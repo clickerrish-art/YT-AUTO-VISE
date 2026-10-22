@@ -31,6 +31,7 @@ def build_script(item: dict) -> str:
         "For a more structured wildlife-creator resource, find the Complete YouTube Wildlife Creator's Vault at the link in the description."
     ]
     optional = [
+        "Plan your shot before you arrive, then wait quietly and leave plenty of space.",
         "Choose transitions that support the story, leave space for viewers to absorb each moment, and avoid dramatic sound effects that misrepresent animal behaviour.",
         "Use natural sound where possible, and let each shot stay long enough for viewers to understand the behaviour.",
         "A focused story is easier to follow than a rushed list of clips.",
@@ -42,6 +43,7 @@ def build_script(item: dict) -> str:
         "A focused story is easier to follow than a rushed list of clips.",
         "Choose transitions that support the story, leave space for viewers to absorb each moment, and avoid dramatic sound effects that misrepresent animal behaviour.",
         "Use natural sound where possible, and let each shot stay long enough for viewers to understand the behaviour.",
+        "Plan your shot before you arrive, then wait quietly and leave plenty of space.",
     ]
     while len(" ".join(lines).split()) > 135:
         removed = False
