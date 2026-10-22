@@ -11,3 +11,11 @@ test("private uploader refuses to run without YouTube credentials", () => {
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /missing required environment variables/);
 });
+
+test("private uploader runs media preflight before any YouTube insert", async () => {
+  const fs = await import("node:fs");
+  const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
+  assert.match(source, /scripts\/preflight-media\.mjs/);
+  assert.match(source, /mediaPreflight\.stdout\.includes\("PASS:"\)/);
+  assert.ok(source.indexOf("mediaPreflight.stdout.trim()") < source.indexOf("youtube.videos.insert"));
+});
