@@ -43,8 +43,36 @@ jobs:
             find review-artifact -maxdepth 5 -type f -print || true
             exit 1
           fi
-          echo "video_path=${videos[0]}" >> "$GITHUB_OUTPUT"
-          echo "Selected draft: ${videos[0]}"
+          video="${videos[0]}"
+          metadata="${video%-DRAFT.mp4}.json"
+          if [ ! -f "$metadata" ]; then
+            echo "::error::Matching generated metadata JSON is missing: $metadata"
+            exit 1
+          fi
+          echo "video_path=$video" >> "$GITHUB_OUTPUT"
+          echo "artifact_metadata_path=$metadata" >> "$GITHUB_OUTPUT"
+          echo "Selected draft and matching metadata: $video"
+      - name: Ensure reviewed metadata matches the selected draft
+        env:
+          REVIEWED_METADATA_PATH: ${{ inputs.reviewed_metadata_path }}
+          ARTIFACT_METADATA_PATH: ${{ steps.select-video.outputs.artifact_metadata_path }}
+        run: |
+          python - <<'PY'
+          import json, os, sys
+          from pathlib import Path
+          reviewed_path = Path(os.environ["REVIEWED_METADATA_PATH"])
+          artifact_path = Path(os.environ["ARTIFACT_METADATA_PATH"])
+          if not reviewed_path.is_file() or not artifact_path.is_file():
+              sys.exit("BLOCKED: reviewed or artifact metadata file is missing.")
+          reviewed = json.loads(reviewed_path.read_text(encoding="utf-8"))
+          artifact = json.loads(artifact_path.read_text(encoding="utf-8"))
+          for field in ("channel", "queueItemId", "title", "productUrl"):
+              if reviewed.get(field) != artifact.get(field):
+                  sys.exit(f"BLOCKED: reviewed metadata does not match this artifact for field {field!r}.")
+          if artifact.get("channel") != "SonicVhibez" or artifact.get("productUrl") != "https://selar.com/0u19v8u99l":
+              sys.exit("BLOCKED: artifact channel or product URL is not approved.")
+          print("PASS: reviewed metadata is bound to the selected artifact and approved product.")
+          PY
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
