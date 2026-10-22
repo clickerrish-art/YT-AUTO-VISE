@@ -78,7 +78,7 @@ jobs:
       - name: Upload narration audio artifact for review
         uses: actions/upload-artifact@v4
         with:
-          name: sonicvhibez-narration-audio
+          name: sonicvhibez-short-draft-package
           path: |
             media/narration/*.mp3
             media/queue-package/*
