@@ -24,7 +24,7 @@ test("Short 002 narration master remains aligned with timed caption beats", () =
 
 test("Short 002 timed captions end at 55 seconds", () => {
   const srt = fs.readFileSync("content/short-002-plan-wildlife-documentary.srt", "utf8");
-  const timestamps = [...srt.matchAll(/(\\d{2}):(\\d{2}):(\\d{2}),(\\d{3}) --> (\\d{2}):(\\d{2}):(\\d{2}),(\\d{3})/g)];
+  const timestamps = [...srt.matchAll(/(\d{2}):(\d{2}):(\d{2}),(\d{3}) --> (\d{2}):(\d{2}):(\d{2}),(\d{3})/g)];
   assert.ok(timestamps.length > 0, "expected timed caption entries");
   const last = timestamps[timestamps.length - 1];
   const endSeconds = Number(last[5]) * 3600 + Number(last[6]) * 60 + Number(last[7]) + Number(last[8]) / 1000;
