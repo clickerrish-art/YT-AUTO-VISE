@@ -10,7 +10,7 @@ test("Short 002 narration master remains aligned with timed caption beats", () =
     ["three-step promise", "three simple steps"],
     ["one subject and question", "one subject"],
     ["behavior examples", "finds food"],
-    ["story structure", "beginning"],
+    ["story structure", "open with a hook"],
     ["faithful editing", "separate clips"],
     ["rights check", "check every asset"],
     ["supported claims", "every claim supported"],
