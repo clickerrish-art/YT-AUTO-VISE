@@ -26,3 +26,12 @@ test("renderer uses manifest-resolved absolute caption path in FFmpeg filter", (
   assert.match(source, /const escapedCaptions = captions/);
   assert.match(source, /subtitles='\" \+ escapedCaptions \+ \"'/);
 });
+
+test("renderer rejects placeholder license evidence", () => {
+  const source = fs.readFileSync("scripts/render-short.mjs", "utf8");
+  assert.match(source, /must contain a real license\/permission record reference/);
+  assert.match(source, /replace_with\|placeholder\|todo\|unknown\|tbd/i);
+  const manifest = JSON.parse(fs.readFileSync("content/render-manifest.example.json", "utf8"));
+  assert.match(manifest.footageLicenseEvidence, /REPLACE_WITH/);
+  assert.equal(manifest.rightsConfirmed, false);
+});
