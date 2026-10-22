@@ -71,6 +71,18 @@ jobs:
           PY
       - name: Render vertical review-only video draft
         run: python scripts/render-queued-draft.py
+      - name: Generate thumbnail from rendered draft
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = next(Path("media/queue-package").glob("*.json"))
+          title = json.loads(p.read_text(encoding="utf-8")).get("title") or "Wildlife Creator Field Notes"
+          Path("media/rendered-drafts/thumbnail-title.txt").write_text(str(title).replace("\\n", " ")[:85], encoding="utf-8")
+          PY
+          VIDEO="$(find media/rendered-drafts -maxdepth 1 -name '*-DRAFT.mp4' -print -quit)"
+          TITLE="$(python -c 'import json,glob; print(json.load(open(glob.glob("media/queue-package/*.json")[0])).get("title","Wildlife Creator Field Notes"))')"
+          node scripts/render-thumbnail.mjs "$VIDEO" "$TITLE" media/rendered-drafts/thumbnail.jpg
       - name: Validate rendered draft video
         run: |
           python - <<'PY'
@@ -108,5 +120,6 @@ jobs:
             media/queue-package/*
             media/rendered-drafts/*.mp4
             media/rendered-drafts/*.json
+            media/rendered-drafts/thumbnail.jpg
           if-no-files-found: error
           retention-days: 30
