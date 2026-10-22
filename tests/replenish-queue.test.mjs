@@ -29,7 +29,12 @@ test("queue replenishment is idempotent and never enables publishing", () => {
     const afterFirst = JSON.parse(fs.readFileSync(queuePath, "utf8"));
     assert.equal(afterFirst.publishingEnabled, false);
     assert.ok(afterFirst.items.some(item => item.id === "existing-approved-draft"));
-    assert.ok(afterFirst.items.length >= 5);
+    assert.ok(afterFirst.items.length >= 13, "preserve the existing item and seed all 12 reviewed topic briefs");
+    const seeded = afterFirst.items.filter(item => item.status === "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW");
+    assert.ok(seeded.length >= 12);
+    assert.ok(seeded.every(item => item.targetSeconds === 55));
+    assert.ok(seeded.every(item => Array.isArray(item.keywords) && item.keywords.length >= 3));
+    assert.ok(seeded.every(item => Array.isArray(item.outline) && item.outline.length >= 3));
     assert.ok(afterFirst.items.every(item => item.productUrl === "https://selar.com/0u19v8u99l"));
     const idsAfterFirst = afterFirst.items.map(item => item.id);
     const second = run();
