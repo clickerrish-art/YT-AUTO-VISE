@@ -1,0 +1,88 @@
+name: Upload a reviewed draft artifact privately
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: Successful draft-generation GitHub Actions run ID
+        required: true
+        type: string
+      reviewed_metadata_path:
+        description: Human-reviewed metadata JSON already committed to this repository
+        required: true
+        default: content/next-short.json
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  private-upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out reviewed project
+        uses: actions/checkout@v4
+      - name: Download draft package from the selected run
+        uses: actions/download-artifact@v4
+        with:
+          name: sonicvhibez-short-draft-package
+          path: review-artifact
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.source_run_id }}
+      - name: Require exactly one rendered draft video
+        id: select-video
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t videos < <(find review-artifact -type f -name '*-DRAFT.mp4' -print | sort)
+          if [ "${#videos[@]}" -ne 1 ]; then
+            echo "::error::Expected exactly one rendered draft MP4 in the selected artifact; found ${#videos[@]}."
+            find review-artifact -maxdepth 5 -type f -print || true
+            exit 1
+          fi
+          echo "video_path=${videos[0]}" >> "$GITHUB_OUTPUT"
+          echo "Selected draft: ${videos[0]}"
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install uploader dependencies
+        run: npm install --ignore-scripts
+      - name: Verify required secrets are configured
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
+        run: |
+          missing=0
+          for name in YOUTUBE_CLIENT_ID YOUTUBE_CLIENT_SECRET YOUTUBE_REFRESH_TOKEN SONICVHIBEZ_CHANNEL_ID; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing GitHub Actions secret: $name"
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            echo "BLOCKED: configure the four repository secrets before retrying."
+            exit 2
+          fi
+      - name: Strictly validate reviewed metadata, media, and channel; upload privately only
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
+          METADATA_PATH: ${{ inputs.reviewed_metadata_path }}
+          VIDEO_PATH: ${{ steps.select-video.outputs.video_path }}
+        run: node scripts/upload-private.mjs "$METADATA_PATH" "$VIDEO_PATH"
+      - name: Preserve private-upload receipt
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-private-upload-receipt
+          path: run-logs/upload-*.json
+          if-no-files-found: error
+          retention-days: 30
