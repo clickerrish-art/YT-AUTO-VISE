@@ -55,5 +55,5 @@ jobs:
       - name: Syntax-check JavaScript automation scripts
         run: |
           for f in scripts/*.mjs; do node --check "$f"; done
-      - name: Compile Python generators
-        run: python -m py_compile scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py
+      - name: Compile Python automation scripts
+        run: python -m py_compile scripts/generate-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py scripts/prepare-review-metadata.py
