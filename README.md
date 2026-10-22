@@ -4,7 +4,7 @@ Isolated project for a compliant, twice-weekly YouTube Shorts workflow for the S
 
 ## Status
 
-Scaffold initialization only. Queue replenishment and metadata/caption checks run in GitHub Actions. A local FFmpeg renderer is available for a reviewed footage file, narration audio, and SRT captions. Automated asset sourcing/TTS, channel authorization, scheduling, and end-to-end media tests are not yet implemented or verified.
+Queue replenishment and metadata/caption checks run in GitHub Actions. A local FFmpeg renderer and a gated private-only uploader are implemented, but automated asset sourcing/TTS, verified channel authorization, and end-to-end media tests are not yet completed or verified.
 
 ## Safety requirements
 
@@ -16,4 +16,4 @@ Scaffold initialization only. Queue replenishment and metadata/caption checks ru
 
 ## Branch status
 
-The `main` branch is available. Repository settings still report a malformed default-branch name, so maintainers must select `main` as the default branch in GitHub repository Settings before treating this repository as production-ready.
+The repository default branch has been corrected to `main` and verified through the GitHub API. Scheduled workflows now target the intended default branch. This configuration fix does not mean video production or publishing is live.
