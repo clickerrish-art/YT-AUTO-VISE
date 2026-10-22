@@ -9,7 +9,8 @@
     "test": "node --test",
     "upload:private": "node scripts/upload-private.mjs",
     "check:captions": "node scripts/check-captions.mjs content/short-001-wildlife-video-storytelling.srt content/short-002-plan-wildlife-documentary.srt",
-    "preflight:media": "node scripts/preflight-media.mjs"
+    "preflight:media": "node scripts/preflight-media.mjs",
+    "render:short": "node scripts/render-short.mjs"
   },
   "engines": {
     "node": ">=20"
