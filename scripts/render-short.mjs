@@ -55,10 +55,20 @@ if (captionCheck.status !== 0) {
   process.exit(1);
 }
 fs.mkdirSync(path.dirname(output), {recursive:true});
+// FFmpeg resolves subtitle paths from the process working directory, not the
+// manifest directory. Use the already-resolved absolute path so manifests in
+// content/ work reliably, and escape filter-graph special characters.
+const escapedCaptions = captions
+  .replace(/\\/g, "\\\\")
+  .replace(/:/g, "\\:")
+  .replace(/'/g, "\\'")
+  .replace(/,/g, "\\,")
+  .replace(/\[/g, "\\[")
+  .replace(/\]/g, "\\]");
 const args = [
   "-y", "-stream_loop", "-1", "-i", footage, "-i", narration,
   "-shortest",
-  "-vf", "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,subtitles=" + captions.replace(/\\/g,"/").replace(/:/g,"\\:"),
+  "-vf", "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,subtitles='" + escapedCaptions + "'",
   "-map", "0:v:0", "-map", "1:a:0",
   "-c:v", "libx264", "-preset", "medium", "-crf", "21",
   "-c:a", "aac", "-b:a", "160k", "-pix_fmt", "yuv420p",
