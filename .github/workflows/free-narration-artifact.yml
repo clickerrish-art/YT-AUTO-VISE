@@ -20,6 +20,8 @@ on:
       - "content/narration-master-short-001-and-002.md"
       - "scripts/generate-narration.py"
       - "scripts/generate-queue-package.py"
+      - "scripts/render-queued-draft.py"
+      - "scripts/render-thumbnail.mjs"
       - ".github/workflows/free-narration-artifact.yml"
 permissions:
   contents: read
