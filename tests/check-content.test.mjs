@@ -17,7 +17,6 @@ test("example template starts private and cannot pass review by default", () => 
   assert.equal(example.productUrl, "https://selar.com/0u19v8u99l");
 });
 
-
 test("all prepared production metadata templates remain blocked until review is complete", async () => {
   const { spawnSync } = await import("node:child_process");
   const templates = [
@@ -28,7 +27,7 @@ test("all prepared production metadata templates remain blocked until review is 
   for (const path of templates) {
     const result = spawnSync(process.execPath, ["scripts/check-content.mjs", path], {
       encoding: "utf8",
-      env: { ...process.env, SONICVHIBEZ_CHANNEL_ID: "UCSlkuPfHH78oGC1o418HV4w" }
+      env: { ...process.env, SONICVHIBEZ_CHANNEL_ID: "UC_TEST_ONLY_NOT_A_REAL_CHANNEL" }
     });
     assert.notEqual(result.status, 0, `${path} must remain blocked until review`);
     assert.match(result.stderr, /BLOCKED/);
