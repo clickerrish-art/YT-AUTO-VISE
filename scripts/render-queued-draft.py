@@ -60,7 +60,7 @@ def main() -> None:
         "drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:"
         "text='STORY  •  ETHICS  •  CRAFT':fontcolor=white@0.9:fontsize=27:"
         "x=(w-text_w)/2:y=h-170,"
-        "subtitles='" + captions.as_posix() + "':force_style='FontName=DejaVu Sans,FontSize=16,PrimaryColour=&H00FFFFFF,OutlineColour=&H90000000,BorderStyle=3,Outline=2,Shadow=0,Alignment=2,MarginV=260'"
+        "subtitles='" + captions.as_posix() + "':force_style='FontName=DejaVu Sans,FontSize=32,PrimaryColour=&H00FFFFFF,OutlineColour=&H90000000,BorderStyle=3,Outline=3,Shadow=0,Alignment=2,MarginV=320'"
     )
     run([
         "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
