@@ -4,7 +4,7 @@ Isolated project for a compliant, twice-weekly YouTube Shorts workflow for the S
 
 ## Status
 
-Scaffold initialization only. Automated media generation, channel authorization, scheduling, and end-to-end tests are not yet implemented or verified.
+Scaffold initialization only. Queue replenishment and metadata/caption checks run in GitHub Actions. A local FFmpeg renderer is available for a reviewed footage file, narration audio, and SRT captions. Automated asset sourcing/TTS, channel authorization, scheduling, and end-to-end media tests are not yet implemented or verified.
 
 ## Safety requirements
 
