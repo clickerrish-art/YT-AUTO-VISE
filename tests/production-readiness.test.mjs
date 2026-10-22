@@ -11,7 +11,7 @@ test("readiness report identifies blockers without enabling publishing or failin
   assert.equal(result.status, 0);
   assert.match(result.stdout, /SonicVhibez production readiness/);
   assert.match(result.stdout, /HOLD:/);
-  assert.match(result.stdout, /publishingEnabled=false/);
+  assert.match(result.stdout, /public publishing disabled/);
   assert.match(result.stdout, /content\/render-manifest\.json/);
   assert.match(result.stdout, /YOUTUBE_CLIENT_ID/);
   assert.match(result.stdout, /never uploads, schedules, or publishes/i);
