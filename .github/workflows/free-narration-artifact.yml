@@ -1,0 +1,54 @@
+name: Generate free narration audio
+on:
+  workflow_dispatch:
+    inputs:
+      short:
+        description: Narration to generate
+        required: true
+        type: choice
+        options:
+          - both
+          - short-001
+          - short-002
+        default: both
+  push:
+    branches: [main]
+    paths:
+      - "content/narration-master-short-001-and-002.md"
+      - "scripts/generate-narration.py"
+      - ".github/workflows/free-narration-artifact.yml"
+permissions:
+  contents: read
+jobs:
+  generate-audio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install free TTS client and ffprobe
+        run: |
+          python -m pip install --disable-pip-version-check edge-tts
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      - name: Generate natural US English narration
+        env:
+          SELECTED_SHORT: ${{ github.event.inputs.short || 'both' }}
+        run: |
+          python scripts/generate-narration.py --short "$SELECTED_SHORT" --voice en-US-GuyNeural --rate=-5%
+      - name: Report audio duration
+        run: |
+          for f in media/narration/*.mp3; do
+            [ -f "$f" ] || continue
+            printf '%s: ' "$f"
+            ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$f"
+          done
+      - name: Upload narration audio artifact for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-narration-audio
+          path: media/narration/*.mp3
+          if-no-files-found: error
+          retention-days: 30
