@@ -57,7 +57,7 @@ if (captionCheck.status !== 0) {
 fs.mkdirSync(path.dirname(output), {recursive:true});
 const args = [
   "-y", "-stream_loop", "-1", "-i", footage, "-i", narration,
-  "-t", "55",
+  "-shortest",
   "-vf", "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,subtitles=" + captions.replace(/\\/g,"/").replace(/:/g,"\\:"),
   "-map", "0:v:0", "-map", "1:a:0",
   "-c:v", "libx264", "-preset", "medium", "-crf", "21",
@@ -69,6 +69,6 @@ if (rendered.error || rendered.status !== 0) {
   console.error("BLOCKED: FFmpeg render failed. Confirm FFmpeg/libass is installed and asset paths are valid.");
   process.exit(2);
 }
-console.log("RENDERED: " + output);
+console.log("RENDERED: " + output + " (duration follows narration; expected 50–60 seconds).");
 console.log("Next: run npm run preflight:media -- " + output + " <reviewed-metadata.json>");
 console.log("No upload or publishing action was performed.");
