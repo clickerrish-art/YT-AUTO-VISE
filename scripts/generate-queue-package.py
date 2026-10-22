@@ -22,26 +22,45 @@ def sentence(s: str) -> str:
 def build_script(item: dict) -> str:
     title = sentence(item.get("title") or item.get("topic") or "Wildlife video tips")
     hook = sentence(item.get("hook") or f"Want to make a clearer wildlife video about {item.get('topic', 'wildlife')}?")
-    outline = item.get("outline") or []
-    lines = [hook, f"Start with one clear goal: {title[:-1] if title.endswith('.') else title}."]
-    for point in outline[:3]:
-        point = sentence(point)
-        if point:
-            lines.append(point)
-    lines += [
-        "Choose transitions that support the story, leave space for viewers to absorb each moment, and avoid dramatic sound effects that misrepresent animal behaviour.",
-        "Use natural sound where possible, and let each shot stay long enough for viewers to understand the behaviour.",
+    outline = [sentence(x) for x in (item.get("outline") or [])[:3] if sentence(x)]
+    mandatory = [
+        hook,
+        f"Start with one clear goal: {title[:-1] if title.endswith('.') else title}.",
         "Keep every claim accurate, and use only footage, images, and sound you have permission to publish.",
         "Never bait, chase, or disturb wildlife to capture a shot. Let natural behaviour guide the story.",
-        "A focused story is easier to follow than a rushed list of clips.",
         "For a more structured wildlife-creator resource, find the Complete YouTube Wildlife Creator's Vault at the link in the description."
     ]
-    text = " ".join(lines)
-    # Keep generated narration within a practical short-form length; no unsupported performance promises.
-    words = text.split()
-    if len(words) > 135:
-        text = " ".join(words[:135]).rstrip(" ,;:") + "."
-    return text
+    optional = [
+        "Choose transitions that support the story, leave space for viewers to absorb each moment, and avoid dramatic sound effects that misrepresent animal behaviour.",
+        "Use natural sound where possible, and let each shot stay long enough for viewers to understand the behaviour.",
+        "A focused story is easier to follow than a rushed list of clips.",
+    ] + outline
+    # Preserve complete sentences and the promotional call-to-action. Remove optional
+    # material as needed rather than truncating mid-sentence at an arbitrary word count.
+    lines = [mandatory[0], mandatory[1], *optional, *mandatory[2:]]
+    drop_order = [
+        "A focused story is easier to follow than a rushed list of clips.",
+        "Choose transitions that support the story, leave space for viewers to absorb each moment, and avoid dramatic sound effects that misrepresent animal behaviour.",
+        "Use natural sound where possible, and let each shot stay long enough for viewers to understand the behaviour.",
+    ]
+    while len(" ".join(lines).split()) > 135:
+        removed = False
+        for candidate in drop_order:
+            if candidate in lines:
+                lines.remove(candidate)
+                removed = True
+                break
+        if not removed:
+            # If the topic outline itself is unusually long, remove its final point.
+            for point in reversed(outline):
+                if point in lines:
+                    lines.remove(point)
+                    outline.remove(point)
+                    removed = True
+                    break
+        if not removed:
+            raise ValueError("Required narration and complete call-to-action exceed the 135-word limit.")
+    return " ".join(lines)
 
 def make_srt(text: str, duration: float) -> str:
     # Proportional timing is a draft only; downstream review must align captions to actual speech.
