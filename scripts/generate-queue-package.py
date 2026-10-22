@@ -83,8 +83,15 @@ async def main():
         "channel": "SonicVhibez",
         "queueItemId": item.get("id"),
         "title": item.get("title") or item.get("topic"),
-        "description": f"{item.get('topic', '')}. For a more structured wildlife-creator resource, see the Complete YouTube Wildlife Creator's Vault: {APPROVED_URL}\n\nUse only footage, images and music you have permission to publish. Captions in this package have estimated timings and require alignment to the final narration.",
-        "tags": item.get("keywords", [])[:10],
+        "description": (
+            f"{item.get('topic', '')}. Learn practical wildlife filmmaking, nature documentary planning, "
+            "ethical wildlife video production, and YouTube Shorts storytelling. "
+            "This creator-education Short focuses on clear storytelling, responsible filming, and accurate captions.\n\n"
+            f"Promotional resource: Complete YouTube Wildlife Creator's Vault — {APPROVED_URL}\n\n"
+            "Use only footage, images, and music you have permission to publish. Captions in this draft have estimated timings and must be aligned to the final narration. "
+            "#WildlifeFilmmaking #NatureDocumentary #YouTubeShorts"
+        ),
+        "tags": list(dict.fromkeys((item.get("keywords", []) + ["wildlife filmmaking", "nature documentary", "YouTube Shorts"])) )[:10],
         "productUrl": APPROVED_URL,
         "madeForKids": False,
         "visibility": "private",
@@ -92,7 +99,7 @@ async def main():
         "actualNarrationSeconds": round(duration, 2),
         "rightsConfirmed": False,
         "complianceReviewed": False,
-        "notes": "Automated draft only. Check the audio, rewrite any awkward phrasing, verify factual claims, confirm footage/music rights, and align captions before rendering. No video was rendered or published."
+        "notes": "Automated draft only. Check audio and title, verify factual claims, confirm footage/music rights, align captions, and review the thumbnail before upload. The product link is disclosed as promotional. No video was published."
     }
     (OUT / f"{slug}.txt").write_text(text + "\n", encoding="utf-8")
     (OUT / f"{slug}.srt").write_text(make_srt(text, duration), encoding="utf-8")
