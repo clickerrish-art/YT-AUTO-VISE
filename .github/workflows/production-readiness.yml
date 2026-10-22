@@ -1,0 +1,49 @@
+name: Check SonicVhibez production readiness
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Weekly diagnostic only; does not upload or publish.
+    - cron: "0 16 * * 1"
+  push:
+    branches: [main]
+    paths:
+      - "content/queue.json"
+      - "content/next-short.json"
+      - "content/render-manifest.example.json"
+      - "scripts/production-readiness.mjs"
+      - ".github/workflows/production-readiness.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Report blockers without exposing credentials
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
+        run: |
+          mkdir -p readiness-report
+          node scripts/production-readiness.mjs | tee readiness-report/readiness.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const names = ['YOUTUBE_CLIENT_ID','YOUTUBE_CLIENT_SECRET','YOUTUBE_REFRESH_TOKEN','SONICVHIBEZ_CHANNEL_ID'];
+          const report = Object.fromEntries(names.map(name => [name, process.env[name] ? 'configured' : 'missing']));
+          fs.writeFileSync('readiness-report/secret-presence.json', JSON.stringify(report, null, 2) + '\\n');
+          NODE
+      - name: Upload diagnostic report
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-readiness-report
+          path: readiness-report/
+          retention-days: 30
