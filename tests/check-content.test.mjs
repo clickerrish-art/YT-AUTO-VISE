@@ -38,7 +38,7 @@ test("all prepared production metadata templates remain blocked until review is 
   }
 });
 
-test("channel identity fails closed when configured ID and metadata ID differ", () => {
+test("channel identity fails closed when configured ID and metadata ID differ", async () => {
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-channel-check-"));
   const metadataPath = path.join(tempDir, "valid-review.json");
   const metadata = {
