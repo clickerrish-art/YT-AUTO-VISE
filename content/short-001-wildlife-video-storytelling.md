@@ -10,14 +10,9 @@
 ## YouTube title
 How to Make Better Wildlife Videos for YouTube
 
-## Narration draft (~120 words; time to be confirmed in edit)
-“Want your wildlife videos to feel more like a documentary and less like a random collection of clips? Start with one question: what is this animal doing, and why should the viewer care?
+## Narration draft (aligned to the supplied 55-second caption timing; record and verify final audio before rendering)
 
-Open with your strongest genuine moment. Then give the viewer context: the animal, its environment, and the behavior to watch for. Build a simple story with a beginning, a change, and a payoff. Keep cuts purposeful, let important moments breathe, and use music that supports the scene without drowning out natural sound.
-
-Most importantly, use footage you own or have permission to use, and never stage or misrepresent animal behavior.
-
-If you want help planning your next wildlife video, explore the Complete YouTube Wildlife Creator’s Vault — Premium Combo PDF. Find it at the link in the description.”
+“Want better wildlife videos? Start with one clear story, not a collection of random animal clips. First, choose a question: what behavior will viewers discover? Next, plan three shots: a wide view, a closer detail, and the behavior itself. Keep a safe distance. Never bait, chase, or disturb wildlife just to get a shot. Let natural movement tell the story. Use steady framing and patient observation. Then edit tightly. Remove pauses that don’t add information. Add readable captions and only music you have permission to use. Finish with one useful takeaway so viewers leave having learned something. Build your next wildlife video with a plan. Find the Wildlife Creator’s Vault at the link in the description.”
 
 ## Shot-by-shot visual plan
 - **0–4s:** Strong, real wildlife moment; on-screen hook: “Make wildlife videos feel like documentaries”
