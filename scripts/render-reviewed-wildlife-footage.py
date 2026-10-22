@@ -70,16 +70,18 @@ def main() -> None:
     # visual frame if footage is shorter than narration. Captions are estimated drafts.
     filters = []
     labels = []
+    segment_duration = duration / len(resolved)
     for i, (_, clip) in enumerate(resolved):
         label = f"v{i}"
         filters.append(
             f"[{i}:v]scale=1080:1920:force_original_aspect_ratio=increase,"
-            f"crop=1080:1920,setsar=1,fps=30,trim=duration={duration:.3f},"
-            f"setpts=PTS-STARTPTS[{label}]"
+            f"crop=1080:1920,setsar=1,fps=30,trim=duration={segment_duration:.3f},"
+            f"tpad=stop_mode=clone:stop_duration={segment_duration:.3f},"
+            f"trim=duration={segment_duration:.3f},setpts=PTS-STARTPTS[{label}]"
         )
         labels.append(f"[{label}]")
     if len(labels) == 1:
-        filters.append(f"{labels[0]}tpad=stop_mode=clone:stop_duration=0.5,trim=duration={duration:.3f}[joined]")
+        filters.append(f"{labels[0]}tpad=stop_mode=clone:stop_duration={duration:.3f},trim=duration={duration:.3f}[joined]")
     else:
         filters.append("".join(labels) + f"concat=n={len(labels)}:v=1:a=0,trim=duration={duration:.3f},setpts=PTS-STARTPTS[joined]")
     subtitle_path = str(captions.resolve()).replace("\\", "\\\\").replace(":", "\\:")
