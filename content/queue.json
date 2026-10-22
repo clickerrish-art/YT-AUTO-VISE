@@ -1,7 +1,10 @@
 {
   "cadence": {
     "postsPerWeek": 2,
-    "days": ["Tuesday", "Friday"],
+    "days": [
+      "Tuesday",
+      "Friday"
+    ],
     "timezone": "Africa/Johannesburg"
   },
   "publishingEnabled": false,
@@ -10,13 +13,13 @@
       "id": "wildlife-vault-001",
       "topic": "How to Make Better Wildlife Videos for YouTube",
       "productUrl": "https://selar.com/0u19v8u99l",
-      "status": "needs_media_and_review"
+      "status": "script_and_captions_ready_needs_media_and_review"
     },
     {
       "id": "wildlife-vault-002",
       "topic": "Three Ways to Plan a Wildlife Documentary Short",
       "productUrl": "https://selar.com/0u19v8u99l",
-      "status": "needs_script_media_and_review"
+      "status": "script_and_captions_ready_needs_media_and_review"
     }
   ]
 }
