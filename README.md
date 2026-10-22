@@ -17,3 +17,15 @@ Queue replenishment and metadata/caption checks run in GitHub Actions. A local F
 ## Branch status
 
 The repository default branch has been corrected to `main` and verified through the GitHub API. Scheduled workflows now target the intended default branch. This configuration fix does not mean video production or publishing is live.
+
+## Current production gate
+
+Run `npm run readiness` for a read-only blocker report. A `HOLD` is expected until all of the following are supplied and independently checked:
+
+1. `content/render-manifest.json` referencing real footage, narration audio, and the SRT captions.
+2. Evidence for footage and narration rights; human-confirmed rights and compliance flags.
+3. `content/next-short.json` updated only after a human review, including the verified SonicVhibez channel ID.
+4. A rendered `media/next-short.mp4` that passes `npm run preflight:media -- media/next-short.mp4 content/next-short.json`.
+5. YouTube OAuth credentials and the verified SonicVhibez channel ID configured as repository secrets/environment variables.
+
+The readiness report is diagnostic only; it does not validate that license evidence is genuine, judge the finished video's quality, or grant permission to publish. The uploader is private-only. Public publishing and unattended public scheduling remain disabled. Never point credentials at Nature Frontiers.
