@@ -75,3 +75,18 @@ test("missing metadata fails closed", async () => {
   assert.equal(result.status, 2);
   assert.match(result.stderr, /metadata file not found/);
 });
+
+test("SonicVhibez metadata templates never target the Nature Frontiers channel", () => {
+  const forbiddenChannelId = "UCSlkuPfHH78oGC1o418HV4w";
+  for (const templatePath of [
+    "content/short-001-metadata.example.json",
+    "content/short-002-metadata.example.json"
+  ]) {
+    const template = JSON.parse(fs.readFileSync(templatePath, "utf8"));
+    assert.notEqual(template.channelId, forbiddenChannelId);
+    assert.equal(template.channelId, "REPLACE_WITH_VERIFIED_SONICVHIBEZ_CHANNEL_ID");
+    assert.equal(template.visibility, "private");
+    assert.equal(template.rightsConfirmed, false);
+    assert.equal(template.complianceReviewed, false);
+  }
+});
