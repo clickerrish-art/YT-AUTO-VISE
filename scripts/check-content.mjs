@@ -17,9 +17,13 @@ if (!configuredChannelId || !configuredChannelId.trim()) {
   errors.push("SONICVHIBEZ_CHANNEL_ID must be configured with the verified SonicVhibez channel ID");
 }
 if (item.channel !== "SonicVhibez") errors.push("channel must be exactly SonicVhibez");
+if (item.status !== "READY_FOR_PRIVATE_UPLOAD") errors.push("status must be READY_FOR_PRIVATE_UPLOAD after a human has completed all reviews");
+if (item.targetSeconds !== 55) errors.push("targetSeconds must be exactly 55 for this Shorts workflow");
 if (!item.channelId || item.channelId !== configuredChannelId) errors.push("channelId must be present and match the configured SonicVhibez channel ID");
+if (!/^UC[a-zA-Z0-9_-]{22}$/.test(item.channelId ?? "")) errors.push("channelId must have the standard YouTube channel ID format");
 if (!item.title || item.title.length > 100) errors.push("title is required and must be at most 100 characters");
 if (!item.description || item.description.length < 20) errors.push("description is required (minimum 20 characters)");
+if (item.description && !item.description.includes(item.productUrl ?? "")) errors.push("description must include the approved product URL");
 if (!Array.isArray(item.tags) || item.tags.length < 3 || item.tags.some(t => typeof t !== "string" || !t.trim())) errors.push("provide at least three non-empty tags");
 if (!item.productUrl || !approvedUrls.has(item.productUrl)) errors.push("productUrl must exactly match an approved URL in config/products.json");
 if (item.madeForKids !== false) errors.push("madeForKids must be explicitly false for this promotional workflow");
