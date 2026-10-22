@@ -3,10 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Safety-first metadata validation for SonicVhibez YouTube Shorts.",
+  "description": "Safety-first SonicVhibez Shorts metadata validation and private-upload tooling.",
   "scripts": {
     "check": "node scripts/check-content.mjs",
-    "test": "node --test"
+    "test": "node --test",
+    "upload:private": "node scripts/upload-private.mjs"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "googleapis": "^144.0.0"
+  }
 }
