@@ -18,8 +18,6 @@ jobs:
       - name: Validate timed subtitle drafts
         run: npm run check:captions
       - name: Ensure all unreviewed metadata examples are blocked
-        env:
-          SONICVHIBEZ_CHANNEL_ID: UCSlkuPfHH78oGC1o418HV4w
         run: |
           set +e
           npm run check -- content/next-short.example.json
