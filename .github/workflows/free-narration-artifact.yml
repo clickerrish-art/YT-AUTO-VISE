@@ -11,6 +11,9 @@ on:
           - short-001
           - short-002
         default: both
+  schedule:
+    # Twice weekly, aligned with the queue refresh (GitHub Actions cron is UTC).
+    - cron: "0 15 * * 2,5"
   push:
     branches: [main]
     paths:
