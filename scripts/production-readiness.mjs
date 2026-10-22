@@ -54,7 +54,7 @@ if (!exists(metadataPath)) {
   catch { blockers.push("content/next-short.json is not valid JSON."); }
   if (metadata) {
     if (metadata.channel !== "SonicVhibez") blockers.push("Metadata target must be exactly SonicVhibez.");
-    if (metadata.status !== "READY_FOR_REVIEW") blockers.push("Metadata must be human-reviewed and explicitly marked READY_FOR_REVIEW before upload.");
+    if (metadata.status !== "READY_FOR_PRIVATE_UPLOAD") blockers.push("Metadata must be human-reviewed and explicitly marked READY_FOR_PRIVATE_UPLOAD before upload.");
     if (!metadata.channelId || !/^UC[a-zA-Z0-9_-]{22}$/.test(metadata.channelId)) blockers.push("Metadata needs the verified SonicVhibez YouTube channel ID.");
     if (metadata.rightsConfirmed !== true) blockers.push("Metadata rightsConfirmed must be true only after media rights are verified.");
     if (metadata.complianceReviewed !== true) blockers.push("Metadata complianceReviewed must be true only after content/compliance review.");
