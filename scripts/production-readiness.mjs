@@ -46,7 +46,22 @@ if (!exists(manifestPath)) {
     if (manifest.complianceReviewed !== true) blockers.push("Set complianceReviewed=true only after human content/compliance review.");
   }
 }
-if (!exists(metadataPath)) blockers.push("Reviewed metadata file content/next-short.json is missing.");
+if (!exists(metadataPath)) {
+  blockers.push("Reviewed metadata file content/next-short.json is missing.");
+} else {
+  let metadata;
+  try { metadata = JSON.parse(fs.readFileSync(path.resolve(root, metadataPath), "utf8")); }
+  catch { blockers.push("content/next-short.json is not valid JSON."); }
+  if (metadata) {
+    if (metadata.channel !== "SonicVhibez") blockers.push("Metadata target must be exactly SonicVhibez.");
+    if (metadata.status !== "READY_FOR_REVIEW") blockers.push("Metadata must be human-reviewed and explicitly marked READY_FOR_REVIEW before upload.");
+    if (!metadata.channelId || !/^UC[a-zA-Z0-9_-]{22}$/.test(metadata.channelId)) blockers.push("Metadata needs the verified SonicVhibez YouTube channel ID.");
+    if (metadata.rightsConfirmed !== true) blockers.push("Metadata rightsConfirmed must be true only after media rights are verified.");
+    if (metadata.complianceReviewed !== true) blockers.push("Metadata complianceReviewed must be true only after content/compliance review.");
+    if (metadata.visibility !== "private") blockers.push("Metadata visibility must remain private.");
+    if (metadata.productUrl !== "https://selar.com/0u19v8u99l") blockers.push("Metadata must use the sole approved Selar product URL.");
+  }
+}
 if (!exists(videoPath)) blockers.push("Rendered MP4 media/next-short.mp4 is missing.");
 for (const key of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN", "SONICVHIBEZ_CHANNEL_ID"]) {
   if (!process.env[key]?.trim()) blockers.push(`Required YouTube environment variable ${key} is not configured in this execution environment.`);
