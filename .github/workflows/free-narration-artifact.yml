@@ -38,7 +38,7 @@ jobs:
           sudo apt-get install -y ffmpeg fonts-dejavu-core
           python -m pip install --disable-pip-version-check edge-tts mutagen
       - name: Validate Python generators
-        run: python -m py_compile scripts/generate-narration.py scripts/generate-queue-package.py
+        run: python -m py_compile scripts/generate-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py
       - name: Validate narration extraction
         run: python scripts/generate-narration.py --short both --extract-only
       - name: Generate natural US English narration
@@ -71,6 +71,26 @@ jobs:
           PY
       - name: Render vertical review-only video draft
         run: python scripts/render-queued-draft.py
+      - name: Validate rendered draft video
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          files = list(Path("media/rendered-drafts").glob("*-DRAFT.mp4"))
+          if len(files) != 1:
+              raise SystemExit(f"Expected one rendered MP4 draft, found {len(files)}")
+          result = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "stream=codec_type,width,height", "-show_entries", "format=duration", "-of", "json", str(files[0])], capture_output=True, text=True, check=True)
+          data = json.loads(result.stdout)
+          video = next((x for x in data.get("streams", []) if x.get("codec_type") == "video"), None)
+          audio = next((x for x in data.get("streams", []) if x.get("codec_type") == "audio"), None)
+          duration = float(data.get("format", {}).get("duration", 0))
+          if not video or (video.get("width"), video.get("height")) != (1080, 1920) or not audio or not 50 <= duration <= 60:
+              raise SystemExit(f"Rendered MP4 failed media checks: video={video}, audio={audio}, duration={duration}")
+          metadata = json.loads(files[0].with_suffix(".json").read_text(encoding="utf-8"))
+          assert metadata.get("status") == "HOLD_FOR_FOOTAGE_AND_REVIEW"
+          assert metadata.get("rightsConfirmed") is False and metadata.get("complianceReviewed") is False
+          print(f"PASS: rendered review draft is 1080x1920, {duration:.2f}s, audio/video present, publishing remains held.")
+          PY
       - name: Report audio duration
         run: |
           python - <<'PY'
