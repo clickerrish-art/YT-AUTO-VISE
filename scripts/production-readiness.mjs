@@ -10,7 +10,7 @@ const root = process.cwd();
 const blockers = [];
 const notes = [];
 const exists = (p) => fs.existsSync(path.resolve(root, p));
-const queuePath = "content/queue.json";
+const queuePath = process.env.QUEUE_PATH ?? "content/queue.json";
 const manifestPath = "content/render-manifest.json";
 const metadataPath = "content/next-short.json";
 const videoPath = "media/next-short.mp4";
