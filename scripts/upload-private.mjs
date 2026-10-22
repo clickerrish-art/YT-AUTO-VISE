@@ -34,6 +34,25 @@ if (stderr || !stdout.includes("PASS")) {
   console.error(stderr || "BLOCKED: metadata checker did not pass.");
   process.exit(1);
 }
+
+// Never send a file to YouTube unless the same media preflight used by the
+// manual workflow confirms duration, vertical orientation, and an audio track.
+const mediaPreflight = await import("node:child_process").then(({ execFileSync }) => {
+  try {
+    const output = execFileSync(process.execPath, ["scripts/preflight-media.mjs", videoPath, metadataPath], {
+      env: process.env, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"]
+    });
+    return { stdout: output, stderr: "" };
+  } catch (error) {
+    return { stdout: error.stdout ?? "", stderr: error.stderr ?? error.message };
+  }
+});
+if (mediaPreflight.stderr || !mediaPreflight.stdout.includes("PASS:")) {
+  console.error(mediaPreflight.stderr || "BLOCKED: media preflight did not pass.");
+  process.exit(1);
+}
+console.log(mediaPreflight.stdout.trim());
+
 if (metadata.visibility !== "private") {
   console.error("BLOCKED: uploader only permits private uploads.");
   process.exit(1);
