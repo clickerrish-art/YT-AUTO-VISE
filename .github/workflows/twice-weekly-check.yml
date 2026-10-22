@@ -1,0 +1,27 @@
+name: SonicVhibez twice-weekly readiness check
+on:
+  schedule:
+    - cron: "0 15 * * 2"
+    - cron: "0 15 * * 5"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm test
+      - name: Confirm example content is blocked until reviewed
+        env:
+          SONICVHIBEZ_CHANNEL_ID: UCSlkuPfHH78oGC1o418HV4w
+        run: |
+          if npm run check -- content/next-short.example.json; then
+            echo "ERROR: unreviewed example passed checks."
+            exit 1
+          else
+            echo "PASS: unreviewed example remains blocked."
+          fi
