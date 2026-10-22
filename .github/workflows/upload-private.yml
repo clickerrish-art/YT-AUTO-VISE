@@ -54,7 +54,9 @@ jobs:
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
-        run: node scripts/upload-private.mjs "${{ inputs.metadata_path }}" "${{ inputs.video_path }}"
+          METADATA_PATH: ${{ inputs.metadata_path }}
+          VIDEO_PATH: ${{ inputs.video_path }}
+        run: node scripts/upload-private.mjs "$METADATA_PATH" "$VIDEO_PATH"
       - name: Preserve private-upload receipt
         if: success()
         uses: actions/upload-artifact@v4
