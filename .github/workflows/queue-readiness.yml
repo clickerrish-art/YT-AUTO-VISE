@@ -4,6 +4,9 @@ on:
     branches: [main]
     paths:
       - "scripts/replenish-queue.mjs"
+      - "scripts/render-short.mjs"
+      - "package.json"
+      - "README.md"
       - "content/queue.json"
       - "content/*.srt"
       - ".github/workflows/queue-readiness.yml"
