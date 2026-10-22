@@ -1,0 +1,30 @@
+name: Queue readiness
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 15 * * 2,5"
+permissions:
+  contents: write
+jobs:
+  replenish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Replenish draft topic queue
+        run: node scripts/replenish-queue.mjs
+      - name: Commit queue only when changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/queue.json
+          if git diff --cached --quiet; then
+            echo "Queue already contains all seed topics."
+          else
+            git commit -m "chore: replenish reviewed-topic queue"
+            git push origin HEAD:main
+          fi
