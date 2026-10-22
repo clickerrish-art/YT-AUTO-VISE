@@ -67,7 +67,7 @@ def build_script(item: dict) -> str:
 def make_srt(text: str, duration: float) -> str:
     # Proportional timing is a draft only; downstream review must align captions to actual speech.
     words = text.split()
-    chunks = [" ".join(words[i:i+7]) for i in range(0, len(words), 7)]
+    chunks = [" ".join(words[i:i+5]) for i in range(0, len(words), 5)]
     weights = [max(1, len(c.split())) for c in chunks]
     total = sum(weights)
     def ts(sec: float) -> str:
