@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 
 test("approved product config contains only the owner-provided vault URL", () => {
   const config = JSON.parse(fs.readFileSync("config/products.json", "utf8"));
@@ -24,15 +26,44 @@ test("all prepared production metadata templates remain blocked until review is 
     "content/short-001-metadata.example.json",
     "content/short-002-metadata.example.json"
   ];
-  for (const path of templates) {
-    const result = spawnSync(process.execPath, ["scripts/check-content.mjs", path], {
+  for (const templatePath of templates) {
+    const result = spawnSync(process.execPath, ["scripts/check-content.mjs", templatePath], {
       encoding: "utf8",
       env: { ...process.env, SONICVHIBEZ_CHANNEL_ID: "UC_TEST_ONLY_NOT_A_REAL_CHANNEL" }
     });
-    assert.notEqual(result.status, 0, `${path} must remain blocked until review`);
+    assert.notEqual(result.status, 0, `${templatePath} must remain blocked until review`);
     assert.match(result.stderr, /BLOCKED/);
     assert.match(result.stderr, /rightsConfirmed/);
     assert.match(result.stderr, /complianceReviewed/);
+  }
+});
+
+test("channel identity fails closed when configured ID and metadata ID differ", () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-channel-check-"));
+  const metadataPath = path.join(tempDir, "valid-review.json");
+  const metadata = {
+    channel: "SonicVhibez",
+    channelId: "UC_METADATA_TEST_ID",
+    title: "How to Make Better Wildlife Videos for YouTube",
+    description: "Practical tips for planning respectful wildlife videos and clear documentary stories.",
+    tags: ["wildlife videos", "wildlife filmmaking", "nature documentary"],
+    productUrl: "https://selar.com/0u19v8u99l",
+    madeForKids: false,
+    visibility: "private",
+    rightsConfirmed: true,
+    complianceReviewed: true
+  };
+  fs.writeFileSync(metadataPath, JSON.stringify(metadata));
+  try {
+    const { spawnSync } = await import("node:child_process");
+    const result = spawnSync(process.execPath, ["scripts/check-content.mjs", metadataPath], {
+      encoding: "utf8",
+      env: { ...process.env, SONICVHIBEZ_CHANNEL_ID: "UC_CONFIGURED_TEST_ID" }
+    });
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /channelId must be present and match/);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
   }
 });
 
