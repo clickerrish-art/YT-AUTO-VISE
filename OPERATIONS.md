@@ -49,3 +49,14 @@ Required GitHub Actions secrets/environment variables for a future manually appr
 - `SONICVHIBEZ_CHANNEL_ID` (channel ID is not secret, but must match authenticated identity)
 
 Do not add a publish workflow until the OAuth credentials are configured, the exact channel is verified, a reviewed media file is available, and a real private-upload test is approved. Upload logs may contain video IDs; review privacy and storage before committing logs. No credentials belong in the repository.
+
+
+## Media preflight (local, no paid service)
+
+Install FFmpeg (including `ffprobe`) on the computer where the reviewed MP4 is stored. Then run:
+
+```sh
+node scripts/preflight-media.mjs path/to/short.mp4 path/to/reviewed-metadata.json
+```
+
+The preflight fails closed unless the metadata targets SonicVhibez, starts as private, and records completed human rights/compliance review. It checks that the file is 50–60 seconds, vertical, and has an audio stream. It does not prove licensing, consent, truthfulness, caption synchronization, or visual quality, and it does not upload or publish anything.
