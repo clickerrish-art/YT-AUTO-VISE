@@ -28,6 +28,7 @@ jobs:
           node --check scripts/check-content.mjs
           node --check scripts/check-captions.mjs
           node --check scripts/preflight-media.mjs
+          node --check scripts/render-short.mjs
           node --check scripts/upload-private.mjs
       - name: Validate existing caption files
         run: node scripts/check-captions.mjs content/short-001-wildlife-video-storytelling.srt content/short-002-plan-wildlife-documentary.srt
