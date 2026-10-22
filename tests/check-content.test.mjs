@@ -91,3 +91,35 @@ test("SonicVhibez metadata templates never target the Nature Frontiers channel",
     assert.equal(template.complianceReviewed, false);
   }
 });
+
+
+test("HOLD metadata cannot pass even when all other metadata fields look ready", async () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-hold-check-"));
+  const metadataPath = path.join(tempDir, "hold.json");
+  const channelId = "UC" + "A".repeat(22);
+  const metadata = {
+    channel: "SonicVhibez",
+    channelId,
+    status: "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
+    targetSeconds: 55,
+    title: "How to Make Better Wildlife Videos for YouTube",
+    description: "Practical wildlife storytelling tips. https://selar.com/0u19v8u99l",
+    tags: ["wildlife videos", "wildlife filmmaking", "nature documentary"],
+    productUrl: "https://selar.com/0u19v8u99l",
+    madeForKids: false,
+    visibility: "private",
+    rightsConfirmed: true,
+    complianceReviewed: true
+  };
+  fs.writeFileSync(metadataPath, JSON.stringify(metadata));
+  try {
+    const result = (await import("node:child_process")).spawnSync(
+      process.execPath, ["scripts/check-content.mjs", metadataPath],
+      { encoding: "utf8", env: { ...process.env, SONICVHIBEZ_CHANNEL_ID: channelId } }
+    );
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /status must be READY_FOR_PRIVATE_UPLOAD/);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
