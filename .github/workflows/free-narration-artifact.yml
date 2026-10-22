@@ -98,7 +98,10 @@ jobs:
           duration = float(data.get("format", {}).get("duration", 0))
           if not video or (video.get("width"), video.get("height")) != (1080, 1920) or not audio or not 50 <= duration <= 60:
               raise SystemExit(f"Rendered MP4 failed media checks: video={video}, audio={audio}, duration={duration}")
-          metadata = json.loads(files[0].with_suffix(".json").read_text(encoding="utf-8"))
+          metadata_files = list(Path("media/rendered-drafts").glob("*.json"))
+          if len(metadata_files) != 1:
+              raise SystemExit(f"Expected one rendered draft metadata JSON, found {len(metadata_files)}")
+          metadata = json.loads(metadata_files[0].read_text(encoding="utf-8"))
           assert metadata.get("status") == "HOLD_FOR_FOOTAGE_AND_REVIEW"
           assert metadata.get("rightsConfirmed") is False and metadata.get("complianceReviewed") is False
           print(f"PASS: rendered review draft is 1080x1920, {duration:.2f}s, audio/video present, publishing remains held.")
