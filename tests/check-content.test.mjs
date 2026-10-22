@@ -35,6 +35,7 @@ test("all prepared production metadata templates remain blocked until review is 
     assert.match(result.stderr, /BLOCKED/);
     assert.match(result.stderr, /rightsConfirmed/);
     assert.match(result.stderr, /complianceReviewed/);
+    assert.match(result.stderr, /READY_FOR_PRIVATE_UPLOAD/);
   }
 });
 
