@@ -56,6 +56,10 @@ if (!exists(metadataPath)) {
     if (metadata.channel !== "SonicVhibez") blockers.push("Metadata target must be exactly SonicVhibez.");
     if (metadata.status !== "READY_FOR_PRIVATE_UPLOAD") blockers.push("Metadata must be human-reviewed and explicitly marked READY_FOR_PRIVATE_UPLOAD before upload.");
     if (!metadata.channelId || !/^UC[a-zA-Z0-9_-]{22}$/.test(metadata.channelId)) blockers.push("Metadata needs the verified SonicVhibez YouTube channel ID.");
+    if (process.env.SONICVHIBEZ_CHANNEL_ID && metadata.channelId !== process.env.SONICVHIBEZ_CHANNEL_ID) blockers.push("Metadata channelId does not match the configured SonicVhibez channel ID.");
+    if (!Array.isArray(metadata.tags) || metadata.tags.length < 3) blockers.push("Metadata must include at least three relevant tags.");
+    if (metadata.madeForKids !== false) blockers.push("Metadata must explicitly set madeForKids=false for this adult creator-marketing workflow.");
+    if (typeof metadata.description !== "string" || !metadata.description.includes("https://selar.com/0u19v8u99l")) blockers.push("Metadata description must contain the sole approved Selar URL.");
     if (metadata.rightsConfirmed !== true) blockers.push("Metadata rightsConfirmed must be true only after media rights are verified.");
     if (metadata.complianceReviewed !== true) blockers.push("Metadata complianceReviewed must be true only after content/compliance review.");
     if (metadata.visibility !== "private") blockers.push("Metadata visibility must remain private.");
