@@ -1,0 +1,60 @@
+name: Validate SonicVhibez automation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/**"
+      - "content/queue.json"
+      - "config/products.json"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/**"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install locked dependencies when lockfile exists
+        run: |
+          if [ -f package-lock.json ]; then npm ci --ignore-scripts; else npm install --ignore-scripts; fi
+      - name: Run unit tests
+        run: npm test
+      - name: Validate queue invariants and approved destination
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          q = json.loads(Path("content/queue.json").read_text(encoding="utf-8"))
+          products = json.loads(Path("config/products.json").read_text(encoding="utf-8"))["products"]
+          approved = {p["url"] for p in products if p.get("status") == "approved"}
+          items = q.get("items", [])
+          assert q.get("publishingEnabled") is False, "Public publishing must remain disabled"
+          cadence = q.get("cadence", {})
+          assert cadence.get("timezone") == "Africa/Johannesburg"
+          assert cadence.get("days") == ["Tuesday", "Friday"] and cadence.get("postsPerWeek") == 2
+          assert len(items) >= 10, "Queue needs at least ten topics"
+          ids = [i.get("id") for i in items]
+          assert all(ids) and len(ids) == len(set(ids)), "Queue IDs must be present and unique"
+          assert all(i.get("productUrl") == "https://selar.com/0u19v8u99l" for i in items)
+          assert "https://selar.com/0u19v8u99l" in approved, "Only the approved Selar destination may be used"
+          assert all(i.get("status") in ("HOLD_FOR_MEDIA_AND_HUMAN_REVIEW", "script_and_captions_ready_needs_media_and_review") for i in items)
+          print(f"PASS: {len(items)} queued topics; approved destination; safe held status; public publishing disabled.")
+          PY
+      - name: Syntax-check JavaScript automation scripts
+        run: |
+          for f in scripts/*.mjs; do node --check "$f"; done
+      - name: Compile Python generators
+        run: python -m py_compile scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py
