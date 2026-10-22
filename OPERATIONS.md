@@ -30,3 +30,15 @@ The intended cadence is two Shorts per week. This repository does not currently 
 ## Content integrity
 
 Do not claim a guaranteed SEO score, guaranteed reach, or guaranteed sales. Avoid misleading income claims. Product promotions must accurately describe the linked product and use only owner-provided URLs. Do not upload unlicensed footage or cloned voices without the necessary rights and consent.
+
+## Private upload implementation
+
+`scripts/upload-private.mjs` is a gated first-stage uploader. It requires a reviewed metadata JSON and an MP4 path, runs the content checker, verifies the OAuth-authenticated YouTube channel ID matches `SONICVHIBEZ_CHANNEL_ID`, and only submits a **private** upload. It never makes a video public or schedules a public release.
+
+Required GitHub Actions secrets/environment variables for a future manually approved run:
+- `YOUTUBE_CLIENT_ID`
+- `YOUTUBE_CLIENT_SECRET`
+- `YOUTUBE_REFRESH_TOKEN`
+- `SONICVHIBEZ_CHANNEL_ID` (channel ID is not secret, but must match authenticated identity)
+
+Do not add a publish workflow until the OAuth credentials are configured, the exact channel is verified, a reviewed media file is available, and a real private-upload test is approved. Upload logs may contain video IDs; review privacy and storage before committing logs. No credentials belong in the repository.
