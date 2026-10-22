@@ -10,10 +10,14 @@ if (!fs.existsSync(metadataPath)) {
 }
 
 const item = JSON.parse(fs.readFileSync(metadataPath, "utf8"));
+const configuredChannelId = process.env.SONICVHIBEZ_CHANNEL_ID;
 const approvedUrls = new Set(products.filter(p => p.status === "approved").map(p => p.url));
 
+if (!configuredChannelId || !configuredChannelId.trim()) {
+  errors.push("SONICVHIBEZ_CHANNEL_ID must be configured with the verified SonicVhibez channel ID");
+}
 if (item.channel !== "SonicVhibez") errors.push("channel must be exactly SonicVhibez");
-if (item.channelId !== process.env.SONICVHIBEZ_CHANNEL_ID) errors.push("channelId must match the configured SonicVhibez channel ID");
+if (!item.channelId || item.channelId !== configuredChannelId) errors.push("channelId must be present and match the configured SonicVhibez channel ID");
 if (!item.title || item.title.length > 100) errors.push("title is required and must be at most 100 characters");
 if (!item.description || item.description.length < 20) errors.push("description is required (minimum 20 characters)");
 if (!Array.isArray(item.tags) || item.tags.length < 3 || item.tags.some(t => typeof t !== "string" || !t.trim())) errors.push("provide at least three non-empty tags");
