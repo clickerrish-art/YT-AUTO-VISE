@@ -18,13 +18,31 @@ const videoPath = "media/next-short.mp4";
 if (!exists(queuePath)) {
   blockers.push("content/queue.json is missing.");
 } else {
-  const queue = JSON.parse(fs.readFileSync(path.resolve(root, queuePath), "utf8"));
-  if (queue.publishingEnabled !== false) blockers.push("Queue must keep publishingEnabled=false until private upload and human review are verified.");
-  if (!Array.isArray(queue.items) || queue.items.length < 2) blockers.push("Queue needs at least two draft items.");
-  if ((queue.items ?? []).some(item => item.productUrl !== "https://selar.com/0u19v8u99l")) {
-    blockers.push("Every queued item must use the sole approved Selar product URL.");
+  let queue;
+  try {
+    queue = JSON.parse(fs.readFileSync(path.resolve(root, queuePath), "utf8"));
+  } catch {
+    blockers.push("content/queue.json is not valid JSON; queue checks cannot be trusted.");
   }
-  notes.push(`Queue: ${queue.items?.length ?? 0} items; public publishing ${queue.publishingEnabled === false ? "disabled" : "not safely disabled"}.`);
+  if (queue) {
+    if (!queue || typeof queue !== "object" || Array.isArray(queue)) {
+      blockers.push("Queue must be a JSON object with an items array.");
+    } else {
+      if (queue.publishingEnabled !== false) blockers.push("Queue must keep publishingEnabled=false until private upload and human review are verified.");
+      if (!Array.isArray(queue.items) || queue.items.length < 2) blockers.push("Queue needs at least two draft items.");
+      const items = Array.isArray(queue.items) ? queue.items : [];
+      if (items.some(item => !item || typeof item !== "object" || typeof item.id !== "string" || !item.id.trim())) {
+        blockers.push("Every queued item must be an object with a non-empty id.");
+      }
+      if (items.some(item => item.productUrl !== "https://selar.com/0u19v8u99l")) {
+        blockers.push("Every queued item must use the sole approved Selar product URL.");
+      }
+      if (new Set(items.map(item => item.id)).size !== items.length) {
+        blockers.push("Queue contains duplicate item IDs; remove duplicates before relying on cadence tracking.");
+      }
+      notes.push(`Queue: ${items.length} items; public publishing ${queue.publishingEnabled === false ? "disabled" : "not safely disabled"}.`);
+    }
+  }
 }
 if (!exists(manifestPath)) {
   blockers.push("Create content/render-manifest.json from the example and fill it only after verifying asset rights.");
