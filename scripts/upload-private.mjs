@@ -46,9 +46,14 @@ const oauth = new google.auth.OAuth2(
 oauth.setCredentials({ refresh_token: process.env.YOUTUBE_REFRESH_TOKEN });
 const youtube = google.youtube({ version: "v3", auth: oauth });
 const channel = await youtube.channels.list({ part: ["id", "snippet"], mine: true });
-const authenticatedChannelId = channel.data.items?.[0]?.id;
-if (!authenticatedChannelId || authenticatedChannelId !== expectedChannelId || metadata.channelId !== expectedChannelId) {
-  console.error("BLOCKED: authenticated YouTube channel does not match the configured SonicVhibez channel ID.");
+const authenticatedChannels = channel.data.items ?? [];
+const matchedChannel = authenticatedChannels.find(item => item.id === expectedChannelId);
+if (!matchedChannel || metadata.channelId !== expectedChannelId) {
+  console.error("BLOCKED: authenticated YouTube channel ID does not match the configured SonicVhibez channel ID.");
+  process.exit(1);
+}
+if (matchedChannel.snippet?.title !== "SonicVhibez") {
+  console.error(`BLOCKED: expected the exact YouTube channel name "SonicVhibez"; authenticated channel is "${matchedChannel.snippet?.title ?? "unknown"}". No video was uploaded.`);
   process.exit(1);
 }
 
@@ -72,11 +77,12 @@ if (!videoId) {
 }
 const log = {
   timestamp: new Date().toISOString(),
-  channelId: authenticatedChannelId,
+  channelId: matchedChannel.id,
+  channelTitle: matchedChannel.snippet.title,
   videoId,
   privacyStatus: response.data.status?.privacyStatus ?? "unknown",
   title: metadata.title
 };
 fs.mkdirSync("run-logs", { recursive: true });
-fs.writeFileSync(`run-logs/upload-${videoId}.json`, JSON.stringify(log, null, 2) + "\\n");
+fs.writeFileSync(`run-logs/upload-${videoId}.json`, JSON.stringify(log, null, 2) + "\n");
 console.log(JSON.stringify({ ...log, url: `https://www.youtube.com/watch?v=${videoId}` }, null, 2));
