@@ -30,6 +30,23 @@ Run `npm run readiness` for a read-only blocker report. A `HOLD` is expected unt
 
 The readiness report is diagnostic only; it does not validate that license evidence is genuine, judge the finished video's quality, or grant permission to publish. The uploader is private-only. Public publishing and unattended public scheduling remain disabled. Never point credentials at Nature Frontiers.
 
+## Guarded private-upload workflow
+
+A manual workflow named **Upload reviewed Short privately to SonicVhibez** is available under GitHub Actions. It cannot publish publicly: the uploader hard-checks the authenticated channel name and ID and sets YouTube visibility to private.
+
+Before running it, add these four secrets in the repository's **Settings → Secrets and variables → Actions → New repository secret**:
+
+- `YOUTUBE_CLIENT_ID`
+- `YOUTUBE_CLIENT_SECRET`
+- `YOUTUBE_REFRESH_TOKEN`
+- `SONICVHIBEZ_CHANNEL_ID`
+
+Use credentials from the YouTube/Google Cloud OAuth client authorized for the SonicVhibez YouTube account. Verify the channel ID from that account before saving it. Never paste secrets into chat, issues, code, or workflow logs. If the OAuth consent screen is in testing mode, refresh-token lifetime can be limited; use the correct production configuration and least-privilege YouTube scope.
+
+Then commit a fully reviewed metadata JSON and a rights-cleared MP4 at the paths entered when dispatching the workflow. The metadata checker must pass, including `rightsConfirmed=true`, `complianceReviewed=true`, `visibility=private`, the approved product URL, and the verified channel ID. The media preflight must also pass. The workflow stops if secrets are missing, metadata is held, media is invalid, or the authenticated channel doesn't match. On success, download the `sonicvhibez-private-upload-receipt` artifact and verify the private video in YouTube Studio.
+
+**This is not unattended public publishing.** It is a guarded, manual private upload so the account owner can inspect the result. No public posting or public scheduler is enabled.
+
 ## Media rights review
 
 Use [`docs/WILDLIFE_MEDIA_RIGHTS_CHECKLIST.md`](docs/WILDLIFE_MEDIA_RIGHTS_CHECKLIST.md) before integrating any real wildlife footage. It documents the preferred government B-roll sources, attribution requirements, embedded-music restrictions, evidence to retain, and stop conditions. The workflow must never mark rights or compliance as verified automatically.
