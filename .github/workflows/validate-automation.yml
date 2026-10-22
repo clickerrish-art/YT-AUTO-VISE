@@ -30,6 +30,8 @@ jobs:
       - name: Install dependencies
         run: |
           if [ -f package-lock.json ]; then npm ci --ignore-scripts; else npm install --ignore-scripts; fi
+      - name: Install Python renderer test dependency
+        run: python -m pip install mutagen pillow
       - name: Run unit tests
         run: npm test
       - name: Test review metadata safety gates
@@ -59,4 +61,4 @@ jobs:
         run: |
           for f in scripts/*.mjs; do node --check "$f"; done
       - name: Compile Python automation scripts
-        run: python -m py_compile scripts/generate-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py scripts/render-reviewed-wildlife-footage.py scripts/prepare-review-metadata.py tests/test_prepare_review_metadata.py tests/test_checked_in_release_metadata.py
+        run: python -m py_compile scripts/generate-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py scripts/render-reviewed-wildlife-footage.py scripts/prepare-review-metadata.py tests/test_prepare_review_metadata.py tests/test_checked_in_release_metadata.py tests/test_reviewed_footage_renderer.py
