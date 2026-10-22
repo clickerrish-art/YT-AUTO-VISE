@@ -53,7 +53,7 @@ def main() -> None:
         "drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:"
         f"textfile='{title_file.as_posix()}':fontcolor=white:fontsize=54:line_spacing=12:"
         "borderw=2:bordercolor=black@0.65:x=90:y=210:"
-        "enable='between(t,0,8)',"
+        "enable='between(t\\,0\\,8)',"
         "drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:"
         "text='WILDLIFE CREATOR FIELD NOTES':fontcolor=0x72e0d4:fontsize=27:"
         "x=(w-text_w)/2:y=100,"
