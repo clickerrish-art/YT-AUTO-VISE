@@ -16,24 +16,22 @@ jobs:
           node-version: 20
       - run: npm test
       - name: Confirm example content is blocked for missing review approvals
-        env:
-          SONICVHIBEZ_CHANNEL_ID: UCSlkuPfHH78oGC1o418HV4w
         shell: bash
         run: |
           set +e
           output=$(npm run check -- content/next-short.example.json 2>&1)
           status=$?
           set -e
-          printf '%s\n' "$output"
+          printf '%s\\n' "$output"
           if [ "$status" -eq 0 ]; then
             echo "ERROR: unreviewed example passed checks."
             exit 1
           fi
-          if ! printf '%s\n' "$output" | grep -Fq "rightsConfirmed must be true"; then
+          if ! printf '%s\\n' "$output" | grep -Fq "rightsConfirmed must be true"; then
             echo "ERROR: checker failed, but not for the expected review gate."
             exit 1
           fi
-          if ! printf '%s\n' "$output" | grep -Fq "complianceReviewed must be true"; then
+          if ! printf '%s\\n' "$output" | grep -Fq "complianceReviewed must be true"; then
             echo "ERROR: checker did not report the compliance review gate."
             exit 1
           fi
