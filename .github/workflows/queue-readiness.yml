@@ -1,12 +1,19 @@
 name: Queue readiness
 on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/replenish-queue.mjs"
+      - "content/queue.json"
+      - "content/*.srt"
+      - ".github/workflows/queue-readiness.yml"
   workflow_dispatch:
   schedule:
     - cron: "0 15 * * 2,5"
 permissions:
   contents: write
 jobs:
-  replenish:
+  validate-and-replenish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,6 +22,26 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+      - name: Check JavaScript syntax
+        run: |
+          node --check scripts/replenish-queue.mjs
+          node --check scripts/check-content.mjs
+          node --check scripts/check-captions.mjs
+          node --check scripts/preflight-media.mjs
+          node --check scripts/upload-private.mjs
+      - name: Validate existing caption files
+        run: node scripts/check-captions.mjs content/short-001-wildlife-video-storytelling.srt content/short-002-plan-wildlife-documentary.srt
+      - name: Validate queue and approved product URLs
+        run: |
+          node --input-type=module -e '
+          import fs from "node:fs";
+          const q = JSON.parse(fs.readFileSync("content/queue.json", "utf8"));
+          const p = JSON.parse(fs.readFileSync("config/products.json", "utf8"));
+          if (!Array.isArray(q.items) || q.publishingEnabled !== false) throw new Error("Queue must exist and publishing must remain disabled");
+          const approved = new Set(p.products.filter(x => x.status === "approved").map(x => x.url));
+          for (const item of q.items) if (!approved.has(item.productUrl)) throw new Error("Unapproved product URL in queue: " + item.id);
+          console.log("PASS: " + q.items.length + " queue items; all product links approved; publishing disabled.");
+          '
       - name: Replenish draft topic queue
         run: node scripts/replenish-queue.mjs
       - name: Commit queue only when changed
