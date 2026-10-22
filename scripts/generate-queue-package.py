@@ -29,6 +29,7 @@ def build_script(item: dict) -> str:
         if point:
             lines.append(point)
     lines += [
+        "Choose transitions that support the story, leave space for viewers to absorb each moment, and avoid dramatic sound effects that misrepresent animal behaviour.",
         "Keep every claim accurate, and use only footage, images, and sound you have permission to publish.",
         "Never bait, chase, or disturb wildlife to capture a shot. Let natural behaviour guide the story.",
         "A focused story is easier to follow than a rushed list of clips.",
