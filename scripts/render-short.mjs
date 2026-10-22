@@ -26,6 +26,12 @@ if (m.channel !== "SonicVhibez") errors.push("channel must be exactly SonicVhibe
 if (m.rightsConfirmed !== true) errors.push("rightsConfirmed must be true after human review");
 if (m.complianceReviewed !== true) errors.push("complianceReviewed must be true after human review");
 if (m.targetSeconds !== 55) errors.push("targetSeconds must be 55");
+for (const key of ["footageLicenseEvidence", "narrationLicenseEvidence"]) {
+  const evidence = typeof m[key] === "string" ? m[key].trim() : "";
+  if (evidence.length < 12 || /replace_with|placeholder|todo|unknown|tbd/i.test(evidence)) {
+    errors.push(key + " must contain a real license/permission record reference, not a placeholder");
+  }
+}
 for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
   if (typeof m[key] === "string" && m[key].trim() && !fs.existsSync(path.resolve(path.dirname(manifestPath), m[key]))) {
     errors.push(key + " does not exist relative to the manifest directory: " + m[key]);
