@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "scripts/**"
+      - "tests/**"
       - "content/queue.json"
       - "config/products.json"
       - "package.json"
@@ -31,6 +32,8 @@ jobs:
           if [ -f package-lock.json ]; then npm ci --ignore-scripts; else npm install --ignore-scripts; fi
       - name: Run unit tests
         run: npm test
+      - name: Test review metadata safety gates
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Validate queue invariants and approved destination
         run: |
           python - <<'PY'
@@ -56,4 +59,4 @@ jobs:
         run: |
           for f in scripts/*.mjs; do node --check "$f"; done
       - name: Compile Python automation scripts
-        run: python -m py_compile scripts/generate-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py scripts/prepare-review-metadata.py
+        run: python -m py_compile scripts/generate-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py scripts/prepare-review-metadata.py tests/test_prepare_review_metadata.py
