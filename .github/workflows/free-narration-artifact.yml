@@ -19,6 +19,7 @@ on:
     paths:
       - "content/narration-master-short-001-and-002.md"
       - "scripts/generate-narration.py"
+      - "scripts/generate-queue-package.py"
       - ".github/workflows/free-narration-artifact.yml"
 permissions:
   contents: read
@@ -41,6 +42,10 @@ jobs:
           SELECTED_SHORT: ${{ github.event.inputs.short || 'both' }}
         run: |
           python scripts/generate-narration.py --short "$SELECTED_SHORT" --voice en-US-GuyNeural --rate=-5%
+      - name: Generate the next queued topic package
+        env:
+          RUN_NUMBER: ${{ github.run_number }}
+        run: python scripts/generate-queue-package.py --run-number "$RUN_NUMBER" --voice en-US-GuyNeural --rate=-5%
       - name: Report audio duration
         run: |
           python - <<'PY'
@@ -53,6 +58,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: sonicvhibez-narration-audio
-          path: media/narration/*.mp3
+          path: |
+            media/narration/*.mp3
+            media/queue-package/*
           if-no-files-found: error
           retention-days: 30
