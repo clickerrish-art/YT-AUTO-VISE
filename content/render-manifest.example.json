@@ -1,0 +1,11 @@
+{
+  "channel": "SonicVhibez",
+  "targetSeconds": 55,
+  "footagePath": "media/rights-cleared-wildlife.mp4",
+  "narrationPath": "media/narration.mp3",
+  "captionsPath": "short-001-wildlife-video-storytelling.srt",
+  "footageLicenseEvidence": "REPLACE_WITH_LICENSE_OR_PERMISSION_RECORD",
+  "narrationLicenseEvidence": "REPLACE_WITH_VOICE_LICENSE_OR_GENERATION_RECORD",
+  "rightsConfirmed": false,
+  "complianceReviewed": false
+}
