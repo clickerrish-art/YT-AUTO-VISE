@@ -29,3 +29,7 @@ Run `npm run readiness` for a read-only blocker report. A `HOLD` is expected unt
 5. YouTube OAuth credentials and the verified SonicVhibez channel ID configured as repository secrets/environment variables.
 
 The readiness report is diagnostic only; it does not validate that license evidence is genuine, judge the finished video's quality, or grant permission to publish. The uploader is private-only. Public publishing and unattended public scheduling remain disabled. Never point credentials at Nature Frontiers.
+
+## Free narration generation
+
+The `Generate free narration audio` GitHub Actions workflow creates MP3 narration artifacts for Short 001 and Short 002 using the US English `en-US-GuyNeural` voice through the community `edge-tts` client. It needs no paid API key and has no upload or publishing permission. It is triggered when the narration master or generator changes, and can also be run manually from Actions to select one Short or both. Download the `sonicvhibez-narration-audio` artifact from the completed run; artifacts expire after 30 days. The generated audio is a draft: listen to it, check pronunciation and timing, and align captions to the actual read before rendering. Voice service availability and terms may change; this workflow does not guarantee a specific age impression or exact duration.
