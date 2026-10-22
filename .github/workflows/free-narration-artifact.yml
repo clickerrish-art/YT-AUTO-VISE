@@ -22,6 +22,7 @@ on:
       - "scripts/generate-queue-package.py"
       - "scripts/render-queued-draft.py"
       - "scripts/render-thumbnail.mjs"
+      - "scripts/render-photo-thumbnail.py"
       - ".github/workflows/free-narration-artifact.yml"
 permissions:
   contents: read
@@ -34,13 +35,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install free TTS client, audio metadata reader, and FFmpeg
+      - name: Install free TTS client, audio metadata reader, and image library
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg fonts-dejavu-core
-          python -m pip install --disable-pip-version-check edge-tts mutagen
+          python -m pip install --disable-pip-version-check edge-tts mutagen pillow
       - name: Validate Python generators
-        run: python -m py_compile scripts/generate-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py
+        run: python -m py_compile scripts/generate-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py
       - name: Validate narration extraction
         run: python scripts/generate-narration.py --short both --extract-only
       - name: Generate natural US English narration
@@ -73,18 +74,8 @@ jobs:
           PY
       - name: Render vertical review-only video draft
         run: python scripts/render-queued-draft.py
-      - name: Generate thumbnail from rendered draft
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          p = next(Path("media/queue-package").glob("*.json"))
-          title = json.loads(p.read_text(encoding="utf-8")).get("title") or "Wildlife Creator Field Notes"
-          Path("media/rendered-drafts/thumbnail-title.txt").write_text(str(title).replace("\\n", " ")[:85], encoding="utf-8")
-          PY
-          VIDEO="$(find media/rendered-drafts -maxdepth 1 -name '*-DRAFT.mp4' -print -quit)"
-          TITLE="$(python -c 'import json,glob; print(json.load(open(glob.glob("media/queue-package/*.json")[0])).get("title","Wildlife Creator Field Notes"))')"
-          node scripts/render-thumbnail.mjs "$VIDEO" "$TITLE" media/rendered-drafts/thumbnail.jpg
+      - name: Generate realistic wildlife photo thumbnail
+        run: python scripts/render-photo-thumbnail.py
       - name: Validate rendered draft video
         run: |
           python - <<'PY'
@@ -100,13 +91,18 @@ jobs:
           duration = float(data.get("format", {}).get("duration", 0))
           if not video or (video.get("width"), video.get("height")) != (1080, 1920) or not audio or not 50 <= duration <= 60:
               raise SystemExit(f"Rendered MP4 failed media checks: video={video}, audio={audio}, duration={duration}")
-          metadata_files = list(Path("media/rendered-drafts").glob("*.json"))
+          metadata_files = [p for p in Path("media/rendered-drafts").glob("*.json") if p.name != "thumbnail-rights-evidence.json"]
           if len(metadata_files) != 1:
               raise SystemExit(f"Expected one rendered draft metadata JSON, found {len(metadata_files)}")
           metadata = json.loads(metadata_files[0].read_text(encoding="utf-8"))
           assert metadata.get("status") == "HOLD_FOR_FOOTAGE_AND_REVIEW"
           assert metadata.get("rightsConfirmed") is False and metadata.get("complianceReviewed") is False
-          print(f"PASS: rendered review draft is 1080x1920, {duration:.2f}s, audio/video present, publishing remains held.")
+          thumb = Path("media/rendered-drafts/thumbnail.jpg")
+          assert thumb.exists() and thumb.stat().st_size > 50000, "Photo thumbnail missing or unexpectedly small"
+          evidence = json.loads(Path("media/rendered-drafts/thumbnail-rights-evidence.json").read_text(encoding="utf-8"))
+          assert evidence.get("sourcePage", "").startswith("https://www.pexels.com/")
+          assert evidence.get("videoFootageRightsConfirmed") is False
+          print(f"PASS: review draft is 1080x1920, {duration:.2f}s; photo thumbnail and provenance exist; public publishing remains held.")
           PY
       - name: Report audio duration
         run: |
@@ -126,5 +122,6 @@ jobs:
             media/rendered-drafts/*.mp4
             media/rendered-drafts/*.json
             media/rendered-drafts/thumbnail.jpg
+            media/rendered-drafts/thumbnail-rights-evidence.json
           if-no-files-found: error
           retention-days: 30
