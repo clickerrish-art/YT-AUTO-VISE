@@ -59,6 +59,7 @@ for (const note of notes) console.log("INFO: " + note);
 if (blockers.length) {
   console.log(`HOLD: ${blockers.length} blocker(s) remain before a private upload can be attempted:`);
   for (const blocker of blockers) console.log("- " + blocker);
+  console.log("This report never uploads, schedules, or publishes.");
   console.log("This report does not verify account ownership, license authenticity, factual accuracy, or visual quality.");
   process.exit(0);
 }
