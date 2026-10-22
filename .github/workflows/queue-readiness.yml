@@ -4,11 +4,15 @@ on:
     branches: [main]
     paths:
       - "scripts/replenish-queue.mjs"
+      - "scripts/production-readiness.mjs"
+      - "tests/**"
       - "scripts/render-short.mjs"
       - "package.json"
       - "README.md"
       - "content/queue.json"
       - "content/*.srt"
+      - "content/*.md"
+      - "content/*.json"
       - ".github/workflows/queue-readiness.yml"
   workflow_dispatch:
   schedule:
@@ -32,7 +36,12 @@ jobs:
           node --check scripts/check-captions.mjs
           node --check scripts/preflight-media.mjs
           node --check scripts/render-short.mjs
+          node --check scripts/production-readiness.mjs
           node --check scripts/upload-private.mjs
+      - name: Run repository regression tests
+        run: node --test
+      - name: Report production blockers without publishing
+        run: node scripts/production-readiness.mjs
       - name: Validate existing caption files
         run: node scripts/check-captions.mjs content/short-001-wildlife-video-storytelling.srt content/short-002-plan-wildlife-documentary.srt
       - name: Validate queue and approved product URLs
