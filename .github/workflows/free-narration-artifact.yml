@@ -40,6 +40,27 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends ffmpeg fonts-dejavu-core
           python -m pip install --disable-pip-version-check --retries 3 --timeout 30 edge-tts mutagen pillow
+      - name: Validate the replenishable queue and destination safety
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          q = json.loads(Path("content/queue.json").read_text(encoding="utf-8"))
+          items = q.get("items", [])
+          assert q.get("publishingEnabled") is False, "Public publishing must remain disabled"
+          cadence = q.get("cadence", {})
+          assert cadence.get("timezone") == "Africa/Johannesburg"
+          assert cadence.get("postsPerWeek") == 2 and cadence.get("days") == ["Tuesday", "Friday"]
+          assert len(items) >= 10, f"Queue needs at least 10 topics; found {len(items)}"
+          ids = [x.get("id") for x in items]
+          assert all(isinstance(i, str) and i.strip() for i in ids), "Every topic needs a stable ID"
+          assert len(ids) == len(set(ids)), "Queue topic IDs must be unique"
+          approved = "https://selar.com/0u19v8u99l"
+          assert all(x.get("productUrl") == approved for x in items), "Queue contains an unapproved product URL"
+          assert all(x.get("status") in ("HOLD_FOR_MEDIA_AND_HUMAN_REVIEW", "script_and_captions_ready_needs_media_and_review") for x in items), "Unexpected topic status; inspect before generation"
+          assert all(x.get("title") or x.get("topic") for x in items), "Every topic needs a title/topic"
+          print(f"PASS: {len(items)} unique queued topics; Tue/Fri SAST cadence; approved URL only; public publishing remains disabled.")
+          PY
       - name: Validate Python generators
         run: python -m py_compile scripts/generate-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py
       - name: Validate narration extraction
