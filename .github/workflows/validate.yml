@@ -15,14 +15,20 @@ jobs:
           node-version: 20
       - run: npm install --ignore-scripts
       - run: npm test
-      - name: Check example is blocked by default
+      - name: Ensure all unreviewed metadata examples are blocked
+        env:
+          SONICVHIBEZ_CHANNEL_ID: UCSlkuPfHH78oGC1o418HV4w
         run: |
           set +e
-          SONICVHIBEZ_CHANNEL_ID="UCSlkuPfHH78oGC1o418HV4w" npm run check -- content/next-short.example.json
-          status=$?
+          npm run check -- content/next-short.example.json
+          base_status=$?
+          npm run check -- content/short-001-metadata.example.json
+          short1_status=$?
+          npm run check -- content/short-002-metadata.example.json
+          short2_status=$?
           set -e
-          if [ "$status" -eq 0 ]; then
-            echo "Unsafe example unexpectedly passed validation."
+          if [ "$base_status" -eq 0 ] || [ "$short1_status" -eq 0 ] || [ "$short2_status" -eq 0 ]; then
+            echo "An unreviewed metadata template unexpectedly passed validation."
             exit 1
           fi
-          echo "Expected result: unreviewed example is blocked."
+          echo "PASS: all unreviewed metadata templates remain blocked."
