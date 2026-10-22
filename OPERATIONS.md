@@ -2,7 +2,14 @@
 
 ## Current scope
 
-This repository currently validates a proposed Short's metadata. It does not generate a video, synthesize narration, upload to YouTube, schedule posts, or replenish a queue.
+This repository validates proposed Short metadata and stores scripts/production briefs. It does not generate a video, synthesize narration, upload to YouTube, schedule posts, or replenish a queue. HeyGen has reported that the workspace has used its free video-generation allowance for this month; no paid generation has been initiated.
+
+## Current drafts
+
+- Short 001: `content/short-001-wildlife-video-storytelling.md`; metadata template: `content/short-001-metadata.example.json`.
+- Short 002: `content/short-002-plan-wildlife-documentary.md`; metadata template: `content/short-002-metadata.example.json`.
+
+Both metadata templates intentionally keep `rightsConfirmed` and `complianceReviewed` false and have no media path. They must fail the production checker until a real video is generated, reviewed, and its rights/compliance verified.
 
 ## Channel isolation
 
