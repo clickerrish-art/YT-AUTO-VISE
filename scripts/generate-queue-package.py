@@ -30,6 +30,7 @@ def build_script(item: dict) -> str:
             lines.append(point)
     lines += [
         "Choose transitions that support the story, leave space for viewers to absorb each moment, and avoid dramatic sound effects that misrepresent animal behaviour.",
+        "Use natural sound where possible, and let each shot stay long enough for viewers to understand the behaviour.",
         "Keep every claim accurate, and use only footage, images, and sound you have permission to publish.",
         "Never bait, chase, or disturb wildlife to capture a shot. Let natural behaviour guide the story.",
         "A focused story is easier to follow than a rushed list of clips.",
@@ -38,8 +39,8 @@ def build_script(item: dict) -> str:
     text = " ".join(lines)
     # Keep generated narration within a practical short-form length; no unsupported performance promises.
     words = text.split()
-    if len(words) > 145:
-        text = " ".join(words[:145]).rstrip(" ,;:") + "."
+    if len(words) > 135:
+        text = " ".join(words[:135]).rstrip(" ,;:") + "."
     return text
 
 def make_srt(text: str, duration: float) -> str:
