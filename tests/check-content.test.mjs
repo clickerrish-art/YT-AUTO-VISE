@@ -123,3 +123,44 @@ test("HOLD metadata cannot pass even when all other metadata fields look ready",
     fs.rmSync(tempDir, { recursive: true, force: true });
   }
 });
+
+
+test("media preflight blocks when human rights and compliance review are missing", async () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-preflight-"));
+  const mediaPath = path.join(tempDir, "placeholder.mp4");
+  const metadataPath = path.join(tempDir, "metadata.json");
+  fs.writeFileSync(mediaPath, "not real media");
+  fs.writeFileSync(metadataPath, JSON.stringify({
+    channel: "SonicVhibez",
+    visibility: "private",
+    rightsConfirmed: false,
+    complianceReviewed: false
+  }));
+  try {
+    const result = (await import("node:child_process")).spawnSync(
+      process.execPath, ["scripts/preflight-media.mjs", mediaPath, metadataPath],
+      { encoding: "utf8" }
+    );
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /rightsConfirmed and complianceReviewed/);
+    assert.doesNotMatch(result.stdout + result.stderr, /PASS:/);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("media preflight blocks if the video file is missing", async () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-missing-media-"));
+  const metadataPath = path.join(tempDir, "metadata.json");
+  fs.writeFileSync(metadataPath, JSON.stringify({ channel: "SonicVhibez", visibility: "private" }));
+  try {
+    const result = (await import("node:child_process")).spawnSync(
+      process.execPath, ["scripts/preflight-media.mjs", path.join(tempDir, "missing.mp4"), metadataPath],
+      { encoding: "utf8" }
+    );
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /video or metadata file does not exist/);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
