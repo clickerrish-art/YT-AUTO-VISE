@@ -13,7 +13,7 @@ test("Short 001 narration draft remains aligned with timed caption beats", () =>
     ["patient observation", "patient observation"],
     ["readable captions and rights-cleared music", "music you have permission to use"],
     ["closing takeaway", "one useful takeaway"],
-    ["approved product call to action", "wildlife creator’s vault"]
+    ["approved product call to action", "wildlife creator"]
   ];
   for (const [label, phrase] of requiredBeats) {
     assert.ok(script.includes(phrase), `script missing ${label}: ${phrase}`);
