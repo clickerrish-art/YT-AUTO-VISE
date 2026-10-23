@@ -28,7 +28,9 @@ def build_script(item: dict) -> str:
         f"Start with one clear goal: {title[:-1] if title.endswith('.') else title}.",
         "Keep every claim accurate, and use only footage, images, and sound you have permission to publish.",
         "Never bait, chase, or disturb wildlife to capture a shot. Let natural behaviour guide the story.",
-        "For a more structured wildlife-creator resource, find the Complete YouTube Wildlife Creator's Vault at the link in the description."
+        "This video promotes the Complete YouTube Wildlife Creator's Vault. I may earn compensation if you buy through the link in the description.",
+        "Some visuals or narration may be AI-generated. Realistic synthetic wildlife scenes will be disclosed as altered or synthetic content.",
+        f"Find the resource at {APPROVED_URL}."
     ]
     optional = [
         "Plan your shot before you arrive, then wait quietly and leave plenty of space.",
@@ -36,8 +38,6 @@ def build_script(item: dict) -> str:
         "Use natural sound where possible, and let each shot stay long enough for viewers to understand the behaviour.",
         "A focused story is easier to follow than a rushed list of clips.",
     ] + outline
-    # Preserve complete sentences and the promotional call-to-action. Remove optional
-    # material as needed rather than truncating mid-sentence at an arbitrary word count.
     lines = [mandatory[0], mandatory[1], *optional, *mandatory[2:]]
     drop_order = [
         "A focused story is easier to follow than a rushed list of clips.",
@@ -53,7 +53,6 @@ def build_script(item: dict) -> str:
                 removed = True
                 break
         if not removed:
-            # If the topic outline itself is unusually long, remove its final point.
             for point in reversed(outline):
                 if point in lines:
                     lines.remove(point)
@@ -61,11 +60,10 @@ def build_script(item: dict) -> str:
                     removed = True
                     break
         if not removed:
-            raise ValueError("Required narration and complete call-to-action exceed the 135-word limit.")
+            raise ValueError("Required narration and complete disclosures exceed the 135-word limit.")
     return " ".join(lines)
 
 def make_srt(text: str, duration: float) -> str:
-    # Proportional timing is a draft only; downstream review must align captions to actual speech.
     words = text.split()
     chunks = [" ".join(words[i:i+5]) for i in range(0, len(words), 5)]
     weights = [max(1, len(c.split())) for c in chunks]
@@ -98,29 +96,33 @@ async def main():
     audio = OUT / f"{slug}.mp3"
     await edge_tts.Communicate(text, args.voice, rate=args.rate).save(str(audio))
     duration = MP3(audio).info.length
-    # Keep the package on HOLD if audio does not meet the intended Short duration.
     metadata = {
         "status": "HOLD_FOR_FOOTAGE_AND_REVIEW",
         "channel": "SonicVhibez",
         "queueItemId": item.get("id"),
         "title": item.get("title") or item.get("topic"),
         "description": (
-            f"{item.get('topic', '')}. Learn practical wildlife filmmaking, nature documentary planning, "
-            "ethical wildlife video production, and YouTube Shorts storytelling. "
-            "This creator-education Short focuses on clear storytelling, responsible filming, and accurate captions.\n\n"
+            f"{item.get('topic', '')}. Practical wildlife filmmaking, nature documentary planning, "
+            "ethical wildlife video production, and storytelling for YouTube Shorts.\n\n"
+            "PAID PROMOTION: This video promotes the Complete YouTube Wildlife Creator's Vault. "
+            "The creator may receive compensation if you purchase. Check the product page for current details.\n\n"
+            "AI DISCLOSURE: Some visuals or narration may be AI-generated. Realistic AI-generated or "
+            "altered wildlife scenes must be disclosed using YouTube's altered/synthetic content setting.\n\n"
             f"Promotional resource: Complete YouTube Wildlife Creator's Vault — {APPROVED_URL}\n\n"
-            "Use only footage, images, and music you have permission to publish. Captions in this draft have estimated timings and must be aligned to the final narration. "
-            "#WildlifeFilmmaking #NatureDocumentary #YouTubeShorts"
+            "Use only footage, images, and music you have permission to publish. Captions in this draft "
+            "have estimated timings and must be aligned to final narration. #WildlifeFilmmaking #NatureDocumentary #YouTubeShorts"
         ),
-        "tags": list(dict.fromkeys((item.get("keywords", []) + ["wildlife filmmaking", "nature documentary", "YouTube Shorts"])) )[:10],
+        "tags": list(dict.fromkeys((item.get("keywords", []) + ["wildlife filmmaking", "nature documentary", "YouTube Shorts"])))[:10],
         "productUrl": APPROVED_URL,
         "madeForKids": False,
         "visibility": "private",
         "targetSeconds": 55,
         "actualNarrationSeconds": round(duration, 2),
+        "containsSyntheticMedia": True,
+        "hasPaidPromotion": True,
         "rightsConfirmed": False,
         "complianceReviewed": False,
-        "notes": "Automated draft only. Check audio and title, verify factual claims, confirm footage/music rights, align captions, and review the thumbnail before upload. The product link is disclosed as promotional. No video was published."
+        "notes": "Automated draft only. Review audio, title, facts, captions, footage/music rights and thumbnail. Disclosures are required. Never clear review flags automatically. No video was published."
     }
     (OUT / f"{slug}.txt").write_text(text + "\n", encoding="utf-8")
     (OUT / f"{slug}.srt").write_text(make_srt(text, duration), encoding="utf-8")
