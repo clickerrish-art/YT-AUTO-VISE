@@ -13,7 +13,7 @@ The automated implementation suite passed **88/88 tests** at tested implementati
 
 The default-branch baseline passed 54/54 tests at `45352b73bb6cc4787b2a49988b575afb754ab627` ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047)).
 
-**Not yet fully accepted:** no genuine rights-cleared final MP4 has been generated and inspected in this pass; worker leases/backoff are incomplete; OAuth identity and a real private upload were not exercised; and no package lockfile exists, so `npm ci` has not been proven.
+**Not yet fully accepted:** no genuine rights-cleared final MP4 has been generated and inspected in this pass; automatic background lease reaping/restart recovery remain incomplete; OAuth identity and a real private upload were not exercised. `package-lock.json` is committed and clean `npm ci --ignore-scripts` passed in run 40025040014.
 
 ## Authoritative schedule
 
@@ -34,7 +34,7 @@ npm test
 
 ## Local setup and dashboard
 
-Requires Node.js 20+ and npm. A lockfile is not yet committed, so use `npm install --ignore-scripts` until reproducible installation is completed.
+Requires Node.js 20+ and npm. A committed `package-lock.json` is available; use `npm ci --ignore-scripts` for reproducible installation.
 
 Copy `.env.example` to a private local `.env` file or export values in your terminal. Set:
 - `DASHBOARD_OPERATOR_TOKEN`: random value with at least 24 characters.
@@ -84,8 +84,8 @@ See `.env.example` for variable names only. Use local secure environment variabl
 
 ## Remaining acceptance work
 
-1. Commit a real npm lockfile and prove clean `npm ci`.
-2. Finish worker leases, heartbeat/expiry, retry backoff and stale-worker fencing.
+1. Keep the lockfile synchronized and rerun clean `npm ci --ignore-scripts` after dependency changes.
+2. Add automatic background lease reaping and full restart recovery; guarded worker lease APIs, heartbeat, bounded backoff and stale-worker fencing are already implemented/tested.
 3. Provide completed real manifests and rights-cleared inputs, then exercise the dashboard-launched render/validation/rights/review pipeline end to end.
 4. Provide rights-cleared source assets and evidence, then generate and inspect real Short and long-form artifacts.
 5. Test upload failure injection and reconciliation; verify authorized SonicVhibez OAuth identity before any actual private upload.
@@ -95,4 +95,4 @@ See `docs/PROJECT_COMPLETION_AUDIT.md`, `docs/PROJECT_COMPLETION_REPORT.md`, `do
 
 ## Acceptance status
 
-Latest tested implementation SHA: `e568471c73dae207948a78538c79324ac15a5376`; [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100677), [metadata/schedule](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100793), and [automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100724) each pass 88 tests with no failures or skips. This is not a claim of full production acceptance: no rights-cleared source media or real render was supplied, `npm ci` is not verified because no lockfile is committed, and no live OAuth/private upload was attempted. Public publishing remains disabled.
+Latest tested implementation SHA: `e568471c73dae207948a78538c79324ac15a5376`; [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100677), [metadata/schedule](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100793), and [automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100724) each pass 88 tests with no failures or skips. This is not a claim of full production acceptance: no rights-cleared source media or real render was supplied; `npm ci --ignore-scripts` passed in run 40025040014, and no live OAuth/private upload was attempted. Public publishing remains disabled.
