@@ -45,7 +45,7 @@ def build_script(item: dict) -> str:
         "Use natural sound where possible, and let each shot stay long enough for viewers to understand the behaviour.",
         "Plan your shot before you arrive, then wait quietly and leave plenty of space.",
     ]
-    while len(" ".join(lines).split()) > 135:
+    while len(" ".join(lines).split()) > 105:
         removed = False
         for candidate in drop_order:
             if candidate in lines:
@@ -60,7 +60,7 @@ def build_script(item: dict) -> str:
                     removed = True
                     break
         if not removed:
-            raise ValueError("Required narration and complete disclosures exceed the 135-word limit.")
+            raise ValueError("Required narration and complete disclosures exceed the 105-word limit.")
     return " ".join(lines)
 
 def make_srt(text: str, duration: float) -> str:
