@@ -14,7 +14,7 @@ Free-first, local-first content operations for the SonicVhibez YouTube channel. 
 ## Setup
 
 ```sh
-npm ci
+npm ci --ignore-scripts
 cp .env.example .env
 ```
 
