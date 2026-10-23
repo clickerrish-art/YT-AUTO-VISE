@@ -10,9 +10,9 @@ Public publishing: disabled
 | Branch | SHA reference | Full-suite result |
 |---|---|---|
 | `main` | baseline `45352b73bb6cc4787b2a49988b575afb754ab627` | **BLOCKED — not run in this execution environment** |
-| `codex/marketing-machine-audit-fixes` | latest verified test-file commit `cfacdfcaa09b8eb064eb9977e4958db13f4c579c` | **BLOCKED — not run in this execution environment** |
+| `codex/marketing-machine-audit-fixes` | HEAD `a426b36b908103e2ce001a28a012a346da5c859c` | **BLOCKED — not run in this execution environment** |
 
-The connected GitHub commit-status endpoint previously returned no status entries for checked implementation commits. That is not a passing result. A clean checkout could not be performed because GitHub hostname resolution failed in this execution environment. The newest dashboard/schedule additions also require a fresh CI run before they can be considered verified.
+At HEAD `a426b36b908103e2ce001a28a012a346da5c859c`, the connected GitHub commit-status endpoint returned an empty `statuses` list and the available commit-workflow lookup returned no runs. Neither result is a pass. That is not a passing result. A clean checkout could not be performed because GitHub hostname resolution failed in this execution environment. The newest dashboard/schedule additions also require a fresh CI run before they can be considered verified.
 
 ## Toolchain and reproducibility
 
