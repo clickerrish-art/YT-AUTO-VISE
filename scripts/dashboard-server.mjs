@@ -7,6 +7,7 @@ import { spawn } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
 import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
+import { manageCampaign } from "./campaign-management.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = process.env.DASHBOARD_HOST ?? "127.0.0.1";
@@ -28,7 +29,8 @@ if (!["127.0.0.1", "::1", "localhost"].includes(host)) {
 fs.mkdirSync(stateDir, { recursive: true });
 if (!fs.existsSync(stateFile)) {
   const queue = JSON.parse(fs.readFileSync(path.join(root, "content/queue.json"), "utf8"));
-  const initial = { version: 1, queueItems: queue.items ?? [], audit: [], jobs: [], uploads: [] };
+  const campaignConfig = JSON.parse(fs.readFileSync(path.join(root, "config/campaigns.json"), "utf8"));
+  const initial = { version: 1, queueItems: queue.items ?? [], campaigns: campaignConfig.campaigns ?? [], audit: [], jobs: [], uploads: [] };
   fs.writeFileSync(stateFile, JSON.stringify(initial, null, 2) + "\n", { mode: 0o600 });
 }
 function loadState() {
@@ -191,7 +193,8 @@ const server = http.createServer(async (req, res) => {
       try {
         loadState();
         const schedule = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
-        const campaigns = JSON.parse(fs.readFileSync(path.join(root, "config/campaigns.json"), "utf8"));
+        const configuredCampaigns = JSON.parse(fs.readFileSync(path.join(root, "config/campaigns.json"), "utf8"));
+        const campaigns = { version: 1, campaigns: loadState().campaigns ?? configuredCampaigns.campaigns };
         const campaignErrors = validateCampaigns(campaigns);
         const optionalBlockers = [];
         if (!schedule.channelId) optionalBlockers.push("SONICVHIBEZ_CHANNEL_ID has not been independently verified");
@@ -213,7 +216,8 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "GET" && url.pathname === "/api/state") {
       const state = loadState();
       const schedule = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
-      const campaignConfig = JSON.parse(fs.readFileSync(path.join(root, "config/campaigns.json"), "utf8"));
+      const configuredCampaigns = JSON.parse(fs.readFileSync(path.join(root, "config/campaigns.json"), "utf8"));
+      const campaignConfig = { version: 1, campaigns: state.campaigns ?? configuredCampaigns.campaigns };
       const campaignErrors = validateCampaigns(campaignConfig);
       const blockers = campaignErrors.map(error => "Campaign configuration: " + error);
       if (!schedule.channelId) blockers.push("SonicVhibez channel ID has not been verified");
@@ -243,12 +247,32 @@ const server = http.createServer(async (req, res) => {
       saveState(latest);
       return json(res, result.status === "SUCCEEDED" ? 200 : 500, { job: latest.jobs.find(entry => entry.id === job.id), publicPublishingEnabled: false });
     }
+    if (req.method === "POST" && url.pathname === "/api/campaigns/manage") {
+      const body = await readBody(req);
+      const actor = process.env.DASHBOARD_OPERATOR_ID;
+      if (!actor || actor.trim().length < 2) return json(res, 503, { error: "Campaign changes require DASHBOARD_OPERATOR_ID to identify the authenticated operator" });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const configured = JSON.parse(fs.readFileSync(path.join(root, "config/campaigns.json"), "utf8"));
+        const current = { version: 1, campaigns: state.campaigns ?? configured.campaigns };
+        const result = manageCampaign(current, body, actor);
+        state.campaigns = result.config.campaigns;
+        state.audit.push({ id: crypto.randomUUID(), action: "CAMPAIGN_" + String(body.action).toUpperCase(), campaignId: result.campaign.id, campaignType: result.campaign.type, status: result.campaign.status, destinationVersion: result.campaign.approval?.destinationVersion ?? result.campaign.pendingDestinationVersion ?? null, actor, at: new Date().toISOString(), previewOnly: result.previewOnly === true });
+        saveState(state);
+        return json(res, 200, { campaign: result.campaign, previewOnly: result.previewOnly, publicPublishingEnabled: false });
+      } finally { release(); }
+    }
     if (req.method === "POST" && url.pathname === "/api/drafts") {
       const body = await readBody(req);
       const item = safeItem(body);
       const release = await acquireStateLock();
       try {
         const state = loadState();
+        const configured = JSON.parse(fs.readFileSync(path.join(root, "config/campaigns.json"), "utf8"));
+        const campaigns = state.campaigns ?? configured.campaigns;
+        const selarCampaign = campaigns.find(c => c.type === "selar_digital_product");
+        if (!selarCampaign || selarCampaign.status !== "ACTIVE_FOR_DRAFTS_ONLY" || selarCampaign.destinationUrl !== approvedProductUrl) return json(res, 409, { error: "The approved Selar campaign is inactive; preview and activate it for drafts first" });
         if (state.queueItems.some(existing => existing.id === item.id)) return json(res, 409, { error: "That queue ID already exists" });
         const slotFingerprint = item.scheduledDate + ":17:00:Africa/Johannesburg";
         const slotAlreadyReserved = state.jobs.some(existing => existing.kind === "CONTENT_PRODUCTION" && existing.scheduledSlot?.date === item.scheduledDate);
