@@ -49,7 +49,7 @@ test("upload attempts are persisted before insert and reconciled without blind r
   assert.match(source, /REMOTE_ACCEPTED_RECONCILIATION_REQUIRED/);
   assert.match(source, /RECOVERY_REQUIRED/);
   assert.match(source, /youtube\.videos\.list\(\{ part: \["id", "snippet", "status"\], id: /);
-  const ledgerWrite = source.indexOf("writeJsonAtomic(ledgerPath, ledger);");
+  const ledgerWrite = source.indexOf("persistJson(ledgerPath, ledger);");
   const insert = source.indexOf("youtube.videos.insert(");
   assert.ok(ledgerWrite !== -1 && ledgerWrite < insert, "attempt ledger must be persisted before the remote insert");
   assert.ok(source.indexOf("if (prior)") < insert, "existing attempts must be reconciled before any new insert");
