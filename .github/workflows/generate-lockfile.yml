@@ -1,0 +1,63 @@
+name: Generate and verify npm lockfile
+
+on:
+  push:
+    branches:
+      - codex/marketing-machine-audit-fixes
+    paths-ignore:
+      - package-lock.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lockfile-generation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lockfile:
+    if: ${{ hashFiles('package-lock.json') == '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out implementation branch
+        uses: actions/checkout@v4
+        with:
+          ref: codex/marketing-machine-audit-fixes
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Generate lockfile without lifecycle scripts
+        run: npm install --package-lock-only --ignore-scripts
+      - name: Prove clean locked installation
+        run: npm ci --ignore-scripts
+      - name: Run complete Node test suite
+        run: npm test
+      - name: Validate schedule and campaign configuration
+        run: |
+          npm run validate:schedule
+          npm run validate:campaigns
+      - name: Check JavaScript syntax
+        run: |
+          find scripts test tests -name '*.mjs' -print0 | xargs -0 -n1 node --check
+      - name: Commit lockfile to implementation branch only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          if git diff --cached --quiet; then
+            echo "No lockfile change to commit."
+          else
+            git commit -m "build: add reproducible npm lockfile"
+            git push origin HEAD:refs/heads/codex/marketing-machine-audit-fixes
+          fi
+      - name: Preserve generated lockfile for recovery if commit is blocked
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-npm-lockfile
+          path: package-lock.json
+          if-no-files-found: warn
+          retention-days: 7
