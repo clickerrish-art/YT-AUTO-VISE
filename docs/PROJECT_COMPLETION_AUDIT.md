@@ -40,7 +40,7 @@ The unchanged `main` baseline passed 54 tests with 0 failures in [run 4001803804
 | Evidence-bound human review | PARTIAL | Review primitives and endpoint implemented; no real rights-cleared media or owner review evidence is present |
 | Actual Short/long-form media artifacts | BLOCKED | No genuine rights-cleared source footage and completed media manifest were available; no real documentary MP4 or checksum is claimed |
 | FFmpeg end-to-end artifact inspection | BLOCKED | Renderers exist, but this run did not render or inspect a rights-cleared final artifact |
-| Worker leases, heartbeat, bounded backoff and stale-worker fencing | NOT IMPLEMENTED | Lifecycle has bounded operator retries and restart recovery, but not a complete leased worker service |
+| Worker leases, heartbeat, expiry, bounded backoff and stale-worker fencing | PARTIAL — guarded APIs exist; expiry reaping is operator-triggered and restart recovery remains incomplete | Lifecycle has bounded operator retries and restart recovery, but not a complete leased worker service |
 | Durable private upload and reconciliation | PARTIAL | Code and static regression tests cover safeguards; no OAuth identity, remote upload, remote verification or real receipt was exercised |
 | Campaign external destination verification | BLOCKED | Safari destination must be supplied and owner-verified; no Safari campaign is active by default |
 | Reproducible `npm ci` installation | BLOCKED | No committed `package-lock.json`; CI currently uses `npm install --ignore-scripts` |
