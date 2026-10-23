@@ -1,0 +1,38 @@
+name: Generate long-form narration drafts
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 15 * * 2,6"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sonicvhibez-long-form-narration
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install free narration client
+        run: python -m pip install --disable-pip-version-check edge-tts
+      - name: Generate two narration drafts
+        run: python scripts/generate_long_form_narration.py
+      - name: Package draft audio and source scripts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-long-form-narration-drafts
+          path: |
+            media/long-form-drafts/*.mp3
+            content/long-form-scripts.md
+          if-no-files-found: error
+          retention-days: 30
