@@ -228,7 +228,7 @@ const server = http.createServer(async (req, res) => {
         const state = loadState();
         if (state.queueItems.some(existing => existing.id === item.id)) return json(res, 409, { error: "That queue ID already exists" });
         const slotFingerprint = item.scheduledDate + ":17:00:Africa/Johannesburg";
-        const slotAlreadyReserved = state.jobs.some(existing => existing.kind === "CONTENT_PRODUCTION" && existing.scheduledSlot?.date === item.scheduledDate && existing.state !== "FAILED" && existing.state !== "BLOCKED");
+        const slotAlreadyReserved = state.jobs.some(existing => existing.kind === "CONTENT_PRODUCTION" && existing.scheduledSlot?.date === item.scheduledDate);
         if (slotAlreadyReserved) return json(res, 409, { error: "This dated schedule slot is already reserved; reuse or edit its existing job", slotFingerprint });
         const job = createContentJob({ idempotencyKey: "draft:" + item.id, title: item.title, topic: item.topic, contentType: item.contentType, scheduledDay: item.scheduledDay, scheduledDate: item.scheduledDate, inputReferences: [] });
         state.queueItems.push(item);
@@ -250,8 +250,11 @@ const server = http.createServer(async (req, res) => {
           if (existing.requestFingerprint !== job.requestFingerprint) return json(res, 409, { error: "Idempotency key already exists with different job inputs", job: existing });
           return json(res, 200, { job: existing, reused: true, publishingEnabled: false });
         }
-        const slotConflict = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.scheduledSlot?.date === job.scheduledSlot.date && !["FAILED", "BLOCKED"].includes(entry.state));
-        if (slotConflict) return json(res, 409, { error: "The requested schedule slot is already reserved by another job", job: slotConflict });
+        const slotConflict = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.scheduledSlot?.date === job.scheduledSlot.date);
+        if (slotConflict) {
+          if (slotConflict.requestFingerprint === job.requestFingerprint) return json(res, 200, { job: slotConflict, reused: true, publishingEnabled: false, reservationReused: true });
+          return json(res, 409, { error: "The requested schedule slot is already reserved by a different job; reuse the existing job for retries", job: slotConflict });
+        }
         state.jobs.push(job);
         state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: "local-operator" });
         saveState(state);
@@ -290,7 +293,7 @@ const server = http.createServer(async (req, res) => {
         if (state.queueItems.some(existing => existing.id !== item.id && existing.scheduledDate === item.scheduledDate && existing.reservationType === "SCHEDULED_SLOT" && existing.status !== "CANCELLED")) {
           return json(res, 409, { error: "Another draft already occupies this dated schedule slot" });
         }
-        if (state.jobs.some(existing => existing.kind === "CONTENT_PRODUCTION" && existing.id !== state.jobs.find(j => j.kind === "CONTENT_PRODUCTION" && j.idempotencyKey === "draft:" + item.id)?.id && existing.scheduledSlot?.date === item.scheduledDate && existing.state !== "FAILED" && existing.state !== "BLOCKED")) {
+        if (state.jobs.some(existing => existing.kind === "CONTENT_PRODUCTION" && existing.id !== state.jobs.find(j => j.kind === "CONTENT_PRODUCTION" && j.idempotencyKey === "draft:" + item.id)?.id && existing.scheduledSlot?.date === item.scheduledDate)) {
           return json(res, 409, { error: "Another production job already occupies this dated schedule slot" });
         }
         state.queueItems[index] = { ...old, ...item, status: old.status, rightsConfirmed: old.rightsConfirmed, complianceReviewed: old.complianceReviewed, updatedAt: new Date().toISOString() };
