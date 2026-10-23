@@ -1,7 +1,7 @@
 # Project Completion Audit — SonicVhibez Marketing Machine
 
 Audit date: 2026-10-23
-Current branch HEAD at last refresh: `3292a891ba0938372efd9c3f10a6236882c60527` (documentation-only updates after tested code SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`).
+Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`; subsequent commits are documentation-only. Consult the live branch ref/PR for the current documentation HEAD.
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE
 Default branch: `main`
 Implementation branch inspected: `codex/marketing-machine-audit-fixes`
