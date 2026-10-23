@@ -3,18 +3,18 @@
 Audit date: 2026-10-23  
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Tested implementation SHA: `11987c6d62f40e11173b70c32ea4c467616da074`  
+Tested implementation SHA: `1c02e6529613e3dee695f98946d4c642fdf146b2`  
 Default branch baseline SHA: `45352b73bb6cc4787b2a49988b575afb754ab627`  
 Pull request: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1 (open, draft, unmerged)  
 Publishing posture: **public publishing disabled; no real upload performed**
 
 ## Current evidence
 
-The tested implementation SHA passed the full Node test suite and repository checks in these GitHub Actions runs:
+The tested implementation SHA `1c02e6529613e3dee695f98946d4c642fdf146b2` passed the full Node test suite and repository checks in these GitHub Actions runs:
 
-- [Content quality — 82 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022475907)
-- [Metadata/schedule validation — 82 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022476331)
-- [Automation validation — 82 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022475908)
+- [Content quality — 88 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40024835685)
+- [Metadata/schedule validation — 88 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40024830465)
+- [Automation validation — 88 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40024835796)
 
 The unchanged `main` baseline passed 54 tests with 0 failures in [run 40018038047](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047). The tested implementation has since been followed only by report/documentation changes; consult the live branch ref for the current documentation HEAD.
 
@@ -34,7 +34,7 @@ The unchanged `main` baseline passed 54 tests with 0 failures in [run 4001803804
 | Criterion | Status | Evidence / remaining condition |
 |---|---|---|
 | Main baseline regression | PASS | 54/54 tests at `45352b73bb6cc4787b2a49988b575afb754ab627`, run 40018038047 |
-| Implementation Node suite | PASS | 82/82 tests at `11987c6d62f40e11173b70c32ea4c467616da074`, three CI runs linked above |
+| Implementation Node suite | PASS | 88/88 tests at `1c02e6529613e3dee695f98946d4c642fdf146b2`, three CI runs linked above |
 | Schedule and approved Selar destination | PASS | Schedule validator and workflow cron checks passed |
 | Dashboard draft and campaign operations | PASS | Integration test exercises persistent state, audit, campaign preview/activation/deactivation |
 | Evidence-bound human review | PARTIAL | Review primitives and endpoint implemented; no real rights-cleared media or owner review evidence is present |
@@ -57,3 +57,9 @@ The unchanged `main` baseline passed 54 tests with 0 failures in [run 4001803804
 7. Generate and commit a real npm lockfile, then prove `npm ci` on a clean runner.
 
 **Conclusion:** the implementation has materially improved and the tested code passes its automated suite. It is **not 100% operational or fully accepted**: genuine media production, worker leases, reproducible install, and live OAuth/private-upload acceptance remain unverified or blocked.
+
+## Additional work in this acceptance pass
+
+- Dashboard production now launches only fixed Short/long render commands, persists worker lease state, rejects missing or invalid outputs, and records actual artifact checksums after ffprobe verifies duration, orientation and audio stream. It also invokes the frame-based thumbnail renderer and verifies a 1280×720 thumbnail before a job can enter GENERATED.
+- Media preflight now checks required metadata, 9:16 framing, a nontrivial file size, full-file decode and measurable audio volume. A test protects these checks. The latest implementation suite has 88 passing tests, 0 failures and 0 skipped.
+- The repository does not yet contain an owner-supplied, verified wildlife source bundle and license documents, a generated real documentary MP4, a committed npm lockfile, or a verified live SonicVhibez OAuth identity/upload receipt. Those acceptance items remain BLOCKED, not passed.
