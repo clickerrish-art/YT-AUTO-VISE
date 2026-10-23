@@ -1,7 +1,7 @@
 # Project Completion Audit — SonicVhibez Marketing Machine
 
 Audit date: 2026-10-23
-Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `46d878b6cc7d53e7beca79c086fd3fead931fb11`; subsequent commits are documentation-only. Consult the live branch ref/PR for the current documentation HEAD.
+Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516`; subsequent commits are documentation-only. Consult the live branch ref/PR for the current documentation HEAD.
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE
 Default branch: `main`
 Implementation branch inspected: `codex/marketing-machine-audit-fixes`
@@ -24,7 +24,7 @@ This audit uses live GitHub branch refs, pull-request metadata, repository files
 - Approved Selar product URL is consistently configured as `https://selar.com/0u19v8u99l`.
 - Channel guard requires the exact channel title `SonicVhibez`, configured channel ID, and private visibility in the existing uploader.
 - Queue and weekly plan both state public publishing is disabled.
-- The implementation branch suite was executed in GitHub Actions at SHA `46d878b6cc7d53e7beca79c086fd3fead931fb11`: 70 tests passed, 0 failed. The main baseline at `45352b73bb6cc4787b2a49988b575afb754ab627` ran 54 tests, 54 passed, 0 failed.
+- The implementation branch suite was executed in GitHub Actions at SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516`: 70 tests passed, 0 failed. The main baseline at `45352b73bb6cc4787b2a49988b575afb754ab627` ran 54 tests, 54 passed, 0 failed.
 
 ## Implemented but unverified
 
@@ -71,7 +71,7 @@ P2: document install, startup, backup/restore, operator flow, OAuth setup, and r
 
 ## Acceptance status
 
-- Dashboard startup, health/readiness endpoints, authenticated API, dated slot reservation, concurrent idempotent job creation across two server processes, and task execution were integration-tested in CI: PASS at SHA `46d878b6cc7d53e7beca79c086fd3fead931fb11`.
+- Dashboard startup, health/readiness endpoints, authenticated API, dated slot reservation, concurrent idempotent job creation across two server processes, and task execution were integration-tested in CI: PASS at SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516`.
 - Authoritative schedule validation and dated slot reservation: PASS in CI. The validator checks config, queue mapping, workflow cron declarations, approved Selar URL, and publishing-disabled flags. The dashboard now locks mutations across processes, binds jobs to a calendar date, rejects conflicting slot reservations, and reuses identical repeated events.
 - Draft generation: IMPLEMENTED IN PARTS / NOT END-TO-END VERIFIED.
 - Complete rights-cleared wildlife Short and long-form documentary: BLOCKED by verified footage/rights and human review.
@@ -96,7 +96,7 @@ P2: document install, startup, backup/restore, operator flow, OAuth setup, and r
 |---|---|---|
 | Schedule configuration | PASS | Validator and workflow checks succeeded in run 40014937474; Tuesday/Thursday long-form, Saturday Short, 17:00 Africa/Johannesburg / 15:00 UTC |
 | Dashboard task allowlist | PASS | Fixed commands only; no uploader/publication task exposed |
-| Task timeout and duplicate prevention | PASS | Allowlisted process runner; dated job reservation tested concurrently against two dashboard server processes in run `40018011341` |
+| Task timeout and duplicate prevention | PASS | Allowlisted process runner; dated job reservation tested concurrently against two dashboard server processes in run `40018707582` |
 | Restart detection | PASS | Persisted RUNNING task becomes RECOVERY_REQUIRED with audit event; test passed in run 40014972795 |
 | Content-job creation, idempotency and guarded state transitions | PASS | Content job schema, duplicate-key conflict detection, transition history, bounded retries, protected upload states; automation CI run 40016605388 |
 | Dated job reservation, idempotency and process-safe state mutation | PASS | Filesystem lock directory and integration test with two dashboard processes; full worker lease/recovery orchestration remains NOT IMPLEMENTED |
@@ -109,4 +109,4 @@ P2: document install, startup, backup/restore, operator flow, OAuth setup, and r
 | Full main branch suite baseline | PASS | Workflow run `40018038047` at main SHA `45352b73bb6cc4787b2a49988b575afb754ab627`: 54/54 Node tests passed; readiness, captions and metadata safety checks passed |
 | Public publishing disabled | PASS | Config false; dashboard exposes no publish task |
 
-Latest code-tested implementation SHA `46d878b6cc7d53e7beca79c086fd3fead931fb11` passed 70/70 tests in run `40018011341`, including cross-process slot reservation and readiness checks. Main SHA `45352b73bb6cc4787b2a49988b575afb754ab627` passed 54/54 tests in run `40018038047`. The application is not production accepted. No real private upload, rights-cleared documentary, or artifact checksum is claimed.
+Latest code-tested implementation SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` passed 72/72 tests in run `40018011341`, including cross-process slot reservation and readiness checks. Main SHA `45352b73bb6cc4787b2a49988b575afb754ab627` passed 54/54 tests in run `40018038047`. The application is not production accepted. No real private upload, rights-cleared documentary, or artifact checksum is claimed.
