@@ -6,10 +6,10 @@ Safety-first, free-first draft production and campaign management for **SonicVhi
 
 The current implementation includes a local authenticated dashboard, persistent draft/job state, date-specific slot reservation, validation task execution, campaign preview/activation/deactivation, evidence-bound human-review primitives, FFmpeg render scripts, and a private-only uploader with attempt-ledger/reconciliation safeguards.
 
-The automated implementation suite passed **82/82 tests** at tested implementation SHA `c0ebeb9bc9c3911b26705e0c35067fa2afb13dd3`:
-- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023904)
-- [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023824)
-- [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023772)
+The automated implementation suite passed **82/82 tests** at tested implementation SHA `11987c6d62f40e11173b70c32ea4c467616da074`:
+- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022475907)
+- [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022476331)
+- [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022475908)
 
 The default-branch baseline passed 54/54 tests at `45352b73bb6cc4787b2a49988b575afb754ab627` ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047)).
 
