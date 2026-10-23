@@ -20,30 +20,30 @@ CAPTION_MAX_WORDS = 7
 CAPTION_MAX_CHARS = 42
 
 def clean_script(text: str) -> str:
-    text = re.sub(r"(?m)^#{1,6} .*\\n", "", text)
-    text = re.sub(r"(?m)^\\*\\*[^\\n]*\\*\\*\\s*$", "", text)
-    text = re.sub(r"(?m)^\\*\\*\\[.*?\\]\\*\\*.*$", "", text)
+    text = re.sub(r"(?m)^#{1,6} .*\n", "", text)
+    text = re.sub(r"(?m)^\*\*[^\n]*\*\*\s*$", "", text)
+    text = re.sub(r"(?m)^\*\*\[.*?\]\*\*.*$", "", text)
     text = re.sub(r"(?m)^### Suggested (description|tags).*$", "", text)
     text = re.sub(r"(?m)^Promotional resource:.*$", "", text)
-    text = re.sub(r"https://selar\\.com/0u19v8u99l", "the approved creator resource linked in the video description", text)
-    text = re.sub(r"\\[[^\\]]*\\]", " ", text)
-    text = re.sub(r"\\*\\*(.*?)\\*\\*", r"\\1", text)
-    text = re.sub(r"(?m)^[-*]\\s+", "", text)
-    text = re.sub(r"(?m)^\\s*---\\s*$", "", text)
-    text = re.sub(r"\\n{3,}", "\\n\\n", text)
+    text = re.sub(r"https://selar\.com/0u19v8u99l", "the approved creator resource linked in the video description", text)
+    text = re.sub(r"\[[^\]]*\]", " ", text)
+    text = re.sub(r"\*\*(.*?)\*\*", r"\1", text)
+    text = re.sub(r"(?m)^[-*]\s+", "", text)
+    text = re.sub(r"(?m)^\s*---\s*$", "", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
 
 def extract_episodes(markdown: str):
-    matches = list(re.finditer(r"(?m)^## Episode (\\d+) — (.+)$", markdown))
+    matches = list(re.finditer(r"(?m)^## Episode (\d+) — (.+)$", markdown))
     episodes = []
     for i, match in enumerate(matches):
         end = matches[i + 1].start() if i + 1 < len(matches) else len(markdown)
         section = markdown[match.end():end]
-        narration = re.search(r"(?m)^### Narration script\\s*$", section)
+        narration = re.search(r"(?m)^### Narration script\s*$", section)
         if not narration:
             raise ValueError(f"Episode {match.group(1)} has no Narration script section")
         body = section[narration.end():]
-        description = re.search(r"(?m)^### Suggested description\\s*$", body)
+        description = re.search(r"(?m)^### Suggested description\s*$", body)
         if description:
             body = body[:description.start()]
         cleaned = clean_script(body)
@@ -86,7 +86,7 @@ def captions_from_boundaries(boundaries):
         if index < len(cues):
             next_start = cues[index][0]["start"] if False else None
         lines.extend([str(index), f"{srt_time(start)} --> {srt_time(end)}", " ".join(x["text"] for x in cue), ""])
-    return "\\n".join(lines).rstrip() + "\\n"
+    return "\n".join(lines).rstrip() + "\n"
 
 async def main():
     if not SOURCE.exists():
@@ -98,7 +98,7 @@ async def main():
         target = OUT / f"{stem}.mp3"
         text_target = OUT / f"{stem}.txt"
         srt_target = OUT / f"long-{int(number):03d}-captions-draft.srt"
-        text_target.write_text(text + "\\n", encoding="utf-8")
+        text_target.write_text(text + "\n", encoding="utf-8")
         communicate = edge_tts.Communicate(text, VOICE)
         boundaries = []
         with target.open("wb") as audio_file:
