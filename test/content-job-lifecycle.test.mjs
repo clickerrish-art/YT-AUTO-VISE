@@ -82,20 +82,18 @@ test("worker lease fences concurrent claims and permits guarded heartbeat/stage 
   assert.throws(() => completeWorkerLease(beat, claimed.leaseToken, "GENERATED", { state: "APPROVED_FOR_PRIVATE_UPLOAD" }, start + 3_000), /protected job field/);
   const generated = completeWorkerLease(beat, claimed.leaseToken, "GENERATED", {
     outputArtifacts: [{ path: "media/fixture.mp4", sha256: "a".repeat(64) }],
+    metadataPath: "content/fixture-metadata.json",
     metadataVersion: "meta-sha256:fixture"
   }, start + 3_000);
   assert.equal(generated.state, "GENERATED");
   assert.ok(generated.workerLease);
-  assert.throws(() => completeWorkerLease(generated, claimed.leaseToken, "AWAITING_HUMAN_REVIEW", {
+  const validating = completeWorkerLease(generated, claimed.leaseToken, "VALIDATING", {}, start + 4_000);
+  assert.equal(validating.state, "VALIDATING");
+  assert.ok(validating.workerLease);
+  assert.throws(() => completeWorkerLease(validating, claimed.leaseToken, "AWAITING_HUMAN_REVIEW", {
     validationResults: { passed: true },
     rightsChecks: { verified: true, evidenceSha256: "b".repeat(64) }
-  }, start + 4_000), /cannot modify protected job field: rightsChecks/);
-  const rightsVerified = { ...generated, rightsChecks: { verified: true, evidenceSha256: "b".repeat(64) } };
-  const reviewed = completeWorkerLease(rightsVerified, claimed.leaseToken, "AWAITING_HUMAN_REVIEW", {
-    validationResults: { passed: true }
-  }, start + 4_000);
-  assert.equal(reviewed.state, "AWAITING_HUMAN_REVIEW");
-  assert.equal(reviewed.workerLease, null);
+  }, start + 5_000), /cannot modify protected job field: validationResults/);
 });
 
 test("expired leases fence stale results and enforce bounded retry backoff", () => {
