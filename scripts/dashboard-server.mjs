@@ -5,6 +5,7 @@ import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
+import { createContentJob, transitionContentJob } from "./content-job-lifecycle.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = process.env.DASHBOARD_HOST ?? "127.0.0.1";
@@ -38,6 +39,15 @@ function recoverInterruptedTasks() {
   const state = loadState();
   let recovered = 0;
   for (const job of state.jobs) {
+    if (job.kind === "CONTENT_PRODUCTION" && ["GENERATING", "VALIDATING", "UPLOADING_PRIVATE"].includes(job.state)) {
+      const previous = job.state;
+      job.state = "RECOVERY_REQUIRED";
+      job.errorDetails = { code: "INTERRUPTED_DURING_ACTIVE_STAGE", retryable: false, message: previous === "UPLOADING_PRIVATE" ? "Upload outcome is uncertain. Reconcile with YouTube before any retry." : "Server restarted during content processing; inspect artifacts before retrying." };
+      job.updatedAt = new Date().toISOString();
+      job.transitionHistory = [...(job.transitionHistory ?? []), { from: previous, to: "RECOVERY_REQUIRED", at: job.updatedAt, actor: "system-recovery", reason: job.errorDetails.message }];
+      state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_RECOVERY_REQUIRED", jobId: job.id, previousState: previous, at: job.updatedAt, actor: "system-recovery" });
+      recovered++;
+    }
     if (job.status === "RUNNING") {
       job.status = "RECOVERY_REQUIRED";
       job.error = "Dashboard restarted while this task was running; inspect its effects before retrying.";
@@ -188,10 +198,40 @@ const server = http.createServer(async (req, res) => {
       const item = safeItem(body);
       const state = loadState();
       if (state.queueItems.some(existing => existing.id === item.id)) return json(res, 409, { error: "That queue ID already exists" });
+      const job = createContentJob({ idempotencyKey: "draft:" + item.id, title: item.title, topic: item.topic, contentType: item.contentType, scheduledDay: item.scheduledDay, inputReferences: [] });
       state.queueItems.push(item);
+      state.jobs.push(job);
       state.audit.push({ id: crypto.randomUUID(), action: "DRAFT_CREATED", itemId: item.id, at: new Date().toISOString(), actor: "local-operator" });
+      state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", itemId: item.id, jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: "local-operator" });
       saveState(state);
-      return json(res, 201, { item });
+      return json(res, 201, { item, job });
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs") {
+      const body = await readBody(req);
+      const job = createContentJob(body);
+      const state = loadState();
+      const existing = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.idempotencyKey === job.idempotencyKey);
+      if (existing) {
+        if (existing.requestFingerprint !== job.requestFingerprint) return json(res, 409, { error: "Idempotency key already exists with different job inputs", job: existing });
+        return json(res, 200, { job: existing, reused: true, publishingEnabled: false });
+      }
+      state.jobs.push(job);
+      state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: "local-operator" });
+      saveState(state);
+      return json(res, 201, { job, reused: false, publishingEnabled: false });
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs/transition") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || typeof body.nextState !== "string") return json(res, 400, { error: "jobId and nextState are required" });
+      const state = loadState();
+      const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+      if (index < 0) return json(res, 404, { error: "Content job not found" });
+      const old = state.jobs[index];
+      const updated = transitionContentJob(old, body.nextState, { actor: "local-operator", reason: body.reason ?? "" });
+      state.jobs[index] = updated;
+      state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_STATE_CHANGED", jobId: updated.id, from: old.state, to: updated.state, at: updated.updatedAt, actor: "local-operator", reason: String(body.reason ?? "").slice(0, 1000) });
+      saveState(state);
+      return json(res, 200, { job: updated, publishingEnabled: false });
     }
     if (req.method === "POST" && url.pathname === "/api/drafts/update") {
       const body = await readBody(req);
