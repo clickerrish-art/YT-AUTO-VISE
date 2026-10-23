@@ -32,6 +32,23 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   assert.equal(readiness.ready, true);
   assert.equal(readiness.publishingEnabled, false);
   assert.ok(Array.isArray(readiness.optionalBlockers));
+  const port2 = port + 10_000;
+  const child2 = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_STATE_DIR: stateDir, PORT: String(port2), DASHBOARD_HOST: "127.0.0.1" },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let logs2 = "";
+  child2.stdout.on("data", chunk => { logs2 += chunk.toString(); });
+  child2.stderr.on("data", chunk => { logs2 += chunk.toString(); });
+  t.after(() => child2.kill("SIGTERM"));
+  const base2 = `http://127.0.0.1:${port2}`;
+  let ready2 = false;
+  for (let i = 0; i < 60; i++) {
+    if (child2.exitCode !== null) break;
+    try { if ((await fetch(base2 + "/healthz")).ok) { ready2 = true; break; } } catch {}
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  assert.equal(ready2, true, "second process did not start: " + logs2);
   const headers = { "content-type": "application/json", "x-operator-token": token };
   const recoveredState = await fetch(base + "/api/state", { headers });
   assert.equal(recoveredState.status, 200);
@@ -64,7 +81,7 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   const slotConflict = await fetch(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify({ ...jobInput, idempotencyKey: "test-job:other", title: "Conflicting slot" }) });
   assert.equal(slotConflict.status, 409, "different jobs must not reserve the same dated slot");
   const concurrentInput = { ...jobInput, idempotencyKey: "test-job:concurrent", scheduledDate: "2026-10-31", title: "Concurrent duplicate" };
-  const concurrent = await Promise.all([1, 2].map(() => fetch(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify(concurrentInput) })));
+  const concurrent = await Promise.all([fetch(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify(concurrentInput) }), fetch(base2 + "/api/jobs", { method: "POST", headers, body: JSON.stringify(concurrentInput) })]);
   assert.deepEqual(concurrent.map(response => response.status).sort(), [200, 201]);
   const concurrentBodies = await Promise.all(concurrent.map(response => response.json()));
   assert.equal(concurrentBodies[0].job.id, concurrentBodies[1].job.id, "concurrent identical requests must reuse one job");
