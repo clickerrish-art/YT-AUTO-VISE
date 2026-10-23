@@ -62,6 +62,7 @@ export function createContentJob(input, now = new Date().toISOString()) {
     updatedAt: now,
     transitionHistory: [{ from: null, to: "QUEUED", at: now, actor: "local-operator", reason: "Job created" }],
     outputArtifacts: [],
+    thumbnailArtifact: null,
     validationResults: null,
     rightsChecks: null,
     humanApproval: null,
@@ -113,6 +114,9 @@ export function approveContentJobForPrivateUpload(job, review, now = new Date().
   }
   const artifact = (job.outputArtifacts ?? []).find(item => item.path === review.artifactPath && item.sha256 === review.artifactSha256);
   if (!artifact) throw new Error("Approval artifact checksum does not match a generated job artifact");
+  const actualRelated = [...(job.outputArtifacts ?? []), ...(job.thumbnailArtifact ? [job.thumbnailArtifact] : [])].map(item => ({ path: item.path, sha256: item.sha256 })).sort((a,b) => a.path.localeCompare(b.path));
+  const reviewedRelated = (review.relatedArtifacts ?? [{ path: review.artifactPath, sha256: review.artifactSha256 }]).map(item => ({ path: item.path, sha256: item.sha256 })).sort((a,b) => a.path.localeCompare(b.path));
+  if (JSON.stringify(actualRelated) !== JSON.stringify(reviewedRelated)) throw new Error("Approval does not bind every current media artifact and thumbnail");
   if (job.metadataVersion !== review.metadataVersion) throw new Error("Approval metadata version does not match the job's validated metadata");
   if (job.rightsChecks?.verified !== true || job.rightsChecks?.evidenceSha256 !== review.rightsEvidenceSha256) {
     throw new Error("Approval rights evidence does not match the job's verified rights record");
@@ -177,7 +181,7 @@ export function completeWorkerLease(job, leaseToken, nextState, patch = {}, now 
   if (!job?.workerLease || job.workerLease.tokenHash !== hashLeaseToken(String(leaseToken ?? ""))) throw new Error("Worker lease token does not match");
   if (Date.parse(job.workerLease.expiresAt) <= now) throw new Error("Worker lease has expired");
   if (!patch || typeof patch !== "object" || Array.isArray(patch)) throw new Error("Worker result must be an object");
-  const allowedPatchKeys = new Set(["outputArtifacts", "metadataPath", "metadataVersion", "errorDetails"]);
+  const allowedPatchKeys = new Set(["outputArtifacts", "thumbnailArtifact", "metadataPath", "metadataVersion", "errorDetails"]);
   for (const key of Object.keys(patch)) if (!allowedPatchKeys.has(key)) throw new Error("Worker cannot modify protected job field: " + key);
   let updated = { ...job, ...structuredClone(patch) };
   updated = transitionContentJob(updated, nextState, {
