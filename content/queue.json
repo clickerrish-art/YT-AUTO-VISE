@@ -1,13 +1,48 @@
 {
   "cadence": {
-    "postsPerWeek": 1,
+    "postsPerWeek": 3,
     "days": [
-      "Thursday"
+      "Tuesday",
+      "Thursday",
+      "Saturday"
     ],
-    "timezone": "Africa/Johannesburg"
+    "timezone": "Africa/Johannesburg",
+    "breakdown": {
+      "longForm": 2,
+      "short": 1
+    },
+    "note": "Target cadence only. This queue does not itself schedule or publish. Public publishing remains disabled until each item passes rights, content, media, metadata, and channel-identity checks."
   },
   "publishingEnabled": false,
   "items": [
+    {
+      "id": "long-form-plan-wildlife-video",
+      "contentType": "long_form",
+      "title": "How to Plan a Wildlife Video People Want to Watch",
+      "topic": "wildlife video planning and storytelling",
+      "productUrl": "https://selar.com/0u19v8u99l",
+      "scheduledDay": "Tuesday",
+      "targetMinutes": {
+        "min": 6,
+        "max": 10
+      },
+      "status": "SCRIPT_READY_NARRATION_DRAFT_PENDING_GENERATION_MEDIA_AND_HUMAN_REVIEW_REQUIRED",
+      "productionNotes": "Use content/long-form-scripts.md. Narration/audio/caption artifact must be generated and reviewed; add verified rights-cleared visuals and complete content/long-form-render-manifest.json before rendering."
+    },
+    {
+      "id": "long-form-faceless-wildlife-workflow",
+      "contentType": "long_form",
+      "title": "A Beginner Workflow for Faceless Wildlife Videos",
+      "topic": "faceless wildlife video production workflow",
+      "productUrl": "https://selar.com/0u19v8u99l",
+      "scheduledDay": "Saturday",
+      "targetMinutes": {
+        "min": 6,
+        "max": 10
+      },
+      "status": "SCRIPT_READY_NARRATION_DRAFT_PENDING_GENERATION_MEDIA_AND_HUMAN_REVIEW_REQUIRED",
+      "productionNotes": "Use content/long-form-scripts.md. Narration/audio/caption artifact must be generated and reviewed; add verified rights-cleared visuals and complete content/long-form-render-manifest.json before rendering."
+    },
     {
       "id": "wildlife-vault-001",
       "topic": "How to Make Better Wildlife Videos for YouTube",
