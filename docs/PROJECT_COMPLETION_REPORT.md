@@ -16,7 +16,7 @@ Public publishing: **DISABLED**
 
 ## Test and workflow evidence
 
-The campaign-enhanced code SHA `3fc132b99c683be71e571dab4e6660ab98beb4a9` passed automation CI, including npm test and the isolated campaign validator: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40016046874. Metadata validation passed at the same SHA: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40016046743. The default-branch full-suite baseline remains unexecuted.
+The latest job-and-campaign code SHA `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` passed automation CI (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40016605388), metadata validation (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40016597429), and content quality (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40016605400). The default-branch full-suite baseline remains unexecuted.
 
 A prior commit, `3df90af8f3fad3803291d6907530f2c24367f6fc`, had a successful validation run:
 https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40013565863
@@ -104,4 +104,4 @@ At SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc, automation CI passed: https://g
 | Full main branch baseline | BLOCKED BY EXTERNAL PREREQUISITE | No full suite executed against main in this run |
 | Public publishing disabled | PASS | Configuration false and no dashboard publishing action |
 
-Latest code commit 14fe79a9ccf32ed7b10372aaa0f649e1aac17f32 passed automation CI in run 40015500289 and metadata validation in run 40015491951. The automation run includes npm test, Python review-safety tests, queue checks, syntax checks and Python compilation. A lockfile has not been added; npm ci is not claimed. No media artifact checksum, rights approval, real upload receipt or remote privacy check is claimed. Keep public publishing disabled.
+Latest job-and-campaign code SHA `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` passed automation CI in run `40016605388`, including npm test, campaign validation, job lifecycle/idempotency tests, Python review-safety tests, queue checks, syntax and Python compilation. A lockfile has not been added; npm ci is not claimed. No media artifact checksum, rights approval, real upload receipt or remote privacy check is claimed. Keep public publishing disabled.
