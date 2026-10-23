@@ -60,19 +60,31 @@ jobs:
               seconds = float(MP3(str(audio)).info.length)
               if seconds <= 0:
                   raise SystemExit(f"Invalid duration for {audio}")
+              # Confirm the final SRT cue is aligned to the narration duration.
+              import re
+              srt_text = caption_file.read_text(encoding="utf-8")
+              end_times = re.findall(r"(?m)^\\d{2}:(\\d{2}):(\\d{2}),(\\d{3}) --> (\\d{2}):(\\d{2}):(\\d{2}),(\\d{3})$", srt_text)
+              if not end_times:
+                  raise SystemExit(f"No valid SRT time ranges found in {caption_file}")
+              last = end_times[-1]
+              caption_end = int(last[4]) * 3600 + int(last[5]) * 60 + int(last[6]) + int(last[7]) / 1000
+              captions_cover_audio = abs(caption_end - seconds) <= 5.0
+              within_target = 360 <= seconds <= 600
               reports.append({
                   "file": audio.name,
                   "durationSeconds": round(seconds, 2),
                   "durationMinutes": round(seconds / 60, 2),
                   "targetMinutes": {"min": 6, "max": 10},
-                  "withinTarget": 360 <= seconds <= 600,
+                  "withinTarget": within_target,
                   "textFileIncluded": True,
                   "captionFile": caption_file.name,
                   "captionFileIncluded": True,
-                  "status": "PASS" if 360 <= seconds <= 600 else "REVIEW"
+                  "captionEndSeconds": round(caption_end, 2),
+                  "captionsCoverAudio": captions_cover_audio,
+                  "status": "PASS" if within_target and captions_cover_audio else "REVIEW"
               })
-              status = "PASS" if 360 <= seconds <= 600 else "REVIEW"
-              print(f"{status}: {audio.name} — {seconds/60:.2f} minutes")
+              status = "PASS" if within_target and captions_cover_audio else "REVIEW"
+              print(f"{status}: {audio.name} — {seconds/60:.2f} minutes; final caption {caption_end:.2f}s; caption coverage {'PASS' if captions_cover_audio else 'REVIEW'}")
           Path("media/long-form-drafts/duration-report.json").write_text(
               json.dumps(reports, indent=2) + "\n", encoding="utf-8"
           )
@@ -106,9 +118,14 @@ jobs:
           items = json.loads(report.read_text(encoding="utf-8"))
           if len(items) != 2:
               raise SystemExit(f"BLOCKED: expected exactly two narration duration records; found {len(items)}.")
-          out_of_range = [item for item in items if item.get("withinTarget") is not True]
-          if out_of_range:
-              details = "; ".join(f"{item.get('file', 'unknown')}: {item.get('durationSeconds', 'unknown')} seconds" for item in out_of_range)
-              raise SystemExit("BLOCKED: one or more narration drafts are outside the required 6–10 minute range. Draft artifact was uploaded for review. " + details)
-          print("PASS: both narration drafts meet the 6–10 minute target. Human review and rights checks are still required.")
+          invalid = [item for item in items if item.get("withinTarget") is not True or item.get("captionsCoverAudio") is not True]
+          if invalid:
+              details = "; ".join(
+                  f"{item.get('file', 'unknown')}: duration={item.get('durationSeconds', 'unknown')}s, "
+                  f"captionEnd={item.get('captionEndSeconds', 'unknown')}s, "
+                  f"captionCoverage={item.get('captionsCoverAudio', 'unknown')}"
+                  for item in invalid
+              )
+              raise SystemExit("BLOCKED: one or more narration drafts failed runtime or caption-coverage checks. Draft artifact was uploaded for review. " + details)
+          print("PASS: both narration drafts meet the 6–10 minute target and final captions align within five seconds. Human review and rights checks are still required.")
           PY
