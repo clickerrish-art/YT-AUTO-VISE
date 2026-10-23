@@ -72,10 +72,17 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   const mediaPreflight = preflightRunner(["scripts/preflight-media.mjs", videoPath, metadataPath], env);
   if (!mediaPreflight.includes("PASS:")) throw new Error("media preflight did not pass");
 
-  const { google } = await import("googleapis");
-  const oauth = new google.auth.OAuth2(env.YOUTUBE_CLIENT_ID, env.YOUTUBE_CLIENT_SECRET);
-  oauth.setCredentials({ refresh_token: env.YOUTUBE_REFRESH_TOKEN });
-  const youtube = youtubeFactory ? youtubeFactory(oauth) : google.youtube({ version: "v3", auth: oauth });
+  let youtube;
+  if (youtubeFactory) {
+    // Dependency-injected API client is used by isolated tests; production always
+    // constructs the authenticated official Google client below.
+    youtube = youtubeFactory(null);
+  } else {
+    const { google } = await import("googleapis");
+    const oauth = new google.auth.OAuth2(env.YOUTUBE_CLIENT_ID, env.YOUTUBE_CLIENT_SECRET);
+    oauth.setCredentials({ refresh_token: env.YOUTUBE_REFRESH_TOKEN });
+    youtube = google.youtube({ version: "v3", auth: oauth });
+  }
   const channel = await youtube.channels.list({ part: ["id", "snippet"], mine: true });
   const authenticatedChannels = channel.data.items ?? [];
   const expectedChannelId = env.SONICVHIBEZ_CHANNEL_ID;
