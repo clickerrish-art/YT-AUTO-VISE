@@ -32,6 +32,10 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(initial.status, 200);
   const body = await initial.json();
   assert.equal(body.publishingEnabled, false);
+  const noPriorReconcile = await fetch(base + "/api/uploads/reconcile", { method: "POST", headers, body: JSON.stringify({ jobId: "no-prior-job", videoPath: "README.md", metadataPath: "README.md", approvalPath: "README.md" }) });
+  const noPriorBody = await noPriorReconcile.json();
+  assert.equal(noPriorReconcile.status, 409, JSON.stringify(noPriorBody));
+  assert.match(noPriorBody.error, /never create a new upload/i);
   const safari = body.campaigns.find(c => c.type === "safari_affiliate");
   assert.equal(safari.status, "INACTIVE");
   const preview = await fetch(base + "/api/campaigns/manage", { method: "POST", headers, body: JSON.stringify({ campaignId: safari.id, action: "preview", destinationUrl: "https://example.com/verified-stay", disclosureText: "I may earn a commission from eligible bookings." }) });
