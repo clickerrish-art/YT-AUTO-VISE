@@ -1,6 +1,5 @@
 import fs from "node:fs";
 import path from "node:path";
-import { google } from "googleapis";
 
 const metadataPath = process.argv[2] ?? "content/next-short.json";
 const videoPath = process.argv[3] ?? "media/next-short.mp4";
@@ -62,6 +61,7 @@ if (metadata.containsSyntheticMedia !== true || metadata.hasPaidPromotion !== tr
   process.exit(1);
 }
 
+const { google } = await import("googleapis");
 const oauth = new google.auth.OAuth2(
   process.env.YOUTUBE_CLIENT_ID,
   process.env.YOUTUBE_CLIENT_SECRET
