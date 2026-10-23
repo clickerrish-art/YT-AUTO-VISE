@@ -32,6 +32,9 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   const recoveredBody = await recoveredState.json();
   assert.equal(recoveredBody.jobs.find(job => job.id === "interrupted-1").status, "RECOVERY_REQUIRED");
   assert.ok(recoveredBody.audit.some(event => event.action === "TASK_INTERRUPTED_RECOVERY_REQUIRED" && event.jobId === "interrupted-1"));
+  assert.equal(recoveredBody.campaignValidation.ok, true);
+  assert.equal(recoveredBody.campaigns.find(campaign => campaign.type === "safari_affiliate").status, "INACTIVE");
+  assert.equal(recoveredBody.campaigns.find(campaign => campaign.type === "safari_affiliate").destinationUrl, "");
   const denied = await fetch(base + "/api/tasks/run", { method: "POST", headers, body: JSON.stringify({ taskId: "upload:private" }) });
   assert.equal(denied.status, 400, "arbitrary commands must not be executable");
   const response = await fetch(base + "/api/tasks/run", { method: "POST", headers, body: JSON.stringify({ taskId: "validate-schedule" }) });
@@ -45,4 +48,10 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   assert.ok(saved.jobs.some(job => job.id === result.job.id && job.status === "SUCCEEDED"));
   assert.ok(saved.audit.some(event => event.action === "VALIDATION_TASK_SUCCEEDED" && event.jobId === result.job.id));
   assert.equal(saved.jobs.find(job => job.id === result.job.id).publishingEnabled, false);
+  const campaignCheck = await fetch(base + "/api/tasks/run", { method: "POST", headers, body: JSON.stringify({ taskId: "validate-campaigns" }) });
+  const campaignText = await campaignCheck.text();
+  assert.equal(campaignCheck.status, 200, campaignText);
+  const campaignResult = JSON.parse(campaignText);
+  assert.equal(campaignResult.job.status, "SUCCEEDED", campaignResult.job.output);
+  assert.match(campaignResult.job.output, /Selar and Safari campaign records are isolated/);
 });
