@@ -1,6 +1,12 @@
 name: Generate long-form narration drafts
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "content/long-form-scripts.md"
+      - "scripts/generate_long_form_narration.py"
+      - ".github/workflows/generate-long-form-narration.yml"
   workflow_dispatch:
   schedule:
     - cron: "0 15 * * 2,6"
