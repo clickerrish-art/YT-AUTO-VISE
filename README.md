@@ -4,7 +4,7 @@ Isolated project for a review-gated SonicVhibez content workflow targeting two l
 
 ## Status
 
-Queue replenishment, free narration generation, and metadata/caption checks run in GitHub Actions. The long-form narration workflow is scheduled for Tuesday and Saturday at 15:00 UTC (17:00 South Africa time); the Short narration workflow is scheduled for Thursday at 15:00 UTC. The narration workflow renders a text-led 1080×1920 review MP4 and a thumbnail from draft content, then validates output before packaging it as an artifact. This is not wildlife-footage production: visuals are typography-based until footage rights are verified. Private upload and public publishing are not enabled by these generation workflows, and channel authorization has not been verified.
+Queue replenishment, free narration generation, and metadata/caption checks run in GitHub Actions. The authoritative target schedule is Tuesday and Thursday long-form drafts, plus one Saturday Short, at 15:00 UTC (17:00 Africa/Johannesburg time). GitHub Actions cron is UTC; South Africa does not observe daylight saving time. The long-form workflow cron is `0 15 * * 2,4`; the Short workflow cron is `0 15 * * 6`. The narration workflow renders a text-led 1080×1920 review MP4 and a thumbnail from draft content, then validates output before packaging it as an artifact. This is not wildlife-footage production: visuals are typography-based until footage rights are verified. Private upload and public publishing are not enabled by these generation workflows, and channel authorization has not been verified.
 
 ## Safety requirements
 
@@ -53,6 +53,11 @@ Use docs/WILDLIFE_MEDIA_RIGHTS_CHECKLIST.md before integrating real wildlife foo
 
 ## Free narration generation
 
-The Generate free narration audio GitHub Actions workflow creates MP3 narration artifacts for Short 001 and Short 002 using the US English en-US-GuyNeural voice through the community edge-tts client. It needs no paid API key and has no upload or publishing permission. It runs on Thursday at 15:00 UTC (17:00 South Africa time), when the narration master or generator changes, and can also be run manually from Actions to select one Short or both. The separate long-form narration workflow runs Tuesday and Saturday at 15:00 UTC. Download the sonicvhibez-short-draft-package artifact from the completed Short workflow run; artifacts expire after 30 days.
+The Generate free narration audio GitHub Actions workflow creates MP3 narration artifacts for Short 001 and Short 002 using the US English en-US-GuyNeural voice through the community edge-tts client. It needs no paid API key and has no upload or publishing permission. It runs on Saturday at 15:00 UTC (17:00 South Africa time), when the narration master or generator changes, and can also be run manually from Actions to select one Short or both. The separate long-form narration workflow runs Tuesday and Thursday at 15:00 UTC. Download the sonicvhibez-short-draft-package artifact from the completed Short workflow run; artifacts expire after 30 days.
 
 Generated audio is a draft: listen to it, check pronunciation and timing, and align captions to the actual read. The Short workflow selects a queued topic and packages a narration MP3, draft script, SRT caption draft, and JSON metadata. It then attempts to render a text-led 1080×1920 review MP4 and a 1280×720 thumbnail, validates the video stream, duration, and safety metadata, and includes them in the downloadable artifact. The output remains HOLD_FOR_FOOTAGE_AND_REVIEW: it contains no licensed wildlife footage, its captions have estimated timings, and the thumbnail and final visual quality require review. It is not ready for upload until media rights, factual/compliance review, and the destination channel are verified. Voice service availability and terms may change; this workflow does not guarantee a specific age impression or exact duration.
+
+
+## Test evidence
+
+See [docs/TEST_BASELINE_AND_REGRESSION_REPORT.md](docs/TEST_BASELINE_AND_REGRESSION_REPORT.md) for branch comparison and blocked checks. Full local test execution and CI status for the latest implementation commit remain unverified; do not treat the absence of reported status checks as a pass.
