@@ -1,0 +1,55 @@
+name: Content quality checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "content/long-form-scripts.md"
+      - "content/queue.json"
+      - "config/weekly-content-plan.json"
+      - "test/**"
+      - "scripts/check-content.mjs"
+      - ".github/workflows/content-quality.yml"
+  pull_request:
+    paths:
+      - "content/long-form-scripts.md"
+      - "content/queue.json"
+      - "config/weekly-content-plan.json"
+      - "test/**"
+      - "scripts/check-content.mjs"
+      - ".github/workflows/content-quality.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run repository tests
+        run: node --test
+      - name: Check long-form script minimum draft length
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          source = Path("content/long-form-scripts.md").read_text(encoding="utf-8")
+          episodes = re.split(r"(?m)^## Episode [0-9]+ — ", source)[1:]
+          if len(episodes) < 2:
+              raise SystemExit(f"Expected at least 2 episode scripts; found {len(episodes)}")
+          for index, episode in enumerate(episodes[:2], start=1):
+              section = re.split(r"(?m)^## ", episode, maxsplit=1)[0]
+              words = re.findall(r"\b[\w’'-]+\b", section)
+              print(f"Episode {index}: {len(words)} draft words")
+              if len(words) < 900:
+                  raise SystemExit(f"Episode {index} is below the 900-word draft floor")
+          print("Draft-length floor passed. This does not certify a 6-minute runtime.")
+          PY
