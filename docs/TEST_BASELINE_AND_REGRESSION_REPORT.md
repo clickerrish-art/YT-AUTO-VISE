@@ -1,6 +1,6 @@
 # Test baseline and regression report
 
-Updated: 2026-10-23. Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8`; subsequent commits are documentation-only. Consult the live branch ref for the current documentation HEAD.
+Updated: 2026-10-23. Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `46d878b6cc7d53e7beca79c086fd3fead931fb11`; subsequent commits are documentation-only. Consult the live branch ref for the current documentation HEAD.
 Default branch: `main`
 Implementation branch: `codex/marketing-machine-audit-fixes`
 Public publishing: disabled
@@ -9,7 +9,7 @@ Public publishing: disabled
 
 | Branch | SHA reference | Full-suite result |
 |---|---|---|
-| `main` | baseline `45352b73bb6cc4787b2a49988b575afb754ab627` | **BLOCKED — not run in this execution environment** |
+| `main` | `45352b73bb6cc4787b2a49988b575afb754ab627` | **PASS** — run `40018038047`: 54 tests passed, 0 failed; readiness, caption checks and unreviewed metadata safety checks passed |
 | `codex/marketing-machine-audit-fixes` | Latest job-and-campaign code SHA `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` | **PASS** — run 40016605388 completed npm test, campaign validation, job lifecycle/idempotency tests, review-safety tests, queue checks, syntax and Python compilation; docs-only commits followed |
 
 Earlier inspection at `a426b36b908103e2ce001a28a012a346da5c859c` preceded the CI runs recorded below; its empty status lookup was not evidence of a pass. The latest job-and-campaign code SHA `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` passed the full automation workflow (run 40016605388), including npm test, campaign validation, job lifecycle/idempotency tests, safety tests, queue checks, syntax and Python compilation. A complete full-suite baseline on main remains unexecuted.
@@ -19,7 +19,7 @@ Earlier inspection at `a426b36b908103e2ce001a28a012a346da5c859c` preceded the CI
 - `package.json` requires Node.js `>=20`, uses ESM, and defines `npm test` as `node --test`.
 - `googleapis` is the runtime dependency.
 - No `package-lock.json` was found on the inspected branches. Thus `npm ci` is not currently available as a reproducible install step. Do not claim a reproducible install until a lockfile is deliberately generated and committed.
-- Blocked, not passed: dependency install, full `npm test`, `npm run check`, `npm run check:captions`, `npm run readiness`, media rendering/preflight, and complete workflow execution.
+- On implementation SHA `46d878b6cc7d53e7beca79c086fd3fead931fb11`, automation CI run `40018011341` passed `npm test` (70/70), campaign validation, Python review-safety tests, queue invariants, JavaScript syntax checks and Python compilation. Metadata and content-quality workflows also passed (runs `40018004685` and `40018011188`). Media rendering and real artifact inspection remain unverified.
 - The CI workflow `.github/workflows/validate.yml` is configured to run `npm install --ignore-scripts`, syntax checks, `npm test`, readiness diagnostics, caption validation and negative checks for unreviewed metadata/asset examples. No confirmed run for the current implementation head was available through the connected status endpoint.
 
 ## Implemented dashboard additions (CI verified; full production acceptance remains incomplete)
@@ -87,7 +87,7 @@ No test, upload, deployment, sale or live analytics result is claimed as success
 - Implementation SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc: full automation validation passed, including npm test, Python review-safety tests, queue invariants, syntax checks and Python compilation: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014937474. Content quality passed at the same SHA: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014937704.
 - Implementation SHA 896eea1521ba93afdff8f29a248cf9760d8c8e6a adds startup recovery and its integration test. Automation CI passed in run 40014972795, metadata validation passed in run 40014972886, and content quality passed in run 40014973012. Later docs-only SHA a47e74d91013f7ae38912bb4a144574f2575dfdd also passed automation CI in run 40015187821.
 - No package-lock.json exists. CI currently uses npm install --ignore-scripts; npm ci is not yet a reproducible supported command.
-- Full main-branch baseline remains BLOCKED BY EXTERNAL PREREQUISITE because no authorized workflow-dispatch action was available in this execution. No live upload or genuine media artifact was created.
+- Main baseline PASS: run `40018038047` at SHA `45352b73bb6cc4787b2a49988b575afb754ab627`; 54 tests passed and all remaining steps in `Validate SonicVhibez metadata` passed. No live upload or genuine media artifact was created.
 
 Campaign-enhanced code SHA `3fc132b99c683be71e571dab4e6660ab98beb4a9` passed automation CI in run `40016046874`, including npm test, campaign validation, Python review-safety tests, queue checks, syntax and Python compilation. The dashboard applies task timeouts, bounds request/output buffering, prevents overlapping same-task runs within the process, and changes persisted RUNNING validation tasks to RECOVERY_REQUIRED on restart. The content-job state machine and API now persist IDs, idempotency keys, schedule, input references, transition history, output/evidence fields, retry limits and upload receipt placeholders. Upload-only states are rejected by the generic transition API, and an interrupted UPLOADING_PRIVATE job becomes RECOVERY_REQUIRED for reconciliation. This is not equivalent to worker execution, cross-process locking, or a verified remote upload.
 
@@ -96,4 +96,4 @@ Campaign-enhanced code SHA `3fc132b99c683be71e571dab4e6660ab98beb4a9` passed aut
 
 Latest code-tested SHA: 869d4ab280fd9bf20ea74edee4c3d1dac032bbe8. Automation workflow run 40016605388 completed successfully: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40016605388. The Node suite reported 70 tests, 70 passed, 0 failed, 0 skipped. The campaign validation step passed, the Python review-safety tests passed, queue invariants reported 16 queued topics and disabled publishing, and JavaScript syntax/Python compilation checks passed. Metadata validation passed in run 40016597429 and content quality passed in run 40016605400.
 
-This result covers the job lifecycle and campaign configuration code at SHA 869d4ab. Later commits update documentation only. It does not establish a full main-branch baseline, real rights-cleared media artifacts, OAuth identity, or a real private upload.
+The tested implementation at SHA `46d878b6cc7d53e7beca79c086fd3fead931fb11` additionally tests calendar-date slot reservation and simultaneous identical requests across two dashboard processes. It does not establish real rights-cleared media artifacts, OAuth identity, or a real private upload.
