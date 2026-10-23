@@ -42,7 +42,7 @@ function recoverInterruptedTasks() {
   const state = loadState();
   let recovered = 0;
   for (const job of state.jobs) {
-    if (job.kind === "CONTENT_PRODUCTION" && ["GENERATING", "VALIDATING", "UPLOADING_PRIVATE"].includes(job.state)) {
+    if (job.kind === "CONTENT_PRODUCTION" && (job.state === "GENERATING" || job.state === "UPLOADING_PRIVATE" || (["GENERATED", "VALIDATING"].includes(job.state) && job.workerLease))) {
       const previous = job.state;
       job.state = "RECOVERY_REQUIRED";
       job.errorDetails = { code: "INTERRUPTED_DURING_ACTIVE_STAGE", retryable: false, message: previous === "UPLOADING_PRIVATE" ? "Upload outcome is uncertain. Reconcile with YouTube before any retry." : "Server restarted during content processing; inspect artifacts before retrying." };
@@ -395,6 +395,10 @@ const server = http.createServer(async (req, res) => {
         let updated = job;
         if (job.state === "GENERATED") updated = transitionContentJob(job, "VALIDATING", { actor: "local-operator", reason: "Server-side artifact, thumbnail, metadata and caption validation started" });
         updated.validationResults = { passed: true, checkedAt: new Date().toISOString(), metadataVersion, captionsPath: body.captionsPath, captionsSha256: sha256File(captionsFile), artifacts: inspectedArtifacts, thumbnail: { path: job.thumbnailArtifact.path, sha256: job.thumbnailArtifact.sha256, width: thumbnailStream.width, height: thumbnailStream.height }, checks: ["metadata-sha256", "caption-structure", "mp4-sha256", "ffprobe-duration", "orientation", "audio-stream", "thumbnail-sha256", "thumbnail-dimensions"] };
+        if (updated.workerLease) {
+          updated.leaseHistory = [...(updated.leaseHistory ?? []), { workerId: updated.workerLease.workerId, action: "VALIDATION_COMPLETED_RELEASED", at: new Date().toISOString() }];
+          updated.workerLease = null;
+        }
         updated.updatedAt = new Date().toISOString();
         state.jobs[index] = updated;
         state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_VALIDATION_PASSED", jobId: job.id, metadataVersion, captionsPath: body.captionsPath, artifacts: inspectedArtifacts.map(a => ({ path: a.path, sha256: a.sha256 })), at: updated.updatedAt, actor: "local-operator" });
