@@ -23,16 +23,56 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install free narration client
-        run: python -m pip install --disable-pip-version-check edge-tts
+      - name: Install narration client and media probe
+        run: |
+          python -m pip install --disable-pip-version-check edge-tts
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
       - name: Generate two narration drafts
         run: python scripts/generate_long_form_narration.py
-      - name: Package draft audio and source scripts
+      - name: Verify audio files and report duration
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess
+          import json
+          out = Path("media/long-form-drafts")
+          reports = []
+          for audio in sorted(out.glob("*.mp3")):
+              result = subprocess.run(
+                  ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                   "-of", "default=noprint_wrappers=1:nokey=1", str(audio)],
+                  check=True, capture_output=True, text=True
+              )
+              seconds = float(result.stdout.strip())
+              if seconds <= 0:
+                  raise SystemExit(f"Invalid duration for {audio}")
+              text_file = audio.with_suffix(".txt")
+              reports.append({
+                  "file": audio.name,
+                  "durationSeconds": round(seconds, 2),
+                  "durationMinutes": round(seconds / 60, 2),
+                  "estimatedTargetMinutes": "6–10",
+                  "withinTarget": 360 <= seconds <= 600,
+                  "textFileIncluded": text_file.exists()
+              })
+              status = "PASS" if 360 <= seconds <= 600 else "REVIEW"
+              print(f"{status}: {audio.name} — {seconds/60:.2f} minutes")
+          if len(reports) != 2:
+              raise SystemExit(f"Expected 2 MP3s, found {len(reports)}")
+          Path("media/long-form-drafts/duration-report.json").write_text(
+              json.dumps(reports, indent=2) + "\n", encoding="utf-8"
+          )
+          print("Audio-duration check complete. REVIEW means human editing is needed; no upload occurred.")
+          PY
+      - name: Package draft audio, extracted text and duration report
         uses: actions/upload-artifact@v4
         with:
           name: sonicvhibez-long-form-narration-drafts
           path: |
             media/long-form-drafts/*.mp3
+            media/long-form-drafts/*.txt
+            media/long-form-drafts/duration-report.json
             content/long-form-scripts.md
           if-no-files-found: error
           retention-days: 30
