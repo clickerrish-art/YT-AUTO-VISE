@@ -64,7 +64,8 @@ If a lockfile is added in a separate dependency-management change, test `npm ci`
 |---|---|---|
 | Complete 50–60 second real wildlife Short | BLOCKED BY EXTERNAL PREREQUISITE | Existing pipeline creates typography-led review drafts; rights-cleared footage and human review are not evidenced. |
 | Complete 6–10 minute wildlife documentary | BLOCKED BY EXTERNAL PREREQUISITE | Narration drafts/render infrastructure exist; complete rights-cleared substantive visuals, final synchronized captions and approval are not evidenced. |
-| Rights-cleared source assets | BLOCKED BY EXTERNAL PREREQUISITE | No human-verified per-asset license/permission evidence is established by this report. |\n| Evidence-backed human-review workflow | NOT IMPLEMENTED | No durable artifact-bound approval UI and reviewer record are integrated. |
+| Rights-cleared source assets | BLOCKED BY EXTERNAL PREREQUISITE | No human-verified per-asset license/permission evidence is established by this report. |
+| Evidence-backed human-review workflow | NOT IMPLEMENTED | No durable artifact-bound approval UI and reviewer record are integrated. |
 | Verified SonicVhibez channel identity | BLOCKED BY EXTERNAL PREREQUISITE | Configured channel ID remains empty; no authenticated OAuth identity result is available. |
 | Real private YouTube upload and independent privacy check | BLOCKED BY EXTERNAL PREREQUISITE | Correctly blocked by missing verified identity, credentials and approved media. |
 | Public publishing remains disabled | PASS | Explicitly remains outside this change. |
