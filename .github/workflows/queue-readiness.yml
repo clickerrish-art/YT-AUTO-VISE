@@ -16,7 +16,8 @@ on:
       - ".github/workflows/queue-readiness.yml"
   workflow_dispatch:
   schedule:
-    - cron: "0 15 * * 2,5"
+    # Tuesday/Thursday/Saturday SAST cadence (GitHub Actions cron is UTC).
+    - cron: "0 15 * * 2,4,6"
 permissions:
   contents: write
 jobs:
