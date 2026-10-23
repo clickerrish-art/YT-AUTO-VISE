@@ -113,12 +113,12 @@ def captions_from_text_estimate(text: str, duration: float) -> str:
         caption = " ".join(words_group)
         share = duration * len(caption) / total_chars
         start = cursor
-        end = duration if index == len(groups) else min(duration, cursor + max(0.25, share))
+        end = duration if index == len(groups) else min(duration, cursor + share)
         if end <= start:
             end = min(duration, start + 0.1)
         lines.extend([str(index), f"{srt_time(start)} --> {srt_time(end)}", caption, ""])
         cursor = end
-    return "\\n".join(lines).rstrip() + "\\n"
+    return "\n".join(lines).rstrip() + "\n"
 
 async def main():
     if not SOURCE.exists():
