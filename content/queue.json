@@ -47,8 +47,10 @@
       "id": "wildlife-vault-001",
       "topic": "How to Make Better Wildlife Videos for YouTube",
       "productUrl": "https://selar.com/0u19v8u99l",
-      "status": "script_and_captions_ready_needs_media_and_review",
-      "contentType": "short"
+      "status": "SCRIPT_AND_CAPTIONS_READY_NEEDS_MEDIA_AND_HUMAN_REVIEW",
+      "contentType": "short",
+      "scheduledDay": "Thursday",
+      "targetSeconds": 55
     },
     {
       "id": "wildlife-vault-002",
