@@ -40,6 +40,10 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(created.status, 201, await created.text());
   const duplicate = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(draft) });
   assert.equal(duplicate.status, 409);
+  const conflictingSlot = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-other", title: "Conflicting Tuesday reservation" }) });
+  assert.equal(conflictingSlot.status, 409, "different drafts must not reserve the same calendar slot");
+  const invalidDate = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-invalid-date", scheduledDate: "2026-02-31" }) });
+  assert.equal(invalidDate.status, 400, "invalid calendar dates must be rejected");
   const unsafe = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-unsafe", rightsConfirmed: true }) });
   assert.equal(unsafe.status, 400);
   const saved = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
