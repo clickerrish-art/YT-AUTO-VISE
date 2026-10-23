@@ -23,7 +23,7 @@ The tested implementation suite includes dashboard integration, two-process date
 - Runtime dependency: `googleapis`.
 - CI currently uses `npm install --ignore-scripts`.
 - `package-lock.json` is committed. Clean `npm ci --ignore-scripts` passed in [lockfile workflow run 40025040014](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025040014) at code-equivalent SHA `c3d3638c03b77e0e04e07748669788a614a758c5`.
-- No claim is made that a clean checkout, FFmpeg render, real media artifact, YouTube OAuth flow, remote upload, or remote privacy verification was exercised.
+- No claim is made that a clean checkout-to-render pipeline, real media artifact, YouTube OAuth flow, remote upload, or remote privacy verification was exercised. A clean locked dependency installation did pass.
 
 ## Dashboard integration evidence
 
@@ -41,9 +41,9 @@ The dashboard integration test starts the real server with a temporary state dir
 
 ## Outstanding acceptance work
 
-1. Commit a valid npm lockfile and run `npm ci` on a clean runner.
-2. Implement worker leases, heartbeat, expiry, bounded retry/backoff and stale-worker fencing.
-3. Complete the dashboard-launched render-to-validation-to-review pipeline.
+1. Keep the committed npm lockfile synchronized and rerun clean `npm ci --ignore-scripts` after dependency changes.
+2. Add automatic background lease reaping and complete restart recovery; guarded lease APIs, heartbeats, backoff and stale-worker fencing are implemented/tested.
+3. Supply real rights-cleared manifests/assets and pass a complete dashboard-launched render/validation/rights/review run; missing prerequisites currently block safely.
 4. Generate and inspect actual rights-cleared MP4 outputs; record real checksums, durations, dimensions and validation results.
 5. Test upload failure injection against mocked YouTube responses and exercise reconciliation behavior.
 6. Verify authorized SonicVhibez OAuth identity, then perform a private upload only after real rights evidence, completed review and explicit operator confirmation.
