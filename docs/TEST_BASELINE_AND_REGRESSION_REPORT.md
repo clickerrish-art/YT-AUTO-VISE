@@ -1,6 +1,6 @@
 # Test baseline and regression report
 
-Updated: 2026-10-23. Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`; subsequent commits are documentation-only. Consult the live branch ref for the current documentation HEAD.
+Updated: 2026-10-23. Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `3fc132b99c683be71e571dab4e6660ab98beb4a9`; subsequent commits are documentation-only. Consult the live branch ref for the current documentation HEAD.
 Default branch: `main`
 Implementation branch: `codex/marketing-machine-audit-fixes`
 Public publishing: disabled
@@ -12,7 +12,7 @@ Public publishing: disabled
 | `main` | baseline `45352b73bb6cc4787b2a49988b575afb754ab627` | **BLOCKED — not run in this execution environment** |
 | `codex/marketing-machine-audit-fixes` | Latest campaign-enhanced code SHA `3fc132b99c683be71e571dab4e6660ab98beb4a9` | **PASS** — run 40016046874 completed npm test, campaign validation, review-safety tests, queue checks, syntax and Python compilation; docs-only commits followed |
 
-Earlier inspection at `a426b36b908103e2ce001a28a012a346da5c859c` preceded the CI runs recorded below; its empty status lookup was not evidence of a pass. The tested code SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32` passed the full automation workflow and metadata validation. A complete full-suite baseline on main remains unexecuted.
+Earlier inspection at `a426b36b908103e2ce001a28a012a346da5c859c` preceded the CI runs recorded below; its empty status lookup was not evidence of a pass. The campaign-enhanced code SHA `3fc132b99c683be71e571dab4e6660ab98beb4a9` passed the full automation workflow and campaign validation. A complete full-suite baseline on main remains unexecuted.
 
 ## Toolchain and reproducibility
 
