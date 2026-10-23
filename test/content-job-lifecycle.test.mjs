@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload } from "../scripts/content-job-lifecycle.mjs";
+import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "../scripts/content-job-lifecycle.mjs";
 
 const input = { idempotencyKey: "draft:short-001", title: "Wildlife storytelling", topic: "How to plan a wildlife documentary", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-24", inputReferences: ["content/short-001-wildlife-video-storytelling.md"] };
 
@@ -66,4 +66,60 @@ test("private-upload approval requires matching generated artifact, metadata and
   assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, metadataVersion: "changed" }), /metadata version/);
   assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, rightsEvidenceSha256: "d".repeat(64) }), /rights evidence/);
   assert.throws(() => approveContentJobForPrivateUpload({ ...job, state: "GENERATED" }, review), /awaiting human review/);
+});
+
+
+test("worker lease fences concurrent claims and permits guarded heartbeat/stage completion", () => {
+  const start = Date.parse("2026-10-23T12:00:00.000Z");
+  const claimed = claimWorkerLease(createContentJob(input), "worker-a", { leaseMs: 10_000, now: start });
+  assert.equal(claimed.job.state, "GENERATING");
+  assert.ok(claimed.job.workerLease.tokenHash);
+  assert.notEqual(claimed.job.workerLease.tokenHash, claimed.leaseToken);
+  assert.throws(() => claimWorkerLease(claimed.job, "worker-b", { leaseMs: 10_000, now: start + 1 }), /active worker lease/);
+  assert.throws(() => heartbeatWorkerLease(claimed.job, "wrong-token", { now: start + 1 }), /does not match/);
+  const beat = heartbeatWorkerLease(claimed.job, claimed.leaseToken, { leaseMs: 15_000, now: start + 2_000 });
+  assert.equal(Date.parse(beat.workerLease.expiresAt), start + 17_000);
+  assert.throws(() => completeWorkerLease(beat, claimed.leaseToken, "GENERATED", { state: "APPROVED_FOR_PRIVATE_UPLOAD" }, start + 3_000), /protected job field/);
+  const generated = completeWorkerLease(beat, claimed.leaseToken, "GENERATED", {
+    outputArtifacts: [{ path: "media/fixture.mp4", sha256: "a".repeat(64) }],
+    metadataVersion: "meta-sha256:fixture"
+  }, start + 3_000);
+  assert.equal(generated.state, "GENERATED");
+  assert.ok(generated.workerLease);
+  const reviewed = completeWorkerLease(generated, claimed.leaseToken, "AWAITING_HUMAN_REVIEW", {
+    validationResults: { passed: true },
+    rightsChecks: { verified: true, evidenceSha256: "b".repeat(64) }
+  }, start + 4_000);
+  assert.equal(reviewed.state, "AWAITING_HUMAN_REVIEW");
+  assert.equal(reviewed.workerLease, null);
+});
+
+test("expired leases fence stale results and enforce bounded retry backoff", () => {
+  const start = Date.parse("2026-10-23T12:00:00.000Z");
+  const first = claimWorkerLease(createContentJob(input), "worker-a", { leaseMs: 5_000, now: start });
+  const expired = expireWorkerLease(first.job, start + 5_001);
+  assert.equal(expired.expired, true);
+  assert.equal(expired.job.state, "FAILED");
+  assert.equal(expired.job.errorDetails.retryable, true);
+  assert.ok(Date.parse(expired.job.nextRetryAt) > start + 5_001);
+  assert.equal(expired.job.workerLease, null);
+  assert.throws(() => completeWorkerLease(expired.job, first.leaseToken, "GENERATED", {}, start + 5_002), /does not match/);
+  assert.throws(() => claimWorkerLease(expired.job, "worker-b", { now: start + 5_002 }), /backoff has not elapsed/);
+  const retry = claimWorkerLease(expired.job, "worker-b", { now: Date.parse(expired.job.nextRetryAt) + 1 });
+  assert.equal(retry.job.state, "GENERATING");
+  assert.equal(retry.job.attemptCount, 2);
+  const secondExpiry = expireWorkerLease(retry.job, Date.parse(retry.job.workerLease.expiresAt) + 1);
+  assert.equal(secondExpiry.job.state, "FAILED");
+  assert.equal(secondExpiry.job.errorDetails.retryable, false);
+  assert.throws(() => claimWorkerLease(secondExpiry.job, "worker-c", { now: Date.parse(secondExpiry.job.nextRetryAt ?? 0) + 1 }), /Retry limit reached/);
+});
+
+test("expired upload lease enters recovery-required rather than retrying", () => {
+  const start = Date.parse("2026-10-23T12:00:00.000Z");
+  const claimed = claimWorkerLease(createContentJob(input), "worker-a", { leaseMs: 5_000, now: start });
+  const uncertain = { ...claimed.job, state: "UPLOADING_PRIVATE" };
+  const recovered = expireWorkerLease(uncertain, start + 5_001);
+  assert.equal(recovered.job.state, "RECOVERY_REQUIRED");
+  assert.equal(recovered.job.errorDetails.retryable, false);
+  assert.match(recovered.job.errorDetails.message, /reconciled/);
 });
