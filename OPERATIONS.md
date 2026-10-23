@@ -88,8 +88,8 @@ After a failed workflow, inspect the failed job logs for the exact tested SHA, c
 
 ## Remaining acceptance work
 
-- Commit a real npm lockfile and pass clean `npm ci`.
-- Implement worker leases, heartbeat, expiry, bounded exponential backoff and stale-worker fencing.
+- Keep the committed npm lockfile current and rerun clean `npm ci --ignore-scripts` after dependency changes.
+- Add automatic background lease reaping and full restart recovery; guarded worker leases/backoff are implemented and tested.
 - Complete dashboard-launched rendering, artifact validation, human review and production-job linkage.
 - Generate and inspect real rights-cleared Short and long-form MP4s.
 - Complete failure-injection/reconciliation tests, OAuth identity verification, and a real private-only upload only after all gates and explicit owner authorization.
