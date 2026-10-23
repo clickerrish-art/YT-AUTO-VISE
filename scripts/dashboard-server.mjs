@@ -350,9 +350,16 @@ const server = http.createServer(async (req, res) => {
           if (!video || !audio || (isShort ? video.height <= video.width : video.width <= video.height)) return json(res, 400, { error: "Artifact must have the correct orientation and an audio stream" });
           inspectedArtifacts.push({ path: artifact.path, sha256: actualSha, durationSeconds: duration, width: video.width, height: video.height });
         }
+        if (!job.thumbnailArtifact) return json(res, 400, { error: "A generated and checksummed thumbnail is required before validation can pass" });
+        const thumbnailFile = resolveRepositoryFile(job.thumbnailArtifact.path);
+        if (sha256File(thumbnailFile) !== job.thumbnailArtifact.sha256) return json(res, 409, { error: "Thumbnail changed after generation" });
+        const thumbnailProbe = spawnSync("ffprobe", ["-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "json", thumbnailFile], { encoding: "utf8", timeout: 15_000 });
+        if (thumbnailProbe.error || thumbnailProbe.status !== 0) return json(res, 503, { error: "ffprobe is unavailable or failed to inspect the thumbnail" });
+        const thumbnailStream = JSON.parse(thumbnailProbe.stdout).streams?.[0];
+        if (!thumbnailStream || thumbnailStream.width !== 1280 || thumbnailStream.height !== 720) return json(res, 400, { error: "Thumbnail must be a readable 1280x720 image" });
         let updated = job;
-        if (job.state === "GENERATED") updated = transitionContentJob(job, "VALIDATING", { actor: "local-operator", reason: "Server-side artifact, metadata and caption validation started" });
-        updated.validationResults = { passed: true, checkedAt: new Date().toISOString(), metadataVersion, captionsPath: body.captionsPath, captionsSha256: sha256File(captionsFile), artifacts: inspectedArtifacts, checks: ["metadata-sha256", "caption-structure", "mp4-sha256", "ffprobe-duration", "orientation", "audio-stream"] };
+        if (job.state === "GENERATED") updated = transitionContentJob(job, "VALIDATING", { actor: "local-operator", reason: "Server-side artifact, thumbnail, metadata and caption validation started" });
+        updated.validationResults = { passed: true, checkedAt: new Date().toISOString(), metadataVersion, captionsPath: body.captionsPath, captionsSha256: sha256File(captionsFile), artifacts: inspectedArtifacts, thumbnail: { path: job.thumbnailArtifact.path, sha256: job.thumbnailArtifact.sha256, width: thumbnailStream.width, height: thumbnailStream.height }, checks: ["metadata-sha256", "caption-structure", "mp4-sha256", "ffprobe-duration", "orientation", "audio-stream", "thumbnail-sha256", "thumbnail-dimensions"] };
         updated.updatedAt = new Date().toISOString();
         state.jobs[index] = updated;
         state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_VALIDATION_PASSED", jobId: job.id, metadataVersion, captionsPath: body.captionsPath, artifacts: inspectedArtifacts.map(a => ({ path: a.path, sha256: a.sha256 })), at: updated.updatedAt, actor: "local-operator" });
