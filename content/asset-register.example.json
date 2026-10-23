@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "channel": "SonicVhibez",
+  "status": "EXAMPLE_ONLY_NOT_APPROVED",
+  "assets": [
+    {
+      "id": "E1-A01",
+      "filename": "replace_with_local_filename.mp4",
+      "sourceUrl": "https://example.org/replace-with-original-source-page",
+      "licenseTerms": "replace_with_exact_terms_and_permitted_use",
+      "dateChecked": "2026-10-23",
+      "requiredAttribution": [
+        "replace_with_exact_required_credit"
+      ],
+      "thirdPartyRestrictionsChecked": false,
+      "evidencePath": "replace_with_saved_license_evidence_path",
+      "rightsEvidenceReviewed": false,
+      "humanApproved": false
+    }
+  ]
+}
+
+This is an intentionally blocked example. Do not mark fields approved until a human has inspected the original source page, actual license/permission terms, any embedded music or third-party restrictions, and saved evidence. The validator checks completeness; it cannot decide whether a license legally permits your intended use.
