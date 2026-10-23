@@ -35,8 +35,8 @@ if (stderr || !stdout.includes("PASS")) {
   process.exit(1);
 }
 
-// Never send a file to YouTube unless the same media preflight used by the
-// manual workflow confirms duration, vertical orientation, and an audio track.
+// Never send a file to YouTube unless the media preflight confirms duration,
+// vertical orientation, and an audio track.
 const mediaPreflight = await import("node:child_process").then(({ execFileSync }) => {
   try {
     const output = execFileSync(process.execPath, ["scripts/preflight-media.mjs", videoPath, metadataPath], {
@@ -55,6 +55,10 @@ console.log(mediaPreflight.stdout.trim());
 
 if (metadata.visibility !== "private") {
   console.error("BLOCKED: uploader only permits private uploads.");
+  process.exit(1);
+}
+if (metadata.containsSyntheticMedia !== true || metadata.hasPaidPromotion !== true) {
+  console.error("BLOCKED: synthetic-media and paid-promotion disclosure flags must both be true.");
   process.exit(1);
 }
 
@@ -85,7 +89,12 @@ const response = await youtube.videos.insert({
       tags: metadata.tags,
       categoryId: "27"
     },
-    status: { privacyStatus: "private", selfDeclaredMadeForKids: false }
+    status: {
+      privacyStatus: "private",
+      selfDeclaredMadeForKids: false,
+      containsSyntheticMedia: true,
+      paidProductPlacementDetails: { hasPaidProductPlacement: true }
+    }
   },
   media: { body: fs.createReadStream(videoPath) }
 });
@@ -100,7 +109,9 @@ const log = {
   channelTitle: matchedChannel.snippet.title,
   videoId,
   privacyStatus: response.data.status?.privacyStatus ?? "unknown",
-  title: metadata.title
+  title: metadata.title,
+  containsSyntheticMedia: response.data.status?.containsSyntheticMedia ?? "unknown",
+  hasPaidProductPlacement: response.data.status?.paidProductPlacementDetails?.hasPaidProductPlacement ?? "unknown"
 };
 fs.mkdirSync("run-logs", { recursive: true });
 fs.writeFileSync(`run-logs/upload-${videoId}.json`, JSON.stringify(log, null, 2) + "\n");
