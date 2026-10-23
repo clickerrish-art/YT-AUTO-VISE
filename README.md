@@ -52,7 +52,7 @@ npm run dashboard
 
 Open http://127.0.0.1:8787. The dashboard binds to loopback by default, rejects weak/missing operator tokens, and persists state under `state/dashboard-state.json` or `DASHBOARD_STATE_DIR`. Back up that directory securely. Do not expose this service directly to the public internet; remote access requires TLS, a proper authenticated reverse proxy, access-control review and secure secret management.
 
-The dashboard can create validated draft records, run allowlisted checks, and manage campaign state. The renderers exist but a complete dashboard-launched production-to-review pipeline is not yet accepted.
+The dashboard can create draft records, launch fixed renderers under worker leases, inspect real MP4s with ffprobe, validate captions/metadata, record per-asset rights evidence, and bind review to artifact checksums. The end-to-end pipeline remains blocked until real manifests and licensed source assets are supplied.
 
 ## Campaign rules
 
@@ -86,7 +86,7 @@ See `.env.example` for variable names only. Use local secure environment variabl
 
 1. Commit a real npm lockfile and prove clean `npm ci`.
 2. Finish worker leases, heartbeat/expiry, retry backoff and stale-worker fencing.
-3. Finish the dashboard-launched render/validation/review workflow.
+3. Provide completed real manifests and rights-cleared inputs, then exercise the dashboard-launched render/validation/rights/review pipeline end to end.
 4. Provide rights-cleared source assets and evidence, then generate and inspect real Short and long-form artifacts.
 5. Test upload failure injection and reconciliation; verify authorized SonicVhibez OAuth identity before any actual private upload.
 6. Finish backup/restore and restart recovery acceptance.
