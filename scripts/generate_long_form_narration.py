@@ -87,7 +87,13 @@ def captions_from_boundaries(boundaries):
     lines = []
     for index, cue in enumerate(cues, 1):
         start = cue[0]["start"]
-        end = max(start + 0.5, cue[-1]["end"])
+        end = max(start + 0.05, cue[-1]["end"])
+        # TTS word-boundary durations can overlap slightly across adjacent words.
+        # End each cue at the next cue's start so SRT blocks never overlap.
+        if index < len(cues):
+            next_start = cues[index][0]["start"]
+            if end > next_start:
+                end = max(start + 0.05, next_start)
         lines.extend([str(index), f"{srt_time(start)} --> {srt_time(end)}", " ".join(x["text"] for x in cue), ""])
     return "\n".join(lines).rstrip() + "\n"
 
