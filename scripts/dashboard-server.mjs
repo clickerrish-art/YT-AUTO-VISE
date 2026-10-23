@@ -308,6 +308,92 @@ const server = http.createServer(async (req, res) => {
         return json(res, 201, { job, reused: false, publishingEnabled: false });
       } finally { release(); }
     }
+    if (req.method === "POST" && url.pathname === "/api/jobs/validate") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || typeof body.captionsPath !== "string") return json(res, 400, { error: "jobId and captionsPath are required" });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const job = state.jobs[index];
+        if (!["GENERATED", "VALIDATING"].includes(job.state)) return json(res, 409, { error: "Only generated jobs can be technically validated" });
+        if (!Array.isArray(job.outputArtifacts) || !job.outputArtifacts.length || !job.metadataPath || !job.metadataVersion) return json(res, 409, { error: "A recorded artifact and metadata version are required" });
+        const metadataFile = resolveRepositoryFile(job.metadataPath);
+        const metadataVersion = sha256File(metadataFile);
+        if (metadataVersion !== job.metadataVersion) return json(res, 409, { error: "Metadata changed after generation; regenerate or create a new job version" });
+        const metadata = JSON.parse(fs.readFileSync(metadataFile, "utf8"));
+        if (metadata.channel !== "SonicVhibez" || metadata.visibility !== "private" || metadata.productUrl !== approvedProductUrl) return json(res, 400, { error: "Metadata must target SonicVhibez, remain private and use the approved Selar URL" });
+        if (typeof metadata.title !== "string" || !metadata.title.trim() || typeof metadata.description !== "string" || !metadata.description.trim() || !Array.isArray(metadata.tags) || metadata.tags.length < 3) return json(res, 400, { error: "Metadata needs a title, description and at least three tags" });
+        const captionsFile = resolveRepositoryFile(body.captionsPath);
+        const captionCheck = spawnSync(process.execPath, ["scripts/check-captions.mjs", captionsFile], { encoding: "utf8", timeout: 15_000 });
+        if (captionCheck.error || captionCheck.status !== 0 || !String(captionCheck.stdout ?? "").includes("PASS:")) return json(res, 400, { error: "Caption validation failed; see the local caption checker output" });
+        const inspectedArtifacts = [];
+        for (const artifact of job.outputArtifacts) {
+          const artifactFile = resolveRepositoryFile(artifact.path);
+          const actualSha = sha256File(artifactFile);
+          if (actualSha !== artifact.sha256) return json(res, 409, { error: "Artifact changed after generation: " + artifact.path });
+          const probe = spawnSync("ffprobe", ["-v", "error", "-show_entries", "format=duration:stream=codec_type,width,height", "-of", "json", artifactFile], { encoding: "utf8", timeout: 15_000 });
+          if (probe.error || probe.status !== 0) return json(res, 503, { error: "ffprobe is unavailable or failed; validation remains blocked" });
+          let media;
+          try { media = JSON.parse(probe.stdout); } catch { return json(res, 400, { error: "ffprobe returned invalid inspection data" }); }
+          const duration = Number(media.format?.duration);
+          const streams = media.streams ?? [];
+          const video = streams.find(stream => stream.codec_type === "video");
+          const audio = streams.some(stream => stream.codec_type === "audio");
+          const isShort = job.contentType === "short";
+          if (!Number.isFinite(duration) || (isShort ? duration < 50 || duration > 60 : duration < 360 || duration > 600)) return json(res, 400, { error: "Artifact duration does not match the scheduled format" });
+          if (!video || !audio || (isShort ? video.height <= video.width : video.width <= video.height)) return json(res, 400, { error: "Artifact must have the correct orientation and an audio stream" });
+          inspectedArtifacts.push({ path: artifact.path, sha256: actualSha, durationSeconds: duration, width: video.width, height: video.height });
+        }
+        let updated = job;
+        if (job.state === "GENERATED") updated = transitionContentJob(job, "VALIDATING", { actor: "local-operator", reason: "Server-side artifact, metadata and caption validation started" });
+        updated.validationResults = { passed: true, checkedAt: new Date().toISOString(), metadataVersion, captionsPath: body.captionsPath, captionsSha256: sha256File(captionsFile), artifacts: inspectedArtifacts, checks: ["metadata-sha256", "caption-structure", "mp4-sha256", "ffprobe-duration", "orientation", "audio-stream"] };
+        updated.updatedAt = new Date().toISOString();
+        state.jobs[index] = updated;
+        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_VALIDATION_PASSED", jobId: job.id, metadataVersion, captionsPath: body.captionsPath, artifacts: inspectedArtifacts.map(a => ({ path: a.path, sha256: a.sha256 })), at: updated.updatedAt, actor: "local-operator" });
+        saveState(state);
+        return json(res, 200, { job: updated, publishingEnabled: false });
+      } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs/rights/verify") {
+      const body = await readBody(req);
+      const actor = process.env.DASHBOARD_OPERATOR_ID;
+      if (!actor || actor.trim().length < 2) return json(res, 503, { error: "Rights verification requires DASHBOARD_OPERATOR_ID" });
+      if (body.confirmRightsVerified !== true || typeof body.jobId !== "string" || !Array.isArray(body.assets) || body.assets.length < 1 || body.assets.length > 50) return json(res, 400, { error: "Explicit confirmation, jobId and 1–50 structured source assets are required" });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const job = state.jobs[index];
+        if (job.state !== "VALIDATING" || job.validationResults?.passed !== true) return json(res, 409, { error: "Technical validation must pass before rights verification" });
+        const timestamp = new Date().toISOString();
+        const assets = [];
+        for (const item of body.assets) {
+          if (!item || typeof item !== "object" || Array.isArray(item)) return json(res, 400, { error: "Each source asset must be an object" });
+          for (const key of ["assetId", "source", "rightsHolder", "assetPath", "licenseEvidenceLocation", "restrictions", "attributionRequirements"]) {
+            if (typeof item[key] !== "string" || !item[key].trim()) return json(res, 400, { error: "Required source-rights field is missing: " + key });
+          }
+          if (!Array.isArray(item.permittedUses) || !item.permittedUses.includes("YouTube")) return json(res, 400, { error: "Every asset must explicitly permit YouTube use" });
+          const assetFile = resolveRepositoryFile(item.assetPath);
+          const evidenceFile = resolveRepositoryFile(item.licenseEvidenceLocation);
+          const assetSha256 = sha256File(assetFile);
+          if (evidenceFile && fs.statSync(evidenceFile).size <= 0) return json(res, 400, { error: "License evidence file is empty" });
+          assets.push({ assetId: item.assetId.trim(), source: item.source.trim(), rightsHolder: item.rightsHolder.trim(), assetPath: item.assetPath, assetSha256, licenseEvidenceLocation: item.licenseEvidenceLocation, licenseEvidenceSha256: sha256File(evidenceFile), permittedUses: item.permittedUses, restrictions: item.restrictions.trim(), attributionRequirements: item.attributionRequirements.trim() });
+        }
+        const primary = assets[0];
+        const rightsEvidence = { assetId: primary.assetId, source: primary.source, rightsHolder: primary.rightsHolder, assetPath: primary.assetPath, assetSha256: primary.assetSha256, licenseEvidenceLocation: primary.licenseEvidenceLocation, licenseEvidenceSha256: primary.licenseEvidenceSha256, permittedUses: [...new Set(assets.flatMap(a => a.permittedUses))], restrictions: assets.map(a => a.restrictions).filter(Boolean).join(" | "), attributionRequirements: assets.map(a => a.attributionRequirements).filter(Boolean).join(" | "), assets, verificationStatus: "VERIFIED", verifiedBy: actor.trim(), verifiedAt: timestamp };
+        const evidenceSha256 = crypto.createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex");
+        const updated = { ...job, rightsChecks: { verified: true, evidenceSha256, evidence: rightsEvidence, verifiedBy: actor.trim(), verifiedAt: timestamp }, updatedAt: timestamp };
+        const reviewed = transitionContentJob(updated, "AWAITING_HUMAN_REVIEW", { actor: actor.trim(), reason: "Operator verified every source asset and retained rights evidence" }, timestamp);
+        state.jobs[index] = reviewed;
+        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_RIGHTS_VERIFIED", jobId: job.id, evidenceSha256, assetCount: assets.length, actor: actor.trim(), at: timestamp, reason: "Operator attested to retained license evidence and permitted uses" });
+        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_AWAITING_HUMAN_REVIEW", jobId: job.id, at: timestamp, actor: actor.trim() });
+        saveState(state);
+        return json(res, 200, { job: reviewed, rightsEvidence, publishingEnabled: false });
+      } finally { release(); }
+    }
     if (req.method === "POST" && url.pathname === "/api/jobs/review") {
       const body = await readBody(req);
       const reviewer = process.env.DASHBOARD_OPERATOR_ID;
