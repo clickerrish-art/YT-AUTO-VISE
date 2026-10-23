@@ -30,7 +30,11 @@ jobs:
           sudo apt-get install -y ffmpeg
       - name: Generate two narration drafts
         run: python scripts/generate_long_form_narration.py
-      - name: Verify audio files and report duration
+      - name: Set up Node for caption validation
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Verify audio files, required text/captions, and report duration
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -38,7 +42,17 @@ jobs:
           import json
           out = Path("media/long-form-drafts")
           reports = []
-          for audio in sorted(out.glob("*.mp3")):
+          expected = ["long-001-narration-draft.mp3", "long-002-narration-draft.mp3"]
+          for filename in expected:
+              audio = out / filename
+              if not audio.exists() or audio.stat().st_size == 0:
+                  raise SystemExit(f"Missing or empty audio file: {audio}")
+              text_file = audio.with_suffix(".txt")
+              caption_file = out / audio.name.replace("-narration-draft.mp3", "-captions-draft.srt")
+              if not text_file.exists() or not text_file.read_text(encoding="utf-8").strip():
+                  raise SystemExit(f"Missing or empty narration text: {text_file}")
+              if not caption_file.exists() or not caption_file.read_text(encoding="utf-8").strip():
+                  raise SystemExit(f"Missing or empty caption file: {caption_file}")
               result = subprocess.run(
                   ["ffprobe", "-v", "error", "-show_entries", "format=duration",
                    "-of", "default=noprint_wrappers=1:nokey=1", str(audio)],
@@ -47,25 +61,29 @@ jobs:
               seconds = float(result.stdout.strip())
               if seconds <= 0:
                   raise SystemExit(f"Invalid duration for {audio}")
-              text_file = audio.with_suffix(".txt")
               reports.append({
                   "file": audio.name,
                   "durationSeconds": round(seconds, 2),
                   "durationMinutes": round(seconds / 60, 2),
-                  "estimatedTargetMinutes": "6–10",
+                  "targetMinutes": {"min": 6, "max": 10},
                   "withinTarget": 360 <= seconds <= 600,
-                  "textFileIncluded": text_file.exists(),
-                  "captionFileIncluded": (out / audio.name.replace("-narration-draft.mp3", "-captions-draft.srt")).exists()
+                  "textFileIncluded": True,
+                  "captionFile": caption_file.name,
+                  "captionFileIncluded": True,
+                  "status": "PASS" if 360 <= seconds <= 600 else "REVIEW"
               })
               status = "PASS" if 360 <= seconds <= 600 else "REVIEW"
               print(f"{status}: {audio.name} — {seconds/60:.2f} minutes")
-          if len(reports) != 2:
-              raise SystemExit(f"Expected 2 MP3s, found {len(reports)}")
           Path("media/long-form-drafts/duration-report.json").write_text(
-              json.dumps(reports, indent=2) + "\n", encoding="utf-8"
+              json.dumps(reports, indent=2) + "\\n", encoding="utf-8"
           )
           print("Audio-duration check complete. REVIEW means human editing is needed; no upload occurred.")
           PY
+      - name: Validate generated caption structure
+        run: |
+          node scripts/check-captions.mjs \\
+            media/long-form-drafts/long-001-captions-draft.srt \\
+            media/long-form-drafts/long-002-captions-draft.srt
       - name: Package draft audio, extracted text and duration report
         uses: actions/upload-artifact@v4
         with:
