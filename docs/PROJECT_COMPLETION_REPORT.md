@@ -2,7 +2,7 @@
 
 Updated: 2026-10-23  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Current branch HEAD at report refresh: `3292a891ba0938372efd9c3f10a6236882c60527` (tested code SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`; subsequent commits were documentation-only).  
+Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`; subsequent commits were documentation-only. Consult the live branch ref/PR for the current documentation HEAD.  
 Default branch: `main` at `45352b73bb6cc4787b2a49988b575afb754ab627`  
 Draft pull request: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1  
 Public publishing: **DISABLED**
