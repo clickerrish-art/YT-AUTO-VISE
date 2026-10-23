@@ -7,6 +7,7 @@
   "scripts": {
     "check": "node scripts/check-content.mjs",
     "test": "node --test",
+    "dashboard": "node scripts/dashboard-server.mjs",
     "upload:private": "node scripts/upload-private.mjs",
     "check:captions": "node scripts/check-captions.mjs content/short-001-wildlife-video-storytelling.srt content/short-002-plan-wildlife-documentary.srt",
     "preflight:media": "node scripts/preflight-media.mjs",
