@@ -14,6 +14,7 @@ export function validateReviewEvidence({ artifact, rightsEvidence, metadataVersi
   if (!artifact || typeof artifact !== "object") errors.push("artifact record is required");
   if (!/^[a-f0-9]{64}$/.test(artifact?.sha256 ?? "")) errors.push("artifact SHA-256 checksum is required");
   if (typeof artifact?.path !== "string" || !artifact.path.trim()) errors.push("artifact path is required");
+  if (artifact && Array.isArray(artifact.relatedArtifacts) && artifact.relatedArtifacts.some(item => !item || typeof item.path !== "string" || !/^[a-f0-9]{64}$/.test(item.sha256 ?? ""))) errors.push("every related media artifact must have a path and SHA-256 checksum");
   if (typeof metadataVersion !== "string" || !metadataVersion.trim() || metadataVersion.length > 160) errors.push("metadata version is required");
   if (typeof reviewer !== "string" || reviewer.trim().length < 2 || reviewer.length > 120) errors.push("authenticated reviewer identity is required");
   if (!["APPROVE", "REJECT"].includes(decision)) errors.push("decision must be APPROVE or REJECT");
@@ -37,6 +38,9 @@ export function validateReviewEvidence({ artifact, rightsEvidence, metadataVersi
 export function createReviewDecision(input, now = new Date().toISOString()) {
   const errors = validateReviewEvidence(input);
   if (errors.length) throw new Error("Review blocked: " + errors.join("; "));
+  const relatedArtifacts = Array.isArray(input.artifact.relatedArtifacts) && input.artifact.relatedArtifacts.length
+    ? structuredClone(input.artifact.relatedArtifacts)
+    : [{ path: input.artifact.path, sha256: input.artifact.sha256 }];
   return Object.freeze({
     id: crypto.randomUUID(),
     decision: input.decision,
@@ -44,6 +48,7 @@ export function createReviewDecision(input, now = new Date().toISOString()) {
     reason: String(input.reason ?? "").trim(),
     artifactPath: input.artifact.path,
     artifactSha256: input.artifact.sha256,
+    relatedArtifacts,
     metadataVersion: input.metadataVersion,
     rightsEvidenceSha256: input.decision === "APPROVE"
       ? crypto.createHash("sha256").update(JSON.stringify(input.rightsEvidence)).digest("hex")
@@ -56,8 +61,13 @@ export function createReviewDecision(input, now = new Date().toISOString()) {
 export function isReviewCurrent(review, { artifact, metadataVersion, rightsEvidence }) {
   if (!review || review.decision !== "APPROVE" || !artifact || !rightsEvidence) return false;
   const rightsHash = crypto.createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex");
+  const currentRelated = Array.isArray(artifact.relatedArtifacts) && artifact.relatedArtifacts.length
+    ? artifact.relatedArtifacts.map(item => ({ path: item.path, sha256: item.sha256 })).sort((a,b) => a.path.localeCompare(b.path))
+    : [{ path: artifact.path, sha256: artifact.sha256 }];
+  const reviewedRelated = (review.relatedArtifacts ?? [{ path: review.artifactPath, sha256: review.artifactSha256 }]).map(item => ({ path: item.path, sha256: item.sha256 })).sort((a,b) => a.path.localeCompare(b.path));
   return review.artifactPath === artifact.path
     && review.artifactSha256 === artifact.sha256
+    && JSON.stringify(currentRelated) === JSON.stringify(reviewedRelated)
     && review.metadataVersion === metadataVersion
     && review.rightsEvidenceSha256 === rightsHash;
 }
