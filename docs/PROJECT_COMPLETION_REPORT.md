@@ -46,7 +46,7 @@ The full default-branch baseline was executed at `45352b73bb6cc4787b2a49988b575a
 | Full campaign editor/activation approval UI | NOT IMPLEMENTED | Dashboard only displays records; owner-verified Safari URL absent |
 | Default branch full-suite baseline | PASS | 54/54 tests at main SHA `45352b73bb6cc4787b2a49988b575afb754ab627`, run `40018038047` |
 | Latest tested implementation CI | PASS | Run `40018707582` passed 72/72 Node tests, campaign validation, review-safety tests, queue checks, syntax and Python compilation |
-| Public publishing disabled | PASS (configuration/code guard) | Schedule says `publishingEnabled: false`; dashboard has no publishing control; new task allowlist has no upload task |
+| Public publishing disabled | PASS | Schedule says `publishingEnabled: false`; dashboard has no publishing control; new task allowlist has no upload task |
 
 ## Run locally
 
@@ -93,12 +93,12 @@ At SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc, automation CI passed: https://g
 |---|---|---|
 | Dashboard startup/health/readiness | PASS | Integration tests start dashboard and verify `/healthz` and `/readyz` in run `40018707582` |
 | Task execution safeguards | PASS | Allowlisted tasks, no shell, bounded output, timeouts, same-process duplicate task guard |
-| Restart recovery | PASS | RUNNING records become RECOVERY_REQUIRED and are audited; covered by run 40014972795 |
+| Restart recovery | PASS | RUNNING records become RECOVERY_REQUIRED and are audited; covered by run `40018707582` |
 | Content-job creation, dated slot reservation, idempotency and guarded transitions | PASS | Job lifecycle API; concurrent requests across two processes tested in run `40018707582` |
 | Full worker execution, lease expiry/backoff and automated recovery orchestration | NOT IMPLEMENTED | Process-safe state lock and dated slot reservation exist; render workers and full lease orchestration are not integrated |
 | Dashboard-launched media production | NOT IMPLEMENTED | Renderers not exposed as dashboard tasks |
 | Rights-cleared real Short and long-form | BLOCKED BY EXTERNAL PREREQUISITE | Verified footage rights and human review unavailable |
-| Campaign destination/disclosure isolation guard | PASS | config/campaigns.json and validate-campaigns.mjs; run 40016046874 |
+| Campaign destination/disclosure isolation guard | PASS | config/campaigns.json and validate-campaigns.mjs; run `40018707582` |
 | Full campaign editor and activation approval | NOT IMPLEMENTED | Dashboard displays campaigns read-only; Safari remains inactive |
 | Authenticated SonicVhibez identity/private upload | BLOCKED BY EXTERNAL PREREQUISITE | Channel ID blank pending independent verification; no real upload claimed |
 | Latest implementation full CI | PASS | Run `40018707582` passed 72/72 tests; docs-only commits follow the tested code SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` |
