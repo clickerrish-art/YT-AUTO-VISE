@@ -348,7 +348,8 @@ const server = http.createServer(async (req, res) => {
         }
         state.audit.push({ id: crypto.randomUUID(), action: body.decision === "APPROVE" ? "CONTENT_ARTIFACT_APPROVED_FOR_PRIVATE_UPLOAD" : "CONTENT_ARTIFACT_REJECTED", jobId: job.id, artifactPath, artifactSha256, metadataVersion, reviewId: review.id, actor: reviewer, reason: String(body.reason ?? "").slice(0, 1000), at: new Date().toISOString() });
         saveState(state);
-        return json(res, 200, { job: state.jobs[index], review, publishingEnabled: false });
+        const uploadApprovalRecord = body.decision === "APPROVE" ? { ...review, jobId: job.id, publishingEnabled: false, visibility: "private" } : null;
+        return json(res, 200, { job: state.jobs[index], review, uploadApprovalRecord, publishingEnabled: false });
       } finally { release(); }
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/transition") {
