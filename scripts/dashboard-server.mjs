@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { spawn } from "node:child_process";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = process.env.DASHBOARD_HOST ?? "127.0.0.1";
@@ -49,6 +50,30 @@ function readBody(req) {
     req.on("error", reject);
   });
 }
+const allowedTasks = new Map([
+  ["validate-schedule", ["run", "validate:schedule"]],
+  ["check-captions", ["run", "check:captions"]],
+  ["production-readiness", ["run", "readiness"]],
+  ["test-suite", ["test"]]
+]);
+function runTask(taskId) {
+  const args = allowedTasks.get(taskId);
+  if (!args) return Promise.reject(new Error("Task is not on the dashboard allowlist"));
+  return new Promise((resolve) => {
+    const startedAt = new Date().toISOString();
+    const child = spawn("npm", args, { cwd: root, shell: false, env: { ...process.env, CI: "1" }, windowsHide: true });
+    let output = "";
+    let truncated = false;
+    const collect = chunk => {
+      output += chunk.toString();
+      if (output.length > 12000) { output = output.slice(-12000); truncated = true; }
+    };
+    child.stdout.on("data", collect);
+    child.stderr.on("data", collect);
+    child.on("error", error => resolve({ taskId, startedAt, finishedAt: new Date().toISOString(), exitCode: null, status: "FAILED", output: (output + "\\n" + error.message).slice(-12000), truncated }));
+    child.on("close", code => resolve({ taskId, startedAt, finishedAt: new Date().toISOString(), exitCode: code, status: code === 0 ? "SUCCEEDED" : "FAILED", output, truncated }));
+  });
+}
 function safeItem(item) {
   if (!item || typeof item !== "object" || Array.isArray(item)) throw new Error("Draft must be an object");
   const id = String(item.id ?? "").trim();
@@ -87,6 +112,25 @@ const server = http.createServer(async (req, res) => {
       if (!schedule.channelId) blockers.push("SonicVhibez channel ID has not been verified");
       if (!fs.existsSync(path.join(root, "content/render-manifest.json"))) blockers.push("Rights-reviewed render manifest is missing");
       return json(res, 200, { publishingEnabled: false, schedule, queueItems: state.queueItems, jobs: state.jobs.slice(-30).reverse(), uploads: state.uploads.slice(-30).reverse(), audit: state.audit.slice(-50).reverse(), blockers, stateFile: path.relative(root, stateFile) });
+    }
+    if (req.method === "GET" && url.pathname === "/api/tasks") {
+      return json(res, 200, { publicPublishingEnabled: false, tasks: [...allowedTasks.keys()] });
+    }
+    if (req.method === "POST" && url.pathname === "/api/tasks/run") {
+      const body = await readBody(req);
+      if (typeof body.taskId !== "string" || !allowedTasks.has(body.taskId)) return json(res, 400, { error: "Choose a supported allowlisted validation task" });
+      const state = loadState();
+      const job = { id: crypto.randomUUID(), kind: "VALIDATION_TASK", taskId: body.taskId, status: "RUNNING", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), publishingEnabled: false };
+      state.jobs.push(job);
+      state.audit.push({ id: crypto.randomUUID(), action: "VALIDATION_TASK_STARTED", jobId: job.id, taskId: body.taskId, at: new Date().toISOString(), actor: "local-operator" });
+      saveState(state);
+      const result = await runTask(body.taskId);
+      const latest = loadState();
+      const index = latest.jobs.findIndex(entry => entry.id === job.id);
+      if (index >= 0) latest.jobs[index] = { ...latest.jobs[index], ...result, updatedAt: new Date().toISOString() };
+      latest.audit.push({ id: crypto.randomUUID(), action: result.status === "SUCCEEDED" ? "VALIDATION_TASK_SUCCEEDED" : "VALIDATION_TASK_FAILED", jobId: job.id, taskId: body.taskId, exitCode: result.exitCode, at: new Date().toISOString(), actor: "local-operator" });
+      saveState(latest);
+      return json(res, result.status === "SUCCEEDED" ? 200 : 500, { job: latest.jobs.find(entry => entry.id === job.id), publicPublishingEnabled: false });
     }
     if (req.method === "POST" && url.pathname === "/api/drafts") {
       const body = await readBody(req);
