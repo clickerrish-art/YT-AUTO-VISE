@@ -48,6 +48,10 @@ function recoverInterruptedTasks() {
       job.errorDetails = { code: "INTERRUPTED_DURING_ACTIVE_STAGE", retryable: false, message: previous === "UPLOADING_PRIVATE" ? "Upload outcome is uncertain. Reconcile with YouTube before any retry." : "Server restarted during content processing; inspect artifacts before retrying." };
       job.updatedAt = new Date().toISOString();
       job.transitionHistory = [...(job.transitionHistory ?? []), { from: previous, to: "RECOVERY_REQUIRED", at: job.updatedAt, actor: "system-recovery", reason: job.errorDetails.message }];
+      if (job.workerLease) {
+        job.leaseHistory = [...(job.leaseHistory ?? []), { workerId: job.workerLease.workerId, action: "INTERRUPTED_ON_RESTART", at: job.updatedAt, previousState: previous }];
+        job.workerLease = null;
+      }
       state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_RECOVERY_REQUIRED", jobId: job.id, previousState: previous, at: job.updatedAt, actor: "system-recovery" });
       recovered++;
     }
@@ -61,6 +65,24 @@ function recoverInterruptedTasks() {
   }
   if (recovered) saveState(state);
   return recovered;
+}
+async function reapExpiredWorkerLeases() {
+  const release = await acquireStateLock();
+  try {
+    const state = loadState();
+    let recovered = 0;
+    for (let i = 0; i < state.jobs.length; i++) {
+      const job = state.jobs[i];
+      if (job.kind !== "CONTENT_PRODUCTION" || !job.workerLease || !["GENERATING", "GENERATED", "VALIDATING", "UPLOADING_PRIVATE"].includes(job.state)) continue;
+      const result = expireWorkerLease(job);
+      if (!result.expired) continue;
+      state.jobs[i] = result.job;
+      state.audit.push({ id: crypto.randomUUID(), action: "WORKER_LEASE_AUTO_REAPED", jobId: job.id, workerId: job.workerLease.workerId, previousState: job.state, state: result.job.state, at: new Date().toISOString(), actor: "lease-reaper" });
+      recovered++;
+    }
+    if (recovered) saveState(state);
+    return recovered;
+  } finally { release(); }
 }
 function saveState(state) {
   const temp = stateFile + "." + crypto.randomUUID() + ".tmp";
@@ -734,4 +756,7 @@ const server = http.createServer(async (req, res) => {
   }
 });
 const recoveredTasks = recoverInterruptedTasks();
-server.listen(port, host, () => console.log(JSON.stringify({ event: "dashboard_started", host, port, publishingEnabled: false, stateFile, recoveredTasks })));
+const recoveredLeases = await reapExpiredWorkerLeases();
+const leaseReaperTimer = setInterval(() => { reapExpiredWorkerLeases().catch(() => {}); }, 30_000);
+leaseReaperTimer.unref();
+server.listen(port, host, () => console.log(JSON.stringify({ event: "dashboard_started", host, port, publishingEnabled: false, stateFile, recoveredTasks, recoveredLeases })));
