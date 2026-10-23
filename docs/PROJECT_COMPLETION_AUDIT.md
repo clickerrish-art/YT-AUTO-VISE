@@ -109,4 +109,4 @@ P2: document install, startup, backup/restore, operator flow, OAuth setup, and r
 | Full main branch suite baseline | PASS | Workflow run `40018038047` at main SHA `45352b73bb6cc4787b2a49988b575afb754ab627`: 54/54 Node tests passed; readiness, captions and metadata safety checks passed |
 | Public publishing disabled | PASS | Config false; dashboard exposes no publish task |
 
-Latest job-and-campaign code SHA `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` passed automation CI in run `40016605388`, including npm test, campaign validation and job lifecycle/idempotency tests. The full default-branch suite remains unexecuted; the application is not production accepted. No real private upload, rights-cleared documentary, or artifact checksum is claimed.
+Latest code-tested implementation SHA `46d878b6cc7d53e7beca79c086fd3fead931fb11` passed 70/70 tests in run `40018011341`, including cross-process slot reservation and readiness checks. Main SHA `45352b73bb6cc4787b2a49988b575afb754ab627` passed 54/54 tests in run `40018038047`. The application is not production accepted. No real private upload, rights-cleared documentary, or artifact checksum is claimed.
