@@ -2,7 +2,7 @@
 
 Updated: 2026-10-23  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8`; subsequent commits were documentation-only. Consult the live branch ref/PR for the current documentation HEAD.  
+Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `46d878b6cc7d53e7beca79c086fd3fead931fb11`; subsequent commits were documentation-only. Consult the live branch ref/PR for the current documentation HEAD.  
 Default branch: `main` at `45352b73bb6cc4787b2a49988b575afb754ab627`  
 Draft pull request: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1  
 Public publishing: **DISABLED**
@@ -16,14 +16,14 @@ Public publishing: **DISABLED**
 
 ## Test and workflow evidence
 
-The latest job-and-campaign code SHA `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` passed automation CI (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40016605388), metadata validation (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40016597429), and content quality (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40016605400). The default-branch full-suite baseline remains unexecuted.
+The latest tested code SHA `46d878b6cc7d53e7beca79c086fd3fead931fb11` passed automation CI (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018011341), metadata validation (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018004685), and content quality (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018011188). The main baseline at SHA `45352b73bb6cc4787b2a49988b575afb754ab627` passed in run https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047.
 
 A prior commit, `3df90af8f3fad3803291d6907530f2c24367f6fc`, had a successful validation run:
 https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40013565863
 
 That prior run does not test the subsequently added dashboard task runner or its new test.
 
-The full default-branch baseline at `45352b73bb6cc4787b2a49988b575afb754ab627` has not been executed in this session. Recent individual main-branch workflows do not constitute a full baseline.
+The full default-branch baseline was executed at `45352b73bb6cc4787b2a49988b575afb754ab627`: 54 tests passed, 0 failed, 0 skipped; npm install, syntax checks, readiness, caption checks, and metadata/asset safety checks passed (run `40018038047`).
 
 ## Acceptance matrix
 
@@ -33,7 +33,7 @@ The full default-branch baseline at `45352b73bb6cc4787b2a49988b575afb754ab627` h
 | One authoritative schedule | PASS (configuration checked in CI on prior head) | Tuesday/Thursday long-form, Saturday Short; 17:00 Africa/Johannesburg = 15:00 UTC |
 | Dashboard reads real schedule and queue | PASS (code implemented; runtime CI test pending for latest head) | `scripts/dashboard-server.mjs`, `public/dashboard.html` |
 | Dashboard runs actual safe validation tasks | PASS | Allowlisted tasks and integration test passed in automation CI run 40015500289; task list intentionally excludes render/upload/publication |
-| Durable local draft/job/audit state | PARTIAL | Atomic JSON state exists; full durable lifecycle and concurrent-worker locking are not implemented |
+| Durable local draft/job/audit state and dated slot reservation | PASS | Atomic JSON state, filesystem lock directory, idempotency and two-process concurrent slot test; full worker lifecycle remains partial |
 | Full media generation through dashboard | NOT IMPLEMENTED | Dashboard task runner intentionally only permits validation commands |
 | Complete 50–60 second wildlife Short | BLOCKED BY EXTERNAL PREREQUISITE | Rights-cleared footage and genuine review evidence not available |
 | Complete 6–10 minute wildlife documentary | BLOCKED BY EXTERNAL PREREQUISITE | Rights-cleared substantive visual assets and genuine review evidence not available |
@@ -43,7 +43,7 @@ The full default-branch baseline at `45352b73bb6cc4787b2a49988b575afb754ab627` h
 | Upload timeout/receipt reconciliation | NOT IMPLEMENTED / UNVERIFIED | Requires durable upload-attempt ledger and remote reconciliation |
 | Separate Selar/Safari configuration and validation | PASS | Separate records; Safari inactive; validator and tests passed in run 40016046874 |
 | Full campaign editor/activation approval UI | NOT IMPLEMENTED | Dashboard only displays records; owner-verified Safari URL absent |
-| Default branch full-suite baseline | BLOCKED | Not run during this execution |
+| Default branch full-suite baseline | PASS | 54/54 tests at main SHA `45352b73bb6cc4787b2a49988b575afb754ab627`, run `40018038047` |
 | Latest job-and-campaign implementation CI | PASS | Run 40016605388 passed npm test, campaign validation, job lifecycle/idempotency tests, review-safety tests, queue checks, syntax and Python compilation |
 | Public publishing disabled | PASS (configuration/code guard) | Schedule says `publishingEnabled: false`; dashboard has no publishing control; new task allowlist has no upload task |
 
@@ -94,14 +94,14 @@ At SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc, automation CI passed: https://g
 | Task execution safeguards | PASS | Allowlisted tasks, no shell, bounded output, timeouts, same-process duplicate guard |
 | Restart recovery | PASS | RUNNING records become RECOVERY_REQUIRED and are audited; covered by run 40014972795 |
 | Content-job creation, idempotency, state history and guarded transitions | PASS | Job lifecycle module and API; run 40016605388 passed tests |
-| Full worker execution, cross-process locking/leases and automated recovery orchestration | NOT IMPLEMENTED | Jobs are persisted, but render workers and cross-process coordination are not integrated |
+| Full worker execution, lease expiry/backoff and automated recovery orchestration | NOT IMPLEMENTED | Process-safe state lock and dated slot reservation exist; render workers and full lease orchestration are not integrated |
 | Dashboard-launched media production | NOT IMPLEMENTED | Renderers not exposed as dashboard tasks |
 | Rights-cleared real Short and long-form | BLOCKED BY EXTERNAL PREREQUISITE | Verified footage rights and human review unavailable |
 | Campaign destination/disclosure isolation guard | PASS | config/campaigns.json and validate-campaigns.mjs; run 40016046874 |
 | Full campaign editor and activation approval | NOT IMPLEMENTED | Dashboard displays campaigns read-only; Safari remains inactive |
 | Authenticated SonicVhibez identity/private upload | BLOCKED BY EXTERNAL PREREQUISITE | Channel ID blank pending independent verification; no real upload claimed |
 | Recovery-enhanced implementation full CI | PASS | Run 40014972795 passed at SHA 896eea1521ba93afdff8f29a248cf9760d8c8e6a; docs-only run 40015187821 passed at SHA a47e74d91013f7ae38912bb4a144574f2575dfdd |
-| Full main branch baseline | BLOCKED BY EXTERNAL PREREQUISITE | No full suite executed against main in this run |
+| Full main branch baseline | PASS | 54/54 tests passed at main SHA `45352b73bb6cc4787b2a49988b575afb754ab627`, run `40018038047` |
 | Public publishing disabled | PASS | Configuration false and no dashboard publishing action |
 
-Latest job-and-campaign code SHA `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` passed automation CI in run `40016605388`, including npm test, campaign validation, job lifecycle/idempotency tests, Python review-safety tests, queue checks, syntax and Python compilation. A lockfile has not been added; npm ci is not claimed. No media artifact checksum, rights approval, real upload receipt or remote privacy check is claimed. Keep public publishing disabled.
+Latest tested code SHA `46d878b6cc7d53e7beca79c086fd3fead931fb11` passed automation CI run `40018011341` with 70/70 Node tests and zero failures, including two-process dated-slot reservation and readiness endpoint tests. Main baseline run `40018038047` passed 54/54 tests at SHA `45352b73bb6cc4787b2a49988b575afb754ab627`. A lockfile has not been added; `npm ci` is not claimed. No media artifact checksum, rights approval, real upload receipt or remote privacy check is claimed. Keep public publishing disabled.
