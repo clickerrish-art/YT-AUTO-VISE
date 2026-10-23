@@ -159,6 +159,10 @@ function safeItem(item) {
   const topic = String(item.topic ?? "").trim();
   const contentType = item.contentType;
   const scheduledDay = item.scheduledDay;
+  const scheduledDate = String(item.scheduledDate ?? "").trim();
+  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(scheduledDate) || Number.isNaN(Date.parse(scheduledDate + "T12:00:00Z"))) throw new Error("Scheduled date must be a real YYYY-MM-DD date");
+  const actualDay = new Date(scheduledDate + "T12:00:00Z").toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" });
+  if (actualDay !== scheduledDay) throw new Error("Scheduled date weekday must match production day");
   if (!/^[a-zA-Z0-9][a-zA-Z0-9_-]{2,79}$/.test(id)) throw new Error("ID must be 3–80 safe characters");
   if (!title || title.length > 100) throw new Error("Title is required and must be at most 100 characters");
   if (!topic || topic.length > 300) throw new Error("Topic is required and must be at most 300 characters");
@@ -169,7 +173,7 @@ function safeItem(item) {
   for (const key of ["rightsConfirmed", "complianceReviewed", "approvedForPrivateUpload", "humanApproved"]) {
     if (item[key] === true) throw new Error("Draft editing cannot grant rights or review approval");
   }
-  return { id, title, topic, contentType, scheduledDay, productUrl: approvedProductUrl, status: "DRAFT_REVIEW_REQUIRED", updatedAt: new Date().toISOString() };
+  return { id, title, topic, contentType, scheduledDay, scheduledDate, reservationType: "SCHEDULED_SLOT", productUrl: approvedProductUrl, status: "DRAFT_REVIEW_REQUIRED", updatedAt: new Date().toISOString() };
 }
 const server = http.createServer(async (req, res) => {
   try {
@@ -223,11 +227,10 @@ const server = http.createServer(async (req, res) => {
       try {
         const state = loadState();
         if (state.queueItems.some(existing => existing.id === item.id)) return json(res, 409, { error: "That queue ID already exists" });
-        const slotFingerprint = item.scheduledDay + ":17:00:Africa/Johannesburg";
-        if (state.queueItems.some(existing => existing.scheduledDay === item.scheduledDay && existing.status !== "CANCELLED")) {
-          return json(res, 409, { error: "A draft already occupies this weekly day slot; edit the existing draft rather than creating a duplicate reservation", slotFingerprint });
-        }
-        const job = createContentJob({ idempotencyKey: "draft:" + item.id, title: item.title, topic: item.topic, contentType: item.contentType, scheduledDay: item.scheduledDay, inputReferences: [] });
+        const slotFingerprint = item.scheduledDate + ":17:00:Africa/Johannesburg";
+        const slotAlreadyReserved = state.jobs.some(existing => existing.kind === "CONTENT_PRODUCTION" && existing.scheduledSlot?.date === item.scheduledDate && existing.state !== "FAILED" && existing.state !== "BLOCKED");
+        if (slotAlreadyReserved) return json(res, 409, { error: "This dated schedule slot is already reserved; reuse or edit its existing job", slotFingerprint });
+        const job = createContentJob({ idempotencyKey: "draft:" + item.id, title: item.title, topic: item.topic, contentType: item.contentType, scheduledDay: item.scheduledDay, scheduledDate: item.scheduledDate, inputReferences: [] });
         state.queueItems.push(item);
         state.jobs.push(job);
         state.audit.push({ id: crypto.randomUUID(), action: "DRAFT_CREATED", itemId: item.id, at: new Date().toISOString(), actor: "local-operator" });
@@ -247,6 +250,8 @@ const server = http.createServer(async (req, res) => {
           if (existing.requestFingerprint !== job.requestFingerprint) return json(res, 409, { error: "Idempotency key already exists with different job inputs", job: existing });
           return json(res, 200, { job: existing, reused: true, publishingEnabled: false });
         }
+        const slotConflict = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.scheduledSlot?.date === job.scheduledSlot.date && !["FAILED", "BLOCKED"].includes(entry.state));
+        if (slotConflict) return json(res, 409, { error: "The requested schedule slot is already reserved by another job", job: slotConflict });
         state.jobs.push(job);
         state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: "local-operator" });
         saveState(state);
@@ -282,8 +287,11 @@ const server = http.createServer(async (req, res) => {
         for (const key of ["rightsConfirmed", "complianceReviewed", "approvedForPrivateUpload", "humanApproved"]) {
           if (Object.hasOwn(item, key) && item[key] !== old[key]) return json(res, 403, { error: "Review and rights fields cannot be changed through draft editing" });
         }
-        if (state.queueItems.some(existing => existing.id !== item.id && existing.scheduledDay === item.scheduledDay && existing.status !== "CANCELLED")) {
-          return json(res, 409, { error: "Another draft already occupies this weekly day slot" });
+        if (state.queueItems.some(existing => existing.id !== item.id && existing.scheduledDate === item.scheduledDate && existing.reservationType === "SCHEDULED_SLOT" && existing.status !== "CANCELLED")) {
+          return json(res, 409, { error: "Another draft already occupies this dated schedule slot" });
+        }
+        if (state.jobs.some(existing => existing.kind === "CONTENT_PRODUCTION" && existing.id !== state.jobs.find(j => j.kind === "CONTENT_PRODUCTION" && j.idempotencyKey === "draft:" + item.id)?.id && existing.scheduledSlot?.date === item.scheduledDate && existing.state !== "FAILED" && existing.state !== "BLOCKED")) {
+          return json(res, 409, { error: "Another production job already occupies this dated schedule slot" });
         }
         state.queueItems[index] = { ...old, ...item, status: old.status, rightsConfirmed: old.rightsConfirmed, complianceReviewed: old.complianceReviewed, updatedAt: new Date().toISOString() };
         state.audit.push({ id: crypto.randomUUID(), action: "DRAFT_EDITED", itemId: item.id, at: new Date().toISOString(), actor: "local-operator" });
