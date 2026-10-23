@@ -54,7 +54,8 @@ jobs:
                   "durationMinutes": round(seconds / 60, 2),
                   "estimatedTargetMinutes": "6–10",
                   "withinTarget": 360 <= seconds <= 600,
-                  "textFileIncluded": text_file.exists(),\n                  "captionFileIncluded": (out / audio.name.replace("-narration-draft.mp3", "-captions-draft.srt")).exists()
+                  "textFileIncluded": text_file.exists(),
+                  "captionFileIncluded": (out / audio.name.replace("-narration-draft.mp3", "-captions-draft.srt")).exists()
               })
               status = "PASS" if 360 <= seconds <= 600 else "REVIEW"
               print(f"{status}: {audio.name} — {seconds/60:.2f} minutes")
