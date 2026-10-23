@@ -27,7 +27,9 @@
       "title": "How to Turn Wildlife Footage Into a Documentary Story",
       "topic": "wildlife documentary storytelling",
       "targetMinutes": 8,
-      "status": "IDEA_ONLY"
+      "status": "SCRIPT_DRAFT",
+      "scriptPath": "content/long-form-001-wildlife-story-script.md",
+      "releaseStatus": "HOLD_FOR_ASSETS_AND_REVIEW"
     },
     {
       "id": "long-plan-wildlife-short",
