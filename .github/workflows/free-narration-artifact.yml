@@ -12,8 +12,8 @@ on:
           - short-002
         default: both
   schedule:
-    # One Short weekly on Thursday SAST; long-form narration is scheduled separately on Tuesday and Saturday.
-    - cron: "0 15 * * 4"
+    # One Short weekly on Saturday at 17:00 SAST (15:00 UTC); long-form narration runs Tuesday and Thursday.
+    - cron: "0 15 * * 6"
   push:
     branches: [main]
     paths:
