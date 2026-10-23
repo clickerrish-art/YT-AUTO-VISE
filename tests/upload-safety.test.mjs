@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { validateUploadApproval } from "../scripts/upload-private.mjs";
+import { validateUploadApproval, assertReconciliationOnlyHasPriorAttempt } from "../scripts/upload-private.mjs";
 
 test("YouTube uploader is private-only and binds upload to the verified SonicVhibez channel", () => {
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
@@ -64,4 +64,11 @@ test("both manual upload workflows require explicit private confirmation and pre
     assert.match(workflow, /sonicvhibez-upload-ledger/);
     assert.match(workflow, /privacyStatus|private/i);
   }
+});
+
+
+test("reconciliation-only mode cannot create a new upload attempt", () => {
+  assert.throws(() => assertReconciliationOnlyHasPriorAttempt(true, null), /refuses to create a new upload attempt/);
+  assert.equal(assertReconciliationOnlyHasPriorAttempt(true, { status: "RECOVERY_REQUIRED" }), true);
+  assert.equal(assertReconciliationOnlyHasPriorAttempt(false, null), true);
 });
