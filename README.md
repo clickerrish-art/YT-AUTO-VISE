@@ -53,6 +53,8 @@ npm run check:captions
 npm run readiness
 npm run render:short
 npm run render:long
+npm run validate:short-export -- media/next-short.mp4
+npm run validate:long-export -- media/long-form-next.mp4
 npm run preflight:media -- media/next-short.mp4 content/next-short.json
 npm run render:thumbnail -- media/next-short.mp4 'Reviewed title' media/next-short-thumbnail.jpg
 npm run upload:private -- content/next-short.json media/next-short.mp4
@@ -62,14 +64,13 @@ Rendering requires real manifests, audio, captions, footage and rights evidence.
 
 ## Test evidence
 
-At implementation SHA `ec4a98137dd74932bd99abae4686de70fd03b4f8`, all three validation workflows passed 90/90 tests with no skips:
-- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027289171)
-- [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027289133)
-- [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027289207)
-- [Clean install: npm ci --ignore-scripts](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027283578)
-- [Main baseline: 54 passing tests](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047)
+At tested implementation commit `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`, all three validation workflows passed 95/95 Node tests with no skips:
+- [Content quality — 95/95](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943766)
+- [Automation validation — 95/95, clean `npm ci --ignore-scripts`](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712)
+- [Metadata/schedule validation — 95/95](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943732)
+- [Main baseline — 54 passing tests](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047)
 
-These tests do not prove a real media render or live YouTube upload. No production MP4/checksum or remote upload receipt is claimed.
+The renderers now run technical export validation before reporting success. These tests do not prove a real media render or live YouTube upload. The production manifests and rights-cleared inputs are absent; no genuine wildlife MP4, production thumbnail/checksum or remote upload receipt is claimed.
 
 ## Operations and recovery
 
