@@ -88,7 +88,7 @@ P2: document install, startup, backup/restore, operator flow, OAuth setup, and r
 - Current implementation SHA at this refresh: 896eea1521ba93afdff8f29a248cf9760d8c8e6a.
 - PR #1 remains open, draft, and unmerged: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1.
 - Full validation passed at implementation SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014937474. The workflow ran npm test, Python review-safety tests, queue invariants, JavaScript syntax checks and Python compilation.
-- Current-head runs 40014967541 and 40014972886 were in progress when this report was refreshed. Do not mark the newest recovery-test changes passed until those runs finish: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014967541
+- The recovery-enhanced current code SHA 896eea1521ba93afdff8f29a248cf9760d8c8e6a passed automation CI in run 40014972795 and metadata validation in run 40014972886; the recovery test therefore passed. The later documentation-only commit a47e74d91013f7ae38912bb4a144574f2575dfdd also passed automation CI (run 40015187821). Current branch HEAD has advanced with documentation-only commits; no code changes occurred after the tested implementation SHA.
 
 ## Acceptance status refresh
 
