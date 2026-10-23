@@ -48,7 +48,7 @@ jobs:
           assert q.get("publishingEnabled") is False, "Public publishing must remain disabled"
           cadence = q.get("cadence", {})
           assert cadence.get("timezone") == "Africa/Johannesburg"
-          assert cadence.get("days") == ["Tuesday", "Friday"] and cadence.get("postsPerWeek") == 2
+          assert cadence.get("days") == ["Thursday"] and cadence.get("postsPerWeek") == 1
           assert len(items) >= 10, "Queue needs at least ten topics"
           ids = [i.get("id") for i in items]
           assert all(ids) and len(ids) == len(set(ids)), "Queue IDs must be present and unique"
