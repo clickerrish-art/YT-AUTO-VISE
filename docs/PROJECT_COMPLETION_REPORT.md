@@ -38,7 +38,7 @@ The report/documentation commits after the tested implementation SHA do not chan
 | Dashboard campaign preview/activation/deactivation with persistent audit | PASS |
 | Human-review evidence primitives and server-side approval gate | PARTIAL — no real licensed media/review has been completed |
 | Full dashboard-launched render pipeline and inspected MP4 outputs | BLOCKED — source assets/rights evidence and end-to-end render acceptance unavailable |
-| Worker leases, heartbeats, stale-worker fencing and bounded exponential backoff | NOT IMPLEMENTED |
+| Worker leases, heartbeats, stale-worker fencing and bounded exponential backoff | PARTIAL — implemented/tested; automatic background reaping and full restart recovery remain incomplete |
 | Private upload attempt ledger, remote re-verification and recovery code | PARTIAL — live OAuth and remote upload were not exercised |
 | Verified SonicVhibez OAuth identity and private upload receipt | BLOCKED — credentials/channel identity not verified in this environment |
 | Safari affiliate destination activation | BLOCKED until owner supplies exact URL/disclosure and explicitly approves it |
