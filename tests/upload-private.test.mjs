@@ -30,3 +30,69 @@ test("uploader verifies authenticated channel ID and exact channel name before u
   assert.ok(source.indexOf("matchedChannel.snippet?.title !== \"SonicVhibez\"") < source.indexOf("youtube.videos.insert"));
   assert.match(source, /privacyStatus: \"private\"/);
 });
+
+
+test("private uploader records uncertain remote outcomes and refuses blind retries", async () => {
+  const fs = await import("node:fs");
+  const os = await import("node:os");
+  const path = await import("node:path");
+  const { uploadPrivate, sha256File } = await import("../scripts/upload-private.mjs");
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-upload-timeout-"));
+  try {
+    const videoPath = path.join(dir, "video.mp4");
+    const metadataPath = path.join(dir, "metadata.json");
+    const approvalPath = path.join(dir, "approval.json");
+    fs.writeFileSync(videoPath, "test-fixture-not-real-video");
+    const metadata = { channel: "SonicVhibez", channelId: "UC_SONIC_TEST", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Test title", description: "Test description", tags: ["wildlife", "documentary", "education"] };
+    fs.writeFileSync(metadataPath, JSON.stringify(metadata));
+    const videoSha = sha256File(videoPath);
+    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-timeout-001", artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256: "a".repeat(64), publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: path.join(dir, "thumbnail.jpg"), sha256: "b".repeat(64) }] }));
+    const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: "UC_SONIC_TEST", CONFIRM_PRIVATE_UPLOAD: "YES", UPLOAD_LOG_DIR: path.join(dir, "logs") };
+    const youtubeFactory = () => ({
+      channels: { list: async () => ({ data: { items: [{ id: "UC_SONIC_TEST", snippet: { title: "SonicVhibez" } }] } }) },
+      videos: { insert: async () => { const e = new Error("network timed out"); e.code = "ETIMEDOUT"; throw e; }, list: async () => ({ data: { items: [] } }) }
+    });
+    const args = { metadataPath, videoPath, approvalPath, jobId: "job-timeout-001", env, youtubeFactory, preflightRunner: args => args[0].includes("check-content") ? "PASS" : "PASS:" };
+    await assert.rejects(uploadPrivate(args), /outcome is uncertain/);
+    const ledgerPath = path.join(env.UPLOAD_LOG_DIR, "upload-attempts.json");
+    const ledger = JSON.parse(fs.readFileSync(ledgerPath, "utf8"));
+    assert.equal(ledger.attempts.length, 1);
+    assert.equal(ledger.attempts[0].status, "RECOVERY_REQUIRED");
+    await assert.rejects(uploadPrivate(args), /reconcile manually with YouTube before any retry/);
+    assert.equal(JSON.parse(fs.readFileSync(ledgerPath, "utf8")).attempts.length, 1);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("private uploader preserves remote video ID and marks recovery if receipt persistence fails", async () => {
+  const fs = await import("node:fs");
+  const os = await import("node:os");
+  const path = await import("node:path");
+  const { uploadPrivate, sha256File } = await import("../scripts/upload-private.mjs");
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-upload-receipt-fail-"));
+  try {
+    const videoPath = path.join(dir, "video.mp4");
+    const metadataPath = path.join(dir, "metadata.json");
+    const approvalPath = path.join(dir, "approval.json");
+    fs.writeFileSync(videoPath, "test-fixture-not-real-video");
+    const metadata = { channel: "SonicVhibez", channelId: "UC_SONIC_TEST", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Test title", description: "Test description", tags: ["wildlife", "documentary", "education"] };
+    fs.writeFileSync(metadataPath, JSON.stringify(metadata));
+    const videoSha = sha256File(videoPath);
+    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-receipt-001", artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256: "a".repeat(64), publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: path.join(dir, "thumbnail.jpg"), sha256: "b".repeat(64) }] }));
+    const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: "UC_SONIC_TEST", CONFIRM_PRIVATE_UPLOAD: "YES", UPLOAD_LOG_DIR: path.join(dir, "logs") };
+    const youtubeFactory = () => ({
+      channels: { list: async () => ({ data: { items: [{ id: "UC_SONIC_TEST", snippet: { title: "SonicVhibez" } }] } }) },
+      videos: { insert: async () => ({ data: { id: "VIDEO_PRIVATE_TEST" } }), list: async () => ({ data: { items: [{ id: "VIDEO_PRIVATE_TEST", snippet: { channelId: "UC_SONIC_TEST" } , status: { privacyStatus: "private" } }] } }) }
+    });
+    let failedReceiptWrite = false;
+    const persistJson = (filePath, value) => {
+      if (!failedReceiptWrite && path.basename(filePath) === "upload-VIDEO_PRIVATE_TEST.json") { failedReceiptWrite = true; throw new Error("injected receipt write failure"); }
+      fs.mkdirSync(path.dirname(filePath), { recursive: true });
+      fs.writeFileSync(filePath, JSON.stringify(value, null, 2));
+    };
+    await assert.rejects(uploadPrivate({ metadataPath, videoPath, approvalPath, jobId: "job-receipt-001", env, youtubeFactory, persistJson, preflightRunner: args => args[0].includes("check-content") ? "PASS" : "PASS:" }), /receipt persistence failed/);
+    const ledger = JSON.parse(fs.readFileSync(path.join(env.UPLOAD_LOG_DIR, "upload-attempts.json"), "utf8"));
+    assert.equal(ledger.attempts[0].remoteVideoId, "VIDEO_PRIVATE_TEST");
+    assert.equal(ledger.attempts[0].status, "RECOVERY_REQUIRED");
+    await assert.rejects(uploadPrivate({ metadataPath, videoPath, approvalPath, jobId: "job-receipt-001", env: { ...env, RECONCILE_ONLY: "YES" }, youtubeFactory, persistJson: (p, v) => fs.writeFileSync(p, JSON.stringify(v)), preflightRunner: args => args[0].includes("check-content") ? "PASS" : "PASS:" }), /do not retry|reconcile/i);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
