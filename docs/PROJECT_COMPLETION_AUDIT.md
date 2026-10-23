@@ -9,7 +9,7 @@ Publishing posture: public publishing disabled; no upload was performed by this 
 
 ## Evidence and scope
 
-This audit uses live GitHub branch refs, pull-request metadata, repository files, and Actions results. A clean local checkout and genuine media/OAuth/upload operation were not performed here. The latest code-tested commit `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` passed automation CI in run `40016605388`, including npm test, campaign validation, job lifecycle/idempotency tests, review-safety tests, queue checks, syntax and Python compilation. Current documentation HEAD is available from the live branch ref; code-tested SHA is `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8`, with documentation-only commits after that code.
+This audit uses live GitHub branch refs, pull-request metadata, repository files, and Actions results. A clean local checkout and genuine media/OAuth/upload operation were not performed here. The latest code-tested commit `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` passed automation CI in run `40018707582`: 72/72 Node tests, campaign validation, review-safety tests, queue checks, JavaScript syntax and Python compilation. Current documentation HEAD is available from the live branch ref; subsequent commits update reports only.
 
 ## Branches and commits
 
@@ -97,8 +97,8 @@ P2: document install, startup, backup/restore, operator flow, OAuth setup, and r
 | Schedule configuration | PASS | Validator and workflow checks succeeded in run 40014937474; Tuesday/Thursday long-form, Saturday Short, 17:00 Africa/Johannesburg / 15:00 UTC |
 | Dashboard task allowlist | PASS | Fixed commands only; no uploader/publication task exposed |
 | Task timeout and duplicate prevention | PASS | Allowlisted process runner; dated job reservation tested concurrently against two dashboard server processes in run `40018707582` |
-| Restart detection | PASS | Persisted RUNNING task becomes RECOVERY_REQUIRED with audit event; test passed in run 40014972795 |
-| Content-job creation, idempotency and guarded state transitions | PASS | Content job schema, duplicate-key conflict detection, transition history, bounded retries, protected upload states; automation CI run 40016605388 |
+| Restart detection | PASS | Persisted RUNNING task becomes RECOVERY_REQUIRED with audit event; test passed in run 40018707582 |
+| Content-job creation, idempotency and guarded state transitions | PASS | Content job schema, duplicate-key conflict detection, transition history, bounded retries, protected upload states; automation CI run 40018707582 |
 | Dated job reservation, idempotency and process-safe state mutation | PASS | Filesystem lock directory and integration test with two dashboard processes; full worker lease/recovery orchestration remains NOT IMPLEMENTED |
 | Full media pipeline launched through dashboard | NOT IMPLEMENTED | Dashboard allows validation commands only |
 | Genuine rights-cleared wildlife Short and long-form | BLOCKED BY EXTERNAL PREREQUISITE | Rights-cleared substantive footage and human review unavailable |
