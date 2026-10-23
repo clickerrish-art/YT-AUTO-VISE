@@ -1,0 +1,197 @@
+{
+  "version": 1,
+  "channel": "SonicVhibez",
+  "timezone": "Africa/Johannesburg",
+  "status": "DRAFT_BRIEFS_ONLY",
+  "product": {
+    "name": "Complete YouTube Wildlife Creator's Vault – Premium Combo PDF",
+    "url": "https://selar.com/0u19v8u99l",
+    "disclosure": "This video contains a promotional recommendation. The linked product is a paid digital product; check its current contents and terms on the sales page before buying."
+  },
+  "productionRules": [
+    "Target 6–10 minutes of original narration per long-form video.",
+    "Use only original, public-domain, or properly licensed footage, music, stills and sound effects; retain evidence for each asset.",
+    "Do not claim guaranteed views, income, virality, monetization or SEO scores.",
+    "Verify every wildlife fact against reliable sources before recording.",
+    "Clearly disclose promotional links and accurately set YouTube altered/synthetic-content settings when applicable.",
+    "Do not publish automatically; render, fact-check, caption-check and review privately first."
+  ],
+  "episodes": [
+    {
+      "id": "long-001",
+      "plannedDay": "Tuesday",
+      "workingTitle": "How to Plan a Wildlife Video People Want to Watch",
+      "targetMinutes": {
+        "min": 6,
+        "max": 10
+      },
+      "audience": "Beginner wildlife and nature-documentary creators",
+      "viewerPromise": "A repeatable planning process for building a clear story before editing.",
+      "hook": "A collection of beautiful animal clips is not automatically a compelling video. The difference is usually the story connecting them.",
+      "outline": [
+        {
+          "time": "0:00–0:30",
+          "section": "Hook and promise",
+          "beats": [
+            "Show a contrast between disconnected clips and a story-led sequence",
+            "Promise a practical planning method"
+          ]
+        },
+        {
+          "time": "0:30–1:30",
+          "section": "Choose one viewer question",
+          "beats": [
+            "Define one central question",
+            "Avoid trying to cover an entire species in one video"
+          ]
+        },
+        {
+          "time": "1:30–3:00",
+          "section": "Build a beginning, middle and payoff",
+          "beats": [
+            "Set up the situation",
+            "Introduce a challenge or change",
+            "Resolve the question without inventing animal behavior"
+          ]
+        },
+        {
+          "time": "3:00–4:30",
+          "section": "Make an evidence checklist",
+          "beats": [
+            "List facts that need verification",
+            "Separate observed footage from narration and inference"
+          ]
+        },
+        {
+          "time": "4:30–6:00",
+          "section": "Plan visuals and pacing",
+          "beats": [
+            "Match each scene to a narration beat",
+            "Use only rights-cleared visuals and sound",
+            "Avoid repetitive shots and misleading edits"
+          ]
+        },
+        {
+          "time": "6:00–7:00",
+          "section": "Title, thumbnail and final checklist",
+          "beats": [
+            "Make the promise specific and accurate",
+            "Check captions, sources, rights and disclosures"
+          ]
+        },
+        {
+          "time": "final 20–30s",
+          "section": "Transparent CTA",
+          "beats": [
+            "Invite viewers to explore the approved creator resource",
+            "State that it is a paid product and results are not guaranteed"
+          ]
+        }
+      ],
+      "status": "DRAFT_BRIEF_NOT_SCRIPT_OR_VIDEO",
+      "metadata": {
+        "title": "How to Plan a Wildlife Video People Want to Watch",
+        "description": "Learn a practical story-first workflow for planning wildlife and nature-documentary videos: choose one viewer question, build a clear narrative, verify facts, plan rights-cleared visuals, and review the final edit. This is educational guidance, not a promise of views or income.\n\nPromotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF: https://selar.com/0u19v8u99l\nThis is a paid digital product. Review the sales page before purchasing. Some content may use AI-assisted narration or visuals; any synthetic elements should be disclosed accurately.",
+        "tags": [
+          "wildlife video planning",
+          "wildlife filmmaking",
+          "nature documentary",
+          "YouTube storytelling",
+          "faceless YouTube channel",
+          "video editing workflow"
+        ]
+      }
+    },
+    {
+      "id": "long-002",
+      "plannedDay": "Saturday",
+      "workingTitle": "A Beginner Workflow for Faceless Wildlife Videos",
+      "targetMinutes": {
+        "min": 6,
+        "max": 10
+      },
+      "audience": "Creators building a faceless wildlife or nature channel on a small budget",
+      "viewerPromise": "A practical, rights-aware production workflow from research to final review.",
+      "hook": "You can work without appearing on camera, but a faceless format still needs original value, careful research and visuals you have permission to use.",
+      "outline": [
+        {
+          "time": "0:00–0:30",
+          "section": "Hook and expectations",
+          "beats": [
+            "Explain the faceless format",
+            "Set realistic expectations: no guaranteed growth or monetization"
+          ]
+        },
+        {
+          "time": "0:30–1:30",
+          "section": "Research one focused topic",
+          "beats": [
+            "Write a single audience question",
+            "Use reliable sources and record citations"
+          ]
+        },
+        {
+          "time": "1:30–3:00",
+          "section": "Write narration",
+          "beats": [
+            "Use a clear hook, context, progression and payoff",
+            "Distinguish verified facts from uncertainty"
+          ]
+        },
+        {
+          "time": "3:00–4:30",
+          "section": "Source legal visuals and audio",
+          "beats": [
+            "Prefer self-created or explicitly licensed assets",
+            "Track creator, source, license and usage conditions",
+            "Never assume a search result is free to reuse"
+          ]
+        },
+        {
+          "time": "4:30–6:00",
+          "section": "Edit for clarity",
+          "beats": [
+            "Match scenes to narration",
+            "Use readable captions and clean audio",
+            "Avoid fabricated scenes or deceptive animal interactions"
+          ]
+        },
+        {
+          "time": "6:00–7:30",
+          "section": "Package and quality-check",
+          "beats": [
+            "Align title and thumbnail with the actual video",
+            "Check factual accuracy, caption timing and disclosure",
+            "Review YouTube policies before upload"
+          ]
+        },
+        {
+          "time": "final 20–30s",
+          "section": "Transparent CTA",
+          "beats": [
+            "Mention the approved paid creator resource without pressure",
+            "No claims of guaranteed results"
+          ]
+        }
+      ],
+      "status": "DRAFT_BRIEF_NOT_SCRIPT_OR_VIDEO",
+      "metadata": {
+        "title": "A Beginner Workflow for Faceless Wildlife Videos",
+        "description": "This beginner workflow covers focused research, narration, rights-cleared visuals, editing, captions and a final policy check for faceless wildlife videos. Always verify facts and asset permissions; this workflow cannot guarantee views, revenue or YouTube monetization.\n\nPromotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF: https://selar.com/0u19v8u99l\nThis is a paid digital product. Review the sales page before purchasing. Accurately disclose promotional links and any synthetic media used.",
+        "tags": [
+          "faceless wildlife videos",
+          "wildlife video editing",
+          "nature documentary workflow",
+          "YouTube beginner tips",
+          "wildlife content creation",
+          "copyright safe video"
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "These briefs are not completed scripts, narration files, rendered MP4s or scheduled uploads.",
+    "The existing long-form renderer still requires real footage, narration, captions, rights evidence and human approval.",
+    "The verified YouTube channel ID is still required before private upload can be enabled."
+  ]
+}
