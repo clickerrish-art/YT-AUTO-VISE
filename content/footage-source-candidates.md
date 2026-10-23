@@ -13,13 +13,13 @@ The library states that B-roll packages are public domain and may be downloaded 
 
 These are relevant candidates for short establishing shots, not approved assets:
 
-1. **B-Roll: Spiny Lobsters in California** — https://videos.fisheries.noaa.gov/detail/video/6276580939001/b-roll:-spiny-lobsters-in-california
+1. **B-Roll: Spiny Lobsters in California** — https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6313425635112/b-roll%3A-spiny-lobsters-in-california?autoStart=true
    - Potential use: marine establishing shots and examples of varied shot sizes.
    - Required before use: open original package; inspect slate and all clip credits; save package/credit evidence; confirm chosen shots match narration.
-2. **B-Roll: Relocation of Hawaiian Monk Seal RQ58 ("Koalani")** — https://videos.fisheries.noaa.gov/detail/video/6276581219001/b-roll:-relocation-of-hawaiian-monk-seal-rq58-(koalani)
+2. **B-Roll: Relocation of Hawaiian Monk Seal RQ58 ("Koalani")** — https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6311406347112/b-roll%3A-relocation-of-hawaiian-monk-seal-rq58-koalani?autoStart=true
    - Potential use: seal footage as a specific example only if narration identifies it accurately; otherwise avoid implying the footage depicts a different animal or event.
    - Required before use: inspect opening slate, partner credits, and any permit/use notes.
-3. **B-Roll: Leatherback Turtle Tagging** — https://videos.fisheries.noaa.gov/detail/video/6276581051001/b-roll:-leatherback-turtle-tagging
+3. **B-Roll: Leatherback Turtle Tagging** — https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6329928828112/b-roll%3A-leatherback-turtle-tagging?autoStart=true
    - Potential use: turtle/research footage for a shot-planning demonstration.
    - Required before use: verify credits and context; do not narrate a different species or imply unrelated behaviour.
 4. **B-Roll: Southern Resident Killer Whale (J35) with Her Dead Calf (J61) and a Healthy Newborn Calf (J62) on January 1, 2025** — find through the official library above.
