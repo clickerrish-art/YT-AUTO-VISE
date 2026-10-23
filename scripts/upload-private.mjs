@@ -45,7 +45,7 @@ export function assertReconciliationOnlyHasPriorAttempt(reconcileOnly, prior) {
   return true;
 }
 
-export async function uploadPrivate({ metadataPath, videoPath, approvalPath, jobId, env = process.env, youtubeFactory, now = () => new Date() }) {
+export async function uploadPrivate({ metadataPath, videoPath, approvalPath, jobId, env = process.env, youtubeFactory, now = () => new Date(), preflightRunner = (args, runEnv) => execFileSync(process.execPath, args, { env: runEnv, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }), persistJson = writeJsonAtomic }) {
   const reconcileOnly = env.RECONCILE_ONLY === "YES";
   const requiredEnv = ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN", "SONICVHIBEZ_CHANNEL_ID", ...(reconcileOnly ? [] : ["CONFIRM_PRIVATE_UPLOAD"])];
   const missing = requiredEnv.filter(key => !env[key]?.trim());
@@ -67,9 +67,9 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (metadata.status !== "READY_FOR_PRIVATE_UPLOAD") throw new Error("metadata status must be READY_FOR_PRIVATE_UPLOAD");
   validateUploadApproval(approval, { jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256 });
 
-  const metadataCheck = execFileSync(process.execPath, ["scripts/check-content.mjs", metadataPath], { env, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+  const metadataCheck = preflightRunner(["scripts/check-content.mjs", metadataPath], env);
   if (!metadataCheck.includes("PASS")) throw new Error("metadata checker did not pass");
-  const mediaPreflight = execFileSync(process.execPath, ["scripts/preflight-media.mjs", videoPath, metadataPath], { env, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+  const mediaPreflight = preflightRunner(["scripts/preflight-media.mjs", videoPath, metadataPath], env);
   if (!mediaPreflight.includes("PASS:")) throw new Error("media preflight did not pass");
 
   const { google } = await import("googleapis");
@@ -103,14 +103,14 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       prior.status = "RECOVERY_REQUIRED";
       prior.errorCode = "REMOTE_RECONCILIATION_FAILED";
       prior.updatedAt = now().toISOString();
-      writeJsonAtomic(ledgerPath, ledger);
+      persistJson(ledgerPath, ledger);
       throw new Error("Existing upload outcome could not be reconciled with YouTube; do not retry");
     }
     if (!remoteItem || remoteItem.status?.privacyStatus !== "private" || remoteItem.snippet?.channelId !== expectedChannelId) {
       prior.status = "RECOVERY_REQUIRED";
       prior.errorCode = "REMOTE_PRIVACY_OR_CHANNEL_MISMATCH";
       prior.updatedAt = now().toISOString();
-      writeJsonAtomic(ledgerPath, ledger);
+      persistJson(ledgerPath, ledger);
       throw new Error("Existing remote video is missing or not verified private on SonicVhibez; do not retry");
     }
     const timestamp = now().toISOString();
@@ -123,12 +123,12 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       publishingEnabled: false, url: "https://www.youtube.com/watch?v=" + prior.remoteVideoId
     };
     const receiptPath = path.join(logDir, "upload-" + prior.remoteVideoId + ".json");
-    writeJsonAtomic(receiptPath, receipt);
+    persistJson(receiptPath, receipt);
     prior.status = "PRIVATE_UPLOAD_VERIFIED";
     prior.receiptPath = path.basename(receiptPath);
     prior.verifiedAt = timestamp;
     prior.updatedAt = timestamp;
-    writeJsonAtomic(ledgerPath, ledger);
+    persistJson(ledgerPath, ledger);
     return { receipt, reused: true };
   }
   const attempt = {
@@ -138,7 +138,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     publishingEnabled: false, visibility: "private"
   };
   ledger.attempts.push(attempt);
-  writeJsonAtomic(ledgerPath, ledger);
+  persistJson(ledgerPath, ledger);
 
   let response;
   try {
@@ -159,7 +159,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     attempt.status = "RECOVERY_REQUIRED";
     attempt.errorCode = safeErrorCode(error);
     attempt.updatedAt = now().toISOString();
-    writeJsonAtomic(ledgerPath, ledger);
+    persistJson(ledgerPath, ledger);
     throw new Error("Upload outcome is uncertain (" + attempt.errorCode + "); reconcile with YouTube before retrying");
   }
 
@@ -168,13 +168,13 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     attempt.status = "RECOVERY_REQUIRED";
     attempt.errorCode = "REMOTE_RESPONSE_MISSING_VIDEO_ID";
     attempt.updatedAt = now().toISOString();
-    writeJsonAtomic(ledgerPath, ledger);
+    persistJson(ledgerPath, ledger);
     throw new Error("YouTube returned no video ID; reconcile before retrying");
   }
   attempt.remoteVideoId = videoId;
   attempt.status = "REMOTE_ACCEPTED_RECONCILIATION_REQUIRED";
   attempt.updatedAt = now().toISOString();
-  writeJsonAtomic(ledgerPath, ledger);
+  persistJson(ledgerPath, ledger);
 
   let verified;
   try {
@@ -188,7 +188,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     attempt.status = "RECOVERY_REQUIRED";
     attempt.errorCode = "REMOTE_PRIVACY_VERIFICATION_FAILED";
     attempt.updatedAt = now().toISOString();
-    writeJsonAtomic(ledgerPath, ledger);
+    persistJson(ledgerPath, ledger);
     throw new Error("YouTube may have accepted the upload, but private visibility could not be independently verified; reconcile before retrying");
   }
 
@@ -202,17 +202,17 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   };
   const receiptPath = path.join(logDir, "upload-" + videoId + ".json");
   try {
-    writeJsonAtomic(receiptPath, receipt);
+    persistJson(receiptPath, receipt);
     attempt.status = "PRIVATE_UPLOAD_VERIFIED";
     attempt.receiptPath = path.basename(receiptPath);
     attempt.verifiedAt = timestamp;
     attempt.updatedAt = timestamp;
-    writeJsonAtomic(ledgerPath, ledger);
+    persistJson(ledgerPath, ledger);
   } catch {
     attempt.status = "RECOVERY_REQUIRED";
     attempt.errorCode = "LOCAL_RECEIPT_PERSISTENCE_FAILED";
     attempt.updatedAt = now().toISOString();
-    try { writeJsonAtomic(ledgerPath, ledger); } catch {}
+    try { persistJson(ledgerPath, ledger); } catch {}
     throw new Error("YouTube video exists but local receipt persistence failed; reconcile the existing remote video before retrying");
   }
   return { receipt, reused: false };
