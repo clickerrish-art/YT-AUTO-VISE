@@ -24,12 +24,12 @@ if (metadata.channel !== 'SonicVhibez' || metadata.visibility !== 'private') {
   console.error('BLOCKED: target must be SonicVhibez and initial visibility must be private.');
   process.exit(1);
 }
-if (typeof metadata.title !== 'string' || !metadata.title.trim() || typeof metadata.description !== 'string' || !metadata.description.trim() || !Array.isArray(metadata.tags) || metadata.tags.length < 3) {
-  console.error('BLOCKED: metadata must contain a title, description and at least three tags.');
-  process.exit(1);
-}
 if (metadata.rightsConfirmed !== true || metadata.complianceReviewed !== true) {
   console.error('BLOCKED: rightsConfirmed and complianceReviewed must both be true after human review.');
+  process.exit(1);
+}
+if (typeof metadata.title !== 'string' || !metadata.title.trim() || typeof metadata.description !== 'string' || !metadata.description.trim() || !Array.isArray(metadata.tags) || metadata.tags.length < 3) {
+  console.error('BLOCKED: metadata must contain a title, description and at least three tags.');
   process.exit(1);
 }
 const probe = spawnSync('ffprobe', [
