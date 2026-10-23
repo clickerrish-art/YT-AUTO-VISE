@@ -1,6 +1,6 @@
 # Test baseline and regression report
 
-Updated: 2026-10-23
+Updated: 2026-10-23 (implementation updates through `ed5c40c484596e0bb3e4e886d09b262972017093`)
 Default branch: `main`
 Implementation branch: `codex/marketing-machine-audit-fixes`
 Public publishing: disabled
@@ -10,7 +10,7 @@ Public publishing: disabled
 | Branch | SHA reference | Full-suite result |
 |---|---|---|
 | `main` | baseline `45352b73bb6cc4787b2a49988b575afb754ab627` | **BLOCKED — not run in this execution environment** |
-| `codex/marketing-machine-audit-fixes` | HEAD `a426b36b908103e2ce001a28a012a346da5c859c` | **BLOCKED — not run in this execution environment** |
+| `codex/marketing-machine-audit-fixes` | HEAD `ed5c40c484596e0bb3e4e886d09b262972017093` | **BLOCKED — not run in this execution environment** |
 
 At HEAD `a426b36b908103e2ce001a28a012a346da5c859c`, the connected GitHub commit-status endpoint returned an empty `statuses` list and the available commit-workflow lookup returned no runs. Neither result is a pass. That is not a passing result. A clean checkout could not be performed because GitHub hostname resolution failed in this execution environment. The newest dashboard/schedule additions also require a fresh CI run before they can be considered verified.
 
@@ -70,3 +70,13 @@ If a lockfile is added in a separate dependency-management change, test `npm ci`
 | Public publishing | **DISABLED** | Explicitly remains outside this change. |
 
 No test, upload, deployment, sale or live analytics result is claimed as successful here. Update this report after collecting actual CI logs, artifact checksums, rights evidence and (if approved) a sanitized private-upload receipt.
+
+
+## Dashboard task runner follow-up (2026-10-23)
+
+- Added an allowlist-backed dashboard endpoint for running only `npm run validate:schedule`, `npm run check:captions`, `npm run readiness`, and `npm test`. Commands are spawned without a shell; arbitrary task names are rejected.
+- Added a dashboard UI selector for these real commands and durable job/audit results.
+- Added `test/dashboard-task-runner.test.mjs`, which starts the server, checks arbitrary command rejection, invokes the real schedule validator, and checks persisted results and publishing-disabled state.
+- Workflow run associated with the initial code/test commit `446d7dd466c2669becdfbb7fc0edf3e628889e2a`: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014281815
+- This run was observed in progress; do not call it passed until a completed conclusion is inspected. The subsequent documentation commit also triggers CI, so use the newest run for final verification.
+- Dashboard tasks deliberately do not invoke the uploader, render pipeline, or any publishing operation. This is a safe incremental step, not full application completion.
