@@ -2,7 +2,7 @@
 
 Updated: 2026-10-23  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `3fc132b99c683be71e571dab4e6660ab98beb4a9`; subsequent commits were documentation-only. Consult the live branch ref/PR for the current documentation HEAD.  
+Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8`; subsequent commits were documentation-only. Consult the live branch ref/PR for the current documentation HEAD.  
 Default branch: `main` at `45352b73bb6cc4787b2a49988b575afb754ab627`  
 Draft pull request: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1  
 Public publishing: **DISABLED**
@@ -44,7 +44,7 @@ The full default-branch baseline at `45352b73bb6cc4787b2a49988b575afb754ab627` h
 | Separate Selar/Safari configuration and validation | PASS | Separate records; Safari inactive; validator and tests passed in run 40016046874 |
 | Full campaign editor/activation approval UI | NOT IMPLEMENTED | Dashboard only displays records; owner-verified Safari URL absent |
 | Default branch full-suite baseline | BLOCKED | Not run during this execution |
-| Campaign-enhanced implementation CI | PASS | Run 40016046874 passed npm test, campaign validation, review-safety tests, queue checks, syntax and Python compilation |
+| Latest job-and-campaign implementation CI | PASS | Run 40016605388 passed npm test, campaign validation, job lifecycle/idempotency tests, review-safety tests, queue checks, syntax and Python compilation |
 | Public publishing disabled | PASS (configuration/code guard) | Schedule says `publishingEnabled: false`; dashboard has no publishing control; new task allowlist has no upload task |
 
 ## Run locally
@@ -93,7 +93,8 @@ At SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc, automation CI passed: https://g
 | Dashboard startup/health | PASS (prior CI) | Integration test starts server and calls /healthz; newest recovery change awaits CI |
 | Task execution safeguards | PASS | Allowlisted tasks, no shell, bounded output, timeouts, same-process duplicate guard |
 | Restart recovery | PASS | RUNNING records become RECOVERY_REQUIRED and are audited; covered by run 40014972795 |
-| Full durable job lifecycle/leases | NOT IMPLEMENTED | Complete content state machine and cross-process locking absent |
+| Content-job creation, idempotency, state history and guarded transitions | PASS | Job lifecycle module and API; run 40016605388 passed tests |
+| Full worker execution, cross-process locking/leases and automated recovery orchestration | NOT IMPLEMENTED | Jobs are persisted, but render workers and cross-process coordination are not integrated |
 | Dashboard-launched media production | NOT IMPLEMENTED | Renderers not exposed as dashboard tasks |
 | Rights-cleared real Short and long-form | BLOCKED BY EXTERNAL PREREQUISITE | Verified footage rights and human review unavailable |
 | Campaign destination/disclosure isolation guard | PASS | config/campaigns.json and validate-campaigns.mjs; run 40016046874 |
