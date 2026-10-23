@@ -34,7 +34,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(body.publishingEnabled, false);
   const draft = {
     id: "dashboard-test-draft", title: "Test wildlife planning draft", topic: "planning a wildlife video",
-    contentType: "long_form", scheduledDay: "Tuesday", productUrl: "https://selar.com/0u19v8u99l"
+    contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: "2026-10-27", productUrl: "https://selar.com/0u19v8u99l"
   };
   const created = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(draft) });
   assert.equal(created.status, 201, await created.text());
