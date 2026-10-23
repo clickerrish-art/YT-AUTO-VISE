@@ -37,7 +37,8 @@ The full default-branch baseline was executed at `45352b73bb6cc4787b2a49988b575a
 | Full media generation through dashboard | NOT IMPLEMENTED | Dashboard task runner intentionally only permits validation commands |
 | Complete 50–60 second wildlife Short | BLOCKED BY EXTERNAL PREREQUISITE | Rights-cleared footage and genuine review evidence not available |
 | Complete 6–10 minute wildlife documentary | BLOCKED BY EXTERNAL PREREQUISITE | Rights-cleared substantive visual assets and genuine review evidence not available |
-| Drafts cannot self-grant rights or approval | PASS | Draft edit endpoint rejects self-granted rights/review flags; media remains blocked without rights evidence |\n| Evidence-backed human-review approval record and dashboard workflow | NOT IMPLEMENTED | Reviewer/artifact-bound review record and approval UI are not integrated |
+| Drafts cannot self-grant rights or approval | PASS | Draft edit endpoint rejects self-granted rights/review flags; media remains blocked without rights evidence |
+| Evidence-backed human-review approval record and dashboard workflow | NOT IMPLEMENTED | Reviewer/artifact-bound review record and approval UI are not integrated |
 | Verified SonicVhibez OAuth identity | BLOCKED BY EXTERNAL PREREQUISITE | Authorized account credentials and independently confirmed channel ID not verified |
 | Real private upload and remote privacy verification | BLOCKED BY EXTERNAL PREREQUISITE | No real upload performed or claimed |
 | Upload timeout/receipt reconciliation | NOT IMPLEMENTED | Durable upload-attempt ledger and remote reconciliation are not integrated |
