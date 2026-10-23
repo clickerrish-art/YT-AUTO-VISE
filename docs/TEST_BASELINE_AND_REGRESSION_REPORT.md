@@ -1,19 +1,26 @@
 # Test Baseline and Regression Report
 
-Date: 2026-10-23  
+Date: 2026-10-24  
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Tested implementation SHA: `ec4a98137dd74932bd99abae4686de70fd03b4f8`  
+Tested implementation SHA: `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`  
 Main baseline SHA: `45352b73bb6cc4787b2a49988b575afb754ab627`
+
+
+## Latest acceptance checkpoint — 2026-10-24
+
+Tested implementation commit: `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`. GitHub Actions ran the full Node suite at this commit: 95 passed, 0 failed, 0 skipped. [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943732), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943766) all passed. The automation workflow also completed `npm ci --ignore-scripts` successfully.
+
+Short and long-form renderers now fail closed on technical export validation errors. This code-test result does not mean a genuine wildlife MP4 was produced: the production manifests and rights-cleared assets are still absent. No live OAuth identity, real private upload, or remote receipt is claimed. Public publishing remains disabled; PR #1 remains draft and unmerged.
 
 ## Results
 
 | Run | Commit tested | Result | Link |
 |---|---|---|---|
-| Content quality | `ec4a98137dd74932bd99abae4686de70fd03b4f8` | 90 tests, 90 pass, 0 fail, 0 skipped | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027289171 |
-| Automation validation | `ec4a98137dd74932bd99abae4686de70fd03b4f8` | 90 tests, 90 pass, 0 fail, 0 skipped | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027289133 |
-| Metadata/schedule validation | `ec4a98137dd74932bd99abae4686de70fd03b4f8` | 90 tests, 90 pass, 0 fail, 0 skipped; schedule/captions passed | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027289207 |
-| npm clean install | `ec4a98137dd74932bd99abae4686de70fd03b4f8` | `npm ci --ignore-scripts` passed; 46 packages installed/audited | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027283578 |
+| Content quality | `c39c3b88eefb3430dcfedbc0663bef33ad03f45c` | 95 tests, 95 pass, 0 fail, 0 skipped | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943766 |
+| Automation validation | `c39c3b88eefb3430dcfedbc0663bef33ad03f45c` | 95 tests, 95 pass, 0 fail, 0 skipped | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712 |
+| Metadata/schedule validation | `c39c3b88eefb3430dcfedbc0663bef33ad03f45c` | 95 tests, 95 pass, 0 fail, 0 skipped; schedule/captions passed | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943732 |
+| npm clean install | `c39c3b88eefb3430dcfedbc0663bef33ad03f45c` | `npm ci --ignore-scripts` passed; 46 packages installed/audited | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712 |
 | Main baseline | `45352b73bb6cc4787b2a49988b575afb754ab627` | 54 tests passed, 0 failed | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047 |
 
 ## Coverage represented by automated tests
