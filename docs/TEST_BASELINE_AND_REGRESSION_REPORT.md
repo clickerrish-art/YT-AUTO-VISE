@@ -22,7 +22,7 @@ The tested implementation suite includes dashboard integration, two-process date
 - Node.js engine requirement: `>=20`.
 - Runtime dependency: `googleapis`.
 - CI currently uses `npm install --ignore-scripts`.
-- No `package-lock.json` is committed. Therefore `npm ci` has **not** been demonstrated and must not be reported as passing.
+- `package-lock.json` is committed. Clean `npm ci --ignore-scripts` passed in [lockfile workflow run 40025040014](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025040014) at code-equivalent SHA `c3d3638c03b77e0e04e07748669788a614a758c5`.
 - No claim is made that a clean checkout, FFmpeg render, real media artifact, YouTube OAuth flow, remote upload, or remote privacy verification was exercised.
 
 ## Dashboard integration evidence
