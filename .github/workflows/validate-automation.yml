@@ -6,6 +6,7 @@ on:
     paths:
       - "scripts/**"
       - "tests/**"
+      - "test/**"
       - "content/queue.json"
       - "config/products.json"
       - "package.json"
