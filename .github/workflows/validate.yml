@@ -14,6 +14,8 @@ jobs:
         with:
           node-version: 20
       - run: npm install --ignore-scripts
+      - run: node --check scripts/render-long-form.mjs
+      - run: node --check test/render-long-form.test.mjs
       - run: npm test
       - name: Report production blockers without publishing
         run: npm run readiness
