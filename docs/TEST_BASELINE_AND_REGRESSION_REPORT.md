@@ -10,7 +10,7 @@ Public publishing: disabled
 | Branch | SHA reference | Full-suite result |
 |---|---|---|
 | `main` | baseline `45352b73bb6cc4787b2a49988b575afb754ab627` | **BLOCKED — not run in this execution environment** |
-| `codex/marketing-machine-audit-fixes` | Current HEAD `3292a891ba0938372efd9c3f10a6236882c60527` (tested code SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`) | **PASS for tested implementation SHA; docs-only commits followed** |
+| `codex/marketing-machine-audit-fixes` | Latest campaign-enhanced code SHA `3fc132b99c683be71e571dab4e6660ab98beb4a9` | **PASS** — run 40016046874 completed npm test, campaign validation, review-safety tests, queue checks, syntax and Python compilation; docs-only commits followed |
 
 Earlier inspection at `a426b36b908103e2ce001a28a012a346da5c859c` preceded the CI runs recorded below; its empty status lookup was not evidence of a pass. The tested code SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32` passed the full automation workflow and metadata validation. A complete full-suite baseline on main remains unexecuted.
 
@@ -22,7 +22,7 @@ Earlier inspection at `a426b36b908103e2ce001a28a012a346da5c859c` preceded the CI
 - Blocked, not passed: dependency install, full `npm test`, `npm run check`, `npm run check:captions`, `npm run readiness`, media rendering/preflight, and complete workflow execution.
 - The CI workflow `.github/workflows/validate.yml` is configured to run `npm install --ignore-scripts`, syntax checks, `npm test`, readiness diagnostics, caption validation and negative checks for unreviewed metadata/asset examples. No confirmed run for the current implementation head was available through the connected status endpoint.
 
-## Latest implementation additions (runtime still not verified)
+## Implemented dashboard additions (CI verified; full production acceptance remains incomplete)
 
 - Added `scripts/validate-schedule.mjs` and `test/validate-schedule.test.mjs`; the validator reads the weekly plan and queue, checks slot types/durations, approved Selar destination, workflow cron strings, and disabled publishing.
 - Added `scripts/dashboard-server.mjs` and `public/dashboard.html`: an authenticated loopback-only dashboard with real queue/config data, local durable JSON state, validated draft creation, duplicate-ID prevention, and an audit log. Ordinary draft creation explicitly rejects rights/review approval flags.
@@ -77,7 +77,7 @@ No test, upload, deployment, sale or live analytics result is claimed as success
 - Added an allowlist-backed dashboard endpoint for running only `npm run validate:schedule`, `npm run check:captions`, `npm run readiness`, and `npm test`. Commands are spawned without a shell; arbitrary task names are rejected.
 - Added a dashboard UI selector for these real commands and durable job/audit results.
 - Added `test/dashboard-task-runner.test.mjs`, which starts the server, checks arbitrary command rejection, invokes the real schedule validator, and checks persisted results and publishing-disabled state.
-- Historical run 40014281815 was superseded by later passing runs. The latest code SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32` passed automation CI in run 40015500289; see the final CI refresh section below.
+- Historical run 40014281815 was superseded by later passing runs. The campaign-enhanced code SHA `3fc132b99c683be71e571dab4e6660ab98beb4a9` passed automation CI in run 40016046874, including the isolated campaign validator.
 - Dashboard tasks deliberately do not invoke the uploader, render pipeline, or any publishing operation. This is a safe incremental step, not full application completion.
 
 
@@ -89,4 +89,4 @@ No test, upload, deployment, sale or live analytics result is claimed as success
 - No package-lock.json exists. CI currently uses npm install --ignore-scripts; npm ci is not yet a reproducible supported command.
 - Full main-branch baseline remains BLOCKED BY EXTERNAL PREREQUISITE because no authorized workflow-dispatch action was available in this execution. No live upload or genuine media artifact was created.
 
-Latest code commit 14fe79a9ccf32ed7b10372aaa0f649e1aac17f32 passed the complete automation workflow (run 40015500289) and metadata validation (run 40015491951). The automation workflow completed npm test, Python review-safety tests, queue checks, syntax checks and Python compilation. The dashboard now applies task timeouts, bounds request/output buffering, prevents overlapping same-task runs within the process, and changes persisted RUNNING validation tasks to RECOVERY_REQUIRED on restart. This is not equivalent to cross-process locking, a complete content-job state machine, or upload reconciliation.
+Campaign-enhanced code SHA `3fc132b99c683be71e571dab4e6660ab98beb4a9` passed automation CI in run `40016046874`, including npm test, campaign validation, Python review-safety tests, queue checks, syntax and Python compilation. The dashboard applies task timeouts, bounds request/output buffering, prevents overlapping same-task runs within the process, and changes persisted RUNNING validation tasks to RECOVERY_REQUIRED on restart. This is not equivalent to cross-process locking, a complete content-job state machine, or upload reconciliation.
