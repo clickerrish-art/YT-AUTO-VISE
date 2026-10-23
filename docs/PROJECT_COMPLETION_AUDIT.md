@@ -9,7 +9,7 @@ Publishing posture: public publishing disabled; no upload was performed by this 
 
 ## Evidence and scope
 
-This audit uses live GitHub branch refs, pull-request metadata, repository files, and Actions results. A clean local checkout and genuine media/OAuth/upload operation were not performed here. The latest code-tested commit `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` passed automation CI in run `40016605388`, including npm test, campaign validation, job lifecycle/idempotency tests, review-safety tests, queue checks, syntax and Python compilation. Current documentation HEAD is available from the live branch ref; code-tested SHA is `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`, with documentation-only commits after that code.
+This audit uses live GitHub branch refs, pull-request metadata, repository files, and Actions results. A clean local checkout and genuine media/OAuth/upload operation were not performed here. The latest code-tested commit `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` passed automation CI in run `40016605388`, including npm test, campaign validation, job lifecycle/idempotency tests, review-safety tests, queue checks, syntax and Python compilation. Current documentation HEAD is available from the live branch ref; code-tested SHA is `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8`, with documentation-only commits after that code.
 
 ## Branches and commits
 
@@ -109,4 +109,4 @@ P2: document install, startup, backup/restore, operator flow, OAuth setup, and r
 | Full main branch suite baseline | BLOCKED BY EXTERNAL PREREQUISITE | No authorized workflow-dispatch tool available; individual main workflow successes are not full baseline |
 | Public publishing disabled | PASS | Config false; dashboard exposes no publish task |
 
-Latest campaign-enhanced code SHA `3fc132b99c683be71e571dab4e6660ab98beb4a9` passed automation CI in run `40016046874`, including npm test and the campaign validation step. The full default-branch suite remains unexecuted; the application is not production accepted. No real private upload, rights-cleared documentary, or artifact checksum is claimed.
+Latest job-and-campaign code SHA `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` passed automation CI in run `40016605388`, including npm test, campaign validation and job lifecycle/idempotency tests. The full default-branch suite remains unexecuted; the application is not production accepted. No real private upload, rights-cleared documentary, or artifact checksum is claimed.
