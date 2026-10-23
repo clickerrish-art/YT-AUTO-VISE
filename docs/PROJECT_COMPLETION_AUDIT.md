@@ -97,7 +97,7 @@ P2: document install, startup, backup/restore, operator flow, OAuth setup, and r
 | Schedule configuration | PASS | Validator and workflow checks succeeded in run 40014937474; Tuesday/Thursday long-form, Saturday Short, 17:00 Africa/Johannesburg / 15:00 UTC |
 | Dashboard task allowlist | PASS | Fixed commands only; no uploader/publication task exposed |
 | Task timeout and same-process duplicate prevention | PASS | Implemented in dashboard server; broad cross-process race testing is not evidenced |
-| Restart detection | PASS (test pending latest CI) | Persisted RUNNING task becomes RECOVERY_REQUIRED with audit event; newest integration test awaits CI |
+| Restart detection | PASS | Persisted RUNNING task becomes RECOVERY_REQUIRED with audit event; test passed in run 40014972795 |
 | Full durable content-job lifecycle/leases | NOT IMPLEMENTED | Local JSON persistence exists; full state machine and multi-process locking absent |
 | Full media pipeline launched through dashboard | NOT IMPLEMENTED | Dashboard allows validation commands only |
 | Genuine rights-cleared wildlife Short and long-form | BLOCKED BY EXTERNAL PREREQUISITE | Rights-cleared substantive footage and human review unavailable |
