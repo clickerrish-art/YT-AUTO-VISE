@@ -42,7 +42,7 @@ Never commit or print API keys, OAuth refresh tokens, client secrets, or access 
 
 ## Rights, campaigns, and disclosure
 
-Campaign configuration lives in config/campaigns.json. Run npm run validate:campaigns to validate the exact approved Selar URL and prevent Safari activation without an owner-verified HTTPS destination and disclosure. Safari remains inactive with an empty URL until those prerequisites are supplied. The dashboard is currently read-only for campaign records; destination activation and approval-history UI are not implemented. A typography-led review render is not a wildlife documentary and must not be represented as one. Never mark rights or human-review flags as approved without real evidence and authorized human review.
+Campaign configuration lives in config/campaigns.json. Run npm run validate:campaigns to validate the exact approved Selar URL and prevent Safari activation without an owner-verified HTTPS destination and disclosure. Safari remains inactive with an empty URL until those prerequisites are supplied. The dashboard is currently read-only for campaign records; destination activation and approval-history UI are not implemented. Draft creation queues a content job with an idempotency key and transition history. Job transitions are constrained by an explicit state machine; the generic API cannot set approved/upload-verified states. Interrupted generation, validation, or upload moves to RECOVERY_REQUIRED, and uncertain uploads must be reconciled before retry. A typography-led review render is not a wildlife documentary and must not be represented as one. Never mark rights or human-review flags as approved without real evidence and authorized human review.
 
 ## Installation and commands
 
