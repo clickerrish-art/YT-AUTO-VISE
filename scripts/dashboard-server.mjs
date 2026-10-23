@@ -5,7 +5,8 @@ import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
-import { createContentJob, transitionContentJob } from "./content-job-lifecycle.mjs";
+import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload } from "./content-job-lifecycle.mjs";
+import { createReviewDecision, sha256File } from "./human-review.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = process.env.DASHBOARD_HOST ?? "127.0.0.1";
@@ -86,6 +87,13 @@ async function acquireStateLock(timeoutMs = 10_000) {
       await new Promise(resolve => setTimeout(resolve, 20 + Math.floor(Math.random() * 40)));
     }
   }
+}
+function resolveRepositoryFile(relativePath) {
+  if (typeof relativePath !== "string" || !relativePath.trim() || path.isAbsolute(relativePath)) throw new Error("File path must be repository-relative");
+  const resolved = path.resolve(root, relativePath);
+  if (resolved !== root && !resolved.startsWith(root + path.sep)) throw new Error("File path escapes repository root");
+  if (!fs.existsSync(resolved) || !fs.statSync(resolved).isFile()) throw new Error("Required evidence file does not exist");
+  return resolved;
 }
 function json(res, status, body) {
   res.writeHead(status, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store", "x-content-type-options": "nosniff" });
@@ -274,6 +282,48 @@ const server = http.createServer(async (req, res) => {
         state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: "local-operator" });
         saveState(state);
         return json(res, 201, { job, reused: false, publishingEnabled: false });
+      } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs/review") {
+      const body = await readBody(req);
+      const reviewer = process.env.DASHBOARD_OPERATOR_ID;
+      if (!reviewer || reviewer.trim().length < 2) return json(res, 503, { error: "Human review is disabled until DASHBOARD_OPERATOR_ID identifies the authenticated local operator" });
+      if (typeof body.jobId !== "string" || !["APPROVE", "REJECT"].includes(body.decision)) return json(res, 400, { error: "jobId and APPROVE/REJECT decision are required" });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const job = state.jobs[index];
+        if (job.state !== "AWAITING_HUMAN_REVIEW") return json(res, 409, { error: "Only jobs awaiting human review can be reviewed" });
+        const artifactPath = String(body.artifactPath ?? "");
+        const artifactFile = resolveRepositoryFile(artifactPath);
+        const artifactSha256 = sha256File(artifactFile);
+        if (body.artifactSha256 !== artifactSha256) return json(res, 409, { error: "Artifact checksum changed or does not match the submitted checksum" });
+        const metadataPath = String(body.metadataPath ?? "");
+        const metadataFile = resolveRepositoryFile(metadataPath);
+        const metadataVersion = sha256File(metadataFile);
+        if (body.metadataVersion !== metadataVersion || job.metadataVersion !== metadataVersion) return json(res, 409, { error: "Metadata version must match both the actual metadata file and validated job metadata" });
+        const artifact = { path: artifactPath, sha256: artifactSha256 };
+        let rightsEvidence = body.rightsEvidence;
+        if (body.decision === "APPROVE") {
+          if (!rightsEvidence || typeof rightsEvidence !== "object") return json(res, 400, { error: "Structured rights evidence is required for approval" });
+          const evidenceFile = resolveRepositoryFile(rightsEvidence.licenseEvidenceLocation);
+          const assetFile = resolveRepositoryFile(rightsEvidence.assetPath);
+          if (sha256File(assetFile) !== rightsEvidence.assetSha256) return json(res, 409, { error: "Source asset checksum does not match the rights evidence" });
+          if (!fs.statSync(evidenceFile).size) return json(res, 400, { error: "Rights evidence file is empty" });
+          rightsEvidence = { ...rightsEvidence, verifiedBy: reviewer, verifiedAt: new Date().toISOString(), verificationStatus: "VERIFIED" };
+        }
+        const review = createReviewDecision({ artifact, rightsEvidence, metadataVersion, reviewer, decision: body.decision, reason: body.reason ?? "" });
+        if (body.decision === "APPROVE") {
+          state.jobs[index] = approveContentJobForPrivateUpload(job, review);
+        } else {
+          const rejected = transitionContentJob(job, "REJECTED", { actor: reviewer, reason: body.reason });
+          state.jobs[index] = { ...rejected, humanApproval: review };
+        }
+        state.audit.push({ id: crypto.randomUUID(), action: body.decision === "APPROVE" ? "CONTENT_ARTIFACT_APPROVED_FOR_PRIVATE_UPLOAD" : "CONTENT_ARTIFACT_REJECTED", jobId: job.id, artifactPath, artifactSha256, metadataVersion, reviewId: review.id, actor: reviewer, reason: String(body.reason ?? "").slice(0, 1000), at: new Date().toISOString() });
+        saveState(state);
+        return json(res, 200, { job: state.jobs[index], review, publishingEnabled: false });
       } finally { release(); }
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/transition") {
