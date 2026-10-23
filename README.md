@@ -1,63 +1,68 @@
-# SonicVhibez Shorts Automation
+# SonicVhibez Marketing Machine
 
-Isolated project for a review-gated SonicVhibez content workflow targeting two long-form videos and one Short per week (Tuesday, Thursday, Saturday; Africa/Johannesburg).
+Safety-first, free-first content workflow for SonicVhibez. Nature Frontiers is excluded. Public publishing, public scheduling, and visibility changes remain disabled.
 
-## Status
+## Current status
 
-Queue replenishment, free narration generation, and metadata/caption checks run in GitHub Actions. The authoritative target schedule is Tuesday and Thursday long-form drafts, plus one Saturday Short, at 15:00 UTC (17:00 Africa/Johannesburg time). GitHub Actions cron is UTC; South Africa does not observe daylight saving time. The long-form workflow cron is `0 15 * * 2,4`; the Short workflow cron is `0 15 * * 6`. The narration workflow renders a text-led 1080×1920 review MP4 and a thumbnail from draft content, then validates output before packaging it as an artifact. This is not wildlife-footage production: visuals are typography-based until footage rights are verified. Private upload and public publishing are not enabled by these generation workflows, and channel authorization has not been verified.
+The repository contains draft queue content, narration workflows, render and validation scripts, a guarded private-only uploader, a schedule validator, and a local operator dashboard. This is not yet a fully accepted production system: the dashboard does not yet trigger the media renderers or uploader, OAuth channel identity has not been verified in this environment, no rights-cleared wildlife footage/human approvals are evidenced, and no actual private upload is claimed.
 
-## Safety requirements
+## Authoritative schedule
 
-- Never publish to the Nature Frontiers channel.
-- Use only approved product URLs supplied by the project owner.
-- Keep posts in draft/review until metadata, media rights, destination channel, and scheduling are verified.
-- Never claim SEO scores or performance guarantees that have not been measured.
-- Keep API tokens and credentials in GitHub Actions secrets; never commit secrets.
+`config/weekly-content-plan.json` is the target schedule:
+- Tuesday 17:00 Africa/Johannesburg — one 6–10 minute long-form draft.
+- Thursday 17:00 Africa/Johannesburg — one 6–10 minute long-form draft.
+- Saturday 17:00 Africa/Johannesburg — one 50–60 second Short draft.
 
-## Branch status
+GitHub Actions cron is UTC: 15:00 UTC equals 17:00 South Africa time. South Africa does not currently observe daylight saving time. These workflows produce drafts only.
 
-The repository default branch is main. Scheduled workflows target the intended default branch. This configuration does not mean video production or publishing is live.
+Run `npm run validate:schedule` to check schedule, queue mapping, approved Selar destination, workflow cron declarations, and disabled publishing.
 
-## Current production gate
+## Local dashboard
 
-Run npm run readiness for a read-only blocker report. A HOLD is expected until all of the following are supplied and independently checked:
+Requires Node.js 20+ and npm. From the repository root:
 
-1. content/render-manifest.json referencing real footage, narration audio, and SRT captions.
-2. Evidence for footage and narration rights; human-confirmed rights and compliance flags.
-3. content/next-short.json updated only after human review, including the verified SonicVhibez channel ID.
-4. A rendered media/next-short.mp4 that passes npm run preflight:media -- media/next-short.mp4 content/next-short.json.
-5. YouTube OAuth credentials and the verified SonicVhibez channel ID configured as repository secrets/environment variables.
+```sh
+npm install --ignore-scripts
+# In a private terminal, set a random operator token of at least 24 characters:
+# macOS/Linux:
+export DASHBOARD_OPERATOR_TOKEN="$(node -e 'console.log(require("node:crypto").randomBytes(32).toString("hex"))')"
+npm run dashboard
+```
 
-The readiness report is diagnostic only; it does not validate that license evidence is genuine, judge finished-video quality, or grant permission to publish. The uploader is private-only. Public publishing and unattended public scheduling remain disabled. Never point credentials at Nature Frontiers.
+Open http://127.0.0.1:8787 and enter the same token. Windows PowerShell equivalent:
 
-## Guarded private-upload workflow
+```powershell
+$env:DASHBOARD_OPERATOR_TOKEN = [Convert]::ToHexString([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+npm run dashboard
+```
 
-A manual workflow named Upload reviewed Short privately to SonicVhibez is available under GitHub Actions. It cannot publish publicly: the uploader hard-checks the authenticated channel name and ID and sets YouTube visibility to private.
+The server binds to loopback only, rejects startup without a strong operator token, and persists queue drafts and audit events under `state/dashboard-state.json` (or `DASHBOARD_STATE_DIR`). Back up that directory securely. Do not expose this service directly to the public internet. A remote deployment requires a proper authenticated reverse proxy, TLS, authorization review, and server-side secret management.
 
-Before running it, add these four secrets in the repository's Settings → Secrets and variables → Actions → New repository secret:
+The dashboard reads real configuration and queue state, creates validated draft records, and shows current blockers. It does not pretend to render media or perform uploads. Do not use it to claim rights or editorial approval.
 
-- YOUTUBE_CLIENT_ID
-- YOUTUBE_CLIENT_SECRET
-- YOUTUBE_REFRESH_TOKEN
-- SONICVHIBEZ_CHANNEL_ID
+## Approved campaign destination
 
-Use credentials from the YouTube/Google Cloud OAuth client authorized for the SonicVhibez YouTube account. Verify the channel ID from that account before saving it. Never paste secrets into chat, issues, code, or workflow logs. If the OAuth consent screen is in testing mode, refresh-token lifetime can be limited; use the correct production configuration and least-privilege YouTube scope.
+The only currently configured product campaign is Selar: https://selar.com/0u19v8u99l. Do not add Safari affiliate campaigns until the owner supplies and verifies exact URLs. Keep future campaign destinations, disclosures, and reporting independent.
 
-Then commit fully reviewed metadata JSON and a rights-cleared MP4 at the paths entered when dispatching the workflow. The metadata checker must pass, including rightsConfirmed=true, complianceReviewed=true, visibility=private, the approved product URL, and the verified channel ID. Media preflight must also pass. The workflow stops if secrets are missing, metadata is held, media is invalid, or the authenticated channel does not match. On success, download the sonicvhibez-private-upload-receipt artifact and verify the private video in YouTube Studio.
+## Production and validation commands
 
-This is not unattended public publishing. It is a guarded, manual private upload so the account owner can inspect the result. No public posting or public scheduler is enabled.
+```sh
+npm test
+npm run validate:schedule
+npm run check:captions
+npm run readiness
+```
 
-## Media rights review
+Use FFmpeg/ffprobe for actual media rendering and technical checks. A text-led typography draft is not a completed wildlife documentary. Rights, editorial review, captions, audio, thumbnail relevance, and promotional disclosure require human verification.
 
-Use docs/WILDLIFE_MEDIA_RIGHTS_CHECKLIST.md before integrating real wildlife footage. It documents preferred government B-roll sources, attribution requirements, embedded-music restrictions, evidence to retain, and stop conditions. The workflow must never mark rights or compliance as verified automatically.
+## Private YouTube upload
 
-## Free narration generation
+The existing guarded uploader requires `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN`, and `SONICVHIBEZ_CHANNEL_ID` as secure environment variables or GitHub secrets. Verify the authenticated channel using the authorized YouTube API before any upload. The only allowed visibility is private. Inspect the remote channel before retrying an uncertain outcome. Never put secret values in chat, source code, logs, or artifacts.
 
-The Generate free narration audio GitHub Actions workflow creates MP3 narration artifacts for Short 001 and Short 002 using the US English en-US-GuyNeural voice through the community edge-tts client. It needs no paid API key and has no upload or publishing permission. It runs on Saturday at 15:00 UTC (17:00 South Africa time), when the narration master or generator changes, and can also be run manually from Actions to select one Short or both. The separate long-form narration workflow runs Tuesday and Thursday at 15:00 UTC. Download the sonicvhibez-short-draft-package artifact from the completed Short workflow run; artifacts expire after 30 days.
+## Known blockers and evidence
 
-Generated audio is a draft: listen to it, check pronunciation and timing, and align captions to the actual read. The Short workflow selects a queued topic and packages a narration MP3, draft script, SRT caption draft, and JSON metadata. It then attempts to render a text-led 1080×1920 review MP4 and a 1280×720 thumbnail, validates the video stream, duration, and safety metadata, and includes them in the downloadable artifact. The output remains HOLD_FOR_FOOTAGE_AND_REVIEW: it contains no licensed wildlife footage, its captions have estimated timings, and the thumbnail and final visual quality require review. It is not ready for upload until media rights, factual/compliance review, and the destination channel are verified. Voice service availability and terms may change; this workflow does not guarantee a specific age impression or exact duration.
+- Test and media execution status: see [test baseline and regression report](docs/TEST_BASELINE_AND_REGRESSION_REPORT.md).
+- Evidence-based feature inventory and blockers: see [project completion audit](docs/PROJECT_COMPLETION_AUDIT.md).
+- Operational safety and recovery notes: see [OPERATIONS.md](OPERATIONS.md).
 
-
-## Test evidence
-
-See [docs/TEST_BASELINE_AND_REGRESSION_REPORT.md](docs/TEST_BASELINE_AND_REGRESSION_REPORT.md) for branch comparison and blocked checks. Full local test execution and CI status for the latest implementation commit remain unverified; do not treat the absence of reported status checks as a pass.
+No current result should be described as a green test suite or successful real upload until the corresponding workflow or integration evidence exists.
