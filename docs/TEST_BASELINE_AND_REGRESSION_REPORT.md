@@ -2,7 +2,7 @@
 
 Updated: 2026-10-23  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Tested implementation SHA: `1c02e6529613e3dee695f98946d4c642fdf146b2`  
+Tested implementation SHA: `e568471c73dae207948a78538c79324ac15a5376`  
 Main baseline SHA: `45352b73bb6cc4787b2a49988b575afb754ab627`  
 Public publishing: disabled
 
@@ -10,9 +10,9 @@ Public publishing: disabled
 
 | Ref | Workflow | Result |
 |---|---|---|
-| Implementation `1c02e6529613e3dee695f98946d4c642fdf146b2` | [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40024835685) | 88 passed, 0 failed, 0 skipped |
-| Implementation `1c02e6529613e3dee695f98946d4c642fdf146b2` | [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40024830465) | 88 passed, 0 failed, 0 skipped; schedule, caption and negative metadata/asset gates passed |
-| Implementation `1c02e6529613e3dee695f98946d4c642fdf146b2` | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40024835796) | 88 passed, 0 failed, 0 skipped; campaign isolation and queue invariants passed |
+| Implementation `e568471c73dae207948a78538c79324ac15a5376` | [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100677) | 88 passed, 0 failed, 0 skipped |
+| Implementation `e568471c73dae207948a78538c79324ac15a5376` | [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100793) | 88 passed, 0 failed, 0 skipped; schedule, caption and negative metadata/asset gates passed |
+| Implementation `e568471c73dae207948a78538c79324ac15a5376` | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100724) | 88 passed, 0 failed, 0 skipped; campaign isolation and queue invariants passed |
 | Main `45352b73bb6cc4787b2a49988b575afb754ab627` | [Baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047) | 54 passed, 0 failed |
 
 The tested implementation suite includes dashboard integration, two-process dated-slot reservation, lifecycle guards, review-evidence checksum binding, campaign preview/activation/deactivation, upload safety checks, schedule validation and existing regression tests. The documentation-only commits after the tested implementation SHA do not alter runtime code; the latest branch head is visible on the live PR.
@@ -53,4 +53,4 @@ No tests are skipped in the three implementation workflow runs listed above. Liv
 
 ## Latest media-preflight regression
 
-At `1c02e6529613e3dee695f98946d4c642fdf146b2`, media preflight now rejects incomplete metadata, non-9:16 Shorts, suspiciously small files, failed full-file decode and silent/unmeasurable audio. The corresponding regression is included in the 88/88 test suite. The real FFmpeg rendering acceptance remains blocked until legitimate input assets and rights evidence are provided; CI passing unit/integration tests is not evidence of a genuine wildlife render.
+At `e568471c73dae207948a78538c79324ac15a5376`, media preflight now rejects incomplete metadata, non-9:16 Shorts, suspiciously small files, failed full-file decode and silent/unmeasurable audio. The corresponding regression is included in the 88/88 test suite. The real FFmpeg rendering acceptance remains blocked until legitimate input assets and rights evidence are provided; CI passing unit/integration tests is not evidence of a genuine wildlife render.
