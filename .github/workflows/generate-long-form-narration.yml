@@ -67,7 +67,7 @@ jobs:
               # Confirm the final SRT cue is aligned to the narration duration.
               import re
               srt_text = caption_file.read_text(encoding="utf-8")
-              end_times = re.findall(r"(?m)^(\\d{2}):(\\d{2}):(\\d{2}),(\\d{3}) --> (\\d{2}):(\\d{2}):(\\d{2}),(\\d{3})$", srt_text)
+          end_times = re.findall(r"(?m)^(\d{2}):(\d{2}):(\d{2}),(\d{3}) --> (\d{2}):(\d{2}):(\d{2}),(\d{3})$", srt_text)
               if not end_times:
                   raise SystemExit(f"No valid SRT time ranges found in {caption_file}")
               last = end_times[-1]
