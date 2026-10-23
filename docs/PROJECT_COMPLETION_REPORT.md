@@ -100,7 +100,7 @@ At SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc, automation CI passed: https://g
 | Rights-cleared real Short and long-form | BLOCKED BY EXTERNAL PREREQUISITE | Verified footage rights and human review unavailable |
 | Campaign separation | NOT IMPLEMENTED | Selar URL retained; Safari destinations inactive and separate schema/tests absent |
 | Authenticated SonicVhibez identity/private upload | BLOCKED BY EXTERNAL PREREQUISITE | Channel ID blank pending independent verification; no real upload claimed |
-| Latest implementation full CI | BLOCKED pending CI | Runs 40014967541 and 40014972886 in progress at report time |
+| Recovery-enhanced implementation full CI | PASS | Run 40014972795 passed at SHA 896eea1521ba93afdff8f29a248cf9760d8c8e6a; docs-only run 40015187821 passed at SHA a47e74d91013f7ae38912bb4a144574f2575dfdd |
 | Full main branch baseline | BLOCKED BY EXTERNAL PREREQUISITE | No full suite executed against main in this run |
 | Public publishing disabled | PASS | Configuration false and no dashboard publishing action |
 
