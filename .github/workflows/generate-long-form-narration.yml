@@ -72,6 +72,7 @@ jobs:
           path: |
             media/long-form-drafts/*.mp3
             media/long-form-drafts/*.txt
+            media/long-form-drafts/*.srt
             media/long-form-drafts/duration-report.json
             content/long-form-scripts.md
           if-no-files-found: error
