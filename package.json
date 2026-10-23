@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Safety-first SonicVhibez Shorts metadata validation and private-upload tooling.",
+  "description": "Safety-first SonicVhibez Shorts and long-form metadata validation, rendering and private-upload tooling.",
   "scripts": {
     "check": "node scripts/check-content.mjs",
     "test": "node --test",
@@ -12,7 +12,8 @@
     "preflight:media": "node scripts/preflight-media.mjs",
     "render:short": "node scripts/render-short.mjs",
     "readiness": "node scripts/production-readiness.mjs",
-    "render:thumbnail": "node scripts/render-thumbnail.mjs"
+    "render:thumbnail": "node scripts/render-thumbnail.mjs",
+    "render:long": "node scripts/render-long-form.mjs"
   },
   "engines": {
     "node": ">=20"
