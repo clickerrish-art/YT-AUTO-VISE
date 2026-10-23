@@ -84,11 +84,11 @@ jobs:
         env:
           SELECTED_SHORT: ${{ github.event.inputs.short || 'both' }}
         run: |
-          python scripts/generate-narration.py --short "$SELECTED_SHORT" --voice en-US-GuyNeural --rate=-5%
+          python scripts/generate-narration.py --short "$SELECTED_SHORT" --voice en-US-GuyNeural --rate=-10%
       - name: Generate the next queued topic package
         env:
           RUN_NUMBER: ${{ github.run_number }}
-        run: python scripts/generate-queue-package.py --run-number "$RUN_NUMBER" --voice en-US-GuyNeural --rate=-5%
+        run: python scripts/generate-queue-package.py --run-number "$RUN_NUMBER" --voice en-US-GuyNeural --rate=-10%
       - name: Validate generated queue package safety
         run: |
           python - <<'PY'
