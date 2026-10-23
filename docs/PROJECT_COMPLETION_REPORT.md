@@ -94,7 +94,7 @@ At SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc, automation CI passed: https://g
 |---|---|---|
 | Dashboard startup/health | PASS (prior CI) | Integration test starts server and calls /healthz; newest recovery change awaits CI |
 | Task execution safeguards | PASS | Allowlisted tasks, no shell, bounded output, timeouts, same-process duplicate guard |
-| Restart recovery | PASS (latest test pending) | RUNNING records become RECOVERY_REQUIRED and are audited |
+| Restart recovery | PASS | RUNNING records become RECOVERY_REQUIRED and are audited; covered by run 40014972795 |
 | Full durable job lifecycle/leases | NOT IMPLEMENTED | Complete content state machine and cross-process locking absent |
 | Dashboard-launched media production | NOT IMPLEMENTED | Renderers not exposed as dashboard tasks |
 | Rights-cleared real Short and long-form | BLOCKED BY EXTERNAL PREREQUISITE | Verified footage rights and human review unavailable |
