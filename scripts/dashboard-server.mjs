@@ -313,7 +313,7 @@ const server = http.createServer(async (req, res) => {
           const assetFile = resolveRepositoryFile(rightsEvidence.assetPath);
           if (sha256File(assetFile) !== rightsEvidence.assetSha256) return json(res, 409, { error: "Source asset checksum does not match the rights evidence" });
           if (!fs.statSync(evidenceFile).size) return json(res, 400, { error: "Rights evidence file is empty" });
-          rightsEvidence = { ...rightsEvidence, verifiedBy: reviewer, verifiedAt: new Date().toISOString(), verificationStatus: "VERIFIED" };
+          if (rightsEvidence.verifiedBy !== reviewer || rightsEvidence.verificationStatus !== "VERIFIED") return json(res, 403, { error: "Rights evidence must be explicitly verified by the authenticated operator before approval" });
         }
         const review = createReviewDecision({ artifact, rightsEvidence, metadataVersion, reviewer, decision: body.decision, reason: body.reason ?? "" });
         if (body.decision === "APPROVE") {
