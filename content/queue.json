@@ -1,9 +1,8 @@
 {
   "cadence": {
-    "postsPerWeek": 2,
+    "postsPerWeek": 1,
     "days": [
-      "Tuesday",
-      "Friday"
+      "Thursday"
     ],
     "timezone": "Africa/Johannesburg"
   },
