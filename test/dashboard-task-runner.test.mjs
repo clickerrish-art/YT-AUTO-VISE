@@ -26,6 +26,12 @@ test("dashboard runs only allowlisted real validation commands and persists resu
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   assert.equal(ready, true, "server did not start: " + logs);
+  const readinessResponse = await fetch(base + "/readyz");
+  assert.equal(readinessResponse.status, 200);
+  const readiness = await readinessResponse.json();
+  assert.equal(readiness.ready, true);
+  assert.equal(readiness.publishingEnabled, false);
+  assert.ok(Array.isArray(readiness.optionalBlockers));
   const headers = { "content-type": "application/json", "x-operator-token": token };
   const recoveredState = await fetch(base + "/api/state", { headers });
   assert.equal(recoveredState.status, 200);
