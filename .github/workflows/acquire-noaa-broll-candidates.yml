@@ -1,6 +1,10 @@
 name: Acquire NOAA B-roll candidates for rights review
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/acquire-noaa-broll-candidates.yml"
   workflow_dispatch:
     inputs:
       include_lobster:
