@@ -5,8 +5,9 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-test("dashboard runs only allowlisted real validation commands and persists results", async (t) => {
+test("dashboard runs only allowlisted real validation commands and persists results", { skip: process.env.DASHBOARD_TEST_CHILD === "1" }, async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-tasks-"));
+  fs.writeFileSync(path.join(stateDir, "dashboard-state.json"), JSON.stringify({ version: 1, queueItems: [], audit: [], jobs: [{ id: "interrupted-1", kind: "VALIDATION_TASK", taskId: "validate-schedule", status: "RUNNING" }], uploads: [] }));
   const port = 28000 + Math.floor(Math.random() * 10000);
   const token = "task-test-" + "x".repeat(40);
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
@@ -26,6 +27,11 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   }
   assert.equal(ready, true, "server did not start: " + logs);
   const headers = { "content-type": "application/json", "x-operator-token": token };
+  const recoveredState = await fetch(base + "/api/state", { headers });
+  assert.equal(recoveredState.status, 200);
+  const recoveredBody = await recoveredState.json();
+  assert.equal(recoveredBody.jobs.find(job => job.id === "interrupted-1").status, "RECOVERY_REQUIRED");
+  assert.ok(recoveredBody.audit.some(event => event.action === "TASK_INTERRUPTED_RECOVERY_REQUIRED" && event.jobId === "interrupted-1"));
   const denied = await fetch(base + "/api/tasks/run", { method: "POST", headers, body: JSON.stringify({ taskId: "upload:private" }) });
   assert.equal(denied.status, 400, "arbitrary commands must not be executable");
   const response = await fetch(base + "/api/tasks/run", { method: "POST", headers, body: JSON.stringify({ taskId: "validate-schedule" }) });
