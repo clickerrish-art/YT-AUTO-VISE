@@ -131,7 +131,7 @@ async def main():
         text_target = OUT / f"{stem}.txt"
         srt_target = OUT / f"long-{int(number):03d}-captions-draft.srt"
         text_target.write_text(text + "\n", encoding="utf-8")
-        communicate = edge_tts.Communicate(text, VOICE)
+        communicate = edge_tts.Communicate(text, VOICE, boundary="WordBoundary")
         boundaries = []
         with target.open("wb") as audio_file:
             async for chunk in communicate.stream():
