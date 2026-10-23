@@ -21,7 +21,7 @@ export function validateReviewEvidence({ artifact, rightsEvidence, metadataVersi
   if (decision === "APPROVE") {
     if (!rightsEvidence || typeof rightsEvidence !== "object" || Array.isArray(rightsEvidence)) errors.push("structured rights evidence is required");
     else {
-      for (const key of ["assetId", "source", "rightsHolder", "licenseEvidenceLocation", "permittedUses", "verificationStatus", "verifiedBy", "verifiedAt"]) {
+      for (const key of ["assetId", "source", "rightsHolder", "licenseEvidenceLocation", "verificationStatus", "verifiedBy", "verifiedAt"]) {
         if (typeof rightsEvidence[key] !== "string" || !rightsEvidence[key].trim()) errors.push("rights evidence field is required: " + key);
       }
       if (rightsEvidence.verificationStatus !== "VERIFIED") errors.push("rights evidence must be marked VERIFIED after review");
