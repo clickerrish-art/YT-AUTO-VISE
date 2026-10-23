@@ -17,8 +17,13 @@
     "render:long": "node scripts/render-long-form.mjs",
     "validate:long-export": "node scripts/validate-long-form-export.mjs",
     "validate:schedule": "node scripts/validate-schedule.mjs",
-    "validate:campaigns": "node scripts/validate-campaigns.mjs"
+    "validate:campaigns": "node scripts/validate-campaigns.mjs",
+    "validate:short-export": "node scripts/validate-short-export.mjs"
   },
-  "engines": { "node": ">=20" },
-  "dependencies": { "googleapis": "^144.0.0" }
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "googleapis": "^144.0.0"
+  }
 }
