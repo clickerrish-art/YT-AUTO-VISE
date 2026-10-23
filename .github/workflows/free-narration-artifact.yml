@@ -41,7 +41,7 @@ jobs:
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1 || \
              ! test -f /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf || \
              ! test -f /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf; then
-            timeout 180s sudo apt-get update -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20
+            # Use the runner's package index directly; refreshing all mirrors is slow.
             timeout 180s sudo apt-get install -y --no-install-recommends ffmpeg fonts-dejavu-core
           fi
           command -v ffmpeg
