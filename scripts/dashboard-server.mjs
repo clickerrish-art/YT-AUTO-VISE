@@ -5,7 +5,7 @@ import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
-import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload } from "./content-job-lifecycle.mjs";
+import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
 
@@ -350,6 +350,69 @@ const server = http.createServer(async (req, res) => {
         saveState(state);
         const uploadApprovalRecord = body.decision === "APPROVE" ? { ...review, jobId: job.id, publishingEnabled: false, visibility: "private" } : null;
         return json(res, 200, { job: state.jobs[index], review, uploadApprovalRecord, publishingEnabled: false });
+      } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs/lease/claim") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || typeof body.workerId !== "string") return json(res, 400, { error: "jobId and workerId are required" });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const claimed = claimWorkerLease(state.jobs[index], body.workerId, { leaseMs: body.leaseMs ?? 60_000 });
+        state.jobs[index] = claimed.job;
+        state.audit.push({ id: crypto.randomUUID(), action: "WORKER_LEASE_CLAIMED", jobId: body.jobId, workerId: body.workerId, expiresAt: claimed.job.workerLease.expiresAt, at: new Date().toISOString(), actor: "local-operator" });
+        saveState(state);
+        return json(res, 200, { job: claimed.job, leaseToken: claimed.leaseToken, publishingEnabled: false });
+      } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs/lease/heartbeat") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || typeof body.leaseToken !== "string") return json(res, 400, { error: "jobId and leaseToken are required" });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const updated = heartbeatWorkerLease(state.jobs[index], body.leaseToken, { leaseMs: body.leaseMs ?? 60_000 });
+        state.jobs[index] = updated;
+        state.audit.push({ id: crypto.randomUUID(), action: "WORKER_LEASE_HEARTBEAT", jobId: body.jobId, workerId: updated.workerLease.workerId, expiresAt: updated.workerLease.expiresAt, at: new Date().toISOString(), actor: "local-operator" });
+        saveState(state);
+        return json(res, 200, { job: updated, publishingEnabled: false });
+      } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs/lease/complete") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || typeof body.leaseToken !== "string" || typeof body.nextState !== "string") return json(res, 400, { error: "jobId, leaseToken and nextState are required" });
+      if (!["GENERATED", "VALIDATING", "FAILED", "BLOCKED"].includes(body.nextState)) return json(res, 400, { error: "Worker completion may only advance to GENERATED, VALIDATING, FAILED or BLOCKED; human review and upload states require separate gates" });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const old = state.jobs[index];
+        const updated = completeWorkerLease(old, body.leaseToken, body.nextState, body.result ?? {});
+        state.jobs[index] = updated;
+        state.audit.push({ id: crypto.randomUUID(), action: "WORKER_STAGE_COMPLETED", jobId: body.jobId, workerId: old.workerLease.workerId, from: old.state, to: updated.state, at: new Date().toISOString(), actor: "local-operator" });
+        saveState(state);
+        return json(res, 200, { job: updated, publishingEnabled: false });
+      } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs/lease/reap") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string") return json(res, 400, { error: "jobId is required" });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const result = expireWorkerLease(state.jobs[index]);
+        if (!result.expired) return json(res, 409, { error: "No expired worker lease is available to reap", job: state.jobs[index] });
+        state.jobs[index] = result.job;
+        state.audit.push({ id: crypto.randomUUID(), action: "WORKER_LEASE_EXPIRED", jobId: body.jobId, previousState: result.job.transitionHistory?.at(-1)?.from, state: result.job.state, at: new Date().toISOString(), actor: "lease-reaper" });
+        saveState(state);
+        return json(res, 200, { job: result.job, publishingEnabled: false });
       } finally { release(); }
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/transition") {
