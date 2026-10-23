@@ -24,6 +24,15 @@ function readJson(filePath, label) {
   try { return JSON.parse(fs.readFileSync(filePath, "utf8")); }
   catch { throw new Error(label + " is missing or invalid JSON"); }
 }
+export function validateUploadApproval(approval, { jobId, artifactSha256, metadataVersion }) {
+  if (approval?.decision !== "APPROVE" || approval.jobId !== jobId) throw new Error("approval decision and job ID must match this upload");
+  if (approval.artifactSha256 !== artifactSha256) throw new Error("approval artifact checksum does not match the actual MP4");
+  if (approval.metadataVersion !== metadataVersion) throw new Error("approval metadata version does not match the actual metadata file");
+  if (typeof approval.reviewer !== "string" || approval.reviewer.trim().length < 2) throw new Error("authenticated human reviewer identity is missing");
+  if (!/^[a-f0-9]{64}$/.test(approval.rightsEvidenceSha256 ?? "")) throw new Error("rights-evidence checksum is missing");
+  if (approval.publishingEnabled !== false || approval.visibility !== "private") throw new Error("approval must explicitly preserve private-only publishing");
+  return true;
+}
 function safeErrorCode(error) {
   const status = Number(error?.response?.status ?? error?.code);
   return Number.isInteger(status) && status >= 100 && status <= 599 ? "REMOTE_HTTP_" + status : "REMOTE_OUTCOME_UNCERTAIN";
@@ -48,12 +57,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (metadata.productUrl !== APPROVED_SELAR_URL) throw new Error("metadata must use the exact approved Selar destination");
   if (metadata.rightsConfirmed !== true || metadata.complianceReviewed !== true) throw new Error("metadata rights and compliance gates must be explicitly reviewed");
   if (metadata.status !== "READY_FOR_PRIVATE_UPLOAD") throw new Error("metadata status must be READY_FOR_PRIVATE_UPLOAD");
-  if (approval.decision !== "APPROVE" || approval.jobId !== jobId) throw new Error("approval decision and job ID must match this upload");
-  if (approval.artifactSha256 !== videoSha256) throw new Error("approval artifact checksum does not match the actual MP4");
-  if (approval.metadataVersion !== metadataSha256) throw new Error("approval metadata version does not match the actual metadata file");
-  if (typeof approval.reviewer !== "string" || approval.reviewer.trim().length < 2) throw new Error("authenticated human reviewer identity is missing");
-  if (!/^[a-f0-9]{64}$/.test(approval.rightsEvidenceSha256 ?? "")) throw new Error("rights-evidence checksum is missing");
-  if (approval.publishingEnabled !== false || approval.visibility !== "private") throw new Error("approval must explicitly preserve private-only publishing");
+  validateUploadApproval(approval, { jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256 });
 
   const metadataCheck = execFileSync(process.execPath, ["scripts/check-content.mjs", metadataPath], { env, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
   if (!metadataCheck.includes("PASS")) throw new Error("metadata checker did not pass");
