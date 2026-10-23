@@ -11,7 +11,7 @@
       "longForm": 2,
       "short": 1
     },
-    "note": "Target cadence only. This queue does not itself schedule or publish. Public publishing remains disabled until each item passes rights, content, media, metadata, and channel-identity checks."
+    "note": "Target cadence from config/weekly-content-plan.json. Draft queue only; public publishing disabled."
   },
   "publishingEnabled": false,
   "items": [
@@ -35,7 +35,7 @@
       "title": "A Beginner Workflow for Faceless Wildlife Videos",
       "topic": "faceless wildlife video production workflow",
       "productUrl": "https://selar.com/0u19v8u99l",
-      "scheduledDay": "Saturday",
+      "scheduledDay": "Thursday",
       "targetMinutes": {
         "min": 6,
         "max": 10
@@ -49,7 +49,7 @@
       "productUrl": "https://selar.com/0u19v8u99l",
       "status": "SCRIPT_AND_CAPTIONS_READY_NEEDS_MEDIA_AND_HUMAN_REVIEW",
       "contentType": "short",
-      "scheduledDay": "Thursday",
+      "scheduledDay": "Saturday",
       "targetSeconds": 55
     },
     {
@@ -57,7 +57,8 @@
       "topic": "Three Ways to Plan a Wildlife Documentary Short",
       "productUrl": "https://selar.com/0u19v8u99l",
       "status": "script_and_captions_ready_needs_media_and_review",
-      "contentType": "short"
+      "contentType": "short",
+      "scheduledDay": "Saturday"
     },
     {
       "id": "wildlife-short-story-structure",
