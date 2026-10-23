@@ -29,6 +29,9 @@ class CheckedInReleaseMetadataTests(unittest.TestCase):
                 self.assertIn(item.get("status"), {
                     "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
                     "script_and_captions_ready_needs_media_and_review",
+                    "SCRIPT_READY_NARRATION_DRAFT_PENDING_GENERATION_MEDIA_AND_HUMAN_REVIEW_REQUIRED",
+                    "SCRIPT_AND_CAPTIONS_READY_NEEDS_MEDIA_AND_HUMAN_REVIEW",
+                    "DRAFT_REVIEW_REQUIRED",
                 })
 
 
