@@ -11,6 +11,8 @@ test("content jobs retain durable schedule, identity, retry and audit fields", (
   assert.equal(job.scheduledSlot.time, "17:00");
   assert.equal(job.scheduledSlot.date, "2026-10-24");
   assert.equal(job.scheduledSlot.idempotencyKey, "slot:2026-10-24:17:00:Africa/Johannesburg");
+  assert.equal(job.scheduledSlot.date, "2026-10-24");
+  assert.equal(job.scheduledSlot.idempotencyKey, "slot:2026-10-24:17:00:Africa/Johannesburg");
   assert.equal(job.attemptCount, 0);
   assert.equal(job.publishingEnabled, false);
   assert.equal(job.transitionHistory[0].to, "QUEUED");
@@ -19,6 +21,7 @@ test("content jobs retain durable schedule, identity, retry and audit fields", (
 
 test("content jobs reject schedule mismatches and malformed idempotency keys", () => {
   assert.throws(() => createContentJob({ ...input, scheduledDay: "Tuesday" }), /conflicts/);
+  assert.throws(() => createContentJob({ ...input, scheduledDate: "2026-10-23" }), /weekday/);
   assert.throws(() => createContentJob({ ...input, scheduledDate: "2026-10-23" }), /weekday/);
   assert.throws(() => createContentJob({ ...input, idempotencyKey: "!" }), /idempotencyKey/);
 });
