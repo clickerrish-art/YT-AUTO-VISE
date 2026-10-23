@@ -83,7 +83,7 @@ No test, upload, deployment, sale or live analytics result is claimed as success
 
 ## Current CI refresh — 2026-10-23
 
-- main SHA: 45352b73bb6cc4787b2a49988b575afb754ab627. Recent queue readiness and metadata runs succeeded (40008273230, 40008273289), but these do not constitute a full main-branch test baseline.
+- Main SHA `45352b73bb6cc4787b2a49988b575afb754ab627` full baseline PASS in run `40018038047` (54 tests passed, zero failures/skips; npm install, readiness, captions and metadata/asset safety checks passed).
 - Implementation SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc: full automation validation passed, including npm test, Python review-safety tests, queue invariants, syntax checks and Python compilation: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014937474. Content quality passed at the same SHA: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014937704.
 - Implementation SHA 896eea1521ba93afdff8f29a248cf9760d8c8e6a adds startup recovery and its integration test. Automation CI passed in run 40014972795, metadata validation passed in run 40014972886, and content quality passed in run 40014973012. Later docs-only SHA a47e74d91013f7ae38912bb4a144574f2575dfdd also passed automation CI in run 40015187821.
 - No package-lock.json exists. CI currently uses npm install --ignore-scripts; npm ci is not yet a reproducible supported command.
