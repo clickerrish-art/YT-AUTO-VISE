@@ -2,7 +2,7 @@
 
 Updated: 2026-10-23  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Implementation HEAD at report authoring: `446d7dd466c2669becdfbb7fc0edf3e628889e2a`  
+Current branch HEAD at report refresh: `3292a891ba0938372efd9c3f10a6236882c60527` (tested code SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`; subsequent commits were documentation-only).  
 Default branch: `main` at `45352b73bb6cc4787b2a49988b575afb754ab627`  
 Draft pull request: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1  
 Public publishing: **DISABLED**
@@ -16,10 +16,7 @@ Public publishing: **DISABLED**
 
 ## Test and workflow evidence
 
-The new validation workflow for HEAD `446d7dd466c2669becdfbb7fc0edf3e628889e2a` was observed running at:
-https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014281815
-
-At the time this report was written, that run was **in progress**. No pass is claimed for this commit until the workflow finishes and its conclusion and logs are inspected.
+The newest tested code SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32` passed the automation workflow, including npm test, Python review-safety tests, queue invariants, syntax checks and Python compilation: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40015500289. Metadata validation passed at the same SHA: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40015491951. The default-branch full-suite baseline remains unexecuted.
 
 A prior commit, `3df90af8f3fad3803291d6907530f2c24367f6fc`, had a successful validation run:
 https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40013565863
