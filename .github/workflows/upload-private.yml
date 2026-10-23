@@ -29,9 +29,15 @@ on:
         options:
           - 'NO'
           - 'YES'
+      previous_ledger_run_id:
+        description: Prior upload workflow run ID whose ledger must be restored; use NONE only for the first-ever attempt
+        required: true
+        default: NONE
+        type: string
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   private-upload:
@@ -47,6 +53,15 @@ jobs:
           node-version: 20
       - name: Install uploader dependencies
         run: npm install --ignore-scripts
+      - name: Restore the previous durable upload-attempt ledger
+        if: ${{ inputs.previous_ledger_run_id != 'NONE' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: sonicvhibez-upload-ledger
+          path: run-logs
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.previous_ledger_run_id }}
       - name: Verify required secrets are configured
         env:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
@@ -77,7 +92,16 @@ jobs:
           UPLOAD_APPROVAL_PATH: ${{ inputs.approval_path }}
           METADATA_PATH: ${{ inputs.metadata_path }}
           VIDEO_PATH: ${{ inputs.video_path }}
+          UPLOAD_LOG_DIR: run-logs
         run: node scripts/upload-private.mjs "$METADATA_PATH" "$VIDEO_PATH"
+      - name: Preserve upload-attempt ledger for reconciliation
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-upload-ledger
+          path: run-logs/upload-attempts.json
+          if-no-files-found: warn
+          retention-days: 90
       - name: Preserve private-upload receipt
         if: success()
         uses: actions/upload-artifact@v4
