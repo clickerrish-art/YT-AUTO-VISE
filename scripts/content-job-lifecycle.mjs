@@ -68,6 +68,7 @@ export function createContentJob(input, now = new Date().toISOString()) {
     attemptCount: 0,
     retryPolicy: { maxAttempts: 2, requiresOperatorRetry: true },
     workerLease: null,
+    metadataPath: null,
     leaseHistory: [],
     nextRetryAt: null,
     errorDetails: null,
@@ -176,7 +177,7 @@ export function completeWorkerLease(job, leaseToken, nextState, patch = {}, now 
   if (!job?.workerLease || job.workerLease.tokenHash !== hashLeaseToken(String(leaseToken ?? ""))) throw new Error("Worker lease token does not match");
   if (Date.parse(job.workerLease.expiresAt) <= now) throw new Error("Worker lease has expired");
   if (!patch || typeof patch !== "object" || Array.isArray(patch)) throw new Error("Worker result must be an object");
-  const allowedPatchKeys = new Set(["outputArtifacts", "validationResults", "metadataVersion", "errorDetails"]);
+  const allowedPatchKeys = new Set(["outputArtifacts", "metadataPath", "metadataVersion", "errorDetails"]);
   for (const key of Object.keys(patch)) if (!allowedPatchKeys.has(key)) throw new Error("Worker cannot modify protected job field: " + key);
   let updated = { ...job, ...structuredClone(patch) };
   updated = transitionContentJob(updated, nextState, {
