@@ -316,7 +316,7 @@ const server = http.createServer(async (req, res) => {
         }
         const review = createReviewDecision({ artifact, rightsEvidence, metadataVersion, reviewer, decision: body.decision, reason: body.reason ?? "" });
         if (body.decision === "APPROVE") {
-          state.jobs[index] = approveContentJobForPrivateUpload(job, review);
+          state.jobs[index] = approveContentJobForPrivateUpload({ ...job, rightsChecks: { verified: true, evidenceSha256: review.rightsEvidenceSha256, verifiedBy: reviewer, verifiedAt: review.reviewedAt } }, review);
         } else {
           const rejected = transitionContentJob(job, "REJECTED", { actor: reviewer, reason: body.reason });
           state.jobs[index] = { ...rejected, humanApproval: review };
