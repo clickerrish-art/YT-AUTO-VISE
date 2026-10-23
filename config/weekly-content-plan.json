@@ -1,7 +1,7 @@
 {
   "version": 1,
   "channel": "SonicVhibez",
-  "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+  "channelId": "",
   "timezone": "Africa/Johannesburg",
   "publishingEnabled": false,
   "targetCadence": {
@@ -53,6 +53,8 @@
   "notes": [
     "This file records the requested target cadence; it does not itself schedule jobs or publish videos.",
     "The currently documented GitHub Actions narration workflow generates Shorts drafts twice weekly; it is not yet a complete 2-long-form-plus-1-Short pipeline.",
-    "Public publishing and unattended public scheduling remain disabled until separately reviewed and explicitly configured."
+    "Public publishing and unattended public scheduling remain disabled until separately reviewed and explicitly configured.",
+    "Channel name is reported by vidIQ as SonicVhibez, but the YouTube channel ID is not independently verified by OAuth; keep channelId empty until confirmed from the authorized YouTube account.",
+    "This plan does not create assets, run a schedule, upload or publish."
   ]
 }
