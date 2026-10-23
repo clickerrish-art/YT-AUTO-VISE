@@ -8,6 +8,11 @@ import re
 import sys
 
 try:
+    from mutagen.mp3 import MP3
+except ImportError:
+    MP3 = None
+
+try:
     import edge_tts
 except ImportError:
     print("ERROR: Install edge-tts first: python -m pip install edge-tts", file=sys.stderr)
@@ -86,6 +91,35 @@ def captions_from_boundaries(boundaries):
         lines.extend([str(index), f"{srt_time(start)} --> {srt_time(end)}", " ".join(x["text"] for x in cue), ""])
     return "\n".join(lines).rstrip() + "\n"
 
+def captions_from_text_estimate(text: str, duration: float) -> str:
+    """Build explicitly approximate draft caption timings when TTS word events are absent."""
+    words = text.split()
+    groups, group = [], []
+    for word in words:
+        candidate = " ".join(group + [word])
+        if group and (len(group) >= CAPTION_MAX_WORDS or len(candidate) > CAPTION_MAX_CHARS):
+            groups.append(group)
+            group = []
+        group.append(word)
+        if word.endswith((".", "?", "!", ":", ";")):
+            groups.append(group)
+            group = []
+    if group:
+        groups.append(group)
+    total_chars = sum(len(" ".join(g)) for g in groups) or 1
+    cursor = 0.0
+    lines = []
+    for index, words_group in enumerate(groups, 1):
+        caption = " ".join(words_group)
+        share = duration * len(caption) / total_chars
+        start = cursor
+        end = duration if index == len(groups) else min(duration, cursor + max(0.25, share))
+        if end <= start:
+            end = min(duration, start + 0.1)
+        lines.extend([str(index), f"{srt_time(start)} --> {srt_time(end)}", caption, ""])
+        cursor = end
+    return "\\n".join(lines).rstrip() + "\\n"
+
 async def main():
     if not SOURCE.exists():
         raise SystemExit(f"ERROR: Missing source file: {SOURCE}")
@@ -107,12 +141,22 @@ async def main():
                     boundaries.append(chunk)
         if not target.exists() or target.stat().st_size == 0:
             raise RuntimeError(f"No audio generated for episode {number}")
-        if not boundaries:
-            raise RuntimeError(f"No word-boundary data returned for episode {number}; captions not generated")
-        srt_target.write_text(captions_from_boundaries(boundaries), encoding="utf-8")
+        if boundaries:
+            caption_text = captions_from_boundaries(boundaries)
+            caption_mode = f"{len(boundaries)} TTS word boundaries"
+        else:
+            if MP3 is None:
+                raise RuntimeError("TTS returned no word-boundary data and mutagen is unavailable for duration estimation")
+            duration = float(MP3(str(target)).info.length)
+            if duration <= 0:
+                raise RuntimeError(f"Invalid MP3 duration for episode {number}")
+            caption_text = captions_from_text_estimate(text, duration)
+            caption_mode = "approximate text-distributed timings; human timing review required"
+            print(f"WARNING: Episode {number} had no TTS word-boundary data; using approximate caption timings.")
+        srt_target.write_text(caption_text, encoding="utf-8")
         print(f"CREATED draft narration: {target} | {title} | {len(text.split())} words")
         print(f"CREATED narration text: {text_target}")
-        print(f"CREATED word-timed draft captions: {srt_target} | {len(boundaries)} word boundaries")
+        print(f"CREATED draft captions: {srt_target} | {caption_mode}")
     print("DRAFT ONLY: review pronunciation, factual accuracy, caption punctuation/timing, voice quality, and total runtime. No upload or publishing occurred.")
 
 if __name__ == "__main__":
