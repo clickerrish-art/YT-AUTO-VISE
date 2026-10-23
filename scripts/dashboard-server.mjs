@@ -160,7 +160,7 @@ function safeItem(item) {
   const contentType = item.contentType;
   const scheduledDay = item.scheduledDay;
   const scheduledDate = String(item.scheduledDate ?? "").trim();
-  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(scheduledDate) || Number.isNaN(Date.parse(scheduledDate + "T12:00:00Z"))) throw new Error("Scheduled date must be a real YYYY-MM-DD date");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(scheduledDate) || Number.isNaN(Date.parse(scheduledDate + "T12:00:00Z"))) throw new Error("Scheduled date must be a real YYYY-MM-DD date");
   const actualDay = new Date(scheduledDate + "T12:00:00Z").toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" });
   if (actualDay !== scheduledDay) throw new Error("Scheduled date weekday must match production day");
   if (!/^[a-zA-Z0-9][a-zA-Z0-9_-]{2,79}$/.test(id)) throw new Error("ID must be 3–80 safe characters");
