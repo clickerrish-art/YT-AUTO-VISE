@@ -1,0 +1,95 @@
+name: Acquire NOAA B-roll candidates for rights review
+
+on:
+  workflow_dispatch:
+    inputs:
+      include_lobster:
+        description: Download NOAA Fisheries spiny lobster B-roll package
+        type: boolean
+        required: true
+        default: true
+      include_turtle:
+        description: Download NOAA Fisheries leatherback turtle tagging B-roll package
+        type: boolean
+        required: true
+        default: true
+      include_seal:
+        description: Download NOAA Fisheries Hawaiian monk seal relocation B-roll package
+        type: boolean
+        required: true
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  acquire-candidates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download only selected official NOAA Fisheries B-roll package files
+        env:
+          INCLUDE_LOBSTER: ${{ inputs.include_lobster }}
+          INCLUDE_TURTLE: ${{ inputs.include_turtle }}
+          INCLUDE_SEAL: ${{ inputs.include_seal }}
+        run: |
+          set -euo pipefail
+          mkdir -p media/rights-review
+          fetch_candidate() {
+            local slug="$1"
+            local video_id="$2"
+            local title="$3"
+            local page_url="$4"
+            local download_url="https://download.gallery.brightcove.com/api/gallery/account/659677166001/site/site-600408/video/${video_id}/download"
+            local output="media/rights-review/${slug}.download"
+            printf 'Fetching official NOAA Fisheries download endpoint for %s\n' "$title"
+            curl --fail --location --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 600 \
+              --user-agent "SonicVhibezRightsReview/1.0 (source acquisition; no public publishing)" \
+              --dump-header "media/rights-review/${slug}-response-headers.txt" \
+              "$download_url" --output "$output"
+            test -s "$output"
+            file "$output" | tee "media/rights-review/${slug}-file-type.txt"
+            sha256sum "$output" | tee "media/rights-review/${slug}-sha256.txt"
+            cat >> media/rights-review/SOURCE-REVIEW-REQUIRED.txt <<EOF
+          Candidate: $title
+          Official source page: $page_url
+          Official download endpoint: $download_url
+          Downloaded file: $output
+          Review state: NOT REVIEWED — DO NOT USE IN A VIDEO YET
+          Required next steps: open the downloaded file; inspect opening slate and all credits; check third-party restrictions and audio; capture evidence; create a real asset-register record; human approval required.
+          
+          EOF
+          }
+          if [ "$INCLUDE_LOBSTER" = "true" ]; then
+            fetch_candidate "noaa-spiny-lobsters-california" "6313425635112" "B-Roll: Spiny Lobsters in California" "https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6313425635112/b-roll%3A-spiny-lobsters-in-california"
+          fi
+          if [ "$INCLUDE_TURTLE" = "true" ]; then
+            fetch_candidate "noaa-leatherback-turtle-tagging" "6329928828112" "B-Roll: Leatherback Turtle Tagging" "https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6329928828112/b-roll%3A-leatherback-turtle-tagging"
+          fi
+          if [ "$INCLUDE_SEAL" = "true" ]; then
+            fetch_candidate "noaa-hawaiian-monk-seal-koalani" "6311406347112" "B-Roll: Relocation of Hawaiian Monk Seal RQ58 (Koalani)" "https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6311406347112/b-roll%3A-relocation-of-hawaiian-monk-seal-rq58-koalani"
+          fi
+          cat > media/rights-review/README.txt <<'EOF'
+          SONICVHIBEZ — NOAA FISHERIES SOURCE ACQUISITION REVIEW PACKAGE
+          
+          These are source candidates only. The downloaded files have NOT been reviewed or approved for use.
+          NOAA Fisheries states that its B-roll packages may be downloaded and used with NOAA Fisheries credit,
+          but each package's opening slate contains specific attribution information, including possible third-party
+          contributions and permit numbers. Inspect every downloaded package and its opening slate before use.
+          Remove source audio unless its reuse rights are explicitly documented. Never imply NOAA endorses SonicVhibez
+          or the promoted product. Do not set rights-confirmed flags or render/publish based only on downloading.
+          
+          Official guidance: https://videos.fisheries.noaa.gov/category/videos/b-roll-packages---all
+          Review checklist: docs/WILDLIFE_MEDIA_RIGHTS_CHECKLIST.md
+          Asset register validator: node scripts/validate-asset-register.mjs content/asset-register.json
+          
+          A successful download is not a legal determination and is not an approval to publish.
+          EOF
+      - name: Upload candidate files and source evidence for human review
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-noaa-broll-candidates
+          path: media/rights-review/
+          if-no-files-found: error
+          retention-days: 14
