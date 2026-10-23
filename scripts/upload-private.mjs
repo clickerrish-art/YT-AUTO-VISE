@@ -66,6 +66,15 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (metadata.rightsConfirmed !== true || metadata.complianceReviewed !== true) throw new Error("metadata rights and compliance gates must be explicitly reviewed");
   if (metadata.status !== "READY_FOR_PRIVATE_UPLOAD") throw new Error("metadata status must be READY_FOR_PRIVATE_UPLOAD");
   validateUploadApproval(approval, { jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256 });
+  const relatedArtifacts = approval.relatedArtifacts;
+  const uploadedArtifactIsBound = relatedArtifacts.some(item => path.resolve(item.path) === path.resolve(videoPath) && item.sha256 === videoSha256);
+  if (!uploadedArtifactIsBound) throw new Error("approval artifact set must include the exact MP4 being uploaded");
+  for (const item of relatedArtifacts) {
+    if (!item || typeof item.path !== "string" || !/^[a-f0-9]{64}$/.test(item.sha256 ?? "") || !fs.existsSync(item.path) || !fs.statSync(item.path).isFile()) {
+      throw new Error("every approval-bound artifact must exist as a file with a SHA-256 checksum");
+    }
+    if (sha256File(item.path) !== item.sha256) throw new Error("approval-bound artifact checksum changed: " + path.basename(item.path));
+  }
 
   const metadataCheck = preflightRunner(["scripts/check-content.mjs", metadataPath], env);
   if (!metadataCheck.includes("PASS")) throw new Error("metadata checker did not pass");
