@@ -3,12 +3,12 @@
 **Status:** Review draft only. Not approved for upload or publication.
 
 ## Working title
-How to Plan a Wildlife Video People Want to Watch
+A Beginner Workflow for Faceless Wildlife Videos
 
 ## Description
-A practical creator workflow for planning a wildlife video: start with one focused question, build a clear narrative, verify claims, plan relevant shots, check footage reuse permissions, and review captions before publishing.
+You do not need to appear on camera to make a useful wildlife video—but faceless videos still need original storytelling, reliable research, relevant visuals, and careful editing. This beginner workflow covers choosing a focused topic, checking factual claims, documenting footage permissions, matching shots to narration, improving captions, and reviewing the final export.
 
-This draft uses illustrative marine B-roll from NOAA Fisheries source packages. The footage is background illustration and does not depict every example discussed in the narration. Source audio was removed and replaced with narration. NOAA does not endorse SonicVhibez or any product mentioned here.
+This draft currently uses illustrative marine B-roll from NOAA Fisheries source packages. The footage is background illustration and does not depict every example discussed in the narration. Source audio was removed and replaced with narration. Do not imply that the animals shown performed a behavior described in narration unless the footage supports that claim. NOAA does not endorse SonicVhibez or any product mentioned here.
 
 **Paid product disclosure:** The Complete YouTube Wildlife Creator's Vault – Premium Combo PDF is a paid digital product. Review its current sales page, contents, and terms before purchasing. No product or workflow can guarantee views, revenue, watch hours, or monetization.
 
@@ -24,7 +24,7 @@ Official source packages:
 - https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6329928828112/b-roll%3A-leatherback-turtle-tagging
 
 ## Suggested tags
-wildlife video planning, faceless YouTube workflow, wildlife video editing, wildlife storytelling, video research, video production workflow, wildlife footage rights, copyright and licensing, YouTube creator workflow, captions and subtitles
+faceless wildlife videos, beginner video workflow, wildlife video editing, wildlife storytelling, video research, wildlife footage rights, copyright and licensing, YouTube creator workflow, captions and subtitles, nature video production
 
 ## Release checklist
 - [ ] Human watches the full exported video with sound.
