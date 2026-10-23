@@ -1,7 +1,7 @@
 # Project Completion Audit — SonicVhibez Marketing Machine
 
 Audit date: 2026-10-23
-Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`; subsequent commits are documentation-only. Consult the live branch ref/PR for the current documentation HEAD.
+Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `3fc132b99c683be71e571dab4e6660ab98beb4a9`; subsequent commits are documentation-only. Consult the live branch ref/PR for the current documentation HEAD.
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE
 Default branch: `main`
 Implementation branch inspected: `codex/marketing-machine-audit-fixes`
@@ -9,7 +9,7 @@ Publishing posture: public publishing disabled; no upload was performed by this 
 
 ## Evidence and scope
 
-This audit uses live GitHub branch refs, pull-request metadata, repository files, and Actions results. A clean local checkout and genuine media/OAuth/upload operation were not performed here. The tested implementation commit `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32` passed the full automation workflow (run `40015500289`) and metadata validation (run `40015491951`). Current documentation HEAD is available from the live branch ref; code-tested SHA is `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`, with documentation-only commits after that code.
+This audit uses live GitHub branch refs, pull-request metadata, repository files, and Actions results. A clean local checkout and genuine media/OAuth/upload operation were not performed here. The tested campaign-enhanced implementation commit `3fc132b99c683be71e571dab4e6660ab98beb4a9` passed the full automation workflow (run `40016046874`), including npm test and campaign validation. Current documentation HEAD is available from the live branch ref; code-tested SHA is `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`, with documentation-only commits after that code.
 
 ## Branches and commits
 
