@@ -179,6 +179,21 @@ const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, "http://127.0.0.1");
     if (req.method === "GET" && url.pathname === "/healthz") return json(res, 200, { ok: true, publishingEnabled: false });
+    if (req.method === "GET" && url.pathname === "/readyz") {
+      try {
+        loadState();
+        const schedule = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
+        const campaigns = JSON.parse(fs.readFileSync(path.join(root, "config/campaigns.json"), "utf8"));
+        const campaignErrors = validateCampaigns(campaigns);
+        const optionalBlockers = [];
+        if (!schedule.channelId) optionalBlockers.push("SONICVHIBEZ_CHANNEL_ID has not been independently verified");
+        for (const key of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN"]) if (!process.env[key]) optionalBlockers.push(key + " is not configured");
+        if (!fs.existsSync(path.join(root, "content/render-manifest.json"))) optionalBlockers.push("Rights-reviewed render manifest is missing");
+        return json(res, campaignErrors.length ? 503 : 200, { ready: campaignErrors.length === 0, publishingEnabled: false, localState: "readable", scheduleConfig: "readable", campaignConfig: campaignErrors.length ? "invalid" : "valid", campaignErrors, optionalBlockers });
+      } catch (error) {
+        return json(res, 503, { ready: false, publishingEnabled: false, error: "Required local state or configuration is unreadable" });
+      }
+    }
     if (url.pathname === "/" && req.method === "GET") {
       const html = fs.readFileSync(htmlPath);
       res.writeHead(200, { "content-type": "text/html; charset=utf-8", "cache-control": "no-store", "x-content-type-options": "nosniff", "content-security-policy": "default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src 'self' data:" });
