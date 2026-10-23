@@ -90,3 +90,10 @@ No test, upload, deployment, sale or live analytics result is claimed as success
 - Full main-branch baseline remains BLOCKED BY EXTERNAL PREREQUISITE because no authorized workflow-dispatch action was available in this execution. No live upload or genuine media artifact was created.
 
 Campaign-enhanced code SHA `3fc132b99c683be71e571dab4e6660ab98beb4a9` passed automation CI in run `40016046874`, including npm test, campaign validation, Python review-safety tests, queue checks, syntax and Python compilation. The dashboard applies task timeouts, bounds request/output buffering, prevents overlapping same-task runs within the process, and changes persisted RUNNING validation tasks to RECOVERY_REQUIRED on restart. The content-job state machine and API now persist IDs, idempotency keys, schedule, input references, transition history, output/evidence fields, retry limits and upload receipt placeholders. Upload-only states are rejected by the generic transition API, and an interrupted UPLOADING_PRIVATE job becomes RECOVERY_REQUIRED for reconciliation. This is not equivalent to worker execution, cross-process locking, or a verified remote upload.
+
+
+## Final job-and-campaign CI result — 2026-10-23
+
+Latest code-tested SHA: 869d4ab280fd9bf20ea74edee4c3d1dac032bbe8. Automation workflow run 40016605388 completed successfully: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40016605388. The Node suite reported 70 tests, 70 passed, 0 failed, 0 skipped. The campaign validation step passed, the Python review-safety tests passed, queue invariants reported 16 queued topics and disabled publishing, and JavaScript syntax/Python compilation checks passed. Metadata validation passed in run 40016597429 and content quality passed in run 40016605400.
+
+This result covers the job lifecycle and campaign configuration code at SHA 869d4ab. Later commits update documentation only. It does not establish a full main-branch baseline, real rights-cleared media artifacts, OAuth identity, or a real private upload.
