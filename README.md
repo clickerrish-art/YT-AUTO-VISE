@@ -66,3 +66,10 @@ The existing guarded uploader requires `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECR
 - Operational safety and recovery notes: see [OPERATIONS.md](OPERATIONS.md).
 
 No current result should be described as a green test suite or successful real upload until the corresponding workflow or integration evidence exists.
+
+
+## Dashboard task safety and current limitations
+
+The operator dashboard runs only its fixed validation-task allowlist (schedule, captions, readiness, and tests). Commands are spawned without a shell, output is bounded, each task has a timeout, and duplicate invocations of the same task are rejected within the running process. On restart, persisted tasks still marked RUNNING are moved to RECOVERY_REQUIRED with an audit event; inspect their effects before retrying. This is not yet a complete content-job state machine or cross-process lock.
+
+Latest evidence: automation validation passed at SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc (run https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014937474). Recovery-enhanced tests at current HEAD 896eea1521ba93afdff8f29a248cf9760d8c8e6a were still running when recorded (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014967541). No full main-branch test baseline, genuine rights-cleared wildlife artifact, verified SonicVhibez OAuth identity, or real private upload is claimed. See docs/PROJECT_COMPLETION_REPORT.md for statuses.
