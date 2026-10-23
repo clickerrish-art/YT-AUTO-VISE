@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "channel": "SonicVhibez",
+  "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+  "timezone": "Africa/Johannesburg",
+  "publishingEnabled": false,
+  "targetCadence": {
+    "longFormVideosPerWeek": 2,
+    "shortsPerWeek": 1,
+    "totalVideosPerWeek": 3
+  },
+  "draftProductionSchedule": [
+    {
+      "day": "Tuesday",
+      "format": "long_form",
+      "targetDurationMinutes": {
+        "min": 6,
+        "max": 10
+      },
+      "status": "DRAFT_ONLY"
+    },
+    {
+      "day": "Thursday",
+      "format": "short",
+      "targetDurationSeconds": {
+        "min": 50,
+        "max": 60
+      },
+      "status": "DRAFT_ONLY"
+    },
+    {
+      "day": "Saturday",
+      "format": "long_form",
+      "targetDurationMinutes": {
+        "min": 6,
+        "max": 10
+      },
+      "status": "DRAFT_ONLY"
+    }
+  ],
+  "product": {
+    "name": "Complete YouTube Wildlife Creator's Vault – Premium Combo PDF",
+    "url": "https://selar.com/0u19v8u99l",
+    "approvedProductUrlsOnly": true
+  },
+  "releaseGates": [
+    "Verify footage, music, narration and image rights with retained evidence",
+    "Human-review factual accuracy, captions, thumbnail, disclosures and YouTube altered/synthetic-media settings",
+    "Render and pass format-specific media preflight",
+    "Validate metadata and channel ID against the connected SonicVhibez account",
+    "Upload privately first and verify the result in YouTube Studio"
+  ],
+  "notes": [
+    "This file records the requested target cadence; it does not itself schedule jobs or publish videos.",
+    "The currently documented GitHub Actions narration workflow generates Shorts drafts twice weekly; it is not yet a complete 2-long-form-plus-1-Short pipeline.",
+    "Public publishing and unattended public scheduling remain disabled until separately reviewed and explicitly configured."
+  ]
+}
