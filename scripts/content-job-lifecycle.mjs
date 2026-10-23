@@ -144,8 +144,8 @@ export function claimWorkerLease(job, workerId, { leaseMs = 60_000, now = Date.n
   if (job.workerLease && Date.parse(job.workerLease.expiresAt) > now) throw new Error("Job already has an active worker lease");
   let working = job;
   if (working.state === "FAILED") {
-    if (working.errorDetails?.retryable !== true) throw new Error("Only retryable failures may be leased again");
     if (working.attemptCount >= (working.retryPolicy?.maxAttempts ?? 0)) throw new Error("Retry limit reached");
+    if (working.errorDetails?.retryable !== true) throw new Error("Only retryable failures may be leased again");
     if (working.nextRetryAt && Date.parse(working.nextRetryAt) > now) throw new Error("Retry backoff has not elapsed");
     working = transitionContentJob(working, "QUEUED", { actor: workerId, reason: "Retry backoff elapsed; worker claimed retry" }, new Date(now).toISOString());
   }
