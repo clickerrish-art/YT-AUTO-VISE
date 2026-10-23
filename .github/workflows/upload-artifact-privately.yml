@@ -12,6 +12,22 @@ on:
         required: true
         default: content/next-short.json
         type: string
+      job_id:
+        description: Stable production job ID bound to the approval record
+        required: true
+        type: string
+      approval_path:
+        description: Path to the artifact-bound human approval JSON
+        required: true
+        type: string
+      confirm_private_upload:
+        description: Explicitly authorize one private-only upload attempt
+        required: true
+        default: 'NO'
+        type: choice
+        options:
+          - 'NO'
+          - 'YES'
 
 permissions:
   contents: read
@@ -19,6 +35,7 @@ permissions:
 
 jobs:
   private-upload:
+    if: ${{ inputs.confirm_private_upload == 'YES' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -85,6 +102,7 @@ jobs:
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
+          CONFIRM_PRIVATE_UPLOAD: ${{ inputs.confirm_private_upload }}
         run: |
           missing=0
           for name in YOUTUBE_CLIENT_ID YOUTUBE_CLIENT_SECRET YOUTUBE_REFRESH_TOKEN SONICVHIBEZ_CHANNEL_ID; do
@@ -103,6 +121,9 @@ jobs:
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
+          CONFIRM_PRIVATE_UPLOAD: ${{ inputs.confirm_private_upload }}
+          JOB_ID: ${{ inputs.job_id }}
+          UPLOAD_APPROVAL_PATH: ${{ inputs.approval_path }}
           METADATA_PATH: ${{ inputs.reviewed_metadata_path }}
           VIDEO_PATH: ${{ steps.select-video.outputs.video_path }}
         run: node scripts/upload-private.mjs "$METADATA_PATH" "$VIDEO_PATH"
