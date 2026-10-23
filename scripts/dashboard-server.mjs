@@ -4,6 +4,7 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
+import { validateCampaigns } from "./validate-campaigns.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = process.env.DASHBOARD_HOST ?? "127.0.0.1";
@@ -81,10 +82,11 @@ const allowedTasks = new Map([
   ["validate-schedule", ["run", "validate:schedule"]],
   ["check-captions", ["run", "check:captions"]],
   ["production-readiness", ["run", "readiness"]],
-  ["test-suite", ["test"]]
+  ["test-suite", ["test"]],
+  ["validate-campaigns", ["run", "validate:campaigns"]]
 ]);
 const activeTasks = new Set();
-const taskTimeoutMs = new Map([["validate-schedule", 30_000], ["check-captions", 45_000], ["production-readiness", 60_000], ["test-suite", 180_000]]);
+const taskTimeoutMs = new Map([["validate-schedule", 30_000], ["validate-campaigns", 30_000], ["check-captions", 45_000], ["production-readiness", 60_000], ["test-suite", 180_000]]);
 function runTask(taskId) {
   const args = allowedTasks.get(taskId);
   if (!args) return Promise.reject(new Error("Task is not on the dashboard allowlist"));
@@ -151,10 +153,12 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "GET" && url.pathname === "/api/state") {
       const state = loadState();
       const schedule = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
-      const blockers = [];
+      const campaignConfig = JSON.parse(fs.readFileSync(path.join(root, "config/campaigns.json"), "utf8"));
+      const campaignErrors = validateCampaigns(campaignConfig);
+      const blockers = campaignErrors.map(error => "Campaign configuration: " + error);
       if (!schedule.channelId) blockers.push("SonicVhibez channel ID has not been verified");
       if (!fs.existsSync(path.join(root, "content/render-manifest.json"))) blockers.push("Rights-reviewed render manifest is missing");
-      return json(res, 200, { publishingEnabled: false, schedule, queueItems: state.queueItems, jobs: state.jobs.slice(-30).reverse(), uploads: state.uploads.slice(-30).reverse(), audit: state.audit.slice(-50).reverse(), blockers, stateFile: path.relative(root, stateFile) });
+      return json(res, 200, { publishingEnabled: false, schedule, campaigns: campaignConfig.campaigns, campaignValidation: { ok: campaignErrors.length === 0, errors: campaignErrors }, queueItems: state.queueItems, jobs: state.jobs.slice(-30).reverse(), uploads: state.uploads.slice(-30).reverse(), audit: state.audit.slice(-50).reverse(), blockers, stateFile: path.relative(root, stateFile) });
     }
     if (req.method === "GET" && url.pathname === "/api/tasks") {
       return json(res, 200, { publicPublishingEnabled: false, tasks: [...allowedTasks.keys()] });
