@@ -55,6 +55,10 @@ jobs:
               caption_file = out / audio.name.replace("-narration-draft.mp3", "-captions-draft.srt")
               if not text_file.exists() or not text_file.read_text(encoding="utf-8").strip():
                   raise SystemExit(f"Missing or empty narration text: {text_file}")
+              narration_text = text_file.read_text(encoding="utf-8").strip()
+              word_count = len(narration_text.split())
+              if word_count < 500:
+                  raise SystemExit(f"Narration draft is unexpectedly short ({word_count} words): {text_file}")
               if not caption_file.exists() or not caption_file.read_text(encoding="utf-8").strip():
                   raise SystemExit(f"Missing or empty caption file: {caption_file}")
               seconds = float(MP3(str(audio)).info.length)
@@ -76,6 +80,8 @@ jobs:
                   "durationMinutes": round(seconds / 60, 2),
                   "targetMinutes": {"min": 6, "max": 10},
                   "withinTarget": within_target,
+                  "narrationWordCount": word_count,
+                  "minimumWordCount": 500,
                   "textFileIncluded": True,
                   "captionFile": caption_file.name,
                   "captionFileIncluded": True,
@@ -118,12 +124,13 @@ jobs:
           items = json.loads(report.read_text(encoding="utf-8"))
           if len(items) != 2:
               raise SystemExit(f"BLOCKED: expected exactly two narration duration records; found {len(items)}.")
-          invalid = [item for item in items if item.get("withinTarget") is not True or item.get("captionsCoverAudio") is not True]
+          invalid = [item for item in items if item.get("withinTarget") is not True or item.get("captionsCoverAudio") is not True or item.get("narrationWordCount", 0) < 500]
           if invalid:
               details = "; ".join(
                   f"{item.get('file', 'unknown')}: duration={item.get('durationSeconds', 'unknown')}s, "
                   f"captionEnd={item.get('captionEndSeconds', 'unknown')}s, "
-                  f"captionCoverage={item.get('captionsCoverAudio', 'unknown')}"
+                  f"captionCoverage={item.get('captionsCoverAudio', 'unknown')}, "
+                  f"wordCount={item.get('narrationWordCount', 'unknown')}"
                   for item in invalid
               )
               raise SystemExit("BLOCKED: one or more narration drafts failed runtime or caption-coverage checks. Draft artifact was uploaded for review. " + details)
