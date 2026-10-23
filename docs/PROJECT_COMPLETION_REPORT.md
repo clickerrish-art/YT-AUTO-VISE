@@ -88,7 +88,7 @@ No video artifact checksum, real narration/footage clearance, verified channel i
 
 Current implementation HEAD: 896eea1521ba93afdff8f29a248cf9760d8c8e6a. Default main SHA: 45352b73bb6cc4787b2a49988b575afb754ab627. PR #1 remains draft and unmerged.
 
-At SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc, automation CI passed: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014937474. The run includes npm test, Python review-safety tests, queue invariants, syntax checks and Python compilation. Current-head runs 40014967541 and 40014972886 were in progress, so the newest restart-recovery test is not yet marked PASS.
+At SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc, automation CI passed: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014937474. The recovery-enhanced implementation SHA 896eea1521ba93afdff8f29a248cf9760d8c8e6a then passed automation CI (run 40014972795), metadata validation (run 40014972886), and content quality (run 40014973012). Later documentation-only SHA a47e74d91013f7ae38912bb4a144574f2575dfdd passed automation CI in run 40015187821.
 
 | Acceptance requirement | Status | Evidence / blocker |
 |---|---|---|
