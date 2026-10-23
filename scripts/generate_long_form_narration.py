@@ -83,8 +83,6 @@ def captions_from_boundaries(boundaries):
     for index, cue in enumerate(cues, 1):
         start = cue[0]["start"]
         end = max(start + 0.5, cue[-1]["end"])
-        if index < len(cues):
-            next_start = cues[index][0]["start"] if False else None
         lines.extend([str(index), f"{srt_time(start)} --> {srt_time(end)}", " ".join(x["text"] for x in cue), ""])
     return "\n".join(lines).rstrip() + "\n"
 
