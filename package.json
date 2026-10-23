@@ -16,7 +16,8 @@
     "render:thumbnail": "node scripts/render-thumbnail.mjs",
     "render:long": "node scripts/render-long-form.mjs",
     "validate:long-export": "node scripts/validate-long-form-export.mjs",
-    "validate:schedule": "node scripts/validate-schedule.mjs"
+    "validate:schedule": "node scripts/validate-schedule.mjs",
+    "validate:campaigns": "node scripts/validate-campaigns.mjs"
   },
   "engines": { "node": ">=20" },
   "dependencies": { "googleapis": "^144.0.0" }
