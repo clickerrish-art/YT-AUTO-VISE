@@ -1,63 +1,73 @@
 # Operations and production gates
 
-## Current scope
+## Current scope and truthful status
 
-This repository holds topic briefs, caption drafts, metadata checks, a scheduled queue-readiness/replenishment workflow, a local FFmpeg renderer, and a private-only upload tool. The workflow replenishes draft topics; it does not produce complete videos or publish them. Automated narration generation, licensed-asset sourcing, public scheduling, and end-to-end media tests are not implemented or verified.
+This repository provides draft topics, caption and metadata validation, scheduled narration-draft workflows, FFmpeg renderers, production-readiness diagnostics, and a guarded private-only YouTube uploader. Presence of these components is not proof that a complete documentary has been rendered or that YouTube authorization is configured. Current media outputs remain drafts until real footage rights and human review are documented.
+
+## Authoritative schedule
+
+The sole target schedule is in `config/weekly-content-plan.json`. Run `npm run validate:schedule` after changing the schedule, queue, or workflow files. It checks the configuration, queue type/day mapping, approved Selar destination, and workflow cron declarations.
+
+- Tuesday, 17:00 `Africa/Johannesburg`: long-form draft, 6–10 minutes.
+- Thursday, 17:00 `Africa/Johannesburg`: long-form draft, 6–10 minutes.
+- Saturday, 17:00 `Africa/Johannesburg`: Short draft, 50–60 seconds.
+
+GitHub Actions cron uses UTC: 15:00 UTC maps to 17:00 in South Africa. South Africa does not currently observe daylight saving time. These are draft-generation targets, not public publication times. Queue items are a backlog; multiple items on a day do not mean multiple videos are authorized to upload.
 
 ## Current drafts
 
 - Short 001: `content/short-001-wildlife-video-storytelling.md`; metadata template: `content/short-001-metadata.example.json`.
 - Short 002: `content/short-002-plan-wildlife-documentary.md`; metadata template: `content/short-002-metadata.example.json`.
 
-Metadata templates intentionally keep `rightsConfirmed` and `complianceReviewed` false and do not represent finished, reviewed media. They must fail the production checker until a real video is rendered, reviewed, and its rights/compliance verified.
+Metadata templates intentionally keep rights and compliance review false. They must remain blocked until real media is rendered, reviewed, and rights/compliance are independently checked.
 
 ## Channel isolation
 
-The intended target is the SonicVhibez YouTube channel, but its channel ID is **not yet verified**. Do not use `UCSlkuPfHH78oGC1o418HV4w`: that ID was found on the existing Metricool brand labelled Nature Frontiers and must not be assumed to belong to SonicVhibez. Nature Frontiers is explicitly out of scope.
-
-Before enabling any uploader, retrieve the authenticated YouTube channel identity and compare it to the independently verified SonicVhibez channel ID. If identity cannot be verified, stop. Do not rely on a brand label alone.
+Only SonicVhibez is authorized. Its channel ID remains unverified until checked through the authorized YouTube API. Do not use `UCSlkuPfHH78oGC1o418HV4w`; that ID was found on a Metricool brand labelled Nature Frontiers and must not be assumed to belong to SonicVhibez. Nature Frontiers is excluded from this project.
 
 ## Required production gates
 
-1. A reviewed video file exists and is playable.
-2. Narration, visuals, music, and fonts have documented usage rights.
-3. Title, description, tags, and product URL pass `npm run check -- content/next-short.json`.
-4. The exact product URL is present in `config/products.json` and has been manually verified.
-5. The authenticated YouTube account is confirmed to be the SonicVhibez channel.
-6. Upload begins as private. Public visibility requires separate explicit approval until the end-to-end flow has been proven.
-7. The returned YouTube video ID and privacy status are stored in a run log; failed uploads are not silently marked successful.
-8. A future scheduling job must not create a second upload if a retry finds an existing video ID.
+1. A complete, readable MP4 exists and matches the queue item.
+2. Narration, visuals, music, and fonts have retained, human-verified usage-rights evidence.
+3. Metadata passes `npm run check -- content/next-short.json`.
+4. The exact destination is approved in `config/products.json`; the currently approved Selar URL is `https://selar.com/0u19v8u99l`.
+5. The authenticated YouTube channel ID and title are verified as SonicVhibez.
+6. The uploader sets visibility to private; public publishing and public scheduling remain disabled.
+7. The returned video ID, privacy status, timestamp, and artifact checksum are retained as a receipt.
+8. Uncertain upload outcomes must be reconciled in YouTube Studio/API before retrying; do not blindly retry.
 
 ## Secrets and configuration
 
-Never commit API keys, OAuth refresh tokens, client secrets, or access tokens. Store them in a secrets manager or GitHub Actions secrets. The channel ID may be stored as a non-secret variable, but must still be checked against the authenticated YouTube API response.
+Never commit or print API keys, OAuth refresh tokens, client secrets, or access tokens. Store them only in GitHub Actions secrets or environment variables. Required uploader variables currently include `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN`, and `SONICVHIBEZ_CHANNEL_ID`. Never request secret values in chat.
 
-## Cadence
+## Rights, campaigns, and disclosure
 
-The intended cadence is two Shorts per week (Tuesday and Friday, Africa/Johannesburg). The scheduled workflow only checks/replenishes draft topics; it does not render videos, upload, or schedule/publish them. Do not describe the posting cadence as active until the media pipeline, verified channel authorization, uploader, and recovery path are deployed and tested.
+The configured campaign is Selar-only. Do not add Safari affiliate destinations until the owner provides and verifies exact URLs. Keep the two campaign types isolated, including destination and disclosure. A typography-led review render is not a wildlife documentary and must not be represented as one. Never mark rights or human-review flags as approved without real evidence and authorized human review.
 
-## Content integrity
+## Installation and commands
 
-Do not claim a guaranteed SEO score, guaranteed reach, or guaranteed sales. Avoid misleading income claims. Product promotions must accurately describe the linked product and use only owner-provided URLs. Do not upload unlicensed footage or cloned voices without the necessary rights and consent.
-
-## Private upload implementation
-
-`scripts/upload-private.mjs` is a gated first-stage uploader. It requires a reviewed metadata JSON and an MP4 path, runs the content checker, verifies the OAuth-authenticated YouTube channel ID matches `SONICVHIBEZ_CHANNEL_ID`, and only submits a **private** upload. It never makes a video public or schedules a public release.
-
-Required GitHub Actions secrets/environment variables for a future manually approved run:
-- `YOUTUBE_CLIENT_ID`
-- `YOUTUBE_CLIENT_SECRET`
-- `YOUTUBE_REFRESH_TOKEN`
-- `SONICVHIBEZ_CHANNEL_ID` (channel ID is not secret, but must match authenticated identity and be verified independently)
-
-Do not add a public-publish workflow until OAuth credentials are configured, the exact channel is verified, a reviewed media file is available, and a real private-upload test is approved. Upload logs may contain video IDs; review privacy and storage before committing logs. No credentials belong in the repository.
-
-## Media preflight (local, no paid service)
-
-Install FFmpeg (including `ffprobe`) on the computer where the reviewed MP4 is stored. Then run:
+Prerequisites: Node.js 20+, npm, Python 3.12 for narration helpers, and FFmpeg/ffprobe for media rendering and validation.
 
 ```sh
-node scripts/preflight-media.mjs path/to/short.mp4 path/to/reviewed-metadata.json
+npm install --ignore-scripts
+npm test
+npm run validate:schedule
+npm run check:captions
+npm run readiness
 ```
 
-The preflight fails closed unless the metadata targets SonicVhibez, starts as private, and records completed human rights/compliance review. It checks that the file is 50–60 seconds, vertical, and has an audio stream. It does not prove licensing, consent, truthfulness, caption synchronization, or visual quality, and it does not upload or publish anything.
+There is currently no committed npm lockfile, so `npm ci` is not yet reproducible. Do not claim deterministic dependency installation until a lockfile is added and tested.
+
+For a private upload, first complete every rights and editorial gate, configure the secrets securely, inspect the metadata and artifact, and use the manual private-upload workflow. The upload is a real external action; keep operator confirmation explicit. No public-visibility option is authorized.
+
+## Backup and recovery
+
+Preserve the Git repository and downloaded workflow artifacts. Keep original media, caption files, metadata, manifests, rights evidence, and sanitized receipts together under stable queue-item identifiers. Before retrying a failed/uncertain upload, inspect the remote channel for an existing video ID. The current implementation still needs a durable job ledger and robust remote-success/local-failure reconciliation before it can be described as fully recoverable.
+
+## Known blockers
+
+- No verified rights-cleared wildlife footage or human approvals have been supplied.
+- No independently verified SonicVhibez OAuth identity or private-upload receipt is evidenced.
+- No dashboard-backed persistent job/approval store is currently verified.
+- Full test suite and media pipeline execution were blocked in the current development environment; consult `docs/TEST_BASELINE_AND_REGRESSION_REPORT.md`.
+- Public publishing remains disabled.
