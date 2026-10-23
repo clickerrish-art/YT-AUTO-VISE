@@ -90,6 +90,19 @@ async function acquireStateLock(timeoutMs = 10_000) {
     }
   }
 }
+function readUploadLedger() {
+  const logDir = path.resolve(root, process.env.UPLOAD_LOG_DIR ?? "run-logs");
+  const ledgerPath = path.join(logDir, "upload-attempts.json");
+  if (!fs.existsSync(ledgerPath)) return { available: false, attempts: [] };
+  try {
+    const ledger = JSON.parse(fs.readFileSync(ledgerPath, "utf8"));
+    if (!Array.isArray(ledger.attempts)) return { available: false, attempts: [], error: "Upload ledger schema is invalid" };
+    const safeFields = ["attemptId", "jobId", "artifactSha256", "metadataVersion", "channelId", "channelTitle", "status", "startedAt", "updatedAt", "verifiedAt", "remoteVideoId", "errorCode", "receiptPath", "visibility", "publishingEnabled"];
+    return { available: true, attempts: ledger.attempts.map(item => Object.fromEntries(safeFields.filter(key => item[key] !== undefined).map(key => [key, item[key]]))).slice(-50).reverse() };
+  } catch {
+    return { available: false, attempts: [], error: "Upload ledger is unreadable; do not retry an uncertain upload" };
+  }
+}
 function resolveRepositoryFile(relativePath) {
   if (typeof relativePath !== "string" || !relativePath.trim() || path.isAbsolute(relativePath)) throw new Error("File path must be repository-relative");
   const resolved = path.resolve(root, relativePath);
@@ -226,7 +239,7 @@ const server = http.createServer(async (req, res) => {
       const blockers = campaignErrors.map(error => "Campaign configuration: " + error);
       if (!schedule.channelId) blockers.push("SonicVhibez channel ID has not been verified");
       if (!fs.existsSync(path.join(root, "content/render-manifest.json"))) blockers.push("Rights-reviewed render manifest is missing");
-      return json(res, 200, { publishingEnabled: false, schedule, campaigns: campaignConfig.campaigns, campaignValidation: { ok: campaignErrors.length === 0, errors: campaignErrors }, queueItems: state.queueItems, jobs: state.jobs.slice(-30).reverse(), uploads: state.uploads.slice(-30).reverse(), audit: state.audit.slice(-50).reverse(), blockers, stateFile: path.relative(root, stateFile) });
+      return json(res, 200, { publishingEnabled: false, schedule, campaigns: campaignConfig.campaigns, campaignValidation: { ok: campaignErrors.length === 0, errors: campaignErrors }, queueItems: state.queueItems, jobs: state.jobs.slice(-30).reverse(), uploads: state.uploads.slice(-30).reverse(), uploadLedger: readUploadLedger(), audit: state.audit.slice(-50).reverse(), blockers, stateFile: path.relative(root, stateFile) });
     }
     if (req.method === "GET" && url.pathname === "/api/tasks") {
       return json(res, 200, { publicPublishingEnabled: false, tasks: [...allowedTasks.keys()] });
@@ -459,6 +472,46 @@ const server = http.createServer(async (req, res) => {
         const uploadApprovalRecord = body.decision === "APPROVE" ? { ...review, jobId: job.id, publishingEnabled: false, visibility: "private" } : null;
         return json(res, 200, { job: state.jobs[index], review, uploadApprovalRecord, publishingEnabled: false });
       } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/uploads/reconcile") {
+      const body = await readBody(req);
+      const actor = process.env.DASHBOARD_OPERATOR_ID;
+      if (!actor || actor.trim().length < 2) return json(res, 503, { error: "Upload reconciliation requires DASHBOARD_OPERATOR_ID" });
+      if (typeof body.jobId !== "string" || typeof body.metadataPath !== "string" || typeof body.videoPath !== "string" || typeof body.approvalPath !== "string") return json(res, 400, { error: "jobId, metadataPath, videoPath and approvalPath are required" });
+      const videoFile = resolveRepositoryFile(body.videoPath);
+      const videoSha256 = sha256File(videoFile);
+      const ledger = readUploadLedger();
+      const prior = ledger.attempts.find(item => item.jobId === body.jobId && item.artifactSha256 === videoSha256);
+      if (!prior) return json(res, 409, { error: "No matching prior upload attempt exists. Read-only reconciliation will never create a new upload." });
+      if (!prior.remoteVideoId) return json(res, 409, { error: "This attempt has no authoritative remote video ID. Reconcile manually in YouTube Studio/API before any retry; no upload was attempted." });
+      if (activeTasks.has("upload-reconcile:" + body.jobId)) return json(res, 409, { error: "Reconciliation is already running for this job" });
+      const metadataFile = resolveRepositoryFile(body.metadataPath);
+      const approvalFile = resolveRepositoryFile(body.approvalPath);
+      activeTasks.add("upload-reconcile:" + body.jobId);
+      const output = await new Promise(resolve => {
+        const child = spawn(process.execPath, ["scripts/upload-private.mjs", body.metadataPath, body.videoPath], {
+          cwd: root, shell: false, windowsHide: true, stdio: ["ignore", "pipe", "pipe"],
+          env: { ...process.env, RECONCILE_ONLY: "YES", JOB_ID: body.jobId, UPLOAD_APPROVAL_PATH: body.approvalPath, UPLOAD_LOG_DIR: path.resolve(root, process.env.UPLOAD_LOG_DIR ?? "run-logs") }
+        });
+        let textOutput = "";
+        let truncated = false;
+        let timedOut = false;
+        const collect = chunk => { textOutput += chunk.toString(); if (textOutput.length > 12000) { textOutput = textOutput.slice(-12000); truncated = true; } };
+        const timer = setTimeout(() => { timedOut = true; child.kill("SIGTERM"); }, 60_000);
+        child.stdout.on("data", collect);
+        child.stderr.on("data", collect);
+        child.on("error", error => { clearTimeout(timer); resolve({ status: "FAILED", exitCode: null, output: (textOutput + "\n" + error.message).slice(-12000), truncated }); });
+        child.on("close", code => { clearTimeout(timer); resolve({ status: timedOut ? "TIMED_OUT" : code === 0 ? "SUCCEEDED" : "FAILED", exitCode: code, output: textOutput, truncated }); });
+      });
+      activeTasks.delete("upload-reconcile:" + body.jobId);
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        state.audit.push({ id: crypto.randomUUID(), action: output.status === "SUCCEEDED" ? "UPLOAD_RECONCILIATION_VERIFIED" : "UPLOAD_RECONCILIATION_BLOCKED", jobId: body.jobId, remoteVideoId: prior.remoteVideoId, artifactSha256: videoSha256, actor: actor.trim(), at: new Date().toISOString(), reason: output.status === "SUCCEEDED" ? "Read-only YouTube reconciliation completed" : "Read-only reconciliation did not prove private status" });
+        saveState(state);
+      } finally { release(); }
+      const updatedLedger = readUploadLedger();
+      return json(res, output.status === "SUCCEEDED" ? 200 : 409, { reconciliation: output, uploadLedger: updatedLedger, publishingEnabled: false, uploadAttemptCreated: false });
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/produce") {
       const body = await readBody(req);
