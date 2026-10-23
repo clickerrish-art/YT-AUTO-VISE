@@ -13,9 +13,9 @@ Focus on wildlife filmmaking and creator education: documentary storytelling, pl
 
 ## Target cadence
 
-- Tuesday: one original vertical Short, approximately 35–60 seconds.
-- Thursday: one original 6–10 minute horizontal video.
-- Friday: one distinct Short with its own hook, narrative and payoff.
+- Tuesday: one original 6–10 minute horizontal long-form video.
+- Thursday: one original vertical Short, approximately 35–60 seconds.
+- Saturday: one original 6–10 minute horizontal long-form video.
 
 This is a production target, not a live schedule. Hold any upload if assets, narration, captions, rights, facts or review are incomplete. Avoid duplicating the existing live Short `LjePS02hA1o`; preserve at least 72 hours between promotional uploads.
 
@@ -38,7 +38,7 @@ Use the existing FFmpeg/Python renderer as the basis for a repeatable workflow. 
 
 ## Checkpoints
 
-**Days 1–14:** test the end-to-end production pipeline, finish one long-form video and two Shorts, verify exports and caption timing, and record rights evidence.
+**Days 1–14:** test the end-to-end production pipeline, finish two long-form videos and one Short, verify exports and caption timing, and record rights evidence.
 
 **Days 15–30:** publish only fully cleared content; record impressions, click-through rate, average view duration, retention, returning viewers and subscriber conversion.
 
@@ -66,4 +66,4 @@ The primary plan is to use Shorts for discovery and original long-form videos to
 
 ## Current blockers
 
-The existing queue is Shorts-focused and publishing is disabled. Short #2 still needs verified rights-cleared media, final narration, thumbnail, rendered MP4, captions synchronized to the final narration, rights evidence and human review. Secure YouTube upload credentials must be configured before private upload testing. Long-form production is not integrated until a 16:9 render/export path and corresponding metadata/preflight checks are tested. This plan does not claim those tasks are complete.
+The queue targets two long-form videos (Tuesday/Saturday) and one Short (Thursday) each week; publishing remains disabled. Short #2 still needs verified rights-cleared media, final narration, thumbnail, rendered MP4, captions synchronized to the final narration, rights evidence and human review. Secure YouTube upload credentials must be configured before private upload testing. Long-form production is not integrated until a 16:9 render/export path and corresponding metadata/preflight checks are tested. This plan does not claim those tasks are complete.
