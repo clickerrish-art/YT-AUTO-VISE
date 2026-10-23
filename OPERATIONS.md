@@ -71,3 +71,10 @@ Preserve the Git repository and downloaded workflow artifacts. Keep original med
 - No dashboard-backed persistent job/approval store is currently verified.
 - Full test suite and media pipeline execution were blocked in the current development environment; consult `docs/TEST_BASELINE_AND_REGRESSION_REPORT.md`.
 - Public publishing remains disabled.
+
+
+## Dashboard task timeouts and interrupted runs
+
+The dashboard accepts only fixed validation task IDs. Child processes use no shell, captured output is bounded, and tasks have per-command timeouts. A second request for the same task while it is active is rejected within the server process. On startup, persisted task records left in RUNNING are moved to RECOVERY_REQUIRED and an audit event is written. Review logs and side effects before retrying. This is not a cross-process lease or a complete media-job recovery implementation.
+
+Current branch CI evidence: automation validation passed at SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc (run https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014937474). Latest recovery test runs were in progress when recorded (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014967541). Do not claim latest-head CI success until that run completes. The full main-branch test baseline, real media artifacts, rights approvals, verified SonicVhibez identity and real private upload remain unverified/blocked.
