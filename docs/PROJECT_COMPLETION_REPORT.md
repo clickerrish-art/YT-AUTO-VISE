@@ -23,7 +23,7 @@ https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40013565863
 
 That prior run does not test the subsequently added dashboard task runner or its new test.
 
-The full default-branch baseline at `45352b73bb6cc4787b2a49988b575afb754ab627` has not been executed in this session. Do not represent it as passing.
+The full default-branch baseline at `45352b73bb6cc4787b2a49988b575afb754ab627` has not been executed in this session. Recent individual main-branch workflows do not constitute a full baseline.
 
 ## Acceptance matrix
 
@@ -32,7 +32,7 @@ The full default-branch baseline at `45352b73bb6cc4787b2a49988b575afb754ab627` h
 | Dedicated implementation branch and draft PR | PASS | Branch `codex/marketing-machine-audit-fixes`; PR #1 remains unmerged/draft |
 | One authoritative schedule | PASS (configuration checked in CI on prior head) | Tuesday/Thursday long-form, Saturday Short; 17:00 Africa/Johannesburg = 15:00 UTC |
 | Dashboard reads real schedule and queue | PASS (code implemented; runtime CI test pending for latest head) | `scripts/dashboard-server.mjs`, `public/dashboard.html` |
-| Dashboard runs actual safe validation tasks | NOT YET VERIFIED | New allowlisted runner and integration test; latest workflow in progress |
+| Dashboard runs actual safe validation tasks | PASS | Allowlisted tasks and integration test passed in automation CI run 40015500289; task list intentionally excludes render/upload/publication |
 | Durable local draft/job/audit state | PARTIAL | Atomic JSON state exists; full durable lifecycle and concurrent-worker locking are not implemented |
 | Full media generation through dashboard | NOT IMPLEMENTED | Dashboard task runner intentionally only permits validation commands |
 | Complete 50–60 second wildlife Short | BLOCKED BY EXTERNAL PREREQUISITE | Rights-cleared footage and genuine review evidence not available |
