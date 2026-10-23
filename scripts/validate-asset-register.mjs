@@ -57,9 +57,12 @@ if (!Array.isArray(data.assets) || data.assets.length === 0) {
     }
     if (asset.humanApproved !== true) errors.push(`${prefix}.humanApproved must be true only after a person reviews the source and terms`);
     if (asset.rightsEvidenceReviewed !== true) errors.push(`${prefix}.rightsEvidenceReviewed must be true only after evidence has been inspected`);
-    if (typeof asset.evidencePath === "string" && asset.evidencePath.trim() &&
-        /placeholder|replace_with|todo|unknown|tbd/i.test(asset.evidencePath)) {
-      errors.push(`${prefix}.evidencePath must identify the actual saved evidence, not a placeholder`);
+    if (typeof asset.evidencePath === "string" && asset.evidencePath.trim()) {
+      if (/placeholder|replace_with|todo|unknown|tbd/i.test(asset.evidencePath)) {
+        errors.push(`${prefix}.evidencePath must identify the actual saved evidence, not a placeholder`);
+      } else if (!fs.existsSync(path.resolve(path.dirname(registerPath), asset.evidencePath))) {
+        errors.push(`${prefix}.evidencePath does not point to an existing saved evidence file`);
+      }
     }
   });
 }
