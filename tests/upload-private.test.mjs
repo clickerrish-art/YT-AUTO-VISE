@@ -50,7 +50,7 @@ test("private uploader records uncertain remote outcomes and refuses blind retri
     const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: "UC_SONIC_TEST", CONFIRM_PRIVATE_UPLOAD: "YES", UPLOAD_LOG_DIR: path.join(dir, "logs") };
     const youtubeFactory = () => ({
       channels: { list: async () => ({ data: { items: [{ id: "UC_SONIC_TEST", snippet: { title: "SonicVhibez" } }] } }) },
-      videos: { insert: async () => { const e = new Error("network timed out"); e.code = "ETIMEDOUT"; throw e; }, list: async () => ({ data: { items: [] } }) }
+      videos: { insert: async request => { for await (const _chunk of request.media.body) {} const e = new Error("network timed out"); e.code = "ETIMEDOUT"; throw e; }, list: async () => ({ data: { items: [] } }) }
     });
     const args = { metadataPath, videoPath, approvalPath, jobId: "job-timeout-001", env, youtubeFactory, preflightRunner: args => args[0].includes("check-content") ? "PASS" : "PASS:" };
     await assert.rejects(uploadPrivate(args), /outcome is uncertain/);
@@ -81,7 +81,7 @@ test("private uploader preserves remote video ID and marks recovery if receipt p
     const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: "UC_SONIC_TEST", CONFIRM_PRIVATE_UPLOAD: "YES", UPLOAD_LOG_DIR: path.join(dir, "logs") };
     const youtubeFactory = () => ({
       channels: { list: async () => ({ data: { items: [{ id: "UC_SONIC_TEST", snippet: { title: "SonicVhibez" } }] } }) },
-      videos: { insert: async () => ({ data: { id: "VIDEO_PRIVATE_TEST" } }), list: async () => ({ data: { items: [{ id: "VIDEO_PRIVATE_TEST", snippet: { channelId: "UC_SONIC_TEST" } , status: { privacyStatus: "private" } }] } }) }
+      videos: { insert: async request => { for await (const _chunk of request.media.body) {} return { data: { id: "VIDEO_PRIVATE_TEST" } }; }, list: async () => ({ data: { items: [{ id: "VIDEO_PRIVATE_TEST", snippet: { channelId: "UC_SONIC_TEST" } , status: { privacyStatus: "private" } }] } }) }
     });
     let failedReceiptWrite = false;
     const persistJson = (filePath, value) => {
