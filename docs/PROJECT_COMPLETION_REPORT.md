@@ -2,7 +2,7 @@
 
 Updated: 2026-10-23  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `46d878b6cc7d53e7beca79c086fd3fead931fb11`; subsequent commits were documentation-only. Consult the live branch ref/PR for the current documentation HEAD.  
+Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516`; subsequent commits were documentation-only. Consult the live branch ref/PR for the current documentation HEAD.  
 Default branch: `main` at `45352b73bb6cc4787b2a49988b575afb754ab627`  
 Draft pull request: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1  
 Public publishing: **DISABLED**
@@ -16,7 +16,7 @@ Public publishing: **DISABLED**
 
 ## Test and workflow evidence
 
-The latest tested code SHA `46d878b6cc7d53e7beca79c086fd3fead931fb11` passed automation CI (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018011341), metadata validation (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018004685), and content quality (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018011188). The main baseline at SHA `45352b73bb6cc4787b2a49988b575afb754ab627` passed in run https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047.
+The latest tested code SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` passed automation CI (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018707582), metadata validation (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018707453), and content quality (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018707660). The main baseline at SHA `45352b73bb6cc4787b2a49988b575afb754ab627` passed in run https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047.
 
 A prior commit, `3df90af8f3fad3803291d6907530f2c24367f6fc`, had a successful validation run:
 https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40013565863
@@ -104,4 +104,4 @@ At SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc, automation CI passed: https://g
 | Full main branch baseline | PASS | 54/54 tests passed at main SHA `45352b73bb6cc4787b2a49988b575afb754ab627`, run `40018038047` |
 | Public publishing disabled | PASS | Configuration false and no dashboard publishing action |
 
-Latest tested code SHA `46d878b6cc7d53e7beca79c086fd3fead931fb11` passed automation CI run `40018011341` with 70/70 Node tests and zero failures, including two-process dated-slot reservation and readiness endpoint tests. Main baseline run `40018038047` passed 54/54 tests at SHA `45352b73bb6cc4787b2a49988b575afb754ab627`. A lockfile has not been added; `npm ci` is not claimed. No media artifact checksum, rights approval, real upload receipt or remote privacy check is claimed. Keep public publishing disabled.
+Latest tested code SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` passed automation CI run `40018707582` with 70/70 Node tests and zero failures, including two-process dated-slot reservation and readiness endpoint tests. Main baseline run `40018038047` passed 54/54 tests at SHA `45352b73bb6cc4787b2a49988b575afb754ab627`. A lockfile has not been added; `npm ci` is not claimed. No media artifact checksum, rights approval, real upload receipt or remote privacy check is claimed. Keep public publishing disabled.
