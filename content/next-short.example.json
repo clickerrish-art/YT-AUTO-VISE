@@ -2,7 +2,7 @@
   "channel": "SonicVhibez",
   "channelId": "SET_SONICVHIBEZ_CHANNEL_ID_IN_GITHUB_ACTIONS_VARIABLES",
   "title": "How to Make Better Wildlife Videos for YouTube",
-  "description": "Learn practical ways to plan wildlife videos, capture animal behaviour respectfully, and shape a clear nature story. Explore the Complete YouTube Wildlife Creator's Vault: https://selar.com/0u19v8u99l",
+  "description": "Practical tips for planning wildlife videos and telling a clear nature story. Promotional disclosure: this video promotes a paid creator resource and I may receive compensation if you purchase through the link. AI disclosure: visuals may include AI-generated or synthetic elements; check the finished edit and disclose any realistic synthetic scenes appropriately. Explore the Complete YouTube Wildlife Creator's Vault: https://selar.com/0u19v8u99l",
   "tags": [
     "wildlife videos",
     "wildlife filmmaking",
@@ -13,5 +13,9 @@
   "madeForKids": false,
   "visibility": "private",
   "rightsConfirmed": false,
-  "complianceReviewed": false
+  "complianceReviewed": false,
+  "status": "DRAFT_REVIEW_REQUIRED",
+  "targetSeconds": 55,
+  "hasPaidPromotion": true,
+  "containsSyntheticMedia": true
 }
