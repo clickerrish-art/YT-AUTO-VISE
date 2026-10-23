@@ -5,12 +5,7 @@ import crypto from "node:crypto";
  * by the application; they do not assert that an external licence is genuine.
  */
 export function sha256File(filePath) {
-  const fs = requireFs();
-  return crypto.createHash("sha256").update(fs.readFileSync(filePath)).digest("hex");
-}
-function requireFs() {
-  // Keep file access confined to callers that explicitly pass a known path.
-  return globalThis.__unusedFs ?? fsModule;
+  return crypto.createHash("sha256").update(fsModule.readFileSync(filePath)).digest("hex");
 }
 import fsModule from "node:fs";
 
