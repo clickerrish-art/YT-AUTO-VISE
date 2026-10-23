@@ -9,7 +9,7 @@ Publishing posture: public publishing disabled; no upload was performed by this 
 
 ## Evidence and scope
 
-This audit uses live GitHub branch refs, pull-request metadata, repository files, and Actions results. A clean local checkout and genuine media/OAuth/upload operation were not performed here. The tested implementation commit `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32` passed the full automation workflow (run `40015500289`) and metadata validation (run `40015491951`). Current branch HEAD is `3292a891ba0938372efd9c3f10a6236882c60527`, with documentation-only commits after the tested code.
+This audit uses live GitHub branch refs, pull-request metadata, repository files, and Actions results. A clean local checkout and genuine media/OAuth/upload operation were not performed here. The tested implementation commit `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32` passed the full automation workflow (run `40015500289`) and metadata validation (run `40015491951`). Current documentation HEAD is available from the live branch ref; code-tested SHA is `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`, with documentation-only commits after that code.
 
 ## Branches and commits
 
@@ -37,7 +37,7 @@ This audit uses live GitHub branch refs, pull-request metadata, repository files
 
 ## Incomplete / defects identified
 
-1. A first local operator dashboard now exists (`scripts/dashboard-server.mjs`, `public/dashboard.html`) with real configuration/queue reads, token-protected API, draft creation, duplicate prevention, and JSON state/audit persistence. It is incomplete: no job launch controls, queue edit UI, rights evidence workflow, campaign isolation beyond the approved Selar URL, or uploader/reconciliation controls.
+1. The local operator dashboard (`scripts/dashboard-server.mjs`, `public/dashboard.html`) has real configuration/queue reads, token-protected API, draft creation, duplicate prevention, local JSON state/audit persistence, allowlisted task execution, timeouts and restart recovery. It remains incomplete: no full content-job state machine, media-job launch, rights evidence workflow, campaign activation approval, or upload reconciliation.
 2. `OPERATIONS.md` contradicts the authoritative plan: it still says two Shorts on Tuesday/Friday.
 3. The default branch schedule config is version 1 and conflicts with the implementation branch's version 2 schedule. Branch choice and merge must be explicit.
 4. The narration workflow can produce draft text/audio/captions and a typography-led review video; it does not establish a finished wildlife documentary with rights-cleared footage.
@@ -48,7 +48,7 @@ This audit uses live GitHub branch refs, pull-request metadata, repository files
 9. The inspected uploader verifies channel identity and private metadata before upload but the returned privacy state is not independently re-fetched after upload.
 10. No evidence in the inspected files establishes that current OAuth secrets exist, that they belong to the SonicVhibez owner, or that a real private upload occurred.
 11. No verified asset-rights evidence or human review records were supplied; example manifests cannot satisfy this gate.
-12. Campaign configuration currently includes the single approved Selar URL; Safari affiliate campaigns must remain absent until exact owner-verified destinations are added.
+12. Campaign configuration now has separate Selar and Safari records. Selar uses the exact approved URL; Safari remains inactive with no destination. Validator and CI tests reject changed Selar URLs and Safari activation without owner-verified destination/disclosure. Full campaign editor/activation UI remains unimplemented.
 
 ## Security and rights risks
 
@@ -101,10 +101,11 @@ P2: document install, startup, backup/restore, operator flow, OAuth setup, and r
 | Full durable content-job lifecycle/leases | NOT IMPLEMENTED | Local JSON persistence exists; full state machine and multi-process locking absent |
 | Full media pipeline launched through dashboard | NOT IMPLEMENTED | Dashboard allows validation commands only |
 | Genuine rights-cleared wildlife Short and long-form | BLOCKED BY EXTERNAL PREREQUISITE | Rights-cleared substantive footage and human review unavailable |
-| Full approval and campaign UI / Selar-Safari isolation | NOT IMPLEMENTED | Selar URL preserved; no verified Safari URLs/schema and isolation tests |
+| Campaign destination/disclosure isolation guard | PASS | Separate campaign records and validator passed in run 40016046874; Safari remains inactive |
+| Full campaign editor and activation approval UI | NOT IMPLEMENTED | Dashboard shows campaign records read-only; Safari URL not configured |
 | SonicVhibez OAuth identity/private upload | BLOCKED BY EXTERNAL PREREQUISITE | Channel ID blank by design; no verified owner OAuth identity or real upload |
 | Recovery-enhanced implementation CI | PASS | Run 40014972795 for SHA 896eea1521ba93afdff8f29a248cf9760d8c8e6a; subsequent docs-only run 40015187821 also passed |
 | Full main branch suite baseline | BLOCKED BY EXTERNAL PREREQUISITE | No authorized workflow-dispatch tool available; individual main workflow successes are not full baseline |
 | Public publishing disabled | PASS | Config false; dashboard exposes no publish task |
 
-Latest code commit 14fe79a9ccf32ed7b10372aaa0f649e1aac17f32 passed automation CI in run 40015500289 and metadata validation in run 40015491951. The full default-branch suite remains unexecuted; the application is not production accepted. No real private upload, rights-cleared documentary, or artifact checksum is claimed.
+Latest campaign-enhanced code SHA `3fc132b99c683be71e571dab4e6660ab98beb4a9` passed automation CI in run `40016046874`, including npm test and the campaign validation step. The full default-branch suite remains unexecuted; the application is not production accepted. No real private upload, rights-cleared documentary, or artifact checksum is claimed.
