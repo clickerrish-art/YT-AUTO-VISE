@@ -1,12 +1,19 @@
 # SonicVhibez Marketing Machine — Acceptance Audit
 
-Audit date: 2026-10-23  
+Audit date: 2026-10-24  
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Tested implementation commit: `ec4a98137dd74932bd99abae4686de70fd03b4f8`  
+Tested implementation commit: `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`  
 Default branch baseline: `45352b73bb6cc4787b2a49988b575afb754ab627`  
 Draft PR: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1  
 Public publishing: **DISABLED**
+
+
+## Latest acceptance checkpoint — 2026-10-24
+
+Tested implementation commit: `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`. GitHub Actions ran the full Node suite at this commit: 95 passed, 0 failed, 0 skipped. [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943732), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943766) all passed. The automation workflow also completed `npm ci --ignore-scripts` successfully.
+
+Short and long-form renderers now fail closed on technical export validation errors. This code-test result does not mean a genuine wildlife MP4 was produced: the production manifests and rights-cleared assets are still absent. No live OAuth identity, real private upload, or remote receipt is claimed. Public publishing remains disabled; PR #1 remains draft and unmerged.
 
 ## Evidence-backed status
 
@@ -15,15 +22,15 @@ Public publishing: **DISABLED**
 | Authoritative schedule and draft-only UTC workflows | PASS | Schedule validation passed at tested commit; Tue/Thu long-form, Sat Short; 15:00 UTC = 17:00 Johannesburg |
 | Draft queue, durable state, stable job IDs, idempotency and cross-process slot locking | PASS | Node regression suite includes process-safe slot and lifecycle cases |
 | Local dashboard auth, loopback binding, allowlisted tasks, real state, health/readiness | PASS | Dashboard integration tests start the actual server and exercise authenticated API paths |
-| Render command launch and fail-closed artifact verification | PASS WITH BLOCKED REAL PRODUCTION | Dashboard launches fixed renderer tasks; missing manifests/rights-cleared media cause BLOCKED, not a fabricated success |
+| Short and long-form renderers with fail-closed technical export verification | PASS WITH BLOCKED REAL PRODUCTION | Short and long-form renderers now run their standalone full-file export validators before reporting success; missing production manifests and rights-cleared media remain BLOCKED |
 | Thumbnail generation and media inspection | IMPLEMENTED; LIVE ARTIFACT BLOCKED | Successful render path invokes FFmpeg thumbnail generation and ffprobe; no rights-cleared wildlife inputs were available for a genuine production render |
 | Caption and metadata validation | PASS FOR CHECKS; CONTENT RELEASE BLOCKED | Caption fixtures pass; unreviewed metadata and asset-register examples remain intentionally blocked |
 | Structured rights evidence and checksum-bound human review | IMPLEMENTED; OWNER EVIDENCE REQUIRED | Server hashes source and license-evidence files, requires configured operator identity and binds approval to video, thumbnail and metadata versions |
 | Artifact-bound approval file | PASS IN CODE PATH | Approval record is atomically written under `run-logs/upload-approvals/`; uploader rechecks every related artifact checksum |
 | Private-only uploader and uncertain-outcome recovery | PASS IN AUTOMATED MOCK TESTS; LIVE UPLOAD BLOCKED | Attempt ledger is persisted before insert; timeout/receipt failure tests cover recovery; live OAuth and remote YouTube identity were not exercised |
 | Campaign isolation | PASS | Selar is fixed to `https://selar.com/0u19v8u99l`; Safari starts inactive and needs exact HTTPS destination, disclosure and explicit owner approval |
-| Clean dependency install | PASS WITH SCRIPTS DISABLED | `npm ci --ignore-scripts` passed in workflow 40027283578; plain `npm ci` without the flag was not separately claimed |
-| Node tests at implementation commit | PASS | 90 tests, 90 pass, 0 fail, 0 skipped in each of the three validation workflows |
+| Clean dependency install | PASS WITH SCRIPTS DISABLED | `npm ci --ignore-scripts` passed in workflow 40037943712; plain `npm ci` without the flag was not separately claimed |
+| Node tests at implementation commit | PASS | 95 tests, 95 pass, 0 fail, 0 skipped in each of the three validation workflows |
 | Main-branch baseline | PASS | 54 tests, 0 failures: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047 |
 | Genuine MP4 and independent playback inspection | BLOCKED | No real rights-cleared Short/long-form artifact was generated in this run; therefore no production MP4 checksum/duration/dimensions are claimed |
 | Verified SonicVhibez channel identity and live private upload | BLOCKED | Owner must configure OAuth secrets and independently confirm channel ID through the authenticated API |
@@ -31,12 +38,12 @@ Public publishing: **DISABLED**
 
 ## Tested workflow evidence
 
-All listed workflows ran against commit `ec4a98137dd74932bd99abae4686de70fd03b4f8`:
+All listed workflows ran against commit `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`:
 
-- Content quality — 90/90 tests: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027289171
-- Automation validation — 90/90 tests: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027289133
-- Metadata/schedule validation — 90/90 tests, schedule/captions checked: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027289207
-- Clean install — `npm ci --ignore-scripts` succeeded: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027283578
+- Content quality — 90/90 tests: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943766
+- Automation validation — 90/90 tests: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712
+- Metadata/schedule validation — 90/90 tests, schedule/captions checked: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943732
+- Clean install — `npm ci --ignore-scripts` succeeded: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712
 
 All three Node test workflows reported 90 tests, 90 pass, 0 fail and 0 skipped. The install workflow reported 46 packages added and audited.
 
