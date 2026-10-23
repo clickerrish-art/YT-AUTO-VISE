@@ -35,15 +35,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Verify runner media tools and install Python libraries
+      - name: Install media tools and free Python libraries
         run: |
-          # GitHub's ubuntu-latest image includes FFmpeg and common fonts.
-          # Avoid apt-get update: it can stall on package mirrors before any work begins.
+          # This runner image does not guarantee FFmpeg. Bound package-manager waits
+          # so mirror delays fail clearly rather than occupying the job indefinitely.
+          timeout 180s sudo apt-get update -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20
+          timeout 180s sudo apt-get install -y --no-install-recommends ffmpeg fonts-dejavu-core
           command -v ffmpeg
           command -v ffprobe
           test -f /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf
           test -f /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
-          ffmpeg -version | head -n 1
           python -m pip install --disable-pip-version-check --retries 3 --timeout 30 edge-tts mutagen pillow
       - name: Validate the replenishable queue and destination safety
         run: |
