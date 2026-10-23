@@ -103,7 +103,7 @@ P2: document install, startup, backup/restore, operator flow, OAuth setup, and r
 | Genuine rights-cleared wildlife Short and long-form | BLOCKED BY EXTERNAL PREREQUISITE | Rights-cleared substantive footage and human review unavailable |
 | Full approval and campaign UI / Selar-Safari isolation | NOT IMPLEMENTED | Selar URL preserved; no verified Safari URLs/schema and isolation tests |
 | SonicVhibez OAuth identity/private upload | BLOCKED BY EXTERNAL PREREQUISITE | Channel ID blank by design; no verified owner OAuth identity or real upload |
-| Current-head CI | NOT YET VERIFIED | Runs 40014967541 and 40014972886 were still running at report time |
+| Recovery-enhanced implementation CI | PASS | Run 40014972795 for SHA 896eea1521ba93afdff8f29a248cf9760d8c8e6a; subsequent docs-only run 40015187821 also passed |
 | Full main branch suite baseline | BLOCKED BY EXTERNAL PREREQUISITE | No authorized workflow-dispatch tool available; individual main workflow successes are not full baseline |
 | Public publishing disabled | PASS | Config false; dashboard exposes no publish task |
 
