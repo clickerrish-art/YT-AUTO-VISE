@@ -18,7 +18,7 @@ GitHub Actions cron is UTC: 15:00 UTC equals 17:00 South Africa time. These are 
 
 ## Local dashboard
 
-1. Use Node.js 20+ and npm. No `package-lock.json` is committed yet, so `npm ci` is not available as a proven setup step; CI currently uses `npm install --ignore-scripts`.
+1. Use Node.js 20+ and npm. `package-lock.json` is committed; clean `npm ci --ignore-scripts` passed in [run 40025040014](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025040014).
 2. Copy `.env.example` to a private local environment file or export the variables in a secure terminal.
 3. Set `DASHBOARD_OPERATOR_TOKEN` to a random value at least 24 characters long and `DASHBOARD_OPERATOR_ID` to the operator identity to be recorded in review/campaign history.
 4. Run `npm run dashboard` and open http://127.0.0.1:8787.
