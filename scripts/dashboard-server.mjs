@@ -418,8 +418,13 @@ const server = http.createServer(async (req, res) => {
         const metadataFile = resolveRepositoryFile(metadataPath);
         const metadataVersion = sha256File(metadataFile);
         if (body.metadataVersion !== metadataVersion || job.metadataVersion !== metadataVersion) return json(res, 409, { error: "Metadata version must match both the actual metadata file and validated job metadata" });
-        const artifact = { path: artifactPath, sha256: artifactSha256 };
+        const relatedArtifacts = [...(job.outputArtifacts ?? []), ...(job.thumbnailArtifact ? [job.thumbnailArtifact] : [])].map(entry => ({ path: entry.path, sha256: entry.sha256 }));
+        const artifact = { path: artifactPath, sha256: artifactSha256, relatedArtifacts };
         if (!(job.outputArtifacts ?? []).some(entry => entry.path === artifact.path && entry.sha256 === artifact.sha256)) return json(res, 409, { error: "The checked file is not the exact artifact recorded on this job" });
+        for (const related of relatedArtifacts) {
+          const relatedFile = resolveRepositoryFile(related.path);
+          if (sha256File(relatedFile) !== related.sha256) return json(res, 409, { error: "A reviewed media artifact or thumbnail changed: " + related.path });
+        }
         let rightsEvidence = body.rightsEvidence;
         if (body.decision === "APPROVE") {
           if (!rightsEvidence || typeof rightsEvidence !== "object") return json(res, 400, { error: "Structured rights evidence is required for approval" });
