@@ -60,9 +60,21 @@ function json(res, status, body) {
 function readBody(req) {
   return new Promise((resolve, reject) => {
     let raw = "";
-    req.on("data", chunk => { raw += chunk; if (raw.length > 16_384) reject(new Error("Request body exceeds 16KB")); });
-    req.on("end", () => { try { resolve(JSON.parse(raw || "{}")); } catch { reject(new Error("Request body must be valid JSON")); } });
-    req.on("error", reject);
+    let tooLarge = false;
+    req.on("data", chunk => {
+      if (tooLarge) return;
+      raw += chunk.toString();
+      if (Buffer.byteLength(raw, "utf8") > 16_384) {
+        tooLarge = true;
+        raw = "";
+        reject(new Error("Request body exceeds 16KB"));
+      }
+    });
+    req.on("end", () => {
+      if (tooLarge) return;
+      try { resolve(JSON.parse(raw || "{}")); } catch { reject(new Error("Request body must be valid JSON")); }
+    });
+    req.on("error", error => { if (!tooLarge) reject(error); });
   });
 }
 const allowedTasks = new Map([
@@ -151,12 +163,12 @@ const server = http.createServer(async (req, res) => {
       const body = await readBody(req);
       if (typeof body.taskId !== "string" || !allowedTasks.has(body.taskId)) return json(res, 400, { error: "Choose a supported allowlisted validation task" });
       if (activeTasks.has(body.taskId)) return json(res, 409, { error: "This task is already running; duplicate execution was prevented" });
-      activeTasks.add(body.taskId);
       const state = loadState();
       const job = { id: crypto.randomUUID(), kind: "VALIDATION_TASK", taskId: body.taskId, status: "RUNNING", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), publishingEnabled: false };
       state.jobs.push(job);
       state.audit.push({ id: crypto.randomUUID(), action: "VALIDATION_TASK_STARTED", jobId: job.id, taskId: body.taskId, at: new Date().toISOString(), actor: "local-operator" });
       saveState(state);
+      activeTasks.add(body.taskId);
       let result;
       try { result = await runTask(body.taskId); }
       finally { activeTasks.delete(body.taskId); }
