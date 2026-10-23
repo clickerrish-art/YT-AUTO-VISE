@@ -1,8 +1,8 @@
-name: SonicVhibez twice-weekly readiness check
+name: SonicVhibez three-day readiness check
 on:
   schedule:
-    - cron: "0 15 * * 2"
-    - cron: "0 15 * * 5"
+    # Tuesday/Thursday/Saturday SAST cadence (GitHub Actions cron is UTC).
+    - cron: "0 15 * * 2,4,6"
   workflow_dispatch:
 permissions:
   contents: read
