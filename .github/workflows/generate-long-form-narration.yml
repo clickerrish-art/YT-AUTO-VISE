@@ -9,7 +9,8 @@ on:
       - ".github/workflows/generate-long-form-narration.yml"
   workflow_dispatch:
   schedule:
-    - cron: "0 15 * * 2,6"
+    # Draft production on Tuesday and Thursday at 17:00 SAST (15:00 UTC).
+    - cron: "0 15 * * 2,4"
 
 permissions:
   contents: read
