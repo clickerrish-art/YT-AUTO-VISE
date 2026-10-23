@@ -1,6 +1,7 @@
 # Project Completion Audit — SonicVhibez Marketing Machine
 
 Audit date: 2026-10-23
+Implementation HEAD at last inspection: `a426b36b908103e2ce001a28a012a346da5c859c` (verify again before merge).
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE
 Default branch: `main`
 Implementation branch inspected: `codex/marketing-machine-audit-fixes`
@@ -36,7 +37,7 @@ This audit is based on the repository files inspected on the two named branches 
 
 ## Incomplete / defects identified
 
-1. No user-facing application/dashboard was present in the inspected package configuration; routine operations still rely on files, CLI scripts, and Actions.
+1. A first local operator dashboard now exists (`scripts/dashboard-server.mjs`, `public/dashboard.html`) with real configuration/queue reads, token-protected API, draft creation, duplicate prevention, and JSON state/audit persistence. It is incomplete: no job launch controls, queue edit UI, rights evidence workflow, campaign isolation beyond the approved Selar URL, or uploader/reconciliation controls.
 2. `OPERATIONS.md` contradicts the authoritative plan: it still says two Shorts on Tuesday/Friday.
 3. The default branch schedule config is version 1 and conflicts with the implementation branch's version 2 schedule. Branch choice and merge must be explicit.
 4. The narration workflow can produce draft text/audio/captions and a typography-led review video; it does not establish a finished wildlife documentary with rights-cleared footage.
@@ -70,7 +71,7 @@ P2: document install, startup, backup/restore, operator flow, OAuth setup, and r
 
 ## Acceptance status
 
-- Dashboard starts and serves real data: NOT IMPLEMENTED / NOT VERIFIED.
+- Dashboard starts and serves real data: IMPLEMENTED IN PART / NOT EXECUTED; integration test added but runtime result is blocked.
 - Authoritative schedule consumed by production logic: PARTIAL; config and crons exist, but cross-file validator was not yet verified.
 - Draft generation: IMPLEMENTED IN PARTS / NOT END-TO-END VERIFIED.
 - Complete rights-cleared wildlife Short and long-form documentary: BLOCKED by verified footage/rights and human review.
