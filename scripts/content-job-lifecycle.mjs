@@ -99,3 +99,31 @@ export function transitionContentJob(job, nextState, { actor = "local-operator",
   if (["PRIVATE_UPLOAD_VERIFIED", "FAILED", "BLOCKED", "REJECTED"].includes(nextState)) updated.completedAt = now;
   return updated;
 }
+
+
+/** Evidence-gated human approval; callers must independently verify the files and rights evidence. */
+export function approveContentJobForPrivateUpload(job, review, now = new Date().toISOString()) {
+  if (!job || job.state !== "AWAITING_HUMAN_REVIEW") throw new Error("Job must be awaiting human review");
+  if (!review || review.decision !== "APPROVE" || !review.reviewer || !review.artifactSha256 || !review.metadataVersion || !review.rightsEvidenceSha256) {
+    throw new Error("Complete artifact-bound approval evidence is required");
+  }
+  const artifact = (job.outputArtifacts ?? []).find(item => item.path === review.artifactPath && item.sha256 === review.artifactSha256);
+  if (!artifact) throw new Error("Approval artifact checksum does not match a generated job artifact");
+  if (job.metadataVersion !== review.metadataVersion) throw new Error("Approval metadata version does not match the job's validated metadata");
+  if (job.rightsChecks?.verified !== true || job.rightsChecks?.evidenceSha256 !== review.rightsEvidenceSha256) {
+    throw new Error("Approval rights evidence does not match the job's verified rights record");
+  }
+  return {
+    ...job,
+    state: "APPROVED_FOR_PRIVATE_UPLOAD",
+    humanApproval: structuredClone(review),
+    updatedAt: now,
+    transitionHistory: [...(job.transitionHistory ?? []), {
+      from: "AWAITING_HUMAN_REVIEW",
+      to: "APPROVED_FOR_PRIVATE_UPLOAD",
+      at: now,
+      actor: review.reviewer,
+      reason: "Human approval bound to artifact checksum, metadata version and rights evidence"
+    }]
+  };
+}
