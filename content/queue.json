@@ -47,13 +47,15 @@
       "id": "wildlife-vault-001",
       "topic": "How to Make Better Wildlife Videos for YouTube",
       "productUrl": "https://selar.com/0u19v8u99l",
-      "status": "script_and_captions_ready_needs_media_and_review"
+      "status": "script_and_captions_ready_needs_media_and_review",
+      "contentType": "short"
     },
     {
       "id": "wildlife-vault-002",
       "topic": "Three Ways to Plan a Wildlife Documentary Short",
       "productUrl": "https://selar.com/0u19v8u99l",
-      "status": "script_and_captions_ready_needs_media_and_review"
+      "status": "script_and_captions_ready_needs_media_and_review",
+      "contentType": "short"
     },
     {
       "id": "wildlife-short-story-structure",
@@ -72,7 +74,8 @@
       ],
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
-      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW"
+      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
+      "contentType": "short"
     },
     {
       "id": "wildlife-short-footage-rights",
@@ -91,7 +94,8 @@
       ],
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
-      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW"
+      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
+      "contentType": "short"
     },
     {
       "id": "wildlife-short-documentary-plan",
@@ -110,7 +114,8 @@
       ],
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
-      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW"
+      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
+      "contentType": "short"
     },
     {
       "id": "wildlife-short-natural-behavior",
@@ -129,7 +134,8 @@
       ],
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
-      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW"
+      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
+      "contentType": "short"
     },
     {
       "id": "wildlife-short-hook-without-clickbait",
@@ -148,7 +154,8 @@
       ],
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
-      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW"
+      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
+      "contentType": "short"
     },
     {
       "id": "wildlife-short-caption-readability",
@@ -167,7 +174,8 @@
       ],
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
-      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW"
+      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
+      "contentType": "short"
     },
     {
       "id": "wildlife-short-natural-sound",
@@ -186,7 +194,8 @@
       ],
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
-      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW"
+      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
+      "contentType": "short"
     },
     {
       "id": "wildlife-short-fact-checking",
@@ -205,7 +214,8 @@
       ],
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
-      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW"
+      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
+      "contentType": "short"
     },
     {
       "id": "wildlife-short-thumbnail-truth",
@@ -224,7 +234,8 @@
       ],
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
-      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW"
+      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
+      "contentType": "short"
     },
     {
       "id": "wildlife-short-editing-pacing",
@@ -243,7 +254,8 @@
       ],
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
-      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW"
+      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
+      "contentType": "short"
     },
     {
       "id": "wildlife-short-research-before-shoot",
@@ -262,7 +274,8 @@
       ],
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
-      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW"
+      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
+      "contentType": "short"
     },
     {
       "id": "wildlife-short-description-seo",
@@ -281,7 +294,8 @@
       ],
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
-      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW"
+      "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
+      "contentType": "short"
     }
   ]
 }
