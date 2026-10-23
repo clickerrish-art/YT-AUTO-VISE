@@ -12,7 +12,7 @@ Public publishing: disabled
 | `main` | baseline `45352b73bb6cc4787b2a49988b575afb754ab627` | **BLOCKED — not run in this execution environment** |
 | `codex/marketing-machine-audit-fixes` | latest verified test-file commit `cfacdfcaa09b8eb064eb9977e4958db13f4c579c` | **BLOCKED — not run in this execution environment** |
 
-The connected GitHub commit-status endpoint returned no status entries for the checked implementation commit. That is not a passing result. A clean checkout could not be performed because GitHub hostname resolution failed in this execution environment.
+The connected GitHub commit-status endpoint previously returned no status entries for checked implementation commits. That is not a passing result. A clean checkout could not be performed because GitHub hostname resolution failed in this execution environment. The newest dashboard/schedule additions also require a fresh CI run before they can be considered verified.
 
 ## Toolchain and reproducibility
 
@@ -21,6 +21,17 @@ The connected GitHub commit-status endpoint returned no status entries for the c
 - No `package-lock.json` was found on the inspected branches. Thus `npm ci` is not currently available as a reproducible install step. Do not claim a reproducible install until a lockfile is deliberately generated and committed.
 - Blocked, not passed: dependency install, full `npm test`, `npm run check`, `npm run check:captions`, `npm run readiness`, media rendering/preflight, and complete workflow execution.
 - The CI workflow `.github/workflows/validate.yml` is configured to run `npm install --ignore-scripts`, syntax checks, `npm test`, readiness diagnostics, caption validation and negative checks for unreviewed metadata/asset examples. No confirmed run for the current implementation head was available through the connected status endpoint.
+
+## Latest implementation additions (runtime still not verified)
+
+- Added `scripts/validate-schedule.mjs` and `test/validate-schedule.test.mjs`; the validator reads the weekly plan and queue, checks slot types/durations, approved Selar destination, workflow cron strings, and disabled publishing.
+- Added `scripts/dashboard-server.mjs` and `public/dashboard.html`: an authenticated loopback-only dashboard with real queue/config data, local durable JSON state, validated draft creation, duplicate-ID prevention, and an audit log. Ordinary draft creation explicitly rejects rights/review approval flags.
+- Added `test/dashboard-server.test.mjs` for API authentication, draft persistence, duplicate prevention, and approval-gate behavior.
+- Added the `dashboard` and `validate:schedule` npm commands; CI invokes the schedule validator.
+- Updated `OPERATIONS.md` and `README.md` to document startup, local state, schedule, and blockers.
+- Added `docs/PROJECT_COMPLETION_AUDIT.md`.
+
+These tests and features have been committed but have **not been executed in this environment**. The dashboard currently does not launch render jobs or invoke the uploader, and it does not yet implement the complete approvals/job lifecycle described in the master prompt. It is a real queue/configuration dashboard, not full end-to-end acceptance.
 
 ## Changes made
 
@@ -32,7 +43,7 @@ The connected GitHub commit-status endpoint returned no status entries for the c
 
 ## Commands required when checkout/runtime access is restored
 
-Run on each branch after recording its exact HEAD SHA:
+Run on each branch after recording its exact HEAD SHA. Also run the dashboard integration test and start the dashboard in a clean environment:
 
 ```sh
 node --version
