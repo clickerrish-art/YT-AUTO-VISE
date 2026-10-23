@@ -67,7 +67,7 @@ jobs:
               if not end_times:
                   raise SystemExit(f"No valid SRT time ranges found in {caption_file}")
               last = end_times[-1]
-              caption_end = int(last[4]) * 3600 + int(last[5]) * 60 + int(last[6]) + int(last[7]) / 1000
+              caption_end = int(last[-4]) * 3600 + int(last[-3]) * 60 + int(last[-2]) + int(last[-1]) / 1000
               captions_cover_audio = abs(caption_end - seconds) <= 5.0
               within_target = 360 <= seconds <= 600
               reports.append({
