@@ -93,3 +93,22 @@ jobs:
             content/long-form-scripts.md
           if-no-files-found: error
           retention-days: 30
+
+      - name: Enforce 6–10 minute target after preserving draft artifact
+        if: always()
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          report = Path("media/long-form-drafts/duration-report.json")
+          if not report.exists():
+              raise SystemExit("BLOCKED: duration report is missing; cannot verify both long-form targets.")
+          items = json.loads(report.read_text(encoding="utf-8"))
+          if len(items) != 2:
+              raise SystemExit(f"BLOCKED: expected exactly two narration duration records; found {len(items)}.")
+          out_of_range = [item for item in items if item.get("withinTarget") is not True]
+          if out_of_range:
+              details = "; ".join(f"{item.get('file', 'unknown')}: {item.get('durationSeconds', 'unknown')} seconds" for item in out_of_range)
+              raise SystemExit("BLOCKED: one or more narration drafts are outside the required 6–10 minute range. Draft artifact was uploaded for review. " + details)
+          print("PASS: both narration drafts meet the 6–10 minute target. Human review and rights checks are still required.")
+          PY
