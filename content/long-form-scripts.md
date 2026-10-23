@@ -80,6 +80,8 @@ Captions should be readable on a phone. Use strong contrast, sensible line break
 
 **[Visual: mobile preview showing readable captions; then a timeline with narration and captions aligned]**
 
+Before you call the edit finished, do one more continuity pass. Ask whether each new shot follows naturally from the narration and whether the viewer has enough time to understand what changed. Check that names and terminology are consistent from beginning to end. If you use a map, label, or on-screen statistic, verify it independently and keep it visible long enough to read. Remove any visual that is attractive but confusing, unsupported, or unrelated to the point being made. This final pass is not about adding effects; it is about removing distractions so the story stays easy to follow.
+
 **Finally, package the video honestly.**
 
 Write the title after you know what the finished video really delivers. Use a thumbnail that accurately represents the topic and does not manufacture an event. A clear promise is more useful than exaggerated claims. Review the description, citations, asset permissions, captions, and any required sponsorship or synthetic-media disclosures before uploading.
