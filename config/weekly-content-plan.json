@@ -1,48 +1,16 @@
 {
-  "version": 1,
+  "version": 2,
   "channel": "SonicVhibez",
   "channelId": "",
   "timezone": "Africa/Johannesburg",
   "publishingEnabled": false,
-  "targetCadence": {
-    "longFormVideosPerWeek": 2,
-    "shortsPerWeek": 1,
-    "totalVideosPerWeek": 3
-  },
-  "draftProductionSchedule": [
-    {
-      "day": "Tuesday",
-      "format": "long_form",
-      "targetDurationMinutes": {
-        "min": 6,
-        "max": 10
-      },
-      "status": "DRAFT_ONLY"
-    },
-    {
-      "day": "Thursday",
-      "format": "short",
-      "targetDurationSeconds": {
-        "min": 50,
-        "max": 60
-      },
-      "status": "DRAFT_ONLY"
-    },
-    {
-      "day": "Saturday",
-      "format": "long_form",
-      "targetDurationMinutes": {
-        "min": 6,
-        "max": 10
-      },
-      "status": "DRAFT_ONLY"
-    }
+  "targetCadence": { "longFormVideosPerWeek": 2, "shortsPerWeek": 1, "totalVideosPerWeek": 3 },
+  "schedule": [
+    { "day": "Tuesday", "format": "long_form", "cronUtc": "0 15 * * 2", "targetDurationMinutes": { "min": 6, "max": 10 }, "status": "DRAFT_ONLY" },
+    { "day": "Thursday", "format": "long_form", "cronUtc": "0 15 * * 4", "targetDurationMinutes": { "min": 6, "max": 10 }, "status": "DRAFT_ONLY" },
+    { "day": "Saturday", "format": "short", "cronUtc": "0 15 * * 6", "targetDurationSeconds": { "min": 50, "max": 60 }, "status": "DRAFT_ONLY" }
   ],
-  "product": {
-    "name": "Complete YouTube Wildlife Creator's Vault – Premium Combo PDF",
-    "url": "https://selar.com/0u19v8u99l",
-    "approvedProductUrlsOnly": true
-  },
+  "product": { "name": "Complete YouTube Wildlife Creator's Vault – Premium Combo PDF", "url": "https://selar.com/0u19v8u99l", "approvedProductUrlsOnly": true },
   "releaseGates": [
     "Verify footage, music, narration and image rights with retained evidence",
     "Human-review factual accuracy, captions, thumbnail, disclosures and YouTube altered/synthetic-media settings",
@@ -51,10 +19,10 @@
     "Upload privately first and verify the result in YouTube Studio"
   ],
   "notes": [
-    "This file records the requested target cadence; it does not itself schedule jobs or publish videos.",
-    "The currently documented GitHub Actions narration workflow generates Shorts drafts twice weekly; it is not yet a complete 2-long-form-plus-1-Short pipeline.",
-    "Public publishing and unattended public scheduling remain disabled until separately reviewed and explicitly configured.",
-    "Channel name is reported by vidIQ as SonicVhibez, but the YouTube channel ID is not independently verified by OAuth; keep channelId empty until confirmed from the authorized YouTube account.",
-    "This plan does not create assets, run a schedule, upload or publish."
+    "Authoritative target schedule; GitHub Actions cron is UTC and must match cronUtc values.",
+    "Africa/Johannesburg is UTC+2 without daylight-saving changes; 15:00 UTC corresponds to 17:00 SAST.",
+    "Schedule triggers draft production only; it does not enable public publishing.",
+    "Public publishing and unattended public scheduling remain disabled.",
+    "Keep channelId empty until independently confirmed from the authorized YouTube account."
   ]
 }
