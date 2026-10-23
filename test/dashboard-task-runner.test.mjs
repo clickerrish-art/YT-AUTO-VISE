@@ -57,13 +57,6 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   assert.deepEqual(concurrent.map(response => response.status).sort(), [200, 201]);
   const concurrentBodies = await Promise.all(concurrent.map(response => response.json()));
   assert.equal(concurrentBodies[0].job.id, concurrentBodies[1].job.id, "concurrent identical requests must reuse one job");
-  const slotConflict = await fetch(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify({ ...jobInput, idempotencyKey: "test-job:other", title: "Conflicting slot" }) });
-  assert.equal(slotConflict.status, 409, "different jobs must not reserve the same dated slot");
-  const concurrentInput = { ...jobInput, idempotencyKey: "test-job:concurrent", scheduledDate: "2026-10-31", title: "Concurrent duplicate" };
-  const concurrent = await Promise.all([1, 2].map(() => fetch(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify(concurrentInput) })));
-  assert.deepEqual(concurrent.map(response => response.status).sort(), [200, 201]);
-  const concurrentBodies = await Promise.all(concurrent.map(response => response.json()));
-  assert.equal(concurrentBodies[0].job.id, concurrentBodies[1].job.id, "concurrent identical requests must reuse one job");
   const transition = await fetch(base + "/api/jobs/transition", { method: "POST", headers, body: JSON.stringify({ jobId: createdJob.id, nextState: "GENERATING", reason: "Test transition" }) });
   const transitionText = await transition.text();
   assert.equal(transition.status, 200, transitionText);
