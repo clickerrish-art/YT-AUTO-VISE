@@ -2,7 +2,7 @@
   "channel": "SonicVhibez",
   "channelId": "UCSlkuPfHH78oGC1o418HV4w",
   "timezone": "Africa/Johannesburg",
-  "targetPerWeek": 1,
+  "targetPerWeek": 2,
   "targetDurationMinutes": {
     "min": 6,
     "max": 10
@@ -82,5 +82,13 @@
       "targetMinutes": 9,
       "status": "IDEA_ONLY"
     }
-  ]
+  ],
+  "cadence": {
+    "days": [
+      "Tuesday",
+      "Saturday"
+    ],
+    "timezone": "Africa/Johannesburg",
+    "targetPerWeek": 2
+  }
 }
