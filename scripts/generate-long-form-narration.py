@@ -18,7 +18,7 @@ VOICE = "en-US-GuyNeural"
 def extract_episodes(markdown: str):
     pieces = re.split(r"(?m)^## Episode \d+ — ", markdown)
     episodes = []
-    for piece in pieces[1:]:
+    for index, piece in enumerate(pieces[1:], start=1):
         title = piece.splitlines()[0].strip()
         match = re.search(r"(?ms)^### Narration script\s*\n(.*?)(?=^### Suggested description\s*$)", piece)
         if not match:
@@ -33,7 +33,7 @@ def extract_episodes(markdown: str):
         body = re.sub(r"\s+", " ", body).strip()
         if len(body.split()) < 500:
             raise ValueError(f"Script for {title} is unexpectedly short ({len(body.split())} words); refusing to create misleadingly incomplete audio.")
-        slug = "long-001" if "Episode 1" in piece else "long-002"
+        slug = "long-001" if index == 1 else "long-002"
         episodes.append((slug, title, body))
     if len(episodes) != 2:
         raise ValueError(f"Expected exactly two episode scripts; found {len(episodes)}.")
