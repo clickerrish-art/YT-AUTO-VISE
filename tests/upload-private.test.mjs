@@ -46,7 +46,10 @@ test("private uploader records uncertain remote outcomes and refuses blind retri
     const metadata = { channel: "SonicVhibez", channelId: "UC_SONIC_TEST", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Test title", description: "Test description", tags: ["wildlife", "documentary", "education"] };
     fs.writeFileSync(metadataPath, JSON.stringify(metadata));
     const videoSha = sha256File(videoPath);
-    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-timeout-001", artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256: "a".repeat(64), publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: path.join(dir, "thumbnail.jpg"), sha256: "b".repeat(64) }] }));
+    const thumbnailPath = path.join(dir, "thumbnail.jpg");
+    fs.writeFileSync(thumbnailPath, "test-thumbnail");
+    const thumbnailSha = sha256File(thumbnailPath);
+    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-timeout-001", artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256: "a".repeat(64), publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }] }));
     const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: "UC_SONIC_TEST", CONFIRM_PRIVATE_UPLOAD: "YES", UPLOAD_LOG_DIR: path.join(dir, "logs") };
     const youtubeFactory = () => ({
       channels: { list: async () => ({ data: { items: [{ id: "UC_SONIC_TEST", snippet: { title: "SonicVhibez" } }] } }) },
@@ -77,7 +80,10 @@ test("private uploader preserves remote video ID and marks recovery if receipt p
     const metadata = { channel: "SonicVhibez", channelId: "UC_SONIC_TEST", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Test title", description: "Test description", tags: ["wildlife", "documentary", "education"] };
     fs.writeFileSync(metadataPath, JSON.stringify(metadata));
     const videoSha = sha256File(videoPath);
-    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-receipt-001", artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256: "a".repeat(64), publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: path.join(dir, "thumbnail.jpg"), sha256: "b".repeat(64) }] }));
+    const thumbnailPath = path.join(dir, "thumbnail.jpg");
+    fs.writeFileSync(thumbnailPath, "test-thumbnail");
+    const thumbnailSha = sha256File(thumbnailPath);
+    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-receipt-001", artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256: "a".repeat(64), publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }] }));
     const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: "UC_SONIC_TEST", CONFIRM_PRIVATE_UPLOAD: "YES", UPLOAD_LOG_DIR: path.join(dir, "logs") };
     const youtubeFactory = () => ({
       channels: { list: async () => ({ data: { items: [{ id: "UC_SONIC_TEST", snippet: { title: "SonicVhibez" } }] } }) },
