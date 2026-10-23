@@ -72,7 +72,7 @@ P2: document install, startup, backup/restore, operator flow, OAuth setup, and r
 ## Acceptance status
 
 - Dashboard starts and serves real data: IMPLEMENTED IN PART / NOT EXECUTED; integration test added but runtime result is blocked.
-- Authoritative schedule consumed by production logic: PARTIAL; config and crons exist, but cross-file validator was not yet verified.
+- Authoritative schedule consumed by validation: PASS in CI; the validator cross-checks config, queue mapping, workflow cron declarations, approved Selar URL, and publishing-disabled flags. Full production slot reservation/idempotency remains incomplete.
 - Draft generation: IMPLEMENTED IN PARTS / NOT END-TO-END VERIFIED.
 - Complete rights-cleared wildlife Short and long-form documentary: BLOCKED by verified footage/rights and human review.
 - OAuth channel identity: BLOCKED pending owner credentials and independently verified channel ID.
