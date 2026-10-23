@@ -1,75 +1,94 @@
 # SonicVhibez Marketing Machine
 
-Safety-first, free-first content workflow for SonicVhibez. Nature Frontiers is excluded. Public publishing, public scheduling, and visibility changes remain disabled.
+Safety-first, free-first draft production and campaign management for **SonicVhibez only**. Nature Frontiers is excluded. Public publishing, public scheduling and automatic visibility changes remain disabled.
 
 ## Current status
 
-The repository contains draft queue content, narration workflows, render and validation scripts, a guarded private-only uploader, a schedule validator, and a local operator dashboard. This is not yet a fully accepted production system: the dashboard does not yet trigger the media renderers or uploader, OAuth channel identity has not been verified in this environment, no rights-cleared wildlife footage/human approvals are evidenced, and no actual private upload is claimed.
+The current implementation includes a local authenticated dashboard, persistent draft/job state, date-specific slot reservation, validation task execution, campaign preview/activation/deactivation, evidence-bound human-review primitives, FFmpeg render scripts, and a private-only uploader with attempt-ledger/reconciliation safeguards.
+
+The automated implementation suite passed **82/82 tests** at tested implementation SHA `c0ebeb9bc9c3911b26705e0c35067fa2afb13dd3`:
+- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023904)
+- [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023824)
+- [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023772)
+
+The default-branch baseline passed 54/54 tests at `45352b73bb6cc4787b2a49988b575afb754ab627` ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047)).
+
+**Not yet fully accepted:** no genuine rights-cleared final MP4 has been generated and inspected in this pass; worker leases/backoff are incomplete; OAuth identity and a real private upload were not exercised; and no package lockfile exists, so `npm ci` has not been proven.
 
 ## Authoritative schedule
 
-`config/weekly-content-plan.json` is the target schedule:
-- Tuesday 17:00 Africa/Johannesburg — one 6–10 minute long-form draft.
-- Thursday 17:00 Africa/Johannesburg — one 6–10 minute long-form draft.
-- Saturday 17:00 Africa/Johannesburg — one 50–60 second Short draft.
+`config/weekly-content-plan.json` is the single source of truth:
+- Tuesday 17:00 Africa/Johannesburg — one 6–10 minute, 16:9 long-form draft.
+- Thursday 17:00 Africa/Johannesburg — one 6–10 minute, 16:9 long-form draft.
+- Saturday 17:00 Africa/Johannesburg — one 50–60 second, 9:16 Short draft.
 
-GitHub Actions cron is UTC: 15:00 UTC equals 17:00 South Africa time. South Africa does not currently observe daylight saving time. These workflows produce drafts only.
+GitHub Actions cron is UTC: 15:00 UTC equals 17:00 South Africa time. These are draft-production targets, not public publishing times. Queue items are a backlog; they are not reserved calendar slots.
 
-Run `npm run validate:schedule` to check schedule, queue mapping, approved Selar destination, workflow cron declarations, and disabled publishing.
-
-## Local dashboard
-
-Requires Node.js 20+ and npm. From the repository root:
+Run:
 
 ```sh
-npm install --ignore-scripts
-# In a private terminal, set a random operator token of at least 24 characters:
-# macOS/Linux:
-export DASHBOARD_OPERATOR_TOKEN="$(node -e 'console.log(require("node:crypto").randomBytes(32).toString("hex"))')"
-npm run dashboard
-```
-
-Open http://127.0.0.1:8787 and enter the same token. Windows PowerShell equivalent:
-
-```powershell
-$env:DASHBOARD_OPERATOR_TOKEN = [Convert]::ToHexString([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
-npm run dashboard
-```
-
-The server binds to loopback only, rejects startup without a strong operator token, and persists queue drafts and audit events under `state/dashboard-state.json` (or `DASHBOARD_STATE_DIR`). Back up that directory securely. Do not expose this service directly to the public internet. A remote deployment requires a proper authenticated reverse proxy, TLS, authorization review, and server-side secret management.
-
-The dashboard reads real configuration and queue state, creates validated draft records, and shows current blockers. It does not pretend to render media or perform uploads. Do not use it to claim rights or editorial approval.
-
-## Approved campaign destination
-
-Campaign records are separated in config/campaigns.json and validated with npm run validate:campaigns. The exact approved Selar destination is https://selar.com/0u19v8u99l. Safari remains inactive with an empty destination until the owner supplies and verifies the exact URL, approves it, and provides disclosure text. The dashboard displays campaign records but does not yet provide a full campaign editor or activation-approval workflow.
-
-## Production and validation commands
-
-```sh
-npm test
 npm run validate:schedule
-npm run check:captions
-npm run readiness
+npm run validate:campaigns
+npm test
 ```
 
-Use FFmpeg/ffprobe for actual media rendering and technical checks. A text-led typography draft is not a completed wildlife documentary. Rights, editorial review, captions, audio, thumbnail relevance, and promotional disclosure require human verification.
+## Local setup and dashboard
 
-## Private YouTube upload
+Requires Node.js 20+ and npm. A lockfile is not yet committed, so use `npm install --ignore-scripts` until reproducible installation is completed.
 
-The existing guarded uploader requires `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN`, and `SONICVHIBEZ_CHANNEL_ID` as secure environment variables or GitHub secrets. Verify the authenticated channel using the authorized YouTube API before any upload. The only allowed visibility is private. Inspect the remote channel before retrying an uncertain outcome. Never put secret values in chat, source code, logs, or artifacts.
+Copy `.env.example` to a private local `.env` file or export values in your terminal. Set:
+- `DASHBOARD_OPERATOR_TOKEN`: random value with at least 24 characters.
+- `DASHBOARD_OPERATOR_ID`: operator identity recorded in review/campaign audit history.
 
-## Known blockers and evidence
+Do not commit `.env` or credentials.
 
-- Test and media execution status: see [test baseline and regression report](docs/TEST_BASELINE_AND_REGRESSION_REPORT.md).
-- Evidence-based feature inventory and blockers: see [project completion audit](docs/PROJECT_COMPLETION_AUDIT.md).
-- Operational safety and recovery notes: see [OPERATIONS.md](OPERATIONS.md).
+macOS/Linux example:
 
-No current result should be described as a green test suite or successful real upload until the corresponding workflow or integration evidence exists.
+```sh
+export DASHBOARD_OPERATOR_TOKEN="$(node -e 'console.log(require("node:crypto").randomBytes(32).toString("hex"))')"
+export DASHBOARD_OPERATOR_ID="your-operator-identity"
+npm run dashboard
+```
 
+Open http://127.0.0.1:8787. The dashboard binds to loopback by default, rejects weak/missing operator tokens, and persists state under `state/dashboard-state.json` or `DASHBOARD_STATE_DIR`. Back up that directory securely. Do not expose this service directly to the public internet; remote access requires TLS, a proper authenticated reverse proxy, access-control review and secure secret management.
 
-## Dashboard task safety and current limitations
+The dashboard can create validated draft records, run allowlisted checks, and manage campaign state. The renderers exist but a complete dashboard-launched production-to-review pipeline is not yet accepted.
 
-The operator dashboard runs fixed allowlisted validation tasks and persists dated content-job reservations. State mutations use a filesystem lock directory so separate dashboard processes sharing the state file serialize job creation and transitions. Same-slot identical requests reuse the existing reservation; conflicting inputs return a conflict. The dashboard exposes `/healthz` and `/readyz`, while reporting missing OAuth/media/rights prerequisites without exposing secrets. Interrupted uploads enter `RECOVERY_REQUIRED` for reconciliation. This is not yet a media worker, lease-expiry scheduler, complete approval interface, or upload workflow.
+## Campaign rules
 
-Latest code-tested SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` passed 72/72 Node tests in run https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018707582. Main baseline SHA `45352b73bb6cc4787b2a49988b575afb754ab627` passed 54/54 tests in run https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047. No genuine rights-cleared wildlife artifact, verified SonicVhibez OAuth identity, or real private upload is claimed. See docs/PROJECT_COMPLETION_REPORT.md for remaining blockers.
+Campaign records are validated by `npm run validate:campaigns`.
+- Selar must use exactly `https://selar.com/0u19v8u99l`. Activation only enables draft use.
+- Safari remains inactive by default. To activate for draft use, provide the exact HTTPS destination and disclosure, preview them in the dashboard, and explicitly confirm. Deactivation clears the active Safari URL and approval.
+- Campaign activation never authorizes YouTube upload or public publishing.
+
+## Media and review gates
+
+Render scripts require completed manifests, real inputs and rights-evidence references. A boolean or placeholder string is not proof that a license is genuine. No wildlife footage is fabricated. Only review actual files after rendering and technical checks; no real MP4 path/checksum/duration/dimensions are claimed by this report.
+
+Human review is bound to artifact SHA-256, metadata version, operator identity and structured rights evidence. Any changed artifact or metadata requires a new review.
+
+## Private-only YouTube workflow
+
+The uploader:
+- Requires secure OAuth environment values and an independently confirmed SonicVhibez channel ID.
+- Requires `CONFIRM_PRIVATE_UPLOAD=YES`, a stable job ID and an artifact-bound approval record.
+- Enforces `privacyStatus: private`; there is no public or unlisted fallback.
+- Writes an attempt ledger before upload, re-fetches the remote video and verifies private visibility.
+- Refuses blind retries after uncertain outcomes. For later workflow attempts, restore the prior `sonicvhibez-upload-ledger` artifact by supplying its run ID.
+
+The manual workflow defaults confirmation to `NO`; a real upload was **not** performed in this implementation pass. Never upload before rights evidence, review, channel identity and explicit authorization are all verified.
+
+## Environment variables and secrets
+
+See `.env.example` for variable names only. Use local secure environment variables or GitHub Actions secrets. Never paste OAuth credentials into chat, commit them, or print them in logs.
+
+## Remaining acceptance work
+
+1. Commit a real npm lockfile and prove clean `npm ci`.
+2. Finish worker leases, heartbeat/expiry, retry backoff and stale-worker fencing.
+3. Finish the dashboard-launched render/validation/review workflow.
+4. Provide rights-cleared source assets and evidence, then generate and inspect real Short and long-form artifacts.
+5. Test upload failure injection and reconciliation; verify authorized SonicVhibez OAuth identity before any actual private upload.
+6. Finish backup/restore and restart recovery acceptance.
+
+See `docs/PROJECT_COMPLETION_AUDIT.md`, `docs/PROJECT_COMPLETION_REPORT.md`, `docs/TEST_BASELINE_AND_REGRESSION_REPORT.md`, and `OPERATIONS.md` for detailed evidence and blockers. PR #1 remains open and in draft; do not merge or enable public publishing before acceptance.
