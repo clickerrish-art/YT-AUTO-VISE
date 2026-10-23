@@ -457,6 +457,9 @@ const server = http.createServer(async (req, res) => {
         const job = state.jobs[index];
         if (job.state !== "AWAITING_HUMAN_REVIEW") return json(res, 409, { error: "Only jobs awaiting human review can be reviewed" });
         const artifactPath = String(body.artifactPath ?? "");
+        if (path.extname(artifactPath).toLowerCase() !== ".mp4") return json(res, 400, { error: "Human review accepts only the recorded MP4 artifact, not arbitrary files" });
+        if (job.validationResults?.passed !== true) return json(res, 409, { error: "Technical validation must pass before human review" });
+        if (!job.thumbnailArtifact || !/\.(jpg|jpeg|png|webp)$/i.test(job.thumbnailArtifact.path ?? "")) return json(res, 409, { error: "A generated and inspected thumbnail is required before human review" });
         const artifactFile = resolveRepositoryFile(artifactPath);
         const artifactSha256 = sha256File(artifactFile);
         if (body.artifactSha256 !== artifactSha256) return json(res, 409, { error: "Artifact checksum changed or does not match the submitted checksum" });
@@ -464,6 +467,9 @@ const server = http.createServer(async (req, res) => {
         const metadataFile = resolveRepositoryFile(metadataPath);
         const metadataVersion = sha256File(metadataFile);
         if (body.metadataVersion !== metadataVersion || job.metadataVersion !== metadataVersion) return json(res, 409, { error: "Metadata version must match both the actual metadata file and validated job metadata" });
+        let uploadMetadata;
+        try { uploadMetadata = JSON.parse(fs.readFileSync(metadataFile, "utf8")); } catch { return json(res, 400, { error: "Reviewed metadata is invalid JSON" }); }
+        if (uploadMetadata.channel !== "SonicVhibez" || uploadMetadata.visibility !== "private" || uploadMetadata.productUrl !== approvedProductUrl || uploadMetadata.status !== "READY_FOR_PRIVATE_UPLOAD" || uploadMetadata.rightsConfirmed !== true || uploadMetadata.complianceReviewed !== true) return json(res, 400, { error: "Metadata must be reviewed and ready for SonicVhibez private upload, with rights/compliance gates and the exact approved Selar destination" });
         const relatedArtifacts = [...(job.outputArtifacts ?? []), ...(job.thumbnailArtifact ? [job.thumbnailArtifact] : [])].map(entry => ({ path: entry.path, sha256: entry.sha256 }));
         const artifact = { path: artifactPath, sha256: artifactSha256, relatedArtifacts };
         if (!(job.outputArtifacts ?? []).some(entry => entry.path === artifact.path && entry.sha256 === artifact.sha256)) return json(res, 409, { error: "The checked file is not the exact artifact recorded on this job" });
