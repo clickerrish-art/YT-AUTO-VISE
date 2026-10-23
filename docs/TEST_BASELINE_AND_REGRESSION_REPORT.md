@@ -10,7 +10,7 @@ Public publishing: disabled
 | Branch | SHA reference | Full-suite result |
 |---|---|---|
 | `main` | `45352b73bb6cc4787b2a49988b575afb754ab627` | **PASS** — run `40018038047`: 54 tests passed, 0 failed; readiness, caption checks and unreviewed metadata safety checks passed |
-| `codex/marketing-machine-audit-fixes` | Tested code SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` | **PASS** — run 40018011341 completed 72/72 tests, dated-slot two-process concurrency and readiness tests, campaign validation, review-safety tests, queue checks, syntax and Python compilation; docs-only commits followed |
+| `codex/marketing-machine-audit-fixes` | Tested code SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` | **PASS** — run 40018707582 completed 72/72 tests, dated-slot two-process concurrency and readiness tests, campaign validation, review-safety tests, queue checks, syntax and Python compilation; docs-only commits followed |
 
 The full main baseline at SHA `45352b73bb6cc4787b2a49988b575afb754ab627` passed in run `40018038047`: 54/54 tests, zero failures/skips, readiness, caption checks, syntax checks and unreviewed metadata/asset safety gates. Latest implementation code SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` passed run `40018707582`: 72/72 tests, zero failures/skips, campaign validation, review-safety tests, queue invariants, syntax and Python compilation.
 
@@ -19,7 +19,7 @@ The full main baseline at SHA `45352b73bb6cc4787b2a49988b575afb754ab627` passed 
 - `package.json` requires Node.js `>=20`, uses ESM, and defines `npm test` as `node --test`.
 - `googleapis` is the runtime dependency.
 - No `package-lock.json` was found on the inspected branches. Thus `npm ci` is not currently available as a reproducible install step. Do not claim a reproducible install until a lockfile is deliberately generated and committed.
-- On implementation SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516`, automation CI run `40018011341` passed `npm test` (70/70), campaign validation, Python review-safety tests, queue invariants, JavaScript syntax checks and Python compilation. Metadata and content-quality workflows also passed (runs `40018004685` and `40018011188`). Media rendering and real artifact inspection remain unverified.
+- On implementation SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516`, automation CI run `40018707582` passed `npm test` (72/72), campaign validation, Python review-safety tests, queue invariants, JavaScript syntax checks and Python compilation. Metadata and content-quality workflows also passed (runs `40018707453` and `40018707660`). Media rendering and real artifact inspection remain unverified.
 - The CI workflow `.github/workflows/validate.yml` is configured to run `npm install --ignore-scripts`, syntax checks, `npm test`, readiness diagnostics, caption validation and negative checks for unreviewed metadata/asset examples. No confirmed run for the current implementation head was available through the connected status endpoint.
 
 ## Implemented dashboard additions (CI verified; full production acceptance remains incomplete)
@@ -31,7 +31,7 @@ The full main baseline at SHA `45352b73bb6cc4787b2a49988b575afb754ab627` passed 
 - Updated `OPERATIONS.md` and `README.md` to document startup, local state, schedule, and blockers.
 - Added `docs/PROJECT_COMPLETION_AUDIT.md`.
 
-These tests have been executed in GitHub Actions. The tested code SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` passed automation CI in run `40018011341`; dated slot reservation was exercised across two server processes. The dashboard does not launch render workers or invoke the uploader; the complete approval/upload lifecycle is not implemented. This is not full end-to-end acceptance.
+These tests have been executed in GitHub Actions. The tested code SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` passed automation CI in run `40018707582`; dated slot reservation was exercised across two server processes. The dashboard does not launch render workers or invoke the uploader; the complete approval/upload lifecycle is not implemented. This is not full end-to-end acceptance.
 
 ## Changes made
 
@@ -77,7 +77,7 @@ No test, upload, deployment, sale or live analytics result is claimed as success
 - Added an allowlist-backed dashboard endpoint for running only `npm run validate:schedule`, `npm run check:captions`, `npm run readiness`, and `npm test`. Commands are spawned without a shell; arbitrary task names are rejected.
 - Added a dashboard UI selector for these real commands and durable job/audit results.
 - Added `test/dashboard-task-runner.test.mjs`, which starts the server, checks arbitrary command rejection, invokes the real schedule validator, and checks persisted results and publishing-disabled state.
-- Historical run 40014281815 was superseded by later passing runs. Latest tested code SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` passed automation CI in run `40018011341`; main baseline passed in run `40018038047`.
+- Historical run 40014281815 was superseded by later passing runs. Latest tested code SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` passed automation CI in run `40018707582`; main baseline passed in run `40018038047`.
 - Dashboard tasks deliberately do not invoke the uploader, render pipeline, or any publishing operation. This is a safe incremental step, not full application completion.
 
 
@@ -94,6 +94,6 @@ Latest tested implementation SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` incl
 
 ## Final job-and-campaign CI result — 2026-10-23
 
-Latest implementation code SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516`. Automation run `40018011341` passed 72 tests (72 passed, 0 failed, 0 skipped), campaign validation, review-safety tests, queue checks, JavaScript syntax and Python compilation. Metadata validation passed in run `40018707453`; content-quality checks passed in run `40018707660`. Main baseline SHA `45352b73bb6cc4787b2a49988b575afb754ab627` passed 54 tests in run `40018038047`.
+Latest implementation code SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516`. Automation run `40018707582` passed 72 tests (72 passed, 0 failed, 0 skipped), campaign validation, review-safety tests, queue checks, JavaScript syntax and Python compilation. Metadata validation passed in run `40018707453`; content-quality checks passed in run `40018707660`. Main baseline SHA `45352b73bb6cc4787b2a49988b575afb754ab627` passed 54 tests in run `40018038047`.
 
 The tested implementation at SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` additionally tests calendar-date slot reservation and simultaneous identical requests across two dashboard processes. It does not establish real rights-cleared media artifacts, OAuth identity, or a real private upload.
