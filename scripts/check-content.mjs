@@ -30,6 +30,10 @@ if (item.madeForKids !== false) errors.push("madeForKids must be explicitly fals
 if (item.visibility !== "private") errors.push("new content must begin as private; public publishing is not authorized by this checker");
 if (item.rightsConfirmed !== true) errors.push("rightsConfirmed must be true before media can proceed");
 if (item.complianceReviewed !== true) errors.push("complianceReviewed must be true before media can proceed");
+if (item.hasPaidPromotion !== true) errors.push("hasPaidPromotion must be true and the promotion relationship disclosed");
+if (item.description && !/paid promotion|affiliate|may receive compensation/i.test(item.description)) errors.push("description must clearly disclose the promotional or affiliate relationship");
+if (item.containsSyntheticMedia !== true) errors.push("containsSyntheticMedia must be true for the planned realistic AI-generated wildlife visuals");
+if (item.description && !/AI DISCLOSURE|AI-generated|synthetic/i.test(item.description)) errors.push("description must include an accurate AI/synthetic-media disclosure");
 
 if (errors.length) {
   console.error("BLOCKED — content did not pass safety checks:");
