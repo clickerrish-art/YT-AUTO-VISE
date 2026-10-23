@@ -305,6 +305,7 @@ const server = http.createServer(async (req, res) => {
         const metadataVersion = sha256File(metadataFile);
         if (body.metadataVersion !== metadataVersion || job.metadataVersion !== metadataVersion) return json(res, 409, { error: "Metadata version must match both the actual metadata file and validated job metadata" });
         const artifact = { path: artifactPath, sha256: artifactSha256 };
+        if (!(job.outputArtifacts ?? []).some(entry => entry.path === artifact.path && entry.sha256 === artifact.sha256)) return json(res, 409, { error: "The checked file is not the exact artifact recorded on this job" });
         let rightsEvidence = body.rightsEvidence;
         if (body.decision === "APPROVE") {
           if (!rightsEvidence || typeof rightsEvidence !== "object") return json(res, 400, { error: "Structured rights evidence is required for approval" });
