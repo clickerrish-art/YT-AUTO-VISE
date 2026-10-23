@@ -80,10 +80,12 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(competingClaim.status, 400, "an active lease must prevent a concurrent worker claim");
   const heartbeat = await fetch(base + "/api/jobs/lease/heartbeat", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, leaseToken: claimBody.leaseToken, leaseMs: 10_000 }) });
   assert.equal(heartbeat.status, 200);
-  const generated = await fetch(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, leaseToken: claimBody.leaseToken, nextState: "GENERATED", result: { outputArtifacts: [{ path: "media/test-only-nonexistent.mp4", sha256: "a".repeat(64) }], metadataVersion: "test-only-metadata-version" } }) });
-  assert.equal(generated.status, 200);
-  const validating = await fetch(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, leaseToken: claimBody.leaseToken, nextState: "VALIDATING", result: { validationResults: { passed: true } } }) });
-  assert.equal(validating.status, 200);
+  const fakeGeneration = await fetch(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, leaseToken: claimBody.leaseToken, nextState: "GENERATED", metadataPath: "content/nonexistent-test-metadata.json", result: { outputArtifacts: [{ path: "media/test-only-nonexistent.mp4", sha256: "a".repeat(64) }], metadataVersion: "test-only-metadata-version" } }) });
+  assert.equal(fakeGeneration.status, 400, "a nonexistent output must never be recorded as generated");
+  const failed = await fetch(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, leaseToken: claimBody.leaseToken, nextState: "FAILED", result: { errorDetails: { retryable: false, message: "test fixture intentionally has no media artifact" } } }) });
+  const failedBody = await failed.json();
+  assert.equal(failed.status, 200, JSON.stringify(failedBody));
+  assert.equal(failedBody.job.state, "FAILED");
   const forgedReview = await fetch(base + "/api/jobs/transition", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, nextState: "AWAITING_HUMAN_REVIEW", reason: "attempted bypass" }) });
   assert.equal(forgedReview.status, 400, "worker output alone cannot bypass the rights-evidence gate");
 });
