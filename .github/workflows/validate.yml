@@ -16,6 +16,8 @@ jobs:
       - run: npm install --ignore-scripts
       - run: node --check scripts/render-long-form.mjs
       - run: node --check test/render-long-form.test.mjs
+      - run: node --check scripts/validate-asset-register.mjs
+      - run: node --check test/validate-asset-register.test.mjs
       - run: npm test
       - name: Report production blockers without publishing
         run: npm run readiness
@@ -36,3 +38,12 @@ jobs:
             exit 1
           fi
           echo "PASS: all unreviewed metadata templates remain blocked."
+          set +e
+          node scripts/validate-asset-register.mjs content/asset-register.example.json
+          asset_status=$?
+          set -e
+          if [ "$asset_status" -eq 0 ]; then
+            echo "An unreviewed asset register example unexpectedly passed validation."
+            exit 1
+          fi
+          echo "PASS: unreviewed asset register example remains blocked."
