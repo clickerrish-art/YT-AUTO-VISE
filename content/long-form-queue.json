@@ -43,7 +43,9 @@
       "title": "How to Film Wildlife Without Disturbing Animals",
       "topic": "ethical wildlife filmmaking",
       "targetMinutes": 8,
-      "status": "IDEA_ONLY"
+      "status": "SCRIPT_DRAFT",
+      "scriptPath": "content/long-form-002-ethical-wildlife-filming-script.md",
+      "releaseStatus": "HOLD_FOR_RESEARCH_ASSETS_AND_REVIEW"
     },
     {
       "id": "long-editing-workflow",
