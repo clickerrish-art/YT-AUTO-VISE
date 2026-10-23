@@ -133,14 +133,14 @@ export function approveContentJobForPrivateUpload(job, review, now = new Date().
 }
 
 
-const leaseDurationBounds = { min: 5_000, max: 5 * 60_000 };
+const leaseDurationBounds = { min: 5_000, max: 15 * 60_000 };
 const retryDelay = (attemptCount) => Math.min(15 * 60_000, 30_000 * (2 ** Math.max(0, attemptCount - 1)));
 const hashLeaseToken = token => crypto.createHash("sha256").update(token).digest("hex");
 
 export function claimWorkerLease(job, workerId, { leaseMs = 60_000, now = Date.now() } = {}) {
   if (!job || !JOB_STATES.includes(job.state)) throw new Error("Existing job has an invalid state");
   if (typeof workerId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(workerId)) throw new Error("workerId must be a safe 2–120 character identifier");
-  if (!Number.isInteger(leaseMs) || leaseMs < leaseDurationBounds.min || leaseMs > leaseDurationBounds.max) throw new Error("lease duration must be between 5 seconds and 5 minutes");
+  if (!Number.isInteger(leaseMs) || leaseMs < leaseDurationBounds.min || leaseMs > leaseDurationBounds.max) throw new Error("lease duration must be between 5 seconds and 15 minutes");
   if (job.workerLease && Date.parse(job.workerLease.expiresAt) > now) throw new Error("Job already has an active worker lease");
   let working = job;
   if (working.state === "FAILED") {
