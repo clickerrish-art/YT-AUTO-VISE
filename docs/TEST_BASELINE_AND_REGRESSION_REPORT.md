@@ -80,3 +80,14 @@ No test, upload, deployment, sale or live analytics result is claimed as success
 - Workflow run associated with the initial code/test commit `446d7dd466c2669becdfbb7fc0edf3e628889e2a`: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014281815
 - This run was observed in progress; do not call it passed until a completed conclusion is inspected. The subsequent documentation commit also triggers CI, so use the newest run for final verification.
 - Dashboard tasks deliberately do not invoke the uploader, render pipeline, or any publishing operation. This is a safe incremental step, not full application completion.
+
+
+## Current CI refresh — 2026-10-23
+
+- main SHA: 45352b73bb6cc4787b2a49988b575afb754ab627. Recent queue readiness and metadata runs succeeded (40008273230, 40008273289), but these do not constitute a full main-branch test baseline.
+- Implementation SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc: full automation validation passed, including npm test, Python review-safety tests, queue invariants, syntax checks and Python compilation: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014937474. Content quality passed at the same SHA: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014937704.
+- Current implementation SHA 896eea1521ba93afdff8f29a248cf9760d8c8e6a adds startup recovery and a test for it. Runs 40014967541 and 40014972886 were in progress at report time; latest-head status is not yet PASS.
+- No package-lock.json exists. CI currently uses npm install --ignore-scripts; npm ci is not yet a reproducible supported command.
+- Full main-branch baseline remains BLOCKED BY EXTERNAL PREREQUISITE because no authorized workflow-dispatch action was available in this execution. No live upload or genuine media artifact was created.
+
+The dashboard now applies task timeouts, bounds output, prevents overlapping same-task runs within the process, and changes persisted RUNNING validation tasks to RECOVERY_REQUIRED on restart. This is not equivalent to cross-process locking, a complete content-job state machine, or upload reconciliation.
