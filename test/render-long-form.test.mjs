@@ -100,7 +100,7 @@ test("blocks incorrect aspect ratio and wrong channel", () => {
 test("long-form workflow embedded Python validation remains syntactically valid", () => {
   const workflowPath = path.join(repoRoot, ".github", "workflows", "generate-long-form-narration.yml");
   const workflow = fs.readFileSync(workflowPath, "utf8");
-  const match = workflow.match(/python - <<'PY'\n([\\s\\S]*?)\n          PY/);
+  const match = workflow.match(/python - <<'PY'\n([\s\S]*?)\n          PY/);
   assert.ok(match, "expected the workflow to contain its Python duration-validation block");
   const pythonSource = match[1].split("\n").map(line => line.startsWith("          ") ? line.slice(10) : line).join("\n") + "\n";
   const syntax = spawnSync("python", ["-c", "import ast,sys; ast.parse(sys.stdin.read())"], {
