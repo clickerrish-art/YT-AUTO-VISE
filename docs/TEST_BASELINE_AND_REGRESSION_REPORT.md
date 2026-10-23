@@ -10,7 +10,7 @@ Public publishing: disabled
 | Branch | SHA reference | Full-suite result |
 |---|---|---|
 | `main` | baseline `45352b73bb6cc4787b2a49988b575afb754ab627` | **BLOCKED — not run in this execution environment** |
-| `codex/marketing-machine-audit-fixes` | Latest campaign-enhanced code SHA `3fc132b99c683be71e571dab4e6660ab98beb4a9` | **PASS** — run 40016046874 completed npm test, campaign validation, review-safety tests, queue checks, syntax and Python compilation; docs-only commits followed |
+| `codex/marketing-machine-audit-fixes` | Latest job-and-campaign code SHA `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` | **PASS** — run 40016605388 completed npm test, campaign validation, job lifecycle/idempotency tests, review-safety tests, queue checks, syntax and Python compilation; docs-only commits followed |
 
 Earlier inspection at `a426b36b908103e2ce001a28a012a346da5c859c` preceded the CI runs recorded below; its empty status lookup was not evidence of a pass. The latest job-and-campaign code SHA `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` passed the full automation workflow (run 40016605388), including npm test, campaign validation, job lifecycle/idempotency tests, safety tests, queue checks, syntax and Python compilation. A complete full-suite baseline on main remains unexecuted.
 
@@ -31,7 +31,7 @@ Earlier inspection at `a426b36b908103e2ce001a28a012a346da5c859c` preceded the CI
 - Updated `OPERATIONS.md` and `README.md` to document startup, local state, schedule, and blockers.
 - Added `docs/PROJECT_COMPLETION_AUDIT.md`.
 
-These tests have been executed in GitHub Actions. The recovery-enhanced implementation at SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32` passed automation CI in run 40015500289. The dashboard does not launch render jobs or invoke the uploader, and it does not implement the complete approval/job lifecycle. It is not full end-to-end acceptance.
+These tests have been executed in GitHub Actions. The latest job-and-campaign code SHA `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` passed automation CI in run 40016605388. The dashboard persists jobs and transition history, but does not launch render workers or invoke the uploader; the complete approval/upload lifecycle is not implemented. This is not full end-to-end acceptance.
 
 ## Changes made
 
@@ -77,7 +77,7 @@ No test, upload, deployment, sale or live analytics result is claimed as success
 - Added an allowlist-backed dashboard endpoint for running only `npm run validate:schedule`, `npm run check:captions`, `npm run readiness`, and `npm test`. Commands are spawned without a shell; arbitrary task names are rejected.
 - Added a dashboard UI selector for these real commands and durable job/audit results.
 - Added `test/dashboard-task-runner.test.mjs`, which starts the server, checks arbitrary command rejection, invokes the real schedule validator, and checks persisted results and publishing-disabled state.
-- Historical run 40014281815 was superseded by later passing runs. The campaign-enhanced code SHA `3fc132b99c683be71e571dab4e6660ab98beb4a9` passed automation CI in run 40016046874, including the isolated campaign validator.
+- Historical run 40014281815 was superseded by later passing runs. Latest job-and-campaign code SHA `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` passed automation CI in run 40016605388.
 - Dashboard tasks deliberately do not invoke the uploader, render pipeline, or any publishing operation. This is a safe incremental step, not full application completion.
 
 
