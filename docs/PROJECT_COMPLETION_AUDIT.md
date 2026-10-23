@@ -80,3 +80,31 @@ P2: document install, startup, backup/restore, operator flow, OAuth setup, and r
 - Durable queue/job/review/upload lifecycle and uncertain-outcome recovery: INCOMPLETE.
 - Tests on both branches: BLOCKED in this environment.
 - Public publishing disabled: CONFIGURED AS DISABLED; preserve this invariant.
+
+
+## Live state refresh — 2026-10-23
+
+- Current main SHA: 45352b73bb6cc4787b2a49988b575afb754ab627.
+- Current implementation SHA at this refresh: 896eea1521ba93afdff8f29a248cf9760d8c8e6a.
+- PR #1 remains open, draft, and unmerged: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1.
+- Full validation passed at implementation SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014937474. The workflow ran npm test, Python review-safety tests, queue invariants, JavaScript syntax checks and Python compilation.
+- Current-head runs 40014967541 and 40014972886 were in progress when this report was refreshed. Do not mark the newest recovery-test changes passed until those runs finish: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014967541
+
+## Acceptance status refresh
+
+| Requirement | Status | Evidence / blocker |
+|---|---|---|
+| Schedule configuration | PASS | Validator and workflow checks succeeded in run 40014937474; Tuesday/Thursday long-form, Saturday Short, 17:00 Africa/Johannesburg / 15:00 UTC |
+| Dashboard task allowlist | PASS | Fixed commands only; no uploader/publication task exposed |
+| Task timeout and same-process duplicate prevention | PASS | Implemented in dashboard server; broad cross-process race testing is not evidenced |
+| Restart detection | PASS (test pending latest CI) | Persisted RUNNING task becomes RECOVERY_REQUIRED with audit event; newest integration test awaits CI |
+| Full durable content-job lifecycle/leases | NOT IMPLEMENTED | Local JSON persistence exists; full state machine and multi-process locking absent |
+| Full media pipeline launched through dashboard | NOT IMPLEMENTED | Dashboard allows validation commands only |
+| Genuine rights-cleared wildlife Short and long-form | BLOCKED BY EXTERNAL PREREQUISITE | Rights-cleared substantive footage and human review unavailable |
+| Full approval and campaign UI / Selar-Safari isolation | NOT IMPLEMENTED | Selar URL preserved; no verified Safari URLs/schema and isolation tests |
+| SonicVhibez OAuth identity/private upload | BLOCKED BY EXTERNAL PREREQUISITE | Channel ID blank by design; no verified owner OAuth identity or real upload |
+| Current-head CI | NOT YET VERIFIED | Runs 40014967541 and 40014972886 were still running at report time |
+| Full main branch suite baseline | BLOCKED BY EXTERNAL PREREQUISITE | No authorized workflow-dispatch tool available; individual main workflow successes are not full baseline |
+| Public publishing disabled | PASS | Config false; dashboard exposes no publish task |
+
+The application is not production accepted. No real private upload, rights-cleared documentary, or artifact checksum is claimed.
