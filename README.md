@@ -6,10 +6,10 @@ Safety-first, free-first draft production and campaign management for **SonicVhi
 
 The current implementation includes a local authenticated dashboard, persistent draft/job state, date-specific slot reservation, validation task execution, campaign preview/activation/deactivation, evidence-bound human-review primitives, FFmpeg render scripts, and a private-only uploader with attempt-ledger/reconciliation safeguards.
 
-The automated implementation suite passed **88/88 tests** at tested implementation SHA `e568471c73dae207948a78538c79324ac15a5376`:
-- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100677)
-- [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100793)
-- [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100724)
+The automated implementation suite passed **88/88 tests** at tested implementation SHA `f0075bbe5fe925799a27645402b938c1673eb331`:
+- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025829088)
+- [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025829277)
+- [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025829195)
 
 The default-branch baseline passed 54/54 tests at `45352b73bb6cc4787b2a49988b575afb754ab627` ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047)).
 
@@ -95,4 +95,4 @@ See `docs/PROJECT_COMPLETION_AUDIT.md`, `docs/PROJECT_COMPLETION_REPORT.md`, `do
 
 ## Acceptance status
 
-Latest tested implementation SHA: `e568471c73dae207948a78538c79324ac15a5376`; [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100677), [metadata/schedule](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100793), and [automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100724) each pass 88 tests with no failures or skips. This is not a claim of full production acceptance: no rights-cleared source media or real render was supplied; `npm ci --ignore-scripts` passed in run 40025040014, and no live OAuth/private upload was attempted. Public publishing remains disabled.
+Latest tested implementation SHA: `f0075bbe5fe925799a27645402b938c1673eb331`; [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025829088), [metadata/schedule](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025829277), and [automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025829195) each pass 88 tests with no failures or skips. This is not a claim of full production acceptance: no rights-cleared source media or real render was supplied; `npm ci --ignore-scripts` passed in run 40025040014, and no live OAuth/private upload was attempted. Public publishing remains disabled.
