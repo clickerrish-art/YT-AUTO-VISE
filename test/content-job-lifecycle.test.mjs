@@ -38,8 +38,12 @@ test("retry requires a retryable failure and respects the attempt limit", () => 
   assert.throws(() => transitionContentJob(job, "QUEUED"), /not marked safe for retry/);
   job = { ...job, errorDetails: { retryable: true } };
   job = transitionContentJob(job, "QUEUED", { reason: "Operator approved retry" });
-  job = transitionContentJob(job, "GENERATING", { reason: "Retry started" });
+  job = transitionContentJob(job, "GENERATING", { reason: "First attempt started" });
   job = { ...job, errorDetails: { retryable: true } };
-  job = transitionContentJob(job, "FAILED", { reason: "Retry failed" });
+  job = transitionContentJob(job, "FAILED", { reason: "First attempt failed" });
+  job = transitionContentJob(job, "QUEUED", { reason: "Operator approved second attempt" });
+  job = transitionContentJob(job, "GENERATING", { reason: "Second attempt started" });
+  job = { ...job, errorDetails: { retryable: true } };
+  job = transitionContentJob(job, "FAILED", { reason: "Second attempt failed" });
   assert.throws(() => transitionContentJob(job, "QUEUED"), /Retry limit reached/);
 });
