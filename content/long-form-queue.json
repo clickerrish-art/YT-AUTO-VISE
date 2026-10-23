@@ -1,0 +1,82 @@
+{
+  "channel": "SonicVhibez",
+  "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+  "timezone": "Africa/Johannesburg",
+  "targetPerWeek": 1,
+  "targetDurationMinutes": {
+    "min": 6,
+    "max": 10
+  },
+  "publishingEnabled": false,
+  "status": "PLANNING_ONLY",
+  "productUrl": "https://selar.com/0u19v8u99l",
+  "releaseGates": [
+    "original script and research complete",
+    "sources recorded and factual claims verified",
+    "all footage/images/music rights documented",
+    "final narration and audio quality checked",
+    "16:9 MP4 rendered and validated",
+    "thumbnail matches actual video",
+    "captions synchronized to final narration",
+    "AI/synthetic and paid-promotion disclosures checked",
+    "human compliance review approved"
+  ],
+  "items": [
+    {
+      "id": "long-story-wildlife-footage",
+      "title": "How to Turn Wildlife Footage Into a Documentary Story",
+      "topic": "wildlife documentary storytelling",
+      "targetMinutes": 8,
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "long-plan-wildlife-short",
+      "title": "Plan a Wildlife Short Before You Start Editing",
+      "topic": "wildlife video pre-production",
+      "targetMinutes": 7,
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "long-ethical-filming",
+      "title": "How to Film Wildlife Without Disturbing Animals",
+      "topic": "ethical wildlife filmmaking",
+      "targetMinutes": 8,
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "long-editing-workflow",
+      "title": "A Practical Wildlife Editing Workflow for Beginners",
+      "topic": "wildlife video editing",
+      "targetMinutes": 9,
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "long-sound-narration",
+      "title": "Natural Sound, Narration and Music in Nature Videos",
+      "topic": "wildlife documentary audio",
+      "targetMinutes": 7,
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "long-fact-checking",
+      "title": "How to Fact-Check Animal Behaviour in Wildlife Videos",
+      "topic": "wildlife research and fact-checking",
+      "targetMinutes": 8,
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "long-thumbnail-truth",
+      "title": "Wildlife Thumbnails and Titles That Match the Footage",
+      "topic": "wildlife YouTube thumbnails and titles",
+      "targetMinutes": 7,
+      "status": "IDEA_ONLY"
+    },
+    {
+      "id": "long-zero-budget-workflow",
+      "title": "A Low-Cost Wildlife Video Workflow From Script to Export",
+      "topic": "wildlife video production workflow",
+      "targetMinutes": 9,
+      "status": "IDEA_ONLY"
+    }
+  ]
+}
