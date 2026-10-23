@@ -107,4 +107,4 @@ P2: document install, startup, backup/restore, operator flow, OAuth setup, and r
 | Full main branch suite baseline | BLOCKED BY EXTERNAL PREREQUISITE | No authorized workflow-dispatch tool available; individual main workflow successes are not full baseline |
 | Public publishing disabled | PASS | Config false; dashboard exposes no publish task |
 
-The application is not production accepted. No real private upload, rights-cleared documentary, or artifact checksum is claimed.
+Latest code commit 14fe79a9ccf32ed7b10372aaa0f649e1aac17f32 passed automation CI in run 40015500289 and metadata validation in run 40015491951. The full default-branch suite remains unexecuted; the application is not production accepted. No real private upload, rights-cleared documentary, or artifact checksum is claimed.
