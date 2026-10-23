@@ -6,6 +6,7 @@ on:
     paths:
       - "content/long-form-scripts.md"
       - "content/queue.json"
+      - "content/next-short.example.json"
       - "config/weekly-content-plan.json"
       - "test/**"
       - "scripts/check-content.mjs"
