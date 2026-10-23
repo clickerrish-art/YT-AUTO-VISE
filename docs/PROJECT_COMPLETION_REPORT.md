@@ -104,4 +104,4 @@ At SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc, automation CI passed: https://g
 | Full main branch baseline | BLOCKED BY EXTERNAL PREREQUISITE | No full suite executed against main in this run |
 | Public publishing disabled | PASS | Configuration false and no dashboard publishing action |
 
-A lockfile has not been added; npm ci is not claimed. No media artifact checksum, rights approval, real upload receipt or remote privacy check is claimed. Keep public publishing disabled.
+Latest code commit 14fe79a9ccf32ed7b10372aaa0f649e1aac17f32 passed automation CI in run 40015500289 and metadata validation in run 40015491951. The automation run includes npm test, Python review-safety tests, queue checks, syntax checks and Python compilation. A lockfile has not been added; npm ci is not claimed. No media artifact checksum, rights approval, real upload receipt or remote privacy check is claimed. Keep public publishing disabled.
