@@ -40,11 +40,17 @@ function safeErrorCode(error) {
   return Number.isInteger(status) && status >= 100 && status <= 599 ? "REMOTE_HTTP_" + status : "REMOTE_OUTCOME_UNCERTAIN";
 }
 
+export function assertReconciliationOnlyHasPriorAttempt(reconcileOnly, prior) {
+  if (reconcileOnly && !prior) throw new Error("reconciliation-only mode refuses to create a new upload attempt");
+  return true;
+}
+
 export async function uploadPrivate({ metadataPath, videoPath, approvalPath, jobId, env = process.env, youtubeFactory, now = () => new Date() }) {
-  const requiredEnv = ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN", "SONICVHIBEZ_CHANNEL_ID", "CONFIRM_PRIVATE_UPLOAD"];
+  const reconcileOnly = env.RECONCILE_ONLY === "YES";
+  const requiredEnv = ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN", "SONICVHIBEZ_CHANNEL_ID", ...(reconcileOnly ? [] : ["CONFIRM_PRIVATE_UPLOAD"])];
   const missing = requiredEnv.filter(key => !env[key]?.trim());
   if (missing.length) throw new Error("missing required environment variables: " + missing.join(", "));
-  if (env.CONFIRM_PRIVATE_UPLOAD !== "YES") throw new Error("explicit private-upload confirmation is required (CONFIRM_PRIVATE_UPLOAD=YES)");
+  if (!reconcileOnly && env.CONFIRM_PRIVATE_UPLOAD !== "YES") throw new Error("explicit private-upload confirmation is required (CONFIRM_PRIVATE_UPLOAD=YES)");
   if (!jobId || !/^[A-Za-z0-9][A-Za-z0-9:_-]{2,119}$/.test(jobId)) throw new Error("a stable JOB_ID is required");
   if (!fs.existsSync(metadataPath)) throw new Error("metadata file not found");
   if (!fs.existsSync(videoPath) || path.extname(videoPath).toLowerCase() !== ".mp4") throw new Error("provide an existing MP4 video file");
@@ -84,6 +90,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (fs.existsSync(ledgerPath)) ledger = readJson(ledgerPath, "Upload attempt ledger");
   if (!Array.isArray(ledger.attempts)) throw new Error("Upload attempt ledger has an invalid schema");
   const prior = ledger.attempts.find(a => a.jobId === jobId && a.artifactSha256 === videoSha256);
+  assertReconciliationOnlyHasPriorAttempt(reconcileOnly, prior);
   if (prior) {
     if (!prior.remoteVideoId) {
       throw new Error("an existing upload attempt is " + prior.status + " without an authoritative remote video ID; reconcile manually with YouTube before any retry");
