@@ -59,8 +59,8 @@ const audioStats = spawnSync("ffmpeg", ["-hide_banner", "-i", mediaPath, "-vn", 
 });
 const audioReport = String(audioStats.stderr ?? "");
 if (audioStats.error || audioStats.status !== 0 ||
-    /mean_volume:\\s*-inf\\s*dB/i.test(audioReport) ||
-    !/mean_volume:\\s*-?\\d+(?:\\.\\d+)?\\s*dB/i.test(audioReport)) {
+    /mean_volume:\s*-inf\s*dB/i.test(audioReport) ||
+    !/mean_volume:\s*-?\d+(?:\.\d+)?\s*dB/i.test(audioReport)) {
   console.error("BLOCKED: audio is silent or its loudness could not be measured.");
   process.exit(1);
 }
