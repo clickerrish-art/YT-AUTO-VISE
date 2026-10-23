@@ -121,6 +121,10 @@ function readBody(req) {
     req.on("error", error => { if (!tooLarge) reject(error); });
   });
 }
+const productionTasks = new Map([
+  ["render-short", ["run", "render:short"]],
+  ["render-long-form", ["run", "render:long"]]
+]);
 const allowedTasks = new Map([
   ["validate-schedule", ["run", "validate:schedule"]],
   ["check-captions", ["run", "check:captions"]],
@@ -129,9 +133,9 @@ const allowedTasks = new Map([
   ["validate-campaigns", ["run", "validate:campaigns"]]
 ]);
 const activeTasks = new Set();
-const taskTimeoutMs = new Map([["validate-schedule", 30_000], ["validate-campaigns", 30_000], ["check-captions", 45_000], ["production-readiness", 60_000], ["test-suite", 180_000]]);
+const taskTimeoutMs = new Map([["validate-schedule", 30_000], ["validate-campaigns", 30_000], ["check-captions", 45_000], ["production-readiness", 60_000], ["test-suite", 180_000], ["render-short", 600_000], ["render-long-form", 600_000]]);
 function runTask(taskId) {
-  const args = allowedTasks.get(taskId);
+  const args = allowedTasks.get(taskId) ?? productionTasks.get(taskId);
   if (!args) return Promise.reject(new Error("Task is not on the dashboard allowlist"));
   return new Promise((resolve) => {
     const startedAt = new Date().toISOString();
@@ -443,6 +447,77 @@ const server = http.createServer(async (req, res) => {
         const uploadApprovalRecord = body.decision === "APPROVE" ? { ...review, jobId: job.id, publishingEnabled: false, visibility: "private" } : null;
         return json(res, 200, { job: state.jobs[index], review, uploadApprovalRecord, publishingEnabled: false });
       } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs/produce") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string") return json(res, 400, { error: "jobId is required" });
+      const release = await acquireStateLock();
+      let claim;
+      let taskId;
+      let jobTitle;
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const job = state.jobs[index];
+        if (job.state !== "QUEUED") return json(res, 409, { error: "Only a queued content job can start production" });
+        taskId = job.contentType === "short" ? "render-short" : "render-long-form";
+        if (activeTasks.has(taskId)) return json(res, 409, { error: "A renderer for this format is already running" });
+        claim = claimWorkerLease(job, "dashboard-renderer-" + job.contentType, { leaseMs: 15 * 60_000 });
+        jobTitle = job.title;
+        state.jobs[index] = claim.job;
+        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_RENDER_STARTED", jobId: job.id, taskId, actor: "local-operator", at: new Date().toISOString(), reason: "Fixed renderer launched through dashboard; no upload/publication path" });
+        saveState(state);
+      } finally { release(); }
+
+      activeTasks.add(taskId);
+      let result;
+      try { result = await runTask(taskId); }
+      finally { activeTasks.delete(taskId); }
+
+      const finishRelease = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job disappeared during rendering" });
+        const current = state.jobs[index];
+        let updated;
+        if (result.status !== "SUCCEEDED") {
+          const blocked = /BLOCKED|not found|missing required fields|must be true|placeholder/i.test(result.output);
+          const nextState = blocked ? "BLOCKED" : "FAILED";
+          updated = completeWorkerLease(current, claim.leaseToken, nextState, { errorDetails: { code: blocked ? "RENDER_PREREQUISITE_MISSING" : result.status, retryable: false, message: String(result.output ?? "Renderer failed").slice(-1000) } });
+        } else {
+          try {
+            const isShort = current.contentType === "short";
+            const artifactPath = isShort ? "media/next-short.mp4" : "media/long-form-next.mp4";
+            const metadataPath = isShort ? "content/next-short.json" : "content/long-form-next.json";
+            const artifactFile = resolveRepositoryFile(artifactPath);
+            const metadataFile = resolveRepositoryFile(metadataPath);
+            const metadata = JSON.parse(fs.readFileSync(metadataFile, "utf8"));
+            const metadataVersion = sha256File(metadataFile);
+            if (metadata.channel !== "SonicVhibez" || metadata.visibility !== "private" || metadata.productUrl !== "https://selar.com/0u19v8u99l") throw new Error("Metadata must target SonicVhibez, remain private, and use the approved Selar URL");
+            if (typeof metadata.title !== "string" || !metadata.title.trim() || typeof metadata.description !== "string" || !metadata.description.trim() || !Array.isArray(metadata.tags) || metadata.tags.length < 3) throw new Error("Metadata title, description and at least three tags are required");
+            const artifactSha256 = sha256File(artifactFile);
+            const probe = spawnSync("ffprobe", ["-v", "error", "-show_entries", "format=duration:stream=codec_type,width,height", "-of", "json", artifactFile], { encoding: "utf8", timeout: 15_000 });
+            if (probe.error || probe.status !== 0) throw new Error("ffprobe is unavailable or could not inspect the rendered MP4");
+            const media = JSON.parse(probe.stdout);
+            const durationSeconds = Number(media.format?.duration);
+            const streams = media.streams ?? [];
+            const video = streams.find(stream => stream.codec_type === "video");
+            const hasAudio = streams.some(stream => stream.codec_type === "audio");
+            if (!Number.isFinite(durationSeconds) || (isShort ? durationSeconds < 50 || durationSeconds > 60 : durationSeconds < 360 || durationSeconds > 600)) throw new Error("Rendered MP4 duration is outside the required format range");
+            if (!video || !hasAudio || (isShort ? video.height <= video.width : video.width <= video.height)) throw new Error("Rendered MP4 is missing audio or has the wrong orientation");
+            updated = completeWorkerLease(current, claim.leaseToken, "GENERATED", { outputArtifacts: [{ path: artifactPath, sha256: artifactSha256, durationSeconds, width: video.width, height: video.height, inspectedAt: new Date().toISOString() }], metadataPath, metadataVersion });
+          } catch (error) {
+            updated = completeWorkerLease(current, claim.leaseToken, "BLOCKED", { errorDetails: { code: "RENDER_OUTPUT_INVALID_OR_MISSING", retryable: false, message: String(error instanceof Error ? error.message : "Rendered artifact validation failed").slice(0, 1000) } });
+          }
+        }
+        updated.renderExecution = { taskId, status: result.status, exitCode: result.exitCode, startedAt: result.startedAt, finishedAt: result.finishedAt, output: result.output, truncated: result.truncated === true };
+        state.jobs[index] = updated;
+        state.audit.push({ id: crypto.randomUUID(), action: updated.state === "GENERATED" ? "CONTENT_RENDER_SUCCEEDED" : updated.state === "BLOCKED" ? "CONTENT_RENDER_BLOCKED" : "CONTENT_RENDER_FAILED", jobId: updated.id, taskId, state: updated.state, at: new Date().toISOString(), actor: "local-operator" });
+        saveState(state);
+        return json(res, updated.state === "GENERATED" ? 200 : 409, { job: updated, publishingEnabled: false });
+      } finally { finishRelease(); }
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/lease/claim") {
       const body = await readBody(req);
