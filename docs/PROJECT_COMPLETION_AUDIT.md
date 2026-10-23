@@ -1,65 +1,52 @@
-# Project Completion Audit — SonicVhibez Marketing Machine
+# SonicVhibez Marketing Machine — Acceptance Audit
 
 Audit date: 2026-10-23  
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Tested implementation SHA: `f0075bbe5fe925799a27645402b938c1673eb331`  
-Default branch baseline SHA: `45352b73bb6cc4787b2a49988b575afb754ab627`  
-Pull request: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1 (open, draft, unmerged)  
-Publishing posture: **public publishing disabled; no real upload performed**
+Tested implementation commit: `ec4a98137dd74932bd99abae4686de70fd03b4f8`  
+Default branch baseline: `45352b73bb6cc4787b2a49988b575afb754ab627`  
+Draft PR: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1  
+Public publishing: **DISABLED**
 
-## Current evidence
+## Evidence-backed status
 
-The tested implementation SHA `f0075bbe5fe925799a27645402b938c1673eb331` passed the full Node test suite and repository checks in these GitHub Actions runs:
-
-- [Content quality — 88 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025829088)
-- [Metadata/schedule validation — 88 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025829277)
-- [Automation validation — 88 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025829195)
-
-The unchanged `main` baseline passed 54 tests with 0 failures in [run 40018038047](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047). The tested implementation has since been followed only by report/documentation changes; consult the live branch ref for the current documentation HEAD.
-
-## Implemented and exercised
-
-- Authoritative draft schedule: Tuesday and Thursday long-form (6–10 minutes), Saturday Short (50–60 seconds), at 17:00 Africa/Johannesburg / 15:00 UTC.
-- Dashboard authentication, loopback-only binding, persistent JSON state, atomic writes, audit history, idempotent dated slot reservation and cross-process locking.
-- Dashboard integration tests exercise real draft creation, conflict rejection, invalid dates, campaign preview/activation/deactivation and durable audit records.
-- Human-review primitives bind approval to artifact SHA-256, metadata version, reviewer identity and structured rights evidence. The dashboard endpoint requires repository-relative files, checks the actual artifact and source-asset checksums, and refuses approval unless the job is awaiting review and its validation metadata matches.
-- Campaign operations persist to dashboard state and audit history. Selar remains exactly `https://selar.com/0u19v8u99l`; Safari requires an HTTPS preview, disclosure and explicit operator confirmation. Deactivation clears Safari's active destination and approval. Campaign activation is draft-only and does not enable publishing.
-- Private uploader requires explicit `CONFIRM_PRIVATE_UPLOAD=YES`, a job ID and artifact-bound approval record; validates actual media/metadata checksums, confirms the authenticated channel is exactly SonicVhibez, persists an attempt ledger before upload, re-fetches the remote video, verifies private visibility, and quarantines uncertain outcomes for reconciliation.
-- Both manual upload workflows require an explicit confirmation choice and can restore/preserve the attempt ledger across runs.
-- `.env.example` contains variable names only. Public publishing remains disabled.
-
-## Acceptance matrix
-
-| Criterion | Status | Evidence / remaining condition |
+| Acceptance area | Status | Evidence / remaining boundary |
 |---|---|---|
-| Main baseline regression | PASS | 54/54 tests at `45352b73bb6cc4787b2a49988b575afb754ab627`, run 40018038047 |
-| Implementation Node suite | PASS | 88/88 tests at `f0075bbe5fe925799a27645402b938c1673eb331`, three CI runs linked above |
-| Schedule and approved Selar destination | PASS | Schedule validator and workflow cron checks passed |
-| Dashboard draft and campaign operations | PASS | Integration test exercises persistent state, audit, campaign preview/activation/deactivation |
-| Evidence-bound human review | PARTIAL | Review primitives and endpoint implemented; no real rights-cleared media or owner review evidence is present |
-| Actual Short/long-form media artifacts | BLOCKED | No genuine rights-cleared source footage and completed media manifest were available; no real documentary MP4 or checksum is claimed |
-| FFmpeg end-to-end artifact inspection | BLOCKED | Renderers exist, but this run did not render or inspect a rights-cleared final artifact |
-| Worker leases, heartbeat, expiry, bounded backoff and stale-worker fencing | PARTIAL — guarded APIs exist; expiry reaping is operator-triggered and restart recovery remains incomplete | Worker lease claims, heartbeat, expiry, bounded exponential backoff, stale-token fencing and operator-triggered reaping are implemented/tested; automatic background reaping and full restart recovery remain incomplete |
-| Durable private upload and reconciliation | PARTIAL | Code and static regression tests cover safeguards; no OAuth identity, remote upload, remote verification or real receipt was exercised |
-| Campaign external destination verification | BLOCKED | Safari destination must be supplied and owner-verified; no Safari campaign is active by default |
-| Reproducible `npm ci` installation | PASS | `package-lock.json` committed; clean `npm ci --ignore-scripts` passed in [run 40025040014](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025040014) |
-| Public publishing | PASS — DISABLED | No public visibility or scheduling path is enabled |
+| Authoritative schedule and draft-only UTC workflows | PASS | Schedule validation passed at tested commit; Tue/Thu long-form, Sat Short; 15:00 UTC = 17:00 Johannesburg |
+| Draft queue, durable state, stable job IDs, idempotency and cross-process slot locking | PASS | Node regression suite includes process-safe slot and lifecycle cases |
+| Local dashboard auth, loopback binding, allowlisted tasks, real state, health/readiness | PASS | Dashboard integration tests start the actual server and exercise authenticated API paths |
+| Render command launch and fail-closed artifact verification | PASS WITH BLOCKED REAL PRODUCTION | Dashboard launches fixed renderer tasks; missing manifests/rights-cleared media cause BLOCKED, not a fabricated success |
+| Thumbnail generation and media inspection | IMPLEMENTED; LIVE ARTIFACT BLOCKED | Successful render path invokes FFmpeg thumbnail generation and ffprobe; no rights-cleared wildlife inputs were available for a genuine production render |
+| Caption and metadata validation | PASS FOR CHECKS; CONTENT RELEASE BLOCKED | Caption fixtures pass; unreviewed metadata and asset-register examples remain intentionally blocked |
+| Structured rights evidence and checksum-bound human review | IMPLEMENTED; OWNER EVIDENCE REQUIRED | Server hashes source and license-evidence files, requires configured operator identity and binds approval to video, thumbnail and metadata versions |
+| Artifact-bound approval file | PASS IN CODE PATH | Approval record is atomically written under `run-logs/upload-approvals/`; uploader rechecks every related artifact checksum |
+| Private-only uploader and uncertain-outcome recovery | PASS IN AUTOMATED MOCK TESTS; LIVE UPLOAD BLOCKED | Attempt ledger is persisted before insert; timeout/receipt failure tests cover recovery; live OAuth and remote YouTube identity were not exercised |
+| Campaign isolation | PASS | Selar is fixed to `https://selar.com/0u19v8u99l`; Safari starts inactive and needs exact HTTPS destination, disclosure and explicit owner approval |
+| Clean dependency install | PASS WITH SCRIPTS DISABLED | `npm ci --ignore-scripts` passed in workflow 40027283578; plain `npm ci` without the flag was not separately claimed |
+| Node tests at implementation commit | PASS | 90 tests, 90 pass, 0 fail, 0 skipped in each of the three validation workflows |
+| Main-branch baseline | PASS | 54 tests, 0 failures: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047 |
+| Genuine MP4 and independent playback inspection | BLOCKED | No real rights-cleared Short/long-form artifact was generated in this run; therefore no production MP4 checksum/duration/dimensions are claimed |
+| Verified SonicVhibez channel identity and live private upload | BLOCKED | Owner must configure OAuth secrets and independently confirm channel ID through the authenticated API |
+| Public publishing | PASS — DISABLED | Schedule and upload workflows remain private/draft-only; no public/unlisted fallback |
 
-## Owner actions required to remove blockers
+## Tested workflow evidence
 
-1. Supply legitimate wildlife footage, narration/audio and thumbnail/source assets with retained license/permission evidence and checksums. Complete the real render manifests and verify output playback.
-2. Configure `DASHBOARD_OPERATOR_TOKEN` and `DASHBOARD_OPERATOR_ID` in the local environment; never put credentials in source or chat.
-3. After media generation and technical validation, complete human review against the exact artifact and metadata checksums.
-4. Configure YouTube OAuth values only through a secure local environment or GitHub Actions secrets. Verify the actual authenticated channel and configured ID are SonicVhibez. Do not use any Nature Frontiers ID.
-5. Export the review approval record, set the workflow confirmation to `YES`, and supply the prior ledger run ID on any subsequent workflow attempt. Never retry an uncertain outcome without reconciliation.
-6. If Safari is desired, provide its exact HTTPS destination and approved disclosure, preview them in the dashboard, and explicitly confirm activation. This only authorizes draft use.
-7. Keep `package-lock.json` in sync with dependency changes and rerun `npm ci --ignore-scripts` in CI.
+All listed workflows ran against commit `ec4a98137dd74932bd99abae4686de70fd03b4f8`:
 
-**Conclusion:** the implementation has materially improved and the tested code passes its automated suite. It is **not 100% operational or fully accepted**: genuine rights-cleared media production, automatic background lease reaping/full restart recovery, and live OAuth/private-upload acceptance remain unverified or blocked.
+- Content quality — 90/90 tests: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027289171
+- Automation validation — 90/90 tests: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027289133
+- Metadata/schedule validation — 90/90 tests, schedule/captions checked: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027289207
+- Clean install — `npm ci --ignore-scripts` succeeded: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027283578
 
-## Additional work in this acceptance pass
+All three Node test workflows reported 90 tests, 90 pass, 0 fail and 0 skipped. The install workflow reported 46 packages added and audited.
 
-- Dashboard production now launches only fixed Short/long render commands, persists worker lease state, rejects missing or invalid outputs, and records actual artifact checksums after ffprobe verifies duration, orientation and audio stream. It also invokes the frame-based thumbnail renderer and verifies a 1280×720 thumbnail before a job can enter GENERATED.
-- Media preflight now checks required metadata, 9:16 framing, a nontrivial file size, full-file decode and measurable audio volume. A test protects these checks. The latest implementation suite has 88 passing tests, 0 failures and 0 skipped.
-- The repository now has a committed npm lockfile and a passing clean `npm ci` run. It still lacks an owner-supplied verified wildlife source bundle and license documents, a generated real documentary MP4, and a verified live SonicVhibez OAuth identity/upload receipt. Those media/OAuth items remain BLOCKED, not passed.
+## Exact owner actions to clear external blockers
+
+1. Add source footage, narration and any music that is legitimately licensed for YouTube use; retain original license/permission documents and checksums.
+2. Complete `content/render-manifest.json` and `content/long-form-render-manifest.json` using real paths and evidence; render and inspect both actual outputs with FFmpeg/ffprobe and human playback.
+3. Start the dashboard locally with a random `DASHBOARD_OPERATOR_TOKEN` of at least 24 characters and `DASHBOARD_OPERATOR_ID` set to the actual authorized operator. Keep `DASHBOARD_HOST=127.0.0.1`.
+4. Verify the OAuth account's channel ID through YouTube API, then store `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN` and the independently confirmed `SONICVHIBEZ_CHANNEL_ID` in the appropriate secure environment/GitHub Actions secrets.
+5. Complete rights verification and human review for the exact rendered MP4, thumbnail and metadata; only then use the uploader with `CONFIRM_PRIVATE_UPLOAD=YES`.
+6. Keep Safari inactive until the owner supplies the exact destination and disclosure, reviews the preview and explicitly approves it.
+
+This repository is **not 100% operational for real media release** until the blocked owner-dependent gates above have genuine evidence. No real upload or documentary artifact is claimed.
