@@ -48,13 +48,21 @@ jobs:
           assert q.get("publishingEnabled") is False, "Public publishing must remain disabled"
           cadence = q.get("cadence", {})
           assert cadence.get("timezone") == "Africa/Johannesburg"
-          assert cadence.get("days") == ["Thursday"] and cadence.get("postsPerWeek") == 1
+          assert cadence.get("days") == ["Tuesday", "Thursday", "Saturday"] and cadence.get("postsPerWeek") == 3
+          assert cadence.get("breakdown") == {"longForm": 2, "short": 1}
           assert len(items) >= 10, "Queue needs at least ten topics"
           ids = [i.get("id") for i in items]
           assert all(ids) and len(ids) == len(set(ids)), "Queue IDs must be present and unique"
           assert all(i.get("productUrl") == "https://selar.com/0u19v8u99l" for i in items)
           assert "https://selar.com/0u19v8u99l" in approved, "Only the approved Selar destination may be used"
-          assert all(i.get("status") in ("HOLD_FOR_MEDIA_AND_HUMAN_REVIEW", "script_and_captions_ready_needs_media_and_review") for i in items)
+          allowed_statuses = {
+              "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
+              "script_and_captions_ready_needs_media_and_review",
+              "SCRIPT_READY_NARRATION_DRAFT_PENDING_GENERATION_MEDIA_AND_HUMAN_REVIEW_REQUIRED",
+              "SCRIPT_AND_CAPTIONS_READY_NEEDS_MEDIA_AND_HUMAN_REVIEW",
+              "DRAFT_REVIEW_REQUIRED",
+          }
+          assert all(i.get("status") in allowed_statuses for i in items), "Every queued item must remain in a recognized held/review state"
           print(f"PASS: {len(items)} queued topics; approved destination; safe held status; public publishing disabled.")
           PY
       - name: Syntax-check JavaScript automation scripts
