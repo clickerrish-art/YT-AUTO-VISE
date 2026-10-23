@@ -62,12 +62,12 @@ If a lockfile is added in a separate dependency-management change, test `npm ci`
 
 | Acceptance item | Status | Evidence/blocker |
 |---|---|---|
-| Complete 50–60 second real wildlife Short | **BLOCKED** | Existing pipeline creates typography-led review drafts; rights-cleared footage and human review are not evidenced. |
-| Complete 6–10 minute wildlife documentary | **BLOCKED** | Narration drafts/render infrastructure exist; complete rights-cleared substantive visuals, final synchronized captions and approval are not evidenced. |
-| Rights evidence and editorial approval | **BLOCKED** | No human-verified per-asset license/permission evidence is established by this report. |
-| Verified SonicVhibez channel identity | **BLOCKED** | Configured channel ID remains empty; no authenticated OAuth identity result is available. |
-| Real private YouTube upload and independent privacy check | **NOT ATTEMPTED** | Correctly blocked by missing verified identity, credentials and approved media. |
-| Public publishing | **DISABLED** | Explicitly remains outside this change. |
+| Complete 50–60 second real wildlife Short | BLOCKED BY EXTERNAL PREREQUISITE | Existing pipeline creates typography-led review drafts; rights-cleared footage and human review are not evidenced. |
+| Complete 6–10 minute wildlife documentary | BLOCKED BY EXTERNAL PREREQUISITE | Narration drafts/render infrastructure exist; complete rights-cleared substantive visuals, final synchronized captions and approval are not evidenced. |
+| Rights-cleared source assets | BLOCKED BY EXTERNAL PREREQUISITE | No human-verified per-asset license/permission evidence is established by this report. |\n| Evidence-backed human-review workflow | NOT IMPLEMENTED | No durable artifact-bound approval UI and reviewer record are integrated. |
+| Verified SonicVhibez channel identity | BLOCKED BY EXTERNAL PREREQUISITE | Configured channel ID remains empty; no authenticated OAuth identity result is available. |
+| Real private YouTube upload and independent privacy check | BLOCKED BY EXTERNAL PREREQUISITE | Correctly blocked by missing verified identity, credentials and approved media. |
+| Public publishing remains disabled | PASS | Explicitly remains outside this change. |
 
 No test, upload, deployment, sale or live analytics result is claimed as successful here. Update this report after collecting actual CI logs, artifact checksums, rights evidence and (if approved) a sanitized private-upload receipt.
 
