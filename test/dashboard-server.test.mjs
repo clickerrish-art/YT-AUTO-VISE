@@ -88,4 +88,15 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(failedBody.job.state, "FAILED");
   const forgedReview = await fetch(base + "/api/jobs/transition", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, nextState: "AWAITING_HUMAN_REVIEW", reason: "attempted bypass" }) });
   assert.equal(forgedReview.status, 400, "worker output alone cannot bypass the rights-evidence gate");
+  const shortDraft = { id: "dashboard-test-render-short", title: "Test Short render attempt", topic: "ethical wildlife filming", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-24", productUrl: "https://selar.com/0u19v8u99l" };
+  const shortCreated = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(shortDraft) });
+  const shortCreatedBody = await shortCreated.json();
+  assert.equal(shortCreated.status, 201, JSON.stringify(shortCreatedBody));
+  const renderJob = shortCreatedBody.job;
+  const renderAttempt = await fetch(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: renderJob.id }) });
+  const renderAttemptBody = await renderAttempt.json();
+  assert.equal(renderAttempt.status, 409, JSON.stringify(renderAttemptBody));
+  assert.equal(renderAttemptBody.job.state, "BLOCKED");
+  assert.match(renderAttemptBody.job.renderExecution.output, /render manifest not found/i);
+  assert.equal(renderAttemptBody.job.outputArtifacts.length, 0, "a blocked renderer must not claim a generated artifact");
 });
