@@ -219,15 +219,22 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "POST" && url.pathname === "/api/drafts") {
       const body = await readBody(req);
       const item = safeItem(body);
-      const state = loadState();
-      if (state.queueItems.some(existing => existing.id === item.id)) return json(res, 409, { error: "That queue ID already exists" });
-      const job = createContentJob({ idempotencyKey: "draft:" + item.id, title: item.title, topic: item.topic, contentType: item.contentType, scheduledDay: item.scheduledDay, inputReferences: [] });
-      state.queueItems.push(item);
-      state.jobs.push(job);
-      state.audit.push({ id: crypto.randomUUID(), action: "DRAFT_CREATED", itemId: item.id, at: new Date().toISOString(), actor: "local-operator" });
-      state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", itemId: item.id, jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: "local-operator" });
-      saveState(state);
-      return json(res, 201, { item, job });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        if (state.queueItems.some(existing => existing.id === item.id)) return json(res, 409, { error: "That queue ID already exists" });
+        const slotFingerprint = item.scheduledDay + ":17:00:Africa/Johannesburg";
+        if (state.queueItems.some(existing => existing.scheduledDay === item.scheduledDay && existing.status !== "CANCELLED")) {
+          return json(res, 409, { error: "A draft already occupies this weekly day slot; edit the existing draft rather than creating a duplicate reservation", slotFingerprint });
+        }
+        const job = createContentJob({ idempotencyKey: "draft:" + item.id, title: item.title, topic: item.topic, contentType: item.contentType, scheduledDay: item.scheduledDay, inputReferences: [] });
+        state.queueItems.push(item);
+        state.jobs.push(job);
+        state.audit.push({ id: crypto.randomUUID(), action: "DRAFT_CREATED", itemId: item.id, at: new Date().toISOString(), actor: "local-operator" });
+        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", itemId: item.id, jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: "local-operator" });
+        saveState(state);
+        return json(res, 201, { item, job });
+      } finally { release(); }
     }
     if (req.method === "POST" && url.pathname === "/api/jobs") {
       const body = await readBody(req);
@@ -249,31 +256,40 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "POST" && url.pathname === "/api/jobs/transition") {
       const body = await readBody(req);
       if (typeof body.jobId !== "string" || typeof body.nextState !== "string") return json(res, 400, { error: "jobId and nextState are required" });
-      const state = loadState();
-      const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
-      if (index < 0) return json(res, 404, { error: "Content job not found" });
-      const old = state.jobs[index];
-      const updated = transitionContentJob(old, body.nextState, { actor: "local-operator", reason: body.reason ?? "" });
-      state.jobs[index] = updated;
-      state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_STATE_CHANGED", jobId: updated.id, from: old.state, to: updated.state, at: updated.updatedAt, actor: "local-operator", reason: String(body.reason ?? "").slice(0, 1000) });
-      saveState(state);
-      return json(res, 200, { job: updated, publishingEnabled: false });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const old = state.jobs[index];
+        const updated = transitionContentJob(old, body.nextState, { actor: "local-operator", reason: body.reason ?? "" });
+        state.jobs[index] = updated;
+        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_STATE_CHANGED", jobId: updated.id, from: old.state, to: updated.state, at: updated.updatedAt, actor: "local-operator", reason: String(body.reason ?? "").slice(0, 1000) });
+        saveState(state);
+        return json(res, 200, { job: updated, publishingEnabled: false });
+      } finally { release(); }
     }
     if (req.method === "POST" && url.pathname === "/api/drafts/update") {
       const body = await readBody(req);
       const item = safeItem(body);
-      const state = loadState();
-      const index = state.queueItems.findIndex(existing => existing.id === item.id);
-      if (index < 0) return json(res, 404, { error: "Queue item not found" });
-      const old = state.queueItems[index];
-      // Ordinary editing cannot grant rights or approval; review flags remain unchanged and cannot be promoted here.
-      for (const key of ["rightsConfirmed", "complianceReviewed", "approvedForPrivateUpload", "humanApproved"]) {
-        if (Object.hasOwn(item, key) && item[key] !== old[key]) return json(res, 403, { error: "Review and rights fields cannot be changed through draft editing" });
-      }
-      state.queueItems[index] = { ...old, ...item, status: old.status, rightsConfirmed: old.rightsConfirmed, complianceReviewed: old.complianceReviewed, updatedAt: new Date().toISOString() };
-      state.audit.push({ id: crypto.randomUUID(), action: "DRAFT_EDITED", itemId: item.id, at: new Date().toISOString(), actor: "local-operator" });
-      saveState(state);
-      return json(res, 200, { item: state.queueItems[index] });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.queueItems.findIndex(existing => existing.id === item.id);
+        if (index < 0) return json(res, 404, { error: "Queue item not found" });
+        const old = state.queueItems[index];
+        // Ordinary editing cannot grant rights or approval; review flags remain unchanged and cannot be promoted here.
+        for (const key of ["rightsConfirmed", "complianceReviewed", "approvedForPrivateUpload", "humanApproved"]) {
+          if (Object.hasOwn(item, key) && item[key] !== old[key]) return json(res, 403, { error: "Review and rights fields cannot be changed through draft editing" });
+        }
+        if (state.queueItems.some(existing => existing.id !== item.id && existing.scheduledDay === item.scheduledDay && existing.status !== "CANCELLED")) {
+          return json(res, 409, { error: "Another draft already occupies this weekly day slot" });
+        }
+        state.queueItems[index] = { ...old, ...item, status: old.status, rightsConfirmed: old.rightsConfirmed, complianceReviewed: old.complianceReviewed, updatedAt: new Date().toISOString() };
+        state.audit.push({ id: crypto.randomUUID(), action: "DRAFT_EDITED", itemId: item.id, at: new Date().toISOString(), actor: "local-operator" });
+        saveState(state);
+        return json(res, 200, { item: state.queueItems[index] });
+      } finally { release(); }
     }
     return json(res, 404, { error: "Not found" });
   } catch (error) {
