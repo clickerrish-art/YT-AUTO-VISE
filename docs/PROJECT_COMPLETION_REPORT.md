@@ -16,7 +16,7 @@ Public publishing: **DISABLED**
 
 ## Test and workflow evidence
 
-The newest tested code SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32` passed the automation workflow, including npm test, Python review-safety tests, queue invariants, syntax checks and Python compilation: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40015500289. Metadata validation passed at the same SHA: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40015491951. The default-branch full-suite baseline remains unexecuted.
+The campaign-enhanced code SHA `3fc132b99c683be71e571dab4e6660ab98beb4a9` passed automation CI, including npm test and the isolated campaign validator: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40016046874. Metadata validation passed at the same SHA: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40016046743. The default-branch full-suite baseline remains unexecuted.
 
 A prior commit, `3df90af8f3fad3803291d6907530f2c24367f6fc`, had a successful validation run:
 https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40013565863
@@ -41,9 +41,10 @@ The full default-branch baseline at `45352b73bb6cc4787b2a49988b575afb754ab627` h
 | Verified SonicVhibez OAuth identity | BLOCKED BY EXTERNAL PREREQUISITE | Authorized account credentials and independently confirmed channel ID not verified |
 | Real private upload and remote privacy verification | BLOCKED BY EXTERNAL PREREQUISITE | No real upload performed or claimed |
 | Upload timeout/receipt reconciliation | NOT IMPLEMENTED / UNVERIFIED | Requires durable upload-attempt ledger and remote reconciliation |
-| Separate Safari affiliate campaigns | NOT IMPLEMENTED | No exact verified owner-supplied Safari destinations configured; Selar URL is preserved |
+| Separate Selar/Safari configuration and validation | PASS | Separate records; Safari inactive; validator and tests passed in run 40016046874 |
+| Full campaign editor/activation approval UI | NOT IMPLEMENTED | Dashboard only displays records; owner-verified Safari URL absent |
 | Default branch full-suite baseline | BLOCKED | Not run during this execution |
-| Latest implementation full-suite test | BLOCKED PENDING CI | Run 40014281815 must finish |
+| Campaign-enhanced implementation CI | PASS | Run 40016046874 passed npm test, campaign validation, review-safety tests, queue checks, syntax and Python compilation |
 | Public publishing disabled | PASS (configuration/code guard) | Schedule says `publishingEnabled: false`; dashboard has no publishing control; new task allowlist has no upload task |
 
 ## Run locally
@@ -95,7 +96,8 @@ At SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc, automation CI passed: https://g
 | Full durable job lifecycle/leases | NOT IMPLEMENTED | Complete content state machine and cross-process locking absent |
 | Dashboard-launched media production | NOT IMPLEMENTED | Renderers not exposed as dashboard tasks |
 | Rights-cleared real Short and long-form | BLOCKED BY EXTERNAL PREREQUISITE | Verified footage rights and human review unavailable |
-| Campaign separation | NOT IMPLEMENTED | Selar URL retained; Safari destinations inactive and separate schema/tests absent |
+| Campaign destination/disclosure isolation guard | PASS | config/campaigns.json and validate-campaigns.mjs; run 40016046874 |
+| Full campaign editor and activation approval | NOT IMPLEMENTED | Dashboard displays campaigns read-only; Safari remains inactive |
 | Authenticated SonicVhibez identity/private upload | BLOCKED BY EXTERNAL PREREQUISITE | Channel ID blank pending independent verification; no real upload claimed |
 | Recovery-enhanced implementation full CI | PASS | Run 40014972795 passed at SHA 896eea1521ba93afdff8f29a248cf9760d8c8e6a; docs-only run 40015187821 passed at SHA a47e74d91013f7ae38912bb4a144574f2575dfdd |
 | Full main branch baseline | BLOCKED BY EXTERNAL PREREQUISITE | No full suite executed against main in this run |
