@@ -18,6 +18,8 @@ test("SonicVhibez weekly target remains two long-form videos and one Short", () 
   assert.ok(shorts.length >= 1, "queue needs at least one Short draft");
   assert.ok(longForm.some((item) => item.scheduledDay === "Tuesday"));
   assert.ok(longForm.some((item) => item.scheduledDay === "Saturday"));
+  assert.ok(shorts.some((item) => item.scheduledDay === "Thursday"), "at least one Short draft must be assigned to Thursday");
+  assert.ok(shorts.some((item) => item.scheduledDay === "Thursday" && item.targetSeconds === 55), "Thursday Short should target 55 seconds");
 });
 
 test("all queued items use only the approved Selar product URL", () => {
