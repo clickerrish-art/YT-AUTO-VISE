@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
 import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
@@ -392,7 +392,38 @@ const server = http.createServer(async (req, res) => {
         const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
         if (index < 0) return json(res, 404, { error: "Content job not found" });
         const old = state.jobs[index];
-        const updated = completeWorkerLease(old, body.leaseToken, body.nextState, body.result ?? {});
+        const resultPatch = body.result ?? {};
+        if (body.nextState === "GENERATED") {
+          if (!Array.isArray(resultPatch.outputArtifacts) || resultPatch.outputArtifacts.length < 1) return json(res, 400, { error: "Generation completion requires at least one real MP4 artifact with a checksum" });
+          if (typeof body.metadataPath !== "string") return json(res, 400, { error: "Generation completion requires the actual metadata file path" });
+          const metadataFile = resolveRepositoryFile(body.metadataPath);
+          const metadata = JSON.parse(fs.readFileSync(metadataFile, "utf8"));
+          const actualMetadataVersion = sha256File(metadataFile);
+          if (resultPatch.metadataVersion !== actualMetadataVersion) return json(res, 409, { error: "Metadata version must equal the actual metadata file SHA-256" });
+          if (metadata.channel !== "SonicVhibez" || metadata.visibility !== "private" || metadata.productUrl !== approvedProductUrl) return json(res, 400, { error: "Generated metadata must target SonicVhibez, remain private, and use the approved Selar destination" });
+          for (const artifact of resultPatch.outputArtifacts) {
+            if (!artifact || typeof artifact.path !== "string" || !/^[a-f0-9]{64}$/.test(artifact.sha256 ?? "") || path.extname(artifact.path).toLowerCase() !== ".mp4") return json(res, 400, { error: "Each output artifact must be a repository-relative MP4 with a SHA-256 checksum" });
+            const artifactFile = resolveRepositoryFile(artifact.path);
+            if (sha256File(artifactFile) !== artifact.sha256) return json(res, 409, { error: "Output artifact checksum does not match the actual file: " + artifact.path });
+            const probe = spawnSync("ffprobe", ["-v", "error", "-show_entries", "format=duration:stream=codec_type,width,height", "-of", "json", artifactFile], { encoding: "utf8", timeout: 15_000 });
+            if (probe.error || probe.status !== 0) return json(res, 503, { error: "ffprobe is unavailable or could not inspect the generated MP4; generation cannot be marked successful" });
+            let media;
+            try { media = JSON.parse(probe.stdout); } catch { return json(res, 400, { error: "ffprobe returned invalid media inspection data" }); }
+            const duration = Number(media.format?.duration);
+            const streams = media.streams ?? [];
+            const video = streams.find(stream => stream.codec_type === "video");
+            const hasAudio = streams.some(stream => stream.codec_type === "audio");
+            const isShort = old.contentType === "short";
+            if (!Number.isFinite(duration) || (isShort ? duration < 50 || duration > 60 : duration < 360 || duration > 600)) return json(res, 400, { error: "Rendered MP4 duration does not match the scheduled content format" });
+            if (!video || !hasAudio || (isShort ? video.height <= video.width : video.width <= video.height)) return json(res, 400, { error: "Rendered MP4 must contain audio and have the correct horizontal/vertical dimensions" });
+            artifact.durationSeconds = duration;
+            artifact.width = video.width;
+            artifact.height = video.height;
+            artifact.inspectedAt = new Date().toISOString();
+          }
+          resultPatch.metadataPath = body.metadataPath;
+        }
+        const updated = completeWorkerLease(old, body.leaseToken, body.nextState, resultPatch);
         state.jobs[index] = updated;
         state.audit.push({ id: crypto.randomUUID(), action: "WORKER_STAGE_COMPLETED", jobId: body.jobId, workerId: old.workerLease.workerId, from: old.state, to: updated.state, at: new Date().toISOString(), actor: "local-operator" });
         saveState(state);
