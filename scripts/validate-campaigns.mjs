@@ -24,7 +24,7 @@ export function validateCampaigns(config) {
       if (campaign.destinationUrl !== APPROVED_SELAR_URL) errors.push("Selar destination must exactly match the approved URL for " + campaign.id);
       if (campaign.destinationValidation !== "exact_approved_allowlist") errors.push("Selar destination must use the exact approved allowlist for " + campaign.id);
       if (campaign.ownerApproved !== true) errors.push("Selar campaign requires owner approval for " + campaign.id);
-      if (campaign.status !== "ACTIVE_FOR_DRAFTS_ONLY") errors.push("approved Selar campaign status must be ACTIVE_FOR_DRAFTS_ONLY");
+      if (!["ACTIVE_FOR_DRAFTS_ONLY", "INACTIVE"].includes(campaign.status)) errors.push("Selar campaign must be active for drafts only or inactive");
       if (typeof campaign.disclosureText !== "string" || !campaign.disclosureText.trim()) errors.push("Selar disclosure text is required for " + campaign.id);
     }
     if (campaign.type === "safari_affiliate") {
