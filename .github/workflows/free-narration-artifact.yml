@@ -12,8 +12,8 @@ on:
           - short-002
         default: both
   schedule:
-    # Tuesday/Thursday/Saturday SAST queue cadence (UTC cron).
-    - cron: "0 15 * * 2,4,6"
+    # One Short weekly on Thursday SAST; long-form narration is scheduled separately on Tuesday and Saturday.
+    - cron: "0 15 * * 4"
   push:
     branches: [main]
     paths:
