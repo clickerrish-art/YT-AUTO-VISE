@@ -1,6 +1,6 @@
 # Test baseline and regression report
 
-Updated: 2026-10-23 (implementation updates through `ed5c40c484596e0bb3e4e886d09b262972017093`)
+Updated: 2026-10-23. Current branch HEAD `3292a891ba0938372efd9c3f10a6236882c60527`; tested code SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`.
 Default branch: `main`
 Implementation branch: `codex/marketing-machine-audit-fixes`
 Public publishing: disabled
@@ -10,9 +10,9 @@ Public publishing: disabled
 | Branch | SHA reference | Full-suite result |
 |---|---|---|
 | `main` | baseline `45352b73bb6cc4787b2a49988b575afb754ab627` | **BLOCKED — not run in this execution environment** |
-| `codex/marketing-machine-audit-fixes` | HEAD `ed5c40c484596e0bb3e4e886d09b262972017093` | **BLOCKED — not run in this execution environment** |
+| `codex/marketing-machine-audit-fixes` | Current HEAD `3292a891ba0938372efd9c3f10a6236882c60527` (tested code SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`) | **PASS for tested implementation SHA; docs-only commits followed** |
 
-At HEAD `a426b36b908103e2ce001a28a012a346da5c859c`, the connected GitHub commit-status endpoint returned an empty `statuses` list and the available commit-workflow lookup returned no runs. Neither result is a pass. That is not a passing result. A clean checkout could not be performed because GitHub hostname resolution failed in this execution environment. The newest dashboard/schedule additions also require a fresh CI run before they can be considered verified.
+Earlier inspection at `a426b36b908103e2ce001a28a012a346da5c859c` preceded the CI runs recorded below; its empty status lookup was not evidence of a pass. The tested code SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32` passed the full automation workflow and metadata validation. A complete full-suite baseline on main remains unexecuted.
 
 ## Toolchain and reproducibility
 
