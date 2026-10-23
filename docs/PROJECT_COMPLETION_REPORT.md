@@ -3,7 +3,7 @@
 Updated: 2026-10-23  
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Tested implementation SHA: `1c02e6529613e3dee695f98946d4c642fdf146b2`  
+Tested implementation SHA: `e568471c73dae207948a78538c79324ac15a5376`  
 Main baseline SHA: `45352b73bb6cc4787b2a49988b575afb754ab627`  
 Draft PR: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1  
 Public publishing: **DISABLED**
@@ -18,13 +18,13 @@ Public publishing: **DISABLED**
 
 ## Test and workflow evidence
 
-At tested implementation SHA `1c02e6529613e3dee695f98946d4c642fdf146b2`:
+At tested implementation SHA `e568471c73dae207948a78538c79324ac15a5376`:
 
 | Workflow | Result | Link |
 |---|---|---|
-| Content quality | 88 passed, 0 failed, 0 skipped | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40024835685 |
-| Metadata/schedule validation | 88 passed, 0 failed, 0 skipped; schedule and caption checks passed; unreviewed metadata/asset examples remained blocked | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40024830465 |
-| Automation validation | 88 passed, 0 failed, 0 skipped; campaign isolation and queue checks passed | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40024835796 |
+| Content quality | 88 passed, 0 failed, 0 skipped | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100677 |
+| Metadata/schedule validation | 88 passed, 0 failed, 0 skipped; schedule and caption checks passed; unreviewed metadata/asset examples remained blocked | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100793 |
+| Automation validation | 88 passed, 0 failed, 0 skipped; campaign isolation and queue checks passed | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025100724 |
 | Main baseline | 54 passed, 0 failed | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047 |
 
 The report/documentation commits after the tested implementation SHA do not change runtime code. The current branch ref and PR head are available from GitHub.
@@ -63,4 +63,4 @@ The application is improved and the automated suite passes, but the project is *
 
 ## Acceptance boundary — do not interpret passing tests as production completion
 
-The current tested code SHA is `1c02e6529613e3dee695f98946d4c642fdf146b2`. The three workflows linked above each report 88 tests passed, 0 failed and 0 skipped. The production dashboard's renderer path is real and fails closed when required manifests/assets, FFmpeg outputs, audio/video checks or thumbnail generation are missing. No real MP4 is claimed as generated in this run. `npm ci` is not proven because `package-lock.json` is absent. Live YouTube identity/upload and real rights clearance remain blocked by external owner prerequisites. Public publishing remains disabled; PR #1 remains open and draft.
+The current tested code SHA is `e568471c73dae207948a78538c79324ac15a5376`. The three workflows linked above each report 88 tests passed, 0 failed and 0 skipped. The production dashboard's renderer path is real and fails closed when required manifests/assets, FFmpeg outputs, audio/video checks or thumbnail generation are missing. No real MP4 is claimed as generated in this run. `npm ci` is not proven because `package-lock.json` is absent. Live YouTube identity/upload and real rights clearance remain blocked by external owner prerequisites. Public publishing remains disabled; PR #1 remains open and draft.
