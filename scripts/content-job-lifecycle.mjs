@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 
 export const JOB_STATES = Object.freeze([
   "QUEUED", "GENERATING", "GENERATED", "VALIDATING", "BLOCKED",
-  "AWAITING_HUMAN_REVIEW", "APPROVED_FOR_PRIVATE_UPLOAD", "UPLOADING_PRIVATE",
+  "AWAITING_HUMAN_REVIEW", "REJECTED", "APPROVED_FOR_PRIVATE_UPLOAD", "UPLOADING_PRIVATE",
   "PRIVATE_UPLOAD_VERIFIED", "FAILED", "RECOVERY_REQUIRED"
 ]);
 
@@ -12,7 +12,8 @@ const transitions = {
   GENERATED: new Set(["VALIDATING", "BLOCKED", "FAILED"]),
   VALIDATING: new Set(["AWAITING_HUMAN_REVIEW", "BLOCKED", "FAILED", "RECOVERY_REQUIRED"]),
   BLOCKED: new Set(["FAILED"]),
-  AWAITING_HUMAN_REVIEW: new Set(["BLOCKED", "FAILED"]),
+  AWAITING_HUMAN_REVIEW: new Set(["BLOCKED", "FAILED", "REJECTED"]),
+  REJECTED: new Set(["QUEUED"]),
   APPROVED_FOR_PRIVATE_UPLOAD: new Set(),
   UPLOADING_PRIVATE: new Set(),
   PRIVATE_UPLOAD_VERIFIED: new Set(),
@@ -80,6 +81,7 @@ export function transitionContentJob(job, nextState, { actor = "local-operator",
   if (!transitions[job.state]?.has(nextState)) throw new Error("Invalid job transition: " + job.state + " -> " + nextState);
   if (typeof actor !== "string" || !actor.trim() || actor.length > 120) throw new Error("actor is required and must be at most 120 characters");
   if (typeof reason !== "string" || reason.length > 1000) throw new Error("reason must be at most 1000 characters");
+  if (nextState === "REJECTED" && job.state !== "AWAITING_HUMAN_REVIEW") throw new Error("Only a job awaiting human review may be rejected");
   if (nextState === "AWAITING_HUMAN_REVIEW") {
     if (job.validationResults?.passed !== true) throw new Error("A passing format-specific validation result is required before human review");
     if (job.rightsChecks?.verified !== true) throw new Error("Verified rights evidence is required before human review");
@@ -94,6 +96,6 @@ export function transitionContentJob(job, nextState, { actor = "local-operator",
     updated.startedAt ??= now;
     updated.attemptCount = (updated.attemptCount ?? 0) + 1;
   }
-  if (["PRIVATE_UPLOAD_VERIFIED", "FAILED", "BLOCKED"].includes(nextState)) updated.completedAt = now;
+  if (["PRIVATE_UPLOAD_VERIFIED", "FAILED", "BLOCKED", "REJECTED"].includes(nextState)) updated.completedAt = now;
   return updated;
 }
