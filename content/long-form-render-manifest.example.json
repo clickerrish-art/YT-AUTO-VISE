@@ -1,0 +1,15 @@
+{
+  "channel": "SonicVhibez",
+  "targetAspectRatio": "16:9",
+  "footagePath": "../media/REPLACE_WITH_RIGHTS_CLEARED_FOOTAGE.mp4",
+  "narrationPath": "../media/REPLACE_WITH_FINAL_NARRATION.wav",
+  "captionsPath": "long-form-captions.srt",
+  "footageLicenseEvidence": "REPLACE_WITH_VERIFIED_LICENSE_RECORD",
+  "narrationLicenseEvidence": "REPLACE_WITH_VERIFIED_RECORD_OR_ORIGINAL_RECORDING",
+  "rightsConfirmed": false,
+  "complianceReviewed": false,
+  "title": "REPLACE_WITH_REVIEWED_VIDEO_TITLE",
+  "containsSyntheticMedia": false,
+  "hasPaidPromotion": false,
+  "notes": "Example only. Copy to content/long-form-render-manifest.json only after real files and evidence exist. Keep rightsConfirmed and complianceReviewed false until human review. This manifest does not publish anything."
+}
