@@ -48,6 +48,11 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   const duplicateJob = await fetch(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify(jobInput) });
   assert.equal(duplicateJob.status, 200);
   assert.equal((await duplicateJob.json()).reused, true);
+  const repeatedScheduleEvent = await fetch(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify({ ...jobInput, idempotencyKey: "schedule-event:retry" }) });
+  assert.equal(repeatedScheduleEvent.status, 200);
+  const repeatedScheduleBody = await repeatedScheduleEvent.json();
+  assert.equal(repeatedScheduleBody.reservationReused, true, "same dated slot and same content must reuse the original reservation");
+  assert.equal(repeatedScheduleBody.job.id, createdJob.id);
   const conflictingJob = await fetch(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify({ ...jobInput, topic: "Different inputs" }) });
   assert.equal(conflictingJob.status, 409);
   const slotConflict = await fetch(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify({ ...jobInput, idempotencyKey: "test-job:other", title: "Conflicting slot" }) });
