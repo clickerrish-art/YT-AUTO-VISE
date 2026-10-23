@@ -1,0 +1,3 @@
+# Long-form narration preparation
+
+The two long-form drafts are in `content/long-form-scripts.md`. Use the narration paragraphs only; exclude visual cues, headings, metadata, and bracketed directions. The current automated narration workflow supports Shorts only. Do not treat long-form narration as generated until a real MP3 artifact has been produced and listened to. A compatible draft-generation workflow can use the community `edge-tts` client with `en-US-GuyNeural`, but service availability and terms may change. Check the actual read for pronunciation, factual accuracy, tone, and duration. Captions must be aligned to the final audio rather than estimated from text.
