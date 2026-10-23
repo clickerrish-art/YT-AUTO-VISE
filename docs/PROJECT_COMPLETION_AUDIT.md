@@ -1,7 +1,7 @@
 # Project Completion Audit — SonicVhibez Marketing Machine
 
 Audit date: 2026-10-23
-Implementation HEAD at last inspection: `a426b36b908103e2ce001a28a012a346da5c859c` (verify again before merge).
+Current branch HEAD at last refresh: `3292a891ba0938372efd9c3f10a6236882c60527` (documentation-only updates after tested code SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`).
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE
 Default branch: `main`
 Implementation branch inspected: `codex/marketing-machine-audit-fixes`
@@ -9,7 +9,7 @@ Publishing posture: public publishing disabled; no upload was performed by this 
 
 ## Evidence and scope
 
-This audit is based on the repository files inspected on the two named branches through the GitHub repository integration. No clean local checkout, npm install, test execution, media render, OAuth request, or YouTube upload could be performed in this execution environment. Therefore code presence is not treated as proof of runtime behavior. Exact SHAs must be refreshed before merge because branches can advance.
+This audit uses live GitHub branch refs, pull-request metadata, repository files, and Actions results. A clean local checkout and genuine media/OAuth/upload operation were not performed here. The tested implementation commit `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32` passed the full automation workflow (run `40015500289`) and metadata validation (run `40015491951`). Current branch HEAD is `3292a891ba0938372efd9c3f10a6236882c60527`, with documentation-only commits after the tested code.
 
 ## Branches and commits
 
