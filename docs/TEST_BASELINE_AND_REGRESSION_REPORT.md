@@ -1,6 +1,6 @@
 # Test baseline and regression report
 
-Updated: 2026-10-23. Current branch HEAD `3292a891ba0938372efd9c3f10a6236882c60527`; tested code SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`.
+Updated: 2026-10-23. Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`; subsequent commits are documentation-only. Consult the live branch ref for the current documentation HEAD.
 Default branch: `main`
 Implementation branch: `codex/marketing-machine-audit-fixes`
 Public publishing: disabled
