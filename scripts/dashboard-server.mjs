@@ -33,6 +33,21 @@ function loadState() {
   for (const key of ["queueItems", "audit", "jobs", "uploads"]) if (!Array.isArray(state[key])) throw new Error("Invalid state schema: " + key);
   return state;
 }
+function recoverInterruptedTasks() {
+  const state = loadState();
+  let recovered = 0;
+  for (const job of state.jobs) {
+    if (job.status === "RUNNING") {
+      job.status = "RECOVERY_REQUIRED";
+      job.error = "Dashboard restarted while this task was running; inspect its effects before retrying.";
+      job.updatedAt = new Date().toISOString();
+      state.audit.push({ id: crypto.randomUUID(), action: "TASK_INTERRUPTED_RECOVERY_REQUIRED", jobId: job.id, taskId: job.taskId, at: job.updatedAt, actor: "system-recovery" });
+      recovered++;
+    }
+  }
+  if (recovered) saveState(state);
+  return recovered;
+}
 function saveState(state) {
   const temp = stateFile + "." + crypto.randomUUID() + ".tmp";
   fs.writeFileSync(temp, JSON.stringify(state, null, 2) + "\n", { mode: 0o600 });
@@ -56,22 +71,38 @@ const allowedTasks = new Map([
   ["production-readiness", ["run", "readiness"]],
   ["test-suite", ["test"]]
 ]);
+const activeTasks = new Set();
+const taskTimeoutMs = new Map([["validate-schedule", 30_000], ["check-captions", 45_000], ["production-readiness", 60_000], ["test-suite", 180_000]]);
 function runTask(taskId) {
   const args = allowedTasks.get(taskId);
   if (!args) return Promise.reject(new Error("Task is not on the dashboard allowlist"));
   return new Promise((resolve) => {
     const startedAt = new Date().toISOString();
-    const child = spawn("npm", args, { cwd: root, shell: false, env: { ...process.env, CI: "1" }, windowsHide: true });
+    const child = spawn("npm", args, { cwd: root, shell: false, env: { ...process.env, CI: "1" }, windowsHide: true, stdio: ["ignore", "pipe", "pipe"] });
     let output = "";
     let truncated = false;
+    let timedOut = false;
+    let settled = false;
+    const finish = result => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      resolve({ taskId, startedAt, finishedAt: new Date().toISOString(), truncated, ...result, output: result.output ?? output });
+    };
     const collect = chunk => {
       output += chunk.toString();
       if (output.length > 12000) { output = output.slice(-12000); truncated = true; }
     };
+    const timer = setTimeout(() => {
+      timedOut = true;
+      output += "\\nTask exceeded its time limit; termination requested.";
+      child.kill("SIGTERM");
+      setTimeout(() => { if (child.exitCode === null) child.kill("SIGKILL"); }, 3000).unref();
+    }, taskTimeoutMs.get(taskId) ?? 60_000);
     child.stdout.on("data", collect);
     child.stderr.on("data", collect);
-    child.on("error", error => resolve({ taskId, startedAt, finishedAt: new Date().toISOString(), exitCode: null, status: "FAILED", output: (output + "\\n" + error.message).slice(-12000), truncated }));
-    child.on("close", code => resolve({ taskId, startedAt, finishedAt: new Date().toISOString(), exitCode: code, status: code === 0 ? "SUCCEEDED" : "FAILED", output, truncated }));
+    child.on("error", error => finish({ exitCode: null, status: "FAILED", output: (output + "\\n" + error.message).slice(-12000) }));
+    child.on("close", code => finish({ exitCode: code, status: timedOut ? "TIMED_OUT" : code === 0 ? "SUCCEEDED" : "FAILED" }));
   });
 }
 function safeItem(item) {
@@ -119,12 +150,16 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "POST" && url.pathname === "/api/tasks/run") {
       const body = await readBody(req);
       if (typeof body.taskId !== "string" || !allowedTasks.has(body.taskId)) return json(res, 400, { error: "Choose a supported allowlisted validation task" });
+      if (activeTasks.has(body.taskId)) return json(res, 409, { error: "This task is already running; duplicate execution was prevented" });
+      activeTasks.add(body.taskId);
       const state = loadState();
       const job = { id: crypto.randomUUID(), kind: "VALIDATION_TASK", taskId: body.taskId, status: "RUNNING", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), publishingEnabled: false };
       state.jobs.push(job);
       state.audit.push({ id: crypto.randomUUID(), action: "VALIDATION_TASK_STARTED", jobId: job.id, taskId: body.taskId, at: new Date().toISOString(), actor: "local-operator" });
       saveState(state);
-      const result = await runTask(body.taskId);
+      let result;
+      try { result = await runTask(body.taskId); }
+      finally { activeTasks.delete(body.taskId); }
       const latest = loadState();
       const index = latest.jobs.findIndex(entry => entry.id === job.id);
       if (index >= 0) latest.jobs[index] = { ...latest.jobs[index], ...result, updatedAt: new Date().toISOString() };
@@ -163,4 +198,5 @@ const server = http.createServer(async (req, res) => {
     return json(res, 400, { error: error instanceof Error ? error.message : "Request failed" });
   }
 });
-server.listen(port, host, () => console.log(JSON.stringify({ event: "dashboard_started", host, port, publishingEnabled: false, stateFile })));
+const recoveredTasks = recoverInterruptedTasks();
+server.listen(port, host, () => console.log(JSON.stringify({ event: "dashboard_started", host, port, publishingEnabled: false, stateFile, recoveredTasks })));
