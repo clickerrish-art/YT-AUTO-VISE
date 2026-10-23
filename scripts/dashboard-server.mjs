@@ -63,7 +63,10 @@ function safeItem(item) {
   if (!["Tuesday", "Thursday", "Saturday"].includes(scheduledDay)) throw new Error("scheduledDay must match an authorized weekly slot");
   if ((scheduledDay === "Saturday") !== (contentType === "short")) throw new Error("Saturday is reserved for Shorts; Tuesday and Thursday are long-form");
   if (item.productUrl !== approvedProductUrl) throw new Error("Destination must be the exact approved Selar URL");
-  return { ...item, id, title, topic, contentType, scheduledDay, status: String(item.status ?? "DRAFT_REVIEW_REQUIRED"), updatedAt: new Date().toISOString() };
+  for (const key of ["rightsConfirmed", "complianceReviewed", "approvedForPrivateUpload", "humanApproved"]) {
+    if (item[key] === true) throw new Error("Draft editing cannot grant rights or review approval");
+  }
+  return { id, title, topic, contentType, scheduledDay, productUrl: approvedProductUrl, status: "DRAFT_REVIEW_REQUIRED", updatedAt: new Date().toISOString() };
 }
 const server = http.createServer(async (req, res) => {
   try {
