@@ -2,7 +2,7 @@
 
 ## Truthful status
 
-The project currently passes its implementation regression suite, but it is not yet fully accepted. The tested code SHA `c0ebeb9bc9c3911b26705e0c35067fa2afb13dd3` passed 82/82 tests in [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023904), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023824), and [automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023772). The main baseline passed 54/54 tests at `45352b73bb6cc4787b2a49988b575afb754ab627` ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047)).
+The project currently passes its implementation regression suite, but it is not yet fully accepted. The tested code SHA `11987c6d62f40e11173b70c32ea4c467616da074` passed 82/82 tests in [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022475907), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022476331), and [automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022475908). The main baseline passed 54/54 tests at `45352b73bb6cc4787b2a49988b575afb754ab627` ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047)).
 
 No genuine final wildlife MP4, verified artifact checksum, FFmpeg playback result, OAuth channel verification, remote private upload or upload receipt is claimed. Public publishing remains disabled.
 
