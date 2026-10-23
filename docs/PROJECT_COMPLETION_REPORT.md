@@ -1,19 +1,26 @@
 # Project Completion Report — SonicVhibez Marketing Machine
 
-Updated: 2026-10-23  
+Updated: 2026-10-24  
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Tested implementation SHA: `ec4a98137dd74932bd99abae4686de70fd03b4f8`  
+Tested implementation SHA: `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`  
 Main baseline SHA: `45352b73bb6cc4787b2a49988b575afb754ab627`  
 Draft PR #1: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1  
 Public publishing: **DISABLED**
+
+
+## Latest acceptance checkpoint — 2026-10-24
+
+Tested implementation commit: `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`. GitHub Actions ran the full Node suite at this commit: 95 passed, 0 failed, 0 skipped. [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943732), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943766) all passed. The automation workflow also completed `npm ci --ignore-scripts` successfully.
+
+Short and long-form renderers now fail closed on technical export validation errors. This code-test result does not mean a genuine wildlife MP4 was produced: the production manifests and rights-cleared assets are still absent. No live OAuth identity, real private upload, or remote receipt is claimed. Public publishing remains disabled; PR #1 remains draft and unmerged.
 
 ## Implemented and tested
 
 - Durable local dashboard state, authenticated API access, loopback-only binding, health/readiness endpoints and audit events.
 - Date-specific draft reservations with idempotency, conflict detection and cross-process state locking.
 - Fixed, typed dashboard tasks for schedule checks, caption checks, readiness diagnostics, tests and Short/long-form renderers; no browser-triggered arbitrary shell command.
-- Render completion fails closed unless a real MP4 is present, its checksum is correct, ffprobe confirms required duration/orientation/audio, and a readable 1280×720 thumbnail is generated and inspected.
+- Both Short and long-form renderers run fail-closed technical export validation before reporting success; checks include duration, resolution/orientation, codecs, audio presence, full-file decode, and measurable audio for Shorts. The dashboard separately verifies checksums, metadata, captions and thumbnail. Real media production remains blocked without rights-cleared inputs.
 - Technical validation rechecks media checksums, metadata version and caption structure before rights review.
 - Rights verification records each source asset and evidence file, their checksums, permitted uses, restrictions, attribution requirements, verifier and timestamp.
 - Human review is authenticated and bound to the actual MP4 checksum, thumbnail, metadata version and verified rights-evidence hash. The resulting approval JSON is persisted under `run-logs/upload-approvals/`.
@@ -21,14 +28,14 @@ Public publishing: **DISABLED**
 - Campaign operations are separated: Selar uses the exact approved destination; Safari remains inactive until an exact HTTPS destination and disclosure are previewed and owner-approved.
 - `package-lock.json` is committed and clean install was exercised with `npm ci --ignore-scripts`.
 
-## Workflow evidence at implementation SHA `ec4a98137dd74932bd99abae4686de70fd03b4f8`
+## Workflow evidence at implementation SHA `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`
 
 | Workflow | Result | Link |
 |---|---|---|
-| Content quality | 90 passed, 0 failed, 0 skipped | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027289171 |
-| Automation validation | 90 passed, 0 failed, 0 skipped; campaign isolation and queue checks passed | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027289133 |
-| Metadata/schedule validation | 90 passed, 0 failed, 0 skipped; schedule and captions passed; unreviewed metadata/assets stayed blocked | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027289207 |
-| Clean install | `npm ci --ignore-scripts` passed; 46 packages installed/audited | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40027283578 |
+| Content quality | 95 passed, 0 failed, 0 skipped | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943766 |
+| Automation validation | 95 passed, 0 failed, 0 skipped; campaign isolation and queue checks passed | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712 |
+| Metadata/schedule validation | 95 passed, 0 failed, 0 skipped; schedule and captions passed; unreviewed metadata/assets stayed blocked | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943732 |
+| Clean install | `npm ci --ignore-scripts` passed; 46 packages installed/audited | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712 |
 | Main baseline | 54 passed, 0 failed | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047 |
 
 ## Acceptance checklist
