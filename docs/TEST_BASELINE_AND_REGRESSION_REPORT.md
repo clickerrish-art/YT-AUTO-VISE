@@ -31,7 +31,7 @@ Earlier inspection at `a426b36b908103e2ce001a28a012a346da5c859c` preceded the CI
 - Updated `OPERATIONS.md` and `README.md` to document startup, local state, schedule, and blockers.
 - Added `docs/PROJECT_COMPLETION_AUDIT.md`.
 
-These tests and features have been committed but have **not been executed in this environment**. The dashboard currently does not launch render jobs or invoke the uploader, and it does not yet implement the complete approvals/job lifecycle described in the master prompt. It is a real queue/configuration dashboard, not full end-to-end acceptance.
+These tests have been executed in GitHub Actions. The recovery-enhanced implementation at SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32` passed automation CI in run 40015500289. The dashboard does not launch render jobs or invoke the uploader, and it does not implement the complete approval/job lifecycle. It is not full end-to-end acceptance.
 
 ## Changes made
 
@@ -77,8 +77,7 @@ No test, upload, deployment, sale or live analytics result is claimed as success
 - Added an allowlist-backed dashboard endpoint for running only `npm run validate:schedule`, `npm run check:captions`, `npm run readiness`, and `npm test`. Commands are spawned without a shell; arbitrary task names are rejected.
 - Added a dashboard UI selector for these real commands and durable job/audit results.
 - Added `test/dashboard-task-runner.test.mjs`, which starts the server, checks arbitrary command rejection, invokes the real schedule validator, and checks persisted results and publishing-disabled state.
-- Workflow run associated with the initial code/test commit `446d7dd466c2669becdfbb7fc0edf3e628889e2a`: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014281815
-- This run was observed in progress; do not call it passed until a completed conclusion is inspected. The subsequent documentation commit also triggers CI, so use the newest run for final verification.
+- Historical run 40014281815 was superseded by later passing runs. The latest code SHA `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32` passed automation CI in run 40015500289; see the final CI refresh section below.
 - Dashboard tasks deliberately do not invoke the uploader, render pipeline, or any publishing operation. This is a safe incremental step, not full application completion.
 
 
