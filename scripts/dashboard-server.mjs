@@ -78,7 +78,7 @@ function runTask(taskId) {
   if (!args) return Promise.reject(new Error("Task is not on the dashboard allowlist"));
   return new Promise((resolve) => {
     const startedAt = new Date().toISOString();
-    const child = spawn("npm", args, { cwd: root, shell: false, env: { ...process.env, CI: "1" }, windowsHide: true, stdio: ["ignore", "pipe", "pipe"] });
+    const child = spawn("npm", args, { cwd: root, shell: false, env: { ...process.env, CI: "1", ...(taskId === "test-suite" ? { DASHBOARD_TEST_CHILD: "1" } : {}) }, windowsHide: true, stdio: ["ignore", "pipe", "pipe"] });
     let output = "";
     let truncated = false;
     let timedOut = false;
