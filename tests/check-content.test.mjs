@@ -132,6 +132,9 @@ test("media preflight blocks when human rights and compliance review are missing
   fs.writeFileSync(mediaPath, "not real media");
   fs.writeFileSync(metadataPath, JSON.stringify({
     channel: "SonicVhibez",
+    title: "Test-only metadata fixture",
+    description: "Test-only description for rights-gate coverage.",
+    tags: ["wildlife", "test", "fixture"],
     visibility: "private",
     rightsConfirmed: false,
     complianceReviewed: false
