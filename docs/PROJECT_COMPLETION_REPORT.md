@@ -82,3 +82,26 @@ npm run readiness
 8. Only after rights and human review are complete, request explicit operator confirmation for a real private upload and independently verify the resulting video remains private.
 
 No video artifact checksum, real narration/footage clearance, verified channel identity, or real upload receipt is claimed by this report.
+
+
+## Latest implementation refresh — 2026-10-23
+
+Current implementation HEAD: 896eea1521ba93afdff8f29a248cf9760d8c8e6a. Default main SHA: 45352b73bb6cc4787b2a49988b575afb754ab627. PR #1 remains draft and unmerged.
+
+At SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc, automation CI passed: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40014937474. The run includes npm test, Python review-safety tests, queue invariants, syntax checks and Python compilation. Current-head runs 40014967541 and 40014972886 were in progress, so the newest restart-recovery test is not yet marked PASS.
+
+| Acceptance requirement | Status | Evidence / blocker |
+|---|---|---|
+| Dashboard startup/health | PASS (prior CI) | Integration test starts server and calls /healthz; newest recovery change awaits CI |
+| Task execution safeguards | PASS | Allowlisted tasks, no shell, bounded output, timeouts, same-process duplicate guard |
+| Restart recovery | PASS (latest test pending) | RUNNING records become RECOVERY_REQUIRED and are audited |
+| Full durable job lifecycle/leases | NOT IMPLEMENTED | Complete content state machine and cross-process locking absent |
+| Dashboard-launched media production | NOT IMPLEMENTED | Renderers not exposed as dashboard tasks |
+| Rights-cleared real Short and long-form | BLOCKED BY EXTERNAL PREREQUISITE | Verified footage rights and human review unavailable |
+| Campaign separation | NOT IMPLEMENTED | Selar URL retained; Safari destinations inactive and separate schema/tests absent |
+| Authenticated SonicVhibez identity/private upload | BLOCKED BY EXTERNAL PREREQUISITE | Channel ID blank pending independent verification; no real upload claimed |
+| Latest implementation full CI | BLOCKED pending CI | Runs 40014967541 and 40014972886 in progress at report time |
+| Full main branch baseline | BLOCKED BY EXTERNAL PREREQUISITE | No full suite executed against main in this run |
+| Public publishing disabled | PASS | Configuration false and no dashboard publishing action |
+
+A lockfile has not been added; npm ci is not claimed. No media artifact checksum, rights approval, real upload receipt or remote privacy check is claimed. Keep public publishing disabled.
