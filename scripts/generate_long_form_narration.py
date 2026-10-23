@@ -58,10 +58,14 @@ async def main():
     OUT.mkdir(parents=True, exist_ok=True)
     episodes = extract_episodes(SOURCE.read_text(encoding="utf-8"))
     for number, title, text in episodes:
-        target = OUT / f"long-{int(number):03d}-narration-draft.mp3"
+        stem = f"long-{int(number):03d}-narration-draft"
+        target = OUT / f"{stem}.mp3"
+        text_target = OUT / f"{stem}.txt"
+        text_target.write_text(text + "\\n", encoding="utf-8")
         communicate = edge_tts.Communicate(text, VOICE)
         await communicate.save(str(target))
         print(f"CREATED draft narration: {target} | {title} | {len(text.split())} words")
+        print(f"CREATED narration text: {text_target}")
     print("DRAFT ONLY: listen for pronunciation, pacing, factual accuracy and voice quality. No upload or publishing occurred.")
 
 if __name__ == "__main__":
