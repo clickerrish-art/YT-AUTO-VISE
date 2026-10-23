@@ -83,8 +83,44 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (!Array.isArray(ledger.attempts)) throw new Error("Upload attempt ledger has an invalid schema");
   const prior = ledger.attempts.find(a => a.jobId === jobId && a.artifactSha256 === videoSha256);
   if (prior) {
-    if (prior.status === "PRIVATE_UPLOAD_VERIFIED") return { receipt: prior, reused: true };
-    throw new Error("an existing upload attempt for this job/artifact is " + prior.status + "; reconcile with YouTube before any retry");
+    if (!prior.remoteVideoId) {
+      throw new Error("an existing upload attempt is " + prior.status + " without an authoritative remote video ID; reconcile manually with YouTube before any retry");
+    }
+    let remoteItem;
+    try {
+      const remote = await youtube.videos.list({ part: ["id", "snippet", "status"], id: prior.remoteVideoId });
+      remoteItem = (remote.data.items ?? []).find(candidate => candidate.id === prior.remoteVideoId);
+    } catch {
+      prior.status = "RECOVERY_REQUIRED";
+      prior.errorCode = "REMOTE_RECONCILIATION_FAILED";
+      prior.updatedAt = now().toISOString();
+      writeJsonAtomic(ledgerPath, ledger);
+      throw new Error("Existing upload outcome could not be reconciled with YouTube; do not retry");
+    }
+    if (!remoteItem || remoteItem.status?.privacyStatus !== "private" || remoteItem.snippet?.channelId !== expectedChannelId) {
+      prior.status = "RECOVERY_REQUIRED";
+      prior.errorCode = "REMOTE_PRIVACY_OR_CHANNEL_MISMATCH";
+      prior.updatedAt = now().toISOString();
+      writeJsonAtomic(ledgerPath, ledger);
+      throw new Error("Existing remote video is missing or not verified private on SonicVhibez; do not retry");
+    }
+    const timestamp = now().toISOString();
+    const receipt = {
+      attemptId: prior.attemptId, jobId, timestamp, channelId: expectedChannelId,
+      channelTitle: matchedChannel.snippet.title, videoId: prior.remoteVideoId,
+      privacyStatus: remoteItem.status.privacyStatus, title: metadata.title,
+      artifactSha256: videoSha256, metadataVersion: metadataSha256, reviewer: approval.reviewer,
+      rightsEvidenceSha256: approval.rightsEvidenceSha256, remoteStatusVerified: true,
+      publishingEnabled: false, url: "https://www.youtube.com/watch?v=" + prior.remoteVideoId
+    };
+    const receiptPath = path.join(logDir, "upload-" + prior.remoteVideoId + ".json");
+    writeJsonAtomic(receiptPath, receipt);
+    prior.status = "PRIVATE_UPLOAD_VERIFIED";
+    prior.receiptPath = path.basename(receiptPath);
+    prior.verifiedAt = timestamp;
+    prior.updatedAt = timestamp;
+    writeJsonAtomic(ledgerPath, ledger);
+    return { receipt, reused: true };
   }
   const attempt = {
     attemptId: crypto.randomUUID(), jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256,
