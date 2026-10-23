@@ -42,7 +42,7 @@ The dashboard reads real configuration and queue state, creates validated draft 
 
 ## Approved campaign destination
 
-The only currently configured product campaign is Selar: https://selar.com/0u19v8u99l. Do not add Safari affiliate campaigns until the owner supplies and verifies exact URLs. Keep future campaign destinations, disclosures, and reporting independent.
+Campaign records are separated in config/campaigns.json and validated with npm run validate:campaigns. The exact approved Selar destination is https://selar.com/0u19v8u99l. Safari remains inactive with an empty destination until the owner supplies and verifies the exact URL, approves it, and provides disclosure text. The dashboard displays campaign records but does not yet provide a full campaign editor or activation-approval workflow.
 
 ## Production and validation commands
 
