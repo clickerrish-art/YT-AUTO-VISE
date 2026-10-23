@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createContentJob, transitionContentJob } from "../scripts/content-job-lifecycle.mjs";
+import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload } from "../scripts/content-job-lifecycle.mjs";
 
 const input = { idempotencyKey: "draft:short-001", title: "Wildlife storytelling", topic: "How to plan a wildlife documentary", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-24", inputReferences: ["content/short-001-wildlife-video-storytelling.md"] };
 
@@ -52,4 +52,18 @@ test("retry requires a retryable failure and respects the attempt limit", () => 
   job = { ...job, errorDetails: { retryable: true } };
   job = transitionContentJob(job, "FAILED", { reason: "Second attempt failed" });
   assert.throws(() => transitionContentJob(job, "QUEUED"), /Retry limit reached/);
+});
+
+
+test("private-upload approval requires matching generated artifact, metadata and rights evidence", () => {
+  let job = createContentJob(input);
+  job = { ...job, state: "AWAITING_HUMAN_REVIEW", metadataVersion: "meta-sha256:abc", outputArtifacts: [{ path: "artifacts/fixture.mp4", sha256: "a".repeat(64) }], rightsChecks: { verified: true, evidenceSha256: "b".repeat(64) } };
+  const review = { decision: "APPROVE", reviewer: "reviewer@example.test", artifactPath: "artifacts/fixture.mp4", artifactSha256: "a".repeat(64), metadataVersion: "meta-sha256:abc", rightsEvidenceSha256: "b".repeat(64), id: "review-001" };
+  const approved = approveContentJobForPrivateUpload(job, review, "2026-10-23T12:00:00.000Z");
+  assert.equal(approved.state, "APPROVED_FOR_PRIVATE_UPLOAD");
+  assert.equal(approved.humanApproval.artifactSha256, "a".repeat(64));
+  assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, artifactSha256: "c".repeat(64) }), /does not match a generated job artifact/);
+  assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, metadataVersion: "changed" }), /metadata version/);
+  assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, rightsEvidenceSha256: "d".repeat(64) }), /rights evidence/);
+  assert.throws(() => approveContentJobForPrivateUpload({ ...job, state: "GENERATED" }, review), /awaiting human review/);
 });
