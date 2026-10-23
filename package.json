@@ -13,7 +13,8 @@
     "render:short": "node scripts/render-short.mjs",
     "readiness": "node scripts/production-readiness.mjs",
     "render:thumbnail": "node scripts/render-thumbnail.mjs",
-    "render:long": "node scripts/render-long-form.mjs"
+    "render:long": "node scripts/render-long-form.mjs",
+    "validate:long-export": "node scripts/validate-long-form-export.mjs"
   },
   "engines": {
     "node": ">=20"
