@@ -38,3 +38,29 @@ test("upload approval rejects mismatched job, artifact, metadata, and visibility
   assert.throws(() => validateUploadApproval(approval, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "e".repeat(64) }), /metadata version/);
   assert.throws(() => validateUploadApproval({ ...approval, visibility: "public" }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /private-only/);
 });
+
+
+test("upload attempts are persisted before insert and reconciled without blind retries", () => {
+  const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
+  assert.match(source, /CONFIRM_PRIVATE_UPLOAD/);
+  assert.match(source, /UPLOAD_APPROVAL_PATH/);
+  assert.match(source, /upload-attempts\.json/);
+  assert.match(source, /REMOTE_ACCEPTED_RECONCILIATION_REQUIRED/);
+  assert.match(source, /RECOVERY_REQUIRED/);
+  assert.match(source, /youtube\.videos\.list\(\{ part: \["id", "snippet", "status"\], id: /);
+  const ledgerWrite = source.indexOf("writeJsonAtomic(ledgerPath, ledger);");
+  const insert = source.indexOf("youtube.videos.insert(");
+  assert.ok(ledgerWrite !== -1 && ledgerWrite < insert, "attempt ledger must be persisted before the remote insert");
+  assert.ok(source.indexOf("if (prior)") < insert, "existing attempts must be reconciled before any new insert");
+});
+
+test("both manual upload workflows require explicit private confirmation and preserve the attempt ledger", () => {
+  for (const file of [".github/workflows/upload-private.yml", ".github/workflows/upload-artifact-privately.yml"]) {
+    const workflow = fs.readFileSync(file, "utf8");
+    assert.match(workflow, /confirm_private_upload/);
+    assert.match(workflow, /inputs\.confirm_private_upload == 'YES'/);
+    assert.match(workflow, /previous_ledger_run_id/);
+    assert.match(workflow, /sonicvhibez-upload-ledger/);
+    assert.match(workflow, /privacyStatus|private/i);
+  }
+});
