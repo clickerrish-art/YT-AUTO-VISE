@@ -29,8 +29,9 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   const denied = await fetch(base + "/api/tasks/run", { method: "POST", headers, body: JSON.stringify({ taskId: "upload:private" }) });
   assert.equal(denied.status, 400, "arbitrary commands must not be executable");
   const response = await fetch(base + "/api/tasks/run", { method: "POST", headers, body: JSON.stringify({ taskId: "validate-schedule" }) });
-  assert.equal(response.status, 200, await response.text());
-  const result = await response.json();
+  const responseText = await response.text();
+  assert.equal(response.status, 200, responseText);
+  const result = JSON.parse(responseText);
   assert.equal(result.publicPublishingEnabled, false);
   assert.equal(result.job.status, "SUCCEEDED", result.job.output);
   assert.equal(result.job.exitCode, 0);
