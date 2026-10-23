@@ -31,7 +31,7 @@ export function createContentJob(input, now = new Date().toISOString()) {
   const contentType = input.contentType;
   const scheduledDay = input.scheduledDay;
   const scheduledDate = String(input.scheduledDate ?? "").trim();
-  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(scheduledDate) || Number.isNaN(Date.parse(scheduledDate + "T12:00:00Z"))) throw new Error("scheduledDate must be a real YYYY-MM-DD date");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(scheduledDate) || Number.isNaN(Date.parse(scheduledDate + "T12:00:00Z"))) throw new Error("scheduledDate must be a real YYYY-MM-DD date");
   const actualDay = new Date(scheduledDate + "T12:00:00Z").toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" });
   if (actualDay !== scheduledDay) throw new Error("scheduledDate weekday must match scheduledDay");
   if (!title || title.length > 100) throw new Error("title is required and must be at most 100 characters");
