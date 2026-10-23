@@ -93,6 +93,10 @@ test("private uploader preserves remote video ID and marks recovery if receipt p
     const ledger = JSON.parse(fs.readFileSync(path.join(env.UPLOAD_LOG_DIR, "upload-attempts.json"), "utf8"));
     assert.equal(ledger.attempts[0].remoteVideoId, "VIDEO_PRIVATE_TEST");
     assert.equal(ledger.attempts[0].status, "RECOVERY_REQUIRED");
-    await assert.rejects(uploadPrivate({ metadataPath, videoPath, approvalPath, jobId: "job-receipt-001", env: { ...env, RECONCILE_ONLY: "YES" }, youtubeFactory, persistJson: (p, v) => fs.writeFileSync(p, JSON.stringify(v)), preflightRunner: args => args[0].includes("check-content") ? "PASS" : "PASS:" }), /do not retry|reconcile/i);
+    const reconciled = await uploadPrivate({ metadataPath, videoPath, approvalPath, jobId: "job-receipt-001", env: { ...env, RECONCILE_ONLY: "YES" }, youtubeFactory, persistJson: (p, v) => fs.writeFileSync(p, JSON.stringify(v)), preflightRunner: args => args[0].includes("check-content") ? "PASS" : "PASS:" });
+    assert.equal(reconciled.reused, true);
+    assert.equal(reconciled.receipt.videoId, "VIDEO_PRIVATE_TEST");
+    assert.equal(reconciled.receipt.privacyStatus, "private");
+    assert.equal(JSON.parse(fs.readFileSync(path.join(env.UPLOAD_LOG_DIR, "upload-attempts.json"), "utf8")).attempts[0].status, "PRIVATE_UPLOAD_VERIFIED");
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
