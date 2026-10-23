@@ -22,7 +22,6 @@ test("content jobs retain durable schedule, identity, retry and audit fields", (
 test("content jobs reject schedule mismatches and malformed idempotency keys", () => {
   assert.throws(() => createContentJob({ ...input, scheduledDay: "Tuesday" }), /conflicts/);
   assert.throws(() => createContentJob({ ...input, scheduledDate: "2026-10-23" }), /weekday/);
-  assert.throws(() => createContentJob({ ...input, scheduledDate: "2026-10-23" }), /weekday/);
   assert.throws(() => createContentJob({ ...input, idempotencyKey: "!" }), /idempotencyKey/);
 });
 
