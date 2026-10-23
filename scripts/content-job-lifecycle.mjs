@@ -30,6 +30,10 @@ export function createContentJob(input, now = new Date().toISOString()) {
   const topic = String(input.topic ?? "").trim();
   const contentType = input.contentType;
   const scheduledDay = input.scheduledDay;
+  const scheduledDate = String(input.scheduledDate ?? "").trim();
+  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(scheduledDate) || Number.isNaN(Date.parse(scheduledDate + "T12:00:00Z"))) throw new Error("scheduledDate must be a real YYYY-MM-DD date");
+  const actualDay = new Date(scheduledDate + "T12:00:00Z").toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" });
+  if (actualDay !== scheduledDay) throw new Error("scheduledDate weekday must match scheduledDay");
   if (!title || title.length > 100) throw new Error("title is required and must be at most 100 characters");
   if (!topic || topic.length > 300) throw new Error("topic is required and must be at most 300 characters");
   if (!["long_form", "short"].includes(contentType)) throw new Error("contentType must be long_form or short");
@@ -39,7 +43,7 @@ export function createContentJob(input, now = new Date().toISOString()) {
   if (!Array.isArray(inputReferences) || inputReferences.length > 30 || inputReferences.some(x => typeof x !== "string" || !x.trim() || x.length > 500)) {
     throw new Error("inputReferences must be an array of at most 30 non-empty strings (max 500 characters each)");
   }
-  const fingerprint = crypto.createHash("sha256").update(JSON.stringify({ title, topic, contentType, scheduledDay, inputReferences })).digest("hex");
+  const fingerprint = crypto.createHash("sha256").update(JSON.stringify({ title, topic, contentType, scheduledDay, scheduledDate, inputReferences })).digest("hex");
   return {
     id: crypto.randomUUID(),
     idempotencyKey,
@@ -48,7 +52,7 @@ export function createContentJob(input, now = new Date().toISOString()) {
     title,
     topic,
     contentType,
-    scheduledSlot: { day: scheduledDay, time: "17:00", timezone: "Africa/Johannesburg" },
+    scheduledSlot: { date: scheduledDate, day: scheduledDay, time: "17:00", timezone: "Africa/Johannesburg", idempotencyKey: `slot:${scheduledDate}:17:00:Africa/Johannesburg` },
     inputReferences,
     state: "QUEUED",
     createdAt: now,
