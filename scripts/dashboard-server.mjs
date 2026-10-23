@@ -64,6 +64,29 @@ function saveState(state) {
   fs.writeFileSync(temp, JSON.stringify(state, null, 2) + "\n", { mode: 0o600 });
   fs.renameSync(temp, stateFile);
 }
+
+const stateLockDir = stateFile + ".lock";
+async function acquireStateLock(timeoutMs = 10_000) {
+  const deadline = Date.now() + timeoutMs;
+  while (true) {
+    try {
+      fs.mkdirSync(stateLockDir, { mode: 0o700 });
+      fs.writeFileSync(path.join(stateLockDir, "owner.json"), JSON.stringify({ pid: process.pid, acquiredAt: new Date().toISOString() }), { mode: 0o600, flag: "wx" });
+      return () => { try { fs.rmSync(stateLockDir, { recursive: true, force: true }); } catch {} };
+    } catch (error) {
+      if (error.code !== "EEXIST") throw error;
+      try {
+        const stat = fs.statSync(stateLockDir);
+        if (Date.now() - stat.mtimeMs > 120_000) {
+          fs.rmSync(stateLockDir, { recursive: true, force: true });
+          continue;
+        }
+      } catch { continue; }
+      if (Date.now() >= deadline) throw new Error("State is busy in another process; retry the operation shortly");
+      await new Promise(resolve => setTimeout(resolve, 20 + Math.floor(Math.random() * 40)));
+    }
+  }
+}
 function json(res, status, body) {
   res.writeHead(status, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store", "x-content-type-options": "nosniff" });
   res.end(JSON.stringify(body));
@@ -209,16 +232,19 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "POST" && url.pathname === "/api/jobs") {
       const body = await readBody(req);
       const job = createContentJob(body);
-      const state = loadState();
-      const existing = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.idempotencyKey === job.idempotencyKey);
-      if (existing) {
-        if (existing.requestFingerprint !== job.requestFingerprint) return json(res, 409, { error: "Idempotency key already exists with different job inputs", job: existing });
-        return json(res, 200, { job: existing, reused: true, publishingEnabled: false });
-      }
-      state.jobs.push(job);
-      state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: "local-operator" });
-      saveState(state);
-      return json(res, 201, { job, reused: false, publishingEnabled: false });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const existing = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.idempotencyKey === job.idempotencyKey);
+        if (existing) {
+          if (existing.requestFingerprint !== job.requestFingerprint) return json(res, 409, { error: "Idempotency key already exists with different job inputs", job: existing });
+          return json(res, 200, { job: existing, reused: true, publishingEnabled: false });
+        }
+        state.jobs.push(job);
+        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: "local-operator" });
+        saveState(state);
+        return json(res, 201, { job, reused: false, publishingEnabled: false });
+      } finally { release(); }
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/transition") {
       const body = await readBody(req);
