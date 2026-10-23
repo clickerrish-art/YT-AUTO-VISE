@@ -3,7 +3,7 @@
 Audit date: 2026-10-23  
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Tested implementation SHA: `c0ebeb9bc9c3911b26705e0c35067fa2afb13dd3`  
+Tested implementation SHA: `11987c6d62f40e11173b70c32ea4c467616da074`  
 Default branch baseline SHA: `45352b73bb6cc4787b2a49988b575afb754ab627`  
 Pull request: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1 (open, draft, unmerged)  
 Publishing posture: **public publishing disabled; no real upload performed**
@@ -12,9 +12,9 @@ Publishing posture: **public publishing disabled; no real upload performed**
 
 The tested implementation SHA passed the full Node test suite and repository checks in these GitHub Actions runs:
 
-- [Content quality — 82 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023904)
-- [Metadata/schedule validation — 82 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023824)
-- [Automation validation — 82 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023772)
+- [Content quality — 82 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022475907)
+- [Metadata/schedule validation — 82 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022476331)
+- [Automation validation — 82 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022475908)
 
 The unchanged `main` baseline passed 54 tests with 0 failures in [run 40018038047](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047). The tested implementation has since been followed only by report/documentation changes; consult the live branch ref for the current documentation HEAD.
 
@@ -34,7 +34,7 @@ The unchanged `main` baseline passed 54 tests with 0 failures in [run 4001803804
 | Criterion | Status | Evidence / remaining condition |
 |---|---|---|
 | Main baseline regression | PASS | 54/54 tests at `45352b73bb6cc4787b2a49988b575afb754ab627`, run 40018038047 |
-| Implementation Node suite | PASS | 82/82 tests at `c0ebeb9bc9c3911b26705e0c35067fa2afb13dd3`, three CI runs linked above |
+| Implementation Node suite | PASS | 82/82 tests at `11987c6d62f40e11173b70c32ea4c467616da074`, three CI runs linked above |
 | Schedule and approved Selar destination | PASS | Schedule validator and workflow cron checks passed |
 | Dashboard draft and campaign operations | PASS | Integration test exercises persistent state, audit, campaign preview/activation/deactivation |
 | Evidence-bound human review | PARTIAL | Review primitives and endpoint implemented; no real rights-cleared media or owner review evidence is present |
