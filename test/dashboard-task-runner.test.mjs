@@ -7,7 +7,7 @@ import path from "node:path";
 
 test("dashboard runs only allowlisted real validation commands and persists results", { skip: process.env.DASHBOARD_TEST_CHILD === "1" }, async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-tasks-"));
-  fs.writeFileSync(path.join(stateDir, "dashboard-state.json"), JSON.stringify({ version: 1, queueItems: [], audit: [], jobs: [{ id: "interrupted-1", kind: "VALIDATION_TASK", taskId: "validate-schedule", status: "RUNNING" }], uploads: [] }));
+  fs.writeFileSync(path.join(stateDir, "dashboard-state.json"), JSON.stringify({ version: 1, queueItems: [], audit: [], jobs: [{ id: "interrupted-1", kind: "VALIDATION_TASK", taskId: "validate-schedule", status: "RUNNING" }, { id: "upload-interrupted-1", kind: "CONTENT_PRODUCTION", title: "Uncertain upload", state: "UPLOADING_PRIVATE", transitionHistory: [], attemptCount: 1 }], uploads: [] }));
   const port = 28000 + Math.floor(Math.random() * 10000);
   const token = "task-test-" + "x".repeat(40);
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
@@ -32,6 +32,9 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   const recoveredBody = await recoveredState.json();
   assert.equal(recoveredBody.jobs.find(job => job.id === "interrupted-1").status, "RECOVERY_REQUIRED");
   assert.ok(recoveredBody.audit.some(event => event.action === "TASK_INTERRUPTED_RECOVERY_REQUIRED" && event.jobId === "interrupted-1"));
+  const uncertainUpload = recoveredBody.jobs.find(job => job.id === "upload-interrupted-1");
+  assert.equal(uncertainUpload.state, "RECOVERY_REQUIRED");
+  assert.match(uncertainUpload.errorDetails.message, /Reconcile with YouTube before any retry/);
   assert.equal(recoveredBody.campaignValidation.ok, true);
   assert.equal(recoveredBody.campaigns.find(campaign => campaign.type === "safari_affiliate").status, "INACTIVE");
   assert.equal(recoveredBody.campaigns.find(campaign => campaign.type === "safari_affiliate").destinationUrl, "");
