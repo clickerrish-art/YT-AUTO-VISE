@@ -42,7 +42,7 @@ The report/documentation commits after the tested implementation SHA do not chan
 | Private upload attempt ledger, remote re-verification and recovery code | PARTIAL — live OAuth and remote upload were not exercised |
 | Verified SonicVhibez OAuth identity and private upload receipt | BLOCKED — credentials/channel identity not verified in this environment |
 | Safari affiliate destination activation | BLOCKED until owner supplies exact URL/disclosure and explicitly approves it |
-| Clean `npm ci` installation | BLOCKED — no committed `package-lock.json` |
+| Clean `npm ci` installation | PASS — `package-lock.json` committed; `npm ci --ignore-scripts` passed in [run 40025040014](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025040014) |
 | Public publishing | PASS — DISABLED |
 
 ## Media evidence
@@ -57,10 +57,10 @@ No genuine wildlife documentary MP4, thumbnail, artifact checksum, duration or d
 4. Review the exact output artifact and metadata; save the generated approval record.
 5. Configure OAuth and the independently verified SonicVhibez channel ID through secure environment variables or GitHub Actions secrets.
 6. For a manual private upload, choose explicit `YES`, provide the matching approval JSON and stable job ID, and restore the prior ledger artifact for any subsequent attempt. Reconcile uncertain outcomes before retrying.
-7. Supply a lockfile and prove clean `npm ci`.
+7. Keep the committed lockfile current; rerun clean `npm ci --ignore-scripts` after dependency changes.
 
 The application is improved and the automated suite passes, but the project is **not fully accepted or 100% operational** until the blocked live media, reproducibility and private-upload criteria are satisfied.
 
 ## Acceptance boundary — do not interpret passing tests as production completion
 
-The current tested code SHA is `e568471c73dae207948a78538c79324ac15a5376`. The three workflows linked above each report 88 tests passed, 0 failed and 0 skipped. The production dashboard's renderer path is real and fails closed when required manifests/assets, FFmpeg outputs, audio/video checks or thumbnail generation are missing. No real MP4 is claimed as generated in this run. `npm ci` is not proven because `package-lock.json` is absent. Live YouTube identity/upload and real rights clearance remain blocked by external owner prerequisites. Public publishing remains disabled; PR #1 remains open and draft.
+The current tested code SHA is `e568471c73dae207948a78538c79324ac15a5376`. The three workflows linked above each report 88 tests passed, 0 failed and 0 skipped. The production dashboard's renderer path is real and fails closed when required manifests/assets, FFmpeg outputs, audio/video checks or thumbnail generation are missing. No real MP4 is claimed as generated in this run. `npm ci --ignore-scripts` passed in [run 40025040014](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025040014). Live YouTube identity/upload and real rights clearance remain blocked by external owner prerequisites. Public publishing remains disabled; PR #1 remains open and draft.
