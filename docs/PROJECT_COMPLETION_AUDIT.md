@@ -1,7 +1,7 @@
 # Project Completion Audit — SonicVhibez Marketing Machine
 
 Audit date: 2026-10-23
-Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `3fc132b99c683be71e571dab4e6660ab98beb4a9`; subsequent commits are documentation-only. Consult the live branch ref/PR for the current documentation HEAD.
+Implementation branch: `codex/marketing-machine-audit-fixes`. Latest code-tested SHA: `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8`; subsequent commits are documentation-only. Consult the live branch ref/PR for the current documentation HEAD.
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE
 Default branch: `main`
 Implementation branch inspected: `codex/marketing-machine-audit-fixes`
@@ -9,7 +9,7 @@ Publishing posture: public publishing disabled; no upload was performed by this 
 
 ## Evidence and scope
 
-This audit uses live GitHub branch refs, pull-request metadata, repository files, and Actions results. A clean local checkout and genuine media/OAuth/upload operation were not performed here. The tested campaign-enhanced implementation commit `3fc132b99c683be71e571dab4e6660ab98beb4a9` passed the full automation workflow (run `40016046874`), including npm test and campaign validation. Current documentation HEAD is available from the live branch ref; code-tested SHA is `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`, with documentation-only commits after that code.
+This audit uses live GitHub branch refs, pull-request metadata, repository files, and Actions results. A clean local checkout and genuine media/OAuth/upload operation were not performed here. The latest code-tested commit `869d4ab280fd9bf20ea74edee4c3d1dac032bbe8` passed automation CI in run `40016605388`, including npm test, campaign validation, job lifecycle/idempotency tests, review-safety tests, queue checks, syntax and Python compilation. Current documentation HEAD is available from the live branch ref; code-tested SHA is `14fe79a9ccf32ed7b10372aaa0f649e1aac17f32`, with documentation-only commits after that code.
 
 ## Branches and commits
 
@@ -98,7 +98,8 @@ P2: document install, startup, backup/restore, operator flow, OAuth setup, and r
 | Dashboard task allowlist | PASS | Fixed commands only; no uploader/publication task exposed |
 | Task timeout and same-process duplicate prevention | PASS | Implemented in dashboard server; broad cross-process race testing is not evidenced |
 | Restart detection | PASS | Persisted RUNNING task becomes RECOVERY_REQUIRED with audit event; test passed in run 40014972795 |
-| Full durable content-job lifecycle/leases | NOT IMPLEMENTED | Local JSON persistence exists; full state machine and multi-process locking absent |
+| Content-job creation, idempotency and guarded state transitions | PASS | Content job schema, duplicate-key conflict detection, transition history, bounded retries, protected upload states; automation CI run 40016605388 |
+| Full durable content-job lifecycle, worker execution and cross-process leases | NOT IMPLEMENTED | Jobs persist, but generation/render workers and multi-process locks are not wired into the dashboard |
 | Full media pipeline launched through dashboard | NOT IMPLEMENTED | Dashboard allows validation commands only |
 | Genuine rights-cleared wildlife Short and long-form | BLOCKED BY EXTERNAL PREREQUISITE | Rights-cleared substantive footage and human review unavailable |
 | Campaign destination/disclosure isolation guard | PASS | Separate campaign records and validator passed in run 40016046874; Safari remains inactive |
