@@ -40,18 +40,18 @@ jobs:
         if: ${{ steps.lockfile-status.outputs.present == 'false' }}
         run: npm install --package-lock-only --ignore-scripts
       - name: Prove clean locked installation
-        if: ${{ steps.lockfile-status.outputs.present == 'false' }}
+        if: ${{ always() && (steps.lockfile-status.outputs.present == 'true' || success()) }}
         run: npm ci --ignore-scripts
       - name: Run complete Node test suite
-        if: ${{ steps.lockfile-status.outputs.present == 'false' }}
+        if: ${{ always() && (steps.lockfile-status.outputs.present == 'true' || success()) }}
         run: npm test
       - name: Validate schedule and campaign configuration
-        if: ${{ steps.lockfile-status.outputs.present == 'false' }}
+        if: ${{ always() && (steps.lockfile-status.outputs.present == 'true' || success()) }}
         run: |
           npm run validate:schedule
           npm run validate:campaigns
       - name: Check JavaScript syntax
-        if: ${{ steps.lockfile-status.outputs.present == 'false' }}
+        if: ${{ always() && (steps.lockfile-status.outputs.present == 'true' || success()) }}
         run: |
           find scripts test tests -name '*.mjs' -print0 | xargs -0 -n1 node --check
       - name: Commit lockfile to implementation branch only
