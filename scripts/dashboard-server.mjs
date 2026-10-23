@@ -512,7 +512,16 @@ const server = http.createServer(async (req, res) => {
             const hasAudio = streams.some(stream => stream.codec_type === "audio");
             if (!Number.isFinite(durationSeconds) || (isShort ? durationSeconds < 50 || durationSeconds > 60 : durationSeconds < 360 || durationSeconds > 600)) throw new Error("Rendered MP4 duration is outside the required format range");
             if (!video || !hasAudio || (isShort ? video.height <= video.width : video.width <= video.height)) throw new Error("Rendered MP4 is missing audio or has the wrong orientation");
-            updated = completeWorkerLease(current, claim.leaseToken, "GENERATED", { outputArtifacts: [{ path: artifactPath, sha256: artifactSha256, durationSeconds, width: video.width, height: video.height, inspectedAt: new Date().toISOString() }], metadataPath, metadataVersion });
+            const thumbnailPath = isShort ? "media/next-short-thumbnail.jpg" : "media/long-form-next-thumbnail.jpg";
+            const thumbnailRun = spawnSync(process.execPath, ["scripts/render-thumbnail.mjs", artifactPath, metadata.title, thumbnailPath], { encoding: "utf8", timeout: 120_000 });
+            if (thumbnailRun.error || thumbnailRun.status !== 0) throw new Error("Thumbnail generation failed; install FFmpeg drawtext support and verify the rendered frame");
+            const thumbnailFile = resolveRepositoryFile(thumbnailPath);
+            const thumbnailProbe = spawnSync("ffprobe", ["-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "json", thumbnailFile], { encoding: "utf8", timeout: 15_000 });
+            if (thumbnailProbe.error || thumbnailProbe.status !== 0) throw new Error("ffprobe could not inspect the generated thumbnail");
+            const thumbnailStream = JSON.parse(thumbnailProbe.stdout).streams?.[0];
+            if (!thumbnailStream || thumbnailStream.width !== 1280 || thumbnailStream.height !== 720) throw new Error("Thumbnail must be a readable 1280x720 image");
+            const thumbnailArtifact = { path: thumbnailPath, sha256: sha256File(thumbnailFile), width: thumbnailStream.width, height: thumbnailStream.height, inspectedAt: new Date().toISOString() };
+            updated = completeWorkerLease(current, claim.leaseToken, "GENERATED", { outputArtifacts: [{ path: artifactPath, sha256: artifactSha256, durationSeconds, width: video.width, height: video.height, inspectedAt: new Date().toISOString() }], thumbnailArtifact, metadataPath, metadataVersion });
           } catch (error) {
             updated = completeWorkerLease(current, claim.leaseToken, "BLOCKED", { errorDetails: { code: "RENDER_OUTPUT_INVALID_OR_MISSING", retryable: false, message: String(error instanceof Error ? error.message : "Rendered artifact validation failed").slice(0, 1000) } });
           }
