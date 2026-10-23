@@ -3,7 +3,7 @@
 Updated: 2026-10-23  
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Tested implementation SHA: `c0ebeb9bc9c3911b26705e0c35067fa2afb13dd3`  
+Tested implementation SHA: `11987c6d62f40e11173b70c32ea4c467616da074`  
 Main baseline SHA: `45352b73bb6cc4787b2a49988b575afb754ab627`  
 Draft PR: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1  
 Public publishing: **DISABLED**
@@ -18,13 +18,13 @@ Public publishing: **DISABLED**
 
 ## Test and workflow evidence
 
-At tested implementation SHA `c0ebeb9bc9c3911b26705e0c35067fa2afb13dd3`:
+At tested implementation SHA `11987c6d62f40e11173b70c32ea4c467616da074`:
 
 | Workflow | Result | Link |
 |---|---|---|
-| Content quality | 82 passed, 0 failed, 0 skipped | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023904 |
-| Metadata/schedule validation | 82 passed, 0 failed, 0 skipped; schedule and caption checks passed; unreviewed metadata/asset examples remained blocked | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023824 |
-| Automation validation | 82 passed, 0 failed, 0 skipped; campaign isolation and queue checks passed | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023772 |
+| Content quality | 82 passed, 0 failed, 0 skipped | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022475907 |
+| Metadata/schedule validation | 82 passed, 0 failed, 0 skipped; schedule and caption checks passed; unreviewed metadata/asset examples remained blocked | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022476331 |
+| Automation validation | 82 passed, 0 failed, 0 skipped; campaign isolation and queue checks passed | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022475908 |
 | Main baseline | 54 passed, 0 failed | https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047 |
 
 The report/documentation commits after the tested implementation SHA do not change runtime code. The current branch ref and PR head are available from GitHub.
