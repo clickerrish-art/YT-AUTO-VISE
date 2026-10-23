@@ -36,3 +36,13 @@ test("reviewer identity and rejection reason are required", () => {
   assert.throws(() => createReviewDecision({ ...base, decision: "REJECT", reason: "" }), /rejection reason/);
   assert.equal(validateReviewEvidence({ ...base, decision: "REJECT", reason: "Captions are incomplete" }).length, 0);
 });
+
+
+test("approval becomes stale when the reviewed thumbnail checksum changes", () => {
+  const thumbnail = { path: "media/fixture-thumbnail.jpg", sha256: "d".repeat(64) };
+  const artifactSet = { ...artifact, relatedArtifacts: [artifact, thumbnail] };
+  const review = createReviewDecision({ ...base, artifact: artifactSet }, "2026-10-23T10:02:00.000Z");
+  assert.equal(isReviewCurrent(review, { artifact: artifactSet, metadataVersion: base.metadataVersion, rightsEvidence }), true);
+  const changedSet = { ...artifact, relatedArtifacts: [artifact, { ...thumbnail, sha256: "e".repeat(64) }] };
+  assert.equal(isReviewCurrent(review, { artifact: changedSet, metadataVersion: base.metadataVersion, rightsEvidence }), false);
+});
