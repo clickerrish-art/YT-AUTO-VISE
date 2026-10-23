@@ -43,7 +43,7 @@ The unchanged `main` baseline passed 54 tests with 0 failures in [run 4001803804
 | Worker leases, heartbeat, expiry, bounded backoff and stale-worker fencing | PARTIAL — guarded APIs exist; expiry reaping is operator-triggered and restart recovery remains incomplete | Lifecycle has bounded operator retries and restart recovery, but not a complete leased worker service |
 | Durable private upload and reconciliation | PARTIAL | Code and static regression tests cover safeguards; no OAuth identity, remote upload, remote verification or real receipt was exercised |
 | Campaign external destination verification | BLOCKED | Safari destination must be supplied and owner-verified; no Safari campaign is active by default |
-| Reproducible `npm ci` installation | BLOCKED | No committed `package-lock.json`; CI currently uses `npm install --ignore-scripts` |
+| Reproducible `npm ci` installation | PASS | `package-lock.json` committed; clean `npm ci --ignore-scripts` passed in [run 40025040014](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40025040014) |
 | Public publishing | PASS — DISABLED | No public visibility or scheduling path is enabled |
 
 ## Owner actions required to remove blockers
@@ -54,12 +54,12 @@ The unchanged `main` baseline passed 54 tests with 0 failures in [run 4001803804
 4. Configure YouTube OAuth values only through a secure local environment or GitHub Actions secrets. Verify the actual authenticated channel and configured ID are SonicVhibez. Do not use any Nature Frontiers ID.
 5. Export the review approval record, set the workflow confirmation to `YES`, and supply the prior ledger run ID on any subsequent workflow attempt. Never retry an uncertain outcome without reconciliation.
 6. If Safari is desired, provide its exact HTTPS destination and approved disclosure, preview them in the dashboard, and explicitly confirm activation. This only authorizes draft use.
-7. Generate and commit a real npm lockfile, then prove `npm ci` on a clean runner.
+7. Keep `package-lock.json` in sync with dependency changes and rerun `npm ci --ignore-scripts` in CI.
 
-**Conclusion:** the implementation has materially improved and the tested code passes its automated suite. It is **not 100% operational or fully accepted**: genuine media production, worker leases, reproducible install, and live OAuth/private-upload acceptance remain unverified or blocked.
+**Conclusion:** the implementation has materially improved and the tested code passes its automated suite. It is **not 100% operational or fully accepted**: genuine rights-cleared media production, automatic background lease reaping/full restart recovery, and live OAuth/private-upload acceptance remain unverified or blocked.
 
 ## Additional work in this acceptance pass
 
 - Dashboard production now launches only fixed Short/long render commands, persists worker lease state, rejects missing or invalid outputs, and records actual artifact checksums after ffprobe verifies duration, orientation and audio stream. It also invokes the frame-based thumbnail renderer and verifies a 1280×720 thumbnail before a job can enter GENERATED.
 - Media preflight now checks required metadata, 9:16 framing, a nontrivial file size, full-file decode and measurable audio volume. A test protects these checks. The latest implementation suite has 88 passing tests, 0 failures and 0 skipped.
-- The repository does not yet contain an owner-supplied, verified wildlife source bundle and license documents, a generated real documentary MP4, a committed npm lockfile, or a verified live SonicVhibez OAuth identity/upload receipt. Those acceptance items remain BLOCKED, not passed.
+- The repository now has a committed npm lockfile and a passing clean `npm ci` run. It still lacks an owner-supplied verified wildlife source bundle and license documents, a generated real documentary MP4, and a verified live SonicVhibez OAuth identity/upload receipt. Those media/OAuth items remain BLOCKED, not passed.
