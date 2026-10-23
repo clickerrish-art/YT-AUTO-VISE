@@ -86,9 +86,13 @@ test("worker lease fences concurrent claims and permits guarded heartbeat/stage 
   }, start + 3_000);
   assert.equal(generated.state, "GENERATED");
   assert.ok(generated.workerLease);
-  const reviewed = completeWorkerLease(generated, claimed.leaseToken, "AWAITING_HUMAN_REVIEW", {
+  assert.throws(() => completeWorkerLease(generated, claimed.leaseToken, "AWAITING_HUMAN_REVIEW", {
     validationResults: { passed: true },
     rightsChecks: { verified: true, evidenceSha256: "b".repeat(64) }
+  }, start + 4_000), /cannot modify protected job field: rightsChecks/);
+  const rightsVerified = { ...generated, rightsChecks: { verified: true, evidenceSha256: "b".repeat(64) } };
+  const reviewed = completeWorkerLease(rightsVerified, claimed.leaseToken, "AWAITING_HUMAN_REVIEW", {
+    validationResults: { passed: true }
   }, start + 4_000);
   assert.equal(reviewed.state, "AWAITING_HUMAN_REVIEW");
   assert.equal(reviewed.workerLease, null);
