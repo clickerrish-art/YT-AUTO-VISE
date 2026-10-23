@@ -6,7 +6,7 @@ test("YouTube uploader is private-only and binds upload to the verified SonicVhi
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
 
   // Guard the actual API request, not just the metadata template.
-  assert.match(source, /status:\s*\{\s*privacyStatus:\s*"private",\s*selfDeclaredMadeForKids:\s*false\s*\}/);
+  assert.match(source, /status:\s*\{\s*privacyStatus:\s*"private",\s*selfDeclaredMadeForKids:\s*false,[\s\S]*?\}/);
   assert.match(source, /metadata\.visibility\s*!==\s*"private"/);
   assert.match(source, /item\.id\s*===\s*expectedChannelId/);
   assert.match(source, /metadata\.channelId\s*!==\s*expectedChannelId/);
