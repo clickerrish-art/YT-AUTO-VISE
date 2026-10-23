@@ -30,21 +30,21 @@ The full default-branch baseline was executed at `45352b73bb6cc4787b2a49988b575a
 | Criterion | Status | Evidence / blocker |
 |---|---|---|
 | Dedicated implementation branch and draft PR | PASS | Branch `codex/marketing-machine-audit-fixes`; PR #1 remains unmerged/draft |
-| One authoritative schedule | PASS (configuration checked in CI on prior head) | Tuesday/Thursday long-form, Saturday Short; 17:00 Africa/Johannesburg = 15:00 UTC |
-| Dashboard reads real schedule and queue | PASS (code implemented; runtime CI test pending for latest head) | `scripts/dashboard-server.mjs`, `public/dashboard.html` |
-| Dashboard runs actual safe validation tasks | PASS | Allowlisted tasks and integration test passed in automation CI run 40015500289; task list intentionally excludes render/upload/publication |
-| Durable local draft/job/audit state and dated slot reservation | PASS | Atomic JSON state, filesystem lock directory, idempotency and two-process concurrent slot test; full worker lifecycle remains partial |
+| One authoritative schedule | PASS | Tuesday/Thursday long-form, Saturday Short; 17:00 Africa/Johannesburg = 15:00 UTC |
+| Dashboard reads real schedule and queue | PASS | `scripts/dashboard-server.mjs`, `public/dashboard.html` |
+| Dashboard runs actual safe validation tasks | PASS | Allowlisted tasks passed in latest automation CI run `40018707582`; render/upload/publication are intentionally not exposed as generic tasks |
+| Durable local draft/job/audit state and dated slot reservation | PASS | Atomic JSON state, filesystem lock directory, idempotency and two-process concurrent slot test; worker lifecycle remains incomplete |
 | Full media generation through dashboard | NOT IMPLEMENTED | Dashboard task runner intentionally only permits validation commands |
 | Complete 50–60 second wildlife Short | BLOCKED BY EXTERNAL PREREQUISITE | Rights-cleared footage and genuine review evidence not available |
 | Complete 6–10 minute wildlife documentary | BLOCKED BY EXTERNAL PREREQUISITE | Rights-cleared substantive visual assets and genuine review evidence not available |
-| Rights and human-review gates | PARTIAL | Drafts cannot self-grant approval; full evidence-backed approval workflow is not implemented |
+| Drafts cannot self-grant rights or approval | PASS | Draft edit endpoint rejects self-granted rights/review flags; media remains blocked without rights evidence |\n| Evidence-backed human-review approval record and dashboard workflow | NOT IMPLEMENTED | Reviewer/artifact-bound review record and approval UI are not integrated |
 | Verified SonicVhibez OAuth identity | BLOCKED BY EXTERNAL PREREQUISITE | Authorized account credentials and independently confirmed channel ID not verified |
 | Real private upload and remote privacy verification | BLOCKED BY EXTERNAL PREREQUISITE | No real upload performed or claimed |
-| Upload timeout/receipt reconciliation | NOT IMPLEMENTED / UNVERIFIED | Requires durable upload-attempt ledger and remote reconciliation |
+| Upload timeout/receipt reconciliation | NOT IMPLEMENTED | Durable upload-attempt ledger and remote reconciliation are not integrated |
 | Separate Selar/Safari configuration and validation | PASS | Separate records; Safari inactive; validator and tests passed in run 40016046874 |
 | Full campaign editor/activation approval UI | NOT IMPLEMENTED | Dashboard only displays records; owner-verified Safari URL absent |
 | Default branch full-suite baseline | PASS | 54/54 tests at main SHA `45352b73bb6cc4787b2a49988b575afb754ab627`, run `40018038047` |
-| Latest job-and-campaign implementation CI | PASS | Run 40016605388 passed npm test, campaign validation, job lifecycle/idempotency tests, review-safety tests, queue checks, syntax and Python compilation |
+| Latest tested implementation CI | PASS | Run `40018707582` passed 72/72 Node tests, campaign validation, review-safety tests, queue checks, syntax and Python compilation |
 | Public publishing disabled | PASS (configuration/code guard) | Schedule says `publishingEnabled: false`; dashboard has no publishing control; new task allowlist has no upload task |
 
 ## Run locally
@@ -90,17 +90,17 @@ At SHA 83501ea5db994c5b6dd73f9b7cc20fcd0d71bcbc, automation CI passed: https://g
 
 | Acceptance requirement | Status | Evidence / blocker |
 |---|---|---|
-| Dashboard startup/health | PASS (prior CI) | Integration test starts server and calls /healthz; newest recovery change awaits CI |
-| Task execution safeguards | PASS | Allowlisted tasks, no shell, bounded output, timeouts, same-process duplicate guard |
+| Dashboard startup/health/readiness | PASS | Integration tests start dashboard and verify `/healthz` and `/readyz` in run `40018707582` |
+| Task execution safeguards | PASS | Allowlisted tasks, no shell, bounded output, timeouts, same-process duplicate task guard |
 | Restart recovery | PASS | RUNNING records become RECOVERY_REQUIRED and are audited; covered by run 40014972795 |
-| Content-job creation, idempotency, state history and guarded transitions | PASS | Job lifecycle module and API; run 40016605388 passed tests |
+| Content-job creation, dated slot reservation, idempotency and guarded transitions | PASS | Job lifecycle API; concurrent requests across two processes tested in run `40018707582` |
 | Full worker execution, lease expiry/backoff and automated recovery orchestration | NOT IMPLEMENTED | Process-safe state lock and dated slot reservation exist; render workers and full lease orchestration are not integrated |
 | Dashboard-launched media production | NOT IMPLEMENTED | Renderers not exposed as dashboard tasks |
 | Rights-cleared real Short and long-form | BLOCKED BY EXTERNAL PREREQUISITE | Verified footage rights and human review unavailable |
 | Campaign destination/disclosure isolation guard | PASS | config/campaigns.json and validate-campaigns.mjs; run 40016046874 |
 | Full campaign editor and activation approval | NOT IMPLEMENTED | Dashboard displays campaigns read-only; Safari remains inactive |
 | Authenticated SonicVhibez identity/private upload | BLOCKED BY EXTERNAL PREREQUISITE | Channel ID blank pending independent verification; no real upload claimed |
-| Recovery-enhanced implementation full CI | PASS | Run 40014972795 passed at SHA 896eea1521ba93afdff8f29a248cf9760d8c8e6a; docs-only run 40015187821 passed at SHA a47e74d91013f7ae38912bb4a144574f2575dfdd |
+| Latest implementation full CI | PASS | Run `40018707582` passed 72/72 tests; docs-only commits follow the tested code SHA `2d5eb1a29fcef9a3ffb4fc8692b0143b9c5a6516` |
 | Full main branch baseline | PASS | 54/54 tests passed at main SHA `45352b73bb6cc4787b2a49988b575afb754ab627`, run `40018038047` |
 | Public publishing disabled | PASS | Configuration false and no dashboard publishing action |
 
