@@ -2,7 +2,7 @@
 
 Updated: 2026-10-23  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Tested implementation SHA: `c0ebeb9bc9c3911b26705e0c35067fa2afb13dd3`  
+Tested implementation SHA: `11987c6d62f40e11173b70c32ea4c467616da074`  
 Main baseline SHA: `45352b73bb6cc4787b2a49988b575afb754ab627`  
 Public publishing: disabled
 
@@ -10,9 +10,9 @@ Public publishing: disabled
 
 | Ref | Workflow | Result |
 |---|---|---|
-| Implementation `c0ebeb9bc9c3911b26705e0c35067fa2afb13dd3` | [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023904) | 82 passed, 0 failed, 0 skipped |
-| Implementation `c0ebeb9bc9c3911b26705e0c35067fa2afb13dd3` | [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023824) | 82 passed, 0 failed, 0 skipped; schedule, caption and negative metadata/asset gates passed |
-| Implementation `c0ebeb9bc9c3911b26705e0c35067fa2afb13dd3` | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022023772) | 82 passed, 0 failed, 0 skipped; campaign isolation and queue invariants passed |
+| Implementation `11987c6d62f40e11173b70c32ea4c467616da074` | [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022475907) | 82 passed, 0 failed, 0 skipped |
+| Implementation `11987c6d62f40e11173b70c32ea4c467616da074` | [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022476331) | 82 passed, 0 failed, 0 skipped; schedule, caption and negative metadata/asset gates passed |
+| Implementation `11987c6d62f40e11173b70c32ea4c467616da074` | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40022475908) | 82 passed, 0 failed, 0 skipped; campaign isolation and queue invariants passed |
 | Main `45352b73bb6cc4787b2a49988b575afb754ab627` | [Baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047) | 54 passed, 0 failed |
 
 The tested implementation suite includes dashboard integration, two-process dated-slot reservation, lifecycle guards, review-evidence checksum binding, campaign preview/activation/deactivation, upload safety checks, schedule validation and existing regression tests. The documentation-only commits after the tested implementation SHA do not alter runtime code; the latest branch head is visible on the live PR.
