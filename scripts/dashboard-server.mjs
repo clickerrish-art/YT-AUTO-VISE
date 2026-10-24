@@ -112,6 +112,26 @@ function saveState(state) {
   fs.writeFileSync(temp, JSON.stringify(state, null, 2) + "\n", { mode: 0o600 });
   fs.renameSync(temp, stateFile);
 }
+function appendFacebookRecoveryReceipt(record) {
+  const ledger = path.join(path.dirname(stateFile), "facebook-recovery-ledger.jsonl");
+  const safeRecord = {
+    attemptId: String(record.attemptId ?? ""),
+    remotePostId: String(record.remotePostId ?? ""),
+    status: String(record.status ?? "NEEDS_RECONCILIATION"),
+    reason: String(record.reason ?? "Receipt persistence failed").slice(0, 300),
+    recordedAt: new Date().toISOString()
+  };
+  try {
+    const noFollow = fs.constants.O_NOFOLLOW ?? 0;
+    const fd = fs.openSync(ledger, fs.constants.O_WRONLY | fs.constants.O_APPEND | fs.constants.O_CREAT | noFollow, 0o600);
+    try {
+      fs.writeSync(fd, JSON.stringify(safeRecord) + "\n", undefined, "utf8");
+      fs.fsyncSync(fd);
+    } finally { fs.closeSync(fd); }
+    try { fs.chmodSync(ledger, 0o600); } catch {}
+    return true;
+  } catch { return false; }
+}
 function verifiedFacebookPageId(state, config) {
   const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
   const connection = state.facebookConnection;
