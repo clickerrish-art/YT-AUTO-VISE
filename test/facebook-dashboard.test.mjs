@@ -52,6 +52,12 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
 
   const duplicateResponse = await fetch(base + "/api/facebook/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "facebook-dashboard-draft-2" }) });
   assert.equal(duplicateResponse.status, 409, await duplicateResponse.text());
+  const sameDayResponse = await fetch(base + "/api/facebook/drafts", { method: "POST", headers, body: JSON.stringify({
+    ...draft, id: "facebook-dashboard-draft-3", topic: "Forest canopy biodiversity",
+    caption: "A field guide to forest canopy biodiversity explains how tree cover supports birds and insects."
+  }) });
+  assert.equal(sameDayResponse.status, 409);
+  assert.match((await sameDayResponse.json()).error, /one-post-per-day collision/i);
 
   const evaluateResponse = await fetch(base + "/api/facebook/drafts/evaluate", { method: "POST", headers, body: JSON.stringify({ draftId: draft.id }) });
   assert.equal(evaluateResponse.status, 200);
