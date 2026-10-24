@@ -87,9 +87,19 @@ export async function runAutonomousFacebookPublisher({
   const canonicalQueuePath = fs.realpathSync(resolvedQueuePath);
   if (!within(canonicalQueuePath, canonicalRoot) && !within(canonicalQueuePath, canonicalStateDir)) throw new Error("Autonomous Facebook queue symlink escapes approved repository/state roots");
   queuePath = canonicalQueuePath;
-  const historyPath = path.join(stateDir, "facebook-history.json");
-  const ledgerPath = path.join(stateDir, "facebook-attempt-ledger.json");
-  const lockPath = path.join(stateDir, "facebook-publishing.lock");
+  const stateFile = name => {
+    if (typeof name !== "string" || !name.trim() || path.isAbsolute(name) ||
+        name.split(/[\\\\/]/).some(part => !part || part === "." || part === "..")) {
+      throw new Error("Facebook state filenames must be safe relative paths within FACEBOOK_STATE_DIR");
+    }
+    const base = path.resolve(stateDir);
+    const resolved = path.resolve(base, name);
+    if (resolved !== base && !resolved.startsWith(base + path.sep)) throw new Error("Facebook state file escapes FACEBOOK_STATE_DIR");
+    return resolved;
+  };
+  const historyPath = stateFile(config.historyFile ?? "facebook-history.json");
+  const ledgerPath = stateFile(config.attemptLedgerFile ?? "facebook-attempt-ledger.json");
+  const lockPath = stateFile(config.lockFile ?? "facebook-publishing.lock");
   const release = acquireLock(lockPath);
   try {
     let history = safeHistory(historyPath);
