@@ -5,8 +5,8 @@ import fs from "node:fs";
 test("every queued idea remains draft-only for SonicVhibez's approved product", () => {
   const queue = JSON.parse(fs.readFileSync("content/queue.json", "utf8"));
   assert.equal(queue.publishingEnabled, false);
-  assert.equal(queue.cadence.postsPerWeek, 3);
-  assert.deepEqual(queue.cadence.days, ["Tuesday", "Thursday", "Saturday"]);
+  assert.equal(queue.cadence.postsPerWeek, 2);
+  assert.deepEqual(queue.cadence.days, ["Tuesday", "Saturday"]);
   assert.equal(queue.cadence.timezone, "Africa/Johannesburg");
   assert.ok(Array.isArray(queue.items) && queue.items.length >= 3);
   for (const item of queue.items) {
