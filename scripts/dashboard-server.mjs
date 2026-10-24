@@ -509,6 +509,9 @@ const server = http.createServer(async (req, res) => {
           const base = path.resolve(configuredStateDir);
           const resolved = path.resolve(base, name);
           if (resolved !== base && !resolved.startsWith(base + path.sep)) throw new Error("Facebook state file escapes durable directory");
+          const canonicalBase = fs.realpathSync(base);
+          const checked = fs.existsSync(resolved) ? fs.realpathSync(resolved) : fs.realpathSync(path.dirname(resolved));
+          if (checked !== canonicalBase && !checked.startsWith(canonicalBase + path.sep)) throw new Error("Facebook state file symlink escapes durable directory");
           return resolved;
         };
         const queue = readArray(queuePath);
