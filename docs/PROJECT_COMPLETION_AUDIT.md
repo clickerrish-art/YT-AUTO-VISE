@@ -332,3 +332,32 @@ The following runs refer to the code/test candidate SHA above:
 - No YouTube upload or Facebook post was performed. Public/unattended YouTube publishing remains disabled; Facebook live publishing remains disabled; approved Selar URL remains `https://selar.com/0u19v8u99l`; Safari affiliate campaigns remain inactive.
 
 **Verdict: IMPLEMENTATION INCOMPLETE for full requested scope; production acceptance remains BLOCKED.** The code fixes and passing tests above do not satisfy missing real-media, account, authorization, external-workflow, recovery-drill, or branch-history gates.
+
+---
+
+## Latest recovery-output hardening and exact-SHA acceptance — 24 October 2026, 21:18 UTC
+
+This addendum supersedes earlier code/test counts and branch-comparison figures above.
+
+### Additional implementation
+- `scripts/restore-facebook-draft-history.mjs` now rejects symbolic links and non-regular output destinations, checks existing path components before writing, and writes history to a same-directory temporary file before atomic rename. This prevents a configurable history-output path from silently following a symlink and overwriting an unrelated file.
+- Added `test/facebook-history-output-safety.test.mjs`, which verifies that a symlinked output is rejected and the unrelated target file and symlink remain unchanged.
+- The prior addendum's caption/media timing gate and Facebook recovery-ledger integrity fix remain in place.
+
+### Latest code/test candidate and verification
+- **Code/test SHA:** `ca88836b671dabd5f7b4e14ed650fc44e05f5994`.
+- [Automation/security — run 40133517078](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133517078): **PASS** — **220 Node tests passed, 0 failed**; 8 Python safety tests passed; clean normal `npm ci`; Google API client import; 16 queue topics passed safe-state/destination checks; `npm audit` reports **0 vulnerabilities**.
+- [Browser E2E — run 40133517060](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133517060): **PASS** — 3 Chromium tests passed against the real local dashboard/backend.
+- [Metadata — run 40133517246](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133517246): **PASS**.
+- [Content quality — run 40133517127](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133517127): **PASS**.
+- [Lockfile validation — run 40133512239](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133512239): **PASS**.
+- [Readiness — run 40133517136](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133517136): **BLOCKED as intended**; retained diagnostic artifact remains available from the workflow.
+- [Facebook daily draft — run 40133517073](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133517073): **SKIPPED** on the PR event; a successful default-branch scheduled/manual run and retained artifact remain unverified.
+
+### Current status and owner actions
+- Live compare after these code/test commits: **950 commits ahead, 2 behind**, **103 changed files**, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; default branch `main` remains at `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- The full patch/history review remains incomplete: commit metadata shows repeated documentation/workflow subjects, and a complete review of every historical patch plus owner-approved branch reconciliation has not been completed. No merge, reset, rebase, force-push, cherry-pick, or history rewrite was performed.
+- Production remains blocked by missing genuine rights-cleared Short and long-form media, completed manifests and hash-bound approval; real SonicVhibez OAuth/channel identity and full remote history reconciliation; operation-specific private-upload authorization and remote receipt; real Nature Frontiers Page verification and default-branch draft artifact; owner-controlled recovery/rollback drills; and production deployment verification.
+- No YouTube upload or Facebook post was performed. Public/unattended YouTube publishing and Facebook live publishing remain disabled. The approved Selar destination remains `https://selar.com/0u19v8u99l`; Safari campaigns remain inactive.
+
+**Verdict: IMPLEMENTATION INCOMPLETE — production acceptance remains BLOCKED.**
