@@ -57,3 +57,26 @@ These are automated checks and a generated draft artifact, not proof of a real P
 - Owner verifies Page ID/roles/permissions in Meta and sets the same ID in the reviewed config and secure environment.
 - Before a live adapter can be considered: official API permission validation, token-expiry handling, dry-run payload review, operator authorization, a reviewed test post, remote refetch and durable receipt/reconciliation tests.
 - Keep Facebook and YouTube destination allowlists separate. Keep public YouTube publishing disabled and the existing YouTube cadence decision unresolved until owner direction.
+
+
+## Autonomous publishing implementation checkpoint — candidate head pending CI
+
+Candidate code added after the historical verified checkpoint above:
+
+- Added `scripts/facebook-policy-engine.mjs`, a versioned fail-closed final-payload policy engine. It returns structured blockers/warnings, source/rights/disclosure/destination checks, duplicate decisions, rule version, a fingerprint and check timestamp. It checks source HTTPS reachability and requires a recorded source excerpt to occur in the fetched response; a URL by itself is not proof. It checks asset and licence-evidence checksums and canonical paths, commercial/platform rights fields, visible affiliate disclosure, exact campaign destination allowlists, URLs embedded directly in captions, redirect outcomes, wildlife/engagement-bait patterns, duplicate slots, daily caps and minimum intervals.
+- Added `scripts/facebook-autonomous-publisher.mjs`. It has no per-post approval requirement. It uses the explicit configuration kill switch, a durable operator-controlled state directory, exclusive lock, validated persistent history/attempt ledger, machine policy decision before mutation, pre-mutation attempt persistence, remote receipt refetch and no automatic retry for uncertain outcomes. It preserves a known remote ID if post verification fails.
+- Added `test/facebook-policy-engine.test.mjs` and `test/facebook-autonomous-publisher.test.mjs`; expanded `test/meta-page-adapter.test.mjs` for cursor pagination.
+- Added `content/facebook-autonomous-queue.json` as an empty queue, `npm run facebook:publish:autonomous`, and `.github/workflows/facebook-autonomous-publisher.yml`. The scheduled workflow runs only from `main` and requires a persistent self-hosted runner labelled `facebook-publisher`; hosted ephemeral runners are deliberately not used for durable history.
+- Updated `config/facebook-publishing.json` and `.env.example` with explicit autonomous-mode settings, the emergency stop, one-post daily cap, allowlists, durable-state path and secure runtime token names. Defaults remain `publishingEnabled=false`, `dryRun=true`, and `emergencyStop=true`; the workflow is not live until verified setup deliberately changes these settings.
+- Meta managed-Page lookup now follows cursor pagination (bounded to 20 pages), and a scheduled receipt is not marked verified unless a real scheduled timestamp is returned.
+
+**Current verification status:** the prior CI run on `05fe179bc53bbb0b4f5f06e21c0842bddd307d81` failed three new policy tests because the engine incorrectly treated a known-authentic `syntheticOrAltered: false` asset as unknown. That predicate was corrected in a later commit, and additional tests were added afterward. GitHub Actions has not provided a run associated with the current candidate head through the available workflow-run query; therefore these latest changes are **not yet verified by CI**. No local test run was possible because this environment cannot resolve GitHub to clone the repository. Do not label the current candidate green until CI runs against its exact SHA.
+
+### Remaining blockers for true end-to-end acceptance
+
+1. The policy engine is a preventive deterministic gate, not proof of legal licence authenticity or a guarantee of Meta enforcement outcomes. Semantic claim support remains conservative and requires a verifiable source excerpt and explicit structured support record; claims that cannot be validated must be skipped.
+2. The autonomous queue is currently empty. The existing daily draft generator is still research-only and is not yet an end-to-end autonomous researcher/media producer that populates this queue with verified facts and rights-cleared assets.
+3. The new scheduled workflow requires an owner-controlled persistent self-hosted runner, a durable absolute `FACEBOOK_STATE_DIR`, secure Meta tokens, exact Page ID/name and granted permissions. None has been verified in a real Meta account.
+4. Uncertain attempts are durably blocked from duplicate retries. Full remote reconciliation for an uncertain mutation with no returned remote ID still requires a supported Page-feed reconciliation strategy before any retry can ever be considered.
+5. The new publisher is not yet integrated into the dashboard health/receipt view; dashboard acceptance remains pending.
+6. The current candidate must pass full CI on its exact SHA. The previous three validation runs were red on the earlier SHA; no current-SHA pass is claimed.
