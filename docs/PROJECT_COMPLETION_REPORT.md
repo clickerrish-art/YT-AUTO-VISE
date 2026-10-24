@@ -62,3 +62,11 @@ No genuine wildlife documentary MP4 or production thumbnail was generated during
 6. Supply and approve Safari's exact HTTPS destination and disclosure if that campaign is desired.
 
 PR #1 remains open and draft. Do not merge or enable public publishing as part of this work.
+
+
+## Acceptance gate documents
+
+- [Go-live blockers and exact owner actions](GO_LIVE_BLOCKERS.md)
+- [Release gate checklist](RELEASE_GATE_CHECKLIST.md)
+
+The code implementation is not a 100% production-complete release: real licensed media, independent playback inspection, authenticated SonicVhibez channel confirmation, and a live private-upload receipt remain blocked. Public publishing remains disabled; PR #1 remains open, draft and unmerged.
