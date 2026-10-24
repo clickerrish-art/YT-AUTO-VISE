@@ -126,6 +126,31 @@ export function generateDailyFacebookDraft({ date, outputDir, now = new Date().t
     }
     return { created: false, path: file, package: existing, reason: "IDEMPOTENT_EXISTING_DRAFT_PRESERVED" };
   }
+  const sameDateHistory = existingDrafts.filter(item =>
+    item && typeof item === "object" &&
+    (item.id === "nature-frontiers-daily-" + date ||
+      (item.date === date && item.destination === "nature_frontiers_facebook"))
+  );
+  if (sameDateHistory.length) {
+    if (sameDateHistory.some(item => !isSafeExistingDraft(item, date))) {
+      throw new Error("Existing cross-run draft history for this date is invalid; refusing duplicate generation");
+    }
+    const canonical = JSON.stringify(sameDateHistory[0]);
+    if (sameDateHistory.some(item => JSON.stringify(item) !== canonical)) {
+      throw new Error("Conflicting cross-run drafts already exist for this date; operator reconciliation is required");
+    }
+    const handle = fs.openSync(file, "wx", 0o600);
+    try {
+      fs.writeFileSync(handle, canonical + "\n", "utf8");
+      fs.fsyncSync(handle);
+    } catch (error) {
+      try { fs.unlinkSync(file); } catch {}
+      throw error;
+    } finally {
+      fs.closeSync(handle);
+    }
+    return { created: false, path: file, package: sameDateHistory[0], reason: "IDEMPOTENT_RETAINED_HISTORY_REUSED" };
+  }
   const idea = generateFacebookIdea({ date, existingDrafts, recentPosts });
   const slot = chooseFacebookExperimentSlot({ date, pillar: idea.pillar ?? "educational_explainer", format: "text" });
   const draft = makePackage(date, idea, slot, now);
