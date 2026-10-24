@@ -75,10 +75,13 @@ function recoverInterruptedTasks() {
       recovered++;
     }
   }
+  const recoveryReceipts = readFacebookRecoveryLedger();
   for (const attempt of state.facebookAttempts ?? []) {
     if (["SUBMITTING", "REMOTE_SCHEDULED_UNVERIFIED"].includes(attempt.status)) {
       const previous = attempt.status;
+      const recoveryReceipt = recoveryReceipts.filter(item => item.attemptId === attempt.id).at(-1);
       attempt.status = "NEEDS_RECONCILIATION";
+      if (recoveryReceipt?.remotePostId) attempt.remotePostId = recoveryReceipt.remotePostId;
       attempt.retryAllowed = false;
       attempt.updatedAt = new Date().toISOString();
       attempt.error = "Dashboard restarted during a Meta publish operation; reconcile the remote post before any retry.";
@@ -131,6 +134,17 @@ function appendFacebookRecoveryReceipt(record) {
     try { fs.chmodSync(ledger, 0o600); } catch {}
     return true;
   } catch { return false; }
+}
+function readFacebookRecoveryLedger() {
+  const ledger = path.join(path.dirname(stateFile), "facebook-recovery-ledger.jsonl");
+  try {
+    return fs.readFileSync(ledger, "utf8").split("\n").filter(Boolean).flatMap(line => {
+      try {
+        const item = JSON.parse(line);
+        return typeof item.attemptId === "string" && typeof item.remotePostId === "string" ? [item] : [];
+      } catch { return []; }
+    });
+  } catch { return []; }
 }
 function verifiedFacebookPageId(state, config) {
   const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
