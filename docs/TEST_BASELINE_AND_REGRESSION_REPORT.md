@@ -1,12 +1,20 @@
 # Test Baseline and Regression Report
 
+## Latest code/test checkpoint — 2026-10-24
+
+Code and regression-test commit: `9c89e46c138f1b277de7efb5580fbaa4008d22c5`. All three GitHub Actions validation workflows passed on this exact commit, each with 96 passed, 0 failed, 0 skipped: [automation validation and clean install](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354250`), [metadata/schedule validation](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354339`), and [content quality](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354256`). The automation workflow used `npm ci --ignore-scripts`, reported 46 packages added and 47 audited, and passed Python compilation.
+
+This checkpoint additionally verifies that private-upload approvals bind the hash of the structured rights record and that the referenced source asset and retained licence-evidence files still match their recorded SHA-256 checksums at upload preflight. Dashboard startup now requires `DASHBOARD_OPERATOR_ID`; relevant audit events use that identity, and each rights-evidence asset retains the reviewer and verification timestamp.
+
+These are automated/code-level checks, not proof that a fixture is a genuine licence, that a real wildlife video has been rendered and watched, or that a live YouTube upload has succeeded. Public publishing remains disabled; PR #1 remains open, draft and unmerged.
+
 Date: 2026-10-24  
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Tested implementation SHA: `6b0874b870343cf435099eedf74038bf2e01f58c`  
+Tested implementation SHA: `9c89e46c138f1b277de7efb5580fbaa4008d22c5`  
 Main baseline SHA: `45352b73bb6cc4787b2a49988b575afb754ab627`
 
-## Latest implementation checkpoint — 2026-10-24
+## Previous implementation checkpoint (superseded by current code/test checkpoint below) — 2026-10-24
 
 Code and regression-test commit: `6b0874b870343cf435099eedf74038bf2e01f58c`. The three GitHub Actions validation workflows passed on this exact commit: 95 tests passed, 0 failed, 0 skipped in each workflow. [Automation validation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083877), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083898), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083943). The automation workflow completed `npm ci --ignore-scripts` and installed/audited 46 packages.
 
