@@ -165,7 +165,9 @@ export async function evaluateFinalFacebookPayload(payload, {
     if (asset.syntheticOrAltered === true && asset.disclosureRequired === true && asset.disclosureApplied !== true) add(blockers, `Media asset ${i + 1} requires a visible synthetic/altered-media disclosure`);
   }
 
-  const links = Array.isArray(payload.links) ? payload.links : [];
+  const structuredLinks = Array.isArray(payload.links) ? payload.links.map(String) : [];
+  const captionLinks = String(payload.caption ?? "").match(/https?:\/\/[^\s)]+/gi) ?? [];
+  const links = [...new Set([...structuredLinks, ...captionLinks])];
   const affiliate = payload.commercial === true || links.some(link => /selar\.com|safari\.com/i.test(String(link)));
   const disclosureText = String(payload.caption ?? "");
   if (affiliate) {
