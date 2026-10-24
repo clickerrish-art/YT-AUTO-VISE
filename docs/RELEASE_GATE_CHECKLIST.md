@@ -8,8 +8,8 @@
 
 ### Exact-SHA evidence
 
-- [Automation validation — run 40125043955](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125043955): **PASS** on exact candidate `c093143a804299cbf7a673f25e0c19d3f8ea4507`; Node tests passed with 0 failures and 0 skips; Python safety tests: 8 passed; campaign/queue/schedule checks, JavaScript syntax and Python compilation passed. The isolated normal lifecycle-script `npm ci` passed and `googleapis` imported successfully. npm audit reported four moderate advisories, zero high and zero critical.
-- [Metadata validation — run 40125043948](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125043948): **PASS** on the same exact candidate.
+- [Automation validation — run 40125043955](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125043955): **PASS** on exact candidate `c093143a804299cbf7a673f25e0c19d3f8ea4507`; 206 Node tests passed, 0 failed, 0 skipped; Python safety tests: 8 passed; campaign/queue/schedule checks, JavaScript syntax and Python compilation passed. The isolated normal lifecycle-script `npm ci` passed and `googleapis` imported successfully. npm audit reported four moderate advisories, zero high and zero critical.
+- [Metadata validation — run 40125043948](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125043948): **PASS** on the same exact candidate; 206 Node tests passed, 0 failed, 0 skipped.
 - [Content quality — run 40125044071](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125044071): **PASS** on the same exact candidate.
 - [Locked install/lockfile validation — run 40125040155](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125040155): **PASS** on the same exact candidate; clean `npm ci --ignore-scripts`, tests and configuration checks passed.
 - [Production-readiness diagnostic — run 40125043947](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125043947): **BLOCKED as intended** because mandatory production prerequisites remain unresolved. The `sonicvhibez-readiness-report` artifact was retained (artifact ID `12572064725`; expires 23 November 2026). This is not a readiness pass.
@@ -32,7 +32,7 @@ The live comparison is 890 ahead / 2 behind, with merge base `45352b73bb6cc4787b
 
 | Gate | Status | Evidence / next action |
 |---|---|---|
-| Node.js automated tests | PASS | Full suite passed on exact code candidate; 0 failures and 0 skips. |
+| Node.js automated tests | PASS | 206 Node tests passed, 0 failed, 0 skipped on exact code candidate. |
 | Python safety tests | PASS | 8 passed on exact code candidate. |
 | Campaign, queue, schedule, syntax and compilation checks | PASS | Exact-candidate automation workflow above. |
 | Normal lifecycle-script installation | PASS | Isolated clean checkout, no credentials, normal `npm ci`, and `googleapis` import passed. |
