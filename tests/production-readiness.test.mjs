@@ -10,6 +10,7 @@ test("readiness report identifies blockers without enabling publishing or failin
   });
   assert.equal(result.status, 0);
   assert.match(result.stdout, /SonicVhibez production readiness/);
+  assert.match(result.stdout, /Owner decision required: the requested 2 long-form \+ 1 Short weekly target conflicts with the 72-hour minimum/);
   assert.match(result.stdout, /HOLD:/);
   assert.match(result.stdout, /public publishing disabled/);
   assert.match(result.stdout, /content\/render-manifest\.json/);
