@@ -1,16 +1,27 @@
 {
   "cadence": {
-    "postsPerWeek": 2,
-    "days": [
-      "Tuesday",
-      "Saturday"
+    "publicationCycleId": "sonicvhibez-rolling-cycle-v1",
+    "formats": [
+      "long_form",
+      "long_form",
+      "short"
     ],
+    "minimumHoursBetweenConsecutivePublications": 72,
+    "minimumCycleHours": 216,
     "timezone": "Africa/Johannesburg",
-    "breakdown": {
-      "longForm": 1,
-      "short": 1
+    "draftPreparationFallback": {
+      "days": [
+        "Tuesday",
+        "Saturday"
+      ],
+      "breakdown": {
+        "longForm": 1,
+        "short": 1
+      },
+      "status": "DRAFT_ONLY",
+      "notPublicationCadence": true
     },
-    "note": "Interim two-slot draft-production schedule only: Tuesday long-form and Saturday Short, with 96h/72h cyclic gaps. The requested target remains 2 long-form + 1 Short weekly but is mathematically incompatible with the 72-hour minimum; owner decision required before publication. Public publishing disabled."
+    "note": "Draft preparation only. Actual publication is governed by the rolling three-publication cycle and verified remote history; no weekly publication count is promised."
   },
   "publishingEnabled": false,
   "items": [
@@ -297,5 +308,6 @@
       "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
       "contentType": "short"
     }
-  ]
+  ],
+  "version": 2
 }
