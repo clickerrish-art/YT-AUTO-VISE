@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
+import path from "node:path";
 import { localDateTimeToIso } from "./schedule-policy.mjs";
 
 export const FACEBOOK_TIMEZONE = "Africa/Johannesburg";
@@ -104,9 +105,9 @@ export function evaluateFacebookDraft(draft, {
   else {
     if (!safeString(draft.media.path, 1000) || !/^[a-f0-9]{64}$/.test(draft.media.sha256 ?? "")) blockers.push("Media path and SHA-256 checksum are required");
     else {
-      const fullPath = require("node:path").resolve(rightsRoot, draft.media.path);
-      const root = require("node:path").resolve(rightsRoot);
-      if (!(fullPath === root || fullPath.startsWith(root + require("node:path").sep))) blockers.push("Media path escapes the configured rights root");
+      const fullPath = path.resolve(rightsRoot, draft.media.path);
+      const root = path.resolve(rightsRoot);
+      if (!(fullPath === root || fullPath.startsWith(root + path.sep))) blockers.push("Media path escapes the configured rights root");
       else {
         try {
           const bytes = fs.readFileSync(fullPath);
@@ -117,7 +118,6 @@ export function evaluateFacebookDraft(draft, {
     if (!safeString(draft.media.provenance, 1000)) blockers.push("Media provenance is required");
     if (!safeString(draft.media.licenseEvidencePath, 1000) || !/^[a-f0-9]{64}$/.test(draft.media.licenseEvidenceSha256 ?? "")) blockers.push("License evidence path and checksum are required");
     else {
-      const path = require("node:path");
       const fullPath = path.resolve(rightsRoot, draft.media.licenseEvidencePath);
       const root = path.resolve(rightsRoot);
       if (!(fullPath === root || fullPath.startsWith(root + path.sep))) blockers.push("License evidence path escapes the configured rights root");
