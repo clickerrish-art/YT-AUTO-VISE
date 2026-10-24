@@ -382,7 +382,7 @@ const server = http.createServer(async (req, res) => {
       const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
       const accessToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
       const apiVersion = process.env.META_GRAPH_API_VERSION ?? config.apiVersion ?? "v26.0";
-      if (!/^\\d{5,30}$/.test(envPageId) || config.destinationPageId !== envPageId) return json(res, 409, { error: "Configure the exact owner-verified numeric Page ID in both config/facebook-publishing.json and NATURE_FRONTIERS_FACEBOOK_PAGE_ID first" });
+      if (!/^\d{5,30}$/.test(envPageId) || config.destinationPageId !== envPageId) return json(res, 409, { error: "Configure the exact owner-verified numeric Page ID in both config/facebook-publishing.json and NATURE_FRONTIERS_FACEBOOK_PAGE_ID first" });
       if (accessToken.length < 20) return json(res, 409, { error: "META_PAGE_ACCESS_TOKEN is missing from the secure environment" });
       let identity;
       try {
@@ -507,7 +507,7 @@ const server = http.createServer(async (req, res) => {
       if (config.publishingEnabled !== true) setupBlockers.push("config/facebook-publishing.json publishingEnabled must be explicitly enabled by the owner");
       if (config.dryRun !== false) setupBlockers.push("Facebook dryRun must be explicitly disabled by the owner after all checks");
       if (!envPublishingEnabled) setupBlockers.push("FACEBOOK_PUBLISH_ENABLED must equal YES as the separate publishing kill switch");
-      if (!expectedPageId) setupBlockers.push("The owner-verified Page ID in config must match NATURE_FRONTIERS_FACEBOOK_PAGE_ID and pageIdentityVerified=true");
+      if (!expectedPageId) setupBlockers.push("A recent successful /api/facebook/verify-page check must match the configured Page ID and secure environment value");
       if (accessToken.length < 20) setupBlockers.push("META_PAGE_ACCESS_TOKEN is missing from the secure environment");
       if (!permissionsConfirmed) setupBlockers.push("META_PAGE_PERMISSIONS_CONFIRMED must equal YES after the owner verifies Meta Page roles and permissions");
       if (setupBlockers.length) return json(res, 409, { error: "Facebook publishing configuration is not ready; no remote mutation was attempted", blockers: setupBlockers, publishingEnabled: false });
