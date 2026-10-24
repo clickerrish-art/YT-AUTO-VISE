@@ -488,7 +488,7 @@ const server = http.createServer(async (req, res) => {
         const durableStateConfigured = path.isAbsolute(configuredStateDir) && fs.existsSync(configuredStateDir) && fs.statSync(configuredStateDir).isDirectory();
         const state = loadState();
         const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
-        const pageIdMatches = /^\\d{5,30}$/.test(config.destinationPageId ?? "") && config.destinationPageId === envPageId;
+        const pageIdMatches = /^\d{5,30}$/.test(config.destinationPageId ?? "") && config.destinationPageId === envPageId;
         const tokensConfigured = (process.env.META_USER_ACCESS_TOKEN ?? "").length >= 20 && (process.env.META_PAGE_ACCESS_TOKEN ?? "").length >= 20;
         const connection = state.facebookConnection ?? {};
         const identityVerified = pageIdMatches && connection.verified === true && connection.permissionsVerified === true &&
