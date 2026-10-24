@@ -120,6 +120,8 @@ function main() {
     date: result.package.date, destination: result.package.destination,
     topic: result.package.topic, pillar: result.package.pillar,
     proposedPublicationTime: result.package.proposedPublicationTime,
+    proposedScheduledAt: result.package.proposedScheduledAt,
+    scheduleStatus: result.package.scheduleStatus, status: result.package.status,
     timezone: result.package.timezone, publishReady: false, publishingEnabled: false
   }, null, 2));
 }
