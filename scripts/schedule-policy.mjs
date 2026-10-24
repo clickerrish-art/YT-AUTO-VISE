@@ -1,7 +1,7 @@
 export const DEFAULT_SCHEDULE_TIMEZONE = "Africa/Johannesburg";
 export const DEFAULT_MIN_SPACING_HOURS = 72;
 
-const ACTIVE_STATUSES = new Set(["scheduled", "published"]);
+const ACTIVE_STATUSES = new Set(["scheduled", "published", "public", "private", "unlisted", "uploading", "uploading_private", "pending", "pending_upload", "uncertain", "outcome_uncertain", "upload_outcome_uncertain", "recovery_required"]);
 
 function localDateKey(timestamp, timeZone) {
   return new Intl.DateTimeFormat("en-CA", {
@@ -145,3 +145,86 @@ export function localDateTimeToIso(date, time = "17:00", timeZone = DEFAULT_SCHE
   return new Date(guess).toISOString();
 }
 
+
+
+export const ROLLING_PUBLICATION_FORMATS = Object.freeze(["long_form", "long_form", "short"]);
+export const UNCERTAIN_UPLOAD_STATUSES = Object.freeze(["uploading", "uploading_private", "pending", "pending_upload", "uncertain", "outcome_uncertain", "upload_outcome_uncertain", "recovery_required"]);
+
+/**
+ * Fail-closed gate for the next actual publication. A queue is not evidence of
+ * channel history; callers must independently retrieve public/private/unlisted
+ * history and reconcile all pending/uncertain inserts before setting historyVerified.
+ */
+export function evaluateNextPublication({
+  history,
+  historyVerified = false,
+  pendingAttempts = [],
+  scheduledItems = [],
+  proposedAt,
+  jobId,
+  format,
+  timeZone = DEFAULT_SCHEDULE_TIMEZONE,
+  minSpacingHours = DEFAULT_MIN_SPACING_HOURS
+} = {}) {
+  const errors = [];
+  if (historyVerified !== true) errors.push("complete channel history has not been independently verified");
+  if (!Array.isArray(history)) errors.push("channel history must be an array");
+  if (!Array.isArray(pendingAttempts)) errors.push("pendingAttempts must be an array");
+  if (!Array.isArray(scheduledItems)) errors.push("scheduledItems must be an array");
+  if (errors.length) return { valid: false, errors, expectedFormat: null };
+  const normalizedHistory = history.map((item, index) => {
+    if (!item || typeof item !== "object" || !item.id) {
+      errors.push(`history item ${index} is missing a stable remote ID`);
+      return null;
+    }
+    const status = String(item.status ?? item.visibility ?? "").toLowerCase();
+    const timestamp = item.actualPublishedAt ?? item.publishedAt ?? item.createdAt;
+    if (!timestamp || !Number.isFinite(Date.parse(timestamp))) {
+      errors.push(`history item ${item.id} is missing a verified actual timestamp`);
+      return null;
+    }
+    return { id: String(item.id), status, timestamp: Date.parse(timestamp), format: item.format ?? item.contentType ?? null };
+  }).filter(Boolean);
+  for (const attempt of pendingAttempts) {
+    const status = String(attempt?.status ?? "").toLowerCase();
+    if (!attempt?.jobId || UNCERTAIN_UPLOAD_STATUSES.includes(status)) {
+      errors.push(`upload attempt ${attempt?.jobId ?? "(unknown)"} has an unresolved/uncertain outcome and must be reconciled`);
+    }
+  }
+  const allPlanned = [...scheduledItems, ...pendingAttempts.filter(a => !UNCERTAIN_UPLOAD_STATUSES.includes(String(a?.status ?? "").toLowerCase()))];
+  const ids = new Set();
+  for (const item of [...allPlanned, ...history]) {
+    if (item?.id && ids.has(String(item.id))) errors.push(`duplicate stable job/remote ID: ${item.id}`);
+    if (item?.id) ids.add(String(item.id));
+  }
+  if (!jobId || typeof jobId !== "string" || !jobId.trim()) errors.push("proposed publication requires a stable job ID");
+  if (!Number.isFinite(Date.parse(proposedAt ?? ""))) errors.push("proposedAt must be a valid timestamp");
+  const actualSorted = normalizedHistory.sort((a, b) => a.timestamp - b.timestamp);
+  const latestActual = actualSorted.at(-1);
+  const expectedFormat = ROLLING_PUBLICATION_FORMATS[actualSorted.length % ROLLING_PUBLICATION_FORMATS.length];
+  if (format !== expectedFormat) errors.push(`next format must be ${expectedFormat} in the rolling long_form, long_form, short cycle`);
+  const candidate = { id: jobId, status: "scheduled", scheduledAt: proposedAt };
+  const existing = [
+    ...history.map(item => ({
+      id: String(item.id),
+      status: String(item.status ?? item.visibility ?? "published").toLowerCase(),
+      scheduledAt: item.scheduledAt,
+      publishedAt: item.actualPublishedAt ?? item.publishedAt ?? item.createdAt
+    })),
+    ...scheduledItems,
+    ...pendingAttempts.map(item => ({
+      id: item?.jobId,
+      status: String(item?.status ?? "").toLowerCase(),
+      scheduledAt: item?.scheduledAt ?? item?.createdAt,
+      publishedAt: item?.actualPublishedAt ?? item?.publishedAt
+    }))
+  ];
+  if (Number.isFinite(Date.parse(proposedAt ?? ""))) {
+    const spacing = validatePublicationSlot(candidate, existing, { timeZone, minSpacingHours });
+    errors.push(...spacing.errors);
+    if (latestActual && (Date.parse(proposedAt) - latestActual.timestamp) / 3_600_000 < minSpacingHours) {
+      errors.push("proposed publication is less than 72 elapsed hours after the latest actual channel publication");
+    }
+  }
+  return { valid: errors.length === 0, errors: [...new Set(errors)], expectedFormat, latestActualAt: latestActual ? new Date(latestActual.timestamp).toISOString() : null };
+}
