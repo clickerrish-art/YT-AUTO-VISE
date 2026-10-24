@@ -5,6 +5,13 @@ import { localDateTimeToIso } from "./schedule-policy.mjs";
 
 export const FACEBOOK_TIMEZONE = "Africa/Johannesburg";
 export const FACEBOOK_COMPLIANCE_VERSION = "nf-facebook-baseline-2026-10-v1";
+export const FACEBOOK_QUALITY_RUBRIC = Object.freeze({
+  version: "facebook-quality-rubric-v1",
+  startingScore: 100,
+  deductions: { eachBlocker: 20, eachHumanReviewFlag: 8, eachWarning: 3 },
+  thresholds: { internalTarget: 95, reviseBelow: 95 },
+  rule: "Any blocker or unresolved human-review flag blocks approval regardless of score; the score is a deterministic triage aid, not a Meta, SEO, reach, or virality score."
+});
 export const FACEBOOK_PILLARS = Object.freeze([
   "wildlife_behaviour", "conservation_education", "habitats_biodiversity",
   "ethical_photography", "educational_explainer", "authorized_behind_scenes"
@@ -136,9 +143,9 @@ export function evaluateFacebookDraft(draft, {
     if (other.contentFingerprint && other.contentFingerprint === fingerprint) blockers.push(`Duplicate content fingerprint matches item ${other.id ?? "unknown"}`);
     else if (similarityRatio(draft.caption, other.caption) >= 0.82) blockers.push(`Caption is near-duplicate of item ${other.id ?? "unknown"}; create meaningfully original content`);
   }
-  const score = Math.max(0, 100 - blockers.length * 20 - flags.length * 8 - warnings.length * 3);
+  const score = Math.max(0, FACEBOOK_QUALITY_RUBRIC.startingScore - blockers.length * FACEBOOK_QUALITY_RUBRIC.deductions.eachBlocker - flags.length * FACEBOOK_QUALITY_RUBRIC.deductions.eachHumanReviewFlag - warnings.length * FACEBOOK_QUALITY_RUBRIC.deductions.eachWarning);
   if (requireHumanApproval && flags.length) warnings.push("Human approval is required to resolve flagged claims or sensitive content");
-  return { ok: blockers.length === 0 && flags.length === 0, blockers: [...new Set(blockers)], flags: [...new Set(flags)], warnings: [...new Set(warnings)], score, rubricVersion: "facebook-quality-rubric-v1", scoreNote: "Deterministic blocker/flag rubric only; not an SEO score, Meta certification, or prediction of reach." , complianceVersion: FACEBOOK_COMPLIANCE_VERSION };
+  return { ok: blockers.length === 0 && flags.length === 0, blockers: [...new Set(blockers)], flags: [...new Set(flags)], warnings: [...new Set(warnings)], score, rubricVersion: FACEBOOK_QUALITY_RUBRIC.version, scoreNote: "Deterministic blocker/flag rubric only; not an SEO score, Meta certification, or prediction of reach." , complianceVersion: FACEBOOK_COMPLIANCE_VERSION };
 }
 
 export function facebookApprovalFingerprint(draft) {
