@@ -21,13 +21,14 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Check out implementation branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: codex/marketing-machine-audit-fixes
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: '20'
+          node-version: '24'
+$2package-manager-cache: false
       - name: Decide whether the lockfile must be generated or refreshed
         id: lockfile-status
         env:
