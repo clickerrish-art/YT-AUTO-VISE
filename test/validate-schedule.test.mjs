@@ -39,6 +39,20 @@ function runWithPlanMutation(mutate) {
   }
 }
 
+
+test("schedule validator keeps requested cadence distinct from interim draft fallback", () => {
+  const target = runWithPlanMutation(plan => {
+    plan.targetCadence = { longFormVideosPerWeek: 1, shortsPerWeek: 1, totalVideosPerWeek: 2 };
+  });
+  assert.notEqual(target.status, 0);
+  assert.match(target.stderr, /targetCadence must preserve the requested 2 long-form/);
+  const interim = runWithPlanMutation(plan => {
+    plan.interimDraftCadence.totalVideosPerWeek = 3;
+  });
+  assert.notEqual(interim.status, 0);
+  assert.match(interim.stderr, /interimDraftCadence must remain one long-form/);
+});
+
 test("schedule validator rejects any weekly gap shorter than 72 full hours", () => {
   const result = runWithPlanMutation(plan => {
     plan.schedule[1].day = "Thursday";
