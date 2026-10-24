@@ -20,7 +20,7 @@ function fixture() {
     allowedDomains: [], allowedCampaignIds: [], approvedDestinations: [],
     dailyCap: 1, minimumIntervalMinutes: 1200
   }));
-  fs.writeFileSync(queuePath = path.join(rootDir, queuePath), "[]");
+  fs.writeFileSync(path.join(rootDir, queuePath), "[]");
   return { rootDir, stateDir, configPath, queuePath, candidatePath, cleanup: () => fs.rmSync(rootDir, { recursive: true, force: true }) };
 }
 
@@ -40,7 +40,7 @@ test("intake queues only candidates that pass the final policy evaluator", async
     });
     assert.equal(result.accepted, 1);
     assert.equal(result.blocked, 1);
-    const queue = JSON.parse(fs.readFileSync(f.queuePath, "utf8"));
+    const queue = JSON.parse(fs.readFileSync(path.join(f.rootDir, f.queuePath), "utf8"));
     assert.deepEqual(queue.map(item => item.slotId), ["eligible-slot"]);
     const summary = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-intake-summary.json"), "utf8"));
     assert.equal(summary.decisions[1].reason, "MISSING_RIGHTS");
@@ -51,7 +51,7 @@ test("intake refuses duplicate slots and preserves existing queue items", async 
   const f = fixture();
   try {
     const existing = { slotId: "already-queued", caption: "existing" };
-    fs.writeFileSync(f.queuePath, JSON.stringify([existing]));
+    fs.writeFileSync(path.join(f.rootDir, f.queuePath), JSON.stringify([existing]));
     fs.writeFileSync(path.join(f.rootDir, f.candidatePath), JSON.stringify([{ slotId: "already-queued", caption: "duplicate" }]));
     const result = await runFacebookContentIntake({
       ...f, now: Date.parse("2026-10-24T10:00:00Z"), rootDir: f.rootDir,
