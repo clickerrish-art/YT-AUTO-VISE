@@ -1,12 +1,13 @@
-# CURRENT CANDIDATE — 2026-10-24
+# CURRENT CANDIDATE — 2026-10-24 (live evidence refresh)
 
-- Implementation branch: `codex/marketing-machine-audit-fixes`; candidate HEAD: `e36f3fb288df257e71605e9f8e51f4941a9253ab`.
-- PR #1 remains open, draft and unmerged: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1. Public YouTube publishing remains disabled; Facebook publishing remains disabled by default.
-- Exact-HEAD CI:
-  - [Automation validation — run 40095077502](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095077502): passed; 147 Node tests passed, 0 failed, 0 skipped; 8 Python safety tests passed; locked install, syntax/compilation, campaign and queue checks passed.
-  - [Content quality — run 40095077405](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095077405): passed; 147 Node tests passed, 0 failed, 0 skipped.
-  - [Metadata validation — run 40095077505](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095077505): passed; 147 Node tests passed, 0 failed, 0 skipped.
-  - [Daily Facebook draft workflow — run 40095077449](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095077449): intentionally skipped on the PR branch by the default-branch-only condition; this is not a production scheduled-run pass.
+- Implementation branch: `codex/marketing-machine-audit-fixes`; code/test evidence SHA: `8fa9180698a3e819fb8a3b865e502ed067b4a047`. This is not the latest branch HEAD after the audit-document refresh; current HEAD must be fetched and CI rechecked before release.
+- PR #1 is open, draft and unmerged. Live branch comparison: 657 commits ahead, 2 behind `main`; current base HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. The two base-only commits add then revert an unintended test file; no history rewrite or merge was performed.
+- Code-HEAD CI:
+  - [Automation validation — run 40095519621](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095519621): passed; 148 Node tests passed, 0 failed, 0 skipped; 8 Python safety tests passed; `npm ci --ignore-scripts`, syntax/compilation and campaign/queue checks passed.
+  - [Content quality — run 40095519648](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095519648): passed; 148 Node tests passed, 0 failed, 0 skipped.
+  - [Metadata validation — run 40095519702](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095519702): passed; 148 Node tests passed, 0 failed, 0 skipped.
+  - [Daily Facebook draft workflow — run 40095519625](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095519625): skipped on the PR branch by the default-branch-only condition; not evidence of live default-branch operation.
+- These results are tied to the code SHA above, not this documentation refresh. Re-fetch live HEAD and require exact-SHA CI before treating this as current release evidence.
 - Cross-run history restoration now has mocked API integration tests for valid artifact retrieval, malformed archive failure, HTTPS enforcement and bounded archive size. Same-day retained packages are reused exactly; conflicting same-date artifacts fail closed. These are mocked tests, not proof of a real default-branch artifact restore.
 - History remains bounded by GitHub's 14-day artifact retention, not a permanent editorial database. The next authorized default-branch scheduled/manual run must verify real artifact restoration and deduplication.
 - Latest npm audit on this tested candidate: 4 moderate, 0 high, 0 critical advisories involving `gaxios`, `googleapis`, `googleapis-common` and `uuid`; the available `googleapis` remediation is a major version upgrade and remains unmodified pending compatibility testing.
