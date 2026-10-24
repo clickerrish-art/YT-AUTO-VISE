@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "destination": "nature_frontiers_facebook",
+  "destinationPageId": "",
+  "pageIdentityVerified": false,
+  "publishingEnabled": false,
+  "dryRun": true,
+  "timezone": "Africa/Johannesburg",
+  "dailyTarget": 1,
+  "defaultLocalTime": "08:00",
+  "comparisonLocalTime": "18:00",
+  "experiment": {
+    "enabled": true,
+    "minimumPostsPerArm": 14,
+    "metrics": ["reach", "meaningfulEngagement", "shares", "outboundLinkClicks", "videoRetention"],
+    "note": "Use only metrics actually returned by the authorized Page Insights integration; do not infer missing values. No Page-specific timing conclusion is available until enough comparable observations are recorded."
+  },
+  "complianceRuleSet": "nf-facebook-baseline-2026-10-v1",
+  "requireHumanApprovalFor": [
+    "unverified_claims",
+    "wildlife_injury_predation_or_graphic_content",
+    "sensitive_conservation_claims",
+    "affiliate_promotions",
+    "ambiguous_rights",
+    "synthetic_or_altered_media",
+    "new_destination_or_integration"
+  ],
+  "pillars": [
+    "wildlife_behaviour",
+    "conservation_education",
+    "habitats_biodiversity",
+    "ethical_photography",
+    "educational_explainer",
+    "authorized_behind_scenes"
+  ],
+  "notes": [
+    "This is configuration for a draft-first pipeline, not proof of Page identity, Meta permissions or live publishing capability.",
+    "The Page ID must be supplied and independently verified by the owner before any publishing adapter can be enabled.",
+    "Public Facebook publishing is disabled. No live publishing adapter is enabled by this configuration.",
+    "The Nature Frontiers Facebook destination is separate from the SonicVhibez YouTube destination."
+  ]
+}
