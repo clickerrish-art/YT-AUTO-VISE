@@ -1,18 +1,16 @@
-# CURRENT CANDIDATE — 2026-10-24 (live evidence refresh)
+# CURRENT CANDIDATE — 2026-10-24 (latest verified status)
 
-- Implementation branch: `codex/marketing-machine-audit-fixes`; tested code candidate before this documentation refresh: `8fa9180698a3e819fb8a3b865e502ed067b4a047`. This documentation-only commit must be revalidated by its own CI before it becomes the current tested candidate.
-- Live PR #1 metadata confirms open, draft and unmerged: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1. Live comparison reports 657 commits ahead and 2 behind `main`; current base HEAD is `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. The two behind commits are the accidental test-file addition and its revert; the latest base commit explicitly removes that test file. Do not merge or rewrite history as part of this task.
-- Exact code-HEAD CI for `8fa9180698a3e819fb8a3b865e502ed067b4a047`:
-  - [Automation validation — run 40095519621](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095519621): passed; 148 Node tests passed, 0 failed, 0 skipped; 8 Python safety tests passed; `npm ci --ignore-scripts`, campaign/queue checks, JavaScript syntax and Python compilation passed.
-  - [Content quality — run 40095519648](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095519648): passed; 148 Node tests passed, 0 failed, 0 skipped.
-  - [Metadata validation — run 40095519702](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095519702): passed; 148 Node tests passed, 0 failed, 0 skipped.
-  - [Daily Facebook draft workflow — run 40095519625](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095519625): intentionally skipped on the PR branch by the default-branch-only condition; this is not a production scheduled-run pass.
-- These workflow results cover the code candidate above, not the documentation-refresh commit that follows. Re-fetch the current branch HEAD and require CI on that exact SHA before treating this snapshot as current.
-- Cross-run history restoration now has mocked API integration tests for valid artifact retrieval, malformed archive failure, HTTPS enforcement and bounded archive size. Same-day retained packages are reused exactly; conflicting same-date artifacts fail closed. These are mocked tests, not proof of a real default-branch artifact restore.
-- History remains bounded by GitHub's 14-day artifact retention, not a permanent editorial database. The next authorized default-branch scheduled/manual run must verify real artifact restoration and deduplication.
-- Latest npm audit on this tested candidate: 4 moderate, 0 high, 0 critical advisories involving `gaxios`, `googleapis`, `googleapis-common` and `uuid`; the available `googleapis` remediation is a major version upgrade and remains unmodified pending compatibility testing.
-- Production acceptance remains blocked by real Meta Page verification, authorized live-post receipt, genuine media/licensing evidence and human review, live SonicVhibez OAuth/channel verification, explicitly authorized private upload and remote receipt, backup/restore owner acceptance, and live owner-reviewed YouTube history reconciliation remains required.
-- No real Facebook post or YouTube upload is claimed. Do not merge, enable public publishing or perform external mutations without separate explicit owner authorization.
+- Branch: `codex/marketing-machine-audit-fixes`; tested code SHA: `4c2cb1c82dbc5cf36bd47a8b179645a7cb07d004`.
+- PR #1: open, draft, unmerged — https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1.
+- Branch comparison: 717 commits ahead, 2 behind `main`; base HEAD `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. Preserve the disclosed accidental test-file add/delete incident for owner review; no merge or history rewrite performed.
+- Exact-SHA CI passed:
+  - Automation [run 40100161525](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40100161525): 159 Node tests passed, 0 failed/skipped; 8 Python safety tests passed; `npm ci --ignore-scripts`, syntax/compilation, campaign/queue checks passed.
+  - Content quality [run 40100161522](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40100161522): 159 Node tests passed, 0 failed/skipped.
+  - Metadata validation [run 40100161580](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40100161580): 159 Node tests passed, 0 failed/skipped; schedule, readiness and caption checks passed.
+  - Facebook daily draft [run 40100161604](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40100161604): skipped on the PR branch; not default-branch acceptance.
+- The cycle is `long_form → long_form → short`, minimum 72 elapsed hours between consecutive actual publications and 216 hours across three cyclic gaps. Tuesday/Saturday triggers are draft preparation only. Successful ledger receipts are excluded from future scheduled-slot checks; an exclusive upload lock prevents concurrent inserts and leaves a stale lock fail-closed after a crash.
+- Audit remains 4 moderate, 0 high/critical; `gaxios`, `googleapis`, `googleapis-common`, `uuid` remain unresolved. Node 20 deprecation warnings remain for checkout/setup-node v4. CI install used `npm ci --ignore-scripts`; unrestricted install not tested.
+- Production acceptance remains BLOCKED: genuine media/licence evidence, human final-hash playback approval, live SonicVhibez OAuth/history reconciliation, separately authorized private upload and remote receipt, default-branch Facebook artifact, Meta identity/permissions, dependency-risk disposition, and owner-accepted backup/restore drill are outstanding. No real upload/post or production restore is claimed.
 
 ---
 
