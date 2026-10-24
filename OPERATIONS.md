@@ -44,8 +44,10 @@ These are automated/code-level checks, not proof of genuine licence authenticity
 ## 3. Schedule and queue
 
 `config/weekly-content-plan.json` is authoritative:
-- Tuesday and Thursday at 17:00 Africa/Johannesburg: 6–10 minute 16:9 long-form drafts.
+- Tuesday at 17:00 Africa/Johannesburg: 6–10 minute 16:9 long-form draft.
 - Saturday at 17:00 Africa/Johannesburg: 50–60 second 9:16 Short draft.
+
+The weekly cycle is 96 hours from Tuesday to Saturday and 72 hours from Saturday to the next Tuesday. These are draft-production slots only; inspect the full SonicVhibez upload history and live queue before any publication.
 - Scheduled GitHub workflows run at 15:00 UTC and must remain draft-only.
 
 Queue backlog items are separate from reserved dated production slots. Duplicate/conflicting reservations are rejected. Do not manually edit the JSON state while the dashboard is running.
