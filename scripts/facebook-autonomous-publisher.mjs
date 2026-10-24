@@ -89,7 +89,7 @@ export async function runAutonomousFacebookPublisher({
   queuePath = canonicalQueuePath;
   const stateFile = name => {
     if (typeof name !== "string" || !name.trim() || path.isAbsolute(name) ||
-        name.includes("\\\\") || name.split("/").some(part => !part || part === "." || part === "..")) {
+        name.includes("\\") || name.split("/").some(part => !part || part === "." || part === "..")) {
       throw new Error("Facebook state filenames must be safe relative paths within FACEBOOK_STATE_DIR");
     }
     const base = path.resolve(stateDir);
