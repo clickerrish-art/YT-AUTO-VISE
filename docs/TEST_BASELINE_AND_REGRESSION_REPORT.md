@@ -1,3 +1,14 @@
+# Current candidate — 2026-10-24
+
+- Tested code HEAD: `e36f3fb288df257e71605e9f8e51f4941a9253ab`.
+- Exact-HEAD CI: [automation run 40095077502](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095077502), [content quality run 40095077405](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095077405), and [metadata run 40095077505](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095077505) passed. Each reports 147 Node tests passed, 0 failed, 0 skipped. Automation also reports 8 Python safety tests passed and completed locked installation, JavaScript syntax/Python compilation, campaign and queue checks.
+- The new mocked history-restoration tests cover artifact download/persistence, malformed archive failure, HTTPS API origin enforcement, bounded archive size, exact same-day artifact reuse and conflicting-artifact rejection. These do not prove real default-branch artifact retrieval.
+- The daily workflow [run 40095077449](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095077449) was intentionally skipped on the PR branch. A default-branch scheduled/manual run is still required to verify actual artifact restoration.
+- Latest npm audit: 4 moderate, 0 high, 0 critical advisories (`gaxios`, `googleapis`, `googleapis-common`, `uuid`). The available `googleapis` fix is a major upgrade; no blind upgrade was applied.
+- PR #1 remains open, draft and unmerged. Public YouTube and Facebook publishing remain disabled. No live Meta post or YouTube upload is claimed.
+
+---
+
 # Release evidence snapshot — prior checkpoint cb6ca43b7723d903c3e6b78fd3ed662a13498b04 (2026-10-24)
 
 This section records evidence from the preceding branch checkpoint; the commit containing this correction is documentation-only and is not covered by the run links below. See PR #1 for the live branch HEAD and exact current-HEAD workflow links. This is not production acceptance.
