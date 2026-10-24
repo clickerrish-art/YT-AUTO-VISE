@@ -9,6 +9,8 @@ Check:
 - `GET /readyz` — readiness and external prerequisites
 - dashboard API — requires the operator token in `x-operator-token`
 
+The `/readyz` endpoint is a **production-readiness gate**, not just a process-health check. It executes the read-only production preflight and returns HTTP 503 with a `blockers` array while required manifests, source assets, rights/compliance checks, reviewed metadata, the Short MP4, or YouTube environment configuration are missing or invalid. Use `/healthz` to distinguish a running local server from production readiness. A clear readiness response does not independently prove that a license is genuine or that editorial review occurred.
+
 Never put OAuth tokens in browser code, committed files or logs.
 
 ## 2. Schedule and queue
