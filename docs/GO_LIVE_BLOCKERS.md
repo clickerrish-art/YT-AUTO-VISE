@@ -19,6 +19,7 @@ Last review: 2026-10-24. PR #1 remains open, draft and unmerged. Public publishi
 | Live private upload | BLOCKED | After all gates pass, explicitly authorize one private upload; set `CONFIRM_PRIVATE_UPLOAD=YES` only for that operation. | Durable pre-upload attempt, remote video ID, re-fetched remote ownership/private visibility, durable receipt. |
 | Safari affiliate | INACTIVE by design | Supply exact HTTPS destination and disclosure if wanted; preview and explicitly approve. | Exact destination, disclosure and owner approval. Until then Safari stays inactive. |
 | Plain `npm ci` | NOT VERIFIED | Review install-script effects and run plain `npm ci` in a clean environment if required. | Captured command exit code and output. The evidenced install path is `npm ci --ignore-scripts`. |
+| Requested weekly cadence | BLOCKED — OWNER DECISION REQUIRED | The requested 2 long-form + 1 Short per 7 days conflicts with the immutable 72-hour minimum; three cyclic gaps require at least 216 hours. The active Tuesday/Saturday 1+1 draft schedule is an interim safety fallback only. | Owner confirms a cadence compatible with 72-hour spacing; keep public publishing disabled until then. |
 | Operator runtime acceptance | PARTIALLY VERIFIED | Run clean local startup, authenticated API checks, restart-persistence and backup/restore. | Captured health/readiness results and persisted-state/restore checks. Automated integration tests alone are not operator acceptance. |
 
 ## Non-negotiable controls
