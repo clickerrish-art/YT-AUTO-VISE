@@ -1,0 +1,49 @@
+name: Generate daily Nature Frontiers Facebook draft
+
+on:
+  schedule:
+    # 07:30 Africa/Johannesburg (UTC+2); schedule events run on the default branch only.
+    - cron: "30 5 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main, codex/marketing-machine-audit-fixes]
+    paths:
+      - "scripts/generate-facebook-daily-draft.mjs"
+      - "scripts/facebook-pipeline.mjs"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/facebook-daily-draft.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/generate-facebook-daily-draft.mjs"
+      - "scripts/facebook-pipeline.mjs"
+      - "test/facebook-daily-draft.test.mjs"
+      - "package.json"
+      - ".github/workflows/facebook-daily-draft.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  create-draft-package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Generate one idempotent research-only draft package
+        env:
+          FACEBOOK_DAILY_DRAFT_DIR: ${{ runner.temp }}/facebook-drafts
+        run: npm run facebook:draft:daily
+      - name: Retain draft package for operator review
+        uses: actions/upload-artifact@v4
+        with:
+          name: nature-frontiers-facebook-draft-${{ github.run_id }}
+          path: ${{ runner.temp }}/facebook-drafts/*.json
+          if-no-files-found: error
+          retention-days: 14
