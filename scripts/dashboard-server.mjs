@@ -112,6 +112,14 @@ function saveState(state) {
   fs.writeFileSync(temp, JSON.stringify(state, null, 2) + "\n", { mode: 0o600 });
   fs.renameSync(temp, stateFile);
 }
+function verifiedFacebookPageId(state, config) {
+  const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
+  const connection = state.facebookConnection;
+  if (!/^\\d{5,30}$/.test(envPageId) || config.destinationPageId !== envPageId) return "";
+  if (connection?.verified !== true || connection.pageId !== envPageId || !Number.isFinite(Date.parse(connection.verifiedAt))) return "";
+  if (Date.now() - Date.parse(connection.verifiedAt) > 24 * 60 * 60 * 1000) return "";
+  return envPageId;
+}
 
 const stateLockDir = stateFile + ".lock";
 async function acquireStateLock(timeoutMs = Number(process.env.DASHBOARD_STATE_LOCK_TIMEOUT_MS ?? 10_000)) {
