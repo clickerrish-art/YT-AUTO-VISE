@@ -237,7 +237,7 @@ test("cross-run history refuses a truncated 500-artifact listing instead of risk
   const calls = [];
   const fetchImpl = async url => {
     calls.push(url);
-    const match = /[?&]page=(\\d+)/.exec(url);
+    const match = /[?&]page=(\d+)/.exec(url);
     if (!match) throw new Error("archive download must not begin from incomplete history");
     return new Response(JSON.stringify({
       artifacts: Array.from({ length: 100 }, (_, index) => ({
