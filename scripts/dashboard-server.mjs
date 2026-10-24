@@ -102,7 +102,7 @@ async function acquireStateLock(timeoutMs = Number(process.env.DASHBOARD_STATE_L
   while (true) {
     try {
       fs.mkdirSync(stateLockDir, { mode: 0o700 });
-      fs.writeFileSync(path.join(stateLockDir, "owner.json"), JSON.stringify({ pid: process.pid, acquiredAt: new Date().toISOString() }), { mode: 0o600, flag: "wx" });
+      fs.writeFileSync(path.join(stateLockDir, "owner.json"), JSON.stringify({ pid: process.pid, ownerId: crypto.randomUUID(), acquiredAt: new Date().toISOString() }), { mode: 0o600, flag: "wx" });
       return () => { try { fs.rmSync(stateLockDir, { recursive: true, force: true }); } catch {} };
     } catch (error) {
       if (error.code !== "EEXIST") throw error;
@@ -114,7 +114,7 @@ async function acquireStateLock(timeoutMs = Number(process.env.DASHBOARD_STATE_L
       try {
         const ownerPath = path.join(stateLockDir, "owner.json");
         const owner = JSON.parse(fs.readFileSync(ownerPath, "utf8"));
-        if (!Number.isSafeInteger(owner.pid) || owner.pid <= 0) {
+        if (!Number.isSafeInteger(owner.pid) || owner.pid <= 0 || typeof owner.ownerId !== "string" || !owner.ownerId) {
           throw new Error("State lock owner metadata is invalid");
         }
         let ownerAlive = true;
@@ -128,7 +128,7 @@ async function acquireStateLock(timeoutMs = Number(process.env.DASHBOARD_STATE_L
           // Recheck ownership immediately before removal to avoid deleting a
           // replacement lock created after the previous observation.
           const latest = JSON.parse(fs.readFileSync(ownerPath, "utf8"));
-          if (latest.pid === owner.pid) {
+          if (latest.pid === owner.pid && latest.ownerId === owner.ownerId) {
             fs.rmSync(stateLockDir, { recursive: true, force: true });
             continue;
           }
