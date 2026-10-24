@@ -51,6 +51,55 @@ function headers(accessToken, extra = {}) {
   return { authorization: "Bearer " + accessToken, accept: "application/json", ...extra };
 }
 
+/** Verify the user's granted app scopes, exact managed Page, create-content task and matching Page token. */
+export async function verifyMetaPagePermissions({
+  pageId, userAccessToken, pageAccessToken, apiVersion = "v26.0",
+  fetchImpl = fetch, timeoutMs = 10000
+}) {
+  if (!PAGE_ID_PATTERN.test(String(pageId ?? ""))) throw new MetaPageApiError("A numeric owner-specified Page ID is required");
+  if (typeof userAccessToken !== "string" || userAccessToken.length < 20) throw new MetaPageApiError("Meta user access token is not configured securely");
+  if (typeof pageAccessToken !== "string" || pageAccessToken.length < 20) throw new MetaPageApiError("Meta Page access token is not configured securely");
+  if (!API_VERSION_PATTERN.test(apiVersion)) throw new MetaPageApiError("META_GRAPH_API_VERSION must look like v26.0");
+  let permissionsResponse;
+  try {
+    permissionsResponse = await fetchImpl(endpoint(apiVersion, "me/permissions"), {
+      method: "GET", headers: headers(userAccessToken), signal: AbortSignal.timeout(timeoutMs)
+    });
+  } catch {
+    throw new MetaPageApiError("Meta permission check failed before a response; publishing remains blocked", { retryable: true });
+  }
+  const permissionData = await parseResponse(permissionsResponse, userAccessToken);
+  const required = ["pages_show_list", "pages_read_engagement", "pages_manage_posts"];
+  const granted = new Set((permissionData.data ?? []).filter(item => item?.status === "granted").map(item => item.permission));
+  const missing = required.filter(permission => !granted.has(permission));
+  if (missing.length) throw new MetaPageApiError("Required Meta permissions are missing or not granted: " + missing.join(", "));
+  let accountsResponse;
+  try {
+    accountsResponse = await fetchImpl(endpoint(apiVersion, "me/accounts?fields=id,name,tasks,access_token&limit=100"), {
+      method: "GET", headers: headers(userAccessToken), signal: AbortSignal.timeout(timeoutMs)
+    });
+  } catch {
+    throw new MetaPageApiError("Meta managed-Page lookup failed before a response; publishing remains blocked", { retryable: true });
+  }
+  const accounts = await parseResponse(accountsResponse, userAccessToken);
+  const page = (accounts.data ?? []).find(item => item?.id === pageId);
+  if (!page) {
+    if (accounts.paging?.next) throw new MetaPageApiError("The configured Page was not in the first managed-Page results page; pagination is required before verification");
+    throw new MetaPageApiError("The configured Page ID is not present in the authorized account's managed Pages");
+  }
+  const tasks = Array.isArray(page.tasks) ? page.tasks : [];
+  if (!tasks.includes("CREATE_CONTENT") && !tasks.includes("MANAGE")) throw new MetaPageApiError("The authorized account lacks the CREATE_CONTENT or MANAGE task for this Page");
+  const returnedPageToken = typeof page.access_token === "string" ? page.access_token : "";
+  const tokensMatch = returnedPageToken.length === pageAccessToken.length &&
+    crypto.timingSafeEqual(Buffer.from(returnedPageToken), Buffer.from(pageAccessToken));
+  if (!tokensMatch) throw new MetaPageApiError("The configured Page access token does not match the token returned for this exact Page ID");
+  return {
+    verified: true, pageId: page.id, pageName: typeof page.name === "string" ? page.name : null,
+    tasks, grantedPermissions: required.filter(permission => granted.has(permission)),
+    permissionsVerified: true, verifiedAt: new Date().toISOString(), apiVersion
+  };
+}
+
 export async function verifyMetaPageIdentity({
   pageId, expectedPageId, accessToken, apiVersion = "v26.0", expectedPageName = "",
   fetchImpl = fetch, timeoutMs = 10000
