@@ -65,9 +65,9 @@ Rendering requires real manifests, audio, captions, footage and rights evidence.
 ## Test evidence
 
 At code and regression-test commit `6b0874b870343cf435099eedf74038bf2e01f58c`, all three GitHub Actions validation workflows passed: 95 passed, 0 failed, 0 skipped.
-- [Automation validation and clean install](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083877`) — `npm ci --ignore-scripts` passed; 46 packages installed/audited; JavaScript tests and Python compilation passed.
-- [Metadata/schedule validation](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083898`) — 95/95 tests passed.
-- [Content quality checks](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083943`) — 95/95 tests passed.
+- [Automation validation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083877) — `npm ci --ignore-scripts` passed; 46 packages installed/audited; JavaScript tests and Python compilation passed.
+- [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083898) — 95/95 tests passed.
+- [Content quality checks](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083943) — 95/95 tests passed.
 
 The dashboard `/readyz` endpoint now runs the full production-readiness preflight and returns HTTP 503 with actionable blockers when prerequisites are missing. These checks do not prove a real media render or live YouTube upload. Production manifests and rights-cleared inputs are still required; no genuine wildlife MP4, production thumbnail/checksum or remote upload receipt is claimed. Public publishing remains disabled.
 
