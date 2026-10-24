@@ -106,13 +106,37 @@ async function acquireStateLock(timeoutMs = 10_000) {
       return () => { try { fs.rmSync(stateLockDir, { recursive: true, force: true }); } catch {} };
     } catch (error) {
       if (error.code !== "EEXIST") throw error;
+      // Never break a lock based on age alone: a legitimate operation can
+      // outlive the lease-reaper interval. Only reap a lock whose recorded
+      // owner PID is demonstrably gone. Unknown/corrupt lock metadata fails
+      // closed and requires operator inspection rather than risking concurrent
+      // state writes.
       try {
-        const stat = fs.statSync(stateLockDir);
-        if (Date.now() - stat.mtimeMs > 120_000) {
-          fs.rmSync(stateLockDir, { recursive: true, force: true });
-          continue;
+        const ownerPath = path.join(stateLockDir, "owner.json");
+        const owner = JSON.parse(fs.readFileSync(ownerPath, "utf8"));
+        if (!Number.isSafeInteger(owner.pid) || owner.pid <= 0) {
+          throw new Error("State lock owner metadata is invalid");
         }
-      } catch { continue; }
+        let ownerAlive = true;
+        try {
+          process.kill(owner.pid, 0);
+        } catch (ownerError) {
+          if (ownerError.code === "ESRCH") ownerAlive = false;
+          else if (ownerError.code !== "EPERM") throw ownerError;
+        }
+        if (!ownerAlive) {
+          // Recheck ownership immediately before removal to avoid deleting a
+          // replacement lock created after the previous observation.
+          const latest = JSON.parse(fs.readFileSync(ownerPath, "utf8"));
+          if (latest.pid === owner.pid) {
+            fs.rmSync(stateLockDir, { recursive: true, force: true });
+            continue;
+          }
+        }
+      } catch (lockError) {
+        if (lockError.code === "ENOENT") continue;
+        // A malformed lock is not proof of a dead owner. Do not steal it.
+      }
       if (Date.now() >= deadline) throw new Error("State is busy in another process; retry the operation shortly");
       await new Promise(resolve => setTimeout(resolve, 20 + Math.floor(Math.random() * 40)));
     }
