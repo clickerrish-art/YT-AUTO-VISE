@@ -626,22 +626,27 @@ const server = http.createServer(async (req, res) => {
           saveState(state);
         } finally { release(); }
       } catch {
-        return json(res, 503, { error: "Meta accepted the request, but durable receipt persistence failed. Preserve this remote ID and reconcile; never retry blindly.", attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", retryAllowed: false });
+        const ledgerWritten = appendFacebookRecoveryReceipt({ attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", reason: "Meta accepted the request but state receipt persistence failed" });
+        return json(res, 503, { error: "Meta accepted the request, but durable receipt persistence failed. Preserve this remote ID and reconcile; never retry blindly.", attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", recoveryLedgerWritten: ledgerWritten, retryAllowed: false });
       }
 
       let remote;
       try {
         remote = await fetchMetaPagePost({ remotePostId: submitted.remotePostId, expectedPageId, accessToken, apiVersion, fetchImpl: fetch });
       } catch (error) {
-        const release = await acquireStateLock();
+        let persisted = false;
         try {
-          const state = loadState();
-          const index = state.facebookAttempts.findIndex(item => item.id === attempt.id);
-          if (index >= 0) state.facebookAttempts[index] = { ...state.facebookAttempts[index], status: "NEEDS_RECONCILIATION", remotePostId: submitted.remotePostId, retryAllowed: false, error: error instanceof Error ? error.message : "Remote verification failed", updatedAt: new Date().toISOString() };
-          state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_REMOTE_VERIFICATION_FAILED", attemptId: attempt.id, remotePostId: submitted.remotePostId, at: new Date().toISOString(), actor: operatorId, retryAllowed: false });
-          saveState(state);
-        } finally { release(); }
-        return json(res, 502, { error: "Remote post exists or may exist, but verification failed; reconcile before retrying", attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", retryAllowed: false });
+          const release = await acquireStateLock();
+          try {
+            const state = loadState();
+            const index = state.facebookAttempts.findIndex(item => item.id === attempt.id);
+            if (index >= 0) state.facebookAttempts[index] = { ...state.facebookAttempts[index], status: "NEEDS_RECONCILIATION", remotePostId: submitted.remotePostId, retryAllowed: false, error: error instanceof Error ? error.message : "Remote verification failed", updatedAt: new Date().toISOString() };
+            state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_REMOTE_VERIFICATION_FAILED", attemptId: attempt.id, remotePostId: submitted.remotePostId, at: new Date().toISOString(), actor: operatorId, retryAllowed: false });
+            saveState(state); persisted = true;
+          } finally { release(); }
+        } catch {}
+        const ledgerWritten = persisted ? false : appendFacebookRecoveryReceipt({ attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", reason: "Remote verification failed and state persistence failed" });
+        return json(res, 502, { error: "Remote post exists or may exist, but verification failed; reconcile before retrying", attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", recoveryLedgerWritten: ledgerWritten, retryAllowed: false });
       }
       if (!["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(remote.status)) {
         const release = await acquireStateLock();
@@ -674,7 +679,8 @@ const server = http.createServer(async (req, res) => {
         saveState(state);
         return json(res, 200, { attempt: finalAttempt, remote, publishingEnabled: false, note: "This operation was individually authorized. Future operations remain disabled unless separately authorized." });
       } catch {
-        return json(res, 503, { error: "Remote post was verified but final receipt persistence failed. Reconcile using this remote ID; do not retry.", attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", retryAllowed: false });
+        const ledgerWritten = appendFacebookRecoveryReceipt({ attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", reason: "Remote post verified but final receipt persistence failed" });
+        return json(res, 503, { error: "Remote post was verified but final receipt persistence failed. Reconcile using this remote ID; do not retry.", attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", recoveryLedgerWritten: ledgerWritten, retryAllowed: false });
       } finally { release(); }
     }
     if (req.method === "GET" && url.pathname === "/api/tasks") {
