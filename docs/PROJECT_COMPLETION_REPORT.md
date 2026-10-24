@@ -1,3 +1,17 @@
+# CURRENT CANDIDATE — 2026-10-24 (latest verified status)
+
+- Branch: `codex/marketing-machine-audit-fixes`; tested code SHA: `4c2cb1c82dbc5cf36bd47a8b179645a7cb07d004`.
+- PR #1: open, draft, unmerged — https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1.
+- Branch comparison: 717 commits ahead, 2 behind `main`; base HEAD `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. Preserve the disclosed accidental test-file add/delete incident for owner review; no merge or history rewrite performed.
+- Exact-SHA CI passed:
+  - Automation [run 40100161525](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40100161525): 159 Node tests passed, 0 failed/skipped; 8 Python safety tests passed; `npm ci --ignore-scripts`, syntax/compilation, campaign/queue checks passed.
+  - Content quality [run 40100161522](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40100161522): 159 Node tests passed, 0 failed/skipped.
+  - Metadata validation [run 40100161580](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40100161580): 159 Node tests passed, 0 failed/skipped; schedule, readiness and caption checks passed.
+  - Facebook daily draft [run 40100161604](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40100161604): skipped on the PR branch; not default-branch acceptance.
+- The cycle is `long_form → long_form → short`, minimum 72 elapsed hours between consecutive actual publications and 216 hours across three cyclic gaps. Tuesday/Saturday triggers are draft preparation only. Successful ledger receipts are excluded from future scheduled-slot checks; an exclusive upload lock prevents concurrent inserts and leaves a stale lock fail-closed after a crash.
+- Audit remains 4 moderate, 0 high/critical; `gaxios`, `googleapis`, `googleapis-common`, `uuid` remain unresolved. Node 20 deprecation warnings remain for checkout/setup-node v4. CI install used `npm ci --ignore-scripts`; unrestricted install not tested.
+- Production acceptance remains BLOCKED: genuine media/licence evidence, human final-hash playback approval, live SonicVhibez OAuth/history reconciliation, separately authorized private upload and remote receipt, default-branch Facebook artifact, Meta identity/permissions, dependency-risk disposition, and owner-accepted backup/restore drill are outstanding. No real upload/post or production restore is claimed.
+
 # Release evidence snapshot — prior checkpoint cb6ca43b7723d903c3e6b78fd3ed662a13498b04 (2026-10-24)
 
 This section records evidence from the preceding branch checkpoint; the commit containing this correction is documentation-only and is not covered by the run links below. See PR #1 for the live branch HEAD and exact current-HEAD workflow links. This is not production acceptance.
