@@ -119,10 +119,11 @@ export async function runAutonomousFacebookPublisher({
         history.push(record); atomicJson(historyPath, history); skipped++; continue;
       }
       // Validate live destination before recording the irreversible mutation attempt.
-      await verifyPermissions({
+      const permissionVerification = await verifyPermissions({
         pageId: config.destinationPageId, userAccessToken: env.META_USER_ACCESS_TOKEN,
         pageAccessToken: env.META_PAGE_ACCESS_TOKEN, apiVersion: config.apiVersion, fetchImpl
       });
+      if (permissionVerification?.permissionsVerified !== true) throw new Error("Live Meta Page permissions are not verified; publishing blocked");
       await verifyIdentity({
         pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
         expectedPageName: config.destinationPageName, accessToken: env.META_PAGE_ACCESS_TOKEN,
@@ -144,7 +145,7 @@ export async function runAutonomousFacebookPublisher({
         remote = await publish({
           draft: adapterDraft, pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
           accessToken: env.META_PAGE_ACCESS_TOKEN, apiVersion: config.apiVersion,
-          permissionsConfirmed: true, fetchImpl, rootDir: root, now: current
+          permissionsVerified: permissionVerification.permissionsVerified, fetchImpl, rootDir: root, now: current
         });
         const verified = await readRemote({
           remotePostId: remote.remotePostId, expectedPageId: config.destinationPageId,
