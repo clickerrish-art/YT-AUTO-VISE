@@ -63,7 +63,7 @@ This section records evidence from the preceding branch checkpoint; the commit c
 
 ## Current publication-spacing control — 2026-10-24
 
-The authoritative draft plan now has two weekly slots: Tuesday 17:00 SAST (long-form draft) and Saturday 17:00 SAST (Short draft). The cyclic gaps are 96 hours Tuesday-to-Saturday and 72 hours Saturday-to-next-Tuesday. The schedule validator rejects any configured gap below 72 hours, same-day duplicate slots, and multiple active queue items occupying one slot. This is configuration-level enforcement only: complete public/private/unlisted upload history and the live destination queue must still be inspected before any publication operation. Public publishing remains disabled.
+Tuesday/Saturday cron slots are draft-preparation triggers only, not a publication cadence. Actual uploads are gated by the rolling long-form → long-form → Short cycle, 72 elapsed hours from the latest actual publication, complete remote history reconciliation, and a clear upload-attempt ledger. Public publishing remains disabled.
 
 
 **Acceptance status: BLOCKED for real media release and live YouTube acceptance.** Code and mock tests do not substitute for real rights evidence, media inspection or remote upload verification.
@@ -121,9 +121,9 @@ These CI results do not close owner-controlled media, rights, human playback, OA
 
 ## Latest verified implementation checkpoint — 2026-10-24
 
-- Tested code/workflow HEAD: `4ba995bc51ed2ae0513bc312865713a73e0e3160` (timezone-aware local-time conversion plus the 72-hour weekly schedule guard).
+- Historical checkpoint only: `4ba995bc51ed2ae0513bc312865713a73e0e3160`. This predates the rolling-cycle and history-gate changes and is **not** current release evidence; check the exact latest branch HEAD and its CI before acceptance.
 - [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081305593), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081305540), and [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081305556) all passed on that code HEAD. Each ran 106 tests: 106 passed, 0 failed, 0 skipped. Automation also passed `npm ci --ignore-scripts` (46 packages added, 47 audited) and Python safety tests. Metadata validation explicitly confirms that `npm run check` fails closed while real production metadata is incomplete; this is not a release-readiness pass.
-- Planned draft slots are Tuesday 17:00 and Saturday 17:00 Africa/Johannesburg. The cyclic gaps are 96 hours and 72 hours. The validator checks the weekly UTC schedule and queue collisions; actual public/private/unlisted upload history and live destination queue must still be inspected before any publication.
+- Tuesday/Saturday are draft-preparation triggers only. The rolling publication cycle is long-form → long-form → Short with at least 72 elapsed hours between actual publications. The pre-upload gate requires complete remote public/private/unlisted history and reconciliation of uncertain attempts; live acceptance remains blocked until owner evidence and authorization are supplied.
 - PR #1 remains open, draft and unmerged. Public publishing remains disabled. No production MP4, thumbnail, rights clearance, human playback acceptance, live OAuth identity check, private upload receipt, or owner-run restore acceptance is claimed.
 - Remaining owner-controlled gates: genuine rights-cleared source assets and completed manifests; rendered/decoded media and human review; secure OAuth identity verification for SonicVhibez; explicit per-operation private-upload authorization; operational backup/restore acceptance. Safari remains inactive until exact destination, disclosure, and owner approval exist.
 
@@ -131,3 +131,6 @@ These CI results do not close owner-controlled media, rights, human playback, OA
 ## Current implementation delta — rolling publication cycle
 
 The former weekly-count fields have been removed from the authoritative configuration and queue. `scripts/schedule-policy.mjs` now exposes a fail-closed rolling-cycle evaluator, and `scripts/upload-private.mjs` invokes a live YouTube uploads-playlist inventory plus owner-reviewed reconciliation before any real insert. The reconciliation must enumerate every remote video with ID, format, actual publication timestamp and visibility and must match the authenticated API's records. Any incomplete history or unresolved upload attempt blocks the operation. Automated helper tests are not live OAuth or upload acceptance. Current branch CI must be rechecked at the exact latest HEAD before this document is treated as release evidence.
+
+
+**Evidence freshness note:** prior test counts and SHAs elsewhere in this file are historical checkpoints only. The latest rolling-cycle implementation introduced new tests and code after those checkpoints; do not cite those old counts as current proof. At this status refresh, the exact latest HEAD has not yet produced a verified successful CI result.
