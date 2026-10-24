@@ -39,7 +39,7 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   assert.equal(state.publishingEnabled, false);
   assert.equal(state.pageIdentityVerified, false);
   assert.ok(state.blockers.some(item => /Page identity is not independently verified/i.test(item)));
-  assert.ok(state.blockers.some(item => /Meta Page publishing permissions have not passed the live API permission\\/task check/i.test(item)));
+  assert.ok(state.blockers.some(item => /Meta Page publishing permissions have not passed the live API permission.*task check/i.test(item)));
   assert.ok(state.blockers.some(item => /publishing kill switches remain disabled/i.test(item)));
   const verifyPageResponse = await fetch(base + "/api/facebook/verify-page", { method: "POST", headers, body: JSON.stringify({}) });
   assert.equal(verifyPageResponse.status, 409, "identity verification must fail closed until a numeric Page ID and secure token are configured");
