@@ -79,7 +79,7 @@ export function weeklyUtcCronGaps(schedule) {
 }
 /** Converts a wall-clock time in an IANA timezone to a real instant without assuming a fixed UTC offset. */
 export function localDateTimeToIso(date, time = "17:00", timeZone = DEFAULT_SCHEDULE_TIMEZONE) {
-  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(date) || !/^([01]\\d|2[0-3]):[0-5]\\d$/.test(time)) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) {
     throw new Error("date/time must be valid YYYY-MM-DD and HH:mm values");
   }
   const [year, month, day] = date.split("-").map(Number);
