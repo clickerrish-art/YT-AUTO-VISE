@@ -9,6 +9,10 @@ import { createContentJob, transitionContentJob, approveContentJobForPrivateUplo
 import { createReviewDecision, sha256File } from "./human-review.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
 import { validatePublicationSlot, localDateTimeToIso } from "./schedule-policy.mjs";
+import {
+  FACEBOOK_PUBLISHING_DEFAULTS, createFacebookDraft, evaluateFacebookDraft,
+  approveFacebookDraft, chooseFacebookExperimentSlot, summarizeFacebookExperiment
+} from "./facebook-pipeline.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = process.env.DASHBOARD_HOST ?? "127.0.0.1";
@@ -36,12 +40,13 @@ fs.mkdirSync(stateDir, { recursive: true });
 if (!fs.existsSync(stateFile)) {
   const queue = JSON.parse(fs.readFileSync(path.join(root, "content/queue.json"), "utf8"));
   const campaignConfig = JSON.parse(fs.readFileSync(path.join(root, "config/campaigns.json"), "utf8"));
-  const initial = { version: 1, queueItems: queue.items ?? [], campaigns: campaignConfig.campaigns ?? [], audit: [], jobs: [], uploads: [] };
+  const initial = { version: 1, queueItems: queue.items ?? [], campaigns: campaignConfig.campaigns ?? [], audit: [], jobs: [], uploads: [], facebookDrafts: [], facebookPosts: [], facebookAttempts: [] };
   fs.writeFileSync(stateFile, JSON.stringify(initial, null, 2) + "\n", { mode: 0o600 });
 }
 function loadState() {
   const state = JSON.parse(fs.readFileSync(stateFile, "utf8"));
   for (const key of ["queueItems", "audit", "jobs", "uploads"]) if (!Array.isArray(state[key])) throw new Error("Invalid state schema: " + key);
+  for (const key of ["facebookDrafts", "facebookPosts", "facebookAttempts"]) if (!Array.isArray(state[key])) state[key] = [];
   return state;
 }
 function recoverInterruptedTasks() {
