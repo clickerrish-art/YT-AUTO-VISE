@@ -120,4 +120,25 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(renderAttemptBody.job.state, "BLOCKED");
   assert.match(renderAttemptBody.job.renderExecution.output, /render manifest not found/i);
   assert.equal(renderAttemptBody.job.outputArtifacts.length, 0, "a blocked renderer must not claim a generated artifact");
+
+  // Simulate a legacy/corrupt state file with two different queue items reserving
+  // the same local date. A distant new slot must still be blocked until the
+  // existing collision is repaired; the validator must not hide duplicates.
+  const statePath = path.join(stateDir, "dashboard-state.json");
+  const collisionState = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  const existingReservation = collisionState.queueItems.find(item => item.id === draft.id);
+  collisionState.queueItems.push({
+    ...existingReservation,
+    id: "dashboard-test-duplicate-reservation",
+    title: "Duplicate existing Tuesday reservation"
+  });
+  fs.writeFileSync(statePath, JSON.stringify(collisionState, null, 2) + "\\n", { mode: 0o600 });
+  const distantDraft = {
+    id: "dashboard-test-distant-draft", title: "Distant Saturday draft", topic: "creator workflow planning",
+    contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-31", productUrl: "https://selar.com/0u19v8u99l"
+  };
+  const blockedByExistingCollision = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(distantDraft) });
+  const collisionBody = await blockedByExistingCollision.json();
+  assert.equal(blockedByExistingCollision.status, 409, JSON.stringify(collisionBody));
+  assert.ok(collisionBody.blockers.some(error => /existing publication date collision/i.test(error)), "pre-existing same-day queue collisions must fail closed");
 });
