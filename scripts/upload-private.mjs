@@ -190,19 +190,22 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
 
   // Live uploads require independently reconciled channel history and no unresolved inserts.
   // Injected clients are reserved for unit tests and never prove live acceptance.
+  let cycleGate = null;
+  let cycleHistoryLength = null;
   if (!youtubeFactory) {
     assertNoUnresolvedUploadAttempts(ledger);
     const history = await fetchCompleteYoutubeHistory(youtube, matchedChannel, env.CHANNEL_HISTORY_RECONCILIATION_PATH, expectedChannelId);
     const format = metadata.contentType ?? metadata.format;
     if (!["long_form", "short"].includes(format)) throw new Error("metadata must explicitly identify contentType as long_form or short for rolling cycle enforcement");
-    var cycleGate = assertNextPublicationAllowed({ history, pendingAttempts: ledger.attempts, proposedAt: now().toISOString(), jobId, format });
+    cycleHistoryLength = history.length;
+    cycleGate = assertNextPublicationAllowed({ history, pendingAttempts: ledger.attempts, proposedAt: now().toISOString(), jobId, format });
   }
   const attempt = {
     attemptId: crypto.randomUUID(), jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256,
     channelId: matchedChannel.id, channelTitle: matchedChannel.snippet.title,
     format: metadata.contentType ?? metadata.format ?? null,
-    cycleIndex: typeof cycleGate !== "undefined" ? (history.length % 3) : null,
-    previousActualPublishedAt: typeof cycleGate !== "undefined" ? cycleGate.latestActualAt : null,
+    cycleIndex: cycleGate ? (cycleHistoryLength % 3) : null,
+    previousActualPublishedAt: cycleGate?.latestActualAt ?? null,
     status: "UPLOADING_PRIVATE", startedAt: now().toISOString(), remoteVideoId: null,
     publishingEnabled: false, visibility: "private"
   };
