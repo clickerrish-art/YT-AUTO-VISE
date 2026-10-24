@@ -88,3 +88,39 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   assert.ok(saved.audit.some(event => event.action === "FACEBOOK_DRAFT_CREATED" && event.itemId === draft.id && event.actor === "facebook-test-owner"));
   assert.ok(saved.audit.some(event => event.action === "FACEBOOK_DRAFT_RECHECKED"));
 });
+test("dashboard restart moves interrupted Facebook submissions to reconciliation without losing known remote IDs", async (t) => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-recovery-"));
+  const port = 28000 + Math.floor(Math.random() * 10000);
+  const token = "facebook-recovery-token-" + "r".repeat(32);
+  const statePath = path.join(stateDir, "dashboard-state.json");
+  fs.writeFileSync(statePath, JSON.stringify({
+    version: 1, queueItems: [], campaigns: [], audit: [], jobs: [], uploads: [], facebookDrafts: [], facebookPosts: [],
+    facebookAttempts: [
+      { id: "attempt-uncertain", kind: "FACEBOOK_PUBLISH_ATTEMPT", status: "SUBMITTING", retryAllowed: false, remotePostId: null },
+      { id: "attempt-known-id", kind: "FACEBOOK_PUBLISH_ATTEMPT", status: "REMOTE_SCHEDULED_UNVERIFIED", retryAllowed: false, remotePostId: "123456789012345_987" }
+    ]
+  }, null, 2) + "\n", { mode: 0o600 });
+  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "facebook-recovery-owner", DASHBOARD_STATE_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let logs = "";
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  t.after(() => { child.kill("SIGTERM"); fs.rmSync(stateDir, { recursive: true, force: true }); });
+  const base = `http://127.0.0.1:${port}`;
+  let ready = false;
+  for (let i = 0; i < 80; i++) {
+    if (child.exitCode !== null) break;
+    try { const response = await fetch(base + "/healthz"); if (response.ok) { ready = true; break; } } catch {}
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  assert.equal(ready, true, "dashboard did not start: " + logs);
+  const state = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  assert.equal(state.facebookAttempts.find(x => x.id === "attempt-uncertain").status, "NEEDS_RECONCILIATION");
+  const known = state.facebookAttempts.find(x => x.id === "attempt-known-id");
+  assert.equal(known.status, "NEEDS_RECONCILIATION");
+  assert.equal(known.remotePostId, "123456789012345_987", "known remote IDs must survive restart recovery");
+  assert.equal(known.retryAllowed, false);
+  assert.ok(state.audit.some(event => event.action === "FACEBOOK_PUBLISH_RECOVERY_REQUIRED" && event.attemptId === "attempt-known-id"));
+});
