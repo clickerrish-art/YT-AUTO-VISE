@@ -167,3 +167,14 @@ test("symlinked asset evidence escaping the rights root is blocked", async () =>
     fs.rmSync(outside, { recursive: true, force: true });
   }
 });
+
+test("URLs embedded directly in the final caption are checked even when links metadata omits them", async () => {
+  const f = fixture();
+  try {
+    f.payload.caption = "Educational note. Visit https://unapproved.example/path for more.";
+    f.payload.links = [];
+    const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.ok(result.destinationChecks.some(check => check.url.includes("unapproved.example") && !check.passed));
+  } finally { f.cleanup(); }
+});
