@@ -21,7 +21,8 @@
     "validate:schedule": "node scripts/validate-schedule.mjs",
     "validate:campaigns": "node scripts/validate-campaigns.mjs",
     "validate:short-export": "node scripts/validate-short-export.mjs",
-    "facebook:draft:daily": "node scripts/generate-facebook-daily-draft.mjs"
+    "facebook:draft:daily": "node scripts/generate-facebook-daily-draft.mjs",
+    "facebook:publish:autonomous": "node scripts/facebook-autonomous-publisher.mjs"
   },
   "engines": {
     "node": ">=22"
