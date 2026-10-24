@@ -886,7 +886,9 @@ const server = http.createServer(async (req, res) => {
     }
     return json(res, 404, { error: "Not found" });
   } catch (error) {
-    return json(res, 400, { error: error instanceof Error ? error.message : "Request failed" });
+    const message = error instanceof Error ? error.message : "Request failed";
+    const status = /State is busy in another process/i.test(message) ? 409 : 400;
+    return json(res, status, { error: message });
   }
 });
 const recoveredTasks = recoverInterruptedTasks();
