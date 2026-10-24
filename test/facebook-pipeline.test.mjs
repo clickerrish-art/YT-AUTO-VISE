@@ -129,6 +129,15 @@ test("approval fingerprint changes when factual sources or licensing provenance 
   assert.notEqual(facebookApprovalFingerprint({ ...draft, media: { ...draft.media, syntheticOrAltered: true, disclosureApplied: true } }), base);
   // Claim ordering alone is not a material change.
   assert.equal(facebookApprovalFingerprint({ ...draft, claims: [...draft.claims].reverse() }), base);
+  const evaluation = evaluateFacebookDraft(draft, { expectedPageId: "123456789012345", rightsRoot: root });
+  const approved = approveFacebookDraft(draft, { reviewer: "reviewer-test", decision: "APPROVE", evaluation, now: NOW });
+  const changedClaim = { ...approved, claims: [{ text: "Different claim", sourceUrls: ["https://example.org/source"], verified: true }] };
+  const gate = assertFacebookPublishAllowed(changedClaim, {
+    publishingEnabled: true, explicitOperationAuthorization: true, dryRun: false,
+    verifiedPageId: "123456789012345", evaluation
+  });
+  assert.equal(gate.allowed, false);
+  assert.ok(gate.blockers.some(reason => /approval.*invalidated/i.test(reason)));
 });
 
 test("human approval is bound to final content, media, disclosure, destination and time", (t) => {
