@@ -1,5 +1,20 @@
 # Operations Runbook
 
+## Facebook daily workflow — draft-only
+
+The Nature Frontiers Facebook Page is a separate destination from SonicVhibez YouTube. The implementation currently supports authenticated draft creation, deterministic checks, re-evaluation and approval records. It does **not** contain a live Meta publishing adapter.
+
+1. Verify the exact Facebook Page in Meta's own settings and record the numeric Page ID; do not rely on the Page display name.
+2. Configure `NATURE_FRONTIERS_FACEBOOK_PAGE_ID` in the local secure environment. Update `config/facebook-publishing.json` only after the owner verifies that Page ID; the config value and environment value must match.
+3. Start the dashboard locally and use the authenticated `/api/facebook/state` endpoint to inspect the Page identity gate and publishing blockers.
+4. Create a draft through `POST /api/facebook/drafts` with a unique ID, specific topic, supported content pillar, caption, future local date, numeric destination Page ID, structured claim sources, and media/license evidence paths and SHA-256 checksums.
+5. Recheck with `POST /api/facebook/drafts/evaluate`. The checker blocks missing/wrong Page identity, missing media/license evidence, checksum mismatches, unsupported source records, missing required disclosures, engagement bait and near-duplicate content. Some uncertain or sensitive cases are flagged for human review.
+6. Approval through `POST /api/facebook/drafts/approve` is allowed only when the current deterministic evaluation passes. Material changes invalidate the recorded approval fingerprint.
+7. The schedule uses `Africa/Johannesburg`, initially testing 08:00 versus 18:00. This is a hypothesis, not a claimed best time. The current experiment requires at least 14 eligible observations in each arm before recommending further comparison; no Page Insights are currently present.
+8. Keep `publishingEnabled=false`. `POST /api/facebook/publish` intentionally returns HTTP 409 and makes no external call. Use a reviewed manual handoff until an official API integration, Page permissions, token lifecycle and owner-authorized test post have been verified.
+
+Never store Meta tokens in source control, browser state, API responses or audit events. No real Facebook post has been created by these tests. See [the Facebook pipeline audit](docs/FACEBOOK_PIPELINE_AUDIT_2026-10-24.md).
+
 ## 1. Safe startup
 
 Use Node.js 20+ and run `npm ci --ignore-scripts` (the supported, CI-verified install path). Set `DASHBOARD_OPERATOR_TOKEN` to a random value at least 24 characters long and `DASHBOARD_OPERATOR_ID` to the actual authorized operator. Start with `npm run dashboard`; it binds to loopback (`127.0.0.1) by default. Keep it local. A non-loopback deployment requires a securely authenticated reverse proxy, TLS, network controls and reviewed operational configuration; do not expose the bare server.
