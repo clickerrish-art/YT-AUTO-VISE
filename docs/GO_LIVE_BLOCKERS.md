@@ -1,48 +1,50 @@
 ## Current release status — 24 October 2026
 
-**Current tested code candidate:** `b7e1a68413edca07900099dd04942c5ef8dcb02b`  
+**Current tested code candidate:** `de1bf204663f05b24d46833a2483453d9926ff0c`  
 **PR #1:** [open, draft, unmerged](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1)  
-**Branch comparison at this checkpoint:** 873 commits ahead, 2 behind `main`; 92 changed files. Merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; base head `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. History reconciliation remains an owner decision.
+**Branch comparison at this code-candidate checkpoint:** 875 commits ahead, 2 behind `main`; 92 changed files. Merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; base head `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. History reconciliation remains an owner decision.
 
 ### Exact-SHA CI evidence
 
-All listed completed workflow runs were triggered for code candidate `b7e1a68413edca07900099dd04942c5ef8dcb02b` and their job logs were inspected:
+These completed workflows ran against code candidate `de1bf204663f05b24d46833a2483453d9926ff0c`; counts and advisories were checked in job logs:
 
-- [Automation validation — run 40121115027](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115027): **PASS WITH MODERATE ADVISORIES**; `npm ci --ignore-scripts`; Node tests 203 passed, 0 failed, 0 skipped; Python safety tests 8 passed; 16 held queue topics validated; campaign checks, JavaScript syntax and Python compilation passed. Fresh locked audit: 4 moderate, 0 high, 0 critical.
-- [Metadata validation — run 40121115039](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115039): **PASS**; 203 Node tests passed, 0 failed, 0 skipped; schedule/caption and fail-closed readiness checks passed.
-- [Content quality — run 40121115019](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115019): **PASS**; 203 Node tests passed, 0 failed, 0 skipped.
-- [Daily Facebook draft — run 40121115017](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115017): **SKIPPED** on the PR event. No default-branch draft artifact is established by this run.
-- Combined commit status returned no status entries; no missing status is inferred to have passed.
+- [Automation validation — run 40121438928](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121438928): **PASS WITH MODERATE ADVISORIES**; `npm ci --ignore-scripts`; Node tests 204 passed, 0 failed, 0 skipped; Python safety tests 8 passed; 16 queued topics validated; campaign checks, JavaScript syntax and Python compilation passed. Audit: 4 moderate, 0 high, 0 critical.
+- [Metadata validation — run 40121439065](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121439065): **PASS**; 204 Node tests passed, 0 failed, 0 skipped; schedule/caption and fail-closed readiness checks passed.
+- [Content quality — run 40121438920](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121438920): **PASS**; 204 Node tests passed, 0 failed, 0 skipped.
+- [Locked-install and lockfile validation — run 40121435383](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121435383): **PASS**; clean `npm ci --ignore-scripts`, complete Node test suite and validation checks passed.
+- [Daily Facebook draft — run 40121438924](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121438924): **SKIPPED** on the PR event. No default-branch draft artifact is established by this run.
+- No live YouTube upload or Facebook post was performed. A skipped workflow is not counted as a pass.
 
 ### Recent code-level changes
 
-- `scripts/schedule-policy.mjs` rejects malformed calendar dates, timezone-free timestamps and invalid offsets. Regression coverage remains in `test/schedule-policy.test.mjs`.
-- `scripts/youtube-history-gate.mjs` now strictly validates remote publication timestamps, owner reconciliation verification timestamps and reconciled record timestamps before accepting channel history. `test/youtube-history-gate.test.mjs` adds malformed-date, missing-timezone and invalid-offset cases.
-- Exact code candidate: [`b7e1a68413edca07900099dd04942c5ef8dcb02b`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/b7e1a68413edca07900099dd04942c5ef8dcb02b). Exact-SHA workflow runs: [automation 40121115027](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115027), [metadata 40121115039](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115039), and [content quality 40121115019](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115019). All report 203 Node tests passed, 0 failed, 0 skipped; automation also reports 8 Python tests passed. The [daily Facebook draft run 40121115017](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115017) was skipped on the PR event.
-- CI ran `npm ci --ignore-scripts`, not a normal lifecycle-script install. Dependency audit remains 4 moderate, 0 high and 0 critical advisories.
+- `scripts/schedule-policy.mjs` rejects malformed calendar dates, timezone-free timestamps and invalid offsets; `test/schedule-policy.test.mjs` covers regression cases.
+- `scripts/youtube-history-gate.mjs` strictly validates remote publication timestamps, owner reconciliation verification timestamps and reconciled record timestamps; `test/youtube-history-gate.test.mjs` covers malformed dates, missing time zones and invalid offsets.
+- `scripts/upload-private.mjs` applies the same strict timestamp validation to retained rights-evidence verification and one-shot private-upload authorization. `tests/upload-safety.test.mjs` covers invalid calendar dates, missing time zones and invalid offsets. This is deterministic code/test evidence, not proof of a real owner approval or live upload.
+- CI deliberately uses `npm ci --ignore-scripts`; a normal lifecycle-script install and clean local runtime acceptance remain unverified.
 
-### Acceptance summary
+### Current acceptance register
 
 | Gate | Status | Evidence / remaining action |
 |---|---|---|
-| Node and Python automated tests | PASS | 203 Node and 8 Python safety tests on exact code SHA above. |
-| Schedule/campaign/queue/caption/syntax checks | PASS | Exact-SHA CI logs linked above. |
-| Malformed timestamp rejection | PASS | New regression cases pass in 203-test suite. |
+| Automated Node tests | PASS | 204 passed, 0 failed, 0 skipped on exact code candidate above. |
+| Python safety tests | PASS | 8 passed on exact code candidate above. |
+| Queue, campaign, schedule, caption, syntax and compilation checks | PASS | Exact-SHA automation/metadata logs linked above. |
+| Strict timestamp validation for schedule, history and private-upload authorization | PASS | Regression tests pass; no real account operation implied. |
 | Normal lifecycle-script install | NOT RUN | CI deliberately uses `npm ci --ignore-scripts`. |
-| Dependency remediation | BLOCKED | Four moderate advisories remain; no untested major Google API upgrade was applied. |
-| Full dashboard clean-install end-to-end acceptance | NOT RUN | Every visible action, restart and operator flow not independently exercised end to end. |
-| Genuine media, rights evidence and final-hash human review | OWNER ACTION REQUIRED | Supply licensed inputs and complete human review. |
-| SonicVhibez OAuth/channel identity and complete remote history | OWNER ACTION REQUIRED | Independently verify identity; reconcile public/private/unlisted videos and uncertain attempts. |
-| Single private upload and remote receipt | OWNER ACTION REQUIRED | No upload authorization or live upload occurred. |
-| Nature Frontiers Facebook Page/permissions and trusted claim verifier | OWNER ACTION REQUIRED | Verify integration; live publishing remains disabled. |
-| Default-branch Facebook draft and retained artifact | BLOCKED | PR run was skipped; verify scheduled/manual default-branch execution and artifact. |
+| Dependency remediation | BLOCKED | Four moderate advisories remain; no major Google API upgrade was applied blindly. |
+| Full dashboard clean-install end-to-end acceptance | NOT RUN | Every visible action, restart and operator flow has not been independently exercised end to end. |
+| Genuine media, rights evidence and final-hash human review | OWNER ACTION REQUIRED | Supply genuine licensed inputs and review exact final hashes. |
+| SonicVhibez OAuth identity and complete remote history | OWNER ACTION REQUIRED | Verify identity; reconcile public/private/unlisted history and uncertain attempts. |
+| One authorized private upload and remote receipt | OWNER ACTION REQUIRED | No operation-specific authorization or live upload occurred. |
+| Nature Frontiers Facebook Page identity/permissions | OWNER ACTION REQUIRED | Verify Page identity, scopes and token validity; live publishing remains disabled. |
+| Default-branch Facebook draft and retained artifact | BLOCKED | PR run skipped; verify a real default-branch run and retained artifact. |
 | Isolated backup/restore/restart drill | OWNER ACTION REQUIRED | Run in isolation and retain evidence. |
-| Branch divergence and test-file incident | OWNER ACTION REQUIRED | Review both base-only commits and branch integration; no merge/rebase performed. |
+| Branch divergence and test-file incident | OWNER ACTION REQUIRED | Review the two base-only commits and 875/2 divergence; no merge or history rewrite performed. |
 | Production acceptance | BLOCKED | External, media, dependency, integration and owner-controlled gates remain open. |
 
-**Safety defaults:** public/unattended YouTube publishing remains disabled; private upload requires separate single-operation authorization; Facebook live publishing remains disabled with dry-run/emergency stop safeguards; only approved Selar destination is `https://selar.com/0u19v8u99l`; Safari affiliate campaigns remain inactive. No live YouTube upload or Facebook post was performed.
+**Safety defaults:** public/unattended YouTube publishing remains disabled; private upload requires separate single-operation authorization; Facebook live publishing remains disabled with dry-run/emergency-stop safeguards; only approved Selar destination is `https://selar.com/0u19v8u99l`; Safari affiliate campaigns remain inactive.
 
-**Verdict:** `CODE-LEVEL ACCEPTANCE BLOCKED`; production acceptance `BLOCKED`. Automated checks pass, but this does not establish full dashboard end-to-end acceptance or production readiness.
+**Verdict:** `CODE-LEVEL ACCEPTANCE BLOCKED`; production acceptance `BLOCKED`. Passing automated tests do not establish complete end-to-end or production acceptance.
 
 ---
 
