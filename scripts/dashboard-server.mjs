@@ -383,20 +383,22 @@ const server = http.createServer(async (req, res) => {
           if (existing.requestFingerprint !== job.requestFingerprint) return json(res, 409, { error: "Idempotency key already exists with different job inputs", job: existing });
           return json(res, 200, { job: existing, reused: true, publishingEnabled: false });
         }
+        const scheduleConfig = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
         if (job.scheduledSlot?.date) {
-          const scheduleConfig = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
           const configuredSlot = (scheduleConfig.schedule ?? []).find(slot => slot.day === job.scheduledSlot.day);
           if (!configuredSlot || configuredSlot.format !== job.contentType) {
             return json(res, 409, { error: "Job day/format is not an authorized slot in the authoritative schedule", publishingEnabled: false });
           }
-          const proposedAt = localDateTimeToIso(job.scheduledSlot.date, "17:00", scheduleConfig.timezone);
-          const spacing = validateReservedPublicationSlot({ id: job.id, scheduledAt: proposedAt }, state);
-          if (!spacing.valid) return json(res, 409, { error: "Job schedule conflicts with an existing reservation or violates minimum publication spacing", blockers: spacing.errors, publishingEnabled: false });
         }
         const slotConflict = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.scheduledSlot?.date === job.scheduledSlot.date);
         if (slotConflict) {
           if (slotConflict.requestFingerprint === job.requestFingerprint) return json(res, 200, { job: slotConflict, reused: true, publishingEnabled: false, reservationReused: true });
           return json(res, 409, { error: "The requested schedule slot is already reserved by a different job; reuse the existing job for retries", job: slotConflict });
+        }
+        if (job.scheduledSlot?.date) {
+          const proposedAt = localDateTimeToIso(job.scheduledSlot.date, "17:00", scheduleConfig.timezone);
+          const spacing = validateReservedPublicationSlot({ id: job.id, scheduledAt: proposedAt }, state);
+          if (!spacing.valid) return json(res, 409, { error: "Job schedule conflicts with an existing reservation or violates minimum publication spacing", blockers: spacing.errors, publishingEnabled: false });
         }
         state.jobs.push(job);
         state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: operatorId });
