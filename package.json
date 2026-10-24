@@ -12,6 +12,7 @@
     "restore:state": "node scripts/restore-state.mjs",
     "upload:private": "node scripts/upload-private.mjs",
     "check:captions": "node scripts/check-captions.mjs content/short-001-wildlife-video-storytelling.srt content/short-002-plan-wildlife-documentary.srt",
+    "validate:caption-sync": "node scripts/validate-caption-sync.mjs",
     "preflight:media": "node scripts/preflight-media.mjs",
     "render:short": "node scripts/render-short.mjs",
     "readiness": "node scripts/production-readiness.mjs",
