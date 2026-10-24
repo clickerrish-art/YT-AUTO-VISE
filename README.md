@@ -1,36 +1,45 @@
 # SonicVhibez Marketing Machine
 
-## Authoritative current status — 24 October 2026, exact evidence checkpoint
+## Authoritative release status — 24 October 2026
 
-**This block supersedes older “current/latest” statements in the historical notes below.** It was refreshed against the live PR, comparison API and workflow logs. Do not use older candidate SHAs, branch counts or test counts below as the current release status.
+**This status supersedes all earlier “current/latest” claims in the archived checkpoints below.** The application/test candidate recorded here is `28c37e3fa2707ab45b35a665ea4b39a40311aa86`. The current release-status refresh is documentation-only; it does not alter application code. The live PR head remains the source of truth for the exact branch tip and its CI run links.
 
-- Repository: [clickerrish-art/YT-AUTO-VISE](https://github.com/clickerrish-art/YT-AUTO-VISE)
-- PR #1: [OPEN, DRAFT, UNMERGED](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1)
-- Current source checkpoint: `51df90d68b9c56d63586e118fe6e50e92ed72172`
-- `main` HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
-- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
-- GitHub compare: **927 commits ahead, 2 behind; 99 changed files**. The comparison endpoint exposes at most 250 branch-only commit records, so this is not a claim that all 927 commits were individually audited. No merge, reset, rebase, force-push, cherry-pick or history rewrite was performed.
+- PR #1: [OPEN, DRAFT, UNMERGED](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1).
+- `main` HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- At application/test candidate `28c37e3`, GitHub comparison was **936 commits ahead, 2 behind, 99 changed files**. The compare endpoint returns at most 250 branch-only commit records; this is not a full commit-by-commit review of 936 commits. No merge, reset, rebase, force-push, cherry-pick or history rewrite was performed.
 
-### Exact-checkpoint CI evidence
+### Exact-candidate checks
 
-- **PASS — automation/security**: [run 40131039255](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40131039255). Job checked out exact SHA `51df90d...`; **211 Node tests passed, 0 failed; 8 Python safety tests passed**; clean `npm ci` and a separate normal lifecycle-script `npm ci` succeeded; `googleapis` import passed; npm audit reported **0 vulnerabilities**; 16 queued topics passed safety/destination checks; campaign, review-metadata, JavaScript syntax and Python compilation checks passed.
-- **PASS — browser E2E**: [run 40131039267](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40131039267). One Chromium test passed against the actual local dashboard/backend with isolated test state. It covers authentication rejection/operator access, authoritative schedule display, draft creation and persistence, duplicate-ID rejection, blocked `/readyz` returning HTTP 503, and a 375px mobile viewport without horizontal page overflow. This is not exhaustive UI or live-service acceptance.
-- **PASS — metadata**: [run 40131039250](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40131039250).
-- **PASS — content quality**: [run 40131039217](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40131039217).
-- **PASS — lockfile validation**: [run 40131034350](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40131034350).
-- **BLOCKED as intended — production readiness**: [run 40131039220](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40131039220). It retained [diagnostic artifact 12574939795](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40131039220/artifacts/12574939795), SHA-256 `ee8c747fd96a21ea4d1f21fa89712805ba005e6befb3c64be3fca9d6129b8b6e`, expires 23 November 2026. Its deliberately empty credential environment reported 12 blockers: full channel-history/uncertain-attempt reconciliation; absent real Short and long-form render manifests; metadata not human-reviewed/READY_FOR_PRIVATE_UPLOAD; unverified channel ID; rights/compliance review not confirmed; missing `media/next-short.mp4`; and `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN`, `SONICVHIBEZ_CHANNEL_ID` not configured in that readiness-job environment. This does **not** establish whether repository secrets exist; the job intentionally does not access them.
-- **SKIPPED — Facebook draft**: [run 40131039222](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40131039222) was skipped on the PR event. It is not proof of a successful default-branch draft artifact or verified Page identity.
+- **PASS — automation/security**: [run 40132055150](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40132055150), exact SHA `28c37e3...`: **211 Node tests passed, 0 failed; 8 Python safety tests passed**; clean `npm ci` and a separate normal lifecycle-script install passed; Google API client import passed; npm audit reported **0 vulnerabilities**; 16 queued topics passed safe-state/destination checks; campaign, review-metadata, JavaScript syntax and Python compilation checks passed.
+- **PASS — browser E2E**: [run 40132055216](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40132055216), exact SHA `28c37e3...`: **3 Chromium tests passed** against the real local dashboard/backend. Coverage: authenticated operator connection and draft creation; persisted state and duplicate-ID rejection; refresh retaining the saved draft; readiness returning HTTP 503 while blocked; 375px mobile viewport without page overflow; invalid Selar destination rejection; Safari preview remains inactive until explicit owner confirmation; and draft/job state survives a real isolated local server stop/restart. No live YouTube or Meta request was made by these tests.
+- **PASS — metadata**: [run 40132055131](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40132055131).
+- **PASS — content quality**: [run 40132055183](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40132055183).
+- **BLOCKED as intended — readiness**: [run 40132055128](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40132055128); retained [diagnostic artifact 12575701766](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40132055128/artifacts/12575701766), SHA-256 `5cdc76037f2599092b2a8ecd2d394c36f7a740b6470e1ec79ba6a9394809961c`, expires 23 November 2026. The job correctly fails while mandatory gates remain open.
+- **SKIPPED — Facebook draft**: [run 40132055158](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40132055158) was skipped on the PR event. It is not default-branch draft-artifact evidence.
 
-### Remaining gates and safety posture
+### Remaining release gates
 
-- **BLOCKED / owner action**: provide genuine, commercially usable source assets and rights evidence; render real 50–60s 1080×1920 Short and 6–10 minute 16:9 long-form media; verify full decode/audio/captions/thumbnails/checksums; review factual claims and disclosures; create complete manifests and human approval bound to final artifact hashes.
-- **BLOCKED / owner action**: configure secure server-side YouTube OAuth in a controlled environment; independently verify the authenticated channel is SonicVhibez; reconcile all relevant public/private/unlisted history and uncertain attempts. Only then, after all gates pass, may the owner separately authorize at most one private upload tied to the exact job/media/metadata/approval/channel. No real upload or remote receipt exists.
-- **BLOCKED / owner action**: verify the actual Nature Frontiers Page, token permissions and tasks; run the eligible default-branch draft workflow and verify its retained artifact. No Facebook post occurred.
-- **NOT RUN**: owner-controlled backup/restore, restart, interrupted-operation, concurrency, stale-lease and rollback drills; production storage durability/deployment/emergency-stop verification; exhaustive operator journeys beyond the one Chromium test.
-- **PASS in configuration/tests, not campaign activation**: public and unattended YouTube publishing remain disabled; Facebook live publishing remains disabled; the sole approved Selar destination remains `https://selar.com/0u19v8u99l`; Safari affiliate campaigns remain inactive; Nature Frontiers is not the SonicVhibez promotional channel.
-- **Git integration remains an owner gate**: two base-only commits were inspected. `71578dafc24e5d48173dce3f4e392e18e42aa40e` added `test/restore-facebook-draft-history.test.mjs`; `fa00d28e7f58911482686e4ad69fac9f4701a2e6` removed that same 117-line test. The current implementation branch restores it at `c507b63abfa336165865ad01cf6354ae50254f04`, and the current Node suite passes. Owner review of the 99-file tree diff and explicit reconciliation strategy are still required.
+The readiness report lists 12 blockers:
+1. Independently reconcile complete SonicVhibez public/private/unlisted history and all pending/uncertain upload attempts immediately before any upload.
+2. Supply a genuine rights-reviewed Short and create `content/render-manifest.json`.
+3. Supply genuine rights-reviewed long-form media and create `content/long-form-render-manifest.json`.
+4. Human-review metadata and explicitly mark it `READY_FOR_PRIVATE_UPLOAD`.
+5. Verify the SonicVhibez channel ID and bind it to metadata/configuration.
+6. Confirm rights only after reviewing retained source/license evidence and final checksums.
+7. Complete content/compliance review, including factual claims, captions, thumbnail and disclosures.
+8. Produce and validate real `media/next-short.mp4`.
+9–12. Configure the four required YouTube variables in the controlled execution environment: `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN`, `SONICVHIBEZ_CHANNEL_ID`. The readiness job deliberately supplies an empty credential environment; this is not a probe of whether repository secrets exist.
 
-**Release verdict: BLOCKED — not 100% software-complete or production-accepted.** CI proves the named checks only; it does not prove real media rights, external account ownership, live API operations, private upload receipt, default-branch Facebook artifact or recovery drills. Keep PR #1 open/draft/unmerged and do not weaken readiness gates.
+Additional **OWNER ACTION REQUIRED / NOT RUN** items: complete production 50–60s 1080×1920 Short and 6–10 minute 16:9 long-form packages with full decode, verified audio, captions, thumbnails, provenance/licensing, checksums and human approval bound to final artifact hashes; verify OAuth identity and complete remote history; separately authorize at most one private upload tied to exact job/media/metadata/approval/channel and verify its remote private receipt; verify the Nature Frontiers Page identity/token/tasks and run the eligible default-branch draft workflow with a retained artifact; conduct owner-controlled backup/restore, interrupted-operation, concurrency, stale-lease and rollback drills; verify production storage/deployment/emergency-stop behaviour. No real YouTube upload or Facebook post has occurred.
+
+### Safety and Git history
+
+Public/unattended YouTube publishing stays disabled; Facebook live publishing stays disabled; the only approved Selar destination is `https://selar.com/0u19v8u99l`; Safari affiliate campaigns remain inactive; Nature Frontiers must not be used as the SonicVhibez promotional channel.
+
+The two base-only commits were inspected: `71578dafc24e5d48173dce3f4e392e18e42aa40e` added `test/restore-facebook-draft-history.test.mjs`; `fa00d28e7f58911482686e4ad69fac9f4701a2e6` removed that exact 117-line test. The implementation branch restores it at `c507b63abfa336165865ad01cf6354ae50254f04`; it is included in the passing Node suite. The 99-file tree diff has been inventoried, but the complete 936-commit history has **not** been individually reviewed. Owner must approve the reconciliation strategy before integration.
+
+**Release verdict: BLOCKED.** Passing CI does not prove genuine rights, external account ownership, live integrations, a real private upload receipt, a default-branch Facebook draft artifact or owner-controlled recovery acceptance. Keep PR #1 open/draft/unmerged and do not bypass readiness gates.
 
 
 ---
