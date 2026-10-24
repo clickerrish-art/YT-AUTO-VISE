@@ -227,8 +227,19 @@ export async function evaluateFinalFacebookPayload(payload, {
       ? link === APPROVED_SELLAR_URL && payload.campaignId === "selar-wildlife-vault"
       : isSafari ? payload.campaignId === "safari-affiliate" && payload.safariCampaignEnabled === true && approvedDestinations.includes(link)
         : approvedDestinations.includes(link) || hostMatches(parsed.hostname, allowedDomains);
-    destinationChecks.push({ url: link, passed: allowed, reason: allowed ? "ALLOWLISTED_DESTINATION" : "DESTINATION_NOT_ALLOWLISTED" });
+    let reachable = false;
+    let finalUrl = link;
+    if (allowed) {
+      try {
+        const response = await fetchImpl(link, { method: "GET", redirect: "manual", signal: AbortSignal.timeout(sourceTimeoutMs), headers: { accept: "text/html,application/xhtml+xml,*/*;q=0.5" } });
+        finalUrl = response.url || link;
+        reachable = response.ok && urlIsSafe(finalUrl) && new URL(finalUrl).hostname === parsed.hostname;
+      } catch { reachable = false; }
+    }
+    const passed = allowed && reachable;
+    destinationChecks.push({ url: link, passed, allowlisted: allowed, reachable, finalUrl, reason: !allowed ? "DESTINATION_NOT_ALLOWLISTED" : reachable ? "ALLOWLISTED_HTTPS_DESTINATION_REACHABLE_NO_REDIRECT" : "DESTINATION_UNREACHABLE_OR_REDIRECTED" });
     if (!allowed) add(blockers, "Outbound link is not on the exact approved destination allowlist");
+    else if (!reachable) add(blockers, "Outbound link is unreachable or redirects to a destination that is not approved");
   }
 
   const current = Date.parse(now);
