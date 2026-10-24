@@ -79,9 +79,7 @@ Approval fingerprints now bind claims/source/licensing provenance and disclosure
 - Tuesday at 17:00 Africa/Johannesburg: 6–10 minute 16:9 long-form draft.
 - Saturday at 17:00 Africa/Johannesburg: 50–60 second 9:16 Short draft.
 
-The active Tuesday/Saturday draft-production cycle is 96 hours then 72 hours. Dashboard draft creation, updates and direct job API requests convert 17:00 local time through the IANA timezone and reject date collisions or gaps below the configured 72-hour minimum. This does not inspect remote YouTube history automatically; that remains mandatory before any publication.
-
-**Owner decision required:** the requested target remains two long-form videos plus one Short per seven days. Three posts in a 168-hour weekly cycle require at least 216 hours to preserve three 72-hour cyclic gaps, so the target is mathematically infeasible. The current one-long-form plus one-Short weekly draft cadence is an interim safety fallback, not a silent change to the requested goal. Keep publishing disabled until the owner resolves the cadence and the remaining production gates.
+The Tuesday/Saturday cron slots are draft-preparation triggers only. The publication policy is a rolling `long_form → long_form → short` cycle with at least 72 elapsed hours between consecutive actual publications (216 hours minimum for three cyclic gaps); it makes no weekly-count promise. The upload path now retrieves the authenticated channel's uploads playlist, compares all returned remote IDs/timestamps/visibility against a complete owner-reviewed reconciliation file, and blocks unresolved upload attempts. This live history check still needs real owner credentials and a completed reconciliation record. Public publishing remains disabled.
 - Scheduled GitHub workflows run at 15:00 UTC and must remain draft-only.
 
 Queue backlog items are separate from reserved dated production slots. Duplicate/conflicting reservations are rejected. Do not manually edit the JSON state while the dashboard is running.
@@ -144,3 +142,8 @@ Open the failed GitHub Actions run and inspect its summary/logs. Fix the root ca
 - Safari stays inactive until its exact HTTPS destination and disclosure are supplied, previewed and explicitly approved by the owner.
 - Nature Frontiers must never be selected as a target.
 - Public publishing remains disabled.
+
+
+## Rolling publication and history gate
+
+The authoritative cycle is `long_form → long_form → short`; each next actual publication must be at least 72 elapsed hours after the previous actual publication. The cycle's three gaps total at least 216 hours. Workflow cron slots are draft-preparation only. The production upload command fails closed unless authenticated channel history is retrieved, every public/private/unlisted video is covered by `CHANNEL_HISTORY_RECONCILIATION_PATH`, all IDs/timestamps/visibility match the remote API, the next format is correct, the gap is valid, and the upload-attempt ledger has no unresolved attempts. The reconciliation file is owner-reviewed evidence, not a substitute for the API comparison.
