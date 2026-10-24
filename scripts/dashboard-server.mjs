@@ -385,6 +385,10 @@ const server = http.createServer(async (req, res) => {
         }
         if (job.scheduledSlot?.date) {
           const scheduleConfig = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
+          const configuredSlot = (scheduleConfig.schedule ?? []).find(slot => slot.day === job.scheduledSlot.day);
+          if (!configuredSlot || configuredSlot.format !== job.contentType) {
+            return json(res, 409, { error: "Job day/format is not an authorized slot in the authoritative schedule", publishingEnabled: false });
+          }
           const proposedAt = localDateTimeToIso(job.scheduledSlot.date, "17:00", scheduleConfig.timezone);
           const spacing = validateReservedPublicationSlot({ id: job.id, scheduledAt: proposedAt }, state);
           if (!spacing.valid) return json(res, 409, { error: "Job schedule conflicts with an existing reservation or violates minimum publication spacing", blockers: spacing.errors, publishingEnabled: false });
