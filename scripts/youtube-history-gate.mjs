@@ -6,6 +6,27 @@ const allowedFormats = new Set(["long_form", "short"]);
 const allowedVisibility = new Set(["public", "private", "unlisted"]);
 const unresolvedStates = new Set(["UPLOADING_PRIVATE", "REMOTE_ACCEPTED_RECONCILIATION_REQUIRED", "RECOVERY_REQUIRED", "UNCERTAIN", "OUTCOME_UNCERTAIN"]);
 
+
+function strictIsoTimestamp(value) {
+  if (typeof value !== "string") return NaN;
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})T([01]\d|2[0-3]):([0-5]\d):([0-5]\d)(?:\.(\d{1,3}))?(Z|([+-])(\d{2}):(\d{2}))$/);
+  if (!match) return NaN;
+  const [, yearText, monthText, dayText, hourText, minuteText, secondText, fraction = "", zone, sign, offsetHourText, offsetMinuteText] = match;
+  const year = Number(yearText), month = Number(monthText), day = Number(dayText);
+  const hour = Number(hourText), minute = Number(minuteText), second = Number(secondText);
+  const calendar = new Date(0);
+  calendar.setUTCFullYear(year, month - 1, day);
+  calendar.setUTCHours(hour, minute, second, Number(fraction.padEnd(3, "0")));
+  if (calendar.getUTCFullYear() !== year || calendar.getUTCMonth() !== month - 1 || calendar.getUTCDate() !== day
+      || calendar.getUTCHours() !== hour || calendar.getUTCMinutes() !== minute || calendar.getUTCSeconds() !== second) return NaN;
+  if (zone !== "Z") {
+    const offsetHour = Number(offsetHourText), offsetMinute = Number(offsetMinuteText);
+    if (offsetHour > 14 || offsetMinute > 59 || (offsetHour === 14 && offsetMinute !== 0)) return NaN;
+  }
+  const timestamp = Date.parse(value);
+  return Number.isFinite(timestamp) ? timestamp : NaN;
+}
+
 export function assertNoUnresolvedUploadAttempts(ledger) {
   if (!ledger || !Array.isArray(ledger.attempts)) throw new Error("upload attempt ledger is missing or invalid; publication history cannot be trusted");
   const unresolved = ledger.attempts.filter(attempt => unresolvedStates.has(String(attempt?.status ?? "").toUpperCase()));
@@ -16,7 +37,7 @@ export function assertNoUnresolvedUploadAttempts(ledger) {
 export function validateHistoryReconciliation({ channelId, remoteVideos, reconciliation }) {
   if (!channelId || !Array.isArray(remoteVideos)) throw new Error("authenticated channel and complete remote video list are required");
   if (!reconciliation || reconciliation.complete !== true || reconciliation.channelId !== channelId) throw new Error("channel history reconciliation must be complete and bound to the authenticated channel ID");
-  if (typeof reconciliation.verifiedBy !== "string" || reconciliation.verifiedBy.trim().length < 2 || !Number.isFinite(Date.parse(reconciliation.verifiedAt ?? ""))) throw new Error("channel history reconciliation needs reviewer identity and a valid verification timestamp");
+  if (typeof reconciliation.verifiedBy !== "string" || reconciliation.verifiedBy.trim().length < 2 || !Number.isFinite(strictIsoTimestamp(reconciliation.verifiedAt))) throw new Error("channel history reconciliation needs reviewer identity and a valid verification timestamp");
   if (!Array.isArray(reconciliation.videos)) throw new Error("channel history reconciliation must contain a videos array");
   const remoteById = new Map();
   for (const video of remoteVideos) {
@@ -24,23 +45,23 @@ export function validateHistoryReconciliation({ channelId, remoteVideos, reconci
     if (video.snippet?.channelId !== channelId) throw new Error("remote video channel ID does not match the authenticated channel ID: " + video.id);
     const actualPublishedAt = video.snippet?.publishedAt;
     const visibility = video.status?.privacyStatus;
-    if (!Number.isFinite(Date.parse(actualPublishedAt ?? "")) || !allowedVisibility.has(visibility)) throw new Error("remote video is missing an actual publication timestamp or known visibility: " + video.id);
-    remoteById.set(video.id, { id: video.id, actualPublishedAt: new Date(actualPublishedAt).toISOString(), status: visibility });
+    if (!Number.isFinite(strictIsoTimestamp(actualPublishedAt)) || !allowedVisibility.has(visibility)) throw new Error("remote video is missing an actual publication timestamp or known visibility: " + video.id);
+    remoteById.set(video.id, { id: video.id, actualPublishedAt: new Date(strictIsoTimestamp(actualPublishedAt)).toISOString(), status: visibility });
   }
   const records = new Map();
   for (const item of reconciliation.videos) {
     if (!item?.id || records.has(item.id)) throw new Error("reconciled history contains a missing or duplicate video ID");
     if (!allowedFormats.has(item.format)) throw new Error("each reconciled video must be classified as long_form or short: " + item.id);
-    if (!allowedVisibility.has(item.visibility) || !Number.isFinite(Date.parse(item.actualPublishedAt ?? ""))) throw new Error("reconciled history requires visibility and actualPublishedAt for " + item.id);
+    if (!allowedVisibility.has(item.visibility) || !Number.isFinite(strictIsoTimestamp(item.actualPublishedAt))) throw new Error("reconciled history requires visibility and actualPublishedAt for " + item.id);
     records.set(item.id, item);
   }
   if (remoteById.size !== records.size) throw new Error("reconciled history does not cover every remote channel video; history is incomplete");
   for (const [id, remote] of remoteById) {
     const record = records.get(id);
     if (!record) throw new Error("remote video is missing from reconciled history: " + id);
-    if (new Date(record.actualPublishedAt).toISOString() !== remote.actualPublishedAt || record.visibility !== remote.status) throw new Error("reconciled timestamp/visibility does not match YouTube for video " + id);
+    if (new Date(strictIsoTimestamp(record.actualPublishedAt)).toISOString() !== remote.actualPublishedAt || record.visibility !== remote.status) throw new Error("reconciled timestamp/visibility does not match YouTube for video " + id);
   }
-  return [...records.values()].map(item => ({ id: item.id, status: item.visibility, actualPublishedAt: new Date(item.actualPublishedAt).toISOString(), format: item.format }));
+  return [...records.values()].map(item => ({ id: item.id, status: item.visibility, actualPublishedAt: new Date(strictIsoTimestamp(item.actualPublishedAt)).toISOString(), format: item.format }));
 }
 
 export async function fetchCompleteYoutubeHistory(youtube, channel, reconciliationPath, channelId) {

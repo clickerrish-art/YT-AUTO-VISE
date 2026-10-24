@@ -36,6 +36,22 @@ test("history reconciliation fails closed on missing remote videos, duplicate ID
   assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos, reconciliation: changed }), /timestamp\/visibility does not match/);
 });
 
+
+test("history reconciliation rejects normalized invalid dates and timezone-free timestamps", () => {
+  for (const invalid of ["2026-02-30T15:00:00.000Z", "2026-10-01T15:00:00", "2026-10-01T15:00:00+14:30", "2026-13-01T15:00:00Z"]) {
+    const badRemote = structuredClone(remoteVideos);
+    badRemote[0].snippet.publishedAt = invalid;
+    assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos: badRemote, reconciliation }), /timestamp/);
+  }
+  for (const invalid of ["2026-02-30T10:00:00.000Z", "2026-10-24T10:00:00"]) {
+    const badReconciliation = { ...reconciliation, verifiedAt: invalid };
+    assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos, reconciliation: badReconciliation }), /verification timestamp/);
+  }
+  const badRecord = structuredClone(reconciliation);
+  badRecord.videos[0].actualPublishedAt = "2026-02-30T15:00:00.000Z";
+  assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos, reconciliation: badRecord }), /requires visibility and actualPublishedAt/);
+});
+
 test("unresolved or uncertain upload attempts block new uploads", () => {
   assert.equal(assertNoUnresolvedUploadAttempts({ attempts: [{ jobId: "job-1", status: "PRIVATE_UPLOAD_VERIFIED" }] }), true);
   assert.throws(() => assertNoUnresolvedUploadAttempts({ attempts: [{ jobId: "job-2", status: "RECOVERY_REQUIRED" }] }), /unresolved upload attempts/);
