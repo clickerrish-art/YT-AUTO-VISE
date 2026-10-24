@@ -61,6 +61,13 @@ if (captionCheck.status !== 0) {
   process.stderr.write(captionCheck.stderr || captionCheck.stdout || "BLOCKED: captions failed validation.\n");
   process.exit(1);
 }
+const captionSyncCheck = spawnSync(process.execPath, ["scripts/validate-caption-sync.mjs", captions, String(Number(probe.stdout.trim()))], { encoding: "utf8" });
+if (captionSyncCheck.stdout) process.stdout.write(captionSyncCheck.stdout);
+if (captionSyncCheck.stderr) process.stderr.write(captionSyncCheck.stderr);
+if (captionSyncCheck.error || captionSyncCheck.status !== 0) {
+  console.error("BLOCKED: captions do not fit the narration duration; refusing to render.");
+  process.exit(1);
+}
 fs.mkdirSync(path.dirname(output), {recursive:true});
 // FFmpeg resolves subtitle paths from the process working directory, not the
 // manifest directory. Use the already-resolved absolute path so manifests in
