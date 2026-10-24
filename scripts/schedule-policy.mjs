@@ -192,7 +192,15 @@ export function evaluateNextPublication({
       errors.push(`upload attempt ${attempt?.jobId ?? "(unknown)"} has an unresolved/uncertain outcome and must be reconciled`);
     }
   }
-  const allPlanned = [...scheduledItems, ...pendingAttempts.filter(a => !UNCERTAIN_UPLOAD_STATUSES.includes(String(a?.status ?? "").toLowerCase()))];
+  // Completed ledger attempts are evidence to reconcile, not future scheduled slots.
+  // The authenticated remote history is authoritative for completed publications; counting
+  // a verified ledger receipt again would compare the publication with itself and falsely
+  // block every subsequent upload. Only explicit future scheduling states belong here.
+  const scheduledAttemptStatuses = new Set(["scheduled", "queued_for_publication", "pending_schedule"]);
+  const allPlanned = [
+    ...scheduledItems,
+    ...pendingAttempts.filter(a => scheduledAttemptStatuses.has(String(a?.status ?? "").toLowerCase()))
+  ];
   const ids = new Set();
   for (const item of [...allPlanned, ...history]) {
     if (item?.id && ids.has(String(item.id))) errors.push(`duplicate stable job/remote ID: ${item.id}`);
@@ -216,12 +224,13 @@ export function evaluateNextPublication({
       publishedAt: new Date(latestActual.timestamp).toISOString()
     }] : []),
     ...scheduledItems,
-    ...pendingAttempts.map(item => ({
-      id: item?.jobId,
-      status: String(item?.status ?? "").toLowerCase(),
-      scheduledAt: item?.scheduledAt ?? item?.createdAt,
-      publishedAt: item?.actualPublishedAt ?? item?.publishedAt
-    }))
+    ...pendingAttempts
+      .filter(item => scheduledAttemptStatuses.has(String(item?.status ?? "").toLowerCase()))
+      .map(item => ({
+        id: item?.jobId,
+        status: String(item?.status ?? "").toLowerCase(),
+        scheduledAt: item?.scheduledAt ?? item?.createdAt
+      }))
   ];
   if (Number.isFinite(Date.parse(proposedAt ?? ""))) {
     const spacing = validatePublicationSlot(candidate, existing, { timeZone, minSpacingHours });
