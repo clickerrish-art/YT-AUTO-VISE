@@ -24,8 +24,20 @@ Last review: 2026-10-24. PR #1 remains open, draft and unmerged. Public publishi
 - Never blindly retry an uncertain upload; reconcile the existing attempt with YouTube first.
 - Keep PR #1 open, draft and unmerged unless the owner separately authorizes a merge.
 
-## Latest code and regression-test evidence
+## Latest code/test checkpoint — 2026-10-24
 
-At code and regression-test commit `6b0874b870343cf435099eedf74038bf2e01f58c`, all three GitHub Actions validation workflows passed with 95 passed, 0 failed and 0 skipped: [automation validation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083877), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083898), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083943). The automation workflow completed `npm ci --ignore-scripts` and installed/audited 46 packages.
+Code and regression-test commit: `9c89e46c138f1b277de7efb5580fbaa4008d22c5`. All three GitHub Actions validation workflows passed on this exact commit, each with 96 passed, 0 failed, 0 skipped: [automation validation and clean install](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354250`), [metadata/schedule validation](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354339`), and [content quality](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354256`). The automation workflow used `npm ci --ignore-scripts`, reported 46 packages added and 47 audited, and passed Python compilation.
 
-The dashboard readiness endpoint now runs the full read-only production preflight and returns HTTP 503 with actionable blockers instead of reporting readiness based only on campaign configuration. Automated tests remain mock/code evidence only. Genuine media, rights verification, human playback inspection, authenticated SonicVhibez channel verification and live private-upload receipt remain blocked on owner-controlled inputs. Public publishing remains disabled; PR #1 remains open, draft and unmerged.
+This checkpoint additionally verifies that private-upload approvals bind the hash of the structured rights record and that the referenced source asset and retained licence-evidence files still match their recorded SHA-256 checksums at upload preflight. Dashboard startup now requires `DASHBOARD_OPERATOR_ID`; relevant audit events use that identity, and each rights-evidence asset retains the reviewer and verification timestamp.
+
+These are automated/code-level checks, not proof that a fixture is a genuine licence, that a real wildlife video has been rendered and watched, or that a live YouTube upload has succeeded. Public publishing remains disabled; PR #1 remains open, draft and unmerged.
+
+## Remaining owner-controlled blockers
+
+- Genuine rights-cleared wildlife footage, narration/music and complete Short/long-form manifests.
+- Actual media render, ffprobe/full-decode evidence and human playback/editorial review.
+- Securely configured and independently verified SonicVhibez OAuth channel identity.
+- Explicit per-operation authorization for one private upload, then remote private-status verification and durable receipt.
+- Separate operator-run restart and backup/restore acceptance.
+- Safari remains inactive until its exact HTTPS destination, disclosure and owner approval are supplied.
+
