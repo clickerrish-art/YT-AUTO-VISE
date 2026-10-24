@@ -36,6 +36,7 @@ The initial Nature Frontiers Facebook workflow is **draft-only**. The current im
 - `POST /api/facebook/drafts`
 - `POST /api/facebook/drafts/evaluate`
 - `POST /api/facebook/drafts/approve`
+- `POST /api/facebook/publish` — requires every disabled-by-default gate and explicit per-operation authorization
 
 All API routes require `x-operator-token`. Draft state and audit events are persisted in the dashboard state file. The configured timezone is `Africa/Johannesburg`; 08:00 SAST is the initial hypothesis and 18:00 is the comparison arm. The experiment does not claim an optimal time without sufficient Page-specific observations.
 
