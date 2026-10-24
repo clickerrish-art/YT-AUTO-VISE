@@ -10,6 +10,7 @@ on:
     paths:
       - "scripts/generate-facebook-daily-draft.mjs"
       - "scripts/facebook-pipeline.mjs"
+      - "scripts/restore-facebook-draft-history.mjs"
       - "package.json"
       - "package-lock.json"
       - ".github/workflows/facebook-daily-draft.yml"
@@ -18,6 +19,7 @@ on:
     paths:
       - "scripts/generate-facebook-daily-draft.mjs"
       - "scripts/facebook-pipeline.mjs"
+      - "scripts/restore-facebook-draft-history.mjs"
       - "test/facebook-daily-draft.test.mjs"
       - "package.json"
       - ".github/workflows/facebook-daily-draft.yml"
