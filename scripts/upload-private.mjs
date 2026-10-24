@@ -100,6 +100,20 @@ export function assertReconciliationOnlyHasPriorAttempt(reconcileOnly, prior) {
   return true;
 }
 
+export function validateOneShotUploadAuthorization(record, {
+  jobId, artifactSha256, metadataSha256, approvalSha256, channelId, now = new Date()
+} = {}) {
+  if (!record || record.decision !== "AUTHORIZE_ONE_PRIVATE_UPLOAD") throw new Error("a separate one-shot private-upload authorization is required");
+  if (typeof record.authorizationId !== "string" || !/^[A-Za-z0-9:_-]{8,120}$/.test(record.authorizationId)) throw new Error("one-shot authorization requires a stable unique authorizationId");
+  if (record.jobId !== jobId || record.artifactSha256 !== artifactSha256 || record.metadataSha256 !== metadataSha256 || record.approvalSha256 !== approvalSha256 || record.channelId !== channelId) throw new Error("one-shot authorization must bind the exact job, final video, metadata, approval and verified channel");
+  if (record.visibility !== "private" || record.publishingEnabled !== false) throw new Error("one-shot authorization must explicitly restrict the operation to private visibility");
+  if (typeof record.operator !== "string" || record.operator.trim().length < 2 || record.operator.length > 120) throw new Error("one-shot authorization requires the approving operator identity");
+  const authorizedAt = Date.parse(record.authorizedAt ?? "");
+  const nowMs = now instanceof Date ? now.getTime() : Date.parse(now);
+  if (!Number.isFinite(authorizedAt) || !Number.isFinite(nowMs) || authorizedAt > nowMs + 5 * 60_000 || nowMs - authorizedAt > 24 * 60 * 60_000) throw new Error("one-shot authorization timestamp must be valid, not future-dated and no older than 24 hours");
+  return { authorizationId: record.authorizationId, operator: record.operator.trim(), authorizedAt: new Date(authorizedAt).toISOString() };
+}
+
 export async function uploadPrivate({ metadataPath, videoPath, approvalPath, jobId, env = process.env, youtubeFactory, now = () => new Date(), preflightRunner = (args, runEnv) => execFileSync(process.execPath, args, { env: runEnv, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }), persistJson = writeJsonAtomic }) {
   const reconcileOnly = env.RECONCILE_ONLY === "YES";
   const requiredEnv = ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN", "SONICVHIBEZ_CHANNEL_ID", ...(reconcileOnly ? [] : ["CONFIRM_PRIVATE_UPLOAD"])];
@@ -214,8 +228,21 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     return { receipt, reused: true };
   }
 
+  // Live uploads require a separate one-shot authorization bound to every final artifact.
+  // Injected clients are reserved for isolated tests and never prove live acceptance.
+  let oneShotAuthorization = null;
+  if (!youtubeFactory && !reconcileOnly) {
+    const authorizationPath = env.PRIVATE_UPLOAD_AUTHORIZATION_PATH;
+    if (!authorizationPath || !fs.existsSync(authorizationPath)) throw new Error("PRIVATE_UPLOAD_AUTHORIZATION_PATH is required for a live one-shot upload");
+    const record = readJson(authorizationPath, "One-shot private-upload authorization");
+    oneShotAuthorization = validateOneShotUploadAuthorization(record, {
+      jobId, artifactSha256: videoSha256, metadataSha256, approvalSha256: sha256File(approvalPath),
+      channelId: expectedChannelId, now: now()
+    });
+    if (ledger.attempts.some(item => item.authorizationId === oneShotAuthorization.authorizationId)) throw new Error("one-shot authorization was already consumed by an upload attempt; issue a new authorization only after reviewing the prior outcome");
+  }
+
   // Live uploads require independently reconciled channel history and no unresolved inserts.
-  // Injected clients are reserved for unit tests and never prove live acceptance.
   let cycleGate = null;
   let cycleHistoryLength = null;
   if (!youtubeFactory) {
@@ -228,6 +255,8 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   }
   const attempt = {
     attemptId: crypto.randomUUID(), jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256,
+    authorizationId: oneShotAuthorization?.authorizationId ?? null,
+    authorizedOperator: oneShotAuthorization?.operator ?? null,
     channelId: matchedChannel.id, channelTitle: matchedChannel.snippet.title,
     format: metadata.contentType ?? metadata.format ?? null,
     cycleIndex: cycleGate ? (cycleHistoryLength % 3) : null,
