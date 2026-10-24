@@ -24,7 +24,7 @@
     "facebook:draft:daily": "node scripts/generate-facebook-daily-draft.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "dependencies": {
     "googleapis": "^144.0.0"
