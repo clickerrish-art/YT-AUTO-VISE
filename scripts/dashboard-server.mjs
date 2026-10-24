@@ -426,11 +426,12 @@ const server = http.createServer(async (req, res) => {
         const index = state.facebookDrafts.findIndex(item => item.id === body.draftId);
         if (index < 0) return json(res, 404, { error: "Facebook draft not found" });
         const draft = state.facebookDrafts[index];
-        const evaluation = evaluateFacebookDraft(draft, {
+        const boundDraft = expectedPageId ? { ...draft, expectedPageId } : draft;
+        const evaluation = evaluateFacebookDraft(boundDraft, {
           existingDrafts: state.facebookDrafts.filter(item => item.id !== draft.id && !["REJECTED", "CANCELLED"].includes(item.status)),
           recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root
         });
-        state.facebookDrafts[index] = { ...draft, evaluation, updatedAt: new Date().toISOString(), status: draft.status === "APPROVED_DRAFT" ? "DRAFT_REVIEW_REQUIRED" : draft.status, approval: draft.status === "APPROVED_DRAFT" ? null : draft.approval };
+        state.facebookDrafts[index] = { ...boundDraft, evaluation, updatedAt: new Date().toISOString(), status: draft.status === "APPROVED_DRAFT" ? "DRAFT_REVIEW_REQUIRED" : draft.status, approval: draft.status === "APPROVED_DRAFT" ? null : draft.approval };
         state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_DRAFT_RECHECKED", itemId: draft.id, ok: evaluation.ok, blockers: evaluation.blockers, flags: evaluation.flags, complianceVersion: evaluation.complianceVersion, at: new Date().toISOString(), actor: operatorId });
         saveState(state);
         return json(res, 200, { draft: state.facebookDrafts[index], evaluation, publishingEnabled: false });
@@ -448,8 +449,9 @@ const server = http.createServer(async (req, res) => {
         const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
         const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
         const expectedPageId = config.pageIdentityVerified === true && config.destinationPageId === envPageId ? config.destinationPageId : "";
-        const evaluation = evaluateFacebookDraft(draft, { existingDrafts: state.facebookDrafts.filter(item => item.id !== draft.id), recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root });
-        const updated = approveFacebookDraft(draft, { reviewer: operatorId, decision: body.decision, reason: body.reason ?? "", evaluation, now: new Date().toISOString() });
+        const boundDraft = expectedPageId ? { ...draft, expectedPageId } : draft;
+        const evaluation = evaluateFacebookDraft(boundDraft, { existingDrafts: state.facebookDrafts.filter(item => item.id !== draft.id), recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root });
+        const updated = approveFacebookDraft(boundDraft, { reviewer: operatorId, decision: body.decision, reason: body.reason ?? "", evaluation, now: new Date().toISOString() });
         state.facebookDrafts[index] = { ...updated, evaluation };
         state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_DRAFT_" + body.decision, itemId: draft.id, reviewer: operatorId, fingerprint: updated.approval.fingerprint, at: updated.approval.reviewedAt, complianceVersion: evaluation.complianceVersion, publishingEnabled: false });
         saveState(state);
