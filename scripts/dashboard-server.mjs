@@ -13,7 +13,7 @@ import {
   FACEBOOK_PUBLISHING_DEFAULTS, createFacebookDraft, evaluateFacebookDraft,
   approveFacebookDraft, chooseFacebookExperimentSlot, summarizeFacebookExperiment, generateFacebookIdea, assertFacebookPublishAllowed
 } from "./facebook-pipeline.mjs";
-import { verifyMetaPageIdentity, publishMetaPagePost, fetchMetaPagePost, MetaPageApiError } from "./meta-page-adapter.mjs";
+import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost, fetchMetaPagePost, MetaPageApiError } from "./meta-page-adapter.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = process.env.DASHBOARD_HOST ?? "127.0.0.1";
@@ -116,7 +116,7 @@ function verifiedFacebookPageId(state, config) {
   const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
   const connection = state.facebookConnection;
   if (!/^\d{5,30}$/.test(envPageId) || config.destinationPageId !== envPageId) return "";
-  if (connection?.verified !== true || connection.pageId !== envPageId || !Number.isFinite(Date.parse(connection.verifiedAt))) return "";
+  if (connection?.verified !== true || connection.permissionsVerified !== true || connection.pageId !== envPageId || !Number.isFinite(Date.parse(connection.verifiedAt))) return "";
   if (Date.now() - Date.parse(connection.verifiedAt) > 24 * 60 * 60 * 1000) return "";
   return envPageId;
 }
@@ -380,23 +380,27 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "POST" && url.pathname === "/api/facebook/verify-page") {
       const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
       const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
-      const accessToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
+      const pageAccessToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
+      const userAccessToken = process.env.META_USER_ACCESS_TOKEN ?? "";
       const apiVersion = process.env.META_GRAPH_API_VERSION ?? config.apiVersion ?? "v26.0";
       if (!/^\d{5,30}$/.test(envPageId) || config.destinationPageId !== envPageId) return json(res, 409, { error: "Configure the exact owner-verified numeric Page ID in both config/facebook-publishing.json and NATURE_FRONTIERS_FACEBOOK_PAGE_ID first" });
-      if (accessToken.length < 20) return json(res, 409, { error: "META_PAGE_ACCESS_TOKEN is missing from the secure environment" });
+      if (pageAccessToken.length < 20 || userAccessToken.length < 20) return json(res, 409, { error: "META_USER_ACCESS_TOKEN and META_PAGE_ACCESS_TOKEN are both required in the secure environment" });
       let identity;
       try {
-        identity = await verifyMetaPageIdentity({ pageId: config.destinationPageId, expectedPageId: envPageId, accessToken, apiVersion, expectedPageName: config.destinationPageName ?? "", fetchImpl: fetch });
+        const permissions = await verifyMetaPagePermissions({ pageId: envPageId, userAccessToken, pageAccessToken, apiVersion, fetchImpl: fetch });
+        const page = await verifyMetaPageIdentity({ pageId: config.destinationPageId, expectedPageId: envPageId, accessToken: pageAccessToken, apiVersion, expectedPageName: config.destinationPageName ?? "", fetchImpl: fetch });
+        if (page.pageName !== permissions.pageName) throw new MetaPageApiError("Page identity name differed between permission lookup and Page-token lookup");
+        identity = { ...page, ...permissions, verified: true };
       } catch (error) {
-        return json(res, 502, { error: error instanceof Error ? error.message : "Meta Page identity verification failed", verified: false });
+        return json(res, 502, { error: error instanceof Error ? error.message : "Meta Page identity/permissions verification failed", verified: false });
       }
       const release = await acquireStateLock();
       try {
         const state = loadState();
-        state.facebookConnection = { verified: true, pageId: identity.pageId, pageName: identity.pageName, verifiedAt: identity.checkedAt, apiVersion: identity.apiVersion, actor: operatorId };
-        state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_PAGE_IDENTITY_VERIFIED", destinationPageId: identity.pageId, pageName: identity.pageName, verifiedAt: identity.checkedAt, apiVersion: identity.apiVersion, actor: operatorId });
+        state.facebookConnection = { verified: true, permissionsVerified: identity.permissionsVerified, grantedPermissions: identity.grantedPermissions, tasks: identity.tasks, pageId: identity.pageId, pageName: identity.pageName, verifiedAt: identity.verifiedAt, apiVersion: identity.apiVersion, actor: operatorId };
+        state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_PAGE_IDENTITY_VERIFIED", destinationPageId: identity.pageId, pageName: identity.pageName, verifiedAt: identity.verifiedAt, grantedPermissions: identity.grantedPermissions, tasks: identity.tasks, apiVersion: identity.apiVersion, actor: operatorId });
         saveState(state);
-        return json(res, 200, { identity, permissionsConfirmed: process.env.META_PAGE_PERMISSIONS_CONFIRMED === "YES", publishingEnabled: false, note: "Identity was checked read-only. Publishing permissions must be confirmed separately and every mutation still requires explicit operation authorization." });
+        return json(res, 200, { identity: { pageId: identity.pageId, pageName: identity.pageName, verifiedAt: identity.verifiedAt, grantedPermissions: identity.grantedPermissions, tasks: identity.tasks }, permissionsConfirmed: identity.permissionsVerified, publishingEnabled: false, note: "Identity was checked read-only. Publishing permissions must be confirmed separately and every mutation still requires explicit operation authorization." });
       } finally { release(); }
     }
     if (req.method === "GET" && url.pathname === "/api/facebook/state") {
@@ -404,8 +408,8 @@ const server = http.createServer(async (req, res) => {
       const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
       const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
       const pageVerified = Boolean(verifiedFacebookPageId(state, config));
-      const permissionsConfirmed = process.env.META_PAGE_PERMISSIONS_CONFIRMED === "YES";
-      const accessTokenConfigured = (process.env.META_PAGE_ACCESS_TOKEN ?? "").length >= 20;
+      const permissionsConfirmed = state.facebookConnection?.permissionsVerified === true && pageVerified;
+      const accessTokenConfigured = (process.env.META_PAGE_ACCESS_TOKEN ?? "").length >= 20 && (process.env.META_USER_ACCESS_TOKEN ?? "").length >= 20;
       const experiment = summarizeFacebookExperiment(state.facebookPosts, { minPerArm: config.experiment?.minimumPostsPerArm ?? 14 });
       const blockers = [];
       if (!pageVerified) blockers.push("Nature Frontiers Facebook Page identity has not passed a recent live Meta API check for the configured Page ID");
@@ -499,7 +503,7 @@ const server = http.createServer(async (req, res) => {
       const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
       const accessToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
       const apiVersion = process.env.META_GRAPH_API_VERSION ?? config.apiVersion ?? "v26.0";
-      const permissionsConfirmed = process.env.META_PAGE_PERMISSIONS_CONFIRMED === "YES";
+      const permissionsConfirmed = initialState.facebookConnection?.permissionsVerified === true && Boolean(expectedPageId);
       const envPublishingEnabled = process.env.FACEBOOK_PUBLISH_ENABLED === "YES";
       const initialState = loadState();
       const expectedPageId = verifiedFacebookPageId(initialState, config);
@@ -509,7 +513,7 @@ const server = http.createServer(async (req, res) => {
       if (!envPublishingEnabled) setupBlockers.push("FACEBOOK_PUBLISH_ENABLED must equal YES as the separate publishing kill switch");
       if (!expectedPageId) setupBlockers.push("A recent successful /api/facebook/verify-page check must match the configured Page ID and secure environment value");
       if (accessToken.length < 20) setupBlockers.push("META_PAGE_ACCESS_TOKEN is missing from the secure environment");
-      if (!permissionsConfirmed) setupBlockers.push("META_PAGE_PERMISSIONS_CONFIRMED must equal YES after the owner verifies Meta Page roles and permissions");
+      if (!permissionsConfirmed) setupBlockers.push("Run the read-only Page verification to confirm pages_show_list, pages_read_engagement, pages_manage_posts, the Page CREATE_CONTENT/MANAGE task, and matching Page access token");
       if (setupBlockers.length) return json(res, 409, { error: "Facebook publishing configuration is not ready; no remote mutation was attempted", blockers: setupBlockers, publishingEnabled: false });
 
       let draftSnapshot;
