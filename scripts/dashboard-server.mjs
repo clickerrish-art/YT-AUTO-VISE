@@ -97,7 +97,7 @@ function saveState(state) {
 }
 
 const stateLockDir = stateFile + ".lock";
-async function acquireStateLock(timeoutMs = 10_000) {
+async function acquireStateLock(timeoutMs = Number(process.env.DASHBOARD_STATE_LOCK_TIMEOUT_MS ?? 10_000)) {
   const deadline = Date.now() + timeoutMs;
   while (true) {
     try {
