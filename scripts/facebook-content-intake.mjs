@@ -61,7 +61,7 @@ export async function runFacebookContentIntake({
   fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
   const config = readJson(configPath);
   const stateFile = name => {
-    if (typeof name !== "string" || !name.trim() || path.isAbsolute(name) || name.includes("\\\\") ||
+    if (typeof name !== "string" || !name.trim() || path.isAbsolute(name) || name.includes("\\") ||
         name.split("/").some(part => !part || part === "." || part === "..")) throw new Error("Unsafe Facebook state filename");
     const base = path.resolve(stateDir);
     const resolved = path.resolve(base, name);
