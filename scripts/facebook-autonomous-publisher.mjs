@@ -198,17 +198,33 @@ export async function runAutonomousFacebookPublisher({
         const record = { slotId: payload.slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_BLOCKED", checkedAt: isoNow(current), contentFingerprint: decision?.contentFingerprint ?? null, policyDecision: decision, reason: decision?.reason ?? "POLICY_UNKNOWN" };
         history.push(record); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++; continue;
       }
-      // Validate live destination before recording the irreversible mutation attempt.
-      const permissionVerification = await verifyPermissions({
-        pageId: config.destinationPageId, userAccessToken: env.META_USER_ACCESS_TOKEN,
-        pageAccessToken: env.META_PAGE_ACCESS_TOKEN, apiVersion: config.apiVersion, fetchImpl
-      });
-      if (permissionVerification?.permissionsVerified !== true) throw new Error("Live Meta Page permissions are not verified; publishing blocked");
-      await verifyIdentity({
-        pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
-        expectedPageName: config.destinationPageName, accessToken: env.META_PAGE_ACCESS_TOKEN,
-        apiVersion: config.apiVersion, fetchImpl
-      });
+      // Validate the live destination before mutation. Connection failures become an
+      // auditable automatic skip; no owner override or publish request is attempted.
+      let permissionVerification;
+      try {
+        permissionVerification = await verifyPermissions({
+          pageId: config.destinationPageId, userAccessToken: env.META_USER_ACCESS_TOKEN,
+          pageAccessToken: env.META_PAGE_ACCESS_TOKEN, apiVersion: config.apiVersion, fetchImpl
+        });
+        if (permissionVerification?.permissionsVerified !== true) throw new Error("Permission check failed");
+        await verifyIdentity({
+          pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
+          expectedPageName: config.destinationPageName, accessToken: env.META_PAGE_ACCESS_TOKEN,
+          apiVersion: config.apiVersion, fetchImpl
+        });
+      } catch {
+        const record = {
+          slotId: payload.slotId, destination: "nature_frontiers_facebook",
+          status: "SKIPPED_CONNECTION_BLOCKED", checkedAt: isoNow(current),
+          contentFingerprint: decision.contentFingerprint, policyDecision: decision,
+          reason: "META_PAGE_IDENTITY_OR_PERMISSION_CHECK_FAILED_NO_MUTATION"
+        };
+        history.push(record);
+        atomicJson(historyPath, history);
+        removeQueuedSlot(payload.slotId);
+        skipped++;
+        continue;
+      }
       const attempt = {
         kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId: payload.slotId, destination: "nature_frontiers_facebook",
         status: "PUBLISHING", startedAt: isoNow(current), scheduledAt: payload.scheduledAt, contentFingerprint: decision.contentFingerprint,
