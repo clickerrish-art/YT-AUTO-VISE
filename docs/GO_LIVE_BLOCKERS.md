@@ -1,21 +1,21 @@
 # CURRENT ACCEPTANCE EVIDENCE — 2026-10-24
 
-This section supersedes the older candidate snapshot retained below for audit history.
+This section is the current release checkpoint. Historical sections below are retained for audit context only.
 
-- Latest executable-code candidate verified before this report refresh: `d7328c9202bc65cb8d6f22c052697cb59f1c4bd3`.
-- PR #1 is open, draft and unmerged: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1.
-- Live branch comparison at this checkpoint: 754 commits ahead and 2 behind `main`; current `main` HEAD `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
-- New security fix: `scripts/dashboard-server.mjs` no longer returns the local state-file path in authenticated `/api/state` responses or logs the absolute state-file path at startup. `test/dashboard-server.test.mjs` adds regression assertions for both surfaces.
-- Exact-SHA CI for executable code candidate `d7328c9202bc65cb8d6f22c052697cb59f1c4bd3`:
-  - Automation validation [run 40102307703](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40102307703): PASS — 160 Node tests passed, 0 failed; 8 Python safety tests passed; queue/campaign checks, JavaScript syntax and Python compilation passed.
-  - Content quality [run 40102307720](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40102307720): PASS — 160 Node tests passed, 0 failed.
-  - Metadata validation [run 40102307705](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40102307705): PASS — 160 Node tests passed, 0 failed; schedule, caption and fail-closed readiness checks passed.
-  - Nature Frontiers daily Facebook draft [run 40102307707](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40102307707): SKIPPED on the PR branch; not default-branch production acceptance.
-- Dependency audit from run 40102307703: 4 moderate, 0 high, 0 critical advisories. Affected packages: `gaxios`, `googleapis`, `googleapis-common`, and `uuid`. The available Google API remediation is a major upgrade to `googleapis@188.0.0`; it has not been applied without compatibility testing.
+- Executable-code candidate tested before this report refresh: `249558377b71eec7b793ad2667bac3cee5594a13`; PR #1 remains open, draft and unmerged.
+- Live branch comparison at this checkpoint: 757 commits ahead and 2 behind `main`; current `main` HEAD `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; 80 changed files in the PR.
+- Security fix: `scripts/dashboard-server.mjs` canonicalizes operator-supplied repository-relative file paths and rejects symlinks whose real target resolves outside the repository. `test/dashboard-server.test.mjs` exercises this through the authenticated HTTP reconciliation API using a temporary external fixture; it asserts the API rejects the path before attempting reconciliation. The earlier state-path disclosure fix and its regression assertions remain.
+- Exact-SHA CI for executable-code candidate `249558377b71eec7b793ad2667bac3cee5594a13`:
+  - Automation validation [run 40108189462](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40108189462): PASS — 160 Node tests passed, 0 failed; 8 Python safety tests passed; queue/campaign checks, JavaScript syntax and Python compilation passed.
+  - Content quality [run 40108189566](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40108189566): PASS — 160 Node tests passed, 0 failed.
+  - Metadata validation [run 40108189456](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40108189456): PASS — 160 Node tests passed, 0 failed; schedule and caption validation passed; readiness correctly remains blocked.
+  - Nature Frontiers daily Facebook draft [run 40108189467](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40108189467): SKIPPED on the PR branch; this is not default-branch production acceptance.
+- Dependency audit from run 40108189462: 4 moderate, 0 high, 0 critical advisories. Affected packages: `gaxios`, `googleapis`, `googleapis-common`, and `uuid`. The available Google API remediation is a major upgrade to `googleapis@188.0.0`; it has not been applied without compatibility testing.
 - Installation evidence uses `npm ci --ignore-scripts`; unrestricted lifecycle-script installation was not tested.
 - Production acceptance remains BLOCKED: genuine licensed source media, complete render manifests/asset register and human playback review are missing; live SonicVhibez OAuth and complete channel-history reconciliation have not been verified; no explicitly authorized private upload or durable remote receipt exists; real Meta identity/default-branch artifact and owner-run backup/restore acceptance are unverified; dependency-risk disposition and branch-divergence review remain open.
 - No real YouTube upload or Facebook post is claimed. Public YouTube publishing stays disabled; Facebook live publishing stays disabled/dry-run; Safari remains inactive. Do not merge or perform external mutations without the relevant explicit owner authorization.
-- The older checkpoint below is retained as historical evidence only. Its SHA, workflow links and ahead count are superseded by this section. The next source or documentation commit must be rechecked against its own exact SHA before it is called the current candidate.
+- This checkpoint describes the executable-code SHA above. The report-refresh commit must receive its own exact-SHA workflow verification before it is described as the latest fully verified candidate.
+
 
 ---
 
