@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import {
   FACEBOOK_TIMEZONE, generateFacebookIdea, chooseFacebookExperimentSlot
 } from "./facebook-pipeline.mjs";
+import { localDateTimeToIso } from "./schedule-policy.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
@@ -29,6 +30,11 @@ function readEditorialState() {
 }
 
 function makePackage(date, idea, slot, now) {
+  const scheduledAt = localDateTimeToIso(date, slot, FACEBOOK_TIMEZONE);
+  const slotHasPassed = Date.parse(scheduledAt) <= Date.parse(now);
+  const status = idea.available === false
+    ? "NO_UNIQUE_IDEA_REVIEW_REQUIRED"
+    : slotHasPassed ? "MISSED_SLOT_REVIEW_REQUIRED" : "DRAFT_RESEARCH_REQUIRED";
   return {
     schemaVersion: 1,
     id: "nature-frontiers-daily-" + date,
@@ -36,6 +42,8 @@ function makePackage(date, idea, slot, now) {
     destinationPageId: null,
     date,
     proposedPublicationTime: slot,
+    proposedScheduledAt: scheduledAt,
+    scheduleStatus: slotHasPassed ? "MISSED_SLOT_REVIEW_REQUIRED" : "FUTURE_SLOT_PROPOSED",
     timezone: FACEBOOK_TIMEZONE,
     experiment: {
       slot,
@@ -52,13 +60,14 @@ function makePackage(date, idea, slot, now) {
     media: null,
     rightsEvidence: null,
     complianceRuleSet: "nf-facebook-baseline-2026-10-v1",
-    status: idea.available === false ? "NO_UNIQUE_IDEA_REVIEW_REQUIRED" : "DRAFT_RESEARCH_REQUIRED",
+    status,
     blockers: [
       "Research the topic and add source URLs for every material factual claim.",
       "Attach a real media asset and retained licensing evidence; test fixtures are not publishable.",
       "Independently verify the exact Nature Frontiers Facebook Page ID and current permissions.",
       "Complete compliance recheck and human approval bound to the final caption, media and schedule.",
-      "External Facebook publishing is disabled; this artifact is draft-only."
+      "External Facebook publishing is disabled; this artifact is draft-only.",
+      ...(slotHasPassed ? ["The assigned local publication slot has passed; do not backdate or batch-publish. An operator must choose a future slot and rerun all checks."] : [])
     ],
     publishReady: false,
     publishingEnabled: false,
