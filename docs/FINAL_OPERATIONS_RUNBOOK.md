@@ -1,3 +1,15 @@
+# Current branch status — 2026-10-24
+
+- Implementation branch: `codex/marketing-machine-audit-fixes`; current code checkpoint before this documentation update: `97f0c87af5801924a4925736c17ec985a2c86673`.
+- Base `main`: `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 is open, draft and unmerged; current comparison at the code checkpoint was 500 commits ahead, 0 behind. Re-fetch live refs after later commits.
+- The code checkpoint passed all three PR workflows: [automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40086353344), [metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40086353299), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40086353309). Automation log: 113 Node tests passed, 0 failed, 0 skipped; 8 Python tests passed. Install path: `npm ci --ignore-scripts`; plain `npm ci` remains unverified.
+- npm audit at this checkpoint: 4 moderate, 0 high, 0 critical; reported packages are `gaxios`, `googleapis`, `googleapis-common`, and `uuid`. A reported `googleapis` fix requires major version 178.0.0 and has not been applied without compatibility testing.
+- Cadence configuration now separates `targetCadence` (requested 2 long-form + 1 Short) from `interimDraftCadence` (1 long-form + 1 Short on Tuesday/Saturday, draft-only). The 72-hour spacing constraint still conflicts mathematically with three weekly publications; `cadenceDecisionRequired=true` and `publishingEnabled=false` remain enforced.
+- Production release remains blocked by genuine assets/manifests, rights evidence, final-hash human review, live SonicVhibez OAuth verification, explicit private-upload acceptance/receipt, and owner-run restart/restore acceptance. Safari remains inactive. CI success is not production acceptance.
+- This snapshot describes the code checkpoint and its workflow evidence. The commit adding this note is documentation-only; check PR #1 for its own current-HEAD workflow results.
+
+---
+
 ## Last fully verified code checkpoint before this documentation refresh — 2026-10-24
 
 - Verified code/test HEAD: `68dd24f7a369a8bdb4ddb2513127e9bf3a0044e3`; PR #1 was open, draft and unmerged against `main`. The subsequent commits in this documentation refresh change documentation only; the final branch HEAD and its CI are reported in the PR description and completion response.
