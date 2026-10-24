@@ -175,3 +175,32 @@ test("startup reconciles an interrupted PUBLISHING ledger entry before consideri
     assert.equal(result.skipped, 1);
   } finally { f.cleanup(); }
 });
+
+
+test("separate runtime kill switch blocks live config before any Meta request", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    let called = false;
+    const result = await runAutonomousFacebookPublisher({
+      configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+      env: { FACEBOOK_PUBLISH_ENABLED: "NO", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
+      fetchImpl: async () => { called = true; throw new Error("must not call"); }
+    });
+    assert.equal(result.status, "SAFE_NOOP");
+    assert.equal(called, false);
+  } finally { f.cleanup(); }
+});
+
+test("live publisher rejects a runtime Page ID that differs from configuration", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "999999999999999", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) }
+    }), /must exactly match/i);
+  } finally { f.cleanup(); }
+});
