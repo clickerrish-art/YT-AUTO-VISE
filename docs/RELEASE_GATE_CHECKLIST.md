@@ -222,3 +222,10 @@ Source candidate: `e1afbdc51745ef18e47f12a93629674c76dc73a0`.
 - **SKIPPED**: [Facebook draft PR run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40130550704); a default-branch retained draft and verified Page identity are still missing.
 - The first browser run caught a genuine mobile overflow from long unbroken Meta status messages. The CSS was repaired and the exact-source browser run passed. Playwright was upgraded from 1.55.0 after npm audit exposed high-severity advisories; version 1.64.1 and the refreshed lockfile audit clean.
 - This local browser test does not prove live YouTube/Meta integrations, production media rights, a private upload, Facebook draft artifact on `main`, or owner-controlled recovery drills. Those gates remain outstanding; no external upload/post occurred.
+
+
+### Git reconciliation remains a separate owner gate
+
+The two base-only commits are `71578dafc24e5d48173dce3f4e392e18e42aa40e` (adds `test/restore-facebook-draft-history.test.mjs`) and `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (reverts that exact file). The current `main` tree lacks this test; the implementation branch restores it at `c507b63abfa336165865ad01cf6354ae50254f04`, and the exact-candidate Node suite passes.
+
+The implementation branch is 926 commits ahead and 2 behind; only the first 250 branch-only commit records are returned by GitHub’s comparison response, with repeated documentation/workflow commit subjects visible. A complete commit-by-commit history audit has **not** been completed. Do not reconcile history implicitly. Owner must review the 99-file tree diff and explicitly choose how to handle the divergent history before any merge/rebase/cherry-pick operation.
