@@ -76,7 +76,7 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   const approvalResponse = await fetch(base + "/api/facebook/drafts/approve", { method: "POST", headers, body: JSON.stringify({ draftId: draft.id, decision: "APPROVE" }) });
   assert.equal(approvalResponse.status, 400, "approval must fail closed while Page identity, rights and compliance blockers remain");
 
-  const publishResponse = await fetch(base + "/api/facebook/publish", { method: "POST", headers, body: JSON.stringify({ draftId: draft.id, authorize: true }) });
+  const publishResponse = await fetch(base + "/api/facebook/publish", { method: "POST", headers, body: JSON.stringify({ draftId: draft.id, confirmOperation: true }) });
   assert.equal(publishResponse.status, 409);
   const publishBody = await publishResponse.json();
   assert.equal(publishBody.publishingEnabled, false);
