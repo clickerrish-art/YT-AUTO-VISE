@@ -243,7 +243,7 @@ export function assertFacebookPublishAllowed(draft, {
   if (!evaluation?.ok) blockers.push("Current compliance/rights preflight has not passed");
   if (draft?.status !== "APPROVED_DRAFT" || draft?.approval?.decision !== "APPROVE") blockers.push("Final human approval is missing");
   if (!draft?.approval?.fingerprint || draft.approval.fingerprint !== facebookApprovalFingerprint(draft)) blockers.push("Approval is missing or invalidated by a material content, media, disclosure, destination, or schedule change");
-  return { allowed: blockers.length === 0, blockers, publishingEnabled: false, mode: "DRY_RUN_ONLY_NO_LIVE_ADAPTER" };
+  return { allowed: blockers.length === 0, blockers, publishingEnabled: publishingEnabled === true && dryRun === false, mode: dryRun ? "DRY_RUN" : "LIVE_ADAPTER_GATED" };
 }
 
 export function chooseFacebookExperimentSlot({ date, pillar, format = "text" }) {
