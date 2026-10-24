@@ -12,8 +12,8 @@ on:
           - short-002
         default: both
   schedule:
-    # One Short weekly on Thursday SAST; long-form narration is scheduled separately on Tuesday and Saturday.
-    - cron: "0 15 * * 4"
+    # Tuesday at 17:00 SAST: long-form draft. Saturday Short at 17:00 SAST: draft (15:00 UTC crons; >=72h apart).
+    - cron: "0 15 * * 6"
   push:
     branches: [main]
     paths:
@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -59,8 +59,8 @@ jobs:
           assert q.get("publishingEnabled") is False, "Public publishing must remain disabled"
           cadence = q.get("cadence", {})
           assert cadence.get("timezone") == "Africa/Johannesburg"
-          assert cadence.get("postsPerWeek") == 3 and cadence.get("days") == ["Tuesday", "Thursday", "Saturday"]
-          assert cadence.get("breakdown") == {"longForm": 2, "short": 1}
+          assert cadence.get("postsPerWeek") == 2 and cadence.get("days") == ["Tuesday", "Saturday"]
+          assert cadence.get("breakdown") == {"longForm": 1, "short": 1}
           assert len(items) >= 10, f"Queue needs at least 10 topics; found {len(items)}"
           ids = [x.get("id") for x in items]
           assert all(isinstance(i, str) and i.strip() for i in ids), "Every topic needs a stable ID"
@@ -77,7 +77,7 @@ jobs:
           }
           assert all(x.get("status") in allowed_statuses for x in items), "Unexpected topic status; inspect before generation"
           assert all(x.get("title") or x.get("topic") for x in items), "Every topic needs a title/topic"
-          print(f"PASS: {len(items)} unique queued topics; Tue/Thu/Sat SAST cadence (2 long-form + 1 Short target); approved URL only; public publishing remains disabled.")
+          print(f"PASS: {len(items)} unique queued topics; Tuesday/Saturday draft slots with >=72-hour spacing; approved URL only; public publishing remains disabled.")
           PY
       - name: Validate Python generators
         run: python -m py_compile scripts/generate-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py

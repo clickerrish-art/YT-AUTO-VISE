@@ -97,6 +97,18 @@ test("blocks incorrect aspect ratio and wrong channel", () => {
   }
 });
 
+test("renderer runs the complete export validator before reporting success", () => {
+  const source = fs.readFileSync(script, "utf8");
+  const validatorIndex = source.indexOf("validate-long-form-export.mjs");
+  const validationFailureIndex = source.indexOf("rendered output failed technical export validation");
+  const successIndex = source.indexOf("RENDERED AND VALIDATED:");
+  assert.ok(validatorIndex >= 0, "renderer must invoke the standalone export validator");
+  assert.ok(validationFailureIndex > validatorIndex, "validation failure must fail closed");
+  assert.ok(successIndex > validationFailureIndex, "success must only be reported after validation logic");
+  assert.match(source, /validation\.status !== 0/);
+  assert.match(source, /timeout:\s*240_000/);
+});
+
 test("long-form workflow embedded Python validation remains syntactically valid", () => {
   const workflowPath = path.join(repoRoot, ".github", "workflows", "generate-long-form-narration.yml");
   const workflow = fs.readFileSync(workflowPath, "utf8");

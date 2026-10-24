@@ -14,6 +14,28 @@ const queuePath = process.env.QUEUE_PATH ?? "content/queue.json";
 const manifestPath = "content/render-manifest.json";
 const metadataPath = "content/next-short.json";
 const videoPath = "media/next-short.mp4";
+const schedulePath = "config/weekly-content-plan.json";
+let minimumSpacingHours = NaN;
+let cycleFormats = [];
+if (!exists(schedulePath)) {
+  blockers.push("Authoritative publication-cycle policy is missing.");
+} else {
+  try {
+    const schedule = JSON.parse(fs.readFileSync(path.resolve(root, schedulePath), "utf8"));
+    if (schedule.timezone !== "Africa/Johannesburg") blockers.push("Schedule timezone must be Africa/Johannesburg.");
+    minimumSpacingHours = schedule.minimumPublicationSpacingHours;
+    cycleFormats = schedule.publicationCycle?.formats ?? [];
+    if (!Number.isFinite(minimumSpacingHours) || minimumSpacingHours <= 0 || minimumSpacingHours > 8760) blockers.push("Schedule minimumPublicationSpacingHours must be a finite positive value no greater than 8760 hours.");
+    if (schedule.spacingPolicy?.minimumHoursBetweenPosts !== minimumSpacingHours) blockers.push("Schedule spacingPolicy must match minimumPublicationSpacingHours.");
+    if (JSON.stringify(schedule.publicationCycle?.formats) !== JSON.stringify(["long_form", "long_form", "short"])) blockers.push("Publication cycle must be long-form, long-form, Short.");
+    if (schedule.publicationCycle?.minimumHoursBetweenConsecutivePublications !== minimumSpacingHours || schedule.publicationCycle?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0) || schedule.spacingPolicy?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0)) blockers.push("Publication cycle and spacingPolicy must use the configured minimum gap and its derived cycle duration.");
+    if (schedule.publicationCycle?.publicationRequiresVerifiedHistory !== true) blockers.push("Publication cycle must require independently verified public/private/unlisted history and reconciliation of uncertain attempts.");
+    if (["targetCadence", "requestedTargetCadence", "cadenceDecisionRequired", "interimDraftCadence"].some(key => key in schedule)) blockers.push("Stale weekly cadence fields must be removed.");
+    blockers.push("LIVE BLOCKER: complete SonicVhibez public, private and unlisted history plus all pending/uncertain upload attempts must be independently reconciled immediately before upload.");
+  } catch {
+    blockers.push("Authoritative weekly schedule is not valid JSON; cadence and spacing cannot be verified.");
+  }
+}
 
 if (!exists(queuePath)) {
   blockers.push("content/queue.json is missing.");
@@ -29,6 +51,8 @@ if (!exists(queuePath)) {
       blockers.push("Queue must be a JSON object with an items array.");
     } else {
       if (queue.publishingEnabled !== false) blockers.push("Queue must keep publishingEnabled=false until private upload and human review are verified.");
+      if (queue.cadence?.minimumHoursBetweenConsecutivePublications !== minimumSpacingHours || queue.cadence?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0) || JSON.stringify(queue.cadence?.formats) !== JSON.stringify(["long_form", "long_form", "short"])) blockers.push("Queue cadence must match the configured rolling publication cycle policy.");
+      if (queue.cadence?.draftPreparationFallback?.notPublicationCadence !== true) blockers.push("Tuesday/Saturday fallback must be marked draft preparation only, not publication cadence.");
       if (!Array.isArray(queue.items) || queue.items.length < 2) blockers.push("Queue needs at least two draft items.");
       const items = Array.isArray(queue.items) ? queue.items : [];
       if (items.some(item => !item || typeof item !== "object" || typeof item.id !== "string" || !item.id.trim())) {
@@ -62,6 +86,35 @@ if (!exists(manifestPath)) {
     }
     if (manifest.rightsConfirmed !== true) blockers.push("Set rightsConfirmed=true only after checking all media licenses and permissions.");
     if (manifest.complianceReviewed !== true) blockers.push("Set complianceReviewed=true only after human content/compliance review.");
+  }
+}
+const longFormManifestPath = "content/long-form-render-manifest.json";
+if (!exists(longFormManifestPath)) {
+  blockers.push("Create content/long-form-render-manifest.json from the example only after verifying real long-form assets and rights.");
+} else {
+  let longManifest;
+  try { longManifest = JSON.parse(fs.readFileSync(path.resolve(root, longFormManifestPath), "utf8")); }
+  catch { blockers.push("content/long-form-render-manifest.json is not valid JSON."); }
+  if (longManifest) {
+    if (longManifest.channel !== "SonicVhibez") blockers.push("Long-form render manifest target must be exactly SonicVhibez.");
+    if (longManifest.targetAspectRatio !== "16:9") blockers.push("Long-form render manifest must specify targetAspectRatio 16:9.");
+    for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
+      if (typeof longManifest[key] !== "string" || !longManifest[key].trim() || !exists(path.join("content", longManifest[key]))) {
+        blockers.push(`Long-form manifest asset ${key} is missing: ${longManifest[key] ?? "(unset)"}.`);
+      }
+    }
+    for (const key of ["footageLicenseEvidence", "narrationLicenseEvidence"]) {
+      if (typeof longManifest[key] !== "string" || longManifest[key].trim().length < 12 || /replace_with|placeholder|todo|unknown|tbd/i.test(longManifest[key])) {
+        blockers.push(`Long-form manifest ${key} must reference real, human-verified rights evidence.`);
+      }
+    }
+    if (typeof longManifest.title !== "string" || longManifest.title.trim().length < 10 || /replace_with|placeholder|todo|tbd/i.test(longManifest.title)) {
+      blockers.push("Long-form manifest title must be a real, reviewed title.");
+    }
+    if (longManifest.rightsConfirmed !== true) blockers.push("Long-form manifest rightsConfirmed must be true only after checking all media licenses and permissions.");
+    if (longManifest.complianceReviewed !== true) blockers.push("Long-form manifest complianceReviewed must be true only after human content/compliance review.");
+    if (typeof longManifest.containsSyntheticMedia !== "boolean") blockers.push("Long-form manifest must explicitly record containsSyntheticMedia as true or false.");
+    if (typeof longManifest.hasPaidPromotion !== "boolean") blockers.push("Long-form manifest must explicitly record hasPaidPromotion as true or false.");
   }
 }
 if (!exists(metadataPath)) {
@@ -98,7 +151,8 @@ if (blockers.length) {
   for (const blocker of blockers) console.log("- " + blocker);
   console.log("This report never uploads, schedules, or publishes.");
   console.log("This report does not verify account ownership, license authenticity, factual accuracy, or visual quality.");
-  process.exit(0);
+  process.exitCode = 2;
+} else {
+  console.log("PREREQUISITES PRESENT: run the content checker and media preflight, then manually inspect the result before any private upload.");
+  console.log("This report never uploads, schedules, or publishes.");
 }
-console.log("PREREQUISITES PRESENT: run the content checker and media preflight, then manually inspect the result before any private upload.");
-console.log("This report never uploads, schedules, or publishes.");

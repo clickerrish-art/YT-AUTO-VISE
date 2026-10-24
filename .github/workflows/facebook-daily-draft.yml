@@ -1,0 +1,64 @@
+name: Generate daily Nature Frontiers Facebook draft
+
+on:
+  schedule:
+    # 07:30 Africa/Johannesburg (UTC+2); schedule events run on the default branch only.
+    - cron: "30 5 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main, codex/marketing-machine-audit-fixes]
+    paths:
+      - "scripts/generate-facebook-daily-draft.mjs"
+      - "scripts/facebook-pipeline.mjs"
+      - "scripts/restore-facebook-draft-history.mjs"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/facebook-daily-draft.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/generate-facebook-daily-draft.mjs"
+      - "scripts/facebook-pipeline.mjs"
+      - "scripts/restore-facebook-draft-history.mjs"
+      - "test/facebook-daily-draft.test.mjs"
+      - "package.json"
+      - ".github/workflows/facebook-daily-draft.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  create-draft-package:
+    # Only the default branch may emit a daily package. Push/PR runs validate through CI,
+    # but must not create competing artifacts from an unmerged candidate branch.
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Restore recent cross-run editorial history
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          FACEBOOK_DAILY_DRAFT_HISTORY_FILE: ${{ runner.temp }}/facebook-history.json
+        run: node scripts/restore-facebook-draft-history.mjs
+      - name: Generate one idempotent research-only draft package
+        env:
+          FACEBOOK_DAILY_DRAFT_DIR: ${{ runner.temp }}/facebook-drafts
+          FACEBOOK_DAILY_DRAFT_HISTORY_FILE: ${{ runner.temp }}/facebook-history.json
+        run: npm run facebook:draft:daily
+      - name: Retain draft package for operator review
+        uses: actions/upload-artifact@v4
+        with:
+          name: nature-frontiers-facebook-draft-${{ github.run_id }}
+          path: ${{ runner.temp }}/facebook-drafts/*.json
+          if-no-files-found: error
+          retention-days: 14

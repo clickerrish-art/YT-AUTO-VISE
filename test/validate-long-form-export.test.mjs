@@ -8,17 +8,21 @@ import { spawnSync } from "node:child_process";
 const repoRoot = process.cwd();
 const validator = path.join(repoRoot, "scripts", "validate-long-form-export.mjs");
 
-function fixture(t, probeOutput) {
+function fixture(t, probeOutput, decodeExitCode = 0) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-export-"));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
   const bin = path.join(dir, "bin");
   fs.mkdirSync(bin);
   const ffprobe = path.join(bin, process.platform === "win32" ? "ffprobe.cmd" : "ffprobe");
+  const ffmpeg = path.join(bin, process.platform === "win32" ? "ffmpeg.cmd" : "ffmpeg");
   if (process.platform === "win32") {
     fs.writeFileSync(ffprobe, "@echo off\necho " + JSON.stringify(probeOutput) + "\n");
+    fs.writeFileSync(ffmpeg, "@echo off\nexit /b " + decodeExitCode + "\n");
   } else {
     fs.writeFileSync(ffprobe, "#!/bin/sh\nprintf '%s' '" + JSON.stringify(probeOutput).replace(/'/g, "'\\''") + "'\n");
+    fs.writeFileSync(ffmpeg, "#!/bin/sh\nexit " + decodeExitCode + "\n");
     fs.chmodSync(ffprobe, 0o755);
+    fs.chmodSync(ffmpeg, 0o755);
   }
   const media = path.join(dir, "sample.mp4");
   fs.writeFileSync(media, "test file");
@@ -32,7 +36,7 @@ function run(media, env) {
 const validProbe = {
   format: { duration: "400.0" },
   streams: [
-    { codec_type: "video", codec_name: "h264", width: 1920, height: 1080 },
+    { codec_type: "video", codec_name: "h264", width: 1920, height: 1080, avg_frame_rate: "30/1" },
     { codec_type: "audio", codec_name: "aac" }
   ]
 };
@@ -48,11 +52,12 @@ test("blocks a missing or empty export", () => {
   }
 });
 
-test("passes a valid 6–10 minute 1080p H.264/AAC export", t => {
+test("passes a valid 6–10 minute 1080p H.264/AAC export with full decode", t => {
   const f = fixture(t, validProbe);
   const result = run(f.media, f.env);
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /technical checks passed/i);
+  assert.match(result.stdout, /Full-file decode passed/i);
   assert.match(result.stdout, /Human review is still required/i);
 });
 
@@ -67,10 +72,26 @@ test("blocks wrong resolution and short duration", t => {
   assert.match(result.stderr, /1920×1080/i);
 });
 
+test("blocks unsupported or missing frame rate", t => {
+  const bad = structuredClone(validProbe);
+  bad.streams[0].avg_frame_rate = "0/0";
+  const f = fixture(t, bad);
+  const result = run(f.media, f.env);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /frame rate must be between 23.9 and 60 fps/i);
+});
+
 test("blocks exports without an audio stream", t => {
-  const bad = { format: { duration: "400" }, streams: [{ codec_type: "video", codec_name: "h264", width: 1920, height: 1080 }] };
+  const bad = { format: { duration: "400" }, streams: [{ codec_type: "video", codec_name: "h264", width: 1920, height: 1080, avg_frame_rate: "30/1" }] };
   const f = fixture(t, bad);
   const result = run(f.media, f.env);
   assert.equal(result.status, 1);
   assert.match(result.stderr, /audio stream is missing/i);
+});
+
+test("blocks a file when full-file decoding fails", t => {
+  const f = fixture(t, validProbe, 1);
+  const result = run(f.media, f.env);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /full-file FFmpeg decode failed/i);
 });

@@ -1,0 +1,40 @@
+name: Autonomous Nature Frontiers Facebook publisher
+
+on:
+  schedule:
+    # 07:30 Africa/Johannesburg (UTC+2): prepare the 08:00 local scheduled post.
+    - cron: "30 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nature-frontiers-facebook-autonomous-publisher
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    # A persistent, owner-controlled runner is required for durable history and locks.
+    runs-on: [self-hosted, linux, facebook-publisher]
+    timeout-minutes: 10
+    env:
+      FACEBOOK_STATE_DIR: ${{ vars.FACEBOOK_STATE_DIR }}
+      FACEBOOK_AUTONOMOUS_QUEUE_PATH: ${{ vars.FACEBOOK_AUTONOMOUS_QUEUE_PATH }}
+      NATURE_FRONTIERS_FACEBOOK_PAGE_ID: ${{ vars.NATURE_FRONTIERS_FACEBOOK_PAGE_ID }}
+      FACEBOOK_PUBLISH_ENABLED: ${{ vars.FACEBOOK_PUBLISH_ENABLED }}
+      META_USER_ACCESS_TOKEN: ${{ secrets.META_USER_ACCESS_TOKEN }}
+      META_PAGE_ACCESS_TOKEN: ${{ secrets.META_PAGE_ACCESS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Validate and enqueue evidence-complete candidates
+        run: npm run facebook:intake:autonomous
+      - name: Run autonomous Facebook publisher
+        run: npm run facebook:publish:autonomous

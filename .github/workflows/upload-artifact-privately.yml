@@ -12,6 +12,27 @@ on:
         required: true
         default: content/next-short.json
         type: string
+      job_id:
+        description: Stable production job ID bound to the approval record
+        required: true
+        type: string
+      approval_path:
+        description: Path to the artifact-bound human approval JSON
+        required: true
+        type: string
+      confirm_private_upload:
+        description: Explicitly authorize one private-only upload attempt
+        required: true
+        default: 'NO'
+        type: choice
+        options:
+          - 'NO'
+          - 'YES'
+      previous_ledger_run_id:
+        description: Prior upload workflow run ID whose ledger must be restored; use NONE only for the first-ever attempt
+        required: true
+        default: NONE
+        type: string
 
 permissions:
   contents: read
@@ -19,11 +40,12 @@ permissions:
 
 jobs:
   private-upload:
+    if: ${{ inputs.confirm_private_upload == 'YES' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - name: Check out reviewed project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Download draft package from the selected run
         uses: actions/download-artifact@v4
         with:
@@ -73,10 +95,20 @@ jobs:
               sys.exit("BLOCKED: artifact channel or product URL is not approved.")
           print("PASS: reviewed metadata is bound to the selected artifact and approved product.")
           PY
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Restore the previous durable upload-attempt ledger
+        if: ${{ inputs.previous_ledger_run_id != 'NONE' }}
+        uses: actions/download-artifact@v4
         with:
-          node-version: 20
+          name: sonicvhibez-upload-ledger
+          path: run-logs
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.previous_ledger_run_id }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
       - name: Install uploader dependencies
         run: npm install --ignore-scripts
       - name: Verify required secrets are configured
@@ -85,6 +117,7 @@ jobs:
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
+          CONFIRM_PRIVATE_UPLOAD: ${{ inputs.confirm_private_upload }}
         run: |
           missing=0
           for name in YOUTUBE_CLIENT_ID YOUTUBE_CLIENT_SECRET YOUTUBE_REFRESH_TOKEN SONICVHIBEZ_CHANNEL_ID; do
@@ -103,9 +136,21 @@ jobs:
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
+          CONFIRM_PRIVATE_UPLOAD: ${{ inputs.confirm_private_upload }}
+          JOB_ID: ${{ inputs.job_id }}
+          UPLOAD_APPROVAL_PATH: ${{ inputs.approval_path }}
           METADATA_PATH: ${{ inputs.reviewed_metadata_path }}
           VIDEO_PATH: ${{ steps.select-video.outputs.video_path }}
+          UPLOAD_LOG_DIR: run-logs
         run: node scripts/upload-private.mjs "$METADATA_PATH" "$VIDEO_PATH"
+      - name: Preserve upload-attempt ledger for reconciliation
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-upload-ledger
+          path: run-logs/upload-attempts.json
+          if-no-files-found: warn
+          retention-days: 90
       - name: Preserve private-upload receipt
         if: success()
         uses: actions/upload-artifact@v4

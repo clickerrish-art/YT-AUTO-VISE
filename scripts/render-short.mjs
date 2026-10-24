@@ -7,6 +7,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
 const [manifestArg = "content/render-manifest.json", outputArg = "media/next-short.mp4"] = process.argv.slice(2);
 const manifestPath = path.resolve(manifestArg);
@@ -60,6 +61,13 @@ if (captionCheck.status !== 0) {
   process.stderr.write(captionCheck.stderr || captionCheck.stdout || "BLOCKED: captions failed validation.\n");
   process.exit(1);
 }
+const captionSyncCheck = spawnSync(process.execPath, ["scripts/validate-caption-sync.mjs", captions, String(Number(probe.stdout.trim()))], { encoding: "utf8" });
+if (captionSyncCheck.stdout) process.stdout.write(captionSyncCheck.stdout);
+if (captionSyncCheck.stderr) process.stderr.write(captionSyncCheck.stderr);
+if (captionSyncCheck.error || captionSyncCheck.status !== 0) {
+  console.error("BLOCKED: captions do not fit the narration duration; refusing to render.");
+  process.exit(1);
+}
 fs.mkdirSync(path.dirname(output), {recursive:true});
 // FFmpeg resolves subtitle paths from the process working directory, not the
 // manifest directory. Use the already-resolved absolute path so manifests in
@@ -85,6 +93,20 @@ if (rendered.error || rendered.status !== 0) {
   console.error("BLOCKED: FFmpeg render failed. Confirm FFmpeg/libass is installed and asset paths are valid.");
   process.exit(2);
 }
-console.log("RENDERED: " + output + " (duration follows narration; expected 50–60 seconds).");
-console.log("Next: run npm run preflight:media -- " + output + " <reviewed-metadata.json>");
+
+// Never trust the renderer exit code alone: verify the produced bytes, streams,
+// exact vertical framing, duration, full decode and measurable audio first.
+const validatorPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "validate-short-export.mjs");
+const validation = spawnSync(process.execPath, [validatorPath, output], {
+  encoding: "utf8",
+  timeout: 180_000
+});
+if (validation.stdout) process.stdout.write(validation.stdout);
+if (validation.stderr) process.stderr.write(validation.stderr);
+if (validation.error || validation.status !== 0) {
+  console.error("BLOCKED: rendered Short failed technical export validation; it must not be marked successful.");
+  process.exit(validation.error?.code === "ETIMEDOUT" ? 124 : 1);
+}
+console.log("RENDERED AND VALIDATED: " + output + " (50–60 seconds, 1080×1920, audio and full-file decode passed).");
+console.log("Next: run npm run preflight:media -- " + output + " <reviewed-metadata.json> for the separate metadata gate.");
 console.log("No upload or publishing action was performed.");

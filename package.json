@@ -3,23 +3,37 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Safety-first SonicVhibez Shorts and long-form metadata validation, rendering and private-upload tooling.",
+  "description": "Safety-first SonicVhibez content workflow, media validation and private-upload tooling.",
   "scripts": {
     "check": "node scripts/check-content.mjs",
     "test": "node --test",
+    "dashboard": "node scripts/dashboard-server.mjs",
+    "backup:state": "node scripts/backup-state.mjs",
+    "restore:state": "node scripts/restore-state.mjs",
     "upload:private": "node scripts/upload-private.mjs",
     "check:captions": "node scripts/check-captions.mjs content/short-001-wildlife-video-storytelling.srt content/short-002-plan-wildlife-documentary.srt",
+    "validate:caption-sync": "node scripts/validate-caption-sync.mjs",
     "preflight:media": "node scripts/preflight-media.mjs",
     "render:short": "node scripts/render-short.mjs",
     "readiness": "node scripts/production-readiness.mjs",
     "render:thumbnail": "node scripts/render-thumbnail.mjs",
     "render:long": "node scripts/render-long-form.mjs",
-    "validate:long-export": "node scripts/validate-long-form-export.mjs"
+    "validate:long-export": "node scripts/validate-long-form-export.mjs",
+    "validate:schedule": "node scripts/validate-schedule.mjs",
+    "validate:campaigns": "node scripts/validate-campaigns.mjs",
+    "validate:short-export": "node scripts/validate-short-export.mjs",
+    "facebook:draft:daily": "node scripts/generate-facebook-daily-draft.mjs",
+    "facebook:intake:autonomous": "node scripts/facebook-content-intake.mjs",
+    "facebook:publish:autonomous": "node scripts/facebook-autonomous-publisher.mjs",
+    "test:browser": "playwright test --config=playwright.config.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "dependencies": {
-    "googleapis": "^144.0.0"
+    "googleapis": "^188.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
   }
 }

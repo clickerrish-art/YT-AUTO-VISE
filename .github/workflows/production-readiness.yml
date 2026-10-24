@@ -1,6 +1,14 @@
 name: Check SonicVhibez production readiness
 
 on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/production-readiness.mjs"
+      - "tests/production-readiness.test.mjs"
+      - ".github/workflows/production-readiness.yml"
+      - "content/**"
+      - "config/weekly-content-plan.json"
   workflow_dispatch:
   schedule:
     # Weekly diagnostic only; does not upload or publish.
@@ -23,10 +31,13 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
       - name: Report blockers without exposing credentials
+        id: readiness
         env:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
@@ -34,7 +45,11 @@ jobs:
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
         run: |
           mkdir -p readiness-report
-          node scripts/production-readiness.mjs | tee readiness-report/readiness.txt
+          set +e
+          node scripts/production-readiness.mjs 2>&1 | tee readiness-report/readiness.txt
+          readiness_status=${PIPESTATUS[0]}
+          set -e
+          echo "exit_code=$readiness_status" >> "$GITHUB_OUTPUT"
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
           const names = ['YOUTUBE_CLIENT_ID','YOUTUBE_CLIENT_SECRET','YOUTUBE_REFRESH_TOKEN','SONICVHIBEZ_CHANNEL_ID'];
@@ -42,8 +57,19 @@ jobs:
           fs.writeFileSync('readiness-report/secret-presence.json', JSON.stringify(report, null, 2) + '\\n');
           NODE
       - name: Upload diagnostic report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: sonicvhibez-readiness-report
           path: readiness-report/
           retention-days: 30
+
+      - name: Fail the workflow when mandatory readiness gates are blocked
+        if: always()
+        env:
+          READINESS_EXIT_CODE: ${{ steps.readiness.outputs.exit_code }}
+        run: |
+          if [ "${READINESS_EXIT_CODE:-2}" -ne 0 ]; then
+            echo "Production readiness is BLOCKED. Review the retained diagnostic artifact; do not bypass the gates."
+            exit 1
+          fi
