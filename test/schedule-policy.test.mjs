@@ -133,3 +133,24 @@ test("rolling cycle rejects duplicate remote IDs and timezone-boundary gaps unde
   );
   assert.equal(tzGap.valid, false);
 });
+
+
+test("reconciled successful upload ledger entries do not count as future scheduled slots", () => {
+  const history = [{
+    id: "remote-video-1", status: "private",
+    actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form"
+  }];
+  const ledger = [{
+    jobId: "job-long-form-1", remoteVideoId: "remote-video-1",
+    status: "PRIVATE_UPLOAD_VERIFIED",
+    actualPublishedAt: "2026-10-20T15:00:00.000Z",
+    format: "long_form"
+  }];
+  const result = evaluateNextPublication({
+    history, historyVerified: true, pendingAttempts: ledger,
+    proposedAt: "2026-10-23T15:00:00.000Z",
+    jobId: "job-long-form-2", format: "long_form"
+  });
+  assert.equal(result.valid, true, result.errors.join("; "));
+  assert.equal(result.expectedFormat, "long_form");
+});
