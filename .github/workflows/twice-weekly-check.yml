@@ -1,7 +1,7 @@
 name: SonicVhibez three-day readiness check
 on:
   schedule:
-    # Tuesday/Thursday/Saturday SAST cadence (GitHub Actions cron is UTC).
+    # Readiness validation only; it does not publish. Check cadence is independent of the Tue/Sat content draft slots and their 72-hour minimum.
     - cron: "0 15 * * 2,4,6"
   workflow_dispatch:
 permissions:

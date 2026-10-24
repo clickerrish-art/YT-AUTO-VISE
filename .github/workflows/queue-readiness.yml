@@ -16,7 +16,7 @@ on:
       - ".github/workflows/queue-readiness.yml"
   workflow_dispatch:
   schedule:
-    # Tuesday/Thursday/Saturday SAST cadence (GitHub Actions cron is UTC).
+    # Operational queue-readiness/replenishment check only; it does not publish. Runs Tue/Thu/Sat UTC cron while content draft slots remain Tue/Sat with a 72-hour minimum.
     - cron: "0 15 * * 2,4,6"
 permissions:
   contents: write
