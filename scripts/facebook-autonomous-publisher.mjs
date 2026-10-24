@@ -86,11 +86,60 @@ export async function runAutonomousFacebookPublisher({
     if (!Array.isArray(queue)) throw new Error("Autonomous Facebook queue must be a JSON array");
     const current = Number(now);
     const today = localDate(current, config.timezone);
+    const runStartedAt = isoNow(current);
+    let published = 0, skipped = 0;
+
+    // Recover interrupted mutations before selecting new work. A PUBLISHING ledger entry
+    // means the previous process may have reached Meta; it must never be retried blindly.
+    for (let index = 0; index < ledger.length; index++) {
+      const priorAttempt = ledger[index];
+      if (!priorAttempt || !["PUBLISHING", "UNCERTAIN"].includes(priorAttempt.status)) continue;
+      if (priorAttempt.status === "PUBLISHING") {
+        ledger[index] = { ...priorAttempt, status: "UNCERTAIN", reason: "PROCESS_RESTARTED_DURING_PUBLISH_RECONCILIATION_REQUIRED", retryAllowed: false };
+        atomicJson(ledgerPath, ledger);
+      }
+      const attempt = ledger[index];
+      const caption = attempt.payload?.caption;
+      const scheduledAt = attempt.scheduledAt ?? attempt.payload?.scheduledAt;
+      if (typeof caption !== "string" || !scheduledAt || !attempt.startedAt) {
+        ledger[index] = { ...attempt, status: "UNCERTAIN", reason: "RECONCILIATION_FIELDS_MISSING_NO_RETRY", retryAllowed: false };
+        atomicJson(ledgerPath, ledger);
+        continue;
+      }
+      let reconciliation;
+      try {
+        reconciliation = await reconcileRemote({
+          pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
+          accessToken: env.META_PAGE_ACCESS_TOKEN, apiVersion: config.apiVersion,
+          caption, scheduledAt, attemptStartedAt: attempt.startedAt,
+          remotePostId: attempt.remotePostId ?? null, fetchImpl
+        });
+      } catch {
+        reconciliation = { outcome: "UNRESOLVED", reason: "STARTUP_RECONCILIATION_FAILED", matches: [] };
+      }
+      if (reconciliation?.outcome === "CONFIRMED" &&
+          ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(reconciliation.receipt?.status)) {
+        const recovered = {
+          ...attempt, status: reconciliation.receipt.status, completedAt: new Date().toISOString(),
+          remotePostId: reconciliation.receipt.remotePostId, remoteUrl: reconciliation.receipt.remoteUrl ?? null,
+          remoteCreatedAt: reconciliation.receipt.createdTime ?? null,
+          scheduledPublishTime: reconciliation.receipt.scheduledPublishTime ?? null,
+          verifiedRemotely: true, reconciliation, retryAllowed: false,
+          recoveryReason: "INTERRUPTED_ATTEMPT_RECONCILED_BEFORE_NEW_WORK"
+        };
+        ledger[index] = recovered;
+        history.push({ ...recovered, payload: undefined });
+      } else {
+        ledger[index] = { ...attempt, status: "UNCERTAIN", reconciliation, retryAllowed: false,
+          reason: reconciliation?.reason ?? "REMOTE_OUTCOME_UNRESOLVED_NO_RETRY" };
+      }
+      atomicJson(ledgerPath, ledger);
+      atomicJson(historyPath, history);
+    }
+
     const candidates = queue.filter(item => item && item.destination === "nature_frontiers_facebook" &&
       item.destinationPageId === config.destinationPageId && item.scheduledDate === today &&
       typeof item.slotId === "string" && typeof item.scheduledAt === "string");
-    const runStartedAt = isoNow(current);
-    let published = 0, skipped = 0;
     for (const payload of candidates) {
       if (history.some(item => item.slotId === payload.slotId) || ledger.some(item => item.slotId === payload.slotId)) {
         skipped++;
@@ -132,9 +181,9 @@ export async function runAutonomousFacebookPublisher({
       });
       const attempt = {
         kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId: payload.slotId, destination: "nature_frontiers_facebook",
-        status: "PUBLISHING", startedAt: isoNow(current), contentFingerprint: decision.contentFingerprint,
+        status: "PUBLISHING", startedAt: isoNow(current), scheduledAt: payload.scheduledAt, contentFingerprint: decision.contentFingerprint,
         policyRuleVersion: decision.policyRuleVersion, policyDecision: decision,
-        payload: { caption: payload.caption, links: payload.links ?? [], mediaFingerprints: decision.mediaFingerprints }
+        payload: { caption: payload.caption, scheduledAt: payload.scheduledAt, links: payload.links ?? [], mediaFingerprints: decision.mediaFingerprints }
       };
       ledger.push(attempt); atomicJson(ledgerPath, ledger);
       let remote = null;
