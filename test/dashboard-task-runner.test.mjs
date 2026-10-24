@@ -27,11 +27,12 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   }
   assert.equal(ready, true, "server did not start: " + logs);
   const readinessResponse = await fetch(base + "/readyz");
-  assert.equal(readinessResponse.status, 200);
+  assert.equal(readinessResponse.status, 503, "production readiness must report missing owner prerequisites");
   const readiness = await readinessResponse.json();
-  assert.equal(readiness.ready, true);
+  assert.equal(readiness.ready, false);
   assert.equal(readiness.publishingEnabled, false);
-  assert.ok(Array.isArray(readiness.optionalBlockers));
+  assert.ok(Array.isArray(readiness.blockers));
+  assert.ok(readiness.blockers.length > 0);
   const port2 = port + 10_000;
   const child2 = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
     env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_STATE_DIR: stateDir, PORT: String(port2), DASHBOARD_HOST: "127.0.0.1" },
