@@ -83,20 +83,33 @@ export async function verifyMetaPagePermissions({
   const granted = new Set((permissionData.data ?? []).filter(item => item?.status === "granted").map(item => item.permission));
   const missing = required.filter(permission => !granted.has(permission));
   if (missing.length) throw new MetaPageApiError("Required Meta permissions are missing or not granted: " + missing.join(", "));
-  let accountsResponse;
-  try {
-    accountsResponse = await fetchImpl(endpoint(apiVersion, "me/accounts?fields=id,name,tasks,access_token&limit=100"), {
-      method: "GET", headers: headers(userAccessToken), signal: AbortSignal.timeout(timeoutMs)
-    });
-  } catch {
-    throw new MetaPageApiError("Meta managed-Page lookup failed before a response; publishing remains blocked", { retryable: true });
+  // Follow cursor pagination through the supported managed-Page edge. Never log paging URLs,
+  // which may contain sensitive query parameters, and cap traversal to prevent runaway requests.
+  let page = null;
+  let after = "";
+  const maxPages = 20;
+  for (let pageNumber = 0; pageNumber < maxPages; pageNumber++) {
+    const query = new URLSearchParams({ fields: "id,name,tasks,access_token", limit: "100" });
+    if (after) query.set("after", after);
+    let accountsResponse;
+    try {
+      accountsResponse = await fetchImpl(endpoint(apiVersion, "me/accounts?" + query.toString()), {
+        method: "GET", headers: headers(userAccessToken), signal: AbortSignal.timeout(timeoutMs)
+      });
+    } catch {
+      throw new MetaPageApiError("Meta managed-Page lookup failed before a response; publishing remains blocked", { retryable: true });
+    }
+    const accounts = await parseResponse(accountsResponse, userAccessToken);
+    page = (accounts.data ?? []).find(item => item?.id === pageId) ?? null;
+    if (page) break;
+    if (!accounts.paging?.next) break;
+    const nextAfter = accounts.paging?.cursors?.after;
+    if (typeof nextAfter !== "string" || !nextAfter || nextAfter === after) {
+      throw new MetaPageApiError("Meta managed-Page pagination did not provide a safe advancing cursor; publishing remains blocked");
+    }
+    after = nextAfter;
   }
-  const accounts = await parseResponse(accountsResponse, userAccessToken);
-  const page = (accounts.data ?? []).find(item => item?.id === pageId);
-  if (!page) {
-    if (accounts.paging?.next) throw new MetaPageApiError("The configured Page was not in the first managed-Page results page; pagination is required before verification");
-    throw new MetaPageApiError("The configured Page ID is not present in the authorized account's managed Pages");
-  }
+  if (!page) throw new MetaPageApiError("The configured Page ID was not found in the bounded managed-Page lookup");
   const tasks = Array.isArray(page.tasks) ? page.tasks : [];
   if (!tasks.includes("CREATE_CONTENT") && !tasks.includes("MANAGE")) throw new MetaPageApiError("The authorized account lacks the CREATE_CONTENT or MANAGE task for this Page");
   const returnedPageToken = typeof page.access_token === "string" ? page.access_token : "";
