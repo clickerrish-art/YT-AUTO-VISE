@@ -58,7 +58,7 @@ test("intake refuses duplicate slots and preserves existing queue items", async 
       policyEvaluator: async () => { throw new Error("duplicate must be rejected before policy evaluation"); }
     });
     assert.equal(result.duplicate, 1);
-    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), [existing]);
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(f.rootDir, f.queuePath), "utf8")), [existing]);
   } finally { f.cleanup(); }
 });
 
