@@ -16,7 +16,8 @@
 /content/next-short.json
 /content/long-form-next.json
 
-# Generated production media; source assets must be separately rights-cleared and managed
+# Local source and generated production media; do not commit large/private assets
+/media/
 /media/next-short.mp4
 /media/long-form-next.mp4
 /media/next-short-thumbnail.*
