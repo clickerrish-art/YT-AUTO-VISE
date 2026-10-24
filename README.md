@@ -65,9 +65,7 @@ Source of truth: `config/weekly-content-plan.json`.
 - Tuesday, 17:00 Africa/Johannesburg: long-form draft, 6–10 minutes, 16:9
 - Saturday, 17:00 Africa/Johannesburg: Short draft, 50–60 seconds, 9:16
 
-These are **interim draft-production slots only**: Tuesday-to-Saturday is 96 hours and Saturday-to-next-Tuesday is 72 hours. The validator and authenticated dashboard API enforce actual elapsed-time gaps and schedule reservations.
-
-**Owner decision required:** the requested target remains two long-form videos plus one Short per seven days. Three posts in a 168-hour weekly cycle with a 72-hour minimum require at least 216 hours, so that target is infeasible. The two-slot schedule is a temporary safety fallback, not a silent change to the requested goal. Public publishing remains disabled until the owner resolves the cadence and all production gates are met.
+These Tuesday/Saturday workflows are **draft-preparation triggers only**, not a publication schedule. Actual publication follows a rolling `long_form → long_form → short` cycle with at least 72 complete elapsed hours between consecutive actual publications (216 hours minimum for three cyclic gaps; no weekly post-count promise). The private-upload path now requires a complete owner-reviewed channel-history reconciliation, checks public/private/unlisted remote records and blocks unresolved upload attempts. Public publishing remains disabled.
 - GitHub Actions uses 15:00 UTC and creates drafts only.
 
 ## Useful commands
@@ -107,3 +105,8 @@ The latest code also binds approvals to claim/source/licensing details and inval
 ## Operations and recovery
 
 See [OPERATIONS.md](OPERATIONS.md), [docs/PROJECT_COMPLETION_AUDIT.md](docs/PROJECT_COMPLETION_AUDIT.md), [docs/GO_LIVE_BLOCKERS.md](docs/GO_LIVE_BLOCKERS.md), and [docs/RELEASE_GATE_CHECKLIST.md](docs/RELEASE_GATE_CHECKLIST.md). Back up the state directory and `run-logs/`; never retry an upload whose outcome is uncertain until the durable ledger and YouTube remote state have been reconciled. Keep PR #1 open and draft until all external prerequisites and live acceptance criteria are genuinely met.
+
+
+## Rolling publication policy (current)
+
+The publication sequence is `long_form → long_form → short`, with at least 72 complete elapsed hours between each consecutive actual publication. Three cyclic gaps require at least 216 hours; this is not a weekly posting promise. Tuesday/Saturday workflow triggers create drafts only. Before a private upload, the uploader fetches the authenticated SonicVhibez uploads playlist and requires `CHANNEL_HISTORY_RECONCILIATION_PATH` to enumerate every remote video with exact ID, format, actual timestamp and visibility, and it blocks unresolved upload attempts. This gate has automated tests but still requires owner credentials, a complete real reconciliation record, genuine approved assets and explicit authorization for one private upload.
