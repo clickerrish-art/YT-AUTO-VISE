@@ -47,7 +47,8 @@ if (weeklyMinutes.length > 1) {
     if (gapMinutes < 72 * 60) errors.push(`publication spacing between ${current.day} and ${next.day} is ${(gapMinutes / 60).toFixed(2)} hours; minimum is 72 full hours`);
   }
 }
-if (plan.targetCadence?.longFormVideosPerWeek !== 1 || plan.targetCadence?.shortsPerWeek !== 1 || plan.targetCadence?.totalVideosPerWeek !== 2) errors.push("target cadence must be 1 long-form + 1 Short = 2 weekly");
+if (plan.targetCadence?.longFormVideosPerWeek !== 2 || plan.targetCadence?.shortsPerWeek !== 1 || plan.targetCadence?.totalVideosPerWeek !== 3) errors.push("targetCadence must preserve the requested 2 long-form + 1 Short = 3 weekly");
+if (plan.interimDraftCadence?.longFormVideosPerWeek !== 1 || plan.interimDraftCadence?.shortsPerWeek !== 1 || plan.interimDraftCadence?.totalVideosPerWeek !== 2 || plan.interimDraftCadence?.status !== "DRAFT_ONLY" || JSON.stringify(plan.interimDraftCadence?.days) !== JSON.stringify(["Tuesday", "Saturday"])) errors.push("interimDraftCadence must remain one long-form + one Short on Tuesday/Saturday, draft-only");
 if (plan.requestedTargetCadence?.longFormVideosPerWeek !== 2 || plan.requestedTargetCadence?.shortsPerWeek !== 1 || plan.requestedTargetCadence?.totalVideosPerWeek !== 3) errors.push("requestedTargetCadence must preserve the owner-requested 2 long-form + 1 Short target");
 if (plan.cadenceDecisionRequired !== true) errors.push("cadenceDecisionRequired must remain true until the owner resolves the incompatible target and spacing rule");
 const approvedUrl = "https://selar.com/0u19v8u99l";
