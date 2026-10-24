@@ -1,6 +1,5 @@
 import fs from "node:fs";
 import path from "node:path";
-import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import {
   FACEBOOK_TIMEZONE, generateFacebookIdea, chooseFacebookExperimentSlot
@@ -29,8 +28,7 @@ function readEditorialState() {
   return { existingDrafts: state.facebookDrafts ?? [], recentPosts: state.facebookPosts ?? [] };
 }
 
-function makePackage(date, idea, slot) {
-  const now = process.env.FACEBOOK_DAILY_DRAFT_NOW ?? new Date().toISOString();
+function makePackage(date, idea, slot, now) {
   return {
     schemaVersion: 1,
     id: "nature-frontiers-daily-" + date,
@@ -85,7 +83,7 @@ export function generateDailyFacebookDraft({ date, outputDir, now = new Date().t
   }
   const idea = generateFacebookIdea({ date, existingDrafts, recentPosts });
   const slot = chooseFacebookExperimentSlot({ date, pillar: idea.pillar ?? "educational_explainer", format: "text" });
-  const draft = makePackage(date, idea, slot);
+  const draft = makePackage(date, idea, slot, now);
   // Exclusive creation prevents concurrent daily jobs from overwriting one another.
   const handle = fs.openSync(file, "wx", 0o600);
   try {
