@@ -16,7 +16,9 @@ test("authoritative plan defines Tuesday long-form and Saturday Short draft slot
     ["Tuesday", "long_form", "0 15 * * 2"],
     ["Saturday", "short", "0 15 * * 6"]
   ]);
-  assert.deepEqual(plan.targetCadence, { longFormVideosPerWeek: 1, shortsPerWeek: 1, totalVideosPerWeek: 2 });
+  assert.deepEqual(plan.targetCadence, { longFormVideosPerWeek: 2, shortsPerWeek: 1, totalVideosPerWeek: 3 });
+  assert.deepEqual(plan.interimDraftCadence, { longFormVideosPerWeek: 1, shortsPerWeek: 1, totalVideosPerWeek: 2, days: ["Tuesday", "Saturday"], status: "DRAFT_ONLY" });
+  assert.equal(plan.cadenceDecisionRequired, true);
 });
 test("weekly cycle maintains at least 72 full hours across adjacent slots and week boundary", () => {
   const times = plan.schedule.map(minuteOfWeek).sort((a, b) => a - b);
