@@ -130,3 +130,27 @@ test("private uploader preserves remote video ID and marks recovery if receipt p
     assert.ok(verifiedLedger.attempts[0].actualPublishedAt, "actual timestamp must survive restart in the durable ledger");
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
+
+
+test("private upload lock prevents concurrent workers and stale locks fail closed", async () => {
+  const fs = await import("node:fs");
+  const os = await import("node:os");
+  const path = await import("node:path");
+  const { acquireExclusiveUploadLock } = await import("../scripts/upload-private.mjs");
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-upload-lock-"));
+  const lockPath = path.join(dir, "upload-operation.lock");
+  try {
+    const release = acquireExclusiveUploadLock(lockPath, {
+      jobId: "job-lock-001", now: () => new Date("2026-10-24T12:00:00.000Z")
+    });
+    assert.throws(() => acquireExclusiveUploadLock(lockPath, { jobId: "job-lock-002" }), /active or left a stale lock/);
+    const record = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+    assert.equal(record.jobId, "job-lock-001");
+    release();
+    assert.equal(fs.existsSync(lockPath), false);
+    const releaseAgain = acquireExclusiveUploadLock(lockPath, { jobId: "job-lock-003" });
+    releaseAgain();
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
