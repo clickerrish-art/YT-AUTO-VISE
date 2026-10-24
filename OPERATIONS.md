@@ -1,3 +1,9 @@
+## Cross-run Facebook draft history — new
+
+The scheduled/manual default-branch workflow runs `scripts/restore-facebook-draft-history.mjs` before generating a new draft. It reads only artifacts named `nature-frontiers-facebook-draft-*` from the previous 14 days using the workflow token with `actions: read`; it does not need write permission. The restore step validates each artifact's identity, destination, timezone, 08:00/18:00 assignment and draft-only flags. Missing permissions, API failures, unexpected archive paths, malformed packages or conflicting packages for the same date stop the job rather than silently resetting history.
+
+This history is **bounded to the artifact-retention window**, not a permanent editorial database. If the history step fails, inspect the run and artifacts before manually rerunning; do not bypass the guard or manufacture history. The PR-branch workflow is intentionally skipped, so the first default-branch scheduled/manual run after authorized release must verify real artifact restoration and deduplication. Drafts remain research-required, with `publishReady=false` and `publishingEnabled=false`; this step never publishes to Facebook.
+
 # Operations Runbook
 
 ## Facebook daily workflow — draft-only
