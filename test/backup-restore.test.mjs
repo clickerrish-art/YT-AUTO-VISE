@@ -95,6 +95,32 @@ test("restore refuses to overwrite a newer Facebook recovery ledger", async () =
   }
 });
 
+test("restore rejects symlinked rights and upload-log paths before writing any state", async () => {
+  for (const mode of ["rights", "upload-logs"]) {
+    const source = fixture();
+    const destination = fixture();
+    const outside = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-restore-outside-"));
+    try {
+      const backupPath = path.join(source.root, "backup.json");
+      await backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir, rightsDir: source.rightsDir, outputPath: backupPath });
+      fs.rmSync(destination.stateDir, { recursive: true, force: true });
+      const linkPath = mode === "rights" ? destination.rightsDir : destination.logDir;
+      fs.rmSync(linkPath, { recursive: true, force: true });
+      fs.symlinkSync(outside, linkPath, "dir");
+      await assert.rejects(
+        restoreState({ backupPath, rootDir: destination.root, stateDir: destination.stateDir, uploadLogDir: destination.logDir, rightsDir: destination.rightsDir, confirm: "YES" }),
+        /symbolic link|symbolic-link|UPLOAD_LOG_DIR/i
+      );
+      assert.equal(fs.existsSync(path.join(destination.stateDir, "dashboard-state.json")), false, "preflight must reject the unsafe path before writing state");
+      assert.deepEqual(fs.readdirSync(outside), [], "restore must not write through the symlink into the external directory");
+    } finally {
+      fs.rmSync(source.root, { recursive: true, force: true });
+      fs.rmSync(destination.root, { recursive: true, force: true });
+      fs.rmSync(outside, { recursive: true, force: true });
+    }
+  }
+});
+
 test("restore requires explicit authorization and validates backup checksums", async () => {
   const source = fixture();
   try {

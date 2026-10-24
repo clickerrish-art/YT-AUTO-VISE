@@ -45,6 +45,43 @@ function targetPath(target, { rootDir = root, stateDir = process.env.DASHBOARD_S
   }
 }
 
+function assertNoSymlinkComponents(anchor, destination) {
+  const resolvedAnchor = path.resolve(anchor);
+  const resolvedDestination = path.resolve(destination);
+  if (resolvedDestination !== resolvedAnchor && !resolvedDestination.startsWith(resolvedAnchor + path.sep)) {
+    throw new Error("Restore destination escapes its trusted directory");
+  }
+  // Inspect each existing component from the trusted anchor through the final
+  // destination. lstat (not stat) is required because stat follows symlinks.
+  const anchorStat = fs.existsSync(resolvedAnchor) ? fs.lstatSync(resolvedAnchor) : null;
+  if (anchorStat?.isSymbolicLink()) throw new Error("Restore refuses a symbolic-link destination directory");
+  let current = resolvedAnchor;
+  const relative = path.relative(resolvedAnchor, resolvedDestination);
+  for (const part of relative ? relative.split(path.sep) : []) {
+    current = path.join(current, part);
+    if (!fs.existsSync(current)) continue;
+    if (fs.lstatSync(current).isSymbolicLink()) {
+      throw new Error("Restore refuses symbolic links in destination paths");
+    }
+  }
+}
+
+function safeRestoreAnchor(target, options, destination) {
+  const base = path.resolve(options.rootDir);
+  const stateRoot = path.resolve(base, options.stateDir);
+  const logRoot = path.resolve(base, options.uploadLogDir);
+  if (target.kind === "dashboard-state" || target.kind === "facebook-recovery-ledger") {
+    return destination === stateRoot || destination.startsWith(stateRoot + path.sep) ? stateRoot : base;
+  }
+  if (target.kind === "upload-ledger" || target.kind === "upload-receipt" || target.kind === "upload-approval") {
+    if (logRoot !== base && !logRoot.startsWith(base + path.sep)) {
+      throw new Error("UPLOAD_LOG_DIR must remain inside the repository root for restore");
+    }
+    return base;
+  }
+  return base;
+}
+
 export async function restoreState({ backupPath, rootDir = root, stateDir = process.env.DASHBOARD_STATE_DIR ?? "state", uploadLogDir = process.env.UPLOAD_LOG_DIR ?? "run-logs", rightsDir = process.env.RIGHTS_EVIDENCE_DIR ?? "rights", confirm = process.env.RESTORE_CONFIRM, overwriteState = process.env.RESTORE_OVERWRITE === "YES", now = Date.now() } = {}) {
   if (confirm !== "YES") throw new Error("Set RESTORE_CONFIRM=YES to authorize this restore operation");
   if (!backupPath) throw new Error("Provide the backup JSON path");
@@ -59,6 +96,7 @@ export async function restoreState({ backupPath, rootDir = root, stateDir = proc
     const bytes = Buffer.from(entry.contentBase64, "base64");
     if (bytes.length !== entry.bytes || sha256(bytes) !== entry.sha256) throw new Error("Backup entry checksum/length validation failed: " + String(entry.target?.path ?? "unknown"));
     const destination = targetPath(entry.target, options);
+    assertNoSymlinkComponents(safeRestoreAnchor(entry.target, options, destination), destination);
     if (seen.has(destination)) throw new Error("Backup contains duplicate target paths");
     seen.add(destination);
     let exists = false;
