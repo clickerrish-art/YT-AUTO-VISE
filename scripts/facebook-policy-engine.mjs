@@ -143,7 +143,7 @@ export async function evaluateFinalFacebookPayload(payload, {
       let host;
       try { host = new URL(sourceUrl).hostname.toLowerCase(); } catch {}
       const defaultAuthorities = ["gov", "gov.za", "sanbi.org", "iucnredlist.org", "iucn.org", "nationalgeographic.com", "si.edu", "nhm.ac.uk", "sciencedirect.com", "nature.com", "science.org", "journals.plos.org", "peerj.com", "animaldiversity.org", "wwf.org", "wwf.org.za", "birdlife.org", "birdlife.org.za"];
-      const authoritative = host && (host.split(".").some(part => part === "gov" || part === "edu") || hostMatches(host, [...defaultAuthorities, ...allowedDomains]));
+      const authoritative = host && (host.endsWith(".gov") || host.endsWith(".edu") || hostMatches(host, [...defaultAuthorities, ...allowedDomains]));
       if (!authoritative) {
         checks.push({ url: sourceUrl, passed: false, reason: "DOMAIN_NOT_IN_AUTHORITY_ALLOWLIST" });
         continue;
