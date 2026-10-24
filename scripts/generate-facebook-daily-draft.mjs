@@ -29,6 +29,22 @@ function readEditorialState() {
   return { existingDrafts: state.facebookDrafts ?? [], recentPosts: state.facebookPosts ?? [] };
 }
 
+function isSafeExistingDraft(existing, date) {
+  if (!existing || typeof existing !== "object" || Array.isArray(existing)) return false;
+  if (existing.schemaVersion !== 1 || existing.id !== "nature-frontiers-daily-" + date) return false;
+  if (existing.date !== date || existing.destination !== "nature_frontiers_facebook" || existing.destinationPageId !== null) return false;
+  if (existing.timezone !== FACEBOOK_TIMEZONE || !["08:00", "18:00"].includes(existing.proposedPublicationTime)) return false;
+  if (existing.experiment?.slot !== existing.proposedPublicationTime || existing.experiment?.timezone !== FACEBOOK_TIMEZONE) return false;
+  if (existing.proposedScheduledAt !== localDateTimeToIso(date, existing.proposedPublicationTime, FACEBOOK_TIMEZONE)) return false;
+  if (!["FUTURE_SLOT_PROPOSED", "MISSED_SLOT_REVIEW_REQUIRED"].includes(existing.scheduleStatus)) return false;
+  if (!["NO_UNIQUE_IDEA_REVIEW_REQUIRED", "MISSED_SLOT_REVIEW_REQUIRED", "DRAFT_RESEARCH_REQUIRED"].includes(existing.status)) return false;
+  if (!Array.isArray(existing.blockers) || existing.blockers.length < 4 || !Array.isArray(existing.factualClaims)) return false;
+  if (existing.media !== null || existing.rightsEvidence !== null) return false;
+  if (existing.publishReady !== false || existing.publishingEnabled !== false) return false;
+  if (typeof existing.generatedAt !== "string" || !Number.isFinite(Date.parse(existing.generatedAt))) return false;
+  return true;
+}
+
 function makePackage(date, idea, slot, now) {
   const scheduledAt = localDateTimeToIso(date, slot, FACEBOOK_TIMEZONE);
   const slotHasPassed = Date.parse(scheduledAt) <= Date.parse(now);
@@ -85,8 +101,8 @@ export function generateDailyFacebookDraft({ date, outputDir, now = new Date().t
   const file = path.join(destination, date + ".json");
   if (fs.existsSync(file)) {
     const existing = JSON.parse(fs.readFileSync(file, "utf8"));
-    if (existing?.date !== date || existing?.destination !== "nature_frontiers_facebook" || existing?.publishingEnabled !== false) {
-      throw new Error("Existing daily draft file is malformed or does not match the expected safe destination; refusing to overwrite");
+    if (!isSafeExistingDraft(existing, date)) {
+      throw new Error("Existing daily draft file is malformed or violates the research-only safety schema; refusing to overwrite");
     }
     return { created: false, path: file, package: existing, reason: "IDEMPOTENT_EXISTING_DRAFT_PRESERVED" };
   }
