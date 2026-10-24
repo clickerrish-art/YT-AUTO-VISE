@@ -55,7 +55,7 @@ test("queue IDs are unique and every item uses only the approved Selar URL", () 
 test("workflow cron schedules remain draft preparation only", () => {
   const longWorkflow=fs.readFileSync(".github/workflows/generate-long-form-narration.yml","utf8");
   const shortWorkflow=fs.readFileSync(".github/workflows/free-narration-artifact.yml","utf8");
-  assert.match(longWorkflow,/cron:\s*"0 15 \\* \\* 2"/);
-  assert.match(shortWorkflow,/cron:\s*"0 15 \\* \\* 6"/);
+  assert.ok(longWorkflow.includes('cron: "0 15 * * 2"'));
+  assert.ok(shortWorkflow.includes('cron: "0 15 * * 6"'));
   assert.match(longWorkflow,/draft/i); assert.match(shortWorkflow,/draft/i);
 });
