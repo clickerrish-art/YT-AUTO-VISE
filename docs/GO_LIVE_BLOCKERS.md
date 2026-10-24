@@ -1,13 +1,13 @@
 # Current branch status — 2026-10-24
 
-- Verified implementation/test checkpoint: `44a4ba120986c4f06bd5370a48c5ff17a7201e40` on `codex/marketing-machine-audit-fixes`; base `main`: `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 was open, draft and unmerged; compare at this checkpoint was 549 ahead, 0 behind.
-- All checkpoint workflows passed: [automation — run 40089461854](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40089461854), [metadata — run 40089461847](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40089461847), [content quality — run 40089461838](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40089461838). Node tests: 126 passed, 0 failed, 0 skipped; automation also passed 8 Python safety tests and syntax/compilation checks. CI install path: `npm ci --ignore-scripts`; plain `npm ci` is not verified.
-- Facebook draft-first implementation: research-first ideas explicitly marked not publish-ready; authenticated dashboard controls/APIs; persistent state/audit; duplicate and one-post-per-local-day checks; source and license checksum gates; commercial disclosure/high-impact claim flags; exact Selar campaign/pillar restrictions; approval fingerprints; 08:00/18:00 SAST experiment bookkeeping; explicit HTTP 409 live-publish refusal. No live Meta adapter, verified Page identity, permissions, token lifecycle or Page Insights. No Facebook post was published.
+- Live repository snapshot before this documentation refresh: branch `codex/marketing-machine-audit-fixes`, HEAD `61ac7afacdcf764bf5a82a67999ce3f388233db6`; base `main` `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 is open, draft and unmerged; comparison at this snapshot was 551 ahead, 0 behind. Last verified code/test checkpoint: `006a61c90ad4a93b902bde1832c360f110e904fa`; intervening commits were documentation-only.
+- Checkpoint workflows passed: [automation — run 40089324936](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40089324936), [metadata — run 40089324929](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40089324929), [content quality — run 40089325007](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40089325007). Node tests: 126 passed, 0 failed, 0 skipped. Automation also passed 8 Python safety tests and syntax/compilation checks. Verified CI install path: `npm ci --ignore-scripts`; plain `npm ci` remains unverified.
+- Facebook implementation is draft-only: research-first ideas that are explicitly not publish-ready; authenticated dashboard UI/API; persistent state/audit; duplicate and one-post-per-local-day checks; source and license checksum gates; commercial disclosure/high-impact claim/external-link flags; exact Selar campaign/pillar restrictions; approval fingerprints; 08:00/18:00 SAST experiment bookkeeping; explicit HTTP 409 live-publish refusal. No live Meta adapter, verified Page identity, permissions, token lifecycle or Page Insights. No Facebook post was published.
 - npm audit remains 4 moderate, 0 high, 0 critical advisories involving `gaxios`, `googleapis`, `googleapis-common`, and `uuid`.
 
 ## Current owner-controlled production blockers
 
-1. Verify the exact Nature Frontiers Facebook Page ID in Meta, Page roles/permissions, official API access and token lifecycle. Configure the same Page ID in reviewed `config/facebook-publishing.json` and secure `NATURE_FRONTIERS_FACEBOOK_PAGE_ID`. Never store tokens in source control or chat.
+1. Verify the exact Nature Frontiers Facebook Page ID in Meta, Page roles/permissions, official API access and token lifecycle. Configure the same Page ID in the reviewed `config/facebook-publishing.json` and secure `NATURE_FRONTIERS_FACEBOOK_PAGE_ID`. Never store tokens in source control or chat.
 2. Decide whether to change the weekly YouTube count or the 72-hour minimum.
 3. Supply genuine rights-cleared media, narration, music, complete manifests/provenance/checksums, and complete full-file decode and human playback/caption/thumbnail review.
 4. Complete final-hash-bound rights/editorial approval, secure live OAuth verification of SonicVhibez, then explicitly authorize one private-only upload and verify its remote ID/receipt.
@@ -18,6 +18,7 @@
 No live Facebook post, YouTube upload, public publishing or production acceptance is claimed by these CI results.
 
 ---
+
 
 
 
