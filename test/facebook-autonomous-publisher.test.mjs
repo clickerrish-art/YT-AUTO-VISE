@@ -204,3 +204,23 @@ test("live publisher rejects a runtime Page ID that differs from configuration",
     }), /must exactly match/i);
   } finally { f.cleanup(); }
 });
+
+
+test("publisher rejects a queue symlink that resolves outside its repository root", async () => {
+  const f = setup();
+  const outside = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-queue-outside-"));
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.writeFileSync(path.join(outside, "queue.json"), "[]");
+    fs.rmSync(f.queuePath);
+    fs.symlinkSync(path.join(outside, "queue.json"), f.queuePath);
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) }
+    }), /symlink escapes repository root/i);
+  } finally {
+    f.cleanup();
+    fs.rmSync(outside, { recursive: true, force: true });
+  }
+});
