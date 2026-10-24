@@ -112,15 +112,19 @@ export async function evaluateFinalFacebookPayload(payload, {
         continue;
       }
       try {
-        const response = await fetchImpl(sourceUrl, { method: "GET", redirect: "manual", signal: AbortSignal.timeout(sourceTimeoutMs), headers: { accept: "text/html,application/pdf;q=0.9,*/*;q=0.1" } });
+        const response = await fetchImpl(sourceUrl, { method: "GET", redirect: "manual", signal: AbortSignal.timeout(sourceTimeoutMs), headers: { accept: "text/html,application/xhtml+xml,text/plain;q=0.9,application/pdf;q=0.5" } });
         const finalUrl = response.url || sourceUrl;
-        const passed = response.ok && urlIsSafe(finalUrl) && new URL(finalUrl).hostname === new URL(sourceUrl).hostname;
-        checks.push({ url: sourceUrl, passed, status: Number(response.status) || null, finalUrl, reason: passed ? "HTTPS_AUTHORITY_REACHABLE_NO_REDIRECT" : "SOURCE_UNAVAILABLE_OR_REDIRECTED" });
+        const reachable = response.ok && urlIsSafe(finalUrl) && new URL(finalUrl).hostname === new URL(sourceUrl).hostname;
+        const body = reachable && typeof response.text === "function" ? await response.text() : "";
+        const excerpt = normalized(claim.sourceExcerpt);
+        const excerptFound = excerpt.length >= 25 && normalized(body).includes(excerpt);
+        const passed = reachable && excerptFound;
+        checks.push({ url: sourceUrl, passed, status: Number(response.status) || null, finalUrl, excerptFound, reason: !reachable ? "SOURCE_UNAVAILABLE_OR_REDIRECTED" : excerptFound ? "SOURCE_EXCERPT_FOUND" : "SOURCE_EXCERPT_MISSING_OR_UNVERIFIABLE" });
       } catch {
         checks.push({ url: sourceUrl, passed: false, reason: "SOURCE_CHECK_FAILED" });
       }
     }
-    const passed = checks.some(check => check.passed) && claim.sourceSupportsClaim === true && claim.verified === true;
+    const passed = checks.some(check => check.passed && check.excerptFound === true) && claim.sourceSupportsClaim === true && claim.verified === true;
     sourceChecks.push({ claimIndex: i, claim: claim.text, checks, passed, reason: passed ? "SOURCE_CHECK_PASSED_WITH_DECLARED_CLAIM_SUPPORT" : "SOURCE_DOES_NOT_VERIFIABLY_SUPPORT_CLAIM" });
     if (!passed) add(blockers, `Claim ${i + 1} is not supported by a reachable, allowlisted source explicitly recorded as supporting it`);
     if (claim.kind === "quote" && claim.quoteVerified !== true) add(blockers, `Claim ${i + 1} contains an unverified quotation`);
