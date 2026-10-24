@@ -135,3 +135,29 @@ test("Meta API errors redact access tokens and network failures are marked uncer
     fetchImpl: async () => { throw new Error("simulated timeout"); }
   }), error => error instanceof MetaPageApiError && error.uncertain === true && error.retryable === false);
 });
+
+test("Meta permission verification follows cursor pagination to find the exact managed Page", async () => {
+  const userToken = "user-access-token-" + "p".repeat(30);
+  const urls = [];
+  const result = await verifyMetaPagePermissions({
+    pageId: PAGE_ID, userAccessToken: userToken, pageAccessToken: TOKEN, apiVersion: API,
+    fetchImpl: async url => {
+      urls.push(String(url));
+      if (String(url).endsWith("/me/permissions")) return response({ data: [
+        { permission: "pages_show_list", status: "granted" },
+        { permission: "pages_read_engagement", status: "granted" },
+        { permission: "pages_manage_posts", status: "granted" }
+      ] });
+      if (!new URL(url).searchParams.has("after")) return response({
+        data: [{ id: "999999999999999", name: "Other Page", tasks: ["CREATE_CONTENT"], access_token: "other-token" }],
+        paging: { next: "https://graph.facebook.com/sensitive-next-url", cursors: { after: "cursor-1" } }
+      });
+      assert.equal(new URL(url).searchParams.get("after"), "cursor-1");
+      return response({ data: [{ id: PAGE_ID, name: "Nature Frontiers", tasks: ["CREATE_CONTENT"], access_token: TOKEN }] });
+    }
+  });
+  assert.equal(result.verified, true);
+  assert.equal(result.pageId, PAGE_ID);
+  assert.equal(urls.length, 3);
+  assert.ok(urls.every(url => !url.includes(userToken) && !url.includes(TOKEN)));
+});
