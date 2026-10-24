@@ -119,7 +119,7 @@ test("commercial disclosures, approved Selar destination and high-impact claims 
 });
 
 test("approval fingerprint changes when factual sources or licensing provenance changes", (t) => {
-  const { draft } = fixture(t);
+  const { root, draft } = fixture(t);
   const base = facebookApprovalFingerprint(draft);
   assert.notEqual(facebookApprovalFingerprint({ ...draft, claims: [{ text: "Different claim", sourceUrls: ["https://example.org/source"], verified: true }] }), base);
   assert.notEqual(facebookApprovalFingerprint({ ...draft, media: { ...draft.media, provenance: "Different source provenance" } }), base);
