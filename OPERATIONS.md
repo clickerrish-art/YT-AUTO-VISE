@@ -2,16 +2,16 @@
 
 ## Facebook daily workflow — draft-only
 
-The Nature Frontiers Facebook Page is a separate destination from SonicVhibez YouTube. The implementation currently supports authenticated draft creation, deterministic checks, re-evaluation and approval records. It does **not** contain a live Meta publishing adapter.
+The Nature Frontiers Facebook Page is a separate destination from SonicVhibez YouTube. The application includes a gated Meta Graph API adapter, but publishing defaults are disabled and no real Page operation has been tested.
 
 1. Verify the exact Facebook Page in Meta's own settings and record the numeric Page ID; do not rely on the Page display name.
-2. Configure `NATURE_FRONTIERS_FACEBOOK_PAGE_ID` in the local secure environment. Update `config/facebook-publishing.json` only after the owner verifies that Page ID; the config value and environment value must match.
-3. Start the dashboard locally and use the authenticated `/api/facebook/state` endpoint to inspect the Page identity gate and publishing blockers. The dashboard can call `GET /api/facebook/idea?date=YYYY-MM-DD` to suggest a research-first topic; it intentionally supplies a placeholder rather than inventing a factual claim.
+2. Put the same exact numeric Page ID in `config/facebook-publishing.json` and `NATURE_FRONTIERS_FACEBOOK_PAGE_ID`. Configure `META_USER_ACCESS_TOKEN` and `META_PAGE_ACCESS_TOKEN` only in the secure environment. Never paste or commit tokens.
+3. Start the dashboard locally. Use the read-only “Verify Page identity” control (or authenticated `POST /api/facebook/verify-page`) to check granted `pages_show_list`, `pages_read_engagement`, `pages_manage_posts`, the Page `CREATE_CONTENT`/`MANAGE` task, exact Page ID and matching Page token. Then inspect `GET /api/facebook/state`. The dashboard can suggest a research-first topic; it intentionally supplies a placeholder rather than inventing a factual claim.
 4. Create a draft through `POST /api/facebook/drafts` with a unique ID, specific topic, supported content pillar, caption, future local date, numeric destination Page ID, structured claim sources, and media/license evidence paths and SHA-256 checksums.
 5. Recheck with `POST /api/facebook/drafts/evaluate`. The checker blocks missing/wrong Page identity, missing media/license evidence, checksum mismatches, unsupported source records, missing required disclosures, engagement bait and near-duplicate content. Some uncertain or sensitive cases are flagged for human review.
 6. Approval through `POST /api/facebook/drafts/approve` is allowed only when the current deterministic evaluation passes. Material changes invalidate the recorded approval fingerprint.
 7. The schedule uses `Africa/Johannesburg`, initially testing 08:00 versus 18:00. This is a hypothesis, not a claimed best time. The current experiment requires at least 14 eligible observations in each arm before recommending further comparison; no Page Insights are currently present.
-8. Keep `publishingEnabled=false`. `POST /api/facebook/publish` intentionally returns HTTP 409 and makes no external call. Use a reviewed manual handoff until an official API integration, Page permissions, token lifecycle and owner-authorized test post have been verified.
+8. Keep `config.publishingEnabled=false`, `config.dryRun=true`, and `FACEBOOK_PUBLISH_ENABLED=NO` unless the owner explicitly approves enabling the integration after all checks. The publish endpoint returns HTTP 409 with these defaults. When gates are enabled, each scheduled post still requires explicit per-operation confirmation, durable attempt logging, remote refetch and receipt persistence. No live test has been performed.
 
 Never store Meta tokens in source control, browser state, API responses or audit events. No real Facebook post has been created by these tests. See [the Facebook pipeline audit](docs/FACEBOOK_PIPELINE_AUDIT_2026-10-24.md).
 
