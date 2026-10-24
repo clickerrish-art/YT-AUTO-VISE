@@ -27,5 +27,6 @@
   },
   "dependencies": {
     "googleapis": "^178.0.0"
-  }
+  },
+  "packageManager": "npm@10.8.2"
 }
