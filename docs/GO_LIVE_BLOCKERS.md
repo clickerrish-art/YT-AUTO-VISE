@@ -1,49 +1,45 @@
 # Go-live blockers
 
-## Dependency remediation candidate — verification pending
-
-The `package.json` dependency range has been deliberately advanced from `googleapis ^144.0.0` to `^188.0.0` to address the previously reported moderate advisory chain. The lockfile workflow refreshed `package-lock.json` and its clean locked install/test/configuration checks passed on its triggering candidate. The newest branch head after that bot-generated lockfile commit is `df5d28560a757fb185a020982f981fb1ce6722c7`; exact-head normal-install, full-test and npm-audit evidence is still pending. Do not treat the major upgrade as accepted until those checks pass and the resulting advisory report is reviewed.
-
-
 ## Live release assessment — 24 October 2026
 
-**Latest application-code/test candidate:** `c093143a804299cbf7a673f25e0c19d3f8ea4507`. This is the exact application-code candidate tested by the workflows below. Documentation-only descendants do not change application code; re-fetch the live branch HEAD and its checks before release.
+**Latest application-code candidate:** `df5d28560a757fb185a020982f981fb1ce6722c7` (Google API client dependency and lockfile upgrade). Exact-head checks on the documentation-only descendant `2576cc2ac841f8d139956a07a038ac69742b0a5d` passed; this evidence is for the tree with the upgraded dependency and refreshed lockfile.
 **PR #1:** [open, draft, unmerged](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1).
-**Branch comparison at this candidate:** 890 commits ahead, 2 behind `main`; 94 changed files; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; `main` HEAD `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. Do not merge, reset, force-push, or rewrite divergent history without the owner's explicit decision.
+**Branch comparison at exact test head `2576cc2ac841f8d139956a07a038ac69742b0a5d`:** 895 commits ahead, 2 behind `main`; 94 changed files; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; `main` HEAD `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. Do not merge, reset, force-push, or rewrite divergent history without the owner's explicit decision.
 
 ### Exact-SHA evidence
 
-- [Automation validation — run 40125043955](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125043955): **PASS** on exact candidate `c093143a804299cbf7a673f25e0c19d3f8ea4507`; 206 Node tests passed, 0 failed, 0 skipped; Python safety tests: 8 passed; campaign/queue/schedule checks, JavaScript syntax and Python compilation passed. The isolated normal lifecycle-script `npm ci` passed and `googleapis` imported successfully. npm audit reported four moderate advisories, zero high and zero critical.
-- [Metadata validation — run 40125043948](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125043948): **PASS** on the same exact candidate; 206 Node tests passed, 0 failed, 0 skipped.
-- [Content quality — run 40125044071](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125044071): **PASS** on the same exact candidate.
-- [Locked install/lockfile validation — run 40125040155](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125040155): **PASS** on the same exact candidate; clean `npm ci --ignore-scripts`, tests and configuration checks passed.
-- [Production-readiness diagnostic — run 40125043947](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125043947): **BLOCKED as intended** because mandatory production prerequisites remain unresolved. The `sonicvhibez-readiness-report` artifact was retained (artifact ID `12572064725`; expires 23 November 2026). This is not a readiness pass.
-- [Nature Frontiers Facebook draft — run 40125043932](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125043932): **SKIPPED** on the pull-request event. No default-branch draft or retained default-branch artifact is established by this run.
+- [Automation validation — run 40125546806](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125546806): **PASS** on exact test head `2576cc2ac841f8d139956a07a038ac69742b0a5d`; **206 Node tests passed, 0 failed, 0 skipped**; Python safety tests: **8 passed**; 16 queued topics passed safe-state/destination checks; campaign validation, JavaScript syntax and Python compilation passed. A clean isolated normal lifecycle-script `npm ci` passed and `googleapis` imported successfully.
+- [Metadata validation — run 40125546882](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125546882): **PASS** on the same exact test head.
+- [Content quality — run 40125546798](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125546798): **PASS** on the same exact test head.
+- [Locked install/lockfile validation — run 40125542276](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125542276): **PASS** on the same exact test head; lockfile was already in sync, clean locked installation and configuration checks passed.
+- [Production-readiness diagnostic — run 40125546845](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125546845): **BLOCKED as intended** because mandatory production prerequisites remain unresolved. The `sonicvhibez-readiness-report` artifact was retained (see run artifacts; expires 23 November 2026). This is not a readiness pass.
+- [Nature Frontiers Facebook draft — run 40125546941](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125546941): **SKIPPED** on the pull-request event. No default-branch draft or retained default-branch artifact is established by this run.
 
-### Changes in this audit
+### Implemented in this audit
 
 - The read-only readiness CLI exits with status 2 when mandatory gates are blocked and prints the complete blocker report; it exits 0 only when checks find no blockers.
 - The dashboard readiness parser accepts the explicit blocked status and preserves actionable blockers rather than collapsing them into a generic validator error.
 - The production-readiness workflow uses Node.js 24, runs for relevant pull-request paths, retains its diagnostic artifact, and fails the readiness gate while production prerequisites remain blocked.
 - Pull-request validation workflows check out the exact pull-request head SHA rather than GitHub's synthetic merge ref. The automation workflow also verifies a normal lifecycle-script install in a clean temporary checkout with no credentials in its environment.
-- The publication minimum gap is now configuration-driven across schedule validation, readiness checks, dashboard checks and the pre-upload history gate. The default remains 72 hours. The configured value must be finite, positive and at most 8,760 hours; cycle duration must equal the gap multiplied by the three-item publication cycle, and the schedule, queue and spacing policy must agree. A regression test confirms a consistent 96-hour configuration is accepted.
+- Publication minimum spacing is configuration-driven across schedule validation, readiness checks, dashboard checks and the pre-upload history gate. The default remains 72 hours. The configured value must be finite, positive and at most 8,760 hours; cycle duration must equal the configured gap multiplied by the three-item cycle, and schedule, queue and spacing policy must agree. A regression test confirms a consistent 96-hour configuration is accepted.
+- Upgraded `googleapis` from `^144.0.0` to `^188.0.0`; the generated lockfile now resolves `googleapis 188.0.0`, `gaxios 8.3.2` and `googleapis-common 9.3.1`. Exact-head npm audit reports **0 vulnerabilities** across all severities. This closes the four previously reported moderate advisories in the audited lockfile; real OAuth/API account acceptance remains unverified.
 - Publication cadence remains a rolling `long_form → long_form → short` cycle; the default 72-hour gap means at least 216 hours across three cyclic gaps. Tuesday/Saturday triggers are draft preparation only; no three-posts-per-week promise is made.
 
 ### Branch-divergence reconciliation
 
-The live comparison is 890 ahead / 2 behind, with merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. The two base-only commits are file-only test churn: `71578dafc24e5d48173dce3f4e392e18e42aa40e` added `test/restore-facebook-draft-history.test.mjs` (117 lines), and `fa00d28e7f58911482686e4ad69fac9f4701a2e6` removed that same test file. They do not change runtime code. The implementation branch lacks this dedicated test file; owner review should decide whether to reintroduce its cross-run history-restoration coverage as a separately reviewed test. No merge, reset, force-push or history rewrite was performed.
+The live comparison is 895 ahead / 2 behind at the exact test head, with merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. The two base-only commits are file-only test churn: `71578dafc24e5d48173dce3f4e392e18e42aa40e` added `test/restore-facebook-draft-history.test.mjs` (117 lines), and `fa00d28e7f58911482686e4ad69fac9f4701a2e6` removed that same test file. They do not change runtime code. The implementation branch lacks this dedicated test file; owner review should decide whether to reintroduce its cross-run history-restoration coverage as a separately reviewed test. No merge, reset, force-push or history rewrite was performed.
 
 ### Current acceptance register
 
 | Gate | Status | Evidence / next action |
 |---|---|---|
-| Node.js automated tests | PASS | 206 Node tests passed, 0 failed, 0 skipped on exact code candidate. |
-| Python safety tests | PASS | 8 passed on exact code candidate. |
-| Campaign, queue, schedule, syntax and compilation checks | PASS | Exact-candidate automation workflow above. |
+| Node.js automated tests | PASS | 206 passed, 0 failed, 0 skipped on exact test head. |
+| Python safety tests | PASS | 8 passed on exact test head. |
+| Campaign, queue, schedule, syntax and compilation checks | PASS | Exact-head automation workflow above. |
 | Normal lifecycle-script installation | PASS | Isolated clean checkout, no credentials, normal `npm ci`, and `googleapis` import passed. |
+| Dependency audit | PASS | `npm audit`: 0 info, 0 low, 0 moderate, 0 high, 0 critical; total 0. |
 | Configurable publication spacing | PASS | Default 72 hours; schedule, queue, dashboard, readiness and upload history gate use the validated configured value. |
 | Readiness reporting fails closed | PASS | CLI returns status 2 with actionable blockers; dashboard returns HTTP 503 while mandatory production prerequisites are missing. |
-| Dependency audit | BLOCKED | Four moderate advisories remain in `gaxios`, `googleapis`, `googleapis-common` and `uuid`; compatible remediation and risk disposition remain required. |
 | Clean-start dashboard/browser acceptance | NOT RUN | Exercise every visible control, authentication failure, API persistence, restart and error paths using the real app. |
 | Real Short and long-form production media | OWNER ACTION REQUIRED | Supply genuine assets, completed manifests, rights evidence, checksums, full renders, full-file decode reports and human playback review bound to final hashes. |
 | YouTube OAuth and channel identity | OWNER ACTION REQUIRED | Configure secrets securely, verify authenticated channel is SonicVhibez, retrieve complete public/private/unlisted history and reconcile uncertain attempts. |
@@ -51,11 +47,11 @@ The live comparison is 890 ahead / 2 behind, with merge base `45352b73bb6cc4787b
 | Facebook integration | OWNER ACTION REQUIRED | Verify Nature Frontiers Page identity, token scopes and default-branch draft/artifact retention; live publishing remains disabled. |
 | Backup/restore/restart drill | OWNER ACTION REQUIRED | Perform isolated restore and interruption/restart/concurrency tests; retain logs and checksums. |
 | Branch divergence/test-file incident | OWNER ACTION REQUIRED | Review whether to restore the dedicated test coverage; no history rewrite or merge performed. |
-| Production acceptance | BLOCKED | Mandatory media, identity, integration, dependency, recovery and owner-approval gates remain open. |
+| Production acceptance | BLOCKED | Mandatory media, identity, integration, recovery and owner-approval gates remain open. |
 
 **Safety defaults:** public and unattended YouTube publishing remain disabled; a private upload requires explicit operation-specific authorization; Facebook live publishing remains disabled with dry-run and emergency-stop safeguards; the only approved Selar destination is `https://selar.com/0u19v8u99l`; Safari affiliate campaigns remain inactive.
 
-**Verdict:** automated code checks pass on the stated exact code candidate; **CODE-LEVEL ACCEPTANCE REMAINS BLOCKED** pending remaining runtime verification and dependency disposition. **PRODUCTION ACCEPTANCE IS BLOCKED.**
+**Verdict:** automated code checks and dependency audit pass on the stated exact test head; **CODE-LEVEL ACCEPTANCE REMAINS BLOCKED** pending remaining runtime verification. **PRODUCTION ACCEPTANCE IS BLOCKED.**
 
 ---
 
