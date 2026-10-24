@@ -19,9 +19,10 @@ function atomicJson(file, value) {
   fs.renameSync(temporary, file);
 }
 
-function requireWithinRoot(candidate) {
-  const resolved = path.resolve(root, candidate);
-  if (resolved !== root && !resolved.startsWith(root + path.sep)) throw new Error("Intake file path escapes repository root");
+function requireWithinRoot(candidate, baseRoot = root) {
+  const resolvedBase = path.resolve(baseRoot);
+  const resolved = path.resolve(resolvedBase, candidate);
+  if (resolved !== resolvedBase && !resolved.startsWith(resolvedBase + path.sep)) throw new Error("Intake file path escapes repository root");
   return resolved;
 }
 
@@ -37,8 +38,10 @@ export async function runFacebookContentIntake({
   stateDir = process.env.FACEBOOK_STATE_DIR,
   fetchImpl = fetch,
   now = Date.now(),
-  policyEvaluator = evaluateFinalFacebookPayload
+  policyEvaluator = evaluateFinalFacebookPayload,
+  rootDir = root
 } = {}) {
+  const activeRoot = path.resolve(rootDir);
   if (typeof stateDir !== "string" || !path.isAbsolute(stateDir)) {
     throw new Error("FACEBOOK_STATE_DIR must be an absolute durable operator-controlled directory");
   }
@@ -48,8 +51,8 @@ export async function runFacebookContentIntake({
       config.complianceRuleSet !== "nf-facebook-autonomous-policy-2026-10-v1") {
     throw new Error("Facebook intake configuration is invalid or policy version does not match");
   }
-  const candidateFile = requireWithinRoot(candidatePath);
-  const queueFile = requireWithinRoot(queuePath);
+  const candidateFile = requireWithinRoot(candidatePath, activeRoot);
+  const queueFile = requireWithinRoot(queuePath, activeRoot);
   if (!fs.existsSync(candidateFile)) throw new Error("Facebook intake candidate file is missing; no content will be invented");
   const candidates = readJson(candidateFile);
   const existingQueue = fs.existsSync(queueFile) ? readJson(queueFile) : [];
@@ -81,7 +84,7 @@ export async function runFacebookContentIntake({
         allowedCampaignIds: config.allowedCampaignIds ?? [],
         approvedDestinations: config.approvedDestinations ?? [],
         history: [...history, ...queue],
-        evidenceRoot: root,
+        evidenceRoot: activeRoot,
         now: new Date(now).toISOString(),
         timezone: config.timezone,
         maxPostsPerLocalDay: config.dailyCap,
