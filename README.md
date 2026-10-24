@@ -26,30 +26,31 @@ Populate secrets only in your local environment or secure secret store; never co
 
 The dashboard refuses to start without its operator token and binds to `127.0.0.1` by default. Do not expose it directly to the internet.
 
-## Facebook Page drafts (separate from YouTube)
+## Facebook publishing (separate from YouTube)
 
-The initial Nature Frontiers Facebook workflow is **draft-only**. The current implementation adds authenticated API routes for inspecting Facebook readiness, creating a draft, rechecking compliance and recording human review:
+Nature Frontiers Facebook is a separate destination from SonicVhibez YouTube. Public YouTube publishing remains disabled; the rolling long_form → long_form → short cadence and 72-hour actual-publication spacing remain independently enforced.
 
-- `GET /api/facebook/state`
-- `GET /api/facebook/idea?date=YYYY-MM-DD` — returns a research-first idea with placeholders; never publish-ready
-- `POST /api/facebook/verify-page` — read-only verification of required Meta scopes, exact managed Page ID, Page task and matching Page token
-- `POST /api/facebook/drafts`
-- `POST /api/facebook/drafts/evaluate`
-- `POST /api/facebook/drafts/approve`
-- `POST /api/facebook/publish` — requires every disabled-by-default gate and explicit per-operation authorization
+The new dedicated autonomous path has no routine per-post approval or manual publish button. It runs on the default branch at 07:30 Africa/Johannesburg, prepares the 08:00 local slot, runs evidence intake, evaluates the final payload, rechecks the Meta Page connection and publishes only when every required check passes. A blocked or missed slot is recorded and skipped; it is never backdated or caught up. The workflow requires an isolated persistent self-hosted runner labelled facebook-publisher.
 
-All API routes require `x-operator-token`. Draft state and audit events are persisted in the dashboard state file. The configured timezone is `Africa/Johannesburg`; 08:00 SAST is the initial hypothesis and 18:00 is the comparison arm. The experiment does not claim an optimal time without sufficient Page-specific observations.
+- `npm run facebook:intake:autonomous` — evaluate evidence-complete candidate records and queue only eligible payloads.
+- `npm run facebook:publish:autonomous` — reconcile interrupted attempts, validate the current slot and publish eligible queued content when all live gates are explicitly enabled.
+- `GET /api/facebook/autonomous-status` — authenticated read-only dashboard status for connection readiness, queue count, intake summary, run history, blocked posts and receipts.
+- `POST /api/facebook/verify-page` — initial read-only verification of required Meta scopes, exact managed Page ID, Page task and matching Page token.
 
-Set the exact numeric Page ID in `config/facebook-publishing.json` and `NATURE_FRONTIERS_FACEBOOK_PAGE_ID`; configure `META_USER_ACCESS_TOKEN` and `META_PAGE_ACCESS_TOKEN` only in the secure local environment. The read-only verification endpoint checks `pages_show_list`, `pages_read_engagement`, `pages_manage_posts`, the Page `CREATE_CONTENT`/`MANAGE` task and that the Page token matches the token returned for that Page.
+The current candidate file `content/facebook-intake-candidates.json` and autonomous queue `content/facebook-autonomous-queue.json` are intentionally empty. The intake will not fabricate facts, source evidence, media, licence records or captions. No eligible candidate means no post. Every queued item is rechecked immediately before the publish mutation.
 
-The official Meta Graph API adapter is implemented, but all defaults remain disabled: `config.publishingEnabled=false`, `dryRun=true`, and `FACEBOOK_PUBLISH_ENABLED=NO`. With those defaults `POST /api/facebook/publish` returns HTTP 409 and makes no remote mutation. Enabling the separate gates still requires a passing live Page/scope check, current draft approval, an explicit per-operation confirmation, a durable attempt record and remote receipt verification. Never store tokens in source control or paste them into chat. No real Page publishing test has been performed. See [Facebook pipeline audit](docs/FACEBOOK_PIPELINE_AUDIT_2026-10-24.md).
+Live publishing is disabled by default. It requires all three JSON controls (`publishingEnabled=true`, `dryRun=false`, `emergencyStop=false)), the secure runtime variable `FACEBOOK_PUBLISH_ENABLED=YES`, the exact Page ID in both config and runtime, valid Meta user/Page tokens, live scope/task/token verification, durable state, and an eligible payload. Keep the emergency stop independent from enablement. Never store tokens in source control or paste them into chat.
 
-## Daily Facebook draft automation (safe, draft-only)
+Uncertain mutations are never blindly retried. The publisher reconciles the official Page scheduled_posts and feed edges using bounded pagination and exact caption/time matching. A single verified remote match is persisted as a receipt; no match is not proof of non-publication, and ambiguous outcomes remain blocked. See [autonomous runner setup](docs/FACEBOOK_AUTONOMOUS_RUNNER_SETUP.md) and [Facebook pipeline audit](docs/FACEBOOK_PIPELINE_AUDIT_2026-10-24.md).
 
-Run locally with `npm run facebook:draft:daily`. It uses the `Africa/Johannesburg` calendar date, checks existing dashboard drafts/posts when local state is available, restores recent daily artifacts from the previous 14 days through the read-only GitHub Actions artifacts API, validates every restored artifact and conflicting date, assigns the 08:00/18:00 experiment arm, and creates one idempotent JSON draft package under `run-logs/facebook-daily-drafts/YYYY-MM-DD.json`. Missing permissions, malformed archives, conflicting artifacts or invalid history fail closed instead of silently resetting topic history. This cross-run history is bounded by GitHub's 14-day artifact retention; it is not a permanent editorial database. The package is explicitly research-required, has no assumed Page ID, factual claims, media or licence evidence, and always reports `publishReady=false` and `publishingEnabled=false`. Existing same-day output is preserved rather than overwritten. When a prior artifact for today's date is restored, the exact retained package is reused in the new run; conflicting packages for that date stop generation for operator reconciliation. Archive retrieval is tested with a mocked GitHub API, but a real default-branch restoration has not yet been accepted.
+The older authenticated Facebook draft and one-operation API routes remain separately gated for compatibility; they are not used by the autonomous schedule and are not presented as routine dashboard controls. The dashboard's visible Facebook area now focuses on autonomous health and read-only receipts rather than per-post approval/publish forms.
 
-The new [daily draft workflow](.github/workflows/facebook-daily-draft.yml) runs at 07:30 SAST when scheduled on the default branch, and its scheduled/manual job restores prior 14-day artifacts before generating today's draft. The artifact list requires the workflow's read-only `actions: read` permission. It retains a 14-day artifact for operator review: [latest verified draft artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091734576/artifacts/12558699856). **GitHub scheduled workflows run from the default branch only**; because PR #1 remains draft, this schedule is not yet active as a production daily trigger. No step publishes to Facebook. A human must research claims, add rights-cleared media/evidence, verify the Page and permissions, complete review, and separately authorize any live operation after the kill switches and external gates are resolved.
+## Daily Facebook draft automation (draft-only)
 
+The separate `npm run facebook:draft:daily` workflow creates a research-required draft package. It remains distinct from the autonomous publisher and never sends posts to Meta. It uses `Africa/Johannesburg`, preserves prior draft artifacts, and reports `publishReady=false` and `publishingEnabled=false`. Its GitHub artifact history is limited by artifact retention and is not a permanent editorial database. The autonomous publisher uses its own durable state directory instead.
+
+The [daily draft workflow](.github/workflows/facebook-daily-draft.yml) is a separate, default-branch-only workflow. A skipped pull-request run is not evidence that the default-branch schedule has executed. Neither workflow is proof of live Page acceptance until the dedicated persistent runner and real Meta integration are verified.
+ 
 ## Run the dashboard
 
 ```sh
