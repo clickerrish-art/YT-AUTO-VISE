@@ -49,7 +49,13 @@ test("private uploader records uncertain remote outcomes and refuses blind retri
     const thumbnailPath = path.join(dir, "thumbnail.jpg");
     fs.writeFileSync(thumbnailPath, "test-thumbnail");
     const thumbnailSha = sha256File(thumbnailPath);
-    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-timeout-001", artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256: "a".repeat(64), publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }] }));
+    const sourceAssetPath = path.join(dir, "source-asset.mp4");
+    const licenseEvidencePath = path.join(dir, "license-evidence.txt");
+    fs.writeFileSync(sourceAssetPath, "test-source-asset-fixture");
+    fs.writeFileSync(licenseEvidencePath, "TEST FIXTURE ONLY: mock rights evidence; not a real license.");
+    const rightsEvidence = { assetId: "fixture-asset", source: "isolated test fixture", rightsHolder: "test fixture", assetPath: sourceAssetPath, assetSha256: sha256File(sourceAssetPath), licenseEvidenceLocation: licenseEvidencePath, licenseEvidenceSha256: sha256File(licenseEvidencePath), permittedUses: ["YouTube"], restrictions: "mock only", attributionRequirements: "mock only", verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z", assets: [{ assetId: "fixture-asset", source: "isolated test fixture", rightsHolder: "test fixture", assetPath: sourceAssetPath, assetSha256: sha256File(sourceAssetPath), licenseEvidenceLocation: licenseEvidencePath, licenseEvidenceSha256: sha256File(licenseEvidencePath), permittedUses: ["YouTube"], restrictions: "mock only", attributionRequirements: "mock only", verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z" }] };
+    const rightsEvidenceSha256 = (await import("node:crypto")).createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex");
+    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-timeout-001", artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }] }));
     const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: "UC_SONIC_TEST", CONFIRM_PRIVATE_UPLOAD: "YES", UPLOAD_LOG_DIR: path.join(dir, "logs") };
     const youtubeFactory = () => ({
       channels: { list: async () => ({ data: { items: [{ id: "UC_SONIC_TEST", snippet: { title: "SonicVhibez" } }] } }) },
@@ -83,7 +89,13 @@ test("private uploader preserves remote video ID and marks recovery if receipt p
     const thumbnailPath = path.join(dir, "thumbnail.jpg");
     fs.writeFileSync(thumbnailPath, "test-thumbnail");
     const thumbnailSha = sha256File(thumbnailPath);
-    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-receipt-001", artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256: "a".repeat(64), publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }] }));
+    const sourceAssetPath = path.join(dir, "source-asset.mp4");
+    const licenseEvidencePath = path.join(dir, "license-evidence.txt");
+    fs.writeFileSync(sourceAssetPath, "test-source-asset-fixture");
+    fs.writeFileSync(licenseEvidencePath, "TEST FIXTURE ONLY: mock rights evidence; not a real license.");
+    const rightsEvidence = { assetId: "fixture-asset", source: "isolated test fixture", rightsHolder: "test fixture", assetPath: sourceAssetPath, assetSha256: sha256File(sourceAssetPath), licenseEvidenceLocation: licenseEvidencePath, licenseEvidenceSha256: sha256File(licenseEvidencePath), permittedUses: ["YouTube"], restrictions: "mock only", attributionRequirements: "mock only", verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z", assets: [{ assetId: "fixture-asset", source: "isolated test fixture", rightsHolder: "test fixture", assetPath: sourceAssetPath, assetSha256: sha256File(sourceAssetPath), licenseEvidenceLocation: licenseEvidencePath, licenseEvidenceSha256: sha256File(licenseEvidencePath), permittedUses: ["YouTube"], restrictions: "mock only", attributionRequirements: "mock only", verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z" }] };
+    const rightsEvidenceSha256 = (await import("node:crypto")).createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex");
+    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-receipt-001", artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }] }));
     const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: "UC_SONIC_TEST", CONFIRM_PRIVATE_UPLOAD: "YES", UPLOAD_LOG_DIR: path.join(dir, "logs") };
     const youtubeFactory = () => ({
       channels: { list: async () => ({ data: { items: [{ id: "UC_SONIC_TEST", snippet: { title: "SonicVhibez" } }] } }) },
