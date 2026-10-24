@@ -389,12 +389,15 @@ const server = http.createServer(async (req, res) => {
         if (JSON.stringify(schedule.publicationCycle?.formats) !== JSON.stringify(["long_form", "long_form", "short"]) || schedule.publicationCycle?.minimumHoursBetweenConsecutivePublications !== 72 || schedule.publicationCycle?.minimumCycleHours !== 216) blockers.push("Rolling publication cycle configuration is invalid; require long-form, long-form, Short with 72 elapsed hours between consecutive actual publications.");
         blockers.push("Live upload is blocked until complete SonicVhibez public/private/unlisted history is reconciled against YouTube and all uncertain attempts are resolved.");
         const readinessCheck = spawnSync(process.execPath, ["scripts/production-readiness.mjs"], { cwd: root, encoding: "utf8", timeout: 15_000, env: process.env });
-        if (readinessCheck.error || readinessCheck.status !== 0) {
+        if (readinessCheck.error || ![0, 2].includes(readinessCheck.status)) {
           blockers.push("Production readiness validator could not complete; inspect server logs and rerun the readiness task");
         } else {
           const report = String(readinessCheck.stdout ?? "");
+          const reportHasHold = /^HOLD:/m.test(report);
           blockers.push(...report.split(/\r?\n/).filter(line => line.startsWith("- ")).map(line => line.slice(2)));
-          if (/^HOLD:/m.test(report) && !report.split(/\r?\n/).some(line => line.startsWith("- "))) blockers.push("Production readiness validator reported HOLD without actionable blocker details");
+          if (readinessCheck.status === 2 && !reportHasHold) blockers.push("Production readiness validator exited blocked without a HOLD report; inspect the readiness task output");
+          if (readinessCheck.status === 0 && reportHasHold) blockers.push("Production readiness validator returned success while reporting HOLD");
+          if (reportHasHold && !report.split(/\r?\n/).some(line => line.startsWith("- "))) blockers.push("Production readiness validator reported HOLD without actionable blocker details");
         }
         if (!schedule.channelId || !/^UC[a-zA-Z0-9_-]{22}$/.test(schedule.channelId)) blockers.push("SONICVHIBEZ_CHANNEL_ID has not been independently verified in the authoritative schedule");
         if (process.env.SONICVHIBEZ_CHANNEL_ID && schedule.channelId && process.env.SONICVHIBEZ_CHANNEL_ID !== schedule.channelId) blockers.push("Configured channel ID does not match the authoritative schedule channel ID");

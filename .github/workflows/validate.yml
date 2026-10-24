@@ -45,7 +45,7 @@ jobs:
           output=$(npm run readiness 2>&1)
           status=$?
           set -e
-          printf '%s\\n' "$output"
+          printf '%s\n' "$output"
           if [ "$status" -ne 2 ] || ! printf '%s' "$output" | grep -Fq 'HOLD:'; then
             echo "BLOCKED: readiness must exit 2 and report HOLD while mandatory production gates are unresolved."
             exit 1
