@@ -35,7 +35,7 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   assert.ok(readiness.blockers.length > 0);
   const port2 = port + 10_000;
   const child2 = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
-    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_STATE_DIR: stateDir, PORT: String(port2), DASHBOARD_HOST: "127.0.0.1" },
+    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-task-operator", DASHBOARD_STATE_DIR: stateDir, PORT: String(port2), DASHBOARD_HOST: "127.0.0.1" },
     stdio: ["ignore", "pipe", "pipe"]
   });
   let logs2 = "";
