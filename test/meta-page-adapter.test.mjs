@@ -61,7 +61,7 @@ test("Meta publish adapter schedules a future post and performs no retries", asy
   const draft = { kind: "FACEBOOK_PAGE_DRAFT", caption: "Verified draft caption", scheduledAt: "2026-10-25T06:00:00.000Z", media: null };
   const result = await publishMetaPagePost({
     draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
-    permissionsConfirmed: true, now: NOW,
+    permissionsVerified: true, now: NOW,
     fetchImpl: async (url, options) => {
       calls++; request = { url, options };
       assert.equal(url, "https://graph.facebook.com/v26.0/123456789012345/feed");
@@ -79,15 +79,15 @@ test("Meta publish adapter schedules a future post and performs no retries", asy
   assert.equal(Number(form.get("scheduled_publish_time")), Date.parse(draft.scheduledAt) / 1000);
 });
 
-test("Meta adapter requires explicit permission confirmation and supported schedule window", async () => {
+test("Meta adapter requires live permission verification and supported schedule window", async () => {
   const draft = { kind: "FACEBOOK_PAGE_DRAFT", caption: "Caption", scheduledAt: "2026-10-25T06:00:00.000Z", media: null };
   await assert.rejects(() => publishMetaPagePost({
-    draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API, permissionsConfirmed: false, now: NOW,
+    draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API, permissionsVerified: false, now: NOW,
     fetchImpl: async () => { throw new Error("must not call"); }
   }), /permissions/i);
   await assert.rejects(() => publishMetaPagePost({
     draft: { ...draft, scheduledAt: "2026-10-24T10:01:00.000Z" }, pageId: PAGE_ID, expectedPageId: PAGE_ID,
-    accessToken: TOKEN, apiVersion: API, permissionsConfirmed: true, now: NOW,
+    accessToken: TOKEN, apiVersion: API, permissionsVerified: true, now: NOW,
     fetchImpl: async () => { throw new Error("must not call"); }
   }), /10 minutes/i);
 });
@@ -101,16 +101,16 @@ test("Meta adapter validates local image checksums and remote verification statu
   let request;
   const draft = { kind: "FACEBOOK_PAGE_DRAFT", caption: "Caption", scheduledAt: "2026-10-25T06:00:00.000Z", media: { path: "image.jpg", sha256: sha } };
   const published = await publishMetaPagePost({
-    draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API, permissionsConfirmed: true, rootDir: root, now: NOW, probeImage: () => ({ width: 640, height: 480 }),
+    draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API, permissionsVerified: true, rootDir: root, now: NOW, probeImage: () => ({ width: 640, height: 480 }),
     fetchImpl: async (url, options) => { request = { url, options }; return response({ id: "photo-777", post_id: PAGE_ID + "_888" }); }
   });
   assert.equal(published.remotePostId, PAGE_ID + "_888");
-  await assert.rejects(() => publishMetaPagePost({ draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API, permissionsConfirmed: true, rootDir: root, now: NOW, probeImage: () => { throw new MetaPageApiError("simulated decode failure"); }, fetchImpl: async () => response({ id: "should-not-publish" }) }), /simulated decode failure/i);
+  await assert.rejects(() => publishMetaPagePost({ draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API, permissionsVerified: true, rootDir: root, now: NOW, probeImage: () => { throw new MetaPageApiError("simulated decode failure"); }, fetchImpl: async () => response({ id: "should-not-publish" }) }), /simulated decode failure/i);
   assert.equal(request.url, "https://graph.facebook.com/v26.0/123456789012345/photos");
   assert.ok(request.options.body.get("source") instanceof Blob);
   await assert.rejects(() => publishMetaPagePost({
     draft: { ...draft, media: { ...draft.media, sha256: "a".repeat(64) } }, pageId: PAGE_ID, expectedPageId: PAGE_ID,
-    accessToken: TOKEN, apiVersion: API, permissionsConfirmed: true, rootDir: root, now: NOW, fetchImpl: async () => response({})
+    accessToken: TOKEN, apiVersion: API, permissionsVerified: true, rootDir: root, now: NOW, fetchImpl: async () => response({})
   }), /checksum/i);
 
   const verified = await fetchMetaPagePost({
@@ -131,7 +131,7 @@ test("Meta API errors redact access tokens and network failures are marked uncer
   }), error => error instanceof MetaPageApiError && !error.message.includes(TOKEN) && error.code === 190);
   await assert.rejects(() => publishMetaPagePost({
     draft: { kind: "FACEBOOK_PAGE_DRAFT", caption: "Caption", scheduledAt: "2026-10-25T06:00:00.000Z" },
-    pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API, permissionsConfirmed: true, now: NOW,
+    pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API, permissionsVerified: true, now: NOW,
     fetchImpl: async () => { throw new Error("simulated timeout"); }
   }), error => error instanceof MetaPageApiError && error.uncertain === true && error.retryable === false);
 });
