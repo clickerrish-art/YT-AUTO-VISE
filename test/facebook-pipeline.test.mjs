@@ -109,6 +109,10 @@ test("commercial disclosures, approved Selar destination and high-impact claims 
   assert.ok(commercial.blockers.some(x => /commercial\/affiliate disclosure/i.test(x)));
   const wrongSelar = evaluateFacebookDraft({ ...draft, caption: "Get details at https://selar.com/not-approved", commercial: true, disclosure: "Promotional link; see seller terms.", externalLinksReviewed: true }, { expectedPageId: "123456789012345", rightsRoot: root });
   assert.ok(wrongSelar.blockers.some(x => /exact approved product URL/i.test(x)));
+  const wrongCampaign = evaluateFacebookDraft({ ...draft, caption: "Find details at https://selar.com/0u19v8u99l", commercial: true, disclosure: "Promotional link; review seller terms.", externalLinksReviewed: true, campaignId: "online-money" }, { expectedPageId: "123456789012345", rightsRoot: root });
+  assert.ok(wrongCampaign.blockers.some(x => /exact approved selar-wildlife-vault campaign ID/i.test(x)));
+  const unrelatedPillar = evaluateFacebookDraft({ ...draft, pillar: "wildlife_behaviour", caption: "Find details at https://selar.com/0u19v8u99l", commercial: true, disclosure: "Promotional link; review seller terms.", externalLinksReviewed: true, campaignId: "selar-wildlife-vault" }, { expectedPageId: "123456789012345", rightsRoot: root });
+  assert.ok(unrelatedPillar.blockers.some(x => /unrelated content pillar/i.test(x)));
   const healthClaim = evaluateFacebookDraft({ ...draft, caption: "This miracle cure cures cancer and is completely safe." }, { expectedPageId: "123456789012345", rightsRoot: root });
   assert.ok(healthClaim.flags.some(x => /high-impact health/i.test(x)));
   assert.equal(healthClaim.ok, false);
