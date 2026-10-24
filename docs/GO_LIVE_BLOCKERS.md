@@ -1,57 +1,71 @@
 # CURRENT RELEASE EVIDENCE REGISTER — 2026-10-24
 
-**Evidence snapshot candidate:** `84e38de3e89c4be16d5fdd1e641d9098d6881834`  
-**Snapshot limitation:** This records CI results observed for that exact candidate before this documentation edit. The new documentation commit must be rechecked separately before this register can be called current for the branch HEAD.
-
-## Repository baseline
-
-- PR #1: [open, draft pull request](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1); no merge performed.
-- Implementation branch: `codex/marketing-machine-audit-fixes`.
-- `main` HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
-- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
-- Live compare at snapshot: **864 commits ahead, 2 behind**, **92 changed files**.
-- The large divergence and two base-only commits remain unresolved. No destructive history operation is authorized. Preserve the test-file add/revert incident for owner review.
+**Exact candidate verified:** `60ef10876de5221b2187ff0f0b737adba6635ea1`  
+**PR:** [#1 — open, draft, unmerged](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1)  
+**Branch:** `codex/marketing-machine-audit-fixes`  
+**Base:** `main` at `fa00d28e7f58911482686e4ad69fac9f4701a2e6`  
+**Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`  
+**Compare:** 867 commits ahead, 2 behind; 92 changed files. This divergence is not reconciled and requires owner review. No merge, rebase, force-push, or history rewrite was performed.
 
 ## Exact-SHA workflow evidence
 
-| Workflow | Exact candidate | Result | Evidence and limits |
+The three passing workflow runs below are attached to the exact candidate SHA above. Logs were retrieved and inspected.
+
+| Workflow | Status | Evidence | Scope and limits |
 |---|---|---|---|
-| Content quality checks | `84e38de3e89c4be16d5fdd1e641d9098d6881834` | PASS | [Run 40117743222](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40117743222) — 200 Node tests passed, 0 failed, 0 skipped. This is not proof of external account operation. |
-| Validate SonicVhibez metadata | `84e38de3e89c4be16d5fdd1e641d9098d6881834` | PASS | [Run 40117743236](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40117743236) — 200 Node tests passed, 0 failed, 0 skipped; schedule/caption validation ran; production metadata and live history remained blocked by design. |
-| Validate SonicVhibez automation | `84e38de3e89c4be16d5fdd1e641d9098d6881834` | PASS WITH MODERATE ADVISORIES | [Run 40117743230](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40117743230) — 200 Node tests passed, 0 failed, 0 skipped; 8 Python safety tests passed; queue/campaign validation, JavaScript syntax and Python compilation passed. Dependency audit: 4 moderate, 0 high, 0 critical. |
-| Generate daily Nature Frontiers Facebook draft | `84e38de3e89c4be16d5fdd1e641d9098d6881834` | SKIPPED | [Run 40117743250](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40117743250) — skipped on PR event. This does not prove the default-branch scheduled workflow produces and retains an artifact. |
-| Combined commit status | `84e38de3e89c4be16d5fdd1e641d9098d6881834` | NOT PRESENT | GitHub combined-status endpoint returned no status entries; use the explicit workflow runs above and do not infer missing checks passed. |
+| Validate SonicVhibez automation | PASS WITH MODERATE ADVISORIES | [Run 40119071272](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40119071272) | `npm ci --ignore-scripts` succeeded; `npm test`: 200 passed, 0 failed, 0 skipped; Python unittest: 8 passed; queue check: 16 held topics; campaign validation, JS syntax checks and Python compilation passed. Audit: 4 moderate, 0 high, 0 critical. |
+| Validate SonicVhibez metadata | PASS | [Run 40119071203](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40119071203) | 200 Node tests passed; schedule, captions and fail-closed production metadata checks passed. Readiness remains blocked by design. |
+| Content quality checks | PASS | [Run 40119071205](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40119071205) | 200 Node tests passed; minimum draft-length checks passed. This is not a media render or runtime-duration certification. |
+| Generate daily Nature Frontiers Facebook draft | SKIPPED | [Run 40119071201](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40119071201) | Skipped on the PR event due to workflow conditions. It does not prove a default-branch scheduled run or retained draft artifact. |
+| Combined commit status | NOT PRESENT | Combined-status endpoint returned no status entries for the candidate. | Do not infer missing status checks passed. Use the explicit workflow evidence above. |
 
-## Security, dependency and readiness findings
+## Changes in this candidate
 
-- `scripts/safe-output.mjs`, `test/safe-output.test.mjs`, and `scripts/dashboard-server.mjs` now include operational output redaction. The three focused redaction tests were run in an isolated Node.js scratch directory and passed (exit code 0); this is not a full application integration test.
-- Audit log evidence identifies four moderate advisories: `gaxios` (range 6.4.0–6.7.1), `googleapis` (range 33.0.0–149.0.0), `googleapis-common` (range through 7.2.0), and `uuid` (below 11.1.1). No high/critical advisories were reported. The available `googleapis` fix points to version 188.0.0, a major upgrade; no blind upgrade was applied. `uuid@9.0.1` is also reported deprecated.
-- CI used `npm ci --ignore-scripts`; normal lifecycle-script installation was not verified. No full clean local install or live HTTP dashboard integration test was executed in this audit.
-- CI verifies the configured queue uses the exact approved Selar URL, 16 held/review-state topics, the rolling `long_form → long_form → short` sequence, 72-hour consecutive minimum, 216-hour cycle minimum, `Africa/Johannesburg`, and publishing disabled.
-- Readiness correctly remains blocked for unverified production metadata, genuine media rights/review, and complete live YouTube history. Example metadata and asset registers remain blocked; these are expected safety outcomes, not production acceptance.
-- Facebook publishing remains disabled, dry-run enabled, and emergency stop active. No real Page identity/permissions, trusted semantic verifier, persistent production runner, remote receipt, or default-branch scheduled draft artifact was verified.
-- No verified SonicVhibez OAuth identity, complete remote history reconciliation, owner-authorized private upload/receipt, or owner-run isolated restore drill exists in the evidence reviewed.
-- Safari campaigns remain inactive. Approved Selar URL: `https://selar.com/0u19v8u99l`.
+- `scripts/youtube-history-gate.mjs` now rejects any remote video whose `snippet.channelId` is missing or differs from the authenticated channel ID.
+- `test/youtube-history-gate.test.mjs` covers wrong and missing remote video channel IDs.
+- Source commit: [`fcd3a2e`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fcd3a2eff3ecb26aee2c7dac76142ea44ed5e9f7); regression test commit: [`60ef108`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/60ef10876de5221b2187ff0f0b737adba6635ea1).
 
-## Acceptance register
+## Dependency and installation findings
 
-| Gate | Status | Required evidence to unblock |
+The exact-SHA automation workflow used `npm ci --ignore-scripts`. Its fresh locked dependency audit reported **4 moderate, 0 high, 0 critical** advisories:
+
+- `gaxios`: moderate, affected range `6.4.0 - 6.7.1`, via `uuid`.
+- `googleapis`: moderate, affected range `33.0.0 - 149.0.0`; available fix `googleapis@188.0.0` is a major upgrade.
+- `googleapis-common`: moderate, affected range `<=7.2.0`.
+- `uuid`: moderate, affected range `<11.1.1`.
+
+No major dependency upgrade was applied without compatibility testing. Normal lifecycle-script installation was not verified. Dependency risk remains a release blocker.
+
+## Release acceptance register
+
+| Gate | Status | Evidence / required action |
 |---|---|---|
-| Node automation tests on snapshot SHA | PASS | Re-run on the final branch SHA after this documentation edit. |
-| Python safety tests on snapshot SHA | PASS | Re-run on the final branch SHA after this documentation edit. |
-| Queue, campaign, schedule, captions, syntax and Python compilation | PASS | Re-run on final SHA. |
-| Latest-SHA combined required status | NOT RUN / NOT PRESENT | Inspect all required checks on the final SHA. |
-| Dependency remediation and normal installation | BLOCKED | Compatibility-tested remediation, clean install, regression suite and fresh audit. |
-| Dashboard full HTTP end-to-end acceptance | NOT RUN | Start the application from a clean install and test authentication, authorization, actions, errors and restart behavior. |
-| Licensed media and hash-bound human approval | OWNER ACTION REQUIRED | Genuine source assets, rights evidence, and human review of final media/metadata hashes. |
-| SonicVhibez identity and private-only upload acceptance | OWNER ACTION REQUIRED | Secure OAuth runtime, independently verified channel ID/history, and explicit one-operation authorization. |
-| Nature Frontiers Facebook acceptance | OWNER ACTION REQUIRED | Verified Page identity/scopes, trusted claim verification, persistent runner and owner-authorized acceptance. |
-| Default-branch scheduled Facebook draft artifact | BLOCKED | A real default-branch scheduled run with retained artifact evidence. |
-| Isolated backup/restore acceptance | OWNER ACTION REQUIRED | Owner-run isolated restore drill with integrity and restart evidence. |
-| Branch divergence/history incident review | OWNER ACTION REQUIRED | Review the 864/2 divergence, the two base-only commits, and test-file add/revert before integration. |
-| Production acceptance | BLOCKED | All applicable code, security, integration and owner-controlled gates above. |
+| Node test suite on exact candidate SHA | PASS | 200 passed, 0 failed, 0 skipped in the automation, metadata and content-quality runs. |
+| Python safety tests on exact candidate SHA | PASS | 8 passed in automation run 40119071272. |
+| Queue, campaign, schedule, captions, syntax and Python compilation | PASS | Exact-SHA automation and metadata logs. |
+| YouTube history channel-ID binding regression | PASS | Added wrong/missing channel-ID tests; all 200 Node tests pass on candidate SHA. |
+| Clean install with normal lifecycle scripts | NOT RUN | CI uses `npm ci --ignore-scripts`; normal install requires separate verification. |
+| Fresh dependency remediation and compatibility regression | BLOCKED | Four moderate advisories remain; test compatible dependency updates before release. |
+| Full dashboard HTTP end-to-end acceptance and all controls | NOT RUN | A full clean-install dashboard workflow was not independently exercised in this run. |
+| Actual licensed media, completed manifests, final hashes and human review | OWNER ACTION REQUIRED | Supply genuine assets and rights evidence; review playback/compliance against final hashes. |
+| Verified SonicVhibez OAuth/channel identity and complete remote history | OWNER ACTION REQUIRED | Securely configure OAuth; verify the authenticated account, channel ID, all remote videos and uncertain attempts. |
+| Explicit single private-only upload and verified receipt | OWNER ACTION REQUIRED | No upload was authorized or executed. Obtain operation-specific approval only after all gates pass. |
+| Nature Frontiers Facebook Page identity/permissions and trusted semantic verifier | OWNER ACTION REQUIRED | Verify the actual Page, permissions and claim-verification provider; no real post was made. |
+| Default-branch scheduled Facebook draft and retained artifact | BLOCKED | PR workflow skipped; a successful default-branch scheduled/dispatch run with artifact is still required. |
+| Isolated backup/restore and restart drill | OWNER ACTION REQUIRED | Run the documented drill in an isolated environment and record integrity/restart evidence. |
+| Branch divergence and historical test-file add/revert incident | OWNER ACTION REQUIRED | Review 867/2 divergence and the two base-only commits; preserve history without blind merge/rebase. |
+| Production acceptance | BLOCKED | External identity, rights, human review, integration, dependency, recovery and owner authorization gates remain incomplete. |
 
-**Decision at snapshot:** `CODE-LEVEL ACCEPTANCE BLOCKED`; production acceptance `BLOCKED`. The focused redaction tests and three CI workflows pass on the snapshot candidate, but full dashboard end-to-end acceptance, dependency remediation, scheduled Facebook draft acceptance and owner-controlled release gates remain unverified.
+## Safety defaults and decision
+
+- Public/unattended YouTube publishing remains disabled; the private uploader is not permission to upload.
+- Facebook live publishing remains disabled, dry-run enabled, and emergency stop active; no live Facebook post was made.
+- The only approved Selar URL remains `https://selar.com/0u19v8u99l`; Safari affiliate campaigns remain inactive.
+- The daily Facebook draft workflow was skipped on the PR event and is not accepted as a successful draft run.
+- The historical test-file add/revert incident remains preserved for owner review.
+- No real licensed production media, remote YouTube receipt, Meta Page receipt or owner-run restore acceptance was fabricated.
+
+**Decision:** `CODE-LEVEL ACCEPTANCE BLOCKED`; production acceptance `BLOCKED`. The exact-SHA automated checks pass, and one history-validation gap has been fixed, but full end-to-end runtime acceptance, dependency remediation and owner-controlled gates remain outstanding.
 
 ---
 
