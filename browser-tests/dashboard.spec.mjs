@@ -63,7 +63,7 @@ test("operator dashboard loads the authoritative schedule and persists a draft t
   await expect(page.locator("#schedule")).toContainText("long-form → long-form → Short");
   await expect(page.locator("#schedule")).toContainText("minimum 72 elapsed hours");
   await expect(page.locator("#day option")).toHaveCount(slots.length);
-  await expect(page.locator("#day option")).not.toContainText("Thursday");
+  await expect(page.locator("#day")).not.toContainText("Thursday");
 
   const slot = slots[0];
   const scheduledDate = candidateDateForSlot(state, slot);
