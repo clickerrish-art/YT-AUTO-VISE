@@ -82,7 +82,7 @@ export function similarityRatio(left, right) {
 
 /** Suggest a research-first topic; placeholders are intentionally not publish-ready factual claims. */
 export function generateFacebookIdea({ date, existingDrafts = [], recentPosts = [] }) {
-  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(String(date))) throw new Error("A valid YYYY-MM-DD date is required");
+  if (!/\d{4}-\d{2}-\d{2}$/.test(String(date))) throw new Error("A valid YYYY-MM-DD date is required");
   const dateValue = new Date(date + "T12:00:00Z");
   if (Number.isNaN(dateValue.getTime()) || dateValue.toISOString().slice(0, 10) !== date) throw new Error("Idea date is invalid");
   const used = [...existingDrafts, ...recentPosts].filter(item => !["REJECTED", "CANCELLED"].includes(item.status));
