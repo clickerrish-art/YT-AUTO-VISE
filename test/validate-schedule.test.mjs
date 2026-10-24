@@ -14,10 +14,10 @@ const copiedFiles = [
   ".github/workflows/free-narration-artifact.yml"
 ];
 
-test("authoritative schedule validator accepts the configured draft-only cadence", () => {
+test("authoritative schedule validator accepts the configured draft-only cadence with 72-hour spacing", () => {
   const result = spawnSync(process.execPath, ["scripts/validate-schedule.mjs"], { cwd: repoRoot, encoding: "utf8" });
   assert.equal(result.status, 0, result.stdout + result.stderr);
-  assert.match(result.stdout, /PASS: authoritative schedule/);
+  assert.match(result.stdout, /PASS: two draft-only weekly slots/);
 });
 
 function runWithPlanMutation(mutate) {
@@ -37,6 +37,15 @@ function runWithPlanMutation(mutate) {
     fs.rmSync(temp, { recursive: true, force: true });
   }
 }
+
+test("schedule validator rejects any weekly gap shorter than 72 full hours", () => {
+  const result = runWithPlanMutation(plan => {
+    plan.schedule[1].day = "Thursday";
+    plan.schedule[1].cronUtc = "0 15 * * 4";
+  });
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /publication spacing between Tuesday and Thursday is 48.00 hours; minimum is 72 full hours/);
+});
 
 test("schedule validator rejects incorrect weekday and UTC time", () => {
   const weekday = runWithPlanMutation(plan => { plan.schedule[0].day = "Wednesday"; });
