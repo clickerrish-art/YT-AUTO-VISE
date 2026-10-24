@@ -19,6 +19,25 @@ function atomicJson(file, value) {
   fs.renameSync(temporary, file);
 }
 
+function acquireIntakeLock(file) {
+  const handle = fs.openSync(file, "wx", 0o600);
+  try {
+    fs.writeFileSync(handle, JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString(), operation: "facebook-intake" }) + "\n", "utf8");
+    fs.fsyncSync(handle);
+  } catch (error) {
+    fs.closeSync(handle);
+    fs.rmSync(file, { force: true });
+    throw error;
+  }
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    fs.closeSync(handle);
+    fs.rmSync(file, { force: false });
+  };
+}
+
 function requireWithinRoot(candidate, baseRoot = root) {
   const resolvedBase = path.resolve(baseRoot);
   const canonicalBase = fs.realpathSync(resolvedBase);
@@ -76,6 +95,9 @@ export async function runFacebookContentIntake({
       config.complianceRuleSet !== "nf-facebook-autonomous-policy-2026-10-v1") {
     throw new Error("Facebook intake configuration is invalid or policy version does not match");
   }
+  const lockPath = stateFile(config.lockFile ?? "facebook-publishing.lock");
+  const release = acquireIntakeLock(lockPath);
+  try {
   const candidateFile = requireWithinRoot(candidatePath, activeRoot);
   const selectedQueuePath = String(process.env.FACEBOOK_AUTONOMOUS_QUEUE_PATH ?? "").trim() || queuePath || path.join(stateDir, "facebook-autonomous-queue.json");
   const queueFile = requireWithinRoots(selectedQueuePath, [activeRoot, stateDir]);
@@ -139,6 +161,9 @@ export async function runFacebookContentIntake({
   };
   atomicJson(path.join(stateDir, "facebook-intake-summary.json"), summary);
   return summary;
+  } finally {
+    release();
+  }
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
