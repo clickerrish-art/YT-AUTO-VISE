@@ -16,15 +16,17 @@ const metadataPath = "content/next-short.json";
 const videoPath = "media/next-short.mp4";
 const schedulePath = "config/weekly-content-plan.json";
 if (!exists(schedulePath)) {
-  blockers.push("Authoritative weekly schedule is missing.");
+  blockers.push("Authoritative publication-cycle policy is missing.");
 } else {
   try {
     const schedule = JSON.parse(fs.readFileSync(path.resolve(root, schedulePath), "utf8"));
     if (schedule.timezone !== "Africa/Johannesburg") blockers.push("Schedule timezone must be Africa/Johannesburg.");
     if (schedule.minimumPublicationSpacingHours !== 72) blockers.push("Schedule minimumPublicationSpacingHours must remain 72.");
-    if (schedule.cadenceDecisionRequired === true) {
-      blockers.push("Owner decision required: the requested 2 long-form + 1 Short weekly target conflicts with the 72-hour minimum; the current two-slot schedule is an interim draft-only fallback.");
-    }
+    if (JSON.stringify(schedule.publicationCycle?.formats) !== JSON.stringify(["long_form", "long_form", "short"])) blockers.push("Publication cycle must be long-form, long-form, Short.");
+    if (schedule.publicationCycle?.minimumHoursBetweenConsecutivePublications !== 72 || schedule.publicationCycle?.minimumCycleHours !== 216) blockers.push("Publication cycle must enforce 72 elapsed hours between each consecutive publication and at least 216 hours for the three-gap cycle.");
+    if (schedule.publicationCycle?.publicationRequiresVerifiedHistory !== true) blockers.push("Publication cycle must require independently verified public/private/unlisted history and reconciliation of uncertain attempts.");
+    if (["targetCadence", "requestedTargetCadence", "cadenceDecisionRequired", "interimDraftCadence"].some(key => key in schedule)) blockers.push("Stale weekly cadence fields must be removed.");
+    blockers.push("LIVE BLOCKER: complete SonicVhibez public, private and unlisted history plus all pending/uncertain upload attempts must be independently reconciled immediately before upload.");
   } catch {
     blockers.push("Authoritative weekly schedule is not valid JSON; cadence and spacing cannot be verified.");
   }
@@ -44,6 +46,8 @@ if (!exists(queuePath)) {
       blockers.push("Queue must be a JSON object with an items array.");
     } else {
       if (queue.publishingEnabled !== false) blockers.push("Queue must keep publishingEnabled=false until private upload and human review are verified.");
+      if (queue.cadence?.minimumHoursBetweenConsecutivePublications !== 72 || queue.cadence?.minimumCycleHours !== 216 || JSON.stringify(queue.cadence?.formats) !== JSON.stringify(["long_form", "long_form", "short"])) blockers.push("Queue cadence must match the rolling publication cycle policy.");
+      if (queue.cadence?.draftPreparationFallback?.notPublicationCadence !== true) blockers.push("Tuesday/Saturday fallback must be marked draft preparation only, not publication cadence.");
       if (!Array.isArray(queue.items) || queue.items.length < 2) blockers.push("Queue needs at least two draft items.");
       const items = Array.isArray(queue.items) ? queue.items : [];
       if (items.some(item => !item || typeof item !== "object" || typeof item.id !== "string" || !item.id.trim())) {
