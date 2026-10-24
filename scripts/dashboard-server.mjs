@@ -270,6 +270,7 @@ const server = http.createServer(async (req, res) => {
         const campaigns = { version: 1, campaigns: loadState().campaigns ?? configuredCampaigns.campaigns };
         const campaignErrors = validateCampaigns(campaigns);
         const blockers = campaignErrors.map(error => "Campaign configuration: " + error);
+        if (schedule.cadenceDecisionRequired) blockers.push("Owner decision required: the requested 2 long-form + 1 Short weekly target conflicts with the 72-hour minimum; the current two-slot schedule is an interim draft-only fallback");
         const readinessCheck = spawnSync(process.execPath, ["scripts/production-readiness.mjs"], { cwd: root, encoding: "utf8", timeout: 15_000, env: process.env });
         if (readinessCheck.error || readinessCheck.status !== 0) {
           blockers.push("Production readiness validator could not complete; inspect server logs and rerun the readiness task");
@@ -302,6 +303,7 @@ const server = http.createServer(async (req, res) => {
       const campaignConfig = { version: 1, campaigns: state.campaigns ?? configuredCampaigns.campaigns };
       const campaignErrors = validateCampaigns(campaignConfig);
       const blockers = campaignErrors.map(error => "Campaign configuration: " + error);
+      if (schedule.cadenceDecisionRequired) blockers.push("Owner decision required: the requested 2 long-form + 1 Short weekly target conflicts with the 72-hour minimum; the current two-slot schedule is an interim draft-only fallback");
       if (!schedule.channelId) blockers.push("SonicVhibez channel ID has not been verified");
       if (!fs.existsSync(path.join(root, "content/render-manifest.json"))) blockers.push("Rights-reviewed render manifest is missing");
       return json(res, 200, { publishingEnabled: false, schedule, campaigns: campaignConfig.campaigns, campaignValidation: { ok: campaignErrors.length === 0, errors: campaignErrors }, queueItems: state.queueItems, jobs: state.jobs.slice(-30).reverse(), uploads: state.uploads.slice(-30).reverse(), uploadLedger: readUploadLedger(), audit: state.audit.slice(-50).reverse(), blockers, stateFile: path.relative(root, stateFile) });
