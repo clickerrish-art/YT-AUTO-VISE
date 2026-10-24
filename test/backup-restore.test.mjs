@@ -87,3 +87,9 @@ test("restore requires explicit authorization and validates backup checksums", a
     await assert.rejects(restoreState({ backupPath, rootDir: source.root, stateDir: path.join(source.root, "fresh-state"), uploadLogDir: path.join(source.root, "fresh-logs"), rightsDir: path.join(source.root, "fresh-rights"), confirm: "YES" }), /checksum\/length validation failed/);
   } finally { fs.rmSync(source.root, { recursive: true, force: true }); }
 });
+
+
+test("local secrets, state, upload evidence, backups and generated media are ignored by Git", () => {
+  const ignore = fs.readFileSync(".gitignore", "utf8");
+  for (const pattern of [".env", "!.env.example", "/state/", "/run-logs/", "/backups/", "/rights/", "/content/render-manifest.json", "/content/long-form-render-manifest.json", "/media/next-short.mp4", "/media/long-form-next.mp4"]) assert.ok(ignore.includes(pattern), "missing .gitignore protection: " + pattern);
+});
