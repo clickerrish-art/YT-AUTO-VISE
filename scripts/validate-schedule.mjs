@@ -28,7 +28,7 @@ for (const slot of expected) {
  if (actual.format !== slot.format) errors.push(slot.day + " format must be " + slot.format);
  if (actual.cronUtc !== slot.cronUtc) errors.push(slot.day + " cronUtc must be " + slot.cronUtc);
  if (actual.status !== "DRAFT_ONLY") errors.push(slot.day + " must remain DRAFT_ONLY");
- const match = String(actual.cronUtc ?? "").match(/^(\\d{1,2}) (\\d{1,2}) \\* \\* ([0-6])$/);
+ const match = String(actual.cronUtc ?? "").match(/^(\d{1,2}) (\d{1,2}) \* \* ([0-6])$/);
  if (!match || Number(match[1]) > 59 || Number(match[2]) > 23 || Number(match[3]) !== dayNumber[slot.day]) errors.push(slot.day + " draft cron must be valid UTC minute hour * * weekday");
  if (slot.duration === "minutes" && (actual.targetDurationMinutes?.min !== 6 || actual.targetDurationMinutes?.max !== 10)) errors.push("Tuesday must target 6–10 minutes");
  if (slot.duration === "seconds" && (actual.targetDurationSeconds?.min !== 50 || actual.targetDurationSeconds?.max !== 60)) errors.push("Saturday Short must target 50–60 seconds");
