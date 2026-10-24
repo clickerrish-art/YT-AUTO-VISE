@@ -25,6 +25,30 @@ function readJson(filePath, label) {
   try { return JSON.parse(fs.readFileSync(filePath, "utf8")); }
   catch { throw new Error(label + " is missing or invalid JSON"); }
 }
+
+/** Cross-process exclusive upload lock. A crash leaves a stale lock that fails closed. */
+export function acquireExclusiveUploadLock(lockPath, { jobId, now = () => new Date() } = {}) {
+  fs.mkdirSync(path.dirname(lockPath), { recursive: true });
+  let fd;
+  try {
+    fd = fs.openSync(lockPath, "wx", 0o600);
+    fs.writeFileSync(fd, JSON.stringify({ pid: process.pid, jobId, startedAt: now().toISOString() }) + "\\n");
+    fs.fsyncSync(fd);
+  } catch (error) {
+    if (fd !== undefined) { try { fs.closeSync(fd); } catch {} }
+    if (error?.code === "EEXIST") throw new Error("another upload operation is active or left a stale lock; reconcile the attempt ledger and inspect the lock before any retry");
+    throw error;
+  }
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    try { fs.closeSync(fd); } catch {}
+    try { fs.unlinkSync(lockPath); } catch (error) {
+      if (error?.code !== "ENOENT") throw error;
+    }
+  };
+}
 export function validateUploadApproval(approval, { jobId, artifactSha256, metadataVersion }) {
   if (approval?.decision !== "APPROVE" || approval.jobId !== jobId) throw new Error("approval decision and job ID must match this upload");
   if (!approval.rightsEvidence || typeof approval.rightsEvidence !== "object" || Array.isArray(approval.rightsEvidence)) throw new Error("structured rights evidence is required in the approval record");
@@ -138,6 +162,8 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   const logDir = path.resolve(env.UPLOAD_LOG_DIR ?? "run-logs");
   const ledgerPath = path.join(logDir, "upload-attempts.json");
   fs.mkdirSync(logDir, { recursive: true });
+  const releaseUploadLock = acquireExclusiveUploadLock(path.join(logDir, "upload-operation.lock"), { jobId, now });
+  try {
   let ledger = { version: 1, attempts: [] };
   if (fs.existsSync(ledgerPath)) ledger = readJson(ledgerPath, "Upload attempt ledger");
   if (!Array.isArray(ledger.attempts)) throw new Error("Upload attempt ledger has an invalid schema");
@@ -291,6 +317,9 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     throw new Error("YouTube video exists but local receipt persistence failed; reconcile the existing remote video before retrying");
   }
   return { receipt, reused: false };
+  } finally {
+    releaseUploadLock();
+  }
 }
 
 const invoked = process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href;
