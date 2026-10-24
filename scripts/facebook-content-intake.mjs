@@ -21,8 +21,11 @@ function atomicJson(file, value) {
 
 function requireWithinRoot(candidate, baseRoot = root) {
   const resolvedBase = path.resolve(baseRoot);
+  const canonicalBase = fs.realpathSync(resolvedBase);
   const resolved = path.resolve(resolvedBase, candidate);
   if (resolved !== resolvedBase && !resolved.startsWith(resolvedBase + path.sep)) throw new Error("Intake file path escapes repository root");
+  const checked = fs.existsSync(resolved) ? fs.realpathSync(resolved) : fs.realpathSync(path.dirname(resolved));
+  if (checked !== canonicalBase && !checked.startsWith(canonicalBase + path.sep)) throw new Error("Intake file symlink escapes repository root");
   return resolved;
 }
 
