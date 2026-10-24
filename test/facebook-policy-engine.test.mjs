@@ -178,3 +178,32 @@ test("URLs embedded directly in the final caption are checked even when links me
     assert.ok(result.destinationChecks.some(check => check.url.includes("unapproved.example") && !check.passed));
   } finally { f.cleanup(); }
 });
+
+test("a factual claim needs a reachable authoritative source containing the recorded excerpt", async () => {
+  const f = fixture();
+  try {
+    const excerpt = "Wetlands support biodiversity and help regulate water flows.";
+    f.payload.caption = "Wetlands support biodiversity and help regulate water flows.";
+    f.payload.claims = [{ text: "Wetlands support biodiversity and help regulate water flows", sourceUrls: ["https://sanbi.org/research"], sourceExcerpt: excerpt, sourceSupportsClaim: true, verified: true }];
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root),
+      fetchImpl: async url => ({ ok: true, status: 200, url: String(url), text: async () => "Report summary. " + excerpt + " Further documented context." })
+    });
+    assert.equal(result.eligible, true, JSON.stringify(result.blockers));
+    assert.equal(result.sourceChecks[0].passed, true);
+  } finally { f.cleanup(); }
+});
+
+test("an allowlisted link that redirects to another host is blocked", async () => {
+  const f = fixture();
+  try {
+    const destination = "https://example.org/approved";
+    f.payload.links = [destination];
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), approvedDestinations: [destination],
+      fetchImpl: async url => ({ ok: true, status: 200, url: "https://redirect-elsewhere.example/path" })
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.destinationChecks.some(check => check.allowlisted && !check.passed));
+  } finally { f.cleanup(); }
+});
