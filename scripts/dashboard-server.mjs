@@ -48,7 +48,12 @@ if (!fs.existsSync(stateFile)) {
 function loadState() {
   const state = JSON.parse(fs.readFileSync(stateFile, "utf8"));
   for (const key of ["queueItems", "audit", "jobs", "uploads"]) if (!Array.isArray(state[key])) throw new Error("Invalid state schema: " + key);
-  for (const key of ["facebookDrafts", "facebookPosts", "facebookAttempts"]) if (!Array.isArray(state[key])) state[key] = [];
+  for (const key of ["facebookDrafts", "facebookPosts", "facebookAttempts"]) {
+    // Missing keys are supported for legacy-state migration; present but malformed history
+    // must fail closed rather than silently erasing duplicate-prevention/reconciliation data.
+    if (state[key] === undefined) state[key] = [];
+    else if (!Array.isArray(state[key])) throw new Error("Invalid state schema: " + key);
+  }
   return state;
 }
 function recoverInterruptedTasks() {
