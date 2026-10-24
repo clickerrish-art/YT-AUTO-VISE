@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import crypto from "node:crypto";
 import os from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
@@ -128,8 +129,6 @@ export async function restoreFacebookDraftHistory({
   const history = [...historyByDate.values()].sort((a, b) => a.date.localeCompare(b.date));
   const destination = path.resolve(configuredOutputPath);
   const parent = path.dirname(destination);
-  fs.mkdirSync(parent, { recursive: true, mode: 0o700 });
-
   // The output path is configurable. Reject symlinks in any existing path
   // component so a caller cannot redirect a history write outside the intended
   // runner/work directory. Replace a regular history file atomically.
@@ -143,7 +142,20 @@ export async function restoreFacebookDraftHistory({
     if (currentPath === destination && !stat.isFile()) throw new Error("History output destination must be a regular file");
   }
 
-  const temporary = destination + "." + process.pid + "." + Math.random().toString(16).slice(2) + ".tmp";
+  fs.mkdirSync(parent, { recursive: true, mode: 0o700 });
+  // Recheck after creating the parent to detect a path component changed during setup.
+  currentPath = rootPath;
+  for (const part of path.relative(rootPath, destination).split(path.sep).filter(Boolean)) {
+    currentPath = path.join(currentPath, part);
+    try {
+      const stat = fs.lstatSync(currentPath);
+      if (stat.isSymbolicLink()) throw new Error("History output path contains a symbolic link; refusing to overwrite an unintended destination");
+      if (currentPath === destination && !stat.isFile()) throw new Error("History output destination must be a regular file");
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
+    }
+  }
+  const temporary = destination + "." + crypto.randomUUID() + ".tmp";
   try {
     fs.writeFileSync(temporary, JSON.stringify(history, null, 2) + "\n", { mode: 0o600, flag: "wx" });
     fs.renameSync(temporary, destination);
