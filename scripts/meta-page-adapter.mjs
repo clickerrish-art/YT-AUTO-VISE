@@ -2,8 +2,8 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
-const PAGE_ID_PATTERN = /^\\d{5,30}$/;
-const API_VERSION_PATTERN = /^v\\d+\\.\\d+$/;
+const PAGE_ID_PATTERN = /^\d{5,30}$/;
+const API_VERSION_PATTERN = /^v\d+\.\d+$/;
 const IMAGE_TYPES = new Map([
   [".jpg", "image/jpeg"], [".jpeg", "image/jpeg"], [".png", "image/png"],
   [".gif", "image/gif"], [".bmp", "image/bmp"], [".tif", "image/tiff"], [".tiff", "image/tiff"]
