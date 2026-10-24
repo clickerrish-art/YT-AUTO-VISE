@@ -170,6 +170,8 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       attemptId: prior.attemptId, jobId, timestamp, channelId: expectedChannelId,
       channelTitle: matchedChannel.snippet.title, videoId: prior.remoteVideoId,
       privacyStatus: remoteItem.status.privacyStatus, title: metadata.title,
+      format: metadata.contentType ?? metadata.format ?? null,
+      actualPublishedAt: remoteItem.snippet?.publishedAt ?? prior.startedAt,
       artifactSha256: videoSha256, metadataVersion: metadataSha256, reviewer: approval.reviewer,
       rightsEvidenceSha256: approval.rightsEvidenceSha256, remoteStatusVerified: true,
       publishingEnabled: false, url: "https://www.youtube.com/watch?v=" + prior.remoteVideoId
@@ -177,6 +179,8 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     const receiptPath = path.join(logDir, "upload-" + prior.remoteVideoId + ".json");
     persistJson(receiptPath, receipt);
     prior.status = "PRIVATE_UPLOAD_VERIFIED";
+    prior.actualPublishedAt = remoteItem.snippet?.publishedAt ?? prior.startedAt;
+    prior.format = metadata.contentType ?? metadata.format ?? prior.format ?? null;
     prior.receiptPath = path.basename(receiptPath);
     prior.verifiedAt = timestamp;
     prior.updatedAt = timestamp;
@@ -191,11 +195,14 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     const history = await fetchCompleteYoutubeHistory(youtube, matchedChannel, env.CHANNEL_HISTORY_RECONCILIATION_PATH, expectedChannelId);
     const format = metadata.contentType ?? metadata.format;
     if (!["long_form", "short"].includes(format)) throw new Error("metadata must explicitly identify contentType as long_form or short for rolling cycle enforcement");
-    assertNextPublicationAllowed({ history, pendingAttempts: ledger.attempts, proposedAt: now().toISOString(), jobId, format });
+    var cycleGate = assertNextPublicationAllowed({ history, pendingAttempts: ledger.attempts, proposedAt: now().toISOString(), jobId, format });
   }
   const attempt = {
     attemptId: crypto.randomUUID(), jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256,
     channelId: matchedChannel.id, channelTitle: matchedChannel.snippet.title,
+    format: metadata.contentType ?? metadata.format ?? null,
+    cycleIndex: typeof cycleGate !== "undefined" ? (history.length % 3) : null,
+    previousActualPublishedAt: typeof cycleGate !== "undefined" ? cycleGate.latestActualAt : null,
     status: "UPLOADING_PRIVATE", startedAt: now().toISOString(), remoteVideoId: null,
     publishingEnabled: false, visibility: "private"
   };
@@ -258,7 +265,9 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   const receipt = {
     attemptId: attempt.attemptId, jobId, timestamp, channelId: matchedChannel.id,
     channelTitle: matchedChannel.snippet.title, videoId, privacyStatus: verified.status.privacyStatus,
-    title: metadata.title, artifactSha256: videoSha256, metadataVersion: metadataSha256,
+    title: metadata.title, format: metadata.contentType ?? metadata.format ?? null,
+    actualPublishedAt: verified.snippet?.publishedAt ?? timestamp,
+    artifactSha256: videoSha256, metadataVersion: metadataSha256,
     reviewer: approval.reviewer, rightsEvidenceSha256: approval.rightsEvidenceSha256,
     remoteStatusVerified: true, publishingEnabled: false, url: "https://www.youtube.com/watch?v=" + videoId
   };
@@ -266,6 +275,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   try {
     persistJson(receiptPath, receipt);
     attempt.status = "PRIVATE_UPLOAD_VERIFIED";
+    attempt.actualPublishedAt = verified.snippet?.publishedAt ?? timestamp;
     attempt.receiptPath = path.basename(receiptPath);
     attempt.verifiedAt = timestamp;
     attempt.updatedAt = timestamp;
