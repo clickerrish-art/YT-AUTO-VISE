@@ -31,5 +31,7 @@ jobs:
           package-manager-cache: false
       - name: Install locked dependencies without lifecycle scripts
         run: npm ci --ignore-scripts
+      - name: Validate and enqueue evidence-complete candidates
+        run: npm run facebook:intake:autonomous
       - name: Run autonomous Facebook publisher
         run: npm run facebook:publish:autonomous
