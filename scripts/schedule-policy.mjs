@@ -77,3 +77,38 @@ export function weeklyUtcCronGaps(schedule) {
     return { from: slot.label, to: next.label, hours: minutes / 60 };
   });
 }
+/** Converts a wall-clock time in an IANA timezone to a real instant without assuming a fixed UTC offset. */
+export function localDateTimeToIso(date, time = "17:00", timeZone = DEFAULT_SCHEDULE_TIMEZONE) {
+  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(date) || !/^([01]\\d|2[0-3]):[0-5]\\d$/.test(time)) {
+    throw new Error("date/time must be valid YYYY-MM-DD and HH:mm values");
+  }
+  const [year, month, day] = date.split("-").map(Number);
+  const [hour, minute] = time.split(":").map(Number);
+  const wallClockAsUtc = Date.UTC(year, month - 1, day, hour, minute, 0);
+  if (new Date(wallClockAsUtc).toISOString().slice(0, 10) !== date) throw new Error("date must be a real calendar date");
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone, year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23"
+  });
+  let guess = wallClockAsUtc;
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const parts = formatter.formatToParts(new Date(guess)).reduce((result, part) => {
+      if (part.type !== "literal") result[part.type] = Number(part.value);
+      return result;
+    }, {});
+    const representedAsUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
+    const next = wallClockAsUtc - (representedAsUtc - guess);
+    if (next === guess) break;
+    guess = next;
+  }
+  const actual = formatter.formatToParts(new Date(guess)).reduce((result, part) => {
+    if (part.type !== "literal") result[part.type] = part.value;
+    return result;
+  }, {});
+  if (actual.year !== date.slice(0, 4) || actual.month !== date.slice(5, 7) || actual.day !== date.slice(8, 10)
+      || actual.hour !== time.slice(0, 2) || actual.minute !== time.slice(3, 5)) {
+    throw new Error(`local time ${date} ${time} does not exist in ${timeZone}`);
+  }
+  return new Date(guess).toISOString();
+}
+
