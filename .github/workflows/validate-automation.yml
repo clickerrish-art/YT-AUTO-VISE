@@ -80,6 +80,7 @@ jobs:
           import json
           from pathlib import Path
           q = json.loads(Path("content/queue.json").read_text(encoding="utf-8"))
+          plan = json.loads(Path("config/weekly-content-plan.json").read_text(encoding="utf-8"))
           products = json.loads(Path("config/products.json").read_text(encoding="utf-8"))["products"]
           approved = {p["url"] for p in products if p.get("status") == "approved"}
           items = q.get("items", [])
@@ -87,8 +88,13 @@ jobs:
           cadence = q.get("cadence", {})
           assert cadence.get("timezone") == "Africa/Johannesburg"
           assert cadence.get("formats") == ["long_form", "long_form", "short"]
-          assert cadence.get("minimumHoursBetweenConsecutivePublications") == 72
-          assert cadence.get("minimumCycleHours") == 216
+          spacing = plan.get("minimumPublicationSpacingHours")
+          cycle_hours = spacing * len(plan.get("publicationCycle", {}).get("formats", [])) if isinstance(spacing, (int, float)) else None
+          assert isinstance(spacing, (int, float)) and 0 < spacing <= 8760, "Configured publication spacing must be finite and positive"
+          assert plan.get("publicationCycle", {}).get("minimumHoursBetweenConsecutivePublications") == spacing
+          assert plan.get("publicationCycle", {}).get("minimumCycleHours") == cycle_hours
+          assert cadence.get("minimumHoursBetweenConsecutivePublications") == spacing
+          assert cadence.get("minimumCycleHours") == cycle_hours
           fallback = cadence.get("draftPreparationFallback", {})
           assert fallback.get("days") == ["Tuesday", "Saturday"]
           assert fallback.get("status") == "DRAFT_ONLY" and fallback.get("notPublicationCadence") is True

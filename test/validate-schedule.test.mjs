@@ -17,7 +17,7 @@ function runWithPlanMutation(mutate){
  const temp=fs.mkdtempSync(path.join(os.tmpdir(),"sonicvhibez-schedule-"));
  try{
   for(const file of copiedFiles){const target=path.join(temp,file);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(path.join(repoRoot,file),target);}
-  const planPath=path.join(temp,"config/weekly-content-plan.json");const plan=JSON.parse(fs.readFileSync(planPath,"utf8"));mutate(plan);fs.writeFileSync(planPath,JSON.stringify(plan,null,2));
+  const planPath=path.join(temp,"config/weekly-content-plan.json");const plan=JSON.parse(fs.readFileSync(planPath,"utf8"));const queuePath=path.join(temp,"content/queue.json");const queue=JSON.parse(fs.readFileSync(queuePath,"utf8"));mutate(plan,queue);fs.writeFileSync(planPath,JSON.stringify(plan,null,2));fs.writeFileSync(queuePath,JSON.stringify(queue,null,2));
   return spawnSync(process.execPath,[path.join(repoRoot,"scripts/validate-schedule.mjs")],{cwd:temp,encoding:"utf8"});
  }finally{fs.rmSync(temp,{recursive:true,force:true});}
 }
@@ -44,4 +44,18 @@ test("validator rejects incorrect cycle order, duration and unsafe publishing",(
  assert.notEqual(duration.status,0);assert.match(duration.stderr,/Saturday Short must target 50–60 seconds/);
  const publishing=runWithPlanMutation(plan=>{plan.publishingEnabled=true;});
  assert.notEqual(publishing.status,0);assert.match(publishing.stderr,/publishing must remain disabled/);
+});
+test("validator accepts a non-default minimum gap when schedule, queue and derived cycle agree",()=>{
+ const result=runWithPlanMutation((plan,queue)=>{
+  plan.minimumPublicationSpacingHours=96;
+  plan.spacingPolicy.minimumHoursBetweenPosts=96;
+  plan.spacingPolicy.minimumCycleHours=288;
+  plan.spacingPolicy.explanation="Test configuration: a 96-hour gap requires 288 hours across three cyclic gaps.";
+  plan.publicationCycle.minimumHoursBetweenConsecutivePublications=96;
+  plan.publicationCycle.minimumCycleHours=288;
+  plan.publicationCycle.description="Test configuration: long-form, long-form, Short with 96 elapsed hours between actual publications.";
+  queue.cadence.minimumHoursBetweenConsecutivePublications=96;
+  queue.cadence.minimumCycleHours=288;
+ });
+ assert.equal(result.status,0,result.stdout+result.stderr);
 });

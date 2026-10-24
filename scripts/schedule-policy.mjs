@@ -259,7 +259,7 @@ export function evaluateNextPublication({
     const spacing = validatePublicationSlot(candidate, existing, { timeZone, minSpacingHours });
     errors.push(...spacing.errors);
     if (latestActual && (proposedTimestamp - latestActual.timestamp) / 3_600_000 < minSpacingHours) {
-      errors.push("proposed publication is less than 72 elapsed hours after the latest actual channel publication");
+      errors.push(`proposed publication is less than ${minSpacingHours} elapsed hours after the latest actual channel publication`);
     }
   }
   return { valid: errors.length === 0, errors: [...new Set(errors)], expectedFormat, latestActualAt: latestActual ? new Date(latestActual.timestamp).toISOString() : null };

@@ -21,9 +21,12 @@ if (!exists(schedulePath)) {
   try {
     const schedule = JSON.parse(fs.readFileSync(path.resolve(root, schedulePath), "utf8"));
     if (schedule.timezone !== "Africa/Johannesburg") blockers.push("Schedule timezone must be Africa/Johannesburg.");
-    if (schedule.minimumPublicationSpacingHours !== 72) blockers.push("Schedule minimumPublicationSpacingHours must remain 72.");
+    const minimumSpacingHours = schedule.minimumPublicationSpacingHours;
+    const cycleFormats = schedule.publicationCycle?.formats;
+    if (!Number.isFinite(minimumSpacingHours) || minimumSpacingHours <= 0 || minimumSpacingHours > 8760) blockers.push("Schedule minimumPublicationSpacingHours must be a finite positive value no greater than 8760 hours.");
+    if (schedule.spacingPolicy?.minimumHoursBetweenPosts !== minimumSpacingHours) blockers.push("Schedule spacingPolicy must match minimumPublicationSpacingHours.");
     if (JSON.stringify(schedule.publicationCycle?.formats) !== JSON.stringify(["long_form", "long_form", "short"])) blockers.push("Publication cycle must be long-form, long-form, Short.");
-    if (schedule.publicationCycle?.minimumHoursBetweenConsecutivePublications !== 72 || schedule.publicationCycle?.minimumCycleHours !== 216) blockers.push("Publication cycle must enforce 72 elapsed hours between each consecutive publication and at least 216 hours for the three-gap cycle.");
+    if (schedule.publicationCycle?.minimumHoursBetweenConsecutivePublications !== minimumSpacingHours || schedule.publicationCycle?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0) || schedule.spacingPolicy?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0)) blockers.push("Publication cycle and spacingPolicy must use the configured minimum gap and its derived cycle duration.");
     if (schedule.publicationCycle?.publicationRequiresVerifiedHistory !== true) blockers.push("Publication cycle must require independently verified public/private/unlisted history and reconciliation of uncertain attempts.");
     if (["targetCadence", "requestedTargetCadence", "cadenceDecisionRequired", "interimDraftCadence"].some(key => key in schedule)) blockers.push("Stale weekly cadence fields must be removed.");
     blockers.push("LIVE BLOCKER: complete SonicVhibez public, private and unlisted history plus all pending/uncertain upload attempts must be independently reconciled immediately before upload.");
@@ -46,7 +49,7 @@ if (!exists(queuePath)) {
       blockers.push("Queue must be a JSON object with an items array.");
     } else {
       if (queue.publishingEnabled !== false) blockers.push("Queue must keep publishingEnabled=false until private upload and human review are verified.");
-      if (queue.cadence?.minimumHoursBetweenConsecutivePublications !== 72 || queue.cadence?.minimumCycleHours !== 216 || JSON.stringify(queue.cadence?.formats) !== JSON.stringify(["long_form", "long_form", "short"])) blockers.push("Queue cadence must match the rolling publication cycle policy.");
+      if (queue.cadence?.minimumHoursBetweenConsecutivePublications !== minimumSpacingHours || queue.cadence?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0) || JSON.stringify(queue.cadence?.formats) !== JSON.stringify(["long_form", "long_form", "short"])) blockers.push("Queue cadence must match the configured rolling publication cycle policy.");
       if (queue.cadence?.draftPreparationFallback?.notPublicationCadence !== true) blockers.push("Tuesday/Saturday fallback must be marked draft preparation only, not publication cadence.");
       if (!Array.isArray(queue.items) || queue.items.length < 2) blockers.push("Queue needs at least two draft items.");
       const items = Array.isArray(queue.items) ? queue.items : [];

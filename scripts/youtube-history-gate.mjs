@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { evaluateNextPublication } from "./schedule-policy.mjs";
+import { evaluateNextPublication, DEFAULT_MIN_SPACING_HOURS, DEFAULT_SCHEDULE_TIMEZONE } from "./schedule-policy.mjs";
 
 const allowedFormats = new Set(["long_form", "short"]);
 const allowedVisibility = new Set(["public", "private", "unlisted"]);
@@ -91,8 +91,26 @@ export async function fetchCompleteYoutubeHistory(youtube, channel, reconciliati
   return validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
 }
 
-export function assertNextPublicationAllowed({ history, pendingAttempts, proposedAt, jobId, format }) {
-  const result = evaluateNextPublication({ history, historyVerified: true, pendingAttempts, proposedAt, jobId, format });
+export function assertNextPublicationAllowed({ history, pendingAttempts, proposedAt, jobId, format, timeZone, minSpacingHours } = {}) {
+  let policy = {};
+  try {
+    policy = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), "config/weekly-content-plan.json"), "utf8"));
+  } catch {
+    throw new Error("authoritative publication schedule is missing or invalid; refusing to use a fallback upload spacing policy");
+  }
+  const configuredSpacing = policy.minimumPublicationSpacingHours;
+  const configuredFormats = policy.publicationCycle?.formats;
+  if (!Number.isFinite(configuredSpacing) || configuredSpacing <= 0 || configuredSpacing > 8760
+      || policy.publicationCycle?.minimumHoursBetweenConsecutivePublications !== configuredSpacing
+      || policy.publicationCycle?.minimumCycleHours !== configuredSpacing * (Array.isArray(configuredFormats) ? configuredFormats.length : 0)
+      || JSON.stringify(configuredFormats) !== JSON.stringify(["long_form", "long_form", "short"])) {
+    throw new Error("authoritative publication schedule has inconsistent spacing/cycle values; refusing upload");
+  }
+  const result = evaluateNextPublication({
+    history, historyVerified: true, pendingAttempts, proposedAt, jobId, format,
+    timeZone: timeZone ?? policy.timezone ?? DEFAULT_SCHEDULE_TIMEZONE,
+    minSpacingHours: minSpacingHours ?? configuredSpacing ?? DEFAULT_MIN_SPACING_HOURS
+  });
   if (!result.valid) throw new Error("rolling publication cycle gate blocked upload: " + result.errors.join("; "));
   return result;
 }

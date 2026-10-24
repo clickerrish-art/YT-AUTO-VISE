@@ -11,9 +11,13 @@ try { queue = read("content/queue.json"); } catch (error) { console.error("FAIL:
 if (plan.channel !== "SonicVhibez") errors.push("schedule channel must be SonicVhibez");
 if (plan.timezone !== "Africa/Johannesburg") errors.push("schedule timezone must be Africa/Johannesburg");
 if (plan.publishingEnabled !== false || queue.publishingEnabled !== false || plan.publicationCycle?.publicationEnabled !== false) errors.push("publishing must remain disabled in schedule, cycle policy and queue");
-if (plan.minimumPublicationSpacingHours !== 72 || plan.publicationCycle?.minimumHoursBetweenConsecutivePublications !== 72) errors.push("minimum publication spacing must be exactly 72 elapsed hours");
+const minSpacing = plan.minimumPublicationSpacingHours;
+if (!Number.isFinite(minSpacing) || minSpacing <= 0 || minSpacing > 8760) errors.push("minimumPublicationSpacingHours must be a finite positive number no greater than 8760 hours");
+if (plan.publicationCycle?.minimumHoursBetweenConsecutivePublications !== minSpacing) errors.push("publicationCycle minimum spacing must match minimumPublicationSpacingHours");
+if (plan.spacingPolicy?.minimumHoursBetweenPosts !== minSpacing) errors.push("spacingPolicy minimumHoursBetweenPosts must match minimumPublicationSpacingHours");
 if (JSON.stringify(plan.publicationCycle?.formats) !== JSON.stringify(ROLLING_PUBLICATION_FORMATS)) errors.push("publicationCycle formats must be long_form, long_form, short in that order");
-if (plan.publicationCycle?.minimumCycleHours !== 216) errors.push("rolling three-publication cycle minimum must be 216 hours");
+if (plan.publicationCycle?.minimumCycleHours !== minSpacing * ROLLING_PUBLICATION_FORMATS.length) errors.push("rolling cycle minimum must equal minimumPublicationSpacingHours multiplied by the publication cycle length");
+if (plan.spacingPolicy?.minimumCycleHours !== minSpacing * ROLLING_PUBLICATION_FORMATS.length) errors.push("spacingPolicy minimumCycleHours must match the configured publication cycle");
 if (plan.publicationCycle?.publicationRequiresVerifiedHistory !== true) errors.push("publication must require independently verified channel history");
 if ("targetCadence" in plan || "requestedTargetCadence" in plan || "cadenceDecisionRequired" in plan || "interimDraftCadence" in plan) errors.push("stale weekly-count cadence fields must be removed; use publicationCycle and draft-only fallback");
 if (!Array.isArray(plan.schedule) || plan.schedule.length !== 2) errors.push("draft-preparation fallback must contain exactly two draft-only slots");
@@ -59,7 +63,7 @@ for (const slot of expected) {
 }
 const cadence = queue.cadence ?? {};
 if (cadence.publicationCycleId !== plan.publicationCycle?.id || JSON.stringify(cadence.formats) !== JSON.stringify(ROLLING_PUBLICATION_FORMATS)
- || cadence.minimumHoursBetweenConsecutivePublications !== 72 || cadence.minimumCycleHours !== 216) errors.push("queue cadence must match the authoritative rolling publication cycle");
+ || cadence.minimumHoursBetweenConsecutivePublications !== minSpacing || cadence.minimumCycleHours !== minSpacing * ROLLING_PUBLICATION_FORMATS.length) errors.push("queue cadence must match the authoritative rolling publication cycle");
 if (cadence.draftPreparationFallback?.status !== "DRAFT_ONLY" || cadence.draftPreparationFallback?.notPublicationCadence !== true) errors.push("Tuesday/Saturday fallback must be explicitly draft-only and not a publication cadence");
 const workflowChecks = [
  [".github/workflows/generate-long-form-narration.yml", "0 15 * * 2", "Tuesday long-form draft preparation"],
