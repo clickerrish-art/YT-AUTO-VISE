@@ -3,13 +3,19 @@
 Audit date: 2026-10-24  
 Repository: https://github.com/clickerrish-art/YT-AUTO-VISE  
 Implementation branch: `codex/marketing-machine-audit-fixes`  
-Tested implementation commit: `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`  
+Tested implementation commit: `6b0874b870343cf435099eedf74038bf2e01f58c`  
 Default branch baseline: `45352b73bb6cc4787b2a49988b575afb754ab627`  
 Draft PR: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1  
 Public publishing: **DISABLED**
 
+## Latest implementation checkpoint — 2026-10-24
 
-## Latest acceptance checkpoint — 2026-10-24
+Code and regression-test commit: `6b0874b870343cf435099eedf74038bf2e01f58c`. The three GitHub Actions validation workflows passed on this exact commit: 95 tests passed, 0 failed, 0 skipped in each workflow. [Automation validation and clean install](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083877`), [metadata/schedule validation](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083898`), and [content quality](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083943`). The automation workflow completed `npm ci --ignore-scripts` and installed/audited 46 packages.
+
+The dashboard `/readyz` endpoint now runs the full production-readiness preflight, includes its actionable blockers, and returns HTTP 503 with `ready: false` when owner-controlled or production prerequisites remain unmet. The new regression test verifies this fail-closed behavior. This is not proof of real wildlife media, license authenticity, human playback review, live OAuth identity, or a real YouTube upload. Public publishing remains disabled and PR #1 remains open, draft and unmerged.
+
+
+## Previous acceptance checkpoint (superseded by the latest code checkpoint below) — 2026-10-24
 
 Tested implementation commit: `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`. GitHub Actions ran the full Node suite at this commit: 95 passed, 0 failed, 0 skipped. [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943732), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943766) all passed. The automation workflow also completed `npm ci --ignore-scripts` successfully.
 
