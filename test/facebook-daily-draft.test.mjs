@@ -228,3 +228,33 @@ test("daily generator refuses conflicting retained artifacts for the same local 
     existingDrafts: [first.package, conflict]
   }), /conflicting cross-run drafts/i);
 });
+
+
+test("cross-run history refuses a truncated 500-artifact listing instead of risking duplicate drafts", async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-history-pagination-"));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const api = "https://api.github.test";
+  const calls = [];
+  const fetchImpl = async url => {
+    calls.push(url);
+    const match = /[?&]page=(\\d+)/.exec(url);
+    if (!match) throw new Error("archive download must not begin from incomplete history");
+    return new Response(JSON.stringify({
+      artifacts: Array.from({ length: 100 }, (_, index) => ({
+        id: (Number(match[1]) - 1) * 100 + index + 1,
+        name: "nature-frontiers-facebook-draft-fixture",
+        expired: false,
+        created_at: "2030-10-24T05:00:00Z",
+        workflow_run: { id: 1234 }
+      }))
+    }), { status: 200, headers: { "content-type": "application/json" } });
+  };
+  await assert.rejects(() => restoreFacebookDraftHistory({
+    now: new Date("2030-10-24T06:00:00Z"), fetchImpl,
+    tempDir: path.join(root, "work"), outputPath: path.join(root, "history.json"),
+    repository: "clickerrish-art/YT-AUTO-VISE", token: "test-token",
+    apiBase: api, currentRunId: "9999"
+  }), /500-item safety limit; refusing incomplete history/i);
+  assert.equal(calls.length, 5, "must stop at the bounded listing limit");
+  assert.equal(fs.existsSync(path.join(root, "history.json")), false);
+});
