@@ -5,6 +5,8 @@
  * or whether the words accurately match the audio.
  */
 import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 export function parseSrtTime(value) {
   const match = String(value).match(/^(\d{2}):(\d{2}):(\d{2}),(\d{3})$/);
@@ -49,7 +51,7 @@ export function validateCaptionSync(srt, mediaDurationSeconds, { toleranceSecond
   return errors;
 }
 
-if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const [captionPath, durationArg] = process.argv.slice(2);
   if (!captionPath || durationArg === undefined) {
     console.error("Usage: node scripts/validate-caption-sync.mjs <captions.srt> <expected-duration-seconds>");
