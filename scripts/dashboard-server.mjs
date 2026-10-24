@@ -8,6 +8,7 @@ import { validateCampaigns } from "./validate-campaigns.mjs";
 import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
+import { validatePublicationSlot, localDateTimeToIso } from "./schedule-policy.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = process.env.DASHBOARD_HOST ?? "127.0.0.1";
@@ -221,13 +222,41 @@ function safeItem(item) {
   if (!title || title.length > 100) throw new Error("Title is required and must be at most 100 characters");
   if (!topic || topic.length > 300) throw new Error("Topic is required and must be at most 300 characters");
   if (!["long_form", "short"].includes(contentType)) throw new Error("contentType must be long_form or short");
-  if (!["Tuesday", "Thursday", "Saturday"].includes(scheduledDay)) throw new Error("scheduledDay must match an authorized weekly slot");
-  if ((scheduledDay === "Saturday") !== (contentType === "short")) throw new Error("Saturday is reserved for Shorts; Tuesday and Thursday are long-form");
+  const scheduleConfig = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
+  const configuredSlot = (scheduleConfig.schedule ?? []).find(slot => slot.day === scheduledDay);
+  if (!configuredSlot) throw new Error("scheduledDay must match an authorized weekly slot in the current schedule");
+  if (configuredSlot.format !== contentType) throw new Error("Scheduled day format does not match the authoritative schedule");
+  const scheduledAt = localDateTimeToIso(scheduledDate, "17:00", scheduleConfig.timezone);
   if (item.productUrl !== approvedProductUrl) throw new Error("Destination must be the exact approved Selar URL");
   for (const key of ["rightsConfirmed", "complianceReviewed", "approvedForPrivateUpload", "humanApproved"]) {
     if (item[key] === true) throw new Error("Draft editing cannot grant rights or review approval");
   }
-  return { id, title, topic, contentType, scheduledDay, scheduledDate, reservationType: "SCHEDULED_SLOT", productUrl: approvedProductUrl, status: "DRAFT_REVIEW_REQUIRED", updatedAt: new Date().toISOString() };
+  return { id, title, topic, contentType, scheduledDay, scheduledDate, scheduledAt, reservationType: "SCHEDULED_SLOT", productUrl: approvedProductUrl, status: "DRAFT_REVIEW_REQUIRED", updatedAt: new Date().toISOString() };
+}
+function reservedPublicationSlots(state, excludeItemId = null) {
+  const scheduleConfig = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
+  const slots = [];
+  const dates = new Set();
+  for (const item of state.queueItems ?? []) {
+    if (item.id === excludeItemId || item.reservationType !== "SCHEDULED_SLOT" || !item.scheduledDate || item.status === "CANCELLED") continue;
+    if (dates.has(item.scheduledDate)) continue;
+    dates.add(item.scheduledDate);
+    slots.push({ id: item.id, status: "scheduled", scheduledAt: item.scheduledAt ?? localDateTimeToIso(item.scheduledDate, "17:00", scheduleConfig.timezone) });
+  }
+  for (const job of state.jobs ?? []) {
+    const date = job.scheduledSlot?.date;
+    if (job.kind !== "CONTENT_PRODUCTION" || !date || job.idempotencyKey === "draft:" + excludeItemId || dates.has(date)) continue;
+    dates.add(date);
+    slots.push({ id: "job-" + job.id, status: "scheduled", scheduledAt: localDateTimeToIso(date, "17:00", scheduleConfig.timezone) });
+  }
+  return { scheduleConfig, slots };
+}
+function validateReservedPublicationSlot(proposed, state, excludeItemId = null) {
+  const { scheduleConfig, slots } = reservedPublicationSlots(state, excludeItemId);
+  return validatePublicationSlot(proposed, slots, {
+    timeZone: scheduleConfig.timezone,
+    minSpacingHours: scheduleConfig.minimumPublicationSpacingHours ?? 72
+  });
 }
 const server = http.createServer(async (req, res) => {
   try {
@@ -327,6 +356,8 @@ const server = http.createServer(async (req, res) => {
         const selarCampaign = campaigns.find(c => c.type === "selar_digital_product");
         if (!selarCampaign || selarCampaign.status !== "ACTIVE_FOR_DRAFTS_ONLY" || selarCampaign.destinationUrl !== approvedProductUrl) return json(res, 409, { error: "The approved Selar campaign is inactive; preview and activate it for drafts first" });
         if (state.queueItems.some(existing => existing.id === item.id)) return json(res, 409, { error: "That queue ID already exists" });
+        const spacing = validateReservedPublicationSlot({ id: item.id, scheduledAt: item.scheduledAt }, state);
+        if (!spacing.valid) return json(res, 409, { error: "Schedule slot conflicts with an existing reservation or violates minimum publication spacing", blockers: spacing.errors, publishingEnabled: false });
         const slotFingerprint = item.scheduledDate + ":17:00:Africa/Johannesburg";
         const slotAlreadyReserved = state.jobs.some(existing => existing.kind === "CONTENT_PRODUCTION" && existing.scheduledSlot?.date === item.scheduledDate);
         if (slotAlreadyReserved) return json(res, 409, { error: "This dated schedule slot is already reserved; reuse or edit its existing job", slotFingerprint });
@@ -351,6 +382,12 @@ const server = http.createServer(async (req, res) => {
         if (existing) {
           if (existing.requestFingerprint !== job.requestFingerprint) return json(res, 409, { error: "Idempotency key already exists with different job inputs", job: existing });
           return json(res, 200, { job: existing, reused: true, publishingEnabled: false });
+        }
+        if (job.scheduledSlot?.date) {
+          const scheduleConfig = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
+          const proposedAt = localDateTimeToIso(job.scheduledSlot.date, "17:00", scheduleConfig.timezone);
+          const spacing = validateReservedPublicationSlot({ id: job.id, scheduledAt: proposedAt }, state);
+          if (!spacing.valid) return json(res, 409, { error: "Job schedule conflicts with an existing reservation or violates minimum publication spacing", blockers: spacing.errors, publishingEnabled: false });
         }
         const slotConflict = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.scheduledSlot?.date === job.scheduledSlot.date);
         if (slotConflict) {
@@ -783,6 +820,8 @@ const server = http.createServer(async (req, res) => {
         const index = state.queueItems.findIndex(existing => existing.id === item.id);
         if (index < 0) return json(res, 404, { error: "Queue item not found" });
         const old = state.queueItems[index];
+        const spacing = validateReservedPublicationSlot({ id: item.id, scheduledAt: item.scheduledAt }, state, item.id);
+        if (!spacing.valid) return json(res, 409, { error: "Updated schedule slot conflicts with an existing reservation or violates minimum publication spacing", blockers: spacing.errors, publishingEnabled: false });
         // Ordinary editing cannot grant rights or approval; review flags remain unchanged and cannot be promoted here.
         for (const key of ["rightsConfirmed", "complianceReviewed", "approvedForPrivateUpload", "humanApproved"]) {
           if (Object.hasOwn(item, key) && item[key] !== old[key]) return json(res, 403, { error: "Review and rights fields cannot be changed through draft editing" });
