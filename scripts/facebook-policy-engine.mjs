@@ -121,9 +121,7 @@ export async function evaluateFinalFacebookPayload(payload, {
   if (/(exact GPS|coordinates|nest location|den location|breeding site location)/i.test(payload.caption ?? "") && /(endangered|vulnerable|rare|nest|den|breeding)/i.test(payload.caption ?? "")) add(blockers, "Potentially sensitive wildlife location disclosure");
 
   const claims = Array.isArray(payload.claims) ? payload.claims : [];
-  if (claims.length === 0 && /\b(according to|research shows|scientists found|population|percent|%|endangered|threatened|conservation success|recorded in|was observed|is native to|km|kilometres|million|billion)\b/i.test(payload.caption ?? "")) {
-    add(blockers, "Factual, numerical, conservation, location or time-sensitive language requires structured source records");
-  }
+  if (claims.length === 0) add(blockers, "Wildlife education payload must declare factual claims and source evidence; source-free factual posts are blocked");
   for (let i = 0; i < claims.length; i++) {
     const claim = claims[i];
     if (!text(claim?.text) || !Array.isArray(claim?.sourceUrls) || claim.sourceUrls.length === 0) {
