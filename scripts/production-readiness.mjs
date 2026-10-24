@@ -14,6 +14,21 @@ const queuePath = process.env.QUEUE_PATH ?? "content/queue.json";
 const manifestPath = "content/render-manifest.json";
 const metadataPath = "content/next-short.json";
 const videoPath = "media/next-short.mp4";
+const schedulePath = "config/weekly-content-plan.json";
+if (!exists(schedulePath)) {
+  blockers.push("Authoritative weekly schedule is missing.");
+} else {
+  try {
+    const schedule = JSON.parse(fs.readFileSync(path.resolve(root, schedulePath), "utf8"));
+    if (schedule.timezone !== "Africa/Johannesburg") blockers.push("Schedule timezone must be Africa/Johannesburg.");
+    if (schedule.minimumPublicationSpacingHours !== 72) blockers.push("Schedule minimumPublicationSpacingHours must remain 72.");
+    if (schedule.cadenceDecisionRequired === true) {
+      blockers.push("Owner decision required: the requested 2 long-form + 1 Short weekly target conflicts with the 72-hour minimum; the current two-slot schedule is an interim draft-only fallback.");
+    }
+  } catch {
+    blockers.push("Authoritative weekly schedule is not valid JSON; cadence and spacing cannot be verified.");
+  }
+}
 
 if (!exists(queuePath)) {
   blockers.push("content/queue.json is missing.");
