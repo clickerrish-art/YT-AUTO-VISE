@@ -17,7 +17,7 @@ export function redactOperationalText(value, { env = process.env, roots = [] } =
   }
   output = output.replace(/\bBearer\s+[A-Za-z0-9._~+\/-]{12,}/gi, "Bearer [REDACTED]");
   output = output.replace(/((?:access_token|refresh_token|client_secret|api_key|password)\s*[=:]\s*)(?:"[^"]*"|'[^']*'|[^\s&,;]+)/gi, "$1[REDACTED]");
-  const normalizedRoots = [...new Set((roots ?? []).filter(Boolean).map(root => path.resolve(String(root))))].sort((a, b) => b.length - a.length);
+  const normalizedRoots = [...new Set((roots ?? []).filter(Boolean).map(root => path.resolve(String(root))))].sort((a, b) => a.length - b.length);
   for (const root of normalizedRoots) {
     output = output.split(root).join(root === normalizedRoots.at(-1) ? "<local-path>" : "<local-path>");
   }
