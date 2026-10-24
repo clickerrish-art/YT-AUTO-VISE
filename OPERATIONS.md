@@ -233,3 +233,18 @@ Mock tests do not establish the real Page ID, token validity, permissions, runne
 ## Current release evidence snapshot — 2026-10-24
 
 Current tested code candidate: `9dd102f9636a5ba71c797cf79c104d3616cbe14e`. Exact-SHA automation validation [40122567804](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40122567804) passed with advisories: 205 Node tests passed, 0 failed, 0 skipped; 8 Python safety tests passed; 16 queue topics validated; JavaScript syntax and Python compilation passed. Metadata [40122567802](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40122567802), content quality [40122567799](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40122567799), and locked installation [40122564222](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40122564222) passed. Daily Facebook draft [40122567717](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40122567717) was **SKIPPED** on the PR event and does not prove a default-branch artifact. The restore code now rejects symlinked destination paths before writing, with regression tests in `test/backup-restore.test.mjs`. Four moderate dependency advisories remain. This snapshot is historical for the tested code candidate; see [the current release register](GO_LIVE_BLOCKERS.md) for owner actions and production blockers. This docs-only update is not represented by the run links above; its exact-head CI is recorded in PR #1 after completion. Verdict: **CODE-LEVEL ACCEPTANCE BLOCKED; PRODUCTION ACCEPTANCE BLOCKED**.
+
+
+## Browser end-to-end acceptance
+
+The repository includes a Playwright Chromium workflow that starts the actual local dashboard and backend with an isolated temporary state directory and test-only operator token. It does not call YouTube or Meta APIs, upload media, or publish posts.
+
+Run locally with Node.js 24 (Node.js 22+ is declared by the package):
+
+```sh
+npm ci
+npx playwright install --with-deps chromium
+npm run test:browser
+```
+
+The browser test verifies unauthenticated API rejection, authenticated dashboard connection, schedule/rolling-cycle display from the backend, creation and persistence of a real local draft/job, duplicate-ID rejection, fail-closed readiness, and mobile-width horizontal overflow. This automated browser journey is separate from owner-controlled live integration, rights review, private-upload authorization, Facebook Page verification, and backup/restore drills.
