@@ -1,12 +1,14 @@
 # SonicVhibez Marketing Machine — Acceptance Audit
 
-## Latest code/test checkpoint — 2026-10-24
+## Latest verified code/test checkpoint — 2026-10-24
 
-Code and regression-test commit: `68cb2359628ca069e33f7de905b10183989f53e1`. The three GitHub Actions validation workflows are running for this exact commit: [automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078895025), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078895040), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078895024). The prior code/test commit `6e56b240868c07cb5207fe8fa7f13a8b664be376` passed all three workflows with 99 passed, 0 failed, 0 skipped; `npm ci --ignore-scripts` installed 46 packages and audited 47, and Python compilation passed. The new candidate adds one regression test for Git-ignored local secrets/state/media and is awaiting these final runs.
+The code/test commit `68cb2359628ca069e33f7de905b10183989f53e1` passed all three GitHub Actions validation workflows with 100 passed, 0 failed, 0 skipped in each: [automation validation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078895025), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078895040), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078895024). The automation run completed `npm ci --ignore-scripts` (46 packages added, 47 audited) and Python compilation.
 
-Code additions since the prior checkpoint: upload preflight now verifies the approval-bound rights record hash and current source/licence-file checksums; dashboard audit events use the required `DASHBOARD_OPERATOR_ID`; per-asset rights records retain reviewer and timestamp; `backup:state` and guarded `restore:state` preserve dashboard state/audit, upload attempts/receipts/approvals and retained rights files. Restore validates checksums, requires explicit confirmation, and refuses to overwrite a different existing upload ledger. `.gitignore` excludes local secrets, state, rights documents, backups and generated production media.
+The later documentation checkpoint `b505a260570afb23de637d599868e55376a827aa` also passed all three workflows with 100 passed, 0 failed, 0 skipped: [automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40079034769), [metadata/schedule](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40079034706), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40079034728). It was documentation-only relative to the tested code/test commit.
 
-These automated checks do not prove genuine licence authenticity, real wildlife media or live YouTube upload acceptance. Public publishing remains disabled; PR #1 remains open, draft and unmerged.
+The implemented safeguards include: full production preflight at dashboard readiness; required operator identity in audit events; rights-record hash verification and rechecking retained source/licence file checksums before upload; checksummed backup/restore of state, audit history, rights records, review approvals, upload attempts and receipts; and fail-closed refusal to overwrite a different upload ledger. `.gitignore` excludes local secrets, state, rights records, backups and generated media.
+
+These are automated/code-level checks, not proof of genuine licence authenticity, human playback review, real wildlife renders or a live YouTube upload. Public publishing remains disabled; PR #1 remains open, draft and unmerged.
 
 ## Previous implementation checkpoint (superseded by current code/test checkpoint below) — 2026-10-24
 
