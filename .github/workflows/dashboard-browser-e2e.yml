@@ -1,0 +1,45 @@
+name: Dashboard browser end-to-end acceptance
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - "public/dashboard.html"
+      - "scripts/dashboard-server.mjs"
+      - "scripts/content-job-lifecycle.mjs"
+      - "scripts/schedule-policy.mjs"
+      - "browser-tests/**"
+      - "playwright.config.mjs"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/dashboard-browser-e2e.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dashboard-browser-e2e-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  browser-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out the exact candidate
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          package-manager-cache: false
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+      - name: Install Chromium and operating-system dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Run browser acceptance against the real local dashboard/backend
+        run: npm run test:browser
