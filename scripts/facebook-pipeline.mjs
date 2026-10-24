@@ -68,7 +68,7 @@ export function createFacebookDraft(input, { now = new Date().toISOString(), exp
     destinationPageId, expectedPageId: expectedPageId || null,
     topic: input.topic.trim(), pillar: input.pillar, caption: input.caption.trim(),
     claims: Array.isArray(input.claims) ? structuredClone(input.claims) : [],
-    media, disclosure: String(input.disclosure ?? "").trim(),
+    media, disclosure: String(input.disclosure ?? "").trim(), disclosureRequired: input.disclosureRequired === true,
     scheduledDate, scheduledTime, timezone: FACEBOOK_TIMEZONE, scheduledAt,
     experiment: { slot: scheduledTime, timezone: FACEBOOK_TIMEZONE, assignedAt: now, reason: "Balanced initial 08:00 vs 18:00 experiment; not a claim of optimal timing" },
     status: "DRAFT", complianceVersion: FACEBOOK_COMPLIANCE_VERSION,
