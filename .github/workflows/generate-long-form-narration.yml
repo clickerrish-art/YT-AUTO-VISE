@@ -39,7 +39,7 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: '24'
-$2package-manager-cache: false
+          package-manager-cache: false
       - name: Verify audio files, required text/captions, and report duration
         run: |
           python - <<'PY'
