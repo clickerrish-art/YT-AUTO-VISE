@@ -32,8 +32,8 @@ function collectFiles(dir, relativePrefix, output, { maxBytes = 10 * 1024 * 1024
 
 export async function backupState({ rootDir = root, stateDir = process.env.DASHBOARD_STATE_DIR ?? "state", uploadLogDir = process.env.UPLOAD_LOG_DIR ?? "run-logs", rightsDir = process.env.RIGHTS_EVIDENCE_DIR ?? "rights", outputPath } = {}) {
   const base = path.resolve(rootDir);
-  const stateFile = path.resolve(stateDir, "dashboard-state.json");
-  const logDir = path.resolve(uploadLogDir);
+  const stateFile = path.resolve(base, stateDir, "dashboard-state.json");
+  const logDir = path.resolve(base, uploadLogDir);
   const entries = [];
   const add = (absolute, target, maxBytes = 10 * 1024 * 1024) => {
     if (!fs.existsSync(absolute)) return;
@@ -57,7 +57,7 @@ export async function backupState({ rootDir = root, stateDir = process.env.DASHB
       }
     }
   }
-  const absoluteRights = path.resolve(rightsDir);
+  const absoluteRights = path.resolve(base, rightsDir);
   if (absoluteRights !== base && !absoluteRights.startsWith(base + path.sep)) throw new Error("RIGHTS_EVIDENCE_DIR must be inside the repository root");
   collectFiles(absoluteRights, "rights", entries);
   add(path.join(base, "content", "asset-register.json"), { kind: "rights-evidence", path: "content/asset-register.json" });
