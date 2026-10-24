@@ -427,8 +427,8 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "POST" && url.pathname === "/api/facebook/drafts") {
       const body = await readBody(req);
       const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
-      const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
-      const expectedPageId = config.pageIdentityVerified === true && config.destinationPageId === envPageId ? config.destinationPageId : "";
+      const stateBefore = loadState();
+      const expectedPageId = verifiedFacebookPageId(stateBefore, config);
       const scheduledTime = body.scheduledTime ?? chooseFacebookExperimentSlot({ date: body.scheduledDate, pillar: body.pillar, format: body.format ?? "text" });
       const draft = createFacebookDraft({ ...body, scheduledTime }, { expectedPageId });
       const release = await acquireStateLock();
@@ -454,11 +454,10 @@ const server = http.createServer(async (req, res) => {
       const body = await readBody(req);
       if (typeof body.draftId !== "string") return json(res, 400, { error: "draftId is required" });
       const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
-      const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
-      const expectedPageId = config.pageIdentityVerified === true && config.destinationPageId === envPageId ? config.destinationPageId : "";
       const release = await acquireStateLock();
       try {
         const state = loadState();
+        const expectedPageId = verifiedFacebookPageId(state, config);
         const index = state.facebookDrafts.findIndex(item => item.id === body.draftId);
         if (index < 0) return json(res, 404, { error: "Facebook draft not found" });
         const draft = state.facebookDrafts[index];
@@ -483,8 +482,7 @@ const server = http.createServer(async (req, res) => {
         if (index < 0) return json(res, 404, { error: "Facebook draft not found" });
         const draft = state.facebookDrafts[index];
         const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
-        const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
-        const expectedPageId = config.pageIdentityVerified === true && config.destinationPageId === envPageId ? config.destinationPageId : "";
+        const expectedPageId = verifiedFacebookPageId(state, config);
         const boundDraft = expectedPageId ? { ...draft, expectedPageId } : draft;
         const evaluation = evaluateFacebookDraft(boundDraft, { existingDrafts: state.facebookDrafts.filter(item => item.id !== draft.id), recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root });
         const updated = approveFacebookDraft(boundDraft, { reviewer: operatorId, decision: body.decision, reason: body.reason ?? "", evaluation, now: new Date().toISOString() });
@@ -503,7 +501,8 @@ const server = http.createServer(async (req, res) => {
       const apiVersion = process.env.META_GRAPH_API_VERSION ?? config.apiVersion ?? "v26.0";
       const permissionsConfirmed = process.env.META_PAGE_PERMISSIONS_CONFIRMED === "YES";
       const envPublishingEnabled = process.env.FACEBOOK_PUBLISH_ENABLED === "YES";
-      const expectedPageId = config.pageIdentityVerified === true && config.destinationPageId === envPageId ? config.destinationPageId : "";
+      const initialState = loadState();
+      const expectedPageId = verifiedFacebookPageId(initialState, config);
       const setupBlockers = [];
       if (config.publishingEnabled !== true) setupBlockers.push("config/facebook-publishing.json publishingEnabled must be explicitly enabled by the owner");
       if (config.dryRun !== false) setupBlockers.push("Facebook dryRun must be explicitly disabled by the owner after all checks");
@@ -551,6 +550,7 @@ const server = http.createServer(async (req, res) => {
         const release = await acquireStateLock();
         try {
           const state = loadState();
+          if (verifiedFacebookPageId(state, config) !== expectedPageId) return json(res, 409, { error: "Verified Page identity changed or expired during authorization; verify the Page again" });
           const current = state.facebookDrafts.find(item => item.id === body.draftId);
           if (!current || current.approval?.fingerprint !== draftSnapshot.approval?.fingerprint || current.status !== "APPROVED_DRAFT") return json(res, 409, { error: "Draft or approval changed during Page identity verification; recheck and approve again" });
           const evaluation = evaluateFacebookDraft(current, { existingDrafts: state.facebookDrafts.filter(item => item.id !== current.id && !["REJECTED", "CANCELLED"].includes(item.status)), recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root });
