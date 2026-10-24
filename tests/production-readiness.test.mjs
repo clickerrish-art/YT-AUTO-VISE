@@ -11,7 +11,8 @@ test("readiness report identifies blockers without enabling publishing or failin
   assert.equal(result.status, 0);
   assert.match(result.stdout, /SonicVhibez production readiness/);
   assert.match(result.stdout, /Publication cycle must be long-form, long-form, Short/);
-  assert.match(result.stdout, /LIVE BLOCKER: complete SonicVhibez public, private and unlisted history/);\n  assert.match(result.stdout, /HOLD:/);
+  assert.match(result.stdout, /LIVE BLOCKER: complete SonicVhibez public, private and unlisted history/);
+  assert.match(result.stdout, /HOLD:/);
   assert.match(result.stdout, /public publishing disabled/);
   assert.match(result.stdout, /content\/render-manifest\.json/);
   assert.match(result.stdout, /long-form-render-manifest/);
