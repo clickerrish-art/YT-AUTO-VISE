@@ -47,7 +47,9 @@ These are automated/code-level checks, not proof of genuine licence authenticity
 - Tuesday at 17:00 Africa/Johannesburg: 6–10 minute 16:9 long-form draft.
 - Saturday at 17:00 Africa/Johannesburg: 50–60 second 9:16 Short draft.
 
-The weekly cycle is 96 hours from Tuesday to Saturday and 72 hours from Saturday to the next Tuesday. These are draft-production slots only; inspect the full SonicVhibez upload history and live queue before any publication.
+The active Tuesday/Saturday draft-production cycle is 96 hours then 72 hours. Dashboard draft creation, updates and direct job API requests convert 17:00 local time through the IANA timezone and reject date collisions or gaps below the configured 72-hour minimum. This does not inspect remote YouTube history automatically; that remains mandatory before any publication.
+
+**Owner decision required:** the requested target remains two long-form videos plus one Short per seven days. Three posts in a 168-hour weekly cycle require at least 216 hours to preserve three 72-hour cyclic gaps, so the target is mathematically infeasible. The current one-long-form plus one-Short weekly draft cadence is an interim safety fallback, not a silent change to the requested goal. Keep publishing disabled until the owner resolves the cadence and the remaining production gates.
 - Scheduled GitHub workflows run at 15:00 UTC and must remain draft-only.
 
 Queue backlog items are separate from reserved dated production slots. Duplicate/conflicting reservations are rejected. Do not manually edit the JSON state while the dashboard is running.
