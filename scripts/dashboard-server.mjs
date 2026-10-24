@@ -503,11 +503,19 @@ const server = http.createServer(async (req, res) => {
           if (!Array.isArray(value)) throw new Error("Malformed persistent array");
           return value;
         };
+        const stateFile = name => {
+          if (typeof name !== "string" || !name.trim() || path.isAbsolute(name) || name.includes("\\") ||
+              name.split("/").some(part => !part || part === "." || part === "..")) throw new Error("Unsafe Facebook state filename");
+          const base = path.resolve(configuredStateDir);
+          const resolved = path.resolve(base, name);
+          if (resolved !== base && !resolved.startsWith(base + path.sep)) throw new Error("Facebook state file escapes durable directory");
+          return resolved;
+        };
         const queue = readArray(queuePath);
-        const history = durableStateConfigured ? readArray(path.join(configuredStateDir, "facebook-history.json")) : [];
-        const ledger = durableStateConfigured ? readArray(path.join(configuredStateDir, "facebook-attempt-ledger.json")) : [];
-        const runSummaryPath = durableStateConfigured ? path.join(configuredStateDir, "facebook-run-summary.json") : "";
-        const intakeSummaryPath = durableStateConfigured ? path.join(configuredStateDir, "facebook-intake-summary.json") : "";
+        const history = durableStateConfigured ? readArray(stateFile(config.historyFile ?? "facebook-history.json")) : [];
+        const ledger = durableStateConfigured ? readArray(stateFile(config.attemptLedgerFile ?? "facebook-attempt-ledger.json")) : [];
+        const runSummaryPath = durableStateConfigured ? stateFile("facebook-run-summary.json") : "";
+        const intakeSummaryPath = durableStateConfigured ? stateFile("facebook-intake-summary.json") : "";
         const lastRun = runSummaryPath && fs.existsSync(runSummaryPath) ? JSON.parse(fs.readFileSync(runSummaryPath, "utf8")) : null;
         const lastIntake = intakeSummaryPath && fs.existsSync(intakeSummaryPath) ? JSON.parse(fs.readFileSync(intakeSummaryPath, "utf8")) : null;
         const formatter = new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit" });
