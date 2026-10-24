@@ -1,3 +1,13 @@
+# CURRENT CANDIDATE — 2026-10-24
+
+- Candidate HEAD: `ce61fcbf41bbfb98d964352146b5f2a71e956c4d`; branch `codex/marketing-machine-audit-fixes`; base `main` at `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- PR #1 remains open, draft and unmerged: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1.
+- Exact-candidate CI: [content quality run 40094005063](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40094005063), [automation run 40094005074](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40094005074), and [metadata run 40094005081](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40094005081) all passed. Each reports 142 Node tests passed, 0 failed, 0 skipped. Automation also reports 8 Python safety tests passed plus JavaScript syntax and Python compilation checks. The daily-draft workflow run [40094005156](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40094005156) was intentionally skipped on the PR branch by the default-branch-only guard; it is not a production scheduled-run pass.
+- New cross-run Facebook draft history restore uses read-only GitHub Actions artifact access, validates packages and refuses conflicting/invalid history. History is bounded by the 14-day artifact retention. **Actual restoration has not yet been verified on a default-branch scheduled/manual run.**
+- Status: code/CI checks are verified for this candidate; production acceptance remains blocked. Public YouTube publishing stays disabled. No live Meta post or YouTube upload is claimed.
+
+---
+
 # Current branch status — 2026-10-24
 
 - Verified code/test checkpoint: `4f144038aba80630494292ec63bc221535881459` on `codex/marketing-machine-audit-fixes`; base `main`: `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 was open, draft and unmerged; comparison at this checkpoint was 583 ahead, 0 behind.
