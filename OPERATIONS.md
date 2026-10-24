@@ -106,13 +106,14 @@ Never upload until all checks are complete. Set secrets securely:
 - `YOUTUBE_REFRESH_TOKEN`
 - `SONICVHIBEZ_CHANNEL_ID` (must be independently confirmed via authenticated YouTube API)
 - `CONFIRM_PRIVATE_UPLOAD=YES`
+- `PRIVATE_UPLOAD_AUTHORIZATION_PATH` — a separate one-shot authorization record bound to the exact job ID, final video hash, metadata hash, approval hash and independently verified channel ID
 - `JOB_ID`, `UPLOAD_APPROVAL_PATH`, `METADATA_PATH`, `VIDEO_PATH`
 
-The uploader verifies that the authenticated channel title is exactly SonicVhibez and its ID matches the configured ID. It writes the attempt ledger before remote insert, uses only `privacyStatus: private`, re-fetches the remote video and verifies private visibility and channel ownership. No public or unlisted fallback exists.
+The uploader verifies that the authenticated channel title is exactly SonicVhibez and its ID matches the configured ID. A live insert additionally requires `PRIVATE_UPLOAD_AUTHORIZATION_PATH` containing `decision: AUTHORIZE_ONE_PRIVATE_UPLOAD`, a unique `authorizationId`, the exact `jobId`, `artifactSha256`, `metadataSha256`, `approvalSha256`, verified `channelId`, `visibility: private`, `publishingEnabled: false`, operator identity and a timestamp no older than 24 hours. The authorization ID is persisted in the pre-insert attempt ledger and cannot be reused. The uploader writes the attempt ledger before remote insert, uses only `privacyStatus: private`, re-fetches the remote video and verifies private visibility and channel ownership. No public or unlisted fallback exists.
 
 ## 7. Uncertain upload outcomes and recovery
 
-Attempt ledger: `run-logs/upload-attempts.json`. Receipts: `run-logs/upload-<video-id>.json`.
+Attempt ledger: `run-logs/upload-attempts.json`. Receipts: `run-logs/upload-<video-id>.json`. The uploader also uses `run-logs/upload-operation.lock` to serialize concurrent processes. A crash can leave a stale lock; the system intentionally fails closed and requires an operator to reconcile the ledger and lock before clearing it. Never automatically remove a stale lock or reuse a consumed authorization.
 
 - If an attempt is marked `RECOVERY_REQUIRED`, do not run a new upload attempt for that job/artifact.
 - If the ledger contains a remote video ID, use the reconciliation-only mode (`RECONCILE_ONLY=YES) to fetch that exact remote video, verify the channel and private status, and rebuild the local receipt.
