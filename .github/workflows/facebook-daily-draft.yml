@@ -27,6 +27,9 @@ permissions:
 
 jobs:
   create-draft-package:
+    # Only the default branch may emit a daily package. Push/PR runs validate through CI,
+    # but must not create competing artifacts from an unmerged candidate branch.
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
