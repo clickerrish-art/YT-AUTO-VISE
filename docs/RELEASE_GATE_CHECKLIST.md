@@ -1,13 +1,22 @@
+## Current verified baseline — 2026-10-24
+
+- Current branch/documentation HEAD at the time of this baseline: `3cb5797b3dcbf740a704e150b682143b8d9b29e8`; PR #1 remains open, draft and unmerged against `main`. Recheck this SHA after later commits.
+- All three GitHub Actions validation workflows passed on this exact HEAD, each with 107 passed, 0 failed, 0 skipped: [automation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081817651), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081817641), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081817653).
+- The automation run passed `npm ci --ignore-scripts` (46 packages added, 47 audited) and 8 Python safety tests. The metadata workflow intentionally verifies that `npm run check` fails closed while production metadata remains incomplete; that is a successful safety check, not production readiness. Plain `npm ci` without `--ignore-scripts` remains unverified.
+- Schedule implementation now converts the configured 17:00 local time with IANA timezone rules, validates elapsed-hour gaps and local dates, and applies schedule/spacing checks to dashboard draft creation, draft updates and direct job creation. The current two-slot draft schedule (Tuesday long-form, Saturday Short) has 96-hour and 72-hour cyclic gaps.
+- **Cadence decision remains BLOCKED:** the requested target is two long-form videos plus one Short every seven days. Three cyclic gaps of at least 72 hours require 216 hours, so that target cannot fit in a 168-hour week. The active one-long-form + one-Short schedule is an explicitly labelled interim safety fallback, not a silent replacement of the requested goal. Public publishing remains disabled.
+- Production acceptance remains blocked by genuine rights-cleared source media and manifests, real rendered and fully decoded exports, human review bound to final hashes, secure live SonicVhibez OAuth identity verification, one explicitly authorized private upload with remote private-status receipt, and owner-run restart/backup-restore acceptance. Safari remains inactive until exact HTTPS destination, disclosure and owner approval exist.
+
 # Release gate checklist — SonicVhibez Marketing Machine
 
 ## Current publication-spacing control — 2026-10-24
 
-The authoritative draft plan now has two weekly slots: Tuesday 17:00 SAST (long-form draft) and Saturday 17:00 SAST (Short draft). The cyclic gaps are 96 hours Tuesday-to-Saturday and 72 hours Saturday-to-next-Tuesday. The schedule validator rejects any configured gap below 72 hours, same-day duplicate slots, and multiple active queue items occupying one slot. This is configuration-level enforcement only: complete public/private/unlisted upload history and the live destination queue must still be inspected before any publication operation. Public publishing remains disabled.
+The active interim draft plan has two weekly slots: Tuesday 17:00 SAST (long-form draft) and Saturday 17:00 SAST (Short draft), with 96-hour and 72-hour cyclic gaps. The dashboard enforces timezone-aware timestamp spacing and slot collisions. The requested target remains 2 long-form + 1 Short weekly, which cannot satisfy 72-hour cyclic spacing within 168 hours; owner decision required. The interim schedule does not authorize publication. Complete public/private/unlisted upload history and the live destination queue must still be inspected before any publication operation. Public publishing remains disabled.
 
 
 Keep each item unchecked until evidence has actually been inspected. Automated tests and mocks do not close real-world acceptance gates.
 
-## Latest verified code/test checkpoint — 2026-10-24
+## Historical checkpoint — superseded by the current verified baseline above
 
 The code/test commit `62b1bd599d63c3ab1d55b6a6660740fbf3d44157` passed all three GitHub Actions validation workflows with 100 passed, 0 failed, 0 skipped in each: [automation validation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40079495157), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40079495128), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40079495162). The automation run completed `npm ci --ignore-scripts` (46 packages added, 47 audited) and Python compilation.
 
@@ -63,7 +72,7 @@ Branch HEAD at the latest verified documentation checkpoint: `54680587e71b5c8407
 These CI results do not close owner-controlled media, rights, human playback, OAuth/channel identity, private upload, or operational restore gates. PR #1 remains open, draft and unmerged; public publishing remains disabled. Recheck this section against the current HEAD before relying on it after future commits.
 
 
-## Latest verified implementation checkpoint — 2026-10-24
+## Historical implementation checkpoint — superseded by the current verified baseline above
 
 - Tested code/workflow HEAD: `4ba995bc51ed2ae0513bc312865713a73e0e3160` (timezone-aware local-time conversion plus the 72-hour weekly schedule guard).
 - [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081305593), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081305540), and [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081305556) all passed on that code HEAD. Each ran 106 tests: 106 passed, 0 failed, 0 skipped. Automation also passed `npm ci --ignore-scripts` (46 packages added, 47 audited) and Python safety tests. Metadata validation explicitly confirms that `npm run check` fails closed while real production metadata is incomplete; this is not a release-readiness pass.
