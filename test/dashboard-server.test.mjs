@@ -81,6 +81,8 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const saved = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
   assert.ok(saved.queueItems.some(item => item.id === draft.id));
   assert.ok(saved.audit.some(event => event.action === "DRAFT_CREATED" && event.itemId === draft.id));
+  assert.ok(saved.audit.filter(event => event.itemId === draft.id).every(event => event.actor === "test-owner@example.test"), "audit records must use the configured authenticated operator identity");
+  assert.equal(productionJob.transitionHistory[0].actor, "test-owner@example.test");
   assert.equal(saved.queueItems.find(item => item.id === draft.id).rightsConfirmed, undefined);
   const productionJob = saved.jobs.find(job => job.kind === "CONTENT_PRODUCTION" && job.idempotencyKey === "draft:" + draft.id);
   assert.ok(productionJob);
