@@ -96,10 +96,12 @@ test("dashboard restart moves interrupted Facebook submissions to reconciliation
   fs.writeFileSync(statePath, JSON.stringify({
     version: 1, queueItems: [], campaigns: [], audit: [], jobs: [], uploads: [], facebookDrafts: [], facebookPosts: [],
     facebookAttempts: [
-      { id: "attempt-uncertain", kind: "FACEBOOK_PUBLISH_ATTEMPT", status: "SUBMITTING", retryAllowed: false, remotePostId: null },
+      { id: "attempt-ledger-receipt", kind: "FACEBOOK_PUBLISH_ATTEMPT", status: "SUBMITTING", retryAllowed: false, remotePostId: null },
+      { id: "attempt-no-ledger", kind: "FACEBOOK_PUBLISH_ATTEMPT", status: "SUBMITTING", retryAllowed: false, remotePostId: null },
       { id: "attempt-known-id", kind: "FACEBOOK_PUBLISH_ATTEMPT", status: "REMOTE_SCHEDULED_UNVERIFIED", retryAllowed: false, remotePostId: "123456789012345_987" }
     ]
   }, null, 2) + "\n", { mode: 0o600 });
+  fs.writeFileSync(path.join(stateDir, "facebook-recovery-ledger.jsonl"), JSON.stringify({ attemptId: "attempt-ledger-receipt", remotePostId: "123456789012345_654", status: "NEEDS_RECONCILIATION", reason: "test-only durable receipt", recordedAt: new Date().toISOString() }) + "\n", { mode: 0o600 });
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
     env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "facebook-recovery-owner", DASHBOARD_STATE_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" },
     stdio: ["ignore", "pipe", "pipe"]
@@ -117,7 +119,12 @@ test("dashboard restart moves interrupted Facebook submissions to reconciliation
   }
   assert.equal(ready, true, "dashboard did not start: " + logs);
   const state = JSON.parse(fs.readFileSync(statePath, "utf8"));
-  assert.equal(state.facebookAttempts.find(x => x.id === "attempt-uncertain").status, "NEEDS_RECONCILIATION");
+  const restored = state.facebookAttempts.find(x => x.id === "attempt-ledger-receipt");
+  assert.equal(restored.status, "NEEDS_RECONCILIATION");
+  assert.equal(restored.remotePostId, "123456789012345_654", "append-only recovery ledger restores the remote ID after state write failure");
+  const noLedger = state.facebookAttempts.find(x => x.id === "attempt-no-ledger");
+  assert.equal(noLedger.status, "NEEDS_RECONCILIATION");
+  assert.equal(noLedger.remotePostId, null);
   const known = state.facebookAttempts.find(x => x.id === "attempt-known-id");
   assert.equal(known.status, "NEEDS_RECONCILIATION");
   assert.equal(known.remotePostId, "123456789012345_987", "known remote IDs must survive restart recovery");
