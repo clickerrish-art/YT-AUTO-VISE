@@ -4,8 +4,8 @@ import { assertNoUnresolvedUploadAttempts, validateHistoryReconciliation, assert
 
 const channelId = "UC1234567890123456789012";
 const remoteVideos = [
-  { id: "vid-a", snippet: { publishedAt: "2026-10-01T15:00:00.000Z" }, status: { privacyStatus: "private" } },
-  { id: "vid-b", snippet: { publishedAt: "2026-10-04T15:00:00.000Z" }, status: { privacyStatus: "unlisted" } }
+  { id: "vid-a", snippet: { channelId, publishedAt: "2026-10-01T15:00:00.000Z" }, status: { privacyStatus: "private" } },
+  { id: "vid-b", snippet: { channelId, publishedAt: "2026-10-04T15:00:00.000Z" }, status: { privacyStatus: "unlisted" } }
 ];
 const reconciliation = {
   complete: true, channelId, verifiedBy: "Owner Reviewer", verifiedAt: "2026-10-24T10:00:00.000Z",
@@ -23,6 +23,12 @@ test("history reconciliation binds all public/private/unlisted remote IDs, times
 });
 
 test("history reconciliation fails closed on missing remote videos, duplicate IDs or mismatched timestamps", () => {
+  const wrongChannel = structuredClone(remoteVideos);
+  wrongChannel[0].snippet.channelId = "UC0000000000000000000000";
+  assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos: wrongChannel, reconciliation }), /does not match the authenticated channel ID/);
+  const missingChannel = structuredClone(remoteVideos);
+  delete missingChannel[1].snippet.channelId;
+  assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos: missingChannel, reconciliation }), /does not match the authenticated channel ID/);
   assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos, reconciliation: { ...reconciliation, videos: reconciliation.videos.slice(0, 1) } }), /does not cover every remote channel video/);
   assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos: [...remoteVideos, remoteVideos[0]], reconciliation }), /duplicate video ID/);
   const changed = structuredClone(reconciliation);
