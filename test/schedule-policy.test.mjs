@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validatePublicationSlot, weeklyUtcCronGaps, localDateTimeToIso } from "../scripts/schedule-policy.mjs";
+import { validatePublicationSlot, weeklyUtcCronGaps, localDateTimeToIso, evaluateNextPublication } from "../scripts/schedule-policy.mjs";
 
 test("publication slot compares actual instants and rejects same-local-date and under-72-hour collisions", () => {
   const existing = [
@@ -85,4 +85,51 @@ test("local schedule time conversion follows IANA timezone and daylight-saving r
   assert.equal(localDateTimeToIso("2026-03-07", "17:00", "America/New_York"), "2026-03-07T22:00:00.000Z");
   assert.equal(localDateTimeToIso("2026-03-09", "17:00", "America/New_York"), "2026-03-09T21:00:00.000Z");
   assert.throws(() => localDateTimeToIso("2026-03-08", "02:30", "America/New_York"), /does not exist/);
+});
+
+
+test("rolling cycle accepts exactly 72 elapsed hours and rejects one millisecond below", () => {
+  const history = [{ id: "remote-1", status: "private", actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form" }];
+  const exact = evaluateNextPublication({ history, historyVerified: true, proposedAt: "2026-10-23T15:00:00.000Z", jobId: "job-next", format: "long_form" });
+  assert.equal(exact.valid, true, exact.errors.join("; "));
+  const below = evaluateNextPublication({ history, historyVerified: true, proposedAt: "2026-10-23T14:59:59.999Z", jobId: "job-next", format: "long_form" });
+  assert.equal(below.valid, false);
+  assert.ok(below.errors.some(error => error.includes("72 elapsed hours") || error.includes("below the 72-hour minimum")));
+});
+
+test("rolling cycle advances long-form, long-form, Short and treats private/unlisted videos as history", () => {
+  const history = [
+    { id: "remote-1", status: "private", actualPublishedAt: "2026-10-01T15:00:00.000Z", format: "long_form" },
+    { id: "remote-2", status: "unlisted", actualPublishedAt: "2026-10-04T15:00:00.000Z", format: "long_form" }
+  ];
+  const result = evaluateNextPublication({ history, historyVerified: true, proposedAt: "2026-10-07T15:00:00.000Z", jobId: "job-next", format: "short" });
+  assert.equal(result.valid, true, result.errors.join("; "));
+  assert.equal(result.expectedFormat, "short");
+});
+
+test("rolling cycle fails closed for missing/incomplete history and unresolved upload attempts", () => {
+  assert.equal(evaluateNextPublication({ history: [], historyVerified: false, proposedAt: "2026-10-01T15:00:00Z", jobId: "job-next", format: "long_form" }).valid, false);
+  const unresolved = evaluateNextPublication({
+    history: [{ id: "remote-1", status: "public", actualPublishedAt: "2026-10-01T15:00:00Z", format: "long_form" }],
+    historyVerified: true, pendingAttempts: [{ jobId: "job-uncertain", status: "RECOVERY_REQUIRED" }],
+    proposedAt: "2026-10-04T15:00:00Z", jobId: "job-next", format: "long_form"
+  });
+  assert.equal(unresolved.valid, false);
+  assert.ok(unresolved.errors.some(error => error.includes("unresolved/uncertain outcome")));
+});
+
+test("rolling cycle rejects duplicate remote IDs and timezone-boundary gaps under 72 hours", () => {
+  const duplicates = evaluateNextPublication({
+    history: [{ id: "same-id", status: "public", actualPublishedAt: "2026-10-01T15:00:00Z", format: "long_form" }],
+    historyVerified: true, scheduledItems: [{ id: "same-id", status: "scheduled", scheduledAt: "2026-10-04T15:00:00Z" }],
+    proposedAt: "2026-10-07T15:00:00Z", jobId: "job-next", format: "long_form"
+  });
+  assert.equal(duplicates.valid, false);
+  assert.ok(duplicates.errors.some(error => error.includes("duplicate stable job/remote ID")));
+  const tzGap = validatePublicationSlot(
+    { id: "next", scheduledAt: "2026-10-04T14:59:00Z" },
+    [{ id: "last", status: "private", publishedAt: "2026-10-01T15:00:00Z" }],
+    { timeZone: "Africa/Johannesburg" }
+  );
+  assert.equal(tzGap.valid, false);
 });
