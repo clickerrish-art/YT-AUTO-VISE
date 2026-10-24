@@ -4,6 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { generateDailyFacebookDraft } from "../scripts/generate-facebook-daily-draft.mjs";
+import { validateFacebookHistoryPackage } from "../scripts/restore-facebook-draft-history.mjs";
 
 test("daily Facebook draft package is research-only, timezone-labelled and idempotent", (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-daily-draft-"));
@@ -83,4 +84,28 @@ test("existing daily draft must pass the full research-only schema before idempo
     () => generateDailyFacebookDraft({ date: "2030-10-25", outputDir: root, now: "2030-10-24T06:00:00.000Z" }),
     /research-only safety schema; refusing to overwrite/i
   );
+});
+
+
+test("cross-run history accepts only matching research-only artifact identities", () => {
+  const valid = {
+    schemaVersion: 1,
+    id: "nature-frontiers-daily-2030-10-25",
+    date: "2030-10-25",
+    destination: "nature_frontiers_facebook",
+    destinationPageId: null,
+    timezone: "Africa/Johannesburg",
+    proposedPublicationTime: "08:00",
+    experiment: { slot: "08:00" },
+    publishReady: false,
+    publishingEnabled: false,
+    media: null,
+    rightsEvidence: null,
+    blockers: ["research", "rights", "page verification", "human review"],
+    factualClaims: []
+  };
+  assert.deepEqual(validateFacebookHistoryPackage(valid, "2030-10-25"), valid);
+  assert.throws(() => validateFacebookHistoryPackage({ ...valid, publishReady: true }, "2030-10-25"), /draft-only/i);
+  assert.throws(() => validateFacebookHistoryPackage({ ...valid, destination: "sonicvhibez_youtube" }, "2030-10-25"), /destination\/timezone/i);
+  assert.throws(() => validateFacebookHistoryPackage(valid, "2030-10-26"), /identity/i);
 });
