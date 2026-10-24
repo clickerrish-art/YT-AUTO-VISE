@@ -974,6 +974,10 @@ const server = http.createServer(async (req, res) => {
           const audio = streams.some(stream => stream.codec_type === "audio");
           const isShort = job.contentType === "short";
           if (!Number.isFinite(duration) || (isShort ? duration < 50 || duration > 60 : duration < 360 || duration > 600)) return json(res, 400, { error: "Artifact duration does not match the scheduled format" });
+          const captionSync = spawnSync(process.execPath, ["scripts/validate-caption-sync.mjs", captionsFile, String(duration)], { encoding: "utf8", timeout: 15_000 });
+          if (captionSync.error || captionSync.status !== 0 || !String(captionSync.stdout ?? "").includes("PASS:")) {
+            return json(res, 400, { error: "Caption timings do not fit the actual media duration; regenerate and validate the captions before review" });
+          }
           if (!video || !audio || (isShort ? video.height <= video.width : video.width <= video.height)) return json(res, 400, { error: "Artifact must have the correct orientation and an audio stream" });
           inspectedArtifacts.push({ path: artifact.path, sha256: actualSha, durationSeconds: duration, width: video.width, height: video.height });
         }
