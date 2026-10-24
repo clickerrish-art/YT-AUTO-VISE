@@ -194,3 +194,12 @@ This addendum supersedes the earlier branch-count and test-file notes above wher
 - Browser-driven dashboard acceptance, genuine media and rights review, real YouTube OAuth/channel/history reconciliation, an explicitly authorized private upload, Facebook default-branch draft artifact verification, and owner-controlled recovery/restart drills remain **NOT RUN / BLOCKED**. No external post or upload was performed.
 
 The above is CI evidence for commit `c507b63abfa336165865ad01cf6354ae50254f04`. Any later code or documentation commit requires its own exact-SHA checks before it can be described as the latest verified head. Production remains **BLOCKED**.
+
+
+## Dashboard UI contract regression — 24 October 2026
+
+The dashboard had a stale hardcoded Tuesday/Thursday/Saturday summary even though the authoritative draft-preparation schedule is Tuesday long-form and Saturday Short. Thursday was visibly selectable but rejected by the server. The UI now renders slot/day/format options from `state.schedule.schedule`, displays the rolling cycle and minimum spacing from the same API response, and accurately describes the default-off Meta adapter. Regression coverage is in `test/dashboard-ui-contract.test.mjs`.
+
+Exact candidate `7490e0caa966861ba16a6af023fb45d0914d9a34` passed [automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40129571307): 211 Node tests passed, 0 failed; 8 Python tests passed; clean `npm ci` passed; audit reported 0 vulnerabilities. [Metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40129571317) and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40129571311) also passed. The readiness workflow remains blocked intentionally and the Facebook draft workflow is skipped for PR events.
+
+The UI regression test is not a real browser test. Browser E2E, genuine media/rights review, live YouTube identity/history, authorized private upload, default-branch Facebook draft artifact, and owner-run recovery drills remain unverified. Production acceptance is **BLOCKED**.
