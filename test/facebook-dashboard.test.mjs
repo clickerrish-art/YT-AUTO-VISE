@@ -39,7 +39,10 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   assert.equal(state.publishingEnabled, false);
   assert.equal(state.pageIdentityVerified, false);
   assert.ok(state.blockers.some(item => /Page identity is not independently verified/i.test(item)));
-  assert.ok(state.blockers.some(item => /No live Meta publishing adapter/i.test(item)));
+  assert.ok(state.blockers.some(item => /Meta Page publishing permissions have not been owner-confirmed/i.test(item)));
+  assert.ok(state.blockers.some(item => /publishing kill switches remain disabled/i.test(item)));
+  const verifyPageResponse = await fetch(base + "/api/facebook/verify-page", { method: "POST", headers, body: JSON.stringify({}) });
+  assert.equal(verifyPageResponse.status, 409, "identity verification must fail closed until a numeric Page ID and secure token are configured");
 
   const draft = {
     id: "facebook-dashboard-draft-1", topic: "Wetland biodiversity",
@@ -77,7 +80,8 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   assert.equal(publishResponse.status, 409);
   const publishBody = await publishResponse.json();
   assert.equal(publishBody.publishingEnabled, false);
-  assert.match(publishBody.error, /not implemented or authorized/i);
+  assert.match(publishBody.error, /not ready; no remote mutation was attempted/i);
+  assert.ok(Array.isArray(publishBody.blockers));
 
   const saved = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
   assert.ok(saved.facebookDrafts.some(item => item.id === draft.id));
