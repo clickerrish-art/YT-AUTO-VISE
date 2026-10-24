@@ -38,6 +38,18 @@ jobs:
           refresh=false
           if ! test -f package-lock.json; then
             refresh=true
+          elif node --input-type=module <<'NODE'
+          import fs from "node:fs";
+          const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+          const lock = JSON.parse(fs.readFileSync("package-lock.json", "utf8"));
+          const expected = pkg.dependencies ?? {};
+          const actual = lock.packages?.[""]?.dependencies ?? {};
+          const mismatch = Object.entries(expected).some(([name, version]) => actual[name] !== version)
+            || Object.keys(actual).some(name => !(name in expected));
+          process.exit(mismatch ? 0 : 1);
+          NODE
+          then
+            refresh=true
           elif [ "$EVENT_NAME" = "push" ] && git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" | grep -qx "package.json"; then
             refresh=true
           fi
