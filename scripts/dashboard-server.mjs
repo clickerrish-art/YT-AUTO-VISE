@@ -496,7 +496,7 @@ const server = http.createServer(async (req, res) => {
           Date.now() - Date.parse(connection.verifiedAt) >= 0 && Date.now() - Date.parse(connection.verifiedAt) <= 24 * 60 * 60_000;
         const configEnabled = config.publishingEnabled === true && config.dryRun === false && config.emergencyStop === false &&
           process.env.FACEBOOK_PUBLISH_ENABLED === "YES";
-        const queuePath = process.env.FACEBOOK_AUTONOMOUS_QUEUE_PATH ?? path.join(root, "content/facebook-autonomous-queue.json");
+        const queuePath = String(process.env.FACEBOOK_AUTONOMOUS_QUEUE_PATH ?? "").trim() || (durableStateConfigured ? path.join(configuredStateDir, "facebook-autonomous-queue.json") : path.join(root, "content/facebook-autonomous-queue.json"));
         const readArray = file => {
           if (!fs.existsSync(file)) return [];
           const value = JSON.parse(fs.readFileSync(file, "utf8"));
