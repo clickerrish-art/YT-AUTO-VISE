@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost, fetchMetaPagePost, MetaPageApiError } from "../scripts/meta-page-adapter.mjs";
+import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost, fetchMetaPagePost, reconcileMetaPagePost, MetaPageApiError } from "../scripts/meta-page-adapter.mjs";
 
 const PAGE_ID = "123456789012345";
 const TOKEN = "test-token-never-log-" + "x".repeat(30);
@@ -160,4 +160,64 @@ test("Meta permission verification follows cursor pagination to find the exact m
   assert.equal(result.pageId, PAGE_ID);
   assert.equal(urls.length, 3);
   assert.ok(urls.every(url => !url.includes(userToken) && !url.includes(TOKEN)));
+});
+
+
+test("uncertain Facebook mutation is reconciled against the scheduled-post edge with bounded pagination", async () => {
+  const calls = [];
+  const result = await reconcileMetaPagePost({
+    pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
+    caption: "Exact scheduled caption", scheduledAt: "2026-10-25T06:00:00.000Z",
+    attemptStartedAt: "2026-10-24T10:00:00.000Z",
+    fetchImpl: async url => {
+      calls.push(String(url));
+      if (String(url).includes("/scheduled_posts")) {
+        const u = new URL(url);
+        if (!u.searchParams.has("after")) return response({
+          data: [{ id: PAGE_ID + "_old", message: "Other caption", scheduled_publish_time: 1792908000 }],
+          paging: { next: "redacted", cursors: { after: "next-cursor" } }
+        });
+        assert.equal(u.searchParams.get("after"), "next-cursor");
+        return response({ data: [{
+          id: PAGE_ID + "_confirmed", message: "Exact scheduled caption",
+          created_time: "2026-10-24T10:01:00Z", scheduled_publish_time: String(Date.parse("2026-10-25T06:00:00.000Z") / 1000),
+          permalink_url: "https://www.facebook.com/" + PAGE_ID + "_confirmed"
+        }] });
+      }
+      return response({ data: [] });
+    }
+  });
+  assert.equal(result.outcome, "CONFIRMED");
+  assert.equal(result.receipt.remotePostId, PAGE_ID + "_confirmed");
+  assert.equal(result.receipt.status, "SCHEDULED_VERIFIED");
+  assert.equal(calls.length, 3);
+  assert.ok(calls.every(url => !url.includes(TOKEN)));
+});
+
+test("no reconciliation match is unresolved, never proof that a publish is safe to retry", async () => {
+  const result = await reconcileMetaPagePost({
+    pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
+    caption: "Exact scheduled caption", scheduledAt: "2026-10-25T06:00:00.000Z",
+    attemptStartedAt: "2026-10-24T10:00:00.000Z",
+    fetchImpl: async () => response({ data: [] })
+  });
+  assert.equal(result.outcome, "UNRESOLVED");
+  assert.equal(result.reason, "NO_MATCH_IS_NOT_PROOF_OF_NON_PUBLICATION");
+});
+
+test("multiple matching remote posts remain ambiguous and block retry", async () => {
+  const item = id => ({
+    id: PAGE_ID + "_" + id, message: "Exact scheduled caption",
+    created_time: "2026-10-24T10:01:00Z", scheduled_publish_time: String(Date.parse("2026-10-25T06:00:00.000Z") / 1000)
+  });
+  const result = await reconcileMetaPagePost({
+    pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
+    caption: "Exact scheduled caption", scheduledAt: "2026-10-25T06:00:00.000Z",
+    attemptStartedAt: "2026-10-24T10:00:00.000Z",
+    fetchImpl: async url => String(url).includes("/scheduled_posts")
+      ? response({ data: [item("one"), item("two")] })
+      : response({ data: [] })
+  });
+  assert.equal(result.outcome, "AMBIGUOUS");
+  assert.equal(result.matches.length, 2);
 });
