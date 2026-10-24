@@ -247,3 +247,24 @@ test("publisher defaults to a durable queue in FACEBOOK_STATE_DIR when no queue 
     assert.deepEqual(JSON.parse(fs.readFileSync(durableQueue, "utf8")), []);
   } finally { f.cleanup(); }
 });
+
+
+test("publisher rejects state-ledger symlinks escaping the durable state directory", async () => {
+  const f = setup();
+  const outside = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-state-outside-"));
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false, historyFile: "facebook-history.json" });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    const outsideHistory = path.join(outside, "private-history.json");
+    fs.writeFileSync(outsideHistory, "[]");
+    fs.symlinkSync(outsideHistory, path.join(f.stateDir, "facebook-history.json"));
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) }
+    }), /state file symlink escapes/i);
+  } finally {
+    f.cleanup();
+    fs.rmSync(outside, { recursive: true, force: true });
+  }
+});
