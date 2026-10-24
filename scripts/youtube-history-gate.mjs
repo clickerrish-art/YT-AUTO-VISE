@@ -21,6 +21,7 @@ export function validateHistoryReconciliation({ channelId, remoteVideos, reconci
   const remoteById = new Map();
   for (const video of remoteVideos) {
     if (!video?.id || remoteById.has(video.id)) throw new Error("remote channel history contains a missing or duplicate video ID");
+    if (video.snippet?.channelId !== channelId) throw new Error("remote video channel ID does not match the authenticated channel ID: " + video.id);
     const actualPublishedAt = video.snippet?.publishedAt;
     const visibility = video.status?.privacyStatus;
     if (!Number.isFinite(Date.parse(actualPublishedAt ?? "")) || !allowedVisibility.has(visibility)) throw new Error("remote video is missing an actual publication timestamp or known visibility: " + video.id);
