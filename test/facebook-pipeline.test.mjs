@@ -7,7 +7,7 @@ import crypto from "node:crypto";
 import {
   FACEBOOK_TIMEZONE, createFacebookDraft, evaluateFacebookDraft, similarityRatio,
   approveFacebookDraft, facebookApprovalFingerprint, assertFacebookPublishAllowed,
-  chooseFacebookExperimentSlot, summarizeFacebookExperiment, reconcileFacebookOutcome,
+  chooseFacebookExperimentSlot, summarizeFacebookExperiment, reconcileFacebookOutcome, generateFacebookIdea,
   facebookContentFingerprint
 } from "../scripts/facebook-pipeline.mjs";
 
@@ -48,6 +48,17 @@ test("Facebook draft schedule uses Africa/Johannesburg without server-local offs
   assert.equal(draft.scheduledAt, "2026-10-25T06:00:00.000Z");
   assert.equal(draft.experiment.slot, "08:00");
   assert.equal(draft.publishingEnabled, false);
+});
+
+test("daily idea suggestions avoid existing topics and remain explicitly research-only", () => {
+  const first = generateFacebookIdea({ date: "2030-10-25" });
+  assert.equal(first.publishReady, false);
+  assert.equal(first.factualClaims.length, 0);
+  assert.match(first.captionStarter, /Add one specific, sourced fact/);
+  const second = generateFacebookIdea({ date: "2030-10-25", existingDrafts: [{ topic: first.topic, status: "DRAFT" }] });
+  assert.notEqual(second.topic, first.topic);
+  assert.match(second.researchPrompt, /reliable primary or authoritative source/i);
+  assert.throws(() => generateFacebookIdea({ date: "2030-02-31" }), /date/i);
 });
 
 test("invalid dates, past schedules, bad pillars and display-name-only destinations are rejected", () => {
