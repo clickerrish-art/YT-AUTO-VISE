@@ -20,6 +20,22 @@ jobs:
       - run: node --check test/validate-asset-register.test.mjs
       - run: node --check scripts/validate-schedule.mjs
       - run: npm test
+      - name: Confirm default metadata checker fails closed without owner-reviewed production metadata
+        run: |
+          set +e
+          output=$(npm run check 2>&1)
+          status=$?
+          set -e
+          printf '%s\\n' "$output"
+          if [ "$status" -eq 0 ]; then
+            echo "BLOCKED: default metadata checker unexpectedly passed without a reviewed production metadata file."
+            exit 1
+          fi
+          if [ "$status" -ne 2 ] || ! printf '%s' "$output" | grep -Fq 'BLOCKED: metadata file not found: content/next-short.json'; then
+            echo "BLOCKED: npm run check failed for an unexpected reason (exit $status)."
+            exit 1
+          fi
+          echo "PASS: npm run check fails closed because owner-reviewed production metadata has not been supplied."
       - name: Validate authoritative draft schedule
         run: npm run validate:schedule
       - name: Report production blockers without publishing
