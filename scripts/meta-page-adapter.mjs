@@ -145,11 +145,11 @@ export async function verifyMetaPageIdentity({
 /** Single-request Page post adapter. It deliberately performs no retries. */
 export async function publishMetaPagePost({
   draft, pageId, expectedPageId, accessToken, apiVersion = "v26.0",
-  permissionsConfirmed = false, fetchImpl = fetch, rootDir = process.cwd(), now = Date.now(),
+  permissionsVerified = false, fetchImpl = fetch, rootDir = process.cwd(), now = Date.now(),
   timeoutMs = 30000, probeImage = probeImageFile
 }) {
   validateConfig({ pageId, expectedPageId, accessToken, apiVersion });
-  if (permissionsConfirmed !== true) throw new MetaPageApiError("Owner has not confirmed required Meta Page publishing permissions");
+  if (permissionsVerified !== true) throw new MetaPageApiError("Live Meta Page permissions were not verified before publishing");
   if (!draft || draft.kind !== "FACEBOOK_PAGE_DRAFT" || !draft.caption || !draft.scheduledAt) throw new MetaPageApiError("A complete reviewed Facebook Page draft is required");
   const scheduledMs = Date.parse(draft.scheduledAt);
   if (!Number.isFinite(scheduledMs) || scheduledMs <= now) throw new MetaPageApiError("Facebook scheduled publication time must be in the future");
