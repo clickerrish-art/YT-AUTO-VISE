@@ -41,7 +41,9 @@ Source of truth: `config/weekly-content-plan.json`.
 - Tuesday, 17:00 Africa/Johannesburg: long-form draft, 6–10 minutes, 16:9
 - Saturday, 17:00 Africa/Johannesburg: Short draft, 50–60 seconds, 9:16
 
-The two weekly draft slots are 96 hours apart Tuesday-to-Saturday and 72 hours Saturday-to-next-Tuesday. The validator rejects shorter weekly gaps and queue-slot collisions. Actual upload history must still be checked before any publication.
+These are **interim draft-production slots only**: Tuesday-to-Saturday is 96 hours and Saturday-to-next-Tuesday is 72 hours. The validator and authenticated dashboard API enforce actual elapsed-time gaps and schedule reservations.
+
+**Owner decision required:** the requested target remains two long-form videos plus one Short per seven days. Three posts in a 168-hour weekly cycle with a 72-hour minimum require at least 216 hours, so that target is infeasible. The two-slot schedule is a temporary safety fallback, not a silent change to the requested goal. Public publishing remains disabled until the owner resolves the cadence and all production gates are met.
 - GitHub Actions uses 15:00 UTC and creates drafts only.
 
 ## Useful commands
