@@ -5,9 +5,9 @@
   "timezone": "Africa/Johannesburg",
   "publishingEnabled": false,
   "targetCadence": {
-    "longFormVideosPerWeek": 1,
+    "longFormVideosPerWeek": 2,
     "shortsPerWeek": 1,
-    "totalVideosPerWeek": 2
+    "totalVideosPerWeek": 3
   },
   "schedule": [
     {
@@ -68,5 +68,15 @@
     "shortsPerWeek": 1,
     "totalVideosPerWeek": 3
   },
-  "cadenceDecisionRequired": true
+  "cadenceDecisionRequired": true,
+  "interimDraftCadence": {
+    "longFormVideosPerWeek": 1,
+    "shortsPerWeek": 1,
+    "totalVideosPerWeek": 2,
+    "days": [
+      "Tuesday",
+      "Saturday"
+    ],
+    "status": "DRAFT_ONLY"
+  }
 }
