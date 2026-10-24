@@ -9,6 +9,7 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
+import { assertNoUnresolvedUploadAttempts, fetchCompleteYoutubeHistory, assertNextPublicationAllowed } from "./youtube-history-gate.mjs";
 
 export const APPROVED_SELAR_URL = "https://selar.com/0u19v8u99l";
 export function sha256File(filePath) {
@@ -121,7 +122,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     oauth.setCredentials({ refresh_token: env.YOUTUBE_REFRESH_TOKEN });
     youtube = google.youtube({ version: "v3", auth: oauth });
   }
-  const channel = await youtube.channels.list({ part: ["id", "snippet"], mine: true });
+  const channel = await youtube.channels.list({ part: ["id", "snippet", "contentDetails"], mine: true });
   const authenticatedChannels = channel.data.items ?? [];
   const expectedChannelId = env.SONICVHIBEZ_CHANNEL_ID;
   const matchedChannel = authenticatedChannels.find(item => item.id === expectedChannelId);
@@ -175,6 +176,16 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     prior.updatedAt = timestamp;
     persistJson(ledgerPath, ledger);
     return { receipt, reused: true };
+  }
+
+  // Live uploads require independently reconciled channel history and no unresolved inserts.
+  // Injected clients are reserved for unit tests and never prove live acceptance.
+  if (!youtubeFactory) {
+    assertNoUnresolvedUploadAttempts(ledger);
+    const history = await fetchCompleteYoutubeHistory(youtube, matchedChannel, env.CHANNEL_HISTORY_RECONCILIATION_PATH, expectedChannelId);
+    const format = metadata.contentType ?? metadata.format;
+    if (!["long_form", "short"].includes(format)) throw new Error("metadata must explicitly identify contentType as long_form or short for rolling cycle enforcement");
+    assertNextPublicationAllowed({ history, pendingAttempts: ledger.attempts, proposedAt: now().toISOString(), jobId, format });
   }
   const attempt = {
     attemptId: crypto.randomUUID(), jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256,
