@@ -118,6 +118,19 @@ test("commercial disclosures, approved Selar destination and high-impact claims 
   assert.equal(healthClaim.ok, false);
 });
 
+test("approval fingerprint changes when factual sources or licensing provenance changes", (t) => {
+  const { draft } = fixture(t);
+  const base = facebookApprovalFingerprint(draft);
+  assert.notEqual(facebookApprovalFingerprint({ ...draft, claims: [{ text: "Different claim", sourceUrls: ["https://example.org/source"], verified: true }] }), base);
+  assert.notEqual(facebookApprovalFingerprint({ ...draft, media: { ...draft.media, provenance: "Different source provenance" } }), base);
+  assert.notEqual(facebookApprovalFingerprint({ ...draft, media: { ...draft.media, licenseEvidencePath: "other-license.txt" } }), base);
+  assert.notEqual(facebookApprovalFingerprint({ ...draft, media: { ...draft.media, commercialPermission: false } }), base);
+  assert.notEqual(facebookApprovalFingerprint({ ...draft, media: { ...draft.media, attributionRequired: true, attributionText: "Credit source" } }), base);
+  assert.notEqual(facebookApprovalFingerprint({ ...draft, media: { ...draft.media, syntheticOrAltered: true, disclosureApplied: true } }), base);
+  // Claim ordering alone is not a material change.
+  assert.equal(facebookApprovalFingerprint({ ...draft, claims: [...draft.claims].reverse() }), base);
+});
+
 test("human approval is bound to final content, media, disclosure, destination and time", (t) => {
   const { root, draft } = fixture(t);
   const evaluation = evaluateFacebookDraft(draft, { expectedPageId: "123456789012345", rightsRoot: root });
