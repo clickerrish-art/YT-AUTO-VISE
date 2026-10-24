@@ -98,7 +98,8 @@ export async function evaluateFinalFacebookPayload(payload, {
   maxPostsPerLocalDay = 1,
   minimumIntervalMinutes = 60 * 20,
   timezone = "Africa/Johannesburg",
-  sourceTimeoutMs = 8000
+  sourceTimeoutMs = 8000,
+  semanticVerifier = null
 } = {}) {
   const blockers = [], warnings = [], sourceChecks = [], rightsChecks = [], disclosureChecks = [], destinationChecks = [];
   const add = (list, reason) => { if (!list.includes(reason)) list.push(reason); };
@@ -131,6 +132,7 @@ export async function evaluateFinalFacebookPayload(payload, {
       continue;
     }
     const checks = [];
+    const sourceBodies = [];
     for (const sourceUrl of claim.sourceUrls) {
       if (!urlIsSafe(sourceUrl)) {
         checks.push({ url: String(sourceUrl), passed: false, reason: "URL_NOT_SAFE_HTTPS" });
@@ -149,6 +151,7 @@ export async function evaluateFinalFacebookPayload(payload, {
         const finalUrl = response.url || sourceUrl;
         const reachable = response.ok && urlIsSafe(finalUrl) && new URL(finalUrl).hostname === new URL(sourceUrl).hostname;
         const body = reachable && typeof response.text === "function" ? await response.text() : "";
+        if (body) sourceBodies.push({ url: sourceUrl, text: body.slice(0, 1_000_000) });
         const excerpt = normalized(claim.sourceExcerpt);
         const excerptFound = excerpt.length >= 25 && normalized(body).includes(excerpt);
         const passed = reachable && excerptFound;
@@ -157,9 +160,32 @@ export async function evaluateFinalFacebookPayload(payload, {
         checks.push({ url: sourceUrl, passed: false, reason: "SOURCE_CHECK_FAILED" });
       }
     }
-    const passed = checks.some(check => check.passed && check.excerptFound === true) && claim.sourceSupportsClaim === true && claim.verified === true;
-    sourceChecks.push({ claimIndex: i, claim: claim.text, checks, passed, reason: passed ? "SOURCE_CHECK_PASSED_WITH_DECLARED_CLAIM_SUPPORT" : "SOURCE_DOES_NOT_VERIFIABLY_SUPPORT_CLAIM" });
-    if (!passed) add(blockers, `Claim ${i + 1} is not supported by a reachable, allowlisted source explicitly recorded as supporting it`);
+    let semanticResult = { verified: false, reason: "NO_TRUSTED_SEMANTIC_VERIFIER_CONFIGURED" };
+    if (typeof semanticVerifier === "function" && checks.some(check => check.passed && check.excerptFound === true)) {
+      try {
+        const verification = await semanticVerifier({
+          claimText: claim.text, sourceUrls: claim.sourceUrls, sourceExcerpt: claim.sourceExcerpt,
+          sourceBodies, finalCaption: payload.caption, checkedAt: now
+        });
+        const claimHash = sha256(String(claim.text));
+        const sourceUrlsHash = sha256(JSON.stringify(claim.sourceUrls));
+        const verified = verification?.verified === true && verification.claimHash === claimHash &&
+          verification.sourceUrlsHash === sourceUrlsHash && text(verification.verifierId) &&
+          Number.isFinite(Date.parse(verification.checkedAt));
+        semanticResult = {
+          verified, verifierId: text(verification?.verifierId) ? verification.verifierId : null,
+          checkedAt: Number.isFinite(Date.parse(verification?.checkedAt)) ? verification.checkedAt : null,
+          reason: verified ? "TRUSTED_SEMANTIC_VERIFIER_CONFIRMED_CLAIM_HASH_AND_SOURCE_SET" : "SEMANTIC_VERIFICATION_FAILED_OR_UNBOUND"
+        };
+      } catch {
+        semanticResult = { verified: false, reason: "SEMANTIC_VERIFIER_FAILED" };
+      }
+    }
+    const passed = checks.some(check => check.passed && check.excerptFound === true) &&
+      semanticResult.verified === true && claim.sourceSupportsClaim === true && claim.verified === true;
+    sourceChecks.push({ claimIndex: i, claim: claim.text, checks, semanticVerification: semanticResult, passed,
+      reason: passed ? "SOURCE_AND_TRUSTED_SEMANTIC_CHECK_PASSED" : "SOURCE_EXCERPT_ALONE_IS_NOT_PROOF_OF_CLAIM_SUPPORT" });
+    if (!passed) add(blockers, `Claim ${i + 1} lacks a reachable source and trusted semantic verification; a URL or excerpt alone is not proof`);
     if (claim.kind === "quote" && claim.quoteVerified !== true) add(blockers, `Claim ${i + 1} contains an unverified quotation`);
   }
 
