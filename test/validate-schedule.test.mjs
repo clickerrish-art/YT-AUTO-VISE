@@ -60,7 +60,7 @@ test("schedule validator rejects wrong format, duration and unsafe publishing", 
   const format = runWithPlanMutation(plan => { plan.schedule[0].format = "short"; });
   assert.notEqual(format.status, 0);
   assert.match(format.stderr, /Tuesday format must be long_form/);
-  const duration = runWithPlanMutation(plan => { plan.schedule[2].targetDurationSeconds.max = 75; });
+  const duration = runWithPlanMutation(plan => { plan.schedule[1].targetDurationSeconds.max = 75; });
   assert.notEqual(duration.status, 0);
   assert.match(duration.stderr, /Saturday Short must target 50–60 seconds/);
   const publishing = runWithPlanMutation(plan => { plan.publishingEnabled = true; });
