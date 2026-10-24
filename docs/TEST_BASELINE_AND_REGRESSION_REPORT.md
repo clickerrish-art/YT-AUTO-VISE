@@ -1,12 +1,14 @@
-## Current branch-head verification — 2026-10-24
+## Verified code/test checkpoint and documentation-refresh status — 2026-10-24
 
-- Current implementation HEAD: `703a7d380a63f0d379ca17f0b920279597ea58be`; base `main`: `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 remains open, draft and unmerged. Live compare currently reports 486 commits ahead and 0 behind; history is not rewritten.
-- All three validation workflows passed on this exact HEAD: [automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40084232036), [metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40084232050), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40084232178). Their logs show the Node test suite at 112 passed, 0 failed, 0 skipped. Python safety tests and syntax/compilation checks also passed in automation validation.
-- The [lockfile workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40084228825) passed on the same HEAD, including `npm ci --ignore-scripts`, Node tests, schedule/campaign validation and syntax checks. This does **not** establish that plain `npm ci` without `--ignore-scripts` is safe or supported.
-- The successful metadata workflow deliberately verifies that production metadata remains blocked until reviewed inputs exist. Passing that fail-closed check is not production readiness.
-- **Release status remains BLOCKED.** The 2-long-form + 1-Short weekly target conflicts with 72-hour cyclic spacing (216 hours required within a 168-hour week). Keep the Tuesday/Saturday 1+1 arrangement interim and draft-only pending the owner’s cadence decision. Public publishing remains disabled.
-- Real media exports, retained rights evidence, human playback approval bound to final hashes, secure live SonicVhibez OAuth verification, a separately authorized private upload with remotely verified private status and durable receipt, and owner-run restart/backup-restore acceptance remain external release gates. Safari remains inactive pending exact HTTPS destination, truthful disclosure and explicit owner approval.
-- Historical checkpoints below remain historical and must not be interpreted as tests of the current HEAD.
+- The most recent code/test checkpoint is `703a7d380a63f0d379ca17f0b920279597ea58be`; it passed all three validation workflows: [automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40084232036), [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40084232050), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40084232178). Logs show 112 Node tests passed, 0 failed, 0 skipped; Python safety tests and syntax/compilation checks also passed.
+- A subsequent documentation-only refresh on this branch updated the evidence sections. Its current branch HEAD and its own CI runs are recorded in PR #1; do not mistake the code/test checkpoint above for the documentation commit SHA.
+- The [lockfile workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40084228825) passed on the code/test checkpoint, including `npm ci --ignore-scripts`, Node tests, schedule/campaign validation and syntax checks. Plain `npm ci` without `--ignore-scripts` remains unverified.
+- The latest verified automation audit reports four moderate npm advisories involving `gaxios`, `googleapis`, `googleapis-common` and `uuid`, with no high/critical findings. The available Google API client fix is a major version upgrade and needs compatibility testing. Do not describe dependencies as vulnerability-free.
+- Production acceptance remains blocked by the cadence decision, genuine rights-cleared media and manifests, full decode and human playback review bound to final hashes, secure live SonicVhibez OAuth identity verification, one explicitly authorized private upload with a remotely verified private-status receipt, and owner-run restart/backup-restore acceptance. Safari remains inactive until exact HTTPS destination, truthful disclosure and explicit owner approval exist.
+- Public publishing remains disabled. The Tuesday/Saturday 1-long-form + 1-Short schedule is an interim draft-only fallback; the requested 2-long-form + 1-Short weekly cadence conflicts with 72-hour cyclic spacing and requires an explicit owner decision.
+
+## Historical checkpoint — superseded by the verified code/test checkpoint above
+
 
 ## Historical checkpoint — superseded by current branch-head verification
 
