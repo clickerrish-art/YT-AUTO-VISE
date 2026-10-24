@@ -86,3 +86,14 @@ test("intake creates the durable state-directory queue when no queue override is
     assert.deepEqual(JSON.parse(fs.readFileSync(durableQueue, "utf8")), []);
   } finally { f.cleanup(); }
 });
+
+
+test("intake fails closed when the durable posting lock is already held", async () => {
+  const f = fixture();
+  try {
+    fs.writeFileSync(path.join(f.rootDir, f.candidatePath), "[]");
+    fs.writeFileSync(path.join(f.stateDir, "facebook-publishing.lock"), JSON.stringify({ pid: 1, startedAt: "2026-10-24T10:00:00Z" }));
+    await assert.rejects(() => runFacebookContentIntake({ ...f, rootDir: f.rootDir }), /EEXIST|file already exists/i);
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(f.rootDir, f.queuePath), "utf8")), []);
+  } finally { f.cleanup(); }
+});
