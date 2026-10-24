@@ -154,3 +154,31 @@ test("reconciled successful upload ledger entries do not count as future schedul
   assert.equal(result.valid, true, result.errors.join("; "));
   assert.equal(result.expectedFormat, "long_form");
 });
+
+
+test("publication timestamps reject normalized invalid dates, missing zones, and malformed offsets", () => {
+  const base = { history: [{ id: "remote-1", status: "private", actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form" }], historyVerified: true, jobId: "next", format: "long_form" };
+  for (const proposedAt of [
+    "2026-02-30T15:00:00Z",
+    "2026-10-23T15:00:00",
+    "2026-10-23 15:00:00Z",
+    "2026-10-23T15:00:00+14:30",
+    "not-a-date"
+  ]) {
+    const result = evaluateNextPublication({ ...base, proposedAt });
+    assert.equal(result.valid, false, `must reject malformed timestamp: ${proposedAt}`);
+    assert.ok(result.errors.some(error => error.includes("proposedAt must be a valid ISO timestamp with explicit timezone")));
+  }
+});
+
+test("history timestamps with invalid calendar dates fail closed instead of normalizing", () => {
+  const result = evaluateNextPublication({
+    history: [{ id: "remote-1", status: "private", actualPublishedAt: "2026-02-30T15:00:00Z", format: "long_form" }],
+    historyVerified: true,
+    proposedAt: "2026-10-23T15:00:00Z",
+    jobId: "next",
+    format: "long_form"
+  });
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some(error => error.includes("history item remote-1 is missing a verified actual ISO timestamp with timezone")));
+});
