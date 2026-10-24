@@ -12,9 +12,30 @@ function localDateKey(timestamp, timeZone) {
   }).format(new Date(timestamp));
 }
 
+function parseStrictTimestamp(value) {
+  if (typeof value === "number") return Number.isFinite(value) ? value : NaN;
+  if (typeof value !== "string") return NaN;
+  const match = value.match(/^(\\d{4})-(\\d{2})-(\\d{2})T([01]\\d|2[0-3]):([0-5]\\d):([0-5]\\d)(?:\\.(\\d{1,3}))?(Z|([+-])(\\d{2}):(\\d{2}))$/);
+  if (!match) return NaN;
+  const [, yearText, monthText, dayText, hourText, minuteText, secondText, fraction = "", zone, sign, offsetHourText, offsetMinuteText] = match;
+  const year = Number(yearText), month = Number(monthText), day = Number(dayText);
+  const hour = Number(hourText), minute = Number(minuteText), second = Number(secondText);
+  const calendar = new Date(0);
+  calendar.setUTCFullYear(year, month - 1, day);
+  calendar.setUTCHours(hour, minute, second, Number(fraction.padEnd(3, "0")));
+  if (calendar.getUTCFullYear() !== year || calendar.getUTCMonth() !== month - 1 || calendar.getUTCDate() !== day
+      || calendar.getUTCHours() !== hour || calendar.getUTCMinutes() !== minute || calendar.getUTCSeconds() !== second) return NaN;
+  if (zone !== "Z") {
+    const offsetHour = Number(offsetHourText), offsetMinute = Number(offsetMinuteText);
+    if (offsetHour > 14 || offsetMinute > 59 || (offsetHour === 14 && offsetMinute !== 0)) return NaN;
+  }
+  const timestamp = Date.parse(value);
+  return Number.isFinite(timestamp) ? timestamp : NaN;
+}
+
 function asTimestamp(value, label) {
-  const timestamp = typeof value === "number" ? value : Date.parse(value);
-  if (!Number.isFinite(timestamp)) throw new Error(`${label} must be a valid ISO timestamp or epoch milliseconds`);
+  const timestamp = parseStrictTimestamp(value);
+  if (!Number.isFinite(timestamp)) throw new Error(`${label} must be a valid ISO timestamp with an explicit timezone or epoch milliseconds`);
   return timestamp;
 }
 
@@ -180,11 +201,12 @@ export function evaluateNextPublication({
     }
     const status = String(item.status ?? item.visibility ?? "").toLowerCase();
     const timestamp = item.actualPublishedAt ?? item.publishedAt ?? item.createdAt;
-    if (!timestamp || !Number.isFinite(Date.parse(timestamp))) {
-      errors.push(`history item ${item.id} is missing a verified actual timestamp`);
+    const parsedTimestamp = parseStrictTimestamp(timestamp);
+    if (!Number.isFinite(parsedTimestamp)) {
+      errors.push(`history item ${item.id} is missing a verified actual ISO timestamp with timezone`);
       return null;
     }
-    return { id: String(item.id), status, timestamp: Date.parse(timestamp), format: item.format ?? item.contentType ?? null };
+    return { id: String(item.id), status, timestamp: parsedTimestamp, format: item.format ?? item.contentType ?? null };
   }).filter(Boolean);
   for (const attempt of pendingAttempts) {
     const status = String(attempt?.status ?? "").toLowerCase();
@@ -207,7 +229,8 @@ export function evaluateNextPublication({
     if (item?.id) ids.add(String(item.id));
   }
   if (!jobId || typeof jobId !== "string" || !jobId.trim()) errors.push("proposed publication requires a stable job ID");
-  if (!Number.isFinite(Date.parse(proposedAt ?? ""))) errors.push("proposedAt must be a valid timestamp");
+  const proposedTimestamp = parseStrictTimestamp(proposedAt);
+  if (!Number.isFinite(proposedTimestamp)) errors.push("proposedAt must be a valid ISO timestamp with explicit timezone");
   const actualSorted = normalizedHistory.sort((a, b) => a.timestamp - b.timestamp);
   const latestActual = actualSorted.at(-1);
   const expectedFormat = ROLLING_PUBLICATION_FORMATS[actualSorted.length % ROLLING_PUBLICATION_FORMATS.length];
@@ -232,10 +255,10 @@ export function evaluateNextPublication({
         scheduledAt: item?.scheduledAt ?? item?.createdAt
       }))
   ];
-  if (Number.isFinite(Date.parse(proposedAt ?? ""))) {
+  if (Number.isFinite(proposedTimestamp)) {
     const spacing = validatePublicationSlot(candidate, existing, { timeZone, minSpacingHours });
     errors.push(...spacing.errors);
-    if (latestActual && (Date.parse(proposedAt) - latestActual.timestamp) / 3_600_000 < minSpacingHours) {
+    if (latestActual && (proposedTimestamp - latestActual.timestamp) / 3_600_000 < minSpacingHours) {
       errors.push("proposed publication is less than 72 elapsed hours after the latest actual channel publication");
     }
   }
