@@ -32,6 +32,14 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(initial.status, 200);
   const body = await initial.json();
   assert.equal(body.publishingEnabled, false);
+  const readinessResponse = await fetch(base + "/readyz");
+  const readiness = await readinessResponse.json();
+  assert.equal(readinessResponse.status, 503, "production readiness must fail closed while owner-controlled prerequisites are missing");
+  assert.equal(readiness.ready, false);
+  assert.equal(readiness.publishingEnabled, false);
+  assert.ok(Array.isArray(readiness.blockers));
+  assert.ok(readiness.blockers.some(item => /long-form render manifest/i.test(item)));
+  assert.ok(readiness.blockers.some(item => /channel ID/i.test(item)));
   const noPriorReconcile = await fetch(base + "/api/uploads/reconcile", { method: "POST", headers, body: JSON.stringify({ jobId: "no-prior-job", videoPath: "README.md", metadataPath: "README.md", approvalPath: "README.md" }) });
   const noPriorBody = await noPriorReconcile.json();
   assert.equal(noPriorReconcile.status, 409, JSON.stringify(noPriorBody));
