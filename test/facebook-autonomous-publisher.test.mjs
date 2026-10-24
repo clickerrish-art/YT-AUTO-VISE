@@ -59,3 +59,78 @@ test("live mode refuses to run without secure Meta credentials", async () => {
     }), /access tokens are missing/i);
   } finally { f.cleanup(); }
 });
+
+
+test("uncertain mutation is reconciled and a unique verified receipt is persisted without retry", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const now = Date.parse("2026-10-25T05:30:00.000Z");
+    const payload = {
+      slotId: "nature-frontiers-2026-10-25-0800",
+      destination: "nature_frontiers_facebook",
+      destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25",
+      scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Educational wildlife habitat note.",
+      links: [], media: [], claims: [], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    let mutationCalls = 0, reconciliationCalls = 0;
+    const result = await runAutonomousFacebookPublisher({
+      configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now,
+      env: { META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true }),
+      verifyIdentity: async () => ({ verified: true }),
+      policyEvaluator: async () => ({ eligible: true, blockers: [], warnings: [], contentFingerprint: "c".repeat(64), policyRuleVersion: f.config.complianceRuleSet, mediaFingerprints: [], reason: "ELIGIBLE" }),
+      publish: async () => { mutationCalls++; const error = new Error("timeout after server mutation"); error.uncertain = true; throw error; },
+      reconcileRemote: async () => {
+        reconciliationCalls++;
+        return { outcome: "CONFIRMED", receipt: { status: "SCHEDULED_VERIFIED", remotePostId: "123456789012345_999", remoteUrl: "https://www.facebook.com/123456789012345_999", createdTime: "2026-10-25T05:30:00Z", scheduledPublishTime: Date.parse(payload.scheduledAt) / 1000 } };
+      },
+      readRemote: async () => { throw new Error("normal read path must not be used after the mutation throws"); }
+    });
+    assert.equal(result.published, 1);
+    assert.equal(mutationCalls, 1);
+    assert.equal(reconciliationCalls, 1);
+    const ledger = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), "utf8"));
+    const history = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-history.json"), "utf8"));
+    assert.equal(ledger[0].status, "SCHEDULED_VERIFIED");
+    assert.equal(ledger[0].remotePostId, "123456789012345_999");
+    assert.equal(ledger[0].verifiedRemotely, true);
+    assert.equal(history[0].remotePostId, "123456789012345_999");
+  } finally { f.cleanup(); }
+});
+
+test("unresolved mutation remains durably uncertain and is never retried", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const now = Date.parse("2026-10-25T05:30:00.000Z");
+    const payload = {
+      slotId: "nature-frontiers-2026-10-25-0800",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Educational wildlife habitat note.", links: [], media: [], claims: [], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    let mutationCalls = 0;
+    const result = await runAutonomousFacebookPublisher({
+      configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now,
+      env: { META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true }),
+      verifyIdentity: async () => ({ verified: true }),
+      policyEvaluator: async () => ({ eligible: true, blockers: [], warnings: [], contentFingerprint: "d".repeat(64), policyRuleVersion: f.config.complianceRuleSet, mediaFingerprints: [], reason: "ELIGIBLE" }),
+      publish: async () => { mutationCalls++; const error = new Error("timeout"); error.uncertain = true; throw error; },
+      reconcileRemote: async () => ({ outcome: "UNRESOLVED", reason: "NO_MATCH_IS_NOT_PROOF_OF_NON_PUBLICATION", matches: [] })
+    });
+    assert.equal(result.skipped, 1);
+    assert.equal(mutationCalls, 1);
+    const ledger = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), "utf8"));
+    assert.equal(ledger[0].status, "UNCERTAIN");
+    assert.equal(ledger[0].retryAllowed, false);
+    assert.equal(ledger[0].reconciliation.outcome, "UNRESOLVED");
+  } finally { f.cleanup(); }
+});
