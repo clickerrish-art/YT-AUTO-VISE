@@ -31,6 +31,7 @@ The dashboard refuses to start without its operator token and binds to `127.0.0.
 The initial Nature Frontiers Facebook workflow is **draft-only**. The current implementation adds authenticated API routes for inspecting Facebook readiness, creating a draft, rechecking compliance and recording human review:
 
 - `GET /api/facebook/state`
+- `GET /api/facebook/idea?date=YYYY-MM-DD` — returns a research-first idea with placeholders; never publish-ready
 - `POST /api/facebook/drafts`
 - `POST /api/facebook/drafts/evaluate`
 - `POST /api/facebook/drafts/approve`
