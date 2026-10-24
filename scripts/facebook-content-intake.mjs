@@ -60,6 +60,14 @@ export async function runFacebookContentIntake({
   }
   fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
   const config = readJson(configPath);
+  const stateFile = name => {
+    if (typeof name !== "string" || !name.trim() || path.isAbsolute(name) || name.includes("\\\\") ||
+        name.split("/").some(part => !part || part === "." || part === "..")) throw new Error("Unsafe Facebook state filename");
+    const base = path.resolve(stateDir);
+    const resolved = path.resolve(base, name);
+    if (resolved !== base && !resolved.startsWith(base + path.sep)) throw new Error("Facebook state file escapes durable directory");
+    return resolved;
+  };
   if (config.destination !== "nature_frontiers_facebook" || config.timezone !== "Africa/Johannesburg" ||
       config.autonomousMode !== true || config.autonomousSchedulingEnabled !== true ||
       config.complianceRuleSet !== "nf-facebook-autonomous-policy-2026-10-v1") {
@@ -72,7 +80,7 @@ export async function runFacebookContentIntake({
   const candidates = readJson(candidateFile);
   const existingQueue = fs.existsSync(queueFile) ? readJson(queueFile) : [];
   if (!Array.isArray(candidates) || !Array.isArray(existingQueue)) throw new Error("Facebook intake candidates and queue must be JSON arrays");
-  const historyFile = path.join(stateDir, "facebook-history.json");
+  const historyFile = stateFile(config.historyFile ?? "facebook-history.json");
   const history = fs.existsSync(historyFile) ? readJson(historyFile) : [];
   if (!Array.isArray(history)) throw new Error("Persistent Facebook history is malformed; intake blocked");
   const queue = [...existingQueue];
