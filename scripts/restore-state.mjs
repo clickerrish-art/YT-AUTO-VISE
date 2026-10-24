@@ -11,12 +11,12 @@ const isInvoked = process.argv[1] && import.meta.url === pathToFileURL(path.reso
 
 function targetPath(target, { rootDir = root, stateDir = process.env.DASHBOARD_STATE_DIR ?? "state", uploadLogDir = process.env.UPLOAD_LOG_DIR ?? "run-logs", rightsDir = process.env.RIGHTS_EVIDENCE_DIR ?? "rights" } = {}) {
   const base = path.resolve(rootDir);
-  const logDir = path.resolve(uploadLogDir);
+  const logDir = path.resolve(base, uploadLogDir);
   if (!target || typeof target.path !== "string" || target.path.includes("\\") || target.path.split("/").some(part => !part || part === "." || part === "..")) throw new Error("Backup contains an unsafe target path");
   switch (target.kind) {
     case "dashboard-state":
       if (target.path !== "dashboard-state.json") throw new Error("Invalid dashboard-state backup target");
-      return path.resolve(stateDir, "dashboard-state.json");
+      return path.resolve(base, stateDir, "dashboard-state.json");
     case "upload-ledger":
       if (target.path !== "upload-attempts.json") throw new Error("Invalid upload-ledger backup target");
       return path.join(logDir, "upload-attempts.json");
@@ -30,12 +30,12 @@ function targetPath(target, { rootDir = root, stateDir = process.env.DASHBOARD_S
       const allowed = target.path === "content/asset-register.json" || target.path.startsWith("rights/");
       if (!allowed) throw new Error("Rights-evidence backup target is outside the allowed evidence folders");
       const destination = path.resolve(base, target.path);
-      const evidenceRoot = path.resolve(rightsDir);
-      if (target.path.startsWith("rights/") && evidenceRoot !== base && !evidenceRoot.startsWith(base + path.sep) && !base.startsWith(evidenceRoot + path.sep)) {
-        throw new Error("Configured rights evidence directory is not compatible with the repository root");
-      }
-      if (destination !== base && !destination.startsWith(base + path.sep)) throw new Error("Backup target escapes repository root");
-      return destination;
+      if (target.path === "content/asset-register.json") return destination;
+      const evidenceRoot = path.resolve(base, rightsDir);
+      if (evidenceRoot !== base && !evidenceRoot.startsWith(base + path.sep)) throw new Error("RIGHTS_EVIDENCE_DIR must remain inside the repository root");
+      const evidenceDestination = path.resolve(evidenceRoot, target.path.slice("rights/".length));
+      if (evidenceDestination !== evidenceRoot && !evidenceDestination.startsWith(evidenceRoot + path.sep)) throw new Error("Rights-evidence target escapes the configured evidence directory");
+      return evidenceDestination;
     }
     default:
       throw new Error("Unsupported backup target kind");
