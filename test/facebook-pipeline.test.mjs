@@ -92,6 +92,17 @@ test("missing media/license evidence, path traversal, disclosure, and attributio
   assert.ok(requiredDisclosure.blockers.some(x => /disclosure/i.test(x)));
 });
 
+test("commercial disclosures, approved Selar destination and high-impact claims are gated", (t) => {
+  const { root, draft } = fixture(t);
+  const commercial = evaluateFacebookDraft({ ...draft, commercial: true, disclosure: "" }, { expectedPageId: "123456789012345", rightsRoot: root });
+  assert.ok(commercial.blockers.some(x => /commercial\/affiliate disclosure/i.test(x)));
+  const wrongSelar = evaluateFacebookDraft({ ...draft, caption: "Get details at https://selar.com/not-approved", commercial: true, disclosure: "Promotional link; see seller terms.", externalLinksReviewed: true }, { expectedPageId: "123456789012345", rightsRoot: root });
+  assert.ok(wrongSelar.blockers.some(x => /exact approved product URL/i.test(x)));
+  const healthClaim = evaluateFacebookDraft({ ...draft, caption: "This miracle cure cures cancer and is completely safe." }, { expectedPageId: "123456789012345", rightsRoot: root });
+  assert.ok(healthClaim.flags.some(x => /high-impact health/i.test(x)));
+  assert.equal(healthClaim.ok, false);
+});
+
 test("human approval is bound to final content, media, disclosure, destination and time", (t) => {
   const { root, draft } = fixture(t);
   const evaluation = evaluateFacebookDraft(draft, { expectedPageId: "123456789012345", rightsRoot: root });
