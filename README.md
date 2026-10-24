@@ -26,6 +26,21 @@ Populate secrets only in your local environment or secure secret store; never co
 
 The dashboard refuses to start without its operator token and binds to `127.0.0.1` by default. Do not expose it directly to the internet.
 
+## Facebook Page drafts (separate from YouTube)
+
+The initial Nature Frontiers Facebook workflow is **draft-only**. The current implementation adds authenticated API routes for inspecting Facebook readiness, creating a draft, rechecking compliance and recording human review:
+
+- `GET /api/facebook/state`
+- `POST /api/facebook/drafts`
+- `POST /api/facebook/drafts/evaluate`
+- `POST /api/facebook/drafts/approve`
+
+All API routes require `x-operator-token`. Draft state and audit events are persisted in the dashboard state file. The configured timezone is `Africa/Johannesburg`; 08:00 SAST is the initial hypothesis and 18:00 is the comparison arm. The experiment does not claim an optimal time without sufficient Page-specific observations.
+
+Set `NATURE_FRONTIERS_FACEBOOK_PAGE_ID` only after verifying the exact Page ID in Meta. Review `config/facebook-publishing.json` and set `pageIdentityVerified` only after the owner has actually verified the identity; the configured ID and secure environment value must match. This setting alone does not grant permissions or prove that an API token is valid.
+
+No live Meta publishing adapter is enabled. `POST /api/facebook/publish` deliberately returns HTTP 409; no remote publish is attempted. Do not add tokens to this repository or paste them into chat. The application must remain draft/export-only until the owner has authorized an official integration and a verified test operation. See [Facebook pipeline audit](docs/FACEBOOK_PIPELINE_AUDIT_2026-10-24.md).
+
 ## Run the dashboard
 
 ```sh
