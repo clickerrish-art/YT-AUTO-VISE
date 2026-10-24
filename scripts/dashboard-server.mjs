@@ -146,12 +146,25 @@ function readFacebookRecoveryLedger() {
     });
   } catch { return []; }
 }
+function metaCredentialFingerprint(value, purpose) {
+  if (typeof value !== "string" || value.length < 20) return "";
+  // HMAC prevents storing raw Meta credentials or a directly reusable plain hash.
+  return crypto.createHmac("sha256", token).update(purpose + ":" + value).digest("hex");
+}
+function fingerprintsMatch(left, right) {
+  if (typeof left !== "string" || typeof right !== "string" || !/^[a-f0-9]{64}$/.test(left) || !/^[a-f0-9]{64}$/.test(right)) return false;
+  return crypto.timingSafeEqual(Buffer.from(left, "hex"), Buffer.from(right, "hex"));
+}
+
 function verifiedFacebookPageId(state, config) {
   const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
   const connection = state.facebookConnection;
   if (!/^\d{5,30}$/.test(envPageId) || config.destinationPageId !== envPageId) return "";
   if (connection?.verified !== true || connection.permissionsVerified !== true || connection.pageId !== envPageId || !Number.isFinite(Date.parse(connection.verifiedAt))) return "";
   if (Date.now() - Date.parse(connection.verifiedAt) > 24 * 60 * 60 * 1000) return "";
+  // A token rotation must invalidate the previous permission attestation until reverified.
+  if (!fingerprintsMatch(connection.pageTokenFingerprint, metaCredentialFingerprint(process.env.META_PAGE_ACCESS_TOKEN ?? "", "meta-page-token"))) return "";
+  if (!fingerprintsMatch(connection.userTokenFingerprint, metaCredentialFingerprint(process.env.META_USER_ACCESS_TOKEN ?? "", "meta-user-token"))) return "";
   return envPageId;
 }
 
@@ -431,7 +444,7 @@ const server = http.createServer(async (req, res) => {
       const release = await acquireStateLock();
       try {
         const state = loadState();
-        state.facebookConnection = { verified: true, permissionsVerified: identity.permissionsVerified, grantedPermissions: identity.grantedPermissions, tasks: identity.tasks, pageId: identity.pageId, pageName: identity.pageName, verifiedAt: identity.verifiedAt, apiVersion: identity.apiVersion, actor: operatorId };
+        state.facebookConnection = { verified: true, permissionsVerified: identity.permissionsVerified, grantedPermissions: identity.grantedPermissions, tasks: identity.tasks, pageId: identity.pageId, pageName: identity.pageName, verifiedAt: identity.verifiedAt, apiVersion: identity.apiVersion, pageTokenFingerprint: metaCredentialFingerprint(pageAccessToken, "meta-page-token"), userTokenFingerprint: metaCredentialFingerprint(userAccessToken, "meta-user-token"), actor: operatorId };
         state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_PAGE_IDENTITY_VERIFIED", destinationPageId: identity.pageId, pageName: identity.pageName, verifiedAt: identity.verifiedAt, grantedPermissions: identity.grantedPermissions, tasks: identity.tasks, apiVersion: identity.apiVersion, actor: operatorId });
         saveState(state);
         return json(res, 200, { identity: { pageId: identity.pageId, pageName: identity.pageName, verifiedAt: identity.verifiedAt, grantedPermissions: identity.grantedPermissions, tasks: identity.tasks }, permissionsConfirmed: identity.permissionsVerified, publishingEnabled: false, note: "Identity was checked read-only. Publishing permissions must be confirmed separately and every mutation still requires explicit operation authorization." });
