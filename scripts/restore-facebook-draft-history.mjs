@@ -127,8 +127,30 @@ export async function restoreFacebookDraftHistory({
   }
   const history = [...historyByDate.values()].sort((a, b) => a.date.localeCompare(b.date));
   const destination = path.resolve(configuredOutputPath);
-  fs.mkdirSync(path.dirname(destination), { recursive: true, mode: 0o700 });
-  fs.writeFileSync(destination, JSON.stringify(history, null, 2) + "\n", { mode: 0o600 });
+  const parent = path.dirname(destination);
+  fs.mkdirSync(parent, { recursive: true, mode: 0o700 });
+
+  // The output path is configurable. Reject symlinks in any existing path
+  // component so a caller cannot redirect a history write outside the intended
+  // runner/work directory. Replace a regular history file atomically.
+  const rootPath = path.parse(destination).root;
+  let currentPath = rootPath;
+  for (const part of path.relative(rootPath, destination).split(path.sep).filter(Boolean)) {
+    currentPath = path.join(currentPath, part);
+    if (!fs.existsSync(currentPath)) continue;
+    const stat = fs.lstatSync(currentPath);
+    if (stat.isSymbolicLink()) throw new Error("History output path contains a symbolic link; refusing to overwrite an unintended destination");
+    if (currentPath === destination && !stat.isFile()) throw new Error("History output destination must be a regular file");
+  }
+
+  const temporary = destination + "." + process.pid + "." + Math.random().toString(16).slice(2) + ".tmp";
+  try {
+    fs.writeFileSync(temporary, JSON.stringify(history, null, 2) + "\n", { mode: 0o600, flag: "wx" });
+    fs.renameSync(temporary, destination);
+  } catch (error) {
+    try { fs.rmSync(temporary, { force: true }); } catch {}
+    throw error;
+  }
   return { count: history.length, dates: history.map(item => item.date), outputPath: destination };
 }
 
