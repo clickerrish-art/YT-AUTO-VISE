@@ -27,6 +27,12 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   assert.equal(ready, true, "dashboard did not start: " + logs);
   assert.equal((await fetch(base + "/api/facebook/state")).status, 401);
   const headers = { "content-type": "application/json", "x-operator-token": token };
+  assert.equal((await fetch(base + "/api/facebook/idea?date=2030-10-25")).status, 401);
+  const ideaResponse = await fetch(base + "/api/facebook/idea?date=2030-10-25", { headers });
+  assert.equal(ideaResponse.status, 200);
+  const ideaBody = await ideaResponse.json();
+  assert.equal(ideaBody.publishReady, false);
+  assert.match(ideaBody.idea.researchPrompt, /reliable primary or authoritative source/i);
   const stateResponse = await fetch(base + "/api/facebook/state", { headers });
   assert.equal(stateResponse.status, 200);
   const state = await stateResponse.json();
