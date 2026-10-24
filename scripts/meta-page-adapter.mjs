@@ -81,6 +81,8 @@ export async function publishMetaPagePost({
   if (!draft || draft.kind !== "FACEBOOK_PAGE_DRAFT" || !draft.caption || !draft.scheduledAt) throw new MetaPageApiError("A complete reviewed Facebook Page draft is required");
   const scheduledMs = Date.parse(draft.scheduledAt);
   if (!Number.isFinite(scheduledMs) || scheduledMs <= now) throw new MetaPageApiError("Facebook scheduled publication time must be in the future");
+  const deltaMs = scheduledMs - now;
+  if (deltaMs < 10 * 60 * 1000 || deltaMs > 75 * 24 * 60 * 60 * 1000) throw new MetaPageApiError("Meta scheduled posts must be at least 10 minutes and no more than 75 days in the future");
   const scheduledSeconds = Math.floor(scheduledMs / 1000);
   const form = new FormData();
   form.set("message", draft.caption);
@@ -138,7 +140,7 @@ export async function fetchMetaPagePost({
   const data = await parseResponse(response, accessToken);
   if (data.id !== remotePostId) throw new MetaPageApiError("Meta post verification returned a different remote ID");
   return {
-    status: data.is_published === true ? "PUBLISHED_VERIFIED" : "SCHEDULED_VERIFIED",
+    status: data.is_published === true ? "PUBLISHED_VERIFIED" : Number.isFinite(Number(data.scheduled_publish_time)) ? "SCHEDULED_VERIFIED" : "REMOTE_EXISTS_STATUS_UNCLEAR",
     remotePostId: data.id, remoteUrl: typeof data.permalink_url === "string" && data.permalink_url.startsWith("https://") ? data.permalink_url : null,
     remoteMessage: typeof data.message === "string" ? data.message : null,
     createdTime: data.created_time ?? null, scheduledPublishTime: data.scheduled_publish_time ?? null,
