@@ -78,7 +78,7 @@ Short and long-form renderers now fail closed on technical export validation err
 
 ## Acceptance checklist
 
-- **PASS:** correct weekly schedule; draft-only workflows; exact Selar URL; public publishing disabled.
+- **PASS — AUTOMATED POLICY:** rolling long-form → long-form → Short cycle, 72-hour minimum spacing gate, draft-only preparation triggers, exact Selar URL, public publishing disabled. This is not live publication acceptance.
 - **PASS:** dashboard integration/authentication, durable drafts, schedule-slot conflict protection, campaign operations and fail-closed rendering paths.
 - **PASS:** automated private-uploader mock tests for remote timeout, receipt persistence failure, remote reconciliation, private visibility checks and duplicate-prevention behavior.
 - **BLOCKED:** actual rights-cleared Short/long-form MP4 generation and human playback inspection. No genuine production media, checksum, duration or dimensions are claimed.
@@ -117,8 +117,8 @@ Docs-only branch head `460f57fdddc48b8eb163ba452e6044a434c0bceb` passed the thre
 
 ## Historical implementation checkpoint — superseded by the current verified baseline above
 
-- Tested code/workflow HEAD: `4ba995bc51ed2ae0513bc312865713a73e0e3160` (timezone-aware local-time conversion plus the 72-hour weekly schedule guard).
+- Historical checkpoint only: `4ba995bc51ed2ae0513bc312865713a73e0e3160`. This predates the rolling-cycle and history-gate changes and is **not** current release evidence; check the exact latest branch HEAD and its CI before acceptance.
 - [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081305593), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081305540), and [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081305556) all passed on that code HEAD. Each ran 106 tests: 106 passed, 0 failed, 0 skipped. Automation also passed `npm ci --ignore-scripts` (46 packages added, 47 audited) and Python safety tests. Metadata validation explicitly confirms that `npm run check` fails closed while real production metadata is incomplete; this is not a release-readiness pass.
-- Planned draft slots are Tuesday 17:00 and Saturday 17:00 Africa/Johannesburg. The cyclic gaps are 96 hours and 72 hours. The validator checks the weekly UTC schedule and queue collisions; actual public/private/unlisted upload history and live destination queue must still be inspected before any publication.
+- Tuesday/Saturday are draft-preparation triggers only. The rolling publication cycle is long-form → long-form → Short with at least 72 elapsed hours between actual publications. The pre-upload gate requires complete remote public/private/unlisted history and reconciliation of uncertain attempts; live acceptance remains blocked until owner evidence and authorization are supplied.
 - PR #1 remains open, draft and unmerged. Public publishing remains disabled. No production MP4, thumbnail, rights clearance, human playback acceptance, live OAuth identity check, private upload receipt, or owner-run restore acceptance is claimed.
 - Remaining owner-controlled gates: genuine rights-cleared source assets and completed manifests; rendered/decoded media and human review; secure OAuth identity verification for SonicVhibez; explicit per-operation private-upload authorization; operational backup/restore acceptance. Safari remains inactive until exact destination, disclosure, and owner approval exist.
