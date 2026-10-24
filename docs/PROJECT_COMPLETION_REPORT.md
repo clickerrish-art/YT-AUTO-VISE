@@ -2,40 +2,41 @@
 
 ## Live release assessment — 24 October 2026
 
-**Latest application-code/test candidate:** `fc9781842dc9e2f09408b9e237149a23ea309acd`. This is the exact application-code candidate tested by the workflows linked below. Documentation-only descendants do not change application code; re-fetch the live branch HEAD and its checks before release.
+**Latest application-code/test candidate:** `c093143a804299cbf7a673f25e0c19d3f8ea4507`. This is the exact application-code candidate tested by the workflows below. Documentation-only descendants do not change application code; re-fetch the live branch HEAD and its checks before release.
 **PR #1:** [open, draft, unmerged](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1).
-**Branch comparison at this candidate:** 887 commits ahead, 2 behind `main`; 94 changed files; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; `main` HEAD `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. Do not merge, reset, force-push, or rewrite divergent history without the owner's explicit decision.
+**Branch comparison at this candidate:** 890 commits ahead, 2 behind `main`; 94 changed files; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; `main` HEAD `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. Do not merge, reset, force-push, or rewrite divergent history without the owner's explicit decision.
 
 ### Exact-SHA evidence
 
-- [Automation validation — run 40124682945](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40124682945): **PASS** on exact candidate `fc9781842dc9e2f09408b9e237149a23ea309acd`; 205 Node tests passed, 0 failed, 0 skipped; 8 Python safety tests passed; campaign/queue/schedule checks, JavaScript syntax and Python compilation passed. The isolated normal lifecycle-script `npm ci` also passed, and `googleapis` imported successfully. npm audit reported four moderate advisories, zero high and zero critical.
-- [Metadata validation — run 40124682997](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40124682997): **PASS** on the same exact candidate.
-- [Content quality — run 40124682921](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40124682921): **PASS** on the same exact candidate.
-- [Locked install/lockfile validation — run 40124680201](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40124680201): **PASS** on the same exact candidate; clean `npm ci --ignore-scripts`, tests and configuration checks passed.
-- [Production-readiness diagnostic — run 40124682832](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40124682832): **BLOCKED as intended** because mandatory production prerequisites remain unresolved. Its diagnostic artifact [`sonicvhibez-readiness-report`](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40124682832) was retained (artifact ID `12572513837`; expires 23 November 2026). This is not a production-readiness pass.
-- [Nature Frontiers Facebook draft — run 40124682948](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40124682948): **SKIPPED** on the pull-request event. No default-branch draft or retained default-branch artifact is established by this run.
+- [Automation validation — run 40125043955](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125043955): **PASS** on exact candidate `c093143a804299cbf7a673f25e0c19d3f8ea4507`; Node tests passed with 0 failures and 0 skips; Python safety tests: 8 passed; campaign/queue/schedule checks, JavaScript syntax and Python compilation passed. The isolated normal lifecycle-script `npm ci` passed and `googleapis` imported successfully. npm audit reported four moderate advisories, zero high and zero critical.
+- [Metadata validation — run 40125043948](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125043948): **PASS** on the same exact candidate.
+- [Content quality — run 40125044071](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125044071): **PASS** on the same exact candidate.
+- [Locked install/lockfile validation — run 40125040155](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125040155): **PASS** on the same exact candidate; clean `npm ci --ignore-scripts`, tests and configuration checks passed.
+- [Production-readiness diagnostic — run 40125043947](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125043947): **BLOCKED as intended** because mandatory production prerequisites remain unresolved. The `sonicvhibez-readiness-report` artifact was retained (artifact ID `12572064725`; expires 23 November 2026). This is not a readiness pass.
+- [Nature Frontiers Facebook draft — run 40125043932](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40125043932): **SKIPPED** on the pull-request event. No default-branch draft or retained default-branch artifact is established by this run.
 
 ### Changes in this audit
 
-- The read-only readiness CLI exits with status 2 when mandatory gates are blocked, while still flushing the complete blocker report; it exits 0 only when checks find no blockers.
+- The read-only readiness CLI exits with status 2 when mandatory gates are blocked and prints the complete blocker report; it exits 0 only when checks find no blockers.
 - The dashboard readiness parser accepts the explicit blocked status and preserves actionable blockers rather than collapsing them into a generic validator error.
 - The production-readiness workflow uses Node.js 24, runs for relevant pull-request paths, retains its diagnostic artifact, and fails the readiness gate while production prerequisites remain blocked.
-- Regression tests assert non-zero readiness status for missing production prerequisites, malformed queue JSON and duplicate queue IDs. The validation workflow expects the blocked state and verifies the `HOLD` report.
-- Pull-request validation workflows now check out the exact pull-request head SHA rather than GitHub's synthetic merge ref. The automation workflow additionally verifies a normal lifecycle-script install in a clean temporary checkout with no credentials in its environment.
-- Publication policy remains a rolling `long_form → long_form → short` cycle with at least 72 elapsed hours between actual publications (minimum 216 hours across three cyclic gaps). Tuesday/Saturday are draft-preparation triggers only; no three-posts-per-week promise is made.
+- Pull-request validation workflows check out the exact pull-request head SHA rather than GitHub's synthetic merge ref. The automation workflow also verifies a normal lifecycle-script install in a clean temporary checkout with no credentials in its environment.
+- The publication minimum gap is now configuration-driven across schedule validation, readiness checks, dashboard checks and the pre-upload history gate. The default remains 72 hours. The configured value must be finite, positive and at most 8,760 hours; cycle duration must equal the gap multiplied by the three-item publication cycle, and the schedule, queue and spacing policy must agree. A regression test confirms a consistent 96-hour configuration is accepted.
+- Publication cadence remains a rolling `long_form → long_form → short` cycle; the default 72-hour gap means at least 216 hours across three cyclic gaps. Tuesday/Saturday triggers are draft preparation only; no three-posts-per-week promise is made.
 
 ### Branch-divergence reconciliation
 
-The live comparison is 887 ahead / 2 behind, with merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. The two base-only commits are file-only test churn: `71578dafc24e5d48173dce3f4e392e18e42aa40e` added `test/restore-facebook-draft-history.test.mjs` (117 lines), and `fa00d28e7f58911482686e4ad69fac9f4701a2e6` removed that same test file. They do not change runtime code. The implementation branch does not contain that dedicated test file; owner review should decide whether its cross-run history-restoration coverage should be reintroduced as a new, separately reviewed test. No merge, reset, force-push or history rewrite was performed.
+The live comparison is 890 ahead / 2 behind, with merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. The two base-only commits are file-only test churn: `71578dafc24e5d48173dce3f4e392e18e42aa40e` added `test/restore-facebook-draft-history.test.mjs` (117 lines), and `fa00d28e7f58911482686e4ad69fac9f4701a2e6` removed that same test file. They do not change runtime code. The implementation branch lacks this dedicated test file; owner review should decide whether to reintroduce its cross-run history-restoration coverage as a separately reviewed test. No merge, reset, force-push or history rewrite was performed.
 
 ### Current acceptance register
 
 | Gate | Status | Evidence / next action |
 |---|---|---|
-| Node.js automated tests | PASS | 205 passed, 0 failed, 0 skipped on exact code candidate above. |
-| Python safety tests | PASS | 8 passed on exact code candidate above. |
+| Node.js automated tests | PASS | Full suite passed on exact code candidate; 0 failures and 0 skips. |
+| Python safety tests | PASS | 8 passed on exact code candidate. |
 | Campaign, queue, schedule, syntax and compilation checks | PASS | Exact-candidate automation workflow above. |
-| Normal lifecycle-script installation | PASS | Isolated clean checkout, no credentials, normal `npm ci`, and `googleapis` import passed on exact candidate. |
+| Normal lifecycle-script installation | PASS | Isolated clean checkout, no credentials, normal `npm ci`, and `googleapis` import passed. |
+| Configurable publication spacing | PASS | Default 72 hours; schedule, queue, dashboard, readiness and upload history gate use the validated configured value. |
 | Readiness reporting fails closed | PASS | CLI returns status 2 with actionable blockers; dashboard returns HTTP 503 while mandatory production prerequisites are missing. |
 | Dependency audit | BLOCKED | Four moderate advisories remain in `gaxios`, `googleapis`, `googleapis-common` and `uuid`; compatible remediation and risk disposition remain required. |
 | Clean-start dashboard/browser acceptance | NOT RUN | Exercise every visible control, authentication failure, API persistence, restart and error paths using the real app. |
