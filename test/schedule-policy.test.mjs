@@ -17,7 +17,7 @@ test("publication slot compares actual instants and rejects same-local-date and 
 test("publication slot rejects duplicate IDs, invalid timestamps, and same Johannesburg date", () => {
   assert.equal(validatePublicationSlot(
     { id: "job-1", scheduledAt: "2026-10-24T10:00:00Z" },
-    [{ id: "job-2", status: "scheduled", scheduledAt: "2026-10-24T22:00:00Z" }]
+    [{ id: "job-2", status: "scheduled", scheduledAt: "2026-10-24T20:00:00Z" }]
   ).valid, false);
   assert.ok(validatePublicationSlot(
     { id: "job-1", scheduledAt: "2026-10-24T10:00:00Z" },
