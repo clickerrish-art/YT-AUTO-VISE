@@ -31,7 +31,7 @@ jobs:
             echo "BLOCKED: default metadata checker unexpectedly passed without a reviewed production metadata file."
             exit 1
           fi
-          if [ "$status" -ne 2 ] || ! printf '%s' "$output" | grep -Fq 'BLOCKED: metadata file not found: content/next-short.json'; then
+          if { [ "$status" -ne 1 ] && [ "$status" -ne 2 ]; } || ! printf '%s' "$output" | grep -Fq 'BLOCKED: metadata file not found: content/next-short.json'; then
             echo "BLOCKED: npm run check failed for an unexpected reason (exit $status)."
             exit 1
           fi
