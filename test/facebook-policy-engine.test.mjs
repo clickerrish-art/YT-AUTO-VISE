@@ -81,6 +81,10 @@ test("unsourced factual claims and unreachable or redirected sources block", asy
     f.payload.claims = [{ text: "Population increased by 40 percent", sourceUrls: ["https://example.org/report"], verified: true, sourceSupportsClaim: true }];
     const badAuthority = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(badAuthority.eligible, false);
+    f.payload.claims[0].sourceUrls = ["https://research.gov.attacker.example/report"];
+    const deceptiveAuthority = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(deceptiveAuthority.eligible, false);
+    assert.ok(deceptiveAuthority.blockers.some(item => /authority|source/i.test(item)));
     f.payload.claims[0].sourceUrls = ["https://sanbi.org/report"];
     const unreachable = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), fetchImpl: async () => { throw new Error("offline"); } });
     assert.equal(unreachable.eligible, false);
