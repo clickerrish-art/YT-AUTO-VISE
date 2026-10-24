@@ -100,6 +100,7 @@ test("uncertain mutation is reconciled and a unique verified receipt is persiste
     assert.equal(ledger[0].remotePostId, "123456789012345_999");
     assert.equal(ledger[0].verifiedRemotely, true);
     assert.equal(history[0].remotePostId, "123456789012345_999");
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), []);
   } finally { f.cleanup(); }
 });
 
@@ -267,4 +268,36 @@ test("publisher rejects state-ledger symlinks escaping the durable state directo
     f.cleanup();
     fs.rmSync(outside, { recursive: true, force: true });
   }
+});
+
+
+test("failed Meta permissions automatically skip and drain a slot without owner confirmation", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const payload = {
+      slotId: "nature-frontiers-2026-10-25-0800",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Educational wildlife habitat note.", links: [], media: [], claims: [], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    let publishCalls = 0;
+    const result = await runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+      now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: false }),
+      verifyIdentity: async () => { throw new Error("identity should not be called"); },
+      policyEvaluator: async () => ({ eligible: true, blockers: [], warnings: [], contentFingerprint: "e".repeat(64), policyRuleVersion: f.config.complianceRuleSet, mediaFingerprints: [], reason: "ELIGIBLE" }),
+      publish: async () => { publishCalls++; throw new Error("must not publish"); }
+    });
+    assert.equal(result.skipped, 1);
+    assert.equal(publishCalls, 0);
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), []);
+    const history = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-history.json"), "utf8"));
+    assert.equal(history[0].status, "SKIPPED_CONNECTION_BLOCKED");
+    assert.equal(history[0].reason, "META_PAGE_IDENTITY_OR_PERMISSION_CHECK_FAILED_NO_MUTATION");
+  } finally { f.cleanup(); }
 });
