@@ -165,8 +165,13 @@ export async function runAutonomousFacebookPublisher({
     const candidates = queue.filter(item => item && item.destination === "nature_frontiers_facebook" &&
       item.destinationPageId === config.destinationPageId && item.scheduledDate === today &&
       typeof item.slotId === "string" && typeof item.scheduledAt === "string");
+    const removeQueuedSlot = slotId => {
+      const index = queue.findIndex(item => item?.slotId === slotId);
+      if (index >= 0) { queue.splice(index, 1); atomicJson(queuePath, queue); }
+    };
     for (const payload of candidates) {
       if (history.some(item => item.slotId === payload.slotId) || ledger.some(item => item.slotId === payload.slotId)) {
+        removeQueuedSlot(payload.slotId);
         skipped++;
         continue;
       }
@@ -174,7 +179,7 @@ export async function runAutonomousFacebookPublisher({
       // Run early enough to use Meta's scheduled-post API. A missed slot is skipped, never caught up.
       if (!Number.isFinite(scheduled) || current < scheduled - 45 * 60_000 || current > scheduled - 10 * 60_000) {
         const record = { slotId: payload.slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_MISSED_SLOT", checkedAt: isoNow(current), reason: "SLOT_OUTSIDE_AUTOMATED_PREPARATION_WINDOW" };
-        history.push(record); atomicJson(historyPath, history); skipped++; continue;
+        history.push(record); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++; continue;
       }
       let decision;
       try {
@@ -191,7 +196,7 @@ export async function runAutonomousFacebookPublisher({
       }
       if (!decision?.eligible) {
         const record = { slotId: payload.slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_BLOCKED", checkedAt: isoNow(current), contentFingerprint: decision?.contentFingerprint ?? null, policyDecision: decision, reason: decision?.reason ?? "POLICY_UNKNOWN" };
-        history.push(record); atomicJson(historyPath, history); skipped++; continue;
+        history.push(record); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++; continue;
       }
       // Validate live destination before recording the irreversible mutation attempt.
       const permissionVerification = await verifyPermissions({
@@ -236,6 +241,7 @@ export async function runAutonomousFacebookPublisher({
         ledger[ledger.length - 1] = receipt;
         history.push({ ...receipt, payload: undefined });
         atomicJson(ledgerPath, ledger); atomicJson(historyPath, history);
+        removeQueuedSlot(payload.slotId);
         if (success) published++; else skipped++;
       } catch (error) {
         const uncertain = error?.uncertain === true || error?.retryable === true || error?.name === "AbortError" || Boolean(remote?.remotePostId);
@@ -264,7 +270,7 @@ export async function runAutonomousFacebookPublisher({
           };
           ledger[ledger.length - 1] = recovered;
           history.push({ ...recovered, payload: undefined });
-          atomicJson(ledgerPath, ledger); atomicJson(historyPath, history); published++;
+          atomicJson(ledgerPath, ledger); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); published++;
           continue;
         }
         const failed = {
@@ -275,7 +281,7 @@ export async function runAutonomousFacebookPublisher({
         };
         ledger[ledger.length - 1] = failed;
         history.push({ ...failed, payload: undefined });
-        atomicJson(ledgerPath, ledger); atomicJson(historyPath, history); skipped++;
+        atomicJson(ledgerPath, ledger); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++;
       }
     }
     const summary = {
