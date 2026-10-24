@@ -100,9 +100,25 @@ test("operator dashboard loads the authoritative schedule and persists a draft t
 
   await page.setViewportSize({ width: 375, height: 812 });
   await expect(page.locator("#app")).toBeVisible();
-  const widths = await page.evaluate(() => ({
-    viewport: document.documentElement.clientWidth,
-    document: document.documentElement.scrollWidth
-  }));
-  expect(widths.document).toBeLessThanOrEqual(widths.viewport + 1);
+  const diagnostics = await page.evaluate(() => {
+    const viewport = document.documentElement.clientWidth;
+    const documentWidth = document.documentElement.scrollWidth;
+    const offenders = [...document.querySelectorAll("body *")].map(element => {
+      const rect = element.getBoundingClientRect();
+      return {
+        tag: element.tagName,
+        id: element.id,
+        className: typeof element.className === "string" ? element.className : "",
+        left: Math.round(rect.left),
+        right: Math.round(rect.right),
+        width: Math.round(rect.width),
+        scrollWidth: element.scrollWidth,
+        clientWidth: element.clientWidth,
+        text: (element.innerText || "").slice(0, 90)
+      };
+    }).filter(item => item.right > viewport + 1 || item.left < -1)
+      .sort((a, b) => b.right - a.right).slice(0, 15);
+    return { viewport, documentWidth, offenders };
+  });
+  expect(diagnostics.documentWidth, JSON.stringify(diagnostics, null, 2)).toBeLessThanOrEqual(diagnostics.viewport + 1);
 });
