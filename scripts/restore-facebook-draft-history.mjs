@@ -28,7 +28,7 @@ async function apiJson(url) {
   return response.json();
 }
 
-function validatePackage(item, filenameDate) {
+export function validateFacebookHistoryPackage(item, filenameDate) {
   if (!item || typeof item !== "object" || Array.isArray(item)) throw new Error("Historical artifact is not a JSON object");
   if (item.schemaVersion !== 1 || item.id !== "nature-frontiers-daily-" + filenameDate || item.date !== filenameDate) throw new Error("Historical artifact identity does not match its filename");
   if (item.destination !== "nature_frontiers_facebook" || item.destinationPageId !== null || item.timezone !== "Africa/Johannesburg") throw new Error("Historical artifact violates destination/timezone safety rules");
@@ -77,7 +77,7 @@ export async function restoreFacebookDraftHistory({ now = new Date(), fetchImpl 
       const packagePath = path.join(extractDir, filename);
       const stat = fs.lstatSync(packagePath);
       if (!stat.isFile() || stat.isSymbolicLink() || stat.size > 1024 * 1024) throw new Error("Historical artifact file is not a bounded regular file");
-      const item = validatePackage(JSON.parse(fs.readFileSync(packagePath, "utf8")), date);
+      const item = validateFacebookHistoryPackage(JSON.parse(fs.readFileSync(packagePath, "utf8")), date);
       const previous = historyByDate.get(date);
       if (previous && JSON.stringify(previous) !== JSON.stringify(item)) throw new Error("Conflicting historical artifacts exist for " + date + "; operator reconciliation is required");
       historyByDate.set(date, item);
