@@ -1,5 +1,10 @@
 # Go-live blockers
 
+## Dependency remediation candidate — verification pending
+
+The `package.json` dependency range has been deliberately advanced from `googleapis ^144.0.0` to `^188.0.0` to address the previously reported moderate advisory chain. The lockfile workflow refreshed `package-lock.json` and its clean locked install/test/configuration checks passed on its triggering candidate. The newest branch head after that bot-generated lockfile commit is `df5d28560a757fb185a020982f981fb1ce6722c7`; exact-head normal-install, full-test and npm-audit evidence is still pending. Do not treat the major upgrade as accepted until those checks pass and the resulting advisory report is reviewed.
+
+
 ## Live release assessment — 24 October 2026
 
 **Latest application-code/test candidate:** `c093143a804299cbf7a673f25e0c19d3f8ea4507`. This is the exact application-code candidate tested by the workflows below. Documentation-only descendants do not change application code; re-fetch the live branch HEAD and its checks before release.
