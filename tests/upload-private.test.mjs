@@ -154,3 +154,27 @@ test("private upload lock prevents concurrent workers and stale locks fail close
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+
+test("one-shot upload authorization binds one job and all final hashes to the verified channel", async () => {
+  const { validateOneShotUploadAuthorization } = await import("../scripts/upload-private.mjs");
+  const input = {
+    authorizationId: "auth-private-001",
+    decision: "AUTHORIZE_ONE_PRIVATE_UPLOAD",
+    jobId: "job-private-001",
+    artifactSha256: "a".repeat(64),
+    metadataSha256: "b".repeat(64),
+    approvalSha256: "c".repeat(64),
+    channelId: "UC_SONIC_TEST",
+    visibility: "private",
+    publishingEnabled: false,
+    operator: "Authorized Owner",
+    authorizedAt: "2026-10-24T12:00:00.000Z"
+  };
+  const validated = validateOneShotUploadAuthorization(input, { ...input, now: new Date("2026-10-24T12:30:00.000Z") });
+  assert.equal(validated.authorizationId, input.authorizationId);
+  assert.equal(validated.operator, "Authorized Owner");
+  assert.throws(() => validateOneShotUploadAuthorization({ ...input, artifactSha256: "d".repeat(64) }, { ...input, now: new Date("2026-10-24T12:30:00.000Z") }), /bind the exact job/);
+  assert.throws(() => validateOneShotUploadAuthorization({ ...input, visibility: "public" }, { ...input, now: new Date("2026-10-24T12:30:00.000Z") }), /restrict the operation to private/);
+  assert.throws(() => validateOneShotUploadAuthorization(input, { ...input, now: new Date("2026-10-26T13:00:00.000Z") }), /no older than 24 hours/);
+});
