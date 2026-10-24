@@ -205,13 +205,16 @@ export function evaluateNextPublication({
   const expectedFormat = ROLLING_PUBLICATION_FORMATS[actualSorted.length % ROLLING_PUBLICATION_FORMATS.length];
   if (format !== expectedFormat) errors.push(`next format must be ${expectedFormat} in the rolling long_form, long_form, short cycle`);
   const candidate = { id: jobId, status: "scheduled", scheduledAt: proposedAt };
+  // Historical records determine cycle progression and duplicate detection, but spacing
+  // is enforced from the latest actual publication forward. Past pre-policy intervals
+  // cannot be changed retroactively.
+  const latestRecord = latestActual ? history.find(item => String(item.id) === latestActual.id) : null;
   const existing = [
-    ...history.map(item => ({
-      id: String(item.id),
-      status: String(item.status ?? item.visibility ?? "published").toLowerCase(),
-      scheduledAt: item.scheduledAt,
-      publishedAt: item.actualPublishedAt ?? item.publishedAt ?? item.createdAt
-    })),
+    ...(latestActual ? [{
+      id: latestActual.id,
+      status: String(latestRecord?.status ?? latestRecord?.visibility ?? "published").toLowerCase(),
+      publishedAt: new Date(latestActual.timestamp).toISOString()
+    }] : []),
     ...scheduledItems,
     ...pendingAttempts.map(item => ({
       id: item?.jobId,
