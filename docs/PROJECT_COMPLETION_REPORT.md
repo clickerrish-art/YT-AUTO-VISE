@@ -70,3 +70,8 @@ PR #1 remains open and draft. Do not merge or enable public publishing as part o
 - [Release gate checklist](RELEASE_GATE_CHECKLIST.md)
 
 The code implementation is not a 100% production-complete release: real licensed media, independent playback inspection, authenticated SonicVhibez channel confirmation, and a live private-upload receipt remain blocked. Public publishing remains disabled; PR #1 remains open, draft and unmerged.
+
+
+## Latest branch-head CI check
+
+Docs-only branch head `460f57fdddc48b8eb163ba452e6044a434c0bceb` passed the three validation workflows with 95 passed, 0 failed and 0 skipped: [automation validation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40073783190), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40073783221), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40073783180). This was a documentation-only commit after the tested runtime implementation `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`; the live-media and private-upload gates remain blocked.
