@@ -64,9 +64,10 @@ test("restore refuses to overwrite a different existing upload ledger and perfor
   try {
     const backupPath = path.join(source.root, "backup.json");
     await backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir, rightsDir: source.rightsDir, outputPath: backupPath });
+    fs.rmSync(destination.stateDir, { recursive: true, force: true });
     fs.writeFileSync(path.join(destination.logDir, "upload-attempts.json"), JSON.stringify({ version: 1, attempts: [{ attemptId: "newer-attempt", status: "PRIVATE_UPLOAD_VERIFIED" }] }));
     await assert.rejects(restoreState({ backupPath, rootDir: destination.root, stateDir: destination.stateDir, uploadLogDir: destination.logDir, rightsDir: destination.rightsDir, confirm: "YES" }), /Refusing to overwrite an existing, different upload ledger/);
-    assert.equal(fs.existsSync(path.join(destination.stateDir, "dashboard-state.json")), true, "preflight conflict must be detected before any writes");
+    assert.equal(fs.existsSync(path.join(destination.stateDir, "dashboard-state.json")), false, "preflight conflict must be detected before any writes");
     assert.equal(JSON.parse(fs.readFileSync(path.join(destination.logDir, "upload-attempts.json"), "utf8")).attempts[0].attemptId, "newer-attempt");
   } finally {
     fs.rmSync(source.root, { recursive: true, force: true });
