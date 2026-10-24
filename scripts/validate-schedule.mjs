@@ -48,6 +48,8 @@ if (weeklyMinutes.length > 1) {
   }
 }
 if (plan.targetCadence?.longFormVideosPerWeek !== 1 || plan.targetCadence?.shortsPerWeek !== 1 || plan.targetCadence?.totalVideosPerWeek !== 2) errors.push("target cadence must be 1 long-form + 1 Short = 2 weekly");
+if (plan.requestedTargetCadence?.longFormVideosPerWeek !== 2 || plan.requestedTargetCadence?.shortsPerWeek !== 1 || plan.requestedTargetCadence?.totalVideosPerWeek !== 3) errors.push("requestedTargetCadence must preserve the owner-requested 2 long-form + 1 Short target");
+if (plan.cadenceDecisionRequired !== true) errors.push("cadenceDecisionRequired must remain true until the owner resolves the incompatible target and spacing rule");
 const approvedUrl = "https://selar.com/0u19v8u99l";
 if (plan.product?.url !== approvedUrl) errors.push("schedule product URL is not the approved Selar URL");
 if (!Array.isArray(queue.items)) errors.push("queue items must be an array");
@@ -82,4 +84,8 @@ for (const [file, cron, label] of workflowChecks) {
 const longWorkflow = fs.readFileSync(path.join(root, ".github/workflows/generate-long-form-narration.yml"), "utf8");
 if (!/draft/i.test(longWorkflow)) errors.push("long-form workflow must identify its output as drafts");
 if (errors.length) fail(errors);
-else console.log("PASS: two draft-only weekly slots, >=72-hour cyclic spacing, unique queue slots, approved destination, UTC workflow crons, and disabled publishing agree. Actual upload history must still be checked before any publication.");
+else {
+  console.log("PASS: interim Tuesday/Saturday draft slots, >=72-hour cyclic spacing, unique queue slots, approved destination, UTC workflow crons, and disabled publishing agree.");
+  if (plan.cadenceDecisionRequired) console.log("BLOCKED: the requested 2-long-form + 1-Short weekly target requires at least 216 elapsed hours for three cyclic gaps and cannot fit in 168 hours. The two-slot schedule is an interim safety fallback; owner decision required before publication.");
+  console.log("Actual YouTube upload history must still be checked before any publication.");
+}
