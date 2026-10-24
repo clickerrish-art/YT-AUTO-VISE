@@ -157,7 +157,7 @@ export async function evaluateFinalFacebookPayload(payload, {
     rightsChecks.push(check);
     if (!check.passed) add(blockers, `Media asset ${i + 1} failed rights, provenance, expiry or checksum verification`);
     resultBase.mediaFingerprints.push({ id: String(asset.id ?? ""), sha256: String(asset.sha256 ?? ""), passed: check.passed });
-    if (asset.syntheticOrAltered !== true || asset.representationKnown !== true) add(blockers, `Media asset ${i + 1} synthetic/altered origin or representation is unknown`);
+    if (typeof asset.syntheticOrAltered !== "boolean" || asset.representationKnown !== true) add(blockers, `Media asset ${i + 1} synthetic/altered origin or representation is unknown`);
     if (asset.syntheticOrAltered === true && asset.disclosureRequired === true && asset.disclosureApplied !== true) add(blockers, `Media asset ${i + 1} requires a visible synthetic/altered-media disclosure`);
   }
 
