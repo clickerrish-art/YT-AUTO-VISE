@@ -227,8 +227,16 @@ function resolveRepositoryFile(relativePath) {
   if (typeof relativePath !== "string" || !relativePath.trim() || path.isAbsolute(relativePath)) throw new Error("File path must be repository-relative");
   const resolved = path.resolve(root, relativePath);
   if (resolved !== root && !resolved.startsWith(root + path.sep)) throw new Error("File path escapes repository root");
-  if (!fs.existsSync(resolved) || !fs.statSync(resolved).isFile()) throw new Error("Required evidence file does not exist");
-  return resolved;
+  if (!fs.existsSync(resolved)) throw new Error("Required evidence file does not exist");
+  // Lexical containment is insufficient when a repository-relative path traverses a
+  // symlink. Resolve the canonical target before opening any operator-supplied file.
+  const realRoot = fs.realpathSync(root);
+  const canonicalPath = fs.realpathSync(resolved);
+  if (canonicalPath !== realRoot && !canonicalPath.startsWith(realRoot + path.sep)) {
+    throw new Error("File path resolves outside repository root");
+  }
+  if (!fs.statSync(canonicalPath).isFile()) throw new Error("Required evidence file does not exist");
+  return canonicalPath;
 }
 function json(res, status, body) {
   res.writeHead(status, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store", "x-content-type-options": "nosniff" });
