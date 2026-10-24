@@ -67,5 +67,5 @@ test("workflow cron schedules match the authoritative plan", () => {
   assert.match(longWorkflow, /cron:\s*"0 15 \* \* 2"/);
   assert.match(shortWorkflow, /cron:\s*"0 15 \* \* 6"/);
   assert.match(longWorkflow, /Tuesday at 17:00 SAST/i);
-  assert.match(shortWorkflow, /Saturday at 17:00 SAST/i);
+  assert.match(shortWorkflow, /Saturday Short at 17:00 SAST/i);
 });
