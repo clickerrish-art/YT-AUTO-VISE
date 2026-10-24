@@ -46,6 +46,18 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(Object.hasOwn(body, "stateFile"), false, "authenticated API responses must not disclose the local state-file path");
   assert.equal(logs.includes(stateDir), false, "startup logs must not disclose the local state directory");
   assert.ok(body.blockers.some(item => /complete SonicVhibez public\/private\/unlisted history is reconciled/i.test(item)), "dashboard state must expose the live history reconciliation blocker");
+  const autonomousUnauth = await fetch(base + "/api/facebook/autonomous-status");
+  assert.equal(autonomousUnauth.status, 401, "autonomous publisher status must use the same operator authentication");
+  const autonomousResponse = await fetch(base + "/api/facebook/autonomous-status", { headers });
+  assert.equal(autonomousResponse.status, 200);
+  const autonomous = await autonomousResponse.json();
+  assert.equal(autonomous.destination, "nature_frontiers_facebook");
+  assert.equal(autonomous.publishingEnabled, false, "dashboard must report disabled safe defaults");
+  assert.equal(autonomous.emergencyStop, true);
+  assert.equal(Object.hasOwn(autonomous, "META_PAGE_ACCESS_TOKEN"), false);
+  assert.ok(Array.isArray(autonomous.blockers));
+  assert.equal(typeof autonomous.queueCount, "number");
+
   const readinessResponse = await fetch(base + "/readyz");
   const readiness = await readinessResponse.json();
   assert.equal(readinessResponse.status, 503, "production readiness must fail closed while owner-controlled prerequisites are missing");
