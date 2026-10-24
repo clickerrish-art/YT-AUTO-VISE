@@ -1,13 +1,10 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
+import { DEFAULT_MIN_SPACING_HOURS, DEFAULT_SCHEDULE_TIMEZONE, validatePublicationSlot, weeklyUtcCronGaps } from "./schedule-policy.mjs";
 
 const root = process.cwd();
 const read = (p) => JSON.parse(fs.readFileSync(path.join(root, p), "utf8"));
-const fail = (errors) => {
-  for (const error of errors) console.error(`FAIL: ${error}`);
-  process.exitCode = errors.length ? 1 : 0;
-};
 const errors = [];
 let plan, queue;
 try { plan = read("config/weekly-content-plan.json"); }
@@ -16,7 +13,7 @@ try { queue = read("content/queue.json"); }
 catch (error) { console.error(`FAIL: cannot read content queue: ${error.message}`); process.exit(1); }
 
 if (plan.channel !== "SonicVhibez") errors.push("schedule channel must be SonicVhibez");
-if (plan.timezone !== "Africa/Johannesburg") errors.push("schedule timezone must be Africa/Johannesburg");
+if (plan.timezone !== DEFAULT_SCHEDULE_TIMEZONE) errors.push(`schedule timezone must be ${DEFAULT_SCHEDULE_TIMEZONE}`);
 if (plan.publishingEnabled !== false || queue.publishingEnabled !== false) errors.push("publishing must remain disabled in schedule and queue");
 if (!Array.isArray(plan.schedule) || plan.schedule.length !== 3) errors.push("authoritative schedule must contain exactly three weekly slots");
 const expected = [
@@ -34,6 +31,17 @@ for (const slot of expected) {
   if (slot.duration === "seconds" && (actual.targetDurationSeconds?.min !== 50 || actual.targetDurationSeconds?.max !== 60)) errors.push("Saturday Short must target 50–60 seconds");
 }
 if (plan.targetCadence?.longFormVideosPerWeek !== 2 || plan.targetCadence?.shortsPerWeek !== 1 || plan.targetCadence?.totalVideosPerWeek !== 3) errors.push("target cadence must be 2 long-form + 1 Short = 3 weekly");
+const minimumSpacingHours = plan.spacingPolicy?.minimumHoursBetweenPosts;
+if (minimumSpacingHours !== DEFAULT_MIN_SPACING_HOURS) errors.push(`spacingPolicy.minimumHoursBetweenPosts must be ${DEFAULT_MIN_SPACING_HOURS}`);
+let cadenceGaps = [];
+try { cadenceGaps = weeklyUtcCronGaps(plan.schedule ?? []); }
+catch (error) { errors.push(`cannot validate weekly cadence: ${error.message}`); }
+const infeasibleGaps = cadenceGaps.filter(gap => gap.hours < (minimumSpacingHours ?? DEFAULT_MIN_SPACING_HOURS));
+const cadenceInfeasible = infeasibleGaps.length > 0;
+if (plan.spacingPolicy?.cadenceInfeasible !== cadenceInfeasible) errors.push("spacingPolicy.cadenceInfeasible must match the computed recurring schedule");
+if (cadenceInfeasible && plan.publishingEnabled !== false) errors.push("infeasible weekly cadence must keep publishing disabled");
+if (cadenceInfeasible && (plan.schedule ?? []).some(slot => slot.status !== "DRAFT_ONLY")) errors.push("infeasible weekly cadence must remain draft-only");
+
 const approvedUrl = "https://selar.com/0u19v8u99l";
 if (plan.product?.url !== approvedUrl) errors.push("schedule product URL is not the approved Selar URL");
 if (!Array.isArray(queue.items)) errors.push("queue items must be an array");
@@ -52,6 +60,13 @@ for (const item of items) {
 for (const slot of expected) {
   if (!items.some(item => item?.scheduledDay === slot.day && item?.contentType === slot.format)) errors.push(`queue has no ${slot.format} draft assigned to ${slot.day}`);
 }
+const active = items.filter(item => ["scheduled", "published", "SCHEDULED", "PUBLISHED"].includes(item?.status));
+for (let index = 0; index < active.length; index++) {
+  const item = active[index];
+  if (!item.scheduledAt) { errors.push(`active queue item ${item.id} is missing scheduledAt`); continue; }
+  const result = validatePublicationSlot(item, active.slice(0, index), { timeZone: plan.timezone, minSpacingHours });
+  errors.push(...result.errors.map(error => `queue schedule: ${error}`));
+}
 const workflowChecks = [
   [".github/workflows/generate-long-form-narration.yml", "0 15 * * 2,4", "Tuesday/Thursday long-form"],
   [".github/workflows/free-narration-artifact.yml", "0 15 * * 6", "Saturday Short"]
@@ -63,10 +78,15 @@ for (const [file, cron, label] of workflowChecks) {
   if (!content.includes(`cron: "${cron}"`)) errors.push(`${label} workflow cron must be ${cron}`);
   if (!content.includes("branches: [main]")) errors.push(`${file} must remain scoped to main for push-triggered generation`);
 }
-if (!fs.readFileSync(path.join(root, ".github/workflows/generate-long-form-narration.yml"), "utf8").includes("publishing")) {
-  // The workflow may use different wording, but must explicitly describe itself as draft-only.
-  const wf = fs.readFileSync(path.join(root, ".github/workflows/generate-long-form-narration.yml"), "utf8");
-  if (!/draft/i.test(wf)) errors.push("long-form workflow must identify its output as drafts");
+const longFormWorkflow = fs.readFileSync(path.join(root, ".github/workflows/generate-long-form-narration.yml"), "utf8");
+if (!longFormWorkflow.includes("publishing") && !/draft/i.test(longFormWorkflow)) errors.push("long-form workflow must identify its output as drafts");
+
+if (errors.length) {
+  for (const error of errors) console.error(`FAIL: ${error}`);
+  process.exitCode = 1;
+} else {
+  console.log("PASS: authoritative schedule, queue types, approved destination, workflow UTC crons, and disabled publishing agree. This validates configuration only; it does not prove media production or upload.");
+  if (cadenceInfeasible) {
+    console.log(`BLOCKED: ${infeasibleGaps.map(gap => `${gap.from}→${gap.to} ${gap.hours}h`).join(", ")} violates the ${minimumSpacingHours}-hour minimum. Three weekly posts cannot be scheduled at these times; publishing remains disabled until the owner resolves the cadence conflict.`);
+  }
 }
-if (errors.length) fail(errors);
-else console.log("PASS: authoritative schedule, queue types, approved destination, workflow UTC crons, and disabled publishing agree. This validates configuration only; it does not prove media production or upload.");
