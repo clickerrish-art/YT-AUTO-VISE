@@ -45,6 +45,8 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
   if (approval.publishingEnabled !== false || approval.visibility !== "private") throw new Error("approval must explicitly preserve private-only publishing");
   if (!Array.isArray(approval.relatedArtifacts) || !approval.relatedArtifacts.some(item => item?.sha256 === artifactSha256)) throw new Error("approval must bind the complete reviewed artifact set, including the uploaded MP4");
   if (!approval.relatedArtifacts.some(item => typeof item?.path === "string" && /\.(jpg|jpeg|png|webp)$/i.test(item.path) && /^[a-f0-9]{64}$/.test(item.sha256 ?? ""))) throw new Error("approval must include the reviewed thumbnail checksum");
+  if (!approval.relatedArtifacts.some(item => typeof item?.path === "string" && /\.(srt|vtt)$/i.test(item.path) && /^[a-f0-9]{64}$/.test(item.sha256 ?? ""))) throw new Error("approval must include the final reviewed captions checksum");
+  if (!approval.relatedArtifacts.some(item => typeof item?.path === "string" && /\.json$/i.test(item.path) && item.sha256 === metadataVersion)) throw new Error("approval must bind the exact metadata JSON checksum");
   return true;
 }
 export function verifyRetainedRightsEvidence(approval) {
