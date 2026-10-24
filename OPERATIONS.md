@@ -15,7 +15,23 @@ Never put OAuth tokens in browser code, committed files or logs.
 
 Dashboard startup also requires `DASHBOARD_OPERATOR_ID` (2–120 characters). Audit events use this configured operator identity; use the actual person responsible for the session rather than a generic label. The private uploader validates the approval's structured rights-evidence hash and rechecks each source asset and retained licence-evidence file against the saved SHA-256 values immediately before the remote upload flow.
 
-## 2. Schedule and queue
+## 2. Backup and restore
+
+Create a secret-excluding checksummed snapshot of dashboard state, audit history, upload attempts, receipts, upload approvals and retained rights evidence:
+
+```sh
+npm run backup:state -- backups/sonicvhibez-backup.json
+```
+
+Review the backup file and keep it in a protected location. It excludes OAuth credentials and generated video files. Restore into an empty or reconciled environment with explicit confirmation:
+
+```sh
+RESTORE_CONFIRM=YES npm run restore:state -- backups/sonicvhibez-backup.json
+```
+
+If the existing dashboard state differs, restore requires `RESTORE_OVERWRITE=YES` and refuses to replace state modified after the backup. A different existing upload ledger is always a hard stop: reconcile remote YouTube state first and do not overwrite that ledger. Receipt, approval and rights-evidence conflicts are also refused. The restore preflights every entry and checksum before writing any files.
+
+## 3. Schedule and queue
 
 `config/weekly-content-plan.json` is authoritative:
 - Tuesday and Thursday at 17:00 Africa/Johannesburg: 6–10 minute 16:9 long-form drafts.
@@ -24,7 +40,7 @@ Dashboard startup also requires `DASHBOARD_OPERATOR_ID` (2–120 characters). Au
 
 Queue backlog items are separate from reserved dated production slots. Duplicate/conflicting reservations are rejected. Do not manually edit the JSON state while the dashboard is running.
 
-## 3. Rendering and media checks
+## 4. Rendering and media checks
 
 Use `content/render-manifest.example.json` and `content/long-form-render-manifest.example.json` only as schema examples. Copy to the expected manifest paths and fill with real footage, narration, captions and actual license-evidence references. Evidence references must point to retained, non-empty documents; a filename or checkbox alone does not establish that rights are genuine.
 
@@ -32,13 +48,13 @@ Run `npm run render:short` or `npm run render:long`; both renderers now run the 
 
 Do not represent test fixtures, typography-only slides or missing/placeholder footage as a wildlife documentary. If inputs or tools are missing, leave the job BLOCKED.
 
-## 4. Human review and private approval
+## 5. Human review and private approval
 
 Configure the real operator identity before enabling rights review. Use the dashboard to validate captions/metadata, verify each source asset against its original rights evidence, and review the exact MP4 and thumbnail. Approval is bound to the MP4 checksum, related artifact checksums, metadata version and rights-evidence hash.
 
 An approval file is written under `run-logs/upload-approvals/`. The file is not a substitute for genuine rights documents or actual human inspection. If media, thumbnail, metadata or rights evidence changes, do not reuse the approval; rerun validation and review.
 
-## 5. Private-only YouTube upload
+## 6. Private-only YouTube upload
 
 Never upload until all checks are complete. Set secrets securely:
 - `YOUTUBE_CLIENT_ID`
@@ -50,7 +66,7 @@ Never upload until all checks are complete. Set secrets securely:
 
 The uploader verifies that the authenticated channel title is exactly SonicVhibez and its ID matches the configured ID. It writes the attempt ledger before remote insert, uses only `privacyStatus: private`, re-fetches the remote video and verifies private visibility and channel ownership. No public or unlisted fallback exists.
 
-## 6. Uncertain upload outcomes and recovery
+## 7. Uncertain upload outcomes and recovery
 
 Attempt ledger: `run-logs/upload-attempts.json`. Receipts: `run-logs/upload-<video-id>.json`.
 
