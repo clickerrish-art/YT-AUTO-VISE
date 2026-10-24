@@ -72,3 +72,17 @@ test("intake blocks malformed history and rejects candidate path traversal", asy
     await assert.rejects(() => runFacebookContentIntake({ ...f, rootDir: f.rootDir, candidatePath: "../outside.json" }), /escapes repository root/i);
   } finally { f.cleanup(); }
 });
+
+
+test("intake creates the durable state-directory queue when no queue override is configured", async () => {
+  const f = fixture();
+  try {
+    fs.writeFileSync(path.join(f.rootDir, f.candidatePath), "[]");
+    const result = await runFacebookContentIntake({
+      ...f, rootDir: f.rootDir, queuePath: null, now: Date.parse("2026-10-24T10:00:00Z")
+    });
+    const durableQueue = path.join(f.stateDir, "facebook-autonomous-queue.json");
+    assert.equal(result.queueCount, 0);
+    assert.deepEqual(JSON.parse(fs.readFileSync(durableQueue, "utf8")), []);
+  } finally { f.cleanup(); }
+});
