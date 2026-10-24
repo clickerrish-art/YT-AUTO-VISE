@@ -142,3 +142,39 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(blockedByExistingCollision.status, 409, JSON.stringify(collisionBody));
   assert.ok(collisionBody.blockers.some(error => /existing publication date collision/i.test(error)), "pre-existing same-day queue collisions must fail closed");
 });
+
+
+test("dashboard refuses to start when persisted Facebook history is malformed", async (t) => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-corrupt-history-"));
+  const stateFile = path.join(stateDir, "dashboard-state.json");
+  fs.writeFileSync(stateFile, JSON.stringify({
+    version: 1,
+    queueItems: [],
+    campaigns: [],
+    audit: [],
+    jobs: [],
+    uploads: [],
+    facebookDrafts: { lost: "history" },
+    facebookPosts: [],
+    facebookAttempts: []
+  }) + "\\n", { mode: 0o600 });
+  const port = 28000 + Math.floor(Math.random() * 10000);
+  const token = "test-token-" + "y".repeat(40);
+  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let logs = "";
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  t.after(() => { if (child.exitCode === null) child.kill("SIGTERM"); fs.rmSync(stateDir, { recursive: true, force: true }); });
+
+  const exited = await new Promise(resolve => {
+    const timeout = setTimeout(() => resolve(false), 3000);
+    child.once("exit", () => { clearTimeout(timeout); resolve(true); });
+  });
+  assert.equal(exited, true, "dashboard must not start against corrupt publication history");
+  assert.notEqual(child.exitCode, 0, "corrupt persisted history must fail startup");
+  assert.match(logs, /Invalid state schema: facebookDrafts/);
+  assert.deepEqual(JSON.parse(fs.readFileSync(stateFile, "utf8")).facebookDrafts, { lost: "history" }, "startup must preserve corrupt evidence for operator recovery, not overwrite it");
+});
