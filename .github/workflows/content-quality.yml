@@ -11,6 +11,9 @@ on:
       - "test/**"
       - "scripts/check-content.mjs"
       - ".github/workflows/content-quality.yml"
+      - "README.md"
+      - "OPERATIONS.md"
+      - "docs/**"
   pull_request:
     paths:
       - "content/long-form-scripts.md"
@@ -19,6 +22,9 @@ on:
       - "test/**"
       - "scripts/check-content.mjs"
       - ".github/workflows/content-quality.yml"
+      - "README.md"
+      - "OPERATIONS.md"
+      - "docs/**"
   workflow_dispatch:
 
 permissions:
