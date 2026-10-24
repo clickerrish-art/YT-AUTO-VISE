@@ -133,12 +133,13 @@ export async function runAutonomousFacebookPublisher({
         payload: { caption: payload.caption, links: payload.links ?? [], mediaFingerprints: decision.mediaFingerprints }
       };
       ledger.push(attempt); atomicJson(ledgerPath, ledger);
+      let remote = null;
       try {
         const adapterDraft = {
           kind: "FACEBOOK_PAGE_DRAFT", caption: payload.caption, scheduledAt: payload.scheduledAt,
           media: Array.isArray(payload.media) && payload.media.length ? payload.media[0] : null
         };
-        const remote = await publish({
+        remote = await publish({
           draft: adapterDraft, pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
           accessToken: env.META_PAGE_ACCESS_TOKEN, apiVersion: config.apiVersion,
           permissionsConfirmed: true, fetchImpl, rootDir: root, now: current
@@ -160,7 +161,7 @@ export async function runAutonomousFacebookPublisher({
         if (success) published++; else skipped++;
       } catch (error) {
         const uncertain = error?.uncertain === true || error?.retryable === true || error?.name === "AbortError";
-        const failed = { ...attempt, status: uncertain ? "UNCERTAIN" : "FAILED_PREMUTATION_OR_REJECTED", completedAt: new Date().toISOString(), reason: uncertain ? "REMOTE_OUTCOME_UNCERTAIN_RECONCILIATION_REQUIRED" : "META_OPERATION_FAILED_NO_AUTOMATIC_RETRY", retryAllowed: false };
+        const failed = { ...attempt, status: uncertain ? "UNCERTAIN" : "FAILED_PREMUTATION_OR_REJECTED", completedAt: new Date().toISOString(), remotePostId: remote?.remotePostId ?? null, reason: uncertain ? "REMOTE_OUTCOME_UNCERTAIN_RECONCILIATION_REQUIRED" : "META_OPERATION_FAILED_NO_AUTOMATIC_RETRY", retryAllowed: false };
         ledger[ledger.length - 1] = failed;
         history.push({ ...failed, payload: undefined });
         atomicJson(ledgerPath, ledger); atomicJson(historyPath, history); skipped++;
