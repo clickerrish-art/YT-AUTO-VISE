@@ -32,6 +32,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(initial.status, 200);
   const body = await initial.json();
   assert.equal(body.publishingEnabled, false);
+  assert.ok(body.blockers.some(item => /Owner decision required:.*72-hour minimum/i.test(item)), "dashboard state must expose the unresolved cadence blocker");
   const readinessResponse = await fetch(base + "/readyz");
   const readiness = await readinessResponse.json();
   assert.equal(readinessResponse.status, 503, "production readiness must fail closed while owner-controlled prerequisites are missing");
