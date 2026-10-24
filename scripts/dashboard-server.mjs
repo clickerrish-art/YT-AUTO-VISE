@@ -144,14 +144,51 @@ function appendFacebookRecoveryReceipt(record) {
 }
 function readFacebookRecoveryLedger() {
   const ledger = path.join(path.dirname(stateFile), "facebook-recovery-ledger.jsonl");
+  let stat;
   try {
-    return fs.readFileSync(ledger, "utf8").split("\n").filter(Boolean).flatMap(line => {
-      try {
-        const item = JSON.parse(line);
-        return typeof item.attemptId === "string" && typeof item.remotePostId === "string" ? [item] : [];
-      } catch { return []; }
-    });
-  } catch { return []; }
+    stat = fs.lstatSync(ledger);
+  } catch (error) {
+    if (error.code === "ENOENT") return [];
+    throw new Error("Facebook recovery ledger cannot be inspected; reconcile remote state before retrying");
+  }
+  if (stat.isSymbolicLink() || !stat.isFile()) {
+    throw new Error("Facebook recovery ledger is not a regular file; reconcile remote state before retrying");
+  }
+  let raw;
+  try {
+    raw = fs.readFileSync(ledger, "utf8");
+  } catch {
+    throw new Error("Facebook recovery ledger cannot be read; reconcile remote state before retrying");
+  }
+  if (!raw) return [];
+  // A crash during append can leave a partial final JSON record. Never skip it:
+  // doing so could hide the only receipt for a remote operation with uncertain outcome.
+  if (!raw.endsWith("\n")) {
+    throw new Error("Facebook recovery ledger has an incomplete final record; preserve it and reconcile remote state before retrying");
+  }
+  const lines = raw.slice(0, -1).split("\n");
+  const records = [];
+  for (const line of lines) {
+    if (!line.trim()) {
+      throw new Error("Facebook recovery ledger contains an empty record; reconcile remote state before retrying");
+    }
+    let item;
+    try {
+      item = JSON.parse(line);
+    } catch {
+      throw new Error("Facebook recovery ledger contains malformed JSON; preserve it and reconcile remote state before retrying");
+    }
+    if (!item || typeof item !== "object" || Array.isArray(item) ||
+        typeof item.attemptId !== "string" || !item.attemptId.trim() ||
+        typeof item.remotePostId !== "string" || !item.remotePostId.trim() ||
+        typeof item.status !== "string" || !item.status.trim() ||
+        typeof item.reason !== "string" ||
+        !Number.isFinite(Date.parse(item.recordedAt ?? ""))) {
+      throw new Error("Facebook recovery ledger record is incomplete; preserve it and reconcile remote state before retrying");
+    }
+    records.push(item);
+  }
+  return records;
 }
 function verifiedFacebookPageId(state, config) {
   const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
