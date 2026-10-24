@@ -1,0 +1,47 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { validatePublicationSlot, weeklyUtcCronGaps } from "../scripts/schedule-policy.mjs";
+
+test("publication slot compares actual instants and rejects same-local-date and under-72-hour collisions", () => {
+  const existing = [
+    { id: "published-1", status: "published", scheduledAt: "2026-10-20T15:00:00.000Z" },
+    { id: "scheduled-2", status: "scheduled", scheduledAt: "2026-10-22T15:00:00.000Z" }
+  ];
+  const tooClose = validatePublicationSlot({ id: "new", scheduledAt: "2026-10-24T15:00:00.000Z" }, existing);
+  assert.equal(tooClose.valid, false);
+  assert.ok(tooClose.errors.some(error => error.includes("48 hours is below the 72-hour minimum")));
+  const enoughGap = validatePublicationSlot({ id: "new", scheduledAt: "2026-10-25T15:00:00.000Z" }, existing);
+  assert.equal(enoughGap.valid, true);
+});
+
+test("publication slot rejects duplicate IDs, invalid timestamps, and same Johannesburg date", () => {
+  assert.equal(validatePublicationSlot(
+    { id: "job-1", scheduledAt: "2026-10-24T10:00:00Z" },
+    [{ id: "job-2", status: "scheduled", scheduledAt: "2026-10-24T22:00:00Z" }]
+  ).valid, false);
+  assert.ok(validatePublicationSlot(
+    { id: "job-1", scheduledAt: "2026-10-24T10:00:00Z" },
+    [{ id: "job-1", status: "scheduled", scheduledAt: "2026-10-28T10:00:00Z" }]
+  ).errors.some(error => error.includes("duplicate job ID")));
+  assert.throws(() => validatePublicationSlot({ id: "x", scheduledAt: "not-a-date" }, []), /valid ISO timestamp/);
+});
+
+test("draft items do not block slots but active items must have real timestamps", () => {
+  assert.equal(validatePublicationSlot(
+    { id: "new", scheduledAt: "2026-10-24T15:00:00Z" },
+    [{ id: "draft-1", status: "draft", scheduledAt: "2026-10-24T15:00:00Z" }]
+  ).valid, true);
+  assert.ok(validatePublicationSlot(
+    { id: "new", scheduledAt: "2026-10-24T15:00:00Z" },
+    [{ id: "active-1", status: "published" }]
+  ).errors.some(error => error.includes("missing scheduledAt")));
+});
+
+test("weekly UTC cadence detects the actual 48/48/72-hour pattern", () => {
+  const gaps = weeklyUtcCronGaps([
+    { day: "Tuesday", cronUtc: "0 15 * * 2" },
+    { day: "Thursday", cronUtc: "0 15 * * 4" },
+    { day: "Saturday", cronUtc: "0 15 * * 6" }
+  ]);
+  assert.deepEqual(gaps.map(gap => gap.hours), [48, 48, 72]);
+});
