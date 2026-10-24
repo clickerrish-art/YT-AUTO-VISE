@@ -21,6 +21,7 @@ jobs:
     timeout-minutes: 10
     env:
       FACEBOOK_STATE_DIR: ${{ vars.FACEBOOK_STATE_DIR }}
+      FACEBOOK_PUBLISH_ENABLED: ${{ vars.FACEBOOK_PUBLISH_ENABLED }}
       META_USER_ACCESS_TOKEN: ${{ secrets.META_USER_ACCESS_TOKEN }}
       META_PAGE_ACCESS_TOKEN: ${{ secrets.META_PAGE_ACCESS_TOKEN }}
     steps:
