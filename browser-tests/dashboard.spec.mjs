@@ -1,4 +1,8 @@
 import { test, expect } from "@playwright/test";
+import { spawn } from "node:child_process";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 
 const operatorToken = "e2e-only-token-" + "x".repeat(40);
 
@@ -172,4 +176,95 @@ test("campaign controls fail closed on unapproved destinations and retain Safari
   expect(selar.destinationUrl).toBe("https://selar.com/0u19v8u99l");
   expect(selar.status).toBe("ACTIVE_FOR_DRAFTS_ONLY");
   expect(state.publishingEnabled).toBe(false);
+});
+
+
+test("dashboard state survives a real local server restart", async ({ page }) => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-browser-restart-"));
+  const port = 20_000 + Math.floor(Math.random() * 20_000);
+  const base = `http://127.0.0.1:${port}`;
+  let child;
+
+  async function startServer() {
+    const processHandle = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+      env: {
+        PATH: process.env.PATH,
+        HOME: process.env.HOME,
+        NODE_ENV: "test",
+        DASHBOARD_OPERATOR_TOKEN: operatorToken,
+        DASHBOARD_OPERATOR_ID: "playwright-restart-test-operator",
+        DASHBOARD_STATE_DIR: stateDir,
+        UPLOAD_LOG_DIR: path.join(stateDir, "run-logs"),
+        PORT: String(port),
+        DASHBOARD_HOST: "127.0.0.1"
+      },
+      stdio: ["ignore", "pipe", "pipe"]
+    });
+    let logs = "";
+    processHandle.stdout.on("data", chunk => { logs += chunk.toString(); });
+    processHandle.stderr.on("data", chunk => { logs += chunk.toString(); });
+    for (let attempt = 0; attempt < 80; attempt++) {
+      if (processHandle.exitCode !== null) throw new Error("Isolated dashboard exited before ready: " + logs);
+      try {
+        const response = await fetch(base + "/healthz");
+        if (response.ok) return processHandle;
+      } catch {}
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    processHandle.kill("SIGTERM");
+    throw new Error("Isolated dashboard did not become ready: " + logs);
+  }
+
+  async function stopServer(processHandle) {
+    if (!processHandle || processHandle.exitCode !== null) return;
+    const exited = new Promise(resolve => processHandle.once("exit", resolve));
+    processHandle.kill("SIGTERM");
+    await exited;
+  }
+
+  try {
+    child = await startServer();
+    await page.goto(base + "/");
+    await page.locator("#token").fill(operatorToken);
+    await page.locator("#connect").click();
+    await expect(page.locator("#app")).toBeVisible();
+
+    const response = await page.request.get(base + "/api/state", {
+      headers: { "x-operator-token": operatorToken }
+    });
+    expect(response.status()).toBe(200);
+    const state = await response.json();
+    const slot = state.schedule.schedule[0];
+    const scheduledDate = candidateDateForSlot(state, slot);
+    const draftId = "restart-e2e-" + Date.now().toString(36);
+
+    await page.locator("#id").fill(draftId);
+    await page.locator("#title").fill("Restart persistence acceptance");
+    await page.locator("#topic").fill("Verify committed draft survives server restart");
+    await page.locator("#day").selectOption(slot.day);
+    await page.locator("#scheduledDate").fill(scheduledDate);
+    await page.getByRole("button", { name: "Save draft" }).click();
+    await expect(page.locator("#message")).toContainText("Draft saved and production job", { timeout: 10_000 });
+    await expect(page.locator("#queue")).toContainText(draftId);
+
+    await stopServer(child);
+    child = await startServer();
+    await page.goto(base + "/");
+    await page.locator("#token").fill(operatorToken);
+    await page.locator("#connect").click();
+    await expect(page.locator("#app")).toBeVisible();
+    await expect(page.locator("#queue")).toContainText(draftId);
+
+    const afterRestart = await page.request.get(base + "/api/state", {
+      headers: { "x-operator-token": operatorToken }
+    });
+    expect(afterRestart.status()).toBe(200);
+    const restored = await afterRestart.json();
+    expect(restored.queueItems.some(item => item.id === draftId)).toBe(true);
+    expect(restored.jobs.some(job => job.kind === "CONTENT_PRODUCTION" && job.idempotencyKey === "draft:" + draftId)).toBe(true);
+    expect(restored.publishingEnabled).toBe(false);
+  } finally {
+    await stopServer(child);
+    fs.rmSync(stateDir, { recursive: true, force: true });
+  }
 });
