@@ -377,19 +377,47 @@ const server = http.createServer(async (req, res) => {
       const idea = generateFacebookIdea({ date, existingDrafts: state.facebookDrafts, recentPosts: state.facebookPosts });
       return json(res, 200, { idea, publishingEnabled: false, publishReady: false });
     }
+    if (req.method === "POST" && url.pathname === "/api/facebook/verify-page") {
+      const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+      const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
+      const accessToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
+      const apiVersion = process.env.META_GRAPH_API_VERSION ?? config.apiVersion ?? "v26.0";
+      if (!/^\\d{5,30}$/.test(envPageId) || config.destinationPageId !== envPageId) return json(res, 409, { error: "Configure the exact owner-verified numeric Page ID in both config/facebook-publishing.json and NATURE_FRONTIERS_FACEBOOK_PAGE_ID first" });
+      if (accessToken.length < 20) return json(res, 409, { error: "META_PAGE_ACCESS_TOKEN is missing from the secure environment" });
+      let identity;
+      try {
+        identity = await verifyMetaPageIdentity({ pageId: config.destinationPageId, expectedPageId: envPageId, accessToken, apiVersion, expectedPageName: config.destinationPageName ?? "", fetchImpl: fetch });
+      } catch (error) {
+        return json(res, 502, { error: error instanceof Error ? error.message : "Meta Page identity verification failed", verified: false });
+      }
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        state.facebookConnection = { verified: true, pageId: identity.pageId, pageName: identity.pageName, verifiedAt: identity.checkedAt, apiVersion: identity.apiVersion, actor: operatorId };
+        state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_PAGE_IDENTITY_VERIFIED", destinationPageId: identity.pageId, pageName: identity.pageName, verifiedAt: identity.checkedAt, apiVersion: identity.apiVersion, actor: operatorId });
+        saveState(state);
+        return json(res, 200, { identity, permissionsConfirmed: process.env.META_PAGE_PERMISSIONS_CONFIRMED === "YES", publishingEnabled: false, note: "Identity was checked read-only. Publishing permissions must be confirmed separately and every mutation still requires explicit operation authorization." });
+      } finally { release(); }
+    }
     if (req.method === "GET" && url.pathname === "/api/facebook/state") {
       const state = loadState();
       const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
       const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
-      const pageVerified = config.pageIdentityVerified === true && /^\\d{5,30}$/.test(config.destinationPageId ?? "") && envPageId === config.destinationPageId;
+      const pageVerified = Boolean(verifiedFacebookPageId(state, config));
+      const permissionsConfirmed = process.env.META_PAGE_PERMISSIONS_CONFIRMED === "YES";
+      const accessTokenConfigured = (process.env.META_PAGE_ACCESS_TOKEN ?? "").length >= 20;
       const experiment = summarizeFacebookExperiment(state.facebookPosts, { minPerArm: config.experiment?.minimumPostsPerArm ?? 14 });
       const blockers = [];
-      if (!pageVerified) blockers.push("Nature Frontiers Facebook Page identity is not independently verified against the configured Page ID and secure environment value");
-      if (config.publishingEnabled !== true) blockers.push("Facebook publishing kill switch is disabled");
-      blockers.push("No live Meta publishing adapter or verified API permission evidence is configured; drafts/export only");
+      if (!pageVerified) blockers.push("Nature Frontiers Facebook Page identity has not passed a recent live Meta API check for the configured Page ID");
+      if (!accessTokenConfigured) blockers.push("META_PAGE_ACCESS_TOKEN is not configured in the secure environment");
+      if (!permissionsConfirmed) blockers.push("Meta Page publishing permissions have not been owner-confirmed");
+      if (config.publishingEnabled !== true || config.dryRun !== false || process.env.FACEBOOK_PUBLISH_ENABLED !== "YES") blockers.push("Facebook publishing kill switches remain disabled (config, dry-run and secure environment switches must all be explicitly changed)");
       return json(res, 200, {
         destination: config.destination, destinationPageId: pageVerified ? config.destinationPageId : null,
-        pageIdentityVerified: pageVerified, publishingEnabled: false, dryRun: true,
+        pageIdentityVerified: pageVerified, pageName: pageVerified ? state.facebookConnection.pageName : null,
+        lastIdentityCheck: pageVerified ? state.facebookConnection.verifiedAt : null,
+        metaAdapterImplemented: true, permissionsConfirmed, accessTokenConfigured,
+        publishingEnabled: false, dryRun: config.dryRun !== false,
         timezone: config.timezone, dailyTarget: config.dailyTarget, defaultLocalTime: config.defaultLocalTime,
         comparisonLocalTime: config.comparisonLocalTime, drafts: state.facebookDrafts.slice(-30).reverse(),
         posts: state.facebookPosts.slice(-30).reverse(), attempts: state.facebookAttempts.slice(-30).reverse(),
