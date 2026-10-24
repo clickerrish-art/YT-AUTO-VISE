@@ -157,7 +157,7 @@ test("dashboard refuses to start when persisted Facebook history is malformed", 
     facebookDrafts: { lost: "history" },
     facebookPosts: [],
     facebookAttempts: []
-  }) + "\\n", { mode: 0o600 });
+  }) + "\n", { mode: 0o600 });
   const port = 28000 + Math.floor(Math.random() * 10000);
   const token = "test-token-" + "y".repeat(40);
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
