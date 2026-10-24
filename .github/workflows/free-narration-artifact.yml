@@ -12,7 +12,7 @@ on:
           - short-002
         default: both
   schedule:
-    # Tuesday at 17:00 SAST: long-form draft. Saturday at 17:00 SAST: Short draft (15:00 UTC crons; >=72h apart).
+    # Tuesday at 17:00 SAST: long-form draft. Saturday Short at 17:00 SAST: draft (15:00 UTC crons; >=72h apart).
     - cron: "0 15 * * 6"
   push:
     branches: [main]
