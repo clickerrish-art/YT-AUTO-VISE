@@ -39,8 +39,9 @@ Open `http://127.0.0.1:8787`. Keep the terminal running. The dashboard's actions
 Source of truth: `config/weekly-content-plan.json`.
 
 - Tuesday, 17:00 Africa/Johannesburg: long-form draft, 6–10 minutes, 16:9
-- Thursday, 17:00 Africa/Johannesburg: long-form draft, 6–10 minutes, 16:9
 - Saturday, 17:00 Africa/Johannesburg: Short draft, 50–60 seconds, 9:16
+
+The two weekly draft slots are 96 hours apart Tuesday-to-Saturday and 72 hours Saturday-to-next-Tuesday. The validator rejects shorter weekly gaps and queue-slot collisions. Actual upload history must still be checked before any publication.
 - GitHub Actions uses 15:00 UTC and creates drafts only.
 
 ## Useful commands
