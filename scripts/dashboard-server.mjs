@@ -459,7 +459,163 @@ const server = http.createServer(async (req, res) => {
       } finally { release(); }
     }
     if (req.method === "POST" && url.pathname === "/api/facebook/publish") {
-      return json(res, 409, { error: "Live Facebook publishing is not implemented or authorized. No remote operation was attempted; retain the draft and use the owner-approved manual handoff.", publishingEnabled: false, dryRun: true });
+      const body = await readBody(req);
+      if (typeof body.draftId !== "string" || body.confirmOperation !== true) return json(res, 400, { error: "draftId and explicit confirmOperation=true are required for a single authorized Facebook scheduling operation" });
+      const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+      const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
+      const accessToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
+      const apiVersion = process.env.META_GRAPH_API_VERSION ?? config.apiVersion ?? "v26.0";
+      const permissionsConfirmed = process.env.META_PAGE_PERMISSIONS_CONFIRMED === "YES";
+      const envPublishingEnabled = process.env.FACEBOOK_PUBLISH_ENABLED === "YES";
+      const expectedPageId = config.pageIdentityVerified === true && config.destinationPageId === envPageId ? config.destinationPageId : "";
+      const setupBlockers = [];
+      if (config.publishingEnabled !== true) setupBlockers.push("config/facebook-publishing.json publishingEnabled must be explicitly enabled by the owner");
+      if (config.dryRun !== false) setupBlockers.push("Facebook dryRun must be explicitly disabled by the owner after all checks");
+      if (!envPublishingEnabled) setupBlockers.push("FACEBOOK_PUBLISH_ENABLED must equal YES as the separate publishing kill switch");
+      if (!expectedPageId) setupBlockers.push("The owner-verified Page ID in config must match NATURE_FRONTIERS_FACEBOOK_PAGE_ID and pageIdentityVerified=true");
+      if (accessToken.length < 20) setupBlockers.push("META_PAGE_ACCESS_TOKEN is missing from the secure environment");
+      if (!permissionsConfirmed) setupBlockers.push("META_PAGE_PERMISSIONS_CONFIRMED must equal YES after the owner verifies Meta Page roles and permissions");
+      if (setupBlockers.length) return json(res, 409, { error: "Facebook publishing configuration is not ready; no remote mutation was attempted", blockers: setupBlockers, publishingEnabled: false });
+
+      let draftSnapshot;
+      {
+        const release = await acquireStateLock();
+        try {
+          const state = loadState();
+          draftSnapshot = state.facebookDrafts.find(item => item.id === body.draftId);
+          if (!draftSnapshot) return json(res, 404, { error: "Facebook draft not found" });
+          const evaluation = evaluateFacebookDraft(draftSnapshot, { existingDrafts: state.facebookDrafts.filter(item => item.id !== draftSnapshot.id && !["REJECTED", "CANCELLED"].includes(item.status)), recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root });
+          const gate = assertFacebookPublishAllowed(draftSnapshot, { publishingEnabled: true, explicitOperationAuthorization: true, dryRun: false, verifiedPageId: expectedPageId, evaluation });
+          if (!gate.allowed) return json(res, 409, { error: "Facebook draft is not approved for this exact operation", blockers: gate.blockers, evaluation, publishingEnabled: false });
+          const dateCollision = state.facebookDrafts.some(item => item.id !== draftSnapshot.id && item.scheduledDate === draftSnapshot.scheduledDate && !["REJECTED", "CANCELLED"].includes(item.status))
+            || state.facebookPosts.some(item => item.scheduledDate === draftSnapshot.scheduledDate);
+          if (dateCollision) return json(res, 409, { error: "Another Facebook draft/post occupies this local calendar date; one-post-per-day collision prevented" });
+          const idempotencyKey = "facebook:" + draftSnapshot.id + ":" + draftSnapshot.approval.fingerprint;
+          const previousAttempt = state.facebookAttempts.find(item => item.idempotencyKey === idempotencyKey);
+          if (previousAttempt) {
+            if (["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(previousAttempt.status)) return json(res, 200, { attempt: previousAttempt, reused: true, publishingEnabled: false });
+            return json(res, 409, { error: "A prior attempt exists and must be reconciled before any further operation", attempt: previousAttempt, retryAllowed: false });
+          }
+        } finally { release(); }
+      }
+
+      let identity;
+      try {
+        identity = await verifyMetaPageIdentity({
+          pageId: config.destinationPageId, expectedPageId, accessToken, apiVersion,
+          expectedPageName: config.destinationPageName ?? "", fetchImpl: fetch
+        });
+      } catch (error) {
+        return json(res, 502, { error: error instanceof Error ? error.message : "Meta Page identity verification failed", publishingEnabled: false, remoteMutationAttempted: false });
+      }
+
+      const idempotencyKey = "facebook:" + draftSnapshot.id + ":" + draftSnapshot.approval.fingerprint;
+      let attempt;
+      {
+        const release = await acquireStateLock();
+        try {
+          const state = loadState();
+          const current = state.facebookDrafts.find(item => item.id === body.draftId);
+          if (!current || current.approval?.fingerprint !== draftSnapshot.approval?.fingerprint || current.status !== "APPROVED_DRAFT") return json(res, 409, { error: "Draft or approval changed during Page identity verification; recheck and approve again" });
+          const evaluation = evaluateFacebookDraft(current, { existingDrafts: state.facebookDrafts.filter(item => item.id !== current.id && !["REJECTED", "CANCELLED"].includes(item.status)), recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root });
+          const gate = assertFacebookPublishAllowed(current, { publishingEnabled: true, explicitOperationAuthorization: true, dryRun: false, verifiedPageId: expectedPageId, evaluation });
+          if (!gate.allowed) return json(res, 409, { error: "Facebook preflight changed during authorization", blockers: gate.blockers });
+          if (state.facebookAttempts.some(item => item.idempotencyKey === idempotencyKey)) return json(res, 409, { error: "An attempt for this approved draft already exists; reconcile before retrying" });
+          attempt = {
+            id: crypto.randomUUID(), kind: "FACEBOOK_PUBLISH_ATTEMPT", idempotencyKey,
+            draftId: current.id, contentFingerprint: current.contentFingerprint,
+            approvalFingerprint: current.approval.fingerprint, destinationPageId: expectedPageId,
+            pageIdentity: { pageId: identity.pageId, pageName: identity.pageName, checkedAt: identity.checkedAt },
+            status: "SUBMITTING", retryAllowed: false, remotePostId: null,
+            startedAt: new Date().toISOString(), updatedAt: new Date().toISOString(), actor: operatorId
+          };
+          state.facebookAttempts.push(attempt);
+          state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_PUBLISH_ATTEMPT_PREPARED", attemptId: attempt.id, draftId: current.id, idempotencyKey, destinationPageId: expectedPageId, at: attempt.startedAt, actor: operatorId, explicitOperationAuthorization: true });
+          saveState(state);
+          draftSnapshot = current;
+        } finally { release(); }
+      }
+
+      let submitted;
+      try {
+        submitted = await publishMetaPagePost({
+          draft: draftSnapshot, pageId: expectedPageId, expectedPageId, accessToken, apiVersion,
+          permissionsConfirmed, fetchImpl: fetch, rootDir: root
+        });
+      } catch (error) {
+        const uncertain = error instanceof MetaPageApiError && error.uncertain === true;
+        const release = await acquireStateLock();
+        try {
+          const state = loadState();
+          const index = state.facebookAttempts.findIndex(item => item.id === attempt.id);
+          if (index >= 0) state.facebookAttempts[index] = { ...state.facebookAttempts[index], status: uncertain ? "NEEDS_RECONCILIATION" : "FAILED", retryAllowed: false, error: error instanceof Error ? error.message : "Meta request failed", errorCode: error instanceof MetaPageApiError ? error.code : null, updatedAt: new Date().toISOString() };
+          state.audit.push({ id: crypto.randomUUID(), action: uncertain ? "FACEBOOK_PUBLISH_OUTCOME_UNCERTAIN" : "FACEBOOK_PUBLISH_FAILED", attemptId: attempt.id, at: new Date().toISOString(), actor: operatorId, retryAllowed: false });
+          saveState(state);
+        } finally { release(); }
+        return json(res, uncertain ? 502 : 409, { error: error instanceof Error ? error.message : "Meta publish failed", attemptId: attempt.id, status: uncertain ? "NEEDS_RECONCILIATION" : "FAILED", retryAllowed: false, publishingEnabled: false });
+      }
+
+      try {
+        const release = await acquireStateLock();
+        try {
+          const state = loadState();
+          const index = state.facebookAttempts.findIndex(item => item.id === attempt.id);
+          if (index < 0) throw new Error("Durable Facebook attempt record disappeared after remote submission");
+          state.facebookAttempts[index] = { ...state.facebookAttempts[index], status: "REMOTE_SCHEDULED_UNVERIFIED", remotePostId: submitted.remotePostId, photoId: submitted.photoId, scheduledPublishTime: submitted.scheduledPublishTime, updatedAt: new Date().toISOString() };
+          state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_REMOTE_ID_RECORDED", attemptId: attempt.id, remotePostId: submitted.remotePostId, at: new Date().toISOString(), actor: operatorId });
+          saveState(state);
+        } finally { release(); }
+      } catch {
+        return json(res, 503, { error: "Meta accepted the request, but durable receipt persistence failed. Preserve this remote ID and reconcile; never retry blindly.", attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", retryAllowed: false });
+      }
+
+      let remote;
+      try {
+        remote = await fetchMetaPagePost({ remotePostId: submitted.remotePostId, expectedPageId, accessToken, apiVersion, fetchImpl: fetch });
+      } catch (error) {
+        const release = await acquireStateLock();
+        try {
+          const state = loadState();
+          const index = state.facebookAttempts.findIndex(item => item.id === attempt.id);
+          if (index >= 0) state.facebookAttempts[index] = { ...state.facebookAttempts[index], status: "NEEDS_RECONCILIATION", remotePostId: submitted.remotePostId, retryAllowed: false, error: error instanceof Error ? error.message : "Remote verification failed", updatedAt: new Date().toISOString() };
+          state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_REMOTE_VERIFICATION_FAILED", attemptId: attempt.id, remotePostId: submitted.remotePostId, at: new Date().toISOString(), actor: operatorId, retryAllowed: false });
+          saveState(state);
+        } finally { release(); }
+        return json(res, 502, { error: "Remote post exists or may exist, but verification failed; reconcile before retrying", attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", retryAllowed: false });
+      }
+      if (!["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(remote.status)) {
+        const release = await acquireStateLock();
+        try {
+          const state = loadState();
+          const index = state.facebookAttempts.findIndex(item => item.id === attempt.id);
+          if (index >= 0) state.facebookAttempts[index] = { ...state.facebookAttempts[index], status: "NEEDS_RECONCILIATION", remotePostId: submitted.remotePostId, remoteVerification: remote, retryAllowed: false, updatedAt: new Date().toISOString() };
+          saveState(state);
+        } finally { release(); }
+        return json(res, 502, { error: "Meta returned a remote object but its scheduled/published state could not be verified", attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", retryAllowed: false });
+      }
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.facebookAttempts.findIndex(item => item.id === attempt.id);
+        const finalAttempt = { ...state.facebookAttempts[index], status: remote.status, remotePostId: remote.remotePostId, remoteUrl: remote.remoteUrl, remoteVerification: remote, verifiedAt: remote.verifiedAt, updatedAt: new Date().toISOString(), retryAllowed: false };
+        state.facebookAttempts[index] = finalAttempt;
+        state.facebookPosts.push({
+          id: attempt.id, draftId: draftSnapshot.id, status: remote.status,
+          contentFingerprint: draftSnapshot.contentFingerprint, caption: draftSnapshot.caption,
+          topic: draftSnapshot.topic, pillar: draftSnapshot.pillar,
+          scheduledDate: draftSnapshot.scheduledDate, scheduledAt: draftSnapshot.scheduledAt,
+          publishedAt: remote.isPublished ? remote.createdTime : null,
+          remotePostId: remote.remotePostId, remoteUrl: remote.remoteUrl,
+          experiment: draftSnapshot.experiment, metrics: null
+        });
+        const draftIndex = state.facebookDrafts.findIndex(item => item.id === draftSnapshot.id);
+        if (draftIndex >= 0) state.facebookDrafts[draftIndex] = { ...state.facebookDrafts[draftIndex], status: remote.status, remote: { remotePostId: remote.remotePostId, remoteUrl: remote.remoteUrl, verifiedAt: remote.verifiedAt } };
+        state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_REMOTE_POST_VERIFIED", attemptId: attempt.id, draftId: draftSnapshot.id, remotePostId: remote.remotePostId, remoteUrl: remote.remoteUrl, status: remote.status, at: remote.verifiedAt, actor: operatorId });
+        saveState(state);
+        return json(res, 200, { attempt: finalAttempt, remote, publishingEnabled: false, note: "This operation was individually authorized. Future operations remain disabled unless separately authorized." });
+      } catch {
+        return json(res, 503, { error: "Remote post was verified but final receipt persistence failed. Reconcile using this remote ID; do not retry.", attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", retryAllowed: false });
+      } finally { release(); }
     }
     if (req.method === "GET" && url.pathname === "/api/tasks") {
       return json(res, 200, { publicPublishingEnabled: false, tasks: [...allowedTasks.keys()] });
