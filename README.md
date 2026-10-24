@@ -6,7 +6,7 @@ Free-first, local-first content operations for the SonicVhibez YouTube channel. 
 
 ## Requirements
 
-- Node.js 20 or newer
+- Node.js 22 or newer (CI runs on Node.js 24)
 - npm
 - FFmpeg and ffprobe with required filters/fonts for real rendering and thumbnail extraction
 - Legitimately licensed footage/narration/music and retained rights evidence before any production release
