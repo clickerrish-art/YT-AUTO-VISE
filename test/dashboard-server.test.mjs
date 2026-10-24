@@ -32,6 +32,8 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(initial.status, 200);
   const body = await initial.json();
   assert.equal(body.publishingEnabled, false);
+  assert.equal(Object.hasOwn(body, "stateFile"), false, "authenticated API responses must not disclose the local state-file path");
+  assert.equal(logs.includes(stateDir), false, "startup logs must not disclose the local state directory");
   assert.ok(body.blockers.some(item => /complete SonicVhibez public\/private\/unlisted history is reconciled/i.test(item)), "dashboard state must expose the live history reconciliation blocker");
   const readinessResponse = await fetch(base + "/readyz");
   const readiness = await readinessResponse.json();
