@@ -74,6 +74,12 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(duplicate.status, 409);
   const conflictingSlot = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-other", title: "Conflicting Tuesday reservation" }) });
   assert.equal(conflictingSlot.status, 409, "different drafts must not reserve the same calendar slot");
+  const unsupportedDirectJob = await fetch(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify({
+    idempotencyKey: "draft:thursday-job", title: "Unsupported Thursday job", topic: "schedule boundary test",
+    contentType: "long_form", scheduledDay: "Thursday", scheduledDate: "2026-10-29", inputReferences: []
+  }) });
+  assert.equal(unsupportedDirectJob.status, 409, "direct API jobs must respect the authoritative schedule, not just same-date locks");
+  assert.match((await unsupportedDirectJob.json()).error, /not an authorized slot/);
   const invalidDate = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-invalid-date", scheduledDate: "2026-02-31" }) });
   assert.equal(invalidDate.status, 400, "invalid calendar dates must be rejected");
   const unsafe = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-unsafe", rightsConfirmed: true }) });
