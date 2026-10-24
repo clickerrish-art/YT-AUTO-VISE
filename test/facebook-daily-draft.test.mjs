@@ -34,6 +34,20 @@ test("daily Facebook draft package is research-only, timezone-labelled and idemp
   assert.equal(fs.readdirSync(root).filter(name => name.endsWith(".json")).length, 1);
 });
 
+test("missed daily experiment slots are flagged instead of silently backdated", (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-daily-missed-"));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const result = generateDailyFacebookDraft({
+    date: "2030-10-25", outputDir: root, now: "2030-10-25T20:00:00.000Z"
+  });
+  assert.equal(result.package.publishReady, false);
+  assert.equal(result.package.publishingEnabled, false);
+  assert.equal(result.package.scheduleStatus, "MISSED_SLOT_REVIEW_REQUIRED");
+  assert.equal(result.package.status, "MISSED_SLOT_REVIEW_REQUIRED");
+  assert.ok(result.package.blockers.some(item => /slot has passed; do not backdate or batch-publish/i.test(item)));
+  assert.ok(Date.parse(result.package.proposedScheduledAt) < Date.parse("2030-10-25T20:00:00.000Z"));
+});
+
 test("daily draft generator rejects invalid dates and refuses malformed existing output", (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-daily-invalid-"));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
