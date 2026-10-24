@@ -2,7 +2,7 @@
 
 ## 1. Safe startup
 
-Use Node.js 20+ and run `npm ci --ignore-scripts` (the supported, CI-verified install path). Set `DASHBOARD_OPERATOR_TOKEN` to a random value at least 24 characters long and `DASHBOARD_OPERATOR_ID` to the actual authorized operator. Start with `npm run dashboard`; it binds to loopback (`127.0.0.1`) by default. Keep it local. A non-loopback deployment requires a securely authenticated reverse proxy, TLS, network controls and reviewed operational configuration; do not expose the bare server.
+Use Node.js 20+ and run `npm ci --ignore-scripts` (the supported, CI-verified install path). Set `DASHBOARD_OPERATOR_TOKEN` to a random value at least 24 characters long and `DASHBOARD_OPERATOR_ID` to the actual authorized operator. Start with `npm run dashboard`; it binds to loopback (`127.0.0.1) by default. Keep it local. A non-loopback deployment requires a securely authenticated reverse proxy, TLS, network controls and reviewed operational configuration; do not expose the bare server.
 
 Check:
 - `GET /healthz` — process health
@@ -53,7 +53,7 @@ The uploader verifies that the authenticated channel title is exactly SonicVhibe
 Attempt ledger: `run-logs/upload-attempts.json`. Receipts: `run-logs/upload-<video-id>.json`.
 
 - If an attempt is marked `RECOVERY_REQUIRED`, do not run a new upload attempt for that job/artifact.
-- If the ledger contains a remote video ID, use the reconciliation-only mode (`RECONCILE_ONLY=YES`) to fetch that exact remote video, verify the channel and private status, and rebuild the local receipt.
+- If the ledger contains a remote video ID, use the reconciliation-only mode (`RECONCILE_ONLY=YES) to fetch that exact remote video, verify the channel and private status, and rebuild the local receipt.
 - If no remote video ID was persisted, reconcile manually in YouTube Studio/API using the authorized account before retrying. Never guess an ID or blindly repeat the insert.
 - A receipt-write failure is not success. Only the remote verification plus durable receipt can establish `PRIVATE_UPLOAD_VERIFIED`.
 
@@ -62,7 +62,7 @@ For GitHub Actions upload workflows, preserve the prior `sonicvhibez-upload-ledg
 ## 7. Backup and restore
 
 Stop the dashboard before backup. Copy:
-- the directory specified by `DASHBOARD_STATE_DIR` (or repository `state/`), including `dashboard-state.json`;
+- the directory specified by `DASHBOARD_STATE_DIR` (or repository `state/), including `dashboard-state.json`;
 - `run-logs/upload-attempts.json`;
 - `run-logs/upload-approvals/` and upload receipt JSON files;
 - original rights/license evidence and source asset register.
