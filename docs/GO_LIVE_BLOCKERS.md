@@ -1,3 +1,24 @@
+# CURRENT ACCEPTANCE EVIDENCE — 2026-10-24 (live re-check)
+
+This snapshot was refreshed from GitHub during the current audit. It records the observed state before this documentation edit; the resulting documentation commit and its own CI must be checked separately before calling this snapshot current.
+
+- Observed PR #1 head: `df70ec63344501106d8b40e4c43ee71f675da6da`; PR remains open, draft and unmerged: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1.
+- Default branch HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`; live compare: 859 commits ahead, 2 behind. This large divergence is not resolved. Do not merge/rebase or rewrite history without owner review.
+- Exact-head PR workflow results observed for `df70ec63344501106d8b40e4c43ee71f675da6da`:
+  - [Automation validation — run 40115828675](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40115828675): success; 197 Node tests passed, 0 failed, 0 skipped; 8 Python safety tests passed; campaign/queue checks, JavaScript syntax and Python compilation passed.
+  - [Content quality — run 40115828668](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40115828668): success; 197 Node tests passed, 0 failed, 0 skipped.
+  - [Metadata validation — run 40115828706](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40115828706): success; 197 Node tests passed, 0 failed, 0 skipped; schedule/caption checks passed and production readiness remained blocked.
+  - [Facebook daily draft — run 40115828664](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40115828664): skipped on the PR event. This is not a default-branch scheduled workflow acceptance.
+  - Combined commit status endpoint returned no status entries. The three named PR workflow runs above are the positive evidence available; do not infer that every required check ran.
+- The automation workflow used `npm ci --ignore-scripts`; its audit reported 4 moderate, 0 high and 0 critical advisories involving `gaxios`, `googleapis`, `googleapis-common` and `uuid`. The available Google API fix requires a major upgrade and has not been applied without compatibility testing. Unrestricted lifecycle-script installation was not tested.
+- Code review confirms Facebook live publishing is disabled in config, dry-run is enabled, and the emergency stop is on. The production queue is empty. The publisher does not inject a trusted semantic verifier, so factual posts fail closed. The intake validates supplied candidates but does not independently research claims and obtain genuine media rights.
+- No real Meta Page identity/permissions, persistent production runner, remote Facebook receipt, SonicVhibez OAuth/history reconciliation, authorized private YouTube upload/receipt, or owner-run isolated restore drill has been verified. Public YouTube publishing remains disabled; Safari campaigns remain inactive; the approved Selar URL remains exactly `https://selar.com/0u19v8u99l`.
+- Historical test-file incident: base-only commit `71578dafc24e5d48173dce3f4e392e18e42aa40e` added `test/restore-facebook-draft-history.test.mjs`, and `fa00d28e7f58911482686e4ad69fac9f4701a2e6` reverted it. Preserve this history for owner review; equivalent cross-run coverage is claimed in daily-draft tests, but the incident itself remains visible.
+
+**Decision: PRODUCTION ACCEPTANCE BLOCKED.** This is a code/test evidence snapshot, not proof of external account operation or production readiness.
+
+---
+
 # CURRENT ACCEPTANCE EVIDENCE — 2026-10-24
 
 This is the current dated evidence snapshot. Older checkpoints below are historical only. If the branch advances, consult PR #1 and the exact-SHA Actions results before treating this snapshot as current.
