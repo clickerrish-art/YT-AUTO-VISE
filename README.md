@@ -48,7 +48,7 @@ The official Meta Graph API adapter is implemented, but all defaults remain disa
 
 Run locally with `npm run facebook:draft:daily`. It uses the `Africa/Johannesburg` calendar date, checks existing dashboard drafts/posts when local state is available, assigns the 08:00/18:00 experiment arm, and creates one idempotent JSON draft package under `run-logs/facebook-daily-drafts/YYYY-MM-DD.json`. The package is explicitly research-required, has no assumed Page ID, factual claims, media or licence evidence, and always reports `publishReady=false` and `publishingEnabled=false`. Existing same-day output is preserved rather than overwritten.
 
-The new [daily draft workflow](.github/workflows/facebook-daily-draft.yml) runs at 07:30 SAST when scheduled on the default branch, and also runs in validation contexts. It retains a 14-day artifact for operator review: [latest verified draft artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529395/artifacts/12558943759). **GitHub scheduled workflows run from the default branch only**; because PR #1 remains draft, this schedule is not yet active as a production daily trigger. No step publishes to Facebook. A human must research claims, add rights-cleared media/evidence, verify the Page and permissions, complete review, and separately authorize any live operation after the kill switches and external gates are resolved.
+The new [daily draft workflow](.github/workflows/facebook-daily-draft.yml) runs at 07:30 SAST when scheduled on the default branch, and also runs in validation contexts. It retains a 14-day artifact for operator review: [latest verified draft artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091734576/artifacts/12558699856). **GitHub scheduled workflows run from the default branch only**; because PR #1 remains draft, this schedule is not yet active as a production daily trigger. No step publishes to Facebook. A human must research claims, add rights-cleared media/evidence, verify the Page and permissions, complete review, and separately authorize any live operation after the kill switches and external gates are resolved.
 
 ## Run the dashboard
 
@@ -91,15 +91,18 @@ Rendering requires real manifests, audio, captions, footage and rights evidence.
 
 ## Test evidence
 
-The latest verified code/test checkpoint is `1c1a9a4d4836cb728a6fb2030f2c402734e6b619`. All three validation workflows and the new daily-draft workflow passed on that exact commit:
-- [Automation validation — run 40091529534](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529534)
-- [Metadata validation — run 40091529360](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529360)
-- [Content quality — run 40091529363](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529363)
-- [Daily Facebook draft workflow — run 40091529395](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529395), [retained draft artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529395/artifacts/12558943759)
+The latest verified code/test checkpoint is `1155263c25e85f901b9245fd4e024898a1af6f19`. All three repository validation workflows and the daily-draft workflow passed on that exact commit:
+- [Automation validation — run 40091734573](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091734573)
+- [Metadata validation — run 40091734584](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091734584)
+- [Content quality — run 40091734600](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091734600)
+- [Daily Facebook draft workflow — run 40091734576](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091734576), [retained draft artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091734576/artifacts/12558699856)
 
-Each run reports 138 Node tests passed, 0 failed, 0 skipped. Automation also passed 8 Python safety tests, JavaScript syntax checks and Python compilation. CI used `npm ci --ignore-scripts` (46 packages added, 47 audited). npm audit still reports 4 moderate, 0 high and 0 critical advisories involving `gaxios`, `googleapis`, `googleapis-common` and `uuid`. Plain `npm ci` without `--ignore-scripts` remains unverified.
+Each run reports 139 Node tests passed, 0 failed, 0 skipped. Automation also passed 8 Python safety tests, JavaScript syntax checks and Python compilation. CI used `npm ci --ignore-scripts` (46 packages added, 47 audited). npm audit still reports 4 moderate, 0 high and 0 critical advisories involving `gaxios`, `googleapis`, `googleapis-common` and `uuid`. Plain `npm ci` without `--ignore-scripts` remains unverified.
 
-The latest code adds a research-only, idempotent daily Facebook draft generator and a scheduled artifact workflow; expands approval fingerprints to bind claims, source URLs, licensing provenance and disclosure; and invalidates Meta permission attestations after credential rotation. These tests use mocks and local fixtures. They do not prove live Meta Page identity, permissions, Insights, licence authenticity, or real publishing.
+The daily workflow's actual output marked the assigned 08:00 SAST slot `MISSED_SLOT_REVIEW_REQUIRED` because the run occurred after that time. The generator now records the proposed instant and refuses to backdate or catch up by publishing a backlog. The artifact remains draft-only. GitHub scheduled triggers run only on the default branch; PR #1 remains draft, so this schedule is not yet active as a production daily trigger.
+
+The latest code also binds approvals to claim/source/licensing details and invalidates Meta permission attestations after credential rotation. These tests use mocks and local fixtures; they do not prove live Meta Page identity, permissions, Insights, licence authenticity, or real publishing.
+
 
 ## Operations and recovery
 
