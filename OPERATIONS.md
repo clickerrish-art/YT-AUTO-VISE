@@ -148,3 +148,24 @@ Open the failed GitHub Actions run and inspect its summary/logs. Fix the root ca
 ## Rolling publication and history gate
 
 The authoritative cycle is `long_form → long_form → short`; each next actual publication must be at least 72 elapsed hours after the previous actual publication. The cycle's three gaps total at least 216 hours. Workflow cron slots are draft-preparation only. The production upload command fails closed unless authenticated channel history is retrieved, every public/private/unlisted video is covered by `CHANNEL_HISTORY_RECONCILIATION_PATH`, all IDs/timestamps/visibility match the remote API, the next format is correct, the gap is valid, and the upload-attempt ledger has no unresolved attempts. The reconciliation file is owner-reviewed evidence, not a substitute for the API comparison.
+
+
+## Autonomous Nature Frontiers Facebook publisher — current implementation
+
+The autonomous publisher is separate from the draft-only Facebook workflow and SonicVhibez YouTube uploader. See [the secure runner setup guide](docs/FACEBOOK_AUTONOMOUS_RUNNER_SETUP.md).
+
+- Scheduled workflow: `.github/workflows/facebook-autonomous-publisher.yml`, 07:30 Africa/Johannesburg, default branch only, persistent self-hosted runner labelled `facebook-publisher`.
+- Intake: `npm run facebook:intake:autonomous`. It accepts only evidence-bearing candidate records, runs the final-payload policy engine, queues eligible candidates and records blocked reasons in the durable state directory. It does not invent evidence, media, rights or captions.
+- Publisher: `npm run facebook:publish:autonomous`. It requires an absolute durable `FACEBOOK_STATE_DIR`, exact matching Page ID in config/runtime, both Meta tokens, `FACEBOOK_PUBLISH_ENABLED=YES`, `publishingEnabled=true`, `dryRun=false`, and `emergencyStop=false`. Defaults remain disabled.
+- Dashboard: authenticated `GET /api/facebook/autonomous-status` displays current configuration readiness, queue size, intake summary, recent run summary, blocked posts, uncertain attempts and the last verified receipt. It does not expose tokens or claim that the runner itself is healthy.
+- Routine path: the autonomous workflow does not require per-post approval. The visible dashboard no longer includes per-post review or manual publish forms for routine operation. The older separately gated API endpoints remain for compatibility and are not called by the autonomous schedule.
+
+### Recovery behavior
+
+Before selecting new work, the publisher examines durable attempts in `PUBLISHING` or `UNCERTAIN` state. It uses the official Page `scheduled_posts` and `feed` edges with bounded pagination, exact caption and time matching, and no mutation retry. A unique verified match is persisted as a receipt. No match does not prove non-publication; unresolved or ambiguous outcomes stay blocked and are retried only as read-only reconciliation on a later run. The original attempt and history are never deleted to enable retry.
+
+The checked-in `content/facebook-intake-candidates.json` and `content/facebook-autonomous-queue.json` are intentionally empty. Until a genuine content-intake record contains source evidence and excerpt, final caption, actual media checksum, licence evidence and the configured destination/schedule, the correct outcome is no post.
+
+### Release limitations
+
+Mock tests do not establish the real Page ID, token validity, permissions, runner isolation, durable volume, licence authenticity or successful remote publication. The self-hosted workflow is not active from the default branch until the PR is accepted through the repository's normal review process. Do not enable live flags until the exact candidate SHA has green CI and a controlled, separately authorized Meta integration test has a remotely verified receipt.
