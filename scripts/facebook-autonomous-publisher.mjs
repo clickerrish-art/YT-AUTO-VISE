@@ -64,6 +64,7 @@ export async function runAutonomousFacebookPublisher({
   publish = publishMetaPagePost,
   readRemote = fetchMetaPagePost
 } = {}) {
+  queuePath = env.FACEBOOK_AUTONOMOUS_QUEUE_PATH ?? queuePath;
   const config = readJson(configPath);
   // Safe defaults are intentionally a no-op rather than an error or implicit opt-in.
   if (config?.emergencyStop !== false || config?.publishingEnabled !== true || config?.dryRun !== false) {
