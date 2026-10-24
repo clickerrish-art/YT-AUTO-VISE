@@ -240,7 +240,7 @@ const server = http.createServer(async (req, res) => {
         const longManifest = path.join(root, "content/long-form-render-manifest.json");
         if (!schedule.channelId || !/^UC[a-zA-Z0-9_-]{22}$/.test(schedule.channelId)) blockers.push("SONICVHIBEZ_CHANNEL_ID has not been independently verified in the authoritative schedule");
         if (process.env.SONICVHIBEZ_CHANNEL_ID && schedule.channelId && process.env.SONICVHIBEZ_CHANNEL_ID !== schedule.channelId) blockers.push("Configured channel ID does not match the authoritative schedule channel ID");
-        for (const key of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN"]) if (!process.env[key]?.trim()) blockers.push(key + " is not configured");
+        for (const key of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN", "SONICVHIBEZ_CHANNEL_ID"]) if (!process.env[key]?.trim()) blockers.push(key + " is not configured");
         if (!fs.existsSync(shortManifest)) blockers.push("Rights-reviewed Short render manifest is missing");
         if (!fs.existsSync(longManifest)) blockers.push("Rights-reviewed long-form render manifest is missing");
         if (!fs.existsSync(path.join(root, "content/next-short.json"))) blockers.push("Reviewed Short metadata is missing");
