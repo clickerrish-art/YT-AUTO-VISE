@@ -297,3 +297,38 @@ The above is CI evidence for commit `c507b63abfa336165865ad01cf6354ae50254f04`. 
 The two commits present on `main` but not on the implementation branch are `71578dafc24e5d48173dce3f4e392e18e42aa40e` (“Exercise cross-run history restoration with mocked GitHub artifact API”) and `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (“Revert unintended test-file write to default branch”). Inspection of their actual patches confirms the first added `test/restore-facebook-draft-history.test.mjs` and the second removed that same 117-line test. The current `main` tree lacks the file; the implementation branch restores it through commit `c507b63abfa336165865ad01cf6354ae50254f04` and exercises it in the 211-test suite.
 
 The implementation branch remains 926 commits ahead and 2 behind `main`. GitHub’s compare endpoint returns only the first 250 of the 926 branch-only commits in its commit list; the visible history includes repeated operational-document and workflow-adjustment subjects. This is a reviewability risk, not proof that any particular code is invalid. I did not inspect every one of the 926 commits individually and did not merge, cherry-pick, reset, rebase, force-push or rewrite history. Safe next step: owner reviews the 99-file tip-to-base diff and decides an explicit reconciliation/review strategy; keep the current branch and draft PR intact until that approval.
+
+---
+
+## Live implementation addendum — 24 October 2026, 21:12 UTC
+
+This addendum supersedes older checkpoints above for the changes described here. The code/test candidate at this checkpoint is `3438f55cf2261b2efcd1afcca7e67c252fbd1b4a`; the documentation refresh itself is separate from those source changes.
+
+### New defects fixed and regression coverage
+
+- **Facebook recovery receipt integrity:** `scripts/dashboard-server.mjs` no longer silently ignores malformed JSON lines, empty records, truncated final records, missing remote IDs, unreadable files, symlinks, or non-file recovery ledgers. A corrupt receipt ledger now fails startup closed so uncertain remote outcomes cannot be hidden before retry. Added `test/facebook-recovery-ledger-integrity.test.mjs` covering malformed JSON, truncation, missing remote receipt identifiers, and preservation of the original evidence.
+- **Caption/media timing:** added `scripts/validate-caption-sync.mjs` and `test/validate-caption-sync.test.mjs`. The validator rejects empty captions, malformed/overlapping cues, invalid duration inputs, and any cue extending beyond the actual expected media duration (with a bounded 250 ms tolerance).
+- **Renderer enforcement:** both `scripts/render-short.mjs` and `scripts/render-long-form.mjs` now check caption timing against narration duration before rendering.
+- **Dashboard enforcement:** `/api/jobs/validate` independently runs the caption timing gate against the duration reported by `ffprobe`; a direct API caller cannot bypass the renderer's caption-duration check.
+- **Operator command:** added `npm run validate:caption-sync -- <captions.srt> <duration-seconds>`.
+
+### Exact-SHA verification
+
+The following runs refer to the code/test candidate SHA above:
+
+- [Automation and security checks — run 40133174746](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133174746): **PASS**, 219 Node tests passed, 0 failed; 8 Python safety tests passed; 16 queued topics passed safe-state/destination checks; normal clean `npm ci` and Google API client import passed; `npm audit` reported 0 vulnerabilities.
+- [Browser E2E — run 40133171717](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133171717): **PASS**, 3 Chromium tests passed against the real local dashboard/backend, including campaign safety and persistence across a real server restart.
+- [Metadata validation — run 40133174647](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133174647): **PASS**.
+- [Content quality — run 40133174728](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133174728): **PASS**.
+- [Lockfile validation — run 40133171725](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133171725): **PASS**.
+- [Production readiness — run 40133174724](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133174724): **BLOCKED as intended**; a blocked readiness check is not a release pass.
+- [Facebook daily draft — run 40133174804](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133174804): **SKIPPED** on the PR event. The branch push run was also skipped because this workflow is restricted to scheduled/manual execution on `main`. A successful default-branch scheduled/manual draft and retained artifact are **not verified**.
+
+### Current Git and acceptance status
+
+- The live compare at this checkpoint reported **946 commits ahead, 2 behind**, **102 changed files**, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, with `main` at `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. These figures must be recalculated after subsequent commits.
+- Commit metadata was inspected across 1,247 branch-history API records. Repeated documentation/workflow commit subjects are present; this is not equivalent to a complete review of every commit's patch. Full historical risk review and owner-approved reconciliation remain open. No merge, reset, rebase, force-push, cherry-pick, or history rewrite was performed.
+- Browser tests cover three key operator flows, not every visible dashboard control or every end-to-end production journey. Actual media rendering from genuine rights-cleared footage, caption readability/audio synchronization review, final-hash-bound human approval, real SonicVhibez OAuth/channel identity and full history reconciliation, an explicitly authorized private upload with verified remote receipt, verified Nature Frontiers Page identity/permissions, a default-branch Facebook draft artifact, and owner-controlled backup/restore/concurrency/rollback drills remain unresolved.
+- No YouTube upload or Facebook post was performed. Public/unattended YouTube publishing remains disabled; Facebook live publishing remains disabled; approved Selar URL remains `https://selar.com/0u19v8u99l`; Safari affiliate campaigns remain inactive.
+
+**Verdict: IMPLEMENTATION INCOMPLETE for full requested scope; production acceptance remains BLOCKED.** The code fixes and passing tests above do not satisfy missing real-media, account, authorization, external-workflow, recovery-drill, or branch-history gates.
