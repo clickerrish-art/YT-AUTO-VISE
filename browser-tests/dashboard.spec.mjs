@@ -84,6 +84,9 @@ test("operator dashboard loads the authoritative schedule and persists a draft t
   expect(persisted.queueItems.some(item => item.id === draftId)).toBe(true);
   expect(persisted.jobs.some(job => job.kind === "CONTENT_PRODUCTION" && job.idempotencyKey === "draft:" + draftId)).toBe(true);
 
+  await page.locator("#refresh").click();
+  await expect(page.locator("#queue")).toContainText(draftId);
+
   await page.locator("#id").fill(draftId);
   await page.locator("#title").fill("Duplicate draft must be rejected");
   await page.locator("#topic").fill("Duplicate submission safety test");
@@ -122,4 +125,51 @@ test("operator dashboard loads the authoritative schedule and persists a draft t
     return { viewport, documentWidth, offenders };
   });
   expect(diagnostics.documentWidth, JSON.stringify(diagnostics, null, 2)).toBeLessThanOrEqual(diagnostics.viewport + 1);
+});
+
+
+test("campaign controls fail closed on unapproved destinations and retain Safari inactive", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  await page.locator("#campaignid").selectOption("safari-affiliate-inactive");
+  await page.locator("#campaignaction").selectOption("preview");
+  await page.locator("#campaignurl").fill("https://example.org/unapproved-safari-destination");
+  await page.locator("#campaigndisclosure").fill("Affiliate link; I may earn a commission.");
+  await page.getByRole("button", { name: "Apply campaign action" }).click();
+  await expect(page.locator("#campaignresult")).toContainText("Preview saved; campaign remains unactivated");
+  let stateResponse = await request.get("/api/state", { headers });
+  expect(stateResponse.status()).toBe(200);
+  let state = await stateResponse.json();
+  let safari = state.campaigns.find(campaign => campaign.id === "safari-affiliate-inactive");
+  expect(safari.status).toBe("INACTIVE");
+  expect(safari.ownerApproved).toBe(false);
+  expect(safari.destinationUrl).toBe("");
+  expect(safari.pendingDestinationUrl).toBe("https://example.org/unapproved-safari-destination");
+
+  await page.locator("#campaignaction").selectOption("activate");
+  await page.locator("#campaignapproval").uncheck();
+  await page.getByRole("button", { name: "Apply campaign action" }).click();
+  await expect(page.locator("#campaignresult")).toContainText("Explicit owner confirmation is required");
+  stateResponse = await request.get("/api/state", { headers });
+  state = await stateResponse.json();
+  safari = state.campaigns.find(campaign => campaign.id === "safari-affiliate-inactive");
+  expect(safari.status).toBe("INACTIVE");
+  expect(safari.ownerApproved).toBe(false);
+
+  await page.locator("#campaignid").selectOption("selar-wildlife-vault");
+  await page.locator("#campaignaction").selectOption("preview");
+  await page.locator("#campaignurl").fill("https://selar.com/unauthorized-destination");
+  await page.locator("#campaigndisclosure").fill("Promotional link; terms are on the seller page.");
+  await page.getByRole("button", { name: "Apply campaign action" }).click();
+  await expect(page.locator("#campaignresult")).toContainText("Selar destination must exactly match the approved URL");
+  stateResponse = await request.get("/api/state", { headers });
+  state = await stateResponse.json();
+  const selar = state.campaigns.find(campaign => campaign.id === "selar-wildlife-vault");
+  expect(selar.destinationUrl).toBe("https://selar.com/0u19v8u99l");
+  expect(selar.status).toBe("ACTIVE_FOR_DRAFTS_ONLY");
+  expect(state.publishingEnabled).toBe(false);
 });
