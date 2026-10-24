@@ -146,7 +146,7 @@ if (blockers.length) {
   for (const blocker of blockers) console.log("- " + blocker);
   console.log("This report never uploads, schedules, or publishes.");
   console.log("This report does not verify account ownership, license authenticity, factual accuracy, or visual quality.");
-  process.exit(0);
+  process.exit(2);
 }
 console.log("PREREQUISITES PRESENT: run the content checker and media preflight, then manually inspect the result before any private upload.");
 console.log("This report never uploads, schedules, or publishes.");
