@@ -236,17 +236,31 @@ function safeItem(item) {
 function reservedPublicationSlots(state, excludeItemId = null) {
   const scheduleConfig = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
   const slots = [];
-  const dates = new Set();
+  const queueReservationDates = new Map();
   for (const item of state.queueItems ?? []) {
-    if (item.id === excludeItemId || item.reservationType !== "SCHEDULED_SLOT" || !item.scheduledDate || item.status === "CANCELLED") continue;
-    if (dates.has(item.scheduledDate)) continue;
-    dates.add(item.scheduledDate);
-    slots.push({ id: item.id, status: "scheduled", scheduledAt: item.scheduledAt ?? localDateTimeToIso(item.scheduledDate, "17:00", scheduleConfig.timezone) });
+    const status = String(item?.status ?? "").toLowerCase();
+    if (item.id === excludeItemId || item.reservationType !== "SCHEDULED_SLOT" || !item.scheduledDate || status === "cancelled") continue;
+    if (status === "published") {
+      // Published items must be checked against when they actually went live, not
+      // the old planned slot. Missing actual time intentionally fails closed.
+      slots.push({ id: item.id, status: "published", publishedAt: item.publishedAt ?? item.actualPublishedAt });
+    } else {
+      slots.push({ id: item.id, status: "scheduled", scheduledAt: item.scheduledAt ?? localDateTimeToIso(item.scheduledDate, "17:00", scheduleConfig.timezone) });
+    }
+    queueReservationDates.set(item.id, item.scheduledDate);
   }
+  const representedQueueJobs = new Set();
   for (const job of state.jobs ?? []) {
     const date = job.scheduledSlot?.date;
-    if (job.kind !== "CONTENT_PRODUCTION" || !date || job.idempotencyKey === "draft:" + excludeItemId || dates.has(date)) continue;
-    dates.add(date);
+    if (job.kind !== "CONTENT_PRODUCTION" || !date || job.idempotencyKey === "draft:" + excludeItemId) continue;
+    const match = /^draft:(.+)$/.exec(String(job.idempotencyKey ?? ""));
+    const queueItemId = match?.[1];
+    // A queue item and its first matching production job represent one slot. Do
+    // not deduplicate unrelated entries by date: those collisions must be visible.
+    if (queueItemId && queueReservationDates.get(queueItemId) === date && !representedQueueJobs.has(queueItemId)) {
+      representedQueueJobs.add(queueItemId);
+      continue;
+    }
     slots.push({ id: "job-" + job.id, status: "scheduled", scheduledAt: localDateTimeToIso(date, "17:00", scheduleConfig.timezone) });
   }
   return { scheduleConfig, slots };
