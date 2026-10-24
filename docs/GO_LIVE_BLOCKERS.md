@@ -24,6 +24,8 @@ Last review: 2026-10-24. PR #1 remains open, draft and unmerged. Public publishi
 - Never blindly retry an uncertain upload; reconcile the existing attempt with YouTube first.
 - Keep PR #1 open, draft and unmerged unless the owner separately authorizes a merge.
 
-## Existing CI evidence
+## Latest code and regression-test evidence
 
-At implementation checkpoint `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`, three GitHub Actions workflows reported 95 passed, 0 failed and 0 skipped: [automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943732), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943766). The automation workflow also passed `npm ci --ignore-scripts`. These runs are not evidence of real-media rendering, real-world rights verification or a live YouTube upload. Recheck the final branch head before owner acceptance.
+At code and regression-test commit `6b0874b870343cf435099eedf74038bf2e01f58c`, all three GitHub Actions validation workflows passed with 95 passed, 0 failed and 0 skipped: [automation validation and clean install](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083877`), [metadata/schedule validation](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083898`), and [content quality](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083943`). The automation workflow completed `npm ci --ignore-scripts` and installed/audited 46 packages.
+
+The dashboard readiness endpoint now runs the full read-only production preflight and returns HTTP 503 with actionable blockers instead of reporting readiness based only on campaign configuration. Automated tests remain mock/code evidence only. Genuine media, rights verification, human playback inspection, authenticated SonicVhibez channel verification and live private-upload receipt remain blocked on owner-controlled inputs. Public publishing remains disabled; PR #1 remains open, draft and unmerged.
