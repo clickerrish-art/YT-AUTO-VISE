@@ -153,7 +153,8 @@ export function facebookApprovalFingerprint(draft) {
 export function approveFacebookDraft(draft, { reviewer, decision, reason = "", evaluation, now = new Date().toISOString() }) {
   if (!safeString(reviewer, 120)) throw new Error("Reviewer identity is required");
   if (!["APPROVE", "REJECT"].includes(decision)) throw new Error("Decision must be APPROVE or REJECT");
-  if (!evaluation || evaluation.ok !== true) throw new Error("A passing compliance evaluation is required before approval");
+  if (decision === "APPROVE" && (!evaluation || evaluation.ok !== true)) throw new Error("A passing compliance evaluation is required before approval");
+  if (!evaluation || typeof evaluation.ok !== "boolean") throw new Error("A current compliance evaluation is required to record review");
   const approval = {
     reviewer: reviewer.trim(), decision, reason: String(reason).slice(0, 1000), reviewedAt: now,
     fingerprint: facebookApprovalFingerprint(draft), complianceVersion: evaluation.complianceVersion
