@@ -39,11 +39,44 @@ function containsAffiliateLanguage(caption) {
 }
 function fingerprint(payload) {
   return sha256(JSON.stringify({
-    pageId: payload?.destinationPageId ?? "",
-    slot: payload?.slotId ?? "",
+    destination: payload?.destination ?? "",
+    destinationPageId: payload?.destinationPageId ?? "",
+    slotId: payload?.slotId ?? "",
+    scheduledAt: payload?.scheduledAt ?? "",
     caption: String(payload?.caption ?? ""),
     links: Array.isArray(payload?.links) ? payload.links.map(String).sort() : [],
-    media: Array.isArray(payload?.media) ? payload.media.map(m => ({ id: m?.id ?? "", sha256: m?.sha256 ?? "" })).sort((a,b) => a.id.localeCompare(b.id)) : []
+    claims: (Array.isArray(payload?.claims) ? payload.claims : []).map(claim => ({
+      text: String(claim?.text ?? ""),
+      kind: String(claim?.kind ?? ""),
+      sourceUrls: (Array.isArray(claim?.sourceUrls) ? claim.sourceUrls : []).map(String).sort(),
+      sourceExcerpt: String(claim?.sourceExcerpt ?? ""),
+      sourceSupportsClaim: claim?.sourceSupportsClaim === true,
+      verified: claim?.verified === true,
+      quoteVerified: claim?.quoteVerified === true
+    })).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))),
+    media: Array.isArray(payload?.media) ? payload.media.map(m => ({
+      id: m?.id ?? "", path: m?.path ?? "", sha256: m?.sha256 ?? "",
+      syntheticOrAltered: m?.syntheticOrAltered ?? null,
+      representationKnown: m?.representationKnown ?? null,
+      disclosureRequired: m?.disclosureRequired ?? null,
+      disclosureApplied: m?.disclosureApplied ?? null,
+      rightsRecord: {
+        evidencePath: m?.rightsRecord?.evidencePath ?? "",
+        evidenceSha256: m?.rightsRecord?.evidenceSha256 ?? "",
+        source: m?.rightsRecord?.source ?? "",
+        license: m?.rightsRecord?.license ?? "",
+        commercialUse: m?.rightsRecord?.commercialUse === true,
+        socialMediaUse: m?.rightsRecord?.socialMediaUse === true,
+        provenanceVerified: m?.rightsRecord?.provenanceVerified === true,
+        attributionRequired: m?.rightsRecord?.attributionRequired === true,
+        attributionText: m?.rightsRecord?.attributionText ?? "",
+        expiresAt: m?.rightsRecord?.expiresAt ?? null
+      }
+    })).sort((a, b) => String(a.id).localeCompare(String(b.id))) : [],
+    commercial: payload?.commercial === true,
+    campaignId: payload?.campaignId ?? null,
+    disclosure: payload?.disclosure ?? "",
+    syntheticDisclosure: payload?.syntheticDisclosure ?? ""
   }));
 }
 
