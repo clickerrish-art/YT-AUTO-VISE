@@ -53,7 +53,7 @@ function safeHistory(file) {
  */
 export async function runAutonomousFacebookPublisher({
   configPath = path.join(root, "config/facebook-publishing.json"),
-  queuePath = path.join(root, "content/facebook-autonomous-queue.json"),
+  queuePath = null,
   rootDir = root,
   stateDir = process.env.FACEBOOK_STATE_DIR,
   env = process.env,
@@ -67,7 +67,7 @@ export async function runAutonomousFacebookPublisher({
   reconcileRemote = reconcileMetaPagePost
 } = {}) {
   const activeRoot = path.resolve(rootDir);
-  queuePath = env.FACEBOOK_AUTONOMOUS_QUEUE_PATH ?? queuePath;
+  queuePath = String(env.FACEBOOK_AUTONOMOUS_QUEUE_PATH ?? "").trim() || queuePath || (path.isAbsolute(String(stateDir ?? "")) ? path.join(stateDir, "facebook-autonomous-queue.json") : path.join(activeRoot, "content/facebook-autonomous-queue.json"));
   const config = readJson(configPath);
   // Safe defaults are intentionally a no-op rather than an error or implicit opt-in.
   if (config?.emergencyStop !== false || config?.publishingEnabled !== true || config?.dryRun !== false || env.FACEBOOK_PUBLISH_ENABLED !== "YES") {
@@ -77,12 +77,15 @@ export async function runAutonomousFacebookPublisher({
   if (typeof stateDir !== "string" || !path.isAbsolute(stateDir)) throw new Error("FACEBOOK_STATE_DIR must be an absolute durable operator-controlled directory");
   if (!/^\d{5,30}$/.test(String(env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "")) || env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID !== config.destinationPageId) throw new Error("NATURE_FRONTIERS_FACEBOOK_PAGE_ID must exactly match the configured Nature Frontiers Page ID");
   if (!env.META_USER_ACCESS_TOKEN || !env.META_PAGE_ACCESS_TOKEN) throw new Error("Meta access tokens are missing from the secure runtime environment");
+  fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
   const resolvedQueuePath = path.resolve(activeRoot, queuePath);
   const canonicalRoot = fs.realpathSync(activeRoot);
-  if (resolvedQueuePath !== canonicalRoot && !resolvedQueuePath.startsWith(canonicalRoot + path.sep)) throw new Error("Autonomous Facebook queue path escapes repository root");
-  if (!fs.existsSync(resolvedQueuePath)) throw new Error("Autonomous Facebook queue is missing; no content will be invented");
+  const canonicalStateDir = fs.realpathSync(stateDir);
+  const within = (candidate, base) => candidate === base || candidate.startsWith(base + path.sep);
+  if (!within(resolvedQueuePath, canonicalRoot) && !within(resolvedQueuePath, canonicalStateDir)) throw new Error("Autonomous Facebook queue path escapes approved repository/state roots");
+  if (!fs.existsSync(resolvedQueuePath)) throw new Error("Autonomous Facebook queue is missing; run evidence intake first");
   const canonicalQueuePath = fs.realpathSync(resolvedQueuePath);
-  if (canonicalQueuePath !== canonicalRoot && !canonicalQueuePath.startsWith(canonicalRoot + path.sep)) throw new Error("Autonomous Facebook queue symlink escapes repository root");
+  if (!within(canonicalQueuePath, canonicalRoot) && !within(canonicalQueuePath, canonicalStateDir)) throw new Error("Autonomous Facebook queue symlink escapes approved repository/state roots");
   queuePath = canonicalQueuePath;
   const historyPath = path.join(stateDir, "facebook-history.json");
   const ledgerPath = path.join(stateDir, "facebook-attempt-ledger.json");
