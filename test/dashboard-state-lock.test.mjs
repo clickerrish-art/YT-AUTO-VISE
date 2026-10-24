@@ -44,6 +44,7 @@ test("dashboard never steals an old-looking lock owned by a live process", async
   fs.mkdirSync(lockDir, { mode: 0o700 });
   fs.writeFileSync(path.join(lockDir, "owner.json"), JSON.stringify({
     pid: process.pid,
+    ownerId: "live-test-owner-token",
     acquiredAt: new Date(Date.now() - 180_000).toISOString()
   }), { mode: 0o600, flag: "wx" });
   const old = new Date(Date.now() - 180_000);
