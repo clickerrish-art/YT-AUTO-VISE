@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import crypto from "node:crypto";
-import { validateUploadApproval, assertReconciliationOnlyHasPriorAttempt } from "../scripts/upload-private.mjs";
+import { validateUploadApproval, assertReconciliationOnlyHasPriorAttempt, verifyRetainedRightsEvidence, sha256File } from "../scripts/upload-private.mjs";
 
 test("YouTube uploader is private-only and binds upload to the verified SonicVhibez channel", () => {
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
@@ -76,4 +76,25 @@ test("reconciliation-only mode cannot create a new upload attempt", () => {
   assert.throws(() => assertReconciliationOnlyHasPriorAttempt(true, null), /refuses to create a new upload attempt/);
   assert.equal(assertReconciliationOnlyHasPriorAttempt(true, { status: "RECOVERY_REQUIRED" }), true);
   assert.equal(assertReconciliationOnlyHasPriorAttempt(false, null), true);
+});
+
+
+test("retained rights evidence fails closed when a source asset or license file changes", async () => {
+  const os = await import("node:os");
+  const path = await import("node:path");
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-rights-integrity-"));
+  try {
+    const assetPath = path.join(dir, "source.mp4");
+    const licensePath = path.join(dir, "license.txt");
+    fs.writeFileSync(assetPath, "isolated fixture asset, not production media");
+    fs.writeFileSync(licensePath, "isolated test fixture only; not a real license");
+    const rightsEvidence = { assetPath, assetSha256: sha256File(assetPath), licenseEvidenceLocation: licensePath, licenseEvidenceSha256: sha256File(licensePath), permittedUses: ["YouTube"], verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z" };
+    const approval = { rightsEvidence };
+    assert.equal(verifyRetainedRightsEvidence(approval), true);
+    fs.writeFileSync(licensePath, "changed after review");
+    assert.throws(() => verifyRetainedRightsEvidence(approval), /license evidence is missing, empty, or its checksum changed/);
+    fs.writeFileSync(licensePath, "isolated test fixture only; not a real license");
+    fs.writeFileSync(assetPath, "substituted asset after review");
+    assert.throws(() => verifyRetainedRightsEvidence(approval), /source asset is missing or its checksum changed/);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
