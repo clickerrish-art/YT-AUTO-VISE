@@ -4,6 +4,18 @@ Repository: `clickerrish-art/YT-AUTO-VISE`
 Branch: `codex/marketing-machine-audit-fixes`
 Scope: Nature Frontiers Facebook Page is a separate destination from SonicVhibez YouTube.
 
+## Current verified implementation checkpoint — 2026-10-24
+
+Current tested code checkpoint: `6217680cc11e617375b152b9e7b5b745559eb8c0`. The three CI workflows passed on that exact code/test commit: [automation — run 40091065946](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091065946), [metadata — run 40091065995](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091065995), and [content quality — run 40091065945](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091065945). Each reports 136 Node tests passed, 0 failed, 0 skipped. Automation also passed 8 Python safety tests and JavaScript/Python syntax checks. The tested dependency installation was `npm ci --ignore-scripts`; ordinary `npm ci` remains unverified. npm audit still reports 4 moderate advisories.
+
+### Additional defects fixed in this checkpoint
+
+- **Approval binding:** `facebookApprovalFingerprint` now binds structured claims and their source URLs, media path/checksum/provenance, retained licence evidence path/checksum, commercial/platform permissions, attribution, synthetic/altered-media disclosure state, Page destination, disclosure, schedule/timezone, experiment assignment and compliance-rule version. Changing material factual or rights data invalidates the prior approval. Regression coverage proves that changed claims fail the publish gate.
+- **Credential rotation:** `scripts/meta-credential-fingerprint.mjs` stores only HMAC fingerprints keyed by the dashboard operator secret, not raw Meta tokens. A Page connection attestation becomes invalid when the Page token, user token or operator secret changes. Regression tests cover rotation, purpose separation and malformed fingerprints.
+- **Test evidence:** the first run exposed a regression-test fixture error (`root is not defined`); the fixture was corrected, and all three workflows passed on the subsequent code/test checkpoint. The earlier failed run is historical and must not be mistaken for the latest result.
+
+These checks do not establish a real Page identity, current live permissions, Page Insights access or successful publication. All publishing kill switches remain disabled; no real Facebook post was published.
+
 ## Baseline findings
 
 | Severity | Finding | Evidence | Implemented response | Acceptance still required |
