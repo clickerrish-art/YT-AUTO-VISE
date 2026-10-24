@@ -2,7 +2,13 @@
 
 Keep each item unchecked until evidence has actually been inspected. Automated tests and mocks do not close real-world acceptance gates.
 
-Latest code/test checkpoint: `6b0874b870343cf435099eedf74038bf2e01f58c`. The three validation workflows passed 95/95 tests each: [automation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083877), [metadata/schedule](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083898), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083943). The dashboard `/readyz` endpoint must return HTTP 503 with actionable blockers until all production preflight requirements are met. These CI results do not close any real-media, rights-authenticity, human-review, live OAuth, or remote-upload gate.
+## Latest code/test checkpoint — 2026-10-24
+
+Code and regression-test commit: `9c89e46c138f1b277de7efb5580fbaa4008d22c5`. All three GitHub Actions validation workflows passed on this exact commit, each with 96 passed, 0 failed, 0 skipped: [automation validation and clean install](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354250`), [metadata/schedule validation](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354339`), and [content quality](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354256`). The automation workflow used `npm ci --ignore-scripts`, reported 46 packages added and 47 audited, and passed Python compilation.
+
+This checkpoint additionally verifies that private-upload approvals bind the hash of the structured rights record and that the referenced source asset and retained licence-evidence files still match their recorded SHA-256 checksums at upload preflight. Dashboard startup now requires `DASHBOARD_OPERATOR_ID`; relevant audit events use that identity, and each rights-evidence asset retains the reviewer and verification timestamp.
+
+These are automated/code-level checks, not proof that a fixture is a genuine licence, that a real wildlife video has been rendered and watched, or that a live YouTube upload has succeeded. Public publishing remains disabled; PR #1 remains open, draft and unmerged.
 
 ## Repository and automation
 - [ ] Re-fetch and record branch/PR head SHA; PR #1 remains open and unmerged.
