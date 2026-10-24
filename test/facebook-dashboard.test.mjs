@@ -38,7 +38,7 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   const state = await stateResponse.json();
   assert.equal(state.publishingEnabled, false);
   assert.equal(state.pageIdentityVerified, false);
-  assert.ok(state.blockers.some(item => /Page identity is not independently verified/i.test(item)));
+  assert.ok(state.blockers.some(item => /Page identity has not passed a recent live Meta API check/i.test(item)));
   assert.ok(state.blockers.some(item => /Meta Page publishing permissions have not passed the live API permission.*task check/i.test(item)));
   assert.ok(state.blockers.some(item => /publishing kill switches remain disabled/i.test(item)));
   const verifyPageResponse = await fetch(base + "/api/facebook/verify-page", { method: "POST", headers, body: JSON.stringify({}) });
