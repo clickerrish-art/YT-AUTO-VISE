@@ -75,7 +75,7 @@ export function createFacebookDraft(input, { now = new Date().toISOString(), exp
     destinationPageId, expectedPageId: expectedPageId || null,
     topic: input.topic.trim(), pillar: input.pillar, caption: input.caption.trim(),
     claims: Array.isArray(input.claims) ? structuredClone(input.claims) : [],
-    media, disclosure: String(input.disclosure ?? "").trim(), disclosureRequired: input.disclosureRequired === true,
+    media, disclosure: String(input.disclosure ?? "").trim(), disclosureRequired: input.disclosureRequired === true, commercial: input.commercial === true, externalLinksReviewed: input.externalLinksReviewed === true,
     scheduledDate, scheduledTime, timezone: FACEBOOK_TIMEZONE, scheduledAt,
     experiment: { slot: scheduledTime, timezone: FACEBOOK_TIMEZONE, assignedAt: now, reason: "Balanced initial 08:00 vs 18:00 experiment; not a claim of optimal timing" },
     status: "DRAFT", complianceVersion: FACEBOOK_COMPLIANCE_VERSION,
@@ -98,7 +98,20 @@ export function evaluateFacebookDraft(draft, {
   if (!safeString(draft.caption, 5000)) blockers.push("Caption is missing or exceeds the allowed length");
   if (/(like and share|share this to win|comment yes|tag \d+ friends|share to save|react now|comment below to get)/i.test(draft.caption)) blockers.push("Potential engagement bait: rewrite as a useful, non-coercive discussion prompt");
   if (/\b(guaranteed|miracle cure|100% proven)\b/i.test(draft.caption)) flags.push("Potentially unsupported absolute claim requires human factual review");
+  if (/\b(cures? (?:cancer|diabetes|disease)|guaranteed income|risk[- ]free investment|guaranteed returns|prevents? all disease|completely safe)\b/i.test(draft.caption)) flags.push("Potential high-impact health, financial, or safety claim requires specialist human review and strong evidence");
   if (/(injured|blood|graphic|attack|kill|dead animal|poaching victim)/i.test(draft.caption)) flags.push("Potentially sensitive wildlife content requires editorial review");
+  const captionUrls = draft.caption.match(/https?:\/\/[^\s)]+/gi) ?? [];
+  for (const link of captionUrls) {
+    try {
+      const parsed = new URL(link);
+      if (parsed.protocol !== "https:") blockers.push("External links must use HTTPS");
+      if (parsed.hostname === "selar.com" || parsed.hostname.endsWith(".selar.com")) {
+        if (parsed.toString().replace(/\/$/, "") !== "https://selar.com/0u19v8u99l") blockers.push("Selar links must match the exact approved product URL");
+        if (draft.commercial !== true) blockers.push("The approved Selar link may only appear in an explicitly marked commercial campaign draft");
+      }
+      if (draft.externalLinksReviewed !== true) flags.push("External link requires human verification for destination safety and relevance");
+    } catch { blockers.push("Caption contains an invalid external URL"); }
+  }
   if (/\b(I witnessed|I rescued|we rescued|exclusive rescue footage)\b/i.test(draft.caption)) flags.push("Personal eyewitness/rescue claim requires evidence and human review");
   if (draft.claims.length === 0) warnings.push("No structured factual claims supplied; ensure factual statements in the caption have source records");
   for (const [index, claim] of draft.claims.entries()) {
@@ -106,7 +119,7 @@ export function evaluateFacebookDraft(draft, {
     if (!Array.isArray(claim?.sourceUrls) || claim.sourceUrls.length === 0 || claim.sourceUrls.some(url => !validHttps(url))) blockers.push(`Claim ${index + 1} requires one or more HTTPS source URLs`);
     if (claim?.verified !== true) flags.push(`Claim ${index + 1} is not marked as human-verified`);
   }
-  if (draft.disclosureRequired && !safeString(draft.disclosure, 500)) blockers.push("Required commercial/affiliate disclosure is missing");
+  if ((draft.disclosureRequired || draft.commercial === true || /\b(affiliate|commission|sponsored|promotional link)\b/i.test(draft.caption)) && !safeString(draft.disclosure, 500)) blockers.push("Required commercial/affiliate disclosure is missing");
   if (draft.disclosure && /selar\.com\//i.test(draft.disclosure)) warnings.push("Disclosure contains a product URL; verify it is the correct approved campaign destination");
   if (!draft.media) blockers.push("A relevant visual/media asset and provenance record are required");
   else {
@@ -152,7 +165,7 @@ export function facebookApprovalFingerprint(draft) {
   return sha256(JSON.stringify({
     caption: draft.caption, topic: draft.topic, pillar: draft.pillar,
     mediaSha256: draft.media?.sha256 ?? null, licenseEvidenceSha256: draft.media?.licenseEvidenceSha256 ?? null,
-    destinationPageId: draft.destinationPageId, disclosure: draft.disclosure ?? "",
+    destinationPageId: draft.destinationPageId, disclosure: draft.disclosure ?? "", commercial: draft.commercial === true, externalLinksReviewed: draft.externalLinksReviewed === true,
     scheduledAt: draft.scheduledAt, complianceVersion: draft.complianceVersion
   }));
 }
@@ -205,7 +218,17 @@ export function summarizeFacebookExperiment(posts, { minPerArm = 14 } = {}) {
     const rows = valid.filter(post => post.experiment.slot === slot);
     const reach = rows.reduce((sum, post) => sum + post.metrics.reach, 0);
     const engaged = rows.reduce((sum, post) => sum + post.metrics.meaningfulEngagement, 0);
-    return [slot, { sampleSize: rows.length, totalReach: reach, totalMeaningfulEngagement: engaged, engagementPerReach: reach ? engaged / reach : null }];
+    const sumAvailable = key => {
+      const observations = rows.map(post => post.metrics[key]).filter(value => Number.isFinite(value) && value >= 0);
+      return { total: observations.reduce((sum, value) => sum + value, 0), sampleSize: observations.length };
+    };
+    const retention = rows.map(post => post.metrics.videoRetention).filter(value => Number.isFinite(value) && value >= 0);
+    const shares = sumAvailable("shares"), clicks = sumAvailable("outboundLinkClicks"), saves = sumAvailable("saves");
+    return [slot, {
+      sampleSize: rows.length, totalReach: reach, totalMeaningfulEngagement: engaged, engagementPerReach: reach ? engaged / reach : null,
+      shares, outboundLinkClicks: clicks, saves,
+      videoRetention: { mean: retention.length ? retention.reduce((sum, value) => sum + value, 0) / retention.length : null, sampleSize: retention.length }
+    }];
   }));
   const enough = arms["08:00"].sampleSize >= minPerArm && arms["18:00"].sampleSize >= minPerArm;
   return { timezone: FACEBOOK_TIMEZONE, arms, sampleThresholdPerArm: minPerArm, sufficientEvidence: enough, recommendation: enough ? "REVIEW_COMPARABILITY_AND_UNCERTAINTY_BEFORE_CHANGING_SCHEDULE" : "INSUFFICIENT_PAGE_SPECIFIC_DATA_KEEP_08_00_DEFAULT", note: "No causal or best-time claim is made; compare weekdays, pillars, formats and measurement windows before drawing conclusions." };
