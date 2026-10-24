@@ -633,7 +633,7 @@ const server = http.createServer(async (req, res) => {
       try {
         submitted = await publishMetaPagePost({
           draft: draftSnapshot, pageId: expectedPageId, expectedPageId, accessToken, apiVersion,
-          permissionsConfirmed, fetchImpl: fetch, rootDir: root
+          permissionsVerified: permissionsConfirmed, fetchImpl: fetch, rootDir: root
         });
       } catch (error) {
         const uncertain = error instanceof MetaPageApiError && error.uncertain === true;
