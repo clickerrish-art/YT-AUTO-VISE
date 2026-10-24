@@ -32,15 +32,16 @@ The initial Nature Frontiers Facebook workflow is **draft-only**. The current im
 
 - `GET /api/facebook/state`
 - `GET /api/facebook/idea?date=YYYY-MM-DD` — returns a research-first idea with placeholders; never publish-ready
+- `POST /api/facebook/verify-page` — read-only verification of required Meta scopes, exact managed Page ID, Page task and matching Page token
 - `POST /api/facebook/drafts`
 - `POST /api/facebook/drafts/evaluate`
 - `POST /api/facebook/drafts/approve`
 
 All API routes require `x-operator-token`. Draft state and audit events are persisted in the dashboard state file. The configured timezone is `Africa/Johannesburg`; 08:00 SAST is the initial hypothesis and 18:00 is the comparison arm. The experiment does not claim an optimal time without sufficient Page-specific observations.
 
-Set `NATURE_FRONTIERS_FACEBOOK_PAGE_ID` only after verifying the exact Page ID in Meta. Review `config/facebook-publishing.json` and set `pageIdentityVerified` only after the owner has actually verified the identity; the configured ID and secure environment value must match. This setting alone does not grant permissions or prove that an API token is valid.
+Set the exact numeric Page ID in `config/facebook-publishing.json` and `NATURE_FRONTIERS_FACEBOOK_PAGE_ID`; configure `META_USER_ACCESS_TOKEN` and `META_PAGE_ACCESS_TOKEN` only in the secure local environment. The read-only verification endpoint checks `pages_show_list`, `pages_read_engagement`, `pages_manage_posts`, the Page `CREATE_CONTENT`/`MANAGE` task and that the Page token matches the token returned for that Page.
 
-No live Meta publishing adapter is enabled. `POST /api/facebook/publish` deliberately returns HTTP 409; no remote publish is attempted. Do not add tokens to this repository or paste them into chat. The application must remain draft/export-only until the owner has authorized an official integration and a verified test operation. See [Facebook pipeline audit](docs/FACEBOOK_PIPELINE_AUDIT_2026-10-24.md).
+The official Meta Graph API adapter is implemented, but all defaults remain disabled: `config.publishingEnabled=false`, `dryRun=true`, and `FACEBOOK_PUBLISH_ENABLED=NO`. With those defaults `POST /api/facebook/publish` returns HTTP 409 and makes no remote mutation. Enabling the separate gates still requires a passing live Page/scope check, current draft approval, an explicit per-operation confirmation, a durable attempt record and remote receipt verification. Never store tokens in source control or paste them into chat. No real Page publishing test has been performed. See [Facebook pipeline audit](docs/FACEBOOK_PIPELINE_AUDIT_2026-10-24.md).
 
 ## Run the dashboard
 
