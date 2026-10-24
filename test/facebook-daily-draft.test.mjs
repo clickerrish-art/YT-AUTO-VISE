@@ -193,3 +193,37 @@ test("cross-run history rejects insecure API origins and oversized archive respo
       : new Response("x".repeat(1024), { status: 200, headers: { "content-length": String(20 * 1024 * 1024) } })
   }), /size limit/i);
 });
+
+
+test("daily generator reuses the exact retained same-day artifact instead of generating a duplicate", (t) => {
+  const firstDir = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-daily-first-"));
+  const secondDir = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-daily-second-"));
+  t.after(() => fs.rmSync(firstDir, { recursive: true, force: true }));
+  t.after(() => fs.rmSync(secondDir, { recursive: true, force: true }));
+  const first = generateDailyFacebookDraft({
+    date: "2030-10-25", outputDir: firstDir, now: "2030-10-24T05:30:00.000Z"
+  });
+  const second = generateDailyFacebookDraft({
+    date: "2030-10-25", outputDir: secondDir, now: "2030-10-24T06:30:00.000Z",
+    existingDrafts: [first.package]
+  });
+  assert.equal(second.created, false);
+  assert.equal(second.reason, "IDEMPOTENT_RETAINED_HISTORY_REUSED");
+  assert.deepEqual(second.package, first.package);
+  assert.deepEqual(JSON.parse(fs.readFileSync(second.path, "utf8")), first.package);
+});
+
+test("daily generator refuses conflicting retained artifacts for the same local date", (t) => {
+  const firstDir = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-daily-conflict-a-"));
+  const secondDir = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-daily-conflict-b-"));
+  t.after(() => fs.rmSync(firstDir, { recursive: true, force: true }));
+  t.after(() => fs.rmSync(secondDir, { recursive: true, force: true }));
+  const first = generateDailyFacebookDraft({
+    date: "2030-10-25", outputDir: firstDir, now: "2030-10-24T05:30:00.000Z"
+  });
+  const conflict = { ...first.package, generatedAt: "2030-10-24T06:30:00.000Z" };
+  assert.throws(() => generateDailyFacebookDraft({
+    date: "2030-10-25", outputDir: secondDir, now: "2030-10-24T06:30:00.000Z",
+    existingDrafts: [first.package, conflict]
+  }), /conflicting cross-run drafts/i);
+});
