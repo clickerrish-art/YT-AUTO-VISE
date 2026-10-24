@@ -55,3 +55,32 @@ test("daily draft generator rejects invalid dates and refuses malformed existing
   fs.writeFileSync(path.join(root, "2030-10-25.json"), JSON.stringify({ date: "2030-10-25", destination: "other-page", publishingEnabled: false }));
   assert.throws(() => generateDailyFacebookDraft({ date: "2030-10-25", outputDir: root }), /refusing to overwrite/i);
 });
+
+
+test("existing daily draft must pass the full research-only schema before idempotent reuse", (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-daily-schema-"));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const file = path.join(root, "2030-10-25.json");
+
+  // A truncated artifact used to pass the old three-field check and suppress regeneration.
+  fs.writeFileSync(file, JSON.stringify({
+    date: "2030-10-25",
+    destination: "nature_frontiers_facebook",
+    publishingEnabled: false
+  }));
+  assert.throws(
+    () => generateDailyFacebookDraft({ date: "2030-10-25", outputDir: root, now: "2030-10-24T05:30:00.000Z" }),
+    /research-only safety schema; refusing to overwrite/i
+  );
+
+  fs.rmSync(file);
+  const generated = generateDailyFacebookDraft({
+    date: "2030-10-25", outputDir: root, now: "2030-10-24T05:30:00.000Z"
+  });
+  const tampered = { ...generated.package, publishReady: true };
+  fs.writeFileSync(file, JSON.stringify(tampered));
+  assert.throws(
+    () => generateDailyFacebookDraft({ date: "2030-10-25", outputDir: root, now: "2030-10-24T06:00:00.000Z" }),
+    /research-only safety schema; refusing to overwrite/i
+  );
+});
