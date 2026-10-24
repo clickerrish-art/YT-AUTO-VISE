@@ -45,6 +45,26 @@ function isSafeExistingDraft(existing, date) {
   return true;
 }
 
+function readArtifactHistory() {
+  const historyPath = process.env.FACEBOOK_DAILY_DRAFT_HISTORY_FILE;
+  if (!historyPath) return [];
+  const resolved = path.resolve(historyPath);
+  if (!fs.existsSync(resolved)) throw new Error("Configured cross-run editorial history file is missing");
+  const history = JSON.parse(fs.readFileSync(resolved, "utf8"));
+  if (!Array.isArray(history)) throw new Error("Cross-run editorial history must be a JSON array");
+  const seen = new Map();
+  for (const item of history) {
+    if (!item || typeof item.date !== "string" || !datePattern.test(item.date) || !isSafeExistingDraft(item, item.date)) {
+      throw new Error("Cross-run editorial history contains an invalid or non-draft-only package");
+    }
+    if (seen.has(item.date) && JSON.stringify(seen.get(item.date)) !== JSON.stringify(item)) {
+      throw new Error("Cross-run editorial history has conflicting packages for " + item.date);
+    }
+    seen.set(item.date, item);
+  }
+  return [...seen.values()];
+}
+
 function makePackage(date, idea, slot, now) {
   const scheduledAt = localDateTimeToIso(date, slot, FACEBOOK_TIMEZONE);
   const slotHasPassed = Date.parse(scheduledAt) <= Date.parse(now);
@@ -127,9 +147,10 @@ function main() {
   const date = process.env.FACEBOOK_DAILY_DRAFT_DATE ?? localDateInTimezone(new Date());
   const outputDir = process.env.FACEBOOK_DAILY_DRAFT_DIR ?? path.join(root, "run-logs", "facebook-daily-drafts");
   const editorial = readEditorialState();
+  const artifactHistory = readArtifactHistory();
   const result = generateDailyFacebookDraft({
     date, outputDir, now: process.env.FACEBOOK_DAILY_DRAFT_NOW ?? new Date().toISOString(),
-    existingDrafts: editorial.existingDrafts, recentPosts: editorial.recentPosts
+    existingDrafts: [...editorial.existingDrafts, ...artifactHistory], recentPosts: editorial.recentPosts
   });
   console.log(JSON.stringify({
     created: result.created, reason: result.reason, path: result.path,
