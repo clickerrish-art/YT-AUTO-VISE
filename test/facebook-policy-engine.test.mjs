@@ -207,3 +207,18 @@ test("an allowlisted link that redirects to another host is blocked", async () =
     assert.ok(result.destinationChecks.some(check => check.allowlisted && !check.passed));
   } finally { f.cleanup(); }
 });
+
+
+test("an allowlisted URL redirecting to a different path on the same host is blocked", async () => {
+  const f = fixture();
+  try {
+    const destination = "https://example.org/approved";
+    f.payload.links = [destination];
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), approvedDestinations: [destination],
+      fetchImpl: async url => ({ ok: true, status: 200, url: "https://example.org/changed-path" })
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.destinationChecks.some(check => check.allowlisted && !check.passed));
+  } finally { f.cleanup(); }
+});
