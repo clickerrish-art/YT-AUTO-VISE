@@ -17,8 +17,13 @@ function fixture() {
     destination: "nature_frontiers_facebook",
     destinationPageId: "123456789012345",
     slotId: "nf-2026-10-25-0800",
-    caption: "A short educational note about respecting wildlife distance and observing without disturbance.",
-    claims: [],
+    caption: "Observe wildlife from a respectful distance and avoid disturbing animals.",
+    claims: [{
+      text: "Observe wildlife from a respectful distance and avoid disturbing animals.",
+      sourceUrls: ["https://sanbi.org/wildlife-viewing"],
+      sourceExcerpt: "Observe wildlife from a respectful distance and avoid disturbing animals.",
+      sourceSupportsClaim: true, verified: true
+    }],
     links: [],
     commercial: false,
     media: [{
@@ -35,7 +40,11 @@ const options = root => ({
   expectedPageId: "123456789012345", expectedPageName: "Nature Frontiers", evidenceRoot: root,
   history: [], allowedDomains: [], allowedCampaignIds: ["selar-wildlife-vault"],
   approvedDestinations: [], now: "2026-10-24T12:00:00.000Z",
-  fetchImpl: async url => ({ ok: true, status: 200, url: String(url) })
+  fetchImpl: async url => ({ ok: true, status: 200, url: String(url), text: async () => "Wildlife viewing guidance: Observe wildlife from a respectful distance and avoid disturbing animals. Further information." }),
+  semanticVerifier: async ({ claimText, sourceUrls, checkedAt }) => ({
+    verified: true, claimHash: hash(claimText), sourceUrlsHash: hash(JSON.stringify(sourceUrls)),
+    verifierId: "unit-test-semantic-verifier", checkedAt
+  })
 });
 
 test("policy returns the required structured decision and accepts only a complete safe fixture", async () => {
