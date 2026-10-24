@@ -220,3 +220,95 @@ export async function fetchMetaPagePost({
     isPublished: data.is_published === true, verifiedAt: new Date().toISOString()
   };
 }
+
+
+/**
+ * Reconcile an uncertain create operation without issuing another mutation.
+ * It searches the official scheduled_posts and feed edges with bounded cursor pagination.
+ * A zero-match result is deliberately not treated as proof of non-publication.
+ */
+export async function reconcileMetaPagePost({
+  pageId, expectedPageId, accessToken, apiVersion = "v26.0",
+  caption, scheduledAt, attemptStartedAt, remotePostId = null,
+  fetchImpl = fetch, timeoutMs = 10000, maxPages = 5
+}) {
+  validateConfig({ pageId, expectedPageId, accessToken, apiVersion });
+  if (typeof caption !== "string" || !caption.trim() || !Number.isFinite(Date.parse(scheduledAt)) ||
+      !Number.isFinite(Date.parse(attemptStartedAt))) {
+    throw new MetaPageApiError("Reconciliation requires the exact caption, scheduled time and attempt timestamp");
+  }
+  if (remotePostId) {
+    const receipt = await fetchMetaPagePost({ remotePostId, expectedPageId, accessToken, apiVersion, fetchImpl, timeoutMs });
+    return { outcome: ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(receipt.status) ? "CONFIRMED" : "UNRESOLVED", receipt, matches: [receipt], checkedAt: new Date().toISOString() };
+  }
+
+  const expectedSchedule = Math.floor(Date.parse(scheduledAt) / 1000);
+  const attemptTime = Date.parse(attemptStartedAt);
+  const candidates = new Map();
+  const edges = [
+    { name: "scheduled_posts", fields: "id,message,created_time,scheduled_publish_time,permalink_url" },
+    { name: "feed", fields: "id,message,created_time,scheduled_publish_time,is_published,permalink_url" }
+  ];
+  for (const edge of edges) {
+    let after = "";
+    for (let pageNumber = 0; pageNumber < maxPages; pageNumber++) {
+      const query = new URLSearchParams({ fields: edge.fields, limit: "100" });
+      if (after) query.set("after", after);
+      if (edge.name === "feed") {
+        query.set("since", String(Math.floor((attemptTime - 20 * 60_000) / 1000)));
+        query.set("until", String(Math.floor((attemptTime + 20 * 60_000) / 1000)));
+      }
+      let response;
+      try {
+        response = await fetchImpl(endpoint(apiVersion, encodeURIComponent(pageId) + "/" + edge.name + "?" + query.toString()), {
+          method: "GET", headers: headers(accessToken), signal: AbortSignal.timeout(timeoutMs)
+        });
+      } catch {
+        return { outcome: "UNRESOLVED", reason: "RECONCILIATION_REQUEST_FAILED", matches: [], checkedAt: new Date().toISOString() };
+      }
+      let data;
+      try { data = await parseResponse(response, accessToken); }
+      catch {
+        return { outcome: "UNRESOLVED", reason: "RECONCILIATION_API_ERROR", matches: [], checkedAt: new Date().toISOString() };
+      }
+      if (!Array.isArray(data.data)) return { outcome: "UNRESOLVED", reason: "RECONCILIATION_RESPONSE_MALFORMED", matches: [], checkedAt: new Date().toISOString() };
+      for (const item of data.data) {
+        if (typeof item?.id !== "string" || typeof item?.message !== "string" || item.message.trim() !== caption.trim()) continue;
+        const scheduled = Number(item.scheduled_publish_time);
+        const created = Date.parse(item.created_time ?? "");
+        const scheduleMatches = Number.isFinite(scheduled) && Math.abs(scheduled * 1000 - expectedSchedule * 1000) <= 120_000;
+        const attemptMatches = Number.isFinite(created) && Math.abs(created - attemptTime) <= 20 * 60_000;
+        if ((edge.name === "scheduled_posts" && scheduleMatches) ||
+            (edge.name === "feed" && (scheduleMatches || (item.is_published === true && attemptMatches)))) {
+          candidates.set(item.id, {
+            status: item.is_published === true ? "PUBLISHED_VERIFIED" :
+              Number.isFinite(scheduled) ? "SCHEDULED_VERIFIED" : "REMOTE_EXISTS_STATUS_UNCLEAR",
+            remotePostId: item.id,
+            remoteUrl: typeof item.permalink_url === "string" && item.permalink_url.startsWith("https://") ? item.permalink_url : null,
+            remoteMessage: item.message, createdTime: item.created_time ?? null,
+            scheduledPublishTime: Number.isFinite(scheduled) ? scheduled : null,
+            isPublished: item.is_published === true, sourceEdge: edge.name
+          });
+        }
+      }
+      if (!data.paging?.next) break;
+      const nextAfter = data.paging?.cursors?.after;
+      if (typeof nextAfter !== "string" || !nextAfter || nextAfter === after) {
+        return { outcome: "UNRESOLVED", reason: "RECONCILIATION_CURSOR_INVALID", matches: [...candidates.values()], checkedAt: new Date().toISOString() };
+      }
+      after = nextAfter;
+      if (pageNumber === maxPages - 1) {
+        return { outcome: "UNRESOLVED", reason: "RECONCILIATION_PAGE_LIMIT_REACHED", matches: [...candidates.values()], checkedAt: new Date().toISOString() };
+      }
+    }
+  }
+  const matches = [...candidates.values()];
+  if (matches.length === 1 && ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(matches[0].status)) {
+    return { outcome: "CONFIRMED", receipt: matches[0], matches, checkedAt: new Date().toISOString() };
+  }
+  return {
+    outcome: matches.length > 1 ? "AMBIGUOUS" : "UNRESOLVED",
+    reason: matches.length > 1 ? "MULTIPLE_REMOTE_CANDIDATES" : "NO_MATCH_IS_NOT_PROOF_OF_NON_PUBLICATION",
+    matches, checkedAt: new Date().toISOString()
+  };
+}
