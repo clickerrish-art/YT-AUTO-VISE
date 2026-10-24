@@ -70,6 +70,7 @@ test("private uploader records uncertain remote outcomes and refuses blind retri
     const ledger = JSON.parse(fs.readFileSync(ledgerPath, "utf8"));
     assert.equal(ledger.attempts.length, 1);
     assert.equal(ledger.attempts[0].status, "RECOVERY_REQUIRED");
+    assert.equal(ledger.attempts[0].format, "short");
     await assert.rejects(uploadPrivate(args), /reconcile manually with YouTube before any retry/);
     assert.equal(JSON.parse(fs.readFileSync(ledgerPath, "utf8")).attempts.length, 1);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
@@ -121,6 +122,11 @@ test("private uploader preserves remote video ID and marks recovery if receipt p
     assert.equal(reconciled.reused, true);
     assert.equal(reconciled.receipt.videoId, "VIDEO_PRIVATE_TEST");
     assert.equal(reconciled.receipt.privacyStatus, "private");
-    assert.equal(JSON.parse(fs.readFileSync(path.join(env.UPLOAD_LOG_DIR, "upload-attempts.json"), "utf8")).attempts[0].status, "PRIVATE_UPLOAD_VERIFIED");
+    assert.equal(reconciled.receipt.format, "short");
+    assert.ok(reconciled.receipt.actualPublishedAt, "remote actual timestamp must be persisted in the receipt");
+    const verifiedLedger = JSON.parse(fs.readFileSync(path.join(env.UPLOAD_LOG_DIR, "upload-attempts.json"), "utf8"));
+    assert.equal(verifiedLedger.attempts[0].status, "PRIVATE_UPLOAD_VERIFIED");
+    assert.equal(verifiedLedger.attempts[0].format, "short");
+    assert.ok(verifiedLedger.attempts[0].actualPublishedAt, "actual timestamp must survive restart in the durable ledger");
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
