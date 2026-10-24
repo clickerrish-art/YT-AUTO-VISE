@@ -122,7 +122,7 @@ export function createFacebookDraft(input, { now = new Date().toISOString(), exp
     destinationPageId, expectedPageId: expectedPageId || null,
     topic: input.topic.trim(), pillar: input.pillar, caption: input.caption.trim(),
     claims: Array.isArray(input.claims) ? structuredClone(input.claims) : [],
-    media, disclosure: String(input.disclosure ?? "").trim(), disclosureRequired: input.disclosureRequired === true, commercial: input.commercial === true, externalLinksReviewed: input.externalLinksReviewed === true,
+    media, disclosure: String(input.disclosure ?? "").trim(), disclosureRequired: input.disclosureRequired === true, commercial: input.commercial === true, campaignId: String(input.campaignId ?? "").trim() || null, externalLinksReviewed: input.externalLinksReviewed === true,
     scheduledDate, scheduledTime, timezone: FACEBOOK_TIMEZONE, scheduledAt,
     experiment: { slot: scheduledTime, timezone: FACEBOOK_TIMEZONE, assignedAt: now, reason: "Balanced initial 08:00 vs 18:00 experiment; not a claim of optimal timing" },
     status: "DRAFT", complianceVersion: FACEBOOK_COMPLIANCE_VERSION,
@@ -155,6 +155,8 @@ export function evaluateFacebookDraft(draft, {
       if (parsed.hostname === "selar.com" || parsed.hostname.endsWith(".selar.com")) {
         if (parsed.toString().replace(/\/$/, "") !== "https://selar.com/0u19v8u99l") blockers.push("Selar links must match the exact approved product URL");
         if (draft.commercial !== true) blockers.push("The approved Selar link may only appear in an explicitly marked commercial campaign draft");
+        if (draft.campaignId !== "selar-wildlife-vault") blockers.push("The approved Selar link requires the exact approved selar-wildlife-vault campaign ID");
+        if (!["ethical_photography", "educational_explainer", "authorized_behind_scenes"].includes(draft.pillar)) blockers.push("The Wildlife Creator Vault promotion is not approved for this unrelated content pillar");
       }
       if (draft.externalLinksReviewed !== true) flags.push("External link requires human verification for destination safety and relevance");
     } catch { blockers.push("Caption contains an invalid external URL"); }
@@ -212,7 +214,7 @@ export function facebookApprovalFingerprint(draft) {
   return sha256(JSON.stringify({
     caption: draft.caption, topic: draft.topic, pillar: draft.pillar,
     mediaSha256: draft.media?.sha256 ?? null, licenseEvidenceSha256: draft.media?.licenseEvidenceSha256 ?? null,
-    destinationPageId: draft.destinationPageId, disclosure: draft.disclosure ?? "", commercial: draft.commercial === true, externalLinksReviewed: draft.externalLinksReviewed === true,
+    destinationPageId: draft.destinationPageId, disclosure: draft.disclosure ?? "", commercial: draft.commercial === true, campaignId: draft.campaignId ?? null, externalLinksReviewed: draft.externalLinksReviewed === true,
     scheduledAt: draft.scheduledAt, complianceVersion: draft.complianceVersion
   }));
 }
