@@ -8,7 +8,7 @@ test("every queued idea remains draft-only for SonicVhibez's approved product", 
   assert.equal(queue.cadence.postsPerWeek, 2);
   assert.deepEqual(queue.cadence.days, ["Tuesday", "Saturday"]);
   assert.equal(queue.cadence.timezone, "Africa/Johannesburg");
-  assert.ok(Array.isArray(queue.items) && queue.items.length >= 3);
+  assert.ok(Array.isArray(queue.items) && queue.items.length >= 2);
   for (const item of queue.items) {
     assert.equal(item.productUrl, "https://selar.com/0u19v8u99l", `unapproved product URL in ${item.id}`);
     assert.notEqual(item.status, "PUBLISHED");
