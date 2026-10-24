@@ -1,7 +1,7 @@
 export const DEFAULT_SCHEDULE_TIMEZONE = "Africa/Johannesburg";
 export const DEFAULT_MIN_SPACING_HOURS = 72;
 
-const ACTIVE_STATUSES = new Set(["scheduled", "published", "SCHEDULED", "PUBLISHED"]);
+const ACTIVE_STATUSES = new Set(["scheduled", "published"]);
 
 function localDateKey(timestamp, timeZone) {
   return new Intl.DateTimeFormat("en-CA", {
@@ -34,26 +34,59 @@ export function validatePublicationSlot(proposed, existingItems = [], {
   const proposedAt = asTimestamp(proposed.scheduledAt, "proposed.scheduledAt");
   const proposedId = proposed.id;
   const errors = [];
-  const active = existingItems.filter(item => ACTIVE_STATUSES.has(item?.status));
+  const active = existingItems.filter(item => ACTIVE_STATUSES.has(String(item?.status ?? "").toLowerCase()));
   const ids = new Set();
+  const resolved = [];
+
   for (const item of active) {
+    const id = item.id ?? "(unknown)";
     if (typeof item.id !== "string" || !item.id.trim()) errors.push("existing scheduled/published items need stable non-empty IDs");
     else if (ids.has(item.id)) errors.push(`duplicate active job ID: ${item.id}`);
     else ids.add(item.id);
-    if (!item.scheduledAt) {
-      errors.push(`active item ${item.id ?? "(unknown)"} is missing scheduledAt`);
+
+    const status = String(item.status ?? "").toLowerCase();
+    const timeValue = status === "published" ? (item.publishedAt ?? item.actualPublishedAt) : item.scheduledAt;
+    if (timeValue === undefined || timeValue === null || timeValue === "") {
+      errors.push(status === "published"
+        ? `active item ${id} is missing publishedAt (actual publication timestamp)`
+        : `active item ${id} is missing scheduledAt`);
       continue;
     }
-    let existingAt;
-    try { existingAt = asTimestamp(item.scheduledAt, `item ${item.id ?? "(unknown)"}.scheduledAt`); }
-    catch (error) { errors.push(error.message); continue; }
-    if (proposedId && item.id === proposedId) errors.push(`duplicate job ID: ${proposedId}`);
-    if (localDateKey(existingAt, timeZone) === localDateKey(proposedAt, timeZone)) {
-      errors.push(`publication date collision with ${item.id ?? "(unknown)"} in ${timeZone}`);
+    let timestamp;
+    try {
+      timestamp = asTimestamp(timeValue, status === "published" ? `item ${id}.publishedAt` : `item ${id}.scheduledAt`);
+    } catch (error) {
+      errors.push(error.message);
+      continue;
     }
-    const gapHours = Math.abs(proposedAt - existingAt) / 3_600_000;
+    resolved.push({ item, timestamp });
+  }
+
+  // Refuse to proceed if the existing schedule is already inconsistent. Otherwise a
+  // new distant slot could appear valid while two older queue entries collide.
+  for (let i = 0; i < resolved.length; i++) {
+    for (let j = i + 1; j < resolved.length; j++) {
+      const first = resolved[i], second = resolved[j];
+      const firstId = first.item.id ?? "(unknown)", secondId = second.item.id ?? "(unknown)";
+      if (localDateKey(first.timestamp, timeZone) === localDateKey(second.timestamp, timeZone)) {
+        errors.push(`existing publication date collision between ${firstId} and ${secondId} in ${timeZone}`);
+      }
+      const gapHours = Math.abs(first.timestamp - second.timestamp) / 3_600_000;
+      if (gapHours < minSpacingHours) {
+        errors.push(`existing spacing conflict between ${firstId} and ${secondId}: ${gapHours} hours is below the ${minSpacingHours}-hour minimum`);
+      }
+    }
+  }
+
+  for (const { item, timestamp } of resolved) {
+    const id = item.id ?? "(unknown)";
+    if (proposedId && item.id === proposedId) errors.push(`duplicate job ID: ${proposedId}`);
+    if (localDateKey(timestamp, timeZone) === localDateKey(proposedAt, timeZone)) {
+      errors.push(`publication date collision with ${id} in ${timeZone}`);
+    }
+    const gapHours = Math.abs(proposedAt - timestamp) / 3_600_000;
     if (gapHours < minSpacingHours) {
-      errors.push(`spacing conflict with ${item.id ?? "(unknown)"}: ${gapHours} hours is below the ${minSpacingHours}-hour minimum`);
+      errors.push(`spacing conflict with ${id}: ${gapHours} hours is below the ${minSpacingHours}-hour minimum`);
     }
   }
   return { valid: errors.length === 0, errors, proposedAt: new Date(proposedAt).toISOString() };
