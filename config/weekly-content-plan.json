@@ -41,18 +41,17 @@
     "Upload privately first and verify the result in YouTube Studio"
   ],
   "notes": [
-    "Authoritative schedule; GitHub Actions cron is UTC and must match cronUtc values.",
     "Africa/Johannesburg is UTC+2 without daylight-saving changes; 15:00 UTC corresponds to 17:00 SAST.",
     "Tuesday 17:00 to Saturday 17:00 is 96 hours; Saturday 17:00 to the next Tuesday 17:00 is 72 hours.",
     "These are draft-production slots only. Before any publication operation, independently inspect all actual and planned YouTube timestamps and enforce the 72-hour minimum.",
     "Schedule triggers draft production only; it does not enable public publishing.",
     "Public publishing and unattended public scheduling remain disabled.",
     "Keep channelId empty until independently confirmed from the authorized YouTube account.",
-    "Requested target remains 2 long-form + 1 Short per week, which cannot satisfy 72-hour spacing in a 168-hour week. Current 1 long-form + 1 Short Tuesday/Saturday draft cadence is interim only; owner decision is required before any publication.",
     "Publication policy is a rolling sequence: long_form, long_form, short; at least 72 elapsed hours between consecutive actual publications, minimum 216 hours for three cyclic gaps.",
     "Tuesday/Saturday workflow cron slots are draft-preparation triggers only and are not the authoritative publication schedule.",
     "Before upload, reconcile public/private/unlisted channel history, scheduled items and every pending or uncertain upload attempt; missing or incomplete history blocks publication.",
-    "Public and unattended publishing remain disabled; private upload requires a separate explicit authorization and all release gates."
+    "Public and unattended publishing remain disabled; private upload requires a separate explicit authorization and all release gates.",
+    "Authoritative publication policy is publicationCycle; schedule entries are draft-preparation triggers only."
   ],
   "spacingPolicy": {
     "minimumHoursBetweenPosts": 72,
