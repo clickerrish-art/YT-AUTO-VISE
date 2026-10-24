@@ -4,13 +4,48 @@
   "channelId": "",
   "timezone": "Africa/Johannesburg",
   "publishingEnabled": false,
-  "targetCadence": { "longFormVideosPerWeek": 2, "shortsPerWeek": 1, "totalVideosPerWeek": 3 },
+  "targetCadence": {
+    "longFormVideosPerWeek": 2,
+    "shortsPerWeek": 1,
+    "totalVideosPerWeek": 3
+  },
   "schedule": [
-    { "day": "Tuesday", "format": "long_form", "cronUtc": "0 15 * * 2", "targetDurationMinutes": { "min": 6, "max": 10 }, "status": "DRAFT_ONLY" },
-    { "day": "Thursday", "format": "long_form", "cronUtc": "0 15 * * 4", "targetDurationMinutes": { "min": 6, "max": 10 }, "status": "DRAFT_ONLY" },
-    { "day": "Saturday", "format": "short", "cronUtc": "0 15 * * 6", "targetDurationSeconds": { "min": 50, "max": 60 }, "status": "DRAFT_ONLY" }
+    {
+      "day": "Tuesday",
+      "format": "long_form",
+      "cronUtc": "0 15 * * 2",
+      "targetDurationMinutes": {
+        "min": 6,
+        "max": 10
+      },
+      "status": "DRAFT_ONLY"
+    },
+    {
+      "day": "Thursday",
+      "format": "long_form",
+      "cronUtc": "0 15 * * 4",
+      "targetDurationMinutes": {
+        "min": 6,
+        "max": 10
+      },
+      "status": "DRAFT_ONLY"
+    },
+    {
+      "day": "Saturday",
+      "format": "short",
+      "cronUtc": "0 15 * * 6",
+      "targetDurationSeconds": {
+        "min": 50,
+        "max": 60
+      },
+      "status": "DRAFT_ONLY"
+    }
   ],
-  "product": { "name": "Complete YouTube Wildlife Creator's Vault – Premium Combo PDF", "url": "https://selar.com/0u19v8u99l", "approvedProductUrlsOnly": true },
+  "product": {
+    "name": "Complete YouTube Wildlife Creator's Vault – Premium Combo PDF",
+    "url": "https://selar.com/0u19v8u99l",
+    "approvedProductUrlsOnly": true
+  },
   "releaseGates": [
     "Verify footage, music, narration and image rights with retained evidence",
     "Human-review factual accuracy, captions, thumbnail, disclosures and YouTube altered/synthetic-media settings",
@@ -23,6 +58,13 @@
     "Africa/Johannesburg is UTC+2 without daylight-saving changes; 15:00 UTC corresponds to 17:00 SAST.",
     "Schedule triggers draft production only; it does not enable public publishing.",
     "Public publishing and unattended public scheduling remain disabled.",
-    "Keep channelId empty until independently confirmed from the authorized YouTube account."
-  ]
+    "Keep channelId empty until independently confirmed from the authorized YouTube account.",
+    "Minimum spacing is 72 elapsed hours between all scheduled/published posts; the current 3-post weekly cadence is mathematically infeasible at these slots and must remain blocked."
+  ],
+  "spacingPolicy": {
+    "minimumHoursBetweenPosts": 72,
+    "cadenceInfeasible": true,
+    "status": "BLOCKED",
+    "explanation": "Configured Tuesday/Thursday/Saturday slots have recurring gaps of 48h, 48h and 72h. Keep publishing disabled; do not silently weaken the 72-hour minimum or claim three posts per week is feasible."
+  }
 }
