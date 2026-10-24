@@ -211,11 +211,49 @@ export function evaluateFacebookDraft(draft, {
 }
 
 export function facebookApprovalFingerprint(draft) {
+  // Bind approval to every material factual, licensing, disclosure and media field,
+  // not only the asset hashes. A same-hash path/provenance/claim edit must trigger review.
+  const media = draft?.media ?? null;
+  const canonicalClaims = (Array.isArray(draft?.claims) ? draft.claims : []).map(claim => ({
+    text: String(claim?.text ?? ""),
+    sourceUrls: (Array.isArray(claim?.sourceUrls) ? claim.sourceUrls : []).map(String).sort(),
+    verified: claim?.verified === true,
+    verificationNotes: String(claim?.verificationNotes ?? "")
+  })).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+  const materialMedia = media ? {
+    path: String(media.path ?? ""),
+    sha256: String(media.sha256 ?? ""),
+    provenance: String(media.provenance ?? ""),
+    licenseEvidencePath: String(media.licenseEvidencePath ?? ""),
+    licenseEvidenceSha256: String(media.licenseEvidenceSha256 ?? ""),
+    commercialPermission: media.commercialPermission === true,
+    platformPermission: media.platformPermission === true,
+    attributionRequired: media.attributionRequired === true,
+    attributionText: String(media.attributionText ?? ""),
+    syntheticOrAltered: media.syntheticOrAltered === true,
+    disclosureApplied: media.disclosureApplied === true,
+    restrictions: String(media.restrictions ?? ""),
+    expiresAt: String(media.expiresAt ?? "")
+  } : null;
   return sha256(JSON.stringify({
-    caption: draft.caption, topic: draft.topic, pillar: draft.pillar,
-    mediaSha256: draft.media?.sha256 ?? null, licenseEvidenceSha256: draft.media?.licenseEvidenceSha256 ?? null,
-    destinationPageId: draft.destinationPageId, disclosure: draft.disclosure ?? "", commercial: draft.commercial === true, campaignId: draft.campaignId ?? null, externalLinksReviewed: draft.externalLinksReviewed === true,
-    scheduledAt: draft.scheduledAt, complianceVersion: draft.complianceVersion
+    caption: draft?.caption ?? "",
+    topic: draft?.topic ?? "",
+    pillar: draft?.pillar ?? "",
+    claims: canonicalClaims,
+    media: materialMedia,
+    destinationPageId: draft?.destinationPageId ?? "",
+    expectedPageId: draft?.expectedPageId ?? null,
+    disclosure: draft?.disclosure ?? "",
+    disclosureRequired: draft?.disclosureRequired === true,
+    commercial: draft?.commercial === true,
+    campaignId: draft?.campaignId ?? null,
+    externalLinksReviewed: draft?.externalLinksReviewed === true,
+    scheduledDate: draft?.scheduledDate ?? "",
+    scheduledTime: draft?.scheduledTime ?? "",
+    scheduledAt: draft?.scheduledAt ?? "",
+    timezone: draft?.timezone ?? "",
+    experiment: draft?.experiment ?? null,
+    complianceVersion: draft?.complianceVersion ?? FACEBOOK_COMPLIANCE_VERSION
   }));
 }
 
