@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { metaCredentialFingerprint, fingerprintsMatch } from "./meta-credential-fingerprint.mjs";
+import { redactOperationalText } from "./safe-output.mjs";
 import { fileURLToPath } from "node:url";
 import { spawn, spawnSync } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
@@ -289,7 +290,8 @@ function runTask(taskId) {
       if (settled) return;
       settled = true;
       clearTimeout(timer);
-      resolve({ taskId, startedAt, finishedAt: new Date().toISOString(), truncated, ...result, output: result.output ?? output });
+      const safeOutput = redactOperationalText(result.output ?? output, { roots: [root, stateDir] });
+      resolve({ taskId, startedAt, finishedAt: new Date().toISOString(), truncated, ...result, output: safeOutput });
     };
     const collect = chunk => {
       output += chunk.toString();
@@ -303,7 +305,7 @@ function runTask(taskId) {
     }, taskTimeoutMs.get(taskId) ?? 60_000);
     child.stdout.on("data", collect);
     child.stderr.on("data", collect);
-    child.on("error", error => finish({ exitCode: null, status: "FAILED", output: (output + "\\n" + error.message).slice(-12000) }));
+    child.on("error", error => finish({ exitCode: null, status: "FAILED", output: redactOperationalText((output + "\\n" + error.message).slice(-12000), { roots: [root, stateDir] }) }));
     child.on("close", code => finish({ exitCode: code, status: timedOut ? "TIMED_OUT" : code === 0 ? "SUCCEEDED" : "FAILED" }));
   });
 }
@@ -1337,7 +1339,7 @@ const server = http.createServer(async (req, res) => {
     }
     return json(res, 404, { error: "Not found" });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Request failed";
+    const message = redactOperationalText(error instanceof Error ? error.message : "Request failed", { roots: [root, stateDir] });
     const status = /State is busy in another process/i.test(message) ? 409 : 400;
     return json(res, status, { error: message });
   }
