@@ -13,6 +13,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = process.env.DASHBOARD_HOST ?? "127.0.0.1";
 const port = Number(process.env.PORT ?? 8787);
 const token = process.env.DASHBOARD_OPERATOR_TOKEN;
+const operatorId = process.env.DASHBOARD_OPERATOR_ID?.trim();
 const stateDir = path.resolve(process.env.DASHBOARD_STATE_DIR ?? path.join(root, "state"));
 const stateFile = path.join(stateDir, "dashboard-state.json");
 const approvedProductUrl = "https://selar.com/0u19v8u99l";
@@ -20,6 +21,10 @@ const htmlPath = path.join(root, "public", "dashboard.html");
 
 if (!token || token.length < 24) {
   console.error("BLOCKED: set DASHBOARD_OPERATOR_TOKEN to a random value of at least 24 characters. No server started.");
+  process.exit(2);
+}
+if (!operatorId || operatorId.length < 2 || operatorId.length > 120) {
+  console.error("BLOCKED: set DASHBOARD_OPERATOR_ID to the actual authorized operator identity (2–120 characters). No server started.");
   process.exit(2);
 }
 if (!["127.0.0.1", "::1", "localhost"].includes(host)) {
@@ -282,7 +287,7 @@ const server = http.createServer(async (req, res) => {
       const state = loadState();
       const job = { id: crypto.randomUUID(), kind: "VALIDATION_TASK", taskId: body.taskId, status: "RUNNING", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), publishingEnabled: false };
       state.jobs.push(job);
-      state.audit.push({ id: crypto.randomUUID(), action: "VALIDATION_TASK_STARTED", jobId: job.id, taskId: body.taskId, at: new Date().toISOString(), actor: "local-operator" });
+      state.audit.push({ id: crypto.randomUUID(), action: "VALIDATION_TASK_STARTED", jobId: job.id, taskId: body.taskId, at: new Date().toISOString(), actor: operatorId });
       saveState(state);
       activeTasks.add(body.taskId);
       let result;
@@ -291,7 +296,7 @@ const server = http.createServer(async (req, res) => {
       const latest = loadState();
       const index = latest.jobs.findIndex(entry => entry.id === job.id);
       if (index >= 0) latest.jobs[index] = { ...latest.jobs[index], ...result, updatedAt: new Date().toISOString() };
-      latest.audit.push({ id: crypto.randomUUID(), action: result.status === "SUCCEEDED" ? "VALIDATION_TASK_SUCCEEDED" : "VALIDATION_TASK_FAILED", jobId: job.id, taskId: body.taskId, exitCode: result.exitCode, at: new Date().toISOString(), actor: "local-operator" });
+      latest.audit.push({ id: crypto.randomUUID(), action: result.status === "SUCCEEDED" ? "VALIDATION_TASK_SUCCEEDED" : "VALIDATION_TASK_FAILED", jobId: job.id, taskId: body.taskId, exitCode: result.exitCode, at: new Date().toISOString(), actor: operatorId });
       saveState(latest);
       return json(res, result.status === "SUCCEEDED" ? 200 : 500, { job: latest.jobs.find(entry => entry.id === job.id), publicPublishingEnabled: false });
     }
@@ -326,10 +331,11 @@ const server = http.createServer(async (req, res) => {
         const slotAlreadyReserved = state.jobs.some(existing => existing.kind === "CONTENT_PRODUCTION" && existing.scheduledSlot?.date === item.scheduledDate);
         if (slotAlreadyReserved) return json(res, 409, { error: "This dated schedule slot is already reserved; reuse or edit its existing job", slotFingerprint });
         const job = createContentJob({ idempotencyKey: "draft:" + item.id, title: item.title, topic: item.topic, contentType: item.contentType, scheduledDay: item.scheduledDay, scheduledDate: item.scheduledDate, inputReferences: [] });
+        job.transitionHistory[0].actor = operatorId;
         state.queueItems.push(item);
         state.jobs.push(job);
-        state.audit.push({ id: crypto.randomUUID(), action: "DRAFT_CREATED", itemId: item.id, at: new Date().toISOString(), actor: "local-operator" });
-        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", itemId: item.id, jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: "local-operator" });
+        state.audit.push({ id: crypto.randomUUID(), action: "DRAFT_CREATED", itemId: item.id, at: new Date().toISOString(), actor: operatorId });
+        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", itemId: item.id, jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: operatorId });
         saveState(state);
         return json(res, 201, { item, job });
       } finally { release(); }
@@ -337,6 +343,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "POST" && url.pathname === "/api/jobs") {
       const body = await readBody(req);
       const job = createContentJob(body);
+      job.transitionHistory[0].actor = operatorId;
       const release = await acquireStateLock();
       try {
         const state = loadState();
@@ -351,7 +358,7 @@ const server = http.createServer(async (req, res) => {
           return json(res, 409, { error: "The requested schedule slot is already reserved by a different job; reuse the existing job for retries", job: slotConflict });
         }
         state.jobs.push(job);
-        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: "local-operator" });
+        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: operatorId });
         saveState(state);
         return json(res, 201, { job, reused: false, publishingEnabled: false });
       } finally { release(); }
@@ -402,7 +409,7 @@ const server = http.createServer(async (req, res) => {
         const thumbnailStream = JSON.parse(thumbnailProbe.stdout).streams?.[0];
         if (!thumbnailStream || thumbnailStream.width !== 1280 || thumbnailStream.height !== 720) return json(res, 400, { error: "Thumbnail must be a readable 1280x720 image" });
         let updated = job;
-        if (job.state === "GENERATED") updated = transitionContentJob(job, "VALIDATING", { actor: "local-operator", reason: "Server-side artifact, thumbnail, metadata and caption validation started" });
+        if (job.state === "GENERATED") updated = transitionContentJob(job, "VALIDATING", { actor: operatorId, reason: "Server-side artifact, thumbnail, metadata and caption validation started" });
         updated.validationResults = { passed: true, checkedAt: new Date().toISOString(), metadataVersion, captionsPath: body.captionsPath, captionsSha256: sha256File(captionsFile), artifacts: inspectedArtifacts, thumbnail: { path: job.thumbnailArtifact.path, sha256: job.thumbnailArtifact.sha256, width: thumbnailStream.width, height: thumbnailStream.height }, checks: ["metadata-sha256", "caption-structure", "mp4-sha256", "ffprobe-duration", "orientation", "audio-stream", "thumbnail-sha256", "thumbnail-dimensions"] };
         if (updated.workerLease) {
           updated.leaseHistory = [...(updated.leaseHistory ?? []), { workerId: updated.workerLease.workerId, action: "VALIDATION_COMPLETED_RELEASED", at: new Date().toISOString() }];
@@ -410,7 +417,7 @@ const server = http.createServer(async (req, res) => {
         }
         updated.updatedAt = new Date().toISOString();
         state.jobs[index] = updated;
-        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_VALIDATION_PASSED", jobId: job.id, metadataVersion, captionsPath: body.captionsPath, artifacts: inspectedArtifacts.map(a => ({ path: a.path, sha256: a.sha256 })), at: updated.updatedAt, actor: "local-operator" });
+        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_VALIDATION_PASSED", jobId: job.id, metadataVersion, captionsPath: body.captionsPath, artifacts: inspectedArtifacts.map(a => ({ path: a.path, sha256: a.sha256 })), at: updated.updatedAt, actor: operatorId });
         saveState(state);
         return json(res, 200, { job: updated, publishingEnabled: false });
       } finally { release(); }
@@ -595,7 +602,7 @@ const server = http.createServer(async (req, res) => {
         claim = claimWorkerLease(job, "dashboard-renderer-" + job.contentType, { leaseMs: 15 * 60_000 });
         jobTitle = job.title;
         state.jobs[index] = claim.job;
-        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_RENDER_STARTED", jobId: job.id, taskId, actor: "local-operator", at: new Date().toISOString(), reason: "Fixed renderer launched through dashboard; no upload/publication path" });
+        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_RENDER_STARTED", jobId: job.id, taskId, actor: operatorId, at: new Date().toISOString(), reason: "Fixed renderer launched through dashboard; no upload/publication path" });
         saveState(state);
       } finally { release(); }
 
@@ -652,7 +659,7 @@ const server = http.createServer(async (req, res) => {
         }
         updated.renderExecution = { taskId, status: result.status, exitCode: result.exitCode, startedAt: result.startedAt, finishedAt: result.finishedAt, output: result.output, truncated: result.truncated === true };
         state.jobs[index] = updated;
-        state.audit.push({ id: crypto.randomUUID(), action: updated.state === "GENERATED" ? "CONTENT_RENDER_SUCCEEDED" : updated.state === "BLOCKED" ? "CONTENT_RENDER_BLOCKED" : "CONTENT_RENDER_FAILED", jobId: updated.id, taskId, state: updated.state, at: new Date().toISOString(), actor: "local-operator" });
+        state.audit.push({ id: crypto.randomUUID(), action: updated.state === "GENERATED" ? "CONTENT_RENDER_SUCCEEDED" : updated.state === "BLOCKED" ? "CONTENT_RENDER_BLOCKED" : "CONTENT_RENDER_FAILED", jobId: updated.id, taskId, state: updated.state, at: new Date().toISOString(), actor: operatorId });
         saveState(state);
         return json(res, updated.state === "GENERATED" ? 200 : 409, { job: updated, publishingEnabled: false });
       } finally { finishRelease(); }
@@ -667,7 +674,7 @@ const server = http.createServer(async (req, res) => {
         if (index < 0) return json(res, 404, { error: "Content job not found" });
         const claimed = claimWorkerLease(state.jobs[index], body.workerId, { leaseMs: body.leaseMs ?? 60_000 });
         state.jobs[index] = claimed.job;
-        state.audit.push({ id: crypto.randomUUID(), action: "WORKER_LEASE_CLAIMED", jobId: body.jobId, workerId: body.workerId, expiresAt: claimed.job.workerLease.expiresAt, at: new Date().toISOString(), actor: "local-operator" });
+        state.audit.push({ id: crypto.randomUUID(), action: "WORKER_LEASE_CLAIMED", jobId: body.jobId, workerId: body.workerId, expiresAt: claimed.job.workerLease.expiresAt, at: new Date().toISOString(), actor: operatorId });
         saveState(state);
         return json(res, 200, { job: claimed.job, leaseToken: claimed.leaseToken, publishingEnabled: false });
       } finally { release(); }
@@ -682,7 +689,7 @@ const server = http.createServer(async (req, res) => {
         if (index < 0) return json(res, 404, { error: "Content job not found" });
         const updated = heartbeatWorkerLease(state.jobs[index], body.leaseToken, { leaseMs: body.leaseMs ?? 60_000 });
         state.jobs[index] = updated;
-        state.audit.push({ id: crypto.randomUUID(), action: "WORKER_LEASE_HEARTBEAT", jobId: body.jobId, workerId: updated.workerLease.workerId, expiresAt: updated.workerLease.expiresAt, at: new Date().toISOString(), actor: "local-operator" });
+        state.audit.push({ id: crypto.randomUUID(), action: "WORKER_LEASE_HEARTBEAT", jobId: body.jobId, workerId: updated.workerLease.workerId, expiresAt: updated.workerLease.expiresAt, at: new Date().toISOString(), actor: operatorId });
         saveState(state);
         return json(res, 200, { job: updated, publishingEnabled: false });
       } finally { release(); }
@@ -730,7 +737,7 @@ const server = http.createServer(async (req, res) => {
         }
         const updated = completeWorkerLease(old, body.leaseToken, body.nextState, resultPatch);
         state.jobs[index] = updated;
-        state.audit.push({ id: crypto.randomUUID(), action: "WORKER_STAGE_COMPLETED", jobId: body.jobId, workerId: old.workerLease.workerId, from: old.state, to: updated.state, at: new Date().toISOString(), actor: "local-operator" });
+        state.audit.push({ id: crypto.randomUUID(), action: "WORKER_STAGE_COMPLETED", jobId: body.jobId, workerId: old.workerLease.workerId, from: old.state, to: updated.state, at: new Date().toISOString(), actor: operatorId });
         saveState(state);
         return json(res, 200, { job: updated, publishingEnabled: false });
       } finally { release(); }
@@ -760,9 +767,9 @@ const server = http.createServer(async (req, res) => {
         const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
         if (index < 0) return json(res, 404, { error: "Content job not found" });
         const old = state.jobs[index];
-        const updated = transitionContentJob(old, body.nextState, { actor: "local-operator", reason: body.reason ?? "" });
+        const updated = transitionContentJob(old, body.nextState, { actor: operatorId, reason: body.reason ?? "" });
         state.jobs[index] = updated;
-        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_STATE_CHANGED", jobId: updated.id, from: old.state, to: updated.state, at: updated.updatedAt, actor: "local-operator", reason: String(body.reason ?? "").slice(0, 1000) });
+        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_STATE_CHANGED", jobId: updated.id, from: old.state, to: updated.state, at: updated.updatedAt, actor: operatorId, reason: String(body.reason ?? "").slice(0, 1000) });
         saveState(state);
         return json(res, 200, { job: updated, publishingEnabled: false });
       } finally { release(); }
@@ -787,7 +794,7 @@ const server = http.createServer(async (req, res) => {
           return json(res, 409, { error: "Another production job already occupies this dated schedule slot" });
         }
         state.queueItems[index] = { ...old, ...item, status: old.status, rightsConfirmed: old.rightsConfirmed, complianceReviewed: old.complianceReviewed, updatedAt: new Date().toISOString() };
-        state.audit.push({ id: crypto.randomUUID(), action: "DRAFT_EDITED", itemId: item.id, at: new Date().toISOString(), actor: "local-operator" });
+        state.audit.push({ id: crypto.randomUUID(), action: "DRAFT_EDITED", itemId: item.id, at: new Date().toISOString(), actor: operatorId });
         saveState(state);
         return json(res, 200, { item: state.queueItems[index] });
       } finally { release(); }
