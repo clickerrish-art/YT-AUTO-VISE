@@ -1,25 +1,24 @@
 # Current branch status — 2026-10-24
 
-- Live branch: `codex/marketing-machine-audit-fixes`; checkpoint before this status update: `5445aba4448c130b77a7fbfc47d736ae5ea67a58`. Base `main`: `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 is open, draft and unmerged; branch comparison is 530 ahead, 0 behind.
-- Current-checkpoint workflows passed: [automation validation — run 40088728165](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40088728165), [content quality — run 40088728161](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40088728161), [metadata validation — run 40088728205](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40088728205). Relevant logs: 124 Node tests passed, 0 failed, 0 skipped; automation additionally passed 8 Python safety tests and syntax/compilation checks. Install path verified in CI: `npm ci --ignore-scripts`; plain `npm ci` is not verified.
-- Facebook draft workflow implemented: separate Nature Frontiers destination, authenticated dashboard APIs/UI, deterministic source/media/licence/disclosure/duplicate checks, approval hash binding, one-post-per-local-date guard, South African 08:00/18:00 experiment bookkeeping, durable draft/audit records and HTTP 409 live-publish refusal. No real Meta integration, Page identity, permissions, token or Page Insights has been verified; no Facebook post was published. Details: [Facebook pipeline audit](FACEBOOK_PIPELINE_AUDIT_2026-10-24.md).
-- npm audit still reports 4 moderate, 0 high, 0 critical advisories affecting `gaxios`, `googleapis`, `googleapis-common` and `uuid`. Major-version remediation requires compatibility testing.
-- YouTube release remains blocked: requested 2 long-form + 1 Short weekly conflicts with three 72-hour cyclic gaps. The interim Tuesday/Saturday schedule remains draft-only. Public YouTube publishing is disabled.
+- Verified code/test checkpoint: `006a61c90ad4a93b902bde1832c360f110e904fa` on `codex/marketing-machine-audit-fixes`; base `main`: `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 remains open, draft and unmerged; comparison at this checkpoint is 544 ahead, 0 behind.
+- All current-checkpoint workflows passed: [automation — run 40089324936](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40089324936), [metadata — run 40089324929](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40089324929), [content quality — run 40089325007](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40089325007). Node tests: 126 passed, 0 failed, 0 skipped. Automation additionally passed 8 Python safety tests and JavaScript syntax/Python compilation checks. Verified CI install path: `npm ci --ignore-scripts`; ordinary `npm ci` is not verified.
+- Facebook implementation is draft-first: research-first idea endpoint, authenticated dashboard UI/API, persistent draft/audit state, duplicate/near-duplicate and one-post-per-local-day checks, source and license checksum gates, disclosure and high-impact claim flags, exact Selar campaign/pillar restrictions, approval fingerprints, 08:00/18:00 SAST experiment bookkeeping, and explicit HTTP 409 refusal for live publishing. No real Meta API adapter is enabled; Page identity, permissions, token lifecycle and Insights remain unverified; no Facebook post was published.
+- npm audit remains 4 moderate, 0 high, 0 critical advisories involving `gaxios`, `googleapis`, `googleapis-common`, and `uuid`. Major-version remediation requires compatibility testing.
 
 ## Current owner-controlled production blockers
 
-1. Verify the exact Nature Frontiers Facebook Page ID in Meta, supported Page roles/permissions, token lifecycle and approved API access. Configure the same verified Page ID in `config/facebook-publishing.json` and the secure `NATURE_FRONTIERS_FACEBOOK_PAGE_ID` environment variable. No tokens in source control or chat.
+1. Verify the exact Nature Frontiers Facebook Page ID in Meta, its supported Page roles/permissions, official API access and token lifecycle. Configure the same Page ID in the reviewed `config/facebook-publishing.json` and secure `NATURE_FRONTIERS_FACEBOOK_PAGE_ID`; do not store tokens in source control or chat.
 2. Decide whether to change the weekly YouTube count or the 72-hour minimum; do not silently weaken either.
-3. Supply real rights-cleared media, narration, music, complete manifests, source provenance and checksum-bound permission evidence.
-4. Complete full-file decode, human playback/caption/thumbnail review and final-hash-bound human approval.
-5. Verify the SonicVhibez channel via secure OAuth; after all other gates pass, explicitly authorize a private-only upload and verify the remote ID/receipt.
-6. Run and record owner-controlled restart and backup/restore acceptance.
-7. Supply exact Safari HTTPS destination, truthful disclosure and explicit owner approval before activation.
-8. Resolve the four moderate dependency advisories through tested compatible upgrades or a documented risk decision.
+3. Supply genuine rights-cleared media, narration, music, manifests, provenance and checksum-bound permission evidence; complete full-file decode and human playback/caption/thumbnail review.
+4. Complete final-hash-bound rights/editorial approval, secure live OAuth verification of SonicVhibez, then explicitly authorize one private-only upload and verify the remote ID/receipt.
+5. Run and record owner-controlled restart and backup/restore acceptance.
+6. Supply the exact Safari HTTPS destination, truthful disclosure and explicit owner approval before activation.
+7. Resolve the four moderate npm advisories through tested compatible upgrades or a documented risk decision.
 
 No live Facebook post, YouTube upload, public publishing or production acceptance is claimed by these CI results.
 
 ---
+
 
 
 # Release evidence snapshot — prior checkpoint cb6ca43b7723d903c3e6b78fd3ed662a13498b04 (2026-10-24)
