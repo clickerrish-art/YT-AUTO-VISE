@@ -89,6 +89,7 @@ export async function runAutonomousFacebookPublisher({
     const candidates = queue.filter(item => item && item.destination === "nature_frontiers_facebook" &&
       item.destinationPageId === config.destinationPageId && item.scheduledDate === today &&
       typeof item.slotId === "string" && typeof item.scheduledAt === "string");
+    const runStartedAt = isoNow(current);
     let published = 0, skipped = 0;
     for (const payload of candidates) {
       if (history.some(item => item.slotId === payload.slotId) || ledger.some(item => item.slotId === payload.slotId)) {
@@ -203,7 +204,22 @@ export async function runAutonomousFacebookPublisher({
         atomicJson(ledgerPath, ledger); atomicJson(historyPath, history); skipped++;
       }
     }
-    return { status: "COMPLETED", published, skipped, date: today, destination: "nature_frontiers_facebook" };
+    const summary = {
+      status: "COMPLETED", destination: "nature_frontiers_facebook", timezone: config.timezone,
+      startedAt: runStartedAt, completedAt: new Date().toISOString(), date: today,
+      published, skipped, queueCount: queue.length,
+      lastRemoteReceipt: [...history].reverse().find(item => ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)) ?? null,
+      blockedPosts: history.filter(item => item.status === "SKIPPED_BLOCKED").slice(-20).map(item => ({
+        slotId: item.slotId ?? null, status: item.status, reason: item.reason ?? null,
+        blockers: item.policyDecision?.blockers ?? [], checkedAt: item.checkedAt ?? null
+      })),
+      uncertainAttempts: ledger.filter(item => item.status === "UNCERTAIN").slice(-20).map(item => ({
+        slotId: item.slotId ?? null, status: item.status, reason: item.reason ?? null,
+        remotePostId: item.remotePostId ?? null, reconciliation: item.reconciliation ?? null
+      }))
+    };
+    atomicJson(path.join(stateDir, "facebook-run-summary.json"), summary);
+    return summary;
   } finally { release(); }
 }
 
