@@ -15,7 +15,7 @@ function localDateKey(timestamp, timeZone) {
 function parseStrictTimestamp(value) {
   if (typeof value === "number") return Number.isFinite(value) ? value : NaN;
   if (typeof value !== "string") return NaN;
-  const match = value.match(/^(\\d{4})-(\\d{2})-(\\d{2})T([01]\\d|2[0-3]):([0-5]\\d):([0-5]\\d)(?:\\.(\\d{1,3}))?(Z|([+-])(\\d{2}):(\\d{2}))$/);
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})T([01]\d|2[0-3]):([0-5]\d):([0-5]\d)(?:\.(\d{1,3}))?(Z|([+-])(\d{2}):(\d{2}))$/);
   if (!match) return NaN;
   const [, yearText, monthText, dayText, hourText, minuteText, secondText, fraction = "", zone, sign, offsetHourText, offsetMinuteText] = match;
   const year = Number(yearText), month = Number(monthText), day = Number(dayText);
