@@ -45,8 +45,12 @@ jobs:
           const lock = JSON.parse(fs.readFileSync("package-lock.json", "utf8"));
           const expected = pkg.dependencies ?? {};
           const actual = lock.packages?.[""]?.dependencies ?? {};
+          const expectedDev = pkg.devDependencies ?? {};
+          const actualDev = lock.packages?.[""]?.devDependencies ?? {};
           const mismatch = Object.entries(expected).some(([name, version]) => actual[name] !== version)
-            || Object.keys(actual).some(name => !(name in expected));
+            || Object.keys(actual).some(name => !(name in expected))
+            || Object.entries(expectedDev).some(([name, version]) => actualDev[name] !== version)
+            || Object.keys(actualDev).some(name => !(name in expectedDev));
           process.exit(mismatch ? 0 : 1);
           NODE
           then
