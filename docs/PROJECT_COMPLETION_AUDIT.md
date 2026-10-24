@@ -1,9 +1,9 @@
-## Last fully verified baseline before this documentation refresh — 2026-10-24
+## Last fully verified code checkpoint before this documentation refresh — 2026-10-24
 
-- Branch HEAD at the verified checkpoint: `8485f76afdd2ee9765cf6359861051c1bfba72e5`; PR #1 was open, draft and unmerged against `main`. The subsequent commits in this documentation refresh change documentation only; the final current branch HEAD and its CI are reported in the PR description and completion response.
-- All three GitHub Actions validation workflows passed on that exact checkpoint, each with 107 passed, 0 failed, 0 skipped: [automation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081958724), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081959017), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081958723).
+- Verified code/test HEAD: `47b513c2f0fedfa0e7bcdbaf77a40857d82e0a2b`; PR #1 was open, draft and unmerged against `main`. The subsequent commits in this documentation refresh change documentation only; the final branch HEAD and its CI are reported in the PR description and completion response.
+- All three GitHub Actions validation workflows passed on that exact code/test HEAD, each with 107 passed, 0 failed, 0 skipped: [automation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40082256630), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40082256649), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40082256549).
 - The automation run passed `npm ci --ignore-scripts` (46 packages added, 47 audited) and 8 Python safety tests. The metadata workflow intentionally verifies that `npm run check` fails closed while production metadata remains incomplete; that is a successful safety check, not production readiness. Plain `npm ci` without `--ignore-scripts` remains unverified.
-- Schedule implementation converts configured 17:00 local time with IANA timezone rules, validates elapsed-hour gaps and local dates, and applies schedule/spacing checks to dashboard draft creation, draft updates and direct job creation. The current two-slot draft schedule (Tuesday long-form, Saturday Short) has 96-hour and 72-hour cyclic gaps.
+- Schedule implementation converts configured 17:00 local time with IANA timezone rules, validates elapsed-hour gaps and local dates, and applies schedule/spacing checks to dashboard draft creation, draft updates and direct job creation. The dashboard state/readiness responses now explicitly show the unresolved cadence decision. The current two-slot draft schedule (Tuesday long-form, Saturday Short) has 96-hour and 72-hour cyclic gaps.
 - **Cadence decision remains BLOCKED:** the requested target is two long-form videos plus one Short every seven days. Three cyclic gaps of at least 72 hours require 216 hours, so that target cannot fit in a 168-hour week. The active one-long-form + one-Short schedule is an explicitly labelled interim safety fallback, not a silent replacement of the requested goal. Public publishing remains disabled.
 - Production acceptance remains blocked by genuine rights-cleared source media and manifests, real rendered and fully decoded exports, human review bound to final hashes, secure live SonicVhibez OAuth identity verification, one explicitly authorized private upload with remote private-status receipt, and owner-run restart/backup-restore acceptance. Safari remains inactive until exact HTTPS destination, disclosure and owner approval exist.
 
@@ -91,7 +91,7 @@ See [GO_LIVE_BLOCKERS.md](GO_LIVE_BLOCKERS.md) for owner-dependent acceptance ga
 - Remaining owner-controlled gates: genuine rights-cleared source assets and completed manifests; rendered/decoded media and human review; secure OAuth identity verification for SonicVhibez; explicit per-operation private-upload authorization; operational backup/restore acceptance. Safari remains inactive until exact destination, disclosure, and owner approval exist.
 
 
-## Requirement traceability — verified implementation checkpoint `8485f76afdd2ee9765cf6359861051c1bfba72e5`
+## Requirement traceability — verified implementation checkpoint `47b513c2f0fedfa0e7bcdbaf77a40857d82e0a2b`
 
 | Requirement | Implementation | Automated tests / CI | Real-world acceptance | Status / next action |
 |---|---|---|---|---|
