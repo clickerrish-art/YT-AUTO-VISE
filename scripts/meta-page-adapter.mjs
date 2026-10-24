@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { spawnSync } from "node:child_process";
 
 const PAGE_ID_PATTERN = /^\d{5,30}$/;
 const API_VERSION_PATTERN = /^v\d+\.\d+$/;
@@ -43,6 +44,15 @@ function validateConfig({ pageId, expectedPageId, accessToken, apiVersion = "v26
   if (!PAGE_ID_PATTERN.test(String(pageId ?? "")) || pageId !== expectedPageId) throw new MetaPageApiError("Facebook Page ID is missing or does not match the owner-verified allowlist");
   if (typeof accessToken !== "string" || accessToken.length < 20) throw new MetaPageApiError("Meta Page access token is not configured securely");
   if (!API_VERSION_PATTERN.test(apiVersion)) throw new MetaPageApiError("META_GRAPH_API_VERSION must look like v26.0");
+}
+function probeImageFile(filePath) {
+  const result = spawnSync("ffprobe", ["-v", "error", "-select_streams", "v:0", "-show_entries", "stream=codec_type,width,height", "-of", "json", filePath], { encoding: "utf8", timeout: 15000 });
+  if (result.error || result.status !== 0) throw new MetaPageApiError("ffprobe is unavailable or failed to decode the Facebook image asset");
+  let data;
+  try { data = JSON.parse(result.stdout); } catch { throw new MetaPageApiError("ffprobe returned invalid image inspection data"); }
+  const stream = (data.streams ?? []).find(item => item.codec_type === "video" && Number(item.width) > 0 && Number(item.height) > 0);
+  if (!stream) throw new MetaPageApiError("Facebook image asset has no decodable image stream or valid dimensions");
+  return { width: Number(stream.width), height: Number(stream.height) };
 }
 function endpoint(apiVersion, pathPart) {
   return "https://graph.facebook.com/" + apiVersion + "/" + pathPart;
@@ -123,7 +133,7 @@ export async function verifyMetaPageIdentity({
 export async function publishMetaPagePost({
   draft, pageId, expectedPageId, accessToken, apiVersion = "v26.0",
   permissionsConfirmed = false, fetchImpl = fetch, rootDir = process.cwd(), now = Date.now(),
-  timeoutMs = 30000
+  timeoutMs = 30000, probeImage = probeImageFile
 }) {
   validateConfig({ pageId, expectedPageId, accessToken, apiVersion });
   if (permissionsConfirmed !== true) throw new MetaPageApiError("Owner has not confirmed required Meta Page publishing permissions");
@@ -150,6 +160,7 @@ export async function publishMetaPagePost({
     const extension = path.extname(absolute).toLowerCase();
     const mimeType = IMAGE_TYPES.get(extension);
     if (!mimeType) throw new MetaPageApiError("Meta photo publishing supports only verified JPEG, PNG, GIF, BMP or TIFF images in this adapter");
+    probeImage(absolute);
     form.set("source", new Blob([bytes], { type: mimeType }), path.basename(absolute));
     pathPart = encodeURIComponent(pageId) + "/photos";
   }
