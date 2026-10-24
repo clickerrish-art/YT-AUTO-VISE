@@ -1,14 +1,9 @@
 {
-  "version": 2,
+  "version": 3,
   "channel": "SonicVhibez",
   "channelId": "",
   "timezone": "Africa/Johannesburg",
   "publishingEnabled": false,
-  "targetCadence": {
-    "longFormVideosPerWeek": 2,
-    "shortsPerWeek": 1,
-    "totalVideosPerWeek": 3
-  },
   "schedule": [
     {
       "day": "Tuesday",
@@ -37,7 +32,7 @@
     "approvedProductUrlsOnly": true
   },
   "releaseGates": [
-    "Owner must resolve the requested 2-long-form + 1-Short weekly target versus the 72-hour minimum; the current two-slot draft schedule is only an interim safety fallback and publishing remains disabled",
+    "Enforce the rolling long-form, long-form, Short cycle with at least 72 elapsed hours between actual publications; fail closed if channel history or uncertain attempts cannot be reconciled",
     "Inspect the complete SonicVhibez public, private and unlisted upload history and all queued timestamps; verify at least 72 full hours before any next publication",
     "Verify footage, music, narration and image rights with retained evidence",
     "Human-review factual accuracy, captions, thumbnail, disclosures and YouTube altered/synthetic-media settings",
@@ -53,30 +48,32 @@
     "Schedule triggers draft production only; it does not enable public publishing.",
     "Public publishing and unattended public scheduling remain disabled.",
     "Keep channelId empty until independently confirmed from the authorized YouTube account.",
-    "Requested target remains 2 long-form + 1 Short per week, which cannot satisfy 72-hour spacing in a 168-hour week. Current 1 long-form + 1 Short Tuesday/Saturday draft cadence is interim only; owner decision is required before any publication."
+    "Requested target remains 2 long-form + 1 Short per week, which cannot satisfy 72-hour spacing in a 168-hour week. Current 1 long-form + 1 Short Tuesday/Saturday draft cadence is interim only; owner decision is required before any publication.",
+    "Publication policy is a rolling sequence: long_form, long_form, short; at least 72 elapsed hours between consecutive actual publications, minimum 216 hours for three cyclic gaps.",
+    "Tuesday/Saturday workflow cron slots are draft-preparation triggers only and are not the authoritative publication schedule.",
+    "Before upload, reconcile public/private/unlisted channel history, scheduled items and every pending or uncertain upload attempt; missing or incomplete history blocks publication.",
+    "Public and unattended publishing remain disabled; private upload requires a separate explicit authorization and all release gates."
   ],
   "spacingPolicy": {
     "minimumHoursBetweenPosts": 72,
-    "cadenceInfeasible": true,
-    "status": "OWNER_DECISION_REQUIRED",
-    "activeScheduleFeasible": true,
-    "explanation": "The requested target of two long-form videos plus one Short every seven days is mathematically incompatible with a 72-hour minimum: three cyclic gaps require at least 216 hours. The current Tuesday/Saturday two-slot draft schedule satisfies 96-hour and 72-hour gaps as an interim safety fallback; it does not replace the requested target or authorize publication."
+    "minimumCycleHours": 216,
+    "status": "ROLLING_CYCLE_POLICY",
+    "cadenceInfeasible": false,
+    "explanation": "Two long-form videos followed by one Short repeat in a rolling cycle. Each consecutive actual publication must be at least 72 elapsed hours apart, so a complete three-gap cycle requires at least 216 hours. No weekly publication count is promised."
   },
   "minimumPublicationSpacingHours": 72,
-  "requestedTargetCadence": {
-    "longFormVideosPerWeek": 2,
-    "shortsPerWeek": 1,
-    "totalVideosPerWeek": 3
-  },
-  "cadenceDecisionRequired": true,
-  "interimDraftCadence": {
-    "longFormVideosPerWeek": 1,
-    "shortsPerWeek": 1,
-    "totalVideosPerWeek": 2,
-    "days": [
-      "Tuesday",
-      "Saturday"
+  "publicationCycle": {
+    "id": "sonicvhibez-rolling-cycle-v1",
+    "formats": [
+      "long_form",
+      "long_form",
+      "short"
     ],
-    "status": "DRAFT_ONLY"
+    "minimumHoursBetweenConsecutivePublications": 72,
+    "minimumCycleHours": 216,
+    "timezone": "Africa/Johannesburg",
+    "publicationRequiresVerifiedHistory": true,
+    "publicationEnabled": false,
+    "description": "Rolling three-publication sequence: long-form, long-form, Short. Each next actual publication waits at least 72 elapsed hours from the prior actual publication; the earliest full cycle is 216 hours (9 days), not a weekly target."
   }
 }
