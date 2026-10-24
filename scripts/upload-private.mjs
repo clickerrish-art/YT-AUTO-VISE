@@ -12,6 +12,27 @@ import { execFileSync } from "node:child_process";
 import { assertNoUnresolvedUploadAttempts, fetchCompleteYoutubeHistory, assertNextPublicationAllowed } from "./youtube-history-gate.mjs";
 
 export const APPROVED_SELAR_URL = "https://selar.com/0u19v8u99l";
+
+function strictIsoTimestamp(value) {
+  if (typeof value !== "string") return NaN;
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})T([01]\d|2[0-3]):([0-5]\d):([0-5]\d)(?:\.(\d{1,3}))?(Z|([+-])(\d{2}):(\d{2}))$/);
+  if (!match) return NaN;
+  const [, yearText, monthText, dayText, hourText, minuteText, secondText, fraction = "", zone, sign, offsetHourText, offsetMinuteText] = match;
+  const year = Number(yearText), month = Number(monthText), day = Number(dayText);
+  const hour = Number(hourText), minute = Number(minuteText), second = Number(secondText);
+  const calendar = new Date(0);
+  calendar.setUTCFullYear(year, month - 1, day);
+  calendar.setUTCHours(hour, minute, second, Number(fraction.padEnd(3, "0")));
+  if (calendar.getUTCFullYear() !== year || calendar.getUTCMonth() !== month - 1 || calendar.getUTCDate() !== day
+      || calendar.getUTCHours() !== hour || calendar.getUTCMinutes() !== minute || calendar.getUTCSeconds() !== second) return NaN;
+  if (zone !== "Z") {
+    const offsetHour = Number(offsetHourText), offsetMinute = Number(offsetMinuteText);
+    if (offsetHour > 14 || offsetMinute > 59 || (offsetHour === 14 && offsetMinute !== 0)) return NaN;
+  }
+  const timestamp = Date.parse(value);
+  return Number.isFinite(timestamp) ? timestamp : NaN;
+}
+
 export function sha256File(filePath) {
   return crypto.createHash("sha256").update(fs.readFileSync(filePath)).digest("hex");
 }
@@ -60,7 +81,7 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
     if (!evidence || typeof evidence !== "object" || typeof evidence.assetPath !== "string" || typeof evidence.licenseEvidenceLocation !== "string") throw new Error("rights evidence must bind each source asset and retained license evidence file");
     if (!/^[a-f0-9]{64}$/.test(evidence.assetSha256 ?? "") || !/^[a-f0-9]{64}$/.test(evidence.licenseEvidenceSha256 ?? "")) throw new Error("rights evidence must contain source and license-evidence SHA-256 checksums");
     if (!Array.isArray(evidence.permittedUses) || !evidence.permittedUses.includes("YouTube")) throw new Error("rights evidence must explicitly permit YouTube use");
-    if (evidence.verificationStatus !== "VERIFIED" || typeof evidence.verifiedBy !== "string" || !evidence.verifiedBy.trim() || !Number.isFinite(Date.parse(evidence.verifiedAt ?? ""))) throw new Error("rights evidence must retain reviewer identity, VERIFIED status, and a valid verification timestamp");
+    if (evidence.verificationStatus !== "VERIFIED" || typeof evidence.verifiedBy !== "string" || !evidence.verifiedBy.trim() || !Number.isFinite(strictIsoTimestamp(evidence.verifiedAt))) throw new Error("rights evidence must retain reviewer identity, VERIFIED status, and a valid verification timestamp");
   }
   if (approval.artifactSha256 !== artifactSha256) throw new Error("approval artifact checksum does not match the actual MP4");
   if (approval.metadataVersion !== metadataVersion) throw new Error("approval metadata version does not match the actual metadata file");
@@ -83,7 +104,7 @@ export function verifyRetainedRightsEvidence(approval) {
     const licenseFile = path.resolve(evidence.licenseEvidenceLocation);
     if (!/^[a-f0-9]{64}$/.test(evidence.assetSha256 ?? "") || !/^[a-f0-9]{64}$/.test(evidence.licenseEvidenceSha256 ?? "")) throw new Error("rights evidence must contain source and license-evidence SHA-256 checksums");
     if (!Array.isArray(evidence.permittedUses) || !evidence.permittedUses.includes("YouTube")) throw new Error("rights evidence must explicitly permit YouTube use");
-    if (evidence.verificationStatus !== "VERIFIED" || typeof evidence.verifiedBy !== "string" || !evidence.verifiedBy.trim() || !Number.isFinite(Date.parse(evidence.verifiedAt ?? ""))) throw new Error("rights evidence must retain reviewer identity, VERIFIED status, and a valid verification timestamp");
+    if (evidence.verificationStatus !== "VERIFIED" || typeof evidence.verifiedBy !== "string" || !evidence.verifiedBy.trim() || !Number.isFinite(strictIsoTimestamp(evidence.verifiedAt))) throw new Error("rights evidence must retain reviewer identity, VERIFIED status, and a valid verification timestamp");
     if (!fs.existsSync(assetFile) || !fs.statSync(assetFile).isFile() || sha256File(assetFile) !== evidence.assetSha256) throw new Error("rights-evidence source asset is missing or its checksum changed: " + path.basename(assetFile));
     if (!fs.existsSync(licenseFile) || !fs.statSync(licenseFile).isFile() || fs.statSync(licenseFile).size <= 0 || sha256File(licenseFile) !== evidence.licenseEvidenceSha256) throw new Error("retained license evidence is missing, empty, or its checksum changed: " + path.basename(licenseFile));
   }
@@ -108,8 +129,8 @@ export function validateOneShotUploadAuthorization(record, {
   if (record.jobId !== jobId || record.artifactSha256 !== artifactSha256 || record.metadataSha256 !== metadataSha256 || record.approvalSha256 !== approvalSha256 || record.channelId !== channelId) throw new Error("one-shot authorization must bind the exact job, final video, metadata, approval and verified channel");
   if (record.visibility !== "private" || record.publishingEnabled !== false) throw new Error("one-shot authorization must explicitly restrict the operation to private visibility");
   if (typeof record.operator !== "string" || record.operator.trim().length < 2 || record.operator.length > 120) throw new Error("one-shot authorization requires the approving operator identity");
-  const authorizedAt = Date.parse(record.authorizedAt ?? "");
-  const nowMs = now instanceof Date ? now.getTime() : Date.parse(now);
+  const authorizedAt = strictIsoTimestamp(record.authorizedAt);
+  const nowMs = now instanceof Date ? now.getTime() : strictIsoTimestamp(now);
   if (!Number.isFinite(authorizedAt) || !Number.isFinite(nowMs) || authorizedAt > nowMs + 5 * 60_000 || nowMs - authorizedAt > 24 * 60 * 60_000) throw new Error("one-shot authorization timestamp must be valid, not future-dated and no older than 24 hours");
   return { authorizationId: record.authorizationId, operator: record.operator.trim(), authorizedAt: new Date(authorizedAt).toISOString() };
 }

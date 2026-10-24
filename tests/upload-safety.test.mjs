@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import crypto from "node:crypto";
-import { validateUploadApproval, assertReconciliationOnlyHasPriorAttempt, verifyRetainedRightsEvidence, sha256File } from "../scripts/upload-private.mjs";
+import { validateUploadApproval, validateOneShotUploadAuthorization, assertReconciliationOnlyHasPriorAttempt, verifyRetainedRightsEvidence, sha256File } from "../scripts/upload-private.mjs";
 
 test("YouTube uploader is private-only and binds upload to the verified SonicVhibez channel", () => {
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
@@ -79,6 +79,22 @@ test("reconciliation-only mode cannot create a new upload attempt", () => {
   assert.equal(assertReconciliationOnlyHasPriorAttempt(false, null), true);
 });
 
+
+test("upload approval, rights evidence and one-shot authorization reject malformed timestamps", () => {
+  const baseRights = { assetPath: "media/source.mp4", assetSha256: "e".repeat(64), licenseEvidenceLocation: "rights/source-license.txt", licenseEvidenceSha256: "f".repeat(64), permittedUses: ["YouTube"], verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z" };
+  const approvalBase = { decision: "APPROVE", jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64), reviewer: "Test Operator", rightsEvidenceSha256: crypto.createHash("sha256").update(JSON.stringify(baseRights)).digest("hex"), rightsEvidence: baseRights, publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: "media/next-short.mp4", sha256: "a".repeat(64) }, { path: "media/next-short-thumbnail.jpg", sha256: "d".repeat(64) }, { path: "content/next-short.srt", sha256: "e".repeat(64) }, { path: "content/next-short.json", sha256: "b".repeat(64) }] };
+  for (const invalid of ["2026-02-30T00:00:00.000Z", "2026-10-24T00:00:00", "2026-10-24T00:00:00+14:30"]) {
+    const rightsEvidence = { ...baseRights, verifiedAt: invalid };
+    const rightsEvidenceSha256 = crypto.createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex");
+    assert.throws(() => validateUploadApproval({ ...approvalBase, rightsEvidence, rightsEvidenceSha256 }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /valid verification timestamp/);
+    assert.throws(() => verifyRetainedRightsEvidence({ rightsEvidence }), /valid verification timestamp/);
+    assert.throws(() => validateOneShotUploadAuthorization({
+      decision: "AUTHORIZE_ONE_PRIVATE_UPLOAD", authorizationId: "auth-12345678", jobId: "job-001",
+      artifactSha256: "a".repeat(64), metadataSha256: "b".repeat(64), approvalSha256: "c".repeat(64),
+      channelId: "UC_SONIC_TEST", visibility: "private", publishingEnabled: false, operator: "Test Operator", authorizedAt: invalid
+    }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataSha256: "b".repeat(64), approvalSha256: "c".repeat(64), channelId: "UC_SONIC_TEST", now: new Date("2026-10-24T12:00:00.000Z") }), /timestamp must be valid/);
+  }
+});
 
 test("retained rights evidence fails closed when a source asset or license file changes", async () => {
   const os = await import("node:os");
