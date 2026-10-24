@@ -64,6 +64,35 @@ if (!exists(manifestPath)) {
     if (manifest.complianceReviewed !== true) blockers.push("Set complianceReviewed=true only after human content/compliance review.");
   }
 }
+const longFormManifestPath = "content/long-form-render-manifest.json";
+if (!exists(longFormManifestPath)) {
+  blockers.push("Create content/long-form-render-manifest.json from the example only after verifying real long-form assets and rights.");
+} else {
+  let longManifest;
+  try { longManifest = JSON.parse(fs.readFileSync(path.resolve(root, longFormManifestPath), "utf8")); }
+  catch { blockers.push("content/long-form-render-manifest.json is not valid JSON."); }
+  if (longManifest) {
+    if (longManifest.channel !== "SonicVhibez") blockers.push("Long-form render manifest target must be exactly SonicVhibez.");
+    if (longManifest.targetAspectRatio !== "16:9") blockers.push("Long-form render manifest must specify targetAspectRatio 16:9.");
+    for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
+      if (typeof longManifest[key] !== "string" || !longManifest[key].trim() || !exists(path.join("content", longManifest[key]))) {
+        blockers.push(`Long-form manifest asset ${key} is missing: ${longManifest[key] ?? "(unset)"}.`);
+      }
+    }
+    for (const key of ["footageLicenseEvidence", "narrationLicenseEvidence"]) {
+      if (typeof longManifest[key] !== "string" || longManifest[key].trim().length < 12 || /replace_with|placeholder|todo|unknown|tbd/i.test(longManifest[key])) {
+        blockers.push(`Long-form manifest ${key} must reference real, human-verified rights evidence.`);
+      }
+    }
+    if (typeof longManifest.title !== "string" || longManifest.title.trim().length < 10 || /replace_with|placeholder|todo|tbd/i.test(longManifest.title)) {
+      blockers.push("Long-form manifest title must be a real, reviewed title.");
+    }
+    if (longManifest.rightsConfirmed !== true) blockers.push("Long-form manifest rightsConfirmed must be true only after checking all media licenses and permissions.");
+    if (longManifest.complianceReviewed !== true) blockers.push("Long-form manifest complianceReviewed must be true only after human content/compliance review.");
+    if (typeof longManifest.containsSyntheticMedia !== "boolean") blockers.push("Long-form manifest must explicitly record containsSyntheticMedia as true or false.");
+    if (typeof longManifest.hasPaidPromotion !== "boolean") blockers.push("Long-form manifest must explicitly record hasPaidPromotion as true or false.");
+  }
+}
 if (!exists(metadataPath)) {
   blockers.push("Reviewed metadata file content/next-short.json is missing.");
 } else {

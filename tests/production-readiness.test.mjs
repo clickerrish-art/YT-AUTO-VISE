@@ -13,6 +13,7 @@ test("readiness report identifies blockers without enabling publishing or failin
   assert.match(result.stdout, /HOLD:/);
   assert.match(result.stdout, /public publishing disabled/);
   assert.match(result.stdout, /content\/render-manifest\.json/);
+  assert.match(result.stdout, /long-form-render-manifest/);
   assert.match(result.stdout, /Metadata complianceReviewed must be true/);
   assert.match(result.stdout, /verified SonicVhibez YouTube channel ID/);
   assert.match(result.stdout, /YOUTUBE_CLIENT_ID/);
