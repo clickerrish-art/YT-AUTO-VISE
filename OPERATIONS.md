@@ -13,6 +13,8 @@ The `/readyz` endpoint is a **production-readiness gate**, not just a process-he
 
 Never put OAuth tokens in browser code, committed files or logs.
 
+Dashboard startup also requires `DASHBOARD_OPERATOR_ID` (2–120 characters). Audit events use this configured operator identity; use the actual person responsible for the session rather than a generic label. The private uploader validates the approval's structured rights-evidence hash and rechecks each source asset and retained licence-evidence file against the saved SHA-256 values immediately before the remote upload flow.
+
 ## 2. Schedule and queue
 
 `config/weekly-content-plan.json` is authoritative:
