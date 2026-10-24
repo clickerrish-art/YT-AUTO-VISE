@@ -17,7 +17,8 @@ const copiedFiles = [
 test("authoritative schedule validator accepts the configured draft-only cadence with 72-hour spacing", () => {
   const result = spawnSync(process.execPath, ["scripts/validate-schedule.mjs"], { cwd: repoRoot, encoding: "utf8" });
   assert.equal(result.status, 0, result.stdout + result.stderr);
-  assert.match(result.stdout, /PASS: two draft-only weekly slots/);
+  assert.match(result.stdout, /PASS: interim Tuesday\/Saturday draft slots/);
+  assert.match(result.stdout, /BLOCKED: the requested 2-long-form \+ 1-Short weekly target/);
 });
 
 function runWithPlanMutation(mutate) {
