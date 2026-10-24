@@ -32,7 +32,7 @@ export function acquireExclusiveUploadLock(lockPath, { jobId, now = () => new Da
   let fd;
   try {
     fd = fs.openSync(lockPath, "wx", 0o600);
-    fs.writeFileSync(fd, JSON.stringify({ pid: process.pid, jobId, startedAt: now().toISOString() }) + "\\n");
+    fs.writeFileSync(fd, JSON.stringify({ pid: process.pid, jobId, startedAt: now().toISOString() }) + "\n");
     fs.fsyncSync(fd);
   } catch (error) {
     if (fd !== undefined) { try { fs.closeSync(fd); } catch {} }
