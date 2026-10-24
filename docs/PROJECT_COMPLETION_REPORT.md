@@ -2,19 +2,11 @@
 
 ## Latest code/test checkpoint — 2026-10-24
 
-Code and regression-test commit: `9c89e46c138f1b277de7efb5580fbaa4008d22c5`. All three GitHub Actions validation workflows passed on this exact commit, each with 96 passed, 0 failed, 0 skipped: [automation validation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354250), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354339), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354256). The automation workflow used `npm ci --ignore-scripts`, reported 46 packages added and 47 audited, and passed Python compilation.
+Code and regression-test commit: `68cb2359628ca069e33f7de905b10183989f53e1`. The three GitHub Actions validation workflows are running for this exact commit: [automation validation](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078895025`), [metadata/schedule validation](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078895040`), and [content quality](`https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078895024`). The prior code/test commit `6e56b240868c07cb5207fe8fa7f13a8b664be376` passed all three workflows with 99 passed, 0 failed, 0 skipped; `npm ci --ignore-scripts` installed 46 packages and audited 47, and Python compilation passed. The new candidate adds one regression test for Git-ignored local secrets/state/media and is awaiting these final runs.
 
-This checkpoint additionally verifies that private-upload approvals bind the hash of the structured rights record and that the referenced source asset and retained licence-evidence files still match their recorded SHA-256 checksums at upload preflight. Dashboard startup now requires `DASHBOARD_OPERATOR_ID`; relevant audit events use that identity, and each rights-evidence asset retains the reviewer and verification timestamp.
+Code additions since the prior checkpoint: upload preflight now verifies the approval-bound rights record hash and current source/licence-file checksums; dashboard audit events use the required `DASHBOARD_OPERATOR_ID`; per-asset rights records retain reviewer and timestamp; `backup:state` and guarded `restore:state` preserve dashboard state/audit, upload attempts/receipts/approvals and retained rights files. Restore validates checksums, requires explicit confirmation, and refuses to overwrite a different existing upload ledger. `.gitignore` excludes local secrets, state, rights documents, backups and generated production media.
 
-These are automated/code-level checks, not proof that a fixture is a genuine licence, that a real wildlife video has been rendered and watched, or that a live YouTube upload has succeeded. Public publishing remains disabled; PR #1 remains open, draft and unmerged.
-
-Updated: 2026-10-24  
-Repository: https://github.com/clickerrish-art/YT-AUTO-VISE  
-Implementation branch: `codex/marketing-machine-audit-fixes`  
-Tested implementation SHA: `9c89e46c138f1b277de7efb5580fbaa4008d22c5`  
-Main baseline SHA: `45352b73bb6cc4787b2a49988b575afb754ab627`  
-Draft PR #1: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1  
-Public publishing: **DISABLED**
+These automated checks do not prove genuine licence authenticity, real wildlife media or live YouTube upload acceptance. Public publishing remains disabled; PR #1 remains open, draft and unmerged.
 
 ## Previous implementation checkpoint (superseded by current code/test checkpoint below) — 2026-10-24
 
