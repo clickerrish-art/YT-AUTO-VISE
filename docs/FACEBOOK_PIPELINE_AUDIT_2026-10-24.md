@@ -80,3 +80,27 @@ Candidate code added after the historical verified checkpoint above:
 4. Uncertain attempts are durably blocked from duplicate retries. Full remote reconciliation for an uncertain mutation with no returned remote ID still requires a supported Page-feed reconciliation strategy before any retry can ever be considered.
 5. The new publisher is not yet integrated into the dashboard health/receipt view; dashboard acceptance remains pending.
 6. The current candidate must pass full CI on its exact SHA. The previous three validation runs were red on the earlier SHA; no current-SHA pass is claimed.
+
+
+## Final implementation checkpoint — 2026-10-24
+
+**Exact tested code checkpoint:** `c272fdf8c997bcda61aec3a1f52084e8e180ed64`. Three required validation workflows passed on that exact SHA:
+
+- [Automation validation — 40114724961](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40114724961): 196 Node tests passed, 0 failed; 8 Python safety tests passed; campaign and queue checks, JS syntax checks and Python compilation passed.
+- [Content quality — 40114724953](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40114724953): 196 Node tests passed, 0 failed.
+- [Metadata validation — 40114724969](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40114724969): 196 Node tests passed, 0 failed; schedule and caption checks passed and the default production readiness checker correctly remained blocked.
+- [Facebook daily draft workflow — 40114724935](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40114724935): skipped on the pull-request event; this is not evidence of a default-branch scheduled run or a published Facebook post.
+
+The current npm audit at that checkpoint reported four moderate advisories and zero high/critical: gaxios, googleapis, googleapis-common and uuid. A proposed googleapis 188.0.0 major upgrade could not be validated because the lockfile-generation run remained pending and the lockfile was out of sync, so the package.json change was reverted rather than leaving an un-installable candidate. The moderate advisories remain unresolved.
+
+### Additional implementation details
+
+- The production queue now defaults to the durable state directory, outside the ephemeral checkout. Intake and publisher share the configured exclusive lock; terminal slots are removed from the pending queue only after their decision/receipt is persisted. The checked-in queue is only a local-development fallback.
+- Startup recovery converts interrupted PUBLISHING records to UNCERTAIN and reconciles them before considering new work. It queries the official scheduled_posts and feed edges with bounded pagination. One verified match is persisted; zero matches are not proof of non-publication; ambiguous results remain blocked with no mutation retry.
+- The publisher requires both JSON enablement flags and the separate runtime FACEBOOK_PUBLISH_ENABLED=YES control, plus an exact matching NATURE_FRONTIERS_FACEBOOK_PAGE_ID, live permissions and identity checks, and an absolute durable state directory. Failed Page/permission checks are recorded as automatic skips without owner confirmation.
+- The dashboard exposes authenticated read-only autonomous status and no longer shows per-post review or manual publish forms as the routine workflow.
+- Path checks reject queue escapes, queue symlink escapes, unsafe state filenames and state-ledger symlinks outside the durable directory. The queue and history are not stored solely in CI artifacts.
+- The policy engine now requires a structured claim, a reachable authoritative source, a matching excerpt, a claim bound to the exact final caption, and an injected trusted semantic verifier. **No trusted semantic-verification provider is currently configured in production; the default is fail-closed, so factual wildlife posts remain ineligible.** Source excerpts and self-declared verified flags are not treated as semantic proof.
+- The new intake evaluates only supplied evidence-bearing candidates. It does not yet autonomously research topics or create/licence production media. The checked-in candidate list remains empty; no content or rights evidence has been fabricated.
+
+**Evidence scope warning:** the three green runs above prove the code checkpoint `c272fdf8c997bcda61aec3a1f52084e8e180ed64`, not subsequent documentation-only commits. Always check the exact current PR head and its runs before release acceptance.
