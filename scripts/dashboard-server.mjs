@@ -413,8 +413,8 @@ const server = http.createServer(async (req, res) => {
       const experiment = summarizeFacebookExperiment(state.facebookPosts, { minPerArm: config.experiment?.minimumPostsPerArm ?? 14 });
       const blockers = [];
       if (!pageVerified) blockers.push("Nature Frontiers Facebook Page identity has not passed a recent live Meta API check for the configured Page ID");
-      if (!accessTokenConfigured) blockers.push("META_PAGE_ACCESS_TOKEN is not configured in the secure environment");
-      if (!permissionsConfirmed) blockers.push("Meta Page publishing permissions have not been owner-confirmed");
+      if (!accessTokenConfigured) blockers.push("META_USER_ACCESS_TOKEN and META_PAGE_ACCESS_TOKEN are required in the secure environment");
+      if (!permissionsConfirmed) blockers.push("Meta Page publishing permissions have not passed the live API permission/task check");
       if (config.publishingEnabled !== true || config.dryRun !== false || process.env.FACEBOOK_PUBLISH_ENABLED !== "YES") blockers.push("Facebook publishing kill switches remain disabled (config, dry-run and secure environment switches must all be explicitly changed)");
       return json(res, 200, {
         destination: config.destination, destinationPageId: pageVerified ? config.destinationPageId : null,
@@ -503,10 +503,10 @@ const server = http.createServer(async (req, res) => {
       const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
       const accessToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
       const apiVersion = process.env.META_GRAPH_API_VERSION ?? config.apiVersion ?? "v26.0";
-      const permissionsConfirmed = initialState.facebookConnection?.permissionsVerified === true && Boolean(expectedPageId);
       const envPublishingEnabled = process.env.FACEBOOK_PUBLISH_ENABLED === "YES";
       const initialState = loadState();
       const expectedPageId = verifiedFacebookPageId(initialState, config);
+      const permissionsConfirmed = initialState.facebookConnection?.permissionsVerified === true && Boolean(expectedPageId);
       const setupBlockers = [];
       if (config.publishingEnabled !== true) setupBlockers.push("config/facebook-publishing.json publishingEnabled must be explicitly enabled by the owner");
       if (config.dryRun !== false) setupBlockers.push("Facebook dryRun must be explicitly disabled by the owner after all checks");
