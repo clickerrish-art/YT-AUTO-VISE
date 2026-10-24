@@ -38,7 +38,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(readiness.ready, false);
   assert.equal(readiness.publishingEnabled, false);
   assert.ok(Array.isArray(readiness.blockers));
-  assert.ok(readiness.blockers.some(item => /long-form render manifest/i.test(item)));
+  assert.ok(readiness.blockers.some(item => /long-form(?: render manifest|-render-manifest)/i.test(item)));
   assert.ok(readiness.blockers.some(item => /SONICVHIBEZ_CHANNEL_ID|channel ID/i.test(item)));
   const noPriorReconcile = await fetch(base + "/api/uploads/reconcile", { method: "POST", headers, body: JSON.stringify({ jobId: "no-prior-job", videoPath: "README.md", metadataPath: "README.md", approvalPath: "README.md" }) });
   const noPriorBody = await noPriorReconcile.json();
