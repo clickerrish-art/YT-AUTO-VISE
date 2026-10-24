@@ -57,3 +57,6 @@ All three Node test workflows reported 90 tests, 90 pass, 0 fail and 0 skipped. 
 6. Keep Safari inactive until the owner supplies the exact destination and disclosure, reviews the preview and explicitly approves it.
 
 This repository is **not 100% operational for real media release** until the blocked owner-dependent gates above have genuine evidence. No real upload or documentary artifact is claimed.
+
+
+See [GO_LIVE_BLOCKERS.md](GO_LIVE_BLOCKERS.md) for owner-dependent acceptance gates and [RELEASE_GATE_CHECKLIST.md](RELEASE_GATE_CHECKLIST.md) for per-release evidence requirements.
