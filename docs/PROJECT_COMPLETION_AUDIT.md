@@ -36,16 +36,19 @@ Short and long-form renderers now fail closed on technical export validation err
 | Verified SonicVhibez channel identity and live private upload | BLOCKED | Owner must configure OAuth secrets and independently confirm channel ID through the authenticated API |
 | Public publishing | PASS — DISABLED | Schedule and upload workflows remain private/draft-only; no public/unlisted fallback |
 
-## Tested workflow evidence
+## Workflow evidence
 
-All listed workflows ran against commit `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`:
+At implementation commit `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`, all three validation workflows reported 95 passed, 0 failed and 0 skipped:
+- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943766)
+- [Automation validation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712)
+- [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943732)
 
-- Content quality — 90/90 tests: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943766
-- Automation validation — 90/90 tests: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712
-- Metadata/schedule validation — 90/90 tests, schedule/captions checked: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943732
-- Clean install — `npm ci --ignore-scripts` succeeded: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712
+The current docs-only branch head `8f5c1186492131be6c644b73c02230a6b29650ce` also passed all three validation workflows with 95 tests, 0 failures and 0 skips:
+- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40073678762)
+- [Automation validation and `npm ci --ignore-scripts`](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40073678805)
+- [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40073678871)
 
-All three Node test workflows reported 90 tests, 90 pass, 0 fail and 0 skipped. The install workflow reported 46 packages added and audited.
+The main-branch baseline is 54 passing tests: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40018038047. These are automated test results; they do not establish genuine media rendering, rights validity or a live YouTube upload. The clean-install workflow uses `npm ci --ignore-scripts`; plain `npm ci` is not claimed. See [go-live blockers](GO_LIVE_BLOCKERS.md) and [release gate checklist](RELEASE_GATE_CHECKLIST.md).
 
 ## Exact owner actions to clear external blockers
 
