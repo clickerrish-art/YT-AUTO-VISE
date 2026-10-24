@@ -46,13 +46,23 @@ RESTORE_CONFIRM=YES npm run restore:state -- backups/sonicvhibez-backup.json
 
 If the existing dashboard state differs, restore requires `RESTORE_OVERWRITE=YES` and refuses to replace state modified after the backup. A different existing upload ledger is always a hard stop: reconcile remote YouTube state first and do not overwrite that ledger. Receipt, approval and rights-evidence conflicts are also refused. The restore preflights every entry and checksum before writing any files.
 
+## Daily Facebook draft generation
+
+Run `npm run facebook:draft:daily` to create today's research-only draft package using the `Africa/Johannesburg` calendar date. The default output is `run-logs/facebook-daily-drafts/YYYY-MM-DD.json`. The generator preserves an existing same-day artifact, checks local editorial state when present, and never fills missing claims, media, licence evidence or Page identity with invented data. Every output remains `publishReady=false` and `publishingEnabled=false`.
+
+The [GitHub Actions daily-draft workflow](.github/workflows/facebook-daily-draft.yml) is configured for 07:30 SAST and stores its output artifact for 14 days. The verified run created [artifact 12558943759](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529395/artifacts/12558943759). Scheduled workflows execute only from the repository's default branch; while PR #1 remains draft, this is not an active production schedule. The workflow creates a draft artifact only and does not call Meta or publish. Research, media/licensing evidence, current Page identity/permissions, compliance recheck and human approval remain required.
+
 ## Current validation evidence
 
-The code/test checkpoint `6217680cc11e617375b152b9e7b5b745559eb8c0` passed all three GitHub Actions validation workflows: [automation validation — run 40091065946](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091065946), [metadata validation — run 40091065995](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091065995), and [content quality — run 40091065945](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091065945). Each workflow reports 136 Node tests passed, 0 failed, 0 skipped. Automation also passed 8 Python safety tests, JavaScript syntax checks and Python compilation. CI used `npm ci --ignore-scripts` (46 packages added, 47 audited). The dependency audit still reports 4 moderate, 0 high and 0 critical advisories involving `gaxios`, `googleapis`, `googleapis-common` and `uuid`.
+The latest verified code/test checkpoint is `1c1a9a4d4836cb728a6fb2030f2c402734e6b619`. All three validation workflows and the daily-draft workflow passed on that exact commit:
+- [Automation validation — run 40091529534](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529534)
+- [Metadata validation — run 40091529360](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529360)
+- [Content quality — run 40091529363](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529363)
+- [Daily Facebook draft workflow — run 40091529395](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529395)
 
-The latest regression tests cover Facebook approval invalidation when claims, source URLs or licensing provenance change, and keyed Meta credential fingerprints that force a new verification after credential rotation. This is automated evidence only; no real Meta Page identity, permissions, Insights or post have been verified. Do not use old test counts below as the current baseline.
+Each reports 138 Node tests passed, 0 failed, 0 skipped. Automation also passed 8 Python safety tests, JavaScript syntax checks and Python compilation. CI used `npm ci --ignore-scripts` (46 packages added, 47 audited). npm audit reports 4 moderate, 0 high, 0 critical advisories involving `gaxios`, `googleapis`, `googleapis-common` and `uuid`. Plain `npm ci` remains unverified.
 
-Current code/test checkpoint: `6217680cc11e617375b152b9e7b5b745559eb8c0`. PR #1 remains open, draft and unmerged. Public YouTube publishing remains disabled.
+The latest code/test checkpoint adds an idempotent research-only daily Facebook draft generator, approval fingerprints bound to claim/source/licensing details, and keyed Meta credential fingerprints that invalidate previous permission attestations after credential rotation. These are code/test checks, not real Page identity, Insights, licensing authenticity or publication evidence. Public YouTube publishing remains disabled; PR #1 remains open, draft and unmerged.
 
 ## 3. Schedule and queue
 
