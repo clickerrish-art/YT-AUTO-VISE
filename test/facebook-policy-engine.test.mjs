@@ -231,3 +231,35 @@ test("an allowlisted URL redirecting to a different path on the same host is blo
     assert.ok(result.destinationChecks.some(check => check.allowlisted && !check.passed));
   } finally { f.cleanup(); }
 });
+
+
+test("source excerpt and self-declared verification cannot replace a trusted semantic verifier", async () => {
+  const f = fixture();
+  try {
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), semanticVerifier: null
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /trusted semantic verification/i.test(item)));
+    assert.equal(result.sourceChecks[0].semanticVerification.reason, "NO_TRUSTED_SEMANTIC_VERIFIER_CONFIGURED");
+  } finally { f.cleanup(); }
+});
+
+test("every factual wildlife post needs structured claims and claims must bind to the final caption", async () => {
+  const f = fixture();
+  try {
+    f.payload.claims = [];
+    const noClaims = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(noClaims.eligible, false);
+    assert.ok(noClaims.blockers.some(item => /must declare factual claims/i.test(item)));
+    f.payload.claims = [{
+      text: "A different unsupported statement about population growth.",
+      sourceUrls: ["https://sanbi.org/wildlife-viewing"],
+      sourceExcerpt: "A different unsupported statement about population growth.",
+      sourceSupportsClaim: true, verified: true
+    }];
+    const unrelated = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(unrelated.eligible, false);
+    assert.ok(unrelated.blockers.some(item => /not bound to the exact final caption/i.test(item)));
+  } finally { f.cleanup(); }
+});
