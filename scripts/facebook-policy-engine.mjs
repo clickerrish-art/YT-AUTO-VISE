@@ -133,6 +133,8 @@ export async function evaluateFinalFacebookPayload(payload, {
     }
     const checks = [];
     const sourceBodies = [];
+    const claimInCaption = normalized(payload.caption).includes(normalized(claim.text));
+    if (!claimInCaption) add(blockers, `Claim ${i + 1} is not bound to the exact final caption`);
     for (const sourceUrl of claim.sourceUrls) {
       if (!urlIsSafe(sourceUrl)) {
         checks.push({ url: String(sourceUrl), passed: false, reason: "URL_NOT_SAFE_HTTPS" });
@@ -181,9 +183,9 @@ export async function evaluateFinalFacebookPayload(payload, {
         semanticResult = { verified: false, reason: "SEMANTIC_VERIFIER_FAILED" };
       }
     }
-    const passed = checks.some(check => check.passed && check.excerptFound === true) &&
+    const passed = claimInCaption && checks.some(check => check.passed && check.excerptFound === true) &&
       semanticResult.verified === true && claim.sourceSupportsClaim === true && claim.verified === true;
-    sourceChecks.push({ claimIndex: i, claim: claim.text, checks, semanticVerification: semanticResult, passed,
+    sourceChecks.push({ claimIndex: i, claim: claim.text, claimInCaption, checks, semanticVerification: semanticResult, passed,
       reason: passed ? "SOURCE_AND_TRUSTED_SEMANTIC_CHECK_PASSED" : "SOURCE_EXCERPT_ALONE_IS_NOT_PROOF_OF_CLAIM_SUPPORT" });
     if (!passed) add(blockers, `Claim ${i + 1} lacks a reachable source and trusted semantic verification; a URL or excerpt alone is not proof`);
     if (claim.kind === "quote" && claim.quoteVerified !== true) add(blockers, `Claim ${i + 1} contains an unverified quotation`);
