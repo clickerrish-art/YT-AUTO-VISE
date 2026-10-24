@@ -132,7 +132,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     id: "dashboard-test-duplicate-reservation",
     title: "Duplicate existing Tuesday reservation"
   });
-  fs.writeFileSync(statePath, JSON.stringify(collisionState, null, 2) + "\\n", { mode: 0o600 });
+  fs.writeFileSync(statePath, JSON.stringify(collisionState, null, 2) + "\n", { mode: 0o600 });
   const distantDraft = {
     id: "dashboard-test-distant-draft", title: "Distant Saturday draft", topic: "creator workflow planning",
     contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-31", productUrl: "https://selar.com/0u19v8u99l"
