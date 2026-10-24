@@ -44,6 +44,7 @@ export async function backupState({ rootDir = root, stateDir = process.env.DASHB
     entries.push({ target, sha256: sha256(bytes), bytes: bytes.length, contentBase64: bytes.toString("base64") });
   };
   add(stateFile, { kind: "dashboard-state", path: "dashboard-state.json" });
+  add(path.join(path.dirname(stateFile), "facebook-recovery-ledger.jsonl"), { kind: "facebook-recovery-ledger", path: "facebook-recovery-ledger.jsonl" });
   add(path.join(logDir, "upload-attempts.json"), { kind: "upload-ledger", path: "upload-attempts.json" });
   if (fs.existsSync(logDir)) {
     for (const name of fs.readdirSync(logDir)) {
