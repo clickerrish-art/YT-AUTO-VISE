@@ -1,5 +1,10 @@
 # Go-live blockers — SonicVhibez Marketing Machine
 
+## Current publication-spacing control — 2026-10-24
+
+The authoritative draft plan now has two weekly slots: Tuesday 17:00 SAST (long-form draft) and Saturday 17:00 SAST (Short draft). The cyclic gaps are 96 hours Tuesday-to-Saturday and 72 hours Saturday-to-next-Tuesday. The schedule validator rejects any configured gap below 72 hours, same-day duplicate slots, and multiple active queue items occupying one slot. This is configuration-level enforcement only: complete public/private/unlisted upload history and the live destination queue must still be inspected before any publication operation. Public publishing remains disabled.
+
+
 **Acceptance status: BLOCKED for real media release and live YouTube acceptance.** Code and mock tests do not substitute for real rights evidence, media inspection or remote upload verification.
 
 Last review: 2026-10-24. PR #1 remains open, draft and unmerged. Public publishing remains disabled.
