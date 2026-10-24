@@ -109,11 +109,11 @@ test("affiliate promotion requires visible disclosure, allowlisted campaign and 
     f.payload.commercial = true;
     f.payload.campaignId = "selar-wildlife-vault";
     f.payload.links = [APPROVED_SELLAR_URL];
-    f.payload.caption = "Explore the Wildlife Creator Vault. https://selar.com/0u19v8u99l";
+    f.payload.caption = "Observe wildlife from a respectful distance and avoid disturbing animals. Explore the Wildlife Creator Vault. https://selar.com/0u19v8u99l";
     let result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(result.eligible, false);
     assert.match(result.blockers.join(" "), /disclosure/i);
-    f.payload.caption = "Affiliate link: I may earn a commission if you buy. Explore the Wildlife Creator Vault. https://selar.com/0u19v8u99l";
+    f.payload.caption = "Observe wildlife from a respectful distance and avoid disturbing animals. Affiliate link: I may earn a commission if you buy. Explore the Wildlife Creator Vault. https://selar.com/0u19v8u99l";
     result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(result.eligible, true, JSON.stringify(result.blockers));
     f.payload.links = ["https://selar.com/not-approved"];
