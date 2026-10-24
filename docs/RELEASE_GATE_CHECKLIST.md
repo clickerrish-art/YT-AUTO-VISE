@@ -196,3 +196,16 @@ This addendum supersedes the earlier branch-count and test-file notes above wher
 - Browser-driven dashboard acceptance, genuine media and rights review, real YouTube OAuth/channel/history reconciliation, an explicitly authorized private upload, Facebook default-branch draft artifact verification, and owner-controlled recovery/restart drills remain **NOT RUN / BLOCKED**. No external post or upload was performed.
 
 The above is CI evidence for commit `c507b63abfa336165865ad01cf6354ae50254f04`. Any later code or documentation commit requires its own exact-SHA checks before it can be described as the latest verified head. Production remains **BLOCKED**.
+
+
+## Latest exact-candidate checkpoint — 24 October 2026
+
+Candidate tested: `7490e0caa966861ba16a6af023fb45d0914d9a34`.
+
+- PASS: [automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40129571307), 211 Node tests, 8 Python safety tests, 16 queued-topic checks, normal clean install and zero npm audit advisories.
+- PASS: [metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40129571317); [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40129571311).
+- BLOCKED by design: [production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40129571315). Required live history, verified channel, genuine assets/rights and owner approvals remain unresolved.
+- SKIPPED: [Facebook daily draft on PR event](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40129571331); default-branch artifact and Page identity are not verified.
+- A dashboard UI contract regression test now guards against stale cadence text and derives day/format options from the backend schedule. This is not a substitute for browser-driven end-to-end testing.
+- Still NOT RUN / OWNER ACTION REQUIRED: browser E2E; genuine fully decoded Short and long-form exports plus rights evidence and final-hash-bound approval; live SonicVhibez OAuth/channel/history verification; separately authorized private-upload receipt; real Nature Frontiers Page verification and retained default-branch draft; isolated restore/restart/concurrency/rollback drills.
+- Safety state unchanged: public and unattended YouTube publishing disabled; Facebook live publishing disabled; only approved Selar URL is `https://selar.com/0u19v8u99l`; Safari remains inactive; no real upload/post occurred. PR #1 stays open, draft and unmerged.
