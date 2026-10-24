@@ -414,7 +414,7 @@ const server = http.createServer(async (req, res) => {
       blockers.push("Live upload is blocked until complete SonicVhibez public/private/unlisted history is reconciled against YouTube and all uncertain attempts are resolved.");
       if (!schedule.channelId) blockers.push("SonicVhibez channel ID has not been verified");
       if (!fs.existsSync(path.join(root, "content/render-manifest.json"))) blockers.push("Rights-reviewed render manifest is missing");
-      return json(res, 200, { publishingEnabled: false, schedule, campaigns: campaignConfig.campaigns, campaignValidation: { ok: campaignErrors.length === 0, errors: campaignErrors }, queueItems: state.queueItems, jobs: state.jobs.slice(-30).reverse(), uploads: state.uploads.slice(-30).reverse(), uploadLedger: readUploadLedger(), audit: state.audit.slice(-50).reverse(), blockers, stateFile: path.relative(root, stateFile) });
+      return json(res, 200, { publishingEnabled: false, schedule, campaigns: campaignConfig.campaigns, campaignValidation: { ok: campaignErrors.length === 0, errors: campaignErrors }, queueItems: state.queueItems, jobs: state.jobs.slice(-30).reverse(), uploads: state.uploads.slice(-30).reverse(), uploadLedger: readUploadLedger(), audit: state.audit.slice(-50).reverse(), blockers });
     }
     if (req.method === "GET" && url.pathname === "/api/facebook/idea") {
       const date = url.searchParams.get("date") ?? "";
@@ -697,8 +697,7 @@ const server = http.createServer(async (req, res) => {
           publishedAt: remote.isPublished ? remote.createdTime : null,
           remotePostId: remote.remotePostId, remoteUrl: remote.remoteUrl,
           experiment: draftSnapshot.experiment, metrics: null
-        });
-        const draftIndex = state.facebookDrafts.findIndex(item => item.id === draftSnapshot.id);
+        });        const draftIndex = state.facebookDrafts.findIndex(item => item.id === draftSnapshot.id);
         if (draftIndex >= 0) state.facebookDrafts[draftIndex] = { ...state.facebookDrafts[draftIndex], status: remote.status, remote: { remotePostId: remote.remotePostId, remoteUrl: remote.remoteUrl, verifiedAt: remote.verifiedAt } };
         state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_REMOTE_POST_VERIFIED", attemptId: attempt.id, draftId: draftSnapshot.id, remotePostId: remote.remotePostId, remoteUrl: remote.remoteUrl, status: remote.status, at: remote.verifiedAt, actor: operatorId });
         saveState(state);
@@ -1257,4 +1256,4 @@ const recoveredTasks = recoverInterruptedTasks();
 const recoveredLeases = await reapExpiredWorkerLeases();
 const leaseReaperTimer = setInterval(() => { reapExpiredWorkerLeases().catch(() => {}); }, 30_000);
 leaseReaperTimer.unref();
-server.listen(port, host, () => console.log(JSON.stringify({ event: "dashboard_started", host, port, publishingEnabled: false, stateFile, recoveredTasks, recoveredLeases })));
+server.listen(port, host, () => console.log(JSON.stringify({ event: "dashboard_started", host, port, publishingEnabled: false, recoveredTasks, recoveredLeases })));
