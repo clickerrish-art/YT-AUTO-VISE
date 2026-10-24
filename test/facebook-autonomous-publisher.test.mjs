@@ -134,3 +134,44 @@ test("unresolved mutation remains durably uncertain and is never retried", async
     assert.equal(ledger[0].reconciliation.outcome, "UNRESOLVED");
   } finally { f.cleanup(); }
 });
+
+
+test("startup reconciles an interrupted PUBLISHING ledger entry before considering its slot", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    const payload = {
+      slotId: "nature-frontiers-2026-10-25-0800",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Educational wildlife habitat note.", links: [], media: [], claims: [], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    fs.writeFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), JSON.stringify([{
+      kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId: payload.slotId, destination: "nature_frontiers_facebook",
+      status: "PUBLISHING", startedAt: "2026-10-25T05:30:00.000Z", scheduledAt: payload.scheduledAt,
+      payload: { caption: payload.caption, scheduledAt: payload.scheduledAt }
+    }]));
+    let mutationCalls = 0, reconciliationCalls = 0;
+    const result = await runAutonomousFacebookPublisher({
+      configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+      now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true }),
+      verifyIdentity: async () => ({ verified: true }),
+      publish: async () => { mutationCalls++; throw new Error("must not publish this slot twice"); },
+      reconcileRemote: async () => {
+        reconciliationCalls++;
+        return { outcome: "CONFIRMED", receipt: { status: "SCHEDULED_VERIFIED", remotePostId: "123456789012345_999", scheduledPublishTime: Date.parse(payload.scheduledAt) / 1000 } };
+      }
+    });
+    assert.equal(mutationCalls, 0);
+    assert.equal(reconciliationCalls, 1);
+    const ledger = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), "utf8"));
+    assert.equal(ledger[0].status, "SCHEDULED_VERIFIED");
+    assert.equal(ledger[0].remotePostId, "123456789012345_999");
+    assert.equal(result.skipped, 1);
+  } finally { f.cleanup(); }
+});
