@@ -24,6 +24,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   create-draft-package:
@@ -39,9 +40,17 @@ jobs:
           node-version: 20
       - name: Install locked dependencies without lifecycle scripts
         run: npm ci --ignore-scripts
+      - name: Restore recent cross-run editorial history
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          FACEBOOK_DAILY_DRAFT_HISTORY_FILE: ${{ runner.temp }}/facebook-history.json
+        run: node scripts/restore-facebook-draft-history.mjs
       - name: Generate one idempotent research-only draft package
         env:
           FACEBOOK_DAILY_DRAFT_DIR: ${{ runner.temp }}/facebook-drafts
+          FACEBOOK_DAILY_DRAFT_HISTORY_FILE: ${{ runner.temp }}/facebook-history.json
         run: npm run facebook:draft:daily
       - name: Retain draft package for operator review
         uses: actions/upload-artifact@v4
