@@ -66,6 +66,9 @@ export async function runFacebookContentIntake({
     const base = path.resolve(stateDir);
     const resolved = path.resolve(base, name);
     if (resolved !== base && !resolved.startsWith(base + path.sep)) throw new Error("Facebook state file escapes durable directory");
+    const canonicalBase = fs.realpathSync(base);
+    const checked = fs.existsSync(resolved) ? fs.realpathSync(resolved) : fs.realpathSync(path.dirname(resolved));
+    if (checked !== canonicalBase && !checked.startsWith(canonicalBase + path.sep)) throw new Error("Facebook state file symlink escapes durable directory");
     return resolved;
   };
   if (config.destination !== "nature_frontiers_facebook" || config.timezone !== "Africa/Johannesburg" ||
