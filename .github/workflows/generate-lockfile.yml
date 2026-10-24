@@ -28,16 +28,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Check whether a lockfile already exists
+      - name: Decide whether the lockfile must be generated or refreshed
         id: lockfile-status
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          CURRENT_SHA: ${{ github.sha }}
         run: |
-          if test -f package-lock.json; then
-            echo "present=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "present=false" >> "$GITHUB_OUTPUT"
+          refresh=false
+          if ! test -f package-lock.json; then
+            refresh=true
+          elif [ "$EVENT_NAME" = "push" ] && git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" | grep -qx "package.json"; then
+            refresh=true
           fi
-      - name: Generate lockfile without lifecycle scripts
-        if: ${{ steps.lockfile-status.outputs.present == 'false' }}
+          echo "refresh=$refresh" >> "$GITHUB_OUTPUT"
+      - name: Generate or refresh lockfile without lifecycle scripts
+        if: ${{ steps.lockfile-status.outputs.refresh == 'true' }}
         run: npm install --package-lock-only --ignore-scripts
       - name: Prove clean locked installation
         run: npm ci --ignore-scripts
@@ -51,7 +57,7 @@ jobs:
         run: |
           find scripts test tests -name '*.mjs' -print0 | xargs -0 -n1 node --check
       - name: Commit lockfile to implementation branch only
-        if: ${{ steps.lockfile-status.outputs.present == 'false' }}
+        if: ${{ steps.lockfile-status.outputs.refresh == 'true' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -63,7 +69,7 @@ jobs:
             git push origin HEAD:refs/heads/codex/marketing-machine-audit-fixes
           fi
       - name: Preserve generated lockfile for recovery if commit is blocked
-        if: ${{ always() && steps.lockfile-status.outputs.present == 'false' }}
+        if: ${{ always() && steps.lockfile-status.outputs.refresh == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: generated-npm-lockfile
