@@ -1,35 +1,41 @@
-# Release gate checklist — SonicVhibez Shorts
+# Release gate checklist — SonicVhibez Marketing Machine
 
-Use this checklist for each generated artifact. Keep every box unchecked until the evidence has actually been inspected. A green code-validation run is not evidence of media rights, factual accuracy, or YouTube channel ownership.
+Keep each item unchecked until evidence has actually been inspected. Automated tests and mocks do not close real-world acceptance gates.
 
-## Artifact identity
-- [ ] Record source GitHub Actions run ID and artifact name.
-- [ ] Confirm exactly one MP4 and matching metadata JSON are selected.
-- [ ] Confirm metadata channel is exactly `SonicVhibez`.
-- [ ] Confirm queue item ID and title match the generated artifact.
-- [ ] Confirm the only product URL is `https://selar.com/0u19v8u99l`.
+## Repository and automation
+- [ ] Re-fetch and record branch/PR head SHA; PR #1 remains open and unmerged.
+- [ ] Public publishing remains disabled.
+- [ ] `npm ci --ignore-scripts` and `npm test` pass on the candidate SHA; record exit codes and test counts.
+- [ ] Run `npm run check`, `npm run validate:schedule`, `npm run validate:campaigns`, `npm run check:captions`, and `npm run readiness`; record outcomes.
+- [ ] Workflow cron values agree with `config/weekly-content-plan.json`; schedules create drafts only.
+- [ ] Dashboard starts on loopback with actual operator credentials; unauthenticated calls fail and authenticated actions persist/audit.
+- [ ] Restart recovery, slot idempotency/conflict, and backup/restore are verified.
 
-## Media and content
-- [ ] Watch the entire rendered video and listen to the entire narration.
-- [ ] Verify final duration is 50–60 seconds and audio is intelligible.
-- [ ] Replace text-only placeholder visuals with appropriate footage before calling it a finished wildlife video.
-- [ ] Record source and license/permission for every footage, photo, music and sound asset.
-- [ ] Verify required attribution and keep proof of permission.
-- [ ] Fact-check every factual claim; remove or correct unsupported claims.
-- [ ] Align captions to actual speech; inspect spelling and timing.
-- [ ] Verify thumbnail depicts the actual finished video and is not misleading.
-- [ ] Ensure the promotional relationship/resource is clearly disclosed in the description.
-- [ ] Confirm the content is not deceptively presented as an actual wildlife encounter if it is synthetic or illustrative.
+## Real production artifacts
+- [ ] Both production manifests point to present, non-empty, validated source files.
+- [ ] Each asset has retained original licence/permission evidence and checksums.
+- [ ] Commercial YouTube use, attribution, restrictions and expiry were checked by an identified reviewer.
+- [ ] Narration, captions, metadata and edit match; wildlife claims are fact-checked.
+- [ ] Short: 50–60 seconds, 1080×1920, H.264/AAC, full-file decode and measurable audio.
+- [ ] Long-form: 6–10 minutes, 16:9, supported video/audio codecs and full-file decode.
+- [ ] Thumbnail is a real file derived from the final rendered artifact and has a checksum.
+- [ ] Video, thumbnail, captions, metadata and rights-evidence hashes are recorded.
+- [ ] Human playback inspection and synthetic/altered-media disclosure review are complete.
+- [ ] Authenticated human approval binds the exact artifact hashes and current metadata/rights versions.
 
-## Channel and upload
-- [ ] Confirm the YouTube OAuth account resolves to the intended SonicVhibez channel.
-- [ ] Confirm configured channel ID matches the authenticated channel ID.
-- [ ] Confirm reviewed metadata says `visibility: private`.
-- [ ] Set `rightsConfirmed: true` only after all final media rights are evidenced.
-- [ ] Set `complianceReviewed: true` only after the checks above are completed.
-- [ ] Set `status: READY_FOR_PRIVATE_UPLOAD` only after every applicable item above passes.
-- [ ] Run the private artifact handoff workflow and inspect its receipt.
-- [ ] Verify the uploaded video's channel, title, and private visibility in YouTube Studio.
+## Private YouTube upload
+- [ ] OAuth credentials remain in a secure environment/secret store, never browser code or chat.
+- [ ] Authenticated API confirms exact title `SonicVhibez` and independently confirmed channel ID.
+- [ ] Artifact package and explicit per-operation operator confirmation are present.
+- [ ] Durable upload attempt is written before remote insert.
+- [ ] Request explicitly sets `privacyStatus: private`; no public/unlisted fallback.
+- [ ] Exact remote video is re-fetched and channel ownership/private visibility verified.
+- [ ] Durable receipt and ledger are persisted; uncertain outcomes are reconciled before retry.
 
-## Publication gate
-Public posting is out of scope until the private upload has been verified and the channel owner separately authorizes public publishing. Never use the Nature Frontiers YouTube channel for these promotions.
+## Campaign compliance
+- [ ] Selar destination is exactly `https://selar.com/0u19v8u99l` with accurate visible disclosure.
+- [ ] Safari remains inactive unless exact HTTPS destination, disclosure and owner approval are retained.
+- [ ] No unsupported sales, SEO-score, monetization or wildlife-event claims.
+- [ ] Nature Frontiers is never selected as a target.
+
+**Decision: BLOCKED** if any required real-world gate remains unchecked. Passing mock tests never substitutes for a genuine render, rights verification, human review or remote private-upload verification.
