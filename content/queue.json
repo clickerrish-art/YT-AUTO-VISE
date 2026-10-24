@@ -1,17 +1,16 @@
 {
   "cadence": {
-    "postsPerWeek": 3,
+    "postsPerWeek": 2,
     "days": [
       "Tuesday",
-      "Thursday",
       "Saturday"
     ],
     "timezone": "Africa/Johannesburg",
     "breakdown": {
-      "longForm": 2,
+      "longForm": 1,
       "short": 1
     },
-    "note": "Target cadence from config/weekly-content-plan.json. Draft queue only; public publishing disabled."
+    "note": "Two draft-production slots weekly, with at least 72 hours between planned publication timestamps. Draft queue only; public publishing disabled."
   },
   "publishingEnabled": false,
   "items": [
@@ -35,7 +34,6 @@
       "title": "A Beginner Workflow for Faceless Wildlife Videos",
       "topic": "faceless wildlife video production workflow",
       "productUrl": "https://selar.com/0u19v8u99l",
-      "scheduledDay": "Thursday",
       "targetMinutes": {
         "min": 6,
         "max": 10
@@ -57,8 +55,7 @@
       "topic": "Three Ways to Plan a Wildlife Documentary Short",
       "productUrl": "https://selar.com/0u19v8u99l",
       "status": "script_and_captions_ready_needs_media_and_review",
-      "contentType": "short",
-      "scheduledDay": "Saturday"
+      "contentType": "short"
     },
     {
       "id": "wildlife-short-story-structure",
