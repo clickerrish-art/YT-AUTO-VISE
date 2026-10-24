@@ -224,3 +224,26 @@ test("publisher rejects a queue symlink that resolves outside its repository roo
     fs.rmSync(outside, { recursive: true, force: true });
   }
 });
+
+
+test("publisher defaults to a durable queue in FACEBOOK_STATE_DIR when no queue override is supplied", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    const durableQueue = path.join(f.stateDir, "facebook-autonomous-queue.json");
+    fs.writeFileSync(durableQueue, "[]");
+    const result = await runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, stateDir: f.stateDir,
+      now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true }),
+      verifyIdentity: async () => ({ verified: true }),
+      publish: async () => { throw new Error("empty durable queue must not publish"); }
+    });
+    assert.equal(result.status, "COMPLETED");
+    assert.equal(result.queueCount, 0);
+    assert.deepEqual(JSON.parse(fs.readFileSync(durableQueue, "utf8")), []);
+  } finally { f.cleanup(); }
+});
