@@ -64,12 +64,10 @@ Rendering requires real manifests, audio, captions, footage and rights evidence.
 
 ## Test evidence
 
-At code and regression-test commit `9c89e46c138f1b277de7efb5580fbaa4008d22c5`, all three GitHub Actions validation workflows passed: 96 passed, 0 failed, 0 skipped.
-- [Automation validation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354250) — `npm ci --ignore-scripts` passed; 46 packages added, 47 audited; JavaScript tests and Python compilation passed.
-- [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354339) — 96/96 tests passed.
-- [Content quality checks](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354256) — 96/96 tests passed.
+Current code/test candidate: `68cb2359628ca069e33f7de905b10183989f53e1`. Final GitHub Actions results are pending: [automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078895025), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078895040), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078895024).
+The preceding code/test commit `6e56b240868c07cb5207fe8fa7f13a8b664be376` passed all three workflows with 99 passed, 0 failed, 0 skipped; `npm ci --ignore-scripts` passed (46 packages added, 47 audited), and Python compilation passed. The current candidate adds a Git-ignore regression test.
 
-The dashboard `/readyz` endpoint runs the full production-readiness preflight and returns HTTP 503 with actionable blockers when prerequisites are missing. The private uploader now checks that the approval-bound rights-record hash and retained source/licence files still match their checksums. Dashboard startup requires `DASHBOARD_OPERATOR_ID` so audit records identify the configured operator. These checks do not prove real media, genuine licence authenticity, human playback inspection or live YouTube upload. Public publishing remains disabled.
+The dashboard `/readyz` endpoint runs the full production-readiness preflight and returns HTTP 503 with actionable blockers. Upload preflight verifies the approval-bound rights record and retained file checksums. Dashboard startup requires `DASHBOARD_OPERATOR_ID`. The new backup/restore commands preserve application state, audit history, upload ledger, receipts, approvals and retained rights evidence; restore refuses to overwrite a different existing upload ledger. These checks do not prove genuine licence authenticity, real media rendering or live YouTube upload acceptance. Public publishing remains disabled.
 
 ## Operations and recovery
 
