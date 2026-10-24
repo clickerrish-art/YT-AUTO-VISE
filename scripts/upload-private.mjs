@@ -45,7 +45,7 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
   if (approval.publishingEnabled !== false || approval.visibility !== "private") throw new Error("approval must explicitly preserve private-only publishing");
   if (!Array.isArray(approval.relatedArtifacts) || !approval.relatedArtifacts.some(item => item?.sha256 === artifactSha256)) throw new Error("approval must bind the complete reviewed artifact set, including the uploaded MP4");
   if (!approval.relatedArtifacts.some(item => typeof item?.path === "string" && /\.(jpg|jpeg|png|webp)$/i.test(item.path) && /^[a-f0-9]{64}$/.test(item.sha256 ?? ""))) throw new Error("approval must include the reviewed thumbnail checksum");
-  if (!approval.relatedArtifacts.some(item => typeof item?.path === "string" && /\.(srt|vtt)$/i.test(item.path) && /^[a-f0-9]{64}$/.test(item.sha256 ?? ""))) throw new Error("approval must include the final reviewed captions checksum");
+  if (!approval.relatedArtifacts.some(item => typeof item?.path === "string" && /\.srt$/i.test(item.path) && /^[a-f0-9]{64}$/.test(item.sha256 ?? ""))) throw new Error("approval must include the final reviewed captions checksum");
   if (!approval.relatedArtifacts.some(item => typeof item?.path === "string" && /\.json$/i.test(item.path) && item.sha256 === metadataVersion)) throw new Error("approval must bind the exact metadata JSON checksum");
   return true;
 }
@@ -108,6 +108,10 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     if (sha256File(item.path) !== item.sha256) throw new Error("approval-bound artifact checksum changed: " + path.basename(item.path));
   }
 
+  const captionArtifact = relatedArtifacts.find(item => typeof item?.path === "string" && /\.srt$/i.test(item.path));
+  if (!captionArtifact) throw new Error("approval must include a final reviewed SRT captions file");
+  const captionsCheck = preflightRunner(["scripts/check-captions.mjs", captionArtifact.path], env);
+  if (!captionsCheck.includes("PASS:")) throw new Error("final approved captions did not pass the caption validator");
   const metadataCheck = preflightRunner(["scripts/check-content.mjs", metadataPath], env);
   if (!metadataCheck.includes("PASS")) throw new Error("metadata checker did not pass");
   const mediaPreflight = preflightRunner(["scripts/preflight-media.mjs", videoPath, metadataPath], env);
