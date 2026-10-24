@@ -101,10 +101,11 @@ test("Meta adapter validates local image checksums and remote verification statu
   let request;
   const draft = { kind: "FACEBOOK_PAGE_DRAFT", caption: "Caption", scheduledAt: "2026-10-25T06:00:00.000Z", media: { path: "image.jpg", sha256: sha } };
   const published = await publishMetaPagePost({
-    draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API, permissionsConfirmed: true, rootDir: root, now: NOW,
+    draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API, permissionsConfirmed: true, rootDir: root, now: NOW, probeImage: () => ({ width: 640, height: 480 }),
     fetchImpl: async (url, options) => { request = { url, options }; return response({ id: "photo-777", post_id: PAGE_ID + "_888" }); }
   });
   assert.equal(published.remotePostId, PAGE_ID + "_888");
+  await assert.rejects(() => publishMetaPagePost({ draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API, permissionsConfirmed: true, rootDir: root, now: NOW, probeImage: () => { throw new MetaPageApiError("simulated decode failure"); }, fetchImpl: async () => response({ id: "should-not-publish" }) }), /simulated decode failure/i);
   assert.equal(request.url, "https://graph.facebook.com/v26.0/123456789012345/photos");
   assert.ok(request.options.body.get("source") instanceof Blob);
   await assert.rejects(() => publishMetaPagePost({
