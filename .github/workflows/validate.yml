@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install --ignore-scripts
+      - run: npm ci --ignore-scripts
       - run: node --check scripts/render-long-form.mjs
       - run: node --check test/render-long-form.test.mjs
       - run: node --check scripts/validate-asset-register.mjs
