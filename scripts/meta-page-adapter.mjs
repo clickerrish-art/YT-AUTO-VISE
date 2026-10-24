@@ -213,7 +213,7 @@ export async function fetchMetaPagePost({
   const data = await parseResponse(response, accessToken);
   if (data.id !== remotePostId) throw new MetaPageApiError("Meta post verification returned a different remote ID");
   return {
-    status: data.is_published === true ? "PUBLISHED_VERIFIED" : Number.isFinite(Number(data.scheduled_publish_time)) ? "SCHEDULED_VERIFIED" : "REMOTE_EXISTS_STATUS_UNCLEAR",
+    status: data.is_published === true ? "PUBLISHED_VERIFIED" : data.scheduled_publish_time != null && data.scheduled_publish_time !== "" && Number.isFinite(Number(data.scheduled_publish_time)) ? "SCHEDULED_VERIFIED" : "REMOTE_EXISTS_STATUS_UNCLEAR",
     remotePostId: data.id, remoteUrl: typeof data.permalink_url === "string" && data.permalink_url.startsWith("https://") ? data.permalink_url : null,
     remoteMessage: typeof data.message === "string" ? data.message : null,
     createdTime: data.created_time ?? null, scheduledPublishTime: data.scheduled_publish_time ?? null,
