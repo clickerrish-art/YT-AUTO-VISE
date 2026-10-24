@@ -1,3 +1,5 @@
+# Test baseline and regression report
+
 ## Current release status — 24 October 2026
 
 **Current tested code candidate:** `de1bf204663f05b24d46833a2483453d9926ff0c`  
