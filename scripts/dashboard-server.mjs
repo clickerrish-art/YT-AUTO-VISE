@@ -236,17 +236,19 @@ const server = http.createServer(async (req, res) => {
         const campaigns = { version: 1, campaigns: loadState().campaigns ?? configuredCampaigns.campaigns };
         const campaignErrors = validateCampaigns(campaigns);
         const blockers = campaignErrors.map(error => "Campaign configuration: " + error);
-        const shortManifest = path.join(root, "content/render-manifest.json");
-        const longManifest = path.join(root, "content/long-form-render-manifest.json");
+        const readinessCheck = spawnSync(process.execPath, ["scripts/production-readiness.mjs"], { cwd: root, encoding: "utf8", timeout: 15_000, env: process.env });
+        if (readinessCheck.error || readinessCheck.status !== 0) {
+          blockers.push("Production readiness validator could not complete; inspect server logs and rerun the readiness task");
+        } else {
+          const report = String(readinessCheck.stdout ?? "");
+          blockers.push(...report.split(/\r?\n/).filter(line => line.startsWith("- ")).map(line => line.slice(2)));
+          if (/^HOLD:/m.test(report) && !report.split(/\r?\n/).some(line => line.startsWith("- "))) blockers.push("Production readiness validator reported HOLD without actionable blocker details");
+        }
         if (!schedule.channelId || !/^UC[a-zA-Z0-9_-]{22}$/.test(schedule.channelId)) blockers.push("SONICVHIBEZ_CHANNEL_ID has not been independently verified in the authoritative schedule");
         if (process.env.SONICVHIBEZ_CHANNEL_ID && schedule.channelId && process.env.SONICVHIBEZ_CHANNEL_ID !== schedule.channelId) blockers.push("Configured channel ID does not match the authoritative schedule channel ID");
-        for (const key of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN", "SONICVHIBEZ_CHANNEL_ID"]) if (!process.env[key]?.trim()) blockers.push(key + " is not configured");
-        if (!fs.existsSync(shortManifest)) blockers.push("Rights-reviewed Short render manifest is missing");
-        if (!fs.existsSync(longManifest)) blockers.push("Rights-reviewed long-form render manifest is missing");
-        if (!fs.existsSync(path.join(root, "content/next-short.json"))) blockers.push("Reviewed Short metadata is missing");
-        if (!fs.existsSync(path.join(root, "media/next-short.mp4"))) blockers.push("Validated Short MP4 is missing");
-        const ready = blockers.length === 0;
-        return json(res, ready ? 200 : 503, { ready, publishingEnabled: false, localState: "readable", scheduleConfig: "readable", campaignConfig: campaignErrors.length ? "invalid" : "valid", campaignErrors, blockers });
+        const uniqueBlockers = [...new Set(blockers)];
+        const ready = uniqueBlockers.length === 0;
+        return json(res, ready ? 200 : 503, { ready, publishingEnabled: false, localState: "readable", scheduleConfig: "readable", campaignConfig: campaignErrors.length ? "invalid" : "valid", campaignErrors, blockers: uniqueBlockers });
       } catch (error) {
         return json(res, 503, { ready: false, publishingEnabled: false, error: "Required local state or configuration is unreadable" });
       }
