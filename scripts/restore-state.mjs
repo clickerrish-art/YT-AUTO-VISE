@@ -20,6 +20,9 @@ function targetPath(target, { rootDir = root, stateDir = process.env.DASHBOARD_S
     case "upload-ledger":
       if (target.path !== "upload-attempts.json") throw new Error("Invalid upload-ledger backup target");
       return path.join(logDir, "upload-attempts.json");
+    case "facebook-recovery-ledger":
+      if (target.path !== "facebook-recovery-ledger.jsonl") throw new Error("Invalid Facebook recovery-ledger backup target");
+      return path.join(path.resolve(base, stateDir), "facebook-recovery-ledger.jsonl");
     case "upload-receipt":
       if (!/^upload-[A-Za-z0-9_-]+\.json$/.test(target.path)) throw new Error("Invalid upload-receipt backup target");
       return path.join(logDir, target.path);
@@ -73,6 +76,7 @@ export async function restoreState({ backupPath, rootDir = root, stateDir = proc
       continue;
     }
     if (exists && entry.target.kind === "upload-ledger") throw new Error("Refusing to overwrite an existing, different upload ledger. Reconcile current remote YouTube state and preserve the newer ledger before restoring.");
+    if (exists && entry.target.kind === "facebook-recovery-ledger") throw new Error("Refusing to overwrite an existing, different Facebook recovery ledger. Reconcile remote Facebook outcomes and preserve the newer ledger before restoring.");
     if (exists && entry.target.kind === "dashboard-state") {
       if (currentMtime > Date.parse(backup.createdAt)) throw new Error("Refusing to overwrite dashboard state modified after this backup was created");
       if (!overwriteState) throw new Error("Dashboard state differs from backup; set RESTORE_OVERWRITE=YES only after reviewing the backup and current state");
