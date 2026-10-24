@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { evaluateFinalFacebookPayload } from "./facebook-policy-engine.mjs";
-import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost, fetchMetaPagePost } from "./meta-page-adapter.mjs";
+import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost, fetchMetaPagePost, reconcileMetaPagePost } from "./meta-page-adapter.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const isoNow = now => new Date(now).toISOString();
@@ -62,7 +62,8 @@ export async function runAutonomousFacebookPublisher({
   verifyPermissions = verifyMetaPagePermissions,
   verifyIdentity = verifyMetaPageIdentity,
   publish = publishMetaPagePost,
-  readRemote = fetchMetaPagePost
+  readRemote = fetchMetaPagePost,
+  reconcileRemote = reconcileMetaPagePost
 } = {}) {
   queuePath = env.FACEBOOK_AUTONOMOUS_QUEUE_PATH ?? queuePath;
   const config = readJson(configPath);
@@ -161,8 +162,41 @@ export async function runAutonomousFacebookPublisher({
         atomicJson(ledgerPath, ledger); atomicJson(historyPath, history);
         if (success) published++; else skipped++;
       } catch (error) {
-        const uncertain = error?.uncertain === true || error?.retryable === true || error?.name === "AbortError";
-        const failed = { ...attempt, status: uncertain ? "UNCERTAIN" : "FAILED_PREMUTATION_OR_REJECTED", completedAt: new Date().toISOString(), remotePostId: remote?.remotePostId ?? null, reason: uncertain ? "REMOTE_OUTCOME_UNCERTAIN_RECONCILIATION_REQUIRED" : "META_OPERATION_FAILED_NO_AUTOMATIC_RETRY", retryAllowed: false };
+        const uncertain = error?.uncertain === true || error?.retryable === true || error?.name === "AbortError" || Boolean(remote?.remotePostId);
+        let reconciliation = null;
+        if (uncertain) {
+          try {
+            reconciliation = await reconcileRemote({
+              pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
+              accessToken: env.META_PAGE_ACCESS_TOKEN, apiVersion: config.apiVersion,
+              caption: payload.caption, scheduledAt: payload.scheduledAt, attemptStartedAt: attempt.startedAt,
+              remotePostId: remote?.remotePostId ?? null, fetchImpl
+            });
+          } catch {
+            reconciliation = { outcome: "UNRESOLVED", reason: "RECONCILIATION_FAILED", matches: [] };
+          }
+        }
+        if (reconciliation?.outcome === "CONFIRMED" &&
+            ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(reconciliation.receipt?.status)) {
+          const recovered = {
+            ...attempt, status: reconciliation.receipt.status, completedAt: new Date().toISOString(),
+            remotePostId: reconciliation.receipt.remotePostId, remoteUrl: reconciliation.receipt.remoteUrl ?? null,
+            remoteCreatedAt: reconciliation.receipt.createdTime ?? null,
+            scheduledPublishTime: reconciliation.receipt.scheduledPublishTime ?? null,
+            verifiedRemotely: true, reconciliation, retryAllowed: false,
+            recoveryReason: "REMOTE_RECEIPT_RECOVERED_AFTER_UNCERTAIN_MUTATION"
+          };
+          ledger[ledger.length - 1] = recovered;
+          history.push({ ...recovered, payload: undefined });
+          atomicJson(ledgerPath, ledger); atomicJson(historyPath, history); published++;
+          continue;
+        }
+        const failed = {
+          ...attempt, status: uncertain ? "UNCERTAIN" : "FAILED_PREMUTATION_OR_REJECTED",
+          completedAt: new Date().toISOString(), remotePostId: remote?.remotePostId ?? null,
+          reason: uncertain ? "REMOTE_OUTCOME_UNCERTAIN_RECONCILIATION_REQUIRED" : "META_OPERATION_FAILED_NO_AUTOMATIC_RETRY",
+          reconciliation, retryAllowed: false
+        };
         ledger[ledger.length - 1] = failed;
         history.push({ ...failed, payload: undefined });
         atomicJson(ledgerPath, ledger); atomicJson(historyPath, history); skipped++;
