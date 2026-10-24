@@ -27,7 +27,7 @@ test("safe defaults are a no-op and never attempt a Meta request", async () => {
   const f = setup();
   try {
     let called = false;
-    const result = await runAutonomousFacebookPublisher({ configPath: f.configPath, queuePath: f.queuePath, fetchImpl: async () => { called = true; throw new Error("must not call"); } });
+    const result = await runAutonomousFacebookPublisher({ rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, fetchImpl: async () => { called = true; throw new Error("must not call"); } });
     assert.equal(result.status, "SAFE_NOOP");
     assert.equal(called, false);
   } finally { f.cleanup(); }
@@ -40,7 +40,7 @@ test("live mode requires explicit disable of emergency stop and durable absolute
     f.config.publishingEnabled = true;
     f.config.dryRun = false;
     fs.writeFileSync(f.configPath, JSON.stringify(f.config));
-    await assert.rejects(() => runAutonomousFacebookPublisher({
+    await assert.rejects(() => runAutonomousFacebookPublisher({ rootDir: f.root,
       configPath: f.configPath, queuePath: f.queuePath, stateDir: "relative-state",
       env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) }
     }), /absolute durable/i);
@@ -54,7 +54,7 @@ test("live mode refuses to run without secure Meta credentials", async () => {
     f.config.publishingEnabled = true;
     f.config.dryRun = false;
     fs.writeFileSync(f.configPath, JSON.stringify(f.config));
-    await assert.rejects(() => runAutonomousFacebookPublisher({
+    await assert.rejects(() => runAutonomousFacebookPublisher({ rootDir: f.root,
       configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345" }
     }), /access tokens are missing/i);
   } finally { f.cleanup(); }
@@ -78,7 +78,7 @@ test("uncertain mutation is reconciled and a unique verified receipt is persiste
     };
     fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
     let mutationCalls = 0, reconciliationCalls = 0;
-    const result = await runAutonomousFacebookPublisher({
+    const result = await runAutonomousFacebookPublisher({ rootDir: f.root,
       configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now,
       env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
       verifyPermissions: async () => ({ permissionsVerified: true }),
@@ -117,7 +117,7 @@ test("unresolved mutation remains durably uncertain and is never retried", async
     };
     fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
     let mutationCalls = 0;
-    const result = await runAutonomousFacebookPublisher({
+    const result = await runAutonomousFacebookPublisher({ rootDir: f.root,
       configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now,
       env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
       verifyPermissions: async () => ({ permissionsVerified: true }),
@@ -155,7 +155,7 @@ test("startup reconciles an interrupted PUBLISHING ledger entry before consideri
       payload: { caption: payload.caption, scheduledAt: payload.scheduledAt }
     }]));
     let mutationCalls = 0, reconciliationCalls = 0;
-    const result = await runAutonomousFacebookPublisher({
+    const result = await runAutonomousFacebookPublisher({ rootDir: f.root,
       configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
       now: Date.parse("2026-10-25T05:30:00.000Z"),
       env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
@@ -183,7 +183,7 @@ test("separate runtime kill switch blocks live config before any Meta request", 
     Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
     fs.writeFileSync(f.configPath, JSON.stringify(f.config));
     let called = false;
-    const result = await runAutonomousFacebookPublisher({
+    const result = await runAutonomousFacebookPublisher({ rootDir: f.root,
       configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
       env: { FACEBOOK_PUBLISH_ENABLED: "NO", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
       fetchImpl: async () => { called = true; throw new Error("must not call"); }
@@ -198,7 +198,7 @@ test("live publisher rejects a runtime Page ID that differs from configuration",
   try {
     Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
     fs.writeFileSync(f.configPath, JSON.stringify(f.config));
-    await assert.rejects(() => runAutonomousFacebookPublisher({
+    await assert.rejects(() => runAutonomousFacebookPublisher({ rootDir: f.root,
       configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
       env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "999999999999999", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) }
     }), /must exactly match/i);
