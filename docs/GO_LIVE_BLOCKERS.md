@@ -1,30 +1,33 @@
 ## Current release status — 24 October 2026
 
-**Current tested code candidate:** `902812df38a9b28e08cf6c4ea4332aaf4b6037bc`  
+**Current tested code candidate:** `b7e1a68413edca07900099dd04942c5ef8dcb02b`  
 **PR #1:** [open, draft, unmerged](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1)  
-**Branch comparison at this checkpoint:** 871 commits ahead, 2 behind `main`; 92 changed files. Merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; base head `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. History reconciliation remains an owner decision.
+**Branch comparison at this checkpoint:** 873 commits ahead, 2 behind `main`; 92 changed files. Merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; base head `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. History reconciliation remains an owner decision.
 
 ### Exact-SHA CI evidence
 
-All listed completed workflow runs were triggered for code candidate `902812df38a9b28e08cf6c4ea4332aaf4b6037bc` and their job logs were inspected:
+All listed completed workflow runs were triggered for code candidate `b7e1a68413edca07900099dd04942c5ef8dcb02b` and their job logs were inspected:
 
-- [Automation validation — run 40120170853](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40120170853): **PASS WITH MODERATE ADVISORIES**; `npm ci --ignore-scripts`; Node tests 202 passed, 0 failed, 0 skipped; Python safety tests 8 passed; 16 held queue topics validated; campaign checks, JavaScript syntax and Python compilation passed. Fresh locked audit: 4 moderate, 0 high, 0 critical.
-- [Metadata validation — run 40120170870](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40120170870): **PASS**; 202 Node tests passed, 0 failed, 0 skipped; schedule/caption and fail-closed readiness checks passed.
-- [Content quality — run 40120170884](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40120170884): **PASS**; 202 Node tests passed, 0 failed, 0 skipped.
-- [Daily Facebook draft — run 40120170826](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40120170826): **SKIPPED** on the PR event. No default-branch draft artifact is established by this run.
+- [Automation validation — run 40121115027](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115027): **PASS WITH MODERATE ADVISORIES**; `npm ci --ignore-scripts`; Node tests 203 passed, 0 failed, 0 skipped; Python safety tests 8 passed; 16 held queue topics validated; campaign checks, JavaScript syntax and Python compilation passed. Fresh locked audit: 4 moderate, 0 high, 0 critical.
+- [Metadata validation — run 40121115039](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115039): **PASS**; 203 Node tests passed, 0 failed, 0 skipped; schedule/caption and fail-closed readiness checks passed.
+- [Content quality — run 40121115019](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115019): **PASS**; 203 Node tests passed, 0 failed, 0 skipped.
+- [Daily Facebook draft — run 40121115017](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115017): **SKIPPED** on the PR event. No default-branch draft artifact is established by this run.
 - Combined commit status returned no status entries; no missing status is inferred to have passed.
 
-### Recent code-level change
+### Recent code-level changes
 
-`scripts/schedule-policy.mjs` now rejects malformed, normalized-invalid, timezone-free and invalid-offset timestamps rather than allowing permissive `Date.parse` normalization through schedule checks. `test/schedule-policy.test.mjs` adds regression cases for invalid calendar dates, missing timezone, malformed offsets and invalid history timestamps. Source commit: [`d02c541`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d02c54176cb4aaf5bfeff42c0d00a3c4d6d25bd8); regression tests: [`87089dd`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/87089dd5aacb4a0c2d22cca43f3f12348dd924a7); regex correction validated by the passing exact-SHA runs above: [`902812d`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/902812df38a9b28e08cf6c4ea4332aaf4b6037bc).
+- `scripts/schedule-policy.mjs` rejects malformed calendar dates, timezone-free timestamps and invalid offsets. Regression coverage remains in `test/schedule-policy.test.mjs`.
+- `scripts/youtube-history-gate.mjs` now strictly validates remote publication timestamps, owner reconciliation verification timestamps and reconciled record timestamps before accepting channel history. `test/youtube-history-gate.test.mjs` adds malformed-date, missing-timezone and invalid-offset cases.
+- Exact code candidate: [`b7e1a68413edca07900099dd04942c5ef8dcb02b`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/b7e1a68413edca07900099dd04942c5ef8dcb02b). Exact-SHA workflow runs: [automation 40121115027](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115027), [metadata 40121115039](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115039), and [content quality 40121115019](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115019). All report 203 Node tests passed, 0 failed, 0 skipped; automation also reports 8 Python tests passed. The [daily Facebook draft run 40121115017](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40121115017) was skipped on the PR event.
+- CI ran `npm ci --ignore-scripts`, not a normal lifecycle-script install. Dependency audit remains 4 moderate, 0 high and 0 critical advisories.
 
 ### Acceptance summary
 
 | Gate | Status | Evidence / remaining action |
 |---|---|---|
-| Node and Python automated tests | PASS | 202 Node and 8 Python safety tests on exact code SHA above. |
+| Node and Python automated tests | PASS | 203 Node and 8 Python safety tests on exact code SHA above. |
 | Schedule/campaign/queue/caption/syntax checks | PASS | Exact-SHA CI logs linked above. |
-| Malformed timestamp rejection | PASS | New regression cases pass in 202-test suite. |
+| Malformed timestamp rejection | PASS | New regression cases pass in 203-test suite. |
 | Normal lifecycle-script install | NOT RUN | CI deliberately uses `npm ci --ignore-scripts`. |
 | Dependency remediation | BLOCKED | Four moderate advisories remain; no untested major Google API upgrade was applied. |
 | Full dashboard clean-install end-to-end acceptance | NOT RUN | Every visible action, restart and operator flow not independently exercised end to end. |
