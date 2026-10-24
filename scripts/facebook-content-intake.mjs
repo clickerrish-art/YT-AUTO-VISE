@@ -29,6 +29,16 @@ function requireWithinRoot(candidate, baseRoot = root) {
   return resolved;
 }
 
+function requireWithinRoots(candidate, allowedRoots) {
+  const canonicalRoots = allowedRoots.map(item => fs.realpathSync(path.resolve(item)));
+  const resolved = path.isAbsolute(candidate) ? path.resolve(candidate) : path.resolve(allowedRoots[0], candidate);
+  const within = (item, base) => item === base || item.startsWith(base + path.sep);
+  if (!canonicalRoots.some(base => within(resolved, base))) throw new Error("Queue path escapes approved repository/state roots");
+  const checked = fs.existsSync(resolved) ? fs.realpathSync(resolved) : fs.realpathSync(path.dirname(resolved));
+  if (!canonicalRoots.some(base => within(checked, base))) throw new Error("Queue symlink escapes approved repository/state roots");
+  return resolved;
+}
+
 /**
  * Intake only accepts evidence-complete candidate records. It does not fabricate research,
  * media, licence records, source excerpts, or captions. The publisher rechecks every queued
@@ -37,7 +47,7 @@ function requireWithinRoot(candidate, baseRoot = root) {
 export async function runFacebookContentIntake({
   configPath = path.join(root, "config/facebook-publishing.json"),
   candidatePath = path.join(root, "content/facebook-intake-candidates.json"),
-  queuePath = path.join(root, "content/facebook-autonomous-queue.json"),
+  queuePath = null,
   stateDir = process.env.FACEBOOK_STATE_DIR,
   fetchImpl = fetch,
   now = Date.now(),
@@ -48,6 +58,7 @@ export async function runFacebookContentIntake({
   if (typeof stateDir !== "string" || !path.isAbsolute(stateDir)) {
     throw new Error("FACEBOOK_STATE_DIR must be an absolute durable operator-controlled directory");
   }
+  fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
   const config = readJson(configPath);
   if (config.destination !== "nature_frontiers_facebook" || config.timezone !== "Africa/Johannesburg" ||
       config.autonomousMode !== true || config.autonomousSchedulingEnabled !== true ||
@@ -55,7 +66,8 @@ export async function runFacebookContentIntake({
     throw new Error("Facebook intake configuration is invalid or policy version does not match");
   }
   const candidateFile = requireWithinRoot(candidatePath, activeRoot);
-  const queueFile = requireWithinRoot(queuePath, activeRoot);
+  const selectedQueuePath = String(process.env.FACEBOOK_AUTONOMOUS_QUEUE_PATH ?? "").trim() || queuePath || path.join(stateDir, "facebook-autonomous-queue.json");
+  const queueFile = requireWithinRoots(selectedQueuePath, [activeRoot, stateDir]);
   if (!fs.existsSync(candidateFile)) throw new Error("Facebook intake candidate file is missing; no content will be invented");
   const candidates = readJson(candidateFile);
   const existingQueue = fs.existsSync(queueFile) ? readJson(queueFile) : [];
