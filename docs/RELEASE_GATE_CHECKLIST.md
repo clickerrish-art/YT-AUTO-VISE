@@ -1,12 +1,20 @@
 # CURRENT CANDIDATE — 2026-10-24
 
-- Candidate HEAD: `ce61fcbf41bbfb98d964352146b5f2a71e956c4d`; branch `codex/marketing-machine-audit-fixes`; base `main` at `45352b73bb6cc4787b2a49988b575afb754ab627`.
-- PR #1 remains open, draft and unmerged: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1.
-- Exact-candidate CI: [content quality run 40094005063](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40094005063), [automation run 40094005074](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40094005074), and [metadata run 40094005081](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40094005081) all passed. Each reports 142 Node tests passed, 0 failed, 0 skipped. Automation also reports 8 Python safety tests passed plus JavaScript syntax and Python compilation checks. The daily-draft workflow run [40094005156](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40094005156) was intentionally skipped on the PR branch by the default-branch-only guard; it is not a production scheduled-run pass.
-- New cross-run Facebook draft history restore uses read-only GitHub Actions artifact access, validates packages and refuses conflicting/invalid history. History is bounded by the 14-day artifact retention. **Actual restoration has not yet been verified on a default-branch scheduled/manual run.**
-- Status: code/CI checks are verified for this candidate; production acceptance remains blocked. Public YouTube publishing stays disabled. No live Meta post or YouTube upload is claimed.
+- Implementation branch: `codex/marketing-machine-audit-fixes`; candidate HEAD: `e36f3fb288df257e71605e9f8e51f4941a9253ab`.
+- PR #1 remains open, draft and unmerged: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1. Public YouTube publishing remains disabled; Facebook publishing remains disabled by default.
+- Exact-HEAD CI:
+  - [Automation validation — run 40095077502](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095077502): passed; 147 Node tests passed, 0 failed, 0 skipped; 8 Python safety tests passed; locked install, syntax/compilation, campaign and queue checks passed.
+  - [Content quality — run 40095077405](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095077405): passed; 147 Node tests passed, 0 failed, 0 skipped.
+  - [Metadata validation — run 40095077505](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095077505): passed; 147 Node tests passed, 0 failed, 0 skipped.
+  - [Daily Facebook draft workflow — run 40095077449](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40095077449): intentionally skipped on the PR branch by the default-branch-only condition; this is not a production scheduled-run pass.
+- Cross-run history restoration now has mocked API integration tests for valid artifact retrieval, malformed archive failure, HTTPS enforcement and bounded archive size. Same-day retained packages are reused exactly; conflicting same-date artifacts fail closed. These are mocked tests, not proof of a real default-branch artifact restore.
+- History remains bounded by GitHub's 14-day artifact retention, not a permanent editorial database. The next authorized default-branch scheduled/manual run must verify real artifact restoration and deduplication.
+- Latest npm audit on this tested candidate: 4 moderate, 0 high, 0 critical advisories involving `gaxios`, `googleapis`, `googleapis-common` and `uuid`; the available `googleapis` remediation is a major version upgrade and remains unmodified pending compatibility testing.
+- Production acceptance remains blocked by real Meta Page verification, authorized live-post receipt, genuine media/licensing evidence and human review, live SonicVhibez OAuth/channel verification, explicitly authorized private upload and remote receipt, backup/restore owner acceptance, and the unresolved requested YouTube cadence.
+- No real Facebook post or YouTube upload is claimed. Do not merge, enable public publishing or perform external mutations without separate explicit owner authorization.
 
 ---
+
 
 # Release evidence snapshot — prior checkpoint cb6ca43b7723d903c3e6b78fd3ed662a13498b04 (2026-10-24)
 
