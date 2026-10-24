@@ -14,6 +14,7 @@ function fixture() {
   fs.mkdirSync(stateDir, { recursive: true });
   fs.mkdirSync(path.join(logDir, "upload-approvals"), { recursive: true });
   fs.mkdirSync(rightsDir, { recursive: true });
+  fs.writeFileSync(path.join(stateDir, "facebook-recovery-ledger.jsonl"), JSON.stringify({ attemptId: "fb-attempt-001", remotePostId: "123456789012345_987", status: "NEEDS_RECONCILIATION" }) + "\n", { mode: 0o600 });
   fs.writeFileSync(path.join(stateDir, "dashboard-state.json"), JSON.stringify({
     version: 1, queueItems: [], campaigns: [], jobs: [{ id: "job-001", state: "AWAITING_HUMAN_REVIEW", humanApproval: { decision: "REJECT", reviewer: "Test Operator" } }],
     audit: [{ action: "TEST_BACKUP", actor: "Test Operator" }], uploads: []
@@ -38,6 +39,7 @@ test("backup and restore preserve dashboard state, audit, review, upload ledger,
     const backup = JSON.parse(fs.readFileSync(backupPath, "utf8"));
     assert.equal(backup.includesSecrets, false);
     assert.ok(backup.entries.some(entry => entry.target.kind === "dashboard-state"));
+    assert.ok(backup.entries.some(entry => entry.target.kind === "facebook-recovery-ledger"));
     assert.ok(backup.entries.some(entry => entry.target.kind === "upload-ledger"));
     assert.ok(backup.entries.some(entry => entry.target.kind === "upload-receipt"));
     assert.ok(backup.entries.some(entry => entry.target.kind === "upload-approval"));
@@ -45,6 +47,7 @@ test("backup and restore preserve dashboard state, audit, review, upload ledger,
     const restored = await restoreState({ backupPath, rootDir: destination.root, stateDir: destination.stateDir, uploadLogDir: destination.logDir, rightsDir: destination.rightsDir, confirm: "YES" });
     assert.equal(restored.status, "RESTORE_COMPLETED");
     assert.equal(restored.restored, backup.entries.length);
+    assert.match(fs.readFileSync(path.join(destination.stateDir, "facebook-recovery-ledger.jsonl"), "utf8"), /123456789012345_987/);
     const state = JSON.parse(fs.readFileSync(path.join(destination.stateDir, "dashboard-state.json"), "utf8"));
     assert.equal(state.audit[0].actor, "Test Operator");
     assert.equal(state.jobs[0].humanApproval.decision, "REJECT");
@@ -69,6 +72,23 @@ test("restore refuses to overwrite a different existing upload ledger and perfor
     await assert.rejects(restoreState({ backupPath, rootDir: destination.root, stateDir: destination.stateDir, uploadLogDir: destination.logDir, rightsDir: destination.rightsDir, confirm: "YES" }), /Refusing to overwrite an existing, different upload ledger/);
     assert.equal(fs.existsSync(path.join(destination.stateDir, "dashboard-state.json")), false, "preflight conflict must be detected before any writes");
     assert.equal(JSON.parse(fs.readFileSync(path.join(destination.logDir, "upload-attempts.json"), "utf8")).attempts[0].attemptId, "newer-attempt");
+  } finally {
+    fs.rmSync(source.root, { recursive: true, force: true });
+    fs.rmSync(destination.root, { recursive: true, force: true });
+  }
+});
+
+test("restore refuses to overwrite a newer Facebook recovery ledger", async () => {
+  const source = fixture();
+  const destination = fixture();
+  try {
+    const backupPath = path.join(source.root, "backup.json");
+    await backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir, rightsDir: source.rightsDir, outputPath: backupPath });
+    fs.rmSync(destination.stateDir, { recursive: true, force: true });
+    fs.mkdirSync(destination.stateDir, { recursive: true });
+    fs.writeFileSync(path.join(destination.stateDir, "facebook-recovery-ledger.jsonl"), JSON.stringify({ attemptId: "newer-fb-attempt", remotePostId: "123456789012345_999" }) + "\n");
+    await assert.rejects(restoreState({ backupPath, rootDir: destination.root, stateDir: destination.stateDir, uploadLogDir: destination.logDir, rightsDir: destination.rightsDir, confirm: "YES" }), /Refusing to overwrite an existing, different Facebook recovery ledger/);
+    assert.equal(fs.existsSync(path.join(destination.stateDir, "dashboard-state.json")), false, "preflight conflict must be detected before any writes");
   } finally {
     fs.rmSync(source.root, { recursive: true, force: true });
     fs.rmSync(destination.root, { recursive: true, force: true });
