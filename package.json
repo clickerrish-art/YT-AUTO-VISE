@@ -29,6 +29,6 @@
     "node": ">=22"
   },
   "dependencies": {
-    "googleapis": "^144.0.0"
+    "googleapis": "188.0.0"
   }
 }
