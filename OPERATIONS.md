@@ -50,19 +50,22 @@ If the existing dashboard state differs, restore requires `RESTORE_OVERWRITE=YES
 
 Run `npm run facebook:draft:daily` to create today's research-only draft package using the `Africa/Johannesburg` calendar date. The default output is `run-logs/facebook-daily-drafts/YYYY-MM-DD.json`. The generator preserves an existing same-day artifact, checks local editorial state when present, and never fills missing claims, media, licence evidence or Page identity with invented data. Every output remains `publishReady=false` and `publishingEnabled=false`.
 
-The [GitHub Actions daily-draft workflow](.github/workflows/facebook-daily-draft.yml) is configured for 07:30 SAST and stores its output artifact for 14 days. The verified run created [artifact 12558943759](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529395/artifacts/12558943759). Scheduled workflows execute only from the repository's default branch; while PR #1 remains draft, this is not an active production schedule. The workflow creates a draft artifact only and does not call Meta or publish. Research, media/licensing evidence, current Page identity/permissions, compliance recheck and human approval remain required.
+The [GitHub Actions daily-draft workflow](.github/workflows/facebook-daily-draft.yml) is configured for 07:30 SAST and stores its output artifact for 14 days. The verified run created [artifact 12558699856](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091734576/artifacts/12558699856). Scheduled workflows execute only from the repository's default branch; while PR #1 remains draft, this is not an active production schedule. The workflow creates a draft artifact only and does not call Meta or publish. Research, media/licensing evidence, current Page identity/permissions, compliance recheck and human approval remain required.
 
 ## Current validation evidence
 
-The latest verified code/test checkpoint is `1c1a9a4d4836cb728a6fb2030f2c402734e6b619`. All three validation workflows and the daily-draft workflow passed on that exact commit:
-- [Automation validation — run 40091529534](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529534)
-- [Metadata validation — run 40091529360](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529360)
-- [Content quality — run 40091529363](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529363)
-- [Daily Facebook draft workflow — run 40091529395](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091529395)
+The latest verified code/test checkpoint is `1155263c25e85f901b9245fd4e024898a1af6f19`. All three validation workflows and the daily-draft workflow passed on that exact commit:
+- [Automation validation — run 40091734573](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091734573)
+- [Metadata validation — run 40091734584](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091734584)
+- [Content quality — run 40091734600](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091734600)
+- [Daily Facebook draft workflow — run 40091734576](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091734576)
 
-Each reports 138 Node tests passed, 0 failed, 0 skipped. Automation also passed 8 Python safety tests, JavaScript syntax checks and Python compilation. CI used `npm ci --ignore-scripts` (46 packages added, 47 audited). npm audit reports 4 moderate, 0 high, 0 critical advisories involving `gaxios`, `googleapis`, `googleapis-common` and `uuid`. Plain `npm ci` remains unverified.
+Each reports 139 Node tests passed, 0 failed, 0 skipped. Automation also passed 8 Python safety tests, JavaScript syntax checks and Python compilation. CI used `npm ci --ignore-scripts` (46 packages added, 47 audited). npm audit reports 4 moderate, 0 high, 0 critical advisories involving `gaxios`, `googleapis`, `googleapis-common` and `uuid`. Plain `npm ci` remains unverified.
 
-The latest code/test checkpoint adds an idempotent research-only daily Facebook draft generator, approval fingerprints bound to claim/source/licensing details, and keyed Meta credential fingerprints that invalidate previous permission attestations after credential rotation. These are code/test checks, not real Page identity, Insights, licensing authenticity or publication evidence. Public YouTube publishing remains disabled; PR #1 remains open, draft and unmerged.
+The actual daily workflow output detected that its assigned 08:00 SAST slot had passed and returned `MISSED_SLOT_REVIEW_REQUIRED`; it did not backdate, batch-publish, or claim success. The retained draft artifact is [here](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40091734576/artifacts/12558699856). Scheduled events execute only on the default branch, so the daily schedule is not active in production while PR #1 remains draft.
+
+Approval fingerprints now bind claims/source/licensing provenance and disclosure, and keyed Meta credential fingerprints invalidate stale permission attestations after credential rotation. These automated tests do not prove real Page identity, Insights, licence authenticity or publishing. Public YouTube publishing remains disabled; PR #1 remains open, draft and unmerged.
+
 
 ## 3. Schedule and queue
 
