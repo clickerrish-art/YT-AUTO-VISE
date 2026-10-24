@@ -209,3 +209,16 @@ Candidate tested: `7490e0caa966861ba16a6af023fb45d0914d9a34`.
 - A dashboard UI contract regression test now guards against stale cadence text and derives day/format options from the backend schedule. This is not a substitute for browser-driven end-to-end testing.
 - Still NOT RUN / OWNER ACTION REQUIRED: browser E2E; genuine fully decoded Short and long-form exports plus rights evidence and final-hash-bound approval; live SonicVhibez OAuth/channel/history verification; separately authorized private-upload receipt; real Nature Frontiers Page verification and retained default-branch draft; isolated restore/restart/concurrency/rollback drills.
 - Safety state unchanged: public and unattended YouTube publishing disabled; Facebook live publishing disabled; only approved Selar URL is `https://selar.com/0u19v8u99l`; Safari remains inactive; no real upload/post occurred. PR #1 stays open, draft and unmerged.
+
+
+## Browser acceptance and security checkpoint — 24 October 2026
+
+Source candidate: `e1afbdc51745ef18e47f12a93629674c76dc73a0`.
+
+- **PASS**: [Playwright Chromium browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40130547249), 1 test. It connected to the actual local dashboard/backend, created and re-read a draft/job, verified duplicate rejection and blocked `/readyz`, and confirmed no horizontal page overflow at 375px.
+- **PASS**: [automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40130550675): 211 Node tests, 8 Python safety tests, clean install, 16 queue topics and zero npm audit advisories.
+- **PASS**: [metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40130550684); [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40130550761).
+- **BLOCKED by design**: [production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40130550732), due missing live account/history evidence, rights-cleared production media and approvals.
+- **SKIPPED**: [Facebook draft PR run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40130550704); a default-branch retained draft and verified Page identity are still missing.
+- The first browser run caught a genuine mobile overflow from long unbroken Meta status messages. The CSS was repaired and the exact-source browser run passed. Playwright was upgraded from 1.55.0 after npm audit exposed high-severity advisories; version 1.64.1 and the refreshed lockfile audit clean.
+- This local browser test does not prove live YouTube/Meta integrations, production media rights, a private upload, Facebook draft artifact on `main`, or owner-controlled recovery drills. Those gates remain outstanding; no external upload/post occurred.

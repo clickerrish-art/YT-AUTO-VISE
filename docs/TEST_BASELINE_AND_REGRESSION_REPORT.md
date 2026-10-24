@@ -203,3 +203,14 @@ The dashboard had a stale hardcoded Tuesday/Thursday/Saturday summary even thoug
 Exact candidate `7490e0caa966861ba16a6af023fb45d0914d9a34` passed [automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40129571307): 211 Node tests passed, 0 failed; 8 Python tests passed; clean `npm ci` passed; audit reported 0 vulnerabilities. [Metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40129571317) and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40129571311) also passed. The readiness workflow remains blocked intentionally and the Facebook draft workflow is skipped for PR events.
 
 The UI regression test is not a real browser test. Browser E2E, genuine media/rights review, live YouTube identity/history, authorized private upload, default-branch Facebook draft artifact, and owner-run recovery drills remain unverified. Production acceptance is **BLOCKED**.
+
+
+## Playwright browser acceptance and mobile regression — 24 October 2026
+
+Exact source candidate `e1afbdc51745ef18e47f12a93629674c76dc73a0` passed [Chromium browser E2E run 40130547249](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40130547249): 1 test passed. The test connected to the actual local dashboard/backend using an isolated temporary state directory and a test-only token; verified unauthenticated rejection, authoritative schedule/cycle display, draft/job creation and persistence, duplicate-ID rejection, fail-closed `/readyz` (503), and a 375px mobile viewport.
+
+The initial browser run failed the mobile overflow assertion. Diagnostics traced it to long unbroken environment-variable names in fail-closed Meta status messages. CSS now applies `overflow-wrap:anywhere` to blocked/notice messages and permits flex-row children to shrink. The subsequent exact-source browser run passed.
+
+[Automation run 40130550675](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40130550675) passed 211 Node tests, 8 Python safety tests, clean install and queue checks; npm audit reported 0 vulnerabilities. The Playwright pin was upgraded from 1.55.0 to 1.64.1 after the audit surfaced high-severity certificate-verification advisories, and the lockfile was regenerated. [Metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40130550684) and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40130550761) also passed. [Readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40130550732) remains blocked intentionally; [Facebook draft on PR](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40130550704) was skipped.
+
+This is browser acceptance of the local operator journey only. It is not evidence of live OAuth/channel identity, rights-cleared exports, private upload, default-branch Facebook artifact or recovery drills. No real upload or post occurred; production remains **BLOCKED**.
