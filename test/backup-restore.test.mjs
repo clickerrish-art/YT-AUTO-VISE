@@ -91,5 +91,5 @@ test("restore requires explicit authorization and validates backup checksums", a
 
 test("local secrets, state, upload evidence, backups and generated media are ignored by Git", () => {
   const ignore = fs.readFileSync(".gitignore", "utf8");
-  for (const pattern of [".env", "!.env.example", "/state/", "/run-logs/", "/backups/", "/rights/", "/content/render-manifest.json", "/content/long-form-render-manifest.json", "/media/next-short.mp4", "/media/long-form-next.mp4"]) assert.ok(ignore.includes(pattern), "missing .gitignore protection: " + pattern);
+  for (const pattern of [".env", "!.env.example", "/state/", "/run-logs/", "/backups/", "/rights/", "/content/render-manifest.json", "/content/long-form-render-manifest.json", "/content/asset-register.json", "/media/next-short.mp4", "/media/long-form-next.mp4"]) assert.ok(ignore.includes(pattern), "missing .gitignore protection: " + pattern);
 });
