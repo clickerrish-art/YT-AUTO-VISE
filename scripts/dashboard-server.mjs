@@ -481,6 +481,77 @@ const server = http.createServer(async (req, res) => {
         experiment, blockers, complianceRuleSet: config.complianceRuleSet
       });
     }
+    if (req.method === "GET" && url.pathname === "/api/facebook/autonomous-status") {
+      try {
+        const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+        const configuredStateDir = process.env.FACEBOOK_STATE_DIR ?? "";
+        const durableStateConfigured = path.isAbsolute(configuredStateDir) && fs.existsSync(configuredStateDir) && fs.statSync(configuredStateDir).isDirectory();
+        const state = loadState();
+        const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
+        const pageIdMatches = /^\\d{5,30}$/.test(config.destinationPageId ?? "") && config.destinationPageId === envPageId;
+        const tokensConfigured = (process.env.META_USER_ACCESS_TOKEN ?? "").length >= 20 && (process.env.META_PAGE_ACCESS_TOKEN ?? "").length >= 20;
+        const connection = state.facebookConnection ?? {};
+        const identityVerified = pageIdMatches && connection.verified === true && connection.permissionsVerified === true &&
+          connection.pageId === config.destinationPageId && Number.isFinite(Date.parse(connection.verifiedAt)) &&
+          Date.now() - Date.parse(connection.verifiedAt) >= 0 && Date.now() - Date.parse(connection.verifiedAt) <= 24 * 60 * 60_000;
+        const configEnabled = config.publishingEnabled === true && config.dryRun === false && config.emergencyStop === false &&
+          process.env.FACEBOOK_PUBLISH_ENABLED === "YES";
+        const queuePath = process.env.FACEBOOK_AUTONOMOUS_QUEUE_PATH ?? path.join(root, "content/facebook-autonomous-queue.json");
+        const readArray = file => {
+          if (!fs.existsSync(file)) return [];
+          const value = JSON.parse(fs.readFileSync(file, "utf8"));
+          if (!Array.isArray(value)) throw new Error("Malformed persistent array");
+          return value;
+        };
+        const queue = readArray(queuePath);
+        const history = durableStateConfigured ? readArray(path.join(configuredStateDir, "facebook-history.json")) : [];
+        const ledger = durableStateConfigured ? readArray(path.join(configuredStateDir, "facebook-attempt-ledger.json")) : [];
+        const runSummaryPath = durableStateConfigured ? path.join(configuredStateDir, "facebook-run-summary.json") : "";
+        const intakeSummaryPath = durableStateConfigured ? path.join(configuredStateDir, "facebook-intake-summary.json") : "";
+        const lastRun = runSummaryPath && fs.existsSync(runSummaryPath) ? JSON.parse(fs.readFileSync(runSummaryPath, "utf8")) : null;
+        const lastIntake = intakeSummaryPath && fs.existsSync(intakeSummaryPath) ? JSON.parse(fs.readFileSync(intakeSummaryPath, "utf8")) : null;
+        const formatter = new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit" });
+        const today = formatter.format(new Date());
+        let nextScheduledRunAt = localDateTimeToIso(today, "07:30", "Africa/Johannesburg");
+        if (Date.parse(nextScheduledRunAt) <= Date.now()) {
+          const [year, month, day] = today.split("-").map(Number);
+          const nextDay = new Date(Date.UTC(year, month - 1, day + 1));
+          const nextLocalDate = [nextDay.getUTCFullYear(), String(nextDay.getUTCMonth() + 1).padStart(2, "0"), String(nextDay.getUTCDate()).padStart(2, "0")].join("-");
+          nextScheduledRunAt = localDateTimeToIso(nextLocalDate, "07:30", "Africa/Johannesburg");
+        }
+        const lastRemoteReceipt = [...history].reverse().find(item => ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)) ?? null;
+        const blockedPosts = history.filter(item => item.status === "SKIPPED_BLOCKED").slice(-20).map(item => ({
+          slotId: item.slotId ?? null, status: item.status, reason: item.reason ?? null,
+          blockers: item.policyDecision?.blockers ?? [], checkedAt: item.checkedAt ?? null
+        }));
+        const uncertainAttempts = ledger.filter(item => item.status === "UNCERTAIN").slice(-20).map(item => ({
+          slotId: item.slotId ?? null, status: item.status, reason: item.reason ?? null,
+          remotePostId: item.remotePostId ?? null, reconciliation: item.reconciliation ?? null
+        }));
+        const blockers = [];
+        if (!pageIdMatches) blockers.push("Exact configured Nature Frontiers Page ID is not aligned with the secure runtime value");
+        if (!tokensConfigured) blockers.push("Meta user/Page tokens are not configured in the secure runtime");
+        if (!identityVerified) blockers.push("Recent live Page identity and permission verification is unavailable");
+        if (!durableStateConfigured) blockers.push("FACEBOOK_STATE_DIR is not an existing absolute durable directory");
+        if (!configEnabled) blockers.push("Autonomous Facebook publishing is disabled by configuration or emergency stop");
+        if (!Array.isArray(config.allowedDomains) || !Array.isArray(config.allowedCampaignIds) || !Array.isArray(config.approvedDestinations)) blockers.push("Facebook policy allowlists are malformed");
+        if (uncertainAttempts.length) blockers.push("Uncertain publication attempts require reconciliation; automatic retry remains disabled");
+        return json(res, 200, {
+          destination: "nature_frontiers_facebook", pageName: config.destinationPageName,
+          pageId: pageIdMatches ? config.destinationPageId : null, identityVerified, tokensConfigured,
+          permissionsVerified: identityVerified, publishingEnabled: configEnabled && blockers.length === 0,
+          dryRun: config.dryRun !== false, emergencyStop: config.emergencyStop !== false,
+          autonomousMode: config.autonomousMode === true, timezone: config.timezone,
+          nextScheduledRunAt, scheduleSource: "GitHub Actions main-branch cron; runner health is not independently queried here",
+          durableStateConfigured, queueCount: queue.length, lastRun, lastIntake,
+          publishedCount: history.filter(item => ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)).length,
+          skippedCount: history.filter(item => String(item.status ?? "").startsWith("SKIPPED")).length,
+          lastRemoteReceipt, blockedPosts, uncertainAttempts, blockers
+        });
+      } catch {
+        return json(res, 503, { ready: false, publishingEnabled: false, error: "Autonomous Facebook status is unavailable because configuration or durable state is malformed" });
+      }
+    }
     if (req.method === "POST" && url.pathname === "/api/facebook/drafts") {
       const body = await readBody(req);
       const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
