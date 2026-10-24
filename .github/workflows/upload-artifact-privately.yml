@@ -45,7 +45,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Check out reviewed project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Download draft package from the selected run
         uses: actions/download-artifact@v4
         with:
@@ -105,9 +105,10 @@ jobs:
           repository: ${{ github.repository }}
           run-id: ${{ inputs.previous_ledger_run_id }}
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: '24'
+$2package-manager-cache: false
       - name: Install uploader dependencies
         run: npm install --ignore-scripts
       - name: Verify required secrets are configured
