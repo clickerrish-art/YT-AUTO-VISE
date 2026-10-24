@@ -4,14 +4,44 @@ import { validatePublicationSlot, weeklyUtcCronGaps, localDateTimeToIso } from "
 
 test("publication slot compares actual instants and rejects same-local-date and under-72-hour collisions", () => {
   const existing = [
-    { id: "published-1", status: "published", scheduledAt: "2026-10-20T15:00:00.000Z" },
-    { id: "scheduled-2", status: "scheduled", scheduledAt: "2026-10-22T15:00:00.000Z" }
+    { id: "published-1", status: "published", scheduledAt: "2026-10-19T15:00:00.000Z", publishedAt: "2026-10-20T15:00:00.000Z" },
+    { id: "scheduled-2", status: "scheduled", scheduledAt: "2026-10-23T15:00:00.000Z" }
   ];
-  const tooClose = validatePublicationSlot({ id: "new", scheduledAt: "2026-10-24T15:00:00.000Z" }, existing);
+  const tooClose = validatePublicationSlot({ id: "new", scheduledAt: "2026-10-25T15:00:00.000Z" }, existing);
   assert.equal(tooClose.valid, false);
   assert.ok(tooClose.errors.some(error => error.includes("48 hours is below the 72-hour minimum")));
-  const enoughGap = validatePublicationSlot({ id: "new", scheduledAt: "2026-10-25T15:00:00.000Z" }, existing);
+  const enoughGap = validatePublicationSlot({ id: "new", scheduledAt: "2026-10-26T15:00:00.000Z" }, existing);
   assert.equal(enoughGap.valid, true);
+});
+
+test("published items use actual publication timestamps rather than their old planned slot", () => {
+  const result = validatePublicationSlot(
+    { id: "next", scheduledAt: "2026-10-25T15:00:00.000Z" },
+    [{ id: "already-live", status: "published", scheduledAt: "2026-10-20T15:00:00.000Z", publishedAt: "2026-10-24T15:00:00.000Z" }]
+  );
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some(error => error.includes("24 hours is below the 72-hour minimum")));
+});
+
+test("validator fails closed when a published item has no actual publication timestamp", () => {
+  const result = validatePublicationSlot(
+    { id: "next", scheduledAt: "2026-10-28T15:00:00.000Z" },
+    [{ id: "published-without-time", status: "published", scheduledAt: "2026-10-20T15:00:00.000Z" }]
+  );
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some(error => error.includes("missing publishedAt")));
+});
+
+test("an already-colliding existing schedule blocks any new slot", () => {
+  const result = validatePublicationSlot(
+    { id: "new", scheduledAt: "2026-10-31T15:00:00.000Z" },
+    [
+      { id: "scheduled-a", status: "scheduled", scheduledAt: "2026-10-27T15:00:00.000Z" },
+      { id: "scheduled-b", status: "scheduled", scheduledAt: "2026-10-27T18:00:00.000Z" }
+    ]
+  );
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some(error => error.includes("existing publication date collision between scheduled-a and scheduled-b")));
 });
 
 test("publication slot rejects duplicate IDs, invalid timestamps, and same Johannesburg date", () => {
@@ -26,14 +56,18 @@ test("publication slot rejects duplicate IDs, invalid timestamps, and same Johan
   assert.throws(() => validatePublicationSlot({ id: "x", scheduledAt: "not-a-date" }, []), /valid ISO timestamp/);
 });
 
-test("draft items do not block slots but active items must have real timestamps", () => {
+test("draft items do not block slots but active items must have the correct real timestamps", () => {
   assert.equal(validatePublicationSlot(
     { id: "new", scheduledAt: "2026-10-24T15:00:00Z" },
     [{ id: "draft-1", status: "draft", scheduledAt: "2026-10-24T15:00:00Z" }]
   ).valid, true);
   assert.ok(validatePublicationSlot(
     { id: "new", scheduledAt: "2026-10-24T15:00:00Z" },
-    [{ id: "active-1", status: "published" }]
+    [{ id: "published-without-time", status: "published" }]
+  ).errors.some(error => error.includes("missing publishedAt")));
+  assert.ok(validatePublicationSlot(
+    { id: "new", scheduledAt: "2026-10-24T15:00:00Z" },
+    [{ id: "scheduled-without-time", status: "scheduled" }]
   ).errors.some(error => error.includes("missing scheduledAt")));
 });
 
