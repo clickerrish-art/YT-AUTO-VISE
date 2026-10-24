@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
+import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { generateDailyFacebookDraft } from "../scripts/generate-facebook-daily-draft.mjs";
 import { validateFacebookHistoryPackage, restoreFacebookDraftHistory } from "../scripts/restore-facebook-draft-history.mjs";
