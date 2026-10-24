@@ -26,7 +26,7 @@ jobs:
           output=$(npm run check 2>&1)
           status=$?
           set -e
-          printf '%s\\n' "$output"
+          printf '%s\n' "$output"
           if [ "$status" -eq 0 ]; then
             echo "BLOCKED: default metadata checker unexpectedly passed without a reviewed production metadata file."
             exit 1
