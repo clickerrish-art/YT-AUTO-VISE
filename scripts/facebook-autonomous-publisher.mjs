@@ -95,6 +95,9 @@ export async function runAutonomousFacebookPublisher({
     const base = path.resolve(stateDir);
     const resolved = path.resolve(base, name);
     if (resolved !== base && !resolved.startsWith(base + path.sep)) throw new Error("Facebook state file escapes FACEBOOK_STATE_DIR");
+    const canonicalBase = fs.realpathSync(base);
+    const checked = fs.existsSync(resolved) ? fs.realpathSync(resolved) : fs.realpathSync(path.dirname(resolved));
+    if (checked !== canonicalBase && !checked.startsWith(canonicalBase + path.sep)) throw new Error("Facebook state file symlink escapes FACEBOOK_STATE_DIR");
     return resolved;
   };
   const historyPath = stateFile(config.historyFile ?? "facebook-history.json");
