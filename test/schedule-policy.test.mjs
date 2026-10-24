@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validatePublicationSlot, weeklyUtcCronGaps } from "../scripts/schedule-policy.mjs";
+import { validatePublicationSlot, weeklyUtcCronGaps, localDateTimeToIso } from "../scripts/schedule-policy.mjs";
 
 test("publication slot compares actual instants and rejects same-local-date and under-72-hour collisions", () => {
   const existing = [
@@ -44,4 +44,11 @@ test("weekly UTC cadence detects the actual 48/48/72-hour pattern", () => {
     { day: "Saturday", cronUtc: "0 15 * * 6" }
   ]);
   assert.deepEqual(gaps.map(gap => gap.hours), [48, 48, 72]);
+});
+
+test("local schedule time conversion follows IANA timezone and daylight-saving rules", () => {
+  assert.equal(localDateTimeToIso("2026-10-27", "17:00", "Africa/Johannesburg"), "2026-10-27T15:00:00.000Z");
+  assert.equal(localDateTimeToIso("2026-03-07", "17:00", "America/New_York"), "2026-03-07T22:00:00.000Z");
+  assert.equal(localDateTimeToIso("2026-03-09", "17:00", "America/New_York"), "2026-03-09T21:00:00.000Z");
+  assert.throws(() => localDateTimeToIso("2026-03-08", "02:30", "America/New_York"), /does not exist/);
 });
