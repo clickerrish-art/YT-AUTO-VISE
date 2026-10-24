@@ -267,3 +267,31 @@ test("every factual wildlife post needs structured claims and claims must bind t
     assert.ok(unrelated.blockers.some(item => /not bound to the exact final caption/i.test(item)));
   } finally { f.cleanup(); }
 });
+
+
+test("semantic verifier must bind its result to the exact claim and source set", async () => {
+  const f = fixture();
+  try {
+    const mismatchedClaim = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root),
+      semanticVerifier: async ({ sourceUrls, checkedAt }) => ({
+        verified: true, claimHash: "0".repeat(64),
+        sourceUrlsHash: hash(JSON.stringify(sourceUrls)),
+        verifierId: "test-verifier", checkedAt
+      })
+    });
+    assert.equal(mismatchedClaim.eligible, false);
+    assert.equal(mismatchedClaim.sourceChecks[0].semanticVerification.reason, "SEMANTIC_VERIFICATION_FAILED_OR_UNBOUND");
+
+    const mismatchedSources = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root),
+      semanticVerifier: async ({ claimText, checkedAt }) => ({
+        verified: true, claimHash: hash(claimText),
+        sourceUrlsHash: "0".repeat(64),
+        verifierId: "test-verifier", checkedAt
+      })
+    });
+    assert.equal(mismatchedSources.eligible, false);
+    assert.equal(mismatchedSources.sourceChecks[0].semanticVerification.verified, false);
+  } finally { f.cleanup(); }
+});
