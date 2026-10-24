@@ -351,6 +351,93 @@ const server = http.createServer(async (req, res) => {
       if (!fs.existsSync(path.join(root, "content/render-manifest.json"))) blockers.push("Rights-reviewed render manifest is missing");
       return json(res, 200, { publishingEnabled: false, schedule, campaigns: campaignConfig.campaigns, campaignValidation: { ok: campaignErrors.length === 0, errors: campaignErrors }, queueItems: state.queueItems, jobs: state.jobs.slice(-30).reverse(), uploads: state.uploads.slice(-30).reverse(), uploadLedger: readUploadLedger(), audit: state.audit.slice(-50).reverse(), blockers, stateFile: path.relative(root, stateFile) });
     }
+    if (req.method === "GET" && url.pathname === "/api/facebook/state") {
+      const state = loadState();
+      const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+      const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
+      const pageVerified = config.pageIdentityVerified === true && /^\\d{5,30}$/.test(config.destinationPageId ?? "") && envPageId === config.destinationPageId;
+      const experiment = summarizeFacebookExperiment(state.facebookPosts, { minPerArm: config.experiment?.minimumPostsPerArm ?? 14 });
+      const blockers = [];
+      if (!pageVerified) blockers.push("Nature Frontiers Facebook Page identity is not independently verified against the configured Page ID and secure environment value");
+      if (config.publishingEnabled !== true) blockers.push("Facebook publishing kill switch is disabled");
+      blockers.push("No live Meta publishing adapter or verified API permission evidence is configured; drafts/export only");
+      return json(res, 200, {
+        destination: config.destination, destinationPageId: pageVerified ? config.destinationPageId : null,
+        pageIdentityVerified: pageVerified, publishingEnabled: false, dryRun: true,
+        timezone: config.timezone, dailyTarget: config.dailyTarget, defaultLocalTime: config.defaultLocalTime,
+        comparisonLocalTime: config.comparisonLocalTime, drafts: state.facebookDrafts.slice(-30).reverse(),
+        posts: state.facebookPosts.slice(-30).reverse(), attempts: state.facebookAttempts.slice(-30).reverse(),
+        experiment, blockers, complianceRuleSet: config.complianceRuleSet
+      });
+    }
+    if (req.method === "POST" && url.pathname === "/api/facebook/drafts") {
+      const body = await readBody(req);
+      const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+      const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
+      const expectedPageId = config.pageIdentityVerified === true && config.destinationPageId === envPageId ? config.destinationPageId : "";
+      const scheduledTime = body.scheduledTime ?? chooseFacebookExperimentSlot({ date: body.scheduledDate, pillar: body.pillar, format: body.format ?? "text" });
+      const draft = createFacebookDraft({ ...body, scheduledTime }, { expectedPageId });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        if (state.facebookDrafts.some(item => item.id === draft.id)) return json(res, 409, { error: "Facebook draft ID already exists" });
+        const evaluation = evaluateFacebookDraft(draft, {
+          existingDrafts: state.facebookDrafts.filter(item => !["REJECTED", "CANCELLED"].includes(item.status)),
+          recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root
+        });
+        if (evaluation.blockers.some(item => /duplicate content fingerprint|near-duplicate/i.test(item))) return json(res, 409, { error: "Facebook draft duplicates existing content; create a meaningfully different concept", evaluation });
+        draft.evaluation = evaluation;
+        state.facebookDrafts.push(draft);
+        state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_DRAFT_CREATED", itemId: draft.id, destination: "nature_frontiers_facebook", contentFingerprint: draft.contentFingerprint, complianceVersion: evaluation.complianceVersion, blockers: evaluation.blockers, at: new Date().toISOString(), actor: operatorId, publishingEnabled: false });
+        saveState(state);
+        return json(res, 201, { draft, evaluation, publishingEnabled: false });
+      } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/facebook/drafts/evaluate") {
+      const body = await readBody(req);
+      if (typeof body.draftId !== "string") return json(res, 400, { error: "draftId is required" });
+      const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+      const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
+      const expectedPageId = config.pageIdentityVerified === true && config.destinationPageId === envPageId ? config.destinationPageId : "";
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.facebookDrafts.findIndex(item => item.id === body.draftId);
+        if (index < 0) return json(res, 404, { error: "Facebook draft not found" });
+        const draft = state.facebookDrafts[index];
+        const evaluation = evaluateFacebookDraft(draft, {
+          existingDrafts: state.facebookDrafts.filter(item => item.id !== draft.id && !["REJECTED", "CANCELLED"].includes(item.status)),
+          recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root
+        });
+        state.facebookDrafts[index] = { ...draft, evaluation, updatedAt: new Date().toISOString(), status: draft.status === "APPROVED_DRAFT" ? "DRAFT_REVIEW_REQUIRED" : draft.status, approval: draft.status === "APPROVED_DRAFT" ? null : draft.approval };
+        state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_DRAFT_RECHECKED", itemId: draft.id, ok: evaluation.ok, blockers: evaluation.blockers, flags: evaluation.flags, complianceVersion: evaluation.complianceVersion, at: new Date().toISOString(), actor: operatorId });
+        saveState(state);
+        return json(res, 200, { draft: state.facebookDrafts[index], evaluation, publishingEnabled: false });
+      } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/facebook/drafts/approve") {
+      const body = await readBody(req);
+      if (typeof body.draftId !== "string" || typeof body.decision !== "string") return json(res, 400, { error: "draftId and decision are required" });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.facebookDrafts.findIndex(item => item.id === body.draftId);
+        if (index < 0) return json(res, 404, { error: "Facebook draft not found" });
+        const draft = state.facebookDrafts[index];
+        const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+        const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
+        const expectedPageId = config.pageIdentityVerified === true && config.destinationPageId === envPageId ? config.destinationPageId : "";
+        const evaluation = evaluateFacebookDraft(draft, { existingDrafts: state.facebookDrafts.filter(item => item.id !== draft.id), recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root });
+        const updated = approveFacebookDraft(draft, { reviewer: operatorId, decision: body.decision, reason: body.reason ?? "", evaluation, now: new Date().toISOString() });
+        state.facebookDrafts[index] = { ...updated, evaluation };
+        state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_DRAFT_" + body.decision, itemId: draft.id, reviewer: operatorId, fingerprint: updated.approval.fingerprint, at: updated.approval.reviewedAt, complianceVersion: evaluation.complianceVersion, publishingEnabled: false });
+        saveState(state);
+        return json(res, 200, { draft: state.facebookDrafts[index], evaluation, publishingEnabled: false });
+      } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/facebook/publish") {
+      return json(res, 409, { error: "Live Facebook publishing is not implemented or authorized. No remote operation was attempted; retain the draft and use the owner-approved manual handoff.", publishingEnabled: false, dryRun: true });
+    }
     if (req.method === "GET" && url.pathname === "/api/tasks") {
       return json(res, 200, { publicPublishingEnabled: false, tasks: [...allowedTasks.keys()] });
     }
