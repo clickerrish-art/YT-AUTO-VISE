@@ -50,7 +50,7 @@ test("private uploader records uncertain remote outcomes and refuses blind retri
     fs.writeFileSync(thumbnailPath, "test-thumbnail");
     const thumbnailSha = sha256File(thumbnailPath);
     const captionsPath = path.join(dir, "captions.srt");
-    fs.writeFileSync(captionsPath, "1\\n00:00:00,000 --> 00:00:01,000\\nTest caption\\n");
+    fs.writeFileSync(captionsPath, "1\n00:00:00,000 --> 00:00:01,000\nTest caption\n");
     const captionsSha = sha256File(captionsPath);
     const sourceAssetPath = path.join(dir, "source-asset.mp4");
     const licenseEvidencePath = path.join(dir, "license-evidence.txt");
@@ -93,7 +93,7 @@ test("private uploader preserves remote video ID and marks recovery if receipt p
     fs.writeFileSync(thumbnailPath, "test-thumbnail");
     const thumbnailSha = sha256File(thumbnailPath);
     const captionsPath = path.join(dir, "captions.srt");
-    fs.writeFileSync(captionsPath, "1\\n00:00:00,000 --> 00:00:01,000\\nTest caption\\n");
+    fs.writeFileSync(captionsPath, "1\n00:00:00,000 --> 00:00:01,000\nTest caption\n");
     const captionsSha = sha256File(captionsPath);
     const sourceAssetPath = path.join(dir, "source-asset.mp4");
     const licenseEvidencePath = path.join(dir, "license-evidence.txt");
