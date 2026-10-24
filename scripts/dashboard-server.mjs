@@ -11,7 +11,7 @@ import { manageCampaign } from "./campaign-management.mjs";
 import { validatePublicationSlot, localDateTimeToIso } from "./schedule-policy.mjs";
 import {
   FACEBOOK_PUBLISHING_DEFAULTS, createFacebookDraft, evaluateFacebookDraft,
-  approveFacebookDraft, chooseFacebookExperimentSlot, summarizeFacebookExperiment
+  approveFacebookDraft, chooseFacebookExperimentSlot, summarizeFacebookExperiment, generateFacebookIdea
 } from "./facebook-pipeline.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -350,6 +350,12 @@ const server = http.createServer(async (req, res) => {
       if (!schedule.channelId) blockers.push("SonicVhibez channel ID has not been verified");
       if (!fs.existsSync(path.join(root, "content/render-manifest.json"))) blockers.push("Rights-reviewed render manifest is missing");
       return json(res, 200, { publishingEnabled: false, schedule, campaigns: campaignConfig.campaigns, campaignValidation: { ok: campaignErrors.length === 0, errors: campaignErrors }, queueItems: state.queueItems, jobs: state.jobs.slice(-30).reverse(), uploads: state.uploads.slice(-30).reverse(), uploadLedger: readUploadLedger(), audit: state.audit.slice(-50).reverse(), blockers, stateFile: path.relative(root, stateFile) });
+    }
+    if (req.method === "GET" && url.pathname === "/api/facebook/idea") {
+      const date = url.searchParams.get("date") ?? "";
+      const state = loadState();
+      const idea = generateFacebookIdea({ date, existingDrafts: state.facebookDrafts, recentPosts: state.facebookPosts });
+      return json(res, 200, { idea, publishingEnabled: false, publishReady: false });
     }
     if (req.method === "GET" && url.pathname === "/api/facebook/state") {
       const state = loadState();
