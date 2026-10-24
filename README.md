@@ -64,12 +64,12 @@ Rendering requires real manifests, audio, captions, footage and rights evidence.
 
 ## Test evidence
 
-At code and regression-test commit `6b0874b870343cf435099eedf74038bf2e01f58c`, all three GitHub Actions validation workflows passed: 95 passed, 0 failed, 0 skipped.
-- [Automation validation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083877) — `npm ci --ignore-scripts` passed; 46 packages installed/audited; JavaScript tests and Python compilation passed.
-- [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083898) — 95/95 tests passed.
-- [Content quality checks](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083943) — 95/95 tests passed.
+At code and regression-test commit `9c89e46c138f1b277de7efb5580fbaa4008d22c5`, all three GitHub Actions validation workflows passed: 96 passed, 0 failed, 0 skipped.
+- [Automation validation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354250) — `npm ci --ignore-scripts` passed; 46 packages added, 47 audited; JavaScript tests and Python compilation passed.
+- [Metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354339) — 96/96 tests passed.
+- [Content quality checks](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40078354256) — 96/96 tests passed.
 
-The dashboard `/readyz` endpoint now runs the full production-readiness preflight and returns HTTP 503 with actionable blockers when prerequisites are missing. These checks do not prove a real media render or live YouTube upload. Production manifests and rights-cleared inputs are still required; no genuine wildlife MP4, production thumbnail/checksum or remote upload receipt is claimed. Public publishing remains disabled.
+The dashboard `/readyz` endpoint runs the full production-readiness preflight and returns HTTP 503 with actionable blockers when prerequisites are missing. The private uploader now checks that the approval-bound rights-record hash and retained source/licence files still match their checksums. Dashboard startup requires `DASHBOARD_OPERATOR_ID` so audit records identify the configured operator. These checks do not prove real media, genuine licence authenticity, human playback inspection or live YouTube upload. Public publishing remains disabled.
 
 ## Operations and recovery
 
