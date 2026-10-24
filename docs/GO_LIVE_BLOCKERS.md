@@ -1,14 +1,26 @@
 # Current branch status — 2026-10-24
 
-- Implementation branch: `codex/marketing-machine-audit-fixes`; current code checkpoint before this documentation update: `97f0c87af5801924a4925736c17ec985a2c86673`.
-- Base `main`: `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 is open, draft and unmerged; current comparison at the code checkpoint was 500 commits ahead, 0 behind. Re-fetch live refs after later commits.
-- The code checkpoint passed all three PR workflows: [automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40086353344), [metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40086353299), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40086353309). Automation log: 113 Node tests passed, 0 failed, 0 skipped; 8 Python tests passed. Install path: `npm ci --ignore-scripts`; plain `npm ci` remains unverified.
-- npm audit at this checkpoint: 4 moderate, 0 high, 0 critical; reported packages are `gaxios`, `googleapis`, `googleapis-common`, and `uuid`. A reported `googleapis` fix requires major version 178.0.0 and has not been applied without compatibility testing.
-- Cadence configuration now separates `targetCadence` (requested 2 long-form + 1 Short) from `interimDraftCadence` (1 long-form + 1 Short on Tuesday/Saturday, draft-only). The 72-hour spacing constraint still conflicts mathematically with three weekly publications; `cadenceDecisionRequired=true` and `publishingEnabled=false` remain enforced.
-- Production release remains blocked by genuine assets/manifests, rights evidence, final-hash human review, live SonicVhibez OAuth verification, explicit private-upload acceptance/receipt, and owner-run restart/restore acceptance. Safari remains inactive. CI success is not production acceptance.
-- This snapshot describes the code checkpoint and its workflow evidence. The commit adding this note is documentation-only; check PR #1 for its own current-HEAD workflow results.
+- Live branch: `codex/marketing-machine-audit-fixes`; checkpoint before this status update: `5445aba4448c130b77a7fbfc47d736ae5ea67a58`. Base `main`: `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 is open, draft and unmerged; branch comparison is 530 ahead, 0 behind.
+- Current-checkpoint workflows passed: [automation validation — run 40088728165](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40088728165), [content quality — run 40088728161](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40088728161), [metadata validation — run 40088728205](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40088728205). Relevant logs: 124 Node tests passed, 0 failed, 0 skipped; automation additionally passed 8 Python safety tests and syntax/compilation checks. Install path verified in CI: `npm ci --ignore-scripts`; plain `npm ci` is not verified.
+- Facebook draft workflow implemented: separate Nature Frontiers destination, authenticated dashboard APIs/UI, deterministic source/media/licence/disclosure/duplicate checks, approval hash binding, one-post-per-local-date guard, South African 08:00/18:00 experiment bookkeeping, durable draft/audit records and HTTP 409 live-publish refusal. No real Meta integration, Page identity, permissions, token or Page Insights has been verified; no Facebook post was published. Details: [Facebook pipeline audit](FACEBOOK_PIPELINE_AUDIT_2026-10-24.md).
+- npm audit still reports 4 moderate, 0 high, 0 critical advisories affecting `gaxios`, `googleapis`, `googleapis-common` and `uuid`. Major-version remediation requires compatibility testing.
+- YouTube release remains blocked: requested 2 long-form + 1 Short weekly conflicts with three 72-hour cyclic gaps. The interim Tuesday/Saturday schedule remains draft-only. Public YouTube publishing is disabled.
+
+## Current owner-controlled production blockers
+
+1. Verify the exact Nature Frontiers Facebook Page ID in Meta, supported Page roles/permissions, token lifecycle and approved API access. Configure the same verified Page ID in `config/facebook-publishing.json` and the secure `NATURE_FRONTIERS_FACEBOOK_PAGE_ID` environment variable. No tokens in source control or chat.
+2. Decide whether to change the weekly YouTube count or the 72-hour minimum; do not silently weaken either.
+3. Supply real rights-cleared media, narration, music, complete manifests, source provenance and checksum-bound permission evidence.
+4. Complete full-file decode, human playback/caption/thumbnail review and final-hash-bound human approval.
+5. Verify the SonicVhibez channel via secure OAuth; after all other gates pass, explicitly authorize a private-only upload and verify the remote ID/receipt.
+6. Run and record owner-controlled restart and backup/restore acceptance.
+7. Supply exact Safari HTTPS destination, truthful disclosure and explicit owner approval before activation.
+8. Resolve the four moderate dependency advisories through tested compatible upgrades or a documented risk decision.
+
+No live Facebook post, YouTube upload, public publishing or production acceptance is claimed by these CI results.
 
 ---
+
 
 # Release evidence snapshot — prior checkpoint cb6ca43b7723d903c3e6b78fd3ed662a13498b04 (2026-10-24)
 
