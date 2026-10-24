@@ -6,7 +6,7 @@ The Nature Frontiers Facebook Page is a separate destination from SonicVhibez Yo
 
 1. Verify the exact Facebook Page in Meta's own settings and record the numeric Page ID; do not rely on the Page display name.
 2. Configure `NATURE_FRONTIERS_FACEBOOK_PAGE_ID` in the local secure environment. Update `config/facebook-publishing.json` only after the owner verifies that Page ID; the config value and environment value must match.
-3. Start the dashboard locally and use the authenticated `/api/facebook/state` endpoint to inspect the Page identity gate and publishing blockers.
+3. Start the dashboard locally and use the authenticated `/api/facebook/state` endpoint to inspect the Page identity gate and publishing blockers. The dashboard can call `GET /api/facebook/idea?date=YYYY-MM-DD` to suggest a research-first topic; it intentionally supplies a placeholder rather than inventing a factual claim.
 4. Create a draft through `POST /api/facebook/drafts` with a unique ID, specific topic, supported content pillar, caption, future local date, numeric destination Page ID, structured claim sources, and media/license evidence paths and SHA-256 checksums.
 5. Recheck with `POST /api/facebook/drafts/evaluate`. The checker blocks missing/wrong Page identity, missing media/license evidence, checksum mismatches, unsupported source records, missing required disclosures, engagement bait and near-duplicate content. Some uncertain or sensitive cases are flagged for human review.
 6. Approval through `POST /api/facebook/drafts/approve` is allowed only when the current deterministic evaluation passes. Material changes invalidate the recorded approval fingerprint.
