@@ -82,10 +82,10 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.ok(saved.queueItems.some(item => item.id === draft.id));
   assert.ok(saved.audit.some(event => event.action === "DRAFT_CREATED" && event.itemId === draft.id));
   assert.ok(saved.audit.filter(event => event.itemId === draft.id).every(event => event.actor === "test-owner@example.test"), "audit records must use the configured authenticated operator identity");
-  assert.equal(productionJob.transitionHistory[0].actor, "test-owner@example.test");
   assert.equal(saved.queueItems.find(item => item.id === draft.id).rightsConfirmed, undefined);
   const productionJob = saved.jobs.find(job => job.kind === "CONTENT_PRODUCTION" && job.idempotencyKey === "draft:" + draft.id);
   assert.ok(productionJob);
+  assert.equal(productionJob.transitionHistory[0].actor, "test-owner@example.test");
   const claim = await fetch(base + "/api/jobs/lease/claim", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, workerId: "test-worker-a", leaseMs: 10_000 }) });
   const claimBody = await claim.json();
   assert.equal(claim.status, 200, JSON.stringify(claimBody));
