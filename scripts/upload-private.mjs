@@ -26,6 +26,17 @@ function readJson(filePath, label) {
 }
 export function validateUploadApproval(approval, { jobId, artifactSha256, metadataVersion }) {
   if (approval?.decision !== "APPROVE" || approval.jobId !== jobId) throw new Error("approval decision and job ID must match this upload");
+  if (!approval.rightsEvidence || typeof approval.rightsEvidence !== "object" || Array.isArray(approval.rightsEvidence)) throw new Error("structured rights evidence is required in the approval record");
+  const actualRightsEvidenceSha256 = crypto.createHash("sha256").update(JSON.stringify(approval.rightsEvidence)).digest("hex");
+  if (approval.rightsEvidenceSha256 !== actualRightsEvidenceSha256) throw new Error("rights evidence checksum does not match the approval-bound rights record");
+  const evidenceAssets = Array.isArray(approval.rightsEvidence.assets) ? approval.rightsEvidence.assets : [approval.rightsEvidence];
+  if (!evidenceAssets.length) throw new Error("approval must include at least one rights-evidence asset record");
+  for (const evidence of evidenceAssets) {
+    if (!evidence || typeof evidence !== "object" || typeof evidence.assetPath !== "string" || typeof evidence.licenseEvidenceLocation !== "string") throw new Error("rights evidence must bind each source asset and retained license evidence file");
+    if (!/^[a-f0-9]{64}$/.test(evidence.assetSha256 ?? "") || !/^[a-f0-9]{64}$/.test(evidence.licenseEvidenceSha256 ?? "")) throw new Error("rights evidence must contain source and license-evidence SHA-256 checksums");
+    if (!Array.isArray(evidence.permittedUses) || !evidence.permittedUses.includes("YouTube")) throw new Error("rights evidence must explicitly permit YouTube use");
+    if (evidence.verificationStatus !== "VERIFIED" || typeof evidence.verifiedBy !== "string" || !evidence.verifiedBy.trim() || !Number.isFinite(Date.parse(evidence.verifiedAt ?? ""))) throw new Error("rights evidence must retain reviewer identity, VERIFIED status, and a valid verification timestamp");
+  }
   if (approval.artifactSha256 !== artifactSha256) throw new Error("approval artifact checksum does not match the actual MP4");
   if (approval.metadataVersion !== metadataVersion) throw new Error("approval metadata version does not match the actual metadata file");
   if (typeof approval.reviewer !== "string" || approval.reviewer.trim().length < 2) throw new Error("authenticated human reviewer identity is missing");
@@ -67,6 +78,13 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (metadata.status !== "READY_FOR_PRIVATE_UPLOAD") throw new Error("metadata status must be READY_FOR_PRIVATE_UPLOAD");
   validateUploadApproval(approval, { jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256 });
   const relatedArtifacts = approval.relatedArtifacts;
+  const evidenceAssets = Array.isArray(approval.rightsEvidence.assets) ? approval.rightsEvidence.assets : [approval.rightsEvidence];
+  for (const evidence of evidenceAssets) {
+    const assetFile = path.resolve(evidence.assetPath);
+    const licenseFile = path.resolve(evidence.licenseEvidenceLocation);
+    if (!fs.existsSync(assetFile) || !fs.statSync(assetFile).isFile() || sha256File(assetFile) !== evidence.assetSha256) throw new Error("rights-evidence source asset is missing or its checksum changed: " + path.basename(assetFile));
+    if (!fs.existsSync(licenseFile) || !fs.statSync(licenseFile).isFile() || fs.statSync(licenseFile).size <= 0 || sha256File(licenseFile) !== evidence.licenseEvidenceSha256) throw new Error("retained license evidence is missing, empty, or its checksum changed: " + path.basename(licenseFile));
+  }
   const uploadedArtifactIsBound = relatedArtifacts.some(item => path.resolve(item.path) === path.resolve(videoPath) && item.sha256 === videoSha256);
   if (!uploadedArtifactIsBound) throw new Error("approval artifact set must include the exact MP4 being uploaded");
   for (const item of relatedArtifacts) {
