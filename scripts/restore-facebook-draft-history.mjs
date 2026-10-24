@@ -80,12 +80,19 @@ export async function restoreFacebookDraftHistory({
   fs.mkdirSync(tempRoot, { recursive: true, mode: 0o700 });
   const cutoff = now.getTime() - 14 * 24 * 60 * 60 * 1000;
   const artifacts = [];
+  let listingComplete = false;
   for (let page = 1; page <= 5; page++) {
     const data = await apiJson(configuredApiBase + "/repos/" + configuredRepository + "/actions/artifacts?per_page=100&page=" + page, fetchImpl, configuredToken);
     if (!Array.isArray(data.artifacts)) throw new Error("GitHub artifact listing has an invalid schema");
     artifacts.push(...data.artifacts);
-    if (data.artifacts.length < 100) break;
+    if (data.artifacts.length < 100) {
+      listingComplete = true;
+      break;
+    }
   }
+  // A full fifth page means more than 500 artifacts may exist. Never build
+  // duplicate-prevention history from a silently truncated listing.
+  if (!listingComplete) throw new Error("Historical artifact listing reached the 500-item safety limit; refusing incomplete history");
   const candidates = artifacts.filter(item =>
     item && typeof item.name === "string" && item.name.startsWith(artifactPrefix) &&
     item.expired === false && Number.isFinite(Date.parse(item.created_at)) && Date.parse(item.created_at) >= cutoff &&
