@@ -40,7 +40,17 @@ jobs:
       - name: Validate authoritative draft schedule
         run: npm run validate:schedule
       - name: Report production blockers without publishing
-        run: npm run readiness
+        run: |
+          set +e
+          output=$(npm run readiness 2>&1)
+          status=$?
+          set -e
+          printf '%s\\n' "$output"
+          if [ "$status" -ne 2 ] || ! printf '%s' "$output" | grep -Fq 'HOLD:'; then
+            echo "BLOCKED: readiness must exit 2 and report HOLD while mandatory production gates are unresolved."
+            exit 1
+          fi
+          echo "PASS: readiness reports the current blockers and exits non-zero; production is not accepted."
       - name: Validate timed subtitle drafts
         run: npm run check:captions
       - name: Ensure all unreviewed metadata examples are blocked
