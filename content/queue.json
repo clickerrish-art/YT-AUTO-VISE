@@ -10,7 +10,7 @@
       "longForm": 1,
       "short": 1
     },
-    "note": "Two draft-production slots weekly, with at least 72 hours between planned publication timestamps. Draft queue only; public publishing disabled."
+    "note": "Interim two-slot draft-production schedule only: Tuesday long-form and Saturday Short, with 96h/72h cyclic gaps. The requested target remains 2 long-form + 1 Short weekly but is mathematically incompatible with the 72-hour minimum; owner decision required before publication. Public publishing disabled."
   },
   "publishingEnabled": false,
   "items": [
