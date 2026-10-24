@@ -71,9 +71,9 @@ Monitor the authenticated dashboard endpoint /api/facebook/autonomous-status for
 
 ## 7. Content intake
 
-content/facebook-intake-candidates.json is an evidence-bearing candidate input, not a place for placeholders. The intake command evaluates candidates, queues only eligible records, writes a redacted summary to the durable state directory, and records blockers without asking for a human override. The publisher independently re-evaluates the final payload immediately before mutation.
+content/facebook-intake-candidates.json is an evidence-bearing candidate input, not a place for placeholders. The intake command evaluates candidates, queues only eligible records, writes a redacted summary to the durable state directory, and records blockers without asking for a human override. The production queue defaults to facebook-autonomous-queue.json inside FACEBOOK_STATE_DIR, not the ephemeral checkout; set FACEBOOK_AUTONOMOUS_QUEUE_PATH only if a different path under the repository or durable state directory is deliberately required. The intake and publisher share the configured durable posting lock. The publisher independently re-evaluates the final payload immediately before mutation.
 
-The intake does not invent claims, sources, media, licences or attribution. No eligible candidates means no post. The current checked-in candidate list is intentionally empty until genuine research and rights-cleared media records are supplied.
+The intake does not invent claims, sources, media, licences or attribution. No eligible candidates means no post. The current checked-in candidate list is intentionally empty until genuine research and rights-cleared media records are supplied. A trusted semantic-claim verifier is not currently wired into production; source excerpts and self-declared verified flags are insufficient, so factual posts remain blocked until that verifier is implemented and tested.
 
 ## 8. Shutdown and rollback
 
