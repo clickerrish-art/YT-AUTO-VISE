@@ -16,7 +16,18 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   let logs = "";
   child.stdout.on("data", chunk => { logs += chunk.toString(); });
   child.stderr.on("data", chunk => { logs += chunk.toString(); });
-  t.after(() => { child.kill("SIGTERM"); fs.rmSync(stateDir, { recursive: true, force: true }); });
+  const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-outside-path-"));
+  const outsideFile = path.join(outsideDir, "private-evidence.txt");
+  const symlinkName = ".dashboard-test-outside-" + path.basename(stateDir) + ".txt";
+  const symlinkPath = path.join(process.cwd(), symlinkName);
+  fs.writeFileSync(outsideFile, "test-only external file; not a credential");
+  fs.symlinkSync(outsideFile, symlinkPath);
+  t.after(() => {
+    child.kill("SIGTERM");
+    fs.rmSync(stateDir, { recursive: true, force: true });
+    fs.rmSync(symlinkPath, { force: true });
+    fs.rmSync(outsideDir, { recursive: true, force: true });
+  });
   const base = `http://127.0.0.1:${port}`;
   let ready = false;
   for (let i = 0; i < 60; i++) {
@@ -47,6 +58,10 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const noPriorBody = await noPriorReconcile.json();
   assert.equal(noPriorReconcile.status, 409, JSON.stringify(noPriorBody));
   assert.match(noPriorBody.error, /never create a new upload/i);
+  const symlinkReconcile = await fetch(base + "/api/uploads/reconcile", { method: "POST", headers, body: JSON.stringify({ jobId: "symlink-job", videoPath: symlinkName, metadataPath: "README.md", approvalPath: "README.md" }) });
+  const symlinkBody = await symlinkReconcile.json();
+  assert.equal(symlinkReconcile.status, 400, JSON.stringify(symlinkBody));
+  assert.match(symlinkBody.error, /resolves outside repository root/i, "repository-relative symlinks must not expose files outside the repository");
   const safari = body.campaigns.find(c => c.type === "safari_affiliate");
   assert.equal(safari.status, "INACTIVE");
   const preview = await fetch(base + "/api/campaigns/manage", { method: "POST", headers, body: JSON.stringify({ campaignId: safari.id, action: "preview", destinationUrl: "https://example.com/verified-stay", disclosureText: "I may earn a commission from eligible bookings." }) });
