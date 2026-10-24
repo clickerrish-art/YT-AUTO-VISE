@@ -11,8 +11,9 @@ import { manageCampaign } from "./campaign-management.mjs";
 import { validatePublicationSlot, localDateTimeToIso } from "./schedule-policy.mjs";
 import {
   FACEBOOK_PUBLISHING_DEFAULTS, createFacebookDraft, evaluateFacebookDraft,
-  approveFacebookDraft, chooseFacebookExperimentSlot, summarizeFacebookExperiment, generateFacebookIdea
+  approveFacebookDraft, chooseFacebookExperimentSlot, summarizeFacebookExperiment, generateFacebookIdea, assertFacebookPublishAllowed
 } from "./facebook-pipeline.mjs";
+import { verifyMetaPageIdentity, publishMetaPagePost, fetchMetaPagePost, MetaPageApiError } from "./meta-page-adapter.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = process.env.DASHBOARD_HOST ?? "127.0.0.1";
@@ -71,6 +72,17 @@ function recoverInterruptedTasks() {
       job.error = "Dashboard restarted while this task was running; inspect its effects before retrying.";
       job.updatedAt = new Date().toISOString();
       state.audit.push({ id: crypto.randomUUID(), action: "TASK_INTERRUPTED_RECOVERY_REQUIRED", jobId: job.id, taskId: job.taskId, at: job.updatedAt, actor: "system-recovery" });
+      recovered++;
+    }
+  }
+  for (const attempt of state.facebookAttempts ?? []) {
+    if (["SUBMITTING", "REMOTE_SCHEDULED_UNVERIFIED"].includes(attempt.status)) {
+      const previous = attempt.status;
+      attempt.status = "NEEDS_RECONCILIATION";
+      attempt.retryAllowed = false;
+      attempt.updatedAt = new Date().toISOString();
+      attempt.error = "Dashboard restarted during a Meta publish operation; reconcile the remote post before any retry.";
+      state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_PUBLISH_RECOVERY_REQUIRED", attemptId: attempt.id, previousStatus: previous, status: attempt.status, remotePostId: attempt.remotePostId ?? null, at: attempt.updatedAt, actor: "system-recovery" });
       recovered++;
     }
   }
