@@ -233,7 +233,7 @@ export async function evaluateFinalFacebookPayload(payload, {
       try {
         const response = await fetchImpl(link, { method: "GET", redirect: "manual", signal: AbortSignal.timeout(sourceTimeoutMs), headers: { accept: "text/html,application/xhtml+xml,*/*;q=0.5" } });
         finalUrl = response.url || link;
-        reachable = response.ok && urlIsSafe(finalUrl) && new URL(finalUrl).hostname === parsed.hostname;
+        reachable = response.ok && urlIsSafe(finalUrl) && new URL(finalUrl).href === parsed.href;
       } catch { reachable = false; }
     }
     const passed = allowed && reachable;
