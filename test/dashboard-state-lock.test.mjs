@@ -62,7 +62,9 @@ test("dashboard never steals an old-looking lock owned by a live process", async
       productUrl: "https://selar.com/0u19v8u99l"
     })
   });
-  assert.equal(response.status, 500, "a competing writer must fail closed when the live owner holds the lock");
+  assert.equal(response.status, 400, "the busy-state error is returned as a client-safe request error");
+  const responseBody = await response.json();
+  assert.match(responseBody.error, /State is busy in another process/i, JSON.stringify(responseBody));
   assert.equal(fs.existsSync(lockDir), true, "the lock owned by a live process must not be removed because it looks old");
   assert.equal(fs.existsSync(path.join(lockDir, "owner.json")), true);
 });
