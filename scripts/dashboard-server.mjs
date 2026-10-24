@@ -386,6 +386,9 @@ const server = http.createServer(async (req, res) => {
           recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root
         });
         if (evaluation.blockers.some(item => /duplicate content fingerprint|near-duplicate/i.test(item))) return json(res, 409, { error: "Facebook draft duplicates existing content; create a meaningfully different concept", evaluation });
+        const dateReserved = state.facebookDrafts.some(item => item.scheduledDate === draft.scheduledDate && !["REJECTED", "CANCELLED"].includes(item.status))
+          || state.facebookPosts.some(item => item.scheduledDate === draft.scheduledDate || item.publishedAt?.slice(0, 10) === draft.scheduledDate);
+        if (dateReserved) return json(res, 409, { error: "A Facebook post is already drafted, scheduled, or recorded for this local calendar date; one-post-per-day collision prevented", publishingEnabled: false });
         draft.evaluation = evaluation;
         state.facebookDrafts.push(draft);
         state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_DRAFT_CREATED", itemId: draft.id, destination: "nature_frontiers_facebook", contentFingerprint: draft.contentFingerprint, complianceVersion: evaluation.complianceVersion, blockers: evaluation.blockers, at: new Date().toISOString(), actor: operatorId, publishingEnabled: false });
