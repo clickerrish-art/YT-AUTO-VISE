@@ -10,22 +10,47 @@ const repository = process.env.GITHUB_REPOSITORY;
 const token = process.env.GITHUB_TOKEN;
 const apiBase = (process.env.GITHUB_API_URL ?? "https://api.github.com").replace(/\/$/, "");
 const currentRunId = process.env.GITHUB_RUN_ID ?? "";
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-function assertConfiguration() {
-  if (!outputPath || !repository || !token) {
+function assertConfiguration(config) {
+  if (!config.outputPath || !config.repository || !config.token) {
     throw new Error("GITHUB_REPOSITORY, GITHUB_TOKEN and FACEBOOK_DAILY_DRAFT_HISTORY_FILE are required");
   }
-  if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repository)) throw new Error("Invalid GitHub repository identifier");
+  if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(config.repository)) throw new Error("Invalid GitHub repository identifier");
+  const api = new URL(config.apiBase);
+  if (api.protocol !== "https:" || api.username || api.password) throw new Error("GitHub API base must be an HTTPS URL without embedded credentials");
 }
 
-async function apiJson(url) {
-  const response = await fetch(url, {
-    headers: { authorization: "Bearer " + token, accept: "application/vnd.github+json", "x-github-api-version": "2022-11-28" },
+async function apiJson(url, fetchImpl, authToken) {
+  const response = await fetchImpl(url, {
+    headers: { authorization: "Bearer " + authToken, accept: "application/vnd.github+json", "x-github-api-version": "2022-11-28" },
     signal: AbortSignal.timeout(15000)
   });
   if (!response.ok) throw new Error("GitHub artifact history API failed with HTTP " + response.status);
   return response.json();
+}
+
+async function boundedResponseBuffer(response, maxBytes) {
+  const declaredLength = Number(response.headers.get("content-length"));
+  if (Number.isFinite(declaredLength) && declaredLength > maxBytes) throw new Error("Historical artifact archive exceeds the configured size limit");
+  if (!response.body) return Buffer.alloc(0);
+  const reader = response.body.getReader();
+  const chunks = [];
+  let total = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel();
+        throw new Error("Historical artifact archive exceeds the configured size limit");
+      }
+      chunks.push(Buffer.from(value));
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  return Buffer.concat(chunks, total);
 }
 
 export function validateFacebookHistoryPackage(item, filenameDate) {
@@ -38,14 +63,25 @@ export function validateFacebookHistoryPackage(item, filenameDate) {
   return item;
 }
 
-export async function restoreFacebookDraftHistory({ now = new Date(), fetchImpl = fetch, tempDir } = {}) {
-  assertConfiguration();
+export async function restoreFacebookDraftHistory({
+  now = new Date(), fetchImpl = fetch, tempDir,
+  outputPath: configuredOutputPath = outputPath,
+  repository: configuredRepository = repository,
+  token: configuredToken = token,
+  apiBase: configuredApiBase = apiBase,
+  currentRunId: configuredCurrentRunId = currentRunId
+} = {}) {
+  const config = {
+    outputPath: configuredOutputPath, repository: configuredRepository,
+    token: configuredToken, apiBase: configuredApiBase
+  };
+  assertConfiguration(config);
   const tempRoot = tempDir ?? fs.mkdtempSync(path.join(os.tmpdir(), "facebook-history-"));
   fs.mkdirSync(tempRoot, { recursive: true, mode: 0o700 });
   const cutoff = now.getTime() - 14 * 24 * 60 * 60 * 1000;
   const artifacts = [];
   for (let page = 1; page <= 5; page++) {
-    const data = await apiJson(apiBase + "/repos/" + repository + "/actions/artifacts?per_page=100&page=" + page);
+    const data = await apiJson(configuredApiBase + "/repos/" + configuredRepository + "/actions/artifacts?per_page=100&page=" + page, fetchImpl, configuredToken);
     if (!Array.isArray(data.artifacts)) throw new Error("GitHub artifact listing has an invalid schema");
     artifacts.push(...data.artifacts);
     if (data.artifacts.length < 100) break;
@@ -53,38 +89,37 @@ export async function restoreFacebookDraftHistory({ now = new Date(), fetchImpl 
   const candidates = artifacts.filter(item =>
     item && typeof item.name === "string" && item.name.startsWith(artifactPrefix) &&
     item.expired === false && Number.isFinite(Date.parse(item.created_at)) && Date.parse(item.created_at) >= cutoff &&
-    String(item.workflow_run?.id ?? "") !== currentRunId
+    String(item.workflow_run?.id ?? "") !== configuredCurrentRunId
   );
   const historyByDate = new Map();
   for (const artifact of candidates) {
-    const archiveUrl = apiBase + "/repos/" + repository + "/actions/artifacts/" + encodeURIComponent(String(artifact.id)) + "/zip";
+    if (!Number.isSafeInteger(Number(artifact.id)) || Number(artifact.id) <= 0) throw new Error("Historical artifact has an invalid identifier");
+    const archiveUrl = configuredApiBase + "/repos/" + configuredRepository + "/actions/artifacts/" + encodeURIComponent(String(artifact.id)) + "/zip";
     const response = await fetchImpl(archiveUrl, {
-      headers: { authorization: "Bearer " + token, accept: "application/vnd.github+json" },
+      headers: { authorization: "Bearer " + configuredToken, accept: "application/vnd.github+json" },
       signal: AbortSignal.timeout(30000)
     });
     if (!response.ok) throw new Error("Could not download a retained Facebook draft artifact (HTTP " + response.status + ")");
     const archivePath = path.join(tempRoot, String(artifact.id) + ".zip");
-    fs.writeFileSync(archivePath, Buffer.from(await response.arrayBuffer()), { mode: 0o600, flag: "wx" });
-    const listing = execFileSync("unzip", ["-Z1", archivePath], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).split("\n").filter(Boolean);
-    if (!listing.length || listing.some(name => path.basename(name) !== name || !/^\d{4}-\d{2}-\d{2}\.json$/.test(name))) {
-      throw new Error("Historical artifact contains an unexpected archive path or filename");
+    const archiveBytes = await boundedResponseBuffer(response, 10 * 1024 * 1024);
+    if (!archiveBytes.length) throw new Error("Historical artifact archive is empty");
+    fs.writeFileSync(archivePath, archiveBytes, { mode: 0o600, flag: "wx" });
+    const listing = execFileSync("unzip", ["-Z1", archivePath], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"], maxBuffer: 64 * 1024 }).split("\n").filter(Boolean);
+    if (listing.length !== 1 || listing.some(name => path.basename(name) !== name || !/^\d{4}-\d{2}-\d{2}\.json$/.test(name))) {
+      throw new Error("Historical artifact contains an unexpected archive path, filename or file count");
     }
-    const extractDir = path.join(tempRoot, String(artifact.id));
-    fs.mkdirSync(extractDir, { mode: 0o700 });
-    execFileSync("unzip", ["-qq", archivePath, "-d", extractDir], { stdio: "ignore" });
     for (const filename of listing) {
       const date = filename.slice(0, 10);
-      const packagePath = path.join(extractDir, filename);
-      const stat = fs.lstatSync(packagePath);
-      if (!stat.isFile() || stat.isSymbolicLink() || stat.size > 1024 * 1024) throw new Error("Historical artifact file is not a bounded regular file");
-      const item = validateFacebookHistoryPackage(JSON.parse(fs.readFileSync(packagePath, "utf8")), date);
+      const raw = execFileSync("unzip", ["-p", archivePath, filename], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"], maxBuffer: 1024 * 1024 + 1 });
+      if (Buffer.byteLength(raw, "utf8") > 1024 * 1024) throw new Error("Historical artifact file exceeds the configured size limit");
+      const item = validateFacebookHistoryPackage(JSON.parse(raw), date);
       const previous = historyByDate.get(date);
       if (previous && JSON.stringify(previous) !== JSON.stringify(item)) throw new Error("Conflicting historical artifacts exist for " + date + "; operator reconciliation is required");
       historyByDate.set(date, item);
     }
   }
   const history = [...historyByDate.values()].sort((a, b) => a.date.localeCompare(b.date));
-  const destination = path.resolve(outputPath);
+  const destination = path.resolve(configuredOutputPath);
   fs.mkdirSync(path.dirname(destination), { recursive: true, mode: 0o700 });
   fs.writeFileSync(destination, JSON.stringify(history, null, 2) + "\n", { mode: 0o600 });
   return { count: history.length, dates: history.map(item => item.date), outputPath: destination };
