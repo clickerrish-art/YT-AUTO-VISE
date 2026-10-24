@@ -114,11 +114,11 @@ test("operator dashboard loads the authoritative schedule and persists a draft t
         width: Math.round(rect.width),
         scrollWidth: element.scrollWidth,
         clientWidth: element.clientWidth,
-        insideTableWrap: Boolean(element.closest(".tablewrap")),
+        insideTableWrap: Boolean(element.closest(".tablewrap") && element !== element.closest(".tablewrap")),
         text: (element.innerText || "").slice(0, 90)
       };
-    }).filter(item => (item.right > viewport + 1 || item.left < -1) && !item.insideTableWrap)
-      .sort((a, b) => b.right - a.right).slice(0, 20);
+    }).filter(item => (item.right > viewport + 1 || item.left < -1 || item.scrollWidth > item.clientWidth + 1) && !item.insideTableWrap)
+      .sort((a, b) => Math.max(b.right - b.clientWidth, b.scrollWidth - b.clientWidth) - Math.max(a.right - a.clientWidth, a.scrollWidth - a.clientWidth)).slice(0, 20);
     return { viewport, documentWidth, offenders };
   });
   expect(diagnostics.documentWidth, JSON.stringify(diagnostics, null, 2)).toBeLessThanOrEqual(diagnostics.viewport + 1);
