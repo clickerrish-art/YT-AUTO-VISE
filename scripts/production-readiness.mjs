@@ -15,14 +15,16 @@ const manifestPath = "content/render-manifest.json";
 const metadataPath = "content/next-short.json";
 const videoPath = "media/next-short.mp4";
 const schedulePath = "config/weekly-content-plan.json";
+let minimumSpacingHours = NaN;
+let cycleFormats = [];
 if (!exists(schedulePath)) {
   blockers.push("Authoritative publication-cycle policy is missing.");
 } else {
   try {
     const schedule = JSON.parse(fs.readFileSync(path.resolve(root, schedulePath), "utf8"));
     if (schedule.timezone !== "Africa/Johannesburg") blockers.push("Schedule timezone must be Africa/Johannesburg.");
-    const minimumSpacingHours = schedule.minimumPublicationSpacingHours;
-    const cycleFormats = schedule.publicationCycle?.formats;
+    minimumSpacingHours = schedule.minimumPublicationSpacingHours;
+    cycleFormats = schedule.publicationCycle?.formats ?? [];
     if (!Number.isFinite(minimumSpacingHours) || minimumSpacingHours <= 0 || minimumSpacingHours > 8760) blockers.push("Schedule minimumPublicationSpacingHours must be a finite positive value no greater than 8760 hours.");
     if (schedule.spacingPolicy?.minimumHoursBetweenPosts !== minimumSpacingHours) blockers.push("Schedule spacingPolicy must match minimumPublicationSpacingHours.");
     if (JSON.stringify(schedule.publicationCycle?.formats) !== JSON.stringify(["long_form", "long_form", "short"])) blockers.push("Publication cycle must be long-form, long-form, Short.");
