@@ -73,6 +73,7 @@ export async function runAutonomousFacebookPublisher({
   }
   validateConfig(config);
   if (typeof stateDir !== "string" || !path.isAbsolute(stateDir)) throw new Error("FACEBOOK_STATE_DIR must be an absolute durable operator-controlled directory");
+  if (!/^\\d{5,30}$/.test(String(env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "")) || env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID !== config.destinationPageId) throw new Error("NATURE_FRONTIERS_FACEBOOK_PAGE_ID must exactly match the configured Nature Frontiers Page ID");
   if (!env.META_USER_ACCESS_TOKEN || !env.META_PAGE_ACCESS_TOKEN) throw new Error("Meta access tokens are missing from the secure runtime environment");
   if (!fs.existsSync(queuePath)) throw new Error("Autonomous Facebook queue is missing; no content will be invented");
   const historyPath = path.join(stateDir, "facebook-history.json");
