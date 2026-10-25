@@ -6,14 +6,20 @@
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
 
-const mediaPath = path.resolve(process.argv[2] ?? "");
 if (!process.argv[2]) {
   console.error("Usage: node scripts/validate-short-export.mjs <video.mp4>");
   process.exit(2);
 }
-if (!fs.existsSync(mediaPath) || !fs.statSync(mediaPath).isFile() || fs.statSync(mediaPath).size < 100_000) {
-  console.error("BLOCKED: Short export is missing, not a regular file, or suspiciously small.");
+let mediaPath;
+try { mediaPath = resolveRegularFileNoSymlinks(process.argv[2], process.cwd(), "Short export"); }
+catch {
+  console.error("BLOCKED: Short export is missing, unsafe, or contains a symbolic link.");
+  process.exit(2);
+}
+if (fs.statSync(mediaPath).size < 100_000) {
+  console.error("BLOCKED: Short export is suspiciously small.");
   process.exit(2);
 }
 const probe = spawnSync("ffprobe", [
