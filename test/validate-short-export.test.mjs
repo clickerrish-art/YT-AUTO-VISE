@@ -50,6 +50,15 @@ test("blocks a wrong-duration or landscape export", t => {
   assert.match(result.stderr, /1080×1920 vertical/);
 });
 
+test("blocks a Short export with unsupported or missing frame rate", t => {
+  const probe = structuredClone(good);
+  probe.streams[0].avg_frame_rate = "0/0";
+  const f = fixture(t, probe);
+  const result = spawnSync(process.execPath, [validator, f.media], { encoding: "utf8", env: f.env });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /frame rate must be between 23.9 and 60 fps/i);
+});
+
 test("blocks an export whose full-file decode fails", t => {
   const f = fixture(t, good, true);
   const result = spawnSync(process.execPath, [validator, f.media], { encoding: "utf8", env: f.env });
@@ -72,4 +81,16 @@ test("rejects a symlinked Short export before invoking media tools", t => {
   const result = spawnSync(process.execPath, [validator, link], { encoding: "utf8", env: f.env });
   assert.equal(result.status, 2);
   assert.match(result.stderr, /contains a symbolic link/i);
+});
+
+test("dashboard job validation runs the strict format-specific export gate before marking validation passed", () => {
+  const dashboard = fs.readFileSync(path.resolve("scripts/dashboard-server.mjs"), "utf8");
+  const start = dashboard.indexOf('url.pathname === "/api/jobs/validate"');
+  const end = dashboard.indexOf('url.pathname === "/api/jobs/rights/verify"', start);
+  assert.ok(start >= 0 && end > start, "validation route must be present");
+  const route = dashboard.slice(start, end);
+  assert.match(route, /scripts\/validate-short-export\.mjs/);
+  assert.match(route, /scripts\/validate-long-form-export\.mjs/);
+  assert.match(route, /exportValidation\.status !== 0/);
+  assert.ok(route.indexOf("exportValidation.status !== 0") < route.indexOf("validationResults = { passed: true"));
 });
