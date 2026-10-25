@@ -45,6 +45,11 @@ if (!video) errors.push("video stream is missing");
 else {
   if (video.width !== 1080 || video.height !== 1920) errors.push("video must be 1080×1920 vertical; found " + video.width + "×" + video.height);
   if (video.codec_name !== "h264") errors.push("video codec must be H.264; found " + video.codec_name);
+  const rateParts = String(video.avg_frame_rate ?? "").split("/").map(Number);
+  const fps = rateParts.length === 2 && rateParts[1] > 0 ? rateParts[0] / rateParts[1] : NaN;
+  if (!Number.isFinite(fps) || fps < 23.9 || fps > 60) {
+    errors.push("video frame rate must be between 23.9 and 60 fps; found " + (Number.isFinite(fps) ? fps.toFixed(3) : "unknown"));
+  }
 }
 if (!audio) errors.push("audio/narration stream is missing");
 else if (audio.codec_name !== "aac") errors.push("audio codec must be AAC; found " + audio.codec_name);
