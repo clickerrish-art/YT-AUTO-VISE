@@ -372,3 +372,63 @@ test("Facebook Page verification control retains actionable blocked feedback aft
   await expect(page.locator("#facebookautonomousstatus")).toBeVisible();
   await expect(page.locator("#facebookstatus")).toBeVisible();
 });
+
+
+test("production controls disable safely when real media prerequisites are missing", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  let response = await request.get("/api/state", { headers });
+  expect(response.status()).toBe(200);
+  let state = await response.json();
+  const slot = state.schedule.schedule[0];
+  const scheduledDate = candidateDateForSlot(state, slot);
+  const draftId = "production-gates-" + Date.now().toString(36);
+  await page.locator("#id").fill(draftId);
+  await page.locator("#title").fill("Production gate browser test");
+  await page.locator("#topic").fill("Verify real media is required before approval");
+  await page.locator("#day").selectOption(slot.day);
+  await page.locator("#scheduledDate").fill(scheduledDate);
+  await page.getByRole("button", { name: "Save draft" }).click();
+  await expect(page.locator("#message")).toContainText("Draft saved and production job", { timeout: 10_000 });
+
+  response = await request.get("/api/state", { headers });
+  state = await response.json();
+  const queued = state.jobs.filter(job => job.kind === "CONTENT_PRODUCTION" && job.state === "QUEUED");
+  expect(queued.length).toBeGreaterThan(0);
+
+  for (const job of queued) {
+    await page.locator("#producejob").selectOption(job.id);
+    await page.locator("#produceform button[type=submit]").click();
+    await expect(page.locator("#produceresult")).toContainText(/Render result: BLOCKED|Render blocked or failed:/, { timeout: 10_000 });
+  }
+
+  response = await request.get("/api/state", { headers });
+  state = await response.json();
+  for (const job of state.jobs.filter(item => queued.some(previous => previous.id === item.id))) {
+    expect(["BLOCKED", "FAILED"]).toContain(job.state);
+    expect(job.outputArtifacts ?? []).toHaveLength(0);
+  }
+  expect(state.publishingEnabled).toBe(false);
+  expect(state.uploads).toHaveLength(0);
+
+  await expect(page.locator("#produceform button[type=submit]")).toBeDisabled();
+  await expect(page.locator("#validationform button[type=submit]")).toBeDisabled();
+  await expect(page.locator("#validationresult")).toContainText("Action unavailable:");
+  await expect(page.locator("#rightsform button[type=submit]")).toBeDisabled();
+  await expect(page.locator("#rightsresult")).toContainText("Action unavailable:");
+  await expect(page.locator("#reviewform button[type=submit]")).toBeDisabled();
+  await expect(page.locator("#reviewresult")).toContainText("Action unavailable:");
+  await expect(page.locator("#reconcileform button[type=submit]")).toBeDisabled();
+  await expect(page.locator("#reconcileresult")).toContainText("Action unavailable:");
+
+  await page.locator("#task").selectOption("validate-schedule");
+  await page.locator("#runTask").click();
+  await expect(page.locator("#taskresult")).toContainText("SUCCEEDED", { timeout: 20_000 });
+  await page.locator("#refresh").click();
+  await expect(page.locator("#produceform button[type=submit]")).toBeDisabled();
+  await expect(page.locator("#reviewresult")).toContainText("Action unavailable:");
+});
