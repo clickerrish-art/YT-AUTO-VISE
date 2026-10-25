@@ -22,8 +22,8 @@ test("package manifest and lockfile root metadata agree", () => {
 
 
 test("private upload workflow installs from the lockfile and uses the built-in Actions token for ledger restore", () => {
-  assert.match(privateUploadWorkflow, /run: npm ci --ignore-scripts\\b/);
-  assert.doesNotMatch(privateUploadWorkflow, /run: npm install\\s/);
-  assert.match(privateUploadWorkflow, /github-token: \\$\\{\\{ github\\.token \\}\\}/);
-  assert.doesNotMatch(privateUploadWorkflow, /github-token: \\$\\{\\{ secrets\\.GITHUB_TOKEN \\}\\}/);
+  assert.match(privateUploadWorkflow, /run: npm ci --ignore-scripts\b/);
+  assert.doesNotMatch(privateUploadWorkflow, /run: npm install\s/);
+  assert.match(privateUploadWorkflow, /github-token: \$\{\{ github\.token \}\}/);
+  assert.doesNotMatch(privateUploadWorkflow, /github-token: \$\{\{ secrets\.GITHUB_TOKEN \}\}/);
 });
