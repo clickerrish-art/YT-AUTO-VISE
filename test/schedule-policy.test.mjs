@@ -184,3 +184,23 @@ test("history timestamps with invalid calendar dates fail closed instead of norm
   assert.equal(result.valid, false);
   assert.ok(result.errors.some(error => error.includes("history item remote-1 is missing a verified actual ISO timestamp with timezone")));
 });
+
+
+test("rolling cycle rejects draft, scheduled, missing, and unknown statuses in claimed remote history", () => {
+  for (const status of ["draft", "scheduled", "", "deleted", "mystery"]) {
+    const result = evaluateNextPublication({
+      history: [{
+        id: "remote-invalid-status",
+        status,
+        actualPublishedAt: "2026-10-20T15:00:00.000Z",
+        format: "long_form"
+      }],
+      historyVerified: true,
+      proposedAt: "2026-10-23T15:00:00.000Z",
+      jobId: "next",
+      format: "long_form"
+    });
+    assert.equal(result.valid, false, \`must reject remote history status \${JSON.stringify(status)}\`);
+    assert.ok(result.errors.some(error => error.includes("unsupported remote publication status")));
+  }
+});
