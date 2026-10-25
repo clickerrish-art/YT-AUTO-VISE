@@ -23,10 +23,10 @@ test("dashboard describes the real read-only Meta adapter without implying live 
 
 
 test("every dashboard form and ID-addressable action control is wired to a handler", () => {
-  const formIds = [...html.matchAll(/<form\\b[^>]*\\bid="([^"]+)"/g)].map(match => match[1]);
-  const submitBindings = [...html.matchAll(/\\$\\(["']([^"']+)["']\\)\\.onsubmit\\s*=/g)].map(match => match[1]);
-  const buttonIds = [...html.matchAll(/<button\\b[^>]*\\bid="([^"]+)"/g)].map(match => match[1]);
-  const clickBindings = [...html.matchAll(/\\$\\(["']([^"']+)["']\\)\\.onclick\\s*=/g)].map(match => match[1]);
+  const formIds = [...html.matchAll(/<form\b[^>]*\bid="([^"]+)"/g)].map(match => match[1]);
+  const submitBindings = [...html.matchAll(/\$\(["']([^"']+)["']\)\.onsubmit\s*=/g)].map(match => match[1]);
+  const buttonIds = [...html.matchAll(/<button\b[^>]*\bid="([^"]+)"/g)].map(match => match[1]);
+  const clickBindings = [...html.matchAll(/\$\(["']([^"']+)["']\)\.onclick\s*=/g)].map(match => match[1]);
 
   assert.ok(formIds.length > 0, "dashboard should expose real forms");
   assert.deepEqual(formIds.filter(id => !submitBindings.includes(id)), [],
