@@ -121,3 +121,60 @@ test("long-form workflow embedded Python validation remains syntactically valid"
   });
   assert.equal(syntax.status, 0, `embedded workflow Python must parse: ${syntax.stderr}`);
 });
+
+test("blocks a symlinked render input before invoking media tools", () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-long-symlink-input-"));
+  try {
+    const content = path.join(tmp, "content");
+    fs.mkdirSync(content);
+    const target = path.join(content, "actual-footage.mp4");
+    const link = path.join(content, "footage.mp4");
+    fs.writeFileSync(target, "authorized fixture");
+    fs.symlinkSync(target, link);
+    fs.writeFileSync(path.join(content, "voice.wav"), "not real audio");
+    fs.writeFileSync(path.join(content, "captions.srt"), "1\\n00:00:00,000 --> 00:00:01,000\\nFixture\\n");
+    const manifestPath = path.join(content, "manifest.json");
+    fs.writeFileSync(manifestPath, JSON.stringify({
+      channel: "SonicVhibez", targetAspectRatio: "16:9",
+      footagePath: "footage.mp4", narrationPath: "voice.wav", captionsPath: "captions.srt",
+      footageLicenseEvidence: "verified permission record 12345",
+      narrationLicenseEvidence: "verified narration record 12345",
+      rightsConfirmed: true, complianceReviewed: true
+    }));
+    const output = path.join(tmp, "out.mp4");
+    const result = run([manifestPath, output]);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /footagePath is missing, unsafe, or contains a symbolic link/i);
+    assert.equal(fs.existsSync(output), false);
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+});
+
+test("blocks a symlinked render destination before media processing", () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-long-symlink-output-"));
+  try {
+    const content = path.join(tmp, "content");
+    fs.mkdirSync(content);
+    for (const name of ["footage.mp4", "voice.wav"]) fs.writeFileSync(path.join(content, name), "fixture");
+    fs.writeFileSync(path.join(content, "captions.srt"), "1\\n00:00:00,000 --> 00:00:01,000\\nFixture\\n");
+    const manifestPath = path.join(content, "manifest.json");
+    fs.writeFileSync(manifestPath, JSON.stringify({
+      channel: "SonicVhibez", targetAspectRatio: "16:9",
+      footagePath: "footage.mp4", narrationPath: "voice.wav", captionsPath: "captions.srt",
+      footageLicenseEvidence: "verified permission record 12345",
+      narrationLicenseEvidence: "verified narration record 12345",
+      rightsConfirmed: true, complianceReviewed: true
+    }));
+    const protectedFile = path.join(tmp, "protected.txt");
+    const outputLink = path.join(tmp, "out.mp4");
+    fs.writeFileSync(protectedFile, "do not overwrite");
+    fs.symlinkSync(protectedFile, outputLink);
+    const result = run([manifestPath, outputLink]);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /output path is unsafe or contains a symbolic link/i);
+    assert.equal(fs.readFileSync(protectedFile, "utf8"), "do not overwrite");
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+});
