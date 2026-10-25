@@ -296,10 +296,16 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/630f1fbe05efa04ac4b5a470c506f872e75d1f1f",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215336608",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215336721",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215336580"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215336580",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/cef7664ad41bc11e6473e6d7a5f1682b7efd69e1",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/f3b31d57ea1363fafe945c184cb300908e6c0f2f",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/58fceca25f9fb70f52a12505e9d14f007e29d516",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215742648",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215742576",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215742589"
       ],
-      "nextAction": "Retain the fail-closed approval validation. A structurally valid decision must still come from an actual owner decision; do not create or infer owner approval. Re-run CI for any code changes.",
-      "assessmentCommitSha": "564d8b95c9457e13ceb24ff32a1f5faa6de40273",
+      "nextAction": "Retain the fail-closed guard. A structurally valid decision must still come from an actual owner decision; do not create or infer owner approval. Exact-candidate browser E2E and subsequent final-head checks remain independently required.",
+      "assessmentCommitSha": "58fceca25f9fb70f52a12505e9d14f007e29d516",
       "acceptanceCriterion": "Both schedule validation and production readiness reject absent, unsupported, unreferenced, timezone-naive or mathematically infeasible owner cadence decisions; tests exercise each rejection and a valid rolling-cycle decision."
     }
   ]
