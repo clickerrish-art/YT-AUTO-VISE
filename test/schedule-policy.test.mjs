@@ -200,7 +200,7 @@ test("rolling cycle rejects draft, scheduled, missing, and unknown statuses in c
       jobId: "next",
       format: "long_form"
     });
-    assert.equal(result.valid, false, \`must reject remote history status \${JSON.stringify(status)}\`);
+    assert.equal(result.valid, false, "must reject remote history status " + JSON.stringify(status));
     assert.ok(result.errors.some(error => error.includes("unsupported remote publication status")));
   }
 });
