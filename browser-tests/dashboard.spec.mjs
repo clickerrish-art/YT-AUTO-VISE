@@ -163,15 +163,22 @@ test("campaign controls fail closed on unapproved destinations and retain Safari
   expect(safari.destinationUrl).toBe("");
   expect(safari.pendingDestinationUrl).toBe("https://example.org/unapproved-safari-destination");
 
-  await page.locator("#campaignaction").selectOption("activate");
-  await page.locator("#campaignapproval").uncheck();
-  await page.getByRole("button", { name: "Apply campaign action" }).click();
-  await expect(page.locator("#campaignresult")).toContainText("Explicit owner confirmation is required");
+  const activateOption = page.locator('#campaignaction option[value="activate"]');
+  await expect(activateOption).toBeDisabled();
+  await expect(activateOption).toContainText("disabled by policy");
+  await expect(page.locator("#campaignresult")).toContainText("Safari campaign activation is disabled by project policy");
+  const bypassAttempt = await request.post("/api/campaigns/manage", {
+    headers,
+    data: { campaignId: "safari-affiliate-inactive", action: "activate", confirmOwnerApproval: true }
+  });
+  expect(bypassAttempt.status()).toBe(400);
+  expect((await bypassAttempt.json()).error).toMatch(/Safari affiliate campaigns are disabled.*remain INACTIVE/i);
   stateResponse = await request.get("/api/state", { headers });
   state = await stateResponse.json();
   safari = state.campaigns.find(campaign => campaign.id === "safari-affiliate-inactive");
   expect(safari.status).toBe("INACTIVE");
   expect(safari.ownerApproved).toBe(false);
+  expect(safari.destinationUrl).toBe("");
 
   await page.locator("#campaignid").selectOption("selar-wildlife-vault");
   await page.locator("#campaignaction").selectOption("preview");
