@@ -1,27 +1,28 @@
-> **Current release status — 2026-10-25:** See the [authoritative current release evidence](docs/CURRENT_RELEASE_EVIDENCE_2026-10-25.md). Exact tested code candidate: `aebb25d5ce795090cb6383ba8e533ccd23a147ee`. Automated checks pass (238 Node tests, 8 Python tests, 5 Chromium E2E tests, clean installs and zero npm-audit vulnerabilities), but **code acceptance remains BLOCKED** by incomplete full control coverage and branch-history review; **production acceptance remains BLOCKED** by genuine media/rights, account, authorization, integration, recovery and deployment gates. This status supersedes older checkpoint wording where it conflicts.
+> **Current release status — 2026-10-25:** See the [authoritative current release evidence](docs/CURRENT_RELEASE_EVIDENCE_2026-10-25.md). Exact tested code candidate: `957d1c4145cb036e647c800ee1a781c2555d6263`. Automated checks pass (239 Node tests, 8 Python tests, 5 Chromium E2E tests, clean installs and zero npm-audit vulnerabilities), but **code acceptance remains BLOCKED** by incomplete full control coverage and branch-history review; **production acceptance remains BLOCKED** by genuine media/rights, account, authorization, integration, recovery and deployment gates. This status supersedes older checkpoint wording where it conflicts.
 
 # Go-live blockers
 
 ## Authoritative current acceptance status — 25 October 2026
 
-**Verdict: CODE ACCEPTANCE BLOCKED — PRODUCTION ACCEPTANCE BLOCKED.** The exact candidate passes the available automated checks, including five Chromium journeys and new path-safety regressions. Full dashboard-control coverage, complete divergent-history review, retained operational drills and real-account acceptance remain incomplete.
+**Verdict: CODE ACCEPTANCE BLOCKED — PRODUCTION ACCEPTANCE BLOCKED.** The exact candidate passes the available automated checks, including five Chromium journeys, a form/button handler-contract regression and path-safety regressions. Full dashboard-control coverage, complete divergent-history review, retained operational drills and real-account acceptance remain incomplete.
 
 ### Live Git state
 - Implementation branch: `codex/marketing-machine-audit-fixes`.
-- Exact application-code/test candidate: `aebb25d5ce795090cb6383ba8e533ccd23a147ee`.
+- Exact application-code/test candidate: `957d1c4145cb036e647c800ee1a781c2555d6263`.
 - `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
-- Comparison at this candidate: **1013 commits ahead, 2 behind, 108 changed files**. GitHub's bounded compare output is not a full review of all branch-only commits. The live PR HEAD after documentation updates is a documentation-only descendant; PR metadata gives its exact SHA.
+- Comparison at this code/test candidate: **1016 commits ahead, 2 behind, 108 changed files**; this evidence refresh is a documentation-only descendant. GitHub's bounded compare output is not a full review of all branch-only commits. The live PR HEAD after documentation updates is a documentation-only descendant; PR metadata gives its exact SHA.
 - PR #1 remains [OPEN, DRAFT, UNMERGED](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1). No merge, history rewrite or direct `main` edit was performed.
 - The two base-only commits are understood: `71578dafc24e5d48173dce3f4e392e18e42aa40e` added `test/restore-facebook-draft-history.test.mjs`; `fa00d28e7f58911482686e4ad69fac9f4701a2e6` reverted that file on `main`. The implementation branch retains equivalent coverage; its version differs only in an unused fetch-options parameter and trailing whitespace. This explains the two base-only commits, not the 1013 branch-only commits, whose complete review remains outstanding.
 
-### Exact-candidate CI
-- [Automation/security — run 40173024807](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173024807): **PASS** — 238 Node tests, 0 failed, 0 skipped; 8 Python tests; clean locked and normal `npm ci`; `googleapis` import; syntax/compilation checks; 16 queue items; `npm audit`: 0 vulnerabilities.
-- [Browser E2E — run 40173021071](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173021071): **PASS** — 5 Chromium journeys, including queue search/filter and Facebook draft idea/save/persistence. Not every visible control is covered.
-- [Content quality — run 40173024722](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173024722): **PASS**.
-- [Metadata — run 40173024740](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173024740): **PASS**.
-- [Lockfile validation — run 40173021070](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173021070): **PASS**.
-- [Readiness — run 40173024741](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173024741): **BLOCKED as intended**, 12 mandatory blockers; retained artifact ID `12590599094`, ZIP SHA-256 `eddfc91ed12b4734c0cadab6273b89d0f53998da6fe2a7d9c49e82c9be64c5d4`.
-- [Facebook draft — run 40173024822](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173024822): **SKIPPED** on PR event; not default-branch evidence.
+### Current exact-candidate CI — `957d1c4145cb036e647c800ee1a781c2555d6263`
+
+- [Automation/security — run 40173401063](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173401063): **PASS** — 239 Node tests, 0 failures, 0 skipped; 8 Python tests; clean locked and normal `npm ci`; Google API import; syntax/compilation checks; 16 queue items; `npm audit`: 0 vulnerabilities.
+- [Dashboard browser E2E — run 40173400988](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173400988): **PASS** — 5/5 Chromium tests, including form/button handler wiring, queue/draft persistence, campaign safeguards, server-restart persistence, Facebook draft workflow, and the public-YouTube safety lock.
+- [Content quality — run 40173400992](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173400992): **PASS**.
+- [Metadata validation — run 40173401012](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173401012): **PASS**.
+- [Lockfile validation — run 40173397937](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173397937): **PASS**.
+- [Production readiness — run 40173400999](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173400999): **BLOCKED as required** — mandatory owner-controlled production gates remain open; this is not a readiness pass.
+- [Nature Frontiers Facebook draft — run 40173400995](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173400995): **SKIPPED** on the PR event; not default-branch acceptance evidence.
 
 ### Latest code defects fixed
 - Approval artifact transaction rejects symlinked/non-directory ancestors before nested approval writes.

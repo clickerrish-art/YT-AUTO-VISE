@@ -2,37 +2,37 @@
 
 ## Authoritative status
 
-**Decision: CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED.** The latest exact code/test candidate passes available automated checks and five Chromium operator journeys. This is not full code acceptance: not every dashboard control is tested, and the 1013 branch-only commits have not been reviewed patch by patch. Production acceptance remains blocked by real media/rights, owner review, live account identity/history, one-shot upload authorization, Facebook default-branch draft evidence, and recovery/deployment gates.
+**Decision: CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED.** The latest exact code/test candidate passes 239 Node tests, 8 Python tests and five Chromium operator journeys. The UI contract test guards form/button handler wiring; not every dashboard control is covered. This is not full code acceptance: not every dashboard control is tested, and the 1013 branch-only commits have not been reviewed patch by patch. Production acceptance remains blocked by real media/rights, owner review, live account identity/history, one-shot upload authorization, Facebook default-branch draft evidence, and recovery/deployment gates.
 
 - Repository: https://github.com/clickerrish-art/YT-AUTO-VISE
 - Implementation branch: `codex/marketing-machine-audit-fixes`
-- Exact application-code/test candidate: `aebb25d5ce795090cb6383ba8e533ccd23a147ee`
+- Exact application-code/test candidate: `957d1c4145cb036e647c800ee1a781c2555d6263`
 - Current documentation HEAD: the live PR metadata is authoritative; documentation synchronization is a descendant of the exact code/test candidate.
 - `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
-- Comparison at exact candidate: **1013 commits ahead, 2 behind, 108 changed files**. GitHub compare output is bounded and is not a full patch-by-patch review.
+- Comparison at exact code/test candidate `957d1c4145cb036e647c800ee1a781c2555d6263`: **1016 commits ahead, 2 behind, 108 changed files**; this evidence refresh is a documentation-only descendant. GitHub compare output is bounded and is not a full patch-by-patch review.
 - PR #1 remains open, draft and unmerged: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1
 - The two base-only commits are understood: `71578dafc24e5d48173dce3f4e392e18e42aa40e` added the Facebook history-restoration test; `fa00d28e7f58911482686e4ad69fac9f4701a2e6` reverted that file on `main`. The implementation branch retains equivalent tests. Branch-only history review remains incomplete.
 - No merge, rebase, reset, force-push, cherry-pick, history rewrite or direct `main` edit was performed.
 
 ## Exact-candidate automated evidence
 
-All results below refer to `aebb25d5ce795090cb6383ba8e533ccd23a147ee`.
+All results below refer to `957d1c4145cb036e647c800ee1a781c2555d6263`.
 
 | Check | Result | Evidence |
 |---|---|---|
-| Node.js regression suite | **238 passed, 0 failed, 0 skipped** | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173024807) |
-| Python safety tests | **8 passed** | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173024807) |
-| Locked and normal lifecycle-script `npm ci` | **Passed** | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173024807); [lockfile validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173021070) |
-| Google API import | **Passed** | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173024807) |
-| `npm audit` | **0 vulnerabilities** in 49 audited packages | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173024807) |
-| Syntax/compilation and queue/campaign checks | **Passed**; 16 queued topics checked | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173024807) |
-| Browser E2E | **5 passed** | [Dashboard browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173021071) |
-| Content quality | **Passed** | [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173024722) |
-| Metadata validation | **Passed** | [Metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173024740) |
-| Lockfile validation | **Passed** | [Lockfile validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173021070) |
-| Production readiness | **Blocked as required: 12 blockers** | [Readiness diagnostic](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173024741); artifact ID `12590599094`, ZIP SHA-256 `eddfc91ed12b4734c0cadab6273b89d0f53998da6fe2a7d9c49e82c9be64c5d4` |
-| Nature Frontiers Facebook draft | **Skipped** on PR event | [Skipped workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173024822); not default-branch acceptance evidence |
+| Node.js regression suite | **239 passed, 0 failed, 0 skipped** | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173401063) |
+| Python safety tests | **8 passed** | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173401063) |
+| Locked and normal lifecycle-script `npm ci` | **Passed** | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173401063); [lockfile validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173397937) |
+| Google API import | **Passed** | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173401063) |
+| `npm audit` | **0 vulnerabilities** in 49 audited packages | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173401063) |
+| Syntax/compilation and queue/campaign checks | **Passed**; 16 queued topics checked | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173401063) |
+| Browser E2E | **5 passed** | [Dashboard browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173400988) |
+| Content quality | **Passed** | [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173400992) |
+| Metadata validation | **Passed** | [Metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173401012) |
+| Lockfile validation | **Passed** | [Lockfile validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173397937) |
+| Production readiness | **Blocked as required: 12 blockers** | [Readiness diagnostic](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173400999); artifact ID `12590599094`, ZIP SHA-256 `eddfc91ed12b4734c0cadab6273b89d0f53998da6fe2a7d9c49e82c9be64c5d4` |
+| Nature Frontiers Facebook draft | **Skipped** on PR event | [Skipped workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173400995); not default-branch acceptance evidence |
 
 ## Code changes and regressions
 
@@ -42,6 +42,7 @@ All results below refer to `aebb25d5ce795090cb6383ba8e533ccd23a147ee`.
 4. Dashboard startup validates/creates state-directory components individually and rejects symlinked ancestors before state writes.
 5. Fixed a real dead dashboard control: the Facebook draft form defined its submit handler but never assigned it to the form. The form now binds to `createFacebookDraft`.
 6. Expanded browser acceptance for queue search/filter and the Facebook idea → draft save → persistence flow. The test verifies the destination remains `nature_frontiers_facebook` and publishing stays disabled.
+7. Added a dashboard UI contract regression requiring every form and ID-addressable button to be wired to a handler.
 
 Relevant implementation/test commits:
 - `f2e8466f272d8b517a1057a84d0fa73510755945` — approval artifact path hardening.
