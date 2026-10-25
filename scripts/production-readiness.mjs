@@ -32,8 +32,28 @@ if (!exists(schedulePath)) {
     if (schedule.publicationCycle?.minimumHoursBetweenConsecutivePublications !== minimumSpacingHours || schedule.publicationCycle?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0) || schedule.spacingPolicy?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0)) blockers.push("Publication cycle and spacingPolicy must use the configured minimum gap and its derived cycle duration.");
     if (schedule.publicationCycle?.publicationRequiresVerifiedHistory !== true) blockers.push("Publication cycle must require independently verified public/private/unlisted history and reconciliation of uncertain attempts.");
     const cadenceDecision = schedule.cadenceDecision;
-    if (!cadenceDecision || cadenceDecision.status !== "OWNER_APPROVED" || cadenceDecision.ownerApproved !== true) {
-      blockers.push("CADENCE DECISION REQUIRED: the requested 2 long-form + 1 Short per week conflicts with 72-hour minimum spacing; owner must explicitly approve a feasible cadence mode before publication.");
+    const supportedCadenceModes = ["ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET", "WEEKLY_TARGET_WITH_SHORTER_SPACING", "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"];
+    let cadenceDecisionValid = Boolean(cadenceDecision
+      && cadenceDecision.status === "OWNER_APPROVED"
+      && cadenceDecision.ownerApproved === true
+      && supportedCadenceModes.includes(cadenceDecision.approvedMode)
+      && typeof cadenceDecision.approvedAt === "string"
+      && Number.isFinite(Date.parse(cadenceDecision.approvedAt))
+      && /(Z|[+-]\\d{2}:\\d{2})$/.test(cadenceDecision.approvedAt)
+      && typeof cadenceDecision.approvalReference === "string"
+      && cadenceDecision.approvalReference.trim());
+    if (cadenceDecisionValid && cadenceDecision.approvedMode === "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET" && minimumSpacingHours < 72) cadenceDecisionValid = false;
+    if (cadenceDecisionValid && cadenceDecision.approvedMode === "WEEKLY_TARGET_WITH_SHORTER_SPACING" && minimumSpacingHours > 56) cadenceDecisionValid = false;
+    if (cadenceDecisionValid && cadenceDecision.approvedMode === "OTHER_OWNER_DEFINED_FEASIBLE_POLICY") {
+      const custom = cadenceDecision.ownerDefinedPolicy;
+      cadenceDecisionValid = Boolean(custom
+        && typeof custom.description === "string" && custom.description.trim()
+        && Number.isFinite(custom.publicationsPerCycle) && custom.publicationsPerCycle >= 1
+        && Number.isFinite(custom.cycleHours) && custom.cycleHours > 0
+        && custom.publicationsPerCycle * minimumSpacingHours <= custom.cycleHours);
+    }
+    if (!cadenceDecisionValid) {
+      blockers.push("CADENCE DECISION REQUIRED: a feasible owner-approved cadence mode, explicit timezone-aware approval timestamp and non-empty approval reference are required before publication.");
     }
     if (["targetCadence", "requestedTargetCadence", "cadenceDecisionRequired", "interimDraftCadence"].some(key => key in schedule)) blockers.push("Stale weekly cadence fields must be removed.");
     blockers.push("LIVE BLOCKER: complete SonicVhibez public, private and unlisted history plus all pending/uncertain upload attempts must be independently reconciled immediately before upload.");
