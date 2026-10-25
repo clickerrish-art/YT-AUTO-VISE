@@ -85,6 +85,8 @@ test("local schedule time conversion follows IANA timezone and daylight-saving r
   assert.equal(localDateTimeToIso("2026-03-07", "17:00", "America/New_York"), "2026-03-07T22:00:00.000Z");
   assert.equal(localDateTimeToIso("2026-03-09", "17:00", "America/New_York"), "2026-03-09T21:00:00.000Z");
   assert.throws(() => localDateTimeToIso("2026-03-08", "02:30", "America/New_York"), /does not exist/);
+  assert.throws(() => localDateTimeToIso("2026-11-01", "01:30", "America/New_York"), /is ambiguous/);
+  assert.equal(localDateTimeToIso("2026-11-01", "03:30", "America/New_York"), "2026-11-01T08:30:00.000Z");
 });
 
 

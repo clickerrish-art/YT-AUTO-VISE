@@ -164,6 +164,23 @@ export function localDateTimeToIso(date, time = "17:00", timeZone = DEFAULT_SCHE
       || actual.hour !== time.slice(0, 2) || actual.minute !== time.slice(3, 5)) {
     throw new Error(`local time ${date} ${time} does not exist in ${timeZone}`);
   }
+  // A wall-clock time can occur twice when clocks move backward. Choosing one
+  // occurrence implicitly can shift a publication by an hour; reject ambiguity.
+  const matchesRequestedWallClock = instant => {
+    const parts = formatter.formatToParts(new Date(instant)).reduce((result, part) => {
+      if (part.type !== "literal") result[part.type] = part.value;
+      return result;
+    }, {});
+    return parts.year === date.slice(0, 4) && parts.month === date.slice(5, 7)
+      && parts.day === date.slice(8, 10) && parts.hour === time.slice(0, 2)
+      && parts.minute === time.slice(3, 5);
+  };
+  for (let deltaMinutes = 15; deltaMinutes <= 180; deltaMinutes += 15) {
+    const delta = deltaMinutes * 60_000;
+    if (matchesRequestedWallClock(guess - delta) || matchesRequestedWallClock(guess + delta)) {
+      throw new Error(`local time ${date} ${time} is ambiguous in ${timeZone} because of a clock transition`);
+    }
+  }
   return new Date(guess).toISOString();
 }
 
