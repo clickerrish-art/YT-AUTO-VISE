@@ -86,17 +86,27 @@ function assertNoSymlinkComponents(anchor, destination) {
   if (resolvedDestination !== resolvedAnchor && !resolvedDestination.startsWith(resolvedAnchor + path.sep)) {
     throw new Error("Restore destination escapes its trusted directory");
   }
-  // Inspect each existing component from the trusted anchor through the final
-  // destination. lstat (not stat) is required because stat follows symlinks.
-  const anchorStat = fs.existsSync(resolvedAnchor) ? fs.lstatSync(resolvedAnchor) : null;
-  if (anchorStat?.isSymbolicLink()) throw new Error("Restore refuses a symbolic-link destination directory");
-  let current = resolvedAnchor;
-  const relative = path.relative(resolvedAnchor, resolvedDestination);
-  for (const part of relative ? relative.split(path.sep) : []) {
-    current = path.join(current, part);
-    if (!fs.existsSync(current)) continue;
-    if (fs.lstatSync(current).isSymbolicLink()) {
+
+  // Inspect the entire path from the filesystem root, not just descendants of the
+  // configured anchor. Otherwise a symlinked rootDir/parent could redirect a path
+  // whose lexical destination still appears to be inside the anchor.
+  const parsed = path.parse(resolvedDestination);
+  let current = parsed.root;
+  const parts = path.relative(parsed.root, resolvedDestination).split(path.sep).filter(Boolean);
+  for (let index = 0; index < parts.length; index++) {
+    current = path.join(current, parts[index]);
+    let stat;
+    try {
+      stat = fs.lstatSync(current);
+    } catch (error) {
+      if (error?.code === "ENOENT") continue;
+      throw error;
+    }
+    if (stat.isSymbolicLink()) {
       throw new Error("Restore refuses symbolic links in destination paths");
+    }
+    if (index < parts.length - 1 && !stat.isDirectory()) {
+      throw new Error("Restore destination has a non-directory path component");
     }
   }
 }
