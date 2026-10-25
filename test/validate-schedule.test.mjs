@@ -21,6 +21,18 @@ function runWithPlanMutation(mutate){
   return spawnSync(process.execPath,[path.join(repoRoot,"scripts/validate-schedule.mjs")],{cwd:temp,encoding:"utf8"});
  }finally{fs.rmSync(temp,{recursive:true,force:true});}
 }
+test("validator surfaces the mathematically incompatible weekly target and requires an owner decision",()=>{
+ const result=spawnSync(process.execPath,["scripts/validate-schedule.mjs"],{cwd:repoRoot,encoding:"utf8"});
+ assert.equal(result.status,0,result.stdout+result.stderr);
+ assert.match(result.stdout,/BLOCKED — CADENCE DECISION/);
+ assert.match(result.stdout,/2 long-form \+ 1 Short per week conflicts with 72-hour spacing/);
+});
+test("validator rejects missing or falsely approved cadence decisions",()=>{
+ const missing=runWithPlanMutation(plan=>{delete plan.cadenceDecision;});
+ assert.notEqual(missing.status,0);assert.match(missing.stderr,/cadenceDecision must explicitly record owner decision status/);
+ const falseApproval=runWithPlanMutation(plan=>{plan.cadenceDecision.status="OWNER_APPROVED";plan.cadenceDecision.ownerApproved=false;});
+ assert.notEqual(falseApproval.status,0);assert.match(falseApproval.stderr,/OWNER_APPROVED status requires ownerApproved=true/);
+});
 test("validator rejects stale weekly-count fields",()=>{
  const result=runWithPlanMutation(plan=>{plan.targetCadence={longFormVideosPerWeek:2,shortsPerWeek:1,totalVideosPerWeek:3};});
  assert.notEqual(result.status,0);assert.match(result.stderr,/stale weekly-count cadence fields must be removed/);
