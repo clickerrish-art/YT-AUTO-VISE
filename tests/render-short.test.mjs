@@ -22,7 +22,8 @@ test("example render manifest defaults to a blocked state", () => {
 
 test("renderer uses manifest-resolved absolute caption path in FFmpeg filter", () => {
   const source = fs.readFileSync("scripts/render-short.mjs", "utf8");
-  assert.match(source, /const captions = path\.resolve\(path\.dirname\(manifestPath\), m\.captionsPath\)/);
+  assert.match(source, /resolvedInputs\\.captionsPath/);
+  assert.match(source, /resolveRegularFileNoSymlinks/);
   assert.match(source, /const escapedCaptions = captions/);
   assert.match(source, /subtitles='\" \+ escapedCaptions \+ \"'/);
 });
