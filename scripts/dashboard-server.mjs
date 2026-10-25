@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { metaCredentialFingerprint, fingerprintsMatch } from "./meta-credential-fingerprint.mjs";
+import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
 import { atomicWriteJson, atomicCreateJson } from "./atomic-json-file.mjs";
 import { redactOperationalText } from "./safe-output.mjs";
 import { fileURLToPath } from "node:url";
@@ -28,30 +29,6 @@ const stateFile = path.join(stateDir, "dashboard-state.json");
 const approvedProductUrl = "https://selar.com/0u19v8u99l";
 const htmlPath = path.join(root, "public", "dashboard.html");
 
-function ensureSafeDirectoryPath(directory) {
-  const target = path.resolve(directory);
-  const rootPath = path.parse(target).root;
-  let current = rootPath;
-  for (const component of path.relative(rootPath, target).split(path.sep).filter(Boolean)) {
-    current = path.join(current, component);
-    let stat;
-    try {
-      stat = fs.lstatSync(current);
-    } catch (error) {
-      if (error?.code !== "ENOENT") throw error;
-      try {
-        fs.mkdirSync(current, { mode: 0o700 });
-      } catch (mkdirError) {
-        if (mkdirError?.code !== "EEXIST") throw mkdirError;
-      }
-      stat = fs.lstatSync(current);
-    }
-    if (stat.isSymbolicLink()) throw new Error("Dashboard state path contains a symbolic link; refusing unsafe directory creation");
-    if (!stat.isDirectory()) throw new Error("Dashboard state path must contain only directories");
-  }
-}
-
-
 if (!token || token.length < 24) {
   console.error("BLOCKED: set DASHBOARD_OPERATOR_TOKEN to a random value of at least 24 characters. No server started.");
   process.exit(2);
@@ -64,7 +41,7 @@ if (!["127.0.0.1", "::1", "localhost"].includes(host)) {
   console.error("BLOCKED: dashboard binds to loopback only; use a secure authenticated reverse proxy before changing this.");
   process.exit(2);
 }
-ensureSafeDirectoryPath(stateDir);
+ensureSafeDirectoryPath(stateDir, "Dashboard state");
 const stateDirectoryStat = fs.lstatSync(stateDir);
 if (stateDirectoryStat.isSymbolicLink() || !stateDirectoryStat.isDirectory()) {
   throw new Error("Dashboard state directory must be a real directory, not a symlink or special file");
@@ -1158,7 +1135,7 @@ const server = http.createServer(async (req, res) => {
             visibility: "private"
           };
           const approvalDir = path.join(root, "run-logs", "upload-approvals");
-          fs.mkdirSync(approvalDir, { recursive: true, mode: 0o700 });
+          ensureSafeDirectoryPath(approvalDir, "Approval artifact");
           uploadApprovalPath = path.join(approvalDir, crypto.createHash("sha256").update(job.id).digest("hex").slice(0, 32) + ".json");
           // Stage the approval, persist the job/audit state first, then atomically
           // publish the approval file. A crash or failed state write must never leave
