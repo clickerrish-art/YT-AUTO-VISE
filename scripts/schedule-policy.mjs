@@ -217,6 +217,13 @@ export function evaluateNextPublication({
       return null;
     }
     const status = String(item.status ?? item.visibility ?? "").toLowerCase();
+    // The verified history input must describe a real remote visibility/publication
+    // state. Drafts, queued jobs, and unknown statuses are not remote publication
+    // history and must not silently advance the rolling format cycle.
+    if (!new Set(["published", "public", "private", "unlisted"]).has(status)) {
+      errors.push(\`history item \${item.id} has unsupported remote publication status: \${status || "(missing)"}\`);
+      return null;
+    }
     const timestamp = item.actualPublishedAt ?? item.publishedAt ?? item.createdAt;
     const parsedTimestamp = parseStrictTimestamp(timestamp);
     if (!Number.isFinite(parsedTimestamp)) {
