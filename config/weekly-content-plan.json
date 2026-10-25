@@ -53,6 +53,23 @@
     "Public and unattended publishing remain disabled; private upload requires a separate explicit authorization and all release gates.",
     "Authoritative publication policy is publicationCycle; schedule entries are draft-preparation triggers only."
   ],
+  "requestedWeeklyCadence": {
+    "longFormPerWeek": 2,
+    "shortsPerWeek": 1,
+    "totalPublicationsPerWeek": 3,
+    "status": "CONFLICTS_WITH_72_HOUR_MINIMUM"
+  },
+  "cadenceDecision": {
+    "status": "OWNER_DECISION_REQUIRED",
+    "ownerApproved": false,
+    "proposedMode": "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
+    "options": [
+      "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
+      "WEEKLY_TARGET_WITH_SHORTER_SPACING",
+      "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"
+    ],
+    "explanation": "Three weekly publications require three cyclic gaps averaging 56 hours; the required 72-hour minimum requires at least 216 hours across a complete three-publication cycle. No publication cadence is approved until the owner selects a feasible mode."
+  },
   "spacingPolicy": {
     "minimumHoursBetweenPosts": 72,
     "minimumCycleHours": 216,
