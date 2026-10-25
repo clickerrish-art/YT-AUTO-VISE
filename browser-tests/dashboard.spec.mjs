@@ -300,10 +300,10 @@ test("Facebook draft idea and save controls persist a blocked draft without atte
   await expect(page.locator("#facebookdraftresult")).toContainText("Draft saved; external publishing was not attempted.", { timeout: 10_000 });
   await expect(page.locator("#facebookdraftlist")).toContainText(draftId);
 
-  const stateResponse = await request.get("/api/state", { headers });
+  const stateResponse = await request.get("/api/facebook/state", { headers });
   expect(stateResponse.status()).toBe(200);
   const state = await stateResponse.json();
-  const saved = state.facebookDrafts.find(draft => draft.id === draftId);
+  const saved = state.drafts.find(draft => draft.id === draftId);
   expect(saved).toBeTruthy();
   expect(saved.destination).toBe("nature_frontiers_facebook");
   expect(saved.publishingEnabled).toBe(false);
