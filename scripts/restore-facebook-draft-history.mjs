@@ -5,6 +5,29 @@ import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
+function ensureSafeDirectoryPath(directory) {
+  const target = path.resolve(directory);
+  const root = path.parse(target).root;
+  let cursor = root;
+  for (const component of path.relative(root, target).split(path.sep).filter(Boolean)) {
+    cursor = path.join(cursor, component);
+    let stat;
+    try {
+      stat = fs.lstatSync(cursor);
+    } catch (error) {
+      if (error?.code !== "ENOENT") throw error;
+      try {
+        fs.mkdirSync(cursor, { mode: 0o700 });
+      } catch (mkdirError) {
+        if (mkdirError?.code !== "EEXIST") throw mkdirError;
+      }
+      stat = fs.lstatSync(cursor);
+    }
+    if (stat.isSymbolicLink()) throw new Error("History directory path contains a symbolic link; refusing an unintended destination");
+    if (!stat.isDirectory()) throw new Error("History directory path must contain only directories");
+  }
+}
+
 const artifactPrefix = "nature-frontiers-facebook-draft-";
 const outputPath = process.env.FACEBOOK_DAILY_DRAFT_HISTORY_FILE;
 const repository = process.env.GITHUB_REPOSITORY;
@@ -77,8 +100,8 @@ export async function restoreFacebookDraftHistory({
     token: configuredToken, apiBase: configuredApiBase
   };
   assertConfiguration(config);
-  const tempRoot = tempDir ?? fs.mkdtempSync(path.join(os.tmpdir(), "facebook-history-"));
-  fs.mkdirSync(tempRoot, { recursive: true, mode: 0o700 });
+  const tempRoot = path.resolve(tempDir ?? fs.mkdtempSync(path.join(os.tmpdir(), "facebook-history-")));
+  ensureSafeDirectoryPath(tempRoot);
   const cutoff = now.getTime() - 14 * 24 * 60 * 60 * 1000;
   const artifacts = [];
   let listingComplete = false;
@@ -129,32 +152,18 @@ export async function restoreFacebookDraftHistory({
   const history = [...historyByDate.values()].sort((a, b) => a.date.localeCompare(b.date));
   const destination = path.resolve(configuredOutputPath);
   const parent = path.dirname(destination);
-  // The output path is configurable. Reject symlinks in any existing path
-  // component so a caller cannot redirect a history write outside the intended
-  // runner/work directory. Replace a regular history file atomically.
-  const rootPath = path.parse(destination).root;
-  let currentPath = rootPath;
-  for (const part of path.relative(rootPath, destination).split(path.sep).filter(Boolean)) {
-    currentPath = path.join(currentPath, part);
-    if (!fs.existsSync(currentPath)) continue;
-    const stat = fs.lstatSync(currentPath);
-    if (stat.isSymbolicLink()) throw new Error("History output path contains a symbolic link; refusing to overwrite an unintended destination");
-    if (currentPath === destination && !stat.isFile()) throw new Error("History output destination must be a regular file");
+  // Create/check every ancestor individually. Recursive mkdir can follow a
+  // symlinked parent and create nested directories outside the intended tree
+  // before a later lstat detects the link.
+  ensureSafeDirectoryPath(parent);
+  try {
+    const stat = fs.lstatSync(destination);
+    if (stat.isSymbolicLink()) throw new Error("History output destination is a symbolic link");
+    if (!stat.isFile()) throw new Error("History output destination must be a regular file");
+  } catch (error) {
+    if (error?.code !== "ENOENT") throw error;
   }
 
-  fs.mkdirSync(parent, { recursive: true, mode: 0o700 });
-  // Recheck after creating the parent to detect a path component changed during setup.
-  currentPath = rootPath;
-  for (const part of path.relative(rootPath, destination).split(path.sep).filter(Boolean)) {
-    currentPath = path.join(currentPath, part);
-    try {
-      const stat = fs.lstatSync(currentPath);
-      if (stat.isSymbolicLink()) throw new Error("History output path contains a symbolic link; refusing to overwrite an unintended destination");
-      if (currentPath === destination && !stat.isFile()) throw new Error("History output destination must be a regular file");
-    } catch (error) {
-      if (error.code !== "ENOENT") throw error;
-    }
-  }
   const temporary = destination + "." + crypto.randomUUID() + ".tmp";
   try {
     fs.writeFileSync(temporary, JSON.stringify(history, null, 2) + "\n", { mode: 0o600, flag: "wx" });
