@@ -28,6 +28,30 @@ const stateFile = path.join(stateDir, "dashboard-state.json");
 const approvedProductUrl = "https://selar.com/0u19v8u99l";
 const htmlPath = path.join(root, "public", "dashboard.html");
 
+function ensureSafeDirectoryPath(directory) {
+  const target = path.resolve(directory);
+  const rootPath = path.parse(target).root;
+  let current = rootPath;
+  for (const component of path.relative(rootPath, target).split(path.sep).filter(Boolean)) {
+    current = path.join(current, component);
+    let stat;
+    try {
+      stat = fs.lstatSync(current);
+    } catch (error) {
+      if (error?.code !== "ENOENT") throw error;
+      try {
+        fs.mkdirSync(current, { mode: 0o700 });
+      } catch (mkdirError) {
+        if (mkdirError?.code !== "EEXIST") throw mkdirError;
+      }
+      stat = fs.lstatSync(current);
+    }
+    if (stat.isSymbolicLink()) throw new Error("Dashboard state path contains a symbolic link; refusing unsafe directory creation");
+    if (!stat.isDirectory()) throw new Error("Dashboard state path must contain only directories");
+  }
+}
+
+
 if (!token || token.length < 24) {
   console.error("BLOCKED: set DASHBOARD_OPERATOR_TOKEN to a random value of at least 24 characters. No server started.");
   process.exit(2);
@@ -40,7 +64,7 @@ if (!["127.0.0.1", "::1", "localhost"].includes(host)) {
   console.error("BLOCKED: dashboard binds to loopback only; use a secure authenticated reverse proxy before changing this.");
   process.exit(2);
 }
-fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+ensureSafeDirectoryPath(stateDir);
 const stateDirectoryStat = fs.lstatSync(stateDir);
 if (stateDirectoryStat.isSymbolicLink() || !stateDirectoryStat.isDirectory()) {
   throw new Error("Dashboard state directory must be a real directory, not a symlink or special file");
