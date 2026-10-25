@@ -6,29 +6,29 @@
 
 - Repository: https://github.com/clickerrish-art/YT-AUTO-VISE
 - Implementation branch: `codex/marketing-machine-audit-fixes`
-- Code/test candidate SHA: `b50b801cb2270bbafe88f1ff62f7e933f871ed70`
+- Code/test candidate SHA: `ef042167f8b6fcca68e1f92f0f75cbea5461b85b`
 - `main` SHA observed during this audit: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
-- Live comparison at baseline: 974 commits ahead, 2 behind; GitHub returned 107 changed files. The compare API caps the commit list at 250, so this is not a complete manual review of all divergent history.
+- Live comparison at code/test candidate `ef042167f8b6fcca68e1f92f0f75cbea5461b85b`: 996 commits ahead, 2 behind, 108 changed files. The compare API caps the commit list at 250, so this is not a complete manual review of all divergent history. This evidence-record update itself is documentation-only and follows the tested code candidate.
 - PR #1: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1 — open, draft, unmerged.
 - No merge, rebase, reset, force-push, cherry-pick, or main-branch edit was performed.
 
 ## Exact-candidate automated evidence
 
-All results below are for code/test candidate `b50b801cb2270bbafe88f1ff62f7e933f871ed70`.
+All results below are for code/test candidate `ef042167f8b6fcca68e1f92f0f75cbea5461b85b`.
 
 | Check | Result | Evidence |
 |---|---|---|
-| Node.js test suite | 234 passed, 0 failed, 0 skipped | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40170874180) |
+| Node.js test suite | 234 passed, 0 failed, 0 skipped | [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40171105637) |
 | Python safety tests | 8 passed | [Automation validation logs](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40170874180) |
-| Browser E2E | 3 passed | [Dashboard browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40170874207) |
-| Content-quality checks | Passed | [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40170874178) |
-| Metadata validation | Passed | [Metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40170874195) |
-| Lockfile validation / clean install | Passed | [Lockfile validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40170872080) |
+| Browser E2E | 3 passed | [Dashboard browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40171105655) |
+| Content-quality checks | Passed | [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40171105646) |
+| Metadata validation | Passed | [Metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40171105670) |
+| Lockfile validation / clean install | Passed | [Lockfile validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40171103322) |
 | Normal `npm ci` and Google API client import | Passed | [Automation validation logs](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40170874180) |
 | `npm audit` | 0 total vulnerabilities | [Automation validation logs](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40170874180) |
-| Production readiness | Blocked as required: 12 blockers; diagnostic artifact retained | [Readiness workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40170874201), artifact `sonicvhibez-readiness-report`, SHA-256 `47640c123b0396d9fdf9c1069c7c4168aef997249caeda4b16b60e430d846553` |
-| Nature Frontiers Facebook draft | Skipped on PR event; not accepted as default-branch evidence | [Skipped workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40170874182) |
+| Production readiness | Blocked as required: 12 blockers; diagnostic artifact retained | [Readiness workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40171105651), artifact `sonicvhibez-readiness-report`, SHA-256 `a99c0db478456b85577e85ed4ba0d25a9cf459c02c5345605e5731105a178d36` |
+| Nature Frontiers Facebook draft | Skipped on PR event; not accepted as default-branch evidence | [Skipped workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40171105644) |
 
 ## Application changes implemented in this checkpoint
 
