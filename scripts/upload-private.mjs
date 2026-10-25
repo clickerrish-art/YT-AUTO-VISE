@@ -10,6 +10,7 @@ import crypto from "node:crypto";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
 import { assertNoUnresolvedUploadAttempts, fetchCompleteYoutubeHistory, assertNextPublicationAllowed } from "./youtube-history-gate.mjs";
+import { atomicWriteJson } from "./atomic-json-file.mjs";
 
 export const APPROVED_SELAR_URL = "https://selar.com/0u19v8u99l";
 
@@ -57,10 +58,8 @@ export function resolveRegularFileNoSymlinks(filePath, label = "Evidence file") 
   return absolute;
 }
 function writeJsonAtomic(filePath, value) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  const temp = filePath + "." + crypto.randomUUID() + ".tmp";
-  fs.writeFileSync(temp, JSON.stringify(value, null, 2) + "\n", { mode: 0o600, flag: "wx" });
-  fs.renameSync(temp, filePath);
+  fs.mkdirSync(path.dirname(filePath), { recursive: true, mode: 0o700 });
+  atomicWriteJson(filePath, value, { mode: 0o600 });
 }
 function readJson(filePath, label) {
   try { return JSON.parse(fs.readFileSync(filePath, "utf8")); }
