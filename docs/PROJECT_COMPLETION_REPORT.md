@@ -1,48 +1,59 @@
 # Project completion report
 
-## Authoritative release status — 24 October 2026
+## Authoritative current acceptance status — 25 October 2026
 
-**This status supersedes all earlier “current/latest” claims in the archived checkpoints below.** The application/test candidate recorded here is `28c37e3fa2707ab45b35a665ea4b39a40311aa86`. The current release-status refresh is documentation-only; it does not alter application code. The live PR head remains the source of truth for the exact branch tip and its CI run links.
+**Verdict: IMPLEMENTATION INCOMPLETE — PRODUCTION ACCEPTANCE BLOCKED.** This section supersedes older “current/latest” checkpoints below. Historical reports remain for audit trail only; do not treat their branch counts, test counts or dependency findings as current.
 
-- PR #1: [OPEN, DRAFT, UNMERGED](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1).
-- `main` HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
-- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
-- At application/test candidate `28c37e3`, GitHub comparison was **936 commits ahead, 2 behind, 99 changed files**. The compare endpoint returns at most 250 branch-only commit records; this is not a full commit-by-commit review of 936 commits. No merge, reset, rebase, force-push, cherry-pick or history rewrite was performed.
+### Live Git state
+- Implementation branch: `codex/marketing-machine-audit-fixes`.
+- Current code/test candidate: `0ae6cca5f6f40beba96adf99c11368c1e95459d3`.
+- `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Live comparison: **953 commits ahead, 2 behind, 105 changed files**. PR #1 remains [OPEN, DRAFT, UNMERGED](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1). No merge, rebase, reset, cherry-pick, force-push or history rewrite was performed.
+- A complete patch-by-patch review of the 953-commit divergence has **not** been completed. Commit metadata and the current file diff were inspected; owner-approved reconciliation remains required.
 
-### Exact-candidate checks
+### Latest exact code/test candidate evidence
+- [Automation/security — run 40167807502](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40167807502), SHA `0ae6cca5f6f40beba96adf99c11368c1e95459d3`: **PASS** — **223 Node tests passed, 0 failed**; 8 Python safety tests passed; normal clean `npm ci`; Google API client import; queue/campaign/syntax/compilation checks passed; `npm audit`: **0 vulnerabilities**.
+- [Browser E2E — run 40167807425](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40167807425), same SHA: **PASS**, 3 Chromium tests against the real local dashboard/backend. This is not exhaustive coverage of every dashboard control or a live integration test.
+- [Metadata — run 40167807476](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40167807476): **PASS**, same SHA.
+- [Content quality — run 40167807435](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40167807435): **PASS**, same SHA.
+- [Lockfile validation — run 40167805375](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40167805375): **PASS**, same SHA.
+- [Production readiness — run 40167807430](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40167807430): **BLOCKED as intended**, with 12 mandatory blockers. The check is not a release pass.
+- [Facebook daily draft — run 40167807438](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40167807438): **SKIPPED** on the PR event; this is not evidence of a successful scheduled/manual run on `main`.
 
-- **PASS — automation/security**: [run 40132055150](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40132055150), exact SHA `28c37e3...`: **211 Node tests passed, 0 failed; 8 Python safety tests passed**; clean `npm ci` and a separate normal lifecycle-script install passed; Google API client import passed; npm audit reported **0 vulnerabilities**; 16 queued topics passed safe-state/destination checks; campaign, review-metadata, JavaScript syntax and Python compilation checks passed.
-- **PASS — browser E2E**: [run 40132055216](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40132055216), exact SHA `28c37e3...`: **3 Chromium tests passed** against the real local dashboard/backend. Coverage: authenticated operator connection and draft creation; persisted state and duplicate-ID rejection; refresh retaining the saved draft; readiness returning HTTP 503 while blocked; 375px mobile viewport without page overflow; invalid Selar destination rejection; Safari preview remains inactive until explicit owner confirmation; and draft/job state survives a real isolated local server stop/restart. No live YouTube or Meta request was made by these tests.
-- **PASS — metadata**: [run 40132055131](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40132055131).
-- **PASS — content quality**: [run 40132055183](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40132055183).
-- **BLOCKED as intended — readiness**: [run 40132055128](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40132055128); retained [diagnostic artifact 12575701766](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40132055128/artifacts/12575701766), SHA-256 `5cdc76037f2599092b2a8ecd2d394c36f7a740b6470e1ec79ba6a9394809961c`, expires 23 November 2026. The job correctly fails while mandatory gates remain open.
-- **SKIPPED — Facebook draft**: [run 40132055158](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40132055158) was skipped on the PR event. It is not default-branch draft-artifact evidence.
+### Implementation added at this checkpoint
+- `scripts/approval-artifact-transaction.mjs` and `test/approval-artifact-transaction.test.mjs`: approval artifact publication is now ordered after durable application-state persistence. It uses an exclusive final-path creation, rejects existing/symlinked destinations, and cleans up staged artifacts if state persistence fails.
+- `scripts/dashboard-server.mjs`: the human-review route now saves the approved job/audit state before exposing the uploadable approval file. If durable state persistence fails, no final approval artifact is made available to the uploader.
+- This specifically closes the crash/error window where an approval JSON could previously become uploadable before its corresponding dashboard state and audit event were durably saved.
 
-### Remaining release gates
+### Schedule and permanent safety posture
+- `Africa/Johannesburg` is authoritative. Tuesday long-form and Saturday Short slots are **draft-preparation only**. The publication cycle is long-form, long-form, Short with at least 72 elapsed hours between actual publications and a minimum 216-hour three-gap cycle; it does not promise three weekly publications.
+- Public/unattended YouTube publishing remains disabled. Only SonicVhibez is an authorized YouTube target. Facebook live publishing remains disabled; Nature Frontiers is a separate Facebook destination.
+- The sole approved Selar URL remains `https://selar.com/0u19v8u99l`. Safari campaigns remain inactive. No real YouTube upload or Facebook post was performed.
 
-The readiness report lists 12 blockers:
-1. Independently reconcile complete SonicVhibez public/private/unlisted history and all pending/uncertain upload attempts immediately before any upload.
-2. Supply a genuine rights-reviewed Short and create `content/render-manifest.json`.
-3. Supply genuine rights-reviewed long-form media and create `content/long-form-render-manifest.json`.
-4. Human-review metadata and explicitly mark it `READY_FOR_PRIVATE_UPLOAD`.
-5. Verify the SonicVhibez channel ID and bind it to metadata/configuration.
-6. Confirm rights only after reviewing retained source/license evidence and final checksums.
-7. Complete content/compliance review, including factual claims, captions, thumbnail and disclosures.
-8. Produce and validate real `media/next-short.mp4`.
-9–12. Configure the four required YouTube variables in the controlled execution environment: `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN`, `SONICVHIBEZ_CHANNEL_ID`. The readiness job deliberately supplies an empty credential environment; this is not a probe of whether repository secrets exist.
+### Mandatory acceptance register
+| Gate | Status | Evidence/action still required |
+|---|---|---|
+| Clean install, dependency audit, automated regression | **PASS** | Exact candidate CI above. |
+| Browser E2E | **PASS — limited** | Three Chromium flows; expand to complete control-by-control lifecycle coverage. |
+| Actual Short and long-form output | **BLOCKED** | Genuine rights-cleared assets, complete manifests, valid exported MP4s and full media validation. |
+| Rights evidence and final-hash-bound human approval | **BLOCKED** | Verify source/licence evidence and approve exact media, metadata, captions and thumbnail hashes. |
+| SonicVhibez OAuth/channel identity | **BLOCKED** | Configure credentials securely and verify authenticated channel ID. |
+| Complete public/private/unlisted history and uncertain-attempt reconciliation | **BLOCKED** | Reconcile remote history immediately before any upload. |
+| Separately authorized private upload and verified receipt | **BLOCKED** | Owner must authorize one exact operation; independently verify channel, video ID and private status. |
+| Nature Frontiers Page identity/permissions | **BLOCKED** | Verify actual Page ID, token scopes, tasks and token validity. |
+| Default-branch Facebook draft plus retained artifact | **NOT RUN** | Run the eligible scheduled/manual workflow on `main`; inspect its actual retained artifact. |
+| Backup/restore, interruption, concurrency, stale-lease and rollback drills | **NOT RUN** | Execute isolated owner-controlled drills and retain logs/checksums. |
+| Complete divergent-history review and reconciliation decision | **NOT RUN** | Review all relevant patches; owner must approve any merge/reconciliation strategy. |
+| Production deployment and operational readiness | **BLOCKED** | Verify real environment, secret injection, storage, monitoring, backup and emergency-stop behavior. |
 
-Additional **OWNER ACTION REQUIRED / NOT RUN** items: complete production 50–60s 1080×1920 Short and 6–10 minute 16:9 long-form packages with full decode, verified audio, captions, thumbnails, provenance/licensing, checksums and human approval bound to final artifact hashes; verify OAuth identity and complete remote history; separately authorize at most one private upload tied to exact job/media/metadata/approval/channel and verify its remote private receipt; verify the Nature Frontiers Page identity/token/tasks and run the eligible default-branch draft workflow with a retained artifact; conduct owner-controlled backup/restore, interrupted-operation, concurrency, stale-lease and rollback drills; verify production storage/deployment/emergency-stop behaviour. No real YouTube upload or Facebook post has occurred.
+### Shortest safe next actions
+1. Supply genuine rights-cleared Short/long-form media, manifests, provenance/licence files, final hashes and metadata.
+2. Securely configure and verify SonicVhibez OAuth/channel identity; reconcile remote history and uncertain attempts.
+3. Verify Nature Frontiers Page access and run the default-branch Facebook draft workflow without publishing a live post.
+4. Run isolated recovery drills and complete the full branch patch review; obtain owner approval before any history-changing operation.
+5. Re-run all exact-head checks after any further source changes. Keep readiness blocked until every mandatory gate passes.
 
-### Safety and Git history
-
-Public/unattended YouTube publishing stays disabled; Facebook live publishing stays disabled; the only approved Selar destination is `https://selar.com/0u19v8u99l`; Safari affiliate campaigns remain inactive; Nature Frontiers must not be used as the SonicVhibez promotional channel.
-
-The two base-only commits were inspected: `71578dafc24e5d48173dce3f4e392e18e42aa40e` added `test/restore-facebook-draft-history.test.mjs`; `fa00d28e7f58911482686e4ad69fac9f4701a2e6` removed that exact 117-line test. The implementation branch restores it at `c507b63abfa336165865ad01cf6354ae50254f04`; it is included in the passing Node suite. The 99-file tree diff has been inventoried, but the complete 936-commit history has **not** been individually reviewed. Owner must approve the reconciliation strategy before integration.
-
-**Release verdict: BLOCKED.** Passing CI does not prove genuine rights, external account ownership, live integrations, a real private upload receipt, a default-branch Facebook draft artifact or owner-controlled recovery acceptance. Keep PR #1 open/draft/unmerged and do not bypass readiness gates.
-
-
----
+A documentation refresh may follow this code/test candidate; it does not change the executable code tested above. The live PR head and its CI links remain authoritative for the exact current revision.
 
 ## Historical checkpoints (superseded; retained for audit trail)
 
