@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import fs from "node:fs";
+import { fileURLToPath } from "node:url";
 
 test("readiness report identifies blockers, preserves safety defaults, and exits non-zero", () => {
   const env = { ...process.env };
@@ -44,4 +46,15 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and actionab
   }
   assert.ok(report.blockers.some(blocker => /SonicVhibez public, private and unlisted history/.test(blocker.message)));
   assert.ok(report.limitations.some(item => /never uploads/.test(item)));
+});
+
+
+test("readiness workflow compares retained exit-code evidence and avoids false mismatches from missing step outputs", () => {
+  const workflowPath = fileURLToPath(new URL("../.github/workflows/production-readiness.yml", import.meta.url));
+  const workflow = fs.readFileSync(workflowPath, "utf8");
+  assert.match(workflow, /readiness-report\/exit-codes\.txt/);
+  assert.match(workflow, /readiness_status=\$\(sed -n '1p' readiness-report\/exit-codes\.txt\)/);
+  assert.match(workflow, /json_status=\$\(sed -n '2p' readiness-report\/exit-codes\.txt\)/);
+  assert.match(workflow, /Production readiness is BLOCKED/);
+  assert.doesNotMatch(workflow, /READINESS_EXIT_CODE:-2|READINESS_JSON_EXIT_CODE:-3/);
 });
