@@ -53,14 +53,14 @@ jobs:
           node-version: '24'
           package-manager-cache: false
       - name: Install uploader dependencies
-        run: npm install --ignore-scripts
+        run: npm ci --ignore-scripts
       - name: Restore the previous durable upload-attempt ledger
         if: ${{ inputs.previous_ledger_run_id != 'NONE' }}
         uses: actions/download-artifact@v4
         with:
           name: sonicvhibez-upload-ledger
           path: run-logs
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ github.token }}
           repository: ${{ github.repository }}
           run-id: ${{ inputs.previous_ledger_run_id }}
       - name: Verify required secrets are configured
