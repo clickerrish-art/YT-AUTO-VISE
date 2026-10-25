@@ -31,6 +31,10 @@ if (!exists(schedulePath)) {
     if (JSON.stringify(schedule.publicationCycle?.formats) !== JSON.stringify(["long_form", "long_form", "short"])) blockers.push("Publication cycle must be long-form, long-form, Short.");
     if (schedule.publicationCycle?.minimumHoursBetweenConsecutivePublications !== minimumSpacingHours || schedule.publicationCycle?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0) || schedule.spacingPolicy?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0)) blockers.push("Publication cycle and spacingPolicy must use the configured minimum gap and its derived cycle duration.");
     if (schedule.publicationCycle?.publicationRequiresVerifiedHistory !== true) blockers.push("Publication cycle must require independently verified public/private/unlisted history and reconciliation of uncertain attempts.");
+    const cadenceDecision = schedule.cadenceDecision;
+    if (!cadenceDecision || cadenceDecision.status !== "OWNER_APPROVED" || cadenceDecision.ownerApproved !== true) {
+      blockers.push("CADENCE DECISION REQUIRED: the requested 2 long-form + 1 Short per week conflicts with 72-hour minimum spacing; owner must explicitly approve a feasible cadence mode before publication.");
+    }
     if (["targetCadence", "requestedTargetCadence", "cadenceDecisionRequired", "interimDraftCadence"].some(key => key in schedule)) blockers.push("Stale weekly cadence fields must be removed.");
     blockers.push("LIVE BLOCKER: complete SonicVhibez public, private and unlisted history plus all pending/uncertain upload attempts must be independently reconciled immediately before upload.");
   } catch {
