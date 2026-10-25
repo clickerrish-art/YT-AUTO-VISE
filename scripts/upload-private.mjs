@@ -36,6 +36,26 @@ function strictIsoTimestamp(value) {
 export function sha256File(filePath) {
   return crypto.createHash("sha256").update(fs.readFileSync(filePath)).digest("hex");
 }
+
+/** Resolve an evidence path only when every component is a real, non-symlink
+ * directory and the final component is a regular file. */
+export function resolveRegularFileNoSymlinks(filePath, label = "Evidence file") {
+  if (typeof filePath !== "string" || !filePath.trim()) throw new Error(label + " path is required");
+  const absolute = path.resolve(filePath);
+  const root = path.parse(absolute).root;
+  const parts = absolute.slice(root.length).split(path.sep).filter(Boolean);
+  let cursor = root;
+  for (let index = 0; index < parts.length; index++) {
+    cursor = path.join(cursor, parts[index]);
+    let stat;
+    try { stat = fs.lstatSync(cursor); }
+    catch { throw new Error(label + " is missing or cannot be inspected"); }
+    if (stat.isSymbolicLink()) throw new Error(label + " path contains a symbolic link");
+    if (index < parts.length - 1 && !stat.isDirectory()) throw new Error(label + " parent path must contain only directories");
+    if (index === parts.length - 1 && !stat.isFile()) throw new Error(label + " must be a regular file");
+  }
+  return absolute;
+}
 function writeJsonAtomic(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   const temp = filePath + "." + crypto.randomUUID() + ".tmp";
@@ -100,8 +120,8 @@ export function verifyRetainedRightsEvidence(approval) {
   if (!evidenceAssets.length) throw new Error("at least one rights-evidence asset record is required");
   for (const evidence of evidenceAssets) {
     if (!evidence || typeof evidence !== "object" || typeof evidence.assetPath !== "string" || typeof evidence.licenseEvidenceLocation !== "string") throw new Error("rights evidence must bind each source asset and retained license evidence file");
-    const assetFile = path.resolve(evidence.assetPath);
-    const licenseFile = path.resolve(evidence.licenseEvidenceLocation);
+    const assetFile = resolveRegularFileNoSymlinks(evidence.assetPath, "Rights-evidence source asset");
+    const licenseFile = resolveRegularFileNoSymlinks(evidence.licenseEvidenceLocation, "Retained license evidence");
     if (!/^[a-f0-9]{64}$/.test(evidence.assetSha256 ?? "") || !/^[a-f0-9]{64}$/.test(evidence.licenseEvidenceSha256 ?? "")) throw new Error("rights evidence must contain source and license-evidence SHA-256 checksums");
     if (!Array.isArray(evidence.permittedUses) || !evidence.permittedUses.includes("YouTube")) throw new Error("rights evidence must explicitly permit YouTube use");
     if (evidence.verificationStatus !== "VERIFIED" || typeof evidence.verifiedBy !== "string" || !evidence.verifiedBy.trim() || !Number.isFinite(strictIsoTimestamp(evidence.verifiedAt))) throw new Error("rights evidence must retain reviewer identity, VERIFIED status, and a valid verification timestamp");
@@ -142,14 +162,15 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (missing.length) throw new Error("missing required environment variables: " + missing.join(", "));
   if (!reconcileOnly && env.CONFIRM_PRIVATE_UPLOAD !== "YES") throw new Error("explicit private-upload confirmation is required (CONFIRM_PRIVATE_UPLOAD=YES)");
   if (!jobId || !/^[A-Za-z0-9][A-Za-z0-9:_-]{2,119}$/.test(jobId)) throw new Error("a stable JOB_ID is required");
-  if (!fs.existsSync(metadataPath)) throw new Error("metadata file not found");
-  if (!fs.existsSync(videoPath) || path.extname(videoPath).toLowerCase() !== ".mp4") throw new Error("provide an existing MP4 video file");
-  if (!approvalPath || !fs.existsSync(approvalPath)) throw new Error("an artifact-bound UPLOAD_APPROVAL_PATH is required");
+  if (path.extname(videoPath).toLowerCase() !== ".mp4") throw new Error("provide an existing MP4 video file");
+  const safeMetadataPath = resolveRegularFileNoSymlinks(metadataPath, "Metadata file");
+  const safeVideoPath = resolveRegularFileNoSymlinks(videoPath, "Video file");
+  const safeApprovalPath = resolveRegularFileNoSymlinks(approvalPath, "Upload approval file");
 
-  const metadata = readJson(metadataPath, "Metadata");
-  const approval = readJson(approvalPath, "Upload approval");
-  const videoSha256 = sha256File(videoPath);
-  const metadataSha256 = sha256File(metadataPath);
+  const metadata = readJson(safeMetadataPath, "Metadata");
+  const approval = readJson(safeApprovalPath, "Upload approval");
+  const videoSha256 = sha256File(safeVideoPath);
+  const metadataSha256 = sha256File(safeMetadataPath);
   if (metadata.channel !== "SonicVhibez" || metadata.channelId !== env.SONICVHIBEZ_CHANNEL_ID) throw new Error("metadata must target the configured SonicVhibez channel");
   if (metadata.visibility !== "private") throw new Error("uploader only permits private uploads");
   if (metadata.productUrl !== APPROVED_SELAR_URL) throw new Error("metadata must use the exact approved Selar destination");
@@ -158,13 +179,14 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   validateUploadApproval(approval, { jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256 });
   const relatedArtifacts = approval.relatedArtifacts;
   verifyRetainedRightsEvidence(approval);
-  const uploadedArtifactIsBound = relatedArtifacts.some(item => path.resolve(item.path) === path.resolve(videoPath) && item.sha256 === videoSha256);
+  const uploadedArtifactIsBound = relatedArtifacts.some(item => path.resolve(item.path) === safeVideoPath && item.sha256 === videoSha256);
   if (!uploadedArtifactIsBound) throw new Error("approval artifact set must include the exact MP4 being uploaded");
   for (const item of relatedArtifacts) {
-    if (!item || typeof item.path !== "string" || !/^[a-f0-9]{64}$/.test(item.sha256 ?? "") || !fs.existsSync(item.path) || !fs.statSync(item.path).isFile()) {
+    if (!item || typeof item.path !== "string" || !/^[a-f0-9]{64}$/.test(item.sha256 ?? "")) {
       throw new Error("every approval-bound artifact must exist as a file with a SHA-256 checksum");
     }
-    if (sha256File(item.path) !== item.sha256) throw new Error("approval-bound artifact checksum changed: " + path.basename(item.path));
+    const safeArtifactPath = resolveRegularFileNoSymlinks(item.path, "Approval-bound artifact");
+    if (sha256File(safeArtifactPath) !== item.sha256) throw new Error("approval-bound artifact checksum changed: " + path.basename(safeArtifactPath));
   }
 
   const captionArtifact = relatedArtifacts.find(item => typeof item?.path === "string" && /\.srt$/i.test(item.path));
