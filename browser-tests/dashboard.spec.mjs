@@ -310,3 +310,49 @@ test("Facebook draft idea and save controls persist a blocked draft without atte
   expect(saved.status).toBe("DRAFT");
   expect(state.publishingEnabled).toBe(false);
 });
+
+test("public YouTube publishing has no dashboard endpoint and readiness stays fail-closed", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+  await expect(page.getByText("PUBLIC PUBLISHING OFF", { exact: true })).toBeVisible();
+
+  const beforeResponse = await request.get("/api/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+  expect(before.publishingEnabled).toBe(false);
+  expect(Array.isArray(before.uploads)).toBe(true);
+
+  const publicControls = await page.getByRole("button", {
+    name: /publish now|publish publicly|make public|set visibility/i
+  }).count();
+  expect(publicControls).toBe(0);
+
+  const attemptedPublicUpload = await request.post("/api/youtube/publish", {
+    headers,
+    data: {
+      channel: "Nature Frontiers",
+      visibility: "public",
+      title: "Must never be published by the safety test"
+    }
+  });
+  expect(attemptedPublicUpload.status()).toBe(404);
+  expect(await attemptedPublicUpload.json()).toMatchObject({ error: "Not found" });
+
+  const afterResponse = await request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  const after = await afterResponse.json();
+  expect(after.publishingEnabled).toBe(false);
+  expect(after.uploads).toHaveLength(before.uploads.length);
+  expect(after.jobs).toHaveLength(before.jobs.length);
+
+  const readinessResponse = await request.get("/readyz");
+  expect(readinessResponse.status()).toBe(503);
+  const readiness = await readinessResponse.json();
+  expect(readiness.ready).toBe(false);
+  expect(readiness.publishingEnabled).toBe(false);
+  expect(readiness.blockers.length).toBeGreaterThan(0);
+});
