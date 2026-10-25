@@ -33,6 +33,29 @@ test("validator rejects missing or falsely approved cadence decisions",()=>{
  const falseApproval=runWithPlanMutation(plan=>{plan.cadenceDecision.status="OWNER_APPROVED";plan.cadenceDecision.ownerApproved=false;});
  assert.notEqual(falseApproval.status,0);assert.match(falseApproval.stderr,/OWNER_APPROVED status requires ownerApproved=true/);
 });
+test("validator accepts only a fully evidenced feasible owner-approved cadence mode",()=>{
+ const valid=runWithPlanMutation(plan=>{
+  plan.cadenceDecision={...plan.cadenceDecision,status:"OWNER_APPROVED",ownerApproved:true,approvedMode:"ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",approvedAt:"2026-10-25T12:00:00+02:00",approvalReference:"owner-decision-record-001"};
+ });
+ assert.equal(valid.status,0,valid.stdout+valid.stderr);
+ assert.doesNotMatch(valid.stdout,/BLOCKED — CADENCE DECISION/);
+ const unsupported=runWithPlanMutation(plan=>{
+  plan.cadenceDecision={...plan.cadenceDecision,status:"OWNER_APPROVED",ownerApproved:true,approvedMode:"MAGIC_MODE",approvedAt:"2026-10-25T12:00:00Z",approvalReference:"owner-decision-record-001"};
+ });
+ assert.notEqual(unsupported.status,0);assert.match(unsupported.stderr,/supported approvedMode/);
+ const noZone=runWithPlanMutation(plan=>{
+  plan.cadenceDecision={...plan.cadenceDecision,status:"OWNER_APPROVED",ownerApproved:true,approvedMode:"ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",approvedAt:"2026-10-25T12:00:00",approvalReference:"owner-decision-record-001"};
+ });
+ assert.notEqual(noZone.status,0);assert.match(noZone.stderr,/ISO timestamp with explicit timezone/);
+ const impossibleWeekly=runWithPlanMutation(plan=>{
+  plan.cadenceDecision={...plan.cadenceDecision,status:"OWNER_APPROVED",ownerApproved:true,approvedMode:"WEEKLY_TARGET_WITH_SHORTER_SPACING",approvedAt:"2026-10-25T12:00:00Z",approvalReference:"owner-decision-record-001"};
+ });
+ assert.notEqual(impossibleWeekly.status,0);assert.match(impossibleWeekly.stderr,/no greater than 56 hours/);
+ const infeasibleCustom=runWithPlanMutation(plan=>{
+  plan.cadenceDecision={...plan.cadenceDecision,status:"OWNER_APPROVED",ownerApproved:true,approvedMode:"OTHER_OWNER_DEFINED_FEASIBLE_POLICY",approvedAt:"2026-10-25T12:00:00Z",approvalReference:"owner-decision-record-001",ownerDefinedPolicy:{description:"Impossible custom policy",publicationsPerCycle:3,cycleHours:168}};
+ });
+ assert.notEqual(infeasibleCustom.status,0);assert.match(infeasibleCustom.stderr,/documented policy whose publication count times minimum spacing fits/);
+});
 test("validator rejects stale weekly-count fields",()=>{
  const result=runWithPlanMutation(plan=>{plan.targetCadence={longFormVideosPerWeek:2,shortsPerWeek:1,totalVideosPerWeek:3};});
  assert.notEqual(result.status,0);assert.match(result.stderr,/stale weekly-count cadence fields must be removed/);
