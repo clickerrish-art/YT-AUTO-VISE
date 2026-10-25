@@ -7,7 +7,7 @@
 - Repository: https://github.com/clickerrish-art/YT-AUTO-VISE
 - Implementation branch: `codex/marketing-machine-audit-fixes`
 - **Exact application-code/test candidate:** `10d5d7bf63b96b99ee44d77be60e1d137edbf430`
-- **Branch HEAD at this evidence update:** `10d5d7bf63b96b99ee44d77be60e1d137edbf430` (documentation updates, if any, must remain descendants of this tested code candidate and must not be represented as separately tested code).
+- **Current PR HEAD:** the live PR metadata is the source of truth for the current documentation-only descendant SHA. The exact application-code/test candidate remains `10d5d7bf63b96b99ee44d77be60e1d137edbf430`; documentation-only descendants do not change the tested code tree.
 - `main` SHA observed during this audit: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
 - Live comparison at code/test candidate: **999 commits ahead, 2 behind, 108 changed files**. GitHub's compare response returns only a bounded commit list; it is not a line-by-line review of all 999 divergent commits. No history rewrite or reconciliation has been performed.
