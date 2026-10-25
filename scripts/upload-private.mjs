@@ -120,13 +120,13 @@ export function verifyRetainedRightsEvidence(approval) {
   if (!evidenceAssets.length) throw new Error("at least one rights-evidence asset record is required");
   for (const evidence of evidenceAssets) {
     if (!evidence || typeof evidence !== "object" || typeof evidence.assetPath !== "string" || typeof evidence.licenseEvidenceLocation !== "string") throw new Error("rights evidence must bind each source asset and retained license evidence file");
-    const assetFile = resolveRegularFileNoSymlinks(evidence.assetPath, "Rights-evidence source asset");
-    const licenseFile = resolveRegularFileNoSymlinks(evidence.licenseEvidenceLocation, "Retained license evidence");
     if (!/^[a-f0-9]{64}$/.test(evidence.assetSha256 ?? "") || !/^[a-f0-9]{64}$/.test(evidence.licenseEvidenceSha256 ?? "")) throw new Error("rights evidence must contain source and license-evidence SHA-256 checksums");
     if (!Array.isArray(evidence.permittedUses) || !evidence.permittedUses.includes("YouTube")) throw new Error("rights evidence must explicitly permit YouTube use");
     if (evidence.verificationStatus !== "VERIFIED" || typeof evidence.verifiedBy !== "string" || !evidence.verifiedBy.trim() || !Number.isFinite(strictIsoTimestamp(evidence.verifiedAt))) throw new Error("rights evidence must retain reviewer identity, VERIFIED status, and a valid verification timestamp");
-    if (!fs.existsSync(assetFile) || !fs.statSync(assetFile).isFile() || sha256File(assetFile) !== evidence.assetSha256) throw new Error("rights-evidence source asset is missing or its checksum changed: " + path.basename(assetFile));
-    if (!fs.existsSync(licenseFile) || !fs.statSync(licenseFile).isFile() || fs.statSync(licenseFile).size <= 0 || sha256File(licenseFile) !== evidence.licenseEvidenceSha256) throw new Error("retained license evidence is missing, empty, or its checksum changed: " + path.basename(licenseFile));
+    const assetFile = resolveRegularFileNoSymlinks(evidence.assetPath, "Rights-evidence source asset");
+    const licenseFile = resolveRegularFileNoSymlinks(evidence.licenseEvidenceLocation, "Retained license evidence");
+    if (sha256File(assetFile) !== evidence.assetSha256) throw new Error("rights-evidence source asset is missing or its checksum changed: " + path.basename(assetFile));
+    if (fs.statSync(licenseFile).size <= 0 || sha256File(licenseFile) !== evidence.licenseEvidenceSha256) throw new Error("retained license evidence is missing, empty, or its checksum changed: " + path.basename(licenseFile));
   }
   return true;
 }
