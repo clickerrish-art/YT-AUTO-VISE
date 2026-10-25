@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-25",
-  "evidencePolicy": "A PASS requires executable or authoritative evidence for the exact relevant revision. Historical documentation alone is insufficient. External integration claims require live evidence, not mocks. Application-code checkpoint for this refresh: eda0dbb7be1cfb2e71155d7478f1875739078340; recheck workflows on the final documentation-refresh HEAD.",
+  "evidencePolicy": "A PASS requires executable or authoritative evidence for the exact relevant revision. Historical documentation alone is insufficient. External integration claims require live evidence, not mocks. Application source checkpoint: eda0dbb7be1cfb2e71155d7478f1875739078340. Documentation-refresh candidate 817a9d3fc8a750efdcfd6417ca7cf664bc23aa34 has completed exact-SHA automated checks; this register-only follow-up does not change application source.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -31,12 +31,12 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40207797361",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40207797321",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40207797357",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40207797355"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40208036733",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40208036721",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40208036744",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40208036729"
       ],
-      "nextAction": "Re-run/verify required workflows on the final documentation-refresh HEAD; keep production readiness blocked until owner gates pass."
+      "nextAction": "Keep required exact-SHA checks enabled and rerun them after any source/workflow change; production acceptance remains blocked on owner and operational prerequisites."
     },
     {
       "id": "CI-002",
@@ -182,9 +182,11 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03006107c6047e9ca82455f4da029462eab7ab49",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/0b6232d0bf21bd2d25eab7b8cda6b8a881d40685",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/f5d288630cc1142873ee2ae87443607010edabe3",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40207797361"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40207797361",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40208036733",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40208036721"
       ],
-      "nextAction": "Retain the regression suite and re-run it on the final documentation-refresh HEAD; continue reviewing filesystem race conditions and all other file-operation entry points."
+      "nextAction": "Retain the regression suite and continue auditing other file-operation entry points and time-of-check/time-of-use risks."
     }
   ]
 }
