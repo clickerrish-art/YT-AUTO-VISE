@@ -7,27 +7,28 @@
 **Decision: CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED.** Automated checks pass on the exact code/test SHA below, but full dashboard-control acceptance, complete divergent-history review, isolated recovery drills, real-account integration and deployment acceptance remain incomplete.
 
 ### Exact Git state
-- Implementation branch: `codex/marketing-machine-audit-fixes`; tested code/test SHA: `030efdd5d006bfcc096051b0a9e091656abfb77e`.
+- Implementation branch: `codex/marketing-machine-audit-fixes`; tested code/test SHA: `6b1de48043d16632957566c0ee84942f45e5ab87`.
 - Current PR HEAD will be a documentation-only descendant of this tested candidate; see [live PR metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1).
 - `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
-- At the tested code/test candidate, comparison was **1,023 ahead, 2 behind, 110 changed files**; subsequent documentation-only commits add no application-code changes. Use the live PR metadata for the current-head comparison. The full branch-only history has not been reviewed patch by patch. PR #1 remains open, draft and unmerged. No direct `main` edit or destructive history operation was performed.
+- At the tested code/test candidate, comparison was **1,027 ahead, 2 behind, 110 changed files**; subsequent documentation-only commits add no application-code changes. Use the live PR metadata for the current-head comparison. The full branch-only history has not been reviewed patch by patch. PR #1 remains open, draft and unmerged. No direct `main` edit or destructive history operation was performed.
 
 ### Exact-SHA CI
-- [Automation/security — run 40174445376](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445376): **PASS** — 243 Node tests, 0 failed/0 skipped; 8 Python tests; locked and normal `npm ci`; Google API import; JS syntax/Python compilation; 16 queue items; `npm audit`: 0 vulnerabilities across 49 packages.
-- [Browser E2E — run 40174445382](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445382): **PASS** — 5 Chromium journeys against the local dashboard/backend; not every visible control is covered.
-- [Content quality — run 40174445428](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445428): **PASS**.
-- [Metadata — run 40174445371](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445371): **PASS**.
-- [Production readiness — run 40174445375](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445375): **BLOCKED as required: 12 mandatory blockers**; retained diagnostic [artifact 12590883990](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445375/artifacts/12590883990).
-- [Facebook daily draft — run 40174445374](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445374): **SKIPPED** on PR event; not default-branch acceptance evidence.
+- [Automation/security — run 40175207834](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207834): **PASS** — 243 Node tests, 0 failed/0 skipped; 8 Python tests; locked and normal `npm ci`; Google API import; JS syntax/Python compilation; 16 queue items; `npm audit`: 0 vulnerabilities across 49 packages.
+- [Browser E2E — run 40175207786](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207786): **PASS** — 5 Chromium journeys against the local dashboard/backend; not every visible control is covered.
+- [Content quality — run 40175207785](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207785): **PASS**.
+- [Metadata — run 40175207781](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207781): **PASS**.
+- [Production readiness — run 40175207782](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207782): **BLOCKED as required: 12 mandatory blockers**; retained diagnostic [artifact 12592125035](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207782/artifacts/12592125035).
+- [Facebook daily draft — run 40175207784](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207784): **SKIPPED** on PR event; not default-branch acceptance evidence.
 
 ### Code fixes in this candidate
 - Approval artifact directory creation now uses component-by-component symlink/non-directory checks before nested writes. Four new path-safety tests cover safe creation, symlink ancestors, file ancestors and dashboard use of the guard.
 - Validation-task start and result persistence now use the cross-process state lock. A durable `RUNNING` record prevents duplicate launches across two dashboard processes sharing state; the regression test exercises concurrent submissions.
+- Facebook Page verification now reports success/failure in a dedicated accessible status area, so refreshing the dashboard cannot erase the operation result; the new browser regression verifies persistent blocked feedback.
 - Existing approval transaction rollback, atomic JSON path checks, Facebook history restoration safeguards, dashboard handler wiring, schedule/queue invariants and publishing safety tests remain covered.
 
 ### Acceptance and owner actions
 - [x] Exact-SHA automation, install, dependency audit, content and metadata checks pass.
-- [x] Five browser journeys pass.
+- [x] Six browser journeys pass.
 - [x] Public/unattended YouTube publishing and Facebook live publishing remain disabled.
 - [ ] Full dashboard-control browser acceptance and complete branch-history review/reconciliation.
 - [ ] Isolated crash, rollback, backup/restore and deployment drills with retained evidence.

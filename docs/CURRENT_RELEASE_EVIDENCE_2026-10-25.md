@@ -2,36 +2,36 @@
 
 ## Release decision
 
-**CODE ACCEPTANCE BLOCKED. PRODUCTION BLOCKED.** Automated regression, installation, dependency-audit and five browser journeys pass on the exact application-code candidate. Full dashboard-control acceptance, complete branch-history review, retained recovery/deployment evidence and real-account acceptance remain incomplete.
+**CODE ACCEPTANCE BLOCKED. PRODUCTION BLOCKED.** Automated regression, installation, dependency-audit and six browser journeys pass on the exact application-code candidate. Full dashboard-control acceptance, complete branch-history review, retained recovery/deployment evidence and real-account acceptance remain incomplete.
 
 ## Authoritative Git state
 
 - Repository: https://github.com/clickerrish-art/YT-AUTO-VISE
 - Implementation branch: `codex/marketing-machine-audit-fixes`
-- Exact tested application-code/test SHA: `030efdd5d006bfcc096051b0a9e091656abfb77e`
+- Exact tested application-code/test SHA: `6b1de48043d16632957566c0ee84942f45e5ab87`
 - Current branch HEAD: a documentation-only descendant of this tested SHA; live PR metadata is authoritative for the exact HEAD.
 - `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
-- At the tested code/test candidate, comparison was **1,023 ahead, 2 behind, 110 changed files**; subsequent documentation-only commits add no application-code changes. Use live PR metadata for the current-head comparison. The full PR changed-file inventory is available from GitHub. The 1,023 branch-only commits have not been reviewed patch by patch. The two base-only commits around Facebook history-restoration coverage are understood.
+- At the tested code/test candidate, comparison was **1,027 ahead, 2 behind, 110 changed files**; subsequent documentation-only commits add no application-code changes. Use live PR metadata for the current-head comparison. The full PR changed-file inventory is available from GitHub. The 1,023 branch-only commits have not been reviewed patch by patch. The two base-only commits around Facebook history-restoration coverage are understood.
 - PR #1: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1 — open, draft, unmerged.
 - No direct `main` edits or destructive history operations were performed.
 
 ## Exact-SHA automated evidence
 
-All runs below target `030efdd5d006bfcc096051b0a9e091656abfb77e`.
+All runs below target `6b1de48043d16632957566c0ee84942f45e5ab87`.
 
 | Check | Result | Evidence |
 |---|---|---|
-| Node regression suite | **243 passed; 0 failed; 0 skipped** | [Automation/security run 40174445376](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445376) |
-| Python safety tests | **8 passed** | [Automation/security run 40174445376](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445376) |
-| Locked and normal lifecycle-script `npm ci` | **Passed** | [Automation/security run 40174445376](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445376) |
-| Dependency audit | **0 vulnerabilities** across 49 audited packages | [Automation/security run 40174445376](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445376) |
-| Google API import, JS syntax, Python compilation, queue/campaign checks | **Passed**; 16 queue topics checked | [Automation/security run 40174445376](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445376) |
-| Browser E2E | **5 passed** against local dashboard/backend | [Dashboard browser E2E run 40174445382](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445382) |
-| Content quality | **Passed** | [Run 40174445428](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445428) |
-| Metadata validation | **Passed** | [Run 40174445371](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445371) |
-| Production readiness | **Blocked as required: 12 mandatory blockers** | [Run 40174445375](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445375); retained diagnostic [artifact 12590883990](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445375/artifacts/12590883990) |
-| Nature Frontiers Facebook draft | **Skipped** on PR event | [Run 40174445374](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445374); not default-branch acceptance evidence |
+| Node regression suite | **243 passed; 0 failed; 0 skipped** | [Automation/security run 40175207834](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207834) |
+| Python safety tests | **8 passed** | [Automation/security run 40175207834](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207834) |
+| Locked and normal lifecycle-script `npm ci` | **Passed** | [Automation/security run 40175207834](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207834) |
+| Dependency audit | **0 vulnerabilities** across 49 audited packages | [Automation/security run 40175207834](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207834) |
+| Google API import, JS syntax, Python compilation, queue/campaign checks | **Passed**; 16 queue topics checked | [Automation/security run 40175207834](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207834) |
+| Browser E2E | **6 passed** against local dashboard/backend | [Dashboard browser E2E run 40175207786](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207786) |
+| Content quality | **Passed** | [Run 40175207785](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207785) |
+| Metadata validation | **Passed** | [Run 40175207781](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207781) |
+| Production readiness | **Blocked as required: 12 mandatory blockers** | [Run 40175207782](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207782); retained diagnostic [artifact 12592125035](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207782/artifacts/12592125035) |
+| Nature Frontiers Facebook draft | **Skipped** on PR event | [Run 40175207784](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207784); not default-branch acceptance evidence |
 
 ## Implementation changes in this candidate
 
@@ -43,13 +43,16 @@ The dashboard previously used recursive directory creation for `run-logs/upload-
 ### Cross-process validation task durability
 The `/api/tasks/run` route previously wrote initial and final task state without the cross-process state lock. Both transitions now acquire the lock, and a durable `RUNNING` record blocks a duplicate launch across dashboard processes sharing state. A regression test submits the same long-running allowlisted task to two processes and asserts one success and one conflict.
 
+### Facebook Page verification feedback
+The Page-verification button previously wrote its result into the autonomous-health panel and then refreshed that panel, overwriting the success/error message. The dashboard now uses a separate accessible live region for operation feedback. A sixth Chromium journey verifies that blocked feedback remains visible after the status refresh.
+
 ### Existing safeguards retained
 Approval-artifact state-before-publication ordering and rollback handling; atomic JSON path validation; Facebook history restoration safeguards; dashboard form handler binding; queue idempotency and spacing; fail-closed readiness; hash-bound private-upload approval; remote-history/uncertain-attempt gates; inactive Safari campaigns; disabled public/unattended publishing.
 
 ## Requirement status
 
 ### Verified in code/CI
-- 243 Node tests, 8 Python tests and five browser journeys pass on the exact tested SHA.
+- 243 Node tests, 8 Python tests and six browser journeys pass on the exact tested SHA.
 - Clean locked and normal dependency installation passed; `npm audit` reported zero vulnerabilities.
 - The schedule uses `Africa/Johannesburg`, a rolling `long_form → long_form → short` cycle and a default 72 elapsed-hour minimum gap; Tuesday/Saturday triggers are draft-preparation only.
 - The dashboard has authenticated operator routes, durable state, queue/job controls, campaign safeguards, Facebook draft workflows, review gates and read-only upload reconciliation.
