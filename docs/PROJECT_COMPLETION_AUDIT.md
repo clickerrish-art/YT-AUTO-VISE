@@ -171,12 +171,12 @@ This section records evidence from the preceding branch checkpoint; the commit c
 ## Historical checkpoint — superseded by the verified code/test checkpoint above
 
 
-## Historical checkpoint — superseded by current branch-head verification
+## Historical checkpoint — superseded by the latest verified checkpoint
 
 
 # SonicVhibez Marketing Machine — Acceptance Audit
 
-## Historical checkpoint — superseded by the current verified baseline above
+## Historical checkpoint — superseded by the latest verified checkpoint above
 
 The code/test commit `62b1bd599d63c3ab1d55b6a6660740fbf3d44157` passed all three GitHub Actions validation workflows with 100 passed, 0 failed, 0 skipped in each: [automation validation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40079495157), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40079495128), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40079495162). The automation run completed `npm ci --ignore-scripts` (46 packages added, 47 audited) and Python compilation.
 
@@ -186,14 +186,14 @@ The implemented safeguards include: full production preflight at dashboard readi
 
 These are automated/code-level checks, not proof of genuine licence authenticity, human playback review, real wildlife renders or a live YouTube upload. Public publishing remains disabled; PR #1 remains open, draft and unmerged.
 
-## Previous implementation checkpoint (superseded by current code/test checkpoint below) — 2026-10-24
+## Historical implementation checkpoint — 24 October 2026 (superseded)
 
 Code and regression-test commit: `6b0874b870343cf435099eedf74038bf2e01f58c`. The three GitHub Actions validation workflows passed on this exact commit: 95 tests passed, 0 failed, 0 skipped in each workflow. [Automation validation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083877), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083898), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40077083943). The automation workflow completed `npm ci --ignore-scripts` and installed/audited 46 packages.
 
 The dashboard `/readyz` endpoint now runs the full production-readiness preflight, includes its actionable blockers, and returns HTTP 503 with `ready: false` when owner-controlled or production prerequisites remain unmet. The new regression test verifies this fail-closed behavior. This is not proof of real wildlife media, license authenticity, human playback review, live OAuth identity, or a real YouTube upload. Public publishing remains disabled and PR #1 remains open, draft and unmerged.
 
 
-## Previous acceptance checkpoint (superseded by the latest code checkpoint below) — 2026-10-24
+## Historical acceptance checkpoint — 24 October 2026 (superseded)
 
 Tested implementation commit: `c39c3b88eefb3430dcfedbc0663bef33ad03f45c`. GitHub Actions ran the full Node suite at this commit: 95 passed, 0 failed, 0 skipped. [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943712), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943732), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40037943766) all passed. The automation workflow also completed `npm ci --ignore-scripts` successfully.
 
@@ -249,7 +249,7 @@ This repository is **not 100% operational for real media release** until the blo
 See [GO_LIVE_BLOCKERS.md](GO_LIVE_BLOCKERS.md) for owner-dependent acceptance gates and [RELEASE_GATE_CHECKLIST.md](RELEASE_GATE_CHECKLIST.md) for per-release evidence requirements.
 
 
-## Historical implementation checkpoint — superseded by the current verified baseline above
+## Historical implementation checkpoint — superseded by the latest verified checkpoint above
 
 - Historical checkpoint only: `4ba995bc51ed2ae0513bc312865713a73e0e3160`. This predates the rolling-cycle and history-gate changes and is **not** current release evidence; check the exact latest branch HEAD and its CI before acceptance.
 - [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081305593), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081305540), and [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081305556) all passed on that code HEAD. Each ran 106 tests: 106 passed, 0 failed, 0 skipped. Automation also passed `npm ci --ignore-scripts` (46 packages added, 47 audited) and Python safety tests. Metadata validation explicitly confirms that `npm run check` fails closed while real production metadata is incomplete; this is not a release-readiness pass.
@@ -346,7 +346,7 @@ The following runs refer to the code/test candidate SHA above:
 - [Production readiness — run 40133174724](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133174724): **BLOCKED as intended**; a blocked readiness check is not a release pass.
 - [Facebook daily draft — run 40133174804](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40133174804): **SKIPPED** on the PR event. The branch push run was also skipped because this workflow is restricted to scheduled/manual execution on `main`. A successful default-branch scheduled/manual draft and retained artifact are **not verified**.
 
-### Current Git and acceptance status
+### Historical Git and acceptance status — superseded by latest verified checkpoint
 
 - The live compare at this checkpoint reported **946 commits ahead, 2 behind**, **102 changed files**, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, with `main` at `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. These figures must be recalculated after subsequent commits.
 - Commit metadata was inspected across 1,247 branch-history API records. Repeated documentation/workflow commit subjects are present; this is not equivalent to a complete review of every commit's patch. Full historical risk review and owner-approved reconciliation remain open. No merge, reset, rebase, force-push, cherry-pick, or history rewrite was performed.

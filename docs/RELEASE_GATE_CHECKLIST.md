@@ -171,7 +171,7 @@ This section records evidence from the preceding branch checkpoint; the commit c
 ## Historical checkpoint — superseded by the verified code/test checkpoint above
 
 
-## Historical checkpoint — superseded by current branch-head verification
+## Historical checkpoint — superseded by the latest verified checkpoint
 
 
 # Release gate checklist — SonicVhibez Marketing Machine
@@ -183,7 +183,7 @@ Tuesday/Saturday workflow slots are draft-preparation triggers only. Publication
 
 Keep each item unchecked until evidence has actually been inspected. Automated tests and mocks do not close real-world acceptance gates.
 
-## Historical checkpoint — superseded by the current verified baseline above
+## Historical checkpoint — superseded by the latest verified checkpoint above
 
 The code/test commit `62b1bd599d63c3ab1d55b6a6660740fbf3d44157` passed all three GitHub Actions validation workflows with 100 passed, 0 failed, 0 skipped in each: [automation validation and clean install](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40079495157), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40079495128), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40079495162). The automation run completed `npm ci --ignore-scripts` (46 packages added, 47 audited) and Python compilation.
 
@@ -239,7 +239,7 @@ Branch HEAD at the latest verified documentation checkpoint: `54680587e71b5c8407
 These CI results do not close owner-controlled media, rights, human playback, OAuth/channel identity, private upload, or operational restore gates. PR #1 remains open, draft and unmerged; public publishing remains disabled. Recheck this section against the current HEAD before relying on it after future commits.
 
 
-## Historical implementation checkpoint — superseded by the current verified baseline above
+## Historical implementation checkpoint — superseded by the latest verified checkpoint above
 
 - Historical checkpoint only: `4ba995bc51ed2ae0513bc312865713a73e0e3160`. This predates the rolling-cycle and history-gate changes and is **not** current release evidence; check the exact latest branch HEAD and its CI before acceptance.
 - [Automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081305593), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081305540), and [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40081305556) all passed on that code HEAD. Each ran 106 tests: 107 passed, 0 failed, 0 skipped. Automation also passed `npm ci --ignore-scripts` (46 packages added, 47 audited) and Python safety tests. Metadata validation explicitly confirms that `npm run check` fails closed while real production metadata is incomplete; this is not a release-readiness pass.
