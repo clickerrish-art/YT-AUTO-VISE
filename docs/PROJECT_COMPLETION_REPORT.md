@@ -8,7 +8,7 @@
 - Implementation branch: `codex/marketing-machine-audit-fixes`.
 - Current code/test candidate: `0ae6cca5f6f40beba96adf99c11368c1e95459d3`.
 - `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
-- Live comparison: **953 commits ahead, 2 behind, 105 changed files**. PR #1 remains [OPEN, DRAFT, UNMERGED](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1). No merge, rebase, reset, cherry-pick, force-push or history rewrite was performed.
+- At the exact code/test candidate `0ae6cca5f6f40beba96adf99c11368c1e95459d3`, comparison was **953 commits ahead, 2 behind, 105 changed files**; the following documentation-only refresh is a descendant of that candidate. PR #1 remains [OPEN, DRAFT, UNMERGED](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1). No merge, rebase, reset, cherry-pick, force-push or history rewrite was performed.
 - A complete patch-by-patch review of the 953-commit divergence has **not** been completed. Commit metadata and the current file diff were inspected; owner-approved reconciliation remains required.
 
 ### Latest exact code/test candidate evidence
