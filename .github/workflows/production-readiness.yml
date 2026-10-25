@@ -51,7 +51,7 @@ jobs:
           node scripts/production-readiness.mjs --json > readiness-report/readiness.json 2> readiness-report/readiness-json-error.txt
           json_status=$?
           set -e
-          printf '%s\\n%s\\n' "$readiness_status" "$json_status" > readiness-report/exit-codes.txt
+          printf '%s\n%s\n' "$readiness_status" "$json_status" > readiness-report/exit-codes.txt
           echo "Observed readiness exit codes: human=$readiness_status json=$json_status"
           echo "exit_code=$readiness_status" >> "$GITHUB_OUTPUT"
           echo "json_exit_code=$json_status" >> "$GITHUB_OUTPUT"
