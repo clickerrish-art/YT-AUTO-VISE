@@ -2,7 +2,43 @@
 
 # Final operations runbook
 
-## Live release assessment — 24 October 2026
+## Authoritative current acceptance status — 25 October 2026
+
+**Decision: CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED.** Automated checks pass on the exact code/test SHA below, but full dashboard-control acceptance, complete divergent-history review, isolated recovery drills, real-account integration and deployment acceptance remain incomplete.
+
+### Exact Git state
+- Implementation branch: `codex/marketing-machine-audit-fixes`; tested code/test SHA: `030efdd5d006bfcc096051b0a9e091656abfb77e`.
+- Current PR HEAD will be a documentation-only descendant of this tested candidate; see [live PR metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1).
+- `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Current compare: **1,023 ahead, 2 behind, 110 changed files**. The full branch-only history has not been reviewed patch by patch. PR #1 remains open, draft and unmerged. No direct `main` edit or destructive history operation was performed.
+
+### Exact-SHA CI
+- [Automation/security — run 40174445376](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445376): **PASS** — 243 Node tests, 0 failed/0 skipped; 8 Python tests; locked and normal `npm ci`; Google API import; JS syntax/Python compilation; 16 queue items; `npm audit`: 0 vulnerabilities across 49 packages.
+- [Browser E2E — run 40174445382](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445382): **PASS** — 5 Chromium journeys against the local dashboard/backend; not every visible control is covered.
+- [Content quality — run 40174445428](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445428): **PASS**.
+- [Metadata — run 40174445371](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445371): **PASS**.
+- [Production readiness — run 40174445375](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445375): **BLOCKED as required: 12 mandatory blockers**; retained diagnostic [artifact 12590883990](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445375/artifacts/12590883990).
+- [Facebook daily draft — run 40174445374](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445374): **SKIPPED** on PR event; not default-branch acceptance evidence.
+
+### Code fixes in this candidate
+- Approval artifact directory creation now uses component-by-component symlink/non-directory checks before nested writes. Four new path-safety tests cover safe creation, symlink ancestors, file ancestors and dashboard use of the guard.
+- Validation-task start and result persistence now use the cross-process state lock. A durable `RUNNING` record prevents duplicate launches across two dashboard processes sharing state; the regression test exercises concurrent submissions.
+- Existing approval transaction rollback, atomic JSON path checks, Facebook history restoration safeguards, dashboard handler wiring, schedule/queue invariants and publishing safety tests remain covered.
+
+### Acceptance and owner actions
+- [x] Exact-SHA automation, install, dependency audit, content and metadata checks pass.
+- [x] Five browser journeys pass.
+- [x] Public/unattended YouTube publishing and Facebook live publishing remain disabled.
+- [ ] Full dashboard-control browser acceptance and complete branch-history review/reconciliation.
+- [ ] Isolated crash, rollback, backup/restore and deployment drills with retained evidence.
+- [ ] Genuine rights-cleared Short/long-form media, validated manifests/checksums and human review.
+- [ ] Verified SonicVhibez OAuth/channel identity, remote-history reconciliation, one-shot authorization and verified private-upload receipt.
+- [ ] Verified Nature Frontiers Page permissions and successful default-branch Facebook draft run with retained artifact.
+- [ ] Production monitoring, backup, emergency stop and deployment acceptance.
+
+No real YouTube upload, public post or live Facebook post was performed. The sole approved Selar destination remains `https://selar.com/0u19v8u99l`; Safari campaigns remain inactive. See [the current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-25.md).
+
+## Historical release assessment — 24 October 2026 (superseded)
 
 **Latest application-code candidate:** `df5d28560a757fb185a020982f981fb1ce6722c7` (Google API client dependency and lockfile upgrade). Exact-head checks passed on `36b9e34285a9becb3ad3305f1147b5e831d7bf16`, a documentation-only descendant containing the same application code and dependency tree.
 **PR #1:** [open, draft, unmerged](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1).

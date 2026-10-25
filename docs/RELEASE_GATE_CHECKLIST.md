@@ -1,60 +1,43 @@
-> **Current release status — 2026-10-25:** See the [authoritative current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-25.md). Exact tested code candidate: `957d1c4145cb036e647c800ee1a781c2555d6263`. Automated checks pass (239 Node tests, 8 Python tests, 5 Chromium E2E tests, clean installs and zero npm-audit vulnerabilities), but **code acceptance remains BLOCKED** by incomplete full control coverage and branch-history review; **production acceptance remains BLOCKED** by genuine media/rights, account, authorization, integration, recovery and deployment gates. This status supersedes older checkpoint wording where it conflicts.
-
 # Release gate checklist
 
 ## Authoritative current acceptance status — 25 October 2026
 
-**Verdict: CODE ACCEPTANCE BLOCKED — PRODUCTION ACCEPTANCE BLOCKED.** The exact candidate passes the available automated checks, including five Chromium journeys, a form/button handler-contract regression and path-safety regressions. Full dashboard-control coverage, complete divergent-history review, retained operational drills and real-account acceptance remain incomplete.
+**Decision: CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED.** Automated checks pass on the exact code/test SHA below, but full dashboard-control acceptance, complete divergent-history review, isolated recovery drills, real-account integration and deployment acceptance remain incomplete.
 
-### Live Git state
-- Implementation branch: `codex/marketing-machine-audit-fixes`.
-- Exact application-code/test candidate: `957d1c4145cb036e647c800ee1a781c2555d6263`.
+### Exact Git state
+- Implementation branch: `codex/marketing-machine-audit-fixes`; tested code/test SHA: `030efdd5d006bfcc096051b0a9e091656abfb77e`.
+- Current PR HEAD will be a documentation-only descendant of this tested candidate; see [live PR metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1).
 - `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
-- Comparison at this code/test candidate: **1016 commits ahead, 2 behind, 108 changed files**; this evidence refresh is a documentation-only descendant. GitHub's bounded compare output is not a full review of all branch-only commits. The live PR HEAD after documentation updates is a documentation-only descendant; PR metadata gives its exact SHA.
-- PR #1 remains [OPEN, DRAFT, UNMERGED](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1). No merge, history rewrite or direct `main` edit was performed.
-- The two base-only commits are understood: `71578dafc24e5d48173dce3f4e392e18e42aa40e` added `test/restore-facebook-draft-history.test.mjs`; `fa00d28e7f58911482686e4ad69fac9f4701a2e6` reverted that file on `main`. The implementation branch retains equivalent coverage. The branch-only history remains unreviewed patch by patch.
+- Current compare: **1,023 ahead, 2 behind, 110 changed files**. The full branch-only history has not been reviewed patch by patch. PR #1 remains open, draft and unmerged. No direct `main` edit or destructive history operation was performed.
 
-### Current exact-candidate CI — `957d1c4145cb036e647c800ee1a781c2555d6263`
+### Exact-SHA CI
+- [Automation/security — run 40174445376](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445376): **PASS** — 243 Node tests, 0 failed/0 skipped; 8 Python tests; locked and normal `npm ci`; Google API import; JS syntax/Python compilation; 16 queue items; `npm audit`: 0 vulnerabilities across 49 packages.
+- [Browser E2E — run 40174445382](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445382): **PASS** — 5 Chromium journeys against the local dashboard/backend; not every visible control is covered.
+- [Content quality — run 40174445428](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445428): **PASS**.
+- [Metadata — run 40174445371](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445371): **PASS**.
+- [Production readiness — run 40174445375](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445375): **BLOCKED as required: 12 mandatory blockers**; retained diagnostic [artifact 12590883990](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445375/artifacts/12590883990).
+- [Facebook daily draft — run 40174445374](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40174445374): **SKIPPED** on PR event; not default-branch acceptance evidence.
 
-- [Automation/security — run 40173401063](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173401063): **PASS** — 239 Node tests, 0 failures, 0 skipped; 8 Python tests; clean locked and normal `npm ci`; Google API import; syntax/compilation checks; 16 queue items; `npm audit`: 0 vulnerabilities.
-- [Dashboard browser E2E — run 40173400988](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173400988): **PASS** — 5/5 Chromium tests, including form/button handler wiring, queue/draft persistence, campaign safeguards, server-restart persistence, Facebook draft workflow, and the public-YouTube safety lock.
-- [Content quality — run 40173400992](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173400992): **PASS**.
-- [Metadata validation — run 40173401012](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173401012): **PASS**.
-- [Lockfile validation — run 40173397937](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173397937): **PASS**.
-- [Production readiness — run 40173400999](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173400999): **BLOCKED as required** — mandatory owner-controlled production gates remain open; this is not a readiness pass.
-- [Nature Frontiers Facebook draft — run 40173400995](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40173400995): **SKIPPED** on the PR event; not default-branch acceptance evidence.
+### Code fixes in this candidate
+- Approval artifact directory creation now uses component-by-component symlink/non-directory checks before nested writes. Four new path-safety tests cover safe creation, symlink ancestors, file ancestors and dashboard use of the guard.
+- Validation-task start and result persistence now use the cross-process state lock. A durable `RUNNING` record prevents duplicate launches across two dashboard processes sharing state; the regression test exercises concurrent submissions.
+- Existing approval transaction rollback, atomic JSON path checks, Facebook history restoration safeguards, dashboard handler wiring, schedule/queue invariants and publishing safety tests remain covered.
 
-### Defects fixed
-- Approval-artifact transaction rejects symlinked ancestors before nested approval writes.
-- Facebook history restoration rejects symlinked temp/output ancestors before nested writes.
-- Atomic JSON writes validate every parent ancestor.
-- Dashboard startup rejects symlinked state ancestors before creating state.
-- Wired the previously dead Facebook draft form to its submit handler; added browser coverage for idea suggestion, draft submission, persisted draft and disabled publishing.
-- Latest code/test candidate: `957d1c4145cb036e647c800ee1a781c2555d6263`; 239 Node tests and five Chromium tests pass, including the dashboard form/button handler-contract regression. The prior `aebb25d5ce795090cb6383ba8e533ccd23a147ee` commit corrected the Facebook state API assertion.
+### Acceptance and owner actions
+- [x] Exact-SHA automation, install, dependency audit, content and metadata checks pass.
+- [x] Five browser journeys pass.
+- [x] Public/unattended YouTube publishing and Facebook live publishing remain disabled.
+- [ ] Full dashboard-control browser acceptance and complete branch-history review/reconciliation.
+- [ ] Isolated crash, rollback, backup/restore and deployment drills with retained evidence.
+- [ ] Genuine rights-cleared Short/long-form media, validated manifests/checksums and human review.
+- [ ] Verified SonicVhibez OAuth/channel identity, remote-history reconciliation, one-shot authorization and verified private-upload receipt.
+- [ ] Verified Nature Frontiers Page permissions and successful default-branch Facebook draft run with retained artifact.
+- [ ] Production monitoring, backup, emergency stop and deployment acceptance.
 
-### Acceptance register
-| Gate | Status | Evidence |
-|---|---|---|
-| Node/Python tests, clean installs, dependency audit | **PASS** | 239 Node, 8 Python, zero npm-audit vulnerabilities |
-| Browser acceptance | **PARTIALLY VERIFIED** | 5 Chromium journeys; not every control/journey |
-| Symlink-path and Facebook form regressions | **PASS** | Exact-candidate suite |
-| Production readiness | **BLOCKED** | 12 blockers and retained diagnostic |
-| Genuine media, rights, manifests and human approval | **BLOCKED** | No accepted final media package |
-| SonicVhibez OAuth/channel identity and remote history | **BLOCKED** | No verified live-account evidence |
-| One-shot private upload and receipt | **NOT PERFORMED / BLOCKED** | No separate authorization |
-| Nature Frontiers Page and default-branch draft | **BLOCKED** | PR event skipped |
-| Recovery/deployment acceptance | **PARTIALLY VERIFIED / BLOCKED** | Complete retained operational evidence unavailable |
-| Full branch-history review | **BLOCKED** | 1016 ahead, 2 behind; branch-only history not fully reviewed |
-| Public/unattended YouTube and Facebook live publishing disabled | **PASS (code/configuration guard)** | No live publishing performed |
-| Overall code acceptance | **CODE ACCEPTANCE BLOCKED** | Browser/control coverage and branch-history review incomplete |
-| Overall production acceptance | **PRODUCTION BLOCKED** | Media, account, authorization, integration and deployment gates open |
-
-### Safety and next actions
-Public/unattended YouTube publishing and Facebook live publishing remain disabled. Nature Frontiers is never the YouTube target. Only `https://selar.com/0u19v8u99l` is approved; Safari campaigns remain inactive. No real YouTube upload, public post or live Facebook post was performed.
-
-Owner actions: provide genuine licensed media and provenance; review final playable exports, captions, thumbnail and metadata; configure OAuth and verify SonicVhibez identity; reconcile remote history; separately authorize one exact private upload after all gates pass; verify Nature Frontiers Page permissions and run the eligible default-branch draft workflow; retain recovery/deployment evidence; approve a safe branch-reconciliation strategy.
+No real YouTube upload, public post or live Facebook post was performed. The sole approved Selar destination remains `https://selar.com/0u19v8u99l`; Safari campaigns remain inactive. See [the current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-25.md).
 
 ## Historical checkpoints (superseded; retained for audit trail)
+
 
 ## Live release assessment — 24 October 2026
 
