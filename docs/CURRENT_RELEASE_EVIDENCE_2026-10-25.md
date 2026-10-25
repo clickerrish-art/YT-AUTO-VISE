@@ -1,3 +1,13 @@
+## Strict cadence-approval timestamp hardening — 25 October 2026
+
+- Shared strict ISO timestamp validator: [`cef7664`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/cef7664ad41bc11e6473e6d7a5f1682b7efd69e1).
+- Schedule and readiness gates now use it: [`f3b31d5`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/f3b31d57ea1363fafe945c184cb300908e6c0f2f), [`58fceca`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/58fceca25f9fb70f52a12505e9d14f007e29d516).
+- Regression tests cover explicit timezone, impossible dates, invalid offsets and invalid owner-decision timestamps: [`358f3b9`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/358f3b9f6e3dea315b30f671f8a1749e7849fb6e), [`70e6611`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/70e661171e91c624ed4d1a3f01d9eeb89c9a5378).
+- Candidate `58fceca25f9fb70f52a12505e9d14f007e29d516`: [automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215742648) **PASS** — 272 Node tests passed, 0 failed; npm audit 0 vulnerabilities; Python safety, JS syntax, Python compilation, campaign and queue checks passed. [Metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215742576) and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215742589) **PASS**. [Dashboard browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215742588) was still running at checkpoint; do not mark it passed until completed. [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215742598) **BLOCKED** as required. Facebook draft workflow was **SKIPPED**.
+- This is not a production acceptance. Public/unattended publishing remains disabled; no upload or publication occurred.
+
+---
+
 ## Verified follow-up checkpoint — 25 October 2026
 
 - Cadence-approval validation hardening is in commits [`cf82332`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/cf82332136c444ef3c57e4e1d1eef9ba9aabae6f), [`95d9dd8`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/95d9dd8c4fb895861bcdfbc4c5ddc12b477990f6), [`630f1fb`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/630f1fbe05efa04ac4b5a470c506f872e75d1f1f). Schedule validation and production readiness now require a supported mode, timezone-aware approval timestamp, non-empty approval reference, and feasible spacing; custom modes must fit their cycle mathematically.
