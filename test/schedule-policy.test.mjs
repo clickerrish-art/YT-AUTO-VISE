@@ -1,6 +1,15 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validatePublicationSlot, weeklyUtcCronGaps, localDateTimeToIso, evaluateNextPublication } from "../scripts/schedule-policy.mjs";
+import { validatePublicationSlot, weeklyUtcCronGaps, localDateTimeToIso, evaluateNextPublication, isValidZonedIsoTimestamp } from "../scripts/schedule-policy.mjs";
+
+test("strict timestamp validator requires timezone and rejects normalized invalid dates", () => {
+  assert.equal(isValidZonedIsoTimestamp("2026-10-25T12:00:00+02:00"), true);
+  assert.equal(isValidZonedIsoTimestamp("2026-10-25T10:00:00Z"), true);
+  assert.equal(isValidZonedIsoTimestamp("2026-10-25T12:00:00"), false);
+  assert.equal(isValidZonedIsoTimestamp("2026-02-31T12:00:00Z"), false);
+  assert.equal(isValidZonedIsoTimestamp("2026-10-25T12:00:00+15:00"), false);
+  assert.equal(isValidZonedIsoTimestamp(null), false);
+});
 
 test("publication slot compares actual instants and rejects same-local-date and under-72-hour collisions", () => {
   const existing = [
