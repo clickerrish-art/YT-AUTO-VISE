@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
-import { weeklyUtcCronGaps, ROLLING_PUBLICATION_FORMATS } from "./schedule-policy.mjs";
+import { weeklyUtcCronGaps, ROLLING_PUBLICATION_FORMATS, isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 const root = process.cwd();
 const read = p => JSON.parse(fs.readFileSync(path.join(root, p), "utf8"));
 const errors = [];
