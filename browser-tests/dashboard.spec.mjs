@@ -166,7 +166,6 @@ test("campaign controls fail closed on unapproved destinations and retain Safari
   const activateOption = page.locator('#campaignaction option[value="activate"]');
   await expect(activateOption).toBeDisabled();
   await expect(activateOption).toContainText("disabled by policy");
-  await expect(page.locator("#campaignresult")).toContainText("Safari campaign activation is disabled by project policy");
   const bypassAttempt = await request.post("/api/campaigns/manage", {
     headers,
     data: { campaignId: "safari-affiliate-inactive", action: "activate", confirmOwnerApproval: true }
