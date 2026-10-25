@@ -12,7 +12,7 @@
 - `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
 - Comparison at this code/test candidate: **1016 commits ahead, 2 behind, 108 changed files**; this evidence refresh is a documentation-only descendant. GitHub's bounded compare output is not a full review of all branch-only commits. The live PR HEAD after documentation updates is a documentation-only descendant; PR metadata gives its exact SHA.
 - PR #1 remains [OPEN, DRAFT, UNMERGED](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1). No merge, history rewrite or direct `main` edit was performed.
-- The two base-only commits are understood: `71578dafc24e5d48173dce3f4e392e18e42aa40e` added `test/restore-facebook-draft-history.test.mjs`; `fa00d28e7f58911482686e4ad69fac9f4701a2e6` reverted that file on `main`. The implementation branch retains equivalent coverage; its version differs only in an unused fetch-options parameter and trailing whitespace. This explains the two base-only commits, not the 1013 branch-only commits, whose complete review remains outstanding.
+- The two base-only commits are understood: `71578dafc24e5d48173dce3f4e392e18e42aa40e` added `test/restore-facebook-draft-history.test.mjs`; `fa00d28e7f58911482686e4ad69fac9f4701a2e6` reverted that file on `main`. The implementation branch retains equivalent coverage; its version differs only in an unused fetch-options parameter and trailing whitespace. This explains the two base-only commits, not the 1016 branch-only commits, whose complete review remains outstanding.
 
 ### Current exact-candidate CI — `957d1c4145cb036e647c800ee1a781c2555d6263`
 
@@ -30,12 +30,12 @@
 - Atomic JSON replacement and exclusive creation validate all parent ancestors, not just the immediate directory.
 - Dashboard startup validates/creates state-directory components individually and refuses symlinked ancestors before creating state.
 - The Facebook draft form lacked a submit-handler binding; the browser test exposed the dead control. The form is now connected to `createFacebookDraft`, and the five-test browser suite verifies the full draft-only flow.
-- Exact code/test candidate: `aebb25d5ce795090cb6383ba8e533ccd23a147ee`; automated checks passed on this SHA.
+- Latest code/test candidate: `957d1c4145cb036e647c800ee1a781c2555d6263`; 239 Node tests and five Chromium tests pass, including the dashboard form/button handler-contract regression. The prior `aebb25d5ce795090cb6383ba8e533ccd23a147ee` commit corrected the Facebook state API assertion.
 
 ### Acceptance register
 | Gate | Status | Evidence |
 |---|---|---|
-| Automated Node/Python tests, clean installs and dependency audit | **PASS** | 238 Node, 8 Python, zero npm-audit vulnerabilities |
+| Automated Node/Python tests, clean installs and dependency audit | **PASS** | 239 Node, 8 Python, zero npm-audit vulnerabilities |
 | Browser acceptance | **PARTIALLY VERIFIED** | 5 Chromium journeys; not all controls/journeys |
 | Symlink-path regressions | **PASS** | Approval, history, atomic state and dashboard startup tests pass |
 | Facebook draft UI lifecycle | **PASS (covered workflow)** | Idea suggestion, form submit, persistence and publishing-disabled assertions pass |
@@ -45,7 +45,7 @@
 | One-shot private upload and receipt | **NOT PERFORMED / BLOCKED** | No separately authorized upload |
 | Nature Frontiers Page and default-branch draft | **BLOCKED** | PR workflow skipped; no accepted default-branch artifact |
 | Complete recovery/deployment drills | **PARTIALLY VERIFIED / BLOCKED** | Test coverage exists; retained operational evidence incomplete |
-| Full branch-history review | **BLOCKED** | 1013-ahead/2-behind; branch-only history unreviewed |
+| Full branch-history review | **BLOCKED** | 1016-ahead/2-behind; branch-only history unreviewed |
 | Public/unattended YouTube and Facebook live publishing disabled | **PASS (code/configuration guard)** | No live external publishing performed |
 | Overall code acceptance | **CODE ACCEPTANCE BLOCKED** | Browser/control coverage and branch-history review incomplete |
 | Overall production acceptance | **PRODUCTION BLOCKED** | Media, account, authorization, integration and deployment gates remain open |

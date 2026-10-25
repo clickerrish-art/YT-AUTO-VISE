@@ -2,7 +2,7 @@
 
 ## Authoritative status
 
-**Decision: CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED.** The latest exact code/test candidate passes 239 Node tests, 8 Python tests and five Chromium operator journeys. The UI contract test guards form/button handler wiring; not every dashboard control is covered. This is not full code acceptance: not every dashboard control is tested, and the 1013 branch-only commits have not been reviewed patch by patch. Production acceptance remains blocked by real media/rights, owner review, live account identity/history, one-shot upload authorization, Facebook default-branch draft evidence, and recovery/deployment gates.
+**Decision: CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED.** The latest exact code/test candidate passes 239 Node tests, 8 Python tests and five Chromium operator journeys. The UI contract test guards form/button handler wiring; not every dashboard control is covered. This is not full code acceptance: not every dashboard control is tested, and the 1016 branch-only commits have not been reviewed patch by patch. Production acceptance remains blocked by real media/rights, owner review, live account identity/history, one-shot upload authorization, Facebook default-branch draft evidence, and recovery/deployment gates.
 
 - Repository: https://github.com/clickerrish-art/YT-AUTO-VISE
 - Implementation branch: `codex/marketing-machine-audit-fixes`
@@ -60,7 +60,7 @@ Relevant implementation/test commits:
 
 | Gate | Status | Reason |
 |---|---|---|
-| Automated Node/Python tests, clean install and dependency audit | **PASS** | 238 Node, 8 Python, zero npm-audit vulnerabilities |
+| Automated Node/Python tests, clean install and dependency audit | **PASS** | 239 Node, 8 Python, zero npm-audit vulnerabilities |
 | Browser acceptance | **PARTIALLY VERIFIED** | Five journeys pass; not every visible control is covered |
 | Symlink-path and Facebook form regressions | **PASS** | Exact candidate checks pass |
 | Production readiness | **BLOCKED** | Twelve mandatory blockers retained |
@@ -69,7 +69,7 @@ Relevant implementation/test commits:
 | One-shot private upload and verified receipt | **NOT PERFORMED / BLOCKED** | No separately authorized upload |
 | Nature Frontiers Page identity/permissions and default-branch draft | **BLOCKED** | PR event skipped; no accepted default-branch artifact |
 | Full recovery/deployment acceptance | **PARTIALLY VERIFIED / BLOCKED** | Test coverage exists; retained operational drill/deployment evidence incomplete |
-| Full branch-only history review | **BLOCKED** | 1013-ahead/2-behind; full patch review incomplete |
+| Full branch-only history review | **BLOCKED** | 1016-ahead/2-behind; full patch review incomplete |
 | Public/unattended YouTube and Facebook live publishing disabled | **PASS (code/configuration guard)** | No live external publishing performed |
 | Overall code acceptance | **CODE ACCEPTANCE BLOCKED** | Browser/control coverage and history review incomplete |
 | Overall production acceptance | **PRODUCTION BLOCKED** | Real media, account, authorization, integration and deployment gates remain open |

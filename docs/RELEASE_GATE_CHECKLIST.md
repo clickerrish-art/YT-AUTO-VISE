@@ -30,12 +30,12 @@
 - Atomic JSON writes validate every parent ancestor.
 - Dashboard startup rejects symlinked state ancestors before creating state.
 - Wired the previously dead Facebook draft form to its submit handler; added browser coverage for idea suggestion, draft submission, persisted draft and disabled publishing.
-- Exact code/test candidate: `aebb25d5ce795090cb6383ba8e533ccd23a147ee`.
+- Latest code/test candidate: `957d1c4145cb036e647c800ee1a781c2555d6263`; 239 Node tests and five Chromium tests pass, including the dashboard form/button handler-contract regression. The prior `aebb25d5ce795090cb6383ba8e533ccd23a147ee` commit corrected the Facebook state API assertion.
 
 ### Acceptance register
 | Gate | Status | Evidence |
 |---|---|---|
-| Node/Python tests, clean installs, dependency audit | **PASS** | 238 Node, 8 Python, zero npm-audit vulnerabilities |
+| Node/Python tests, clean installs, dependency audit | **PASS** | 239 Node, 8 Python, zero npm-audit vulnerabilities |
 | Browser acceptance | **PARTIALLY VERIFIED** | 5 Chromium journeys; not every control/journey |
 | Symlink-path and Facebook form regressions | **PASS** | Exact-candidate suite |
 | Production readiness | **BLOCKED** | 12 blockers and retained diagnostic |
@@ -44,7 +44,7 @@
 | One-shot private upload and receipt | **NOT PERFORMED / BLOCKED** | No separate authorization |
 | Nature Frontiers Page and default-branch draft | **BLOCKED** | PR event skipped |
 | Recovery/deployment acceptance | **PARTIALLY VERIFIED / BLOCKED** | Complete retained operational evidence unavailable |
-| Full branch-history review | **BLOCKED** | 1013 ahead, 2 behind; branch-only history not fully reviewed |
+| Full branch-history review | **BLOCKED** | 1016 ahead, 2 behind; branch-only history not fully reviewed |
 | Public/unattended YouTube and Facebook live publishing disabled | **PASS (code/configuration guard)** | No live publishing performed |
 | Overall code acceptance | **CODE ACCEPTANCE BLOCKED** | Browser/control coverage and branch-history review incomplete |
 | Overall production acceptance | **PRODUCTION BLOCKED** | Media, account, authorization, integration and deployment gates open |
