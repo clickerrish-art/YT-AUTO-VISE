@@ -179,6 +179,24 @@ test("08:00/18:00 assignment is deterministic and experiment reports insufficien
   assert.equal(summarizeFacebookExperiment(posts).sufficientEvidence, true);
 });
 
+test("Facebook emergency stop blocks an otherwise fully authorized and approved publish", (t) => {
+  const { root, draft } = fixture(t);
+  const evaluation = evaluateFacebookDraft(draft, { expectedPageId: "123456789012345", rightsRoot: root });
+  assert.equal(evaluation.ok, true, JSON.stringify(evaluation));
+  const approved = approveFacebookDraft(draft, { reviewer: "owner@example.test", decision: "APPROVE", evaluation, now: NOW });
+  const stopped = assertFacebookPublishAllowed(approved, {
+    publishingEnabled: true, explicitOperationAuthorization: true, dryRun: false,
+    emergencyStop: true, verifiedPageId: "123456789012345", evaluation
+  });
+  assert.equal(stopped.allowed, false);
+  assert.ok(stopped.blockers.some(reason => /emergency stop is active/i.test(reason)));
+  const explicitlyReleased = assertFacebookPublishAllowed(approved, {
+    publishingEnabled: true, explicitOperationAuthorization: true, dryRun: false,
+    emergencyStop: false, verifiedPageId: "123456789012345", evaluation
+  });
+  assert.equal(explicitlyReleased.allowed, true, JSON.stringify(explicitlyReleased.blockers));
+});
+
 test("uncertain remote publish outcomes cannot be blindly retried", () => {
   const job = { id: "attempt-1", kind: "FACEBOOK_PUBLISH_ATTEMPT", status: "UPLOADING" };
   const unknown = reconcileFacebookOutcome(job, { status: "UNKNOWN" });
