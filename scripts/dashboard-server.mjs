@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { metaCredentialFingerprint, fingerprintsMatch } from "./meta-credential-fingerprint.mjs";
+import { atomicWriteJson } from "./atomic-json-file.mjs";
 import { redactOperationalText } from "./safe-output.mjs";
 import { fileURLToPath } from "node:url";
 import { spawn, spawnSync } from "node:child_process";
@@ -118,9 +119,7 @@ async function reapExpiredWorkerLeases() {
   } finally { release(); }
 }
 function saveState(state) {
-  const temp = stateFile + "." + crypto.randomUUID() + ".tmp";
-  fs.writeFileSync(temp, JSON.stringify(state, null, 2) + "\n", { mode: 0o600 });
-  fs.renameSync(temp, stateFile);
+  atomicWriteJson(stateFile, state, { mode: 0o600 });
 }
 function appendFacebookRecoveryReceipt(record) {
   const ledger = path.join(path.dirname(stateFile), "facebook-recovery-ledger.jsonl");
