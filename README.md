@@ -12,7 +12,7 @@
 
 ### Exact-SHA CI
 - [Automation/security — run 40175207834](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207834): **PASS** — 243 Node tests, 0 failed/0 skipped; 8 Python tests; locked and normal `npm ci`; Google API import; JS syntax/Python compilation; 16 queue items; `npm audit`: 0 vulnerabilities across 49 packages.
-- [Browser E2E — run 40175207786](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207786): **PASS** — 5 Chromium journeys against the local dashboard/backend; not every visible control is covered.
+- [Browser E2E — run 40175207786](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207786): **PASS** — 6 Chromium journeys against the local dashboard/backend; not every visible control is covered.
 - [Content quality — run 40175207785](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207785): **PASS**.
 - [Metadata — run 40175207781](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207781): **PASS**.
 - [Production readiness — run 40175207782](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207782): **BLOCKED as required: 12 mandatory blockers**; retained diagnostic [artifact 12592125035](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207782/artifacts/12592125035).
