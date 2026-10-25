@@ -1195,10 +1195,17 @@ const server = http.createServer(async (req, res) => {
         const metadataFile = resolveRepositoryFile(metadataPath);
         const metadataVersion = sha256File(metadataFile);
         if (body.metadataVersion !== metadataVersion || job.metadataVersion !== metadataVersion) return json(res, 409, { error: "Metadata version must match both the actual metadata file and validated job metadata" });
+        const captionsPath = job.validationResults?.captionsPath;
+        const captionsSha256 = job.validationResults?.captionsSha256;
+        if (typeof captionsPath !== "string" || !captionsPath.trim() || !/^[a-f0-9]{64}$/.test(captionsSha256 ?? "")) return json(res, 409, { error: "Validated captions path and SHA-256 are required before approval" });
+        let captionsFile;
+        try { captionsFile = resolveRepositoryFile(captionsPath); }
+        catch { return json(res, 409, { error: "Validated captions file is missing or unsafe; repeat technical validation" }); }
+        if (sha256File(captionsFile) !== captionsSha256) return json(res, 409, { error: "Captions changed after technical validation; repeat validation before approval" });
         let uploadMetadata;
         try { uploadMetadata = JSON.parse(fs.readFileSync(metadataFile, "utf8")); } catch { return json(res, 400, { error: "Reviewed metadata is invalid JSON" }); }
         if (uploadMetadata.channel !== "SonicVhibez" || uploadMetadata.visibility !== "private" || uploadMetadata.productUrl !== approvedProductUrl || uploadMetadata.status !== "READY_FOR_PRIVATE_UPLOAD" || uploadMetadata.rightsConfirmed !== true || uploadMetadata.complianceReviewed !== true) return json(res, 400, { error: "Metadata must be reviewed and ready for SonicVhibez private upload, with rights/compliance gates and the exact approved Selar destination" });
-        const relatedArtifacts = [...(job.outputArtifacts ?? []), ...(job.thumbnailArtifact ? [job.thumbnailArtifact] : [])].map(entry => ({ path: entry.path, sha256: entry.sha256 }));
+        const relatedArtifacts = [...(job.outputArtifacts ?? []), ...(job.thumbnailArtifact ? [job.thumbnailArtifact] : []), { path: captionsPath, sha256: captionsSha256 }].map(entry => ({ path: entry.path, sha256: entry.sha256 }));
         const artifact = { path: artifactPath, sha256: artifactSha256, relatedArtifacts };
         if (!(job.outputArtifacts ?? []).some(entry => entry.path === artifact.path && entry.sha256 === artifact.sha256)) return json(res, 409, { error: "The checked file is not the exact artifact recorded on this job" });
         for (const related of relatedArtifacts) {
@@ -1241,7 +1248,7 @@ const server = http.createServer(async (req, res) => {
             metadataVersion,
             rightsEvidenceSha256: review.rightsEvidenceSha256,
             rightsEvidence,
-            relatedArtifacts: [{ path: artifactPath, sha256: artifactSha256 }, ...relatedArtifacts],
+            relatedArtifacts: [...relatedArtifacts, { path: metadataPath, sha256: metadataVersion }],
             publishingEnabled: false,
             visibility: "private"
           };

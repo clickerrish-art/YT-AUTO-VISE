@@ -55,16 +55,38 @@ test("retry requires a retryable failure and respects the attempt limit", () => 
 });
 
 
-test("private-upload approval requires matching generated artifact, metadata and rights evidence", () => {
+test("private-upload approval binds media, thumbnail, validated captions, metadata and rights evidence", () => {
   let job = createContentJob(input);
-  job = { ...job, state: "AWAITING_HUMAN_REVIEW", metadataVersion: "meta-sha256:abc", outputArtifacts: [{ path: "artifacts/fixture.mp4", sha256: "a".repeat(64) }], rightsChecks: { verified: true, evidenceSha256: "b".repeat(64) } };
-  const review = { decision: "APPROVE", reviewer: "reviewer@example.test", artifactPath: "artifacts/fixture.mp4", artifactSha256: "a".repeat(64), metadataVersion: "meta-sha256:abc", rightsEvidenceSha256: "b".repeat(64), id: "review-001" };
+  const video = { path: "artifacts/fixture.mp4", sha256: "a".repeat(64) };
+  const thumbnail = { path: "artifacts/fixture.jpg", sha256: "d".repeat(64) };
+  const captions = { path: "artifacts/fixture.srt", sha256: "c".repeat(64) };
+  job = {
+    ...job,
+    state: "AWAITING_HUMAN_REVIEW",
+    metadataVersion: "meta-sha256:abc",
+    outputArtifacts: [video],
+    thumbnailArtifact: thumbnail,
+    validationResults: { passed: true, captionsPath: captions.path, captionsSha256: captions.sha256 },
+    rightsChecks: { verified: true, evidenceSha256: "b".repeat(64) }
+  };
+  const review = {
+    decision: "APPROVE",
+    reviewer: "reviewer@example.test",
+    artifactPath: video.path,
+    artifactSha256: video.sha256,
+    metadataVersion: "meta-sha256:abc",
+    rightsEvidenceSha256: "b".repeat(64),
+    relatedArtifacts: [video, thumbnail, captions],
+    id: "review-001"
+  };
   const approved = approveContentJobForPrivateUpload(job, review, "2026-10-23T12:00:00.000Z");
   assert.equal(approved.state, "APPROVED_FOR_PRIVATE_UPLOAD");
-  assert.equal(approved.humanApproval.artifactSha256, "a".repeat(64));
-  assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, artifactSha256: "c".repeat(64) }), /does not match a generated job artifact/);
+  assert.equal(approved.humanApproval.artifactSha256, video.sha256);
+  assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, artifactSha256: "e".repeat(64) }), /does not match a generated job artifact/);
   assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, metadataVersion: "changed" }), /metadata version/);
-  assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, rightsEvidenceSha256: "d".repeat(64) }), /rights evidence/);
+  assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, rightsEvidenceSha256: "f".repeat(64) }), /rights evidence/);
+  assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, relatedArtifacts: review.relatedArtifacts.filter(item => item.path !== captions.path) }), /does not bind every current media artifact/);
+  assert.throws(() => approveContentJobForPrivateUpload({ ...job, validationResults: { passed: true } }, review), /Validated captions path and SHA-256/);
   assert.throws(() => approveContentJobForPrivateUpload({ ...job, state: "GENERATED" }, review), /awaiting human review/);
 });
 
