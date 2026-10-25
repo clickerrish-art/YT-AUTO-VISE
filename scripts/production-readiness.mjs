@@ -5,6 +5,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import { createHash } from "node:crypto";
 
 const root = process.cwd();
 const blockers = [];
@@ -144,15 +145,54 @@ for (const key of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRES
 if (process.env.SONICVHIBEZ_CHANNEL_ID && !/^UC[a-zA-Z0-9_-]{22}$/.test(process.env.SONICVHIBEZ_CHANNEL_ID)) {
   blockers.push("SONICVHIBEZ_CHANNEL_ID does not match the expected YouTube channel-ID format; verify it manually.");
 }
-console.log("SonicVhibez production readiness (read-only)");
-for (const note of notes) console.log("INFO: " + note);
-if (blockers.length) {
-  console.log(`HOLD: ${blockers.length} blocker(s) remain before a private upload can be attempted:`);
-  for (const blocker of blockers) console.log("- " + blocker);
-  console.log("This report never uploads, schedules, or publishes.");
-  console.log("This report does not verify account ownership, license authenticity, factual accuracy, or visual quality.");
-  process.exitCode = 2;
+function resolutionFor(blocker) {
+  if (/history|uncertain upload|remote/i.test(blocker)) return "Authenticate to the approved SonicVhibez channel, retrieve public/private/unlisted history, reconcile every pending or uncertain attempt, and retain the reviewed reconciliation ledger.";
+  if (/license|licen[cs]e|rights evidence|rightsConfirmed/i.test(blocker)) return "Supply genuine source and licence/permission evidence for every asset, verify the permitted uses and restrictions, and retain evidence files plus SHA-256 hashes. Do not use placeholder strings.";
+  if (/human|review|approval|compliance/i.test(blocker)) return "Have the authorized human reviewer inspect the final media, captions, thumbnail, metadata, claims and disclosures; record the decision against exact final artifact hashes.";
+  if (/YOUTUBE_|channel ID|channelId|channel identity|SonicVhibez/i.test(blocker)) return "Configure credentials only in the approved secret store, authenticate with YouTube, and verify the API-returned channel ID equals the independently confirmed SonicVhibez channel ID.";
+  if (/manifest|MP4|media|footage|narration|captions|thumbnail/i.test(blocker)) return "Provide the genuine playable export and complete manifest; validate streams, duration, dimensions, captions, metadata and exact SHA-256 hashes.";
+  if (/Selar|product URL|destination/i.test(blocker)) return "Use only the approved product destination https://selar.com/0u19v8u99l and ensure reviewed metadata and CTA agree with the actual content.";
+  if (/schedule|spacing|cycle|queue|cadence/i.test(blocker)) return "Correct the authoritative schedule and queue so the rolling long_form → long_form → short cycle, Africa/Johannesburg timezone and minimum elapsed spacing agree; keep publication disabled.";
+  return "Inspect the named prerequisite, provide verifiable evidence in the expected configuration or artifact, then rerun production readiness. Do not bypass or weaken this gate.";
+}
+
+const structuredBlockers = blockers.map((message) => {
+  const digest = createHash("sha256").update(message).digest("hex").slice(0, 12).toUpperCase();
+  const critical = /LIVE BLOCKER|uncertain|OAuth|YOUTUBE_|channel ID|rights|licen[cs]e|human|approval|upload|private/i.test(message);
+  return {
+    id: `RDY-${digest}`,
+    severity: critical ? "critical" : "high",
+    message,
+    evidence: { kind: "readiness-check-finding", observed: message },
+    resolution: resolutionFor(message)
+  };
+});
+
+if (process.argv.includes("--json")) {
+  console.log(JSON.stringify({
+    application: "SonicVhibez Marketing Machine",
+    mode: "read-only",
+    status: blockers.length ? "blocked" : "prerequisites-present",
+    blockerCount: structuredBlockers.length,
+    blockers: structuredBlockers,
+    notes,
+    limitations: [
+      "This report never uploads, schedules, or publishes.",
+      "This report does not verify account ownership, licence authenticity, factual accuracy, or visual quality."
+    ]
+  }, null, 2));
+  if (blockers.length) process.exitCode = 2;
 } else {
-  console.log("PREREQUISITES PRESENT: run the content checker and media preflight, then manually inspect the result before any private upload.");
-  console.log("This report never uploads, schedules, or publishes.");
+  console.log("SonicVhibez production readiness (read-only)");
+  for (const note of notes) console.log("INFO: " + note);
+  if (blockers.length) {
+    console.log(`HOLD: ${blockers.length} blocker(s) remain before a private upload can be attempted:`);
+    for (const blocker of blockers) console.log("- " + blocker);
+    console.log("This report never uploads, schedules, or publishes.");
+    console.log("This report does not verify account ownership, license authenticity, factual accuracy, or visual quality.");
+    process.exitCode = 2;
+  } else {
+    console.log("PREREQUISITES PRESENT: run the content checker and media preflight, then manually inspect the result before any private upload.");
+    console.log("This report never uploads, schedules, or publishes.");
+  }
 }
