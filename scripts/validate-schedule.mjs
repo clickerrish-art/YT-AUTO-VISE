@@ -23,8 +23,21 @@ if ("targetCadence" in plan || "requestedTargetCadence" in plan || "interimDraft
 const requestedCadence = plan.requestedWeeklyCadence;
 if (requestedCadence?.longFormPerWeek !== 2 || requestedCadence?.shortsPerWeek !== 1 || requestedCadence?.totalPublicationsPerWeek !== 3 || requestedCadence?.status !== "CONFLICTS_WITH_72_HOUR_MINIMUM") errors.push("requestedWeeklyCadence must explicitly record the requested 2 long-form + 1 Short weekly target and its 72-hour conflict");
 const cadenceDecision = plan.cadenceDecision;
+const supportedCadenceModes = ["ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET", "WEEKLY_TARGET_WITH_SHORTER_SPACING", "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"];
 if (!cadenceDecision || !["OWNER_DECISION_REQUIRED", "OWNER_APPROVED"].includes(cadenceDecision.status) || typeof cadenceDecision.ownerApproved !== "boolean") errors.push("cadenceDecision must explicitly record owner decision status");
 if (cadenceDecision?.status === "OWNER_APPROVED" && cadenceDecision.ownerApproved !== true) errors.push("cadenceDecision OWNER_APPROVED status requires ownerApproved=true");
+if (cadenceDecision?.ownerApproved === true || cadenceDecision?.status === "OWNER_APPROVED") {
+ if (cadenceDecision.status !== "OWNER_APPROVED" || cadenceDecision.ownerApproved !== true) errors.push("approved cadence decision must have matching OWNER_APPROVED status and ownerApproved=true");
+ if (!supportedCadenceModes.includes(cadenceDecision.approvedMode)) errors.push("approved cadence decision must name a supported approvedMode");
+ if (typeof cadenceDecision.approvedAt !== "string" || !Number.isFinite(Date.parse(cadenceDecision.approvedAt)) || !/(Z|[+-]\\d{2}:\\d{2})$/.test(cadenceDecision.approvedAt)) errors.push("approved cadence decision requires approvedAt as an ISO timestamp with explicit timezone");
+ if (typeof cadenceDecision.approvalReference !== "string" || !cadenceDecision.approvalReference.trim()) errors.push("approved cadence decision requires a non-empty approvalReference");
+ if (cadenceDecision.approvedMode === "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET" && minSpacing < 72) errors.push("rolling-cycle mode must retain at least 72 hours between publications");
+ if (cadenceDecision.approvedMode === "WEEKLY_TARGET_WITH_SHORTER_SPACING" && minSpacing > 56) errors.push("weekly target mode requires a minimum gap no greater than 56 hours for three recurring publications per 168-hour cycle");
+ if (cadenceDecision.approvedMode === "OTHER_OWNER_DEFINED_FEASIBLE_POLICY") {
+  const custom = cadenceDecision.ownerDefinedPolicy;
+  if (!custom || typeof custom.description !== "string" || !custom.description.trim() || !Number.isFinite(custom.publicationsPerCycle) || custom.publicationsPerCycle < 1 || !Number.isFinite(custom.cycleHours) || custom.cycleHours <= 0 || custom.publicationsPerCycle * minSpacing > custom.cycleHours) errors.push("custom cadence mode requires a documented policy whose publication count times minimum spacing fits within its cycle duration");
+ }
+}
 if (cadenceDecision?.status !== "OWNER_APPROVED" || cadenceDecision?.ownerApproved !== true) console.log("BLOCKED — CADENCE DECISION: requested 2 long-form + 1 Short per week conflicts with 72-hour spacing; owner approval of a feasible policy mode is required before publication.");
 if (!Array.isArray(plan.schedule) || plan.schedule.length !== 2) errors.push("draft-preparation fallback must contain exactly two draft-only slots");
 const expected = [
