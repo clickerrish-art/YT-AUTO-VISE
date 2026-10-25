@@ -70,3 +70,33 @@ test("existing or symlinked approval destinations fail closed before state persi
   assert.equal(persisted, false);
   assert.equal(fs.readFileSync(outside, "utf8"), "preserve outside");
 });
+
+
+test("post-publication cleanup failure rolls back the final approval artifact", (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "approval-transaction-rollback-"));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const destination = path.join(root, "approvals", "job.json");
+  const originalUnlink = fs.unlinkSync;
+  let failedTempCleanupOnce = false;
+
+  fs.unlinkSync = function (target, ...args) {
+    if (!failedTempCleanupOnce && typeof target === "string" && target.endsWith(".tmp")) {
+      failedTempCleanupOnce = true;
+      const error = new Error("simulated temporary-link cleanup failure");
+      error.code = "EIO";
+      throw error;
+    }
+    return originalUnlink.call(this, target, ...args);
+  };
+  t.after(() => { fs.unlinkSync = originalUnlink; });
+
+  assert.throws(() => commitApprovalArtifact({
+    destination,
+    record: { decision: "APPROVE", visibility: "private", jobId: "job-rollback" },
+    persistState: () => {}
+  }), /simulated temporary-link cleanup failure/);
+
+  assert.equal(failedTempCleanupOnce, true);
+  assert.equal(fs.existsSync(destination), false, "failed publication must not leave a final-looking approval");
+  assert.equal(fs.readdirSync(path.dirname(destination)).some(name => name.endsWith(".tmp")), false);
+});
