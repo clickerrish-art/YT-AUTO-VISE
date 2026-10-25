@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-25",
-  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. External integration claims require live owner-authorized evidence, not mocks. Baseline comparison workflow run 40226415569 tested main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 11d3f5f119b6caf4dc5427f84653a7983ae77a86 in isolated checkouts; normal/locked installs, Node tests and Python tests exited 0 for both. Exact final PR HEAD checks must still be verified after any further change.",
+  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. External integration claims require live owner-authorized evidence, not mocks. Exact isolated baseline run 40227617108 tested main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate e6bdf05bbda396d462de53f3c5a10dce6108f8f8; both clean installs and Node/Python test commands exited 0. Exact candidate automation/security run 40227616776 passed 276 Node tests, 8 Python safety tests and npm audit (0 vulnerabilities); browser E2E run 40227616798 passed 10 Chromium journeys. Readiness remains blocked and the Facebook draft workflow was skipped.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -34,14 +34,14 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40226419088",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40226419075",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40226419159",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40226419076",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40226415616"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616776",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616798",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616809",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616866",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227611405"
       ],
-      "nextAction": "Rerun all required checks on any subsequent source/workflow changes. This pass covers automated checks only; production readiness remains blocked and the Facebook draft integration was skipped.",
-      "assessmentCommitSha": "11d3f5f119b6caf4dc5427f84653a7983ae77a86",
+      "nextAction": "Repeat exact-SHA checks after any subsequent code/workflow change. Passing local CI does not establish production readiness; readiness remains blocked and the Facebook draft integration was skipped.",
+      "assessmentCommitSha": "e6bdf05bbda396d462de53f3c5a10dce6108f8f8",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
     {
@@ -51,13 +51,12 @@
       "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40226415569",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40226419079",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227617108",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fa00d28e7f58911482686e4ad69fac9f4701a2e6",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/11d3f5f119b6caf4dc5427f84653a7983ae77a86"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e6bdf05bbda396d462de53f3c5a10dce6108f8f8"
       ],
-      "nextAction": "Repeat the isolated baseline comparison after substantive application changes or if main advances. Review any baseline differences rather than assuming identical test counts.",
-      "assessmentCommitSha": "11d3f5f119b6caf4dc5427f84653a7983ae77a86",
+      "nextAction": "Repeat the isolated comparison if main advances or after substantive code changes. This baseline establishes install and Node/Python suite outcomes only; it does not cover full dashboard acceptance or external integrations.",
+      "assessmentCommitSha": "e6bdf05bbda396d462de53f3c5a10dce6108f8f8",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
     {
@@ -361,6 +360,22 @@
       "nextAction": "Keep this route-level regression test. Provider-failure injection and exhaustive UI error-state coverage remain NOT_TESTED; live Nature Frontiers Page verification remains BLOCKED_EXTERNAL.",
       "assessmentCommitSha": "8146666ec32d5496dd0af6fb93a79fbd3284bf8f",
       "acceptanceCriterion": "Unauthenticated requests return 401; malformed dates and impossible calendar dates return HTTP 400 with safe JSON errors; draft IDs and publishing state remain unchanged."
+    },
+    {
+      "id": "DASH-A11Y-001",
+      "severity": "medium",
+      "owner": "maintainer",
+      "requirement": "The dashboard operator token field has an accessible programmatic label and operator connection can be completed with keyboard-only input without exposing the token in user-facing feedback.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/458c783312a35d438bb9e3fabf30b8cee4ff1a29",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e6bdf05bbda396d462de53f3c5a10dce6108f8f8",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227611417",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616798"
+      ],
+      "nextAction": "Retain this regression test. Full keyboard-only acceptance of every control, focus-state review and comprehensive automated accessibility/mobile checks remain incomplete.",
+      "assessmentCommitSha": "e6bdf05bbda396d462de53f3c5a10dce6108f8f8",
+      "acceptanceCriterion": "A programmatic label identifies the password token input; keyboard typing, Tab focus and Enter activate Connect; successful connection reveals the app and does not echo the token in status feedback."
     }
   ]
 }

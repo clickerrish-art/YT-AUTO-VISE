@@ -1,3 +1,18 @@
+# Current Release Evidence — 25 October 2026
+
+## Latest verified checkpoint — candidate `e6bdf05bbda396d462de53f3c5a10dce6108f8f8`
+
+> **Verified checkpoint — 25 October 2026; assessed application/test SHA `e6bdf05bbda396d462de53f3c5a10dce6108f8f8`.** Exact-SHA automation/security [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616776): 276 Node tests passed, 0 failed; 8 Python safety tests passed; clean normal/locked installation and npm audit reported 0 vulnerabilities. Real-dashboard Chromium E2E [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616798): 10 tests passed, including keyboard-only operator login, accessible token label and token redaction. Exact isolated main/candidate baseline [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227617108): main `fa00d28e7f58911482686e4ad69fac9f4701a2e6` and candidate `e6bdf05bbda396d462de53f3c5a10dce6108f8f8` both installed and passed Node/Python test commands (all exit codes 0). Metadata [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616809); content quality [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616866). Production readiness [BLOCKED as designed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616914); Nature Frontiers Facebook draft workflow [SKIPPED](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616772), not integration evidence. PR #1 remains open/draft/unmerged; main is unchanged. Remaining blockers include owner-approved feasible cadence, genuine rights-cleared final media and human review, verified SonicVhibez OAuth/channel history, verified Nature Frontiers Page permissions and a non-skipped draft run, exhaustive dashboard/recovery/deployment acceptance, full divergent-history review, and repository branch protection. Public/unattended YouTube publishing, Facebook live publishing and Safari campaigns remain disabled. No upload or publication was performed.
+
+### Exact-SHA evidence
+- [Automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616776): PASS — 276 Node tests, 8 Python tests, npm audit 0 vulnerabilities, clean normal/locked install, syntax and compile checks.
+- [Dashboard browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616798): PASS — 10 Chromium tests against the local dashboard/backend, including keyboard-only login.
+- [Isolated main/candidate baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227617108): PASS — exact main and candidate install/Node/Python exit codes 0.
+- [Metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616809) and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616866): PASS.
+- [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616914): BLOCKED. [Facebook draft](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616772): SKIPPED.
+
+---
+
 ## Exact PR HEAD verification checkpoint — 25 October 2026
 
 - Exact candidate at this checkpoint: `f66928df29c804fa487a6a0d53e0961952b410c1`; `main` remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; comparison at this checkpoint was 1,185 commits ahead, 2 behind, 120 changed files.

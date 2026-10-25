@@ -6,7 +6,7 @@
 
 # Dashboard control/API acceptance matrix
 
-**Assessment basis:** candidate `8146666ec32d5496dd0af6fb93a79fbd3284bf8f`; this matrix remains partial where individual journeys are marked PARTIAL or NOT_TESTED. The dashboard markup is `public/dashboard.html`; backend routes are in `scripts/dashboard-server.mjs`; browser acceptance uses `browser-tests/dashboard.spec.mjs`.
+**Assessment basis:** candidate `e6bdf05bbda396d462de53f3c5a10dce6108f8f8`; this matrix remains partial where individual journeys are marked PARTIAL or NOT_TESTED. The dashboard markup is `public/dashboard.html`; backend routes are in `scripts/dashboard-server.mjs`; browser acceptance uses `browser-tests/dashboard.spec.mjs`.
 
 **Scope note:** this matrix maps visible control groups to backend operations. It is not a claim that every control has exhaustive browser, authorization, failure-injection, or persistence coverage. The exact-SHA browser suite has eight tests; the remaining items stay NOT_TESTED until dedicated evidence exists.
 
@@ -31,17 +31,17 @@
 | DASH-CTRL-17 | Worker lease claim/heartbeat/complete/reap | `POST /api/jobs/lease/claim`, `/heartbeat`, `/complete`, `/reap` | Authenticated; ownership, lease expiry, idempotency and recovery rules | NOT_TESTED | Add two-process contention, stale lease, heartbeat race, restart and duplicate-completion tests. |
 | DASH-CTRL-18 | Job state transitions | `POST /api/jobs/transition` | Authenticated; legal state transitions only; reject replay and malformed transition | PARTIAL | Lifecycle unit tests exist; exhaustive route-level authorization/state matrix remains outstanding. |
 | DASH-CTRL-19 | Health/status and autonomous Facebook status | `GET /api/facebook/autonomous-status` and state routes | Authenticated except documented health endpoints; no secrets in response | NOT_TESTED | Add response schema and secret-redaction tests plus real runner/volume health verification. |
-| DASH-CTRL-20 | Keyboard, mobile, status announcements, layout | Dashboard HTML/CSS and accessible status regions | Keyboard operability, labels, focus, narrow viewport, no horizontal overflow | PARTIAL | Eight Chromium journeys passed at exact candidate; comprehensive accessibility/mobile audit is not complete. Add keyboard-only and automated accessibility coverage. |
+| DASH-CTRL-20 | Keyboard, mobile, status announcements, layout | Dashboard HTML/CSS and accessible status regions | Keyboard operability, labels, focus, narrow viewport, no horizontal overflow | PARTIAL | Exact-candidate browser run [40227616798](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616798) passed 10 Chromium journeys. New keyboard-only test verifies the operator token label, password input, Tab/Enter connection and token redaction. Full control-by-control keyboard/focus and mobile accessibility review remains incomplete. |
 
 ## Current automated evidence
 
-- Exact code/test candidate: `5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938`.
-- [Automation/security run 40210971948](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971948): **PASS** — 263 Node tests, 0 failures, 0 skipped; 8 Python tests; clean normal install; npm audit reports 0 vulnerabilities; syntax/compilation and metadata-adjacent checks passed.
-- [Browser E2E run 40210971726](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971726): **PASS** — 8 Chromium tests. This does not mean all 20 rows are fully tested.
-- [Metadata run 40210971766](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971766): **PASS**.
-- [Content quality run 40210971776](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971776): **PASS**.
-- [Production readiness run 40210971770](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971770): **BLOCKED** on mandatory owner-controlled prerequisites.
-- [Facebook draft workflow run 40210971709](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971709): **SKIPPED**; not live integration evidence.
+- Exact assessed candidate: `e6bdf05bbda396d462de53f3c5a10dce6108f8f8`.
+- [Automation/security run 40227616776](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616776): **PASS** — 276 Node tests, 0 failures; 8 Python safety tests; clean normal/locked install; npm audit 0 vulnerabilities.
+- [Browser E2E run 40227616798](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616798): **PASS** — 10 Chromium journeys against the real local dashboard/backend, including keyboard-only operator login and token redaction.
+- [Isolated baseline run 40227617108](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227617108): **PASS** — exact main `fa00d28e7f58911482686e4ad69fac9f4701a2e6` and candidate `e6bdf05bbda396d462de53f3c5a10dce6108f8f8`; both installs, Node tests and Python tests exited 0.
+- [Metadata run 40227616809](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616809): **PASS**; [content quality run 40227616866](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616866): **PASS**.
+- [Production readiness run 40227616914](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616914): **BLOCKED**, as required until genuine owner-controlled prerequisites pass.
+- [Nature Frontiers Facebook draft run 40227616772](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616772): **SKIPPED**, not live integration evidence.
 
 ## Acceptance rule
 
