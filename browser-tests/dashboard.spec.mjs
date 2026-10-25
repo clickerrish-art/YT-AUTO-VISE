@@ -438,3 +438,30 @@ test("production controls disable safely when real media prerequisites are missi
   await expect(page.locator("#produceform button[type=submit]")).toBeDisabled();
   await expect(page.locator("#reviewresult")).toContainText("Action unavailable:");
 });
+
+
+test("dashboard presents actionable API errors without exposing raw server responses", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+
+  await page.route("**/api/state", async route => {
+    await route.fulfill({
+      status: 502,
+      contentType: "text/plain",
+      body: "internal upstream stack trace: private server details"
+    });
+  });
+  await page.locator("#connect").click();
+  await expect(page.locator("#message")).toContainText(
+    "Dashboard API returned HTTP 502 without a valid JSON error response."
+  );
+  await expect(page.locator("#message")).not.toContainText("private server details");
+
+  await page.unroute("**/api/state");
+  await page.route("**/api/state", route => route.abort("failed"));
+  await page.locator("#connect").click();
+  await expect(page.locator("#message")).toContainText(
+    "Could not reach the dashboard API. Confirm the local dashboard server is running, then retry."
+  );
+  await expect(page.locator("#message")).not.toContainText(operatorToken);
+});
