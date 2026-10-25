@@ -34,6 +34,7 @@ export function commitApprovalArtifact({ destination, record, persistState }) {
 
   const temporary = path.join(parent, "." + path.basename(target) + "." + crypto.randomUUID() + ".tmp");
   let fd;
+  let published = false;
   try {
     fd = fs.openSync(temporary, "wx", 0o600);
     fs.writeFileSync(fd, JSON.stringify(record, null, 2) + "\n", "utf8");
@@ -46,6 +47,7 @@ export function commitApprovalArtifact({ destination, record, persistState }) {
 
     // link() is exclusive: EEXIST fails instead of replacing a concurrent file.
     fs.linkSync(temporary, target);
+    published = true;
     fs.unlinkSync(temporary);
     try {
       const dirFd = fs.openSync(parent, "r");
@@ -58,6 +60,14 @@ export function commitApprovalArtifact({ destination, record, persistState }) {
     return target;
   } catch (error) {
     if (fd !== undefined) { try { fs.closeSync(fd); } catch {} }
+    // A failure after link() must not leave a final-looking approval artifact
+    // behind while the caller receives an error. We created this path exclusively,
+    // so removing it cannot delete a pre-existing approval.
+    if (published) {
+      try { fs.unlinkSync(target); } catch (rollbackError) {
+        if (rollbackError?.code !== "ENOENT") throw new Error("approval publication failed and final artifact rollback also failed: " + rollbackError.message, { cause: error });
+      }
+    }
     try { fs.unlinkSync(temporary); } catch (cleanupError) { if (cleanupError?.code !== "ENOENT") throw cleanupError; }
     throw error;
   }
