@@ -100,3 +100,25 @@ test("post-publication cleanup failure rolls back the final approval artifact", 
   assert.equal(fs.existsSync(destination), false, "failed publication must not leave a final-looking approval");
   assert.equal(fs.readdirSync(path.dirname(destination)).some(name => name.endsWith(".tmp")), false);
 });
+
+
+test("symlinked approval parent is rejected before creating any directory through the link", (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "approval-transaction-parent-link-"));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const outside = path.join(root, "outside");
+  fs.mkdirSync(outside);
+  const linkedParent = path.join(root, "approval-root");
+  fs.symlinkSync(outside, linkedParent, "dir");
+  const destination = path.join(linkedParent, "new-subdirectory", "job.json");
+  let persisted = false;
+
+  assert.throws(() => commitApprovalArtifact({
+    destination,
+    record: { decision: "APPROVE", jobId: "must-not-escape" },
+    persistState: () => { persisted = true; }
+  }), /symbolic link/);
+
+  assert.equal(persisted, false, "state persistence must not run for an unsafe parent");
+  assert.equal(fs.existsSync(path.join(outside, "new-subdirectory")), false,
+    "preflight must not create a directory through a symlink before rejecting it");
+});
