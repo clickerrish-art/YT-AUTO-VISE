@@ -48,6 +48,12 @@ on:
         default: NONE
         type: string
 
+# Both private-upload entry points share a repository-wide concurrency group. The
+# uploader's filesystem lock is runner-local, so it cannot serialize separate runners.
+concurrency:
+  group: sonicvhibez-private-upload
+  cancel-in-progress: false
+
 permissions:
   contents: read
   actions: read

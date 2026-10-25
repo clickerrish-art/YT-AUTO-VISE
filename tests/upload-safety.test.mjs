@@ -71,6 +71,8 @@ test("both manual upload workflows require explicit private confirmation and pre
     assert.match(workflow, /confirm_emergency_stop_release/);
     assert.match(workflow, /one_shot_authorization_path/);
     assert.match(workflow, /PRIVATE_UPLOAD_AUTHORIZATION_PATH:/);
+    assert.match(workflow, /group: sonicvhibez-private-upload/);
+    assert.match(workflow, /cancel-in-progress: false/);
     assert.match(workflow, /previous_ledger_run_id/);
     assert.match(workflow, /sonicvhibez-upload-ledger/);
     assert.match(workflow, /run: npm ci --ignore-scripts/);
