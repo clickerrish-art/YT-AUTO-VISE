@@ -63,14 +63,9 @@ export function manageCampaign(config, request, actor, now = new Date().toISOStr
     campaign.status = "ACTIVE_FOR_DRAFTS_ONLY";
     campaign.approval = { approvedBy: actor.trim(), approvedAt: now, destinationVersion: crypto.createHash("sha256").update(campaign.destinationUrl + "\n" + campaign.disclosureText).digest("hex") };
   } else if (campaign.type === "safari_affiliate") {
-    if (request.confirmOwnerApproval !== true) throw new Error("Explicit owner confirmation is required after preview");
-    if (!campaign.pendingDestinationUrl || !campaign.pendingDisclosureText || !campaign.pendingDestinationVersion) throw new Error("Preview the exact Safari destination and disclosure before activation");
-    campaign.destinationUrl = campaign.pendingDestinationUrl;
-    campaign.disclosureText = campaign.pendingDisclosureText;
-    campaign.destinationValidation = "owner_verified";
-    campaign.ownerApproved = true;
-    campaign.status = "ACTIVE_FOR_DRAFTS_ONLY";
-    campaign.approval = { approvedBy: actor.trim(), approvedAt: now, destinationVersion: campaign.pendingDestinationVersion };
+    // This project explicitly keeps Safari campaigns inactive. A preview and a generic
+    // owner-confirmation flag are not sufficient to override that repository-level policy.
+    throw new Error("Safari affiliate campaigns are disabled for this project and must remain INACTIVE");
   } else throw new Error("Unsupported campaign type");
 
   const errors = validateCampaigns(campaigns);
