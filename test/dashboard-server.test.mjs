@@ -82,8 +82,12 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(previewBody.previewOnly, true);
   const activated = await fetch(base + "/api/campaigns/manage", { method: "POST", headers, body: JSON.stringify({ campaignId: safari.id, action: "activate", confirmOwnerApproval: true }) });
   const activatedBody = await activated.json();
-  assert.equal(activated.status, 200, JSON.stringify(activatedBody));
-  assert.equal(activatedBody.campaign.status, "ACTIVE_FOR_DRAFTS_ONLY");
+  assert.equal(activated.status, 400, JSON.stringify(activatedBody));
+  assert.match(activatedBody.error, /Safari affiliate campaigns are disabled.*remain INACTIVE/i);
+  const afterRejectedActivation = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  assert.equal(afterRejectedActivation.campaigns.find(c => c.id === safari.id).status, "INACTIVE");
+  assert.equal(afterRejectedActivation.audit.some(event => event.action === "CAMPAIGN_ACTIVATE" && event.campaignId === safari.id), false,
+    "rejected Safari activation must not persist an activation audit event");
   const deactivated = await fetch(base + "/api/campaigns/manage", { method: "POST", headers, body: JSON.stringify({ campaignId: safari.id, action: "deactivate" }) });
   const deactivatedBody = await deactivated.json();
   assert.equal(deactivated.status, 200, JSON.stringify(deactivatedBody));
@@ -92,7 +96,8 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(inactiveSafari.destinationUrl, "");
   const afterCampaignChanges = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
   assert.ok(afterCampaignChanges.audit.some(event => event.action === "CAMPAIGN_PREVIEW"));
-  assert.ok(afterCampaignChanges.audit.some(event => event.action === "CAMPAIGN_ACTIVATE"));
+  assert.equal(afterCampaignChanges.audit.some(event => event.action === "CAMPAIGN_ACTIVATE" && event.campaignId === safari.id), false,
+    "Safari activation must remain blocked even after preview and explicit confirmation");
   assert.ok(afterCampaignChanges.audit.some(event => event.action === "CAMPAIGN_DEACTIVATE"));
   const draft = {
     id: "dashboard-test-draft", title: "Test wildlife planning draft", topic: "planning a wildlife video",
