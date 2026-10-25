@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-25",
-  "evidencePolicy": "A PASS requires executable or authoritative evidence for the exact relevant revision. Historical documentation alone is insufficient. External integration claims require live evidence, not mocks.",
+  "evidencePolicy": "A PASS requires executable or authoritative evidence for the exact relevant revision. Historical documentation alone is insufficient. External integration claims require live evidence, not mocks. Application-code checkpoint for this refresh: eda0dbb7be1cfb2e71155d7478f1875739078340; recheck workflows on the final documentation-refresh HEAD.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -31,13 +31,12 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508299",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508335",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508305",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508386",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203501963"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40207797361",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40207797321",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40207797357",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40207797355"
       ],
-      "nextAction": "Re-run required suites on the final application-code SHA after any source change; historical tests do not certify future commits."
+      "nextAction": "Re-run/verify required workflows on the final documentation-refresh HEAD; keep production readiness blocked until owner gates pass."
     },
     {
       "id": "CI-002",
@@ -133,7 +132,7 @@
       "requirement": "Keep public/unattended YouTube and Facebook live publishing disabled and Safari inactive.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508332",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40207797310",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/production-readiness.mjs"
       ],
       "nextAction": "Retain all backend gates; do not relax readiness checks to obtain a green result."
@@ -168,6 +167,24 @@
       "status": "NOT_TESTED",
       "evidence": [],
       "nextAction": "Execute documented deployment and operational drills; do not infer production readiness from unit tests."
+    },
+    {
+      "id": "MEDIA-SEC-001",
+      "severity": "critical",
+      "owner": "maintainer",
+      "requirement": "Render, thumbnail, media-preflight and export-validation paths must reject symlinked input files, symlinked output files and symlinked output ancestors.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/f41d74cfbd48942f24713da4fba73208726fb82a",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/193a7bb81d84ad4d03ab87c24b54b9240e318be4",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c33edf0e60e1544c1a5f924b1b1fcbbf7898bb8a",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fa4d23e872339f04f09d3d3d785e7887bcfaccac",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03006107c6047e9ca82455f4da029462eab7ab49",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/0b6232d0bf21bd2d25eab7b8cda6b8a881d40685",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/f5d288630cc1142873ee2ae87443607010edabe3",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40207797361"
+      ],
+      "nextAction": "Retain the regression suite and re-run it on the final documentation-refresh HEAD; continue reviewing filesystem race conditions and all other file-operation entry points."
     }
   ]
 }
