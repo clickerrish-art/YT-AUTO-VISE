@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-25",
-  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. The schedule cadence decision change is assessed at d12118304e5706959aeaaffd09035fd490031411; rerun relevant tests and verify exact-head CI before release. External integration claims require live owner-authorized evidence, not mocks. Each requirement records assessmentCommitSha and acceptanceCriterion.",
+  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. External integration claims require live owner-authorized evidence, not mocks. Baseline comparison workflow run 40226415569 tested main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 11d3f5f119b6caf4dc5427f84653a7983ae77a86 in isolated checkouts; normal/locked installs, Node tests and Python tests exited 0 for both. Exact final PR HEAD checks must still be verified after any further change.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -34,27 +34,31 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40211909067",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40211909103",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40211909068",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40211909057"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40226419088",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40226419075",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40226419159",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40226419076",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40226415616"
       ],
-      "nextAction": "Re-run relevant checks on any subsequent source/workflow changes; this pass covers automated checks only, not production readiness or skipped live integrations.",
-      "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
-      "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows all complete successfully on the exact source/test SHA; required tests are not skipped."
+      "nextAction": "Rerun all required checks on any subsequent source/workflow changes. This pass covers automated checks only; production readiness remains blocked and the Facebook draft integration was skipped.",
+      "assessmentCommitSha": "11d3f5f119b6caf4dc5427f84653a7983ae77a86",
+      "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
     {
       "id": "CI-002",
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/compare/main...codex/marketing-machine-audit-fixes"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40226415569",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40226419079",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fa00d28e7f58911482686e4ad69fac9f4701a2e6",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/11d3f5f119b6caf4dc5427f84653a7983ae77a86"
       ],
-      "nextAction": "Restore a working local/CI execution environment and run both exact-SHA baselines; this session could not clone because github.com DNS resolution failed.",
-      "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
-      "acceptanceCriterion": "Run clean isolated normal and locked installs plus baseline suites on exact main and candidate SHAs, record commands and outcomes, and compare results without inferring an unrun baseline."
+      "nextAction": "Repeat the isolated baseline comparison after substantive application changes or if main advances. Review any baseline differences rather than assuming identical test counts.",
+      "assessmentCommitSha": "11d3f5f119b6caf4dc5427f84653a7983ae77a86",
+      "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
     {
       "id": "DASH-001",
