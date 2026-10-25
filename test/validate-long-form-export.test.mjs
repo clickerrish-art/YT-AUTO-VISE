@@ -95,3 +95,12 @@ test("blocks a file when full-file decoding fails", t => {
   assert.equal(result.status, 1);
   assert.match(result.stderr, /full-file FFmpeg decode failed/i);
 });
+
+test("rejects a symlinked long-form export before invoking media tools", t => {
+  const f = fixture(t, validProbe);
+  const link = path.join(path.dirname(f.media), "linked.mp4");
+  fs.symlinkSync(f.media, link);
+  const result = run(link, f.env);
+  assert.equal(result.status, 2);
+  assert.match(result.stderr, /contains a symbolic link/i);
+});
