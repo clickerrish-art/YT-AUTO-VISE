@@ -104,3 +104,18 @@ test("failed exclusive link removes the staged state file and leaves destination
   assert.equal(fs.existsSync(file), false);
   assert.deepEqual(fs.readdirSync(dir), []);
 });
+
+
+test("atomic JSON operations reject symlinked ancestors even when the immediate parent is a directory", (t) => {
+  const { dir } = fixture(t);
+  const outside = path.join(dir, "outside");
+  fs.mkdirSync(outside);
+  fs.mkdirSync(path.join(outside, "nested"));
+  const link = path.join(dir, "linked-root");
+  fs.symlinkSync(outside, link, "dir");
+  const destination = path.join(link, "nested", "state.json");
+
+  assert.throws(() => atomicWriteJson(destination, { unsafe: true }), /symbolic link/i);
+  assert.throws(() => atomicCreateJson(destination, { unsafe: true }), /symbolic link/i);
+  assert.equal(fs.existsSync(path.join(outside, "nested", "state.json")), false);
+});
