@@ -43,7 +43,7 @@ test("thumbnail title sidecar is created exclusively rather than following a pre
   const bin = path.join(root, "bin");
   fs.mkdirSync(bin);
   const ffprobe = path.join(bin, "ffprobe");
-  fs.writeFileSync(ffprobe, "#!/bin/sh\\nprintf '%s' '{\\"streams\\":[{\\"codec_type\\":\\"video\\",\\"width\\":1280,\\"height\\":720}]}'\\n");
+  fs.writeFileSync(ffprobe, "#!/bin/sh\nprintf '%s' '{\"streams\":[{\"codec_type\":\"video\",\"width\":1280,\"height\":720}]}'\n");
   fs.chmodSync(ffprobe, 0o755);
   fs.writeFileSync(video, "fixture");
   fs.writeFileSync(protectedFile, "do not overwrite");
