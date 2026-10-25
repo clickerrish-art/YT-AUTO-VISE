@@ -1,0 +1,137 @@
+name: Isolated main and candidate baseline comparison
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - "scripts/**"
+      - "test/**"
+      - "tests/**"
+      - ".github/workflows/isolated-baseline-comparison.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: isolated-baseline-comparison-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  compare-baselines:
+    name: Test exact main and PR candidate in isolated checkouts
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out exact main/base SHA
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha || 'main' }}
+          path: baseline-main
+          fetch-depth: 1
+
+      - name: Check out exact candidate SHA
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          path: baseline-candidate
+          fetch-depth: 1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          package-manager-cache: false
+
+      - name: Run isolated baselines and record exact outcomes
+        id: baselines
+        shell: bash
+        run: |
+          set +e
+          report="$RUNNER_TEMP/baseline-comparison.txt"
+          : > "$report"
+          candidate_failed=0
+          main_failed=0
+
+          run_baseline() {
+            label="$1"
+            directory="$2"
+            ref_sha="$3"
+            printf '\n=== %s ===\nSHA: %s\n' "$label" "$ref_sha" | tee -a "$report"
+            if [ ! -f "$directory/package.json" ]; then
+              echo "RESULT=NOT_APPLICABLE (package.json missing)" | tee -a "$report"
+              if [ "$label" = "CANDIDATE" ]; then candidate_failed=1; else main_failed=1; fi
+              return
+            fi
+
+            if [ -f "$directory/package-lock.json" ]; then
+              (cd "$directory" && npm ci --ignore-scripts) >> "$report" 2>&1
+            else
+              (cd "$directory" && npm install --ignore-scripts) >> "$report" 2>&1
+            fi
+            install_status=$?
+            echo "INSTALL_EXIT_CODE=$install_status" | tee -a "$report"
+
+            test_status=125
+            python_status=125
+            if [ "$install_status" -eq 0 ]; then
+              (cd "$directory" && npm test) >> "$report" 2>&1
+              test_status=$?
+              echo "NODE_TEST_EXIT_CODE=$test_status" | tee -a "$report"
+
+              if [ -d "$directory/tests" ]; then
+                (cd "$directory" && python -m unittest discover -s tests -p 'test_*.py' -v) >> "$report" 2>&1
+                python_status=$?
+                echo "PYTHON_TEST_EXIT_CODE=$python_status" | tee -a "$report"
+              else
+                python_status=0
+                echo "PYTHON_TESTS=NOT_PRESENT" | tee -a "$report"
+              fi
+            else
+              echo "NODE_TEST_EXIT_CODE=NOT_RUN_INSTALL_FAILED" | tee -a "$report"
+              echo "PYTHON_TEST_EXIT_CODE=NOT_RUN_INSTALL_FAILED" | tee -a "$report"
+            fi
+
+            if [ "$install_status" -ne 0 ] || [ "$test_status" -ne 0 ] || [ "$python_status" -ne 0 ]; then
+              if [ "$label" = "CANDIDATE" ]; then candidate_failed=1; else main_failed=1; fi
+            fi
+          }
+
+          main_sha="$(git -C baseline-main rev-parse HEAD)"
+          candidate_sha="$(git -C baseline-candidate rev-parse HEAD)"
+          run_baseline "MAIN_BASELINE" "baseline-main" "$main_sha"
+          run_baseline "CANDIDATE" "baseline-candidate" "$candidate_sha"
+
+          {
+            echo "## Isolated baseline comparison"
+            echo
+            echo "- Main/base SHA: `$main_sha`"
+            echo "- Candidate SHA: `$candidate_sha`"
+            echo "- Main baseline result: $([ "$main_failed" -eq 0 ] && echo PASS || echo FAIL)"
+            echo "- Candidate baseline result: $([ "$candidate_failed" -eq 0 ] && echo PASS || echo FAIL)"
+            echo
+            echo "Full command output is retained in the `baseline-comparison` artifact."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          cp "$report" baseline-comparison.txt
+          echo "main_sha=$main_sha" >> "$GITHUB_OUTPUT"
+          echo "candidate_sha=$candidate_sha" >> "$GITHUB_OUTPUT"
+          echo "main_failed=$main_failed" >> "$GITHUB_OUTPUT"
+          echo "candidate_failed=$candidate_failed" >> "$GITHUB_OUTPUT"
+
+          if [ "$candidate_failed" -ne 0 ] || [ "$main_failed" -ne 0 ]; then
+            echo "At least one exact-SHA baseline failed. Review the retained artifact; do not infer acceptance."
+            exit 1
+          fi
+
+      - name: Upload baseline evidence even when a test fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: baseline-comparison
+          path: baseline-comparison.txt
+          if-no-files-found: warn
+          retention-days: 30
