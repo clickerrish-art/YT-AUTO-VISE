@@ -29,7 +29,7 @@ if (cadenceDecision?.status === "OWNER_APPROVED" && cadenceDecision.ownerApprove
 if (cadenceDecision?.ownerApproved === true || cadenceDecision?.status === "OWNER_APPROVED") {
  if (cadenceDecision.status !== "OWNER_APPROVED" || cadenceDecision.ownerApproved !== true) errors.push("approved cadence decision must have matching OWNER_APPROVED status and ownerApproved=true");
  if (!supportedCadenceModes.includes(cadenceDecision.approvedMode)) errors.push("approved cadence decision must name a supported approvedMode");
- if (typeof cadenceDecision.approvedAt !== "string" || !Number.isFinite(Date.parse(cadenceDecision.approvedAt)) || !/(Z|[+-]\\d{2}:\\d{2})$/.test(cadenceDecision.approvedAt)) errors.push("approved cadence decision requires approvedAt as an ISO timestamp with explicit timezone");
+ if (typeof cadenceDecision.approvedAt !== "string" || !Number.isFinite(Date.parse(cadenceDecision.approvedAt)) || !/(Z|[+-]\d{2}:\d{2})$/.test(cadenceDecision.approvedAt)) errors.push("approved cadence decision requires approvedAt as an ISO timestamp with explicit timezone");
  if (typeof cadenceDecision.approvalReference !== "string" || !cadenceDecision.approvalReference.trim()) errors.push("approved cadence decision requires a non-empty approvalReference");
  if (cadenceDecision.approvedMode === "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET" && minSpacing < 72) errors.push("rolling-cycle mode must retain at least 72 hours between publications");
  if (cadenceDecision.approvedMode === "WEEKLY_TARGET_WITH_SHORTER_SPACING" && minSpacing > 56) errors.push("weekly target mode requires a minimum gap no greater than 56 hours for three recurring publications per 168-hour cycle");
