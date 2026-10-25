@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-25",
-  "evidencePolicy": "A PASS requires executable or authoritative evidence for the exact relevant revision. Historical documentation alone is insufficient. External integration claims require live evidence, not mocks. Application source checkpoint: eda0dbb7be1cfb2e71155d7478f1875739078340. Documentation-refresh candidate 817a9d3fc8a750efdcfd6417ca7cf664bc23aa34 has completed exact-SHA automated checks; this register-only follow-up does not change application source.",
+  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. The source/test candidate assessed here is 5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938; documentation-only descendants do not change source but must have their own final-head CI. External integration claims require live owner-authorized evidence, not mocks. Each requirement records assessmentCommitSha and acceptanceCriterion.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -22,7 +22,9 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1"
       ],
-      "nextAction": "Continue changes only on codex/marketing-machine-audit-fixes; do not merge without owner approval."
+      "nextAction": "Continue changes only on codex/marketing-machine-audit-fixes; do not merge without owner approval.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch."
     },
     {
       "id": "CI-001",
@@ -31,12 +33,14 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40208036733",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40208036721",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40208036744",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40208036729"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971948",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971726",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971766",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971776"
       ],
-      "nextAction": "Keep required exact-SHA checks enabled and rerun them after any source/workflow change; production acceptance remains blocked on owner and operational prerequisites."
+      "nextAction": "Rerun affected and full acceptance workflows after every subsequent source/workflow change; this PASS is limited to the listed automated checks.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows all complete successfully on the exact source/test SHA; required tests are not skipped."
     },
     {
       "id": "CI-002",
@@ -47,7 +51,9 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/compare/main...codex/marketing-machine-audit-fixes"
       ],
-      "nextAction": "Restore a working local/CI execution environment and run both exact-SHA baselines; this session could not clone because github.com DNS resolution failed."
+      "nextAction": "Restore a working local/CI execution environment and run both exact-SHA baselines; this session could not clone because github.com DNS resolution failed.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "Run clean isolated normal and locked installs plus baseline suites on exact main and candidate SHAs, record commands and outcomes, and compare results without inferring an unrun baseline."
     },
     {
       "id": "DASH-001",
@@ -56,9 +62,12 @@
       "requirement": "Map every dashboard control and mutating API to end-to-end behavior and authorization tests.",
       "status": "NOT_TESTED",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508335"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971726",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md"
       ],
-      "nextAction": "Produce exhaustive control-to-route matrix and test every critical state transition; existing browser run alone does not establish full coverage."
+      "nextAction": "Produce exhaustive control-to-route matrix and test every critical state transition; existing browser run alone does not establish full coverage.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
     {
       "id": "SCHED-001",
@@ -68,9 +77,12 @@
       "status": "NOT_TESTED",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/config/weekly-content-plan.json",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/schedule-policy.mjs"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/schedule-policy.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971948"
       ],
-      "nextAction": "Run deterministic boundary, DST, month-rollover, overlapping-worker and restart tests against the final SHA."
+      "nextAction": "Run deterministic boundary, DST, month-rollover, overlapping-worker and restart tests against the final SHA.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "The same 72-hour minimum, rolling long_form → long_form → short cycle, actual-history ordering and DST/timezone policy are enforced by config, queue, dashboard, workflows and tests."
     },
     {
       "id": "STATE-001",
@@ -79,7 +91,9 @@
       "requirement": "Prove cross-process idempotency, crash recovery, ambiguous-operation reconciliation, backup and restore.",
       "status": "NOT_TESTED",
       "evidence": [],
-      "nextAction": "Run isolated failure-injection and concurrent-worker tests; demonstrate remote-acceptance-before-receipt recovery without repeating side effects."
+      "nextAction": "Run isolated failure-injection and concurrent-worker tests; demonstrate remote-acceptance-before-receipt recovery without repeating side effects.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects."
     },
     {
       "id": "YT-001",
@@ -90,7 +104,9 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508332"
       ],
-      "nextAction": "Verify the channel ID from the authorized YouTube account/API; do not guess or silently correct the documented 23-character value."
+      "nextAction": "Verify the channel ID from the authorized YouTube account/API; do not guess or silently correct the documented 23-character value.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "Authenticated YouTube API identity matches the independently verified SonicVhibez channel ID and never resolves to Nature Frontiers."
     },
     {
       "id": "YT-002",
@@ -101,7 +117,9 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508332"
       ],
-      "nextAction": "Create and review genuine playable exports, captions, thumbnails, rights/provenance manifests and approval bound to exact hashes."
+      "nextAction": "Create and review genuine playable exports, captions, thumbnails, rights/provenance manifests and approval bound to exact hashes.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "Playable 50–60s 9:16 Short and 6–10 minute long-form outputs decode fully, match manifests/checksums, carry verified rights evidence, and have recorded human review bound to exact hashes."
     },
     {
       "id": "YT-003",
@@ -112,7 +130,9 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508332"
       ],
-      "nextAction": "After YT-001 and YT-002 pass, configure credentials securely, reconcile all remote visibility states and attempt ledger, then issue separate explicit one-shot authorization. No upload has occurred."
+      "nextAction": "After YT-001 and YT-002 pass, configure credentials securely, reconcile all remote visibility states and attempt ledger, then issue separate explicit one-shot authorization. No upload has occurred.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "Complete public/private/unlisted history and every uncertain attempt are reconciled; a separate one-shot authorization is consumed exactly once; any authorized test upload is verified private on the correct channel and has a durable receipt."
     },
     {
       "id": "FB-001",
@@ -123,7 +143,9 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508297"
       ],
-      "nextAction": "Run the authorized draft workflow on its intended branch/event and retain the actual artifact; do not enable live publishing."
+      "nextAction": "Run the authorized draft workflow on its intended branch/event and retain the actual artifact; do not enable live publishing.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "The verified Nature Frontiers Page identity and permissions pass live checks; the intended draft-only workflow completes (not skipped) and retains a validated draft artifact without publishing."
     },
     {
       "id": "SAFE-001",
@@ -135,7 +157,9 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40207797310",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/production-readiness.mjs"
       ],
-      "nextAction": "Retain all backend gates; do not relax readiness checks to obtain a green result."
+      "nextAction": "Retain all backend gates; do not relax readiness checks to obtain a green result.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "All applicable public/unattended YouTube and Facebook live mutations remain blocked, Safari stays inactive, and only the exact approved Selar URL is accepted."
     },
     {
       "id": "SEC-001",
@@ -146,7 +170,9 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1"
       ],
-      "nextAction": "Repository owner must configure branch protection and required checks through GitHub settings; repository metadata indicates protection is off."
+      "nextAction": "Repository owner must configure branch protection and required checks through GitHub settings; repository metadata indicates protection is off.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "Repository owner enables branch protection and required status checks and verifies the settings before integration."
     },
     {
       "id": "GIT-002",
@@ -157,7 +183,9 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/compare/main...codex/marketing-machine-audit-fixes"
       ],
-      "nextAction": "Review full relevant patch history; preserve both restore-history test variants until the differences are understood; obtain approval before reconciliation."
+      "nextAction": "Review full relevant patch history; preserve both restore-history test variants until the differences are understood; obtain approval before reconciliation.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "Review all 1,116 branch-only commits and both base-only commits/patches, inspect the restore-history test variants, and produce a non-destructive reconciliation plan with owner decisions."
     },
     {
       "id": "DEPLOY-001",
@@ -166,7 +194,9 @@
       "requirement": "Demonstrate clean deployment, monitoring, backup/restore and rollback in an authorized isolated environment.",
       "status": "NOT_TESTED",
       "evidence": [],
-      "nextAction": "Execute documented deployment and operational drills; do not infer production readiness from unit tests."
+      "nextAction": "Execute documented deployment and operational drills; do not infer production readiness from unit tests.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "An isolated deployment run records startup, health/readiness, monitoring, backup, restore, rollback and interrupted-deployment outcomes for the exact candidate SHA."
     },
     {
       "id": "MEDIA-SEC-001",
@@ -186,7 +216,37 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40208036733",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40208036721"
       ],
-      "nextAction": "Retain the regression suite and continue auditing other file-operation entry points and time-of-check/time-of-use risks."
+      "nextAction": "Retain the regression suite and continue auditing other file-operation entry points and time-of-check/time-of-use risks.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "Regression tests prove relevant media paths reject symlinks and unsafe ancestors; remaining TOCTOU risk is documented and separately assessed."
+    },
+    {
+      "id": "SCHED-002",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Reject unknown or non-publication statuses in the claimed verified remote YouTube history before calculating the rolling format cycle.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/1389e7f89bf34fa16707df1082382faf9d7f0684",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971948"
+      ],
+      "nextAction": "Retain regression coverage and verify status normalization against live YouTube API history before any upload.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "evaluateNextPublication rejects missing, draft, scheduled, deleted or unknown statuses in claimed remote publication history, while accepting only published/public/private/unlisted and retaining 72-hour/cycle safeguards."
+    },
+    {
+      "id": "DASH-002",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Maintain an explicit control-to-route acceptance matrix with authorization, safety boundary, test status and next action.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md"
+      ],
+      "nextAction": "Use the matrix to implement and evidence each currently PARTIAL or NOT_TESTED journey; do not treat the matrix itself as proof those journeys pass.",
+      "assessmentCommitSha": "5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
+      "acceptanceCriterion": "The dashboard matrix lists every currently identified visible control group, its backend route, authorization/safety boundary, status, evidence and next acceptance action."
     }
   ]
 }
