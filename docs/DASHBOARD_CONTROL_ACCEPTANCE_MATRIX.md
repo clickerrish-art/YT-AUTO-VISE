@@ -1,3 +1,5 @@
+> **Cadence decision blocker — 25 October 2026:** The requested target of two long-form videos plus one Short per week is mathematically incompatible with a 72-hour minimum between consecutive publications: three cyclic gaps require at least 216 hours (9 days), versus 168 hours in a week. `config/weekly-content-plan.json` now records the requested target and `cadenceDecision.status=OWNER_DECISION_REQUIRED`; `npm run validate:schedule` reports the conflict, and production readiness blocks publication until a feasible mode is explicitly owner-approved. Draft-generation triggers are not publication times. Public/unattended publishing remains disabled.
+
 # Dashboard control/API acceptance matrix
 
 **Assessment basis:** source reviewed at `5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938` (code/test candidate; the document is a later documentation-only descendant). The dashboard markup is `public/dashboard.html`; backend routes are in `scripts/dashboard-server.mjs`; browser acceptance uses `browser-tests/dashboard.spec.mjs`.
