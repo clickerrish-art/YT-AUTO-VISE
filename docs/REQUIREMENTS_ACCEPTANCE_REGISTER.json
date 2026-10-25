@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-25",
-  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. Current source/test checkpoint c089a4d46af45403de15edc3d8c913a65b80e463: 279 Node tests and 8 Python safety tests passed; npm audit reported 0 vulnerabilities; real-dashboard browser E2E passed 10 Chromium journeys; isolated main/candidate baseline passed for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate c089a4d46af45403de15edc3d8c913a65b80e463; metadata and content quality passed. Production readiness remains BLOCKED on real owner-controlled prerequisites; Facebook draft workflow was SKIPPED.",
+  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. Current source/test checkpoint 2686612d9982e0094cd25759e9a73fe466585634: 280 Node tests and 8 Python safety tests passed; npm audit reported 0 vulnerabilities; real-dashboard browser E2E passed 10 Chromium journeys; isolated main/candidate baseline passed for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 2686612d9982e0094cd25759e9a73fe466585634; metadata and content quality passed. Production readiness remains BLOCKED on real owner-controlled prerequisites; Facebook draft workflow was SKIPPED.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -24,7 +24,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1"
       ],
       "nextAction": "Continue changes only on codex/marketing-machine-audit-fixes; do not merge without owner approval.",
-      "assessmentCommitSha": "c089a4d46af45403de15edc3d8c913a65b80e463",
+      "assessmentCommitSha": "2686612d9982e0094cd25759e9a73fe466585634",
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch."
     },
     {
@@ -34,13 +34,13 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229308581",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229308501",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229308661",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229308568"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229940102",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229935212",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229940142",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229940079"
       ],
       "nextAction": "Repeat and verify all required checks on the exact final PR HEAD after this documentation checkpoint. Readiness must remain blocked until real prerequisites pass; the skipped Facebook workflow is not a pass.",
-      "assessmentCommitSha": "c089a4d46af45403de15edc3d8c913a65b80e463",
+      "assessmentCommitSha": "2686612d9982e0094cd25759e9a73fe466585634",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
     {
@@ -50,12 +50,12 @@
       "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229308569",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229935210",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fa00d28e7f58911482686e4ad69fac9f4701a2e6",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c089a4d46af45403de15edc3d8c913a65b80e463"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/2686612d9982e0094cd25759e9a73fe466585634"
       ],
       "nextAction": "Repeat if main advances or after substantive code changes. This baseline covers only the commands executed in the isolated workflow.",
-      "assessmentCommitSha": "c089a4d46af45403de15edc3d8c913a65b80e463",
+      "assessmentCommitSha": "2686612d9982e0094cd25759e9a73fe466585634",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
     {
@@ -368,11 +368,11 @@
       "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/458c783312a35d438bb9e3fabf30b8cee4ff1a29",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c089a4d46af45403de15edc3d8c913a65b80e463",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229308501"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/2686612d9982e0094cd25759e9a73fe466585634",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229935212"
       ],
       "nextAction": "Retain this regression test. Full keyboard-only acceptance of every control, focus-state review and comprehensive automated accessibility/mobile checks remain incomplete.",
-      "assessmentCommitSha": "c089a4d46af45403de15edc3d8c913a65b80e463",
+      "assessmentCommitSha": "2686612d9982e0094cd25759e9a73fe466585634",
       "acceptanceCriterion": "A programmatic label identifies the password token input; keyboard typing, Tab focus and Enter activate Connect; successful connection reveals the app and does not echo the token in status feedback."
     },
     {
@@ -384,29 +384,44 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/83fa52ffc538a26f969d784d5cdd3f55e07ce4fe",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/355fb506972cd80ec048761b2736d065e85b203c",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c089a4d46af45403de15edc3d8c913a65b80e463",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229308581"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/2686612d9982e0094cd25759e9a73fe466585634",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229940102"
       ],
       "nextAction": "Extend API/browser acceptance to malformed captions, missing artifacts, invalid codecs/dimensions, decode failures and persistence errors. This narrow technical gate does not establish real media rights or human approval.",
-      "assessmentCommitSha": "c089a4d46af45403de15edc3d8c913a65b80e463",
+      "assessmentCommitSha": "2686612d9982e0094cd25759e9a73fe466585634",
       "acceptanceCriterion": "POST /api/jobs/validate invokes validate-short-export.mjs for Short artifacts or validate-long-form-export.mjs for long-form artifacts; any validator error/non-zero exit blocks validationResults.passed=true. Short exports with missing, malformed, or fps outside 23.9–60 are rejected."
+    },
+    {
+      "id": "APPROVAL-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Private-upload approval must be bound to the validated MP4, thumbnail, exact captions, metadata and verified rights evidence, and must not be created without passing technical validation.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/723dc6968f60f128ff9cd088ba56412d43206f18",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/2686612d9982e0094cd25759e9a73fe466585634",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229940102"
+      ],
+      "nextAction": "Add a successful full dashboard review-to-approval API journey and a stale-caption mutation test that inspects the generated approval artifact and confirms it passes the uploader's approval validator. Real human playback and rights clearance remain external gates.",
+      "assessmentCommitSha": "2686612d9982e0094cd25759e9a73fe466585634",
+      "acceptanceCriterion": "Approval re-hashes the exact validated captions and rejects missing/changed captions; approval relatedArtifacts include current video(s), thumbnail, SRT captions and metadata JSON hashes; lifecycle approval requires validationResults.passed === true and exact equality of the reviewed artifact set."
     }
   ],
   "currentCheckpoint": {
-    "assessedSourceTestSha": "c089a4d46af45403de15edc3d8c913a65b80e463",
+    "assessedSourceTestSha": "2686612d9982e0094cd25759e9a73fe466585634",
     "mainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBase": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "branchAhead": 1205,
+    "branchAhead": 1208,
     "branchBehind": 2,
-    "changedFiles": 123,
+    "changedFiles": 124,
     "evidence": {
-      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229308581",
-      "browserE2E": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229308501",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229308569",
-      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229308661",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229308568",
-      "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229308476",
-      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229308527"
+      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229940102",
+      "browserE2E": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229935212",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229935210",
+      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229940142",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229940079",
+      "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229940077",
+      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229940225"
     },
     "verdict": "CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED",
     "note": "This records the source/test checkpoint. The documentation-only commit that follows must receive its own exact-HEAD CI verification."
