@@ -2,6 +2,24 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 
+function assertSafeDirectoryAncestors(directory) {
+  const target = path.resolve(directory);
+  const root = path.parse(target).root;
+  let cursor = root;
+  for (const component of path.relative(root, target).split(path.sep).filter(Boolean)) {
+    cursor = path.join(cursor, component);
+    let stat;
+    try {
+      stat = fs.lstatSync(cursor);
+    } catch (error) {
+      if (error?.code === "ENOENT") throw new Error("JSON state parent path component is missing");
+      throw error;
+    }
+    if (stat.isSymbolicLink()) throw new Error("JSON state parent path contains a symbolic link");
+    if (!stat.isDirectory()) throw new Error("JSON state parent path must contain only directories");
+  }
+}
+
 /**
  * Atomically replace a JSON state file, flushing file contents before rename
  * and the containing directory afterward. A failed pre-rename write preserves
@@ -13,10 +31,7 @@ export function atomicWriteJson(destination, value, { mode = 0o600 } = {}) {
   }
   const target = path.resolve(destination);
   const parent = path.dirname(target);
-  const parentStat = fs.lstatSync(parent);
-  if (parentStat.isSymbolicLink() || !parentStat.isDirectory()) {
-    throw new Error("JSON state parent must be a real directory");
-  }
+  assertSafeDirectoryAncestors(parent);
   try {
     const targetStat = fs.lstatSync(target);
     if (targetStat.isSymbolicLink() || !targetStat.isFile()) {
@@ -74,10 +89,7 @@ export function atomicCreateJson(destination, value, { mode = 0o600 } = {}) {
   }
   const target = path.resolve(destination);
   const parent = path.dirname(target);
-  const parentStat = fs.lstatSync(parent);
-  if (parentStat.isSymbolicLink() || !parentStat.isDirectory()) {
-    throw new Error("JSON state parent must be a real directory");
-  }
+  assertSafeDirectoryAncestors(parent);
   try {
     const targetStat = fs.lstatSync(target);
     if (targetStat.isSymbolicLink() || !targetStat.isFile()) {
