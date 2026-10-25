@@ -1097,6 +1097,7 @@ const server = http.createServer(async (req, res) => {
         }
         let uploadApprovalPath = null;
         let uploadApprovalRecord = null;
+        let pendingApprovalCommit = null;
         if (body.decision === "APPROVE") {
           uploadApprovalRecord = {
             decision: "APPROVE",
@@ -1115,12 +1116,18 @@ const server = http.createServer(async (req, res) => {
           const approvalDir = path.join(root, "run-logs", "upload-approvals");
           fs.mkdirSync(approvalDir, { recursive: true, mode: 0o700 });
           uploadApprovalPath = path.join(approvalDir, crypto.createHash("sha256").update(job.id).digest("hex").slice(0, 32) + ".json");
-          const approvalTemp = uploadApprovalPath + "." + crypto.randomUUID() + ".tmp";
-          fs.writeFileSync(approvalTemp, JSON.stringify(uploadApprovalRecord, null, 2) + "\n", { mode: 0o600, flag: "wx" });
-          fs.renameSync(approvalTemp, uploadApprovalPath);
+          // Stage the approval, persist the job/audit state first, then atomically
+          // publish the approval file. A crash or failed state write must never leave
+          // an uploadable approval artifact for an uncommitted review decision.
+          pendingApprovalCommit = () => commitApprovalArtifact({
+            destination: uploadApprovalPath,
+            record: uploadApprovalRecord,
+            persistState: () => saveState(state)
+          });
         }
         state.audit.push({ id: crypto.randomUUID(), action: body.decision === "APPROVE" ? "CONTENT_ARTIFACT_APPROVED_FOR_PRIVATE_UPLOAD" : "CONTENT_ARTIFACT_REJECTED", jobId: job.id, artifactPath, artifactSha256, metadataVersion, reviewId: review.id, uploadApprovalPath: uploadApprovalPath ? path.relative(root, uploadApprovalPath) : null, actor: reviewer, reason: String(body.reason ?? "").slice(0, 1000), at: new Date().toISOString() });
-        saveState(state);
+        if (pendingApprovalCommit) pendingApprovalCommit();
+        else saveState(state);
         return json(res, 200, { job: state.jobs[index], review, uploadApprovalRecord, uploadApprovalPath: uploadApprovalPath ? path.relative(root, uploadApprovalPath) : null, publishingEnabled: false });
       } finally { release(); }
     }
