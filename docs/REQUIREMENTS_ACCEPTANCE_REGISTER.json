@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-25",
-  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. The source/test candidate assessed here is 5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938; documentation-only descendants do not change source but must have their own final-head CI. External integration claims require live owner-authorized evidence, not mocks. Each requirement records assessmentCommitSha and acceptanceCriterion.",
+  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. The schedule cadence decision change is assessed at d12118304e5706959aeaaffd09035fd490031411; rerun relevant tests and verify exact-head CI before release. External integration claims require live owner-authorized evidence, not mocks. Each requirement records assessmentCommitSha and acceptanceCriterion.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -264,6 +264,22 @@
       "nextAction": "Keep the restore regression tests; the path checks reduce exposure but portable path-based Node APIs cannot eliminate every ancestor TOCTOU race. Perform restore only in an isolated, controlled state directory and retain that limitation in the runbook.",
       "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
       "acceptanceCriterion": "Tests reject a symlinked backup file, a symlinked parent of the backup, and a symlinked rootDir ancestor without creating files through the link; regular backup input and explicit restore confirmation remain functional."
+    },
+    {
+      "id": "SCHED-003",
+      "severity": "critical",
+      "owner": "owner",
+      "requirement": "Resolve the requested weekly cadence conflict with the 72-hour minimum before enabling any publication.",
+      "status": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c5e31dff20229da18f86c0a59ddac14a88b82eae",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/2f6b872dea6aa7a171e4d93dac4989c1f568a488",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/deb6ada374c48f4e81e90514949b14e700dadf6c",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d12118304e5706959aeaaffd09035fd490031411"
+      ],
+      "nextAction": "Owner must select and explicitly approve a mathematically feasible policy mode; current proposed rolling cycle has no weekly publication-count promise. Keep publication disabled until the decision is recorded and validated.",
+      "assessmentCommitSha": "d12118304e5706959aeaaffd09035fd490031411",
+      "acceptanceCriterion": "Configuration records the requested weekly target and mathematical conflict; validator emits a visible blocked decision status; production readiness refuses to pass unless a valid owner-approved cadence decision is present."
     }
   ]
 }
