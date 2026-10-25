@@ -2,6 +2,30 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 
+function ensureSafeParentDirectories(parent) {
+  const root = path.parse(parent).root;
+  let cursor = root;
+  for (const component of path.relative(root, parent).split(path.sep).filter(Boolean)) {
+    cursor = path.join(cursor, component);
+    let stat;
+    try {
+      stat = fs.lstatSync(cursor);
+    } catch (error) {
+      if (error?.code !== "ENOENT") throw error;
+      try {
+        fs.mkdirSync(cursor, { mode: 0o700 });
+      } catch (mkdirError) {
+        // Another process may have created this component concurrently. Recheck
+        // the actual filesystem object instead of trusting the mkdir outcome.
+        if (mkdirError?.code !== "EEXIST") throw mkdirError;
+      }
+      stat = fs.lstatSync(cursor);
+    }
+    if (stat.isSymbolicLink()) throw new Error("approval artifact parent path contains a symbolic link");
+    if (!stat.isDirectory()) throw new Error("approval artifact parent path must contain only directories");
+  }
+}
+
 /**
  * Commit an approval artifact only after its corresponding durable application
  * state has been saved. The final path is created exclusively with a hard link,
@@ -14,22 +38,18 @@ export function commitApprovalArtifact({ destination, record, persistState }) {
 
   const target = path.resolve(destination);
   const parent = path.dirname(target);
-  fs.mkdirSync(parent, { recursive: true, mode: 0o700 });
 
-  let cursor = path.parse(target).root;
-  const parts = path.relative(cursor, target).split(path.sep).filter(Boolean);
-  for (let index = 0; index < parts.length; index++) {
-    cursor = path.join(cursor, parts[index]);
-    let stat;
-    try { stat = fs.lstatSync(cursor); }
-    catch (error) {
-      if (error?.code === "ENOENT" && index === parts.length - 1) continue;
-      if (error?.code === "ENOENT") throw new Error("approval artifact path has a missing component");
-      throw error;
-    }
-    if (stat.isSymbolicLink()) throw new Error("approval artifact path contains a symbolic link");
-    if (index < parts.length - 1 && !stat.isDirectory()) throw new Error("approval artifact parent path must contain only directories");
-    if (index === parts.length - 1) throw new Error("approval artifact already exists; refusing to overwrite an existing approval");
+  // Do not use recursive mkdir before checking each ancestor: if a parent is a
+  // symlink, recursive creation could write outside the intended approval tree
+  // before a later validation step notices the link.
+  ensureSafeParentDirectories(parent);
+
+  try {
+    const stat = fs.lstatSync(target);
+    if (stat.isSymbolicLink()) throw new Error("approval artifact destination is a symbolic link");
+    throw new Error("approval artifact already exists; refusing to overwrite an existing approval");
+  } catch (error) {
+    if (error?.code !== "ENOENT") throw error;
   }
 
   const temporary = path.join(parent, "." + path.basename(target) + "." + crypto.randomUUID() + ".tmp");
