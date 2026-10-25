@@ -1,4 +1,4 @@
-> **Current release status — 2026-10-25:** See the [authoritative current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-25.md). Exact tested code candidate: `aebb25d5ce795090cb6383ba8e533ccd23a147ee`. Automated checks pass (238 Node tests, 8 Python tests, 5 Chromium E2E tests, clean installs and zero npm-audit vulnerabilities), but **code acceptance remains BLOCKED** by incomplete full control coverage and branch-history review; **production acceptance remains BLOCKED** by genuine media/rights, account, authorization, integration, recovery and deployment gates. This status supersedes older checkpoint wording where it conflicts.
+> **Current release status — 2026-10-25:** See the [authoritative current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-25.md). Exact tested code/test SHA: `e56e3f5a328590a2b54849299a9fabc09df02f25`. Automated checks pass (244 Node tests, 8 Python tests, 7 Chromium E2E tests, locked and normal clean installs, and zero npm-audit vulnerabilities). **Code acceptance remains BLOCKED** by incomplete full dashboard-control coverage and divergent-history review; **production acceptance remains BLOCKED** by genuine media/rights, account authorization, external integration, recovery and deployment gates. This status supersedes older checkpoint wording where it conflicts.
 
 # Final operations runbook
 
@@ -7,28 +7,29 @@
 **Decision: CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED.** Automated checks pass on the exact code/test SHA below, but full dashboard-control acceptance, complete divergent-history review, isolated recovery drills, real-account integration and deployment acceptance remain incomplete.
 
 ### Exact Git state
-- Implementation branch: `codex/marketing-machine-audit-fixes`; tested code/test SHA: `6b1de48043d16632957566c0ee84942f45e5ab87`.
+- Implementation branch: `codex/marketing-machine-audit-fixes`; tested code/test SHA: `e56e3f5a328590a2b54849299a9fabc09df02f25`.
 - Current PR HEAD will be a documentation-only descendant of this tested candidate; see [live PR metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1).
 - `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
-- At the tested code/test candidate, comparison was **1,027 ahead, 2 behind, 110 changed files**; subsequent documentation-only commits add no application-code changes. Use the live PR metadata for the current-head comparison. The full branch-only history has not been reviewed patch by patch. PR #1 remains open, draft and unmerged. No direct `main` edit or destructive history operation was performed.
+- At the tested code/test candidate, comparison was **1,036 ahead, 2 behind, 110 changed files**; subsequent documentation-only commits add no application-code changes. Use the live PR metadata for the current-head comparison. The full branch-only history has not been reviewed patch by patch. PR #1 remains open, draft and unmerged. No direct `main` edit or destructive history operation was performed.
 
 ### Exact-SHA CI
-- [Automation/security — run 40175207834](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207834): **PASS** — 243 Node tests, 0 failed/0 skipped; 8 Python tests; locked and normal `npm ci`; Google API import; JS syntax/Python compilation; 16 queue items; `npm audit`: 0 vulnerabilities across 49 packages.
-- [Browser E2E — run 40175207786](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207786): **PASS** — 6 Chromium journeys against the local dashboard/backend; not every visible control is covered.
-- [Content quality — run 40175207785](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207785): **PASS**.
-- [Metadata — run 40175207781](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207781): **PASS**.
-- [Production readiness — run 40175207782](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207782): **BLOCKED as required: 12 mandatory blockers**; retained diagnostic [artifact 12592125035](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207782/artifacts/12592125035).
-- [Facebook daily draft — run 40175207784](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40175207784): **SKIPPED** on PR event; not default-branch acceptance evidence.
+- [Automation/security — run 40181771250](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40181771250): **PASS** — 244 Node tests, 0 failed/0 skipped; 8 Python tests; locked and normal `npm ci`; Google API import; JS syntax/Python compilation; 16 queue items; `npm audit`: 0 vulnerabilities across 49 packages.
+- [Browser E2E — run 40181771259](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40181771259): **PASS** — 6 Chromium journeys against the local dashboard/backend; not every visible control is covered.
+- [Content quality — run 40181771275](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40181771275): **PASS**.
+- [Metadata — run 40181771283](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40181771283): **PASS**.
+- [Production readiness — run 40181771257](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40181771257): **BLOCKED as required: 12 mandatory blockers**; retained diagnostic [artifact 12594570724](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40181771257/artifacts/12594570724).
+- [Facebook daily draft — run 40181771276](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40181771276): **SKIPPED** on PR event; not default-branch acceptance evidence.
 
 ### Code fixes in this candidate
 - Approval artifact directory creation now uses component-by-component symlink/non-directory checks before nested writes. Four new path-safety tests cover safe creation, symlink ancestors, file ancestors and dashboard use of the guard.
 - Validation-task start and result persistence now use the cross-process state lock. A durable `RUNNING` record prevents duplicate launches across two dashboard processes sharing state; the regression test exercises concurrent submissions.
 - Facebook Page verification now reports success/failure in a dedicated accessible status area, so refreshing the dashboard cannot erase the operation result; the new browser regression verifies persistent blocked feedback.
+- Private upload workflow now uses lockfile-enforced `npm ci --ignore-scripts` and the built-in `${{ github.token }}` for restoring the prior attempt ledger; `test/ci-lockfile.test.mjs` asserts both settings.
 - Existing approval transaction rollback, atomic JSON path checks, Facebook history restoration safeguards, dashboard handler wiring, schedule/queue invariants and publishing safety tests remain covered.
 
 ### Acceptance and owner actions
 - [x] Exact-SHA automation, install, dependency audit, content and metadata checks pass.
-- [x] Six browser journeys pass.
+- [x] Seven browser journeys pass.
 - [x] Public/unattended YouTube publishing and Facebook live publishing remain disabled.
 - [ ] Full dashboard-control browser acceptance and complete branch-history review/reconciliation.
 - [ ] Isolated crash, rollback, backup/restore and deployment drills with retained evidence.
