@@ -544,6 +544,7 @@ const server = http.createServer(async (req, res) => {
       try {
         idea = generateFacebookIdea({ date, existingDrafts: state.facebookDrafts, recentPosts: state.facebookPosts });
       } catch (error) {
+        // Invalid operator input is a client error, not an internal server failure.
         if (error instanceof Error && /date is required|date is invalid/i.test(error.message)) {
           return json(res, 400, { error: error.message, publishingEnabled: false, publishReady: false });
         }

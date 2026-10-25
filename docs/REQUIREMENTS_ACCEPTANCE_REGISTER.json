@@ -341,6 +341,21 @@
       "nextAction": "Keep the workflow fail-closed. The expected blocked readiness result is not production acceptance; rerun the exact final PR HEAD and preserve the diagnostic artifact.",
       "assessmentCommitSha": "dfad17c87c6473a81ac65baa67ac7f694e2c7b29",
       "acceptanceCriterion": "The workflow records both exit codes in a retained artifact, validates the values, confirms they agree, and emits the explicit BLOCKED message when both checks return 2; a missing or malformed record fails closed."
+    },
+    {
+      "id": "DASH-CTRL-05",
+      "severity": "medium",
+      "owner": "maintainer",
+      "requirement": "The authenticated Facebook idea endpoint must validate malformed and impossible dates as client errors without mutating draft state.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/5ca20732e714dd850e3a6ec657ad987e7741e20f",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e9fd88a993906565945aa0219987fece673ea332",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40223472355"
+      ],
+      "nextAction": "Keep this route-level regression test. Provider-failure injection and exhaustive UI error-state coverage remain NOT_TESTED; live Nature Frontiers Page verification remains BLOCKED_EXTERNAL.",
+      "assessmentCommitSha": "8146666ec32d5496dd0af6fb93a79fbd3284bf8f",
+      "acceptanceCriterion": "Unauthenticated requests return 401; malformed dates and impossible calendar dates return HTTP 400 with safe JSON errors; draft IDs and publishing state remain unchanged."
     }
   ]
 }

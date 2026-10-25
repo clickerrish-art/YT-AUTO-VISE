@@ -1,3 +1,11 @@
+## Latest dashboard input-validation checkpoint — 25 October 2026
+
+- Candidate: `8146666ec32d5496dd0af6fb93a79fbd3284bf8f`; exact browser E2E [run 40223472355](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40223472355) **PASS** — 9 Chromium journeys.
+- Confirmed defect: `GET /api/facebook/idea` previously allowed invalid date errors to reach the generic handler, which could misrepresent operator input as an internal server failure.
+- Fix: [route returns HTTP 400 for invalid/impossible dates](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/5ca20732e714dd850e3a6ec657ad987e7741e20f); [browser regression test](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e9fd88a993906565945aa0219987fece673ea332) checks unauthenticated 401, malformed and impossible dates, and unchanged draft state.
+- The dashboard control matrix now documents the correct GET route and remaining partial coverage. The acceptance register records `DASH-CTRL-05` as PASS for the validated behavior; provider failure and full control coverage remain open.
+- The final PR HEAD's checks remain authoritative; do not transfer this candidate's test results to a newer SHA without checking its own runs.
+
 ## Latest code/CI checkpoint — 25 October 2026
 
 - Source/test candidate: `dfad17c87c6473a81ac65baa67ac7f694e2c7b29` on `codex/marketing-machine-audit-fixes`; PR #1 remains open, draft and unmerged.
