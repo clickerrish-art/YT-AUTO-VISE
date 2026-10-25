@@ -40,15 +40,28 @@ if (!["127.0.0.1", "::1", "localhost"].includes(host)) {
   console.error("BLOCKED: dashboard binds to loopback only; use a secure authenticated reverse proxy before changing this.");
   process.exit(2);
 }
-fs.mkdirSync(stateDir, { recursive: true });
-if (!fs.existsSync(stateFile)) {
+fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+const stateDirectoryStat = fs.lstatSync(stateDir);
+if (stateDirectoryStat.isSymbolicLink() || !stateDirectoryStat.isDirectory()) {
+  throw new Error("Dashboard state directory must be a real directory, not a symlink or special file");
+}
+let initialStateEntry;
+try {
+  initialStateEntry = fs.lstatSync(stateFile);
+} catch (error) {
+  if (error?.code !== "ENOENT") throw error;
+}
+if (initialStateEntry && (initialStateEntry.isSymbolicLink() || !initialStateEntry.isFile())) {
+  throw new Error("Dashboard state file must be a regular file, not a symlink or special file");
+}
+if (!initialStateEntry) {
   const queue = JSON.parse(fs.readFileSync(path.join(root, "content/queue.json"), "utf8"));
   const campaignConfig = JSON.parse(fs.readFileSync(path.join(root, "config/campaigns.json"), "utf8"));
   const initial = { version: 1, queueItems: queue.items ?? [], campaigns: campaignConfig.campaigns ?? [], audit: [], jobs: [], uploads: [], facebookDrafts: [], facebookPosts: [], facebookAttempts: [] };
   try {
     atomicCreateJson(stateFile, initial, { mode: 0o600 });
   } catch (error) {
-    // Another server process may have initialized the file after existsSync.
+    // Another server process may have initialized the file after lstat.
     // Accept only a real regular file created atomically by that process.
     if (error?.code !== "EEXIST") throw error;
     const current = fs.lstatSync(stateFile);
