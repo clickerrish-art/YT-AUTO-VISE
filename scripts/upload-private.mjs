@@ -310,7 +310,8 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   let cycleHistoryLength = null;
   if (!youtubeFactory) {
     assertNoUnresolvedUploadAttempts(ledger);
-    const history = await fetchCompleteYoutubeHistory(youtube, matchedChannel, env.CHANNEL_HISTORY_RECONCILIATION_PATH, expectedChannelId);
+    const safeHistoryPath = resolveRepositoryFileNoSymlinks(env.CHANNEL_HISTORY_RECONCILIATION_PATH, "Channel history reconciliation");
+    const history = await fetchCompleteYoutubeHistory(youtube, matchedChannel, safeHistoryPath, expectedChannelId);
     const format = metadata.contentType ?? metadata.format;
     if (!["long_form", "short"].includes(format)) throw new Error("metadata must explicitly identify contentType as long_form or short for rolling cycle enforcement");
     cycleHistoryLength = history.length;
