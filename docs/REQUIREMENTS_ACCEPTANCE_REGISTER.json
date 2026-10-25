@@ -289,14 +289,17 @@
       "severity": "critical",
       "owner": "maintainer",
       "requirement": "Validate owner-approved cadence decisions as explicit, timezone-stamped, referenced and mathematically feasible in both schedule validation and production readiness.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/cf82332136c444ef3c57e4e1d1eef9ba9aabae6f",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/95d9dd8c4fb895861bcdfbc4c5ddc12b477990f6",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/630f1fbe05efa04ac4b5a470c506f872e75d1f1f"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/630f1fbe05efa04ac4b5a470c506f872e75d1f1f",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215336608",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215336721",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215336580"
       ],
-      "nextAction": "Wait for exact-candidate CI and verify tests for valid rolling mode, unsupported mode, missing timezone, impossible weekly spacing and infeasible custom policy. Do not record owner approval without an actual owner decision.",
-      "assessmentCommitSha": "630f1fbe05efa04ac4b5a470c506f872e75d1f1f",
+      "nextAction": "Retain the fail-closed approval validation. A structurally valid decision must still come from an actual owner decision; do not create or infer owner approval. Re-run CI for any code changes.",
+      "assessmentCommitSha": "564d8b95c9457e13ceb24ff32a1f5faa6de40273",
       "acceptanceCriterion": "Both schedule validation and production readiness reject absent, unsupported, unreferenced, timezone-naive or mathematically infeasible owner cadence decisions; tests exercise each rejection and a valid rolling-cycle decision."
     }
   ]
