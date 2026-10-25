@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { metaCredentialFingerprint, fingerprintsMatch } from "./meta-credential-fingerprint.mjs";
-import { atomicWriteJson } from "./atomic-json-file.mjs";
+import { atomicWriteJson, atomicCreateJson } from "./atomic-json-file.mjs";
 import { redactOperationalText } from "./safe-output.mjs";
 import { fileURLToPath } from "node:url";
 import { spawn, spawnSync } from "node:child_process";
@@ -45,7 +45,15 @@ if (!fs.existsSync(stateFile)) {
   const queue = JSON.parse(fs.readFileSync(path.join(root, "content/queue.json"), "utf8"));
   const campaignConfig = JSON.parse(fs.readFileSync(path.join(root, "config/campaigns.json"), "utf8"));
   const initial = { version: 1, queueItems: queue.items ?? [], campaigns: campaignConfig.campaigns ?? [], audit: [], jobs: [], uploads: [], facebookDrafts: [], facebookPosts: [], facebookAttempts: [] };
-  fs.writeFileSync(stateFile, JSON.stringify(initial, null, 2) + "\n", { mode: 0o600 });
+  try {
+    atomicCreateJson(stateFile, initial, { mode: 0o600 });
+  } catch (error) {
+    // Another server process may have initialized the file after existsSync.
+    // Accept only a real regular file created atomically by that process.
+    if (error?.code !== "EEXIST") throw error;
+    const current = fs.lstatSync(stateFile);
+    if (current.isSymbolicLink() || !current.isFile()) throw new Error("Dashboard state initialization collided with an unsafe destination");
+  }
 }
 function loadState() {
   const state = JSON.parse(fs.readFileSync(stateFile, "utf8"));
