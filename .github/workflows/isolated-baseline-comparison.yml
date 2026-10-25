@@ -1,6 +1,7 @@
 name: Isolated main and candidate baseline comparison
 
 on:
+  workflow_dispatch:
   pull_request:
     branches: [main]
   push:
