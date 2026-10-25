@@ -75,7 +75,7 @@ test("atomic JSON creation initializes a new file once with restrictive permissi
 
 test("atomic JSON creation never overwrites an existing state file", (t) => {
   const { dir, file } = fixture(t);
-  fs.writeFileSync(file, JSON.stringify({ committed: true }) + "\\n", { mode: 0o600 });
+  fs.writeFileSync(file, JSON.stringify({ committed: true }) + "\n", { mode: 0o600 });
   assert.throws(() => atomicCreateJson(file, { committed: false }), error => error.code === "EEXIST");
   assert.deepEqual(JSON.parse(fs.readFileSync(file, "utf8")), { committed: true });
   assert.deepEqual(fs.readdirSync(dir), ["state.json"]);
