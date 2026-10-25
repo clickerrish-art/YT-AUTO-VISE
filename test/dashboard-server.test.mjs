@@ -289,3 +289,63 @@ test("dashboard refuses a state directory beneath a symlink before creating nest
   assert.equal(fs.existsSync(path.join(outside, "new-state")), false,
     "startup must not create directories through the symlink before rejecting it");
 });
+
+test("dashboard startup repairs legacy state that had an active Safari campaign", async (t) => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-safari-migration-"));
+  const port = 28000 + Math.floor(Math.random() * 10000);
+  const token = "test-token-" + "s".repeat(40);
+  const queue = JSON.parse(fs.readFileSync(path.join(process.cwd(), "content/queue.json"), "utf8"));
+  const campaignConfig = JSON.parse(fs.readFileSync(path.join(process.cwd(), "config/campaigns.json"), "utf8"));
+  const safari = campaignConfig.campaigns.find(campaign => campaign.type === "safari_affiliate");
+  safari.status = "ACTIVE_FOR_DRAFTS_ONLY";
+  safari.destinationUrl = "https://example.org/legacy-safari";
+  safari.destinationValidation = "owner_verified";
+  safari.ownerApproved = true;
+  safari.disclosureText = "Legacy affiliate disclosure";
+  safari.pendingDestinationUrl = "https://example.org/legacy-safari";
+  safari.pendingDisclosureText = "Legacy affiliate disclosure";
+  safari.pendingDestinationVersion = "a".repeat(64);
+  safari.approval = { approvedBy: "legacy-owner", approvedAt: "2026-10-24T00:00:00Z", destinationVersion: "a".repeat(64) };
+  const stateFile = path.join(stateDir, "dashboard-state.json");
+  fs.writeFileSync(stateFile, JSON.stringify({
+    version: 1, queueItems: queue.items ?? [], campaigns: campaignConfig.campaigns,
+    audit: [], jobs: [], uploads: [], facebookDrafts: [], facebookPosts: [], facebookAttempts: []
+  }), { mode: 0o600 });
+
+  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let logs = "";
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  t.after(() => {
+    if (child.exitCode === null) child.kill("SIGTERM");
+    fs.rmSync(stateDir, { recursive: true, force: true });
+  });
+
+  const base = `http://127.0.0.1:${port}`;
+  let ready = false;
+  for (let i = 0; i < 60; i++) {
+    if (child.exitCode !== null) break;
+    try { const response = await fetch(base + "/healthz"); if (response.ok) { ready = true; break; } } catch {}
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  assert.equal(ready, true, "server did not start with legacy fixture: " + logs);
+  const response = await fetch(base + "/api/state", { headers: { "x-operator-token": token } });
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  const repaired = body.campaigns.find(campaign => campaign.type === "safari_affiliate");
+  assert.equal(repaired.status, "INACTIVE");
+  assert.equal(repaired.destinationUrl, "");
+  assert.equal(repaired.destinationValidation, "not_verified");
+  assert.equal(repaired.ownerApproved, false);
+  assert.equal(repaired.disclosureText, "");
+  assert.equal(Object.hasOwn(repaired, "pendingDestinationUrl"), false);
+  assert.equal(Object.hasOwn(repaired, "pendingDisclosureText"), false);
+  assert.equal(Object.hasOwn(repaired, "pendingDestinationVersion"), false);
+  assert.equal(Object.hasOwn(repaired, "approval"), false);
+  const durable = JSON.parse(fs.readFileSync(stateFile, "utf8"));
+  assert.equal(durable.campaigns.find(campaign => campaign.type === "safari_affiliate").status, "INACTIVE");
+  assert.ok(durable.audit.some(event => event.action === "SAFARI_CAMPAIGN_POLICY_ENFORCED"));
+});
