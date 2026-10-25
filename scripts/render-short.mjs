@@ -8,11 +8,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { prepareSafeRenderOutput, resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
 
 const [manifestArg = "content/render-manifest.json", outputArg = "media/next-short.mp4"] = process.argv.slice(2);
-const manifestPath = path.resolve(manifestArg);
-if (!fs.existsSync(manifestPath)) {
-  console.error("BLOCKED: render manifest not found. Copy content/render-manifest.example.json and fill it in after rights review.");
+let manifestPath;
+try { manifestPath = resolveRegularFileNoSymlinks(manifestArg, process.cwd(), "Render manifest"); }
+catch {
+  console.error("BLOCKED: render manifest not found or unsafe. Copy content/render-manifest.example.json and fill it in after rights review.");
   process.exit(2);
 }
 let m;
@@ -33,9 +35,14 @@ for (const key of ["footageLicenseEvidence", "narrationLicenseEvidence"]) {
     errors.push(key + " must contain a real license/permission record reference, not a placeholder");
   }
 }
+const resolvedInputs = {};
 for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
-  if (typeof m[key] === "string" && m[key].trim() && !fs.existsSync(path.resolve(path.dirname(manifestPath), m[key]))) {
-    errors.push(key + " does not exist relative to the manifest directory: " + m[key]);
+  if (typeof m[key] === "string" && m[key].trim()) {
+    try {
+      resolvedInputs[key] = resolveRegularFileNoSymlinks(m[key], path.dirname(manifestPath), key);
+    } catch {
+      errors.push(key + " is missing, unsafe, or contains a symbolic link");
+    }
   }
 }
 if (errors.length) {
@@ -43,10 +50,15 @@ if (errors.length) {
   errors.forEach(e => console.error("- " + e));
   process.exit(1);
 }
-const footage = path.resolve(path.dirname(manifestPath), m.footagePath);
-const narration = path.resolve(path.dirname(manifestPath), m.narrationPath);
-const captions = path.resolve(path.dirname(manifestPath), m.captionsPath);
-const output = path.resolve(outputArg);
+const footage = resolvedInputs.footagePath;
+const narration = resolvedInputs.narrationPath;
+const captions = resolvedInputs.captionsPath;
+let output;
+try { output = prepareSafeRenderOutput(outputArg); }
+catch {
+  console.error("BLOCKED: render output path is unsafe or contains a symbolic link.");
+  process.exit(1);
+}
 const probe = spawnSync("ffprobe", ["-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1", narration], {encoding:"utf8"});
 if (probe.error || probe.status !== 0 || !Number.isFinite(Number(probe.stdout.trim()))) {
   console.error("BLOCKED: ffprobe could not read narration. Install FFmpeg and provide a valid audio file.");
@@ -68,7 +80,7 @@ if (captionSyncCheck.error || captionSyncCheck.status !== 0) {
   console.error("BLOCKED: captions do not fit the narration duration; refusing to render.");
   process.exit(1);
 }
-fs.mkdirSync(path.dirname(output), {recursive:true});
+
 // FFmpeg resolves subtitle paths from the process working directory, not the
 // manifest directory. Use the already-resolved absolute path so manifests in
 // content/ work reliably, and escape filter-graph special characters.
