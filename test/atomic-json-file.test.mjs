@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { atomicWriteJson } from "../scripts/atomic-json-file.mjs";
+import { atomicWriteJson, atomicCreateJson } from "../scripts/atomic-json-file.mjs";
 
 function fixture(t) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "atomic-json-state-"));
@@ -62,4 +62,45 @@ test("symlink destinations are rejected without following or replacing their tar
   assert.throws(() => atomicWriteJson(file, { unsafe: true }), /regular file/);
   assert.equal(fs.readFileSync(target, "utf8"), "preserve");
   assert.equal(fs.lstatSync(file).isSymbolicLink(), true);
+});
+
+
+test("atomic JSON creation initializes a new file once with restrictive permissions", (t) => {
+  const { dir, file } = fixture(t);
+  atomicCreateJson(file, { version: 1, jobs: [] });
+  assert.deepEqual(JSON.parse(fs.readFileSync(file, "utf8")), { version: 1, jobs: [] });
+  assert.equal(fs.statSync(file).mode & 0o777, 0o600);
+  assert.deepEqual(fs.readdirSync(dir), ["state.json"]);
+});
+
+test("atomic JSON creation never overwrites an existing state file", (t) => {
+  const { dir, file } = fixture(t);
+  fs.writeFileSync(file, JSON.stringify({ committed: true }) + "\\n", { mode: 0o600 });
+  assert.throws(() => atomicCreateJson(file, { committed: false }), error => error.code === "EEXIST");
+  assert.deepEqual(JSON.parse(fs.readFileSync(file, "utf8")), { committed: true });
+  assert.deepEqual(fs.readdirSync(dir), ["state.json"]);
+});
+
+test("atomic JSON creation rejects a symlink destination without touching its target", (t) => {
+  const { dir, file } = fixture(t);
+  const target = path.join(dir, "target.json");
+  fs.writeFileSync(target, "preserve");
+  fs.symlinkSync(target, file);
+  assert.throws(() => atomicCreateJson(file, { unsafe: true }), /regular file/);
+  assert.equal(fs.readFileSync(target, "utf8"), "preserve");
+  assert.equal(fs.lstatSync(file).isSymbolicLink(), true);
+});
+
+test("failed exclusive link removes the staged state file and leaves destination absent", (t) => {
+  const { dir, file } = fixture(t);
+  const originalLink = fs.linkSync;
+  t.after(() => { fs.linkSync = originalLink; });
+  fs.linkSync = function () {
+    const error = new Error("simulated exclusive link failure");
+    error.code = "EIO";
+    throw error;
+  };
+  assert.throws(() => atomicCreateJson(file, { version: 1 }), /simulated exclusive link failure/);
+  assert.equal(fs.existsSync(file), false);
+  assert.deepEqual(fs.readdirSync(dir), []);
 });
