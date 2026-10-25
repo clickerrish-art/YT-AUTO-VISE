@@ -56,6 +56,13 @@ test("validator accepts only a fully evidenced feasible owner-approved cadence m
  });
  assert.notEqual(infeasibleCustom.status,0);assert.match(infeasibleCustom.stderr,/documented policy whose publication count times minimum spacing fits/);
 });
+test("validator rejects calendar-invalid owner approval timestamps",()=>{
+ const invalidDate=runWithPlanMutation(plan=>{
+  plan.cadenceDecision={...plan.cadenceDecision,status:"OWNER_APPROVED",ownerApproved:true,approvedMode:"ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",approvedAt:"2026-02-31T12:00:00Z",approvalReference:"owner-decision-record-001"};
+ });
+ assert.notEqual(invalidDate.status,0);
+ assert.match(invalidDate.stderr,/approvedAt as a valid ISO timestamp with explicit timezone/);
+});
 test("validator rejects stale weekly-count fields",()=>{
  const result=runWithPlanMutation(plan=>{plan.targetCadence={longFormVideosPerWeek:2,shortsPerWeek:1,totalVideosPerWeek:3};});
  assert.notEqual(result.status,0);assert.match(result.stderr,/stale weekly-count cadence fields must be removed/);
