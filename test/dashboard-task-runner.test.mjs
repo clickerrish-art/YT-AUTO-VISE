@@ -111,4 +111,22 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   const campaignResult = JSON.parse(campaignText);
   assert.equal(campaignResult.job.status, "SUCCEEDED", campaignResult.job.output);
   assert.match(campaignResult.job.output, /Selar and Safari campaign records are isolated/);
+
+  // Two independent dashboard processes share one durable state directory.
+  // A long-running allowlisted task must be claimed once; the other process
+  // must see the persisted RUNNING record rather than launching a duplicate.
+  const duplicateTaskRequests = await Promise.all([
+    fetch(base + "/api/tasks/run", { method: "POST", headers, body: JSON.stringify({ taskId: "test-suite" }) }),
+    fetch(base2 + "/api/tasks/run", { method: "POST", headers, body: JSON.stringify({ taskId: "test-suite" }) })
+  ]);
+  assert.deepEqual(duplicateTaskRequests.map(response => response.status).sort(), [200, 409]);
+  const duplicateTaskBodies = await Promise.all(duplicateTaskRequests.map(response => response.json()));
+  const rejectedDuplicate = duplicateTaskBodies.find(body => body.error);
+  assert.match(rejectedDuplicate.error, /durable RUNNING record|already running/i);
+  assert.equal(rejectedDuplicate.retryAllowed, false);
+  const afterConcurrentTasks = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  const testSuiteJobs = afterConcurrentTasks.jobs.filter(job => job.kind === "VALIDATION_TASK" && job.taskId === "test-suite");
+  assert.equal(testSuiteJobs.length, 1, "concurrent task submissions must create one durable task record");
+  assert.equal(testSuiteJobs[0].status, "SUCCEEDED", testSuiteJobs[0].output);
+  assert.ok(afterConcurrentTasks.audit.some(event => event.action === "VALIDATION_TASK_SUCCEEDED" && event.jobId === testSuiteJobs[0].id));
 });
