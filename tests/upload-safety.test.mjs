@@ -1,8 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import crypto from "node:crypto";
-import { validateUploadApproval, validateOneShotUploadAuthorization, assertReconciliationOnlyHasPriorAttempt, verifyRetainedRightsEvidence, sha256File } from "../scripts/upload-private.mjs";
+import { validateUploadApproval, validateOneShotUploadAuthorization, assertReconciliationOnlyHasPriorAttempt, verifyRetainedRightsEvidence, sha256File, resolveRegularFileNoSymlinks } from "../scripts/upload-private.mjs";
 
 test("YouTube uploader is private-only and binds upload to the verified SonicVhibez channel", () => {
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
@@ -114,4 +116,34 @@ test("retained rights evidence fails closed when a source asset or license file 
     fs.writeFileSync(assetPath, "substituted asset after review");
     assert.throws(() => verifyRetainedRightsEvidence(approval), /source asset is missing or its checksum changed/);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+
+test("upload evidence path resolver rejects symlinked artifacts and rights evidence", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-upload-path-safety-"));
+  try {
+    const realFile = path.join(dir, "real.txt");
+    const linkedFile = path.join(dir, "linked.txt");
+    fs.writeFileSync(realFile, "fixture evidence");
+    fs.symlinkSync(realFile, linkedFile);
+    assert.equal(resolveRegularFileNoSymlinks(realFile), realFile);
+    assert.throws(() => resolveRegularFileNoSymlinks(linkedFile, "Approval-bound artifact"), /symbolic link/);
+    const rights = {
+      rightsEvidence: {
+        assets: [{
+          assetPath: linkedFile,
+          assetSha256: sha256File(realFile),
+          licenseEvidenceLocation: realFile,
+          licenseEvidenceSha256: sha256File(realFile),
+          permittedUses: ["YouTube"],
+          verificationStatus: "VERIFIED",
+          verifiedBy: "Test Operator",
+          verifiedAt: "2026-10-24T00:00:00.000Z"
+        }]
+      }
+    };
+    assert.throws(() => verifyRetainedRightsEvidence(rights), /symbolic link/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
 });
