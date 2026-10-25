@@ -58,6 +58,16 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.ok(Array.isArray(autonomous.blockers));
   assert.equal(typeof autonomous.queueCount, "number");
 
+  const emergencyStoppedPublish = await fetch(base + "/api/facebook/publish", {
+    method: "POST", headers, body: JSON.stringify({ draftId: "must-not-publish", confirmOperation: true })
+  });
+  const emergencyStoppedBody = await emergencyStoppedPublish.json();
+  assert.equal(emergencyStoppedPublish.status, 409);
+  assert.ok(emergencyStoppedBody.blockers.some(item => /Facebook emergency stop is active/i.test(item)),
+    "manual publish endpoint must explicitly report the emergency stop even if other kill switches are also disabled");
+  const stateBeforeCampaignTests = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  assert.equal(stateBeforeCampaignTests.facebookAttempts.length, 0, "emergency-stop rejection must not create an external-operation attempt");
+
   const readinessResponse = await fetch(base + "/readyz");
   const readiness = await readinessResponse.json();
   assert.equal(readinessResponse.status, 503, "production readiness must fail closed while owner-controlled prerequisites are missing");
