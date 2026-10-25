@@ -51,6 +51,8 @@ jobs:
           node scripts/production-readiness.mjs --json > readiness-report/readiness.json 2> readiness-report/readiness-json-error.txt
           json_status=$?
           set -e
+          printf '%s\\n%s\\n' "$readiness_status" "$json_status" > readiness-report/exit-codes.txt
+          echo "Observed readiness exit codes: human=$readiness_status json=$json_status"
           echo "exit_code=$readiness_status" >> "$GITHUB_OUTPUT"
           echo "json_exit_code=$json_status" >> "$GITHUB_OUTPUT"
           node --input-type=module <<'NODE'
@@ -69,15 +71,22 @@ jobs:
 
       - name: Fail the workflow when mandatory readiness gates are blocked
         if: always()
-        env:
-          READINESS_EXIT_CODE: ${{ steps.readiness.outputs.exit_code }}
-          READINESS_JSON_EXIT_CODE: ${{ steps.readiness.outputs.json_exit_code }}
         run: |
-          if [ "${READINESS_EXIT_CODE:-2}" -ne "${READINESS_JSON_EXIT_CODE:-3}" ]; then
+          if [ ! -s readiness-report/exit-codes.txt ]; then
+            echo "Readiness exit-code evidence is missing; refusing to infer a result."
+            exit 1
+          fi
+          readiness_status=$(sed -n '1p' readiness-report/exit-codes.txt)
+          json_status=$(sed -n '2p' readiness-report/exit-codes.txt)
+          case "$readiness_status:$json_status" in
+            *[!0-9:]*|:*) echo "Readiness exit-code evidence is malformed."; exit 1 ;;
+          esac
+          echo "Verifying readiness exit codes from retained evidence: human=$readiness_status json=$json_status"
+          if [ "$readiness_status" -ne "$json_status" ]; then
             echo "Human-readable and JSON readiness checks disagree or JSON generation failed."
             exit 1
           fi
-          if [ "${READINESS_EXIT_CODE:-2}" -ne 0 ]; then
+          if [ "$readiness_status" -ne 0 ]; then
             echo "Production readiness is BLOCKED. Review the retained diagnostic artifact; do not bypass the gates."
             exit 1
           fi
