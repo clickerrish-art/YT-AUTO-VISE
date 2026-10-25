@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { validateUploadApproval, validateOneShotUploadAuthorization, assertReconciliationOnlyHasPriorAttempt, verifyRetainedRightsEvidence, sha256File, resolveRegularFileNoSymlinks } from "../scripts/upload-private.mjs";
+import { validateUploadApproval, validateOneShotUploadAuthorization, assertReconciliationOnlyHasPriorAttempt, verifyRetainedRightsEvidence, sha256File, resolveRegularFileNoSymlinks, resolveRepositoryFileNoSymlinks } from "../scripts/upload-private.mjs";
 
 test("YouTube uploader is private-only and binds upload to the verified SonicVhibez channel", () => {
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
@@ -97,7 +97,9 @@ test("both manual upload workflows default the emergency stop to active and requ
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
   assert.match(source, /env\.YOUTUBE_EMERGENCY_STOP !== "false"/);
   assert.match(source, /YouTube emergency stop is active or unset; private upload is blocked/);
-  assert.match(source, /resolveRegularFileNoSymlinks\(authorizationPath, "One-shot private-upload authorization"\)/);
+  assert.match(source, /resolveRepositoryFileNoSymlinks\(authorizationPath, "One-shot private-upload authorization"\)/);
+  assert.match(source, /const resolveInputFile = youtubeFactory \? resolveRegularFileNoSymlinks : resolveRepositoryFileNoSymlinks/);
+  assert.match(source, /verifyRetainedRightsEvidence\(approval, youtubeFactory \? \{\} : \{ repositoryRoot: process\.cwd\(\) \}\)/);
 });
 
 test("reconciliation-only mode cannot create a new upload attempt", () => {
@@ -143,6 +145,19 @@ test("retained rights evidence fails closed when a source asset or license file 
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 
+
+test("production evidence paths cannot escape the repository root", async () => {
+  const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-upload-outside-root-"));
+  const outsideFile = path.join(outsideDir, "outside.json");
+  fs.writeFileSync(outsideFile, "{}");
+  try {
+    assert.equal(resolveRepositoryFileNoSymlinks("package.json"), path.resolve("package.json"));
+    assert.throws(() => resolveRepositoryFileNoSymlinks(outsideFile, "Authorization"), /must remain inside the repository root/);
+    assert.throws(() => resolveRepositoryFileNoSymlinks(path.join("..", path.basename(outsideDir), "outside.json"), "Authorization"), /must remain inside the repository root|missing or cannot be inspected/);
+  } finally {
+    fs.rmSync(outsideDir, { recursive: true, force: true });
+  }
+});
 
 test("upload evidence path resolver rejects symlinked artifacts and rights evidence", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-upload-path-safety-"));

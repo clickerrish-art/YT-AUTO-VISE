@@ -57,6 +57,17 @@ export function resolveRegularFileNoSymlinks(filePath, label = "Evidence file") 
   }
   return absolute;
 }
+
+/** Resolve a production input only when it remains inside the checked-out repository. */
+export function resolveRepositoryFileNoSymlinks(filePath, label = "Repository evidence file", repositoryRoot = process.cwd()) {
+  const absolute = resolveRegularFileNoSymlinks(filePath, label);
+  const root = path.resolve(repositoryRoot);
+  const relative = path.relative(root, absolute);
+  if (!relative || relative === "." || relative === ".." || relative.startsWith(".." + path.sep) || path.isAbsolute(relative)) {
+    throw new Error(label + " must remain inside the repository root");
+  }
+  return absolute;
+}
 function writeJsonAtomic(filePath, value) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true, mode: 0o700 });
   atomicWriteJson(filePath, value, { mode: 0o600 });
@@ -113,7 +124,7 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
   if (!approval.relatedArtifacts.some(item => typeof item?.path === "string" && /\.json$/i.test(item.path) && item.sha256 === metadataVersion)) throw new Error("approval must bind the exact metadata JSON checksum");
   return true;
 }
-export function verifyRetainedRightsEvidence(approval) {
+export function verifyRetainedRightsEvidence(approval, { repositoryRoot } = {}) {
   if (!approval?.rightsEvidence || typeof approval.rightsEvidence !== "object" || Array.isArray(approval.rightsEvidence)) throw new Error("structured rights evidence is required");
   const evidenceAssets = Array.isArray(approval.rightsEvidence.assets) ? approval.rightsEvidence.assets : [approval.rightsEvidence];
   if (!evidenceAssets.length) throw new Error("at least one rights-evidence asset record is required");
@@ -122,8 +133,11 @@ export function verifyRetainedRightsEvidence(approval) {
     if (!/^[a-f0-9]{64}$/.test(evidence.assetSha256 ?? "") || !/^[a-f0-9]{64}$/.test(evidence.licenseEvidenceSha256 ?? "")) throw new Error("rights evidence must contain source and license-evidence SHA-256 checksums");
     if (!Array.isArray(evidence.permittedUses) || !evidence.permittedUses.includes("YouTube")) throw new Error("rights evidence must explicitly permit YouTube use");
     if (evidence.verificationStatus !== "VERIFIED" || typeof evidence.verifiedBy !== "string" || !evidence.verifiedBy.trim() || !Number.isFinite(strictIsoTimestamp(evidence.verifiedAt))) throw new Error("rights evidence must retain reviewer identity, VERIFIED status, and a valid verification timestamp");
-    const assetFile = resolveRegularFileNoSymlinks(evidence.assetPath, "Rights-evidence source asset");
-    const licenseFile = resolveRegularFileNoSymlinks(evidence.licenseEvidenceLocation, "Retained license evidence");
+    const resolveEvidence = repositoryRoot
+      ? (filePath, label) => resolveRepositoryFileNoSymlinks(filePath, label, repositoryRoot)
+      : resolveRegularFileNoSymlinks;
+    const assetFile = resolveEvidence(evidence.assetPath, "Rights-evidence source asset");
+    const licenseFile = resolveEvidence(evidence.licenseEvidenceLocation, "Retained license evidence");
     if (sha256File(assetFile) !== evidence.assetSha256) throw new Error("rights-evidence source asset is missing or its checksum changed: " + path.basename(assetFile));
     if (fs.statSync(licenseFile).size <= 0 || sha256File(licenseFile) !== evidence.licenseEvidenceSha256) throw new Error("retained license evidence is missing, empty, or its checksum changed: " + path.basename(licenseFile));
   }
@@ -166,9 +180,10 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     throw new Error("YouTube emergency stop is active or unset; private upload is blocked");
   }
   if (!jobId || !/^[A-Za-z0-9][A-Za-z0-9:_-]{2,119}$/.test(jobId)) throw new Error("a stable JOB_ID is required");
-  const safeMetadataPath = resolveRegularFileNoSymlinks(metadataPath, "Metadata file");
-  const safeVideoPath = resolveRegularFileNoSymlinks(videoPath, "Video file");
-  const safeApprovalPath = resolveRegularFileNoSymlinks(approvalPath, "Upload approval file");
+  const resolveInputFile = youtubeFactory ? resolveRegularFileNoSymlinks : resolveRepositoryFileNoSymlinks;
+  const safeMetadataPath = resolveInputFile(metadataPath, "Metadata file");
+  const safeVideoPath = resolveInputFile(videoPath, "Video file");
+  const safeApprovalPath = resolveInputFile(approvalPath, "Upload approval file");
   if (path.extname(safeVideoPath).toLowerCase() !== ".mp4") throw new Error("provide an existing MP4 video file");
 
   const metadata = readJson(safeMetadataPath, "Metadata");
@@ -182,14 +197,14 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (metadata.status !== "READY_FOR_PRIVATE_UPLOAD") throw new Error("metadata status must be READY_FOR_PRIVATE_UPLOAD");
   validateUploadApproval(approval, { jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256 });
   const relatedArtifacts = approval.relatedArtifacts;
-  verifyRetainedRightsEvidence(approval);
+  verifyRetainedRightsEvidence(approval, youtubeFactory ? {} : { repositoryRoot: process.cwd() });
   const uploadedArtifactIsBound = relatedArtifacts.some(item => path.resolve(item.path) === safeVideoPath && item.sha256 === videoSha256);
   if (!uploadedArtifactIsBound) throw new Error("approval artifact set must include the exact MP4 being uploaded");
   for (const item of relatedArtifacts) {
     if (!item || typeof item.path !== "string" || !/^[a-f0-9]{64}$/.test(item.sha256 ?? "")) {
       throw new Error("every approval-bound artifact must exist as a file with a SHA-256 checksum");
     }
-    const safeArtifactPath = resolveRegularFileNoSymlinks(item.path, "Approval-bound artifact");
+    const safeArtifactPath = resolveInputFile(item.path, "Approval-bound artifact");
     if (sha256File(safeArtifactPath) !== item.sha256) throw new Error("approval-bound artifact checksum changed: " + path.basename(safeArtifactPath));
   }
 
@@ -281,7 +296,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (!youtubeFactory && !reconcileOnly) {
     const authorizationPath = env.PRIVATE_UPLOAD_AUTHORIZATION_PATH;
     if (!authorizationPath || !fs.existsSync(authorizationPath)) throw new Error("PRIVATE_UPLOAD_AUTHORIZATION_PATH is required for a live one-shot upload");
-    const safeAuthorizationPath = resolveRegularFileNoSymlinks(authorizationPath, "One-shot private-upload authorization");
+    const safeAuthorizationPath = resolveRepositoryFileNoSymlinks(authorizationPath, "One-shot private-upload authorization");
     const record = readJson(safeAuthorizationPath, "One-shot private-upload authorization");
     oneShotAuthorization = validateOneShotUploadAuthorization(record, {
       jobId, artifactSha256: videoSha256, metadataSha256, approvalSha256: sha256File(approvalPath),
