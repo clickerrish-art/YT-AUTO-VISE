@@ -20,7 +20,7 @@ try {
   media = resolveRegularFileNoSymlinks(mediaArg, process.cwd(), 'Media preflight video');
   metadataPath = resolveRegularFileNoSymlinks(metadataArg, process.cwd(), 'Media preflight metadata');
 } catch {
-  console.error('BLOCKED: video or metadata file is missing, unsafe, or contains a symbolic link.');
+  console.error('BLOCKED: video or metadata file does not exist or is unsafe (symbolic links are not allowed).');
   process.exit(2);
 }
 let metadata;
