@@ -271,9 +271,10 @@ export function approveFacebookDraft(draft, { reviewer, decision, reason = "", e
 
 export function assertFacebookPublishAllowed(draft, {
   publishingEnabled = false, explicitOperationAuthorization = false, dryRun = true,
-  verifiedPageId = "", evaluation
+  emergencyStop = true, verifiedPageId = "", evaluation
 } = {}) {
   const blockers = [];
+  if (emergencyStop !== false) blockers.push("Facebook emergency stop is active; no publication may be attempted");
   if (!publishingEnabled) blockers.push("Facebook publishing kill switch is disabled");
   if (!explicitOperationAuthorization) blockers.push("Explicit per-operation operator authorization is required");
   if (dryRun) blockers.push("Dry-run mode does not publish remotely");
