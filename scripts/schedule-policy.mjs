@@ -221,7 +221,7 @@ export function evaluateNextPublication({
     // state. Drafts, queued jobs, and unknown statuses are not remote publication
     // history and must not silently advance the rolling format cycle.
     if (!new Set(["published", "public", "private", "unlisted"]).has(status)) {
-      errors.push(\`history item \${item.id} has unsupported remote publication status: \${status || "(missing)"}\`);
+      errors.push("history item " + item.id + " has unsupported remote publication status: " + (status || "(missing)"));
       return null;
     }
     const timestamp = item.actualPublishedAt ?? item.publishedAt ?? item.createdAt;
