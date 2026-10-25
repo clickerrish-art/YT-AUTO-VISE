@@ -87,6 +87,7 @@ test("private-upload approval binds media, thumbnail, validated captions, metada
   assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, rightsEvidenceSha256: "f".repeat(64) }), /rights evidence/);
   assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, relatedArtifacts: review.relatedArtifacts.filter(item => item.path !== captions.path) }), /does not bind every current media artifact/);
   assert.throws(() => approveContentJobForPrivateUpload({ ...job, validationResults: { passed: true } }, review), /Validated captions path and SHA-256/);
+  assert.throws(() => approveContentJobForPrivateUpload({ ...job, validationResults: { ...job.validationResults, passed: false } }, review), /Passing technical validation/);
   assert.throws(() => approveContentJobForPrivateUpload({ ...job, state: "GENERATED" }, review), /awaiting human review/);
 });
 

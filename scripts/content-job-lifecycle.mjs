@@ -109,6 +109,7 @@ export function transitionContentJob(job, nextState, { actor = "local-operator",
 /** Evidence-gated human approval; callers must independently verify the files and rights evidence. */
 export function approveContentJobForPrivateUpload(job, review, now = new Date().toISOString()) {
   if (!job || job.state !== "AWAITING_HUMAN_REVIEW") throw new Error("Job must be awaiting human review");
+  if (job.validationResults?.passed !== true) throw new Error("Passing technical validation is required before approval");
   if (!review || review.decision !== "APPROVE" || !review.reviewer || !review.artifactSha256 || !review.metadataVersion || !review.rightsEvidenceSha256) {
     throw new Error("Complete artifact-bound approval evidence is required");
   }
