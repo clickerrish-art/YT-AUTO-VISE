@@ -48,8 +48,11 @@ jobs:
           set +e
           node scripts/production-readiness.mjs 2>&1 | tee readiness-report/readiness.txt
           readiness_status=${PIPESTATUS[0]}
+          node scripts/production-readiness.mjs --json > readiness-report/readiness.json 2> readiness-report/readiness-json-error.txt
+          json_status=$?
           set -e
           echo "exit_code=$readiness_status" >> "$GITHUB_OUTPUT"
+          echo "json_exit_code=$json_status" >> "$GITHUB_OUTPUT"
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
           const names = ['YOUTUBE_CLIENT_ID','YOUTUBE_CLIENT_SECRET','YOUTUBE_REFRESH_TOKEN','SONICVHIBEZ_CHANNEL_ID'];
@@ -68,7 +71,12 @@ jobs:
         if: always()
         env:
           READINESS_EXIT_CODE: ${{ steps.readiness.outputs.exit_code }}
+          READINESS_JSON_EXIT_CODE: ${{ steps.readiness.outputs.json_exit_code }}
         run: |
+          if [ "${READINESS_EXIT_CODE:-2}" -ne "${READINESS_JSON_EXIT_CODE:-3}" ]; then
+            echo "Human-readable and JSON readiness checks disagree or JSON generation failed."
+            exit 1
+          fi
           if [ "${READINESS_EXIT_CODE:-2}" -ne 0 ]; then
             echo "Production readiness is BLOCKED. Review the retained diagnostic artifact; do not bypass the gates."
             exit 1
