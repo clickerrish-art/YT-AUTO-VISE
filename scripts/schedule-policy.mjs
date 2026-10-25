@@ -33,6 +33,11 @@ function parseStrictTimestamp(value) {
   return Number.isFinite(timestamp) ? timestamp : NaN;
 }
 
+/** Strictly validate a timezone-qualified ISO timestamp, including calendar validity. */
+export function isValidZonedIsoTimestamp(value) {
+  return typeof value === "string" && Number.isFinite(parseStrictTimestamp(value));
+}
+
 function asTimestamp(value, label) {
   const timestamp = parseStrictTimestamp(value);
   if (!Number.isFinite(timestamp)) throw new Error(`${label} must be a valid ISO timestamp with an explicit timezone or epoch milliseconds`);
