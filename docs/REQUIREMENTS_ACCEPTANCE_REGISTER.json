@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez Marketing Machine",
+  "repository": "clickerrish-art/YT-AUTO-VISE",
+  "implementationBranch": "codex/marketing-machine-audit-fixes",
+  "recordedAt": "2026-10-25",
+  "evidencePolicy": "A PASS requires executable or authoritative evidence for the exact relevant revision. Historical documentation alone is insufficient. External integration claims require live evidence, not mocks.",
+  "statuses": [
+    "PASS",
+    "FAIL",
+    "BLOCKED_EXTERNAL",
+    "NOT_TESTED",
+    "NOT_APPLICABLE"
+  ],
+  "requirements": [
+    {
+      "id": "GIT-001",
+      "severity": "critical",
+      "owner": "maintainer",
+      "requirement": "Keep implementation isolated from main and preserve PR #1 as draft/unmerged.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1"
+      ],
+      "nextAction": "Continue changes only on codex/marketing-machine-audit-fixes; do not merge without owner approval."
+    },
+    {
+      "id": "CI-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508299",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508335",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508305",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508386",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203501963"
+      ],
+      "nextAction": "Re-run required suites on the final application-code SHA after any source change; historical tests do not certify future commits."
+    },
+    {
+      "id": "CI-002",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
+      "status": "NOT_TESTED",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/compare/main...codex/marketing-machine-audit-fixes"
+      ],
+      "nextAction": "Restore a working local/CI execution environment and run both exact-SHA baselines; this session could not clone because github.com DNS resolution failed."
+    },
+    {
+      "id": "DASH-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Map every dashboard control and mutating API to end-to-end behavior and authorization tests.",
+      "status": "NOT_TESTED",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508335"
+      ],
+      "nextAction": "Produce exhaustive control-to-route matrix and test every critical state transition; existing browser run alone does not establish full coverage."
+    },
+    {
+      "id": "SCHED-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Enforce Africa/Johannesburg schedule, 72 elapsed hours between actual publications, no same-day publication, and safe recovery.",
+      "status": "NOT_TESTED",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/config/weekly-content-plan.json",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/schedule-policy.mjs"
+      ],
+      "nextAction": "Run deterministic boundary, DST, month-rollover, overlapping-worker and restart tests against the final SHA."
+    },
+    {
+      "id": "STATE-001",
+      "severity": "critical",
+      "owner": "maintainer",
+      "requirement": "Prove cross-process idempotency, crash recovery, ambiguous-operation reconciliation, backup and restore.",
+      "status": "NOT_TESTED",
+      "evidence": [],
+      "nextAction": "Run isolated failure-injection and concurrent-worker tests; demonstrate remote-acceptance-before-receipt recovery without repeating side effects."
+    },
+    {
+      "id": "YT-001",
+      "severity": "critical",
+      "owner": "owner",
+      "requirement": "Independently verify exact SonicVhibez channel identity and OAuth ownership.",
+      "status": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508332"
+      ],
+      "nextAction": "Verify the channel ID from the authorized YouTube account/API; do not guess or silently correct the documented 23-character value."
+    },
+    {
+      "id": "YT-002",
+      "severity": "critical",
+      "owner": "owner",
+      "requirement": "Provide genuine final Short and long-form media, rights evidence, manifests, checksum-bound review and metadata approval.",
+      "status": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508332"
+      ],
+      "nextAction": "Create and review genuine playable exports, captions, thumbnails, rights/provenance manifests and approval bound to exact hashes."
+    },
+    {
+      "id": "YT-003",
+      "severity": "critical",
+      "owner": "owner",
+      "requirement": "Reconcile complete remote video history and uncertain attempts, then authorize at most one private-only acceptance upload.",
+      "status": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508332"
+      ],
+      "nextAction": "After YT-001 and YT-002 pass, configure credentials securely, reconcile all remote visibility states and attempt ledger, then issue separate explicit one-shot authorization. No upload has occurred."
+    },
+    {
+      "id": "FB-001",
+      "severity": "high",
+      "owner": "owner",
+      "requirement": "Verify Nature Frontiers Facebook Page identity/permissions and execute the intended draft-only workflow.",
+      "status": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508297"
+      ],
+      "nextAction": "Run the authorized draft workflow on its intended branch/event and retain the actual artifact; do not enable live publishing."
+    },
+    {
+      "id": "SAFE-001",
+      "severity": "critical",
+      "owner": "maintainer",
+      "requirement": "Keep public/unattended YouTube and Facebook live publishing disabled and Safari inactive.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508332",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/production-readiness.mjs"
+      ],
+      "nextAction": "Retain all backend gates; do not relax readiness checks to obtain a green result."
+    },
+    {
+      "id": "SEC-001",
+      "severity": "critical",
+      "owner": "maintainer",
+      "requirement": "Enable branch protection and required status checks before release integration.",
+      "status": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1"
+      ],
+      "nextAction": "Repository owner must configure branch protection and required checks through GitHub settings; repository metadata indicates protection is off."
+    },
+    {
+      "id": "GIT-002",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Review all branch-only and base-only commits, restore-history test variants, and prepare a non-destructive reconciliation plan.",
+      "status": "NOT_TESTED",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/compare/main...codex/marketing-machine-audit-fixes"
+      ],
+      "nextAction": "Review full relevant patch history; preserve both restore-history test variants until the differences are understood; obtain approval before reconciliation."
+    },
+    {
+      "id": "DEPLOY-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Demonstrate clean deployment, monitoring, backup/restore and rollback in an authorized isolated environment.",
+      "status": "NOT_TESTED",
+      "evidence": [],
+      "nextAction": "Execute documented deployment and operational drills; do not infer production readiness from unit tests."
+    }
+  ]
+}
