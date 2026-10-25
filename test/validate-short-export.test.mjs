@@ -64,3 +64,12 @@ test("renderer wires technical validation before its success message", () => {
   assert.ok(source.indexOf("RENDERED AND VALIDATED:") > source.indexOf("rendered Short failed technical export validation"));
   assert.match(source, /validation\.status !== 0/);
 });
+
+test("rejects a symlinked Short export before invoking media tools", t => {
+  const f = fixture(t);
+  const link = path.join(path.dirname(f.media), "linked.mp4");
+  fs.symlinkSync(f.media, link);
+  const result = spawnSync(process.execPath, [validator, link], { encoding: "utf8", env: f.env });
+  assert.equal(result.status, 2);
+  assert.match(result.stderr, /contains a symbolic link/i);
+});
