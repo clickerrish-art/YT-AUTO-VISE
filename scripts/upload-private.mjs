@@ -160,6 +160,11 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   const missing = requiredEnv.filter(key => !env[key]?.trim());
   if (missing.length) throw new Error("missing required environment variables: " + missing.join(", "));
   if (!reconcileOnly && env.CONFIRM_PRIVATE_UPLOAD !== "YES") throw new Error("explicit private-upload confirmation is required (CONFIRM_PRIVATE_UPLOAD=YES)");
+  // Reconciliation is read-only and remains available during an incident. Any new
+  // remote insert requires an explicit stop release; unset or malformed values fail closed.
+  if (!reconcileOnly && env.YOUTUBE_EMERGENCY_STOP !== "false") {
+    throw new Error("YouTube emergency stop is active or unset; private upload is blocked");
+  }
   if (!jobId || !/^[A-Za-z0-9][A-Za-z0-9:_-]{2,119}$/.test(jobId)) throw new Error("a stable JOB_ID is required");
   const safeMetadataPath = resolveRegularFileNoSymlinks(metadataPath, "Metadata file");
   const safeVideoPath = resolveRegularFileNoSymlinks(videoPath, "Video file");

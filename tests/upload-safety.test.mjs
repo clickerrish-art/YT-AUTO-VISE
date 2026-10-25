@@ -75,6 +75,19 @@ test("both manual upload workflows require explicit private confirmation and pre
 });
 
 
+test("both manual upload workflows default the emergency stop to active and require an explicit release", () => {
+  for (const file of [".github/workflows/upload-private.yml", ".github/workflows/upload-artifact-privately.yml"]) {
+    const workflow = fs.readFileSync(file, "utf8");
+    assert.match(workflow, /confirm_emergency_stop_release:/);
+    assert.match(workflow, /default:\s*'NO'/);
+    assert.match(workflow, /inputs\.confirm_emergency_stop_release == 'YES'/);
+    assert.match(workflow, /YOUTUBE_EMERGENCY_STOP:/);
+  }
+  const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
+  assert.match(source, /env\.YOUTUBE_EMERGENCY_STOP !== "false"/);
+  assert.match(source, /YouTube emergency stop is active or unset; private upload is blocked/);
+});
+
 test("reconciliation-only mode cannot create a new upload attempt", () => {
   assert.throws(() => assertReconciliationOnlyHasPriorAttempt(true, null), /refuses to create a new upload attempt/);
   assert.equal(assertReconciliationOnlyHasPriorAttempt(true, { status: "RECOVERY_REQUIRED" }), true);

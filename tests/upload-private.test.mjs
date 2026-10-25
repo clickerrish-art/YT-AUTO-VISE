@@ -12,6 +12,28 @@ test("private uploader refuses to run without YouTube credentials", () => {
   assert.match(result.stderr, /missing required environment variables/);
 });
 
+test("private uploader fails closed when YouTube emergency stop is active or unset", async () => {
+  const { uploadPrivate } = await import("../scripts/upload-private.mjs");
+  const baseEnv = {
+    YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test",
+    SONICVHIBEZ_CHANNEL_ID: "UC_SONIC_TEST", CONFIRM_PRIVATE_UPLOAD: "YES"
+  };
+  for (const stopValue of ["true", "YES", undefined]) {
+    const env = { ...baseEnv };
+    if (stopValue === undefined) delete env.YOUTUBE_EMERGENCY_STOP;
+    else env.YOUTUBE_EMERGENCY_STOP = stopValue;
+    await assert.rejects(uploadPrivate({
+      metadataPath: "does-not-exist.json", videoPath: "does-not-exist.mp4",
+      approvalPath: "does-not-exist-approval.json", jobId: "job-stop-001", env
+    }), /YouTube emergency stop is active or unset/);
+  }
+  await assert.rejects(uploadPrivate({
+    metadataPath: "does-not-exist.json", videoPath: "does-not-exist.mp4",
+    approvalPath: "does-not-exist-approval.json", jobId: "job-stop-002",
+    env: { ...baseEnv, YOUTUBE_EMERGENCY_STOP: "false" }
+  }), /Metadata file.*does not exist|Metadata file.*not found|ENOENT/);
+});
+
 test("private uploader runs media preflight before any YouTube insert", async () => {
   const fs = await import("node:fs");
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");

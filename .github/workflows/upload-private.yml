@@ -29,6 +29,14 @@ on:
         options:
           - 'NO'
           - 'YES'
+      confirm_emergency_stop_release:
+        description: Separately release the YouTube emergency stop for this explicitly authorized one-shot operation
+        required: true
+        default: 'NO'
+        type: choice
+        options:
+          - 'NO'
+          - 'YES'
       previous_ledger_run_id:
         description: Prior upload workflow run ID whose ledger must be restored; use NONE only for the first-ever attempt
         required: true
@@ -70,6 +78,7 @@ jobs:
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
           CONFIRM_PRIVATE_UPLOAD: ${{ inputs.confirm_private_upload }}
+          YOUTUBE_EMERGENCY_STOP: ${{ inputs.confirm_emergency_stop_release == 'YES' && 'false' || 'true' }}
         run: |
           missing=0
           for name in YOUTUBE_CLIENT_ID YOUTUBE_CLIENT_SECRET YOUTUBE_REFRESH_TOKEN SONICVHIBEZ_CHANNEL_ID; do
@@ -89,6 +98,7 @@ jobs:
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
           CONFIRM_PRIVATE_UPLOAD: ${{ inputs.confirm_private_upload }}
+          YOUTUBE_EMERGENCY_STOP: ${{ inputs.confirm_emergency_stop_release == 'YES' && 'false' || 'true' }}
           JOB_ID: ${{ inputs.job_id }}
           UPLOAD_APPROVAL_PATH: ${{ inputs.approval_path }}
           METADATA_PATH: ${{ inputs.metadata_path }}
