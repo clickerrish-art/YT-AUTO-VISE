@@ -294,14 +294,33 @@ async function acquireStateLock(timeoutMs = Number(process.env.DASHBOARD_STATE_L
 function readUploadLedger() {
   const logDir = path.resolve(root, process.env.UPLOAD_LOG_DIR ?? "run-logs");
   const ledgerPath = path.join(logDir, "upload-attempts.json");
-  if (!fs.existsSync(ledgerPath)) return { available: false, attempts: [] };
+  let fd;
   try {
-    const ledger = JSON.parse(fs.readFileSync(ledgerPath, "utf8"));
-    if (!Array.isArray(ledger.attempts)) return { available: false, attempts: [], error: "Upload ledger schema is invalid" };
+    // Never follow a ledger symlink or read a special file: this ledger is used
+    // to reconcile uncertain remote uploads, so trusting a substituted path can
+    // hide an attempt or make arbitrary external JSON look authoritative.
+    fd = fs.openSync(ledgerPath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+    const stat = fs.fstatSync(fd);
+    if (!stat.isFile()) {
+      fs.closeSync(fd);
+      return { available: false, attempts: [], error: "Upload ledger is not a regular file; do not retry an uncertain upload" };
+    }
+    const raw = fs.readFileSync(fd, "utf8");
+    fs.closeSync(fd);
+    fd = undefined;
+    const ledger = JSON.parse(raw);
+    if (!ledger || typeof ledger !== "object" || Array.isArray(ledger) || !Array.isArray(ledger.attempts)) {
+      return { available: false, attempts: [], error: "Upload ledger schema is invalid; do not retry an uncertain upload" };
+    }
     const safeFields = ["attemptId", "jobId", "artifactSha256", "metadataVersion", "channelId", "channelTitle", "status", "startedAt", "updatedAt", "verifiedAt", "remoteVideoId", "errorCode", "receiptPath", "visibility", "publishingEnabled"];
+    if (ledger.attempts.some(item => !item || typeof item !== "object" || Array.isArray(item))) {
+      return { available: false, attempts: [], error: "Upload ledger contains an invalid attempt; do not retry an uncertain upload" };
+    }
     return { available: true, attempts: ledger.attempts.map(item => Object.fromEntries(safeFields.filter(key => item[key] !== undefined).map(key => [key, item[key]]))).slice(-50).reverse() };
-  } catch {
-    return { available: false, attempts: [], error: "Upload ledger is unreadable; do not retry an uncertain upload" };
+  } catch (error) {
+    if (fd !== undefined) { try { fs.closeSync(fd); } catch {} }
+    if (error?.code === "ENOENT") return { available: false, attempts: [] };
+    return { available: false, attempts: [], error: "Upload ledger is unreadable or unsafe; do not retry an uncertain upload" };
   }
 }
 function resolveRepositoryFile(relativePath) {
