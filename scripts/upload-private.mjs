@@ -281,7 +281,8 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (!youtubeFactory && !reconcileOnly) {
     const authorizationPath = env.PRIVATE_UPLOAD_AUTHORIZATION_PATH;
     if (!authorizationPath || !fs.existsSync(authorizationPath)) throw new Error("PRIVATE_UPLOAD_AUTHORIZATION_PATH is required for a live one-shot upload");
-    const record = readJson(authorizationPath, "One-shot private-upload authorization");
+    const safeAuthorizationPath = resolveRegularFileNoSymlinks(authorizationPath, "One-shot private-upload authorization");
+    const record = readJson(safeAuthorizationPath, "One-shot private-upload authorization");
     oneShotAuthorization = validateOneShotUploadAuthorization(record, {
       jobId, artifactSha256: videoSha256, metadataSha256, approvalSha256: sha256File(approvalPath),
       channelId: expectedChannelId, now: now()

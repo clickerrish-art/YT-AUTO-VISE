@@ -91,6 +91,7 @@ test("both manual upload workflows default the emergency stop to active and requ
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
   assert.match(source, /env\.YOUTUBE_EMERGENCY_STOP !== "false"/);
   assert.match(source, /YouTube emergency stop is active or unset; private upload is blocked/);
+  assert.match(source, /resolveRegularFileNoSymlinks\(authorizationPath, "One-shot private-upload authorization"\)/);
 });
 
 test("reconciliation-only mode cannot create a new upload attempt", () => {
