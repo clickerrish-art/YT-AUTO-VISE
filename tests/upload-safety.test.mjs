@@ -68,8 +68,13 @@ test("both manual upload workflows require explicit private confirmation and pre
     const workflow = fs.readFileSync(file, "utf8");
     assert.match(workflow, /confirm_private_upload/);
     assert.match(workflow, /inputs\.confirm_private_upload == 'YES'/);
+    assert.match(workflow, /confirm_emergency_stop_release/);
+    assert.match(workflow, /one_shot_authorization_path/);
+    assert.match(workflow, /PRIVATE_UPLOAD_AUTHORIZATION_PATH:/);
     assert.match(workflow, /previous_ledger_run_id/);
     assert.match(workflow, /sonicvhibez-upload-ledger/);
+    assert.match(workflow, /run: npm ci --ignore-scripts/);
+    assert.doesNotMatch(workflow, /run: npm install --ignore-scripts/);
     assert.match(workflow, /privacyStatus|private/i);
   }
 });

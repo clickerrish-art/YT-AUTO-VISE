@@ -21,6 +21,11 @@ on:
         description: Path to the artifact-bound human approval JSON
         required: true
         type: string
+      one_shot_authorization_path:
+        description: Owner-issued one-shot authorization bound to this exact final upload
+        required: true
+        default: content/one-shot-private-upload-authorization.json
+        type: string
       confirm_private_upload:
         description: Explicitly authorize one private-only upload attempt
         required: true
@@ -101,6 +106,7 @@ jobs:
           YOUTUBE_EMERGENCY_STOP: ${{ inputs.confirm_emergency_stop_release == 'YES' && 'false' || 'true' }}
           JOB_ID: ${{ inputs.job_id }}
           UPLOAD_APPROVAL_PATH: ${{ inputs.approval_path }}
+          PRIVATE_UPLOAD_AUTHORIZATION_PATH: ${{ inputs.one_shot_authorization_path }}
           METADATA_PATH: ${{ inputs.metadata_path }}
           VIDEO_PATH: ${{ inputs.video_path }}
           UPLOAD_LOG_DIR: run-logs
