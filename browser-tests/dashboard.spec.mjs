@@ -91,6 +91,15 @@ test("operator dashboard loads the authoritative schedule and persists a draft t
   await page.locator("#refresh").click();
   await expect(page.locator("#queue")).toContainText(draftId);
 
+  await page.locator("#search").fill(draftId);
+  await expect(page.locator("#queue")).toContainText(draftId);
+  await page.locator("#filter").selectOption("short");
+  await expect(page.locator("#queue")).toContainText("No matching drafts");
+  await page.locator("#filter").selectOption("long_form");
+  await expect(page.locator("#queue")).toContainText(draftId);
+  await page.locator("#search").fill("");
+  await page.locator("#filter").selectOption("");
+
   await page.locator("#id").fill(draftId);
   await page.locator("#title").fill("Duplicate draft must be rejected");
   await page.locator("#topic").fill("Duplicate submission safety test");
@@ -267,4 +276,37 @@ test("dashboard state survives a real local server restart", async ({ page }) =>
     await stopServer(child);
     fs.rmSync(stateDir, { recursive: true, force: true });
   }
+});
+
+
+test("Facebook draft idea and save controls persist a blocked draft without attempting publication", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  const draftId = "fb-browser-" + Date.now().toString(36);
+  await page.locator("#fbdate").fill("2030-10-25");
+  await page.locator("#fbsuggest").click();
+  await expect(page.locator("#facebookdraftresult")).toContainText("Research-first idea:");
+  await expect(page.locator("#fbtopic")).not.toHaveValue("");
+  await expect(page.locator("#fbcaption")).not.toHaveValue("");
+
+  await page.locator("#fbid").fill(draftId);
+  await page.locator("#fbpageid").fill("123456789");
+  await page.locator("#fbcaption").fill("Research-first wildlife education draft: explain how habitat structure affects animal behaviour. Add verified sources and licensed media before any publication.");
+  await page.getByRole("button", { name: "Save Facebook draft and run checks" }).click();
+  await expect(page.locator("#facebookdraftresult")).toContainText("Draft saved; external publishing was not attempted.", { timeout: 10_000 });
+  await expect(page.locator("#facebookdraftlist")).toContainText(draftId);
+
+  const stateResponse = await request.get("/api/state", { headers });
+  expect(stateResponse.status()).toBe(200);
+  const state = await stateResponse.json();
+  const saved = state.facebookDrafts.find(draft => draft.id === draftId);
+  expect(saved).toBeTruthy();
+  expect(saved.destination).toBe("nature_frontiers_facebook");
+  expect(saved.publishingEnabled).toBe(false);
+  expect(saved.status).toBe("DRAFT");
+  expect(state.publishingEnabled).toBe(false);
 });
