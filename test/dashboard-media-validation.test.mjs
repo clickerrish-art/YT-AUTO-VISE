@@ -102,8 +102,9 @@ test("dashboard does not persist a passing validation when the strict Short expo
     headers: { "content-type": "application/json", "x-operator-token": token },
     body: JSON.stringify({ jobId, captionsPath: relative(captionsFile) })
   });
-  assert.equal(response.status, 400, await response.text());
-  const result = await response.json();
+  const responseText = await response.text();
+  assert.equal(response.status, 400, responseText);
+  const result = JSON.parse(responseText);
   assert.match(result.error, /format-specific media export validation failed/i);
   const persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
   const job = persisted.jobs.find(item => item.id === jobId);
