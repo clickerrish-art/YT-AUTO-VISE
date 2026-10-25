@@ -39,7 +39,7 @@ if (!exists(schedulePath)) {
       && supportedCadenceModes.includes(cadenceDecision.approvedMode)
       && typeof cadenceDecision.approvedAt === "string"
       && Number.isFinite(Date.parse(cadenceDecision.approvedAt))
-      && /(Z|[+-]\\d{2}:\\d{2})$/.test(cadenceDecision.approvedAt)
+      && /(Z|[+-]\d{2}:\d{2})$/.test(cadenceDecision.approvedAt)
       && typeof cadenceDecision.approvalReference === "string"
       && cadenceDecision.approvalReference.trim());
     if (cadenceDecisionValid && cadenceDecision.approvedMode === "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET" && minimumSpacingHours < 72) cadenceDecisionValid = false;
