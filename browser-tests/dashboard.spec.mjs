@@ -356,3 +356,19 @@ test("public YouTube publishing has no dashboard endpoint and readiness stays fa
   expect(readiness.publishingEnabled).toBe(false);
   expect(readiness.blockers.length).toBeGreaterThan(0);
 });
+
+
+test("Facebook Page verification control retains actionable blocked feedback after refreshing status", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  await page.locator("#fbverifyPage").click();
+  await expect(page.locator("#facebookverifyresult")).toContainText("Page verification blocked:", { timeout: 10_000 });
+  await expect(page.locator("#facebookverifyresult")).toContainText(/Page ID|META_USER_ACCESS_TOKEN|META_PAGE_ACCESS_TOKEN/);
+  // The action result must not be overwritten by connect() re-rendering the
+  // separate read-only publisher-health and connection-status panels.
+  await expect(page.locator("#facebookautonomousstatus")).toBeVisible();
+  await expect(page.locator("#facebookstatus")).toBeVisible();
+});
