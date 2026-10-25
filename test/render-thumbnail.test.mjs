@@ -40,10 +40,15 @@ test("thumbnail title sidecar is created exclusively rather than following a pre
   const video = path.join(root, "video.mp4");
   const protectedFile = path.join(root, "protected.txt");
   const output = path.join(root, "thumbnail.jpg");
+  const bin = path.join(root, "bin");
+  fs.mkdirSync(bin);
+  const ffprobe = path.join(bin, "ffprobe");
+  fs.writeFileSync(ffprobe, "#!/bin/sh\\nprintf '%s' '{\\"streams\\":[{\\"codec_type\\":\\"video\\",\\"width\\":1280,\\"height\\":720}]}'\\n");
+  fs.chmodSync(ffprobe, 0o755);
   fs.writeFileSync(video, "fixture");
   fs.writeFileSync(protectedFile, "do not overwrite");
   fs.symlinkSync(protectedFile, path.join(root, ".thumbnail-title.txt"));
-  const result = spawnSync(process.execPath, [script, video, "A safe title", output], { encoding: "utf8" });
+  const result = spawnSync(process.execPath, [script, video, "A safe title", output], { encoding: "utf8", env: { ...process.env, PATH: bin + path.delimiter + process.env.PATH } });
   assert.equal(result.status, 2);
   assert.match(result.stderr, /temporary file already exists/i);
   assert.equal(fs.readFileSync(protectedFile, "utf8"), "do not overwrite");
