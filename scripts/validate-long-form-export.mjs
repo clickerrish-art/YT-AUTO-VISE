@@ -12,7 +12,7 @@ const [mediaArg = "media/long-form-next.mp4"] = process.argv.slice(2);
 let mediaPath;
 try { mediaPath = resolveRegularFileNoSymlinks(mediaArg, process.cwd(), "Long-form export"); }
 catch {
-  console.error("BLOCKED: export file is missing, unsafe, or contains a symbolic link.");
+  console.error("BLOCKED: export file is missing or empty, unsafe, or contains a symbolic link.");
   process.exit(2);
 }
 if (fs.statSync(mediaPath).size === 0) {
