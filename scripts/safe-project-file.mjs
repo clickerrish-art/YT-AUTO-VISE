@@ -7,6 +7,8 @@ import path from "node:path";
  * component. The normal caller supplies the repository root; an explicit
  * external-queue override supplies that file's parent as the trust root. This
  * prevents symlinks or path-traversal targets being treated as valid prerequisites.
+ * Path-based checks cannot eliminate every TOCTOU race; sensitive consumers must
+ * revalidate immediately before use and must not treat this guard as a file lock.
  */
 export function isSafeRegularFileWithinRoot(rootDirectory, candidatePath) {
   if (typeof rootDirectory !== "string" || !rootDirectory.trim()
