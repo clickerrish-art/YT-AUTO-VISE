@@ -728,6 +728,7 @@ const server = http.createServer(async (req, res) => {
       const expectedPageId = verifiedFacebookPageId(initialState, config);
       const permissionsConfirmed = initialState.facebookConnection?.permissionsVerified === true && Boolean(expectedPageId);
       const setupBlockers = [];
+      if (config.emergencyStop !== false) setupBlockers.push("Facebook emergency stop is active; no remote mutation was attempted");
       if (config.publishingEnabled !== true) setupBlockers.push("config/facebook-publishing.json publishingEnabled must be explicitly enabled by the owner");
       if (config.dryRun !== false) setupBlockers.push("Facebook dryRun must be explicitly disabled by the owner after all checks");
       if (!envPublishingEnabled) setupBlockers.push("FACEBOOK_PUBLISH_ENABLED must equal YES as the separate publishing kill switch");
@@ -744,7 +745,7 @@ const server = http.createServer(async (req, res) => {
           draftSnapshot = state.facebookDrafts.find(item => item.id === body.draftId);
           if (!draftSnapshot) return json(res, 404, { error: "Facebook draft not found" });
           const evaluation = evaluateFacebookDraft(draftSnapshot, { existingDrafts: state.facebookDrafts.filter(item => item.id !== draftSnapshot.id && !["REJECTED", "CANCELLED"].includes(item.status)), recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root });
-          const gate = assertFacebookPublishAllowed(draftSnapshot, { publishingEnabled: true, explicitOperationAuthorization: true, dryRun: false, verifiedPageId: expectedPageId, evaluation });
+          const gate = assertFacebookPublishAllowed(draftSnapshot, { publishingEnabled: true, explicitOperationAuthorization: true, dryRun: false, emergencyStop: config.emergencyStop !== false, verifiedPageId: expectedPageId, evaluation });
           if (!gate.allowed) return json(res, 409, { error: "Facebook draft is not approved for this exact operation", blockers: gate.blockers, evaluation, publishingEnabled: false });
           const dateCollision = state.facebookDrafts.some(item => item.id !== draftSnapshot.id && item.scheduledDate === draftSnapshot.scheduledDate && !["REJECTED", "CANCELLED"].includes(item.status))
             || state.facebookPosts.some(item => item.scheduledDate === draftSnapshot.scheduledDate);
