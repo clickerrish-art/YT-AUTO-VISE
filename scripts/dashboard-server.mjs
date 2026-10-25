@@ -316,6 +316,15 @@ function resolveRepositoryFile(relativePath) {
   if (canonicalPath !== realRoot && !canonicalPath.startsWith(realRoot + path.sep)) {
     throw new Error("File path resolves outside repository root");
   }
+  // Even an in-repository symlink is not acceptable for evidence: it can be
+  // retargeted after validation and detach the approved path from its contents.
+  let cursor = realRoot;
+  for (const component of path.relative(root, resolved).split(path.sep)) {
+    cursor = path.join(cursor, component);
+    if (fs.lstatSync(cursor).isSymbolicLink()) {
+      throw new Error("Repository file paths must not contain symbolic links");
+    }
+  }
   if (!fs.statSync(canonicalPath).isFile()) throw new Error("Required evidence file does not exist");
   return canonicalPath;
 }

@@ -20,12 +20,16 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const outsideFile = path.join(outsideDir, "private-evidence.txt");
   const symlinkName = ".dashboard-test-outside-" + path.basename(stateDir) + ".txt";
   const symlinkPath = path.join(process.cwd(), symlinkName);
+  const internalSymlinkName = ".dashboard-test-internal-" + path.basename(stateDir) + ".md";
+  const internalSymlinkPath = path.join(process.cwd(), internalSymlinkName);
   fs.writeFileSync(outsideFile, "test-only external file; not a credential");
   fs.symlinkSync(outsideFile, symlinkPath);
+  fs.symlinkSync(path.join(process.cwd(), "README.md"), internalSymlinkPath);
   t.after(() => {
     child.kill("SIGTERM");
     fs.rmSync(stateDir, { recursive: true, force: true });
     fs.rmSync(symlinkPath, { force: true });
+    fs.rmSync(internalSymlinkPath, { force: true });
     fs.rmSync(outsideDir, { recursive: true, force: true });
   });
   const base = `http://127.0.0.1:${port}`;
@@ -84,6 +88,10 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const symlinkBody = await symlinkReconcile.json();
   assert.equal(symlinkReconcile.status, 400, JSON.stringify(symlinkBody));
   assert.match(symlinkBody.error, /resolves outside repository root/i, "repository-relative symlinks must not expose files outside the repository");
+  const internalSymlinkReconcile = await fetch(base + "/api/uploads/reconcile", { method: "POST", headers, body: JSON.stringify({ jobId: "internal-symlink-job", videoPath: internalSymlinkName, metadataPath: "README.md", approvalPath: "README.md" }) });
+  const internalSymlinkBody = await internalSymlinkReconcile.json();
+  assert.equal(internalSymlinkReconcile.status, 400, JSON.stringify(internalSymlinkBody));
+  assert.match(internalSymlinkBody.error, /must not contain symbolic links/i, "even in-repository symlinks must be rejected for evidence paths");
   const safari = body.campaigns.find(c => c.type === "safari_affiliate");
   assert.equal(safari.status, "INACTIVE");
   const preview = await fetch(base + "/api/campaigns/manage", { method: "POST", headers, body: JSON.stringify({ campaignId: safari.id, action: "preview", destinationUrl: "https://example.com/verified-stay", disclosureText: "I may earn a commission from eligible bookings." }) });
