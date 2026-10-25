@@ -162,10 +162,10 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (missing.length) throw new Error("missing required environment variables: " + missing.join(", "));
   if (!reconcileOnly && env.CONFIRM_PRIVATE_UPLOAD !== "YES") throw new Error("explicit private-upload confirmation is required (CONFIRM_PRIVATE_UPLOAD=YES)");
   if (!jobId || !/^[A-Za-z0-9][A-Za-z0-9:_-]{2,119}$/.test(jobId)) throw new Error("a stable JOB_ID is required");
-  if (path.extname(videoPath).toLowerCase() !== ".mp4") throw new Error("provide an existing MP4 video file");
   const safeMetadataPath = resolveRegularFileNoSymlinks(metadataPath, "Metadata file");
   const safeVideoPath = resolveRegularFileNoSymlinks(videoPath, "Video file");
   const safeApprovalPath = resolveRegularFileNoSymlinks(approvalPath, "Upload approval file");
+  if (path.extname(safeVideoPath).toLowerCase() !== ".mp4") throw new Error("provide an existing MP4 video file");
 
   const metadata = readJson(safeMetadataPath, "Metadata");
   const approval = readJson(safeApprovalPath, "Upload approval");
@@ -193,9 +193,9 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (!captionArtifact) throw new Error("approval must include a final reviewed SRT captions file");
   const captionsCheck = preflightRunner(["scripts/check-captions.mjs", captionArtifact.path], env);
   if (!captionsCheck.includes("PASS:")) throw new Error("final approved captions did not pass the caption validator");
-  const metadataCheck = preflightRunner(["scripts/check-content.mjs", metadataPath], env);
+  const metadataCheck = preflightRunner(["scripts/check-content.mjs", safeMetadataPath], env);
   if (!metadataCheck.includes("PASS")) throw new Error("metadata checker did not pass");
-  const mediaPreflight = preflightRunner(["scripts/preflight-media.mjs", videoPath, metadataPath], env);
+  const mediaPreflight = preflightRunner(["scripts/preflight-media.mjs", safeVideoPath, safeMetadataPath], env);
   if (!mediaPreflight.includes("PASS:")) throw new Error("media preflight did not pass");
 
   let youtube;
@@ -323,7 +323,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
           paidProductPlacementDetails: { hasPaidProductPlacement: metadata.hasPaidPromotion === true }
         }
       },
-      media: { body: fs.createReadStream(videoPath) }
+      media: { body: fs.createReadStream(safeVideoPath) }
     });
   } catch (error) {
     attempt.status = "RECOVERY_REQUIRED";
