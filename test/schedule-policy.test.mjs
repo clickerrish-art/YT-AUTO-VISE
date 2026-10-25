@@ -8,6 +8,9 @@ test("strict timestamp validator requires timezone and rejects normalized invali
   assert.equal(isValidZonedIsoTimestamp("2026-10-25T12:00:00"), false);
   assert.equal(isValidZonedIsoTimestamp("2026-02-31T12:00:00Z"), false);
   assert.equal(isValidZonedIsoTimestamp("2026-10-25T12:00:00+15:00"), false);
+  assert.equal(isValidZonedIsoTimestamp("2026-10-25T12:00:00+02:60"), false);
+  assert.equal(isValidZonedIsoTimestamp("2026-02-29T12:00:00Z"), false);
+  assert.equal(isValidZonedIsoTimestamp("2024-02-29T12:00:00Z"), true);
   assert.equal(isValidZonedIsoTimestamp(null), false);
 });
 
