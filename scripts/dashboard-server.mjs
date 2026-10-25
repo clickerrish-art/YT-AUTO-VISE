@@ -867,21 +867,66 @@ const server = http.createServer(async (req, res) => {
       const body = await readBody(req);
       if (typeof body.taskId !== "string" || !allowedTasks.has(body.taskId)) return json(res, 400, { error: "Choose a supported allowlisted validation task" });
       if (activeTasks.has(body.taskId)) return json(res, 409, { error: "This task is already running; duplicate execution was prevented" });
-      const state = loadState();
-      const job = { id: crypto.randomUUID(), kind: "VALIDATION_TASK", taskId: body.taskId, status: "RUNNING", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), publishingEnabled: false };
-      state.jobs.push(job);
-      state.audit.push({ id: crypto.randomUUID(), action: "VALIDATION_TASK_STARTED", jobId: job.id, taskId: body.taskId, at: new Date().toISOString(), actor: operatorId });
-      saveState(state);
+
+      // The in-memory set prevents duplicates within this process; the durable
+      // RUNNING record and cross-process state lock also prevent two dashboard
+      // processes sharing the same state directory from launching the same task.
       activeTasks.add(body.taskId);
-      let result;
-      try { result = await runTask(body.taskId); }
-      finally { activeTasks.delete(body.taskId); }
-      const latest = loadState();
-      const index = latest.jobs.findIndex(entry => entry.id === job.id);
-      if (index >= 0) latest.jobs[index] = { ...latest.jobs[index], ...result, updatedAt: new Date().toISOString() };
-      latest.audit.push({ id: crypto.randomUUID(), action: result.status === "SUCCEEDED" ? "VALIDATION_TASK_SUCCEEDED" : "VALIDATION_TASK_FAILED", jobId: job.id, taskId: body.taskId, exitCode: result.exitCode, at: new Date().toISOString(), actor: operatorId });
-      saveState(latest);
-      return json(res, result.status === "SUCCEEDED" ? 200 : 500, { job: latest.jobs.find(entry => entry.id === job.id), publicPublishingEnabled: false });
+      let job;
+      try {
+        const release = await acquireStateLock();
+        try {
+          const state = loadState();
+          const existing = state.jobs.find(entry =>
+            entry.kind === "VALIDATION_TASK" && entry.taskId === body.taskId && entry.status === "RUNNING"
+          );
+          if (existing) return json(res, 409, {
+            error: "This validation task already has a durable RUNNING record; inspect or recover it before retrying",
+            jobId: existing.id,
+            retryAllowed: false,
+            publicPublishingEnabled: false
+          });
+          job = {
+            id: crypto.randomUUID(), kind: "VALIDATION_TASK", taskId: body.taskId,
+            status: "RUNNING", createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(), publishingEnabled: false
+          };
+          state.jobs.push(job);
+          state.audit.push({ id: crypto.randomUUID(), action: "VALIDATION_TASK_STARTED", jobId: job.id, taskId: body.taskId, at: new Date().toISOString(), actor: operatorId });
+          saveState(state);
+        } finally { release(); }
+
+        let result;
+        try {
+          result = await runTask(body.taskId);
+        } catch (error) {
+          result = {
+            taskId: body.taskId, exitCode: null, status: "FAILED",
+            output: redactOperationalText(error instanceof Error ? error.message : "Validation task failed")
+          };
+        }
+
+        const finishRelease = await acquireStateLock();
+        try {
+          const latest = loadState();
+          const index = latest.jobs.findIndex(entry => entry.id === job.id);
+          if (index < 0) throw new Error("Durable validation task record disappeared while the task was running");
+          latest.jobs[index] = { ...latest.jobs[index], ...result, updatedAt: new Date().toISOString() };
+          latest.audit.push({
+            id: crypto.randomUUID(),
+            action: result.status === "SUCCEEDED" ? "VALIDATION_TASK_SUCCEEDED" : "VALIDATION_TASK_FAILED",
+            jobId: job.id, taskId: body.taskId, exitCode: result.exitCode,
+            at: new Date().toISOString(), actor: operatorId
+          });
+          saveState(latest);
+          return json(res, result.status === "SUCCEEDED" ? 200 : 500, {
+            job: latest.jobs.find(entry => entry.id === job.id),
+            publicPublishingEnabled: false
+          });
+        } finally { finishRelease(); }
+      } finally {
+        activeTasks.delete(body.taskId);
+      }
     }
     if (req.method === "POST" && url.pathname === "/api/campaigns/manage") {
       const body = await readBody(req);
