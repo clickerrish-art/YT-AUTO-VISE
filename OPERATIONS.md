@@ -132,6 +132,8 @@ Check:
 
 The `/readyz` endpoint is a **production-readiness gate**, not just a process-health check. It executes the read-only production preflight and returns HTTP 503 with a `blockers` array while required manifests, source assets, rights/compliance checks, reviewed metadata, the Short MP4, or YouTube environment configuration are missing or invalid. Use `/healthz` to distinguish a running local server from production readiness. A clear readiness response does not independently prove that a license is genuine or that editorial review occurred.
 
+For a structured terminal report, run `npm run readiness:json`. It emits JSON only, with deterministic `RDY-…` blocker identifiers, severity, the observed readiness finding, and a suggested resolution. Exit code `2` means prerequisites remain blocked; exit code `0` means the configured checks found no blockers, not that account identity, licence authenticity, media quality, or human review was independently proven. This command is read-only and never uploads or publishes.
+
 Never put OAuth tokens in browser code, committed files or logs.
 
 Dashboard startup also requires `DASHBOARD_OPERATOR_ID` (2–120 characters). Audit events use this configured operator identity; use the actual person responsible for the session rather than a generic label. The private uploader validates the approval's structured rights-evidence hash and rechecks each source asset and retained licence-evidence file against the saved SHA-256 values immediately before the remote upload flow.
