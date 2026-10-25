@@ -16,6 +16,7 @@
     "preflight:media": "node scripts/preflight-media.mjs",
     "render:short": "node scripts/render-short.mjs",
     "readiness": "node scripts/production-readiness.mjs",
+    "readiness:json": "node scripts/production-readiness.mjs --json",
     "render:thumbnail": "node scripts/render-thumbnail.mjs",
     "render:long": "node scripts/render-long-form.mjs",
     "validate:long-export": "node scripts/validate-long-form-export.mjs",
