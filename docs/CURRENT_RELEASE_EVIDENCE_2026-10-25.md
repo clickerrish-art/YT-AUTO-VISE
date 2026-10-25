@@ -1,6 +1,51 @@
 # Current Release Evidence — 25 October 2026
 
-## Release decision
+## Latest implementation checkpoint — 25 October 2026
+
+**Current tested candidate at this checkpoint:** `58f9255740903fefc0e0ac410d5adf308480f59d` on `codex/marketing-machine-audit-fixes`. The PR remains open, draft and unmerged. This section supersedes older "current" checkpoint statements later in this document; those entries are retained as historical evidence.
+
+### Live repository state
+- PR #1: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1
+- Live comparison at this checkpoint: **1,044 commits ahead, 2 behind, 110 changed files**; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; `main` remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- The full 1,044-commit branch-only history has **not** been reviewed patch by patch. No merge, rebase, reset, force-push, history rewrite, or direct `main` edit was performed. A safe reconciliation plan and owner approval remain required.
+- Latest recorded branch-protection status says required protection/status checks are not enforced; owner must confirm current settings and enable required checks before merge.
+
+### Implementation changes committed in this continuation
+- [`11adb103`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/11adb10335ed96c898cd82c8205054a0a40b2187) adds a read-only `--json` readiness mode with deterministic blocker IDs, severity, observed check findings and suggested resolution steps.
+- [`fd3d8c4`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fd3d8c4c0fbd14b7df0a8a150a43ba969d1c32e1) tests JSON shape, stable-ID format, actionable resolution and blocked exit status.
+- [`fbbee4f`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fbbee4f49b12267384e979aa7dc36bf6c301d612) adds `npm run readiness:json`.
+- [`df64774`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/df64774f056da696fdedcaaad52a9654c504483d) documents the JSON diagnostic command and its limits.
+- [`58f9255`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/58f9255740903fefc0e0ac410d5adf308480f59d) retains both human-readable and structured JSON readiness reports in the CI artifact and fails if their exit statuses disagree. It does not weaken the readiness gate.
+
+### CI evidence for candidate `58f9255740903fefc0e0ac410d5adf308480f59d`
+- [Automation/security — run 40188274695](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40188274695): **PASS** — 245 Node tests, 0 failed, 0 skipped; 8 Python tests; clean normal and locked dependency installs; `npm audit` reported 0 vulnerabilities across 49 packages; configuration, syntax and compilation checks passed.
+- [Dashboard browser E2E — run 40188274674](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40188274674): **PASS** — 7 Chromium journeys. This still does not exercise every visible dashboard control.
+- [Metadata validation — run 40188274667](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40188274667): **PASS**.
+- [Content quality — run 40188274693](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40188274693): **PASS**.
+- [Production readiness — run 40188274678](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40188274678): **BLOCKED as required** while real prerequisites are absent; retained [diagnostic artifact 12597386549](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40188274678/artifacts/12597386549), containing the human-readable report and structured JSON report.
+- [Nature Frontiers Facebook draft — run 40188274716](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40188274716): **SKIPPED** on the pull-request event; this is not default-branch integration evidence.
+
+### Requirements-to-evidence delta
+| Requirement | Current classification | Evidence / unresolved item |
+|---|---|---|
+| Readiness diagnostics with stable IDs, severity and resolution | Implemented and CI-tested | `scripts/production-readiness.mjs --json`; regression test in `tests/production-readiness.test.mjs`; CI run 40188274695 |
+| Structured readiness artifact retained in CI | Implemented and workflow-tested | Run 40188274678 artifact 12597386549; gate correctly remains blocked |
+| Complete dashboard-control acceptance | Incompletely verified | Seven browser journeys pass; exhaustive per-control outcome coverage remains outstanding |
+| Full divergent-history review and safe reconciliation | Missing / owner-blocked | 1,044 branch-only commits and 2 base-only commits; no destructive history action performed |
+| Genuine playable Short and long-form exports, rights and human approval | Externally blocked | No production media/licence evidence or final-hash-bound human approval accepted |
+| SonicVhibez identity, remote history and private-upload receipt | Externally blocked | No live OAuth identity/history acceptance or authorized upload performed |
+| Nature Frontiers Page permissions and default-branch draft | Externally blocked | PR run skipped; Page permissions and successful default-branch artifact remain unverified |
+| Crash/recovery, backup/restore, deployment, monitoring and emergency stop | Incompletely verified / owner-blocked | Automated tests exist; isolated operational drills and deployed-environment evidence remain outstanding |
+
+### Safety and release decision
+Public and unattended YouTube publishing remain disabled; Facebook live publishing remains disabled; Safari campaigns remain inactive; only `https://selar.com/0u19v8u99l` is approved for this release. No upload, public post, live Facebook post, campaign activation or merge was performed.
+
+**Decision: CODE ACCEPTANCE BLOCKED. PRODUCTION BLOCKED.** The new readiness diagnostics improve observability; they do not close the external media, account, history, recovery, branch-review or deployment gates.
+
+---
+
+
+## Historical checkpoint — superseded by the latest implementation checkpoint above
 
 **CODE ACCEPTANCE BLOCKED. PRODUCTION BLOCKED.** Automated regression, installation, dependency-audit and seven browser journeys pass on the exact application-code candidate. Full dashboard-control acceptance, complete branch-history review, retained recovery/deployment evidence and real-account acceptance remain incomplete.
 
