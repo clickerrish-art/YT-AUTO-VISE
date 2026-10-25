@@ -540,7 +540,15 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "GET" && url.pathname === "/api/facebook/idea") {
       const date = url.searchParams.get("date") ?? "";
       const state = loadState();
-      const idea = generateFacebookIdea({ date, existingDrafts: state.facebookDrafts, recentPosts: state.facebookPosts });
+      let idea;
+      try {
+        idea = generateFacebookIdea({ date, existingDrafts: state.facebookDrafts, recentPosts: state.facebookPosts });
+      } catch (error) {
+        if (error instanceof Error && /date is required|date is invalid/i.test(error.message)) {
+          return json(res, 400, { error: error.message, publishingEnabled: false, publishReady: false });
+        }
+        throw error;
+      }
       return json(res, 200, { idea, publishingEnabled: false, publishReady: false });
     }
     if (req.method === "POST" && url.pathname === "/api/facebook/verify-page") {
