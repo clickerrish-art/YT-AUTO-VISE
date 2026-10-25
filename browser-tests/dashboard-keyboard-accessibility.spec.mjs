@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-const operatorToken = "keyboard-a11y-only-" + "x".repeat(40);
+const operatorToken = "e2e-only-token-" + "x".repeat(40);
 
 test("operator token has an accessible label and the dashboard can be connected with keyboard only", async ({ page }) => {
   await page.goto("/");
