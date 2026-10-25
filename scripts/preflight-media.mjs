@@ -7,19 +7,28 @@ import { spawnSync } from 'node:child_process';
 import { statSync } from 'node:fs';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
+import { resolveRegularFileNoSymlinks } from './safe-media-path.mjs';
 
 const [mediaArg, metadataArg] = process.argv.slice(2);
 if (!mediaArg || !metadataArg) {
   console.error('Usage: node scripts/preflight-media.mjs <video.mp4> <metadata.json>');
   process.exit(2);
 }
-const media = path.resolve(mediaArg);
-const metadataPath = path.resolve(metadataArg);
-if (!existsSync(media) || !existsSync(metadataPath)) {
-  console.error('BLOCKED: video or metadata file does not exist.');
+let media;
+let metadataPath;
+try {
+  media = resolveRegularFileNoSymlinks(mediaArg, process.cwd(), 'Media preflight video');
+  metadataPath = resolveRegularFileNoSymlinks(metadataArg, process.cwd(), 'Media preflight metadata');
+} catch {
+  console.error('BLOCKED: video or metadata file is missing, unsafe, or contains a symbolic link.');
   process.exit(2);
 }
-const metadata = JSON.parse(readFileSync(metadataPath, 'utf8'));
+let metadata;
+try { metadata = JSON.parse(readFileSync(metadataPath, 'utf8')); }
+catch {
+  console.error('BLOCKED: metadata file is unreadable or invalid JSON.');
+  process.exit(2);
+}
 if (metadata.channel !== 'SonicVhibez' || metadata.visibility !== 'private') {
   console.error('BLOCKED: target must be SonicVhibez and initial visibility must be private.');
   process.exit(1);
