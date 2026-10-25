@@ -34,6 +34,28 @@ test("private uploader fails closed when YouTube emergency stop is active or uns
   }), /Metadata file is missing or cannot be inspected/);
 });
 
+test("production uploader rejects inputs outside the repository root before reading them", async () => {
+  const fs = await import("node:fs");
+  const os = await import("node:os");
+  const path = await import("node:path");
+  const { uploadPrivate } = await import("../scripts/upload-private.mjs");
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-upload-outside-root-"));
+  const metadataPath = path.join(dir, "metadata.json");
+  fs.writeFileSync(metadataPath, "{}");
+  try {
+    await assert.rejects(uploadPrivate({
+      metadataPath, videoPath: metadataPath, approvalPath: metadataPath, jobId: "job-path-001",
+      env: {
+        YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test",
+        SONICVHIBEZ_CHANNEL_ID: "UC_SONIC_TEST", CONFIRM_PRIVATE_UPLOAD: "YES",
+        YOUTUBE_EMERGENCY_STOP: "false"
+      }
+    }), /Metadata file must remain inside the repository root/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("private uploader runs media preflight before any YouTube insert", async () => {
   const fs = await import("node:fs");
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
