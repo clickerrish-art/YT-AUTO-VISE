@@ -275,11 +275,29 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c5e31dff20229da18f86c0a59ddac14a88b82eae",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/2f6b872dea6aa7a171e4d93dac4989c1f568a488",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/deb6ada374c48f4e81e90514949b14e700dadf6c",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d12118304e5706959aeaaffd09035fd490031411"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d12118304e5706959aeaaffd09035fd490031411",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/cf82332136c444ef3c57e4e1d1eef9ba9aabae6f",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/95d9dd8c4fb895861bcdfbc4c5ddc12b477990f6",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/630f1fbe05efa04ac4b5a470c506f872e75d1f1f"
       ],
-      "nextAction": "Owner must select and explicitly approve a mathematically feasible policy mode; current proposed rolling cycle has no weekly publication-count promise. Keep publication disabled until the decision is recorded and validated.",
-      "assessmentCommitSha": "d12118304e5706959aeaaffd09035fd490031411",
+      "nextAction": "Owner must select and explicitly approve a feasible policy mode. Validator and readiness now require a supported mode, timezone-aware approval timestamp, non-empty approval reference, and mathematically feasible spacing; automated CI on the exact updated candidate must complete before the code guard is marked verified. Keep publication disabled until the owner decision is recorded.",
+      "assessmentCommitSha": "630f1fbe05efa04ac4b5a470c506f872e75d1f1f",
       "acceptanceCriterion": "Configuration records the requested weekly target and mathematical conflict; validator emits a visible blocked decision status; production readiness refuses to pass unless a valid owner-approved cadence decision is present."
+    },
+    {
+      "id": "SCHED-004",
+      "severity": "critical",
+      "owner": "maintainer",
+      "requirement": "Validate owner-approved cadence decisions as explicit, timezone-stamped, referenced and mathematically feasible in both schedule validation and production readiness.",
+      "status": "NOT_TESTED",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/cf82332136c444ef3c57e4e1d1eef9ba9aabae6f",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/95d9dd8c4fb895861bcdfbc4c5ddc12b477990f6",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/630f1fbe05efa04ac4b5a470c506f872e75d1f1f"
+      ],
+      "nextAction": "Wait for exact-candidate CI and verify tests for valid rolling mode, unsupported mode, missing timezone, impossible weekly spacing and infeasible custom policy. Do not record owner approval without an actual owner decision.",
+      "assessmentCommitSha": "630f1fbe05efa04ac4b5a470c506f872e75d1f1f",
+      "acceptanceCriterion": "Both schedule validation and production readiness reject absent, unsupported, unreferenced, timezone-naive or mathematically infeasible owner cadence decisions; tests exercise each rejection and a valid rolling-cycle decision."
     }
   ]
 }
