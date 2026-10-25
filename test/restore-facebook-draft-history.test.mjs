@@ -115,3 +115,30 @@ test("cross-run history rejects insecure API origins and oversized artifact resp
       : new Response("x".repeat(1024), { status: 200, headers: { "content-length": String(20 * 1024 * 1024) } })
   }), /size limit/i);
 });
+
+
+test("cross-run history restoration rejects symlinked output parents before creating nested directories", async (t) => {
+  const fixture = makeArtifact(t);
+  const outside = path.join(fixture.root, "outside");
+  fs.mkdirSync(outside);
+  const linkedParent = path.join(fixture.root, "history-root");
+  fs.symlinkSync(outside, linkedParent, "dir");
+  const outputPath = path.join(linkedParent, "new-subdirectory", "history.json");
+
+  await assert.rejects(() => restoreFacebookDraftHistory({
+    now: new Date("2030-10-24T06:00:00Z"),
+    fetchImpl: async () => new Response(JSON.stringify({ artifacts: [] }), {
+      status: 200, headers: { "content-type": "application/json" }
+    }),
+    tempDir: path.join(fixture.root, "work"),
+    outputPath,
+    repository: "clickerrish-art/YT-AUTO-VISE",
+    token: "test-token",
+    apiBase: API,
+    currentRunId: "9999"
+  }), /symbolic link/i);
+
+  assert.equal(fs.existsSync(path.join(outside, "new-subdirectory")), false,
+    "history restoration must not create directories through a symlinked output parent");
+  assert.equal(fs.existsSync(outputPath), false);
+});
