@@ -7,10 +7,14 @@ import path from "node:path";
 
 test("dashboard API authenticates operators, persists real drafts, and cannot grant approval", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-"));
+  const ledgerTarget = path.join(os.tmpdir(), "sonicvhibez-upload-ledger-target-" + path.basename(stateDir) + ".json");
+  const ledgerLink = path.join(stateDir, "upload-attempts.json");
+  fs.writeFileSync(ledgerTarget, JSON.stringify({ attempts: [{ attemptId: "forged-symlink-attempt", status: "PRIVATE_UPLOAD_VERIFIED", remoteVideoId: "not-authoritative" }] }) + "\n", { mode: 0o600 });
+  fs.symlinkSync(ledgerTarget, ledgerLink);
   const port = 18000 + Math.floor(Math.random() * 10000);
   const token = "test-token-" + "x".repeat(40);
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
-    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" },
+    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, UPLOAD_LOG_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" },
     stdio: ["ignore", "pipe", "pipe"]
   });
   let logs = "";
@@ -28,6 +32,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   t.after(() => {
     child.kill("SIGTERM");
     fs.rmSync(stateDir, { recursive: true, force: true });
+    fs.rmSync(ledgerTarget, { force: true });
     fs.rmSync(symlinkPath, { force: true });
     fs.rmSync(internalSymlinkPath, { force: true });
     fs.rmSync(outsideDir, { recursive: true, force: true });
@@ -47,6 +52,8 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(initial.status, 200);
   const body = await initial.json();
   assert.equal(body.publishingEnabled, false);
+  assert.equal(body.uploadLedger.available, false, "a symlinked upload ledger must never be trusted as authoritative attempt history");
+  assert.match(body.uploadLedger.error, /unsafe/i, "the dashboard must report an unsafe ledger without exposing its contents");
   assert.equal(Object.hasOwn(body, "stateFile"), false, "authenticated API responses must not disclose the local state-file path");
   assert.equal(logs.includes(stateDir), false, "startup logs must not disclose the local state directory");
   assert.ok(body.blockers.some(item => /complete SonicVhibez public\/private\/unlisted history is reconciled/i.test(item)), "dashboard state must expose the live history reconciliation blocker");
