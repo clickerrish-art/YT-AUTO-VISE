@@ -7,27 +7,27 @@ import fs from "node:fs";
 const baseline = JSON.parse(fs.readFileSync(new URL("../config/campaigns.json", import.meta.url), "utf8"));
 const operator = "owner@example.test";
 
-test("Safari requires a separate HTTPS preview before explicit activation", () => {
+test("Safari requires HTTPS preview but activation remains prohibited by project policy", () => {
   const id = baseline.campaigns.find(c => c.type === "safari_affiliate").id;
-  assert.throws(() => manageCampaign(baseline, { campaignId: id, action: "activate", confirmOwnerApproval: true }, operator), /Preview the exact Safari/);
+  assert.throws(() => manageCampaign(baseline, { campaignId: id, action: "activate", confirmOwnerApproval: true }, operator), /Safari affiliate campaigns are disabled.*remain INACTIVE/);
   assert.throws(() => manageCampaign(baseline, { campaignId: id, action: "preview", destinationUrl: "http://example.com", disclosureText: "Affiliate disclosure applies" }, operator), /HTTPS/);
   const preview = manageCampaign(baseline, { campaignId: id, action: "preview", destinationUrl: "https://example.com/stay", disclosureText: "I may earn a commission from eligible bookings." }, operator);
   assert.equal(preview.previewOnly, true);
   assert.equal(preview.config.campaigns.find(c => c.id === id).status, "INACTIVE");
-  const active = manageCampaign(preview.config, { campaignId: id, action: "activate", confirmOwnerApproval: true }, operator, "2026-10-23T12:00:00Z");
-  assert.equal(active.campaign.status, "ACTIVE_FOR_DRAFTS_ONLY");
-  assert.equal(active.campaign.approval.approvedBy, operator);
-  assert.deepEqual(validateCampaigns(active.config), []);
+  assert.throws(() => manageCampaign(preview.config, { campaignId: id, action: "activate", confirmOwnerApproval: true }, operator, "2026-10-23T12:00:00Z"),
+    /Safari affiliate campaigns are disabled.*remain INACTIVE/);
+  assert.deepEqual(validateCampaigns(preview.config), []);
 });
 
-test("Safari deactivation clears active destination and approval so it cannot silently reactivate", () => {
+test("Safari deactivation clears pending destination and approval data", () => {
   const id = baseline.campaigns.find(c => c.type === "safari_affiliate").id;
   const preview = manageCampaign(baseline, { campaignId: id, action: "preview", destinationUrl: "https://example.com/stay", disclosureText: "I may earn a commission from eligible bookings." }, operator);
-  const active = manageCampaign(preview.config, { campaignId: id, action: "activate", confirmOwnerApproval: true }, operator);
-  const inactive = manageCampaign(active.config, { campaignId: id, action: "deactivate" }, operator);
+  const inactive = manageCampaign(preview.config, { campaignId: id, action: "deactivate" }, operator);
   assert.equal(inactive.campaign.destinationUrl, "");
   assert.equal(inactive.campaign.ownerApproved, false);
   assert.equal(inactive.campaign.status, "INACTIVE");
+  assert.equal(Object.hasOwn(inactive.campaign, "pendingDestinationUrl"), false);
+  assert.equal(Object.hasOwn(inactive.campaign, "pendingDisclosureText"), false);
   assert.deepEqual(validateCampaigns(inactive.config), []);
 });
 
