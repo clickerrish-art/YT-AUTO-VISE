@@ -471,3 +471,28 @@ test("dashboard presents actionable API errors without exposing raw server respo
   );
   await expect(page.locator("#message")).not.toContainText(operatorToken);
 });
+
+test("Facebook idea endpoint validates malformed and impossible dates without mutating drafts", async ({ request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  const unauthorized = await request.get("/api/facebook/idea?date=2030-10-25");
+  expect(unauthorized.status()).toBe(401);
+
+  const beforeResponse = await request.get("/api/facebook/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+  const beforeIds = (before.drafts ?? []).map(draft => draft.id).sort();
+
+  const malformed = await request.get("/api/facebook/idea?date=tomorrow", { headers });
+  expect(malformed.status()).toBe(400);
+  expect((await malformed.json()).error).toMatch(/valid YYYY-MM-DD date is required/i);
+
+  const impossible = await request.get("/api/facebook/idea?date=2030-02-30", { headers });
+  expect(impossible.status()).toBe(400);
+  expect((await impossible.json()).error).toMatch(/date is invalid/i);
+
+  const afterResponse = await request.get("/api/facebook/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  const after = await afterResponse.json();
+  expect((after.drafts ?? []).map(draft => draft.id).sort()).toEqual(beforeIds);
+  expect(after.publishingEnabled).toBe(false);
+});
