@@ -324,6 +324,23 @@
       "nextAction": "Keep the guard fail-closed and retain the path traversal, symlink-file, symlink-ancestor, missing-file and directory tests. The readiness workflow remains blocked on genuine production prerequisites; this code test does not imply production acceptance.",
       "assessmentCommitSha": "728f6821c16cfa6fa730a84fe421c38c74ba41be",
       "acceptanceCriterion": "Automated tests prove safe in-root regular files pass; path traversal, outside-root paths, symlinked files, symlinked ancestors, directories and missing files fail; readiness continues to support an explicitly configured external queue path only when the full path contains no symlinks."
+    },
+    {
+      "id": "CI-READY-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "The production-readiness workflow must compare actual human-readable and JSON readiness exit codes from retained evidence, clearly distinguish a blocked gate from a diagnostic mismatch, and never default missing outputs into an inferred result.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/7813cd5d8ed6b91d20ea78c46f378cc726e9bf4c",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/eb1753cdfd3158fdce0c5d53bdc6d04f291e3e7c",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/dfad17c87c6473a81ac65baa67ac7f694e2c7b29",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702143",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702175"
+      ],
+      "nextAction": "Keep the workflow fail-closed. The expected blocked readiness result is not production acceptance; rerun the exact final PR HEAD and preserve the diagnostic artifact.",
+      "assessmentCommitSha": "dfad17c87c6473a81ac65baa67ac7f694e2c7b29",
+      "acceptanceCriterion": "The workflow records both exit codes in a retained artifact, validates the values, confirms they agree, and emits the explicit BLOCKED message when both checks return 2; a missing or malformed record fails closed."
     }
   ]
 }

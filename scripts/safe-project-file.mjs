@@ -3,9 +3,10 @@ import path from "node:path";
 
 /**
  * Read-only guard for readiness checks. A candidate must be a regular file
- * lexically contained in the project root, with no symlink in any path
- * component. This prevents a readiness report from treating a symlink or
- * path-traversal target as a valid production prerequisite.
+ * lexically contained in the supplied trust root, with no symlink in any path
+ * component. The normal caller supplies the repository root; an explicit
+ * external-queue override supplies that file's parent as the trust root. This
+ * prevents symlinks or path-traversal targets being treated as valid prerequisites.
  */
 export function isSafeRegularFileWithinRoot(rootDirectory, candidatePath) {
   if (typeof rootDirectory !== "string" || !rootDirectory.trim()

@@ -1,3 +1,16 @@
+## Latest code/CI checkpoint — 25 October 2026
+
+- Source/test candidate: `dfad17c87c6473a81ac65baa67ac7f694e2c7b29` on `codex/marketing-machine-audit-fixes`; PR #1 remains open, draft and unmerged.
+- Readiness path hardening: [safe project-file guard](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c8aa2710caa3e8b599e179f73012d3f2adebccf5), [regression tests](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ca6ccf14e3a8f146966d921e4994b20d0e93c0a5), [readiness integration](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/2ed5f9968460e7a318f37e22ec959a107e447710), and [explicit external queue-path compatibility fix](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/728f6821c16cfa6fa730a84fe421c38c74ba41be).
+- Readiness workflow correction: [retained exit-code evidence](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/7813cd5d8ed6b91d20ea78c46f378cc726e9bf4c), [line-delimited output fix](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/eb1753cdfd3158fdce0c5d53bdc6d04f291e3e7c), and [workflow regression assertion](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/dfad17c87c6473a81ac65baa67ac7f694e2c7b29).
+- Automation/security [run 40222702143](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702143): **PASS** — 276 Node tests, 0 failed; 8 Python safety tests; dependency audit reported 0 vulnerabilities.
+- Browser E2E [run 40222702124](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702124): **PASS** — all 8 Chromium journeys passed against the real local dashboard/backend.
+- Content quality [run 40222702109](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702109), metadata [run 40222702097](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702097), and locked install [run 40222697980](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222697980): **PASS**.
+- Production readiness [run 40222702175](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702175): **BLOCKED**, correctly — retained evidence records human-readable exit 2 and JSON exit 2, then explicitly reports the readiness gate as blocked. This is not a release pass.
+- Facebook draft workflow [run 40222702166](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702166): **SKIPPED**, not integration evidence.
+- Remaining blockers: owner cadence decision; real rights-cleared media and hash-bound human review; verified SonicVhibez OAuth/channel/history and one-shot authorization; verified Nature Frontiers Page and genuine draft workflow; exact-main baseline; full divergent-history review; exhaustive dashboard/recovery/deployment drills; and branch protection/governance.
+- Safety: no upload, publication, campaign activation, merge or destructive Git operation. Public/unattended YouTube and Facebook live publishing remain disabled; Safari remains inactive.
+
 ## Strict cadence-approval timestamp hardening — 25 October 2026
 
 - Shared strict ISO timestamp validator: [`cef7664`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/cef7664ad41bc11e6473e6d7a5f1682b7efd69e1).
