@@ -538,6 +538,7 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, { publishingEnabled: false, schedule, campaigns: campaignConfig.campaigns, campaignValidation: { ok: campaignErrors.length === 0, errors: campaignErrors }, queueItems: state.queueItems, jobs: state.jobs.slice(-30).reverse(), uploads: state.uploads.slice(-30).reverse(), uploadLedger: readUploadLedger(), audit: state.audit.slice(-50).reverse(), blockers });
     }
     if (req.method === "GET" && url.pathname === "/api/facebook/idea") {
+      // This endpoint is read-only: validation errors must not create or alter drafts.
       const date = url.searchParams.get("date") ?? "";
       const state = loadState();
       let idea;
