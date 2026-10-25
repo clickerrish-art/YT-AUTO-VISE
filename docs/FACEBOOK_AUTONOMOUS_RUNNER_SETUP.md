@@ -1,3 +1,22 @@
+## Authoritative current checkpoint — 25 October 2026
+
+**Source/test candidate:** `5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938`. This is the code/test SHA with the verified-history status guard and regression test. Later documentation-only commits do not change application source; final-head CI must still be checked after documentation edits.
+
+- [Automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971948): **PASS** — 263 Node tests, 0 failures, 0 skipped; 8 Python tests; clean install checks; npm audit reports 0 vulnerabilities.
+- [Dashboard browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971726): **PASS** — 8 Chromium tests.
+- [Metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971766) and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971776): **PASS**.
+- [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971770): **BLOCKED**, as required by missing mandatory owner/account/media/history/approval prerequisites.
+- [Facebook draft workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971709): **SKIPPED**; this is not live Page integration evidence.
+- PR #1 remains open, draft and unmerged. `main` remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base is `45352b73bb6cc4787b2a49988b575afb754ab627`. At the source/test checkpoint the branch was 1,116 commits ahead and 2 behind; use the [live PR comparison](https://github.com/clickerrish-art/YT-AUTO-VISE/compare/main...codex/marketing-machine-audit-fixes) for current post-documentation counts. Full divergent patch review remains incomplete.
+- Dashboard mapping is now recorded in [DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md](DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md); the matrix explicitly marks incomplete journeys rather than implying all controls are accepted. The acceptance register now records acceptance criteria and assessed source/test SHA.
+- The schedule policy now rejects missing, draft, scheduled, deleted and unknown statuses in claimed remote publication history instead of silently counting them toward the rolling cycle. This does not replace authenticated live-history verification.
+- **Decision: CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED.** Exhaustive dashboard journeys, exact-main baseline, full branch-history review/reconciliation, isolated recovery/deployment drills, genuine media/rights/human review, verified SonicVhibez OAuth/history, explicit one-shot upload authorization/receipt, and verified Nature Frontiers Page/draft workflow remain unresolved.
+- Safety: public/unattended YouTube publishing and Facebook live publishing remain disabled; Safari remains inactive; only approved Selar URL is `https://selar.com/0u19v8u99l`. No upload, post, campaign activation, merge or destructive Git operation occurred.
+
+> Older checkpoint sections below are historical unless they match the exact SHAs and workflow links above. Do not treat their counts or "current" labels as current evidence.
+
+---
+
 # Nature Frontiers Facebook autonomous runner setup
 
 This guide configures the dedicated Facebook publisher. It does not enable public YouTube publishing and does not authorize the Nature Frontiers YouTube channel.
