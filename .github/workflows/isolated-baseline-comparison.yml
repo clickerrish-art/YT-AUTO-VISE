@@ -83,8 +83,15 @@ jobs:
               echo "NODE_TEST_EXIT_CODE=$test_status" | tee -a "$report"
 
               if [ -d "$directory/tests" ]; then
-                (cd "$directory" && python -m unittest discover -s tests -p 'test_*.py' -v) >> "$report" 2>&1
-                python_status=$?
+                (python -m pip install --disable-pip-version-check mutagen pillow) >> "$report" 2>&1
+                python_install_status=$?
+                echo "PYTHON_DEPENDENCY_INSTALL_EXIT_CODE=$python_install_status" | tee -a "$report"
+                if [ "$python_install_status" -eq 0 ]; then
+                  (cd "$directory" && python -m unittest discover -s tests -p 'test_*.py' -v) >> "$report" 2>&1
+                  python_status=$?
+                else
+                  python_status=125
+                fi
                 echo "PYTHON_TEST_EXIT_CODE=$python_status" | tee -a "$report"
               else
                 python_status=0
@@ -108,12 +115,12 @@ jobs:
           {
             echo "## Isolated baseline comparison"
             echo
-            echo "- Main/base SHA: `$main_sha`"
-            echo "- Candidate SHA: `$candidate_sha`"
-            echo "- Main baseline result: $([ "$main_failed" -eq 0 ] && echo PASS || echo FAIL)"
-            echo "- Candidate baseline result: $([ "$candidate_failed" -eq 0 ] && echo PASS || echo FAIL)"
+            printf -- '- Main/base SHA: %s\n' "$main_sha"
+            printf -- '- Candidate SHA: %s\n' "$candidate_sha"
+            if [ "$main_failed" -eq 0 ]; then echo "- Main baseline result: PASS"; else echo "- Main baseline result: FAIL"; fi
+            if [ "$candidate_failed" -eq 0 ]; then echo "- Candidate baseline result: PASS"; else echo "- Candidate baseline result: FAIL"; fi
             echo
-            echo "Full command output is retained in the `baseline-comparison` artifact."
+            echo "Full command output is retained in the baseline-comparison artifact."
           } >> "$GITHUB_STEP_SUMMARY"
 
           cp "$report" baseline-comparison.txt
