@@ -14,6 +14,10 @@ const blockers = [];
 const notes = [];
 const exists = (p) => isSafeRegularFileWithinRoot(root, p);
 const queuePath = process.env.QUEUE_PATH ?? "content/queue.json";
+const queueAbsolutePath = path.resolve(root, queuePath);
+const queueExists = process.env.QUEUE_PATH
+  ? isSafeRegularFileWithinRoot(path.dirname(queueAbsolutePath), path.basename(queueAbsolutePath))
+  : exists(queuePath);
 const manifestPath = "content/render-manifest.json";
 const metadataPath = "content/next-short.json";
 const videoPath = "media/next-short.mp4";
@@ -62,7 +66,7 @@ if (!exists(schedulePath)) {
   }
 }
 
-if (!exists(queuePath)) {
+if (!queueExists) {
   blockers.push("content/queue.json is missing.");
 } else {
   let queue;
