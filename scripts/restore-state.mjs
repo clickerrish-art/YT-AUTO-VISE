@@ -9,6 +9,41 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sha256 = value => crypto.createHash("sha256").update(value).digest("hex");
 const isInvoked = process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href;
 
+/**
+ * Read a backup only from a regular file whose visible path contains no symlinks.
+ * O_NOFOLLOW protects the final component on platforms that support it; component
+ * checks additionally reject symlinked ancestors. Filesystem races in ancestor
+ * components cannot be eliminated portably with path-based Node APIs and remain
+ * an operational isolation requirement.
+ */
+function readBackupFileNoSymlinks(filePath) {
+  const absolute = path.resolve(filePath);
+  const parsed = path.parse(absolute);
+  let current = parsed.root;
+  const parts = path.relative(parsed.root, absolute).split(path.sep).filter(Boolean);
+  for (let index = 0; index < parts.length; index++) {
+    current = path.join(current, parts[index]);
+    let stat;
+    try { stat = fs.lstatSync(current); }
+    catch (error) {
+      if (error?.code === "ENOENT") throw new Error("Backup file or path component is missing");
+      throw error;
+    }
+    if (stat.isSymbolicLink()) throw new Error("Restore refuses a symbolic link in the backup file path");
+    const isFinal = index === parts.length - 1;
+    if (!isFinal && !stat.isDirectory()) throw new Error("Backup path contains a non-directory component");
+    if (isFinal && !stat.isFile()) throw new Error("Backup source must be a regular file");
+  }
+  const flags = fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0);
+  const fd = fs.openSync(absolute, flags);
+  try {
+    if (!fs.fstatSync(fd).isFile()) throw new Error("Backup source must be a regular file");
+    return fs.readFileSync(fd, "utf8");
+  } finally {
+    fs.closeSync(fd);
+  }
+}
+
 function targetPath(target, { rootDir = root, stateDir = process.env.DASHBOARD_STATE_DIR ?? "state", uploadLogDir = process.env.UPLOAD_LOG_DIR ?? "run-logs", rightsDir = process.env.RIGHTS_EVIDENCE_DIR ?? "rights" } = {}) {
   const base = path.resolve(rootDir);
   const logDir = path.resolve(base, uploadLogDir);
@@ -86,7 +121,7 @@ export async function restoreState({ backupPath, rootDir = root, stateDir = proc
   if (confirm !== "YES") throw new Error("Set RESTORE_CONFIRM=YES to authorize this restore operation");
   if (!backupPath) throw new Error("Provide the backup JSON path");
   const backupFile = path.resolve(backupPath);
-  const backup = JSON.parse(fs.readFileSync(backupFile, "utf8"));
+  const backup = JSON.parse(readBackupFileNoSymlinks(backupFile));
   if (backup.format !== "sonicvhibez-state-backup" || backup.version !== 1 || backup.includesSecrets !== false || !Array.isArray(backup.entries) || !Number.isFinite(Date.parse(backup.createdAt))) throw new Error("Backup format or schema is invalid");
   const options = { rootDir, stateDir, uploadLogDir, rightsDir };
   const prepared = [];
