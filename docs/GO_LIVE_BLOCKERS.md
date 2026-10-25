@@ -1,3 +1,5 @@
+> **Current release status — 2026-10-25:** See the [authoritative current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-25.md). Tested code candidate: `b50b801cb2270bbafe88f1ff62f7e933f871ed70`. Automated code checks pass, but code acceptance and production acceptance remain **BLOCKED** by incomplete full-workflow/browser coverage, branch-history review, genuine media and rights evidence, account verification, live integration evidence, recovery drills and deployment verification. This status supersedes any older checkpoint wording below where it conflicts.
+
 # Go-live blockers
 
 ## Authoritative current acceptance status — 25 October 2026
