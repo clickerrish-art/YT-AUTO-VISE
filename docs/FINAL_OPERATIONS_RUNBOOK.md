@@ -14,7 +14,7 @@
 
 ### Exact-SHA CI
 - [Automation/security — run 40181771250](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40181771250): **PASS** — 244 Node tests, 0 failed/0 skipped; 8 Python tests; locked and normal `npm ci`; Google API import; JS syntax/Python compilation; 16 queue items; `npm audit`: 0 vulnerabilities across 49 packages.
-- [Browser E2E — run 40181771259](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40181771259): **PASS** — 6 Chromium journeys against the local dashboard/backend; not every visible control is covered.
+- [Browser E2E — run 40181771259](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40181771259): **PASS** — 7 Chromium journeys against the local dashboard/backend; not every visible control is covered.
 - [Content quality — run 40181771275](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40181771275): **PASS**.
 - [Metadata — run 40181771283](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40181771283): **PASS**.
 - [Production readiness — run 40181771257](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40181771257): **BLOCKED as required: 12 mandatory blockers**; retained diagnostic [artifact 12594570724](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40181771257/artifacts/12594570724).
@@ -73,7 +73,7 @@ The live comparison is 896 ahead / 2 behind at the exact test head, with merge b
 
 | Gate | Status | Evidence / next action |
 |---|---|---|
-| Node.js automated tests | PASS | 206 passed, 0 failed, 0 skipped on exact test head. |
+| Node.js automated tests | PASS | 207 passed, 0 failed, 0 skipped on exact test head. |
 | Python safety tests | PASS | 8 passed on exact test head. |
 | Campaign, queue, schedule, syntax and compilation checks | PASS | Exact-head automation workflow above. |
 | Normal lifecycle-script installation | PASS | Isolated clean checkout, no credentials, normal `npm ci`, and `googleapis` import passed. |
