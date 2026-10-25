@@ -307,6 +307,23 @@
       "nextAction": "Retain the fail-closed guard. A structurally valid decision must still come from an actual owner decision; do not create or infer owner approval. Exact-candidate browser E2E and subsequent final-head checks remain independently required.",
       "assessmentCommitSha": "58fceca25f9fb70f52a12505e9d14f007e29d516",
       "acceptanceCriterion": "Both schedule validation and production readiness reject absent, unsupported, unreferenced, timezone-naive or mathematically infeasible owner cadence decisions; tests exercise each rejection and a valid rolling-cycle decision."
+    },
+    {
+      "id": "RDY-SEC-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Production-readiness prerequisite checks must reject symlinked files, symlinked ancestors, non-regular files, and path traversal outside the project root, while preserving explicitly configured external queue paths only when their full path is symlink-free.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c8aa2710caa3e8b599e179f73012d3f2adebccf5",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ca6ccf14e3a8f146966d921e4994b20d0e93c0a5",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/2ed5f9968460e7a318f37e22ec959a107e447710",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/728f6821c16cfa6fa730a84fe421c38c74ba41be",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222258484"
+      ],
+      "nextAction": "Keep the guard fail-closed and retain the path traversal, symlink-file, symlink-ancestor, missing-file and directory tests. The readiness workflow remains blocked on genuine production prerequisites; this code test does not imply production acceptance.",
+      "assessmentCommitSha": "728f6821c16cfa6fa730a84fe421c38c74ba41be",
+      "acceptanceCriterion": "Automated tests prove safe in-root regular files pass; path traversal, outside-root paths, symlinked files, symlinked ancestors, directories and missing files fail; readiness continues to support an explicitly configured external queue path only when the full path contains no symlinks."
     }
   ]
 }
