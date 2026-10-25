@@ -55,6 +55,7 @@ test("readiness workflow compares retained exit-code evidence and avoids false m
   assert.match(workflow, /readiness-report\/exit-codes\.txt/);
   assert.match(workflow, /readiness_status=\$\(sed -n '1p' readiness-report\/exit-codes\.txt\)/);
   assert.match(workflow, /json_status=\$\(sed -n '2p' readiness-report\/exit-codes\.txt\)/);
+  assert.ok(workflow.includes("printf '%s\\n%s\\n'"));
   assert.match(workflow, /Production readiness is BLOCKED/);
   assert.doesNotMatch(workflow, /READINESS_EXIT_CODE:-2|READINESS_JSON_EXIT_CODE:-3/);
 });
