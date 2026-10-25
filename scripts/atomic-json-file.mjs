@@ -95,7 +95,7 @@ export function atomicCreateJson(destination, value, { mode = 0o600 } = {}) {
   let linked = false;
   try {
     fd = fs.openSync(temporary, "wx", mode);
-    fs.writeFileSync(fd, JSON.stringify(value, null, 2) + "\\n", "utf8");
+    fs.writeFileSync(fd, JSON.stringify(value, null, 2) + "\n", "utf8");
     fs.fsyncSync(fd);
     fs.closeSync(fd);
     fd = undefined;
