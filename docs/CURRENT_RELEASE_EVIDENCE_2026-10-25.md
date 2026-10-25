@@ -12,7 +12,7 @@
 - Current branch HEAD: a documentation-only descendant of this tested SHA; live PR metadata is authoritative for the exact HEAD.
 - `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
-- Current comparison: **1,023 commits ahead, 2 behind, 110 changed files**. The full PR changed-file inventory is available from GitHub. The 1,023 branch-only commits have not been reviewed patch by patch. The two base-only commits around Facebook history-restoration coverage are understood.
+- At the tested code/test candidate, comparison was **1,023 ahead, 2 behind, 110 changed files**; subsequent documentation-only commits add no application-code changes. Use live PR metadata for the current-head comparison. The full PR changed-file inventory is available from GitHub. The 1,023 branch-only commits have not been reviewed patch by patch. The two base-only commits around Facebook history-restoration coverage are understood.
 - PR #1: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1 — open, draft, unmerged.
 - No direct `main` edits or destructive history operations were performed.
 
