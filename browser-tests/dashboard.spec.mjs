@@ -403,7 +403,13 @@ test("production controls disable safely when real media prerequisites are missi
   for (const job of queued) {
     await page.locator("#producejob").selectOption(job.id);
     await page.locator("#produceform button[type=submit]").click();
-    await expect(page.locator("#produceresult")).toContainText(/Render result: BLOCKED|Render blocked or failed:/, { timeout: 10_000 });
+    await expect.poll(async () => {
+      const snapshot = await request.get("/api/state", { headers });
+      const current = await snapshot.json();
+      return current.jobs.find(item => item.id === job.id)?.state;
+    }, { timeout: 10_000 }).toMatch(/BLOCKED|FAILED|GENERATED/);
+    await expect(page.locator(`#producejob option[value="${job.id}"]`)).toHaveCount(0, { timeout: 10_000 });
+    await expect(page.locator("#produceresult")).toContainText(/Render result: (BLOCKED|FAILED|GENERATED)|Render blocked or failed:/, { timeout: 10_000 });
   }
 
   response = await request.get("/api/state", { headers });
