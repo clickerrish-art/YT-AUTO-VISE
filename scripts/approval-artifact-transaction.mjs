@@ -23,12 +23,13 @@ export function commitApprovalArtifact({ destination, record, persistState }) {
     let stat;
     try { stat = fs.lstatSync(cursor); }
     catch (error) {
+      if (error?.code === "ENOENT" && index === parts.length - 1) continue;
       if (error?.code === "ENOENT") throw new Error("approval artifact path has a missing component");
       throw error;
     }
     if (stat.isSymbolicLink()) throw new Error("approval artifact path contains a symbolic link");
     if (index < parts.length - 1 && !stat.isDirectory()) throw new Error("approval artifact parent path must contain only directories");
-    if (index === parts.length - 1 && fs.existsSync(cursor)) throw new Error("approval artifact already exists; refusing to overwrite an existing approval");
+    if (index === parts.length - 1) throw new Error("approval artifact already exists; refusing to overwrite an existing approval");
   }
 
   const temporary = path.join(parent, "." + path.basename(target) + "." + crypto.randomUUID() + ".tmp");
