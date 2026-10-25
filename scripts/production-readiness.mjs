@@ -7,11 +7,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
+import { isSafeRegularFileWithinRoot } from "./safe-project-file.mjs";
 
 const root = process.cwd();
 const blockers = [];
 const notes = [];
-const exists = (p) => fs.existsSync(path.resolve(root, p));
+const exists = (p) => isSafeRegularFileWithinRoot(root, p);
 const queuePath = process.env.QUEUE_PATH ?? "content/queue.json";
 const manifestPath = "content/render-manifest.json";
 const metadataPath = "content/next-short.json";
