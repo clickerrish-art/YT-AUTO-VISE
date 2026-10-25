@@ -207,3 +207,33 @@ test("dashboard refuses to start when persisted Facebook history is malformed", 
   assert.match(logs, /Invalid state schema: facebookDrafts/);
   assert.deepEqual(JSON.parse(fs.readFileSync(stateFile, "utf8")).facebookDrafts, { lost: "history" }, "startup must preserve corrupt evidence for operator recovery, not overwrite it");
 });
+
+
+test("dashboard refuses a symlinked persisted state file at startup", async (t) => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-symlink-state-"));
+  const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-symlink-target-"));
+  const outsideFile = path.join(outsideDir, "preserved.json");
+  const stateFile = path.join(stateDir, "dashboard-state.json");
+  const port = 28000 + Math.floor(Math.random() * 10000);
+  fs.writeFileSync(outsideFile, JSON.stringify({ sentinel: "do-not-touch" }) + "\\n", { mode: 0o600 });
+  fs.symlinkSync(outsideFile, stateFile);
+  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: "test-token-" + "x".repeat(40), DASHBOARD_OPERATOR_ID: "test-owner", DASHBOARD_STATE_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let logs = "";
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  t.after(() => {
+    if (child.exitCode === null) child.kill("SIGTERM");
+    fs.rmSync(stateDir, { recursive: true, force: true });
+    fs.rmSync(outsideDir, { recursive: true, force: true });
+  });
+  const code = await new Promise(resolve => {
+    child.once("exit", resolve);
+    setTimeout(() => { if (child.exitCode === null) child.kill("SIGKILL"); }, 5000).unref();
+  });
+  assert.notEqual(code, 0, "server must refuse to start when the state path is a symlink");
+  assert.match(logs, /state file must be a regular file/i);
+  assert.deepEqual(JSON.parse(fs.readFileSync(outsideFile, "utf8")), { sentinel: "do-not-touch" });
+});
