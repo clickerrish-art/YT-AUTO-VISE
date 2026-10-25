@@ -215,7 +215,7 @@ test("dashboard refuses a symlinked persisted state file at startup", async (t) 
   const outsideFile = path.join(outsideDir, "preserved.json");
   const stateFile = path.join(stateDir, "dashboard-state.json");
   const port = 28000 + Math.floor(Math.random() * 10000);
-  fs.writeFileSync(outsideFile, JSON.stringify({ sentinel: "do-not-touch" }) + "\\n", { mode: 0o600 });
+  fs.writeFileSync(outsideFile, JSON.stringify({ sentinel: "do-not-touch" }) + "\n", { mode: 0o600 });
   fs.symlinkSync(outsideFile, stateFile);
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
     env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: "test-token-" + "x".repeat(40), DASHBOARD_OPERATOR_ID: "test-owner", DASHBOARD_STATE_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" },
