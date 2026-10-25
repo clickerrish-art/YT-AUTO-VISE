@@ -19,7 +19,13 @@ if (JSON.stringify(plan.publicationCycle?.formats) !== JSON.stringify(ROLLING_PU
 if (plan.publicationCycle?.minimumCycleHours !== minSpacing * ROLLING_PUBLICATION_FORMATS.length) errors.push("rolling cycle minimum must equal minimumPublicationSpacingHours multiplied by the publication cycle length");
 if (plan.spacingPolicy?.minimumCycleHours !== minSpacing * ROLLING_PUBLICATION_FORMATS.length) errors.push("spacingPolicy minimumCycleHours must match the configured publication cycle");
 if (plan.publicationCycle?.publicationRequiresVerifiedHistory !== true) errors.push("publication must require independently verified channel history");
-if ("targetCadence" in plan || "requestedTargetCadence" in plan || "cadenceDecisionRequired" in plan || "interimDraftCadence" in plan) errors.push("stale weekly-count cadence fields must be removed; use publicationCycle and draft-only fallback");
+if ("targetCadence" in plan || "requestedTargetCadence" in plan || "interimDraftCadence" in plan) errors.push("stale weekly-count cadence fields must be removed; use requestedWeeklyCadence, cadenceDecision and publicationCycle");
+const requestedCadence = plan.requestedWeeklyCadence;
+if (requestedCadence?.longFormPerWeek !== 2 || requestedCadence?.shortsPerWeek !== 1 || requestedCadence?.totalPublicationsPerWeek !== 3 || requestedCadence?.status !== "CONFLICTS_WITH_72_HOUR_MINIMUM") errors.push("requestedWeeklyCadence must explicitly record the requested 2 long-form + 1 Short weekly target and its 72-hour conflict");
+const cadenceDecision = plan.cadenceDecision;
+if (!cadenceDecision || !["OWNER_DECISION_REQUIRED", "OWNER_APPROVED"].includes(cadenceDecision.status) || typeof cadenceDecision.ownerApproved !== "boolean") errors.push("cadenceDecision must explicitly record owner decision status");
+if (cadenceDecision?.status === "OWNER_APPROVED" && cadenceDecision.ownerApproved !== true) errors.push("cadenceDecision OWNER_APPROVED status requires ownerApproved=true");
+if (cadenceDecision?.status !== "OWNER_APPROVED" || cadenceDecision?.ownerApproved !== true) console.log("BLOCKED — CADENCE DECISION: requested 2 long-form + 1 Short per week conflicts with 72-hour spacing; owner approval of a feasible policy mode is required before publication.");
 if (!Array.isArray(plan.schedule) || plan.schedule.length !== 2) errors.push("draft-preparation fallback must contain exactly two draft-only slots");
 const expected = [
  { day: "Tuesday", format: "long_form", cronUtc: "0 15 * * 2", duration: "minutes" },
