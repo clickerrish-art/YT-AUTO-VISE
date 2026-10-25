@@ -83,6 +83,28 @@ function loadState() {
 function recoverInterruptedTasks() {
   const state = loadState();
   let recovered = 0;
+  // Enforce the repository-level Safari prohibition on persisted legacy state as well as
+  // new API requests. Earlier versions allowed activation after a generic confirmation.
+  for (const campaign of Array.isArray(state.campaigns) ? state.campaigns : []) {
+    if (campaign.type !== "safari_affiliate") continue;
+    const hasPendingFields = ["pendingDestinationUrl", "pendingDisclosureText", "pendingDestinationVersion", "approval"]
+      .some(key => Object.hasOwn(campaign, key));
+    if (campaign.status !== "INACTIVE" || campaign.destinationUrl !== "" || campaign.ownerApproved !== false ||
+        campaign.destinationValidation !== "not_verified" || campaign.disclosureText !== "" || hasPendingFields) {
+      campaign.status = "INACTIVE";
+      campaign.destinationUrl = "";
+      campaign.destinationValidation = "not_verified";
+      campaign.ownerApproved = false;
+      campaign.disclosureText = "";
+      delete campaign.pendingDestinationUrl;
+      delete campaign.pendingDisclosureText;
+      delete campaign.pendingDestinationVersion;
+      delete campaign.approval;
+      const at = new Date().toISOString();
+      state.audit.push({ id: crypto.randomUUID(), action: "SAFARI_CAMPAIGN_POLICY_ENFORCED", campaignId: campaign.id, at, actor: "system-policy" });
+      recovered++;
+    }
+  }
   for (const job of state.jobs) {
     if (job.kind === "CONTENT_PRODUCTION" && (job.state === "GENERATING" || job.state === "UPLOADING_PRIVATE" || (["GENERATED", "VALIDATING"].includes(job.state) && job.workerLease))) {
       const previous = job.state;
