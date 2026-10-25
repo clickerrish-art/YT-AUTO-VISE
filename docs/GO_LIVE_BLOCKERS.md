@@ -1,14 +1,14 @@
-## Latest verified checkpoint — 25 October 2026 (private-upload stop, authorization and ledger hardening)
+## Latest verified checkpoint — 25 October 2026 (upload stop, ledger and path-confinement hardening)
 
-- **Exact tested application-code SHA:** `131acefacd47d93e3056637b67c768b40c1a3d74`. The documentation-only refresh that follows does not change application code.
-- **YouTube emergency stop fails closed.** A new remote upload is blocked unless `YOUTUBE_EMERGENCY_STOP` is explicitly the string `false`; absent or malformed values block. Read-only reconciliation remains available during an incident. Both manual upload workflows default the separate emergency-stop-release input to `NO`, alongside one-shot upload confirmation.
-- **One-shot authorization hardening:** both workflows pass `PRIVATE_UPLOAD_AUTHORIZATION_PATH`; authorization records pass the no-symlink regular-file guard before being read. The artifact-based workflow uses `npm ci --ignore-scripts`.
-- **Cross-workflow concurrency and ledger protection:** both private-upload workflows share the repository-wide `sonicvhibez-private-upload` concurrency group with `cancel-in-progress: false`. Before allowing `previous_ledger_run_id=NONE`, the workflow checks the latest 100 manual runs of both upload workflows and fails closed if any earlier manual run exists or the first-ever state cannot be established. This prevents an operator from silently bypassing a prior attempt ledger. Any ambiguous or missing prior ledger still requires manual reconciliation; a superseded pending run is not evidence of an upload.
-- **Relevant commits:** [YouTube stop gate](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/5f304a190c6439e7fa075424a218fec0fa59a0fa), [isolated upload fixtures](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/56a093ae7bad9ac436ccdabd027ac22dac7f0a26), [authorization binding and locked install](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/8a7dcc01a39e67411d1ee85e6218c615561ba400), [authorization symlink guard](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e274802788f242d02011ec0554922afae23654ad), [cross-workflow serialization](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/63de00c2f883ee9b033af2c6617813fc1267c615), [ledger-bypass prevention](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/131acefacd47d93e3056637b67c768b40c1a3d74).
-- **Exact-SHA CI for `131acef`:** [automation/security run 40199177795](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40199177795) **PASS** — 249 Node tests, 0 failures, 0 skips; 8 Python tests; clean install, JavaScript syntax/Python compilation; npm audit reports 0 vulnerabilities. [Dashboard browser run 40199177769](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40199177769) **PASS** — 8 Chromium journeys. [Metadata run 40199177765](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40199177765) **PASS**. [Content-quality run 40199177785](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40199177785) **PASS**. [Clean locked-install run 40199174042](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40199174042) **PASS**.
-- **Readiness remains correctly blocked:** [production-readiness run 40199177792](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40199177792) **BLOCKED** on mandatory external/release prerequisites. [Facebook draft workflow 40199177830](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40199177830) was **SKIPPED** on this PR event; it does not prove live Page integration.
-- **Live repository state:** `main` is `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; comparison is **1,071 ahead, 2 behind, 110 changed files**. PR #1 remains open, draft and unmerged. Both branches are `protected=false`; required status checks are not enforced. Full branch-only patch history review remains incomplete; no history-changing reconciliation was performed.
-- **Owner blocker `RDY-C24AE0CF4F1B`:** supplied channel ID `UCSlkuPfHH78oC1o418HV4w` is 23 characters while the current validator expects 24. Verify the exact SonicVhibez channel ID through the authorized account; never guess or silently correct it.
+- **Exact tested application-code SHA:** `8e67f96d14588394d9cd1e0640509b2c642e7805`. This is the current implementation branch HEAD before the documentation-only refresh.
+- **YouTube emergency stop fails closed.** New remote upload is blocked unless `YOUTUBE_EMERGENCY_STOP` is explicitly the string `false`; absent or malformed values block. Read-only reconciliation remains available. Both upload workflows default the separate emergency-stop-release input to `NO`.
+- **Authorization and filesystem safety:** both workflows pass `PRIVATE_UPLOAD_AUTHORIZATION_PATH`; authorization files, production metadata/video/approval files, approval-bound artifacts, rights-evidence assets and channel-history reconciliation records must be non-symlink regular files within the repository root. The artifact-based workflow uses `npm ci --ignore-scripts`.
+- **Cross-workflow concurrency and ledger protection:** both upload workflows share the repository-wide `sonicvhibez-private-upload` concurrency group with `cancel-in-progress: false`. Before allowing `previous_ledger_run_id=NONE`, each workflow checks the latest 100 manual runs of both upload workflows and fails closed if any earlier manual run exists or first-ever state cannot be established. This prevents silently bypassing a prior attempt ledger. An ambiguous or missing prior ledger still requires reconciliation; a superseded pending run is not evidence of an upload.
+- **Relevant commits:** [YouTube stop gate](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/5f304a190c6439e7fa075424a218fec0fa59a0fa), [authorization binding and locked install](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/8a7dcc01a39e67411d1ee85e6218c615561ba400), [authorization symlink guard](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e274802788f242d02011ec0554922afae23654ad), [cross-workflow serialization](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/63de00c2f883ee9b033af2c6617813fc1267c615), [ledger-bypass prevention](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/131acefacd47d93e3056637b67c768b40c1a3d74), [production path confinement](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/db36c40131a7d3f7c2b574e51b334f089846d73e), [history-path confinement](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/8e67f96d14588394d9cd1e0640509b2c642e7805).
+- **Exact-SHA CI for `8e67f96`:** [automation/security run 40199688490](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40199688490) **PASS** — 250 Node tests, 0 failures, 0 skips; 8 Python tests; clean install, JavaScript syntax/Python compilation; npm audit reports 0 vulnerabilities. [Dashboard browser run 40199688481](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40199688481) **PASS** — 8 Chromium journeys. [Metadata run 40199688430](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40199688430) **PASS**. [Content-quality run 40199688471](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40199688471) **PASS**. [Clean locked-install run 40199685374](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40199685374) **PASS**.
+- **Readiness remains correctly blocked:** [production-readiness run 40199688492](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40199688492) **BLOCKED** on mandatory external/release prerequisites. [Facebook draft workflow 40199688455](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40199688455) was **SKIPPED** on this PR event; it does not prove live Page integration.
+- **Live repository state:** `main` is `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; comparison is **1,074 ahead, 2 behind, 110 changed files**. PR #1 remains open, draft and unmerged. Both branches are `protected=false`; required status checks are not enforced. Full branch-only patch history review remains incomplete; no history-changing reconciliation was performed.
+- **Owner blocker `RDY-C24AE0CF4F1B`:** supplied channel ID `UCSlkuPfHH78oC1o418HV4w` is 23 characters while the validator expects 24. Verify the exact SonicVhibez channel ID through the authorized account; never guess or silently correct it.
 - **Still blocked:** genuine playable Short and long-form exports with verified provenance/licensing; complete manifests and exact-hash human approval; authenticated SonicVhibez identity and complete public/private/unlisted history reconciliation; separately authorized one-shot private upload and independently verified remote receipt; verified Nature Frontiers Page permissions and successful default-branch draft artifact; exhaustive dashboard-control acceptance; crash/concurrency/backup/restore/rollback/deployment/monitoring/emergency-stop drills; complete branch-history review and owner-approved reconciliation.
 - **Safety invariant:** no real upload, live Facebook post, campaign activation, merge or destructive Git operation was performed. Public/unattended YouTube publishing and Facebook live publishing remain disabled; Safari remains inactive. Only approved Selar URL: `https://selar.com/0u19v8u99l`.
 - **Decision: CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED.** Passing CI does not replace remaining software-coverage, account, media, rights, history, recovery, deployment and owner gates.
@@ -97,7 +97,7 @@ No real YouTube upload, public post or live Facebook post was performed. The sol
 
 The live comparison is 896 ahead / 2 behind at the exact test head, with merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. The two base-only commits are file-only test churn: `71578dafc24e5d48173dce3f4e392e18e42aa40e` added `test/restore-facebook-draft-history.test.mjs` (117 lines), and `fa00d28e7f58911482686e4ad69fac9f4701a2e6` removed that same test file. They do not change runtime code. The implementation branch lacks this dedicated test file; owner review should decide whether to reintroduce its cross-run history-restoration coverage as a separately reviewed test. No merge, reset, force-push or history rewrite was performed.
 
-### Current acceptance register
+### Historical acceptance register — superseded by latest verified checkpoint
 
 | Gate | Status | Evidence / next action |
 |---|---|---|
@@ -177,7 +177,7 @@ This is the current dated evidence snapshot. Older checkpoints below are histori
 - Facebook implementation includes research-first draft ideas, authenticated dashboard UI/API, persistent state/audit, duplicate and one-post-per-local-day checks, source/license checksum gates, disclosure/high-impact claim/external-link checks, exact Selar campaign/pillar restrictions, artifact-bound approvals, live Meta scope/Page/task/token verification, gated Graph API scheduled text/photo publishing, image ffprobe/checksum validation, durable attempts, remote refetch and interrupted-attempt reconciliation. It is disabled by default: `publishingEnabled=false`, `dryRun=true`, `FACEBOOK_PUBLISH_ENABLED=NO`. No real Meta account was verified and no Facebook post was published.
 - npm audit remains 4 moderate, 0 high, 0 critical advisories involving `gaxios`, `googleapis`, `googleapis-common`, and `uuid`.
 
-## Current owner-controlled production blockers
+## Historical owner-controlled production blockers — see latest verified checkpoint
 
 1. Securely configure `META_USER_ACCESS_TOKEN`, `META_PAGE_ACCESS_TOKEN`, the exact Page ID in config and `NATURE_FRONTIERS_FACEBOOK_PAGE_ID`; run read-only Meta permission/Page verification and review the returned scopes, Page task, ID and token match.
 2. Keep Facebook publishing kill switches disabled until the owner explicitly authorizes a real test post. Any real scheduled operation requires current human approval, per-operation confirmation, durable attempt record and remote receipt verification.
@@ -214,7 +214,7 @@ This section records evidence from the preceding branch checkpoint; the commit c
 
 # Go-live blockers — SonicVhibez Marketing Machine
 
-## Current publication-spacing control — 2026-10-24
+## Historical publication-spacing acceptance snapshot — 24 October 2026
 
 Tuesday/Saturday cron slots are draft-preparation triggers only, not a publication cadence. Actual uploads are gated by the rolling long-form → long-form → Short cycle, 72 elapsed hours from the latest actual publication, complete remote history reconciliation, and a clear upload-attempt ledger. Public publishing remains disabled.
 
@@ -265,7 +265,7 @@ These are automated/code-level checks, not proof of genuine licence authenticity
 
 
 
-## Current branch checkpoint — 2026-10-24
+## Historical branch checkpoint — 24 October 2026 (superseded)
 
 Branch HEAD at the latest verified documentation checkpoint: `54680587e71b5c84074a2c681ed8e95d919a87fd`. The three PR validation workflows passed on this exact SHA: [automation validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40079578167), [metadata/schedule validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40079578180), and [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40079578198). Each reported 100 passed, 0 failed, 0 skipped. The automation workflow verified `npm ci --ignore-scripts` and Python compilation. The metadata workflow deliberately verifies that production checks fail closed while production metadata is incomplete; it is not a production-readiness pass.
 
@@ -289,7 +289,7 @@ The authoritative configuration and queue use the rolling `long_form → long_fo
 **Evidence freshness note (2026-10-24):** exact tested code SHA `e86f715ee52522964e2864aead890b8bedf94395` passed all three code/test workflows linked at the top of this document (159 Node tests in each, 0 failures/skips; 8 Python safety tests in Automation validation). Older SHAs and counts elsewhere are historical checkpoints only. The Facebook workflow skip is not live default-branch acceptance.
 
 
-## Current release evidence register — 2026-10-24
+## Historical release evidence register — 24 October 2026 (superseded)
 
 This register was prepared from live CI results for code/test candidate `9dd102f9636a5ba71c797cf79c104d3616cbe14e`. It does not turn mocked or local tests into proof of live external integrations. The docs-only commit carrying this register is not represented by these earlier run links; its exact-head checks are listed in PR #1 after they complete.
 
@@ -345,7 +345,7 @@ This addendum supersedes the earlier branch-count and test-file notes above wher
 The above is CI evidence for commit `c507b63abfa336165865ad01cf6354ae50254f04`. Any later code or documentation commit requires its own exact-SHA checks before it can be described as the latest verified head. Production remains **BLOCKED**.
 
 
-## Latest code/test checkpoint — 24 October 2026
+## Historical code/test checkpoint — 24 October 2026
 
 The dashboard now derives draft-preparation slots and cycle/spacing labels from the authoritative backend schedule; the unsupported Thursday option and obsolete hardcoded cadence were removed. The stale Meta-adapter disclaimer was corrected. Regression test: `test/dashboard-ui-contract.test.mjs`.
 
@@ -380,7 +380,7 @@ Still blocked: no verified production media exports/licences/approvals; no live 
 The approval transaction defect is fixed and covered, and the exact candidate's automation, browser, metadata and content-quality checks pass. **The overall project remains IMPLEMENTATION INCOMPLETE; production acceptance is BLOCKED.** Genuine rights-cleared Short and long-form media and completed manifests, final-hash-bound human approval, verified SonicVhibez OAuth/channel identity and complete remote-history reconciliation, explicit authorization for one private upload and verified remote receipt, verified Nature Frontiers Page access and a successful default-branch Facebook draft artifact, isolated backup/restore/interruption/concurrency/rollback drills, full divergent-history review and production deployment verification remain unresolved. Public/unattended YouTube publishing and Facebook live publishing remain disabled; only approved Selar URL is `https://selar.com/0u19v8u99l`; Safari campaigns remain inactive. No real YouTube upload or Facebook post was performed.
 
 
-## Latest verified implementation checkpoint — 25 October 2026
+## Historical implementation checkpoint — 25 October 2026 (superseded by latest verified checkpoint)
 
 **Exact tested application-code SHA:** `6b05beb4461ddf3065f05b56742a306fa4433ec2`. This checkpoint was tested by GitHub Actions on the exact SHA. Documentation-only descendants, if any, do not change the application code; do not describe this as CI for a later source change.
 
