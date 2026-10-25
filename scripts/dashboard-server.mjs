@@ -1091,7 +1091,13 @@ const server = http.createServer(async (req, res) => {
           const artifactFile = resolveRepositoryFile(artifact.path);
           const actualSha = sha256File(artifactFile);
           if (actualSha !== artifact.sha256) return json(res, 409, { error: "Artifact changed after generation: " + artifact.path });
-          const probe = spawnSync("ffprobe", ["-v", "error", "-show_entries", "format=duration:stream=codec_type,width,height", "-of", "json", artifactFile], { encoding: "utf8", timeout: 15_000 });
+          const isShort = job.contentType === "short";
+        const exportValidator = isShort ? "scripts/validate-short-export.mjs" : "scripts/validate-long-form-export.mjs";
+        const exportValidation = spawnSync(process.execPath, [exportValidator, artifactFile], { encoding: "utf8", timeout: isShort ? 180_000 : 300_000 });
+        if (exportValidation.error || exportValidation.status !== 0 || !String(exportValidation.stdout ?? "").includes("PASS:")) {
+          return json(res, 400, { error: "Format-specific media export validation failed; human review remains blocked", publishingEnabled: false });
+        }
+        const probe = spawnSync("ffprobe", ["-v", "error", "-show_entries", "format=duration:stream=codec_type,width,height", "-of", "json", artifactFile], { encoding: "utf8", timeout: 15_000 });
           if (probe.error || probe.status !== 0) return json(res, 503, { error: "ffprobe is unavailable or failed; validation remains blocked" });
           let media;
           try { media = JSON.parse(probe.stdout); } catch { return json(res, 400, { error: "ffprobe returned invalid inspection data" }); }
@@ -1099,7 +1105,6 @@ const server = http.createServer(async (req, res) => {
           const streams = media.streams ?? [];
           const video = streams.find(stream => stream.codec_type === "video");
           const audio = streams.some(stream => stream.codec_type === "audio");
-          const isShort = job.contentType === "short";
           if (!Number.isFinite(duration) || (isShort ? duration < 50 || duration > 60 : duration < 360 || duration > 600)) return json(res, 400, { error: "Artifact duration does not match the scheduled format" });
           const captionSync = spawnSync(process.execPath, ["scripts/validate-caption-sync.mjs", captionsFile, String(duration)], { encoding: "utf8", timeout: 15_000 });
           if (captionSync.error || captionSync.status !== 0 || !String(captionSync.stdout ?? "").includes("PASS:")) {
