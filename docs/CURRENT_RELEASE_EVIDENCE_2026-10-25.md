@@ -1,3 +1,16 @@
+## Exact PR HEAD verification checkpoint — 25 October 2026
+
+- Exact candidate at this checkpoint: `f66928df29c804fa487a6a0d53e0961952b410c1`; `main` remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; comparison at this checkpoint was 1,185 commits ahead, 2 behind, 120 changed files.
+- PR #1 remains open, draft and unmerged.
+- Automation/security [run 40223741160](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40223741160): **PASS** — 276 Node tests, 0 failures; 8 Python tests; npm audit 0 vulnerabilities.
+- Browser E2E [run 40223737527](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40223737527): **PASS** — 9 Chromium journeys, including the new invalid/impossible Facebook idea-date regression.
+- Content quality [run 40223741125](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40223741125), metadata [run 40223741117](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40223741117), and lockfile/locked install [run 40223737473](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40223737473): **PASS**.
+- Production readiness [run 40223741116](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40223741116): **BLOCKED** as required. Retained log evidence confirms human-readable and JSON exit codes are both 2, followed by the explicit production-blocked message. Do not treat the workflow's failure conclusion as a test pass.
+- Facebook draft workflow [run 40223741118](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40223741118): **SKIPPED**, not integration evidence.
+- Latest code changes: readiness prerequisite path/symlink guard; readiness workflow exit-code evidence correction; authenticated Facebook idea endpoint returns 400 for malformed/impossible dates without mutating draft state. The acceptance register records the applicable source/test evidence.
+- Outstanding blockers remain unchanged: cadence approval; genuine rights-cleared final media and human approval; verified SonicVhibez OAuth/channel/history/attempt ledger and one-shot upload authorization; verified Nature Frontiers Page and real draft-only workflow; exact isolated `main` baseline; complete divergent-history review; exhaustive dashboard, recovery, deployment/monitoring/rollback drills; and repository protection/governance.
+- Safety: no uploads, posts, campaign activation, merge or destructive Git operation. Public/unattended YouTube and Facebook live publishing remain disabled; Safari remains inactive.
+
 ## Latest dashboard input-validation checkpoint — 25 October 2026
 
 - Candidate: `8146666ec32d5496dd0af6fb93a79fbd3284bf8f`; exact browser E2E [run 40223472355](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40223472355) **PASS** — 9 Chromium journeys.

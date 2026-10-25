@@ -10,7 +10,8 @@
     "FAIL",
     "BLOCKED_EXTERNAL",
     "NOT_TESTED",
-    "NOT_APPLICABLE"
+    "NOT_APPLICABLE",
+    "SKIPPED"
   ],
   "requirements": [
     {
