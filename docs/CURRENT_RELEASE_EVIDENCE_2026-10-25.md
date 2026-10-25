@@ -1,3 +1,17 @@
+## Verified follow-up checkpoint — 25 October 2026
+
+- Cadence-approval validation hardening is in commits [`cf82332`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/cf82332136c444ef3c57e4e1d1eef9ba9aabae6f), [`95d9dd8`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/95d9dd8c4fb895861bcdfbc4c5ddc12b477990f6), [`630f1fb`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/630f1fbe05efa04ac4b5a470c506f872e75d1f1f). Schedule validation and production readiness now require a supported mode, timezone-aware approval timestamp, non-empty approval reference, and feasible spacing; custom modes must fit their cycle mathematically.
+- Exact candidate tested by the latest workflow set: `564d8b95c9457e13ceb24ff32a1f5faa6de40273`.
+- [Automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215336608): **PASS** — 270 Node tests passed, 0 failed; npm audit reported 0 vulnerabilities; Python safety checks, syntax/compile, campaign and queue validations passed.
+- [Metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215336721): **PASS** — clean `npm ci --ignore-scripts`, 270 Node tests and metadata/schedule/caption checks passed.
+- [Dashboard browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215336587): **PASS** — all 8 real-local-dashboard/backend Chromium tests passed, including persistence across server restart and fail-closed publication controls.
+- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215336624): **PASS**.
+- [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215336580): **BLOCKED** — reports the missing feasible owner-approved cadence decision and other release prerequisites. This failure is expected; it is not a release pass.
+- [Facebook draft workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40215336585): **SKIPPED**, not live integration evidence.
+- These results cover candidate `564d8b9`; any subsequent commit requires its own exact-head CI verification. Public/unattended YouTube publishing, Facebook live publishing and Safari activation remain disabled. No upload or publication occurred.
+
+---
+
 > **Cadence decision blocker — 25 October 2026:** The requested target of two long-form videos plus one Short per week is mathematically incompatible with a 72-hour minimum between consecutive publications: three cyclic gaps require at least 216 hours (9 days), versus 168 hours in a week. `config/weekly-content-plan.json` now records the requested target and `cadenceDecision.status=OWNER_DECISION_REQUIRED`; `npm run validate:schedule` reports the conflict, and production readiness blocks publication until a feasible mode is explicitly owner-approved. Draft-generation triggers are not publication times. Public/unattended publishing remains disabled.
 
 ## Authoritative current checkpoint — 25 October 2026
