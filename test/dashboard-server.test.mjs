@@ -237,3 +237,50 @@ test("dashboard refuses a symlinked persisted state file at startup", async (t) 
   assert.match(logs, /state file must be a regular file/i);
   assert.deepEqual(JSON.parse(fs.readFileSync(outsideFile, "utf8")), { sentinel: "do-not-touch" });
 });
+
+
+test("dashboard refuses a state directory beneath a symlink before creating nested state paths", async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-parent-link-"));
+  const outside = path.join(root, "outside");
+  fs.mkdirSync(outside);
+  const link = path.join(root, "state-link");
+  fs.symlinkSync(outside, link, "dir");
+  const stateDir = path.join(link, "new-state");
+  const port = 18000 + Math.floor(Math.random() * 10000);
+  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: {
+      ...process.env,
+      DASHBOARD_OPERATOR_TOKEN: "test-token-" + "x".repeat(40),
+      DASHBOARD_OPERATOR_ID: "test-owner@example.test",
+      DASHBOARD_STATE_DIR: stateDir,
+      PORT: String(port),
+      DASHBOARD_HOST: "127.0.0.1"
+    },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let logs = "";
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  t.after(() => {
+    if (child.exitCode === null) child.kill("SIGTERM");
+    fs.rmSync(root, { recursive: true, force: true });
+  });
+
+  const result = await new Promise(resolve => {
+    const timer = setTimeout(() => {
+      child.kill("SIGTERM");
+      resolve({ timedOut: true, code: null, signal: "SIGTERM" });
+    }, 3000);
+    child.once("exit", (code, signal) => {
+      clearTimeout(timer);
+      resolve({ timedOut: false, code, signal });
+    });
+  });
+
+  assert.equal(result.timedOut, false, "unsafe startup should fail immediately, not begin serving");
+  assert.notEqual(result.code, 0, "server must refuse the symlinked state ancestor");
+  assert.equal(result.signal, null);
+  assert.match(logs, /symbolic link/i);
+  assert.equal(fs.existsSync(path.join(outside, "new-state")), false,
+    "startup must not create directories through the symlink before rejecting it");
+});
