@@ -6,11 +6,17 @@
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
 
 const [mediaArg = "media/long-form-next.mp4"] = process.argv.slice(2);
-const mediaPath = path.resolve(mediaArg);
-if (!fs.existsSync(mediaPath) || !fs.statSync(mediaPath).isFile() || fs.statSync(mediaPath).size === 0) {
-  console.error("BLOCKED: export file is missing or empty: " + mediaPath);
+let mediaPath;
+try { mediaPath = resolveRegularFileNoSymlinks(mediaArg, process.cwd(), "Long-form export"); }
+catch {
+  console.error("BLOCKED: export file is missing, unsafe, or contains a symbolic link.");
+  process.exit(2);
+}
+if (fs.statSync(mediaPath).size === 0) {
+  console.error("BLOCKED: export file is empty.");
   process.exit(2);
 }
 const probe = spawnSync("ffprobe", [
