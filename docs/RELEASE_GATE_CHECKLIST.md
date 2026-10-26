@@ -384,3 +384,7 @@ Current branch SHA at the code checkpoint: `6b05beb4461ddf3065f05b56742a306fa443
 - [ ] Full human playback review accepts realistic, continuous, non-misleading visuals and accurate narration; synthetic content is disclosed where required.
 - [ ] Short's explicit parent revision/hash and canonical verified parent URL match the approved parent record.
 - [ ] YouTube Studio native Related video association is separately verified and retained as evidence; internal linkage or description URL alone does not satisfy this item.
+
+- [ ] Confirm the renderer does not loop source footage; source duration must cover the narration and strict export duration/decode validation must pass.
+- [ ] Confirm the selected audio profile was applied and actual output MP4 loudness/true peak passed `validate-rendered-audio.mjs`; human listening remains mandatory.
+- [ ] Confirm deterministic framing and subtle colour grade match the recorded seed/edit-plan evidence. Multi-scene timeline composition remains incomplete and must not be represented as implemented.
