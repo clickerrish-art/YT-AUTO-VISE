@@ -80,7 +80,7 @@ test("generation requires substantive research evidence and complete scene direc
     format: "short",
     brief: { topic: "Topic", audience: "Adults", editorialPurpose: "Explain", sources: [source], parentRecord: { contentId: "long-parent", weeklyContentCycleId: "cycle-1", format: "long_form", channel: "SonicVhibez" } },
     fetchImpl: async () => providerResponse(incomplete)
-  }), /requires visualDirection, pacing and soundDesign/);
+  }), /failed measured structural validation: section 1 requires soundDesign/);
 });
 
 
