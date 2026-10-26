@@ -1416,6 +1416,16 @@ const server = http.createServer(async (req, res) => {
           if (!parentArtifact || parentJob.metadataVersion !== job.shortParentRelationship.parentMetadataSha256 || parentJob.humanApproval?.decision !== "APPROVE") {
             return json(res, 409, { error: "Parent media, metadata revision or approval is stale; rebind the Short relationship", publishingEnabled: false });
           }
+          try {
+            if (sha256File(resolveRepositoryFile(parentArtifact.path)) !== parentArtifact.sha256) return json(res, 409, { error: "Parent media hash changed after relationship binding", publishingEnabled: false });
+            if (!parentJob.metadataPath || sha256File(resolveRepositoryFile(parentJob.metadataPath)) !== parentJob.metadataVersion) return json(res, 409, { error: "Parent metadata hash changed after relationship binding", publishingEnabled: false });
+            if (!parentAttempt.receiptPath) return json(res, 409, { error: "Parent upload receipt path is missing", publishingEnabled: false });
+            const receiptFile = resolveRepositoryFile(path.relative(root, path.join(path.resolve(root, process.env.UPLOAD_LOG_DIR ?? "run-logs"), parentAttempt.receiptPath)));
+            const receipt = JSON.parse(fs.readFileSync(receiptFile, "utf8"));
+            if (receipt.jobId !== parentJob.id || receipt.videoId !== parentAttempt.remoteVideoId || receipt.channelTitle !== "SonicVhibez" || receipt.privacyStatus !== "private" || receipt.remoteStatusVerified !== true) return json(res, 409, { error: "Parent upload receipt no longer proves the exact approved remote parent", publishingEnabled: false });
+          } catch {
+            return json(res, 409, { error: "Parent media, metadata or receipt evidence is missing or unsafe; rebind after reconciliation", publishingEnabled: false });
+          }
         }
         const review = createReviewDecision({ artifact, rightsEvidence, metadataVersion, reviewer, decision: body.decision, reason: body.reason ?? "", shortParentRelationshipSha256: shortParentRelationshipSha256Value });
         if (body.decision === "APPROVE") {
