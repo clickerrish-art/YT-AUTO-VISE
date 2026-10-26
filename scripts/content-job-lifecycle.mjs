@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { assertShortParentRelationship, shortParentRelationshipSha256 } from "./short-parent-relationship.mjs";
 
 export const JOB_STATES = Object.freeze([
   "QUEUED", "GENERATING", "GENERATED", "VALIDATING", "BLOCKED",
@@ -112,6 +113,11 @@ export function approveContentJobForPrivateUpload(job, review, now = new Date().
   if (job.validationResults?.passed !== true) throw new Error("Passing technical validation is required before approval");
   if (!review || review.decision !== "APPROVE" || !review.reviewer || !review.artifactSha256 || !review.metadataVersion || !review.rightsEvidenceSha256) {
     throw new Error("Complete artifact-bound approval evidence is required");
+  }
+  if (job.contentType === "short") {
+    assertShortParentRelationship(job.shortParentRelationship, { childContentId: job.id, childMediaSha256: review.artifactSha256, childMetadataSha256: review.metadataVersion, channelId: job.verifiedChannelId });
+    const relationshipDigest = shortParentRelationshipSha256(job.shortParentRelationship);
+    if (review.shortParentRelationshipSha256 !== relationshipDigest) throw new Error("Approval does not bind the current Short-to-parent relationship");
   }
   const artifact = (job.outputArtifacts ?? []).find(item => item.path === review.artifactPath && item.sha256 === review.artifactSha256);
   if (!artifact) throw new Error("Approval artifact checksum does not match a generated job artifact");
