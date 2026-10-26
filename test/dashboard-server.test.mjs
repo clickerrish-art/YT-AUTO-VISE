@@ -428,3 +428,9 @@ test("dashboard startup repairs legacy state that had an active Safari campaign"
   assert.equal(repaired.disclosureText, "");
   assert.equal(Object.hasOwn(repaired, "pendingDestinationUrl"), false);
   assert.equal(Object.hasOwn(repaired, "pendingDisclosureText"), false);
+  assert.equal(Object.hasOwn(repaired, "pendingDestinationVersion"), false);
+  assert.equal(Object.hasOwn(repaired, "approval"), false);
+  const durable = JSON.parse(fs.readFileSync(stateFile, "utf8"));
+  assert.equal(durable.campaigns.find(campaign => campaign.type === "safari_affiliate").status, "INACTIVE");
+  assert.ok(durable.audit.some(event => event.action === "SAFARI_CAMPAIGN_POLICY_ENFORCED"));
+});
