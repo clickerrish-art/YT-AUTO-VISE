@@ -26,7 +26,8 @@
     "facebook:draft:daily": "node scripts/generate-facebook-daily-draft.mjs",
     "facebook:intake:autonomous": "node scripts/facebook-content-intake.mjs",
     "facebook:publish:autonomous": "node scripts/facebook-autonomous-publisher.mjs",
-    "test:browser": "playwright test --config=playwright.config.mjs"
+    "test:browser": "playwright test --config=playwright.config.mjs",
+    "validate:content-quality": "node scripts/validate-content-quality.mjs"
   },
   "engines": {
     "node": ">=22"
