@@ -532,3 +532,52 @@ test("Short-parent relationship workflow is exposed and incomplete binding fails
   );
   expect(after.publishingEnabled).toBe(false);
 });
+
+test("Short-parent dashboard submits the explicit relationship payload and surfaces backend blockers", async ({ page }) => {
+  const headers = { "x-operator-token": operatorToken };
+  await page.route("**/api/jobs/parent-relationship", async route => {
+    const request = route.request();
+    expect(request.method()).toBe("POST");
+    const payload = request.postDataJSON();
+    expect(payload).toMatchObject({
+      jobId: "child-short-fixture",
+      parentJobId: "parent-long-fixture",
+      childMediaPath: "artifacts/child-short.mp4",
+      parentMediaPath: "artifacts/parent-long.mp4",
+      parentQualityEvidencePath: "content/parent-quality-evidence.json",
+      sourceSegments: [{ sceneId: "scene-actual-01", startSeconds: 2, endSeconds: 14 }],
+      confirmRelationshipReviewed: true,
+      relationshipReviewNotes: "The Short follows the same verified subject and narrative."
+    });
+    await route.fulfill({
+      status: 409,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "Parent metadata revision is stale; relationship cannot be bound" })
+    });
+  });
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  // The test fixture supplies selectable IDs only at the browser boundary. The
+  // backend response is deliberately blocked so this journey cannot create state.
+  await page.locator("#relationshipChildJob").evaluate(el => el.add(new Option("fixture child", "child-short-fixture")));
+  await page.locator("#relationshipParentJob").evaluate(el => el.add(new Option("fixture parent", "parent-long-fixture")));
+  await page.locator("#relationshipChildJob").selectOption("child-short-fixture");
+  await page.locator("#relationshipParentJob").selectOption("parent-long-fixture");
+  await page.locator("#relationshipChildMediaPath").fill("artifacts/child-short.mp4");
+  await page.locator("#relationshipParentMediaPath").fill("artifacts/parent-long.mp4");
+  await page.locator("#parentQualityEvidencePath").fill("content/parent-quality-evidence.json");
+  await page.locator("#relationshipSourceSegments").fill('[{"sceneId":"scene-actual-01","startSeconds":2,"endSeconds":14}]');
+  await page.locator("#relationshipReviewNotes").fill("The Short follows the same verified subject and narrative.");
+  await page.locator("#confirmRelationshipReviewed").check();
+  await page.getByRole("button", { name: "Validate and save Short-parent relationship" }).click();
+
+  await expect(page.locator("#parentrelationshipresult")).toContainText("Parent metadata revision is stale");
+  const afterResponse = await page.request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  expect((await afterResponse.json()).publishingEnabled).toBe(false);
+});
+
