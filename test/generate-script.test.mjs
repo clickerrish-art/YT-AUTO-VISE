@@ -65,3 +65,20 @@ test("provider failure fails closed without returning a publishable script", asy
     fetchImpl: async () => providerResponse({}, 503)
   }), /HTTP 503/);
 });
+
+test("generation requires substantive research evidence and complete scene direction", async () => {
+  await assert.rejects(() => generateScript({
+    format: "short",
+    brief: { topic: "Topic", audience: "Adults", editorialPurpose: "Explain", sources: [{ id: "source-1", title: "Paper", url: source.url }] },
+    fetchImpl: async () => providerResponse(script)
+  }), /substantive evidenceSummary/);
+  const incomplete = {
+    ...script,
+    sections: script.sections.map((section, index) => index === 0 ? { ...section, soundDesign: "" } : section)
+  };
+  await assert.rejects(() => generateScript({
+    format: "short",
+    brief: { topic: "Topic", audience: "Adults", editorialPurpose: "Explain", sources: [source], parentRecord: { contentId: "long-parent", weeklyContentCycleId: "cycle-1", format: "long_form", channel: "SonicVhibez" } },
+    fetchImpl: async () => providerResponse(incomplete)
+  }), /requires visualDirection, pacing and soundDesign/);
+});
