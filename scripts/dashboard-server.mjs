@@ -1083,8 +1083,19 @@ const server = http.createServer(async (req, res) => {
         if (job.authoring?.fingerprint === fingerprint && job.authoring.status === "AWAITING_HUMAN_EDITORIAL_REVIEW") {
           return json(res, 200, { job, reused: true, publishable: false, publishingEnabled: false });
         }
+        if (job.authoring?.status === "AWAITING_HUMAN_EDITORIAL_REVIEW" && job.authoring.fingerprint !== fingerprint) {
+          return json(res, 409, { error: "A different script brief already has a persisted review draft; create a new job/version rather than silently replacing it", publishable: false });
+        }
         if (job.authoring?.status === "GENERATING") {
-          return json(res, 409, { error: "Authoring is already in progress or was interrupted; inspect recovery state before retrying", recoveryRequired: true });
+          const ageMs = Date.now() - Date.parse(job.authoring.requestedAt);
+          if (Number.isFinite(ageMs) && ageMs > 10 * 60_000) {
+            job.authoring = { ...job.authoring, status: "RECOVERY_REQUIRED", recoveryRequired: true, recoveryDetectedAt: new Date().toISOString(), publishable: false };
+            state.jobs[index] = job;
+            state.audit.push({ id: crypto.randomUUID(), action: "SCRIPT_AUTHORING_RECOVERY_REQUIRED", jobId: job.id, fingerprint: job.authoring.fingerprint, at: job.authoring.recoveryDetectedAt, actor: operatorId, reason: "Prior authoring attempt exceeded the recovery threshold; no automatic retry was performed" });
+            saveState(state);
+            return json(res, 409, { error: "Prior authoring attempt appears interrupted; inspect the provider and persisted job before creating a new job", recoveryRequired: true, job });
+          }
+          return json(res, 409, { error: "Authoring is already in progress; duplicate provider calls are blocked", recoveryRequired: false });
         }
         if (job.state !== "QUEUED") return json(res, 409, { error: "Only a queued job can start script authoring" });
         job.authoring = { status: "GENERATING", fingerprint, requestedAt: new Date().toISOString(), requestedBy: operatorId, publishable: false, editorialReviewRequired: true };
