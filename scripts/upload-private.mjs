@@ -101,9 +101,12 @@ export function acquireExclusiveUploadLock(lockPath, { jobId, now = () => new Da
     }
   };
 }
-export function validateUploadApproval(approval, { jobId, artifactSha256, metadataVersion, channelId }) {
+export function validateUploadApproval(approval, { jobId, artifactSha256, metadataVersion, channelId, contentType }) {
   if (approval?.decision !== "APPROVE" || approval.jobId !== jobId) throw new Error("approval decision and job ID must match this upload");
-  if ((approval.contentType ?? "long_form") === "short") {
+  if (contentType && approval.contentType && contentType !== approval.contentType) throw new Error("approval content format does not match upload metadata");
+  const approvedFormat = contentType ?? approval.contentType ?? "long_form";
+  if (approvedFormat === "short") {
+    if (approval.contentType !== "short") throw new Error("Short upload approval must explicitly identify contentType=short");
     assertShortParentRelationship(approval.shortParentRelationship, { childContentId: jobId, childMediaSha256: artifactSha256, childMetadataSha256: metadataVersion, channelId });
     const relationshipSha256 = shortParentRelationshipSha256(approval.shortParentRelationship);
     if (approval.shortParentRelationshipSha256 !== relationshipSha256) throw new Error("approval does not bind the exact Short-to-parent relationship");
@@ -201,7 +204,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (metadata.productUrl !== APPROVED_SELAR_URL) throw new Error("metadata must use the exact approved Selar destination");
   if (metadata.rightsConfirmed !== true || metadata.complianceReviewed !== true) throw new Error("metadata rights and compliance gates must be explicitly reviewed");
   if (metadata.status !== "READY_FOR_PRIVATE_UPLOAD") throw new Error("metadata status must be READY_FOR_PRIVATE_UPLOAD");
-  validateUploadApproval(approval, { jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256, channelId: env.SONICVHIBEZ_CHANNEL_ID });
+  validateUploadApproval(approval, { jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256, channelId: env.SONICVHIBEZ_CHANNEL_ID, contentType: metadata.contentType ?? metadata.format });
   const relatedArtifacts = approval.relatedArtifacts;
   verifyRetainedRightsEvidence(approval, youtubeFactory ? {} : { repositoryRoot: process.cwd() });
   const uploadedArtifactIsBound = relatedArtifacts.some(item => path.resolve(item.path) === safeVideoPath && item.sha256 === videoSha256);
