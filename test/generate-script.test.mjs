@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { generateScript, validateGenerationEndpoint } from "../scripts/generate-script.mjs";
 
-const source = { id: "source-1", title: "Field ecology paper", url: "https://research.example.org/paper", evidenceLocator: "Results section, paragraphs 2–4", evidenceSummary: "The supplied research describes observation conditions and explains why repeated observations are needed before generalizing animal behavior." };
+const source = { id: "source-1", title: "Field ecology paper", url: "https://wildlife-research.org/paper", evidenceLocator: "Results section, paragraphs 2–4", evidenceSummary: "The supplied research describes observation conditions and explains why repeated observations are needed before generalizing animal behavior." };
 const narration = [
   "A wildlife encounter can look simple from a distance, but the evidence often tells a more careful story. The first question is not which animal is strongest; it is what each animal is doing in its own habitat.",
   "Field observations can describe behavior under specific conditions, but one observation cannot establish a universal rule. Researchers compare repeated observations, environmental context, and competing explanations before drawing conclusions.",
@@ -92,5 +92,19 @@ test("malformed, duplicate and placeholder research sources fail closed before p
   await assert.rejects(() => generateScript({ ...base, brief: { ...base.brief, sources: [{ title: "Missing URL" }] }, fetchImpl }), /requires a non-empty url/);
   await assert.rejects(() => generateScript({ ...base, brief: { ...base.brief, sources: [{ ...source, url: "http://example.org/research", evidenceSummary: "A sufficiently long evidence summary that should not permit insecure URLs.", evidenceLocator: "section 1" }] }, fetchImpl }), /public HTTPS URL/);
   await assert.rejects(() => generateScript({ ...base, brief: { ...base.brief, sources: [source, { ...source }] }, fetchImpl }), /IDs must be unique/);
+  for (const url of [
+    "https://example.com/paper",
+    "https://research.example.org/paper",
+    "https://127.0.0.1/paper",
+    "https://localhost/paper",
+    "https://internal.invalid/paper",
+    "https://research.test/paper"
+  ]) {
+    await assert.rejects(() => generateScript({
+      ...base,
+      brief: { ...base.brief, sources: [{ ...source, url }] },
+      fetchImpl
+    }), /non-placeholder public HTTPS URL/);
+  }
   assert.equal(calls, 0, "provider must not be called for malformed research inputs");
 });
