@@ -144,8 +144,14 @@ export function localDateTimeToIso(date, time = "17:00", timeZone = DEFAULT_SCHE
   }
   const [year, month, day] = date.split("-").map(Number);
   const [hour, minute] = time.split(":").map(Number);
-  const wallClockAsUtc = Date.UTC(year, month - 1, day, hour, minute, 0);
-  if (new Date(wallClockAsUtc).toISOString().slice(0, 10) !== date) throw new Error("date must be a real calendar date");
+  // Date.UTC treats years 0–99 as 1900–1999. Build the calendar instant
+  // with setUTCFullYear so strict YYYY-MM-DD validation handles all four-digit
+  // years consistently instead of silently normalizing early years by +1900.
+  const calendarDate = new Date(0);
+  calendarDate.setUTCFullYear(year, month - 1, day);
+  calendarDate.setUTCHours(hour, minute, 0, 0);
+  const wallClockAsUtc = calendarDate.getTime();
+  if (!Number.isFinite(wallClockAsUtc) || new Date(wallClockAsUtc).toISOString().slice(0, 10) !== date) throw new Error("date must be a real calendar date");
   const formatter = new Intl.DateTimeFormat("en-CA", {
     timeZone, year: "numeric", month: "2-digit", day: "2-digit",
     hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23"
