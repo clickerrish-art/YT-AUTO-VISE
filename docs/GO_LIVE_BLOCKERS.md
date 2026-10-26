@@ -443,3 +443,8 @@ Current branch SHA at the code checkpoint: `6b05beb4461ddf3065f05b56742a306fa443
 The renderers now require `qualityEvidencePath` and run the content-quality evidence validator before FFmpeg. Missing script structure/source references, placeholder rights evidence, provenance hash mismatches, non-reproducible edit plans, unverified audio measurements, missing human editorial review, or an invalid Short parent relationship block rendering. These checks are evidence validation only; they do not independently prove licence authenticity or visual realism.
 
 For Shorts, the internal parent and canonical parent URL are separate from YouTube Studio's native Related video setting. That native setting remains a manual verification gate and must not be marked `VERIFIED` without a dated artifact showing the child Short ID and intended parent video ID. Public/unattended publishing remains disabled.
+
+
+## 2026-10-26 — render limitations
+
+The Short and long-form renderers no longer loop source footage to manufacture target duration. They apply seed-bound framing/subtle bounded colour grading and selected narration audio filters, then measure the actual output audio loudness and true peak before success. These code gates passed automated tests on source/test SHA `26785f59e8fe600d7db73c261148f38dee627c83`. The renderer still accepts a single footage input rather than composing a complete multi-scene storyboard. Genuine multi-scene timeline/transition composition, actual production media, full human playback and verified rights evidence remain unresolved; do not call the production pipeline fully complete.
