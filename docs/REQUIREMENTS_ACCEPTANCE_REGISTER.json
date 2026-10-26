@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-26T14:25:00+02:00",
-  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. Current source/test checkpoint 2686612d9982e0094cd25759e9a73fe466585634: 280 Node tests and 8 Python safety tests passed; npm audit reported 0 vulnerabilities; real-dashboard browser E2E passed 10 Chromium journeys; isolated main/candidate baseline passed for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 2686612d9982e0094cd25759e9a73fe466585634; metadata and content quality passed. Production readiness remains BLOCKED on real owner-controlled prerequisites; Facebook draft workflow was SKIPPED. New script-generation provider commits 1a393a652fd89bf1516b61a3ad1be74f73fbf79b, 6182af1255ecf780b8ffd507eee9bc458136a33e, 14bc3daf8faaade5d79275cd8c9b32f56f340d5a and 12c089305be633d12db29172f4e531d2417d7ad4 are awaiting exact-HEAD CI confirmation; do not infer PASS from prior SHA results. Latest generator test checkpoint 12c089305be633d12db29172f4e531d2417d7ad4 failed automated Node test workflows because negative-path Short tests omitted the mandatory explicit parent. Test fixture correction is committed at ebbf799d29479c8e549ebb75617eb024a5d15ca3 and redirect hardening at dae5eb43889f6870672621937914ef7595a04d2c, but fresh CI has not been returned for those later commits. Do not mark latest code as tested. Follow-up CI on exact application-code SHA dae5eb43889f6870672621937914ef7595a04d2c passed: 304 Node tests, 8 Python tests, npm audit zero vulnerabilities, 10 browser tests, metadata/content-quality workflows and isolated baseline. Production readiness remains blocked and Facebook draft remains skipped. Latest exact test SHA 684c262169bd6bfde131e5380ead4128b19372bf passed automation/security (305 Node tests, 8 Python tests, npm audit 0), content-quality, metadata, 10 browser E2E tests and isolated baseline. Readiness remains blocked; Facebook workflow skipped.",
+  "recordedAt": "2026-10-26T11:55:00+02:00",
+  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. Current source/test checkpoint 2686612d9982e0094cd25759e9a73fe466585634: 280 Node tests and 8 Python safety tests passed; npm audit reported 0 vulnerabilities; real-dashboard browser E2E passed 10 Chromium journeys; isolated main/candidate baseline passed for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 2686612d9982e0094cd25759e9a73fe466585634; metadata and content quality passed. Production readiness remains BLOCKED on real owner-controlled prerequisites; Facebook draft workflow was SKIPPED. New script-generation provider commits 1a393a652fd89bf1516b61a3ad1be74f73fbf79b, 6182af1255ecf780b8ffd507eee9bc458136a33e, 14bc3daf8faaade5d79275cd8c9b32f56f340d5a and 12c089305be633d12db29172f4e531d2417d7ad4 are awaiting exact-HEAD CI confirmation; do not infer PASS from prior SHA results. Latest generator test checkpoint 12c089305be633d12db29172f4e531d2417d7ad4 failed automated Node test workflows because negative-path Short tests omitted the mandatory explicit parent. Test fixture correction is committed at ebbf799d29479c8e549ebb75617eb024a5d15ca3 and redirect hardening at dae5eb43889f6870672621937914ef7595a04d2c, but fresh CI has not been returned for those later commits. Do not mark latest code as tested. Follow-up CI on exact application-code SHA dae5eb43889f6870672621937914ef7595a04d2c passed: 304 Node tests, 8 Python tests, npm audit zero vulnerabilities, 10 browser tests, metadata/content-quality workflows and isolated baseline. Production readiness remains blocked and Facebook draft remains skipped. Latest exact test SHA 684c262169bd6bfde131e5380ead4128b19372bf passed automation/security (305 Node tests, 8 Python tests, npm audit 0), content-quality, metadata, 10 browser E2E tests and isolated baseline. Readiness remains blocked; Facebook workflow skipped. Latest exact test SHA a912d3c724195fb1f3ca823d186cddf8b9b4f984: automation/security PASS (306 Node tests, 8 Python safety tests, npm audit 0 vulnerabilities), content quality PASS, metadata PASS, dashboard E2E PASS (10 tests), isolated baseline PASS; production readiness BLOCKED and Facebook daily draft SKIPPED. This SHA includes strict validation of research source objects, HTTPS URLs, placeholder URLs, embedded credentials, unique IDs and source count.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -533,22 +533,31 @@
     }
   ],
   "currentCheckpoint": {
-    "assessedSourceTestSha": "e65e859e44f254edddb735def44ca1b8095ab627",
-    "mainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
-    "mergeBase": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "branchAhead": 1297,
-    "branchBehind": 2,
-    "changedFiles": 139,
-    "evidence": {
-      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980",
-      "browserE2E": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971984",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971993",
-      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284972151",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284972016",
-      "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284972044",
-      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284972048"
-    },
+    "testedSha": "a912d3c724195fb1f3ca823d186cddf8b9b4f984",
+    "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
+    "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
+    "aheadBy": 1322,
+    "behindBy": 2,
+    "changedFiles": 141,
+    "prState": "open",
+    "draft": true,
+    "merged": false,
     "verdict": "CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED",
-    "note": "Source/test SHA e65e859e44f254edddb735def44ca1b8095ab627 has 300 Node tests passing, 8 Python safety tests passing, zero npm audit vulnerabilities, 10 Chromium browser tests passing, and a passing isolated main/candidate baseline. The current documentation tree records the source/test checkpoint and exact workflow links. Re-fetch the live PR head and verify its exact-HEAD CI after any subsequent commit. Production readiness remains blocked; full multi-scene storyboard composition, automated prompt workflow integration, complete dashboard control matrix, branch-only history review, recovery/deployment drills and real production prerequisites remain unresolved."
+    "ci": {
+      "automationSecurity": "PASS",
+      "nodeTests": 306,
+      "pythonTests": 8,
+      "npmAuditVulnerabilities": 0,
+      "contentQuality": "PASS",
+      "metadata": "PASS",
+      "dashboardE2e": "PASS (10 tests)",
+      "isolatedBaseline": "PASS",
+      "productionReadiness": "BLOCKED",
+      "facebookDraftWorkflow": "SKIPPED"
+    },
+    "implementationCommits": [
+      "3dbccd19584cb9da81e646cb9c34a65184fcd47b",
+      "a912d3c724195fb1f3ca823d186cddf8b9b4f984"
+    ]
   }
 }
