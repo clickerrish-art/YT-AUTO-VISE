@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-26T14:15:00+02:00",
-  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. Current source/test checkpoint 2686612d9982e0094cd25759e9a73fe466585634: 280 Node tests and 8 Python safety tests passed; npm audit reported 0 vulnerabilities; real-dashboard browser E2E passed 10 Chromium journeys; isolated main/candidate baseline passed for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 2686612d9982e0094cd25759e9a73fe466585634; metadata and content quality passed. Production readiness remains BLOCKED on real owner-controlled prerequisites; Facebook draft workflow was SKIPPED. New script-generation provider commits 1a393a652fd89bf1516b61a3ad1be74f73fbf79b, 6182af1255ecf780b8ffd507eee9bc458136a33e, 14bc3daf8faaade5d79275cd8c9b32f56f340d5a and 12c089305be633d12db29172f4e531d2417d7ad4 are awaiting exact-HEAD CI confirmation; do not infer PASS from prior SHA results. Latest generator test checkpoint 12c089305be633d12db29172f4e531d2417d7ad4 failed automated Node test workflows because negative-path Short tests omitted the mandatory explicit parent. Test fixture correction is committed at ebbf799d29479c8e549ebb75617eb024a5d15ca3 and redirect hardening at dae5eb43889f6870672621937914ef7595a04d2c, but fresh CI has not been returned for those later commits. Do not mark latest code as tested. Follow-up CI on exact application-code SHA dae5eb43889f6870672621937914ef7595a04d2c passed: 304 Node tests, 8 Python tests, npm audit zero vulnerabilities, 10 browser tests, metadata/content-quality workflows and isolated baseline. Production readiness remains blocked and Facebook draft remains skipped.",
+  "recordedAt": "2026-10-26T14:25:00+02:00",
+  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. Current source/test checkpoint 2686612d9982e0094cd25759e9a73fe466585634: 280 Node tests and 8 Python safety tests passed; npm audit reported 0 vulnerabilities; real-dashboard browser E2E passed 10 Chromium journeys; isolated main/candidate baseline passed for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 2686612d9982e0094cd25759e9a73fe466585634; metadata and content quality passed. Production readiness remains BLOCKED on real owner-controlled prerequisites; Facebook draft workflow was SKIPPED. New script-generation provider commits 1a393a652fd89bf1516b61a3ad1be74f73fbf79b, 6182af1255ecf780b8ffd507eee9bc458136a33e, 14bc3daf8faaade5d79275cd8c9b32f56f340d5a and 12c089305be633d12db29172f4e531d2417d7ad4 are awaiting exact-HEAD CI confirmation; do not infer PASS from prior SHA results. Latest generator test checkpoint 12c089305be633d12db29172f4e531d2417d7ad4 failed automated Node test workflows because negative-path Short tests omitted the mandatory explicit parent. Test fixture correction is committed at ebbf799d29479c8e549ebb75617eb024a5d15ca3 and redirect hardening at dae5eb43889f6870672621937914ef7595a04d2c, but fresh CI has not been returned for those later commits. Do not mark latest code as tested. Follow-up CI on exact application-code SHA dae5eb43889f6870672621937914ef7595a04d2c passed: 304 Node tests, 8 Python tests, npm audit zero vulnerabilities, 10 browser tests, metadata/content-quality workflows and isolated baseline. Production readiness remains blocked and Facebook draft remains skipped. Latest exact test SHA 684c262169bd6bfde131e5380ead4128b19372bf passed automation/security (305 Node tests, 8 Python tests, npm audit 0), content-quality, metadata, 10 browser E2E tests and isolated baseline. Readiness remains blocked; Facebook workflow skipped.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -34,13 +34,13 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288075144",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288074937",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288074988",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288075040"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288463303",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288463345",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288463446",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288463382"
       ],
-      "nextAction": "Repeat exact-SHA checks after any subsequent application-code change. The documentation descendants do not change the tested application code. Production readiness remains blocked and the Facebook workflow is skipped.",
-      "assessmentCommitSha": "dae5eb43889f6870672621937914ef7595a04d2c",
+      "nextAction": "Repeat exact-SHA checks after substantive application-code changes. This pass is code acceptance evidence only; it does not clear production prerequisites.",
+      "assessmentCommitSha": "684c262169bd6bfde131e5380ead4128b19372bf",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
     {
@@ -50,12 +50,12 @@
       "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288074935",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288463510",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fa00d28e7f58911482686e4ad69fac9f4701a2e6",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/dae5eb43889f6870672621937914ef7595a04d2c"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/684c262169bd6bfde131e5380ead4128b19372bf"
       ],
-      "nextAction": "Repeat if main advances or substantive code changes; the isolated comparison covers only its recorded install, Node and applicable Python suites.",
-      "assessmentCommitSha": "dae5eb43889f6870672621937914ef7595a04d2c",
+      "nextAction": "Repeat if main advances or after substantive code changes; baseline covers only commands documented by the isolated workflow.",
+      "assessmentCommitSha": "684c262169bd6bfde131e5380ead4128b19372bf",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
     {
