@@ -1244,6 +1244,13 @@ const server = http.createServer(async (req, res) => {
         if (sha256File(parentMediaFile) !== parentArtifact.sha256) return json(res, 409, { error: "Parent media hash changed; relationship cannot be bound" });
         const parentMetadataFile = resolveRepositoryFile(parentJob.metadataPath);
         if (sha256File(parentMetadataFile) !== parentJob.metadataVersion) return json(res, 409, { error: "Parent metadata revision is stale; relationship cannot be bound" });
+        if (!child.metadataPath) return json(res, 409, { error: "Short metadata path is required before parent binding" });
+        const childMetadataFile = resolveRepositoryFile(child.metadataPath);
+        if (sha256File(childMetadataFile) !== child.metadataVersion) return json(res, 409, { error: "Short metadata revision is stale; relationship cannot be bound" });
+        const childMetadata = JSON.parse(fs.readFileSync(childMetadataFile, "utf8"));
+        if (childMetadata.parentContentId !== parentJob.id || childMetadata.parentVideoId !== parentReceipt.videoId || childMetadata.parentVideoUrl !== "https://www.youtube.com/watch?v=" + parentReceipt.videoId) {
+          return json(res, 409, { error: "Short metadata must explicitly reference this exact parent content ID, verified remote ID and canonical URL before binding" });
+        }
         const reviewer = operatorId;
         const relationship = {
           childContentId: child.id,
