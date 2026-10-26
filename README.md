@@ -303,3 +303,17 @@ Current branch SHA at the code checkpoint: `6b05beb4461ddf3065f05b56742a306fa443
 
 ### Remaining release gates
 **Code acceptance is PARTIALLY VERIFIED, not fully accepted. Production acceptance is BLOCKED.** The current test suite and three browser tests do not establish every visible control/API route or all recovery drills. Genuine rights-cleared Short and long-form media, final manifests and validation reports, human playback and hash-bound approval, verified SonicVhibez OAuth/channel identity and complete remote-history reconciliation, explicit authorization for one private upload and verified remote receipt, verified Nature Frontiers Page access and successful default-branch Facebook draft artifact, isolated backup/restore/interruption/concurrency/rollback drills, complete branch-history review and actual deployment/monitoring verification remain outstanding. No real YouTube upload or Facebook post was performed. Public/unattended YouTube publishing and Facebook live publishing remain disabled. Only approved Selar destination: `https://selar.com/0u19v8u99l`; Safari campaigns remain inactive.
+
+
+## Evidence-bound content quality gate (2026-10-26)
+
+Both renderers now require a separate `qualityEvidencePath` in their render manifest. Run the gate explicitly with:
+
+```sh
+npm run validate:content-quality -- content/long-form-quality-evidence.json long_form
+npm run validate:content-quality -- content/short-quality-evidence.json short
+```
+
+The evidence JSON must bind the script's measured word count/sections/claim sources and similarity-review record, exact footage bytes to provenance SHA-256, a deterministic edit plan and seed, measured audio report and narration bytes, and an approving human editorial review. Short evidence must also bind an explicit approved long-form parent, its revision and media hash, the verified remote parent video ID and the canonical watch URL. The native YouTube Related video setting is a separate Studio verification; an internal relationship or description URL does not prove that setting.
+
+The validator blocks placeholders and mismatched files; it does not prove licence authenticity, guarantee originality, assess animal realism automatically, or replace a real full-playback/factual review. Keep public/unattended publishing disabled. See `scripts/content-quality-gates.mjs`, `scripts/validate-content-quality.mjs`, and `test/validate-content-quality.test.mjs`.
