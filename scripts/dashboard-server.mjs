@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 import { spawn, spawnSync } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
 import { generateScript } from "./generate-script.mjs";
-import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence, validateConfiguredSonicVhibezChannel, validateParentReceiptTitle } from "./short-parent-relationship.mjs";
+import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence, validateConfiguredSonicVhibezChannel, validateParentReceiptTitle, parseShortMetadataJson } from "./short-parent-relationship.mjs";
 import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
@@ -1274,8 +1274,8 @@ const server = http.createServer(async (req, res) => {
         const childMetadataFile = resolveRepositoryFile(child.metadataPath);
         if (sha256File(childMetadataFile) !== child.metadataVersion) return json(res, 409, { error: "Short metadata revision is stale; relationship cannot be bound" });
         let childMetadata;
-        try { childMetadata = JSON.parse(fs.readFileSync(childMetadataFile, "utf8")); }
-        catch { return json(res, 409, { error: "Short metadata is invalid JSON; relationship cannot be bound" }); }
+        try { childMetadata = parseShortMetadataJson(fs.readFileSync(childMetadataFile, "utf8")); }
+        catch { return json(res, 409, { error: "Short metadata is invalid JSON or not a JSON object; relationship cannot be bound" }); }
         if (childMetadata.parentContentId !== parentJob.id || childMetadata.parentVideoId !== parentReceipt.videoId || childMetadata.parentVideoUrl !== "https://www.youtube.com/watch?v=" + parentReceipt.videoId) {
           return json(res, 409, { error: "Short metadata must explicitly reference this exact parent content ID, verified remote ID and canonical URL before binding" });
         }
