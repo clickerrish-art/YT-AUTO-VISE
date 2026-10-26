@@ -50,6 +50,7 @@ export function createReviewDecision(input, now = new Date().toISOString()) {
     artifactSha256: input.artifact.sha256,
     relatedArtifacts,
     metadataVersion: input.metadataVersion,
+    shortParentRelationshipSha256: input.shortParentRelationshipSha256 ?? null,
     rightsEvidenceSha256: input.decision === "APPROVE"
       ? crypto.createHash("sha256").update(JSON.stringify(input.rightsEvidence)).digest("hex")
       : null,
