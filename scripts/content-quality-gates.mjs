@@ -56,6 +56,12 @@ export function validateShortParentRelationship(short, parent, {
   return { valid: errors.length === 0, errors, canonicalUrl: canonicalUrl || null, parentYouTubeVideoId: nonempty(remoteId) ? remoteId : null };
 }
 
+/** Publication-stage gate: the native YouTube Related video association must be independently checked in Studio. */
+export function validateShortPublicationRelationship(short, parent, options = {}) {
+  const result = validateShortParentRelationship(short, parent, { ...options, requireNativeRelatedVideoVerification: true });
+  return { ...result, stage: "PUBLICATION" };
+}
+
 /**
  * Deterministic, non-evasive variation plan. The seed changes editorial choices,
  * not provenance, facts, rights restrictions, or source identities.
