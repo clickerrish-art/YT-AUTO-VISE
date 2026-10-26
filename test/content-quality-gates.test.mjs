@@ -99,7 +99,7 @@ test("asset provenance requires traceable origin, hash, commercial permission an
 });
 
 test("script-depth gate measures words and requires sections, claim sources and similarity evidence", () => {
-  const sectionNarrations = Array.from({ length: 5 }, (_, i) => Array.from({ length: 160 }, (_, j) => "word" + (i * 160 + j)).join(" "));
+  const sectionNarrations = Array.from({ length: 5 }, (_, i) => Array.from({ length: 200 }, (_, j) => "word" + (i * 200 + j)).join(" "));
   const narration = sectionNarrations.join("\n\n");
   const sections = sectionNarrations.map((sectionNarration, i) => ({
     heading: "Section " + i, purpose: "Advance explanation " + i, narration: sectionNarration,
@@ -108,18 +108,23 @@ test("script-depth gate measures words and requires sections, claim sources and 
   const script = {
     narration, sections, premise: "A sourced premise", conclusion: "A meaningful conclusion",
     claims: [{ text: "Claim", sourceIds: ["src-1"] }],
-    sources: [{ id: "src-1", title: "Scientific source", url: "https://example.org/research" }],
+    sources: [{ id: "src-1", title: "Scientific source", url: "https://www.nature.com/" }],
     similarityReview: { status: "REVIEWED", evidenceRef: "review-2026-01" }
   };
   assert.equal(validateScriptDepth(script).valid, true, validateScriptDepth(script).errors.join("; "));
+  assert.equal(validateScriptDepth(script).measured.estimatedDurationSeconds, 400);
   assert.match(validateScriptDepth({ ...script, narration: "too short" }).errors.join(" "), /word count/);
+  assert.match(validateScriptDepth({ ...script, narration: "too short" }).errors.join(" "), /estimated narration duration/);
+  for (const url of ["https://example.org/research", "https://research.example.org/paper", "https://127.0.0.1/paper", "https://user:pass@www.nature.com/"]) {
+    assert.match(validateScriptDepth({ ...script, sources: [{ ...script.sources[0], url }] }).errors.join(" "), /public HTTPS source|non-placeholder public HTTPS URL/);
+  }
   assert.match(validateScriptDepth({ ...script, sources: [] }).errors.join(" "), /missing or invalid HTTPS source/);
   assert.match(validateScriptDepth({ ...script, similarityReview: null }).errors.join(" "), /similarity review/);
 });
 
 test("script-depth gate rejects duplicate sections, missing scene direction and narration mismatch", () => {
-  const words = Array.from({ length: 800 }, (_, i) => "word" + i);
-  const sectionNarrations = Array.from({ length: 5 }, (_, i) => words.slice(i * 160, (i + 1) * 160).join(" "));
+  const words = Array.from({ length: 1000 }, (_, i) => "word" + i);
+  const sectionNarrations = Array.from({ length: 5 }, (_, i) => words.slice(i * 200, (i + 1) * 200).join(" "));
   const sections = sectionNarrations.map((narration, i) => ({
     heading: "Section " + i, purpose: "Different purpose " + i, narration,
     visualDirection: "Specific scene direction " + i, pacing: "Measured", soundDesign: "Natural ambience"
@@ -128,7 +133,7 @@ test("script-depth gate rejects duplicate sections, missing scene direction and 
     narration: sectionNarrations.join("\n\n"), sections,
     premise: "A clear premise", conclusion: "A substantive conclusion",
     claims: [{ text: "Claim supported by evidence", sourceIds: ["src-1"] }],
-    sources: [{ id: "src-1", title: "Research source", url: "https://research.example.org/paper" }],
+    sources: [{ id: "src-1", title: "Research source", url: "https://www.nature.com/" }],
     similarityReview: { status: "REVIEWED", evidenceRef: "human-review-1" }
   };
   assert.equal(validateScriptDepth(script).valid, true, validateScriptDepth(script).errors.join("; "));
