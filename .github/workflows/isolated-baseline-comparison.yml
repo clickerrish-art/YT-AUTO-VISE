@@ -46,6 +46,13 @@ jobs:
         with:
           node-version: "24"
 
+      - name: Install FFmpeg for renderer integration tests in the candidate baseline
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          ffmpeg -version
+          ffprobe -version
+
       - name: Run isolated baselines and record exact outcomes
         id: baselines
         shell: bash
