@@ -20,9 +20,9 @@ const parent = {
   revision: "rev-3",
   mediaSha256: hash,
   channel: "SonicVhibez",
-  channelId: "UCverified",
+  channelId: "UC" + "A".repeat(22),
   privacyStatus: "unlisted",
-  remoteVideoId: "abc123XYZ",
+  remoteVideoId: "abc123XYZ_1",
 };
 const child = {
   contentId: "short-2026-w44",
@@ -31,9 +31,9 @@ const child = {
   parentContentId: parent.contentId,
   parentMediaSha256: hash,
   approvedParentRevision: "rev-3",
-  parentYouTubeVideoId: "abc123XYZ",
-  parentChannelId: "UCverified",
-  verifiedDestinationUrl: "https://www.youtube.com/watch?v=abc123XYZ",
+  parentYouTubeVideoId: "abc123XYZ_1",
+  parentChannelId: "UC" + "A".repeat(22),
+  verifiedDestinationUrl: "https://www.youtube.com/watch?v=abc123XYZ_1",
   relationshipStatus: "VERIFIED",
   youtubeRelatedVideoStatus: "VERIFIED",
 };
@@ -62,6 +62,8 @@ test("blocks unapproved, failed, foreign-channel and unpublished parent records"
   assert.match(validateShortParentRelationship(child, { ...parent, channel: "Nature Frontiers" }).errors.join(" "), /exactly SonicVhibez/);
   assert.match(validateShortParentRelationship({ ...child, parentYouTubeVideoId: "", verifiedDestinationUrl: "" }, { ...parent, remoteVideoId: "" }).errors.join(" "), /video ID is required/);
   assert.match(validateShortParentRelationship({ ...child, verifiedDestinationUrl: "https://youtube.com/watch?v=wrong" }, parent).errors.join(" "), /canonical URL/);
+  assert.match(validateShortParentRelationship(child, { ...parent, remoteVideoId: "too-short" }).errors.join(" "), /11-character ID/);
+  assert.match(validateShortParentRelationship(child, { ...parent, channelId: "UCverified" }).errors.join(" "), /valid YouTube channel ID/);
 });
 
 test("render edit plan is reproducible for same seed and does not accept unverified assets", () => {
