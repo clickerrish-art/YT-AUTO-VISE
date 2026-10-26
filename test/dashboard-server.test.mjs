@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
+import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -11,10 +12,39 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const ledgerLink = path.join(stateDir, "upload-attempts.json");
   fs.writeFileSync(ledgerTarget, JSON.stringify({ attempts: [{ attemptId: "forged-symlink-attempt", status: "PRIVATE_UPLOAD_VERIFIED", remoteVideoId: "not-authoritative" }] }) + "\n", { mode: 0o600 });
   fs.symlinkSync(ledgerTarget, ledgerLink);
+  const researchSource = { id: "source-1", title: "Field ecology paper", url: "https://research.example.org/paper", evidenceLocator: "Results section, paragraphs 2–4", evidenceSummary: "The supplied research describes observation conditions and explains why repeated observations are needed before generalizing animal behavior." };
+  const narration = [
+    "A wildlife encounter can look simple from a distance, but the evidence often tells a more careful story. The first question is not which animal is strongest; it is what each animal is doing in its own habitat.",
+    "Field observations can describe behavior under specific conditions, but one observation cannot establish a universal rule. Researchers compare repeated observations, environmental context, and competing explanations before drawing conclusions.",
+    "That distinction matters when a short video compresses a complicated interaction into a dramatic moment. A responsible account separates what the source directly reports from what remains uncertain, and never invents a scene to make the story more exciting."
+  ].join("\\n\\n");
+  const generatedScript = {
+    premise: "Explain how to interpret wildlife behavior without overstating a single observation.",
+    conclusion: "The strongest wildlife story is the one that keeps observation, interpretation, and uncertainty distinct.",
+    narration,
+    sections: [
+      { heading: "The question", purpose: "Frame the evidence", narration: narration.split("\\n\\n")[0], visualDirection: "Wide habitat establishing shot", pacing: "Measured", soundDesign: "Natural ambience" },
+      { heading: "What evidence means", purpose: "Explain source limits", narration: narration.split("\\n\\n")[1], visualDirection: "Documented behavior with no invented encounter", pacing: "Steady", soundDesign: "Low ambience under narration" },
+      { heading: "The responsible conclusion", purpose: "Resolve the premise", narration: narration.split("\\n\\n")[2], visualDirection: "Return to habitat context", pacing: "Slow slightly", soundDesign: "Natural fade" }
+    ],
+    claims: [{ text: "Researchers compare observations and context before drawing conclusions.", sourceIds: ["source-1"] }],
+    sources: [researchSource],
+    similarityReview: { status: "REVIEWED", evidenceRef: "provider-claim-must-not-be-trusted" }
+  };
+  const provider = createServer((req, res) => {
+    let body = "";
+    req.on("data", chunk => { body += chunk; });
+    req.on("end", () => {
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(generatedScript) } }] }));
+    });
+  });
+  await new Promise(resolve => provider.listen(0, "127.0.0.1", resolve));
+  const providerPort = provider.address().port;
   const port = 18000 + Math.floor(Math.random() * 10000);
   const token = "test-token-" + "x".repeat(40);
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
-    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, UPLOAD_LOG_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" },
+    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, UPLOAD_LOG_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1", SCRIPT_GENERATION_ENDPOINT: `http://127.0.0.1:${providerPort}/v1/chat/completions`, SCRIPT_GENERATION_TIMEOUT_MS: "5000" },
     stdio: ["ignore", "pipe", "pipe"]
   });
   let logs = "";
@@ -31,6 +61,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   fs.symlinkSync(path.join(process.cwd(), "README.md"), internalSymlinkPath);
   t.after(() => {
     child.kill("SIGTERM");
+    provider.close();
     fs.rmSync(stateDir, { recursive: true, force: true });
     fs.rmSync(ledgerTarget, { force: true });
     fs.rmSync(symlinkPath, { force: true });
@@ -149,6 +180,28 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.ok(saved.audit.some(event => event.action === "DRAFT_CREATED" && event.itemId === draft.id));
   assert.ok(saved.audit.filter(event => event.itemId === draft.id).every(event => event.actor === "test-owner@example.test"), "audit records must use the configured authenticated operator identity");
   assert.equal(saved.queueItems.find(item => item.id === draft.id).rightsConfirmed, undefined);
+  const authorDraft = { id: "dashboard-test-authoring-short", title: "Evidence-led wildlife Short", topic: "Interpreting wildlife observations", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-11-07", productUrl: "https://selar.com/0u19v8u99l" };
+  const authorDraftResponse = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(authorDraft) });
+  const authorDraftBody = await authorDraftResponse.json();
+  assert.equal(authorDraftResponse.status, 201, JSON.stringify(authorDraftBody));
+  const authorJob = authorDraftBody.job;
+  const authorBrief = { topic: "Interpreting wildlife observations", audience: "Adults", editorialPurpose: "Explain evidence limits", sources: [researchSource], parentRecord: { contentId: "long-parent", weeklyContentCycleId: "cycle-1", format: "long_form", channel: "SonicVhibez" } };
+  const authorResponse = await fetch(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id, brief: authorBrief }) });
+  const authorBody = await authorResponse.json();
+  assert.equal(authorResponse.status, 201, JSON.stringify(authorBody));
+  assert.equal(authorBody.job.authoring.status, "AWAITING_HUMAN_EDITORIAL_REVIEW");
+  assert.equal(authorBody.job.authoring.result.script.similarityReview.status, "PENDING", "provider/model claims must never satisfy originality review");
+  assert.equal(authorBody.publishable, false);
+  assert.equal(authorBody.publishingEnabled, false);
+  assert.equal(authorBody.job.authoring.gates.factualVerification, "PENDING");
+  assert.equal(authorBody.job.authoring.gates.rightsReview, "PENDING");
+  const authorDuplicate = await fetch(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id, brief: authorBrief }) });
+  const authorDuplicateBody = await authorDuplicate.json();
+  assert.equal(authorDuplicate.status, 200, JSON.stringify(authorDuplicateBody));
+  assert.equal(authorDuplicateBody.reused, true, "identical retries must reuse the persisted authoring result");
+  const authorState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  assert.equal(authorState.jobs.find(job => job.id === authorJob.id).authoring.result.script.narration, narration);
+  assert.ok(authorState.audit.some(event => event.action === "SCRIPT_AUTHORING_COMPLETED_REVIEW_REQUIRED" && event.jobId === authorJob.id));
   const productionJob = saved.jobs.find(job => job.kind === "CONTENT_PRODUCTION" && job.idempotencyKey === "draft:" + draft.id);
   assert.ok(productionJob);
   assert.equal(productionJob.transitionHistory[0].actor, "test-owner@example.test");
