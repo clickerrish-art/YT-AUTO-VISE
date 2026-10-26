@@ -52,7 +52,7 @@ function fixture(t, format = "long_form") {
     audioReport: {
       narrationPath: "narration.bin", narrationSha256: narrationHash, finalAudioSha256: "b".repeat(64),
       transcriptMatchStatus: "HUMAN_VERIFIED", integratedLufs: format === "short" ? -14 : -16,
-      truePeakDbtp: -1.6, musicBelowNarrationDb: 18, ambienceBelowNarrationDb: 18,
+      truePeakDbtp: -1.6, loudnessRange: 6, musicBelowNarrationDb: 18, ambienceBelowNarrationDb: 18,
       fadesVerified: true, rightsStatus: "VERIFIED"
     },
     humanEditorialReview: { status: "APPROVED", reviewer: "editor-1", reviewedAt: "2026-10-25T12:00:00Z" }
