@@ -9,7 +9,7 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { prepareSafeRenderOutput, resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
-import { getAudioProfile } from "./content-quality-gates.mjs";
+import { createDeterministicEditPlan, getAudioProfile } from "./content-quality-gates.mjs";
 
 const [manifestArg = "content/long-form-render-manifest.json", outputArg = "media/long-form-next.mp4"] = process.argv.slice(2);
 let manifestPath;
@@ -99,6 +99,16 @@ const escapedCaptions = captions
   .replace(/\[/g, "\\[")
   .replace(/\]/g, "\\]");
 const qualityEvidence = JSON.parse(fs.readFileSync(resolvedInputs.qualityEvidencePath, "utf8"));
+const editPlan = createDeterministicEditPlan({ seed: qualityEvidence.renderSeed, scenes: qualityEvidence.scenes, profile: qualityEvidence.editProfile ?? {} });
+const selectedScene = editPlan.scenes[0];
+const framingFilter = selectedScene.framing === "fit"
+  ? "scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2:black"
+  : "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080";
+const videoFilter = framingFilter
+  + ",eq=brightness=" + selectedScene.grade.brightness
+  + ":contrast=" + selectedScene.grade.contrast
+  + ":saturation=" + selectedScene.grade.saturation
+  + ",setsar=1,subtitles='" + escapedCaptions + "'";
 const audioProfile = getAudioProfile(qualityEvidence.audioProfile);
 const compressionThreshold = Math.pow(10, audioProfile.compressionThresholdDb / 20).toFixed(5);
 const narrationDurationSeconds = duration;
@@ -114,7 +124,7 @@ const audioFilter = "highpass=f=" + audioProfile.highPassHz
 const args = [
   "-y", "-i", footage, "-i", narration,
   "-shortest",
-  "-vf", "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,setsar=1,subtitles='" + escapedCaptions + "'",
+  "-vf", videoFilter,
   "-map", "0:v:0", "-map", "1:a:0",
   "-c:v", "libx264", "-preset", "medium", "-crf", "21",
   "-af", audioFilter,
