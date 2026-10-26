@@ -32,6 +32,7 @@ export function validateShortParentRelationship(relationship, {
   if (!VIDEO_ID.test(relationship.parentRemoteVideoId ?? "")) errors.push("verified parent YouTube video ID is required");
   const canonical = "https://www.youtube.com/watch?v=" + String(relationship.parentRemoteVideoId ?? "");
   if (relationship.parentCanonicalUrl !== canonical) errors.push("parent URL must be the canonical watch URL for the exact verified parent ID");
+  if (typeof relationship.parentRemoteTitle !== "string" || !relationship.parentRemoteTitle.trim()) errors.push("verified parent remote title is required for narrative review");
   if (relationship.parentChannelTitle !== "SonicVhibez") errors.push("parent must be verified as belonging to SonicVhibez");
   if (!CHANNEL_ID.test(relationship.parentChannelId ?? "") || (channelId && relationship.parentChannelId !== channelId)) errors.push("parent channel ID must match the verified configured SonicVhibez channel");
   if (relationship.parentRemoteVerified !== true) errors.push("parent remote identity and state have not been verified");
