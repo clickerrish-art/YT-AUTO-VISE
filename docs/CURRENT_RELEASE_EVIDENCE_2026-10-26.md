@@ -1,3 +1,46 @@
+# Live release checkpoint — 26 October 2026 (current source/test evidence)
+
+This checkpoint supersedes earlier SHA, branch-divergence and test-count claims below wherever they differ. The latest tested source/test tree is **`f3cae44edcc9094bf2f294ff46d583c556462548`**. The last application-code change is **`8c085e1347144ad94dede6884619232d5c7278fd`**; the immediately following test-only change is included in the tested tree. PR HEAD was this tested tree when the evidence was collected.
+
+## Live Git state at test time
+- PR #1: open, draft, unmerged — https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1
+- Implementation branch: `codex/marketing-machine-audit-fixes`
+- `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
+- Divergence: 1,452 commits ahead / 2 behind; 148 changed files.
+- No main edits, merge, reset, rebase, force-push, history rewrite, destructive reconciliation, upload, public post or campaign activation occurred.
+
+## Implementation in this checkpoint
+- Parent binding now requires an explicit, valid `SONICVHIBEZ_CHANNEL_ID` configuration and checks the parent upload receipt's channel ID against that configured identity. It no longer treats the receipt's own channel ID as its own verification authority.
+- Added reusable `validateConfiguredSonicVhibezChannel` validation and regression tests for absent/invalid configured IDs, mismatched channel IDs, wrong channel title and malformed/missing receipts.
+- Files: `scripts/dashboard-server.mjs`, `scripts/short-parent-relationship.mjs`, `test/short-parent-relationship.test.mjs`.
+- Commits: [85f9258](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/85f9258d441e926e31facc1330b68fc2f8b268b8), [d9ab366](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d9ab3667a21123c829df4e18c96a3d8ca2897a89), [8c085e1](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/8c085e1347144ad94dede6884619232d5c7278fd), [f3cae44](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/f3cae44edcc9094bf2f294ff46d583c556462548).
+
+## Exact-SHA workflow results
+All results below apply to source/test SHA `f3cae44edcc9094bf2f294ff46d583c556462548`, not to a future code change:
+- Automation/security **PASS** — 320 Node tests, 0 failures; 8 Python safety tests passed; normal and locked install checks, syntax/compile checks and dependency audit passed. [Run 40328924668](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924668).
+- Dashboard browser E2E **PASS** — 11 Chromium journeys against the real local dashboard/backend. [Run 40328924917](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924917).
+- Content quality **PASS**. [Run 40328924800](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924800).
+- Metadata **PASS**. [Run 40328924789](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924789).
+- Isolated main/candidate baseline **PASS**. [Run 40328924666](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924666).
+- Production readiness **BLOCKED**; the workflow intentionally fails while mandatory external/production gates remain unresolved. [Run 40328924747](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924747).
+- Nature Frontiers Facebook draft workflow **SKIPPED**; this is not evidence of Page verification or a successful draft artifact. [Run 40328924901](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924901).
+
+## Remaining blockers — no release approval
+- The parent relationship UI and API exist, but the browser suite currently verifies control exposure and incomplete-binding rejection; a successful end-to-end parent bind, stale hash, wrong-channel receipt, queue reorder, concurrent bind, and backup/restore relationship journey still need explicit acceptance coverage.
+- No real, rights-cleared final Short and long-form exports with complete provenance and human playback review bound to final hashes have been accepted.
+- Full script-to-narration/caption/render lifecycle and comprehensive originality/perceptual similarity checks remain incomplete as an accepted production workflow; automated similarity cannot establish legal originality.
+- YouTube OAuth/channel identity and full public/private/unlisted history reconciliation remain unverified. The previously supplied channel ID must not be guessed or repaired.
+- A private parent is ineligible for native YouTube Related video; the UI accurately records `BLOCKED_EXTERNAL`. No visibility change is authorized.
+- Meta Page identity/scopes and a successful non-skipped draft-only workflow remain unverified.
+- The `long_form → long_form → short` cycle with 72-hour minimum gaps requires 216 hours for a complete three-gap cycle and conflicts with a 168-hour week; owner decision remains required.
+- Full divergent-history review, exhaustive API/dashboard coverage, cross-process fault injection, backup/restore/rollback and deployment/monitoring drills remain incomplete. Branch protection and required checks need owner-controlled governance.
+- Public/unattended YouTube publishing, Facebook live publishing and Safari campaign activation remain disabled. Approved Selar URL remains `https://selar.com/0u19v8u99l`.
+
+**Verdict: CODE ACCEPTANCE PARTIAL / PRODUCTION ACCEPTANCE BLOCKED. No claim of 100% completion.**
+
+---
+
 ## Latest live checkpoint — 26 October 2026: parent source evidence and exact-SHA acceptance
 
 **Application-code SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **Exact tested source/test SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **PR HEAD at this checkpoint:** `2f455314d4f75dafe8b9b309ead0040570158e09` (documentation-only descendant after the tested source/test SHA).
