@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 import { spawn, spawnSync } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
 import { generateScript } from "./generate-script.mjs";
-import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence } from "./short-parent-relationship.mjs";
+import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence, validateConfiguredSonicVhibezChannel } from "./short-parent-relationship.mjs";
 import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
@@ -1246,8 +1246,9 @@ const server = http.createServer(async (req, res) => {
         let parentReceipt;
         try { parentReceipt = JSON.parse(fs.readFileSync(resolveRepositoryFile(parentReceiptPath), "utf8")); } catch { return json(res, 409, { error: "Parent upload receipt is missing or unsafe; relationship remains blocked" }); }
         const configuredSonicVhibezChannelId = process.env.SONICVHIBEZ_CHANNEL_ID?.trim();
-        if (!/^UC[A-Za-z0-9_-]{22}$/.test(configuredSonicVhibezChannelId ?? "")) return json(res, 503, { error: "Parent binding requires a valid owner-configured SONICVHIBEZ_CHANNEL_ID; no channel ID may be inferred from the receipt" });
-        if (parentReceipt.jobId !== parentJob.id || parentReceipt.videoId !== parentAttempt.remoteVideoId || parentReceipt.channelId !== parentAttempt.channelId || parentReceipt.channelId !== configuredSonicVhibezChannelId || parentReceipt.channelTitle !== "SonicVhibez" || parentReceipt.privacyStatus !== "private" || parentReceipt.remoteStatusVerified !== true) return json(res, 409, { error: "Parent receipt does not independently verify the exact private video on the configured SonicVhibez channel" });
+        const configuredChannelErrors = validateConfiguredSonicVhibezChannel(parentReceipt, configuredSonicVhibezChannelId);
+        if (!configuredSonicVhibezChannelId || !/^UC[A-Za-z0-9_-]{22}$/.test(configuredSonicVhibezChannelId)) return json(res, 503, { error: "Parent binding requires a valid owner-configured SONICVHIBEZ_CHANNEL_ID; no channel ID may be inferred from the receipt" });
+        if (configuredChannelErrors.length || parentReceipt.jobId !== parentJob.id || parentReceipt.videoId !== parentAttempt.remoteVideoId || parentReceipt.channelId !== parentAttempt.channelId || parentReceipt.privacyStatus !== "private" || parentReceipt.remoteStatusVerified !== true) return json(res, 409, { error: "Parent receipt does not independently verify the exact private video on the configured SonicVhibez channel" + (configuredChannelErrors.length ? ": " + configuredChannelErrors.join("; ") : "") });
         parentReceipt.remoteVideoId = parentReceipt.videoId;
         const parentArtifact = (parentJob.outputArtifacts ?? []).find(entry => entry.path === body.parentMediaPath);
         if (!parentArtifact || !/^[a-f0-9]{64}$/.test(parentArtifact.sha256 ?? "")) return json(res, 409, { error: "parentMediaPath must exactly match a checksummed artifact on the selected parent job" });
