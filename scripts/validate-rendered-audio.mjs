@@ -44,7 +44,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   try { profile = getAudioProfile(profileName); }
   catch (error) { console.error("BLOCKED: " + error.message); process.exit(2); }
   const measured = spawnSync("ffmpeg", [
-    "-hide_banner", "-v", "error", "-i", mediaPath, "-vn",
+    "-hide_banner", "-nostats", "-v", "info", "-i", mediaPath, "-vn",
     "-af", "loudnorm=I=" + profile.narrationTargetLufs + ":TP=" + profile.truePeakDbtpMax + ":LRA=" + profile.loudnessRangeTarget + ":print_format=json",
     "-f", "null", "-"
   ], { encoding: "utf8", timeout: 90_000 });
