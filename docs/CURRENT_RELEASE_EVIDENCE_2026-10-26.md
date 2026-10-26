@@ -1,3 +1,34 @@
+# Latest exact-SHA checkpoint — 26 October 2026 (supersedes earlier checkpoint below)
+
+## Live Git state at the tested code checkpoint
+- **Application-code SHA:** `f0bf2278cd093859cbee49ac473e828c6ff785a9`
+- **Exact tested source/test SHA:** `8d754b0a01c81ce1957ba25a7c8112eaa2e8a1b4`
+- PR #1 was at tested HEAD `8d754b0a01c81ce1957ba25a7c8112eaa2e8a1b4` when these workflows ran; later documentation-only commits may advance the current PR HEAD.
+- `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`; divergence at tested HEAD: **1,464 ahead / 2 behind / 148 changed files**.
+- PR #1 remains open, draft and unmerged. No direct main edits, merge, reset, rebase, force-push, history rewrite or destructive reconciliation.
+
+## Newly implemented safety checks
+- Parent binding requires an explicit valid `SONICVHIBEZ_CHANNEL_ID` and matches the upload receipt's channel ID to it; a receipt cannot self-assert its own channel identity.
+- Parent binding now also requires the remote receipt title to exactly match the title in the hash-verified approved parent metadata revision.
+- Added unit regression tests for missing/invalid/mismatched channel identity, wrong channel title, missing/malformed receipt, and remote-title mismatch.
+- Commits: [85f9258](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/85f9258d441e926e31facc1330b68fc2f8b268b8), [d9ab366](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d9ab3667a21123c829df4e18c96a3d8ca2897a89), [8c085e1](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/8c085e1347144ad94dede6884619232d5c7278fd), [abcda0e](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/abcda0efe45f78f5164aa79396904f7679d1c97f), [f0bf227](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/f0bf2278cd093859cbee49ac473e828c6ff785a9), [8d754b0](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/8d754b0a01c81ce1957ba25a7c8112eaa2e8a1b4).
+
+## Exact-SHA results for `8d754b0a01c81ce1957ba25a7c8112eaa2e8a1b4`
+- Automation/security **PASS** — **321 Node tests, 0 failures or skips**, 8 Python safety tests, install/syntax/compile checks, dependency audit with 0 vulnerabilities. [Run 40330156711](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330156711).
+- Dashboard browser E2E **PASS** — 11 Chromium journeys against the real local dashboard/backend. [Run 40330156665](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330156665).
+- Content quality **PASS** [run 40330156751](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330156751).
+- Metadata **PASS** [run 40330156842](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330156842).
+- Isolated main/candidate baseline **PASS** [run 40330157081](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330157081).
+- Production readiness **BLOCKED** [run 40330156666](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330156666).
+- Nature Frontiers Facebook draft **SKIPPED**, not external integration evidence [run 40330156993](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330156993).
+
+## Still not accepted for production
+The dashboard exposes parent binding, but successful binding with genuine approved artifacts and full browser coverage for stale hashes, wrong-channel receipt, queue reorder, concurrent binding, restart and backup/restore remain incomplete. No genuine final Short/long-form package has passed complete provenance/rights, originality, factual, narration/caption, natural-realism and human playback acceptance. YouTube OAuth/channel identity and complete history remain unverified; private parent means native Related video is correctly marked `BLOCKED_EXTERNAL`. Meta Page identity and a successful non-skipped draft workflow remain unverified. Cadence owner decision, full divergent-history review, cross-process recovery/backup/rollback/deployment drills and branch-protection governance remain open.
+
+**Verdict: CODE ACCEPTANCE PARTIAL / PRODUCTION ACCEPTANCE BLOCKED.** Public/unattended YouTube publishing, Facebook live publishing and Safari campaigns remain disabled. No upload, public post, campaign activation or merge occurred.
+
+---
+
 # Live release checkpoint — 26 October 2026 (current source/test evidence)
 
 This checkpoint supersedes earlier SHA, branch-divergence and test-count claims below wherever they differ. The latest tested source/test tree is **`f3cae44edcc9094bf2f294ff46d583c556462548`**. The last application-code change is **`8c085e1347144ad94dede6884619232d5c7278fd`**; the immediately following test-only change is included in the tested tree. PR HEAD was this tested tree when the evidence was collected.
