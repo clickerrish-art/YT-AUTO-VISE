@@ -44,7 +44,13 @@ export function validateContentQualityEvidence(evidence, { format, evidenceDir =
     });
   }
   if (expectedFootagePath && !matchedFootage) errors.push("asset provenance must bind the exact footage file used by the render manifest");
-  if (expectedFootagePath && evidence.scenes?.[0]?.sourceSha256 !== sha256(expectedFootagePath)) errors.push("the first deterministic scene must bind the exact footage file used by the render manifest");
+  if (expectedFootagePath) {
+    try {
+      if (evidence.scenes?.[0]?.sourceSha256 !== sha256(expectedFootagePath)) errors.push("the first deterministic scene must bind the exact footage file used by the render manifest");
+    } catch {
+      errors.push("expected footage input is missing or unsafe");
+    }
+  }
   if (!Number.isSafeInteger(evidence.renderSeed) || evidence.renderSeed < 0) errors.push("renderSeed must be a recorded non-negative integer");
   try {
     const plan = createDeterministicEditPlan({ seed: evidence.renderSeed, scenes: evidence.scenes, profile: evidence.editProfile ?? {} });
