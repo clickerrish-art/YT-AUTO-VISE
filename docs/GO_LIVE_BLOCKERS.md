@@ -1,3 +1,13 @@
+# Live blocker checkpoint — 26 October 2026
+
+**Latest tested source/test SHA:** `36aa95baeecfdb3ce1dbd8a4bf2380b0034e92fa`; **application-code SHA:** `15a3979fc294a97a1421b29ff4ff93207072e8b3`. Exact-SHA automation/security, content quality, metadata, 12-journey browser E2E and isolated baseline passed. Production readiness remains BLOCKED with 13 mandatory prerequisites; Facebook daily draft was SKIPPED. See [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-26.md) for exact workflow links and scope.
+
+The latest implementation fix corrects over-escaped research URL validation and rejects reserved example domains, loopback/local hosts and placeholders before provider access. Regression tests cover those cases; the dashboard integration fixture was updated to avoid a reserved test URL.
+
+**Do not treat the green code suites as production acceptance.** Genuine rights-cleared media, human playback review, verified YouTube identity/history, owner-approved feasible cadence, successful Meta draft execution, full parent-binding success/recovery journeys, backup/restore and operational drills remain outstanding. Keep public/unattended YouTube publishing OFF, Facebook live publishing OFF, Safari campaigns inactive and PR #1 open/draft/unmerged.
+
+---
+
 # Current release decision — 26 October 2026 (latest tested source)
 
 **Status: PRODUCTION BLOCKED.** Latest application-code SHA: `f0bf2278cd093859cbee49ac473e828c6ff785a9`; exact tested source/test SHA: `8d754b0a01c81ce1957ba25a7c8112eaa2e8a1b4`. Exact-SHA automation/security (321 Node, 8 Python), 11-journey browser E2E, content quality, metadata and isolated baseline passed; readiness is blocked and Facebook draft was skipped. See `docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md`.
