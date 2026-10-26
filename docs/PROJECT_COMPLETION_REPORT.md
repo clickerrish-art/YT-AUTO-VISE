@@ -1,3 +1,16 @@
+## Current implementation checkpoint — 26 October 2026
+
+**Latest tested source/test SHA:** `f3cae44edcc9094bf2f294ff46d583c556462548`. **Last application-code SHA:** `8c085e1347144ad94dede6884619232d5c7278fd`. **Current PR HEAD after evidence documentation updates:** to be refreshed from live refs; it is a documentation-only descendant of the tested tree unless later source changes are recorded. PR #1 remains open, draft and unmerged.
+
+- Automation/security **PASS**: 320 Node tests, 8 Python safety tests, clean/locked install, syntax/compile and security checks [40328924668](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924668).
+- Browser E2E **PASS**: 11 Chromium journeys [40328924917](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924917); content quality **PASS** [40328924800](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924800); metadata **PASS** [40328924789](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924789); isolated baseline **PASS** [40328924666](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924666).
+- Production readiness **BLOCKED** [40328924747](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924747); Facebook daily draft **SKIPPED** [40328924901](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924901).
+- Newly fixed: parent binding validates the upload receipt against the explicitly configured SonicVhibez channel ID and has regression coverage. This does not constitute a successful live parent-binding journey or external channel verification.
+
+**Verdict: implementation remains incomplete; production acceptance blocked.** Real media, rights and human playback evidence, full end-to-end lifecycle acceptance, external identity/history verification, owner cadence decision, complete recovery/deployment drills and branch governance remain unresolved. Do not claim 100% completion.
+
+---
+
 ## Latest live checkpoint — 26 October 2026: parent source evidence and exact-SHA acceptance
 
 **Application-code SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **Exact tested source/test SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **PR HEAD at this checkpoint:** `2f455314d4f75dafe8b9b309ead0040570158e09` (documentation-only descendant after the tested source/test SHA).
