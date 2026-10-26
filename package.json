@@ -27,7 +27,8 @@
     "facebook:intake:autonomous": "node scripts/facebook-content-intake.mjs",
     "facebook:publish:autonomous": "node scripts/facebook-autonomous-publisher.mjs",
     "test:browser": "playwright test --config=playwright.config.mjs",
-    "validate:content-quality": "node scripts/validate-content-quality.mjs"
+    "validate:content-quality": "node scripts/validate-content-quality.mjs",
+    "prompt:script": "node scripts/build-script-generation-prompt.mjs"
   },
   "engines": {
     "node": ">=22"
