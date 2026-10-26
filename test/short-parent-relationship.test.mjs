@@ -7,7 +7,7 @@ const base = {
   childContentId: "child-job-001", childRevision: "rev-2", childMediaSha256: sha("a"), childMetadataSha256: sha("b"),
   parentContentId: "parent-job-001", parentRevision: "rev-5", parentMediaSha256: sha("c"), parentMetadataSha256: sha("d"),
   parentApprovalSha256: sha("e"), parentRemoteVideoId: "abcdefghijk", parentCanonicalUrl: "https://www.youtube.com/watch?v=abcdefghijk",
-  parentChannelTitle: "SonicVhibez", parentChannelId: "UC" + "A".repeat(22), parentRemoteVerified: true, parentPrivacyStatus: "private",
+  parentChannelTitle: "SonicVhibez", parentRemoteTitle: "Why honey badgers survive venom", parentChannelId: "UC" + "A".repeat(22), parentRemoteVerified: true, parentPrivacyStatus: "private",
   parentApproved: true, parentRevisionApproved: true, parentPublicationCycleId: "cycle-2026-10-A", childPublicationCycleId: "cycle-2026-10-A",
   sourceSegments: [{ sceneId: "scene-03", startSeconds: 42, endSeconds: 58 }],
   relationshipApproved: true, relationshipReviewer: "operator-1", relationshipApprovedAt: "2026-10-26T10:00:00.000Z",
