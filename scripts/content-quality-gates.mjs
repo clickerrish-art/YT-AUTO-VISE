@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { isIP } from "node:net";
 
 const SHA256 = /^[a-f0-9]{64}$/;
 const AUDIO_PROFILES = Object.freeze({
@@ -129,7 +130,7 @@ export function createDeterministicEditPlan({ seed, scenes, profile = {} }) {
 }
 
 /** Enforce measurable script structure; quality scores supplied by an LLM are ignored. */
-export function validateScriptDepth(script, { format = "long_form", minWords, maxWords, minSections } = {}) {
+export function validateScriptDepth(script, { format = "long_form", minWords, maxWords, minSections, speakingRateWpm = 150, minDurationSeconds, maxDurationSeconds } = {}) {
   const errors = [];
   if (!script || typeof script !== "object" || Array.isArray(script)) return { valid: false, errors: ["script object is required"], measured: null };
   if (!["long_form", "short"].includes(format)) errors.push("format must be long_form or short");
@@ -138,10 +139,18 @@ export function validateScriptDepth(script, { format = "long_form", minWords, ma
   const sections = Array.isArray(script.sections) ? script.sections : [];
   const claims = Array.isArray(script.claims) ? script.claims : [];
   const sources = Array.isArray(script.sources) ? script.sources : [];
-  const measuredMinWords = minWords ?? (format === "long_form" ? 780 : 90);
-  const measuredMaxWords = maxWords ?? (format === "long_form" ? 1600 : 150);
+  const measuredMinWords = minWords ?? (format === "long_form" ? 900 : 125);
+  const measuredMaxWords = maxWords ?? (format === "long_form" ? 1500 : 150);
   const measuredMinSections = minSections ?? (format === "long_form" ? 5 : 3);
+  const targetMinDurationSeconds = minDurationSeconds ?? (format === "long_form" ? 360 : 50);
+  const targetMaxDurationSeconds = maxDurationSeconds ?? (format === "long_form" ? 600 : 60);
+  const validSpeakingRate = Number.isFinite(speakingRateWpm) && speakingRateWpm >= 60 && speakingRateWpm <= 240;
+  if (!validSpeakingRate) errors.push("speakingRateWpm must be between 60 and 240 words per minute");
+  const estimatedDurationSeconds = validSpeakingRate ? words / speakingRateWpm * 60 : null;
   if (words < measuredMinWords || words > measuredMaxWords) errors.push("narration word count must be " + measuredMinWords + "–" + measuredMaxWords + "; measured " + words);
+  if (estimatedDurationSeconds !== null && (estimatedDurationSeconds < targetMinDurationSeconds || estimatedDurationSeconds > targetMaxDurationSeconds)) {
+    errors.push("estimated narration duration must be " + targetMinDurationSeconds + "–" + targetMaxDurationSeconds + " seconds at " + speakingRateWpm + " WPM; measured " + estimatedDurationSeconds.toFixed(1) + " seconds");
+  }
   if (sections.length < measuredMinSections) errors.push("at least " + measuredMinSections + " differentiated sections are required");
   const normalizedHeadings = new Set();
   const normalizedPurposes = new Set();
@@ -180,7 +189,7 @@ export function validateScriptDepth(script, { format = "long_form", minWords, ma
     if (!nonempty(source?.id) || !nonempty(source?.title) || !nonempty(source?.url) || !/^https:\/\//i.test(source.url) || PLACEHOLDER.test(source.url)) errors.push("source " + (index + 1) + " must have a title and a non-placeholder HTTPS URL");
   }
   if (script.similarityReview?.status !== "REVIEWED" || !nonempty(script.similarityReview?.evidenceRef)) errors.push("originality similarity review evidence is required");
-  return { valid: errors.length === 0, errors, measured: { words, sections: sections.length, claims: claims.length, sources: sources.length } };
+  return { valid: errors.length === 0, errors, measured: { words, sections: sections.length, claims: claims.length, sources: sources.length, speakingRateWpm: validSpeakingRate ? speakingRateWpm : null, estimatedDurationSeconds: estimatedDurationSeconds === null ? null : Number(estimatedDurationSeconds.toFixed(1)), estimatedNarrationMinutes: estimatedDurationSeconds === null ? null : Number((estimatedDurationSeconds / 60).toFixed(2)), targetDurationSeconds: { min: targetMinDurationSeconds, max: targetMaxDurationSeconds } } };
 }
 
 /** Validate rights/provenance records; this does not independently prove a licence is genuine. */
