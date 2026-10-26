@@ -1,5 +1,12 @@
 
 
+## Latest authoring and mobile correction checkpoint — 26 October 2026
+
+- Source/test SHA: 25f920890479271e961b4178f52675d6a811e4e6. The dashboard authoring route and UI are covered by 306 passing Node tests, including durable script/research-brief persistence, idempotent reuse, pending review gates, renderer-bypass rejection, and recovery handling. [Automation PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40306582741).
+- The browser suite previously failed at 375px on SHA 891952af1a2191322b9a411890aecf46ae4d2d9f because the new authoring form widened the page. A CSS correction was committed in 25f920890479271e961b4178f52675d6a811e4e6. Browser E2E run [40306582878](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40306582878) was QUEUED at last check; responsive acceptance remains NOT TESTED until it completes.
+- Script authoring control status remains PARTIAL: the UI can create and display a source-constrained script, but the script does not yet flow into narration, captions, multi-scene rendering, playback review or final approval.
+
+
 ## Incremental authoring-control evidence — 26 October 2026
 
 | Control | Backend | Exact evidence | Status | Remaining acceptance |
