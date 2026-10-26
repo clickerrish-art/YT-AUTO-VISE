@@ -143,7 +143,7 @@ export function validateAssetProvenance(asset) {
   const errors = [];
   if (!asset || typeof asset !== "object") return { valid: false, errors: ["asset provenance record is required"] };
   for (const key of ["assetId", "sourceMethod", "creatorOrRightsHolder", "acquiredAt", "licenseEvidenceLocation", "editorialPurpose"]) {
-    if (!nonempty(asset[key])) errors.push(key + " is required");
+    if (!nonempty(asset[key]) || PLACEHOLDER.test(asset[key] ?? "")) errors.push(key + " is required and must not be a placeholder");
   }
   if (!hashValid(asset.originalSha256)) errors.push("originalSha256 must be a SHA-256 checksum");
   if (!["GENERATED", "ORIGINAL_RECORDING", "LICENSED"].includes(asset.sourceMethod)) errors.push("sourceMethod must be GENERATED, ORIGINAL_RECORDING or LICENSED");
