@@ -63,6 +63,7 @@ test("source segments must map to the exact reviewed parent timeline and stay wi
   ] };
   assert.deepEqual(validateSourceSegmentsAgainstEvidence([{ sceneId: "scene-03", startSeconds: 42, endSeconds: 58 }], evidence), []);
   assert.match(validateSourceSegmentsAgainstEvidence([{ sceneId: "invented-scene", startSeconds: 42, endSeconds: 58 }], evidence).join(" "), /exactly one recorded parent scene/);
+  assert.match(validateSourceSegmentsAgainstEvidence([{ sceneId: "asset-03", startSeconds: 42, endSeconds: 58 }], evidence).join(" "), /exactly one recorded parent scene/, "asset IDs must not substitute for explicit scene IDs");
   assert.match(validateSourceSegmentsAgainstEvidence([{ sceneId: "scene-03", startSeconds: 38, endSeconds: 58 }], evidence).join(" "), /exactly one recorded parent scene/);
   assert.match(validateSourceSegmentsAgainstEvidence([{ sceneId: "scene-03", startSeconds: 42, endSeconds: 58 }], { format: "short", scenes: evidence.scenes }).join(" "), /must be a long_form/);
 });
