@@ -1273,7 +1273,9 @@ const server = http.createServer(async (req, res) => {
         if (!child.metadataPath) return json(res, 409, { error: "Short metadata path is required before parent binding" });
         const childMetadataFile = resolveRepositoryFile(child.metadataPath);
         if (sha256File(childMetadataFile) !== child.metadataVersion) return json(res, 409, { error: "Short metadata revision is stale; relationship cannot be bound" });
-        const childMetadata = JSON.parse(fs.readFileSync(childMetadataFile, "utf8"));
+        let childMetadata;
+        try { childMetadata = JSON.parse(fs.readFileSync(childMetadataFile, "utf8")); }
+        catch { return json(res, 409, { error: "Short metadata is invalid JSON; relationship cannot be bound" }); }
         if (childMetadata.parentContentId !== parentJob.id || childMetadata.parentVideoId !== parentReceipt.videoId || childMetadata.parentVideoUrl !== "https://www.youtube.com/watch?v=" + parentReceipt.videoId) {
           return json(res, 409, { error: "Short metadata must explicitly reference this exact parent content ID, verified remote ID and canonical URL before binding" });
         }
