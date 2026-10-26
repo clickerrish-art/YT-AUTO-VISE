@@ -3,7 +3,7 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-26T08:00:00+02:00",
+  "recordedAt": "2026-10-26T08:15:00+02:00",
   "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. Current source/test checkpoint 2686612d9982e0094cd25759e9a73fe466585634: 280 Node tests and 8 Python safety tests passed; npm audit reported 0 vulnerabilities; real-dashboard browser E2E passed 10 Chromium journeys; isolated main/candidate baseline passed for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 2686612d9982e0094cd25759e9a73fe466585634; metadata and content quality passed. Production readiness remains BLOCKED on real owner-controlled prerequisites; Facebook draft workflow was SKIPPED.",
   "statuses": [
     "PASS",
@@ -418,10 +418,14 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fc7dffb93d14238af96bf63f0df3873838d0c4a8",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/68d80d152a1bea9e0e35b7097072f80c2658b58",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e1e3d3ab5630911c0569920876c358f29046f1f3",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803930"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803930",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/5ceb0bf0a14aba803f6f7c8e280bab45f42a40e2",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/90a847c8033c74875868598d4c0bddcd375d3668",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40283292738",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40283292695"
       ],
       "nextAction": "Supply genuine production assets and licence evidence, generate complete quality-evidence manifests, and conduct full human playback/factual review. Code validation does not prove licence authenticity, originality or naturalistic visual quality.",
-      "assessmentCommitSha": "2e077612f5efbe4f787348fee9e8be5297619625",
+      "assessmentCommitSha": "bbde79e1f3f589f1737e3ea95512a412e5c91d61",
       "acceptanceCriterion": "The Short and long-form renderers invoke the quality validator before FFmpeg; missing/placeholder evidence, source hash mismatch, invalid script depth/source references, stale edit plan, failed audio metrics or absent human editorial review block rendering."
     },
     {
@@ -434,10 +438,11 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/0ad40c100050494d922672c249eb2a6bd0609c2e",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/b21b4fa1a081564d883b17e26e8eafa4dfd5ff09",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/09c660b3cba3fe5a075ed645b4847c8a0ef0e1e1",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803930"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803930",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40283292738"
       ],
       "nextAction": "Retain the explicit relationship in durable queue/job/approval/receipt state, then verify the actual native Related video setting in YouTube Studio after the child Short exists. Do not infer it from a description link.",
-      "assessmentCommitSha": "2e077612f5efbe4f787348fee9e8be5297619625",
+      "assessmentCommitSha": "bbde79e1f3f589f1737e3ea95512a412e5c91d61",
       "acceptanceCriterion": "Tests reject missing/wrong parent, wrong weekly cycle, stale revision/hash, unapproved/failed/foreign-channel parent, missing remote ID, wrong canonical URL and unverified native Related video at publication stage."
     },
     {
@@ -451,7 +456,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md"
       ],
       "nextAction": "After a permitted private workflow creates the Short, an authorized operator must open the Short in Studio, select the verified parent in Related video, verify the resulting setting, and retain a dated evidence record containing both video IDs. Do not enable public publishing for this check.",
-      "assessmentCommitSha": "2e077612f5efbe4f787348fee9e8be5297619625",
+      "assessmentCommitSha": "bbde79e1f3f589f1737e3ea95512a412e5c91d61",
       "acceptanceCriterion": "A retained verification record names the actual Short ID and exact intended parent video ID and confirms the native Related video setting in Studio; a description URL or internal database field is insufficient."
     },
     {
@@ -461,30 +466,33 @@
       "requirement": "Integrate a structured script-generation prompt contract that explicitly requests required depth, source-backed claims, differentiated sections, realistic scene direction, uncertainty and an original conclusion before text-to-speech.",
       "status": "NOT_TESTED",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/content-quality-gates.mjs"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/content-quality-gates.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/5ec90d8cb8d467a7293738da11a9f17cbe14f89b",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/90a847c8033c74875868598d4c0bddcd375d3668",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40283292738"
       ],
-      "nextAction": "Connect the measurable script validator to the actual script-authoring workflow and version a prompt template/contract; do not claim prompting is integrated merely because post-generation validation exists.",
-      "assessmentCommitSha": "2e077612f5efbe4f787348fee9e8be5297619625",
+      "nextAction": "Use the tested prompt builder in the actual script-authoring workflow and make script validation a required gate before narration generation; the current TTS workflow still consumes authored text and no automatic LLM integration is claimed.",
+      "assessmentCommitSha": "bbde79e1f3f589f1737e3ea95512a412e5c91d61",
       "acceptanceCriterion": "The script-authoring workflow emits a structured prompt with the 6–10 minute/50–60 second target, required sections and sourcing rules, then validates the returned text with measured counts and source coverage before narration generation."
     }
   ],
   "currentCheckpoint": {
-    "assessedSourceTestSha": "2e077612f5efbe4f787348fee9e8be5297619625",
+    "assessedSourceTestSha": "bbde79e1f3f589f1737e3ea95512a412e5c91d61",
     "mainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBase": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "branchAhead": 1237,
+    "branchAhead": 1251,
     "branchBehind": 2,
-    "changedFiles": 131,
+    "changedFiles": 136,
     "evidence": {
-      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803930",
-      "browserE2E": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282804001",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803924",
-      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803925",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803919",
-      "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803929",
-      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803928"
+      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40283292738",
+      "browserE2E": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40283292552",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40283292715",
+      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40283292591",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40283292695",
+      "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40283292557",
+      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40283292743"
     },
     "verdict": "CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED",
-    "note": "Source/test SHA evidence only. Documentation descendants require their own exact-HEAD CI. Full branch-only history review, complete dashboard matrix, cross-process/fault-injection/recovery/deployment drills and actual production prerequisites remain unresolved."
+    "note": "Source/test SHA evidence only; the current documentation descendant is a different SHA and must have its own exact-HEAD CI verified. Full branch-only history review, complete dashboard matrix, cross-process/fault-injection/recovery/deployment drills and actual production prerequisites remain unresolved."
   }
 }
