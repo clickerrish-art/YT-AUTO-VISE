@@ -496,3 +496,38 @@ test("Facebook idea endpoint validates malformed and impossible dates without mu
   expect((after.drafts ?? []).map(draft => draft.id).sort()).toEqual(beforeIds);
   expect(after.publishingEnabled).toBe(false);
 });
+
+
+test("Short-parent relationship workflow is exposed and incomplete binding fails closed", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  const beforeResponse = await request.get("/api/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+  expect(before.publishingEnabled).toBe(false);
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Short-to-parent relationship review" })).toBeVisible();
+  await expect(page.locator("#parentrelationshipform")).toBeVisible();
+  await expect(page.locator("#relationshipChildJob")).toBeVisible();
+  await expect(page.locator("#relationshipParentJob")).toBeVisible();
+  await expect(page.locator("#relationshipSourceSegments")).toBeVisible();
+  await expect(page.locator("#confirmRelationshipReviewed")).toBeVisible();
+
+  const rejected = await request.post("/api/jobs/parent-relationship", {
+    headers,
+    data: { jobId: "", parentJobId: "", childMediaPath: "", parentMediaPath: "", sourceSegments: [], confirmRelationshipReviewed: false, relationshipReviewNotes: "" }
+  });
+  expect(rejected.status()).toBe(400);
+  expect((await rejected.json()).error).toMatch(/exact childMediaPath\/parentMediaPath|relationship-review confirmation/i);
+
+  const afterResponse = await request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  const after = await afterResponse.json();
+  expect(after.jobs.map(job => [job.id, job.shortParentRelationship?.relationshipEvidenceSha256 ?? null])).toEqual(
+    before.jobs.map(job => [job.id, job.shortParentRelationship?.relationshipEvidenceSha256 ?? null])
+  );
+  expect(after.publishingEnabled).toBe(false);
+});
