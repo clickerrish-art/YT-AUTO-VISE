@@ -61,15 +61,15 @@ function fixture(t, format = "long_form") {
     const parent = {
       contentId: "long-1", weeklyContentCycleId: "cycle-1", format: "long_form",
       state: "PRIVATE_UPLOAD_VERIFIED", approvalStatus: "APPROVED_FOR_PRIVATE_UPLOAD", privacyStatus: "unlisted",
-      revision: "r1", mediaSha256: "c".repeat(64), channel: "SonicVhibez", channelId: "channel-1",
-      remoteVideoId: "verifiedVideo1"
+      revision: "r1", mediaSha256: "c".repeat(64), channel: "SonicVhibez", channelId: "UC" + "B".repeat(22),
+      remoteVideoId: "aBcD1234_-Z"
     };
     evidence.parentRecord = parent;
     evidence.shortRelationship = {
       contentId: "short-1", weeklyContentCycleId: "cycle-1", format: "short",
       parentContentId: "long-1", parentMediaSha256: "c".repeat(64), approvedParentRevision: "r1",
-      parentYouTubeVideoId: "verifiedVideo1", parentChannelId: "channel-1",
-      verifiedDestinationUrl: "https://www.youtube.com/watch?v=verifiedVideo1",
+      parentYouTubeVideoId: "aBcD1234_-Z", parentChannelId: "UC" + "B".repeat(22),
+      verifiedDestinationUrl: "https://www.youtube.com/watch?v=aBcD1234_-Z",
       relationshipStatus: "VERIFIED", youtubeRelatedVideoStatus: "PENDING"
     };
   }
