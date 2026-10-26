@@ -66,8 +66,8 @@ test("blocks unapproved, failed, foreign-channel and unpublished parent records"
 
 test("render edit plan is reproducible for same seed and does not accept unverified assets", () => {
   const scenes = [
-    { assetId: "scene-a", sourceSha256: hash, rightsStatus: "VERIFIED", editorialPurpose: "Establish habitat" },
-    { assetId: "scene-b", sourceSha256: "b".repeat(64), rightsStatus: "VERIFIED", editorialPurpose: "Show natural behavior" }
+    { assetId: "scene-a", sourceSha256: hash, rightsStatus: "VERIFIED", editorialPurpose: "Establish habitat", startSeconds: 0, endSeconds: 10 },
+    { assetId: "scene-b", sourceSha256: "b".repeat(64), rightsStatus: "VERIFIED", editorialPurpose: "Show natural behavior", startSeconds: 0, endSeconds: 10 }
   ];
   assert.deepEqual(createDeterministicEditPlan({ seed: 44, scenes }), createDeterministicEditPlan({ seed: 44, scenes }));
   assert.notDeepEqual(createDeterministicEditPlan({ seed: 44, scenes }), createDeterministicEditPlan({ seed: 45, scenes }));
