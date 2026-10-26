@@ -1245,7 +1245,9 @@ const server = http.createServer(async (req, res) => {
         const parentReceiptPath = path.relative(root, path.join(path.resolve(root, process.env.UPLOAD_LOG_DIR ?? "run-logs"), parentAttempt.receiptPath));
         let parentReceipt;
         try { parentReceipt = JSON.parse(fs.readFileSync(resolveRepositoryFile(parentReceiptPath), "utf8")); } catch { return json(res, 409, { error: "Parent upload receipt is missing or unsafe; relationship remains blocked" }); }
-        if (parentReceipt.jobId !== parentJob.id || parentReceipt.videoId !== parentAttempt.remoteVideoId || parentReceipt.channelId !== parentAttempt.channelId || parentReceipt.channelTitle !== "SonicVhibez" || parentReceipt.privacyStatus !== "private" || parentReceipt.remoteStatusVerified !== true) return json(res, 409, { error: "Parent receipt does not independently verify the exact private SonicVhibez video" });
+        const configuredSonicVhibezChannelId = process.env.SONICVHIBEZ_CHANNEL_ID?.trim();
+        if (!/^UC[A-Za-z0-9_-]{22}$/.test(configuredSonicVhibezChannelId ?? "")) return json(res, 503, { error: "Parent binding requires a valid owner-configured SONICVHIBEZ_CHANNEL_ID; no channel ID may be inferred from the receipt" });
+        if (parentReceipt.jobId !== parentJob.id || parentReceipt.videoId !== parentAttempt.remoteVideoId || parentReceipt.channelId !== parentAttempt.channelId || parentReceipt.channelId !== configuredSonicVhibezChannelId || parentReceipt.channelTitle !== "SonicVhibez" || parentReceipt.privacyStatus !== "private" || parentReceipt.remoteStatusVerified !== true) return json(res, 409, { error: "Parent receipt does not independently verify the exact private video on the configured SonicVhibez channel" });
         parentReceipt.remoteVideoId = parentReceipt.videoId;
         const parentArtifact = (parentJob.outputArtifacts ?? []).find(entry => entry.path === body.parentMediaPath);
         if (!parentArtifact || !/^[a-f0-9]{64}$/.test(parentArtifact.sha256 ?? "")) return json(res, 409, { error: "parentMediaPath must exactly match a checksummed artifact on the selected parent job" });
