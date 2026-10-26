@@ -199,6 +199,12 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const authorDuplicateBody = await authorDuplicate.json();
   assert.equal(authorDuplicate.status, 200, JSON.stringify(authorDuplicateBody));
   assert.equal(authorDuplicateBody.reused, true, "identical retries must reuse the persisted authoring result");
+  const authorRenderBypass = await fetch(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id }) });
+  const authorRenderBypassBody = await authorRenderBypass.json();
+  assert.equal(authorRenderBypass.status, 409, "a generated script must not bypass missing narration/caption/scene integration");
+  assert.equal(authorRenderBypassBody.publishable, false);
+  assert.match(authorRenderBypassBody.error, /not yet connected to narration, captions and scene rendering/i);
+
   const authorState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
   assert.equal(authorState.jobs.find(job => job.id === authorJob.id).authoring.result.script.narration, narration);
   assert.ok(authorState.audit.some(event => event.action === "SCRIPT_AUTHORING_COMPLETED_REVIEW_REQUIRED" && event.jobId === authorJob.id));
