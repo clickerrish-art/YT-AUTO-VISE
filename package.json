@@ -28,7 +28,8 @@
     "facebook:publish:autonomous": "node scripts/facebook-autonomous-publisher.mjs",
     "test:browser": "playwright test --config=playwright.config.mjs",
     "validate:content-quality": "node scripts/validate-content-quality.mjs",
-    "prompt:script": "node scripts/build-script-generation-prompt.mjs"
+    "prompt:script": "node scripts/build-script-generation-prompt.mjs",
+    "validate:rendered-audio": "node scripts/validate-rendered-audio.mjs"
   },
   "engines": {
     "node": ">=22"
