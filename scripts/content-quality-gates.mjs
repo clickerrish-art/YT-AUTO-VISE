@@ -239,3 +239,16 @@ export function getAudioProfile(name) {
 
 export function validateAudioReport(report, profileName) {
   const profile = getAudioProfile(profileName);
+  const errors = [];
+  if (!report || typeof report !== "object") return { valid: false, errors: ["measured audio report is required"] };
+  if (!hashValid(report.narrationSha256)) errors.push("narrationSha256 is required");
+  if (!hashValid(report.finalAudioSha256)) errors.push("finalAudioSha256 is required");
+  if (typeof report.transcriptMatchStatus !== "string" || report.transcriptMatchStatus !== "HUMAN_VERIFIED") errors.push("narration transcript must be HUMAN_VERIFIED against the approved script");
+  if (!Number.isFinite(report.integratedLufs) || Math.abs(report.integratedLufs - profile.narrationTargetLufs) > 3) errors.push("integrated loudness is outside configured tolerance");
+  if (!Number.isFinite(report.truePeakDbtp) || report.truePeakDbtp > profile.truePeakDbtpMax) errors.push("true peak exceeds configured maximum");
+  if (!Number.isFinite(report.musicBelowNarrationDb) || report.musicBelowNarrationDb < profile.musicBelowNarrationDb) errors.push("music-to-narration separation is below profile minimum");
+  if (!Number.isFinite(report.ambienceBelowNarrationDb) || report.ambienceBelowNarrationDb < profile.ambienceBelowNarrationDb) errors.push("ambience-to-narration separation is below profile minimum");
+  if (profile.fadesRequired && report.fadesVerified !== true) errors.push("audio fades must be verified");
+  if (report.rightsStatus !== "VERIFIED") errors.push("audio rights must be verified");
+  return { valid: errors.length === 0, errors, profile };
+}
