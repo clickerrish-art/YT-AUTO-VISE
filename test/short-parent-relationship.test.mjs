@@ -49,6 +49,7 @@ test("rejects stale child hashes, cross-cycle parent, absent source segment and 
 
 test("private parent cannot claim native Related video verification", () => {
   const invalid = { ...base, nativeRelatedVideo: { status: "VERIFIED", verifiedBy: "operator", verifiedAt: "2026-10-26T10:00:00Z", evidenceSha256: sha("a") } };
+  invalid.relationshipEvidenceSha256 = shortParentEvidenceSha256(invalid);
   assert.match(validateShortParentRelationship(invalid).join(" "), /private parent/);
   assert.match(validateShortParentRelationship({ ...base, parentPrivacyStatus: "public", nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "unknown" } }).join(" "), /native Related video/);
 });
