@@ -10,6 +10,7 @@ import crypto from "node:crypto";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
 import { assertNoUnresolvedUploadAttempts, fetchCompleteYoutubeHistory, assertNextPublicationAllowed } from "./youtube-history-gate.mjs";
+import { assertShortParentRelationship, shortParentRelationshipSha256 } from "./short-parent-relationship.mjs";
 import { atomicWriteJson } from "./atomic-json-file.mjs";
 
 export const APPROVED_SELAR_URL = "https://selar.com/0u19v8u99l";
@@ -100,8 +101,13 @@ export function acquireExclusiveUploadLock(lockPath, { jobId, now = () => new Da
     }
   };
 }
-export function validateUploadApproval(approval, { jobId, artifactSha256, metadataVersion }) {
+export function validateUploadApproval(approval, { jobId, artifactSha256, metadataVersion, channelId }) {
   if (approval?.decision !== "APPROVE" || approval.jobId !== jobId) throw new Error("approval decision and job ID must match this upload");
+  if ((approval.contentType ?? "long_form") === "short") {
+    assertShortParentRelationship(approval.shortParentRelationship, { childContentId: jobId, childMediaSha256: artifactSha256, childMetadataSha256: metadataVersion, channelId });
+    const relationshipSha256 = shortParentRelationshipSha256(approval.shortParentRelationship);
+    if (approval.shortParentRelationshipSha256 !== relationshipSha256) throw new Error("approval does not bind the exact Short-to-parent relationship");
+  }
   if (!approval.rightsEvidence || typeof approval.rightsEvidence !== "object" || Array.isArray(approval.rightsEvidence)) throw new Error("structured rights evidence is required in the approval record");
   const actualRightsEvidenceSha256 = crypto.createHash("sha256").update(JSON.stringify(approval.rightsEvidence)).digest("hex");
   if (approval.rightsEvidenceSha256 !== actualRightsEvidenceSha256) throw new Error("rights evidence checksum does not match the approval-bound rights record");
@@ -195,7 +201,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (metadata.productUrl !== APPROVED_SELAR_URL) throw new Error("metadata must use the exact approved Selar destination");
   if (metadata.rightsConfirmed !== true || metadata.complianceReviewed !== true) throw new Error("metadata rights and compliance gates must be explicitly reviewed");
   if (metadata.status !== "READY_FOR_PRIVATE_UPLOAD") throw new Error("metadata status must be READY_FOR_PRIVATE_UPLOAD");
-  validateUploadApproval(approval, { jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256 });
+  validateUploadApproval(approval, { jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256, channelId: env.SONICVHIBEZ_CHANNEL_ID });
   const relatedArtifacts = approval.relatedArtifacts;
   verifyRetainedRightsEvidence(approval, youtubeFactory ? {} : { repositoryRoot: process.cwd() });
   const uploadedArtifactIsBound = relatedArtifacts.some(item => path.resolve(item.path) === safeVideoPath && item.sha256 === videoSha256);
@@ -234,6 +240,22 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   const matchedChannel = authenticatedChannels.find(item => item.id === expectedChannelId);
   if (!matchedChannel || metadata.channelId !== expectedChannelId) throw new Error("authenticated YouTube channel ID does not match configured SonicVhibez channel ID");
   if (matchedChannel.snippet?.title !== "SonicVhibez") throw new Error("authenticated channel is not exactly SonicVhibez");
+  if ((metadata.contentType ?? metadata.format) === "short") {
+    const relationship = approval.shortParentRelationship;
+    if (metadata.parentContentId !== relationship.parentContentId || metadata.parentVideoId !== relationship.parentRemoteVideoId || metadata.parentVideoUrl !== relationship.parentCanonicalUrl || metadata.shortParentRelationshipSha256 !== approval.shortParentRelationshipSha256) {
+      throw new Error("Short metadata must bind the exact approved parent content ID, remote video ID, canonical URL and relationship hash");
+    }
+    let parentRemote;
+    try {
+      const parentResponse = await youtube.videos.list({ part: ["id", "snippet", "status"], id: relationship.parentRemoteVideoId });
+      parentRemote = (parentResponse.data.items ?? []).find(item => item.id === relationship.parentRemoteVideoId);
+    } catch {
+      throw new Error("Exact Short parent could not be independently reconciled with YouTube; do not upload");
+    }
+    if (!parentRemote || parentRemote.snippet?.channelId !== expectedChannelId || parentRemote.snippet?.title !== relationship.parentRemoteTitle || parentRemote.status?.privacyStatus !== relationship.parentPrivacyStatus) {
+      throw new Error("Exact Short parent remote ID, channel, title or privacy state no longer matches approval; do not upload");
+    }
+  }
 
   const logDir = path.resolve(env.UPLOAD_LOG_DIR ?? "run-logs");
   const ledgerPath = path.join(logDir, "upload-attempts.json");
@@ -321,6 +343,9 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     attemptId: crypto.randomUUID(), jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256,
     authorizationId: oneShotAuthorization?.authorizationId ?? null,
     authorizedOperator: oneShotAuthorization?.operator ?? null,
+    parentContentId: (metadata.contentType ?? metadata.format) === "short" ? approval.shortParentRelationship.parentContentId : null,
+    parentRemoteVideoId: (metadata.contentType ?? metadata.format) === "short" ? approval.shortParentRelationship.parentRemoteVideoId : null,
+    shortParentRelationshipSha256: (metadata.contentType ?? metadata.format) === "short" ? approval.shortParentRelationshipSha256 : null,
     channelId: matchedChannel.id, channelTitle: matchedChannel.snippet.title,
     format: metadata.contentType ?? metadata.format ?? null,
     cycleIndex: cycleGate ? (cycleHistoryLength % 3) : null,
@@ -389,6 +414,10 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     channelTitle: matchedChannel.snippet.title, videoId, privacyStatus: verified.status.privacyStatus,
     title: metadata.title, format: metadata.contentType ?? metadata.format ?? null,
     actualPublishedAt: verified.snippet?.publishedAt ?? timestamp,
+    parentContentId: (metadata.contentType ?? metadata.format) === "short" ? approval.shortParentRelationship.parentContentId : null,
+    parentRemoteVideoId: (metadata.contentType ?? metadata.format) === "short" ? approval.shortParentRelationship.parentRemoteVideoId : null,
+    shortParentRelationshipSha256: (metadata.contentType ?? metadata.format) === "short" ? approval.shortParentRelationshipSha256 : null,
+    nativeRelatedVideoStatus: (metadata.contentType ?? metadata.format) === "short" ? approval.shortParentRelationship.nativeRelatedVideo.status : null,
     artifactSha256: videoSha256, metadataVersion: metadataSha256,
     reviewer: approval.reviewer, rightsEvidenceSha256: approval.rightsEvidenceSha256,
     remoteStatusVerified: true, publishingEnabled: false, url: "https://www.youtube.com/watch?v=" + videoId
