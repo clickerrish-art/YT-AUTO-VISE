@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validateShortParentRelationship, assertShortParentRelationship, shortParentRelationshipSha256 } from "../scripts/short-parent-relationship.mjs";
+import { validateShortParentRelationship, assertShortParentRelationship, shortParentRelationshipSha256, shortParentEvidenceSha256 } from "../scripts/short-parent-relationship.mjs";
 
 const sha = c => c.repeat(64);
 const base = {
@@ -14,6 +14,7 @@ const base = {
   relationshipEvidenceSha256: sha("f"),
   nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "Private parent is ineligible; owner authorization and eligible visibility arrangement are required." }
 };
+base.relationshipEvidenceSha256 = shortParentEvidenceSha256(base);
 
 test("accepts an explicit, hash-bound Short parent with native feature honestly blocked for private parent", () => {
   assert.deepEqual(validateShortParentRelationship(base, { childContentId: base.childContentId, childMediaSha256: base.childMediaSha256, childMetadataSha256: base.childMetadataSha256, channelId: base.parentChannelId }), []);
