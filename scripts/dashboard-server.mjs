@@ -1083,6 +1083,9 @@ const server = http.createServer(async (req, res) => {
         if (job.authoring?.fingerprint === fingerprint && job.authoring.status === "AWAITING_HUMAN_EDITORIAL_REVIEW") {
           return json(res, 200, { job, reused: true, publishable: false, publishingEnabled: false });
         }
+        if (job.authoring?.status === "RECOVERY_REQUIRED") {
+          return json(res, 409, { error: "Authoring is in RECOVERY_REQUIRED; reconcile the prior provider attempt before retrying", recoveryRequired: true, publishable: false });
+        }
         if (job.authoring?.status === "AWAITING_HUMAN_EDITORIAL_REVIEW" && job.authoring.fingerprint !== fingerprint) {
           return json(res, 409, { error: "A different script brief already has a persisted review draft; create a new job/version rather than silently replacing it", publishable: false });
         }
