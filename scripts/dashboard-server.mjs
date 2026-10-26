@@ -1410,6 +1410,7 @@ const server = http.createServer(async (req, res) => {
         if (index < 0) return json(res, 404, { error: "Content job not found" });
         const job = state.jobs[index];
         if (job.state !== "QUEUED") return json(res, 409, { error: "Only a queued content job can start production" });
+        if (job.authoring) return json(res, 409, { error: "This job has a script-authoring record; generated scripts are not yet connected to narration, captions and scene rendering. Do not bypass review by running the fixed-manifest renderer on this job.", authoringStatus: job.authoring.status, publishable: false, publishingEnabled: false });
         taskId = job.contentType === "short" ? "render-short" : "render-long-form";
         if (activeTasks.has(taskId)) return json(res, 409, { error: "A renderer for this format is already running" });
         claim = claimWorkerLease(job, "dashboard-renderer-" + job.contentType, { leaseMs: 15 * 60_000 });
