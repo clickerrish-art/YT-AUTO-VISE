@@ -13,7 +13,7 @@ const relationship = {
   parentChannelTitle: "SonicVhibez", parentRemoteTitle: "Parent documentary", parentChannelId: channelId, parentRemoteVerified: true, parentPrivacyStatus: "private",
   parentApproved: true, parentRevisionApproved: true, parentPublicationCycleId: "cycle-a", childPublicationCycleId: "cycle-a",
   sourceSegments: [{ sceneId: "scene-02", startSeconds: 5, endSeconds: 15 }],
-  relationshipApproved: true, relationshipReviewNotes: "Parent narrative and source scene segment reviewed.", relationshipReviewer: "operator-1", relationshipApprovedAt: "2026-10-26T10:00:00.000Z",
+  relationshipApproved: true, relationshipReviewNotes: "Parent narrative and source scene segment reviewed.", relationshipReviewer: "operator-1", relationshipApprovedAt: "2026-10-26T10:00:00.000Z", parentSourceEvidencePath: "content/long-form-quality-evidence.json", parentSourceEvidenceSha256: sha("7"),
   relationshipEvidenceSha256: sha("f"),
   nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "Parent is private; native Related video is ineligible without owner-authorized visibility policy." }
 };

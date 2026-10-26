@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 import { spawn, spawnSync } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
 import { generateScript } from "./generate-script.mjs";
-import { assertShortParentRelationship, shortParentRelationshipSha256 } from "./short-parent-relationship.mjs";
+import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence } from "./short-parent-relationship.mjs";
 import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
@@ -1224,7 +1224,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/parent-relationship") {
       const body = await readBody(req);
-      if (typeof body.jobId !== "string" || typeof body.parentJobId !== "string" || typeof body.parentMediaPath !== "string" || typeof body.childMediaPath !== "string" || body.confirmRelationshipReviewed !== true || typeof body.relationshipReviewNotes !== "string" || body.relationshipReviewNotes.trim().length < 3 || body.relationshipReviewNotes.length > 1000) return json(res, 400, { error: "jobId, parentJobId, exact childMediaPath/parentMediaPath, explicit relationship-review confirmation and reviewer notes are required" });
+      if (typeof body.jobId !== "string" || typeof body.parentJobId !== "string" || typeof body.parentMediaPath !== "string" || typeof body.childMediaPath !== "string" || typeof body.parentQualityEvidencePath !== "string" || !body.parentQualityEvidencePath.trim() || body.confirmRelationshipReviewed !== true || typeof body.relationshipReviewNotes !== "string" || body.relationshipReviewNotes.trim().length < 3 || body.relationshipReviewNotes.length > 1000) return json(res, 400, { error: "jobId, exact childMediaPath/parentMediaPath, parentQualityEvidencePath, explicit relationship-review confirmation and reviewer notes are required" });
       const release = await acquireStateLock();
       try {
         const state = loadState();
@@ -1251,6 +1251,16 @@ const server = http.createServer(async (req, res) => {
         if (!parentArtifact || !/^[a-f0-9]{64}$/.test(parentArtifact.sha256 ?? "")) return json(res, 409, { error: "parentMediaPath must exactly match a checksummed artifact on the selected parent job" });
         const parentMediaFile = resolveRepositoryFile(parentArtifact.path);
         if (sha256File(parentMediaFile) !== parentArtifact.sha256) return json(res, 409, { error: "Parent media hash changed; relationship cannot be bound" });
+        let parentQualityEvidenceFile, parentQualityEvidence;
+        try {
+          parentQualityEvidenceFile = resolveRepositoryFile(body.parentQualityEvidencePath);
+          parentQualityEvidence = JSON.parse(fs.readFileSync(parentQualityEvidenceFile, "utf8"));
+        } catch {
+          return json(res, 409, { error: "Exact parent quality-evidence file is missing, unsafe or invalid JSON" });
+        }
+        const sourceSegmentErrors = validateSourceSegmentsAgainstEvidence(body.sourceSegments, parentQualityEvidence);
+        if (sourceSegmentErrors.length) return json(res, 409, { error: "Parent source-scene evidence rejected: " + sourceSegmentErrors.join("; ") });
+        const parentSourceEvidenceSha256 = sha256File(parentQualityEvidenceFile);
         const parentMetadataFile = resolveRepositoryFile(parentJob.metadataPath);
         if (sha256File(parentMetadataFile) !== parentJob.metadataVersion) return json(res, 409, { error: "Parent metadata revision is stale; relationship cannot be bound" });
         if (!child.metadataPath) return json(res, 409, { error: "Short metadata path is required before parent binding" });
@@ -1271,6 +1281,8 @@ const server = http.createServer(async (req, res) => {
           parentMediaSha256: parentArtifact.sha256,
           parentMetadataSha256: parentJob.metadataVersion,
           parentApprovalSha256: crypto.createHash("sha256").update(JSON.stringify(parentJob.humanApproval)).digest("hex"),
+          parentSourceEvidencePath: body.parentQualityEvidencePath,
+          parentSourceEvidenceSha256,
           parentRemoteVideoId: parentReceipt.remoteVideoId,
           parentCanonicalUrl: "https://www.youtube.com/watch?v=" + parentReceipt.remoteVideoId,
           parentChannelTitle: parentReceipt.channelTitle,

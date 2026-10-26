@@ -1,12 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validateShortParentRelationship, assertShortParentRelationship, shortParentRelationshipSha256, shortParentEvidenceSha256 } from "../scripts/short-parent-relationship.mjs";
+import { validateShortParentRelationship, assertShortParentRelationship, shortParentRelationshipSha256, shortParentEvidenceSha256, validateSourceSegmentsAgainstEvidence } from "../scripts/short-parent-relationship.mjs";
 
 const sha = c => c.repeat(64);
 const base = {
   childContentId: "child-job-001", childRevision: "rev-2", childMediaSha256: sha("a"), childMetadataSha256: sha("b"),
   parentContentId: "parent-job-001", parentRevision: "rev-5", parentMediaSha256: sha("c"), parentMetadataSha256: sha("d"),
-  parentApprovalSha256: sha("e"), parentRemoteVideoId: "abcdefghijk", parentCanonicalUrl: "https://www.youtube.com/watch?v=abcdefghijk",
+  parentApprovalSha256: sha("e"), parentSourceEvidencePath: "content/long-form-quality-evidence.json", parentSourceEvidenceSha256: sha("7"), parentRemoteVideoId: "abcdefghijk", parentCanonicalUrl: "https://www.youtube.com/watch?v=abcdefghijk",
   parentChannelTitle: "SonicVhibez", parentRemoteTitle: "Why honey badgers survive venom", parentChannelId: "UC" + "A".repeat(22), parentRemoteVerified: true, parentPrivacyStatus: "private",
   parentApproved: true, parentRevisionApproved: true, parentPublicationCycleId: "cycle-2026-10-A", childPublicationCycleId: "cycle-2026-10-A",
   sourceSegments: [{ sceneId: "scene-03", startSeconds: 42, endSeconds: 58 }],
@@ -54,4 +54,15 @@ test("private parent cannot claim native Related video verification", () => {
   const invalidStatus = { ...base, parentPrivacyStatus: "public", nativeRelatedVideo: { status: "UNKNOWN" } };
   invalidStatus.relationshipEvidenceSha256 = shortParentEvidenceSha256(invalidStatus);
   assert.match(validateShortParentRelationship(invalidStatus).join(" "), /native YouTube Related video status/);
+});
+
+test("source segments must map to the exact reviewed parent timeline and stay within scene bounds", () => {
+  const evidence = { format: "long_form", scenes: [
+    { sceneId: "scene-03", assetId: "asset-03", startSeconds: 40, endSeconds: 60 },
+    { sceneId: "scene-04", assetId: "asset-04", startSeconds: 60, endSeconds: 85 }
+  ] };
+  assert.deepEqual(validateSourceSegmentsAgainstEvidence([{ sceneId: "scene-03", startSeconds: 42, endSeconds: 58 }], evidence), []);
+  assert.match(validateSourceSegmentsAgainstEvidence([{ sceneId: "invented-scene", startSeconds: 42, endSeconds: 58 }], evidence).join(" "), /exactly one recorded parent scene/);
+  assert.match(validateSourceSegmentsAgainstEvidence([{ sceneId: "scene-03", startSeconds: 38, endSeconds: 58 }], evidence).join(" "), /exactly one recorded parent scene/);
+  assert.match(validateSourceSegmentsAgainstEvidence([{ sceneId: "scene-03", startSeconds: 42, endSeconds: 58 }], { format: "short", scenes: evidence.scenes }).join(" "), /must be a long_form/);
 });

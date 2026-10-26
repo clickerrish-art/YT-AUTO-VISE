@@ -514,6 +514,7 @@ test("Short-parent relationship workflow is exposed and incomplete binding fails
   await expect(page.locator("#relationshipChildJob")).toBeVisible();
   await expect(page.locator("#relationshipParentJob")).toBeVisible();
   await expect(page.locator("#relationshipSourceSegments")).toBeVisible();
+  await expect(page.locator("#parentQualityEvidencePath")).toBeVisible();
   await expect(page.locator("#confirmRelationshipReviewed")).toBeVisible();
 
   const rejected = await request.post("/api/jobs/parent-relationship", {

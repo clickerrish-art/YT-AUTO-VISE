@@ -29,6 +29,8 @@ export function validateShortParentRelationship(relationship, {
   if (!SHA256.test(relationship.parentMediaSha256 ?? "")) errors.push("parent media SHA-256 is required");
   if (!SHA256.test(relationship.parentMetadataSha256 ?? "")) errors.push("parent approved metadata SHA-256 is required");
   if (!SHA256.test(relationship.parentApprovalSha256 ?? "")) errors.push("parent approval SHA-256 is required");
+  if (typeof relationship.parentSourceEvidencePath !== "string" || !relationship.parentSourceEvidencePath.trim()) errors.push("exact parent source-quality evidence path is required");
+  if (!SHA256.test(relationship.parentSourceEvidenceSha256 ?? "")) errors.push("parent source-quality evidence SHA-256 is required");
   if (!VIDEO_ID.test(relationship.parentRemoteVideoId ?? "")) errors.push("verified parent YouTube video ID is required");
   const canonical = "https://www.youtube.com/watch?v=" + String(relationship.parentRemoteVideoId ?? "");
   if (relationship.parentCanonicalUrl !== canonical) errors.push("parent URL must be the canonical watch URL for the exact verified parent ID");
@@ -72,4 +74,25 @@ export function shortParentEvidenceSha256(relationship) {
 export function shortParentRelationshipSha256(relationship) {
   if (!relationship || typeof relationship !== "object" || Array.isArray(relationship)) throw new Error("relationship record is required");
   return crypto.createHash("sha256").update(JSON.stringify(relationship)).digest("hex");
+}
+
+/** Validate submitted source segments against the exact parent quality-evidence file. */
+export function validateSourceSegmentsAgainstEvidence(sourceSegments, evidence) {
+  const errors = [];
+  if (!evidence || typeof evidence !== "object" || Array.isArray(evidence) || evidence.format !== "long_form") return ["parent source evidence must be a long_form quality-evidence object"];
+  if (!Array.isArray(evidence.scenes) || evidence.scenes.length < 2) return ["parent source evidence must contain the explicit multi-scene timeline"];
+  if (!Array.isArray(sourceSegments) || sourceSegments.length < 1 || sourceSegments.length > 30) return ["between 1 and 30 explicit source segments are required"];
+  const seen = new Set();
+  for (const [index, segment] of sourceSegments.entries()) {
+    if (!segment || typeof segment.sceneId !== "string" || !segment.sceneId.trim() || !Number.isFinite(segment.startSeconds) || !Number.isFinite(segment.endSeconds) || segment.startSeconds < 0 || segment.endSeconds <= segment.startSeconds) {
+      errors.push("source segment " + (index + 1) + " requires a scene ID and valid start/end seconds");
+      continue;
+    }
+    const matches = evidence.scenes.filter(scene => (scene?.sceneId === segment.sceneId || scene?.assetId === segment.sceneId) && Number.isFinite(scene?.startSeconds) && Number.isFinite(scene?.endSeconds) && segment.startSeconds >= scene.startSeconds && segment.endSeconds <= scene.endSeconds && scene.endSeconds > scene.startSeconds);
+    if (matches.length !== 1) errors.push("source segment " + (index + 1) + " must map to exactly one recorded parent scene and stay within its reviewed time range");
+    const key = [segment.sceneId, segment.startSeconds, segment.endSeconds].join(":");
+    if (seen.has(key)) errors.push("duplicate source segment is not allowed");
+    seen.add(key);
+  }
+  return errors;
 }
