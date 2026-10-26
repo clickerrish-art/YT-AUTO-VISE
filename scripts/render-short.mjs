@@ -50,7 +50,7 @@ if (errors.length) {
   errors.forEach(e => console.error("- " + e));
   process.exit(1);
 }
-const qualityValidator = spawnSync(process.execPath, [path.join(path.dirname(fileURLToPath(import.meta.url)), "validate-content-quality.mjs"), resolvedInputs.qualityEvidencePath, "short"], { encoding: "utf8", timeout: 30_000 });
+const qualityValidator = spawnSync(process.execPath, [path.join(path.dirname(fileURLToPath(import.meta.url)), "validate-content-quality.mjs"), resolvedInputs.qualityEvidencePath, "short", resolvedInputs.footagePath, resolvedInputs.narrationPath], { encoding: "utf8", timeout: 30_000 });
 if (qualityValidator.stdout) process.stdout.write(qualityValidator.stdout);
 if (qualityValidator.stderr) process.stderr.write(qualityValidator.stderr);
 if (qualityValidator.error || qualityValidator.status !== 0) {
