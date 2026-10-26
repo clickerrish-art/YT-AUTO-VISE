@@ -152,3 +152,16 @@ Exact-SHA CI results for `684c262169bd6bfde131e5380ead4128b19372bf`:
 - [Nature Frontiers Facebook draft — run 40288463312](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288463312): **SKIPPED**, not live Page or draft-execution evidence.
 
 These runs explicitly checked out the exact test SHA above. The current application-code checkpoint is `3110140b79cc1e835eb1dd75721e26a16f40150b` (generation/prompt code), with subsequent test-only commits through `684c262169bd6bfde131e5380ead4128b19372bf`. Overall code and production acceptance remain BLOCKED despite these passing automated checks.
+
+
+## Live implementation checkpoint — 26 October 2026 (candidate `a912d3c724195fb1f3ca823d186cddf8b9b4f984`)
+
+Starting PR HEAD for this work was `2c0475b5fb0e38dfb85e962487b42266454bac0a`. Live refs were rechecked before editing: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, 1,320 commits ahead / 2 behind, 141 changed files. PR #1 remains open, draft and unmerged. No reset, rebase, force-push, merge or main-branch write was performed.
+
+Implementation commits:
+- [`3dbccd1`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3dbccd19584cb9da81e646cb9c34a65184fcd47b) — research source normalization now rejects malformed records, non-HTTPS and placeholder URLs, embedded credentials, duplicate/empty IDs and over-limit source lists before contacting the configured provider.
+- [`a912d3c`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/a912d3c724195fb1f3ca823d186cddf8b9b4f984) — regression tests prove malformed, insecure, duplicate and missing research sources fail before provider access.
+
+Exact candidate CI is in progress at the time this note was written: automation/security [run 40302828218](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40302828218), dashboard E2E [40302828398](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40302828398), metadata [40302828303](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40302828303), content quality [40302828279](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40302828279), isolated baseline [40302828254](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40302828254), readiness [40302828489](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40302828489). Facebook daily draft [run 40302828351](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40302828351) is **SKIPPED**, not an integration pass. Do not treat in-progress checks as passes.
+
+This change closes one code-level input-validation defect only. It does not integrate script generation into the dashboard/job lifecycle, implement a multi-scene renderer, prove rights/originality/realism, or clear account/cadence/media/recovery blockers. Current verdict remains **CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED** pending exact-SHA CI results and unresolved acceptance gates. Public/unattended YouTube publishing, Facebook live publishing and Safari campaigns remain disabled/inactive.
