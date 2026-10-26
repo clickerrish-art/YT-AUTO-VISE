@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "../scripts/content-job-lifecycle.mjs";
-import { shortParentRelationshipSha256 } from "../scripts/short-parent-relationship.mjs";
+import { shortParentRelationshipSha256, shortParentEvidenceSha256 } from "../scripts/short-parent-relationship.mjs";
 
 const input = { idempotencyKey: "draft:short-001", title: "Wildlife storytelling", topic: "How to plan a wildlife documentary", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-24", inputReferences: ["content/short-001-wildlife-video-storytelling.md"] };
 
@@ -72,6 +72,7 @@ test("private-upload approval binds media, thumbnail, validated captions, metada
     relationshipApproved: true, relationshipReviewer: "reviewer@example.test", relationshipApprovedAt: "2026-10-23T12:00:00.000Z", relationshipEvidenceSha256: "f".repeat(64),
     nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "Private parent cannot use native Related video." }
   };
+  relationship.relationshipEvidenceSha256 = shortParentEvidenceSha256(relationship);
   job = {
     ...job,
     state: "AWAITING_HUMAN_REVIEW",
