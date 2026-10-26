@@ -39,9 +39,13 @@ function normalizeSources(sources) {
     let parsedUrl;
     try { parsedUrl = new URL(source.url.trim()); }
     catch { throw new Error("research source " + (index + 1) + " URL must be a valid HTTPS URL"); }
-    if (parsedUrl.protocol !== "https:" || parsedUrl.username || parsedUrl.password ||
-        /^(?:localhost|127\\.|0\\.0\\.0\\.0|\\[::1\\])$/i.test(parsedUrl.hostname) ||
-        /(?:replace[_ -]?with|placeholder|todo|tbd|unknown|example\\.com)/i.test(source.url)) {
+    const hostname = parsedUrl.hostname.toLowerCase();
+    const labels = hostname.split(".");
+    const reservedHost = hostname === "localhost" || hostname.endsWith(".localhost") ||
+      hostname.startsWith("127.") || hostname === "0.0.0.0" || hostname === "::1" || hostname === "[::1]" ||
+      labels.includes("example") || ["example", "invalid", "test", "localhost", "local"].includes(labels.at(-1));
+    if (parsedUrl.protocol !== "https:" || parsedUrl.username || parsedUrl.password || reservedHost ||
+        /(?:replace[_ -]?with|placeholder|todo|tbd|unknown)/i.test(source.url)) {
       throw new Error("research source " + (index + 1) + " URL must be a non-placeholder public HTTPS URL without embedded credentials");
     }
     return {
