@@ -1,3 +1,7 @@
+> **Release status (26 October 2026): INCOMPLETE / PRODUCTION BLOCKED.** Latest tested source/test SHA: `f3cae44edcc9094bf2f294ff46d583c556462548`. Automation/security, content quality, metadata, 11 Chromium dashboard journeys and isolated baseline passed on that SHA; production readiness remains blocked and the Facebook draft workflow was skipped. The parent-binding API now requires the verified parent receipt to match the explicitly configured SonicVhibez channel ID. This does not prove live OAuth/channel verification or production readiness. See [current release evidence](docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md), [go-live blockers](docs/GO_LIVE_BLOCKERS.md), and [completion audit](docs/PROJECT_COMPLETION_AUDIT.md). Public/unattended YouTube publishing, Facebook live publishing and Safari campaigns remain disabled; PR #1 remains open, draft and unmerged. No 100% completion claim is supported.
+
+---
+
 ## Latest live checkpoint — 26 October 2026: parent source evidence and exact-SHA acceptance
 
 **Application-code SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **Exact tested source/test SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **PR HEAD at this checkpoint:** `2f455314d4f75dafe8b9b309ead0040570158e09` (documentation-only descendant after the tested source/test SHA).
