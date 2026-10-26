@@ -533,7 +533,7 @@ test("Short-parent relationship workflow is exposed and incomplete binding fails
   expect(after.publishingEnabled).toBe(false);
 });
 
-test("Short-parent dashboard submits the explicit relationship payload and surfaces backend blockers", async ({ page }) => {
+test("Short-parent dashboard submits the explicit relationship payload and surfaces backend blockers", async ({ page, request }) => {
   const headers = { "x-operator-token": operatorToken };
   await page.route("**/api/jobs/parent-relationship", async route => {
     const request = route.request();
@@ -576,7 +576,7 @@ test("Short-parent dashboard submits the explicit relationship payload and surfa
   await page.getByRole("button", { name: "Validate and save Short-parent relationship" }).click();
 
   await expect(page.locator("#parentrelationshipresult")).toContainText("Parent metadata revision is stale");
-  const afterResponse = await page.request.get("/api/state", { headers });
+  const afterResponse = await request.get("/api/state", { headers });
   expect(afterResponse.status()).toBe(200);
   expect((await afterResponse.json()).publishingEnabled).toBe(false);
 });
