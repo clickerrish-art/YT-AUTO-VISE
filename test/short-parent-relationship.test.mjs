@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validateShortParentRelationship, assertShortParentRelationship, shortParentRelationshipSha256, shortParentEvidenceSha256, validateSourceSegmentsAgainstEvidence } from "../scripts/short-parent-relationship.mjs";
+import { validateShortParentRelationship, assertShortParentRelationship, shortParentRelationshipSha256, shortParentEvidenceSha256, validateSourceSegmentsAgainstEvidence, validateConfiguredSonicVhibezChannel } from "../scripts/short-parent-relationship.mjs";
 
 const sha = c => c.repeat(64);
 const base = {
@@ -65,4 +65,16 @@ test("source segments must map to the exact reviewed parent timeline and stay wi
   assert.match(validateSourceSegmentsAgainstEvidence([{ sceneId: "invented-scene", startSeconds: 42, endSeconds: 58 }], evidence).join(" "), /exactly one recorded parent scene/);
   assert.match(validateSourceSegmentsAgainstEvidence([{ sceneId: "scene-03", startSeconds: 38, endSeconds: 58 }], evidence).join(" "), /exactly one recorded parent scene/);
   assert.match(validateSourceSegmentsAgainstEvidence([{ sceneId: "scene-03", startSeconds: 42, endSeconds: 58 }], { format: "short", scenes: evidence.scenes }).join(" "), /must be a long_form/);
+});
+
+
+test("configured SonicVhibez channel identity must independently match the parent receipt", () => {
+  const channelId = "UC" + "A".repeat(22);
+  const receipt = { channelTitle: "SonicVhibez", channelId };
+  assert.deepEqual(validateConfiguredSonicVhibezChannel(receipt, channelId), []);
+  assert.match(validateConfiguredSonicVhibezChannel(receipt, undefined).join(" "), /owner-configured SONICVHIBEZ_CHANNEL_ID/);
+  assert.match(validateConfiguredSonicVhibezChannel(receipt, "UC" + "B".repeat(22)).join(" "), /does not match configured SONICVHIBEZ_CHANNEL_ID/);
+  assert.match(validateConfiguredSonicVhibezChannel({ ...receipt, channelTitle: "Nature Frontiers" }, channelId).join(" "), /must be SonicVhibez/);
+  assert.match(validateConfiguredSonicVhibezChannel({ ...receipt, channelId: "UCbad" }, channelId).join(" "), /valid channel ID/);
+  assert.match(validateConfiguredSonicVhibezChannel(null, channelId).join(" "), /receipt is required/);
 });
