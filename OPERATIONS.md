@@ -378,3 +378,21 @@ Current branch SHA at the code checkpoint: `6b05beb4461ddf3065f05b56742a306fa443
 
 ### Remaining release gates
 **Code acceptance is PARTIALLY VERIFIED, not fully accepted. Production acceptance is BLOCKED.** The current test suite and three browser tests do not establish every visible control/API route or all recovery drills. Genuine rights-cleared Short and long-form media, final manifests and validation reports, human playback and hash-bound approval, verified SonicVhibez OAuth/channel identity and complete remote-history reconciliation, explicit authorization for one private upload and verified remote receipt, verified Nature Frontiers Page access and successful default-branch Facebook draft artifact, isolated backup/restore/interruption/concurrency/rollback drills, complete branch-history review and actual deployment/monitoring verification remain outstanding. No real YouTube upload or Facebook post was performed. Public/unattended YouTube publishing and Facebook live publishing remain disabled. Only approved Selar destination: `https://selar.com/0u19v8u99l`; Safari campaigns remain inactive.
+
+
+## Content-quality evidence required before rendering
+
+Render manifests must include `qualityEvidencePath`. Before invoking FFmpeg, the Short and long-form renderers run `scripts/validate-content-quality.mjs` and fail closed if the evidence is absent, invalid, stale, or bound to different source bytes. The evidence file is resolved safely without symlinks and must include:
+
+- Structured script, measured word count/sections, source-backed material claims, and recorded similarity review.
+- Provenance records for source assets, including original SHA-256, permitted use, commercial permission and a human verifier.
+- Scene list and a recorded non-negative render seed; the reproducible edit-plan hash must match.
+- Audio profile, measured loudness/true-peak/ducking/fade data, narration SHA-256 and human-verified transcript match.
+- Human editorial review record with reviewer and timestamp.
+- For a Short, the exact parent content ID, weekly cycle, approved parent revision/hash, SonicVhibez channel, verified remote parent video ID and canonical URL.
+
+This is a technical evidence gate, not a claim that a licence is genuine or the footage looks realistic. A human must review the complete export for factual accuracy, scene continuity, animal anatomy/behavior, synthetic-media disclosure, captions and narration synchronization.
+
+### YouTube Short Related video verification
+
+Keep three states distinct: (1) internal parent relationship, (2) canonical parent URL used in description/metadata, and (3) YouTube Studio's native Related video association. The current repository gate can validate (1) and (2); it does not configure or independently observe (3). After the Short exists in Studio, an authorized operator must select the intended verified parent under the Short's Related video setting and record a dated verification artifact with the Short ID, parent video ID and reviewer. Until that artifact is checked and `youtubeRelatedVideoStatus` is `VERIFIED`, the Short is not cleared for publication. Do not automate unsupported Studio actions or infer success from a description link.
