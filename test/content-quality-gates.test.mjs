@@ -41,7 +41,7 @@ const child = {
 test("accepts only an explicit approved parent with matching cycle, revision, hash and verified remote destination", () => {
   const result = validateShortParentRelationship(child, parent);
   assert.equal(result.valid, true, result.errors.join("; "));
-  assert.equal(result.canonicalUrl, "https://www.youtube.com/watch?v=abc123XYZ");
+  assert.equal(result.canonicalUrl, "https://www.youtube.com/watch?v=abc123XYZ_1");
 });
 
 test("fails closed for missing/wrong parent, wrong cycle, stale revision/hash and unverified native Related video", () => {
