@@ -1,3 +1,15 @@
+# Live implementation checkpoint — 26 October 2026
+
+This checkpoint supersedes earlier SHA/divergence/test-count statements below when inconsistent. Exact tested source/test SHA is `f3cae44edcc9094bf2f294ff46d583c556462548`; last application-code change is `8c085e1347144ad94dede6884619232d5c7278fd`. At the time of exact-SHA CI, PR #1 was open, draft and unmerged. `main` was `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; divergence 1,452 ahead / 2 behind / 148 changed files. See `docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md` for workflow evidence.
+
+New implementation: the parent-binding API now requires the parent receipt channel ID to match the explicitly configured SonicVhibez channel ID; a reusable validator and regression tests cover missing/invalid configuration, wrong channel ID/title and malformed receipts. This fixes an identity-trust gap; it does not establish live OAuth/channel verification.
+
+Current test evidence on the exact source/test SHA: automation/security PASS (320 Node tests, 8 Python safety tests, install/syntax/security checks), browser E2E PASS (11 Chromium journeys), content quality PASS, metadata PASS, isolated baseline PASS. Production readiness remains BLOCKED; Facebook draft workflow SKIPPED.
+
+**Overall completion remains INCOMPLETE.** The existing dashboard has a Short-parent form and API, but successful binding and all requested stale-hash/wrong-channel/queue-reorder/concurrency/restart/backup-restore journeys are not yet comprehensively browser-accepted. No production media package has passed complete rights/provenance, factual, originality, naturalism, audio/caption, final-export and human playback gates. YouTube/Meta external identity and history gates, owner-approved cadence, full divergent-history review, operational recovery and deployment governance remain open. No claim of 100% completion is warranted.
+
+---
+
 ## Latest live checkpoint — 26 October 2026: parent source evidence and exact-SHA acceptance
 
 **Application-code SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **Exact tested source/test SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **PR HEAD at this checkpoint:** `2f455314d4f75dafe8b9b309ead0040570158e09` (documentation-only descendant after the tested source/test SHA).
