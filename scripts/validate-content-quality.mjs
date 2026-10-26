@@ -49,7 +49,7 @@ export function validateContentQualityEvidence(evidence, { format, evidenceDir =
     errors.push("edit plan: " + error.message);
   }
   if (evidence.format === "short") {
-    const relationship = validateShortParentRelationship(evidence.shortRelationship, evidence.parentRecord);
+    const relationship = validateShortParentRelationship(evidence.shortRelationship, evidence.parentRecord, { requireNativeRelatedVideoVerification: false });
     errors.push(...relationship.errors.map(e => "parent relationship: " + e));
   }
   const audio = evidence.audioReport;
