@@ -9,6 +9,7 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { prepareSafeRenderOutput, resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
+import { getAudioProfile } from "./content-quality-gates.mjs";
 
 const [manifestArg = "content/long-form-render-manifest.json", outputArg = "media/long-form-next.mp4"] = process.argv.slice(2);
 let manifestPath;
@@ -97,12 +98,26 @@ const escapedCaptions = captions
   .replace(/,/g, "\\,")
   .replace(/\[/g, "\\[")
   .replace(/\]/g, "\\]");
+const qualityEvidence = JSON.parse(fs.readFileSync(resolvedInputs.qualityEvidencePath, "utf8"));
+const audioProfile = getAudioProfile(qualityEvidence.audioProfile);
+const compressionThreshold = Math.pow(10, audioProfile.compressionThresholdDb / 20).toFixed(5);
+const narrationDurationSeconds = duration;
+const fadeOutStart = Math.max(0, narrationDurationSeconds - 0.2);
+const audioFilter = "highpass=f=" + audioProfile.highPassHz
+  + ",lowpass=f=" + audioProfile.lowPassHz
+  + ",acompressor=threshold=" + compressionThreshold
+  + ":ratio=" + audioProfile.compressionRatio + ":attack=20:release=250"
+  + ",loudnorm=I=" + audioProfile.narrationTargetLufs
+  + ":TP=" + audioProfile.truePeakDbtpMax + ":LRA=" + audioProfile.loudnessRangeTarget
+  + ",afade=t=in:st=0:d=0.12,afade=t=out:st=" + fadeOutStart.toFixed(3) + ":d=0.2";
+
 const args = [
   "-y", "-i", footage, "-i", narration,
   "-shortest",
   "-vf", "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,setsar=1,subtitles='" + escapedCaptions + "'",
   "-map", "0:v:0", "-map", "1:a:0",
   "-c:v", "libx264", "-preset", "medium", "-crf", "21",
+  "-af", audioFilter,
   "-c:a", "aac", "-b:a", "192k", "-pix_fmt", "yuv420p",
   "-movflags", "+faststart", output
 ];
