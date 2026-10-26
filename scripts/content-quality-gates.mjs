@@ -52,6 +52,7 @@ export function validateShortParentRelationship(short, parent, {
   if (short.verifiedDestinationUrl !== canonicalUrl) errors.push("verifiedDestinationUrl must exactly match the canonical URL derived from the verified parent video ID");
   if (short.relationshipStatus !== "VERIFIED") errors.push("relationshipStatus must be VERIFIED");
   if (requireNativeRelatedVideoVerification && short.youtubeRelatedVideoStatus !== "VERIFIED") errors.push("YouTube native Related video association is not independently verified; manual Studio verification is required");
+  if (requireNativeRelatedVideoVerification && !["public", "unlisted"].includes(String(parent?.privacyStatus ?? parent?.visibility ?? "").toLowerCase())) errors.push("YouTube native Related video target must be public or unlisted; a private parent is ineligible");
   if (short.sourceSegment !== undefined && (!short.sourceSegment || typeof short.sourceSegment !== "object" || !nonempty(short.sourceSegment.start) || !nonempty(short.sourceSegment.end))) errors.push("sourceSegment must include explicit start and end when supplied");
   return { valid: errors.length === 0, errors, canonicalUrl: canonicalUrl || null, parentYouTubeVideoId: nonempty(remoteId) ? remoteId : null };
 }
