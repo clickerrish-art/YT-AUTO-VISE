@@ -1224,7 +1224,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/parent-relationship") {
       const body = await readBody(req);
-      if (typeof body.jobId !== "string" || typeof body.parentJobId !== "string" || typeof body.parentMediaPath !== "string" || typeof body.childMediaPath !== "string") return json(res, 400, { error: "jobId, parentJobId, exact childMediaPath and parentMediaPath are required" });
+      if (typeof body.jobId !== "string" || typeof body.parentJobId !== "string" || typeof body.parentMediaPath !== "string" || typeof body.childMediaPath !== "string" || body.confirmRelationshipReviewed !== true || typeof body.relationshipReviewNotes !== "string" || body.relationshipReviewNotes.trim().length < 3 || body.relationshipReviewNotes.length > 1000) return json(res, 400, { error: "jobId, parentJobId, exact childMediaPath/parentMediaPath, explicit relationship-review confirmation and reviewer notes are required" });
       const release = await acquireStateLock();
       try {
         const state = loadState();
@@ -1284,6 +1284,7 @@ const server = http.createServer(async (req, res) => {
           childPublicationCycleId: child.publicationCycleId,
           sourceSegments: body.sourceSegments,
           relationshipApproved: true,
+          relationshipReviewNotes: body.relationshipReviewNotes.trim(),
           relationshipReviewer: reviewer,
           relationshipApprovedAt: new Date().toISOString(),
           relationshipEvidenceSha256: "",
