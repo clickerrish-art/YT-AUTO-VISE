@@ -150,6 +150,17 @@ if (validation.error || validation.status !== 0) {
   console.error("BLOCKED: rendered output failed technical export validation; it must not be marked successful.");
   process.exit(validation.error?.code === "ETIMEDOUT" ? 124 : 1);
 }
+const audioValidatorPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "validate-rendered-audio.mjs");
+const audioValidation = spawnSync(process.execPath, [audioValidatorPath, output, qualityEvidence.audioProfile], {
+  encoding: "utf8",
+  timeout: 120_000
+});
+if (audioValidation.stdout) process.stdout.write(audioValidation.stdout);
+if (audioValidation.stderr) process.stderr.write(audioValidation.stderr);
+if (audioValidation.error || audioValidation.status !== 0) {
+  console.error("BLOCKED: rendered audio failed measured loudness/true-peak validation.");
+  process.exit(audioValidation.error?.code === "ETIMEDOUT" ? 124 : 1);
+}
 console.log("RENDERED AND VALIDATED: " + output + " (horizontal 16:9; duration, streams, codec, frame rate and full-file decode passed).");
 console.log("Next: complete separate metadata, rights, thumbnail and human release review.");
 console.log("No upload or publishing action was performed.");
