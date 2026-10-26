@@ -9,7 +9,7 @@ const AUDIO_PROFILES = Object.freeze({
   short_form_voice_first: { narrationTargetLufs: -14, truePeakDbtpMax: -1, musicBelowNarrationDb: 14, ambienceBelowNarrationDb: 16, fadesRequired: true, highPassHz: 90, lowPassHz: 16000, compressionThresholdDb: -16, compressionRatio: 2.5, loudnessRangeTarget: 8 }
 });
 
-const PLACEHOLDER = /replace[_ -]?with|placeholder|todo|tbd|unknown|example\.com/i;
+const PLACEHOLDER = /replace[_ -]?with|placeholder|todo|tbd|unknown/i;
 
 function nonempty(value) {
   return typeof value === "string" && value.trim().length > 0;
@@ -17,6 +17,24 @@ function nonempty(value) {
 
 function hashValid(value) {
   return typeof value === "string" && SHA256.test(value);
+}
+
+/** Reject reserved examples, credentials, local names and IP-literal research URLs. */
+export function isUsableResearchUrl(value) {
+  if (typeof value !== "string" || !value.trim() || PLACEHOLDER.test(value)) return false;
+  let url;
+  try { url = new URL(value); } catch { return false; }
+  if (url.protocol !== "https:" || url.username || url.password) return false;
+  const hostname = url.hostname.toLowerCase().replace(/^\[|\]$/g, "");
+  if (!hostname || hostname === "localhost" || hostname.endsWith(".localhost") ||
+      hostname.endsWith(".local") || hostname.endsWith(".internal") || hostname.endsWith(".test") ||
+      hostname.endsWith(".invalid") || hostname.endsWith(".example") || hostname === "example" ||
+      hostname === "example.com" || hostname.endsWith(".example.com") ||
+      hostname === "example.org" || hostname.endsWith(".example.org") ||
+      hostname === "example.net" || hostname.endsWith(".example.net") ||
+      hostname.endsWith(".onion") || hostname.endsWith(".home.arpa") ||
+      hostname.split(".").includes("example") || isIP(hostname) !== 0) return false;
+  return true;
 }
 
 /**
@@ -182,11 +200,11 @@ export function validateScriptDepth(script, { format = "long_form", minWords, ma
   for (const [index, claim] of claims.entries()) {
     if (!nonempty(claim?.text) || !Array.isArray(claim?.sourceIds) || claim.sourceIds.length === 0) errors.push("claim " + (index + 1) + " requires text and at least one sourceId");
     for (const sourceId of claim?.sourceIds ?? []) {
-      if (!sources.some(source => source?.id === sourceId && nonempty(source?.url) && /^https:\/\//i.test(source.url))) errors.push("claim " + (index + 1) + " references a missing or invalid HTTPS source: " + sourceId);
+      if (!sources.some(source => source?.id === sourceId && isUsableResearchUrl(source?.url))) errors.push("claim " + (index + 1) + " references a missing or invalid public HTTPS source: " + sourceId);
     }
   }
   for (const [index, source] of sources.entries()) {
-    if (!nonempty(source?.id) || !nonempty(source?.title) || !nonempty(source?.url) || !/^https:\/\//i.test(source.url) || PLACEHOLDER.test(source.url)) errors.push("source " + (index + 1) + " must have a title and a non-placeholder HTTPS URL");
+    if (!nonempty(source?.id) || !nonempty(source?.title) || !isUsableResearchUrl(source?.url)) errors.push("source " + (index + 1) + " must have a title and a non-placeholder public HTTPS URL");
   }
   if (script.similarityReview?.status !== "REVIEWED" || !nonempty(script.similarityReview?.evidenceRef)) errors.push("originality similarity review evidence is required");
   return { valid: errors.length === 0, errors, measured: { words, sections: sections.length, claims: claims.length, sources: sources.length, speakingRateWpm: validSpeakingRate ? speakingRateWpm : null, estimatedDurationSeconds: estimatedDurationSeconds === null ? null : Number(estimatedDurationSeconds.toFixed(1)), estimatedNarrationMinutes: estimatedDurationSeconds === null ? null : Number((estimatedDurationSeconds / 60).toFixed(2)), targetDurationSeconds: { min: targetMinDurationSeconds, max: targetMaxDurationSeconds } } };
