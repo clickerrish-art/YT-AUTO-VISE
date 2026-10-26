@@ -1222,6 +1222,71 @@ const server = http.createServer(async (req, res) => {
         return json(res, 200, { job: updated, publishingEnabled: false });
       } finally { release(); }
     }
+    if (req.method === "POST" && url.pathname === "/api/jobs/parent-relationship") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || typeof body.parentJobId !== "string" || typeof body.parentMediaPath !== "string") return json(res, 400, { error: "jobId, parentJobId and exact parentMediaPath are required" });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const childIndex = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        const parentJob = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.parentJobId);
+        if (childIndex < 0 || !parentJob) return json(res, 404, { error: "Child or exact parent job was not found" });
+        const child = state.jobs[childIndex];
+        if (child.contentType !== "short" || parentJob.contentType !== "long_form" || child.id === parentJob.id) return json(res, 409, { error: "Only a Short may bind to a distinct long-form parent job" });
+        if (!child.publicationCycleId || child.publicationCycleId !== parentJob.publicationCycleId) return json(res, 409, { error: "Both jobs must have the same explicit owner-assigned publicationCycleId" });
+        if (!["GENERATED", "VALIDATING", "AWAITING_HUMAN_REVIEW"].includes(child.state) || !Array.isArray(child.outputArtifacts) || !child.outputArtifacts.length || !child.metadataVersion) return json(res, 409, { error: "Short must have a recorded media artifact and metadata revision before parent binding" });
+        if (parentJob.state !== "PRIVATE_UPLOAD_VERIFIED" || parentJob.humanApproval?.decision !== "APPROVE") return json(res, 409, { error: "Parent must be human-approved and have a verified private-upload receipt" });
+        const parentReceipt = state.uploads.find(entry => entry.jobId === parentJob.id && entry.remoteStatusVerified === true && entry.channelTitle === "SonicVhibez" && entry.privacyStatus === "private");
+        if (!parentReceipt?.videoId || !parentReceipt.channelId || !/^[A-Za-z0-9_-]{11}$/.test(parentReceipt.videoId)) return json(res, 409, { error: "Exact parent remote ID and verified SonicVhibez private receipt are required" });
+        const parentArtifact = (parentJob.outputArtifacts ?? []).find(entry => entry.path === body.parentMediaPath);
+        if (!parentArtifact || !/^[a-f0-9]{64}$/.test(parentArtifact.sha256 ?? "")) return json(res, 409, { error: "parentMediaPath must exactly match a checksummed artifact on the selected parent job" });
+        const parentMediaFile = resolveRepositoryFile(parentArtifact.path);
+        if (sha256File(parentMediaFile) !== parentArtifact.sha256) return json(res, 409, { error: "Parent media hash changed; relationship cannot be bound" });
+        const parentMetadataFile = resolveRepositoryFile(parentJob.metadataPath);
+        if (sha256File(parentMetadataFile) !== parentJob.metadataVersion) return json(res, 409, { error: "Parent metadata revision is stale; relationship cannot be bound" });
+        const reviewer = operatorId;
+        const relationship = {
+          childContentId: child.id,
+          childRevision: child.metadataVersion,
+          childMediaSha256: child.outputArtifacts[0].sha256,
+          childMetadataSha256: child.metadataVersion,
+          parentContentId: parentJob.id,
+          parentRevision: parentJob.metadataVersion,
+          parentMediaSha256: parentArtifact.sha256,
+          parentMetadataSha256: parentJob.metadataVersion,
+          parentApprovalSha256: crypto.createHash("sha256").update(JSON.stringify(parentJob.humanApproval)).digest("hex"),
+          parentRemoteVideoId: parentReceipt.videoId,
+          parentCanonicalUrl: "https://www.youtube.com/watch?v=" + parentReceipt.videoId,
+          parentChannelTitle: parentReceipt.channelTitle,
+          parentRemoteTitle: parentReceipt.title,
+          parentChannelId: parentReceipt.channelId,
+          parentRemoteVerified: true,
+          parentPrivacyStatus: parentReceipt.privacyStatus,
+          parentApproved: true,
+          parentRevisionApproved: true,
+          parentPublicationCycleId: parentJob.publicationCycleId,
+          childPublicationCycleId: child.publicationCycleId,
+          sourceSegments: body.sourceSegments,
+          relationshipApproved: true,
+          relationshipReviewer: reviewer,
+          relationshipApprovedAt: new Date().toISOString(),
+          relationshipEvidenceSha256: "",
+          nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "Parent is private under the current policy; native YouTube Related video requires an eligible public/unlisted parent and owner authorization." }
+        };
+        relationship.relationshipEvidenceSha256 = crypto.createHash("sha256").update(JSON.stringify({ ...relationship, relationshipEvidenceSha256: "" })).digest("hex");
+        try {
+          assertShortParentRelationship(relationship, { childContentId: child.id, childMediaSha256: relationship.childMediaSha256, childMetadataSha256: child.metadataVersion, channelId: parentReceipt.channelId });
+        } catch (error) {
+          return json(res, 400, { error: String(error?.message ?? "Short parent relationship validation failed") });
+        }
+        child.shortParentRelationship = relationship;
+        child.updatedAt = new Date().toISOString();
+        state.jobs[childIndex] = child;
+        state.audit.push({ id: crypto.randomUUID(), action: "SHORT_PARENT_RELATIONSHIP_BOUND", jobId: child.id, parentJobId: parentJob.id, parentRemoteVideoId: parentReceipt.videoId, relationshipSha256: shortParentRelationshipSha256(relationship), actor: reviewer, at: child.updatedAt, nativeRelatedVideoStatus: "BLOCKED_EXTERNAL" });
+        saveState(state);
+        return json(res, 200, { job: child, relationshipSha256: shortParentRelationshipSha256(relationship), nativeRelatedVideoStatus: "BLOCKED_EXTERNAL", publishingEnabled: false });
+      } finally { release(); }
+    }
     if (req.method === "POST" && url.pathname === "/api/jobs/rights/verify") {
       const body = await readBody(req);
       const actor = process.env.DASHBOARD_OPERATOR_ID;
