@@ -317,3 +317,8 @@ npm run validate:content-quality -- content/short-quality-evidence.json short
 The evidence JSON must bind the script's measured word count/sections/claim sources and similarity-review record, exact footage bytes to provenance SHA-256, a deterministic edit plan and seed, measured audio report and narration bytes, and an approving human editorial review. Short evidence must also bind an explicit approved long-form parent, its revision and media hash, the verified remote parent video ID and the canonical watch URL. The native YouTube Related video setting is a separate Studio verification; an internal relationship or description URL does not prove that setting.
 
 The validator blocks placeholders and mismatched files; it does not prove licence authenticity, guarantee originality, assess animal realism automatically, or replace a real full-playback/factual review. Keep public/unattended publishing disabled. See `scripts/content-quality-gates.mjs`, `scripts/validate-content-quality.mjs`, and `test/validate-content-quality.test.mjs`.
+
+
+### Structured script-authoring prompt
+
+Use `npm run prompt:script -- long_form <brief.json>` or `npm run prompt:script -- short <brief.json>` to produce a source-constrained prompt. A Short brief must identify its exact long-form parent and weekly cycle. This command builds a prompt only; it does not call an LLM or invent research. Validate the returned structured script through the quality-evidence gate before narration/rendering.
