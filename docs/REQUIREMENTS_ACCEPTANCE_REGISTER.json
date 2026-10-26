@@ -3,7 +3,7 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-26T08:40:00+02:00",
+  "recordedAt": "2026-10-26T08:55:00+02:00",
   "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. Current source/test checkpoint 2686612d9982e0094cd25759e9a73fe466585634: 280 Node tests and 8 Python safety tests passed; npm audit reported 0 vulnerabilities; real-dashboard browser E2E passed 10 Chromium journeys; isolated main/candidate baseline passed for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 2686612d9982e0094cd25759e9a73fe466585634; metadata and content quality passed. Production readiness remains BLOCKED on real owner-controlled prerequisites; Facebook draft workflow was SKIPPED.",
   "statuses": [
     "PASS",
@@ -529,25 +529,40 @@
       "nextAction": "Implement a validated multi-input scene timeline/concat path that uses all approved scene entries, binds each file hash and timing, and verifies the assembled sequence. Do not claim complete scene-by-scene production from the current single-footage input.",
       "assessmentCommitSha": "be11490345ae89938c32af1496f01b75ae20134a",
       "acceptanceCriterion": "A multi-scene test fixture renders a deterministic, timed sequence of distinct approved inputs; missing/reordered/stale assets fail closed and the final manifest records each source hash and edit decision."
+    },
+    {
+      "id": "SCHED-QUEUE-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Queued jobs reserve their intended publication timestamps and are included in spacing/date-collision validation so a queued operation cannot silently collide with another queued or proposed slot.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/390919713da239968d391ec7b715dd6173035f3e",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e65e859e44f254edddb735def44ca1b8095ab627",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980"
+      ],
+      "nextAction": "Retain regression coverage for same-day collisions, exact 72-hour spacing and missing queued timestamps; verify the current branch's exact-head browser E2E run before overall code acceptance.",
+      "assessmentCommitSha": "e65e859e44f254edddb735def44ca1b8095ab627",
+      "acceptanceCriterion": "QUEUED entries are treated as active schedule reservations; collision and malformed/missing timestamp cases fail closed, while a valid exact 72-hour gap passes."
     }
   ],
   "currentCheckpoint": {
-    "assessedSourceTestSha": "be11490345ae89938c32af1496f01b75ae20134a",
+    "assessedSourceTestSha": "e65e859e44f254edddb735def44ca1b8095ab627",
     "mainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBase": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "branchAhead": 1289,
+    "branchAhead": 1297,
     "branchBehind": 2,
     "changedFiles": 139,
     "evidence": {
-      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284726836",
-      "browserE2E": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284726765",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284726848",
-      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284726766",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284726814",
-      "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284726890",
-      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284726775"
+      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980",
+      "browserE2E": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971984",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971993",
+      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284972151",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284972016",
+      "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284972044",
+      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284972048"
     },
     "verdict": "CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED",
-    "note": "Source/test SHA evidence only. Exact documentation descendants also receive CI. Full multi-scene storyboard composition, complete dashboard control acceptance, full branch-only history review, cross-process/fault-injection/recovery/deployment drills and actual production prerequisites remain unresolved."
+    "note": "The browser E2E run for this exact source/test SHA was still in progress when recorded; do not mark code acceptance complete until it finishes. Full multi-scene storyboard composition, automated prompt workflow integration, full dashboard control matrix, branch-only history review, recovery/deployment drills and real production prerequisites remain unresolved."
   }
 }
