@@ -123,6 +123,8 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     errors.forEach(error => console.error("- " + error));
     process.exit(1);
   }
+  const measuredScript = validateScriptDepth(evidence.script, { format }).measured;
   console.log("PASS: script depth, source claims, provenance hashes, reproducible edit plan, audio measurements and editorial review evidence.");
-  console.log("Human review is evidence-bound but still depends on the reviewer performing a genuine full playback and factual review.");
+  console.log("Measured narration: " + measuredScript.words + " words at " + measuredScript.speakingRateWpm + " WPM; estimated duration " + measuredScript.estimatedNarrationMinutes + " minutes (" + measuredScript.estimatedDurationSeconds + " seconds), target " + measuredScript.targetDurationSeconds.min + "–" + measuredScript.targetDurationSeconds.max + " seconds.");
+  console.log("This is a word-rate estimate, not a measured final audio duration. Human review still requires genuine full playback and factual review.");
 }
