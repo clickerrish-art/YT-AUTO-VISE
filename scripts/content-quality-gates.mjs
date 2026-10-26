@@ -71,11 +71,24 @@ export function createDeterministicEditPlan({ seed, scenes, profile = {} }) {
   if (!Number.isSafeInteger(seed) || seed < 0) throw new Error("render seed must be a non-negative safe integer");
   if (!Array.isArray(scenes) || scenes.length === 0) throw new Error("at least one approved scene is required");
   const errors = [];
+  const seenSegments = new Set();
   for (const [index, scene] of scenes.entries()) {
     if (!scene || !nonempty(scene.assetId) || !hashValid(scene.sourceSha256)) errors.push("scene " + index + " needs assetId and source SHA-256");
     if (scene?.rightsStatus !== "VERIFIED") errors.push("scene " + index + " rightsStatus must be VERIFIED");
     if (!nonempty(scene?.editorialPurpose)) errors.push("scene " + index + " needs an editorialPurpose");
     if (scene?.containsRestrictedMaterial === true) errors.push("scene " + index + " contains restricted material");
+    const hasStart = Number.isFinite(scene?.startSeconds);
+    const hasEnd = Number.isFinite(scene?.endSeconds);
+    if (scenes.length > 1 && (!hasStart || !hasEnd || scene.startSeconds < 0 || scene.endSeconds <= scene.startSeconds)) {
+      errors.push("multi-scene scene " + index + " requires a valid source startSeconds/endSeconds segment");
+    } else if (hasStart !== hasEnd || (hasStart && (scene.startSeconds < 0 || scene.endSeconds <= scene.startSeconds))) {
+      errors.push("scene " + index + " source segment times must both be valid with endSeconds greater than startSeconds");
+    }
+    if (hasStart && hasEnd) {
+      const segmentKey = [scene.assetId, scene.startSeconds, scene.endSeconds].join(":");
+      if (seenSegments.has(segmentKey)) errors.push("duplicate source segment is not allowed at scene " + index);
+      seenSegments.add(segmentKey);
+    }
   }
   if (errors.length) throw new Error("edit plan blocked: " + errors.join("; "));
   let state = seed >>> 0;
@@ -94,6 +107,8 @@ export function createDeterministicEditPlan({ seed, scenes, profile = {} }) {
     scenes: scenes.map((scene, index) => ({
       assetId: scene.assetId,
       sourceSha256: scene.sourceSha256,
+      sourceStartSeconds: Number.isFinite(scene.startSeconds) ? scene.startSeconds : null,
+      sourceEndSeconds: Number.isFinite(scene.endSeconds) ? scene.endSeconds : null,
       order: index,
       framing: allowedFraming[Math.floor(random() * allowedFraming.length)],
       grade: {
@@ -107,7 +122,7 @@ export function createDeterministicEditPlan({ seed, scenes, profile = {} }) {
     profile: structuredClone(profile),
     planSha256: crypto.createHash("sha256").update(JSON.stringify({
       seed,
-      scenes: scenes.map(s => ({ assetId: s.assetId, sourceSha256: s.sourceSha256, editorialPurpose: s.editorialPurpose })),
+      scenes: scenes.map(s => ({ assetId: s.assetId, sourceSha256: s.sourceSha256, startSeconds: Number.isFinite(s.startSeconds) ? s.startSeconds : null, endSeconds: Number.isFinite(s.endSeconds) ? s.endSeconds : null, editorialPurpose: s.editorialPurpose })),
       profile
     })).digest("hex")
   };

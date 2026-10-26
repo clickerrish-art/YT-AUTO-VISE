@@ -43,6 +43,17 @@ export function validateContentQualityEvidence(evidence, { format, evidenceDir =
       }
     });
   }
+  if (Array.isArray(evidence.scenes)) {
+    const provenanceById = new Map((evidence.assetProvenance ?? []).map(asset => [asset?.assetId, asset]));
+    evidence.scenes.forEach((scene, index) => {
+      const asset = provenanceById.get(scene?.assetId);
+      if (!asset) errors.push("scene " + index + " must reference an assetProvenance assetId");
+      else if (asset.originalSha256 !== scene.sourceSha256) errors.push("scene " + index + " source SHA-256 must match its assetProvenance record");
+      if (evidence.scenes.length > 1 && (!Number.isFinite(scene?.startSeconds) || !Number.isFinite(scene?.endSeconds) || scene.startSeconds < 0 || scene.endSeconds <= scene.startSeconds)) {
+        errors.push("multi-scene scene " + index + " must specify a valid source startSeconds/endSeconds segment");
+      }
+    });
+  } else errors.push("scenes must be an explicit array tied to source provenance");
   if (expectedFootagePath && !matchedFootage) errors.push("asset provenance must bind the exact footage file used by the render manifest");
   if (expectedFootagePath) {
     try {

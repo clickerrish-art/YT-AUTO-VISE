@@ -83,6 +83,23 @@ test("quality evidence validator binds provenance and narration to exact render 
   }), []);
 });
 
+test("multi-scene quality evidence requires exact provenance hashes and valid source ranges", t => {
+  const f = fixture(t);
+  const secondPath = path.join(f.dir, "footage-second.bin");
+  fs.writeFileSync(secondPath, "second licensed source bytes");
+  const secondHash = hash(fs.readFileSync(secondPath));
+  f.evidence.assetProvenance.push({ ...f.evidence.assetProvenance[0], assetId: "asset-2", path: "footage-second.bin", originalSha256: secondHash, editorialPurpose: "Show the next narrative beat" });
+  f.evidence.scenes.push({ assetId: "asset-2", sourceSha256: secondHash, rightsStatus: "VERIFIED", editorialPurpose: "Show the next narrative beat", startSeconds: 0, endSeconds: 10 });
+  f.evidence.scenes[0].startSeconds = 0;
+  f.evidence.scenes[0].endSeconds = 10;
+  f.evidence.editPlanSha256 = createDeterministicEditPlan({ seed: f.evidence.renderSeed, scenes: f.evidence.scenes, profile: f.evidence.editProfile }).planSha256;
+  const validErrors = validateContentQualityEvidence(f.evidence, { format: "long_form", evidenceDir: f.dir, expectedFootagePath: f.footagePath, expectedNarrationPath: f.narrationPath });
+  assert.deepEqual(validErrors, []);
+  f.evidence.scenes[1].sourceSha256 = "f".repeat(64);
+  f.evidence.editPlanSha256 = createDeterministicEditPlan({ seed: f.evidence.renderSeed, scenes: f.evidence.scenes, profile: f.evidence.editProfile }).planSha256;
+  assert.match(validateContentQualityEvidence(f.evidence, { format: "long_form", evidenceDir: f.dir }).join(" "), /must match its assetProvenance record/);
+});
+
 test("quality evidence fails closed when manifest footage or narration differs from reviewed evidence", t => {
   const f = fixture(t);
   const errors = validateContentQualityEvidence(f.evidence, {

@@ -8,6 +8,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import crypto from "node:crypto";
+import { buildMultiSceneVideoGraph } from "./multi-scene-render.mjs";
 import { prepareSafeRenderOutput, resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
 import { createDeterministicEditPlan, getAudioProfile } from "./content-quality-gates.mjs";
 
@@ -111,6 +113,30 @@ const videoFilter = framingFilter
   + ":contrast=" + selectedScene.grade.contrast
   + ":saturation=" + selectedScene.grade.saturation
   + ",setsar=1,subtitles='" + escapedCaptions + "'";
+const sha256File = file => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+let multiSceneGraph = null;
+if (qualityEvidence.scenes.length > 1) {
+  const provenanceById = new Map((qualityEvidence.assetProvenance ?? []).map(asset => [asset.assetId, asset]));
+  const sceneTimeline = qualityEvidence.scenes.map((scene, index) => {
+    const asset = provenanceById.get(scene.assetId);
+    if (!asset || asset.originalSha256 !== scene.sourceSha256) throw new Error("scene " + index + " is not bound to its exact provenance hash");
+    const scenePath = resolveRegularFileNoSymlinks(asset.path, path.dirname(resolvedInputs.qualityEvidencePath), "Multi-scene source");
+    if (sha256File(scenePath) !== scene.sourceSha256) throw new Error("scene " + index + " source bytes changed after quality validation");
+    return { assetId: scene.assetId, path: scenePath, startSeconds: scene.startSeconds, endSeconds: scene.endSeconds };
+  });
+  if (path.resolve(sceneTimeline[0].path) !== path.resolve(footage)) throw new Error("manifest footagePath must match the first explicit timeline scene");
+  try {
+    multiSceneGraph = buildMultiSceneVideoGraph({
+      editPlan, sceneTimeline, captionsFilter: escapedCaptions, width: 1080, height: 1920,
+      narrationDurationSeconds: Number(probe.stdout.trim()),
+      transitionDurationSeconds: qualityEvidence.editProfile?.transitionDurationSeconds ?? 0.35,
+      fps: qualityEvidence.editProfile?.fps ?? 30
+    });
+  } catch (error) {
+    console.error("BLOCKED: multi-scene timeline failed validation: " + error.message);
+    process.exit(1);
+  }
+}
 const audioProfile = getAudioProfile(qualityEvidence.audioProfile);
 const compressionThreshold = Math.pow(10, audioProfile.compressionThresholdDb / 20).toFixed(5);
 const narrationDurationSeconds = Number(probe.stdout.trim());
@@ -123,16 +149,19 @@ const audioFilter = "highpass=f=" + audioProfile.highPassHz
   + ":TP=" + audioProfile.truePeakDbtpMax + ":LRA=" + audioProfile.loudnessRangeTarget
   + ",afade=t=in:st=0:d=0.12,afade=t=out:st=" + fadeOutStart.toFixed(3) + ":d=0.2";
 
-const args = [
-  "-y", "-i", footage, "-i", narration,
-  "-shortest",
-  "-vf", videoFilter,
-  "-map", "0:v:0", "-map", "1:a:0",
-  "-c:v", "libx264", "-preset", "medium", "-crf", "21",
-  "-af", audioFilter,
-  "-c:a", "aac", "-b:a", "160k", "-pix_fmt", "yuv420p",
-  "-movflags", "+faststart", output
-];
+const args = multiSceneGraph
+  ? [
+      "-y", ...multiSceneGraph.scenePaths.flatMap(scenePath => ["-i", scenePath]), "-i", narration,
+      "-filter_complex", multiSceneGraph.filterComplex, "-map", multiSceneGraph.outputLabel,
+      "-map", String(multiSceneGraph.narrationInputIndex) + ":a:0", "-shortest",
+      "-c:v", "libx264", "-preset", "medium", "-crf", "21", "-af", audioFilter,
+      "-c:a", "aac", "-b:a", "160k", "-pix_fmt", "yuv420p", "-movflags", "+faststart", output
+    ]
+  : [
+      "-y", "-i", footage, "-i", narration, "-shortest", "-vf", videoFilter,
+      "-map", "0:v:0", "-map", "1:a:0", "-c:v", "libx264", "-preset", "medium", "-crf", "21",
+      "-af", audioFilter, "-c:a", "aac", "-b:a", "160k", "-pix_fmt", "yuv420p", "-movflags", "+faststart", output
+    ];
 const rendered = spawnSync("ffmpeg", args, {stdio:"inherit"});
 if (rendered.error || rendered.status !== 0) {
   console.error("BLOCKED: FFmpeg render failed. Confirm FFmpeg/libass is installed and asset paths are valid.");
