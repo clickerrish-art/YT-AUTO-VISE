@@ -10,7 +10,7 @@ const base = {
   parentChannelTitle: "SonicVhibez", parentRemoteTitle: "Why honey badgers survive venom", parentChannelId: "UC" + "A".repeat(22), parentRemoteVerified: true, parentPrivacyStatus: "private",
   parentApproved: true, parentRevisionApproved: true, parentPublicationCycleId: "cycle-2026-10-A", childPublicationCycleId: "cycle-2026-10-A",
   sourceSegments: [{ sceneId: "scene-03", startSeconds: 42, endSeconds: 58 }],
-  relationshipApproved: true, relationshipReviewer: "operator-1", relationshipApprovedAt: "2026-10-26T10:00:00.000Z",
+  relationshipApproved: true, relationshipReviewNotes: "Parent narrative and source scene segment reviewed.", relationshipReviewer: "operator-1", relationshipApprovedAt: "2026-10-26T10:00:00.000Z",
   relationshipEvidenceSha256: sha("f"),
   nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "Private parent is ineligible; owner authorization and eligible visibility arrangement are required." }
 };
