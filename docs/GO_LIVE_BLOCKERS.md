@@ -1,3 +1,11 @@
+# Current release decision — 26 October 2026 (latest tested source)
+
+**Status: PRODUCTION BLOCKED.** Latest application-code SHA: `f0bf2278cd093859cbee49ac473e828c6ff785a9`; exact tested source/test SHA: `8d754b0a01c81ce1957ba25a7c8112eaa2e8a1b4`. Exact-SHA automation/security (321 Node, 8 Python), 11-journey browser E2E, content quality, metadata and isolated baseline passed; readiness is blocked and Facebook draft was skipped. See `docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md`.
+
+Parent binding now requires both a configured SonicVhibez channel ID match and exact remote-title match against approved parent metadata. Still unresolved: successful parent-binding/recovery E2E coverage; genuine rights-cleared final exports and human playback; complete narration/caption/render and originality acceptance; verified YouTube OAuth/history and one-operation private upload; verified Meta Page and non-skipped draft; owner-approved feasible cadence; full recovery/deployment drills; full branch-history review and branch protection. Keep all public/live publishing and Safari activation disabled. PR #1 stays open/draft/unmerged.
+
+---
+
 # Current release decision — 26 October 2026
 
 **Status: PRODUCTION BLOCKED.** Use `docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md` as the source of truth for the latest live Git state and exact-SHA workflow evidence. Current tested source/test SHA: `f3cae44edcc9094bf2f294ff46d583c556462548`; documentation-only updates after that SHA do not count as new code-test evidence.
