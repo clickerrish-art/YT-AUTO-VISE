@@ -21,6 +21,13 @@ let m;
 try { m = JSON.parse(fs.readFileSync(manifestPath, "utf8")); }
 catch { console.error("BLOCKED: render manifest is not valid JSON."); process.exit(2); }
 
+let output;
+try { output = prepareSafeRenderOutput(outputArg); }
+catch {
+  console.error("BLOCKED: render output path is unsafe or contains a symbolic link.");
+  process.exit(1);
+}
+
 const required = ["footagePath", "narrationPath", "captionsPath", "footageLicenseEvidence", "narrationLicenseEvidence", "qualityEvidencePath"];
 const missing = required.filter(k => typeof m[k] !== "string" || !m[k].trim());
 const errors = [];
@@ -60,12 +67,6 @@ if (qualityValidator.error || qualityValidator.status !== 0) {
 const footage = resolvedInputs.footagePath;
 const narration = resolvedInputs.narrationPath;
 const captions = resolvedInputs.captionsPath;
-let output;
-try { output = prepareSafeRenderOutput(outputArg); }
-catch {
-  console.error("BLOCKED: render output path is unsafe or contains a symbolic link.");
-  process.exit(1);
-}
 const probe = spawnSync("ffprobe", ["-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1", narration], {encoding:"utf8"});
 if (probe.error || probe.status !== 0 || !Number.isFinite(Number(probe.stdout.trim()))) {
   console.error("BLOCKED: ffprobe could not read narration. Install FFmpeg and provide a valid audio file.");
