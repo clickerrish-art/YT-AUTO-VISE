@@ -396,3 +396,8 @@ This is a technical evidence gate, not a claim that a licence is genuine or the 
 ### YouTube Short Related video verification
 
 Keep three states distinct: (1) internal parent relationship, (2) canonical parent URL used in description/metadata, and (3) YouTube Studio's native Related video association. The current repository gate can validate (1) and (2); it does not configure or independently observe (3). After the Short exists in Studio, an authorized operator must select the intended verified parent under the Short's Related video setting and record a dated verification artifact with the Short ID, parent video ID and reviewer. Until that artifact is checked and `youtubeRelatedVideoStatus` is `VERIFIED`, the Short is not cleared for publication. Do not automate unsupported Studio actions or infer success from a description link.
+
+
+### Script prompt workflow
+
+Build a source-constrained authoring prompt with `npm run prompt:script -- long_form <brief.json>` or `npm run prompt:script -- short <brief.json>`. The brief must contain the topic, audience, editorial purpose and HTTPS research sources; Short briefs must also identify the explicit SonicVhibez long-form parent and weekly cycle. The builder does not call an external model. Use it in the approved authoring process, then measure and validate the returned script with the content-quality gate before generating narration. The current text-to-speech workflow consumes authored scripts; automatic LLM authoring is not claimed unless separately integrated and tested.
