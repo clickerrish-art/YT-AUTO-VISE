@@ -15,6 +15,7 @@ function makeShortParentRelationship(jobId, childMediaSha256, childMetadataSha25
     parentPublicationCycleId: "test-cycle", childPublicationCycleId: "test-cycle",
     sourceSegments: [{ sceneId: "parent-scene-01", startSeconds: 12, endSeconds: 20 }],
     relationshipApproved: true, relationshipReviewNotes: "Parent narrative and source scene segment reviewed in isolated test fixture.", relationshipReviewer: "Test Operator", relationshipApprovedAt: "2026-10-24T00:00:00.000Z",
+    parentSourceEvidencePath: "test/fixtures/parent-quality-evidence.json", parentSourceEvidenceSha256: "7".repeat(64),
     relationshipEvidenceSha256: "",
     nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "Private parent is ineligible for native Related video." }
   };
