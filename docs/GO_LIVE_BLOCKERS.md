@@ -1,3 +1,15 @@
+# Latest implementation and blocker checkpoint — 26 October 2026
+
+Exact tested source/test SHA: `9982caed6bee7f8d01740acff5162b94988b2e59`; latest application-code commit: `1aeca29026c6965fe13ff206f8cc097f7d4fa038`. See [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-26.md) for exact-SHA workflow links.
+
+Code-level fixes now enforce measured script-duration estimates, shared public research URL validation, strict explicit parent IDs and measured loudness range. On the exact tested SHA, content quality, metadata, dashboard browser E2E and isolated baseline **PASS**; automation/security was still **IN PROGRESS** at last observation; production readiness is **BLOCKED**; Facebook draft is **SKIPPED**.
+
+Keep these owner-controlled gates open: feasible approved cadence; complete verified YouTube history and uncertain attempts; genuine rights-cleared media/manifests and rendered Short; human metadata, rights and compliance review; credentials and verified channel identity; successful parent-binding/recovery E2E; genuine human full-playback realism and final audio/caption acceptance; verified Meta Page and non-skipped draft execution; recovery/deployment/monitoring drills; branch-history and governance review.
+
+Never lower the 72-hour minimum spacing silently. Keep public/unattended YouTube publishing OFF, Facebook live publishing OFF, Safari campaigns inactive and PR #1 open/draft/unmerged.
+
+---
+
 # Live blocker checkpoint — 26 October 2026
 
 **Latest tested source/test SHA:** `36aa95baeecfdb3ce1dbd8a4bf2380b0034e92fa`; **application-code SHA:** `15a3979fc294a97a1421b29ff4ff93207072e8b3`. Exact-SHA automation/security, content quality, metadata, 12-journey browser E2E and isolated baseline passed. Production readiness remains BLOCKED with 13 mandatory prerequisites; Facebook daily draft was SKIPPED. See [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-26.md) for exact workflow links and scope.

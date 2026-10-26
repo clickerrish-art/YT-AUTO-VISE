@@ -1,3 +1,15 @@
+## Latest operational checkpoint — 26 October 2026
+
+Exact tested source/test SHA: `9982caed6bee7f8d01740acff5162b94988b2e59`; application-code commit: `1aeca29026c6965fe13ff206f8cc097f7d4fa038`.
+
+The latest code gates now reject shallow/out-of-duration scripts, reserved/private research URLs, malformed or missing explicit Short parent identifiers, and audio reports without measured loudness range. Estimated script duration is not a substitute for measured final audio duration or genuine human full-playback review.
+
+Current exact-SHA evidence: content quality, metadata, browser E2E and isolated baseline **PASS**; automation/security **IN PROGRESS** at last observation; production readiness **BLOCKED**; Facebook daily draft **SKIPPED**. See `docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md`.
+
+Operational safety remains unchanged: public/unattended YouTube publishing disabled; Facebook live publishing disabled; Safari campaigns inactive; PR #1 open/draft/unmerged. Never retry an uncertain upload until its durable attempt ledger and YouTube state are reconciled. Do not treat a description URL as proof of native YouTube Related video. Do not alter the 72-hour minimum or cadence policy without explicit owner approval.
+
+---
+
 ## Latest live checkpoint — 26 October 2026: parent source evidence and exact-SHA acceptance
 
 **Application-code SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **Exact tested source/test SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **PR HEAD at this checkpoint:** `2f455314d4f75dafe8b9b309ead0040570158e09` (documentation-only descendant after the tested source/test SHA).

@@ -1,3 +1,19 @@
+# Latest release gate checkpoint — 26 October 2026
+
+Exact tested source/test SHA: `9982caed6bee7f8d01740acff5162b94988b2e59`; latest application-code commit: `1aeca29026c6965fe13ff206f8cc097f7d4fa038`.
+
+- [x] Content-quality validation on exact SHA — [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971141).
+- [x] Metadata validation on exact SHA — [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400970942).
+- [x] Dashboard browser E2E on exact SHA — [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971057).
+- [x] Isolated main/candidate baseline on exact SHA — [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971265).
+- [ ] Automation/security — still in progress at last observation: [run 40400971091](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971091).
+- [ ] Production readiness — blocked: [run 40400971139](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971139).
+- [ ] Facebook daily draft — skipped, not an integration pass: [run 40400971146](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971146).
+
+Still required: approved feasible cadence; verified YouTube identity/history and uncertain-attempt reconciliation; genuine rights-cleared manifests and final media; human realism/factual/audio/caption review; parent-link success/recovery acceptance; credentials and one-shot private-upload evidence; verified Meta Page and non-skipped draft run; operational recovery/deployment drills and branch governance. Keep all live/public publishing disabled.
+
+---
+
 # Current release gate decision — 26 October 2026
 
 Latest tested source/test SHA: `8d754b0a01c81ce1957ba25a7c8112eaa2e8a1b4`; last application-code SHA: `f0bf2278cd093859cbee49ac473e828c6ff785a9`. Automation/security, 11 Chromium dashboard journeys, content quality, metadata and isolated baseline **PASS** on the exact tested SHA. Production readiness **BLOCKED**; Facebook draft workflow **SKIPPED**. Details and run links: `docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md`.

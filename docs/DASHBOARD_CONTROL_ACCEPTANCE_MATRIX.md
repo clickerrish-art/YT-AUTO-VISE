@@ -1,3 +1,16 @@
+## Latest implementation and browser checkpoint — 26 October 2026
+
+Exact source/test SHA: `9982caed6bee7f8d01740acff5162b94988b2e59`.
+- Dashboard browser E2E: **PASS** — [run 40400971057](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971057).
+- Metadata validation: **PASS** — [run 40400970942](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400970942).
+- Content quality: **PASS** — [run 40400971141](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971141).
+- Isolated baseline: **PASS** — [run 40400971265](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971265).
+- Automation/security: **IN PROGRESS** — [run 40400971091](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971091).
+
+These results do not yet prove the missing full parent-binding success journey with genuine approved artifacts/receipt, stale-hash and wrong-channel rejection in browser, queue reorder, concurrent binding, restart and backup/restore. Those acceptance rows remain open. Production readiness remains blocked and the Facebook daily draft is skipped.
+
+---
+
 ## Latest exact-SHA dashboard checkpoint — 26 October 2026
 
 - Tested source/test SHA: `36aa95baeecfdb3ce1dbd8a4bf2380b0034e92fa`.

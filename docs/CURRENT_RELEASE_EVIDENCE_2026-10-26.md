@@ -1,3 +1,49 @@
+# Implementation checkpoint — 26 October 2026
+
+**Exact tested source/test SHA:** `9982caed6bee7f8d01740acff5162b94988b2e59`. **Latest application-code commit:** `1aeca29026c6965fe13ff206f8cc097f7d4fa038`. The documentation-only checkpoint that follows does not alter the tested source or tests.
+
+## Implementation changes at this checkpoint
+- Script depth now measures narration duration at a declared 150 WPM default and enforces **6–10 minutes / 900–1,500 words** for long-form and **50–60 seconds / 125–150 words** for Shorts. The validator and CLI report the estimate and explicitly distinguish it from measured final audio duration.
+- A shared public-HTTPS research URL validator is used by script generation and offline quality gates. It rejects reserved example domains, local/reserved hostnames, IP-literal URLs, embedded credentials and placeholder references. Provider endpoint validation also rejects local/private/reserved remote targets while preserving the explicit loopback-local-provider exception.
+- The content-quality parent gate now requires valid 11-character YouTube video IDs, valid 24-character channel IDs, and an explicit child `parentYouTubeVideoId` matching the parent record.
+- Rendered-audio validation and quality-evidence validation now require measured loudness range as well as integrated loudness and true peak, and reject values above the profile maximum tolerance.
+- Regression fixtures were updated to use realistic target word counts, public research hostnames and structurally valid YouTube IDs. The complete dashboard-server test file was restored after an intermediate range-limited edit was caught by CI; only the current exact-SHA results below count as final evidence.
+
+## Exact-SHA workflow evidence
+- **Content quality — PASS:** [run 40400971141](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971141).
+- **Metadata validation — PASS:** [run 40400970942](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400970942).
+- **Dashboard browser E2E — PASS:** [run 40400971057](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971057).
+- **Isolated main/candidate baseline — PASS:** [run 40400971265](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971265).
+- **Automation/security — IN PROGRESS at last observation:** [run 40400971091](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971091). Do not count as PASS until the workflow completes.
+- **Production readiness — BLOCKED:** [run 40400971139](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971139), with its diagnostic artifact retained.
+- **Nature Frontiers Facebook daily draft — SKIPPED:** [run 40400971146](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971146); not evidence of successful Meta integration.
+
+## Live Git state at the tested code/test checkpoint
+- PR #1: **OPEN, DRAFT, UNMERGED** — [view PR](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1).
+- `main` HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Divergence at this source/test checkpoint: **1,515 ahead / 2 behind / 148 changed files**.
+- No direct main edit, merge, reset, rebase, force-push, history rewrite, destructive reconciliation or external publication was performed.
+
+## Remaining acceptance blockers
+1. Owner-approved feasible cadence decision, with timezone-aware approval timestamp and approval reference.
+2. Independently reconciled full SonicVhibez public/private/unlisted history and all uncertain upload attempts.
+3. Rights-verified Short and long-form render manifests.
+4. Real rendered `media/next-short.mp4`.
+5. Human-reviewed metadata marked `READY_FOR_PRIVATE_UPLOAD` and verified SonicVhibez channel ID.
+6. Actual rights and compliance review against the production assets.
+7. Securely configured `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN` and `SONICVHIBEZ_CHANNEL_ID`.
+8. Human full-playback realism/factual review and measured final narration/audio/caption synchronization.
+9. Successful parent-binding acceptance using genuine approved artifacts and a verified remote receipt, plus stale-hash, wrong-channel, queue reorder, concurrency, restart and backup/restore journeys.
+10. Native YouTube Related video remains externally blocked for a private parent; a description URL is not native-link evidence.
+11. Verified Meta Page identity/permissions and a successful non-skipped draft-only execution.
+12. Cross-process failure injection, backup/restore, rollback, deployment/monitoring and emergency-stop drills.
+13. Full branch-only history and branch-governance review, including both preserved history-restoration test variants.
+
+**Decision: CODE ACCEPTANCE PARTIAL / PRODUCTION BLOCKED.** Public/unattended YouTube publishing remains disabled; Facebook live publishing remains disabled; Safari campaigns remain inactive. The approved Selar destination remains `https://selar.com/0u19v8u99l`. No upload, visibility change, public post, campaign activation or PR merge occurred.
+
+---
+
 # Latest implementation checkpoint — 26 October 2026
 
 **Current source/test checkpoint at time of this record:** `36aa95baeecfdb3ce1dbd8a4bf2380b0034e92fa`. **Application-code commit:** `15a3979fc294a97a1421b29ff4ff93207072e8b3`. PR HEAD at this checkpoint: `36aa95baeecfdb3ce1dbd8a4bf2380b0034e92fa` (the documentation commits that follow this checkpoint do not change application/test code).

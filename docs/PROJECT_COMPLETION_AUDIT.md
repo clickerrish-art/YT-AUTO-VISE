@@ -1,5 +1,17 @@
 # Latest implementation checkpoint — 26 October 2026
 
+Exact tested source/test SHA: `9982caed6bee7f8d01740acff5162b94988b2e59`; latest application-code commit: `1aeca29026c6965fe13ff206f8cc097f7d4fa038`. This checkpoint supersedes older evidence for the listed script/source/audio gates; historical entries below remain historical.
+
+Implemented since the prior checkpoint: duration estimates and format-specific limits; a shared research URL safety gate used by generation and offline quality validation; strict YouTube parent/channel identifier validation and mandatory child parent ID; measured loudness-range validation; regression fixture corrections.
+
+Exact-SHA results: content quality **PASS** ([40400971141](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971141)), metadata **PASS** ([40400970942](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400970942)), browser E2E **PASS** ([40400971057](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971057)), isolated baseline **PASS** ([40400971265](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971265)); automation/security **IN PROGRESS** ([40400971091](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971091)); production readiness **BLOCKED** ([40400971139](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971139)); Facebook daily draft **SKIPPED** ([40400971146](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40400971146)).
+
+**Overall remains CODE ACCEPTANCE PARTIAL / PRODUCTION BLOCKED.** Real rights-cleared final media, human playback, final export/audio/caption acceptance, live YouTube identity/history and one-shot private-upload prerequisites, complete Short-parent recovery E2E, successful Meta draft integration, owner cadence approval and operational/governance drills remain unresolved. Do not claim 100%.
+
+---
+
+# Latest implementation checkpoint — 26 October 2026
+
 Exact tested source/test SHA: `8d754b0a01c81ce1957ba25a7c8112eaa2e8a1b4`; last application-code SHA: `f0bf2278cd093859cbee49ac473e828c6ff785a9`. Exact-SHA CI: automation/security PASS (321 Node, 8 Python, 0 npm audit vulnerabilities), browser E2E PASS (11 journeys), content quality PASS, metadata PASS, isolated baseline PASS. Production readiness remains BLOCKED; Facebook draft workflow is SKIPPED. See `docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md`.
 
 Newly enforced: parent receipt channel ID must match the explicit configured SonicVhibez channel ID, and remote parent title must match the hash-verified approved parent metadata title. Remaining acceptance includes successful parent binding/recovery E2E, real rights-cleared final media and human playback, full narration/caption/render/originality gates, verified YouTube and Meta identity/history, feasible owner-approved cadence, complete recovery/deployment drills, and branch governance. **Implementation remains incomplete; do not claim 100%.**
