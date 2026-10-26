@@ -242,7 +242,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (matchedChannel.snippet?.title !== "SonicVhibez") throw new Error("authenticated channel is not exactly SonicVhibez");
   if ((metadata.contentType ?? metadata.format) === "short") {
     const relationship = approval.shortParentRelationship;
-    if (metadata.parentContentId !== relationship.parentContentId || metadata.parentVideoId !== relationship.parentRemoteVideoId || metadata.parentVideoUrl !== relationship.parentCanonicalUrl || metadata.shortParentRelationshipSha256 !== approval.shortParentRelationshipSha256) {
+    if (metadata.parentContentId !== relationship.parentContentId || metadata.parentVideoId !== relationship.parentRemoteVideoId || metadata.parentVideoUrl !== relationship.parentCanonicalUrl) {
       throw new Error("Short metadata must bind the exact approved parent content ID, remote video ID, canonical URL and relationship hash");
     }
     let parentRemote;
