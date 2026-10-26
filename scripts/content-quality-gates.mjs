@@ -2,6 +2,8 @@ import crypto from "node:crypto";
 import { isIP } from "node:net";
 
 const SHA256 = /^[a-f0-9]{64}$/;
+const YOUTUBE_VIDEO_ID = /^[A-Za-z0-9_-]{11}$/;
+const YOUTUBE_CHANNEL_ID = /^UC[A-Za-z0-9_-]{22}$/;
 const AUDIO_PROFILES = Object.freeze({
   documentary_narration: { narrationTargetLufs: -16, truePeakDbtpMax: -1.5, musicBelowNarrationDb: 12, ambienceBelowNarrationDb: 15, fadesRequired: true, highPassHz: 70, lowPassHz: 16000, compressionThresholdDb: -18, compressionRatio: 2, loudnessRangeTarget: 11 },
   wildlife_immersive: { narrationTargetLufs: -16, truePeakDbtpMax: -1.5, musicBelowNarrationDb: 10, ambienceBelowNarrationDb: 12, fadesRequired: true, highPassHz: 60, lowPassHz: 18000, compressionThresholdDb: -20, compressionRatio: 1.8, loudnessRangeTarget: 12 },
@@ -62,10 +64,11 @@ export function validateShortParentRelationship(short, parent, {
   if (parent && short.parentMediaSha256 !== parent.mediaSha256) errors.push("Short parentMediaSha256 is missing or stale");
   if (parent && (!nonempty(short.approvedParentRevision) || short.approvedParentRevision !== String(parent.revision ?? parent.approvedRevision ?? ""))) errors.push("approvedParentRevision does not match the current parent revision");
   if (parent && parent.channel !== expectedChannel) errors.push("parent channel must be exactly " + expectedChannel);
-  if (parent && parent.channelId && short.parentChannelId !== parent.channelId) errors.push("parent channel ID does not match the Short relationship");
+  if (parent && !YOUTUBE_CHANNEL_ID.test(parent.channelId ?? "")) errors.push("parent channelId must be a valid YouTube channel ID");
+  if (parent && short.parentChannelId !== parent.channelId) errors.push("parent channel ID does not match the Short relationship");
   if (parent && !hashValid(parent.mediaSha256)) errors.push("parent media checksum is not verified");
   const remoteId = parent?.remoteVideoId ?? parent?.youtubeVideoId ?? parent?.parentYouTubeVideoId;
-  if (!nonempty(remoteId)) errors.push("parent verified YouTube video ID is required before the Short can become publishable");
+  if (!YOUTUBE_VIDEO_ID.test(typeof remoteId === "string" ? remoteId : "")) errors.push("parent verified YouTube video ID must be a valid 11-character ID before the Short can become publishable");
   if (nonempty(short.parentYouTubeVideoId) && short.parentYouTubeVideoId !== remoteId) errors.push("Short parent YouTube video ID conflicts with the verified parent");
   const canonicalUrl = nonempty(remoteId) ? "https://www.youtube.com/watch?v=" + encodeURIComponent(remoteId) : "";
   if (short.verifiedDestinationUrl !== canonicalUrl) errors.push("verifiedDestinationUrl must exactly match the canonical URL derived from the verified parent video ID");
