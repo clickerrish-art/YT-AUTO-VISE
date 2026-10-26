@@ -372,3 +372,15 @@ Current branch SHA at the code checkpoint: `6b05beb4461ddf3065f05b56742a306fa443
 
 ### Remaining release gates
 **Code acceptance is PARTIALLY VERIFIED, not fully accepted. Production acceptance is BLOCKED.** The current test suite and three browser tests do not establish every visible control/API route or all recovery drills. Genuine rights-cleared Short and long-form media, final manifests and validation reports, human playback and hash-bound approval, verified SonicVhibez OAuth/channel identity and complete remote-history reconciliation, explicit authorization for one private upload and verified remote receipt, verified Nature Frontiers Page access and successful default-branch Facebook draft artifact, isolated backup/restore/interruption/concurrency/rollback drills, complete branch-history review and actual deployment/monitoring verification remain outstanding. No real YouTube upload or Facebook post was performed. Public/unattended YouTube publishing and Facebook live publishing remain disabled. Only approved Selar destination: `https://selar.com/0u19v8u99l`; Safari campaigns remain inactive.
+
+
+## Additional content-quality release gates — 2026-10-26
+
+- [ ] Both render manifests reference a complete `qualityEvidencePath`; render fails closed when it is missing.
+- [ ] Script evidence passes measured depth, differentiated sections, sourced factual claims and similarity review.
+- [ ] Provenance file hashes match exact source bytes; rights permissions are reviewed by a human.
+- [ ] Recorded render seed and edit-plan hash reproduce the selected approved scenes.
+- [ ] Audio profile report binds the exact narration bytes and passes loudness/true-peak/ducking/fade checks; transcript is human-verified.
+- [ ] Full human playback review accepts realistic, continuous, non-misleading visuals and accurate narration; synthetic content is disclosed where required.
+- [ ] Short's explicit parent revision/hash and canonical verified parent URL match the approved parent record.
+- [ ] YouTube Studio native Related video association is separately verified and retained as evidence; internal linkage or description URL alone does not satisfy this item.
