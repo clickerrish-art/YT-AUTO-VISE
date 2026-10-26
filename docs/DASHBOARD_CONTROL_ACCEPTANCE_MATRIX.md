@@ -1,3 +1,15 @@
+## Latest exact-SHA dashboard checkpoint — 26 October 2026
+
+- Tested source/test SHA: `36aa95baeecfdb3ce1dbd8a4bf2380b0034e92fa`.
+- Browser E2E: **PASS**, 12 Chromium journeys against the real local dashboard/backend — [run 40397794568](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40397794568).
+- Automation/security: **PASS**, 322 Node tests and 8 Python safety tests — [run 40397794282](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40397794282).
+- Content quality: **PASS** — [run 40397794233](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40397794233). Metadata: **PASS** — [run 40397794356](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40397794356). Isolated baseline: **PASS** — [run 40397794433](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40397794433).
+- Production readiness: **BLOCKED** — [run 40397794432](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40397794432). Facebook daily draft: **SKIPPED** — [run 40397794289](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40397794289).
+
+The browser suite covers dashboard authentication, persisted draft creation, safe campaign handling, restart persistence, Facebook draft controls, fail-closed production controls and Short-parent UI submission/rejection. It does **not** establish successful parent binding using approved artifacts/receipt, stale-hash and wrong-channel browser rejection, queue reorder, concurrent binding, or relationship persistence across backup/restore. Those rows remain **NOT TESTED** until dedicated acceptance journeys run. The latest research-source validation fix is covered by the exact-SHA Node suite.
+
+---
+
 ## Latest dashboard acceptance checkpoint — 26 October 2026
 
 Exact tested source/test SHA: `8d754b0a01c81ce1957ba25a7c8112eaa2e8a1b4`. Browser E2E **PASS**: 11 Chromium journeys [run 40330156665](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330156665). Automation/security **PASS** (321 Node, 8 Python) [40330156711](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330156711); content quality **PASS** [40330156751](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330156751); metadata **PASS** [40330156842](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330156842); isolated baseline **PASS** [40330157081](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330157081). Readiness remains **BLOCKED** and Facebook draft **SKIPPED**.
