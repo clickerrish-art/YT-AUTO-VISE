@@ -401,3 +401,8 @@ Keep three states distinct: (1) internal parent relationship, (2) canonical pare
 ### Script prompt workflow
 
 Build a source-constrained authoring prompt with `npm run prompt:script -- long_form <brief.json>` or `npm run prompt:script -- short <brief.json>`. The brief must contain the topic, audience, editorial purpose and HTTPS research sources; Short briefs must also identify the explicit SonicVhibez long-form parent and weekly cycle. The builder does not call an external model. Use it in the approved authoring process, then measure and validate the returned script with the content-quality gate before generating narration. The current text-to-speech workflow consumes authored scripts; automatic LLM authoring is not claimed unless separately integrated and tested.
+
+
+### Render behavior and audio quality
+
+The renderers intentionally do not loop a single source clip to manufacture the required duration. Provide footage long enough for the complete narration or rendering will fail the strict duration gate. The evidence manifest's fixed seed and allowed framing choices determine a reproducible fit/crop and subtle colour-grade adjustment; this is editorial variation, not an originality test. The selected audio profile applies filtering, compression, loudness normalization and fades. After the normal export validator, `validate-rendered-audio.mjs` measures the actual output audio stream and enforces integrated loudness and true-peak tolerance. If audio measurement is absent or fails, the render cannot report success. Human listening for intelligibility, pronunciation, distortion and scene synchronization remains mandatory.
