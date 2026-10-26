@@ -82,3 +82,15 @@ test("generation requires substantive research evidence and complete scene direc
     fetchImpl: async () => providerResponse(incomplete)
   }), /requires visualDirection, pacing and soundDesign/);
 });
+
+
+test("malformed, duplicate and placeholder research sources fail closed before provider access", async () => {
+  const base = { format: "short", brief: { topic: "Topic", audience: "Adults", editorialPurpose: "Explain", sources: [source] } };
+  let calls = 0;
+  const fetchImpl = async () => { calls++; return providerResponse(script); };
+  await assert.rejects(() => generateScript({ ...base, brief: { ...base.brief, sources: [null] }, fetchImpl }), /must be an object/);
+  await assert.rejects(() => generateScript({ ...base, brief: { ...base.brief, sources: [{ title: "Missing URL" }] }, fetchImpl }), /requires a non-empty url/);
+  await assert.rejects(() => generateScript({ ...base, brief: { ...base.brief, sources: [{ ...source, url: "http://example.org/research", evidenceSummary: "A sufficiently long evidence summary that should not permit insecure URLs.", evidenceLocator: "section 1" }] }, fetchImpl }), /public HTTPS URL/);
+  await assert.rejects(() => generateScript({ ...base, brief: { ...base.brief, sources: [source, { ...source }] }, fetchImpl }), /IDs must be unique/);
+  assert.equal(calls, 0, "provider must not be called for malformed research inputs");
+});
