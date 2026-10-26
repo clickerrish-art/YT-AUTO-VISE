@@ -136,3 +136,19 @@ The corrected fixture and redirect hardening were tested by GitHub Actions after
 - [Nature Frontiers Facebook draft — run 40288074948](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288074948): **SKIPPED**, not Facebook integration evidence.
 
 This supersedes the preceding statement that no new CI had returned. The earlier failure on SHA `12c089305be633d12db29172f4e531d2417d7ad4` remains historically recorded and is not counted as a pass. CI acceptance for the application-code checkpoint `dae5eb43889f6870672621937914ef7595a04d2c` is PASS; overall code and production acceptance remain BLOCKED for the independent dashboard/recovery/history/governance and external prerequisites listed above.
+
+
+## Evidence-constrained script generation follow-up — exact test SHA `684c262169bd6bfde131e5380ead4128b19372bf`
+
+The generation provider now requires each research input to include a substantive `evidenceSummary` (at least 40 characters) and an `evidenceLocator`, includes those fields in the authoring prompt, and requires each section to carry visual direction, pacing and sound-design notes. Model-returned source IDs/titles/URLs must still match the supplied source list exactly. Added regression coverage for missing research evidence and missing scene direction.
+
+Exact-SHA CI results for `684c262169bd6bfde131e5380ead4128b19372bf`:
+- [Automation/security — run 40288463303](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288463303): **PASS** — 305 Node tests, 8 Python tests, npm audit 0 vulnerabilities, clean/locked install and Python syntax checks.
+- [Content quality — run 40288463345](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288463345): **PASS**.
+- [Metadata — run 40288463446](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288463446): **PASS**.
+- [Dashboard browser E2E — run 40288463382](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288463382): **PASS**, 10 browser tests.
+- [Isolated main/candidate baseline — run 40288463510](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288463510): **PASS**.
+- [Production readiness — run 40288463438](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288463438): **BLOCKED as required** by mandatory production gates.
+- [Nature Frontiers Facebook draft — run 40288463312](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288463312): **SKIPPED**, not live Page or draft-execution evidence.
+
+These runs explicitly checked out the exact test SHA above. The current application-code checkpoint is `3110140b79cc1e835eb1dd75721e26a16f40150b` (generation/prompt code), with subsequent test-only commits through `684c262169bd6bfde131e5380ead4128b19372bf`. Overall code and production acceptance remain BLOCKED despite these passing automated checks.
