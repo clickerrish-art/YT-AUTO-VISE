@@ -100,7 +100,7 @@ const escapedCaptions = captions
   .replace(/\[/g, "\\[")
   .replace(/\]/g, "\\]");
 const args = [
-  "-y", "-stream_loop", "-1", "-i", footage, "-i", narration,
+  "-y", "-i", footage, "-i", narration,
   "-shortest",
   "-vf", "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,subtitles='" + escapedCaptions + "'",
   "-map", "0:v:0", "-map", "1:a:0",
