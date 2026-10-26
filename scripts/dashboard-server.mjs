@@ -1224,7 +1224,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/parent-relationship") {
       const body = await readBody(req);
-      if (typeof body.jobId !== "string" || typeof body.parentJobId !== "string" || typeof body.parentMediaPath !== "string") return json(res, 400, { error: "jobId, parentJobId and exact parentMediaPath are required" });
+      if (typeof body.jobId !== "string" || typeof body.parentJobId !== "string" || typeof body.parentMediaPath !== "string" || typeof body.childMediaPath !== "string") return json(res, 400, { error: "jobId, parentJobId, exact childMediaPath and parentMediaPath are required" });
       const release = await acquireStateLock();
       try {
         const state = loadState();
@@ -1235,6 +1235,9 @@ const server = http.createServer(async (req, res) => {
         if (child.contentType !== "short" || parentJob.contentType !== "long_form" || child.id === parentJob.id) return json(res, 409, { error: "Only a Short may bind to a distinct long-form parent job" });
         if (!child.publicationCycleId || child.publicationCycleId !== parentJob.publicationCycleId) return json(res, 409, { error: "Both jobs must have the same explicit owner-assigned publicationCycleId" });
         if (!["GENERATED", "VALIDATING", "AWAITING_HUMAN_REVIEW"].includes(child.state) || !Array.isArray(child.outputArtifacts) || !child.outputArtifacts.length || !child.metadataVersion) return json(res, 409, { error: "Short must have a recorded media artifact and metadata revision before parent binding" });
+        const childArtifact = child.outputArtifacts.find(entry => entry.path === body.childMediaPath);
+        if (!childArtifact || !/^[a-f0-9]{64}$/.test(childArtifact.sha256 ?? "")) return json(res, 409, { error: "childMediaPath must exactly match a checksummed artifact on the selected Short job" });
+        if (sha256File(resolveRepositoryFile(childArtifact.path)) !== childArtifact.sha256) return json(res, 409, { error: "Short media hash changed; relationship cannot be bound" });
         if (!["APPROVED_FOR_PRIVATE_UPLOAD", "PRIVATE_UPLOAD_VERIFIED"].includes(parentJob.state) || parentJob.humanApproval?.decision !== "APPROVE") return json(res, 409, { error: "Parent must be human-approved before its verified private-upload receipt can be bound" });
         const parentLedger = readUploadLedger();
         const parentAttempt = parentLedger.available ? parentLedger.attempts.find(entry => entry.jobId === parentJob.id && entry.status === "PRIVATE_UPLOAD_VERIFIED" && entry.channelTitle === "SonicVhibez" && entry.visibility === "private" && entry.remoteVideoId) : null;
@@ -1261,7 +1264,7 @@ const server = http.createServer(async (req, res) => {
         const relationship = {
           childContentId: child.id,
           childRevision: child.metadataVersion,
-          childMediaSha256: child.outputArtifacts[0].sha256,
+          childMediaSha256: childArtifact.sha256,
           childMetadataSha256: child.metadataVersion,
           parentContentId: parentJob.id,
           parentRevision: parentJob.metadataVersion,
