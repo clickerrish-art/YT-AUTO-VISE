@@ -47,6 +47,7 @@ jobs:
           node-version: "24"
 
       - name: Make FFmpeg available for candidate renderer integration tests when runner package cache permits
+        timeout-minutes: 3
         run: |
           if sudo apt-get install -y ffmpeg; then
             ffmpeg -version
