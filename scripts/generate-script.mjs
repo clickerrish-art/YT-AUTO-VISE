@@ -64,6 +64,7 @@ export async function generateScript({
   try {
     response = await fetchImpl(safeEndpoint, {
       method: "POST",
+      redirect: "error",
       headers,
       signal: controller.signal,
       body: JSON.stringify({
