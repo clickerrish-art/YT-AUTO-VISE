@@ -17,6 +17,15 @@ export function validateConfiguredSonicVhibezChannel(receipt, configuredChannelI
   return errors;
 }
 
+/** Require the remote parent's title to match the exact approved metadata revision. */
+export function validateParentReceiptTitle(receipt, approvedMetadata) {
+  if (!receipt || typeof receipt !== "object" || Array.isArray(receipt)) return ["verified parent upload receipt is required"];
+  if (!approvedMetadata || typeof approvedMetadata !== "object" || Array.isArray(approvedMetadata)) return ["approved parent metadata JSON is required"];
+  if (typeof approvedMetadata.title !== "string" || !approvedMetadata.title.trim()) return ["approved parent metadata must contain an exact title"];
+  if (typeof receipt.title !== "string" || !receipt.title.trim()) return ["verified parent receipt must contain the remote title"];
+  return receipt.title === approvedMetadata.title ? [] : ["remote parent title does not match the approved parent metadata title"];
+}
+
 /**
  * Validate a Short's explicit parent binding. This checks integrity and recorded
  * evidence shape; it does not independently prove YouTube state or rights.
