@@ -199,6 +199,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   const approval = readJson(safeApprovalPath, "Upload approval");
   const videoSha256 = sha256File(safeVideoPath);
   const metadataSha256 = sha256File(safeMetadataPath);
+  const approvalSha256 = sha256File(safeApprovalPath);
   if (metadata.channel !== "SonicVhibez" || metadata.channelId !== env.SONICVHIBEZ_CHANNEL_ID) throw new Error("metadata must target the configured SonicVhibez channel");
   if (metadata.visibility !== "private") throw new Error("uploader only permits private uploads");
   if (metadata.productUrl !== APPROVED_SELAR_URL) throw new Error("metadata must use the exact approved Selar destination");
@@ -324,7 +325,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     const safeAuthorizationPath = resolveRepositoryFileNoSymlinks(authorizationPath, "One-shot private-upload authorization");
     const record = readJson(safeAuthorizationPath, "One-shot private-upload authorization");
     oneShotAuthorization = validateOneShotUploadAuthorization(record, {
-      jobId, artifactSha256: videoSha256, metadataSha256, approvalSha256: sha256File(approvalPath),
+      jobId, artifactSha256: videoSha256, metadataSha256, approvalSha256,
       channelId: expectedChannelId, now: now()
     });
     if (ledger.attempts.some(item => item.authorizationId === oneShotAuthorization.authorizationId)) throw new Error("one-shot authorization was already consumed by an upload attempt; issue a new authorization only after reviewing the prior outcome");
@@ -358,6 +359,36 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   };
   ledger.attempts.push(attempt);
   persistJson(ledgerPath, ledger);
+
+  // Revalidate the exact approved inputs and Short parent immediately before
+  // the irreversible remote insert. A failed recheck records recovery and sends
+  // no upload request; the operator must reconcile/reapprove rather than retry.
+  try {
+    if (sha256File(safeVideoPath) !== videoSha256 || sha256File(safeMetadataPath) !== metadataSha256 || sha256File(safeApprovalPath) !== approvalSha256) {
+      throw new Error("video, metadata or approval hash changed after initial validation");
+    }
+    for (const item of relatedArtifacts) {
+      const safeArtifactPath = resolveInputFile(item.path, "Approval-bound artifact");
+      if (sha256File(safeArtifactPath) !== item.sha256) throw new Error("approval-bound artifact changed: " + path.basename(safeArtifactPath));
+    }
+    const finalChannel = await youtube.channels.list({ part: ["id", "snippet"], mine: true });
+    const finalChannelMatch = (finalChannel.data.items ?? []).find(item => item.id === expectedChannelId && item.snippet?.title === "SonicVhibez");
+    if (!finalChannelMatch || matchedChannel.id !== expectedChannelId) throw new Error("authenticated SonicVhibez channel identity changed before upload");
+    if ((metadata.contentType ?? metadata.format) === "short") {
+      const relationship = approval.shortParentRelationship;
+      const parentResponse = await youtube.videos.list({ part: ["id", "snippet", "status"], id: relationship.parentRemoteVideoId });
+      const currentParent = (parentResponse.data.items ?? []).find(item => item.id === relationship.parentRemoteVideoId);
+      if (!currentParent || currentParent.snippet?.channelId !== expectedChannelId || currentParent.snippet?.title !== relationship.parentRemoteTitle || currentParent.status?.privacyStatus !== relationship.parentPrivacyStatus) {
+        throw new Error("exact approved parent remote state changed immediately before upload");
+      }
+    }
+  } catch (error) {
+    attempt.status = "RECOVERY_REQUIRED";
+    attempt.errorCode = "PRE_UPLOAD_REVALIDATION_FAILED";
+    attempt.updatedAt = now().toISOString();
+    persistJson(ledgerPath, ledger);
+    throw new Error("Pre-upload revalidation failed; no upload request was sent. Reconcile and reapprove before retrying: " + (error instanceof Error ? error.message : "revalidation failed"));
+  }
 
   let response;
   try {
