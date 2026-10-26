@@ -7,7 +7,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildScriptGenerationPrompt } from "./build-script-generation-prompt.mjs";
-import { validateScriptDepth } from "./content-quality-gates.mjs";
+import { isUsableResearchUrl, validateScriptDepth } from "./content-quality-gates.mjs";
 import { resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
 
 const DEFAULT_ENDPOINT = "http://127.0.0.1:1234/v1/chat/completions";
@@ -16,8 +16,9 @@ export function validateGenerationEndpoint(value) {
   let url;
   try { url = new URL(value); } catch { throw new Error("SCRIPT_GENERATION_ENDPOINT must be a valid URL"); }
   const loopback = ["127.0.0.1", "::1", "localhost"].includes(url.hostname);
-  if (url.protocol !== "https:" && !(url.protocol === "http:" && loopback)) {
-    throw new Error("script generation endpoint must use HTTPS or loopback HTTP; remote plaintext endpoints are forbidden");
+  if (url.protocol === "http:" && loopback) return url.toString();
+  if (!isUsableResearchUrl(url.toString())) {
+    throw new Error("script generation endpoint must use public HTTPS or loopback HTTP; local, reserved, IP-literal and credential-bearing endpoints are forbidden");
   }
   if (url.username || url.password) throw new Error("endpoint URL must not embed credentials");
   return url.toString();
@@ -41,11 +42,7 @@ function normalizeSources(sources) {
     catch { throw new Error("research source " + (index + 1) + " URL must be a valid HTTPS URL"); }
     const hostname = parsedUrl.hostname.toLowerCase();
     const labels = hostname.split(".");
-    const reservedHost = hostname === "localhost" || hostname.endsWith(".localhost") ||
-      hostname.startsWith("127.") || hostname === "0.0.0.0" || hostname === "::1" || hostname === "[::1]" ||
-      labels.includes("example") || ["example", "invalid", "test", "localhost", "local"].includes(labels.at(-1));
-    if (parsedUrl.protocol !== "https:" || parsedUrl.username || parsedUrl.password || reservedHost ||
-        /(?:replace[_ -]?with|placeholder|todo|tbd|unknown)/i.test(source.url)) {
+      if (!isUsableResearchUrl(parsedUrl.toString())) {
       throw new Error("research source " + (index + 1) + " URL must be a non-placeholder public HTTPS URL without embedded credentials");
     }
     return {
