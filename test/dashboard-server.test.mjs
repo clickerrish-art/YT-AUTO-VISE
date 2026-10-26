@@ -12,7 +12,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const ledgerLink = path.join(stateDir, "upload-attempts.json");
   fs.writeFileSync(ledgerTarget, JSON.stringify({ attempts: [{ attemptId: "forged-symlink-attempt", status: "PRIVATE_UPLOAD_VERIFIED", remoteVideoId: "not-authoritative" }] }) + "\n", { mode: 0o600 });
   fs.symlinkSync(ledgerTarget, ledgerLink);
-  const researchSource = { id: "source-1", title: "Field ecology paper", url: "https://research.example.org/paper", evidenceLocator: "Results section, paragraphs 2–4", evidenceSummary: "The supplied research describes observation conditions and explains why repeated observations are needed before generalizing animal behavior." };
+  const researchSource = { id: "source-1", title: "Field ecology paper", url: "https://wildlife-research.org/paper", evidenceLocator: "Results section, paragraphs 2–4", evidenceSummary: "The supplied research describes observation conditions and explains why repeated observations are needed before generalizing animal behavior." };
   const narration = [
     "A wildlife encounter can look simple from a distance, but the evidence often tells a more careful story. The first question is not which animal is strongest; it is what each animal is doing in its own habitat.",
     "Field observations can describe behavior under specific conditions, but one observation cannot establish a universal rule. Researchers compare repeated observations, environmental context, and competing explanations before drawing conclusions.",
