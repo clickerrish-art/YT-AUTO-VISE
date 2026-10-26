@@ -4,6 +4,20 @@ const SHA256 = /^[a-f0-9]{64}$/;
 const VIDEO_ID = /^[A-Za-z0-9_-]{11}$/;
 const CHANNEL_ID = /^UC[A-Za-z0-9_-]{22}$/;
 
+/** Parse persisted Short metadata without allowing malformed or non-object JSON to bind. */
+export function parseShortMetadataJson(raw) {
+  let metadata;
+  try {
+    metadata = JSON.parse(raw);
+  } catch {
+    throw new Error("Short metadata is invalid JSON");
+  }
+  if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) {
+    throw new Error("Short metadata must be a JSON object");
+  }
+  return metadata;
+}
+
 /** Validate the receipt against the explicitly configured SonicVhibez identity. */
 export function validateConfiguredSonicVhibezChannel(receipt, configuredChannelId) {
   const errors = [];
