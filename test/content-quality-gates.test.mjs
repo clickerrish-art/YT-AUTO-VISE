@@ -149,11 +149,13 @@ test("audio profiles enforce measured loudness, peak, transcript, rights and sou
   const profile = getAudioProfile("documentary_narration");
   const report = {
     narrationSha256: hash, finalAudioSha256: "b".repeat(64),
-    transcriptMatchStatus: "HUMAN_VERIFIED", integratedLufs: -16, truePeakDbtp: -1.6,
+    transcriptMatchStatus: "HUMAN_VERIFIED", integratedLufs: -16, truePeakDbtp: -1.6, loudnessRange: 6,
     musicBelowNarrationDb: 13, ambienceBelowNarrationDb: 16, fadesVerified: true, rightsStatus: "VERIFIED"
   };
   assert.equal(validateAudioReport(report, "documentary_narration").valid, true);
   assert.ok(profile.fadesRequired);
   assert.match(validateAudioReport({ ...report, truePeakDbtp: 0 }, "documentary_narration").errors.join(" "), /true peak/);
+  assert.match(validateAudioReport({ ...report, loudnessRange: 20 }, "documentary_narration").errors.join(" "), /loudness range/);
+  assert.match(validateAudioReport(({ ...report, loudnessRange: undefined }), "documentary_narration").errors.join(" "), /loudnessRange measurement/);
   assert.match(validateAudioReport({ ...report, transcriptMatchStatus: "AUTO" }, "documentary_narration").errors.join(" "), /HUMAN_VERIFIED/);
 });
