@@ -1,3 +1,11 @@
+## Latest dashboard acceptance checkpoint — 26 October 2026
+
+Exact tested source/test SHA: `8d754b0a01c81ce1957ba25a7c8112eaa2e8a1b4`. Browser E2E **PASS**: 11 Chromium journeys [run 40330156665](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330156665). Automation/security **PASS** (321 Node, 8 Python) [40330156711](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330156711); content quality **PASS** [40330156751](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330156751); metadata **PASS** [40330156842](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330156842); isolated baseline **PASS** [40330157081](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40330157081). Readiness remains **BLOCKED** and Facebook draft **SKIPPED**.
+
+Parent binding UI exposure and incomplete-input rejection are tested, but successful binding with real approved artifacts/receipt and browser journeys for stale hashes, wrong-channel receipt, queue reorder, concurrent binding, restart and backup/restore remain **NOT TESTED**. Do not mark them PASS based on UI visibility. See current release evidence for blockers.
+
+---
+
 ## Current dashboard acceptance checkpoint — 26 October 2026
 
 The current browser suite passed **11 Chromium journeys** on exact source/test SHA `f3cae44edcc9094bf2f294ff46d583c556462548` [run 40328924917](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924917). The Short-parent UI is visible and the incomplete-binding API rejection is tested, but a successful binding with real approved artifacts/receipt and browser coverage for stale hashes, wrong-channel receipts, queue reorder, concurrent binds, restart and backup/restore remain **NOT TESTED**. Do not mark those acceptance rows PASS from control visibility alone.
