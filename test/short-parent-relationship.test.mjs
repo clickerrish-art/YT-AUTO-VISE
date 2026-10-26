@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validateShortParentRelationship, assertShortParentRelationship, shortParentRelationshipSha256, shortParentEvidenceSha256, validateSourceSegmentsAgainstEvidence, validateConfiguredSonicVhibezChannel, validateParentReceiptTitle } from "../scripts/short-parent-relationship.mjs";
+import { validateShortParentRelationship, assertShortParentRelationship, shortParentRelationshipSha256, shortParentEvidenceSha256, validateSourceSegmentsAgainstEvidence, validateConfiguredSonicVhibezChannel, validateParentReceiptTitle, parseShortMetadataJson } from "../scripts/short-parent-relationship.mjs";
 
 const sha = c => c.repeat(64);
 const base = {
@@ -88,4 +88,16 @@ test("parent receipt title must exactly match the approved metadata revision", (
   assert.match(validateParentReceiptTitle({ title: "" }, approvedMetadata).join(" "), /must contain the remote title/);
   assert.match(validateParentReceiptTitle({}, { title: "" }).join(" "), /must contain an exact title/);
   assert.match(validateParentReceiptTitle(null, approvedMetadata).join(" "), /receipt is required/);
+});
+
+
+test("Short metadata parsing fails closed for malformed and non-object JSON", () => {
+  assert.deepEqual(parseShortMetadataJson('{"title":"A verified title","parentContentId":"parent-1"}'), {
+    title: "A verified title",
+    parentContentId: "parent-1"
+  });
+  assert.throws(() => parseShortMetadataJson("{invalid"), /Short metadata is invalid JSON/);
+  for (const raw of ["null", "[]", '"a string"', "42", "true"]) {
+    assert.throws(() => parseShortMetadataJson(raw), /Short metadata must be a JSON object/, raw);
+  }
 });
