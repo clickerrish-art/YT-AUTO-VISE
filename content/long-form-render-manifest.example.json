@@ -4,6 +4,7 @@
   "footagePath": "../media/REPLACE_WITH_RIGHTS_CLEARED_FOOTAGE.mp4",
   "narrationPath": "../media/REPLACE_WITH_FINAL_NARRATION.wav",
   "captionsPath": "long-form-captions.srt",
+  "qualityEvidencePath": "long-form-quality-evidence.json",
   "footageLicenseEvidence": "REPLACE_WITH_VERIFIED_LICENSE_RECORD",
   "narrationLicenseEvidence": "REPLACE_WITH_VERIFIED_RECORD_OR_ORIGINAL_RECORDING",
   "rightsConfirmed": false,
