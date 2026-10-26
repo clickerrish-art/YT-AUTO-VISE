@@ -86,6 +86,8 @@ export function createDeterministicEditPlan({ seed, scenes, profile = {} }) {
     ? profile.transitions : ["cut", "crossfade"];
   const allowedFraming = Array.isArray(profile.framing) && profile.framing.length
     ? profile.framing : ["fit", "gentle_crop"];
+  if (allowedTransitions.some(value => !["cut", "crossfade"].includes(value))) throw new Error("edit profile contains an unsupported transition");
+  if (allowedFraming.some(value => !["fit", "gentle_crop"].includes(value))) throw new Error("edit profile contains an unsupported framing mode");
   return {
     seed,
     scenes: scenes.map((scene, index) => ({
@@ -93,6 +95,11 @@ export function createDeterministicEditPlan({ seed, scenes, profile = {} }) {
       sourceSha256: scene.sourceSha256,
       order: index,
       framing: allowedFraming[Math.floor(random() * allowedFraming.length)],
+      grade: {
+        brightness: Number((-0.015 + random() * 0.03).toFixed(3)),
+        contrast: Number((0.985 + random() * 0.03).toFixed(3)),
+        saturation: Number((0.985 + random() * 0.03).toFixed(3))
+      },
       transitionToNext: index === scenes.length - 1 ? "none" : allowedTransitions[Math.floor(random() * allowedTransitions.length)],
       purpose: scene.editorialPurpose
     })),
