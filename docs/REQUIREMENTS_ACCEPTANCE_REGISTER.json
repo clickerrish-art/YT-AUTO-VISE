@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-26T11:55:00+02:00",
-  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. Current source/test checkpoint 2686612d9982e0094cd25759e9a73fe466585634: 280 Node tests and 8 Python safety tests passed; npm audit reported 0 vulnerabilities; real-dashboard browser E2E passed 10 Chromium journeys; isolated main/candidate baseline passed for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 2686612d9982e0094cd25759e9a73fe466585634; metadata and content quality passed. Production readiness remains BLOCKED on real owner-controlled prerequisites; Facebook draft workflow was SKIPPED. New script-generation provider commits 1a393a652fd89bf1516b61a3ad1be74f73fbf79b, 6182af1255ecf780b8ffd507eee9bc458136a33e, 14bc3daf8faaade5d79275cd8c9b32f56f340d5a and 12c089305be633d12db29172f4e531d2417d7ad4 are awaiting exact-HEAD CI confirmation; do not infer PASS from prior SHA results. Latest generator test checkpoint 12c089305be633d12db29172f4e531d2417d7ad4 failed automated Node test workflows because negative-path Short tests omitted the mandatory explicit parent. Test fixture correction is committed at ebbf799d29479c8e549ebb75617eb024a5d15ca3 and redirect hardening at dae5eb43889f6870672621937914ef7595a04d2c, but fresh CI has not been returned for those later commits. Do not mark latest code as tested. Follow-up CI on exact application-code SHA dae5eb43889f6870672621937914ef7595a04d2c passed: 304 Node tests, 8 Python tests, npm audit zero vulnerabilities, 10 browser tests, metadata/content-quality workflows and isolated baseline. Production readiness remains blocked and Facebook draft remains skipped. Latest exact test SHA 684c262169bd6bfde131e5380ead4128b19372bf passed automation/security (305 Node tests, 8 Python tests, npm audit 0), content-quality, metadata, 10 browser E2E tests and isolated baseline. Readiness remains blocked; Facebook workflow skipped. Latest exact test SHA a912d3c724195fb1f3ca823d186cddf8b9b4f984: automation/security PASS (306 Node tests, 8 Python safety tests, npm audit 0 vulnerabilities), content quality PASS, metadata PASS, dashboard E2E PASS (10 tests), isolated baseline PASS; production readiness BLOCKED and Facebook daily draft SKIPPED. This SHA includes strict validation of research source objects, HTTPS URLs, placeholder URLs, embedded credentials, unique IDs and source count.",
+  "recordedAt": "2026-10-26T12:20:00+02:00",
+  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. Current source/test checkpoint 2686612d9982e0094cd25759e9a73fe466585634: 280 Node tests and 8 Python safety tests passed; npm audit reported 0 vulnerabilities; real-dashboard browser E2E passed 10 Chromium journeys; isolated main/candidate baseline passed for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 2686612d9982e0094cd25759e9a73fe466585634; metadata and content quality passed. Production readiness remains BLOCKED on real owner-controlled prerequisites; Facebook draft workflow was SKIPPED. New script-generation provider commits 1a393a652fd89bf1516b61a3ad1be74f73fbf79b, 6182af1255ecf780b8ffd507eee9bc458136a33e, 14bc3daf8faaade5d79275cd8c9b32f56f340d5a and 12c089305be633d12db29172f4e531d2417d7ad4 are awaiting exact-HEAD CI confirmation; do not infer PASS from prior SHA results. Latest generator test checkpoint 12c089305be633d12db29172f4e531d2417d7ad4 failed automated Node test workflows because negative-path Short tests omitted the mandatory explicit parent. Test fixture correction is committed at ebbf799d29479c8e549ebb75617eb024a5d15ca3 and redirect hardening at dae5eb43889f6870672621937914ef7595a04d2c, but fresh CI has not been returned for those later commits. Do not mark latest code as tested. Follow-up CI on exact application-code SHA dae5eb43889f6870672621937914ef7595a04d2c passed: 304 Node tests, 8 Python tests, npm audit zero vulnerabilities, 10 browser tests, metadata/content-quality workflows and isolated baseline. Production readiness remains blocked and Facebook draft remains skipped. Latest exact test SHA 684c262169bd6bfde131e5380ead4128b19372bf passed automation/security (305 Node tests, 8 Python tests, npm audit 0), content-quality, metadata, 10 browser E2E tests and isolated baseline. Readiness remains blocked; Facebook workflow skipped. Latest exact test SHA a912d3c724195fb1f3ca823d186cddf8b9b4f984: automation/security PASS (306 Node tests, 8 Python safety tests, npm audit 0 vulnerabilities), content quality PASS, metadata PASS, dashboard E2E PASS (10 tests), isolated baseline PASS; production readiness BLOCKED and Facebook daily draft SKIPPED. This SHA includes strict validation of research source objects, HTTPS URLs, placeholder URLs, embedded credentials, unique IDs and source count. Latest source/test SHA 6acd678f0f52e691b8e54218f089d8874845f5ba adds authenticated dashboard script authoring with durable job persistence, idempotent reuse, recovery-required handling and separate pending review gates. Exact-SHA automation/security passed 306 Node tests, 8 Python safety tests and npm audit 0 vulnerabilities (run 40305546768); content quality passed (40305546692); metadata passed (40305546657); isolated baseline passed (40305546723). Production readiness remains blocked (40305546830), Facebook draft was skipped (40305546789), and dashboard browser E2E was pending at last check (40305546725), not counted as pass. Script-to-narration/captions/multi-scene rendering and final approval remain unintegrated.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -465,10 +465,11 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/build-script-generation-prompt.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/build-script-generation-prompt.test.mjs",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40305546768"
       ],
-      "nextAction": "Use the tested prompt builder in the actual script-authoring workflow and make script validation a required gate before narration generation; the current TTS workflow still consumes authored text and no automatic LLM integration is claimed.",
-      "assessmentCommitSha": "be11490345ae89938c32af1496f01b75ae20134a",
+      "nextAction": "Dashboard authoring now invokes the source-constrained generator and validates the returned script before persisting it. Still connect the reviewed script to narration, captions and the multi-scene render pipeline; the full requirement remains NOT_TESTED until that downstream workflow is demonstrated.",
+      "assessmentCommitSha": "6acd678f0f52e691b8e54218f089d8874845f5ba",
       "acceptanceCriterion": "The script-authoring workflow emits a structured prompt with the 6–10 minute/50–60 second target, required sections and sourcing rules, then validates the returned text with measured counts and source coverage before narration generation."
     },
     {
@@ -533,10 +534,10 @@
     }
   ],
   "currentCheckpoint": {
-    "testedSha": "a912d3c724195fb1f3ca823d186cddf8b9b4f984",
+    "testedSha": "6acd678f0f52e691b8e54218f089d8874845f5ba",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1322,
+    "aheadBy": 1333,
     "behindBy": 2,
     "changedFiles": 141,
     "prState": "open",
@@ -550,14 +551,20 @@
       "npmAuditVulnerabilities": 0,
       "contentQuality": "PASS",
       "metadata": "PASS",
-      "dashboardE2e": "PASS (10 tests)",
+      "dashboardE2e": "PENDING at last check",
       "isolatedBaseline": "PASS",
       "productionReadiness": "BLOCKED",
       "facebookDraftWorkflow": "SKIPPED"
     },
     "implementationCommits": [
       "3dbccd19584cb9da81e646cb9c34a65184fcd47b",
-      "a912d3c724195fb1f3ca823d186cddf8b9b4f984"
+      "a912d3c724195fb1f3ca823d186cddf8b9b4f984",
+      "fcf1e2d6a23ca5a3290d224201fb7b9ae73e7a38",
+      "43bf67cf55989c8ee1282ffa1427898a617b3cd2",
+      "8bccf6156c653980a5cec1c2d83345c376a7071f",
+      "fe81ac15f0942001f10ca0b924b091a481dd5961",
+      "ac73663ac522e23ce6d35c8e07e01560bea71ba5",
+      "6acd678f0f52e691b8e54218f089d8874845f5ba"
     ]
   }
 }
