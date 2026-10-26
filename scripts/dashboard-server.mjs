@@ -9,6 +9,7 @@ import { redactOperationalText } from "./safe-output.mjs";
 import { fileURLToPath } from "node:url";
 import { spawn, spawnSync } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
+import { generateScript } from "./generate-script.mjs";
 import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
@@ -1065,6 +1066,78 @@ const server = http.createServer(async (req, res) => {
         saveState(state);
         return json(res, 201, { job, reused: false, publishingEnabled: false });
       } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs/author") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || !body.jobId.trim()) return json(res, 400, { error: "jobId is required" });
+      if (!body.brief || typeof body.brief !== "object" || Array.isArray(body.brief)) return json(res, 400, { error: "A structured research brief is required" });
+      const fingerprint = crypto.createHash("sha256").update(JSON.stringify({ brief: body.brief })).digest("hex");
+      const release = await acquireStateLock();
+      let jobSnapshot;
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const job = state.jobs[index];
+        if (job.contentType !== "long_form" && job.contentType !== "short") return json(res, 400, { error: "Unsupported content format" });
+        if (job.authoring?.fingerprint === fingerprint && job.authoring.status === "AWAITING_HUMAN_EDITORIAL_REVIEW") {
+          return json(res, 200, { job, reused: true, publishable: false, publishingEnabled: false });
+        }
+        if (job.authoring?.status === "GENERATING") {
+          return json(res, 409, { error: "Authoring is already in progress or was interrupted; inspect recovery state before retrying", recoveryRequired: true });
+        }
+        if (job.state !== "QUEUED") return json(res, 409, { error: "Only a queued job can start script authoring" });
+        job.authoring = { status: "GENERATING", fingerprint, requestedAt: new Date().toISOString(), requestedBy: operatorId, publishable: false, editorialReviewRequired: true };
+        state.jobs[index] = job;
+        state.audit.push({ id: crypto.randomUUID(), action: "SCRIPT_AUTHORING_STARTED", jobId: job.id, fingerprint, at: job.authoring.requestedAt, actor: operatorId });
+        saveState(state);
+        jobSnapshot = structuredClone(job);
+      } finally { release(); }
+
+      let generated;
+      try {
+        generated = await generateScript({
+          format: jobSnapshot.contentType,
+          brief: body.brief,
+          endpoint: process.env.SCRIPT_GENERATION_ENDPOINT ?? undefined,
+          apiKey: process.env.SCRIPT_GENERATION_API_KEY ?? "",
+          model: process.env.SCRIPT_GENERATION_MODEL ?? "local-model",
+          timeoutMs: Math.min(120_000, Math.max(1_000, Number(process.env.SCRIPT_GENERATION_TIMEOUT_MS ?? 120_000)))
+        });
+      } catch (error) {
+        const failRelease = await acquireStateLock();
+        try {
+          const state = loadState();
+          const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+          if (index >= 0 && state.jobs[index].authoring?.fingerprint === fingerprint) {
+            state.jobs[index].authoring = { ...state.jobs[index].authoring, status: "FAILED", failedAt: new Date().toISOString(), error: redactOperationalText(error instanceof Error ? error.message : "Script generation failed", { roots: [root, stateDir] }), publishable: false, recoveryRequired: false };
+            state.audit.push({ id: crypto.randomUUID(), action: "SCRIPT_AUTHORING_FAILED", jobId: body.jobId, fingerprint, at: new Date().toISOString(), actor: operatorId });
+            saveState(state);
+          }
+        } finally { failRelease(); }
+        return json(res, 409, { error: "Script authoring failed closed; inspect the job's authoring error before retrying", detail: redactOperationalText(error instanceof Error ? error.message : "Script generation failed", { roots: [root, stateDir] }), publishable: false, publishingEnabled: false });
+      }
+
+      const finishRelease = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job disappeared during authoring" });
+        const current = state.jobs[index];
+        if (current.authoring?.fingerprint !== fingerprint || current.authoring?.status !== "GENERATING") return json(res, 409, { error: "Authoring state changed while generation was running; generated output was not persisted", publishable: false });
+        current.authoring = {
+          ...current.authoring,
+          status: "AWAITING_HUMAN_EDITORIAL_REVIEW",
+          completedAt: new Date().toISOString(),
+          result: generated,
+          publishable: false,
+          gates: { factualVerification: "PENDING", originalityReview: "PENDING", rightsReview: "PENDING", humanEditorialReview: "PENDING", measuredNarrationDuration: "NOT_TESTED", captions: "NOT_CREATED", scenePlan: "GENERATED_NOT_RENDERED" }
+        };
+        state.jobs[index] = current;
+        state.audit.push({ id: crypto.randomUUID(), action: "SCRIPT_AUTHORING_COMPLETED_REVIEW_REQUIRED", jobId: current.id, fingerprint, at: current.authoring.completedAt, actor: operatorId });
+        saveState(state);
+        return json(res, 201, { job: current, reused: false, publishable: false, publishingEnabled: false, nextAction: "Complete separate factual, originality, rights and human editorial review; narration, captions, scene rendering and technical validation are not complete." });
+      } finally { finishRelease(); }
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/validate") {
       const body = await readBody(req);
