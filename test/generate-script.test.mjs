@@ -29,7 +29,7 @@ function providerResponse(content, status = 200) {
 test("generation accepts structurally valid source-bound output but never trusts model similarity claims", async () => {
   const result = await generateScript({
     format: "short",
-    brief: { topic: "Interpreting wildlife observations", audience: "Adults", editorialPurpose: "Explain evidence limits", sources: [source] },
+    brief: { topic: "Interpreting wildlife observations", audience: "Adults", editorialPurpose: "Explain evidence limits", sources: [source], parentRecord: { contentId: "long-parent", weeklyContentCycleId: "cycle-1", format: "long_form", channel: "SonicVhibez" } },
     fetchImpl: async () => providerResponse(script)
   });
   assert.equal(result.publishable, false);
@@ -43,7 +43,7 @@ test("generation rejects a model that invents or changes source URLs", async () 
   const altered = { ...script, sources: [{ ...source, url: "https://invented.example.org" }] };
   await assert.rejects(() => generateScript({
     format: "short",
-    brief: { topic: "Topic", audience: "Adults", editorialPurpose: "Explain", sources: [source] },
+    brief: { topic: "Topic", audience: "Adults", editorialPurpose: "Explain", sources: [source], parentRecord: { contentId: "long-parent", weeklyContentCycleId: "cycle-1", format: "long_form", channel: "SonicVhibez" } },
     fetchImpl: async () => providerResponse(altered)
   }), /exactly match supplied source/);
 });
@@ -51,7 +51,7 @@ test("generation rejects a model that invents or changes source URLs", async () 
 test("generation rejects malformed structure and remote plaintext endpoints", async () => {
   await assert.rejects(() => generateScript({
     format: "short",
-    brief: { topic: "Topic", audience: "Adults", editorialPurpose: "Explain", sources: [source] },
+    brief: { topic: "Topic", audience: "Adults", editorialPurpose: "Explain", sources: [source], parentRecord: { contentId: "long-parent", weeklyContentCycleId: "cycle-1", format: "long_form", channel: "SonicVhibez" } },
     fetchImpl: async () => providerResponse({ ...script, narration: "too short", sections: [] })
   }), /failed measured structural validation/);
   assert.throws(() => validateGenerationEndpoint("http://203.0.113.10/api"), /HTTPS or loopback HTTP/);
@@ -61,7 +61,7 @@ test("generation rejects malformed structure and remote plaintext endpoints", as
 test("provider failure fails closed without returning a publishable script", async () => {
   await assert.rejects(() => generateScript({
     format: "short",
-    brief: { topic: "Topic", audience: "Adults", editorialPurpose: "Explain", sources: [source] },
+    brief: { topic: "Topic", audience: "Adults", editorialPurpose: "Explain", sources: [source], parentRecord: { contentId: "long-parent", weeklyContentCycleId: "cycle-1", format: "long_form", channel: "SonicVhibez" } },
     fetchImpl: async () => providerResponse({}, 503)
   }), /HTTP 503/);
 });
