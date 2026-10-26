@@ -1,3 +1,13 @@
+# Current release gate decision — 26 October 2026
+
+**Release is not approved.** Current exact tested source/test SHA: `f3cae44edcc9094bf2f294ff46d583c556462548`; latest evidence and blocker details are in `docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md`. Automation/security, content-quality, metadata, 11-journey dashboard E2E and isolated baseline passed on that SHA. Production readiness is blocked and Facebook draft workflow was skipped.
+
+Required release gates still open: successful Short-parent end-to-end/recovery acceptance; real final rights-cleared media with human playback review; complete script/narration/caption/render and originality gates; verified SonicVhibez OAuth and full upload history; explicit one-operation private-upload authorization and verified receipt; verified Meta Page and successful draft-only workflow; owner-approved feasible cadence; complete concurrency/backup/restore/rollback/deployment drills; divergent-history review and branch protection/required-check governance.
+
+Keep public/unattended YouTube publishing, Facebook live publishing and Safari campaigns disabled. Keep PR #1 open, draft and unmerged. Never equate BLOCKED or SKIPPED with PASS.
+
+---
+
 ## Latest live checkpoint — 26 October 2026: parent source evidence and exact-SHA acceptance
 
 **Application-code SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **Exact tested source/test SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **PR HEAD at this checkpoint:** `2f455314d4f75dafe8b9b309ead0040570158e09` (documentation-only descendant after the tested source/test SHA).
