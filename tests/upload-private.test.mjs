@@ -127,7 +127,13 @@ test("private uploader records uncertain remote outcomes and refuses blind retri
     const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES", YOUTUBE_EMERGENCY_STOP: "false", UPLOAD_LOG_DIR: path.join(dir, "logs") };
     const youtubeFactory = () => ({
       channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez" } }] } }) },
-      videos: { insert: async request => { for await (const _chunk of request.media.body) {} const e = new Error("network timed out"); e.code = "ETIMEDOUT"; throw e; }, list: async ({ id }) => ({ data: { items: id === TEST_PARENT_ID ? [{ id: TEST_PARENT_ID, snippet: { channelId: TEST_CHANNEL_ID, title: "Parent test documentary" }, status: { privacyStatus: "private" } }] : [] } }) }
+      videos: {
+        insert: async request => { for await (const _chunk of request.media.body) {} const e = new Error("network timed out"); e.code = "ETIMEDOUT"; throw e; },
+        list: async ({ id }) => {
+          if (id === TEST_PARENT_ID) return { data: { items: [{ id: TEST_PARENT_ID, snippet: { channelId: TEST_CHANNEL_ID, title: "Parent test documentary" }, status: { privacyStatus: "private" } }] } };
+          return { data: { items: [] } };
+        }
+      }
     });
     const args = { metadataPath, videoPath, approvalPath, jobId: "job-timeout-001", env, youtubeFactory, preflightRunner: args => args[0].includes("check-content") ? "PASS" : "PASS:" };
     await assert.rejects(uploadPrivate(args), /outcome is uncertain/);
@@ -172,7 +178,13 @@ test("private uploader preserves remote video ID and marks recovery if receipt p
     const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES", YOUTUBE_EMERGENCY_STOP: "false", UPLOAD_LOG_DIR: path.join(dir, "logs") };
     const youtubeFactory = () => ({
       channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez" } }] } }) },
-      videos: { insert: async request => { for await (const _chunk of request.media.body) {} return { data: { id: "VIDEO_PRIVATE_TEST" } }; }, list: async ({ id }) => ({ data: { items: id === TEST_PARENT_ID ? [{ id: TEST_PARENT_ID, snippet: { channelId: TEST_CHANNEL_ID, title: "Parent test documentary" }, status: { privacyStatus: "private" } }] : [{ id: "VIDEO_PRIVATE_TEST", snippet: { channelId: TEST_CHANNEL_ID } , status: { privacyStatus: "private" } }] }) }
+      videos: {
+        insert: async request => { for await (const _chunk of request.media.body) {} return { data: { id: "VIDEO_PRIVATE_TEST" } }; },
+        list: async ({ id }) => {
+          if (id === TEST_PARENT_ID) return { data: { items: [{ id: TEST_PARENT_ID, snippet: { channelId: TEST_CHANNEL_ID, title: "Parent test documentary" }, status: { privacyStatus: "private" } }] } };
+          return { data: { items: [{ id: "VIDEO_PRIVATE_TEST", snippet: { channelId: TEST_CHANNEL_ID }, status: { privacyStatus: "private" } }] } };
+        }
+      }
     });
     let failedReceiptWrite = false;
     const persistJson = (filePath, value) => {
