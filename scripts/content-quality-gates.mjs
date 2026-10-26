@@ -2,10 +2,10 @@ import crypto from "node:crypto";
 
 const SHA256 = /^[a-f0-9]{64}$/;
 const AUDIO_PROFILES = Object.freeze({
-  documentary_narration: { narrationTargetLufs: -16, truePeakDbtpMax: -1.5, musicBelowNarrationDb: 12, ambienceBelowNarrationDb: 15, fadesRequired: true },
-  wildlife_immersive: { narrationTargetLufs: -16, truePeakDbtpMax: -1.5, musicBelowNarrationDb: 10, ambienceBelowNarrationDb: 12, fadesRequired: true },
-  minimal_clean: { narrationTargetLufs: -18, truePeakDbtpMax: -2, musicBelowNarrationDb: 18, ambienceBelowNarrationDb: 18, fadesRequired: true },
-  short_form_voice_first: { narrationTargetLufs: -14, truePeakDbtpMax: -1, musicBelowNarrationDb: 14, ambienceBelowNarrationDb: 16, fadesRequired: true }
+  documentary_narration: { narrationTargetLufs: -16, truePeakDbtpMax: -1.5, musicBelowNarrationDb: 12, ambienceBelowNarrationDb: 15, fadesRequired: true, highPassHz: 70, lowPassHz: 16000, compressionThresholdDb: -18, compressionRatio: 2, loudnessRangeTarget: 11 },
+  wildlife_immersive: { narrationTargetLufs: -16, truePeakDbtpMax: -1.5, musicBelowNarrationDb: 10, ambienceBelowNarrationDb: 12, fadesRequired: true, highPassHz: 60, lowPassHz: 18000, compressionThresholdDb: -20, compressionRatio: 1.8, loudnessRangeTarget: 12 },
+  minimal_clean: { narrationTargetLufs: -18, truePeakDbtpMax: -2, musicBelowNarrationDb: 18, ambienceBelowNarrationDb: 18, fadesRequired: true, highPassHz: 80, lowPassHz: 16000, compressionThresholdDb: -20, compressionRatio: 1.5, loudnessRangeTarget: 9 },
+  short_form_voice_first: { narrationTargetLufs: -14, truePeakDbtpMax: -1, musicBelowNarrationDb: 14, ambienceBelowNarrationDb: 16, fadesRequired: true, highPassHz: 90, lowPassHz: 16000, compressionThresholdDb: -16, compressionRatio: 2.5, loudnessRangeTarget: 8 }
 });
 
 const PLACEHOLDER = /replace[_ -]?with|placeholder|todo|tbd|unknown|example\.com/i;
