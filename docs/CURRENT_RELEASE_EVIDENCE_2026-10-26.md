@@ -1,4 +1,4 @@
-# Current release checkpoint — 26 October 2026, 22:20 SAST
+# Current release checkpoint — 26 October 2026, 22:18 SAST
 
 This section supersedes the older checkpoint claims below for current branch state and the most recent source/test tree. Older entries are historical evidence and must not be read as proof for later code.
 
