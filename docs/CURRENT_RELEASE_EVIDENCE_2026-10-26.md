@@ -4,10 +4,10 @@
 
 - Repository: `clickerrish-art/YT-AUTO-VISE`
 - Implementation branch: `codex/marketing-machine-audit-fixes`
-- Source/test SHA with the new content-quality gates: `26785f59e8fe600d7db73c261148f38dee627c83`
+- Source/test SHA with the new content-quality gates: `be11490345ae89938c32af1496f01b75ae20134a`
 - Main SHA at the source/test checkpoint: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
-- Divergence at source/test checkpoint: 1,277 commits ahead, 2 behind, 139 changed files.
+- Divergence at source/test checkpoint: 1,289 commits ahead, 2 behind, 139 changed files.
 - PR #1 is open, draft and unmerged. Subsequent documentation commits have advanced the branch; the live PR head must be fetched before using this report as the final-head checkpoint.
 - No merge, reset, rebase, force-push, history rewrite, upload, public post or campaign activation occurred.
 
@@ -26,17 +26,17 @@ The native YouTube Related video setting is intentionally separate. Internal rel
 
 ## Exact source/test SHA CI evidence
 
-All links below are workflows associated with source/test SHA `26785f59e8fe600d7db73c261148f38dee627c83`.
+All links below are workflows associated with source/test SHA `be11490345ae89938c32af1496f01b75ae20134a`.
 
-- [Automation/security — run 40284094717](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803930): PASS; 299 Node tests passed, 0 failed; npm audit reported 0 vulnerabilities. The workflow also ran clean/locked install checks and other repository validations.
-- [Content quality — run 40284094611](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803919): PASS.
-- [Metadata validation — run 40284094583](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803925): PASS.
-- [Dashboard browser E2E — run 40284094653](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282804001): PASS.
-- [Isolated main/candidate baseline — run 40284094826](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803924): PASS.
-- [Production readiness — run 40284094643](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803929): BLOCKED as expected; human-readable and JSON readiness returned 2/2 and retained the diagnostic artifact. The blockers include missing verified media manifests, channel ID, OAuth credentials, owner-approved cadence decision and complete upload-history reconciliation.
-- [Nature Frontiers Facebook daily draft — run 40284094665](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803928): SKIPPED, not successful Meta integration evidence.
+- [Automation/security — run 40284726836](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803930): PASS; 299 Node tests passed, 0 failed; npm audit reported 0 vulnerabilities. The workflow also ran clean/locked install checks and other repository validations.
+- [Content quality — run 40284726814](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803919): PASS.
+- [Metadata validation — run 40284726766](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803925): PASS.
+- [Dashboard browser E2E — run 40284726765](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282804001): PASS.
+- [Isolated main/candidate baseline — run 40284726848](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803924): PASS.
+- [Production readiness — run 40284726890](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803929): BLOCKED as expected; human-readable and JSON readiness returned 2/2 and retained the diagnostic artifact. The blockers include missing verified media manifests, channel ID, OAuth credentials, owner-approved cadence decision and complete upload-history reconciliation.
+- [Nature Frontiers Facebook daily draft — run 40284726775](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803928): SKIPPED, not successful Meta integration evidence.
 
-The structured prompt builder is covered by regression tests and produces a prompt; the current TTS workflow still consumes authored scripts rather than automatically invoking an LLM. The deterministic visual adjustments are limited to framing/colour grading of the single manifest footage input; the pipeline does not yet compose a multi-scene storyboard automatically. Prompt-builder integration into an automated authoring service is not claimed. These results apply to source/test SHA `26785f59e8fe600d7db73c261148f38dee627c83`, not automatically to later documentation descendants. Fetch and inspect workflows on the exact current PR head before release decisions.
+The structured prompt builder is covered by regression tests and produces a prompt; the current TTS workflow still consumes authored scripts rather than automatically invoking an LLM. The deterministic visual adjustments are limited to framing/colour grading of the single manifest footage input; the pipeline does not yet compose a multi-scene storyboard automatically. Prompt-builder integration into an automated authoring service is not claimed. These results apply to source/test SHA `be11490345ae89938c32af1496f01b75ae20134a`, not automatically to later documentation descendants. Fetch and inspect workflows on the exact current PR head before release decisions.
 
 ## Relationship and media limitations
 
@@ -58,7 +58,7 @@ No real source asset set, generated wildlife sequence, final narration, final ca
 
 ## Exact PR/documentation-descendant CI checkpoint
 
-At the time this section was written, live PR metadata reported documentation descendant `5f4cff95e4119f9175bd4b96f702e405aed58a3f`, while this document's application source/test SHA remains `26785f59e8fe600d7db73c261148f38dee627c83`. This resolves the stale PR body/documentation SHA discrepancy; the PR body still contains an older historical checkpoint and should not be treated as live-ref evidence.
+At the time this section was written, live PR metadata reported documentation descendant `5f4cff95e4119f9175bd4b96f702e405aed58a3f`, while this document's application source/test SHA remains `be11490345ae89938c32af1496f01b75ae20134a`. This resolves the stale PR body/documentation SHA discrepancy; the PR body still contains an older historical checkpoint and should not be treated as live-ref evidence.
 
 Exact-HEAD workflow results for documentation descendant `5f4cff95e4119f9175bd4b96f702e405aed58a3f`:
 
@@ -71,3 +71,20 @@ Exact-HEAD workflow results for documentation descendant `5f4cff95e4119f9175bd4b
 - [Facebook daily draft — run 40284364164](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284364164): SKIPPED, not Meta integration evidence.
 
 The current PR head at the next fetch may be newer if further documentation commits are made. Do not conflate the application source/test SHA with the PR's documentation descendant SHA.
+
+
+## Native Related video visibility restriction — official source
+
+The official [YouTube Help instructions for adding a Related video to Shorts](https://support.google.com/youtube/answer/14075157?hl=en-GB) state that the selected target must be **public or unlisted**, and that the channel must have advanced feature access. A private parent is therefore ineligible for the native Related video feature. This repository's private-only upload posture and disabled public/unattended publishing mean the native association is blocked until the owner separately authorizes an eligible parent visibility or decides not to use the native feature. No visibility change was made. The publication-stage relationship validator now rejects private or unknown parent visibility.
+
+## Exact documentation-descendant CI — 26 October 2026
+
+Live PR metadata at this checkpoint reported documentation descendant `06d70ecd28c9ae8330f81cb0ad94c4b4a6351fa2`; application source/test SHA is `be11490345ae89938c32af1496f01b75ae20134a`. The current exact-HEAD runs for that documentation descendant are:
+
+- [Automation/security — run 40284745178](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284745178): PASS; 299 Node tests passed, 0 failed; npm audit total 0 vulnerabilities.
+- [Browser E2E — run 40284745158](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284745158): PASS; 10 Chromium tests.
+- [Isolated baseline — run 40284745184](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284745184): PASS.
+- [Metadata — run 40284745239](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284745239): PASS.
+- [Content quality — run 40284745194](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284745194): PASS.
+- [Production readiness — run 40284745174](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284745174): BLOCKED as expected.
+- [Facebook draft — run 40284745168](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284745168): SKIPPED.
