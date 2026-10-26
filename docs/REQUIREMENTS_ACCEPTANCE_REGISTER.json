@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-26T12:40:00+02:00",
-  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. Current source/test checkpoint 2686612d9982e0094cd25759e9a73fe466585634: 280 Node tests and 8 Python safety tests passed; npm audit reported 0 vulnerabilities; real-dashboard browser E2E passed 10 Chromium journeys; isolated main/candidate baseline passed for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 2686612d9982e0094cd25759e9a73fe466585634; metadata and content quality passed. Production readiness remains BLOCKED on real owner-controlled prerequisites; Facebook draft workflow was SKIPPED. New script-generation provider commits 1a393a652fd89bf1516b61a3ad1be74f73fbf79b, 6182af1255ecf780b8ffd507eee9bc458136a33e, 14bc3daf8faaade5d79275cd8c9b32f56f340d5a and 12c089305be633d12db29172f4e531d2417d7ad4 are awaiting exact-HEAD CI confirmation; do not infer PASS from prior SHA results. Latest generator test checkpoint 12c089305be633d12db29172f4e531d2417d7ad4 failed automated Node test workflows because negative-path Short tests omitted the mandatory explicit parent. Test fixture correction is committed at ebbf799d29479c8e549ebb75617eb024a5d15ca3 and redirect hardening at dae5eb43889f6870672621937914ef7595a04d2c, but fresh CI has not been returned for those later commits. Do not mark latest code as tested. Follow-up CI on exact application-code SHA dae5eb43889f6870672621937914ef7595a04d2c passed: 304 Node tests, 8 Python tests, npm audit zero vulnerabilities, 10 browser tests, metadata/content-quality workflows and isolated baseline. Production readiness remains blocked and Facebook draft remains skipped. Latest exact test SHA 684c262169bd6bfde131e5380ead4128b19372bf passed automation/security (305 Node tests, 8 Python tests, npm audit 0), content-quality, metadata, 10 browser E2E tests and isolated baseline. Readiness remains blocked; Facebook workflow skipped. Latest exact test SHA a912d3c724195fb1f3ca823d186cddf8b9b4f984: automation/security PASS (306 Node tests, 8 Python safety tests, npm audit 0 vulnerabilities), content quality PASS, metadata PASS, dashboard E2E PASS (10 tests), isolated baseline PASS; production readiness BLOCKED and Facebook daily draft SKIPPED. This SHA includes strict validation of research source objects, HTTPS URLs, placeholder URLs, embedded credentials, unique IDs and source count. Latest source/test SHA 6acd678f0f52e691b8e54218f089d8874845f5ba adds authenticated dashboard script authoring with durable job persistence, idempotent reuse, recovery-required handling and separate pending review gates. Exact-SHA automation/security passed 306 Node tests, 8 Python safety tests and npm audit 0 vulnerabilities (run 40305546768); content quality passed (40305546692); metadata passed (40305546657); isolated baseline passed (40305546723). Production readiness remains blocked (40305546830), Facebook draft was skipped (40305546789), and dashboard browser E2E was pending at last check (40305546725), not counted as pass. Script-to-narration/captions/multi-scene rendering and final approval remain unintegrated. Latest source/test SHA 25f920890479271e961b4178f52675d6a811e4e6 includes persisted research briefs, generated scripts, audit events, idempotent reuse, recovery-required handling, renderer-bypass blocking and a narrow-viewport CSS correction. Exact-SHA automation/security PASS (306 Node tests, 8 Python safety tests, npm audit 0 vulnerabilities; run 40306582741), content quality PASS (40306582779), metadata PASS (40306582615), isolated baseline PASS (40306583897). Readiness remains BLOCKED (40306582834), Facebook draft SKIPPED (40306582827). Browser E2E 40306582878 was queued at last check; the preceding source/test SHA 891952af1a2191322b9a411890aecf46ae4d2d9f failed the 375px viewport check and the CSS correction is not counted as verified until the latest browser run completes. Script-to-narration/caption/multi-scene rendering remains unintegrated.",
+  "recordedAt": "2026-10-26T13:00:00+02:00",
+  "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. Current source/test checkpoint 2686612d9982e0094cd25759e9a73fe466585634: 280 Node tests and 8 Python safety tests passed; npm audit reported 0 vulnerabilities; real-dashboard browser E2E passed 10 Chromium journeys; isolated main/candidate baseline passed for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 2686612d9982e0094cd25759e9a73fe466585634; metadata and content quality passed. Production readiness remains BLOCKED on real owner-controlled prerequisites; Facebook draft workflow was SKIPPED. New script-generation provider commits 1a393a652fd89bf1516b61a3ad1be74f73fbf79b, 6182af1255ecf780b8ffd507eee9bc458136a33e, 14bc3daf8faaade5d79275cd8c9b32f56f340d5a and 12c089305be633d12db29172f4e531d2417d7ad4 are awaiting exact-HEAD CI confirmation; do not infer PASS from prior SHA results. Latest generator test checkpoint 12c089305be633d12db29172f4e531d2417d7ad4 failed automated Node test workflows because negative-path Short tests omitted the mandatory explicit parent. Test fixture correction is committed at ebbf799d29479c8e549ebb75617eb024a5d15ca3 and redirect hardening at dae5eb43889f6870672621937914ef7595a04d2c, but fresh CI has not been returned for those later commits. Do not mark latest code as tested. Follow-up CI on exact application-code SHA dae5eb43889f6870672621937914ef7595a04d2c passed: 304 Node tests, 8 Python tests, npm audit zero vulnerabilities, 10 browser tests, metadata/content-quality workflows and isolated baseline. Production readiness remains blocked and Facebook draft remains skipped. Latest exact test SHA 684c262169bd6bfde131e5380ead4128b19372bf passed automation/security (305 Node tests, 8 Python tests, npm audit 0), content-quality, metadata, 10 browser E2E tests and isolated baseline. Readiness remains blocked; Facebook workflow skipped. Latest exact test SHA a912d3c724195fb1f3ca823d186cddf8b9b4f984: automation/security PASS (306 Node tests, 8 Python safety tests, npm audit 0 vulnerabilities), content quality PASS, metadata PASS, dashboard E2E PASS (10 tests), isolated baseline PASS; production readiness BLOCKED and Facebook daily draft SKIPPED. This SHA includes strict validation of research source objects, HTTPS URLs, placeholder URLs, embedded credentials, unique IDs and source count. Latest source/test SHA 6acd678f0f52e691b8e54218f089d8874845f5ba adds authenticated dashboard script authoring with durable job persistence, idempotent reuse, recovery-required handling and separate pending review gates. Exact-SHA automation/security passed 306 Node tests, 8 Python safety tests and npm audit 0 vulnerabilities (run 40305546768); content quality passed (40305546692); metadata passed (40305546657); isolated baseline passed (40305546723). Production readiness remains blocked (40305546830), Facebook draft was skipped (40305546789), and dashboard browser E2E was pending at last check (40305546725), not counted as pass. Script-to-narration/captions/multi-scene rendering and final approval remain unintegrated. Latest source/test SHA 25f920890479271e961b4178f52675d6a811e4e6 includes persisted research briefs, generated scripts, audit events, idempotent reuse, recovery-required handling, renderer-bypass blocking and a narrow-viewport CSS correction. Exact-SHA automation/security PASS (306 Node tests, 8 Python safety tests, npm audit 0 vulnerabilities; run 40306582741), content quality PASS (40306582779), metadata PASS (40306582615), isolated baseline PASS (40306583897). Readiness remains BLOCKED (40306582834), Facebook draft SKIPPED (40306582827). Browser E2E 40306582878 was queued at last check; the preceding source/test SHA 891952af1a2191322b9a411890aecf46ae4d2d9f failed the 375px viewport check and the CSS correction is not counted as verified until the latest browser run completes. Script-to-narration/caption/multi-scene rendering remains unintegrated. Latest exact tested application-code SHA 9766a5181eeb3a055357bbc8551af2e6f0fdb6f8 adds explicit Short parent relationship validation, authenticated parent binding, relationship hash binding in human/private-upload approval, and immediate pre-insert hash/channel/parent revalidation. Exact-SHA automation/security PASS (312 Node tests, 8 Python tests, npm audit 0 vulnerabilities; run 40310763040), content quality PASS (40310763155), metadata PASS (40310763002), browser E2E PASS (10 journeys; 40310762992), isolated baseline PASS (40310762998). Readiness remains BLOCKED (40310763178); Facebook draft workflow SKIPPED (40310763123). The latest PR HEAD is documentation-only descendant ebe174f417bba913741af68422f358c673cafde7; its own checks must not be inferred from the source SHA.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -66,10 +66,11 @@
       "status": "NOT_TESTED",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971726",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40310762992"
       ],
-      "nextAction": "Produce exhaustive control-to-route matrix and test every critical state transition; existing browser run alone does not establish full coverage.",
-      "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
+      "nextAction": "Ten existing browser journeys pass, but parent-binding route and all visible controls are not exhaustively covered. Add relationship UI/control acceptance and complete the matrix.",
+      "assessmentCommitSha": "9766a5181eeb3a055357bbc8551af2e6f0fdb6f8",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
     {
@@ -120,8 +121,8 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508332"
       ],
-      "nextAction": "Create and review genuine playable exports, captions, thumbnails, rights/provenance manifests and approval bound to exact hashes.",
-      "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
+      "nextAction": "Supply genuine rights-cleared final Short and long-form assets, source manifests, licence evidence, full playback review and exact-hash approvals. No production assets were fabricated.",
+      "assessmentCommitSha": "9766a5181eeb3a055357bbc8551af2e6f0fdb6f8",
       "acceptanceCriterion": "Playable 50–60s 9:16 Short and 6–10 minute long-form outputs decode fully, match manifests/checksums, carry verified rights evidence, and have recorded human review bound to exact hashes."
     },
     {
@@ -133,8 +134,8 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508332"
       ],
-      "nextAction": "After YT-001 and YT-002 pass, configure credentials securely, reconcile all remote visibility states and attempt ledger, then issue separate explicit one-shot authorization. No upload has occurred.",
-      "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
+      "nextAction": "Verify SonicVhibez OAuth/channel ID, reconcile complete remote history and uncertain attempts, then provide explicit one-operation private-upload authorization. No upload occurred.",
+      "assessmentCommitSha": "9766a5181eeb3a055357bbc8551af2e6f0fdb6f8",
       "acceptanceCriterion": "Complete public/private/unlisted history and every uncertain attempt are reconciled; a separate one-shot authorization is consumed exactly once; any authorized test upload is verified private on the correct channel and has a durable receipt."
     },
     {
@@ -428,15 +429,17 @@
       "severity": "critical",
       "owner": "maintainer",
       "requirement": "Short quality evidence must bind an explicit approved long-form parent from the same cycle, current parent revision and media hash, verified SonicVhibez remote video ID and canonical URL; the native YouTube Related video setting is a separate publication gate.",
-      "status": "PASS",
+      "status": "NOT_TESTED",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/content-quality-gates.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/content-quality-gates.test.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/validate-content-quality.test.mjs",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40310763040",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40310763155"
       ],
-      "nextAction": "Retain the explicit relationship in durable queue/job/approval/receipt state, then verify the actual native Related video setting in YouTube Studio after the child Short exists. Do not infer it from a description link.",
-      "assessmentCommitSha": "be11490345ae89938c32af1496f01b75ae20134a",
+      "nextAction": "Unit and upload-approval gates pass, but add a dedicated browser/API journey for successful binding, stale parent/media/metadata mutation and restart persistence; verify actual remote parent receipt and native Related video separately. Private parent remains BLOCKED_EXTERNAL for native feature.",
+      "assessmentCommitSha": "9766a5181eeb3a055357bbc8551af2e6f0fdb6f8",
       "acceptanceCriterion": "Tests reject missing/wrong parent, wrong weekly cycle, stale revision/hash, unapproved/failed/foreign-channel parent, missing remote ID, wrong canonical URL and unverified native Related video at publication stage."
     },
     {
@@ -534,44 +537,57 @@
     }
   ],
   "currentCheckpoint": {
-    "testedSha": "25f920890479271e961b4178f52675d6a811e4e6",
+    "testedSha": "9766a5181eeb3a055357bbc8551af2e6f0fdb6f8",
+    "latestPrHead": "ebe174f417bba913741af68422f358c673cafde7",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1352,
+    "aheadBy": 1404,
     "behindBy": 2,
-    "changedFiles": 141,
+    "changedFiles": 144,
     "prState": "open",
     "draft": true,
     "merged": false,
     "verdict": "CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED",
     "ci": {
       "automationSecurity": "PASS",
-      "nodeTests": 306,
+      "nodeTests": 312,
       "pythonTests": 8,
       "npmAuditVulnerabilities": 0,
       "contentQuality": "PASS",
       "metadata": "PASS",
-      "dashboardE2e": "QUEUED / NOT VERIFIED",
+      "dashboardE2e": "PASS (10 journeys)",
       "isolatedBaseline": "PASS",
       "productionReadiness": "BLOCKED",
-      "facebookDraftWorkflow": "SKIPPED"
+      "facebookDraftWorkflow": "SKIPPED",
+      "currentDocumentationHeadCi": "NOT VERIFIED"
+    },
+    "evidence": {
+      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40310763040",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40310763155",
+      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40310763002",
+      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40310762992",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40310762998",
+      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40310763178",
+      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40310763123"
     },
     "implementationCommits": [
-      "3dbccd19584cb9da81e646cb9c34a65184fcd47b",
-      "a912d3c724195fb1f3ca823d186cddf8b9b4f984",
-      "fcf1e2d6a23ca5a3290d224201fb7b9ae73e7a38",
-      "43bf67cf55989c8ee1282ffa1427898a617b3cd2",
-      "8bccf6156c653980a5cec1c2d83345c376a7071f",
-      "fe81ac15f0942001f10ca0b924b091a481dd5961",
-      "ac73663ac522e23ce6d35c8e07e01560bea71ba5",
-      "6acd678f0f52e691b8e54218f089d8874845f5ba",
-      "9c5e9c6ef180e2a68ddc6b432cf8b33b228eeb2b",
-      "73be940c1e594ff6875135024b880d35b7527aea",
-      "b62c800bcd95f7aa40fc8690902e8aed6c6df4c9",
-      "4f7eab0c084fdec01b114dc836827e1df371ec8a",
-      "90495c29afdb95ddb4b1322faadcd36991a2e43b",
-      "891952af1a2191322b9a411890aecf46ae4d2d9f",
-      "25f920890479271e961b4178f52675d6a811e4e6"
+      "bac39492995af64043a7a714dd907901e429e96c",
+      "e92b5e28ffc547cb1d9bfa10a4f9f2e78283507d",
+      "9e853900e5ed6281b730dafc07777dc1888fb612",
+      "9ff65e341e9389f1272018cfc6c9cca606971f6c",
+      "cfabe9f2c86d88ce068fdb070b56435da3fd6c46",
+      "81dbc47face293356bbca38e4fd67665870f5b71",
+      "b465b0e66bef9533093e30fd19b54315174d4aac",
+      "7ad5b595c77b80742f8a1f5d320d0103c2a2866b",
+      "921656ab62005ff029386fd875f273ceeba01bd0",
+      "cd12d5becb225d8dd7a355bc2bd8191b297f86ae",
+      "9ec931947c62e517f8d4617d904fbc6e6c4ac1b9",
+      "e78e780d42838e570b6f60411556b2606673acfb",
+      "8ceb308a30fdc855e4f74e439094c7bdfb28d33e",
+      "23ddb13248db8b35d4bc429a52e3822ea52d99ec",
+      "2951d20d9470d03f1ac9449435a4855cbfba0a0f",
+      "248b801b5b2ec826ad2bd8bb6bedf06ef55b618f",
+      "9766a5181eeb3a055357bbc8551af2e6f0fdb6f8"
     ]
   }
 }
