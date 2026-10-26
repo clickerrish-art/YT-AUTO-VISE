@@ -1,7 +1,7 @@
 export const DEFAULT_SCHEDULE_TIMEZONE = "Africa/Johannesburg";
 export const DEFAULT_MIN_SPACING_HOURS = 72;
 
-const ACTIVE_STATUSES = new Set(["scheduled", "published", "public", "private", "unlisted", "uploading", "uploading_private", "pending", "pending_upload", "uncertain", "outcome_uncertain", "upload_outcome_uncertain", "recovery_required"]);
+const ACTIVE_STATUSES = new Set(["queued", "scheduled", "published", "public", "private", "unlisted", "uploading", "uploading_private", "pending", "pending_upload", "uncertain", "outcome_uncertain", "upload_outcome_uncertain", "recovery_required"]);
 
 function localDateKey(timestamp, timeZone) {
   return new Intl.DateTimeFormat("en-CA", {
