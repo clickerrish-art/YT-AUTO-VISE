@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 import { spawn, spawnSync } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
 import { generateScript } from "./generate-script.mjs";
-import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence, validateConfiguredSonicVhibezChannel } from "./short-parent-relationship.mjs";
+import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence, validateConfiguredSonicVhibezChannel, validateParentReceiptTitle } from "./short-parent-relationship.mjs";
 import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
@@ -1266,6 +1266,10 @@ const server = http.createServer(async (req, res) => {
         const parentSourceEvidenceSha256 = sha256File(parentQualityEvidenceFile);
         const parentMetadataFile = resolveRepositoryFile(parentJob.metadataPath);
         if (sha256File(parentMetadataFile) !== parentJob.metadataVersion) return json(res, 409, { error: "Parent metadata revision is stale; relationship cannot be bound" });
+        let approvedParentMetadata;
+        try { approvedParentMetadata = JSON.parse(fs.readFileSync(parentMetadataFile, "utf8")); } catch { return json(res, 409, { error: "Approved parent metadata is missing or invalid JSON; relationship cannot be bound" }); }
+        const parentTitleErrors = validateParentReceiptTitle(parentReceipt, approvedParentMetadata);
+        if (parentTitleErrors.length) return json(res, 409, { error: "Parent title verification failed: " + parentTitleErrors.join("; ") });
         if (!child.metadataPath) return json(res, 409, { error: "Short metadata path is required before parent binding" });
         const childMetadataFile = resolveRepositoryFile(child.metadataPath);
         if (sha256File(childMetadataFile) !== child.metadataVersion) return json(res, 409, { error: "Short metadata revision is stale; relationship cannot be bound" });
