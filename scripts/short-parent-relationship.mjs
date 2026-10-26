@@ -4,6 +4,19 @@ const SHA256 = /^[a-f0-9]{64}$/;
 const VIDEO_ID = /^[A-Za-z0-9_-]{11}$/;
 const CHANNEL_ID = /^UC[A-Za-z0-9_-]{22}$/;
 
+/** Validate the receipt against the explicitly configured SonicVhibez identity. */
+export function validateConfiguredSonicVhibezChannel(receipt, configuredChannelId) {
+  const errors = [];
+  if (!CHANNEL_ID.test(typeof configuredChannelId === "string" ? configuredChannelId.trim() : "")) errors.push("a valid owner-configured SONICVHIBEZ_CHANNEL_ID is required");
+  if (!receipt || typeof receipt !== "object" || Array.isArray(receipt)) errors.push("verified parent upload receipt is required");
+  else {
+    if (receipt.channelTitle !== "SonicVhibez") errors.push("parent receipt channel title must be SonicVhibez");
+    if (!CHANNEL_ID.test(receipt.channelId ?? "")) errors.push("parent receipt must contain a valid channel ID");
+    else if (typeof configuredChannelId === "string" && configuredChannelId.trim() && receipt.channelId !== configuredChannelId.trim()) errors.push("parent receipt channel ID does not match configured SONICVHIBEZ_CHANNEL_ID");
+  }
+  return errors;
+}
+
 /**
  * Validate a Short's explicit parent binding. This checks integrity and recorded
  * evidence shape; it does not independently prove YouTube state or rights.
