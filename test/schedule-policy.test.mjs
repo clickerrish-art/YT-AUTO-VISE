@@ -216,3 +216,26 @@ test("rolling cycle rejects draft, scheduled, missing, and unknown statuses in c
     assert.ok(result.errors.some(error => error.includes("unsupported remote publication status")));
   }
 });
+
+test("queued publication jobs reserve their timestamps and block collisions", () => {
+  const sameDay = validatePublicationSlot(
+    { id: "next-slot", scheduledAt: "2026-10-27T15:00:00Z" },
+    [{ id: "queued-slot", status: "QUEUED", scheduledAt: "2026-10-27T15:00:00Z" }]
+  );
+  assert.equal(sameDay.valid, false);
+  assert.ok(sameDay.errors.some(error => error.includes("publication date collision with queued-slot")));
+
+  const exact72Hours = validatePublicationSlot(
+    { id: "next-slot", scheduledAt: "2026-10-27T15:00:00Z" },
+    [{ id: "queued-prior", status: "queued", scheduledAt: "2026-10-24T15:00:00Z" }]
+  );
+  assert.equal(exact72Hours.valid, true, exact72Hours.errors.join("; "));
+
+  const missingTimestamp = validatePublicationSlot(
+    { id: "next-slot", scheduledAt: "2026-10-27T15:00:00Z" },
+    [{ id: "queued-without-time", status: "queued" }]
+  );
+  assert.equal(missingTimestamp.valid, false);
+  assert.ok(missingTimestamp.errors.some(error => error.includes("active item queued-without-time is missing scheduledAt")));
+});
+
