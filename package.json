@@ -29,6 +29,7 @@
     "test:browser": "playwright test --config=playwright.config.mjs",
     "validate:content-quality": "node scripts/validate-content-quality.mjs",
     "prompt:script": "node scripts/build-script-generation-prompt.mjs",
+    "script:generate": "node scripts/generate-script.mjs",
     "validate:rendered-audio": "node scripts/validate-rendered-audio.mjs"
   },
   "engines": {
