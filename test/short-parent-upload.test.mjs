@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import crypto from "node:crypto";
 import { validateUploadApproval } from "../scripts/upload-private.mjs";
 import { shortParentRelationshipSha256 } from "../scripts/short-parent-relationship.mjs";
 
@@ -16,11 +17,12 @@ const relationship = {
   relationshipEvidenceSha256: sha("f"),
   nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "Parent is private; native Related video is ineligible without owner-authorized visibility policy." }
 };
+const rightsEvidence = { assets: [{ assetPath: "media/scene.mp4", licenseEvidenceLocation: "rights/license.txt", assetSha256: sha("c"), licenseEvidenceSha256: sha("d"), permittedUses: ["YouTube"], verificationStatus: "VERIFIED", verifiedBy: "operator-1", verifiedAt: "2026-10-26T10:00:00.000Z" }] };
 const baseApproval = {
   decision: "APPROVE", jobId: "child-job-001", contentType: "short",
   artifactSha256: sha("a"), metadataVersion: sha("b"), reviewer: "operator-1",
-  rightsEvidence: { assets: [{ assetPath: "media/scene.mp4", licenseEvidenceLocation: "rights/license.txt", assetSha256: sha("c"), licenseEvidenceSha256: sha("d"), permittedUses: ["YouTube"], verificationStatus: "VERIFIED", verifiedBy: "operator-1", verifiedAt: "2026-10-26T10:00:00.000Z" }] },
-  rightsEvidenceSha256: sha("9"), publishingEnabled: false, visibility: "private",
+  rightsEvidence,
+  rightsEvidenceSha256: crypto.createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex"), publishingEnabled: false, visibility: "private",
   relatedArtifacts: [
     { path: "media/child.mp4", sha256: sha("a") },
     { path: "media/thumb.jpg", sha256: sha("8") },
