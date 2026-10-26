@@ -40,8 +40,6 @@ function normalizeSources(sources) {
     let parsedUrl;
     try { parsedUrl = new URL(source.url.trim()); }
     catch { throw new Error("research source " + (index + 1) + " URL must be a valid HTTPS URL"); }
-    const hostname = parsedUrl.hostname.toLowerCase();
-    const labels = hostname.split(".");
       if (!isUsableResearchUrl(parsedUrl.toString())) {
       throw new Error("research source " + (index + 1) + " URL must be a non-placeholder public HTTPS URL without embedded credentials");
     }
