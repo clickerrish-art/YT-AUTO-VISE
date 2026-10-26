@@ -46,6 +46,7 @@ export function validateShortParentRelationship(relationship, {
   if (typeof relationship.relationshipReviewer !== "string" || relationship.relationshipReviewer.trim().length < 2) errors.push("relationship reviewer identity is required");
   if (!Number.isFinite(Date.parse(relationship.relationshipApprovedAt ?? ""))) errors.push("relationship approval timestamp is invalid");
   if (!SHA256.test(relationship.relationshipEvidenceSha256 ?? "")) errors.push("relationship evidence SHA-256 is required");
+  else if (relationship.relationshipEvidenceSha256 !== shortParentEvidenceSha256(relationship)) errors.push("relationship evidence checksum does not match the exact relationship record");
   const native = relationship.nativeRelatedVideo;
   if (!native || !["VERIFIED", "BLOCKED_EXTERNAL"].includes(native.status)) errors.push("native YouTube Related video status must be explicitly VERIFIED or BLOCKED_EXTERNAL");
   else if (relationship.parentPrivacyStatus === "private" && native.status !== "BLOCKED_EXTERNAL") errors.push("a private parent cannot be reported as natively Related-video eligible");
@@ -58,6 +59,12 @@ export function assertShortParentRelationship(relationship, context = {}) {
   const errors = validateShortParentRelationship(relationship, context);
   if (errors.length) throw new Error("Short parent relationship blocked: " + errors.join("; "));
   return true;
+}
+
+/** Digest of the relationship fields with its own evidence digest blanked. */
+export function shortParentEvidenceSha256(relationship) {
+  if (!relationship || typeof relationship !== "object" || Array.isArray(relationship)) throw new Error("relationship record is required");
+  return crypto.createHash("sha256").update(JSON.stringify({ ...relationship, relationshipEvidenceSha256: "" })).digest("hex");
 }
 
 /** Stable digest for binding the reviewed relationship to an approval record. */
