@@ -1,5 +1,13 @@
 # Current release gate decision — 26 October 2026
 
+Latest tested source/test SHA: `8d754b0a01c81ce1957ba25a7c8112eaa2e8a1b4`; last application-code SHA: `f0bf2278cd093859cbee49ac473e828c6ff785a9`. Automation/security, 11 Chromium dashboard journeys, content quality, metadata and isolated baseline **PASS** on the exact tested SHA. Production readiness **BLOCKED**; Facebook draft workflow **SKIPPED**. Details and run links: `docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md`.
+
+Still open: successful parent binding plus stale-hash/wrong-channel/reorder/concurrency/restart/backup-restore journeys; actual rights-cleared exports and human playback review; full script/narration/caption/render/originality checks; verified YouTube OAuth/history and authorized one-operation private upload; verified Meta Page and successful draft workflow; owner-approved feasible cadence; recovery/rollback/deployment drills; divergent-history review and branch governance. Keep public/unattended YouTube, Facebook live publishing and Safari campaigns disabled. PR #1 open/draft/unmerged.
+
+---
+
+# Current release gate decision — 26 October 2026
+
 **Release is not approved.** Current exact tested source/test SHA: `f3cae44edcc9094bf2f294ff46d583c556462548`; latest evidence and blocker details are in `docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md`. Automation/security, content-quality, metadata, 11-journey dashboard E2E and isolated baseline passed on that SHA. Production readiness is blocked and Facebook draft workflow was skipped.
 
 Required release gates still open: successful Short-parent end-to-end/recovery acceptance; real final rights-cleared media with human playback review; complete script/narration/caption/render and originality gates; verified SonicVhibez OAuth and full upload history; explicit one-operation private-upload authorization and verified receipt; verified Meta Page and successful draft-only workflow; owner-approved feasible cadence; complete concurrency/backup/restore/rollback/deployment drills; divergent-history review and branch protection/required-check governance.
