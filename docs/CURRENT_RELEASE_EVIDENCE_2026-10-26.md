@@ -1,3 +1,54 @@
+# Latest implementation checkpoint — 26 October 2026
+
+**Current source/test checkpoint at time of this record:** `36aa95baeecfdb3ce1dbd8a4bf2380b0034e92fa`. **Application-code commit:** `15a3979fc294a97a1421b29ff4ff93207072e8b3`. PR HEAD at this checkpoint: `36aa95baeecfdb3ce1dbd8a4bf2380b0034e92fa` (the documentation commits that follow this checkpoint do not change application/test code).
+
+## Live Git state
+- PR #1: [open, draft, unmerged](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1).
+- `main` HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Divergence: **1,486 commits ahead / 2 behind / 148 changed files**.
+- No main-branch edits, merge, reset, rebase, force-push, history rewrite or destructive reconciliation was performed.
+
+## Implementation and exact-SHA verification
+- [`15a3979`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/15a3979fc294a97a1421b29ff4ff93207072e8b3): corrected research-source URL validation. The prior regular expressions were over-escaped; validation now rejects reserved example domains, loopback/local hostnames and placeholder URLs before provider access.
+- [`834a255`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/834a255c4643f2f64bd7f91356d8438ae58c926b): added regressions for reserved and loopback research URLs.
+- [`36aa95b`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/36aa95baeecfdb3ce1dbd8a4bf2380b0034e92fa): updated the dashboard script-generation test fixture after the stricter validator correctly rejected its reserved `research.example.org` URL.
+
+Exact-SHA workflows associated with source/test SHA `36aa95baeecfdb3ce1dbd8a4bf2380b0034e92fa`:
+- [Automation/security — run 40397794282](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40397794282): **PASS** — 322 Node tests passed, 0 failed; 8 Python safety tests passed; npm audit reported 0 vulnerabilities; install, syntax and Python compilation checks passed.
+- [Content quality — run 40397794233](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40397794233): **PASS**.
+- [Metadata validation — run 40397794356](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40397794356): **PASS**.
+- [Dashboard browser E2E — run 40397794568](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40397794568): **PASS** — 12 Chromium journeys against the real local dashboard/backend.
+- [Isolated main/candidate baseline — run 40397794433](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40397794433): **PASS** — isolated exact-main and exact-candidate checks completed successfully.
+- [Production readiness — run 40397794432](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40397794432): **BLOCKED** — readiness reported 13 mandatory blockers; the failing gate is not a production pass.
+- [Nature Frontiers Facebook daily draft — run 40397794289](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40397794289): **SKIPPED**, not Meta integration evidence.
+
+## Remaining production blockers (13)
+1. Owner-approved feasible publication cadence with timezone-aware timestamp and approval reference.
+2. Independent reconciliation of complete public/private/unlisted YouTube history and uncertain upload attempts.
+3. Rights-verified `content/render-manifest.json`.
+4. Real rights-verified `content/long-form-render-manifest.json`.
+5. Human-reviewed metadata marked `READY_FOR_PRIVATE_UPLOAD`.
+6. Verified SonicVhibez channel ID in metadata.
+7. Rights confirmation based on verified media rights.
+8. Completed compliance review.
+9. Real rendered `media/next-short.mp4`.
+10–13. Securely configured `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN` and `SONICVHIBEZ_CHANNEL_ID`.
+
+## Acceptance gaps that automated green checks do not close
+- The browser suite tests 12 real-local-service journeys, including parent-binding UI and fail-closed incomplete binding; it does **not** yet prove successful binding with genuine approved artifacts and receipt, or the full stale-hash, wrong-channel, queue-reorder, concurrent-binding and backup/restore browser journeys.
+- Human full-playback realism acceptance, complete rights/originality review of real final exports, and measured final narration/audio/caption synchronization are not proven by this checkpoint.
+- Facebook Page identity/permissions and a successful non-skipped draft-only execution remain unverified.
+- Full branch-only history review, cross-process/failure-injection and deployment/monitoring/rollback drills remain incomplete. The two main-only historical commits and both variants of `test/restore-facebook-draft-history.test.mjs` remain preserved for review.
+- Native YouTube Related video remains **BLOCKED_EXTERNAL** under the private-parent policy; a description URL is not evidence of native Related video configuration.
+
+## Safety and verdict
+No YouTube upload, visibility change, public post, Facebook live publication, Safari activation, PR merge or destructive Git operation occurred. Public/unattended YouTube publishing remains disabled; Facebook live publishing remains disabled; Safari campaigns remain inactive. The only approved Selar destination remains `https://selar.com/0u19v8u99l`.
+
+**Decision: CODE ACCEPTANCE PARTIAL / PRODUCTION BLOCKED.** The specific source-validation defect is fixed and the exact source/test SHA passes the automated suites and browser E2E, but the remaining external, media, parent-binding, recovery, governance and real-world acceptance criteria prevent overall acceptance.
+
+---
+
 # Current release checkpoint — 26 October 2026, 22:18 SAST
 
 This section supersedes the older checkpoint claims below for current branch state and the most recent source/test tree. Older entries are historical evidence and must not be read as proof for later code.
