@@ -1,3 +1,11 @@
+## Current dashboard acceptance checkpoint — 26 October 2026
+
+The current browser suite passed **11 Chromium journeys** on exact source/test SHA `f3cae44edcc9094bf2f294ff46d583c556462548` [run 40328924917](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924917). The Short-parent UI is visible and the incomplete-binding API rejection is tested, but a successful binding with real approved artifacts/receipt and browser coverage for stale hashes, wrong-channel receipts, queue reorder, concurrent binds, restart and backup/restore remain **NOT TESTED**. Do not mark those acceptance rows PASS from control visibility alone.
+
+The same SHA has automation/security PASS (320 Node tests and 8 Python safety tests) [40328924668](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924668), content-quality PASS [40328924800](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924800), metadata PASS [40328924789](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924789) and isolated baseline PASS [40328924666](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924666). Production readiness is BLOCKED [40328924747](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924747); Facebook draft workflow is SKIPPED [40328924901](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40328924901). These test results apply to the exact tested SHA, not automatically to a later code change.
+
+---
+
 ## Latest live checkpoint — 26 October 2026: parent source evidence and exact-SHA acceptance
 
 **Application-code SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **Exact tested source/test SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **PR HEAD at this checkpoint:** `2f455314d4f75dafe8b9b309ead0040570158e09` (documentation-only descendant after the tested source/test SHA).
