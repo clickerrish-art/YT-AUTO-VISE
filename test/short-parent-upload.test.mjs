@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import crypto from "node:crypto";
 import { validateUploadApproval } from "../scripts/upload-private.mjs";
-import { shortParentRelationshipSha256 } from "../scripts/short-parent-relationship.mjs";
+import { shortParentRelationshipSha256, shortParentEvidenceSha256 } from "../scripts/short-parent-relationship.mjs";
 
 const sha = c => c.repeat(64);
 const channelId = "UC" + "A".repeat(22);
@@ -17,6 +17,7 @@ const relationship = {
   relationshipEvidenceSha256: sha("f"),
   nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "Parent is private; native Related video is ineligible without owner-authorized visibility policy." }
 };
+relationship.relationshipEvidenceSha256 = shortParentEvidenceSha256(relationship);
 const rightsEvidence = { assets: [{ assetPath: "media/scene.mp4", licenseEvidenceLocation: "rights/license.txt", assetSha256: sha("c"), licenseEvidenceSha256: sha("d"), permittedUses: ["YouTube"], verificationStatus: "VERIFIED", verifiedBy: "operator-1", verifiedAt: "2026-10-26T10:00:00.000Z" }] };
 const baseApproval = {
   decision: "APPROVE", jobId: "child-job-001", contentType: "short",
@@ -42,7 +43,9 @@ test("Short upload approval must bind the exact approved parent and child hashes
 });
 
 test("Short relationship cannot claim private parent native Related video eligibility", () => {
-  const bad = { ...baseApproval, shortParentRelationship: { ...relationship, nativeRelatedVideo: { status: "VERIFIED", verifiedBy: "operator", verifiedAt: "2026-10-26T10:00:00Z", evidenceSha256: sha("1") } } };
+  const changedRelationship = { ...relationship, nativeRelatedVideo: { status: "VERIFIED", verifiedBy: "operator", verifiedAt: "2026-10-26T10:00:00Z", evidenceSha256: sha("1") } };
+  changedRelationship.relationshipEvidenceSha256 = shortParentEvidenceSha256(changedRelationship);
+  const bad = { ...baseApproval, shortParentRelationship: changedRelationship };
   bad.shortParentRelationshipSha256 = shortParentRelationshipSha256(bad.shortParentRelationship);
   assert.throws(() => validateUploadApproval(bad, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), /private parent/);
 });
