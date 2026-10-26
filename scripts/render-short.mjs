@@ -21,7 +21,7 @@ let m;
 try { m = JSON.parse(fs.readFileSync(manifestPath, "utf8")); }
 catch { console.error("BLOCKED: render manifest is not valid JSON."); process.exit(2); }
 
-const required = ["footagePath", "narrationPath", "captionsPath", "footageLicenseEvidence", "narrationLicenseEvidence"];
+const required = ["footagePath", "narrationPath", "captionsPath", "footageLicenseEvidence", "narrationLicenseEvidence", "qualityEvidencePath"];
 const missing = required.filter(k => typeof m[k] !== "string" || !m[k].trim());
 const errors = [];
 if (missing.length) errors.push("missing required fields: " + missing.join(", "));
@@ -36,7 +36,7 @@ for (const key of ["footageLicenseEvidence", "narrationLicenseEvidence"]) {
   }
 }
 const resolvedInputs = {};
-for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
+for (const key of ["footagePath", "narrationPath", "captionsPath", "qualityEvidencePath"]) {
   if (typeof m[key] === "string" && m[key].trim()) {
     try {
       resolvedInputs[key] = resolveRegularFileNoSymlinks(m[key], path.dirname(manifestPath), key);
@@ -49,6 +49,13 @@ if (errors.length) {
   console.error("BLOCKED — render preflight failed:");
   errors.forEach(e => console.error("- " + e));
   process.exit(1);
+}
+const qualityValidator = spawnSync(process.execPath, [path.join(path.dirname(fileURLToPath(import.meta.url)), "validate-content-quality.mjs"), resolvedInputs.qualityEvidencePath, "short"], { encoding: "utf8", timeout: 30_000 });
+if (qualityValidator.stdout) process.stdout.write(qualityValidator.stdout);
+if (qualityValidator.stderr) process.stderr.write(qualityValidator.stderr);
+if (qualityValidator.error || qualityValidator.status !== 0) {
+  console.error("BLOCKED: Short script, provenance, relationship, edit-plan, audio or editorial quality evidence failed.");
+  process.exit(qualityValidator.error?.code === "ETIMEDOUT" ? 124 : 1);
 }
 const footage = resolvedInputs.footagePath;
 const narration = resolvedInputs.narrationPath;
