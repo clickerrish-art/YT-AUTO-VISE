@@ -54,3 +54,20 @@ No real source asset set, generated wildlife sequence, final narration, final ca
 - Facebook live publishing: disabled; workflow skipped.
 - Safari campaigns: inactive.
 - Approved Selar destination remains exactly `https://selar.com/0u19v8u99l`.
+
+
+## Exact PR/documentation-descendant CI checkpoint
+
+At the time this section was written, live PR metadata reported documentation descendant `5f4cff95e4119f9175bd4b96f702e405aed58a3f`, while this document's application source/test SHA remains `26785f59e8fe600d7db73c261148f38dee627c83`. This resolves the stale PR body/documentation SHA discrepancy; the PR body still contains an older historical checkpoint and should not be treated as live-ref evidence.
+
+Exact-HEAD workflow results for documentation descendant `5f4cff95e4119f9175bd4b96f702e405aed58a3f`:
+
+- [Automation/security — run 40284364171](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284364171): PASS; 299 Node tests passed, 0 failed; npm audit total 0 vulnerabilities.
+- [Dashboard browser E2E — run 40284364156](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284364156): PASS; 10 Chromium tests passed.
+- [Isolated main/candidate baseline — run 40284364148](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284364148): PASS.
+- [Metadata — run 40284364176](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284364176): PASS.
+- [Content quality — run 40284364278](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284364278): PASS.
+- [Production readiness — run 40284364175](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284364175): BLOCKED as intended by external production prerequisites.
+- [Facebook daily draft — run 40284364164](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284364164): SKIPPED, not Meta integration evidence.
+
+The current PR head at the next fetch may be newer if further documentation commits are made. Do not conflate the application source/test SHA with the PR's documentation descendant SHA.
