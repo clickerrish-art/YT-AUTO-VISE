@@ -142,7 +142,7 @@ test("private uploader records uncertain remote outcomes and refuses blind retri
     assert.equal(ledger.attempts.length, 1);
     assert.equal(ledger.attempts[0].status, "RECOVERY_REQUIRED");
     assert.equal(ledger.attempts[0].format, "short");
-    await assert.rejects(uploadPrivate(args), /reconcile manually with YouTube before any retry/);
+    await assert.rejects(uploadPrivate(args), /reconcile with YouTube before any retry/);
     assert.equal(JSON.parse(fs.readFileSync(ledgerPath, "utf8")).attempts.length, 1);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
