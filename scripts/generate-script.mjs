@@ -27,7 +27,9 @@ function normalizeSources(sources) {
   return sources.map((source, index) => ({
     id: String(source.id ?? `source-${index + 1}`),
     title: source.title.trim(),
-    url: source.url.trim()
+    url: source.url.trim(),
+    evidenceSummary: String(source.evidenceSummary ?? "").trim(),
+    evidenceLocator: String(source.evidenceLocator ?? "").trim()
   }));
 }
 
@@ -54,6 +56,11 @@ export async function generateScript({
     throw new Error("brief must contain explicit research sources before generation");
   }
   const normalizedBrief = { ...brief, sources: normalizeSources(brief.sources) };
+  for (const source of normalizedBrief.sources) {
+    if (source.evidenceSummary.length < 40 || !source.evidenceLocator) {
+      throw new Error("each research source requires a substantive evidenceSummary (at least 40 characters) and evidenceLocator before generation");
+    }
+  }
   const prompt = buildScriptGenerationPrompt(format, normalizedBrief);
   const safeEndpoint = validateGenerationEndpoint(endpoint);
   const headers = { "content-type": "application/json" };
@@ -105,6 +112,11 @@ export async function generateScript({
   const validation = validateScriptDepth(structuralCopy, { format });
   if (!validation.valid) throw new Error("generated script failed measured structural validation: " + validation.errors.join("; "));
   const sectionNarration = script.sections.map(section => String(section.narration).trim()).join("\n\n");
+  for (const [index, section] of script.sections.entries()) {
+    if (![section?.visualDirection, section?.pacing, section?.soundDesign].every(value => typeof value === "string" && value.trim())) {
+      throw new Error("section " + (index + 1) + " requires visualDirection, pacing and soundDesign");
+    }
+  }
   if (sectionNarration !== String(script.narration).trim()) {
     throw new Error("section narration must exactly concatenate to the complete narration transcript");
   }
