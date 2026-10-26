@@ -56,6 +56,8 @@ export function createContentJob(input, now = new Date().toISOString()) {
     contentType,
     scheduledSlot: { date: scheduledDate, day: scheduledDay, time: "17:00", timezone: "Africa/Johannesburg", idempotencyKey: `slot:${scheduledDate}:17:00:Africa/Johannesburg` },
     inputReferences,
+    publicationCycleId: typeof input.publicationCycleId === "string" && input.publicationCycleId.trim() ? input.publicationCycleId.trim() : null,
+    shortParentRelationship: null,
     state: "QUEUED",
     createdAt: now,
     startedAt: null,
