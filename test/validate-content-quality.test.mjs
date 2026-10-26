@@ -22,7 +22,7 @@ function fixture(t, format = "long_form") {
   const editProfile = { framing: ["fit", "gentle_crop"], transitions: ["cut", "crossfade"] };
   const editPlanSha256 = createDeterministicEditPlan({ seed: 71, scenes, profile: editProfile }).planSha256;
   const sectionCount = format === "long_form" ? 5 : 3;
-  const wordCount = format === "long_form" ? 800 : 110;
+  const wordCount = format === "long_form" ? 1000 : 137;
   const words = Array.from({ length: wordCount }, (_, i) => "narration" + i);
   const sectionNarrations = Array.from({ length: sectionCount }, (_, i) => words.slice(Math.floor(i * wordCount / sectionCount), Math.floor((i + 1) * wordCount / sectionCount)).join(" "));
   const narration = sectionNarrations.join("\n\n");
@@ -35,7 +35,7 @@ function fixture(t, format = "long_form") {
     premise: format === "long_form" ? "An evidence-led premise" : undefined,
     conclusion: format === "long_form" ? "A substantive conclusion" : undefined,
     claims: [{ text: "A sourced claim", sourceIds: ["source-1"] }],
-    sources: [{ id: "source-1", title: "Research reference", url: "https://research.example.org/paper" }],
+    sources: [{ id: "source-1", title: "Research reference", url: "https://www.nature.com/" }],
     similarityReview: { status: "REVIEWED", evidenceRef: "similarity-review-1" }
   };
   const asset = {
