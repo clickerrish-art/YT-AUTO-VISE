@@ -1,0 +1,112 @@
+{
+  "format": "long_form",
+  "script": {
+    "narration": "REPLACE_WITH_COMPLETE_780_TO_1600_WORD_LONG_FORM_NARRATION",
+    "premise": "REPLACE_WITH_ACCURATE_DISTINCTIVE_PREMISE",
+    "conclusion": "REPLACE_WITH_SUBSTANTIVE_CONCLUSION",
+    "sections": [
+      {
+        "heading": "Section 1",
+        "purpose": "REPLACE_WITH_DISTINCT_SECTION_PURPOSE",
+        "narration": "REPLACE_WITH_COMPLETE_SECTION_NARRATION"
+      },
+      {
+        "heading": "Section 2",
+        "purpose": "REPLACE_WITH_DISTINCT_SECTION_PURPOSE",
+        "narration": "REPLACE_WITH_COMPLETE_SECTION_NARRATION"
+      },
+      {
+        "heading": "Section 3",
+        "purpose": "REPLACE_WITH_DISTINCT_SECTION_PURPOSE",
+        "narration": "REPLACE_WITH_COMPLETE_SECTION_NARRATION"
+      },
+      {
+        "heading": "Section 4",
+        "purpose": "REPLACE_WITH_DISTINCT_SECTION_PURPOSE",
+        "narration": "REPLACE_WITH_COMPLETE_SECTION_NARRATION"
+      },
+      {
+        "heading": "Section 5",
+        "purpose": "REPLACE_WITH_DISTINCT_SECTION_PURPOSE",
+        "narration": "REPLACE_WITH_COMPLETE_SECTION_NARRATION"
+      }
+    ],
+    "claims": [
+      {
+        "text": "REPLACE_WITH_FACTUAL_CLAIM",
+        "sourceIds": [
+          "source-1"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "source-1",
+        "title": "REPLACE_WITH_SOURCE_TITLE",
+        "url": "https://REPLACE_WITH_REAL_SOURCE_URL"
+      }
+    ],
+    "similarityReview": {
+      "status": "NOT_REVIEWED",
+      "evidenceRef": "REPLACE_WITH_SIMILARITY_REVIEW_RECORD"
+    }
+  },
+  "assetProvenance": [
+    {
+      "assetId": "REPLACE_WITH_STABLE_ASSET_ID",
+      "path": "../media/REPLACE_WITH_SOURCE_FILE",
+      "sourceMethod": "GENERATED",
+      "creatorOrRightsHolder": "REPLACE_WITH_CREATOR",
+      "originalSha256": "REPLACE_WITH_64_CHAR_SHA256",
+      "acquiredAt": "REPLACE_WITH_ISO_TIMESTAMP",
+      "licenseEvidenceLocation": "REPLACE_WITH_RIGHTS_RECORD",
+      "permittedUse": "REPLACE_WITH_EXPLICIT_PERMITTED_USE",
+      "commercialUseAllowed": false,
+      "rightsStatus": "UNVERIFIED",
+      "verifiedBy": "",
+      "verifiedAt": "",
+      "generationMethod": "REPLACE_WITH_METHOD",
+      "generationTool": "REPLACE_WITH_TOOL",
+      "editorialPurpose": "REPLACE_WITH_SCENE_PURPOSE"
+    }
+  ],
+  "renderSeed": 0,
+  "scenes": [
+    {
+      "assetId": "REPLACE_WITH_STABLE_ASSET_ID",
+      "sourceSha256": "REPLACE_WITH_64_CHAR_SHA256",
+      "rightsStatus": "UNVERIFIED",
+      "editorialPurpose": "REPLACE_WITH_SCENE_PURPOSE"
+    }
+  ],
+  "editProfile": {
+    "framing": [
+      "fit",
+      "gentle_crop"
+    ],
+    "transitions": [
+      "cut",
+      "crossfade"
+    ]
+  },
+  "editPlanSha256": "REPLACE_WITH_HASH_FROM_DETERMINISTIC_PLAN",
+  "audioProfile": "documentary_narration",
+  "audioReport": {
+    "narrationPath": "../media/REPLACE_WITH_NARRATION_FILE",
+    "narrationSha256": "REPLACE_WITH_64_CHAR_SHA256",
+    "finalAudioSha256": "REPLACE_WITH_64_CHAR_SHA256",
+    "transcriptMatchStatus": "NOT_REVIEWED",
+    "integratedLufs": -16,
+    "truePeakDbtp": -1.5,
+    "musicBelowNarrationDb": 12,
+    "ambienceBelowNarrationDb": 15,
+    "fadesVerified": false,
+    "rightsStatus": "UNVERIFIED"
+  },
+  "humanEditorialReview": {
+    "status": "PENDING",
+    "reviewer": "",
+    "reviewedAt": ""
+  },
+  "notes": "EXAMPLE ONLY. Every placeholder and unverified state intentionally fails the gate. Replace with evidence-backed values; do not copy fake approvals or hashes."
+}
