@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 import { spawn, spawnSync } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
 import { generateScript } from "./generate-script.mjs";
+import { assertShortParentRelationship, shortParentRelationshipSha256 } from "./short-parent-relationship.mjs";
 import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
@@ -1314,7 +1315,30 @@ const server = http.createServer(async (req, res) => {
             if (!fs.statSync(evidenceFile).size) return json(res, 400, { error: "Rights evidence file is empty" });
           }
         }
-        const review = createReviewDecision({ artifact, rightsEvidence, metadataVersion, reviewer, decision: body.decision, reason: body.reason ?? "" });
+        let shortParentRelationshipSha256Value = null;
+        if (body.decision === "APPROVE" && job.contentType === "short") {
+          try {
+            assertShortParentRelationship(job.shortParentRelationship, {
+              childContentId: job.id,
+              childMediaSha256: artifactSha256,
+              childMetadataSha256: metadataVersion,
+              channelId: uploadMetadata.channelId
+            });
+            shortParentRelationshipSha256Value = shortParentRelationshipSha256(job.shortParentRelationship);
+          } catch (error) {
+            return json(res, 409, { error: String(error?.message ?? "Short parent relationship is invalid"), publishingEnabled: false });
+          }
+          const parentJob = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === job.shortParentRelationship.parentContentId);
+          const parentReceipt = state.uploads.find(entry => entry.jobId === parentJob?.id && entry.videoId === job.shortParentRelationship.parentRemoteVideoId && entry.remoteStatusVerified === true);
+          if (!parentJob || parentJob.contentType !== "long_form" || parentJob.state !== "PRIVATE_UPLOAD_VERIFIED" || !parentReceipt) {
+            return json(res, 409, { error: "The exact parent job must be a verified long-form upload with a matching remote receipt", publishingEnabled: false });
+          }
+          const parentArtifact = (parentJob.outputArtifacts ?? []).find(entry => entry.sha256 === job.shortParentRelationship.parentMediaSha256);
+          if (!parentArtifact || parentJob.metadataVersion !== job.shortParentRelationship.parentMetadataSha256 || parentJob.humanApproval?.decision !== "APPROVE") {
+            return json(res, 409, { error: "Parent media, metadata revision or approval is stale; rebind the Short relationship", publishingEnabled: false });
+          }
+        }
+        const review = createReviewDecision({ artifact, rightsEvidence, metadataVersion, reviewer, decision: body.decision, reason: body.reason ?? "", shortParentRelationshipSha256: shortParentRelationshipSha256Value });
         if (body.decision === "APPROVE") {
           state.jobs[index] = approveContentJobForPrivateUpload({ ...job, rightsChecks: { verified: true, evidenceSha256: review.rightsEvidenceSha256, verifiedBy: reviewer, verifiedAt: review.reviewedAt } }, review);
         } else {
@@ -1328,6 +1352,9 @@ const server = http.createServer(async (req, res) => {
           uploadApprovalRecord = {
             decision: "APPROVE",
             jobId: job.id,
+            contentType: job.contentType,
+            shortParentRelationship: job.contentType === "short" ? structuredClone(job.shortParentRelationship) : null,
+            shortParentRelationshipSha256: shortParentRelationshipSha256Value,
             reviewId: review.id,
             reviewedAt: review.reviewedAt,
             reviewer,
