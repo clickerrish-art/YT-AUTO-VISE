@@ -24,13 +24,13 @@ export function buildScriptGenerationPrompt(format, brief) {
     if (brief.parentRecord?.channel !== "SonicVhibez") errors.push("Short parent must target SonicVhibez");
   }
   if (errors.length) throw new Error("Prompt blocked: " + errors.join("; "));
-  const sourceList = brief.sources.map((s, i) => "[" + (s.id ?? ("source-" + (i + 1))) + "] " + s.title + " — " + s.url).join("\n");
+  const sourceList = brief.sources.map((s, i) => "[" + (s.id ?? ("source-" + (i + 1))) + "] " + s.title + " — " + s.url + "\nEvidence locator: " + (s.evidenceLocator ?? "NOT SUPPLIED") + "\nEvidence summary: " + (s.evidenceSummary ?? "NOT SUPPLIED")).join("\n");
   const common = [
     "Create original, evidence-led wildlife documentary narration for SonicVhibez.",
     "Never invent sources, quotations, observations, animal behavior, statistics or certainty. Distinguish established evidence, inference and uncertainty.",
     "Do not copy, paraphrase closely, or imitate another creator's script. Do not invent a recorded encounter. Generated/reconstructed visuals must be described as illustrative where appropriate.",
     "Every material factual claim must reference one or more supplied source IDs. If a claim cannot be supported, qualify it or omit it.",
-    "Return valid JSON only with keys: premise, conclusion, narration, sections, claims, sources, similarityReview. Each section must contain heading, purpose, narration. Each claim must contain text and sourceIds. Preserve source IDs and exact source URLs.",
+    "Return valid JSON only with keys: premise, conclusion, narration, sections, claims, sources, similarityReview. Each section must contain heading, purpose, narration, visualDirection, pacing and soundDesign. Each claim must contain text and sourceIds. Preserve source IDs and exact source URLs.",
     "Use scene-by-scene visual direction that is physically plausible, anatomically realistic, geographically coherent and aligned with the narration. Flag any scene that requires synthetic reconstruction or human factual review.",
     "Avoid filler, repetitive summaries, keyword stuffing, engagement bait and unsupported sensationalism.",
     "Topic: " + brief.topic,
