@@ -99,7 +99,7 @@ test("private-upload approval binds media, thumbnail, validated captions, metada
   assert.equal(approved.state, "APPROVED_FOR_PRIVATE_UPLOAD");
   assert.equal(approved.humanApproval.artifactSha256, video.sha256);
   assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, artifactSha256: "e".repeat(64) }), /Short parent relationship/);
-  assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, metadataVersion: "changed" }), /parent relationship/);
+  assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, metadataVersion: "changed" }), /metadata version/);
   assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, rightsEvidenceSha256: "f".repeat(64) }), /rights evidence/);
   assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, relatedArtifacts: review.relatedArtifacts.filter(item => item.path !== captions.path) }), /does not bind every current media artifact/);
   assert.throws(() => approveContentJobForPrivateUpload({ ...job, validationResults: { passed: true } }, review), /Validated captions path and SHA-256/);
