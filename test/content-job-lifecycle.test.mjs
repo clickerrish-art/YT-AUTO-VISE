@@ -69,7 +69,7 @@ test("private-upload approval binds media, thumbnail, validated captions, metada
     parentChannelTitle: "SonicVhibez", parentRemoteTitle: "Approved parent documentary", parentChannelId: channelId, parentRemoteVerified: true, parentPrivacyStatus: "private",
     parentApproved: true, parentRevisionApproved: true, parentPublicationCycleId: "cycle-a", childPublicationCycleId: "cycle-a",
     sourceSegments: [{ sceneId: "scene-01", startSeconds: 10, endSeconds: 20 }],
-    relationshipApproved: true, relationshipReviewer: "reviewer@example.test", relationshipApprovedAt: "2026-10-23T12:00:00.000Z", relationshipEvidenceSha256: "f".repeat(64),
+    relationshipApproved: true, relationshipReviewNotes: "Parent narrative and scene segment reviewed.", relationshipReviewer: "reviewer@example.test", relationshipApprovedAt: "2026-10-23T12:00:00.000Z", relationshipEvidenceSha256: "f".repeat(64),
     nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "Private parent cannot use native Related video." }
   };
   relationship.relationshipEvidenceSha256 = shortParentEvidenceSha256(relationship);
