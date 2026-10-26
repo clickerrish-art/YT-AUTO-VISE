@@ -4,16 +4,16 @@
 
 - Repository: `clickerrish-art/YT-AUTO-VISE`
 - Implementation branch: `codex/marketing-machine-audit-fixes`
-- Source/test SHA with the new content-quality gates: `2e077612f5efbe4f787348fee9e8be5297619625`
+- Source/test SHA with the new content-quality gates: `bbde79e1f3f589f1737e3ea95512a412e5c91d61`
 - Main SHA at the source/test checkpoint: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
-- Divergence at source/test checkpoint: 1,237 commits ahead, 2 behind, 131 changed files.
+- Divergence at source/test checkpoint: 1,251 commits ahead, 2 behind, 136 changed files.
 - PR #1 is open, draft and unmerged. Subsequent documentation commits have advanced the branch; the live PR head must be fetched before using this report as the final-head checkpoint.
 - No merge, reset, rebase, force-push, history rewrite, upload, public post or campaign activation occurred.
 
 ## Implemented source changes
 
-The source/test candidate adds `scripts/content-quality-gates.mjs` and `scripts/validate-content-quality.mjs`. Both renderers require `qualityEvidencePath` and run this gate before FFmpeg. The gate validates:
+The source/test candidate adds `scripts/content-quality-gates.mjs`, `scripts/validate-content-quality.mjs`, and the source-constrained prompt builder `scripts/build-script-generation-prompt.mjs`. Both renderers require `qualityEvidencePath` and run this gate before FFmpeg. The gate validates:
 
 - measured script word count and differentiated sections, source-backed claims and a retained similarity-review record;
 - asset provenance and original SHA-256 values against actual files, with commercial-use permission and human rights verification fields;
@@ -26,17 +26,17 @@ The native YouTube Related video setting is intentionally separate. Internal rel
 
 ## Exact source/test SHA CI evidence
 
-All links below are workflows associated with source/test SHA `2e077612f5efbe4f787348fee9e8be5297619625`.
+All links below are workflows associated with source/test SHA `bbde79e1f3f589f1737e3ea95512a412e5c91d61`.
 
-- [Automation/security — run 40282803930](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803930): PASS; 293 Node tests passed, 0 failed; npm audit reported 0 vulnerabilities. The workflow also ran clean/locked install checks and other repository validations.
-- [Content quality — run 40282803919](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803919): PASS.
-- [Metadata validation — run 40282803925](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803925): PASS.
-- [Dashboard browser E2E — run 40282804001](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282804001): PASS.
-- [Isolated main/candidate baseline — run 40282803924](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803924): PASS.
-- [Production readiness — run 40282803929](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803929): BLOCKED as expected; human-readable and JSON readiness returned 2/2 and retained the diagnostic artifact. The blockers include missing verified media manifests, channel ID, OAuth credentials, owner-approved cadence decision and complete upload-history reconciliation.
-- [Nature Frontiers Facebook daily draft — run 40282803928](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803928): SKIPPED, not successful Meta integration evidence.
+- [Automation/security — run 40283292738](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803930): PASS; 296 Node tests passed, 0 failed; npm audit reported 0 vulnerabilities. The workflow also ran clean/locked install checks and other repository validations.
+- [Content quality — run 40283292695](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803919): PASS.
+- [Metadata validation — run 40283292591](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803925): PASS.
+- [Dashboard browser E2E — run 40283292552](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282804001): PASS.
+- [Isolated main/candidate baseline — run 40283292715](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803924): PASS.
+- [Production readiness — run 40283292557](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803929): BLOCKED as expected; human-readable and JSON readiness returned 2/2 and retained the diagnostic artifact. The blockers include missing verified media manifests, channel ID, OAuth credentials, owner-approved cadence decision and complete upload-history reconciliation.
+- [Nature Frontiers Facebook daily draft — run 40283292743](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803928): SKIPPED, not successful Meta integration evidence.
 
-These results do not apply automatically to later documentation commits. Fetch and inspect workflows on the exact current PR head before release decisions.
+The structured prompt builder is covered by regression tests and produces a prompt; the current TTS workflow still consumes authored scripts rather than automatically invoking an LLM. Prompt-builder integration into an automated authoring service is not claimed. These results apply to source/test SHA `bbde79e1f3f589f1737e3ea95512a412e5c91d61`, not automatically to later documentation descendants. Fetch and inspect workflows on the exact current PR head before release decisions.
 
 ## Relationship and media limitations
 
