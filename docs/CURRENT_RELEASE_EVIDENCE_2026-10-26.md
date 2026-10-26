@@ -122,3 +122,17 @@ The generator does not claim factual accuracy or originality based on model asse
 The first CI execution for the generator code checkpoint `12c089305be633d12db29172f4e531d2417d7ad4` exposed a test-fixture defect: the three negative-path tests invoked Short generation without the required explicit SonicVhibez long-form parent. The automation/security, content-quality, metadata and isolated-baseline workflows therefore failed at this checkpoint; browser E2E passed, production readiness remained blocked, and the Facebook draft workflow was skipped. This failure is not concealed or counted as a pass.
 
 The fixture was corrected in commit https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ebbf799d29479c8e549ebb75617eb024a5d15ca3. Provider redirects were then disabled in https://github.com/clickerrish-art/YT-AUTO-VISE/commit/dae5eb43889f6870672621937914ef7595a04d2c. As of this note, GitHub's PR-triggered workflow lookup has not returned new runs for these later commits, and local repository execution is unavailable in this environment. Therefore the corrected tests are **NOT VERIFIED on the latest application-code SHA**; the prior failures remain recorded, and no green result is inferred. Request a fresh CI execution from a normal branch push or authorized workflow run before treating the generator as accepted.
+
+
+### Follow-up exact application-code CI — `dae5eb43889f6870672621937914ef7595a04d2c`
+
+The corrected fixture and redirect hardening were tested by GitHub Actions after the previous note was written. These runs explicitly checked out application-code SHA `dae5eb43889f6870672621937914ef7595a04d2c`:
+- [Automation/security — run 40288075144](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288075144): **PASS** — 304 Node tests passed; 8 Python tests passed; npm audit reported 0 vulnerabilities; lock/install checks, queue policy checks and Python syntax compilation completed.
+- [Content quality — run 40288074937](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288074937): **PASS**.
+- [Metadata — run 40288074988](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288074988): **PASS**.
+- [Dashboard browser E2E — run 40288075040](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288075040): **PASS**, 10 browser tests.
+- [Isolated main/candidate baseline — run 40288074935](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288074935): **PASS**.
+- [Production readiness — run 40288074986](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288074986): **BLOCKED as intended**; the workflow's failure exit is the readiness gate enforcing unresolved production blockers, not a passing production result.
+- [Nature Frontiers Facebook draft — run 40288074948](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288074948): **SKIPPED**, not Facebook integration evidence.
+
+This supersedes the preceding statement that no new CI had returned. The earlier failure on SHA `12c089305be633d12db29172f4e531d2417d7ad4` remains historically recorded and is not counted as a pass. CI acceptance for the application-code checkpoint `dae5eb43889f6870672621937914ef7595a04d2c` is PASS; overall code and production acceptance remain BLOCKED for the independent dashboard/recovery/history/governance and external prerequisites listed above.
