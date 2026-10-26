@@ -102,3 +102,16 @@ Exact SHA workflow status at time of update:
 - [Production readiness — run 40284972044](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284972044): BLOCKED as expected by real prerequisites.
 - [Facebook daily draft — run 40284972048](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284972048): SKIPPED.
 - [Dashboard browser E2E — run 40284971984](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971984): IN PROGRESS at the time of this note; do not claim it passed on this SHA until the run completes.
+
+
+## Script-generation provider implementation — 26 October 2026
+
+Implementation commits:
+- https://github.com/clickerrish-art/YT-AUTO-VISE/commit/1a393a652fd89bf1516b61a3ad1be74f73fbf79b — added `scripts/generate-script.mjs`, an optional configurable OpenAI-compatible provider that defaults to a loopback endpoint.
+- https://github.com/clickerrish-art/YT-AUTO-VISE/commit/6182af1255ecf780b8ffd507eee9bc458136a33e — added regression tests for valid output, source URL substitution, malformed output, remote plaintext endpoint rejection and provider failure.
+- https://github.com/clickerrish-art/YT-AUTO-VISE/commit/14bc3daf8faaade5d79275cd8c9b32f56f340d5a — added the `npm run script:generate` command.
+- https://github.com/clickerrish-art/YT-AUTO-VISE/commit/12c089305be633d12db29172f4e531d2417d7ad4 — prompt source listing now includes stable source IDs.
+
+The generator does not claim factual accuracy or originality based on model assertions. It verifies returned source identifiers/titles/URLs against the brief, measures narration and structure, requires section narration to concatenate exactly to the transcript, forces similarity review back to PENDING, and sets `publishable=false`. It emits JSON to stdout and does not write production state or call publication APIs. Configure `SCRIPT_GENERATION_ENDPOINT`, `SCRIPT_GENERATION_MODEL`, and optionally `SCRIPT_GENERATION_API_KEY`; loopback HTTP and HTTPS endpoints are permitted, remote plaintext HTTP is rejected. Default endpoint is `http://127.0.0.1:1234/v1/chat/completions`.
+
+**Integration limitation:** this is now an executable generation command, but it is not yet a dashboard/lifecycle worker integration. Research provenance, similarity review, editorial review, actual rendered speech duration and final artifact approval remain independent gates. The new tests and full regression suites must be confirmed on the exact current HEAD before this addition is marked PASS. Production remains BLOCKED.
