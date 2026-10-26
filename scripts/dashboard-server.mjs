@@ -1235,9 +1235,15 @@ const server = http.createServer(async (req, res) => {
         if (child.contentType !== "short" || parentJob.contentType !== "long_form" || child.id === parentJob.id) return json(res, 409, { error: "Only a Short may bind to a distinct long-form parent job" });
         if (!child.publicationCycleId || child.publicationCycleId !== parentJob.publicationCycleId) return json(res, 409, { error: "Both jobs must have the same explicit owner-assigned publicationCycleId" });
         if (!["GENERATED", "VALIDATING", "AWAITING_HUMAN_REVIEW"].includes(child.state) || !Array.isArray(child.outputArtifacts) || !child.outputArtifacts.length || !child.metadataVersion) return json(res, 409, { error: "Short must have a recorded media artifact and metadata revision before parent binding" });
-        if (parentJob.state !== "PRIVATE_UPLOAD_VERIFIED" || parentJob.humanApproval?.decision !== "APPROVE") return json(res, 409, { error: "Parent must be human-approved and have a verified private-upload receipt" });
-        const parentReceipt = state.uploads.find(entry => entry.jobId === parentJob.id && entry.remoteStatusVerified === true && entry.channelTitle === "SonicVhibez" && entry.privacyStatus === "private");
-        if (!parentReceipt?.videoId || !parentReceipt.channelId || !/^[A-Za-z0-9_-]{11}$/.test(parentReceipt.videoId)) return json(res, 409, { error: "Exact parent remote ID and verified SonicVhibez private receipt are required" });
+        if (!["APPROVED_FOR_PRIVATE_UPLOAD", "PRIVATE_UPLOAD_VERIFIED"].includes(parentJob.state) || parentJob.humanApproval?.decision !== "APPROVE") return json(res, 409, { error: "Parent must be human-approved before its verified private-upload receipt can be bound" });
+        const parentLedger = readUploadLedger();
+        const parentAttempt = parentLedger.available ? parentLedger.attempts.find(entry => entry.jobId === parentJob.id && entry.status === "PRIVATE_UPLOAD_VERIFIED" && entry.channelTitle === "SonicVhibez" && entry.visibility === "private" && entry.remoteVideoId) : null;
+        if (!parentAttempt?.receiptPath || !/^[A-Za-z0-9_-]+\.json$/.test(parentAttempt.receiptPath)) return json(res, 409, { error: "Exact parent remote ID and verified SonicVhibez private receipt are required" });
+        const parentReceiptPath = path.relative(root, path.join(path.resolve(root, process.env.UPLOAD_LOG_DIR ?? "run-logs"), parentAttempt.receiptPath));
+        let parentReceipt;
+        try { parentReceipt = JSON.parse(fs.readFileSync(resolveRepositoryFile(parentReceiptPath), "utf8")); } catch { return json(res, 409, { error: "Parent upload receipt is missing or unsafe; relationship remains blocked" }); }
+        if (parentReceipt.jobId !== parentJob.id || parentReceipt.videoId !== parentAttempt.remoteVideoId || parentReceipt.channelId !== parentAttempt.channelId || parentReceipt.channelTitle !== "SonicVhibez" || parentReceipt.privacyStatus !== "private" || parentReceipt.remoteStatusVerified !== true) return json(res, 409, { error: "Parent receipt does not independently verify the exact private SonicVhibez video" });
+        parentReceipt.remoteVideoId = parentReceipt.videoId;
         const parentArtifact = (parentJob.outputArtifacts ?? []).find(entry => entry.path === body.parentMediaPath);
         if (!parentArtifact || !/^[a-f0-9]{64}$/.test(parentArtifact.sha256 ?? "")) return json(res, 409, { error: "parentMediaPath must exactly match a checksummed artifact on the selected parent job" });
         const parentMediaFile = resolveRepositoryFile(parentArtifact.path);
@@ -1262,8 +1268,8 @@ const server = http.createServer(async (req, res) => {
           parentMediaSha256: parentArtifact.sha256,
           parentMetadataSha256: parentJob.metadataVersion,
           parentApprovalSha256: crypto.createHash("sha256").update(JSON.stringify(parentJob.humanApproval)).digest("hex"),
-          parentRemoteVideoId: parentReceipt.videoId,
-          parentCanonicalUrl: "https://www.youtube.com/watch?v=" + parentReceipt.videoId,
+          parentRemoteVideoId: parentReceipt.remoteVideoId,
+          parentCanonicalUrl: "https://www.youtube.com/watch?v=" + parentReceipt.remoteVideoId,
           parentChannelTitle: parentReceipt.channelTitle,
           parentRemoteTitle: parentReceipt.title,
           parentChannelId: parentReceipt.channelId,
@@ -1401,9 +1407,10 @@ const server = http.createServer(async (req, res) => {
             return json(res, 409, { error: String(error?.message ?? "Short parent relationship is invalid"), publishingEnabled: false });
           }
           const parentJob = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === job.shortParentRelationship.parentContentId);
-          const parentReceipt = state.uploads.find(entry => entry.jobId === parentJob?.id && entry.videoId === job.shortParentRelationship.parentRemoteVideoId && entry.remoteStatusVerified === true);
-          if (!parentJob || parentJob.contentType !== "long_form" || parentJob.state !== "PRIVATE_UPLOAD_VERIFIED" || !parentReceipt) {
-            return json(res, 409, { error: "The exact parent job must be a verified long-form upload with a matching remote receipt", publishingEnabled: false });
+          const parentLedger = readUploadLedger();
+          const parentAttempt = parentLedger.available ? parentLedger.attempts.find(entry => entry.jobId === parentJob?.id && entry.remoteVideoId === job.shortParentRelationship.parentRemoteVideoId && entry.status === "PRIVATE_UPLOAD_VERIFIED" && entry.channelTitle === "SonicVhibez" && entry.visibility === "private") : null;
+          if (!parentJob || parentJob.contentType !== "long_form" || !["APPROVED_FOR_PRIVATE_UPLOAD", "PRIVATE_UPLOAD_VERIFIED"].includes(parentJob.state) || parentJob.humanApproval?.decision !== "APPROVE" || !parentAttempt) {
+            return json(res, 409, { error: "The exact parent job must be human-approved and have a matching verified private-upload ledger receipt", publishingEnabled: false });
           }
           const parentArtifact = (parentJob.outputArtifacts ?? []).find(entry => entry.sha256 === job.shortParentRelationship.parentMediaSha256);
           if (!parentArtifact || parentJob.metadataVersion !== job.shortParentRelationship.parentMetadataSha256 || parentJob.humanApproval?.decision !== "APPROVE") {
