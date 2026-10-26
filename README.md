@@ -322,3 +322,8 @@ The validator blocks placeholders and mismatched files; it does not prove licenc
 ### Structured script-authoring prompt
 
 Use `npm run prompt:script -- long_form <brief.json>` or `npm run prompt:script -- short <brief.json>` to produce a source-constrained prompt. A Short brief must identify its exact long-form parent and weekly cycle. This command builds a prompt only; it does not call an LLM or invent research. Validate the returned structured script through the quality-evidence gate before narration/rendering.
+
+
+### Reproducible render and audio processing
+
+Renderers do not loop a short source clip to fake a 50–60 second or 6–10 minute duration; short footage produces a short export that fails the duration gate. A recorded seed produces a deterministic framing choice and subtle bounded brightness/contrast/saturation adjustment. Audio profile filters apply high/low-pass filtering, compression, loudness normalization and short fades. After technical export validation, the renderer measures the actual MP4 audio loudness and true peak with FFmpeg and blocks success when the profile tolerance fails. These filters improve delivery consistency; they do not establish originality or hide reused content.
