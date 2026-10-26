@@ -162,7 +162,10 @@ export function localDateTimeToIso(date, time = "17:00", timeZone = DEFAULT_SCHE
       if (part.type !== "literal") result[part.type] = Number(part.value);
       return result;
     }, {});
-    const representedAsUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
+    const representedDate = new Date(0);
+    representedDate.setUTCFullYear(parts.year, parts.month - 1, parts.day);
+    representedDate.setUTCHours(parts.hour, parts.minute, parts.second, 0);
+    const representedAsUtc = representedDate.getTime();
     const next = wallClockAsUtc - (representedAsUtc - guess);
     if (next === guess) break;
     guess = next;
