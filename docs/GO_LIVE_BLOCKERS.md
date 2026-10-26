@@ -1,3 +1,15 @@
+# Current release decision — 26 October 2026
+
+**Status: PRODUCTION BLOCKED.** Use `docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md` as the source of truth for the latest live Git state and exact-SHA workflow evidence. Current tested source/test SHA: `f3cae44edcc9094bf2f294ff46d583c556462548`; documentation-only updates after that SHA do not count as new code-test evidence.
+
+Newly enforced: Short-parent binding now fails closed unless the parent receipt matches the explicitly configured `SONICVHIBEZ_CHANNEL_ID`. This does not verify OAuth, remote channel history or native Related video eligibility by itself.
+
+Open release blockers remain: genuine rights-cleared final media and human playback review; complete script/narration/caption/render acceptance; comprehensive originality checks; verified YouTube identity/history and one-operation private-upload authorization; verified Meta Page identity and successful non-skipped draft workflow; owner-approved feasible cadence; complete relationship success/failure/recovery browser journeys; backup/restore/concurrency/rollback and deployment drills; complete divergent-history review; and branch-protection/required-check governance.
+
+Safety remains unchanged: public/unattended YouTube publishing OFF, Facebook live publishing OFF, Safari campaigns inactive, PR #1 open/draft/unmerged, no unauthorized external actions.
+
+---
+
 ## Latest live checkpoint — 26 October 2026: parent source evidence and exact-SHA acceptance
 
 **Application-code SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **Exact tested source/test SHA:** `02eb5c42b81b479223fd32c262247d75ecf5472d`. **PR HEAD at this checkpoint:** `2f455314d4f75dafe8b9b309ead0040570158e09` (documentation-only descendant after the tested source/test SHA).
