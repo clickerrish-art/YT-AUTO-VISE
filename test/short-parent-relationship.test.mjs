@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validateShortParentRelationship, assertShortParentRelationship, shortParentRelationshipSha256, shortParentEvidenceSha256, validateSourceSegmentsAgainstEvidence, validateConfiguredSonicVhibezChannel } from "../scripts/short-parent-relationship.mjs";
+import { validateShortParentRelationship, assertShortParentRelationship, shortParentRelationshipSha256, shortParentEvidenceSha256, validateSourceSegmentsAgainstEvidence, validateConfiguredSonicVhibezChannel, validateParentReceiptTitle } from "../scripts/short-parent-relationship.mjs";
 
 const sha = c => c.repeat(64);
 const base = {
@@ -77,4 +77,15 @@ test("configured SonicVhibez channel identity must independently match the paren
   assert.match(validateConfiguredSonicVhibezChannel({ ...receipt, channelTitle: "Nature Frontiers" }, channelId).join(" "), /must be SonicVhibez/);
   assert.match(validateConfiguredSonicVhibezChannel({ ...receipt, channelId: "UCbad" }, channelId).join(" "), /valid channel ID/);
   assert.match(validateConfiguredSonicVhibezChannel(null, channelId).join(" "), /receipt is required/);
+});
+
+
+test("parent receipt title must exactly match the approved metadata revision", () => {
+  const approvedMetadata = { title: "Why honey badgers survive venom" };
+  const receipt = { title: approvedMetadata.title };
+  assert.deepEqual(validateParentReceiptTitle(receipt, approvedMetadata), []);
+  assert.match(validateParentReceiptTitle({ title: "Different remote title" }, approvedMetadata).join(" "), /does not match the approved parent metadata title/);
+  assert.match(validateParentReceiptTitle({ title: "" }, approvedMetadata).join(" "), /must contain the remote title/);
+  assert.match(validateParentReceiptTitle({}, { title: "" }).join(" "), /must contain an exact title/);
+  assert.match(validateParentReceiptTitle(null, approvedMetadata).join(" "), /receipt is required/);
 });
