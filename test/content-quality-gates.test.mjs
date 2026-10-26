@@ -121,7 +121,7 @@ test("script-depth gate measures words and requires sections, claim sources and 
   for (const url of ["https://example.org/research", "https://research.example.org/paper", "https://127.0.0.1/paper", "https://user:pass@www.nature.com/"]) {
     assert.match(validateScriptDepth({ ...script, sources: [{ ...script.sources[0], url }] }).errors.join(" "), /public HTTPS source|non-placeholder public HTTPS URL/);
   }
-  assert.match(validateScriptDepth({ ...script, sources: [] }).errors.join(" "), /missing or invalid HTTPS source/);
+  assert.match(validateScriptDepth({ ...script, sources: [] }).errors.join(" "), /missing or invalid public HTTPS source/);
   assert.match(validateScriptDepth({ ...script, similarityReview: null }).errors.join(" "), /similarity review/);
 });
 
