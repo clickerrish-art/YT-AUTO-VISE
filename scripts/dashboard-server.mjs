@@ -1101,7 +1101,7 @@ const server = http.createServer(async (req, res) => {
           return json(res, 409, { error: "Authoring is already in progress; duplicate provider calls are blocked", recoveryRequired: false });
         }
         if (job.state !== "QUEUED") return json(res, 409, { error: "Only a queued job can start script authoring" });
-        job.authoring = { status: "GENERATING", fingerprint, requestedAt: new Date().toISOString(), requestedBy: operatorId, publishable: false, editorialReviewRequired: true };
+        job.authoring = { status: "GENERATING", fingerprint, researchBrief: structuredClone(body.brief), requestedAt: new Date().toISOString(), requestedBy: operatorId, publishable: false, editorialReviewRequired: true };
         state.jobs[index] = job;
         state.audit.push({ id: crypto.randomUUID(), action: "SCRIPT_AUTHORING_STARTED", jobId: job.id, fingerprint, at: job.authoring.requestedAt, actor: operatorId });
         saveState(state);
