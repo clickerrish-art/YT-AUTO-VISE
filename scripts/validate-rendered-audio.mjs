@@ -21,13 +21,15 @@ export function parseLoudnormReport(stderr) {
   }
 }
 
-export function validateRenderedAudioMetrics(metrics, profileName, { loudnessTolerance = 3, truePeakTolerance = 0.2 } = {}) {
+export function validateRenderedAudioMetrics(metrics, profileName, { loudnessTolerance = 3, truePeakTolerance = 0.2, loudnessRangeTolerance = 2 } = {}) {
   const profile = getAudioProfile(profileName);
   const errors = [];
   if (!metrics || !Number.isFinite(metrics.integratedLufs)) errors.push("rendered integrated loudness could not be measured");
   else if (Math.abs(metrics.integratedLufs - profile.narrationTargetLufs) > loudnessTolerance) errors.push("rendered integrated loudness is outside profile tolerance");
   if (!metrics || !Number.isFinite(metrics.truePeakDbtp)) errors.push("rendered true peak could not be measured");
   else if (metrics.truePeakDbtp > profile.truePeakDbtpMax + truePeakTolerance) errors.push("rendered true peak exceeds profile limit");
+  if (!metrics || !Number.isFinite(metrics.loudnessRange)) errors.push("rendered loudness range could not be measured");
+  else if (metrics.loudnessRange > profile.loudnessRangeTarget + loudnessRangeTolerance) errors.push("rendered loudness range exceeds profile target maximum");
   return { valid: errors.length === 0, errors, profile, metrics };
 }
 
