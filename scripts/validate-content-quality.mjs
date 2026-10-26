@@ -17,8 +17,9 @@ function sha256(filePath) {
   return crypto.createHash("sha256").update(fs.readFileSync(filePath)).digest("hex");
 }
 
-export function validateContentQualityEvidence(evidence, { format, evidenceDir = process.cwd() } = {}) {
+export function validateContentQualityEvidence(evidence, { format, evidenceDir = process.cwd(), expectedFootagePath, expectedNarrationPath } = {}) {
   const errors = [];
+  let matchedFootage = false;
   if (!evidence || typeof evidence !== "object") return ["quality evidence must be a JSON object"];
   if (evidence.format !== format) errors.push("quality evidence format must match render format " + format);
   const script = validateScriptDepth(evidence.script, { format });
@@ -35,12 +36,14 @@ export function validateContentQualityEvidence(evidence, { format, evidenceDir =
         try {
           const file = resolveRegularFileNoSymlinks(asset.path, evidenceDir, "Provenance source asset");
           if (sha256(file) !== asset.originalSha256) errors.push("asset " + (index + 1) + " source hash does not match the file bytes");
+          if (expectedFootagePath && path.resolve(file) === path.resolve(expectedFootagePath)) matchedFootage = true;
         } catch {
           errors.push("asset " + (index + 1) + " source path is missing or unsafe");
         }
       }
     });
   }
+  if (expectedFootagePath && !matchedFootage) errors.push("asset provenance must bind the exact footage file used by the render manifest");
   if (!Number.isSafeInteger(evidence.renderSeed) || evidence.renderSeed < 0) errors.push("renderSeed must be a recorded non-negative integer");
   try {
     const plan = createDeterministicEditPlan({ seed: evidence.renderSeed, scenes: evidence.scenes, profile: evidence.editProfile ?? {} });
@@ -59,6 +62,7 @@ export function validateContentQualityEvidence(evidence, { format, evidenceDir =
     try {
       const narrationPath = resolveRegularFileNoSymlinks(audio.narrationPath, evidenceDir, "Narration source");
       if (sha256(narrationPath) !== audio.narrationSha256) errors.push("audio narrationSha256 does not match the narration file bytes");
+      if (expectedNarrationPath && path.resolve(narrationPath) !== path.resolve(expectedNarrationPath)) errors.push("audio report must bind the exact narration file used by the render manifest");
     } catch {
       errors.push("audio narration path is missing or unsafe");
     }
@@ -76,9 +80,9 @@ export function validateContentQualityEvidence(evidence, { format, evidenceDir =
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const [evidenceArg, format] = process.argv.slice(2);
+  const [evidenceArg, format, expectedFootageArg, expectedNarrationArg] = process.argv.slice(2);
   if (!evidenceArg || !["long_form", "short"].includes(format)) {
-    console.error("Usage: node scripts/validate-content-quality.mjs <quality-evidence.json> <long_form|short>");
+    console.error("Usage: node scripts/validate-content-quality.mjs <quality-evidence.json> <long_form|short> [footage-file] [narration-file]");
     process.exit(2);
   }
   let evidencePath;
@@ -87,7 +91,15 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   let evidence;
   try { evidence = JSON.parse(fs.readFileSync(evidencePath, "utf8")); }
   catch { console.error("BLOCKED: quality evidence is not valid JSON."); process.exit(2); }
-  const errors = validateContentQualityEvidence(evidence, { format, evidenceDir: path.dirname(evidencePath) });
+  let expectedFootagePath, expectedNarrationPath;
+  try {
+    if (expectedFootageArg) expectedFootagePath = resolveRegularFileNoSymlinks(expectedFootageArg, process.cwd(), "Manifest footage");
+    if (expectedNarrationArg) expectedNarrationPath = resolveRegularFileNoSymlinks(expectedNarrationArg, process.cwd(), "Manifest narration");
+  } catch {
+    console.error("BLOCKED: manifest footage or narration path is missing or unsafe.");
+    process.exit(2);
+  }
+  const errors = validateContentQualityEvidence(evidence, { format, evidenceDir: path.dirname(evidencePath), expectedFootagePath, expectedNarrationPath });
   if (errors.length) {
     console.error("BLOCKED — content quality evidence failed:");
     errors.forEach(error => console.error("- " + error));
