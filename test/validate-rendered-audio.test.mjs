@@ -12,8 +12,10 @@ test("parses FFmpeg loudnorm input measurements", () => {
 });
 
 test("rendered audio must meet the selected profile's loudness and true-peak limits", () => {
-  assert.equal(validateRenderedAudioMetrics({ integratedLufs: -16.5, truePeakDbtp: -1.7 }, "documentary_narration").valid, true);
-  assert.match(validateRenderedAudioMetrics({ integratedLufs: -24, truePeakDbtp: -1.7 }, "documentary_narration").errors.join(" "), /loudness/);
-  assert.match(validateRenderedAudioMetrics({ integratedLufs: -16, truePeakDbtp: -0.5 }, "documentary_narration").errors.join(" "), /true peak/);
+  assert.equal(validateRenderedAudioMetrics({ integratedLufs: -16.5, truePeakDbtp: -1.7, loudnessRange: 8 }, "documentary_narration").valid, true);
+  assert.match(validateRenderedAudioMetrics({ integratedLufs: -24, truePeakDbtp: -1.7, loudnessRange: 8 }, "documentary_narration").errors.join(" "), /loudness/);
+  assert.match(validateRenderedAudioMetrics({ integratedLufs: -16, truePeakDbtp: -0.5, loudnessRange: 8 }, "documentary_narration").errors.join(" "), /true peak/);
+  assert.match(validateRenderedAudioMetrics({ integratedLufs: -16, truePeakDbtp: -1.7, loudnessRange: 20 }, "documentary_narration").errors.join(" "), /loudness range/);
+  assert.match(validateRenderedAudioMetrics({ integratedLufs: -16, truePeakDbtp: -1.7 }, "documentary_narration").errors.join(" "), /loudness range could not be measured/);
   assert.match(validateRenderedAudioMetrics(null, "documentary_narration").errors.join(" "), /could not be measured/);
 });
