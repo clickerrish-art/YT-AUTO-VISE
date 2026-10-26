@@ -55,6 +55,8 @@ test("generation rejects malformed structure and remote plaintext endpoints", as
     fetchImpl: async () => providerResponse({ ...script, narration: "too short", sections: [] })
   }), /failed measured structural validation/);
   assert.throws(() => validateGenerationEndpoint("http://203.0.113.10/api"), /HTTPS or loopback HTTP/);
+  assert.throws(() => validateGenerationEndpoint("https://192.168.1.2/api"), /public HTTPS or loopback HTTP/);
+  assert.throws(() => validateGenerationEndpoint("https://localhost/api"), /public HTTPS or loopback HTTP/);
   assert.equal(validateGenerationEndpoint("http://127.0.0.1:1234/v1/chat/completions"), "http://127.0.0.1:1234/v1/chat/completions");
 });
 
@@ -96,6 +98,9 @@ test("malformed, duplicate and placeholder research sources fail closed before p
     "https://example.com/paper",
     "https://research.example.org/paper",
     "https://127.0.0.1/paper",
+    "https://10.0.0.8/paper",
+    "https://192.168.1.2/paper",
+    "https://169.254.169.254/latest/meta-data",
     "https://localhost/paper",
     "https://internal.invalid/paper",
     "https://research.test/paper"
