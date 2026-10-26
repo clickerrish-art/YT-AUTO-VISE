@@ -24,13 +24,39 @@ export function validateGenerationEndpoint(value) {
 }
 
 function normalizeSources(sources) {
-  return sources.map((source, index) => ({
-    id: String(source.id ?? `source-${index + 1}`),
-    title: source.title.trim(),
-    url: source.url.trim(),
-    evidenceSummary: String(source.evidenceSummary ?? "").trim(),
-    evidenceLocator: String(source.evidenceLocator ?? "").trim()
-  }));
+  if (!Array.isArray(sources) || sources.length === 0 || sources.length > 30) {
+    throw new Error("sources must be a non-empty array with at most 30 research records");
+  }
+  const normalized = sources.map((source, index) => {
+    if (!source || typeof source !== "object" || Array.isArray(source)) {
+      throw new Error("research source " + (index + 1) + " must be an object");
+    }
+    for (const field of ["title", "url"]) {
+      if (typeof source[field] !== "string" || !source[field].trim()) {
+        throw new Error("research source " + (index + 1) + " requires a non-empty " + field);
+      }
+    }
+    let parsedUrl;
+    try { parsedUrl = new URL(source.url.trim()); }
+    catch { throw new Error("research source " + (index + 1) + " URL must be a valid HTTPS URL"); }
+    if (parsedUrl.protocol !== "https:" || parsedUrl.username || parsedUrl.password ||
+        /^(?:localhost|127\\.|0\\.0\\.0\\.0|\\[::1\\])$/i.test(parsedUrl.hostname) ||
+        /(?:replace[_ -]?with|placeholder|todo|tbd|unknown|example\\.com)/i.test(source.url)) {
+      throw new Error("research source " + (index + 1) + " URL must be a non-placeholder public HTTPS URL without embedded credentials");
+    }
+    return {
+      id: String(source.id ?? `source-${index + 1}`).trim(),
+      title: source.title.trim(),
+      url: parsedUrl.toString(),
+      evidenceSummary: typeof source.evidenceSummary === "string" ? source.evidenceSummary.trim() : "",
+      evidenceLocator: typeof source.evidenceLocator === "string" ? source.evidenceLocator.trim() : ""
+    };
+  });
+  const ids = normalized.map(source => source.id);
+  if (ids.some(id => !id || id.length > 120) || new Set(ids).size !== ids.length) {
+    throw new Error("research source IDs must be unique, non-empty and at most 120 characters");
+  }
+  return normalized;
 }
 
 function parseModelJson(content) {
