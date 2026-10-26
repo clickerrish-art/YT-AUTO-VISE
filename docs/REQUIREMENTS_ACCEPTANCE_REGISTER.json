@@ -3,7 +3,7 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-26T09:05:00+02:00",
+  "recordedAt": "2026-10-26T09:15:00+02:00",
   "evidencePolicy": "PASS requires direct executable or authoritative evidence for the exact relevant revision. Current source/test checkpoint 2686612d9982e0094cd25759e9a73fe466585634: 280 Node tests and 8 Python safety tests passed; npm audit reported 0 vulnerabilities; real-dashboard browser E2E passed 10 Chromium journeys; isolated main/candidate baseline passed for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 2686612d9982e0094cd25759e9a73fe466585634; metadata and content quality passed. Production readiness remains BLOCKED on real owner-controlled prerequisites; Facebook draft workflow was SKIPPED.",
   "statuses": [
     "PASS",
@@ -413,20 +413,11 @@
       "requirement": "Renderers must fail closed unless script structure/source coverage, source-file provenance hashes, deterministic edit-plan seed/hash, measured audio evidence, and human editorial approval are valid and bound to the exact render inputs.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/0ad40c100050494d922672c249eb2a6bd0609c2e",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/4d6c199ac6e975e27f5aa1eb5b48c78ca82ea9d6",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fc7dffb93d14238af96bf63f0df3873838d0c4a8",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/68d80d152a1bea9e0e35b7097072f80c2658b58",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e1e3d3ab5630911c0569920876c358f29046f1f3",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803930",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/5ceb0bf0a14aba803f6f7c8e280bab45f42a40e2",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/90a847c8033c74875868598d4c0bddcd375d3668",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40283292738",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40283292695",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/201ca17cebd641be156f65887a07dc5b50f51436",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e44269d9b8391fd2d7d8b013208c7e825f02aed4",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c128a5ffd0811fad3ab92c505cd69705253dd11b",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284094717"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/content-quality-gates.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/validate-content-quality.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/content-quality-gates.test.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/validate-content-quality.test.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980"
       ],
       "nextAction": "Supply genuine production assets and licence evidence, generate complete quality-evidence manifests, and conduct full human playback/factual review. Code validation does not prove licence authenticity, originality or naturalistic visual quality.",
       "assessmentCommitSha": "be11490345ae89938c32af1496f01b75ae20134a",
@@ -439,12 +430,10 @@
       "requirement": "Short quality evidence must bind an explicit approved long-form parent from the same cycle, current parent revision and media hash, verified SonicVhibez remote video ID and canonical URL; the native YouTube Related video setting is a separate publication gate.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/0ad40c100050494d922672c249eb2a6bd0609c2e",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/b21b4fa1a081564d883b17e26e8eafa4dfd5ff09",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/09c660b3cba3fe5a075ed645b4847c8a0ef0e1e1",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803930",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40283292738",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284094717"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/content-quality-gates.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/content-quality-gates.test.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/validate-content-quality.test.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980"
       ],
       "nextAction": "Retain the explicit relationship in durable queue/job/approval/receipt state, then verify the actual native Related video setting in YouTube Studio after the child Short exists. Do not infer it from a description link.",
       "assessmentCommitSha": "be11490345ae89938c32af1496f01b75ae20134a",
@@ -474,11 +463,9 @@
       "requirement": "Integrate a structured script-generation prompt contract that explicitly requests required depth, source-backed claims, differentiated sections, realistic scene direction, uncertainty and an original conclusion before text-to-speech.",
       "status": "NOT_TESTED",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/content-quality-gates.mjs",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/5ec90d8cb8d467a7293738da11a9f17cbe14f89b",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/90a847c8033c74875868598d4c0bddcd375d3668",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40283292738",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284094717"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/build-script-generation-prompt.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/build-script-generation-prompt.test.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980"
       ],
       "nextAction": "Use the tested prompt builder in the actual script-authoring workflow and make script validation a required gate before narration generation; the current TTS workflow still consumes authored text and no automatic LLM integration is claimed.",
       "assessmentCommitSha": "be11490345ae89938c32af1496f01b75ae20134a",
@@ -491,10 +478,9 @@
       "requirement": "Renderers must apply the selected narration audio profile and measure the actual rendered MP4's integrated loudness and true peak before reporting render success.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/5819b2ba87a092330111f8fcfbea786256e1056b",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/201ca17cebd641be156f65887a07dc5b50f51436",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/a46d530c226e829671ffabf6bd56b31538585af8",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284094717"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/validate-rendered-audio.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/validate-rendered-audio.test.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980"
       ],
       "nextAction": "Run a genuine final export and review its measured report plus human listening for intelligibility, pronunciation, clipping, noise and synchronization. Code tests do not establish the quality of absent production media.",
       "assessmentCommitSha": "be11490345ae89938c32af1496f01b75ae20134a",
@@ -507,10 +493,10 @@
       "requirement": "A short source clip must not be looped to manufacture a target-length Short or long-form export; the strict duration validator must reject an insufficient source duration.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ab9e1ca7fb3a1cead3c7171c064b3aad30d862d6",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/bf24d859b274ed938e21fcc236f05a815abdd986",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ee0a2c5ec1e498181c08089751e4a3e435f7280e",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284094717"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/render-short.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/render-long-form.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/render-no-looping.test.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980"
       ],
       "nextAction": "Keep the no-loop regression test and use sufficient original/rights-cleared footage. A coherent multi-scene storyboard compositor remains a separate incomplete capability.",
       "assessmentCommitSha": "be11490345ae89938c32af1496f01b75ae20134a",
@@ -563,6 +549,6 @@
       "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284972048"
     },
     "verdict": "CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED",
-    "note": "The browser E2E run for source/test SHA e65e859e44f254edddb735def44ca1b8095ab627 subsequently completed successfully (10 Chromium tests). Exact source/test CI results are linked above. The current documentation descendant still requires its own exact-HEAD CI inspection before final release decisions. Full multi-scene storyboard composition, automated prompt workflow integration, full dashboard control matrix, branch-only history review, recovery/deployment drills and real production prerequisites remain unresolved."
+    "note": "Latest application code/test evidence is source/test SHA e65e859e44f254edddb735def44ca1b8095ab627; 300 Node tests pass, npm audit reports zero vulnerabilities, and its browser E2E run completed successfully with 10 Chromium tests. Exact current documentation-descendant CI must still be inspected before release decisions. The full multi-scene storyboard, automated prompt workflow integration, full dashboard control matrix, branch-only history review, recovery/deployment drills and real production prerequisites remain unresolved."
   }
 }
