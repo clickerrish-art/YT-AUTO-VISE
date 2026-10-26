@@ -1,3 +1,11 @@
+## Latest tested implementation checkpoint — 26 October 2026
+
+Application-code SHA: `f0bf2278cd093859cbee49ac473e828c6ff785a9`. Exact tested source/test SHA: `8d754b0a01c81ce1957ba25a7c8112eaa2e8a1b4`. Automation/security **PASS** (321 Node tests, 8 Python safety tests, npm audit 0 vulnerabilities), browser E2E **PASS** (11 journeys), content quality **PASS**, metadata **PASS**, isolated baseline **PASS**. Readiness remains **BLOCKED** and Facebook draft **SKIPPED**. Current evidence: `docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md`.
+
+The parent-binding backend now requires the receipt channel to match configured SonicVhibez identity and the remote title to match approved metadata. This is a code-level improvement, not proof of live channel verification or a successful relationship bind with production artifacts. **Project incomplete; production acceptance blocked.**
+
+---
+
 ## Current implementation checkpoint — 26 October 2026
 
 **Latest tested source/test SHA:** `f3cae44edcc9094bf2f294ff46d583c556462548`. **Last application-code SHA:** `8c085e1347144ad94dede6884619232d5c7278fd`. **Current PR HEAD after evidence documentation updates:** to be refreshed from live refs; it is a documentation-only descendant of the tested tree unless later source changes are recorded. PR #1 remains open, draft and unmerged.
