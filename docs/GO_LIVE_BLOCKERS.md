@@ -453,3 +453,10 @@ The Short and long-form renderers no longer loop source footage to manufacture t
 ## 2026-10-26 — YouTube native Related video visibility blocker
 
 The [official YouTube Help instructions](https://support.google.com/youtube/answer/14075157?hl=en-GB) require a Related video target to be public or unlisted and the channel to have advanced feature access. A privately uploaded parent therefore cannot be used as the native Shorts Related video target. Since public/unattended publishing remains disabled, native Related video acceptance is BLOCKED_EXTERNAL until the owner explicitly authorizes an eligible public/unlisted parent visibility or chooses not to use the native feature. No visibility change was made. The publication-stage code gate now rejects private/unknown parent visibility.
+
+
+## Live checkpoint update — 26 October 2026
+
+Candidate `a912d3c724195fb1f3ca823d186cddf8b9b4f984` adds fail-closed validation for script research-source records: malformed objects, absent title/URL, non-HTTPS/placeholder/credential-bearing URLs, duplicate IDs and excessive source counts are rejected before provider access. Regression tests are included. Exact-SHA CI runs are pending at note time; see [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-26.md). This is a narrow code improvement, not closure of the production blockers.
+
+Still blocked: script-generation lifecycle/dashboard integration; real multi-scene composition and perceptual reuse checks; genuine rights-cleared full exports and human playback review; independently verified SonicVhibez OAuth/channel/history and one-shot private-upload recovery; native Related video eligibility/verification; genuine Nature Frontiers Page identity/permissions and draft-only execution; owner-approved feasible cadence; exhaustive dashboard/recovery/deployment drills; full divergent-history review and owner-controlled branch protection. PR #1 remains open/draft/unmerged; `main` is unchanged. No external upload, publication, campaign activation, merge or destructive Git operation occurred.
