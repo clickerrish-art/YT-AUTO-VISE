@@ -124,7 +124,7 @@ export function validateSourceSegmentsAgainstEvidence(sourceSegments, evidence) 
       errors.push("source segment " + (index + 1) + " requires a scene ID and valid start/end seconds");
       continue;
     }
-    const matches = evidence.scenes.filter(scene => (scene?.sceneId === segment.sceneId || scene?.assetId === segment.sceneId) && Number.isFinite(scene?.startSeconds) && Number.isFinite(scene?.endSeconds) && segment.startSeconds >= scene.startSeconds && segment.endSeconds <= scene.endSeconds && scene.endSeconds > scene.startSeconds);
+    const matches = evidence.scenes.filter(scene => scene?.sceneId === segment.sceneId && Number.isFinite(scene?.startSeconds) && Number.isFinite(scene?.endSeconds) && segment.startSeconds >= scene.startSeconds && segment.endSeconds <= scene.endSeconds && scene.endSeconds > scene.startSeconds);
     if (matches.length !== 1) errors.push("source segment " + (index + 1) + " must map to exactly one recorded parent scene and stay within its reviewed time range");
     const key = [segment.sceneId, segment.startSeconds, segment.endSeconds].join(":");
     if (seen.has(key)) errors.push("duplicate source segment is not allowed");
