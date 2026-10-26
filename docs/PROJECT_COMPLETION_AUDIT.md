@@ -1,3 +1,11 @@
+# Latest implementation checkpoint — 26 October 2026
+
+Exact tested source/test SHA: `8d754b0a01c81ce1957ba25a7c8112eaa2e8a1b4`; last application-code SHA: `f0bf2278cd093859cbee49ac473e828c6ff785a9`. Exact-SHA CI: automation/security PASS (321 Node, 8 Python, 0 npm audit vulnerabilities), browser E2E PASS (11 journeys), content quality PASS, metadata PASS, isolated baseline PASS. Production readiness remains BLOCKED; Facebook draft workflow is SKIPPED. See `docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md`.
+
+Newly enforced: parent receipt channel ID must match the explicit configured SonicVhibez channel ID, and remote parent title must match the hash-verified approved parent metadata title. Remaining acceptance includes successful parent binding/recovery E2E, real rights-cleared final media and human playback, full narration/caption/render/originality gates, verified YouTube and Meta identity/history, feasible owner-approved cadence, complete recovery/deployment drills, and branch governance. **Implementation remains incomplete; do not claim 100%.**
+
+---
+
 # Live implementation checkpoint — 26 October 2026
 
 This checkpoint supersedes earlier SHA/divergence/test-count statements below when inconsistent. Exact tested source/test SHA is `f3cae44edcc9094bf2f294ff46d583c556462548`; last application-code change is `8c085e1347144ad94dede6884619232d5c7278fd`. At the time of exact-SHA CI, PR #1 was open, draft and unmerged. `main` was `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; divergence 1,452 ahead / 2 behind / 148 changed files. See `docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md` for workflow evidence.
