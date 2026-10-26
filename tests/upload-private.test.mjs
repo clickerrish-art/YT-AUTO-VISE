@@ -152,7 +152,7 @@ test("private uploader preserves remote video ID and marks recovery if receipt p
     const metadataPath = path.join(dir, "metadata.json");
     const approvalPath = path.join(dir, "approval.json");
     fs.writeFileSync(videoPath, "test-fixture-not-real-video");
-    const metadata = { channel: "SonicVhibez", channelId: TEST_CHANNEL_ID, contentType: "short", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Test title", description: "Test description", tags: ["wildlife", "documentary", "education"] };
+    const metadata = { channel: "SonicVhibez", channelId: TEST_CHANNEL_ID, contentType: "short", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Test title", description: "Test description", tags: ["wildlife", "documentary", "education"], parentContentId: "parent-job-001", parentVideoId: TEST_PARENT_ID, parentVideoUrl: "https://www.youtube.com/watch?v=" + TEST_PARENT_ID };
     fs.writeFileSync(metadataPath, JSON.stringify(metadata));
     const videoSha = sha256File(videoPath);
     const thumbnailPath = path.join(dir, "thumbnail.jpg");
