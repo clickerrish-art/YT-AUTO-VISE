@@ -1,6 +1,26 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import { shortParentEvidenceSha256, shortParentRelationshipSha256 } from "../scripts/short-parent-relationship.mjs";
+
+const TEST_CHANNEL_ID = "UC" + "A".repeat(22);
+const TEST_PARENT_ID = "PARENT00001";
+function makeShortParentRelationship(jobId, childMediaSha256, childMetadataSha256) {
+  const relationship = {
+    childContentId: jobId, childRevision: childMetadataSha256, childMediaSha256, childMetadataSha256,
+    parentContentId: "parent-job-001", parentRevision: "parent-rev-1", parentMediaSha256: "c".repeat(64), parentMetadataSha256: "d".repeat(64), parentApprovalSha256: "e".repeat(64),
+    parentRemoteVideoId: TEST_PARENT_ID, parentCanonicalUrl: "https://www.youtube.com/watch?v=" + TEST_PARENT_ID,
+    parentChannelTitle: "SonicVhibez", parentRemoteTitle: "Parent test documentary", parentChannelId: TEST_CHANNEL_ID,
+    parentRemoteVerified: true, parentPrivacyStatus: "private", parentApproved: true, parentRevisionApproved: true,
+    parentPublicationCycleId: "test-cycle", childPublicationCycleId: "test-cycle",
+    sourceSegments: [{ sceneId: "parent-scene-01", startSeconds: 12, endSeconds: 20 }],
+    relationshipApproved: true, relationshipReviewer: "Test Operator", relationshipApprovedAt: "2026-10-24T00:00:00.000Z",
+    relationshipEvidenceSha256: "",
+    nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "Private parent is ineligible for native Related video." }
+  };
+  relationship.relationshipEvidenceSha256 = shortParentEvidenceSha256(relationship);
+  return relationship;
+}
 
 test("private uploader refuses to run without YouTube credentials", () => {
   const env = { ...process.env };
@@ -16,7 +36,7 @@ test("private uploader fails closed when YouTube emergency stop is active or uns
   const { uploadPrivate } = await import("../scripts/upload-private.mjs");
   const baseEnv = {
     YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test",
-    SONICVHIBEZ_CHANNEL_ID: "UC_SONIC_TEST", CONFIRM_PRIVATE_UPLOAD: "YES"
+    SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES"
   };
   for (const stopValue of ["true", "YES", undefined]) {
     const env = { ...baseEnv };
@@ -47,7 +67,7 @@ test("production uploader rejects inputs outside the repository root before read
       metadataPath, videoPath: metadataPath, approvalPath: metadataPath, jobId: "job-path-001",
       env: {
         YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test",
-        SONICVHIBEZ_CHANNEL_ID: "UC_SONIC_TEST", CONFIRM_PRIVATE_UPLOAD: "YES",
+        SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES",
         YOUTUBE_EMERGENCY_STOP: "false"
       }
     }), /Metadata file must remain inside the repository root/);
@@ -87,7 +107,7 @@ test("private uploader records uncertain remote outcomes and refuses blind retri
     const metadataPath = path.join(dir, "metadata.json");
     const approvalPath = path.join(dir, "approval.json");
     fs.writeFileSync(videoPath, "test-fixture-not-real-video");
-    const metadata = { channel: "SonicVhibez", channelId: "UC_SONIC_TEST", contentType: "short", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Test title", description: "Test description", tags: ["wildlife", "documentary", "education"] };
+    const metadata = { channel: "SonicVhibez", channelId: TEST_CHANNEL_ID, contentType: "short", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Test title", description: "Test description", tags: ["wildlife", "documentary", "education"], parentContentId: "parent-job-001", parentVideoId: TEST_PARENT_ID, parentVideoUrl: "https://www.youtube.com/watch?v=" + TEST_PARENT_ID };
     fs.writeFileSync(metadataPath, JSON.stringify(metadata));
     const videoSha = sha256File(videoPath);
     const thumbnailPath = path.join(dir, "thumbnail.jpg");
@@ -102,11 +122,12 @@ test("private uploader records uncertain remote outcomes and refuses blind retri
     fs.writeFileSync(licenseEvidencePath, "TEST FIXTURE ONLY: mock rights evidence; not a real license.");
     const rightsEvidence = { assetId: "fixture-asset", source: "isolated test fixture", rightsHolder: "test fixture", assetPath: sourceAssetPath, assetSha256: sha256File(sourceAssetPath), licenseEvidenceLocation: licenseEvidencePath, licenseEvidenceSha256: sha256File(licenseEvidencePath), permittedUses: ["YouTube"], restrictions: "mock only", attributionRequirements: "mock only", verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z", assets: [{ assetId: "fixture-asset", source: "isolated test fixture", rightsHolder: "test fixture", assetPath: sourceAssetPath, assetSha256: sha256File(sourceAssetPath), licenseEvidenceLocation: licenseEvidencePath, licenseEvidenceSha256: sha256File(licenseEvidencePath), permittedUses: ["YouTube"], restrictions: "mock only", attributionRequirements: "mock only", verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z" }] };
     const rightsEvidenceSha256 = (await import("node:crypto")).createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex");
-    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-timeout-001", artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }, { path: captionsPath, sha256: captionsSha }, { path: metadataPath, sha256: sha256File(metadataPath) }] }));
-    const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: "UC_SONIC_TEST", CONFIRM_PRIVATE_UPLOAD: "YES", YOUTUBE_EMERGENCY_STOP: "false", UPLOAD_LOG_DIR: path.join(dir, "logs") };
+    const relationship = makeShortParentRelationship(metadata.title === "Test title" ? (path.basename(dir).includes("timeout") ? "job-timeout-001" : "job-receipt-001") : "unknown-job", videoSha, sha256File(metadataPath));
+    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-timeout-001", contentType: "short", shortParentRelationship: relationship, shortParentRelationshipSha256: shortParentRelationshipSha256(relationship), artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }, { path: captionsPath, sha256: captionsSha }, { path: metadataPath, sha256: sha256File(metadataPath) }] }));
+    const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES", YOUTUBE_EMERGENCY_STOP: "false", UPLOAD_LOG_DIR: path.join(dir, "logs") };
     const youtubeFactory = () => ({
-      channels: { list: async () => ({ data: { items: [{ id: "UC_SONIC_TEST", snippet: { title: "SonicVhibez" } }] } }) },
-      videos: { insert: async request => { for await (const _chunk of request.media.body) {} const e = new Error("network timed out"); e.code = "ETIMEDOUT"; throw e; }, list: async () => ({ data: { items: [] } }) }
+      channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez" } }] } }) },
+      videos: { insert: async request => { for await (const _chunk of request.media.body) {} const e = new Error("network timed out"); e.code = "ETIMEDOUT"; throw e; }, list: async ({ id }) => ({ data: { items: id === TEST_PARENT_ID ? [{ id: TEST_PARENT_ID, snippet: { channelId: TEST_CHANNEL_ID, title: "Parent test documentary" }, status: { privacyStatus: "private" } }] : [] } }) }
     });
     const args = { metadataPath, videoPath, approvalPath, jobId: "job-timeout-001", env, youtubeFactory, preflightRunner: args => args[0].includes("check-content") ? "PASS" : "PASS:" };
     await assert.rejects(uploadPrivate(args), /outcome is uncertain/);
@@ -131,7 +152,7 @@ test("private uploader preserves remote video ID and marks recovery if receipt p
     const metadataPath = path.join(dir, "metadata.json");
     const approvalPath = path.join(dir, "approval.json");
     fs.writeFileSync(videoPath, "test-fixture-not-real-video");
-    const metadata = { channel: "SonicVhibez", channelId: "UC_SONIC_TEST", contentType: "short", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Test title", description: "Test description", tags: ["wildlife", "documentary", "education"] };
+    const metadata = { channel: "SonicVhibez", channelId: TEST_CHANNEL_ID, contentType: "short", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Test title", description: "Test description", tags: ["wildlife", "documentary", "education"] };
     fs.writeFileSync(metadataPath, JSON.stringify(metadata));
     const videoSha = sha256File(videoPath);
     const thumbnailPath = path.join(dir, "thumbnail.jpg");
@@ -146,11 +167,12 @@ test("private uploader preserves remote video ID and marks recovery if receipt p
     fs.writeFileSync(licenseEvidencePath, "TEST FIXTURE ONLY: mock rights evidence; not a real license.");
     const rightsEvidence = { assetId: "fixture-asset", source: "isolated test fixture", rightsHolder: "test fixture", assetPath: sourceAssetPath, assetSha256: sha256File(sourceAssetPath), licenseEvidenceLocation: licenseEvidencePath, licenseEvidenceSha256: sha256File(licenseEvidencePath), permittedUses: ["YouTube"], restrictions: "mock only", attributionRequirements: "mock only", verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z", assets: [{ assetId: "fixture-asset", source: "isolated test fixture", rightsHolder: "test fixture", assetPath: sourceAssetPath, assetSha256: sha256File(sourceAssetPath), licenseEvidenceLocation: licenseEvidencePath, licenseEvidenceSha256: sha256File(licenseEvidencePath), permittedUses: ["YouTube"], restrictions: "mock only", attributionRequirements: "mock only", verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z" }] };
     const rightsEvidenceSha256 = (await import("node:crypto")).createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex");
-    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-receipt-001", artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }, { path: captionsPath, sha256: captionsSha }, { path: metadataPath, sha256: sha256File(metadataPath) }] }));
-    const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: "UC_SONIC_TEST", CONFIRM_PRIVATE_UPLOAD: "YES", YOUTUBE_EMERGENCY_STOP: "false", UPLOAD_LOG_DIR: path.join(dir, "logs") };
+    const relationship = makeShortParentRelationship(metadata.title === "Test title" ? (path.basename(dir).includes("timeout") ? "job-timeout-001" : "job-receipt-001") : "unknown-job", videoSha, sha256File(metadataPath));
+    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-receipt-001", contentType: "short", shortParentRelationship: relationship, shortParentRelationshipSha256: shortParentRelationshipSha256(relationship), artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }, { path: captionsPath, sha256: captionsSha }, { path: metadataPath, sha256: sha256File(metadataPath) }] }));
+    const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES", YOUTUBE_EMERGENCY_STOP: "false", UPLOAD_LOG_DIR: path.join(dir, "logs") };
     const youtubeFactory = () => ({
-      channels: { list: async () => ({ data: { items: [{ id: "UC_SONIC_TEST", snippet: { title: "SonicVhibez" } }] } }) },
-      videos: { insert: async request => { for await (const _chunk of request.media.body) {} return { data: { id: "VIDEO_PRIVATE_TEST" } }; }, list: async () => ({ data: { items: [{ id: "VIDEO_PRIVATE_TEST", snippet: { channelId: "UC_SONIC_TEST" } , status: { privacyStatus: "private" } }] } }) }
+      channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez" } }] } }) },
+      videos: { insert: async request => { for await (const _chunk of request.media.body) {} return { data: { id: "VIDEO_PRIVATE_TEST" } }; }, list: async ({ id }) => ({ data: { items: id === TEST_PARENT_ID ? [{ id: TEST_PARENT_ID, snippet: { channelId: TEST_CHANNEL_ID, title: "Parent test documentary" }, status: { privacyStatus: "private" } }] : [{ id: "VIDEO_PRIVATE_TEST", snippet: { channelId: TEST_CHANNEL_ID } , status: { privacyStatus: "private" } }] }) }
     });
     let failedReceiptWrite = false;
     const persistJson = (filePath, value) => {
@@ -209,7 +231,7 @@ test("one-shot upload authorization binds one job and all final hashes to the ve
     artifactSha256: "a".repeat(64),
     metadataSha256: "b".repeat(64),
     approvalSha256: "c".repeat(64),
-    channelId: "UC_SONIC_TEST",
+    channelId: TEST_CHANNEL_ID,
     visibility: "private",
     publishingEnabled: false,
     operator: "Authorized Owner",
