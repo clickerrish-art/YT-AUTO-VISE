@@ -55,7 +55,7 @@ function fixture(t, format = "long_form") {
   if (format === "short") {
     const parent = {
       contentId: "long-1", weeklyContentCycleId: "cycle-1", format: "long_form",
-      state: "PRIVATE_UPLOAD_VERIFIED", approvalStatus: "APPROVED_FOR_PRIVATE_UPLOAD",
+      state: "PRIVATE_UPLOAD_VERIFIED", approvalStatus: "APPROVED_FOR_PRIVATE_UPLOAD", privacyStatus: "unlisted",
       revision: "r1", mediaSha256: "c".repeat(64), channel: "SonicVhibez", channelId: "channel-1",
       remoteVideoId: "verifiedVideo1"
     };
