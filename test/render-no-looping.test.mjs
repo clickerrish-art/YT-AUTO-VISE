@@ -8,6 +8,9 @@ test("Short and long-form renderers never loop a source clip to fake the target 
     assert.doesNotMatch(source, /-stream_loop/);
     assert.match(source, /-shortest/);
     assert.match(source, /getAudioProfile/);
+    assert.match(source, /createDeterministicEditPlan/);
+    assert.match(source, /videoFilter/);
+    assert.match(source, /eq=brightness/);
     assert.match(source, /audioFilter/);
     assert.match(source, /"-af", audioFilter/);
     assert.match(source, /validate-(?:short|long-form)-export\.mjs/);
