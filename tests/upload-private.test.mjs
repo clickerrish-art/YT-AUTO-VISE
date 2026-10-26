@@ -1,10 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import fs from "node:fs";
+import crypto from "node:crypto";
 import { shortParentEvidenceSha256, shortParentRelationshipSha256 } from "../scripts/short-parent-relationship.mjs";
 
 const TEST_CHANNEL_ID = "UC" + "A".repeat(22);
 const TEST_PARENT_ID = "PARENT00001";
+const PARENT_SOURCE_EVIDENCE_PATH = "test/fixtures/parent-quality-evidence.json";
+const PARENT_SOURCE_EVIDENCE_SHA256 = crypto.createHash("sha256").update(fs.readFileSync(PARENT_SOURCE_EVIDENCE_PATH)).digest("hex");
 function makeShortParentRelationship(jobId, childMediaSha256, childMetadataSha256) {
   const relationship = {
     childContentId: jobId, childRevision: childMetadataSha256, childMediaSha256, childMetadataSha256,
@@ -15,7 +19,7 @@ function makeShortParentRelationship(jobId, childMediaSha256, childMetadataSha25
     parentPublicationCycleId: "test-cycle", childPublicationCycleId: "test-cycle",
     sourceSegments: [{ sceneId: "parent-scene-01", startSeconds: 12, endSeconds: 20 }],
     relationshipApproved: true, relationshipReviewNotes: "Parent narrative and source scene segment reviewed in isolated test fixture.", relationshipReviewer: "Test Operator", relationshipApprovedAt: "2026-10-24T00:00:00.000Z",
-    parentSourceEvidencePath: "test/fixtures/parent-quality-evidence.json", parentSourceEvidenceSha256: "7".repeat(64),
+    parentSourceEvidencePath: PARENT_SOURCE_EVIDENCE_PATH, parentSourceEvidenceSha256: PARENT_SOURCE_EVIDENCE_SHA256,
     relationshipEvidenceSha256: "",
     nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "Private parent is ineligible for native Related video." }
   };

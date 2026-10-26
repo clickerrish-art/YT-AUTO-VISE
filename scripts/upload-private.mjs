@@ -10,7 +10,7 @@ import crypto from "node:crypto";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
 import { assertNoUnresolvedUploadAttempts, fetchCompleteYoutubeHistory, assertNextPublicationAllowed } from "./youtube-history-gate.mjs";
-import { assertShortParentRelationship, shortParentRelationshipSha256 } from "./short-parent-relationship.mjs";
+import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence } from "./short-parent-relationship.mjs";
 import { atomicWriteJson } from "./atomic-json-file.mjs";
 
 export const APPROVED_SELAR_URL = "https://selar.com/0u19v8u99l";
@@ -376,6 +376,11 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     if (!finalChannelMatch || matchedChannel.id !== expectedChannelId) throw new Error("authenticated SonicVhibez channel identity changed before upload");
     if ((metadata.contentType ?? metadata.format) === "short") {
       const relationship = approval.shortParentRelationship;
+      const sourceEvidencePath = resolveInputFile(relationship.parentSourceEvidencePath, "Parent source-quality evidence");
+      if (sha256File(sourceEvidencePath) !== relationship.parentSourceEvidenceSha256) throw new Error("parent source-quality evidence changed after approval");
+      const sourceEvidence = readJson(sourceEvidencePath, "Parent source-quality evidence");
+      const sourceSegmentErrors = validateSourceSegmentsAgainstEvidence(relationship.sourceSegments, sourceEvidence);
+      if (sourceSegmentErrors.length) throw new Error("parent source segments no longer match approved evidence: " + sourceSegmentErrors.join("; "));
       const parentResponse = await youtube.videos.list({ part: ["id", "snippet", "status"], id: relationship.parentRemoteVideoId });
       const currentParent = (parentResponse.data.items ?? []).find(item => item.id === relationship.parentRemoteVideoId);
       if (!currentParent || currentParent.snippet?.channelId !== expectedChannelId || currentParent.snippet?.title !== relationship.parentRemoteTitle || currentParent.status?.privacyStatus !== relationship.parentPrivacyStatus) {
