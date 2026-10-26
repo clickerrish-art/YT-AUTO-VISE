@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "../scripts/content-job-lifecycle.mjs";
+import { shortParentRelationshipSha256 } from "../scripts/short-parent-relationship.mjs";
 
 const input = { idempotencyKey: "draft:short-001", title: "Wildlife storytelling", topic: "How to plan a wildlife documentary", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-24", inputReferences: ["content/short-001-wildlife-video-storytelling.md"] };
 
@@ -60,9 +61,22 @@ test("private-upload approval binds media, thumbnail, validated captions, metada
   const video = { path: "artifacts/fixture.mp4", sha256: "a".repeat(64) };
   const thumbnail = { path: "artifacts/fixture.jpg", sha256: "d".repeat(64) };
   const captions = { path: "artifacts/fixture.srt", sha256: "c".repeat(64) };
+  const channelId = "UC" + "A".repeat(22);
+  const relationship = {
+    childContentId: job.id, childRevision: "rev-child-1", childMediaSha256: video.sha256, childMetadataSha256: "meta-sha256:abc",
+    parentContentId: "parent-job-001", parentRevision: "rev-parent-1", parentMediaSha256: "c".repeat(64), parentMetadataSha256: "d".repeat(64), parentApprovalSha256: "e".repeat(64),
+    parentRemoteVideoId: "abcdefghijk", parentCanonicalUrl: "https://www.youtube.com/watch?v=abcdefghijk",
+    parentChannelTitle: "SonicVhibez", parentRemoteTitle: "Approved parent documentary", parentChannelId: channelId, parentRemoteVerified: true, parentPrivacyStatus: "private",
+    parentApproved: true, parentRevisionApproved: true, parentPublicationCycleId: "cycle-a", childPublicationCycleId: "cycle-a",
+    sourceSegments: [{ sceneId: "scene-01", startSeconds: 10, endSeconds: 20 }],
+    relationshipApproved: true, relationshipReviewer: "reviewer@example.test", relationshipApprovedAt: "2026-10-23T12:00:00.000Z", relationshipEvidenceSha256: "f".repeat(64),
+    nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "Private parent cannot use native Related video." }
+  };
   job = {
     ...job,
     state: "AWAITING_HUMAN_REVIEW",
+    verifiedChannelId: channelId,
+    shortParentRelationship: relationship,
     metadataVersion: "meta-sha256:abc",
     outputArtifacts: [video],
     thumbnailArtifact: thumbnail,
@@ -76,6 +90,7 @@ test("private-upload approval binds media, thumbnail, validated captions, metada
     artifactSha256: video.sha256,
     metadataVersion: "meta-sha256:abc",
     rightsEvidenceSha256: "b".repeat(64),
+    shortParentRelationshipSha256: shortParentRelationshipSha256(relationship),
     relatedArtifacts: [video, thumbnail, captions],
     id: "review-001"
   };
