@@ -116,6 +116,7 @@ export function approveContentJobForPrivateUpload(job, review, now = new Date().
   if (!review || review.decision !== "APPROVE" || !review.reviewer || !review.artifactSha256 || !review.metadataVersion || !review.rightsEvidenceSha256) {
     throw new Error("Complete artifact-bound approval evidence is required");
   }
+  if (job.metadataVersion !== review.metadataVersion) throw new Error("Approval metadata version does not match the job's validated metadata");
   if (job.contentType === "short") {
     assertShortParentRelationship(job.shortParentRelationship, { childContentId: job.id, childMediaSha256: review.artifactSha256, childMetadataSha256: review.metadataVersion, channelId: job.verifiedChannelId });
     const relationshipDigest = shortParentRelationshipSha256(job.shortParentRelationship);
