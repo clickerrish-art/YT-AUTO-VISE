@@ -207,6 +207,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
 
   const authorState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
   assert.equal(authorState.jobs.find(job => job.id === authorJob.id).authoring.result.script.narration, narration);
+  assert.deepEqual(authorState.jobs.find(job => job.id === authorJob.id).authoring.researchBrief, authorBrief, "the exact supplied research brief and evidence locators must remain auditable");
   assert.ok(authorState.audit.some(event => event.action === "SCRIPT_AUTHORING_COMPLETED_REVIEW_REQUIRED" && event.jobId === authorJob.id));
   const productionJob = saved.jobs.find(job => job.kind === "CONTENT_PRODUCTION" && job.idempotencyKey === "draft:" + draft.id);
   assert.ok(productionJob);
