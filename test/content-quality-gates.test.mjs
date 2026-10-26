@@ -21,6 +21,7 @@ const parent = {
   mediaSha256: hash,
   channel: "SonicVhibez",
   channelId: "UCverified",
+  privacyStatus: "unlisted",
   remoteVideoId: "abc123XYZ",
 };
 const child = {
@@ -52,6 +53,7 @@ test("fails closed for missing/wrong parent, wrong cycle, stale revision/hash an
   assert.match(validateShortParentRelationship({ ...child, youtubeRelatedVideoStatus: "PENDING" }, parent).errors.join(" "), /Related video association/);
   assert.equal(validateShortParentRelationship({ ...child, youtubeRelatedVideoStatus: "PENDING" }, parent, { requireNativeRelatedVideoVerification: false }).valid, true);
   assert.match(validateShortPublicationRelationship({ ...child, youtubeRelatedVideoStatus: "PENDING" }, parent).errors.join(" "), /Related video association/);
+  assert.match(validateShortPublicationRelationship(child, { ...parent, privacyStatus: "private" }).errors.join(" "), /must be public or unlisted/);
 });
 
 test("blocks unapproved, failed, foreign-channel and unpublished parent records", () => {
