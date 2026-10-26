@@ -116,7 +116,7 @@ export function createDeterministicEditPlan({ seed, scenes, profile = {} }) {
 /** Enforce measurable script structure; quality scores supplied by an LLM are ignored. */
 export function validateScriptDepth(script, { format = "long_form", minWords, maxWords, minSections } = {}) {
   const errors = [];
-  if (!script || typeof script !== "object") return { valid: false, errors: ["script object is required"], measured: null };
+  if (!script || typeof script !== "object" || Array.isArray(script)) return { valid: false, errors: ["script object is required"], measured: null };
   if (!["long_form", "short"].includes(format)) errors.push("format must be long_form or short");
   const text = String(script.narration ?? "").trim();
   const words = text ? text.split(/\s+/u).length : 0;
@@ -128,8 +128,30 @@ export function validateScriptDepth(script, { format = "long_form", minWords, ma
   const measuredMinSections = minSections ?? (format === "long_form" ? 5 : 3);
   if (words < measuredMinWords || words > measuredMaxWords) errors.push("narration word count must be " + measuredMinWords + "–" + measuredMaxWords + "; measured " + words);
   if (sections.length < measuredMinSections) errors.push("at least " + measuredMinSections + " differentiated sections are required");
+  const normalizedHeadings = new Set();
+  const normalizedPurposes = new Set();
+  const normalizedNarrations = new Set();
   for (const [index, section] of sections.entries()) {
-    if (!nonempty(section?.heading) || !nonempty(section?.purpose) || !nonempty(section?.narration)) errors.push("section " + (index + 1) + " requires heading, purpose and narration");
+    if (!nonempty(section?.heading) || !nonempty(section?.purpose) || !nonempty(section?.narration)) {
+      errors.push("section " + (index + 1) + " requires heading, purpose and narration");
+      continue;
+    }
+    const heading = section.heading.trim().toLocaleLowerCase("en-US").replace(/\s+/g, " ");
+    const purpose = section.purpose.trim().toLocaleLowerCase("en-US").replace(/\s+/g, " ");
+    const sectionNarration = section.narration.trim().replace(/\s+/g, " ");
+    if (normalizedHeadings.has(heading)) errors.push("section headings must be distinct; duplicate heading at section " + (index + 1));
+    if (normalizedPurposes.has(purpose)) errors.push("section purposes must be differentiated; duplicate purpose at section " + (index + 1));
+    if (normalizedNarrations.has(sectionNarration)) errors.push("section narration must not repeat verbatim; duplicate narration at section " + (index + 1));
+    normalizedHeadings.add(heading);
+    normalizedPurposes.add(purpose);
+    normalizedNarrations.add(sectionNarration);
+    for (const key of ["visualDirection", "pacing", "soundDesign"]) {
+      if (!nonempty(section[key])) errors.push("section " + (index + 1) + " requires " + key);
+    }
+  }
+  if (sections.length && sections.every(section => nonempty(section?.narration))) {
+    const assembledNarration = sections.map(section => section.narration.trim()).join("\n\n");
+    if (assembledNarration !== text) errors.push("section narration must exactly concatenate to the complete narration transcript");
   }
   if (format === "long_form" && (!nonempty(script.premise) || !nonempty(script.conclusion))) errors.push("long-form script requires a distinct premise and substantive conclusion");
   if (!Array.isArray(script.claims) || claims.length === 0) errors.push("material factual claims must be enumerated with source references");

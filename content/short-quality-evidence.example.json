@@ -6,17 +6,26 @@
       {
         "heading": "Hook",
         "purpose": "Introduce a specific question",
-        "narration": "REPLACE_WITH_NARRATION"
+        "narration": "REPLACE_WITH_NARRATION",
+        "visualDirection": "REPLACE_WITH_SPECIFIC_SCENE_DIRECTION",
+        "pacing": "REPLACE_WITH_NARRATION_PACING",
+        "soundDesign": "REPLACE_WITH_AUDIO_CUE"
       },
       {
         "heading": "Discovery",
         "purpose": "Explain the evidence",
-        "narration": "REPLACE_WITH_NARRATION"
+        "narration": "REPLACE_WITH_NARRATION",
+        "visualDirection": "REPLACE_WITH_SPECIFIC_SCENE_DIRECTION",
+        "pacing": "REPLACE_WITH_NARRATION_PACING",
+        "soundDesign": "REPLACE_WITH_AUDIO_CUE"
       },
       {
         "heading": "Payoff",
         "purpose": "Resolve the hook",
-        "narration": "REPLACE_WITH_NARRATION"
+        "narration": "REPLACE_WITH_NARRATION",
+        "visualDirection": "REPLACE_WITH_SPECIFIC_SCENE_DIRECTION",
+        "pacing": "REPLACE_WITH_NARRATION_PACING",
+        "soundDesign": "REPLACE_WITH_AUDIO_CUE"
       }
     ],
     "claims": [

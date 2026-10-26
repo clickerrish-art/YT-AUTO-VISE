@@ -21,9 +21,14 @@ function fixture(t, format = "long_form") {
   const scenes = [{ assetId: "asset-1", sourceSha256: footageHash, rightsStatus: "VERIFIED", editorialPurpose: "Establish habitat" }];
   const editProfile = { framing: ["fit", "gentle_crop"], transitions: ["cut", "crossfade"] };
   const editPlanSha256 = createDeterministicEditPlan({ seed: 71, scenes, profile: editProfile }).planSha256;
-  const narration = Array.from({ length: format === "long_form" ? 800 : 110 }, (_, i) => "narration" + i).join(" ");
-  const sections = Array.from({ length: format === "long_form" ? 5 : 3 }, (_, i) => ({
-    heading: "Section " + i, purpose: "Advance the narrative " + i, narration: "Detailed narration " + i
+  const sectionCount = format === "long_form" ? 5 : 3;
+  const wordCount = format === "long_form" ? 800 : 110;
+  const words = Array.from({ length: wordCount }, (_, i) => "narration" + i);
+  const sectionNarrations = Array.from({ length: sectionCount }, (_, i) => words.slice(Math.floor(i * wordCount / sectionCount), Math.floor((i + 1) * wordCount / sectionCount)).join(" "));
+  const narration = sectionNarrations.join("\n\n");
+  const sections = sectionNarrations.map((sectionNarration, i) => ({
+    heading: "Section " + i, purpose: "Advance the narrative " + i, narration: sectionNarration,
+    visualDirection: "Documentary scene " + i, pacing: "Measured", soundDesign: "Natural ambience"
   }));
   const script = {
     narration, sections,

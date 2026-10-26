@@ -99,8 +99,12 @@ test("asset provenance requires traceable origin, hash, commercial permission an
 });
 
 test("script-depth gate measures words and requires sections, claim sources and similarity evidence", () => {
-  const narration = Array.from({ length: 800 }, (_, i) => "word" + i).join(" ");
-  const sections = Array.from({ length: 5 }, (_, i) => ({ heading: "Section " + i, purpose: "Advance explanation " + i, narration: "Narration section " + i }));
+  const sectionNarrations = Array.from({ length: 5 }, (_, i) => Array.from({ length: 160 }, (_, j) => "word" + (i * 160 + j)).join(" "));
+  const narration = sectionNarrations.join("\n\n");
+  const sections = sectionNarrations.map((sectionNarration, i) => ({
+    heading: "Section " + i, purpose: "Advance explanation " + i, narration: sectionNarration,
+    visualDirection: "Documentary scene for section " + i, pacing: "Measured", soundDesign: "Natural ambience"
+  }));
   const script = {
     narration, sections, premise: "A sourced premise", conclusion: "A meaningful conclusion",
     claims: [{ text: "Claim", sourceIds: ["src-1"] }],
@@ -111,6 +115,26 @@ test("script-depth gate measures words and requires sections, claim sources and 
   assert.match(validateScriptDepth({ ...script, narration: "too short" }).errors.join(" "), /word count/);
   assert.match(validateScriptDepth({ ...script, sources: [] }).errors.join(" "), /missing or invalid HTTPS source/);
   assert.match(validateScriptDepth({ ...script, similarityReview: null }).errors.join(" "), /similarity review/);
+});
+
+test("script-depth gate rejects duplicate sections, missing scene direction and narration mismatch", () => {
+  const words = Array.from({ length: 800 }, (_, i) => "word" + i);
+  const sectionNarrations = Array.from({ length: 5 }, (_, i) => words.slice(i * 160, (i + 1) * 160).join(" "));
+  const sections = sectionNarrations.map((narration, i) => ({
+    heading: "Section " + i, purpose: "Different purpose " + i, narration,
+    visualDirection: "Specific scene direction " + i, pacing: "Measured", soundDesign: "Natural ambience"
+  }));
+  const script = {
+    narration: sectionNarrations.join("\n\n"), sections,
+    premise: "A clear premise", conclusion: "A substantive conclusion",
+    claims: [{ text: "Claim supported by evidence", sourceIds: ["src-1"] }],
+    sources: [{ id: "src-1", title: "Research source", url: "https://research.example.org/paper" }],
+    similarityReview: { status: "REVIEWED", evidenceRef: "human-review-1" }
+  };
+  assert.equal(validateScriptDepth(script).valid, true, validateScriptDepth(script).errors.join("; "));
+  assert.match(validateScriptDepth({ ...script, sections: sections.map((section, i) => i === 4 ? { ...section, heading: sections[0].heading } : section) }).errors.join(" "), /headings must be distinct/);
+  assert.match(validateScriptDepth({ ...script, sections: sections.map((section, i) => i === 2 ? { ...section, visualDirection: "" } : section) }).errors.join(" "), /requires visualDirection/);
+  assert.match(validateScriptDepth({ ...script, narration: script.narration + " extra" }).errors.join(" "), /exactly concatenate/);
 });
 
 test("audio profiles enforce measured loudness, peak, transcript, rights and source hashes", () => {
