@@ -63,6 +63,7 @@ test("blocks unapproved, failed, foreign-channel and unpublished parent records"
   assert.match(validateShortParentRelationship({ ...child, parentYouTubeVideoId: "", verifiedDestinationUrl: "" }, { ...parent, remoteVideoId: "" }).errors.join(" "), /video ID is required/);
   assert.match(validateShortParentRelationship({ ...child, verifiedDestinationUrl: "https://youtube.com/watch?v=wrong" }, parent).errors.join(" "), /canonical URL/);
   assert.match(validateShortParentRelationship(child, { ...parent, remoteVideoId: "too-short" }).errors.join(" "), /11-character ID/);
+  assert.match(validateShortParentRelationship({ ...child, parentYouTubeVideoId: "" }, parent).errors.join(" "), /must explicitly contain/);
   assert.match(validateShortParentRelationship(child, { ...parent, channelId: "UCverified" }).errors.join(" "), /valid YouTube channel ID/);
 });
 
