@@ -171,7 +171,7 @@ export function localDateTimeToIso(date, time = "17:00", timeZone = DEFAULT_SCHE
     if (part.type !== "literal") result[part.type] = part.value;
     return result;
   }, {});
-  if (actual.year !== date.slice(0, 4) || actual.month !== date.slice(5, 7) || actual.day !== date.slice(8, 10)
+  if (String(actual.year).padStart(4, "0") !== date.slice(0, 4) || actual.month !== date.slice(5, 7) || actual.day !== date.slice(8, 10)
       || actual.hour !== time.slice(0, 2) || actual.minute !== time.slice(3, 5)) {
     throw new Error(`local time ${date} ${time} does not exist in ${timeZone}`);
   }
@@ -182,7 +182,7 @@ export function localDateTimeToIso(date, time = "17:00", timeZone = DEFAULT_SCHE
       if (part.type !== "literal") result[part.type] = part.value;
       return result;
     }, {});
-    return parts.year === date.slice(0, 4) && parts.month === date.slice(5, 7)
+    return String(parts.year).padStart(4, "0") === date.slice(0, 4) && parts.month === date.slice(5, 7)
       && parts.day === date.slice(8, 10) && parts.hour === time.slice(0, 2)
       && parts.minute === time.slice(3, 5);
   };
