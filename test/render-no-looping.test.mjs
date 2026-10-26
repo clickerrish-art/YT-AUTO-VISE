@@ -13,6 +13,7 @@ test("Short and long-form renderers never loop a source clip to fake the target 
     assert.match(source, /eq=brightness/);
     assert.match(source, /audioFilter/);
     assert.match(source, /"-af", audioFilter/);
+    assert.match(source, /validate-rendered-audio\.mjs/);
     assert.match(source, /validate-(?:short|long-form)-export\.mjs/);
   }
 });
