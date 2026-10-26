@@ -6,7 +6,8 @@ import {
   validateAssetProvenance,
   validateAudioReport,
   validateScriptDepth,
-  validateShortParentRelationship
+  validateShortParentRelationship,
+  validateShortPublicationRelationship
 } from "../scripts/content-quality-gates.mjs";
 
 const hash = "a".repeat(64);
@@ -49,6 +50,8 @@ test("fails closed for missing/wrong parent, wrong cycle, stale revision/hash an
   assert.match(validateShortParentRelationship({ ...child, parentMediaSha256: "b".repeat(64) }, parent).errors.join(" "), /stale/);
   assert.match(validateShortParentRelationship({ ...child, approvedParentRevision: "rev-2" }, parent).errors.join(" "), /revision/);
   assert.match(validateShortParentRelationship({ ...child, youtubeRelatedVideoStatus: "PENDING" }, parent).errors.join(" "), /Related video association/);
+  assert.equal(validateShortParentRelationship({ ...child, youtubeRelatedVideoStatus: "PENDING" }, parent, { requireNativeRelatedVideoVerification: false }).valid, true);
+  assert.match(validateShortPublicationRelationship({ ...child, youtubeRelatedVideoStatus: "PENDING" }, parent).errors.join(" "), /Related video association/);
 });
 
 test("blocks unapproved, failed, foreign-channel and unpublished parent records", () => {
