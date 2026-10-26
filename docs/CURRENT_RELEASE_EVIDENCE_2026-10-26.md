@@ -1,0 +1,56 @@
+# Current release evidence — 26 October 2026
+
+## Git and PR state
+
+- Repository: `clickerrish-art/YT-AUTO-VISE`
+- Implementation branch: `codex/marketing-machine-audit-fixes`
+- Source/test SHA with the new content-quality gates: `2e077612f5efbe4f787348fee9e8be5297619625`
+- Main SHA at the source/test checkpoint: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
+- Divergence at source/test checkpoint: 1,237 commits ahead, 2 behind, 131 changed files.
+- PR #1 is open, draft and unmerged. Subsequent documentation commits have advanced the branch; the live PR head must be fetched before using this report as the final-head checkpoint.
+- No merge, reset, rebase, force-push, history rewrite, upload, public post or campaign activation occurred.
+
+## Implemented source changes
+
+The source/test candidate adds `scripts/content-quality-gates.mjs` and `scripts/validate-content-quality.mjs`. Both renderers require `qualityEvidencePath` and run this gate before FFmpeg. The gate validates:
+
+- measured script word count and differentiated sections, source-backed claims and a retained similarity-review record;
+- asset provenance and original SHA-256 values against actual files, with commercial-use permission and human rights verification fields;
+- deterministic scene selection from a recorded seed and matching edit-plan hash;
+- audio profile, measured integrated loudness, true peak, music/ambience separation, fades, rights and human-verified transcript matching, bound to the exact narration bytes;
+- a human editorial approval record;
+- for Shorts, explicit parent content ID, same cycle, approved parent revision and media hash, SonicVhibez identity, verified remote parent video ID and canonical watch URL.
+
+The native YouTube Related video setting is intentionally separate. Internal relationship validation and a description URL do not prove that YouTube Studio's Related video feature is configured. The publication-stage validator requires `youtubeRelatedVideoStatus=VERIFIED`; manual Studio verification and retained evidence remain necessary.
+
+## Exact source/test SHA CI evidence
+
+All links below are workflows associated with source/test SHA `2e077612f5efbe4f787348fee9e8be5297619625`.
+
+- [Automation/security — run 40282803930](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803930): PASS; 293 Node tests passed, 0 failed; npm audit reported 0 vulnerabilities. The workflow also ran clean/locked install checks and other repository validations.
+- [Content quality — run 40282803919](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803919): PASS.
+- [Metadata validation — run 40282803925](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803925): PASS.
+- [Dashboard browser E2E — run 40282804001](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282804001): PASS.
+- [Isolated main/candidate baseline — run 40282803924](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803924): PASS.
+- [Production readiness — run 40282803929](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803929): BLOCKED as expected; human-readable and JSON readiness returned 2/2 and retained the diagnostic artifact. The blockers include missing verified media manifests, channel ID, OAuth credentials, owner-approved cadence decision and complete upload-history reconciliation.
+- [Nature Frontiers Facebook daily draft — run 40282803928](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40282803928): SKIPPED, not successful Meta integration evidence.
+
+These results do not apply automatically to later documentation commits. Fetch and inspect workflows on the exact current PR head before release decisions.
+
+## Relationship and media limitations
+
+The code now has a tested internal parent relationship gate and a separate publication-stage native Related video gate. It does not autonomously set the native YouTube Studio Related video feature. A reviewer must verify it in Studio and retain evidence naming both the Short and parent video IDs.
+
+No real source asset set, generated wildlife sequence, final narration, final captions, finished MP4, rights packet or full-playback editorial review was supplied or independently verified in this execution. No production export was rendered. The code cannot claim naturalistic visual quality, zero reused-content risk, zero copyright claims or monetization eligibility.
+
+## Acceptance status
+
+- Content-quality gate implementation: code checks passed on the source/test SHA; genuine production assets and human editorial review remain BLOCKED_EXTERNAL.
+- Internal Short-parent linkage: automated gate tested; native Related video configuration remains NOT_TESTED until Studio evidence exists.
+- Code acceptance: BLOCKED overall because the full dashboard matrix, complete branch-only history review, cross-process/fault-injection/recovery drills and deployment acceptance remain incomplete.
+- Production acceptance: BLOCKED.
+- Public/unattended YouTube publishing: disabled.
+- Facebook live publishing: disabled; workflow skipped.
+- Safari campaigns: inactive.
+- Approved Selar destination remains exactly `https://selar.com/0u19v8u99l`.
