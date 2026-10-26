@@ -60,7 +60,7 @@ test("blocks unapproved, failed, foreign-channel and unpublished parent records"
   assert.match(validateShortParentRelationship(child, { ...parent, approvalStatus: "PENDING" }).errors.join(" "), /approved status/);
   assert.match(validateShortParentRelationship(child, { ...parent, state: "FAILED" }).errors.join(" "), /failed, cancelled/);
   assert.match(validateShortParentRelationship(child, { ...parent, channel: "Nature Frontiers" }).errors.join(" "), /exactly SonicVhibez/);
-  assert.match(validateShortParentRelationship({ ...child, parentYouTubeVideoId: "", verifiedDestinationUrl: "" }, { ...parent, remoteVideoId: "" }).errors.join(" "), /video ID is required/);
+  assert.match(validateShortParentRelationship({ ...child, parentYouTubeVideoId: "", verifiedDestinationUrl: "" }, { ...parent, remoteVideoId: "" }).errors.join(" "), /11-character ID/);
   assert.match(validateShortParentRelationship({ ...child, verifiedDestinationUrl: "https://youtube.com/watch?v=wrong" }, parent).errors.join(" "), /canonical URL/);
   assert.match(validateShortParentRelationship(child, { ...parent, remoteVideoId: "too-short" }).errors.join(" "), /11-character ID/);
   assert.match(validateShortParentRelationship({ ...child, parentYouTubeVideoId: "" }, parent).errors.join(" "), /must explicitly contain/);
