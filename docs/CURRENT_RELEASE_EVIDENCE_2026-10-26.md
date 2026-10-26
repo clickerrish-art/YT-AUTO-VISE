@@ -1,3 +1,35 @@
+# Current release checkpoint — 26 October 2026, 22:20 SAST
+
+This section supersedes the older checkpoint claims below for current branch state and the most recent source/test tree. Older entries are historical evidence and must not be read as proof for later code.
+
+## Exact Git state at this checkpoint
+- **Exact tested source/test SHA:** `46551b175583db51cb48976755b4e52a8abcdea1`.
+- **Application-code commit:** [`8cfb24b`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/8cfb24b3979763e505fdf59a95e1f1d8879ced66).
+- **Regression-test commit:** [`46551b1`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/46551b175583db51cb48976755b4e52a8abcdea1).
+- `main` HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`; divergence: **1,481 ahead / 2 behind**; PR reports **148 changed files**.
+- PR #1 remains **OPEN, DRAFT, UNMERGED**. No main edits, merge, reset, rebase, force-push or destructive reconciliation occurred.
+
+## Changes in this checkpoint
+- Source-segment binding now accepts only an explicit scene ID that exists exactly once in the reviewed long-form timeline and contains the submitted time range. An asset ID can no longer substitute for a scene ID.
+- Added a regression test proving that an asset-only identifier is rejected even when it appears as a timeline asset ID.
+- This is a targeted fail-closed correction. It does not prove successful real-artifact binding, native Related video eligibility, or full Short-to-parent end-to-end acceptance.
+
+## Exact-SHA CI evidence for `46551b175583db51cb48976755b4e52a8abcdea1`
+- **Automation/security — PASS:** 322 Node tests passed, 0 failed or skipped; 8 Python safety tests passed; locked install, JavaScript syntax and Python compile checks passed; npm audit reported 0 vulnerabilities. [Run 40394411415](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40394411415).
+- **Content quality — PASS:** [Run 40394411376](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40394411376).
+- **Metadata validation — PASS:** [Run 40394411479](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40394411479).
+- **Isolated main/candidate baseline — PASS:** [Run 40394411326](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40394411326).
+- **Dashboard browser E2E — IN PROGRESS when this checkpoint was recorded:** [Run 40394411338](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40394411338). Do not count this as a pass until it finishes successfully.
+- **Production readiness — BLOCKED:** [Run 40394411469](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40394411469). The run reports 13 blockers, including missing approved manifests/media, unresolved cadence approval, unverified full YouTube history and missing YouTube CI credentials.
+- **Facebook daily draft — SKIPPED:** [Run 40394411339](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40394411339). This is not evidence of Meta Page verification or successful draft integration.
+
+## Acceptance verdict
+**CODE ACCEPTANCE PARTIAL / PRODUCTION ACCEPTANCE BLOCKED.** The targeted source-segment correction is committed and the automation, content-quality, metadata and baseline workflows pass on the exact tested SHA. Browser E2E is not yet verified for this SHA. No real media, human realism review, live YouTube identity/history verification, successful authorized Facebook draft, feasible owner-approved cadence, exhaustive recovery drills or owner-controlled governance resolution are evidenced by these CI results.
+
+Public/unattended YouTube publishing remains disabled; Facebook live publishing remains disabled; Safari campaigns remain inactive; the approved Selar destination remains `https://selar.com/0u19v8u99l`. No upload, public post, campaign activation, visibility change or PR merge occurred.
+
+---
+
 # Latest exact-SHA checkpoint — 26 October 2026 (supersedes earlier checkpoint below)
 
 ## Live Git state at the tested code checkpoint
