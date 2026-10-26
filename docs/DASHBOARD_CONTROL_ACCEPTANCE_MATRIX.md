@@ -46,3 +46,17 @@
 ## Acceptance rule
 
 Do not mark a row PASS solely because its route exists or a unit test passes. PASS requires a specific successful test of the visible control, backend state transition, authorization boundary, failure behavior, and durable result where applicable. External integrations additionally require live owner-authorized evidence. Public/unattended YouTube publishing and Facebook live publishing remain disabled; Safari remains inactive.
+
+
+## Supplemental content-quality acceptance coverage — 2026-10-26
+
+| Control / gate | Executable evidence | Current boundary |
+|---|---|---|
+| Render manifest content-quality preflight | `test/content-quality-gates.test.mjs`, `test/validate-content-quality.test.mjs`; renderer calls `validate-content-quality.mjs` before FFmpeg | Code gate tested; no genuine production asset set has passed |
+| Provenance-to-file integrity | Quality validator hashes each referenced source file and requires a match to the evidence SHA-256; render manifest footage path must be among the verified provenance assets | Does not prove licence authenticity |
+| Script depth and sourcing | Measured word count, required differentiated sections, claim-to-HTTPS-source references and similarity-review evidence | No automated claim that factual assertions are true |
+| Reproducible edit plan | Seeded scene plan and plan hash must match; only approved scenes with verified provenance are accepted | Randomization is for legitimate editorial variation, never to disguise reuse |
+| Audio tier / narration binding | Profile-based loudness, true peak, music/ambience separation, fade, rights and human transcript-match checks | Actual voice intelligibility and factual pronunciation still need human listening |
+| Short parent relationship | Tests reject missing/wrong parent, cycle mismatch, stale revision/hash, missing remote ID, wrong destination and unverified native Related video for publication | Native YouTube Related video configuration is not automated or claimed; manual Studio verification remains required |
+
+These rows supplement, not replace, the per-control route mapping above. Existing dashboard coverage is not exhaustive and overall code acceptance remains blocked until the entire matrix is backed by executable route/control tests.
