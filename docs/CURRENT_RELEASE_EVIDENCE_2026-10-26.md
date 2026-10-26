@@ -88,3 +88,17 @@ Live PR metadata at this checkpoint reported documentation descendant `06d70ecd2
 - [Content quality — run 40284745194](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284745194): PASS.
 - [Production readiness — run 40284745174](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284745174): BLOCKED as expected.
 - [Facebook draft — run 40284745168](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284745168): SKIPPED.
+
+
+## Latest source/test checkpoint — 26 October 2026
+
+A subsequent branch-only change `390919713da239968d391ec7b715dd6173035f3e` adds queued jobs to active publication-spacing checks, so queued timestamps reserve slots. Regression test `e65e859e44f254edddb735def44ca1b8095ab627` verifies same-day collisions, the exact 72-hour boundary and missing queued timestamps. The current source/test SHA is therefore `e65e859e44f254edddb735def44ca1b8095ab627`; the preceding `be11490345ae89938c32af1496f01b75ae20134a` checkpoint remains useful for the Related video visibility-gate change but is no longer the latest test commit.
+
+Exact SHA workflow status at time of update:
+- [Automation/security — run 40284971980](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980): PASS; 300 Node tests passed, 0 failed; npm audit total 0 vulnerabilities.
+- [Content quality — run 40284972016](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284972016): PASS.
+- [Metadata — run 40284972151](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284972151): PASS.
+- [Isolated main/candidate baseline — run 40284971993](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971993): PASS.
+- [Production readiness — run 40284972044](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284972044): BLOCKED as expected by real prerequisites.
+- [Facebook daily draft — run 40284972048](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284972048): SKIPPED.
+- [Dashboard browser E2E — run 40284971984](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971984): IN PROGRESS at the time of this note; do not claim it passed on this SHA until the run completes.
