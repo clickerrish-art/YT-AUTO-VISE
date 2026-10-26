@@ -1408,7 +1408,7 @@ const server = http.createServer(async (req, res) => {
           }
           const parentJob = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === job.shortParentRelationship.parentContentId);
           const parentLedger = readUploadLedger();
-          const parentAttempt = parentLedger.available ? parentLedger.attempts.find(entry => entry.jobId === parentJob?.id && entry.remoteVideoId === job.shortParentRelationship.parentRemoteVideoId && entry.status === "PRIVATE_UPLOAD_VERIFIED" && entry.channelTitle === "SonicVhibez" && entry.visibility === "private") : null;
+          const parentAttempt = parentLedger.available ? parentLedger.attempts.find(entry => entry.jobId === parentJob?.id && entry.remoteVideoId === job.shortParentRelationship.parentRemoteVideoId && entry.channelId === job.shortParentRelationship.parentChannelId && entry.status === "PRIVATE_UPLOAD_VERIFIED" && entry.channelTitle === "SonicVhibez" && entry.visibility === "private") : null;
           if (!parentJob || parentJob.contentType !== "long_form" || !["APPROVED_FOR_PRIVATE_UPLOAD", "PRIVATE_UPLOAD_VERIFIED"].includes(parentJob.state) || parentJob.humanApproval?.decision !== "APPROVE" || !parentAttempt) {
             return json(res, 409, { error: "The exact parent job must be human-approved and have a matching verified private-upload ledger receipt", publishingEnabled: false });
           }
@@ -1422,7 +1422,9 @@ const server = http.createServer(async (req, res) => {
             if (!parentAttempt.receiptPath) return json(res, 409, { error: "Parent upload receipt path is missing", publishingEnabled: false });
             const receiptFile = resolveRepositoryFile(path.relative(root, path.join(path.resolve(root, process.env.UPLOAD_LOG_DIR ?? "run-logs"), parentAttempt.receiptPath)));
             const receipt = JSON.parse(fs.readFileSync(receiptFile, "utf8"));
-            if (receipt.jobId !== parentJob.id || receipt.videoId !== parentAttempt.remoteVideoId || receipt.channelTitle !== "SonicVhibez" || receipt.privacyStatus !== "private" || receipt.remoteStatusVerified !== true) return json(res, 409, { error: "Parent upload receipt no longer proves the exact approved remote parent", publishingEnabled: false });
+            if (receipt.jobId !== parentJob.id || receipt.videoId !== parentAttempt.remoteVideoId || receipt.channelId !== job.shortParentRelationship.parentChannelId || receipt.channelTitle !== "SonicVhibez" || receipt.privacyStatus !== "private" || receipt.remoteStatusVerified !== true) return json(res, 409, { error: "Parent upload receipt no longer proves the exact approved remote parent", publishingEnabled: false });
+            const currentParentApprovalSha256 = crypto.createHash("sha256").update(JSON.stringify(parentJob.humanApproval)).digest("hex");
+            if (currentParentApprovalSha256 !== job.shortParentRelationship.parentApprovalSha256) return json(res, 409, { error: "Parent approval changed after the Short relationship was bound", publishingEnabled: false });
           } catch {
             return json(res, 409, { error: "Parent media, metadata or receipt evidence is missing or unsafe; rebind after reconciliation", publishingEnabled: false });
           }
