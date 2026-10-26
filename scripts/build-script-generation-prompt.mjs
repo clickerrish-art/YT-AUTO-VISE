@@ -24,7 +24,7 @@ export function buildScriptGenerationPrompt(format, brief) {
     if (brief.parentRecord?.channel !== "SonicVhibez") errors.push("Short parent must target SonicVhibez");
   }
   if (errors.length) throw new Error("Prompt blocked: " + errors.join("; "));
-  const sourceList = brief.sources.map((s, i) => (i + 1) + ". " + s.title + " — " + s.url).join("\n");
+  const sourceList = brief.sources.map((s, i) => "[" + (s.id ?? ("source-" + (i + 1))) + "] " + s.title + " — " + s.url).join("\n");
   const common = [
     "Create original, evidence-led wildlife documentary narration for SonicVhibez.",
     "Never invent sources, quotations, observations, animal behavior, statistics or certainty. Distinguish established evidence, inference and uncertainty.",
