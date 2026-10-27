@@ -199,12 +199,26 @@ def main() -> int:
     parser.add_argument("--voice", default="en-US-GuyNeural")
     parser.add_argument("--rate", default="-5%")
     args = parser.parse_args()
-    source = Path(args.script_json).resolve(strict=True)
-    if source.is_symlink() or not source.is_file():
+    source_arg = Path(args.script_json)
+    if source_arg.is_symlink():
+        raise SystemExit("BLOCKED: script JSON must be a regular file, not a symlink")
+    source = source_arg.resolve(strict=True)
+    if not source.is_file():
         raise SystemExit("BLOCKED: script JSON must be a regular file, not a symlink")
     try:
         payload = json.loads(source.read_text(encoding="utf-8"))
-        report = asyncio.run(generate(payload, args.format, Path(args.output_dir), args.voice, args.rate))
+        base = (ROOT / "media" / "generated-authoring").resolve()
+        base.mkdir(parents=True, exist_ok=True)
+        output_arg = Path(args.output_dir)
+        output_dir = (ROOT / output_arg).resolve() if not output_arg.is_absolute() else output_arg.resolve()
+        if not output_dir.is_relative_to(base) or output_dir == base:
+            raise ValueError("output directory must be a job-specific child of media/generated-authoring")
+        cursor = base
+        for part in output_dir.relative_to(base).parts:
+            cursor = cursor / part
+            if cursor.exists() and cursor.is_symlink():
+                raise ValueError("output path may not contain symbolic links")
+        report = asyncio.run(generate(payload, args.format, output_dir, args.voice, args.rate))
     except Exception as error:
         raise SystemExit("BLOCKED: narration generation failed closed: " + str(error)) from error
     print("DRAFT ONLY: " + json.dumps(report, sort_keys=True))
