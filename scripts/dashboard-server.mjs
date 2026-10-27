@@ -16,6 +16,7 @@ import { createReviewDecision, sha256File } from "./human-review.mjs";
 import { canonicalAuthoringScriptSha256, runAuthoringNarrationStage } from "./authoring-production-pipeline.mjs";
 import { productionPlanSha256, validateProductionPlan } from "./production-plan.mjs";
 import { buildApprovedJobRenderManifest } from "./build-approved-job-render-manifest.mjs";
+import { contentJobArtifactPaths } from "./content-job-artifact-paths.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
 import { validatePublicationSlot, localDateTimeToIso } from "./schedule-policy.mjs";
 import {
@@ -2153,10 +2154,11 @@ const server = http.createServer(async (req, res) => {
               if (existingStat.isSymbolicLink() || !existingStat.isFile()) throw new Error("Existing per-job render manifest is unsafe");
             }
             atomicWriteJson(manifestFile, renderPackage.manifest, { mode: 0o600 });
-            const jobMediaDirectory = ensureSafeDirectoryPath(path.join(root, "media", "jobs", job.id), "Per-job media directory");
+            const artifactPaths = contentJobArtifactPaths(job.id);
+            const jobMediaDirectory = ensureSafeDirectoryPath(path.join(root, artifactPaths.directory), "Per-job media directory");
             const jobMediaStat = fs.lstatSync(jobMediaDirectory);
             if (jobMediaStat.isSymbolicLink() || !jobMediaStat.isDirectory()) throw new Error("Per-job media directory must be a real directory");
-            outputPath = path.posix.join("media", "jobs", job.id, "final.mp4");
+            outputPath = artifactPaths.videoPath;
             const scriptFile = path.join(root, "scripts", job.contentType === "short" ? "render-short.mjs" : "render-long-form.mjs");
             const outputFile = path.resolve(root, outputPath);
             job.renderExecution = { taskId, status: "PREPARED", outputPath, preparedAt: new Date().toISOString() };
@@ -2221,7 +2223,7 @@ const server = http.createServer(async (req, res) => {
             if (!Number.isFinite(durationSeconds) || (isShort ? durationSeconds < 50 || durationSeconds > 60 : durationSeconds < 360 || durationSeconds > 600)) throw new Error("Rendered MP4 duration is outside the required format range");
             if (!video || !hasAudio || (isShort ? video.height <= video.width : video.width <= video.height)) throw new Error("Rendered MP4 is missing audio or has the wrong orientation");
             const thumbnailPath = current.authoring
-              ? path.posix.join("media", "jobs", current.id, "thumbnail.jpg")
+              ? contentJobArtifactPaths(current.id).thumbnailPath
               : isShort ? "media/next-short-thumbnail.jpg" : "media/long-form-next-thumbnail.jpg";
             const thumbnailRun = spawnSync(process.execPath, ["scripts/render-thumbnail.mjs", artifactPath, metadata.title, thumbnailPath], { encoding: "utf8", timeout: 120_000 });
             if (thumbnailRun.error || thumbnailRun.status !== 0) throw new Error("Thumbnail generation failed; install FFmpeg drawtext support and verify the rendered frame");
