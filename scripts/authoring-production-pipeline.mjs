@@ -122,7 +122,7 @@ export function runAuthoringNarrationStage({
     try { report = JSON.parse(fs.readFileSync(reportPath, "utf8")); } catch { throw new Error("Existing narration report is invalid; recovery is required"); }
     const errors = validateNarrationStageArtifacts({ report, scriptSha256, format: job.contentType, outputDir, expectedNarration: script.narration });
     if (errors.length) throw new Error("Existing narration artifacts failed reconciliation: " + errors.join("; "));
-    verifyCaptionValidators({ captionsPath: path.join(outputDir, "captions.srt"), report, projectRoot, spawnSyncImpl });
+    verifyCaptionValidators({ captionsPath: path.join(outputDir, "captions.srt"), audioPath: path.join(outputDir, "narration.mp3"), report, projectRoot, spawnSyncImpl, format: job.contentType });
     return narrationStageResult(job, outputDir, report, scriptSha256, true, projectRoot);
   }
   if (present.length > 0) throw new Error("Partial narration artifacts exist without a complete report; mark RECOVERY_REQUIRED and reconcile before retrying");
@@ -144,10 +144,20 @@ export function runAuthoringNarrationStage({
   return narrationStageResult(job, outputDir, report, scriptSha256, false, projectRoot);
 }
 
-function verifyCaptionValidators({ captionsPath, report, projectRoot, spawnSyncImpl }) {
+function verifyCaptionValidators({ captionsPath, audioPath, report, projectRoot, spawnSyncImpl, format }) {
+  const probe = spawnSyncImpl("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", audioPath], {
+    cwd: projectRoot, encoding: "utf8", timeout: 20_000, maxBuffer: 1024 * 1024, windowsHide: true
+  });
+  const measuredDuration = Number(String(probe?.stdout ?? "").trim());
+  const low = format === "short" ? 50 : 360;
+  const high = format === "short" ? 60 : 600;
+  if (probe?.error || probe?.status !== 0 || !Number.isFinite(measuredDuration) ||
+      measuredDuration < low || measuredDuration > high || Math.abs(measuredDuration - report.durationSeconds) > 0.25) {
+    throw new Error("ffprobe measurement of actual narration audio is missing, outside the format duration, or differs from the narration report");
+  }
   for (const [validator, args] of [
     ["scripts/check-captions.mjs", [captionsPath]],
-    ["scripts/validate-caption-sync.mjs", [captionsPath, String(report.durationSeconds)]]
+    ["scripts/validate-caption-sync.mjs", [captionsPath, String(measuredDuration)]]
   ]) {
     const checked = spawnSyncImpl(process.execPath, [path.join(projectRoot, validator), ...args], {
       cwd: projectRoot, encoding: "utf8", timeout: 20_000, maxBuffer: 1024 * 1024, windowsHide: true
