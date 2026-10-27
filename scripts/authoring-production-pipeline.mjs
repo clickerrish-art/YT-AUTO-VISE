@@ -53,6 +53,8 @@ export function validateNarrationStageArtifacts({ report, scriptSha256, format, 
   if (report.publishingEnabled !== false) errors.push("narration stage must not enable publishing");
   if (report.rightsStatus !== "NOT_VERIFIED") errors.push("narration rights must remain unverified until separately reviewed");
   if (report.captionTiming !== "TTS_WORD_BOUNDARIES" || !Number.isInteger(report.wordBoundaryCount) || report.wordBoundaryCount < 1) errors.push("captions must use verified TTS word-boundary timings");
+  if (!Number.isInteger(report.wordCount) || (format === "short" && (report.wordCount < 125 || report.wordCount > 150)) ||
+      (format === "long_form" && (report.wordCount < 900 || report.wordCount > 1500))) errors.push("measured narration word count is outside the required format range");
   if (!Number.isFinite(report.durationSeconds) || (durationRange && (report.durationSeconds < durationRange[0] || report.durationSeconds > durationRange[1]))) errors.push("measured narration duration is outside the required format range");
   const expected = [
     ["narration.mp3", report.audioSha256, "audio"],
@@ -114,6 +116,7 @@ export function runAuthoringNarrationStage({
     try { report = JSON.parse(fs.readFileSync(reportPath, "utf8")); } catch { throw new Error("Existing narration report is invalid; recovery is required"); }
     const errors = validateNarrationStageArtifacts({ report, scriptSha256, format: job.contentType, outputDir });
     if (errors.length) throw new Error("Existing narration artifacts failed reconciliation: " + errors.join("; "));
+    verifyCaptionValidators({ captionsPath: path.join(outputDir, "captions.srt"), report, projectRoot, spawnSyncImpl });
     return narrationStageResult(job, outputDir, report, scriptSha256, true, projectRoot);
   }
   if (present.length > 0) throw new Error("Partial narration artifacts exist without a complete report; mark RECOVERY_REQUIRED and reconcile before retrying");
@@ -131,7 +134,23 @@ export function runAuthoringNarrationStage({
   try { report = JSON.parse(fs.readFileSync(reportPath, "utf8")); } catch { throw new Error("Narration generator produced an invalid report"); }
   const errors = validateNarrationStageArtifacts({ report, scriptSha256, format: job.contentType, outputDir });
   if (errors.length) throw new Error("Narration stage validation failed: " + errors.join("; "));
+  verifyCaptionValidators({ captionsPath: path.join(outputDir, "captions.srt"), report, projectRoot, spawnSyncImpl });
   return narrationStageResult(job, outputDir, report, scriptSha256, false, projectRoot);
+}
+
+function verifyCaptionValidators({ captionsPath, report, projectRoot, spawnSyncImpl, pythonResult }) {
+  for (const [validator, args] of [
+    ["scripts/check-captions.mjs", [captionsPath]],
+    ["scripts/validate-caption-sync.mjs", [captionsPath, String(report.durationSeconds)]]
+  ]) {
+    const checked = spawnSyncImpl(process.execPath, [path.join(projectRoot, validator), ...args], {
+      cwd: projectRoot, encoding: "utf8", timeout: 20_000, maxBuffer: 1024 * 1024, windowsHide: true
+    });
+    const output = String(checked?.stdout ?? "") + "\\n" + String(checked?.stderr ?? "");
+    if (checked?.error || checked?.status !== 0 || !/PASS:/i.test(output)) {
+      throw new Error(validator + " rejected generated captions: " + output.slice(-800));
+    }
+  }
 }
 
 function narrationStageResult(job, outputDir, report, scriptSha256, reused, root) {
