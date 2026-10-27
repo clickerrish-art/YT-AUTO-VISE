@@ -232,9 +232,9 @@ This section supersedes earlier statements above that the authoring renderer was
 
 - Metadata validation **PASS** — [run 40528746426](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746426).
 - Content quality **PASS** — [run 40528746313](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746313).
-- Automation/security **IN PROGRESS at checkpoint** — [run 40528746351](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746351).
-- Dashboard browser E2E **IN PROGRESS at checkpoint** — [run 40528746832](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746832).
-- Isolated main/candidate baseline **PENDING at checkpoint** — [run 40528746461](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746461).
+- Automation/security **PASS** — [run 40528746351](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746351): 362 Node tests passed, 0 failed; npm audit reported 0 vulnerabilities; JavaScript syntax and Python compilation checks passed.
+- Dashboard browser E2E **PASS** — [run 40528746832](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746832): 13 Chromium browser acceptance tests passed.
+- Isolated main/candidate baseline **PASS** — [run 40528746461](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746461).
 - Production readiness **BLOCKED / fail-closed** — [run 40528746326](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746326).
 - Facebook daily draft **SKIPPED** — [run 40528746430](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746430); this is not evidence of a real Meta integration.
 
