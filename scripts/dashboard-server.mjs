@@ -1151,7 +1151,7 @@ const server = http.createServer(async (req, res) => {
           verified[name] = { path: artifact.path, sha256: artifact.sha256, file };
         }
         const transcript = fs.readFileSync(verified["narration.txt"].file, "utf8");
-        const expectedTranscript = String(script.narration ?? "").replace(/\\s+/gu, " ").trim() + "\\n";
+        const expectedTranscript = String(script.narration ?? "").replace(/\s+/gu, " ").trim() + "\n";
         if (transcript !== expectedTranscript) throw new Error("Narration transcript differs from the exact approved script");
         const captions = fs.readFileSync(verified["captions.srt"].file, "utf8");
         const report = JSON.parse(fs.readFileSync(verified["narration-report.json"].file, "utf8"));
