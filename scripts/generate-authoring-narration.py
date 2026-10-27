@@ -207,8 +207,14 @@ def main() -> int:
         raise SystemExit("BLOCKED: script JSON must be a regular file, not a symlink")
     try:
         payload = json.loads(source.read_text(encoding="utf-8"))
-        base = (ROOT / "media" / "generated-authoring").resolve()
-        base.mkdir(parents=True, exist_ok=True)
+        media_dir = ROOT / "media"
+        if media_dir.is_symlink() or not media_dir.is_dir():
+            raise ValueError("media directory must be a real directory, not a symlink")
+        base_path = media_dir / "generated-authoring"
+        if base_path.exists() and base_path.is_symlink():
+            raise ValueError("generated-authoring directory must not be a symlink")
+        base_path.mkdir(parents=True, exist_ok=True)
+        base = base_path.resolve()
         output_arg = Path(args.output_dir)
         output_dir = (ROOT / output_arg).resolve() if not output_arg.is_absolute() else output_arg.resolve()
         if not output_dir.is_relative_to(base) or output_dir == base:
