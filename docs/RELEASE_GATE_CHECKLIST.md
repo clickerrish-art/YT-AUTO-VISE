@@ -1,3 +1,21 @@
+## Exact tested candidate — `96cb4b06704915c7ee4fb2f0feb1796b41823301`
+
+- [x] Dashboard malformed-JSON and >16KB request rejection assertions added; error responses checked for state-path disclosure.
+- [x] Concurrent same-slot reservation acceptance test added: exactly one reservation, one conflict and one audit event.
+- [x] Lockfile workflow installs FFmpeg and ffprobe before the full Node suite.
+- [x] Automation/security: 384 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641429)).
+- [x] Content quality 384/384 with zero skips ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641482)).
+- [x] Metadata 384/384 with zero skips ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641432)).
+- [x] Browser E2E: 13 Chromium journeys ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641446)).
+- [x] Isolated baseline PASS ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641414)).
+- [x] Lockfile clean install + FFmpeg integration + complete Node suite 384/384 ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602634490)).
+- [ ] Exhaustive dashboard/API control acceptance remains incomplete; DASH-001 stays NOT_TESTED.
+- [ ] Production readiness remains BLOCKED by 13 prerequisites ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641438)).
+- [ ] External Meta draft creation remains unverified because its job was skipped ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641541)).
+- [ ] Full Git history reconciliation, deployment/restore drills, external identity/media/rights/human approval and owner cadence decision remain open.
+
+---
+
 ## Latest exact tested candidate — `b2686b888dabf6099d25aff59d288a514b3caffe`
 
 - [x] Restore operations serialized by exclusive cross-process lock; competing lock fails closed.

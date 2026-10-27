@@ -1,3 +1,13 @@
+## Latest tested dashboard/API checkpoint — `96cb4b06704915c7ee4fb2f0feb1796b41823301`
+
+Live static inventory recalculated from `public/dashboard.html` and `scripts/dashboard-server.mjs`: **105 controls, 15 forms, 38 literal route branches** (10 GET, 28 POST; 35 `/api` branches). This is inventory, not acceptance.
+
+Exact candidate checks: automation/security [40602641429](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641429) passed 384 Node tests, zero failures/skips; browser E2E [40602641446](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641446) passed 13 Chromium journeys. The dashboard API test now rejects malformed JSON and >16KB bodies without path disclosure, and verifies concurrent requests for one schedule date create exactly one reservation and one audit event.
+
+The route sweep still only proves unauthenticated requests to inventoried API branches are rejected. It does not prove authorized behavior, role boundaries, all malformed/boundary inputs, duplicate and retry safety across every route, provider/filesystem/persistence failure handling, restart durability, correct audit semantics, or complete keyboard/mobile accessibility. **Keep DASH-001 `NOT_TESTED`.**
+
+---
+
 ## Latest exact-candidate coverage note — `b2686b888dabf6099d25aff59d288a514b3caffe`
 
 The current static inventory remains 105 HTML button/input/select/textarea elements across 15 forms and 37 literal route handlers (9 GET, 28 POST). Browser E2E [40593628079](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628079) passed 13 Chromium journeys, including the existing restore-journal and Short-parent blocker journeys. Automation/security [40593628190](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628190) passed 379 Node tests with zero skips; content quality [40593628137](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628137) and metadata [40593628366](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628366) each passed 379 tests with zero skips.

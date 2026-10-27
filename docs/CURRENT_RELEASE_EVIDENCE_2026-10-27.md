@@ -1,3 +1,34 @@
+## Exact tested candidate and CI repair — 28 October 2026
+
+**Tested source/test SHA:** `96cb4b06704915c7ee4fb2f0feb1796b41823301`. At this checkpoint PR #1 remained open, draft and unmerged. Live refs: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, `1,845 ahead / 2 behind / 168 changed files`.
+
+### Implementation in this checkpoint
+- Added dashboard API assertions for malformed JSON and request bodies larger than 16 KB; both must be rejected without disclosing local state paths.
+- Added a concurrent same-slot reservation test: two concurrent drafts for one local date produce exactly one successful reservation, one conflict, and one audit event.
+- Fixed `.github/workflows/generate-lockfile.yml` to install FFmpeg and ffprobe before running the full Node test suite. Previously, that workflow failed with `spawnSync ffmpeg ENOENT`; it now passes without skipping the integration test.
+
+### Exact-SHA results
+- Automation/security [run 40602641429](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641429): **384 Node tests passed, 0 failed, 0 skipped; 16 Python tests; npm audit 0 vulnerabilities; normal install and FFmpeg/ffprobe integration passed.**
+- Content quality [run 40602641482](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641482): **384 tests, 0 failures, 0 skips.**
+- Metadata [run 40602641432](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641432): **384 tests, 0 failures, 0 skips.**
+- Browser E2E [run 40602641446](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641446): **13 Chromium journeys passed.**
+- Isolated baseline [run 40602641414](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641414): **PASS**, artifact [12779123920](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641414/artifacts/12779123920). Artifact checksum not calculated in this session.
+- Lockfile verification [run 40602634490](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602634490): clean locked install, FFmpeg/ffprobe available, **384/384 Node tests passed**, schedule/campaign validation and syntax checks passed.
+- Metadata push workflow [run 40602634445](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602634445): **PASS**.
+- Production readiness [run 40602641438](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641438): **BLOCKED** by 13 genuine prerequisites. The failure is the expected fail-closed release gate, not a passing production check.
+- Meta draft workflow [run 40602641541](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641541): 15 local validation tests passed; external `create-draft-package` job **SKIPPED**. No live Meta draft creation is proven.
+
+### Dashboard inventory and acceptance status
+Live source scan: **105 HTML controls, 15 forms, 38 literal route branches** (10 GET, 28 POST), of which 35 are `/api` branches. The unauthenticated sweep covers the inventoried API routes. New malformed-body, size-limit and concurrent-reservation assertions pass. This does **not** complete DASH-001; authorized success/failure, per-control behavior, all malformed/boundary cases, permissions, provider/persistence failures, restart durability, audit correctness and complete accessibility remain partly untested.
+
+### Git reconciliation and preserved restore tests
+The two base-only commits are a net-zero test-file add/revert pair: [71578daf](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/71578dafc24e5d48173dce3f4e392e18e42aa40e) added `test/restore-facebook-draft-history.test.mjs`; [fa00d28](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fa00d28e7f58911482686e4ad69fac9f4701a2e6) reverted that write on `main`. The implementation branch retains the test file, and `tests/restore-state.test.mjs` remains present. Do not cherry-pick the revert, reset, rebase or reconcile destructively. Full review of 1,845 branch-only commits and owner-approved integration plan remain incomplete.
+
+### Release verdict
+**AUTOMATED TESTS PASS / IMPLEMENTATION PARTIAL / PRODUCTION BLOCKED.** No live YouTube upload, Meta post, campaign activation, visibility change, merge, or edit to `main` occurred. Nature Frontiers remains prohibited as a YouTube target; public/unattended YouTube publishing and live Meta publishing remain disabled; Safari remains inactive; approved Selar destination unchanged.
+
+---
+
 ## Latest exact-SHA restore-lock checkpoint — 28 October 2026, 00:20 SAST
 
 **Exact tested source/test SHA:** `b2686b888dabf6099d25aff59d288a514b3caffe`. Documentation-only commits followed that tested candidate; PR #1 remains open, draft and unmerged. Live refs at the latest state check: branch head `59d34c856912fdb1a03229801612e04eb532baa1`, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, divergence `1819 ahead / 2 behind / 164 changed files`.

@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-28",
-  "evidencePolicy": "Source/test acceptance candidate: 1f72c6dc5b648f0c60fdea45ae1d37e835e4505e. Latest branch-state observation before this register refresh: 785d73fb236fec808f57b4749af1ae0e6026cf5e (documentation-only after tested candidate). Automation/security PASS: 384 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; normal lifecycle install and FFmpeg integration passed. Content quality, metadata, 13 Chromium browser journeys and isolated main/candidate baseline passed. Baseline artifact ID 12776283618, ZIP SHA-256 989203aab1898f8d740d4f56294e03eec8d023cb6086ce4c171ee2aff156ad2b. Dashboard inventory and unauthenticated API-route sweep passed. Production readiness remains blocked; external Meta draft creation was skipped.",
+  "evidencePolicy": "Exact tested source/test candidate: 96cb4b06704915c7ee4fb2f0feb1796b41823301. CI passed on this SHA: 384 Node tests (0 failed, 0 skipped), 16 Python tests, npm audit 0 vulnerabilities, clean locked install, FFmpeg/ffprobe integration, content quality, metadata, 13 Chromium browser journeys, isolated main/candidate baseline and schedule/campaign validation. Added dashboard API assertions for malformed JSON, >16KB bodies and concurrent same-slot reservations. Fixed lockfile workflow to install FFmpeg/ffprobe before the full Node suite. Readiness remains BLOCKED (13 genuine prerequisites); external Meta draft creation remains skipped.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -21,10 +21,11 @@
       "requirement": "Keep implementation isolated from main and preserve PR #1 as draft/unmerged.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/96cb4b06704915c7ee4fb2f0feb1796b41823301"
       ],
-      "nextAction": "Continue changes only on codex/marketing-machine-audit-fixes; do not merge without owner approval.",
-      "assessmentCommitSha": "2f455314d4f75dafe8b9b309ead0040570158e09",
+      "nextAction": "Continue changes only on codex/marketing-machine-audit-fixes. PR #1 was verified open, draft and unmerged; main remained fa00d28e7f58911482686e4ad69fac9f4701a2e6. No merge or destructive Git operation is authorized.",
+      "assessmentCommitSha": "96cb4b06704915c7ee4fb2f0feb1796b41823301",
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch."
     },
     {
@@ -34,13 +35,14 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195046",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195206",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195232",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195101"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641429",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641482",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641432",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641446",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602634490"
       ],
-      "nextAction": "Repeat applicable workflows after source/test changes. This candidate passed automation/security, content-quality, metadata and browser E2E with zero skipped Node tests; exhaustive per-control/per-route acceptance and production gates remain separate requirements.",
-      "assessmentCommitSha": "1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
+      "nextAction": "Exact candidate 96cb4b06704915c7ee4fb2f0feb1796b41823301 passed 384 Node tests with zero failures/skips, 16 Python tests, npm audit (0 vulnerabilities), clean locked install with FFmpeg/ffprobe, content quality, metadata, 13 Chromium journeys and schedule/campaign validation. Readiness and external Meta acceptance remain separate blockers.",
+      "assessmentCommitSha": "96cb4b06704915c7ee4fb2f0feb1796b41823301",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
     {
@@ -50,11 +52,11 @@
       "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195202",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195202/artifacts/12776283618"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641414",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641414/artifacts/12779123920"
       ],
-      "nextAction": "Repeat if main advances or source/test files change. Artifact baseline-comparison.zip (artifact ID 12776283618; SHA-256 989203aab1898f8d740d4f56294e03eec8d023cb6086ce4c171ee2aff156ad2b) retains exact main/candidate baseline output; both Node and Python commands exited 0.",
-      "assessmentCommitSha": "1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
+      "nextAction": "The exact candidate 96cb4b06704915c7ee4fb2f0feb1796b41823301 passed the isolated main/candidate baseline workflow; retained artifact ID 12779123920. No checksum is claimed because the downloaded artifact bytes were not hashed in this session. Repeat if main or source/test files change.",
+      "assessmentCommitSha": "96cb4b06704915c7ee4fb2f0feb1796b41823301",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
     {
@@ -65,11 +67,11 @@
       "status": "NOT_TESTED",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195046",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195206"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641429",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641446"
       ],
-      "nextAction": "Reproducible inventory now reports 105 controls across 15 forms and 38 literal route branches; unauthenticated access is tested across all inventoried /api method/path routes. This does not cover authorized success, role/permission boundaries, malformed and boundary inputs, duplicate/concurrent requests, dependency/persistence failures, restart durability, audit correctness or complete keyboard/mobile acceptance. Keep NOT_TESTED until every applicable control and route has evidence.",
-      "assessmentCommitSha": "1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
+      "nextAction": "Live static inventory recalculated: 105 HTML controls, 15 forms, 38 literal route branches (10 GET, 28 POST; 35 /api branches). Tests now cover all inventoried API routes unauthenticated, malformed JSON, >16KB body rejection without path disclosure, and concurrent same-slot reservation (exactly one 201 and one 409 with one audit event). This remains partial: authorized success and failure injection, permission boundaries, complete control-by-control UI behavior, keyboard/mobile accessibility, persistence/restart and audit correctness are not covered for every route/control. Keep NOT_TESTED.",
+      "assessmentCommitSha": "96cb4b06704915c7ee4fb2f0feb1796b41823301",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
     {
@@ -189,8 +191,8 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/compare/main...codex/marketing-machine-audit-fixes"
       ],
-      "nextAction": "Review full relevant patch history; preserve both restore-history test variants until the differences are understood; obtain approval before reconciliation.",
-      "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
+      "nextAction": "Non-destructive review found the two base-only commits are a test-file add/revert pair: 71578dafc24e5d48173dce3f4e392e18e42aa40e added test/restore-facebook-draft-history.test.mjs; fa00d28e7f58911482686e4ad69fac9f4701a2e6 reverted that write on main. The implementation branch retains the test file, and tests/restore-state.test.mjs also remains present. Do not cherry-pick the revert or reconcile history automatically. Full review of 1,845 branch-only commits and owner-approved integration plan remain NOT_TESTED.",
+      "assessmentCommitSha": "96cb4b06704915c7ee4fb2f0feb1796b41823301",
       "acceptanceCriterion": "Review all 1,116 branch-only commits and both base-only commits/patches, inspect the restore-history test variants, and produce a non-destructive reconciliation plan with owner decisions."
     },
     {
@@ -736,17 +738,17 @@
   ],
   "currentCheckpoint": {
     "applicationCodeSha": "de41102b622def75671e82b8972a16b536cd1c5a",
-    "testedSha": "1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
-    "checkpointPrHead": "785d73fb236fec808f57b4749af1ae0e6026cf5e",
+    "testedSha": "96cb4b06704915c7ee4fb2f0feb1796b41823301",
+    "checkpointPrHead": "96cb4b06704915c7ee4fb2f0feb1796b41823301",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1841,
+    "aheadBy": 1845,
     "behindBy": 2,
     "changedFiles": 168,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "AUTOMATED CODE AND ISOLATED BASELINE PASS / IMPLEMENTATION PARTIAL / PRODUCTION BLOCKED",
+    "verdict": "AUTOMATED TESTS PASS / DASHBOARD ACCEPTANCE PARTIAL / PRODUCTION BLOCKED",
     "ci": {
       "automationSecurity": "PASS",
       "nodeTests": 384,
@@ -758,32 +760,42 @@
       "contentQuality": "PASS",
       "metadata": "PASS",
       "dashboardE2e": "PASS (13 Chromium journeys)",
-      "isolatedBaseline": "PASS (exact isolated main/candidate Node/Python commands exit 0; artifact retained)",
+      "isolatedBaseline": "PASS (exact main/candidate isolated workflow)",
       "productionReadiness": "BLOCKED (13 prerequisites)",
       "facebookDraftWorkflow": "PASS for local deterministic validation only; external draft-creation job skipped",
       "operatorTokenByteSafeComparison": "PASS",
-      "dashboardInventory": "PASS (105 controls, 15 forms, 38 literal route branches)",
-      "unauthenticatedApiRouteSweep": "PASS for all distinct inventoried /api method/path routes"
+      "dashboardInventory": "PASS (105 HTML controls, 15 forms, 38 literal route branches: 10 GET / 28 POST; 35 /api branches)",
+      "unauthenticatedApiRouteSweep": "PASS for all distinct inventoried /api method/path routes",
+      "cleanLockedInstall": "PASS",
+      "ffmpegFfprobeIntegration": "PASS",
+      "lockfileWorkflow": "PASS (FFmpeg/ffprobe installed before full Node suite)",
+      "dashboardBodyValidation": "PASS (malformed JSON and >16KB request rejected without path disclosure)",
+      "concurrentSlotReservation": "PASS (two concurrent same-date requests yield exactly one reservation and one conflict)"
     },
     "evidence": {
-      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195046",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195232",
-      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195101",
-      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195206",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195202",
-      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195202/artifacts/12776283618",
-      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195430",
-      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195092"
+      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641429",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641482",
+      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641432",
+      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641446",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641414",
+      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641414/artifacts/12779123920",
+      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641438",
+      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641541",
+      "lockfileWorkflow": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602634490",
+      "metadataPush": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602634445"
     },
     "implementationCommits": [
       "b9f357435149bbb7650e858691c228f3133b9950",
       "196e56c5b663b5c2e7f7661a980f73b1684a1444",
-      "b2686b888dabf6099d25aff59d288a514b3caffe"
+      "b2686b888dabf6099d25aff59d288a514b3caffe",
+      "ef06d50e2ac9e6135aa3305da2aa1f7f0b708211",
+      "ade1efa4c9c4962a27867728451d3ef3a22e7fca",
+      "96cb4b06704915c7ee4fb2f0feb1796b41823301"
     ],
-    "candidateSourceTestSha": "1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
+    "candidateSourceTestSha": "96cb4b06704915c7ee4fb2f0feb1796b41823301",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Source/test candidate 1f72c6dc5b648f0c60fdea45ae1d37e835e4505e passed exact-candidate automation/security (384 Node tests, zero failures/skips; 16 Python tests; npm audit zero vulnerabilities), content quality, metadata, 13 Chromium browser journeys and isolated main/candidate Node/Python baseline. The dashboard inventory command and inventory-driven unauthenticated API-route sweep are included. Subsequent commits through observed branch head 785d73fb236fec808f57b4749af1ae0e6026cf5e are documentation-only; production readiness remains blocked and external Meta draft creation was skipped.",
-    "latestDocumentedPrHeadBeforeRegisterRefresh": "59d34c856912fdb1a03229801612e04eb532baa1",
-    "observedBranchHeadBeforeRegisterRefresh": "785d73fb236fec808f57b4749af1ae0e6026cf5e"
+    "latestChangeTestReason": "Exact candidate 96cb4b06704915c7ee4fb2f0feb1796b41823301 passed automation/security (384 Node tests, 0 failed/0 skipped; 16 Python tests; npm audit 0 vulnerabilities), content quality, metadata, browser E2E (13 Chromium journeys), isolated baseline, lockfile verification (FFmpeg/ffprobe installed; 384/384 tests) and schedule/campaign validation. New assertions cover malformed JSON, >16KB API requests, and concurrent reservation collision. Production readiness remains blocked; external Meta draft creation skipped.",
+    "latestDocumentedPrHeadBeforeRegisterRefresh": "96cb4b06704915c7ee4fb2f0feb1796b41823301",
+    "observedBranchHeadBeforeRegisterRefresh": "96cb4b06704915c7ee4fb2f0feb1796b41823301"
   }
 }

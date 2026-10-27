@@ -1,3 +1,17 @@
+## Current exact-SHA status — 28 October 2026
+
+- Tested candidate: `96cb4b06704915c7ee4fb2f0feb1796b41823301`; current source/test CI passes (384 Node, 0 failures/0 skips; 16 Python; npm audit 0 vulnerabilities; FFmpeg/ffprobe integration; 13 Chromium journeys; isolated baseline).
+- Dashboard API acceptance has new malformed-JSON, >16KB body and concurrent-slot assertions, but the full 105-control/38-route acceptance matrix remains incomplete.
+- Lockfile workflow FFmpeg setup was repaired and the exact candidate passed: [run 40602634490](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602634490).
+- Production readiness remains BLOCKED by 13 genuine prerequisites: [run 40602641438](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641438).
+- External Meta draft creation remains SKIPPED: [run 40602641541](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40602641541).
+- Git compare remains 1,845 ahead / 2 behind / 168 changed files. Base-only commits are the test-file add/revert pair; do not reconcile destructively.
+- `test/restore-facebook-draft-history.test.mjs` and `tests/restore-state.test.mjs` are preserved.
+
+**Verdict: NOT READY for production.** Keep public/unattended YouTube publishing disabled, live Meta publishing disabled, Safari inactive, and the native Related-video feature blocked while the parent is private.
+
+---
+
 ## Latest cross-process restore lock — `b2686b888dabf6099d25aff59d288a514b3caffe`
 
 Restore and interrupted-restore recovery are now serialized with an exclusive `.restore-operation.lock` in the configured state directory. A competing operation fails closed without replacing the existing lock; normal validation failures release the current invocation's lock. A stale lock requires operator verification that no restore is active before removal. Do not delete a lock merely because it is old.
