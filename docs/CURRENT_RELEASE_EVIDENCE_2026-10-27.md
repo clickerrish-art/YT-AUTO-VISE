@@ -1,5 +1,51 @@
 # Live exact-SHA checkpoint — 27 October 2026 (current as of 20:50 UTC)
 
+## Latest exact-SHA implementation and acceptance checkpoint — 27 October 2026, 21:02 UTC
+
+**Exact source/test SHA:** `0969430d130340eed1d143de2f488265a50930dc`. **Latest application-code SHA:** `e1f5650be2c82cb0c8ffd4046b8342a84df09eb9`. The code/test checkpoint is exact; documentation-only descendants follow it. At the tested checkpoint, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, divergence 1,724 ahead / 2 behind / 163 changed files. PR #1 remains open, draft and unmerged.
+
+### Implementation changes in this checkpoint
+
+- Script narration generation now requires a strict calendar-valid ISO human-approval timestamp with an explicit timezone, reusing `isValidZonedIsoTimestamp`. Regression tests reject date-only values, timezone-free timestamps, impossible dates and invalid offsets before TTS runs. Code: [`65a572e`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/65a572eeb8a785b79725594b90954c958b9b1625); tests: [`d214cbe`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d214cbe7910d755a0630d7e7536b4c675fe1f589).
+- Readiness JSON now distinguishes repository-path checks, environment-presence checks and external history reconciliation, labels blocker ownership (`external_owner_or_human_reviewer`, `shared_code_and_owner`, or `maintainer_code_or_configuration`), and explicitly says the read-only check does not independently verify remote YouTube history. Code: [`e1f5650`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e1f5650be2c82cb0c8ffd4046b8342a84df09eb9); tests: [`0969430`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/0969430d130340eed1d143de2f488265a50930dc).
+
+### Exact-SHA verification
+
+All following workflows checked out the exact source/test SHA `0969430d130340eed1d143de2f488265a50930dc`:
+
+- **Automation/security — PASS:** [run 40582978833](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582978833). 371 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; locked install with normal lifecycle scripts passed; FFmpeg two-scene render/decode integration passed; syntax checks and Python compilation passed; npm audit reported 0 vulnerabilities.
+- **Dashboard browser E2E — PASS:** [run 40582979150](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582979150), 13 Chromium journeys against the real local dashboard/backend.
+- **Content quality — PASS:** [run 40582978759](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582978759).
+- **Metadata validation — PASS:** [run 40582979141](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582979141). This workflow's own test invocation reported 370 passed / 0 failed / 1 skipped because FFmpeg was unavailable in that job; the automation workflow separately installed FFmpeg and ran all 371 tests with zero skips.
+- **Isolated main/candidate comparison — PASS:** [run 40582978705](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582978705). Retained artifact: [baseline-comparison.zip](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582978705/artifacts/12770128315). Main: 54 Node / 8 Python tests, zero failures/skips; candidate: 371 Node / 16 Python tests, zero failures/skips; all reported exit codes were 0.
+- **Facebook draft workflow — PASS for local deterministic package validation only:** [run 40582978997](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582978997). The external `create-draft-package` job was skipped. No live Meta integration is proven.
+- **Production readiness — BLOCKED / fail-closed:** [run 40582979127](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582979127). Both human-readable and JSON readiness checks exited 2; the retained diagnostic artifact reports 13 blockers: [readiness report](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582979127/artifacts/12769179191).
+
+### Current 13 production blockers
+
+1. Owner must approve a feasible cadence mode with a timezone-aware timestamp and non-empty approval reference.
+2. Complete SonicVhibez public/private/unlisted YouTube history and all pending/uncertain upload attempts remain externally unreconciled; this read-only readiness command does not fetch that history.
+3. Rights-verified `content/render-manifest.json` is missing.
+4. Rights-verified `content/long-form-render-manifest.json` is missing.
+5. Short metadata needs human review and explicit `READY_FOR_PRIVATE_UPLOAD` status.
+6. Metadata needs the independently verified SonicVhibez channel ID.
+7. Rights confirmation must follow genuine media/licence verification.
+8. Compliance review must be completed by an authorized human.
+9. Genuine final `media/next-short.mp4` is missing.
+10–12. `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET` and `YOUTUBE_REFRESH_TOKEN` are absent from this readiness execution environment; this does not establish the state of any separate production secret store.
+13. `SONICVHIBEZ_CHANNEL_ID` is absent from this readiness execution environment and must be independently verified, not guessed.
+
+The readiness report now labels each blocker with evidence type, control owner and remedy. The 13 blockers are not cleared by code tests. `test/restore-facebook-draft-history.test.mjs` remains present and is exercised by the passing automation suite.
+
+### Safety and verdict
+
+No upload, post, campaign activation, visibility change, merge, main-branch edit, reset, rebase, force-push or destructive reconciliation was performed. Public/unattended YouTube publishing and Facebook/Instagram live publishing remain disabled; Nature Frontiers remains prohibited as a YouTube target; Safari remains inactive; the approved Selar URL remains `https://selar.com/0u19v8u99l`.
+
+**Verdict: IMPLEMENTATION PARTIAL / PRODUCTION ACCEPTANCE BLOCKED.** The tested code checkpoint passes the automated suites above, but genuine media/rights/human approval, channel identity/history, one-operation private-upload receipt, live Meta integration, owner cadence approval and operational recovery/deployment drills remain unproven.
+
+---
+
+
 ## Git baseline
 
 - Repository: `clickerrish-art/YT-AUTO-VISE`
