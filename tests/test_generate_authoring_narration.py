@@ -32,6 +32,14 @@ class AuthoringNarrationTests(unittest.TestCase):
         self.assertEqual(count, 130)
         self.assertEqual(len(narration.split()), 130)
 
+    def test_script_hash_is_stable_and_changes_with_script_content(self):
+        payload = short_payload()
+        first = MODULE.canonical_script_sha256(payload)
+        self.assertEqual(first, MODULE.canonical_script_sha256(payload))
+        changed = short_payload()
+        changed["claims"][0]["text"] = "A different supported claim."
+        self.assertNotEqual(first, MODULE.canonical_script_sha256(changed))
+
     def test_rejects_short_below_minimum(self):
         with self.assertRaisesRegex(ValueError, "125–150"):
             MODULE.validate_script_payload(short_payload(124), "short")
