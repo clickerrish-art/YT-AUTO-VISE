@@ -1,3 +1,19 @@
+## Latest exact-SHA production gate result — 27 October 2026
+
+- Tested candidate: `ac97c8860700dcbfedfb367d4dfbc0c654164479`.
+- [Production-readiness run 40588392139](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392139) exits fail-closed with **HOLD: 13 blockers**. This is not a code-test failure and is not production acceptance.
+- The readiness execution environment reports the final Short `media/next-short.mp4` missing and `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN`, and `SONICVHIBEZ_CHANNEL_ID` unconfigured. These findings describe this execution environment; do not infer secret-store status elsewhere.
+- The owner-approved feasible cadence decision and timezone-qualified approval evidence are still missing. The requested 2 long-form + 1 Short weekly cadence conflicts with a 72-hour minimum.
+- Complete remote public/private/unlisted YouTube history and uncertain attempts must be independently reconciled immediately before any upload.
+- Genuine final media, provenance/licences, manifests, full human playback/compliance review and exact-hash approvals remain required. Nature Frontiers must never be the YouTube target.
+- Native YouTube Related video remains a separate external gate; do not change visibility to bypass parent eligibility.
+- Nature Frontiers Facebook/Instagram live identities/permissions and an actual external draft-creation result are not proven; the external draft job was skipped in [run 40588392305](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392305). Live Meta publishing remains disabled.
+- Full backup/restore/restart/uncertain-operation recovery and isolated deployment/rollback drills, branch reconciliation, and branch protection remain incomplete.
+
+No upload/post/campaign activation/visibility change/merge was performed. See [exact-SHA release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
+
+---
+
 ## Latest verified implementation and CI checkpoint — 27 October 2026, 21:28 UTC
 
 **Exact tested candidate SHA:** `466605be027f531d1c6143a6d1f42e1bf4c2ffcc`. The candidate includes strict Short-parent approval timestamp validation, FFmpeg installation in the content-quality and metadata workflows, and explicit zero-skip assertions in the automation, content-quality and metadata workflows.
