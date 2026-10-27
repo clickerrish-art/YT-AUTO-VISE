@@ -14,6 +14,7 @@ import { assertShortParentRelationship, shortParentRelationshipSha256, validateS
 import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
 import { canonicalAuthoringScriptSha256, runAuthoringNarrationStage } from "./authoring-production-pipeline.mjs";
+import { productionPlanSha256, validateProductionPlan } from "./production-plan.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
 import { validatePublicationSlot, localDateTimeToIso } from "./schedule-policy.mjs";
 import {
@@ -1067,6 +1068,141 @@ const server = http.createServer(async (req, res) => {
         state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: operatorId });
         saveState(state);
         return json(res, 201, { job, reused: false, publishingEnabled: false });
+      } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs/production-plan") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || !body.productionPlan || typeof body.productionPlan !== "object" ||
+          typeof body.scriptSha256 !== "string" || !/^[a-f0-9]{64}$/.test(body.scriptSha256)) {
+        return json(res, 400, { error: "jobId, productionPlan object and exact script SHA-256 are required" });
+      }
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const job = state.jobs[index];
+        if (job.state !== "QUEUED") return json(res, 409, { error: "Production plan can only be attached to a queued job" });
+        const script = job.authoring?.result?.script;
+        if (!script || canonicalAuthoringScriptSha256(script) !== body.scriptSha256 ||
+            job.authoring?.scriptApproval?.decision !== "APPROVE" ||
+            job.authoring.scriptApproval.scriptSha256 !== body.scriptSha256) {
+          return json(res, 409, { error: "Production plan requires human approval of the exact current script revision" });
+        }
+        const narration = job.authoring?.narrationStage;
+        const narrationApproval = job.authoring?.narrationApproval;
+        if (!narration || narration.status !== "APPROVED_FOR_RENDER" ||
+            narration.scriptSha256 !== body.scriptSha256 ||
+            !narrationApproval || narrationApproval.decision !== "APPROVE" ||
+            narrationApproval.scriptSha256 !== body.scriptSha256 ||
+            narrationApproval.approvalSha256 !== crypto.createHash("sha256").update(JSON.stringify({
+              jobId: job.id,
+              decision: narrationApproval.decision,
+              reviewer: narrationApproval.reviewer,
+              reviewedAt: narrationApproval.reviewedAt,
+              reason: narrationApproval.reason,
+              scriptSha256: narrationApproval.scriptSha256,
+              audioSha256: narrationApproval.audioSha256,
+              transcriptSha256: narrationApproval.transcriptSha256,
+              captionsSha256: narrationApproval.captionsSha256,
+              reportSha256: narrationApproval.reportSha256,
+              confirmAudioListened: narrationApproval.confirmAudioListened,
+              confirmTranscriptReviewed: narrationApproval.confirmTranscriptReviewed,
+              confirmCaptionsReviewed: narrationApproval.confirmCaptionsReviewed
+            })).digest("hex")) {
+          return json(res, 409, { error: "Current narration must be approved for the exact script before production planning" });
+        }
+        const errors = validateProductionPlan(body.productionPlan, { jobId: job.id, contentType: job.contentType, scriptSha256: body.scriptSha256 });
+        if (errors.length) return json(res, 422, { error: "Production plan validation failed", validationErrors: errors, publishingEnabled: false });
+        for (const scene of body.productionPlan.scenes) {
+          for (const [relativePath, expectedHash, label] of [
+            [scene.assetPath, scene.assetSha256, "scene asset"],
+            [scene.provenance.rightsEvidencePath, scene.provenance.rightsEvidenceSha256, "rights evidence"]
+          ]) {
+            let file;
+            try { file = resolveRepositoryFile(relativePath); }
+            catch (error) { return json(res, 422, { error: label + " is unavailable", detail: String(error.message ?? error) }); }
+            const stat = fs.lstatSync(file);
+            if (stat.isSymbolicLink() || !stat.isFile() || sha256File(file) !== expectedHash) {
+              return json(res, 409, { error: label + " must be a regular non-symlink file matching its declared SHA-256", path: relativePath });
+            }
+          }
+        }
+        if (job.contentType === "short") {
+          const parent = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.productionPlan.parentRelationship?.parentContentId);
+          if (!parent || parent.contentType !== "long_form" || parent.id === job.id) {
+            return json(res, 409, { error: "Short parent must resolve to an existing distinct long-form content job; inferred parents are forbidden" });
+          }
+        }
+        const planSha256 = productionPlanSha256(body.productionPlan);
+        job.authoring.productionPlan = {
+          plan: body.productionPlan, planSha256, scriptSha256: body.scriptSha256,
+          status: "REVIEW_REQUIRED", submittedBy: operatorId, submittedAt: new Date().toISOString(),
+          publishingEnabled: false, publishable: false
+        };
+        state.jobs[index] = job;
+        state.audit.push({ id: crypto.randomUUID(), action: "PRODUCTION_PLAN_SUBMITTED", jobId: job.id, planSha256, scriptSha256: body.scriptSha256, actor: operatorId, at: job.authoring.productionPlan.submittedAt, reason: "Validated scene manifest and on-disk asset/evidence hashes; human plan review remains required" });
+        saveState(state);
+        return json(res, 201, { job, planSha256, validationStatus: "STRUCTURE_AND_FILE_HASHES_VALIDATED", humanReviewRequired: true, publishable: false, publishingEnabled: false, note: "This does not certify rights validity, originality, factual accuracy or realism, and does not enable rendering or publishing." });
+      } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs/production-plan/review") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || !["APPROVE", "REJECT"].includes(body.decision) ||
+          typeof body.planSha256 !== "string" || !/^[a-f0-9]{64}$/.test(body.planSha256) ||
+          typeof body.reason !== "string" || body.reason.trim().length < 5 || body.reason.length > 1000 ||
+          (body.decision === "APPROVE" && (body.confirmScenePlanReviewed !== true || body.confirmRightsEvidenceReviewed !== true))) {
+        return json(res, 400, { error: "jobId, exact plan SHA-256, decision and review reason are required; approval additionally requires explicit scene-plan and rights-evidence review confirmations" });
+      }
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const job = state.jobs[index];
+        const stage = job.authoring?.productionPlan;
+        if (!stage || stage.status !== "REVIEW_REQUIRED" || stage.planSha256 !== body.planSha256 ||
+            productionPlanSha256(stage.plan) !== body.planSha256) {
+          return json(res, 409, { error: "Production plan is missing, already reviewed, stale or has changed" });
+        }
+        const script = job.authoring?.result?.script;
+        if (!script || canonicalAuthoringScriptSha256(script) !== stage.scriptSha256 ||
+            job.authoring?.scriptApproval?.decision !== "APPROVE" ||
+            job.authoring.scriptApproval.scriptSha256 !== stage.scriptSha256) {
+          return json(res, 409, { error: "Production plan is no longer bound to the current approved script revision" });
+        }
+        const errors = validateProductionPlan(stage.plan, { jobId: job.id, contentType: job.contentType, scriptSha256: stage.scriptSha256 });
+        for (const scene of stage.plan.scenes ?? []) {
+          for (const [relativePath, expectedHash, label] of [
+            [scene.assetPath, scene.assetSha256, "scene asset"],
+            [scene.provenance?.rightsEvidencePath, scene.provenance?.rightsEvidenceSha256, "rights evidence"]
+          ]) {
+            try {
+              const file = resolveRepositoryFile(relativePath);
+              const stat = fs.lstatSync(file);
+              if (stat.isSymbolicLink() || !stat.isFile() || sha256File(file) !== expectedHash) errors.push(label + " changed or is unsafe: " + relativePath);
+            } catch { errors.push(label + " is missing or unsafe: " + String(relativePath)); }
+          }
+        }
+        if (errors.length) return json(res, 409, { error: "Production plan evidence is stale or invalid", validationErrors: errors, publishingEnabled: false });
+        const reviewedAt = new Date().toISOString();
+        const approval = {
+          decision: body.decision, planSha256: body.planSha256, scriptSha256: stage.scriptSha256,
+          reviewer: operatorId, reviewedAt, reason: body.reason.trim(),
+          confirmScenePlanReviewed: body.confirmScenePlanReviewed === true,
+          confirmRightsEvidenceReviewed: body.confirmRightsEvidenceReviewed === true
+        };
+        approval.approvalSha256 = crypto.createHash("sha256").update(JSON.stringify({ jobId: job.id, ...approval })).digest("hex");
+        stage.status = body.decision === "APPROVE" ? "APPROVED_PLAN_ONLY" : "REJECTED";
+        stage.review = approval;
+        stage.reviewedAt = reviewedAt;
+        stage.reviewedBy = operatorId;
+        stage.publishable = false;
+        stage.publishingEnabled = false;
+        state.jobs[index] = job;
+        state.audit.push({ id: crypto.randomUUID(), action: body.decision === "APPROVE" ? "PRODUCTION_PLAN_APPROVED" : "PRODUCTION_PLAN_REJECTED", jobId: job.id, planSha256: body.planSha256, approvalSha256: approval.approvalSha256, actor: operatorId, at: reviewedAt, reason: body.reason.trim() });
+        saveState(state);
+        return json(res, 200, { job, planReview: approval, status: stage.status, renderingEnabled: false, publishable: false, publishingEnabled: false, nextAction: "The reviewed plan is persisted, but the per-job renderer integration and final-media review gate are not yet implemented; /api/jobs/produce remains fail-closed." });
       } finally { release(); }
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/authoring/review") {
