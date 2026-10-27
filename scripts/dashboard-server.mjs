@@ -2220,6 +2220,20 @@ const server = http.createServer(async (req, res) => {
         if (index < 0) return json(res, 404, { error: "Content job not found" });
         const job = state.jobs[index];
         if (job.state !== "QUEUED") return json(res, 409, { error: "Only a queued content job can start production" });
+        if (!job.authoring) {
+          return json(res, 409, {
+            error: "Content job is not linked to the required approved authoring pipeline; legacy fixed-manifest rendering is disabled",
+            blockers: [
+              "Research and source evidence must be attached to the job",
+              "The exact script and narration/caption stages must be reviewed and approved",
+              "Scene plan, rights/provenance, quality and compliance evidence must be current",
+              "A hash-bound production plan must authorize the exact render inputs"
+            ],
+            publishable: false,
+            publishingEnabled: false,
+            renderStarted: false
+          });
+        }
         taskId = job.contentType === "short" ? "render-short" : "render-long-form";
         if (activeTasks.has(taskId)) return json(res, 409, { error: "A renderer for this format is already running" });
 

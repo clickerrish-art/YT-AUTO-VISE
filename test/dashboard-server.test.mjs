@@ -389,9 +389,17 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const renderAttempt = await fetch(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: renderJob.id }) });
   const renderAttemptBody = await renderAttempt.json();
   assert.equal(renderAttempt.status, 409, JSON.stringify(renderAttemptBody));
-  assert.equal(renderAttemptBody.job.state, "BLOCKED");
-  assert.match(renderAttemptBody.job.renderExecution.output, /render manifest not found/i);
-  assert.equal(renderAttemptBody.job.outputArtifacts.length, 0, "a blocked renderer must not claim a generated artifact");
+  assert.match(renderAttemptBody.error, /legacy fixed-manifest rendering is disabled/i);
+  assert.equal(renderAttemptBody.renderStarted, false, "legacy draft jobs must be rejected before a renderer process is launched");
+  assert.equal(renderAttemptBody.publishable, false);
+  const legacyRenderState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  const legacyRenderJob = legacyRenderState.jobs.find(job => job.id === renderJob.id);
+  assert.equal(legacyRenderJob.state, "QUEUED", "rejecting a legacy render must not claim or mutate the job");
+  assert.equal(legacyRenderJob.workerLease, null, "rejecting a legacy render must not claim a worker lease");
+  assert.equal(legacyRenderJob.renderExecution, undefined, "rejecting a legacy render must not create render execution state");
+  assert.equal(legacyRenderJob.outputArtifacts.length, 0, "a rejected renderer must not claim a generated artifact");
+  assert.equal(legacyRenderState.audit.some(event => event.action === "CONTENT_RENDER_STARTED" && event.jobId === renderJob.id), false,
+    "a rejected legacy render must not record a render-start audit event");
 
   // A retry must not let FFmpeg's -y overwrite an output retained after an
   // interrupted attempt. The API must refuse before claiming work and preserve
