@@ -203,3 +203,43 @@ This section supersedes earlier statements above that the authoring renderer was
 ### Release decision
 
 **BLOCKED — NOT 100% ACCEPTED.** The latest tested tree has meaningful pipeline, approval-integrity and per-job artifact improvements, and the listed exact-SHA checks pass except for the explicitly pending/blocked/skipped workflows. Real-media, external-account, cadence, final human-review, upload-receipt and deployment/recovery acceptance gates remain open. Do not merge PR #1 or enable unattended/public YouTube, Facebook live publishing, or Safari campaigns.
+
+
+---
+
+# Live implementation checkpoint — 27 October 2026: native Short-parent evidence binding
+
+**Exact source/test SHA:** `3c961716d348945b266afd3e996c7952984c7260`  
+**Implementation commit:** `1c8bde08e6bf0e9574e4085365fcde2924ca2f6d`  
+**Regression-test commit / source-test HEAD:** `3c961716d348945b266afd3e996c7952984c7260`  
+**Live PR #1:** open, draft, unmerged. Documentation/PR metadata updates are not application-code test evidence.
+
+## Live Git reconciliation
+
+- Implementation branch HEAD at this checkpoint: `3c961716d348945b266afd3e996c7952984c7260`.
+- `main` HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Comparison: 1,640 commits ahead, 2 behind; 162 changed files.
+- Historical release evidence elsewhere in this file refers to older SHAs and must not be treated as evidence for this checkpoint.
+
+## Implemented
+
+- `scripts/short-parent-relationship.mjs` now requires native Related video evidence marked `VERIFIED` to identify the exact approved parent video ID, matching verified SonicVhibez channel ID, and canonical parent destination URL.
+- `test/short-parent-relationship.test.mjs` adds regression cases for wrong parent ID, wrong channel, wrong destination, and a matching evidence record.
+- The validator still treats `BLOCKED_EXTERNAL` as an explicit external blocker. These checks validate recorded evidence consistency; they do not independently query YouTube or prove that the native Related video setting is configured correctly.
+
+## Exact-SHA workflow status for `3c961716d348945b266afd3e996c7952984c7260`
+
+- Metadata validation **PASS** — [run 40528746426](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746426).
+- Content quality **PASS** — [run 40528746313](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746313).
+- Automation/security **IN PROGRESS at checkpoint** — [run 40528746351](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746351).
+- Dashboard browser E2E **IN PROGRESS at checkpoint** — [run 40528746832](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746832).
+- Isolated main/candidate baseline **PENDING at checkpoint** — [run 40528746461](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746461).
+- Production readiness **BLOCKED / fail-closed** — [run 40528746326](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746326).
+- Facebook daily draft **SKIPPED** — [run 40528746430](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40528746430); this is not evidence of a real Meta integration.
+
+## Release decision
+
+**Production release remains BLOCKED.** This checkpoint is not evidence of a genuine end-to-end production video or of originality, rights authenticity, naturalism, narration quality, final playback approval, native Related video configuration, live YouTube identity/history, an authorized private-upload receipt, Meta draft-only integration, or a feasible owner-approved cadence.
+
+Safety controls remain unchanged: public/unattended YouTube publishing OFF; Facebook live publishing OFF; Safari campaigns inactive; Nature Frontiers prohibited as a YouTube target; approved Selar destination remains `https://selar.com/0u19v8u99l`. No upload, social post, merge, `main` edit, reset, rebase, force-push or destructive history operation was performed.
