@@ -276,3 +276,35 @@ Safety controls remain unchanged: public/unattended YouTube publishing OFF; Face
 **Production release remains BLOCKED.** No real production MP4 or rights licence was independently reviewed in this run. No real YouTube native Related video association, authenticated channel/history reconciliation, authorized private-upload receipt, Meta draft-only integration, or owner-approved cadence was verified. The synthetic upload fixtures exercise recovery mechanics only; they are not production media or real licence proof.
 
 Safety remains unchanged: public/unattended YouTube publishing OFF; Facebook live publishing OFF; Safari campaigns inactive; Nature Frontiers prohibited as a YouTube target; approved Selar destination remains `https://selar.com/0u19v8u99l`. No external account mutation, upload, post, merge, `main` edit or destructive Git operation occurred.
+
+
+---
+
+## Follow-up implementation checkpoint — cadence hard invariant (27 October 2026)
+
+**Exact source/test SHA:** `47c839452fda99757a34dcb29865da9e967121af`  
+**Application-code commit:** `e9c555d1c70cc18d6fc6a919b3899ca78d67713f`  
+**Configuration commit:** `477f1ad0d86ff00aac7dcf1d89f455553a6d8a4b`  
+**Regression-test commit:** `47c839452fda99757a34dcb29865da9e967121af`
+
+### Code change
+
+- `scripts/production-readiness.mjs` no longer accepts the `WEEKLY_TARGET_WITH_SHORTER_SPACING` mode and rejects any cadence with less than 72 hours, regardless of owner-defined mode.
+- `config/weekly-content-plan.json` no longer presents a cadence option that violates the hard minimum.
+- `tests/production-readiness.test.mjs` adds regression coverage for the 72-hour invariant, 216-hour cycle, and removal of the unsafe option.
+- This does not set owner approval, change actual publication slots, or enable publishing.
+
+### Exact-SHA CI outcomes for `47c839452fda99757a34dcb29865da9e967121af`
+
+- Automation/security **PASS** — [run 40537264912](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537264912): 364 Node tests passed, 0 failed; 16 Python tests passed; npm audit reported 0 vulnerabilities.
+- Dashboard browser E2E **PASS** — [run 40537264704](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537264704): 13 Chromium tests passed against the real local dashboard/backend.
+- Content quality **PASS** — [run 40537264707](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537264707).
+- Metadata validation **PASS** — [run 40537265090](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537265090).
+- Lockfile generation/verification **PASS** — [run 40537255697](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537255697).
+- Production readiness **BLOCKED / fail-closed** — [run 40537264786](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537264786).
+- Facebook daily draft **SKIPPED** — [run 40537264915](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537264915); not a real Meta integration test.
+- Isolated main/candidate baseline **IN PROGRESS at this checkpoint** — [run 40537255841](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537255841). Do not count it as a pass until its actual conclusion is available.
+
+### Release decision remains BLOCKED
+
+No real production media, independent human full-playback approval, authenticated SonicVhibez OAuth/history reconciliation, authorized private-upload receipt, verified eligible native Related video association, real Meta draft-only run, owner-approved feasible cadence, or complete production recovery/deployment drill is established by these CI checks. Keep public/unattended YouTube publishing OFF, Facebook live publishing OFF, Safari inactive, Nature Frontiers prohibited as a YouTube target, and PR #1 open/draft/unmerged. The approved Selar URL remains `https://selar.com/0u19v8u99l`.
