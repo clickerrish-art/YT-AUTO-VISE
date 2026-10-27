@@ -2041,7 +2041,9 @@ const server = http.createServer(async (req, res) => {
               childContentId: job.id,
               childMediaSha256: artifactSha256,
               childMetadataSha256: metadataVersion,
-              channelId: uploadMetadata.channelId
+              channelId: uploadMetadata.channelId,
+              requireNativeRelatedVideoVerified: true,
+              allowPrivateParent: false
             });
             shortParentRelationshipSha256Value = shortParentRelationshipSha256(job.shortParentRelationship);
           } catch (error) {
