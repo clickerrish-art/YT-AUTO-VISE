@@ -122,7 +122,7 @@ test("dashboard restart moves interrupted Facebook submissions to reconciliation
   let ready = false;
   for (let i = 0; i < 80; i++) {
     if (child.exitCode !== null) break;
-    const started = logs.match(/"event":"dashboard_started"[^\\n]*"port":(\\d+)/);
+    const started = logs.match(/"event":"dashboard_started"[^\n]*"port":(\d+)/);
     if (started) {
       base = `http://127.0.0.1:${started[1]}`;
       try { const response = await fetch(base + "/healthz"); if (response.ok) { ready = true; break; } } catch {}
