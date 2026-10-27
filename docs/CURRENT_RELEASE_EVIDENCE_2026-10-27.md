@@ -901,3 +901,25 @@ This section supersedes earlier statements in this document that isolated baseli
 **Code CI and isolated baseline: PASS for the observed checkpoint. Implementation: PARTIAL. Production acceptance: BLOCKED.** The inventory is now refreshed to 105 controls across 15 forms and 38 literal route branches (10 GET, 28 POST). Exhaustive per-control/API acceptance remains `NOT_TESTED`; genuine media, rights, human playback approval, verified SonicVhibez account/history, private upload receipt, owner cadence approval, external Meta draft acceptance, native Related video eligibility, branch protection and operational deployment/recovery drills remain unresolved.
 
 No public/unattended YouTube publishing, live Meta publishing, campaign activation, video visibility change, PR merge, main edit or destructive Git operation was performed.
+
+
+---
+
+## Dashboard inventory tooling and route-auth acceptance — 28 October 2026
+
+**Exact source/test candidate:** `1f72c6dc5b648f0c60fdea45ae1d37e835e4505e`.
+
+Implemented `scripts/dashboard-inventory.mjs`, exposed it as `npm run inventory:dashboard`, and added `test/dashboard-inventory.test.mjs`. The static inventory contains 105 controls (21 buttons, 43 inputs, 26 selects, 15 textareas), 15 forms and 38 literal route branches (10 GET, 28 POST). Inventory output includes source line numbers and route/control metadata; it explicitly does not represent acceptance by itself.
+
+Extended `test/dashboard-server.test.mjs` to enumerate the literal `/api/*` method/path routes from the inventory and verify that every distinct route rejects a request without the operator token with HTTP 401. This improves coverage of the authentication boundary, not the complete behavior of each route.
+
+Exact-candidate workflow results:
+- Automation/security [40598195046](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195046): PASS; 384 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities.
+- Content quality [40598195232](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195232): PASS.
+- Metadata [40598195101](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195101): PASS.
+- Browser E2E [40598195206](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195206): PASS, 13 Chromium journeys.
+- Isolated main/candidate baseline [40598195202](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195202): PASS. Both isolated Node/Python test commands exited 0. Retained artifact [baseline-comparison.zip](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195202/artifacts/12776283618), artifact ID `12776283618`, ZIP SHA-256 `989203aab1898f8d740d4f56294e03eec8d023cb6086ce4c171ee2aff156ad2b`.
+- Production readiness [40598195430](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195430): BLOCKED; the expected fail-closed readiness gate still reports unresolved production prerequisites.
+- Facebook draft workflow [40598195092](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195092): local validation succeeded; external draft creation was skipped.
+
+**Verdict:** this candidate passes the listed automated code checks and isolated baseline. Implementation remains partial; exhaustive dashboard/API acceptance, real external integrations, media/rights/human approval, cadence approval, native Short-parent association, operational deployment/recovery and branch protection remain unresolved. No external publishing or merge occurred.
