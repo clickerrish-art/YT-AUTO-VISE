@@ -1,3 +1,9 @@
+## Latest exact-candidate coverage note — `b2686b888dabf6099d25aff59d288a514b3caffe`
+
+The current static inventory remains 105 HTML button/input/select/textarea elements across 15 forms and 37 literal route handlers (9 GET, 28 POST). Browser E2E [40593628079](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628079) passed 13 Chromium journeys, including the existing restore-journal and Short-parent blocker journeys. Automation/security [40593628190](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628190) passed 379 Node tests with zero skips; content quality [40593628137](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628137) and metadata [40593628366](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628366) each passed 379 tests with zero skips.
+
+This does **not** close DASH-001: per-control and per-route authorized, unauthorized, malformed, duplicate/concurrent, dependency/persistence failure, restart and audit acceptance remains incomplete. Keep the requirement NOT_TESTED until its full matrix has evidence.
+
 ## Static dashboard/API inventory at tested candidate `b1989a764e54400cddb55158b998c5a375972321`
 
 The current dashboard source contains **105 HTML button/input/select/textarea elements** (21 buttons, 43 inputs, 26 selects, 15 textareas) across 15 forms. A literal route scan of `scripts/dashboard-server.mjs` identifies **37 route handlers: 9 GET and 28 POST**, including health/readiness, state, campaign, Facebook, content jobs, review, rights, narration, leases, uploads and Short-parent workflow.
