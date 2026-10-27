@@ -204,6 +204,21 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(duplicate.status, 409);
   const conflictingSlot = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-other", title: "Conflicting Tuesday reservation" }) });
   assert.equal(conflictingSlot.status, 409, "different drafts must not reserve the same calendar slot");
+  const concurrentDrafts = [
+    { ...draft, id: "dashboard-concurrent-a", title: "Concurrent Tuesday reservation A", scheduledDate: "2026-11-03" },
+    { ...draft, id: "dashboard-concurrent-b", title: "Concurrent Tuesday reservation B", scheduledDate: "2026-11-03" }
+  ];
+  const concurrentResponses = await Promise.all(concurrentDrafts.map(item =>
+    fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(item) })
+  ));
+  assert.deepEqual(
+    concurrentResponses.map(response => response.status).sort((a, b) => a - b),
+    [201, 409],
+    "concurrent requests for the same publication slot must persist exactly one reservation and reject the other"
+  );
+  const concurrentState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  assert.equal(concurrentState.queueItems.filter(item => item.scheduledDate === "2026-11-03" && item.reservationType === "SCHEDULED_SLOT").length, 1);
+  assert.equal(concurrentState.audit.filter(event => event.action === "DRAFT_CREATED" && concurrentDrafts.some(item => item.id === event.itemId)).length, 1);
   const unsupportedDirectJob = await fetch(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify({
     idempotencyKey: "draft:thursday-job", title: "Unsupported Thursday job", topic: "schedule boundary test",
     contentType: "long_form", scheduledDay: "Thursday", scheduledDate: "2026-10-29", inputReferences: []
