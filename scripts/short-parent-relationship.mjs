@@ -49,7 +49,7 @@ export function validateShortParentRelationship(relationship, {
   childMediaSha256,
   childMetadataSha256,
   channelId,
-  allowPrivateParent = true,
+  allowPrivateParent = false,
   requireNativeRelatedVideoVerified = false
 } = {}) {
   const errors = [];
