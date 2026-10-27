@@ -121,10 +121,15 @@ export function buildApprovedJobRenderManifest({ job, root }) {
       !Array.isArray(qualityEvidence.assetProvenance)) {
     throw new Error("Quality evidence must map every approved production-plan scene to provenance");
   }
-  for (const scene of plan.scenes) {
+  for (const [index, scene] of plan.scenes.entries()) {
     const source = resolveHashedFile(root, scene.assetPath, scene.assetSha256, "Scene asset " + scene.sceneId);
+    const qualityScene = qualityEvidence.scenes[index];
+    if (qualityScene?.sourceSha256 !== scene.assetSha256) {
+      throw new Error("Quality evidence scene order/hash differs from approved production plan at " + scene.sceneId);
+    }
     const provenance = qualityEvidence.assetProvenance.find(asset => {
-      if (asset?.originalSha256 !== scene.assetSha256 || typeof asset.path !== "string") return false;
+      if (asset?.assetId !== qualityScene.assetId || asset?.originalSha256 !== scene.assetSha256 ||
+          typeof asset.path !== "string") return false;
       try {
         const evidenceAsset = resolveRegularFileNoSymlinks(asset.path, path.dirname(qualityEvidencePath), "Quality-evidence source asset");
         return evidenceAsset === source && sha256File(evidenceAsset) === asset.originalSha256;
