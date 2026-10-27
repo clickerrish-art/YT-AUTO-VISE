@@ -1,3 +1,42 @@
+## Latest exact-SHA interrupted-restore hardening checkpoint — 27 October 2026, 22:02 UTC
+
+**Exact tested source/test candidate:** `b1989a764e54400cddb55158b998c5a375972321`. The latest source/test changes put the restore journal inside the configured application state directory and make the dashboard refuse startup while an interrupted restore journal exists. The recovery path now stages and flushes all replacements, records a durable transaction journal, rolls back committed files after a later commit failure, restores the original dashboard-state bytes on rollback, and requires an explicit second invocation after restart recovery.
+
+### Exact-candidate CI results
+
+- **Automation/security PASS:** [run 40591305237](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237): **378 Node tests passed, 0 failed, 0 skipped**; 16 Python tests passed; normal lifecycle-script install passed; `npm audit` reported 0 vulnerabilities; syntax, Python compilation and FFmpeg renderer integration passed.
+- **Content quality PASS:** [run 40591305355](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305355): 378 Node tests, 0 failures, 0 skips; FFmpeg/ffprobe installed.
+- **Metadata validation PASS:** [run 40591305087](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305087): 378 Node tests, 0 failures, 0 skips.
+- **Dashboard browser E2E PASS:** [run 40591305138](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305138): 13 Chromium tests passed. These include server-restart persistence and Short-parent blocker reporting, not exhaustive dashboard/API control acceptance.
+- **Isolated main/candidate baseline PASS:** [run 40591305219](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305219); [retained artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305219/artifacts/12773494010). Both main and candidate install, Node and Python baseline commands exited 0.
+- **Facebook draft workflow:** [run 40591305428](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305428) passed 15 local deterministic validation tests, 0 failures, 0 skips. The external `create-draft-package` job was skipped; no real Meta draft creation is proven.
+- **Production readiness remains BLOCKED:** [run 40591305218](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305218) correctly reports HOLD with 13 prerequisites. This expected fail-closed result is not production acceptance.
+
+### Restore recovery acceptance
+
+Three deterministic tests now cover:
+1. rollback of a previously committed new file when the next destination rename fails;
+2. byte-for-byte restoration of an existing dashboard-state file after a later commit fails;
+3. restart recovery from a durable journal, removing a partial commit and requiring explicit operator retry.
+
+A dashboard startup regression test confirms the server exits before initializing state when the restore journal remains. All four new recovery/startup tests passed within the 378-test Node suite.
+
+**Limit:** this is deterministic filesystem failure injection and journal-recovery evidence, not a full production power-loss/filesystem crash drill. Cross-process remote-side-effect recovery and full isolated deployment/rollback remain `NOT_TESTED`.
+
+### Live Git state at the tested candidate
+
+- `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
+- Candidate/branch HEAD at test: `b1989a764e54400cddb55158b998c5a375972321`
+- Divergence at test: 1,803 ahead / 2 behind / 164 changed files.
+- PR #1 remains open, draft and unmerged. `main` was not modified.
+
+Both `test/restore-facebook-draft-history.test.mjs` and the separate `tests/restore-state.test.mjs` remain present. No restore-history test was deleted or recreated blindly.
+
+**Verdict: IMPLEMENTATION PARTIAL / NOT PRODUCTION READY.** No live upload, post, campaign activation, visibility change or merge occurred. Nature Frontiers remains prohibited as a YouTube target; public/unattended YouTube publishing and live Meta publishing remain disabled; Safari remains inactive; the approved Selar URL remains `https://selar.com/0u19v8u99l`.
+
+---
+
 ## Latest exact-SHA restore-recovery implementation checkpoint — 27 October 2026, 21:55 UTC
 
 **Exact tested source/test candidate:** `31b5f56415b51280baa11418c56ef3c2b1280006`. **Current PR head at the time of test:** `31b5f56415b51280baa11418c56ef3c2b1280006`. The source/test changes add transaction staging and durable journaling to `scripts/restore-state.mjs`, plus failure-injection and interrupted-transaction recovery tests in `test/backup-restore.test.mjs`.
