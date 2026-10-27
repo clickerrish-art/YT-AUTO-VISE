@@ -40,14 +40,34 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and actionab
     assert.match(blocker.id, /^RDY-[A-F0-9]{12}$/);
     assert.ok(["critical", "high"].includes(blocker.severity));
     assert.equal(typeof blocker.message, "string");
-    assert.equal(blocker.evidence.kind, "readiness-check-finding");
+    assert.ok(["readiness-check-finding", "repository-path-check", "environment-presence-check", "external-reconciliation-required"].includes(blocker.evidence.kind));
     assert.equal(typeof blocker.evidence.observed, "string");
+    assert.ok(["external_owner_or_human_reviewer", "shared_code_and_owner", "maintainer_code_or_configuration"].includes(blocker.controlOwner));
     assert.ok(blocker.resolution.length > 20);
   }
   assert.ok(report.blockers.some(blocker => /SonicVhibez public, private and unlisted history/.test(blocker.message)));
   assert.ok(report.limitations.some(item => /never uploads/.test(item)));
 });
 
+
+
+test("readiness JSON distinguishes external reconciliation from code-controlled findings", () => {
+  const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
+    cwd: process.cwd(), encoding: "utf8",
+    env: { ...process.env, YOUTUBE_CLIENT_ID: "", YOUTUBE_CLIENT_SECRET: "", YOUTUBE_REFRESH_TOKEN: "", SONICVHIBEZ_CHANNEL_ID: "" }
+  });
+  assert.equal(result.status, 2);
+  const report = JSON.parse(result.stdout);
+  assert.ok(report.blockers.some(blocker =>
+    blocker.evidence.kind === "external-reconciliation-required" &&
+    blocker.controlOwner === "external_owner_or_human_reviewer" &&
+    /does not independently fetch remote YouTube history/.test(blocker.evidence.observed)
+  ));
+  assert.ok(report.blockers.some(blocker =>
+    blocker.evidence.kind === "environment-presence-check" &&
+    /secret values are never included/.test(blocker.evidence.observed)
+  ));
+});
 
 test("readiness workflow compares retained exit-code evidence and avoids false mismatches from missing step outputs", () => {
   const workflowPath = fileURLToPath(new URL("../.github/workflows/production-readiness.yml", import.meta.url));
