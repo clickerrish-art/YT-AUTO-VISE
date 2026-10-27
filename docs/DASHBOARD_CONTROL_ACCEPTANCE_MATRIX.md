@@ -249,3 +249,24 @@ Current Git snapshot before these documentation updates: PR HEAD `a912d3c724195f
 ## Checkpoint supplement — 27 October 2026
 
 Source/test SHA: `28d326c474d2c4871f6e9f2f55f050dac9fe14bd`. Added a five-case provenance-lineage unit suite and an integrated quality-gate regression for duplicate asset IDs. Exact-SHA dashboard browser E2E passed in [run 40444442543](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40444442543). This is not proof that every visible control or the entire production journey is accepted. The `POST /api/jobs/produce` path remains blocked for authored jobs until narration, captions, scene rendering and validation are genuinely connected. Stale approval, full success review-to-approval journey, cross-process/failure-injection, restart, backup/restore, and deployment/recovery controls remain incomplete or externally blocked.
+
+---
+
+## Current authoring/narration controls — 27 October 2026
+
+Exact tested source/test SHA: `c5bfbbc7861616494c6b589604fa3797e673681a`.
+
+| Control / API | Current behavior | Acceptance status | Limitation |
+|---|---|---|---|
+| Script authoring | Persists a structured generated script and supplied research brief | PASS for existing API tests | Does not prove factual correctness without editorial review |
+| Hash-bound script review | `POST /api/jobs/authoring/review` approves/rejects only the exact current script SHA-256 | PASS — stale hash, approval and rejection/reauthoring paths covered by Node tests | Human factual/source review remains operator responsibility |
+| Narration generation | `POST /api/jobs/narration` requires current script approval, writes job-specific output, verifies transcript text/word count, artifact hashes, ffprobe duration and existing caption validators | PASS for orchestration tests with injected subprocess fixtures | No live Edge TTS generation or genuine audio has been accepted in CI |
+| Narration review bundle | `GET /api/jobs/narration/review` verifies script and artifact hashes and returns transcript/captions; `GET /api/jobs/narration/audio` serves the hash-checked audio to an authenticated operator | PASS for API integrity/stream fixture tests | Synthetic fixture bytes are not real or playable production audio |
+| Narration human review | `POST /api/jobs/narration/review` binds decision to script, audio, transcript, captions and report hashes; approval requires explicit playback/transcript/caption attestations | PASS for API validation tests | Human attestation in a test is not actual listening evidence |
+| Narration recovery | `POST /api/jobs/narration/reconcile` verifies complete retained artifacts without invoking TTS again | PASS for helper recovery/idempotency tests | No injected process-crash production run has been demonstrated |
+| Reconcile UI | Dashboard control invokes recovery-only endpoint and reports blockers | Browser suite PASS | UI control coverage is not full operational recovery acceptance |
+| Production job | `POST /api/jobs/produce` still blocks jobs with authoring records | **BLOCKED by design** | Approved narration, approved visual source plan, rights evidence, per-job render, final validation and final-video review are not yet integrated |
+
+Exact-SHA results: automation/security PASS (336 Node tests, 16 Python tests, npm audit zero vulnerabilities) [run 40453030534](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030534); browser E2E PASS (12 Chromium tests) [run 40453030615](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030615); content quality PASS [run 40453030586](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030586); metadata PASS [run 40453030574](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030574); isolated baseline PASS [run 40453030640](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030640); readiness BLOCKED [run 40453031961](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453031961); Facebook daily draft SKIPPED [run 40453030497](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030497).
+
+The above controls are real, but they do not complete the production journey. Keep the production refusal and publication safety controls in place until the full authoring-to-render-to-final-review workflow is connected and tested.
