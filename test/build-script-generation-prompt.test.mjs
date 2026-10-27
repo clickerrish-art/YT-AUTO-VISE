@@ -12,6 +12,7 @@ const brief = {
 test("long-form prompt specifies measured depth, source mapping, originality and realistic scene direction", () => {
   const prompt = buildScriptGenerationPrompt("long_form", brief);
   assert.match(prompt, /6–10 minutes/);
+  assert.match(prompt, /900–1500 words/);
   assert.match(prompt, /at least five clearly differentiated sections/);
   assert.match(prompt, /Every material factual claim must reference/);
   assert.match(prompt, /physically plausible, anatomically realistic/);
@@ -24,6 +25,7 @@ test("Short prompt requires an explicit same-cycle SonicVhibez parent and forbid
     parentRecord: { contentId: "long-1", weeklyContentCycleId: "cycle-1", format: "long_form", channel: "SonicVhibez" }
   });
   assert.match(prompt, /50–60 seconds/);
+  assert.match(prompt, /125–150 words/);
   assert.match(prompt, /never truncate a long-form script arbitrarily/);
   assert.match(prompt, /contentId=long-1/);
   assert.match(prompt, /actual YouTube Studio Related video setting is a separate/);
