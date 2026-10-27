@@ -1,3 +1,16 @@
+## Latest verified checkpoint — 28 October 2026, 00:20 SAST
+
+Exact tested source/test SHA: `b2686b888dabf6099d25aff59d288a514b3caffe`. Restore operations now use an exclusive cross-process lock in the configured state directory. Competing restores fail closed; a lock is only removed by the operation that created it. Stale locks require operator verification before manual removal.
+
+Exact-candidate evidence:
+- Automation/security: [40593628190](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628190) — 379 Node tests, 0 failures, 0 skips; 16 Python tests; normal lifecycle install; npm audit 0 vulnerabilities; FFmpeg renderer integration, JS syntax and Python compilation passed.
+- Content quality: [40593628137](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628137) — 379 tests, 0 failures, 0 skips.
+- Metadata/schedule: [40593628366](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628366) — 379 tests, 0 failures, 0 skips.
+- Dashboard E2E: [40593628079](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628079) — 13 Chromium journeys.
+- Isolated main/candidate baseline: [40593628185](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628185) — PASS.
+- Readiness: [40593628122](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628122) — BLOCKED by 13 production prerequisites.
+- Meta draft workflow: [40593628361](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628361) — external draft creation skipped.
+
 ## Latest verified checkpoint — 27 October 2026, 21:29 UTC
 
 Exact tested candidate SHA: `466605be027f531d1c6143a6d1f42e1bf4c2ffcc`. Automation/security PASS: 373 Node tests, 0 failures, 0 skips; 16 Python tests; normal lifecycle-script install; npm audit 0 vulnerabilities; FFmpeg renderer integration, JS syntax and Python compilation passed. Content-quality and metadata workflows install FFmpeg/ffprobe and explicitly fail if any Node test is skipped; each passed 373 tests with zero skips. Dashboard E2E passed 13 Chromium journeys. Isolated main/candidate baseline passed on the exact candidate SHA. Facebook workflow passed local draft validation only; its remote draft-creation job was skipped. Production readiness remains correctly blocked by 13 genuine production prerequisites.
