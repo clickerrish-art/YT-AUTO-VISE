@@ -73,8 +73,15 @@ jobs:
           sudo apt-get install -y ffmpeg
           ffmpeg -version
           ffprobe -version
-      - name: Run unit tests
-        run: npm test
+      - name: Run unit tests and require zero skips
+        shell: bash
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee "$RUNNER_TEMP/node-test.log"
+          if ! grep -Fq 'ℹ skipped 0' "$RUNNER_TEMP/node-test.log"; then
+            echo "FAIL: Node test summary did not explicitly report zero skips."
+            exit 1
+          fi
       - name: Validate isolated campaign destinations and disclosures
         run: npm run validate:campaigns
       - name: Test review metadata safety gates
