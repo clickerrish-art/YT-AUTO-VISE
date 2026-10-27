@@ -47,6 +47,17 @@ test("rejects missing parent, guessed/noncanonical URL, channel mismatch and unv
   ]) assert.ok(validateShortParentRelationship({ ...base, ...patch }, { channelId: base.parentChannelId }).length, JSON.stringify(patch));
 });
 
+test("requires child media and metadata identities to be actual SHA-256 digests even without caller-supplied expected hashes", () => {
+  for (const patch of [
+    { childMediaSha256: "not-a-digest" },
+    { childMetadataSha256: "f".repeat(63) }
+  ]) {
+    const invalid = { ...base, ...patch };
+    invalid.relationshipEvidenceSha256 = shortParentEvidenceSha256(invalid);
+    assert.match(validateShortParentRelationship(invalid).join(" "), /child(Media|Metadata)Sha256 must be a SHA-256 digest/);
+  }
+});
+
 test("rejects stale child hashes, cross-cycle parent, absent source segment and missing review evidence", () => {
   assert.match(validateShortParentRelationship(base, { childMediaSha256: sha("9") }).join(" "), /childMediaSha256/);
   for (const patch of [
