@@ -1205,6 +1205,32 @@ const server = http.createServer(async (req, res) => {
             job.authoring.scriptApproval.scriptSha256 !== stage.scriptSha256) {
           return json(res, 409, { error: "Production plan is no longer bound to the current approved script revision" });
         }
+        const narration = job.authoring?.narrationStage;
+        const narrationApproval = job.authoring?.narrationApproval;
+        if (!narration || narration.status !== "APPROVED_FOR_RENDER" || narration.scriptSha256 !== stage.scriptSha256 ||
+            !narrationApproval || narrationApproval.decision !== "APPROVE" || narrationApproval.scriptSha256 !== stage.scriptSha256) {
+          return json(res, 409, { error: "Production plan review requires the current narration approval for the exact approved script" });
+        }
+        for (const [name, approvedHash] of [
+          ["narration.mp3", narrationApproval.audioSha256],
+          ["narration.txt", narrationApproval.transcriptSha256],
+          ["captions.srt", narrationApproval.captionsSha256],
+          ["narration-report.json", narrationApproval.reportSha256]
+        ]) {
+          const artifact = narration.artifacts?.[name];
+          if (!artifact || artifact.sha256 !== approvedHash || !/^[a-f0-9]{64}$/.test(approvedHash ?? "")) {
+            return json(res, 409, { error: "Approved narration is missing a hash-bound artifact: " + name });
+          }
+          try {
+            const artifactPath = resolveRepositoryFile(artifact.path);
+            const artifactStat = fs.lstatSync(artifactPath);
+            if (artifactStat.isSymbolicLink() || !artifactStat.isFile() || sha256File(artifactPath) !== approvedHash) {
+              return json(res, 409, { error: "Approved narration artifact changed or is unsafe: " + name });
+            }
+          } catch {
+            return json(res, 409, { error: "Approved narration artifact is missing or unsafe: " + name });
+          }
+        }
         const errors = validateProductionPlan(stage.plan, { jobId: job.id, contentType: job.contentType, scriptSha256: stage.scriptSha256 });
         for (const scene of stage.plan.scenes ?? []) {
           for (const [relativePath, expectedHash, label] of [
