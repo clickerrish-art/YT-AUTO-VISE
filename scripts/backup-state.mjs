@@ -9,14 +9,42 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sha256 = value => crypto.createHash("sha256").update(value).digest("hex");
 const isInvoked = process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href;
 
+/**
+ * Reject symlinks in every visible path component before reading backup inputs.
+ * This is a path-based guard, not a complete defence against concurrent ancestor
+ * replacement; run backups in an isolated, owner-controlled filesystem.
+ */
+function assertNoSymlinkComponents(filePath, label = "backup input") {
+  const absolute = path.resolve(filePath);
+  const parsed = path.parse(absolute);
+  let current = parsed.root;
+  const parts = path.relative(parsed.root, absolute).split(path.sep).filter(Boolean);
+  for (let index = 0; index < parts.length; index++) {
+    current = path.join(current, parts[index]);
+    let stat;
+    try {
+      stat = fs.lstatSync(current);
+    } catch (error) {
+      if (error?.code === "ENOENT") throw new Error("Backup " + label + " path is missing");
+      throw error;
+    }
+    if (stat.isSymbolicLink()) throw new Error("Backup refuses symbolic links in " + label + " path");
+    if (index < parts.length - 1 && !stat.isDirectory()) {
+      throw new Error("Backup " + label + " path contains a non-directory component");
+    }
+  }
+}
+
 function collectFiles(dir, relativePrefix, output, { maxBytes = 10 * 1024 * 1024 } = {}) {
   if (!fs.existsSync(dir)) return;
+  assertNoSymlinkComponents(dir, "rights-evidence input");
   const stat = fs.lstatSync(dir);
   if (stat.isSymbolicLink()) throw new Error("Backup refuses symbolic-link directories: " + relativePrefix);
   if (!stat.isDirectory()) throw new Error("Backup path must be a directory: " + relativePrefix);
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const absolute = path.join(dir, entry.name);
     const relative = path.posix.join(relativePrefix, entry.name);
+    assertNoSymlinkComponents(absolute, "rights-evidence file");
     const itemStat = fs.lstatSync(absolute);
     if (itemStat.isSymbolicLink()) throw new Error("Backup refuses symbolic links: " + relative);
     if (itemStat.isDirectory()) {
@@ -37,6 +65,7 @@ export async function backupState({ rootDir = root, stateDir = process.env.DASHB
   const entries = [];
   const add = (absolute, target, maxBytes = 10 * 1024 * 1024) => {
     if (!fs.existsSync(absolute)) return;
+    assertNoSymlinkComponents(absolute, "state/evidence input");
     const stat = fs.lstatSync(absolute);
     if (stat.isSymbolicLink() || !stat.isFile()) throw new Error("Backup accepts only regular files: " + absolute);
     if (stat.size > maxBytes) throw new Error("Backup file exceeds 10 MiB limit: " + path.basename(absolute));
@@ -73,6 +102,7 @@ export async function backupState({ rootDir = root, stateDir = process.env.DASHB
   const encoded = JSON.stringify(payload, null, 2) + "\n";
   const destination = path.resolve(outputPath ?? path.join(base, "backups", "sonicvhibez-state-backup-" + payload.createdAt.replace(/[:.]/g, "-") + ".json"));
   fs.mkdirSync(path.dirname(destination), { recursive: true, mode: 0o700 });
+  assertNoSymlinkComponents(path.dirname(destination), "backup output directory");
   const temp = destination + "." + crypto.randomUUID() + ".tmp";
   fs.writeFileSync(temp, encoded, { mode: 0o600, flag: "wx" });
   fs.renameSync(temp, destination);
