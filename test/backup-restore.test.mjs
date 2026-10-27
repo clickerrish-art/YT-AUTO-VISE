@@ -86,16 +86,16 @@ test("restore rolls back earlier file commits when a later destination rename fa
       restoreState({ backupPath, rootDir: destination.root, stateDir: destination.stateDir, uploadLogDir: destination.logDir, rightsDir: destination.rightsDir, confirm: "YES" }),
       /all committed destination changes were rolled back/
     );
+    assert.equal(renameCalls, 2, "the injected failure must occur after one destination has committed");
+    assert.equal(fs.existsSync(path.join(destination.stateDir, "dashboard-state.json")), false,
+      "a prior committed destination must be removed when the transaction aborts");
+    assert.equal(fs.existsSync(path.join(destination.stateDir, "facebook-recovery-ledger.jsonl")), false);
+    assert.equal(fs.existsSync(path.join(destination.logDir, "upload-attempts.json")), false);
   } finally {
     fs.renameSync = originalRename;
     fs.rmSync(source.root, { recursive: true, force: true });
     fs.rmSync(destination.root, { recursive: true, force: true });
   }
-  assert.equal(renameCalls, 2, "the injected failure must occur after one destination has committed");
-  assert.equal(fs.existsSync(path.join(destination.stateDir, "dashboard-state.json")), false,
-    "a prior committed destination must be removed when the transaction aborts");
-  assert.equal(fs.existsSync(path.join(destination.stateDir, "facebook-recovery-ledger.jsonl")), false);
-  assert.equal(fs.existsSync(path.join(destination.logDir, "upload-attempts.json")), false);
 });
 
 test("restore refuses to overwrite a different existing upload ledger and performs no partial restore", async () => {
