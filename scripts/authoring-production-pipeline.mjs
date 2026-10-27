@@ -138,7 +138,7 @@ export function runAuthoringNarrationStage({
   assertRegularFile(reportPath, "narration report");
   let report;
   try { report = JSON.parse(fs.readFileSync(reportPath, "utf8")); } catch { throw new Error("Narration generator produced an invalid report"); }
-  const errors = validateNarrationStageArtifacts({ report, scriptSha256, format: job.contentType, outputDir });
+  const errors = validateNarrationStageArtifacts({ report, scriptSha256, format: job.contentType, outputDir, expectedNarration: script.narration });
   if (errors.length) throw new Error("Narration stage validation failed: " + errors.join("; "));
   verifyCaptionValidators({ captionsPath: path.join(outputDir, "captions.srt"), report, projectRoot, spawnSyncImpl });
   return narrationStageResult(job, outputDir, report, scriptSha256, false, projectRoot);
