@@ -90,6 +90,9 @@ export function validateShortParentRelationship(relationship, {
   if (!native || !["VERIFIED", "BLOCKED_EXTERNAL"].includes(native.status)) errors.push("native YouTube Related video status must be explicitly VERIFIED or BLOCKED_EXTERNAL");
   else if (relationship.parentPrivacyStatus === "private" && native.status !== "BLOCKED_EXTERNAL") errors.push("a private parent cannot be reported as natively Related-video eligible");
   else if (native.status === "VERIFIED" && (!native.verifiedBy || !Number.isFinite(Date.parse(native.verifiedAt ?? "")) || !SHA256.test(native.evidenceSha256 ?? ""))) errors.push("native Related video verification requires reviewer, timestamp and evidence hash");
+  else if (native.status === "VERIFIED" && native.parentVideoId !== relationship.parentRemoteVideoId) errors.push("native Related video evidence must identify the exact approved parent video ID");
+  else if (native.status === "VERIFIED" && native.channelId !== relationship.parentChannelId) errors.push("native Related video evidence channel must match the verified SonicVhibez parent channel");
+  else if (native.status === "VERIFIED" && native.destinationUrl !== canonical) errors.push("native Related video evidence must identify the exact canonical parent destination URL");
   else if (native.status === "BLOCKED_EXTERNAL" && typeof native.blocker !== "string") errors.push("native Related video external blocker must be explained");
   return errors;
 }
