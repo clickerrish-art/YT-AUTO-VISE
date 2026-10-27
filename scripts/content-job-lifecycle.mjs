@@ -118,7 +118,7 @@ export function approveContentJobForPrivateUpload(job, review, now = new Date().
   }
   if (job.metadataVersion !== review.metadataVersion) throw new Error("Approval metadata version does not match the job's validated metadata");
   if (job.contentType === "short") {
-    assertShortParentRelationship(job.shortParentRelationship, { childContentId: job.id, childMediaSha256: review.artifactSha256, childMetadataSha256: review.metadataVersion, channelId: job.verifiedChannelId });
+    assertShortParentRelationship(job.shortParentRelationship, { childContentId: job.id, childMediaSha256: review.artifactSha256, childMetadataSha256: review.metadataVersion, channelId: job.verifiedChannelId, allowPrivateParent: true });
     const relationshipDigest = shortParentRelationshipSha256(job.shortParentRelationship);
     if (review.shortParentRelationshipSha256 !== relationshipDigest) throw new Error("Approval does not bind the current Short-to-parent relationship");
   }
