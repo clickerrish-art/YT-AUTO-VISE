@@ -29,6 +29,12 @@ jobs:
         with:
           node-version: '24'
           package-manager-cache: false
+      - name: Install FFmpeg and ffprobe for media integration tests
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends ffmpeg
+          ffmpeg -version
+          ffprobe -version
       - name: Decide whether the lockfile must be generated or refreshed
         id: lockfile-status
         env:
