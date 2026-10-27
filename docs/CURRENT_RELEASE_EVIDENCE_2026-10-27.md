@@ -2,7 +2,7 @@
 
 ## Latest exact-SHA implementation and acceptance checkpoint — 27 October 2026, 21:08 UTC
 
-**Exact source/test SHA:** `4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd`. **Latest application-code SHA:** `4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd`. At this source/test checkpoint, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, divergence 1,733 ahead / 2 behind / 163 changed files. Documentation-only descendants update this evidence. PR #1 remains open, draft and unmerged.
+**Exact source/test SHA:** `4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd`. **Latest application-code SHA:** `4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd`. At this source/test checkpoint, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, divergence 1,734 ahead / 2 behind / 163 changed files. Documentation-only descendants update this evidence. PR #1 remains open, draft and unmerged.
 
 ### Implementation changes
 
