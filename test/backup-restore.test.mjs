@@ -61,6 +61,43 @@ test("backup and restore preserve dashboard state, audit, review, upload ledger,
   }
 });
 
+test("restore rolls back earlier file commits when a later destination rename fails", async () => {
+  const source = fixture();
+  const destination = fixture();
+  const originalRename = fs.renameSync;
+  let renameCalls = 0;
+  try {
+    fs.rmSync(destination.stateDir, { recursive: true, force: true });
+    fs.rmSync(destination.logDir, { recursive: true, force: true });
+    fs.rmSync(destination.rightsDir, { recursive: true, force: true });
+    const backupPath = path.join(source.root, "backup.json");
+    await backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir, rightsDir: source.rightsDir, outputPath: backupPath });
+
+    fs.renameSync = function (...args) {
+      renameCalls += 1;
+      if (renameCalls === 2) {
+        const error = new Error("injected destination rename failure");
+        error.code = "EIO";
+        throw error;
+      }
+      return originalRename.apply(this, args);
+    };
+    await assert.rejects(
+      restoreState({ backupPath, rootDir: destination.root, stateDir: destination.stateDir, uploadLogDir: destination.logDir, rightsDir: destination.rightsDir, confirm: "YES" }),
+      /all committed destination changes were rolled back/
+    );
+  } finally {
+    fs.renameSync = originalRename;
+    fs.rmSync(source.root, { recursive: true, force: true });
+    fs.rmSync(destination.root, { recursive: true, force: true });
+  }
+  assert.equal(renameCalls, 2, "the injected failure must occur after one destination has committed");
+  assert.equal(fs.existsSync(path.join(destination.stateDir, "dashboard-state.json")), false,
+    "a prior committed destination must be removed when the transaction aborts");
+  assert.equal(fs.existsSync(path.join(destination.stateDir, "facebook-recovery-ledger.jsonl")), false);
+  assert.equal(fs.existsSync(path.join(destination.logDir, "upload-attempts.json")), false);
+});
+
 test("restore refuses to overwrite a different existing upload ledger and performs no partial restore", async () => {
   const source = fixture();
   const destination = fixture();
