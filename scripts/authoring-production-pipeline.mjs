@@ -153,7 +153,7 @@ function verifyCaptionValidators({ captionsPath, audioPath, report, projectRoot,
   const high = format === "short" ? 60 : 600;
   if (probe?.error || probe?.status !== 0 || !Number.isFinite(measuredDuration) ||
       measuredDuration < low || measuredDuration > high || Math.abs(measuredDuration - report.durationSeconds) > 0.25) {
-    throw new Error("ffprobe measurement of actual narration audio is missing, outside the format duration, or differs from the narration report");
+    throw new Error("ffprobe measurement invalid: status=" + String(probe?.status) + ", stdout=" + JSON.stringify(probe?.stdout) + ", measured=" + String(measuredDuration) + ", format=" + String(format) + ", reportDuration=" + String(report.durationSeconds));
   }
   for (const [validator, args] of [
     ["scripts/check-captions.mjs", [captionsPath]],
