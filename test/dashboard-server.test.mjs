@@ -7,6 +7,7 @@ import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
 import { canonicalAuthoringScriptSha256 } from "../scripts/authoring-production-pipeline.mjs";
+import { inventoryDashboardSources } from "../scripts/dashboard-inventory.mjs";
 
 test("dashboard API authenticates operators, persists real drafts, and cannot grant approval", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-"));
@@ -82,6 +83,22 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(ready, true, "server did not start: " + logs);
   const unauthorized = await fetch(base + "/api/state");
   assert.equal(unauthorized.status, 401);
+  const sourceInventory = inventoryDashboardSources(
+    fs.readFileSync(path.join(process.cwd(), "public", "dashboard.html"), "utf8"),
+    fs.readFileSync(path.join(process.cwd(), "scripts", "dashboard-server.mjs"), "utf8"),
+  );
+  const apiRoutes = [...new Map(sourceInventory.routes
+    .filter(route => route.path.startsWith("/api/"))
+    .map(route => [route.method + " " + route.path, route])).values()];
+  assert.ok(apiRoutes.length > 0, "the route inventory must discover API routes");
+  for (const route of apiRoutes) {
+    const response = await fetch(base + route.path, { method: route.method });
+    assert.equal(
+      response.status,
+      401,
+      `unauthenticated request must be rejected for ${route.method} ${route.path}`,
+    );
+  }
   const malformedUnicodeToken = "é" + "x".repeat(token.length - 1);
   assert.equal(malformedUnicodeToken.length, token.length);
   const malformedTokenResponse = await fetch(base + "/api/state", { headers: { "x-operator-token": malformedUnicodeToken } });
