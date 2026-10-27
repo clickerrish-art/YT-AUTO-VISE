@@ -53,8 +53,8 @@ export function validateNarrationStageArtifacts({ report, scriptSha256, format, 
   if (report.publishingEnabled !== false) errors.push("narration stage must not enable publishing");
   if (report.rightsStatus !== "NOT_VERIFIED") errors.push("narration rights must remain unverified until separately reviewed");
   if (report.captionTiming !== "TTS_WORD_BOUNDARIES" || !Number.isInteger(report.wordBoundaryCount) || report.wordBoundaryCount < 1) errors.push("captions must use verified TTS word-boundary timings");
-  const normalizedExpected = typeof expectedNarration === "string" ? expectedNarration.replace(/\\s+/gu, " ").trim() : "";
-  const expectedWordCount = normalizedExpected ? normalizedExpected.split(/\\s+/u).length : 0;
+  const normalizedExpected = typeof expectedNarration === "string" ? expectedNarration.replace(/\s+/gu, " ").trim() : "";
+  const expectedWordCount = normalizedExpected ? normalizedExpected.split(/\s+/u).length : 0;
   if (!Number.isInteger(report.wordCount) || report.wordCount !== expectedWordCount ||
       (format === "short" && (report.wordCount < 125 || report.wordCount > 150)) ||
       (format === "long_form" && (report.wordCount < 900 || report.wordCount > 1500))) errors.push("measured narration word count does not match the approved transcript or is outside the required format range");
@@ -69,7 +69,7 @@ export function validateNarrationStageArtifacts({ report, scriptSha256, format, 
       const file = path.join(outputDir, name);
       assertRegularFile(file, label);
       if (!SHA256.test(digest ?? "") || sha256File(file) !== digest) errors.push(label + " checksum does not match the narration report");
-      if (label === "transcript" && normalizedExpected && fs.readFileSync(file, "utf8") !== normalizedExpected + "\\n") {
+      if (label === "transcript" && normalizedExpected && fs.readFileSync(file, "utf8") !== normalizedExpected + "\n") {
         errors.push("generated transcript text differs from the exact approved script narration");
       }
     } catch (error) {
@@ -162,7 +162,7 @@ function verifyCaptionValidators({ captionsPath, audioPath, report, projectRoot,
     const checked = spawnSyncImpl(process.execPath, [path.join(projectRoot, validator), ...args], {
       cwd: projectRoot, encoding: "utf8", timeout: 20_000, maxBuffer: 1024 * 1024, windowsHide: true
     });
-    const output = String(checked?.stdout ?? "") + "\\n" + String(checked?.stderr ?? "");
+    const output = String(checked?.stdout ?? "") + "\n" + String(checked?.stderr ?? "");
     if (checked?.error || checked?.status !== 0 || !/PASS:/i.test(output)) {
       throw new Error(validator + " rejected generated captions: " + output.slice(-800));
     }
