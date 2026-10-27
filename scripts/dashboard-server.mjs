@@ -15,6 +15,7 @@ import { createContentJob, transitionContentJob, approveContentJobForPrivateUplo
 import { createReviewDecision, sha256File } from "./human-review.mjs";
 import { canonicalAuthoringScriptSha256, runAuthoringNarrationStage } from "./authoring-production-pipeline.mjs";
 import { productionPlanSha256, validateProductionPlan } from "./production-plan.mjs";
+import { buildApprovedJobRenderManifest } from "./build-approved-job-render-manifest.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
 import { validatePublicationSlot, localDateTimeToIso } from "./schedule-policy.mjs";
 import {
@@ -388,12 +389,14 @@ const allowedTasks = new Map([
 ]);
 const activeTasks = new Set();
 const taskTimeoutMs = new Map([["validate-schedule", 30_000], ["validate-campaigns", 30_000], ["check-captions", 45_000], ["production-readiness", 60_000], ["test-suite", 180_000], ["render-short", 600_000], ["render-long-form", 600_000]]);
-function runTask(taskId) {
-  const args = allowedTasks.get(taskId) ?? productionTasks.get(taskId);
+function runTask(taskId, commandOverride = null) {
+  const args = commandOverride ?? (allowedTasks.get(taskId) ?? productionTasks.get(taskId));
   if (!args) return Promise.reject(new Error("Task is not on the dashboard allowlist"));
+  const command = commandOverride ? args[0] : "npm";
+  const commandArgs = commandOverride ? args.slice(1) : args;
   return new Promise((resolve) => {
     const startedAt = new Date().toISOString();
-    const child = spawn("npm", args, { cwd: root, shell: false, env: { ...process.env, CI: "1", ...(taskId === "test-suite" ? { DASHBOARD_TEST_CHILD: "1" } : {}) }, windowsHide: true, stdio: ["ignore", "pipe", "pipe"] });
+    const child = spawn(command, commandArgs, { cwd: root, shell: false, env: { ...process.env, CI: "1", ...(taskId === "test-suite" ? { DASHBOARD_TEST_CHILD: "1" } : {}) }, windowsHide: true, stdio: ["ignore", "pipe", "pipe"] });
     let output = "";
     let truncated = false;
     let timedOut = false;
@@ -2124,6 +2127,7 @@ const server = http.createServer(async (req, res) => {
       const release = await acquireStateLock();
       let claim;
       let taskId;
+      let taskArgs = null;
       let jobTitle;
       try {
         const state = loadState();
@@ -2131,19 +2135,44 @@ const server = http.createServer(async (req, res) => {
         if (index < 0) return json(res, 404, { error: "Content job not found" });
         const job = state.jobs[index];
         if (job.state !== "QUEUED") return json(res, 409, { error: "Only a queued content job can start production" });
-        if (job.authoring) return json(res, 409, { error: "This job has a script-authoring record; generated scripts are not yet connected to narration, captions and scene rendering. Do not bypass review by running the fixed-manifest renderer on this job.", authoringStatus: job.authoring.status, publishable: false, publishingEnabled: false });
         taskId = job.contentType === "short" ? "render-short" : "render-long-form";
         if (activeTasks.has(taskId)) return json(res, 409, { error: "A renderer for this format is already running" });
+        if (job.authoring) {
+          let renderPackage;
+          try {
+            renderPackage = buildApprovedJobRenderManifest({ job, root });
+            const expectedMetadataPath = job.contentType === "short" ? "content/next-short.json" : "content/long-form-next.json";
+            if (renderPackage.metadataPath !== path.resolve(root, expectedMetadataPath)) {
+              throw new Error("The approved metadata path must be the format's designated metadata file so post-render validation checks the same artifact");
+            }
+            const manifestDirectory = ensureSafeDirectoryPath(path.join(root, "content", "job-render-manifests"), "Job render manifest directory");
+            const manifestFile = path.join(manifestDirectory, job.id + ".json");
+            if (fs.existsSync(manifestFile)) {
+              const existingStat = fs.lstatSync(manifestFile);
+              if (existingStat.isSymbolicLink() || !existingStat.isFile()) throw new Error("Existing per-job render manifest is unsafe");
+            }
+            atomicWriteJson(manifestFile, renderPackage.manifest, { mode: 0o600 });
+            const scriptFile = path.join(root, "scripts", job.contentType === "short" ? "render-short.mjs" : "render-long-form.mjs");
+            const outputFile = path.resolve(root, job.contentType === "short" ? "media/next-short.mp4" : "media/long-form-next.mp4");
+            taskArgs = [process.execPath, scriptFile, manifestFile, outputFile];
+          } catch (error) {
+            return json(res, 409, {
+              error: "Authoring job is not render-ready; mandatory approval, provenance, quality, compliance or artifact-integrity evidence is missing or stale",
+              detail: String(error?.message ?? error).slice(0, 1000),
+              publishable: false, publishingEnabled: false
+            });
+          }
+        }
         claim = claimWorkerLease(job, "dashboard-renderer-" + job.contentType, { leaseMs: 15 * 60_000 });
         jobTitle = job.title;
         state.jobs[index] = claim.job;
-        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_RENDER_STARTED", jobId: job.id, taskId, actor: operatorId, at: new Date().toISOString(), reason: "Fixed renderer launched through dashboard; no upload/publication path" });
+        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_RENDER_STARTED", jobId: job.id, taskId, actor: operatorId, at: new Date().toISOString(), reason: taskArgs ? "Renderer launched with a per-job manifest built from exact approved script, narration, scene, rights, quality and metadata evidence; no upload/publication path" : "Legacy fixed-manifest renderer launched through dashboard; no upload/publication path" });
         saveState(state);
       } finally { release(); }
 
       activeTasks.add(taskId);
       let result;
-      try { result = await runTask(taskId); }
+      try { result = await runTask(taskId, taskArgs); }
       finally { activeTasks.delete(taskId); }
 
       const finishRelease = await acquireStateLock();
@@ -2166,6 +2195,13 @@ const server = http.createServer(async (req, res) => {
             const metadataFile = resolveRepositoryFile(metadataPath);
             const metadata = JSON.parse(fs.readFileSync(metadataFile, "utf8"));
             const metadataVersion = sha256File(metadataFile);
+            if (current.authoring?.productionPlan?.status === "APPROVED_PLAN_ONLY") {
+              const renderEvidence = current.authoring.productionPlan.plan?.renderEvidence;
+              if (!renderEvidence || renderEvidence.metadataPath !== (isShort ? "content/next-short.json" : "content/long-form-next.json") ||
+                  renderEvidence.metadataSha256 !== metadataVersion) {
+                throw new Error("Post-render metadata hash differs from the exact metadata approved in the production plan");
+              }
+            }
             if (metadata.channel !== "SonicVhibez" || metadata.visibility !== "private" || metadata.productUrl !== "https://selar.com/0u19v8u99l") throw new Error("Metadata must target SonicVhibez, remain private, and use the approved Selar URL");
             if (typeof metadata.title !== "string" || !metadata.title.trim() || typeof metadata.description !== "string" || !metadata.description.trim() || !Array.isArray(metadata.tags) || metadata.tags.length < 3) throw new Error("Metadata title, description and at least three tags are required");
             const artifactSha256 = sha256File(artifactFile);
