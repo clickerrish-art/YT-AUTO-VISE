@@ -306,7 +306,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const authorRenderBypassBody = await authorRenderBypass.json();
   assert.equal(authorRenderBypass.status, 409, "a generated script must not bypass missing narration/caption/scene integration");
   assert.equal(authorRenderBypassBody.publishable, false);
-  assert.match(authorRenderBypassBody.error, /not yet connected to narration, captions and scene rendering/i);
+  assert.match(authorRenderBypassBody.error, /not render-ready; mandatory approval, provenance, quality, compliance or artifact-integrity evidence is missing or stale/i);
 
   const authorState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
   assert.equal(authorState.jobs.find(job => job.id === authorJob.id).authoring.result.script.narration, narration);
