@@ -1,3 +1,20 @@
+## Latest cross-process restore lock — `b2686b888dabf6099d25aff59d288a514b3caffe`
+
+Restore and interrupted-restore recovery are now serialized with an exclusive `.restore-operation.lock` in the configured state directory. A competing operation fails closed without replacing the existing lock; normal validation failures release the current invocation's lock. A stale lock requires operator verification that no restore is active before removal. Do not delete a lock merely because it is old.
+
+Exact-candidate evidence:
+- Automation/security [40593628190](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628190): 379 Node tests, 0 failures, 0 skips; 16 Python tests; normal install; npm audit 0 vulnerabilities.
+- Content quality [40593628137](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628137): 379 tests, 0 failures, 0 skips.
+- Metadata [40593628366](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628366): 379 tests, 0 failures, 0 skips.
+- Dashboard E2E [40593628079](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628079): 13 Chromium journeys.
+- Isolated baseline [40593628185](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628185): PASS.
+- Readiness [40593628122](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628122): BLOCKED by 13 prerequisites.
+- Meta workflow [40593628361](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628361): external draft-creation job skipped; no external draft verified.
+
+This closes restore lock contention and cleanup test cases only. It does not establish full crash/power-loss resilience, stale-lock automatic recovery, exhaustive dashboard/API coverage, deployment/rollback acceptance, real YouTube/Meta operations or production readiness.
+
+---
+
 ## Latest restore transaction and startup guard — `b1989a764e54400cddb55158b998c5a375972321`
 
 Restore transaction state is now journaled in the configured application state directory. On a later commit failure the routine rolls back earlier committed destinations, including restoring the exact original dashboard-state bytes. After a process interruption, the next confirmed restore invocation reconciles the journal and stops for operator inspection; the dashboard itself refuses startup while the journal remains. The exact candidate passed all four deterministic restore/startup regression tests in [automation run 40591305237](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237), with 378 Node tests and zero skips.
