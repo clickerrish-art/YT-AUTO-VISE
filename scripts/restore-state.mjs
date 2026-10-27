@@ -221,7 +221,7 @@ function recoverInterruptedRestore(options) {
   return { recovered: true, entries: journal.entries.length };
 }
 
-export async function restoreState({ backupPath, rootDir = root, stateDir = process.env.DASHBOARD_STATE_DIR ?? "state", uploadLogDir = process.env.UPLOAD_LOG_DIR ?? "run-logs", rightsDir = process.env.RIGHTS_EVIDENCE_DIR ?? "rights", confirm = process.env.RESTORE_CONFIRM, overwriteState = process.env.RESTORE_OVERWRITE === "YES", now = Date.now() } = {}) {
+async function restoreStateUnlocked({ backupPath, rootDir = root, stateDir = process.env.DASHBOARD_STATE_DIR ?? "state", uploadLogDir = process.env.UPLOAD_LOG_DIR ?? "run-logs", rightsDir = process.env.RIGHTS_EVIDENCE_DIR ?? "rights", confirm = process.env.RESTORE_CONFIRM, overwriteState = process.env.RESTORE_OVERWRITE === "YES", now = Date.now() } = {}) {
   if (confirm !== "YES") throw new Error("Set RESTORE_CONFIRM=YES to authorize this restore operation");
   if (!backupPath) throw new Error("Provide the backup JSON path");
   const options = { rootDir, stateDir, uploadLogDir, rightsDir };
@@ -367,6 +367,79 @@ export async function restoreState({ backupPath, rootDir = root, stateDir = proc
   const journalPath = restoreJournalPath(options);
   fs.unlinkSync(journalPath);
   return { status: "RESTORE_COMPLETED", backupCreatedAt: backup.createdAt, restored: results.filter(x => x.action !== "UNCHANGED").length, unchanged: results.filter(x => x.action === "UNCHANGED").length, entries: results };
+}
+
+
+const RESTORE_OPERATION_LOCK_NAME = ".restore-operation.lock";
+
+/**
+ * Serialize restore/recovery across processes sharing the state directory.
+ * A pre-existing lock is intentionally fail-closed: operators must establish
+ * whether its owner is still active before removing it. Never steal a lock
+ * based only on age because a slow restore may still be committing files.
+ */
+export async function restoreState(options = {}) {
+  const rootDir = options.rootDir ?? root;
+  const stateDir = options.stateDir ?? process.env.DASHBOARD_STATE_DIR ?? "state";
+  const stateRoot = path.resolve(rootDir, stateDir);
+  assertNoSymlinkComponents(path.parse(stateRoot).root, stateRoot);
+  fs.mkdirSync(stateRoot, { recursive: true, mode: 0o700 });
+  assertNoSymlinkComponents(path.parse(stateRoot).root, stateRoot);
+  const stateStat = fs.lstatSync(stateRoot);
+  if (stateStat.isSymbolicLink() || !stateStat.isDirectory()) {
+    throw new Error("Restore state directory must be a real directory, not a symlink or special file");
+  }
+
+  const lockPath = path.join(stateRoot, RESTORE_OPERATION_LOCK_NAME);
+  const token = crypto.randomUUID();
+  let fd;
+  try {
+    fd = fs.openSync(lockPath, "wx", 0o600);
+    fs.writeFileSync(fd, JSON.stringify({
+      format: "sonicvhibez-restore-operation-lock",
+      version: 1,
+      token,
+      pid: process.pid,
+      createdAt: new Date().toISOString()
+    }));
+    fs.fsyncSync(fd);
+    fs.closeSync(fd);
+    fd = undefined;
+  } catch (error) {
+    if (fd !== undefined) {
+      try { fs.closeSync(fd); } catch {}
+    }
+    if (error?.code === "EEXIST") {
+      throw new Error("Another restore operation holds the restore lock; inspect the lock owner and recover or remove a confirmed stale lock before retrying");
+    }
+    try {
+      const lockStat = fs.lstatSync(lockPath);
+      if (lockStat.isFile() && !lockStat.isSymbolicLink() && JSON.parse(fs.readFileSync(lockPath, "utf8")).token === token) {
+        fs.unlinkSync(lockPath);
+      }
+    } catch {}
+    throw error;
+  }
+
+  try {
+    return await restoreStateUnlocked({ ...options, rootDir, stateDir });
+  } finally {
+    // Remove only the exact lock this invocation created; never delete a
+    // replaced lock or an operator's recovery artifact.
+    try {
+      const lockStat = fs.lstatSync(lockPath);
+      if (!lockStat.isSymbolicLink() && lockStat.isFile()) {
+        const current = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+        if (current.format === "sonicvhibez-restore-operation-lock" && current.token === token) {
+          fs.unlinkSync(lockPath);
+        }
+      }
+    } catch (error) {
+      if (error?.code !== "ENOENT") {
+        throw new Error("Restore finished but its operation lock could not be safely cleared; inspect the lock before retrying", { cause: error });
+      }
+    }
+  }
 }
 
 if (isInvoked) {
