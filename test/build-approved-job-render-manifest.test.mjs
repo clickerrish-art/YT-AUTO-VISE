@@ -11,6 +11,9 @@ import { productionPlanSha256 } from "../scripts/production-plan.mjs";
 function hash(file) {
   return crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
 }
+function hashJson(value) {
+  return crypto.createHash("sha256").update(JSON.stringify(value), "utf8").digest("hex");
+}
 function write(root, relative, data) {
   const file = path.join(root, relative);
   fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -70,25 +73,57 @@ function fixture() {
     }
   };
   const planSha256 = productionPlanSha256(plan);
+  const scriptApproval = {
+    decision: "APPROVE", scriptSha256, reviewer: "editor-1",
+    reviewedAt: "2026-10-27T12:00:00Z",
+    reason: "Reviewed the complete exact script revision and its source coverage."
+  };
+  scriptApproval.approvalSha256 = hashJson({
+    jobId: "job-123", decision: scriptApproval.decision, scriptSha256: scriptApproval.scriptSha256,
+    reviewer: scriptApproval.reviewer, reviewedAt: scriptApproval.reviewedAt, reason: scriptApproval.reason
+  });
+  const narrationApproval = {
+    decision: "APPROVE", reviewer: "editor-1", reviewedAt: "2026-10-27T12:05:00Z",
+    reason: "Listened to the complete narration and reviewed transcript and caption timing.",
+    scriptSha256, audioSha256: audio.sha256, transcriptSha256: transcript.sha256,
+    captionsSha256: captions.sha256, reportSha256: report.sha256,
+    confirmAudioListened: true, confirmTranscriptReviewed: true, confirmCaptionsReviewed: true
+  };
+  narrationApproval.approvalSha256 = hashJson({
+    jobId: "job-123", decision: narrationApproval.decision, reviewer: narrationApproval.reviewer,
+    reviewedAt: narrationApproval.reviewedAt, reason: narrationApproval.reason,
+    scriptSha256: narrationApproval.scriptSha256, audioSha256: narrationApproval.audioSha256,
+    transcriptSha256: narrationApproval.transcriptSha256, captionsSha256: narrationApproval.captionsSha256,
+    reportSha256: narrationApproval.reportSha256, confirmAudioListened: narrationApproval.confirmAudioListened,
+    confirmTranscriptReviewed: narrationApproval.confirmTranscriptReviewed,
+    confirmCaptionsReviewed: narrationApproval.confirmCaptionsReviewed
+  });
+  const planReview = {
+    decision: "APPROVE", planSha256, scriptSha256, reviewer: "editor-1",
+    reviewedAt: "2026-10-27T12:10:00Z",
+    reason: "Reviewed every scene, source asset, rights evidence and compliance note.",
+    confirmScenePlanReviewed: true, confirmRightsEvidenceReviewed: true
+  };
+  planReview.approvalSha256 = hashJson({
+    jobId: "job-123", decision: planReview.decision, planSha256: planReview.planSha256,
+    scriptSha256: planReview.scriptSha256, reviewer: planReview.reviewer,
+    reviewedAt: planReview.reviewedAt, reason: planReview.reason,
+    confirmScenePlanReviewed: planReview.confirmScenePlanReviewed,
+    confirmRightsEvidenceReviewed: planReview.confirmRightsEvidenceReviewed
+  });
   const job = {
     id: "job-123", kind: "CONTENT_PRODUCTION", contentType: "long_form", state: "QUEUED",
     authoring: {
-      result: { script }, scriptSha256,
-      scriptApproval: { decision: "APPROVE", scriptSha256 },
+      result: { script }, scriptSha256, scriptApproval,
       narrationStage: {
         status: "APPROVED_FOR_RENDER", scriptSha256,
         artifacts: {
           "narration.mp3": audio, "narration.txt": transcript, "captions.srt": captions, "narration-report.json": report
         }
       },
-      narrationApproval: {
-        decision: "APPROVE", scriptSha256, audioSha256: audio.sha256,
-        transcriptSha256: transcript.sha256, captionsSha256: captions.sha256, reportSha256: report.sha256,
-        confirmAudioListened: true, confirmTranscriptReviewed: true, confirmCaptionsReviewed: true
-      },
+      narrationApproval,
       productionPlan: {
-        status: "APPROVED_PLAN_ONLY", plan, planSha256, scriptSha256,
-        review: { decision: "APPROVE", planSha256, reviewer: "editor-1", reviewedAt: "2026-10-27T12:00:00Z" }
+        status: "APPROVED_PLAN_ONLY", plan, planSha256, scriptSha256, review: planReview
       }
     }
   };
