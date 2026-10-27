@@ -1,5 +1,18 @@
 ## Live checkpoint — 27 October 2026
 
+## Latest implementation checkpoint — 27 October 2026, 21:08 UTC
+
+Exact source/test SHA: `4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd`. Automation/security PASS: 372 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg renderer integration passed. Dashboard E2E passed 13 Chromium journeys; content quality, metadata validation and isolated baseline passed. Main baseline: 54 Node / 8 Python; candidate: 372 Node / 16 Python; zero failures/skips, all exit codes 0. The metadata workflow itself skipped one FFmpeg-dependent test because FFmpeg was absent there; the automation and baseline workflows ran all candidate tests without skips. [Exact-SHA evidence and workflow links](CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
+
+Implementation fixes: strict timezone-qualified script-approval timestamps; readiness JSON now identifies checked paths, evidence type and control ownership, explicitly labels external YouTube history as unverified by the read-only checker, and redacts absolute external `QUEUE_PATH` values. A preceding interim commit failed on a syntax error; it was corrected and the final exact SHA was re-tested.
+
+Production readiness still correctly reports 13 blockers. No live Meta integration is proven because the external draft job was skipped. Genuine media/rights/human approval, verified channel identity and full history, one-operation private-upload authorization/receipt, owner cadence approval and recovery/deployment drills remain outstanding. PR #1 is open, draft and unmerged. At the tested checkpoint, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, divergence 1,733 ahead / 2 behind / 163 changed files. `test/restore-facebook-draft-history.test.mjs` remains present and tested. No publication, campaign activation, visibility change, merge or destructive Git operation occurred.
+
+**Verdict: IMPLEMENTATION PARTIAL / PRODUCTION ACCEPTANCE BLOCKED.**
+
+---
+
+
 ## Latest implementation checkpoint — 27 October 2026, 21:02 UTC
 
 Exact source/test SHA: `0969430d130340eed1d143de2f488265a50930dc`; latest application-code SHA: `e1f5650be2c82cb0c8ffd4046b8342a84df09eb9`. The source/test SHA passed automation/security (371 Node tests, 0 failed/skipped; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg render integration passed), dashboard E2E (13 Chromium journeys), content quality, metadata validation, and isolated main/candidate baseline (main 54 Node + 8 Python; candidate 371 Node + 16 Python; all zero failures/skips and exit codes 0). Exact links and limitations are recorded in [CURRENT_RELEASE_EVIDENCE_2026-10-27.md](CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
