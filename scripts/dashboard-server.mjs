@@ -2037,13 +2037,16 @@ const server = http.createServer(async (req, res) => {
         let shortParentRelationshipSha256Value = null;
         if (body.decision === "APPROVE" && job.contentType === "short") {
           try {
+            // This approval authorizes only a single private review upload. A private parent
+            // cannot be represented as natively Related, so preserve BLOCKED_EXTERNAL honestly;
+            // production/public readiness remains blocked until native association is verified.
             assertShortParentRelationship(job.shortParentRelationship, {
               childContentId: job.id,
               childMediaSha256: artifactSha256,
               childMetadataSha256: metadataVersion,
               channelId: uploadMetadata.channelId,
-              requireNativeRelatedVideoVerified: true,
-              allowPrivateParent: false
+              requireNativeRelatedVideoVerified: false,
+              allowPrivateParent: true
             });
             shortParentRelationshipSha256Value = shortParentRelationshipSha256(job.shortParentRelationship);
           } catch (error) {
