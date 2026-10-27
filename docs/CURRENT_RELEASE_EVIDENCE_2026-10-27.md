@@ -345,3 +345,38 @@ The separate application-code commit `2186822bba83ecfb299e40ab8d10376c009f8711` 
 ### Release decision
 
 **IMPLEMENTATION INCOMPLETE / PRODUCTION BLOCKED.** The focused Short-review defect is covered, but the broader audit still identifies missing lifecycle integration for authoring, no verified genuine multi-scene production render and no human-approved production MP4. Real SonicVhibez OAuth/history, an authorized private-upload receipt, native Related-video verification, live Meta draft-only integration, owner-approved feasible cadence, and complete recovery/deployment drills remain unproven. Public/unattended YouTube publishing and Facebook live publishing remain disabled; Safari campaigns remain inactive; Nature Frontiers remains prohibited as a YouTube target. PR #1 remains open, draft and unmerged. No live account mutation or publication was performed.
+
+
+---
+
+## Live repository and workflow reconciliation — 27 October 2026
+
+This addendum supersedes any earlier statement in this document that describes the then-current branch head or says the newest browser/baseline workflows are still pending. It is documentation-only and does not change application code or tests.
+
+- Live PR #1: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1 — OPEN, DRAFT, UNMERGED.
+- Live branch: `codex/marketing-machine-audit-fixes`.
+- Live PR head observed: `ed6f27d5275a8c9d2e41964d3f5ea386d4078d6c`.
+- The head commit is documentation-only (OPERATIONS.md); the application/test tree remains at exact source/test checkpoint `77921aca418b25bca0a9aa681281145b00c6d72f`.
+- Live comparison against `main`: 1,675 commits ahead / 2 behind; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; current `main` SHA `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. This is a large divergent history and still requires a full risk review; do not merge or reconcile destructively.
+
+### Current-head workflow observations
+
+The GitHub Actions runs associated with the observed head completed with these results:
+
+- Automation/security PASS: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40543315036
+- Dashboard browser E2E PASS: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40543315508
+- Content quality PASS: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40543315286
+- Metadata validation PASS: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40543315245
+- Isolated main/candidate comparison PASS: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40543315742
+- Production readiness FAILED because mandatory readiness gates remain blocked: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40543315319
+- Nature Frontiers Facebook daily draft SKIPPED: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40543315444. This is not evidence of a successful live Meta integration.
+
+### Implementation interpretation
+
+The current dashboard source includes a guarded authoring-to-render path that calls `buildApprovedJobRenderManifest`, validates the designated metadata path and per-job output directory, persists a per-job manifest, and launches the appropriate renderer. Tests verify that authoring jobs lacking required approval, provenance, quality, compliance, or artifact-integrity evidence are rejected. Therefore, the older blanket description that the endpoint simply refuses every authoring job is not supported by the current source; acceptance still requires successful end-to-end render evidence with genuine approved assets and independent human review.
+
+### Release verdict remains BLOCKED
+
+These CI results do not establish genuine rights-cleared final MP4s, full human playback/factual/realism acceptance, authenticated SonicVhibez OAuth identity and complete remote history, an authorized private-upload receipt, eligible native YouTube Related-video association, a real draft-only Meta run, owner-approved feasible cadence, or complete operational recovery/deployment drills. The documented Metricool risk involving Nature Frontiers' incorrect YouTube association and scheduled auto-publishing must be reconciled in Metricool by the owner before any further external publishing; no such account changes were made in this task.
+
+Safety remains unchanged: public/unattended YouTube publishing OFF; Facebook live publishing OFF; Safari campaigns inactive; Nature Frontiers prohibited as a YouTube target; approved Selar URL unchanged. PR #1 remains open/draft/unmerged. No upload, post, campaign activation, merge, `main` edit, reset, rebase, force-push or destructive history operation occurred.
