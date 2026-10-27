@@ -608,7 +608,7 @@ These code/test passes do not override any blocked production or external integr
 - [x] Enforce 72 elapsed hours as a hard minimum in readiness for every cadence mode.
 - [x] Remove the shorter-spacing weekly target from supported owner approval options.
 - [x] Add regression coverage and pass automation/security (364 Node tests, 16 Python tests, npm audit 0 vulnerabilities), content quality, metadata and 13 browser E2E tests on source/test SHA `47c839452fda99757a34dcb29865da9e967121af`.
-- [ ] Isolated main/candidate baseline: not yet accepted; see the linked current release evidence for the actual workflow status.
+- [x] Isolated main/candidate baseline **PASS** on source/test SHA `47c839452fda99757a34dcb29865da9e967121af`: [run 40537255841](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537255841) and [run 40537264675](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537264675).
 - [ ] Production readiness: blocked until external identity/history, genuine production media, human approval, native Related video eligibility, Meta draft integration, owner cadence approval and recovery/deployment drills are proven.
 
 Release decision remains **BLOCKED**.
