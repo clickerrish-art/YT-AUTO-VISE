@@ -95,7 +95,7 @@ export function validateShortParentRelationship(relationship, {
   else if (native.status === "VERIFIED" && native.parentVideoId !== relationship.parentRemoteVideoId) errors.push("native Related video evidence must identify the exact approved parent video ID");
   else if (native.status === "VERIFIED" && native.channelId !== relationship.parentChannelId) errors.push("native Related video evidence channel must match the verified SonicVhibez parent channel");
   else if (native.status === "VERIFIED" && native.destinationUrl !== canonical) errors.push("native Related video evidence must identify the exact canonical parent destination URL");
-  else if (native.status === "BLOCKED_EXTERNAL" && typeof native.blocker !== "string") errors.push("native Related video external blocker must be explained");
+  else if (native.status === "BLOCKED_EXTERNAL" && (typeof native.blocker !== "string" || native.blocker.trim().length < 8 || native.blocker.length > 500)) errors.push("native Related video external blocker must contain a specific explanation (8–500 characters)");
   return errors;
 }
 
