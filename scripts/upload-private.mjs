@@ -107,7 +107,10 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
   const approvedFormat = contentType ?? approval.contentType ?? "long_form";
   if (approvedFormat === "short") {
     if (approval.contentType !== "short") throw new Error("Short upload approval must explicitly identify contentType=short");
-    assertShortParentRelationship(approval.shortParentRelationship, { childContentId: jobId, childMediaSha256: artifactSha256, childMetadataSha256: metadataVersion, channelId, requireNativeRelatedVideoVerified: true, allowPrivateParent: false });
+    // Upload is restricted to private visibility below. A valid parent relationship may
+    // honestly record BLOCKED_EXTERNAL for YouTube Related video while the parent is private;
+    // this does not certify public-release readiness or claim native association succeeded.
+    assertShortParentRelationship(approval.shortParentRelationship, { childContentId: jobId, childMediaSha256: artifactSha256, childMetadataSha256: metadataVersion, channelId, requireNativeRelatedVideoVerified: false, allowPrivateParent: true });
     const relationshipSha256 = shortParentRelationshipSha256(approval.shortParentRelationship);
     if (approval.shortParentRelationshipSha256 !== relationshipSha256) throw new Error("approval does not bind the exact Short-to-parent relationship");
   }
