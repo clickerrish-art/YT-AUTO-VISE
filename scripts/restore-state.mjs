@@ -226,7 +226,12 @@ export async function restoreState({ backupPath, rootDir = root, stateDir = proc
   const options = { rootDir, stateDir, uploadLogDir, rightsDir };
   // If a previous process died during commit, reconcile its journal before
   // starting another restore so the state never silently remains half-applied.
-  recoverInterruptedRestore(options);
+  // Stop after recovery: require an explicit second invocation before retrying
+  // the requested restore, so an operator can inspect the recovered state.
+  const interruptedRestore = recoverInterruptedRestore(options);
+  if (interruptedRestore.recovered) {
+    throw new Error("An interrupted restore was rolled back safely; inspect the recovered state and rerun restore explicitly if still required");
+  }
   const backupFile = path.resolve(backupPath);
   const backup = JSON.parse(readBackupFileNoSymlinks(backupFile));
   if (backup.format !== "sonicvhibez-state-backup" || backup.version !== 1 || backup.includesSecrets !== false || !Array.isArray(backup.entries) || !Number.isFinite(Date.parse(backup.createdAt))) throw new Error("Backup format or schema is invalid");
