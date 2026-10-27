@@ -382,9 +382,9 @@ export async function restoreState(options = {}) {
   const rootDir = options.rootDir ?? root;
   const stateDir = options.stateDir ?? process.env.DASHBOARD_STATE_DIR ?? "state";
   const stateRoot = path.resolve(rootDir, stateDir);
-  assertNoSymlinkComponents(path.parse(stateRoot).root, stateRoot);
+  assertNoSymlinkComponents(path.dirname(stateRoot), stateRoot);
   fs.mkdirSync(stateRoot, { recursive: true, mode: 0o700 });
-  assertNoSymlinkComponents(path.parse(stateRoot).root, stateRoot);
+  assertNoSymlinkComponents(path.dirname(stateRoot), stateRoot);
   const stateStat = fs.lstatSync(stateRoot);
   if (stateStat.isSymbolicLink() || !stateStat.isDirectory()) {
     throw new Error("Restore state directory must be a real directory, not a symlink or special file");
