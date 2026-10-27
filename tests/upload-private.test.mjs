@@ -15,13 +15,13 @@ function makeShortParentRelationship(jobId, childMediaSha256, childMetadataSha25
     parentContentId: "parent-job-001", parentRevision: "parent-rev-1", parentMediaSha256: "c".repeat(64), parentMetadataSha256: "d".repeat(64), parentApprovalSha256: "e".repeat(64),
     parentRemoteVideoId: TEST_PARENT_ID, parentCanonicalUrl: "https://www.youtube.com/watch?v=" + TEST_PARENT_ID,
     parentChannelTitle: "SonicVhibez", parentRemoteTitle: "Parent test documentary", parentChannelId: TEST_CHANNEL_ID,
-    parentRemoteVerified: true, parentPrivacyStatus: "private", parentApproved: true, parentRevisionApproved: true,
+    parentRemoteVerified: true, parentPrivacyStatus: "unlisted", parentApproved: true, parentRevisionApproved: true,
     parentPublicationCycleId: "test-cycle", childPublicationCycleId: "test-cycle",
     sourceSegments: [{ sceneId: "parent-scene-01", startSeconds: 12, endSeconds: 20 }],
     relationshipApproved: true, relationshipReviewNotes: "Parent narrative and source scene segment reviewed in isolated test fixture.", relationshipReviewer: "Test Operator", relationshipApprovedAt: "2026-10-24T00:00:00.000Z",
     parentSourceEvidencePath: PARENT_SOURCE_EVIDENCE_PATH, parentSourceEvidenceSha256: PARENT_SOURCE_EVIDENCE_SHA256,
     relationshipEvidenceSha256: "",
-    nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "Private parent is ineligible for native Related video." }
+    nativeRelatedVideo: { status: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z", evidenceSha256: "f".repeat(64), parentVideoId: TEST_PARENT_ID, channelId: TEST_CHANNEL_ID, destinationUrl: "https://www.youtube.com/watch?v=" + TEST_PARENT_ID }
   };
   relationship.relationshipEvidenceSha256 = shortParentEvidenceSha256(relationship);
   return relationship;
