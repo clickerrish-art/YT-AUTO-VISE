@@ -34,8 +34,11 @@ const baseApproval = {
   shortParentRelationshipSha256: shortParentRelationshipSha256(relationship)
 };
 
-test("Short upload requires independently verified native Related video association and exact parent/child hashes", () => {
-  assert.throws(() => validateUploadApproval(baseApproval, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), /native YouTube Related video association must be independently verified/);
+test("private-only Short upload accepts an explicit BLOCKED_EXTERNAL native Related-video status without claiming association succeeded", () => {
+  assert.equal(validateUploadApproval(baseApproval, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), true);
+  assert.equal(baseApproval.shortParentRelationship.nativeRelatedVideo.status, "BLOCKED_EXTERNAL");
+  assert.equal(baseApproval.visibility, "private");
+  assert.equal(baseApproval.publishingEnabled, false);
   const eligibleRelationship = {
     ...relationship,
     parentPrivacyStatus: "unlisted",
