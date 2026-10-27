@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-27",
-  "evidencePolicy": "Exact source/test SHA: 081999d2a7f3afb2ef013a840e01982b21084db2; application-code SHA: 081999d2a7f3afb2ef013a840e01982b21084db2. On this SHA, automation/security passed 368 Node tests (0 failed, 0 skipped), 16 Python tests and npm audit with 0 vulnerabilities; content quality, metadata validation, local draft-package validation and isolated main/candidate baseline passed. Dashboard browser E2E was pending at the latest check. Production acceptance remains blocked; documentation-only descendants may follow this tested SHA.",
+  "evidencePolicy": "Exact source/test SHA: 0969430d130340eed1d143de2f488265a50930dc; latest application-code SHA: e1f5650be2c82cb0c8ffd4046b8342a84df09eb9. On the exact source/test SHA, automation/security passed 371 Node tests (0 failed, 0 skipped), 16 Python tests and npm audit with 0 vulnerabilities; normal lifecycle-script installation, FFmpeg renderer integration, syntax checks and Python compilation passed. Dashboard browser E2E passed 13 Chromium journeys; content quality, metadata validation and isolated main/candidate baseline workflows passed. Baseline artifact reports main 54/54 Node and 8 Python tests; candidate 371/371 Node and 16 Python tests, zero skips, both exit code 0. Local Facebook draft-package validation passed but remote draft creation was skipped; no live Meta integration is proven. Production readiness correctly remains blocked by 13 real prerequisites. Documentation-only descendants may follow this tested source/test SHA.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -34,14 +34,14 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40325797435",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40325797106",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40325797283",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40325797233",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40325797285"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582978833",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582979150",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582978759",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582979141",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582978705"
       ],
-      "nextAction": "Repeat affected checks after any application-code/test change; production readiness and external-integration gates remain separate.",
-      "assessmentCommitSha": "02eb5c42b81b479223fd32c262247d75ecf5472d",
+      "nextAction": "Repeat all affected checks after substantive source/test changes; production readiness and real external integrations remain separate gates.",
+      "assessmentCommitSha": "0969430d130340eed1d143de2f488265a50930dc",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
     {
@@ -51,12 +51,12 @@
       "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40288463510",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582978705",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fa00d28e7f58911482686e4ad69fac9f4701a2e6",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/684c262169bd6bfde131e5380ead4128b19372bf"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/0969430d130340eed1d143de2f488265a50930dc"
       ],
-      "nextAction": "Repeat if main advances or after substantive code changes; baseline covers only commands documented by the isolated workflow.",
-      "assessmentCommitSha": "684c262169bd6bfde131e5380ead4128b19372bf",
+      "nextAction": "Repeat if main advances or after substantive candidate changes; the retained artifact records exact main/candidate command output and counts.",
+      "assessmentCommitSha": "0969430d130340eed1d143de2f488265a50930dc",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
     {
@@ -546,6 +546,37 @@
       "nextAction": "Keep the guard in place; reconcile retained render evidence under operator review before any retry.",
       "assessmentCommitSha": "3690ec82b52263cb2da2378f8aba9a5b19658a8f",
       "acceptanceCriterion": "An existing regular file, symlink or retained per-job manifest is not overwritten; the request fails closed before a job lease is claimed and retained bytes remain unchanged."
+    },
+    {
+      "id": "AUTH-TIMESTAMP-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Human script approval timestamps must be strict, calendar-valid ISO timestamps with an explicit timezone before narration generation.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/65a572eeb8a785b79725594b90954c958b9b1625",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d214cbe7910d755a0630d7e7536b4c675fe1f589",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582978833"
+      ],
+      "nextAction": "Keep regression tests for date-only, timezone-free, impossible-calendar and invalid-offset approval timestamps; do not weaken the shared strict timestamp validator.",
+      "assessmentCommitSha": "0969430d130340eed1d143de2f488265a50930dc",
+      "acceptanceCriterion": "Narration refuses script approval timestamps unless they are calendar-valid ISO timestamps with explicit timezone; regression cases fail before any TTS subprocess is invoked."
+    },
+    {
+      "id": "RDY-EVIDENCE-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Each structured readiness blocker must identify the evidence inspected, distinguish external reconciliation from local checks, identify control ownership, and retain an actionable remedy.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e1f5650be2c82cb0c8ffd4046b8342a84df09eb9",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/0969430d130340eed1d143de2f488265a50930dc",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582978833",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582979127"
+      ],
+      "nextAction": "Preserve fail-closed behavior. Do not describe remote YouTube history as verified by the read-only readiness command; external evidence must be reconciled separately.",
+      "assessmentCommitSha": "0969430d130340eed1d143de2f488265a50930dc",
+      "acceptanceCriterion": "Readiness JSON exposes stable blocker IDs, severity, evidence kind and observed limitation, controlOwner, and actionable resolution; tests verify absent credentials are reported without printing secret values and remote history is explicitly unverified by the read-only check."
     }
   ],
   "currentCheckpoint": {
