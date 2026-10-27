@@ -571,3 +571,12 @@ The review API serves audio only to authenticated dashboard operators and checks
 ### Current limitation
 
 No real narration audio or final video was produced in the CI tests. The API integration tests use synthetic fixture bytes to exercise hashing and review attestations; they are not playback or production-media evidence. The dashboard's production action still blocks authoring jobs because the approved narration has not yet been connected to a reviewed production plan, traceable visual assets, a per-job multi-scene render, final media validators and final-video human approval.
+
+
+### Production-plan stage (new, draft-only)
+
+After the exact script and narration have been approved, use **Scene-by-scene production plan** in the dashboard. Submit a schema-version-1 JSON plan bound to the exact job ID, content format and approved script SHA-256. Each scene must include a repository-relative asset path and hash, editorial purpose, narration cue, timing, provenance and a separate rights-evidence path/hash. Shorts additionally require an explicit parent binding that matches the independently persisted human-approved relationship and verified public SonicVhibez receipt.
+
+The API checks that referenced files are regular non-symlink files and that the current bytes match the declared hashes. The plan then remains in REVIEW_REQUIRED until the reviewer inspects the persisted plan preview, source evidence and narration alignment and records a hash-bound decision. An approved result is APPROVED_PLAN_ONLY, not final media approval. Any changed script, narration artifact, scene asset or rights-evidence file blocks review.
+
+**Important:** hashes establish integrity, not ownership or licence validity. A plan-stage decision does not prove originality, factual accuracy or realism. The renderer integration is not complete, so POST /api/jobs/produce continues to refuse authoring jobs. Do not bypass this gate or use the fixed global manifest for a generated authoring job.
