@@ -499,6 +499,18 @@ const server = http.createServer(async (req, res) => {
         const campaignErrors = validateCampaigns(campaigns);
         const blockers = campaignErrors.map(error => "Campaign configuration: " + error);
         if (!Number.isFinite(schedule.minimumPublicationSpacingHours) || schedule.minimumPublicationSpacingHours <= 0 || schedule.minimumPublicationSpacingHours > 8760 || JSON.stringify(schedule.publicationCycle?.formats) !== JSON.stringify(["long_form", "long_form", "short"]) || schedule.publicationCycle?.minimumHoursBetweenConsecutivePublications !== schedule.minimumPublicationSpacingHours || schedule.publicationCycle?.minimumCycleHours !== schedule.minimumPublicationSpacingHours * schedule.publicationCycle.formats.length || schedule.spacingPolicy?.minimumHoursBetweenPosts !== schedule.minimumPublicationSpacingHours || schedule.spacingPolicy?.minimumCycleHours !== schedule.minimumPublicationSpacingHours * schedule.publicationCycle.formats.length) blockers.push("Rolling publication cycle configuration is invalid; cycle formats, configured minimum spacing and derived cycle duration must agree.");
+        const cadencePolicy = schedule.ownerApprovedPolicy;
+        if (!cadencePolicy || cadencePolicy.ownerApproved !== true ||
+            typeof cadencePolicy.approvedBy !== "string" || cadencePolicy.approvedBy.trim().length < 2 ||
+            !Number.isFinite(Date.parse(cadencePolicy.approvedAt ?? "")) ||
+            cadencePolicy.timeZone !== "Africa/Johannesburg" ||
+            cadencePolicy.mode !== "rolling" ||
+            cadencePolicy.minimumSpacingHours !== schedule.minimumPublicationSpacingHours ||
+            !Number.isInteger(cadencePolicy.weeklyPublicationTarget) || cadencePolicy.weeklyPublicationTarget < 1) {
+          blockers.push("An explicit owner-approved rolling cadence policy is required; Tuesday/Saturday preparation triggers are not publication authorization.");
+        } else if (cadencePolicy.weeklyPublicationTarget * schedule.minimumPublicationSpacingHours > 168) {
+          blockers.push("Owner-approved weekly publication target is mathematically infeasible: " + cadencePolicy.weeklyPublicationTarget + " publications at " + schedule.minimumPublicationSpacingHours + "-hour minimum spacing require at least " + (cadencePolicy.weeklyPublicationTarget * schedule.minimumPublicationSpacingHours) + " hours per weekly cycle.");
+        }
         blockers.push("Live upload is blocked until complete SonicVhibez public/private/unlisted history is reconciled against YouTube and all uncertain attempts are resolved.");
         const readinessCheck = spawnSync(process.execPath, ["scripts/production-readiness.mjs"], { cwd: root, encoding: "utf8", timeout: 15_000, env: process.env });
         if (readinessCheck.error || ![0, 2].includes(readinessCheck.status)) {
