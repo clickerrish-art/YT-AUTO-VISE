@@ -58,6 +58,7 @@ export function validateShortParentRelationship(relationship, {
   }
   for (const [key, expected] of [["childContentId", childContentId], ["childMediaSha256", childMediaSha256], ["childMetadataSha256", childMetadataSha256]]) {
     if (typeof relationship[key] !== "string" || !relationship[key].trim()) errors.push("relationship " + key + " is required");
+    else if ((key === "childMediaSha256" || key === "childMetadataSha256") && !SHA256.test(relationship[key])) errors.push("relationship " + key + " must be a SHA-256 digest");
     else if (expected !== undefined && relationship[key] !== expected) errors.push("relationship " + key + " does not match the current child artifact");
   }
   if (typeof relationship.childRevision !== "string" || !relationship.childRevision.trim()) errors.push("child revision is required");
