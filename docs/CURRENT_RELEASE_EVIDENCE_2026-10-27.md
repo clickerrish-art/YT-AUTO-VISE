@@ -308,3 +308,8 @@ Safety remains unchanged: public/unattended YouTube publishing OFF; Facebook liv
 ### Release decision remains BLOCKED
 
 No real production media, independent human full-playback approval, authenticated SonicVhibez OAuth/history reconciliation, authorized private-upload receipt, verified eligible native Related video association, real Meta draft-only run, owner-approved feasible cadence, or complete production recovery/deployment drill is established by these CI checks. Keep public/unattended YouTube publishing OFF, Facebook live publishing OFF, Safari inactive, Nature Frontiers prohibited as a YouTube target, and PR #1 open/draft/unmerged. The approved Selar URL remains `https://selar.com/0u19v8u99l`.
+
+
+### Baseline completion addendum — 27 October 2026
+
+The isolated main/candidate baseline workflows completed after the checkpoint above and are now **PASS** for tested source/test SHA `47c839452fda99757a34dcb29865da9e967121af`: [run 40537255841](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537255841) and [run 40537264675](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537264675). The earlier `IN PROGRESS at this checkpoint` line accurately describes the earlier observation, but the final result is PASS. Production readiness remains BLOCKED and Facebook draft remains SKIPPED.
