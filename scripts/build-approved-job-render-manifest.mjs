@@ -11,6 +11,9 @@ const APPROVED_SELLAR_URL = "https://selar.com/0u19v8u99l";
 function sha256File(filePath) {
   return crypto.createHash("sha256").update(fs.readFileSync(filePath)).digest("hex");
 }
+function sha256Json(value) {
+  return crypto.createHash("sha256").update(JSON.stringify(value), "utf8").digest("hex");
+}
 
 function resolveHashedFile(root, relativePath, expectedHash, label) {
   if (typeof relativePath !== "string" || !relativePath.trim() ||
@@ -44,20 +47,38 @@ export function buildApprovedJobRenderManifest({ job, root }) {
   const script = authoring?.result?.script;
   if (!script || typeof script !== "object" || Array.isArray(script)) throw new Error("Generated structured script is missing");
   const scriptSha256 = canonicalAuthoringScriptSha256(script);
-  if (authoring?.scriptApproval?.decision !== "APPROVE" ||
-      authoring.scriptApproval.scriptSha256 !== scriptSha256 ||
-      authoring.scriptSha256 !== scriptSha256) {
-    throw new Error("The exact current script revision must have human approval");
+  const scriptApproval = authoring?.scriptApproval;
+  if (scriptApproval?.decision !== "APPROVE" || scriptApproval.scriptSha256 !== scriptSha256 ||
+      authoring.scriptSha256 !== scriptSha256 ||
+      !scriptApproval.reviewer || !Number.isFinite(Date.parse(scriptApproval.reviewedAt ?? "")) ||
+      typeof scriptApproval.reason !== "string" || scriptApproval.reason.trim().length < 5 ||
+      scriptApproval.approvalSha256 !== sha256Json({
+        jobId: job.id, decision: scriptApproval.decision, scriptSha256: scriptApproval.scriptSha256,
+        reviewer: scriptApproval.reviewer, reviewedAt: scriptApproval.reviewedAt, reason: scriptApproval.reason
+      })) {
+    throw new Error("The exact current script revision must have a valid hash-bound human approval");
   }
 
   const narration = authoring.narrationStage;
   const narrationApproval = authoring.narrationApproval;
+  const narrationApprovalSha = narrationApproval && sha256Json({
+    jobId: job.id, decision: narrationApproval.decision, reviewer: narrationApproval.reviewer,
+    reviewedAt: narrationApproval.reviewedAt, reason: narrationApproval.reason,
+    scriptSha256: narrationApproval.scriptSha256, audioSha256: narrationApproval.audioSha256,
+    transcriptSha256: narrationApproval.transcriptSha256, captionsSha256: narrationApproval.captionsSha256,
+    reportSha256: narrationApproval.reportSha256, confirmAudioListened: narrationApproval.confirmAudioListened,
+    confirmTranscriptReviewed: narrationApproval.confirmTranscriptReviewed,
+    confirmCaptionsReviewed: narrationApproval.confirmCaptionsReviewed
+  });
   if (narration?.status !== "APPROVED_FOR_RENDER" || narration.scriptSha256 !== scriptSha256 ||
       narrationApproval?.decision !== "APPROVE" || narrationApproval.scriptSha256 !== scriptSha256 ||
+      narrationApproval.approvalSha256 !== narrationApprovalSha ||
+      !narrationApproval.reviewer || !Number.isFinite(Date.parse(narrationApproval.reviewedAt ?? "")) ||
+      typeof narrationApproval.reason !== "string" || narrationApproval.reason.trim().length < 5 ||
       narrationApproval.confirmAudioListened !== true ||
       narrationApproval.confirmTranscriptReviewed !== true ||
       narrationApproval.confirmCaptionsReviewed !== true) {
-    throw new Error("Narration, transcript and captions must be human-approved for the exact script");
+    throw new Error("Narration, transcript and captions must have valid hash-bound human approval for the exact script");
   }
   const artifactFiles = {};
   for (const [name, hashField] of [
@@ -76,10 +97,21 @@ export function buildApprovedJobRenderManifest({ job, root }) {
   }
 
   const planStage = authoring.productionPlan;
-  if (planStage?.status !== "APPROVED_PLAN_ONLY" || planStage.review?.decision !== "APPROVE" ||
-      planStage.review.planSha256 !== planStage.planSha256 ||
+  const planReview = planStage?.review;
+  if (planStage?.status !== "APPROVED_PLAN_ONLY" || planReview?.decision !== "APPROVE" ||
+      planReview.planSha256 !== planStage.planSha256 || planReview.scriptSha256 !== scriptSha256 ||
       productionPlanSha256(planStage.plan) !== planStage.planSha256 ||
-      planStage.scriptSha256 !== scriptSha256) {
+      planStage.scriptSha256 !== scriptSha256 ||
+      !planReview.reviewer || !Number.isFinite(Date.parse(planReview.reviewedAt ?? "")) ||
+      typeof planReview.reason !== "string" || planReview.reason.trim().length < 5 ||
+      planReview.confirmScenePlanReviewed !== true || planReview.confirmRightsEvidenceReviewed !== true ||
+      planReview.approvalSha256 !== sha256Json({
+        jobId: job.id, decision: planReview.decision, planSha256: planReview.planSha256,
+        scriptSha256: planReview.scriptSha256, reviewer: planReview.reviewer,
+        reviewedAt: planReview.reviewedAt, reason: planReview.reason,
+        confirmScenePlanReviewed: planReview.confirmScenePlanReviewed,
+        confirmRightsEvidenceReviewed: planReview.confirmRightsEvidenceReviewed
+      })) {
     throw new Error("A current, hash-bound, human-approved production plan is required");
   }
   const plan = planStage.plan;
