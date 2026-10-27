@@ -1,3 +1,66 @@
+# Live exact-SHA checkpoint — 27 October 2026 (current as of 20:50 UTC)
+
+## Git baseline
+
+- Repository: `clickerrish-art/YT-AUTO-VISE`
+- Branch: `codex/marketing-machine-audit-fixes`
+- Current source/test candidate at this checkpoint: `7bd13b1894de0b783f062a6481090cdafcf272f3`
+- Latest application-code ancestor: `081999d2a7f3afb2ef013a840e01982b21084db2`; this checkpoint changes only a test fixture after that application commit.
+- `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
+- Live compare at this checkpoint: 1,718 commits ahead, 2 behind, 163 changed files. The branch is heavily divergent; do not merge or rewrite history as part of this work.
+- PR #1: [open, draft, unmerged](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1).
+- Historical checkpoint SHAs later in this file are retained as history, not current state.
+
+## Change and regression
+
+- Commit: [`7bd13b1894de0b783f062a6481090cdafcf272f3`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/7bd13b1894de0b783f062a6481090cdafcf272f3).
+- Changed only `test/content-job-lifecycle.test.mjs`: corrected the private-upload approval fixture's metadata digest from a non-SHA label to a 64-character lowercase hexadecimal digest required by the validator.
+- `test/restore-facebook-draft-history.test.mjs` remains present and tracked. Its cross-run archive restoration, malformed archive, size-limit, insecure-origin and symlinked-output-parent tests are included in the automation test run.
+- No credentials were added and no external publishing operation was performed.
+
+## Exact-SHA workflow evidence
+
+All workflow runs below checked out the exact candidate SHA `7bd13b1894de0b783f062a6481090cdafcf272f3`.
+
+- Automation/security: **PASS** — [run 40581175451](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40581175451). 369 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; `npm audit` reported 0 vulnerabilities; locked install, JavaScript syntax checks, Python compilation, campaign/disclosure checks, metadata safety checks and queue invariants passed.
+- Dashboard browser E2E: **PASS** — [run 40581175422](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40581175422). 13 Chromium journeys passed against the real local dashboard/backend.
+- Content quality: **PASS** — [run 40581175413](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40581175413).
+- Metadata validation: **PASS** — [run 40581175673](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40581175673).
+- Isolated main/candidate comparison: **PASS** — [run 40581175645](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40581175645). This indicates the comparison workflow completed successfully; inspect its retained artifact for the detailed main/candidate counts before making broader claims.
+- Nature Frontiers Facebook draft: **PASS for deterministic local draft-package validation only** — [run 40581175874](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40581175874). The `create-draft-package` job was skipped; this is not live Meta integration evidence.
+- Production readiness: **BLOCKED / expected fail-closed** — [run 40581175396](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40581175396). The readiness command exited 2 and reported 13 blockers; the workflow correctly failed its mandatory readiness gate.
+
+## Exact currently reported readiness blockers
+
+The 13 blockers from the readiness log are:
+
+1. Feasible owner-approved cadence mode, timezone-aware approval timestamp and approval reference are missing.
+2. Complete SonicVhibez public/private/unlisted upload history and all pending/uncertain upload attempts need independent reconciliation immediately before upload.
+3. Rights-verified `content/render-manifest.json` is missing.
+4. Rights-verified `content/long-form-render-manifest.json` is missing.
+5. Short metadata is not human-reviewed and explicitly marked `READY_FOR_PRIVATE_UPLOAD`.
+6. Metadata does not contain the verified SonicVhibez YouTube channel ID.
+7. Metadata rights confirmation is not verified.
+8. Metadata compliance review is not completed.
+9. Final rendered `media/next-short.mp4` is missing.
+10. `YOUTUBE_CLIENT_ID` is not configured in the readiness runner.
+11. `YOUTUBE_CLIENT_SECRET` is not configured in the readiness runner.
+12. `YOUTUBE_REFRESH_TOKEN` is not configured in the readiness runner.
+13. `SONICVHIBEZ_CHANNEL_ID` is not configured in the readiness runner.
+
+These are reported blockers, not proof that every related underlying system is defective. Do not fabricate owner approval, credentials, media, rights evidence, identity, upload history or a remote receipt to clear them.
+
+## Scope and verdict
+
+The source/test change and exact-SHA CI results above are verified. The checks do **not** establish genuine final media, authentic rights/provenance, human playback approval, authenticated channel identity/history, one-operation private-upload authorization or receipt, eligible native Short Related video association, live Meta Page/Instagram integration, or completed production recovery/deployment drills.
+
+No public/unattended YouTube publishing was enabled. No YouTube upload, Facebook/Instagram post, campaign activation, visibility change, merge, or destructive Git operation occurred. Nature Frontiers remains prohibited as a YouTube target; Facebook live publishing remains disabled; Safari remains inactive; approved Selar destination remains `https://selar.com/0u19v8u99l`.
+
+**Verdict: IMPLEMENTATION PARTIAL / PRODUCTION ACCEPTANCE BLOCKED.**
+
+---
+
 ## Newer exact-SHA acceptance result — 27 October 2026
 
 **Exact application/test SHA:** `3690ec82b52263cb2da2378f8aba9a5b19658a8f`; latest application-code commit `d465c03cb3b12ee68000192089165f326121e8eb`. The PR HEAD at this evidence snapshot was `57ce7714ccdabbb149a95c56c3e3e0f5468f3f28`; subsequent documentation-only commits do not alter the tested application or tests. `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; divergence at that snapshot: 1,698 ahead / 2 behind / 163 changed files. No removed or renamed files appear in the live compare, and `test/restore-facebook-draft-history.test.mjs` is preserved.
