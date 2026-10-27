@@ -270,3 +270,15 @@ Exact tested source/test SHA: `c5bfbbc7861616494c6b589604fa3797e673681a`.
 Exact-SHA results: automation/security PASS (336 Node tests, 16 Python tests, npm audit zero vulnerabilities) [run 40453030534](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030534); browser E2E PASS (12 Chromium tests) [run 40453030615](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030615); content quality PASS [run 40453030586](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030586); metadata PASS [run 40453030574](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030574); isolated baseline PASS [run 40453030640](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030640); readiness BLOCKED [run 40453031961](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453031961); Facebook daily draft SKIPPED [run 40453030497](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030497).
 
 The above controls are real, but they do not complete the production journey. Keep the production refusal and publication safety controls in place until the full authoring-to-render-to-final-review workflow is connected and tested.
+
+
+## Addendum — production-plan controls (27 October 2026)
+
+| Control | Current behavior | Evidence/status | Limitation |
+|---|---|---|---|
+| Submit production plan | POST /api/jobs/production-plan binds the exact approved script and narration revision, verifies narration/scene/rights-evidence hashes, and persists the plan for review | API regression PASS at test tree 46186a494da5b512c57d0e6a04056b6c367754ef; current combined test tree 95a64fa... includes subsequent review-hash and preview assertions | File hashes do not prove licence validity, originality, factual accuracy or realism |
+| Review production plan | POST /api/jobs/production-plan/review rechecks approved narration and source hashes and records a hash-bound plan-only decision | Automation/security PASS [run 40487769081](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40487769081) | Plan approval is not final-video approval |
+| Plan review preview | Dashboard displays the exact persisted plan JSON before the reviewer submits a decision | New browser assertion included in tree 95a64fa...; latest browser workflow was pending when documented | Await exact latest browser result |
+| Produce authoring job | POST /api/jobs/produce continues to fail closed for authoring jobs | BLOCKED by design | Per-job quality evidence, renderer integration, final media validation and human playback review are still missing |
+
+Latest application-code SHA: 6224218660a11fd59353dbab96d9963e429649bb; test tree: 95a64fa88f668ba0f88cd2f4be394c9100c6ff53. Production readiness remains BLOCKED. Facebook daily draft remains SKIPPED.
