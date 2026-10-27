@@ -2128,6 +2128,7 @@ const server = http.createServer(async (req, res) => {
       let claim;
       let taskId;
       let taskArgs = null;
+      let outputPath = null;
       let jobTitle;
       try {
         const state = loadState();
@@ -2152,8 +2153,13 @@ const server = http.createServer(async (req, res) => {
               if (existingStat.isSymbolicLink() || !existingStat.isFile()) throw new Error("Existing per-job render manifest is unsafe");
             }
             atomicWriteJson(manifestFile, renderPackage.manifest, { mode: 0o600 });
+            const jobMediaDirectory = ensureSafeDirectoryPath(path.join(root, "media", "jobs", job.id), "Per-job media directory");
+            const jobMediaStat = fs.lstatSync(jobMediaDirectory);
+            if (jobMediaStat.isSymbolicLink() || !jobMediaStat.isDirectory()) throw new Error("Per-job media directory must be a real directory");
+            outputPath = path.posix.join("media", "jobs", job.id, "final.mp4");
             const scriptFile = path.join(root, "scripts", job.contentType === "short" ? "render-short.mjs" : "render-long-form.mjs");
-            const outputFile = path.resolve(root, job.contentType === "short" ? "media/next-short.mp4" : "media/long-form-next.mp4");
+            const outputFile = path.resolve(root, outputPath);
+            job.renderExecution = { taskId, status: "PREPARED", outputPath, preparedAt: new Date().toISOString() };
             taskArgs = [process.execPath, scriptFile, manifestFile, outputFile];
           } catch (error) {
             return json(res, 409, {
@@ -2189,7 +2195,7 @@ const server = http.createServer(async (req, res) => {
         } else {
           try {
             const isShort = current.contentType === "short";
-            const artifactPath = isShort ? "media/next-short.mp4" : "media/long-form-next.mp4";
+            const artifactPath = current.renderExecution?.outputPath ?? (isShort ? "media/next-short.mp4" : "media/long-form-next.mp4");
             const metadataPath = isShort ? "content/next-short.json" : "content/long-form-next.json";
             const artifactFile = resolveRepositoryFile(artifactPath);
             const metadataFile = resolveRepositoryFile(metadataPath);
@@ -2214,7 +2220,9 @@ const server = http.createServer(async (req, res) => {
             const hasAudio = streams.some(stream => stream.codec_type === "audio");
             if (!Number.isFinite(durationSeconds) || (isShort ? durationSeconds < 50 || durationSeconds > 60 : durationSeconds < 360 || durationSeconds > 600)) throw new Error("Rendered MP4 duration is outside the required format range");
             if (!video || !hasAudio || (isShort ? video.height <= video.width : video.width <= video.height)) throw new Error("Rendered MP4 is missing audio or has the wrong orientation");
-            const thumbnailPath = isShort ? "media/next-short-thumbnail.jpg" : "media/long-form-next-thumbnail.jpg";
+            const thumbnailPath = current.authoring
+              ? path.posix.join("media", "jobs", current.id, "thumbnail.jpg")
+              : isShort ? "media/next-short-thumbnail.jpg" : "media/long-form-next-thumbnail.jpg";
             const thumbnailRun = spawnSync(process.execPath, ["scripts/render-thumbnail.mjs", artifactPath, metadata.title, thumbnailPath], { encoding: "utf8", timeout: 120_000 });
             if (thumbnailRun.error || thumbnailRun.status !== 0) throw new Error("Thumbnail generation failed; install FFmpeg drawtext support and verify the rendered frame");
             const thumbnailFile = resolveRepositoryFile(thumbnailPath);
@@ -2228,7 +2236,7 @@ const server = http.createServer(async (req, res) => {
             updated = completeWorkerLease(current, claim.leaseToken, "BLOCKED", { errorDetails: { code: "RENDER_OUTPUT_INVALID_OR_MISSING", retryable: false, message: String(error instanceof Error ? error.message : "Rendered artifact validation failed").slice(0, 1000) } });
           }
         }
-        updated.renderExecution = { taskId, status: result.status, exitCode: result.exitCode, startedAt: result.startedAt, finishedAt: result.finishedAt, output: result.output, truncated: result.truncated === true };
+        updated.renderExecution = { taskId, status: result.status, outputPath: outputPath ?? current.renderExecution?.outputPath ?? null, exitCode: result.exitCode, startedAt: result.startedAt, finishedAt: result.finishedAt, output: result.output, truncated: result.truncated === true };
         state.jobs[index] = updated;
         state.audit.push({ id: crypto.randomUUID(), action: updated.state === "GENERATED" ? "CONTENT_RENDER_SUCCEEDED" : updated.state === "BLOCKED" ? "CONTENT_RENDER_BLOCKED" : "CONTENT_RENDER_FAILED", jobId: updated.id, taskId, state: updated.state, at: new Date().toISOString(), actor: operatorId });
         saveState(state);
