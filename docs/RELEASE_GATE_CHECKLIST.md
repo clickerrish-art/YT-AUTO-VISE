@@ -1,3 +1,14 @@
+## Current release checkpoint — 27 October 2026
+
+Exact application/test SHA: `081999d2a7f3afb2ef013a840e01982b21084db2`. PR #1 remains open, draft and unmerged. `main` remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; live divergence 1,709 ahead / 2 behind / 163 changed files. No removed or renamed files appear in the live compare, and `test/restore-facebook-draft-history.test.mjs` is preserved.
+
+Latest engineering change: private-parent Short relationship validation now fails closed by default; only the explicit private-upload and relationship-binding paths may persist a private parent with native Related video status `BLOCKED_EXTERNAL`. It does not claim a successful native association. Regression coverage is included.
+
+Exact-SHA checks: automation/security PASS (368 Node, 0 failures, 0 skipped; 16 Python; npm audit 0 vulnerabilities), content quality PASS, metadata validation PASS, local Facebook draft-package validation PASS (not live Meta integration), isolated main/candidate baseline PASS. Dashboard browser E2E was pending when this note was recorded. Production readiness is BLOCKED / fail-closed (13 blockers), not a passing release gate.
+
+Production remains blocked by genuine media and rights/playback approval, verified SonicVhibez identity and complete remote history, one-operation private upload authorization/receipt, native Short-parent eligibility, live authorized Meta/Instagram integration, owner-approved feasible cadence, and complete operational recovery/deployment acceptance. No upload or post occurred; public/unattended YouTube and Facebook live publishing remain disabled; Safari remains inactive.
+
+---
 ## Newer exact-SHA acceptance result — 27 October 2026
 
 **Exact application/test SHA:** `3690ec82b52263cb2da2378f8aba9a5b19658a8f`; latest application-code commit `d465c03cb3b12ee68000192089165f326121e8eb`. The PR HEAD at this evidence snapshot was `57ce7714ccdabbb149a95c56c3e3e0f5468f3f28`; subsequent documentation-only commits do not alter the tested application or tests. `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; divergence at that snapshot: 1,698 ahead / 2 behind / 163 changed files. No removed or renamed files appear in the live compare, and `test/restore-facebook-draft-history.test.mjs` is preserved.
