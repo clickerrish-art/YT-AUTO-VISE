@@ -26,6 +26,16 @@ test("rejects symlinked manifest/source inputs even when the target is inside th
   assert.throws(() => resolveRegularFileNoSymlinks(link, root, "Narration"), /symbolic link/i);
 });
 
+test("rejects an existing regular output instead of allowing FFmpeg overwrite", t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-safe-media-retained-"));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const output = path.join(root, "retained.mp4");
+  const retained = Buffer.from("reviewed or interrupted render bytes");
+  fs.writeFileSync(output, retained);
+  assert.throws(() => prepareSafeRenderOutput(output), /already exists.*refusing to overwrite/i);
+  assert.deepEqual(fs.readFileSync(output), retained);
+});
+
 test("rejects a symlinked output target without touching its destination", t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-safe-media-output-"));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
