@@ -157,3 +157,49 @@ The connected Metricool account currently returns a Nature Frontiers brand (`754
 
 ### Release decision
 **BLOCKED.** No real narration output or final production video has been accepted, no final full-playback realism review exists, no authorized private-upload receipt has been accepted, and the complete authoring-to-render workflow is still disconnected. Public/unattended YouTube publishing remains OFF, Facebook live publishing remains OFF in the application, Safari campaigns remain inactive, Nature Frontiers remains prohibited as a YouTube target, and the approved Selar URL remains `https://selar.com/0u19v8u99l`. No upload, post, visibility change, campaign activation, merge, or destructive Git operation was performed.
+
+
+## Superseding implementation and exact-SHA evidence — 27 October 2026, 12:57 UTC
+
+This section supersedes earlier statements above that the authoring renderer was entirely disconnected. Those statements remain historical checkpoints, not the current code description.
+
+### Live Git refs at this checkpoint
+
+- Repository: https://github.com/clickerrish-art/YT-AUTO-VISE
+- PR #1 remains OPEN, DRAFT and UNMERGED: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1
+- Application/test SHA: `66c61fc8aa8d79069426fc7f34dcb92013c02d7f`
+- `main` SHA: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
+- Live comparison: 1,628 commits ahead, 2 behind; 162 changed files.
+- No merge, main edit, reset, rebase, force-push or history rewrite was performed.
+
+### Code changes in the tested application/test tree
+
+- Added `scripts/content-job-artifact-paths.mjs` and `test/content-job-artifact-paths.test.mjs`. Authoring jobs now use validated, isolated `media/jobs/<job-id>/final.mp4` and `thumbnail.jpg` paths rather than shared format-level output paths. Traversal/malformed IDs are rejected and distinct jobs receive distinct paths.
+- Corrected `test/build-approved-job-render-manifest.test.mjs` fixtures to carry current hash-bound script, narration and plan approval attestations. Mutation tests now recompute the plan approval hash before testing deeper validation, so tests reach the intended gate rather than failing at an earlier stale-approval check.
+- Corrected the production-plan review response so it no longer claims renderer integration is absent when `POST /api/jobs/produce` has a hash-gated authoring-render path.
+- Final approval for authoring jobs now revalidates the current approved render package and saved per-job render manifest, and records explicit script, narration, transcript, captions, production-plan, quality-evidence and render-manifest hashes. It also records source-asset and licence-evidence hashes in the related-artifact integrity list. A stale or missing render package blocks approval.
+- The renderer and all approval stages still keep publication disabled; code-level readiness does not constitute a real-media acceptance receipt.
+
+### Exact-SHA CI for application/test SHA `66c61fc8aa8d79069426fc7f34dcb92013c02d7f`
+
+- **Automation/security — PASS:** 357 Node tests passed, 0 failed; 16 Python safety tests passed; locked dependency install succeeded; npm audit found 0 vulnerabilities; syntax/compile and repository policy checks passed. [Run 40507689487](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40507689487)
+- **Content quality — PASS:** [Run 40507689426](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40507689426)
+- **Metadata validation — PASS:** [Run 40507689469](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40507689469)
+- **Isolated main/candidate baseline — PASS:** main `fa00d28e7f58911482686e4ad69fac9f4701a2e6` and candidate `66c61fc8aa8d79069426fc7f34dcb92013c02d7f` each completed Node and Python tests with exit code 0. [Run 40507689457](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40507689457)
+- **Dashboard browser E2E — PENDING at evidence capture:** [Run 40507689427](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40507689427). Do not treat this as a pass.
+- **Production readiness — BLOCKED:** [Run 40507689465](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40507689465). The workflow reported 13 blockers, including missing owner-approved feasible cadence, unverified complete YouTube history, missing verified SonicVhibez channel ID, rights attestation and missing final media.
+- **Nature Frontiers Facebook daily draft — SKIPPED:** [Run 40507689421](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40507689421). No live draft-execution pass is claimed.
+
+### External and production blockers that remain
+
+- No genuine, rights-cleared production asset set and complete accepted final export have been produced and reviewed in this checkpoint. A renderer test, manifest validation or sample media file is not evidence of realistic wildlife footage.
+- No verified SonicVhibez OAuth/channel identity, complete public/private/unlisted history reconciliation, authorized private-upload attempt or remote receipt was produced. No upload was performed.
+- No completed real-media human full-playback review, verified caption/audio synchronization receipt, or native YouTube Related-video verification is available.
+- The owner-approved feasible publication cadence remains absent. The configured `long_form → long_form → short` cycle and 72-hour minimum gap remain fail-closed until the owner records a feasible policy.
+- The latest previously inspected Metricool snapshot reported eight future Nature Frontiers posts with `autoPublish=true` and `draft=false`, plus a Nature Frontiers YouTube connection whose identity was not verified. No safe, reversible account-level pause/disconnect control was exposed by the connected read-only inspection surface; no external schedules or connections were changed. Treat this as an unresolved external safety risk until the account is corrected and verified directly.
+- Facebook draft integration remains unproven. Facebook live publishing remains disabled. Safari campaigns remain inactive. Nature Frontiers must never be a YouTube target. The approved Selar URL remains exactly `https://selar.com/0u19v8u99l`.
+
+### Release decision
+
+**BLOCKED — NOT 100% ACCEPTED.** The latest tested tree has meaningful pipeline, approval-integrity and per-job artifact improvements, and the listed exact-SHA checks pass except for the explicitly pending/blocked/skipped workflows. Real-media, external-account, cadence, final human-review, upload-receipt and deployment/recovery acceptance gates remain open. Do not merge PR #1 or enable unattended/public YouTube, Facebook live publishing, or Safari campaigns.
