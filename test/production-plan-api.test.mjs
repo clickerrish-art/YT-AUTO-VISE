@@ -112,6 +112,16 @@ test("production-plan API binds the approved script, checks real file hashes, an
   assert.equal(submitted.body.publishingEnabled, false);
   assert.equal(submitted.body.planSha256, productionPlanSha256(plan));
 
+  const narrationPath = path.join(repoRoot, narrationArtifacts["narration.mp3"].path);
+  const originalAudio = fs.readFileSync(narrationPath);
+  fs.writeFileSync(narrationPath, "mutated approved narration after plan submission");
+  const staleNarration = await request("/api/jobs/production-plan/review", {
+    jobId, planSha256: submitted.body.planSha256, decision: "APPROVE", reason: "Evidence was inspected",
+    confirmScenePlanReviewed: true, confirmRightsEvidenceReviewed: true
+  });
+  assert.equal(staleNarration.status, 409, "changed approved narration must invalidate plan review");
+  fs.writeFileSync(narrationPath, originalAudio);
+
   const changedAsset = path.join(repoRoot, scenes[0].assetPath);
   fs.writeFileSync(changedAsset, "mutated after plan submission");
   const stale = await request("/api/jobs/production-plan/review", {
