@@ -581,3 +581,29 @@ test("Short-parent dashboard submits the explicit relationship payload and surfa
   expect((await afterResponse.json()).publishingEnabled).toBe(false);
 });
 
+
+
+test("production-plan controls are exposed and report backend rejection without claiming render approval", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+  await expect(page.locator("#productionplanform")).toBeVisible();
+  await expect(page.locator("#productionplanreviewform")).toBeVisible();
+  await expect(page.locator("#productionplanresult")).toContainText("No production plan submitted");
+
+  await page.route("**/api/jobs/production-plan", async route => {
+    await route.fulfill({
+      status: 409,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "Current approved narration artifacts are missing or stale" })
+    });
+  });
+  await page.locator("#productionplanjob").evaluate(el => el.add(new Option("fixture job", "fixture-production-job")));
+  await page.locator("#productionplanjob").selectOption("fixture-production-job");
+  await page.locator("#productionplansha").fill("a".repeat(64));
+  await page.locator("#productionplanjson").fill(JSON.stringify({ schemaVersion: 1, jobId: "fixture-production-job", contentType: "long_form", scriptSha256: "a".repeat(64), scenes: [] }));
+  await page.getByRole("button", { name: "Validate and persist production plan" }).click();
+  await expect(page.locator("#productionplanresult")).toContainText("Current approved narration artifacts are missing or stale");
+  await expect(page.locator("#produceresult")).toContainText("No render action taken");
+});
