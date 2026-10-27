@@ -82,6 +82,10 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(ready, true, "server did not start: " + logs);
   const unauthorized = await fetch(base + "/api/state");
   assert.equal(unauthorized.status, 401);
+  const malformedUnicodeToken = "é" + "x".repeat(token.length - 1);
+  assert.equal(malformedUnicodeToken.length, token.length);
+  const malformedTokenResponse = await fetch(base + "/api/state", { headers: { "x-operator-token": malformedUnicodeToken } });
+  assert.equal(malformedTokenResponse.status, 401, "equal JavaScript string lengths with unequal UTF-8 byte lengths must reject cleanly");
   const headers = { "content-type": "application/json", "x-operator-token": token };
   const initial = await fetch(base + "/api/state", { headers });
   assert.equal(initial.status, 200);
