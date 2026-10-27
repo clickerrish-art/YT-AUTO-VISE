@@ -98,6 +98,44 @@ test("restore rolls back earlier file commits when a later destination rename fa
   }
 });
 
+test("restore recovers a committed file from an interrupted transaction journal and requires explicit retry", async () => {
+  const source = fixture();
+  const destination = fixture();
+  try {
+    const backupPath = path.join(source.root, "backup.json");
+    await backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir, rightsDir: source.rightsDir, outputPath: backupPath });
+    const backup = JSON.parse(fs.readFileSync(backupPath, "utf8"));
+    const stateEntry = backup.entries.find(entry => entry.target.kind === "dashboard-state");
+    assert.ok(stateEntry, "fixture backup must contain dashboard state");
+
+    const destinationState = path.join(destination.stateDir, "dashboard-state.json");
+    fs.writeFileSync(destinationState, Buffer.from(stateEntry.contentBase64, "base64"), { mode: 0o600 });
+    const journalPath = path.join(destination.root, ".restore-transaction.json");
+    fs.writeFileSync(journalPath, JSON.stringify({
+      format: "sonicvhibez-restore-transaction",
+      version: 1,
+      createdAt: new Date().toISOString(),
+      entries: [{
+        target: { kind: "dashboard-state", path: "dashboard-state.json" },
+        action: "RESTORE_MISSING",
+        newSha256: stateEntry.sha256,
+        tempName: "dashboard-state.json.interrupted.restore-tmp"
+      }]
+    }), { mode: 0o600 });
+
+    await assert.rejects(
+      restoreState({ backupPath, rootDir: destination.root, stateDir: destination.stateDir, uploadLogDir: destination.logDir, rightsDir: destination.rightsDir, confirm: "YES" }),
+      /rolled back safely.*rerun restore explicitly/
+    );
+    assert.equal(fs.existsSync(destinationState), false,
+      "restart recovery must roll back the committed file from the interrupted restore");
+    assert.equal(fs.existsSync(journalPath), false, "successful rollback must remove the transaction journal");
+  } finally {
+    fs.rmSync(source.root, { recursive: true, force: true });
+    fs.rmSync(destination.root, { recursive: true, force: true });
+  }
+});
+
 test("restore refuses to overwrite a different existing upload ledger and performs no partial restore", async () => {
   const source = fixture();
   const destination = fixture();
