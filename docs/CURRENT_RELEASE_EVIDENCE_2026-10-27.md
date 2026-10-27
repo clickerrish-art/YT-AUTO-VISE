@@ -880,3 +880,24 @@ The helper's three isolated Node regression tests also passed locally. No full l
 The previous candidate `de41102b622def75671e82b8972a16b536cd1c5a` had automation/security, content-quality, metadata and 13-journey Chromium E2E workflows pass. The current candidate adds the integration-level malformed-token regression, so its own in-progress results must be checked before assigning the same pass claims to `c819fb9e005eb01b614d66c1aa380e1330147d41`.
 
 Production remains **NOT READY**. The 13 current readiness blockers include missing genuine render manifests and final Short media, missing review/rights evidence, missing verified SonicVhibez channel metadata and YouTube credentials in this CI environment, complete YouTube history reconciliation, and a feasible timezone-aware owner-approved cadence. No external publication was attempted.
+
+
+---
+
+## Reconciled completed CI checkpoint — 28 October 2026
+
+This section supersedes earlier statements in this document that isolated baseline run `40595854787` was pending. The refreshed branch checkpoint was `8e7bec96d66bf6ad8c18da177fe4b83d1e943716`; the only change in that commit relative to the source/test candidate was acceptance-register documentation. Dashboard and server source blobs at the checkpoint were independently scanned for the refreshed control/route inventory recorded in `docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md`.
+
+- Automation/security [40596063596](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40596063596): PASS; 382 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit reported 0 vulnerabilities; normal lifecycle install, FFmpeg integration, syntax and compilation checks passed.
+- Content quality [40596063407](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40596063407): PASS.
+- Metadata [40596063450](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40596063450): PASS.
+- Dashboard browser E2E [40596063436](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40596063436): PASS, 13 Chromium journeys.
+- Isolated main/candidate baseline [40596063417](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40596063417): PASS. Retained artifact: [baseline-comparison.zip](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40596063417/artifacts/12776445936), artifact ID `12776445936`, uploaded ZIP SHA-256 `ad6a3cdc09533fd7d45cb8db516f4c02c4b0fce5c9960786b8e274084b0d6851`.
+- Production readiness [40596063416](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40596063416): BLOCKED; the readiness commands correctly returned exit code 2 with 13 prerequisites.
+- Facebook draft workflow [40596063619](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40596063619): local candidate draft validation passed, but `create-draft-package` was skipped. No external Meta draft is verified.
+
+### Current decision
+
+**Code CI and isolated baseline: PASS for the observed checkpoint. Implementation: PARTIAL. Production acceptance: BLOCKED.** The inventory is now refreshed to 105 controls across 15 forms and 38 literal route branches (10 GET, 28 POST). Exhaustive per-control/API acceptance remains `NOT_TESTED`; genuine media, rights, human playback approval, verified SonicVhibez account/history, private upload receipt, owner cadence approval, external Meta draft acceptance, native Related video eligibility, branch protection and operational deployment/recovery drills remain unresolved.
+
+No public/unattended YouTube publishing, live Meta publishing, campaign activation, video visibility change, PR merge, main edit or destructive Git operation was performed.
