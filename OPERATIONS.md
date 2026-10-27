@@ -1,3 +1,11 @@
+## Latest verification — 27 October 2026
+
+The retained render output and manifest guards passed the exact source/test SHA `3690ec82b52263cb2da2378f8aba9a5b19658a8f`: automation/security [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972741), 367 Node tests / 0 failures / 0 skips, 16 Python tests, 0 npm audit vulnerabilities; dashboard E2E [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972740), 13 Chromium journeys; content quality [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972899); metadata [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972743). Isolated baseline [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972749), with one candidate integration test explicitly skipped because FFmpeg could not be installed in that isolated baseline runner. Production readiness remains [BLOCKED](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972751).
+
+Continue to preserve any existing MP4, thumbnail or per-job manifest and reconcile it under operator review before retrying. Never delete retained evidence merely to get a clean render. A private parent cannot serve as a native Short Related video under YouTube's [official eligibility rule](https://support.google.com/youtube/answer/14075157?hl=en); do not change privacy to bypass it. Real media/rights/playback approval, verified OAuth/history, one-shot private-upload receipt, eligible Short-parent association, live Meta integration, owner cadence approval and full recovery/deployment acceptance remain outstanding.
+
+---
+
 ## Live recovery note — 27 October 2026
 
 A render request now refuses to overwrite an existing per-job MP4, thumbnail or render manifest. The standalone render destination validator also refuses an existing regular output file. A `409 recoveryRequired` response means **do not delete the file and retry blindly**: preserve the artifact, inspect job state and hashes, and reconcile the interrupted attempt under operator review. The current regression tests assert that retained bytes are unchanged and the job remains queued. Exact source/test checkpoint: `3690ec82b52263cb2da2378f8aba9a5b19658a8f`; automation/security and isolated baseline were still running at the time this note was recorded.
