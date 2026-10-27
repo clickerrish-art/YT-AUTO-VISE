@@ -1,3 +1,22 @@
+## Latest exact-SHA release checkpoint — `b1989a764e54400cddb55158b998c5a375972321`
+
+- [x] Stage all changed restore files before destination commits; persist journal in configured state directory.
+- [x] Roll back a previously committed new file after injected second-destination rename failure.
+- [x] Restore original dashboard-state bytes after an injected later commit failure.
+- [x] Recover interrupted restore journal after restart; require explicit retry rather than silently replaying the restore.
+- [x] Dashboard refuses startup while an interrupted restore journal remains.
+- [x] Automation/security: [run 40591305237](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237), 378 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; normal lifecycle install; npm audit 0 vulnerabilities.
+- [x] Content quality: [run 40591305355](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305355), 378 tests, 0 skips.
+- [x] Metadata: [run 40591305087](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305087), 378 tests, 0 skips.
+- [x] Dashboard E2E: [run 40591305138](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305138), 13 Chromium tests.
+- [x] Isolated main/candidate baseline: [run 40591305219](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305219); [artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305219/artifacts/12773494010).
+- [ ] Production readiness — BLOCKED by 13 real prerequisites: [run 40591305218](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305218).
+- [ ] Full power-loss/operational restore and rollback drills, cross-process uncertain remote-operation recovery, exhaustive dashboard/API acceptance, genuine media/rights/human approvals, verified YouTube/Meta external operations, owner-approved cadence and branch divergence reconciliation.
+
+**Verdict remains IMPLEMENTATION PARTIAL / NOT PRODUCTION READY.**
+
+---
+
 ## Latest exact-SHA checkpoint — `31b5f56415b51280baa11418c56ef3c2b1280006`
 
 - [x] Restore stages every changed file before committing any destination and writes a durable recovery journal.
