@@ -4,13 +4,30 @@ import { spawn } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import net from "node:net";
+
+async function getAvailablePort() {
+  const probe = net.createServer();
+  await new Promise((resolve, reject) => {
+    probe.once("error", reject);
+    probe.listen(0, "127.0.0.1", resolve);
+  });
+  const address = probe.address();
+  if (!address || typeof address === "string") {
+    await new Promise(resolve => probe.close(resolve));
+    throw new Error("Could not allocate a TCP test port");
+  }
+  const port = address.port;
+  await new Promise((resolve, reject) => probe.close(error => error ? reject(error) : resolve()));
+  return port;
+}
 
 test("authenticated Facebook draft endpoints persist review state and refuse live publication", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-dashboard-"));
   // Let the OS allocate an isolated ephemeral port. Random selection from a
   // shared range can collide with parallel test servers and make the test read
   // another process's state directory, producing misleading recovery failures.
-  const port = 0;
+  const port = await getAvailablePort();
   const token = "facebook-test-token-" + "z".repeat(36);
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
     env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "facebook-test-owner", DASHBOARD_STATE_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "" },
@@ -20,15 +37,11 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   child.stdout.on("data", chunk => { logs += chunk.toString(); });
   child.stderr.on("data", chunk => { logs += chunk.toString(); });
   t.after(() => { child.kill("SIGTERM"); fs.rmSync(stateDir, { recursive: true, force: true }); });
-  let base = null;
+  const base = `http://127.0.0.1:${port}`;
   let ready = false;
   for (let i = 0; i < 80; i++) {
     if (child.exitCode !== null) break;
-    const started = logs.match(/"event":"dashboard_started"[^\n]*"port":(\d+)/);
-    if (started) {
-      base = `http://127.0.0.1:${started[1]}`;
-      try { const response = await fetch(base + "/healthz"); if (response.ok) { ready = true; break; } } catch {}
-    }
+    try { const response = await fetch(base + "/healthz"); if (response.ok) { ready = true; break; } } catch {}
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   assert.equal(ready, true, "dashboard did not start: " + logs);
@@ -98,7 +111,7 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
 test("dashboard restart moves interrupted Facebook submissions to reconciliation without losing known remote IDs", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-recovery-"));
   // Use an OS-assigned ephemeral port so parallel tests cannot hit another server.
-  const port = 0;
+  const port = await getAvailablePort();
   const token = "facebook-recovery-token-" + "r".repeat(32);
   const statePath = path.join(stateDir, "dashboard-state.json");
   fs.writeFileSync(statePath, JSON.stringify({
@@ -118,15 +131,11 @@ test("dashboard restart moves interrupted Facebook submissions to reconciliation
   child.stdout.on("data", chunk => { logs += chunk.toString(); });
   child.stderr.on("data", chunk => { logs += chunk.toString(); });
   t.after(() => { child.kill("SIGTERM"); fs.rmSync(stateDir, { recursive: true, force: true }); });
-  let base = null;
+  const base = `http://127.0.0.1:${port}`;
   let ready = false;
   for (let i = 0; i < 80; i++) {
     if (child.exitCode !== null) break;
-    const started = logs.match(/"event":"dashboard_started"[^\n]*"port":(\d+)/);
-    if (started) {
-      base = `http://127.0.0.1:${started[1]}`;
-      try { const response = await fetch(base + "/healthz"); if (response.ok) { ready = true; break; } } catch {}
-    }
+    try { const response = await fetch(base + "/healthz"); if (response.ok) { ready = true; break; } } catch {}
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   assert.equal(ready, true, "dashboard did not start: " + logs);
