@@ -56,6 +56,31 @@ test("private parent cannot claim native Related video verification", () => {
   assert.match(validateShortParentRelationship(invalidStatus).join(" "), /native YouTube Related video status/);
 });
 
+test("native Related video proof must bind exact parent ID, channel and destination", () => {
+  const verified = {
+    status: "VERIFIED",
+    verifiedBy: "operator-1",
+    verifiedAt: "2026-10-27T10:00:00.000Z",
+    evidenceSha256: sha("9"),
+    parentVideoId: base.parentRemoteVideoId,
+    channelId: base.parentChannelId,
+    destinationUrl: base.parentCanonicalUrl
+  };
+  const eligibleBase = { ...base, parentPrivacyStatus: "public", nativeRelatedVideo: verified };
+  eligibleBase.relationshipEvidenceSha256 = shortParentEvidenceSha256(eligibleBase);
+  assert.deepEqual(validateShortParentRelationship(eligibleBase, { channelId: base.parentChannelId }), []);
+
+  for (const [patch, expected] of [
+    [{ parentVideoId: "zzzzzzzzzzz" }, /exact approved parent video ID/],
+    [{ channelId: "UC" + "B".repeat(22) }, /verified SonicVhibez parent channel/],
+    [{ destinationUrl: "https://example.com/other-parent" }, /canonical parent destination URL/]
+  ]) {
+    const invalid = { ...eligibleBase, nativeRelatedVideo: { ...verified, ...patch } };
+    invalid.relationshipEvidenceSha256 = shortParentEvidenceSha256(invalid);
+    assert.match(validateShortParentRelationship(invalid, { channelId: base.parentChannelId }).join(" "), expected);
+  }
+});
+
 test("source segments must map to the exact reviewed parent timeline and stay within scene bounds", () => {
   const evidence = { format: "long_form", scenes: [
     { sceneId: "scene-03", assetId: "asset-03", startSeconds: 40, endSeconds: 60 },
