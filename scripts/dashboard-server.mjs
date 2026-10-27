@@ -1895,7 +1895,7 @@ const server = http.createServer(async (req, res) => {
         };
         relationship.relationshipEvidenceSha256 = crypto.createHash("sha256").update(JSON.stringify({ ...relationship, relationshipEvidenceSha256: "" })).digest("hex");
         try {
-          assertShortParentRelationship(relationship, { childContentId: child.id, childMediaSha256: relationship.childMediaSha256, childMetadataSha256: child.metadataVersion, channelId: parentReceipt.channelId });
+          assertShortParentRelationship(relationship, { childContentId: child.id, childMediaSha256: relationship.childMediaSha256, childMetadataSha256: child.metadataVersion, channelId: parentReceipt.channelId, allowPrivateParent: true });
         } catch (error) {
           return json(res, 400, { error: String(error?.message ?? "Short parent relationship validation failed") });
         }
