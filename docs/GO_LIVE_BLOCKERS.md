@@ -733,3 +733,10 @@ Keep all repository publication safeguards enabled. Full production acceptance r
 The readiness engine now treats 72 elapsed hours as a hard minimum for every cadence mode and no longer accepts `WEEKLY_TARGET_WITH_SHORTER_SPACING`. See source/test SHA `47c839452fda99757a34dcb29865da9e967121af` and [exact-SHA CI evidence](https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
 
 This closes the code-level defect that could have accepted a shorter spacing policy. It does **not** close the owner cadence decision: the configuration remains unapproved until an explicit feasible mode is selected. Production remains blocked on real media/rights/human review, verified YouTube identity and history, private-upload authorization/receipt, eligible native Short Related video evidence, successful real Meta draft-only integration, and operational recovery/deployment acceptance.
+
+
+## Follow-up implementation checkpoint — 27 October 2026
+
+The private-only Short review path now permits an explicit `BLOCKED_EXTERNAL` native Related-video status without representing it as a successful association. An empty or vague blocker explanation is rejected and covered by a regression test. Exact source/test SHA: `77921aca418b25bca0a9aa681281145b00c6d72f`; application-code commit: `2186822bba83ecfb299e40ab8d10376c009f8711`. Evidence is recorded in [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
+
+This does not clear native Related-video eligibility or authorize public publishing. Production readiness remains blocked by genuine approved media and human review, verified SonicVhibez OAuth/history and a private-upload receipt, real Meta draft-only integration, an owner-approved feasible cadence, and complete recovery/deployment acceptance. Browser E2E and isolated baseline were still in progress at the source/test checkpoint; verify their final outcomes before release. Keep publishing safeguards unchanged.
