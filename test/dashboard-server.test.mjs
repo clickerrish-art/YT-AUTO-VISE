@@ -475,6 +475,48 @@ test("dashboard refuses to start when persisted Facebook history is malformed", 
 });
 
 
+test("dashboard refuses startup while an interrupted restore journal exists", async (t) => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-interrupted-restore-"));
+  const journal = path.join(stateDir, ".restore-transaction.json");
+  fs.writeFileSync(journal, JSON.stringify({
+    format: "sonicvhibez-restore-transaction",
+    version: 1,
+    entries: []
+  }) + "\n", { mode: 0o600 });
+  const port = 18000 + Math.floor(Math.random() * 10000);
+  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: {
+      ...process.env,
+      DASHBOARD_OPERATOR_TOKEN: "test-token-" + "z".repeat(40),
+      DASHBOARD_OPERATOR_ID: "test-owner",
+      DASHBOARD_STATE_DIR: stateDir,
+      PORT: String(port),
+      DASHBOARD_HOST: "127.0.0.1"
+    },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let logs = "";
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  t.after(() => {
+    if (child.exitCode === null) child.kill("SIGTERM");
+    fs.rmSync(stateDir, { recursive: true, force: true });
+  });
+
+  const result = await new Promise(resolve => {
+    const timer = setTimeout(() => resolve({ timedOut: true, code: null }), 3000);
+    child.once("exit", code => {
+      clearTimeout(timer);
+      resolve({ timedOut: false, code });
+    });
+  });
+  assert.equal(result.timedOut, false, "dashboard must refuse startup before serving partially restored state");
+  assert.equal(result.code, 2);
+  assert.match(logs, /interrupted state restore journal exists/i);
+  assert.equal(fs.existsSync(path.join(stateDir, "dashboard-state.json")), false,
+    "startup refusal must not initialize or overwrite state while recovery is pending");
+});
+
 test("dashboard refuses a symlinked persisted state file at startup", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-symlink-state-"));
   const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-symlink-target-"));
