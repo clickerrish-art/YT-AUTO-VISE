@@ -1,3 +1,22 @@
+# Latest release gate checkpoint — 27 October 2026
+
+Exact tested source/test SHA: `71555f20cc5fbd24658f50e82da5544eeed1a622`; application-code commit: `cb9118e8cadaa72c6be334031e250e4ceb44d02c`; regression-test commit: `71555f20cc5fbd24658f50e82da5544eeed1a622`.
+
+- [x] Schedule reservation hardening: `queued_for_publication` and `pending_schedule` now participate in 72-hour and same-local-date collision checks.
+- [x] Automation/security — [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40465705566): 338 Node tests, 16 Python safety tests, 0 reported npm vulnerabilities.
+- [x] Dashboard browser E2E — [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40465705587): 12 Chromium tests.
+- [x] Content quality — [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40465705622).
+- [x] Metadata validation — [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40465705503).
+- [x] Isolated main/candidate baseline — [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40465705450).
+- [ ] Production readiness — **BLOCKED**, not a release pass: [run 40465705498](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40465705498).
+- [ ] Nature Frontiers Facebook draft integration — **SKIPPED**, not a pass: [run 40465705576](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40465705576).
+
+Owner-controlled gates still open: genuine rights-cleared media and final human review; verified SonicVhibez OAuth/channel identity and complete visibility history; reconciliation of uncertain uploads and one-operation private-upload authorization; native Short-parent evidence; verified Meta Page and non-skipped draft execution; feasible owner-approved cadence; recovery/backup/restore/deployment drills; full divergent-history and branch-governance review.
+
+Keep all live/public publishing disabled, Safari inactive, PR #1 open/draft/unmerged, and `main` unchanged.
+
+---
+
 # Latest release gate checkpoint — 26 October 2026
 
 Exact tested source/test SHA: `9982caed6bee7f8d01740acff5162b94988b2e59`; latest application-code commit: `1aeca29026c6965fe13ff206f8cc097f7d4fa038`.
