@@ -17,9 +17,21 @@ const base = {
 base.relationshipEvidenceSha256 = shortParentEvidenceSha256(base);
 
 test("accepts an explicit, hash-bound Short parent with native feature honestly blocked for private parent", () => {
-  assert.deepEqual(validateShortParentRelationship(base, { childContentId: base.childContentId, childMediaSha256: base.childMediaSha256, childMetadataSha256: base.childMetadataSha256, channelId: base.parentChannelId }), []);
-  assert.equal(assertShortParentRelationship(base, { channelId: base.parentChannelId }), true);
+  assert.deepEqual(validateShortParentRelationship(base, { childContentId: base.childContentId, childMediaSha256: base.childMediaSha256, childMetadataSha256: base.childMetadataSha256, channelId: base.parentChannelId, allowPrivateParent: true }), []);
+  assert.equal(assertShortParentRelationship(base, { channelId: base.parentChannelId, allowPrivateParent: true }), true);
   assert.match(shortParentRelationshipSha256(base), /^[a-f0-9]{64}$/);
+});
+
+test("private parent validation fails closed unless a caller explicitly records a blocked pending relationship", () => {
+  assert.match(
+    validateShortParentRelationship(base, { channelId: base.parentChannelId }).join(" "),
+    /a private parent is ineligible for native YouTube Related video/
+  );
+  assert.deepEqual(
+    validateShortParentRelationship(base, { channelId: base.parentChannelId, allowPrivateParent: true }),
+    [],
+    "explicitly allowed private-parent records still require nativeRelatedVideo=BLOCKED_EXTERNAL"
+  );
 });
 
 test("rejects missing parent, guessed/noncanonical URL, channel mismatch and unverified remote parent", () => {
