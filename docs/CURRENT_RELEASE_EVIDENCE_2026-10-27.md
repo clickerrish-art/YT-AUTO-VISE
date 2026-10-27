@@ -1,5 +1,49 @@
 # Live exact-SHA checkpoint — 27 October 2026 (current as of 20:50 UTC)
 
+## Latest exact-SHA implementation and acceptance checkpoint — 27 October 2026, 21:08 UTC
+
+**Exact source/test SHA:** `4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd`. **Latest application-code SHA:** `4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd`. At this source/test checkpoint, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, divergence 1,733 ahead / 2 behind / 163 changed files. Documentation-only descendants update this evidence. PR #1 remains open, draft and unmerged.
+
+### Implementation changes
+
+- Narration generation now requires a strict calendar-valid ISO timestamp with an explicit timezone for human script approval. Regression cases reject date-only, timezone-free, impossible-date and invalid-offset values before TTS. See [code](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/65a572eeb8a785b79725594b90954c958b9b1625) and [tests](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d214cbe7910d755a0630d7e7536b4c675fe1f589).
+- Structured readiness findings now label evidence types and control ownership, identify checked paths for schedule/metadata/queue findings, explicitly state that remote YouTube history is not fetched by the read-only report, and redact absolute external `QUEUE_PATH` values. Regression tests cover evidence paths and path redaction. Final code/test checkpoint is `4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd`.
+
+### Exact-SHA verification
+
+- **Automation/security — PASS:** [run 40583891887](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891887): 372 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; locked install with normal lifecycle scripts, npm audit (0 vulnerabilities), FFmpeg renderer integration, JS syntax checks and Python compilation passed.
+- **Dashboard browser E2E — PASS:** [run 40583891896](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891896), 13 Chromium journeys against the real local dashboard/backend.
+- **Content quality — PASS:** [run 40583891874](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891874).
+- **Metadata validation — PASS:** [run 40583892218](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583892218). Its own Node test invocation had 1 FFmpeg-dependent skip because FFmpeg was absent in that job; automation and baseline workflows installed FFmpeg and passed all 372 tests without skips.
+- **Isolated main/candidate baseline — PASS:** [run 40583891860](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891860). [Retained baseline artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891860/artifacts/12770538942): main 54 Node / 8 Python tests; candidate 372 Node / 16 Python tests; zero failures/skips and all command exit codes 0.
+- **Facebook draft workflow — PASS for local deterministic draft validation only:** [run 40583891851](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891851). The remote `create-draft-package` job was skipped; no live Meta integration is proven.
+- **Production readiness — BLOCKED / fail-closed:** [run 40583891981](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891981). Human-readable and JSON checks exited 2; 13 blockers were retained in the [readiness artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891981/artifacts/12771280214).
+
+The immediately preceding interim checkpoint exposed a syntax error and failed; that checkpoint is not accepted. The syntax was corrected and the exact source/test SHA above was rerun. The readiness workflow's failure is expected because production prerequisites remain missing.
+
+### Current 13 production blockers
+
+1. Owner-approved feasible cadence mode, timezone-aware approval timestamp and non-empty approval reference.
+2. Complete SonicVhibez public/private/unlisted history and pending/uncertain upload attempts must be independently reconciled; the readiness script does not fetch remote history.
+3. Rights-verified `content/render-manifest.json` is missing.
+4. Rights-verified `content/long-form-render-manifest.json` is missing.
+5. Short metadata needs human review and explicit `READY_FOR_PRIVATE_UPLOAD` status.
+6. Metadata needs the independently verified SonicVhibez channel ID.
+7. Rights confirmation requires genuine media/licence verification.
+8. Compliance review requires authorized human completion.
+9. Genuine final `media/next-short.mp4` is missing.
+10–12. `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET` and `YOUTUBE_REFRESH_TOKEN` are absent from this readiness execution environment; this does not establish the state of a separate production secret store.
+13. `SONICVHIBEZ_CHANNEL_ID` is absent from this readiness execution environment and must be verified, never guessed.
+
+### Safety and verdict
+
+No upload, post, campaign activation, visibility change, merge, main-branch edit, reset, rebase, force-push or destructive reconciliation was performed. Public/unattended YouTube and Facebook/Instagram live publishing remain disabled; Nature Frontiers remains prohibited as a YouTube target; Safari remains inactive; the approved Selar URL remains `https://selar.com/0u19v8u99l`.
+
+**Verdict: IMPLEMENTATION PARTIAL / PRODUCTION ACCEPTANCE BLOCKED.** The automated code checkpoint passes, but genuine rights-cleared media, human approvals, channel identity/history, explicit one-operation private-upload authorization/receipt, live Meta integration, owner cadence approval and recovery/deployment drills remain unproven.
+
+---
+
+
 ## Latest exact-SHA implementation and acceptance checkpoint — 27 October 2026, 21:02 UTC
 
 **Exact source/test SHA:** `0969430d130340eed1d143de2f488265a50930dc`. **Latest application-code SHA:** `e1f5650be2c82cb0c8ffd4046b8342a84df09eb9`. The code/test checkpoint is exact; documentation-only descendants follow it. At the tested checkpoint, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, divergence 1,724 ahead / 2 behind / 163 changed files. PR #1 remains open, draft and unmerged.
