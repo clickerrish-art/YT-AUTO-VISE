@@ -119,6 +119,7 @@ export function validateSourceSegmentsAgainstEvidence(sourceSegments, evidence) 
   if (!Array.isArray(evidence.scenes) || evidence.scenes.length < 2) return ["parent source evidence must contain the explicit multi-scene timeline"];
   if (!Array.isArray(sourceSegments) || sourceSegments.length < 1 || sourceSegments.length > 30) return ["between 1 and 30 explicit source segments are required"];
   const seen = new Set();
+  const acceptedSegments = [];
   for (const [index, segment] of sourceSegments.entries()) {
     if (!segment || typeof segment.sceneId !== "string" || !segment.sceneId.trim() || !Number.isFinite(segment.startSeconds) || !Number.isFinite(segment.endSeconds) || segment.startSeconds < 0 || segment.endSeconds <= segment.startSeconds) {
       errors.push("source segment " + (index + 1) + " requires a scene ID and valid start/end seconds");
@@ -129,6 +130,18 @@ export function validateSourceSegmentsAgainstEvidence(sourceSegments, evidence) 
     const key = [segment.sceneId, segment.startSeconds, segment.endSeconds].join(":");
     if (seen.has(key)) errors.push("duplicate source segment is not allowed");
     seen.add(key);
+    // A child Short must not map overlapping time ranges from the same parent scene:
+    // overlapping ranges can silently repeat the same source moment while appearing
+    // to be distinct lineage entries. Adjacent segments remain valid.
+    for (const previous of acceptedSegments) {
+      if (previous.sceneId === segment.sceneId &&
+          segment.startSeconds < previous.endSeconds &&
+          segment.endSeconds > previous.startSeconds) {
+        errors.push("overlapping source segments from the same parent scene are not allowed");
+        break;
+      }
+    }
+    acceptedSegments.push(segment);
   }
   return errors;
 }

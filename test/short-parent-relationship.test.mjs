@@ -102,3 +102,19 @@ test("Short metadata parsing fails closed for malformed and non-object JSON", ()
     assert.throws(() => parseShortMetadataJson(raw), /Short metadata must be a JSON object/, raw);
   }
 });
+
+
+test("parent source lineage rejects overlapping ranges from the same scene but permits adjacent ranges", () => {
+  const evidence = { format: "long_form", scenes: [
+    { sceneId: "scene-03", assetId: "asset-03", startSeconds: 40, endSeconds: 60 },
+    { sceneId: "scene-04", assetId: "asset-04", startSeconds: 60, endSeconds: 85 }
+  ] };
+  assert.deepEqual(validateSourceSegmentsAgainstEvidence([
+    { sceneId: "scene-03", startSeconds: 42, endSeconds: 50 },
+    { sceneId: "scene-03", startSeconds: 50, endSeconds: 58 }
+  ], evidence), []);
+  assert.match(validateSourceSegmentsAgainstEvidence([
+    { sceneId: "scene-03", startSeconds: 42, endSeconds: 52 },
+    { sceneId: "scene-03", startSeconds: 50, endSeconds: 58 }
+  ], evidence).join(" "), /overlapping source segments from the same parent scene/);
+});
