@@ -1,3 +1,13 @@
+## Restore recovery change — tested candidate `31b5f56415b51280baa11418c56ef3c2b1280006`
+
+- [Automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357580) and [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357601) passed 376 Node tests each with 0 failures and 0 skips.
+- [Dashboard browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357460) passed 13 Chromium journeys, including Short-parent blocker-state coverage. Exhaustive control-by-control authorization, malformed-input, duplicate, concurrency, persistence-failure and durable-state coverage remains incomplete; keep DASH-001 `NOT_TESTED`.
+- Restore API internals are not a dashboard control inventory. Restore failure-injection and interrupted-journal recovery are covered separately by `test/backup-restore.test.mjs`; they do not prove the entire dashboard/API mutation matrix.
+
+See [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
+
+---
+
 ## Latest tested candidate update — 27 October 2026
 
 - Exact source/test candidate: `ac97c8860700dcbfedfb367d4dfbc0c654164479`.
