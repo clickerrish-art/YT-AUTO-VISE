@@ -843,3 +843,18 @@ Do not treat pending or in-progress runs as passes. Recheck exact-head conclusio
 This small authentication hardening does not close the exhaustive dashboard/API acceptance gap or any external production prerequisite. Production remains **NOT READY** until the current full test/acceptance results and all required media, rights, human review, verified account identity/history, private-upload receipt, native Short-parent eligibility, Meta draft-only integration, feasible owner-approved cadence, operational recovery/deployment drills, and branch-history reconciliation are evidenced.
 
 No upload, social post, campaign activation, visibility change, merge, `main` edit, reset, rebase, force-push or destructive reconciliation was performed. Nature Frontiers remains prohibited as a YouTube target; public/unattended YouTube publishing and live Meta publishing remain disabled; Safari remains inactive.
+
+
+### Exact source/test candidate status reconciliation — 28 October 2026
+
+This reconciliation supersedes the earlier "in progress/pending" status for the following jobs only; it does not change the tested source/test candidate SHA `de41102b622def75671e82b8972a16b536cd1c5a`.
+
+- Automation/security **PASS** — [40595638690](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595638690): 382 Node tests, 0 failures, 0 skips; 16 Python tests passed; npm audit reported 0 vulnerabilities; normal install, FFmpeg integration, JavaScript syntax and Python compilation checks passed.
+- Content quality **PASS** — [40595638795](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595638795): repository test suite passed with zero skips.
+- Metadata validation **PASS** — [40595638741](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595638741): repository test suite and metadata gates passed with zero skips.
+- Dashboard browser E2E — [40595638773](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595638773) remained **IN PROGRESS** at this reconciliation; do not count it as a pass.
+- Isolated main/candidate baseline — [40595638701](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595638701) remained **PENDING** at this reconciliation; do not count it as a pass.
+- Production readiness — [40595638859](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595638859) remains **BLOCKED/FAILED** by outstanding release prerequisites.
+- Nature Frontiers Facebook draft workflow — [40595638700](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595638700) reported workflow success, but that status alone does not establish external Meta draft creation; external job-level evidence must be inspected separately.
+
+The helper's three isolated Node regression tests also passed locally. No full local checkout was available in this execution environment, so no claim is made that the complete suite was run locally.
