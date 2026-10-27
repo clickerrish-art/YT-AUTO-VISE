@@ -1,5 +1,18 @@
 ## Current release checkpoint — 27 October 2026
 
+## Latest implementation checkpoint — 27 October 2026, 21:02 UTC
+
+Exact source/test SHA: `0969430d130340eed1d143de2f488265a50930dc`; latest application-code SHA: `e1f5650be2c82cb0c8ffd4046b8342a84df09eb9`. The source/test SHA passed automation/security (371 Node tests, 0 failed/skipped; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg render integration passed), dashboard E2E (13 Chromium journeys), content quality, metadata validation, and isolated main/candidate baseline (main 54 Node + 8 Python; candidate 371 Node + 16 Python; all zero failures/skips and exit codes 0). Exact links and limitations are recorded in [CURRENT_RELEASE_EVIDENCE_2026-10-27.md](CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
+
+New code hardening: script approval timestamps must be strict timezone-qualified ISO timestamps; readiness JSON now identifies evidence type, control ownership and the fact that external YouTube history is not independently verified by the read-only check. Production readiness still correctly reports 13 blockers. Local Facebook draft validation passed, but the remote draft job was skipped; no live Meta integration is proven.
+
+At the tested checkpoint, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, branch divergence 1,724 ahead / 2 behind / 163 changed files. PR #1 remains open, draft and unmerged. `test/restore-facebook-draft-history.test.mjs` remains present and tested. No external publication, campaign activation, visibility change, merge or destructive Git operation occurred.
+
+**Verdict: IMPLEMENTATION PARTIAL / PRODUCTION ACCEPTANCE BLOCKED.**
+
+---
+
+
 Exact application/test SHA: `081999d2a7f3afb2ef013a840e01982b21084db2`. PR #1 remains open, draft and unmerged. `main` remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; live divergence 1,709 ahead / 2 behind / 163 changed files. No removed or renamed files appear in the live compare, and `test/restore-facebook-draft-history.test.mjs` is preserved.
 
 Latest engineering change: private-parent Short relationship validation now fails closed by default; only the explicit private-upload and relationship-binding paths may persist a private parent with native Related video status `BLOCKED_EXTERNAL`. It does not claim a successful native association. Regression coverage is included.
