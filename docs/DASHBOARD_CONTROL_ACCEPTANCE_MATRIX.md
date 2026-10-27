@@ -1,3 +1,13 @@
+## Latest candidate `b1989a764e54400cddb55158b998c5a375972321`: restore journal and startup fail-closed guard
+
+- [Automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305355) and [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305087) passed 378 Node tests each, with 0 failures and 0 skips.
+- [Dashboard browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305138) passed 13 Chromium journeys. The dashboard now refuses startup when the configured state directory contains an interrupted restore journal.
+- Restore rollback/restart acceptance is covered by deterministic tests in `test/backup-restore.test.mjs`; this is not a substitute for the exhaustive per-control/API matrix. Authorization, malformed-input, duplicate, concurrency, persistence-failure and durable-state cases are still incomplete for some controls; keep DASH-001 `NOT_TESTED`.
+
+See [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
+
+---
+
 ## Restore recovery change — tested candidate `31b5f56415b51280baa11418c56ef3c2b1280006`
 
 - [Automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357580) and [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357601) passed 376 Node tests each with 0 failures and 0 skips.
