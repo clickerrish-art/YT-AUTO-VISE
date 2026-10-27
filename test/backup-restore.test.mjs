@@ -139,3 +139,42 @@ test("local secrets, state, upload evidence, backups and generated media are ign
   const ignore = fs.readFileSync(".gitignore", "utf8");
   for (const pattern of [".env", "!.env.example", "/state/", "/run-logs/", "/backups/", "/rights/", "/content/render-manifest.json", "/content/long-form-render-manifest.json", "/content/asset-register.json", "/media/", "/media/next-short.mp4", "/media/long-form-next.mp4"]) assert.ok(ignore.includes(pattern), "missing .gitignore protection: " + pattern);
 });
+
+
+test("backup refuses symlinked root, state and upload-log path components", async () => {
+  for (const mode of ["root", "state", "logs"]) {
+    const source = fixture();
+    const outside = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-backup-outside-"));
+    const linkedRoot = path.join(path.dirname(source.root), path.basename(source.root) + "-linked");
+    try {
+      if (mode === "root") {
+        fs.symlinkSync(source.root, linkedRoot, "dir");
+        await assert.rejects(
+          backupState({ rootDir: linkedRoot, stateDir: "state", uploadLogDir: "run-logs", rightsDir: "rights", outputPath: path.join(source.root, "backup.json") }),
+          /symbolic links in .* path/i
+        );
+      } else if (mode === "state") {
+        fs.rmSync(source.stateDir, { recursive: true, force: true });
+        fs.writeFileSync(path.join(outside, "dashboard-state.json"), JSON.stringify({ jobs: [] }));
+        fs.symlinkSync(outside, source.stateDir, "dir");
+        await assert.rejects(
+          backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir, rightsDir: source.rightsDir, outputPath: path.join(source.root, "backup.json") }),
+          /symbolic links in .* path/i
+        );
+      } else {
+        fs.rmSync(source.logDir, { recursive: true, force: true });
+        fs.writeFileSync(path.join(outside, "upload-attempts.json"), JSON.stringify({ attempts: [] }));
+        fs.symlinkSync(outside, source.logDir, "dir");
+        await assert.rejects(
+          backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir, rightsDir: source.rightsDir, outputPath: path.join(source.root, "backup.json") }),
+          /symbolic links in .* path/i
+        );
+      }
+    } finally {
+      fs.rmSync(linkedRoot, { recursive: true, force: true });
+      fs.rmSync(source.root, { recursive: true, force: true });
+      fs.rmSync(outside, { recursive: true, force: true });
+    }
+  }
+});
+
