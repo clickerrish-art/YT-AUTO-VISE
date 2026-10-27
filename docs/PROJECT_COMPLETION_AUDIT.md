@@ -1,3 +1,13 @@
+## Latest verified checkpoint — 27 October 2026, 21:29 UTC
+
+Exact tested candidate SHA: `466605be027f531d1c6143a6d1f42e1bf4c2ffcc`. Automation/security PASS: 373 Node tests, 0 failures, 0 skips; 16 Python tests; normal lifecycle-script install; npm audit 0 vulnerabilities; FFmpeg renderer integration, JS syntax and Python compilation passed. Content-quality and metadata workflows install FFmpeg/ffprobe and explicitly fail if any Node test is skipped; each passed 373 tests with zero skips. Dashboard E2E passed 13 Chromium journeys. Isolated main/candidate baseline passed on the exact candidate SHA. Facebook workflow passed local draft validation only; its remote draft-creation job was skipped. Production readiness remains correctly blocked by 13 genuine production prerequisites.
+
+Implementation fixes at this checkpoint: parent relationship and native association timestamps require strict timezone-qualified, calendar-valid ISO values; FFmpeg is installed in the content-quality and metadata workflows; automation, content-quality and metadata workflows enforce zero skips. Evidence: [automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772617), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772612), [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772614), [dashboard E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772627), [isolated baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772619), [readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772604), [Facebook draft validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772611).
+
+Verdict: automated code and CI acceptance pass on the exact tested candidate SHA; implementation is partial and production acceptance remains blocked. PR #1 remains open, draft and unmerged. No upload, post, campaign activation, visibility change, merge, main edit or destructive Git operation occurred.
+
+---
+
 ## Current release checkpoint — 27 October 2026
 
 ## Latest implementation checkpoint — 27 October 2026, 21:08 UTC
