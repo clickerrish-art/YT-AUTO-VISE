@@ -1978,7 +1978,18 @@ const server = http.createServer(async (req, res) => {
         let uploadMetadata;
         try { uploadMetadata = JSON.parse(fs.readFileSync(metadataFile, "utf8")); } catch { return json(res, 400, { error: "Reviewed metadata is invalid JSON" }); }
         if (uploadMetadata.channel !== "SonicVhibez" || uploadMetadata.visibility !== "private" || uploadMetadata.productUrl !== approvedProductUrl || uploadMetadata.status !== "READY_FOR_PRIVATE_UPLOAD" || uploadMetadata.rightsConfirmed !== true || uploadMetadata.complianceReviewed !== true) return json(res, 400, { error: "Metadata must be reviewed and ready for SonicVhibez private upload, with rights/compliance gates and the exact approved Selar destination" });
-        const relatedArtifacts = [...(job.outputArtifacts ?? []), ...(job.thumbnailArtifact ? [job.thumbnailArtifact] : []), { path: captionsPath, sha256: captionsSha256 }].map(entry => ({ path: entry.path, sha256: entry.sha256 }));
+        const relatedArtifacts = [
+          ...(job.outputArtifacts ?? []),
+          ...(job.thumbnailArtifact ? [job.thumbnailArtifact] : []),
+          { path: captionsPath, sha256: captionsSha256 },
+          ...(authoringArtifactBinding ? Object.values(authoringArtifactBinding.narrationArtifacts) : []),
+          ...(authoringArtifactBinding ? [
+            { path: authoringArtifactBinding.qualityEvidencePath, sha256: authoringArtifactBinding.qualityEvidenceSha256 },
+            { path: authoringArtifactBinding.narrationRightsEvidencePath, sha256: sha256File(resolveRepositoryFile(authoringArtifactBinding.narrationRightsEvidencePath)) },
+            { path: authoringArtifactBinding.renderManifestPath, sha256: authoringArtifactBinding.renderManifestSha256 }
+          ] : [])
+        ].filter((entry, index, all) => all.findIndex(other => other.path === entry.path) === index)
+          .map(entry => ({ path: entry.path, sha256: entry.sha256 }));
         const artifact = { path: artifactPath, sha256: artifactSha256, relatedArtifacts };
         if (!(job.outputArtifacts ?? []).some(entry => entry.path === artifact.path && entry.sha256 === artifact.sha256)) return json(res, 409, { error: "The checked file is not the exact artifact recorded on this job" });
         for (const related of relatedArtifacts) {
@@ -2036,6 +2047,43 @@ const server = http.createServer(async (req, res) => {
             return json(res, 409, { error: "Parent media, metadata or receipt evidence is missing or unsafe; rebind after reconciliation", publishingEnabled: false });
           }
         }
+        let authoringArtifactBinding = null;
+        if (body.decision === "APPROVE" && job.authoring) {
+          try {
+            const renderPackage = buildApprovedJobRenderManifest({ job, root });
+            const renderManifestPath = path.posix.join("content", "job-render-manifests", job.id + ".json");
+            const renderManifestFile = resolveRepositoryFile(renderManifestPath);
+            const manifestStat = fs.lstatSync(renderManifestFile);
+            if (manifestStat.isSymbolicLink() || !manifestStat.isFile()) throw new Error("per-job render manifest is not a regular file");
+            const savedManifest = JSON.parse(fs.readFileSync(renderManifestFile, "utf8"));
+            if (JSON.stringify(savedManifest) !== JSON.stringify(renderPackage.manifest)) {
+              throw new Error("saved render manifest differs from the currently approved source, narration, scene, rights, quality or metadata evidence");
+            }
+            const narrationArtifacts = Object.fromEntries(Object.entries(renderPackage.artifactFiles).map(([name, file]) => [
+              name,
+              { path: path.relative(root, file).split(path.sep).join("/"), sha256: sha256File(file) }
+            ]));
+            authoringArtifactBinding = {
+              scriptSha256: renderPackage.manifest.scriptSha256,
+              narrationSha256: renderPackage.manifest.narrationSha256,
+              transcriptSha256: renderPackage.manifest.transcriptSha256,
+              captionsSha256: renderPackage.manifest.captionsSha256,
+              productionPlanSha256: renderPackage.manifest.productionPlanSha256,
+              qualityEvidenceSha256: renderPackage.manifest.qualityEvidenceSha256,
+              qualityEvidencePath: path.relative(root, renderPackage.qualityEvidencePath).split(path.sep).join("/"),
+              narrationRightsEvidencePath: path.relative(root, renderPackage.narrationRightsPath).split(path.sep).join("/"),
+              narrationArtifacts,
+              renderManifestPath,
+              renderManifestSha256: sha256File(renderManifestFile)
+            };
+          } catch (error) {
+            return json(res, 409, {
+              error: "Final approval is blocked because the exact approved authoring/render manifest evidence is missing or stale",
+              detail: String(error?.message ?? error).slice(0, 1000),
+              publishingEnabled: false
+            });
+          }
+        }
         const review = createReviewDecision({ artifact, rightsEvidence, metadataVersion, reviewer, decision: body.decision, reason: body.reason ?? "", shortParentRelationshipSha256: shortParentRelationshipSha256Value });
         if (body.decision === "APPROVE") {
           state.jobs[index] = approveContentJobForPrivateUpload({ ...job, rightsChecks: { verified: true, evidenceSha256: review.rightsEvidenceSha256, verifiedBy: reviewer, verifiedAt: review.reviewedAt } }, review);
@@ -2060,6 +2108,7 @@ const server = http.createServer(async (req, res) => {
             metadataVersion,
             rightsEvidenceSha256: review.rightsEvidenceSha256,
             rightsEvidence,
+            authoringArtifactBinding,
             relatedArtifacts: [...relatedArtifacts, { path: metadataPath, sha256: metadataVersion }],
             publishingEnabled: false,
             visibility: "private"
