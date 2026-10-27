@@ -63,7 +63,7 @@ test("private-upload approval binds media, thumbnail, validated captions, metada
   const captions = { path: "artifacts/fixture.srt", sha256: "c".repeat(64) };
   const channelId = "UC" + "A".repeat(22);
   const relationship = {
-    childContentId: job.id, childRevision: "rev-child-1", childMediaSha256: video.sha256, childMetadataSha256: "meta-sha256:abc",
+    childContentId: job.id, childRevision: "rev-child-1", childMediaSha256: video.sha256, childMetadataSha256: "9".repeat(64),
     parentContentId: "parent-job-001", parentRevision: "rev-parent-1", parentMediaSha256: "c".repeat(64), parentMetadataSha256: "d".repeat(64), parentApprovalSha256: "e".repeat(64),
     parentRemoteVideoId: "abcdefghijk", parentCanonicalUrl: "https://www.youtube.com/watch?v=abcdefghijk",
     parentChannelTitle: "SonicVhibez", parentRemoteTitle: "Approved parent documentary", parentChannelId: channelId, parentRemoteVerified: true, parentPrivacyStatus: "private",
@@ -78,7 +78,7 @@ test("private-upload approval binds media, thumbnail, validated captions, metada
     state: "AWAITING_HUMAN_REVIEW",
     verifiedChannelId: channelId,
     shortParentRelationship: relationship,
-    metadataVersion: "meta-sha256:abc",
+    metadataVersion: "9".repeat(64),
     outputArtifacts: [video],
     thumbnailArtifact: thumbnail,
     validationResults: { passed: true, captionsPath: captions.path, captionsSha256: captions.sha256 },
@@ -89,7 +89,7 @@ test("private-upload approval binds media, thumbnail, validated captions, metada
     reviewer: "reviewer@example.test",
     artifactPath: video.path,
     artifactSha256: video.sha256,
-    metadataVersion: "meta-sha256:abc",
+    metadataVersion: "9".repeat(64),
     rightsEvidenceSha256: "b".repeat(64),
     shortParentRelationshipSha256: shortParentRelationshipSha256(relationship),
     relatedArtifacts: [video, thumbnail, captions],
