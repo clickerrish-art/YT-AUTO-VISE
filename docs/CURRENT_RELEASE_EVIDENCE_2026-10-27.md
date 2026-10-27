@@ -128,11 +128,12 @@ Safety unchanged: public/unattended YouTube publishing OFF; Facebook live publis
 ## Addendum — production-plan integration checkpoint (27 October 2026)
 
 ### Exact refs
-- Live PR HEAD at this checkpoint: `95a64fa88f668ba0f88cd2f4be394c9100c6ff53`.
+- Current PR HEAD after documentation-only commits: `c439789e0ba8170821b85a3c9f0d685e5c08e62f`.
+- Exact code/test tree used for the latest automated regression runs: `95a64fa88f668ba0f88cd2f4be394c9100c6ff53`; its latest browser run is still pending.
 - Latest application-code SHA: `6224218660a11fd59353dbab96d9963e429649bb`; `95a64fa...` adds the corresponding browser acceptance assertion.
 - `main` HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
-- Live compare: 1,599 commits ahead / 2 behind / 157 changed files. Divergent history review is still incomplete.
+- Live compare: 1,607 commits ahead / 2 behind / 157 changed files. Divergent history review is still incomplete.
 - PR #1 remains OPEN, DRAFT and UNMERGED.
 
 ### Implemented in this checkpoint
