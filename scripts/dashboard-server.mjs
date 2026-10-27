@@ -2216,6 +2216,34 @@ const server = http.createServer(async (req, res) => {
         if (job.state !== "QUEUED") return json(res, 409, { error: "Only a queued content job can start production" });
         taskId = job.contentType === "short" ? "render-short" : "render-long-form";
         if (activeTasks.has(taskId)) return json(res, 409, { error: "A renderer for this format is already running" });
+
+        // Renderers use FFmpeg's -y flag internally. Never let a retry overwrite
+        // retained output from an interrupted attempt or a previously reviewed
+        // artifact. Refuse existing video/thumbnail paths before writing a new
+        // manifest or claiming a worker lease; recovery must explicitly reconcile
+        // or preserve those artifacts first.
+        const protectedArtifactPaths = job.authoring
+          ? contentJobArtifactPaths(job.id)
+          : {
+              videoPath: job.contentType === "short" ? "media/next-short.mp4" : "media/long-form-next.mp4",
+              thumbnailPath: job.contentType === "short" ? "media/next-short-thumbnail.jpg" : "media/long-form-next-thumbnail.jpg"
+            };
+        for (const relativePath of [protectedArtifactPaths.videoPath, protectedArtifactPaths.thumbnailPath]) {
+          const absolutePath = path.resolve(root, relativePath);
+          try {
+            const existing = fs.lstatSync(absolutePath);
+            const kind = existing.isSymbolicLink() ? "symbolic link" : existing.isFile() ? "file" : "non-file";
+            return json(res, 409, {
+              error: "Render output already exists (" + kind + "); refusing to overwrite retained artifacts",
+              artifactPath: relativePath,
+              recoveryRequired: true,
+              retryAllowed: false,
+              publishingEnabled: false
+            });
+          } catch (error) {
+            if (error?.code !== "ENOENT") throw error;
+          }
+        }
         if (job.authoring) {
           let renderPackage;
           try {
