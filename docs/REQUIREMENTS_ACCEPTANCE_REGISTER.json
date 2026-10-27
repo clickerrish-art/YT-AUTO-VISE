@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-27",
-  "evidencePolicy": "Exact tested candidate SHA: 466605be027f531d1c6143a6d1f42e1bf4c2ffcc. Automation/security PASS: 373 Node tests, 0 failures, 0 skips; 16 Python tests; normal lifecycle-script install; npm audit 0 vulnerabilities; FFmpeg renderer integration, JS syntax and Python compilation passed. Content-quality and metadata workflows now install FFmpeg and assert that the Node test summary explicitly reports zero skips; each passed 373/373 with zero skips on this SHA. Dashboard E2E passed 13 Chromium journeys. Isolated main/candidate baseline passed on this exact candidate SHA. Facebook workflow passed local draft validation only; remote draft creation was skipped. Production readiness remains blocked by 13 genuine production prerequisites.",
+  "evidencePolicy": "Latest exact tested source/test candidate SHA: ac97c8860700dcbfedfb367d4dfbc0c654164479. Automation/security PASS: 374 Node tests, 0 failures, 0 skips; 16 Python tests; normal lifecycle-script install; npm audit 0 vulnerabilities; FFmpeg renderer integration, JS syntax and Python compilation passed. Content-quality and metadata workflows each passed 374/374 with zero skips and FFmpeg installed. Dashboard E2E passed 13 Chromium journeys. Isolated main/candidate baseline passed. Production readiness remains blocked by 13 real prerequisites. A synthetic two-scene FFmpeg render integration test was added and passed, but genuine production media, rights, manifest-bound approval and human playback remain external gates.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -34,14 +34,14 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772617",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772627",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772612",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772614",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772619"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392132",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392231",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392114",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392137",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392118"
       ],
-      "nextAction": "Repeat all affected checks after substantive source/test changes; production readiness and live external integrations remain separate gates.",
-      "assessmentCommitSha": "466605be027f531d1c6143a6d1f42e1bf4c2ffcc",
+      "nextAction": "Repeat all affected checks after substantive source/test changes; the latest exact candidate passed required automated code workflows, while production readiness and live external integrations remain separate gates.",
+      "assessmentCommitSha": "ac97c8860700dcbfedfb367d4dfbc0c654164479",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
     {
@@ -51,10 +51,11 @@
       "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772619"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392118",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392118/artifacts/12772897547"
       ],
       "nextAction": "Repeat if main advances or after substantive candidate changes; retained artifact contains exact main/candidate command output and counts.",
-      "assessmentCommitSha": "466605be027f531d1c6143a6d1f42e1bf4c2ffcc",
+      "assessmentCommitSha": "ac97c8860700dcbfedfb367d4dfbc0c654164479",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
     {
@@ -67,9 +68,10 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971726",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40310762992",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40311602123"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40311602123",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392231"
       ],
-      "nextAction": "10 browser journeys pass, but exhaustive control coverage and a dedicated Short-parent binding UI/API journey remain incomplete.",
+      "nextAction": "13 Chromium journeys pass on exact candidate ac97c8860700dcbfedfb367d4dfbc0c654164479. Exhaustive control-by-control coverage and the dedicated Short-parent UI/API journey remain incomplete; keep NOT_TESTED.",
       "assessmentCommitSha": "defe68872edc1a24e404a17a4e997e98708826b6",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
@@ -507,9 +509,12 @@
       "status": "NOT_TESTED",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/render-short.mjs",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/render-long-form.mjs"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/render-long-form.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/multi-scene-render-integration.test.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392132",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392114"
       ],
-      "nextAction": "Implement a validated multi-input scene timeline/concat path that uses all approved scene entries, binds each file hash and timing, and verifies the assembled sequence. Do not claim complete scene-by-scene production from the current single-footage input.",
+      "nextAction": "A new synthetic FFmpeg integration test now proves two distinct scene inputs can be assembled with captions/narration, probed, fully decoded and visually distinguished on exact candidate ac97c8860700dcbfedfb367d4dfbc0c654164479. Keep NOT_TESTED until the full manifest-to-final-edit hash binding is accepted end-to-end with genuine rights-cleared assets and human playback review.",
       "assessmentCommitSha": "be11490345ae89938c32af1496f01b75ae20134a",
       "acceptanceCriterion": "A multi-scene test fixture renders a deterministic, timed sequence of distinct approved inputs; missing/reordered/stale assets fail closed and the final manifest records each source hash and edit decision."
     },
@@ -622,11 +627,13 @@
       "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772612",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772614"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772614",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392114",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392137"
       ],
       "nextAction": "Keep FFmpeg and ffprobe installation steps in both workflows and retain zero-skip test-count assertions where practical.",
-      "assessmentCommitSha": "466605be027f531d1c6143a6d1f42e1bf4c2ffcc",
-      "acceptanceCriterion": "Both workflows install and report FFmpeg/ffprobe before the Node suite; exact-SHA test output reports 373 tests, 373 pass, 0 failures, 0 skips."
+      "assessmentCommitSha": "ac97c8860700dcbfedfb367d4dfbc0c654164479",
+      "acceptanceCriterion": "Both workflows install and report FFmpeg/ffprobe before the Node suite; exact candidate ac97c8860700dcbfedfb367d4dfbc0c654164479 reports 374 tests, 374 pass, 0 failures, 0 skips, including a synthetic multi-scene FFmpeg integration test."
     },
     {
       "id": "CI-TEST-SKIPS-001",
@@ -642,55 +649,58 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/466605be027f531d1c6143a6d1f42e1bf4c2ffcc",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772612",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772614",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772617"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772617",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392132",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392114",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392137"
       ],
       "nextAction": "Keep FFmpeg installation and zero-skip assertions in all required CI test workflows; investigate any future skip rather than weakening the assertion.",
-      "assessmentCommitSha": "466605be027f531d1c6143a6d1f42e1bf4c2ffcc",
-      "acceptanceCriterion": "Automation, content-quality and metadata test jobs explicitly verify the summary reports zero skips; each installs FFmpeg/ffprobe and runs 373 tests with 373 pass, 0 fail, 0 skipped."
+      "assessmentCommitSha": "ac97c8860700dcbfedfb367d4dfbc0c654164479",
+      "acceptanceCriterion": "Automation, content-quality and metadata jobs install FFmpeg/ffprobe and explicitly verify zero skips; each reports 374 tests, 374 pass, 0 fail, 0 skipped on exact candidate ac97c8860700dcbfedfb367d4dfbc0c654164479."
     }
   ],
   "currentCheckpoint": {
     "applicationCodeSha": "ebd4f334683237878bac742e052767faabb4f632",
-    "testedSha": "466605be027f531d1c6143a6d1f42e1bf4c2ffcc",
-    "checkpointPrHead": "466605be027f531d1c6143a6d1f42e1bf4c2ffcc",
+    "testedSha": "ac97c8860700dcbfedfb367d4dfbc0c654164479",
+    "checkpointPrHead": "ac97c8860700dcbfedfb367d4dfbc0c654164479",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1770,
+    "aheadBy": 1779,
     "behindBy": 2,
-    "changedFiles": 163,
+    "changedFiles": 164,
     "prState": "open",
     "draft": true,
     "merged": false,
     "verdict": "AUTOMATED CODE AND CI ACCEPTANCE PASS / IMPLEMENTATION PARTIAL / PRODUCTION BLOCKED",
     "ci": {
       "automationSecurity": "PASS",
-      "nodeTests": 373,
+      "nodeTests": 374,
       "nodeFailures": 0,
       "nodeSkipped": 0,
       "pythonTests": 16,
       "npmAuditVulnerabilities": 0,
       "normalLifecycleInstall": "PASS",
-      "ffmpegRendererIntegration": "PASS",
+      "ffmpegRendererIntegration": "PASS (synthetic two-scene integration; not production media acceptance)",
       "syntaxChecks": "PASS",
       "pythonCompilation": "PASS",
-      "contentQuality": "PASS (373 tests, 0 failed, 0 skipped; FFmpeg installed; zero-skip assertion passed)",
-      "metadata": "PASS (373 tests, 0 failed, 0 skipped; FFmpeg installed; zero-skip assertion passed)",
-      "dashboardE2e": "PASS (13 Chromium journeys)",
-      "isolatedBaseline": "PASS on exact candidate SHA; all command exit codes 0",
+      "contentQuality": "PASS (374 tests, 0 failed, 0 skipped; FFmpeg installed; zero-skip assertion passed)",
+      "metadata": "PASS (374 tests, 0 failed, 0 skipped; FFmpeg installed; zero-skip assertion passed)",
+      "dashboardE2e": "PASS (13 Chromium journeys; exhaustive control coverage remains incomplete)",
+      "isolatedBaseline": "PASS on exact candidate SHA; main/candidate install, Node and Python commands exited 0",
       "productionReadiness": "BLOCKED (13 genuine production prerequisites)",
       "facebookDraftWorkflow": "PASS for local deterministic draft-package validation only; external create-draft-package skipped",
-      "latestTimestampRegression": "PASS",
+      "multiSceneFfmpegIntegration": "PASS on exact candidate; manifest-bound production workflow and human review remain unproven",
       "zeroSkipGuards": "PASS in automation, content-quality and metadata workflows"
     },
     "evidence": {
-      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772617",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772612",
-      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772614",
-      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772627",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772619",
-      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772604",
-      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772611",
-      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772619/artifacts/12772562360"
+      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392132",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392114",
+      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392137",
+      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392231",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392118",
+      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392139",
+      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392305",
+      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392118/artifacts/12772897547"
     },
     "implementationCommits": [
       "bd6a4b75addcb2e14b31d2219ff82b5ef33a1406",
@@ -698,10 +708,11 @@
       "03699e4bc75e3a8db57bc25118383c74a787ca27",
       "0cf1650320b30707ba2f5e65db6b4c49dd5cb9d4",
       "d465c03cb3b12ee68000192089165f326121e8eb",
-      "3690ec82b52263cb2da2378f8aba9a5b19658a8f"
+      "3690ec82b52263cb2da2378f8aba9a5b19658a8f",
+      "ac97c8860700dcbfedfb367d4dfbc0c654164479"
     ],
-    "candidateSourceTestSha": "466605be027f531d1c6143a6d1f42e1bf4c2ffcc",
+    "candidateSourceTestSha": "ac97c8860700dcbfedfb367d4dfbc0c654164479",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Exact candidate SHA 466605be027f531d1c6143a6d1f42e1bf4c2ffcc passed automation/security (373 Node, 0 failed, 0 skipped; 16 Python), dashboard E2E (13 Chromium), content quality (373 Node, 0 skips), metadata validation (373 Node, 0 skips) and isolated baseline. Production readiness correctly remains blocked."
+    "latestChangeTestReason": "Exact candidate ac97c8860700dcbfedfb367d4dfbc0c654164479 passed automation/security (374 Node tests, 0 failed, 0 skipped; 16 Python tests), dashboard E2E (13 Chromium journeys), content quality (374 Node tests, 0 skips), metadata validation (374 Node tests, 0 skips) and isolated main/candidate baseline. Production readiness correctly remains blocked."
   }
 }
