@@ -435,3 +435,35 @@ The current dashboard source includes a guarded authoring-to-render path that ca
 These CI results do not establish genuine rights-cleared final MP4s, full human playback/factual/realism acceptance, authenticated SonicVhibez OAuth identity and complete remote history, an authorized private-upload receipt, eligible native YouTube Related-video association, a real draft-only Meta run, owner-approved feasible cadence, or complete operational recovery/deployment drills. The documented Metricool risk involving Nature Frontiers' incorrect YouTube association and scheduled auto-publishing must be reconciled in Metricool by the owner before any further external publishing; no such account changes were made in this task.
 
 Safety remains unchanged: public/unattended YouTube publishing OFF; Facebook live publishing OFF; Safari campaigns inactive; Nature Frontiers prohibited as a YouTube target; approved Selar URL unchanged. PR #1 remains open/draft/unmerged. No upload, post, campaign activation, merge, `main` edit, reset, rebase, force-push or destructive history operation occurred.
+
+
+---
+
+## Live implementation checkpoint — 27 October 2026: fail-closed Short-parent validation
+
+**Exact application/test SHA:** `081999d2a7f3afb2ef013a840e01982b21084db2`  
+**Latest application-code commit:** `081999d2a7f3afb2ef013a840e01982b21084db2`  
+**PR #1:** open, draft, unmerged.  
+**Main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`; current divergence: 1,709 ahead / 2 behind / 163 changed files. The live compare shows no removed or renamed files; `test/restore-facebook-draft-history.test.mjs` remains present.
+
+### Code and regression change
+
+- `scripts/short-parent-relationship.mjs`: `allowPrivateParent` now defaults to `false`. Callers must explicitly opt in when they are recording a private-parent relationship as pending/blocked; this does not make the native YouTube Related video association successful.
+- `scripts/dashboard-server.mjs`: the relationship-binding endpoint explicitly opts in to persist the honest `BLOCKED_EXTERNAL` private-parent state.
+- `scripts/content-job-lifecycle.mjs`: private-upload approval explicitly opts in to the pending private-parent record, while native association remains blocked.
+- `test/short-parent-relationship.test.mjs`: regression covers rejection by default and explicit acceptance only for a relationship record that still declares the native feature blocked.
+- Commits: [`7cd237a`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/7cd237a7a41ba9f7f59314ee9f1cc9ba7f2a0c3a), [`75dc4d5`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/75dc4d561e17535f7353e59d9e78b5ebfd9fb675), [`6a74173`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/6a74173e83e77984f7fe276ca7227d0f07614028), [`081999d`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/081999d2a7f3afb2ef013a840e01982b21084db2).
+
+### Exact-SHA CI
+
+- **Automation/security — PASS:** [run 40578139334](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40578139334): 368 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; `npm audit` found 0 vulnerabilities; normal install, FFmpeg installation, syntax and safety checks passed.
+- **Content quality — PASS:** [run 40578139310](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40578139310).
+- **Metadata validation — PASS:** [run 40578139325](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40578139325).
+- **Local Facebook draft package — PASS for deterministic draft-only validation only:** [run 40578139309](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40578139309); this is not live Meta integration evidence.
+- **Isolated main/candidate baseline — PASS:** [run 40578139462](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40578139462).
+- **Dashboard browser E2E:** [run 40578139350](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40578139350) was still pending when this checkpoint was recorded; do not infer a result from a pending run.
+- **Production readiness — BLOCKED / fail-closed:** [run 40578139411](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40578139411) reported 13 blockers. This is an expected release hold, not a passing production gate.
+
+### Still blocked
+
+No genuine production MP4 with verified rights/provenance and full human playback approval; authenticated SonicVhibez OAuth identity and complete public/private/unlisted history; operation-specific private-upload authorization and verified receipt; eligible native Short-parent association (private parents remain ineligible); live authorized Meta Page/Instagram verification and external draft creation; owner-approved feasible cadence; complete operational recovery/deployment acceptance. No live upload or post occurred. Public/unattended YouTube publishing and Facebook live publishing remain disabled; Safari remains inactive.
