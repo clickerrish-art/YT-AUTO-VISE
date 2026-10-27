@@ -612,3 +612,12 @@ These code/test passes do not override any blocked production or external integr
 - [ ] Production readiness: blocked until external identity/history, genuine production media, human approval, native Related video eligibility, Meta draft integration, owner cadence approval and recovery/deployment drills are proven.
 
 Release decision remains **BLOCKED**.
+
+
+## Follow-up release-gate checkpoint — 27 October 2026
+
+- [x] Private-only Short review approval can preserve native Related-video status as `BLOCKED_EXTERNAL` without claiming association success.
+- [x] Empty/vague `BLOCKED_EXTERNAL` explanations are rejected; regression test added.
+- [x] Automation/security, content quality and metadata validation passed for source/test SHA `77921aca418b25bca0a9aa681281145b00c6d72f`.
+- [ ] Dashboard browser E2E and isolated baseline were still in progress at the latest recorded observation; check their actual final outcomes.
+- [ ] Production readiness remains blocked. No live Meta draft integration, authenticated channel/history verification, real approved media, authorized upload receipt, eligible native Related-video evidence, owner-approved cadence, or full recovery/deployment drill has been established.
