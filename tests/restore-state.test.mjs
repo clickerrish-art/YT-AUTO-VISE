@@ -59,10 +59,14 @@ test("restore refuses an empty backup and preserves the explicit confirmation ga
       restoreState({ backupPath: backup, rootDir: dir, confirm: "YES", now: Date.parse("2026-10-02T00:00:00.000Z") }),
       /Backup contains no entries/
     );
+    assert.equal(fs.existsSync(path.join(dir, "state", ".restore-operation.lock")), false,
+      "the operation lock is released after validation failure");
     await assert.rejects(
       restoreState({ backupPath: backup, rootDir: dir, confirm: "NO", now: Date.parse("2026-10-02T00:00:00.000Z") }),
       /RESTORE_CONFIRM=YES/
     );
+    assert.equal(fs.existsSync(path.join(dir, "state", ".restore-operation.lock")), false,
+      "the operation lock is released after confirmation failure");
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
@@ -96,6 +100,35 @@ test("restore refuses a symlinked rootDir ancestor before creating destination d
       /symbolic links in destination paths/
     );
     assert.equal(fs.existsSync(path.join(realRoot, "state")), false);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+
+test("restore fails closed when another process already holds the operation lock", async () => {
+  const dir = makeTempDir();
+  try {
+    const backup = path.join(dir, "backup.json");
+    fs.writeFileSync(backup, validEmptyBackup, { mode: 0o600 });
+    const stateDir = path.join(dir, "state");
+    fs.mkdirSync(stateDir, { mode: 0o700 });
+    const lockPath = path.join(stateDir, ".restore-operation.lock");
+    const existingLock = JSON.stringify({
+      format: "sonicvhibez-restore-operation-lock",
+      version: 1,
+      token: "other-process-token",
+      pid: 999999,
+      createdAt: "2026-10-28T00:00:00.000Z"
+    });
+    fs.writeFileSync(lockPath, existingLock, { mode: 0o600 });
+
+    await assert.rejects(
+      restoreState({ backupPath: backup, rootDir: dir, confirm: "YES", now: Date.parse("2026-10-29T00:00:00.000Z") }),
+      /Another restore operation holds the restore lock/
+    );
+    assert.equal(fs.readFileSync(lockPath, "utf8"), existingLock,
+      "a competing invocation must not steal or rewrite another process's lock");
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
