@@ -419,3 +419,21 @@ A fresh literal source scan found:
 This is an inventory only, not proof that all controls or routes are accepted. The current test evidence includes 13 Chromium browser journeys, but exhaustive per-control/per-route success, authentication, authorization, malformed input, boundary, duplicate/concurrency, dependency/persistence failure, restart, audit and accessibility acceptance remains incomplete. Keep the full DASH-001 requirement `NOT_TESTED` until the matrix is completed with reproducible evidence for every applicable route and control.
 
 The operator-token UTF-8 byte-length regression is covered by `test/operator-auth.test.mjs` and the dashboard API regression in `test/dashboard-server.test.mjs`. Exact-head automation/security, content-quality, metadata, browser E2E and isolated baseline runs are recorded in `docs/REQUIREMENTS_ACCEPTANCE_REGISTER.json`. Production readiness remains blocked; external Meta draft creation remains unverified.
+
+
+## Automated inventory and API authentication regression — 28 October 2026
+
+The source inventory is now reproducible via `npm run inventory:dashboard` (implementation candidate `1f72c6dc5b648f0c60fdea45ae1d37e835e4505e`). The exported inventory records source line numbers, control tag/id/name/type/form/aria-label/disabled state, form metadata, literal route method/path/condition and aggregate counts. `test/dashboard-inventory.test.mjs` validates the current source counts and preserves duplicate method/path declarations instead of hiding them.
+
+The dashboard integration test now uses that inventory to send unauthenticated requests to every distinct literal `/api/*` method/path and asserts HTTP 401 for each route. This establishes an API unauthenticated-access regression for the currently inventoried routes; it does not replace authorized-success, malformed-input, authorization-level, dependency/persistence failure, duplicate/concurrency, restart, audit or UI accessibility acceptance.
+
+Exact-candidate evidence for `1f72c6dc5b648f0c60fdea45ae1d37e835e4505e`:
+- Automation/security [40598195046](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195046): PASS, 384 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities.
+- Content quality [40598195232](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195232): PASS.
+- Metadata [40598195101](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195101): PASS.
+- Browser E2E [40598195206](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195206): PASS, 13 Chromium journeys.
+- Isolated main/candidate baseline [40598195202](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195202): PASS; retained artifact [baseline-comparison.zip](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195202/artifacts/12776283618), ZIP SHA-256 `989203aab1898f8d740d4f56294e03eec8d023cb6086ce4c171ee2aff156ad2b`. Both main and candidate Node/Python baseline commands exited 0.
+- Readiness [40598195430](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195430): BLOCKED by unresolved production prerequisites.
+- Meta draft workflow [40598195092](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195092): workflow success for local validation; external draft-creation job skipped.
+
+DASH-001 remains `NOT_TESTED` for exhaustive control/API acceptance.
