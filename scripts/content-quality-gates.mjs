@@ -232,6 +232,48 @@ export function validateAssetProvenance(asset) {
   return { valid: errors.length === 0, errors };
 }
 
+/** Validate provenance as a graph so duplicate IDs, missing ancestors and cycles cannot be hidden by Map overwrite. */
+export function validateAssetProvenanceSet(assets) {
+  const errors = [];
+  if (!Array.isArray(assets) || assets.length === 0) return ["asset provenance set must be a non-empty array"];
+  const byId = new Map();
+  for (const [index, asset] of assets.entries()) {
+    const id = asset && typeof asset.assetId === "string" ? asset.assetId.trim() : "";
+    if (!id) { errors.push("asset " + (index + 1) + " has no assetId for provenance graph validation"); continue; }
+    if (byId.has(id)) errors.push("duplicate assetId in provenance set: " + id);
+    else byId.set(id, asset);
+  }
+  const edges = new Map();
+  for (const [id, asset] of byId) {
+    if (asset.derivativeOf === undefined) { edges.set(id, []); continue; }
+    if (!Array.isArray(asset.derivativeOf) || asset.derivativeOf.length === 0) {
+      errors.push("asset " + id + " derivativeOf must be a non-empty array when supplied");
+      edges.set(id, []);
+      continue;
+    }
+    const parents = [];
+    for (const parentIdValue of asset.derivativeOf) {
+      const parentId = typeof parentIdValue === "string" ? parentIdValue.trim() : "";
+      if (!parentId || !byId.has(parentId)) errors.push("asset " + id + " references missing derivative ancestor " + (parentId || "(invalid ID)"));
+      else if (parentId === id) errors.push("asset " + id + " cannot derive from itself");
+      else parents.push(parentId);
+    }
+    edges.set(id, parents);
+  }
+  const visiting = new Set();
+  const visited = new Set();
+  const visit = id => {
+    if (visiting.has(id)) { errors.push("asset provenance derivative graph contains a cycle at " + id); return; }
+    if (visited.has(id)) return;
+    visiting.add(id);
+    for (const parent of edges.get(id) ?? []) visit(parent);
+    visiting.delete(id);
+    visited.add(id);
+  };
+  for (const id of edges.keys()) visit(id);
+  return [...new Set(errors)];
+}
+
 export function getAudioProfile(name) {
   if (!Object.hasOwn(AUDIO_PROFILES, name)) throw new Error("unknown audio profile: " + name);
   return structuredClone(AUDIO_PROFILES[name]);
