@@ -122,6 +122,17 @@ test("script-depth gate measures words and requires sections, claim sources and 
     assert.match(validateScriptDepth({ ...script, sources: [{ ...script.sources[0], url }] }).errors.join(" "), /public HTTPS source|non-placeholder public HTTPS URL/);
   }
   assert.match(validateScriptDepth({ ...script, sources: [] }).errors.join(" "), /missing or invalid public HTTPS source/);
+  assert.match(validateScriptDepth({ ...script, sources: [
+    ...script.sources,
+    { id: "src-1", title: "Different source sharing an ID", url: "https://www.nationalgeographic.com/" }
+  ] }).errors.join(" "), /source IDs must be unique/);
+  assert.match(validateScriptDepth({ ...script, claims: [
+    { text: "Claim A", sourceIds: ["src-1"] },
+    { text: "Claim B", sourceIds: ["src-1"] }
+  ], sources: [
+    { id: "src-1", title: "Trusted source", url: "https://www.nature.com/" },
+    { id: "src-1", title: "Placeholder source", url: "https://example.org/paper" }
+  ] }).errors.join(" "), /source IDs must be unique/);
   assert.match(validateScriptDepth({ ...script, similarityReview: null }).errors.join(" "), /similarity review/);
 });
 

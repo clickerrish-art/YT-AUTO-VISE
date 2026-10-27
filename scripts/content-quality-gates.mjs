@@ -207,8 +207,14 @@ export function validateScriptDepth(script, { format = "long_form", minWords, ma
       if (!sources.some(source => source?.id === sourceId && isUsableResearchUrl(source?.url))) errors.push("claim " + (index + 1) + " references a missing or invalid public HTTPS source: " + sourceId);
     }
   }
+  const sourceIds = new Set();
   for (const [index, source] of sources.entries()) {
     if (!nonempty(source?.id) || !nonempty(source?.title) || !isUsableResearchUrl(source?.url)) errors.push("source " + (index + 1) + " must have a title and a non-placeholder public HTTPS URL");
+    if (nonempty(source?.id)) {
+      const sourceId = source.id.trim();
+      if (sourceIds.has(sourceId)) errors.push("source IDs must be unique; duplicate source ID: " + sourceId);
+      sourceIds.add(sourceId);
+    }
   }
   if (script.similarityReview?.status !== "REVIEWED" || !nonempty(script.similarityReview?.evidenceRef)) errors.push("originality similarity review evidence is required");
   return { valid: errors.length === 0, errors, measured: { words, sections: sections.length, claims: claims.length, sources: sources.length, speakingRateWpm: validSpeakingRate ? speakingRateWpm : null, estimatedDurationSeconds: estimatedDurationSeconds === null ? null : Number(estimatedDurationSeconds.toFixed(1)), estimatedNarrationMinutes: estimatedDurationSeconds === null ? null : Number((estimatedDurationSeconds / 60).toFixed(2)), targetDurationSeconds: { min: targetMinDurationSeconds, max: targetMaxDurationSeconds } } };
