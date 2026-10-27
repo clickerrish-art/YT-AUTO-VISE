@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 
 const SHA256 = /^[a-f0-9]{64}$/;
 const VIDEO_ID = /^[A-Za-z0-9_-]{11}$/;
@@ -85,14 +86,14 @@ export function validateShortParentRelationship(relationship, {
   if (relationship.relationshipApproved !== true) errors.push("the Short-to-parent relationship has not been human-approved");
   if (typeof relationship.relationshipReviewNotes !== "string" || relationship.relationshipReviewNotes.trim().length < 3 || relationship.relationshipReviewNotes.length > 1000) errors.push("human relationship-review notes are required");
   if (typeof relationship.relationshipReviewer !== "string" || relationship.relationshipReviewer.trim().length < 2) errors.push("relationship reviewer identity is required");
-  if (!Number.isFinite(Date.parse(relationship.relationshipApprovedAt ?? ""))) errors.push("relationship approval timestamp is invalid");
+  if (!isValidZonedIsoTimestamp(relationship.relationshipApprovedAt)) errors.push("relationship approval timestamp must be a valid ISO timestamp with an explicit timezone");
   if (!SHA256.test(relationship.relationshipEvidenceSha256 ?? "")) errors.push("relationship evidence SHA-256 is required");
   else if (relationship.relationshipEvidenceSha256 !== shortParentEvidenceSha256(relationship)) errors.push("relationship evidence checksum does not match the exact relationship record");
   const native = relationship.nativeRelatedVideo;
   if (requireNativeRelatedVideoVerified && native?.status !== "VERIFIED") errors.push("native YouTube Related video association must be independently verified before Short publication");
   if (!native || !["VERIFIED", "BLOCKED_EXTERNAL"].includes(native.status)) errors.push("native YouTube Related video status must be explicitly VERIFIED or BLOCKED_EXTERNAL");
   else if (relationship.parentPrivacyStatus === "private" && native.status !== "BLOCKED_EXTERNAL") errors.push("a private parent cannot be reported as natively Related-video eligible");
-  else if (native.status === "VERIFIED" && (!native.verifiedBy || !Number.isFinite(Date.parse(native.verifiedAt ?? "")) || !SHA256.test(native.evidenceSha256 ?? ""))) errors.push("native Related video verification requires reviewer, timestamp and evidence hash");
+  else if (native.status === "VERIFIED" && (!native.verifiedBy || !isValidZonedIsoTimestamp(native.verifiedAt) || !SHA256.test(native.evidenceSha256 ?? ""))) errors.push("native Related video verification requires reviewer, timestamp and evidence hash");
   else if (native.status === "VERIFIED" && native.parentVideoId !== relationship.parentRemoteVideoId) errors.push("native Related video evidence must identify the exact approved parent video ID");
   else if (native.status === "VERIFIED" && native.channelId !== relationship.parentChannelId) errors.push("native Related video evidence channel must match the verified SonicVhibez parent channel");
   else if (native.status === "VERIFIED" && native.destinationUrl !== canonical) errors.push("native Related video evidence must identify the exact canonical parent destination URL");
