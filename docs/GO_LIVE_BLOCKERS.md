@@ -1,3 +1,13 @@
+## Live checkpoint — 27 October 2026
+
+Current source/test SHA: `7bd13b1894de0b783f062a6481090cdafcf272f3`. Latest application-code ancestor: `081999d2a7f3afb2ef013a840e01982b21084db2`. Current release evidence: [CURRENT_RELEASE_EVIDENCE_2026-10-27.md](CURRENT_RELEASE_EVIDENCE_2026-10-27.md). PR #1 remains open, draft and unmerged. `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; live compare is 1,718 ahead / 2 behind / 163 changed files.
+
+Exact candidate-SHA automation/security, browser E2E, content-quality, metadata-validation and isolated-baseline workflows completed successfully. Automation/security ran 369 Node tests (0 failures, 0 skipped), 16 Python tests and npm audit (0 vulnerabilities); browser E2E passed 13 Chromium journeys against the real local dashboard/backend. Local Facebook draft-package validation passed, but its external draft-package job was skipped and no live Meta integration is proven. Production readiness remains blocked: the readiness workflow reported 13 blockers and correctly failed closed. See the current release evidence for the verbatim blocker list and exact workflow links.
+
+The historical test-file incident check is positive: `test/restore-facebook-draft-history.test.mjs` exists at the candidate branch and is exercised by the passing automation test suite. No YouTube upload, Facebook/Instagram post, campaign activation, visibility change, merge, main-branch modification or destructive Git operation occurred. Do not infer production readiness from code CI alone.
+
+---
+
 ## Current release checkpoint — 27 October 2026
 
 Exact application/test SHA: `081999d2a7f3afb2ef013a840e01982b21084db2`. PR #1 remains open, draft and unmerged. `main` remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; live divergence 1,709 ahead / 2 behind / 163 changed files. No removed or renamed files appear in the live compare, and `test/restore-facebook-draft-history.test.mjs` is preserved.
