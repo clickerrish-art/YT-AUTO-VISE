@@ -858,3 +858,25 @@ This reconciliation supersedes the earlier "in progress/pending" status for the 
 - Nature Frontiers Facebook draft workflow — [40595638700](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595638700) reported workflow success, but that status alone does not establish external Meta draft creation; external job-level evidence must be inspected separately.
 
 The helper's three isolated Node regression tests also passed locally. No full local checkout was available in this execution environment, so no claim is made that the complete suite was run locally.
+
+
+---
+
+## Dashboard authentication integration regression — 28 October 2026
+
+**Current application/test candidate:** `c819fb9e005eb01b614d66c1aa380e1330147d41`  
+**Change:** `test/dashboard-server.test.mjs` now sends an operator token with the same JavaScript string length as the configured token but a different UTF-8 byte length. It asserts the authenticated API rejects this malformed token with HTTP 401 rather than producing an internal error. The byte-safe helper and dedicated unit tests from `de41102b622def75671e82b8972a16b536cd1c5a` remain included.
+
+### Exact-candidate workflow status at this observation
+
+- Automation/security: [40595854783](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854783) — in progress.
+- Content quality: [40595854786](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854786) — in progress.
+- Metadata validation: [40595854888](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854888) — in progress.
+- Dashboard browser E2E: [40595854792](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854792) — in progress.
+- Isolated main/candidate baseline: [40595854787](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854787) — pending.
+- Production readiness: [40595854780](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854780) — blocked/failure, with 13 reported prerequisites.
+- Nature Frontiers draft workflow: [40595854852](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854852) — local draft-package validation passed; external draft-creation job was skipped. This is not external Meta acceptance.
+
+The previous candidate `de41102b622def75671e82b8972a16b536cd1c5a` had automation/security, content-quality, metadata and 13-journey Chromium E2E workflows pass. The current candidate adds the integration-level malformed-token regression, so its own in-progress results must be checked before assigning the same pass claims to `c819fb9e005eb01b614d66c1aa380e1330147d41`.
+
+Production remains **NOT READY**. The 13 current readiness blockers include missing genuine render manifests and final Short media, missing review/rights evidence, missing verified SonicVhibez channel metadata and YouTube credentials in this CI environment, complete YouTube history reconciliation, and a feasible timezone-aware owner-approved cadence. No external publication was attempted.
