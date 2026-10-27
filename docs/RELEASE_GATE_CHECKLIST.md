@@ -1,3 +1,20 @@
+## Latest exact-SHA checkpoint — `31b5f56415b51280baa11418c56ef3c2b1280006`
+
+- [x] Restore stages every changed file before committing any destination and writes a durable recovery journal.
+- [x] Injected second-destination rename failure rolls back the earlier committed destination.
+- [x] Simulated interrupted restore journal is reconciled after restart; operation stops and requires explicit retry.
+- [x] Exact candidate automation/security: [run 40590357469](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469), 376 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; normal lifecycle install; npm audit 0 vulnerabilities.
+- [x] Content quality: [run 40590357580](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357580), 376 tests, 0 skips.
+- [x] Metadata: [run 40590357601](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357601), 376 tests, 0 skips.
+- [x] Dashboard E2E: [run 40590357460](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357460), 13 Chromium tests.
+- [x] Isolated main/candidate baseline: [run 40590357407](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357407); [artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357407/artifacts/12773761331).
+- [ ] Production readiness — BLOCKED by 13 real prerequisites: [run 40590357522](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357522).
+- [ ] Full power-loss/operational restore, cross-process concurrency, uncertain remote-operation recovery, isolated deployment/rollback, exhaustive dashboard API acceptance, genuine production media and human approval, verified YouTube/Meta external operations, owner-approved cadence and Git divergence reconciliation.
+
+**Verdict remains IMPLEMENTATION PARTIAL / NOT PRODUCTION READY.**
+
+---
+
 ## Latest exact-SHA release checkpoint — 27 October 2026
 
 - [x] Exact candidate Node suite: 374 passed, 0 failed, 0 skipped in automation, content-quality and metadata workflows.
