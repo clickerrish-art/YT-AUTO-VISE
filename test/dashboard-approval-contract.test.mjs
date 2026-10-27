@@ -21,3 +21,10 @@ test("dashboard final approval requires explicit YouTube-use permission and exac
   assert.match(server, /sha256File\(evidenceFile\) !== evidenceAsset\.licenseEvidenceSha256/);
   assert.doesNotMatch(server, /if \(evidenceAsset\.licenseEvidenceSha256 && sha256File\(evidenceFile\) !== evidenceAsset\.licenseEvidenceSha256\)/);
 });
+
+test("dashboard cannot final-approve a Short until native parent association is verified and eligible", () => {
+  const server = fs.readFileSync(path.resolve("scripts/dashboard-server.mjs"), "utf8");
+  assert.match(server, /requireNativeRelatedVideoVerified: true/);
+  assert.match(server, /allowPrivateParent: false/);
+  assert.match(server, /native YouTube Related video association must be independently verified before Short publication/);
+});
