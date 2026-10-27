@@ -655,3 +655,18 @@ A new draft-only `scripts/generate-authoring-narration.py` component now accepts
 Exact-SHA checks at `4b4b041dd45c41246736bd7973be8d05ba091286`: automation/security PASS (328 Node, 16 Python; [run 40449501858](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40449501858)); dashboard browser E2E PASS (12 tests; [run 40449501863](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40449501863)); content quality PASS ([run 40449501841](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40449501841)); metadata PASS ([run 40449501936](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40449501936)); isolated baseline was still IN PROGRESS when recorded ([run 40449501846](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40449501846)); readiness BLOCKED ([run 40449501870](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40449501870)); Facebook draft SKIPPED ([run 40449501843](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40449501843)).
 
 Continue to keep public/unattended YouTube publishing disabled, Facebook live publishing disabled, Safari campaigns inactive, and Nature Frontiers excluded from YouTube targets. Preserve the approved Selar URL exactly: `https://selar.com/0u19v8u99l`.
+
+
+---
+
+## Live implementation update — 27 October 2026: narration review stages
+
+Exact application/test SHA: `c5bfbbc7861616494c6b589604fa3797e673681a`.
+
+Implemented and tested a hash-bound script approval route, narration-generation stage, authenticated narration playback/review bundle, narration approval bound to audio/transcript/caption/report hashes, and a no-TTS-retry recovery endpoint. The dashboard now exposes the script review, narration generation, playback, transcript/caption review and recovery controls.
+
+Exact-SHA results: automation/security PASS (336 Node + 16 Python tests; npm audit zero vulnerabilities) [run 40453030534](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030534); browser E2E PASS (12 Chromium tests) [run 40453030615](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030615); content quality PASS [run 40453030586](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030586); metadata PASS [run 40453030574](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030574); isolated baseline PASS [run 40453030640](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030640); readiness BLOCKED [run 40453031961](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453031961); Facebook daily draft SKIPPED [run 40453030497](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030497).
+
+**The primary production integration blocker remains open.** `POST /api/jobs/produce` still refuses authoring jobs. No live Edge TTS audio or final video was generated; API integrity tests use synthetic fixture bytes and do not constitute real audio or human playback evidence. The next code task is to bind an approved production plan and rights-cleared scene assets to the approved narration, render into per-job paths, run the final validators and require final-video review before removing the refusal.
+
+Keep public/unattended YouTube OFF, Facebook live OFF, Safari campaigns inactive and Nature Frontiers excluded from YouTube targets. Do not claim the app is production accepted.
