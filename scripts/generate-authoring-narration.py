@@ -30,6 +30,16 @@ def normalized_text(value: str) -> str:
     return re.sub(r"\s+", " ", str(value or "")).strip()
 
 
+def canonical_script_sha256(payload: object) -> str:
+    if not isinstance(payload, dict):
+        raise ValueError("script JSON must be an object")
+    script = payload.get("result", payload)
+    if not isinstance(script, dict):
+        raise ValueError("script result must be an object")
+    canonical = json.dumps(script, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
 def validate_script_payload(payload: object, content_format: str) -> tuple[str, int]:
     if content_format not in MAX_WORDS:
         raise ValueError("format must be short or long_form")
@@ -143,6 +153,7 @@ async def generate(payload: object, content_format: str, output_dir: Path,
     if edge_tts is None:
         raise RuntimeError("Install the free edge-tts package before generating narration")
     narration, words = validate_script_payload(payload, content_format)
+    script_digest = canonical_script_sha256(payload)
     output_dir.mkdir(parents=True, exist_ok=True)
     if output_dir.is_symlink() or not output_dir.is_dir():
         raise ValueError("output directory must be a real directory, not a symlink")
@@ -177,6 +188,7 @@ async def generate(payload: object, content_format: str, output_dir: Path,
         targets[2].write_text(captions, encoding="utf-8")
         report = {
             "format": content_format, "voice": voice, "rate": rate, "wordCount": words,
+            "scriptSha256": script_digest,
             "durationSeconds": round(duration, 3), "wordBoundaryCount": len(boundaries),
             "captionTiming": "TTS_WORD_BOUNDARIES", "audioSha256": hashlib.sha256(final_audio.read_bytes()).hexdigest(),
             "transcriptSha256": hashlib.sha256((narration + "\n").encode()).hexdigest(),
