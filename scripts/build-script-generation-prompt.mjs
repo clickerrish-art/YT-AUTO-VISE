@@ -40,13 +40,13 @@ export function buildScriptGenerationPrompt(format, brief) {
   ];
   if (format === "long_form") {
     common.push(
-      "FORMAT: long-form, 6–10 minutes, measured narration target 780–1600 words. The application measures the returned text; do not self-report word counts.",
+      "FORMAT: long-form, 6–10 minutes, measured narration target 900–1500 words. The application measures the returned text; do not self-report word counts.",
       "Use at least five clearly differentiated sections. Include a distinctive accurate premise, researched context, detailed explanation, transitions, pacing and sound/visual direction, explicit uncertainty where appropriate, and a substantive conclusion that resolves the opening premise.",
       "Provide a complete narration transcript suitable for caption generation. Every section must advance the explanation and not repeat another section."
     );
   } else {
     common.push(
-      "FORMAT: YouTube Short, 50–60 seconds, measured narration target 90–150 words. The application measures the returned text; do not self-report word counts.",
+      "FORMAT: YouTube Short, 50–60 seconds, measured narration target 125–150 words. The application measures the returned text; do not self-report word counts.",
       "Use at least three differentiated beats: hook, evidence/discovery, and payoff. Make the Short coherent and self-contained; never truncate a long-form script arbitrarily.",
       "Explicit parent: contentId=" + brief.parentRecord.contentId + "; weeklyContentCycleId=" + brief.parentRecord.weeklyContentCycleId + ". Align the Short's topic and narrative with this parent, but do not fabricate a scene or claim absent from the approved parent evidence.",
       "Include a relevant, non-misleading invitation to watch the parent only where appropriate. The actual YouTube Studio Related video setting is a separate post-upload verification."
