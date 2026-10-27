@@ -1108,7 +1108,8 @@ const server = http.createServer(async (req, res) => {
         } else {
           delete job.authoring.scriptApproval;
           job.authoring.scriptReview = decision;
-          job.authoring.narrationStage = undefined;
+          delete job.authoring.narrationStage;
+          job.authoring.status = "REJECTED";
         }
         state.jobs[index] = job;
         state.audit.push({
