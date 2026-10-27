@@ -45,6 +45,7 @@ export function prepareSafeRenderOutput(outputPath) {
     const stat = fs.lstatSync(absolute);
     if (stat.isSymbolicLink()) throw new Error("Render output path is a symbolic link");
     if (!stat.isFile()) throw new Error("Render output path must be a regular file when it already exists");
+    throw new Error("Render output already exists; refusing to overwrite retained artifact");
   } catch (error) {
     if (error?.code !== "ENOENT") throw error;
   }
