@@ -1,3 +1,16 @@
+## Latest exact tested candidate — `b2686b888dabf6099d25aff59d288a514b3caffe`
+
+- [x] Restore operations serialized by exclusive cross-process lock; competing lock fails closed.
+- [x] Restore lock-contention and failure-cleanup regression tests pass in the exact candidate.
+- [x] Automation/security: 379 Node tests, 0 failures, 0 skips; 16 Python tests; normal install; npm audit 0 vulnerabilities; FFmpeg/syntax/compile checks pass ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628190)).
+- [x] Content quality 379/379, zero skips ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628137)).
+- [x] Metadata/schedule 379/379, zero skips ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628366)).
+- [x] Dashboard E2E 13 Chromium journeys ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628079)).
+- [x] Isolated main/candidate baseline ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628185)).
+- [ ] Production readiness: BLOCKED by 13 prerequisites ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628122)).
+- [ ] External Meta draft integration: draft-creation job skipped; no external draft proof ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628361)).
+- [ ] Exhaustive dashboard/API control acceptance, production media/rights/human approvals, verified YouTube identity/history/authorized upload, native Short-parent association, Meta identities/draft operation, owner cadence approval, full deployment/rollback drills and branch divergence review remain unresolved.
+
 ## Latest exact-SHA release checkpoint — `b1989a764e54400cddb55158b998c5a375972321`
 
 - [x] Stage all changed restore files before destination commits; persist journal in configured state directory.
