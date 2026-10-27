@@ -50,14 +50,15 @@ test("restore refuses a backup whose parent directory is a symbolic link", async
   }
 });
 
-test("restore reads a regular backup file and preserves the explicit confirmation gate", async () => {
+test("restore refuses an empty backup and preserves the explicit confirmation gate", async () => {
   const dir = makeTempDir();
   try {
     const backup = path.join(dir, "backup.json");
     fs.writeFileSync(backup, validEmptyBackup, { mode: 0o600 });
-    const result = await restoreState({ backupPath: backup, rootDir: dir, confirm: "YES", now: Date.parse("2026-10-02T00:00:00.000Z") });
-    assert.equal(result.status, "RESTORE_COMPLETED");
-    assert.equal(result.restored, 0);
+    await assert.rejects(
+      restoreState({ backupPath: backup, rootDir: dir, confirm: "YES", now: Date.parse("2026-10-02T00:00:00.000Z") }),
+      /Backup contains no entries/
+    );
     await assert.rejects(
       restoreState({ backupPath: backup, rootDir: dir, confirm: "NO", now: Date.parse("2026-10-02T00:00:00.000Z") }),
       /RESTORE_CONFIRM=YES/
