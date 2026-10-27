@@ -38,7 +38,7 @@ if (!exists(schedulePath)) {
     if (schedule.publicationCycle?.minimumHoursBetweenConsecutivePublications !== minimumSpacingHours || schedule.publicationCycle?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0) || schedule.spacingPolicy?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0)) blockers.push("Publication cycle and spacingPolicy must use the configured minimum gap and its derived cycle duration.");
     if (schedule.publicationCycle?.publicationRequiresVerifiedHistory !== true) blockers.push("Publication cycle must require independently verified public/private/unlisted history and reconciliation of uncertain attempts.");
     const cadenceDecision = schedule.cadenceDecision;
-    const supportedCadenceModes = ["ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET", "WEEKLY_TARGET_WITH_SHORTER_SPACING", "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"];
+    const supportedCadenceModes = ["ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET", "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"];
     let cadenceDecisionValid = Boolean(cadenceDecision
       && cadenceDecision.status === "OWNER_APPROVED"
       && cadenceDecision.ownerApproved === true
@@ -46,8 +46,9 @@ if (!exists(schedulePath)) {
       && isValidZonedIsoTimestamp(cadenceDecision.approvedAt)
       && typeof cadenceDecision.approvalReference === "string"
       && cadenceDecision.approvalReference.trim());
-    if (cadenceDecisionValid && cadenceDecision.approvedMode === "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET" && minimumSpacingHours < 72) cadenceDecisionValid = false;
-    if (cadenceDecisionValid && cadenceDecision.approvedMode === "WEEKLY_TARGET_WITH_SHORTER_SPACING" && minimumSpacingHours > 56) cadenceDecisionValid = false;
+    // The 72-hour minimum is a hard publication invariant for every cadence mode.
+    // Owner approval may resolve the weekly-target conflict, but may never waive spacing.
+    if (cadenceDecisionValid && minimumSpacingHours < 72) cadenceDecisionValid = false;
     if (cadenceDecisionValid && cadenceDecision.approvedMode === "OTHER_OWNER_DEFINED_FEASIBLE_POLICY") {
       const custom = cadenceDecision.ownerDefinedPolicy;
       cadenceDecisionValid = Boolean(custom
