@@ -78,7 +78,14 @@ export function validateProductionPlan(plan, { jobId, contentType, scriptSha256 
       }
       if (parent.remoteParentVerified !== true || !/^[A-Za-z0-9_-]{11}$/.test(parent.remoteVideoId ?? "") ||
           parent.channelTitle !== "SonicVhibez" || !/^UC[A-Za-z0-9_-]{22}$/.test(parent.channelId ?? "") ||
-          parent.visibility !== "public") errors.push("Short parent must have a verified public SonicVhibez remote receipt and exact channel identity");
+          !["private", "public", "unlisted"].includes(parent.visibility)) {
+        errors.push("Short parent must have a verified private/public/unlisted SonicVhibez remote receipt and exact channel identity");
+      }
+      if (parent.visibility === "private" &&
+          (parent.nativeRelatedVideoStatus !== "BLOCKED_EXTERNAL" ||
+           typeof parent.nativeRelatedVideoBlocker !== "string" || parent.nativeRelatedVideoBlocker.trim().length < 8)) {
+        errors.push("a private parent may be used for internal Short lineage only when native Related video is explicitly BLOCKED_EXTERNAL with a specific reason");
+      }
       const expectedUrl = "https://www.youtube.com/watch?v=" + String(parent.remoteVideoId ?? "");
       if (parent.destinationUrl !== expectedUrl) errors.push("Short parent destination must be the canonical URL for the verified remote parent ID");
     }

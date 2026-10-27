@@ -89,6 +89,19 @@ test("long-form plan requires six or more scenes and cannot carry Short parent b
   assert.ok(errors.some(error => /must not carry a Short parent/.test(error)));
 });
 
+
+test("private parent is valid for internal lineage only when native Related video stays externally blocked", () => {
+  const plan = makePlan("short");
+  plan.parentRelationship.visibility = "private";
+  plan.parentRelationship.nativeRelatedVideoStatus = "BLOCKED_EXTERNAL";
+  plan.parentRelationship.nativeRelatedVideoBlocker = "Private parent is not eligible for native Related video.";
+  assert.deepEqual(validateProductionPlan(plan, { jobId: "short-job-01", contentType: "short", scriptSha256: hash }), []);
+  delete plan.parentRelationship.nativeRelatedVideoStatus;
+  delete plan.parentRelationship.nativeRelatedVideoBlocker;
+  const errors = validateProductionPlan(plan, { jobId: "short-job-01", contentType: "short", scriptSha256: hash });
+  assert.ok(errors.some(error => /native Related video is explicitly BLOCKED_EXTERNAL/.test(error)));
+});
+
 test("rejects unverified, private or wrong-channel parent for a Short", () => {
   const plan = makePlan("short");
   plan.parentRelationship.remoteParentVerified = false;

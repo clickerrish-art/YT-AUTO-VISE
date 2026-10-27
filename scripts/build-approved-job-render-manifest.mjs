@@ -199,13 +199,17 @@ export function buildApprovedJobRenderManifest({ job, root }) {
     const parent = plan.parentRelationship;
     if (!relationship || relationship.relationshipApproved !== true ||
         relationship.parentRemoteVerified !== true || relationship.parentChannelTitle !== "SonicVhibez" ||
-        relationship.parentPrivacyStatus !== "public" || !parent ||
+        !["private", "public", "unlisted"].includes(relationship.parentPrivacyStatus) || !parent ||
         parent.parentContentId !== relationship.parentContentId ||
         parent.remoteVideoId !== relationship.parentRemoteVideoId ||
         parent.parentMediaSha256 !== relationship.parentMediaSha256 ||
         parent.channelId !== relationship.parentChannelId ||
-        parent.remoteParentVerified !== true) {
-      throw new Error("Short rendering requires the exact independently approved and remotely verified SonicVhibez parent relationship");
+        parent.visibility !== relationship.parentPrivacyStatus ||
+        parent.remoteParentVerified !== true ||
+        (relationship.parentPrivacyStatus === "private" &&
+          (parent.nativeRelatedVideoStatus !== "BLOCKED_EXTERNAL" ||
+           relationship.nativeRelatedVideo?.status !== "BLOCKED_EXTERNAL"))) {
+      throw new Error("Short rendering requires the exact approved SonicVhibez parent relationship; private parents require native Related video to remain explicitly BLOCKED_EXTERNAL");
     }
   }
 
