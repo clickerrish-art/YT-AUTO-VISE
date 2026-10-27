@@ -1,3 +1,21 @@
+## Latest exact-SHA restore-lock checkpoint — 28 October 2026, 00:20 SAST
+
+**Exact tested source/test SHA:** `b2686b888dabf6099d25aff59d288a514b3caffe`. Live PR #1 head at this checkpoint is the same SHA; PR remains open, draft and unmerged.
+
+The restore path now serializes concurrent restore/recovery invocations using `.restore-operation.lock` in the validated state directory. Lock creation is exclusive; a competing operation fails closed and does not rewrite another process's lock. The current operation removes only its own token-matched lock. A stale lock is not automatically stolen by age: an operator must establish that no restore is active before manual cleanup.
+
+- Automation/security: [run 40593628190](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628190) — **379 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; normal lifecycle install passed; npm audit reported 0 vulnerabilities; FFmpeg, syntax and Python compilation checks passed.**
+- Content quality: [run 40593628137](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628137) — **379 tests, 0 failures, 0 skips**, FFmpeg installed.
+- Metadata/schedule: [run 40593628366](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628366) — **379 tests, 0 failures, 0 skips**.
+- Dashboard browser E2E: [run 40593628079](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628079) — **13 Chromium journeys passed**; this does not prove exhaustive control/API coverage.
+- Isolated main/candidate baseline: [run 40593628185](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628185) — **PASS**.
+- Production readiness: [run 40593628122](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628122) — correctly **BLOCKED**, not a test-suite failure; 13 production prerequisites remain.
+- Meta draft workflow: [run 40593628361](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628361) — local candidate validation passed; external `create-draft-package` job was **SKIPPED**, so no real Meta draft creation is proven.
+
+Current live refs: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, branch `1813 ahead / 2 behind / 164 changed files`. The large divergence remains a separate integration-review blocker.
+
+Acceptance register currently records 27 PASS / 8 NOT_TESTED / 7 BLOCKED_EXTERNAL. Dashboard/API exhaustive acceptance, full operational crash and deployment drills, genuine production media/rights/human approval, verified YouTube/Meta operations, owner-approved cadence and safe branch reconciliation remain incomplete. No live upload/post, campaign activation, visibility change, merge, `main` edit or destructive Git operation occurred.
+
 ## Latest exact-SHA interrupted-restore hardening checkpoint — 27 October 2026, 22:02 UTC
 
 **Exact tested source/test candidate:** `b1989a764e54400cddb55158b998c5a375972321`. The latest source/test changes put the restore journal inside the configured application state directory and make the dashboard refuse startup while an interrupted restore journal exists. The recovery path now stages and flushes all replacements, records a durable transaction journal, rolls back committed files after a later commit failure, restores the original dashboard-state bytes on rollback, and requires an explicit second invocation after restart recovery.
