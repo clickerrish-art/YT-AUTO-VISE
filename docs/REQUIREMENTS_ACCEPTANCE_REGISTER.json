@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-28",
-  "evidencePolicy": "Latest exact tested source/test candidate SHA: b2686b888dabf6099d25aff59d288a514b3caffe. Automation/security PASS: 379 Node tests, 0 failures, 0 skips; 16 Python tests; normal lifecycle-script installation; npm audit 0 vulnerabilities; FFmpeg integration, syntax and Python compilation passed. Content-quality and metadata workflows each passed 379/379 with zero skips. Dashboard E2E passed 13 Chromium journeys. Isolated main/candidate baseline passed. New cross-process restore lock and lock-contention/cleanup tests are included. Production readiness remains blocked by 13 external/owner prerequisites; external Meta draft creation was skipped.",
+  "evidencePolicy": "Latest exact tested source/test candidate SHA: b2686b888dabf6099d25aff59d288a514b3caffe. Automation/security PASS: 379 Node tests, 0 failures, 0 skips; 16 Python tests; normal lifecycle-script installation; npm audit 0 vulnerabilities; FFmpeg integration, syntax and Python compilation passed. Content-quality and metadata workflows each passed 379/379 with zero skips. Dashboard E2E passed 13 Chromium journeys. Isolated main/candidate baseline passed. New cross-process restore lock and lock-contention/cleanup tests are included. Production readiness remains blocked by 13 external/owner prerequisites; external Meta draft creation was skipped. Documentation-only commits after the tested source/test SHA updated the release evidence; they are not represented as source/test validation.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -700,7 +700,7 @@
     "checkpointPrHead": "b2686b888dabf6099d25aff59d288a514b3caffe",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1813,
+    "aheadBy": 1819,
     "behindBy": 2,
     "changedFiles": 164,
     "prState": "open",
@@ -741,6 +741,7 @@
     ],
     "candidateSourceTestSha": "b2686b888dabf6099d25aff59d288a514b3caffe",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Exact candidate b2686b888dabf6099d25aff59d288a514b3caffe passed automation/security, content quality, metadata, dashboard E2E and isolated baseline. All workflows reported zero skipped Node tests; automation passed 379 Node tests and 16 Python tests. Restore operations now serialize across processes with a fail-closed exclusive lock and regression tests."
+    "latestChangeTestReason": "Exact candidate b2686b888dabf6099d25aff59d288a514b3caffe passed automation/security, content quality, metadata, dashboard E2E and isolated baseline. All workflows reported zero skipped Node tests; automation passed 379 Node tests and 16 Python tests. Restore operations now serialize across processes with a fail-closed exclusive lock and regression tests.",
+    "latestDocumentedPrHeadBeforeRegisterRefresh": "59d34c856912fdb1a03229801612e04eb532baa1"
   }
 }
