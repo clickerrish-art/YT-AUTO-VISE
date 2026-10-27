@@ -302,3 +302,84 @@ export function evaluateNextPublication({
   }
   return { valid: errors.length === 0, errors: [...new Set(errors)], expectedFormat, latestActualAt: latestActual ? new Date(latestActual.timestamp).toISOString() : null };
 }
+
+
+const ROLLING_CYCLE = Object.freeze(["long_form", "long_form", "short"]);
+const WEEK_HOURS = 168;
+
+/**
+ * Validate a rolling long_form → long_form → short publication sequence.
+ * This is a scheduling-policy gate, not publication authorization. The policy
+ * must be explicitly owner-approved and mathematically feasible before any
+ * scheduler may use it to enable publication.
+ */
+export function validateRollingPublicationCycle(items, {
+  minSpacingHours = DEFAULT_MIN_SPACING_HOURS,
+  timeZone = DEFAULT_SCHEDULE_TIMEZONE,
+  ownerApprovedPolicy = null
+} = {}) {
+  const errors = [];
+  if (!Array.isArray(items) || items.length === 0) {
+    return { valid: false, errors: ["at least one rolling-cycle item is required"], orderedItems: [], gaps: [] };
+  }
+  if (!Number.isFinite(minSpacingHours) || minSpacingHours < DEFAULT_MIN_SPACING_HOURS) {
+    errors.push("rolling cycle must preserve the project minimum of 72 elapsed hours");
+  }
+  try { new Intl.DateTimeFormat("en", { timeZone }).format(new Date(0)); }
+  catch { errors.push("timeZone must be a valid IANA timezone"); }
+
+  const orderedItems = items.map((item, index) => {
+    if (!item || typeof item !== "object") {
+      errors.push("cycle item " + index + " must be an object");
+      return { id: "(invalid-" + index + ")", contentType: null, timestamp: NaN, sourceIndex: index };
+    }
+    const id = typeof item.id === "string" && item.id.trim() ? item.id : "(missing-id-" + index + ")";
+    if (typeof item.id !== "string" || !item.id.trim()) errors.push("cycle item " + index + " requires a stable ID");
+    if (!ROLLING_CYCLE.includes(item.contentType)) errors.push("cycle item " + id + " contentType must be long_form or short");
+    let timestamp = NaN;
+    try { timestamp = asTimestamp(item.scheduledAt, "cycle item " + id + ".scheduledAt"); }
+    catch (error) { errors.push(error.message); }
+    return { id, contentType: item.contentType, timestamp, sourceIndex: index };
+  }).sort((a, b) => a.timestamp - b.timestamp);
+
+  const seenIds = new Set();
+  for (const item of orderedItems) {
+    if (seenIds.has(item.id)) errors.push("duplicate rolling-cycle item ID: " + item.id);
+    seenIds.add(item.id);
+  }
+  const gaps = [];
+  for (let index = 0; index < orderedItems.length; index++) {
+    const current = orderedItems[index];
+    const expectedType = ROLLING_CYCLE[index % ROLLING_CYCLE.length];
+    if (current.contentType !== expectedType) {
+      errors.push("rolling cycle position " + (index + 1) + " must be " + expectedType + ", got " + String(current.contentType));
+    }
+    const next = orderedItems[index + 1];
+    if (!next) continue;
+    if (!Number.isFinite(current.timestamp) || !Number.isFinite(next.timestamp)) continue;
+    const gapHours = (next.timestamp - current.timestamp) / 3_600_000;
+    gaps.push({ from: current.id, to: next.id, hours: gapHours });
+    if (gapHours < minSpacingHours) errors.push("spacing between " + current.id + " and " + next.id + " is " + gapHours + " hours; minimum is " + minSpacingHours);
+    if (localDateKey(current.timestamp, timeZone) === localDateKey(next.timestamp, timeZone)) {
+      errors.push("same-local-date publication collision between " + current.id + " and " + next.id + " in " + timeZone);
+    }
+  }
+
+  const policy = ownerApprovedPolicy;
+  if (!policy || policy.ownerApproved !== true) {
+    errors.push("an explicit owner-approved rolling publication policy is required");
+  } else {
+    if (typeof policy.approvedBy !== "string" || policy.approvedBy.trim().length < 2) errors.push("owner-approved policy must identify the approving owner");
+    if (!Number.isFinite(Date.parse(policy.approvedAt ?? ""))) errors.push("owner-approved policy must include a valid approval timestamp");
+    if (policy.timeZone !== timeZone) errors.push("owner-approved policy timezone must match the validated schedule timezone");
+    if (policy.minSpacingHours !== minSpacingHours) errors.push("owner-approved policy minimum spacing must match the validated minimum");
+    if (policy.mode !== "rolling") errors.push("owner-approved policy mode must be rolling");
+    if (!Number.isInteger(policy.weeklyPublicationTarget) || policy.weeklyPublicationTarget < 1) {
+      errors.push("owner-approved policy must declare a positive integer weeklyPublicationTarget");
+    } else if (policy.weeklyPublicationTarget * minSpacingHours > WEEK_HOURS) {
+      errors.push("weekly target is mathematically infeasible: " + policy.weeklyPublicationTarget + " publications at " + minSpacingHours + "-hour spacing require at least " + (policy.weeklyPublicationTarget * minSpacingHours) + " hours per weekly cycle");
+    }
+  }
+
+  return { valid: errors.length === 0, errors, orderedItems, gaps, cycle: [...ROLLING_CYCLE], minSpacingHours, timeZone, publishingEnabled: false };
+}
