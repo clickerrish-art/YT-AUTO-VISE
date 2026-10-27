@@ -77,6 +77,26 @@ test("narration stage requires human approval bound to the exact script", () => 
   } finally { fs.rmSync(f.root, { recursive: true, force: true }); }
 });
 
+test("narration stage rejects approval timestamps without an explicit valid timezone", () => {
+  for (const reviewedAt of [
+    "2026-10-27",
+    "2026-10-27T00:00:00",
+    "2026-02-30T00:00:00.000Z",
+    "2026-10-27T00:00:00+15:00"
+  ]) {
+    const f = fixture();
+    try {
+      f.job.authoring.scriptApproval.reviewedAt = reviewedAt;
+      assert.throws(
+        () => runAuthoringNarrationStage({ job: f.job, root: f.root, spawnSyncImpl: () => { throw new Error("must not run"); } }),
+        /human script approval/
+      );
+    } finally {
+      fs.rmSync(f.root, { recursive: true, force: true });
+    }
+  }
+});
+
 test("narration stage records verified artifact hashes but remains draft-only", () => {
   const f = fixture();
   try {
