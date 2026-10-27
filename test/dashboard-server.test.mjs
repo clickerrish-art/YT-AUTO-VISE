@@ -104,6 +104,20 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const malformedTokenResponse = await fetch(base + "/api/state", { headers: { "x-operator-token": malformedUnicodeToken } });
   assert.equal(malformedTokenResponse.status, 401, "equal JavaScript string lengths with unequal UTF-8 byte lengths must reject cleanly");
   const headers = { "content-type": "application/json", "x-operator-token": token };
+  const malformedJson = await fetch(base + "/api/drafts", {
+    method: "POST", headers, body: "{\"id\":"
+  });
+  assert.equal(malformedJson.status, 400, "malformed JSON must be rejected before any draft mutation");
+  const malformedJsonBody = await malformedJson.json();
+  assert.match(malformedJsonBody.error, /valid JSON/i);
+  assert.equal(JSON.stringify(malformedJsonBody).includes(stateDir), false, "malformed-body errors must not expose local state paths");
+  const oversizedBody = await fetch(base + "/api/drafts", {
+    method: "POST", headers, body: JSON.stringify({ payload: "x".repeat(17_000) })
+  });
+  assert.equal(oversizedBody.status, 400, "requests above the 16KB body limit must be rejected before parsing or mutation");
+  const oversizedBodyResult = await oversizedBody.json();
+  assert.match(oversizedBodyResult.error, /16KB/i);
+  assert.equal(JSON.stringify(oversizedBodyResult).includes(stateDir), false, "oversized-body errors must not expose local state paths");
   const initial = await fetch(base + "/api/state", { headers });
   assert.equal(initial.status, 200);
   const body = await initial.json();
