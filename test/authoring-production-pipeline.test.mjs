@@ -99,7 +99,7 @@ test("a complete exact narration stage can be reconciled idempotently without re
     const runner = (...args) => { calls++; return fakeRunnerFactory({ expectedScriptSha256: f.scriptSha256 })(...args); };
     const first = runAuthoringNarrationStage({ job: f.job, root: f.root, spawnSyncImpl: runner });
     const second = runAuthoringNarrationStage({ job: f.job, root: f.root, spawnSyncImpl: (command, args) => { if (command === "ffprobe") return { status: 0, stdout: "55.000\n", stderr: "" }; if (args[0]?.endsWith("check-captions.mjs") || args[0]?.endsWith("validate-caption-sync.mjs")) return { status: 0, stdout: "PASS: captions validated", stderr: "" }; throw new Error("duplicate TTS call"); } });
-    assert.equal(calls, 3, "generator plus two caption validators run exactly once");
+    assert.equal(calls, 4, "generator, independent ffprobe measurement and two caption validators run exactly once");
     assert.equal(first.reused, false);
     assert.equal(second.reused, true);
     assert.deepEqual(second.artifacts, first.artifacts);
