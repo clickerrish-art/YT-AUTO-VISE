@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { spawnSync } from "node:child_process";
+import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 
 const SHA256 = /^[a-f0-9]{64}$/;
 const JOB_ID = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/;
@@ -95,7 +96,7 @@ export function runAuthoringNarrationStage({
   const approval = job.authoring?.scriptApproval;
   if (!approval || approval.decision !== "APPROVE" || approval.scriptSha256 !== scriptSha256 ||
       typeof approval.reviewer !== "string" || approval.reviewer.trim().length < 2 ||
-      typeof approval.reviewedAt !== "string" || !Number.isFinite(Date.parse(approval.reviewedAt))) {
+      !isValidZonedIsoTimestamp(approval.reviewedAt)) {
     throw new Error("A current human script approval bound to the exact script SHA-256 is required before narration");
   }
   const projectRoot = path.resolve(root);
