@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-27",
-  "evidencePolicy": "Exact verified source/test SHA: 9abc4a46ed3ea6e3368ad7af5f24c587baee9411. Automation/security PASS: 373 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; normal lifecycle-script install, npm audit (0 vulnerabilities), FFmpeg renderer integration, JS syntax checks and Python compilation passed. Dashboard E2E PASS: 13 Chromium journeys. Content quality, metadata and isolated main/candidate baseline workflows passed. Content-quality and metadata workflow test invocations each reported one FFmpeg-dependent skip because FFmpeg was not installed in those specific jobs; the full automation workflow installed FFmpeg and ran all 373 Node tests with zero skips. Baseline workflow passed on the exact candidate SHA. Facebook workflow passed local draft validation only; remote create-draft-package was skipped. Production readiness remains blocked by 13 genuine production prerequisites.",
+  "evidencePolicy": "Exact tested candidate SHA: 9310d961311871c3f6e9d2b1271735129fe45d31 (includes the strict parent timestamp code/tests and CI workflow fixes). Automation/security PASS: 373 Node tests, 0 failures, 0 skips; 16 Python tests; normal lifecycle-script install; npm audit 0 vulnerabilities; FFmpeg renderer integration, JS syntax and Python compilation passed. Content-quality and metadata workflows now install FFmpeg and both ran 373 Node tests with zero skips. Dashboard E2E passed 13 Chromium journeys. Isolated main/candidate baseline passed on the exact candidate SHA. Facebook workflow only proved local draft validation; external draft creation was skipped. Production readiness remains blocked by 13 genuine production prerequisites.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -34,14 +34,14 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444830",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444732",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444874",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444697",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444803"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342797",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342774",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342818",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342777",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342909"
       ],
       "nextAction": "Repeat all affected checks after substantive source/test changes; production readiness and live external integrations remain separate gates.",
-      "assessmentCommitSha": "9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
+      "assessmentCommitSha": "9310d961311871c3f6e9d2b1271735129fe45d31",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
     {
@@ -51,10 +51,10 @@
       "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444803"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342909"
       ],
       "nextAction": "Repeat if main advances or after substantive candidate changes; retained artifact contains exact main/candidate command output and counts.",
-      "assessmentCommitSha": "9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
+      "assessmentCommitSha": "9310d961311871c3f6e9d2b1271735129fe45d31",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
     {
@@ -605,26 +605,44 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ebd4f334683237878bac742e052767faabb4f632",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444830",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444732"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444732",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342797",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342774"
       ],
       "nextAction": "Retain strict timestamp validation and regression cases; apply the same explicit-timezone standard to any new approval/receipt timestamp fields.",
-      "assessmentCommitSha": "9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
+      "assessmentCommitSha": "9310d961311871c3f6e9d2b1271735129fe45d31",
       "acceptanceCriterion": "Reject timezone-free, impossible calendar dates and out-of-range UTC offsets for relationshipApprovedAt and reject invalid timestamps for native Related-video verification; accept valid timezone-qualified timestamps."
+    },
+    {
+      "id": "CI-FFMPEG-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Content-quality and metadata validation workflows must install FFmpeg so renderer integration tests do not silently skip.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/1702513c9d32e22b99dd218054ce693b246402c7",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/9310d961311871c3f6e9d2b1271735129fe45d31",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342818",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342777"
+      ],
+      "nextAction": "Keep FFmpeg and ffprobe installation steps in both workflows and retain zero-skip test-count assertions where practical.",
+      "assessmentCommitSha": "9310d961311871c3f6e9d2b1271735129fe45d31",
+      "acceptanceCriterion": "Both workflows install and report FFmpeg/ffprobe before the Node suite; exact-SHA test output reports 373 tests, 373 pass, 0 failures, 0 skips."
     }
   ],
   "currentCheckpoint": {
     "applicationCodeSha": "ebd4f334683237878bac742e052767faabb4f632",
-    "testedSha": "9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
-    "checkpointPrHead": "eb45a37192b294c311471a334d7ad8c544911403",
+    "testedSha": "9310d961311871c3f6e9d2b1271735129fe45d31",
+    "checkpointPrHead": "9310d961311871c3f6e9d2b1271735129fe45d31",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1758,
+    "aheadBy": 1761,
     "behindBy": 2,
     "changedFiles": 163,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "AUTOMATED CODE CHECKS PASS / IMPLEMENTATION PARTIAL / PRODUCTION BLOCKED",
+    "verdict": "AUTOMATED CODE AND CI ACCEPTANCE PASS / IMPLEMENTATION PARTIAL / PRODUCTION BLOCKED",
     "ci": {
       "automationSecurity": "PASS",
       "nodeTests": 373,
@@ -636,22 +654,24 @@
       "ffmpegRendererIntegration": "PASS",
       "syntaxChecks": "PASS",
       "pythonCompilation": "PASS",
-      "contentQuality": "PASS (workflow test invocation skipped 1 FFmpeg-dependent test because FFmpeg absent in that job; full automation passed with FFmpeg and 0 skips)",
-      "metadata": "PASS (workflow test invocation skipped 1 FFmpeg-dependent test because FFmpeg absent in that job; full automation passed with FFmpeg and 0 skips)",
+      "contentQuality": "PASS (373 tests, 0 failed, 0 skipped; FFmpeg installed)",
+      "metadata": "PASS (373 tests, 0 failed, 0 skipped; FFmpeg installed)",
       "dashboardE2e": "PASS (13 Chromium journeys)",
       "isolatedBaseline": "PASS on exact candidate SHA; all command exit codes 0",
       "productionReadiness": "BLOCKED (13 genuine production prerequisites)",
       "facebookDraftWorkflow": "PASS for local deterministic draft-package validation only; external create-draft-package skipped",
-      "latestTimestampRegression": "PASS"
+      "latestTimestampRegression": "PASS",
+      "workflowDependencyFix": "PASS; FFmpeg installed in content-quality and metadata workflows; both now have zero skips"
     },
     "evidence": {
-      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444830",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444874",
-      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444697",
-      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444732",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444803",
-      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444822",
-      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444973"
+      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342797",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342818",
+      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342777",
+      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342774",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342909",
+      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342805",
+      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342799",
+      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342909/artifacts/12772391880"
     },
     "implementationCommits": [
       "bd6a4b75addcb2e14b31d2219ff82b5ef33a1406",
@@ -661,8 +681,8 @@
       "d465c03cb3b12ee68000192089165f326121e8eb",
       "3690ec82b52263cb2da2378f8aba9a5b19658a8f"
     ],
-    "candidateSourceTestSha": "9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
+    "candidateSourceTestSha": "9310d961311871c3f6e9d2b1271735129fe45d31",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Exact candidate SHA 9abc4a46ed3ea6e3368ad7af5f24c587baee9411 passed automation/security (373 Node, 0 failures, 0 skips; 16 Python), dashboard E2E (13 Chromium), content quality, metadata and isolated baseline workflows. Readiness correctly remains blocked."
+    "latestChangeTestReason": "Exact candidate SHA 9310d961311871c3f6e9d2b1271735129fe45d31 passed automation/security (373 Node, 0 failed, 0 skipped; 16 Python), dashboard E2E (13 Chromium), content quality (373 Node, 0 skipped), metadata validation (373 Node, 0 skipped) and isolated baseline. Production readiness correctly remains blocked."
   }
 }
