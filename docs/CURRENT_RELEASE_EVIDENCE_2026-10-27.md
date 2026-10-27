@@ -66,3 +66,33 @@ Public/unattended YouTube publishing stays disabled. Facebook live publishing st
 - Remaining primary code defect: connect the authoring record to durable narration/caption generation, an explicitly approved storyboard/source-asset manifest, per-job multi-scene render output, actual audio/caption/export validation, metadata/hash binding, and human review. Do not remove the refusal until this is integrated and tested end-to-end.
 - Other blockers remain: genuine rights-cleared media and full-playback realism review; successful Short-parent binding/recovery with real receipts; verified SonicVhibez OAuth/channel identity/history and uncertain-upload reconciliation; native Related video verification; verified Nature Frontiers Page and non-skipped draft workflow; feasible owner-approved cadence; exhaustive recovery/restore/deployment drills; full branch-history review and branch-governance acceptance.
 - Safety unchanged: public/unattended YouTube publishing OFF; Facebook live publishing OFF; Safari campaigns inactive; Nature Frontiers prohibited as a YouTube target; approved Selar destination `https://selar.com/0u19v8u99l`. No upload/post, visibility change, campaign activation, merge or destructive Git operation.
+
+
+---
+
+## Live implementation checkpoint — 27 October 2026: dashboard script/narration review stages
+
+**Exact application/test SHA:** `c5bfbbc7861616494c6b589604fa3797e673681a`. Documentation-only follow-ups, if any, do not change that tested source tree. **Latest server-stage integration commit:** `def2b74541f8f84a9095a92a54872264b4e22a6f`. **Latest narration recovery helper commit:** `85b0a15071a72de6c463e5fe89b7b047ae19a282`.
+
+- Live PR #1 remains OPEN, DRAFT and UNMERGED. At this checkpoint, branch HEAD is `c5bfbbc7861616494c6b589604fa3797e673681a`; `main` is `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; live divergence **1,576 ahead / 2 behind / 154 changed files**. Full divergent-history review remains incomplete.
+- Added `scripts/authoring-production-pipeline.mjs` to generate narration only for an explicitly human-approved exact script revision. It records script/audio/transcript/caption hashes, checks transcript text and word count against the approved narration, independently measures audio duration with ffprobe, runs the existing caption structure and synchronization validators, rejects symlinks and partial artifacts, and can reconcile complete prior output without invoking TTS again.
+- Added dashboard API stages for hash-bound script review, narration generation, authenticated narration audio and review-bundle retrieval, explicit narration playback/transcript/caption approval, and recovery-only reconciliation. Added UI controls for script review, narration generation, audio playback, transcript/caption inspection, human review and no-retry reconciliation.
+- The API tests use synthetic fixture bytes to test integrity/attestation handling; this is **not** evidence of real generated or playable production audio. CI does not invoke live Edge TTS. No genuine narration or final video was generated in this checkpoint.
+
+### Exact-SHA workflow results for `c5bfbbc7861616494c6b589604fa3797e673681a`
+
+- Automation/security **PASS** — [run 40453030534](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030534): **336 Node tests passed, 0 failed**; **16 Python safety tests passed**; npm audit reported **0 vulnerabilities**.
+- Dashboard browser E2E **PASS** — [run 40453030615](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030615): **12 Chromium tests passed** against the local dashboard/backend.
+- Content quality **PASS** — [run 40453030586](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030586).
+- Metadata validation **PASS** — [run 40453030574](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030574).
+- Isolated main/candidate baseline **PASS** — [run 40453030640](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030640), with the exact main/candidate comparison retained.
+- Production readiness **BLOCKED** — [run 40453031961](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453031961), as expected because external account/media/approval gates remain unsatisfied.
+- Nature Frontiers Facebook daily draft **SKIPPED** — [run 40453030497](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030497); this is not external integration proof.
+
+### Release decision remains BLOCKED
+
+The main defect is **not closed**: `POST /api/jobs/produce` still refuses authoring jobs. The new review/narration endpoints form a real, hash-bound first part of the pipeline, but the application still does not connect approved narration and approved source assets into a per-job scene manifest, render, final audio/caption/metadata validation and final-video human review. The refusal remains in place intentionally.
+
+Remaining blockers include a production-plan binding contract and renderer integration; real rights-cleared visual assets and narration-licence evidence; final video playback review; successful Short-parent binding/recovery with a real verified parent receipt; verified SonicVhibez OAuth/channel/history and uncertain-upload reconciliation; native Related video verification; a successful non-skipped Nature Frontiers Page draft integration; owner-approved feasible cadence; and exhaustive backup/restore, deployment, rollback and branch-history review.
+
+Safety unchanged: public/unattended YouTube publishing OFF; Facebook live publishing OFF; Safari campaigns inactive; Nature Frontiers prohibited as a YouTube target; approved Selar destination remains `https://selar.com/0u19v8u99l`. No upload, post, visibility change, campaign activation, merge or destructive Git operation occurred.
