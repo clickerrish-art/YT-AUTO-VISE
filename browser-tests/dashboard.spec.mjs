@@ -424,7 +424,9 @@ test("production controls disable safely when real media prerequisites are missi
   response = await request.get("/api/state", { headers });
   state = await response.json();
   for (const job of state.jobs.filter(item => queued.some(previous => previous.id === item.id))) {
-    expect(["BLOCKED", "FAILED"]).toContain(job.state);
+    expect(job.state).toBe("QUEUED");
+    expect(job.workerLease ?? null).toBeNull();
+    expect(job.renderExecution).toBeUndefined();
     expect(job.outputArtifacts ?? []).toHaveLength(0);
   }
   expect(state.publishingEnabled).toBe(false);
