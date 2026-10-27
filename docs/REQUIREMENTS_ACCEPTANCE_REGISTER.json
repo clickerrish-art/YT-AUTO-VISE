@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-27",
-  "evidencePolicy": "Latest exact tested source/test candidate SHA: 31b5f56415b51280baa11418c56ef3c2b1280006. Automation/security PASS: 376 Node tests, 0 failures, 0 skips; 16 Python tests; normal lifecycle-script install; npm audit 0 vulnerabilities; FFmpeg renderer integration, syntax and Python compilation passed. Content-quality and metadata workflows each passed 376/376 with zero skips. Dashboard E2E passed 13 Chromium tests. Isolated main/candidate baseline passed. Restore rollback and interrupted-journal recovery tests passed. Production readiness remains blocked by 13 prerequisites; real external Meta draft creation remains unverified.",
+  "evidencePolicy": "Latest exact tested source/test candidate SHA: b1989a764e54400cddb55158b998c5a375972321. Automation/security PASS: 378 Node tests, 0 failures, 0 skips; 16 Python tests; normal lifecycle-script install; npm audit 0 vulnerabilities; FFmpeg integration, syntax and compilation passed. Content-quality and metadata workflows each passed 378/378 with zero skips. Dashboard E2E passed 13 Chromium tests. Isolated main/candidate baseline passed. Four deterministic restore rollback/restart/startup tests passed. Production readiness remains blocked by 13 prerequisites; external Meta draft creation remains unverified.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -34,14 +34,14 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357460",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357580",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357601",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357407"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305138",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305355",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305087",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305219"
       ],
       "nextAction": "Repeat affected checks after source/test changes; production readiness and external integrations remain separate gates.",
-      "assessmentCommitSha": "31b5f56415b51280baa11418c56ef3c2b1280006",
+      "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
     {
@@ -51,11 +51,11 @@
       "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357407",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357407/artifacts/12773761331"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305219",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305219/artifacts/12773494010"
       ],
       "nextAction": "Repeat if main advances or after substantive candidate changes; retained artifact contains exact main/candidate command output and counts.",
-      "assessmentCommitSha": "31b5f56415b51280baa11418c56ef3c2b1280006",
+      "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
     {
@@ -70,10 +70,11 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40310762992",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40311602123",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392231",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357460"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357460",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305138"
       ],
-      "nextAction": "13 Chromium journeys pass on the exact candidate, including Short-parent blocker reporting; exhaustive per-control/API matrix and successful eligible native association remain incomplete. Keep NOT_TESTED.",
-      "assessmentCommitSha": "31b5f56415b51280baa11418c56ef3c2b1280006",
+      "nextAction": "13 Chromium journeys pass, including the Short-parent blocker workflow and restore-journal startup guard. Exhaustive per-control/API acceptance and successful eligible native association remain incomplete. Keep NOT_TESTED.",
+      "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
     {
@@ -98,10 +99,11 @@
       "requirement": "Prove cross-process idempotency, crash recovery, ambiguous-operation reconciliation, backup and restore.",
       "status": "NOT_TESTED",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237"
       ],
-      "nextAction": "Restore rollback and interrupted-journal recovery now have deterministic integration evidence; full cross-process state safety, uncertain remote-acceptance recovery, and full deployment/rollback drills remain NOT_TESTED.",
-      "assessmentCommitSha": "31b5f56415b51280baa11418c56ef3c2b1280006",
+      "nextAction": "Restore rollback, original-state preservation, interrupted-journal recovery and startup blocking now have deterministic evidence; full cross-process state safety, uncertain remote-acceptance recovery and production-like deployment/rollback drills remain NOT_TESTED.",
+      "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
       "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects."
     },
     {
@@ -269,10 +271,11 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/832482f1ad8068421f7c4894bb5e5ac956a36a93",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/4819a6ed6553a87913aa8edc07a0aca09979831e",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40211909067",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237"
       ],
-      "nextAction": "Keep the path-safety and transaction recovery tests. Full controlled filesystem crash/power-loss testing and production-like restore/rollback drills remain required.",
-      "assessmentCommitSha": "31b5f56415b51280baa11418c56ef3c2b1280006",
+      "nextAction": "Keep path-safety and transaction recovery tests. Full controlled filesystem crash/power-loss testing and production-like restore/rollback drills remain required.",
+      "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
       "acceptanceCriterion": "Tests reject a symlinked backup file, a symlinked parent of the backup, and a symlinked rootDir ancestor without creating files through the link; regular backup input and explicit restore confirmation remain functional."
     },
     {
@@ -635,10 +638,12 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392114",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392137",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357580",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357601"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357601",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305355",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305087"
       ],
       "nextAction": "Keep FFmpeg and ffprobe installation steps in both workflows and retain zero-skip test-count assertions where practical.",
-      "assessmentCommitSha": "31b5f56415b51280baa11418c56ef3c2b1280006",
+      "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
       "acceptanceCriterion": "Both workflows install and report FFmpeg/ffprobe before the Node suite; exact candidate ac97c8860700dcbfedfb367d4dfbc0c654164479 reports 374 tests, 374 pass, 0 failures, 0 skips, including a synthetic multi-scene FFmpeg integration test."
     },
     {
@@ -661,36 +666,40 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392137",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357580",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357601"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357601",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305355",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305087"
       ],
       "nextAction": "Keep FFmpeg installation and zero-skip assertions in all required CI test workflows; investigate any future skip rather than weakening the assertion.",
-      "assessmentCommitSha": "31b5f56415b51280baa11418c56ef3c2b1280006",
-      "acceptanceCriterion": "Automation, content-quality and metadata jobs explicitly report 376 tests, 376 pass, 0 fail, 0 skipped on exact candidate 31b5f56415b51280baa11418c56ef3c2b1280006."
+      "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
+      "acceptanceCriterion": "Automation, content-quality and metadata jobs explicitly report 378 tests, 378 pass, 0 fail, 0 skipped on exact candidate b1989a764e54400cddb55158b998c5a375972321."
     },
     {
       "id": "RESTORE-TXN-001",
       "severity": "critical",
       "owner": "maintainer",
-      "requirement": "Restore changes are staged and journaled before commit; a later commit failure rolls back earlier changes; interrupted restore journals are recovered safely before requiring explicit retry.",
+      "requirement": "Restore changes are staged and journaled before commit; a later commit failure rolls back earlier changes; interrupted restore journals are recovered safely and dashboard startup is blocked until recovery.",
       "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/restore-state.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/dashboard-server.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/backup-restore.test.mjs",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357580"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/dashboard-server.test.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237"
       ],
       "nextAction": "Retain regression coverage and perform a controlled filesystem crash/power-loss and full isolated deployment/rollback drill before production acceptance.",
-      "assessmentCommitSha": "31b5f56415b51280baa11418c56ef3c2b1280006",
-      "acceptanceCriterion": "On the exact tested candidate, injected failure on the second destination rename leaves no partial restored files; a simulated interrupted journal rolls back the committed file, removes the journal and requires a separate explicit restore invocation."
+      "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
+      "acceptanceCriterion": "On the exact tested candidate, injected failure after the first destination commit rolls back all partial changes; the original dashboard state is restored byte-for-byte; simulated interrupted journal recovery rolls back and requires explicit retry; dashboard startup refuses to serve while a journal exists."
     }
   ],
   "currentCheckpoint": {
-    "applicationCodeSha": "6d43ae39dff8f8757becc50e7232775aed8ce076",
-    "testedSha": "31b5f56415b51280baa11418c56ef3c2b1280006",
-    "checkpointPrHead": "31b5f56415b51280baa11418c56ef3c2b1280006",
+    "applicationCodeSha": "9aa4dac6b6160c093f5ff508bbb8f4f3f7c1e73a",
+    "testedSha": "b1989a764e54400cddb55158b998c5a375972321",
+    "checkpointPrHead": "b1989a764e54400cddb55158b998c5a375972321",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1791,
+    "aheadBy": 1803,
     "behindBy": 2,
     "changedFiles": 164,
     "prState": "open",
@@ -699,31 +708,33 @@
     "verdict": "AUTOMATED CODE AND CI ACCEPTANCE PASS / IMPLEMENTATION PARTIAL / PRODUCTION BLOCKED",
     "ci": {
       "automationSecurity": "PASS",
-      "nodeTests": 376,
+      "nodeTests": 378,
       "nodeFailures": 0,
       "nodeSkipped": 0,
       "pythonTests": 16,
       "npmAuditVulnerabilities": 0,
       "normalLifecycleInstall": "PASS",
-      "contentQuality": "PASS (376 tests, 0 failures, 0 skips; FFmpeg installed)",
-      "metadata": "PASS (376 tests, 0 failures, 0 skips; FFmpeg installed)",
+      "contentQuality": "PASS (378 tests, 0 failures, 0 skips; FFmpeg installed)",
+      "metadata": "PASS (378 tests, 0 failures, 0 skips; FFmpeg installed)",
       "dashboardE2e": "PASS (13 Chromium tests; exhaustive control/API acceptance remains incomplete)",
       "isolatedBaseline": "PASS on exact candidate; main/candidate install, Node and Python commands exited 0",
       "productionReadiness": "BLOCKED (13 genuine production prerequisites)",
       "facebookDraftWorkflow": "PASS for 15 local deterministic validation tests only; external create-draft-package skipped",
-      "restoreTransactionRollback": "PASS on exact candidate: injected second destination rename failure rolls back earlier commit",
-      "interruptedRestoreRecovery": "PASS on exact candidate: durable journal recovery rolls back partial commit and requires explicit retry",
+      "restoreTransactionRollback": "PASS on exact candidate: injected second-destination failure rolls back earlier commit",
+      "existingStateRollback": "PASS on exact candidate: original dashboard state restored byte-for-byte after a later commit fails",
+      "interruptedRestoreRecovery": "PASS on exact candidate: journal recovery rolls back partial commit and requires explicit retry",
+      "dashboardRestoreJournalGuard": "PASS on exact candidate: dashboard refuses startup while restore journal exists",
       "operationalRestoreAndDeployment": "NOT_TESTED (full power-loss/production-like restore and rollback drills remain required)"
     },
     "evidence": {
-      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357580",
-      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357601",
-      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357460",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357407",
-      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357522",
-      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357666",
-      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357407/artifacts/12773761331"
+      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305355",
+      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305087",
+      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305138",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305219",
+      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305218",
+      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305428",
+      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305219/artifacts/12773494010"
     },
     "implementationCommits": [
       "bd6a4b75addcb2e14b31d2219ff82b5ef33a1406",
@@ -740,10 +751,14 @@
       "15aabee6d1bccf98ae937f92f8aa361c1af36531",
       "6d43ae39dff8f8757becc50e7232775aed8ce076",
       "a880f8249f0d523335cd37ce7187784e81d0ca7d",
-      "31b5f56415b51280baa11418c56ef3c2b1280006"
+      "31b5f56415b51280baa11418c56ef3c2b1280006",
+      "e9d4f6b8e2f79ec4db8517ed6512055dbcfe6e3f",
+      "9aa4dac6b6160c093f5ff508bbb8f4f3f7c1e73a",
+      "d01212ef4b18431edcfa947c16242571e75af787",
+      "b1989a764e54400cddb55158b998c5a375972321"
     ],
-    "candidateSourceTestSha": "31b5f56415b51280baa11418c56ef3c2b1280006",
+    "candidateSourceTestSha": "b1989a764e54400cddb55158b998c5a375972321",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Exact candidate passed automation/security, content quality, metadata, dashboard E2E and isolated baseline. The two new restore transaction/recovery tests passed within 376 Node tests, with 0 failures and 0 skips. Production readiness correctly remains blocked."
+    "latestChangeTestReason": "Exact candidate passed automation/security, content quality, metadata, dashboard E2E and isolated baseline. All four new restore rollback/restart/startup regression tests passed within 378 Node tests, with 0 failures and 0 skips. Production readiness correctly remains blocked."
   }
 }
