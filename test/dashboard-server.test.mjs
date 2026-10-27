@@ -355,6 +355,13 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const protectedCreatedBody = await protectedCreated.json();
   assert.equal(protectedCreated.status, 201, JSON.stringify(protectedCreatedBody));
   const protectedJob = protectedCreatedBody.job;
+  // Exercise the per-job authoring output path; the render readiness gate is
+  // intentionally bypassed by the pre-existing-output refusal under test.
+  const protectedStatePath = path.join(stateDir, "dashboard-state.json");
+  const protectedState = JSON.parse(fs.readFileSync(protectedStatePath, "utf8"));
+  const protectedJobIndex = protectedState.jobs.findIndex(job => job.id === protectedJob.id);
+  protectedState.jobs[protectedJobIndex].authoring = { status: "TEST_FIXTURE_ONLY" };
+  fs.writeFileSync(protectedStatePath, JSON.stringify(protectedState, null, 2), { mode: 0o600 });
   const protectedDirectory = path.join(process.cwd(), "media", "jobs", protectedJob.id);
   const protectedOutput = path.join(protectedDirectory, "final.mp4");
   const protectedBytes = Buffer.from("retained interrupted-render bytes");
