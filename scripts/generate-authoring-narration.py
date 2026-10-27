@@ -44,7 +44,7 @@ def validate_script_payload(payload: object, content_format: str) -> tuple[str, 
     sections = script.get("sections")
     if not isinstance(sections, list) or len(sections) < (3 if content_format == "short" else 5):
         raise ValueError("script has too few differentiated sections")
-    section_text = "\n\n".join(normalized_text(s.get("narration")) for s in sections if isinstance(s, dict))
+    section_text = normalizedized = normalized_text("\n\n".join(normalized_text(s.get("narration")) for s in sections if isinstance(s, dict)))
     if not section_text or section_text != narration:
         raise ValueError("section narration must reproduce the complete script narration in order")
     for index, section in enumerate(sections, 1):
