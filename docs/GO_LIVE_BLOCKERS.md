@@ -1,3 +1,11 @@
+## Latest restore-safety implementation — `31b5f56415b51280baa11418c56ef3c2b1280006`
+
+The state restore implementation now stages all replacement files, persists a recovery journal before the first destination mutation, rolls back a previously committed destination if a later commit fails, and reconciles interrupted journal state on the next confirmed invocation. The exact candidate passed the injected second-rename failure and simulated restart-recovery tests in [automation run 40590357469](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469), with 376 Node tests and zero skips.
+
+This closes the narrow deterministic restore-transaction regression, not the broader operational recovery gate. Full crash/power-loss testing, cross-process concurrency, isolated deployment/rollback and ambiguous remote upload recovery remain `NOT_TESTED`. The 13 production blockers listed below remain in force.
+
+---
+
 ## Latest exact-SHA production gate result — 27 October 2026
 
 - Tested candidate: `ac97c8860700dcbfedfb367d4dfbc0c654164479`.
