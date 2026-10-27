@@ -6,6 +6,7 @@ import { metaCredentialFingerprint, fingerprintsMatch } from "./meta-credential-
 import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
 import { atomicWriteJson, atomicCreateJson } from "./atomic-json-file.mjs";
 import { redactOperationalText } from "./safe-output.mjs";
+import { matchesOperatorToken } from "./operator-auth.mjs";
 import { fileURLToPath } from "node:url";
 import { spawn, spawnSync } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
@@ -548,7 +549,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (!url.pathname.startsWith("/api/")) return json(res, 404, { error: "Not found" });
     const provided = req.headers["x-operator-token"];
-    if (typeof provided !== "string" || provided.length !== token.length || !crypto.timingSafeEqual(Buffer.from(provided), Buffer.from(token))) return json(res, 401, { error: "Operator authentication required" });
+    if (!matchesOperatorToken(provided, token)) return json(res, 401, { error: "Operator authentication required" });
     if (req.method === "GET" && url.pathname === "/api/state") {
       const state = loadState();
       const schedule = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
