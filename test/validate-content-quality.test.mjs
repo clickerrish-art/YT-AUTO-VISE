@@ -128,3 +128,12 @@ test("missing editorial playback approval blocks content quality acceptance", t 
   f.evidence.humanEditorialReview = { status: "PENDING" };
   assert.match(validateContentQualityEvidence(f.evidence, { format: "long_form", evidenceDir: f.dir }).join(" "), /humanEditorialReview/);
 });
+
+test("integrated quality gate rejects duplicate provenance IDs before scene mapping can overwrite them", t => {
+  const f = fixture(t);
+  f.evidence.assetProvenance.push(structuredClone(f.evidence.assetProvenance[0]));
+  const errors = validateContentQualityEvidence(f.evidence, {
+    format: "long_form", evidenceDir: f.dir, expectedFootagePath: f.footagePath, expectedNarrationPath: f.narrationPath
+  });
+  assert.match(errors.join(" "), /provenance graph: duplicate assetId/i);
+});
