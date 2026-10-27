@@ -1,6 +1,6 @@
 ## Latest exact-SHA restore-lock checkpoint — 28 October 2026, 00:20 SAST
 
-**Exact tested source/test SHA:** `b2686b888dabf6099d25aff59d288a514b3caffe`. Live PR #1 head at this checkpoint is the same SHA; PR remains open, draft and unmerged.
+**Exact tested source/test SHA:** `b2686b888dabf6099d25aff59d288a514b3caffe`. Documentation-only commits followed that tested candidate; PR #1 remains open, draft and unmerged. Live refs at the latest state check: branch head `59d34c856912fdb1a03229801612e04eb532baa1`, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, divergence `1819 ahead / 2 behind / 164 changed files`.
 
 The restore path now serializes concurrent restore/recovery invocations using `.restore-operation.lock` in the validated state directory. Lock creation is exclusive; a competing operation fails closed and does not rewrite another process's lock. The current operation removes only its own token-matched lock. A stale lock is not automatically stolen by age: an operator must establish that no restore is active before manual cleanup.
 
