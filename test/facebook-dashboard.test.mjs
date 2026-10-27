@@ -7,7 +7,10 @@ import path from "node:path";
 
 test("authenticated Facebook draft endpoints persist review state and refuse live publication", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-dashboard-"));
-  const port = 28000 + Math.floor(Math.random() * 10000);
+  // Let the OS allocate an isolated ephemeral port. Random selection from a
+  // shared range can collide with parallel test servers and make the test read
+  // another process's state directory, producing misleading recovery failures.
+  const port = 0;
   const token = "facebook-test-token-" + "z".repeat(36);
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
     env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "facebook-test-owner", DASHBOARD_STATE_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "" },
@@ -17,11 +20,15 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   child.stdout.on("data", chunk => { logs += chunk.toString(); });
   child.stderr.on("data", chunk => { logs += chunk.toString(); });
   t.after(() => { child.kill("SIGTERM"); fs.rmSync(stateDir, { recursive: true, force: true }); });
-  const base = `http://127.0.0.1:${port}`;
+  let base = null;
   let ready = false;
   for (let i = 0; i < 80; i++) {
     if (child.exitCode !== null) break;
-    try { const response = await fetch(base + "/healthz"); if (response.ok) { ready = true; break; } } catch {}
+    const started = logs.match(/"event":"dashboard_started"[^\n]*"port":(\d+)/);
+    if (started) {
+      base = `http://127.0.0.1:${started[1]}`;
+      try { const response = await fetch(base + "/healthz"); if (response.ok) { ready = true; break; } } catch {}
+    }
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   assert.equal(ready, true, "dashboard did not start: " + logs);
