@@ -1,5 +1,18 @@
 ## Live checkpoint — 27 October 2026
 
+## Latest implementation checkpoint — 27 October 2026, 21:02 UTC
+
+Exact source/test SHA: `0969430d130340eed1d143de2f488265a50930dc`; latest application-code SHA: `e1f5650be2c82cb0c8ffd4046b8342a84df09eb9`. The source/test SHA passed automation/security (371 Node tests, 0 failed/skipped; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg render integration passed), dashboard E2E (13 Chromium journeys), content quality, metadata validation, and isolated main/candidate baseline (main 54 Node + 8 Python; candidate 371 Node + 16 Python; all zero failures/skips and exit codes 0). Exact links and limitations are recorded in [CURRENT_RELEASE_EVIDENCE_2026-10-27.md](CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
+
+New code hardening: script approval timestamps must be strict timezone-qualified ISO timestamps; readiness JSON now identifies evidence type, control ownership and the fact that external YouTube history is not independently verified by the read-only check. Production readiness still correctly reports 13 blockers. Local Facebook draft validation passed, but the remote draft job was skipped; no live Meta integration is proven.
+
+At the tested checkpoint, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, branch divergence 1,724 ahead / 2 behind / 163 changed files. PR #1 remains open, draft and unmerged. `test/restore-facebook-draft-history.test.mjs` remains present and tested. No external publication, campaign activation, visibility change, merge or destructive Git operation occurred.
+
+**Verdict: IMPLEMENTATION PARTIAL / PRODUCTION ACCEPTANCE BLOCKED.**
+
+---
+
+
 Current source/test SHA: `7bd13b1894de0b783f062a6481090cdafcf272f3`. Latest application-code ancestor: `081999d2a7f3afb2ef013a840e01982b21084db2`. Current release evidence: [CURRENT_RELEASE_EVIDENCE_2026-10-27.md](CURRENT_RELEASE_EVIDENCE_2026-10-27.md). PR #1 remains open, draft and unmerged. `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; live compare is 1,718 ahead / 2 behind / 163 changed files.
 
 Exact candidate-SHA automation/security, browser E2E, content-quality, metadata-validation and isolated-baseline workflows completed successfully. Automation/security ran 369 Node tests (0 failures, 0 skipped), 16 Python tests and npm audit (0 vulnerabilities); browser E2E passed 13 Chromium journeys against the real local dashboard/backend. Local Facebook draft-package validation passed, but its external draft-package job was skipped and no live Meta integration is proven. Production readiness remains blocked: the readiness workflow reported 13 blockers and correctly failed closed. See the current release evidence for the verbatim blocker list and exact workflow links.
