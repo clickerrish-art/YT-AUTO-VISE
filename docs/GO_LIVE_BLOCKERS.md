@@ -940,3 +940,25 @@ This closes the code-level defect that could have accepted a shorter spacing pol
 The private-only Short review path now permits an explicit `BLOCKED_EXTERNAL` native Related-video status without representing it as a successful association. An empty or vague blocker explanation is rejected and covered by a regression test. Exact source/test SHA: `77921aca418b25bca0a9aa681281145b00c6d72f`; application-code commit: `2186822bba83ecfb299e40ab8d10376c009f8711`. Evidence is recorded in [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
 
 This does not clear native Related-video eligibility or authorize public publishing. Production readiness remains blocked by genuine approved media and human review, verified SonicVhibez OAuth/history and a private-upload receipt, real Meta draft-only integration, an owner-approved feasible cadence, and complete recovery/deployment acceptance. Browser E2E and isolated baseline were still in progress at the source/test checkpoint; verify their final outcomes before release. Keep publishing safeguards unchanged.
+
+
+## Current acceptance checkpoint — 28 October 2026
+
+**Tested source/test candidate:** `1f72c6dc5b648f0c60fdea45ae1d37e835e4505e`.
+
+The current candidate passed:
+- Automation/security [40598195046](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195046): 384 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities.
+- Content quality [40598195232](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195232).
+- Metadata [40598195101](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195101).
+- Browser E2E [40598195206](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195206): 13 Chromium journeys.
+- Isolated main/candidate baseline [40598195202](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195202), with both Node and Python baseline commands exiting 0; retained artifact [12776283618](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195202/artifacts/12776283618), ZIP SHA-256 `989203aab1898f8d740d4f56294e03eec8d023cb6086ce4c171ee2aff156ad2b`.
+
+New repository-controlled safeguards include byte-safe operator-token comparison, regression tests for malformed UTF-8 token lengths, a reproducible `npm run inventory:dashboard` command, and an inventory-driven unauthenticated-access test across every discovered `/api/*` method/path.
+
+### Blockers remain
+
+Production readiness [40598195430](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195430) still correctly fails closed. Missing or unverified production prerequisites include genuine final Short/long-form assets and source/rights manifests, human factual and full-playback approval, verified SonicVhibez channel identity/OAuth and complete remote video-history reconciliation, explicit single-operation private-upload authorization and independently verified receipt, owner-approved feasible cadence, native Related-video eligibility or an explicit retained external blocker, external Meta draft-only acceptance, branch protection, and controlled deployment/recovery/rollback drills.
+
+The dashboard inventory is **not** exhaustive behavioral acceptance. The full DASH-001 requirement remains `NOT_TESTED`; current authentication coverage proves only that unauthenticated requests to inventoried API routes receive HTTP 401. Authorized success, permission boundaries, malformed/boundary inputs, concurrency, dependency/persistence failure, restart durability, audit outcomes and full accessibility acceptance remain to be completed.
+
+No live upload/post, visibility change, campaign activation, merge, main edit, or destructive Git reconciliation was performed. Public/unattended YouTube publishing, live Meta publishing and Safari remain disabled.
