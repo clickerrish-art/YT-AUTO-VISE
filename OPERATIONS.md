@@ -580,3 +580,10 @@ After the exact script and narration have been approved, use **Scene-by-scene pr
 The API checks that referenced files are regular non-symlink files and that the current bytes match the declared hashes. The plan then remains in REVIEW_REQUIRED until the reviewer inspects the persisted plan preview, source evidence and narration alignment and records a hash-bound decision. An approved result is APPROVED_PLAN_ONLY, not final media approval. Any changed script, narration artifact, scene asset or rights-evidence file blocks review.
 
 **Important:** hashes establish integrity, not ownership or licence validity. A plan-stage decision does not prove originality, factual accuracy or realism. The renderer integration is not complete, so POST /api/jobs/produce continues to refuse authoring jobs. Do not bypass this gate or use the fixed global manifest for a generated authoring job.
+
+
+### Current cadence invariant and release state — 27 October 2026
+
+The readiness engine enforces **at least 72 elapsed hours between every pair of consecutive actual publications** in all cadence modes. Do not approve or configure a weekly target by reducing the spacing minimum. The configured long_form → long_form → short cycle requires at least 216 hours across its three cyclic gaps. Africa/Johannesburg remains the scheduling timezone; Tuesday/Saturday workflow slots are draft-preparation triggers, not publication authorization.
+
+Current exact source/test SHA: 47c839452fda99757a34dcb29865da9e967121af. Automation/security, content-quality, metadata, browser E2E and isolated baseline checks passed on that SHA. Production readiness remains blocked. No external account mutation or publication is authorized by these test results. Keep public/unattended YouTube publishing OFF, Facebook live publishing OFF, Safari campaigns inactive and PR #1 open/draft/unmerged. See docs/CURRENT_RELEASE_EVIDENCE_2026-10-27.md for workflow links and outstanding owner-controlled gates.
