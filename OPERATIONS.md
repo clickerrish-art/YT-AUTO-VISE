@@ -528,3 +528,26 @@ Current Git snapshot before these documentation updates: PR HEAD `a912d3c724195f
 The exact source/test checkpoint is `28d326c474d2c4871f6e9f2f55f050dac9fe14bd`; current evidence is in [docs/CURRENT_RELEASE_EVIDENCE_2026-10-27.md](docs/CURRENT_RELEASE_EVIDENCE_2026-10-27.md). Provenance lineage validation now rejects duplicate IDs, missing ancestors, self-links, malformed derivative lists and cycles, with unit and integrated tests. Exact-SHA automation/security, browser E2E, metadata and content-quality workflows passed. Production readiness is still blocked; Facebook daily draft is skipped and is not integration evidence; the isolated baseline was pending at checkpoint time.
 
 Do not bypass the known authored-job production guard. The current dashboard does not yet connect generated narration, captions and scene rendering end to end. Keep public/unattended YouTube publishing disabled, Facebook live publishing disabled and Safari campaigns inactive. No real upload/post or activation is permitted for testing.
+
+---
+
+## Authoring narration component — draft-only, not yet dashboard-integrated (27 October 2026)
+
+A reusable component now exists at `scripts/generate-authoring-narration.py`. It is **not yet connected to `POST /api/jobs/produce`**, so do not treat it as the completed production workflow and do not remove the dashboard's fail-closed authoring guard.
+
+For isolated manual component testing only:
+
+1. Install `edge-tts` in a disposable Python environment (`python -m pip install edge-tts`) and ensure `ffprobe` is installed. The voice generation step requires network access to the free Edge TTS service.
+2. Export the generated structured script result as JSON. It must include the full narration, matching section narration, at least three differentiated Short sections or five long-form sections, non-empty visual/pacing/sound direction, and source-backed claims.
+3. Run the generator with a unique stable job ID as the output folder name, for example:
+
+   ```sh
+   python scripts/generate-authoring-narration.py --script-json path/to/script-result.json --format short --output-dir media/generated-authoring/job-UUID
+   ```
+
+   Use `--format long_form` for long-form scripts. Output must remain under `media/generated-authoring/`; symlinked media/output directories are rejected.
+
+4. Inspect `narration.mp3`, `narration.txt`, `captions.srt` and `narration-report.json`. The report binds a canonical script hash and the audio, transcript and caption hashes. Captions must have actual TTS word-boundary timings; the generator fails closed rather than estimating missing timings.
+5. This output is a narration/caption **draft only**. It does not create or approve wildlife visuals, verify source rights, validate scene alignment, render a video, produce reviewed metadata, replace human playback review, or authorize upload. Do not use these files as a production-ready manifest until the dashboard-to-render integration and all evidence gates are implemented and passed.
+
+Required next implementation: persistently connect this narration stage to each content job, bind its output hashes to an explicitly approved storyboard and traceable source assets, render into per-job output paths, run format-specific media/audio/caption/metadata validation, and require human review bound to final artifact hashes before any separate private-upload authorization.
