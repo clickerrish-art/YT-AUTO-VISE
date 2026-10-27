@@ -219,6 +219,17 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     jobId: authorJob.id, scriptSha256: "0".repeat(64)
   }) });
   assert.equal(narrationWrongRevision.status, 409, "narration must reject a script revision that does not match the current draft");
+  const rejectedScriptReview = await fetch(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify({
+    jobId: authorJob.id, decision: "REJECT", scriptSha256: approvedScriptSha256,
+    reason: "Revise the narrative structure before narration."
+  }) });
+  const rejectedScriptReviewBody = await rejectedScriptReview.json();
+  assert.equal(rejectedScriptReview.status, 200, JSON.stringify(rejectedScriptReviewBody));
+  assert.equal(rejectedScriptReviewBody.job.authoring.status, "REJECTED");
+  const reauthorResponse = await fetch(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id, brief: authorBrief }) });
+  const reauthorBody = await reauthorResponse.json();
+  assert.equal(reauthorResponse.status, 201, JSON.stringify(reauthorBody));
+  assert.equal(reauthorBody.job.authoring.status, "AWAITING_HUMAN_EDITORIAL_REVIEW", "a rejected draft can be replaced by a newly generated review draft");
   const authorRenderBypass = await fetch(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id }) });
   const authorRenderBypassBody = await authorRenderBypass.json();
   assert.equal(authorRenderBypass.status, 409, "a generated script must not bypass missing narration/caption/scene integration");
