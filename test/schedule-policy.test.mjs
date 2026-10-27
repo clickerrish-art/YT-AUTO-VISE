@@ -239,3 +239,43 @@ test("queued publication jobs reserve their timestamps and block collisions", ()
   assert.ok(missingTimestamp.errors.some(error => error.includes("active item queued-without-time is missing scheduledAt")));
 });
 
+
+
+test("queued-for-publication and pending-schedule attempts reserve publication slots", () => {
+  for (const status of ["queued_for_publication", "pending_schedule"]) {
+    const sameDay = validatePublicationSlot(
+      { id: "next-slot", scheduledAt: "2026-10-27T15:00:00Z" },
+      [{ id: "reserved-slot", status, scheduledAt: "2026-10-27T15:00:00Z" }]
+    );
+    assert.equal(sameDay.valid, false, status + " must block same-day collisions");
+    assert.ok(sameDay.errors.some(error => error.includes("publication date collision with reserved-slot")));
+
+    const missingTime = validatePublicationSlot(
+      { id: "next-slot", scheduledAt: "2026-10-27T15:00:00Z" },
+      [{ id: "reserved-without-time", status }]
+    );
+    assert.equal(missingTime.valid, false, status + " without a timestamp must fail closed");
+    assert.ok(missingTime.errors.some(error => error.includes("missing scheduledAt")));
+  }
+});
+
+test("pending-attempt schedule states are checked against the proposed publication slot", () => {
+  for (const status of ["queued_for_publication", "pending_schedule"]) {
+    const result = evaluateNextPublication({
+      history: [{
+        id: "remote-prior", status: "private",
+        actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form"
+      }],
+      historyVerified: true,
+      pendingAttempts: [{
+        jobId: "reserved-attempt", status,
+        scheduledAt: "2026-10-23T15:00:00.000Z"
+      }],
+      proposedAt: "2026-10-23T15:00:00.000Z",
+      jobId: "next-job",
+      format: "long_form"
+    });
+    assert.equal(result.valid, false, status + " must reserve its timestamp");
+    assert.ok(result.errors.some(error => error.includes("publication date collision with reserved-attempt")));
+  }
+});
