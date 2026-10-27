@@ -1,3 +1,23 @@
+## Latest exact-SHA release checkpoint — 27 October 2026
+
+- [x] Exact candidate Node suite: 374 passed, 0 failed, 0 skipped in automation, content-quality and metadata workflows.
+- [x] Normal lifecycle-script install, npm audit (0 reported vulnerabilities), JavaScript/Python checks, FFmpeg renderer integration.
+- [x] Dashboard browser E2E: 13 Chromium journeys (not exhaustive control/API acceptance).
+- [x] Isolated main/candidate baseline workflow passed: [run 40588392118](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392118); [artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392118/artifacts/12772897547).
+- [x] Added and ran synthetic multi-scene FFmpeg integration test on exact candidate `ac97c8860700dcbfedfb367d4dfbc0c654164479`.
+- [ ] Production readiness — BLOCKED by 13 real prerequisites: [run 40588392139](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392139).
+- [ ] Exhaustive dashboard control/API acceptance and dedicated Short-parent browser/API journey.
+- [ ] Cross-process concurrency, crash/restart, ambiguous remote operation, full backup/restore and rollback drills.
+- [ ] Genuine final media, rights/provenance, full playback/compliance review and exact-hash human approvals.
+- [ ] Verified SonicVhibez channel identity/OAuth, complete remote history reconciliation and explicit single-use private-upload authorization/receipt.
+- [ ] Native Related-video association verified or accurately blocked as external.
+- [ ] Verified Meta Page/Instagram identity/permissions and real draft-only external integration; live publishing disabled.
+- [ ] Owner-approved feasible cadence, repository protection/required checks, and non-destructive divergence reconciliation.
+
+**Verdict remains IMPLEMENTATION PARTIAL / NOT PRODUCTION READY.** Details: [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
+
+---
+
 ## Latest verified implementation and CI checkpoint — 27 October 2026, 21:28 UTC
 
 **Exact tested candidate SHA:** `466605be027f531d1c6143a6d1f42e1bf4c2ffcc`. The candidate includes strict Short-parent approval timestamp validation, FFmpeg installation in the content-quality and metadata workflows, and explicit zero-skip assertions in the automation, content-quality and metadata workflows.
