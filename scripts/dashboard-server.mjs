@@ -1128,6 +1128,120 @@ const server = http.createServer(async (req, res) => {
         });
       } finally { release(); }
     }
+    if (req.method === "GET" && url.pathname === "/api/jobs/narration/review") {
+      const jobId = url.searchParams.get("jobId");
+      if (!jobId) return json(res, 400, { error: "jobId is required" });
+      const state = loadState();
+      const job = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === jobId);
+      if (!job) return json(res, 404, { error: "Content job not found" });
+      const stage = job.authoring?.narrationStage;
+      if (!stage || !["DRAFT_REVIEW_REQUIRED", "APPROVED_FOR_RENDER", "REJECTED"].includes(stage.status)) {
+        return json(res, 409, { error: "No complete narration draft is available for human review" });
+      }
+      try {
+        const script = job.authoring?.result?.script;
+        const scriptSha256 = canonicalAuthoringScriptSha256(script);
+        if (scriptSha256 !== stage.scriptSha256 || job.authoring?.scriptApproval?.scriptSha256 !== scriptSha256) throw new Error("Narration is not bound to the current approved script");
+        const verified = {};
+        for (const name of ["narration.mp3", "narration.txt", "captions.srt", "narration-report.json"]) {
+          const artifact = stage.artifacts?.[name];
+          if (!artifact || typeof artifact.path !== "string" || !/^[a-f0-9]{64}$/.test(artifact.sha256 ?? "")) throw new Error("Narration artifact record is missing: " + name);
+          const file = resolveRepositoryFile(artifact.path);
+          if (sha256File(file) !== artifact.sha256) throw new Error("Narration artifact checksum changed: " + name);
+          verified[name] = { path: artifact.path, sha256: artifact.sha256, file };
+        }
+        const transcript = fs.readFileSync(verified["narration.txt"].file, "utf8");
+        const expectedTranscript = String(script.narration ?? "").replace(/\\s+/gu, " ").trim() + "\\n";
+        if (transcript !== expectedTranscript) throw new Error("Narration transcript differs from the exact approved script");
+        const captions = fs.readFileSync(verified["captions.srt"].file, "utf8");
+        const report = JSON.parse(fs.readFileSync(verified["narration-report.json"].file, "utf8"));
+        if (report.scriptSha256 !== scriptSha256 || report.audioSha256 !== verified["narration.mp3"].sha256 ||
+            report.transcriptSha256 !== verified["narration.txt"].sha256 || report.captionsSha256 !== verified["captions.srt"].sha256) {
+          throw new Error("Narration report hashes do not match the retained artifacts");
+        }
+        return json(res, 200, {
+          jobId, title: job.title, contentFormat: job.contentType, scriptSha256,
+          script, transcript, captions, report, stageStatus: stage.status,
+          narrationApproval: job.authoring.narrationApproval ?? null,
+          artifacts: Object.fromEntries(Object.entries(verified).map(([name, item]) => [name, { path: item.path, sha256: item.sha256 }]))
+        });
+      } catch (error) {
+        return json(res, 409, { error: "Narration review bundle failed integrity checks", detail: redactOperationalText(error instanceof Error ? error.message : "Narration integrity failure", { roots: [root, stateDir] }), publishable: false });
+      }
+    }
+    if (req.method === "GET" && url.pathname === "/api/jobs/narration/audio") {
+      const jobId = url.searchParams.get("jobId");
+      if (!jobId) return json(res, 400, { error: "jobId is required" });
+      const state = loadState();
+      const job = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === jobId);
+      if (!job) return json(res, 404, { error: "Content job not found" });
+      try {
+        const stage = job.authoring?.narrationStage;
+        if (!stage || !["DRAFT_REVIEW_REQUIRED", "APPROVED_FOR_RENDER", "REJECTED"].includes(stage.status)) throw new Error("No complete narration draft is available");
+        const scriptSha256 = canonicalAuthoringScriptSha256(job.authoring?.result?.script);
+        if (scriptSha256 !== stage.scriptSha256 || job.authoring?.scriptApproval?.scriptSha256 !== scriptSha256) throw new Error("Narration is not bound to the current approved script");
+        const artifact = stage.artifacts?.["narration.mp3"];
+        if (!artifact || sha256File(resolveRepositoryFile(artifact.path)) !== artifact.sha256) throw new Error("Narration audio is missing or its checksum changed");
+        const file = resolveRepositoryFile(artifact.path);
+        res.writeHead(200, { "content-type": "audio/mpeg", "content-length": String(fs.statSync(file).size), "cache-control": "no-store", "x-content-type-options": "nosniff" });
+        fs.createReadStream(file).on("error", () => { if (!res.headersSent) json(res, 500, { error: "Narration audio could not be streamed" }); else res.destroy(); }).pipe(res);
+        return;
+      } catch (error) {
+        return json(res, 409, { error: "Narration audio unavailable", detail: redactOperationalText(error instanceof Error ? error.message : "Narration integrity failure", { roots: [root, stateDir] }) });
+      }
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs/narration/review") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || !["APPROVE", "REJECT"].includes(body.decision) ||
+          typeof body.scriptSha256 !== "string" || !/^[a-f0-9]{64}$/.test(body.scriptSha256) ||
+          typeof body.audioSha256 !== "string" || !/^[a-f0-9]{64}$/.test(body.audioSha256) ||
+          typeof body.transcriptSha256 !== "string" || !/^[a-f0-9]{64}$/.test(body.transcriptSha256) ||
+          typeof body.captionsSha256 !== "string" || !/^[a-f0-9]{64}$/.test(body.captionsSha256) ||
+          typeof body.reportSha256 !== "string" || !/^[a-f0-9]{64}$/.test(body.reportSha256) ||
+          typeof body.reason !== "string" || body.reason.trim().length < 5 || body.reason.length > 1000) {
+        return json(res, 400, { error: "jobId, decision, exact script/audio/transcript/caption/report hashes and review notes are required" });
+      }
+      if (body.decision === "APPROVE" && (body.confirmAudioListened !== true || body.confirmTranscriptReviewed !== true || body.confirmCaptionsReviewed !== true)) {
+        return json(res, 400, { error: "Approval requires explicit confirmation that the audio was listened to and transcript and caption timing were reviewed" });
+      }
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const job = state.jobs[index];
+        const stage = job.authoring?.narrationStage;
+        if (job.state !== "QUEUED" || stage?.status !== "DRAFT_REVIEW_REQUIRED") return json(res, 409, { error: "Only a queued job with a complete, unreviewed narration draft can receive narration review" });
+        if (canonicalAuthoringScriptSha256(job.authoring?.result?.script) !== body.scriptSha256 ||
+            job.authoring?.scriptApproval?.scriptSha256 !== body.scriptSha256 ||
+            stage.scriptSha256 !== body.scriptSha256 ||
+            job.authoring?.scriptApproval?.approvalSha256 !== stage.scriptApprovalSha256) return json(res, 409, { error: "Script or script approval changed after narration generation" });
+        const verified = {};
+        for (const [name, submitted] of [["narration.mp3", body.audioSha256], ["narration.txt", body.transcriptSha256], ["captions.srt", body.captionsSha256], ["narration-report.json", body.reportSha256]]) {
+          const artifact = stage.artifacts?.[name];
+          if (!artifact || artifact.sha256 !== submitted || sha256File(resolveRepositoryFile(artifact.path)) !== submitted) return json(res, 409, { error: "Narration review rejected a missing or changed artifact: " + name });
+          verified[name] = submitted;
+        }
+        const report = JSON.parse(fs.readFileSync(resolveRepositoryFile(stage.artifacts["narration-report.json"].path), "utf8"));
+        if (report.status !== "DRAFT_REVIEW_REQUIRED" || report.humanReviewRequired !== true || report.rightsStatus !== "NOT_VERIFIED" || report.publishingEnabled !== false) return json(res, 409, { error: "Narration report does not satisfy draft-only review requirements" });
+        const reviewedAt = new Date().toISOString();
+        const review = {
+          decision: body.decision, reviewer: operatorId, reviewedAt, reason: body.reason.trim(),
+          scriptSha256: body.scriptSha256, audioSha256: body.audioSha256,
+          transcriptSha256: body.transcriptSha256, captionsSha256: body.captionsSha256, reportSha256: body.reportSha256,
+          confirmAudioListened: body.confirmAudioListened === true,
+          confirmTranscriptReviewed: body.confirmTranscriptReviewed === true,
+          confirmCaptionsReviewed: body.confirmCaptionsReviewed === true
+        };
+        review.approvalSha256 = crypto.createHash("sha256").update(JSON.stringify({ jobId: job.id, ...review })).digest("hex");
+        job.authoring.narrationApproval = review;
+        job.authoring.narrationStage = { ...stage, status: body.decision === "APPROVE" ? "APPROVED_FOR_RENDER" : "REJECTED", reviewedAt, reviewedBy: operatorId, publishable: false, publishingEnabled: false };
+        state.jobs[index] = job;
+        state.audit.push({ id: crypto.randomUUID(), action: body.decision === "APPROVE" ? "NARRATION_APPROVED_FOR_RENDER" : "NARRATION_REJECTED", jobId: job.id, scriptSha256: body.scriptSha256, audioSha256: body.audioSha256, transcriptSha256: body.transcriptSha256, captionsSha256: body.captionsSha256, approvalSha256: review.approvalSha256, actor: operatorId, at: reviewedAt, reason: body.reason.trim() });
+        saveState(state);
+        return json(res, 200, { job, narrationReview: review, publishable: false, publishingEnabled: false, nextAction: body.decision === "APPROVE" ? "Narration is approved only for a later render stage; rights, visual assets, scene plan, factual alignment and final-video review remain mandatory." : "Narration was rejected; revise or regenerate the script and narration as a new revision." });
+      } finally { release(); }
+    }
     if (req.method === "POST" && url.pathname === "/api/jobs/narration") {
       const body = await readBody(req);
       if (typeof body.jobId !== "string" || typeof body.scriptSha256 !== "string" || !/^[a-f0-9]{64}$/.test(body.scriptSha256)) {
