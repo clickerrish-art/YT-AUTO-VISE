@@ -67,6 +67,11 @@ test("readiness JSON distinguishes external reconciliation from code-controlled 
     blocker.evidence.kind === "environment-presence-check" &&
     /secret values are never included/.test(blocker.evidence.observed)
   ));
+  const cadence = report.blockers.find(blocker => /CADENCE DECISION REQUIRED/.test(blocker.message));
+  assert.equal(cadence.evidence.kind, "repository-path-check");
+  assert.equal(cadence.evidence.path, "config/weekly-content-plan.json");
+  const metadata = report.blockers.find(blocker => /Metadata needs the verified SonicVhibez YouTube channel ID/.test(blocker.message));
+  assert.equal(metadata.evidence.path, "content/next-short.json");
 });
 
 test("readiness workflow compares retained exit-code evidence and avoids false mismatches from missing step outputs", () => {
