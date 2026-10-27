@@ -1,3 +1,22 @@
+## Latest verified implementation and exact-SHA CI checkpoint — 27 October 2026, 21:40 UTC
+
+**Exact tested source/test candidate SHA:** `ac97c8860700dcbfedfb367d4dfbc0c654164479`. The new test adds a real FFmpeg multi-scene integration path: generate distinct source clips and narration, assemble with captions, probe streams/duration, fully decode, and verify both visual scenes remain in the output. This proves the compositor can assemble a small synthetic test sequence; it does not certify production assets, rights, manifests, or human playback review.
+
+- **Automation/security PASS:** [run 40588392132](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392132): 374 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; normal lifecycle-script install passed; `npm audit` reported 0 vulnerabilities; FFmpeg renderer integration, syntax and compilation checks passed.
+- **Content quality PASS:** [run 40588392114](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392114): 374 Node tests, 0 failures, 0 skips; FFmpeg installed.
+- **Metadata validation PASS:** [run 40588392137](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392137): 374 Node tests, 0 failures, 0 skips; FFmpeg installed.
+- **Dashboard browser E2E PASS:** [run 40588392231](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392231): 13 Chromium journeys. This is not exhaustive control-by-control acceptance; the Short-parent dashboard journey and full mutation matrix remain incomplete.
+- **Isolated main/candidate baseline PASS:** [run 40588392118](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392118), with retained [baseline-comparison artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392118/artifacts/12772897547). Exact main and candidate install, Node and Python baseline commands exited successfully.
+- **Facebook draft workflow:** [run 40588392305](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392305) passed local deterministic validation only; external `create-draft-package` was skipped. No real Meta draft creation is proven.
+- **Production readiness remains BLOCKED:** [run 40588392139](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392139) correctly reports HOLD with 13 production blockers. The readiness failure is an expected fail-closed production gate, not a passing release result.
+- **Live Git state at test:** `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; branch `codex/marketing-machine-audit-fixes` at tested candidate `ac97c8860700dcbfedfb367d4dfbc0c654164479`; 1,779 commits ahead / 2 behind / 164 changed files. PR #1 remained open, draft and unmerged.
+- **Remaining scope:** exhaustive dashboard controls/API matrix; cross-process crash/restart and uncertain-side-effect recovery drills; owner-approved cadence; genuine rights-cleared final media and hash-bound human approval; verified SonicVhibez identity/OAuth and complete remote history; one-operation private upload and remote receipt; native Short Related-video association eligibility; real Meta identities/permissions and draft-only integration; isolated deployment/rollback; branch-history reconciliation and repository protections.
+- No live upload, post, campaign activation, visibility change, merge, main edit, reset, rebase, force-push or destructive Git operation occurred. Nature Frontiers remains prohibited as a YouTube target; public/unattended YouTube publishing and live Meta publishing remain disabled; Safari remains inactive; approved Selar URL remains `https://selar.com/0u19v8u99l`.
+
+**Verdict: automated code/CI checks PASS on the exact tested candidate; implementation remains partial; production is NOT READY.**
+
+---
+
 ## Latest verified implementation and CI checkpoint — 27 October 2026, 21:28 UTC
 
 **Exact tested candidate SHA:** `466605be027f531d1c6143a6d1f42e1bf4c2ffcc`. The candidate includes strict Short-parent approval timestamp validation, FFmpeg installation in the content-quality and metadata workflows, and explicit zero-skip assertions in the automation, content-quality and metadata workflows.
