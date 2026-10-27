@@ -38,7 +38,7 @@ function fixture() {
   return { root, job, scriptSha256 };
 }
 function fakeRunnerFactory({ expectedScriptSha256, corrupt = false, invalidTiming = false } = {}) {
-  return (_command, args) => {
+  return (command, args) => {
     if (command === "ffprobe") return { status: 0, stdout: "55.000\\n", stderr: "" };
     if (args[0]?.endsWith("check-captions.mjs") || args[0]?.endsWith("validate-caption-sync.mjs")) {
       return { status: 0, stdout: "PASS: captions validated", stderr: "" };
