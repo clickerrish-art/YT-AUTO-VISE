@@ -112,7 +112,7 @@ test("private uploader records uncertain remote outcomes and refuses blind retri
     const metadataPath = path.join(dir, "metadata.json");
     const approvalPath = path.join(dir, "approval.json");
     fs.writeFileSync(videoPath, "test-fixture-not-real-video");
-    const metadata = { channel: "SonicVhibez", channelId: TEST_CHANNEL_ID, contentType: "short", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Test title", description: "Test description", tags: ["wildlife", "documentary", "education"], parentContentId: "parent-job-001", parentVideoId: TEST_PARENT_ID, parentVideoUrl: "https://www.youtube.com/watch?v=" + TEST_PARENT_ID };
+    const metadata = { channel: "SonicVhibez", channelId: TEST_CHANNEL_ID, contentType: "long_form", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Test title", description: "Test description", tags: ["wildlife", "documentary", "education"], parentContentId: "parent-job-001", parentVideoId: TEST_PARENT_ID, parentVideoUrl: "https://www.youtube.com/watch?v=" + TEST_PARENT_ID };
     fs.writeFileSync(metadataPath, JSON.stringify(metadata));
     const videoSha = sha256File(videoPath);
     const thumbnailPath = path.join(dir, "thumbnail.jpg");
@@ -128,7 +128,7 @@ test("private uploader records uncertain remote outcomes and refuses blind retri
     const rightsEvidence = { assetId: "fixture-asset", source: "isolated test fixture", rightsHolder: "test fixture", assetPath: sourceAssetPath, assetSha256: sha256File(sourceAssetPath), licenseEvidenceLocation: licenseEvidencePath, licenseEvidenceSha256: sha256File(licenseEvidencePath), permittedUses: ["YouTube"], restrictions: "mock only", attributionRequirements: "mock only", verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z", assets: [{ assetId: "fixture-asset", source: "isolated test fixture", rightsHolder: "test fixture", assetPath: sourceAssetPath, assetSha256: sha256File(sourceAssetPath), licenseEvidenceLocation: licenseEvidencePath, licenseEvidenceSha256: sha256File(licenseEvidencePath), permittedUses: ["YouTube"], restrictions: "mock only", attributionRequirements: "mock only", verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z" }] };
     const rightsEvidenceSha256 = (await import("node:crypto")).createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex");
     const relationship = makeShortParentRelationship(metadata.title === "Test title" ? (path.basename(dir).includes("timeout") ? "job-timeout-001" : "job-receipt-001") : "unknown-job", videoSha, sha256File(metadataPath));
-    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-timeout-001", contentType: "short", shortParentRelationship: relationship, shortParentRelationshipSha256: shortParentRelationshipSha256(relationship), artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }, { path: captionsPath, sha256: captionsSha }, { path: metadataPath, sha256: sha256File(metadataPath) }] }));
+    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-timeout-001", contentType: "long_form", artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), reviewer: "Test Operator", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }, { path: captionsPath, sha256: captionsSha }, { path: metadataPath, sha256: sha256File(metadataPath) }] }));
     const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES", YOUTUBE_EMERGENCY_STOP: "false", UPLOAD_LOG_DIR: path.join(dir, "logs") };
     const youtubeFactory = () => ({
       channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez" } }] } }) },
@@ -146,7 +146,7 @@ test("private uploader records uncertain remote outcomes and refuses blind retri
     const ledger = JSON.parse(fs.readFileSync(ledgerPath, "utf8"));
     assert.equal(ledger.attempts.length, 1);
     assert.equal(ledger.attempts[0].status, "RECOVERY_REQUIRED");
-    assert.equal(ledger.attempts[0].format, "short");
+    assert.equal(ledger.attempts[0].format, "long_form");
     await assert.rejects(uploadPrivate(args), /before any retry/);
     assert.equal(JSON.parse(fs.readFileSync(ledgerPath, "utf8")).attempts.length, 1);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
@@ -205,11 +205,11 @@ test("private uploader preserves remote video ID and marks recovery if receipt p
     assert.equal(reconciled.reused, true);
     assert.equal(reconciled.receipt.videoId, "VIDEO_PRIVATE_TEST");
     assert.equal(reconciled.receipt.privacyStatus, "private");
-    assert.equal(reconciled.receipt.format, "short");
+    assert.equal(reconciled.receipt.format, "long_form");
     assert.ok(reconciled.receipt.actualPublishedAt, "remote actual timestamp must be persisted in the receipt");
     const verifiedLedger = JSON.parse(fs.readFileSync(path.join(env.UPLOAD_LOG_DIR, "upload-attempts.json"), "utf8"));
     assert.equal(verifiedLedger.attempts[0].status, "PRIVATE_UPLOAD_VERIFIED");
-    assert.equal(verifiedLedger.attempts[0].format, "short");
+    assert.equal(verifiedLedger.attempts[0].format, "long_form");
     assert.ok(verifiedLedger.attempts[0].actualPublishedAt, "actual timestamp must survive restart in the durable ledger");
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
