@@ -8,6 +8,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
         with:
@@ -17,6 +18,12 @@ jobs:
           node-version: '24'
           package-manager-cache: false
       - run: npm ci --ignore-scripts
+      - name: Install FFmpeg for renderer integration tests
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          ffmpeg -version
+          ffprobe -version
       - run: node --check scripts/render-long-form.mjs
       - run: node --check test/render-long-form.test.mjs
       - run: node --check scripts/validate-asset-register.mjs
