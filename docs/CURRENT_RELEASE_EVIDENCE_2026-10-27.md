@@ -1,3 +1,11 @@
+## Unverified follow-up code checkpoint — 27 October 2026
+
+A new source/test change was committed after the last verified SHA. The latest **verified** source/test SHA remains `4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd`. New code commit `ebd4f334683237878bac742e052767faabb4f632` tightens Short-to-parent approval timestamps, and test commit `9abc4a46ed3ea6e3368ad7af5f24c587baee9411` adds regression cases for timezone-free timestamps, impossible dates and invalid offsets. **The new source/test SHA is NOT TESTED**: no workflow runs were returned for it, and a local clone could not be fetched because this environment could not resolve github.com. Do not attribute the previous passing test counts to this newer SHA.
+
+The latest test candidate requires CI to run before acceptance: `9abc4a46ed3ea6e3368ad7af5f24c587baee9411`. Production readiness remains blocked. PR #1 remains open, draft and unmerged; no external publishing or destructive Git operation was performed.
+
+---
+
 # Live exact-SHA checkpoint — 27 October 2026 (current as of 20:50 UTC)
 
 ## Latest exact-SHA implementation and acceptance checkpoint — 27 October 2026, 21:08 UTC
