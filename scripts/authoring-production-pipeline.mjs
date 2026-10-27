@@ -41,7 +41,7 @@ function assertRegularFile(file, label) {
   if (stat.size <= 0) throw new Error(label + " is empty");
 }
 
-export function validateNarrationStageArtifacts({ report, scriptSha256, format, outputDir }) {
+export function validateNarrationStageArtifacts({ report, scriptSha256, format, outputDir, expectedNarration }) {
   const errors = [];
   const durationRange = format === "short" ? [50, 60] : format === "long_form" ? [360, 600] : null;
   if (!durationRange) errors.push("format must be short or long_form");
@@ -53,8 +53,11 @@ export function validateNarrationStageArtifacts({ report, scriptSha256, format, 
   if (report.publishingEnabled !== false) errors.push("narration stage must not enable publishing");
   if (report.rightsStatus !== "NOT_VERIFIED") errors.push("narration rights must remain unverified until separately reviewed");
   if (report.captionTiming !== "TTS_WORD_BOUNDARIES" || !Number.isInteger(report.wordBoundaryCount) || report.wordBoundaryCount < 1) errors.push("captions must use verified TTS word-boundary timings");
-  if (!Number.isInteger(report.wordCount) || (format === "short" && (report.wordCount < 125 || report.wordCount > 150)) ||
-      (format === "long_form" && (report.wordCount < 900 || report.wordCount > 1500))) errors.push("measured narration word count is outside the required format range");
+  const normalizedExpected = typeof expectedNarration === "string" ? expectedNarration.replace(/\\s+/gu, " ").trim() : "";
+  const expectedWordCount = normalizedExpected ? normalizedExpected.split(/\\s+/u).length : 0;
+  if (!Number.isInteger(report.wordCount) || report.wordCount !== expectedWordCount ||
+      (format === "short" && (report.wordCount < 125 || report.wordCount > 150)) ||
+      (format === "long_form" && (report.wordCount < 900 || report.wordCount > 1500))) errors.push("measured narration word count does not match the approved transcript or is outside the required format range");
   if (!Number.isFinite(report.durationSeconds) || (durationRange && (report.durationSeconds < durationRange[0] || report.durationSeconds > durationRange[1]))) errors.push("measured narration duration is outside the required format range");
   const expected = [
     ["narration.mp3", report.audioSha256, "audio"],
@@ -66,6 +69,9 @@ export function validateNarrationStageArtifacts({ report, scriptSha256, format, 
       const file = path.join(outputDir, name);
       assertRegularFile(file, label);
       if (!SHA256.test(digest ?? "") || sha256File(file) !== digest) errors.push(label + " checksum does not match the narration report");
+      if (label === "transcript" && normalizedExpected && fs.readFileSync(file, "utf8") !== normalizedExpected + "\\n") {
+        errors.push("generated transcript text differs from the exact approved script narration");
+      }
     } catch (error) {
       errors.push(error instanceof Error ? error.message : label + " artifact is missing");
     }
@@ -114,7 +120,7 @@ export function runAuthoringNarrationStage({
     assertRegularFile(reportPath, "narration report");
     let report;
     try { report = JSON.parse(fs.readFileSync(reportPath, "utf8")); } catch { throw new Error("Existing narration report is invalid; recovery is required"); }
-    const errors = validateNarrationStageArtifacts({ report, scriptSha256, format: job.contentType, outputDir });
+    const errors = validateNarrationStageArtifacts({ report, scriptSha256, format: job.contentType, outputDir, expectedNarration: script.narration });
     if (errors.length) throw new Error("Existing narration artifacts failed reconciliation: " + errors.join("; "));
     verifyCaptionValidators({ captionsPath: path.join(outputDir, "captions.srt"), report, projectRoot, spawnSyncImpl });
     return narrationStageResult(job, outputDir, report, scriptSha256, true, projectRoot);
@@ -138,7 +144,7 @@ export function runAuthoringNarrationStage({
   return narrationStageResult(job, outputDir, report, scriptSha256, false, projectRoot);
 }
 
-function verifyCaptionValidators({ captionsPath, report, projectRoot, spawnSyncImpl, pythonResult }) {
+function verifyCaptionValidators({ captionsPath, report, projectRoot, spawnSyncImpl }) {
   for (const [validator, args] of [
     ["scripts/check-captions.mjs", [captionsPath]],
     ["scripts/validate-caption-sync.mjs", [captionsPath, String(report.durationSeconds)]]
