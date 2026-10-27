@@ -807,3 +807,39 @@ Safety remains unchanged: public/unattended YouTube publishing OFF; Facebook liv
 ### Still blocked
 
 No genuine production MP4 with verified rights/provenance and full human playback approval; authenticated SonicVhibez OAuth identity and complete public/private/unlisted history; operation-specific private-upload authorization and verified receipt; eligible native Short-parent association (private parents remain ineligible); live authorized Meta Page/Instagram verification and external draft creation; owner-approved feasible cadence; complete operational recovery/deployment acceptance. No live upload or post occurred. Public/unattended YouTube publishing and Facebook live publishing remain disabled; Safari remains inactive.
+
+
+---
+
+## Operator-token byte-length hardening checkpoint — 28 October 2026
+
+**Implementation branch:** `codex/marketing-machine-audit-fixes`  
+**PR #1 head at observation:** `de41102b622def75671e82b8972a16b536cd1c5a`  
+**Change commits:** `c488ff20afd4177fc0e2a2d851d8b8073c9da9be` (helper), `d74eb48a709fbaae33437bcb1c958fdb8b5d3646` (regression tests), `de41102b622def75671e82b8972a16b536cd1c5a` (dashboard integration).
+
+### Implemented
+
+- Added `scripts/operator-auth.mjs` with `matchesOperatorToken`, which compares UTF-8 byte buffers using `timingSafeEqual` only after verifying equal byte lengths.
+- Updated `scripts/dashboard-server.mjs` to use the helper for `x-operator-token` authentication. This avoids a thrown exception when strings have equal JavaScript code-unit lengths but unequal UTF-8 byte lengths.
+- Added `test/operator-auth.test.mjs` covering exact match/mismatch, non-string inputs, equal code-unit lengths with unequal UTF-8 byte lengths, and matching non-ASCII tokens.
+- Isolated local Node test execution for the helper and equivalent regression cases: **3 tests passed, 0 failed, 0 skipped**. This is focused helper evidence only, not a full repository test run.
+
+### Exact-head GitHub Actions observation
+
+At the time of this entry, the following runs were associated with `de41102b622def75671e82b8972a16b536cd1c5a`:
+
+- Automation/security: [40595638690](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595638690) — in progress.
+- Content quality: [40595638795](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595638795) — in progress.
+- Metadata validation: [40595638741](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595638741) — in progress.
+- Dashboard browser E2E: [40595638773](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595638773) — pending.
+- Isolated main/candidate baseline: [40595638701](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595638701) — pending.
+- Production readiness: [40595638859](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595638859) — failed/blocked by outstanding release prerequisites; this is not a code-test pass.
+- Nature Frontiers Facebook draft workflow: [40595638700](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595638700) — workflow success does not prove an external Meta draft was created; inspect job-level outcome before interpreting it.
+
+Do not treat pending or in-progress runs as passes. Recheck exact-head conclusions before using this checkpoint for release acceptance.
+
+### Release status and safety
+
+This small authentication hardening does not close the exhaustive dashboard/API acceptance gap or any external production prerequisite. Production remains **NOT READY** until the current full test/acceptance results and all required media, rights, human review, verified account identity/history, private-upload receipt, native Short-parent eligibility, Meta draft-only integration, feasible owner-approved cadence, operational recovery/deployment drills, and branch-history reconciliation are evidenced.
+
+No upload, social post, campaign activation, visibility change, merge, `main` edit, reset, rebase, force-push or destructive reconciliation was performed. Nature Frontiers remains prohibited as a YouTube target; public/unattended YouTube publishing and live Meta publishing remain disabled; Safari remains inactive.
