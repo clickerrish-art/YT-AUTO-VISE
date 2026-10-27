@@ -214,7 +214,7 @@ function evidenceInspectedFor(message) {
     : (pathMatch?.[0] ??
       (/cadence|schedule|publication cycle|spacing|weekly/i.test(message) ? schedulePath :
         (/metadata/i.test(message) ? metadataPath :
-          (/queue/i.test(message) ? queuePath : "")));
+          (/queue/i.test(message) ? queuePath : ""))));
   return {
     kind: inferredPath ? "repository-path-check" : "readiness-check-finding",
     ...(inferredPath ? { path: inferredPath } : {}),
