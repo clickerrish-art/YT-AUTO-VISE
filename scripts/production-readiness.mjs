@@ -209,10 +209,12 @@ function evidenceInspectedFor(message) {
     };
   }
   const pathMatch = message.match(/(?:content|config|media)\/[A-Za-z0-9._/-]+\.json|media\/next-short\.mp4/);
-  const inferredPath = pathMatch?.[0] ??
-    (/cadence|schedule|publication cycle|spacing|weekly/i.test(message) ? schedulePath :
-      (/metadata/i.test(message) ? metadataPath :
-        (/queue/i.test(message) ? (path.isAbsolute(queuePath) ? "configured QUEUE_PATH (absolute path withheld)" : queuePath) : "")));
+  const inferredPath = /queue/i.test(message) && path.isAbsolute(queuePath)
+    ? "configured QUEUE_PATH (absolute path withheld)"
+    : (pathMatch?.[0] ??
+      (/cadence|schedule|publication cycle|spacing|weekly/i.test(message) ? schedulePath :
+        (/metadata/i.test(message) ? metadataPath :
+          (/queue/i.test(message) ? queuePath : "")));
   return {
     kind: inferredPath ? "repository-path-check" : "readiness-check-finding",
     ...(inferredPath ? { path: inferredPath } : {}),
