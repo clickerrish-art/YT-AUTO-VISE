@@ -551,3 +551,23 @@ For isolated manual component testing only:
 5. This output is a narration/caption **draft only**. It does not create or approve wildlife visuals, verify source rights, validate scene alignment, render a video, produce reviewed metadata, replace human playback review, or authorize upload. Do not use these files as a production-ready manifest until the dashboard-to-render integration and all evidence gates are implemented and passed.
 
 Required next implementation: persistently connect this narration stage to each content job, bind its output hashes to an explicitly approved storyboard and traceable source assets, render into per-job output paths, run format-specific media/audio/caption/metadata validation, and require human review bound to final artifact hashes before any separate private-upload authorization.
+
+
+---
+
+## Dashboard script review and narration draft workflow — 27 October 2026
+
+The dashboard now supports a separate, hash-bound script review and narration draft stage. This is **not yet the complete authoring-to-render workflow**. `POST /api/jobs/produce` remains fail-closed for authoring jobs until approved visual assets, rights evidence, scene manifests, final validation and video review are integrated.
+
+1. Generate a script through the existing authoring control. Inspect the complete structured script and its supplied research references.
+2. In **Hash-bound script review**, select the draft, confirm its SHA-256, choose APPROVE or REJECT, and record review notes. Approval is bound to that exact script hash. A rejected draft must be regenerated; its approval cannot be reused.
+3. For an approved script, choose the job under **Generate narration draft**. The server invokes `scripts/generate-authoring-narration.py` in a job-specific directory under `media/generated-authoring/`. It needs Python, `edge-tts`, `ffprobe`, and network access to Edge TTS. Voice and rate can be configured with `AUTHORING_TTS_VOICE` and `AUTHORING_TTS_RATE`.
+4. The stage validates the script hash, transcript text and word count, measured audio duration, artifact hashes, caption structure and caption timing. It remains draft-only; rights status remains unverified and publishing remains disabled.
+5. Under **Human narration playback review**, listen to the full audio, inspect the transcript and timed captions, and submit a hash-bound APPROVE or REJECT decision with review notes. Approval permits only a later render stage; it does not approve rights, source visuals, realism, the final video or publication.
+6. If a previous narration attempt was interrupted, use **Reconcile interrupted narration without retrying TTS**. Reconciliation validates existing complete artifacts and their hashes; it never starts TTS or overwrites partial files. If it cannot prove completeness, the stage remains `RECOVERY_REQUIRED` for manual inspection.
+
+The review API serves audio only to authenticated dashboard operators and checks the stored artifact hash before streaming. Do not copy or edit generated files in place after review; any content change requires a new revision and revalidation.
+
+### Current limitation
+
+No real narration audio or final video was produced in the CI tests. The API integration tests use synthetic fixture bytes to exercise hashing and review attestations; they are not playback or production-media evidence. The dashboard's production action still blocks authoring jobs because the approved narration has not yet been connected to a reviewed production plan, traceable visual assets, a per-job multi-scene render, final media validators and final-video human approval.
