@@ -60,3 +60,32 @@ The production-readiness failure is not counted as a code-test regression: it is
 Public/unattended YouTube publishing remains disabled. Facebook live publishing remains disabled. Safari campaigns remain inactive. Nature Frontiers must never be a YouTube target. The approved Selar URL remains exactly `https://selar.com/0u19v8u99l`.
 
 No video upload, social post, campaign activation, PR merge, `main` edit, reset, rebase, force-push or destructive history operation was performed.
+
+
+---
+
+## Follow-up exact-SHA checkpoint — restore rejects empty backups (27 October 2026)
+
+This addendum supersedes no historical result above; the earlier sections refer to their explicitly stated SHAs. This checkpoint records the later restore-safety change and its own completed CI runs.
+
+- Exact application/source/test SHA: `b97378fec30b49a25c30ed2ce5fcac0bf7d75114`
+- Application change: `scripts/restore-state.mjs` rejects a valid-looking backup with zero entries instead of returning `RESTORE_COMPLETED` with zero restored files.
+- Regression test: `tests/restore-state.test.mjs` asserts the empty-backup rejection while retaining the `RESTORE_CONFIRM=YES` confirmation gate.
+- The separate `test/restore-facebook-draft-history.test.mjs` remains present and was not removed.
+
+### Exact-SHA workflow outcomes for `b97378fec30b49a25c30ed2ce5fcac0bf7d75114`
+
+- Automation/security and unit suite: **PASS** — [run 40562493445](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40562493445). Dependency installation, locked dependency audit, FFmpeg setup, unit tests, destination/disclosure checks, metadata safety checks, queue invariants, JavaScript syntax checks and Python compilation completed successfully.
+- Dashboard browser E2E: **PASS** — [run 40562493423](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40562493423).
+- Content quality: **PASS** — [run 40562493442](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40562493442).
+- Metadata validation: **PASS** — [run 40562493428](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40562493428).
+- Isolated main/candidate baseline: **PASS** — [run 40562493544](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40562493544).
+- Candidate Facebook draft/recovery validation: **PASS** — [run 40562493425](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40562493425). This validates the candidate local draft/recovery workflow; it does not prove a live Meta API draft.
+- Candidate push lockfile verification: **PASS** — [run 40562483356](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40562483356).
+- Production readiness: **BLOCKED / fail-closed** — [run 40562493422](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40562493422). This is an expected release-gate failure while external production requirements remain unmet, not a test pass.
+
+### Remaining release blockers
+
+No real production MP4 with independently reviewed rights evidence and complete human playback approval; verified SonicVhibez OAuth identity and complete remote upload history; explicitly authorized private-upload operation and verified remote receipt; independently verified eligible native Short Related-video association; live Meta draft-only integration; owner-approved feasible cadence; or complete interrupted-restore, deployment and operational recovery drills have been demonstrated by this checkpoint.
+
+**Verdict: IMPLEMENTATION INCOMPLETE / PRODUCTION BLOCKED.** Public/unattended YouTube publishing remains disabled; Facebook live publishing remains disabled; Safari remains inactive; Nature Frontiers is prohibited as a YouTube target; the approved Selar URL remains `https://selar.com/0u19v8u99l`. No upload, external post, campaign activation, PR merge, `main` edit, reset, rebase, force-push or destructive history operation was performed.
