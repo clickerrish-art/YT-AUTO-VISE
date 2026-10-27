@@ -185,6 +185,37 @@ function resolutionFor(blocker) {
   return "Inspect the named prerequisite, provide verifiable evidence in the expected configuration or artifact, then rerun production readiness. Do not bypass or weaken this gate.";
 }
 
+function controlOwnerFor(message) {
+  if (/LIVE BLOCKER|CADENCE DECISION REQUIRED|YOUTUBE_CLIENT_ID|YOUTUBE_CLIENT_SECRET|YOUTUBE_REFRESH_TOKEN|SONICVHIBEZ_CHANNEL_ID|verified SonicVhibez YouTube channel ID|rightsConfirmed|complianceReviewed|human-reviewed|human review|owner-approved/i.test(message)) {
+    return "external_owner_or_human_reviewer";
+  }
+  if (/render-manifest|long-form-render-manifest|final rendered|media\/next-short\.mp4|footageLicenseEvidence|narrationLicenseEvidence/i.test(message)) {
+    return "shared_code_and_owner";
+  }
+  return "maintainer_code_or_configuration";
+}
+
+function evidenceInspectedFor(message) {
+  if (/YOUTUBE_CLIENT_ID|YOUTUBE_CLIENT_SECRET|YOUTUBE_REFRESH_TOKEN|SONICVHIBEZ_CHANNEL_ID/.test(message)) {
+    return {
+      kind: "environment-presence-check",
+      observed: "The required variable is absent from this readiness process environment; secret values are never included in this report."
+    };
+  }
+  if (/LIVE BLOCKER/.test(message)) {
+    return {
+      kind: "external-reconciliation-required",
+      observed: "This read-only readiness check does not independently fetch remote YouTube history; remote public/private/unlisted history and local uncertain attempts remain unverified here."
+    };
+  }
+  const pathMatch = message.match(/(?:content|config|media)\/[A-Za-z0-9._/-]+\.json|media\/next-short\.mp4/);
+  return {
+    kind: pathMatch ? "repository-path-check" : "readiness-check-finding",
+    ...(pathMatch ? { path: pathMatch[0] } : {}),
+    observed: message
+  };
+}
+
 const structuredBlockers = blockers.map((message) => {
   const digest = createHash("sha256").update(message).digest("hex").slice(0, 12).toUpperCase();
   const critical = /LIVE BLOCKER|uncertain|OAuth|YOUTUBE_|channel ID|rights|licen[cs]e|human|approval|upload|private/i.test(message);
@@ -192,7 +223,8 @@ const structuredBlockers = blockers.map((message) => {
     id: `RDY-${digest}`,
     severity: critical ? "critical" : "high",
     message,
-    evidence: { kind: "readiness-check-finding", observed: message },
+    evidence: evidenceInspectedFor(message),
+    controlOwner: controlOwnerFor(message),
     resolution: resolutionFor(message)
   };
 });
