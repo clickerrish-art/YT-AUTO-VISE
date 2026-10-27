@@ -1,3 +1,15 @@
+## PR-head revalidation — `914f4e461982836737439e4fa7e8721916aa2e32` (source/test candidate `96cb4b06704915c7ee4fb2f0feb1796b41823301`)
+
+- [x] Automation/security 384 Node tests, 0 failed/0 skipped; 16 Python tests; npm audit 0 vulnerabilities ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603127074)).
+- [x] Content quality 384/384, zero skips ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603126998)).
+- [x] Metadata 384/384, zero skips ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603126864)).
+- [x] Browser E2E 13 Chromium journeys ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603127058)).
+- [x] Lockfile verification, FFmpeg/ffprobe and 384/384 Node tests ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603121347)).
+- [x] Isolated baseline and retained artifact SHA-256 recorded ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603126970)).
+- [ ] Exhaustive dashboard/API acceptance remains incomplete.
+- [ ] Production readiness blocked; external Meta draft job skipped.
+- [ ] Branch protection owner verification and full Git history reconciliation remain open.
+
 ## Exact tested candidate — `96cb4b06704915c7ee4fb2f0feb1796b41823301`
 
 - [x] Dashboard malformed-JSON and >16KB request rejection assertions added; error responses checked for state-path disclosure.

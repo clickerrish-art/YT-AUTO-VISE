@@ -1,3 +1,7 @@
+## PR-head revalidation — `914f4e461982836737439e4fa7e8721916aa2e32` / tested source-test SHA `96cb4b06704915c7ee4fb2f0feb1796b41823301`
+
+Exact PR-head runs passed: automation/security 384/384 with 0 skips ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603127074)), content quality 384/384 ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603126998)), metadata 384/384 ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603126864)), and 13 Chromium journeys ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603127058)). The lockfile workflow passed with FFmpeg/ffprobe installed ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603121347)). This does not close DASH-001.
+
 ## Latest tested dashboard/API checkpoint — `96cb4b06704915c7ee4fb2f0feb1796b41823301`
 
 Live static inventory recalculated from `public/dashboard.html` and `scripts/dashboard-server.mjs`: **105 controls, 15 forms, 38 literal route branches** (10 GET, 28 POST; 35 `/api` branches). This is inventory, not acceptance.

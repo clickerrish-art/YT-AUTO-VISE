@@ -1,3 +1,20 @@
+## Revalidation of PR head `914f4e461982836737439e4fa7e8721916aa2e32` — 28 October 2026
+
+The PR head at this run was a documentation-only descendant of tested source/test candidate `96cb4b06704915c7ee4fb2f0feb1796b41823301`. It remained open, draft and unmerged. Live comparison: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, `1,846 ahead / 2 behind / 168 changed files`.
+
+- Automation/security [run 40603127074](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603127074): **384 Node tests passed, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities.**
+- Content quality [run 40603126998](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603126998): **384/384, zero skips.**
+- Metadata [run 40603126864](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603126864): **384/384, zero skips.**
+- Browser E2E [run 40603127058](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603127058): **13 Chromium journeys passed.**
+- Isolated baseline [run 40603126970](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603126970): **PASS**, artifact [12780390057](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603126970/artifacts/12780390057), SHA-256 `31b48206bc04997e80aa5be5ae3973589411c676d09be1a25eb65ba952481c49`. The runner's FFmpeg installation timed out, so this baseline is not proof of the media integration test; the automation and lockfile workflows independently ran FFmpeg integration with zero skips.
+- Lockfile verification [run 40603121347](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603121347): **PASS**, FFmpeg/ffprobe installed and complete Node suite 384/384 with zero skips.
+- Production readiness [run 40603126958](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603126958): **BLOCKED** by 13 prerequisites; the fail-closed gate is not a production pass.
+- Meta draft workflow [run 40603127120](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603127120): local validation passed, external draft-creation job skipped.
+
+The live branch-protection endpoint returned **403 Resource not accessible by integration**. The owner must verify branch protection and required checks directly in repository settings; this session cannot claim the setting is enabled or disabled.
+
+---
+
 ## Exact tested candidate and CI repair — 28 October 2026
 
 **Tested source/test SHA:** `96cb4b06704915c7ee4fb2f0feb1796b41823301`. At this checkpoint PR #1 remained open, draft and unmerged. Live refs: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, `1,845 ahead / 2 behind / 168 changed files`.

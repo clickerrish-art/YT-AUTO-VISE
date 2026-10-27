@@ -1,3 +1,14 @@
+## Revalidated checkpoint — `914f4e461982836737439e4fa7e8721916aa2e32`
+
+- Source/test candidate `96cb4b06704915c7ee4fb2f0feb1796b41823301`; docs-only PR head `914f4e461982836737439e4fa7e8721916aa2e32`.
+- Automated tests pass (384 Node, 0 failures/0 skips; 16 Python; npm audit 0 vulnerabilities; FFmpeg/ffprobe integration; 13 Chromium journeys; isolated baseline).
+- Readiness remains BLOCKED by 13 genuine prerequisites ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603126958)); Meta external draft creation was skipped ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40603127120)).
+- Branch protection could not be verified because the integration received 403; owner verification is required.
+- Git compare: 1,846 ahead / 2 behind / 168 files; base-only commits are the test-file add/revert pair. No destructive reconciliation.
+- Both `test/restore-facebook-draft-history.test.mjs` and `tests/restore-state.test.mjs` remain present.
+
+**Verdict: NOT READY for production.**
+
 ## Current exact-SHA status — 28 October 2026
 
 - Tested candidate: `96cb4b06704915c7ee4fb2f0feb1796b41823301`; current source/test CI passes (384 Node, 0 failures/0 skips; 16 Python; npm audit 0 vulnerabilities; FFmpeg/ffprobe integration; 13 Chromium journeys; isolated baseline).
