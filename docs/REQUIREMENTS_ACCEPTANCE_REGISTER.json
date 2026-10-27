@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-28",
-  "evidencePolicy": "Exact source/test candidate: 1f72c6dc5b648f0c60fdea45ae1d37e835e4505e. Automation/security PASS: 384 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; normal lifecycle install and FFmpeg integration passed. Content quality, metadata and 13 Chromium browser journeys passed. Isolated main/candidate baseline passed with both Node/Python commands exiting 0; artifact ID 12776283618, ZIP SHA-256 989203aab1898f8d740d4f56294e03eec8d023cb6086ce4c171ee2aff156ad2b. Dashboard inventory command and inventory-driven unauthenticated API-route sweep are included. Production readiness remains blocked; external Meta draft creation was skipped.",
+  "evidencePolicy": "Source/test acceptance candidate: 1f72c6dc5b648f0c60fdea45ae1d37e835e4505e. Latest branch-state observation before this register refresh: 785d73fb236fec808f57b4749af1ae0e6026cf5e (documentation-only after tested candidate). Automation/security PASS: 384 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; normal lifecycle install and FFmpeg integration passed. Content quality, metadata, 13 Chromium browser journeys and isolated main/candidate baseline passed. Baseline artifact ID 12776283618, ZIP SHA-256 989203aab1898f8d740d4f56294e03eec8d023cb6086ce4c171ee2aff156ad2b. Dashboard inventory and unauthenticated API-route sweep passed. Production readiness remains blocked; external Meta draft creation was skipped.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -737,10 +737,10 @@
   "currentCheckpoint": {
     "applicationCodeSha": "de41102b622def75671e82b8972a16b536cd1c5a",
     "testedSha": "1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
-    "checkpointPrHead": "1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
+    "checkpointPrHead": "785d73fb236fec808f57b4749af1ae0e6026cf5e",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1836,
+    "aheadBy": 1841,
     "behindBy": 2,
     "changedFiles": 168,
     "prState": "open",
@@ -782,7 +782,8 @@
     ],
     "candidateSourceTestSha": "1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Exact candidate 1f72c6dc5b648f0c60fdea45ae1d37e835e4505e passed automation/security (384 Node tests, zero failures/skips; 16 Python tests; npm audit zero vulnerabilities), content quality, metadata, 13 Chromium browser journeys and isolated main/candidate Node/Python baseline. The inventory command, inventory regression tests, byte-safe operator-token helper and inventory-driven unauthenticated API-route sweep are included. Production readiness remains blocked by 13 prerequisites; external Meta draft creation was skipped.",
-    "latestDocumentedPrHeadBeforeRegisterRefresh": "59d34c856912fdb1a03229801612e04eb532baa1"
+    "latestChangeTestReason": "Source/test candidate 1f72c6dc5b648f0c60fdea45ae1d37e835e4505e passed exact-candidate automation/security (384 Node tests, zero failures/skips; 16 Python tests; npm audit zero vulnerabilities), content quality, metadata, 13 Chromium browser journeys and isolated main/candidate Node/Python baseline. The dashboard inventory command and inventory-driven unauthenticated API-route sweep are included. Subsequent commits through observed branch head 785d73fb236fec808f57b4749af1ae0e6026cf5e are documentation-only; production readiness remains blocked and external Meta draft creation was skipped.",
+    "latestDocumentedPrHeadBeforeRegisterRefresh": "59d34c856912fdb1a03229801612e04eb532baa1",
+    "observedBranchHeadBeforeRegisterRefresh": "785d73fb236fec808f57b4749af1ae0e6026cf5e"
   }
 }
