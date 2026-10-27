@@ -14,6 +14,16 @@ function hash(file) {
 function hashJson(value) {
   return crypto.createHash("sha256").update(JSON.stringify(value), "utf8").digest("hex");
 }
+function rehashPlanReview(job) {
+  const review = job.authoring.productionPlan.review;
+  review.approvalSha256 = hashJson({
+    jobId: job.id, decision: review.decision, planSha256: review.planSha256,
+    scriptSha256: review.scriptSha256, reviewer: review.reviewer,
+    reviewedAt: review.reviewedAt, reason: review.reason,
+    confirmScenePlanReviewed: review.confirmScenePlanReviewed,
+    confirmRightsEvidenceReviewed: review.confirmRightsEvidenceReviewed
+  });
+}
 function write(root, relative, data) {
   const file = path.join(root, relative);
   fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -160,6 +170,7 @@ test("rejects stale quality evidence and metadata hashes", () => {
     f.job.authoring.productionPlan.plan.renderEvidence.qualityEvidenceSha256 = "0".repeat(64);
     f.job.authoring.productionPlan.planSha256 = productionPlanSha256(f.job.authoring.productionPlan.plan);
     f.job.authoring.productionPlan.review.planSha256 = f.job.authoring.productionPlan.planSha256;
+    rehashPlanReview(f.job);
     assert.throws(() => buildApprovedJobRenderManifest({ job: f.job, root: f.root }), /Quality evidence SHA-256/);
   } finally { f.cleanup(); }
 });
@@ -170,6 +181,7 @@ test("rejects an unreviewed compliance package", () => {
     f.job.authoring.productionPlan.plan.renderEvidence.complianceReviewed = false;
     f.job.authoring.productionPlan.planSha256 = productionPlanSha256(f.job.authoring.productionPlan.plan);
     f.job.authoring.productionPlan.review.planSha256 = f.job.authoring.productionPlan.planSha256;
+    rehashPlanReview(f.job);
     assert.throws(() => buildApprovedJobRenderManifest({ job: f.job, root: f.root }), /compliance review evidence/);
   } finally { f.cleanup(); }
 });
