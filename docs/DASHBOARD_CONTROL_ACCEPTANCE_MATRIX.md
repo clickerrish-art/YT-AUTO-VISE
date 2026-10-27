@@ -1,3 +1,22 @@
+## Latest verified implementation checkpoint — 27 October 2026, 21:19 UTC
+
+**Exact source/test SHA:** `9abc4a46ed3ea6e3368ad7af5f24c587baee9411`. **Application code commit:** `ebd4f334683237878bac742e052767faabb4f632`. The new timestamp-hardening regression test passed on the exact source/test SHA.
+
+- **Automation/security PASS:** [run 40585444830](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444830): 373 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; normal lifecycle-script dependency install, npm audit with 0 vulnerabilities, FFmpeg renderer integration, JS syntax checks and Python compilation passed.
+- **Dashboard browser E2E PASS:** [run 40585444732](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444732), 13 Chromium journeys against the local dashboard/backend.
+- **Content quality PASS:** [run 40585444874](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444874). **Metadata PASS:** [run 40585444697](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444697). Each of these two workflow-specific test invocations skipped one FFmpeg-dependent test because FFmpeg was absent in those jobs; the automation workflow installed FFmpeg and ran the full 373-test candidate suite with zero skips.
+- **Isolated main/candidate baseline PASS:** [run 40585444803](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444803). The retained comparison artifact is [available here](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444803/artifacts/12771906551).
+- **Facebook workflow PASS for local draft validation only:** [run 40585444973](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444973); external `create-draft-package` was skipped, so no real Meta integration is accepted.
+- **Production readiness BLOCKED:** [run 40585444822](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444822); fail-closed report identifies 13 outstanding production prerequisites.
+
+### Implementation change
+
+Short-to-parent relationship approval timestamps and native Related-video verification timestamps now use the strict shared ISO timestamp validator, rejecting timezone-free timestamps, impossible calendar dates and invalid UTC offsets. Regression coverage is in [test commit](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/9abc4a46ed3ea6e3368ad7af5f24c587baee9411).
+
+**Verdict: automated code checks pass at this exact SHA; overall implementation is partial and production acceptance remains blocked.** Genuine production media/rights, human approvals, verified SonicVhibez identity and complete remote history, secure runtime credentials, owner-approved cadence, actual Meta draft integration and full operational recovery/deployment drills are not replaced by CI results. PR #1 remains open, draft and unmerged. No upload, post, campaign activation, visibility change, merge, main edit or destructive Git operation occurred.
+
+---
+
 ## Unverified follow-up code checkpoint — 27 October 2026
 
 A new source/test change was committed after the last verified SHA. The latest **verified** source/test SHA remains `4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd`. New code commit `ebd4f334683237878bac742e052767faabb4f632` tightens Short-to-parent approval timestamps, and test commit `9abc4a46ed3ea6e3368ad7af5f24c587baee9411` adds regression cases for timezone-free timestamps, impossible dates and invalid offsets. **The new source/test SHA is NOT TESTED**: no workflow runs were returned for it, and a local clone could not be fetched because this environment could not resolve github.com. Do not attribute the previous passing test counts to this newer SHA.
