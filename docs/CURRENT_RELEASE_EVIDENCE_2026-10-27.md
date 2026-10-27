@@ -1,3 +1,42 @@
+## Latest exact-SHA restore-recovery implementation checkpoint — 27 October 2026, 21:55 UTC
+
+**Exact tested source/test candidate:** `31b5f56415b51280baa11418c56ef3c2b1280006`. **Current PR head at the time of test:** `31b5f56415b51280baa11418c56ef3c2b1280006`. The source/test changes add transaction staging and durable journaling to `scripts/restore-state.mjs`, plus failure-injection and interrupted-transaction recovery tests in `test/backup-restore.test.mjs`.
+
+### Exact-candidate CI evidence
+
+- **Automation/security PASS:** [run 40590357469](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469): 376 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; clean normal lifecycle-script install passed; `npm audit` reported 0 vulnerabilities; syntax, Python compilation and FFmpeg renderer integration checks passed.
+- **Content quality PASS:** [run 40590357580](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357580): 376 Node tests, 0 failures, 0 skips; FFmpeg/ffprobe installed.
+- **Metadata validation PASS:** [run 40590357601](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357601): 376 Node tests, 0 failures, 0 skips.
+- **Dashboard browser E2E PASS:** [run 40590357460](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357460): 13 Chromium tests passed, including real-server restart persistence and Short-parent workflow blocker reporting. This is not exhaustive control-by-control acceptance or proof of a successful native YouTube association.
+- **Isolated main/candidate baseline PASS:** [run 40590357407](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357407); [retained artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357407/artifacts/12773761331).
+- **Facebook draft workflow:** [run 40590357666](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357666) passed 15 local deterministic validation tests, 0 failures, 0 skips. The external `create-draft-package` job was skipped; no real Meta draft creation is proven.
+- **Production readiness remains BLOCKED:** [run 40590357522](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357522) correctly reports HOLD with 13 production prerequisites. This expected fail-closed result is not production acceptance.
+
+### Restore safety improvement
+
+The restore path now stages and fsyncs every changed destination before the first destination commit, writes a durable `.restore-transaction.json` journal containing expected hashes and the original state bytes for an allowed state replacement, rolls back committed destinations when a later rename fails, and recovers a journal after restart. Recovery refuses unexpected destination contents and requires a separate explicit restore invocation before retrying.
+
+Regression evidence in `test/backup-restore.test.mjs`:
+- injected failure on the second destination rename rolls back the first committed file;
+- simulated interrupted transaction rolls back the partial file and removes the journal;
+- both tests pass in the exact candidate's 376-test Node suite.
+
+**Limit:** this is deterministic failure-injection and journal-recovery evidence, not a full production filesystem/power-loss drill. Keep broad cross-process state recovery and deployment/rollback requirements `NOT_TESTED` until the remaining operational tests are performed.
+
+### Git and release state at tested candidate
+
+- `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
+- Candidate/branch HEAD at test: `31b5f56415b51280baa11418c56ef3c2b1280006`
+- Divergence: 1,791 ahead / 2 behind / 164 changed files.
+- PR #1 remains open, draft and unmerged. `main` was not modified.
+
+The existing `test/restore-facebook-draft-history.test.mjs` remains present. The separate `tests/restore-state.test.mjs` variant was preserved; no restore test was deleted or blindly recreated.
+
+**Verdict: IMPLEMENTATION PARTIAL / NOT PRODUCTION READY.** No live upload, post, campaign activation, visibility change or merge occurred. Nature Frontiers remains prohibited as a YouTube target; public/unattended YouTube publishing and live Meta publishing remain disabled; Safari remains inactive; the approved Selar URL remains `https://selar.com/0u19v8u99l`.
+
+---
+
 ## Latest verified implementation and exact-SHA CI checkpoint — 27 October 2026, 21:40 UTC
 
 **Exact tested source/test candidate SHA:** `ac97c8860700dcbfedfb367d4dfbc0c654164479`. The new test adds a real FFmpeg multi-scene integration path: generate distinct source clips and narration, assemble with captions, probe streams/duration, fully decode, and verify both visual scenes remain in the output. This proves the compositor can assemble a small synthetic test sequence; it does not certify production assets, rights, manifests, or human playback review.
