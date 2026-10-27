@@ -343,6 +343,37 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.match(renderAttemptBody.job.renderExecution.output, /render manifest not found/i);
   assert.equal(renderAttemptBody.job.outputArtifacts.length, 0, "a blocked renderer must not claim a generated artifact");
 
+  // A retry must not let FFmpeg's -y overwrite an output retained after an
+  // interrupted attempt. The API must refuse before claiming work and preserve
+  // the existing bytes for explicit reconciliation.
+  const protectedDraft = {
+    id: "dashboard-test-protected-render-output", title: "Protected render output",
+    topic: "wildlife observation", contentType: "short", scheduledDay: "Saturday",
+    scheduledDate: "2026-10-31", productUrl: "https://selar.com/0u19v8u99l"
+  };
+  const protectedCreated = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(protectedDraft) });
+  const protectedCreatedBody = await protectedCreated.json();
+  assert.equal(protectedCreated.status, 201, JSON.stringify(protectedCreatedBody));
+  const protectedJob = protectedCreatedBody.job;
+  const protectedDirectory = path.join(process.cwd(), "media", "jobs", protectedJob.id);
+  const protectedOutput = path.join(protectedDirectory, "final.mp4");
+  const protectedBytes = Buffer.from("retained interrupted-render bytes");
+  fs.mkdirSync(protectedDirectory, { recursive: true });
+  fs.writeFileSync(protectedOutput, protectedBytes);
+  try {
+    const protectedAttempt = await fetch(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: protectedJob.id }) });
+    const protectedBody = await protectedAttempt.json();
+    assert.equal(protectedAttempt.status, 409, JSON.stringify(protectedBody));
+    assert.equal(protectedBody.recoveryRequired, true);
+    assert.equal(protectedBody.retryAllowed, false);
+    assert.equal(protectedBody.artifactPath, "media/jobs/" + protectedJob.id + "/final.mp4");
+    assert.deepEqual(fs.readFileSync(protectedOutput), protectedBytes, "existing render output must remain byte-for-byte unchanged");
+    const protectedState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+    assert.equal(protectedState.jobs.find(job => job.id === protectedJob.id).state, "QUEUED", "refusal must happen before worker claim");
+  } finally {
+    fs.rmSync(protectedDirectory, { recursive: true, force: true });
+  }
+
   // Simulate a legacy/corrupt state file with two different queue items reserving
   // the same local date. A distant new slot must still be blocked until the
   // existing collision is repaired; the validator must not hide duplicates.
