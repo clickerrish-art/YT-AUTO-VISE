@@ -186,6 +186,22 @@ test("rejects an unreviewed compliance package", () => {
   } finally { f.cleanup(); }
 });
 
+test("rejects ambiguous duplicate provenance IDs before renderer Map selection", () => {
+  const f = fixture();
+  try {
+    const qualityPath = path.join(f.root, f.quality.path);
+    const evidence = JSON.parse(fs.readFileSync(qualityPath, "utf8"));
+    evidence.assetProvenance[1].assetId = evidence.assetProvenance[0].assetId;
+    fs.writeFileSync(qualityPath, JSON.stringify(evidence));
+    f.quality.sha256 = hash(qualityPath);
+    f.job.authoring.productionPlan.plan.renderEvidence.qualityEvidenceSha256 = f.quality.sha256;
+    f.job.authoring.productionPlan.planSha256 = productionPlanSha256(f.job.authoring.productionPlan.plan);
+    f.job.authoring.productionPlan.review.planSha256 = f.job.authoring.productionPlan.planSha256;
+    rehashPlanReview(f.job);
+    assert.throws(() => buildApprovedJobRenderManifest({ job: f.job, root: f.root }), /duplicate provenance asset IDs/);
+  } finally { f.cleanup(); }
+});
+
 test("rejects narration artifacts modified after approval", () => {
   const f = fixture();
   try {

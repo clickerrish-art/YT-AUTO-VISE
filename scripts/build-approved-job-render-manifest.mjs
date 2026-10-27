@@ -153,6 +153,20 @@ export function buildApprovedJobRenderManifest({ job, root }) {
       !Array.isArray(qualityEvidence.assetProvenance)) {
     throw new Error("Quality evidence must map every approved production-plan scene to provenance");
   }
+  // The renderer indexes provenance by assetId. Duplicate IDs would make its Map
+  // select a different record than the first-match validation above, so reject
+  // ambiguous evidence before it can influence the rendered footage.
+  const sceneIds = plan.scenes.map(scene => scene?.sceneId);
+  const qualityAssetIds = qualityEvidence.scenes.map(scene => scene?.assetId);
+  const provenanceAssetIds = qualityEvidence.assetProvenance.map(asset => asset?.assetId);
+  const hasDuplicates = values => values.some((value, index) =>
+    typeof value !== "string" || !value.trim() || values.indexOf(value) !== index);
+  if (hasDuplicates(sceneIds)) throw new Error("Production plan contains missing or duplicate scene IDs");
+  if (hasDuplicates(qualityAssetIds)) throw new Error("Quality evidence contains missing or duplicate scene asset IDs");
+  if (hasDuplicates(provenanceAssetIds)) throw new Error("Quality evidence contains missing or duplicate provenance asset IDs");
+  if (qualityAssetIds.some(assetId => !provenanceAssetIds.includes(assetId))) {
+    throw new Error("Quality evidence scene asset IDs must each have one provenance record");
+  }
   for (const [index, scene] of plan.scenes.entries()) {
     const source = resolveHashedFile(root, scene.assetPath, scene.assetSha256, "Scene asset " + scene.sceneId);
     const qualityScene = qualityEvidence.scenes[index];
