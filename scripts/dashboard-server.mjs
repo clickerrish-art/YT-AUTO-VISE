@@ -1302,7 +1302,19 @@ const server = http.createServer(async (req, res) => {
         if (index < 0) return json(res, 404, { error: "Content job disappeared during authoring" });
         const current = state.jobs[index];
         if (current.authoring?.fingerprint !== fingerprint || current.authoring?.status !== "GENERATING") return json(res, 409, { error: "Authoring state changed while generation was running; generated output was not persisted", publishable: false });
-        const scriptSha256 = canonicalAuthoringScriptSha256(generated?.script);
+        let scriptSha256;
+        try { scriptSha256 = canonicalAuthoringScriptSha256(generated?.script); }
+        catch (error) {
+          current.authoring = {
+            ...current.authoring, status: "FAILED", failedAt: new Date().toISOString(),
+            error: redactOperationalText(error instanceof Error ? error.message : "Generated script structure is invalid", { roots: [root, stateDir] }),
+            publishable: false, recoveryRequired: false
+          };
+          state.jobs[index] = current;
+          state.audit.push({ id: crypto.randomUUID(), action: "SCRIPT_AUTHORING_OUTPUT_INVALID", jobId: current.id, fingerprint, at: current.authoring.failedAt, actor: operatorId, reason: "Generated output did not satisfy the structured script contract" });
+          saveState(state);
+          return json(res, 409, { error: "Generated script did not satisfy the structured script contract; no reviewable draft was persisted", publishable: false, publishingEnabled: false });
+        }
         current.authoring = {
           ...current.authoring,
           status: "AWAITING_HUMAN_EDITORIAL_REVIEW",
