@@ -132,8 +132,9 @@ const RESTORE_JOURNAL_NAME = ".restore-transaction.json";
 
 function restoreJournalPath(options) {
   const base = path.resolve(options.rootDir);
-  const destination = path.join(base, RESTORE_JOURNAL_NAME);
-  assertNoSymlinkComponents(base, destination);
+  const stateRoot = path.resolve(base, options.stateDir);
+  const destination = path.join(stateRoot, RESTORE_JOURNAL_NAME);
+  assertNoSymlinkComponents(stateRoot, destination);
   return destination;
 }
 
@@ -304,6 +305,7 @@ export async function restoreState({ backupPath, rootDir = root, stateDir = proc
     // records the expected output hashes and original bytes for the only kind
     // of existing state file this restore is allowed to replace.
     const journalPath = restoreJournalPath(options);
+    fs.mkdirSync(path.dirname(journalPath), { recursive: true, mode: 0o700 });
     atomicWriteJson(journalPath, {
       format: "sonicvhibez-restore-transaction",
       version: 1,
