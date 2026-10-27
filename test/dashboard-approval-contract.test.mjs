@@ -12,3 +12,12 @@ test("dashboard approval rechecks and binds the exact validated captions and met
   assert.match(lifecycle, /Validated captions path and SHA-256 are required before private-upload approval/);
   assert.match(lifecycle, /\{ path: captionsPath, sha256: captionsSha256 \}/);
 });
+
+test("dashboard final approval requires explicit YouTube-use permission and exact source/licence evidence hashes", () => {
+  const server = fs.readFileSync(path.resolve("scripts/dashboard-server.mjs"), "utf8");
+  assert.match(server, /Each source asset and licence-evidence file requires an explicit SHA-256 checksum/);
+  assert.match(server, /permittedUses\.includes\("YouTube"\)/);
+  assert.match(server, /evidenceAsset\.verificationStatus !== "VERIFIED"/);
+  assert.match(server, /sha256File\(evidenceFile\) !== evidenceAsset\.licenseEvidenceSha256/);
+  assert.doesNotMatch(server, /if \(evidenceAsset\.licenseEvidenceSha256 && sha256File\(evidenceFile\) !== evidenceAsset\.licenseEvidenceSha256\)/);
+});

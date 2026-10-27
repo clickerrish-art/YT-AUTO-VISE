@@ -2010,10 +2010,27 @@ const server = http.createServer(async (req, res) => {
           if (job.rightsChecks?.verified !== true || job.rightsChecks.evidenceSha256 !== submittedRightsHash) return json(res, 409, { error: "Rights evidence changed after verification; repeat rights verification before review" });
           const evidenceAssets = Array.isArray(rightsEvidence.assets) && rightsEvidence.assets.length ? rightsEvidence.assets : [rightsEvidence];
           for (const evidenceAsset of evidenceAssets) {
+            if (!evidenceAsset || typeof evidenceAsset !== "object" || Array.isArray(evidenceAsset) ||
+                typeof evidenceAsset.assetId !== "string" || !evidenceAsset.assetId.trim() ||
+                typeof evidenceAsset.assetPath !== "string" || !evidenceAsset.assetPath.trim() ||
+                typeof evidenceAsset.licenseEvidenceLocation !== "string" || !evidenceAsset.licenseEvidenceLocation.trim()) {
+              return json(res, 400, { error: "Each rights-evidence asset must identify the source asset and retained licence-evidence file" });
+            }
+            if (!/^[a-f0-9]{64}$/.test(evidenceAsset.assetSha256 ?? "") ||
+                !/^[a-f0-9]{64}$/.test(evidenceAsset.licenseEvidenceSha256 ?? "")) {
+              return json(res, 400, { error: "Each source asset and licence-evidence file requires an explicit SHA-256 checksum: " + evidenceAsset.assetId });
+            }
+            if (!Array.isArray(evidenceAsset.permittedUses) || !evidenceAsset.permittedUses.includes("YouTube")) {
+              return json(res, 400, { error: "Rights evidence must explicitly permit the intended YouTube use: " + evidenceAsset.assetId });
+            }
+            if (evidenceAsset.verificationStatus !== "VERIFIED" || evidenceAsset.verifiedBy !== reviewer ||
+                !Number.isFinite(Date.parse(evidenceAsset.verifiedAt ?? ""))) {
+              return json(res, 400, { error: "Each rights-evidence asset requires verified status, the authenticated reviewer and a valid verification timestamp: " + evidenceAsset.assetId });
+            }
             const evidenceFile = resolveRepositoryFile(evidenceAsset.licenseEvidenceLocation);
             const assetFile = resolveRepositoryFile(evidenceAsset.assetPath);
             if (sha256File(assetFile) !== evidenceAsset.assetSha256) return json(res, 409, { error: "Source asset checksum does not match the rights evidence: " + evidenceAsset.assetId });
-            if (evidenceAsset.licenseEvidenceSha256 && sha256File(evidenceFile) !== evidenceAsset.licenseEvidenceSha256) return json(res, 409, { error: "License evidence file checksum changed: " + evidenceAsset.assetId });
+            if (sha256File(evidenceFile) !== evidenceAsset.licenseEvidenceSha256) return json(res, 409, { error: "License evidence file checksum is missing or does not match the rights evidence: " + evidenceAsset.assetId });
             if (!fs.statSync(evidenceFile).size) return json(res, 400, { error: "Rights evidence file is empty" });
           }
         }
