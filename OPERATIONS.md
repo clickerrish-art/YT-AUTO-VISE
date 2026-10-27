@@ -1,3 +1,11 @@
+## Live recovery note — 27 October 2026
+
+A render request now refuses to overwrite an existing per-job MP4, thumbnail or render manifest. The standalone render destination validator also refuses an existing regular output file. A `409 recoveryRequired` response means **do not delete the file and retry blindly**: preserve the artifact, inspect job state and hashes, and reconcile the interrupted attempt under operator review. The current regression tests assert that retained bytes are unchanged and the job remains queued. Exact source/test checkpoint: `3690ec82b52263cb2da2378f8aba9a5b19658a8f`; automation/security and isolated baseline were still running at the time this note was recorded.
+
+Production is still blocked on genuine rights-cleared media, full human playback approval, verified SonicVhibez OAuth identity/history, an explicitly authorized one-shot private upload with verified receipt, a platform-eligible Short Related video, real Meta integration and operational recovery/deployment acceptance. YouTube requires a Related video to be public or unlisted; do not change a private parent to bypass this limitation. Keep all live publishing disabled.
+
+---
+
 ## Latest operational checkpoint — 26 October 2026
 
 Exact tested source/test SHA: `9982caed6bee7f8d01740acff5162b94988b2e59`; application-code commit: `1aeca29026c6965fe13ff206f8cc097f7d4fa038`.
