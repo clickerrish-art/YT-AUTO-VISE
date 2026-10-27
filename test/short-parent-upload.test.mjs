@@ -72,3 +72,17 @@ test("Short relationship cannot claim private parent native Related video eligib
   bad.shortParentRelationshipSha256 = shortParentRelationshipSha256(bad.shortParentRelationship);
   assert.throws(() => validateUploadApproval(bad, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), /private parent/);
 });
+
+test("BLOCKED_EXTERNAL native Related-video status requires a specific non-empty blocker", () => {
+  const changedRelationship = {
+    ...relationship,
+    nativeRelatedVideo: { ...relationship.nativeRelatedVideo, blocker: "" }
+  };
+  changedRelationship.relationshipEvidenceSha256 = shortParentEvidenceSha256(changedRelationship);
+  const bad = { ...baseApproval, shortParentRelationship: changedRelationship };
+  bad.shortParentRelationshipSha256 = shortParentRelationshipSha256(changedRelationship);
+  assert.throws(
+    () => validateUploadApproval(bad, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }),
+    /external blocker must contain a specific explanation/
+  );
+});
