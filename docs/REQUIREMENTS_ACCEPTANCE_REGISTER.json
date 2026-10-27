@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-27",
-  "evidencePolicy": "Exact source/test SHA: 4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd; latest application-code SHA: 4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd. On this exact SHA, automation/security passed 372 Node tests (0 failed, 0 skipped), 16 Python tests and npm audit with 0 vulnerabilities; normal lifecycle-script install, FFmpeg renderer integration, syntax checks and Python compilation passed. Dashboard browser E2E passed 13 Chromium journeys; content quality, metadata validation and isolated main/candidate baseline workflows passed. Baseline artifact: main 54/54 Node and 8 Python tests; candidate 372/372 Node and 16 Python tests, zero skips, both exit code 0. Metadata workflow's own test invocation skipped one FFmpeg-dependent test because FFmpeg was absent in that job; the full automation and baseline workflows installed FFmpeg and ran all candidate tests with zero skips. Local Facebook draft-package validation passed but remote draft creation was skipped; no live Meta integration is proven. Production readiness remains blocked by 13 external/production prerequisites. A preceding interim commit failed due to a syntax error; it was corrected and the final exact SHA above was re-tested.",
+  "evidencePolicy": "Latest verified source/test SHA remains 4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd (372 Node tests, 0 failed/0 skipped; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg renderer integration, syntax/compile, 13 Chromium journeys, content quality, metadata and baseline workflows passed). New parent-relationship timestamp hardening code commit ebd4f334683237878bac742e052767faabb4f632 and regression-test commit 9abc4a46ed3ea6e3368ad7af5f24c587baee9411 are committed but NOT YET TESTED: the workflow lookup returned no runs for the new SHA, and this environment cannot reach GitHub from a local shell. Do not represent the new source/test SHA as tested until CI runs. Production readiness remains blocked by real media/rights/approval, verified identity/history, secure credentials, owner cadence decision and recovery/external integration prerequisites.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -596,21 +596,35 @@
       "nextAction": "Keep the redaction regression test and preserve only non-sensitive configured-path labels in public readiness output.",
       "assessmentCommitSha": "4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd",
       "acceptanceCriterion": "With an absolute external QUEUE_PATH and malformed queue JSON, readiness returns exit code 2, reports a redacted path label, and never includes the external directory in the serialized evidence."
+    },
+    {
+      "id": "YT-PARENT-TIME-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Short-to-parent relationship approval and native association verification timestamps must be strict calendar-valid ISO timestamps with explicit timezones.",
+      "status": "NOT_TESTED",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ebd4f334683237878bac742e052767faabb4f632",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/9abc4a46ed3ea6e3368ad7af5f24c587baee9411"
+      ],
+      "nextAction": "Run the full Node suite and relevant relationship/upload/dashboard workflows on exact source/test SHA 9abc4a46ed3ea6e3368ad7af5f24c587baee9411; do not mark PASS until the run completes.",
+      "assessmentCommitSha": "9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
+      "acceptanceCriterion": "Reject timezone-free, impossible calendar dates and out-of-range UTC offsets for relationshipApprovedAt and reject invalid timestamps for native Related-video verification; accept valid timezone-qualified timestamps."
     }
   ],
   "currentCheckpoint": {
-    "applicationCodeSha": "d465c03cb3b12ee68000192089165f326121e8eb",
-    "testedSha": "3690ec82b52263cb2da2378f8aba9a5b19658a8f",
-    "checkpointPrHead": "57ce7714ccdabbb149a95c56c3e3e0f5468f3f28",
+    "applicationCodeSha": "ebd4f334683237878bac742e052767faabb4f632",
+    "testedSha": "4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd",
+    "checkpointPrHead": "9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1698,
+    "aheadBy": 1745,
     "behindBy": 2,
     "changedFiles": 163,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "CODE ACCEPTANCE PARTIAL / PRODUCTION BLOCKED",
+    "verdict": "IMPLEMENTATION PARTIAL / NEW TIMESTAMP HARDENING NOT YET TESTED / PRODUCTION BLOCKED",
     "ci": {
       "automationSecurity": "PASS",
       "nodeTests": 367,
@@ -646,6 +660,9 @@
       "0cf1650320b30707ba2f5e65db6b4c49dd5cb9d4",
       "d465c03cb3b12ee68000192089165f326121e8eb",
       "3690ec82b52263cb2da2378f8aba9a5b19658a8f"
-    ]
+    ],
+    "candidateSourceTestSha": "9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
+    "latestChangeTestStatus": "NOT_TESTED",
+    "latestChangeTestReason": "No workflow runs were returned for candidate SHA 9abc4a46ed3ea6e3368ad7af5f24c587baee9411; direct local clone was unavailable because github.com DNS could not be resolved."
   }
 }
