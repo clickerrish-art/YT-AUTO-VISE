@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-27",
-  "evidencePolicy": "Latest verified source/test SHA remains 4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd (372 Node tests, 0 failed/0 skipped; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg renderer integration, syntax/compile, 13 Chromium journeys, content quality, metadata and baseline workflows passed). New parent-relationship timestamp hardening code commit ebd4f334683237878bac742e052767faabb4f632 and regression-test commit 9abc4a46ed3ea6e3368ad7af5f24c587baee9411 are committed but NOT YET TESTED: the workflow lookup returned no runs for the new SHA, and this environment cannot reach GitHub from a local shell. Do not represent the new source/test SHA as tested until CI runs. Production readiness remains blocked by real media/rights/approval, verified identity/history, secure credentials, owner cadence decision and recovery/external integration prerequisites.",
+  "evidencePolicy": "Exact verified source/test SHA: 9abc4a46ed3ea6e3368ad7af5f24c587baee9411. Automation/security PASS: 373 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; normal lifecycle-script install, npm audit (0 vulnerabilities), FFmpeg renderer integration, JS syntax checks and Python compilation passed. Dashboard E2E PASS: 13 Chromium journeys. Content quality, metadata and isolated main/candidate baseline workflows passed. Content-quality and metadata workflow test invocations each reported one FFmpeg-dependent skip because FFmpeg was not installed in those specific jobs; the full automation workflow installed FFmpeg and ran all 373 Node tests with zero skips. Baseline workflow passed on the exact candidate SHA. Facebook workflow passed local draft validation only; remote create-draft-package was skipped. Production readiness remains blocked by 13 genuine production prerequisites.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -34,14 +34,14 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891887",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891896",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891874",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583892218",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891860"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444830",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444732",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444874",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444697",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444803"
       ],
       "nextAction": "Repeat all affected checks after substantive source/test changes; production readiness and live external integrations remain separate gates.",
-      "assessmentCommitSha": "4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd",
+      "assessmentCommitSha": "9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
     {
@@ -51,12 +51,10 @@
       "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891860",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fa00d28e7f58911482686e4ad69fac9f4701a2e6",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444803"
       ],
       "nextAction": "Repeat if main advances or after substantive candidate changes; retained artifact contains exact main/candidate command output and counts.",
-      "assessmentCommitSha": "4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd",
+      "assessmentCommitSha": "9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
     {
@@ -602,29 +600,31 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Short-to-parent relationship approval and native association verification timestamps must be strict calendar-valid ISO timestamps with explicit timezones.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ebd4f334683237878bac742e052767faabb4f632",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/9abc4a46ed3ea6e3368ad7af5f24c587baee9411"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444830",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40585444732"
       ],
-      "nextAction": "Run the full Node suite and relevant relationship/upload/dashboard workflows on exact source/test SHA 9abc4a46ed3ea6e3368ad7af5f24c587baee9411; do not mark PASS until the run completes.",
+      "nextAction": "Retain strict timestamp validation and regression cases; apply the same explicit-timezone standard to any new approval/receipt timestamp fields.",
       "assessmentCommitSha": "9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
       "acceptanceCriterion": "Reject timezone-free, impossible calendar dates and out-of-range UTC offsets for relationshipApprovedAt and reject invalid timestamps for native Related-video verification; accept valid timezone-qualified timestamps."
     }
   ],
   "currentCheckpoint": {
     "applicationCodeSha": "ebd4f334683237878bac742e052767faabb4f632",
-    "testedSha": "4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd",
-    "checkpointPrHead": "9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
+    "testedSha": "9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
+    "checkpointPrHead": "46654b746591c396ab0ae303ea365e590f40b90d",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1745,
+    "aheadBy": 1751,
     "behindBy": 2,
     "changedFiles": 163,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "IMPLEMENTATION PARTIAL / NEW TIMESTAMP HARDENING NOT YET TESTED / PRODUCTION BLOCKED",
+    "verdict": "AUTOMATED CODE CHECKS PASS / IMPLEMENTATION PARTIAL / PRODUCTION BLOCKED",
     "ci": {
       "automationSecurity": "PASS",
       "nodeTests": 367,
@@ -662,7 +662,7 @@
       "3690ec82b52263cb2da2378f8aba9a5b19658a8f"
     ],
     "candidateSourceTestSha": "9abc4a46ed3ea6e3368ad7af5f24c587baee9411",
-    "latestChangeTestStatus": "NOT_TESTED",
-    "latestChangeTestReason": "No workflow runs were returned for candidate SHA 9abc4a46ed3ea6e3368ad7af5f24c587baee9411; direct local clone was unavailable because github.com DNS could not be resolved."
+    "latestChangeTestStatus": "PASS",
+    "latestChangeTestReason": "Exact candidate SHA 9abc4a46ed3ea6e3368ad7af5f24c587baee9411 passed automation/security (373 Node, 0 failures, 0 skips; 16 Python), dashboard E2E (13 Chromium), content quality, metadata and isolated baseline workflows. Readiness correctly remains blocked."
   }
 }
