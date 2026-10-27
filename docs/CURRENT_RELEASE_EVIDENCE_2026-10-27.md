@@ -243,3 +243,36 @@ This section supersedes earlier statements above that the authoring renderer was
 **Production release remains BLOCKED.** This checkpoint is not evidence of a genuine end-to-end production video or of originality, rights authenticity, naturalism, narration quality, final playback approval, native Related video configuration, live YouTube identity/history, an authorized private-upload receipt, Meta draft-only integration, or a feasible owner-approved cadence.
 
 Safety controls remain unchanged: public/unattended YouTube publishing OFF; Facebook live publishing OFF; Safari campaigns inactive; Nature Frontiers prohibited as a YouTube target; approved Selar destination remains `https://selar.com/0u19v8u99l`. No upload, social post, merge, `main` edit, reset, rebase, force-push or destructive history operation was performed.
+
+
+---
+
+# Live implementation checkpoint — 27 October 2026: fail closed on unverified Short Related video
+
+**Exact source/test SHA:** `3b91b1338f970ab671ca366eec6c860672146671`  
+**Latest application-code commit:** `13fea8d69efb8680fe2619a183296e5bc3904f3d`  
+**Latest regression-test commit:** `3b91b1338f970ab671ca366eec6c860672146671`
+
+## Implemented and tested
+
+- `scripts/short-parent-relationship.mjs` supports a strict publication context that requires native Related video status `VERIFIED` and rejects a private parent as ineligible.
+- `scripts/upload-private.mjs` invokes that strict context for Short uploads, so a Short with `BLOCKED_EXTERNAL`, missing native evidence or an ineligible private parent cannot proceed to upload.
+- `scripts/dashboard-server.mjs` applies the same strict requirement to final Short approval, keeping the job in review until the native association is independently verified and eligible.
+- `test/short-parent-relationship.test.mjs`, `test/short-parent-upload.test.mjs`, `test/dashboard-approval-contract.test.mjs`, and `tests/upload-private.test.mjs` cover mismatched parent evidence, the final approval gate, eligible synthetic test fixtures, and generic upload-recovery tests without bypassing the Short-specific gate.
+- A private-only parent cannot satisfy the native Related video eligibility rule in this workflow. This is intentionally fail-closed; do not change the parent visibility or publish it publicly without separate explicit owner authorization. Current private-only policy therefore leaves native Short linking as a production blocker.
+
+## Exact-SHA workflow outcomes for `3b91b1338f970ab671ca366eec6c860672146671`
+
+- Automation/security **PASS** — [run 40529986572](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40529986572): 363 Node tests passed, 0 failed; 16 Python tests passed; npm audit reported 0 vulnerabilities; syntax/compile checks passed.
+- Dashboard browser E2E **PASS** — [run 40529986676](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40529986676): 13 Chromium tests passed.
+- Content quality **PASS** — [run 40529986871](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40529986871).
+- Metadata validation **PASS** — [run 40529986776](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40529986776).
+- Isolated main/candidate baseline **PASS** — [run 40529986758](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40529986758).
+- Production readiness **BLOCKED / fail-closed** — [run 40529986321](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40529986321).
+- Nature Frontiers Facebook daily draft **SKIPPED** — [run 40529986454](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40529986454); not live Meta integration evidence.
+
+## Release decision
+
+**Production release remains BLOCKED.** No real production MP4 or rights licence was independently reviewed in this run. No real YouTube native Related video association, authenticated channel/history reconciliation, authorized private-upload receipt, Meta draft-only integration, or owner-approved cadence was verified. The synthetic upload fixtures exercise recovery mechanics only; they are not production media or real licence proof.
+
+Safety remains unchanged: public/unattended YouTube publishing OFF; Facebook live publishing OFF; Safari campaigns inactive; Nature Frontiers prohibited as a YouTube target; approved Selar destination remains `https://selar.com/0u19v8u99l`. No external account mutation, upload, post, merge, `main` edit or destructive Git operation occurred.
