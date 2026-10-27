@@ -52,6 +52,11 @@ const stateDirectoryStat = fs.lstatSync(stateDir);
 if (stateDirectoryStat.isSymbolicLink() || !stateDirectoryStat.isDirectory()) {
   throw new Error("Dashboard state directory must be a real directory, not a symlink or special file");
 }
+const restoreJournalFile = path.join(stateDir, ".restore-transaction.json");
+if (fs.existsSync(restoreJournalFile)) {
+  console.error("BLOCKED: an interrupted state restore journal exists; run the confirmed restore recovery procedure and inspect state before starting the dashboard.");
+  process.exit(2);
+}
 let initialStateEntry;
 try {
   initialStateEntry = fs.lstatSync(stateFile);
