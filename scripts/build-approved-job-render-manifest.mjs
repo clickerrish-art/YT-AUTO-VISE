@@ -123,10 +123,13 @@ export function buildApprovedJobRenderManifest({ job, root }) {
   }
   for (const scene of plan.scenes) {
     const source = resolveHashedFile(root, scene.assetPath, scene.assetSha256, "Scene asset " + scene.sceneId);
-    const provenance = qualityEvidence.assetProvenance.find(asset =>
-      asset?.originalSha256 === scene.assetSha256 &&
-      typeof asset.path === "string" &&
-      path.resolve(root, asset.path) === source);
+    const provenance = qualityEvidence.assetProvenance.find(asset => {
+      if (asset?.originalSha256 !== scene.assetSha256 || typeof asset.path !== "string") return false;
+      try {
+        const evidenceAsset = resolveRegularFileNoSymlinks(asset.path, path.dirname(qualityEvidencePath), "Quality-evidence source asset");
+        return evidenceAsset === source && sha256File(evidenceAsset) === asset.originalSha256;
+      } catch { return false; }
+    });
     if (!provenance) throw new Error("Quality evidence lacks matching provenance for scene " + scene.sceneId);
     resolveHashedFile(root, scene.provenance?.rightsEvidencePath,
       scene.provenance?.rightsEvidenceSha256, "Scene rights evidence " + scene.sceneId);
