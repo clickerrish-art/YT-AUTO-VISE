@@ -1090,6 +1090,10 @@ const server = http.createServer(async (req, res) => {
         if (!script || typeof script !== "object" || Array.isArray(script)) return json(res, 409, { error: "Structured generated script is missing" });
         const actualScriptSha256 = canonicalAuthoringScriptSha256(script);
         if (body.scriptSha256 !== actualScriptSha256) return json(res, 409, { error: "Script changed after review was prepared; refresh the draft and review its current SHA-256" });
+        if (body.decision === "APPROVE" && job.authoring.scriptApproval?.decision === "APPROVE" &&
+            job.authoring.scriptApproval.scriptSha256 === actualScriptSha256) {
+          return json(res, 200, { job, scriptReview: job.authoring.scriptApproval, reused: true, publishable: false, publishingEnabled: false });
+        }
         job.authoring.scriptSha256 = actualScriptSha256;
         const reviewedAt = new Date().toISOString();
         const decision = {
@@ -1108,6 +1112,7 @@ const server = http.createServer(async (req, res) => {
           job.authoring.scriptReview = decision;
         } else {
           delete job.authoring.scriptApproval;
+          delete job.authoring.narrationApproval;
           job.authoring.scriptReview = decision;
           delete job.authoring.narrationStage;
           job.authoring.status = "REJECTED";
@@ -1274,9 +1279,8 @@ const server = http.createServer(async (req, res) => {
           return json(res, 409, { error: "Narration generation is already in progress; duplicate work is blocked" });
         }
         if (prior?.status === "RECOVERY_REQUIRED") return json(res, 409, { error: "Narration is RECOVERY_REQUIRED; reconcile existing artifacts before retrying", recoveryRequired: true });
-        if (prior?.status === "DRAFT_REVIEW_REQUIRED" && prior.scriptSha256 === body.scriptSha256) {
-          return json(res, 200, { job, narrationStage: prior, reused: true, publishable: false, publishingEnabled: false });
-        }
+        if (prior?.status === "APPROVED_FOR_RENDER") return json(res, 409, { error: "Narration is already approved for rendering; do not regenerate or invalidate its approval", publishable: false });
+        if (prior?.status === "REJECTED") return json(res, 409, { error: "Narration was rejected; create and approve a new script revision before generating replacement narration", publishable: false });
         requestedAt = new Date().toISOString();
         job.authoring.narrationStage = {
           status: "GENERATING", scriptSha256: body.scriptSha256, requestedAt,
