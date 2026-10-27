@@ -1,3 +1,22 @@
+## Current exact-SHA release checkpoint — 27 October 2026
+
+- [x] Guard dashboard rendering against overwriting existing video/thumbnail outputs.
+- [x] Guard dashboard rendering against overwriting retained per-job render manifests.
+- [x] Guard direct renderer destinations against overwriting existing regular files.
+- [x] Add regression tests for retained manifest/output preservation.
+- [x] Dashboard browser E2E — [PASS, 13 Chromium journeys](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972740).
+- [x] Content quality — [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972899).
+- [x] Metadata — [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972743).
+- [ ] Automation/security — [IN PROGRESS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972741); unit-test step not yet started at note time.
+- [ ] Isolated main/candidate baseline — [IN PROGRESS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972749).
+- [ ] Production readiness — [BLOCKED](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972751).
+- [ ] Real Meta draft-only integration — not proven; the successful workflow only validates a local draft package.
+- [ ] Genuine media, human playback, verified YouTube identity/history, authorized private receipt, eligible native Short-parent association, owner-approved cadence, and recovery/deployment acceptance.
+
+Exact source/test SHA: `3690ec82b52263cb2da2378f8aba9a5b19658a8f`; latest application-code SHA: `d465c03cb3b12ee68000192089165f326121e8eb`. PR #1 remains open/draft/unmerged; `main` remains unchanged. See [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
+
+---
+
 # Latest release gate checkpoint — 27 October 2026
 
 Exact tested source/test SHA: `71555f20cc5fbd24658f50e82da5544eeed1a622`; application-code commit: `cb9118e8cadaa72c6be334031e250e4ceb44d02c`; regression-test commit: `71555f20cc5fbd24658f50e82da5544eeed1a622`.
