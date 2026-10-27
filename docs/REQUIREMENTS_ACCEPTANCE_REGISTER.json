@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-28",
-  "evidencePolicy": "Latest exact tested source/test candidate SHA: b2686b888dabf6099d25aff59d288a514b3caffe. Automation/security PASS: 379 Node tests, 0 failures, 0 skips; 16 Python tests; normal lifecycle-script installation; npm audit 0 vulnerabilities; FFmpeg integration, syntax and Python compilation passed. Content-quality and metadata workflows each passed 379/379 with zero skips. Dashboard E2E passed 13 Chromium journeys. Isolated main/candidate baseline passed. New cross-process restore lock and lock-contention/cleanup tests are included. Production readiness remains blocked by 13 external/owner prerequisites; external Meta draft creation was skipped. Documentation-only commits after the tested source/test SHA updated the release evidence; they are not represented as source/test validation.",
+  "evidencePolicy": "Latest application/test candidate: c819fb9e005eb01b614d66c1aa380e1330147d41. Automation/security PASS: 382 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; normal lifecycle install, FFmpeg integration, syntax and compilation passed. Content-quality and metadata workflows passed with zero skips. Dashboard browser E2E passed 13 Chromium journeys. Isolated main/candidate baseline was still in progress at the last observation. Production readiness remains blocked by 13 prerequisites. Meta draft workflow validated a local draft package; external draft creation was skipped.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -34,14 +34,13 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305138",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305355",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305087",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305219"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854783",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854792",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854786",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854888"
       ],
-      "nextAction": "Repeat affected checks after source/test changes; production readiness and external integrations remain separate gates.",
-      "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
+      "nextAction": "Recheck isolated main/candidate baseline run 40595854787 before declaring all acceptance CI complete; production readiness and external integrations remain separate gates.",
+      "assessmentCommitSha": "c819fb9e005eb01b614d66c1aa380e1330147d41",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
     {
@@ -49,13 +48,12 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
-      "status": "PASS",
+      "status": "NOT_TESTED",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305219",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305219/artifacts/12773494010"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854787"
       ],
-      "nextAction": "Repeat if main advances or after substantive candidate changes; retained artifact contains exact main/candidate command output and counts.",
-      "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
+      "nextAction": "The exact current candidate baseline workflow was still in progress at the last observation. Confirm its conclusion and retained artifact before marking PASS.",
+      "assessmentCommitSha": "c819fb9e005eb01b614d66c1aa380e1330147d41",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
     {
@@ -692,56 +690,71 @@
       "nextAction": "Retain regression coverage and perform a controlled filesystem crash/power-loss and full isolated deployment/rollback drill before production acceptance.",
       "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
       "acceptanceCriterion": "On the exact tested candidate, injected failure after the first destination commit rolls back all partial changes; the original dashboard state is restored byte-for-byte; simulated interrupted journal recovery rolls back and requires explicit retry; dashboard startup refuses to serve while a journal exists."
+    },
+    {
+      "id": "AUTH-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Dashboard operator-token authentication must compare equal-length UTF-8 byte buffers safely and reject malformed tokens without producing an internal error.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c488ff20afd4177fc0e2a2d851d8b8073c9da9be",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d74eb48a709fbaae33437bcb1c958fdb8b5d3646",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/de41102b622def75671e82b8972a16b536cd1c5a",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c819fb9e005eb01b614d66c1aa380e1330147d41",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854783"
+      ],
+      "nextAction": "Retain helper unit tests and the dashboard-server regression proving a malformed same-code-unit-length token is rejected with HTTP 401. Re-run after future authentication changes.",
+      "assessmentCommitSha": "c819fb9e005eb01b614d66c1aa380e1330147d41",
+      "acceptanceCriterion": "Exact tokens are accepted; wrong or non-string values are rejected; unequal UTF-8 byte lengths never reach timingSafeEqual and the dashboard API returns 401 rather than 500 for a malformed token."
     }
   ],
   "currentCheckpoint": {
-    "applicationCodeSha": "b2686b888dabf6099d25aff59d288a514b3caffe",
-    "testedSha": "b2686b888dabf6099d25aff59d288a514b3caffe",
-    "checkpointPrHead": "b2686b888dabf6099d25aff59d288a514b3caffe",
+    "applicationCodeSha": "de41102b622def75671e82b8972a16b536cd1c5a",
+    "testedSha": "c819fb9e005eb01b614d66c1aa380e1330147d41",
+    "checkpointPrHead": "937d2115e1ecbfdc4d3c41bce7e85e20531f3edf",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1819,
+    "aheadBy": 1828,
     "behindBy": 2,
-    "changedFiles": 164,
+    "changedFiles": 166,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "AUTOMATED CODE AND CI ACCEPTANCE PASS / IMPLEMENTATION PARTIAL / PRODUCTION BLOCKED",
+    "verdict": "FOCUSED AUTHENTICATION FIX VERIFIED / IMPLEMENTATION PARTIAL / PRODUCTION BLOCKED",
     "ci": {
       "automationSecurity": "PASS",
-      "nodeTests": 379,
+      "nodeTests": 382,
       "nodeFailures": 0,
       "nodeSkipped": 0,
       "pythonTests": 16,
       "npmAuditVulnerabilities": 0,
       "normalLifecycleInstall": "PASS",
-      "contentQuality": "PASS (379 tests, 0 failures, 0 skips; FFmpeg installed)",
-      "metadata": "PASS (379 tests, 0 failures, 0 skips; FFmpeg installed)",
-      "dashboardE2e": "PASS (13 Chromium tests; exhaustive control/API acceptance remains incomplete)",
-      "isolatedBaseline": "PASS on exact candidate; main/candidate install, Node and Python commands exited 0",
-      "productionReadiness": "BLOCKED (13 genuine production prerequisites)",
-      "facebookDraftWorkflow": "PASS for local deterministic validation only; external create-draft-package job skipped",
-      "restoreOperationLock": "PASS on exact candidate: exclusive cross-process lock; pre-existing lock fails closed and is not rewritten",
-      "restoreLockCleanup": "PASS on exact candidate: lock released after validation/confirmation failures",
-      "operationalRestoreAndDeployment": "NOT_TESTED (full power-loss/production-like restore and rollback drills remain required)"
+      "contentQuality": "PASS",
+      "metadata": "PASS",
+      "dashboardE2e": "PASS (13 Chromium tests)",
+      "isolatedBaseline": "IN_PROGRESS (do not count as pass)",
+      "productionReadiness": "BLOCKED (13 prerequisites)",
+      "facebookDraftWorkflow": "PASS for local deterministic validation only; external draft-creation job skipped",
+      "operatorTokenByteSafeComparison": "PASS with unit and dashboard integration regression tests"
     },
     "evidence": {
-      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628190",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628137",
-      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628366",
-      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628079",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628185",
-      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628122",
-      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40593628361"
+      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854783",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854786",
+      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854888",
+      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854792",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854787",
+      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854780",
+      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40595854852"
     },
     "implementationCommits": [
       "b9f357435149bbb7650e858691c228f3133b9950",
       "196e56c5b663b5c2e7f7661a980f73b1684a1444",
       "b2686b888dabf6099d25aff59d288a514b3caffe"
     ],
-    "candidateSourceTestSha": "b2686b888dabf6099d25aff59d288a514b3caffe",
+    "candidateSourceTestSha": "c819fb9e005eb01b614d66c1aa380e1330147d41",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Exact candidate b2686b888dabf6099d25aff59d288a514b3caffe passed automation/security, content quality, metadata, dashboard E2E and isolated baseline. All workflows reported zero skipped Node tests; automation passed 379 Node tests and 16 Python tests. Restore operations now serialize across processes with a fail-closed exclusive lock and regression tests.",
+    "latestChangeTestReason": "Exact candidate c819fb9e005eb01b614d66c1aa380e1330147d41 passed automation/security (382 Node tests, zero failures/skips; 16 Python tests; npm audit zero vulnerabilities), content quality, metadata and 13 Chromium browser E2E journeys. The byte-safe operator-token helper and dashboard integration regression are included. Isolated main/candidate baseline remains in progress; production readiness remains blocked by 13 prerequisites.",
     "latestDocumentedPrHeadBeforeRegisterRefresh": "59d34c856912fdb1a03229801612e04eb532baa1"
   }
 }
