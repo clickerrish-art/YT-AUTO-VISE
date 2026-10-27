@@ -5,10 +5,12 @@ import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import crypto from "node:crypto";
 import { canonicalAuthoringScriptSha256 } from "../scripts/authoring-production-pipeline.mjs";
 
 test("dashboard API authenticates operators, persists real drafts, and cannot grant approval", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-"));
+  let narrationFixtureDir = null;
   const ledgerTarget = path.join(os.tmpdir(), "sonicvhibez-upload-ledger-target-" + path.basename(stateDir) + ".json");
   const ledgerLink = path.join(stateDir, "upload-attempts.json");
   fs.writeFileSync(ledgerTarget, JSON.stringify({ attempts: [{ attemptId: "forged-symlink-attempt", status: "PRIVATE_UPLOAD_VERIFIED", remoteVideoId: "not-authoritative" }] }) + "\n", { mode: 0o600 });
@@ -68,6 +70,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     fs.rmSync(symlinkPath, { force: true });
     fs.rmSync(internalSymlinkPath, { force: true });
     fs.rmSync(outsideDir, { recursive: true, force: true });
+    if (narrationFixtureDir) fs.rmSync(narrationFixtureDir, { recursive: true, force: true });
   });
   const base = `http://127.0.0.1:${port}`;
   let ready = false;
@@ -230,6 +233,75 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const reauthorBody = await reauthorResponse.json();
   assert.equal(reauthorResponse.status, 201, JSON.stringify(reauthorBody));
   assert.equal(reauthorBody.job.authoring.status, "AWAITING_HUMAN_EDITORIAL_REVIEW", "a rejected draft can be replaced by a newly generated review draft");
+
+  const reauthScriptSha256 = canonicalAuthoringScriptSha256(reauthorBody.job.authoring.result.script);
+  const reauthApproval = await fetch(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify({
+    jobId: authorJob.id, decision: "APPROVE", scriptSha256: reauthScriptSha256,
+    reason: "Reviewed the replacement script and source mapping."
+  }) });
+  assert.equal(reauthApproval.status, 200, "replacement script must be approved against its exact revision");
+  const stageStatePath = path.join(stateDir, "dashboard-state.json");
+  const stageState = JSON.parse(fs.readFileSync(stageStatePath, "utf8"));
+  const stageJob = stageState.jobs.find(job => job.id === authorJob.id);
+  narrationFixtureDir = path.join(process.cwd(), "media", "generated-authoring", stageJob.id + "-" + reauthScriptSha256.slice(0, 12));
+  fs.mkdirSync(narrationFixtureDir, { recursive: true });
+  const digest = value => crypto.createHash("sha256").update(value).digest("hex");
+  const fixtureAudio = Buffer.from("test fixture bytes only; not playable production audio");
+  const fixtureTranscript = String(stageJob.authoring.result.script.narration).replace(/\\s+/gu, " ").trim() + "\\n";
+  const fixtureCaptions = "1\\n00:00:00,000 --> 00:00:55,000\\nNarration caption fixture.\\n";
+  const writeArtifact = (name, bytes) => {
+    fs.writeFileSync(path.join(narrationFixtureDir, name), bytes);
+    return { path: path.relative(process.cwd(), path.join(narrationFixtureDir, name)).split(path.sep).join("/"), sha256: digest(bytes) };
+  };
+  const audioArtifact = writeArtifact("narration.mp3", fixtureAudio);
+  const transcriptArtifact = writeArtifact("narration.txt", fixtureTranscript);
+  const captionsArtifact = writeArtifact("captions.srt", fixtureCaptions);
+  const fixtureReport = {
+    format: stageJob.contentType, scriptSha256: reauthScriptSha256,
+    wordCount: fixtureTranscript.trim().split(/\\s+/u).length, durationSeconds: 55,
+    wordBoundaryCount: 5, captionTiming: "TTS_WORD_BOUNDARIES",
+    audioSha256: audioArtifact.sha256, transcriptSha256: transcriptArtifact.sha256,
+    captionsSha256: captionsArtifact.sha256, humanReviewRequired: true,
+    rightsStatus: "NOT_VERIFIED", status: "DRAFT_REVIEW_REQUIRED", publishingEnabled: false
+  };
+  const reportBytes = Buffer.from(JSON.stringify(fixtureReport) + "\\n");
+  const reportArtifact = writeArtifact("narration-report.json", reportBytes);
+  stageJob.authoring.narrationStage = {
+    status: "DRAFT_REVIEW_REQUIRED", scriptSha256: reauthScriptSha256,
+    scriptApprovalSha256: stageJob.authoring.scriptApproval.approvalSha256,
+    narrationReport: fixtureReport,
+    artifacts: {
+      "narration.mp3": audioArtifact, "narration.txt": transcriptArtifact,
+      "captions.srt": captionsArtifact, "narration-report.json": reportArtifact
+    }, publishable: false, publishingEnabled: false
+  };
+  fs.writeFileSync(stageStatePath, JSON.stringify(stageState, null, 2), { mode: 0o600 });
+  const narrationBundleResponse = await fetch(base + "/api/jobs/narration/review?jobId=" + encodeURIComponent(authorJob.id), { headers });
+  const narrationBundle = await narrationBundleResponse.json();
+  assert.equal(narrationBundleResponse.status, 200, JSON.stringify(narrationBundle));
+  assert.equal(narrationBundle.scriptSha256, reauthScriptSha256);
+  assert.equal(narrationBundle.transcript, fixtureTranscript);
+  const audioResponse = await fetch(base + "/api/jobs/narration/audio?jobId=" + encodeURIComponent(authorJob.id), { headers });
+  assert.equal(audioResponse.status, 200);
+  assert.equal(Buffer.from(await audioResponse.arrayBuffer()).toString(), fixtureAudio.toString());
+  const missingAttestations = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify({
+    jobId: authorJob.id, decision: "APPROVE", scriptSha256: reauthScriptSha256,
+    audioSha256: audioArtifact.sha256, transcriptSha256: transcriptArtifact.sha256,
+    captionsSha256: captionsArtifact.sha256, reportSha256: reportArtifact.sha256,
+    reason: "Review attempted without full-playback attestations."
+  }) });
+  assert.equal(missingAttestations.status, 400, "approval must require explicit audio, transcript and caption review attestations");
+  const narrationApproval = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify({
+    jobId: authorJob.id, decision: "APPROVE", scriptSha256: reauthScriptSha256,
+    audioSha256: audioArtifact.sha256, transcriptSha256: transcriptArtifact.sha256,
+    captionsSha256: captionsArtifact.sha256, reportSha256: reportArtifact.sha256,
+    confirmAudioListened: true, confirmTranscriptReviewed: true, confirmCaptionsReviewed: true,
+    reason: "Test fixture only: exercised hash and attestation checks, not a genuine listening review."
+  }) });
+  const narrationApprovalBody = await narrationApproval.json();
+  assert.equal(narrationApproval.status, 200, JSON.stringify(narrationApprovalBody));
+  assert.equal(narrationApprovalBody.job.authoring.narrationStage.status, "APPROVED_FOR_RENDER");
+  assert.equal(narrationApprovalBody.publishable, false, "narration approval must not imply video approval or publication");
   const authorRenderBypass = await fetch(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id }) });
   const authorRenderBypassBody = await authorRenderBypass.json();
   assert.equal(authorRenderBypass.status, 409, "a generated script must not bypass missing narration/caption/scene integration");
