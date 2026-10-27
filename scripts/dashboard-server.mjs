@@ -1129,9 +1129,23 @@ const server = http.createServer(async (req, res) => {
           }
         }
         if (job.contentType === "short") {
-          const parent = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.productionPlan.parentRelationship?.parentContentId);
+          const parentBinding = body.productionPlan.parentRelationship;
+          const parent = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === parentBinding?.parentContentId);
+          const verifiedRelationship = job.shortParentRelationship;
           if (!parent || parent.contentType !== "long_form" || parent.id === job.id) {
             return json(res, 409, { error: "Short parent must resolve to an existing distinct long-form content job; inferred parents are forbidden" });
+          }
+          if (!verifiedRelationship || verifiedRelationship.relationshipApproved !== true ||
+              verifiedRelationship.parentRemoteVerified !== true ||
+              verifiedRelationship.parentChannelTitle !== "SonicVhibez" ||
+              verifiedRelationship.parentPrivacyStatus !== "public" ||
+              verifiedRelationship.parentContentId !== parent.id ||
+              verifiedRelationship.parentRemoteVideoId !== parentBinding.remoteVideoId ||
+              verifiedRelationship.parentCanonicalUrl !== parentBinding.destinationUrl ||
+              verifiedRelationship.parentMediaSha256 !== parentBinding.parentMediaSha256 ||
+              verifiedRelationship.parentChannelId !== parentBinding.channelId ||
+              parentBinding.remoteParentVerified !== true) {
+            return json(res, 409, { error: "Short plan must match the independently persisted, human-approved parent relationship and verified public SonicVhibez receipt; self-declared parent fields are insufficient" });
           }
         }
         const planSha256 = productionPlanSha256(body.productionPlan);
