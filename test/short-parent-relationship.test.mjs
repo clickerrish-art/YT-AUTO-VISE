@@ -34,6 +34,41 @@ test("private parent validation fails closed unless a caller explicitly records 
   );
 });
 
+test("requires timezone-qualified, calendar-valid timestamps for relationship and native-association approvals", () => {
+  for (const timestamp of [
+    "2026-10-26T10:00:00",
+    "2026-02-30T10:00:00.000Z",
+    "2026-10-26T10:00:00+15:00"
+  ]) {
+    const invalid = { ...base, relationshipApprovedAt: timestamp };
+    invalid.relationshipEvidenceSha256 = shortParentEvidenceSha256(invalid);
+    assert.match(
+      validateShortParentRelationship(invalid, { channelId: base.parentChannelId, allowPrivateParent: true }).join(" "),
+      /relationship approval timestamp must be a valid ISO timestamp with an explicit timezone/,
+      timestamp
+    );
+  }
+
+  const verified = {
+    status: "VERIFIED",
+    verifiedBy: "operator-1",
+    verifiedAt: "2026-10-27T10:00:00.000Z",
+    evidenceSha256: sha("9"),
+    parentVideoId: base.parentRemoteVideoId,
+    channelId: base.parentChannelId,
+    destinationUrl: base.parentCanonicalUrl
+  };
+  for (const timestamp of ["2026-10-27T10:00:00", "2026-02-30T10:00:00.000Z"]) {
+    const invalid = { ...base, parentPrivacyStatus: "public", nativeRelatedVideo: { ...verified, verifiedAt: timestamp } };
+    invalid.relationshipEvidenceSha256 = shortParentEvidenceSha256(invalid);
+    assert.match(
+      validateShortParentRelationship(invalid, { channelId: base.parentChannelId }).join(" "),
+      /native Related video verification requires reviewer, timestamp and evidence hash/,
+      timestamp
+    );
+  }
+});
+
 test("rejects missing parent, guessed/noncanonical URL, channel mismatch and unverified remote parent", () => {
   assert.match(validateShortParentRelationship(null)[0], /required/);
   for (const patch of [
