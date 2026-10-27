@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-27",
-  "evidencePolicy": "Exact source/test SHA: 3690ec82b52263cb2da2378f8aba9a5b19658a8f; application-code SHA: d465c03cb3b12ee68000192089165f326121e8eb. The source/test SHA passed automation/security, browser E2E, content quality, metadata, and isolated main/candidate baseline checks. Production acceptance remains blocked; documentation-only descendants may follow this tested SHA.",
+  "evidencePolicy": "Exact source/test SHA: 081999d2a7f3afb2ef013a840e01982b21084db2; application-code SHA: 081999d2a7f3afb2ef013a840e01982b21084db2. On this SHA, automation/security passed 368 Node tests (0 failed, 0 skipped), 16 Python tests and npm audit with 0 vulnerabilities; content quality, metadata validation, local draft-package validation and isolated main/candidate baseline passed. Dashboard browser E2E was pending at the latest check. Production acceptance remains blocked; documentation-only descendants may follow this tested SHA.",
   "statuses": [
     "PASS",
     "FAIL",
