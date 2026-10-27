@@ -44,7 +44,7 @@ test("production-plan API binds the approved script, checks real file hashes, an
   for (let i = 0; i < 100; i++) {
     if (child.exitCode !== null) throw new Error("Dashboard server exited before startup: " + logs);
     try {
-      const response = await fetch(baseUrl + "/api/state", { headers: { "x-operator-token": token } });
+      const response = await fetch(baseUrl + "/healthz");
       if (response.ok) { ready = true; break; }
     } catch {}
     await new Promise(resolve => setTimeout(resolve, 100));
