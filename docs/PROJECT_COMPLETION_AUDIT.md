@@ -1,3 +1,36 @@
+## Live checkpoint — 27 October 2026: retained render evidence protection
+
+**Application-code SHA:** `d465c03cb3b12ee68000192089165f326121e8eb`  
+**Exact source/test SHA:** `3690ec82b52263cb2da2378f8aba9a5b19658a8f`  
+**PR #1:** open, draft, unmerged. Documentation-only commits may follow this source/test SHA.  
+**Git comparison:** `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; 1,691 commits ahead / 2 behind / 163 changed files. The current compare lists no removed or renamed files; `test/restore-facebook-draft-history.test.mjs` remains present.
+
+### Implemented in this checkpoint
+
+- `scripts/dashboard-server.mjs` refuses to replace a retained per-job render manifest, including an existing regular file, and returns a recovery-required response.
+- `scripts/safe-media-path.mjs` rejects an existing regular render destination before FFmpeg can overwrite it.
+- Regression tests preserve existing manifest/output bytes and verify refusal occurs before a job leaves `QUEUED`.
+- Earlier related protection: `bd6a4b75addcb2e14b31d2219ff82b5ef33a1406` guards existing video/thumbnail output; `fc466b1192305464493313c7c9ef68ee69129289` guards retained per-job manifests; `d465c03cb3b12ee68000192089165f326121e8eb` hardens direct renderer output handling.
+
+### Exact-SHA CI status for `3690ec82b52263cb2da2378f8aba9a5b19658a8f`
+
+- Dashboard browser E2E: **PASS**, 13 Chromium journeys — [run 40575972740](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972740).
+- Content quality: **PASS** — [run 40575972899](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972899).
+- Metadata validation: **PASS** — [run 40575972743](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972743).
+- Lockfile install completed successfully in browser CI; that job reported 0 npm vulnerabilities — [run 40575972740](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972740).
+- Automation/security: **IN PROGRESS** — [run 40575972741](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972741). Its unit-test step had not started when this checkpoint was recorded; do not infer that the new helper regression passed.
+- Isolated main/candidate baseline: **IN PROGRESS** — [run 40575972749](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972749).
+- Production readiness: **BLOCKED** — [run 40575972751](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972751).
+- Daily Nature Frontiers Facebook workflow: **PASS for local draft-package validation only**, not live Meta integration — [run 40575973011](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575973011).
+
+### External and production gates
+
+No genuine production media, full human playback/rights approval, authenticated SonicVhibez OAuth identity and complete remote history, one-operation private-upload receipt, successful native Short Related video, verified Meta Page integration, or operational acceptance is proven. YouTube's [official Related video guidance](https://support.google.com/youtube/answer/14075157?hl=en) requires the selected video to be public or unlisted; a private parent is ineligible. Do not change privacy to bypass this. No live upload or post was performed. Public/unattended YouTube publishing and Facebook live publishing remain disabled; Safari campaigns remain inactive.
+
+**Verdict: CODE ACCEPTANCE PARTIAL / PRODUCTION ACCEPTANCE BLOCKED.** This is a checkpoint, not a claim of completion.
+
+---
+
 # Latest implementation checkpoint — 26 October 2026
 
 Exact tested source/test SHA: `9982caed6bee7f8d01740acff5162b94988b2e59`; latest application-code commit: `1aeca29026c6965fe13ff206f8cc097f7d4fa038`. This checkpoint supersedes older evidence for the listed script/source/audio gates; historical entries below remain historical.
