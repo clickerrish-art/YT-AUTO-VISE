@@ -5,6 +5,7 @@ import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { canonicalAuthoringScriptSha256 } from "../scripts/authoring-production-pipeline.mjs";
 
 test("dashboard API authenticates operators, persists real drafts, and cannot grant approval", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-"));
@@ -199,6 +200,25 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const authorDuplicateBody = await authorDuplicate.json();
   assert.equal(authorDuplicate.status, 200, JSON.stringify(authorDuplicateBody));
   assert.equal(authorDuplicateBody.reused, true, "identical retries must reuse the persisted authoring result");
+  const approvedScriptSha256 = canonicalAuthoringScriptSha256(authorBody.job.authoring.result.script);
+  const staleScriptReview = await fetch(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify({
+    jobId: authorJob.id, decision: "APPROVE", scriptSha256: "0".repeat(64),
+    reason: "Reviewed factual claims against the supplied research."
+  }) });
+  assert.equal(staleScriptReview.status, 409, "stale script hashes must never be approved");
+  const scriptReviewResponse = await fetch(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify({
+    jobId: authorJob.id, decision: "APPROVE", scriptSha256: approvedScriptSha256,
+    reason: "Reviewed factual claims against the supplied research."
+  }) });
+  const scriptReviewBody = await scriptReviewResponse.json();
+  assert.equal(scriptReviewResponse.status, 200, JSON.stringify(scriptReviewBody));
+  assert.equal(scriptReviewBody.scriptReview.decision, "APPROVE");
+  assert.equal(scriptReviewBody.scriptReview.scriptSha256, approvedScriptSha256);
+  assert.equal(scriptReviewBody.publishable, false, "script approval must not imply production or publication approval");
+  const narrationWrongRevision = await fetch(base + "/api/jobs/narration", { method: "POST", headers, body: JSON.stringify({
+    jobId: authorJob.id, scriptSha256: "0".repeat(64)
+  }) });
+  assert.equal(narrationWrongRevision.status, 409, "narration must reject a script revision that does not match the current draft");
   const authorRenderBypass = await fetch(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id }) });
   const authorRenderBypassBody = await authorRenderBypass.json();
   assert.equal(authorRenderBypass.status, 409, "a generated script must not bypass missing narration/caption/scene integration");
