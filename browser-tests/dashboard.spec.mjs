@@ -590,6 +590,7 @@ test("production-plan controls are exposed and report backend rejection without 
   await expect(page.locator("#app")).toBeVisible();
   await expect(page.locator("#productionplanform")).toBeVisible();
   await expect(page.locator("#productionplanreviewform")).toBeVisible();
+  await expect(page.locator("#productionplanreviewpreview")).toBeVisible();
   await expect(page.locator("#productionplanresult")).toContainText("No production plan submitted");
 
   await page.route("**/api/jobs/production-plan", async route => {
