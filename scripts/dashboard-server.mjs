@@ -2247,16 +2247,28 @@ const server = http.createServer(async (req, res) => {
         if (job.authoring) {
           let renderPackage;
           try {
+            const manifestDirectory = ensureSafeDirectoryPath(path.join(root, "content", "job-render-manifests"), "Job render manifest directory");
+            const manifestFile = path.join(manifestDirectory, job.id + ".json");
+            // A prior manifest is retained recovery/approval evidence. Even a
+            // regular file must not be silently replaced after a partial render
+            // or restart; reconcile it explicitly before preparing a new run.
+            try {
+              const existingStat = fs.lstatSync(manifestFile);
+              const kind = existingStat.isSymbolicLink() ? "symbolic link" : existingStat.isFile() ? "file" : "non-file";
+              return json(res, 409, {
+                error: "Render manifest already exists (" + kind + "); refusing to replace retained evidence",
+                artifactPath: path.relative(root, manifestFile).split(path.sep).join("/"),
+                recoveryRequired: true,
+                retryAllowed: false,
+                publishingEnabled: false
+              });
+            } catch (error) {
+              if (error?.code !== "ENOENT") throw error;
+            }
             renderPackage = buildApprovedJobRenderManifest({ job, root });
             const expectedMetadataPath = job.contentType === "short" ? "content/next-short.json" : "content/long-form-next.json";
             if (renderPackage.metadataPath !== path.resolve(root, expectedMetadataPath)) {
               throw new Error("The approved metadata path must be the format's designated metadata file so post-render validation checks the same artifact");
-            }
-            const manifestDirectory = ensureSafeDirectoryPath(path.join(root, "content", "job-render-manifests"), "Job render manifest directory");
-            const manifestFile = path.join(manifestDirectory, job.id + ".json");
-            if (fs.existsSync(manifestFile)) {
-              const existingStat = fs.lstatSync(manifestFile);
-              if (existingStat.isSymbolicLink() || !existingStat.isFile()) throw new Error("Existing per-job render manifest is unsafe");
             }
             atomicWriteJson(manifestFile, renderPackage.manifest, { mode: 0o600 });
             const artifactPaths = contentJobArtifactPaths(job.id);
