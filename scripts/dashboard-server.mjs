@@ -1133,6 +1133,82 @@ const server = http.createServer(async (req, res) => {
         });
       } finally { release(); }
     }
+    if (req.method === "POST" && url.pathname === "/api/jobs/narration/reconcile") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || typeof body.scriptSha256 !== "string" || !/^[a-f0-9]{64}$/.test(body.scriptSha256)) {
+        return json(res, 400, { error: "jobId and the exact approved script SHA-256 are required for reconciliation" });
+      }
+      const release = await acquireStateLock();
+      let snapshot;
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const job = state.jobs[index];
+        const stage = job.authoring?.narrationStage;
+        if (job.state !== "QUEUED" || !stage || !["RECOVERY_REQUIRED", "GENERATING"].includes(stage.status)) {
+          return json(res, 409, { error: "Only an interrupted or recovery-required narration stage can be reconciled" });
+        }
+        if (stage.status === "GENERATING") {
+          const ageMs = Date.now() - Date.parse(stage.requestedAt);
+          if (!Number.isFinite(ageMs) || ageMs <= 10 * 60_000) return json(res, 409, { error: "Narration attempt is not yet stale; duplicate reconciliation is blocked" });
+        }
+        if (canonicalAuthoringScriptSha256(job.authoring?.result?.script) !== body.scriptSha256 ||
+            job.authoring?.scriptApproval?.decision !== "APPROVE" ||
+            job.authoring.scriptApproval.scriptSha256 !== body.scriptSha256 ||
+            stage.scriptSha256 !== body.scriptSha256) return json(res, 409, { error: "Current script or approval does not match the interrupted narration stage" });
+        job.authoring.narrationStage = { ...stage, status: "RECONCILING", reconciliationStartedAt: new Date().toISOString(), reconciliationActor: operatorId };
+        state.jobs[index] = job;
+        state.audit.push({ id: crypto.randomUUID(), action: "AUTHORING_NARRATION_RECONCILIATION_STARTED", jobId: job.id, scriptSha256: body.scriptSha256, actor: operatorId, at: job.authoring.narrationStage.reconciliationStartedAt, reason: "Reconcile retained narration files without invoking TTS or overwriting partial outputs" });
+        saveState(state);
+        snapshot = structuredClone(job);
+      } finally { release(); }
+
+      let reconciled;
+      try {
+        reconciled = runAuthoringNarrationStage({ job: snapshot, root, reconcileOnly: true });
+      } catch (error) {
+        const message = redactOperationalText(error instanceof Error ? error.message : "Narration reconciliation failed", { roots: [root, stateDir] });
+        const failRelease = await acquireStateLock();
+        try {
+          const state = loadState();
+          const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+          if (index >= 0 && state.jobs[index].authoring?.narrationStage?.status === "RECONCILING") {
+            state.jobs[index].authoring.narrationStage = {
+              ...state.jobs[index].authoring.narrationStage, status: "RECOVERY_REQUIRED",
+              recoveryRequired: true, reconciliationFailedAt: new Date().toISOString(),
+              error: message.slice(0, 1200), publishable: false, publishingEnabled: false
+            };
+            state.audit.push({ id: crypto.randomUUID(), action: "AUTHORING_NARRATION_RECONCILIATION_FAILED", jobId: body.jobId, scriptSha256: body.scriptSha256, actor: operatorId, at: new Date().toISOString(), reason: message.slice(0, 500) });
+            saveState(state);
+          }
+        } finally { failRelease(); }
+        return json(res, 409, { error: "Narration reconciliation could not prove a complete intact draft; no TTS retry was performed", detail: message, recoveryRequired: true, publishable: false });
+      }
+
+      const finishRelease = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job disappeared during narration reconciliation" });
+        const current = state.jobs[index];
+        if (current.authoring?.narrationStage?.status !== "RECONCILING" ||
+            canonicalAuthoringScriptSha256(current.authoring?.result?.script) !== body.scriptSha256 ||
+            current.authoring?.scriptApproval?.scriptSha256 !== body.scriptSha256) {
+          return json(res, 409, { error: "Authoring or approval changed during reconciliation; inspect artifacts manually", recoveryRequired: true });
+        }
+        const completedAt = new Date().toISOString();
+        current.authoring.narrationStage = {
+          ...reconciled, status: "DRAFT_REVIEW_REQUIRED", requestedAt: current.authoring.narrationStage.requestedAt,
+          completedAt, reconciledAt: completedAt, actor: operatorId, publishable: false, publishingEnabled: false
+        };
+        delete current.authoring.narrationStage.error;
+        state.jobs[index] = current;
+        state.audit.push({ id: crypto.randomUUID(), action: "AUTHORING_NARRATION_RECONCILIATION_SUCCEEDED", jobId: current.id, scriptSha256: body.scriptSha256, actor: operatorId, at: completedAt, reason: "Complete audio/transcript/caption artifacts and their hashes were verified without regenerating narration" });
+        saveState(state);
+        return json(res, 200, { job: current, narrationStage: current.authoring.narrationStage, reused: true, publishable: false, publishingEnabled: false });
+      } finally { finishRelease(); }
+    }
     if (req.method === "GET" && url.pathname === "/api/jobs/narration/review") {
       const jobId = url.searchParams.get("jobId");
       if (!jobId) return json(res, 400, { error: "jobId is required" });
