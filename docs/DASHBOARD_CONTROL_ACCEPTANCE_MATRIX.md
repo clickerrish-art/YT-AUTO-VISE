@@ -402,3 +402,20 @@ The above controls are real, but they do not complete the production journey. Ke
 | Produce authoring job | POST /api/jobs/produce continues to fail closed for authoring jobs | BLOCKED by design | Per-job quality evidence, renderer integration, final media validation and human playback review are still missing |
 
 Latest application-code SHA: 6224218660a11fd59353dbab96d9963e429649bb; test tree: 95a64fa88f668ba0f88cd2f4be394c9100c6ff53. Production readiness remains BLOCKED. Facebook daily draft remains SKIPPED.
+
+
+---
+
+## Refreshed source inventory — 28 October 2026
+
+**Source checkpoint:** `8e7bec96d66bf6ad8c18da177fe4b83d1e943716` (the dashboard and server source blobs inspected for this inventory were `public/dashboard.html` blob `80ea5d347c288288c47960015348c3984e8f71c4` and `scripts/dashboard-server.mjs` blob `ab626e786cf553314b133087d7aa3375dc32865f`).
+
+A fresh literal source scan found:
+
+- **105** HTML controls: 21 buttons, 43 inputs, 26 selects and 15 textareas.
+- **15** forms.
+- **38** literal route-handler branches: **10 GET** and **28 POST**. This supersedes older 37-route / 9-GET static inventory figures for this source checkpoint.
+
+This is an inventory only, not proof that all controls or routes are accepted. The current test evidence includes 13 Chromium browser journeys, but exhaustive per-control/per-route success, authentication, authorization, malformed input, boundary, duplicate/concurrency, dependency/persistence failure, restart, audit and accessibility acceptance remains incomplete. Keep the full DASH-001 requirement `NOT_TESTED` until the matrix is completed with reproducible evidence for every applicable route and control.
+
+The operator-token UTF-8 byte-length regression is covered by `test/operator-auth.test.mjs` and the dashboard API regression in `test/dashboard-server.test.mjs`. Exact-head automation/security, content-quality, metadata, browser E2E and isolated baseline runs are recorded in `docs/REQUIREMENTS_ACCEPTANCE_REGISTER.json`. Production readiness remains blocked; external Meta draft creation remains unverified.
