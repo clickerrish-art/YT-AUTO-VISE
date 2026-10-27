@@ -26,5 +26,5 @@ test("dashboard cannot final-approve a Short until native parent association is 
   const server = fs.readFileSync(path.resolve("scripts/dashboard-server.mjs"), "utf8");
   assert.match(server, /requireNativeRelatedVideoVerified: true/);
   assert.match(server, /allowPrivateParent: false/);
-  assert.match(server, /native YouTube Related video association must be independently verified before Short publication/);
+  assert.match(server, /assertShortParentRelationship\(job\.shortParentRelationship, \{[\s\S]*?requireNativeRelatedVideoVerified: true,[\s\S]*?allowPrivateParent: false/);
 });
