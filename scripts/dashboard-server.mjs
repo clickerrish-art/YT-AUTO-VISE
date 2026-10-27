@@ -1112,6 +1112,26 @@ const server = http.createServer(async (req, res) => {
             })).digest("hex")) {
           return json(res, 409, { error: "Current narration must be approved for the exact script before production planning" });
         }
+        for (const [name, approvedHash] of [
+          ["narration.mp3", narrationApproval.audioSha256],
+          ["narration.txt", narrationApproval.transcriptSha256],
+          ["captions.srt", narrationApproval.captionsSha256],
+          ["narration-report.json", narrationApproval.reportSha256]
+        ]) {
+          const artifact = narration.artifacts?.[name];
+          if (!artifact || artifact.sha256 !== approvedHash || !/^[a-f0-9]{64}$/.test(approvedHash ?? "")) {
+            return json(res, 409, { error: "Approved narration is missing a hash-bound artifact: " + name });
+          }
+          try {
+            const artifactPath = resolveRepositoryFile(artifact.path);
+            const artifactStat = fs.lstatSync(artifactPath);
+            if (artifactStat.isSymbolicLink() || !artifactStat.isFile() || sha256File(artifactPath) !== approvedHash) {
+              return json(res, 409, { error: "Approved narration artifact changed or is unsafe: " + name });
+            }
+          } catch {
+            return json(res, 409, { error: "Approved narration artifact is missing or unsafe: " + name });
+          }
+        }
         const errors = validateProductionPlan(body.productionPlan, { jobId: job.id, contentType: job.contentType, scriptSha256: body.scriptSha256 });
         if (errors.length) return json(res, 422, { error: "Production plan validation failed", validationErrors: errors, publishingEnabled: false });
         for (const scene of body.productionPlan.scenes) {
