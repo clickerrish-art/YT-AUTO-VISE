@@ -682,3 +682,27 @@ Current exact source/test SHA: 47c839452fda99757a34dcb29865da9e967121af. Automat
 A private-only Short review may proceed only through its explicitly bounded private-upload authorization and exact artifact/relationship checks. If the native YouTube Related video association cannot be verified, retain `BLOCKED_EXTERNAL` with a specific 8–500 character explanation. Never infer native association from a description URL, change privacy to bypass a restriction, or treat this state as public-release readiness. Regression coverage is in source/test SHA `77921aca418b25bca0a9aa681281145b00c6d72f`; evidence and remaining blockers are in [docs/CURRENT_RELEASE_EVIDENCE_2026-10-27.md](docs/CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
 
 Production remains blocked until genuine media and rights review, authenticated SonicVhibez identity/history, an authorized private-upload receipt, native Related-video verification or an accepted external blocker policy, real Meta draft-only integration, owner-approved feasible cadence, and operational recovery/deployment drills are evidenced. Keep public/unattended YouTube publishing, Facebook live publishing and Safari activation disabled.
+
+
+---
+
+## Current dashboard inventory and API authentication checks — 28 October 2026
+
+On source/test candidate `1f72c6dc5b648f0c60fdea45ae1d37e835e4505e`, the dashboard inventory is reproducible:
+
+```sh
+npm run inventory:dashboard
+node --test test/dashboard-inventory.test.mjs test/operator-auth.test.mjs
+```
+
+The full standard suite also includes `test/dashboard-server.test.mjs`, which checks that unauthenticated requests to each distinct inventoried `/api/*` method/path return HTTP 401. The inventory reports 105 HTML controls across 15 forms and 38 literal route branches (10 GET, 28 POST). It is a static inventory, not proof of complete behavior acceptance.
+
+Exact-candidate automated results:
+- [Automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195046): 384 Node tests passed, 0 failed, 0 skipped; 16 Python tests; npm audit 0 vulnerabilities.
+- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195232): PASS.
+- [Metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195101): PASS.
+- [Dashboard E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195206): 13 Chromium journeys passed.
+- [Isolated main/candidate baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195202): PASS; both Node/Python baseline commands exited 0. Artifact [12776283618](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195202/artifacts/12776283618), SHA-256 `989203aab1898f8d740d4f56294e03eec8d023cb6086ce4c171ee2aff156ad2b`.
+- [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195430): BLOCKED by unresolved prerequisites.
+
+Do not interpret the passing automation and baseline workflows as production acceptance. Keep YouTube private-only and explicitly authorized, keep public/unattended publishing disabled, keep Meta live publishing disabled, and keep Safari inactive. Do not bypass readiness, rights, approval, identity, history, cadence or recovery gates.
