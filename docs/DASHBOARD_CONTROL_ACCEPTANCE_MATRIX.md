@@ -1,3 +1,15 @@
+## Latest tested candidate update — 27 October 2026
+
+- Exact source/test candidate: `ac97c8860700dcbfedfb367d4dfbc0c654164479`.
+- Dashboard browser acceptance: [run 40588392231](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392231) passed **13 Chromium journeys** against the real local dashboard/backend.
+- Node suite on this candidate: **374 passed, 0 failed, 0 skipped** in automation, content-quality and metadata workflows; FFmpeg/ffprobe were installed.
+- Added `test/multi-scene-render-integration.test.mjs` and verified it in the exact-SHA CI run. This covers synthetic two-scene FFmpeg assembly, captions, audio presence, duration, full decode and scene-distinction checks.
+- **Do not mark exhaustive dashboard acceptance complete:** full visible-control/state-changing API coverage, all authorized/unauthorized/malformed/duplicate/failure/durable-state cases, and the dedicated Short-parent dashboard/API journey are still incomplete. Keep DASH-001 `NOT_TESTED` until the complete matrix is evidenced.
+
+See [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-27.md) for exact workflow links and external blockers.
+
+---
+
 ## Latest verified implementation and CI checkpoint — 27 October 2026, 21:28 UTC
 
 **Exact tested candidate SHA:** `466605be027f531d1c6143a6d1f42e1bf4c2ffcc`. The candidate includes strict Short-parent approval timestamp validation, FFmpeg installation in the content-quality and metadata workflows, and explicit zero-skip assertions in the automation, content-quality and metadata workflows.
