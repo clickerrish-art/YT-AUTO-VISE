@@ -59,3 +59,18 @@ test("readiness workflow compares retained exit-code evidence and avoids false m
   assert.match(workflow, /Production readiness is BLOCKED/);
   assert.doesNotMatch(workflow, /READINESS_EXIT_CODE:-2|READINESS_JSON_EXIT_CODE:-3/);
 });
+
+
+test("readiness never accepts an owner-approved cadence that weakens the 72-hour publication invariant", () => {
+  const readinessPath = fileURLToPath(new URL("../scripts/production-readiness.mjs", import.meta.url));
+  const schedulePath = fileURLToPath(new URL("../config/weekly-content-plan.json", import.meta.url));
+  const readiness = fs.readFileSync(readinessPath, "utf8");
+  const schedule = JSON.parse(fs.readFileSync(schedulePath, "utf8"));
+
+  assert.match(readiness, /minimumSpacingHours < 72/);
+  assert.doesNotMatch(readiness, /WEEKLY_TARGET_WITH_SHORTER_SPACING/);
+  assert.equal(schedule.minimumPublicationSpacingHours, 72);
+  assert.equal(schedule.publicationCycle.minimumHoursBetweenConsecutivePublications, 72);
+  assert.equal(schedule.publicationCycle.minimumCycleHours, 216);
+  assert.ok(!schedule.cadenceDecision.options.includes("WEEKLY_TARGET_WITH_SHORTER_SPACING"));
+});
