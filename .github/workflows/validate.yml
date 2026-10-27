@@ -29,7 +29,15 @@ jobs:
       - run: node --check scripts/validate-asset-register.mjs
       - run: node --check test/validate-asset-register.test.mjs
       - run: node --check scripts/validate-schedule.mjs
-      - run: npm test
+      - name: Run tests and require zero skips
+        shell: bash
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee "$RUNNER_TEMP/node-test.log"
+          if ! grep -Fq 'ℹ skipped 0' "$RUNNER_TEMP/node-test.log"; then
+            echo "FAIL: Node test summary did not explicitly report zero skips."
+            exit 1
+          fi
       - name: Confirm default metadata checker fails closed until all production gates pass
         run: |
           set +e
