@@ -108,5 +108,5 @@ test("rejects unverified, private or wrong-channel parent for a Short", () => {
   plan.parentRelationship.visibility = "private";
   plan.parentRelationship.channelTitle = "Nature Frontiers";
   const errors = validateProductionPlan(plan, { jobId: "short-job-01", contentType: "short", scriptSha256: hash });
-  assert.ok(errors.some(error => /verified public SonicVhibez/.test(error)));
+  assert.ok(errors.some(error => /verified private\/public\/unlisted SonicVhibez/.test(error)));
 });
