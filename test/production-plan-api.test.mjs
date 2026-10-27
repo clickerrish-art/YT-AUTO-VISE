@@ -33,9 +33,8 @@ test("production-plan API binds the approved script, checks real file hashes, an
     const response = await fetch(baseUrl + route, { method: "POST", headers, body: JSON.stringify(body) });
     return { status: response.status, body: await response.json() };
   };
-  t.after(async () => {
+  t.after(() => {
     child.kill("SIGTERM");
-    await new Promise(resolve => child.once("exit", resolve));
     fs.rmSync(stateDir, { recursive: true, force: true });
     fs.rmSync(evidenceDir, { recursive: true, force: true });
   });
