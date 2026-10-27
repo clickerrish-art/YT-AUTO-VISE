@@ -85,7 +85,7 @@ export function validateNarrationStageArtifacts({ report, scriptSha256, format, 
  */
 export function runAuthoringNarrationStage({
   job, root, spawnSyncImpl = spawnSync, pythonExecutable = process.env.PYTHON ?? "python3",
-  voice = "en-US-GuyNeural", rate = "-5%", timeoutMs = 180_000
+  voice = "en-US-GuyNeural", rate = "-5%", timeoutMs = 180_000, reconcileOnly = false
 }) {
   if (!job || job.kind !== "CONTENT_PRODUCTION" || !JOB_ID.test(job.id ?? "")) throw new Error("A valid persisted content-production job ID is required");
   if (!["short", "long_form"].includes(job.contentType)) throw new Error("Unsupported content format");
@@ -108,6 +108,7 @@ export function runAuthoringNarrationStage({
   assertRealDirectory(outputDir, "job-specific narration output directory");
   const scriptFile = path.join(outputDir, "approved-script.json");
   const payload = JSON.stringify({ result: script }, null, 2) + "\n";
+  if (reconcileOnly && !fs.existsSync(scriptFile)) throw new Error("Reconciliation-only mode requires the original approved-script.json; no regeneration was attempted");
   if (fs.existsSync(scriptFile)) {
     assertRegularFile(scriptFile, "approved script");
     if (fs.readFileSync(scriptFile, "utf8") !== payload) throw new Error("Existing script payload differs; recovery is required and files will not be overwritten");
@@ -125,6 +126,7 @@ export function runAuthoringNarrationStage({
     verifyCaptionValidators({ captionsPath: path.join(outputDir, "captions.srt"), audioPath: path.join(outputDir, "narration.mp3"), report, projectRoot, spawnSyncImpl, format: job.contentType });
     return narrationStageResult(job, outputDir, report, scriptSha256, true, projectRoot);
   }
+  if (reconcileOnly) throw new Error("Reconciliation-only mode found incomplete narration artifacts; it will not invoke TTS or overwrite files");
   if (present.length > 0) throw new Error("Partial narration artifacts exist without a complete report; mark RECOVERY_REQUIRED and reconcile before retrying");
   const generator = path.join(projectRoot, "scripts", "generate-authoring-narration.py");
   assertRegularFile(generator, "narration generator");
