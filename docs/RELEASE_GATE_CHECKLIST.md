@@ -533,3 +533,29 @@ Current Git snapshot before these documentation updates: PR HEAD `a912d3c724195f
 - [ ] Genuine rights-cleared final media, human full-playback review, verified YouTube identity/history/receipt, native Related video, Facebook Page/draft integration, feasible owner-approved cadence, full recovery/deployment tests, exhaustive dashboard coverage, divergent history review and repository governance remain outstanding.
 
 No live publication, upload, visibility change, campaign activation, merge or destructive Git operation was performed. Safety switches remain off.
+
+---
+
+## Implementation checkpoint — 27 October 2026
+
+Exact application/test SHA: `c5bfbbc7861616494c6b589604fa3797e673681a`.
+
+- [x] Hash-bound human script review API and dashboard controls added.
+- [x] Narration generation stage integrated with job-specific durable state, transcript/script hash checks, actual ffprobe duration, caption validators and no-overwrite partial-artifact behavior.
+- [x] Authenticated narration audio/review bundle and hash-bound human narration review added.
+- [x] Recovery-only narration reconciliation added; it does not retry TTS or overwrite partial artifacts.
+- [x] Exact-SHA automation/security PASS: 336 Node tests, 16 Python tests, npm audit zero vulnerabilities — [run 40453030534](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030534).
+- [x] Exact-SHA browser E2E PASS: 12 Chromium tests — [run 40453030615](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030615).
+- [x] Content quality PASS — [run 40453030586](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030586).
+- [x] Metadata validation PASS — [run 40453030574](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030574).
+- [x] Isolated main/candidate baseline PASS — [run 40453030640](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030640).
+- [ ] Complete authoring-to-render integration: **BLOCKED**. `POST /api/jobs/produce` still refuses authoring jobs; no per-job render plan integration or final video review.
+- [ ] Real narration generated and reviewed; no live TTS output was accepted in CI.
+- [ ] Real rights-cleared multi-scene export and full-playback realism review.
+- [ ] Short-parent success/recovery with genuine approved parent and verified remote receipt.
+- [ ] Verified SonicVhibez OAuth/channel/history and native Related video evidence.
+- [ ] Verified Nature Frontiers Page and successful non-skipped draft integration.
+- [ ] Owner-approved feasible cadence, complete recovery/deployment/rollback drills and full divergent-history review.
+- [ ] Production readiness: **BLOCKED** — [run 40453031961](https://github.com/clickerrish-art/YT-AUTO-VISE). Facebook daily draft: **SKIPPED** — [run 40453030497](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030497).
+
+The checkbox items marked complete are code/test checkpoints only. They do not supersede the blocked production acceptance items above.
