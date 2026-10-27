@@ -54,10 +54,24 @@ test("production-plan API binds the approved script, checks real file hashes, an
   const script = { premise: "Explain an evidence-led wildlife question", narration, sections: [{ heading: "Context", purpose: "Set context", narration, visualDirection: "Documented habitat", pacing: "Measured", soundDesign: "Natural ambience" }], claims: [{ text: "A supported claim", sourceIds: ["source-1"] }], sources: [{ id: "source-1", title: "Actual source record" }] };
   const scriptSha256 = canonicalAuthoringScriptSha256(script);
   const jobId = "job-production-plan-api";
+  const narrationArtifacts = {};
+  for (const [name, bytes] of [
+    ["narration.mp3", Buffer.from("test-only audio fixture")],
+    ["narration.txt", Buffer.from(narration + "\\n")],
+    ["captions.srt", Buffer.from("1\\n00:00:00,000 --> 00:00:05,000\\nTest caption\\n")],
+    ["narration-report.json", Buffer.from(JSON.stringify({ status: "DRAFT_REVIEW_REQUIRED", publishingEnabled: false }))]
+  ]) {
+    const relativePath = evidenceDirName + "/" + name;
+    fs.writeFileSync(path.join(repoRoot, relativePath), bytes);
+    narrationArtifacts[name] = { path: relativePath, sha256: sha256(bytes) };
+  }
   const review = {
     decision: "APPROVE", reviewer: "test-owner@example.test", reviewedAt: "2026-10-27T10:00:00.000Z",
     reason: "Test fixture review for API contract", scriptSha256,
-    audioSha256: "a".repeat(64), transcriptSha256: "b".repeat(64), captionsSha256: "c".repeat(64), reportSha256: "d".repeat(64),
+    audioSha256: narrationArtifacts["narration.mp3"].sha256,
+    transcriptSha256: narrationArtifacts["narration.txt"].sha256,
+    captionsSha256: narrationArtifacts["captions.srt"].sha256,
+    reportSha256: narrationArtifacts["narration-report.json"].sha256,
     confirmAudioListened: true, confirmTranscriptReviewed: true, confirmCaptionsReviewed: true
   };
   review.approvalSha256 = sha256(JSON.stringify({ jobId, ...review }));
@@ -66,7 +80,7 @@ test("production-plan API binds the approved script, checks real file hashes, an
     state: "QUEUED", authoring: {
       result: { script },
       scriptApproval: { decision: "APPROVE", scriptSha256, reviewer: "test-owner@example.test", reviewedAt: "2026-10-27T09:00:00.000Z" },
-      narrationStage: { status: "APPROVED_FOR_RENDER", scriptSha256 },
+      narrationStage: { status: "APPROVED_FOR_RENDER", scriptSha256, artifacts: narrationArtifacts },
       narrationApproval: review
     }
   };
