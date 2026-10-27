@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-27",
-  "evidencePolicy": "Exact tested source/test SHA: 47c839452fda99757a34dcb29865da9e967121af. Documentation-only commits may follow without changing tested application code; rerun exact-SHA checks after any source/test change. Production acceptance remains blocked.",
+  "evidencePolicy": "Exact source/test SHA: 3690ec82b52263cb2da2378f8aba9a5b19658a8f. Latest application-code SHA: d465c03cb3b12ee68000192089165f326121e8eb. The current automation/security and isolated baseline workflows were still in progress when this checkpoint was recorded. Documentation-only commits may follow; rerun relevant checks after any source/test change. Production acceptance remains blocked.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -529,55 +529,71 @@
       "nextAction": "Retain regression coverage for same-day collisions, exact 72-hour spacing and missing queued timestamps; verify the current branch's exact-head browser E2E run before overall code acceptance.",
       "assessmentCommitSha": "e65e859e44f254edddb735def44ca1b8095ab627",
       "acceptanceCriterion": "QUEUED entries are treated as active schedule reservations; collision and malformed/missing timestamp cases fail closed, while a valid exact 72-hour gap passes."
+    },
+    {
+      "id": "ART-RENDER-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Prevent render retries from overwriting retained MP4, thumbnail, or per-job render manifest evidence.",
+      "status": "NOT_TESTED",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/bd6a4b75addcb2e14b31d2219ff82b5ef33a1406",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fc466b1192305464493313c7c9ef68ee69129289",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d465c03cb3b12ee68000192089165f326121e8eb",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3690ec82b52263cb2da2378f8aba9a5b19658a8f"
+      ],
+      "nextAction": "Wait for automation/security CI on exact source/test SHA 3690ec82b52263cb2da2378f8aba9a5b19658a8f; require the new safe-media-path regression and dashboard manifest-preservation regression to pass.",
+      "assessmentCommitSha": "3690ec82b52263cb2da2378f8aba9a5b19658a8f",
+      "acceptanceCriterion": "An existing regular file, symlink or retained per-job manifest is not overwritten; the request fails closed before a job lease is claimed and retained bytes remain unchanged."
     }
   ],
   "currentCheckpoint": {
-    "applicationCodeSha": "e9c555d1c70cc18d6fc6a919b3899ca78d67713f",
-    "testedSha": "47c839452fda99757a34dcb29865da9e967121af",
-    "checkpointPrHead": "a48c9c6945656cf69b0f39046cf73f1223dae9ea",
+    "applicationCodeSha": "d465c03cb3b12ee68000192089165f326121e8eb",
+    "testedSha": "3690ec82b52263cb2da2378f8aba9a5b19658a8f",
+    "checkpointPrHead": "3690ec82b52263cb2da2378f8aba9a5b19658a8f",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1658,
+    "aheadBy": 1691,
     "behindBy": 2,
-    "changedFiles": 162,
+    "changedFiles": 163,
     "prState": "open",
     "draft": true,
     "merged": false,
     "verdict": "CODE ACCEPTANCE PARTIAL / PRODUCTION BLOCKED",
     "ci": {
-      "automationSecurity": "PASS",
-      "nodeTests": 364,
-      "nodeFailures": 0,
-      "pythonTests": 16,
-      "npmAuditVulnerabilities": 0,
+      "automationSecurity": "IN_PROGRESS",
+      "nodeTests": null,
+      "nodeFailures": null,
+      "pythonTests": null,
+      "npmAuditVulnerabilities": null,
       "contentQuality": "PASS",
       "metadata": "PASS",
       "dashboardE2e": "PASS (13 Chromium journeys)",
-      "lockfile": "PASS",
-      "isolatedBaseline": "PASS; exact main/candidate run 40537255841 concluded success",
+      "lockfile": "PASS; npm ci reported 0 vulnerabilities in browser E2E",
+      "isolatedBaseline": "IN_PROGRESS",
       "productionReadiness": "BLOCKED",
-      "facebookDraftWorkflow": "SKIPPED",
-      "successfulShortParentBinding": "BLOCKED / NOT VERIFIED against native YouTube relationship",
+      "facebookDraftWorkflow": "PASS for local draft-package validation only; not live Meta integration",
+      "retainedRenderOutputProtection": "COMMITTED; exact-SHA unit suite pending",
+      "successfulShortParentBinding": "BLOCKED_EXTERNAL / NOT VERIFIED against native YouTube relationship",
       "realMultiSceneExportAndPlayback": "NOT RUN",
       "realMetaDraftIntegration": "NOT RUN"
     },
     "evidence": {
-      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537264912",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537264707",
-      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537265090",
-      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537264704",
-      "lockfile": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537255697",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537255841",
-      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537264786",
-      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537264915"
+      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972741",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972899",
+      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972743",
+      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972740",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972749",
+      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575972751",
+      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40575973011"
     },
     "implementationCommits": [
-      "e9c555d1c70cc18d6fc6a919b3899ca78d67713f",
-      "477f1ad0d86ff00aac7dcf1d89f455553a6d8a4b",
-      "47c839452fda99757a34dcb29865da9e967121af",
-      "99a4ecf31c21d444c0f9267175234e5e19715b83",
-      "11ce4d4b3ccd471d8d95b07e619017b78d5a6bb6",
-      "13fea8d69efb8680fe2619a183296e5bc3904f3d"
+      "bd6a4b75addcb2e14b31d2219ff82b5ef33a1406",
+      "fc466b1192305464493313c7c9ef68ee69129289",
+      "03699e4bc75e3a8db57bc25118383c74a787ca27",
+      "0cf1650320b30707ba2f5e65db6b4c49dd5cb9d4",
+      "d465c03cb3b12ee68000192089165f326121e8eb",
+      "3690ec82b52263cb2da2378f8aba9a5b19658a8f"
     ]
   }
 }
