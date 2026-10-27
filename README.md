@@ -474,3 +474,10 @@ Current Git snapshot before these documentation updates: PR HEAD `a912d3c724195f
 The readiness engine now enforces the 72-hour minimum for every approved cadence mode and removes the conflicting shorter-spacing weekly option. Source/test SHA: `47c839452fda99757a34dcb29865da9e967121af`. Exact-SHA checks: 364 Node tests and 16 Python tests passed, npm audit reported 0 vulnerabilities, 13 Chromium dashboard E2E tests passed, content quality and metadata passed, and the isolated main/candidate baseline passed. See [current release evidence](docs/CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
 
 **Release remains BLOCKED.** These tests do not establish genuine production media, human full-playback approval, verified SonicVhibez OAuth/history, an authorized private-upload receipt, a verified eligible native Short Related video, a real Meta draft-only run, owner-approved cadence, or completed operational recovery/deployment drills. Public/unattended YouTube publishing and Facebook live publishing remain disabled; Safari campaigns remain inactive. PR #1 remains open and draft.
+
+
+### Latest Short-to-parent acceptance checkpoint (27 October 2026)
+
+Private-only Short review can now preserve an explicit `BLOCKED_EXTERNAL` status for the native YouTube Related video feature; it does not claim that the association succeeded. Empty or vague blocker explanations are rejected. The regression test is included in source/test SHA `77921aca418b25bca0a9aa681281145b00c6d72f`. See [current release evidence](docs/CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
+
+**Release remains blocked and implementation is incomplete.** Browser E2E and isolated baseline were in progress at the latest recorded observation. Genuine approved media, full editorial/rights acceptance, verified YouTube identity/history and upload receipt, live Meta draft-only integration, owner-approved cadence, and full recovery/deployment acceptance are still not proven.
