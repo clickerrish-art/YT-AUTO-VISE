@@ -71,9 +71,10 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40311602123",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392231",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357460",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305138",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305138"
       ],
-      "nextAction": "13 Chromium journeys pass, including the Short-parent blocker workflow and restore-journal startup guard. Exhaustive per-control/API acceptance and successful eligible native association remain incomplete. Keep NOT_TESTED.",
+      "nextAction": "Static inventory at tested candidate b1989a764e54400cddb55158b998c5a375972321: 105 HTML button/input/select/textarea elements across 15 forms; 37 literal route handlers (9 GET, 28 POST); 13 Chromium journeys pass. This is not exhaustive acceptance: every control/route still needs authorized, unauthorized, malformed, duplicate/concurrent, dependency/persistence failure, restart and audit coverage. Keep NOT_TESTED.",
       "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
