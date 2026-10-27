@@ -49,7 +49,8 @@ export function validateShortParentRelationship(relationship, {
   childMediaSha256,
   childMetadataSha256,
   channelId,
-  allowPrivateParent = true
+  allowPrivateParent = true,
+  requireNativeRelatedVideoVerified = false
 } = {}) {
   const errors = [];
   if (!relationship || typeof relationship !== "object" || Array.isArray(relationship)) {
@@ -87,6 +88,7 @@ export function validateShortParentRelationship(relationship, {
   if (!SHA256.test(relationship.relationshipEvidenceSha256 ?? "")) errors.push("relationship evidence SHA-256 is required");
   else if (relationship.relationshipEvidenceSha256 !== shortParentEvidenceSha256(relationship)) errors.push("relationship evidence checksum does not match the exact relationship record");
   const native = relationship.nativeRelatedVideo;
+  if (requireNativeRelatedVideoVerified && native?.status !== "VERIFIED") errors.push("native YouTube Related video association must be independently verified before Short publication");
   if (!native || !["VERIFIED", "BLOCKED_EXTERNAL"].includes(native.status)) errors.push("native YouTube Related video status must be explicitly VERIFIED or BLOCKED_EXTERNAL");
   else if (relationship.parentPrivacyStatus === "private" && native.status !== "BLOCKED_EXTERNAL") errors.push("a private parent cannot be reported as natively Related-video eligible");
   else if (native.status === "VERIFIED" && (!native.verifiedBy || !Number.isFinite(Date.parse(native.verifiedAt ?? "")) || !SHA256.test(native.evidenceSha256 ?? ""))) errors.push("native Related video verification requires reviewer, timestamp and evidence hash");
