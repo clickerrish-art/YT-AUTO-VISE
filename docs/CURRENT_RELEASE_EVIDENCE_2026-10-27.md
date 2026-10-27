@@ -123,3 +123,36 @@ The main defect is **not closed**: `POST /api/jobs/produce` still refuses author
 Remaining blockers include a production-plan binding contract and renderer integration; real rights-cleared visual assets and narration-licence evidence; final video playback review; successful Short-parent binding/recovery with a real verified parent receipt; verified SonicVhibez OAuth/channel/history and uncertain-upload reconciliation; native Related video verification; a successful non-skipped Nature Frontiers Page draft integration; owner-approved feasible cadence; and exhaustive backup/restore, deployment, rollback and branch-history review.
 
 Safety unchanged: public/unattended YouTube publishing OFF; Facebook live publishing OFF; Safari campaigns inactive; Nature Frontiers prohibited as a YouTube target; approved Selar destination remains `https://selar.com/0u19v8u99l`. No upload, post, visibility change, campaign activation, merge or destructive Git operation occurred.
+
+
+## Addendum — production-plan integration checkpoint (27 October 2026)
+
+### Exact refs
+- Live PR HEAD at this checkpoint: `95a64fa88f668ba0f88cd2f4be394c9100c6ff53`.
+- Latest application-code SHA: `6224218660a11fd59353dbab96d9963e429649bb`; `95a64fa...` adds the corresponding browser acceptance assertion.
+- `main` HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Live compare: 1,599 commits ahead / 2 behind / 157 changed files. Divergent history review is still incomplete.
+- PR #1 remains OPEN, DRAFT and UNMERGED.
+
+### Implemented in this checkpoint
+- Added `scripts/production-plan.mjs` and structural/hash-bound validation tests for scene-level assets, provenance, rights-evidence hashes, format-specific scene counts, and explicit Short parent fields.
+- Added `POST /api/jobs/production-plan` and `POST /api/jobs/production-plan/review`. The APIs require exact approved script and narration revisions, verify on-disk narration/audio/transcript/caption/report hashes, verify scene asset and rights-evidence file hashes, persist plan review state, and revalidate evidence during human review.
+- Short plans must match the independently persisted, human-approved Short-parent relationship and verified public SonicVhibez receipt. A submitted plan cannot self-certify the parent.
+- Added dashboard plan submission and review controls with a persisted plan preview. The review is explicitly **plan-stage only**.
+- `POST /api/jobs/produce` remains fail-closed for authoring jobs. The per-job quality-evidence conversion, renderer integration, final media review and final-artifact approval are not implemented yet.
+
+### Exact-SHA test evidence
+- Automation/security PASS at `46186a494da5b512c57d0e6a04056b6c367754ef`: 345 Node tests passed, 0 failed; 16 Python safety tests passed; dependency audit and syntax/compile steps passed — [run 40487769081](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40487769081).
+- Dashboard browser E2E at the prior code/test checkpoint PASS: 12 Chromium tests — [run 40487769134](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40487769134). The additional production-plan-preview assertion at current tree `95a64fa...` was still running when this addendum was drafted; do not attribute that result to the older run.
+- Content quality PASS at `95a64fa...` — [run 40488246239](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488246239).
+- Metadata validation PASS at `95a64fa...` — [run 40488245972](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488245972).
+- Isolated main/candidate baseline PASS at `95a64fa...` — [run 40488246103](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488246103).
+- Production readiness BLOCKED at `95a64fa...` — [run 40488246069](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488246069).
+- Nature Frontiers Facebook daily draft SKIPPED at `95a64fa...` — [run 40488245959](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488245959); this is not a live integration pass.
+
+### Current Metricool account finding
+The connected Metricool account currently returns a Nature Frontiers brand (`7545638`) with a YouTube connection as well as Facebook and Instagram. The scheduled-post query found seven future posts (31 October–25 November 2026) with `autoPublish: true`, `draft: false`, and Instagram auto-publish enabled; one 27 October post is marked Facebook PUBLISHED. A pending/draft YouTube Short record on the Nature Frontiers brand has `youtubeData.privacy: public`. These are account observations, not repository test results. No Metricool post or setting was changed; the unsafe scheduled actions remain an external blocker pending explicit owner action.
+
+### Release decision
+**BLOCKED.** No real narration output or final production video has been accepted, no final full-playback realism review exists, no authorized private-upload receipt has been accepted, and the complete authoring-to-render workflow is still disconnected. Public/unattended YouTube publishing remains OFF, Facebook live publishing remains OFF in the application, Safari campaigns remain inactive, Nature Frontiers remains prohibited as a YouTube target, and the approved Selar URL remains `https://selar.com/0u19v8u99l`. No upload, post, visibility change, campaign activation, merge, or destructive Git operation was performed.
