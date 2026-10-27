@@ -34,12 +34,32 @@ const baseApproval = {
   shortParentRelationshipSha256: shortParentRelationshipSha256(relationship)
 };
 
-test("Short upload approval must bind the exact approved parent and child hashes", () => {
-  assert.equal(validateUploadApproval(baseApproval, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), true);
-  assert.throws(() => validateUploadApproval({ ...baseApproval, shortParentRelationship: null }, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), /parent relationship/);
-  assert.throws(() => validateUploadApproval({ ...baseApproval, shortParentRelationshipSha256: sha("8") }, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), /does not bind the exact Short-to-parent relationship/);
-  assert.throws(() => validateUploadApproval(baseApproval, { jobId: "child-job-001", artifactSha256: sha("9"), metadataVersion: sha("b"), channelId }), /childMediaSha256/);
-  assert.throws(() => validateUploadApproval(baseApproval, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId: "UC" + "Z".repeat(22) }), /configured SonicVhibez channel/);
+test("Short upload requires independently verified native Related video association and exact parent/child hashes", () => {
+  assert.throws(() => validateUploadApproval(baseApproval, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), /native YouTube Related video association must be independently verified/);
+  const eligibleRelationship = {
+    ...relationship,
+    parentPrivacyStatus: "unlisted",
+    nativeRelatedVideo: {
+      status: "VERIFIED",
+      verifiedBy: "operator-1",
+      verifiedAt: "2026-10-26T10:00:00.000Z",
+      evidenceSha256: sha("9"),
+      parentVideoId: relationship.parentRemoteVideoId,
+      channelId,
+      destinationUrl: relationship.parentCanonicalUrl
+    }
+  };
+  eligibleRelationship.relationshipEvidenceSha256 = shortParentEvidenceSha256(eligibleRelationship);
+  const validApproval = {
+    ...baseApproval,
+    shortParentRelationship: eligibleRelationship,
+    shortParentRelationshipSha256: shortParentRelationshipSha256(eligibleRelationship)
+  };
+  assert.equal(validateUploadApproval(validApproval, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), true);
+  assert.throws(() => validateUploadApproval({ ...validApproval, shortParentRelationship: null }, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), /parent relationship/);
+  assert.throws(() => validateUploadApproval({ ...validApproval, shortParentRelationshipSha256: sha("8") }, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), /does not bind the exact Short-to-parent relationship/);
+  assert.throws(() => validateUploadApproval(validApproval, { jobId: "child-job-001", artifactSha256: sha("9"), metadataVersion: sha("b"), channelId }), /childMediaSha256/);
+  assert.throws(() => validateUploadApproval(validApproval, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId: "UC" + "Z".repeat(22) }), /configured SonicVhibez channel/);
 });
 
 test("Short relationship cannot claim private parent native Related video eligibility", () => {
