@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { atomicWriteJson } from "./atomic-json-file.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sha256 = value => crypto.createHash("sha256").update(value).digest("hex");
@@ -127,14 +128,109 @@ function safeRestoreAnchor(target, options, destination) {
   return base;
 }
 
+const RESTORE_JOURNAL_NAME = ".restore-transaction.json";
+
+function restoreJournalPath(options) {
+  const base = path.resolve(options.rootDir);
+  const destination = path.join(base, RESTORE_JOURNAL_NAME);
+  assertNoSymlinkComponents(base, destination);
+  return destination;
+}
+
+function writeDurableBytes(destination, bytes) {
+  const temp = destination + "." + crypto.randomUUID() + ".rollback-tmp";
+  let fd;
+  try {
+    fd = fs.openSync(temp, "wx", 0o600);
+    fs.writeFileSync(fd, bytes);
+    fs.fsyncSync(fd);
+    fs.closeSync(fd);
+    fd = undefined;
+    fs.renameSync(temp, destination);
+  } catch (error) {
+    if (fd !== undefined) {
+      try { fs.closeSync(fd); } catch {}
+    }
+    try { fs.unlinkSync(temp); } catch {}
+    throw error;
+  }
+}
+
+/**
+ * Roll back a restore interrupted after its durable journal was written.
+ * Recovery only mutates destinations whose current bytes still match the
+ * journal's expected transaction output; unexpected operator changes stop
+ * recovery and leave the journal for manual reconciliation.
+ */
+function recoverInterruptedRestore(options) {
+  const journalPath = restoreJournalPath(options);
+  if (!fs.existsSync(journalPath)) return { recovered: false };
+  const journal = JSON.parse(readBackupFileNoSymlinks(journalPath));
+  if (journal.format !== "sonicvhibez-restore-transaction" || journal.version !== 1 || !Array.isArray(journal.entries)) {
+    throw new Error("Interrupted restore journal is invalid; manual recovery is required");
+  }
+
+  for (const entry of [...journal.entries].reverse()) {
+    if (!entry || !["RESTORE_MISSING", "REPLACE_STATE"].includes(entry.action) || !/^[a-f0-9]{64}$/.test(entry.newSha256 ?? "")) {
+      throw new Error("Interrupted restore journal entry is invalid; manual recovery is required");
+    }
+    const destination = targetPath(entry.target, options);
+    assertNoSymlinkComponents(safeRestoreAnchor(entry.target, options, destination), destination);
+    const tempName = entry.tempName;
+    if (typeof tempName !== "string" || path.basename(tempName) !== tempName ||
+        !tempName.startsWith(path.basename(destination) + ".") || !tempName.endsWith(".restore-tmp")) {
+      throw new Error("Interrupted restore journal contains an unsafe temporary path");
+    }
+    const temp = path.join(path.dirname(destination), tempName);
+    assertNoSymlinkComponents(safeRestoreAnchor(entry.target, options, destination), temp);
+
+    let exists = fs.existsSync(destination);
+    let currentSha = null;
+    if (exists) {
+      const stat = fs.lstatSync(destination);
+      if (stat.isSymbolicLink() || !stat.isFile()) throw new Error("Interrupted restore destination is not a regular file; manual recovery is required");
+      currentSha = sha256(fs.readFileSync(destination));
+    }
+
+    if (entry.action === "RESTORE_MISSING") {
+      if (exists && currentSha === entry.newSha256) fs.unlinkSync(destination);
+      else if (exists) throw new Error("Interrupted restore found unexpected destination contents; manual recovery is required: " + path.basename(destination));
+    } else {
+      if (!/^[a-f0-9]{64}$/.test(entry.originalSha256 ?? "") || typeof entry.originalBase64 !== "string") {
+        throw new Error("Interrupted replacement journal lacks original state; manual recovery is required");
+      }
+      const originalBytes = Buffer.from(entry.originalBase64, "base64");
+      if (sha256(originalBytes) !== entry.originalSha256) throw new Error("Interrupted replacement journal original-state checksum is invalid");
+      if (exists && currentSha === entry.newSha256) writeDurableBytes(destination, originalBytes);
+      else if (exists && currentSha === entry.originalSha256) { /* already rolled back */ }
+      else if (!exists) writeDurableBytes(destination, originalBytes);
+      else throw new Error("Interrupted restore found unexpected replacement contents; manual recovery is required: " + path.basename(destination));
+    }
+
+    try {
+      const tempStat = fs.lstatSync(temp);
+      if (tempStat.isSymbolicLink() || !tempStat.isFile()) throw new Error("Interrupted restore temporary path is not a regular file");
+      fs.unlinkSync(temp);
+    } catch (error) {
+      if (error?.code !== "ENOENT") throw error;
+    }
+  }
+
+  fs.unlinkSync(journalPath);
+  return { recovered: true, entries: journal.entries.length };
+}
+
 export async function restoreState({ backupPath, rootDir = root, stateDir = process.env.DASHBOARD_STATE_DIR ?? "state", uploadLogDir = process.env.UPLOAD_LOG_DIR ?? "run-logs", rightsDir = process.env.RIGHTS_EVIDENCE_DIR ?? "rights", confirm = process.env.RESTORE_CONFIRM, overwriteState = process.env.RESTORE_OVERWRITE === "YES", now = Date.now() } = {}) {
   if (confirm !== "YES") throw new Error("Set RESTORE_CONFIRM=YES to authorize this restore operation");
   if (!backupPath) throw new Error("Provide the backup JSON path");
+  const options = { rootDir, stateDir, uploadLogDir, rightsDir };
+  // If a previous process died during commit, reconcile its journal before
+  // starting another restore so the state never silently remains half-applied.
+  recoverInterruptedRestore(options);
   const backupFile = path.resolve(backupPath);
   const backup = JSON.parse(readBackupFileNoSymlinks(backupFile));
   if (backup.format !== "sonicvhibez-state-backup" || backup.version !== 1 || backup.includesSecrets !== false || !Array.isArray(backup.entries) || !Number.isFinite(Date.parse(backup.createdAt))) throw new Error("Backup format or schema is invalid");
   if (backup.entries.length === 0) throw new Error("Backup contains no entries; refusing a no-op restore");
-  const options = { rootDir, stateDir, uploadLogDir, rightsDir };
   const prepared = [];
   const seen = new Set();
   for (const entry of backup.entries) {
@@ -199,7 +295,27 @@ export async function restoreState({ backupPath, rootDir = root, stateDir = proc
       }
     }
 
-    // Commit only after every replacement file has been staged and flushed.
+    // Persist a recovery journal before the first destination mutation. It
+    // records the expected output hashes and original bytes for the only kind
+    // of existing state file this restore is allowed to replace.
+    const journalPath = restoreJournalPath(options);
+    atomicWriteJson(journalPath, {
+      format: "sonicvhibez-restore-transaction",
+      version: 1,
+      createdAt: new Date().toISOString(),
+      entries: staged.map(item => ({
+        target: item.target,
+        action: item.action,
+        newSha256: sha256(item.bytes),
+        tempName: path.basename(item.temp),
+        ...(item.action === "REPLACE_STATE" ? {
+          originalSha256: sha256(item.originalBytes),
+          originalBase64: item.originalBytes.toString("base64")
+        } : {})
+      }))
+    });
+
+    // Commit only after every replacement file is staged, flushed and journaled.
     for (const item of staged) {
       // Recheck the destination immediately before mutation to detect ordinary
       // concurrent replacement. This path-based check cannot eliminate every
@@ -220,46 +336,29 @@ export async function restoreState({ backupPath, rootDir = root, stateDir = proc
       results.push({ target: item.target, action: item.action, sha256: sha256(item.bytes) });
     }
   } catch (error) {
-    const rollbackErrors = [];
-    for (const item of committed.reverse()) {
-      try {
-        if (item.action === "RESTORE_MISSING") {
-          // Only remove the file if it is still exactly the bytes this restore
-          // committed; preserve any concurrent operator change.
-          if (fs.existsSync(item.destination)) {
-            const stat = fs.lstatSync(item.destination);
-            if (stat.isSymbolicLink() || !stat.isFile() || sha256(fs.readFileSync(item.destination)) !== sha256(item.bytes)) {
-              throw new Error("Committed restore file changed before rollback: " + path.basename(item.destination));
-            }
-            fs.unlinkSync(item.destination);
-          }
-        } else if (item.action === "REPLACE_STATE") {
-          const rollbackTemp = item.destination + "." + crypto.randomUUID() + ".rollback-tmp";
-          let fd;
-          try {
-            fd = fs.openSync(rollbackTemp, "wx", 0o600);
-            fs.writeFileSync(fd, item.originalBytes);
-            fs.fsyncSync(fd);
-          } finally {
-            if (fd !== undefined) fs.closeSync(fd);
-          }
-          fs.renameSync(rollbackTemp, item.destination);
-        }
-      } catch (rollbackError) {
-        rollbackErrors.push(path.basename(item.destination) + ": " + rollbackError.message);
-      }
+    let recoveryError = null;
+    try {
+      recoverInterruptedRestore(options);
+    } catch (caught) {
+      recoveryError = caught;
+    }
+    if (recoveryError) {
+      // Keep the durable journal and any remaining staged files so the next
+      // confirmed restore invocation can retry recovery safely.
+      throw new Error("Restore failed and recovery journal was retained for operator recovery: " + recoveryError.message, { cause: error });
     }
     for (const item of staged) {
       try { fs.unlinkSync(item.temp); } catch (cleanupError) {
-        if (cleanupError?.code !== "ENOENT") rollbackErrors.push(path.basename(item.temp) + " cleanup: " + cleanupError.message);
+        if (cleanupError?.code !== "ENOENT") {
+          throw new Error("Restore rolled back but temporary-file cleanup failed: " + cleanupError.message, { cause: error });
+        }
       }
-    }
-    if (rollbackErrors.length) {
-      throw new Error("Restore failed and rollback needs operator recovery: " + rollbackErrors.join("; "), { cause: error });
     }
     throw new Error("Restore failed; all committed destination changes were rolled back: " + error.message, { cause: error });
   }
 
+  const journalPath = restoreJournalPath(options);
+  fs.unlinkSync(journalPath);
   return { status: "RESTORE_COMPLETED", backupCreatedAt: backup.createdAt, restored: results.filter(x => x.action !== "UNCHANGED").length, unchanged: results.filter(x => x.action === "UNCHANGED").length, entries: results };
 }
 
