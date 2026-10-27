@@ -134,7 +134,7 @@ test("restore reinstates the original dashboard state if a later commit fails", 
     assert.equal(fs.readFileSync(destinationState).equals(originalBytes), true,
       "the exact pre-restore dashboard state must be restored byte-for-byte");
     assert.equal(fs.existsSync(failingDestination), false);
-    assert.equal(fs.existsSync(path.join(destination.root, ".restore-transaction.json")), false);
+    assert.equal(fs.existsSync(path.join(destination.stateDir, ".restore-transaction.json")), false);
   } finally {
     fs.renameSync = originalRename;
     fs.rmSync(source.root, { recursive: true, force: true });
@@ -155,7 +155,7 @@ test("restore recovers a committed file from an interrupted transaction journal 
 
     const destinationState = path.join(destination.stateDir, "dashboard-state.json");
     fs.writeFileSync(destinationState, Buffer.from(stateEntry.contentBase64, "base64"), { mode: 0o600 });
-    const journalPath = path.join(destination.root, ".restore-transaction.json");
+    const journalPath = path.join(destination.stateDir, ".restore-transaction.json");
     fs.writeFileSync(journalPath, JSON.stringify({
       format: "sonicvhibez-restore-transaction",
       version: 1,
