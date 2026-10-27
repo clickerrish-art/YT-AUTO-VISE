@@ -601,3 +601,14 @@ Exact code/test references:
 - Automation/security PASS [run 40487769081](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40487769081); content quality PASS [run 40488246239](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488246239); metadata PASS [run 40488245972](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488245972); isolated baseline PASS [run 40488246103](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488246103); readiness BLOCKED [run 40488246069](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488246069); Facebook daily draft SKIPPED [run 40488245959](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488245959).
 
 These code/test passes do not override any blocked production or external integration gate. Do not remove the /api/jobs/produce refusal until the approved per-job renderer and final-media review path is complete.
+
+
+## Follow-up gate status — 27 October 2026
+
+- [x] Enforce 72 elapsed hours as a hard minimum in readiness for every cadence mode.
+- [x] Remove the shorter-spacing weekly target from supported owner approval options.
+- [x] Add regression coverage and pass automation/security (364 Node tests, 16 Python tests, npm audit 0 vulnerabilities), content quality, metadata and 13 browser E2E tests on source/test SHA `47c839452fda99757a34dcb29865da9e967121af`.
+- [ ] Isolated main/candidate baseline: not yet accepted; see the linked current release evidence for the actual workflow status.
+- [ ] Production readiness: blocked until external identity/history, genuine production media, human approval, native Related video eligibility, Meta draft integration, owner cadence approval and recovery/deployment drills are proven.
+
+Release decision remains **BLOCKED**.
