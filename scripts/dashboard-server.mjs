@@ -1301,11 +1301,13 @@ const server = http.createServer(async (req, res) => {
         if (index < 0) return json(res, 404, { error: "Content job disappeared during authoring" });
         const current = state.jobs[index];
         if (current.authoring?.fingerprint !== fingerprint || current.authoring?.status !== "GENERATING") return json(res, 409, { error: "Authoring state changed while generation was running; generated output was not persisted", publishable: false });
+        const scriptSha256 = canonicalAuthoringScriptSha256(generated?.script);
         current.authoring = {
           ...current.authoring,
           status: "AWAITING_HUMAN_EDITORIAL_REVIEW",
           completedAt: new Date().toISOString(),
           result: generated,
+          scriptSha256,
           publishable: false,
           gates: { factualVerification: "PENDING", originalityReview: "PENDING", rightsReview: "PENDING", humanEditorialReview: "PENDING", measuredNarrationDuration: "NOT_TESTED", captions: "NOT_CREATED", scenePlan: "GENERATED_NOT_RENDERED" }
         };
