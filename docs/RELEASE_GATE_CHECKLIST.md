@@ -1,3 +1,25 @@
+## Latest verified implementation and workflow checkpoint — 27 October 2026, 21:25 UTC
+
+**Exact tested candidate SHA:** `9310d961311871c3f6e9d2b1271735129fe45d31`. **Application-code fix:** `ebd4f334683237878bac742e052767faabb4f632`. **CI fixes:** `1702513c9d32e22b99dd218054ce693b246402c7` and `9310d961311871c3f6e9d2b1271735129fe45d31`.
+
+- **Automation/security PASS:** [run 40586342797](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342797): 373 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; normal lifecycle-script install, npm audit 0 vulnerabilities, FFmpeg renderer integration, JS syntax and Python compilation passed.
+- **Content quality PASS:** [run 40586342818](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342818): 373 Node tests, 0 failures, 0 skips. **Metadata validation PASS:** [run 40586342777](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342777): 373 Node tests, 0 failures, 0 skips. Both workflows now install FFmpeg/ffprobe before testing; previously each had one FFmpeg-dependent skip.
+- **Dashboard browser E2E PASS:** [run 40586342774](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342774), 13 Chromium journeys.
+- **Isolated main/candidate baseline PASS:** [run 40586342909](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342909); [retained comparison artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342909/artifacts/12772391880).
+- **Facebook workflow PASS for local deterministic draft validation only:** [run 40586342799](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342799); remote `create-draft-package` was skipped, so no live Meta integration is accepted.
+- **Production readiness BLOCKED:** [run 40586342805](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586342805), fail-closed with 13 genuine production prerequisites.
+
+### Implementation fixes
+
+1. Short-to-parent relationship approval and native-association verification timestamps now require strict calendar-valid ISO timestamps with explicit timezones; regression cases reject timezone-free timestamps, impossible dates and invalid UTC offsets.
+2. Content-quality and metadata workflows install FFmpeg and ffprobe rather than silently skipping the real renderer integration test.
+
+**Verdict: automated code and CI acceptance pass on the exact tested candidate SHA; implementation is partial and production acceptance remains blocked.** Genuine media/rights, human approvals, verified channel identity and full remote history, secure runtime credentials, owner-approved cadence, live Meta draft creation and full recovery/deployment drills remain unproven.
+
+No upload, post, campaign activation, visibility change, merge, main edit or destructive Git operation occurred. PR #1 remains open, draft and unmerged.
+
+---
+
 ## Latest verified implementation checkpoint — 27 October 2026, 21:19 UTC
 
 **Exact source/test SHA:** `9abc4a46ed3ea6e3368ad7af5f24c587baee9411`. **Application code commit:** `ebd4f334683237878bac742e052767faabb4f632`. The new timestamp-hardening regression test passed on the exact source/test SHA.
