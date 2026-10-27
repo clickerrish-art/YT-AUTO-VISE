@@ -1,3 +1,26 @@
+## Latest verified implementation and CI checkpoint — 27 October 2026, 21:28 UTC
+
+**Exact tested candidate SHA:** `466605be027f531d1c6143a6d1f42e1bf4c2ffcc`. The candidate includes strict Short-parent approval timestamp validation, FFmpeg installation in the content-quality and metadata workflows, and explicit zero-skip assertions in the automation, content-quality and metadata workflows.
+
+- **Automation/security PASS:** [run 40586772617](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772617): 373 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; normal lifecycle-script install, npm audit 0 vulnerabilities, FFmpeg renderer integration, JS syntax and Python compilation passed.
+- **Content quality PASS:** [run 40586772612](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772612): 373 tests, 0 failures, 0 skips. **Metadata validation PASS:** [run 40586772614](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772614): 373 tests, 0 failures, 0 skips. Both jobs install FFmpeg/ffprobe and fail if the Node test summary does not explicitly report zero skips.
+- **Dashboard browser E2E PASS:** [run 40586772627](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772627), 13 Chromium journeys.
+- **Isolated main/candidate baseline PASS:** [run 40586772619](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772619); [retained baseline artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772619/artifacts/12772562360).
+- **Facebook workflow PASS for local deterministic draft validation only:** [run 40586772611](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772611); external `create-draft-package` remains skipped, so no live Meta integration is accepted.
+- **Production readiness BLOCKED:** [run 40586772604](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40586772604), fail-closed with 13 genuine production prerequisites.
+
+### Latest implementation fixes
+
+1. Parent relationship and native association approval timestamps must be strict, calendar-valid ISO timestamps with explicit timezones. Regression tests reject timezone-free values, impossible dates and invalid UTC offsets.
+2. FFmpeg is installed in content-quality and metadata CI jobs, removing the previous renderer integration skip.
+3. CI explicitly fails if the automation, content-quality or metadata Node test summary does not report zero skipped tests.
+
+**Verdict: automated code and CI acceptance pass on this exact candidate SHA; implementation remains partial and production acceptance is blocked.** Genuine rights-cleared media, human approvals, independently verified SonicVhibez identity and complete remote history, secure runtime credentials, owner-approved cadence, live Meta draft creation and complete operational recovery/deployment drills remain unproven.
+
+No upload, post, campaign activation, visibility change, merge, main edit or destructive Git operation occurred. PR #1 remains open, draft and unmerged.
+
+---
+
 ## Latest verified implementation and workflow checkpoint — 27 October 2026, 21:25 UTC
 
 **Exact tested candidate SHA:** `9310d961311871c3f6e9d2b1271735129fe45d31`. **Application-code fix:** `ebd4f334683237878bac742e052767faabb4f632`. **CI fixes:** `1702513c9d32e22b99dd218054ce693b246402c7` and `9310d961311871c3f6e9d2b1271735129fe45d31`.
