@@ -313,3 +313,35 @@ No real production media, independent human full-playback approval, authenticate
 ### Baseline completion addendum — 27 October 2026
 
 The isolated main/candidate baseline workflows completed after the checkpoint above and are now **PASS** for tested source/test SHA `47c839452fda99757a34dcb29865da9e967121af`: [run 40537255841](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537255841) and [run 40537264675](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40537264675). The earlier `IN PROGRESS at this checkpoint` line accurately describes the earlier observation, but the final result is PASS. Production readiness remains BLOCKED and Facebook draft remains SKIPPED.
+
+
+---
+
+## Follow-up implementation checkpoint — private-only Short review and truthful Related-video blocker (27 October 2026)
+
+**Application-code commit:** `2186822bba83ecfb299e40ab8d10376c009f8711`  
+**Exact source/test SHA:** `77921aca418b25bca0a9aa681281145b00c6d72f`  
+**Branch/PR head at this checkpoint:** `77921aca418b25bca0a9aa681281145b00c6d72f`
+
+### Changes
+
+- A private-only Short review upload may carry an explicit `BLOCKED_EXTERNAL` native Related-video status when its parent is private. It does not claim native association success, permit public publishing, or waive the public-release gate.
+- Relationship validation now rejects an empty or vague external-blocker explanation (requires 8–500 characters).
+- Regression coverage checks private-only approval, exact relationship binding, private-parent eligibility, and rejection of empty blocker evidence.
+- The historical `test/restore-facebook-draft-history.test.mjs` remains present on the branch; its recovery coverage was not removed or rewritten.
+
+### CI status observed for exact source/test SHA `77921aca418b25bca0a9aa681281145b00c6d72f`
+
+- Automation/security **PASS** — [run 40542854519](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40542854519).
+- Content quality **PASS** — [run 40542854671](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40542854671).
+- Metadata validation **PASS** — [run 40542854427](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40542854427).
+- Dashboard browser E2E **IN PROGRESS at this observation** — [run 40542854283](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40542854283). Do not treat as a pass until its final conclusion is checked.
+- Isolated main/candidate baseline **IN PROGRESS at this observation** — [run 40542854437](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40542854437). Do not treat as a pass until its final conclusion is checked.
+- Production readiness **BLOCKED / fail-closed** — [run 40542854087](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40542854087).
+- Nature Frontiers Facebook daily draft **SKIPPED** — [run 40542854114](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40542854114); this is not live Meta integration evidence.
+
+The separate application-code commit `2186822bba83ecfb299e40ab8d10376c009f8711` had dashboard browser E2E **PASS** in [run 40542804855](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40542804855), but this older run does not replace final checks for the source/test SHA above.
+
+### Release decision
+
+**IMPLEMENTATION INCOMPLETE / PRODUCTION BLOCKED.** The focused Short-review defect is covered, but the broader audit still identifies missing lifecycle integration for authoring, no verified genuine multi-scene production render and no human-approved production MP4. Real SonicVhibez OAuth/history, an authorized private-upload receipt, native Related-video verification, live Meta draft-only integration, owner-approved feasible cadence, and complete recovery/deployment drills remain unproven. Public/unattended YouTube publishing and Facebook live publishing remain disabled; Safari campaigns remain inactive; Nature Frontiers remains prohibited as a YouTube target. PR #1 remains open, draft and unmerged. No live account mutation or publication was performed.
