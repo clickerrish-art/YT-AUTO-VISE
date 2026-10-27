@@ -73,20 +73,21 @@ test("restore rolls back earlier file commits when a later destination rename fa
     const backupPath = path.join(source.root, "backup.json");
     await backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir, rightsDir: source.rightsDir, outputPath: backupPath });
 
-    fs.renameSync = function (...args) {
+    const failingDestination = path.join(destination.stateDir, "facebook-recovery-ledger.jsonl");
+    fs.renameSync = function (sourcePath, targetPath, ...rest) {
       renameCalls += 1;
-      if (renameCalls === 2) {
+      if (path.resolve(targetPath) === failingDestination) {
         const error = new Error("injected destination rename failure");
         error.code = "EIO";
         throw error;
       }
-      return originalRename.apply(this, args);
+      return originalRename.call(this, sourcePath, targetPath, ...rest);
     };
     await assert.rejects(
       restoreState({ backupPath, rootDir: destination.root, stateDir: destination.stateDir, uploadLogDir: destination.logDir, rightsDir: destination.rightsDir, confirm: "YES" }),
       /all committed destination changes were rolled back/
     );
-    assert.equal(renameCalls, 2, "the injected failure must occur after one destination has committed");
+    assert.equal(renameCalls, 3, "the journal and first destination must commit before the second destination fails");
     assert.equal(fs.existsSync(path.join(destination.stateDir, "dashboard-state.json")), false,
       "a prior committed destination must be removed when the transaction aborts");
     assert.equal(fs.existsSync(path.join(destination.stateDir, "facebook-recovery-ledger.jsonl")), false);
