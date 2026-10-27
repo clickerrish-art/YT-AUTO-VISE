@@ -97,7 +97,8 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
 });
 test("dashboard restart moves interrupted Facebook submissions to reconciliation without losing known remote IDs", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-recovery-"));
-  const port = 28000 + Math.floor(Math.random() * 10000);
+  // Use an OS-assigned ephemeral port so parallel tests cannot hit another server.
+  const port = 0;
   const token = "facebook-recovery-token-" + "r".repeat(32);
   const statePath = path.join(stateDir, "dashboard-state.json");
   fs.writeFileSync(statePath, JSON.stringify({
@@ -117,11 +118,15 @@ test("dashboard restart moves interrupted Facebook submissions to reconciliation
   child.stdout.on("data", chunk => { logs += chunk.toString(); });
   child.stderr.on("data", chunk => { logs += chunk.toString(); });
   t.after(() => { child.kill("SIGTERM"); fs.rmSync(stateDir, { recursive: true, force: true }); });
-  const base = `http://127.0.0.1:${port}`;
+  let base = null;
   let ready = false;
   for (let i = 0; i < 80; i++) {
     if (child.exitCode !== null) break;
-    try { const response = await fetch(base + "/healthz"); if (response.ok) { ready = true; break; } } catch {}
+    const started = logs.match(/"event":"dashboard_started"[^\\n]*"port":(\\d+)/);
+    if (started) {
+      base = `http://127.0.0.1:${started[1]}`;
+      try { const response = await fetch(base + "/healthz"); if (response.ok) { ready = true; break; } } catch {}
+    }
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   assert.equal(ready, true, "dashboard did not start: " + logs);
