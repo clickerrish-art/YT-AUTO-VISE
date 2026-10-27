@@ -1,3 +1,11 @@
+## Latest restore transaction and startup guard — `b1989a764e54400cddb55158b998c5a375972321`
+
+Restore transaction state is now journaled in the configured application state directory. On a later commit failure the routine rolls back earlier committed destinations, including restoring the exact original dashboard-state bytes. After a process interruption, the next confirmed restore invocation reconciles the journal and stops for operator inspection; the dashboard itself refuses startup while the journal remains. The exact candidate passed all four deterministic restore/startup regression tests in [automation run 40591305237](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237), with 378 Node tests and zero skips.
+
+This closes the deterministic restore transaction cases only. Full filesystem/power-loss drills, cross-process remote-side-effect recovery and isolated deployment/rollback remain `NOT_TESTED`. All 13 production blockers below remain in force.
+
+---
+
 ## Latest restore-safety implementation — `31b5f56415b51280baa11418c56ef3c2b1280006`
 
 The state restore implementation now stages all replacement files, persists a recovery journal before the first destination mutation, rolls back a previously committed destination if a later commit fails, and reconciles interrupted journal state on the next confirmed invocation. The exact candidate passed the injected second-rename failure and simulated restart-recovery tests in [automation run 40590357469](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469), with 376 Node tests and zero skips.
