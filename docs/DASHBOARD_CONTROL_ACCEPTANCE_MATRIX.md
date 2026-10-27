@@ -1,3 +1,13 @@
+## Static dashboard/API inventory at tested candidate `b1989a764e54400cddb55158b998c5a375972321`
+
+The current dashboard source contains **105 HTML button/input/select/textarea elements** (21 buttons, 43 inputs, 26 selects, 15 textareas) across 15 forms. A literal route scan of `scripts/dashboard-server.mjs` identifies **37 route handlers: 9 GET and 28 POST**, including health/readiness, state, campaign, Facebook, content jobs, review, rights, narration, leases, uploads and Short-parent workflow.
+
+This is an inventory count, **not acceptance coverage**. The exact candidate's browser suite passed 13 Chromium journeys. Exhaustive control-by-control tests for authorized success, unauthorized access, malformed input, duplicate/concurrent requests, dependency/persistence failure, restart durability and audit results are not complete for every control/route. A route-by-route tested/pass/failed/untested matrix still needs to be completed; keep DASH-001 `NOT_TESTED`.
+
+The restore journal startup guard is covered by the automation Node suite, while the 13 browser journeys include the Short-parent blocker state—not a successful native Related-video association.
+
+---
+
 ## Latest candidate `b1989a764e54400cddb55158b998c5a375972321`: restore journal and startup fail-closed guard
 
 - [Automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305355) and [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305087) passed 378 Node tests each, with 0 failures and 0 skips.
