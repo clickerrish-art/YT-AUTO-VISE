@@ -99,6 +99,50 @@ test("restore rolls back earlier file commits when a later destination rename fa
   }
 });
 
+test("restore reinstates the original dashboard state if a later commit fails", async () => {
+  const source = fixture();
+  const destination = fixture();
+  const originalRename = fs.renameSync;
+  let renameCalls = 0;
+  try {
+    const destinationState = path.join(destination.stateDir, "dashboard-state.json");
+    const originalState = JSON.parse(fs.readFileSync(destinationState, "utf8"));
+    originalState.audit = [{ action: "PRESERVE_ORIGINAL_STATE", actor: "destination-before-restore" }];
+    fs.writeFileSync(destinationState, JSON.stringify(originalState, null, 2) + "\n", { mode: 0o600 });
+    const originalBytes = fs.readFileSync(destinationState);
+
+    fs.rmSync(path.join(destination.stateDir, "facebook-recovery-ledger.jsonl"), { force: true });
+    fs.rmSync(destination.logDir, { recursive: true, force: true });
+    fs.rmSync(destination.rightsDir, { recursive: true, force: true });
+    const backupPath = path.join(source.root, "backup.json");
+    await backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir, rightsDir: source.rightsDir, outputPath: backupPath });
+
+    const failingDestination = path.join(destination.stateDir, "facebook-recovery-ledger.jsonl");
+    fs.renameSync = function (sourcePath, targetPath, ...rest) {
+      renameCalls += 1;
+      if (path.resolve(targetPath) === failingDestination) {
+        const error = new Error("injected destination rename failure");
+        error.code = "EIO";
+        throw error;
+      }
+      return originalRename.call(this, sourcePath, targetPath, ...rest);
+    };
+    await assert.rejects(
+      restoreState({ backupPath, rootDir: destination.root, stateDir: destination.stateDir, uploadLogDir: destination.logDir, rightsDir: destination.rightsDir, confirm: "YES", overwriteState: true }),
+      /all committed destination changes were rolled back/
+    );
+    assert.equal(fs.readFileSync(destinationState).equals(originalBytes), true,
+      "the exact pre-restore dashboard state must be restored byte-for-byte");
+    assert.equal(fs.existsSync(failingDestination), false);
+    assert.equal(fs.existsSync(path.join(destination.root, ".restore-transaction.json")), false);
+  } finally {
+    fs.renameSync = originalRename;
+    fs.rmSync(source.root, { recursive: true, force: true });
+    fs.rmSync(destination.root, { recursive: true, force: true });
+  }
+  assert.ok(renameCalls >= 3, "failure must occur after the journal and dashboard-state replacement commit");
+});
+
 test("restore recovers a committed file from an interrupted transaction journal and requires explicit retry", async () => {
   const source = fixture();
   const destination = fixture();
