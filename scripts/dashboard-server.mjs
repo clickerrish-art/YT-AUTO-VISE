@@ -1090,6 +1090,7 @@ const server = http.createServer(async (req, res) => {
         if (!script || typeof script !== "object" || Array.isArray(script)) return json(res, 409, { error: "Structured generated script is missing" });
         const actualScriptSha256 = canonicalAuthoringScriptSha256(script);
         if (body.scriptSha256 !== actualScriptSha256) return json(res, 409, { error: "Script changed after review was prepared; refresh the draft and review its current SHA-256" });
+        job.authoring.scriptSha256 = actualScriptSha256;
         const reviewedAt = new Date().toISOString();
         const decision = {
           decision: body.decision,
