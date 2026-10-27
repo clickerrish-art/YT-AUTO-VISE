@@ -247,8 +247,8 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   fs.mkdirSync(narrationFixtureDir, { recursive: true });
   const digest = value => crypto.createHash("sha256").update(value).digest("hex");
   const fixtureAudio = Buffer.from("test fixture bytes only; not playable production audio");
-  const fixtureTranscript = String(stageJob.authoring.result.script.narration).replace(/\\s+/gu, " ").trim() + "\\n";
-  const fixtureCaptions = "1\\n00:00:00,000 --> 00:00:55,000\\nNarration caption fixture.\\n";
+  const fixtureTranscript = String(stageJob.authoring.result.script.narration).replace(/\s+/gu, " ").trim() + "\n";
+  const fixtureCaptions = "1\n00:00:00,000 --> 00:00:55,000\nNarration caption fixture.\n";
   const writeArtifact = (name, bytes) => {
     fs.writeFileSync(path.join(narrationFixtureDir, name), bytes);
     return { path: path.relative(process.cwd(), path.join(narrationFixtureDir, name)).split(path.sep).join("/"), sha256: digest(bytes) };
@@ -258,13 +258,13 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const captionsArtifact = writeArtifact("captions.srt", fixtureCaptions);
   const fixtureReport = {
     format: stageJob.contentType, scriptSha256: reauthScriptSha256,
-    wordCount: fixtureTranscript.trim().split(/\\s+/u).length, durationSeconds: 55,
+    wordCount: fixtureTranscript.trim().split(/\s+/u).length, durationSeconds: 55,
     wordBoundaryCount: 5, captionTiming: "TTS_WORD_BOUNDARIES",
     audioSha256: audioArtifact.sha256, transcriptSha256: transcriptArtifact.sha256,
     captionsSha256: captionsArtifact.sha256, humanReviewRequired: true,
     rightsStatus: "NOT_VERIFIED", status: "DRAFT_REVIEW_REQUIRED", publishingEnabled: false
   };
-  const reportBytes = Buffer.from(JSON.stringify(fixtureReport) + "\\n");
+  const reportBytes = Buffer.from(JSON.stringify(fixtureReport) + "\n");
   const reportArtifact = writeArtifact("narration-report.json", reportBytes);
   stageJob.authoring.narrationStage = {
     status: "DRAFT_REVIEW_REQUIRED", scriptSha256: reauthScriptSha256,
