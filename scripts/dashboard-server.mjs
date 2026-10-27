@@ -13,6 +13,7 @@ import { generateScript } from "./generate-script.mjs";
 import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence, validateConfiguredSonicVhibezChannel, validateParentReceiptTitle, parseShortMetadataJson } from "./short-parent-relationship.mjs";
 import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
+import { canonicalAuthoringScriptSha256, runAuthoringNarrationStage } from "./authoring-production-pipeline.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
 import { validatePublicationSlot, localDateTimeToIso } from "./schedule-policy.mjs";
 import {
@@ -1067,6 +1068,165 @@ const server = http.createServer(async (req, res) => {
         saveState(state);
         return json(res, 201, { job, reused: false, publishingEnabled: false });
       } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs/authoring/review") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || !["APPROVE", "REJECT"].includes(body.decision) ||
+          typeof body.scriptSha256 !== "string" || !/^[a-f0-9]{64}$/.test(body.scriptSha256) ||
+          typeof body.reason !== "string" || body.reason.trim().length < 5 || body.reason.length > 1000) {
+        return json(res, 400, { error: "jobId, script SHA-256, APPROVE/REJECT decision and a 5–1000 character review reason are required" });
+      }
+      const actor = operatorId;
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const job = state.jobs[index];
+        if (job.state !== "QUEUED" || !job.authoring || job.authoring.status !== "AWAITING_HUMAN_EDITORIAL_REVIEW") {
+          return json(res, 409, { error: "Only a queued job with a persisted authoring draft can receive script review" });
+        }
+        const script = job.authoring.result?.script;
+        if (!script || typeof script !== "object" || Array.isArray(script)) return json(res, 409, { error: "Structured generated script is missing" });
+        const actualScriptSha256 = canonicalAuthoringScriptSha256(script);
+        if (body.scriptSha256 !== actualScriptSha256) return json(res, 409, { error: "Script changed after review was prepared; refresh the draft and review its current SHA-256" });
+        const reviewedAt = new Date().toISOString();
+        const decision = {
+          decision: body.decision,
+          scriptSha256: actualScriptSha256,
+          reviewer: actor,
+          reviewedAt,
+          reason: body.reason.trim(),
+          approvalSha256: crypto.createHash("sha256").update(JSON.stringify({
+            jobId: job.id, decision: body.decision, scriptSha256: actualScriptSha256,
+            reviewer: actor, reviewedAt, reason: body.reason.trim()
+          })).digest("hex")
+        };
+        if (body.decision === "APPROVE") {
+          job.authoring.scriptApproval = decision;
+          job.authoring.scriptReview = decision;
+        } else {
+          delete job.authoring.scriptApproval;
+          job.authoring.scriptReview = decision;
+          job.authoring.narrationStage = undefined;
+        }
+        state.jobs[index] = job;
+        state.audit.push({
+          id: crypto.randomUUID(),
+          action: body.decision === "APPROVE" ? "SCRIPT_REVISION_APPROVED_FOR_NARRATION" : "SCRIPT_REVISION_REJECTED",
+          jobId: job.id, scriptSha256: actualScriptSha256, reviewer: actor, at: reviewedAt,
+          reason: body.reason.trim(), approvalSha256: decision.approvalSha256
+        });
+        saveState(state);
+        return json(res, 200, {
+          job, scriptReview: decision, publishable: false, publishingEnabled: false,
+          nextAction: body.decision === "APPROVE"
+            ? "Generate narration as a draft, then separately review narration and provide approved visual assets, rights evidence and a scene plan."
+            : "Revise the script brief and generate a new draft; rejected script approval cannot be reused."
+        });
+      } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs/narration") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || typeof body.scriptSha256 !== "string" || !/^[a-f0-9]{64}$/.test(body.scriptSha256)) {
+        return json(res, 400, { error: "jobId and the exact approved script SHA-256 are required" });
+      }
+      const release = await acquireStateLock();
+      let snapshot;
+      let requestedAt;
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const job = state.jobs[index];
+        if (job.state !== "QUEUED") return json(res, 409, { error: "Narration draft can only be generated for a queued content job" });
+        const script = job.authoring?.result?.script;
+        if (!script || canonicalAuthoringScriptSha256(script) !== body.scriptSha256) return json(res, 409, { error: "The current structured script does not match the submitted SHA-256" });
+        if (job.authoring?.scriptApproval?.decision !== "APPROVE" || job.authoring.scriptApproval.scriptSha256 !== body.scriptSha256) {
+          return json(res, 409, { error: "Human script approval bound to this exact revision is required before narration generation" });
+        }
+        const prior = job.authoring.narrationStage;
+        if (prior?.status === "GENERATING") {
+          const ageMs = Date.now() - Date.parse(prior.requestedAt);
+          if (Number.isFinite(ageMs) && ageMs > 10 * 60_000) {
+            job.authoring.narrationStage = { ...prior, status: "RECOVERY_REQUIRED", recoveryRequired: true, recoveryDetectedAt: new Date().toISOString() };
+            state.jobs[index] = job;
+            state.audit.push({ id: crypto.randomUUID(), action: "NARRATION_RECOVERY_REQUIRED", jobId: job.id, at: new Date().toISOString(), actor: operatorId, reason: "Prior narration generation exceeded recovery threshold; no automatic retry was performed" });
+            saveState(state);
+            return json(res, 409, { error: "Prior narration attempt may have been interrupted; reconcile its job-specific artifacts before retrying", recoveryRequired: true });
+          }
+          return json(res, 409, { error: "Narration generation is already in progress; duplicate work is blocked" });
+        }
+        if (prior?.status === "RECOVERY_REQUIRED") return json(res, 409, { error: "Narration is RECOVERY_REQUIRED; reconcile existing artifacts before retrying", recoveryRequired: true });
+        if (prior?.status === "DRAFT_REVIEW_REQUIRED" && prior.scriptSha256 === body.scriptSha256) {
+          return json(res, 200, { job, narrationStage: prior, reused: true, publishable: false, publishingEnabled: false });
+        }
+        requestedAt = new Date().toISOString();
+        job.authoring.narrationStage = {
+          status: "GENERATING", scriptSha256: body.scriptSha256, requestedAt,
+          requestedBy: operatorId, attemptId: crypto.randomUUID(), publishable: false
+        };
+        state.jobs[index] = job;
+        state.audit.push({ id: crypto.randomUUID(), action: "AUTHORING_NARRATION_STARTED", jobId: job.id, scriptSha256: body.scriptSha256, actor: operatorId, at: requestedAt });
+        saveState(state);
+        snapshot = structuredClone(job);
+      } finally { release(); }
+
+      let generated;
+      try {
+        generated = runAuthoringNarrationStage({
+          job: snapshot, root, voice: process.env.AUTHORING_TTS_VOICE ?? "en-US-GuyNeural",
+          rate: process.env.AUTHORING_TTS_RATE ?? "-5%",
+          timeoutMs: Math.min(240_000, Math.max(30_000, Number(process.env.AUTHORING_TTS_TIMEOUT_MS ?? 180_000)))
+        });
+      } catch (error) {
+        const message = redactOperationalText(error instanceof Error ? error.message : "Narration generation failed", { roots: [root, stateDir] });
+        const recoveryRequired = /partial narration artifacts|recovery is required|invalid report|checksum does not match/i.test(message);
+        const failRelease = await acquireStateLock();
+        try {
+          const state = loadState();
+          const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+          if (index >= 0 && state.jobs[index].authoring?.narrationStage?.scriptSha256 === body.scriptSha256) {
+            state.jobs[index].authoring.narrationStage = {
+              ...state.jobs[index].authoring.narrationStage,
+              status: recoveryRequired ? "RECOVERY_REQUIRED" : "BLOCKED",
+              recoveryRequired, failedAt: new Date().toISOString(), error: message.slice(0, 1200),
+              publishable: false, publishingEnabled: false
+            };
+            state.audit.push({ id: crypto.randomUUID(), action: recoveryRequired ? "AUTHORING_NARRATION_RECOVERY_REQUIRED" : "AUTHORING_NARRATION_BLOCKED", jobId: body.jobId, scriptSha256: body.scriptSha256, actor: operatorId, at: new Date().toISOString(), reason: message.slice(0, 500) });
+            saveState(state);
+          }
+        } finally { failRelease(); }
+        return json(res, 409, { error: "Narration stage did not complete; production remains blocked", detail: message, recoveryRequired, publishable: false, publishingEnabled: false });
+      }
+
+      const finishRelease = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job disappeared during narration generation" });
+        const current = state.jobs[index];
+        if (current.authoring?.narrationStage?.status !== "GENERATING" ||
+            current.authoring.narrationStage.scriptSha256 !== body.scriptSha256 ||
+            canonicalAuthoringScriptSha256(current.authoring?.result?.script) !== body.scriptSha256 ||
+            current.authoring?.scriptApproval?.scriptSha256 !== body.scriptSha256) {
+          return json(res, 409, { error: "Authoring or approval changed while narration was generating; reconcile artifacts and do not reuse them", recoveryRequired: true, publishable: false });
+        }
+        current.authoring.narrationStage = {
+          ...generated, status: "DRAFT_REVIEW_REQUIRED", requestedAt,
+          completedAt: new Date().toISOString(), actor: operatorId,
+          scriptApprovalSha256: current.authoring.scriptApproval.approvalSha256,
+          publishable: false, publishingEnabled: false
+        };
+        state.jobs[index] = current;
+        state.audit.push({ id: crypto.randomUUID(), action: "AUTHORING_NARRATION_DRAFT_READY", jobId: current.id, scriptSha256: body.scriptSha256, narrationReportSha256: sha256File(path.join(root, generated.artifacts["narration-report.json"].path)), actor: operatorId, at: current.authoring.narrationStage.completedAt, reason: "Narration and timed captions generated; human narration review and source-asset/rights gates remain pending" });
+        saveState(state);
+        return json(res, 201, {
+          job: current, narrationStage: current.authoring.narrationStage,
+          publishable: false, publishingEnabled: false,
+          nextAction: "Human-review transcript, pronunciation and timing; then provide independently approved source assets, provenance, scene plan and rights evidence before rendering."
+        });
+      } finally { finishRelease(); }
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/author") {
       const body = await readBody(req);
