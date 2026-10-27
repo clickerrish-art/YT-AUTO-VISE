@@ -726,3 +726,10 @@ Keep public/unattended YouTube OFF, Facebook live OFF, Safari campaigns inactive
 Metricool currently lists Nature Frontiers with a YouTube connection. Seven future posts dated 31 October–25 November have autoPublish: true, draft: false, and Instagram auto-publish enabled; a post on 27 October is marked Facebook PUBLISHED; a pending/draft YouTube Short on the Nature Frontiers brand has public privacy metadata. No external posts/settings were changed. Pause/reconcile these scheduled actions and remove the incorrect YouTube association before any further publishing.
 
 Keep all repository publication safeguards enabled. Full production acceptance remains **BLOCKED**.
+
+
+## Follow-up code correction — 27 October 2026
+
+The readiness engine now treats 72 elapsed hours as a hard minimum for every cadence mode and no longer accepts `WEEKLY_TARGET_WITH_SHORTER_SPACING`. See source/test SHA `47c839452fda99757a34dcb29865da9e967121af` and [exact-SHA CI evidence](https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
+
+This closes the code-level defect that could have accepted a shorter spacing policy. It does **not** close the owner cadence decision: the configuration remains unapproved until an explicit feasible mode is selected. Production remains blocked on real media/rights/human review, verified YouTube identity and history, private-upload authorization/receipt, eligible native Short Related video evidence, successful real Meta draft-only integration, and operational recovery/deployment acceptance.
