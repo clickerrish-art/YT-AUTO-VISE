@@ -1277,7 +1277,7 @@ const server = http.createServer(async (req, res) => {
         state.jobs[index] = job;
         state.audit.push({ id: crypto.randomUUID(), action: body.decision === "APPROVE" ? "PRODUCTION_PLAN_APPROVED" : "PRODUCTION_PLAN_REJECTED", jobId: job.id, planSha256: body.planSha256, approvalSha256: approval.approvalSha256, actor: operatorId, at: reviewedAt, reason: body.reason.trim() });
         saveState(state);
-        return json(res, 200, { job, planReview: approval, status: stage.status, renderingEnabled: false, publishable: false, publishingEnabled: false, nextAction: "The reviewed plan is persisted, but the per-job renderer integration and final-media review gate are not yet implemented; /api/jobs/produce remains fail-closed." });
+        return json(res, 200, { job, planReview: approval, status: stage.status, renderingEnabled: false, publishable: false, publishingEnabled: false, nextAction: "The reviewed plan is persisted. POST /api/jobs/produce revalidates the exact hash-bound approvals and evidence before rendering; final media still requires technical validation and full human review. Publishing remains disabled." });
       } finally { release(); }
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/authoring/review") {
