@@ -148,15 +148,17 @@ export async function restoreState({ backupPath, rootDir = root, stateDir = proc
     let exists = false;
     let currentSha = null;
     let currentMtime = null;
+    let originalBytes = null;
     if (fs.existsSync(destination)) {
       const stat = fs.lstatSync(destination);
       if (stat.isSymbolicLink() || !stat.isFile()) throw new Error("Restore target exists but is not a regular file: " + path.basename(destination));
       exists = true;
-      currentSha = sha256(fs.readFileSync(destination));
+      originalBytes = fs.readFileSync(destination);
+      currentSha = sha256(originalBytes);
       currentMtime = stat.mtimeMs;
     }
     if (exists && currentSha === entry.sha256) {
-      prepared.push({ destination, bytes, target: entry.target, action: "UNCHANGED" });
+      prepared.push({ destination, bytes, originalBytes, target: entry.target, action: "UNCHANGED" });
       continue;
     }
     if (exists && entry.target.kind === "upload-ledger") throw new Error("Refusing to overwrite an existing, different upload ledger. Reconcile current remote YouTube state and preserve the newer ledger before restoring.");
@@ -166,18 +168,95 @@ export async function restoreState({ backupPath, rootDir = root, stateDir = proc
       if (!overwriteState) throw new Error("Dashboard state differs from backup; set RESTORE_OVERWRITE=YES only after reviewing the backup and current state");
     }
     if (exists && entry.target.kind !== "dashboard-state") throw new Error("Restore conflict: refusing to overwrite a different existing evidence/receipt file: " + path.basename(destination));
-    prepared.push({ destination, bytes, target: entry.target, action: exists ? "REPLACE_STATE" : "RESTORE_MISSING" });
+    prepared.push({ destination, bytes, originalBytes, target: entry.target, action: exists ? "REPLACE_STATE" : "RESTORE_MISSING" });
   }
   if (now < Date.parse(backup.createdAt)) throw new Error("Backup timestamp is in the future; restore refused");
+  // Stage every changed entry before the first destination is replaced. A staging
+  // failure therefore cannot leave a subset of the restored files committed.
+  const staged = [];
+  const committed = [];
   const results = [];
-  for (const item of prepared) {
-    if (item.action === "UNCHANGED") { results.push({ target: item.target, action: item.action }); continue; }
-    fs.mkdirSync(path.dirname(item.destination), { recursive: true, mode: 0o700 });
-    const temp = item.destination + "." + crypto.randomUUID() + ".tmp";
-    fs.writeFileSync(temp, item.bytes, { mode: 0o600, flag: "wx" });
-    fs.renameSync(temp, item.destination);
-    results.push({ target: item.target, action: item.action, sha256: sha256(item.bytes) });
+  try {
+    for (const item of prepared) {
+      if (item.action === "UNCHANGED") {
+        results.push({ target: item.target, action: item.action });
+        continue;
+      }
+      fs.mkdirSync(path.dirname(item.destination), { recursive: true, mode: 0o700 });
+      assertNoSymlinkComponents(safeRestoreAnchor(item.target, options, item.destination), path.dirname(item.destination));
+      const temp = item.destination + "." + crypto.randomUUID() + ".restore-tmp";
+      let fd;
+      try {
+        fd = fs.openSync(temp, "wx", 0o600);
+        fs.writeFileSync(fd, item.bytes);
+        fs.fsyncSync(fd);
+      } finally {
+        if (fd !== undefined) fs.closeSync(fd);
+      }
+      staged.push({ ...item, temp });
+    }
+
+    // Commit only after every replacement file has been staged and flushed.
+    for (const item of staged) {
+      // Recheck the destination immediately before mutation to detect ordinary
+      // concurrent replacement. This path-based check cannot eliminate every
+      // hostile ancestor TOCTOU race; run restores in a controlled state dir.
+      assertNoSymlinkComponents(safeRestoreAnchor(item.target, options, item.destination), path.dirname(item.destination));
+      if (item.action === "RESTORE_MISSING" && fs.existsSync(item.destination)) {
+        throw new Error("Restore destination appeared during commit; refusing to overwrite: " + path.basename(item.destination));
+      }
+      if (item.action === "REPLACE_STATE") {
+        const current = fs.lstatSync(item.destination);
+        if (current.isSymbolicLink() || !current.isFile() || sha256(fs.readFileSync(item.destination)) !== sha256(item.originalBytes)) {
+          throw new Error("Restore destination changed during commit; refusing to overwrite: " + path.basename(item.destination));
+        }
+      }
+      fs.renameSync(item.temp, item.destination);
+      item.committed = true;
+      committed.push(item);
+      results.push({ target: item.target, action: item.action, sha256: sha256(item.bytes) });
+    }
+  } catch (error) {
+    const rollbackErrors = [];
+    for (const item of committed.reverse()) {
+      try {
+        if (item.action === "RESTORE_MISSING") {
+          // Only remove the file if it is still exactly the bytes this restore
+          // committed; preserve any concurrent operator change.
+          if (fs.existsSync(item.destination)) {
+            const stat = fs.lstatSync(item.destination);
+            if (stat.isSymbolicLink() || !stat.isFile() || sha256(fs.readFileSync(item.destination)) !== sha256(item.bytes)) {
+              throw new Error("Committed restore file changed before rollback: " + path.basename(item.destination));
+            }
+            fs.unlinkSync(item.destination);
+          }
+        } else if (item.action === "REPLACE_STATE") {
+          const rollbackTemp = item.destination + "." + crypto.randomUUID() + ".rollback-tmp";
+          let fd;
+          try {
+            fd = fs.openSync(rollbackTemp, "wx", 0o600);
+            fs.writeFileSync(fd, item.originalBytes);
+            fs.fsyncSync(fd);
+          } finally {
+            if (fd !== undefined) fs.closeSync(fd);
+          }
+          fs.renameSync(rollbackTemp, item.destination);
+        }
+      } catch (rollbackError) {
+        rollbackErrors.push(path.basename(item.destination) + ": " + rollbackError.message);
+      }
+    }
+    for (const item of staged) {
+      try { fs.unlinkSync(item.temp); } catch (cleanupError) {
+        if (cleanupError?.code !== "ENOENT") rollbackErrors.push(path.basename(item.temp) + " cleanup: " + cleanupError.message);
+      }
+    }
+    if (rollbackErrors.length) {
+      throw new Error("Restore failed and rollback needs operator recovery: " + rollbackErrors.join("; "), { cause: error });
+    }
+    throw new Error("Restore failed; all committed destination changes were rolled back: " + error.message, { cause: error });
   }
+
   return { status: "RESTORE_COMPLETED", backupCreatedAt: backup.createdAt, restored: results.filter(x => x.action !== "UNCHANGED").length, unchanged: results.filter(x => x.action === "UNCHANGED").length, entries: results };
 }
 
