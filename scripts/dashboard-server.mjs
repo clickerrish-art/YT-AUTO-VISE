@@ -1987,7 +1987,13 @@ const server = http.createServer(async (req, res) => {
             { path: authoringArtifactBinding.qualityEvidencePath, sha256: authoringArtifactBinding.qualityEvidenceSha256 },
             { path: authoringArtifactBinding.narrationRightsEvidencePath, sha256: sha256File(resolveRepositoryFile(authoringArtifactBinding.narrationRightsEvidencePath)) },
             { path: authoringArtifactBinding.renderManifestPath, sha256: authoringArtifactBinding.renderManifestSha256 }
-          ] : [])
+          ] : []),
+          ...(body.decision === "APPROVE" && rightsEvidence ? (
+            Array.isArray(rightsEvidence.assets) && rightsEvidence.assets.length ? rightsEvidence.assets : [rightsEvidence]
+          ).flatMap(asset => [
+            { path: asset.assetPath, sha256: asset.assetSha256 },
+            { path: asset.licenseEvidenceLocation, sha256: sha256File(resolveRepositoryFile(asset.licenseEvidenceLocation)) }
+          ]) : [])
         ].filter((entry, index, all) => all.findIndex(other => other.path === entry.path) === index)
           .map(entry => ({ path: entry.path, sha256: entry.sha256 }));
         const artifact = { path: artifactPath, sha256: artifactSha256, relatedArtifacts };
