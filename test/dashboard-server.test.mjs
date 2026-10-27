@@ -381,6 +381,41 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     fs.rmSync(protectedDirectory, { recursive: true, force: true });
   }
 
+  // A prior per-job render manifest is also retained evidence. A restart
+  // must not silently replace it merely because the MP4 output is absent.
+  const manifestDraft = {
+    id: "dashboard-test-protected-render-manifest", title: "Protected render manifest",
+    topic: "wildlife observation", contentType: "short", scheduledDay: "Saturday",
+    scheduledDate: "2026-11-07", productUrl: "https://selar.com/0u19v8u99l"
+  };
+  const manifestCreated = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(manifestDraft) });
+  const manifestCreatedBody = await manifestCreated.json();
+  assert.equal(manifestCreated.status, 201, JSON.stringify(manifestCreatedBody));
+  const manifestJob = manifestCreatedBody.job;
+  const manifestStatePath = path.join(stateDir, "dashboard-state.json");
+  const manifestState = JSON.parse(fs.readFileSync(manifestStatePath, "utf8"));
+  const manifestJobIndex = manifestState.jobs.findIndex(job => job.id === manifestJob.id);
+  manifestState.jobs[manifestJobIndex].authoring = { status: "TEST_FIXTURE_ONLY" };
+  fs.writeFileSync(manifestStatePath, JSON.stringify(manifestState, null, 2), { mode: 0o600 });
+  const manifestDirectory = path.join(process.cwd(), "content", "job-render-manifests");
+  const manifestPath = path.join(manifestDirectory, manifestJob.id + ".json");
+  const retainedManifestBytes = Buffer.from('{"retained":"previous attempt evidence"}\\n');
+  fs.mkdirSync(manifestDirectory, { recursive: true });
+  fs.writeFileSync(manifestPath, retainedManifestBytes, { flag: "wx", mode: 0o600 });
+  try {
+    const manifestAttempt = await fetch(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: manifestJob.id }) });
+    const manifestBody = await manifestAttempt.json();
+    assert.equal(manifestAttempt.status, 409, JSON.stringify(manifestBody));
+    assert.equal(manifestBody.recoveryRequired, true);
+    assert.equal(manifestBody.retryAllowed, false);
+    assert.equal(manifestBody.artifactPath, "content/job-render-manifests/" + manifestJob.id + ".json");
+    assert.deepEqual(fs.readFileSync(manifestPath), retainedManifestBytes, "an existing render manifest must remain byte-for-byte unchanged");
+    const stateAfterManifestRefusal = JSON.parse(fs.readFileSync(manifestStatePath, "utf8"));
+    assert.equal(stateAfterManifestRefusal.jobs.find(job => job.id === manifestJob.id).state, "QUEUED");
+  } finally {
+    fs.rmSync(manifestPath, { force: true });
+  }
+
   // Simulate a legacy/corrupt state file with two different queue items reserving
   // the same local date. A distant new slot must still be blocked until the
   // existing collision is repaired; the validator must not hide duplicates.
