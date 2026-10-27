@@ -133,6 +133,7 @@ export async function restoreState({ backupPath, rootDir = root, stateDir = proc
   const backupFile = path.resolve(backupPath);
   const backup = JSON.parse(readBackupFileNoSymlinks(backupFile));
   if (backup.format !== "sonicvhibez-state-backup" || backup.version !== 1 || backup.includesSecrets !== false || !Array.isArray(backup.entries) || !Number.isFinite(Date.parse(backup.createdAt))) throw new Error("Backup format or schema is invalid");
+  if (backup.entries.length === 0) throw new Error("Backup contains no entries; refusing a no-op restore");
   const options = { rootDir, stateDir, uploadLogDir, rightsDir };
   const prepared = [];
   const seen = new Set();
