@@ -2222,7 +2222,7 @@ const server = http.createServer(async (req, res) => {
         if (job.state !== "QUEUED") return json(res, 409, { error: "Only a queued content job can start production" });
         if (!job.authoring) {
           return json(res, 409, {
-            error: "Content job is not linked to the required approved authoring pipeline; legacy fixed-manifest rendering is disabled",
+            error: "Content job is not linked to the required approved authoring pipeline; legacy fixed-manifest rendering is disabled. Complete research, exact-script and narration/caption review, scene and rights checks, quality/compliance review, and the hash-bound production plan before retrying.",
             blockers: [
               "Research and source evidence must be attached to the job",
               "The exact script and narration/caption stages must be reviewed and approved",

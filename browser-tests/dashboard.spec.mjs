@@ -409,13 +409,16 @@ test("production controls disable safely when real media prerequisites are missi
   for (const job of queued) {
     await page.locator("#producejob").selectOption(job.id);
     await page.locator("#produceform button[type=submit]").click();
-    await expect.poll(async () => {
-      const snapshot = await request.get("/api/state", { headers });
-      const current = await snapshot.json();
-      return current.jobs.find(item => item.id === job.id)?.state;
-    }, { timeout: 10_000 }).toMatch(/BLOCKED|FAILED|GENERATED/);
-    await expect(page.locator(`#producejob option[value="${job.id}"]`)).toHaveCount(0, { timeout: 10_000 });
-    await expect(page.locator("#produceresult")).toContainText(/Render result: (BLOCKED|FAILED|GENERATED)|Render blocked or failed:/, { timeout: 10_000 });
+    await expect(page.locator("#produceresult")).toContainText(/Render blocked or failed:.*approved authoring pipeline/i, { timeout: 10_000 });
+    await expect(page.locator("#produceresult")).toContainText(/Complete research.*hash-bound production plan/i, { timeout: 10_000 });
+    const snapshot = await request.get("/api/state", { headers });
+    const current = await snapshot.json();
+    const unchanged = current.jobs.find(item => item.id === job.id);
+    expect(unchanged.state).toBe("QUEUED");
+    expect(unchanged.workerLease ?? null).toBeNull();
+    expect(unchanged.renderExecution).toBeUndefined();
+    expect(unchanged.outputArtifacts ?? []).toHaveLength(0);
+    expect(current.audit.some(event => event.action === "CONTENT_RENDER_STARTED" && event.jobId === job.id)).toBe(false);
   }
 
   response = await request.get("/api/state", { headers });
