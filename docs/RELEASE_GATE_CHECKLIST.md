@@ -578,3 +578,26 @@ Exact application/test SHA: `c5bfbbc7861616494c6b589604fa3797e673681a`.
 - [ ] Production readiness: **BLOCKED** — [run 40453031961](https://github.com/clickerrish-art/YT-AUTO-VISE). Facebook daily draft: **SKIPPED** — [run 40453030497](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40453030497).
 
 The checkbox items marked complete are code/test checkpoints only. They do not supersede the blocked production acceptance items above.
+
+
+## Addendum — exact-SHA checkpoint, 27 October 2026
+
+- [x] Production-plan structural validator and tests added: scripts/production-plan.mjs, test/production-plan.test.mjs.
+- [x] Authenticated production-plan submission/review API and hash-bound dashboard controls added.
+- [x] API regression verifies exact approved script/narration bindings and rejects changed narration or source assets during review.
+- [x] Browser assertion added for the production-plan form, persisted-plan preview and blocked feedback.
+- [ ] Latest browser workflow including that added assertion: PENDING at the time of this addendum; do not reuse the prior 12-test result as evidence for the latest UI.
+- [ ] Per-job quality-evidence generation and actual renderer integration: BLOCKED / NOT IMPLEMENTED.
+- [ ] Final export validation and hash-bound human full-playback realism review: BLOCKED / NOT RUN.
+- [ ] Real original/rights-cleared production media and real narration playback evidence: BLOCKED / NOT PROVIDED.
+- [ ] Short-parent remote receipt/native Related video verification: BLOCKED.
+- [ ] Verified OAuth/channel/history and private-upload receipt: BLOCKED.
+- [ ] Verified Nature Frontiers Page identity/permissions and successful non-skipped draft-only integration: BLOCKED / SKIPPED.
+- [ ] Metricool Nature Frontiers account reconciliation: BLOCKED; seven future auto-publishing posts and a pending public-metadata YouTube Short were observed; no external mutations made.
+- [ ] Full divergent history, operational recovery, rollback, backup/restore and emergency-stop acceptance: NOT COMPLETE.
+
+Exact code/test references:
+- Application code SHA 6224218660a11fd59353dbab96d9963e429649bb; test tree 95a64fa88f668ba0f88cd2f4be394c9100c6ff53.
+- Automation/security PASS [run 40487769081](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40487769081); content quality PASS [run 40488246239](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488246239); metadata PASS [run 40488245972](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488245972); isolated baseline PASS [run 40488246103](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488246103); readiness BLOCKED [run 40488246069](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488246069); Facebook daily draft SKIPPED [run 40488245959](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488245959).
+
+These code/test passes do not override any blocked production or external integration gate. Do not remove the /api/jobs/produce refusal until the approved per-job renderer and final-media review path is complete.
