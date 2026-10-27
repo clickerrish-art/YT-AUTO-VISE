@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import {
   createDeterministicEditPlan,
   validateAssetProvenance,
+  validateAssetProvenanceSet,
   validateAudioReport,
   validateScriptDepth,
   validateShortParentRelationship
@@ -27,6 +28,7 @@ export function validateContentQualityEvidence(evidence, { format, evidenceDir =
   if (!Array.isArray(evidence.assetProvenance) || evidence.assetProvenance.length === 0) {
     errors.push("at least one asset provenance record is required");
   } else {
+    errors.push(...validateAssetProvenanceSet(evidence.assetProvenance).map(message => "provenance graph: " + message));
     evidence.assetProvenance.forEach((asset, index) => {
       const result = validateAssetProvenance(asset);
       errors.push(...result.errors.map(e => "asset " + (index + 1) + ": " + e));
