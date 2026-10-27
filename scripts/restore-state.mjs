@@ -185,6 +185,10 @@ export async function restoreState({ backupPath, rootDir = root, stateDir = proc
       fs.mkdirSync(path.dirname(item.destination), { recursive: true, mode: 0o700 });
       assertNoSymlinkComponents(safeRestoreAnchor(item.target, options, item.destination), path.dirname(item.destination));
       const temp = item.destination + "." + crypto.randomUUID() + ".restore-tmp";
+      const stagedItem = { ...item, temp };
+      // Register the temporary path before opening it so even a partial write
+      // or fsync failure is covered by the cleanup path.
+      staged.push(stagedItem);
       let fd;
       try {
         fd = fs.openSync(temp, "wx", 0o600);
@@ -193,7 +197,6 @@ export async function restoreState({ backupPath, rootDir = root, stateDir = proc
       } finally {
         if (fd !== undefined) fs.closeSync(fd);
       }
-      staged.push({ ...item, temp });
     }
 
     // Commit only after every replacement file has been staged and flushed.
