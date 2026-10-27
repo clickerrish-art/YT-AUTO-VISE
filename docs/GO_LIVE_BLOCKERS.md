@@ -697,3 +697,32 @@ Exact-SHA results: automation/security PASS (336 Node + 16 Python tests; npm aud
 **The primary production integration blocker remains open.** `POST /api/jobs/produce` still refuses authoring jobs. No live Edge TTS audio or final video was generated; API integrity tests use synthetic fixture bytes and do not constitute real audio or human playback evidence. The next code task is to bind an approved production plan and rights-cleared scene assets to the approved narration, render into per-job paths, run the final validators and require final-video review before removing the refusal.
 
 Keep public/unattended YouTube OFF, Facebook live OFF, Safari campaigns inactive and Nature Frontiers excluded from YouTube targets. Do not claim the app is production accepted.
+
+
+## Addendum — 27 October 2026 production-plan checkpoint
+
+### Code progress
+- Added a hash-bound production-plan schema and scene manifest validator.
+- Added authenticated submission/review endpoints and dashboard controls with a persisted-plan preview.
+- Both submission and approval recheck exact approved narration/audio/transcript/caption/report hashes and each scene asset/rights-evidence file hash. Short plans must match the independently persisted approved parent relationship and verified public SonicVhibez receipt.
+- Production-plan approval is **not** final media approval. POST /api/jobs/produce still blocks authoring jobs.
+
+### Still blocked
+1. Convert the approved plan and exact narration/captions into per-job quality evidence and a render manifest compatible with the existing multi-scene renderer.
+2. Independently validate every source's provenance and rights record; human review must not be inferred from hashes or checkbox fields alone.
+3. Run actual FFmpeg/FFprobe production renders, final media/metadata/caption checks, and hash-bound final-video playback review.
+4. Complete successful Short-parent recovery tests using real approved parent and remote receipt evidence.
+5. Verify OAuth/channel/history, private-upload attempt ledger and receipt, YouTube native Related video association, Nature Frontiers Page permissions, and a non-skipped Facebook draft-only integration.
+6. Complete operational restart/rollback/backup/restore/emergency-stop drills and the full divergent Git-history review.
+
+### Latest evidence
+- Application-code SHA: 6224218660a11fd59353dbab96d9963e429649bb.
+- Exact test tree: 95a64fa88f668ba0f88cd2f4be394c9100c6ff53.
+- Automation/security PASS: 345 Node tests, 16 Python safety tests, dependency audit and syntax/compile checks — [run 40487769081](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40487769081).
+- Content quality PASS — [run 40488246239](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488246239); metadata PASS — [run 40488245972](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488245972); isolated baseline PASS — [run 40488246103](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488246103).
+- Production readiness BLOCKED — [run 40488246069](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488246069). Facebook daily draft SKIPPED — [run 40488245959](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40488245959). The latest browser workflow including the new plan-preview assertion was pending at the time this addendum was written; do not reuse the prior 12-test result as evidence for the latest UI.
+
+### External publishing blocker
+Metricool currently lists Nature Frontiers with a YouTube connection. Seven future posts dated 31 October–25 November have autoPublish: true, draft: false, and Instagram auto-publish enabled; a post on 27 October is marked Facebook PUBLISHED; a pending/draft YouTube Short on the Nature Frontiers brand has public privacy metadata. No external posts/settings were changed. Pause/reconcile these scheduled actions and remove the incorrect YouTube association before any further publishing.
+
+Keep all repository publication safeguards enabled. Full production acceptance remains **BLOCKED**.
