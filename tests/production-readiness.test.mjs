@@ -2,6 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 test("readiness report identifies blockers, preserves safety defaults, and exits non-zero", () => {
@@ -85,6 +87,26 @@ test("readiness workflow compares retained exit-code evidence and avoids false m
   assert.doesNotMatch(workflow, /READINESS_EXIT_CODE:-2|READINESS_JSON_EXIT_CODE:-3/);
 });
 
+
+test("readiness evidence redacts absolute external queue paths", () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "readiness-queue-"));
+  const queueFile = path.join(directory, "queue.json");
+  fs.writeFileSync(queueFile, "{ malformed json");
+  try {
+    const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
+      cwd: process.cwd(), encoding: "utf8",
+      env: { ...process.env, QUEUE_PATH: queueFile }
+    });
+    assert.equal(result.status, 2);
+    const report = JSON.parse(result.stdout);
+    const queueBlocker = report.blockers.find(blocker => /content\/queue\.json is not valid JSON/.test(blocker.message));
+    assert.ok(queueBlocker);
+    assert.equal(queueBlocker.evidence.path, "configured QUEUE_PATH (absolute path withheld)");
+    assert.equal(JSON.stringify(queueBlocker.evidence).includes(directory), false);
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
 
 test("readiness never accepts an owner-approved cadence that weakens the 72-hour publication invariant", () => {
   const readinessPath = fileURLToPath(new URL("../scripts/production-readiness.mjs", import.meta.url));
