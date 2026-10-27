@@ -1,3 +1,13 @@
+## Live blocker update — 27 October 2026
+
+The current source/test checkpoint is `3690ec82b52263cb2da2378f8aba9a5b19658a8f` (latest application-code commit `d465c03cb3b12ee68000192089165f326121e8eb`). PR #1 remains open/draft/unmerged; `main` remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. The branch is 1,691 ahead / 2 behind with 163 changed files from merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+
+Render retries now fail closed when the per-job video, thumbnail or render manifest already exists. The manifest/output preservation regression tests are committed, but automation/security and isolated baseline CI for this exact SHA were still in progress at the time of this note. Browser E2E, content quality and metadata passed; production readiness remains blocked. See [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
+
+Still blocked: genuine approved exports and human playback; verified SonicVhibez OAuth/channel identity and complete public/private/unlisted history; explicit one-operation private-upload authorization and verified receipt; native Short Related video (private parents are ineligible under [YouTube's official rule](https://support.google.com/youtube/answer/14075157?hl=en)); verified Meta Page and real draft-only integration; owner-approved cadence; recovery/deployment drills; full divergent-history review. Do not publish publicly or change visibility to bypass any gate.
+
+---
+
 # Latest verified checkpoint — 27 October 2026: publication-slot status coverage
 
 **Exact tested source/test SHA:** `71555f20cc5fbd24658f50e82da5544eeed1a622`  
