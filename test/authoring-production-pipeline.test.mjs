@@ -15,9 +15,15 @@ function fixture() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "authoring-pipeline-"));
   fs.mkdirSync(path.join(root, "scripts"), { recursive: true });
   fs.writeFileSync(path.join(root, "scripts/generate-authoring-narration.py"), "# test fixture generator\n");
+  const words = Array.from({ length: 137 }, (_, i) => "word" + i);
+  const sections = [0, 1, 2].map((index) => ({
+    heading: "Section " + index, purpose: "Advance the narrative " + index,
+    narration: words.slice(Math.floor(index * words.length / 3), Math.floor((index + 1) * words.length / 3)).join(" "),
+    visualDirection: "Reviewed source scene " + index, pacing: "Measured", soundDesign: "Natural ambience"
+  }));
   const script = {
-    narration: "Measured test narration.",
-    sections: [{ heading: "Opening", narration: "Measured test narration." }],
+    narration: sections.map(section => section.narration).join("\n\n"),
+    sections,
     claims: [{ text: "A sourced claim.", sourceIds: ["s1"] }],
     sources: [{ id: "s1", title: "Test source" }]
   };
@@ -33,16 +39,20 @@ function fixture() {
 }
 function fakeRunnerFactory({ expectedScriptSha256, corrupt = false, invalidTiming = false } = {}) {
   return (_command, args) => {
+    if (args[0]?.endsWith("check-captions.mjs") || args[0]?.endsWith("validate-caption-sync.mjs")) {
+      return { status: 0, stdout: "PASS: captions validated", stderr: "" };
+    }
     const outputDir = args[args.indexOf("--output-dir") + 1];
-    const transcript = "Measured test narration.\n";
-    const captions = "1\n00:00:00,000 --> 00:00:01,000\nMeasured test narration.\n";
+    const payload = JSON.parse(fs.readFileSync(args[args.indexOf("--script-json") + 1], "utf8"));
+    const transcript = payload.result.narration.replace(/\s+/gu, " ").trim() + "\n";
+    const captions = "1\n00:00:00,000 --> 00:00:55,000\nReviewed narration caption text.\n";
     const audio = Buffer.from("fake audio bytes");
     fs.writeFileSync(path.join(outputDir, "narration.mp3"), audio);
     fs.writeFileSync(path.join(outputDir, "narration.txt"), transcript);
     fs.writeFileSync(path.join(outputDir, "captions.srt"), captions);
     const report = {
-      format: "short", voice: "test", rate: "-5%", wordCount: 3,
-      scriptSha256: expectedScriptSha256, durationSeconds: 55, wordBoundaryCount: 3,
+      format: "short", voice: "test", rate: "-5%", wordCount: transcript.trim().split(/\s+/u).length,
+      scriptSha256: expectedScriptSha256, durationSeconds: 55, wordBoundaryCount: 137,
       captionTiming: invalidTiming ? "ESTIMATED" : "TTS_WORD_BOUNDARIES",
       audioSha256: hash(audio), transcriptSha256: hash(transcript), captionsSha256: hash(captions),
       humanReviewRequired: true, rightsStatus: "NOT_VERIFIED",
@@ -88,7 +98,7 @@ test("a complete exact narration stage can be reconciled idempotently without re
     const runner = (...args) => { calls++; return fakeRunnerFactory({ expectedScriptSha256: f.scriptSha256 })(...args); };
     const first = runAuthoringNarrationStage({ job: f.job, root: f.root, spawnSyncImpl: runner });
     const second = runAuthoringNarrationStage({ job: f.job, root: f.root, spawnSyncImpl: () => { throw new Error("duplicate TTS call"); } });
-    assert.equal(calls, 1);
+    assert.equal(calls, 3, "generator plus two caption validators run exactly once");
     assert.equal(first.reused, false);
     assert.equal(second.reused, true);
     assert.deepEqual(second.artifacts, first.artifacts);
@@ -108,10 +118,7 @@ test("partial narration artifacts require recovery and are never overwritten", (
 test("tampered audio hash and estimated caption timing fail closed", () => {
   const f = fixture();
   try {
-    const run = runAuthoringNarrationStage({ job: f.job, root: f.root, spawnSyncImpl: fakeRunnerFactory({ expectedScriptSha256: f.scriptSha256, corrupt: true }) });
-    assert.fail("corrupt audio hash must throw");
-  } catch (error) {
-    assert.match(String(error), /audio checksum/);
+    assert.throws(() => runAuthoringNarrationStage({ job: f.job, root: f.root, spawnSyncImpl: fakeRunnerFactory({ expectedScriptSha256: f.scriptSha256, corrupt: true }) }), /audio checksum/);
   } finally { fs.rmSync(f.root, { recursive: true, force: true }); }
 
   const g = fixture();
@@ -120,6 +127,6 @@ test("tampered audio hash and estimated caption timing fail closed", () => {
   } finally { fs.rmSync(g.root, { recursive: true, force: true }); }
 });
 
-test("validator rejects missing report, wrong format and duration outside target", () => {
+test("validator rejects a missing narration report", () => {
   assert.deepEqual(validateNarrationStageArtifacts({ report: null, scriptSha256: "a".repeat(64), format: "short", outputDir: "/missing" }), ["narration report must be a JSON object"]);
 });
