@@ -1,3 +1,33 @@
+# Follow-up implementation evidence — 28 October 2026, 20:35 UTC
+
+## Cross-process backup/restore lock contention
+
+- **Exact source/test candidate:** `d5e3445def955413d424085489212c5835ff0807`.
+- **Change:** `test/backup-restore.test.mjs` now launches a separate Node process that acquires and fsyncs the shared `.restore-operation.lock`, then verifies the parent process's `backupState` refuses to proceed without changing the other process's lock bytes or creating backup output. The test releases the child-owned lock and cleans its isolated fixture.
+- **Test-debugging record:** candidate `9c9d98a379a6b0867e4ce8dc2add3162d618b5be` exposed a false-negative readiness-marker assertion (409 passed, 1 failed); the assertion was corrected to recognize the stable marker independent of newline encoding. The corrected candidate below passed all tests.
+- **Exact-SHA automation/security:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160063) — **410 Node tests passed, 0 failed, 0 skipped**; npm audit reported 0 vulnerabilities.
+- **Metadata validation:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160114).
+- **Content quality:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160204).
+- **Dashboard browser E2E:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160061).
+- **Isolated main/candidate baseline:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148454).
+- **Lockfile workflow:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148444).
+- **Draft-only workflow:** [PASS for repository/local validation only](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160297); no remote Meta draft was created or verified.
+- **Production readiness:** [BLOCKED/fail-closed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160031), as expected while mandatory production prerequisites remain unresolved.
+
+## Live refs at candidate verification
+
+- `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Tested source/test candidate: `d5e3445def955413d424085489212c5835ff0807`.
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- PR #1 remained open, draft and unmerged. The full Git divergence review remains incomplete.
+- This evidence update is documentation-only; it does not change the tested source/test candidate.
+
+## Scope limit
+
+The new test verifies real separate-process lock contention, lock preservation, and no backup output while another process owns the shared lock. It does not prove process termination during restore, power-loss durability, full rollback after every interruption point, deployment rollback, or reconciliation of uncertain remote provider side effects. **Production remains blocked.**
+
+---
+
 # Follow-up implementation evidence — 28 October 2026, 20:23 UTC
 
 ## Shared backup/restore lock cleanup and truthful contention reporting
