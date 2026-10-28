@@ -1,11 +1,12 @@
-## Latest verified checkpoint — 28 October 2026, 20:36 UTC
+## Latest verified checkpoint — 28 October 2026, 20:44 UTC
 
-- Exact source/test candidate: `d5e3445def955413d424085489212c5835ff0807`.
-- Automation/security: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160063) — 410 Node tests, zero failures/skips, npm audit 0 vulnerabilities.
-- Metadata: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160114); content quality: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160204); browser E2E: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160061); isolated baseline: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148454).
-- Added real child-process coverage proving backup fails closed while another process owns the shared operation lock, preserving lock bytes and producing no snapshot.
-- Production readiness remains [BLOCKED](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160031). These checks do not complete full dashboard acceptance, power-loss recovery, deployment rollback or external provider verification.
+- Exact source/test candidate: `379dd09a5990db6c64e94a51f9d7606013e2604d`.
+- Automation/security: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633734) — 411 Node tests, zero failures/skips, npm audit 0 vulnerabilities.
+- Metadata: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633578); content quality: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633488); dashboard E2E: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651); isolated baseline: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633501).
+- Backup refuses to create snapshots while an interrupted restore journal exists or is unsafe. Regression coverage confirms it preserves the journal, writes no backup output, and releases its own lock.
+- Production readiness remains [BLOCKED](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633515). These checks do not complete full dashboard acceptance, process-kill/power-loss recovery or deployment rollback.
 - Live main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 remains open, draft and unmerged. No main edits, merge, rebase, reset or force-push performed.
+
 
 ---
 
