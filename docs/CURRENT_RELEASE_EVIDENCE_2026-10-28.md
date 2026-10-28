@@ -1,3 +1,35 @@
+# Follow-up implementation evidence — 28 October 2026, 20:23 UTC
+
+## Shared backup/restore lock cleanup and truthful contention reporting
+
+- **Exact source/test candidate:** `918f33295994d47a3f669e8b491828fd8293a862`.
+- **Source commits:** `73c697c9c675504b07f15ad2c915261f0313769a` (shared backup/restore lock), `a0d6d74d239d318487fac8201602844ba34ea1ee` (accurate shared-lock contention message).
+- **Test commits:** `086f157356a78d026b6e1dde4e473d01b85773ba` (backup-vs-restore contention), `753ecd7cdcb265b43113d264d79abb8dc0ba16b4` (lock cleanup on validation failure), `918f33295994d47a3f669e8b491828fd8293a862` (updated restore contention assertion).
+- **Additional fix:** because backups now use the same exclusive lock as restore, a restore that encounters a backup lock reports the shared backup/restore operation accurately rather than incorrectly saying only another restore owns it.
+- **Regression:** a backup with no eligible entries fails validation, leaves no backup output, and releases its own shared lock. Restore's lock-contention test asserts the shared-lock message.
+- **Exact-SHA automation/security:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720045) — **409 Node tests passed, 0 failed, 0 skipped**; npm audit reported **0 vulnerabilities**.
+- **Metadata validation:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720246).
+- **Content quality:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720195).
+- **Dashboard browser E2E:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720017).
+- **Isolated main/candidate baseline:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762709642).
+- **Draft-only workflow:** [PASS for local validation only](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720015); this is not proof of a remote Meta draft.
+- **Production readiness:** [BLOCKED/fail-closed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720001), as expected while mandatory production prerequisites remain unresolved.
+
+## Live Git snapshot before this documentation update
+
+- `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Implementation branch / PR #1 HEAD: `918f33295994d47a3f669e8b491828fd8293a862`.
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- GitHub compare: **2,014 ahead / 2 behind / 174 changed files**, status `diverged`.
+- PR #1 remains open, draft and unmerged. `test/restore-facebook-draft-history.test.mjs` is present on the implementation branch and absent from main after main's explicit revert.
+- Documentation commits following this candidate do not change source/test behavior.
+
+## Scope limit
+
+Backup destination overwrite protection, backup durability flushing, backup/restore mutual exclusion, lock cleanup after validation failure, and shared-lock error reporting are implemented and covered. Full power-loss/deployment recovery, complete dashboard/API acceptance, genuine production media and rights approval, verified YouTube/Meta external operations, owner-approved cadence and full Git reconciliation remain unresolved. **Production remains blocked.**
+
+---
+
 # Follow-up implementation evidence — 28 October 2026, 20:19 UTC
 
 ## Serialize backup snapshots with restore transactions
