@@ -102,3 +102,55 @@ test("dashboard rejects malformed JSON, unsupported content types, and oversized
       `${item.name} must not mutate persisted state`);
   }
 });
+
+
+test("authorized content-job creation persists one audit event and enforces idempotency", async t => {
+  const { base, token, statePath } = await startDashboard(t);
+  const request = {
+    idempotencyKey: "api-integration:short-2026-11-07",
+    title: "Wildlife storytelling integration test",
+    topic: "How to plan a wildlife documentary",
+    contentType: "short",
+    scheduledDay: "Saturday",
+    scheduledDate: "2026-11-07",
+    inputReferences: ["content/short-001-wildlife-video-storytelling.md"]
+  };
+  const headers = { "content-type": "application/json", "x-operator-token": token };
+
+  const createdResponse = await fetch(base + "/api/jobs", {
+    method: "POST", headers, body: JSON.stringify(request)
+  });
+  const createdText = await createdResponse.text();
+  assert.equal(createdResponse.status, 201, createdText);
+  const created = JSON.parse(createdText);
+  assert.equal(created.reused, false);
+  assert.equal(created.publishingEnabled, false);
+  assert.equal(created.job.state, "QUEUED");
+  assert.equal(created.job.scheduledSlot.timezone, "Africa/Johannesburg");
+
+  const persistedOnce = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  assert.equal(persistedOnce.jobs.filter(job => job.idempotencyKey === request.idempotencyKey).length, 1);
+  assert.equal(persistedOnce.audit.filter(event => event.action === "CONTENT_JOB_QUEUED" && event.idempotencyKey === request.idempotencyKey).length, 1);
+
+  const repeatedResponse = await fetch(base + "/api/jobs", {
+    method: "POST", headers, body: JSON.stringify(request)
+  });
+  const repeatedText = await repeatedResponse.text();
+  assert.equal(repeatedResponse.status, 200, repeatedText);
+  const repeated = JSON.parse(repeatedText);
+  assert.equal(repeated.reused, true);
+  assert.equal(repeated.job.id, created.job.id);
+
+  const conflictingResponse = await fetch(base + "/api/jobs", {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ ...request, topic: "A different topic using the same key" })
+  });
+  const conflictingText = await conflictingResponse.text();
+  assert.equal(conflictingResponse.status, 409, conflictingText);
+
+  const persistedFinal = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  assert.equal(persistedFinal.jobs.filter(job => job.idempotencyKey === request.idempotencyKey).length, 1);
+  assert.equal(persistedFinal.audit.filter(event => event.action === "CONTENT_JOB_QUEUED" && event.idempotencyKey === request.idempotencyKey).length, 1);
+  assert.equal(persistedFinal.jobs.find(job => job.id === created.job.id).topic, request.topic);
+});
