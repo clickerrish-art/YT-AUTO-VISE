@@ -451,3 +451,12 @@ Exact-candidate evidence for `1f72c6dc5b648f0c60fdea45ae1d37e835e4505e`:
 - Meta draft workflow [40598195092](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195092): workflow success for local validation; external draft-creation job skipped.
 
 DASH-001 remains `NOT_TESTED` for exhaustive control/API acceptance.
+
+## Current source/test checkpoint — 28 October 2026
+
+**Exact tested source/test SHA:** `ce3ee82d48265ef16c39e5d9b84debd69709112a`. Exact-SHA browser E2E [40606298746](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606298746) passed all 13 Chromium journeys. Automation/security [40606304386](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304386) and content quality [40606304170](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304170) passed 386 Node tests, 0 failures, 0 skips; content quality included FFmpeg/ffprobe renderer integration.
+
+The current UI now disables the render action unless a queued job has current script, narration and production-plan approvals. The browser test verifies that jobs missing the approved authoring pipeline receive HTTP 409 with actionable blockers, remain `QUEUED`, acquire no worker lease, create no render output and emit no `CONTENT_RENDER_STARTED` audit entry. A private parent can support internal Short lineage only when native Related video remains explicitly `BLOCKED_EXTERNAL`.
+
+**DASH-001 remains NOT_TESTED.** The inventory remains 105 controls, 15 forms and 38 literal route branches (10 GET, 28 POST; 35 API branches). The browser suite is not exhaustive coverage of all 105 controls and all 38 route branches. Authorized success paths, role/permission boundaries, malformed/boundary inputs per route, provider/filesystem/persistence failure injection, retries, cross-process concurrency, complete restart durability, audit semantics and full keyboard/mobile accessibility remain incomplete. Continue to record evidence per control/route; do not infer acceptance from inventory or global test-suite success.
+
