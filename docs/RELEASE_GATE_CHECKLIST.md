@@ -886,17 +886,17 @@ Release decision remains **BLOCKED**.
 
 ## Exact-HEAD schedule-history and cadence-decision validation — 2026-10-28
 
-- [x] Exact tested source/test candidate: `707b15b65e3a20e24c15f30833d5106944a04c76`.
-- [x] Remote `published`, `public`, `private`, and `unlisted` records without `actualPublishedAt` or `publishedAt` fail closed; `createdAt` is not accepted as publication evidence.
-- [x] Caller-supplied minimum spacing below 72 elapsed hours is rejected; tests cover negative/zero/sub-72 values and accepted 72/96-hour settings.
+- [x] Exact tested source/test candidate: `cfa4e3c3b18e8fd2e799a676f56b32ade766d072`.
+- [x] Remote `published`, `public`, `private`, and `unlisted` records without `actualPublishedAt` or `publishedAt` fail closed; creation/planned timestamps are not publication evidence.
+- [x] Both schedule validation entry points reject spacing overrides below 72 elapsed hours.
 - [x] Owner-cadence validation requires an explicit owner-approved mode/reference and a mathematically feasible policy; it cannot waive the hard 72-hour gap.
-- [x] Automation/security [40649764392](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40649764392): 393 Node tests, 0 failures/0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe integration passed.
-- [x] Content quality [40649764450](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40649764450): 393/393 Node tests, zero skips.
-- [x] Metadata [40649764345](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40649764345): 393/393 Node tests, zero skips.
-- [x] Dashboard E2E [40649764389](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40649764389): 14 Chromium journeys.
-- [x] Isolated main/candidate baseline [40649764478](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40649764478): PASS for main and candidate.
-- [ ] Production readiness [40649764412](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40649764412) remains BLOCKED by 13 prerequisites.
-- [ ] Nature Frontiers draft workflow [40649764729](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40649764729): local validation passed, but external draft creation was skipped.
+- [x] Automation/security [40650196598](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650196598): 394 Node tests, 0 failures/0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe integration passed.
+- [x] Content quality [40650196513](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650196513): 394/394 Node tests, zero skips.
+- [x] Metadata [40650196606](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650196606): 394/394 Node tests, zero skips.
+- [x] Dashboard E2E [40650196545](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650196545): 14 Chromium journeys.
+- [x] Isolated main/candidate baseline [40650196481](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650196481): PASS for main and candidate.
+- [ ] Production readiness [40650196516](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650196516) remains BLOCKED by 13 prerequisites.
+- [ ] Nature Frontiers draft workflow [40650196549](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650196549): local validation passed, but external draft creation was skipped.
 - [ ] Metricool has eight upcoming Nature Frontiers Facebook/Instagram promotions with auto-publishing enabled. Owner must resolve them; this run did not alter existing scheduled posts.
 - [ ] DASH-001 exhaustive dashboard/API acceptance, actual rights-cleared media and human review, verified YouTube identity/history, authorized private-upload receipt, external Meta acceptance, owner cadence approval, branch protection and operational recovery/deployment drills remain open.
 - Full evidence: [CURRENT_RELEASE_EVIDENCE_2026-10-28.md](CURRENT_RELEASE_EVIDENCE_2026-10-28.md).
