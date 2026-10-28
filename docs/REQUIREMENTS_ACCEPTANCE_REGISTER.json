@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-28T12:57:00+02:00",
-  "evidencePolicy": "Exact source/test candidate 4d003f320df0f1d26c5b46dcb2a0c545cfec785c: automation/security 401 Node tests passed, 0 failures/0 skips; 16 Python tests passed; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1; content quality 401/401 zero skips; metadata 401/401 zero skips; dashboard browser E2E 15 journeys; isolated main/candidate baseline passed. Production readiness remains blocked by external prerequisites; external Meta draft creation was skipped. DASH-001 remains NOT_TESTED because control-by-control and route-by-route behavior acceptance is incomplete.",
+  "recordedAt": "2026-10-28T12:35:00Z",
+  "evidencePolicy": "Exact source/test candidate 3f2b2e27bd04c686d279b293d3019f125a344285 adds inventory-driven unauthenticated HTTP coverage for every distinct declared /api method/path. Exact-SHA automation/security passed 402 Node tests, 0 failures/0 skips; 16 Python tests passed; npm audit found 0 vulnerabilities; content-quality and metadata workflows passed 402/402 with zero skips; dashboard browser E2E passed 15 journeys. Exact-SHA isolated main/candidate baseline is still running at the time of this record. Production readiness remains correctly blocked by external prerequisites; Meta workflow success does not establish remote draft creation. DASH-001 remains NOT_TESTED because authorized success, mutation persistence, failures, idempotency, concurrency, restart and accessibility acceptance are not complete for every control/route.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -38,9 +38,14 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295493",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295386",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295376",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295383"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295383",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3f2b2e27bd04c686d279b293d3019f125a344285",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995839",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995821",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995870",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995790"
       ],
-      "nextAction": "Exact source/test candidate 986fe282b84c14f72d7c735c46259ca15722b858: automation/security 397/397 Node tests, 0 failures/0 skips; Python unittest 16/16; npm audit 0 vulnerabilities; content quality 397/397; metadata 397/397; dashboard browser E2E 15 Chromium journeys; isolated main/candidate baseline passed. Production readiness remains separately BLOCKED; Meta workflow did not establish external draft creation.",
+      "nextAction": "Exact source/test candidate 3f2b2e27bd04c686d279b293d3019f125a344285: automation/security 402 Node tests passed, 0 failures/0 skips; Python unittest 16/16; npm audit 0 vulnerabilities; content quality 402/402 and metadata 402/402 with zero skips; dashboard browser E2E 15 journeys. Exact-SHA isolated baseline comparison run 40688995834 was still in progress at record time. Production readiness is a separate expected fail-closed gate; Meta draft CI does not prove external draft creation.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
@@ -66,9 +71,11 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087540",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087503"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087503",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3f2b2e27bd04c686d279b293d3019f125a344285",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995839"
       ],
-      "nextAction": "Live inventory remains 105 controls, 15 forms, 38 literal route branches (10 GET, 28 POST; 35 /api branches). Exact candidate eab2e53440fa7c2ce611c4608b67c019a59ca5c7 passed 15 Chromium journeys including 320px mobile no-horizontal-overflow and accessible-name checks, but per-control/per-route authorized success, permission, malformed/boundary input, dependency failure, idempotency, concurrency, persistence, audit, restart and full keyboard workflow acceptance remain incomplete. Keep NOT_TESTED.",
+      "nextAction": "Current static inventory: 105 HTML controls, 15 forms, 38 literal route branches (10 GET, 28 POST), including 35 distinct API method/path routes. New exact-SHA real-server authentication sweep covers all distinct API routes for missing operator credentials and verifies 401 JSON, no path leak and unchanged persisted state. Keep NOT_TESTED: per-control/per-route authorized success, validation/boundaries, authorization variants, mutation persistence/audit, idempotency, concurrency, provider/filesystem failures, restart/recovery, keyboard/focus/accessibility and responsive behavior are not exhaustively accepted.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
@@ -192,7 +199,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/restore-facebook-draft-history.test.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/tests/restore-state.test.mjs"
       ],
-      "nextAction": "Live source/test candidate comparison on 28 October 2026: 1,892 commits ahead, 2 behind, 170 changed files; merge base 45352b73bb6cc4787b2a49988b575afb754ab627. Two subsequent documentation-only evidence commits leave the live branch head 1,894 ahead. Full non-destructive review of all branch-only/base-only commits and the restore-history test-file add/revert pair remains incomplete.",
+      "nextAction": "Live compare at source/test candidate 3f2b2e27bd04c686d279b293d3019f125a344285: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 1,981 commits ahead / 2 behind / 173 changed files. Full commit-by-commit/file-level divergence review and the restore-history test add/revert investigation remain incomplete. Do not reset, rebase, merge or force-push.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants."
     },
@@ -730,11 +737,13 @@
       "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195046"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195046",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3f2b2e27bd04c686d279b293d3019f125a344285",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995839"
       ],
       "assessmentCommitSha": "1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
       "acceptanceCriterion": "An inventory-driven integration test sends each distinct /api method/path without an operator token and verifies HTTP 401.",
-      "nextAction": "Add authorized-success, malformed-input, permission, dependency/persistence, duplicate/concurrency, restart and audit assertions for every applicable route; do not treat this narrow authentication sweep as full API acceptance."
+      "nextAction": "New exact-SHA test test/dashboard-api-auth-matrix.test.mjs starts the real local backend and sends unauthenticated requests to every distinct declared /api method/path; all return consistent 401 JSON without state mutation or filesystem-path disclosure. Full authorized success, malformed input, provider/persistence failures, duplicate/concurrent operations, restart and audit-event acceptance remain required; do not close DASH-001 from this narrow sweep."
     },
     {
       "id": "A11Y-001",
@@ -788,7 +797,7 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/METRICOOL_LIVE_PUBLISHING_RISK_2026-10-28.md"
       ],
-      "nextAction": "Read-only Metricool inspection on 2026-10-28 returned eight future records scheduled 2026-10-31 through 2026-11-25; all had autoPublish=true and draft=false. One prior record (406357273) returned Facebook PUBLISHED. Obtain explicit owner authorization for specific pause/cancel/configuration actions if posts are unintended; apply only approved changes and read back remote state. Do not assume repository dry-run settings affect existing remote schedules.",
+      "nextAction": "Read-only Metricool inspection on 2026-10-28 found eight future Nature Frontiers records (brandId 7545638), all autoPublish=true and draft=false: 406357296 (2026-10-31 10:00 SAST, Facebook); 406357335 (2026-11-04 10:00, Facebook); 406357364 (2026-11-07 10:00, Facebook); 406357388 (2026-11-11 10:00, Facebook); 406357414 (2026-11-14 10:00, Facebook); 406357443 (2026-11-18 10:00, Facebook); 406357483 (2026-11-21 10:00, Facebook); 406357554 (2026-11-25 10:00, Facebook and Instagram). No schedules were changed. Obtain explicit owner decision for each record before pausing, cancelling or changing any; re-read provider state after any authorized change.",
       "assessmentCommitSha": "83d810069b1fe9404f6bc5d5bb45d72ba67d9cd4",
       "acceptanceCriterion": "The owner has decided which records are intended; any authorized changes are verified by a fresh Metricool read-back; no unintended scheduled publication remains active; evidence does not expose credentials."
     },
