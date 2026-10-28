@@ -87,3 +87,35 @@ Metricool exposes one brand labelled **Nature Frontiers**. The inspected queue c
 - Exhaustive dashboard/API behavioral acceptance (DASH-001 remains NOT_TESTED), branch protection, non-destructive branch-history reconciliation, and controlled deployment/backup/restore/rollback drills.
 
 No video or post was published by this implementation run. No campaign was activated, no visibility changed, no paid generation used, no merge performed, and `main` was not edited. Scheduled GitHub workflows execute from `main`; PR-branch workflow success is not evidence that production automation is active.
+
+
+---
+
+## Exact-SHA Meta adapter security repair — 28 October 2026
+
+**Source/test candidate:** `ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9`  
+**Application source fix:** `e090b19136d9336c45fd1a01c4c90400c05405d4`  
+**Remote-ID boundary fix:** `b47d08614fa31074d2118cadc98df356478784b2`
+
+### Defects fixed
+
+1. **Remote post-ID prefix collision:** `fetchMetaPagePost` previously accepted any remote ID beginning with the configured Page ID, so a longer Page ID could share the prefix. It now validates the configured Page first and requires the exact Page ID, underscore separator, and non-empty suffix. The regression proves colliding, separator-free, and empty-suffix IDs are rejected before a Graph API request.
+2. **Symlink escape in media upload:** lexical path containment alone did not stop a symlink located inside the configured media root from pointing outside it. The adapter now uses `resolveRegularFileNoSymlinks`, retains repository-root confinement, and rejects symlinked or non-regular files before reading/probing/uploading. The regression points an in-root symlink at an outside file and verifies that neither ffprobe nor the remote POST is called.
+
+### Exact-candidate automated evidence
+
+- Automation/security [run 40661176042](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176042): **PASS** — 399 Node tests, 0 failures, 0 skips; 16 Python tests passed; `npm audit` reported 0 vulnerabilities; FFmpeg 6.1.1 was installed; JavaScript syntax and Python compilation checks passed. Both new Meta regression tests appear in the run log.
+- Content quality [run 40661176110](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176110): **PASS** — 399/399 Node tests, 0 failures, 0 skips.
+- Metadata validation [run 40661176011](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176011): **PASS** — 399/399 Node tests, 0 failures, 0 skips.
+- Dashboard Chromium E2E [run 40661176112](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176112): **PASS** — 15 tests. This remains a useful journey suite, not exhaustive per-control/API acceptance.
+- Isolated main/candidate comparison [run 40661176071](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176071): **PASS** — Node and Python commands exited 0 for both main and candidate. The isolated baseline runner could not install FFmpeg and explicitly warned that its renderer integration test would skip there; the candidate automation workflow installed FFmpeg and passed with zero skipped tests. Artifact [12804520728](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176071/artifacts/12804520728), ZIP SHA-256 `89c7bf8f49f976a9b57e711cbafc71eaba2470e081a3416f85166c6f2518e586`.
+- Production readiness [run 40661176424](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176424): **BLOCKED/failed closed**, as expected while owner-controlled prerequisites are absent.
+- Facebook draft workflow [run 40661176046](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176046): local validation **PASS** (15 tests); remote draft creation was **SKIPPED**, so no external draft receipt is claimed.
+
+### Current repository and release status
+
+- Live `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- At this evidence refresh, live compare reports 1,906 commits ahead / 2 behind / 171 changed files before this documentation-only refresh. Recheck refs before any future integration; full non-destructive history reconciliation remains open.
+- Acceptance register now has 51 requirements: 35 PASS, 8 NOT_TESTED, 8 BLOCKED_EXTERNAL. The two newly fixed Meta defects are recorded as `META-ASSET-PATH-001`.
+- PR #1 remains open, draft and unmerged. No edit to `main`, merge, reset, rebase, force-push, external post, campaign activation, or visibility change occurred.
+- Production remains **NOT READY**. Dashboard/API exhaustive acceptance, the full branch-history review, real media and rights/human approval, verified YouTube identity/history, authorized private upload, native Short Related-video verification, external Meta draft read-back, the owner decision on eight Metricool schedules, owner-approved cadence, and isolated deployment/rollback drills remain unresolved.
