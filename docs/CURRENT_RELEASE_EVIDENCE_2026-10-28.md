@@ -119,3 +119,8 @@ No video or post was published by this implementation run. No campaign was activ
 - Acceptance register now has 51 requirements: 35 PASS, 8 NOT_TESTED, 8 BLOCKED_EXTERNAL. The two newly fixed Meta defects are recorded as `META-ASSET-PATH-001`.
 - PR #1 remains open, draft and unmerged. No edit to `main`, merge, reset, rebase, force-push, external post, campaign activation, or visibility change occurred.
 - Production remains **NOT READY**. Dashboard/API exhaustive acceptance, the full branch-history review, real media and rights/human approval, verified YouTube identity/history, authorized private upload, native Short Related-video verification, external Meta draft read-back, the owner decision on eight Metricool schedules, owner-approved cadence, and isolated deployment/rollback drills remain unresolved.
+
+
+## Non-destructive history note — test-file preservation
+
+Live `main` is `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; its latest commit is explicitly titled **“Revert unintended test-file write to default branch”** and its diff deletes `test/restore-facebook-draft-history.test.mjs` from `main`. The implementation branch still contains that test file (current blob SHA at this inspection: `b6d4ab9c30d1e025bf2e55bddae446d96a2cb2a3`). This is a verified branch/base discrepancy, not a reason to delete the branch regression test. Preserve it and its history; do not resolve this divergence by merging, resetting, rebasing or force-pushing. The complete inventory of branch-only commits and the other base-only commit still requires a dedicated, non-destructive history review.
