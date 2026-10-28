@@ -44,6 +44,23 @@ test("validator fails closed when a published item has no actual publication tim
   assert.ok(result.errors.some(error => error.includes("missing publishedAt")));
 });
 
+test("actual remote states never fall back to job creation time when publication time is missing", () => {
+  for (const status of ["published", "public", "private", "unlisted"]) {
+    const result = validatePublicationSlot(
+      { id: "next", scheduledAt: "2026-10-28T15:00:00.000Z" },
+      [{
+        id: `remote-${status}`,
+        status,
+        createdAt: "2026-10-20T15:00:00.000Z",
+        scheduledAt: "2026-10-20T15:00:00.000Z"
+      }]
+    );
+    assert.equal(result.valid, false, `${status} history without an actual timestamp must fail closed`);
+    assert.ok(result.errors.some(error => error.includes("actual publication timestamp")),
+      `${status} history must identify the missing actual publication timestamp`);
+  }
+});
+
 test("an already-colliding existing schedule blocks any new slot", () => {
   const result = validatePublicationSlot(
     { id: "new", scheduledAt: "2026-10-31T15:00:00.000Z" },
