@@ -212,6 +212,16 @@ export async function backupState(options = {}) {
   }
 
   try {
+    const interruptedRestoreJournal = path.join(stateRoot, ".restore-transaction.json");
+    try {
+      const journalStat = fs.lstatSync(interruptedRestoreJournal);
+      if (journalStat.isSymbolicLink() || !journalStat.isFile()) {
+        throw new Error("An interrupted restore journal path is unsafe; inspect state and recover before creating a backup");
+      }
+      throw new Error("An interrupted restore journal exists; run restore recovery and inspect the recovered state before creating a backup snapshot");
+    } catch (error) {
+      if (error?.code !== "ENOENT") throw error;
+    }
     return await backupStateUnlocked(options);
   } finally {
     try {
