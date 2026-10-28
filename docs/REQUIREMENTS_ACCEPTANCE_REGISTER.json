@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-28T20:17:00Z",
-  "evidencePolicy": "Exact source/test candidate 7cdd5fe59686acdd5e3499289463ccc5369f0efd adds backup overwrite protection and durability flushes in scripts/backup-state.mjs with a regression in test/backup-restore.test.mjs. Exact-SHA automation/security passed; the metadata workflow reports 407 Node tests, zero failures/skips, npm audit 0 vulnerabilities; content quality, dashboard browser E2E and isolated baseline passed. Production readiness remains blocked. Evidence for the new backup behavior is tied to 7cdd5fe59686acdd5e3499289463ccc5369f0efd; later commits in this update are documentation-only.",
+  "recordedAt": "2026-10-28T20:20:00Z",
+  "evidencePolicy": "Exact source/test candidate 086f157356a78d026b6e1dde4e473d01b85773ba adds shared backup/restore lock exclusion. Automation/security passed 408 Node tests, zero failures/skips, npm audit 0 vulnerabilities; content-quality, metadata, dashboard browser E2E and isolated main/candidate baseline passed. The test-file incident was reviewed: test/restore-facebook-draft-history.test.mjs is intentionally present on the implementation branch and absent from main following the explicit revert there. Production readiness remains blocked. Later documentation commits do not alter source/test behavior.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -66,9 +66,16 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591289",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601910",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601880",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591541"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591541",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/73c697c9c675504b07f15ad2c915261f0313769a",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/086f157356a78d026b6e1dde4e473d01b85773ba",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762134886",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762134957",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135041",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135380",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762127254"
       ],
-      "nextAction": "Exact source/test candidate 7cdd5fe59686acdd5e3499289463ccc5369f0efd adds a backup overwrite-protection regression. Automation/security 40761601849 passed; exact-SHA metadata workflow 40761591289 reports 407 Node tests passed, zero failures/skips and npm audit 0 vulnerabilities; content quality 40761601910, dashboard E2E 40761601880 and isolated baseline 40761591541 passed. Production readiness 40761601938 remains blocked. Earlier evidence entries are historical exact-SHA records; do not imply all historical runs tested this candidate.",
+      "nextAction": "Exact source/test candidate 086f157356a78d026b6e1dde4e473d01b85773ba adds shared backup/restore lock contention coverage. Automation/security 40762134886 passed 408 Node tests with zero failures/skips and npm audit 0 vulnerabilities; content quality 40762134957, metadata 40762135041, browser E2E 40762135380 and isolated baseline 40762127254 passed. Production readiness 40762135154 remains blocked. Older evidence entries are historical and are not represented as testing this candidate.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
@@ -88,9 +95,16 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591289",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601910",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601880",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591541"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591541",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/73c697c9c675504b07f15ad2c915261f0313769a",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/086f157356a78d026b6e1dde4e473d01b85773ba",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762134886",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762134957",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135041",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135380",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762127254"
       ],
-      "nextAction": "Exact current source/test candidate 7cdd5fe59686acdd5e3499289463ccc5369f0efd passed isolated main/candidate baseline workflow 40761591541. Live main at verification: fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627. Full branch divergence review remains incomplete.",
+      "nextAction": "Exact source/test candidate 086f157356a78d026b6e1dde4e473d01b85773ba passed isolated main/candidate baseline workflow 40762127254. Live main at verification: fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base: 45352b73bb6cc4787b2a49988b575afb754ab627. Full branch divergence review remains incomplete.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
@@ -143,7 +157,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237"
       ],
-      "nextAction": "Backup writer now refuses an existing explicit output path and adds file/directory durability flushes; regression is covered at exact candidate 7cdd5fe59686acdd5e3499289463ccc5369f0efd. This does not complete backup/restore concurrency, power-loss, interrupted transaction, ambiguous remote side-effect or deployment recovery drills; requirement remains NOT_TESTED.",
+      "nextAction": "Backup output overwrite protection and backup-vs-restore lock contention are implemented and tested on exact candidate 086f157356a78d026b6e1dde4e473d01b85773ba. This does not complete process-level concurrent-operation tests, crash/power-loss transaction-boundary recovery, ambiguous remote-side-effect reconciliation or deployment rollback drills; requirement remains NOT_TESTED.",
       "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
       "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects."
     },
@@ -993,6 +1007,25 @@
       "nextAction": "This specific overwrite-preservation behavior is tested. Continue separate concurrency, crash/power-loss and operational recovery acceptance under STATE-001 and DEPLOY-001.",
       "assessmentCommitSha": "7cdd5fe59686acdd5e3499289463ccc5369f0efd",
       "acceptanceCriterion": "When outputPath already exists, backupState rejects, preserves the original bytes, and cleans up its temporary file. A new backup is finalized without replacement-capable rename; file bytes are fsynced and the parent directory is fsynced on supported POSIX systems."
+    },
+    {
+      "id": "BACKUP-002",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Backups and restores sharing a state directory must not run concurrently or capture a partially committed restore.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/73c697c9c675504b07f15ad2c915261f0313769a",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/086f157356a78d026b6e1dde4e473d01b85773ba",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762134886",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762134957",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135041",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135380",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762127254"
+      ],
+      "nextAction": "Lock-contention behavior is proven. Add real overlapping-process and interrupted-restore drills before marking overall STATE-001 accepted.",
+      "assessmentCommitSha": "086f157356a78d026b6e1dde4e473d01b85773ba",
+      "acceptanceCriterion": "Backup acquires the same exclusive state-operation lock as restore, rejects a pre-existing lock without changing it, and writes no backup output while the lock is held."
     }
   ],
   "currentCheckpoint": {
