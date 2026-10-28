@@ -115,7 +115,11 @@ test("restore reinstates the original dashboard state if a later commit fails", 
     fs.rmSync(destination.logDir, { recursive: true, force: true });
     fs.rmSync(destination.rightsDir, { recursive: true, force: true });
     const backupPath = path.join(source.root, "backup.json");
-    await backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir, rightsDir: source.rightsDir, outputPath: backupPath });
+    const backup = await backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir, rightsDir: source.rightsDir, outputPath: backupPath });
+    // Keep this failure-injection test deterministic while preserving the real
+    // stale-state guard: the destination's pre-restore state predates this backup.
+    const earlierThanBackup = new Date(Date.parse(backup.createdAt) - 1000);
+    fs.utimesSync(destinationState, earlierThanBackup, earlierThanBackup);
 
     const failingDestination = path.join(destination.stateDir, "facebook-recovery-ledger.jsonl");
     fs.renameSync = function (sourcePath, targetPath, ...rest) {
