@@ -1,3 +1,14 @@
+## Latest exact-SHA coverage update — 28 October 2026
+
+- **Source/test candidate:** `3f2b2e27bd04c686d279b293d3019f125a344285`.
+- **Current static inventory:** 105 controls, 15 forms, 38 literal route branches (10 GET, 28 POST), including 35 distinct API method/path routes.
+- **New real-server security sweep:** `test/dashboard-api-auth-matrix.test.mjs` derives the distinct API route inventory from the live source, starts the actual dashboard backend in isolated temporary state, and submits requests without operator credentials to every distinct `/api/` route. Each returned HTTP 401 with consistent JSON; responses did not reveal local filesystem paths; persisted state remained byte-identical.
+- **Exact-SHA evidence:** automation/security [402 Node tests, 0 failures, 0 skips and 16 Python tests passed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995839); content quality [402/402, zero skips](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995821); metadata [402/402, zero skips](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995870); dashboard browser E2E [15 Chromium journeys](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995790); isolated main/candidate baseline [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995834).
+- **Coverage limitation:** this is a broad negative-authentication sweep only. It does not prove authorized success, per-route input validation, durable mutation/audit behavior, provider/filesystem failure handling, idempotency, concurrency, restart/recovery, keyboard/focus/accessibility or every responsive state. Keep `DASH-001` `NOT_TESTED`; do not count a static inventory or auth-only route sweep as full control/API acceptance.
+- Full exact-SHA report: [CURRENT_RELEASE_EVIDENCE_2026-10-28.md](https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/CURRENT_RELEASE_EVIDENCE_2026-10-28.md).
+
+---
+
 ## Exact-candidate dashboard request-size fix — 28 October 2026
 
 - Live implementation/test candidate: `852eb1087cc4a06bafb80d70760ec9915817fe79`; current PR #1 was open, draft and unmerged at verification. `main` remained `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
