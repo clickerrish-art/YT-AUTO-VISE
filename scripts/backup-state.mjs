@@ -104,8 +104,39 @@ export async function backupState({ rootDir = root, stateDir = process.env.DASHB
   fs.mkdirSync(path.dirname(destination), { recursive: true, mode: 0o700 });
   assertNoSymlinkComponents(path.dirname(destination), "backup output directory");
   const temp = destination + "." + crypto.randomUUID() + ".tmp";
-  fs.writeFileSync(temp, encoded, { mode: 0o600, flag: "wx" });
-  fs.renameSync(temp, destination);
+  let fd;
+  let linked = false;
+  try {
+    fd = fs.openSync(temp, "wx", 0o600);
+    fs.writeFileSync(fd, encoded);
+    fs.fsyncSync(fd);
+    fs.closeSync(fd);
+    fd = undefined;
+
+    // linkSync creates the final name atomically without replacing an existing
+    // backup. renameSync would silently overwrite an operator-supplied path.
+    fs.linkSync(temp, destination);
+    linked = true;
+    fs.unlinkSync(temp);
+
+    // Persist the directory entry on POSIX filesystems before reporting success.
+    // Some platforms do not permit opening/fsyncing directories, so Windows
+    // relies on the flushed file plus atomic same-directory link operation.
+    if (process.platform !== "win32") {
+      const directoryFd = fs.openSync(path.dirname(destination), fs.constants.O_RDONLY);
+      try { fs.fsyncSync(directoryFd); }
+      finally { fs.closeSync(directoryFd); }
+    }
+  } catch (error) {
+    if (fd !== undefined) {
+      try { fs.closeSync(fd); } catch {}
+    }
+    try { fs.unlinkSync(temp); } catch {}
+    if (error?.code === "EEXIST" && !linked) {
+      throw new Error("Backup destination already exists; refusing to overwrite an existing backup", { cause: error });
+    }
+    throw error;
+  }
   return { path: destination, createdAt: payload.createdAt, entries: entries.length, sha256: sha256(Buffer.from(encoded)), includesSecrets: false };
 }
 
