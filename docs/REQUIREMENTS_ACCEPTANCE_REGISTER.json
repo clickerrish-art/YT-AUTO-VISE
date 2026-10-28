@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-28T20:04:00Z",
-  "evidencePolicy": "Exact source/test candidate 54a15314e53c00af3e33faf8a7d691a72372e00a adds a real-server regression for a malformed persisted SCHEDULED_SLOT reservation with no scheduledDate. Automation/security passed with 406 passing test lines, zero failed test lines, and the workflow's zero-skip assertion; npm audit reported zero vulnerabilities. Content-quality, metadata, dashboard browser E2E and isolated main/candidate baseline workflows passed. Production readiness remains correctly blocked on external prerequisites. Evidence is tied to 54a15314e53c00af3e33faf8a7d691a72372e00a, not subsequent documentation-only commits.",
+  "recordedAt": "2026-10-28T20:17:00Z",
+  "evidencePolicy": "Exact source/test candidate 7cdd5fe59686acdd5e3499289463ccc5369f0efd adds backup overwrite protection and durability flushes in scripts/backup-state.mjs with a regression in test/backup-restore.test.mjs. Exact-SHA automation/security passed; the metadata workflow reports 407 Node tests, zero failures/skips, npm audit 0 vulnerabilities; content quality, dashboard browser E2E and isolated baseline passed. Production readiness remains blocked. Evidence for the new backup behavior is tied to 7cdd5fe59686acdd5e3499289463ccc5369f0efd; later commits in this update are documentation-only.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -25,7 +25,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417"
       ],
-      "nextAction": "Live snapshot immediately before this evidence refresh: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; PR/branch head 54a15314e53c00af3e33faf8a7d691a72372e00a; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 1,997 ahead / 2 behind / 174 changed files. PR #1 was open, draft and unmerged. This follow-up register update is documentation-only; full divergence review remains incomplete.",
+      "nextAction": "Live snapshot before documentation-only evidence refresh: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; PR/branch head 7cdd5fe59686acdd5e3499289463ccc5369f0efd; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 2002 ahead / 2 behind / 174 changed files. PR #1 remained open, draft and unmerged. Documentation-only evidence commits follow; full divergence review remains incomplete.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch."
     },
@@ -59,9 +59,16 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759742691",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759742541",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759742592",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759733666"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759733666",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3be0ddf7b8fcd4445d8bb93fe1f015a7ab006f51",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/7cdd5fe59686acdd5e3499289463ccc5369f0efd",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601849",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591289",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601910",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601880",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591541"
       ],
-      "nextAction": "Exact source/test candidate 54a15314e53c00af3e33faf8a7d691a72372e00a: automation/security run 40759742550 passed the Node test step with zero skips required; 406 test pass lines and 0 failed lines were present in the retained log; npm audit reported 0 vulnerabilities. Content quality 40759742691, metadata 40759742541, browser E2E 40759742592 and isolated baseline 40759733666 passed. Production readiness 40759742599 remains BLOCKED/fail-closed on missing production prerequisites. Local Meta draft workflow does not prove remote creation.",
+      "nextAction": "Exact source/test candidate 7cdd5fe59686acdd5e3499289463ccc5369f0efd adds a backup overwrite-protection regression. Automation/security 40761601849 passed; exact-SHA metadata workflow 40761591289 reports 407 Node tests passed, zero failures/skips and npm audit 0 vulnerabilities; content quality 40761601910, dashboard E2E 40761601880 and isolated baseline 40761591541 passed. Production readiness 40761601938 remains blocked. Earlier evidence entries are historical exact-SHA records; do not imply all historical runs tested this candidate.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
@@ -74,9 +81,16 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40651430324",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40706792076",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759733666"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759733666",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3be0ddf7b8fcd4445d8bb93fe1f015a7ab006f51",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/7cdd5fe59686acdd5e3499289463ccc5369f0efd",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601849",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591289",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601910",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601880",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591541"
       ],
-      "nextAction": "Exact candidate 54a15314e53c00af3e33faf8a7d691a72372e00a passed isolated baseline run 40759733666 against main fa00d28e7f58911482686e4ad69fac9f4701a2e6. Baseline success does not close the full 1,997-commit divergence review.",
+      "nextAction": "Exact current source/test candidate 7cdd5fe59686acdd5e3499289463ccc5369f0efd passed isolated main/candidate baseline workflow 40761591541. Live main at verification: fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627. Full branch divergence review remains incomplete.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
@@ -129,7 +143,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237"
       ],
-      "nextAction": "Restore rollback, original-state preservation, interrupted-journal recovery and startup blocking now have deterministic evidence; full cross-process state safety, uncertain remote-acceptance recovery and production-like deployment/rollback drills remain NOT_TESTED.",
+      "nextAction": "Backup writer now refuses an existing explicit output path and adds file/directory durability flushes; regression is covered at exact candidate 7cdd5fe59686acdd5e3499289463ccc5369f0efd. This does not complete backup/restore concurrency, power-loss, interrupted transaction, ambiguous remote side-effect or deployment recovery drills; requirement remains NOT_TESTED.",
       "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
       "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects."
     },
@@ -960,6 +974,25 @@
       "nextAction": "Extend the same persistence/idempotency/concurrency pattern to every state-changing route and test cross-process overlap/restart recovery.",
       "assessmentCommitSha": "03c60617afab051f0aab745d0c1203d0ed788417",
       "acceptanceCriterion": "Real HTTP POST /api/jobs creates one queued job and audit event; exact retry returns same job as reused; different inputs with the same key return 409; persisted job/audit counts remain one."
+    },
+    {
+      "id": "BACKUP-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "An explicit backup output path must never overwrite an existing file; flush backup bytes before reporting success.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3be0ddf7b8fcd4445d8bb93fe1f015a7ab006f51",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/7cdd5fe59686acdd5e3499289463ccc5369f0efd",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601849",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591289",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601910",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601880",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591541"
+      ],
+      "nextAction": "This specific overwrite-preservation behavior is tested. Continue separate concurrency, crash/power-loss and operational recovery acceptance under STATE-001 and DEPLOY-001.",
+      "assessmentCommitSha": "7cdd5fe59686acdd5e3499289463ccc5369f0efd",
+      "acceptanceCriterion": "When outputPath already exists, backupState rejects, preserves the original bytes, and cleans up its temporary file. A new backup is finalized without replacement-capable rename; file bytes are fsynced and the parent directory is fsynced on supported POSIX systems."
     }
   ],
   "currentCheckpoint": {
