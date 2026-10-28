@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-28T20:36:00Z",
-  "evidencePolicy": "Exact source/test candidate d5e3445def955413d424085489212c5835ff0807 adds a separate-process shared backup/restore lock contention test. Automation/security passed 410 Node tests, zero failures/skips and npm audit 0 vulnerabilities; metadata, content quality, dashboard browser E2E, isolated baseline and lockfile workflow passed. The preceding candidate 9c9d98a379a6b0867e4ce8dc2add3162d618b5be had one test-only readiness-marker assertion failure (409 pass/1 fail); it was corrected, and the corrected exact candidate passed. Production readiness remains blocked.",
+  "recordedAt": "2026-10-28T20:41:00Z",
+  "evidencePolicy": "Exact source/test candidate 379dd09a5990db6c64e94a51f9d7606013e2604d adds a backup guard for an interrupted restore journal. Automation/security passed 411 Node tests, zero failures/skips and npm audit 0 vulnerabilities; metadata, content quality and dashboard browser E2E passed. Isolated main/candidate baseline was in progress at the time this record was captured; its result must be verified separately. Production readiness remains blocked.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -89,9 +89,15 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160204",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160061",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148454",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148444"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148444",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/aeebf0cf5fa1641d7896907b93b70d17344cbc9c",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/379dd09a5990db6c64e94a51f9d7606013e2604d",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633734",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633578",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633488",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651"
       ],
-      "nextAction": "Exact source/test candidate d5e3445def955413d424085489212c5835ff0807 passed 410 Node tests with zero failures/skips and npm audit 0 vulnerabilities (automation/security 40764160063); metadata 40764160114, content quality 40764160204, browser E2E 40764160061, isolated baseline 40764148454 and lockfile workflow 40764148444 passed. Production readiness 40764160031 remains blocked. Evidence is exact-SHA scoped; historical runs are not represented as testing this candidate.",
+      "nextAction": "Exact source/test candidate 379dd09a5990db6c64e94a51f9d7606013e2604d passed automation/security: 411 Node tests, zero failures/skips, npm audit 0 vulnerabilities (40764633734); metadata 40764633578, content quality 40764633488 and browser E2E 40764633651 passed. Isolated main/candidate baseline 40764633501 was still running at the evidence capture. Production readiness 40764633515 remains blocked.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
@@ -187,9 +193,15 @@
       "status": "NOT_TESTED",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/aeebf0cf5fa1641d7896907b93b70d17344cbc9c",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/379dd09a5990db6c64e94a51f9d7606013e2604d",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633734",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633578",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633488",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651"
       ],
-      "nextAction": "Backup output overwrite protection, durability flushing, backup/restore shared locking, cleanup after validation failure, truthful contention reporting, and a separate-process lock contention regression are implemented. Exact candidate d5e3445def955413d424085489212c5835ff0807 passed 410 Node tests. Process termination during restore, power-loss boundaries, exhaustive rollback/restart drills and uncertain remote-side-effect reconciliation remain incomplete; requirement remains NOT_TESTED.",
+      "nextAction": "Backup refuses to create a new snapshot while .restore-transaction.json exists or is unsafe, preserving the journal and releasing its own lock; test added at exact candidate 379dd09a5990db6c64e94a51f9d7606013e2604d. Automation/security passed 411 tests. Full process-kill/restart, power-loss transaction-boundary, rollback and uncertain remote-side-effect recovery remain incomplete; requirement remains NOT_TESTED.",
       "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
       "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects."
     },
@@ -1099,6 +1111,24 @@
       "nextAction": "The cross-process contention behavior is proven. Continue interrupted-restore, process-kill, crash/restart, power-loss and deployment rollback drills before accepting overall STATE-001.",
       "assessmentCommitSha": "d5e3445def955413d424085489212c5835ff0807",
       "acceptanceCriterion": "A child Node process acquires and fsyncs the shared operation lock. backupState rejects, leaves the lock bytes unchanged, writes no backup file, and the child releases only its own lock during fixture cleanup."
+    },
+    {
+      "id": "BACKUP-005",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Do not create a backup snapshot while an interrupted restore transaction journal remains in the state directory.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/aeebf0cf5fa1641d7896907b93b70d17344cbc9c",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/379dd09a5990db6c64e94a51f9d7606013e2604d",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633734",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633578",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633488",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651"
+      ],
+      "nextAction": "The journal-present refusal is tested. Continue real process termination during restore and repeated restart-recovery drills; this targeted gate does not accept overall STATE-001.",
+      "assessmentCommitSha": "379dd09a5990db6c64e94a51f9d7606013e2604d",
+      "acceptanceCriterion": "When .restore-transaction.json exists, backupState rejects before reading snapshot inputs, preserves the journal, creates no backup output, and removes only its own operation lock."
     }
   ],
   "currentCheckpoint": {
