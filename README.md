@@ -489,3 +489,10 @@ The readiness engine now enforces the 72-hour minimum for every approved cadence
 Private-only Short review can now preserve an explicit `BLOCKED_EXTERNAL` status for the native YouTube Related video feature; it does not claim that the association succeeded. Empty or vague blocker explanations are rejected. The regression test is included in source/test SHA `77921aca418b25bca0a9aa681281145b00c6d72f`. See [current release evidence](docs/CURRENT_RELEASE_EVIDENCE_2026-10-27.md).
 
 **Release remains blocked and implementation is incomplete.** Browser E2E and isolated baseline were in progress at the latest recorded observation. Genuine approved media, full editorial/rights acceptance, verified YouTube identity/history and upload receipt, live Meta draft-only integration, owner-approved cadence, and full recovery/deployment acceptance are still not proven.
+
+
+## Latest tested checkpoint — 28 October 2026
+
+The current source/test candidate is `ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9`. Meta adapter fixes now reject ambiguous remote post IDs and symlinked image assets before external requests. Exact-candidate automation, content-quality and metadata workflows each passed 399 Node tests with zero skips; automation passed 16 Python tests, npm audit found zero vulnerabilities, and FFmpeg was installed. Dashboard browser E2E passed 15 tests. See [current release evidence](docs/CURRENT_RELEASE_EVIDENCE_2026-10-28.md) and the [acceptance register](docs/REQUIREMENTS_ACCEPTANCE_REGISTER.json).
+
+**The application is still incomplete and production is not ready.** Full dashboard/API acceptance, genuine approved media and human review, verified YouTube identity/history and authorized private upload, native Short Related-video evidence, actual Meta draft creation/read-back, owner-approved cadence, the Metricool schedule decision, full branch-history reconciliation and deployment/rollback drills remain open. Keep public/unattended YouTube and live Meta publishing disabled; keep Safari inactive.
