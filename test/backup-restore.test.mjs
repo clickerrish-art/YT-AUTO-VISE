@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { spawn } from "node:child_process";
 import { backupState } from "../scripts/backup-state.mjs";
 import { restoreState } from "../scripts/restore-state.mjs";
 
@@ -371,5 +372,63 @@ test("backup releases its shared operation lock after a validation failure", asy
     assert.equal(fs.existsSync(path.join(root, "backup.json")), false);
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+
+test("separate process holding the shared operation lock blocks backup without altering its lock", async () => {
+  const source = fixture();
+  const lockPath = path.join(source.stateDir, ".restore-operation.lock");
+  const token = "separate-process-restore-owner";
+  const childSource = [
+    "import fs from 'node:fs';",
+    "const lockPath = process.argv[1];",
+    "const token = process.argv[2];",
+    "const fd = fs.openSync(lockPath, 'wx', 0o600);",
+    "fs.writeFileSync(fd, JSON.stringify({ format: 'sonicvhibez-restore-operation-lock', version: 1, token, pid: process.pid, createdAt: new Date().toISOString(), operation: 'restore-test' }));",
+    "fs.fsyncSync(fd);",
+    "process.stdout.write('LOCK_READY\\n');",
+    "process.stdin.setEncoding('utf8');",
+    "process.stdin.on('data', () => { try { fs.closeSync(fd); const current = JSON.parse(fs.readFileSync(lockPath, 'utf8')); if (current.token === token) fs.unlinkSync(lockPath); } finally { process.exit(0); } });"
+  ].join("\n");
+  const child = spawn(process.execPath, ["--input-type=module", "-e", childSource, lockPath, token], {
+    stdio: ["pipe", "pipe", "pipe"]
+  });
+  let stderr = "";
+  child.stderr.setEncoding("utf8");
+  child.stderr.on("data", chunk => { stderr += chunk; });
+  try {
+    await new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error("Timed out waiting for child process to acquire operation lock")), 5000);
+      child.once("error", error => { clearTimeout(timeout); reject(error); });
+      child.stdout.setEncoding("utf8");
+      let output = "";
+      child.stdout.on("data", chunk => {
+        output += chunk;
+        if (output.includes("LOCK_READY\\n")) {
+          clearTimeout(timeout);
+          resolve();
+        }
+      });
+      child.once("exit", code => {
+        clearTimeout(timeout);
+        if (code !== 0) reject(new Error("Lock-owning child exited before readiness: " + code + " " + stderr));
+      });
+    });
+
+    const lockBytes = fs.readFileSync(lockPath);
+    const backupPath = path.join(source.root, "blocked-cross-process-backup.json");
+    await assert.rejects(
+      backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir, rightsDir: source.rightsDir, outputPath: backupPath }),
+      /Another backup or restore operation holds the state-operation lock/
+    );
+    assert.deepEqual(fs.readFileSync(lockPath), lockBytes, "backup must not alter the other process's lock");
+    assert.equal(fs.existsSync(backupPath), false, "backup must not create a snapshot during another process's operation");
+  } finally {
+    if (child.exitCode === null && child.signalCode === null) {
+      child.stdin.end("release\\n");
+      await new Promise(resolve => child.once("exit", resolve));
+    }
+    fs.rmSync(source.root, { recursive: true, force: true });
   }
 });
