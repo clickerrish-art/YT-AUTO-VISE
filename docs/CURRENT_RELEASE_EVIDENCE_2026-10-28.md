@@ -1,13 +1,13 @@
 # Verified release checkpoint — 28 October 2026, 14:35 UTC
 
-## Live refs and PR safety
+## Live refs snapshot at start of verification (before documentation-only refresh commits)
 
-- Live `main` HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
-- Live implementation branch / PR #1 HEAD: `34d083d84a6410a176174cdffb4ebb59efecb2b4`.
+- `main` HEAD at snapshot: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Implementation branch / PR #1 HEAD at snapshot: `34d083d84a6410a176174cdffb4ebb59efecb2b4`.
 - Merge base / PR base SHA: `45352b73bb6cc4787b2a49988b575afb754ab627`.
-- Current live comparison: **1,992 ahead / 2 behind / 174 changed files**; GitHub reports the refs as diverged.
+- Comparison at snapshot: **1,992 ahead / 2 behind / 174 changed files**; GitHub reported the refs as diverged.
 - PR #1 is **open, draft, and unmerged**. No merge, rebase, reset, force-push, main-branch write, or external publishing operation was performed during this verification.
-- This evidence refresh is documentation-only; it does not change or claim new source/test behavior.
+- Documentation-only evidence commits after that snapshot: `bd2d11d26f4351c5756915b08a8add93edd1ec00` (release evidence refresh) and `e92214c4854f2f7f3bbf33f7eee107246db7e409` (acceptance register refresh). These commits do not change application source or tests. The source/test candidate remains `34d083d84a6410a176174cdffb4ebb59efecb2b4`.
 
 ## Exact-HEAD GitHub Actions evidence
 
