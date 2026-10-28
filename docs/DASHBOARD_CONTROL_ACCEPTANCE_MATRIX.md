@@ -1,3 +1,13 @@
+## Follow-up real-server schedule-reservation regression — 28 October 2026
+
+- **Exact source/test candidate:** `54a15314e53c00af3e33faf8a7d691a72372e00a`.
+- **Source fix:** `scripts/dashboard-server.mjs` no longer excludes a queue record solely because a `SCHEDULED_SLOT` item lacks `scheduledDate`. For a non-published reservation with neither `scheduledAt` nor `scheduledDate`, the reservation is passed to `validatePublicationSlot` with no timestamp and blocks the attempted slot.
+- **Real HTTP test:** `test/dashboard-api-request-boundaries.test.mjs` launches the actual dashboard server, inserts a malformed persisted reservation into isolated test state, sends authenticated `POST /api/jobs`, and verifies HTTP 409, the explicit missing-timestamp blocker, `publishingEnabled=false`, and byte-for-byte unchanged state.
+- **Evidence:** [source fix commit](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c6f4ea8db1bcc8ec14e38ee0d9b3336abdae1aff); [regression test commit](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/54a15314e53c00af3e33faf8a7d691a72372e00a); [automation/security — test step PASS, zero skips required](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759742550); [dashboard browser E2E PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759742592).
+- **Scope limit:** this closes the missing-date reservation omission only. `DASH-001` and overall `SCHED-001` remain `NOT_TESTED` because exhaustive control/route coverage and operational concurrency/restart/recovery evidence are incomplete.
+
+---
+
 ## Latest exact-SHA API acceptance evidence — 28 October 2026
 
 - **Source/test candidate:** `03c60617afab051f0aab745d0c1203d0ed788417`.
