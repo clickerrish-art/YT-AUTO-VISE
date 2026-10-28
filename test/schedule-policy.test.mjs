@@ -296,3 +296,16 @@ test("pending-attempt schedule states are checked against the proposed publicati
     assert.ok(result.errors.some(error => error.includes("publication date collision with reserved-attempt")));
   }
 });
+
+
+test("publication slot validator refuses caller-supplied spacing below the non-waivable 72-hour minimum", () => {
+  const proposed = { id: "new", scheduledAt: "2026-10-28T15:00:00Z" };
+  for (const minSpacingHours of [-1, 0, 71.999, 71]) {
+    assert.throws(
+      () => validatePublicationSlot(proposed, [], { minSpacingHours }),
+      /minSpacingHours must be at least 72 elapsed hours/
+    );
+  }
+  assert.equal(validatePublicationSlot(proposed, [], { minSpacingHours: 72 }).valid, true);
+  assert.equal(validatePublicationSlot(proposed, [], { minSpacingHours: 96 }).valid, true);
+});

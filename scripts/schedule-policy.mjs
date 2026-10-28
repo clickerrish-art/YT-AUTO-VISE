@@ -103,7 +103,7 @@ export function validatePublicationSlot(proposed, existingItems = [], {
   minSpacingHours = DEFAULT_MIN_SPACING_HOURS
 } = {}) {
   if (!proposed || typeof proposed !== "object") throw new Error("proposed slot is required");
-  if (!Number.isFinite(minSpacingHours) || minSpacingHours < 0) throw new Error("minSpacingHours must be a non-negative number");
+  if (!Number.isFinite(minSpacingHours) || minSpacingHours < DEFAULT_MIN_SPACING_HOURS) throw new Error(`minSpacingHours must be at least ${DEFAULT_MIN_SPACING_HOURS} elapsed hours`);
   // Fail early if the runtime does not recognize the configured IANA timezone.
   new Intl.DateTimeFormat("en", { timeZone }).format(new Date(0));
 
