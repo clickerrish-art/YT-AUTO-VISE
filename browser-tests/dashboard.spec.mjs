@@ -618,5 +618,5 @@ test("production-plan controls are exposed and report backend rejection without 
   await page.locator("#productionplanjson").fill(JSON.stringify({ schemaVersion: 1, jobId: "fixture-production-job", contentType: "long_form", scriptSha256: "a".repeat(64), scenes: [] }));
   await page.getByRole("button", { name: "Validate and persist production plan" }).click();
   await expect(page.locator("#productionplanresult")).toContainText("Current approved narration artifacts are missing or stale");
-  await expect(page.locator("#produceresult")).toContainText("No render action taken");
+  await expect(page.locator("#produceresult")).toContainText(/Action unavailable:.*approved script, narration and production-plan evidence/i);
 });
