@@ -183,3 +183,39 @@ test("authorized read-only dashboard API routes return structured responses with
       `${route.path} must remain read-only`);
   }
 });
+
+
+test("new schedule reservation fails closed when an existing reserved queue item has no scheduled date", async t => {
+  const { base, token, statePath } = await startDashboard(t);
+  const state = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  state.queueItems.push({
+    id: "legacy-missing-schedule-date",
+    reservationType: "SCHEDULED_SLOT",
+    status: "DRAFT_REVIEW_REQUIRED"
+  });
+  fs.writeFileSync(statePath, JSON.stringify(state, null, 2) + "\n", { mode: 0o600 });
+  const beforeRequest = fs.readFileSync(statePath);
+
+  const response = await fetch(base + "/api/jobs", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-operator-token": token },
+    body: JSON.stringify({
+      idempotencyKey: "missing-reservation-date-regression:2027-04-06",
+      title: "Schedule safety regression test",
+      topic: "Fail closed when an existing reservation has no date",
+      contentType: "long_form",
+      scheduledDay: "Tuesday",
+      scheduledDate: "2027-04-06",
+      inputReferences: []
+    })
+  });
+  const responseText = await response.text();
+  assert.equal(response.status, 409, responseText);
+  const payload = JSON.parse(responseText);
+  assert.match(payload.error, /schedule conflicts with an existing reservation/i);
+  assert.ok(payload.blockers.some(message => /legacy-missing-schedule-date.*missing scheduledAt/i.test(message)),
+    "response must identify the malformed reservation as the blocking cause");
+  assert.equal(payload.publishingEnabled, false);
+  assert.deepEqual(fs.readFileSync(statePath), beforeRequest,
+    "blocked scheduling must not create a job, queue item or audit event");
+});
