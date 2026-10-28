@@ -1,3 +1,23 @@
+
+
+## Latest verified implementation checkpoint — 28 October 2026
+
+- **Exact source/test candidate:** `986fe282b84c14f72d7c735c46259ca15722b858`. Source fix commit: `fbef6bc3f42d65fc712b2db3831bcaa4326cdfae`.
+- **Fix implemented:** `validatePublicationSlot` no longer substitutes `createdAt` for missing `scheduledAt` on active reservations. Queued, queued-for-publication, pending-schedule, scheduled, uploading, uncertain and recovery-required states now fail closed when the reservation timestamp is absent.
+- **Regression:** `test/schedule-policy.test.mjs`, test “active reservations never fall back to createdAt when scheduledAt is missing”.
+- **Exact-SHA automation/security:** [397 Node tests passed, 0 failures, 0 skips; 16 Python tests passed; npm audit reported 0 vulnerabilities](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295493).
+- **Exact-SHA content quality:** [397/397 Node tests passed, 0 skips](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295386).
+- **Exact-SHA metadata validation:** [397/397 Node tests passed, 0 skips](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295376).
+- **Dashboard browser E2E:** [15 Chromium journeys passed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295383). This is not full per-control/per-route acceptance; keep `DASH-001` `NOT_TESTED`.
+- **Isolated main/candidate baseline:** [passed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295381); [artifact 12802324377](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295381/artifacts/12802324377), ZIP SHA-256 `6e4d1a3e8dcb5414cb45abab91daab9f47fa67bfe4c0b887763a24821fe51419`.
+- **Production readiness:** [blocked, correctly fail-closed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295494); [diagnostic artifact 12802583446](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295494/artifacts/12802583446). Do not treat this expected safety block as a test-suite pass.
+- **Meta/Metricool:** [workflow passed its local validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295394), but that does not establish an external draft artifact or alter the separately observed eight live scheduled records.
+- **Live Git state at the source/test checkpoint:** `main` `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; 1,898 commits ahead, 2 behind, 171 changed files; PR #1 open, draft and unmerged. Subsequent evidence-document commits are documentation-only; do not treat them as newly tested source/test changes.
+- **Still blocked:** full dashboard/API acceptance; exhaustive divergence/history review; owner-approved feasible cadence; genuine rights-cleared production media and hash-bound human approval; verified SonicVhibez OAuth/channel identity and complete remote history; native Short Related-video eligibility; genuine Meta draft create/read-back; external scheduled-post owner decision; full recovery/deployment drills; branch protection verification.
+- No live upload/post, visibility change, campaign activation, merge, edit to `main`, or destructive Git operation was performed.
+
+---
+
 ## Exact source/test candidate — eab2e53440fa7c2ce611c4608b67c019a59ca5c7 (28 October 2026)
 
 - **Schedule-history hardening:** `evaluateNextPublication` rejects remote `published`, `public`, `private` and `unlisted` history when `actualPublishedAt`/`publishedAt` are missing, even if `createdAt` or `scheduledAt` exists. A separate test confirms `publishedAt` remains a valid actual timestamp alias.
