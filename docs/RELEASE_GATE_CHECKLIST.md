@@ -883,3 +883,12 @@ Release decision remains **BLOCKED**.
 - [x] Isolated main/candidate baseline passed; artifact ID 12798511239, ZIP SHA-256 fe5d86c58c0a07a3abb163257858ce69a6bad7f4030c8f3225338320a6af6307: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087532.
 - [ ] DASH-001 remains NOT_TESTED; inventory is not exhaustive acceptance.
 - [ ] Production readiness remains blocked; external Meta draft creation was skipped: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087721, https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087484.
+
+## Exact-SHA schedule-history safety regression — 2026-10-28
+
+- [x] Remote `published`, `public`, `private`, and `unlisted` records without `actualPublishedAt` or `publishedAt` now fail closed; `createdAt` is not accepted as a publication timestamp.
+- [x] Regression tests cover all four states when creation/scheduled timestamps exist but actual publication time is absent.
+- [x] Exact source/test candidate `24d792b51dee6ab4020601e225dbb6d0625b39f4`: automation/security 387/387 Node tests, 16 Python tests, zero npm audit vulnerabilities; content-quality and metadata 387/387; dashboard E2E 14 Chromium journeys; isolated main/candidate baseline PASS.
+- [ ] Production readiness remains BLOCKED by 13 prerequisites. External Meta draft creation was skipped; no external integration acceptance is implied.
+- [ ] Metricool currently has eight upcoming Nature Frontiers Facebook/Instagram promotions with auto-publishing enabled. Owner must resolve the queue; this implementation run intentionally did not alter existing scheduled posts.
+- Full details and links: [CURRENT_RELEASE_EVIDENCE_2026-10-28.md](CURRENT_RELEASE_EVIDENCE_2026-10-28.md).
