@@ -309,3 +309,20 @@ test("publication slot validator refuses caller-supplied spacing below the non-w
   assert.equal(validatePublicationSlot(proposed, [], { minSpacingHours: 72 }).valid, true);
   assert.equal(validatePublicationSlot(proposed, [], { minSpacingHours: 96 }).valid, true);
 });
+
+
+test("next-publication gate cannot be weakened below 72 hours through an option override", () => {
+  const args = {
+    history: [{ id: "remote-1", status: "private", actualPublishedAt: "2026-10-20T15:00:00Z", format: "long_form" }],
+    historyVerified: true,
+    proposedAt: "2026-10-23T15:00:00Z",
+    jobId: "job-next",
+    format: "long_form"
+  };
+  for (const minSpacingHours of [-1, 0, 71.999, 71]) {
+    const result = evaluateNextPublication({ ...args, minSpacingHours });
+    assert.equal(result.valid, false, String(minSpacingHours));
+    assert.ok(result.errors.some(error => /at least 72 elapsed hours/.test(error)));
+  }
+  assert.equal(evaluateNextPublication({ ...args, minSpacingHours: 72 }).valid, true);
+});
