@@ -1,3 +1,22 @@
+## Reverified external state — 28 October 2026, read-only
+
+A fresh read-only Metricool query against Nature Frontiers brand `7545638` (`Africa/Johannesburg`) returned the same eight future records documented below. All eight still report `autoPublish=true`, `draft=false`, provider status `PENDING`. The first seven list Facebook as their provider; record `406357554` lists Facebook and Instagram. No remote changes were made.
+
+- `406357296` — 31 October 2026, 10:00 SAST.
+- `406357335` — 4 November 2026, 10:00 SAST.
+- `406357364` — 7 November 2026, 10:00 SAST.
+- `406357388` — 11 November 2026, 10:00 SAST.
+- `406357414` — 14 November 2026, 10:00 SAST.
+- `406357443` — 18 November 2026, 10:00 SAST.
+- `406357483` — 21 November 2026, 10:00 SAST.
+- `406357554` — 25 November 2026, 10:00 SAST, Facebook and Instagram.
+
+The scheduled text includes online-business/digital-product promotions as well as wildlife-creator content. Account owner must review the individual IDs, content and destinations and decide what should remain active. This implementation assignment authorizes **no** pause, cancellation, edit or reschedule. If a separate future request authorizes a specific change, read the provider state again after the change and verify it.
+
+Latest exact source/test candidate: `03c60617afab051f0aab745d0c1203d0ed788417`. It passed the automation/security suite (404 Node tests, zero failures/skips; 16 Python tests; zero npm audit vulnerabilities), content-quality, metadata, 15-journey browser E2E and isolated main/candidate baseline workflows. Production readiness remains blocked. Details are in [current release evidence](https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/CURRENT_RELEASE_EVIDENCE_2026-10-28.md).
+
+---
+
 ## Live external blocker refresh — 28 October 2026
 
 ### Owner decision required: existing Metricool schedules
