@@ -706,3 +706,10 @@ Exact-candidate automated results:
 - [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195430): BLOCKED by unresolved prerequisites.
 
 Do not interpret the passing automation and baseline workflows as production acceptance. Keep YouTube private-only and explicitly authorized, keep public/unattended publishing disabled, keep Meta live publishing disabled, and keep Safari inactive. Do not bypass readiness, rights, approval, identity, history, cadence or recovery gates.
+
+
+## Current operational checkpoint — 28 October 2026
+
+The exact source/test candidate `ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9` passes automation/security (399 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg installed), content quality (399/399, zero skips), metadata (399/399, zero skips), and 15 dashboard Chromium journeys. The isolated baseline's main and candidate Node/Python commands exited 0; its runner explicitly skipped the renderer integration test because FFmpeg installation failed there, while the candidate automation workflow executed it with FFmpeg and zero skips.
+
+Meta adapter now rejects remote post IDs with only a Page ID prefix match and rejects symlinked image inputs before external requests. These tests do not prove live Meta Page identity or external draft creation. Production readiness remains blocked. Keep external publishing disabled and do not change live Metricool schedules without explicit owner authorization. Refer to [current release evidence](docs/CURRENT_RELEASE_EVIDENCE_2026-10-28.md), [go-live blockers](docs/GO_LIVE_BLOCKERS.md) and [acceptance register](docs/REQUIREMENTS_ACCEPTANCE_REGISTER.json).
