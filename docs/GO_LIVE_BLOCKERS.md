@@ -1115,3 +1115,12 @@ An isolated baseline comparison for this exact source/test candidate has not yet
 At the candidate snapshot, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, divergence 1,936 ahead / 2 behind / 172 changed files. PR #1 remains open/draft/unmerged. The full branch-only history inventory remains incomplete. Production remains **BLOCKED**.
 
 No production gate is cleared by this validator fix. Keep the channel, media, rights, human review, remote draft and operational blockers open until their own evidence is recorded.
+
+
+## Latest verified code/test checkpoint — 28 October 2026
+
+Exact candidate `4d003f320df0f1d26c5b46dcb2a0c545cfec785c` passed automation/security (401 Node, 0 failures/skips; 16 Python; npm audit 0 vulnerabilities), content quality (401/401), metadata (401/401), dashboard E2E (15 journeys), and isolated main/candidate baseline. See [automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471424), [quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471379), [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471565), [browser](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471427), and [baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471350). Baseline artifact [12809417525](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471350/artifacts/12809417525), SHA-256 `7c46f5156967ef944b8a602e47cc8bbd6e31e7608c6600cd5a9f898a040a7371`.
+
+Dashboard API now rejects non-JSON request media types with 415; a regression test covers JSON-looking `text/plain` payloads. The backup/restore failure-injection fixture now deterministically reaches the rollback path. These changes do not clear production blockers. Production readiness [remains blocked](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471449); the Meta workflow [skipped external draft creation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471614).
+
+Live Git compare: main `fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, 1,962 ahead / 2 behind / 172 changed files. PR #1 remains open, draft and unmerged. Full divergence/history review and exhaustive dashboard/API acceptance remain open.
