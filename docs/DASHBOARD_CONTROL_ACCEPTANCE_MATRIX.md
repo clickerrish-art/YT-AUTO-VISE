@@ -1,3 +1,12 @@
+## Follow-up cross-process backup lock regression — 28 October 2026
+
+- **Exact source/test candidate:** `d5e3445def955413d424085489212c5835ff0807`.
+- The backup/restore integration test now starts a separate Node process that owns and fsyncs the shared operation lock. A competing backup is rejected, preserves the other process's lock bytes, and creates no output file.
+- Exact-SHA automation/security [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160063): 410 Node tests, zero failures/skips, npm audit 0 vulnerabilities. Metadata [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160114), content quality [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160204), dashboard browser E2E [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160061), isolated baseline [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148454).
+- **Scope limit:** cross-process lock contention is covered; process-kill/restart recovery, power-loss and full deployment rollback are not. `DASH-001` remains `NOT_TESTED`; this regression does not substitute for exhaustive control and route acceptance.
+
+---
+
 ## Follow-up shared-lock cleanup and error reporting — 28 October 2026
 
 - **Exact source/test candidate:** `918f33295994d47a3f669e8b491828fd8293a862`.
