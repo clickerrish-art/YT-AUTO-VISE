@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-28T12:35:00Z",
-  "evidencePolicy": "Exact source/test candidate 3f2b2e27bd04c686d279b293d3019f125a344285 adds inventory-driven unauthenticated HTTP coverage for every distinct declared /api method/path. Exact-SHA automation/security passed 402 Node tests, 0 failures/0 skips; 16 Python tests passed; npm audit found 0 vulnerabilities; content-quality and metadata workflows passed 402/402 with zero skips; dashboard browser E2E passed 15 journeys. Exact-SHA isolated main/candidate baseline is still running at the time of this record. Production readiness remains correctly blocked by external prerequisites; Meta workflow success does not establish remote draft creation. DASH-001 remains NOT_TESTED because authorized success, mutation persistence, failures, idempotency, concurrency, restart and accessibility acceptance are not complete for every control/route.",
+  "recordedAt": "2026-10-28T14:26:00Z",
+  "evidencePolicy": "Current exact source/test candidate ec3decc94b0f2d0b8b12efbad7bbdd3170055eda: 403 Node tests passed, 0 failures/0 skips; 16 Python tests passed; npm audit 0 vulnerabilities; dashboard browser E2E 15 journeys; content-quality and metadata workflows passed; isolated main/candidate baseline passed. Candidate 03c60617afab051f0aab745d0c1203d0ed788417 adds a real-server authorized content-job persistence/idempotency integration test; its exact-SHA automation/security run passed 404 Node tests, 0 failures/0 skips and 16 Python tests, with zero npm audit vulnerabilities. Exact-SHA content quality, metadata, 15-journey dashboard browser E2E and isolated baseline workflows passed on 03c60617afab051f0aab745d0c1203d0ed788417. Production readiness remains fail-closed on genuine external prerequisites; local Meta draft workflow is not proof of external draft creation. DASH-001 remains NOT_TESTED because authorized success and all failure/concurrency/recovery/accessibility paths are not exhaustively accepted for every control and route.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -22,9 +22,10 @@
       "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417"
       ],
-      "nextAction": "Live comparison at the latest code/test checkpoint: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; implementation branch checkpoint 4d003f320df0f1d26c5b46dcb2a0c545cfec785c; 1,962 ahead / 2 behind / 172 changed files. PR #1 remains open, draft and unmerged. Full commit-by-commit divergence review and the historical test-file add/revert investigation remain incomplete.",
+      "nextAction": "Live refs at source/test candidate 03c60617afab051f0aab745d0c1203d0ed788417: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; PR/branch head 03c60617afab051f0aab745d0c1203d0ed788417; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 1,987 ahead / 2 behind / 174 changed files. PR #1 remains open, draft and unmerged. Full commit-by-commit divergence review and complete base-only/branch-only risk assessment remain incomplete.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch."
     },
@@ -43,9 +44,15 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995839",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995821",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995870",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995790"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995790",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517639",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517536",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517494",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517541",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517549"
       ],
-      "nextAction": "Exact source/test candidate 3f2b2e27bd04c686d279b293d3019f125a344285: automation/security 402 Node tests passed, 0 failures/0 skips; Python unittest 16/16; npm audit 0 vulnerabilities; content quality 402/402 and metadata 402/402 with zero skips; dashboard browser E2E 15 journeys. Exact-SHA isolated baseline comparison run 40688995834 was still in progress at record time. Production readiness is a separate expected fail-closed gate; Meta draft CI does not prove external draft creation.",
+      "nextAction": "Exact source/test candidate 03c60617afab051f0aab745d0c1203d0ed788417: 404 Node tests passed, 0 failures/0 skips; 16 Python tests passed; npm audit reported 0 vulnerabilities; content-quality and metadata workflows passed; dashboard browser E2E passed 15 Chromium journeys; isolated main/candidate baseline passed. Production-readiness workflow remains intentionally fail-closed on external prerequisites. Local Meta draft workflow is not proof of a remote provider draft.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
@@ -73,9 +80,12 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087540",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087503",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3f2b2e27bd04c686d279b293d3019f125a344285",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995839"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995839",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ec3decc94b0f2d0b8b12efbad7bbdd3170055eda",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517639"
       ],
-      "nextAction": "Current static inventory: 105 HTML controls, 15 forms, 38 literal route branches (10 GET, 28 POST), including 35 distinct API method/path routes. New exact-SHA real-server authentication sweep covers all distinct API routes for missing operator credentials and verifies 401 JSON, no path leak and unchanged persisted state. Keep NOT_TESTED: per-control/per-route authorized success, validation/boundaries, authorization variants, mutation persistence/audit, idempotency, concurrency, provider/filesystem failures, restart/recovery, keyboard/focus/accessibility and responsive behavior are not exhaustively accepted.",
+      "nextAction": "Current inventory remains 105 controls, 15 forms, 38 literal route branches (10 GET, 28 POST), including 35 distinct API method/path routes. Exact-SHA real-server tests cover unauthenticated 401/no-state-mutation on every distinct API route; malformed JSON 400, unsupported media type 415 and >16 KiB body 413 on POST /api/jobs with no state mutation/path disclosure; authorized content-job creation returns 201 and persists one audit event; exact duplicate returns 200 with the same job; conflicting reuse returns 409 and does not create a second job/audit event. Keep NOT_TESTED: authorized success and boundary/failure/idempotency/concurrency/restart/accessibility are not covered for every applicable control and route; provider/filesystem failure injection and complete keyboard/responsive acceptance remain open.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
@@ -197,9 +207,11 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/compare/main...codex/marketing-machine-audit-fixes",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/restore-facebook-draft-history.test.mjs",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/tests/restore-state.test.mjs"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/tests/restore-state.test.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517549"
       ],
-      "nextAction": "Live compare at source/test candidate 3f2b2e27bd04c686d279b293d3019f125a344285: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 1,981 commits ahead / 2 behind / 173 changed files. Full commit-by-commit/file-level divergence review and the restore-history test add/revert investigation remain incomplete. Do not reset, rebase, merge or force-push.",
+      "nextAction": "Current live compare: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; candidate 03c60617afab051f0aab745d0c1203d0ed788417; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 1,987 ahead / 2 behind / 174 changed files. Exact-SHA isolated baseline passed. This is not a substitute for full commit-by-commit review of 1,987 branch-only commits or a complete review of the two base-only commits and restore-history incident. Do not reset, rebase, merge or force-push.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants."
     },
@@ -739,11 +751,14 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195046",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3f2b2e27bd04c686d279b293d3019f125a344285",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995839"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995839",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ec3decc94b0f2d0b8b12efbad7bbdd3170055eda",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517639"
       ],
       "assessmentCommitSha": "1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
       "acceptanceCriterion": "An inventory-driven integration test sends each distinct /api method/path without an operator token and verifies HTTP 401.",
-      "nextAction": "New exact-SHA test test/dashboard-api-auth-matrix.test.mjs starts the real local backend and sends unauthenticated requests to every distinct declared /api method/path; all return consistent 401 JSON without state mutation or filesystem-path disclosure. Full authorized success, malformed input, provider/persistence failures, duplicate/concurrent operations, restart and audit-event acceptance remain required; do not close DASH-001 from this narrow sweep."
+      "nextAction": "Retain byte-safe helper and malformed-token tests; exact-SHA route sweep covers missing credentials across all distinct API method/path routes. Exact-SHA boundary test verifies 400 malformed JSON, 415 unsupported media type, and 413 for >16 KiB request bodies without persisted-state mutation or state-path disclosure. These focused tests do not close DASH-001."
     },
     {
       "id": "A11Y-001",
@@ -900,6 +915,34 @@
       "nextAction": "Retain this regression and include all body-bearing routes in the full dashboard/API acceptance matrix.",
       "assessmentCommitSha": "852eb1087cc4a06bafb80d70760ec9915817fe79",
       "acceptanceCriterion": "Oversized request returns 413; no state mutation occurs; error response does not reveal local filesystem paths."
+    },
+    {
+      "id": "DASH-API-BOUNDARY-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Real dashboard HTTP API rejects malformed JSON, unsupported request media types and request bodies over 16 KiB with explicit status codes and no state mutation or local path disclosure.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ec3decc94b0f2d0b8b12efbad7bbdd3170055eda",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517639"
+      ],
+      "nextAction": "Retain this regression on all body-bearing routes as the API acceptance matrix expands.",
+      "assessmentCommitSha": "03c60617afab051f0aab745d0c1203d0ed788417",
+      "acceptanceCriterion": "Against the real local server, malformed JSON returns 400, unsupported content type returns 415, and JSON >16 KiB returns 413; error responses do not disclose the state path and state bytes are unchanged."
+    },
+    {
+      "id": "DASH-JOB-IDEMPOTENCY-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Authorized content-job creation persists a single job and audit event, exact duplicate requests reuse the existing job, and conflicting requests with the same idempotency key are rejected without a second mutation.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517639"
+      ],
+      "nextAction": "Extend the same persistence/idempotency/concurrency pattern to every state-changing route and test cross-process overlap/restart recovery.",
+      "assessmentCommitSha": "03c60617afab051f0aab745d0c1203d0ed788417",
+      "acceptanceCriterion": "Real HTTP POST /api/jobs creates one queued job and audit event; exact retry returns same job as reused; different inputs with the same key return 409; persisted job/audit counts remain one."
     }
   ],
   "currentCheckpoint": {
