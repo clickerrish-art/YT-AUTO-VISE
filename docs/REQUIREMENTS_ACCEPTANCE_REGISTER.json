@@ -189,11 +189,13 @@
       "requirement": "Review all branch-only and base-only commits, restore-history test variants, and prepare a non-destructive reconciliation plan.",
       "status": "NOT_TESTED",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/compare/main...codex/marketing-machine-audit-fixes"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/compare/main...codex/marketing-machine-audit-fixes",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/restore-facebook-draft-history.test.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/tests/restore-state.test.mjs"
       ],
-      "nextAction": "The two base-only commits are a net-zero test-file add/revert pair: 71578dafc24e5d48173dce3f4e392e18e42aa40e added test/restore-facebook-draft-history.test.mjs and fa00d28e7f58911482686e4ad69fac9f4701a2e6 reverted it on main. The implementation branch retains the test file; tests/restore-state.test.mjs also remains. Full review of 1,846 branch-only commits and owner-approved integration remains NOT_TESTED; do not cherry-pick the revert or reconcile destructively.",
-      "assessmentCommitSha": "96cb4b06704915c7ee4fb2f0feb1796b41823301",
-      "acceptanceCriterion": "Review all 1,116 branch-only commits and both base-only commits/patches, inspect the restore-history test variants, and produce a non-destructive reconciliation plan with owner decisions."
+      "nextAction": "Live compare on 28 October 2026: 1,862 commits ahead, 2 behind, 168 changed files; merge base 45352b73bb6cc4787b2a49988b575afb754ab627. The two base-only commits are the net-zero test-file add/revert pair: 71578dafc24e5d48173dce3f4e392e18e42aa40e added test/restore-facebook-draft-history.test.mjs and fa00d28e7f58911482686e4ad69fac9f4701a2e6 reverted it on main. The implementation branch retains test/restore-facebook-draft-history.test.mjs and tests/restore-state.test.mjs. Full review of every branch-only patch and owner-approved integration plan remain NOT_TESTED; do not cherry-pick the revert or reconcile destructively.",
+      "assessmentCommitSha": "ce3ee82d48265ef16c39e5d9b84debd69709112a",
+      "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants."
     },
     {
       "id": "DEPLOY-001",
