@@ -350,3 +350,26 @@ test("backup fails closed when a restore already holds the shared state-operatio
     fs.rmSync(source.root, { recursive: true, force: true });
   }
 });
+
+
+test("backup releases its shared operation lock after a validation failure", async () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-backup-empty-"));
+  const stateDir = path.join(root, "state");
+  try {
+    await assert.rejects(
+      backupState({
+        rootDir: root,
+        stateDir,
+        uploadLogDir: path.join(root, "logs"),
+        rightsDir: path.join(root, "rights"),
+        outputPath: path.join(root, "backup.json")
+      }),
+      /No state, upload ledger, receipts, approvals or retained rights evidence were found/
+    );
+    assert.equal(fs.existsSync(path.join(stateDir, ".restore-operation.lock")), false,
+      "a failed backup must not strand the shared backup/restore lock");
+    assert.equal(fs.existsSync(path.join(root, "backup.json")), false);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
