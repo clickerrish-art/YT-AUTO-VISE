@@ -125,7 +125,7 @@ test("restore fails closed when another process already holds the operation lock
 
     await assert.rejects(
       restoreState({ backupPath: backup, rootDir: dir, confirm: "YES", now: Date.parse("2026-10-29T00:00:00.000Z") }),
-      /Another restore operation holds the restore lock/
+      /Another backup or restore operation holds the shared state-operation lock/
     );
     assert.equal(fs.readFileSync(lockPath, "utf8"), existingLock,
       "a competing invocation must not steal or rewrite another process's lock");
