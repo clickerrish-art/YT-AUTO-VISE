@@ -1,3 +1,28 @@
+## Live external blocker refresh — 28 October 2026
+
+### Owner decision required: existing Metricool schedules
+
+Read-only inspection of Nature Frontiers Metricool brand `7545638` (`Africa/Johannesburg`) returned eight future scheduled records. Every record currently has `autoPublish=true` and `draft=false`. Repository dry-run flags do not disable these already-existing remote schedules. No remote state was changed.
+
+| Record ID | Scheduled time (SAST) | Network(s) | Current state |
+|---|---|---|---|
+| `406357296` | 2026-10-31 10:00 | Facebook | auto-publish enabled, not draft |
+| `406357335` | 2026-11-04 10:00 | Facebook | auto-publish enabled, not draft |
+| `406357364` | 2026-11-07 10:00 | Facebook | auto-publish enabled, not draft |
+| `406357388` | 2026-11-11 10:00 | Facebook | auto-publish enabled, not draft |
+| `406357414` | 2026-11-14 10:00 | Facebook | auto-publish enabled, not draft |
+| `406357443` | 2026-11-18 10:00 | Facebook | auto-publish enabled, not draft |
+| `406357483` | 2026-11-21 10:00 | Facebook | auto-publish enabled, not draft |
+| `406357554` | 2026-11-25 10:00 | Facebook and Instagram | auto-publish enabled, not draft |
+
+**Required next action:** owner must explicitly identify which individual records should remain active and authorize any specific pause, cancellation or edit. Do not change any record speculatively. For each authorized change, retain the provider response, read the schedule again, and verify the exact resulting ID, time, network and publication mode. This list contains both wildlife-creator and online-business/digital-product promotions, so review the content/destination fit as part of the decision.
+
+### Latest exact-SHA repository evidence
+
+The current tested source/test candidate is `3f2b2e27bd04c686d279b293d3019f125a344285`. The real-server dashboard API authentication sweep passed; exact-SHA automation/security, content-quality, metadata, dashboard browser E2E and isolated main/candidate baseline workflows passed. The readiness workflow remains blocked by genuine external prerequisites. See [current release evidence](https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/CURRENT_RELEASE_EVIDENCE_2026-10-28.md). No YouTube upload, visibility change, Meta post, campaign activation, Metricool schedule change, PR merge or edit to `main` occurred.
+
+---
+
 ## Exact-candidate dashboard request-size fix — 28 October 2026
 
 - Live implementation/test candidate: `852eb1087cc4a06bafb80d70760ec9915817fe79`; current PR #1 was open, draft and unmerged at verification. `main` remained `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
