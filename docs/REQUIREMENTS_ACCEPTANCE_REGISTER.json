@@ -24,7 +24,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c"
       ],
-      "nextAction": "At the tested candidate: source/test SHA eab2e53440fa7c2ce611c4608b67c019a59ca5c7; main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 1,889 commits ahead / 2 behind / 170 changed files. PR #1 remains open, draft and unmerged. Subsequent evidence commit(s) are documentation-only and preserve the tested source/test blobs.",
+      "nextAction": "Exact source/test candidate eab2e53440fa7c2ce611c4608b67c019a59ca5c7 compared to main fa00d28e7f58911482686e4ad69fac9f4701a2e6: 1,892 commits ahead / 2 behind / 170 changed files; merge base 45352b73bb6cc4787b2a49988b575afb754ab627. Two subsequent documentation-only evidence commits leave the live branch head at 1,894 ahead / 2 behind / 170 changed files. PR #1 remains open, draft and unmerged; source/test blobs are unchanged by those documentation-only commits.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch."
     },
@@ -192,7 +192,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/restore-facebook-draft-history.test.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/tests/restore-state.test.mjs"
       ],
-      "nextAction": "Live comparison at candidate eab2e53440fa7c2ce611c4608b67c019a59ca5c7: 1,889 commits ahead, 2 behind, 170 changed files; merge base 45352b73bb6cc4787b2a49988b575afb754ab627. Full non-destructive review of all branch-only/base-only commits and the restore-history test-file add/revert pair remains incomplete. No destructive reconciliation.",
+      "nextAction": "Live source/test candidate comparison on 28 October 2026: 1,892 commits ahead, 2 behind, 170 changed files; merge base 45352b73bb6cc4787b2a49988b575afb754ab627. Two subsequent documentation-only evidence commits leave the live branch head 1,894 ahead. Full non-destructive review of all branch-only/base-only commits and the restore-history test-file add/revert pair remains incomplete.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants."
     },
