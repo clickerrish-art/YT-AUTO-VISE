@@ -1,3 +1,14 @@
+## Latest verified checkpoint — 28 October 2026, 20:36 UTC
+
+- Exact source/test candidate: `d5e3445def955413d424085489212c5835ff0807`.
+- Automation/security: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160063) — 410 Node tests, zero failures/skips, npm audit 0 vulnerabilities.
+- Metadata: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160114); content quality: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160204); browser E2E: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160061); isolated baseline: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148454).
+- Added real child-process coverage proving backup fails closed while another process owns the shared operation lock, preserving lock bytes and producing no snapshot.
+- Production readiness remains [BLOCKED](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160031). These checks do not complete full dashboard acceptance, power-loss recovery, deployment rollback or external provider verification.
+- Live main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 remains open, draft and unmerged. No main edits, merge, rebase, reset or force-push performed.
+
+---
+
 ## Latest verified implementation and CI checkpoint — 27 October 2026, 21:28 UTC
 
 **Exact tested candidate SHA:** `466605be027f531d1c6143a6d1f42e1bf4c2ffcc`. The candidate includes strict Short-parent approval timestamp validation, FFmpeg installation in the content-quality and metadata workflows, and explicit zero-skip assertions in the automation, content-quality and metadata workflows.
