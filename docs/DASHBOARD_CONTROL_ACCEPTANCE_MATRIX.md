@@ -520,3 +520,10 @@ The current UI now disables the render action unless a queued job has current sc
 - The source/test candidate also passed automation/security (386 Node tests, 0 failures/0 skips; 16 Python tests; npm audit 0 vulnerabilities), content quality (386/386, zero skips), metadata (386/386, zero skips), locked install/FFmpeg integration and isolated baseline: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087503, https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087695, https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087634, https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648082330, https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087532.
 - Inventory remains 105 controls, 15 forms and 38 route branches. This new accessibility slice does **not** close DASH-001: full authorized-success and failure-path coverage for every control and route, role boundaries, injected provider/filesystem failures, full keyboard/focus/status-announcement and responsive acceptance remain open.
 - Production readiness remains blocked (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087721); Meta external draft creation was skipped (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087484).
+
+
+## Latest browser acceptance checkpoint — 28 October 2026
+
+Dashboard browser E2E [run 40661176112](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176112) passed 15 Chromium tests on source/test candidate `ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9`, including keyboard connection, accessible names, 320px viewport overflow, draft persistence across server restart, campaign destination safety, safe blocked feedback, and Short-parent workflow journeys.
+
+This is a passing journey suite, not exhaustive acceptance for all 105 controls, 15 forms and 38 route branches. DASH-001 remains NOT_TESTED until every control and mutating route has authorized success, negative input, authorization, persistence/restart and audit assertions. Do not promote the dashboard acceptance requirement based solely on this run.
