@@ -996,3 +996,9 @@ The readiness workflow [40606304141](https://github.com/clickerrish-art/YT-AUTO-
 
 Unresolved owner/external actions: verify SonicVhibez account/channel ID and OAuth ownership; reconcile complete remote history; provide genuine rights-cleared final assets and exact-hash human review; authorize a one-operation private upload only when all gates pass; approve a mathematically feasible cadence; verify Meta Page/Instagram identity and actual draft creation; decide whether native Related video remains unconfigured while parent is private; verify branch protection; perform isolated deployment/backup/restore/rollback drills. Do not enable public/unattended YouTube or live Meta publishing, change visibility, activate Safari, or alter the approved Selar URL.
 
+## Live Metricool safety finding — 2026-10-28
+
+- Metricool currently exposes one brand labelled Nature Frontiers; the inspected queue had eight upcoming Facebook/Instagram promotions with `draft: false` and `autoPublish: true`.
+- Post `406357273` showed as published on 2026-10-27. The implementation run did not modify existing scheduled posts.
+- Treat cross-platform promotional automation as unsafe until the owner has resolved these pending posts and a read-only recheck confirms the intended draft-only state.
+- Exact-SHA code/test evidence for the remote-publication timestamp fail-closed correction is recorded in [CURRENT_RELEASE_EVIDENCE_2026-10-28.md](CURRENT_RELEASE_EVIDENCE_2026-10-28.md). Passing CI does not clear the owner-controlled integration and media gates.
