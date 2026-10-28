@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-28T14:26:00Z",
-  "evidencePolicy": "Current exact source/test candidate ec3decc94b0f2d0b8b12efbad7bbdd3170055eda: 403 Node tests passed, 0 failures/0 skips; 16 Python tests passed; npm audit 0 vulnerabilities; dashboard browser E2E 15 journeys; content-quality and metadata workflows passed; isolated main/candidate baseline passed. Candidate 03c60617afab051f0aab745d0c1203d0ed788417 adds a real-server authorized content-job persistence/idempotency integration test; its exact-SHA automation/security run passed 404 Node tests, 0 failures/0 skips and 16 Python tests, with zero npm audit vulnerabilities. Exact-SHA content quality, metadata, 15-journey dashboard browser E2E and isolated baseline workflows passed on 03c60617afab051f0aab745d0c1203d0ed788417. Production readiness remains fail-closed on genuine external prerequisites; local Meta draft workflow is not proof of external draft creation. DASH-001 remains NOT_TESTED because authorized success and all failure/concurrency/recovery/accessibility paths are not exhaustively accepted for every control and route.",
+  "recordedAt": "2026-10-28T14:35:00Z",
+  "evidencePolicy": "Exact source/test candidate 34d083d84a6410a176174cdffb4ebb59efecb2b4: exact-HEAD automation/security passed 405 Node tests (0 failures, 0 skips) and 16 Python tests; content-quality, metadata validation, dashboard browser E2E and isolated main/candidate baseline workflows passed. Evidence runs: 40706792068, 40706792055, 40706792135, 40706792120, 40706792076. Production readiness run 40706792088 correctly failed closed on genuine prerequisites. PR/branch refs were sampled before the documentation-only evidence refresh; all test claims are tied to 34d083d84a6410a176174cdffb4ebb59efecb2b4, not later documentation commits. DASH-001 and GIT-002 remain NOT_TESTED; no external publication or schedule mutation occurred.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -25,7 +25,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417"
       ],
-      "nextAction": "Live refs at source/test candidate 03c60617afab051f0aab745d0c1203d0ed788417: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; PR/branch head 03c60617afab051f0aab745d0c1203d0ed788417; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 1,987 ahead / 2 behind / 174 changed files. PR #1 remains open, draft and unmerged. Full commit-by-commit divergence review and complete base-only/branch-only risk assessment remain incomplete.",
+      "nextAction": "Live ref snapshot before documentation-only evidence updates: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; PR/branch head 34d083d84a6410a176174cdffb4ebb59efecb2b4; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 1,992 ahead / 2 behind / 174 changed files. PR #1 is open, draft and unmerged. Documentation-only commits follow this snapshot; no source/test changes are claimed by them. Full divergence review remains incomplete.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch."
     },
@@ -50,9 +50,13 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517536",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517494",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517541",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517549"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517549",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40706792068",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40706792055",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40706792135",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40706792120"
       ],
-      "nextAction": "Exact source/test candidate 03c60617afab051f0aab745d0c1203d0ed788417: 404 Node tests passed, 0 failures/0 skips; 16 Python tests passed; npm audit reported 0 vulnerabilities; content-quality and metadata workflows passed; dashboard browser E2E passed 15 Chromium journeys; isolated main/candidate baseline passed. Production-readiness workflow remains intentionally fail-closed on external prerequisites. Local Meta draft workflow is not proof of a remote provider draft.",
+      "nextAction": "Exact source/test candidate 34d083d84a6410a176174cdffb4ebb59efecb2b4: automation/security passed 405 Node tests, 0 failures, 0 skips and 16 Python tests (run 40706792068); content quality (40706792055), metadata (40706792135), dashboard browser E2E (40706792120) and isolated baseline (40706792076) passed. Production readiness run 40706792088 remains BLOCKED/fail-closed on missing external prerequisites. Local Meta draft workflow does not prove a remote provider draft.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
@@ -63,9 +67,10 @@
       "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40651430324"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40651430324",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40706792076"
       ],
-      "nextAction": "Exact main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate eab2e53440fa7c2ce611c4608b67c019a59ca5c7 isolated baseline passed. Artifact ID 12799084851; baseline ZIP SHA-256 08b01932b28647cc2baa8a7d1cd28c441dfbcbe42f557f77a24f6a1cb4beae06. See https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40651430324.",
+      "nextAction": "Exact-head isolated baseline run 40706792076 passed using main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 34d083d84a6410a176174cdffb4ebb59efecb2b4. Artifact ID 12824088751; ZIP SHA-256 494261ec68ef48819eb41c34b4bfbcfae8880fd09db5e1a88fc8d493cbddcb2c. Baseline success does not close the complete divergence-review gate.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
@@ -211,7 +216,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517549"
       ],
-      "nextAction": "Current live compare: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; candidate 03c60617afab051f0aab745d0c1203d0ed788417; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 1,987 ahead / 2 behind / 174 changed files. Exact-SHA isolated baseline passed. This is not a substitute for full commit-by-commit review of 1,987 branch-only commits or a complete review of the two base-only commits and restore-history incident. Do not reset, rebase, merge or force-push.",
+      "nextAction": "Live comparison snapshot before documentation-only evidence updates: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; source/test candidate 34d083d84a6410a176174cdffb4ebb59efecb2b4; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 1,992 ahead / 2 behind / 174 changed files. Exact-head isolated baseline run 40706792076 passed. This does not substitute for review of the 1,992 branch-only commits, two base-only commits, overlapping file changes or restore-history incident. Do not reset, rebase, merge or force-push.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants."
     },
