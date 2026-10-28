@@ -1,3 +1,13 @@
+## Follow-up backup/restore mutual exclusion — 28 October 2026
+
+- **Exact source/test candidate:** `086f157356a78d026b6e1dde4e473d01b85773ba`.
+- `backupState` now acquires the same exclusive operation lock as `restoreState`. It fails closed if a restore already owns the lock, does not steal or rewrite the existing lock, and does not create a backup snapshot while a restore may be partially committed.
+- `test/backup-restore.test.mjs` verifies lock contention, byte-identical lock preservation, and absence of backup output after rejection.
+- Exact-SHA automation/security [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762134886): 408 Node tests, zero failures/skips, npm audit 0 vulnerabilities. Content quality [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762134957), metadata [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135041), browser E2E [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135380), isolated baseline [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762127254).
+- **Scope limit:** this establishes lock contention behavior, not exhaustive crash/power-loss or deployment recovery. `STATE-001`, `DEPLOY-001`, `DASH-001`, and production readiness remain open.
+
+---
+
 ## Follow-up backup overwrite regression — 28 October 2026
 
 - **Exact source/test candidate:** `7cdd5fe59686acdd5e3499289463ccc5369f0efd`.
