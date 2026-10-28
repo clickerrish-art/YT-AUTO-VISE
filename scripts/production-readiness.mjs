@@ -6,7 +6,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
-import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
+import { validateCadenceDecision } from "./schedule-policy.mjs";
 import { isSafeRegularFileWithinRoot } from "./safe-project-file.mjs";
 
 const root = process.cwd();
@@ -37,27 +37,8 @@ if (!exists(schedulePath)) {
     if (JSON.stringify(schedule.publicationCycle?.formats) !== JSON.stringify(["long_form", "long_form", "short"])) blockers.push("Publication cycle must be long-form, long-form, Short.");
     if (schedule.publicationCycle?.minimumHoursBetweenConsecutivePublications !== minimumSpacingHours || schedule.publicationCycle?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0) || schedule.spacingPolicy?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0)) blockers.push("Publication cycle and spacingPolicy must use the configured minimum gap and its derived cycle duration.");
     if (schedule.publicationCycle?.publicationRequiresVerifiedHistory !== true) blockers.push("Publication cycle must require independently verified public/private/unlisted history and reconciliation of uncertain attempts.");
-    const cadenceDecision = schedule.cadenceDecision;
-    const supportedCadenceModes = ["ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET", "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"];
-    let cadenceDecisionValid = Boolean(cadenceDecision
-      && cadenceDecision.status === "OWNER_APPROVED"
-      && cadenceDecision.ownerApproved === true
-      && supportedCadenceModes.includes(cadenceDecision.approvedMode)
-      && isValidZonedIsoTimestamp(cadenceDecision.approvedAt)
-      && typeof cadenceDecision.approvalReference === "string"
-      && cadenceDecision.approvalReference.trim());
-    // The 72-hour minimum is a hard publication invariant for every cadence mode.
-    // Owner approval may resolve the weekly-target conflict, but may never waive spacing.
-    if (cadenceDecisionValid && minimumSpacingHours < 72) cadenceDecisionValid = false;
-    if (cadenceDecisionValid && cadenceDecision.approvedMode === "OTHER_OWNER_DEFINED_FEASIBLE_POLICY") {
-      const custom = cadenceDecision.ownerDefinedPolicy;
-      cadenceDecisionValid = Boolean(custom
-        && typeof custom.description === "string" && custom.description.trim()
-        && Number.isFinite(custom.publicationsPerCycle) && custom.publicationsPerCycle >= 1
-        && Number.isFinite(custom.cycleHours) && custom.cycleHours > 0
-        && custom.publicationsPerCycle * minimumSpacingHours <= custom.cycleHours);
-    }
-    if (!cadenceDecisionValid) {
+    const cadenceDecisionCheck = validateCadenceDecision(schedule.cadenceDecision, minimumSpacingHours);
+    if (!cadenceDecisionCheck.valid) {
       blockers.push("CADENCE DECISION REQUIRED: a feasible owner-approved cadence mode, explicit timezone-aware approval timestamp and non-empty approval reference are required before publication.");
     }
     if (["targetCadence", "requestedTargetCadence", "cadenceDecisionRequired", "interimDraftCadence"].some(key => key in schedule)) blockers.push("Stale weekly cadence fields must be removed.");

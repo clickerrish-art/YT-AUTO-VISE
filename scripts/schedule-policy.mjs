@@ -38,6 +38,56 @@ export function isValidZonedIsoTimestamp(value) {
   return typeof value === "string" && Number.isFinite(parseStrictTimestamp(value));
 }
 
+/**
+ * Validate the explicit owner decision that resolves the requested cadence conflict.
+ * Publication spacing is a hard invariant and cannot be waived by a custom policy.
+ */
+export function validateCadenceDecision(decision, minimumSpacingHours) {
+  const errors = [];
+  if (!decision || typeof decision !== "object" || Array.isArray(decision)) {
+    return { valid: false, errors: ["an owner-approved cadence decision is required"] };
+  }
+  if (decision.status !== "OWNER_APPROVED") errors.push("status must be OWNER_APPROVED");
+  if (decision.ownerApproved !== true) errors.push("ownerApproved must be true");
+  if (!["ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET", "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"].includes(decision.approvedMode)) {
+    errors.push("approvedMode must be a supported cadence mode");
+  }
+  if (!isValidZonedIsoTimestamp(decision.approvedAt)) {
+    errors.push("approvedAt must be a calendar-valid ISO timestamp with an explicit timezone");
+  }
+  if (typeof decision.approvalReference !== "string" || !decision.approvalReference.trim()) {
+    errors.push("approvalReference must be a non-empty owner decision reference");
+  }
+  if (!Number.isFinite(minimumSpacingHours) || minimumSpacingHours < 72) {
+    errors.push("minimum publication spacing must be at least 72 elapsed hours");
+  }
+
+  if (decision.approvedMode === "OTHER_OWNER_DEFINED_FEASIBLE_POLICY") {
+    const custom = decision.ownerDefinedPolicy;
+    if (!custom || typeof custom !== "object" || Array.isArray(custom)) {
+      errors.push("ownerDefinedPolicy is required for a custom cadence mode");
+    } else {
+      if (typeof custom.description !== "string" || !custom.description.trim()) {
+        errors.push("ownerDefinedPolicy.description must be non-empty");
+      }
+      if (!Number.isInteger(custom.publicationsPerCycle) || custom.publicationsPerCycle < 1) {
+        errors.push("ownerDefinedPolicy.publicationsPerCycle must be a positive integer");
+      }
+      if (!Number.isFinite(custom.cycleHours) || custom.cycleHours <= 0) {
+        errors.push("ownerDefinedPolicy.cycleHours must be a finite positive number");
+      }
+      if (Number.isInteger(custom.publicationsPerCycle) && custom.publicationsPerCycle >= 1 &&
+          Number.isFinite(custom.cycleHours) && custom.cycleHours > 0 &&
+          Number.isFinite(minimumSpacingHours) &&
+          custom.publicationsPerCycle * minimumSpacingHours > custom.cycleHours) {
+        errors.push("ownerDefinedPolicy is mathematically infeasible under the minimum spacing rule");
+      }
+    }
+  }
+
+  return { valid: errors.length === 0, errors };
+}
+
 function asTimestamp(value, label) {
   const timestamp = parseStrictTimestamp(value);
   if (!Number.isFinite(timestamp)) throw new Error(`${label} must be a valid ISO timestamp with an explicit timezone or epoch milliseconds`);
