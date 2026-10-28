@@ -52,3 +52,19 @@ test("all visible dashboard controls have programmatic accessible names after co
 
   expect(unnamed, "visible interactive controls must expose an accessible name, not just a placeholder").toEqual([]);
 });
+
+test("connected dashboard fits a 320px mobile viewport without page-level horizontal overflow", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto("/");
+  await page.getByLabel("Operator API token", { exact: true }).fill(operatorToken);
+  await page.getByRole("button", { name: "Connect", exact: true }).click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  const overflow = await page.evaluate(() => ({
+    viewportWidth: window.innerWidth,
+    documentWidth: document.documentElement.scrollWidth,
+    bodyWidth: document.body.scrollWidth
+  }));
+  expect(overflow.documentWidth, JSON.stringify(overflow)).toBeLessThanOrEqual(overflow.viewportWidth);
+  expect(overflow.bodyWidth, JSON.stringify(overflow)).toBeLessThanOrEqual(overflow.viewportWidth);
+});
