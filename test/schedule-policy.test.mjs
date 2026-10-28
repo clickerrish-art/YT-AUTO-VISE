@@ -366,3 +366,16 @@ test("next-publication gate cannot be weakened below 72 hours through an option 
   }
   assert.equal(evaluateNextPublication({ ...args, minSpacingHours: 72 }).valid, true);
 });
+
+
+test("active reservations never fall back to createdAt when scheduledAt is missing", () => {
+  for (const status of ["queued", "queued_for_publication", "pending_schedule", "scheduled", "uploading", "uncertain", "recovery_required"]) {
+    const result = validatePublicationSlot(
+      { id: "next", scheduledAt: "2026-10-28T15:00:00Z" },
+      [{ id: `reservation-${status}`, status, createdAt: "2026-10-20T15:00:00Z" }]
+    );
+    assert.equal(result.valid, false, `${status} without scheduledAt must fail closed`);
+    assert.ok(result.errors.some(error => error.includes("missing scheduledAt")),
+      `${status} must report the missing reservation timestamp`);
+  }
+});
