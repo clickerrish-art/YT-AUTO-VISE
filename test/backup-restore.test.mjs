@@ -405,7 +405,7 @@ test("separate process holding the shared operation lock blocks backup without a
       let output = "";
       child.stdout.on("data", chunk => {
         output += chunk;
-        if (output.includes("LOCK_READY\\n")) {
+        if (output.includes("LOCK_READY")) {
           clearTimeout(timeout);
           resolve();
         }
