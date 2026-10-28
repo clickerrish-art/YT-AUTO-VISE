@@ -156,6 +156,57 @@ test("builds a renderer manifest only from exact approved, hash-bound job eviden
   } finally { f.cleanup(); }
 });
 
+test("allows internal Short lineage to a verified private parent while native Related video remains blocked", () => {
+  const f = fixture();
+  try {
+    f.job.contentType = "short";
+    f.plan.contentType = "short";
+    const qualityPath = path.join(f.root, f.quality.path);
+    const qualityEvidence = JSON.parse(fs.readFileSync(qualityPath, "utf8"));
+    qualityEvidence.format = "short";
+    const quality = write(f.root, f.quality.path, JSON.stringify(qualityEvidence));
+    f.quality.sha256 = quality.sha256;
+    f.plan.renderEvidence.qualityEvidenceSha256 = quality.sha256;
+
+    const channelId = "UC" + "a".repeat(22);
+    const parentVideoId = "Abcdef123_-";
+    f.job.shortParentRelationship = {
+      relationshipApproved: true,
+      parentRemoteVerified: true,
+      parentChannelTitle: "SonicVhibez",
+      parentPrivacyStatus: "private",
+      parentContentId: "parent-long-01",
+      parentRemoteVideoId: parentVideoId,
+      parentMediaSha256: "b".repeat(64),
+      parentChannelId: channelId,
+      nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "Private parent is ineligible for native Related video." }
+    };
+    f.plan.parentRelationship = {
+      parentContentId: "parent-long-01",
+      parentRevisionSha256: "c".repeat(64),
+      parentMediaSha256: "b".repeat(64),
+      sourceSegments: [{ sceneId: "scene-2", startSeconds: 0, endSeconds: 2 }],
+      remoteParentVerified: true,
+      remoteVideoId: parentVideoId,
+      channelTitle: "SonicVhibez",
+      channelId,
+      visibility: "private",
+      destinationUrl: "https://www.youtube.com/watch?v=" + parentVideoId,
+      nativeRelatedVideoStatus: "BLOCKED_EXTERNAL",
+      nativeRelatedVideoBlocker: "Private parent is ineligible for native Related video."
+    };
+
+    const planSha256 = productionPlanSha256(f.plan);
+    f.job.authoring.productionPlan.planSha256 = planSha256;
+    f.job.authoring.productionPlan.review.planSha256 = planSha256;
+    rehashPlanReview(f.job);
+    const result = buildApprovedJobRenderManifest({ job: f.job, root: f.root });
+    assert.equal(result.manifest.publishable, false);
+    assert.equal(result.manifest.publishingEnabled, false);
+    assert.equal(result.manifest.parentRelationship.nativeRelatedVideoStatus, "BLOCKED_EXTERNAL");
+  } finally { f.cleanup(); }
+});
+
 test("rejects a missing plan approval rather than treating a submitted plan as render-ready", () => {
   const f = fixture();
   try {
