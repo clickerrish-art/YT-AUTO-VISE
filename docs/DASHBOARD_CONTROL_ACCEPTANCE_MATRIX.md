@@ -1,3 +1,16 @@
+## Latest exact-SHA API acceptance evidence — 28 October 2026
+
+- **Source/test candidate:** `03c60617afab051f0aab745d0c1203d0ed788417`.
+- **Current static inventory:** 105 controls, 15 forms, 38 literal route branches (10 GET, 28 POST), including 35 distinct API method/path routes.
+- **Missing-auth sweep:** all distinct declared API method/path routes reject missing credentials with HTTP 401 JSON; responses do not disclose filesystem paths; persisted state is unchanged. See [auth-matrix test commit](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3f2b2e27bd04c686d279b293d3019f125a344285).
+- **Request boundaries:** [test commit](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ec3decc94b0f2d0b8b12efbad7bbdd3170055eda) proves real-server malformed JSON returns 400, unsupported content type returns 415, and JSON exceeding 16 KiB returns 413, with no state mutation or path disclosure.
+- **Authorized job integration:** [test commit](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417) proves POST /api/jobs creates one persisted queued job and one audit event; exact retry returns the same job with `reused=true`; changed input with the same key returns 409 and does not duplicate job/audit state.
+- **Exact-SHA test evidence:** [automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517639) — 404 Node tests, 0 failures/0 skips, 16 Python tests and zero npm audit vulnerabilities; [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517536); [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517494); [dashboard browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517541) — 15 Chromium journeys; [isolated main/candidate baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517549).
+- **Remaining gap:** keep `DASH-001` `NOT_TESTED`. The above tests cover negative authentication, three request-boundary cases and one authorized job/idempotency path. They do not establish all-control/all-route authorized success, authorization variants, full input boundaries, provider/filesystem failure injection, complete mutation/audit behavior, concurrency, restart/recovery, keyboard/focus/accessibility or all responsive states.
+- Full exact-SHA report: [CURRENT_RELEASE_EVIDENCE_2026-10-28.md](https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/CURRENT_RELEASE_EVIDENCE_2026-10-28.md).
+
+---
+
 ## Latest exact-SHA coverage update — 28 October 2026
 
 - **Source/test candidate:** `3f2b2e27bd04c686d279b293d3019f125a344285`.
