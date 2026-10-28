@@ -366,6 +366,8 @@ function json(res, status, body) {
 function readBody(req) {
   const contentType = String(req.headers["content-type"] ?? "");
   if (contentType.split(";", 1)[0].trim().toLowerCase() !== "application/json") {
+    // Drain the rejected request so keep-alive sockets cannot remain blocked by an unread body.
+    req.resume();
     return Promise.reject(new Error("Unsupported content type; use application/json"));
   }
   return new Promise((resolve, reject) => {
