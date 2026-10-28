@@ -469,13 +469,13 @@ function reservedPublicationSlots(state, excludeItemId = null) {
   const queueReservationDates = new Map();
   for (const item of state.queueItems ?? []) {
     const status = String(item?.status ?? "").toLowerCase();
-    if (item.id === excludeItemId || item.reservationType !== "SCHEDULED_SLOT" || !item.scheduledDate || status === "cancelled") continue;
+    if (item.id === excludeItemId || item.reservationType !== "SCHEDULED_SLOT" || status === "cancelled") continue;
     if (status === "published") {
       // Published items must be checked against when they actually went live, not
       // the old planned slot. Missing actual time intentionally fails closed.
       slots.push({ id: item.id, status: "published", publishedAt: item.publishedAt ?? item.actualPublishedAt });
     } else {
-      slots.push({ id: item.id, status: "scheduled", scheduledAt: item.scheduledAt ?? localDateTimeToIso(item.scheduledDate, "17:00", scheduleConfig.timezone) });
+      slots.push({ id: item.id, status: "scheduled", scheduledAt: item.scheduledAt ?? (item.scheduledDate ? localDateTimeToIso(item.scheduledDate, "17:00", scheduleConfig.timezone) : undefined) });
     }
     queueReservationDates.set(item.id, item.scheduledDate);
   }
