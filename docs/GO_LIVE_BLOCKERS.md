@@ -1002,3 +1002,13 @@ Unresolved owner/external actions: verify SonicVhibez account/channel ID and OAu
 - Post `406357273` showed as published on 2026-10-27. The implementation run did not modify existing scheduled posts.
 - Treat cross-platform promotional automation as unsafe until the owner has resolved these pending posts and a read-only recheck confirms the intended draft-only state.
 - Exact-SHA code/test evidence for the remote-publication timestamp fail-closed correction is recorded in [CURRENT_RELEASE_EVIDENCE_2026-10-28.md](CURRENT_RELEASE_EVIDENCE_2026-10-28.md). Passing CI does not clear the owner-controlled integration and media gates.
+
+## Current-HEAD verification — 2026-10-28
+
+- Exact tested checkpoint before this documentation refresh: `4f4499e93de2d9faa6e56d0c062ee5ce901d7ce2`.
+- Remote states `published`, `public`, `private`, and `unlisted` fail closed when no actual publication timestamp exists; a creation/planned timestamp is not treated as remote publication evidence.
+- Cadence validation is centralized and requires explicit owner approval plus a feasible policy; the 72-hour minimum remains non-waivable.
+- Current-HEAD CI: automation/security 392 Node tests + 16 Python tests passed; content-quality and metadata 392 Node tests passed; dashboard E2E 14 Chromium journeys passed; isolated main/candidate baseline passed.
+- Production readiness remains blocked by 13 prerequisites. External Meta draft creation was skipped. These are not successful production acceptance gates.
+- Metricool still has eight upcoming Nature Frontiers Facebook/Instagram promotions with auto-publishing enabled. They were not modified. Owner intervention is needed before further scheduled dates.
+- Full exact links and the remaining release gates are in [CURRENT_RELEASE_EVIDENCE_2026-10-28.md](CURRENT_RELEASE_EVIDENCE_2026-10-28.md).
