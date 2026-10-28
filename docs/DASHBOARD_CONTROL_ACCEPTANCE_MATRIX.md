@@ -564,3 +564,13 @@ An isolated baseline comparison for this exact source/test candidate has not yet
 At the candidate snapshot, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, divergence 1,936 ahead / 2 behind / 172 changed files. PR #1 remains open/draft/unmerged. The full branch-only history inventory remains incomplete. Production remains **BLOCKED**.
 
 This does not change DASH-001: exhaustive per-control/API acceptance remains NOT_TESTED.
+
+
+## Focused API parsing acceptance — 28 October 2026
+
+- Exact tested source/test SHA: `4d003f320df0f1d26c5b46dcb2a0c545cfec785c`.
+- `scripts/dashboard-server.mjs` requires `application/json` for body-bearing API routes; unsupported media types are rejected with HTTP 415 and request bodies are drained.
+- Regression assertion in `test/dashboard-server.test.mjs` sends JSON as `text/plain` and verifies 415 plus a redacted, path-safe response.
+- Exact candidate automation [40673471424](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471424), content-quality [40673471379](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471379), metadata [40673471565](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471565), and browser E2E [40673471427](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471427) passed; the isolated main/candidate baseline [40673471350](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471350) also passed.
+- This closes only the unsupported-content-type acceptance case. **DASH-001 remains NOT_TESTED** until every inventoried control and mutating route has executed, behavior-specific acceptance coverage. The browser suite remains 15 journeys, not full per-control coverage.
+- The rollback failure-injection fixture in `test/backup-restore.test.mjs` now explicitly places the destination state's mtime before the backup timestamp so it reaches the intended later-rename rollback path without bypassing the real stale-state guard.
