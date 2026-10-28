@@ -778,6 +778,19 @@
       "nextAction": "Retain the Chromium regression in browser-tests/dashboard-keyboard-accessibility.spec.mjs. This narrow viewport check does not close the complete dashboard/API acceptance matrix.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "The real local dashboard/backend is connected at 320px viewport width; documentElement.scrollWidth and body.scrollWidth do not exceed window.innerWidth; exact candidate browser suite passes."
+    },
+    {
+      "id": "META-REMOTE-SCHEDULED-001",
+      "severity": "critical",
+      "owner": "account owner",
+      "requirement": "Identify and safely resolve unintended live Metricool scheduled posts for the Nature Frontiers brand; verify remote state after any authorized intervention.",
+      "status": "BLOCKED_EXTERNAL",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/METRICOOL_LIVE_PUBLISHING_RISK_2026-10-28.md"
+      ],
+      "nextAction": "Read-only Metricool inspection on 2026-10-28 returned eight future records scheduled 2026-10-31 through 2026-11-25; all had autoPublish=true and draft=false. One prior record (406357273) returned Facebook PUBLISHED. Obtain explicit owner authorization for specific pause/cancel/configuration actions if posts are unintended; apply only approved changes and read back remote state. Do not assume repository dry-run settings affect existing remote schedules.",
+      "assessmentCommitSha": "83d810069b1fe9404f6bc5d5bb45d72ba67d9cd4",
+      "acceptanceCriterion": "The owner has decided which records are intended; any authorized changes are verified by a fresh Metricool read-back; no unintended scheduled publication remains active; evidence does not expose credentials."
     }
   ],
   "currentCheckpoint": {
