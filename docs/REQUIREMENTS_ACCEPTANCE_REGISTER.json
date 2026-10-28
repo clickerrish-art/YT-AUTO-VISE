@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-28T20:20:00Z",
-  "evidencePolicy": "Exact source/test candidate 086f157356a78d026b6e1dde4e473d01b85773ba adds shared backup/restore lock exclusion. Automation/security passed 408 Node tests, zero failures/skips, npm audit 0 vulnerabilities; content-quality, metadata, dashboard browser E2E and isolated main/candidate baseline passed. The test-file incident was reviewed: test/restore-facebook-draft-history.test.mjs is intentionally present on the implementation branch and absent from main following the explicit revert there. Production readiness remains blocked. Later documentation commits do not alter source/test behavior.",
+  "recordedAt": "2026-10-28T20:24:00Z",
+  "evidencePolicy": "Exact source/test candidate 918f33295994d47a3f669e8b491828fd8293a862 adds backup lock cleanup after validation failure and updates restore's shared-lock contention error assertion. Exact-SHA automation/security passed 409 Node tests, zero failures/skips and npm audit 0 vulnerabilities; metadata, content quality, dashboard browser E2E and isolated main/candidate baseline passed. Production readiness remains blocked. test/restore-facebook-draft-history.test.mjs is preserved on the implementation branch and absent from main following the explicit revert there. Documentation commits after this candidate do not alter source/test behavior.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -25,7 +25,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417"
       ],
-      "nextAction": "Live snapshot before documentation-only evidence refresh: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; PR/branch head 7cdd5fe59686acdd5e3499289463ccc5369f0efd; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 2002 ahead / 2 behind / 174 changed files. PR #1 remained open, draft and unmerged. Documentation-only evidence commits follow; full divergence review remains incomplete.",
+      "nextAction": "Live snapshot immediately before documentation refresh: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; PR/branch head 918f33295994d47a3f669e8b491828fd8293a862; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 2014 ahead / 2 behind / 174 changed files. PR #1 remains open, draft and unmerged. Full divergence review remains incomplete.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch."
     },
@@ -73,9 +73,17 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762134957",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135041",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135380",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762127254"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762127254",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/a0d6d74d239d318487fac8201602844ba34ea1ee",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/753ecd7cdcb265b43113d264d79abb8dc0ba16b4",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/918f33295994d47a3f669e8b491828fd8293a862",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720045",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720246",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720195",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720017",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762709642"
       ],
-      "nextAction": "Exact source/test candidate 086f157356a78d026b6e1dde4e473d01b85773ba adds shared backup/restore lock contention coverage. Automation/security 40762134886 passed 408 Node tests with zero failures/skips and npm audit 0 vulnerabilities; content quality 40762134957, metadata 40762135041, browser E2E 40762135380 and isolated baseline 40762127254 passed. Production readiness 40762135154 remains blocked. Older evidence entries are historical and are not represented as testing this candidate.",
+      "nextAction": "Exact source/test candidate 918f33295994d47a3f669e8b491828fd8293a862: automation/security 40762720045 passed 409 Node tests with zero failures/skips and npm audit 0 vulnerabilities; metadata 40762720246, content quality 40762720195, dashboard browser E2E 40762720017 and isolated baseline 40762709642 passed. Production readiness 40762720001 remains blocked. Historical evidence entries refer to their own exact SHAs and are not represented as tests of this candidate.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
@@ -102,9 +110,17 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762134957",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135041",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135380",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762127254"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762127254",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/a0d6d74d239d318487fac8201602844ba34ea1ee",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/753ecd7cdcb265b43113d264d79abb8dc0ba16b4",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/918f33295994d47a3f669e8b491828fd8293a862",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720045",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720246",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720195",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720017",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762709642"
       ],
-      "nextAction": "Exact source/test candidate 086f157356a78d026b6e1dde4e473d01b85773ba passed isolated main/candidate baseline workflow 40762127254. Live main at verification: fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base: 45352b73bb6cc4787b2a49988b575afb754ab627. Full branch divergence review remains incomplete.",
+      "nextAction": "Exact source/test candidate 918f33295994d47a3f669e8b491828fd8293a862 passed isolated main/candidate baseline workflow 40762709642. Live main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627. Full divergence review remains incomplete.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
@@ -157,7 +173,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237"
       ],
-      "nextAction": "Backup output overwrite protection and backup-vs-restore lock contention are implemented and tested on exact candidate 086f157356a78d026b6e1dde4e473d01b85773ba. This does not complete process-level concurrent-operation tests, crash/power-loss transaction-boundary recovery, ambiguous remote-side-effect reconciliation or deployment rollback drills; requirement remains NOT_TESTED.",
+      "nextAction": "Backup overwrite protection, file/directory flushes, backup-vs-restore shared-lock exclusion, lock cleanup after backup validation failure, and truthful shared-lock error reporting are implemented and tested at exact candidate 918f33295994d47a3f669e8b491828fd8293a862. Full overlapping-process tests, crash/power-loss transaction-boundary recovery, uncertain remote-side-effect reconciliation and deployment rollback drills remain incomplete; requirement stays NOT_TESTED.",
       "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
       "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects."
     },
@@ -1026,6 +1042,27 @@
       "nextAction": "Lock-contention behavior is proven. Add real overlapping-process and interrupted-restore drills before marking overall STATE-001 accepted.",
       "assessmentCommitSha": "086f157356a78d026b6e1dde4e473d01b85773ba",
       "acceptanceCriterion": "Backup acquires the same exclusive state-operation lock as restore, rejects a pre-existing lock without changing it, and writes no backup output while the lock is held."
+    },
+    {
+      "id": "BACKUP-003",
+      "severity": "medium",
+      "owner": "maintainer",
+      "requirement": "A failed backup validation must release the shared backup/restore operation lock and leave no backup output.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/73c697c9c675504b07f15ad2c915261f0313769a",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/a0d6d74d239d318487fac8201602844ba34ea1ee",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/753ecd7cdcb265b43113d264d79abb8dc0ba16b4",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/918f33295994d47a3f669e8b491828fd8293a862",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720045",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720246",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720195",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720017",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762709642"
+      ],
+      "nextAction": "The validation-failure lock cleanup is tested. Continue separate real-process overlap and interrupted-transaction recovery drills before accepting STATE-001.",
+      "assessmentCommitSha": "918f33295994d47a3f669e8b491828fd8293a862",
+      "acceptanceCriterion": "When backupState fails because there are no eligible entries, it rejects, removes only its own shared lock, and does not create the requested backup file."
     }
   ],
   "currentCheckpoint": {
