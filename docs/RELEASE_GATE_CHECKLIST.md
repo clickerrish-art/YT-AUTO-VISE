@@ -1,3 +1,16 @@
+## Exact-candidate dashboard request-size fix — 28 October 2026
+
+- Live implementation/test candidate: `852eb1087cc4a06bafb80d70760ec9915817fe79`; current PR #1 was open, draft and unmerged at verification. `main` remained `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Implemented in `scripts/dashboard-server.mjs`: oversized JSON request bodies above 16KB now return HTTP 413 (Payload Too Large), rather than falling through to generic HTTP 400. `test/dashboard-server.test.mjs` now asserts 413 and retains assertions that the request is rejected without leaking the local state path.
+- Exact-candidate automation/security: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312590), 401 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1.
+- Exact-candidate content quality: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312539), 401/401 tests and zero skips.
+- Exact-candidate metadata: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312486), 401/401 tests and zero skips.
+- Exact-candidate dashboard browser E2E: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312668), 15 Chromium journeys. This does not close exhaustive per-control/per-route acceptance; `DASH-001` remains `NOT_TESTED`.
+- Production readiness: [BLOCKED/fail-closed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312615). Meta draft workflow: [local validation passed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312494), but external draft creation was skipped.
+- Exact-candidate isolated baseline comparison had not completed at the time of this note; do not infer a baseline PASS from earlier SHAs. The register marks it pending.
+- Git comparison at the implementation/test candidate: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, 1,967 ahead / 2 behind / 172 changed files. This is not a completed full divergence review.
+- Safety remains unchanged: no live upload/post, campaign activation, visibility change, PR merge, edit to `main`, or destructive Git operation. Nature Frontiers remains prohibited as a YouTube target; public/unattended YouTube and live Meta publishing remain disabled; Safari remains inactive; approved Selar destination remains unchanged.
+
 
 
 ## Latest verified implementation checkpoint — 28 October 2026
