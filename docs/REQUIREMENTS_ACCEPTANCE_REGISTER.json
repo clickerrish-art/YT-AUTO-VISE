@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-28",
-  "evidencePolicy": "Exact source/test candidate ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9 passed automation/security (399 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg 6.1.1), content quality (399/399; zero skips), metadata (399/399; zero skips), dashboard E2E, and isolated main/candidate baseline (both exit code 0; baseline runner lacked FFmpeg and explicitly skipped the renderer integration there, which ran on the candidate automation workflow). Readiness remains blocked by genuine owner/external prerequisites; Meta draft workflow validated locally only and external draft creation was skipped.",
+  "evidencePolicy": "Exact source/test candidate c6b93328a92b48539650c96b647989fd9538623f passed automation/security (400 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg 6.1.1), content quality (400/400; zero skips), metadata (400/400; zero skips), dashboard E2E (15 Chromium tests), and isolated main/candidate baseline (both Node/Python commands exit 0; FFmpeg available). Production readiness remains blocked by real prerequisites; the external Meta draft-creation job was skipped.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -823,47 +823,67 @@
       "assessmentCommitSha": "ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9",
       "acceptanceCriterion": "The exact Page ID must be validated before read-back; IDs with a longer Page-ID prefix, no separator or an empty suffix are rejected before fetch. Image paths must be regular files with no symlink in any path component and remain inside the configured root; a symlinked asset is rejected before ffprobe or POST. Exact-SHA Node suites pass with zero skips.",
       "nextAction": "Retain both regression tests. Reuse resolveRegularFileNoSymlinks for any future external-media upload adapter and add coverage before adding such paths."
+    },
+    {
+      "id": "META-SCHEDULE-TIMESTAMP-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Meta scheduled post mutations must reject timezone-free, impossible-calendar and out-of-range-offset timestamps before calling the remote API.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/36caca2b40390b355bd4d25bc1bc65e1634d31e9",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c6b93328a92b48539650c96b647989fd9538623f",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366736",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366691",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366690"
+      ],
+      "assessmentCommitSha": "c6b93328a92b48539650c96b647989fd9538623f",
+      "acceptanceCriterion": "The adapter uses isValidZonedIsoTimestamp and rejects missing timezone, impossible calendar date, invalid hour/minute and UTC offsets outside the allowed range before any external mutation. The exact-SHA test asserts no request is made for invalid timestamps.",
+      "nextAction": "Retain the adapter regression test and apply strict timezone-qualified timestamp validation at every external scheduling boundary."
     }
   ],
   "currentCheckpoint": {
-    "applicationCodeSha": "e090b19136d9336c45fd1a01c4c90400c05405d4",
-    "testedSha": "ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9",
-    "checkpointPrHead": "ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9",
+    "applicationCodeSha": "36caca2b40390b355bd4d25bc1bc65e1634d31e9",
+    "testedSha": "c6b93328a92b48539650c96b647989fd9538623f",
+    "checkpointPrHead": "c6b93328a92b48539650c96b647989fd9538623f",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1906,
+    "aheadBy": 1924,
     "behindBy": 2,
-    "changedFiles": 171,
+    "changedFiles": 172,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "META ASSET PATH AND REMOTE-ID REGRESSIONS PASS / AUTOMATED CHECKS PASS / DASHBOARD ACCEPTANCE PARTIAL / PRODUCTION BLOCKED",
+    "verdict": "META POST-ID, SYMLINK-ASSET AND STRICT-SCHEDULE-TIMESTAMP REGRESSIONS PASS / AUTOMATED CHECKS PASS / DASHBOARD ACCEPTANCE PARTIAL / PRODUCTION BLOCKED",
     "ci": {
       "automationSecurity": "PASS",
-      "nodeTests": 399,
+      "nodeTests": 400,
       "nodeFailures": 0,
       "nodeSkipped": 0,
       "pythonTests": 16,
       "npmAuditVulnerabilities": 0,
       "ffmpegVersion": "6.1.1-3ubuntu5",
-      "contentQuality": "PASS (399/399; 0 failures; 0 skips)",
-      "metadata": "PASS (399/399; 0 failures; 0 skips)",
-      "dashboardE2e": "PASS (see run 40661176112; browser journeys are not exhaustive per-control acceptance)",
-      "isolatedBaseline": "PASS (main and candidate Node/Python commands exit 0; baseline runner explicitly skipped FFmpeg integration because FFmpeg install failed there; exact candidate automation ran FFmpeg with zero skipped tests; artifact 12804520728, ZIP SHA-256 89c7bf8f49f976a9b57e711cbafc71eaba2470e081a3416f85166c6f2518e586)",
-      "productionReadiness": "BLOCKED (fail-closed; run 40661176424)",
-      "facebookDraftWorkflow": "PASS for local deterministic validation only; external draft creation job skipped",
-      "newMetaPostIdBoundaryRegression": "PASS (exact candidate ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9)",
-      "newMetaSymlinkAssetGuard": "PASS (exact candidate ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9)"
+      "contentQuality": "PASS (400/400; 0 failures; 0 skips)",
+      "metadata": "PASS (400/400; 0 failures; 0 skips)",
+      "dashboardE2e": "PASS (15 Chromium tests; not exhaustive per-control acceptance)",
+      "isolatedBaseline": "PASS (main and candidate Node/Python commands exit 0; FFmpeg 6.1.1 available; artifact 12804756911, ZIP SHA-256 fa645973cfb2a6927aad8a4bdbec2af06d30b448df89f897f4a10cfcf3a1a994)",
+      "productionReadiness": "BLOCKED (fail-closed; run 40662366746; diagnostic artifact 12804562115)",
+      "facebookDraftWorkflow": "PASS for local validation (15 tests); external draft creation job SKIPPED",
+      "newMetaPostIdBoundaryRegression": "PASS",
+      "newMetaSymlinkAssetGuard": "PASS",
+      "newMetaScheduleTimestampRegression": "PASS"
     },
     "evidence": {
-      "automation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176042",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176110",
-      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176011",
-      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176112",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176071",
-      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176424",
-      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176046",
-      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176071/artifacts/12804520728"
+      "automation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366736",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366691",
+      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366690",
+      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366676",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366734",
+      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366746",
+      "readinessArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366746/artifacts/12804562115",
+      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366692",
+      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366734/artifacts/12804756911",
+      "branchReconciliationReport": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/BRANCH_RECONCILIATION_REPORT_2026-10-28.md"
     },
     "implementationCommits": [
       "b9f357435149bbb7650e858691c228f3133b9950",
@@ -874,12 +894,14 @@
       "96cb4b06704915c7ee4fb2f0feb1796b41823301",
       "b47d08614fa31074d2118cadc98df356478784b2",
       "e090b19136d9336c45fd1a01c4c90400c05405d4",
-      "ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9"
+      "ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9",
+      "36caca2b40390b355bd4d25bc1bc65e1634d31e9",
+      "c6b93328a92b48539650c96b647989fd9538623f"
     ],
-    "candidateSourceTestSha": "ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9",
+    "candidateSourceTestSha": "c6b93328a92b48539650c96b647989fd9538623f",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Exact source/test candidate ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9 passed automation/security (399 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg 6.1.1-3ubuntu5), content quality (399/399; zero skips), metadata (399/399; zero skips), dashboard E2E and isolated baseline (main/candidate Node/Python commands exit 0). Regression tests explicitly prove prefix-collision post IDs and symlinked image assets are rejected before remote requests. Baseline runner explicitly skipped its FFmpeg integration because installation failed there; the exact candidate automation workflow ran with FFmpeg and zero skips. Readiness remains BLOCKED and external Meta draft creation was skipped.",
-    "latestDocumentedPrHeadBeforeRegisterRefresh": "ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9",
-    "observedBranchHeadBeforeRegisterRefresh": "ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9"
+    "latestChangeTestReason": "Exact source/test candidate c6b93328a92b48539650c96b647989fd9538623f passed automation/security (400 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg 6.1.1), content quality (400/400; zero skips), metadata (400/400; zero skips), dashboard E2E (15 Chromium tests), and isolated main/candidate baseline (main/candidate Node/Python commands exit 0). New tests verify strict timezone-qualified calendar timestamps, alongside the prior exact Page-ID and symlink-path regressions. Readiness remains BLOCKED; external Meta draft creation was skipped.",
+    "latestDocumentedPrHeadBeforeRegisterRefresh": "c6b93328a92b48539650c96b647989fd9538623f",
+    "observedBranchHeadBeforeRegisterRefresh": "c6b93328a92b48539650c96b647989fd9538623f"
   }
 }
