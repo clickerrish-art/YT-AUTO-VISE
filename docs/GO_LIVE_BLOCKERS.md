@@ -1063,3 +1063,15 @@ Unresolved owner/external actions: verify SonicVhibez account/channel ID and OAu
 - Production readiness remains blocked by 13 prerequisites. External Meta draft creation was skipped. These are not production acceptance passes.
 - Metricool still has eight upcoming Nature Frontiers Facebook/Instagram promotions with auto-publishing enabled. They were not modified; owner intervention is required.
 - Exact links and remaining release gates: [CURRENT_RELEASE_EVIDENCE_2026-10-28.md](CURRENT_RELEASE_EVIDENCE_2026-10-28.md).
+
+
+## Exact-SHA verification after Meta adapter security fixes — 2026-10-28
+
+- Tested source/test candidate: `ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9`; latest application-source fix: `e090b19136d9336c45fd1a01c4c90400c05405d4`.
+- The Meta adapter now rejects remote post IDs that only share a prefix with the authorized Page ID and rejects symlinked image assets before file inspection or remote mutation.
+- Exact-candidate automation/security [40661176042](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176042), content quality [40661176110](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176110), and metadata [40661176011](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176011) passed 399 Node tests each with 0 failures and 0 skips. Automation also passed 16 Python tests and reported 0 npm audit vulnerabilities with FFmpeg installed.
+- Dashboard browser E2E [40661176112](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176112) passed 15 journeys; this does not close exhaustive dashboard/API acceptance.
+- Isolated baseline [40661176071](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176071) passed with main and candidate Node/Python commands exiting 0. The isolated baseline runner explicitly could not install FFmpeg and skipped its renderer integration test; the candidate automation run installed FFmpeg and had zero skipped tests. Artifact [12804520728](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176071/artifacts/12804520728).
+- Readiness [40661176424](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176424) remains blocked by missing production prerequisites. Facebook workflow [40661176046](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176046) passed local validation but skipped external draft creation.
+- Register: 51 requirements — 35 PASS, 8 NOT_TESTED, 8 BLOCKED_EXTERNAL. These CI passes do not resolve the external blockers listed above.
+- Live main remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. At the source/test checkpoint, comparison was 1,906 ahead / 2 behind / 171 changed files. PR #1 remains open/draft/unmerged; no main edit or destructive reconciliation was performed.
