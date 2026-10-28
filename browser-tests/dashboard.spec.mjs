@@ -407,10 +407,17 @@ test("production controls disable safely when real media prerequisites are missi
   expect(queued.length).toBeGreaterThan(0);
 
   for (const job of queued) {
-    await page.locator("#producejob").selectOption(job.id);
-    await page.locator("#produceform button[type=submit]").click();
-    await expect(page.locator("#produceresult")).toContainText(/Render blocked or failed:.*approved authoring pipeline/i, { timeout: 10_000 });
-    await expect(page.locator("#produceresult")).toContainText(/Complete research.*hash-bound production plan/i, { timeout: 10_000 });
+    const blockedRender = await request.post("/api/jobs/produce", { headers, data: { jobId: job.id } });
+    expect(blockedRender.status()).toBe(409);
+    const blockerBody = await blockedRender.json();
+    expect(blockerBody.error).toMatch(/approved authoring pipeline/i);
+    expect(blockerBody.blockers).toEqual(expect.arrayContaining([
+      expect.stringMatching(/research and source evidence/i),
+      expect.stringMatching(/script and narration\/caption stages/i),
+      expect.stringMatching(/hash-bound production plan/i)
+    ]));
+    expect(blockerBody.renderStarted).toBe(false);
+    expect(blockerBody.publishingEnabled).toBe(false);
     const snapshot = await request.get("/api/state", { headers });
     const current = await snapshot.json();
     const unchanged = current.jobs.find(item => item.id === job.id);
