@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-28",
-  "evidencePolicy": "Exact source/test candidate e5f866d910db3a572a280f59c4c9ba17d4061c7f: automation/security 401 Node tests passed, 0 failures/0 skips; 16 Python tests passed; npm audit 0 vulnerabilities; FFmpeg 6.1.1; content quality 401/401 with zero skips; metadata 401/401 with zero skips; dashboard browser E2E 15 tests. Production readiness remains blocked by genuine external prerequisites; Meta draft creation job was skipped. Isolated baseline comparison has not yet been verified on this exact candidate.",
+  "evidencePolicy": "Exact source/test candidate 4d003f320df0f1d26c5b46dcb2a0c545cfec785c: automation/security 401 Node tests passed, 0 failures/0 skips; 16 Python tests passed; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1; content quality 401/401 zero skips; metadata 401/401 zero skips; dashboard browser E2E 15 journeys; isolated main/candidate baseline passed. Production readiness remains blocked by external prerequisites; external Meta draft creation was skipped. DASH-001 remains NOT_TESTED because control-by-control and route-by-route behavior acceptance is incomplete.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -24,7 +24,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c"
       ],
-      "nextAction": "Live GitHub comparison before this register refresh: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; implementation branch cbd18c3a19a84e7a95f1407222fd712aa53829e7; 1903 ahead / 2 behind / 171 changed files. PR #1 state=open, draft=true, merged=false. The source/test candidate 986fe282b84c14f72d7c735c46259ca15722b858 passed its listed CI runs; subsequent commits through cbd18c3a19a84e7a95f1407222fd712aa53829e7 are evidence-document/register changes only. The exhaustive commit-by-commit divergence review is still incomplete.",
+      "nextAction": "Live comparison at the latest code/test checkpoint: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; implementation branch checkpoint 4d003f320df0f1d26c5b46dcb2a0c545cfec785c; 1,962 ahead / 2 behind / 172 changed files. PR #1 remains open, draft and unmerged. Full commit-by-commit divergence review and the historical test-file add/revert investigation remain incomplete.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch."
     },
@@ -858,21 +858,39 @@
       "assessmentCommitSha": "e5f866d910db3a572a280f59c4c9ba17d4061c7f",
       "acceptanceCriterion": "parseSrtTime returns null for minute or second fields above 59; validateCaptionSync reports an invalid SRT timestamp value; regression tests cover 00:60:00,000, 00:00:60,000, and acceptance of timelines with hours >= 24.",
       "nextAction": "Keep strict timestamp validation at all caption parsing and rendering boundaries."
+    },
+    {
+      "id": "API-REQUEST-MEDIA-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Dashboard API body-bearing routes reject unsupported request media types before JSON parsing or mutation, return HTTP 415, and safely drain rejected request bodies.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/290888193caa2b64b1f5c3f3497176175ecdc2b7",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/4d003f320df0f1d26c5b46dcb2a0c545cfec785c",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471424",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471379",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471565",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471427"
+      ],
+      "assessmentCommitSha": "4d003f320df0f1d26c5b46dcb2a0c545cfec785c",
+      "acceptanceCriterion": "readBody accepts application/json with optional media-type parameters; rejects missing or unsupported Content-Type with HTTP 415 before route mutation; drains rejected bodies; regression test submits JSON as text/plain and verifies 415 and a path-safe error. Exact candidate CI passes with zero test skips.",
+      "nextAction": "Keep the regression and ensure any future body-bearing API routes use the shared readBody parser. This focused case does not close DASH-001."
     }
   ],
   "currentCheckpoint": {
-    "applicationCodeSha": "e5f866d910db3a572a280f59c4c9ba17d4061c7f",
-    "testedSha": "e5f866d910db3a572a280f59c4c9ba17d4061c7f",
-    "checkpointPrHead": "0099c0e62acf7a6121d74215257501e2b2145d14",
+    "applicationCodeSha": "290888193caa2b64b1f5c3f3497176175ecdc2b7",
+    "testedSha": "4d003f320df0f1d26c5b46dcb2a0c545cfec785c",
+    "checkpointPrHead": "a947e76211435496f3b9beacad1e9d7067f1553f",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1953,
+    "aheadBy": 1966,
     "behindBy": 2,
     "changedFiles": 172,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "CAPTION SRT TIMESTAMP VALIDATION FIX PASS / ALL RELEVANT AUTOMATED SUITES PASS / EXACT-CANDIDATE BASELINE PASS / PRODUCTION BLOCKED",
+    "verdict": "DASHBOARD API CONTENT-TYPE VALIDATION PASS / EXACT-CANDIDATE AUTOMATED SUITES AND BASELINE PASS / DASH-001 INCOMPLETE / PRODUCTION BLOCKED",
     "ci": {
       "automationSecurity": "PASS",
       "nodeTests": 401,
@@ -884,43 +902,34 @@
       "contentQuality": "PASS (401/401; 0 failures; 0 skips)",
       "metadata": "PASS (401/401; 0 failures; 0 skips)",
       "dashboardE2e": "PASS (15 Chromium tests; not exhaustive per-control acceptance)",
-      "isolatedBaseline": "PASS on exact source/test candidate e5f866d910db3a572a280f59c4c9ba17d4061c7f; main and candidate Node/Python commands exited 0; FFmpeg/ffprobe 6.1.1; artifact 12804894418, ZIP SHA-256 cf4efef274a291627572da3407553365090988ecb07b8021797da0bd33e34e5f",
-      "productionReadiness": "BLOCKED (fail-closed; run 40664139308)",
-      "facebookDraftWorkflow": "PASS for local validation; external draft creation job SKIPPED",
-      "captionInvalidSrtClockRegression": "PASS"
+      "isolatedBaseline": "PASS on exact source/test candidate 4d003f320df0f1d26c5b46dcb2a0c545cfec785c; main and candidate Node/Python commands exited 0; artifact 12809417525, ZIP SHA-256 7c46f5156967ef944b8a602e47cc8bbd6e31e7608c6600cd5a9f898a040a7371",
+      "productionReadiness": "BLOCKED (fail-closed; run 40673471449)",
+      "facebookDraftWorkflow": "PASS for local validation; external draft creation job SKIPPED (run 40673471614)",
+      "dashboardUnsupportedContentTypeRegression": "PASS",
+      "restoreRollbackFixture": "PASS; deterministic mtime ensures the failure-injection test reaches the rollback path"
     },
     "evidence": {
-      "automation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139349",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139298",
-      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139374",
-      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139278",
-      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139308",
-      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139317",
-      "previousBaselineCandidateOnly": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664013917",
-      "currentHeadBaselinePending": "Resolved: exact source/test candidate e5f866d910db3a572a280f59c4c9ba17d4061c7f baseline run 40664139277 completed successfully; main and candidate Node/Python commands all exited 0.",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139277",
-      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139277/artifacts/12804894418"
+      "automation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471424",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471379",
+      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471565",
+      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471427",
+      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471449",
+      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471614",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471350",
+      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471350/artifacts/12809417525"
     },
     "implementationCommits": [
-      "b9f357435149bbb7650e858691c228f3133b9950",
-      "196e56c5b663b5c2e7f7661a980f73b1684a1444",
-      "b2686b888dabf6099d25aff59d288a514b3caffe",
-      "ef06d50e2ac9e6135aa3305da2aa1f7f0b708211",
-      "ade1efa4c9c4962a27867728451d3ef3a22e7fca",
-      "96cb4b06704915c7ee4fb2f0feb1796b41823301",
-      "b47d08614fa31074d2118cadc98df356478784b2",
-      "e090b19136d9336c45fd1a01c4c90400c05405d4",
-      "ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9",
-      "36caca2b40390b355bd4d25bc1bc65e1634d31e9",
-      "c6b93328a92b48539650c96b647989fd9538623f",
-      "94de8dc22e90171112955dd75bf1c696e0608de3",
-      "c9f6c213cb402ef8210a013080f13856181e8fe7",
-      "e5f866d910db3a572a280f59c4c9ba17d4061c7f"
+      "e40ae4fd38e6bf015af26dcaa0a44335d34d8e1d",
+      "5d8e1fd4faf7f1c57239734fdca28086afbbd69b",
+      "697bd2afed660c2874a4fb53844aa5286e556d74",
+      "c1bfed46607ab40a006483997e353ef65102d1ac",
+      "290888193caa2b64b1f5c3f3497176175ecdc2b7",
+      "4d003f320df0f1d26c5b46dcb2a0c545cfec785c"
     ],
-    "candidateSourceTestSha": "e5f866d910db3a572a280f59c4c9ba17d4061c7f",
+    "candidateSourceTestSha": "4d003f320df0f1d26c5b46dcb2a0c545cfec785c",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Exact source/test candidate e5f866d910db3a572a280f59c4c9ba17d4061c7f passed automation/security (401 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1), content quality (401/401; zero skips), metadata (401/401; zero skips), dashboard E2E (15 Chromium tests), and isolated main/candidate baseline run 40664139277 (Node/Python commands exit 0 on both main and candidate). Baseline artifact 12804894418, ZIP SHA-256 cf4efef274a291627572da3407553365090988ecb07b8021797da0bd33e34e5f. Production readiness remains BLOCKED; actual Meta draft creation was skipped.",
-    "latestDocumentedPrHeadBeforeRegisterRefresh": "0099c0e62acf7a6121d74215257501e2b2145d14",
-    "observedBranchHeadBeforeRegisterRefresh": "0099c0e62acf7a6121d74215257501e2b2145d14"
+    "latestChangeTestReason": "Exact candidate 4d003f320df0f1d26c5b46dcb2a0c545cfec785c passed automation/security (401 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1), content quality 401/401 with zero skips, metadata 401/401 with zero skips, dashboard E2E (15 Chromium journeys), and isolated main/candidate baseline run 40673471350. Baseline artifact 12809417525 has ZIP SHA-256 7c46f5156967ef944b8a602e47cc8bbd6e31e7608c6600cd5a9f898a040a7371. Production readiness remains BLOCKED; Meta external draft creation was skipped.",
+    "latestDocumentedPrHeadBeforeRegisterRefresh": "a947e76211435496f3b9beacad1e9d7067f1553f",
+    "observedBranchHeadBeforeRegisterRefresh": "a947e76211435496f3b9beacad1e9d7067f1553f"
   }
 }
