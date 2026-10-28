@@ -857,3 +857,18 @@ Release decision remains **BLOCKED**.
 - [x] Automation/security, content quality and metadata validation passed for source/test SHA `77921aca418b25bca0a9aa681281145b00c6d72f`.
 - [ ] Dashboard browser E2E and isolated baseline were still in progress at the latest recorded observation; check their actual final outcomes.
 - [ ] Production readiness remains blocked. No live Meta draft integration, authenticated channel/history verification, real approved media, authorized upload receipt, eligible native Related-video evidence, owner-approved cadence, or full recovery/deployment drill has been established.
+
+## Exact source/test checkpoint — 28 October 2026
+
+- [x] Automation/security [40606304386](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304386): PASS; 386 Node tests, 0 failures, 0 skips.
+- [x] Content quality [40606304170](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304170): PASS; 386 Node tests, 0 failures, 0 skips; FFmpeg/ffprobe integration.
+- [x] Metadata validation [40606304233](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304233): PASS.
+- [x] Dashboard browser E2E [40606298746](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606298746): PASS; 13 Chromium journeys.
+- [x] Isolated main/candidate baseline [40606304157](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304157): PASS; both isolated installs, Node tests and Python tests exited 0. Artifact ID `12779819868`, ZIP SHA-256 `d47d9e6cd2b63a52e80195177251c0d04b7cdb110dcb5aae981451606abd7eb9`.
+- [ ] Production readiness [40606304141](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304141): BLOCKED/FAILED by real prerequisites; do not override.
+- [ ] External Meta draft acceptance [40606304174](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304174): local validation passed but external draft-creation job was skipped.
+- [ ] Exhaustive dashboard/API acceptance: still NOT_TESTED; 105 controls and 38 route branches are inventory counts, not complete per-control acceptance.
+- [ ] Genuine production media, rights, hash-bound human review, verified SonicVhibez identity/history, one-shot private upload receipt, owner-approved feasible cadence, native Related video eligibility/decision, Meta identities/actual draft, branch protection, and isolated deployment/backup/restore/rollback drills remain release gates.
+
+**Tested source/test SHA:** `ce3ee82d48265ef16c39e5d9b84debd69709112a`. The following commits are documentation-only descendants and do not change source/test files. PR #1 remains open, draft and unmerged.
+
