@@ -3,7 +3,7 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-28T12:52:00+02:00",
+  "recordedAt": "2026-10-28T12:55:00+02:00",
   "evidencePolicy": "Exact source/test candidate 4d003f320df0f1d26c5b46dcb2a0c545cfec785c: automation/security 401 Node tests passed, 0 failures/0 skips; 16 Python tests passed; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1; content quality 401/401 zero skips; metadata 401/401 zero skips; dashboard browser E2E 15 journeys; isolated main/candidate baseline passed. Production readiness remains blocked by external prerequisites; external Meta draft creation was skipped. DASH-001 remains NOT_TESTED because control-by-control and route-by-route behavior acceptance is incomplete.",
   "statuses": [
     "PASS",
@@ -905,7 +905,7 @@
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "DASHBOARD OVERSIZED-BODY STATUS FIX IMPLEMENTED / AUTOMATED SUITES PASS ON EXACT CANDIDATE / BASELINE REVIEW PENDING / DASH-001 INCOMPLETE / PRODUCTION BLOCKED",
+    "verdict": "DASHBOARD OVERSIZED-BODY STATUS FIX IMPLEMENTED / AUTOMATED SUITES AND ISOLATED BASELINE PASS ON EXACT CANDIDATE / DASH-001 INCOMPLETE / PRODUCTION BLOCKED",
     "ci": {
       "automationSecurity": "PASS",
       "nodeTests": 401,
@@ -917,7 +917,7 @@
       "contentQuality": "PASS (401/401; 0 failures; 0 skips)",
       "metadata": "PASS (401/401; 0 failures; 0 skips)",
       "dashboardE2e": "PASS (15 Chromium tests; not exhaustive per-control acceptance)",
-      "isolatedBaseline": "PENDING at checkpoint; do not claim exact-candidate baseline until completed",
+      "isolatedBaseline": "PASS on exact source/test candidate 852eb1087cc4a06bafb80d70760ec9915817fe79; both main and candidate locked installs, Node tests and Python tests exited 0. Run 40675312543; artifact 12809887903, ZIP SHA-256 56159f21e0f951549990e321bc824d25977662a876e489d2c26e5ad134132b4a",
       "productionReadiness": "BLOCKED (fail-closed; run 40675312615)",
       "facebookDraftWorkflow": "PASS for local validation; external draft creation job SKIPPED (run 40675312494)",
       "dashboardUnsupportedContentTypeRegression": "PASS",
@@ -931,7 +931,8 @@
       "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312668",
       "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312615",
       "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312494",
-      "isolatedBaseline": "pending at update; prior baseline evidence is not substituted"
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312543",
+      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312543/artifacts/12809887903"
     },
     "implementationCommits": [
       "e40ae4fd38e6bf015af26dcaa0a44335d34d8e1d",
@@ -943,8 +944,8 @@
     ],
     "candidateSourceTestSha": "852eb1087cc4a06bafb80d70760ec9915817fe79",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Fixed dashboard API oversized JSON body response to use HTTP 413 instead of generic 400; updated the end-to-end dashboard API regression assertion. Exact candidate passed automation/security (401 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1), content quality 401/401 with zero skips, metadata 401/401 with zero skips, and 15 Chromium browser journeys. Production readiness remains fail-closed; external Meta draft creation was skipped. Exact-candidate isolated baseline run was still pending when this register update was prepared.",
-    "latestDocumentedPrHeadBeforeRegisterRefresh": "852eb1087cc4a06bafb80d70760ec9915817fe79",
-    "observedBranchHeadBeforeRegisterRefresh": "852eb1087cc4a06bafb80d70760ec9915817fe79"
+    "latestChangeTestReason": "Fixed dashboard API oversized JSON body response to use HTTP 413 instead of generic 400; updated the end-to-end dashboard API regression assertion. Exact candidate 852eb1087cc4a06bafb80d70760ec9915817fe79 passed automation/security (401 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1), content quality 401/401 with zero skips, metadata 401/401 with zero skips, 15 Chromium browser journeys, and isolated main/candidate baseline (both main and candidate Node/Python commands exited 0; artifact 12809887903; ZIP SHA-256 56159f21e0f951549990e321bc824d25977662a876e489d2c26e5ad134132b4a). Production readiness remains fail-closed; external Meta draft creation was skipped.",
+    "latestDocumentedPrHeadBeforeRegisterRefresh": "e59d2c9b14c25c59141950133c43c75dcc8aff49",
+    "observedBranchHeadBeforeRegisterRefresh": "e59d2c9b14c25c59141950133c43c75dcc8aff49"
   }
 }
