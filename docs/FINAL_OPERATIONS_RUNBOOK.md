@@ -235,3 +235,21 @@ Current Git snapshot before these documentation updates: PR HEAD `a912d3c724195f
 The current tested Meta adapter candidate is `ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9`. For any authorized Meta operation, the adapter requires the remote post ID to contain the exact configured Page ID followed by an underscore and a non-empty suffix. It also rejects symlinked media inputs and files that resolve outside the configured root before image probing or upload. Do not bypass these checks or infer a remote draft from local validation.
 
 Exact-candidate automation/security [40661176042](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176042), content quality [40661176110](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176110), and metadata [40661176011](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176011) each passed 399 tests with zero skips; automation passed 16 Python tests, npm audit found zero vulnerabilities, and FFmpeg was installed. Production readiness remains blocked and external draft creation remains unverified. Keep live Meta publishing disabled and do not alter the eight Metricool scheduled records without explicit owner authorization.
+
+## Latest exact-SHA checkpoint — 28 October 2026
+
+**Tested source/test SHA:** `c6b93328a92b48539650c96b647989fd9538623f`. The Meta adapter now requires calendar-valid, timezone-qualified schedule timestamps before any remote mutation, in addition to exact Page-ID-boundary checks and symlink-resistant image path handling. Regression tests prove invalid timestamps, ambiguous remote IDs and symlinked image assets are rejected before any external request.
+
+- Automation/security [40662366736](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366736): **PASS** — 400 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg 6.1.1; syntax and compilation checks passed.
+- Content quality [40662366691](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366691): **PASS** — 400/400, zero skips.
+- Metadata validation [40662366690](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366690): **PASS** — 400/400, zero skips.
+- Dashboard Chromium E2E [40662366676](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366676): **PASS** — 15 tests; not exhaustive per-control/API acceptance.
+- Isolated baseline [40662366734](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366734): **PASS** — main and candidate Node/Python commands exited 0; FFmpeg 6.1.1 was available. Artifact [12804756911](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366734/artifacts/12804756911), ZIP SHA-256 `fa645973cfb2a6927aad8a4bdbec2af06d30b448df89f897f4a10cfcf3a1a994`.
+- Production readiness [40662366746](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366746): **BLOCKED/failed closed**, with diagnostic artifact [12804562115](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366746/artifacts/12804562115).
+- Facebook workflow [40662366692](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40662366692): local validation passed 15/15; remote draft creation was **SKIPPED**.
+
+The acceptance register now contains 52 requirements: 36 PASS, 8 NOT_TESTED, 8 BLOCKED_EXTERNAL. The tested candidate's live Git snapshot was `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, 1,924 ahead / 2 behind / 172 changed files. Later commits are documentation-only. PR #1 remains open/draft/unmerged; `main` remains unchanged.
+
+**Production is still not ready.** Full dashboard/API acceptance, full branch-only history inventory, genuine rights-cleared media and human approval, verified SonicVhibez identity/history and authorized private upload, native Short Related-video evidence, actual Meta draft read-back, owner-approved feasible cadence, the eight Metricool schedule decision, and isolated deployment/rollback drills remain unresolved.
+
+Operational rule: do not run external Meta mutation unless Page identity/permissions, exact draft, approved media, and schedule policy are independently verified; do not retry uncertain mutations without reconciliation. Keep live Meta publishing disabled.
