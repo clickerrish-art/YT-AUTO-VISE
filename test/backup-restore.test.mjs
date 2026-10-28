@@ -432,3 +432,29 @@ test("separate process holding the shared operation lock blocks backup without a
     fs.rmSync(source.root, { recursive: true, force: true });
   }
 });
+
+
+test("backup refuses to snapshot state while an interrupted restore journal remains", async () => {
+  const source = fixture();
+  const journalPath = path.join(source.stateDir, ".restore-transaction.json");
+  const backupPath = path.join(source.root, "must-not-capture-partial-restore.json");
+  try {
+    fs.writeFileSync(journalPath, JSON.stringify({
+      format: "sonicvhibez-restore-transaction",
+      version: 1,
+      entries: [{ destination: "in-progress" }]
+    }), { mode: 0o600 });
+    await assert.rejects(
+      backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir, rightsDir: source.rightsDir, outputPath: backupPath }),
+      /An interrupted restore journal exists; run restore recovery/
+    );
+    assert.equal(fs.existsSync(backupPath), false,
+      "backup must not preserve an uncertain, potentially partially restored state");
+    assert.equal(fs.existsSync(path.join(source.stateDir, ".restore-operation.lock")), false,
+      "the failed backup must release its own lock");
+    assert.equal(fs.existsSync(journalPath), true,
+      "backup must preserve the recovery journal for restoreState to inspect");
+  } finally {
+    fs.rmSync(source.root, { recursive: true, force: true });
+  }
+});
