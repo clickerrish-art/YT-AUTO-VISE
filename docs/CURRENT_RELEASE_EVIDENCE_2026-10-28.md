@@ -1,3 +1,9 @@
+# Post-capture CI completion — 28 October 2026, 20:43 UTC
+
+For exact source/test candidate `379dd09a5990db6c64e94a51f9d7606013e2604d`, the isolated main/candidate baseline workflow has now completed **PASS**: [run 40764633501](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633501). This supersedes the earlier note below that the baseline was still in progress at capture time. The exact candidate therefore has passing automation/security (411 tests, zero failures/skips, npm audit 0), metadata, content-quality, dashboard browser E2E and isolated-baseline results. Production readiness remains blocked.
+
+---
+
 # Follow-up implementation evidence — 28 October 2026, 20:40 UTC
 
 ## Refuse backups while interrupted restore recovery is pending
