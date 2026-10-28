@@ -44,3 +44,9 @@ The current branch HEAD is later than that candidate because of documentation-on
 5. Produce an explicit, reviewed integration strategy only after the full inventory; do not merge or rewrite history as part of the audit.
 
 **Current conclusion:** non-destructive snapshot recorded; full reconciliation remains **NOT COMPLETE**. PR #1 stays open/draft/unmerged, and `main` remains unchanged.
+
+## Source/test candidate update — 28 October 2026
+
+The original ref snapshot above was captured before the latest Meta adapter fixes. The current exact source/test candidate is `c6b93328a92b48539650c96b647989fd9538623f`; the code changes since that snapshot are the strict timezone-qualified schedule validation and its regression test. Exact-candidate automation, content quality and metadata each passed 400 Node tests with zero skips; automation passed 16 Python tests and npm audit reported zero vulnerabilities; dashboard E2E passed 15 tests; isolated main/candidate baseline commands exited 0. See [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-28.md).
+
+The branch is still substantially divergent; no history rewrite or integration was attempted. Preserve `test/restore-facebook-draft-history.test.mjs` and `tests/restore-state.test.mjs`. Full branch-only commit-by-commit inventory and duplicate-change classification remain incomplete, so this remains a snapshot rather than an integration recommendation.
