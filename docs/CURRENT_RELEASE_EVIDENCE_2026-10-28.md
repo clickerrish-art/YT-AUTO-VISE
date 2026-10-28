@@ -1,3 +1,39 @@
+# Verified release checkpoint — 28 October 2026, 14:35 UTC
+
+## Live refs and PR safety
+
+- Live `main` HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Live implementation branch / PR #1 HEAD: `34d083d84a6410a176174cdffb4ebb59efecb2b4`.
+- Merge base / PR base SHA: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Current live comparison: **1,992 ahead / 2 behind / 174 changed files**; GitHub reports the refs as diverged.
+- PR #1 is **open, draft, and unmerged**. No merge, rebase, reset, force-push, main-branch write, or external publishing operation was performed during this verification.
+- This evidence refresh is documentation-only; it does not change or claim new source/test behavior.
+
+## Exact-HEAD GitHub Actions evidence
+
+These runs are associated with exact candidate `34d083d84a6410a176174cdffb4ebb59efecb2b4`:
+
+- Automation/security: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40706792068) — **405 Node tests passed, 0 failed, 0 skipped**; **16 Python tests passed**. The log includes the full Node test summary.
+- Content quality: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40706792055).
+- Dashboard browser E2E: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40706792120).
+- Metadata validation: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40706792135).
+- Isolated baseline comparison: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40706792076) — logs confirm main SHA `fa00d28e7f58911482686e4ad69fac9f4701a2e6` and candidate SHA `34d083d84a6410a176174cdffb4ebb59efecb2b4`; retained artifact ID `12824088751`, ZIP SHA-256 `494261ec68ef48819eb41c34b4bfbcfae8880fd09db5e1a88fc8d493cbddcb2c`.
+- Nature Frontiers Facebook draft workflow: [workflow PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40706792503) means local workflow completed; it **does not prove** a real remote Meta draft was created or read back.
+- Production readiness: [BLOCKED (expected fail-closed)](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40706792088). The log identifies unresolved cadence approval, missing `SONICVHIBEZ_CHANNEL_ID`, missing `media/next-short.mp4`, absent approved metadata/rights evidence and unverified remote history. This failure is not production acceptance and must not be bypassed.
+
+## Acceptance state remains partial
+
+- The authoritative acceptance register currently records **41 PASS, 0 FAIL, 8 BLOCKED_EXTERNAL, 8 NOT_TESTED, 0 NOT_APPLICABLE, 0 SKIPPED**. These counts are register labels, not a claim that the whole application is accepted.
+- `DASH-001` remains `NOT_TESTED`: the source register describes a 105-control / 15-form inventory, 38 literal route branches and 35 distinct API method/path routes, but full per-control/per-route success, failure, persistence, concurrency, recovery and accessibility acceptance is incomplete.
+- `GIT-002` remains `NOT_TESTED`: isolated baseline success does not replace review of the 1,992 branch-only commits, the two base-only commits, overlapping changes, or the restore-history test incident.
+- Cross-process recovery and deployment/rollback drills, the feasible owner-approved cadence, independently verified SonicVhibez channel identity/history, genuine rights-cleared production media and hash-bound human approval remain unresolved.
+- The previously documented eight future Metricool Nature Frontiers records were inspected read-only in the earlier 28 October checkpoint. This verification did not re-read or modify those records; do not assume their current provider state without a fresh read.
+- No live YouTube upload, Facebook/Instagram post, schedule change, campaign activation or visibility change occurred.
+
+**Verdict: PARTIALLY IMPLEMENTED / PRODUCTION BLOCKED.** Current exact-HEAD automation, content-quality, browser E2E, metadata and isolated-baseline workflows report success, but mandatory acceptance gates remain open.
+
+---
+
 # Latest checkpoint — 28 October 2026, exact source/test candidate
 
 ## Live Git state at source/test candidate
