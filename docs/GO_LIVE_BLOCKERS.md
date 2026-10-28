@@ -1005,10 +1005,10 @@ Unresolved owner/external actions: verify SonicVhibez account/channel ID and OAu
 
 ## Current-HEAD verification — 2026-10-28
 
-- Exact tested checkpoint before this documentation refresh: `4f4499e93de2d9faa6e56d0c062ee5ce901d7ce2`.
-- Remote states `published`, `public`, `private`, and `unlisted` fail closed when no actual publication timestamp exists; a creation/planned timestamp is not treated as remote publication evidence.
-- Cadence validation is centralized and requires explicit owner approval plus a feasible policy; the 72-hour minimum remains non-waivable.
-- Current-HEAD CI: automation/security 392 Node tests + 16 Python tests passed; content-quality and metadata 392 Node tests passed; dashboard E2E 14 Chromium journeys passed; isolated main/candidate baseline passed.
-- Production readiness remains blocked by 13 prerequisites. External Meta draft creation was skipped. These are not successful production acceptance gates.
-- Metricool still has eight upcoming Nature Frontiers Facebook/Instagram promotions with auto-publishing enabled. They were not modified. Owner intervention is needed before further scheduled dates.
-- Full exact links and the remaining release gates are in [CURRENT_RELEASE_EVIDENCE_2026-10-28.md](CURRENT_RELEASE_EVIDENCE_2026-10-28.md).
+- Exact tested source/test candidate: `707b15b65e3a20e24c15f30833d5106944a04c76`.
+- Remote `published`, `public`, `private`, and `unlisted` states fail closed if actual publication time is absent; creation/planned timestamps are not publication evidence.
+- Caller-supplied minimum spacing below 72 hours is rejected; cadence validation requires explicit owner approval and a mathematically feasible policy.
+- Current-candidate CI: automation/security 393 Node tests + 16 Python tests passed; content-quality and metadata 393 Node tests passed; dashboard E2E 14 Chromium journeys passed; isolated main/candidate baseline passed.
+- Production readiness remains blocked by 13 prerequisites. External Meta draft creation was skipped. These are not production acceptance passes.
+- Metricool still has eight upcoming Nature Frontiers Facebook/Instagram promotions with auto-publishing enabled. They were not modified; owner intervention is required.
+- Exact links and remaining release gates: [CURRENT_RELEASE_EVIDENCE_2026-10-28.md](CURRENT_RELEASE_EVIDENCE_2026-10-28.md).
