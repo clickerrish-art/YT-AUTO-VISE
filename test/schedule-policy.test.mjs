@@ -236,6 +236,25 @@ test("verified remote history rejects createdAt and scheduledAt as substitutes f
   }
 });
 
+test("verified remote history accepts publishedAt as an actual timestamp when actualPublishedAt is absent", () => {
+  const result = evaluateNextPublication({
+    history: [{
+      id: "remote-published-at-alias",
+      status: "private",
+      publishedAt: "2026-10-20T15:00:00.000Z",
+      createdAt: "2026-10-19T15:00:00.000Z",
+      scheduledAt: "2026-10-20T14:00:00.000Z",
+      format: "long_form"
+    }],
+    historyVerified: true,
+    proposedAt: "2026-10-23T15:00:00.000Z",
+    jobId: "next-job",
+    format: "long_form"
+  });
+  assert.equal(result.valid, true, result.errors.join("; "));
+  assert.equal(result.latestActualAt, "2026-10-20T15:00:00.000Z");
+});
+
 test("rolling cycle rejects draft, scheduled, missing, and unknown statuses in claimed remote history", () => {
   for (const status of ["draft", "scheduled", "", "deleted", "mystery"]) {
     const result = evaluateNextPublication({
