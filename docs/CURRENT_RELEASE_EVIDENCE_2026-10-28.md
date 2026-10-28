@@ -1,3 +1,36 @@
+# Follow-up implementation evidence — 28 October 2026, 20:15 UTC
+
+## Backup overwrite and durability fix
+
+- **Exact source/test candidate:** `7cdd5fe59686acdd5e3499289463ccc5369f0efd`.
+- **Source commit:** `3be0ddf7b8fcd4445d8bb93fe1f015a7ab006f51` updates `scripts/backup-state.mjs`.
+- **Regression-test commit:** `7cdd5fe59686acdd5e3499289463ccc5369f0efd` updates `test/backup-restore.test.mjs`.
+- **Defect:** an explicit `outputPath` could already exist and `renameSync` could silently replace the previous backup.
+- **Fix:** backup content is written to an exclusive temporary file, flushed with `fsync`, and finalized with an exclusive same-directory hard link. An existing destination is rejected rather than replaced; the temporary file is cleaned up. POSIX directory metadata is flushed before success is reported.
+- **Regression:** pre-create an operator-owned backup, call `backupState` with that path, assert it rejects with the overwrite-protection error, verify the original bytes remain unchanged, and verify no temporary file remains.
+- **Exact-SHA automation/security:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601849) — the run completed successfully; the exact-SHA metadata test workflow also reports **407 Node tests passed, 0 failed, 0 skipped**, with npm audit reporting **0 vulnerabilities** ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591289)).
+- **Content quality:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601910).
+- **Metadata validation:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591289).
+- **Dashboard browser E2E:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601880).
+- **Isolated main/candidate baseline:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591541).
+- **Draft-only workflow:** [PASS for local validation only](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601917); it does not establish remote Meta draft creation.
+- **Production readiness:** [BLOCKED/fail-closed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601938), as expected while mandatory production prerequisites remain unresolved.
+
+## Live Git snapshot before this documentation update
+
+- `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Implementation branch / PR #1 HEAD: `7cdd5fe59686acdd5e3499289463ccc5369f0efd`.
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- GitHub compare: **2,002 ahead / 2 behind / 174 changed files**, status `diverged`.
+- PR #1 remains open, draft and unmerged. `test/restore-facebook-draft-history.test.mjs` remains present.
+- The following acceptance evidence commits are documentation-only and are not treated as application/test validation.
+
+## Scope limit
+
+This closes the explicit-backup-path overwrite defect and improves backup durability. It does not prove full backup/restore concurrency, crash/power-loss recovery, deployment rollback, complete dashboard/API acceptance, or overall production readiness. The acceptance status remains **PARTIALLY IMPLEMENTED / PRODUCTION BLOCKED**.
+
+---
+
 # Follow-up implementation evidence — 28 October 2026, 20:04 UTC
 
 ## Source/test candidate and targeted fix
