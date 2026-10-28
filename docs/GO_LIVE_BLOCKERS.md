@@ -1075,3 +1075,8 @@ Unresolved owner/external actions: verify SonicVhibez account/channel ID and OAu
 - Readiness [40661176424](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176424) remains blocked by missing production prerequisites. Facebook workflow [40661176046](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176046) passed local validation but skipped external draft creation.
 - Register: 51 requirements — 35 PASS, 8 NOT_TESTED, 8 BLOCKED_EXTERNAL. These CI passes do not resolve the external blockers listed above.
 - Live main remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. At the source/test checkpoint, comparison was 1,906 ahead / 2 behind / 171 changed files. PR #1 remains open/draft/unmerged; no main edit or destructive reconciliation was performed.
+
+
+## Non-destructive branch-history finding — 2026-10-28
+
+Live `main` HEAD `fa00d28e7f58911482686e4ad69fac9f4701a2e6` is titled “Revert unintended test-file write to default branch” and deletes `test/restore-facebook-draft-history.test.mjs`. That regression test remains present on `codex/marketing-machine-audit-fixes` and must be preserved. This verifies one meaningful base/branch difference but does not complete the full history inventory: the implementation branch remains substantially divergent, with two commits on `main` not in the branch and the complete branch-only commit/file review still open. Do not merge, reset, rebase, force-push, or delete the test as a shortcut. Obtain a full non-destructive comparison before any integration proposal.
