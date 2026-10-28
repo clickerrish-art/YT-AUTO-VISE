@@ -322,3 +322,31 @@ test("backup refuses to overwrite an existing destination and preserves its byte
     fs.rmSync(source.root, { recursive: true, force: true });
   }
 });
+
+
+test("backup fails closed when a restore already holds the shared state-operation lock", async () => {
+  const source = fixture();
+  try {
+    const lockPath = path.join(source.stateDir, ".restore-operation.lock");
+    const lockBytes = Buffer.from(JSON.stringify({
+      format: "sonicvhibez-restore-operation-lock",
+      version: 1,
+      token: "restore-process-token",
+      pid: 12345,
+      createdAt: "2026-10-28T00:00:00.000Z"
+    }));
+    fs.writeFileSync(lockPath, lockBytes, { mode: 0o600 });
+    const backupPath = path.join(source.root, "must-not-exist.json");
+
+    await assert.rejects(
+      backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir, rightsDir: source.rightsDir, outputPath: backupPath }),
+      /Another backup or restore operation holds the state-operation lock/
+    );
+    assert.deepEqual(fs.readFileSync(lockPath), lockBytes,
+      "backup must not steal or rewrite the restore process's lock");
+    assert.equal(fs.existsSync(backupPath), false,
+      "backup must not read and persist a potentially partial restore snapshot");
+  } finally {
+    fs.rmSync(source.root, { recursive: true, force: true });
+  }
+});
