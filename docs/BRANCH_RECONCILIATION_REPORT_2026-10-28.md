@@ -1,3 +1,20 @@
+# Live-ref refresh — 28 October 2026, 20:45 UTC
+
+This is a new read-only snapshot. The historical snapshot below is retained as historical evidence, not current state.
+
+- Implementation branch / PR #1 HEAD: `7d77e86e526c6846e408f8feafb549eb58f1fe43`.
+- Live `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- PR #1: open, draft, unmerged; base SHA `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Live compare: **2,036 commits ahead / 2 behind**, **174 changed files**, status `diverged`.
+- Latest tested source/test candidate: `379dd09a5990db6c64e94a51f9d7606013e2604d`; [automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633734), [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633578), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633488), [dashboard E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651) and [isolated baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633501) passed. The eight commits after the tested candidate affect only README, OPERATIONS and four evidence/acceptance documents.
+- `test/restore-facebook-draft-history.test.mjs` remains present on the implementation branch. The explicit revert on `main` remains untouched.
+- No merge, rebase, reset, force-push, branch deletion, history rewrite or edit to `main` was performed.
+
+**Reconciliation decision:** do not attempt a blind merge or history rewrite. Full commit-by-commit duplicate-change and conflict analysis is still required before proposing any integration strategy. PR #1 remains draft/unmerged.
+
+---
+
 # Non-destructive branch reconciliation report — 28 October 2026
 
 ## Scope and safety
