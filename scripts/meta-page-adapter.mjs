@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
 
 const PAGE_ID_PATTERN = /^\d{5,30}$/;
 const API_VERSION_PATTERN = /^v\d+\.\d+$/;
@@ -164,9 +165,16 @@ export async function publishMetaPagePost({
   let pathPart = encodeURIComponent(pageId) + "/feed";
   if (draft.media) {
     if (typeof draft.media.path !== "string" || !/^[a-f0-9]{64}$/.test(draft.media.sha256 ?? "")) throw new MetaPageApiError("Image asset path and SHA-256 are required");
-    const absolute = path.resolve(rootDir, draft.media.path);
     const root = path.resolve(rootDir);
-    if (!(absolute === root || absolute.startsWith(root + path.sep))) throw new MetaPageApiError("Image asset path escapes the configured repository root");
+    let absolute;
+    try {
+      absolute = resolveRegularFileNoSymlinks(draft.media.path, rootDir, "Facebook image asset");
+    } catch {
+      throw new MetaPageApiError("Image asset is missing, unsafe, or not a regular file");
+    }
+    if (!(absolute === root || absolute.startsWith(root + path.sep)) {
+      throw new MetaPageApiError("Image asset path escapes the configured repository root");
+    }
     let bytes;
     try { bytes = fs.readFileSync(absolute); } catch { throw new MetaPageApiError("Image asset is missing or unreadable"); }
     if (!bytes.length || crypto.createHash("sha256").update(bytes).digest("hex") !== draft.media.sha256) throw new MetaPageApiError("Image asset checksum does not match the approved draft");
