@@ -215,6 +215,27 @@ test("history timestamps with invalid calendar dates fail closed instead of norm
 });
 
 
+test("verified remote history rejects createdAt and scheduledAt as substitutes for actual publication time", () => {
+  for (const status of ["published", "public", "private", "unlisted"]) {
+    const result = evaluateNextPublication({
+      history: [{
+        id: "remote-without-publication-time-" + status,
+        status,
+        createdAt: "2026-10-20T15:00:00.000Z",
+        scheduledAt: "2026-10-20T15:00:00.000Z",
+        format: "long_form"
+      }],
+      historyVerified: true,
+      proposedAt: "2026-10-23T15:00:00.000Z",
+      jobId: "next-job",
+      format: "long_form"
+    });
+    assert.equal(result.valid, false, status + " history must not use creation or scheduled time as publication time");
+    assert.ok(result.errors.some(error => error.includes("missing a verified actual ISO timestamp with timezone")),
+      status + " history should report its missing actual publication timestamp");
+  }
+});
+
 test("rolling cycle rejects draft, scheduled, missing, and unknown statuses in claimed remote history", () => {
   for (const status of ["draft", "scheduled", "", "deleted", "mystery"]) {
     const result = evaluateNextPublication({
