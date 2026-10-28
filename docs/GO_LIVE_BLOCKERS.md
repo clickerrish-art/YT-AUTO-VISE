@@ -1,16 +1,15 @@
-## Repository implementation update — 28 October 2026, 20:24 UTC
+## Repository implementation update — 28 October 2026, 20:36 UTC
 
-This update records repository-controlled fixes; it does not remove or waive any production blocker.
+- **Latest tested source/test candidate:** `d5e3445def955413d424085489212c5835ff0807`.
+- Added a separate-process backup/restore lock contention regression. The child process owns and fsyncs the shared lock; a competing backup fails closed, leaves the lock byte-identical, and creates no backup output.
+- Exact-SHA automation/security [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160063): **410 Node tests passed, 0 failed, 0 skipped**, npm audit 0 vulnerabilities. Metadata [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160114), content quality [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160204), browser E2E [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160061), isolated baseline [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148454), lockfile workflow [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148444).
+- Production readiness [remains BLOCKED](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160031). Backup lock contention is not proof of process-kill recovery, power-loss recovery or deployment rollback.
+- The acceptance register records 45 PASS, 8 NOT_TESTED and 8 BLOCKED_EXTERNAL requirements. `DASH-001` and `STATE-001` remain open.
+- Live refs at candidate verification: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; tested candidate `d5e3445def955413d424085489212c5835ff0807`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 remains open, draft and unmerged. Full branch divergence review remains incomplete.
 
-- **Latest tested source/test candidate:** `918f33295994d47a3f669e8b491828fd8293a862`. The following evidence updates are documentation-only.
-- Backup output refuses to overwrite an existing explicit destination, flushes file bytes before finalization, and flushes the containing directory on supported POSIX systems.
-- Backup and restore share an exclusive state-operation lock. Backup rejects a pre-existing lock, preserves the other process's lock, and does not write a snapshot while restore may be partially committed. Backup validation failure releases its own lock; restore's contention message accurately identifies either backup or restore as the owner.
-- Exact-SHA automation/security [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720045): **409 Node tests, 0 failures, 0 skips**, npm audit 0 vulnerabilities. Metadata [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720246), content quality [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720195), browser E2E [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720017), and isolated main/candidate baseline [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762709642).
-- Production readiness [remains BLOCKED](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720001). These fixes do not prove full power-loss/deployment recovery, exhaustive dashboard/API acceptance, verified YouTube identity/history, genuine media rights and human approval, native Short association, actual Meta draft creation, owner-approved cadence, or safe external schedule decisions.
-- The history incident was checked: `test/restore-facebook-draft-history.test.mjs` is present on the implementation branch. Main commit `fa00d28e7f58911482686e4ad69fac9f4701a2e6` explicitly reverted the earlier unintended test-file write; the implementation branch later added its own intentional test and symlink regression. The file was not restored to main.
-- Live Git snapshot before this documentation update: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; tested candidate `918f33295994d47a3f669e8b491828fd8293a862`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; 2,014 ahead / 2 behind / 174 changed files. PR #1 remains open, draft and unmerged; full divergence reconciliation remains incomplete.
+**Production verdict: NOT READY.** No live YouTube or Meta operation was performed and no existing external schedule was changed.
 
-**Production verdict: NOT READY.** Do not change the eight previously documented live Metricool schedules without explicit owner authorization; repository dry-run flags do not disable those existing remote schedules.
+
 ---
 
 ## Reverified external state — 28 October 2026, read-only
