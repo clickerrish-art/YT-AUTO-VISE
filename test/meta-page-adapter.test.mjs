@@ -263,3 +263,24 @@ test("Meta image upload rejects symlinked assets even when the link is inside th
   }), /unsafe|symbolic link/i);
   assert.equal(requests, 0, "unsafe symlinked assets must be rejected before any remote mutation");
 });
+
+
+test("Meta scheduled mutations reject timezone-free and impossible timestamps before any request", async () => {
+  const baseDraft = { kind: "FACEBOOK_PAGE_DRAFT", caption: "Caption", scheduledAt: "2026-10-25T06:00:00.000Z", media: null };
+  const invalidTimestamps = [
+    "2026-10-25T06:00:00",
+    "2026-02-30T06:00:00.000Z",
+    "2026-10-25T06:00:00+15:00",
+    "2026-10-25T06:60:00.000Z"
+  ];
+  let requests = 0;
+  for (const scheduledAt of invalidTimestamps) {
+    await assert.rejects(() => publishMetaPagePost({
+      draft: { ...baseDraft, scheduledAt },
+      pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
+      permissionsVerified: true, now: NOW,
+      fetchImpl: async () => { requests++; return response({ id: PAGE_ID + "_999" }); }
+    }), /calendar-valid ISO timestamp with an explicit timezone/i, scheduledAt);
+  }
+  assert.equal(requests, 0, "invalid schedule timestamps must be rejected before a remote mutation");
+});
