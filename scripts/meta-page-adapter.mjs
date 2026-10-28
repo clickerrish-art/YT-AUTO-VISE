@@ -172,7 +172,7 @@ export async function publishMetaPagePost({
     } catch {
       throw new MetaPageApiError("Image asset is missing, unsafe, or not a regular file");
     }
-    if (!(absolute === root || absolute.startsWith(root + path.sep)) {
+    if (!(absolute === root || absolute.startsWith(root + path.sep))) {
       throw new MetaPageApiError("Image asset path escapes the configured repository root");
     }
     let bytes;
