@@ -1,3 +1,48 @@
+# Latest checkpoint — 28 October 2026, exact source/test candidate
+
+## Live Git state at source/test candidate
+
+- Main HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
+- Source/test candidate: `03c60617afab051f0aab745d0c1203d0ed788417`
+- Implementation branch and PR #1 head at this code checkpoint: `03c60617afab051f0aab745d0c1203d0ed788417`
+- Merge base / PR base: `45352b73bb6cc4787b2a49988b575afb754ab627`
+- Live compare: 1,987 commits ahead, 2 behind, 174 changed files.
+- PR #1 remains open, draft and unmerged.
+
+## New repository-controlled acceptance work
+
+- [`ec3decc`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ec3decc94b0f2d0b8b12efbad7bbdd3170055eda) adds `test/dashboard-api-request-boundaries.test.mjs`: real-server POST /api/jobs tests prove malformed JSON returns 400, unsupported content type returns 415, and a body exceeding 16 KiB returns 413. Each case checks structured JSON, no local state-path disclosure and byte-identical persisted state.
+- [`03c6061`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417) extends that test with an authorized content-job lifecycle: POST creates one queued job and one audit event, exact duplicate submission returns the same job with `reused=true`, and conflicting content with the same idempotency key returns 409 without a second job or audit event.
+- These are real local HTTP integration tests, not mocked handler tests. They are focused slices of acceptance, not full coverage of every route or control.
+
+## Exact-SHA CI for candidate `03c60617afab051f0aab745d0c1203d0ed788417`
+
+- Automation/security: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517639) — 404 Node tests passed, 0 failures, 0 skips; 16 Python tests passed; npm audit reported 0 vulnerabilities; FFmpeg installation, syntax and Python compilation checks completed successfully.
+- Content quality: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517536).
+- Metadata validation: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517494).
+- Dashboard browser E2E: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517541) — 15 Chromium journeys passed.
+- Isolated main/candidate baseline: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517549); retained artifact ID `12823608223`.
+- Production readiness: [BLOCKED / fail-closed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517519). This is not production acceptance.
+- Nature Frontiers draft workflow: [local workflow passed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517492); no evidence that a remote Meta draft was created or read back.
+
+## Current dashboard acceptance
+
+- Static inventory: 105 controls, 15 forms, 38 literal route branches (10 GET, 28 POST), including 35 distinct API method/path routes.
+- Missing-credential sweep: every distinct API method/path returned 401 JSON, did not disclose local paths and did not mutate persisted state.
+- Boundary test: malformed JSON 400, unsupported media type 415, body over 16 KiB 413, no state mutation/path disclosure.
+- Authorized job integration: one job and one audit event persisted; exact retry reused the same job; conflicting reuse returned 409 and preserved one job/audit event.
+- `DASH-001` remains `NOT_TESTED`. Other controls/routes still need authorized success and input validation, failure injection, persistence/audit checks, concurrency/idempotency, restart/recovery, keyboard/focus/accessibility and responsive acceptance.
+
+## Read-only Metricool re-verification
+
+On 28 October 2026, the connected Metricool read-only query still returned the same eight Nature Frontiers future records. All have `autoPublish=true` and `draft=false`. Record IDs and scheduled times are: `406357296` (31 Oct 10:00), `406357335` (4 Nov 10:00), `406357364` (7 Nov 10:00), `406357388` (11 Nov 10:00), `406357414` (14 Nov 10:00), `406357443` (18 Nov 10:00), `406357483` (21 Nov 10:00), and `406357554` (25 Nov 10:00 SAST). The first seven have Facebook as their provider; the last has Facebook and Instagram. All are pending and set to auto-publish. Several include online-business promotions, not wildlife-specific copy. No remote schedule or post was created, edited, paused, cancelled or rescheduled.
+
+## Verdict
+
+**PARTIALLY IMPLEMENTED / PRODUCTION BLOCKED.** New real-server API boundary and content-job idempotency coverage passes on the exact source/test candidate. Dashboard acceptance remains incomplete, and full branch-history review, operational recovery/deployment drills, genuine rights-cleared media and human approval, verified SonicVhibez YouTube identity/history, owner-approved feasible publication cadence, native Related video eligibility, and genuine external Meta draft creation/read-back remain unresolved. Live Metricool records are read-only and require owner review; no changes were made.
+
+---
+
 # Current release evidence — 28 October 2026, 12:36 UTC
 
 ## Latest exact source/test candidate
