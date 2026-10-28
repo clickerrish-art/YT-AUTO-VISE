@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-28",
-  "evidencePolicy": "Exact tested source/test candidate: 44fe965a9b6a5d9d09043714acf08a378e86eb8c. On this exact SHA, automation/security, content quality, metadata, lockfile verification, 14 Chromium browser journeys and isolated main/candidate baseline passed. Automation/content/metadata/lockfile report 386 Node tests, 0 failures, 0 skips; automation also reports 16 Python tests and npm audit 0 vulnerabilities. Browser acceptance specifically verifies all visible dashboard controls have programmatic accessible names. Baseline artifact ID 12798511239, uploaded ZIP SHA-256 fe5d86c58c0a07a3abb163257858ce69a6bad7f4030c8f3225338320a6af6307. Production readiness remains BLOCKED; the Meta external draft-creation job was skipped.",
+  "evidencePolicy": "Exact tested source/test candidate: e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd. Exact-SHA automation/security, content quality, metadata, lockfile verification, 14 Chromium browser journeys and isolated main/candidate baseline all completed successfully. Automation/content/metadata/lockfile report 395 Node tests, 0 failures, 0 skips; automation also passed 16 Python tests, npm audit reported 0 vulnerabilities, and FFmpeg/ffprobe integration ran. Baseline run https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650536584 passed on main fa00d28e7f58911482686e4ad69fac9f4701a2e6 versus candidate e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd; artifact ID 12798704730. Production readiness remains BLOCKED (13 prerequisites); Meta draft workflow local validation passed but external create-draft job was skipped.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -24,8 +24,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c"
       ],
-      "nextAction": "Live refs on 28 October 2026: tested source/test candidate 44fe965a9b6a5d9d09043714acf08a378e86eb8c; main fa00d28e7f58911482686e4ad69fac9f4701a2e6; PR #1 remains open, draft and unmerged. Current branch head after this evidence-only update will be a documentation-only descendant; continue with fast-forward commits only on the implementation branch.",
-      "assessmentCommitSha": "44fe965a9b6a5d9d09043714acf08a378e86eb8c",
+      "nextAction": "Live refs at this checkpoint: candidate e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd; main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; branch 1,887 ahead / 2 behind / 170 changed files. PR #1 remains open, draft and unmerged.",
+      "assessmentCommitSha": "e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd",
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch."
     },
     {
@@ -35,14 +35,14 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087503",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087695",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087634",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087540",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648082330"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650536588",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650536513",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650536515",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650532906",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650536704"
       ],
-      "nextAction": "Exact source/test candidate 44fe965a9b6a5d9d09043714acf08a378e86eb8c: automation/security, content quality, metadata and lockfile verification each passed 386 Node tests, 0 failures, 0 skips; automation passed 16 Python tests and npm audit reported 0 vulnerabilities; Chromium browser suite passed 14 journeys. See exact workflow runs in evidence. Production readiness remains a separate blocked gate; external Meta draft creation was skipped.",
-      "assessmentCommitSha": "44fe965a9b6a5d9d09043714acf08a378e86eb8c",
+      "nextAction": "Exact candidate e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd: automation/security, content quality, metadata and lockfile workflows each passed 395 Node tests, 0 failures, 0 skips; automation passed 16 Python tests and npm audit reported 0 vulnerabilities; 14 Chromium journeys passed. Production readiness is separately blocked and the external Meta draft-creation job was skipped.",
+      "assessmentCommitSha": "e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
     {
@@ -52,11 +52,10 @@
       "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087532",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087532/artifacts/12798511239"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650536584"
       ],
-      "nextAction": "Exact main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 44fe965a9b6a5d9d09043714acf08a378e86eb8c isolated baseline workflow passed. Artifact ID 12798511239; uploaded ZIP SHA-256 fe5d86c58c0a07a3abb163257858ce69a6bad7f4030c8f3225338320a6af6307.",
-      "assessmentCommitSha": "44fe965a9b6a5d9d09043714acf08a378e86eb8c",
+      "nextAction": "Exact main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd isolated baseline workflow passed; artifact ID 12798704730. See https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650536584.",
+      "assessmentCommitSha": "e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
     {
@@ -70,8 +69,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087540",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087503"
       ],
-      "nextAction": "Live static inventory remains 105 controls, 15 forms, 38 literal route branches (10 GET, 28 POST; 35 /api branches). Exact SHA 44fe965a9b6a5d9d09043714acf08a378e86eb8c passed 14 Chromium journeys, including a new connected-dashboard assertion that every visible interactive control has a programmatic accessible name. API tests cover unauthenticated route sweep, malformed/oversized bodies, concurrent reservation, render-bypass rejection and disabled render UI. Full per-control/per-route authorized success, role boundaries, provider/filesystem/persistence failures, all retries/concurrency, restart/audit semantics and complete keyboard/mobile accessibility remain incomplete; keep NOT_TESTED.",
-      "assessmentCommitSha": "44fe965a9b6a5d9d09043714acf08a378e86eb8c",
+      "nextAction": "Inventory remains 105 controls across 15 forms and 38 literal route branches (10 GET, 28 POST; 35 /api branches). Exact candidate e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd passed 14 Chromium journeys, but this does not prove every control/route authorized success, permission boundary, malformed/boundary input, dependency failure, idempotency, concurrency, persistence, audit, restart or complete accessibility. Keep NOT_TESTED.",
+      "assessmentCommitSha": "e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
     {
@@ -85,8 +84,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/schedule-policy.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971948"
       ],
-      "nextAction": "Run deterministic boundary, DST, month-rollover, overlapping-worker and restart tests against the final SHA.",
-      "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
+      "nextAction": "Exact candidate e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd passed schedule-policy and cadence regression suites, including the new test rejecting createdAt/scheduledAt fallbacks for remote published/public/private/unlisted history. Full queue/history, worker-overlap, restart and operational schedule acceptance is not complete; keep NOT_TESTED.",
+      "assessmentCommitSha": "e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd",
       "acceptanceCriterion": "The same 72-hour minimum, rolling long_form → long_form → short cycle, actual-history ordering and DST/timezone policy are enforced by config, queue, dashboard, workflows and tests."
     },
     {
@@ -193,8 +192,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/restore-facebook-draft-history.test.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/tests/restore-state.test.mjs"
       ],
-      "nextAction": "Live compare on 28 October 2026: 1,862 commits ahead, 2 behind, 168 changed files; merge base 45352b73bb6cc4787b2a49988b575afb754ab627. The two base-only commits are the net-zero test-file add/revert pair: 71578dafc24e5d48173dce3f4e392e18e42aa40e added test/restore-facebook-draft-history.test.mjs and fa00d28e7f58911482686e4ad69fac9f4701a2e6 reverted it on main. The implementation branch retains test/restore-facebook-draft-history.test.mjs and tests/restore-state.test.mjs. Full review of every branch-only patch and owner-approved integration plan remain NOT_TESTED; do not cherry-pick the revert or reconcile destructively.",
-      "assessmentCommitSha": "ce3ee82d48265ef16c39e5d9b84debd69709112a",
+      "nextAction": "Live comparison on 28 October 2026: 1,887 commits ahead, 2 behind, 170 changed files; merge base 45352b73bb6cc4787b2a49988b575afb754ab627. Full non-destructive review of branch-only/base-only commits and the restore-history test-file add/revert pair remains incomplete. No destructive reconciliation.",
+      "assessmentCommitSha": "e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd",
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants."
     },
     {
@@ -241,8 +240,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/5efd1ed0d3b73e23b81c3b2146c4895bb0ec4938",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40210971948"
       ],
-      "nextAction": "Retain regression coverage and verify status normalization against live YouTube API history before any upload.",
-      "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
+      "nextAction": "Exact candidate e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd includes the separate regression in SCHED-005 requiring an actual remote publication timestamp; unknown/draft status rejection remains covered. Live remote history still requires owner-authorized reconciliation.",
+      "assessmentCommitSha": "e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd",
       "acceptanceCriterion": "evaluateNextPublication rejects missing, draft, scheduled, deleted or unknown statuses in claimed remote publication history, while accepting only published/public/private/unlisted and retaining 72-hour/cycle safeguards."
     },
     {
@@ -750,6 +749,22 @@
       "nextAction": "This narrow accessible-name check passes for the connected dashboard. Continue keyboard-only operation across all workflows, focus management, status announcements, contrast and responsive/mobile accessibility before closing DASH-001.",
       "assessmentCommitSha": "44fe965a9b6a5d9d09043714acf08a378e86eb8c",
       "acceptanceCriterion": "Playwright connects to the real local dashboard and asserts that every visible button, input, select and textarea has a programmatic name from ARIA, associated labels or native button text/value."
+    },
+    {
+      "id": "SCHED-005",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Verified remote publication history must require an actual publication timestamp and must never use creation or scheduled time as a substitute.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650536588",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650536513",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650536515",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40650532906"
+      ],
+      "nextAction": "Keep the regression covering published/public/private/unlisted records with only createdAt and scheduledAt. The gate intentionally fails closed until actualPublishedAt or publishedAt is present; external history must still be reconciled.",
+      "assessmentCommitSha": "e38e2fe7a5c13a71077bcab6bc3c337eb341d3cd",
+      "acceptanceCriterion": "evaluateNextPublication rejects each supported remote publication status when actualPublishedAt and publishedAt are absent, even if createdAt or scheduledAt is present; exact candidate CI passes with zero skipped tests."
     }
   ],
   "currentCheckpoint": {
