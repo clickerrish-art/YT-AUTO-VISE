@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-28T20:41:00Z",
-  "evidencePolicy": "Exact source/test candidate 379dd09a5990db6c64e94a51f9d7606013e2604d adds a backup guard for an interrupted restore journal. Automation/security passed 411 Node tests, zero failures/skips and npm audit 0 vulnerabilities; metadata, content quality and dashboard browser E2E passed. Isolated main/candidate baseline was in progress at the time this record was captured; its result must be verified separately. Production readiness remains blocked.",
+  "recordedAt": "2026-10-28T20:44:00Z",
+  "evidencePolicy": "Exact source/test candidate 379dd09a5990db6c64e94a51f9d7606013e2604d adds a backup guard for an interrupted restore journal. Automation/security passed 411 Node tests, zero failures/skips and npm audit 0 vulnerabilities; metadata, content quality, dashboard browser E2E and isolated main/candidate baseline passed. Production readiness remains blocked.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -95,9 +95,10 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633734",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633578",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633488",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633501"
       ],
-      "nextAction": "Exact source/test candidate 379dd09a5990db6c64e94a51f9d7606013e2604d passed automation/security: 411 Node tests, zero failures/skips, npm audit 0 vulnerabilities (40764633734); metadata 40764633578, content quality 40764633488 and browser E2E 40764633651 passed. Isolated main/candidate baseline 40764633501 was still running at the evidence capture. Production readiness 40764633515 remains blocked.",
+      "nextAction": "Exact source/test candidate 379dd09a5990db6c64e94a51f9d7606013e2604d passed automation/security (411 Node tests, zero failures/skips, npm audit 0 vulnerabilities; run 40764633734), metadata (40764633578), content quality (40764633488), dashboard browser E2E (40764633651) and isolated main/candidate baseline (40764633501). Production readiness 40764633515 remains blocked.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
@@ -140,9 +141,10 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160204",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160061",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148454",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148444"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148444",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633501"
       ],
-      "nextAction": "Exact source/test candidate d5e3445def955413d424085489212c5835ff0807 passed isolated main/candidate baseline workflow 40764148454. Live main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627. Full divergence review remains incomplete.",
+      "nextAction": "Exact source/test candidate 379dd09a5990db6c64e94a51f9d7606013e2604d passed isolated main/candidate baseline workflow 40764633501. Live main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627. Full divergence review remains incomplete.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
@@ -199,9 +201,10 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633734",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633578",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633488",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633501"
       ],
-      "nextAction": "Backup refuses to create a new snapshot while .restore-transaction.json exists or is unsafe, preserving the journal and releasing its own lock; test added at exact candidate 379dd09a5990db6c64e94a51f9d7606013e2604d. Automation/security passed 411 tests. Full process-kill/restart, power-loss transaction-boundary, rollback and uncertain remote-side-effect recovery remain incomplete; requirement remains NOT_TESTED.",
+      "nextAction": "Backup refuses snapshots while an interrupted restore journal exists or is unsafe; separate-process shared-lock contention and lock cleanup are tested. Exact candidate 379dd09a5990db6c64e94a51f9d7606013e2604d passed 411 Node tests and the isolated baseline. Full process-kill/restart, power-loss transaction-boundary, rollback and uncertain remote-side-effect recovery remain incomplete; requirement remains NOT_TESTED.",
       "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
       "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects."
     },
