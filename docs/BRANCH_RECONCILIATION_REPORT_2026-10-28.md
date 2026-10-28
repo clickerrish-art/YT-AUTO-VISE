@@ -68,3 +68,9 @@ An isolated baseline comparison for this exact source/test candidate has not yet
 At the candidate snapshot, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, divergence 1,936 ahead / 2 behind / 172 changed files. PR #1 remains open/draft/unmerged. The full branch-only history inventory remains incomplete. Production remains **BLOCKED**.
 
 The commit-by-commit inventory and duplicate/superseded-change classification are still NOT COMPLETE; no history rewrite or integration was performed.
+
+## Baseline result resolved — 28 October 2026
+
+Follow-up to the earlier note that exact-candidate baseline evidence was pending: isolated baseline workflow [40664619319](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664619319) completed successfully on documentation-only PR head `a0d71fcbc53bdfa0909328567e4da4a004dd3de8`, whose application source/test candidate remained `e5f866d910db3a572a280f59c4c9ba17d4061c7f). Both `main` and candidate Node/Python test commands exited 0; FFmpeg and ffprobe 6.1.1 were installed. Artifact [12806220430](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664619319/artifacts/12806220430), ZIP SHA-256 `c052006e3424e8ea1d999c517de93a37bca336d2586099ce882464570711bd27`.
+
+This resolves the pending baseline status for the tested source/test candidate. It does not resolve full branch-history reconciliation or production blockers. The source/test SHA remains `e5f866d910db3a572a280f59c4c9ba17d4061c7f`; later commits are documentation-only.
