@@ -969,3 +969,17 @@ An isolated baseline comparison for this exact source/test candidate has not yet
 At the candidate snapshot, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, divergence 1,936 ahead / 2 behind / 172 changed files. PR #1 remains open/draft/unmerged. The full branch-only history inventory remains incomplete. Production remains **BLOCKED**.
 
 - [ ] Exact-candidate isolated main comparison still needs fresh evidence.
+
+
+## Exact candidate verification update — 28 October 2026
+
+- [x] Automation/security [40673471424](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471424): 401 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1.
+- [x] Content quality [40673471379](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471379): 401/401 tests, zero skips.
+- [x] Metadata [40673471565](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471565): 401/401 tests, zero skips.
+- [x] Dashboard Chromium E2E [40673471427](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471427): 15 journeys.
+- [x] Isolated main/candidate baseline [40673471350](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471350); artifact [12809417525](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471350/artifacts/12809417525), SHA-256 `7c46f5156967ef944b8a602e47cc8bbd6e31e7608c6600cd5a9f898a040a7371`.
+- [ ] Exhaustive dashboard control/mutating-route acceptance — remains incomplete; DASH-001 is not a pass.
+- [ ] Production readiness [40673471449](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471449) — blocked by mandatory prerequisites.
+- [ ] Actual Meta draft creation/read-back [40673471614](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471614) — external draft creation skipped.
+- [ ] Full branch divergence/history reconciliation, production media/rights/human playback approval, authenticated YouTube channel/history verification, native Short-parent association, owner cadence decision, live Metricool scheduled-post decision, and production deployment/recovery drill.
+- Tested source/test SHA: `4d003f320df0f1d26c5b46dcb2a0c545cfec785c`; main remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; PR #1 remains open/draft/unmerged.
