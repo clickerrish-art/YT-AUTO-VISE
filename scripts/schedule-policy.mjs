@@ -72,10 +72,10 @@ export function validatePublicationSlot(proposed, existingItems = [], {
 
     const status = String(item.status ?? "").toLowerCase();
     const actualStatuses = new Set(["published", "public", "private", "unlisted"]);
-    const timeValue = actualStatuses.has(status) ? (item.actualPublishedAt ?? item.publishedAt ?? item.createdAt) : (item.scheduledAt ?? item.createdAt);
+    const timeValue = actualStatuses.has(status) ? (item.actualPublishedAt ?? item.publishedAt) : (item.scheduledAt ?? item.createdAt);
     if (timeValue === undefined || timeValue === null || timeValue === "") {
-      errors.push(status === "published"
-        ? `active item ${id} is missing publishedAt (actual publication timestamp)`
+      errors.push(actualStatuses.has(status)
+        ? `active item ${id} is missing publishedAt/actualPublishedAt (actual publication timestamp)`
         : `active item ${id} is missing scheduledAt`);
       continue;
     }
