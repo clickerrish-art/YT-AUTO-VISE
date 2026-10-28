@@ -302,3 +302,23 @@ test("backup refuses symlinked root, state and upload-log path components", asyn
   }
 });
 
+
+
+test("backup refuses to overwrite an existing destination and preserves its bytes", async () => {
+  const source = fixture();
+  try {
+    const backupPath = path.join(source.root, "backup.json");
+    const original = Buffer.from("operator-owned backup: preserve exactly\\n");
+    fs.writeFileSync(backupPath, original, { mode: 0o600 });
+    await assert.rejects(
+      backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir, rightsDir: source.rightsDir, outputPath: backupPath }),
+      /Backup destination already exists; refusing to overwrite an existing backup/
+    );
+    assert.deepEqual(fs.readFileSync(backupPath), original,
+      "an explicit output path must never replace an existing backup");
+    assert.equal(fs.readdirSync(source.root).some(name => name.endsWith(".tmp")), false,
+      "failed exclusive creation must clean up its temporary file");
+  } finally {
+    fs.rmSync(source.root, { recursive: true, force: true });
+  }
+});
