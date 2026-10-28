@@ -237,3 +237,29 @@ test("Meta post read-back rejects IDs that only share a Page ID prefix", async (
   }
   assert.equal(calls, 0, "invalid remote IDs must be rejected before any API request");
 });
+
+
+test("Meta image upload rejects symlinked assets even when the link is inside the configured root", async t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "meta-adapter-symlink-root-"));
+  const outsideRoot = fs.mkdtempSync(path.join(os.tmpdir(), "meta-adapter-symlink-outside-"));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  t.after(() => fs.rmSync(outsideRoot, { recursive: true, force: true }));
+  const outsideAsset = path.join(outsideRoot, "private.jpg");
+  const linkedAsset = path.join(root, "image.jpg");
+  const bytes = Buffer.from("outside-root bytes must never be uploaded");
+  fs.writeFileSync(outsideAsset, bytes);
+  fs.symlinkSync(outsideAsset, linkedAsset);
+  let requests = 0;
+  await assert.rejects(() => publishMetaPagePost({
+    draft: {
+      kind: "FACEBOOK_PAGE_DRAFT", caption: "Caption",
+      scheduledAt: "2026-10-25T06:00:00.000Z",
+      media: { path: "image.jpg", sha256: crypto.createHash("sha256").update(bytes).digest("hex") }
+    },
+    pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
+    permissionsVerified: true, rootDir: root, now: NOW,
+    probeImage: () => { throw new Error("must not inspect symlink target"); },
+    fetchImpl: async () => { requests++; return response({ id: PAGE_ID + "_999" }); }
+  }), /unsafe|symbolic link/i);
+  assert.equal(requests, 0, "unsafe symlinked assets must be rejected before any remote mutation");
+});
