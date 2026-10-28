@@ -12,6 +12,8 @@ export function parseSrtTime(value) {
   const match = String(value).match(/^(\d{2}):(\d{2}):(\d{2}),(\d{3})$/);
   if (!match) return null;
   const [, hours, minutes, seconds, milliseconds] = match.map(Number);
+  // SRT permits hours beyond 23, but minute and second fields must be clock-valid.
+  if (minutes > 59 || seconds > 59) return null;
   return (((hours * 60 + minutes) * 60 + seconds) * 1000) + milliseconds;
 }
 
