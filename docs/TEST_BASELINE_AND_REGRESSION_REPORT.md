@@ -374,3 +374,29 @@ Tested application/test SHA: `a912d3c724195fb1f3ca823d186cddf8b9b4f984`. Exact-S
 Change: [`3dbccd1`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3dbccd19584cb9da81e646cb9c34a65184fcd47b) hardens script research input validation; [`a912d3c`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/a912d3c724195fb1f3ca823d186cddf8b9b4f984) adds regression tests proving malformed, insecure, placeholder and duplicate research records are rejected before provider access. Current PR HEAD after evidence-document updates is later than the tested SHA; those updates are documentation-only.
 
 Current Git snapshot before these documentation updates: PR HEAD `a912d3c724195fb1f3ca823d186cddf8b9b4f984`, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, 1,322 ahead / 2 behind, 141 changed files. PR remains open/draft/unmerged. Full branch-only history review remains incomplete. Verdict remains **CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED**: authoring is not lifecycle/dashboard integrated; renderer still does not compose a genuine multi-scene storyboard; no production media/rights/human playback evidence; YouTube/Meta identity and history are unverified; cadence decision and exhaustive recovery/deployment gates remain open. No external upload, post, campaign activation, merge, or destructive Git operation occurred.
+
+
+---
+
+## Exact-SHA regression evidence — Meta adapter path safety (2026-10-28)
+
+**Tested source/test SHA:** `ecad7ac2c706983e79c6206bbccb1a6fcaeb3bd9`
+
+New regression coverage addresses two verified defects in `scripts/meta-page-adapter.mjs`:
+
+- `Meta post read-back rejects IDs that only share a Page ID prefix`: validates exact Page ID boundary and rejects collisions before any Graph API read.
+- `Meta image upload rejects symlinked assets even when the link is inside the configured root`: rejects an in-root symlink targeting an outside file before ffprobe or POST.
+
+Exact candidate results:
+
+| Workflow | Result | Evidence |
+|---|---|---|
+| Automation/security | 399 Node passed, 0 failed, 0 skipped; 16 Python passed; npm audit 0 vulnerabilities; FFmpeg installed | [40661176042](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176042) |
+| Content quality | 399 Node passed, 0 failed, 0 skipped | [40661176110](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176110) |
+| Metadata validation | 399 Node passed, 0 failed, 0 skipped | [40661176011](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176011) |
+| Dashboard browser E2E | 15 Chromium tests passed; not exhaustive per-control acceptance | [40661176112](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176112) |
+| Isolated main/candidate baseline | Both Node and Python commands exit 0 | [40661176071](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176071) |
+
+**Baseline limitation:** the isolated comparison runner could not install FFmpeg and explicitly warned that the renderer integration test would skip in that runner. The candidate automation workflow installed FFmpeg and ran with zero skipped tests. Baseline artifact [12804520728](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176071/artifacts/12804520728), ZIP SHA-256 `89c7bf8f49f976a9b57e711cbafc71eaba2470e081a3416f85166c6f2518e586`.
+
+Production readiness [40661176424](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176424) remains blocked. Facebook workflow [40661176046](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40661176046) passed local validation but skipped external draft creation. No external operation is inferred from local tests. Current acceptance register: 51 requirements (35 PASS / 8 NOT_TESTED / 8 BLOCKED_EXTERNAL).
