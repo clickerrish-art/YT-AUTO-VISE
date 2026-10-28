@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
+import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 
 const PAGE_ID_PATTERN = /^\d{5,30}$/;
 const API_VERSION_PATTERN = /^v\d+\.\d+$/;
@@ -152,6 +153,9 @@ export async function publishMetaPagePost({
   validateConfig({ pageId, expectedPageId, accessToken, apiVersion });
   if (permissionsVerified !== true) throw new MetaPageApiError("Live Meta Page permissions were not verified before publishing");
   if (!draft || draft.kind !== "FACEBOOK_PAGE_DRAFT" || !draft.caption || !draft.scheduledAt) throw new MetaPageApiError("A complete reviewed Facebook Page draft is required");
+  if (!isValidZonedIsoTimestamp(draft.scheduledAt)) {
+    throw new MetaPageApiError("Facebook scheduled publication time must be a calendar-valid ISO timestamp with an explicit timezone");
+  }
   const scheduledMs = Date.parse(draft.scheduledAt);
   if (!Number.isFinite(scheduledMs) || scheduledMs <= now) throw new MetaPageApiError("Facebook scheduled publication time must be in the future");
   const deltaMs = scheduledMs - now;
