@@ -2528,7 +2528,7 @@ const server = http.createServer(async (req, res) => {
     return json(res, 404, { error: "Not found" });
   } catch (error) {
     const message = redactOperationalText(error instanceof Error ? error.message : "Request failed", { roots: [root, stateDir] });
-    const status = /Unsupported content type/i.test(message) ? 415 : (/State is busy in another process/i.test(message) ? 409 : 400);
+    const status = /Unsupported content type/i.test(message) ? 415 : (/Request body exceeds 16KB/i.test(message) ? 413 : (/State is busy in another process/i.test(message) ? 409 : 400));
     return json(res, status, { error: message });
   }
 });
