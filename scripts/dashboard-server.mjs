@@ -365,7 +365,7 @@ function json(res, status, body) {
 }
 function readBody(req) {
   const contentType = String(req.headers["content-type"] ?? "");
-  if (!/^application\\/json(?:\\s*;|$)/i.test(contentType.trim())) {
+  if (contentType.split(";", 1)[0].trim().toLowerCase() !== "application/json") {
     return Promise.reject(new Error("Unsupported content type; use application/json"));
   }
   return new Promise((resolve, reject) => {
