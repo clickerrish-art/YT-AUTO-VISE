@@ -1,3 +1,41 @@
+# Follow-up implementation evidence — 28 October 2026, 20:19 UTC
+
+## Serialize backup snapshots with restore transactions
+
+- **Exact source/test candidate:** `086f157356a78d026b6e1dde4e473d01b85773ba`.
+- **Source commit:** `73c697c9c675504b07f15ad2c915261f0313769a`.
+- **Regression-test commit:** `086f157356a78d026b6e1dde4e473d01b85773ba`.
+- **Defect:** restore already uses an exclusive operation lock, but backup did not participate. A backup could read files while a restore transaction was committing and capture a mixed/partial snapshot.
+- **Fix:** `backupState` now acquires the same exclusive `.restore-operation.lock` used by `restoreState`, refuses to proceed if another operation owns it, and removes only the lock whose token it created. Existing symlink and real-directory checks protect the lock path. Restore and backup therefore fail closed rather than run concurrently under the shared state directory.
+- **Regression:** pre-create a restore lock, call `backupState`, assert the operation is rejected, verify lock bytes are unchanged, and verify no backup output is written.
+- **Exact-SHA automation/security:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762134886) — **408 Node tests passed, 0 failed, 0 skipped**; npm audit reported 0 vulnerabilities.
+- **Content quality:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762134957).
+- **Metadata validation:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135041).
+- **Dashboard browser E2E:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135380).
+- **Isolated main/candidate baseline:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762127254).
+- **Draft-only workflow:** [PASS for local validation only](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135171); remote Meta draft creation was not established.
+- **Production readiness:** [BLOCKED/fail-closed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135154), as expected while mandatory prerequisites remain unresolved.
+
+## Test-file addition/deletion incident — history checked
+
+- Current implementation branch contains `test/restore-facebook-draft-history.test.mjs` (blob `b6d4ab9c30d1e025bf2e55bddae446d96a2cb2a3`). It includes injected GitHub artifact API tests for cross-run draft-history restoration, malformed archives, and safe output handling.
+- GitHub path history shows main commit `71578dafc24e5d48173dce3f4e392e18e42aa40e` originally added the test on 24 October, followed by `fa00d28e7f58911482686e4ad69fac9f4701a2e6` explicitly reverting the unintended test-file write to main. The implementation branch later added its own intentional test commit `c507b63abfa336165865ad01cf6354ae50254f04` and symlink regression commit `fd92b55415c8a630860dba5894dae705b19ef5ac`.
+- The file is present and exercised on the implementation branch. It is absent on current `main`; that absence matches the explicit revert. No attempt was made to restore it to main or alter either history.
+
+## Live Git snapshot before this documentation update
+
+- `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Implementation branch / PR #1 HEAD: `086f157356a78d026b6e1dde4e473d01b85773ba`.
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- The branch remains substantially diverged from main; full commit-by-commit reconciliation remains incomplete.
+- The evidence update that follows is documentation-only and does not alter the tested source/test candidate.
+
+## Scope limit
+
+The backup writer now protects explicit output paths, flushes backup contents, and serializes backup snapshots against restore transactions. The lock-contention regression does not complete full crash/power-loss recovery, deployment rollback, exhaustive dashboard/API acceptance, genuine production-media approval, or external platform verification. **Production remains blocked.**
+
+---
+
 # Follow-up implementation evidence — 28 October 2026, 20:15 UTC
 
 ## Backup overwrite and durability fix
