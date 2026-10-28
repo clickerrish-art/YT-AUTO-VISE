@@ -43,6 +43,10 @@ export function validateCaptionSync(srt, mediaDurationSeconds, { toleranceSecond
     }
     const start = parseSrtTime(match[1]);
     const end = parseSrtTime(match[2]);
+    if (start === null || end === null) {
+      errors.push(`cue ${index + 1}: invalid SRT timestamp value`);
+      return;
+    }
     if (end <= start) errors.push(`cue ${index + 1}: end must follow start`);
     if (start < previousEnd) errors.push(`cue ${index + 1}: captions overlap or are out of order`);
     if (start > maxEnd) errors.push(`cue ${index + 1}: starts after the media ends`);
