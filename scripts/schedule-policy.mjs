@@ -291,7 +291,7 @@ export function evaluateNextPublication({
       errors.push("history item " + item.id + " has unsupported remote publication status: " + (status || "(missing)"));
       return null;
     }
-    const timestamp = item.actualPublishedAt ?? item.publishedAt ?? item.createdAt;
+    const timestamp = item.actualPublishedAt ?? item.publishedAt;
     const parsedTimestamp = parseStrictTimestamp(timestamp);
     if (!Number.isFinite(parsedTimestamp)) {
       errors.push(`history item ${item.id} is missing a verified actual ISO timestamp with timezone`);
