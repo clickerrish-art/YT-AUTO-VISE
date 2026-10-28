@@ -364,6 +364,10 @@ function json(res, status, body) {
   res.end(JSON.stringify(body));
 }
 function readBody(req) {
+  const contentType = String(req.headers["content-type"] ?? "");
+  if (!/^application\\/json(?:\\s*;|$)/i.test(contentType.trim())) {
+    return Promise.reject(new Error("Unsupported content type; use application/json"));
+  }
   return new Promise((resolve, reject) => {
     let raw = "";
     let tooLarge = false;
@@ -2522,7 +2526,7 @@ const server = http.createServer(async (req, res) => {
     return json(res, 404, { error: "Not found" });
   } catch (error) {
     const message = redactOperationalText(error instanceof Error ? error.message : "Request failed", { roots: [root, stateDir] });
-    const status = /State is busy in another process/i.test(message) ? 409 : 400;
+    const status = /Unsupported content type/i.test(message) ? 415 : (/State is busy in another process/i.test(message) ? 409 : 400);
     return json(res, status, { error: message });
   }
 });
