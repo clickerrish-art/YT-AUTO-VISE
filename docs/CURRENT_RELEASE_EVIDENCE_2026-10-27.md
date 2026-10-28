@@ -1007,3 +1007,20 @@ Production remains **NOT READY**. Owner-controlled blockers remain: verified Son
 
 No live YouTube upload, Meta post, campaign activation, video visibility change, merge, `main` edit, reset, rebase, force-push or destructive history reconciliation occurred. Nature Frontiers remains prohibited as a YouTube target; public/unattended YouTube and live Meta publishing remain disabled; Safari remains inactive; the approved Selar URL remains unchanged.
 
+
+
+## Latest implementation checkpoint — 28 October 2026
+
+**Exact tested source/test SHA:** `44fe965a9b6a5d9d09043714acf08a378e86eb8c` (commit: https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c). The next branch head is documentation-only relative to this tested source.
+
+- Added a Playwright assertion for programmatic accessible names on every visible dashboard control after connection. It exposed three unlabeled controls; added meaningful ARIA labels to draft search, format filter and validation-task selector.
+- Browser E2E: 14 Chromium journeys passed (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087540).
+- Automation/security: 386 Node tests, 0 failed/0 skipped; 16 Python tests; npm audit 0 vulnerabilities (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087503).
+- Content quality and FFmpeg integration: 386 Node tests, 0 failed/0 skipped (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087695).
+- Metadata: 386 Node tests, 0 failed/0 skipped (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087634). Lockfile install and FFmpeg/ffprobe integration passed (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648082330).
+- Isolated baseline passed for main `fa00d28e7f58911482686e4ad69fac9f4701a2e6` and candidate `44fe965a9b6a5d9d09043714acf08a378e86eb8c`; artifact ID 12798511239, ZIP SHA-256 `fe5d86c58c0a07a3abb163257858ce69a6bad7f4030c8f3225338320a6af6307` (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087532).
+- Production readiness correctly remains blocked (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087721). Meta draft workflow local validation passed, but external draft creation was skipped (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087484); this is not external acceptance.
+
+Dashboard inventory remains 105 controls, 15 forms and 38 literal route branches. The accessibility sub-requirement is accepted; DASH-001 remains NOT_TESTED because exhaustive per-control/per-route state, authorization, failure, concurrency, persistence and full accessibility coverage is not complete. STATE-001, SCHED-001 and DEPLOY-001 remain open/not fully tested.
+
+No live YouTube upload, Meta post, campaign activation, video visibility change, merge, `main` edit, reset, rebase, force-push or destructive history reconciliation occurred. Nature Frontiers remains prohibited as a YouTube target; public/unattended YouTube and live Meta publishing remain disabled; Safari remains inactive; the approved Selar URL remains unchanged.

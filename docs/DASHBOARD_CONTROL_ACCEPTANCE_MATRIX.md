@@ -460,3 +460,12 @@ The current UI now disables the render action unless a queued job has current sc
 
 **DASH-001 remains NOT_TESTED.** The inventory remains 105 controls, 15 forms and 38 literal route branches (10 GET, 28 POST; 35 API branches). The browser suite is not exhaustive coverage of all 105 controls and all 38 route branches. Authorized success paths, role/permission boundaries, malformed/boundary inputs per route, provider/filesystem/persistence failure injection, retries, cross-process concurrency, complete restart durability, audit semantics and full keyboard/mobile accessibility remain incomplete. Continue to record evidence per control/route; do not infer acceptance from inventory or global test-suite success.
 
+
+
+## Exact-SHA accessibility checkpoint — 44fe965a9b6a5d9d09043714acf08a378e86eb8c
+
+- Browser E2E passed **14 Chromium journeys**: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087540.
+- A new connected-dashboard Playwright assertion checks every visible button, input, select and textarea for a programmatic accessible name. It initially exposed three unlabeled controls (draft search, format filter, validation-task selector); each now has an explicit, meaningful aria-label.
+- The source/test candidate also passed automation/security (386 Node tests, 0 failures/0 skips; 16 Python tests; npm audit 0 vulnerabilities), content quality (386/386, zero skips), metadata (386/386, zero skips), locked install/FFmpeg integration and isolated baseline: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087503, https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087695, https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087634, https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648082330, https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087532.
+- Inventory remains 105 controls, 15 forms and 38 route branches. This new accessibility slice does **not** close DASH-001: full authorized-success and failure-path coverage for every control and route, role boundaries, injected provider/filesystem failures, full keyboard/focus/status-announcement and responsive acceptance remain open.
+- Production readiness remains blocked (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087721); Meta external draft creation was skipped (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087484).

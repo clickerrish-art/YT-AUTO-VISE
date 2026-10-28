@@ -872,3 +872,14 @@ Release decision remains **BLOCKED**.
 
 **Tested source/test SHA:** `ce3ee82d48265ef16c39e5d9b84debd69709112a`. The following commits are documentation-only descendants and do not change source/test files. PR #1 remains open, draft and unmerged.
 
+
+
+## Exact-SHA checkpoint — 44fe965a9b6a5d9d09043714acf08a378e86eb8c
+
+- [x] Dashboard accessibility regression test added; all 14 Chromium journeys passed: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087540.
+- [x] Automation/security: 386 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087503.
+- [x] Content quality and FFmpeg integration: 386 Node tests, 0 failures, 0 skips: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087695.
+- [x] Metadata validation and clean lockfile/FFmpeg verification passed: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087634, https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648082330.
+- [x] Isolated main/candidate baseline passed; artifact ID 12798511239, ZIP SHA-256 fe5d86c58c0a07a3abb163257858ce69a6bad7f4030c8f3225338320a6af6307: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087532.
+- [ ] DASH-001 remains NOT_TESTED; inventory is not exhaustive acceptance.
+- [ ] Production readiness remains blocked; external Meta draft creation was skipped: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087721, https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087484.

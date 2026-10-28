@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-28",
-  "evidencePolicy": "Exact tested source/test candidate: ce3ee82d48265ef16c39e5d9b84debd69709112a. Exact-SHA automation/security, content quality, metadata, 13 Chromium browser journeys and isolated main/candidate baseline all passed. The automation/content workflows report 386 Node tests, 0 failures and 0 skips; baseline install, Node and Python commands exited 0 for both main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and this candidate. Baseline artifact ID 12779819868, uploaded ZIP SHA-256 d47d9e6cd2b63a52e80195177251c0d04b7cdb110dcb5aae981451606abd7eb9. Production readiness remains BLOCKED; external Meta draft-creation job was skipped. This candidate adds truthful render-action disabling and explicitly permits internal Short lineage to a verified private parent only while native Related video remains BLOCKED_EXTERNAL.",
+  "evidencePolicy": "Exact tested source/test candidate: 44fe965a9b6a5d9d09043714acf08a378e86eb8c. On this exact SHA, automation/security, content quality, metadata, lockfile verification, 14 Chromium browser journeys and isolated main/candidate baseline passed. Automation/content/metadata/lockfile report 386 Node tests, 0 failures, 0 skips; automation also reports 16 Python tests and npm audit 0 vulnerabilities. Browser acceptance specifically verifies all visible dashboard controls have programmatic accessible names. Baseline artifact ID 12798511239, uploaded ZIP SHA-256 fe5d86c58c0a07a3abb163257858ce69a6bad7f4030c8f3225338320a6af6307. Production readiness remains BLOCKED; the Meta external draft-creation job was skipped.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -22,10 +22,10 @@
       "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ce3ee82d48265ef16c39e5d9b84debd69709112a"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c"
       ],
-      "nextAction": "Live refs on 28 October 2026: implementation source/test candidate ce3ee82d48265ef16c39e5d9b84debd69709112a; main fa00d28e7f58911482686e4ad69fac9f4701a2e6; PR #1 open, draft and unmerged. Continue only with fast-forward commits on the implementation branch.",
-      "assessmentCommitSha": "ce3ee82d48265ef16c39e5d9b84debd69709112a",
+      "nextAction": "Live refs on 28 October 2026: tested source/test candidate 44fe965a9b6a5d9d09043714acf08a378e86eb8c; main fa00d28e7f58911482686e4ad69fac9f4701a2e6; PR #1 remains open, draft and unmerged. Current branch head after this evidence-only update will be a documentation-only descendant; continue with fast-forward commits only on the implementation branch.",
+      "assessmentCommitSha": "44fe965a9b6a5d9d09043714acf08a378e86eb8c",
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch."
     },
     {
@@ -35,14 +35,14 @@
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304386",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304170",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304233",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606298746",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304157"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087503",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087695",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087634",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087540",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648082330"
       ],
-      "nextAction": "Exact candidate ce3ee82d48265ef16c39e5d9b84debd69709112a passed automation/security and content quality with 386 Node tests, 0 failures, 0 skips; metadata validation; 13 Chromium browser journeys; and isolated main/candidate baseline. Baseline main/candidate installs and Node/Python test commands all exited 0. Production readiness is a separate blocked release gate; Meta external draft creation was skipped.",
-      "assessmentCommitSha": "ce3ee82d48265ef16c39e5d9b84debd69709112a",
+      "nextAction": "Exact source/test candidate 44fe965a9b6a5d9d09043714acf08a378e86eb8c: automation/security, content quality, metadata and lockfile verification each passed 386 Node tests, 0 failures, 0 skips; automation passed 16 Python tests and npm audit reported 0 vulnerabilities; Chromium browser suite passed 14 journeys. See exact workflow runs in evidence. Production readiness remains a separate blocked gate; external Meta draft creation was skipped.",
+      "assessmentCommitSha": "44fe965a9b6a5d9d09043714acf08a378e86eb8c",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
     {
@@ -52,11 +52,11 @@
       "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
       "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304157",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304157/artifacts/12779819868"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087532",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087532/artifacts/12798511239"
       ],
-      "nextAction": "Exact main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate ce3ee82d48265ef16c39e5d9b84debd69709112a isolated installs plus Node/Python baseline commands exited 0. Artifact ID 12779819868; uploaded ZIP SHA-256 d47d9e6cd2b63a52e80195177251c0d04b7cdb110dcb5aae981451606abd7eb9.",
-      "assessmentCommitSha": "ce3ee82d48265ef16c39e5d9b84debd69709112a",
+      "nextAction": "Exact main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 44fe965a9b6a5d9d09043714acf08a378e86eb8c isolated baseline workflow passed. Artifact ID 12798511239; uploaded ZIP SHA-256 fe5d86c58c0a07a3abb163257858ce69a6bad7f4030c8f3225338320a6af6307.",
+      "assessmentCommitSha": "44fe965a9b6a5d9d09043714acf08a378e86eb8c",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence."
     },
     {
@@ -67,11 +67,11 @@
       "status": "NOT_TESTED",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606298746",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304386"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087540",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087503"
       ],
-      "nextAction": "Live static inventory remains 105 controls, 15 forms, 38 literal route branches (10 GET, 28 POST; 35 /api branches). Latest browser run passed 13 Chromium journeys and API tests cover unauthenticated route sweep, malformed/oversized bodies, concurrent reservation, render-bypass rejection and disabled render UI. Full per-control/per-route authorized success, role boundaries, provider/filesystem/persistence failures, all retries/concurrency, restart/audit semantics and full keyboard/mobile accessibility remain incomplete; keep NOT_TESTED.",
-      "assessmentCommitSha": "ce3ee82d48265ef16c39e5d9b84debd69709112a",
+      "nextAction": "Live static inventory remains 105 controls, 15 forms, 38 literal route branches (10 GET, 28 POST; 35 /api branches). Exact SHA 44fe965a9b6a5d9d09043714acf08a378e86eb8c passed 14 Chromium journeys, including a new connected-dashboard assertion that every visible interactive control has a programmatic accessible name. API tests cover unauthenticated route sweep, malformed/oversized bodies, concurrent reservation, render-bypass rejection and disabled render UI. Full per-control/per-route authorized success, role boundaries, provider/filesystem/persistence failures, all retries/concurrency, restart/audit semantics and complete keyboard/mobile accessibility remain incomplete; keep NOT_TESTED.",
+      "assessmentCommitSha": "44fe965a9b6a5d9d09043714acf08a378e86eb8c",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
     {
@@ -736,6 +736,20 @@
       "assessmentCommitSha": "1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
       "acceptanceCriterion": "An inventory-driven integration test sends each distinct /api method/path without an operator token and verifies HTTP 401.",
       "nextAction": "Add authorized-success, malformed-input, permission, dependency/persistence, duplicate/concurrency, restart and audit assertions for every applicable route; do not treat this narrow authentication sweep as full API acceptance."
+    },
+    {
+      "id": "A11Y-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Every visible interactive dashboard control exposes a programmatic accessible name after operator connection.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087540",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c"
+      ],
+      "nextAction": "This narrow accessible-name check passes for the connected dashboard. Continue keyboard-only operation across all workflows, focus management, status announcements, contrast and responsive/mobile accessibility before closing DASH-001.",
+      "assessmentCommitSha": "44fe965a9b6a5d9d09043714acf08a378e86eb8c",
+      "acceptanceCriterion": "Playwright connects to the real local dashboard and asserts that every visible button, input, select and textarea has a programmatic name from ARIA, associated labels or native button text/value."
     }
   ],
   "currentCheckpoint": {
