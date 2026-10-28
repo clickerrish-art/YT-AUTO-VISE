@@ -154,3 +154,32 @@ test("authorized content-job creation persists one audit event and enforces idem
   assert.equal(persistedFinal.audit.filter(event => event.action === "CONTENT_JOB_QUEUED" && event.idempotencyKey === request.idempotencyKey).length, 1);
   assert.equal(persistedFinal.jobs.find(job => job.id === created.job.id).topic, request.topic);
 });
+
+
+test("authorized read-only dashboard API routes return structured responses without state mutation", async t => {
+  const { base, token, statePath } = await startDashboard(t);
+  const initialState = fs.readFileSync(statePath);
+  const routes = [
+    { path: "/api/state", expectedStatus: 200, assertPayload: payload => assert.equal(payload.publishingEnabled, false) },
+    { path: "/api/facebook/idea?date=2026-10-31", expectedStatus: 200, assertPayload: payload => assert.equal(payload.publishReady, false) },
+    { path: "/api/facebook/state", expectedStatus: 200 },
+    { path: "/api/facebook/autonomous-status", expectedStatus: 200 },
+    { path: "/api/tasks", expectedStatus: 200, assertPayload: payload => assert.equal(payload.publicPublishingEnabled, false) },
+    { path: "/api/jobs/narration/review", expectedStatus: 400 },
+    { path: "/api/jobs/narration/audio", expectedStatus: 400 }
+  ];
+
+  for (const route of routes) {
+    const response = await fetch(base + route.path, {
+      headers: { "x-operator-token": token }
+    });
+    const responseText = await response.text();
+    assert.equal(response.status, route.expectedStatus, `${route.path}: ${responseText}`);
+    const payload = JSON.parse(responseText);
+    assert.equal(typeof payload, "object", `${route.path} should return JSON`);
+    if (route.assertPayload) route.assertPayload(payload);
+    assert.ok(!responseText.includes(statePath), `${route.path} must not disclose the state-file path`);
+    assert.deepEqual(fs.readFileSync(statePath), initialState,
+      `${route.path} must remain read-only`);
+  }
+});
