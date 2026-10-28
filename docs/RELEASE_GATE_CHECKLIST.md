@@ -1,3 +1,14 @@
+## Current gate status — 28 October 2026, 20:46 UTC
+
+- Latest tested source/test candidate: `379dd09a5990db6c64e94a51f9d7606013e2604d`.
+- Passed on that exact SHA: automation/security (411 Node tests, 0 failures, 0 skips, npm audit 0 vulnerabilities), metadata validation, content quality, dashboard browser E2E and isolated main/candidate baseline. See [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-28.md).
+- Backup rejects a new snapshot when a restore journal remains, and separate-process lock contention is covered. This is targeted recovery evidence, not a complete crash/power-loss/deployment rollback drill.
+- Acceptance register: **46 PASS / 8 NOT_TESTED / 8 BLOCKED_EXTERNAL**. `DASH-001` and `STATE-001` remain NOT_TESTED; external YouTube/Meta prerequisites remain blocked.
+- Production readiness [failed closed as expected](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633515). Do not mark release gates complete from unit/CI passes alone.
+- Live main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`; live branch compare at checkpoint: 2,036 ahead / 2 behind / 174 changed files. PR #1 remains open, draft and unmerged.
+
+---
+
 ## Exact-candidate dashboard request-size fix — 28 October 2026
 
 - Live implementation/test candidate: `852eb1087cc4a06bafb80d70760ec9915817fe79`; current PR #1 was open, draft and unmerged at verification. `main` remained `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
