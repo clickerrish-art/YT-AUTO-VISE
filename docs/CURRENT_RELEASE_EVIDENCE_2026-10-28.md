@@ -1,3 +1,57 @@
+# Current release evidence — 28 October 2026, 12:36 UTC
+
+## Latest exact source/test candidate
+
+- **Tested source/test candidate:** `3f2b2e27bd04c686d279b293d3019f125a344285`
+- **Live main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
+- **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`
+- **Live PR #1 before this evidence refresh:** `cda7af6f6c9eaec9b56c0f2bf8d2fef47a0e91cf`; PR remains open, draft and unmerged. The commits after the source/test candidate are documentation-only.
+- **Live divergence at the pre-evidence documentation checkpoint:** 1,982 ahead / 2 behind / 173 changed files. This is not a substitute for the required full commit-by-commit and file-level divergence review.
+- **Implementation commit:** [3f2b2e2 — add real-server authentication sweep across every dashboard API route](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3f2b2e27bd04c686d279b293d3019f125a344285).
+- New test `test/dashboard-api-auth-matrix.test.mjs` uses the actual local dashboard server and the current source inventory to call every distinct declared `/api/` method/path without credentials. Every route returned HTTP 401 with the consistent JSON authentication error; the test verified no internal path disclosure and byte-identical persisted state before/after the sweep. This is a narrow authentication guarantee, **not** full route acceptance.
+
+## Exact-SHA CI results
+
+All listed results below target the exact source/test candidate `3f2b2e27bd04c686d279b293d3019f125a344285`:
+
+- Automation/security: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995839) — 402 Node tests passed, 0 failures, 0 skips; 16 Python tests passed; locked dependency audit reported 0 vulnerabilities; FFmpeg/ffprobe installation, syntax and Python compilation checks passed.
+- Content quality: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995821) — 402/402 tests, 0 skips.
+- Metadata validation: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995870) — 402/402 tests, 0 skips.
+- Dashboard browser E2E: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995790) — 15 Chromium journeys. This does not cover every control/route.
+- Isolated main/candidate baseline: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995834) — exact main and candidate checkouts tested in isolation.
+- Production readiness: [BLOCKED/fail-closed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995898). The expected blocked readiness job is not a passing production gate.
+- Nature Frontiers Facebook draft workflow: [local workflow passed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995785), but it does not prove that an external Meta draft was created or read back.
+
+## Recomputed dashboard inventory and remaining acceptance
+
+Current source inventory: **105 controls, 15 forms, 38 literal route branches (10 GET, 28 POST), including 35 distinct API method/path routes**. The new test covers missing-credential rejection on every API route. `DASH-001` remains `NOT_TESTED`: per-control and per-route authorized success, malformed/boundary inputs, mutation persistence and audit events, idempotency, concurrent requests, dependency failures, restart/recovery, keyboard/focus, accessible announcements and full responsive behavior have not all been demonstrated.
+
+## Live Metricool safety inspection — read-only
+
+The live Nature Frontiers Metricool brand (`brandId=7545638`, timezone `Africa/Johannesburg`) currently has eight future records. **No remote state was changed.** All eight have `autoPublish=true` and `draft=false`:
+
+| Metricool ID | Scheduled (SAST) | Destinations | Mode |
+|---|---|---|---|
+| `406357296` | 2026-10-31 10:00 | Facebook | Auto-publish enabled |
+| `406357335` | 2026-11-04 10:00 | Facebook | Auto-publish enabled |
+| `406357364` | 2026-11-07 10:00 | Facebook | Auto-publish enabled |
+| `406357388` | 2026-11-11 10:00 | Facebook | Auto-publish enabled |
+| `406357414` | 2026-11-14 10:00 | Facebook | Auto-publish enabled |
+| `406357443` | 2026-11-18 10:00 | Facebook | Auto-publish enabled |
+| `406357483` | 2026-11-21 10:00 | Facebook | Auto-publish enabled |
+| `406357554` | 2026-11-25 10:00 | Facebook and Instagram | Auto-publish enabled |
+
+The scheduled copy includes a mixture of wildlife-creator resources and online-business/digital-product promotions. Do not cancel, pause, edit, or activate anything without the owner explicitly deciding which individual records should remain active. If any change is authorized, re-read the provider and verify the new state. The prior published Facebook record is not changed by this inspection.
+
+## Safety and release verdict
+
+- `main` untouched; PR #1 remains open, draft and unmerged.
+- No YouTube upload, visibility change, Meta post, campaign activation, schedule change, purchase, or website production change occurred.
+- Nature Frontiers is not an allowed YouTube target. Public/unattended YouTube publishing and live Meta publishing remain disabled in repository policy; Safari remains inactive; the approved wildlife-creator Selar destination remains `https://selar.com/0u19v8u99l`.
+- **Verdict: IMPLEMENTATION INCOMPLETE / PRODUCTION BLOCKED.** The new auth-sweep test and exact-SHA CI are positive progress, but dashboard acceptance, deeper operational recovery/deployment drills, full Git divergence review, genuine rights-cleared production media and human approval, verified SonicVhibez YouTube identity/history, native Related-video eligibility, genuine Meta draft creation/read-back, and the owner's decision on the eight live Metricool schedules remain unresolved.
+
+---
+
 ## Exact-candidate dashboard request-size fix — 28 October 2026
 
 - Live implementation/test candidate: `852eb1087cc4a06bafb80d70760ec9915817fe79`; current PR #1 was open, draft and unmerged at verification. `main` remained `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
