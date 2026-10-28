@@ -1,3 +1,41 @@
+# Follow-up implementation evidence — 28 October 2026, 20:04 UTC
+
+## Source/test candidate and targeted fix
+
+- **Exact source/test SHA:** `54a15314e53c00af3e33faf8a7d691a72372e00a`.
+- **Changes:** `scripts/dashboard-server.mjs` no longer drops a queue item marked `reservationType: "SCHEDULED_SLOT"` solely because `scheduledDate` is absent. The malformed reservation now reaches `validatePublicationSlot` without a timestamp and blocks new scheduling fail-closed.
+- **Regression test:** `test/dashboard-api-request-boundaries.test.mjs` now starts the real dashboard server, injects a malformed persisted scheduled reservation, attempts an authenticated `POST /api/jobs`, expects HTTP 409 with the precise missing-timestamp blocker, confirms `publishingEnabled=false`, and verifies persisted state is byte-identical after rejection.
+- **Code/test commits:** source fix `c6f4ea8db1bcc8ec14e38ee0d9b3336abdae1aff`; regression test `54a15314e53c00af3e33faf8a7d691a72372e00a`.
+
+## Exact-SHA CI evidence
+
+All runs below were triggered for candidate `54a15314e53c00af3e33faf8a7d691a72372e00a`:
+
+- Automation/security: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759742550). The real-server regression is explicitly reported passing. The Node test step completed successfully with zero skips required by the workflow; the log contains 406 passing test lines and zero failed test lines. npm audit summary: 0 info, 0 low, 0 moderate, 0 high, 0 critical vulnerabilities.
+- Content quality: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759742691).
+- Metadata validation: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759742541).
+- Dashboard browser E2E: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759742592).
+- Isolated main/candidate baseline: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759733666), using the live main SHA `fa00d28e7f58911482686e4ad69fac9f4701a2e6` and candidate `54a15314e53c00af3e33faf8a7d691a72372e00a`.
+- Draft-only workflow: [workflow PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759742755); this does not prove a remote Meta draft was created, and no remote posting was authorized.
+- Production readiness: [BLOCKED as expected](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40759742599). Missing production prerequisites remain blockers; this failure is not a test regression and must not be bypassed.
+
+## Live Git snapshot before this documentation update
+
+- `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Implementation branch / PR #1 HEAD: `54a15314e53c00af3e33faf8a7d691a72372e00a`.
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Comparison: **1,997 ahead / 2 behind / 174 changed files**, status `diverged`.
+- PR #1 remains open, draft, and unmerged.
+- The evidence/documentation update that follows is documentation-only. It does not alter source/test behavior; all test claims above remain tied to the exact candidate SHA.
+
+## Acceptance impact
+
+This closes one specific fail-open omission in queue reservation validation and adds real-server regression coverage. It does **not** close `DASH-001`, `SCHED-001`, `GIT-002`, or overall production acceptance. Full control/route acceptance, concurrency/restart/operational recovery, complete divergence review, verified channel history, genuine production media/rights/human approval, owner-approved cadence, and external provider decisions remain open.
+
+**Verdict remains: PARTIALLY IMPLEMENTED / PRODUCTION BLOCKED.**
+
+---
+
 # Verified release checkpoint — 28 October 2026, 14:35 UTC
 
 ## Live refs snapshot at start of verification (before documentation-only refresh commits)
