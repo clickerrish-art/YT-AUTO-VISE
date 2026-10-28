@@ -863,16 +863,16 @@
   "currentCheckpoint": {
     "applicationCodeSha": "e5f866d910db3a572a280f59c4c9ba17d4061c7f",
     "testedSha": "e5f866d910db3a572a280f59c4c9ba17d4061c7f",
-    "checkpointPrHead": "a0d71fcbc53bdfa0909328567e4da4a004dd3de8",
+    "checkpointPrHead": "0099c0e62acf7a6121d74215257501e2b2145d14",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1948,
+    "aheadBy": 1953,
     "behindBy": 2,
     "changedFiles": 172,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "CAPTION SRT TIMESTAMP VALIDATION FIX PASS / AUTOMATED SUITES PASS / ISOLATED BASELINE PASS / PRODUCTION BLOCKED",
+    "verdict": "CAPTION SRT TIMESTAMP VALIDATION FIX PASS / ALL RELEVANT AUTOMATED SUITES PASS / EXACT-CANDIDATE BASELINE PASS / PRODUCTION BLOCKED",
     "ci": {
       "automationSecurity": "PASS",
       "nodeTests": 401,
@@ -884,7 +884,7 @@
       "contentQuality": "PASS (401/401; 0 failures; 0 skips)",
       "metadata": "PASS (401/401; 0 failures; 0 skips)",
       "dashboardE2e": "PASS (15 Chromium tests; not exhaustive per-control acceptance)",
-      "isolatedBaseline": "PASS on documentation-only PR head a0d71fcbc53bdfa0909328567e4da4a004dd3de8; main and candidate Node/Python commands exited 0; FFmpeg/ffprobe 6.1.1 installed; artifact 12806220430, ZIP SHA-256 c052006e3424e8ea1d999c517de93a37bca336d2586099ce882464570711bd27",
+      "isolatedBaseline": "PASS on exact source/test candidate e5f866d910db3a572a280f59c4c9ba17d4061c7f; main and candidate Node/Python commands exited 0; FFmpeg/ffprobe 6.1.1; artifact 12804894418, ZIP SHA-256 cf4efef274a291627572da3407553365090988ecb07b8021797da0bd33e34e5f",
       "productionReadiness": "BLOCKED (fail-closed; run 40664139308)",
       "facebookDraftWorkflow": "PASS for local validation; external draft creation job SKIPPED",
       "captionInvalidSrtClockRegression": "PASS"
@@ -897,9 +897,9 @@
       "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139308",
       "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139317",
       "previousBaselineCandidateOnly": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664013917",
-      "currentHeadBaselinePending": "Resolved: baseline run 40664619319 completed successfully on docs-only PR head a0d71fcbc53bdfa0909328567e4da4a004dd3de8; application source/test SHA remains e5f866d910db3a572a280f59c4c9ba17d4061c7f.",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664619319",
-      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664619319/artifacts/12806220430"
+      "currentHeadBaselinePending": "Resolved: exact source/test candidate e5f866d910db3a572a280f59c4c9ba17d4061c7f baseline run 40664139277 completed successfully; main and candidate Node/Python commands all exited 0.",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139277",
+      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139277/artifacts/12804894418"
     },
     "implementationCommits": [
       "b9f357435149bbb7650e858691c228f3133b9950",
@@ -919,8 +919,8 @@
     ],
     "candidateSourceTestSha": "e5f866d910db3a572a280f59c4c9ba17d4061c7f",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Exact source/test candidate e5f866d910db3a572a280f59c4c9ba17d4061c7f passed automation/security (401 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1), content quality (401/401; zero skips), metadata (401/401; zero skips), and dashboard E2E (15 Chromium tests). Isolated main/candidate baseline run 40664619319 on docs-only PR head a0d71fcbc53bdfa0909328567e4da4a004dd3de8 exited 0 for Node and Python on both main and candidate, with FFmpeg/ffprobe installed; artifact 12806220430. Production readiness remains BLOCKED; actual Meta draft creation was skipped.",
-    "latestDocumentedPrHeadBeforeRegisterRefresh": "a0d71fcbc53bdfa0909328567e4da4a004dd3de8",
-    "observedBranchHeadBeforeRegisterRefresh": "a0d71fcbc53bdfa0909328567e4da4a004dd3de8"
+    "latestChangeTestReason": "Exact source/test candidate e5f866d910db3a572a280f59c4c9ba17d4061c7f passed automation/security (401 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1), content quality (401/401; zero skips), metadata (401/401; zero skips), dashboard E2E (15 Chromium tests), and isolated main/candidate baseline run 40664139277 (Node/Python commands exit 0 on both main and candidate). Baseline artifact 12804894418, ZIP SHA-256 cf4efef274a291627572da3407553365090988ecb07b8021797da0bd33e34e5f. Production readiness remains BLOCKED; actual Meta draft creation was skipped.",
+    "latestDocumentedPrHeadBeforeRegisterRefresh": "0099c0e62acf7a6121d74215257501e2b2145d14",
+    "observedBranchHeadBeforeRegisterRefresh": "0099c0e62acf7a6121d74215257501e2b2145d14"
   }
 }
