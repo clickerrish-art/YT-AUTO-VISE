@@ -200,8 +200,12 @@ export async function fetchMetaPagePost({
   remotePostId, expectedPageId, accessToken, apiVersion = "v26.0",
   fetchImpl = fetch, timeoutMs = 10000
 }) {
-  if (typeof remotePostId !== "string" || !remotePostId.startsWith(expectedPageId + "_") && !remotePostId.startsWith(expectedPageId)) throw new MetaPageApiError("Remote post ID does not match the authorized Page ID");
   validateConfig({ pageId: expectedPageId, expectedPageId, accessToken, apiVersion });
+  // Meta Page post IDs use the exact Page ID followed by an underscore and a non-empty post ID.
+  // A plain startsWith(Page ID) check accepts IDs belonging to a different, longer Page ID.
+  if (typeof remotePostId !== "string" || !remotePostId.startsWith(expectedPageId + "_") || remotePostId.length <= expectedPageId.length + 1) {
+    throw new MetaPageApiError("Remote post ID does not match the authorized Page ID");
+  }
   let response;
   try {
     response = await fetchImpl(endpoint(apiVersion, encodeURIComponent(remotePostId) + "?fields=id,message,created_time,permalink_url,is_published,scheduled_publish_time"), {
