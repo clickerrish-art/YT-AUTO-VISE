@@ -410,7 +410,7 @@ export async function restoreState(options = {}) {
       try { fs.closeSync(fd); } catch {}
     }
     if (error?.code === "EEXIST") {
-      throw new Error("Another restore operation holds the restore lock; inspect the lock owner and recover or remove a confirmed stale lock before retrying");
+      throw new Error("Another backup or restore operation holds the shared state-operation lock; inspect the lock owner and recover or remove a confirmed stale lock before retrying");
     }
     try {
       const lockStat = fs.lstatSync(lockPath);
