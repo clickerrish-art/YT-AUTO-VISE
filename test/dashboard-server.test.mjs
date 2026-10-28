@@ -123,7 +123,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const oversizedBody = await fetch(base + "/api/drafts", {
     method: "POST", headers, body: JSON.stringify({ payload: "x".repeat(17_000) })
   });
-  assert.equal(oversizedBody.status, 400, "requests above the 16KB body limit must be rejected before parsing or mutation");
+  assert.equal(oversizedBody.status, 413, "requests above the 16KB body limit must return Payload Too Large before parsing or mutation");
   const oversizedBodyResult = await oversizedBody.json();
   assert.match(oversizedBodyResult.error, /16KB/i);
   assert.equal(JSON.stringify(oversizedBodyResult).includes(stateDir), false, "oversized-body errors must not expose local state paths");
