@@ -1,3 +1,19 @@
+## Repository implementation update — 28 October 2026, 20:20 UTC
+
+This update records repository-controlled fixes; it does not remove or waive any production blocker.
+
+- **Latest tested source/test candidate:** `086f157356a78d026b6e1dde4e473d01b85773ba`. Three later commits update evidence documentation only.
+- Backup output now refuses to overwrite an existing explicit destination, flushes file contents before finalization, and flushes the containing directory on supported POSIX systems.
+- Backup and restore now share an exclusive state-operation lock. A backup refuses to proceed when restore owns the lock, preserving the existing lock and writing no backup snapshot.
+- Exact-SHA automation/security [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762134886): 408 Node tests, 0 failures, 0 skips; npm audit 0 vulnerabilities. Content quality [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762134957), metadata [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135041), browser E2E [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135380), and isolated main/candidate baseline [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762127254).
+- Production readiness [remains BLOCKED](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135154). These repository fixes do not prove full power-loss/deployment recovery, exhaustive dashboard/API acceptance, verified YouTube identity/history, real media rights and human approval, native Short association, actual Meta draft creation, owner-approved cadence, or safe external schedule decisions.
+- The prior history incident was checked: `test/restore-facebook-draft-history.test.mjs` is present on the implementation branch. Main commit `fa00d28e7f58911482686e4ad69fac9f4701a2e6` explicitly reverted the earlier unintended test-file write; the implementation branch later added its own intentional test and symlink regression. No attempt was made to restore the file on main.
+- Live Git snapshot before this documentation update: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; tested candidate `086f157356a78d026b6e1dde4e473d01b85773ba`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. Full divergence reconciliation remains incomplete. PR #1 remains open, draft and unmerged.
+
+**Production verdict: NOT READY.** Do not change the eight previously documented live Metricool schedules without explicit owner authorization; local dry-run flags do not disable them.
+
+---
+
 ## Reverified external state — 28 October 2026, read-only
 
 A fresh read-only Metricool query against Nature Frontiers brand `7545638` (`Africa/Johannesburg`) returned the same eight future records documented below. All eight still report `autoPublish=true`, `draft=false`, provider status `PENDING`. The first seven list Facebook as their provider; record `406357554` lists Facebook and Instagram. No remote changes were made.
