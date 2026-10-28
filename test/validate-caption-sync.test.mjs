@@ -33,3 +33,13 @@ test("caption sync fails closed for empty captions and invalid duration", () => 
   assert.ok(validateCaptionSync("", 5).some(error => /empty/i.test(error)));
   assert.ok(validateCaptionSync(valid, Number.NaN).some(error => /finite positive/i.test(error)));
 });
+
+test("caption sync rejects impossible SRT minute and second fields", () => {
+  assert.equal(parseSrtTime("00:60:00,000"), null);
+  assert.equal(parseSrtTime("00:00:60,000"), null);
+  assert.equal(parseSrtTime("01:00:00,000"), 3600000, "hours may exceed 23 in an SRT timeline");
+  const badMinutes = valid.replace("00:00:00,000 --> 00:00:02,000", "00:61:00,000 --> 00:61:02,000");
+  const badSeconds = valid.replace("00:00:00,000 --> 00:00:02,000", "00:00:60,000 --> 00:00:62,000");
+  assert.ok(validateCaptionSync(badMinutes, 10).some(error => /invalid SRT timestamp/i.test(error)));
+  assert.ok(validateCaptionSync(badSeconds, 10).some(error => /invalid SRT timestamp/i.test(error)));
+});
