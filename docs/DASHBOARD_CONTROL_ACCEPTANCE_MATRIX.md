@@ -1,3 +1,13 @@
+## Follow-up interrupted-restore backup guard — 28 October 2026
+
+- **Exact source/test candidate:** `379dd09a5990db6c64e94a51f9d7606013e2604d`.
+- Backup now refuses to create a snapshot while `.restore-transaction.json` exists or is unsafe; the journal is preserved for recovery, no backup output is written, and the backup-owned lock is released.
+- Exact-SHA automation/security [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633734): 411 Node tests, zero failures/skips, npm audit 0 vulnerabilities. Metadata [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633578), content quality [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633488), browser E2E [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651).
+- Isolated main/candidate baseline [was in progress when recorded](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633501). Production readiness [remains blocked](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633515).
+- **Scope limit:** this targeted state-recovery improvement does not establish exhaustive dashboard-control acceptance. `DASH-001` remains `NOT_TESTED`.
+
+---
+
 ## Follow-up cross-process backup lock regression — 28 October 2026
 
 - **Exact source/test candidate:** `d5e3445def955413d424085489212c5835ff0807`.
