@@ -1,3 +1,14 @@
+## Follow-up backup overwrite regression — 28 October 2026
+
+- **Exact source/test candidate:** `7cdd5fe59686acdd5e3499289463ccc5369f0efd`.
+- `scripts/backup-state.mjs` now refuses an explicit destination that already exists. It flushes the temporary backup before finalizing it, uses an exclusive same-directory hard link instead of replacement-capable rename, and flushes the parent directory on supported POSIX systems.
+- `test/backup-restore.test.mjs` verifies the existing file remains byte-identical after a rejected overwrite and no temporary file is left behind.
+- Exact-SHA automation/security: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601849); Node suite: [407 passed, 0 failed, 0 skipped](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591289); npm audit: 0 vulnerabilities.
+- Content quality [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601910), browser E2E [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601880), and isolated baseline [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591541).
+- **Scope limit:** this is backup-file preservation evidence, not full backup/restore crash-recovery acceptance. `STATE-001`, `DASH-001`, and production readiness remain open.
+
+---
+
 ## Follow-up real-server schedule-reservation regression — 28 October 2026
 
 - **Exact source/test candidate:** `54a15314e53c00af3e33faf8a7d691a72372e00a`.
