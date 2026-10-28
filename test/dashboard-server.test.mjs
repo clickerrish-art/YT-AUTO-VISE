@@ -118,7 +118,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   });
   assert.equal(unsupportedContentType.status, 415, "JSON-looking bodies with a non-JSON media type must be rejected");
   const unsupportedContentTypeBody = await unsupportedContentType.json();
-  assert.match(unsupportedContentTypeBody.error, /application\\/json/i);
+  assert.ok(unsupportedContentTypeBody.error.includes("application/json"));
   assert.equal(JSON.stringify(unsupportedContentTypeBody).includes(stateDir), false, "unsupported-content-type errors must not disclose local paths");
   const oversizedBody = await fetch(base + "/api/drafts", {
     method: "POST", headers, body: JSON.stringify({ payload: "x".repeat(17_000) })
