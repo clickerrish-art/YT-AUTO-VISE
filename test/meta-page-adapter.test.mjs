@@ -221,3 +221,19 @@ test("multiple matching remote posts remain ambiguous and block retry", async ()
   assert.equal(result.outcome, "AMBIGUOUS");
   assert.equal(result.matches.length, 2);
 });
+
+
+test("Meta post read-back rejects IDs that only share a Page ID prefix", async () => {
+  let calls = 0;
+  for (const remotePostId of [
+    PAGE_ID + "9_888",
+    PAGE_ID + "9",
+    PAGE_ID
+  ]) {
+    await assert.rejects(() => fetchMetaPagePost({
+      remotePostId, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
+      fetchImpl: async () => { calls++; return response({ id: remotePostId }); }
+    }), /does not match the authorized Page ID/i, remotePostId);
+  }
+  assert.equal(calls, 0, "invalid remote IDs must be rejected before any API request");
+});
