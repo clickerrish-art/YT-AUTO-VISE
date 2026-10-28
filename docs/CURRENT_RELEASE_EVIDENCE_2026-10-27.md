@@ -971,3 +971,39 @@ Exact-candidate workflow results:
 - Facebook draft workflow [40598195092](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195092): local validation succeeded; external draft creation was skipped.
 
 **Verdict:** this candidate passes the listed automated code checks and isolated baseline. Implementation remains partial; exhaustive dashboard/API acceptance, real external integrations, media/rights/human approval, cadence approval, native Short-parent association, operational deployment/recovery and branch protection remain unresolved. No external publishing or merge occurred.
+
+---
+
+## Exact source/test checkpoint — 28 October 2026
+
+**Tested source/test SHA:** `ce3ee82d48265ef16c39e5d9b84debd69709112a`  
+**Documentation-only descendant:** `e3f973c61f250ef8f8329e19dcfd7838de49fb7d` (acceptance-register update only).  
+**Live main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6`  
+**Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`  
+**Live divergence after the source/test commits:** 1,854 ahead / 2 behind / 168 changed files at candidate observation. PR #1 remains open, draft and unmerged.
+
+### Changes in this implementation checkpoint
+
+- `public/dashboard.html`: rendering is offered only when a queued job has approved script, narration and production-plan stages. The button's disabled state and feedback now reflect these prerequisites; the backend still revalidates hashes and files.
+- `browser-tests/dashboard.spec.mjs`: tests the API's explicit 409 blockers and unchanged queued state for jobs lacking the approved authoring pipeline, while checking the UI action remains disabled.
+- `scripts/production-plan.mjs` and `scripts/build-approved-job-render-manifest.mjs`: allow a Short's internal lineage to a verified private SonicVhibez parent only when native Related video is explicitly `BLOCKED_EXTERNAL`. This does not configure or claim the native YouTube association and does not alter visibility.
+- `test/production-plan.test.mjs` and `test/build-approved-job-render-manifest.test.mjs`: regression coverage for private-parent lineage and the explicit external native-feature blocker.
+
+### Exact-SHA automated evidence
+
+- Automation/security [40606304386](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304386): **PASS**; 386 Node tests, 0 failures, 0 skips.
+- Content quality [40606304170](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304170): **PASS**; 386 Node tests, 0 failures, 0 skips; FFmpeg/ffprobe renderer integration included.
+- Metadata validation [40606304233](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304233): **PASS**.
+- Dashboard browser E2E [40606298746](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606298746): **PASS**, 13 Chromium journeys.
+- Isolated main/candidate baseline [40606304157](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304157): **PASS**. Main and candidate install, Node and Python baseline commands exited 0. Artifact [baseline-comparison.zip](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304157/artifacts/12779819868), artifact ID `12779819868`, uploaded ZIP SHA-256 `d47d9e6cd2b63a52e80195177251c0d04b7cdb110dcb5aae981451606abd7eb9`.
+- Production readiness [40606304141](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304141): **BLOCKED/FAILED** as intended because mandatory production prerequisites remain unresolved. This is not a test-suite failure and must not be reported as release acceptance.
+- Nature Frontiers Facebook draft workflow [40606304174](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40606304174): workflow success for local candidate validation; external `create-draft-package` job was **SKIPPED**. This is not external Meta acceptance.
+
+### Current acceptance interpretation
+
+The static dashboard inventory remains 105 controls across 15 forms and 38 literal route branches (10 GET, 28 POST; 35 `/api` branches). Inventory, route-auth coverage and 13 browser journeys are useful but do not close the complete per-control/per-route requirement. `DASH-001`, `STATE-001`, `SCHED-001` and `DEPLOY-001` remain open/not fully tested. Current UI work does not establish production media rights, editorial review, real provider identity or successful external operations.
+
+Production remains **NOT READY**. Owner-controlled blockers remain: verified SonicVhibez channel ID/OAuth and full remote history; genuine rights-cleared final media and hash-bound human playback approval; operation-specific private upload authorization/receipt; feasible owner-approved cadence; native Related video eligibility or an explicit decision to leave it unconfigured; verified Meta identities/permissions and actual draft artifact; branch protection; and isolated deployment/backup/restore/rollback drills.
+
+No live YouTube upload, Meta post, campaign activation, video visibility change, merge, `main` edit, reset, rebase, force-push or destructive history reconciliation occurred. Nature Frontiers remains prohibited as a YouTube target; public/unattended YouTube and live Meta publishing remain disabled; Safari remains inactive; the approved Selar URL remains unchanged.
+
