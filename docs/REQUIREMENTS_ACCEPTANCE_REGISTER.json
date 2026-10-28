@@ -3,7 +3,7 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-28",
+  "recordedAt": "2026-10-28T12:52:00+02:00",
   "evidencePolicy": "Exact source/test candidate 4d003f320df0f1d26c5b46dcb2a0c545cfec785c: automation/security 401 Node tests passed, 0 failures/0 skips; 16 Python tests passed; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1; content quality 401/401 zero skips; metadata 401/401 zero skips; dashboard browser E2E 15 journeys; isolated main/candidate baseline passed. Production readiness remains blocked by external prerequisites; external Meta draft creation was skipped. DASH-001 remains NOT_TESTED because control-by-control and route-by-route behavior acceptance is incomplete.",
   "statuses": [
     "PASS",
@@ -876,21 +876,36 @@
       "assessmentCommitSha": "4d003f320df0f1d26c5b46dcb2a0c545cfec785c",
       "acceptanceCriterion": "readBody accepts application/json with optional media-type parameters; rejects missing or unsupported Content-Type with HTTP 415 before route mutation; drains rejected bodies; regression test submits JSON as text/plain and verifies 415 and a path-safe error. Exact candidate CI passes with zero test skips.",
       "nextAction": "Keep the regression and ensure any future body-bearing API routes use the shared readBody parser. This focused case does not close DASH-001."
+    },
+    {
+      "id": "API-REQUEST-SIZE-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Dashboard API requests exceeding the 16KB JSON body limit return HTTP 413 and do not mutate persisted state or disclose internal paths.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/0ad25ea1a8d1bf76ffa07f79a576951777897501",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/852eb1087cc4a06bafb80d70760ec9915817fe79",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312590"
+      ],
+      "nextAction": "Retain this regression and include all body-bearing routes in the full dashboard/API acceptance matrix.",
+      "assessmentCommitSha": "852eb1087cc4a06bafb80d70760ec9915817fe79",
+      "acceptanceCriterion": "Oversized request returns 413; no state mutation occurs; error response does not reveal local filesystem paths."
     }
   ],
   "currentCheckpoint": {
-    "applicationCodeSha": "290888193caa2b64b1f5c3f3497176175ecdc2b7",
-    "testedSha": "4d003f320df0f1d26c5b46dcb2a0c545cfec785c",
-    "checkpointPrHead": "a947e76211435496f3b9beacad1e9d7067f1553f",
+    "applicationCodeSha": "852eb1087cc4a06bafb80d70760ec9915817fe79",
+    "testedSha": "852eb1087cc4a06bafb80d70760ec9915817fe79",
+    "checkpointPrHead": "852eb1087cc4a06bafb80d70760ec9915817fe79",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1966,
+    "aheadBy": 1967,
     "behindBy": 2,
     "changedFiles": 172,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "DASHBOARD API CONTENT-TYPE VALIDATION PASS / EXACT-CANDIDATE AUTOMATED SUITES AND BASELINE PASS / DASH-001 INCOMPLETE / PRODUCTION BLOCKED",
+    "verdict": "DASHBOARD OVERSIZED-BODY STATUS FIX IMPLEMENTED / AUTOMATED SUITES PASS ON EXACT CANDIDATE / BASELINE REVIEW PENDING / DASH-001 INCOMPLETE / PRODUCTION BLOCKED",
     "ci": {
       "automationSecurity": "PASS",
       "nodeTests": 401,
@@ -902,21 +917,21 @@
       "contentQuality": "PASS (401/401; 0 failures; 0 skips)",
       "metadata": "PASS (401/401; 0 failures; 0 skips)",
       "dashboardE2e": "PASS (15 Chromium tests; not exhaustive per-control acceptance)",
-      "isolatedBaseline": "PASS on exact source/test candidate 4d003f320df0f1d26c5b46dcb2a0c545cfec785c; main and candidate Node/Python commands exited 0; artifact 12809417525, ZIP SHA-256 7c46f5156967ef944b8a602e47cc8bbd6e31e7608c6600cd5a9f898a040a7371",
-      "productionReadiness": "BLOCKED (fail-closed; run 40673471449)",
-      "facebookDraftWorkflow": "PASS for local validation; external draft creation job SKIPPED (run 40673471614)",
+      "isolatedBaseline": "PENDING at checkpoint; do not claim exact-candidate baseline until completed",
+      "productionReadiness": "BLOCKED (fail-closed; run 40675312615)",
+      "facebookDraftWorkflow": "PASS for local validation; external draft creation job SKIPPED (run 40675312494)",
       "dashboardUnsupportedContentTypeRegression": "PASS",
-      "restoreRollbackFixture": "PASS; deterministic mtime ensures the failure-injection test reaches the rollback path"
+      "dashboardOversizedBodyStatus": "PASS (HTTP 413 regression on exact candidate)",
+      "restoreRollbackFixture": "PASS; prior evidence remains tied to its own exact SHA"
     },
     "evidence": {
-      "automation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471424",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471379",
-      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471565",
-      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471427",
-      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471449",
-      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471614",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471350",
-      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471350/artifacts/12809417525"
+      "automation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312590",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312539",
+      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312486",
+      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312668",
+      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312615",
+      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312494",
+      "isolatedBaseline": "pending at update; prior baseline evidence is not substituted"
     },
     "implementationCommits": [
       "e40ae4fd38e6bf015af26dcaa0a44335d34d8e1d",
@@ -926,10 +941,10 @@
       "290888193caa2b64b1f5c3f3497176175ecdc2b7",
       "4d003f320df0f1d26c5b46dcb2a0c545cfec785c"
     ],
-    "candidateSourceTestSha": "4d003f320df0f1d26c5b46dcb2a0c545cfec785c",
+    "candidateSourceTestSha": "852eb1087cc4a06bafb80d70760ec9915817fe79",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Exact candidate 4d003f320df0f1d26c5b46dcb2a0c545cfec785c passed automation/security (401 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1), content quality 401/401 with zero skips, metadata 401/401 with zero skips, dashboard E2E (15 Chromium journeys), and isolated main/candidate baseline run 40673471350. Baseline artifact 12809417525 has ZIP SHA-256 7c46f5156967ef944b8a602e47cc8bbd6e31e7608c6600cd5a9f898a040a7371. Production readiness remains BLOCKED; Meta external draft creation was skipped.",
-    "latestDocumentedPrHeadBeforeRegisterRefresh": "a947e76211435496f3b9beacad1e9d7067f1553f",
-    "observedBranchHeadBeforeRegisterRefresh": "a947e76211435496f3b9beacad1e9d7067f1553f"
+    "latestChangeTestReason": "Fixed dashboard API oversized JSON body response to use HTTP 413 instead of generic 400; updated the end-to-end dashboard API regression assertion. Exact candidate passed automation/security (401 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1), content quality 401/401 with zero skips, metadata 401/401 with zero skips, and 15 Chromium browser journeys. Production readiness remains fail-closed; external Meta draft creation was skipped. Exact-candidate isolated baseline run was still pending when this register update was prepared.",
+    "latestDocumentedPrHeadBeforeRegisterRefresh": "852eb1087cc4a06bafb80d70760ec9915817fe79",
+    "observedBranchHeadBeforeRegisterRefresh": "852eb1087cc4a06bafb80d70760ec9915817fe79"
   }
 }
