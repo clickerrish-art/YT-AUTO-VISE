@@ -274,6 +274,9 @@ export function evaluateNextPublication({
   if (!Array.isArray(history)) errors.push("channel history must be an array");
   if (!Array.isArray(pendingAttempts)) errors.push("pendingAttempts must be an array");
   if (!Array.isArray(scheduledItems)) errors.push("scheduledItems must be an array");
+  if (!Number.isFinite(minSpacingHours) || minSpacingHours < DEFAULT_MIN_SPACING_HOURS) {
+    errors.push(`minimum publication spacing must be at least ${DEFAULT_MIN_SPACING_HOURS} elapsed hours`);
+  }
   if (errors.length) return { valid: false, errors, expectedFormat: null };
   const normalizedHistory = history.map((item, index) => {
     if (!item || typeof item !== "object" || !item.id) {
