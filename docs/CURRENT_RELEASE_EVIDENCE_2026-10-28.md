@@ -1,3 +1,26 @@
+# Follow-up implementation evidence — 28 October 2026, 20:40 UTC
+
+## Refuse backups while interrupted restore recovery is pending
+
+- **Exact source/test candidate:** `379dd09a5990db6c64e94a51f9d7606013e2604d`.
+- **Source commit:** `aeebf0cf5fa1641d7896907b93b70d17344cbc9c`.
+- **Regression-test commit:** `379dd09a5990db6c64e94a51f9d7606013e2604d`.
+- **Defect closed:** a durable `.restore-transaction.json` can remain after an interrupted restore. Even when no operation lock is present, creating a fresh backup of the possibly partially restored state would misrepresent it as a stable recovery point.
+- **Fix:** while holding the shared operation lock, `backupState` checks the restore journal. If it exists or is unsafe, backup refuses to proceed, leaves the journal for `restoreState` recovery, writes no backup, and releases only its own lock.
+- **Regression:** an isolated fixture with a restore journal asserts the backup rejects, creates no output, leaves the journal intact, and removes its own operation lock.
+- **Exact-SHA automation/security:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633734) — **411 Node tests passed, 0 failed, 0 skipped**; npm audit reported 0 vulnerabilities.
+- **Metadata validation:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633578).
+- **Content quality:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633488).
+- **Dashboard browser E2E:** [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651).
+- **Isolated main/candidate baseline:** [IN PROGRESS at evidence capture](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633501); do not claim it passed until its final conclusion is verified.
+- **Production readiness:** [BLOCKED/fail-closed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633515), as expected while external and end-to-end acceptance gates remain unresolved.
+
+## Scope limit
+
+This fix prevents new backups while a restore recovery journal is present. It does not itself execute restore recovery, prove process-kill/power-loss behavior at every commit boundary, or establish deployment rollback. **Production remains blocked.**
+
+---
+
 # Follow-up implementation evidence — 28 October 2026, 20:35 UTC
 
 ## Cross-process backup/restore lock contention
