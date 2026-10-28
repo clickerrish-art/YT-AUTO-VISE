@@ -291,6 +291,7 @@ export function evaluateNextPublication({
       errors.push("history item " + item.id + " has unsupported remote publication status: " + (status || "(missing)"));
       return null;
     }
+    // Creation and scheduled times do not prove when a remote publication actually occurred.
     const timestamp = item.actualPublishedAt ?? item.publishedAt;
     const parsedTimestamp = parseStrictTimestamp(timestamp);
     if (!Number.isFinite(parsedTimestamp)) {
