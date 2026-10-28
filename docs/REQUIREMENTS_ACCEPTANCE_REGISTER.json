@@ -872,7 +872,7 @@
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "CAPTION SRT TIMESTAMP VALIDATION FIX VERIFIED ON SOURCE/TEST SHA e5f866d910db3a572a280f59c4c9ba17d4061c7f; AUTOMATED SUITES PASS; CURRENT-HEAD BASELINE WORKFLOW PENDING; PRODUCTION BLOCKED",
+    "verdict": "CAPTION SRT TIMESTAMP VALIDATION FIX PASS / AUTOMATED SUITES PASS / ISOLATED BASELINE PASS / PRODUCTION BLOCKED",
     "ci": {
       "automationSecurity": "PASS",
       "nodeTests": 401,
@@ -884,7 +884,7 @@
       "contentQuality": "PASS (401/401; 0 failures; 0 skips)",
       "metadata": "PASS (401/401; 0 failures; 0 skips)",
       "dashboardE2e": "PASS (15 Chromium tests; not exhaustive per-control acceptance)",
-      "isolatedBaseline": "PENDING on docs-only PR head a0d71fcbc53bdfa0909328567e4da4a004dd3de8; do not reuse earlier candidate's baseline result",
+      "isolatedBaseline": "PASS on documentation-only PR head a0d71fcbc53bdfa0909328567e4da4a004dd3de8; main and candidate Node/Python commands exited 0; FFmpeg/ffprobe 6.1.1 installed; artifact 12806220430, ZIP SHA-256 c052006e3424e8ea1d999c517de93a37bca336d2586099ce882464570711bd27",
       "productionReadiness": "BLOCKED (fail-closed; run 40664139308)",
       "facebookDraftWorkflow": "PASS for local validation; external draft creation job SKIPPED",
       "captionInvalidSrtClockRegression": "PASS"
@@ -897,7 +897,9 @@
       "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139308",
       "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139317",
       "previousBaselineCandidateOnly": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664013917",
-      "currentHeadBaselinePending": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664619319"
+      "currentHeadBaselinePending": "Resolved: baseline run 40664619319 completed successfully on docs-only PR head a0d71fcbc53bdfa0909328567e4da4a004dd3de8; application source/test SHA remains e5f866d910db3a572a280f59c4c9ba17d4061c7f.",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664619319",
+      "baselineArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664619319/artifacts/12806220430"
     },
     "implementationCommits": [
       "b9f357435149bbb7650e858691c228f3133b9950",
@@ -917,7 +919,7 @@
     ],
     "candidateSourceTestSha": "e5f866d910db3a572a280f59c4c9ba17d4061c7f",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Exact candidate e5f866d910db3a572a280f59c4c9ba17d4061c7f passed automation/security (401 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg 6.1.1), content quality (401/401; zero skips), metadata (401/401; zero skips), and dashboard E2E (15 Chromium tests). The strict SRT clock-field regression is included. Exact-candidate isolated baseline comparison has not yet been verified; readiness remains BLOCKED and external Meta draft creation was skipped.",
+    "latestChangeTestReason": "Exact source/test candidate e5f866d910db3a572a280f59c4c9ba17d4061c7f passed automation/security (401 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1), content quality (401/401; zero skips), metadata (401/401; zero skips), and dashboard E2E (15 Chromium tests). Isolated main/candidate baseline run 40664619319 on docs-only PR head a0d71fcbc53bdfa0909328567e4da4a004dd3de8 exited 0 for Node and Python on both main and candidate, with FFmpeg/ffprobe installed; artifact 12806220430. Production readiness remains BLOCKED; actual Meta draft creation was skipped.",
     "latestDocumentedPrHeadBeforeRegisterRefresh": "a0d71fcbc53bdfa0909328567e4da4a004dd3de8",
     "observedBranchHeadBeforeRegisterRefresh": "a0d71fcbc53bdfa0909328567e4da4a004dd3de8"
   }
