@@ -1,13 +1,13 @@
-## Repository implementation update — 28 October 2026, 20:36 UTC
+## Repository implementation update — 28 October 2026, 20:41 UTC
 
-- **Latest tested source/test candidate:** `d5e3445def955413d424085489212c5835ff0807`.
-- Added a separate-process backup/restore lock contention regression. The child process owns and fsyncs the shared lock; a competing backup fails closed, leaves the lock byte-identical, and creates no backup output.
-- Exact-SHA automation/security [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160063): **410 Node tests passed, 0 failed, 0 skipped**, npm audit 0 vulnerabilities. Metadata [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160114), content quality [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160204), browser E2E [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160061), isolated baseline [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148454), lockfile workflow [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148444).
-- Production readiness [remains BLOCKED](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160031). Backup lock contention is not proof of process-kill recovery, power-loss recovery or deployment rollback.
-- The acceptance register records 45 PASS, 8 NOT_TESTED and 8 BLOCKED_EXTERNAL requirements. `DASH-001` and `STATE-001` remain open.
-- Live refs at candidate verification: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; tested candidate `d5e3445def955413d424085489212c5835ff0807`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 remains open, draft and unmerged. Full branch divergence review remains incomplete.
+- **Latest tested source/test candidate:** `379dd09a5990db6c64e94a51f9d7606013e2604d`.
+- Backup now refuses to snapshot state while an interrupted restore journal `.restore-transaction.json` remains or is unsafe. The journal is retained for recovery; no backup output is written and the backup's own lock is released.
+- Exact-SHA automation/security [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633734): **411 Node tests, 0 failures, 0 skips**, npm audit 0 vulnerabilities. Metadata [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633578), content quality [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633488), browser E2E [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651). Isolated baseline [was still running at capture](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633501).
+- Production readiness [remains BLOCKED](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633515). The guard is not proof of process-kill recovery, power-loss durability, or deployment rollback.
+- Acceptance register counts: 46 PASS, 8 NOT_TESTED, 8 BLOCKED_EXTERNAL. `DASH-001` and `STATE-001` remain open.
+- Live main at candidate verification: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 remains open, draft and unmerged; full branch-divergence reconciliation remains incomplete.
 
-**Production verdict: NOT READY.** No live YouTube or Meta operation was performed and no existing external schedule was changed.
+**Production verdict: NOT READY.** No live YouTube or Meta operation was performed, and no external schedule was changed.
 
 
 ---
