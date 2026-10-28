@@ -1,3 +1,12 @@
+## Follow-up shared-lock cleanup and error reporting — 28 October 2026
+
+- **Exact source/test candidate:** `918f33295994d47a3f669e8b491828fd8293a862`.
+- The backup/restore shared lock now has explicit regression coverage for lock contention and lock release after a backup validation failure. Restore reports that either backup or restore may own the shared lock, rather than misidentifying the operation.
+- Exact-SHA automation/security [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720045): 409 Node tests, zero failures/skips, npm audit 0 vulnerabilities. Metadata [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720246), content quality [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720195), browser E2E [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720017), isolated baseline [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762709642).
+- Production readiness [remains blocked](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720001). These targeted tests do not complete the overall `STATE-001` or `DEPLOY-001` gates.
+
+---
+
 ## Follow-up backup/restore mutual exclusion — 28 October 2026
 
 - **Exact source/test candidate:** `086f157356a78d026b6e1dde4e473d01b85773ba`.
