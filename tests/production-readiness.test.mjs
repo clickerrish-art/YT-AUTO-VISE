@@ -114,7 +114,10 @@ test("readiness never accepts an owner-approved cadence that weakens the 72-hour
   const readiness = fs.readFileSync(readinessPath, "utf8");
   const schedule = JSON.parse(fs.readFileSync(schedulePath, "utf8"));
 
-  assert.match(readiness, /minimumSpacingHours < 72/);
+  const schedulePolicyPath = fileURLToPath(new URL("../scripts/schedule-policy.mjs", import.meta.url));
+  const schedulePolicy = fs.readFileSync(schedulePolicyPath, "utf8");
+  assert.match(readiness, /validateCadenceDecision\(schedule\.cadenceDecision, minimumSpacingHours\)/);
+  assert.match(schedulePolicy, /minimumSpacingHours < 72/);
   assert.doesNotMatch(readiness, /WEEKLY_TARGET_WITH_SHORTER_SPACING/);
   assert.equal(schedule.minimumPublicationSpacingHours, 72);
   assert.equal(schedule.publicationCycle.minimumHoursBetweenConsecutivePublications, 72);
