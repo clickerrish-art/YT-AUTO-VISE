@@ -58,7 +58,7 @@ function collectFiles(dir, relativePrefix, output, { maxBytes = 10 * 1024 * 1024
   }
 }
 
-export async function backupState({ rootDir = root, stateDir = process.env.DASHBOARD_STATE_DIR ?? "state", uploadLogDir = process.env.UPLOAD_LOG_DIR ?? "run-logs", rightsDir = process.env.RIGHTS_EVIDENCE_DIR ?? "rights", outputPath } = {}) {
+async function backupStateUnlocked({ rootDir = root, stateDir = process.env.DASHBOARD_STATE_DIR ?? "state", uploadLogDir = process.env.UPLOAD_LOG_DIR ?? "run-logs", rightsDir = process.env.RIGHTS_EVIDENCE_DIR ?? "rights", outputPath } = {}) {
   const base = path.resolve(rootDir);
   const stateFile = path.resolve(base, stateDir, "dashboard-state.json");
   const logDir = path.resolve(base, uploadLogDir);
@@ -138,6 +138,96 @@ export async function backupState({ rootDir = root, stateDir = process.env.DASHB
     throw error;
   }
   return { path: destination, createdAt: payload.createdAt, entries: entries.length, sha256: sha256(Buffer.from(encoded)), includesSecrets: false };
+}
+
+
+/**
+ * Serialize backups with restores so a backup cannot capture a partially
+ * committed restore transaction. The legacy lock filename is shared with
+ * restore-state.mjs; lock ownership is token-checked and never stolen.
+ */
+export async function backupState(options = {}) {
+  const rootDir = options.rootDir ?? root;
+  const stateDir = options.stateDir ?? process.env.DASHBOARD_STATE_DIR ?? "state";
+  const stateRoot = path.resolve(rootDir, stateDir);
+
+  const assertNoSymlinksAllowMissing = filePath => {
+    const absolute = path.resolve(filePath);
+    const parsed = path.parse(absolute);
+    let current = parsed.root;
+    const parts = path.relative(parsed.root, absolute).split(path.sep).filter(Boolean);
+    for (let index = 0; index < parts.length; index++) {
+      current = path.join(current, parts[index]);
+      let stat;
+      try { stat = fs.lstatSync(current); }
+      catch (error) {
+        if (error?.code === "ENOENT") return;
+        throw error;
+      }
+      if (stat.isSymbolicLink()) throw new Error("Backup refuses symbolic links in state-operation lock path");
+      if (index < parts.length - 1 && !stat.isDirectory()) {
+        throw new Error("Backup state-operation lock path contains a non-directory component");
+      }
+    }
+  };
+
+  assertNoSymlinksAllowMissing(stateRoot);
+  fs.mkdirSync(stateRoot, { recursive: true, mode: 0o700 });
+  assertNoSymlinksAllowMissing(stateRoot);
+  const stateStat = fs.lstatSync(stateRoot);
+  if (stateStat.isSymbolicLink() || !stateStat.isDirectory()) {
+    throw new Error("Backup state directory must be a real directory, not a symlink or special file");
+  }
+
+  const lockPath = path.join(stateRoot, ".restore-operation.lock");
+  const token = crypto.randomUUID();
+  let fd;
+  try {
+    fd = fs.openSync(lockPath, "wx", 0o600);
+    fs.writeFileSync(fd, JSON.stringify({
+      format: "sonicvhibez-restore-operation-lock",
+      version: 1,
+      token,
+      pid: process.pid,
+      createdAt: new Date().toISOString(),
+      operation: "backup"
+    }));
+    fs.fsyncSync(fd);
+    fs.closeSync(fd);
+    fd = undefined;
+  } catch (error) {
+    if (fd !== undefined) {
+      try { fs.closeSync(fd); } catch {}
+    }
+    if (error?.code === "EEXIST") {
+      throw new Error("Another backup or restore operation holds the state-operation lock; inspect the owner before retrying");
+    }
+    try {
+      const lockStat = fs.lstatSync(lockPath);
+      if (lockStat.isFile() && !lockStat.isSymbolicLink() && JSON.parse(fs.readFileSync(lockPath, "utf8")).token === token) {
+        fs.unlinkSync(lockPath);
+      }
+    } catch {}
+    throw error;
+  }
+
+  try {
+    return await backupStateUnlocked(options);
+  } finally {
+    try {
+      const lockStat = fs.lstatSync(lockPath);
+      if (!lockStat.isSymbolicLink() && lockStat.isFile()) {
+        const current = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+        if (current.format === "sonicvhibez-restore-operation-lock" && current.token === token) {
+          fs.unlinkSync(lockPath);
+        }
+      }
+    } catch (error) {
+      if (error?.code !== "ENOENT") {
+        throw new Error("Backup finished but its state-operation lock could not be safely cleared; inspect the lock before retrying", { cause: error });
+      }
+    }
+  }
 }
 
 if (isInvoked) {
