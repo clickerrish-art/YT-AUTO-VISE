@@ -23,7 +23,8 @@ jobs:
       FACEBOOK_STATE_DIR: ${{ vars.FACEBOOK_STATE_DIR }}
       FACEBOOK_AUTONOMOUS_QUEUE_PATH: ${{ vars.FACEBOOK_AUTONOMOUS_QUEUE_PATH }}
       NATURE_FRONTIERS_FACEBOOK_PAGE_ID: ${{ vars.NATURE_FRONTIERS_FACEBOOK_PAGE_ID }}
-      FACEBOOK_PUBLISH_ENABLED: ${{ vars.FACEBOOK_PUBLISH_ENABLED }}
+      # Fail-closed at workflow level; live publishing needs a separate reviewed change and authorization.
+      FACEBOOK_PUBLISH_ENABLED: 'NO'
       META_USER_ACCESS_TOKEN: ${{ secrets.META_USER_ACCESS_TOKEN }}
       META_PAGE_ACCESS_TOKEN: ${{ secrets.META_PAGE_ACCESS_TOKEN }}
     steps:
