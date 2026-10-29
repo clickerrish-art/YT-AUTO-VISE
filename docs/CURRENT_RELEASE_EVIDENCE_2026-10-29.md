@@ -249,3 +249,13 @@ No live YouTube upload, visibility change, Meta post, campaign activation, Metri
 **Production readiness: NOT READY.**
 
 The readiness gate must remain fail-closed until every mandatory repository and external prerequisite is genuinely satisfied. Documentation-only commits after the exact candidate do not constitute new application-code test evidence.
+
+## Exact-SHA dashboard inventory regression — 29 October 2026, 14:25 UTC
+
+- **Application-code commit:** [dea21c7](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/dea21c79403af6fa645edcc89b66f52088e73a70).
+- **Tested source/test SHA:** [3b038b7](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3b038b7f2af9b301135644778cfb9e8af21d6fb6).
+- **Defect fixed:** `scripts/dashboard-inventory.mjs` previously only matched route conditions on a single line. It now recognizes multiline literal route conditions. `test/dashboard-inventory.test.mjs` includes a regression for a multiline POST route.
+- **Automation/security PASS:** [run 40890110672](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40890110672) — 422 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; syntax and compilation checks passed.
+- **Content quality PASS:** [run 40890111066](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40890111066). **Metadata PASS:** [run 40890110636](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40890110636). **Dashboard browser E2E PASS:** [run 40890110850](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40890110850). **Branch inventory PASS:** [run 40890110825](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40890110825).
+- Isolated baseline run [40890110695](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40890110695) was still in progress at the time this section was recorded; it is not counted as PASS here. Production readiness remains fail-closed at [run 40890110804](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40890110804).
+- **DASH-001 remains NOT_TESTED.** This closes the multiline-inventory regression only; it does not establish behavior-level acceptance for all controls, forms or routes. No external publishing or schedule mutation was performed.

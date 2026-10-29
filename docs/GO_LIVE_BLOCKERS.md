@@ -1263,3 +1263,8 @@ Live Git compare: main `fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `4
 - Live refs at the tested candidate: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, 2,120 ahead / 2 behind / 178 changed files. PR #1 remains open, draft and unmerged.
 - No live upload/post, campaign activation, visibility change, Metricool schedule mutation, PR merge, main edit or destructive Git operation occurred. Public/unattended YouTube and live Meta publishing remain disabled; Nature Frontiers remains prohibited as a YouTube target; Safari remains inactive.
 
+
+
+## Dashboard inventory regression checkpoint — 29 October 2026
+
+The multiline route-inventory defect is fixed and covered by a regression test at exact tested SHA 3b038b7f2af9b301135644778cfb9e8af21d6fb6. Automation/security passed 422 Node tests (0 failures, 0 skips), 16 Python tests and npm audit (0 vulnerabilities); content-quality, metadata, dashboard browser E2E and branch inventory workflows passed. The isolated baseline was still in progress at the checkpoint and is not counted as accepted. This does not close DASH-001; exhaustive control/form/route behavior acceptance remains required. Production readiness remains blocked, and no external publishing action was performed.

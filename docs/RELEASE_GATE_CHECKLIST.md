@@ -1049,3 +1049,13 @@ At the candidate snapshot, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merg
 - [ ] Actual Meta draft creation/read-back [40673471614](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40673471614) — external draft creation skipped.
 - [ ] Full branch divergence/history reconciliation, production media/rights/human playback approval, authenticated YouTube channel/history verification, native Short-parent association, owner cadence decision, live Metricool scheduled-post decision, and production deployment/recovery drill.
 - Tested source/test SHA: `4d003f320df0f1d26c5b46dcb2a0c545cfec785c`; main remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; PR #1 remains open/draft/unmerged.
+
+
+## Dashboard inventory regression checkpoint — 29 October 2026
+
+- [x] Multiline literal route inventory regression fixed and tested at 3b038b7f2af9b301135644778cfb9e8af21d6fb6.
+- [x] Automation/security: 422 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities.
+- [x] Content quality, metadata, dashboard browser E2E and branch inventory passed at the same source/test SHA.
+- [ ] Isolated baseline comparison: run 40890110695 was still in progress at the evidence snapshot; verify its final result before accepting.
+- [ ] DASH-001 full control/form/route behavior matrix remains incomplete.
+- [ ] Production readiness remains blocked by external account/media/approval and operational prerequisites.

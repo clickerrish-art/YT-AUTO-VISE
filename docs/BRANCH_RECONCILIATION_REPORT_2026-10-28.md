@@ -192,3 +192,14 @@ The inventory workflow does not replace human semantic review of all branch-only
 - No live upload/post, campaign activation, visibility change, Metricool schedule mutation, PR merge, main edit or destructive Git operation occurred. Public/unattended YouTube and live Meta publishing remain disabled; Nature Frontiers remains prohibited as a YouTube target; Safari remains inactive.
 
 The generated inventory is not a semantic merge review. Review of every branch-only/base-only commit, overlapping code/config/workflow changes, and the restore-history test incident remains NOT_TESTED. No history rewrite or integration was performed.
+
+
+## Live divergence checkpoint — 29 October 2026, 14:25 UTC
+
+- Implementation branch: 3b038b7f2af9b301135644778cfb9e8af21d6fb6.
+- main: fa00d28e7f58911482686e4ad69fac9f4701a2e6.
+- Merge base: 45352b73bb6cc4787b2a49988b575afb754ab627.
+- Ahead/behind: 2,124 ahead / 2 behind; final-tree compare reports 178 changed files.
+- Non-destructive branch inventory: [workflow 40890110825](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40890110825) passed. This is machine-generated inventory only, not the required human semantic review.
+- The dashboard inventory multiline-route defect was fixed in dea21c79403af6fa645edcc89b66f52088e73a70 and regression-tested at 3b038b7f2af9b301135644778cfb9e8af21d6fb6. Automation, content-quality, metadata and dashboard browser E2E passed; baseline run 40890110695 was still in progress at this snapshot.
+- No merge, rebase, reset, force-push, branch deletion, main edit or destructive reconciliation was performed. Full review of branch-only/base-only history, duplicate patch-equivalence, workflows, security/configuration, and the restore-history incident remains open.
