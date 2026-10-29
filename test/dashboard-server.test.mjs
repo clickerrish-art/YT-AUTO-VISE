@@ -420,11 +420,11 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const winningClaim = concurrentResults.find(result => result.status === 200);
   assert.ok(winningClaim?.body.leaseToken, "the single winning worker receives the lease token");
   assert.equal(concurrentResults.filter(result => result.status === 400).length, 1);
-  const concurrentState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
-  const concurrentJobState = concurrentState.jobs.find(job => job.id === concurrentJob.id);
+  const leaseRaceState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  const concurrentJobState = leaseRaceState.jobs.find(job => job.id === concurrentJob.id);
   assert.equal(concurrentJobState.workerLease.workerId,
     concurrentResults.find(result => result.status === 200).body.job.workerLease.workerId);
-  assert.equal(concurrentState.audit.filter(event =>
+  assert.equal(leaseRaceState.audit.filter(event =>
     event.action === "WORKER_LEASE_CLAIMED" && event.jobId === concurrentJob.id).length, 1,
     "only the winning claim may produce a durable lease-claimed audit event");
   const forgedReview = await fetch(base + "/api/jobs/transition", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, nextState: "AWAITING_HUMAN_REVIEW", reason: "attempted bypass" }) });
