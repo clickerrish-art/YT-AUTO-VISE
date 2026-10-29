@@ -116,6 +116,49 @@ test("every declared API route rejects unauthenticated requests without mutating
   assert.deepEqual(fs.readFileSync(statePath), initialState,
     "invalid operator credentials must not mutate persisted dashboard state");
 
+  // Authenticated requests still have to pass content-type, JSON and size boundaries.
+  // Use a draft endpoint because it parses JSON but has no provider-side side effects.
+  const bodyBoundaryCases = [
+    {
+      label: "unsupported content type",
+      headers: { "x-operator-token": token, "content-type": "text/plain" },
+      body: "{}",
+      expectedStatus: 415,
+      expectedError: /Unsupported content type/i
+    },
+    {
+      label: "malformed JSON",
+      headers: { "x-operator-token": token, "content-type": "application/json" },
+      body: "{malformed",
+      expectedStatus: 400,
+      expectedError: /valid JSON/i
+    },
+    {
+      label: "oversized JSON",
+      headers: { "x-operator-token": token, "content-type": "application/json" },
+      body: JSON.stringify({ caption: "x".repeat(17_000) }),
+      expectedStatus: 413,
+      expectedError: /exceeds 16KB/i
+    }
+  ];
+  for (const item of bodyBoundaryCases) {
+    const response = await fetch(base + "/api/facebook/drafts", {
+      method: "POST",
+      headers: item.headers,
+      body: item.body
+    });
+    const responseText = await response.text();
+    assert.equal(response.status, item.expectedStatus,
+      `${item.label} should return HTTP ${item.expectedStatus}; body=${responseText}`);
+    assert.match(response.headers.get("content-type") ?? "", /application\\/json/i);
+    const payload = JSON.parse(responseText);
+    assert.match(payload.error ?? "", item.expectedError, item.label + " should return a safe actionable error");
+    assert.doesNotMatch(responseText, /dashboard-state\\.json|stateDir|\\/home\\/runner|\\/tmp\\//i,
+      item.label + " leaked an internal filesystem path");
+  }
+
+  assert.deepEqual(fs.readFileSync(statePath), initialState,
+    "invalid request bodies must not mutate persisted dashboard state");
   assert.deepEqual(fs.readFileSync(statePath), initialState,
     "unauthenticated API requests must not mutate persisted dashboard state");
   assert.equal(results.length, apiRoutes.length);
