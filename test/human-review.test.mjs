@@ -31,6 +31,24 @@ test("approval fails closed when rights evidence is missing or incomplete", () =
   assert.throws(() => createReviewDecision({ ...base, artifact: { ...artifact, sha256: "invalid" } }), /SHA-256 checksum/);
 });
 
+test("rights verification timestamps must be timezone-qualified and calendar-valid", () => {
+  for (const verifiedAt of [
+    "2026-10-23T10:00:00",
+    "2026-02-30T10:00:00.000Z",
+    "2026-10-23T10:00:00+14:30",
+    "not-a-timestamp"
+  ]) {
+    assert.throws(
+      () => createReviewDecision({ ...base, rightsEvidence: { ...rightsEvidence, verifiedAt } }),
+      /calendar-valid ISO timestamp with an explicit timezone/
+    );
+  }
+  assert.doesNotThrow(() => createReviewDecision({
+    ...base,
+    rightsEvidence: { ...rightsEvidence, verifiedAt: "2026-10-23T10:00:00.000+02:00" }
+  }));
+});
+
 test("reviewer identity and rejection reason are required", () => {
   assert.throws(() => createReviewDecision({ ...base, reviewer: "" }), /authenticated reviewer identity/);
   assert.throws(() => createReviewDecision({ ...base, decision: "REJECT", reason: "" }), /rejection reason/);
