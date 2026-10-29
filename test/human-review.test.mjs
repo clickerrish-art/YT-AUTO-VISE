@@ -49,6 +49,25 @@ test("rights verification timestamps must be timezone-qualified and calendar-val
   }));
 });
 
+test("review receipt timestamp must be valid when created and when reused", () => {
+  for (const reviewedAt of [
+    "2026-10-23T10:00:00",
+    "2026-02-30T10:00:00.000Z",
+    "2026-10-23T10:00:00+14:30",
+    "invalid"
+  ]) {
+    assert.throws(
+      () => createReviewDecision(base, reviewedAt),
+      /review timestamp must be a calendar-valid ISO timestamp with an explicit timezone/
+    );
+  }
+  const review = createReviewDecision(base, "2026-10-23T10:01:00.000Z");
+  assert.equal(isReviewCurrent(review, { artifact, metadataVersion: base.metadataVersion, rightsEvidence }), true);
+  for (const reviewedAt of ["2026-10-23T10:01:00", "2026-02-30T10:01:00.000Z", "invalid"]) {
+    assert.equal(isReviewCurrent({ ...review, reviewedAt }, { artifact, metadataVersion: base.metadataVersion, rightsEvidence }), false);
+  }
+});
+
 test("reviewer identity and rejection reason are required", () => {
   assert.throws(() => createReviewDecision({ ...base, reviewer: "" }), /authenticated reviewer identity/);
   assert.throws(() => createReviewDecision({ ...base, decision: "REJECT", reason: "" }), /rejection reason/);
