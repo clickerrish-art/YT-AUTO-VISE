@@ -427,6 +427,32 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(leaseRaceState.audit.filter(event =>
     event.action === "WORKER_LEASE_CLAIMED" && event.jobId === concurrentJob.id).length, 1,
     "only the winning claim may produce a durable lease-claimed audit event");
+
+  const duplicateRaceDraft = {
+    id: "dashboard-test-concurrent-draft-idempotency",
+    title: "Concurrent duplicate draft test",
+    topic: "ethical wildlife observation",
+    contentType: "short",
+    scheduledDay: "Saturday",
+    scheduledDate: "2026-12-05",
+    productUrl: "https://selar.com/0u19v8u99l"
+  };
+  const duplicateRaceResponses = await Promise.all([1, 2].map(() =>
+    fetch(base + "/api/drafts", {
+      method: "POST", headers, body: JSON.stringify(duplicateRaceDraft)
+    })
+  ));
+  const duplicateRaceResults = await Promise.all(duplicateRaceResponses.map(async response => ({
+    status: response.status,
+    body: await response.json()
+  })));
+  assert.deepEqual(duplicateRaceResults.map(result => result.status).sort(), [201, 409],
+    "simultaneous duplicate draft submissions must create one durable draft and reject the duplicate");
+  const duplicateRaceState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  assert.equal(duplicateRaceState.queueItems.filter(item => item.id === duplicateRaceDraft.id).length, 1,
+    "the queue must contain exactly one draft after concurrent duplicate submission");
+  assert.equal(duplicateRaceState.jobs.filter(job => job.idempotencyKey === "draft:" + duplicateRaceDraft.id).length, 1,
+    "concurrent duplicate submission must not create multiple production jobs");
   const forgedReview = await fetch(base + "/api/jobs/transition", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, nextState: "AWAITING_HUMAN_REVIEW", reason: "attempted bypass" }) });
   assert.equal(forgedReview.status, 400, "worker output alone cannot bypass the rights-evidence gate");
   const shortDraft = { id: "dashboard-test-render-short", title: "Test Short render attempt", topic: "ethical wildlife filming", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-24", productUrl: "https://selar.com/0u19v8u99l" };
