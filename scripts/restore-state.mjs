@@ -207,6 +207,37 @@ function recoverInterruptedRestore(options) {
     } else if (entry.originalSha256 !== undefined || entry.originalBase64 !== undefined) {
       throw new Error("Interrupted missing-file journal contains unexpected original-state data");
     }
+
+    // Validate current filesystem state for every entry before the rollback
+    // loop starts. Otherwise a conflict in a later destination could be found
+    // after earlier entries had already been changed.
+    assertNoSymlinkComponents(safeRestoreAnchor(entry.target, options, destination), destination);
+    const destinationStat = (() => {
+      try { return fs.lstatSync(destination); }
+      catch (error) { if (error?.code === "ENOENT") return null; throw error; }
+    })();
+    if (destinationStat && (destinationStat.isSymbolicLink() || !destinationStat.isFile())) {
+      throw new Error("Interrupted restore destination is not a regular file; manual recovery is required");
+    }
+    const currentSha = destinationStat ? sha256(fs.readFileSync(destination)) : null;
+    if (entry.action === "RESTORE_MISSING" && destinationStat &&
+        currentSha !== entry.newSha256) {
+      throw new Error("Interrupted restore found unexpected destination contents; manual recovery is required: " + path.basename(destination));
+    }
+    if (entry.action === "REPLACE_STATE" && destinationStat &&
+        currentSha !== entry.newSha256 && currentSha !== entry.originalSha256) {
+      throw new Error("Interrupted restore found unexpected replacement contents; manual recovery is required: " + path.basename(destination));
+    }
+    const tempPath = path.join(path.dirname(destination), tempName);
+    assertNoSymlinkComponents(safeRestoreAnchor(entry.target, options, destination), tempPath);
+    try {
+      const tempStat = fs.lstatSync(tempPath);
+      if (tempStat.isSymbolicLink() || !tempStat.isFile()) {
+        throw new Error("Interrupted restore temporary path is not a regular file");
+      }
+    } catch (error) {
+      if (error?.code !== "ENOENT") throw error;
+    }
   }
 
   for (const entry of [...journal.entries].reverse()) {
