@@ -104,8 +104,8 @@ test("every declared API route rejects unauthenticated requests without mutating
     const responseText = await response.text();
     assert.equal(response.status, 401,
       `invalid operator credentials must be rejected for ${route.method} ${route.path}; body=${responseText}`);
-    assert.match(response.headers.get("content-type") ?? "", /application\\/json/i);
-    assert.doesNotMatch(responseText, /dashboard-state\\.json|stateDir|\\/home\\/runner|\\/tmp\\//i,
+    assert.match(response.headers.get("content-type") ?? "", /application\/json/i);
+    assert.doesNotMatch(responseText, /dashboard-state\.json|stateDir|\/home\/runner|\/tmp\//i,
       `${route.method} ${route.path} leaked an internal filesystem path for invalid credentials`);
     const payload = JSON.parse(responseText);
     assert.equal(payload.error, "Operator authentication required",
