@@ -1,5 +1,23 @@
 # Latest live branch-head inventory — 29 October 2026
 
+A full-history inventory was rerun on live PR head `94328372ac920db4f2983757199c488986dca18f`. The tested application/source candidate remains `726e3fca8d0a1a79a76f9d04fefcd440b83f52cc`; intervening changes are release documentation only.
+
+- Base: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
+- Branch-only commits: **2,105**
+- Main-only commits: **2**
+- Final-tree changed files: **178**
+- Patch-equivalent branch commits: **0**
+- Final-tree deletions: **0**
+- Inventory workflow: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40856736722)
+- Full JSON/Markdown inventory: [artifact 12888729993](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40856736722/artifacts/12888729993)
+
+This inventory supersedes earlier branch-count snapshots for the exact HEAD above. The large divergence still requires human semantic review before any integration. The artifact records every branch-only and main-only commit, per-commit file status/path summaries, critical-module changes and deletion status. It is not approval to merge or rewrite history.
+
+---
+
+# Latest live branch-head inventory — 29 October 2026
+
 A fresh full-history inventory was generated against the then-current PR branch head `71802fa7ee684513246731d3a55bfa486cb7469a` after the release-documentation updates. The application/test candidate remains `726e3fca8d0a1a79a76f9d04fefcd440b83f52cc`; changes after that candidate are documentation-only.
 
 - Live main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
