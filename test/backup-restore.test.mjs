@@ -458,3 +458,31 @@ test("backup refuses to snapshot state while an interrupted restore journal rema
     fs.rmSync(source.root, { recursive: true, force: true });
   }
 });
+
+
+test("backup refuses symlinked output ancestors before creating nested directories", async () => {
+  const source = fixture();
+  const outside = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-backup-outside-"));
+  const linkedParent = path.join(source.root, "linked-output");
+  fs.symlinkSync(outside, linkedParent, "dir");
+  const outputPath = path.join(linkedParent, "nested", "backup.json");
+  try {
+    await assert.rejects(
+      backupState({
+        rootDir: source.root,
+        stateDir: source.stateDir,
+        uploadLogDir: source.logDir,
+        rightsDir: source.rightsDir,
+        outputPath
+      }),
+      /output directory contains a symbolic link/i
+    );
+    assert.equal(fs.existsSync(path.join(outside, "nested")), false,
+      "a rejected symlinked output path must not create directories outside the requested tree");
+    assert.equal(fs.existsSync(path.join(source.stateDir, ".restore-operation.lock")), false,
+      "the shared operation lock must be released after output-path validation fails");
+  } finally {
+    fs.rmSync(source.root, { recursive: true, force: true });
+    fs.rmSync(outside, { recursive: true, force: true });
+  }
+});
