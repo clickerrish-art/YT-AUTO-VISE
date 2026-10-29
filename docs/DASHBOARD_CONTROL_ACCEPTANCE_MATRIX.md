@@ -1,3 +1,14 @@
+## Backup output path symlink hardening — 29 October 2026
+
+- **Exact source/test candidate:** `6c08cf0e49647babe3583bedb2d44fffb660cd8f`.
+- `scripts/backup-state.mjs` now creates explicit backup output parent directories one component at a time, rejects symlinked ancestors before creating descendants, and retains the existing exclusive output-file creation and shared operation lock.
+- Regression in `test/backup-restore.test.mjs` verifies a symlinked output parent is rejected, no nested directory is created in the symlink target, and the shared operation lock is released.
+- Exact-candidate evidence: [content quality — 413 Node tests, zero failures/skips](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016430); [automation/security — 413 Node tests, 16 Python tests, npm audit zero vulnerabilities](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016434).
+- Dashboard browser E2E: [15 Chromium tests passed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016429); metadata [passed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016477); isolated main/candidate baseline [passed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016435).
+- **Scope limit:** this closes a targeted backup output path issue. It does not complete `STATE-001` crash/power-loss recovery or `DASH-001` exhaustive control-by-control acceptance.
+
+---
+
 ## Follow-up interrupted-restore backup guard — 28 October 2026
 
 - **Exact source/test candidate:** `379dd09a5990db6c64e94a51f9d7606013e2604d`.
