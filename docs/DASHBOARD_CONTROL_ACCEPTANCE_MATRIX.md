@@ -2,9 +2,9 @@
 
 ## Exact-candidate checkpoint — 29 October 2026
 
-- Current tested source/test candidate: `f363baeee5c14c21c3980001980df0eddb330b5d`.
-- Exact-candidate automation/security, content quality, metadata, 15 Chromium journeys and isolated main/candidate baseline passed; automation/security reports 419 Node tests, zero failures/skips, 16 Python tests and npm audit with zero vulnerabilities.
-- Dashboard inventory currently records 105 controls, 15 forms and 38 routes. Stable acceptance IDs are available, but static enumeration and the 15 Chromium journeys are not control-by-control/API-by-API behavioral acceptance.
+- Current tested source/test candidate: `726e3fca8d0a1a79a76f9d04fefcd440b83f52cc`.
+- Exact-candidate automation/security, content quality, metadata, 15 Chromium journeys, isolated main/candidate baseline and branch-inventory workflow passed; automation/security reports 420 Node tests, zero failures/skips, 16 Python tests and npm audit with zero vulnerabilities.
+- Dashboard inventory records 105 controls, 15 forms and 38 routes. Stable acceptance IDs are available, but static enumeration and the 15 Chromium journeys are not control-by-control/API-by-API behavioral acceptance.
 - **DASH-001 remains NOT_TESTED.** Each control/form/route still needs its expected operation, valid/invalid response, authorization, repeat-click/idempotency, state consistency, keyboard/focus and persistence result recorded with evidence.
 - Latest release evidence: [CURRENT_RELEASE_EVIDENCE_2026-10-29.md](CURRENT_RELEASE_EVIDENCE_2026-10-29.md). Machine-readable status: [REQUIREMENTS_ACCEPTANCE_REGISTER.json](REQUIREMENTS_ACCEPTANCE_REGISTER.json).
 ## Live implementation checkpoint — 29 October 2026, 07:01 UTC
