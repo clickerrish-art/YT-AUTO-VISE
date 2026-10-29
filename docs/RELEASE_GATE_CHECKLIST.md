@@ -1,3 +1,13 @@
+## Controlled restore termination — exact candidate 1e55ac4e231db83fa77b6a5f8b5d50997e992c79
+
+- [x] Separate child process terminated after a dashboard-state destination commit; recovery restored byte-exact original state and cleared the journal after operator-confirmed stale-lock cleanup.
+- [x] 414 Node tests passed, zero failures and zero skips — [content quality workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466179).
+- [x] Automation/security, 16 Python tests, FFmpeg/ffprobe, locked install and npm audit zero vulnerabilities — [workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466090).
+- [x] 15 Chromium dashboard E2E tests — [workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466165).
+- [x] Metadata — [workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466158); isolated baseline — [workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466115).
+- [ ] Kill/restart coverage at every transaction boundary, disk-full/permission faults, power-loss durability and deployment rollback remain incomplete.
+- [ ] Production readiness remains blocked — [workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466131).
+
 ## Exact-SHA verification update — 29 October 2026
 
 - [x] Backup output symlink-ancestor regression implemented and covered by the mandatory Node suite at source/test candidate `6c08cf0e49647babe3583bedb2d44fffb660cd8f`.
