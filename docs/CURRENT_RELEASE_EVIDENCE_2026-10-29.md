@@ -7,7 +7,7 @@
 - Current PR head at this checkpoint: `f363baeee5c14c21c3980001980df0eddb330b5d`; later documentation-only commits will be explicitly distinguished from this tested candidate.
 - `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged by this work)
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
-- Compare snapshot before documentation refresh: 2,073 ahead / 2 behind / 175 changed files; complete commit-by-commit reconciliation remains incomplete.
+- Compare snapshot before documentation refresh: 2,081 ahead / 2 behind / 175 changed files; complete commit-by-commit reconciliation remains incomplete.
 - PR #1 remains open, draft, and unmerged: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1
 - GitHub reports `main` unprotected and required status-check enforcement off. Owner/admin action is required to configure protection; no settings were changed.
 
