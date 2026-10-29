@@ -1,4 +1,4 @@
-name: Generate daily Nature Frontiers Facebook draft
+name: Validate daily Nature Frontiers local draft package
 
 on:
   schedule:
@@ -81,10 +81,19 @@ jobs:
           for (const [ok, label] of checks) console.log((ok ? 'PASS ' : 'FAIL ') + label);
           if (failed.length) process.exit(1);
           NODE
+      - name: Report external integration boundary
+        run: |
+          {
+            echo "## Local draft package validation"
+            echo "- Local validation: PASS when all preceding steps succeed."
+            echo "- Meta provider-side draft creation/read-back: BLOCKED_EXTERNAL."
+            echo "- This job performs no Meta API write and does not claim a remote Page draft exists."
+          } >> "$GITHUB_STEP_SUMMARY"
 
-  create-draft-package:
+  generate-and-retain-local-draft-package:
+    name: Generate and retain local draft package (no Meta API write)
     # Only the default branch may emit a retained daily package.
-    # Candidate validation above never creates a retained competing artifact.
+    # This job creates a local artifact only; it does not create or read back a Meta Page draft.
     if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -114,3 +123,11 @@ jobs:
           path: ${{ runner.temp }}/facebook-drafts/*.json
           if-no-files-found: error
           retention-days: 14
+      - name: Report external integration boundary
+        run: |
+          {
+            echo "## Local draft artifact retained"
+            echo "- Local package generation: PASS when the artifact upload succeeds."
+            echo "- Meta provider-side draft creation/read-back: BLOCKED_EXTERNAL."
+            echo "- The retained JSON file is not evidence of a Facebook Page draft; no Meta API write is performed."
+          } >> "$GITHUB_STEP_SUMMARY"
