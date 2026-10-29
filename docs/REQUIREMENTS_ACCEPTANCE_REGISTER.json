@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-28T20:44:00Z",
-  "evidencePolicy": "Exact source/test candidate 379dd09a5990db6c64e94a51f9d7606013e2604d adds a backup guard for an interrupted restore journal. Automation/security passed 411 Node tests, zero failures/skips and npm audit 0 vulnerabilities; metadata, content quality, dashboard browser E2E and isolated main/candidate baseline passed. Production readiness remains blocked.",
+  "recordedAt": "2026-10-29T06:46:10Z",
+  "evidencePolicy": "Exact application-code/test candidate 6c08cf0e49647babe3583bedb2d44fffb660cd8f adds a regression preventing backup output directory creation through symlinked ancestors. Content-quality workflow passed 413 Node tests, zero failures/skips; automation/security passed 413 Node tests, 16 Python tests, locked install, FFmpeg/ffprobe checks and npm audit with zero vulnerabilities; dashboard E2E passed 15 Chromium tests; metadata and isolated baseline workflows passed. Production readiness remains blocked; external workflows do not prove live provider actions.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -25,7 +25,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417"
       ],
-      "nextAction": "Live snapshot immediately before documentation refresh: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; PR/branch head 918f33295994d47a3f669e8b491828fd8293a862; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 2014 ahead / 2 behind / 174 changed files. PR #1 remains open, draft and unmerged. Full divergence review remains incomplete.",
+      "nextAction": "Live snapshot before this evidence refresh: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; PR/branch source-test candidate 6c08cf0e49647babe3583bedb2d44fffb660cd8f; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 2044 ahead / 2 behind / 174 changed files. PR #1 remains open, draft and unmerged. Branch protection API read returned 403; ruleset listing returned empty. Full divergence reconciliation remains incomplete.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch."
     },
@@ -98,7 +98,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633501"
       ],
-      "nextAction": "Exact source/test candidate 379dd09a5990db6c64e94a51f9d7606013e2604d passed automation/security (411 Node tests, zero failures/skips, npm audit 0 vulnerabilities; run 40764633734), metadata (40764633578), content quality (40764633488), dashboard browser E2E (40764633651) and isolated main/candidate baseline (40764633501). Production readiness 40764633515 remains blocked.",
+      "nextAction": "Exact source/test candidate 6c08cf0e49647babe3583bedb2d44fffb660cd8f passed automation/security (413 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe checks), content quality (413/413, zero skips), metadata, dashboard browser E2E (15 Chromium journeys), and isolated main/candidate baseline. Production readiness workflow fails closed because mandatory prerequisites remain blocked. Meta workflow success is local validation only; external draft creation was not proven.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
@@ -204,7 +204,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633501"
       ],
-      "nextAction": "Backup refuses snapshots while an interrupted restore journal exists or is unsafe; separate-process shared-lock contention and lock cleanup are tested. Exact candidate 379dd09a5990db6c64e94a51f9d7606013e2604d passed 411 Node tests and the isolated baseline. Full process-kill/restart, power-loss transaction-boundary, rollback and uncertain remote-side-effect recovery remain incomplete; requirement remains NOT_TESTED.",
+      "nextAction": "Backup refuses snapshots while an interrupted restore journal exists or is unsafe; separate-process shared-lock contention and lock cleanup are tested. Exact candidate 379dd09a5990db6c64e94a51f9d7606013e2604d passed 411 Node tests and the isolated baseline. Full process-kill/restart, power-loss transaction-boundary, rollback and uncertain remote-side-effect recovery remain incomplete; requirement remains NOT_TESTED. Additional exact-candidate hardening: backup output parent directories are now created component-by-component with symlink rejection before creating descendants; regression verifies no nested directory is created through a symlink and the shared operation lock is released. This does not complete process-kill/restart, power-loss, or deployment rollback drills.",
       "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
       "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects."
     },
@@ -1132,6 +1132,22 @@
       "nextAction": "The journal-present refusal is tested. Continue real process termination during restore and repeated restart-recovery drills; this targeted gate does not accept overall STATE-001.",
       "assessmentCommitSha": "379dd09a5990db6c64e94a51f9d7606013e2604d",
       "acceptanceCriterion": "When .restore-transaction.json exists, backupState rejects before reading snapshot inputs, preserves the journal, creates no backup output, and removes only its own operation lock."
+    },
+    {
+      "id": "BACKUP-OUTPUT-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "Reject symlinked ancestors of an explicit backup output path before creating any nested output directories.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/16a3b4814ccbc52304f61fb782869f131a61aa85",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/6c08cf0e49647babe3583bedb2d44fffb660cd8f",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016430",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016434"
+      ],
+      "nextAction": "Keep the regression in the mandatory suite. This is a targeted filesystem-safety acceptance item and does not imply overall backup/restore crash-recovery acceptance.",
+      "assessmentCommitSha": "6c08cf0e49647babe3583bedb2d44fffb660cd8f",
+      "acceptanceCriterion": "A backup output path with a symlinked ancestor is rejected before nested directories are created outside the intended path; no backup output is written and the shared operation lock is released."
     }
   ],
   "currentCheckpoint": {
