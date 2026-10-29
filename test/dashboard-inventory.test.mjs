@@ -62,7 +62,7 @@ test("dashboard acceptance IDs are unique and stable when unrelated declarations
   assert.equal(new Set(before.forms.map(item => item.acceptanceId)).size, before.forms.length);
   assert.equal(new Set(before.routes.map(item => item.acceptanceId)).size, before.routes.length);
   for (const item of before.controls) {
-    assert.equal(after.controls.find(candidate => candidate.id === item.id || candidate.name === item.name)?.acceptanceId, item.acceptanceId);
+    assert.equal(after.controls.find(candidate => (item.id && candidate.id === item.id) || (item.name && candidate.name === item.name))?.acceptanceId, item.acceptanceId);
   }
   for (const item of before.forms) {
     assert.equal(after.forms.find(candidate => candidate.id === item.id)?.acceptanceId, item.acceptanceId);
