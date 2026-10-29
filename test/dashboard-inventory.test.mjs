@@ -50,7 +50,7 @@ test("dashboard inventory preserves duplicate method/path declarations rather th
 });
 
 test("dashboard acceptance IDs are unique and stable when unrelated declarations are inserted", () => {
-  const originalHtml = '<button id="save">Save</button><input name="caption"><form id="review"><button type="submit">Approve</button></form>';
+  const originalHtml = '<button id="save">Save</button><input name="caption"><form id="review"><button id="approve" type="submit">Approve</button></form>';
   const originalServer = 'if (req.method === "GET" && url.pathname === "/health") {}\nif (req.method === "POST" && url.pathname === "/jobs") {}';
   const before = inventoryDashboardSources(originalHtml, originalServer);
   const after = inventoryDashboardSources('<button id="new-control">New</button>' + originalHtml, 'if (req.method === "GET" && url.pathname === "/new") {}\n' + originalServer);
