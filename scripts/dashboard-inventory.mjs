@@ -7,13 +7,65 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 function attributesOf(raw) {
   const attributes = {};
-  const expression = /([\w:-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
+  const expression = /([\\w:-]+)(?:\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+)))?/g;
   for (const match of raw.matchAll(expression)) {
     const key = match[1].toLowerCase();
-    if (key === "button" || key === "input" || key === "select" || key === "textarea") continue;
+    if (key === "button" || key === "input" || key === "select" || key === "textarea" || key === "form") continue;
     attributes[key] = match[2] ?? match[3] ?? match[4] ?? true;
   }
   return attributes;
+}
+
+/**
+ * Read opening tags without treating a greater-than sign inside a quoted
+ * attribute as the end of the tag. Comments are skipped so example markup
+ * cannot be mistaken for live dashboard controls or forms.
+ */
+function* openingTags(source) {
+  const trackedTags = new Set(["button", "input", "select", "textarea", "form"]);
+  let cursor = 0;
+  while (cursor < source.length) {
+    const start = source.indexOf("<", cursor);
+    if (start < 0) return;
+
+    if (source.startsWith("<!--", start)) {
+      const commentEnd = source.indexOf("-->", start + 4);
+      cursor = commentEnd < 0 ? source.length : commentEnd + 3;
+      continue;
+    }
+
+    const nameStart = start + 1;
+    if (source[nameStart] === "/" || source[nameStart] === "!" || source[nameStart] === "?") {
+      cursor = nameStart + 1;
+      continue;
+    }
+    const nameMatch = source.slice(nameStart).match(/^([a-z][a-z0-9:-]*)\\b/i);
+    if (!nameMatch) {
+      cursor = start + 1;
+      continue;
+    }
+
+    const tag = nameMatch[1].toLowerCase();
+    const attributesStart = nameStart + nameMatch[0].length;
+    let quote = null;
+    let end = -1;
+    for (let index = attributesStart; index < source.length; index++) {
+      const character = source[index];
+      if (quote !== null) {
+        if (character === quote) quote = null;
+      } else if (character === '"' || character === "'") {
+        quote = character;
+      } else if (character === ">") {
+        end = index;
+        break;
+      }
+    }
+    if (end < 0) return;
+    if (trackedTags.has(tag)) {
+      yield { tag, raw: source.slice(attributesStart, end), index: start };
+    }
+    cursor = end + 1;
+  }
 }
 
 function stableAcceptanceId(kind, identity, occurrences) {
@@ -27,7 +79,7 @@ function stableAcceptanceId(kind, identity, occurrences) {
 }
 
 function lineAt(source, index) {
-  return source.slice(0, index).split("\n").length;
+  return source.slice(0, index).split("\\n").length;
 }
 
 /**
@@ -35,12 +87,13 @@ function lineAt(source, index) {
  * declarations only; it does not claim that a control or route is accepted.
  */
 export function inventoryDashboardSources(html, server) {
+  const tags = [...openingTags(html)];
   const controls = [];
   const controlIds = new Map();
-  const controlExpression = /<(button|input|select|textarea)\b([^>]*)>/gi;
-  for (const match of html.matchAll(controlExpression)) {
-    const attributes = attributesOf(match[2]);
-    const tag = match[1].toLowerCase();
+  for (const match of tags) {
+    if (!["button", "input", "select", "textarea"].includes(match.tag)) continue;
+    const attributes = attributesOf(match.raw);
+    const tag = match.tag;
     const identity = attributes.id
       ? "id:" + attributes.id
       : attributes.name
@@ -64,8 +117,9 @@ export function inventoryDashboardSources(html, server) {
 
   const forms = [];
   const formIds = new Map();
-  for (const match of html.matchAll(/<form\b([^>]*)>/gi)) {
-    const attributes = attributesOf(match[1]);
+  for (const match of tags) {
+    if (match.tag !== "form") continue;
+    const attributes = attributesOf(match.raw);
     const identity = attributes.id
       ? "id:" + attributes.id
       : attributes.name
@@ -84,9 +138,9 @@ export function inventoryDashboardSources(html, server) {
 
   const routes = [];
   const routeIds = new Map();
-  const routeExpression = /if\s*\(([^\n]*url\.pathname\s*===\s*["']([^"']+)["'][^\n]*)\)/g;
+  const routeExpression = /if\\s*\\(([^\\n]*url\\.pathname\\s*===\\s*["']([^"']+)["'][^\\n]*)\\)/g;
   for (const match of server.matchAll(routeExpression)) {
-    const methodMatch = match[1].match(/req\.method\s*===\s*["'](GET|POST|PUT|PATCH|DELETE)["']/);
+    const methodMatch = match[1].match(/req\\.method\\s*===\\s*["'](GET|POST|PUT|PATCH|DELETE)["']/);
     const method = methodMatch?.[1] ?? "METHOD_NOT_INLINE";
     const routePath = match[2];
     routes.push({
@@ -118,5 +172,5 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     fs.readFileSync(htmlPath, "utf8"),
     fs.readFileSync(serverPath, "utf8"),
   );
-  process.stdout.write(JSON.stringify(inventory, null, 2) + "\n");
+  process.stdout.write(JSON.stringify(inventory, null, 2) + "\\n");
 }
