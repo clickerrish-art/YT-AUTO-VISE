@@ -720,7 +720,7 @@ test("dashboard startup repairs legacy state that had an active Safari campaign"
   assert.ok(durable.audit.some(event => event.action === "SAFARI_CAMPAIGN_POLICY_ENFORCED"));
 });
 
-test("every declared dashboard API mutation rejects missing operator authentication before input handling", async (t) => {
+test("every declared dashboard API mutation rejects missing and invalid operator authentication before input handling", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-auth-matrix-"));
   const token = "test-token-" + "a".repeat(48);
   const port = 20000 + Math.floor(Math.random() * 20000);
@@ -768,19 +768,24 @@ test("every declared dashboard API mutation rejects missing operator authenticat
     assert.equal(mutatingRoutes.length, 28, "all declared mutating API routes must be included in the auth matrix");
 
     for (const route of mutatingRoutes) {
-      const response = await fetch(base + route.path, {
-        method: route.method,
-        headers: { "content-type": "application/json" },
-        body: "{}",
-        signal: AbortSignal.timeout(3000),
-      });
-      assert.equal(
-        response.status,
-        401,
-        `${route.acceptanceId} (${route.method} ${route.path}) must reject unauthenticated requests before validation or mutation`,
-      );
-      const payload = await response.json();
-      assert.match(String(payload.error ?? ""), /authentication required/i);
+      for (const authCase of [
+        { label: "missing token", headers: { "content-type": "application/json" } },
+        { label: "invalid token", headers: { "content-type": "application/json", "x-operator-token": "invalid-token" } },
+      ]) {
+        const response = await fetch(base + route.path, {
+          method: route.method,
+          headers: authCase.headers,
+          body: "{}",
+          signal: AbortSignal.timeout(3000),
+        });
+        assert.equal(
+          response.status,
+          401,
+          `${route.acceptanceId} (${route.method} ${route.path}) must reject ${authCase.label} before validation or mutation`,
+        );
+        const payload = await response.json();
+        assert.match(String(payload.error ?? ""), /authentication required/i);
+      }
     }
   } finally {
     child.kill("SIGTERM");
