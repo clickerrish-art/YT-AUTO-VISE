@@ -1,3 +1,13 @@
+## Latest exact-SHA dashboard authorization acceptance — 29 October 2026, 13:20 UTC
+
+- **Tested source/test SHA:** `02fd8f03b4730dca5c01974809314bf2e7f84678`. The application code is unchanged by this checkpoint; the regression test expands the dashboard mutation-route authorization matrix.
+- **Implemented:** `test/dashboard-server.test.mjs` now discovers all 28 declared mutating API routes and verifies that both missing and invalid operator tokens receive HTTP 401 and an authentication error before request validation or state mutation.
+- **Exact-SHA evidence:** [automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40880532626) PASS — 421 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities. [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40880532402) PASS, [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40880532528) PASS, [dashboard browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40880532606) PASS, [isolated main/candidate baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40880532588) PASS, and [non-destructive branch inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40880532386) PASS.
+- [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40880532384) remains blocked/fail-closed. [Nature Frontiers draft workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40880532420) passed local validation, but does not prove real provider-side draft creation/read-back.
+- This closes only the missing/invalid-authentication negative-path slice for mutating routes. **DASH-001 remains NOT_TESTED** because all controls/forms/routes still need their complete behavior-specific success, validation, duplicate/concurrency, durable-state, failure/recovery, audit and accessibility acceptance.
+- Live refs at this candidate: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, 2,118 ahead / 2 behind / 178 changed files. PR #1 remains open, draft and unmerged.
+- No live upload/post, campaign activation, visibility change, Metricool schedule mutation, PR merge, main edit or destructive Git operation occurred. Public/unattended YouTube and live Meta publishing remain disabled; Nature Frontiers remains prohibited as a YouTube target; Safari remains inactive.
+
 ## Controlled restore termination — exact candidate 1e55ac4e231db83fa77b6a5f8b5d50997e992c79
 
 - [x] Separate child process terminated after a dashboard-state destination commit; recovery restored byte-exact original state and cleared the journal after operator-confirmed stale-lock cleanup.
