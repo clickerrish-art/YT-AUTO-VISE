@@ -1213,7 +1213,7 @@
     "checkpointPrHead": "f363baeee5c14c21c3980001980df0eddb330b5d",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 2073,
+    "aheadBy": 2081,
     "behindBy": 2,
     "changedFiles": 175,
     "prState": "open",
@@ -1275,7 +1275,7 @@
     "candidateSourceTestSha": "f363baeee5c14c21c3980001980df0eddb330b5d",
     "latestChangeTestStatus": "PASS",
     "latestChangeTestReason": "Added symlink-safe upload log directory creation (49e1df25d6a512eb31b6b48132c5a3880f9010cb) and direct tests (941a27a3d8eed2cc51c7842759595dd2d479a35c). Then centralized remote YouTube read-back verification (b70cdf6e510cf7a959ecadc3ab8a9fc7ac9cc2a1, 22ee0e755f339d3850fb1ea3f75afb470e1e6ed8) and added direct mismatch tests (78a4b8625532ef9f040c1eef1b5b341b2ed7274b; stale source-guard assertion was fixed in f363baeee5c14c21c3980001980df0eddb330b5d). Exact candidate passed 419 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities; content quality, metadata, 15 Chromium journeys and isolated main/candidate baseline. Production readiness remains fail-closed; external Meta draft creation skipped.",
-    "latestDocumentedPrHeadBeforeRegisterRefresh": "634c9add5e889e02cd45986205a2197605be7b8b",
+    "latestDocumentedPrHeadBeforeRegisterRefresh": "c1dcb7f9ae46a28c1a1da638c1ccbaf59ddeede8",
     "observedBranchHeadBeforeRegisterRefresh": "634c9add5e889e02cd45986205a2197605be7b8b"
   }
 }
