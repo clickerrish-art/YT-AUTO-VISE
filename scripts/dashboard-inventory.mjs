@@ -138,7 +138,7 @@ export function inventoryDashboardSources(html, server) {
 
   const routes = [];
   const routeIds = new Map();
-  const routeExpression = /if\s*\(([^\n]*url\.pathname\s*===\s*["']([^"']+)["'][^\n]*)\)/g;
+  const routeExpression = /if\s*\(([^)]*?url\.pathname\s*===\s*["']([^"']+)["'][^)]*)\)/g;
   for (const match of server.matchAll(routeExpression)) {
     const methodMatch = match[1].match(/req\.method\s*===\s*["'](GET|POST|PUT|PATCH|DELETE)["']/);
     const method = methodMatch?.[1] ?? "METHOD_NOT_INLINE";
