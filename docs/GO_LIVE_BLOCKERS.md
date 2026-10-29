@@ -1268,3 +1268,8 @@ Live Git compare: main `fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `4
 ## Dashboard inventory regression checkpoint — 29 October 2026
 
 The multiline route-inventory defect is fixed and covered by a regression test at exact tested SHA 3b038b7f2af9b301135644778cfb9e8af21d6fb6. Automation/security passed 422 Node tests (0 failures, 0 skips), 16 Python tests and npm audit (0 vulnerabilities); content-quality, metadata, dashboard browser E2E and branch inventory workflows passed. The isolated baseline was still in progress at the checkpoint and is not counted as accepted. This does not close DASH-001; exhaustive control/form/route behavior acceptance remains required. Production readiness remains blocked, and no external publishing action was performed.
+
+
+## Dashboard concurrency acceptance checkpoint — 29 October 2026
+
+At exact source/test SHA e64505ebf62f36ea6d7680324a04a6ba08f4ce9a, the real dashboard API test proves simultaneous worker-lease requests for the same job cannot both succeed and only the winning request creates a durable claim audit event. Automation/security passed 422 Node tests with zero failures/skips, 16 Python tests and npm audit with zero vulnerabilities. Content quality, metadata, dashboard E2E, isolated baseline and branch inventory passed. This does not complete DASH-001 or cross-process/deployment recovery acceptance. Production readiness remains blocked and no external publishing operation was performed.

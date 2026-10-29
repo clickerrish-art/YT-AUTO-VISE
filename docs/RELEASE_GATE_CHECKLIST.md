@@ -1059,3 +1059,14 @@ At the candidate snapshot, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merg
 - [ ] Isolated baseline comparison: run 40890110695 was still in progress at the evidence snapshot; verify its final result before accepting.
 - [ ] DASH-001 full control/form/route behavior matrix remains incomplete.
 - [ ] Production readiness remains blocked by external account/media/approval and operational prerequisites.
+
+
+## Dashboard concurrency acceptance checkpoint — 29 October 2026
+
+- [x] Static inventory detects multiline literal route declarations.
+- [x] Simultaneous dashboard worker lease requests: one 200 grant, one 400 rejection, one durable claim audit event.
+- [x] Exact-SHA automation/security: 422 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities.
+- [x] Content quality, metadata, dashboard E2E, isolated baseline and branch inventory passed.
+- [ ] Full DASH-001 per-control/form/route behavior matrix remains incomplete.
+- [ ] Cross-process lease contention, restart recovery and operational deployment/rollback drill remain unaccepted.
+- [ ] Production readiness remains blocked by unresolved external account, media, rights, approval and provider prerequisites.
