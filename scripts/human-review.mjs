@@ -8,6 +8,7 @@ export function sha256File(filePath) {
   return crypto.createHash("sha256").update(fsModule.readFileSync(filePath)).digest("hex");
 }
 import fsModule from "node:fs";
+import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 
 export function validateReviewEvidence({ artifact, rightsEvidence, metadataVersion, reviewer, decision, reason }) {
   const errors = [];
@@ -27,7 +28,7 @@ export function validateReviewEvidence({ artifact, rightsEvidence, metadataVersi
       }
       if (rightsEvidence.verificationStatus !== "VERIFIED") errors.push("rights evidence must be marked VERIFIED after review");
       if (rightsEvidence.verifiedBy !== reviewer) errors.push("rights verifier must match the authenticated reviewer");
-      if (!Number.isFinite(Date.parse(rightsEvidence.verifiedAt ?? ""))) errors.push("rights evidence verification timestamp is invalid");
+      if (!isValidZonedIsoTimestamp(rightsEvidence.verifiedAt)) errors.push("rights evidence verification timestamp must be a calendar-valid ISO timestamp with an explicit timezone");
       if (!Array.isArray(rightsEvidence.permittedUses) || !rightsEvidence.permittedUses.includes("YouTube")) errors.push("rights evidence must explicitly permit YouTube use");
       if (!/^[a-f0-9]{64}$/.test(rightsEvidence.assetSha256 ?? "")) errors.push("source asset SHA-256 checksum is required");
     }
