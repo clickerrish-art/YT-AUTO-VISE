@@ -1,3 +1,54 @@
+## Latest checkpoint — 29 October 2026 (newer than the historical snapshot below)
+
+### Live refs immediately before this evidence refresh
+
+- PR #1 remains open, draft and unmerged.
+- PR head before this documentation update: 7a11ae51094a6bfd76147f12708ddca876f9c8b2.
+- Exact tested source/test candidate: 1e55ac4e231db83fa77b6a5f8b5d50997e992c79.
+- main: fa00d28e7f58911482686e4ad69fac9f4701a2e6.
+- Merge base: 45352b73bb6cc4787b2a49988b575afb754ab627.
+- Divergence: 2,054 ahead / 2 behind / 175 changed files.
+- Commits after the exact source/test candidate are documentation-only. This update is also documentation-only and does not change application/test code.
+
+### Exact-candidate CI
+
+- **Content quality: PASS** — 414 Node tests, 0 failures, 0 skipped: [run 40831466179](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466179).
+- **Automation/security: PASS** — 414 Node tests, 16 Python tests, locked install, FFmpeg/ffprobe, npm audit 0 vulnerabilities: [run 40831466090](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466090).
+- **Dashboard browser E2E: PASS** — 15 Chromium tests: [run 40831466165](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466165).
+- **Metadata: PASS:** [run 40831466158](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466158).
+- **Isolated main/candidate baseline: PASS:** [run 40831466115](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466115).
+- **Production readiness: BLOCKED and correctly fails closed:** [run 40831466131](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466131).
+- **Facebook daily draft:** local validation succeeded but external provider draft-creation job was skipped: [run 40831466088](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466088).
+
+### New recovery evidence
+
+The test commit [1e55ac4e](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/1e55ac4e231db83fa77b6a5f8b5d50997e992c79) launches a separate process, terminates it immediately after the dashboard-state destination commit, confirms the durable journal and lock remain, models operator-confirmed stale-lock cleanup only after child exit, then proves restart recovery restores the exact original state bytes and clears the journal. This covers one controlled transaction boundary. It does not prove every-boundary recovery, true power-loss durability, disk-full/permission drills or deployment rollback. The broader STATE-001 requirement remains NOT_TESTED.
+
+The prior backup output symlink hardening remains covered by [source commit 16a3b481](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/16a3b4814ccbc52304f61fb782869f131a61aa85) and regression [commit 6c08cf0e](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/6c08cf0e49647babe3583bedb2d44fffb660cd8f).
+
+### Updated acceptance totals
+
+The register contains **64 requirements: 48 PASS, 8 NOT_TESTED, 8 BLOCKED_EXTERNAL**. Targeted PASS items do not mean overall acceptance.
+
+### Remaining blockers and verdict
+
+- Exhaustive control-by-control and route-by-route dashboard/API acceptance remains incomplete; DASH-001 is NOT_TESTED.
+- Full transaction-boundary, power-loss, disk-full and deployment rollback drills remain incomplete; STATE-001 and DEPLOY-001 are not accepted.
+- Real SonicVhibez channel/OAuth identity, complete YouTube history, and an authorized private upload/read-back are not proven. Public/unattended YouTube publishing remains disabled.
+- Native YouTube Related-video association remains unverified and may conflict with the private-only policy.
+- Meta destination identity/permissions and actual draft creation/read-back remain unverified; live publishing remains disabled.
+- Genuine production media, license evidence, human playback review and final hash-bound approval are not established by synthetic renderer tests.
+- Owner-approved cadence and full Git divergence reconciliation remain outstanding. Branch protection is unverified because the integration receives HTTP 403 from the protection endpoint.
+- Historical Metricool schedules must be reread and any change individually authorized; none was changed here.
+
+No upload, post, visibility change, campaign activation, remote schedule mutation, merge, main edit or destructive Git operation occurred.
+
+**Tested candidate checks: PASS. Full functional acceptance: NOT COMPLETE. Production readiness: NOT READY.**
+
+---
+
+Historical snapshot below is retained for audit trail; its older refs and test candidate are not the latest state.
+
 # Current Release Evidence — 29 October 2026
 
 ## Live Git snapshot
