@@ -1102,3 +1102,14 @@ At the candidate snapshot, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merg
 - [x] Content quality, metadata, browser E2E, isolated baseline and branch inventory passed.
 - [ ] Remote Meta Page draft creation/read-back remains blocked externally; no live publishing occurred.
 - [ ] DASH-001 and production readiness remain incomplete/blocked.
+
+
+## Exact-SHA checkpoint — strict rights timestamp validation — 29 October 2026
+
+- [x] Rights verification timestamps reject timezone-free, impossible-calendar, invalid-offset and malformed values; valid timezone-qualified ISO timestamps remain accepted.
+- [x] Exact source/test SHA `bd988fd5a1c565401f1c34ec94e1c59a4312d95a`: automation/security 425 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities.
+- [x] Content quality and metadata workflows passed; dashboard Chromium E2E passed 15 journeys; isolated baseline and non-destructive branch inventory passed.
+- [x] Acceptance register refreshed to 68 requirements: 52 PASS, 8 NOT_TESTED, 8 BLOCKED_EXTERNAL.
+- [ ] DASH-001 remains incomplete: 105 controls, 15 forms and 37 protected API routes do not yet have complete behavior-specific acceptance evidence.
+- [ ] Production readiness remains blocked; the readiness workflow correctly fails closed. No live upload/post or provider-side Meta draft/read-back was performed.
+- [ ] Cross-process crash/restart and deployment/rollback drills, genuine rights-cleared assets and human approval, authenticated YouTube identity/history, authorized private upload, native Related-video verification, owner decisions and full semantic Git reconciliation remain outstanding.
