@@ -486,3 +486,78 @@ test("backup refuses symlinked output ancestors before creating nested directori
     fs.rmSync(outside, { recursive: true, force: true });
   }
 });
+
+
+test("a killed restore process leaves a journal that is safely rolled back after operator-confirmed lock cleanup", async () => {
+  const source = fixture();
+  const destination = fixture();
+  try {
+    const backupPath = path.join(source.root, "backup.json");
+    const backup = await backupState({
+      rootDir: source.root,
+      stateDir: source.stateDir,
+      uploadLogDir: source.logDir,
+      rightsDir: source.rightsDir,
+      outputPath: backupPath
+    });
+    const destinationState = path.join(destination.stateDir, "dashboard-state.json");
+    const modified = JSON.parse(fs.readFileSync(destinationState, "utf8"));
+    modified.audit = [{ action: "PRE_RESTORE_STATE_TO_PRESERVE", actor: "crash-test" }];
+    fs.writeFileSync(destinationState, JSON.stringify(modified, null, 2) + "\n", { mode: 0o600 });
+    const originalBytes = fs.readFileSync(destinationState);
+    const earlierThanBackup = new Date(Date.parse(backup.createdAt) - 1000);
+    fs.utimesSync(destinationState, earlierThanBackup, earlierThanBackup);
+
+    const restoreModule = new URL("../scripts/restore-state.mjs", import.meta.url).href;
+    const childScript = `
+      import fs from "node:fs";
+      import path from "node:path";
+      const { restoreState } = await import(${JSON.stringify(restoreModule)});
+      const rename = fs.renameSync;
+      fs.renameSync = function (source, target, ...rest) {
+        const result = rename.call(this, source, target, ...rest);
+        if (path.basename(target) === "dashboard-state.json") process.exit(86);
+        return result;
+      };
+      await restoreState({
+        backupPath: ${JSON.stringify(backupPath)},
+        rootDir: ${JSON.stringify(destination.root)},
+        confirm: "YES",
+        overwriteState: true
+      });
+    `;
+    const child = spawn(process.execPath, ["--input-type=module", "-e", childScript], { encoding: "utf8" });
+    const exitCode = await new Promise((resolve, reject) => {
+      child.once("error", reject);
+      child.once("close", resolve);
+    });
+    assert.equal(exitCode, 86, "the child must terminate immediately after committing the dashboard-state replacement");
+
+    const journalPath = path.join(destination.stateDir, ".restore-transaction.json");
+    const lockPath = path.join(destination.stateDir, ".restore-operation.lock");
+    assert.equal(fs.existsSync(journalPath), true, "the durable transaction journal must survive process termination");
+    assert.equal(fs.existsSync(lockPath), true, "the abandoned lock must remain for explicit operator inspection");
+    assert.notDeepEqual(fs.readFileSync(destinationState), originalBytes,
+      "the child should have committed the replacement before terminating");
+
+    // The child has exited and its PID is no longer running. Only now does the
+    // test model an operator confirming that it is safe to remove the stale lock.
+    fs.unlinkSync(lockPath);
+    await assert.rejects(
+      restoreState({
+        backupPath,
+        rootDir: destination.root,
+        confirm: "YES",
+        overwriteState: true
+      }),
+      /rolled back safely.*rerun restore explicitly/
+    );
+    assert.deepEqual(fs.readFileSync(destinationState), originalBytes,
+      "restart recovery must restore the exact pre-transaction state bytes");
+    assert.equal(fs.existsSync(journalPath), false, "successful recovery must clear the transaction journal");
+    assert.equal(fs.existsSync(lockPath), false, "the recovery invocation must release its own lock");
+  } finally {
+    fs.rmSync(source.root, { recursive: true, force: true });
+    fs.rmSync(destination.root, { recursive: true, force: true });
+  }
+});
