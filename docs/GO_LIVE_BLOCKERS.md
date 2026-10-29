@@ -1,14 +1,18 @@
 # Current authoritative release checkpoint — 29 October 2026
 
-Exact tested source/test candidate: `941a27a3d8eed2cc51c7842759595dd2d479a35c`. Exact-candidate automation/security, content quality, metadata, 15 Chromium browser journeys and isolated main/candidate baseline checks passed; 418 Node tests passed with zero failures/skips, 16 Python tests passed, and npm audit reported zero vulnerabilities. Production-readiness CI remains intentionally blocked on missing prerequisites.
+Exact tested source/test candidate: `f363baeee5c14c21c3980001980df0eddb330b5d`. Exact-candidate automation/security, content quality, metadata, 15 Chromium browser journeys and isolated main/candidate baseline checks passed; 419 Node tests passed with zero failures/skips, 16 Python tests passed, and npm audit reported zero vulnerabilities. Production-readiness CI remains intentionally blocked on missing prerequisites.
 
-Current acceptance register: 49 PASS / 8 NOT_TESTED / 8 BLOCKED_EXTERNAL (65 total). Full production readiness is **NOT READY**. DASH-001 exhaustive dashboard/API acceptance and STATE-001 full recovery drills remain NOT_TESTED. Real YouTube identity/history/operation-specific private-upload acceptance, real Meta identity/draft/read-back, genuine rights-cleared assets and human review, native Short-parent evidence, owner-approved cadence, Metricool owner decisions and full Git reconciliation remain unresolved.
+Current acceptance register: 50 PASS / 8 NOT_TESTED / 8 BLOCKED_EXTERNAL (66 total). Full production readiness is **NOT READY**. DASH-001 exhaustive dashboard/API acceptance and STATE-001 full recovery drills remain NOT_TESTED. Real YouTube identity/history/operation-specific private-upload acceptance, real Meta identity/draft/read-back, genuine rights-cleared assets and human review, native Short-parent evidence, owner-approved cadence, Metricool owner decisions and full Git reconciliation remain unresolved.
 
-Live refs: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; branch `codex/marketing-machine-audit-fixes` at candidate `941a27a3d8eed2cc51c7842759595dd2d479a35c`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; 2,069 ahead / 2 behind / 175 changed files. PR #1 remains open, draft and unmerged. GitHub reports main branch protection disabled; owner/admin configuration is required.
+Targeted implementation fixes on this candidate: upload log/ledger directory creation rejects symlinked ancestors; shared YouTube read-back validation checks exact remote video ID, channel ID, approved title and private visibility. The exact test candidate passed the mandatory suite after an intermediate stale source-guard assertion was corrected.
+
+Live refs at tested checkpoint: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; implementation branch `codex/marketing-machine-audit-fixes`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; 2,073 ahead / 2 behind / 175 changed files. PR #1 remains open, draft and unmerged. GitHub reports main branch protection disabled; owner/admin configuration is required.
 
 Safety policy remains unchanged: no public/unattended YouTube publishing, no live Meta publishing, no campaign activation, no remote schedule changes without explicit per-record authorization, no visibility changes to satisfy Short association, Nature Frontiers never a YouTube target, Safari inactive, and the approved Selar destination remains `https://selar.com/0u19v8u99l`.
 
 See [exact-candidate release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-29.md) and [machine-readable acceptance register](REQUIREMENTS_ACCEPTANCE_REGISTER.json). Historical blocker details follow.
+
+---
 
 ---
 
