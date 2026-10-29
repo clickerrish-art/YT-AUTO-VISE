@@ -1,16 +1,18 @@
 # Current authoritative release checkpoint — 29 October 2026
 
-Exact tested source/test candidate: `f363baeee5c14c21c3980001980df0eddb330b5d`. Exact-candidate automation/security, content quality, metadata, 15 Chromium browser journeys and isolated main/candidate baseline checks passed; 419 Node tests passed with zero failures/skips, 16 Python tests passed, and npm audit reported zero vulnerabilities. Production-readiness CI remains intentionally blocked on missing prerequisites.
+Exact tested source/test candidate: `726e3fca8d0a1a79a76f9d04fefcd440b83f52cc`. Exact-candidate automation/security, content quality, metadata, 15 Chromium browser journeys, isolated main/candidate baseline and full-history branch inventory passed; 420 Node tests passed with zero failures/skips, 16 Python tests passed, and npm audit reported zero vulnerabilities. Production-readiness CI remains intentionally blocked on missing prerequisites.
 
-Current acceptance register: 50 PASS / 8 NOT_TESTED / 8 BLOCKED_EXTERNAL (66 total). Full production readiness is **NOT READY**. DASH-001 exhaustive dashboard/API acceptance and STATE-001 full recovery drills remain NOT_TESTED. Real YouTube identity/history/operation-specific private-upload acceptance, real Meta identity/draft/read-back, genuine rights-cleared assets and human review, native Short-parent evidence, owner-approved cadence, Metricool owner decisions and full Git reconciliation remain unresolved.
+Current acceptance register: 51 PASS / 8 NOT_TESTED / 8 BLOCKED_EXTERNAL (67 total). Full production readiness is **NOT READY**. DASH-001 exhaustive dashboard/API acceptance and STATE-001 full recovery drills remain NOT_TESTED. Real YouTube identity/history/operation-specific private-upload acceptance, real Meta identity/draft/read-back, genuine rights-cleared assets and human review, native Short-parent evidence, owner-approved cadence and Metricool owner decisions remain unresolved.
 
-Targeted implementation fixes on this candidate: upload log/ledger directory creation rejects symlinked ancestors; shared YouTube read-back validation checks exact remote video ID, channel ID, approved title and private visibility. The exact test candidate passed the mandatory suite after an intermediate stale source-guard assertion was corrected.
+The new branch-inventory workflow retained [the complete JSON/Markdown inventory artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917617/artifacts/12889820366): 2,094 branch-only commits, 2 main-only commits, 178 final-tree changed files, 17 critical-path changes, 0 final-tree deletions. The inventory is not human approval to merge; full semantic integration review remains required.
 
-Live refs at tested checkpoint: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; implementation branch `codex/marketing-machine-audit-fixes`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; 2,081 ahead / 2 behind / 175 changed files. PR #1 remains open, draft and unmerged. GitHub reports main branch protection disabled; owner/admin configuration is required.
+Live tested refs: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; candidate `726e3fca8d0a1a79a76f9d04fefcd440b83f52cc`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; 2,094 ahead / 2 behind / 178 changed files. PR #1 remains open, draft and unmerged. GitHub reports main branch protection disabled; owner/admin configuration is required.
 
 Safety policy remains unchanged: no public/unattended YouTube publishing, no live Meta publishing, no campaign activation, no remote schedule changes without explicit per-record authorization, no visibility changes to satisfy Short association, Nature Frontiers never a YouTube target, Safari inactive, and the approved Selar destination remains `https://selar.com/0u19v8u99l`.
 
-See [exact-candidate release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-29.md) and [machine-readable acceptance register](REQUIREMENTS_ACCEPTANCE_REGISTER.json). Historical blocker details follow.
+See [exact-candidate release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-29.md), [machine-readable acceptance register](REQUIREMENTS_ACCEPTANCE_REGISTER.json), and [branch reconciliation report](BRANCH_RECONCILIATION_REPORT_2026-10-28.md). Historical blocker details follow.
+
+---
 
 ---
 
