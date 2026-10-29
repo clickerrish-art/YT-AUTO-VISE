@@ -39,6 +39,7 @@ export function validateReviewEvidence({ artifact, rightsEvidence, metadataVersi
 export function createReviewDecision(input, now = new Date().toISOString()) {
   const errors = validateReviewEvidence(input);
   if (errors.length) throw new Error("Review blocked: " + errors.join("; "));
+  if (!isValidZonedIsoTimestamp(now)) throw new Error("Review blocked: review timestamp must be a calendar-valid ISO timestamp with an explicit timezone");
   const relatedArtifacts = Array.isArray(input.artifact.relatedArtifacts) && input.artifact.relatedArtifacts.length
     ? structuredClone(input.artifact.relatedArtifacts)
     : [{ path: input.artifact.path, sha256: input.artifact.sha256 }];
@@ -61,7 +62,7 @@ export function createReviewDecision(input, now = new Date().toISOString()) {
 }
 
 export function isReviewCurrent(review, { artifact, metadataVersion, rightsEvidence }) {
-  if (!review || review.decision !== "APPROVE" || !artifact || !rightsEvidence) return false;
+  if (!review || review.decision !== "APPROVE" || !isValidZonedIsoTimestamp(review.reviewedAt) || !artifact || !rightsEvidence) return false;
   const rightsHash = crypto.createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex");
   const currentRelated = Array.isArray(artifact.relatedArtifacts) && artifact.relatedArtifacts.length
     ? artifact.relatedArtifacts.map(item => ({ path: item.path, sha256: item.sha256 })).sort((a,b) => a.path.localeCompare(b.path))
