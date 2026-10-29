@@ -7,7 +7,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 function attributesOf(raw) {
   const attributes = {};
-  const expression = /([\\w:-]+)(?:\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+)))?/g;
+  const expression = /([\w:-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
   for (const match of raw.matchAll(expression)) {
     const key = match[1].toLowerCase();
     if (key === "button" || key === "input" || key === "select" || key === "textarea" || key === "form") continue;
@@ -39,7 +39,7 @@ function* openingTags(source) {
       cursor = nameStart + 1;
       continue;
     }
-    const nameMatch = source.slice(nameStart).match(/^([a-z][a-z0-9:-]*)\\b/i);
+    const nameMatch = source.slice(nameStart).match(/^([a-z][a-z0-9:-]*)\b/i);
     if (!nameMatch) {
       cursor = start + 1;
       continue;
@@ -79,7 +79,7 @@ function stableAcceptanceId(kind, identity, occurrences) {
 }
 
 function lineAt(source, index) {
-  return source.slice(0, index).split("\\n").length;
+  return source.slice(0, index).split("\n").length;
 }
 
 /**
@@ -138,9 +138,9 @@ export function inventoryDashboardSources(html, server) {
 
   const routes = [];
   const routeIds = new Map();
-  const routeExpression = /if\\s*\\(([^\\n]*url\\.pathname\\s*===\\s*["']([^"']+)["'][^\\n]*)\\)/g;
+  const routeExpression = /if\s*\(([^\n]*url\.pathname\s*===\s*["']([^"']+)["'][^\n]*)\)/g;
   for (const match of server.matchAll(routeExpression)) {
-    const methodMatch = match[1].match(/req\\.method\\s*===\\s*["'](GET|POST|PUT|PATCH|DELETE)["']/);
+    const methodMatch = match[1].match(/req\.method\s*===\s*["'](GET|POST|PUT|PATCH|DELETE)["']/);
     const method = methodMatch?.[1] ?? "METHOD_NOT_INLINE";
     const routePath = match[2];
     routes.push({
@@ -172,5 +172,5 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     fs.readFileSync(htmlPath, "utf8"),
     fs.readFileSync(serverPath, "utf8"),
   );
-  process.stdout.write(JSON.stringify(inventory, null, 2) + "\\n");
+  process.stdout.write(JSON.stringify(inventory, null, 2) + "\n");
 }
