@@ -316,9 +316,10 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/restore-facebook-draft-history.test.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/tests/restore-state.test.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517549"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517549",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40881209440"
       ],
-      "nextAction": "Live compare: 2115 commits ahead / 2 behind / merge base 45352b73bb6cc4787b2a49988b575afb754ab627. Non-destructive branch inventory workflow 40857300919 passed on live HEAD and generated the inventory, but this does not replace human semantic review of every branch-only/base-only commit, overlapping changes, patch-equivalent changes, workflow/security changes, or the restore-history incident. Do not reset, rebase, merge, force-push or delete branches.",
+      "nextAction": "Live compare at tested source/test candidate 9229671e82180eadb92411cdd5ac9e649da79fdb: 2,120 commits ahead / 2 behind, merge base 45352b73bb6cc4787b2a49988b575afb754ab627, 178 changed files. Non-destructive inventory workflow 40881209440 passed and generated the branch inventory, but human semantic review of branch-only/base-only commits, patch-equivalent and overlapping changes, workflows/security/configuration, and the restore-history incident remains incomplete. Preserve both restore-history test variants. Do not reset, rebase, merge, force-push or delete branches.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants."
     },
@@ -417,7 +418,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/95d9dd8c4fb895861bcdfbc4c5ddc12b477990f6",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/630f1fbe05efa04ac4b5a470c506f872e75d1f1f"
       ],
-      "nextAction": "Owner must select and explicitly approve a feasible policy mode. Validator and readiness now require a supported mode, timezone-aware approval timestamp, non-empty approval reference, and mathematically feasible spacing; automated CI on the exact updated candidate must complete before the code guard is marked verified. Keep publication disabled until the owner decision is recorded.",
+      "nextAction": "Owner must select and explicitly approve a feasible publication cadence, with a timezone-aware approval timestamp and non-empty approval reference. Repository validation/readiness guards and exact-SHA automated tests are present, but no owner approval has been invented or recorded. Keep all publication disabled until the owner decision is saved and the readiness gate verifies it.",
       "assessmentCommitSha": "630f1fbe05efa04ac4b5a470c506f872e75d1f1f",
       "acceptanceCriterion": "Configuration records the requested weekly target and mathematical conflict; validator emits a visible blocked decision status; production readiness refuses to pass unless a valid owner-approved cadence decision is present."
     },
