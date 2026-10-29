@@ -1,3 +1,9 @@
+## Controlled recovery test update — 29 October 2026
+
+Candidate 1e55ac4e231db83fa77b6a5f8b5d50997e992c79 adds a separate-process termination regression: a child commits dashboard state and exits before normal cleanup; after its exit is confirmed and the stale lock is explicitly removed, recovery restores the exact prior bytes and clears the journal. The test suite passes at 414 Node tests with zero skips. Evidence: [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466179), [automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466090), [isolated baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466115).
+
+This closes only one controlled crash point. Full transaction-boundary fault injection, power-loss durability, disk-full and permission failures, repeated recovery, and deployment rollback remain open; STATE-001 and DEPLOY-001 are not accepted. Production readiness remains blocked.
+
 ## Verification update — 29 October 2026
 
 Exact source/test candidate `6c08cf0e49647babe3583bedb2d44fffb660cd8f` passed the Node suite (413 passed, 0 failed, 0 skipped), 16 Python tests, npm audit (0 vulnerabilities), FFmpeg/ffprobe integration checks, 15 Chromium dashboard E2E tests, metadata validation and isolated baseline comparison. Evidence: [automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016434), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016430), [dashboard E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016429), [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016477), [isolated baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016435).
