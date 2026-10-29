@@ -10,6 +10,34 @@ const sha256 = value => crypto.createHash("sha256").update(value).digest("hex");
 const isInvoked = process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href;
 
 /**
+ * Create an output directory one component at a time, checking each existing
+ * ancestor before creating descendants. Recursive mkdir can follow a symlink
+ * and create directories outside the requested tree before a later check fails.
+ */
+function ensureSafeDirectoryPath(directory) {
+  const target = path.resolve(directory);
+  const parsed = path.parse(target);
+  let current = parsed.root;
+  for (const component of path.relative(parsed.root, target).split(path.sep).filter(Boolean)) {
+    current = path.join(current, component);
+    let stat;
+    try {
+      stat = fs.lstatSync(current);
+    } catch (error) {
+      if (error?.code !== "ENOENT") throw error;
+      try {
+        fs.mkdirSync(current, { mode: 0o700 });
+      } catch (mkdirError) {
+        if (mkdirError?.code !== "EEXIST") throw mkdirError;
+      }
+      stat = fs.lstatSync(current);
+    }
+    if (stat.isSymbolicLink()) throw new Error("Backup output directory contains a symbolic link; refusing an unintended destination");
+    if (!stat.isDirectory()) throw new Error("Backup output path must contain only directories");
+  }
+}
+
+/**
  * Reject symlinks in every visible path component before reading backup inputs.
  * This is a path-based guard, not a complete defence against concurrent ancestor
  * replacement; run backups in an isolated, owner-controlled filesystem.
@@ -101,7 +129,7 @@ async function backupStateUnlocked({ rootDir = root, stateDir = process.env.DASH
   };
   const encoded = JSON.stringify(payload, null, 2) + "\n";
   const destination = path.resolve(outputPath ?? path.join(base, "backups", "sonicvhibez-state-backup-" + payload.createdAt.replace(/[:.]/g, "-") + ".json"));
-  fs.mkdirSync(path.dirname(destination), { recursive: true, mode: 0o700 });
+  ensureSafeDirectoryPath(path.dirname(destination));
   assertNoSymlinkComponents(path.dirname(destination), "backup output directory");
   const temp = destination + "." + crypto.randomUUID() + ".tmp";
   let fd;
