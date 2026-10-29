@@ -133,3 +133,47 @@ test("restore fails closed when another process already holds the operation lock
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+
+test("restore recovery validates the entire journal before mutating duplicate destinations", async () => {
+  const crypto = await import("node:crypto");
+  const dir = makeTempDir();
+  try {
+    const stateDir = path.join(dir, "state");
+    const logDir = path.join(dir, "run-logs");
+    fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+    fs.mkdirSync(logDir, { recursive: true, mode: 0o700 });
+    const destination = path.join(logDir, "upload-attempts.json");
+    const original = Buffer.from("must-not-be-deleted-by-invalid-journal");
+    fs.writeFileSync(destination, original);
+    const newBytes = Buffer.from("simulated-restored-content");
+    const newSha256 = crypto.createHash("sha256").update(newBytes).digest("hex");
+    const target = { kind: "upload-ledger", path: "upload-attempts.json" };
+    const journalPath = path.join(stateDir, ".restore-transaction.json");
+    const journal = {
+      format: "sonicvhibez-restore-transaction",
+      version: 1,
+      createdAt: "2026-10-29T00:00:00.000Z",
+      entries: [
+        { target, action: "RESTORE_MISSING", newSha256, tempName: "upload-attempts.json.first.restore-tmp" },
+        { target, action: "RESTORE_MISSING", newSha256, tempName: "upload-attempts.json.second.restore-tmp" }
+      ]
+    };
+    fs.writeFileSync(journalPath, JSON.stringify(journal), { mode: 0o600 });
+    const backupPath = path.join(dir, "backup.json");
+    fs.writeFileSync(backupPath, validEmptyBackup, { mode: 0o600 });
+
+    await assert.rejects(
+      restoreState({ backupPath, rootDir: dir, confirm: "YES", now: Date.parse("2026-10-30T00:00:00.000Z") }),
+      /duplicate destinations/
+    );
+    assert.deepEqual(fs.readFileSync(destination), original,
+      "recovery must validate every journal entry before changing any destination");
+    assert.equal(fs.existsSync(journalPath), true,
+      "the invalid recovery journal must remain available for operator investigation");
+    assert.equal(fs.existsSync(path.join(stateDir, ".restore-operation.lock")), false,
+      "the operation lock is released after fail-closed journal validation");
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
