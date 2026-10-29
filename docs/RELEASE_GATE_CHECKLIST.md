@@ -1082,3 +1082,12 @@ At the candidate snapshot, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merg
 - [ ] Exhaustive DASH-001 per-control/form/route acceptance remains incomplete.
 - [ ] Cross-process worker contention and deployment/rollback drill remain unaccepted.
 - [ ] Production readiness remains blocked by unresolved external account/media/rights/approval/provider prerequisites.
+
+
+## Exact-SHA checkpoint — 29 October 2026
+
+- [x] 423 Node tests passed with zero failures/skips; 16 Python tests passed; npm audit reported zero vulnerabilities.
+- [x] Content quality, metadata, dashboard browser E2E, isolated main/candidate baseline and branch inventory passed at exact source/test SHA 713a876f0753b2200b69ebb566438728400ae017.
+- [x] Facebook workflow now explicitly labels its output as local-only and marks Meta provider-side draft creation/read-back BLOCKED_EXTERNAL.
+- [ ] Full DASH-001 per-control/form/route acceptance remains incomplete.
+- [ ] Production readiness remains blocked by external account identity, genuine media/rights, owner approvals and provider-side acceptance evidence.

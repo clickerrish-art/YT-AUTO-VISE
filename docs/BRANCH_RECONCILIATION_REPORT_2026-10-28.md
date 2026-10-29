@@ -222,3 +222,11 @@ The generated inventory is not a semantic merge review. Review of every branch-o
 - The implementation branch contains `c507b63abfa336165865ad01cf6354ae50254f04` ("test: restore Facebook draft history regression coverage") and `fd92b55415c8a630860dba5894dae705b19ef5ac` ("Cover symlinked Facebook history output parent regression"). The current branch file `test/restore-facebook-draft-history.test.mjs` exists with four tests, including symlinked output-parent safety; its content is similar to but not byte-identical to the main-only version.
 - The exact source/test candidate `dba98d78fb211a77ffb5df5410f77097218828cb` passed the full Node suite (422 tests, 0 failures, 0 skips), so this test is included and executed by the current `node --test` suite. This is evidence that the test exists and runs on the implementation branch, not a completed semantic review of all branch divergence.
 - No main edit, merge, rebase, reset, force-push, branch deletion or destructive reconciliation was performed. Maintainer approval remains required before any integration decision.
+
+
+## Exact-SHA workflow and test checkpoint — 29 October 2026, 14:52 UTC
+
+- Current tested source/test SHA: 713a876f0753b2200b69ebb566438728400ae017. `main` remains fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 2133 ahead / 2 behind / 179 changed files. PR #1 remains open, draft and unmerged.
+- Automation/security, content-quality, metadata, browser E2E, isolated baseline and branch inventory passed; 423 Node tests, zero failures/skips, 16 Python tests, npm audit zero vulnerabilities.
+- Facebook workflow has been renamed to explicitly indicate local draft-package validation. Provider-side draft creation/read-back remains BLOCKED_EXTERNAL; a skipped local-package job on PR is not treated as external acceptance.
+- Dashboard route-inventory and concurrency regression tests pass. Full semantic branch review and all mandatory dashboard acceptance remain incomplete.

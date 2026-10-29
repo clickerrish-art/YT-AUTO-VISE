@@ -1278,3 +1278,8 @@ At exact source/test SHA e64505ebf62f36ea6d7680324a04a6ba08f4ce9a, the real dash
 ## Exact-SHA concurrent draft/lease regression — 29 October 2026
 
 At source/test SHA dba98d78fb211a77ffb5df5410f77097218828cb, simultaneous identical draft submissions create exactly one queue item and one production job (one HTTP 201, one HTTP 409), and simultaneous worker claims produce exactly one lease grant and one durable audit event. Automation/security passed 422 Node tests, 0 failures/skips, 16 Python tests and npm audit 0 vulnerabilities. Content quality, metadata, browser E2E, isolated baseline and branch inventory passed. DASH-001 remains incomplete and production readiness remains blocked.
+
+
+## Facebook workflow acceptance boundary — 29 October 2026
+
+The workflow is now named "Validate daily Nature Frontiers local draft package". Its run summary distinguishes local draft generation from provider acceptance. On the exact tested SHA 713a876f0753b2200b69ebb566438728400ae017, the local validation workflow passed, but the provider-side draft creation/read-back requirement remains BLOCKED_EXTERNAL: no Meta API write or remote Page read-back was performed. A green local validation result must not be interpreted as external integration acceptance.
