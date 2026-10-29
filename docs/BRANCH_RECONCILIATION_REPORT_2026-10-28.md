@@ -9,8 +9,8 @@ A full-history inventory was rerun on live PR head `6562977544164e121671f5c635af
 - Final-tree changed files: **178**
 - Patch-equivalent branch commits: **0**
 - Final-tree deletions: **0**
-- Inventory workflow: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40856736722)
-- Full JSON/Markdown inventory: [artifact 12888729993](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40856736722/artifacts/12888729993)
+- Inventory workflow: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40856976846)
+- Full JSON/Markdown inventory: [artifact 12889427360](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40856976846/artifacts/12889427360)
 
 This inventory supersedes earlier branch-count snapshots for the exact HEAD above. The large divergence still requires human semantic review before any integration. The artifact records every branch-only and main-only commit, per-commit file status/path summaries, critical-module changes and deletion status. It is not approval to merge or rewrite history.
 
