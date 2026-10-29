@@ -1273,3 +1273,8 @@ The multiline route-inventory defect is fixed and covered by a regression test a
 ## Dashboard concurrency acceptance checkpoint — 29 October 2026
 
 At exact source/test SHA e64505ebf62f36ea6d7680324a04a6ba08f4ce9a, the real dashboard API test proves simultaneous worker-lease requests for the same job cannot both succeed and only the winning request creates a durable claim audit event. Automation/security passed 422 Node tests with zero failures/skips, 16 Python tests and npm audit with zero vulnerabilities. Content quality, metadata, dashboard E2E, isolated baseline and branch inventory passed. This does not complete DASH-001 or cross-process/deployment recovery acceptance. Production readiness remains blocked and no external publishing operation was performed.
+
+
+## Exact-SHA concurrent draft/lease regression — 29 October 2026
+
+At source/test SHA dba98d78fb211a77ffb5df5410f77097218828cb, simultaneous identical draft submissions create exactly one queue item and one production job (one HTTP 201, one HTTP 409), and simultaneous worker claims produce exactly one lease grant and one durable audit event. Automation/security passed 422 Node tests, 0 failures/skips, 16 Python tests and npm audit 0 vulnerabilities. Content quality, metadata, browser E2E, isolated baseline and branch inventory passed. DASH-001 remains incomplete and production readiness remains blocked.

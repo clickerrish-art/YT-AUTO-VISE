@@ -1070,3 +1070,15 @@ At the candidate snapshot, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merg
 - [ ] Full DASH-001 per-control/form/route behavior matrix remains incomplete.
 - [ ] Cross-process lease contention, restart recovery and operational deployment/rollback drill remain unaccepted.
 - [ ] Production readiness remains blocked by unresolved external account, media, rights, approval and provider prerequisites.
+
+
+## Exact-SHA concurrent draft/lease regression — 29 October 2026
+
+- [x] Multiline dashboard route inventory regression covered.
+- [x] Concurrent worker lease claims: one grant, one rejection, one durable audit event.
+- [x] Concurrent duplicate draft submission: one creation, one conflict, one queue item and one production job.
+- [x] Automation/security: 422 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities.
+- [x] Content quality, metadata, dashboard browser E2E, isolated baseline and branch inventory passed.
+- [ ] Exhaustive DASH-001 per-control/form/route acceptance remains incomplete.
+- [ ] Cross-process worker contention and deployment/rollback drill remain unaccepted.
+- [ ] Production readiness remains blocked by unresolved external account/media/rights/approval/provider prerequisites.

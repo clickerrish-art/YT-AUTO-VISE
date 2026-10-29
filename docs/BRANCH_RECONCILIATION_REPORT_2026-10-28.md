@@ -214,3 +214,11 @@ The generated inventory is not a semantic merge review. Review of every branch-o
 - Non-destructive branch inventory [run 40892739829](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40892739829) passed; it is machine-generated, not a completed human semantic review.
 - Exact-SHA automation/security, content-quality, metadata, dashboard browser E2E and isolated baseline passed. Full branch-only/base-only semantic review, patch equivalence, overlapping workflows/configuration/security changes and restore-history incident review remain open.
 - No merge, rebase, reset, force-push, branch deletion, main edit or destructive reconciliation was performed.
+
+
+## Restore-history test incident — verified branch comparison, 29 October 2026
+
+- `main` history contains commit `71578dafc24e5d48173dce3f4e392e18e42aa40e` ("Exercise cross-run history restoration with mocked GitHub artifact API", 24 October 2026) followed by `fa00d28e7f58911482686e4ad69fac9f4701a2e6` ("Revert unintended test-file write to default branch"). The test file is absent from current `main` at the latter SHA.
+- The implementation branch contains `c507b63abfa336165865ad01cf6354ae50254f04` ("test: restore Facebook draft history regression coverage") and `fd92b55415c8a630860dba5894dae705b19ef5ac` ("Cover symlinked Facebook history output parent regression"). The current branch file `test/restore-facebook-draft-history.test.mjs` exists with four tests, including symlinked output-parent safety; its content is similar to but not byte-identical to the main-only version.
+- The exact source/test candidate `dba98d78fb211a77ffb5df5410f77097218828cb` passed the full Node suite (422 tests, 0 failures, 0 skips), so this test is included and executed by the current `node --test` suite. This is evidence that the test exists and runs on the implementation branch, not a completed semantic review of all branch divergence.
+- No main edit, merge, rebase, reset, force-push, branch deletion or destructive reconciliation was performed. Maintainer approval remains required before any integration decision.
