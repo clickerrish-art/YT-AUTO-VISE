@@ -6,7 +6,7 @@ Current acceptance register: 50 PASS / 8 NOT_TESTED / 8 BLOCKED_EXTERNAL (66 tot
 
 Targeted implementation fixes on this candidate: upload log/ledger directory creation rejects symlinked ancestors; shared YouTube read-back validation checks exact remote video ID, channel ID, approved title and private visibility. The exact test candidate passed the mandatory suite after an intermediate stale source-guard assertion was corrected.
 
-Live refs at tested checkpoint: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; implementation branch `codex/marketing-machine-audit-fixes`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; 2,073 ahead / 2 behind / 175 changed files. PR #1 remains open, draft and unmerged. GitHub reports main branch protection disabled; owner/admin configuration is required.
+Live refs at tested checkpoint: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; implementation branch `codex/marketing-machine-audit-fixes`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; 2,081 ahead / 2 behind / 175 changed files. PR #1 remains open, draft and unmerged. GitHub reports main branch protection disabled; owner/admin configuration is required.
 
 Safety policy remains unchanged: no public/unattended YouTube publishing, no live Meta publishing, no campaign activation, no remote schedule changes without explicit per-record authorization, no visibility changes to satisfy Short association, Nature Frontiers never a YouTube target, Safari inactive, and the approved Selar destination remains `https://selar.com/0u19v8u99l`.
 
