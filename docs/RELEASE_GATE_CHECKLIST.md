@@ -1113,3 +1113,14 @@ At the candidate snapshot, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merg
 - [ ] DASH-001 remains incomplete: 105 controls, 15 forms and 37 protected API routes do not yet have complete behavior-specific acceptance evidence.
 - [ ] Production readiness remains blocked; the readiness workflow correctly fails closed. No live upload/post or provider-side Meta draft/read-back was performed.
 - [ ] Cross-process crash/restart and deployment/rollback drills, genuine rights-cleared assets and human approval, authenticated YouTube identity/history, authorized private upload, native Related-video verification, owner decisions and full semantic Git reconciliation remain outstanding.
+
+
+## Exact-SHA review receipt timestamp integrity — 29 October 2026
+
+- [x] Review creation rejects invalid `reviewedAt` timestamps; `isReviewCurrent` rejects persisted review receipts with invalid timestamps.
+- [x] Exact source/test SHA `115fe82252b4fa1ef1eb2f9587bf0653356a6dc9`: 426 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities.
+- [x] Content quality, metadata, 15 Chromium journeys, isolated main/candidate baseline and branch inventory passed.
+- [x] Acceptance register now has 69 requirements: 53 PASS, 8 NOT_TESTED, 8 BLOCKED_EXTERNAL.
+- [ ] DASH-001 full behavior-specific control/form/route acceptance remains incomplete.
+- [ ] Production readiness remains blocked by 13 prerequisites; provider-side Meta draft creation/read-back remains unperformed.
+- [ ] Cross-process recovery and deployment/rollback drills, genuine media/rights/human approval, authenticated YouTube identity/history, authorized private upload, native Related-video verification, owner decisions and full semantic Git reconciliation remain outstanding.
