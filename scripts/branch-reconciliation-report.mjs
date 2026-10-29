@@ -32,7 +32,7 @@ export function classifyCommit(commit, patchEquivalent = false) {
   let category = "mixed";
   if (patchEquivalent) category = "patch-equivalent-to-base";
   else if (files.length && files.every(file => file.startsWith("docs/") || /\.(md|rst|txt)$/i.test(file))) category = "documentation-only";
-  else if (files.length && files.every(file => /(^|\/)(test|tests|browser-tests)\//.test(file) || /\.(test|spec)\.[cm]?[jt]sx?$/.test(file)) category = "test-only";
+  else if (files.length && files.every(file => /(^|\/)(test|tests|browser-tests)\//.test(file) || /\.(test|spec)\.[cm]?[jt]sx?$/.test(file))) category = "test-only";
   else if (files.length && files.every(file => file.startsWith(".github/workflows/"))) category = "workflow-only";
   else if (files.length && files.every(file => /(^|\/)(config|content)\//.test(file) || /\.json$/i.test(file))) category = "config-content";
   else if (files.length && files.every(file => /(^|\/)(dist|build|coverage|artifacts)\//.test(file) || /(^|\/)(package-lock\.json|npm-shrinkwrap\.json)$/.test(file))) category = "generated-or-lockfile";
