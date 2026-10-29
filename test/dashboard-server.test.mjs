@@ -719,3 +719,83 @@ test("dashboard startup repairs legacy state that had an active Safari campaign"
   assert.equal(durable.campaigns.find(campaign => campaign.type === "safari_affiliate").status, "INACTIVE");
   assert.ok(durable.audit.some(event => event.action === "SAFARI_CAMPAIGN_POLICY_ENFORCED"));
 });
+
+test("every declared dashboard API mutation rejects missing operator authentication before input handling", async (t) => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-auth-matrix-"));
+  const token = "test-token-" + "a".repeat(48);
+  const port = 20000 + Math.floor(Math.random() * 20000);
+  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: {
+      ...process.env,
+      DASHBOARD_OPERATOR_TOKEN: token,
+      DASHBOARD_OPERATOR_ID: "test-auth-matrix",
+      DASHBOARD_STATE_DIR: stateDir,
+      UPLOAD_LOG_DIR: stateDir,
+      PORT: String(port),
+      DASHBOARD_HOST: "127.0.0.1",
+    },
+    stdio: ["ignore", "ignore", "pipe"],
+  });
+  let stderr = "";
+  child.stderr.setEncoding("utf8");
+  child.stderr.on("data", chunk => { stderr += chunk; });
+  const base = `http://127.0.0.1:${port}`;
+
+  try {
+    let healthy = false;
+    for (let attempt = 0; attempt < 100; attempt++) {
+      if (child.exitCode !== null) break;
+      try {
+        const response = await fetch(base + "/healthz", { signal: AbortSignal.timeout(500) });
+        if (response.status === 200) {
+          healthy = true;
+          break;
+        }
+      } catch {
+        // The server may still be binding its local test port.
+      }
+      await new Promise(resolve => setTimeout(resolve, 50));
+    }
+    assert.equal(healthy, true, "dashboard must start before authorization matrix runs; stderr: " + stderr);
+
+    const inventory = inventoryDashboardSources(
+      fs.readFileSync(path.join(process.cwd(), "public/dashboard.html"), "utf8"),
+      fs.readFileSync(path.join(process.cwd(), "scripts/dashboard-server.mjs"), "utf8"),
+    );
+    const mutatingRoutes = inventory.routes.filter(route =>
+      route.path.startsWith("/api/") && route.method !== "GET"
+    );
+    assert.equal(mutatingRoutes.length, 28, "all declared mutating API routes must be included in the auth matrix");
+
+    for (const route of mutatingRoutes) {
+      const response = await fetch(base + route.path, {
+        method: route.method,
+        headers: { "content-type": "application/json" },
+        body: "{}",
+        signal: AbortSignal.timeout(3000),
+      });
+      assert.equal(
+        response.status,
+        401,
+        `${route.acceptanceId} (${route.method} ${route.path}) must reject unauthenticated requests before validation or mutation`,
+      );
+      const payload = await response.json();
+      assert.match(String(payload.error ?? ""), /authentication required/i);
+    }
+  } finally {
+    child.kill("SIGTERM");
+    await new Promise(resolve => {
+      if (child.exitCode !== null || child.signalCode !== null) return resolve();
+      const timeout = setTimeout(() => {
+        child.kill("SIGKILL");
+        resolve();
+      }, 3000);
+      child.once("exit", () => {
+        clearTimeout(timeout);
+        resolve();
+      });
+    });
+    fs.rmSync(stateDir, { recursive: true, force: true });
+  }
+});
+
