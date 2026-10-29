@@ -720,7 +720,7 @@ test("dashboard startup repairs legacy state that had an active Safari campaign"
   assert.ok(durable.audit.some(event => event.action === "SAFARI_CAMPAIGN_POLICY_ENFORCED"));
 });
 
-test("every declared dashboard API mutation rejects missing and invalid operator authentication before input handling", async (t) => {
+test("every protected dashboard API route rejects missing and invalid operator authentication", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-auth-matrix-"));
   const token = "test-token-" + "a".repeat(48);
   const port = 20000 + Math.floor(Math.random() * 20000);
@@ -782,6 +782,31 @@ test("every declared dashboard API mutation rejects missing and invalid operator
           response.status,
           401,
           `${route.acceptanceId} (${route.method} ${route.path}) must reject ${authCase.label} before validation or mutation`,
+        );
+        const payload = await response.json();
+        assert.match(String(payload.error ?? ""), /authentication required/i);
+      }
+    }
+
+    const protectedReadRoutes = inventory.routes.filter(route =>
+      route.path.startsWith("/api/") && route.method === "GET"
+    );
+    assert.equal(protectedReadRoutes.length, 7, "all protected API read routes must be included in the auth matrix");
+
+    for (const route of protectedReadRoutes) {
+      for (const authCase of [
+        { label: "missing token", headers: {} },
+        { label: "invalid token", headers: { "x-operator-token": "invalid-token" } },
+      ]) {
+        const response = await fetch(base + route.path, {
+          method: "GET",
+          headers: authCase.headers,
+          signal: AbortSignal.timeout(3000),
+        });
+        assert.equal(
+          response.status,
+          401,
+          `${route.acceptanceId} (GET ${route.path}) must reject ${authCase.label}`,
         );
         const payload = await response.json();
         assert.match(String(payload.error ?? ""), /authentication required/i);
