@@ -1,3 +1,14 @@
+## Exact-SHA verification update — 29 October 2026
+
+- [x] Backup output symlink-ancestor regression implemented and covered by the mandatory Node suite at source/test candidate `6c08cf0e49647babe3583bedb2d44fffb660cd8f`.
+- [x] Content quality: 413 Node tests, 0 failures, 0 skips — [workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016430).
+- [x] Automation/security: 413 Node tests, 16 Python tests, locked installation, FFmpeg/ffprobe checks and npm audit with 0 vulnerabilities — [workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016434).
+- [x] Dashboard browser E2E: 15 Chromium tests — [workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016429).
+- [x] Metadata validation — [workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016477).
+- [x] Isolated main/candidate baseline — [workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016435).
+- [ ] Production readiness — intentionally blocked until mandatory prerequisites are proven; [workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016439).
+- [ ] Exhaustive dashboard/API acceptance, process-kill/power-loss recovery, deployment rollback, complete branch reconciliation and external provider acceptance remain open.
+
 ## Current gate status — 28 October 2026, 20:46 UTC
 
 - Latest tested source/test candidate: `379dd09a5990db6c64e94a51f9d7606013e2604d`.
