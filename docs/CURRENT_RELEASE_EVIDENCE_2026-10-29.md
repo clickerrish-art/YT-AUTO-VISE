@@ -1,41 +1,50 @@
-# Current implementation checkpoint — 29 October 2026 (exact candidate f363baeee5c)
+# Current implementation checkpoint — 29 October 2026 (exact candidate 726e3fca8d0)
 
-## Authoritative live refs
+## Authoritative live refs at the tested candidate
 
 - Implementation branch: `codex/marketing-machine-audit-fixes`
-- Exact tested source/test candidate: `f363baeee5c14c21c3980001980df0eddb330b5d`
-- Current PR head at this checkpoint: `f363baeee5c14c21c3980001980df0eddb330b5d`; later documentation-only commits will be explicitly distinguished from this tested candidate.
+- Exact tested source/test candidate: `726e3fca8d0a1a79a76f9d04fefcd440b83f52cc`
 - `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged by this work)
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
-- Compare snapshot before documentation refresh: 2,081 ahead / 2 behind / 175 changed files; complete commit-by-commit reconciliation remains incomplete.
+- Full-history comparison at this candidate: 2,094 branch-only commits / 2 main-only commits / 178 final-tree changed files.
 - PR #1 remains open, draft, and unmerged: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1
 - GitHub reports `main` unprotected and required status-check enforcement off. Owner/admin action is required to configure protection; no settings were changed.
+- Later commits after this exact source/test candidate update release documentation only; they are not represented as new application-code validation.
 
 ## Implemented code and regression
 
-- [`49e1df2`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/49e1df25d6a512eb31b6b48132c5a3880f9010cb): upload log/ledger directory now uses `ensureSafeDirectoryPath`, rejecting symlinked path components before creating recovery-state descendants.
-- [`941a27a`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/941a27a3d8eed2cc51c7842759595dd2d479a35c): regression test confirms a symlinked ancestor is rejected and no nested log directory/artifacts are created through the link.
-- [`b70cdf6`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/b70cdf6e510cf7a959ecadc3ab8a9fc7ac9cc2a1) and [`22ee0e7`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/22ee0e755f339d3850fb1ea3f75afb470e1e6ed8): centralized remote YouTube read-back validation and require the exact remote video ID, verified channel ID, approved title, and private visibility.
-- [`78a4b86`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/78a4b8625532ef9f040c1eef1b5b341b2ed7274b) adds direct field-mismatch tests. An intermediate source-guard assertion failed after centralization; [`f363bae`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/f363baeee5c14c21c3980001980df0eddb330b5d) corrected the assertion to target the shared verifier. The corrected exact candidate passed CI.
-- These are targeted safety improvements, not proof of live provider acceptance, complete history reconciliation, or all file operations being race-free.
+- [`49e1df2`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/49e1df25d6a512eb31b6b48132c5a3880f9010cb): upload log/ledger directory now uses the symlink-rejecting directory validator.
+- [`22ee0e7`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/22ee0e755f339d3850fb1ea3f75afb470e1e6ed8): centralized YouTube read-back validation checks exact remote video ID, verified channel ID, approved title, and private visibility.
+- [`78a4b86`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/78a4b8625532ef9f040c1eef1b5b341b2ed7274b) adds direct mismatch tests; [`f363bae`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/f363baeee5c14c21c3980001980df0eddb330b5d) fixes a stale source-guard assertion exposed by the refactor.
+- [`351195b`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/351195b3a0b1ba27aae0f9e445907cbcfe85bf1a), [`e8a0dc4`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e8a0dc42a06939004737ac75114b0340050a64bc), [`2699f41`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/2699f4152f7e0f252a46fe6aa6ba55018b6bb885), [`e33f96f`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e33f96f54880a640fab4ddbd934f619d7ac23a81), and [`726e3fc`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/726e3fca8d0a1a79a76f9d04fefcd440b83f52cc) add a tested full-history Git reconciliation inventory tool, CLI, test, and artifact workflow. The first inventory workflow exposed a syntax error; it was fixed and the rerun passed.
 
 ## Exact-candidate CI
 
-All listed runs below target `f363baeee5c14c21c3980001980df0eddb330b5d`:
+All listed runs below target `726e3fca8d0a1a79a76f9d04fefcd440b83f52cc`:
 
-- Automation/security: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40854698985) — 419 Node tests, 0 failures, 0 skipped; 16 Python tests passed; npm audit reported 0 vulnerabilities; normal lifecycle install, syntax/compile and FFmpeg/ffprobe checks passed.
-- Content quality: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40854699039).
-- Metadata validation: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40854699028).
-- Dashboard Chromium E2E: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40854698955) — 15 journeys; not exhaustive per-control acceptance.
-- Isolated main/candidate baseline: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40854698991).
-- Production readiness: [BLOCKED as designed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40854698976); the workflow preserved a diagnostic artifact and returned exit code 2 for missing prerequisites.
-- Facebook daily draft: [local candidate validation passed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40854698962); external provider draft-creation job was skipped, so this is not proof of a real Meta draft.
+- Automation/security: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917680) — 420 Node tests, 0 failures, 0 skipped; 16 Python tests passed; npm audit reported 0 vulnerabilities; normal lifecycle install, syntax/compile and FFmpeg/ffprobe checks passed.
+- Content quality: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917761).
+- Metadata validation: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917638).
+- Dashboard Chromium E2E: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917580) — 15 journeys; not exhaustive per-control acceptance.
+- Isolated main/candidate baseline: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917554).
+- Full-history branch inventory: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917617); retained [machine-readable JSON and human-readable Markdown artifact 12889820366](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917617/artifacts/12889820366).
+- Production readiness: [BLOCKED as designed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917557); diagnostic artifact retained and gate returned exit code 2 for unmet prerequisites.
+- Facebook daily draft: [local candidate validation passed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917596); external provider draft-creation job was skipped, so this is not proof of a real Meta draft.
+
+## Branch inventory results
+
+- 2,094 branch-only commits and 2 main-only commits were inventoried.
+- 0 patch-equivalent branch commits were detected by `git cherry`.
+- 178 final-tree file changes, 17 critical-path changes, 0 final-tree deletions; working tree was clean during report generation.
+- Heuristic categories: 900 documentation-only, 493 implementation, 455 test-only, 89 workflow-only, 58 config/content, 28 implementation-and-tests, and 71 mixed.
+- The two main-only commits are the historical restore Facebook draft test incident: `71578dafc24e5d48173dce3f4e392e18e42aa40e` added the test and `fa00d28e7f58911482686e4ad69fac9f4701a2e6` reverted the unintended write. The implementation branch retains the test; `tests/restore-state.test.mjs` is retained too.
+- This is a complete commit/file inventory but **not** completed human semantic review. Classification and patch-equivalence are heuristic, and the large divergence is not approved for merge.
 
 ## Current acceptance status
 
-The machine-readable register now has 66 requirements: 50 PASS, 8 NOT_TESTED, 8 BLOCKED_EXTERNAL. `UPLOAD-LOG-PATH-001` is PASS only for the targeted symlink rejection criterion. `YT-READBACK-001` is PASS for shared read-back validation and its field-mismatch tests; actual provider-side upload acceptance remains blocked. `DASH-001` remains NOT_TESTED: the 105-control / 15-form / 38-route inventory is not exhaustive acceptance. `STATE-001` remains NOT_TESTED because process termination at every transaction boundary, disk-full/permission-failure drills, deployment rollback and power-loss durability are not fully demonstrated.
+The machine-readable register has 67 requirements: 51 PASS, 8 NOT_TESTED, 8 BLOCKED_EXTERNAL. `GIT-INVENTORY-001` is PASS for reproducible inventory generation, but the human integration review remains outstanding. `UPLOAD-LOG-PATH-001` and `YT-READBACK-001` are PASS only for their targeted code criteria; they do not constitute a live upload acceptance. `DASH-001` remains NOT_TESTED: the 105-control / 15-form / 38-route inventory is not exhaustive acceptance. `STATE-001` remains NOT_TESTED because process termination at every transaction boundary, disk-full/permission-failure drills, deployment rollback and power-loss durability are not fully demonstrated.
 
-External acceptance remains blocked for real rights-cleared production media and human review, verified YouTube OAuth/channel/history and a separately authorized private upload with provider read-back, native Short-parent association evidence, actual Meta Page/Instagram identity and provider draft read-back, owner-approved feasible cadence, per-record owner decisions for existing Metricool schedules, and full Git history reconciliation. Safari remains inactive. Nature Frontiers remains prohibited as a YouTube target. Public/unattended YouTube publishing and live Meta publishing remain disabled. The approved Selar URL remains `https://selar.com/0u19v8u99l`.
+External acceptance remains blocked for real rights-cleared production media and human review, verified YouTube OAuth/channel/history and a separately authorized private upload with provider read-back, native Short-parent association evidence, actual Meta Page/Instagram identity and provider draft read-back, owner-approved feasible cadence, and per-record owner decisions for existing Metricool schedules. Safari remains inactive. Nature Frontiers remains prohibited as a YouTube target. Public/unattended YouTube publishing and live Meta publishing remain disabled. The approved Selar URL remains `https://selar.com/0u19v8u99l`.
 
 ## Release decision
 
