@@ -1,3 +1,46 @@
+# Current implementation checkpoint — 29 October 2026 (exact candidate 941a27a)
+
+## Authoritative live refs
+
+- Implementation branch: `codex/marketing-machine-audit-fixes`
+- Exact tested source/test candidate: `941a27a3d8eed2cc51c7842759595dd2d479a35c`
+- Current PR head at checkpoint: `941a27a3d8eed2cc51c7842759595dd2d479a35c`
+- `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged by this work)
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
+- Compare snapshot: 2,069 ahead / 2 behind / 175 changed files; full commit-by-commit reconciliation remains incomplete.
+- PR #1 remains open, draft, and unmerged: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1
+- GitHub reports `main` unprotected and required status-check enforcement off. Owner/admin action is required to configure protection; no settings were changed.
+
+## Implemented code and regression
+
+- [`49e1df2`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/49e1df25d6a512eb31b6b48132c5a3880f9010cb): upload log/ledger directory now uses `ensureSafeDirectoryPath`, rejecting symlinked path components before creating recovery-state descendants.
+- [`941a27a`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/941a27a3d8eed2cc51c7842759595dd2d479a35c): regression test confirms a symlinked ancestor is rejected and no nested log directory/artifacts are created through the link.
+- This is a targeted filesystem-safety fix. It does not prove all file operations are race-free or accept the overall upload/recovery workflow.
+
+## Exact-candidate CI
+
+All listed runs below target `941a27a3d8eed2cc51c7842759595dd2d479a35c`:
+
+- Automation/security: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40853611089) — 418 Node tests, 0 failures, 0 skipped; 16 Python tests passed; npm audit reported 0 vulnerabilities; normal lifecycle install, syntax/compile and FFmpeg/ffprobe checks passed.
+- Content quality: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40853611152) — exact-candidate workflow passed.
+- Metadata validation: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40853611243) — exact-candidate workflow passed.
+- Dashboard Chromium E2E: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40853611166) — 15 journeys; not exhaustive per-control acceptance.
+- Isolated main/candidate baseline: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40853603924).
+- Production readiness: [BLOCKED as designed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40853611139); missing production prerequisites must not be bypassed.
+- Facebook daily draft: [local candidate validation passed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40853611134); external provider draft-creation job was skipped, so this is not proof of a real Meta draft.
+
+## Current acceptance status
+
+The machine-readable register now has 65 requirements: 49 PASS, 8 NOT_TESTED, 8 BLOCKED_EXTERNAL. The new `UPLOAD-LOG-PATH-001` is PASS only for the targeted symlink rejection criterion. `DASH-001` remains NOT_TESTED: the 105-control / 15-form / 38-route inventory is not exhaustive acceptance. `STATE-001` remains NOT_TESTED because process termination at every transaction boundary, disk-full/permission-failure drills, deployment rollback and power-loss durability are not fully demonstrated.
+
+External acceptance remains blocked for real rights-cleared production media and human review, verified YouTube OAuth/channel/history and a separately authorized private upload with read-back, native Short-parent association evidence, actual Meta Page/Instagram identity and provider draft read-back, owner-approved feasible cadence, and per-record owner decisions for existing Metricool schedules. Safari remains inactive. Nature Frontiers remains prohibited as a YouTube target. Public/unattended YouTube publishing and live Meta publishing remain disabled. The approved Selar URL remains `https://selar.com/0u19v8u99l`.
+
+## Release decision
+
+**PARTIALLY ACCEPTED — NOT PRODUCTION READY.** No live upload, post, visibility change, campaign activation, remote schedule mutation, PR merge, main edit, or destructive Git operation occurred. Historical sections below are retained as historical evidence and must not supersede this checkpoint.
+
+---
+
 # Exact source/test checkpoint — 29 October 2026, 07:23 UTC
 
 ## Current tested candidate
