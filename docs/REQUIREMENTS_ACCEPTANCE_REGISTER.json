@@ -1262,7 +1262,9 @@
         "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917596",
         "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917554",
         "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917617",
-        "branchInventoryArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917617/artifacts/12889820366"
+        "branchInventoryArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917617/artifacts/12889820366",
+        "branchInventoryLatest": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40856512307",
+        "branchInventoryLatestArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40856512307/artifacts/12889741334"
       }
     },
     "evidence": {
@@ -1300,7 +1302,11 @@
     "candidateSourceTestSha": "726e3fca8d0a1a79a76f9d04fefcd440b83f52cc",
     "latestChangeTestStatus": "PASS",
     "latestChangeTestReason": "Added a tested Git-based reconciliation inventory generator and workflow (351195b3a0b1ba27aae0f9e445907cbcfe85bf1a, e8a0dc42a06939004737ac75114b0340050a64bc, 2699f4152f7e0f252a46fe6aa6ba55018b6bb885, e33f96f54880a640fab4ddbd934f619d7ac23a81, 726e3fca8d0a1a79a76f9d04fefcd440b83f52cc). The first workflow run exposed a syntax error in the classifier; fixed on 726 and rerun passed. Exact candidate passed 420 Node tests, zero failures/skips; 16 Python tests; npm audit 0 vulnerabilities; content quality, metadata, 15 Chromium journeys, isolated main/candidate baseline and full-history branch inventory. Report artifact 12889820366 contains full JSON and Markdown inventories. Human integration review remains required.",
-    "latestDocumentedPrHeadBeforeRegisterRefresh": "7f896d82de45a506d904948ba8e86df8ad887cf3",
-    "observedBranchHeadBeforeRegisterRefresh": "634c9add5e889e02cd45986205a2197605be7b8b"
+    "latestDocumentedPrHeadBeforeRegisterRefresh": "c13537e69d10e1fb7f4b2dc2e07fcb0a746f885b",
+    "observedBranchHeadBeforeRegisterRefresh": "634c9add5e889e02cd45986205a2197605be7b8b",
+    "latestLiveBranchHeadBeforeRegisterRefresh": "c13537e69d10e1fb7f4b2dc2e07fcb0a746f885b",
+    "latestLiveAheadBy": 2101,
+    "latestLiveBehindBy": 2,
+    "latestLiveChangedFiles": 178
   }
 }
