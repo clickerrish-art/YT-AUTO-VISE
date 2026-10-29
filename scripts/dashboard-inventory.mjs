@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { createHash } from "node:crypto";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -15,6 +16,16 @@ function attributesOf(raw) {
   return attributes;
 }
 
+function stableAcceptanceId(kind, identity, occurrences) {
+  const normalized = String(identity || "anonymous").trim().toLowerCase();
+  const slug = normalized.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48) || "anonymous";
+  const digest = createHash("sha256").update(kind + ":" + normalized).digest("hex").slice(0, 8);
+  const base = kind + "-" + slug + "-" + digest;
+  const occurrence = (occurrences.get(base) ?? 0) + 1;
+  occurrences.set(base, occurrence);
+  return occurrence === 1 ? base : base + "-" + occurrence;
+}
+
 function lineAt(source, index) {
   return source.slice(0, index).split("\n").length;
 }
@@ -25,12 +36,21 @@ function lineAt(source, index) {
  */
 export function inventoryDashboardSources(html, server) {
   const controls = [];
+  const controlIds = new Map();
   const controlExpression = /<(button|input|select|textarea)\b([^>]*)>/gi;
   for (const match of html.matchAll(controlExpression)) {
     const attributes = attributesOf(match[2]);
     const tag = match[1].toLowerCase();
+    const identity = attributes.id
+      ? "id:" + attributes.id
+      : attributes.name
+        ? "name:" + attributes.name + "|tag:" + tag
+        : attributes["aria-label"]
+          ? "aria:" + attributes["aria-label"] + "|tag:" + tag
+          : "tag:" + tag + "|type:" + (attributes.type ?? "unspecified") + "|form:" + (attributes.form ?? "default");
     controls.push({
       index: controls.length + 1,
+      acceptanceId: stableAcceptanceId("control", identity, controlIds),
       tag,
       line: lineAt(html, match.index),
       id: typeof attributes.id === "string" ? attributes.id : null,
@@ -43,10 +63,17 @@ export function inventoryDashboardSources(html, server) {
   }
 
   const forms = [];
+  const formIds = new Map();
   for (const match of html.matchAll(/<form\b([^>]*)>/gi)) {
     const attributes = attributesOf(match[1]);
+    const identity = attributes.id
+      ? "id:" + attributes.id
+      : attributes.name
+        ? "name:" + attributes.name
+        : "method:" + (attributes.method ?? "GET") + "|action:" + (attributes.action ?? "default");
     forms.push({
       index: forms.length + 1,
+      acceptanceId: stableAcceptanceId("form", identity, formIds),
       line: lineAt(html, match.index),
       id: typeof attributes.id === "string" ? attributes.id : null,
       name: typeof attributes.name === "string" ? attributes.name : null,
@@ -56,14 +83,18 @@ export function inventoryDashboardSources(html, server) {
   }
 
   const routes = [];
+  const routeIds = new Map();
   const routeExpression = /if\s*\(([^\n]*url\.pathname\s*===\s*["']([^"']+)["'][^\n]*)\)/g;
   for (const match of server.matchAll(routeExpression)) {
     const methodMatch = match[1].match(/req\.method\s*===\s*["'](GET|POST|PUT|PATCH|DELETE)["']/);
+    const method = methodMatch?.[1] ?? "METHOD_NOT_INLINE";
+    const routePath = match[2];
     routes.push({
       index: routes.length + 1,
+      acceptanceId: stableAcceptanceId("route", method + ":" + routePath, routeIds),
       line: lineAt(server, match.index),
-      method: methodMatch?.[1] ?? "METHOD_NOT_INLINE",
-      path: match[2],
+      method,
+      path: routePath,
       condition: match[1].trim(),
     });
   }
