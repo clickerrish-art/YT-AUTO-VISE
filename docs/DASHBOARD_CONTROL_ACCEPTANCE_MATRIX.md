@@ -1,3 +1,13 @@
+## Controlled interrupted-restore process termination — 29 October 2026
+
+- **Exact source/test candidate:** 1e55ac4e231db83fa77b6a5f8b5d50997e992c79.
+- A separate Node process is terminated immediately after it commits the dashboard-state destination and before normal transaction cleanup. The test confirms that the durable journal and lock remain.
+- Only after the child process has exited does the test model explicit operator confirmation and remove the stale lock. A subsequent restore invocation rolls back to byte-identical original state, clears the journal and releases its own lock.
+- Exact candidate evidence: [content quality — 414 Node tests, zero failures/skips](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466179), [automation/security — 414 Node tests, 16 Python tests and zero npm vulnerabilities](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466090), [dashboard E2E — 15 Chromium tests](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466165), [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466158), [isolated baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831466115).
+- **Scope limit:** this is one controlled transaction boundary, not a complete kill-at-every-boundary, power-loss, disk-full or deployment rollback drill. STATE-001 remains NOT_TESTED.
+
+---
+
 ## Backup output path symlink hardening — 29 October 2026
 
 - **Exact source/test candidate:** `6c08cf0e49647babe3583bedb2d44fffb660cd8f`.
