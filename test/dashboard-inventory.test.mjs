@@ -49,6 +49,18 @@ test("dashboard inventory preserves duplicate method/path declarations rather th
   ]);
 });
 
+test("dashboard inventory detects multiline literal route conditions", () => {
+  const inventory = inventoryDashboardSources(
+    "",
+    'if (\\n  req.method === "POST" &&\\n  url.pathname === "/api/multiline"\\n) { }',
+  );
+
+  assert.equal(inventory.counts.routes, 1);
+  assert.equal(inventory.routes[0].method, "POST");
+  assert.equal(inventory.routes[0].path, "/api/multiline");
+  assert.notEqual(inventory.routes[0].method, "METHOD_NOT_INLINE");
+});
+
 test("dashboard acceptance IDs are unique and stable when unrelated declarations are inserted", () => {
   const originalHtml = '<button id="save">Save</button><input name="caption"><form id="review"><button id="approve" type="submit">Approve</button></form>';
   const originalServer = 'if (req.method === "GET" && url.pathname === "/health") {}\nif (req.method === "POST" && url.pathname === "/jobs") {}';
