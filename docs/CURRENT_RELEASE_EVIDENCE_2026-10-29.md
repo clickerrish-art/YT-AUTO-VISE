@@ -1,3 +1,44 @@
+# Exact source/test checkpoint — 29 October 2026, 07:23 UTC
+
+## Current tested candidate
+
+- **Exact source/test SHA:** `71e84d211adacaeb8fed8865a24950101c2fa452`.
+- Source fix: `76c3b2cf1d08b36c3a44f8079d8bffbbae7ad57b` updates `scripts/dashboard-inventory.mjs` to scan opening tags while respecting quoted attribute values and ignoring commented-out markup. This prevents a literal `>` inside an `aria-label` or form `action` from truncating the tag and distorting the static inventory.
+- Regression test: `71e84d211adacaeb8fed8865a24950101c2fa452` adds coverage for quoted greater-than characters and commented-out example markup.
+- Static inventory remains explicitly labelled as declaration inventory only, not proof that every dashboard control or API route is functionally accepted.
+
+## Exact-SHA CI
+
+- Automation/security **PASS** — [run 40835085920](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40835085920): **417 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; npm audit reported 0 vulnerabilities**.
+- Content quality **PASS** — [run 40835085840](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40835085840): 417 Node tests, 0 failures, 0 skips.
+- Metadata validation **PASS** — [run 40835085797](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40835085797): passed.
+- Dashboard browser E2E **PASS** — [run 40835086030](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40835086030): 15 Chromium journeys.
+- Isolated main/candidate baseline **PASS** — [run 40835085938](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40835085938): both exact checkouts passed their configured Node/Python baseline commands.
+- Production readiness **BLOCKED / fail-closed** — [run 40835086060](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40835086060). This is not a test-suite pass or production acceptance.
+- Nature Frontiers draft workflow — [run 40835085907](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40835085907): deterministic local draft validation passed; external provider draft creation was skipped, so no real Meta integration acceptance is claimed.
+
+## Live repository state at tested candidate
+
+- PR #1 remains [open, draft and unmerged](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1).
+- `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Branch comparison: **2,068 commits ahead / 2 behind / 175 changed files**. Full non-destructive branch-history reconciliation is still required before any merge decision.
+- After this evidence refresh, any later HEAD is documentation-only relative to the exact tested source/test candidate; do not claim the documentation commit itself is a new source/test candidate.
+
+## Still blocked / not accepted
+
+- Exhaustive per-control/per-route dashboard/API acceptance.
+- Crash/restart coverage at every transaction boundary and production-like backup/restore/deployment rollback drills.
+- Genuine rights-cleared production media, final rendered assets and full human playback/factual/rights review.
+- Secure verification of the SonicVhibez YouTube OAuth identity, complete public/private/unlisted history, reconciliation of uncertain upload attempts, explicit per-operation private-upload authorization and verified remote receipt.
+- Native Short-to-parent Related-video eligibility/association.
+- Verified Meta identities/permissions and a successful external draft-only integration test.
+- Owner-approved feasible cadence, with the mandatory minimum of 72 full hours between any two promotional publication timestamps.
+- Full branch-history integration review.
+
+No upload or post was published, no campaign was activated, no visibility was changed, `main` was not edited, and PR #1 was not merged. Public/unattended YouTube publishing and live Meta publishing remain disabled; Nature Frontiers remains prohibited as a YouTube target; Safari remains inactive; the approved Wildlife Creator's Vault Selar destination remains unchanged.
+
+---
+
 ## Live implementation checkpoint — 29 October 2026, 07:01 UTC
 
 - **Exact tested source/test SHA:** `bc02a73c2bfc39faa11990468778bb98372a551c`. This is the application/test candidate; subsequent documentation commits do not change it.
