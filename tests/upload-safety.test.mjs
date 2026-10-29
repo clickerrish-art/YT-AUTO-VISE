@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { validateUploadApproval, validateOneShotUploadAuthorization, assertReconciliationOnlyHasPriorAttempt, verifyRetainedRightsEvidence, sha256File, resolveRegularFileNoSymlinks, resolveRepositoryFileNoSymlinks, prepareUploadLogDirectory } from "../scripts/upload-private.mjs";
+import { validateUploadApproval, validateOneShotUploadAuthorization, assertReconciliationOnlyHasPriorAttempt, verifyRetainedRightsEvidence, sha256File, resolveRegularFileNoSymlinks, resolveRepositoryFileNoSymlinks, prepareUploadLogDirectory, remoteUploadMatchesApprovedMetadata } from "../scripts/upload-private.mjs";
 
 test("YouTube uploader is private-only and binds upload to the verified SonicVhibez channel", () => {
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
@@ -206,4 +206,16 @@ test("upload log directory creation rejects symlinked ancestors before ledger or
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
+});
+
+
+test("remote YouTube read-back must match exact video ID, channel, approved title and private visibility", () => {
+  const expected = { videoId: "video-accepted-001", channelId: "UC" + "A".repeat(22), title: "Approved wildlife documentary" };
+  const remote = { id: expected.videoId, snippet: { channelId: expected.channelId, title: expected.title }, status: { privacyStatus: "private" } };
+  assert.equal(remoteUploadMatchesApprovedMetadata(remote, expected), true);
+  assert.equal(remoteUploadMatchesApprovedMetadata({ ...remote, id: "other-video" }, expected), false);
+  assert.equal(remoteUploadMatchesApprovedMetadata({ ...remote, snippet: { ...remote.snippet, channelId: "UC" + "B".repeat(22) } }, expected), false);
+  assert.equal(remoteUploadMatchesApprovedMetadata({ ...remote, snippet: { ...remote.snippet, title: "Different title" } }, expected), false);
+  assert.equal(remoteUploadMatchesApprovedMetadata({ ...remote, status: { privacyStatus: "unlisted" } }, expected), false);
+  assert.equal(remoteUploadMatchesApprovedMetadata(null, expected), false);
 });
