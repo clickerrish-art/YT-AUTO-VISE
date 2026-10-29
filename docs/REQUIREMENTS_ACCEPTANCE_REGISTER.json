@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-29T07:01:00Z",
-  "evidencePolicy": "Exact application/test candidate bc02a73c2bfc39faa11990468778bb98372a551c adds stable semantic dashboard acceptance IDs and regression tests. Exact-SHA CI: 416 Node tests pass, zero failures/skips; 16 Python tests pass; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax/compile, metadata, content quality, dashboard browser E2E and isolated baseline comparison pass. Production readiness remains blocked. Meta workflow validates local draft-only content; provider creation is skipped on candidate branch. See current release evidence for run links. DASH-001 remains NOT_TESTED.",
+  "recordedAt": "2026-10-29T09:58:00Z",
+  "evidencePolicy": "Latest exact source/test candidate 941a27a3d8eed2cc51c7842759595dd2d479a35c adds symlink-safe upload log directory creation and a regression test. Exact-SHA automation/security passed 418 Node tests, 0 failures, 0 skips; 16 Python tests passed; npm audit reported 0 vulnerabilities; syntax/compile, campaign validation and FFmpeg/ffprobe checks passed. Content-quality, metadata, 15 Chromium dashboard journeys and isolated main/candidate baseline comparison passed. Production readiness remains intentionally fail-closed; Meta provider draft creation was skipped. DASH-001 remains NOT_TESTED; real provider and production-media acceptance remain blocked.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -1174,38 +1174,59 @@
       "nextAction": "Extend controlled process termination across each transaction boundary, add disk-full and permission-failure drills, and separately exercise power-loss durability. This targeted acceptance does not replace STATE-001.",
       "assessmentCommitSha": "1e55ac4e231db83fa77b6a5f8b5d50997e992c79",
       "acceptanceCriterion": "A separate process exits immediately after a destination commit, leaving the journal and lock. After operator-confirmed lock cleanup, recovery restores the exact original bytes, clears the journal, and releases its own lock."
+    },
+    {
+      "id": "UPLOAD-LOG-PATH-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "The private-upload recovery ledger and operation lock directory must reject symlinked ancestors before creating or writing upload state.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/49e1df25d6a512eb31b6b48132c5a3880f9010cb",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/941a27a3d8eed2cc51c7842759595dd2d479a35c",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40853611089"
+      ],
+      "nextAction": "Retain this regression. Continue auditing other file-operation entry points and TOCTOU risks; this targeted filesystem-safety pass does not prove live YouTube acceptance or full crash recovery.",
+      "assessmentCommitSha": "941a27a3d8eed2cc51c7842759595dd2d479a35c",
+      "acceptanceCriterion": "Upload log directory creation must reject any symlinked ancestor before creating descendant directories, ledger files or operation locks."
     }
   ],
   "currentCheckpoint": {
-    "applicationCodeSha": "852eb1087cc4a06bafb80d70760ec9915817fe79",
-    "testedSha": "852eb1087cc4a06bafb80d70760ec9915817fe79",
-    "checkpointPrHead": "634c9add5e889e02cd45986205a2197605be7b8b",
+    "applicationCodeSha": "941a27a3d8eed2cc51c7842759595dd2d479a35c",
+    "testedSha": "941a27a3d8eed2cc51c7842759595dd2d479a35c",
+    "checkpointPrHead": "941a27a3d8eed2cc51c7842759595dd2d479a35c",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 1967,
+    "aheadBy": 2069,
     "behindBy": 2,
-    "changedFiles": 172,
+    "changedFiles": 175,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "DASHBOARD OVERSIZED-BODY STATUS FIX IMPLEMENTED / EXACT-CANDIDATE AUTOMATED SUITES AND BASELINE PASS / DOCUMENTATION-ONLY DESCENDANTS VERIFIED / DASH-001 INCOMPLETE / PRODUCTION BLOCKED",
+    "verdict": "TARGETED UPLOAD-LOG SYMLINK SAFETY FIX IMPLEMENTED / EXACT-CANDIDATE CI AND BASELINE PASS / DASH-001 INCOMPLETE / EXTERNAL ACCEPTANCE BLOCKED / PRODUCTION NOT READY",
     "ci": {
       "automationSecurity": "PASS",
-      "nodeTests": 401,
+      "nodeTests": 418,
       "nodeFailures": 0,
       "nodeSkipped": 0,
       "pythonTests": 16,
       "npmAuditVulnerabilities": 0,
-      "ffmpegVersion": "6.1.1-3ubuntu5",
-      "contentQuality": "PASS (401/401; 0 failures; 0 skips)",
-      "metadata": "PASS (401/401; 0 failures; 0 skips)",
-      "dashboardE2e": "PASS (15 Chromium tests; not exhaustive per-control acceptance)",
-      "isolatedBaseline": "PASS on exact source/test candidate 852eb1087cc4a06bafb80d70760ec9915817fe79; both main and candidate locked installs, Node tests and Python tests exited 0. Run 40675312543; artifact 12809887903, ZIP SHA-256 56159f21e0f951549990e321bc824d25977662a876e489d2c26e5ad134132b4a",
-      "productionReadiness": "BLOCKED (fail-closed; run 40675312615)",
-      "facebookDraftWorkflow": "PASS for local validation; external draft creation job SKIPPED (run 40675312494)",
-      "dashboardUnsupportedContentTypeRegression": "PASS",
-      "dashboardOversizedBodyStatus": "PASS (HTTP 413 regression on exact candidate)",
-      "restoreRollbackFixture": "PASS; prior evidence remains tied to its own exact SHA"
+      "contentQuality": "PASS on exact candidate (418/418; 0 failures; 0 skips)",
+      "metadata": "PASS on exact candidate (418/418; 0 failures; 0 skips)",
+      "dashboardE2e": "PASS (15 Chromium journeys; not exhaustive per-control acceptance)",
+      "isolatedBaseline": "PASS on exact candidate 941a27a3d8eed2cc51c7842759595dd2d479a35c; run 40853603924",
+      "productionReadiness": "BLOCKED as designed; run 40853611139",
+      "facebookDraftWorkflow": "PASS for local validation; external draft creation job SKIPPED; run 40853611134",
+      "uploadLogSymlinkRegression": "PASS: test rejects symlinked upload log ancestors and verifies no directory/artifacts are created through the link",
+      "evidence": {
+        "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40853611089",
+        "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40853611152",
+        "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40853611243",
+        "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40853611166",
+        "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40853611139",
+        "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40853611134",
+        "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40853603924"
+      }
     },
     "evidence": {
       "automation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40675312590",
@@ -1223,11 +1244,13 @@
       "697bd2afed660c2874a4fb53844aa5286e556d74",
       "c1bfed46607ab40a006483997e353ef65102d1ac",
       "290888193caa2b64b1f5c3f3497176175ecdc2b7",
-      "4d003f320df0f1d26c5b46dcb2a0c545cfec785c"
+      "4d003f320df0f1d26c5b46dcb2a0c545cfec785c",
+      "49e1df25d6a512eb31b6b48132c5a3880f9010cb",
+      "941a27a3d8eed2cc51c7842759595dd2d479a35c"
     ],
-    "candidateSourceTestSha": "852eb1087cc4a06bafb80d70760ec9915817fe79",
+    "candidateSourceTestSha": "941a27a3d8eed2cc51c7842759595dd2d479a35c",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Fixed dashboard API oversized JSON body response to use HTTP 413 instead of generic 400; updated the end-to-end dashboard API regression assertion. Exact candidate 852eb1087cc4a06bafb80d70760ec9915817fe79 passed automation/security (401 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe 6.1.1), content quality 401/401 with zero skips, metadata 401/401 with zero skips, 15 Chromium browser journeys, and isolated main/candidate baseline (both main and candidate Node/Python commands exited 0; artifact 12809887903; ZIP SHA-256 56159f21e0f951549990e321bc824d25977662a876e489d2c26e5ad134132b4a). Production readiness remains fail-closed; external Meta draft creation was skipped.",
+    "latestChangeTestReason": "Added prepareUploadLogDirectory using the existing symlink-rejecting ensureSafeDirectoryPath helper before ledger/lock writes. Regression in tests/upload-safety.test.mjs verifies symlinked ancestors are rejected and no nested logs are created through the target. Exact candidate 941a27a3d8eed2cc51c7842759595dd2d479a35c passed automation/security (418 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities), content quality, metadata, 15 Chromium journeys and isolated main/candidate baseline. Production readiness remains fail-closed; Meta external draft creation skipped.",
     "latestDocumentedPrHeadBeforeRegisterRefresh": "634c9add5e889e02cd45986205a2197605be7b8b",
     "observedBranchHeadBeforeRegisterRefresh": "634c9add5e889e02cd45986205a2197605be7b8b"
   }
