@@ -297,3 +297,16 @@ Before accepting captions, run the repository caption synchronization validator 
 - No live upload/post, campaign activation, visibility change, Metricool schedule mutation, PR merge, main edit or destructive Git operation occurred. Public/unattended YouTube and live Meta publishing remain disabled; Nature Frontiers remains prohibited as a YouTube target; Safari remains inactive.
 
 Operational deployment/monitoring/rollback acceptance remains NOT_TESTED; this workflow evidence does not substitute for a deployment drill.
+
+## Latest exact-SHA dashboard API authentication acceptance — 29 October 2026, 13:25 UTC
+
+- **Tested source/test SHA:** `9229671e82180eadb92411cdd5ac9e649da79fdb`. Application implementation is unchanged; regression coverage now includes protected read and mutating API declarations.
+- **Implemented:** `test/dashboard-server.test.mjs` derives protected API routes from the source inventory and verifies missing and invalid operator tokens return HTTP 401 with an authentication error before validation or mutation on all **35 protected API route declarations: 28 mutating routes and 7 GET routes**.
+- **Exact-SHA automation/security PASS:** [run 40881209227](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40881209227) — 421 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe and syntax/compilation checks passed.
+- **Exact-SHA acceptance workflows:** [content quality PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40881209267), [metadata PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40881209407), [dashboard browser E2E PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40881209155), [isolated main/candidate baseline PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40881198843), [non-destructive branch inventory PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40881209440).
+- [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40881209299) remains BLOCKED/fail-closed. [Nature Frontiers draft workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40881209154) passed local candidate validation, but its external `create-draft-package` job was SKIPPED; no live Meta draft/read-back is proven.
+- This closes the protected API authentication negative-path slice only. **DASH-001 remains NOT_TESTED**: all 105 controls and 15 forms and every route still need behavior-specific success, validation, repeat/concurrency, persistence, failure/recovery, audit and accessibility acceptance.
+- Live refs at the tested candidate: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, 2,120 ahead / 2 behind / 178 changed files. PR #1 remains open, draft and unmerged.
+- No live upload/post, campaign activation, visibility change, Metricool schedule mutation, PR merge, main edit or destructive Git operation occurred. Public/unattended YouTube and live Meta publishing remain disabled; Nature Frontiers remains prohibited as a YouTube target; Safari remains inactive.
+
+A real deployment, monitoring, backup/restore and rollback drill remains NOT_TESTED; CI and isolated baseline evidence are not a substitute.
