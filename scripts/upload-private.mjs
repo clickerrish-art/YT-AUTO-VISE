@@ -12,6 +12,7 @@ import { execFileSync } from "node:child_process";
 import { assertNoUnresolvedUploadAttempts, fetchCompleteYoutubeHistory, assertNextPublicationAllowed } from "./youtube-history-gate.mjs";
 import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence } from "./short-parent-relationship.mjs";
 import { atomicWriteJson } from "./atomic-json-file.mjs";
+import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
 
 export const APPROVED_SELAR_URL = "https://selar.com/0u19v8u99l";
 
@@ -33,6 +34,10 @@ function strictIsoTimestamp(value) {
   }
   const timestamp = Date.parse(value);
   return Number.isFinite(timestamp) ? timestamp : NaN;
+}
+
+export function prepareUploadLogDirectory(directory) {
+  return ensureSafeDirectoryPath(directory, "Upload log");
 }
 
 export function sha256File(filePath) {
@@ -264,9 +269,8 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     }
   }
 
-  const logDir = path.resolve(env.UPLOAD_LOG_DIR ?? "run-logs");
+  const logDir = prepareUploadLogDirectory(path.resolve(env.UPLOAD_LOG_DIR ?? "run-logs"));
   const ledgerPath = path.join(logDir, "upload-attempts.json");
-  fs.mkdirSync(logDir, { recursive: true });
   const releaseUploadLock = acquireExclusiveUploadLock(path.join(logDir, "upload-operation.lock"), { jobId, now });
   try {
   let ledger = { version: 1, attempts: [] };
