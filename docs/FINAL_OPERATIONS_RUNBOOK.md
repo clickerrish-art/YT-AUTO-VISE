@@ -1,12 +1,14 @@
 # Current checkpoint — 29 October 2026
 
-The current exact tested source/test candidate is `f363baeee5c14c21c3980001980df0eddb330b5d`. Its mandatory automation/security, content-quality, metadata, browser and isolated-baseline workflows passed (419 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities; 15 Chromium journeys). Production readiness is still **BLOCKED**; do not bypass the readiness gate.
+The current exact tested source/test candidate is `726e3fca8d0a1a79a76f9d04fefcd440b83f52cc`. Its automation/security, content-quality, metadata, browser and isolated-baseline workflows passed (420 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities; 15 Chromium journeys). The full-history branch inventory also passed and is available as [artifact 12889820366](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917617/artifacts/12889820366). Production readiness is still **BLOCKED**; do not bypass the readiness gate.
 
-Targeted safeguards now reject symlinked upload-log directory components and verify that YouTube read-back matches the exact remote video ID, verified channel, approved title and private visibility. These checks do not authorize an upload. A real upload still requires verified OAuth/channel identity, complete reconciled history, rights-cleared reviewed assets, human approval, and a separate one-operation authorization.
+Targeted safeguards reject symlinked upload-log directory components and verify that YouTube read-back matches the exact remote video ID, verified channel, approved title and private visibility. The branch reconciliation tool inventories every branch-only/main-only commit and per-commit changed files; its report is evidence for review, not authorization to merge or rewrite history.
 
 PR #1 remains open/draft/unmerged; `main` remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. Do not publish publicly, change visibility, post to Meta, activate campaigns or mutate remote schedules without the exact required authorization. Nature Frontiers is never a YouTube target; Safari remains inactive; the approved Selar URL remains `https://selar.com/0u19v8u99l`.
 
-See [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-29.md), [go-live blockers](GO_LIVE_BLOCKERS.md), and [acceptance register](REQUIREMENTS_ACCEPTANCE_REGISTER.json).
+See [current release evidence](CURRENT_RELEASE_EVIDENCE_2026-10-29.md), [go-live blockers](GO_LIVE_BLOCKERS.md), [acceptance register](REQUIREMENTS_ACCEPTANCE_REGISTER.json), and [branch reconciliation report](BRANCH_RECONCILIATION_REPORT_2026-10-28.md).
+
+---
 
 ---
 
