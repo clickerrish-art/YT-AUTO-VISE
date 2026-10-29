@@ -144,10 +144,11 @@ test("restore recovery validates the entire journal before mutating duplicate de
     fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
     fs.mkdirSync(logDir, { recursive: true, mode: 0o700 });
     const destination = path.join(logDir, "upload-attempts.json");
-    const original = Buffer.from("must-not-be-deleted-by-invalid-journal");
-    fs.writeFileSync(destination, original);
     const newBytes = Buffer.from("simulated-restored-content");
     const newSha256 = crypto.createHash("sha256").update(newBytes).digest("hex");
+    // This is a valid partially committed output for the first entry: recovery
+    // would delete it unless the duplicate later entry is detected first.
+    fs.writeFileSync(destination, newBytes);
     const target = { kind: "upload-ledger", path: "upload-attempts.json" };
     const journalPath = path.join(stateDir, ".restore-transaction.json");
     const journal = {
@@ -167,7 +168,7 @@ test("restore recovery validates the entire journal before mutating duplicate de
       restoreState({ backupPath, rootDir: dir, confirm: "YES", now: Date.parse("2026-10-30T00:00:00.000Z") }),
       /duplicate destinations/
     );
-    assert.deepEqual(fs.readFileSync(destination), original,
+    assert.deepEqual(fs.readFileSync(destination), newBytes,
       "recovery must validate every journal entry before changing any destination");
     assert.equal(fs.existsSync(journalPath), true,
       "the invalid recovery journal must remain available for operator investigation");
