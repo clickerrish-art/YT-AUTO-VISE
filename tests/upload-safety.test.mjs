@@ -15,8 +15,8 @@ test("YouTube uploader is private-only and binds upload to the verified SonicVhi
   assert.match(source, /item\.id\s*===\s*expectedChannelId/);
   assert.match(source, /metadata\.channelId\s*!==\s*expectedChannelId/);
   assert.match(source, /matchedChannel\.snippet\?\.title\s*!==\s*"SonicVhibez"/);
-  assert.match(source, /remoteItem\.snippet\?\.title\s*!==\s*metadata\.title/);
-  assert.match(source, /item\.snippet\?\.title\s*!==\s*metadata\.title/);
+  assert.match(source, /remoteUploadMatchesApprovedMetadata\(remoteItem/);
+  assert.match(source, /remoteUploadMatchesApprovedMetadata\(item/);
 
   // No API path for public visibility, scheduled publishing, or channel-wide uploads.
   assert.doesNotMatch(source, /privacyStatus:\s*["']public["']/);
