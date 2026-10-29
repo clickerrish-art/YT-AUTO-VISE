@@ -293,12 +293,12 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       persistJson(ledgerPath, ledger);
       throw new Error("Existing upload outcome could not be reconciled with YouTube; do not retry");
     }
-    if (!remoteItem || remoteItem.status?.privacyStatus !== "private" || remoteItem.snippet?.channelId !== expectedChannelId) {
+    if (!remoteItem || remoteItem.status?.privacyStatus !== "private" || remoteItem.snippet?.channelId !== expectedChannelId || remoteItem.snippet?.title !== metadata.title) {
       prior.status = "RECOVERY_REQUIRED";
       prior.errorCode = "REMOTE_PRIVACY_OR_CHANNEL_MISMATCH";
       prior.updatedAt = now().toISOString();
       persistJson(ledgerPath, ledger);
-      throw new Error("Existing remote video is missing or not verified private on SonicVhibez; do not retry");
+      throw new Error("Existing remote video title, channel or private visibility does not match this approved upload; do not retry");
     }
     const timestamp = now().toISOString();
     const receipt = {
@@ -442,8 +442,8 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   try {
     const remote = await youtube.videos.list({ part: ["id", "snippet", "status"], id: videoId });
     const item = (remote.data.items ?? []).find(candidate => candidate.id === videoId);
-    if (!item || item.status?.privacyStatus !== "private" || item.snippet?.channelId !== expectedChannelId) {
-      throw new Error("remote privacy or channel verification failed");
+    if (!item || item.status?.privacyStatus !== "private" || item.snippet?.channelId !== expectedChannelId || item.snippet?.title !== metadata.title) {
+      throw new Error("remote title, privacy or channel verification failed");
     }
     verified = item;
   } catch {
