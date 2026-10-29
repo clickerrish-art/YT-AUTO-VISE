@@ -395,7 +395,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     topic: "wildlife observation",
     contentType: "short",
     scheduledDay: "Saturday",
-    scheduledDate: "2026-11-07",
+    scheduledDate: "2026-11-21",
     productUrl: "https://selar.com/0u19v8u99l"
   };
   const concurrentDraftResponse = await fetch(base + "/api/drafts", {
