@@ -80,3 +80,16 @@ test("dashboard acceptance IDs disambiguate repeated declarations without droppi
   assert.equal(new Set(inventory.controls.map(item => item.acceptanceId)).size, 2);
   assert.equal(new Set(inventory.routes.map(item => item.acceptanceId)).size, 2);
 });
+
+
+test("dashboard inventory parses greater-than signs in quoted attributes and ignores commented-out markup", () => {
+  const html = '<!-- <button id="comment-only">Not live</button> --><form id="review" action="/submit?hint=a>b"><input name="caption" aria-label="Save > review"></form>';
+  const inventory = inventoryDashboardSources(html, "");
+
+  assert.equal(inventory.counts.controls, 1);
+  assert.equal(inventory.counts.forms, 1);
+  assert.equal(inventory.controls[0].ariaLabel, "Save > review");
+  assert.equal(inventory.forms[0].action, "/submit?hint=a>b");
+  assert.equal(inventory.controls[0].id, null);
+  assert.equal(inventory.controls[0].name, "caption");
+});
