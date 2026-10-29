@@ -1,6 +1,6 @@
 # Latest live branch-head inventory — 29 October 2026
 
-A full-history inventory was rerun on live PR head `94328372ac920db4f2983757199c488986dca18f`. The tested application/source candidate remains `726e3fca8d0a1a79a76f9d04fefcd440b83f52cc`; intervening changes are release documentation only.
+A full-history inventory was rerun on live PR head `6562977544164e121671f5c635af610fcad20161`. The tested application/source candidate remains `726e3fca8d0a1a79a76f9d04fefcd440b83f52cc`; intervening changes are release documentation only.
 
 - Base: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
