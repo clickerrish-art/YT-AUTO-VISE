@@ -31,7 +31,8 @@
     "prompt:script": "node scripts/build-script-generation-prompt.mjs",
     "script:generate": "node scripts/generate-script.mjs",
     "validate:rendered-audio": "node scripts/validate-rendered-audio.mjs",
-    "inventory:dashboard": "node scripts/dashboard-inventory.mjs"
+    "inventory:dashboard": "node scripts/dashboard-inventory.mjs",
+    "report:branch": "node scripts/branch-reconciliation-report.mjs"
   },
   "engines": {
     "node": ">=22"
