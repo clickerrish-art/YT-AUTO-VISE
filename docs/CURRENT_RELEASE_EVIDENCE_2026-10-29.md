@@ -7,7 +7,7 @@
 - `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged by this work)
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
 - Full-history comparison at this candidate: 2,094 branch-only commits / 2 main-only commits / 178 final-tree changed files.
-- Latest live branch-head inventory: `94328372ac920db4f2983757199c488986dca18f` at generation time; 2,105 ahead / 2 behind / 178 changed files; [full inventory artifact 12888729993](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40856736722/artifacts/12888729993). Later commits in this task update release documentation only. The exact tested source/test candidate below has its own 2,094-ahead inventory snapshot.
+- Latest live branch-head inventory snapshot: `6562977544164e121671f5c635af610fcad20161`; 2,109 ahead / 2 behind / 178 changed files; [full inventory artifact 12889427360](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40856976846/artifacts/12889427360). Documentation-only commits after this snapshot do not change application/test code. The exact tested source/test candidate below has its own 2,094-ahead inventory snapshot.
 - PR #1 remains open, draft, and unmerged: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1
 - GitHub reports `main` unprotected and required status-check enforcement off. Owner/admin action is required to configure protection; no settings were changed.
 - Later commits after this exact source/test candidate update release documentation only; they are not represented as new application-code validation.
