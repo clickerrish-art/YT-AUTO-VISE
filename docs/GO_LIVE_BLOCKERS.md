@@ -8,7 +8,7 @@ The new branch-inventory workflow retained [the complete JSON/Markdown inventory
 
 Live tested refs: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; candidate `726e3fca8d0a1a79a76f9d04fefcd440b83f52cc`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; 2,094 ahead / 2 behind / 178 changed files. PR #1 remains open, draft and unmerged. GitHub reports main branch protection disabled; owner/admin configuration is required.
 
-Latest live branch-head inventory (documentation-only descendant): 2,101 ahead / 2 behind / 178 changed files. The [full-history inventory artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40856512307/artifacts/12889741334) is retained; human semantic integration review remains required.
+Latest live branch-head inventory at generation time: 2,105 ahead / 2 behind / 178 changed files. The [full-history inventory artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40856736722/artifacts/12888729993) is retained; later commits are documentation-only, and human semantic integration review remains required.
 
 Safety policy remains unchanged: no public/unattended YouTube publishing, no live Meta publishing, no campaign activation, no remote schedule changes without explicit per-record authorization, no visibility changes to satisfy Short association, Nature Frontiers never a YouTube target, Safari inactive, and the approved Selar destination remains `https://selar.com/0u19v8u99l`.
 
