@@ -150,10 +150,10 @@ test("every declared API route rejects unauthenticated requests without mutating
     const responseText = await response.text();
     assert.equal(response.status, item.expectedStatus,
       `${item.label} should return HTTP ${item.expectedStatus}; body=${responseText}`);
-    assert.match(response.headers.get("content-type") ?? "", /application\\/json/i);
+    assert.match(response.headers.get("content-type") ?? "", /application\/json/i);
     const payload = JSON.parse(responseText);
     assert.match(payload.error ?? "", item.expectedError, item.label + " should return a safe actionable error");
-    assert.doesNotMatch(responseText, /dashboard-state\\.json|stateDir|\\/home\\/runner|\\/tmp\\//i,
+    assert.doesNotMatch(responseText, /dashboard-state\.json|stateDir|\/home\/runner|\/tmp\//i,
       item.label + " leaked an internal filesystem path");
   }
 
