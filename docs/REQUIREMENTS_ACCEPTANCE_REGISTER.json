@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-29T10:16:00Z",
-  "evidencePolicy": "Exact source/test candidate 726e3fca8d0a1a79a76f9d04fefcd440b83f52cc includes symlink-safe upload log directory creation, strict YouTube read-back validation, and a reproducible full-history branch reconciliation inventory tool with an integration test. Exact-SHA automation/security passed 420 Node tests, 0 failures, 0 skips; 16 Python tests passed; npm audit 0 vulnerabilities; normal lifecycle install, syntax/compile and FFmpeg/ffprobe checks passed. Content-quality, metadata, 15 Chromium dashboard journeys and isolated main/candidate baseline comparison passed. Branch inventory workflow passed and retained full JSON/Markdown artifact. Production readiness remains intentionally fail-closed; Meta provider draft creation was skipped. DASH-001 remains NOT_TESTED.",
+  "recordedAt": "2026-10-29T11:58:00Z",
+  "evidencePolicy": "Live refs rechecked 2026-10-29: implementation branch HEAD 9cd8f2f0b1fce6ca673152ae992eb18155e599e1; main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 2115 commits ahead and 2 behind. Compare from source/test candidate 726e3fca8d0a1a79a76f9d04fefcd440b83f52cc to live HEAD reports 21 commits and only six documentation files changed, so the source/test candidate remains 726e3fca8d0a1a79a76f9d04fefcd440b83f52cc. Exact live-head automation/security workflow 40857301030 passed 420 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax and Python compilation passed. Content-quality 40857300934, metadata 40857301014, dashboard E2E 40857300938 (15 Chromium journeys), isolated baseline 40857300918 and branch inventory 40857300919 passed. Readiness workflow 40857300916 correctly failed closed; Meta draft generation workflow 40857300925 passed its local validation but does not prove provider-side draft creation. DASH-001, STATE-001, GIT-002 and DEPLOY-001 remain incomplete; no external operation or production acceptance is inferred from local tests.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -25,7 +25,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417"
       ],
-      "nextAction": "Live refs: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; source/test candidate bc02a73c2bfc39faa11990468778bb98372a551c; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 2059 ahead / 2 behind / 175 changed files. PR #1 open, draft, unmerged. Live branch metadata reports protected=false and required status-check enforcement off; owner/admin must configure protection. Full commit-by-commit divergence inventory and integration plan remain incomplete.",
+      "nextAction": "Live refs checked 2026-10-29: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; branch HEAD 9cd8f2f0b1fce6ca673152ae992eb18155e599e1; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 2115 ahead / 2 behind. PR #1 remains open, draft and unmerged. A prior branch metadata read reported protection disabled, but the branch-protection endpoint is not accessible through the current connector; owner/admin must verify protection and required checks directly. Full semantic review of divergent history remains incomplete.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch."
     },
@@ -104,7 +104,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40832559722",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40832559729"
       ],
-      "nextAction": "Exact source/test candidate bc02a73c2bfc39faa11990468778bb98372a551c passed 416 Node tests with zero failures/skips, 16 Python tests, npm audit with zero vulnerabilities, FFmpeg/ffprobe and syntax/compile checks; metadata, content quality, browser E2E and isolated baseline comparison all passed. Production readiness remains blocked by genuine prerequisites.",
+      "nextAction": "Live HEAD 9cd8f2f0b1fce6ca673152ae992eb18155e599e1 was checked by automation/security workflow 40857301030: 420 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; npm audit reported zero vulnerabilities; FFmpeg/ffprobe, Node syntax and Python compilation passed. Content quality 40857300934, metadata 40857301014, dashboard E2E 40857300938 (15 Chromium journeys), isolated baseline 40857300918 and branch inventory 40857300919 passed. The source/test candidate remains 726e3fca8d0a1a79a76f9d04fefcd440b83f52cc because the 21 later commits change only six documentation files. Readiness remains blocked intentionally; no provider-side Meta draft acceptance is claimed.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
@@ -177,7 +177,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40832559799",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40832559722"
       ],
-      "nextAction": "Semantic stable acceptance IDs and regression tests are implemented and pass on bc02a73c2bfc39faa11990468778bb98372a551c. Do not mark PASS: exhaustive per-control and per-route authorization, persistence, concurrency, error-path, audit, secret/path leakage, accessibility and responsive acceptance remains incomplete.",
+      "nextAction": "Current live HEAD has 105 inventoried controls, 15 forms and 38 route declarations; dashboard E2E workflow 40857300938 passed 15 Chromium journeys, and API tests include unauthorized route checks, malformed/oversized input, duplicate submissions, concurrent schedule reservations, persistence and selected recovery cases. This is not exhaustive acceptance: each control/form/mutating route still needs behavior-specific authorized success, negative, persistence, concurrency, audit and failure/recovery coverage. Keep NOT_TESTED.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
@@ -310,7 +310,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517549"
       ],
-      "nextAction": "Live snapshot immediately before this evidence refresh: main fa00d28e7f58911482686e4ad69fac9f4701a2e6; tested source/test candidate 54a15314e53c00af3e33faf8a7d691a72372e00a; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; 1,997 ahead / 2 behind / 174 changed files. Exact-head isolated baseline run 40759733666 passed. This does not substitute for reviewing all branch-only/base-only commits, overlapping changes, or the restore-history incident. Do not reset, rebase, merge or force-push.",
+      "nextAction": "Live compare: 2115 commits ahead / 2 behind / merge base 45352b73bb6cc4787b2a49988b575afb754ab627. Non-destructive branch inventory workflow 40857300919 passed on live HEAD and generated the inventory, but this does not replace human semantic review of every branch-only/base-only commit, overlapping changes, patch-equivalent changes, workflow/security changes, or the restore-history incident. Do not reset, rebase, merge, force-push or delete branches.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants."
     },
