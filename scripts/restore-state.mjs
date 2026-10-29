@@ -167,8 +167,46 @@ function recoverInterruptedRestore(options) {
   const journalPath = restoreJournalPath(options);
   if (!fs.existsSync(journalPath)) return { recovered: false };
   const journal = JSON.parse(readBackupFileNoSymlinks(journalPath));
-  if (journal.format !== "sonicvhibez-restore-transaction" || journal.version !== 1 || !Array.isArray(journal.entries)) {
+  if (journal.format !== "sonicvhibez-restore-transaction" || journal.version !== 1 ||
+      !Number.isFinite(Date.parse(journal.createdAt)) || !Array.isArray(journal.entries) || journal.entries.length === 0) {
     throw new Error("Interrupted restore journal is invalid; manual recovery is required");
+  }
+
+  // Validate the complete journal before changing any destination. A malformed
+  // later entry must not be discovered only after earlier entries were rolled
+  // back, which would leave recovery partially applied.
+  const validatedDestinations = new Set();
+  const validatedTemps = new Set();
+  for (const entry of journal.entries) {
+    if (!entry || !["RESTORE_MISSING", "REPLACE_STATE"].includes(entry.action) ||
+        !/^[a-f0-9]{64}$/.test(entry.newSha256 ?? "")) {
+      throw new Error("Interrupted restore journal entry is invalid; manual recovery is required");
+    }
+    const destination = targetPath(entry.target, options);
+    if (validatedDestinations.has(destination)) {
+      throw new Error("Interrupted restore journal contains duplicate destinations; manual recovery is required");
+    }
+    validatedDestinations.add(destination);
+    const tempName = entry.tempName;
+    if (typeof tempName !== "string" || path.basename(tempName) !== tempName ||
+        !tempName.startsWith(path.basename(destination) + ".") || !tempName.endsWith(".restore-tmp") ||
+        validatedTemps.has(path.join(path.dirname(destination), tempName))) {
+      throw new Error("Interrupted restore journal contains an unsafe or duplicate temporary path");
+    }
+    validatedTemps.add(path.join(path.dirname(destination), tempName));
+    if (entry.action === "REPLACE_STATE") {
+      if (entry.target?.kind !== "dashboard-state" ||
+          !/^[a-f0-9]{64}$/.test(entry.originalSha256 ?? "") ||
+          typeof entry.originalBase64 !== "string") {
+        throw new Error("Interrupted replacement journal lacks valid original state; manual recovery is required");
+      }
+      const originalBytes = Buffer.from(entry.originalBase64, "base64");
+      if (sha256(originalBytes) !== entry.originalSha256) {
+        throw new Error("Interrupted replacement journal original-state checksum is invalid");
+      }
+    } else if (entry.originalSha256 !== undefined || entry.originalBase64 !== undefined) {
+      throw new Error("Interrupted missing-file journal contains unexpected original-state data");
+    }
   }
 
   for (const entry of [...journal.entries].reverse()) {
