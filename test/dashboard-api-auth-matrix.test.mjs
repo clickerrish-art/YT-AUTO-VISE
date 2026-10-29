@@ -88,6 +88,34 @@ test("every declared API route rejects unauthenticated requests without mutating
     results.push(`${route.method} ${route.path}`);
   }
 
+  // Invalid credentials must be rejected on every declared API route before validation or mutation.
+  // POST routes intentionally receive a syntactically valid body so the assertion proves
+  // authentication wins over route-specific business validation.
+  const invalidToken = "invalid-route-auth-token";
+  const invalidTokenResults = [];
+  for (const route of apiRoutes) {
+    const response = await fetch(base + route.path, {
+      method: route.method,
+      headers: route.method === "POST"
+        ? { "content-type": "application/json", "x-operator-token": invalidToken }
+        : { "x-operator-token": invalidToken },
+      body: route.method === "POST" ? "{}" : undefined
+    });
+    const responseText = await response.text();
+    assert.equal(response.status, 401,
+      `invalid operator credentials must be rejected for ${route.method} ${route.path}; body=${responseText}`);
+    assert.match(response.headers.get("content-type") ?? "", /application\\/json/i);
+    assert.doesNotMatch(responseText, /dashboard-state\\.json|stateDir|\\/home\\/runner|\\/tmp\\//i,
+      `${route.method} ${route.path} leaked an internal filesystem path for invalid credentials`);
+    const payload = JSON.parse(responseText);
+    assert.equal(payload.error, "Operator authentication required",
+      `${route.method} ${route.path} should use the consistent authentication error for invalid credentials`);
+    invalidTokenResults.push(`${route.method} ${route.path}`);
+  }
+  assert.equal(invalidTokenResults.length, apiRoutes.length);
+  assert.deepEqual(fs.readFileSync(statePath), initialState,
+    "invalid operator credentials must not mutate persisted dashboard state");
+
   assert.deepEqual(fs.readFileSync(statePath), initialState,
     "unauthenticated API requests must not mutate persisted dashboard state");
   assert.equal(results.length, apiRoutes.length);
