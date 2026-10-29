@@ -230,3 +230,12 @@ The generated inventory is not a semantic merge review. Review of every branch-o
 - Automation/security, content-quality, metadata, browser E2E, isolated baseline and branch inventory passed; 423 Node tests, zero failures/skips, 16 Python tests, npm audit zero vulnerabilities.
 - Facebook workflow has been renamed to explicitly indicate local draft-package validation. Provider-side draft creation/read-back remains BLOCKED_EXTERNAL; a skipped local-package job on PR is not treated as external acceptance.
 - Dashboard route-inventory and concurrency regression tests pass. Full semantic branch review and all mandatory dashboard acceptance remain incomplete.
+
+
+## Latest exact-SHA workflow safety checkpoint — 29 October 2026, 14:57 UTC
+
+- Implementation branch source/test SHA: 75ef3a5ee5c3eb41f1edec106d65145b219d737c. `main`: fa00d28e7f58911482686e4ad69fac9f4701a2e6. Merge base: 45352b73bb6cc4787b2a49988b575afb754ab627. Divergence: 2136 ahead / 2 behind; 180 changed files. PR #1 remains open, draft and unmerged.
+- Automation/security, content quality, metadata, dashboard E2E, isolated baseline and branch inventory passed. Node 424/424, 0 skips; Python 16/16; npm audit zero vulnerabilities.
+- The Facebook autonomous publisher workflow is hardcoded disabled (`FACEBOOK_PUBLISH_ENABLED=NO`) and its config remains draft-only. The daily draft workflow is explicitly local-only; provider-side draft creation/read-back is blocked externally.
+- The restore-history test incident was inspected: main's test addition was reverted, while the implementation branch retains the test and symlink-parent regression; the test executes in the full suite. Complete semantic review of all 2,136 branch-only commits remains open.
+- No merge, rebase, reset, force-push, main edit, live post, upload or destructive reconciliation was performed.

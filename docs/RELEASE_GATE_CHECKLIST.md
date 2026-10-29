@@ -1091,3 +1091,14 @@ At the candidate snapshot, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merg
 - [x] Facebook workflow now explicitly labels its output as local-only and marks Meta provider-side draft creation/read-back BLOCKED_EXTERNAL.
 - [ ] Full DASH-001 per-control/form/route acceptance remains incomplete.
 - [ ] Production readiness remains blocked by external account identity, genuine media/rights, owner approvals and provider-side acceptance evidence.
+
+
+## Exact-SHA Facebook publishing safety checkpoint — 29 October 2026
+
+- [x] Autonomous publisher workflow hardcodes `FACEBOOK_PUBLISH_ENABLED=NO`; config `publishingEnabled=false`, `dryRun=true`, `emergencyStop=true`.
+- [x] Regression test covers the workflow and config safety boundary.
+- [x] Daily draft workflow identifies itself as local-only and records provider-side creation/read-back as BLOCKED_EXTERNAL.
+- [x] Exact-SHA automation/security: 424 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities.
+- [x] Content quality, metadata, browser E2E, isolated baseline and branch inventory passed.
+- [ ] Remote Meta Page draft creation/read-back remains blocked externally; no live publishing occurred.
+- [ ] DASH-001 and production readiness remain incomplete/blocked.

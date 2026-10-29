@@ -1283,3 +1283,8 @@ At source/test SHA dba98d78fb211a77ffb5df5410f77097218828cb, simultaneous identi
 ## Facebook workflow acceptance boundary — 29 October 2026
 
 The workflow is now named "Validate daily Nature Frontiers local draft package". Its run summary distinguishes local draft generation from provider acceptance. On the exact tested SHA 713a876f0753b2200b69ebb566438728400ae017, the local validation workflow passed, but the provider-side draft creation/read-back requirement remains BLOCKED_EXTERNAL: no Meta API write or remote Page read-back was performed. A green local validation result must not be interpreted as external integration acceptance.
+
+
+## Scheduled Facebook publisher fail-closed checkpoint — 29 October 2026
+
+The autonomous publisher workflow now hardcodes `FACEBOOK_PUBLISH_ENABLED=NO` instead of inheriting a repository variable. The config remains `publishingEnabled=false`, `dryRun=true` and `emergencyStop=true`; a regression test checks these safety defaults and workflow boundary. The daily draft workflow is explicitly local-only and marks Meta provider-side draft creation/read-back `BLOCKED_EXTERNAL`. No live Meta write occurred. Exact-SHA CI at 75ef3a5ee5c3eb41f1edec106d65145b219d737c passed 424 Node tests with zero failures/skips, 16 Python tests and npm audit with zero vulnerabilities.
