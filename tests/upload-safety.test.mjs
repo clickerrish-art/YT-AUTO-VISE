@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { validateUploadApproval, validateOneShotUploadAuthorization, assertReconciliationOnlyHasPriorAttempt, verifyRetainedRightsEvidence, sha256File, resolveRegularFileNoSymlinks, resolveRepositoryFileNoSymlinks } from "../scripts/upload-private.mjs";
+import { validateUploadApproval, validateOneShotUploadAuthorization, assertReconciliationOnlyHasPriorAttempt, verifyRetainedRightsEvidence, sha256File, resolveRegularFileNoSymlinks, resolveRepositoryFileNoSymlinks, prepareUploadLogDirectory } from "../scripts/upload-private.mjs";
 
 test("YouTube uploader is private-only and binds upload to the verified SonicVhibez channel", () => {
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
@@ -185,6 +185,22 @@ test("upload evidence path resolver rejects symlinked artifacts and rights evide
       }
     };
     assert.throws(() => verifyRetainedRightsEvidence(rights), /symbolic link/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+
+test("upload log directory creation rejects symlinked ancestors before ledger or lock writes", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-upload-log-symlink-"));
+  const real = path.join(dir, "real");
+  const link = path.join(dir, "redirect");
+  fs.mkdirSync(real);
+  try {
+    fs.symlinkSync(real, link, "dir");
+    assert.throws(() => prepareUploadLogDirectory(path.join(link, "logs")), /symbolic link/);
+    assert.equal(fs.existsSync(path.join(real, "logs")), false, "a symlink must not redirect log directory creation");
+    assert.equal(fs.readdirSync(real).length, 0, "no ledger or lock artifacts may be created through the symlink");
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
