@@ -388,6 +388,45 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const failedBody = await failed.json();
   assert.equal(failed.status, 200, JSON.stringify(failedBody));
   assert.equal(failedBody.job.state, "FAILED");
+
+  const concurrentDraft = {
+    id: "dashboard-test-concurrent-worker-claim",
+    title: "Concurrent worker lease test",
+    topic: "wildlife observation",
+    contentType: "long_form",
+    scheduledDay: "Saturday",
+    scheduledDate: "2026-11-07",
+    productUrl: "https://selar.com/0u19v8u99l"
+  };
+  const concurrentDraftResponse = await fetch(base + "/api/drafts", {
+    method: "POST", headers, body: JSON.stringify(concurrentDraft)
+  });
+  const concurrentDraftBody = await concurrentDraftResponse.json();
+  assert.equal(concurrentDraftResponse.status, 201, JSON.stringify(concurrentDraftBody));
+  const concurrentJob = concurrentDraftBody.job;
+  const concurrentClaims = await Promise.all(["worker-race-a", "worker-race-b"].map(workerId =>
+    fetch(base + "/api/jobs/lease/claim", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ jobId: concurrentJob.id, workerId, leaseMs: 10_000 })
+    })
+  ));
+  const concurrentResults = await Promise.all(concurrentClaims.map(async response => ({
+    status: response.status,
+    body: await response.json()
+  })));
+  assert.deepEqual(concurrentResults.map(result => result.status).sort(), [200, 400],
+    "simultaneous workers must not both acquire the same content-job lease");
+  const winningClaim = concurrentResults.find(result => result.status === 200);
+  assert.ok(winningClaim?.body.leaseToken, "the single winning worker receives the lease token");
+  assert.equal(concurrentResults.filter(result => result.status === 400).length, 1);
+  const concurrentState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  const concurrentJobState = concurrentState.jobs.find(job => job.id === concurrentJob.id);
+  assert.equal(concurrentJobState.workerLease.workerId,
+    concurrentResults.find(result => result.status === 200).body.job.workerLease.workerId);
+  assert.equal(concurrentState.audit.filter(event =>
+    event.action === "WORKER_LEASE_CLAIMED" && event.jobId === concurrentJob.id).length, 1,
+    "only the winning claim may produce a durable lease-claimed audit event");
   const forgedReview = await fetch(base + "/api/jobs/transition", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, nextState: "AWAITING_HUMAN_REVIEW", reason: "attempted bypass" }) });
   assert.equal(forgedReview.status, 400, "worker output alone cannot bypass the rights-evidence gate");
   const shortDraft = { id: "dashboard-test-render-short", title: "Test Short render attempt", topic: "ethical wildlife filming", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-24", productUrl: "https://selar.com/0u19v8u99l" };
