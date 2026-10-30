@@ -764,7 +764,14 @@ test("restore recovery rolls back after every destination-commit boundary", asyn
     for (let boundary = 1; boundary <= backup.entries.length; boundary++) {
       const destination = fixture();
       try {
-        fs.rmSync(destination.stateDir, { recursive: true, force: true });
+        const destinationState = path.join(destination.stateDir, "dashboard-state.json");
+        const modifiedState = JSON.parse(fs.readFileSync(destinationState, "utf8"));
+        modifiedState.audit = [{ action: "PRE_RESTORE_STATE_TO_PRESERVE", actor: "crash-boundary-test" }];
+        fs.writeFileSync(destinationState, JSON.stringify(modifiedState, null, 2) + "\n", { mode: 0o600 });
+        const originalStateBytes = fs.readFileSync(destinationState);
+        const earlierThanBackup = new Date(Date.parse(backup.createdAt) - 1000);
+        fs.utimesSync(destinationState, earlierThanBackup, earlierThanBackup);
+        fs.rmSync(path.join(destination.stateDir, "facebook-recovery-ledger.jsonl"), { force: true });
         fs.rmSync(destination.logDir, { recursive: true, force: true });
         fs.rmSync(destination.rightsDir, { recursive: true, force: true });
 
@@ -790,7 +797,8 @@ test("restore recovery rolls back after every destination-commit boundary", asyn
           await restoreState({
             backupPath: ${JSON.stringify(backupPath)},
             rootDir: ${JSON.stringify(destination.root)},
-            confirm: "YES"
+            confirm: "YES",
+            overwriteState: true
           });
         `;
         const child = spawn(process.execPath, ["--input-type=module", "-e", childScript], { encoding: "utf8" });
@@ -809,14 +817,15 @@ test("restore recovery rolls back after every destination-commit boundary", asyn
         // no restore process remains before removing this test's stale lock.
         fs.unlinkSync(lockPath);
         await assert.rejects(
-          restoreState({ backupPath, rootDir: destination.root, confirm: "YES" }),
+          restoreState({ backupPath, rootDir: destination.root, confirm: "YES", overwriteState: true }),
           /rolled back safely.*rerun restore explicitly/i
         );
         assert.equal(fs.existsSync(journalPath), false, "recovery must remove the journal after boundary " + boundary);
         assert.equal(fs.existsSync(lockPath), false, "recovery must release its own lock after boundary " + boundary);
 
+        assert.deepEqual(fs.readFileSync(destinationState), originalStateBytes,
+          "recovery must restore the exact pre-transaction dashboard-state bytes after boundary " + boundary);
         const expectedDestinations = [
-          path.join(destination.stateDir, "dashboard-state.json"),
           path.join(destination.stateDir, "facebook-recovery-ledger.jsonl"),
           path.join(destination.logDir, "upload-attempts.json"),
           path.join(destination.logDir, "upload-VIDEO001.json"),
