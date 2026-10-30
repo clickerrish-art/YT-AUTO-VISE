@@ -1228,3 +1228,236 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
     if (jobOutputDir.value) fs.rmSync(jobOutputDir.value, { recursive: true, force: true });
   }
 });
+
+
+test("production-plan submission and hash-bound review persist through the real dashboard", async ({ page }) => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-production-plan-browser-"));
+  const evidenceDirName = ".browser-production-plan-" + process.pid + "-" + crypto.randomBytes(5).toString("hex");
+  const evidenceDir = path.join(process.cwd(), evidenceDirName);
+  fs.mkdirSync(evidenceDir);
+  const token = "production-plan-browser-token-" + "x".repeat(40);
+  const operator = "playwright-production-plan-operator";
+  const port = 24_000 + Math.floor(Math.random() * 12_000);
+  const base = "http://127.0.0.1:" + port;
+  const jobId = "browser-production-plan-" + crypto.randomBytes(5).toString("hex");
+  const hash = bytes => crypto.createHash("sha256").update(bytes).digest("hex");
+  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    cwd: process.cwd(),
+    env: {
+      PATH: process.env.PATH,
+      HOME: process.env.HOME,
+      NODE_ENV: "test",
+      DASHBOARD_OPERATOR_TOKEN: token,
+      DASHBOARD_OPERATOR_ID: operator,
+      DASHBOARD_STATE_DIR: stateDir,
+      UPLOAD_LOG_DIR: path.join(stateDir, "run-logs"),
+      PORT: String(port),
+      DASHBOARD_HOST: "127.0.0.1"
+    },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let logs = "";
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+
+  const stopServer = async () => {
+    if (child.exitCode !== null || child.signalCode !== null) return;
+    const exited = new Promise(resolve => child.once("exit", resolve));
+    child.kill("SIGTERM");
+    await exited;
+  };
+
+  try {
+    const narration = "The approved narration explains an evidence-led wildlife question and distinguishes documented facts from uncertainty.";
+    const script = {
+      premise: "Explain an evidence-led wildlife question",
+      narration,
+      sections: [{
+        heading: "Context",
+        purpose: "Set the documented context",
+        narration,
+        visualDirection: "Show verified habitat context",
+        pacing: "Measured",
+        soundDesign: "Natural ambience"
+      }],
+      claims: [{ text: "A supported claim", sourceIds: ["source-1"] }],
+      sources: [{ id: "source-1", title: "Source record used by the test fixture" }]
+    };
+    const { canonicalAuthoringScriptSha256 } = await import("../scripts/authoring-production-pipeline.mjs");
+    const scriptSha256 = canonicalAuthoringScriptSha256(script);
+    const narrationArtifacts = {};
+    const narrationFiles = [
+      ["narration.mp3", Buffer.from("test-only narration bytes; not playable production audio")],
+      ["narration.txt", Buffer.from(narration + "\\n")],
+      ["captions.srt", Buffer.from("1\\n00:00:00,000 --> 00:00:05,000\\nTest caption\\n")],
+      ["narration-report.json", Buffer.from(JSON.stringify({ status: "DRAFT_REVIEW_REQUIRED", publishingEnabled: false }))]
+    ];
+    for (const [name, bytes] of narrationFiles) {
+      const relativePath = evidenceDirName + "/" + name;
+      fs.writeFileSync(path.join(evidenceDir, name), bytes);
+      narrationArtifacts[name] = { path: relativePath, sha256: hash(bytes) };
+    }
+
+    const narrationApproval = {
+      decision: "APPROVE",
+      reviewer: operator,
+      reviewedAt: "2026-10-31T08:00:00.000Z",
+      reason: "Test-only prerequisite fixture; no human approval is implied",
+      scriptSha256,
+      audioSha256: narrationArtifacts["narration.mp3"].sha256,
+      transcriptSha256: narrationArtifacts["narration.txt"].sha256,
+      captionsSha256: narrationArtifacts["captions.srt"].sha256,
+      reportSha256: narrationArtifacts["narration-report.json"].sha256,
+      confirmAudioListened: true,
+      confirmTranscriptReviewed: true,
+      confirmCaptionsReviewed: true
+    };
+    narrationApproval.approvalSha256 = hash(Buffer.from(JSON.stringify({ jobId, ...narrationApproval })));
+
+    const job = {
+      id: jobId,
+      kind: "CONTENT_PRODUCTION",
+      contentType: "long_form",
+      title: "Browser production-plan acceptance fixture",
+      state: "QUEUED",
+      authoring: {
+        result: { script },
+        scriptSha256,
+        scriptApproval: {
+          decision: "APPROVE",
+          scriptSha256,
+          reviewer: operator,
+          reviewedAt: "2026-10-31T07:00:00.000Z",
+          reason: "Test-only prerequisite fixture"
+        },
+        narrationStage: {
+          status: "APPROVED_FOR_RENDER",
+          scriptSha256,
+          artifacts: narrationArtifacts
+        },
+        narrationApproval
+      }
+    };
+    fs.writeFileSync(path.join(stateDir, "dashboard-state.json"), JSON.stringify({
+      version: 1,
+      queueItems: [],
+      campaigns: [],
+      audit: [],
+      jobs: [job],
+      uploads: [],
+      facebookDrafts: [],
+      facebookPosts: [],
+      facebookAttempts: []
+    }));
+
+    const scenes = Array.from({ length: 6 }, (_, index) => {
+      const assetBytes = Buffer.from("test-only scene asset bytes " + index);
+      const rightsBytes = Buffer.from(JSON.stringify({
+        assetId: "fixture-scene-" + index,
+        permittedUse: "COMMERCIAL_DERIVATIVE",
+        evidenceType: "TEST_FIXTURE_NOT_REAL_RIGHTS"
+      }));
+      const assetPath = evidenceDirName + "/scene-" + index + ".mp4";
+      const rightsEvidencePath = evidenceDirName + "/rights-" + index + ".json";
+      fs.writeFileSync(path.join(evidenceDir, "scene-" + index + ".mp4"), assetBytes);
+      fs.writeFileSync(path.join(evidenceDir, "rights-" + index + ".json"), rightsBytes);
+      return {
+        sceneId: "scene-" + index,
+        editorialPurpose: "Advance a specific documentary point " + index,
+        narrationCue: "Align with approved narration section " + index,
+        assetPath,
+        assetSha256: hash(assetBytes),
+        sourceType: "GENERATED_ORIGINAL",
+        startSeconds: index * 60,
+        endSeconds: (index + 1) * 60,
+        provenance: {
+          sourceOrGeneration: "test fixture generated scene " + index,
+          rightsEvidencePath,
+          rightsEvidenceSha256: hash(rightsBytes),
+          permittedUse: "COMMERCIAL_DERIVATIVE",
+          attribution: "Test fixture attribution record",
+          editorialNotes: "Synthetic test fixture only; not production rights evidence"
+        }
+      };
+    });
+    const plan = {
+      schemaVersion: 1,
+      jobId,
+      contentType: "long_form",
+      scriptSha256,
+      title: "An evidence-led wildlife documentary",
+      editorialPremise: "Explain a specific wildlife question using source-backed context, careful uncertainty and scene-level narration alignment.",
+      syntheticDisclosure: "Generated scenes must be disclosed in metadata where applicable.",
+      scenes,
+      publishingEnabled: false,
+      humanReviewRequired: true
+    };
+
+    let ready = false;
+    for (let attempt = 0; attempt < 100; attempt++) {
+      if (child.exitCode !== null) throw new Error("Isolated dashboard exited before startup: " + logs);
+      try {
+        const response = await fetch(base + "/healthz");
+        if (response.ok) { ready = true; break; }
+      } catch {}
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    expect(ready, "isolated dashboard should start; logs: " + logs).toBe(true);
+
+    await page.goto(base + "/");
+    await page.locator("#token").fill(token);
+    await page.locator("#connect").click();
+    await expect(page.locator("#app")).toBeVisible();
+    await expect(page.locator("#productionplanjob")).toContainText("Browser production-plan acceptance fixture");
+    await page.locator("#productionplanjob").selectOption(jobId);
+    await expect(page.locator("#productionplansha")).toHaveValue(scriptSha256);
+    await page.locator("#productionplanjson").fill(JSON.stringify(plan));
+    await page.getByRole("button", { name: "Validate and persist production plan" }).click();
+    await expect(page.locator("#productionplanresult")).toContainText("Plan persisted for review", { timeout: 10_000 });
+    await expect(page.locator("#productionplanresult")).toContainText("STRUCTURE_AND_FILE_HASHES_VALIDATED");
+    await expect(page.locator("#productionplanresult")).toContainText("Rendering and publishing remain disabled");
+
+    const headers = { "x-operator-token": token };
+    const submittedResponse = await fetch(base + "/api/state", { headers });
+    expect(submittedResponse.status).toBe(200);
+    const submittedState = await submittedResponse.json();
+    const submittedJob = submittedState.jobs.find(item => item.id === jobId);
+    expect(submittedJob.authoring.productionPlan.status).toBe("REVIEW_REQUIRED");
+    const planSha256 = submittedJob.authoring.productionPlan.planSha256;
+    expect(planSha256).toMatch(/^[a-f0-9]{64}$/);
+    expect(submittedJob.authoring.productionPlan.plan).toEqual(plan);
+    expect(submittedState.audit.some(item => item.action === "PRODUCTION_PLAN_SUBMITTED" && item.jobId === jobId && item.planSha256 === planSha256)).toBe(true);
+
+    await expect(page.locator("#productionplanreviewjob")).toContainText("plan review required");
+    await page.locator("#productionplanreviewjob").selectOption(jobId);
+    await expect(page.locator("#productionplanreviewsha")).toHaveValue(planSha256);
+    await expect(page.locator("#productionplanreviewpreview")).toContainText(plan.title);
+    await page.locator("#productionplanreviewdecision").selectOption("APPROVE");
+    await page.locator("#confirmScenePlanReviewed").check();
+    await page.locator("#confirmRightsEvidenceReviewed").check();
+    await page.locator("#productionplanreviewreason").fill("Reviewed the exact plan and test evidence fixture.");
+    await page.getByRole("button", { name: "Record plan review decision" }).click();
+    await expect(page.locator("#productionplanreviewresult")).toContainText("APPROVED_PLAN_ONLY", { timeout: 10_000 });
+    await expect(page.locator("#productionplanreviewresult")).toContainText("Rendering remains disabled until");
+    const reviewedResponse = await fetch(base + "/api/state", { headers });
+    expect(reviewedResponse.status).toBe(200);
+    const reviewedState = await reviewedResponse.json();
+    const reviewedJob = reviewedState.jobs.find(item => item.id === jobId);
+    const stage = reviewedJob.authoring.productionPlan;
+    expect(stage.status).toBe("APPROVED_PLAN_ONLY");
+    expect(stage.planSha256).toBe(planSha256);
+    expect(stage.review.planSha256).toBe(planSha256);
+    expect(stage.review.reviewer).toBe(operator);
+    expect(stage.review.decision).toBe("APPROVE");
+    expect(stage.review.approvalSha256).toMatch(/^[a-f0-9]{64}$/);
+    expect(stage.publishingEnabled).toBe(false);
+    expect(stage.publishable).toBe(false);
+    expect(reviewedState.audit.some(item => item.action === "PRODUCTION_PLAN_APPROVED" && item.jobId === jobId && item.planSha256 === planSha256 && item.approvalSha256 === stage.review.approvalSha256)).toBe(true);
+    await expect(page.locator("#produceform button[type='submit']")).toBeDisabled();
+    expect(reviewedState.publishingEnabled).toBe(false);
+  } finally {
+    await stopServer();
+    fs.rmSync(stateDir, { recursive: true, force: true });
+    fs.rmSync(evidenceDir, { recursive: true, force: true });
+  }
+});
