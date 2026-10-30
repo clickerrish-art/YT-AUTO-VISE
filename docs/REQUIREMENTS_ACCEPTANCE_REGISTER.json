@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-30",
-  "evidencePolicy": "Live refs checked 2026-10-30: PR #1 HEAD 47e38c5480faeaa687f82a6c3a377ddb1254815f (documentation-only updates after tested source/test candidate 115fe82252b4fa1ef1eb2f9587bf0653356a6dc9); main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; GitHub compare 2163 ahead / 2 behind / 182 changed files. Exact candidate 115fe82252b4fa1ef1eb2f9587bf0653356a6dc9: 426 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, JS syntax and Python compilation passed. Content quality, metadata, 15 Chromium journeys, isolated baseline, branch inventory and local Facebook draft-package validation passed. Fresh workflows for prior documentation-only HEAD 7bb46f0167f145134e927ae32798a19432f66107 were pending at last read; no conclusions claimed. Register counts: 53 PASS / 8 NOT_TESTED / 8 BLOCKED_EXTERNAL.",
+  "evidencePolicy": "Live refs checked 2026-10-30 09:36 SAST: PR #1 HEAD and exact tested source/test candidate b31149df440a4c02cb2d7541b4894dcd916b8796; main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; compare 2166 ahead / 2 behind / 182 changed files. Exact-HEAD CI: 426 Node tests (0 failures, 0 skips), 16 Python tests, npm audit 0 vulnerabilities; content quality, metadata, 15 Chromium journeys, isolated baseline and branch inventory passed. Production readiness remains blocked by 13 prerequisites; Meta provider-side draft creation/read-back skipped. Nature Frontiers product-promotion hard-block v2 is covered by exact-SHA regression tests. No external publishing or schedule mutation.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -1293,21 +1293,37 @@
       "nextAction": "Keep receipt timestamp regression tests; the receipt timestamp check is local integrity validation and does not prove the reviewer identity or external rights evidence is authentic.",
       "assessmentCommitSha": "115fe82252b4fa1ef1eb2f9587bf0653356a6dc9",
       "acceptanceCriterion": "createReviewDecision refuses invalid reviewedAt values, and isReviewCurrent returns false for a persisted review whose reviewedAt timestamp is invalid."
+    },
+    {
+      "id": "NF-PROMO-001",
+      "severity": "critical",
+      "owner": "maintainer",
+      "requirement": "Nature Frontiers Facebook/Instagram content must never carry product or affiliate promotions; both draft evaluation and final-payload policy must fail closed for commercial flags, campaign IDs, Selar/Safari storefront links, affiliate/sponsor language, explicit purchase CTAs and the supplied Selar product names.",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/798d507dbb6188ac9df555c1300507c2f6b3815a",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/b31149df440a4c02cb2d7541b4894dcd916b8796",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592775",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592787"
+      ],
+      "nextAction": "Retain the hard block and do not add owner overrides or campaign allowlists for Nature Frontiers product promotions. Existing Metricool schedules are provider-side records and require separate owner review; this code change does not mutate them.",
+      "assessmentCommitSha": "b31149df440a4c02cb2d7541b4894dcd916b8796",
+      "acceptanceCriterion": "Tests demonstrate that evaluateFacebookDraft and evaluateFinalFacebookPayload reject all three supplied Selar URLs, the named Complete YouTube Wildlife Creator's Vault, commercial=true, campaign IDs, affiliate language and purchase/download CTAs, while an ordinary non-commercial wildlife education fixture remains eligible."
     }
   ],
   "currentCheckpoint": {
-    "applicationCodeSha": "2dc230300e6c60f3eac31e6564deb2e0bb2b3d82",
-    "testedSha": "115fe82252b4fa1ef1eb2f9587bf0653356a6dc9",
-    "checkpointPrHead": "115fe82252b4fa1ef1eb2f9587bf0653356a6dc9",
+    "applicationCodeSha": "b31149df440a4c02cb2d7541b4894dcd916b8796",
+    "testedSha": "b31149df440a4c02cb2d7541b4894dcd916b8796",
+    "checkpointPrHead": "b31149df440a4c02cb2d7541b4894dcd916b8796",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 2149,
+    "aheadBy": 2166,
     "behindBy": 2,
-    "changedFiles": 180,
+    "changedFiles": 182,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "STRICT RIGHTS AND REVIEW-RECEIPT TIMESTAMP VALIDATION PASS / EXACT-SHA CI AND BASELINE PASS / DASH-001 INCOMPLETE / PRODUCTION NOT READY",
+    "verdict": "NATURE FRONTIERS PRODUCT-PROMOTION HARD BLOCK PASS / EXACT-HEAD CI PASS / DASH-001 INCOMPLETE / PRODUCTION NOT READY",
     "ci": {
       "automationSecurity": "PASS",
       "nodeTests": 426,
@@ -1318,31 +1334,21 @@
       "contentQuality": "PASS (426 tests; 0 failures; 0 skips)",
       "metadata": "PASS (426 tests; 0 failures; 0 skips)",
       "dashboardE2e": "PASS: 15 Chromium journeys; not exhaustive per-control acceptance",
-      "isolatedBaseline": "PASS: exact main and candidate baseline at source/test SHA 115fe82252b4fa1ef1eb2f9587bf0653356a6dc9; run 40940647321",
-      "branchReconciliationInventory": "PASS: run 40940647363; full semantic review remains incomplete",
-      "productionReadiness": "BLOCKED / fail-closed as designed; 13 blockers; run 40940647448",
-      "facebookDraftWorkflow": "PASS for local validation only: run 40940647309; provider-side draft creation/read-back skipped and remains BLOCKED_EXTERNAL",
-      "uploadLogSymlinkRegression": "PASS: symlinked upload log ancestors are rejected before directory creation",
-      "youtubeRemoteReadback": "PASS: shared verifier requires exact remote video ID, expected channel ID, approved title and private visibility; direct mismatch tests cover each field",
+      "isolatedBaseline": "PASS: exact main and candidate baseline at b31149df440a4c02cb2d7541b4894dcd916b8796; run 41022592897",
+      "branchReconciliationInventory": "PASS: run 41022592859; full semantic review remains incomplete",
+      "productionReadiness": "BLOCKED / fail-closed as designed; 13 blockers; run 41022592898",
+      "facebookDraftWorkflow": "PASS for local validation only: run 41022592805; provider-side draft creation/read-back skipped",
+      "natureFrontiersPromotionGuard": "PASS: both draft and final-payload policy reject product/affiliate promotions; all three supplied Selar URLs and named Wildlife Creator Vault covered",
       "evidence": {
-        "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40896235089",
-        "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40896235208",
-        "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40896235156",
-        "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40896235539",
-        "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40896235238",
-        "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40896235130",
-        "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40896235384",
-        "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40896235084"
-      },
-      "dashboardMutationAuthMatrix": "PASS: all 28 declared mutating API routes reject missing and invalid operator tokens with 401 before input validation or mutation",
-      "dashboardAuthMatrix": "PASS: 35 protected API route declarations (28 mutating + 7 GET) reject missing and invalid operator tokens with 401",
-      "dashboardInventoryMultilineRouteRegression": "PASS: multiline literal route detection regression covered",
-      "simultaneousWorkerLeaseClaim": "PASS: simultaneous claims yield one 200 grant, one 400 rejection, one durable claim audit event",
-      "simultaneousDraftIdempotency": "PASS: concurrent duplicate drafts yield one 201, one 409, one queue item and one production job",
-      "facebookWorkflowBoundary": "PASS: local-only workflow name and BLOCKED_EXTERNAL summary tested",
-      "facebookPublisherSafety": "PASS: scheduled autonomous publisher workflow hardcodes FACEBOOK_PUBLISH_ENABLED=NO; config remains publishingEnabled=false, dryRun=true, emergencyStop=true",
-      "rightsVerificationTimestamp": "PASS: strict timezone-qualified, calendar-valid rights evidence timestamp; automation/security run 40940647523",
-      "reviewReceiptTimestamp": "PASS: creation and reuse validate reviewedAt; automation/security run 40940647523"
+        "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592775",
+        "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592787",
+        "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592837",
+        "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592840",
+        "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592897",
+        "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592859",
+        "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592898",
+        "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592805"
+      }
     },
     "evidence": {
       "automation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647523",
@@ -1374,24 +1380,80 @@
       "e8a0dc42a06939004737ac75114b0340050a64bc",
       "2699f4152f7e0f252a46fe6aa6ba55018b6bb885",
       "e33f96f54880a640fab4ddbd934f619d7ac23a81",
-      "726e3fca8d0a1a79a76f9d04fefcd440b83f52cc"
+      "726e3fca8d0a1a79a76f9d04fefcd440b83f52cc",
+      "798d507dbb6188ac9df555c1300507c2f6b3815a",
+      "b31149df440a4c02cb2d7541b4894dcd916b8796"
     ],
-    "candidateSourceTestSha": "115fe82252b4fa1ef1eb2f9587bf0653356a6dc9",
+    "candidateSourceTestSha": "b31149df440a4c02cb2d7541b4894dcd916b8796",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "At exact source/test SHA 115fe82252b4fa1ef1eb2f9587bf0653356a6dc9, review receipt creation rejects invalid reviewedAt timestamps and isReviewCurrent rejects persisted receipts with invalid reviewedAt. Regression cases cover timezone-free, impossible-calendar, invalid-offset and malformed values. Automation passed 426 Node tests (0 failures, 0 skips), 16 Python tests, npm audit 0 vulnerabilities, syntax/compilation; content quality, metadata, 15 Chromium journeys, isolated baseline and branch inventory passed. Production readiness remains blocked by 13 prerequisites; Meta provider-side draft creation/read-back was skipped.",
-    "latestDocumentedPrHeadBeforeRegisterRefresh": "fc5c8d16193d6341224d64b4f105be47d6262a93",
-    "observedBranchHeadBeforeRegisterRefresh": "634c9add5e889e02cd45986205a2197605be7b8b",
-    "latestLiveBranchHeadBeforeRegisterRefresh": "e04629db2f6babe0306755ad441abe914cb4d29a",
-    "latestLiveAheadBy": 2105,
+    "latestChangeTestReason": "Exact source/test SHA b31149df440a4c02cb2d7541b4894dcd916b8796 adds a regression for the apostrophe in Complete YouTube Wildlife Creator's Vault. The preceding commit 798d507dbb6188ac9df555c1300507c2f6b3815a adds the fail-closed Nature Frontiers Facebook/Instagram promotion guard in draft and final-payload evaluation. Exact-HEAD CI passed 426 Node tests (0 failures, 0 skips), 16 Python tests, npm audit 0 vulnerabilities, 15 Chromium journeys, isolated baseline and branch inventory. Production readiness remains blocked by 13 prerequisites; provider-side Meta draft creation/read-back was skipped.",
+    "latestDocumentedPrHeadBeforeRegisterRefresh": "b31149df440a4c02cb2d7541b4894dcd916b8796",
+    "observedBranchHeadBeforeRegisterRefresh": "b31149df440a4c02cb2d7541b4894dcd916b8796",
+    "latestLiveBranchHeadBeforeRegisterRefresh": "b31149df440a4c02cb2d7541b4894dcd916b8796",
+    "latestLiveAheadBy": 2166,
     "latestLiveBehindBy": 2,
-    "latestLiveChangedFiles": 178,
-    "currentLiveHeadBeforeRegisterRefresh": "fc5c8d16193d6341224d64b4f105be47d6262a93",
-    "currentLiveAheadBy": 2114,
+    "latestLiveChangedFiles": 182,
+    "currentLiveHeadBeforeRegisterRefresh": "b31149df440a4c02cb2d7541b4894dcd916b8796",
+    "currentLiveAheadBy": 2166,
     "currentLiveBehindBy": 2,
-    "currentLiveChangedFiles": 178,
-    "latestInventoryHead": "6562977544164e121671f5c635af610fcad20161",
-    "latestInventoryAheadBy": 2109,
+    "currentLiveChangedFiles": 182,
+    "latestInventoryHead": "b31149df440a4c02cb2d7541b4894dcd916b8796",
+    "latestInventoryAheadBy": 2166,
     "latestInventoryBehindBy": 2,
-    "latestInventoryArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40856976846/artifacts/12889427360"
+    "latestInventoryArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592859/artifacts/12961912400",
+    "latestInventoryArtifactSha256": "sha256:9e82fbcc5b8a2cd5c0f51211481d0693bb4ec9cd0014b26072884497c90a56e2",
+    "externalState": {
+      "metricoolBrandCount": 1,
+      "brandName": "Nature Frontiers",
+      "brandId": "7545638",
+      "youtubeChannelId": "UCSlkuPfHH78oGC1o418HV4w",
+      "resolvedChannelTitle": "SonicVibes",
+      "destinationVerified": false,
+      "scheduledPromotionalPosts": 8,
+      "scheduledPostIds": [
+        "406357296",
+        "406357335",
+        "406357364",
+        "406357388",
+        "406357414",
+        "406357443",
+        "406357483",
+        "406357554"
+      ],
+      "scheduledState": {
+        "draft": false,
+        "autoPublish": true
+      },
+      "modified": false
+    },
+    "spacingCheck": {
+      "publicVideosInInspectedTwelveMonthRange": 1,
+      "videoId": "LjePS02hA1o",
+      "rawMetricTimestamp": "20261022150556",
+      "timezoneReturned": false,
+      "elapsedIfUtc": "184h 31m 02s",
+      "elapsedIfAfricaJohannesburg": "186h 31m 02s",
+      "minimumRequired": "72h",
+      "fullHistoryVerified": false,
+      "status": "UNVERIFIED",
+      "reason": "Private/unlisted history, uncertain upload attempts and timezone interpretation are incomplete."
+    },
+    "heygen": {
+      "completedDurationsSeconds": [
+        20.4016,
+        22.3085,
+        24.32,
+        48.7967
+      ],
+      "newHookShortRendered": false,
+      "latestListedFailedAttempt": "MOVIO_PAYMENT_INSUFFICIENT_CREDIT",
+      "paidRenderStartedThisRun": false
+    },
+    "keywordResearch": {
+      "keywordVolumeAccessed": false,
+      "sourceType": "Qualitative web search evidence only",
+      "vidIQKeywordResearchCreditsSpent": 0,
+      "note": "A separate 5-credit VidIQ channel lookup was used for destination identity; no VidIQ keyword-volume lookup was run."
+    }
   }
 }
