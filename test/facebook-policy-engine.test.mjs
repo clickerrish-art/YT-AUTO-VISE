@@ -128,6 +128,10 @@ test("Nature Frontiers rejects product and affiliate promotions even when disclo
     const affiliateCopy = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(affiliateCopy.eligible, false);
     assert.ok(affiliateCopy.blockers.some(item => /product and affiliate promotions are prohibited/i.test(item)));
+    f.payload.caption = "The Complete YouTube Wildlife Creator's Vault is available now.";
+    const namedProduct = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(namedProduct.eligible, false);
+    assert.ok(namedProduct.blockers.some(item => /product and affiliate promotions are prohibited/i.test(item)));
     f.payload.caption = "Buy now and download your copy today.";
     const promotionalCallToAction = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(promotionalCallToAction.eligible, false);

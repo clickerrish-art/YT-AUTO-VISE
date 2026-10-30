@@ -64,7 +64,7 @@ function isNatureFrontiersProductPromotion(draft) {
       return host === "selar.com" || host.endsWith(".selar.com") || host === "safari.com" || host.endsWith(".safari.com");
     } catch { return false; }
   });
-  const promotionCopy = /\b(?:affiliate|earn commission|may earn|paid partnership|sponsored|advertisement|buy now|shop now|order now|purchase now|download now|get your copy|product link|promotional link|complete youtube wildlife creators vault|full video creation prompt pack premium edition|youtube success blueprint(?: 90-day creator system)?|selar)\b/i.test(caption);
+  const promotionCopy = /\b(?:affiliate|earn commission|may earn|paid partnership|sponsored|advertisement|buy now|shop now|order now|purchase now|download now|get your copy|product link|promotional link|complete youtube wildlife creator|full video creation prompt pack premium edition|youtube success blueprint(?: 90-day creator system)?|selar)\b/i.test(caption);
   return draft?.commercial === true || Boolean(String(draft?.campaignId ?? "").trim()) || hasStorefrontLink || promotionCopy;
 }
 

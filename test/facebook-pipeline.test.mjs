@@ -123,6 +123,8 @@ test("commercial disclosures, approved Selar destination and high-impact claims 
   assert.ok(wrongCampaign.blockers.some(x => /exact approved selar-wildlife-vault campaign ID/i.test(x)));
   const unrelatedPillar = evaluateFacebookDraft({ ...draft, pillar: "wildlife_behaviour", caption: "Find details at https://selar.com/0u19v8u99l", commercial: true, disclosure: "Promotional link; review seller terms.", externalLinksReviewed: true, campaignId: "selar-wildlife-vault" }, { expectedPageId: "123456789012345", rightsRoot: root });
   assert.ok(unrelatedPillar.blockers.some(x => /unrelated content pillar/i.test(x)));
+  const namedProduct = evaluateFacebookDraft({ ...draft, caption: "The Complete YouTube Wildlife Creator's Vault is available now." }, { expectedPageId: "123456789012345", rightsRoot: root });
+  assert.ok(namedProduct.blockers.some(x => /Nature Frontiers social channels are education-only/i.test(x)));
   const healthClaim = evaluateFacebookDraft({ ...draft, caption: "This miracle cure cures cancer and is completely safe." }, { expectedPageId: "123456789012345", rightsRoot: root });
   assert.ok(healthClaim.flags.some(x => /high-impact health/i.test(x)));
   assert.equal(healthClaim.ok, false);
