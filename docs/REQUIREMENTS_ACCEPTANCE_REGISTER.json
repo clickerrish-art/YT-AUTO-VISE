@@ -4,7 +4,7 @@
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
   "recordedAt": "2026-10-30",
-  "evidencePolicy": "Live refs checked 2026-10-30 09:36 SAST: PR #1 HEAD at documentation snapshot ef3eadd005a811f9596e1cc12fa58beaf4770a03; exact tested application/source candidate b31149df440a4c02cb2d7541b4894dcd916b8796; main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; compare 2167 ahead / 2 behind / 182 changed files. Exact candidate CI: 426 Node tests, 16 Python tests, npm audit 0 vulnerabilities, 15 Chromium journeys, content quality, metadata and isolated baseline passed. Documentation-head workflows also passed; production readiness remains blocked by 13 prerequisites; Meta provider-side draft creation/read-back skipped. Branch protection reports protected=false.",
+  "evidencePolicy": "Live GitHub integration refs checked 2026-10-30 after the restore durability fix: PR #1 HEAD 29537d71411d227a6da01f980671d72c4a9a4f2e; main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; compare 2173 ahead / 2 behind / 182 changed files. GitHub repository integration reports admin permissions and accepted two fast-forward branch commits. No local checkout was attached; all test evidence below comes from GitHub Actions on the exact candidate SHA. Restore directory-entry durability hardening passed 428 Node tests (0 failures, 0 skips), 16 Python tests, npm audit 0 vulnerabilities, FFmpeg/ffprobe checks, 15 Chromium journeys, isolated baseline, and non-destructive branch inventory. Production readiness remains blocked by 13 external/operational prerequisites; provider-side Meta draft creation/read-back skipped. Remote Metricool read-only recheck confirms eight future Nature Frontiers scheduled promotional posts remain draft=false and autoPublish=true; no provider-side post was modified.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -23,9 +23,11 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/deefa1d83097a298bd39c2eeb04f5aa29ffd4774",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/29537d71411d227a6da01f980671d72c4a9a4f2e"
       ],
-      "nextAction": "Live refs checked 2026-10-30: PR #1 HEAD a1152a2ce936af2e4dd4ccb88cc63d7bafb483cb; main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; GitHub compare 1,821 ahead / 2 behind / 164 changed files. PR remains open, draft and unmerged. No main edits, merge, rebase, reset, force-push or branch deletion. Human semantic review of the divergent history remains incomplete; owner/admin must verify branch protection and required checks.",
+      "nextAction": "Live GitHub integration check 2026-10-30: PR #1 HEAD 29537d71411d227a6da01f980671d72c4a9a4f2e; main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; compare 2,173 ahead / 2 behind / 182 changed files. PR remains open, draft and unmerged. Two new commits were fast-forward additions through the connected GitHub integration; no main edit, merge, rebase, reset, force-push or branch deletion. Local checkout/write probe was unavailable; remote integration reports admin permission. Human semantic review of the divergent history and owner branch-protection verification remain incomplete.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch."
     },
@@ -102,9 +104,19 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40832559799",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40832559712",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40832559722",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40832559729"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40832559729",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119408",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119355",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119534",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119353",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119318",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119397",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119384",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119335",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/deefa1d83097a298bd39c2eeb04f5aa29ffd4774",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/29537d71411d227a6da01f980671d72c4a9a4f2e"
       ],
-      "nextAction": "Exact source/test candidate 115fe82252b4fa1ef1eb2f9587bf0653356a6dc9 passed 426 Node tests (0 failures, 0 skips), 16 Python tests, npm audit 0 vulnerabilities, FFmpeg/ffprobe, JavaScript syntax and Python compilation. Exact-candidate workflows: automation/security 40940647523; content quality 40940647323; metadata 40940647496; dashboard E2E 40940647329 (15 Chromium journeys); isolated baseline 40940647321; non-destructive branch inventory 40940647363. The current PR HEAD a1152a2ce936af2e4dd4ccb88cc63d7bafb483cb is a documentation-only descendant and is not claimed as a new application-code test run. Production readiness remains intentionally blocked; local Meta draft validation is not provider-side draft acceptance.",
+      "nextAction": "Exact candidate 29537d71411d227a6da01f980671d72c4a9a4f2e passed 428 Node tests (0 failures, 0 skips), 16 Python tests, npm audit 0 vulnerabilities, FFmpeg/ffprobe, JavaScript syntax and Python compilation. Exact-candidate workflows: automation/security 41118119408; content quality 41118119355; metadata 41118119534; dashboard E2E 41118119353 (15 Chromium journeys); isolated baseline 41118119318; non-destructive branch inventory 41118119397. Production readiness 41118119384 correctly remains blocked by 13 prerequisites. The Nature Frontiers workflow 41118119335 passed local draft-package validation only; provider-side draft creation/read-back was skipped.",
       "assessmentCommitSha": "986fe282b84c14f72d7c735c46259ca15722b858",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped."
     },
@@ -249,9 +261,13 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633578",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633488",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633501"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633501",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/deefa1d83097a298bd39c2eeb04f5aa29ffd4774",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/29537d71411d227a6da01f980671d72c4a9a4f2e",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119408",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119318"
       ],
-      "nextAction": "Backup refuses snapshots while an interrupted restore journal exists or is unsafe; separate-process shared-lock contention and lock cleanup are tested. Exact candidate 379dd09a5990db6c64e94a51f9d7606013e2604d passed 411 Node tests and the isolated baseline. Full process-kill/restart, power-loss transaction-boundary, rollback and uncertain remote-side-effect recovery remain incomplete; requirement remains NOT_TESTED. Additional exact-candidate hardening: backup output parent directories are now created component-by-component with symlink rejection before creating descendants; regression verifies no nested directory is created through a symlink and the shared operation lock is released. This does not complete process-kill/restart, power-loss, or deployment rollback drills. New controlled child-process termination regression at candidate 1e55ac4e231db83fa77b6a5f8b5d50997e992c79 commits dashboard state then exits before cleanup; after confirming child exit, test removes the stale lock explicitly, reruns restore, and proves byte-exact rollback and journal cleanup. This covers one controlled transaction boundary, not every boundary or true power-loss durability; STATE-001 remains NOT_TESTED.",
+      "nextAction": "Restore now fsyncs each committed destination directory after rename, fsyncs rollback replacements and missing-file deletions, and fsyncs the journal directory after journal removal. Regression test verifies every destination directory flush occurs before journal deletion and the journal directory is flushed afterward. Exact candidate 29537d71411d227a6da01f980671d72c4a9a4f2e passed 428 Node tests, 0 failures, 0 skips, 16 Python tests, npm audit 0 vulnerabilities, FFmpeg/ffprobe and isolated main/candidate baseline. This closes the directory-entry durability ordering slice only. STATE-001 remains NOT_TESTED pending kill/restart at every transaction boundary, power-loss and disk-full drills, full cross-process idempotency, deployment rollback, and ambiguous external side-effect reconciliation.",
       "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
       "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects."
     },
@@ -348,9 +364,11 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/tests/restore-state.test.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517549",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40881209440"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40881209440",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119397",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/29537d71411d227a6da01f980671d72c4a9a4f2e"
       ],
-      "nextAction": "Live compare at tested source/test candidate 9229671e82180eadb92411cdd5ac9e649da79fdb: 2,120 commits ahead / 2 behind, merge base 45352b73bb6cc4787b2a49988b575afb754ab627, 178 changed files. Non-destructive inventory workflow 40881209440 passed and generated the branch inventory, but human semantic review of branch-only/base-only commits, patch-equivalent and overlapping changes, workflows/security/configuration, and the restore-history incident remains incomplete. Preserve both restore-history test variants. Do not reset, rebase, merge, force-push or delete branches.",
+      "nextAction": "Live compare after exact candidate 29537d71411d227a6da01f980671d72c4a9a4f2e: 2,173 commits ahead / 2 behind, merge base 45352b73bb6cc4787b2a49988b575afb754ab627, 182 changed files. Non-destructive inventory workflow 41118119397 passed; human semantic review of branch-only/base-only commits, patch-equivalent and overlapping changes, workflows/security/configuration, and restore-history incident remains incomplete. Preserve both restore-history test variants. Do not reset, rebase, merge, force-push or delete branches.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants."
     },
@@ -954,7 +972,7 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/METRICOOL_LIVE_PUBLISHING_RISK_2026-10-28.md"
       ],
-      "nextAction": "Read-only Metricool inspection on 2026-10-28 found eight future Nature Frontiers records (brandId 7545638), all autoPublish=true and draft=false: 406357296 (2026-10-31 10:00 SAST, Facebook); 406357335 (2026-11-04 10:00, Facebook); 406357364 (2026-11-07 10:00, Facebook); 406357388 (2026-11-11 10:00, Facebook); 406357414 (2026-11-14 10:00, Facebook); 406357443 (2026-11-18 10:00, Facebook); 406357483 (2026-11-21 10:00, Facebook); 406357554 (2026-11-25 10:00, Facebook and Instagram). No schedules were changed. Obtain explicit owner decision for each record before pausing, cancelling or changing any; re-read provider state after any authorized change.",
+      "nextAction": "Read-only Metricool recheck on 2026-10-30 confirms all eight future Nature Frontiers records still exist with draft=false and autoPublish=true: 406357296 (2026-10-31 10:00 SAST, Facebook); 406357335 (2026-11-04 10:00, Facebook); 406357364 (2026-11-07 10:00, Facebook); 406357388 (2026-11-11 10:00, Facebook); 406357414 (2026-11-14 10:00, Facebook); 406357443 (2026-11-18 10:00, Facebook); 406357483 (2026-11-21 10:00, Facebook); 406357554 (2026-11-25 10:00, Facebook and Instagram). Content contains commercial/affiliate product promotion and Selar destinations. The first post is scheduled tomorrow at 10:00 SAST. No remote schedule was modified. Owner must explicitly decide whether to pause/cancel/edit each post; re-read provider state after any authorized intervention.",
       "assessmentCommitSha": "83d810069b1fe9404f6bc5d5bb45d72ba67d9cd4",
       "acceptanceCriterion": "The owner has decided which records are intended; any authorized changes are verified by a fresh Metricool read-back; no unintended scheduled publication remains active; evidence does not expose credentials."
     },
@@ -1312,53 +1330,54 @@
     }
   ],
   "currentCheckpoint": {
-    "applicationCodeSha": "b31149df440a4c02cb2d7541b4894dcd916b8796",
-    "testedSha": "b31149df440a4c02cb2d7541b4894dcd916b8796",
-    "checkpointPrHead": "ef3eadd005a811f9596e1cc12fa58beaf4770a03",
+    "applicationCodeSha": "deefa1d83097a298bd39c2eeb04f5aa29ffd4774",
+    "testedSha": "29537d71411d227a6da01f980671d72c4a9a4f2e",
+    "checkpointPrHead": "29537d71411d227a6da01f980671d72c4a9a4f2e",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 2167,
+    "aheadBy": 2173,
     "behindBy": 2,
     "changedFiles": 182,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "NATURE FRONTIERS PRODUCT-PROMOTION HARD BLOCK PASS / EXACT-HEAD CI PASS / DASH-001 INCOMPLETE / PRODUCTION NOT READY",
+    "verdict": "RESTORE DIRECTORY DURABILITY HARDENING PASS / EXACT-CANDIDATE CI PASS / STATE-001 STILL NOT_TESTED / PRODUCTION NOT READY",
     "ci": {
       "automationSecurity": "PASS",
-      "nodeTests": 426,
+      "nodeTests": 428,
       "nodeFailures": 0,
       "nodeSkipped": 0,
       "pythonTests": 16,
       "npmAuditVulnerabilities": 0,
-      "contentQuality": "PASS (426 tests; 0 failures; 0 skips)",
-      "metadata": "PASS (426 tests; 0 failures; 0 skips)",
+      "contentQuality": "PASS (428 tests; 0 failures; 0 skips)",
+      "metadata": "PASS (428 tests; 0 failures; 0 skips; unreviewed metadata remains fail-closed)",
       "dashboardE2e": "PASS: 15 Chromium journeys; not exhaustive per-control acceptance",
-      "isolatedBaseline": "PASS: exact main and candidate baseline at b31149df440a4c02cb2d7541b4894dcd916b8796; run 41022592897",
-      "branchReconciliationInventory": "PASS: run 41022592859; full semantic review remains incomplete",
-      "productionReadiness": "BLOCKED / fail-closed as designed; 13 blockers; run 41022592898",
-      "facebookDraftWorkflow": "PASS for local validation only: run 41022592805; provider-side draft creation/read-back skipped",
+      "isolatedBaseline": "PASS: exact main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate 29537d71411d227a6da01f980671d72c4a9a4f2e",
+      "branchReconciliationInventory": "PASS: run 41118119397; inventory only, semantic review incomplete",
+      "productionReadiness": "BLOCKED / fail-closed as designed; 13 blockers; run 41118119384",
+      "facebookDraftWorkflow": "PASS for local validation only: run 41118119335; provider-side draft creation/read-back skipped",
       "natureFrontiersPromotionGuard": "PASS: both draft and final-payload policy reject product/affiliate promotions; all three supplied Selar URLs and named Wildlife Creator Vault covered",
       "evidence": {
         "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592775",
-        "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592787",
-        "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592837",
-        "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592840",
-        "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592897",
-        "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592859",
-        "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592898",
-        "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592805"
+        "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119355",
+        "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119534",
+        "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119353",
+        "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119318",
+        "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119397",
+        "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119384",
+        "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119335",
+        "automation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119408"
       }
     },
     "evidence": {
-      "automation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647523",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647323",
-      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647496",
-      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647329",
-      "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647448",
-      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647309",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647321",
-      "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647363"
+      "automation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119408",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119355",
+      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119534",
+      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119353",
+      "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119384",
+      "facebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119335",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119318",
+      "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119397"
     },
     "implementationCommits": [
       "e40ae4fd38e6bf015af26dcaa0a44335d34d8e1d",
@@ -1383,26 +1402,28 @@
       "726e3fca8d0a1a79a76f9d04fefcd440b83f52cc",
       "798d507dbb6188ac9df555c1300507c2f6b3815a",
       "b31149df440a4c02cb2d7541b4894dcd916b8796",
-      "ef3eadd005a811f9596e1cc12fa58beaf4770a03"
+      "ef3eadd005a811f9596e1cc12fa58beaf4770a03",
+      "deefa1d83097a298bd39c2eeb04f5aa29ffd4774",
+      "29537d71411d227a6da01f980671d72c4a9a4f2e"
     ],
-    "candidateSourceTestSha": "b31149df440a4c02cb2d7541b4894dcd916b8796",
+    "candidateSourceTestSha": "29537d71411d227a6da01f980671d72c4a9a4f2e",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Exact source/test SHA b31149df440a4c02cb2d7541b4894dcd916b8796 adds a regression for the apostrophe in Complete YouTube Wildlife Creator's Vault. The preceding commit 798d507dbb6188ac9df555c1300507c2f6b3815a adds the fail-closed Nature Frontiers Facebook/Instagram promotion guard in draft and final-payload evaluation. Exact-HEAD CI passed 426 Node tests (0 failures, 0 skips), 16 Python tests, npm audit 0 vulnerabilities, 15 Chromium journeys, isolated baseline and branch inventory. Production readiness remains blocked by 13 prerequisites; provider-side Meta draft creation/read-back was skipped.",
-    "latestDocumentedPrHeadBeforeRegisterRefresh": "ef3eadd005a811f9596e1cc12fa58beaf4770a03",
-    "observedBranchHeadBeforeRegisterRefresh": "ef3eadd005a811f9596e1cc12fa58beaf4770a03",
-    "latestLiveBranchHeadBeforeRegisterRefresh": "ef3eadd005a811f9596e1cc12fa58beaf4770a03",
-    "latestLiveAheadBy": 2167,
+    "latestChangeTestReason": "Commit deefa1d83097a298bd39c2eeb04f5aa29ffd4774 adds directory fsync after restore destination commits, rollback renames and recovery deletions, plus a directory fsync after journal removal. Commit 29537d71411d227a6da01f980671d72c4a9a4f2e adds an ordering regression. Exact-candidate automation/security run 41118119408 passed 428 Node tests (0 failures, 0 skips), 16 Python tests, npm audit 0 vulnerabilities, FFmpeg/ffprobe, syntax and compilation. Content quality, metadata, 15 Chromium journeys, isolated baseline and branch inventory passed. Production readiness remains blocked by 13 prerequisites; provider-side Meta draft creation/read-back was skipped.",
+    "latestDocumentedPrHeadBeforeRegisterRefresh": "29537d71411d227a6da01f980671d72c4a9a4f2e",
+    "observedBranchHeadBeforeRegisterRefresh": "29537d71411d227a6da01f980671d72c4a9a4f2e",
+    "latestLiveBranchHeadBeforeRegisterRefresh": "29537d71411d227a6da01f980671d72c4a9a4f2e",
+    "latestLiveAheadBy": 2173,
     "latestLiveBehindBy": 2,
     "latestLiveChangedFiles": 182,
-    "currentLiveHeadBeforeRegisterRefresh": "ef3eadd005a811f9596e1cc12fa58beaf4770a03",
-    "currentLiveAheadBy": 2167,
+    "currentLiveHeadBeforeRegisterRefresh": "29537d71411d227a6da01f980671d72c4a9a4f2e",
+    "currentLiveAheadBy": 2173,
     "currentLiveBehindBy": 2,
     "currentLiveChangedFiles": 182,
-    "latestInventoryHead": "ef3eadd005a811f9596e1cc12fa58beaf4770a03",
-    "latestInventoryAheadBy": 2167,
+    "latestInventoryHead": "29537d71411d227a6da01f980671d72c4a9a4f2e",
+    "latestInventoryAheadBy": 2173,
     "latestInventoryBehindBy": 2,
-    "latestInventoryArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41023127689/artifacts/12962975376",
-    "latestInventoryArtifactSha256": "sha256:7f00f8f1b481b8a7fd626ac950ea78e47f8b90159c8949bc13e3eef72668c7c9",
+    "latestInventoryArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119397",
+    "latestInventoryArtifactSha256": null,
     "externalState": {
       "metricoolBrandCount": 1,
       "brandName": "Nature Frontiers",
@@ -1425,7 +1446,8 @@
         "draft": false,
         "autoPublish": true
       },
-      "modified": false
+      "modified": false,
+      "lastReadOnlyRecheck": "2026-10-30"
     },
     "spacingCheck": {
       "publicVideosInInspectedTwelveMonthRange": 1,
