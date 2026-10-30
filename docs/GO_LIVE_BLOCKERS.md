@@ -1,3 +1,9 @@
+## Live blocker update — 30 October 2026
+
+Exact tested source/test candidate: `115fe82252b4fa1ef1eb2f9587bf0653356a6dc9`; live PR #1 HEAD after documentation-only refresh: `a1152a2ce936af2e4dd4ccb88cc63d7bafb483cb`. Register remains 53 PASS / 8 NOT_TESTED / 8 BLOCKED_EXTERNAL. DASH-001 exhaustive dashboard/API acceptance, STATE-001 complete crash/power-loss and rollback acceptance, SCHED-001 complete queue/history/restart acceptance, GIT-002 human semantic reconciliation and DEPLOY-001 isolated deployment/rollback remain NOT_TESTED. External blockers remain verified YouTube identity/OAuth/history and operation-specific private upload, genuine media/rights/human approval, Meta identity/provider draft read-back, owner cadence decision, native Related-video eligibility, per-record Metricool decisions and repository branch protection. See `CURRENT_RELEASE_EVIDENCE_2026-10-30.md` and `REQUIREMENTS_ACCEPTANCE_REGISTER.json` for exact evidence and owner actions.
+
+---
+
 # Current authoritative release checkpoint — 29 October 2026
 
 Exact tested source/test candidate: `726e3fca8d0a1a79a76f9d04fefcd440b83f52cc`. Exact-candidate automation/security, content quality, metadata, 15 Chromium browser journeys, isolated main/candidate baseline and full-history branch inventory passed; 420 Node tests passed with zero failures/skips, 16 Python tests passed, and npm audit reported zero vulnerabilities. Production-readiness CI remains intentionally blocked on missing prerequisites.
