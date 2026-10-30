@@ -950,8 +950,8 @@ test("authoring form generates and persists a source-bound script through the re
     fs.mkdirSync(narrationFixtureDir, { recursive: true });
     const digest = value => crypto.createHash("sha256").update(value).digest("hex");
     const fixtureAudio = Buffer.from("test fixture bytes only; not playable production audio");
-    const fixtureTranscript = String(stageJob.authoring.result.script.narration).replace(/\\s+/gu, " ").trim() + "\\n";
-    const fixtureCaptions = "1\\n00:00:00,000 --> 00:00:55,000\\nNarration caption fixture.\\n";
+    const fixtureTranscript = String(stageJob.authoring.result.script.narration).replace(/\s+/gu, " ").trim() + "\n";
+    const fixtureCaptions = "1\n00:00:00,000 --> 00:00:55,000\nNarration caption fixture.\n";
     const writeArtifact = (name, bytes) => {
       const file = path.join(narrationFixtureDir, name);
       fs.writeFileSync(file, bytes);
@@ -968,7 +968,7 @@ test("authoring form generates and persists a source-bound script through the re
       captionsSha256: captionsArtifact.sha256, humanReviewRequired: true,
       rightsStatus: "NOT_VERIFIED", status: "DRAFT_REVIEW_REQUIRED", publishingEnabled: false
     };
-    const reportArtifact = writeArtifact("narration-report.json", Buffer.from(JSON.stringify(fixtureReport) + "\\n"));
+    const reportArtifact = writeArtifact("narration-report.json", Buffer.from(JSON.stringify(fixtureReport) + "\n"));
     stageJob.authoring.narrationStage = {
       status: "DRAFT_REVIEW_REQUIRED", scriptSha256: reviewedScriptSha,
       scriptApprovalSha256: stageJob.authoring.scriptApproval.approvalSha256,
