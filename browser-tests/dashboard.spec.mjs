@@ -1269,7 +1269,16 @@ test("production-plan submission and hash-bound review persist through the real 
     await exited;
   };
   const waitForServer = async () => {
-    await waitForServer();
+    let ready = false;
+    for (let attempt = 0; attempt < 100; attempt++) {
+      if (child.exitCode !== null) throw new Error("Production-plan dashboard exited before startup: " + logs);
+      try {
+        const response = await fetch(base + "/healthz");
+        if (response.ok) { ready = true; break; }
+      } catch {}
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    if (!ready) throw new Error("Production-plan dashboard did not become ready: " + logs);
   };
   startServer();
 
