@@ -91,4 +91,29 @@ $("narrationreviewform").onsubmit=async e=>{e.preventDefault();const result=$("n
 $("runTask").onclick=runTask;$("connect").onclick=connect;$("refresh").onclick=connect;$("search").oninput=drawQueue;$("filter").onchange=drawQueue;
 $("day").onchange=()=>{const slot=(state?.schedule?.schedule||[]).find(item=>item.day===$("day").value);if(slot)$("type").value=slot.format};$("type").onchange=()=>{const slot=(state?.schedule?.schedule||[]).find(item=>item.format===$("type").value);if(slot)$("day").value=slot.day};
 $("draft").onsubmit=async e=>{e.preventDefault();try{const item={id:$("id").value,title:$("title").value,topic:$("topic").value,contentType:$("type").value,scheduledDay:$("day").value,scheduledDate:$("scheduledDate").value,productUrl:$("campaign").value,status:"DRAFT_REVIEW_REQUIRED"};const saved=await api("/api/drafts",{method:"POST",body:JSON.stringify(item)});$("draft").reset();await connect();msg("Draft saved and production job "+saved.job.id+" queued. No media has been generated and no rights or review approval was granted.");}catch(err){msg(err.message)}};
+
+/*
+ * A browser can dispatch a second submit while an asynchronous operation is
+ * still in flight. Keep each form single-flight at the UI boundary as well as
+ * relying on the server's operation-specific idempotency and state guards.
+ * This does not replace server-side duplicate protection.
+ */
+const activeFormSubmissions=new WeakSet();
+for(const form of document.forms){
+  const handler=form.onsubmit;
+  if(typeof handler!=="function")continue;
+  form.onsubmit=async event=>{
+    if(activeFormSubmissions.has(form)){
+      event.preventDefault();
+      return false;
+    }
+    activeFormSubmissions.add(form);
+    form.setAttribute("aria-busy","true");
+    try{return await handler.call(form,event);}
+    finally{
+      activeFormSubmissions.delete(form);
+      form.removeAttribute("aria-busy");
+    }
+  };
+}
 </script></body></html>
