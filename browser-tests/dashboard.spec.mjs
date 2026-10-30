@@ -620,3 +620,53 @@ test("production-plan controls are exposed and report backend rejection without 
   await expect(page.locator("#productionplanresult")).toContainText("Current approved narration artifacts are missing or stale");
   await expect(page.locator("#produceresult")).toContainText(/Action unavailable:.*approved script, narration and production-plan evidence/i);
 });
+
+test("authoring and approval forms reject malformed evidence without false success", async ({ page, request }) => {
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  const headers = { "x-operator-token": operatorToken };
+  const beforeResponse = await request.get("/api/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+  const beforeJobs = before.jobs.length;
+  const beforeAudit = before.auditLog?.length ?? 0;
+
+  const submitWithoutNativeValidation = async (formId) => {
+    await page.locator("#" + formId).evaluate(form => {
+      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    });
+  };
+
+  await page.locator("#authorbrief").fill("{invalid-json");
+  await submitWithoutNativeValidation("authoringform");
+  await expect(page.locator("#authoringresult")).toContainText("Research brief must be valid JSON.");
+
+  await page.locator("#scriptreviewsha").fill("not-a-sha");
+  await submitWithoutNativeValidation("scriptreviewform");
+  await expect(page.locator("#scriptreviewresult")).toContainText("A valid exact script SHA-256 is required.");
+
+  await page.locator("#narrationsha").fill("not-a-sha");
+  await submitWithoutNativeValidation("narrationform");
+  await expect(page.locator("#narrationresult")).toContainText("A valid approved script SHA-256 is required.");
+
+  await page.locator("#productionplanjson").fill("{invalid-json");
+  await submitWithoutNativeValidation("productionplanform");
+  await expect(page.locator("#productionplanresult")).toContainText("Production plan must be valid JSON.");
+
+  await page.locator("#assetsJson").fill("{invalid-json");
+  await submitWithoutNativeValidation("rightsform");
+  await expect(page.locator("#rightsresult")).toContainText("Rights verification blocked:");
+
+  const afterResponse = await request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  const after = await afterResponse.json();
+  expect(after.jobs.length).toBe(beforeJobs);
+  expect(after.auditLog?.length ?? 0).toBe(beforeAudit);
+  await expect(page.locator("#authoringresult")).not.toContainText("Script saved");
+  await expect(page.locator("#narrationresult")).not.toContainText("Narration stage:");
+  await expect(page.locator("#productionplanresult")).not.toContainText("Plan persisted");
+  await expect(page.locator("#rightsresult")).not.toContainText("Rights verified");
+});
