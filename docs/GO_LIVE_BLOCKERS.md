@@ -1354,3 +1354,26 @@ Dashboard progress at the same candidate: campaign management, queue draft creat
 CI on exact candidate `521ed70a263c03df48f5b0ae1c6c726dd380ce92`: 436 Node tests, 0 failures; 16 Python tests; 17 Chromium browser journeys; npm audit 0 vulnerabilities; metadata, lockfile, isolated baseline and local Nature Frontiers draft validation passed. Production readiness intentionally returned HOLD.
 
 The acceptance register currently contains 70 requirements: 54 PASS, 8 NOT_TESTED and 8 BLOCKED_EXTERNAL. These targeted PASS statuses do not imply overall engineering or production acceptance.
+
+
+## Live fail-closed recheck — exact candidate 1334f938 — 30 October 2026
+
+Production-readiness workflow [41137046887](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137046887) completed with **HOLD: 13 blockers**. Observed exit codes were `human=2` and `json=2`; this is the expected blocked result. The report did not upload, schedule or publish.
+
+1. **Owner-controlled:** choose a feasible publication cadence mode and supply a timezone-aware approval timestamp plus non-empty approval reference.
+2. **Owner/provider-controlled:** independently reconcile complete SonicVhibez public, private and unlisted history plus all pending/uncertain upload attempts immediately before upload.
+3. **Owner-controlled:** create `content/render-manifest.json` only after verifying genuine Short asset rights.
+4. **Owner-controlled:** create `content/long-form-render-manifest.json` only after verifying genuine long-form assets and rights.
+5. **Owner-controlled:** human-review metadata and explicitly mark it `READY_FOR_PRIVATE_UPLOAD`.
+6. **Owner-controlled:** provide the verified SonicVhibez YouTube channel ID; do not guess the previously discrepant ID.
+7. **Owner-controlled:** verify media rights before setting `rightsConfirmed=true`.
+8. **Owner-controlled:** complete content/compliance review before setting `complianceReviewed=true`.
+9. **Engineering + owner asset input:** provide a genuine rendered `media/next-short.mp4`; the file is currently missing.
+10. **Owner-controlled credential configuration:** `YOUTUBE_CLIENT_ID` is missing from this execution environment.
+11. **Owner-controlled credential configuration:** `YOUTUBE_CLIENT_SECRET` is missing from this execution environment.
+12. **Owner-controlled credential configuration:** `YOUTUBE_REFRESH_TOKEN` is missing from this execution environment.
+13. **Owner-controlled identity configuration:** `SONICVHIBEZ_CHANNEL_ID` is missing from this execution environment.
+
+The application/test candidate `1334f9380dafbf5f9e6cf272e1bd14feab0045f3` passed its code/quality checks and the 18-journey dashboard browser run. A subsequent browser-test-only commit `67edf6c84d716a236f457df8b13901eee896d195` added successful hash-bound script-review form evidence. These engineering tests do not resolve the 13 production prerequisites.
+
+**Safety remains unchanged:** public/unattended YouTube publishing is disabled; no upload, schedule or publication was attempted; Nature Frontiers is not a YouTube target; Meta/Metricool external publishing was not performed.
