@@ -1172,7 +1172,7 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
     }
     const reviewBundle = await (await page.request.get(base + "/api/jobs/narration/review?jobId=" + encodeURIComponent(jobId), { headers })).json();
     expect(reviewBundle.scriptSha256).toBe(approvedSha);
-    expect(reviewBundle.transcript.split(/\s+/u)).toHaveLength(137);
+    expect(reviewBundle.transcript.trim().split(/\s+/u)).toHaveLength(137);
     expect(reviewBundle.captions).toContain("-->");
 
     await page.reload();
