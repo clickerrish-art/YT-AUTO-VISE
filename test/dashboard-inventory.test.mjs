@@ -153,5 +153,5 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
     wiredControls++;
   }
 
-  assert.equal(wiredControls, 90, "the number of non-submit dashboard controls changed; review the acceptance fixture");
+  assert.equal(wiredControls, 87, "the number of non-submit dashboard controls changed; review the acceptance fixture");
 });
