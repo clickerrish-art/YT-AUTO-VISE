@@ -1,3 +1,51 @@
+# Latest all-commit-boundary restore recovery verification — 30 October 2026
+
+## Current exact source/test candidate and live refs
+
+- Exact tested source/test candidate: `dbd65dabcc75e993ae73a9e401cf3f471e860f70`.
+- PR #1 was open, draft and unmerged at the tested candidate; this evidence update is a documentation-only descendant.
+- Implementation branch: `codex/marketing-machine-audit-fixes`.
+- Live `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`; compare: **2,181 ahead / 2 behind / 182 changed files**.
+- Connected GitHub integration reports admin permission and accepted fast-forward commits on the implementation branch. No local checkout was attached; no local write probe or local test execution is claimed. GitHub Actions ran the exact candidate tests.
+
+## Implementation and crash-recovery tests
+
+- [`deefa1d83097a298bd39c2eeb04f5aa29ffd4774`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/deefa1d83097a298bd39c2eeb04f5aa29ffd4774) flushes destination directories after restore commits, rollback replacements and recovery deletions, and flushes the journal directory after journal removal.
+- [`29537d71411d227a6da01f980671d72c4a9a4f2e`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/29537d71411d227a6da01f980671d72c4a9a4f2e) verifies destination directory flush ordering before journal removal.
+- [`3d863ffb46c492169e4b516bf1325bc5c328d71e`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3d863ffb46c492169e4b516bf1325bc5c328d71e) injects directory-fsync `EIO` after a destination rename and verifies safe rollback, journal cleanup and lock release.
+- [`109b92f0c8b3dc894a6f360b99131fa6c0fffac3`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/109b92f0c8b3dc894a6f360b99131fa6c0fffac3) makes directory-fsync-specific assertions Windows-aware; those assertions skip on Windows because Node does not expose a portable directory-fsync API.
+- [`bdfe264004ffc5451b0bae3ed66d7646a75bcdee`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/bdfe264004ffc5451b0bae3ed66d7646a75bcdee) adds child-process termination at each destination-commit boundary.
+- [`dbd65dabcc75e993ae73a9e401cf3f471e860f70`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/dbd65dabcc75e993ae73a9e401cf3f471e860f70) extends that boundary matrix to cover an existing dashboard-state replacement and all missing-file destinations. Recovery verifies exact original dashboard bytes, absence of partial restored files, staged-temp cleanup, journal removal and lock release.
+- Existing `test/restore-facebook-draft-history.test.mjs` remains present and was not deleted or recreated.
+
+## Exact-candidate CI — `dbd65dabcc75e993ae73a9e401cf3f471e860f70`
+
+| Workflow | Result | Evidence |
+|---|---|---|
+| Automation/security | **PASS** — 430 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, JavaScript syntax and Python compilation passed | [Run 41119869020](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119869020) |
+| Content quality | **PASS** — 430 tests, 0 failures, 0 skips | [Run 41119869159](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119869159) |
+| Metadata validation | **PASS** — 430 tests, 0 failures, 0 skips; unreviewed metadata remains fail-closed | [Run 41119869249](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119869249) |
+| Dashboard browser E2E | **PASS** — 15 Chromium journeys; not exhaustive per-control acceptance | [Run 41119869047](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119869047) |
+| Isolated main/candidate baseline | **PASS** — exact main and candidate Node/Python test commands exited 0 | [Run 41119869134](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119869134) |
+| Non-destructive branch inventory | **PASS** — inventory only; human semantic review remains incomplete | [Run 41119869074](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119869074) |
+| Nature Frontiers local draft package | **PASS for local validation only** — provider-side create/read-back skipped | [Run 41119869265](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119869265) |
+| Production readiness | **BLOCKED as designed** — fail-closed with 13 prerequisites; not a test-suite failure or production acceptance | [Run 41119869264](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119869264) |
+
+## Acceptance and external safety
+
+- Acceptance register remains **54 PASS / 8 NOT_TESTED / 8 BLOCKED_EXTERNAL** (70 requirements).
+- `STATE-001` remains **NOT_TESTED**. The test suite now covers process termination after every destination-commit boundary for a fixture containing both a dashboard-state replacement and missing destinations. True power-loss/disk-full tests, full cross-process idempotency, deployment rollback and ambiguous external-side-effect reconciliation remain outstanding.
+- `DASH-001` remains NOT_TESTED: 15 Chromium journeys do not prove all 105 controls, 15 forms and 38 routes.
+- Production readiness remains blocked by 13 prerequisites, including external account identity/history, genuine rights-backed media, owner approvals and deployment requirements.
+- Read-only Metricool recheck on 30 October confirms eight future Nature Frontiers promotional schedules remain `draft=false` and `autoPublish=true`; the first is due 31 October 2026 at 10:00 SAST. No remote record was changed.
+- No live YouTube upload, Meta post, campaign activation, Metricool mutation, merge or `main` edit occurred.
+
+## Verdict
+
+**PARTIALLY COMPLETE — RESTORE DURABILITY AND ALL DESTINATION-COMMIT RECOVERY BOUNDARIES VERIFIED IN CI; REMAINING ENGINEERING AND EXTERNAL ACCEPTANCE GAPS ARE OPEN.**
+
+---
+
 # Latest restore fsync failure-recovery verification — 30 October 2026
 
 ## Current exact source/test candidate and live refs
