@@ -1,5 +1,57 @@
 
 
+## Dashboard successful-form and campaign-approval acceptance — 30 October 2026
+
+Exact tested application/test candidate: `521ed70a263c03df48f5b0ae1c6c726dd380ce92`.
+
+### Implemented fixes
+
+- `public/dashboard.html`: all registered asynchronous form submit handlers are now wrapped in a single-flight guard. A second submit while the same form is in progress is prevented; the form exposes `aria-busy=true` during the operation. This is a UI-level duplicate guard only; server-side idempotency and state checks remain authoritative.
+- `scripts/campaign-management.mjs`: Selar preview now persists a pending destination, trimmed disclosure and SHA-256 fingerprint while leaving the currently approved destination/disclosure/approval unchanged. Previously the endpoint returned a preview-shaped response but did not write the preview into the campaign configuration.
+- Selar activation now requires an explicit owner confirmation and a pending preview whose destination, disclosure and canonical fingerprint exactly match the activation request. Activation binds its approval receipt to that exact preview fingerprint and clears pending preview fields. Deactivation discards any pending preview.
+- Tests cover preview persistence, immutable source configuration, canonical fingerprint, activation without confirmation, stale/mismatched disclosure rejection, exact-preview activation, and deactivation cleanup.
+
+### Form-by-form acceptance status
+
+| Form | Endpoint | Status | Demonstrated evidence / outstanding gap |
+|---|---|---|---|
+| `campaignform` | `POST /api/campaigns/manage` | **PASS** | Real browser preview and activation; double-click produces one in-flight request; pending preview persists after reload; no-confirm activation is rejected; exact preview plus owner confirmation succeeds and receipt hash matches |
+| `draft` | `POST /api/drafts` | **PASS** | Real browser draft creation, queue/job persistence, refresh, duplicate rejection and restart persistence |
+| `facebookdraftform` | `POST /api/facebook/drafts` | **PASS** | Real local Facebook draft saved and read back; `publishingEnabled=false`; no provider-side post claimed |
+| `authoringform` | `POST /api/jobs/author` | **NOT_TESTED** | Browser invalid-JSON rejection is covered; successful browser submission/read-back remains unproven |
+| `scriptreviewform` | `POST /api/jobs/authoring/review` | **NOT_TESTED** | Invalid SHA rejection is covered; successful browser approval journey remains unproven |
+| `narrationform` | `POST /api/jobs/narration` | **NOT_TESTED** | Invalid SHA rejection is covered; successful browser generation/reconciliation journey remains unproven |
+| `narrationreviewform` | `POST /api/jobs/narration/review` | **NOT_TESTED** | Complete successful browser review and durable receipt journey remains unproven |
+| `productionplanform` | `POST /api/jobs/production-plan` | **NOT_TESTED** | Invalid JSON and backend rejection feedback are covered; successful plan submission and persisted read-back remain unproven |
+| `productionplanreviewform` | `POST /api/jobs/production-plan/review` | **NOT_TESTED** | Successful hash-bound browser review remains unproven |
+| `produceform` | `POST /api/jobs/produce` | **BLOCKED** | UI correctly disables rendering without approved script, narration, production plan and genuine source assets; successful render needs valid reviewed assets |
+| `parentrelationshipform` | `POST /api/jobs/parent-relationship` | **BLOCKED** | Incomplete/stale relationship is rejected; successful binding needs genuine child/parent media, quality evidence and verified parent receipt |
+| `validationform` | `POST /api/jobs/validate` | **BLOCKED** | UI correctly disables validation without a generated job; real media export is not present for successful validation |
+| `rightsform` | `POST /api/jobs/rights/verify` | **BLOCKED** | Malformed evidence is rejected; genuine technical media and verifiable licence evidence are required for success |
+| `reviewform` | `POST /api/jobs/review` | **BLOCKED** | UI gate prevents review without technically validated and rights-cleared assets; genuine artifacts and approvals are absent |
+| `reconcileform` | `POST /api/uploads/reconcile` | **BLOCKED** | UI disables reconciliation without a durable upload attempt; a genuine uncertain remote upload receipt/history is absent |
+
+The three PASS entries are form-specific evidence, not a declaration that DASH-001 is accepted. The remaining 12 forms have not passed complete successful UI journeys. BLOCKED means the required genuine business/asset state is absent, not that a mock or placeholder should be introduced.
+
+### Exact-SHA CI
+
+On exact candidate `521ed70a263c03df48f5b0ae1c6c726dd380ce92`:
+
+- [Dashboard browser E2E — run 41135546018](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135546018): **SUCCESS**, 17 Chromium journeys passed, including the new real-backend campaign double-click, preview persistence, reload and explicit-approval flow.
+- [Content quality — run 41135552879](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135552879): **SUCCESS**, 436 Node tests, 0 failures.
+- [Automation/security — run 41135552980](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135552980): **SUCCESS**, 436 Node tests, 0 failures; 16 Python tests; npm audit 0 vulnerabilities; syntax/compilation checks passed.
+- [Metadata — run 41135546094](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135546094): **SUCCESS**.
+- [Additional metadata validation — run 41135553076](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135553076): **SUCCESS**.
+- [Isolated main/candidate baseline — run 41135552933](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135552933): **SUCCESS**.
+- [Lockfile verification — run 41135546010](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135546010): **SUCCESS**.
+- [Nature Frontiers local draft validation — run 41135553002](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135553002): **SUCCESS**; provider-side creation remains skipped/not claimed.
+- [Production readiness — run 41135552805](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135552805): **FAILURE / HOLD by design**; mandatory owner/provider/media prerequisites remain unresolved.
+
+Historical failure preserved: [run 41134441258](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41134441258) failed on earlier candidate `204fa79` because the campaign preview endpoint reported success without persisting the pending Selar preview. The product defect was corrected and the new exact-SHA E2E now passes. An intermediate browser test on `65b894d` also exposed a test-fixture mismatch: it attempted activation with a different disclosure than the saved preview; the test now submits the exact previewed disclosure and verifies the fingerprint binding.
+
+**DASH-001 remains NOT_TESTED.** This is a real partial acceptance improvement, not full acceptance of all 15 forms, 105 controls or 38 API routes.
+
+
 ## Final workflow status refresh for source/test candidate `a3b57eb` — 30 October 2026
 
 The exact candidate's relevant GitHub Actions runs have now reported final conclusions:
