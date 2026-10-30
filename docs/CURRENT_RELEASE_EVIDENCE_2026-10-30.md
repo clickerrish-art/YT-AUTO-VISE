@@ -332,3 +332,29 @@ The inventory artifact and report are evidence for a human review, not integrati
 After the evidence above was written, the existing project audit/report, go-live blockers, release checklist, acceptance register and operations runbook were refreshed, and `docs/BRANCH_RECONCILIATION_REPORT_2026-10-30.md` was added. The live PR HEAD at this later read was `7bb46f0167f145134e927ae32798a19432f66107`; PR #1 remained open, draft and unmerged. Live compare at that read: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, 2,162 ahead / 2 behind / 182 changed files. These are documentation-only commits after tested source/test candidate `115fe82252b4fa1ef1eb2f9587bf0653356a6dc9`; they do not constitute a new application-code test run.
 
 Fresh PR workflows triggered for `7bb46f0167f145134e927ae32798a19432f66107` were still queued/in progress at the time of the last status read: automation/security run 40977628344; content quality 40977628347; metadata 40977628324; dashboard E2E 40977628382; isolated baseline 40977628350; branch inventory 40977628363; local Facebook draft package 40977628346; production readiness 40977628341. No conclusion is claimed for these pending runs.
+
+
+## Dashboard API behavior-test expansion — 30 October 2026
+
+The exact source/test candidate for the dashboard API test expansion is `a3b57ebddd96b28fe0bef5233eb0c87be152bf48` ([commit](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/a3b57ebddd96b28fe0bef5233eb0c87be152bf48)); a preceding test-only commit is [9e73447](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/9e73447adb7efd661f437e4fb052a036d8068214). Both changed only `test/dashboard-server.test.mjs`.
+
+New evidence on the exact candidate:
+- All 28 declared POST routes reject an authenticated empty JSON operation payload with a client error and leave the persisted dashboard state byte-for-byte unchanged.
+- Read-only behavior is tested for Facebook idea generation (missing, invalid and valid dates), Facebook connection state and allowlisted task discovery; those reads preserve persisted state and report publishing disabled.
+- Content-quality and metadata test steps each report 433 Node tests passed, zero failures and zero skips.
+- Automation/security test step reports 433 Node tests passed, zero failures and zero skips; 16 Python tests passed; npm audit reports zero vulnerabilities; syntax/compilation steps completed successfully.
+- Dashboard browser acceptance reports 16 passed journeys.
+- Non-destructive branch inventory passed. Nature Frontiers local draft validation passed, while provider-side creation was skipped.
+- Production readiness remains fail-closed with missing external prerequisites. No live upload, Meta post, campaign activation, Metricool schedule mutation, PR merge, main edit or destructive Git operation was performed.
+
+At the time this section was written, several GitHub Actions wrappers were still `in_progress` even though their test/validation steps had completed successfully, and the isolated baseline was pending. Their final workflow conclusions must be rechecked before calling those workflows complete.
+
+Live repository snapshot at this source/test checkpoint:
+- Implementation branch: `codex/marketing-machine-audit-fixes`, source/test SHA `a3b57ebddd96b28fe0bef5233eb0c87be152bf48`.
+- `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- PR #1: open, draft and unmerged.
+- Compare: 2,194 ahead / 2 behind / 182 changed files.
+- `main` was not modified.
+
+**DASH-001 remains NOT_TESTED.** This is partial behavior-level evidence for all 28 POST invalid-payload paths and three GET read-only paths, not exhaustive acceptance of all 15 forms, 105 controls, all successful API operations, browser persistence/reload, or every error/recovery path. Production remains NOT READY.
+
