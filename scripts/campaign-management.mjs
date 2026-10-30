@@ -27,7 +27,7 @@ export function manageCampaign(config, request, actor, now = new Date().toISOStr
       campaign.pendingDestinationUrl = APPROVED_SELAR_URL;
       campaign.pendingDisclosureText = request.disclosureText.trim();
       campaign.pendingDestinationVersion = crypto.createHash("sha256")
-        .update(campaign.pendingDestinationUrl + "\\n" + campaign.pendingDisclosureText)
+        .update(campaign.pendingDestinationUrl + "\n" + campaign.pendingDisclosureText)
         .digest("hex");
       return { config: campaigns, campaign, previewOnly: true };
     }
