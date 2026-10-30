@@ -644,11 +644,11 @@ test("authoring and approval forms reject malformed evidence without false succe
   await submitWithoutNativeValidation("authoringform");
   await expect(page.locator("#authoringresult")).toContainText("Research brief must be valid JSON.");
 
-  await page.locator("#scriptreviewsha").fill("not-a-sha");
+  await page.locator("#scriptreviewsha").evaluate(element => { element.value = "not-a-sha"; });
   await submitWithoutNativeValidation("scriptreviewform");
   await expect(page.locator("#scriptreviewresult")).toContainText("A valid exact script SHA-256 is required.");
 
-  await page.locator("#narrationsha").fill("not-a-sha");
+  await page.locator("#narrationsha").evaluate(element => { element.value = "not-a-sha"; });
   await submitWithoutNativeValidation("narrationform");
   await expect(page.locator("#narrationresult")).toContainText("A valid approved script SHA-256 is required.");
 
