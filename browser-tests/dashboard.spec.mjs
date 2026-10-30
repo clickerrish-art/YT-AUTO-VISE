@@ -1115,7 +1115,7 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
     };
     const draftResponse = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(draft) });
     const draftBody = await draftResponse.json();
-    expect(draftResponse.status(), JSON.stringify(draftBody)).toBe(201);
+    expect(draftResponse.status, JSON.stringify(draftBody)).toBe(201);
     const jobId = draftBody.job.id;
     const brief = {
       topic: draft.topic,
@@ -1126,7 +1126,7 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
     };
     const authorResponse = await fetch(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId, brief }) });
     const authorBody = await authorResponse.json();
-    expect(authorResponse.status(), JSON.stringify(authorBody)).toBe(201);
+    expect(authorResponse.status, JSON.stringify(authorBody)).toBe(201);
     // Use the server's canonical digest, which sorts nested keys as well.
     const stateAfterAuthor = await (await fetch(base + "/api/state", { headers })).json();
     const authoredJob = stateAfterAuthor.jobs.find(job => job.id === jobId);
@@ -1141,7 +1141,7 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
       body: JSON.stringify({ jobId, decision: "APPROVE", scriptSha256: approvedSha, reason: "Reviewed the source mapping and approved the exact script revision for narration." })
     });
     const approvalBody = await approvalResponse.json();
-    expect(approvalResponse.status(), JSON.stringify(approvalBody)).toBe(200);
+    expect(approvalResponse.status, JSON.stringify(approvalBody)).toBe(200);
 
     await page.goto(base + "/");
     await page.locator("#token").fill(token);
