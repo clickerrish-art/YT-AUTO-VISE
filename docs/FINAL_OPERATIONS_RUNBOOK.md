@@ -1,3 +1,13 @@
+# Live operational acceptance status — 30 October 2026
+
+The tested application/source candidate is `115fe82252b4fa1ef1eb2f9587bf0653356a6dc9`; exact candidate workflows passed 426 Node tests (0 failures/skips), 16 Python tests, npm audit 0 vulnerabilities, FFmpeg/ffprobe, JS syntax and Python compilation. Content quality, metadata, 15 Chromium journeys, isolated baseline and branch inventory passed. The current branch HEAD is a documentation-only descendant; see `docs/CURRENT_RELEASE_EVIDENCE_2026-10-30.md`.
+
+**Operational status: NOT PRODUCTION READY.** Do not enable publishing, campaigns or provider mutations. Keep public/unattended YouTube disabled; SonicVhibez is the only permitted YouTube destination; Nature Frontiers must never be a YouTube target. Keep Meta publishing disabled, dry-run enabled and emergency stop asserted. Production readiness remains fail-closed until genuine owner/provider evidence and operational acceptance are complete.
+
+Outstanding maintainer acceptance includes exhaustive dashboard/API behavior acceptance (DASH-001), full crash/restart and power-loss recovery plus deployment rollback (STATE-001 / DEPLOY-001), complete schedule queue/history/concurrency acceptance (SCHED-001), and full semantic branch reconciliation (GIT-002). Owner/provider actions are enumerated in `docs/REQUIREMENTS_ACCEPTANCE_REGISTER.json` and `docs/GO_LIVE_BLOCKERS.md`.
+
+---
+
 # Current checkpoint — 29 October 2026
 
 The current exact tested source/test candidate is `726e3fca8d0a1a79a76f9d04fefcd440b83f52cc`. Its automation/security, content-quality, metadata, browser and isolated-baseline workflows passed (420 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities; 15 Chromium journeys). The full-history branch inventory also passed and is available as [artifact 12889820366](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40855917617/artifacts/12889820366). Production readiness is still **BLOCKED**; do not bypass the readiness gate.
