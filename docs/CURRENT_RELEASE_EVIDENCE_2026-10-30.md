@@ -1,3 +1,67 @@
+# Latest restore durability implementation and exact-SHA acceptance — 30 October 2026
+
+## Live Git state and workspace method
+
+- Repository: `clickerrish-art/YT-AUTO-VISE`
+- Implementation branch: `codex/marketing-machine-audit-fixes`
+- PR #1: open, draft and unmerged; base `main`; implementation candidate `29537d71411d227a6da01f980671d72c4a9a4f2e`.
+- Live `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; comparison after the implementation commits: **2,173 ahead / 2 behind / 182 changed files**.
+- The connected GitHub repository integration reported repository permission `admin` and accepted fast-forward commits on the implementation branch. No local repository checkout was attached, so no local write probe or local test execution is claimed. Tests below ran in GitHub Actions against the exact candidate SHA.
+- No `main` edit, merge, rebase, reset, force-push, branch deletion, live YouTube upload, live Meta post, campaign activation or Metricool mutation occurred.
+
+## Implementation commits
+
+- [`deefa1d83097a298bd39c2eeb04f5aa29ffd4774`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/deefa1d83097a298bd39c2eeb04f5aa29ffd4774) — restore destination-directory durability.
+  - After each committed destination rename, flush the containing directory before proceeding.
+  - Flush the destination directory after rollback replacement renames and recovery deletion of a newly restored file.
+  - Flush the state directory after removing the interrupted-restore journal during recovery or successful completion.
+  - Propagate real directory-sync I/O errors so the durable journal remains the recovery authority; tolerate explicitly unsupported directory fsync cases and Windows' lack of portable Node directory fsync.
+- [`29537d71411d227a6da01f980671d72c4a9a4f2e`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/29537d71411d227a6da01f980671d72c4a9a4f2e) — add a regression test that observes destination renames, directory fsync ordering, journal deletion and final journal-directory fsync.
+- The existing `test/restore-facebook-draft-history.test.mjs` remains present on the branch; it was not deleted or recreated.
+
+## Exact-candidate CI for `29537d71411d227a6da01f980671d72c4a9a4f2e`
+
+| Workflow | Result | Evidence |
+|---|---|---|
+| Automation/security | **PASS** — 428 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, JS syntax and Python compilation passed | [Run 41118119408](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119408) |
+| New restore durability regression | **PASS** — explicit test output confirms the directory-flush ordering test passed | [Automation log](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119408) |
+| Content quality | **PASS** — 428 tests, 0 failures, 0 skips | [Run 41118119355](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119355) |
+| Metadata validation | **PASS** — 428 tests, 0 failures, 0 skips; unreviewed metadata remains fail-closed | [Run 41118119534](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119534) |
+| Dashboard browser E2E | **PASS** — 15 Chromium journeys; not exhaustive per-control acceptance | [Run 41118119353](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119353) |
+| Isolated main/candidate baseline | **PASS** — exact main and candidate checkouts | [Run 41118119318](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119318) |
+| Non-destructive branch inventory | **PASS** — inventory only; not a human semantic merge review | [Run 41118119397](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119397) |
+| Nature Frontiers local draft package | **PASS for local validation only** — provider-side create/read-back was skipped | [Run 41118119335](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119335) |
+| Production readiness | **BLOCKED as designed** — fail-closed with 13 prerequisites; not a test-suite pass or production acceptance | [Run 41118119384](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41118119384) |
+
+## Acceptance status
+
+- Register counts remain **54 PASS / 8 NOT_TESTED / 8 BLOCKED_EXTERNAL** (70 requirements).
+- `STATE-001` remains **NOT_TESTED**. This change closes the directory-entry durability ordering gap, but does not complete kill/restart at every transaction boundary, power-loss and disk-full drills, all cross-process idempotency, deployment rollback, or ambiguous external side-effect reconciliation.
+- `DASH-001` remains NOT_TESTED: 15 Chromium journeys do not provide per-control acceptance for all 105 controls, 15 forms and 38 routes.
+- `SCHED-001`, `SHORT-PARENT-001`, `SCRIPT-PROMPT-001`, `RENDER-MULTISCENE-001` and `DEPLOY-001` remain NOT_TESTED for the previously recorded operational/evidence reasons.
+- External YouTube identity/history/media/approval, owner-approved cadence, Meta identity/provider-side draft acceptance, native Short Related-video eligibility and branch protection remain unresolved.
+
+## Read-only Metricool safety recheck — 30 October 2026
+
+The connected Metricool read-only integration returned only the Nature Frontiers brand (ID `7545638`) with timezone `Africa/Johannesburg`. All eight future promotional records remain scheduled with `draft=false` and `autoPublish=true`:
+
+- `406357296` — 31 October 2026, 10:00 SAST, Facebook.
+- `406357335` — 4 November 2026, 10:00 SAST, Facebook.
+- `406357364` — 7 November 2026, 10:00 SAST, Facebook.
+- `406357388` — 11 November 2026, 10:00 SAST, Facebook.
+- `406357414` — 14 November 2026, 10:00 SAST, Facebook.
+- `406357443` — 18 November 2026, 10:00 SAST, Facebook.
+- `406357483` — 21 November 2026, 10:00 SAST, Facebook.
+- `406357554` — 25 November 2026, 10:00 SAST, Facebook and Instagram.
+
+The scheduled copy contains commercial/affiliate product promotion and Selar destinations. The first record is due **tomorrow, 31 October at 10:00 SAST**. No remote record was edited, paused, cancelled or rescheduled. Owner must decide what to do with each existing scheduled record; do not infer authorization from the code guard, which only protects newly generated repository content.
+
+## Release verdict
+
+**APPLICATION IMPLEMENTATION PARTIAL / PRODUCTION NOT READY.** The restore directory durability change and regression test passed exact-candidate CI. The acceptance register correctly retains unresolved engineering and external requirements. No live publication, account activation, remote schedule mutation, merge or main-branch change occurred.
+
+---
+
 # Latest exact-SHA implementation update — 30 October 2026
 
 ## Live refs and implementation
