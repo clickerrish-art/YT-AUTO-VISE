@@ -1110,7 +1110,7 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
       topic: "Interpreting wildlife observations",
       contentType: "short",
       scheduledDay: "Saturday",
-      scheduledDate: "2030-11-02",
+      scheduledDate: "2026-11-07",
       productUrl: "https://selar.com/0u19v8u99l"
     };
     const draftResponse = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(draft) });
@@ -1135,6 +1135,7 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
       value && typeof value === "object" ? "{" + Object.keys(value).sort().map(key => JSON.stringify(key) + ":" + canonical(value[key])).join(",") + "}" : JSON.stringify(value);
     const approvedSha = crypto.createHash("sha256").update(canonical(approvedScript), "utf8").digest("hex");
     expect(approvedSha).toMatch(/^[a-f0-9]{64}$/);
+    jobOutputDir.value = path.join(process.cwd(), "media", "generated-authoring", jobId + "-" + approvedSha.slice(0, 12));
     const approvalResponse = await fetch(base + "/api/jobs/authoring/review", {
       method: "POST", headers,
       body: JSON.stringify({ jobId, decision: "APPROVE", scriptSha256: approvedSha, reason: "Reviewed the source mapping and approved the exact script revision for narration." })
