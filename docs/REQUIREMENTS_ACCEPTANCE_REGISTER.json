@@ -279,10 +279,13 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135552980",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135552933",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135553076",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135553002"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135553002",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/1334f9380dafbf5f9e6cf272e1bd14feab0045f3",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137041295",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/browser-tests/dashboard.spec.mjs"
       ],
-      "nextAction": "Successful UI acceptance is now demonstrated for campaignform (pending preview persists, double-click is single-flight, exact preview hash is required for activation, owner confirmation is required, activation persists after reload), draft (queue/job persistence and duplicate rejection), and facebookdraftform (local draft saved with external publishing disabled). The remaining 12 forms still require their own valid UI journeys, operation-specific persistence/reload, invalid/failure/retry/concurrency paths, or genuine prerequisite evidence. In particular, authoring/review/narration/production-plan stages need a deterministic isolated provider/asset fixture; produce/validate/rights/review/parent-relationship/upload-reconciliation remain blocked by absent genuine media, rights, parent receipt or upload history. Do not mark DASH-001 PASS until every meaningful control and route meets its acceptance criterion.",
-      "assessmentCommitSha": "521ed70a263c03df48f5b0ae1c6c726dd380ce92",
+      "nextAction": "Successful real-browser form journeys are now demonstrated for campaignform, draft, facebookdraftform and authoringform. The authoring journey uses an isolated loopback test provider, proves source-bound output persistence/reload, forces model similarity claims to PENDING, keeps publishable=false, and verifies exact retry reuse with one provider call. Exact candidate 1334f9380dafbf5f9e6cf272e1bd14feab0045f3 passed 18 Chromium journeys, 436 Node tests, 16 Python tests, npm audit (0 vulnerabilities), metadata, content-quality and isolated baseline checks. Continue with scriptreviewform successful hash-bound decision journey using the isolated test operator, then narrationform/narrationreviewform with deterministic audio/FFmpeg fixtures; retain production approval as a separate owner action. The remaining rendering, rights, validation, parent relationship and upload reconciliation forms need genuine isolated media/rights/remote-receipt fixtures. DASH-001 remains NOT_TESTED until every meaningful control and mutating route has successful and negative-path behavior, persistence, reload, failure and duplicate/concurrency coverage.",
+      "assessmentCommitSha": "1334f9380dafbf5f9e6cf272e1bd14feab0045f3",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
     {
