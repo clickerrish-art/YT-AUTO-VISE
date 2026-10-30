@@ -1428,6 +1428,31 @@ test("production-plan submission and hash-bound review persist through the real 
     expect(submittedJob.authoring.productionPlan.plan).toEqual(plan);
     expect(submittedState.audit.some(item => item.action === "PRODUCTION_PLAN_SUBMITTED" && item.jobId === jobId && item.planSha256 === planSha256)).toBe(true);
 
+    // A plan approval must fail if any protected source asset changes after submission.
+    const scenePath = path.join(evidenceDir, "scene-0.mp4");
+    const originalSceneBytes = fs.readFileSync(scenePath);
+    fs.writeFileSync(scenePath, Buffer.from("tampered scene asset bytes"));
+    const staleApprovalResponse = await fetch(base + "/api/jobs/production-plan/review", {
+      method: "POST",
+      headers: { ...headers, "content-type": "application/json" },
+      body: JSON.stringify({
+        jobId,
+        planSha256,
+        decision: "APPROVE",
+        reason: "Attempt to approve after source asset mutation.",
+        confirmScenePlanReviewed: true,
+        confirmRightsEvidenceReviewed: true
+      })
+    });
+    expect(staleApprovalResponse.status).toBe(409);
+    expect((await staleApprovalResponse.json()).error).toMatch(/stale or invalid/i);
+    const staleStateResponse = await fetch(base + "/api/state", { headers });
+    const staleState = await staleStateResponse.json();
+    const staleJob = staleState.jobs.find(item => item.id === jobId);
+    expect(staleJob.authoring.productionPlan.status).toBe("REVIEW_REQUIRED");
+    expect(staleState.audit.some(item => item.action === "PRODUCTION_PLAN_APPROVED" && item.jobId === jobId)).toBe(false);
+    fs.writeFileSync(scenePath, originalSceneBytes);
+
     await expect(page.locator("#productionplanreviewjob")).toContainText("plan review required");
     await page.locator("#productionplanreviewjob").selectOption(jobId);
     await expect(page.locator("#productionplanreviewsha")).toHaveValue(planSha256);
