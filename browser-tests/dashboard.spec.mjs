@@ -857,7 +857,7 @@ test("authoring form generates and persists a source-bound script through the re
         contentType: "short",
         scheduledDay: shortSlot.day,
         scheduledDate,
-        productUrl: "",
+        productUrl: "https://selar.com/0u19v8u99l",
         status: "DRAFT_REVIEW_REQUIRED"
       }
     });
