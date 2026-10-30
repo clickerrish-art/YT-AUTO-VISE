@@ -4,7 +4,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION, APPROVED_SELLAR_URL } from "../scripts/facebook-policy-engine.mjs";
+import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION } from "../scripts/facebook-policy-engine.mjs";
 
 const hash = value => crypto.createHash("sha256").update(value).digest("hex");
 function fixture() {
@@ -107,22 +107,31 @@ test("engagement bait, graphic wildlife and sensitive location content block", a
   } finally { f.cleanup(); }
 });
 
-test("affiliate promotion requires visible disclosure, allowlisted campaign and exact Selar URL", async () => {
+test("Nature Frontiers rejects product and affiliate promotions even when disclosed or allowlisted", async () => {
   const f = fixture();
   try {
-    f.payload.commercial = true;
-    f.payload.campaignId = "selar-wildlife-vault";
-    f.payload.links = [APPROVED_SELLAR_URL];
-    f.payload.caption = "Observe wildlife from a respectful distance and avoid disturbing animals. Explore the Wildlife Creator Vault. https://selar.com/0u19v8u99l";
-    let result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
-    assert.equal(result.eligible, false);
-    assert.match(result.blockers.join(" "), /disclosure/i);
-    f.payload.caption = "Observe wildlife from a respectful distance and avoid disturbing animals. Affiliate link: I may earn a commission if you buy. Explore the Wildlife Creator Vault. https://selar.com/0u19v8u99l";
-    result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
-    assert.equal(result.eligible, true, JSON.stringify(result.blockers));
-    f.payload.links = ["https://selar.com/not-approved"];
-    result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
-    assert.equal(result.eligible, false);
+    const productLinks = ["https://selar.com/0u19v8u99l", "https://selar.com/539497q11t", "https://selar.com/91j893378q"];
+    for (const link of productLinks) {
+      f.payload.commercial = true;
+      f.payload.campaignId = "selar-wildlife-vault";
+      f.payload.links = [link];
+      f.payload.caption = "Affiliate link: I may earn a commission if you buy. Review this product: " + link;
+      const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+      assert.equal(result.eligible, false, link);
+      assert.ok(result.blockers.some(item => /Nature Frontiers Facebook and Instagram are education-only/i.test(item)));
+      assert.ok(result.destinationChecks.some(check => check.url === link && check.passed === false));
+    }
+    f.payload.commercial = false;
+    f.payload.campaignId = null;
+    f.payload.links = [];
+    f.payload.caption = "Affiliate link: I may earn a commission if you buy.";
+    const affiliateCopy = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(affiliateCopy.eligible, false);
+    assert.ok(affiliateCopy.blockers.some(item => /product and affiliate promotions are prohibited/i.test(item)));
+    f.payload.caption = "Buy now and download your copy today.";
+    const promotionalCallToAction = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(promotionalCallToAction.eligible, false);
+    assert.ok(promotionalCallToAction.blockers.some(item => /product and affiliate promotions are prohibited/i.test(item)));
   } finally { f.cleanup(); }
 });
 

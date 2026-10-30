@@ -106,6 +106,16 @@ test("missing media/license evidence, path traversal, disclosure, and attributio
 test("commercial disclosures, approved Selar destination and high-impact claims are gated", (t) => {
   const { root, draft } = fixture(t);
   const commercial = evaluateFacebookDraft({ ...draft, commercial: true, disclosure: "" }, { expectedPageId: "123456789012345", rightsRoot: root });
+  assert.ok(commercial.blockers.some(x => /Nature Frontiers social channels are education-only/i.test(x)));
+  for (const link of ["https://selar.com/0u19v8u99l", "https://selar.com/539497q11t", "https://selar.com/91j893378q"]) {
+    const productPromotion = evaluateFacebookDraft({
+      ...draft, caption: "Review this creator product: " + link, links: [link],
+      commercial: true, campaignId: "selar-wildlife-vault",
+      disclosure: "Promotional link; review seller details.", externalLinksReviewed: true
+    }, { expectedPageId: "123456789012345", rightsRoot: root });
+    assert.ok(productPromotion.blockers.some(x => /Nature Frontiers social channels are education-only/i.test(x)), link);
+  }
+
   assert.ok(commercial.blockers.some(x => /commercial\/affiliate disclosure/i.test(x)));
   const wrongSelar = evaluateFacebookDraft({ ...draft, caption: "Get details at https://selar.com/not-approved", commercial: true, disclosure: "Promotional link; see seller terms.", externalLinksReviewed: true }, { expectedPageId: "123456789012345", rightsRoot: root });
   assert.ok(wrongSelar.blockers.some(x => /exact approved product URL/i.test(x)));

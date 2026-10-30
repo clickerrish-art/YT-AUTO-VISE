@@ -4,7 +4,7 @@ import path from "node:path";
 import { localDateTimeToIso } from "./schedule-policy.mjs";
 
 export const FACEBOOK_TIMEZONE = "Africa/Johannesburg";
-export const FACEBOOK_COMPLIANCE_VERSION = "nf-facebook-baseline-2026-10-v1";
+export const FACEBOOK_COMPLIANCE_VERSION = "nf-facebook-baseline-2026-10-v2";
 export const FACEBOOK_QUALITY_RUBRIC = Object.freeze({
   version: "facebook-quality-rubric-v1",
   startingScore: 100,
@@ -53,6 +53,20 @@ const validHttps = value => {
   try { const url = new URL(value); return url.protocol === "https:" && !url.username && !url.password; }
   catch { return false; }
 };
+
+function isNatureFrontiersProductPromotion(draft) {
+  const caption = String(draft?.caption ?? "");
+  const captionLinks = caption.match(/https?:\/\/[^\s)]+/gi) ?? [];
+  const structuredLinks = Array.isArray(draft?.links) ? draft.links.map(String) : [];
+  const hasStorefrontLink = [...captionLinks, ...structuredLinks].some(link => {
+    try {
+      const host = new URL(link).hostname.toLowerCase();
+      return host === "selar.com" || host.endsWith(".selar.com") || host === "safari.com" || host.endsWith(".safari.com");
+    } catch { return false; }
+  });
+  const promotionCopy = /\b(?:affiliate|earn commission|may earn|paid partnership|sponsored|advertisement|buy now|shop now|order now|purchase now|download now|get your copy|product link|promotional link|complete youtube wildlife creators vault|full video creation prompt pack premium edition|youtube success blueprint(?: 90-day creator system)?|selar)\b/i.test(caption);
+  return draft?.commercial === true || Boolean(String(draft?.campaignId ?? "").trim()) || hasStorefrontLink || promotionCopy;
+}
 
 export function normalizeFacebookText(value) {
   return String(value ?? "").normalize("NFKC").toLocaleLowerCase("en-ZA")
@@ -139,6 +153,7 @@ export function evaluateFacebookDraft(draft, {
 } = {}) {
   const blockers = [], flags = [], warnings = [];
   if (!draft || draft.kind !== "FACEBOOK_PAGE_DRAFT") return { ok: false, blockers: ["A Facebook Page draft is required"], flags, warnings, score: 0, complianceVersion: FACEBOOK_COMPLIANCE_VERSION };
+  if (isNatureFrontiersProductPromotion(draft)) blockers.push("Nature Frontiers social channels are education-only; product and affiliate promotions are prohibited");
   if (!expectedPageId) blockers.push("Exact Nature Frontiers Facebook Page ID is not configured or independently verified");
   if (!draft.destinationPageId || !expectedPageId || draft.destinationPageId !== expectedPageId) blockers.push("Destination Page ID is missing or does not match the independently configured Page ID");
   if (!FACEBOOK_PILLARS.includes(draft.pillar)) blockers.push("Unsupported content pillar");

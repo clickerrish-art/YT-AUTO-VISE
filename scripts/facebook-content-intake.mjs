@@ -92,7 +92,7 @@ export async function runFacebookContentIntake({
   };
   if (config.destination !== "nature_frontiers_facebook" || config.timezone !== "Africa/Johannesburg" ||
       config.autonomousMode !== true || config.autonomousSchedulingEnabled !== true ||
-      config.complianceRuleSet !== "nf-facebook-autonomous-policy-2026-10-v1") {
+      config.complianceRuleSet !== "nf-facebook-autonomous-policy-2026-10-v2") {
     throw new Error("Facebook intake configuration is invalid or policy version does not match");
   }
   const lockPath = stateFile(config.lockFile ?? "facebook-publishing.lock");

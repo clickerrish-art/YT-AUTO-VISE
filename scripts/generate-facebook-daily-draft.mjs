@@ -95,7 +95,7 @@ function makePackage(date, idea, slot, now) {
     factualClaims: [],
     media: null,
     rightsEvidence: null,
-    complianceRuleSet: "nf-facebook-baseline-2026-10-v1",
+    complianceRuleSet: "nf-facebook-baseline-2026-10-v2",
     status,
     blockers: [
       "Research the topic and add source URLs for every material factual claim.",

@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
-export const FACEBOOK_POLICY_RULE_VERSION = "nf-facebook-autonomous-policy-2026-10-v1";
+export const FACEBOOK_POLICY_RULE_VERSION = "nf-facebook-autonomous-policy-2026-10-v2";
 export const APPROVED_SELLAR_URL = "https://selar.com/0u19v8u99l";
 const sha256 = value => crypto.createHash("sha256").update(value).digest("hex");
 const text = value => typeof value === "string" && value.trim().length > 0;
@@ -36,6 +36,19 @@ function hostMatches(host, domains) {
 }
 function containsAffiliateLanguage(caption) {
   return /\b(affiliate|affiliate link|earn commission|may earn|paid partnership|sponsored|advertisement|ad)\b/i.test(caption);
+}
+
+function isNatureFrontiersProductPromotion(payload, links = []) {
+  const caption = String(payload?.caption ?? "");
+  const hasStorefrontLink = links.some(link => {
+    try {
+      const host = new URL(String(link)).hostname.toLowerCase();
+      return host === "selar.com" || host.endsWith(".selar.com") || host === "safari.com" || host.endsWith(".safari.com");
+    } catch { return false; }
+  });
+  const explicitPromotion = /\b(?:buy now|shop now|order now|purchase now|download now|get your copy|product link|promotional link|product promotion|limited offer|complete youtube wildlife creators vault|full video creation prompt pack premium edition|youtube success blueprint(?: 90-day creator system)?|selar)\b/i.test(caption);
+  return payload?.commercial === true || Boolean(String(payload?.campaignId ?? "").trim()) ||
+    hasStorefrontLink || containsAffiliateLanguage(caption) || explicitPromotion;
 }
 function fingerprint(payload) {
   return sha256(JSON.stringify({
@@ -227,6 +240,9 @@ export async function evaluateFinalFacebookPayload(payload, {
   const structuredLinks = Array.isArray(payload.links) ? payload.links.map(String) : [];
   const captionLinks = String(payload.caption ?? "").match(/https?:\/\/[^\s)]+/gi) ?? [];
   const links = [...new Set([...structuredLinks, ...captionLinks])];
+  if (payload.destination === "nature_frontiers_facebook" && isNatureFrontiersProductPromotion(payload, links)) {
+    add(blockers, "Nature Frontiers Facebook and Instagram are education-only destinations; product and affiliate promotions are prohibited");
+  }
   const affiliate = payload.commercial === true || links.some(link => /selar\.com|safari\.com/i.test(String(link)));
   const disclosureText = String(payload.caption ?? "");
   if (affiliate) {
@@ -249,10 +265,9 @@ export async function evaluateFinalFacebookPayload(payload, {
     const parsed = new URL(link);
     const isSelar = parsed.hostname === "selar.com" || parsed.hostname.endsWith(".selar.com");
     const isSafari = parsed.hostname === "safari.com" || parsed.hostname.endsWith(".safari.com");
-    const allowed = isSelar
-      ? link === APPROVED_SELLAR_URL && payload.campaignId === "selar-wildlife-vault"
-      : isSafari ? payload.campaignId === "safari-affiliate" && payload.safariCampaignEnabled === true && approvedDestinations.includes(link)
-        : approvedDestinations.includes(link) || hostMatches(parsed.hostname, allowedDomains);
+    const allowed = isSelar || isSafari
+      ? false
+      : approvedDestinations.includes(link) || hostMatches(parsed.hostname, allowedDomains);
     let reachable = false;
     let finalUrl = link;
     if (allowed) {

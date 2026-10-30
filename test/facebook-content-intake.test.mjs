@@ -15,7 +15,7 @@ function fixture() {
   fs.writeFileSync(configPath, JSON.stringify({
     destination: "nature_frontiers_facebook", timezone: "Africa/Johannesburg",
     autonomousMode: true, autonomousSchedulingEnabled: true,
-    complianceRuleSet: "nf-facebook-autonomous-policy-2026-10-v1",
+    complianceRuleSet: "nf-facebook-autonomous-policy-2026-10-v2",
     destinationPageId: "123456789012345", destinationPageName: "Nature Frontiers",
     allowedDomains: [], allowedCampaignIds: [], approvedDestinations: [],
     dailyCap: 1, minimumIntervalMinutes: 1200
