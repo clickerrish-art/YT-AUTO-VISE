@@ -1,8 +1,8 @@
 
 
-## Dashboard successful-form and campaign-approval acceptance — 30 October 2026
+## Dashboard successful-form and campaign-approval acceptance — 31 October 2026
 
-Exact tested application/test candidate: `521ed70a263c03df48f5b0ae1c6c726dd380ce92`.
+Exact tested application/test candidate for the latest real-narration browser journey: `f96fc6564f2eca767e7be65f6064f082a507770e`.
 
 ### Implemented fixes
 
@@ -10,6 +10,7 @@ Exact tested application/test candidate: `521ed70a263c03df48f5b0ae1c6c726dd380ce
 - `scripts/campaign-management.mjs`: Selar preview now persists a pending destination, trimmed disclosure and SHA-256 fingerprint while leaving the currently approved destination/disclosure/approval unchanged. Previously the endpoint returned a preview-shaped response but did not write the preview into the campaign configuration.
 - Selar activation now requires an explicit owner confirmation and a pending preview whose destination, disclosure and canonical fingerprint exactly match the activation request. Activation binds its approval receipt to that exact preview fingerprint and clears pending preview fields. Deactivation discards any pending preview.
 - Tests cover preview persistence, immutable source configuration, canonical fingerprint, activation without confirmation, stale/mismatched disclosure rejection, exact-preview activation, and deactivation cleanup.
+- `browser-tests/dashboard.spec.mjs` now exercises the actual narration form with the free Edge TTS service and FFmpeg/ffprobe, verifies measured audio and word-boundary captions, hashes all four persisted artifacts, reloads the dashboard, and reconciles a simulated interrupted state without invoking TTS again.
 
 ### Form-by-form acceptance status
 
@@ -20,7 +21,7 @@ Exact tested application/test candidate: `521ed70a263c03df48f5b0ae1c6c726dd380ce
 | `facebookdraftform` | `POST /api/facebook/drafts` | **PASS** | Real local Facebook draft saved and read back; `publishingEnabled=false`; no provider-side post claimed |
 | `authoringform` | `POST /api/jobs/author` | **PASS** | Exact-SHA real-browser journey creates a queued job, submits a source-bound brief through the UI, persists and reads back the script, resets model similarity claims to PENDING, reloads the dashboard, and verifies exact retry reuses the result without a second provider call; [workflow 41137041295](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137041295) on `1334f9380dafbf5f9e6cf272e1bd14feab0045f3` |
 | `scriptreviewform` | `POST /api/jobs/authoring/review` | **PASS** | Same isolated real-browser journey submits an APPROVE decision against the displayed script SHA-256, persists reviewer/reason/approval hash, verifies publishable remains false, and confirms exact repeat reuses the approval; [workflow 41137335224](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137335224) on `67edf6c84d716a236f457df8b13901eee896d195` (test-only descendant of the previously validated authoring candidate) |
-| `narrationform` | `POST /api/jobs/narration` | **NOT_TESTED** | Invalid SHA rejection is covered; successful browser generation/reconciliation journey remains unproven |
+| `narrationform` | `POST /api/jobs/narration` | **PASS** | Exact-SHA real-browser journey uses free Edge TTS and FFmpeg/ffprobe; validates 137-word narration, measured 50–60s audio, TTS word-boundary captions, hashes for audio/transcript/captions/report, persistence after reload, and reconciliation of retained artifacts without another TTS call; [workflow 41141627024](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41141627024) on `f96fc6564f2eca767e7be65f6064f082a507770e` |
 | `narrationreviewform` | `POST /api/jobs/narration/review` | **PASS** | Isolated real-browser journey loads a script-hash-bound narration review bundle, displays transcript/captions and artifact hashes, submits the required three review attestations and reason, and verifies the persisted APPROVED_FOR_RENDER receipt while publishable/publishingEnabled remain false; synthetic non-playable audio fixture only (does not prove real TTS generation or genuine listening); [workflow 41139006431](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41139006431) on exact SHA `1fc956dbcbc1404286036a379b513bf9dbe3953a` |
 | `productionplanform` | `POST /api/jobs/production-plan` | **NOT_TESTED** | Invalid JSON and backend rejection feedback are covered; successful plan submission and persisted read-back remain unproven |
 | `productionplanreviewform` | `POST /api/jobs/production-plan/review` | **NOT_TESTED** | Successful hash-bound browser review remains unproven |
@@ -31,9 +32,12 @@ Exact tested application/test candidate: `521ed70a263c03df48f5b0ae1c6c726dd380ce
 | `reviewform` | `POST /api/jobs/review` | **BLOCKED** | UI gate prevents review without technically validated and rights-cleared assets; genuine artifacts and approvals are absent |
 | `reconcileform` | `POST /api/uploads/reconcile` | **BLOCKED** | UI disables reconciliation without a durable upload attempt; a genuine uncertain remote upload receipt/history is absent |
 
-The three PASS entries are form-specific evidence, not a declaration that DASH-001 is accepted. The remaining 12 forms have not passed complete successful UI journeys. BLOCKED means the required genuine business/asset state is absent, not that a mock or placeholder should be introduced.
+Seven PASS entries are form-specific evidence, not a declaration that DASH-001 is accepted. Two forms remain NOT_TESTED and six are BLOCKED; these eight forms have not passed complete successful UI journeys. BLOCKED means the required genuine business/asset state is absent, not that a mock or placeholder should be introduced.
 
 ### Exact-SHA CI
+
+- [Real narration browser E2E — run 41141627024](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41141627024): **SUCCESS**, 19/19 Chromium journeys on exact SHA `f96fc6564f2eca767e7be65f6064f082a507770e`; the new `narrationform` journey generated real Edge TTS audio, validated FFmpeg/ffprobe duration and timed captions, verified all four artifact hashes, persisted state across reload, and reconciled without a TTS retry.
+
 
 On exact candidate `1334f9380dafbf5f9e6cf272e1bd14feab0045f3`, the dashboard browser workflow passed **18 Chromium journeys**, including the source-bound authoring form's successful persistence/reload and duplicate-reuse journey. The exact candidate's Node/Python, metadata, content-quality and baseline checks are recorded in the 30 October release evidence. The earlier campaign acceptance below remains independently evidenced on candidate `521ed70a263c03df48f5b0ae1c6c726dd380ce92`.
 
