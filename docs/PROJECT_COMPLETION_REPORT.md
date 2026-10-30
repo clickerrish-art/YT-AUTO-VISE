@@ -1,3 +1,9 @@
+## Current verified position — 30 October 2026
+
+The live PR #1 HEAD is `a1152a2ce936af2e4dd4ccb88cc63d7bafb483cb` (documentation-only evidence/register updates). The exact tested source/test candidate is `115fe82252b4fa1ef1eb2f9587bf0653356a6dc9`: 426 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, JavaScript syntax and Python compilation passed. Content quality, metadata, 15 Chromium browser journeys, isolated baseline and non-destructive branch inventory passed. Production readiness remains fail-closed. Acceptance register: 53 PASS / 8 NOT_TESTED / 8 BLOCKED_EXTERNAL. **The application is incomplete and not production-ready.** Current evidence: `docs/CURRENT_RELEASE_EVIDENCE_2026-10-30.md`.
+
+---
+
 ## Latest tested implementation checkpoint — 26 October 2026
 
 Application-code SHA: `f0bf2278cd093859cbee49ac473e828c6ff785a9`. Exact tested source/test SHA: `8d754b0a01c81ce1957ba25a7c8112eaa2e8a1b4`. Automation/security **PASS** (321 Node tests, 8 Python safety tests, npm audit 0 vulnerabilities), browser E2E **PASS** (11 journeys), content quality **PASS**, metadata **PASS**, isolated baseline **PASS**. Readiness remains **BLOCKED** and Facebook draft **SKIPPED**. Current evidence: `docs/CURRENT_RELEASE_EVIDENCE_2026-10-26.md`.
