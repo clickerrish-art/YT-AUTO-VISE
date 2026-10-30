@@ -18,7 +18,7 @@ Exact tested application/test candidate: `521ed70a263c03df48f5b0ae1c6c726dd380ce
 | `campaignform` | `POST /api/campaigns/manage` | **PASS** | Real browser preview and activation; double-click produces one in-flight request; pending preview persists after reload; no-confirm activation is rejected; exact preview plus owner confirmation succeeds and receipt hash matches |
 | `draft` | `POST /api/drafts` | **PASS** | Real browser draft creation, queue/job persistence, refresh, duplicate rejection and restart persistence |
 | `facebookdraftform` | `POST /api/facebook/drafts` | **PASS** | Real local Facebook draft saved and read back; `publishingEnabled=false`; no provider-side post claimed |
-| `authoringform` | `POST /api/jobs/author` | **NOT_TESTED** | Browser invalid-JSON rejection is covered; successful browser submission/read-back remains unproven |
+| `authoringform` | `POST /api/jobs/author` | **PASS** | Exact-SHA real-browser journey creates a queued job, submits a source-bound brief through the UI, persists and reads back the script, resets model similarity claims to PENDING, reloads the dashboard, and verifies exact retry reuses the result without a second provider call; [workflow 41137041295](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137041295) on `1334f9380dafbf5f9e6cf272e1bd14feab0045f3` |
 | `scriptreviewform` | `POST /api/jobs/authoring/review` | **NOT_TESTED** | Invalid SHA rejection is covered; successful browser approval journey remains unproven |
 | `narrationform` | `POST /api/jobs/narration` | **NOT_TESTED** | Invalid SHA rejection is covered; successful browser generation/reconciliation journey remains unproven |
 | `narrationreviewform` | `POST /api/jobs/narration/review` | **NOT_TESTED** | Complete successful browser review and durable receipt journey remains unproven |
@@ -35,7 +35,7 @@ The three PASS entries are form-specific evidence, not a declaration that DASH-0
 
 ### Exact-SHA CI
 
-On exact candidate `521ed70a263c03df48f5b0ae1c6c726dd380ce92`:
+On exact candidate `1334f9380dafbf5f9e6cf272e1bd14feab0045f3`, the dashboard browser workflow passed **18 Chromium journeys**, including the source-bound authoring form's successful persistence/reload and duplicate-reuse journey. The exact candidate's Node/Python, metadata, content-quality and baseline checks are recorded in the 30 October release evidence. The earlier campaign acceptance below remains independently evidenced on candidate `521ed70a263c03df48f5b0ae1c6c726dd380ce92`.
 
 - [Dashboard browser E2E — run 41135546018](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135546018): **SUCCESS**, 17 Chromium journeys passed, including the new real-backend campaign double-click, preview persistence, reload and explicit-approval flow.
 - [Content quality — run 41135552879](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135552879): **SUCCESS**, 436 Node tests, 0 failures.
@@ -49,7 +49,7 @@ On exact candidate `521ed70a263c03df48f5b0ae1c6c726dd380ce92`:
 
 Historical failure preserved: [run 41134441258](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41134441258) failed on earlier candidate `204fa79` because the campaign preview endpoint reported success without persisting the pending Selar preview. The product defect was corrected and the new exact-SHA E2E now passes. An intermediate browser test on `65b894d` also exposed a test-fixture mismatch: it attempted activation with a different disclosure than the saved preview; the test now submits the exact previewed disclosure and verifies the fingerprint binding.
 
-**DASH-001 remains NOT_TESTED.** This is a real partial acceptance improvement, not full acceptance of all 15 forms, 105 controls or 38 API routes.
+**DASH-001 remains NOT_TESTED.** Four forms now have demonstrated successful UI journeys (`campaignform`, `draft`, `facebookdraftform`, `authoringform`). Eleven other forms remain NOT_TESTED or BLOCKED. This is partial acceptance, not full acceptance of all 15 forms, 105 controls or 38 API routes.
 
 
 ## Final workflow status refresh for source/test candidate `a3b57eb` — 30 October 2026
