@@ -24,7 +24,12 @@ export function manageCampaign(config, request, actor, now = new Date().toISOStr
     if (campaign.type === "selar_digital_product") {
       if (request.destinationUrl !== APPROVED_SELAR_URL) throw new Error("Selar destination must exactly match the approved URL");
       if (typeof request.disclosureText !== "string" || !request.disclosureText.trim()) throw new Error("Promotional disclosure is required");
-      return { config: campaigns, campaign: { ...campaign, destinationUrl: APPROVED_SELAR_URL, disclosureText: request.disclosureText.trim() }, previewOnly: true };
+      campaign.pendingDestinationUrl = APPROVED_SELAR_URL;
+      campaign.pendingDisclosureText = request.disclosureText.trim();
+      campaign.pendingDestinationVersion = crypto.createHash("sha256")
+        .update(campaign.pendingDestinationUrl + "\\n" + campaign.pendingDisclosureText)
+        .digest("hex");
+      return { config: campaigns, campaign, previewOnly: true };
     }
     if (campaign.type !== "safari_affiliate") throw new Error("Unsupported campaign type");
     const destinationUrl = safeHttps(String(request.destinationUrl ?? ""));
@@ -62,6 +67,9 @@ export function manageCampaign(config, request, actor, now = new Date().toISOStr
     campaign.disclosureText = request.disclosureText.trim();
     campaign.status = "ACTIVE_FOR_DRAFTS_ONLY";
     campaign.approval = { approvedBy: actor.trim(), approvedAt: now, destinationVersion: crypto.createHash("sha256").update(campaign.destinationUrl + "\n" + campaign.disclosureText).digest("hex") };
+    delete campaign.pendingDestinationUrl;
+    delete campaign.pendingDisclosureText;
+    delete campaign.pendingDestinationVersion;
   } else if (campaign.type === "safari_affiliate") {
     // This project explicitly keeps Safari campaigns inactive. A preview and a generic
     // owner-confirmation flag are not sufficient to override that repository-level policy.
