@@ -369,6 +369,9 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(narrationApprovalRetryBody.narrationReview.approvalSha256, narrationApprovalBody.narrationReview.approvalSha256);
   const changedNarrationRetry = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify({ ...narrationReviewPayload, reason: "Changed review reason." }) });
   assert.equal(changedNarrationRetry.status, 409, "a changed review cannot overwrite a finalized narration approval");
+  fs.writeFileSync(path.join(process.cwd(), audioArtifact.path), "tampered after approval");
+  const tamperedNarrationRetry = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) });
+  assert.equal(tamperedNarrationRetry.status, 409, "an exact retry must not replay an approval receipt after an artifact has changed");
   const authorRenderBypass = await fetch(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id }) });
   const authorRenderBypassBody = await authorRenderBypass.json();
   assert.equal(authorRenderBypass.status, 409, "a generated script must not bypass missing narration/caption/scene integration");
