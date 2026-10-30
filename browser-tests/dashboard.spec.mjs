@@ -1020,3 +1020,188 @@ test("authoring form generates and persists a source-bound script through the re
     if (narrationFixtureDir) fs.rmSync(narrationFixtureDir, { recursive: true, force: true });
   }
 });
+
+
+test("narration form generates real measured TTS, persists artifacts, and reconciles without a second TTS call", async ({ page }) => {
+  test.setTimeout(300_000);
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-live-narration-"));
+  const token = operatorToken;
+  const port = 24_000 + Math.floor(Math.random() * 12_000);
+  const base = `http://127.0.0.1:${port}`;
+  const narration = [
+    "A wildlife encounter can look simple from a distance, but the evidence often tells a more careful story. The first question is not which animal is strongest; it is what each animal is doing in its own habitat. Good reporting separates observed action from assumptions about intent.",
+    "Field observations can describe behavior under specific conditions, but one observation cannot establish a universal rule. Researchers compare repeated observations, environmental context, and competing explanations before drawing conclusions. Strong conclusions depend on source quality, methods, and repeated observations.",
+    "That distinction matters when a short video compresses a complicated interaction into a dramatic moment. A responsible account separates what the source directly reports from what remains uncertain, and never invents a scene to make the story more exciting. That care can make a story more compelling without pretending uncertainty has disappeared."
+  ].join("\\n\\n");
+  const source = {
+    id: "live-tts-source",
+    title: "Field ecology evidence note",
+    url: "https://wildlife-research.org/evidence-note",
+    evidenceLocator: "Methods and discussion",
+    evidenceSummary: "The supplied evidence note explains that wildlife observations are context-specific and that repeated observations are needed before making broad behavioural claims."
+  };
+  const sections = narration.split("\\n\\n").map((text, index) => ({
+    heading: ["The observation", "The evidence", "The conclusion"][index],
+    purpose: ["Introduce the observation", "Explain the limits of inference", "State the responsible conclusion"][index],
+    narration: text,
+    visualDirection: ["Establish the habitat without inventing an encounter", "Show documented field observation context", "Return to a neutral habitat view"][index],
+    pacing: ["Measured", "Steady", "Measured close"][index],
+    soundDesign: "Natural ambience beneath clear narration"
+  }));
+  const script = {
+    premise: "Explain why wildlife observations must be interpreted within their evidence and context.",
+    conclusion: "Separate what was observed from what remains uncertain.",
+    narration,
+    sections,
+    claims: [{ text: "Researchers compare repeated observations and environmental context before drawing broad conclusions.", sourceIds: [source.id] }],
+    sources: [source],
+    similarityReview: { status: "PENDING" }
+  };
+  const provider = createServer((req, res) => {
+    let body = "";
+    req.on("data", chunk => { body += chunk; });
+    req.on("end", () => {
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(script) } }] }));
+    });
+  });
+  await new Promise(resolve => provider.listen(0, "127.0.0.1", resolve));
+  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: {
+      ...process.env,
+      DASHBOARD_OPERATOR_TOKEN: token,
+      DASHBOARD_OPERATOR_ID: "live-narration-e2e-operator",
+      DASHBOARD_STATE_DIR: stateDir,
+      UPLOAD_LOG_DIR: stateDir,
+      PORT: String(port),
+      DASHBOARD_HOST: "127.0.0.1",
+      SCRIPT_GENERATION_ENDPOINT: `http://127.0.0.1:${provider.address().port}/v1/chat/completions`,
+      SCRIPT_GENERATION_TIMEOUT_MS: "10000",
+      AUTHORING_TTS_RATE: "+5%"
+    },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let logs = "";
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  const jobOutputDir = { value: null };
+  async function stopServer() {
+    if (child.exitCode === null) {
+      const exited = new Promise(resolve => child.once("exit", resolve));
+      child.kill("SIGTERM");
+      await exited;
+    }
+  }
+  try {
+    let ready = false;
+    for (let attempt = 0; attempt < 100; attempt++) {
+      if (child.exitCode !== null) break;
+      try {
+        const response = await fetch(base + "/healthz");
+        if (response.ok) { ready = true; break; }
+      } catch {}
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    expect(ready, "isolated dashboard failed to start: " + logs).toBe(true);
+    const headers = { "content-type": "application/json", "x-operator-token": token };
+    const draft = {
+      id: "live-tts-" + Date.now().toString(36),
+      title: "Evidence-led wildlife Short",
+      topic: "Interpreting wildlife observations",
+      contentType: "short",
+      scheduledDay: "Saturday",
+      scheduledDate: "2030-11-02",
+      productUrl: "https://selar.com/0u19v8u99l"
+    };
+    const draftResponse = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(draft) });
+    const draftBody = await draftResponse.json();
+    expect(draftResponse.status(), JSON.stringify(draftBody)).toBe(201);
+    const jobId = draftBody.job.id;
+    const brief = {
+      topic: draft.topic,
+      audience: "Adults interested in evidence-led wildlife education",
+      editorialPurpose: "Explain the limits of interpreting one wildlife observation",
+      sources: [source],
+      parentRecord: { contentId: "long-parent", weeklyContentCycleId: "live-tts-cycle", format: "long_form", channel: "SonicVhibez" }
+    };
+    const authorResponse = await fetch(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId, brief }) });
+    const authorBody = await authorResponse.json();
+    expect(authorResponse.status(), JSON.stringify(authorBody)).toBe(201);
+    const scriptSha256 = crypto.createHash("sha256").update(JSON.stringify(script, Object.keys(script).sort())).digest("hex");
+    // Use the server's canonical digest, which sorts nested keys as well.
+    const stateAfterAuthor = await (await fetch(base + "/api/state", { headers })).json();
+    const authoredJob = stateAfterAuthor.jobs.find(job => job.id === jobId);
+    const approvedScript = authoredJob.authoring.result.script;
+    const canonical = value => Array.isArray(value) ? "[" + value.map(canonical).join(",") + "]" :
+      value && typeof value === "object" ? "{" + Object.keys(value).sort().map(key => JSON.stringify(key) + ":" + canonical(value[key])).join(",") + "}" : JSON.stringify(value);
+    const approvedSha = crypto.createHash("sha256").update(canonical(approvedScript), "utf8").digest("hex");
+    expect(approvedSha).toMatch(/^[a-f0-9]{64}$/);
+    const approvalResponse = await fetch(base + "/api/jobs/authoring/review", {
+      method: "POST", headers,
+      body: JSON.stringify({ jobId, decision: "APPROVE", scriptSha256: approvedSha, reason: "Reviewed the source mapping and approved the exact script revision for narration." })
+    });
+    const approvalBody = await approvalResponse.json();
+    expect(approvalResponse.status(), JSON.stringify(approvalBody)).toBe(200);
+
+    await page.goto(base + "/");
+    await page.locator("#token").fill(token);
+    await page.locator("#connect").click();
+    await expect(page.locator("#app")).toBeVisible();
+    await page.locator("#narrationjob").selectOption(jobId);
+    await expect(page.locator("#narrationsha")).toHaveValue(approvedSha);
+    await page.locator("#narrationform button[type=submit]").click();
+    await expect(page.locator("#narrationresult")).toContainText("Narration stage: DRAFT_REVIEW_REQUIRED", { timeout: 240_000 });
+
+    const firstState = await (await page.request.get(base + "/api/state", { headers })).json();
+    const firstJob = firstState.jobs.find(job => job.id === jobId);
+    expect(firstJob.authoring.narrationStage.status).toBe("DRAFT_REVIEW_REQUIRED");
+    expect(firstJob.authoring.narrationStage.narrationReport.captionTiming).toBe("TTS_WORD_BOUNDARIES");
+    expect(firstJob.authoring.narrationStage.narrationReport.wordCount).toBe(137);
+    expect(firstJob.authoring.narrationStage.narrationReport.durationSeconds).toBeGreaterThanOrEqual(50);
+    expect(firstJob.authoring.narrationStage.narrationReport.durationSeconds).toBeLessThanOrEqual(60);
+    expect(firstJob.authoring.narrationStage.publishable).toBe(false);
+    expect(firstState.publishingEnabled).toBe(false);
+    const expectedArtifacts = ["narration.mp3", "narration.txt", "captions.srt", "narration-report.json"];
+    for (const name of expectedArtifacts) {
+      const artifact = firstJob.authoring.narrationStage.artifacts[name];
+      expect(artifact.sha256).toMatch(/^[a-f0-9]{64}$/);
+      const absolutePath = path.resolve(process.cwd(), artifact.path);
+      expect(fs.lstatSync(absolutePath).isFile()).toBe(true);
+      expect(crypto.createHash("sha256").update(fs.readFileSync(absolutePath)).digest("hex")).toBe(artifact.sha256);
+      if (name === "narration.mp3") jobOutputDir.value = path.dirname(absolutePath);
+    }
+    const reviewBundle = await (await page.request.get(base + "/api/jobs/narration/review?jobId=" + encodeURIComponent(jobId), { headers })).json();
+    expect(reviewBundle.scriptSha256).toBe(approvedSha);
+    expect(reviewBundle.transcript.split(/\\s+/u)).toHaveLength(137);
+    expect(reviewBundle.captions).toContain("-->");
+
+    await page.reload();
+    await page.locator("#token").fill(token);
+    await page.locator("#connect").click();
+    await expect(page.locator("#app")).toBeVisible();
+    await page.locator("#narrationjob").selectOption(jobId);
+    await expect(page.locator("#narrationsha")).toHaveValue(approvedSha);
+
+    // Simulate a process interruption after complete files exist. Reconciliation
+    // must verify those exact files and must not call the TTS service again.
+    const stateFile = path.join(stateDir, "dashboard-state.json");
+    const interruptedState = JSON.parse(fs.readFileSync(stateFile, "utf8"));
+    const interruptedJob = interruptedState.jobs.find(job => job.id === jobId);
+    interruptedJob.authoring.narrationStage.status = "RECOVERY_REQUIRED";
+    interruptedJob.authoring.narrationStage.recoveryRequired = true;
+    fs.writeFileSync(stateFile, JSON.stringify(interruptedState, null, 2), { mode: 0o600 });
+    await page.locator("#reconcilenarration").click();
+    await expect(page.locator("#narrationresult")).toContainText("Narration reconciled without regeneration: DRAFT_REVIEW_REQUIRED", { timeout: 30_000 });
+    const reconciledState = await (await page.request.get(base + "/api/state", { headers })).json();
+    const reconciledJob = reconciledState.jobs.find(job => job.id === jobId);
+    expect(reconciledJob.authoring.narrationStage.status).toBe("DRAFT_REVIEW_REQUIRED");
+    expect(reconciledJob.authoring.narrationStage.artifacts["narration.mp3"].sha256).toBe(firstJob.authoring.narrationStage.artifacts["narration.mp3"].sha256);
+    expect(reconciledJob.authoring.narrationStage.publishable).toBe(false);
+    expect(reconciledState.publishingEnabled).toBe(false);
+  } finally {
+    await stopServer();
+    provider.close();
+    fs.rmSync(stateDir, { recursive: true, force: true });
+    if (jobOutputDir.value) fs.rmSync(jobOutputDir.value, { recursive: true, force: true });
+  }
+});
