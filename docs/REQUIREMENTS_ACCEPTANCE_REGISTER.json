@@ -252,10 +252,17 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fba143383977b3142d1b2cbdfa57262225c85ea2",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e8353daa3f786a0afbf74374d85bcce2e649d5e2",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123147688",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123147615"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123147615",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/9e73447adb7efd661f437e4fb052a036d8068214",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/a3b57ebddd96b28fe0bef5233eb0c87be152bf48",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41124654565",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41124654564",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41124654694",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41124654677",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41124654569"
       ],
-      "nextAction": "The exact candidate e8353daa3f786a0afbf74374d85bcce2e649d5e2 now passes a static regression test that maps all 15 form submit handlers to declared API routes and verifies stable IDs/JavaScript bindings for all 87 non-submit controls. Automation/security passes 431 Node tests, 16 Python tests, npm audit 0 vulnerabilities; Chromium browser E2E passes 15 journeys. This is not behavior acceptance. Next add real authorized success and invalid-input/persistence/failure browser/API journeys for each of the 15 forms, then meaningful behavior tests for every control and remaining route. Keep NOT_TESTED until the complete matrix is evidenced.",
-      "assessmentCommitSha": "9229671e82180eadb92411cdd5ac9e649da79fdb",
+      "nextAction": "Continue with per-form valid/invalid submissions, successful persisted state transitions and reload verification, operation-specific behavior for every dashboard control, remaining GET route behavior, and API error/concurrency/recovery cases. The 28 POST empty-payload/no-mutation slice and three read-only GET behavior slices are partial evidence only; do not mark DASH-001 PASS.",
+      "assessmentCommitSha": "a3b57ebddd96b28fe0bef5233eb0c87be152bf48",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
     {
