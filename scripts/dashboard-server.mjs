@@ -1516,6 +1516,9 @@ const server = http.createServer(async (req, res) => {
         if (index < 0) return json(res, 404, { error: "Content job not found" });
         const job = state.jobs[index];
         const stage = job.authoring?.narrationStage;
+        // A client may time out after persistence and retry. Replay only the
+        // same operator's exact decision, and revalidate the retained script
+        // approval plus every artifact before returning the original receipt.
         const existingReview = job.authoring?.narrationApproval;
         const finalizedDecision = stage?.status === "APPROVED_FOR_RENDER" ? "APPROVE" : stage?.status === "REJECTED" ? "REJECT" : null;
         if (job.state === "QUEUED" && finalizedDecision && existingReview) {
