@@ -704,6 +704,7 @@ test("campaign form single-flights a double-click and persists the successful pr
   const saved = await savedResponse.json();
   const campaign = saved.campaigns.find(item => item.id === "selar-wildlife-vault");
   expect(campaign.pendingDestinationUrl).toBe("https://selar.com/0u19v8u99l");
+  expect(campaign.pendingDestinationVersion).toMatch(/^[a-f0-9]{64}$/);
   expect(campaign.status).toBe("ACTIVE_FOR_DRAFTS_ONLY");
   expect(saved.publishingEnabled).toBe(false);
 
