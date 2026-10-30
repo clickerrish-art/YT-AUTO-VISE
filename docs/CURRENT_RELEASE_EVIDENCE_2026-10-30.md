@@ -378,3 +378,31 @@ A duplicate baseline run `41124654594` was still in progress at the time of the 
 
 **Acceptance decision unchanged: DASH-001 remains NOT_TESTED.** The new 28-route POST negative-path matrix, three read-only GET behavior paths, and 16 browser journeys are partial behavior evidence. They do not cover every form's successful persisted operation, every control's intended behavior, all route success/error/concurrency paths, or complete browser reload/recovery acceptance.
 
+
+
+## Dashboard campaign persistence and single-flight acceptance — 30 October 2026
+
+Exact application/test candidate: `521ed70a263c03df48f5b0ae1c6c726dd380ce92`.
+
+Implemented and committed:
+- A single-flight guard for asynchronous dashboard form submissions, with `aria-busy` feedback. Backend validation/idempotency remains authoritative.
+- Fixed Selar campaign preview so the pending URL, disclosure and fingerprint are durably stored without replacing approved configuration.
+- Selar activation now requires explicit owner confirmation and an exact match to the stored preview hash; activation records the same fingerprint and clears pending fields.
+- Deactivation clears pending preview state.
+- Added unit and real-browser regression coverage for these behaviors.
+
+Exact-SHA evidence:
+- Dashboard browser E2E [run 41135546018](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135546018): SUCCESS, 17 Chromium journeys.
+- Content quality [run 41135552879](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135552879): SUCCESS, 436 Node tests, zero failures.
+- Automation/security [run 41135552980](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135552980): SUCCESS, 436 Node tests, zero failures; 16 Python tests; npm audit zero vulnerabilities; syntax and compilation passed.
+- Metadata [run 41135546094](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135546094) and [run 41135553076](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135553076): SUCCESS.
+- Isolated baseline [run 41135552933](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135552933): SUCCESS.
+- Lockfile [run 41135546010](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135546010): SUCCESS.
+- Nature Frontiers local draft validation [run 41135553002](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135553002): SUCCESS; no external Meta post was created.
+- Production readiness [run 41135552805](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135552805): remains FAIL/HOLD because genuine production prerequisites are missing.
+
+The earlier browser failure [run 41134441258](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41134441258) on `204fa79` correctly exposed the missing Selar preview persistence. That application defect has been fixed. An intermediate test mismatch was also corrected by using the exact saved disclosure for activation.
+
+Three of the 15 dashboard forms now have demonstrated successful browser journeys: campaign management, draft creation, and local Facebook draft creation. The remaining 12 forms are NOT_TESTED or BLOCKED by genuine prerequisites; see the form-by-form table in the dashboard matrix.
+
+**DASH-001 remains NOT_TESTED.** Do not infer complete dashboard/API acceptance from the three accepted form journeys or 17 browser journeys.
