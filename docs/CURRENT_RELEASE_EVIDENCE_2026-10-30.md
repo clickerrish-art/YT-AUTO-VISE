@@ -1,3 +1,26 @@
+# Dashboard wiring acceptance checkpoint — 30 October 2026
+
+## Exact source/test candidate
+
+- Exact tested candidate: `e8353daa3f786a0afbf74374d85bcce2e649d5e2`.
+- Latest application implementation remains the previously tested restore-directory durability change; this checkpoint adds a dashboard acceptance regression test and does not change production application behavior.
+- Added `test/dashboard-inventory.test.mjs` coverage proving that 15 dashboard forms have explicit submit handlers, each handler's first API call references a declared dashboard route, and all 87 non-submit controls have stable IDs and JavaScript bindings.
+- The earlier commit `9c13352a9eb60205edbc29789c000102038c65c4` initially failed CI because the new test contained incorrectly escaped regular expressions. The failure was retrieved from the GitHub Actions job log, corrected in `8c556f601a9fef3fccae5b815d4079d91b30b78a`, and corrected again for proper assertion-source escaping in `e8353daa3f786a0afbf74374d85bcce2e649d5e2`.
+- Exact-candidate automation/security [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123147688): 431 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; syntax and compile checks passed.
+- Exact-candidate dashboard browser E2E [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123147615): 15 Chromium journeys passed.
+- Exact-candidate content quality [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123147543). Metadata [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123147789).
+- Isolated baseline [pending at time of this checkpoint](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123147512); lockfile workflow [pending at time of this checkpoint](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123142447).
+- Production readiness remains [BLOCKED/fail-closed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123147712) by 13 genuine prerequisites.
+- **DASH-001 remains NOT_TESTED.** This static form/control wiring test does not prove successful operation, valid/invalid payload behavior, state persistence, authorization for each route, duplicate/concurrent request handling, error feedback or full user journeys. The 15 browser tests are useful but not exhaustive.
+- Live refs at this checkpoint: PR #1 head `e8353daa3f786a0afbf74374d85bcce2e649d5e2`; `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; compare 2,187 ahead / 2 behind / 182 changed files. PR remains open, draft and unmerged. No main edit, merge, rebase, reset, force-push or destructive reconciliation.
+- No local Codex checkout or local test execution is claimed; verification is from GitHub Actions. Remote GitHub integration accepted the branch commits.
+
+## Next DASH-001 implementation target
+
+Add operation-level browser/API acceptance for the 15 forms, starting with the remaining production authoring, script review, narration generation/review, production-plan review, produce, validation, rights verification, human review and upload reconciliation paths. Use isolated test jobs and fixture artifacts. For each, prove authorized success where the safe local path exists, invalid/missing payload rejection, no false success on server errors, state/audit persistence, and reload/read-back. Preserve all private-upload and no-live-publishing gates. Extend control-specific behavior journeys after forms; do not treat a generic handler check as acceptance.
+
+---
+
 # Latest all-commit-boundary restore recovery verification — 30 October 2026
 
 ## Current exact source/test candidate and live refs
