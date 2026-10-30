@@ -103,3 +103,21 @@ test("Selar activation applies the submitted disclosure and clears the pending p
   assert.equal(Object.hasOwn(activated.campaign, "pendingDestinationVersion"), false);
   assert.deepEqual(validateCampaigns(activated.config), []);
 });
+
+
+test("Selar deactivation discards an unapproved pending preview", () => {
+  const id = baseline.campaigns.find(c => c.type === "selar_digital_product").id;
+  const preview = manageCampaign(baseline, {
+    campaignId: id,
+    action: "preview",
+    destinationUrl: "https://selar.com/0u19v8u99l",
+    disclosureText: "Promotional link: pending disclosure for a later owner decision."
+  }, operator);
+  assert.ok(preview.campaign.pendingDestinationVersion);
+  const inactive = manageCampaign(preview.config, { campaignId: id, action: "deactivate" }, operator);
+  assert.equal(inactive.campaign.status, "INACTIVE");
+  assert.equal(Object.hasOwn(inactive.campaign, "pendingDestinationUrl"), false);
+  assert.equal(Object.hasOwn(inactive.campaign, "pendingDisclosureText"), false);
+  assert.equal(Object.hasOwn(inactive.campaign, "pendingDestinationVersion"), false);
+  assert.deepEqual(validateCampaigns(inactive.config), []);
+});
