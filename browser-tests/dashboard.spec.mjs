@@ -670,3 +670,52 @@ test("authoring and approval forms reject malformed evidence without false succe
   await expect(page.locator("#productionplanresult")).not.toContainText("Plan persisted");
   await expect(page.locator("#rightsresult")).not.toContainText("Rights verified");
 });
+
+
+test("campaign form single-flights a double-click and persists the successful preview after reload", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  let submissions = 0;
+  await page.route("**/api/campaigns/manage", async route => {
+    submissions += 1;
+    // Keep the real local API request in flight long enough for the second
+    // physical click to arrive; route.fetch still executes the real server.
+    await new Promise(resolve => setTimeout(resolve, 250));
+    const response = await route.fetch();
+    await route.fulfill({ response });
+  });
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  await page.locator("#campaignid").selectOption("selar-wildlife-vault");
+  await page.locator("#campaignaction").selectOption("preview");
+  await page.locator("#campaignurl").fill("https://selar.com/0u19v8u99l");
+  await page.locator("#campaigndisclosure").fill("Promotional link; check the seller page for current product details and terms.");
+
+  await page.locator("#campaignform button[type=submit]").dblclick();
+  await expect(page.locator("#campaignresult")).toContainText("Preview saved; campaign remains unactivated", { timeout: 10_000 });
+  await expect(page.locator("#campaignform")).not.toHaveAttribute("aria-busy", "true");
+  expect(submissions).toBe(1);
+
+  const savedResponse = await request.get("/api/state", { headers });
+  expect(savedResponse.status()).toBe(200);
+  const saved = await savedResponse.json();
+  const campaign = saved.campaigns.find(item => item.id === "selar-wildlife-vault");
+  expect(campaign.pendingDestinationUrl).toBe("https://selar.com/0u19v8u99l");
+  expect(campaign.status).toBe("ACTIVE_FOR_DRAFTS_ONLY");
+  expect(saved.publishingEnabled).toBe(false);
+
+  await page.reload();
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+  const afterReloadResponse = await request.get("/api/state", { headers });
+  expect(afterReloadResponse.status()).toBe(200);
+  const afterReload = await afterReloadResponse.json();
+  const reloadedCampaign = afterReload.campaigns.find(item => item.id === "selar-wildlife-vault");
+  expect(reloadedCampaign.pendingDestinationUrl).toBe("https://selar.com/0u19v8u99l");
+  expect(reloadedCampaign.status).toBe("ACTIVE_FOR_DRAFTS_ONLY");
+  expect(afterReload.publishingEnabled).toBe(false);
+});
