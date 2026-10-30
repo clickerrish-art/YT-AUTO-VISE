@@ -1,3 +1,9 @@
+## Current verified position — 30 October 2026
+
+Live PR #1 HEAD: `a1152a2ce936af2e4dd4ccb88cc63d7bafb483cb`; exact tested source/test candidate: `115fe82252b4fa1ef1eb2f9587bf0653356a6dc9`. The tested candidate passed 426 Node tests (0 failures/skips), 16 Python tests, npm audit (0 vulnerabilities), FFmpeg/ffprobe, JavaScript syntax and Python compilation; content quality, metadata, 15 Chromium journeys, isolated baseline and branch inventory passed. The current PR HEAD is a documentation-only descendant, not a new tested application-code SHA. Acceptance remains 53 PASS / 8 NOT_TESTED / 8 BLOCKED_EXTERNAL. DASH-001, STATE-001, SCHED-001, GIT-002 and DEPLOY-001 remain NOT_TESTED. Production readiness remains NOT READY. See `docs/CURRENT_RELEASE_EVIDENCE_2026-10-30.md`.
+
+---
+
 ## Latest verified checkpoint — 27 October 2026, 21:29 UTC
 
 Exact tested candidate SHA: `466605be027f531d1c6143a6d1f42e1bf4c2ffcc`. Automation/security PASS: 373 Node tests, 0 failures, 0 skips; 16 Python tests; normal lifecycle-script install; npm audit 0 vulnerabilities; FFmpeg renderer integration, JS syntax and Python compilation passed. Content-quality and metadata workflows install FFmpeg/ffprobe and explicitly fail if any Node test is skipped; each passed 373 tests with zero skips. Dashboard E2E passed 13 Chromium journeys. Isolated main/candidate baseline passed on the exact candidate SHA. Facebook workflow passed local draft validation only; its remote draft-creation job was skipped. Production readiness remains correctly blocked by 13 genuine production prerequisites.
