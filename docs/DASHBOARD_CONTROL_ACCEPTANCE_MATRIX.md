@@ -2,7 +2,7 @@
 
 ## Dashboard successful-form and campaign-approval acceptance — 31 October 2026
 
-Exact tested application/test candidate for the latest real-narration browser journey: `f96fc6564f2eca767e7be65f6064f082a507770e`.
+Exact tested application/test candidate for the latest real-narration browser journey on the PR documentation head: `fa6145a4d5977fd64824fa98803c669161e2a152` (documentation-only descendants retain the same narration implementation and test).
 
 ### Implemented fixes
 
@@ -21,7 +21,7 @@ Exact tested application/test candidate for the latest real-narration browser jo
 | `facebookdraftform` | `POST /api/facebook/drafts` | **PASS** | Real local Facebook draft saved and read back; `publishingEnabled=false`; no provider-side post claimed |
 | `authoringform` | `POST /api/jobs/author` | **PASS** | Exact-SHA real-browser journey creates a queued job, submits a source-bound brief through the UI, persists and reads back the script, resets model similarity claims to PENDING, reloads the dashboard, and verifies exact retry reuses the result without a second provider call; [workflow 41137041295](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137041295) on `1334f9380dafbf5f9e6cf272e1bd14feab0045f3` |
 | `scriptreviewform` | `POST /api/jobs/authoring/review` | **PASS** | Same isolated real-browser journey submits an APPROVE decision against the displayed script SHA-256, persists reviewer/reason/approval hash, verifies publishable remains false, and confirms exact repeat reuses the approval; [workflow 41137335224](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137335224) on `67edf6c84d716a236f457df8b13901eee896d195` (test-only descendant of the previously validated authoring candidate) |
-| `narrationform` | `POST /api/jobs/narration` | **PASS** | Exact-SHA real-browser journey uses free Edge TTS and FFmpeg/ffprobe; validates 137-word narration, measured 50–60s audio, TTS word-boundary captions, hashes for audio/transcript/captions/report, persistence after reload, and reconciliation of retained artifacts without another TTS call; [workflow 41141627024](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41141627024) on `f96fc6564f2eca767e7be65f6064f082a507770e` |
+| `narrationform` | `POST /api/jobs/narration` | **PASS** | Exact-SHA real-browser journey uses free Edge TTS and FFmpeg/ffprobe; validates 137-word narration, measured 50–60s audio, TTS word-boundary captions, hashes for audio/transcript/captions/report, persistence after reload, and reconciliation of retained artifacts without another TTS call; [workflow 41141841497](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41141841497) on exact PR head `fa6145a4d5977fd64824fa98803c669161e2a152` |
 | `narrationreviewform` | `POST /api/jobs/narration/review` | **PASS** | Isolated real-browser journey loads a script-hash-bound narration review bundle, displays transcript/captions and artifact hashes, submits the required three review attestations and reason, and verifies the persisted APPROVED_FOR_RENDER receipt while publishable/publishingEnabled remain false; synthetic non-playable audio fixture only (does not prove real TTS generation or genuine listening); [workflow 41139006431](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41139006431) on exact SHA `1fc956dbcbc1404286036a379b513bf9dbe3953a` |
 | `productionplanform` | `POST /api/jobs/production-plan` | **NOT_TESTED** | Invalid JSON and backend rejection feedback are covered; successful plan submission and persisted read-back remain unproven |
 | `productionplanreviewform` | `POST /api/jobs/production-plan/review` | **NOT_TESTED** | Successful hash-bound browser review remains unproven |
@@ -36,7 +36,7 @@ Seven PASS entries are form-specific evidence, not a declaration that DASH-001 i
 
 ### Exact-SHA CI
 
-- [Real narration browser E2E — run 41141627024](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41141627024): **SUCCESS**, 19/19 Chromium journeys on exact SHA `f96fc6564f2eca767e7be65f6064f082a507770e`; the new `narrationform` journey generated real Edge TTS audio, validated FFmpeg/ffprobe duration and timed captions, verified all four artifact hashes, persisted state across reload, and reconciled without a TTS retry.
+- [Real narration browser E2E — run 41141841497](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41141841497): **SUCCESS**, 19/19 Chromium journeys on exact PR head `fa6145a4d5977fd64824fa98803c669161e2a152`; the new `narrationform` journey generated real Edge TTS audio, validated FFmpeg/ffprobe duration and timed captions, verified all four artifact hashes, persisted state across reload, and reconciled without a TTS retry.
 
 
 On exact candidate `1334f9380dafbf5f9e6cf272e1bd14feab0045f3`, the dashboard browser workflow passed **18 Chromium journeys**, including the source-bound authoring form's successful persistence/reload and duplicate-reuse journey. The exact candidate's Node/Python, metadata, content-quality and baseline checks are recorded in the 30 October release evidence. The earlier campaign acceptance below remains independently evidenced on candidate `521ed70a263c03df48f5b0ae1c6c726dd380ce92`.
