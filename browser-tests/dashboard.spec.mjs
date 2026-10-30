@@ -732,8 +732,9 @@ test("campaign form single-flights a double-click and persists the successful pr
 
   const stillPendingResponse = await request.get("/api/state", { headers });
   const stillPending = await stillPendingResponse.json();
-  expect(stillPending.campaigns.find(item => item.id === "selar-wildlife-vault").pendingDestinationUrl)
-    .toBe("https://selar.com/0u19v8u99l");
+  const stillPendingCampaign = stillPending.campaigns.find(item => item.id === "selar-wildlife-vault");
+  expect(stillPendingCampaign.pendingDestinationUrl).toBe("https://selar.com/0u19v8u99l");
+  const pendingPreviewVersion = stillPendingCampaign.pendingDestinationVersion;
 
   await page.locator("#campaignapproval").check();
   await page.locator("#campaignform button[type=submit]").click();
@@ -747,7 +748,7 @@ test("campaign form single-flights a double-click and persists the successful pr
   expect(activatedCampaign.disclosureText).toBe(approvedDisclosure);
   expect(activatedCampaign.pendingDestinationUrl).toBeUndefined();
   expect(activatedCampaign.pendingDisclosureText).toBeUndefined();
-  expect(activatedCampaign.approval.destinationVersion).toBe(activatedCampaign.pendingDestinationVersion ?? activatedCampaign.approval.destinationVersion);
+  expect(activatedCampaign.approval.destinationVersion).toBe(pendingPreviewVersion);
   expect(activatedCampaign.status).toBe("ACTIVE_FOR_DRAFTS_ONLY");
   expect(activatedState.publishingEnabled).toBe(false);
 });
