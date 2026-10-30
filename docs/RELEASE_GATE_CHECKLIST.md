@@ -1,10 +1,12 @@
 ## Current release gate snapshot — 30 October 2026, 09:36 SAST
 
-- [x] Exact source/test candidate and PR #1 HEAD b31149df440a4c02cb2d7541b4894dcd916b8796 verified on codex/marketing-machine-audit-fixes.
+- [x] Exact source/test candidate b31149df440a4c02cb2d7541b4894dcd916b8796 verified; PR #1 HEAD at this snapshot is ef3eadd005a811f9596e1cc12fa58beaf4770a03, a documentation-only descendant.
 - [x] Nature Frontiers Facebook/Instagram product-promotion hard block v2 implemented in both draft evaluation and final-payload policy; all three supplied Selar URLs and the named Wildlife Creator Vault are covered by regression tests.
 - [x] Automation/security: 426 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe and syntax/compile checks passed.
 - [x] Content quality PASS (426 tests); metadata PASS (426 tests); dashboard browser E2E PASS (15 Chromium journeys); isolated main/candidate baseline PASS; non-destructive branch inventory PASS.
 - [x] Nature Frontiers local draft-package validation PASS; external Meta provider draft creation/read-back remains skipped and BLOCKED_EXTERNAL.
+- [x] Documentation-only PR HEAD ef3eadd005a811f9596e1cc12fa58beaf4770a03 workflows: automation/security, content quality, metadata, 15 Chromium journeys, isolated baseline, branch inventory and local draft validation PASS; production readiness remains blocked with 13 prerequisites.
+- [ ] Branch protection and required checks: GitHub branch metadata currently reports protected=false; owner/admin setup is required.
 - [ ] Production readiness: 13 blockers remain; current workflow correctly fails closed. No publishing bypass is permitted.
 - [ ] DASH-001 exhaustive control/form/route behavior acceptance.
 - [ ] STATE-001 complete transaction-boundary crash/restart and power-loss acceptance.

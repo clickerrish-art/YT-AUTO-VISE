@@ -4,12 +4,16 @@
 
 - Repository: clickerrish-art/YT-AUTO-VISE
 - Implementation branch: codex/marketing-machine-audit-fixes
-- Current PR #1 HEAD and exact tested source/test SHA: b31149df440a4c02cb2d7541b4894dcd916b8796
+- Current PR #1 HEAD at this snapshot: ef3eadd005a811f9596e1cc12fa58beaf4770a03 (documentation-only descendant). Exact tested application/source candidate: b31149df440a4c02cb2d7541b4894dcd916b8796.
 - PR #1 remains open, draft and unmerged: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1
 - Live main: fa00d28e7f58911482686e4ad69fac9f4701a2e6
 - Merge base: 45352b73bb6cc4787b2a49988b575afb754ab627
-- Compare: 2,166 ahead / 2 behind / 182 changed files
+- Compare at this snapshot: 2,167 ahead / 2 behind / 182 changed files
 - No main edit, merge, rebase, reset, force-push, destructive reconciliation, live upload, public post or Metricool mutation occurred.
+
+## Documentation-head workflow verification
+
+The current PR HEAD ef3eadd005a811f9596e1cc12fa58beaf4770a03 is documentation-only after tested application/test candidate b31149df440a4c02cb2d7541b4894dcd916b8796. Its automation/security, content quality, metadata, 15 Chromium browser journeys, isolated baseline, non-destructive branch inventory and local Nature Frontiers draft-package validation all passed: runs 41023127603, 41023127627, 41023127609, 41023127570, 41023127566, 41023127689 and 41023127592. The external Meta draft-creation step was skipped. Production readiness remains blocked at run 41023127637 with 13 blockers. GitHub branch metadata reports protected=false; owner/admin must configure branch protection and required checks.
 
 ## Current implementation change
 
