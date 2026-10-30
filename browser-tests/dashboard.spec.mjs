@@ -1187,6 +1187,16 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
     expect(reviewBundle.scriptSha256).toBe(approvedSha);
     expect(reviewBundle.transcript.trim().split(/\s+/u)).toHaveLength(137);
     expect(reviewBundle.captions).toContain("-->");
+    const audioResponse = await page.request.get(base + "/api/jobs/narration/audio?jobId=" + encodeURIComponent(jobId), { headers });
+    expect(audioResponse.status()).toBe(200);
+    expect(audioResponse.headers()["content-type"]).toContain("audio/mpeg");
+    const audioBytes = await audioResponse.body();
+    expect(crypto.createHash("sha256").update(audioBytes).digest("hex")).toBe(firstJob.authoring.narrationStage.artifacts["narration.mp3"].sha256);
+    expect(audioBytes.length).toBeGreaterThan(10_000);
+    await page.locator("#narrationreviewjob").selectOption(jobId);
+    await expect(page.locator("#narrationtranscript")).toContainText("A wildlife encounter");
+    await expect(page.locator("#narrationcaptions")).toContainText("-->");
+    await expect(page.locator("#narrationaudio")).toHaveAttribute("src", /^blob:/);
 
     await page.reload();
     await page.locator("#token").fill(token);
