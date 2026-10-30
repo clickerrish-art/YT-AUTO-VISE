@@ -1,3 +1,26 @@
+# API behavior-test expansion checkpoint — 30 October 2026
+
+## Exact source/test candidate
+
+- Source/test SHA: `a3b57ebddd96b28fe0bef5233eb0c87be152bf48`.
+- Implementation commits: [9e73447](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/9e73447adb7efd661f437e4fb052a036d8068214) and [a3b57eb](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/a3b57ebddd96b28fe0bef5233eb0c87be152bf48).
+- Files changed by these two commits: `test/dashboard-server.test.mjs` only.
+- Added a behavior-level negative-path matrix for all **28 declared POST API routes**. Each route receives an authenticated empty JSON payload; the test requires a client-error response and byte-for-byte unchanged persisted dashboard state.
+- Added authorized read-only behavior tests for `GET /api/facebook/idea` (missing date, impossible date and valid date), `GET /api/facebook/state`, and `GET /api/tasks`; verifies safe disabled publishing state and no persisted-state mutation.
+- Existing authorization coverage continues to check unauthenticated requests against the protected API declarations. These additions do not imply every route's successful operation or every dashboard control has been accepted.
+- Exact-SHA test-step evidence:
+  - [Content quality workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41124654565): **433 Node tests passed, 0 failed, 0 skipped**.
+  - [Metadata workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41124654564): **433 Node tests passed, 0 failed, 0 skipped**; remaining validation steps observed successful.
+  - [Automation/security workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41124654694): **433 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; npm audit 0 vulnerabilities**; syntax/compile checks observed successful.
+  - [Dashboard browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41124654677): **16 browser journeys passed**.
+  - [Non-destructive branch inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41124654569): PASS.
+  - [Nature Frontiers local draft validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41124654676): local validation passed; provider-side draft creation was skipped.
+  - [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41124654659): correctly remains blocked by owner/provider prerequisites; the workflow fails closed and is not a regression-test pass.
+- At the time of this evidence refresh, several GitHub Actions run wrappers were still reporting `in_progress` despite their test/validation steps completing successfully; the isolated baseline run was still queued/in progress. Do not represent those workflow wrappers as completed PASS until GitHub reports their final conclusions.
+- **DASH-001 remains NOT_TESTED.** The 28-route invalid-payload slice and three GET behavior slices are meaningful partial evidence, not exhaustive route success, form behavior, per-control, browser persistence/reload, failure recovery or full acceptance.
+
+---
+
 # Latest dashboard wiring checkpoint — 30 October 2026
 
 ## Exact tested candidate
