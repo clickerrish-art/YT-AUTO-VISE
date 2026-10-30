@@ -4,6 +4,7 @@ import { spawn } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import crypto from "node:crypto";
 
 const operatorToken = "e2e-only-token-" + "x".repeat(40);
 
@@ -798,6 +799,7 @@ test("authoring form generates and persists a source-bound script through the re
   const port = 30_000 + Math.floor(Math.random() * 20_000);
   const base = `http://127.0.0.1:${port}`;
   let child;
+  let narrationFixtureDir = null;
   async function startServer() {
     const processHandle = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
       env: {
@@ -938,6 +940,47 @@ test("authoring form generates and persists a source-bound script through the re
     expect((await repeatedReview.json()).reused).toBe(true);
     expect((await repeatedReview.json()).scriptReview.approvalSha256).toBe(approvedJob.authoring.scriptApproval.approvalSha256);
 
+    // Seed a hash-consistent, explicitly synthetic narration bundle to exercise
+    // the dashboard review form. These bytes are NOT playable TTS and this test
+    // is not evidence of real audio generation or a genuine listening review.
+    const stageStatePath = path.join(stateDir, "dashboard-state.json");
+    const stageState = JSON.parse(fs.readFileSync(stageStatePath, "utf8"));
+    const stageJob = stageState.jobs.find(job => job.id === created.job.id);
+    narrationFixtureDir = path.join(process.cwd(), "media", "generated-authoring", stageJob.id + "-" + reviewedScriptSha.slice(0, 12));
+    fs.mkdirSync(narrationFixtureDir, { recursive: true });
+    const digest = value => crypto.createHash("sha256").update(value).digest("hex");
+    const fixtureAudio = Buffer.from("test fixture bytes only; not playable production audio");
+    const fixtureTranscript = String(stageJob.authoring.result.script.narration).replace(/\\s+/gu, " ").trim() + "\\n";
+    const fixtureCaptions = "1\\n00:00:00,000 --> 00:00:55,000\\nNarration caption fixture.\\n";
+    const writeArtifact = (name, bytes) => {
+      const file = path.join(narrationFixtureDir, name);
+      fs.writeFileSync(file, bytes);
+      return { path: path.relative(process.cwd(), file).split(path.sep).join("/"), sha256: digest(bytes) };
+    };
+    const audioArtifact = writeArtifact("narration.mp3", fixtureAudio);
+    const transcriptArtifact = writeArtifact("narration.txt", fixtureTranscript);
+    const captionsArtifact = writeArtifact("captions.srt", fixtureCaptions);
+    const fixtureReport = {
+      format: stageJob.contentType, scriptSha256: reviewedScriptSha,
+      wordCount: fixtureTranscript.trim().split(/\\s+/u).length, durationSeconds: 55,
+      wordBoundaryCount: 5, captionTiming: "TTS_WORD_BOUNDARIES",
+      audioSha256: audioArtifact.sha256, transcriptSha256: transcriptArtifact.sha256,
+      captionsSha256: captionsArtifact.sha256, humanReviewRequired: true,
+      rightsStatus: "NOT_VERIFIED", status: "DRAFT_REVIEW_REQUIRED", publishingEnabled: false
+    };
+    const reportArtifact = writeArtifact("narration-report.json", Buffer.from(JSON.stringify(fixtureReport) + "\\n"));
+    stageJob.authoring.narrationStage = {
+      status: "DRAFT_REVIEW_REQUIRED", scriptSha256: reviewedScriptSha,
+      scriptApprovalSha256: stageJob.authoring.scriptApproval.approvalSha256,
+      narrationReport: fixtureReport,
+      artifacts: {
+        "narration.mp3": audioArtifact, "narration.txt": transcriptArtifact,
+        "captions.srt": captionsArtifact, "narration-report.json": reportArtifact
+      },
+      publishable: false, publishingEnabled: false
+    };
+    fs.writeFileSync(stageStatePath, JSON.stringify(stageState, null, 2), { mode: 0o600 });
+
     await page.reload();
     await page.locator("#token").fill(operatorToken);
     await page.locator("#connect").click();
@@ -945,9 +988,35 @@ test("authoring form generates and persists a source-bound script through the re
     await page.locator("#authorjob").selectOption(created.job.id);
     await expect(page.locator("#authoringscript")).toContainText("The strongest wildlife story");
     await expect(page.locator("#authoringscript")).toContainText(providerSource.title);
+
+    await page.locator("#narrationreviewjob").selectOption(created.job.id);
+    await expect(page.locator("#narrationreviewsha")).toHaveValue(reviewedScriptSha);
+    await expect(page.locator("#narrationreviewaudioSha")).toHaveValue(audioArtifact.sha256);
+    await expect(page.locator("#narrationtranscript")).toContainText("A wildlife encounter");
+    await expect(page.locator("#narrationcaptions")).toContainText("Narration caption fixture");
+    await page.locator("#narrationreviewdecision").selectOption("APPROVE");
+    await page.locator("#confirmAudioListened").check();
+    await page.locator("#confirmTranscriptReviewed").check();
+    await page.locator("#confirmCaptionsReviewed").check();
+    await page.locator("#narrationreviewreason").fill("Synthetic browser fixture only; verifies hash binding, attestations and persisted review workflow.");
+    await page.locator("#narrationreviewform button[type=submit]").click();
+    await expect(page.locator("#narrationreviewresult")).toContainText("Narration review recorded: APPROVE", { timeout: 10_000 });
+    await expect(page.locator("#narrationreviewresult")).toContainText("publishing is disabled");
+
+    const narrationStateResponse = await page.request.get(base + "/api/state", { headers });
+    expect(narrationStateResponse.status()).toBe(200);
+    const narrationState = await narrationStateResponse.json();
+    const reviewedNarrationJob = narrationState.jobs.find(job => job.id === created.job.id);
+    expect(reviewedNarrationJob.authoring.narrationStage.status).toBe("APPROVED_FOR_RENDER");
+    expect(reviewedNarrationJob.authoring.narrationApproval.decision).toBe("APPROVE");
+    expect(reviewedNarrationJob.authoring.narrationApproval.audioSha256).toBe(audioArtifact.sha256);
+    expect(reviewedNarrationJob.authoring.narrationApproval.confirmAudioListened).toBe(true);
+    expect(reviewedNarrationJob.authoring.narrationStage.publishable).toBe(false);
+    expect(narrationState.publishingEnabled).toBe(false);
   } finally {
     await stopServer(child);
     provider.close();
     fs.rmSync(stateDir, { recursive: true, force: true });
+    if (narrationFixtureDir) fs.rmSync(narrationFixtureDir, { recursive: true, force: true });
   }
 });
