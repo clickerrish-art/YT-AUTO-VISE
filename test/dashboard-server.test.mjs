@@ -894,3 +894,98 @@ test("every protected dashboard API route rejects missing and invalid operator a
   }
 });
 
+
+
+test("all dashboard POST routes reject empty operation payloads without mutating persisted state", async (t) => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-route-matrix-"));
+  const port = 18000 + Math.floor(Math.random() * 10000);
+  const token = "route-matrix-token-" + "x".repeat(32);
+  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: {
+      ...process.env,
+      DASHBOARD_OPERATOR_TOKEN: token,
+      DASHBOARD_OPERATOR_ID: "route-matrix-owner@example.test",
+      DASHBOARD_STATE_DIR: stateDir,
+      UPLOAD_LOG_DIR: stateDir,
+      PORT: String(port),
+      DASHBOARD_HOST: "127.0.0.1",
+      FACEBOOK_PUBLISH_ENABLED: "NO",
+      FACEBOOK_RUNTIME_KILL_SWITCH: "YES",
+      META_PAGE_ACCESS_TOKEN: "",
+      META_USER_ACCESS_TOKEN: ""
+    },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let logs = "";
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  t.after(() => {
+    child.kill("SIGTERM");
+    fs.rmSync(stateDir, { recursive: true, force: true });
+  });
+
+  const base = "http://127.0.0.1:" + port;
+  let ready = false;
+  for (let attempt = 0; attempt < 60; attempt++) {
+    if (child.exitCode !== null) break;
+    try {
+      const response = await fetch(base + "/healthz");
+      if (response.ok) { ready = true; break; }
+    } catch {}
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  assert.equal(ready, true, "dashboard server did not start: " + logs);
+
+  const routes = [
+    "/api/facebook/verify-page",
+    "/api/facebook/drafts",
+    "/api/facebook/drafts/evaluate",
+    "/api/facebook/drafts/approve",
+    "/api/facebook/publish",
+    "/api/tasks/run",
+    "/api/campaigns/manage",
+    "/api/drafts",
+    "/api/jobs",
+    "/api/jobs/production-plan",
+    "/api/jobs/production-plan/review",
+    "/api/jobs/authoring/review",
+    "/api/jobs/narration/reconcile",
+    "/api/jobs/narration/review",
+    "/api/jobs/narration",
+    "/api/jobs/author",
+    "/api/jobs/validate",
+    "/api/jobs/parent-relationship",
+    "/api/jobs/rights/verify",
+    "/api/jobs/review",
+    "/api/uploads/reconcile",
+    "/api/jobs/produce",
+    "/api/jobs/lease/claim",
+    "/api/jobs/lease/heartbeat",
+    "/api/jobs/lease/complete",
+    "/api/jobs/lease/reap",
+    "/api/jobs/transition",
+    "/api/drafts/update"
+  ];
+  const stateFile = path.join(stateDir, "dashboard-state.json");
+  const originalState = fs.readFileSync(stateFile, "utf8");
+  const headers = { "content-type": "application/json", "x-operator-token": token };
+
+  for (const route of routes) {
+    const response = await fetch(base + route, {
+      method: "POST",
+      headers,
+      body: "{}"
+    });
+    const responseText = await response.text();
+    assert.ok(
+      response.status >= 400 && response.status < 500,
+      "empty payload for POST " + route + " must fail with a client error, received " +
+        response.status + ": " + responseText
+    );
+    assert.equal(
+      fs.readFileSync(stateFile, "utf8"),
+      originalState,
+      "empty payload for POST " + route + " must not mutate persisted dashboard state"
+    );
+  }
+});
