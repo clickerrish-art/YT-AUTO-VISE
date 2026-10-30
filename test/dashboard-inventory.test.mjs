@@ -126,13 +126,13 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
 
   for (const formId of formIds) {
     const bindingIndex = submitBindings.findIndex(binding => binding.id === formId);
-    assert.notEqual(bindingIndex, -1, \`form #\${formId} has no submit handler\`);
+    assert.notEqual(bindingIndex, -1, "form #" + formId + " has no submit handler");
     const start = submitBindings[bindingIndex].index;
     const end = submitBindings[bindingIndex + 1]?.index ?? scriptSource.length;
     const handler = scriptSource.slice(start, end);
-    const apiRoute = handler.match(/\\bapi\\s*\\(\\s*["']([^"']+)["']/)?.[1];
-    assert.ok(apiRoute, \`form #\${formId} does not call the dashboard API\`);
-    assert.ok(routeDeclarations.has(apiRoute), \`form #\${formId} calls undeclared API route \${apiRoute}\`);
+    const apiRoute = handler.match(/\bapi\s*\(\s*["']([^"']+)["']/)?.[1];
+    assert.ok(apiRoute, "form #" + formId + " does not call the dashboard API");
+    assert.ok(routeDeclarations.has(apiRoute), "form #" + formId + " calls undeclared API route " + apiRoute);
   }
 
   const controlTags = [...html.matchAll(/<(button|input|select|textarea)\b([^>]*)>/gi)];
@@ -145,10 +145,10 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
       ?? (tag === "button" ? "submit" : "");
     if (tag === "button" && type === "submit") continue;
 
-    assert.ok(id, \`non-submit \${tag} control is missing a stable id\`);
+    assert.ok(id, "non-submit " + tag + " control is missing a stable id");
     assert.ok(
       scriptSource.includes('$("' + id + '")') || scriptSource.includes("$('#" + id + "')"),
-      \`non-submit control #\${id} has no JavaScript binding\`,
+      "non-submit control #" + id + " has no JavaScript binding",
     );
     wiredControls++;
   }
