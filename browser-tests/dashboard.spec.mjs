@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { createServer } from "node:http";
 import { spawn } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
@@ -768,15 +769,15 @@ test("authoring form generates and persists a source-bound script through the re
     "A wildlife encounter can look simple from a distance, but the evidence often tells a more careful story. The first question is not which animal is strongest; it is what each animal is doing in its own habitat. Good reporting separates observed action from assumptions about intent.",
     "Field observations can describe behavior under specific conditions, but one observation cannot establish a universal rule. Researchers compare repeated observations, environmental context, and competing explanations before drawing conclusions. Strong conclusions depend on source quality, methods, and repeated observations.",
     "That distinction matters when a short video compresses a complicated interaction into a dramatic moment. A responsible account separates what the source directly reports from what remains uncertain, and never invents a scene to make the story more exciting. That care can make a story more compelling without pretending uncertainty has disappeared."
-  ].join("\\n\\n");
+  ].join("\n\n");
   const generatedScript = {
     premise: "Explain how to interpret wildlife behavior without overstating a single observation.",
     conclusion: "The strongest wildlife story is the one that keeps observation, interpretation, and uncertainty distinct.",
     narration,
     sections: [
-      { heading: "The question", purpose: "Frame the evidence", narration: narration.split("\\n\\n")[0], visualDirection: "Wide habitat establishing shot", pacing: "Measured", soundDesign: "Natural ambience" },
-      { heading: "What evidence means", purpose: "Explain source limits", narration: narration.split("\\n\\n")[1], visualDirection: "Documented behavior with no invented encounter", pacing: "Steady", soundDesign: "Low ambience under narration" },
-      { heading: "The responsible conclusion", purpose: "Resolve the premise", narration: narration.split("\\n\\n")[2], visualDirection: "Return to habitat context", pacing: "Slow slightly", soundDesign: "Natural fade" }
+      { heading: "The question", purpose: "Frame the evidence", narration: narration.split("\n\n")[0], visualDirection: "Wide habitat establishing shot", pacing: "Measured", soundDesign: "Natural ambience" },
+      { heading: "What evidence means", purpose: "Explain source limits", narration: narration.split("\n\n")[1], visualDirection: "Documented behavior with no invented encounter", pacing: "Steady", soundDesign: "Low ambience under narration" },
+      { heading: "The responsible conclusion", purpose: "Resolve the premise", narration: narration.split("\n\n")[2], visualDirection: "Return to habitat context", pacing: "Slow slightly", soundDesign: "Natural fade" }
     ],
     claims: [{ text: "Researchers compare observations and context before drawing conclusions.", sourceIds: ["source-1"] }],
     sources: [providerSource],
