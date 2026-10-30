@@ -745,3 +745,97 @@ test("restore rolls back a destination commit when its directory fsync fails", a
     fs.rmSync(destination.root, { recursive: true, force: true });
   }
 });
+
+
+test("restore recovery rolls back after every destination-commit boundary", async () => {
+  const source = fixture();
+  try {
+    const backupPath = path.join(source.root, "backup.json");
+    await backupState({
+      rootDir: source.root,
+      stateDir: source.stateDir,
+      uploadLogDir: source.logDir,
+      rightsDir: source.rightsDir,
+      outputPath: backupPath
+    });
+    const backup = JSON.parse(fs.readFileSync(backupPath, "utf8"));
+    assert.ok(backup.entries.length > 1, "fixture must cover multiple destination commits");
+
+    for (let boundary = 1; boundary <= backup.entries.length; boundary++) {
+      const destination = fixture();
+      try {
+        fs.rmSync(destination.stateDir, { recursive: true, force: true });
+        fs.rmSync(destination.logDir, { recursive: true, force: true });
+        fs.rmSync(destination.rightsDir, { recursive: true, force: true });
+
+        const restoreModule = new URL("../scripts/restore-state.mjs", import.meta.url).href;
+        const childScript = `
+          import fs from "node:fs";
+          import path from "node:path";
+          const { restoreState } = await import(${JSON.stringify(restoreModule)});
+          const exitAfter = ${boundary};
+          let commits = 0;
+          const rename = fs.renameSync;
+          fs.renameSync = function (from, to, ...rest) {
+            const result = rename.call(this, from, to, ...rest);
+            const target = String(to);
+            if (path.basename(target) !== ".restore-transaction.json" &&
+                !target.endsWith(".restore-tmp") &&
+                !target.endsWith(".rollback-tmp")) {
+              commits += 1;
+              if (commits === exitAfter) process.exit(86);
+            }
+            return result;
+          };
+          await restoreState({
+            backupPath: ${JSON.stringify(backupPath)},
+            rootDir: ${JSON.stringify(destination.root)},
+            confirm: "YES"
+          });
+        `;
+        const child = spawn(process.execPath, ["--input-type=module", "-e", childScript], { encoding: "utf8" });
+        const exitCode = await new Promise((resolve, reject) => {
+          child.once("error", reject);
+          child.once("close", resolve);
+        });
+        assert.equal(exitCode, 86, "child must terminate after destination commit boundary " + boundary);
+
+        const journalPath = path.join(destination.stateDir, ".restore-transaction.json");
+        const lockPath = path.join(destination.stateDir, ".restore-operation.lock");
+        assert.equal(fs.existsSync(journalPath), true, "durable journal must remain after boundary " + boundary);
+        assert.equal(fs.existsSync(lockPath), true, "abandoned operation lock must remain after boundary " + boundary);
+
+        // The child has exited; explicitly model an operator confirming that
+        // no restore process remains before removing this test's stale lock.
+        fs.unlinkSync(lockPath);
+        await assert.rejects(
+          restoreState({ backupPath, rootDir: destination.root, confirm: "YES" }),
+          /rolled back safely.*rerun restore explicitly/i
+        );
+        assert.equal(fs.existsSync(journalPath), false, "recovery must remove the journal after boundary " + boundary);
+        assert.equal(fs.existsSync(lockPath), false, "recovery must release its own lock after boundary " + boundary);
+
+        const expectedDestinations = [
+          path.join(destination.stateDir, "dashboard-state.json"),
+          path.join(destination.stateDir, "facebook-recovery-ledger.jsonl"),
+          path.join(destination.logDir, "upload-attempts.json"),
+          path.join(destination.logDir, "upload-VIDEO001.json"),
+          path.join(destination.logDir, "upload-approvals", "approval001.json"),
+          path.join(destination.rightsDir, "license.txt")
+        ];
+        for (const target of expectedDestinations) {
+          assert.equal(fs.existsSync(target), false, "recovery must restore the pre-transaction absence: " + target);
+        }
+        for (const directory of [destination.stateDir, destination.logDir, path.join(destination.logDir, "upload-approvals"), destination.rightsDir]) {
+          if (!fs.existsSync(directory)) continue;
+          const leftovers = fs.readdirSync(directory).filter(name => name.endsWith(".restore-tmp") || name.endsWith(".rollback-tmp"));
+          assert.deepEqual(leftovers, [], "recovery must remove staged temporary files after boundary " + boundary);
+        }
+      } finally {
+        fs.rmSync(destination.root, { recursive: true, force: true });
+      }
+    }
+  } finally {
+    fs.rmSync(source.root, { recursive: true, force: true });
+  }
+});
