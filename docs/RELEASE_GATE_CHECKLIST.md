@@ -1,3 +1,18 @@
+## Current release gate snapshot — 30 October 2026
+
+- [x] Exact candidate `115fe82252b4fa1ef1eb2f9587bf0653356a6dc9` automated workflows reviewed: 426 Node tests, 0 failures/skips; 16 Python tests; npm audit 0 vulnerabilities; content quality, metadata, 15 Chromium journeys, isolated baseline and branch inventory passed.
+- [x] Current PR HEAD is recorded separately as documentation-only descendant `a1152a2ce936af2e4dd4ccb88cc63d7bafb483cb`; it is not claimed as a new application-code test SHA.
+- [ ] DASH-001 exhaustive control/form/route behavior acceptance.
+- [ ] STATE-001 complete transaction-boundary crash/restart and power-loss acceptance.
+- [ ] SCHED-001 complete schedule queue/history/concurrency/restart acceptance.
+- [ ] GIT-002 human semantic review of the divergent branch and restore-test incident.
+- [ ] DEPLOY-001 clean install, monitoring, backup/restore and rollback drill.
+- [ ] All owner/provider gates listed in `GO_LIVE_BLOCKERS.md`.
+
+**Release verdict: NOT READY.** Do not bypass readiness or enable publishing to satisfy this checklist. See `CURRENT_RELEASE_EVIDENCE_2026-10-30.md`.
+
+---
+
 ## Latest exact-SHA dashboard API authentication acceptance — 29 October 2026, 13:25 UTC
 
 - **Tested source/test SHA:** `9229671e82180eadb92411cdd5ac9e649da79fdb`. Application implementation is unchanged; regression coverage now includes protected read and mutating API declarations.
