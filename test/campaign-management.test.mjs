@@ -58,7 +58,7 @@ test("Selar preview persists pending destination and disclosure without changing
   assert.equal(saved.pendingDestinationUrl, "https://selar.com/0u19v8u99l");
   assert.equal(saved.pendingDisclosureText, disclosure.trim());
   assert.match(saved.pendingDestinationVersion, /^[a-f0-9]{64}$/);
-  assert.equal(saved.pendingDestinationVersion, crypto.createHash("sha256").update("https://selar.com/0u19v8u99l\\n" + disclosure.trim()).digest("hex"));
+  assert.equal(saved.pendingDestinationVersion, crypto.createHash("sha256").update("https://selar.com/0u19v8u99l\n" + disclosure.trim()).digest("hex"));
   assert.equal(saved.destinationUrl, original.destinationUrl);
   assert.equal(saved.disclosureText, original.disclosureText);
   assert.deepEqual(saved.approval, original.approval);
