@@ -439,3 +439,16 @@ Three of the 15 dashboard forms now have demonstrated successful browser journey
 - [Dashboard browser E2E workflow 41137335224](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137335224): **SUCCESS — all 18 Chromium journeys passed**, including authoring and hash-bound script review.
 - This synthetic test operator approval demonstrates the form and server workflow only. It is not the owner's real-world editorial approval and does not clear factual, originality, rights, narration, visual or publication gates.
 - Successful form journeys now demonstrated: `campaignform`, `draft`, `facebookdraftform`, `authoringform`, and `scriptreviewform` (**5 of 15**). The other 10 forms remain NOT_TESTED or BLOCKED. DASH-001 remains NOT_TESTED.
+
+
+## Follow-up: narration-review UI journey and idempotent review receipts — 31 October 2026
+
+- Browser-test candidate: `1fc956dbcbc1404286036a379b513bf9dbe3953a`.
+- Extended the existing isolated authoring browser journey to seed a hash-consistent **synthetic, non-playable** narration bundle, then use the actual dashboard `narrationreviewform` to load the review bundle, inspect the transcript/captions and hashes, submit the three required attestations plus review reason, and verify the persisted `APPROVED_FOR_RENDER` receipt.
+- This demonstrates the dashboard/API/persistence review workflow only. It does **not** demonstrate real TTS generation, playable audio, actual listening, or an owner's genuine editorial approval. The synthetic fixture is explicitly labeled in the test.
+- [Dashboard browser workflow 41139006431](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41139006431): **SUCCESS — 18 Chromium journeys passed** on exact SHA `1fc956dbcbc1404286036a379b513bf9dbe3953a`.
+- Implemented idempotent narration-review retries in `scripts/dashboard-server.mjs`: an exact retry by the same operator returns the original approval receipt without writing a second decision; changed decisions/reasons/evidence return HTTP 409. Before replaying a receipt, the server rechecks the current script hash, script-approval receipt and all four narration artifact hashes against retained files.
+- Added API regression coverage for exact retry reuse, changed-request rejection and post-approval artifact-tampering rejection in `test/dashboard-server.test.mjs`.
+- [Automation/security workflow 41139006397](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41139006397): **SUCCESS** on exact SHA `1fc956dbcbc1404286036a379b513bf9dbe3953a`; 436 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; npm audit reported 0 vulnerabilities; syntax and Python compilation checks passed.
+- Successful form journeys now demonstrated: `campaignform`, `draft`, `facebookdraftform`, `authoringform`, `scriptreviewform`, and `narrationreviewform` (**6 of 15**). `narrationform` remains NOT_TESTED for successful real generation/reconciliation; nine forms remain NOT_TESTED or BLOCKED. DASH-001 remains NOT_TESTED.
+- Global publishing remains disabled. No YouTube, Facebook, Instagram or Metricool external publication/schedule mutation occurred.
