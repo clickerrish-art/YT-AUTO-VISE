@@ -1531,6 +1531,21 @@ const server = http.createServer(async (req, res) => {
             existingReview.confirmTranscriptReviewed === (body.confirmTranscriptReviewed === true) &&
             existingReview.confirmCaptionsReviewed === (body.confirmCaptionsReviewed === true);
           if (exactRetry) {
+            const currentScriptMatches = canonicalAuthoringScriptSha256(job.authoring?.result?.script) === body.scriptSha256 &&
+              job.authoring?.scriptApproval?.scriptSha256 === body.scriptSha256 &&
+              stage.scriptSha256 === body.scriptSha256 &&
+              stage.scriptApprovalSha256 === job.authoring.scriptApproval.approvalSha256;
+            if (!currentScriptMatches) return json(res, 409, { error: "The approved script or its approval receipt changed after narration review", publishable: false });
+            for (const [name, submitted] of [["narration.mp3", body.audioSha256], ["narration.txt", body.transcriptSha256], ["captions.srt", body.captionsSha256], ["narration-report.json", body.reportSha256]]) {
+              const artifact = stage.artifacts?.[name];
+              try {
+                if (!artifact || artifact.sha256 !== submitted || sha256File(resolveRepositoryFile(artifact.path)) !== submitted) {
+                  return json(res, 409, { error: "Previously reviewed narration artifact has changed: " + name, publishable: false });
+                }
+              } catch {
+                return json(res, 409, { error: "Previously reviewed narration artifact is unavailable: " + name, publishable: false });
+              }
+            }
             return json(res, 200, {
               job, narrationReview: existingReview, reused: true, publishable: false, publishingEnabled: false,
               nextAction: finalizedDecision === "APPROVE"
