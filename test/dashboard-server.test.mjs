@@ -350,17 +350,25 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     reason: "Review attempted without full-playback attestations."
   }) });
   assert.equal(missingAttestations.status, 400, "approval must require explicit audio, transcript and caption review attestations");
-  const narrationApproval = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify({
+  const narrationReviewPayload = {
     jobId: authorJob.id, decision: "APPROVE", scriptSha256: reauthScriptSha256,
     audioSha256: audioArtifact.sha256, transcriptSha256: transcriptArtifact.sha256,
     captionsSha256: captionsArtifact.sha256, reportSha256: reportArtifact.sha256,
     confirmAudioListened: true, confirmTranscriptReviewed: true, confirmCaptionsReviewed: true,
     reason: "Test fixture only: exercised hash and attestation checks, not a genuine listening review."
-  }) });
+  };
+  const narrationApproval = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) });
   const narrationApprovalBody = await narrationApproval.json();
   assert.equal(narrationApproval.status, 200, JSON.stringify(narrationApprovalBody));
   assert.equal(narrationApprovalBody.job.authoring.narrationStage.status, "APPROVED_FOR_RENDER");
   assert.equal(narrationApprovalBody.publishable, false, "narration approval must not imply video approval or publication");
+  const narrationApprovalRetry = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) });
+  const narrationApprovalRetryBody = await narrationApprovalRetry.json();
+  assert.equal(narrationApprovalRetry.status, 200, JSON.stringify(narrationApprovalRetryBody));
+  assert.equal(narrationApprovalRetryBody.reused, true, "an exact retry after a timeout must reuse the persisted narration approval");
+  assert.equal(narrationApprovalRetryBody.narrationReview.approvalSha256, narrationApprovalBody.narrationReview.approvalSha256);
+  const changedNarrationRetry = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify({ ...narrationReviewPayload, reason: "Changed review reason." }) });
+  assert.equal(changedNarrationRetry.status, 409, "a changed review cannot overwrite a finalized narration approval");
   const authorRenderBypass = await fetch(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id }) });
   const authorRenderBypassBody = await authorRenderBypass.json();
   assert.equal(authorRenderBypass.status, 409, "a generated script must not bypass missing narration/caption/scene integration");
