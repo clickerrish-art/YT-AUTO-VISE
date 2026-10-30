@@ -19,7 +19,7 @@ Exact tested application/test candidate: `521ed70a263c03df48f5b0ae1c6c726dd380ce
 | `draft` | `POST /api/drafts` | **PASS** | Real browser draft creation, queue/job persistence, refresh, duplicate rejection and restart persistence |
 | `facebookdraftform` | `POST /api/facebook/drafts` | **PASS** | Real local Facebook draft saved and read back; `publishingEnabled=false`; no provider-side post claimed |
 | `authoringform` | `POST /api/jobs/author` | **PASS** | Exact-SHA real-browser journey creates a queued job, submits a source-bound brief through the UI, persists and reads back the script, resets model similarity claims to PENDING, reloads the dashboard, and verifies exact retry reuses the result without a second provider call; [workflow 41137041295](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137041295) on `1334f9380dafbf5f9e6cf272e1bd14feab0045f3` |
-| `scriptreviewform` | `POST /api/jobs/authoring/review` | **NOT_TESTED** | Invalid SHA rejection is covered; successful browser approval journey remains unproven |
+| `scriptreviewform` | `POST /api/jobs/authoring/review` | **PASS** | Same isolated real-browser journey submits an APPROVE decision against the displayed script SHA-256, persists reviewer/reason/approval hash, verifies publishable remains false, and confirms exact repeat reuses the approval; [workflow 41137335224](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137335224) on `67edf6c84d716a236f457df8b13901eee896d195` (test-only descendant of the previously validated authoring candidate) |
 | `narrationform` | `POST /api/jobs/narration` | **NOT_TESTED** | Invalid SHA rejection is covered; successful browser generation/reconciliation journey remains unproven |
 | `narrationreviewform` | `POST /api/jobs/narration/review` | **NOT_TESTED** | Complete successful browser review and durable receipt journey remains unproven |
 | `productionplanform` | `POST /api/jobs/production-plan` | **NOT_TESTED** | Invalid JSON and backend rejection feedback are covered; successful plan submission and persisted read-back remain unproven |
@@ -49,7 +49,7 @@ On exact candidate `1334f9380dafbf5f9e6cf272e1bd14feab0045f3`, the dashboard bro
 
 Historical failure preserved: [run 41134441258](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41134441258) failed on earlier candidate `204fa79` because the campaign preview endpoint reported success without persisting the pending Selar preview. The product defect was corrected and the new exact-SHA E2E now passes. An intermediate browser test on `65b894d` also exposed a test-fixture mismatch: it attempted activation with a different disclosure than the saved preview; the test now submits the exact previewed disclosure and verifies the fingerprint binding.
 
-**DASH-001 remains NOT_TESTED.** Four forms now have demonstrated successful UI journeys (`campaignform`, `draft`, `facebookdraftform`, `authoringform`). Eleven other forms remain NOT_TESTED or BLOCKED. This is partial acceptance, not full acceptance of all 15 forms, 105 controls or 38 API routes.
+**DASH-001 remains NOT_TESTED.** Five forms now have demonstrated successful UI journeys (`campaignform`, `draft`, `facebookdraftform`, `authoringform`, `scriptreviewform`). Ten other forms remain NOT_TESTED or BLOCKED. This is partial acceptance, not full acceptance of all 15 forms, 105 controls or 38 API routes.
 
 
 ## Final workflow status refresh for source/test candidate `a3b57eb` — 30 October 2026
