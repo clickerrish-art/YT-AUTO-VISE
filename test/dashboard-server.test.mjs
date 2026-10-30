@@ -989,3 +989,88 @@ test("all dashboard POST routes reject empty operation payloads without mutating
     );
   }
 });
+
+
+test("read-only Facebook idea, connection-state and task endpoints return truthful safe states", async (t) => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-readonly-"));
+  const port = 18000 + Math.floor(Math.random() * 10000);
+  const token = "readonly-route-token-" + "x".repeat(32);
+  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: {
+      ...process.env,
+      DASHBOARD_OPERATOR_TOKEN: token,
+      DASHBOARD_OPERATOR_ID: "readonly-owner@example.test",
+      DASHBOARD_STATE_DIR: stateDir,
+      UPLOAD_LOG_DIR: stateDir,
+      PORT: String(port),
+      DASHBOARD_HOST: "127.0.0.1",
+      FACEBOOK_PUBLISH_ENABLED: "NO",
+      FACEBOOK_RUNTIME_KILL_SWITCH: "YES",
+      META_PAGE_ACCESS_TOKEN: "",
+      META_USER_ACCESS_TOKEN: ""
+    },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let logs = "";
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  t.after(() => {
+    child.kill("SIGTERM");
+    fs.rmSync(stateDir, { recursive: true, force: true });
+  });
+
+  const base = "http://127.0.0.1:" + port;
+  let ready = false;
+  for (let attempt = 0; attempt < 60; attempt++) {
+    if (child.exitCode !== null) break;
+    try {
+      const response = await fetch(base + "/healthz");
+      if (response.ok) { ready = true; break; }
+    } catch {}
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  assert.equal(ready, true, "dashboard server did not start: " + logs);
+
+  const headers = { "x-operator-token": token };
+  const stateFile = path.join(stateDir, "dashboard-state.json");
+  const originalState = fs.readFileSync(stateFile, "utf8");
+
+  const missingDate = await fetch(base + "/api/facebook/idea", { headers });
+  assert.equal(missingDate.status, 400);
+  assert.match((await missingDate.json()).error, /date is required/i);
+
+  const invalidDate = await fetch(base + "/api/facebook/idea?date=2026-02-30", { headers });
+  assert.equal(invalidDate.status, 400);
+  assert.match((await invalidDate.json()).error, /date is invalid/i);
+
+  const ideaResponse = await fetch(base + "/api/facebook/idea?date=2026-10-31", { headers });
+  assert.equal(ideaResponse.status, 200);
+  const ideaBody = await ideaResponse.json();
+  assert.equal(ideaBody.idea.date, "2026-10-31");
+  assert.equal(ideaBody.idea.publishReady, false);
+  assert.equal(ideaBody.publishReady, false);
+  assert.equal(ideaBody.publishingEnabled, false);
+
+  const connectionResponse = await fetch(base + "/api/facebook/state", { headers });
+  assert.equal(connectionResponse.status, 200);
+  const connection = await connectionResponse.json();
+  assert.equal(connection.publishingEnabled, false);
+  assert.equal(connection.pageIdentityVerified, false);
+  assert.equal(connection.permissionsConfirmed, false);
+  assert.equal(connection.accessTokenConfigured, false);
+  assert.ok(Array.isArray(connection.blockers));
+  assert.ok(connection.blockers.length > 0);
+
+  const tasksResponse = await fetch(base + "/api/tasks", { headers });
+  assert.equal(tasksResponse.status, 200);
+  const tasks = await tasksResponse.json();
+  assert.equal(tasks.publicPublishingEnabled, false);
+  assert.ok(Array.isArray(tasks.tasks));
+  assert.ok(tasks.tasks.length > 0);
+
+  assert.equal(
+    fs.readFileSync(stateFile, "utf8"),
+    originalState,
+    "read-only dashboard endpoints must not mutate persisted state"
+  );
+});
