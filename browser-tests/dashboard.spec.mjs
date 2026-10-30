@@ -1241,31 +1241,37 @@ test("production-plan submission and hash-bound review persist through the real 
   const base = "http://127.0.0.1:" + port;
   const jobId = "browser-production-plan-" + crypto.randomBytes(5).toString("hex");
   const hash = bytes => crypto.createHash("sha256").update(bytes).digest("hex");
-  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
-    cwd: process.cwd(),
-    env: {
-      PATH: process.env.PATH,
-      HOME: process.env.HOME,
-      NODE_ENV: "test",
-      DASHBOARD_OPERATOR_TOKEN: token,
-      DASHBOARD_OPERATOR_ID: operator,
-      DASHBOARD_STATE_DIR: stateDir,
-      UPLOAD_LOG_DIR: path.join(stateDir, "run-logs"),
-      PORT: String(port),
-      DASHBOARD_HOST: "127.0.0.1"
-    },
-    stdio: ["ignore", "pipe", "pipe"]
-  });
+  let child;
   let logs = "";
-  child.stdout.on("data", chunk => { logs += chunk.toString(); });
-  child.stderr.on("data", chunk => { logs += chunk.toString(); });
-
+  const startServer = () => {
+    child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+      cwd: process.cwd(),
+      env: {
+        PATH: process.env.PATH,
+        HOME: process.env.HOME,
+        NODE_ENV: "test",
+        DASHBOARD_OPERATOR_TOKEN: token,
+        DASHBOARD_OPERATOR_ID: operator,
+        DASHBOARD_STATE_DIR: stateDir,
+        UPLOAD_LOG_DIR: path.join(stateDir, "run-logs"),
+        PORT: String(port),
+        DASHBOARD_HOST: "127.0.0.1"
+      },
+      stdio: ["ignore", "pipe", "pipe"]
+    });
+    child.stdout.on("data", chunk => { logs += chunk.toString(); });
+    child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  };
   const stopServer = async () => {
-    if (child.exitCode !== null || child.signalCode !== null) return;
+    if (!child || child.exitCode !== null || child.signalCode !== null) return;
     const exited = new Promise(resolve => child.once("exit", resolve));
     child.kill("SIGTERM");
     await exited;
   };
+  const waitForServer = async () => {
+    await waitForServer();
+  };
+  startServer();
 
   try {
     const narration = "The approved narration explains an evidence-led wildlife question and distinguishes documented facts from uncertainty.";
@@ -1480,6 +1486,27 @@ test("production-plan submission and hash-bound review persist through the real 
     expect(reviewedState.audit.some(item => item.action === "PRODUCTION_PLAN_APPROVED" && item.jobId === jobId && item.planSha256 === planSha256 && item.approvalSha256 === stage.review.approvalSha256)).toBe(true);
     await expect(page.locator("#produceform button[type='submit']")).toBeDisabled();
     expect(reviewedState.publishingEnabled).toBe(false);
+
+    // A fresh process must load the exact reviewed plan and immutable approval
+    // from durable state, not reconstruct or silently replace the review.
+    await stopServer();
+    startServer();
+    await waitForServer();
+    const restartedResponse = await fetch(base + "/api/state", { headers });
+    expect(restartedResponse.status).toBe(200);
+    const restartedState = await restartedResponse.json();
+    const restartedJob = restartedState.jobs.find(item => item.id === jobId);
+    expect(restartedJob.authoring.productionPlan.status).toBe("APPROVED_PLAN_ONLY");
+    expect(restartedJob.authoring.productionPlan.planSha256).toBe(planSha256);
+    expect(restartedJob.authoring.productionPlan.review.approvalSha256).toBe(stage.review.approvalSha256);
+    expect(restartedJob.authoring.productionPlan.review.reviewer).toBe(operator);
+    expect(restartedState.audit.some(item =>
+      item.action === "PRODUCTION_PLAN_APPROVED" &&
+      item.jobId === jobId &&
+      item.planSha256 === planSha256 &&
+      item.approvalSha256 === stage.review.approvalSha256
+    )).toBe(true);
+    expect(restartedState.publishingEnabled).toBe(false);
   } finally {
     await stopServer();
     fs.rmSync(stateDir, { recursive: true, force: true });
