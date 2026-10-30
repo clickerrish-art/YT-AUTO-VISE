@@ -105,3 +105,53 @@ test("dashboard inventory parses greater-than signs in quoted attributes and ign
   assert.equal(inventory.controls[0].id, null);
   assert.equal(inventory.controls[0].name, "caption");
 });
+
+test("dashboard forms and non-submit controls are wired to real API routes", () => {
+  const html = fs.readFileSync(path.join(root, "public", "dashboard.html"), "utf8");
+  const server = fs.readFileSync(path.join(root, "scripts", "dashboard-server.mjs"), "utf8");
+  const inventory = inventoryDashboardSources(html, server);
+  const scriptSource = [...html.matchAll(/<script\\b[^>]*>([\\s\\S]*?)<\\/script>/gi)]
+    .map(match => match[1])
+    .join("\\n");
+
+  const formIds = [...html.matchAll(/<form\\b([^>]*)>/gi)]
+    .map(match => match[1].match(/\\bid=["']([^"']+)["']/i)?.[1])
+    .filter(Boolean);
+  const submitBindings = [...scriptSource.matchAll(/\\$\\(\\s*["']([^"']+)["']\\s*\\)\\.onsubmit\\s*=/g)]
+    .map(match => ({ id: match[1], index: match.index }));
+  const routeDeclarations = new Set(inventory.routes.map(route => route.path));
+
+  assert.equal(formIds.length, 15, "the dashboard form inventory changed; review the acceptance fixture");
+  assert.equal(submitBindings.length, formIds.length, "every dashboard form must have exactly one explicit submit handler");
+
+  for (const formId of formIds) {
+    const bindingIndex = submitBindings.findIndex(binding => binding.id === formId);
+    assert.notEqual(bindingIndex, -1, `form #${formId} has no submit handler`);
+    const start = submitBindings[bindingIndex].index;
+    const end = submitBindings[bindingIndex + 1]?.index ?? scriptSource.length;
+    const handler = scriptSource.slice(start, end);
+    const apiRoute = handler.match(/\\bapi\\s*\\(\\s*["']([^"']+)["']/)?.[1];
+    assert.ok(apiRoute, `form #${formId} does not call the dashboard API`);
+    assert.ok(routeDeclarations.has(apiRoute), `form #${formId} calls undeclared API route ${apiRoute}`);
+  }
+
+  const controlTags = [...html.matchAll(/<(button|input|select|textarea)\\b([^>]*)>/gi)];
+  let wiredControls = 0;
+  for (const match of controlTags) {
+    const tag = match[1].toLowerCase();
+    const attributes = match[2];
+    const id = attributes.match(/\\bid=["']([^"']+)["']/i)?.[1];
+    const type = attributes.match(/\\btype=["']([^"']+)["']/i)?.[1]?.toLowerCase()
+      ?? (tag === "button" ? "submit" : "");
+    if (tag === "button" && type === "submit") continue;
+
+    assert.ok(id, `non-submit ${tag} control is missing a stable id`);
+    assert.ok(
+      scriptSource.includes('$("' + id + '")') || scriptSource.includes("$('#" + id + "')"),
+      `non-submit control #${id} has no JavaScript binding`,
+    );
+    wiredControls++;
+  }
+
+  assert.equal(wiredControls, 90, "the number of non-submit dashboard controls changed; review the acceptance fixture");
+});
