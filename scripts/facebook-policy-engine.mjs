@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
-export const FACEBOOK_POLICY_RULE_VERSION = "nf-facebook-autonomous-policy-2026-10-v2";
+export const FACEBOOK_POLICY_RULE_VERSION = "nf-facebook-autonomous-policy-2026-10-v3";
 export const APPROVED_SELLAR_URL = "https://selar.com/0u19v8u99l";
 const sha256 = value => crypto.createHash("sha256").update(value).digest("hex");
 const text = value => typeof value === "string" && value.trim().length > 0;
@@ -39,16 +39,19 @@ function containsAffiliateLanguage(caption) {
 }
 
 function isNatureFrontiersProductPromotion(payload, links = []) {
-  const caption = String(payload?.caption ?? "");
+  // Metricool supports a public first comment. Treat it as promotional copy too:
+  // a neutral caption must not be able to move a prohibited product link into the comment.
+  const visibleCopy = [payload?.caption, payload?.firstCommentText]
+    .filter(value => typeof value === "string").join("\n");
   const hasStorefrontLink = links.some(link => {
     try {
       const host = new URL(String(link)).hostname.toLowerCase();
       return host === "selar.com" || host.endsWith(".selar.com") || host === "safari.com" || host.endsWith(".safari.com");
     } catch { return false; }
   });
-  const explicitPromotion = /\b(?:buy now|shop now|order now|purchase now|download now|get your copy|product link|promotional link|product promotion|limited offer|complete youtube wildlife creator|full video creation prompt pack premium edition|youtube success blueprint(?: 90-day creator system)?|selar)\b/i.test(caption);
+  const explicitPromotion = /\b(?:buy now|shop now|order now|purchase now|download now|get your copy|product link|promotional link|product promotion|limited offer|complete youtube wildlife creator|full video creation prompt pack premium edition|youtube success blueprint(?: 90-day creator system)?|selar)\b/i.test(visibleCopy);
   return payload?.commercial === true || Boolean(String(payload?.campaignId ?? "").trim()) ||
-    hasStorefrontLink || containsAffiliateLanguage(caption) || explicitPromotion;
+    hasStorefrontLink || containsAffiliateLanguage(visibleCopy) || explicitPromotion;
 }
 function fingerprint(payload) {
   return sha256(JSON.stringify({
@@ -57,6 +60,7 @@ function fingerprint(payload) {
     slotId: payload?.slotId ?? "",
     scheduledAt: payload?.scheduledAt ?? "",
     caption: String(payload?.caption ?? ""),
+    ...(Object.hasOwn(payload ?? {}, "firstCommentText") ? { firstCommentText: String(payload.firstCommentText ?? "") } : {}),
     links: Array.isArray(payload?.links) ? payload.links.map(String).sort() : [],
     claims: (Array.isArray(payload?.claims) ? payload.claims : []).map(claim => ({
       text: String(claim?.text ?? ""),
@@ -238,8 +242,10 @@ export async function evaluateFinalFacebookPayload(payload, {
   }
 
   const structuredLinks = Array.isArray(payload.links) ? payload.links.map(String) : [];
-  const captionLinks = String(payload.caption ?? "").match(/https?:\/\/[^\s)]+/gi) ?? [];
-  const links = [...new Set([...structuredLinks, ...captionLinks])];
+  const visibleCopy = [payload.caption, payload.firstCommentText]
+    .filter(value => typeof value === "string").join("\n");
+  const visibleLinks = visibleCopy.match(/https?:\/\/[^\s)]+/gi) ?? [];
+  const links = [...new Set([...structuredLinks, ...visibleLinks])];
   if (payload.destination === "nature_frontiers_facebook" && isNatureFrontiersProductPromotion(payload, links)) {
     add(blockers, "Nature Frontiers Facebook and Instagram are education-only destinations; product and affiliate promotions are prohibited");
   }
