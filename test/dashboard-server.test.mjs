@@ -357,11 +357,19 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     confirmAudioListened: true, confirmTranscriptReviewed: true, confirmCaptionsReviewed: true,
     reason: "Test fixture only: exercised hash and attestation checks, not a genuine listening review."
   };
-  const narrationApproval = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) });
-  const narrationApprovalBody = await narrationApproval.json();
-  assert.equal(narrationApproval.status, 200, JSON.stringify(narrationApprovalBody));
+  const concurrentNarrationApprovals = await Promise.all([
+    fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) }),
+    fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) })
+  ]);
+  const concurrentNarrationBodies = await Promise.all(concurrentNarrationApprovals.map(response => response.json()));
+  assert.ok(concurrentNarrationApprovals.every(response => response.status === 200), JSON.stringify(concurrentNarrationBodies));
+  assert.equal(concurrentNarrationBodies.filter(body => body.reused === true).length, 1, "exactly one concurrent review request must reuse the receipt");
+  const narrationApprovalBody = concurrentNarrationBodies.find(body => body.reused !== true);
+  assert.ok(narrationApprovalBody, "one request must create the original narration approval receipt");
   assert.equal(narrationApprovalBody.job.authoring.narrationStage.status, "APPROVED_FOR_RENDER");
   assert.equal(narrationApprovalBody.publishable, false, "narration approval must not imply video approval or publication");
+  const afterConcurrentReviewState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  assert.equal(afterConcurrentReviewState.audit.filter(event => event.action === "NARRATION_APPROVED_FOR_RENDER" && event.jobId === authorJob.id).length, 1, "concurrent exact submissions must create one audit decision");
   const narrationApprovalRetry = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) });
   const narrationApprovalRetryBody = await narrationApprovalRetry.json();
   assert.equal(narrationApprovalRetry.status, 200, JSON.stringify(narrationApprovalRetryBody));
