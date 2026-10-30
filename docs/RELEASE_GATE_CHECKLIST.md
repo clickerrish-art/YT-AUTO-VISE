@@ -1144,3 +1144,19 @@ At the candidate snapshot, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merg
 - [ ] DASH-001 full behavior-specific control/form/route acceptance remains incomplete.
 - [ ] Production readiness remains blocked by 13 prerequisites; provider-side Meta draft creation/read-back remains unperformed.
 - [ ] Cross-process recovery and deployment/rollback drills, genuine media/rights/human approval, authenticated YouTube identity/history, authorized private upload, native Related-video verification, owner decisions and full semantic Git reconciliation remain outstanding.
+
+
+## Exact-SHA dashboard campaign and readiness checkpoint — 30 October 2026
+
+- [x] Dashboard async forms now have a shared single-flight guard; server-side idempotency remains authoritative.
+- [x] Selar campaign preview persists pending URL/disclosure/fingerprint without mutating the currently approved destination/disclosure.
+- [x] Selar activation requires explicit owner confirmation and an exact match to the stored preview fingerprint; approval receipt is bound to that fingerprint.
+- [x] Deactivation clears pending preview state.
+- [x] Real dashboard browser regression verifies double-click suppression, preview persistence after reload, rejection without explicit owner approval and successful activation with the exact saved preview.
+- [x] Exact source/test candidate `521ed70a263c03df48f5b0ae1c6c726dd380ce92`: 436 Node tests passed, 0 failures; 16 Python tests passed; 17 Chromium browser journeys passed; npm audit 0 vulnerabilities.
+- [x] Metadata, lockfile verification, isolated baseline and local Nature Frontiers draft validation passed.
+- [ ] Only 3 of 15 dashboard forms currently have demonstrated successful browser journeys: campaign, draft and local Facebook draft. The remaining 12 are NOT_TESTED or BLOCKED; see `DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md`.
+- [ ] DASH-001 remains NOT_TESTED; all 105 controls and 38 API routes are not yet fully behavior-accepted.
+- [ ] Production readiness remains HOLD with 13 live prerequisites; see `GO_LIVE_BLOCKERS.md` and workflow [41135552805](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135552805).
+- [ ] SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain NOT_TESTED. Existing targeted passing tests do not substitute for full operational acceptance.
+- [ ] Nature Frontiers provider-side draft creation/read-back remains external and unperformed. No Meta post, Instagram post, Metricool schedule change, YouTube upload or public publication was performed.
