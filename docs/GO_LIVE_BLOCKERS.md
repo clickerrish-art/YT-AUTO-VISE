@@ -1325,3 +1325,32 @@ This change does **not** close the existing release blockers. Production readine
 At exact source/test SHA `115fe82252b4fa1ef1eb2f9587bf0653356a6dc9`, review creation rejects invalid `reviewedAt` timestamps and review-currentness checks reject persisted receipts with invalid timestamps. Automation/security passed 426 Node tests, 0 failures/skips, 16 Python tests and npm audit with zero vulnerabilities. Content quality, metadata, 15 Chromium journeys, isolated baseline and branch inventory passed. Evidence: [automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647523), [quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647323), [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647496), [browser](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647329), [baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647321).
 
 This closes a timestamp-integrity implementation gap only. Production readiness remains blocked by 13 prerequisites ([run 40940647448](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647448)); provider-side Meta draft creation/read-back was skipped ([run 40940647309](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647309)). All other previously listed release blockers remain open until their own evidence is provided.
+
+
+## Live readiness recheck — exact tested candidate 521ed70 — 30 October 2026
+
+The exact tested application/test candidate is `521ed70a263c03df48f5b0ae1c6c726dd380ce92`; documentation-only commits now follow it. The production-readiness workflow [41135552805](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41135552805) reports **HOLD: 13 blockers**. It performs no upload, schedule or publication operation.
+
+Current blockers from the live workflow output:
+
+1. **Owner-controlled cadence decision:** choose a feasible mode and provide a timezone-aware approval timestamp plus non-empty approval reference.
+2. **Owner/provider-controlled YouTube history:** reconcile complete public, private and unlisted history and all pending/uncertain attempts immediately before any upload.
+3. **Owner-controlled genuine Short assets/rights:** create `content/render-manifest.json` only after verifying actual asset rights.
+4. **Owner-controlled genuine long-form assets/rights:** create `content/long-form-render-manifest.json` only after verifying actual long-form assets and rights.
+5. **Owner-controlled metadata approval:** human-review metadata and explicitly mark `READY_FOR_PRIVATE_UPLOAD`.
+6. **Owner-controlled channel verification:** provide the verified SonicVhibez YouTube channel ID; do not guess the earlier discrepant value.
+7. **Owner-controlled rights evidence:** set `rightsConfirmed=true` only after genuine rights verification.
+8. **Owner-controlled compliance review:** set `complianceReviewed=true` only after the content/compliance review.
+9. **Asset/engineering controlled:** genuine rendered `media/next-short.mp4` is missing.
+10. **Owner-controlled credential configuration:** `YOUTUBE_CLIENT_ID` is missing.
+11. **Owner-controlled credential configuration:** `YOUTUBE_CLIENT_SECRET` is missing.
+12. **Owner-controlled credential configuration:** `YOUTUBE_REFRESH_TOKEN` is missing.
+13. **Owner-controlled identity configuration:** `SONICVHIBEZ_CHANNEL_ID` is missing.
+
+The gate remains fail-closed. Missing credentials, media, history or approvals were not fabricated or bypassed.
+
+Dashboard progress at the same candidate: campaign management, queue draft creation and local Nature Frontiers Facebook draft creation have successful browser journeys; the other 12 forms remain NOT_TESTED or BLOCKED by genuine prerequisites. DASH-001 remains NOT_TESTED.
+
+CI on exact candidate `521ed70a263c03df48f5b0ae1c6c726dd380ce92`: 436 Node tests, 0 failures; 16 Python tests; 17 Chromium browser journeys; npm audit 0 vulnerabilities; metadata, lockfile, isolated baseline and local Nature Frontiers draft validation passed. Production readiness intentionally returned HOLD.
+
+The acceptance register currently contains 70 requirements: 54 PASS, 8 NOT_TESTED and 8 BLOCKED_EXTERNAL. These targeted PASS statuses do not imply overall engineering or production acceptance.
