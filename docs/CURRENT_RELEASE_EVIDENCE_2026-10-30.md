@@ -1,3 +1,49 @@
+# Latest restore fsync failure-recovery verification — 30 October 2026
+
+## Current exact source/test candidate and live refs
+
+- Exact tested source/test candidate: `109b92f0c8b3dc894a6f360b99131fa6c0fffac3`.
+- Current PR #1 HEAD before this evidence refresh: `3f9a1f7bf5678745c9c63e7baf5e5a8d601527ef` (documentation-only descendant); PR remains open, draft and unmerged.
+- Implementation branch: `codex/marketing-machine-audit-fixes`.
+- Live `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`; live compare: **2,177 ahead / 2 behind / 182 changed files**.
+- Connected GitHub integration reports admin permission and successfully created fast-forward commits on the existing implementation branch. No local checkout was attached, so no local write probe or local test execution is claimed; GitHub Actions ran the tests against the exact candidate SHA.
+
+## Additional implementation and regression coverage
+
+- [`deefa1d83097a298bd39c2eeb04f5aa29ffd4774`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/deefa1d83097a298bd39c2eeb04f5aa29ffd4774) flushes destination directories after restore commits, rollback renames and recovery deletions, and flushes the journal directory after journal removal.
+- [`29537d71411d227a6da01f980671d72c4a9a4f2e`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/29537d71411d227a6da01f980671d72c4a9a4f2e) adds ordering coverage: every committed destination directory is flushed before journal removal, then the journal directory is flushed after deletion.
+- [`3d863ffb46c492169e4b516bf1325bc5c328d71e`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3d863ffb46c492169e4b516bf1325bc5c328d71e) injects a directory-fsync `EIO` after a destination rename and verifies rollback, journal cleanup and lock release.
+- [`109b92f0c8b3dc894a6f360b99131fa6c0fffac3`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/109b92f0c8b3dc894a6f360b99131fa6c0fffac3) makes the directory-fsync-specific assertions skip on Windows, where Node does not expose a portable directory-fsync API. Linux CI executes both tests; the suite reports zero skips.
+- Existing `test/restore-facebook-draft-history.test.mjs` remains present and unchanged by this work.
+
+## Exact-candidate CI — `109b92f0c8b3dc894a6f360b99131fa6c0fffac3`
+
+| Workflow | Result | Evidence |
+|---|---|---|
+| Automation/security | **PASS** — 429 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax and Python compilation passed | [Run 41119180464](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119180464) |
+| Content quality | **PASS** — 429 tests, 0 failures, 0 skips | [Run 41119180492](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119180492) |
+| Metadata validation | **PASS** — 429 tests, 0 failures, 0 skips; unreviewed metadata remains fail-closed | [Run 41119180567](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119180567) |
+| Dashboard browser E2E | **PASS** — 15 Chromium journeys; not exhaustive per-control acceptance | [Run 41119180565](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119180565) |
+| Isolated main/candidate baseline | **PASS** — exact main and candidate checkouts | [Run 41119180598](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119180598) |
+| Non-destructive branch inventory | **PASS** — inventory only; semantic history review remains incomplete | [Run 41119180487](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119180487) |
+| Nature Frontiers local draft package | **PASS for local validation only** — provider-side create/read-back skipped | [Run 41119180437](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119180437) |
+| Production readiness | **BLOCKED as designed** — fail-closed with 13 prerequisites; not a test-suite failure or production acceptance | [Run 41119180384](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119180384) |
+
+## Acceptance and external safety
+
+- The single acceptance register remains **54 PASS / 8 NOT_TESTED / 8 BLOCKED_EXTERNAL** (70 requirements).
+- `STATE-001` remains **NOT_TESTED**: the new directory durability and injected-failure paths pass, but complete kill/restart at every transaction boundary, true power-loss/disk-full testing, all cross-process idempotency, deployment rollback and ambiguous remote-side-effect recovery remain outstanding.
+- `DASH-001` remains NOT_TESTED: 15 Chromium journeys do not close behavior acceptance for all 105 controls, 15 forms and 38 routes.
+- Production readiness remains blocked by 13 prerequisites, including owner/account/media/rights/history/approval and deployment requirements.
+- Read-only Metricool recheck on 30 October confirms eight future Nature Frontiers promotional schedules remain `draft=false` and `autoPublish=true`; the first is due 31 October 2026 at 10:00 SAST. No remote record was edited, paused, cancelled or rescheduled. Owner action is required.
+- No live YouTube upload, Meta post, campaign activation, Metricool mutation, merge or `main` edit occurred.
+
+## Verdict
+
+**PARTIALLY COMPLETE — TARGETED RESTORE DURABILITY DEFECT FIXED AND EXACT-CANDIDATE CI PASSED; APPLICATION AND PRODUCTION ACCEPTANCE REMAIN OPEN.**
+
+---
+
 # Latest restore durability implementation and exact-SHA acceptance — 30 October 2026
 
 ## Live Git state and workspace method
