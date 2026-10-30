@@ -284,10 +284,14 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137041295",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/browser-tests/dashboard.spec.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/67edf6c84d716a236f457df8b13901eee896d195",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137335224"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137335224",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/1fc956dbcbc1404286036a379b513bf9dbe3953a",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41139006431",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41139006397",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3171fd3f825fdf9536890ac2b14c42986337ac21"
       ],
-      "nextAction": "Successful browser journeys now cover campaignform, draft, facebookdraftform, authoringform and scriptreviewform. The script-review journey submits an explicit APPROVE against the exact persisted script SHA, stores operator/reason/approval receipt, verifies publishable=false, and proves exact retry reuses the receipt. Exact browser workflow 41137335224 passed 18 Chromium journeys on test-only candidate 67edf6c84d716a236f457df8b13901eee896d195 (application code remains the 1334f9380dafbf5f9e6cf272e1bd14feab0045f3 candidate). This synthetic operator action is not the business owner's actual editorial approval. Next implement/test narrationform and narrationreviewform through isolated deterministic TTS/audio/caption fixtures; then proceed to production-plan submission/review. Render/validate/rights/review/parent/upload-reconciliation still need genuine isolated media, rights evidence, parent receipt or uncertain upload evidence. DASH-001 remains NOT_TESTED.",
-      "assessmentCommitSha": "67edf6c84d716a236f457df8b13901eee896d195",
+      "nextAction": "Six successful browser form journeys are now demonstrated: campaignform, draft, facebookdraftform, authoringform, scriptreviewform, and narrationreviewform. Browser workflow 41139006431 passed all 18 Chromium journeys on exact SHA 1fc956dbcbc1404286036a379b513bf9dbe3953a. The narration-review UI uses an explicitly synthetic non-playable audio fixture and therefore does not prove real TTS generation, actual listening, or owner approval. Server-side narration review now reuses an exact same-operator retry receipt only after rechecking current script/approval and all four retained artifact hashes; changed retries and tampered artifacts fail with 409. Automation workflow 41139006397 passed 436 Node tests (0 failures/skips), 16 Python tests and npm audit (0 vulnerabilities) on that exact SHA. Next DASH-001 task: prove narrationform successful generation/reconciliation using a real isolated TTS run with FFmpeg/ffprobe and word-boundary captions; do not claim the synthetic review fixture is real audio. Then test productionplanform/review using genuinely hash-bound test assets where safe. Nine other forms remain NOT_TESTED or BLOCKED; 105-control and 38-route full acceptance remain incomplete. Keep DASH-001 NOT_TESTED.",
+      "assessmentCommitSha": "1fc956dbcbc1404286036a379b513bf9dbe3953a",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
     {
