@@ -55,6 +55,9 @@ export function manageCampaign(config, request, actor, now = new Date().toISOStr
     }
     const errors = validateCampaigns(campaigns);
     if (errors.length) throw new Error("Campaign deactivation blocked: " + errors.join("; "));
+    delete campaign.pendingDestinationUrl;
+    delete campaign.pendingDisclosureText;
+    delete campaign.pendingDestinationVersion;
     return { config: campaigns, campaign, previewOnly: false };
   }
 
