@@ -752,3 +752,169 @@ test("campaign form single-flights a double-click and persists the successful pr
   expect(activatedCampaign.status).toBe("ACTIVE_FOR_DRAFTS_ONLY");
   expect(activatedState.publishingEnabled).toBe(false);
 });
+
+
+
+test("authoring form generates and persists a source-bound script through the real dashboard", async ({ page }) => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-authoring-browser-"));
+  const providerSource = {
+    id: "source-1",
+    title: "Field ecology paper",
+    url: "https://wildlife-research.org/paper",
+    evidenceLocator: "Results section, paragraphs 2–4",
+    evidenceSummary: "The supplied research describes observation conditions and explains why repeated observations are needed before generalizing animal behavior."
+  };
+  const narration = [
+    "A wildlife encounter can look simple from a distance, but the evidence often tells a more careful story. The first question is not which animal is strongest; it is what each animal is doing in its own habitat. Good reporting separates observed action from assumptions about intent.",
+    "Field observations can describe behavior under specific conditions, but one observation cannot establish a universal rule. Researchers compare repeated observations, environmental context, and competing explanations before drawing conclusions. Strong conclusions depend on source quality, methods, and repeated observations.",
+    "That distinction matters when a short video compresses a complicated interaction into a dramatic moment. A responsible account separates what the source directly reports from what remains uncertain, and never invents a scene to make the story more exciting. That care can make a story more compelling without pretending uncertainty has disappeared."
+  ].join("\\n\\n");
+  const generatedScript = {
+    premise: "Explain how to interpret wildlife behavior without overstating a single observation.",
+    conclusion: "The strongest wildlife story is the one that keeps observation, interpretation, and uncertainty distinct.",
+    narration,
+    sections: [
+      { heading: "The question", purpose: "Frame the evidence", narration: narration.split("\\n\\n")[0], visualDirection: "Wide habitat establishing shot", pacing: "Measured", soundDesign: "Natural ambience" },
+      { heading: "What evidence means", purpose: "Explain source limits", narration: narration.split("\\n\\n")[1], visualDirection: "Documented behavior with no invented encounter", pacing: "Steady", soundDesign: "Low ambience under narration" },
+      { heading: "The responsible conclusion", purpose: "Resolve the premise", narration: narration.split("\\n\\n")[2], visualDirection: "Return to habitat context", pacing: "Slow slightly", soundDesign: "Natural fade" }
+    ],
+    claims: [{ text: "Researchers compare observations and context before drawing conclusions.", sourceIds: ["source-1"] }],
+    sources: [providerSource],
+    similarityReview: { status: "REVIEWED", evidenceRef: "provider-claim-must-not-be-trusted" }
+  };
+  let providerCalls = 0;
+  const provider = createServer((req, res) => {
+    let body = "";
+    req.on("data", chunk => { body += chunk; });
+    req.on("end", () => {
+      providerCalls++;
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(generatedScript) } }] }));
+    });
+  });
+  await new Promise(resolve => provider.listen(0, "127.0.0.1", resolve));
+  const providerPort = provider.address().port;
+  const port = 30_000 + Math.floor(Math.random() * 20_000);
+  const base = `http://127.0.0.1:${port}`;
+  let child;
+  async function startServer() {
+    const processHandle = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+      env: {
+        ...process.env,
+        DASHBOARD_OPERATOR_TOKEN: operatorToken,
+        DASHBOARD_OPERATOR_ID: "authoring-browser-test-operator",
+        DASHBOARD_STATE_DIR: stateDir,
+        UPLOAD_LOG_DIR: path.join(stateDir, "run-logs"),
+        PORT: String(port),
+        DASHBOARD_HOST: "127.0.0.1",
+        SCRIPT_GENERATION_ENDPOINT: `http://127.0.0.1:${providerPort}/v1/chat/completions`,
+        SCRIPT_GENERATION_TIMEOUT_MS: "5000"
+      },
+      stdio: ["ignore", "pipe", "pipe"]
+    });
+    let logs = "";
+    processHandle.stdout.on("data", chunk => { logs += chunk.toString(); });
+    processHandle.stderr.on("data", chunk => { logs += chunk.toString(); });
+    for (let attempt = 0; attempt < 80; attempt++) {
+      if (processHandle.exitCode !== null) throw new Error("Isolated authoring dashboard exited: " + logs);
+      try {
+        const response = await fetch(base + "/healthz");
+        if (response.ok) return processHandle;
+      } catch {}
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    processHandle.kill("SIGTERM");
+    throw new Error("Isolated authoring dashboard did not become ready: " + logs);
+  }
+  async function stopServer(processHandle) {
+    if (!processHandle || processHandle.exitCode !== null) return;
+    const exited = new Promise(resolve => processHandle.once("exit", resolve));
+    processHandle.kill("SIGTERM");
+    await exited;
+  }
+  try {
+    child = await startServer();
+    await page.goto(base + "/");
+    await page.locator("#token").fill(operatorToken);
+    await page.locator("#connect").click();
+    await expect(page.locator("#app")).toBeVisible();
+
+    const headers = { "x-operator-token": operatorToken };
+    const initialResponse = await page.request.get(base + "/api/state", { headers });
+    expect(initialResponse.status()).toBe(200);
+    const initial = await initialResponse.json();
+    const shortSlot = initial.schedule.schedule.find(slot => slot.format === "short");
+    expect(shortSlot).toBeTruthy();
+    const scheduledDate = candidateDateForSlot(initial, shortSlot);
+    const draftId = "authoring-e2e-" + Date.now().toString(36);
+    const draftResponse = await page.request.post(base + "/api/drafts", {
+      headers,
+      data: {
+        id: draftId,
+        title: "Source-bound authoring browser acceptance",
+        topic: "How to interpret wildlife observations responsibly",
+        contentType: "short",
+        scheduledDay: shortSlot.day,
+        scheduledDate,
+        productUrl: "",
+        status: "DRAFT_REVIEW_REQUIRED"
+      }
+    });
+    expect(draftResponse.status()).toBe(201);
+    const created = await draftResponse.json();
+    expect(created.job?.id).toBeTruthy();
+
+    await page.locator("#authorjob").selectOption(created.job.id);
+    await page.locator("#authorbrief").fill(JSON.stringify({
+      topic: "How to interpret wildlife observations responsibly",
+      audience: "General adult audience",
+      editorialPurpose: "Explain what the supplied evidence supports and what remains uncertain.",
+      sources: [providerSource],
+      parentRecord: { contentId: "long-parent", weeklyContentCycleId: "cycle-browser-test", format: "long_form", channel: "SonicVhibez" }
+    }));
+    await page.locator("#authoringform button[type=submit]").click();
+    await expect(page.locator("#authoringresult")).toContainText("Script saved for human editorial review", { timeout: 15_000 });
+    await expect(page.locator("#authoringresult")).toContainText("Publishable: false");
+    await expect(page.locator("#authoringscript")).toContainText("AWAITING_HUMAN_EDITORIAL_REVIEW");
+
+    const persistedResponse = await page.request.get(base + "/api/state", { headers });
+    expect(persistedResponse.status()).toBe(200);
+    const persisted = await persistedResponse.json();
+    const persistedJob = persisted.jobs.find(job => job.id === created.job.id);
+    expect(persistedJob.authoring.status).toBe("AWAITING_HUMAN_EDITORIAL_REVIEW");
+    expect(persistedJob.authoring.result.script.sources).toEqual([providerSource]);
+    expect(persistedJob.authoring.result.script.similarityReview.status).toBe("PENDING");
+    expect(persistedJob.authoring.publishable).toBe(false);
+    expect(persisted.publishingEnabled).toBe(false);
+    expect(providerCalls).toBe(1);
+
+    const exactRetry = await page.request.post(base + "/api/jobs/author", {
+      headers,
+      data: {
+        jobId: created.job.id,
+        brief: {
+          topic: "How to interpret wildlife observations responsibly",
+          audience: "General adult audience",
+          editorialPurpose: "Explain what the supplied evidence supports and what remains uncertain.",
+          sources: [providerSource],
+          parentRecord: { contentId: "long-parent", weeklyContentCycleId: "cycle-browser-test", format: "long_form", channel: "SonicVhibez" }
+        }
+      }
+    });
+    expect(exactRetry.status()).toBe(200);
+    expect((await exactRetry.json()).reused).toBe(true);
+    expect(providerCalls).toBe(1);
+
+    await page.reload();
+    await page.locator("#token").fill(operatorToken);
+    await page.locator("#connect").click();
+    await expect(page.locator("#app")).toBeVisible();
+    await page.locator("#authorjob").selectOption(created.job.id);
+    await expect(page.locator("#authoringscript")).toContainText("AWAITING_HUMAN_EDITORIAL_REVIEW");
+    await expect(page.locator("#authoringscript")).toContainText(providerSource.title);
+  } finally {
+    await stopServer(child);
+    provider.close();
+    fs.rmSync(stateDir, { recursive: true, force: true });
+  }
+});
