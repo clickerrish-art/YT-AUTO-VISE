@@ -35,7 +35,22 @@ test("Safari deactivation clears pending destination and approval data", () => {
 test("Selar URL cannot be edited and campaign activation remains draft-only", () => {
   const id = baseline.campaigns.find(c => c.type === "selar_digital_product").id;
   assert.throws(() => manageCampaign(baseline, { campaignId: id, action: "activate", destinationUrl: "https://example.com", disclosureText: "Promotional link" }, operator), /exactly match/);
-  const result = manageCampaign(baseline, { campaignId: id, action: "activate", destinationUrl: "https://selar.com/0u19v8u99l", disclosureText: "Promotional link: product details are on the seller page." }, operator);
+  const disclosureText = "Promotional link: product details are on the seller page.";
+  assert.throws(() => manageCampaign(baseline, {
+    campaignId: id, action: "activate", destinationUrl: "https://selar.com/0u19v8u99l", disclosureText, confirmOwnerApproval: true
+  }, operator), /Preview the exact destination and disclosure before activation/);
+  const preview = manageCampaign(baseline, {
+    campaignId: id, action: "preview", destinationUrl: "https://selar.com/0u19v8u99l", disclosureText
+  }, operator);
+  assert.throws(() => manageCampaign(preview.config, {
+    campaignId: id, action: "activate", destinationUrl: "https://selar.com/0u19v8u99l", disclosureText
+  }, operator), /Explicit owner approval/);
+  assert.throws(() => manageCampaign(preview.config, {
+    campaignId: id, action: "activate", destinationUrl: "https://selar.com/0u19v8u99l", disclosureText: disclosureText + " changed", confirmOwnerApproval: true
+  }, operator), /Preview the exact destination and disclosure before activation/);
+  const result = manageCampaign(preview.config, {
+    campaignId: id, action: "activate", destinationUrl: "https://selar.com/0u19v8u99l", disclosureText, confirmOwnerApproval: true
+  }, operator);
   assert.equal(result.campaign.destinationUrl, "https://selar.com/0u19v8u99l");
   assert.equal(result.campaign.status, "ACTIVE_FOR_DRAFTS_ONLY");
   assert.deepEqual(validateCampaigns(result.config), []);
@@ -79,7 +94,8 @@ test("Selar activation applies the submitted disclosure and clears the pending p
     campaignId: id,
     action: "activate",
     destinationUrl: "https://selar.com/0u19v8u99l",
-    disclosureText: disclosure
+    disclosureText: disclosure,
+    confirmOwnerApproval: true
   }, operator, "2026-10-30T12:00:00Z");
   assert.equal(activated.campaign.disclosureText, disclosure);
   assert.equal(Object.hasOwn(activated.campaign, "pendingDestinationUrl"), false);
