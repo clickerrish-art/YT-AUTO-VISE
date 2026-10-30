@@ -1032,7 +1032,7 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
     "A wildlife encounter can look simple from a distance, but the evidence often tells a more careful story. The first question is not which animal is strongest; it is what each animal is doing in its own habitat. Good reporting separates observed action from assumptions about intent.",
     "Field observations can describe behavior under specific conditions, but one observation cannot establish a universal rule. Researchers compare repeated observations, environmental context, and competing explanations before drawing conclusions. Strong conclusions depend on source quality, methods, and repeated observations.",
     "That distinction matters when a short video compresses a complicated interaction into a dramatic moment. A responsible account separates what the source directly reports from what remains uncertain, and never invents a scene to make the story more exciting. That care can make a story more compelling without pretending uncertainty has disappeared."
-  ].join("\\n\\n");
+  ].join("\n\n");
   const source = {
     id: "live-tts-source",
     title: "Field ecology evidence note",
@@ -1040,7 +1040,7 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
     evidenceLocator: "Methods and discussion",
     evidenceSummary: "The supplied evidence note explains that wildlife observations are context-specific and that repeated observations are needed before making broad behavioural claims."
   };
-  const sections = narration.split("\\n\\n").map((text, index) => ({
+  const sections = narration.split("\n\n").map((text, index) => ({
     heading: ["The observation", "The evidence", "The conclusion"][index],
     purpose: ["Introduce the observation", "Explain the limits of inference", "State the responsible conclusion"][index],
     narration: text,
@@ -1127,7 +1127,6 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
     const authorResponse = await fetch(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId, brief }) });
     const authorBody = await authorResponse.json();
     expect(authorResponse.status(), JSON.stringify(authorBody)).toBe(201);
-    const scriptSha256 = crypto.createHash("sha256").update(JSON.stringify(script, Object.keys(script).sort())).digest("hex");
     // Use the server's canonical digest, which sorts nested keys as well.
     const stateAfterAuthor = await (await fetch(base + "/api/state", { headers })).json();
     const authoredJob = stateAfterAuthor.jobs.find(job => job.id === jobId);
@@ -1172,7 +1171,7 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
     }
     const reviewBundle = await (await page.request.get(base + "/api/jobs/narration/review?jobId=" + encodeURIComponent(jobId), { headers })).json();
     expect(reviewBundle.scriptSha256).toBe(approvedSha);
-    expect(reviewBundle.transcript.split(/\\s+/u)).toHaveLength(137);
+    expect(reviewBundle.transcript.split(/\s+/u)).toHaveLength(137);
     expect(reviewBundle.captions).toContain("-->");
 
     await page.reload();
