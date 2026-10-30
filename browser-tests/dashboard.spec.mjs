@@ -907,6 +907,37 @@ test("authoring form generates and persists a source-bound script through the re
     expect((await exactRetry.json()).reused).toBe(true);
     expect(providerCalls).toBe(1);
 
+    await page.locator("#scriptreviewjob").selectOption(created.job.id);
+    await expect(page.locator("#scriptreviewsha")).toHaveValue(/^[a-f0-9]{64}$/);
+    const reviewedScriptSha = await page.locator("#scriptreviewsha").inputValue();
+    await page.locator("#scriptreviewdecision").selectOption("APPROVE");
+    await page.locator("#scriptreviewreason").fill("Reviewed the supplied source, claim boundaries, uncertainty and complete narration structure.");
+    await page.locator("#scriptreviewform button[type=submit]").click();
+    await expect(page.locator("#scriptreviewresult")).toContainText("Script decision recorded: APPROVE", { timeout: 10_000 });
+
+    const approvedStateResponse = await page.request.get(base + "/api/state", { headers });
+    expect(approvedStateResponse.status()).toBe(200);
+    const approvedState = await approvedStateResponse.json();
+    const approvedJob = approvedState.jobs.find(job => job.id === created.job.id);
+    expect(approvedJob.authoring.scriptApproval.decision).toBe("APPROVE");
+    expect(approvedJob.authoring.scriptApproval.scriptSha256).toBe(reviewedScriptSha);
+    expect(approvedJob.authoring.scriptApproval.approvalSha256).toMatch(/^[a-f0-9]{64}$/);
+    expect(approvedJob.authoring.publishable).toBe(false);
+    expect(approvedState.publishingEnabled).toBe(false);
+
+    const repeatedReview = await page.request.post(base + "/api/jobs/authoring/review", {
+      headers,
+      data: {
+        jobId: created.job.id,
+        decision: "APPROVE",
+        scriptSha256: reviewedScriptSha,
+        reason: "Reviewed the supplied source, claim boundaries, uncertainty and complete narration structure."
+      }
+    });
+    expect(repeatedReview.status()).toBe(200);
+    expect((await repeatedReview.json()).reused).toBe(true);
+    expect((await repeatedReview.json()).scriptReview.approvalSha256).toBe(approvedJob.authoring.scriptApproval.approvalSha256);
+
     await page.reload();
     await page.locator("#token").fill(operatorToken);
     await page.locator("#connect").click();
