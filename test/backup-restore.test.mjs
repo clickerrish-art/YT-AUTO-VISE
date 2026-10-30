@@ -657,3 +657,89 @@ test("restore flushes destination directory entries before deleting its recovery
     fs.rmSync(destination.root, { recursive: true, force: true });
   }
 });
+
+
+test("restore rolls back a destination commit when its directory fsync fails", async () => {
+  const source = fixture();
+  const destination = fixture();
+  const directoryByFd = new Map();
+  const originalOpen = fs.openSync;
+  const originalClose = fs.closeSync;
+  const originalFsync = fs.fsyncSync;
+  const originalRename = fs.renameSync;
+  let failNextDirectorySync = false;
+  let injectedFailure = false;
+  let firstCommittedDestination = null;
+  try {
+    const backupPath = path.join(source.root, "backup.json");
+    await backupState({
+      rootDir: source.root,
+      stateDir: source.stateDir,
+      uploadLogDir: source.logDir,
+      rightsDir: source.rightsDir,
+      outputPath: backupPath
+    });
+    fs.rmSync(destination.stateDir, { recursive: true, force: true });
+    fs.rmSync(destination.logDir, { recursive: true, force: true });
+    fs.rmSync(destination.rightsDir, { recursive: true, force: true });
+
+    fs.openSync = function (file, ...args) {
+      const fd = originalOpen.call(this, file, ...args);
+      try {
+        if (fs.fstatSync(fd).isDirectory()) directoryByFd.set(fd, path.resolve(String(file)));
+      } catch {}
+      return fd;
+    };
+    fs.closeSync = function (fd, ...args) {
+      directoryByFd.delete(fd);
+      return originalClose.call(this, fd, ...args);
+    };
+    fs.fsyncSync = function (fd, ...args) {
+      if (failNextDirectorySync && directoryByFd.has(fd)) {
+        failNextDirectorySync = false;
+        injectedFailure = true;
+        const error = new Error("injected directory fsync failure");
+        error.code = "EIO";
+        throw error;
+      }
+      return originalFsync.call(this, fd, ...args);
+    };
+    fs.renameSync = function (from, to, ...args) {
+      const result = originalRename.call(this, from, to, ...args);
+      if (path.basename(String(to)) !== ".restore-transaction.json" &&
+          !String(to).endsWith(".restore-tmp") &&
+          !String(to).endsWith(".rollback-tmp")) {
+        firstCommittedDestination ??= path.resolve(String(to));
+        failNextDirectorySync = true;
+      }
+      return result;
+    };
+
+    await assert.rejects(
+      restoreState({
+        backupPath,
+        rootDir: destination.root,
+        stateDir: destination.stateDir,
+        uploadLogDir: destination.logDir,
+        rightsDir: destination.rightsDir,
+        confirm: "YES"
+      }),
+      /all committed destination changes were rolled back/i
+    );
+    assert.equal(injectedFailure, true, "the test must inject a real directory fsync I/O failure");
+    assert.ok(firstCommittedDestination, "the test must commit a destination before injecting failure");
+    assert.equal(fs.existsSync(firstCommittedDestination), false,
+      "recovery must remove a newly created destination after its directory fsync fails");
+    assert.equal(fs.existsSync(path.join(destination.stateDir, ".restore-transaction.json")), false,
+      "successful rollback must remove the recovery journal");
+    assert.equal(fs.existsSync(path.join(destination.stateDir, ".restore-operation.lock")), false,
+      "the restore invocation must release its own operation lock after rollback");
+  } finally {
+    fs.openSync = originalOpen;
+    fs.closeSync = originalClose;
+    fs.fsyncSync = originalFsync;
+    fs.renameSync = originalRename;
+    fs.rmSync(source.root, { recursive: true, force: true });
+    fs.rmSync(destination.root, { recursive: true, force: true });
+  }
+});
