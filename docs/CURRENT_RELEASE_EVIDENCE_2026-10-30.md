@@ -428,3 +428,14 @@ Three of the 15 dashboard forms now have demonstrated successful browser journey
 - Dashboard successful-form count is now **4 of 15**: campaign preview/activation, queue draft, local Facebook draft, and source-bound script authoring. Eleven forms remain NOT_TESTED or BLOCKED; see `DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md`. DASH-001 remains NOT_TESTED.
 - The exact-SHA lockfile verification workflow was still pending at the time of this entry; no result is inferred.
 - No YouTube upload, Facebook/Instagram publication, Metricool schedule change, campaign activation outside isolated tests, merge, main edit, reset, rebase or force-push occurred.
+
+
+## Follow-up: hash-bound script review form successfully exercised — 30 October 2026
+
+- **Test-only candidate:** `67edf6c84d716a236f457df8b13901eee896d195`, a browser-test-only descendant of application/test candidate `1334f9380dafbf5f9e6cf272e1bd14feab0045f3`; no application source changed in this follow-up.
+- Extended the isolated authoring browser journey to submit the dashboard `scriptreviewform` using the selected script's exact SHA-256, an explicit APPROVE decision and a substantive review reason.
+- Verified the real API persists the operator identity, review reason, script hash and approval receipt hash; verified the job remains `publishable=false` and global publishing remains disabled.
+- Repeated the exact review request and verified the server reuses the existing approval receipt rather than recording a second approval.
+- [Dashboard browser E2E workflow 41137335224](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137335224): **SUCCESS — all 18 Chromium journeys passed**, including authoring and hash-bound script review.
+- This synthetic test operator approval demonstrates the form and server workflow only. It is not the owner's real-world editorial approval and does not clear factual, originality, rights, narration, visual or publication gates.
+- Successful form journeys now demonstrated: `campaignform`, `draft`, `facebookdraftform`, `authoringform`, and `scriptreviewform` (**5 of 15**). The other 10 forms remain NOT_TESTED or BLOCKED. DASH-001 remains NOT_TESTED.
