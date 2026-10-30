@@ -1149,8 +1149,16 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
     await expect(page.locator("#app")).toBeVisible();
     await page.locator("#narrationjob").selectOption(jobId);
     await expect(page.locator("#narrationsha")).toHaveValue(approvedSha);
-    await page.locator("#narrationform button[type=submit]").click();
+    let narrationRequests = 0;
+    await page.route("**/api/jobs/narration", async route => {
+      narrationRequests += 1;
+      await new Promise(resolve => setTimeout(resolve, 250));
+      const response = await route.fetch();
+      await route.fulfill({ response });
+    });
+    await page.locator("#narrationform button[type=submit]").dblclick();
     await expect(page.locator("#narrationresult")).toContainText("Narration stage: DRAFT_REVIEW_REQUIRED", { timeout: 240_000 });
+    expect(narrationRequests).toBe(1);
 
     const firstState = await (await page.request.get(base + "/api/state", { headers })).json();
     const firstJob = firstState.jobs.find(job => job.id === jobId);
@@ -1170,6 +1178,11 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
       expect(crypto.createHash("sha256").update(fs.readFileSync(absolutePath)).digest("hex")).toBe(artifact.sha256);
       if (name === "narration.mp3") jobOutputDir.value = path.dirname(absolutePath);
     }
+    const exactRetryResponse = await fetch(base + "/api/jobs/narration", { method: "POST", headers, body: JSON.stringify({ jobId, scriptSha256: approvedSha }) });
+    const exactRetryBody = await exactRetryResponse.json();
+    expect(exactRetryResponse.status).toBe(201);
+    expect(exactRetryBody.narrationStage.reused).toBe(true);
+    expect(exactRetryBody.narrationStage.artifacts["narration.mp3"].sha256).toBe(firstJob.authoring.narrationStage.artifacts["narration.mp3"].sha256);
     const reviewBundle = await (await page.request.get(base + "/api/jobs/narration/review?jobId=" + encodeURIComponent(jobId), { headers })).json();
     expect(reviewBundle.scriptSha256).toBe(approvedSha);
     expect(reviewBundle.transcript.trim().split(/\s+/u)).toHaveLength(137);
