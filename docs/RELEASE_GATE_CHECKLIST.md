@@ -1172,3 +1172,11 @@ At the candidate snapshot, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merg
 - [ ] The branch-only restore history test `test/restore-facebook-draft-history.test.mjs` remains present on the implementation branch and is absent from `main`; the compare API reports it as **added**, not deleted or renamed. Preserve it and the separate `tests/restore-state.test.mjs` variant pending human semantic review.
 - [ ] Production readiness [41137046887](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137046887) remains HOLD with 13 explicit prerequisites. The failure is expected fail-closed behavior, not a production acceptance pass.
 - [ ] No real YouTube upload, Facebook/Instagram publication, Metricool schedule mutation, or campaign activation occurred.
+
+
+## Follow-up acceptance checkpoint — narration review — 31 October 2026
+
+- [x] Narration-review dashboard journey: browser workflow [41139006431](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41139006431) passed all 18 Chromium journeys on exact SHA `1fc956dbcbc1404286036a379b513bf9dbe3953a`. The journey verifies review bundle retrieval, displayed transcript/captions and hashes, required attestation fields, successful API submission, and persisted `APPROVED_FOR_RENDER` state with publication disabled. Its audio bytes are a synthetic, non-playable fixture; it does not verify real TTS or actual listening.
+- [x] Narration-review retry safety: exact same-operator retry reuses the stored approval receipt only if the current script, script-approval receipt and all four narration artifact files still match their submitted hashes. Changed retry and tampered-artifact retry are rejected. API regression is covered by automation workflow [41139006397](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41139006397) on the same exact SHA; 436 Node tests, 16 Python tests, 0 skipped, npm audit 0 vulnerabilities.
+- [ ] Successful `narrationform` real TTS generation/reconciliation is still NOT_TESTED. The synthetic narration-review fixture is not evidence of TTS generation.
+- [ ] Six of 15 dashboard forms have successful browser journeys; nine remain NOT_TESTED or BLOCKED. DASH-001 remains NOT_TESTED.
