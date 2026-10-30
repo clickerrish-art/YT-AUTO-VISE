@@ -721,7 +721,7 @@ test("campaign form single-flights a double-click and persists the successful pr
   expect(afterReload.publishingEnabled).toBe(false);
   expect(submissions).toBe(1);
 
-  const approvedDisclosure = "Promotional link: check current details and terms on the seller page.";
+  const approvedDisclosure = "Promotional link; check the seller page for current product details and terms.";
   await page.locator("#campaignaction").selectOption("activate");
   await page.locator("#campaignurl").fill("https://selar.com/0u19v8u99l");
   await page.locator("#campaigndisclosure").fill(approvedDisclosure);
