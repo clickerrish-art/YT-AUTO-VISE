@@ -406,3 +406,25 @@ The earlier browser failure [run 41134441258](https://github.com/clickerrish-art
 Three of the 15 dashboard forms now have demonstrated successful browser journeys: campaign management, draft creation, and local Facebook draft creation. The remaining 12 forms are NOT_TESTED or BLOCKED by genuine prerequisites; see the form-by-form table in the dashboard matrix.
 
 **DASH-001 remains NOT_TESTED.** Do not infer complete dashboard/API acceptance from the three accepted form journeys or 17 browser journeys.
+
+
+---
+
+## Exact-SHA successful dashboard authoring journey — 30 October 2026
+
+- **Application/test candidate:** `1334f9380dafbf5f9e6cf272e1bd14feab0045f3`.
+- Added a real Chromium journey for dashboard form `authoringform` in `browser-tests/dashboard.spec.mjs`. The test starts an isolated dashboard process and a loopback-only deterministic OpenAI-compatible test provider; it does not contact an external model service.
+- The journey creates an isolated queued Short job using the repository's exact approved Selar destination, refreshes the real dashboard, submits a source-backed research brief through the authoring form, and verifies the generated script is persisted to the job state.
+- It verifies the model-provided similarity claim is not trusted: persisted `similarityReview.status` is `PENDING`, and the job remains `publishable=false` with `publishingEnabled=false`.
+- It performs an exact retry and verifies the server returns the existing result (`reused=true`) without a second provider call; after a full page reload, the saved script remains visible.
+- [Dashboard browser E2E workflow 41137041295](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137041295): **SUCCESS — 18 Chromium journeys passed, 0 failures**, exact candidate SHA above.
+- [Automation/security workflow 41137046863](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137046863): **SUCCESS — 436 Node tests, 0 failures, 0 skips; 16 Python tests passed; npm audit 0 vulnerabilities; syntax and Python compilation passed.**
+- [Content quality workflow 41137047075](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137047075): **SUCCESS — 436 Node tests, 0 failures.**
+- [Metadata workflow 41137046875](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137046875): **SUCCESS — 436 Node tests, 0 failures; metadata validation passed.**
+- [Isolated main/candidate baseline workflow 41137046915](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137046915): **SUCCESS** on the same exact candidate.
+- [Non-destructive branch inventory workflow 41137046955](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137046955): **SUCCESS** on the same exact candidate.
+- [Nature Frontiers local draft validation 41137046914](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137046914): **SUCCESS for local package validation only**; no provider-side draft creation or publication is claimed.
+- [Production readiness workflow 41137046887](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137046887): **FAILURE / HOLD by design**; mandatory business, identity, history, credentials, media and rights prerequisites remain unresolved.
+- Dashboard successful-form count is now **4 of 15**: campaign preview/activation, queue draft, local Facebook draft, and source-bound script authoring. Eleven forms remain NOT_TESTED or BLOCKED; see `DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md`. DASH-001 remains NOT_TESTED.
+- The exact-SHA lockfile verification workflow was still pending at the time of this entry; no result is inferred.
+- No YouTube upload, Facebook/Instagram publication, Metricool schedule change, campaign activation outside isolated tests, merge, main edit, reset, rebase or force-push occurred.
