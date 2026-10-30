@@ -1,3 +1,20 @@
+# Latest dashboard wiring checkpoint — 30 October 2026
+
+## Exact tested candidate
+
+- Source/test candidate: `e8353daa3f786a0afbf74374d85bcce2e649d5e2`.
+- Regression test: `test/dashboard-inventory.test.mjs`.
+- The test verifies all 15 declared dashboard forms have explicit submit handlers, each handler's first API call references a route declared by `scripts/dashboard-server.mjs`, and all 87 non-submit controls have stable IDs and JavaScript bindings.
+- This is a static wiring check. It does not prove that a form's valid submission succeeds, that invalid input is rejected correctly, that the resulting state persists, or that every control performs its intended operation.
+- Exact-SHA automation/security: [PASS — 431 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123147688).
+- Exact-SHA dashboard browser E2E: [PASS — 15 Chromium journeys](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123147615). These journeys are not exhaustive form/control acceptance.
+- Content quality: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123147543). Metadata: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123147789).
+- Isolated main/candidate baseline: [run pending at checkpoint](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123147512). Lockfile workflow: [run pending at checkpoint](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123142447).
+- Production readiness: [BLOCKED/fail-closed as designed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41123147712); this does not represent a regression-test failure.
+- **DASH-001 remains NOT_TESTED.** Continue with real valid/invalid submissions, authorization, duplicate requests, persistence/reload, API failures, UI feedback and operation-specific behavior. Do not convert inventory or handler mapping into behavior acceptance.
+
+---
+
 ## Latest exact-SHA dashboard API authentication acceptance — 29 October 2026, 13:25 UTC
 
 - **Tested source/test SHA:** `9229671e82180eadb92411cdd5ac9e649da79fdb`. Application implementation is unchanged; regression coverage now includes protected read and mutating API declarations.
