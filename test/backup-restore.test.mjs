@@ -563,7 +563,8 @@ test("a killed restore process leaves a journal that is safely rolled back after
 });
 
 
-test("restore flushes destination directory entries before deleting its recovery journal", async () => {
+test("restore flushes destination directory entries before deleting its recovery journal", async (t) => {
+  if (process.platform === "win32") return t.skip("Node does not expose portable directory fsync on Windows");
   const source = fixture();
   const destination = fixture();
   const events = [];
@@ -659,7 +660,8 @@ test("restore flushes destination directory entries before deleting its recovery
 });
 
 
-test("restore rolls back a destination commit when its directory fsync fails", async () => {
+test("restore rolls back a destination commit when its directory fsync fails", async (t) => {
+  if (process.platform === "win32") return t.skip("Node does not expose portable directory fsync on Windows");
   const source = fixture();
   const destination = fixture();
   const directoryByFd = new Map();
