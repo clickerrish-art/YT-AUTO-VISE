@@ -139,6 +139,30 @@ test("Nature Frontiers rejects product and affiliate promotions even when disclo
   } finally { f.cleanup(); }
 });
 
+
+test("Nature Frontiers blocks Selar links and affiliate copy placed in the public first comment", async () => {
+  const f = fixture();
+  try {
+    f.payload.caption = "Observe wildlife from a respectful distance and avoid disturbing animals.";
+    f.payload.links = [];
+    f.payload.commercial = false;
+    f.payload.campaignId = null;
+    f.payload.firstCommentText = "Product details: https://selar.com/0u19v8u99l";
+    const linkedComment = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(linkedComment.eligible, false);
+    assert.ok(linkedComment.blockers.some(item => /product and affiliate promotions are prohibited/i.test(item)));
+    assert.ok(linkedComment.destinationChecks.some(check => check.url === "https://selar.com/0u19v8u99l" && check.passed === false));
+
+    const linkedFingerprint = linkedComment.contentFingerprint;
+    f.payload.firstCommentText = "Affiliate link: I may earn a commission if you purchase.";
+    const affiliateComment = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(affiliateComment.eligible, false);
+    assert.ok(affiliateComment.blockers.some(item => /product and affiliate promotions are prohibited/i.test(item)));
+    assert.notEqual(affiliateComment.contentFingerprint, linkedFingerprint,
+      "the public first comment must be included in the approval fingerprint");
+  } finally { f.cleanup(); }
+});
+
 test("Safari remains inactive and arbitrary or unsafe destinations are blocked", async () => {
   const f = fixture();
   try {
