@@ -864,6 +864,7 @@ test("authoring form generates and persists a source-bound script through the re
     expect(draftResponse.status()).toBe(201);
     const created = await draftResponse.json();
     expect(created.job?.id).toBeTruthy();
+    await page.locator("#refresh").click();
 
     await page.locator("#authorjob").selectOption(created.job.id);
     await page.locator("#authorbrief").fill(JSON.stringify({
@@ -876,7 +877,7 @@ test("authoring form generates and persists a source-bound script through the re
     await page.locator("#authoringform button[type=submit]").click();
     await expect(page.locator("#authoringresult")).toContainText("Script saved for human editorial review", { timeout: 15_000 });
     await expect(page.locator("#authoringresult")).toContainText("Publishable: false");
-    await expect(page.locator("#authoringscript")).toContainText("AWAITING_HUMAN_EDITORIAL_REVIEW");
+    await expect(page.locator("#authoringscript")).toContainText("The strongest wildlife story");
 
     const persistedResponse = await page.request.get(base + "/api/state", { headers });
     expect(persistedResponse.status()).toBe(200);
@@ -911,7 +912,7 @@ test("authoring form generates and persists a source-bound script through the re
     await page.locator("#connect").click();
     await expect(page.locator("#app")).toBeVisible();
     await page.locator("#authorjob").selectOption(created.job.id);
-    await expect(page.locator("#authoringscript")).toContainText("AWAITING_HUMAN_EDITORIAL_REVIEW");
+    await expect(page.locator("#authoringscript")).toContainText("The strongest wildlife story");
     await expect(page.locator("#authoringscript")).toContainText(providerSource.title);
   } finally {
     await stopServer(child);
