@@ -719,4 +719,35 @@ test("campaign form single-flights a double-click and persists the successful pr
   expect(reloadedCampaign.pendingDestinationUrl).toBe("https://selar.com/0u19v8u99l");
   expect(reloadedCampaign.status).toBe("ACTIVE_FOR_DRAFTS_ONLY");
   expect(afterReload.publishingEnabled).toBe(false);
+  expect(submissions).toBe(1);
+
+  const approvedDisclosure = "Promotional link: check current details and terms on the seller page.";
+  await page.locator("#campaignaction").selectOption("activate");
+  await page.locator("#campaignurl").fill("https://selar.com/0u19v8u99l");
+  await page.locator("#campaigndisclosure").fill(approvedDisclosure);
+  await page.locator("#campaignapproval").uncheck();
+  await page.locator("#campaignform button[type=submit]").click();
+  await expect(page.locator("#campaignresult")).toContainText("Explicit owner approval of the exact preview is required");
+  expect(submissions).toBe(2);
+
+  const stillPendingResponse = await request.get("/api/state", { headers });
+  const stillPending = await stillPendingResponse.json();
+  expect(stillPending.campaigns.find(item => item.id === "selar-wildlife-vault").pendingDestinationUrl)
+    .toBe("https://selar.com/0u19v8u99l");
+
+  await page.locator("#campaignapproval").check();
+  await page.locator("#campaignform button[type=submit]").click();
+  await expect(page.locator("#campaignresult")).toContainText("Campaign action saved: ACTIVE_FOR_DRAFTS_ONLY");
+  expect(submissions).toBe(3);
+
+  const activatedResponse = await request.get("/api/state", { headers });
+  expect(activatedResponse.status()).toBe(200);
+  const activatedState = await activatedResponse.json();
+  const activatedCampaign = activatedState.campaigns.find(item => item.id === "selar-wildlife-vault");
+  expect(activatedCampaign.disclosureText).toBe(approvedDisclosure);
+  expect(activatedCampaign.pendingDestinationUrl).toBeUndefined();
+  expect(activatedCampaign.pendingDisclosureText).toBeUndefined();
+  expect(activatedCampaign.approval.destinationVersion).toBe(activatedCampaign.pendingDestinationVersion ?? activatedCampaign.approval.destinationVersion);
+  expect(activatedCampaign.status).toBe("ACTIVE_FOR_DRAFTS_ONLY");
+  expect(activatedState.publishingEnabled).toBe(false);
 });
