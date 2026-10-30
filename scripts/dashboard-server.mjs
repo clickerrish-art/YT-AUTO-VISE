@@ -1516,6 +1516,30 @@ const server = http.createServer(async (req, res) => {
         if (index < 0) return json(res, 404, { error: "Content job not found" });
         const job = state.jobs[index];
         const stage = job.authoring?.narrationStage;
+        const existingReview = job.authoring?.narrationApproval;
+        const finalizedDecision = stage?.status === "APPROVED_FOR_RENDER" ? "APPROVE" : stage?.status === "REJECTED" ? "REJECT" : null;
+        if (job.state === "QUEUED" && finalizedDecision && existingReview) {
+          const exactRetry = existingReview.decision === body.decision &&
+            existingReview.reviewer === operatorId &&
+            existingReview.scriptSha256 === body.scriptSha256 &&
+            existingReview.audioSha256 === body.audioSha256 &&
+            existingReview.transcriptSha256 === body.transcriptSha256 &&
+            existingReview.captionsSha256 === body.captionsSha256 &&
+            existingReview.reportSha256 === body.reportSha256 &&
+            existingReview.reason === body.reason.trim() &&
+            existingReview.confirmAudioListened === (body.confirmAudioListened === true) &&
+            existingReview.confirmTranscriptReviewed === (body.confirmTranscriptReviewed === true) &&
+            existingReview.confirmCaptionsReviewed === (body.confirmCaptionsReviewed === true);
+          if (exactRetry) {
+            return json(res, 200, {
+              job, narrationReview: existingReview, reused: true, publishable: false, publishingEnabled: false,
+              nextAction: finalizedDecision === "APPROVE"
+                ? "Narration is approved only for a later render stage; rights, visual assets, scene plan, factual alignment and final-video review remain mandatory."
+                : "Narration was rejected; revise or regenerate the script and narration as a new revision."
+            });
+          }
+          return json(res, 409, { error: "Narration review is already finalized; a changed decision or evidence requires a new narration revision", publishable: false, publishingEnabled: false });
+        }
         if (job.state !== "QUEUED" || stage?.status !== "DRAFT_REVIEW_REQUIRED") return json(res, 409, { error: "Only a queued job with a complete, unreviewed narration draft can receive narration review" });
         if (canonicalAuthoringScriptSha256(job.authoring?.result?.script) !== body.scriptSha256 ||
             job.authoring?.scriptApproval?.scriptSha256 !== body.scriptSha256 ||
