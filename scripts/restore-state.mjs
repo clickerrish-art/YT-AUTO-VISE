@@ -138,6 +138,23 @@ function restoreJournalPath(options) {
   return destination;
 }
 
+function fsyncDirectory(directory) {
+  // File fsync does not make a rename/unlink durable. Flush the containing
+  // directory after changing its entries so a completed restore survives a
+  // crash without losing the destination rename or its recovery journal.
+  // Windows does not expose portable directory fsync through Node.
+  if (process.platform === "win32") return;
+  let directoryFd;
+  try {
+    directoryFd = fs.openSync(directory, fs.constants.O_RDONLY);
+    fs.fsyncSync(directoryFd);
+  } catch (error) {
+    if (!["EINVAL", "ENOTSUP", "EISDIR", "EPERM"].includes(error?.code)) throw error;
+  } finally {
+    if (directoryFd !== undefined) fs.closeSync(directoryFd);
+  }
+}
+
 function writeDurableBytes(destination, bytes) {
   const temp = destination + "." + crypto.randomUUID() + ".rollback-tmp";
   let fd;
@@ -148,6 +165,7 @@ function writeDurableBytes(destination, bytes) {
     fs.closeSync(fd);
     fd = undefined;
     fs.renameSync(temp, destination);
+    fsyncDirectory(path.dirname(destination));
   } catch (error) {
     if (fd !== undefined) {
       try { fs.closeSync(fd); } catch {}
@@ -263,7 +281,10 @@ function recoverInterruptedRestore(options) {
     }
 
     if (entry.action === "RESTORE_MISSING") {
-      if (exists && currentSha === entry.newSha256) fs.unlinkSync(destination);
+      if (exists && currentSha === entry.newSha256) {
+        fs.unlinkSync(destination);
+        fsyncDirectory(path.dirname(destination));
+      }
       else if (exists) throw new Error("Interrupted restore found unexpected destination contents; manual recovery is required: " + path.basename(destination));
     } else {
       if (!/^[a-f0-9]{64}$/.test(entry.originalSha256 ?? "") || typeof entry.originalBase64 !== "string") {
@@ -287,6 +308,7 @@ function recoverInterruptedRestore(options) {
   }
 
   fs.unlinkSync(journalPath);
+  fsyncDirectory(path.dirname(journalPath));
   return { recovered: true, entries: journal.entries.length };
 }
 
@@ -407,6 +429,7 @@ async function restoreStateUnlocked({ backupPath, rootDir = root, stateDir = pro
         }
       }
       fs.renameSync(item.temp, item.destination);
+      fsyncDirectory(path.dirname(item.destination));
       item.committed = true;
       committed.push(item);
       results.push({ target: item.target, action: item.action, sha256: sha256(item.bytes) });
@@ -435,6 +458,7 @@ async function restoreStateUnlocked({ backupPath, rootDir = root, stateDir = pro
 
   const journalPath = restoreJournalPath(options);
   fs.unlinkSync(journalPath);
+  fsyncDirectory(path.dirname(journalPath));
   return { status: "RESTORE_COMPLETED", backupCreatedAt: backup.createdAt, restored: results.filter(x => x.action !== "UNCHANGED").length, unchanged: results.filter(x => x.action === "UNCHANGED").length, entries: results };
 }
 
