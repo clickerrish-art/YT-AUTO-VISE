@@ -1,3 +1,41 @@
+# Latest exact-SHA implementation update — 30 October 2026
+
+## Live refs and implementation
+
+- PR #1 is OPEN, DRAFT and UNMERGED.
+- Exact tested source/test SHA before this evidence-only update: `ab9416146adcd05a17f571b2cc7889dccac0c280`.
+- Two focused commits added:
+  - `0e4e6044840a5b62def1025799f452e71988d13a` — Nature Frontiers promotion guard scans the public `firstCommentText` as well as the caption, extracts URLs from both, and blocks Selar/Safari links or affiliate/promotional language hidden in the first comment. Policy version: `nf-facebook-autonomous-policy-2026-10-v3`.
+  - `ab9416146adcd05a17f571b2cc7889dccac0c280` — regression test proves a neutral caption cannot move a prohibited Selar URL or affiliate disclosure into the public first comment; changing the first comment changes the approval fingerprint.
+- The fingerprint includes `firstCommentText` only when the property is present, preserving legacy fingerprints for old payloads that do not contain the field.
+- Live compare at the tested source/test SHA: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, **2,170 ahead / 2 behind / 182 changed files**. This is a live API compare snapshot, not human semantic approval to merge.
+
+## Exact-SHA CI — source/test SHA ab9416146adcd05a17f571b2cc7889dccac0c280
+
+- Automation/security [41024489463](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41024489463): **427 Node tests passed, 0 failures, 0 skips; 16 Python unit tests passed; npm audit 0 vulnerabilities; FFmpeg/ffprobe integration, syntax and Python compilation steps passed.**
+- Content quality [41024489659](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41024489659): **427 tests passed, 0 failures, 0 skips.**
+- Metadata validation [41024489440](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41024489440): **427 tests passed, 0 failures, 0 skips.** Its negative-path checks intentionally report that unreviewed asset metadata is BLOCKED.
+- Dashboard browser E2E [41024489446](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41024489446): **15 Chromium journeys passed.**
+- Isolated main/candidate baseline [41024489845](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41024489845): **PASS** for both exact checkouts.
+- Non-destructive branch inventory [41024489462](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41024489462): **PASS**; inventory is not a semantic merge review.
+- Nature Frontiers local draft-package validation [41024489472](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41024489472): **PASS for local deterministic validation only**; the external provider-create/read-back job was skipped.
+- Production readiness [41024489515](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41024489515): **BLOCKED / fail-closed**, with the existing 13 prerequisites. This is not a code-test failure and is not production acceptance.
+
+## Metricool and destination verification
+
+- Metricool read-only brand list exposes only Nature Frontiers, brand ID `7545638`; it does not expose a distinct SonicVhibez/Sonic Fire brand.
+- Metricool's configured YouTube channel ID is `UCSlkuPfHH78oGC1o418HV4w` (24 characters). The previously supplied SonicVhibez channel URL contains `UCSlkuPfHH78oC1o418HV4w` (23 characters). They are not equal. The connected destination must not be selected until the owner confirms the correct channel identity.
+- Eight upcoming Nature Frontiers Facebook/Instagram promotional posts remain configured with `draft=false` and `autoPublish=true`: `406357296` (31 Oct 10:00 SAST), `406357335` (4 Nov 10:00), `406357364` (7 Nov 10:00), `406357388` (11 Nov 10:00), `406357414` (14 Nov 10:00), `406357443` (18 Nov 10:00), `406357483` (21 Nov 10:00), and `406357554` (25 Nov 10:00; Facebook and Instagram). No existing remote post was changed, cancelled or rescheduled. The repository guard does not alter provider-side queue records.
+- The Metricool YouTube published-in-range connector returned one public video in the inspected 12-month period: `LjePS02hA1o`, title “How to make wildlife videos people actually watch #wildlife #filmmaking #shorts”, raw timestamp `20261022150556` without timezone metadata. At 30 Oct 2026 10:04:53 SAST, the known-public-video gap is **186h 58m 57s** if that timestamp is SAST or **184h 58m 57s** if it is UTC. Both exceed 72 hours, but private/unlisted history and uncertain upload attempts are not available and the timestamp timezone is ambiguous; the complete spacing check remains **UNVERIFIED**. No YouTube post was scheduled.
+- HeyGen account read reports the Free plan and null/unavailable remaining-credit counters. The latest failed generation returned `MOVIO_PAYMENT_INSUFFICIENT_CREDIT`; completed library items inspected were 20.4016s, 22.3085s, 24.32s and 48.7967s. No new video was generated and no quota/payment was bypassed.
+- All three supplied Selar pages were inaccessible to the available web reader. Seller identity, exact product contents and whether the link is affiliate, paid or owner-operated remain unverified. Do not publish promotional copy until the relationship is confirmed and the accurate disclosure is supplied.
+
+## Release verdict
+
+**NOT PRODUCTION READY.** Public/unattended YouTube publishing remains disabled; no live upload, schedule, Meta post, campaign activation, visibility change, merge, main-branch edit, rebase, reset, force-push or destructive reconciliation occurred. Nature Frontiers remains prohibited as a YouTube destination. The owner-controlled YouTube identity/history, genuine rights-backed media and human review, per-operation private-upload authorization, owner-approved feasible cadence, Meta identity/draft acceptance, branch protection and full semantic branch review remain unresolved.
+
+---
+
 # Current release evidence — 30 October 2026
 
 ## Latest live checkpoint — 30 October 2026, 09:36 SAST
