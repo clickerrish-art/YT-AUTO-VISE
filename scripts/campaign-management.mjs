@@ -61,12 +61,22 @@ export function manageCampaign(config, request, actor, now = new Date().toISOStr
   if (campaign.type === "selar_digital_product") {
     if (request.destinationUrl !== APPROVED_SELAR_URL) throw new Error("Selar destination must exactly match the approved URL");
     if (typeof request.disclosureText !== "string" || !request.disclosureText.trim()) throw new Error("Promotional disclosure is required");
+    if (request.confirmOwnerApproval !== true) throw new Error("Explicit owner approval of the exact preview is required before activation");
+    const submittedDisclosure = request.disclosureText.trim();
+    const expectedPreviewVersion = crypto.createHash("sha256")
+      .update(APPROVED_SELAR_URL + "\n" + submittedDisclosure)
+      .digest("hex");
+    if (campaign.pendingDestinationUrl !== APPROVED_SELAR_URL ||
+        campaign.pendingDisclosureText !== submittedDisclosure ||
+        campaign.pendingDestinationVersion !== expectedPreviewVersion) {
+      throw new Error("Preview the exact destination and disclosure before activation; the pending preview must match this request");
+    }
     campaign.destinationUrl = APPROVED_SELAR_URL;
     campaign.destinationValidation = "exact_approved_allowlist";
     campaign.ownerApproved = true;
     campaign.disclosureText = request.disclosureText.trim();
     campaign.status = "ACTIVE_FOR_DRAFTS_ONLY";
-    campaign.approval = { approvedBy: actor.trim(), approvedAt: now, destinationVersion: crypto.createHash("sha256").update(campaign.destinationUrl + "\n" + campaign.disclosureText).digest("hex") };
+    campaign.approval = { approvedBy: actor.trim(), approvedAt: now, destinationVersion: expectedPreviewVersion };
     delete campaign.pendingDestinationUrl;
     delete campaign.pendingDisclosureText;
     delete campaign.pendingDestinationVersion;
