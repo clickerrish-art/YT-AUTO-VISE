@@ -561,3 +561,99 @@ test("a killed restore process leaves a journal that is safely rolled back after
     fs.rmSync(destination.root, { recursive: true, force: true });
   }
 });
+
+
+test("restore flushes destination directory entries before deleting its recovery journal", async () => {
+  const source = fixture();
+  const destination = fixture();
+  const events = [];
+  const directoryByFd = new Map();
+  const originalOpen = fs.openSync;
+  const originalClose = fs.closeSync;
+  const originalFsync = fs.fsyncSync;
+  const originalRename = fs.renameSync;
+  const originalUnlink = fs.unlinkSync;
+  try {
+    const backupPath = path.join(source.root, "backup.json");
+    await backupState({
+      rootDir: source.root,
+      stateDir: source.stateDir,
+      uploadLogDir: source.logDir,
+      rightsDir: source.rightsDir,
+      outputPath: backupPath
+    });
+    fs.rmSync(destination.stateDir, { recursive: true, force: true });
+    fs.rmSync(destination.logDir, { recursive: true, force: true });
+    fs.rmSync(destination.rightsDir, { recursive: true, force: true });
+
+    fs.openSync = function (file, ...args) {
+      const fd = originalOpen.call(this, file, ...args);
+      try {
+        if (fs.fstatSync(fd).isDirectory()) directoryByFd.set(fd, path.resolve(String(file)));
+      } catch {}
+      return fd;
+    };
+    fs.closeSync = function (fd, ...args) {
+      directoryByFd.delete(fd);
+      return originalClose.call(this, fd, ...args);
+    };
+    fs.fsyncSync = function (fd, ...args) {
+      const directory = directoryByFd.get(fd);
+      if (directory) events.push({ type: "directory-fsync", path: directory });
+      return originalFsync.call(this, fd, ...args);
+    };
+    fs.renameSync = function (from, to, ...args) {
+      const result = originalRename.call(this, from, to, ...args);
+      if (path.basename(String(to)) !== ".restore-transaction.json" &&
+          !String(to).endsWith(".restore-tmp") &&
+          !String(to).endsWith(".rollback-tmp")) {
+        events.push({ type: "destination-rename", path: path.resolve(String(to)) });
+      }
+      return result;
+    };
+    fs.unlinkSync = function (file, ...args) {
+      const result = originalUnlink.call(this, file, ...args);
+      if (path.basename(String(file)) === ".restore-transaction.json") {
+        events.push({ type: "journal-unlink", path: path.resolve(String(file)) });
+      }
+      return result;
+    };
+
+    const result = await restoreState({
+      backupPath,
+      rootDir: destination.root,
+      stateDir: destination.stateDir,
+      uploadLogDir: destination.logDir,
+      rightsDir: destination.rightsDir,
+      confirm: "YES"
+    });
+    assert.equal(result.status, "RESTORE_COMPLETED");
+
+    const journalRemovalIndex = events.findIndex(event => event.type === "journal-unlink");
+    assert.notEqual(journalRemovalIndex, -1, "successful restore must remove its journal");
+    const committed = events.map((event, index) => ({ ...event, index }))
+      .filter(event => event.type === "destination-rename");
+    assert.ok(committed.length > 0, "fixture must exercise destination commits");
+    for (const commit of committed) {
+      assert.ok(events.some((event, index) =>
+        index > commit.index &&
+        index < journalRemovalIndex &&
+        event.type === "directory-fsync" &&
+        event.path === path.dirname(commit.path)
+      ), "destination directory must be flushed after commit and before journal removal: " + commit.path);
+    }
+    assert.ok(events.some((event, index) =>
+      index > journalRemovalIndex &&
+      event.type === "directory-fsync" &&
+      event.path === destination.stateDir
+    ), "journal directory must be flushed after journal removal");
+  } finally {
+    fs.openSync = originalOpen;
+    fs.closeSync = originalClose;
+    fs.fsyncSync = originalFsync;
+    fs.renameSync = originalRename;
+    fs.unlinkSync = originalUnlink;
+    fs.rmSync(source.root, { recursive: true, force: true });
+    fs.rmSync(destination.root, { recursive: true, force: true });
+  }
+});
