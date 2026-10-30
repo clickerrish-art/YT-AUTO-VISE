@@ -7,26 +7,26 @@
 - Implementation branch: `codex/marketing-machine-audit-fixes`
 - Pull request: https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1
 - Observed PR state: OPEN, DRAFT, UNMERGED
-- Observed branch HEAD at this evidence snapshot: `4efa5db67dbd8b7b796d15dabaa7ec7fe122fcd5`
-- Latest exact application/test candidate: `fa6145a4d5977fd64824fa98803c669161e2a152`
+- Observed branch HEAD at this evidence snapshot: `ba0ed89a3d8509d264bfdcb837ba01443beb25fb`
+- Latest exact application/test candidate: `7c8470a86aab237fe87002adbe8cec8fc47ae4d1`
 - `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
-- Comparison at the observed HEAD: 2,254 commits ahead, 2 behind, 182 changed files.
+- Comparison at the observed HEAD: 2,259 commits ahead, 2 behind, 183 changed files.
 - No merge, reset, rebase, force-push or destructive reconciliation was performed. The work was committed only to the implementation branch.
 - A local developer working tree was not available through the remote GitHub session; local uncommitted changes therefore cannot be certified clean.
 
 ## Exact-SHA CI evidence
 
-The latest full PR validation batch was triggered on exact PR head `fa6145a4d5977fd64824fa98803c669161e2a152`. Subsequent commits through `4efa5db67dbd8b7b796d15dabaa7ec7fe122fcd5` updated acceptance documentation and register evidence; no application behavior was changed after that tested candidate.
+The latest full PR validation batch was triggered on exact application/test SHA `7c8470a86aab237fe87002adbe8cec8fc47ae4d1`. Subsequent commits through `ba0ed89a3d8509d264bfdcb837ba01443beb25fb` updated acceptance documentation and register evidence; no application behavior was changed after that tested candidate.
 
-- Dashboard browser E2E — [run 41141841497](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41141841497): SUCCESS, 19/19 Chromium journeys.
-- Automation/security — [run 41141841572](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41141841572): SUCCESS, 436 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; npm audit reported 0 vulnerabilities.
-- Metadata validation — [run 41141841557](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41141841557): SUCCESS.
-- Content quality — [run 41141841516](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41141841516): SUCCESS.
-- Isolated main/candidate baseline comparison — [run 41141841590](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41141841590): SUCCESS.
-- Non-destructive branch inventory — [run 41141841537](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41141841537): SUCCESS.
-- Nature Frontiers local draft validation — [run 41141841398](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41141841398): SUCCESS. This validates the local draft package, not an external Facebook or Instagram publication.
-- Production readiness — [run 41141841536](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41141841536): EXPECTED HOLD / workflow failure, 13 blockers remain. This is not a passing readiness result.
+- Dashboard browser E2E — [run 41142804815](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41142804815): SUCCESS, 19/19 Chromium journeys on exact SHA `7c8470a86aab237fe87002adbe8cec8fc47ae4d1`.
+- Automation/security — [run 41142804948](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41142804948): SUCCESS, 436 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; npm audit reported 0 vulnerabilities.
+- Metadata validation — [run 41142804925](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41142804925): SUCCESS.
+- Content quality — [run 41142804795](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41142804795): SUCCESS.
+- Isolated main/candidate baseline comparison — [run 41142804801](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41142804801): SUCCESS.
+- Non-destructive branch inventory — [run 41142804861](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41142804861): SUCCESS.
+- Nature Frontiers local draft validation — [run 41142804788](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41142804788): SUCCESS. This validates the local draft package, not an external Facebook or Instagram publication.
+- Production readiness — [run 41142804825](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41142804825): EXPECTED HOLD / workflow failure, 13 blockers remain. This is not a passing readiness result.
 
 ## DASH-001 dashboard acceptance
 
