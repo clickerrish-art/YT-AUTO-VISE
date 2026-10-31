@@ -1,3 +1,14 @@
+## Exact-SHA allowlisted task-runner API acceptance — 31 October 2026
+
+The existing real-server test `test/dashboard-task-runner.test.mjs` was rerun by exact-SHA workflow [41216258636](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41216258636) on `4eb66910a93bf4b33843b91d9384e1f34bdc902b`.
+
+- Authorized `validate-schedule` and `validate-campaigns` task requests execute actual allowlisted child processes and return `SUCCEEDED` with exit code 0.
+- An arbitrary task identifier is rejected with HTTP 400.
+- A durable `RUNNING` task record prevents duplicate execution across two independent dashboard processes; the concurrent requests return one accepted execution and one conflict.
+- Completion status and `VALIDATION_TASK_SUCCEEDED` audit records are checked in persistent state.
+- Startup recovery of an already-running interrupted task is exercised separately in the same real-server test.
+- Route evidence is recorded for `POST /api/tasks/run` in `docs/API_ROUTE_ACCEPTANCE_MATRIX.json`: authorized success, allowlist validation, persistence, audit and concurrency PASS; post-completion restart read-back remains NOT_TESTED. Overall API-001 remains NOT_TESTED.
+
 ## Exact-SHA worker lease lifecycle acceptance — 31 October 2026
 
 Implementation/test commit: `4eb66910a93bf4b33843b91d9384e1f34bdc902b`.
