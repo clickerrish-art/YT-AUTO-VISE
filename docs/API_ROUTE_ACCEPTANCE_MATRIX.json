@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-31T16:16:00Z",
+  "generatedAt": "2026-10-31T16:18:00Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
+  "testedSourceTestSha": "dea284d21b4e7a6923c46a201cd196ed39b72ffa",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -33,9 +33,12 @@
     "transitionRegressionCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217247523",
     "facebookDraftReviewCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
     "facebookDraftReviewCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988",
-    "facebookDraftBrowserCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526029"
+    "facebookDraftBrowserCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526029",
+    "latestExactCandidateAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848775",
+    "latestExactCandidateDashboard": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848763",
+    "latestExactCandidateBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848781"
   },
-  "disclaimer": "This matrix records route-level slices only. Exact tested commits include worker lease lifecycle, task runner, content-job transition, Facebook local draft reevaluation and safe rejection. External Meta identity/provider writes remain blocked. A route's overallAcceptance stays NOT_TESTED until every applicable criterion is independently proven; overall API-001 remains NOT_TESTED. The POST /api/jobs/narration/review route now has a tested local fixture success/concurrency/idempotency/audit slice; it is not a genuine human listening approval. Overall API-001 remains NOT_TESTED. POST /api/drafts/update now has a local authorized update, durable read-back/audit and invalid-input/no-mutation slice at exact SHA dea284d21b4e7a6923c46a201cd196ed39b72ffa. Overall API-001 remains NOT_TESTED.",
+  "disclaimer": "This matrix records route-level slices only. Exact tested commits include worker lease lifecycle, task runner, content-job transition, Facebook local draft reevaluation and safe rejection. External Meta identity/provider writes remain blocked. A route's overallAcceptance stays NOT_TESTED until every applicable criterion is independently proven; overall API-001 remains NOT_TESTED. The POST /api/jobs/narration/review route now has a tested local fixture success/concurrency/idempotency/audit slice; it is not a genuine human listening approval. Overall API-001 remains NOT_TESTED. POST /api/drafts/update now has a local authorized update, durable read-back/audit and invalid-input/no-mutation slice at exact SHA dea284d21b4e7a6923c46a201cd196ed39b72ffa. Overall API-001 remains NOT_TESTED. Latest exact candidate dea284d21b4e7a6923c46a201cd196ed39b72ffa passed automation/security, dashboard E2E, content quality, metadata and isolated baseline. Route-level statuses remain partial; overall API-001 remains NOT_TESTED.",
   "routes": [
     {
       "method": "GET",
