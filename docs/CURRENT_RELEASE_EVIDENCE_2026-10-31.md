@@ -1,3 +1,82 @@
+# Latest live checkpoint — 31 October 2026, 12:27 UTC
+
+## Repository state
+
+- PR #1: OPEN, DRAFT, UNMERGED.
+- Implementation branch HEAD at this checkpoint: `d372709474a5c3f116e6bf53d8cb26e42a3eba12` (this commit updates acceptance evidence only).
+- Exact source/test candidate: `d9bdfbb4a79d4a1030edb208d8754fda88852c9b`.
+- Latest application-code commit in the current branch lineage: `88552e3c38fe30422724da4f6c599933f0335cad`.
+- `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Live comparison: **2,302 ahead / 2 behind / 188 changed files**.
+- No merge, main edit, reset, rebase, force-push, branch deletion or destructive reconciliation was performed.
+- GitHub remote operations do not expose a local developer working tree; a clean local working-tree status is therefore **NOT VERIFIED**.
+
+## Exact-SHA validation — d9bdfbb
+
+| Workflow | Run | Result |
+|---|---:|---|
+| Automation/security | [41201034162](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034162) | PASS — 446 Node, 0 failures, 0 skips; 16 Python; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax and compilation checks passed |
+| Content quality | [41201034134](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034134) | PASS — 446 tests, 0 failures, 0 skips |
+| Metadata | [41201034143](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034143) | PASS — 446 tests, 0 failures, 0 skips |
+| Dashboard Chromium E2E | [41201034132](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034132) | PASS — 20/20 journeys against the real local dashboard/backend |
+| Isolated main/candidate baseline | [41201034192](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034192) | PASS — exact main and candidate checkouts; Node and Python exit code 0; [retained artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034192/artifacts/13042790814), SHA-256 `003b57a69350cbfc45f88a255c71d260b31d24e6212da058d7965bf114297f90` |
+| Non-destructive branch inventory | [41201034144](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034144) | PASS — inventory only; human semantic review remains incomplete |
+| Nature Frontiers local draft validation | [41201034174](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034174) | PASS for local validation only; provider-side draft creation job SKIPPED |
+| Production readiness | [41201034135](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034135) | HOLD / BLOCKED — 13 genuine prerequisites remain; exit codes human=2, JSON=2 |
+
+## New repository-controlled acceptance
+
+Commit `d9bdfbb4a79d4a1030edb208d8754fda88852c9b` adds `test/dashboard-api-worker-lease-multiprocess.integration.test.mjs`.
+
+The test starts two independent dashboard server processes against one isolated persistent state directory. Both compete to claim the same queued content job. Exactly one receives the lease and one claim audit event is retained. Both processes are then SIGKILLed; a fresh process must recover the job to `RECOVERY_REQUIRED`, clear the lease and record exactly one recovery audit event.
+
+This exact test passed as part of the 446-test Node suite. The new narrow acceptance item is `SCHED-WORKER-MULTIPROCESS-001` (PASS). This does **not** close SCHED-001: heartbeat, lease expiry, retry, queue ordering, actual publication history and complete operational recovery still require acceptance.
+
+The earlier candidate `8e95b9057d5e031e60474a171bb6aeea07b1cef1` exposed a test teardown bug: cleanup waited for a child-process exit event twice after SIGKILL. That attempt is superseded. The signal-aware teardown correction is in `d9bdfbb`, and the corrected exact-SHA suite passed.
+
+## Dashboard and API acceptance boundaries
+
+- Current static inventory: **101 HTML controls, 15 forms, 38 total registered handlers**.
+- Of the 38 handlers, **35 are protected `/api/` routes**; the remaining three are `/`, `/healthz` and `/readyz`.
+- Browser E2E: 20/20 PASS.
+- DASH-001 remains NOT_TESTED: 20 browser journeys do not amount to per-control/per-form acceptance.
+- API-001 remains NOT_TESTED: route authentication and focused successful/negative tests exist, but complete route-by-route business success, persistence, audit, concurrency and restart acceptance is incomplete.
+
+## Current external Metricool read-only observation — 31 October 2026
+
+Metricool currently exposes one brand: **Nature Frontiers** (brand ID `7545638`), with timezone `Africa/Johannesburg`, Facebook Page ID `1003575786161492` and Instagram username `naturefrontieers`.
+
+A read-only scheduled-post query for 31 October 2026 through 31 January 2027 returned eight promotional records. All eight have `draft=false` and `autoPublish=true`. Provider status shows post `406357296` as PUBLISHED and the other seven (`406357335`, `406357364`, `406357388`, `406357414`, `406357443`, `406357483`, `406357554`) as PENDING. Their content includes Selar/product promotions, which conflict with the Nature Frontiers education-only repository policy. One pending record includes both Facebook and Instagram providers. No record was edited, cancelled, rescheduled or published by this investigation. **Owner review is required; do not assume application safeguards alter these remote schedules.**
+
+The Metricool YouTubeData ID still resolves only to the title `SonicVibes` in the previous lookup; exact SonicVhibez identity is not verified. Do not use it as a YouTube destination.
+
+## Remaining production blockers
+
+The exact readiness run reports 13 blockers:
+
+1. Feasible owner-approved publication cadence, timezone-aware approval timestamp and approval reference.
+2. Complete SonicVhibez public/private/unlisted history and pending/uncertain upload reconciliation.
+3. Genuine rights-verified `content/render-manifest.json`.
+4. Genuine rights-verified `content/long-form-render-manifest.json`.
+5. Human-reviewed metadata marked `READY_FOR_PRIVATE_UPLOAD`.
+6. Verified SonicVhibez YouTube channel ID.
+7. Genuine media rights approval.
+8. Genuine content/compliance review.
+9. Final rendered `media/next-short.mp4`.
+10. `YOUTUBE_CLIENT_ID`.
+11. `YOUTUBE_CLIENT_SECRET`.
+12. `YOUTUBE_REFRESH_TOKEN`.
+13. `SONICVHIBEZ_CHANNEL_ID`.
+
+No YouTube upload, Meta draft creation, Facebook/Instagram publication, schedule change or campaign activation was attempted. Public/unattended YouTube publishing remains disabled. Nature Frontiers remains prohibited as a YouTube target. The original `.bundle` remains BLOCKED — original file not supplied.
+
+## Acceptance summary
+
+The updated machine-readable register contains **75 requirements: 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED**. Repository engineering remains incomplete. Keep PR #1 open and draft; do not merge or alter `main`.
+
+---
+
 # SonicVhibez Marketing Machine — Release Evidence
 # 31 October 2026 checkpoint
 
