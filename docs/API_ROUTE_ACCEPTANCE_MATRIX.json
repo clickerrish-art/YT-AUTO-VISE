@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-31T15:46:00Z",
+  "generatedAt": "2026-10-31T15:50:00Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "4eb66910a93bf4b33843b91d9384e1f34bdc902b",
@@ -198,15 +198,20 @@
       "classification": "operator task execution",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "NOT_TESTED",
+      "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
-      "durablePersistence": "NOT_TESTED",
-      "auditEvidence": "NOT_TESTED",
-      "concurrency": "NOT_TESTED",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
+      "concurrency": "PASS",
       "restartRecovery": "NOT_TESTED",
       "externalOperation": "task-specific external dependencies vary",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Exact-SHA 4eb66910 test: allowlisted validate-schedule and validate-campaigns execute through real child processes and return SUCCEEDED/exitCode 0; arbitrary task IDs are rejected; durable RUNNING state prevents cross-process duplicate execution; completed result and audit event persist. Startup recovery of a pre-existing interrupted task is separately exercised. A post-completion restart/read-back for this route is not yet asserted, so restartRecovery remains NOT_TESTED and overall route acceptance remains NOT_TESTED.",
+      "testEvidence": {
+        "test": "test/dashboard-task-runner.test.mjs",
+        "exactTestedSha": "4eb66910a93bf4b33843b91d9384e1f34bdc902b",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41216258636"
+      }
     },
     {
       "method": "POST",
