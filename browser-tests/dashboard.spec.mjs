@@ -1280,8 +1280,6 @@ test("production-plan submission and hash-bound review persist through the real 
     }
     if (!ready) throw new Error("Production-plan dashboard did not become ready: " + logs);
   };
-  startServer();
-
   try {
     const narration = "The approved narration explains an evidence-led wildlife question and distinguishes documented facts from uncertainty.";
     const script = {
@@ -1407,6 +1405,9 @@ test("production-plan submission and hash-bound review persist through the real 
       publishingEnabled: false,
       humanReviewRequired: true
     };
+
+    // The fixture state must be fully written before the server starts and runs startup recovery.
+    startServer();
 
     let ready = false;
     for (let attempt = 0; attempt < 100; attempt++) {
