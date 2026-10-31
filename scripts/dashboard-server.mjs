@@ -2543,7 +2543,7 @@ const server = http.createServer(async (req, res) => {
         const old = state.jobs[index];
         const updated = transitionContentJob(old, body.nextState, { actor: operatorId, reason: body.reason ?? "" });
         state.jobs[index] = updated;
-        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_STATE_CHANGED", jobId: updated.id, from: old.state, to: updated.state, at: updated.updatedAt, actor: operatorId, reason: String(body.reason ?? "").slice(0, 1000) });
+        state.audit.push({ id: crypto.randomUUID(), action: updated.state === "CANCELLED" ? "CONTENT_JOB_CANCELLED" : "CONTENT_JOB_STATE_CHANGED", jobId: updated.id, from: old.state, to: updated.state, at: updated.updatedAt, actor: operatorId, reason: String(body.reason ?? "").slice(0, 1000) });
         saveState(state);
         return json(res, 200, { job: updated, publishingEnabled: false });
       } finally { release(); }
