@@ -64,7 +64,7 @@ async function waitForReady(instance) {
 }
 
 async function killAbruptly(instance) {
-  if (!instance || instance.child.exitCode !== null) return;
+  if (!instance || instance.child.exitCode !== null || instance.child.signalCode !== null) return;
   const exited = new Promise(resolve => instance.child.once("exit", resolve));
   instance.child.kill("SIGKILL");
   await exited;
