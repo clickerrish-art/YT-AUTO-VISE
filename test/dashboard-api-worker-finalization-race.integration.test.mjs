@@ -117,6 +117,28 @@ test("independent dashboard processes serialize duplicate worker completion and 
     "Duplicate completion race"
   );
   const completionLease = await claimJob(completionJob.id, "race-worker-complete", 60_000);
+
+  const heartbeatPayload = {
+    jobId: completionJob.id,
+    leaseToken: completionLease.leaseToken,
+    leaseMs: 120_000
+  };
+  const heartbeatResponses = await Promise.all([
+    post(first, "/api/jobs/lease/heartbeat", heartbeatPayload),
+    post(second, "/api/jobs/lease/heartbeat", heartbeatPayload)
+  ]);
+  const heartbeatOutcomes = await Promise.all(heartbeatResponses.map(async response => ({
+    status: response.status,
+    body: await response.json()
+  })));
+  assert.deepEqual(heartbeatOutcomes.map(item => item.status), [200, 200],
+    "both serialized heartbeats using the still-current lease token must succeed");
+  assert.ok(heartbeatOutcomes.every(item => item.body.job.workerLease.workerId === "race-worker-complete"));
+  let heartbeatState = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  assert.equal(heartbeatState.audit.filter(event =>
+    event.action === "WORKER_LEASE_HEARTBEAT" && event.jobId === completionJob.id
+  ).length, 2, "both concurrent heartbeat operations must be durably audited");
+
   const completionPayload = {
     jobId: completionJob.id,
     leaseToken: completionLease.leaseToken,
