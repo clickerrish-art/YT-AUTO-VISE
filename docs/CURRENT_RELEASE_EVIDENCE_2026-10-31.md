@@ -1,3 +1,20 @@
+## Documentation-only reconciliation update — 31 October 2026, 12:30 UTC
+
+Latest PR head observed before this evidence refresh: `424f349cb39ffb885f4d521564eb1c8c64cc9656`. This and the preceding evidence/matrix/checklist commits are documentation-only descendants of exact source/test candidate `d9bdfbb4a79d4a1030edb208d8754fda88852c9b`; no application or test code changed after that tested candidate.
+
+- PR #1 remains OPEN, DRAFT, UNMERGED.
+- Current compare at the observed documentation head: **2,312 ahead / 2 behind / 189 changed files**.
+- `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- A new machine-readable API route acceptance matrix is now checked in at `docs/API_ROUTE_ACCEPTANCE_MATRIX.json`. It inventories all 35 protected API routes and separates global authentication-negative coverage from route-specific success, validation, persistence, audit, concurrency and restart evidence. Overall API-001 remains NOT_TESTED; the matrix does not inflate incomplete routes to PASS.
+- The acceptance register now has 75 requirements: **58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED**. The new PASS is limited to SCHED-WORKER-MULTIPROCESS-001; SCHED-001 remains NOT_TESTED.
+- The release evidence, dashboard control matrix, go-live blockers and release checklist now carry the 31 October exact-SHA checkpoint and links to the route matrix.
+- The current Metricool read-only state is documented above: eight Nature Frontiers records remain `draft=false` and `autoPublish=true`; provider marks one PUBLISHED and seven PENDING. No remote post or schedule was changed.
+- GitHub remote-only access cannot certify a local working-tree status. Branch protection remains unverified because the relevant owner/admin setting is not exposed by the connected GitHub read tools.
+
+The exact-SHA CI evidence remains the workflow batch listed above for `d9bdfbb`. The later documentation-only commits do not change that test result. Production readiness remains HOLD with 13 fail-closed blockers.
+
+---
+
 # Latest live checkpoint — 31 October 2026, 12:27 UTC
 
 ## Repository state
