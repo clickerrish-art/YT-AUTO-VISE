@@ -1,3 +1,72 @@
+# Latest exact-SHA implementation and acceptance update — 31 October 2026, 16:20 UTC
+
+This update supersedes older live-state snapshots below. Older records are retained as historical evidence.
+
+## Live Git state at this update
+
+- Implementation branch HEAD observed before this documentation update: `d6b2fa128adce8e10f087b523591f8870d6efec2` (documentation-only descendants of the tested code candidate).
+- Exact latest source/test candidate: `dea284d21b4e7a6923c46a201cd196ed39b72ffa`.
+- Main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Live compare: **2,337 ahead / 2 behind / 190 changed files**.
+- PR #1: **OPEN, DRAFT, UNMERGED**. Branch protection is disabled. No main edit, merge, reset, rebase, force-push, branch deletion or destructive reconciliation occurred.
+
+## Exact-SHA validation for `dea284d21b4e7a6923c46a201cd196ed39b72ffa`
+
+| Workflow | Run | Result |
+|---|---:|---|
+| Automation/security + Node unit tests, zero skips | [41217848775](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848775) | **PASS** |
+| Dashboard browser E2E | [41217848763](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848763) | **PASS** |
+| Content quality | [41217848765](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848765) | **PASS** |
+| Metadata | [41217848778](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848778) | **PASS** |
+| Isolated main/candidate baseline | [41217848781](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848781) | **PASS** |
+
+Exact-SHA code/test additions in this execution:
+- `4eb66910a93bf4b33843b91d9384e1f34bdc902b`: real-server worker lease heartbeat, invalid-token fencing, controlled FAILED completion, duplicate completion rejection, active/expired reaping, durable audit and restart read-back. [CI 41216258636](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41216258636) PASS.
+- `9ff2de1f046e879f687f3767697e787214cc1e28`: valid content-job transition persistence/audit; unsafe `UPLOADING_PRIVATE` transition returns 400 with byte-identical state. Automation, dashboard E2E, content quality and baseline passed.
+- `c533cd8fbf7153ccbf84ab94a2a919069b9abbe0`: Facebook draft reevaluation; blocked APPROVE no-mutation; safe REJECT persists reviewer-bound rejection/audit. Automation, dashboard E2E, content quality, metadata and baseline passed.
+- `dea284d21b4e7a6923c46a201cd196ed39b72ffa`: `POST /api/drafts/update` valid edit with durable read-back and one operator-attributed audit event; invalid calendar date and attempted rights promotion rejected without state mutation. All five exact-SHA workflows above passed.
+
+## Acceptance state
+
+- Requirement register: **75 total / 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED**.
+- Dashboard inventory: **101 controls / 15 forms**. DASH-001 remains NOT_TESTED; browser journeys and targeted route tests are not exhaustive per-control acceptance.
+- Protected API: **35 routes / 35 auth-negative checks PASS / 30 overall NOT_TESTED / 5 externally BLOCKED**. API-001 remains NOT_TESTED.
+- Worker lifecycle route slices are accepted individually; overall SCHED-001 remains NOT_TESTED.
+- STATE-001, DEPLOY-001 and GIT-002 remain NOT_TESTED. The 2,337-commit divergence has automated inventory but still requires human semantic review.
+- The machine-readable route matrix and requirement register preserve partial route evidence without marking overall routes complete.
+
+## Production readiness — HOLD, 13 blockers
+
+1. Owner-approved feasible publication cadence with timezone-stamped approval and reference.
+2. Complete SonicVhibez public/private/unlisted YouTube history and uncertain-upload reconciliation.
+3. Verified Short rights manifest at `content/render-manifest.json`.
+4. Verified long-form rights manifest at `content/long-form-render-manifest.json`.
+5. Genuine human metadata review.
+6. Independently verified exact SonicVhibez channel identity; do not guess or normalize the historical ID discrepancy.
+7. Genuine media rights approval.
+8. Genuine content/compliance approval.
+9. Final Short media `media/next-short.mp4`.
+10. `YOUTUBE_CLIENT_ID`.
+11. `YOUTUBE_CLIENT_SECRET`.
+12. `YOUTUBE_REFRESH_TOKEN`.
+13. `SONICVHIBEZ_CHANNEL_ID`.
+
+Production readiness workflow [41218088805](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41218088805) on the documentation head reports the expected HOLD/fail-closed result. It is not a passing production gate.
+
+## External operational risk and safety
+
+- Eight Nature Frontiers promotional records in Metricool were previously read as `draft=false`, `autoPublish=true`; seven were pending. No remote records were modified. Owner review is still required.
+- Nature Frontiers is never a YouTube target. Public/unattended YouTube publishing remains disabled. Facebook/Instagram provider-side draft creation/read-back is not verified; live Meta publishing remains disabled.
+- No live upload, post, campaign activation, visibility change or schedule mutation occurred.
+- Approved Selar destination remains `https://selar.com/0u19v8u99l`.
+- Original `.bundle`: **BLOCKED — ORIGINAL FILE NOT SUPPLIED**.
+- GitHub remote-only work cannot certify a developer local working-tree state.
+
+**Verdict: IMPLEMENTATION INCOMPLETE / NOT PRODUCTION READY.** Exact-SHA code/test checks pass; the application-wide acceptance gates remain open.
+
+---
+
 ## Documentation-only reconciliation update — 31 October 2026, 12:30 UTC
 
 Latest PR head observed before this evidence refresh: `424f349cb39ffb885f4d521564eb1c8c64cc9656`. This and the preceding evidence/matrix/checklist commits are documentation-only descendants of exact source/test candidate `d9bdfbb4a79d4a1030edb208d8754fda88852c9b`; no application or test code changed after that tested candidate.
