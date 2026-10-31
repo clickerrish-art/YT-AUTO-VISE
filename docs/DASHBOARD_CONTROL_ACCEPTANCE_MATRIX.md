@@ -1,3 +1,16 @@
+## Exact-SHA draft-edit and narration-review API acceptance — 31 October 2026
+
+- Exact code/test candidate: `dea284d21b4e7a6923c46a201cd196ed39b72ffa`.
+- Automation/security [run 41217848775](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848775): **SUCCESS**; unit-test step passed with zero skips, dependency/install/audit, renderer setup, campaign/review/queue, syntax and Python compilation steps passed.
+- Dashboard browser E2E [run 41217848763](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848763): **SUCCESS** against the real local dashboard/backend.
+- Content quality [run 41217848765](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848765): **SUCCESS**. Metadata [run 41217848778](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848778): **SUCCESS**.
+- The real-server `POST /api/drafts/update` test now proves successful title editing, durable read-back and one operator-attributed `DRAFT_EDITED` audit event. Invalid calendar dates and attempted rights promotion return 400 with byte-identical state and no audit mutation.
+- The real-server `POST /api/jobs/narration/review` path has synthetic-fixture positive acceptance: missing attestations rejected, concurrent exact requests resolve to one approval receipt and one audit decision, exact retry reuses receipt, changed-review and tampered-artifact retries rejected. This is not genuine human listening approval.
+- API route matrix: `docs/API_ROUTE_ACCEPTANCE_MATRIX.json`. These slices do not prove all controls/routes, restart recovery for draft editing, real human review, or external provider acceptance.
+- Isolated baseline [run 41217848781](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848781) was pending when this section was recorded.
+
+**DASH-001 and API-001 remain NOT_TESTED.** These are targeted route-level tests, not exhaustive acceptance of all 101 dashboard controls, 15 forms and 35 protected API routes.
+
 ## Exact-SHA dashboard/API operation evidence — 31 October 2026
 
 Tested code/test candidate: `c533cd8fbf7153ccbf84ab94a2a919069b9abbe0`.
