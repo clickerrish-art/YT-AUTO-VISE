@@ -177,6 +177,21 @@ Implementation commits:
 - Non-destructive branch inventory [run 41149529702](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529702): **SUCCESS** (inventory only; human semantic review of all divergent history remains incomplete).
 - Nature Frontiers local draft validation [run 41149529710](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529710): **SUCCESS for local draft-package validation only**; provider-side draft creation/read-back was skipped.
 - Production readiness [run 41149529996](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529996): **HOLD / BLOCKED by 13 mandatory prerequisites**, as intended. The workflow's expected nonzero result is not a code-test failure or a production pass.
+- Exact readiness blockers from that run:
+  1. Owner-approved feasible cadence mode, timezone-aware approval timestamp and approval reference.
+  2. Independent reconciliation of SonicVhibez public/private/unlisted history and all pending/uncertain upload attempts.
+  3. Genuine rights-verified `content/render-manifest.json`.
+  4. Genuine rights-verified `content/long-form-render-manifest.json`.
+  5. Human-reviewed metadata explicitly marked `READY_FOR_PRIVATE_UPLOAD`.
+  6. Verified SonicVhibez YouTube channel ID bound to metadata.
+  7. Media rights confirmation based on actual evidence.
+  8. Content/compliance review confirmation.
+  9. Genuine validated `media/next-short.mp4`.
+  10. `YOUTUBE_CLIENT_ID` in the secure execution environment.
+  11. `YOUTUBE_CLIENT_SECRET` in the secure execution environment.
+  12. `YOUTUBE_REFRESH_TOKEN` in the secure execution environment.
+  13. Verified `SONICVHIBEZ_CHANNEL_ID` in the secure execution environment.
+  The readiness report explicitly performs no upload, scheduling or publication.
 
 ### Acceptance register refresh
 
