@@ -1,3 +1,56 @@
+# Latest live blocker reconciliation — 31 October 2026, 16:20 UTC
+
+This section supersedes older repository/head snapshots below. The blocker count and fail-closed policy remain unchanged.
+
+- Latest tested source/test candidate: `dea284d21b4e7a6923c46a201cd196ed39b72ffa`.
+- Implementation branch HEAD observed before this documentation update: `d6b2fa128adce8e10f087b523591f8870d6efec2`.
+- Main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Compare: **2,337 ahead / 2 behind / 190 changed files**. PR #1 remains open, draft and unmerged.
+- Exact-SHA automation, dashboard E2E, content quality, metadata and isolated baseline all passed for `dea284d` (runs [41217848775](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848775), [41217848763](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848763), [41217848765](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848765), [41217848778](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848778), [41217848781](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848781)).
+- Production readiness remains **HOLD with 13 blockers**. The exact branch-head readiness workflow [41218088805](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41218088805) failed only at the intentional mandatory-gates step after successfully reporting blockers and uploading diagnostics. This is the expected fail-closed outcome.
+- No credentials, remote provider operations, publishing or schedule changes were performed.
+
+## The 13 mandatory blockers — unchanged
+
+1. Owner-approved feasible publication cadence with a timezone-aware timestamp and non-empty approval reference.
+2. Complete SonicVhibez public/private/unlisted YouTube history and all pending/uncertain upload attempts reconciled.
+3. Verified Short rights manifest at `content/render-manifest.json`.
+4. Verified long-form rights manifest at `content/long-form-render-manifest.json`.
+5. Genuine human metadata review to `READY_FOR_PRIVATE_UPLOAD`.
+6. Independently verified exact SonicVhibez channel ID; do not guess or normalize the documented mismatch.
+7. Genuine media rights approval.
+8. Genuine content/compliance approval.
+9. Final Short media `media/next-short.mp4`.
+10. `YOUTUBE_CLIENT_ID`.
+11. `YOUTUBE_CLIENT_SECRET`.
+12. `YOUTUBE_REFRESH_TOKEN`.
+13. `SONICVHIBEZ_CHANNEL_ID`.
+
+## Repository acceptance still open
+
+- DASH-001: all 101 controls / 15 forms not yet accepted individually.
+- API-001: all 35 protected routes not yet fully accepted. 35 auth-negative checks pass; 30 route-level overall statuses remain NOT_TESTED and 5 are externally BLOCKED.
+- SCHED-001: complete queue/retry/cancel/dead-letter/recovery and cadence/publication-history semantics remain NOT_TESTED despite accepted worker lease/task runner slices.
+- STATE-001: backup/restore transaction and failure-injection acceptance remains NOT_TESTED.
+- DEPLOY-001: clean installation, deployment simulation and rollback remain NOT_TESTED.
+- GIT-002: human semantic review of 2,337-ahead / 2-behind history remains NOT_TESTED. Automated branch inventory is not human semantic approval.
+- Branch protection is disabled. Owner/admin setup is required if protection is desired.
+- Original Git bundle: **BLOCKED — ORIGINAL FILE NOT SUPPLIED**.
+
+## Safety remains unchanged
+
+- Nature Frontiers must never be a YouTube target.
+- Public and unattended YouTube publishing remain disabled; private upload remains one-operation authorized only.
+- Facebook/Instagram publishing remains disabled until provider identity, permission and authorization are independently verified.
+- Safari campaign remains inactive.
+- Approved Selar URL remains `https://selar.com/0u19v8u99l`.
+- Eight previously observed Metricool Nature Frontiers records (`draft=false`, `autoPublish=true`) were not changed; owner review remains required.
+- No merge, main edit, reset, rebase, force-push, destructive reconciliation, upload, post, campaign activation, visibility change or schedule mutation occurred.
+
+**Verdict: NOT PRODUCTION READY.** Never bypass a blocker to obtain a green readiness result.
+
+---
+
 Machine-readable protected API route coverage is maintained in `docs/API_ROUTE_ACCEPTANCE_MATRIX.json`; route-level overall acceptance remains NOT_TESTED unless explicitly proven there.
 
 # Live go-live blocker reconciliation — 31 October 2026, 12:27 UTC
