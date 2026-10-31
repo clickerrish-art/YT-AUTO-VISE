@@ -1,3 +1,17 @@
+## Production-plan submission and review acceptance — 31 October 2026
+
+Exact browser candidate: `e3a7e8b2bba82b0db96aefe396eaca7dddecf8e9`.
+
+- Browser workflow [41148260651](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148260651): **SUCCESS, 20/20 Chromium journeys** against the real local dashboard and HTTP server.
+- The production-plan journey creates an isolated state directory and test-only scene/evidence files, submits a six-scene long-form plan through the dashboard, verifies its exact persisted plan hash and submission audit event, rejects a tampered narration-approval receipt, rejects a changed scene asset, restores the original test fixture, records a reviewer-bound plan approval, verifies its approval hash/audit event, and restarts the server to prove the same plan and review receipt remain persisted.
+- The test deliberately labels all scene/media/rights files as test fixtures. It proves application mechanics and fail-closed integrity checks; it does **not** prove genuine source-media provenance, valid commercial licences, actual human listening/editorial approval, production rendering, or upload authorization.
+- Code commits: `119cf6215ae922938941d9ab862ffe4c580e9f9b` (receipt and parent revalidation helpers), `c0e922877a287e077ede4fb6a504c7d24c4e6f0f` (regression tests), `e7d91d06626c1c9c87314f3d380c57c65943ae83` (API enforcement), and `e3a7e8b2bba82b0db96aefe396eaca7dddecf8e9` (browser tamper regression).
+- Automation/security [41148265949](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148265949): **438 Node tests passed, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities**.
+- Content quality [41148265966](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148265966), metadata [41148265891](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148265891), isolated baseline [41148265897](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148265897), and non-destructive branch inventory [41148265902](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148265902): **SUCCESS**.
+- Production readiness [41148265917](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148265917): **HOLD / BLOCKED by the 13 external prerequisites**, as intended.
+
+This closes the two production-plan form-specific workflow tests using controlled test fixtures. It does not close DASH-001: the complete 105-control and 38-route acceptance matrix remains incomplete, and the six downstream production forms still require genuine assets or remote evidence.
+
 
 
 ## Dashboard successful-form and campaign-approval acceptance — 31 October 2026
@@ -23,8 +37,8 @@ Exact tested application/test candidate for the latest real-narration and audio-
 | `scriptreviewform` | `POST /api/jobs/authoring/review` | **PASS** | Same isolated real-browser journey submits an APPROVE decision against the displayed script SHA-256, persists reviewer/reason/approval hash, verifies publishable remains false, and confirms exact repeat reuses the approval; [workflow 41137335224](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137335224) on `67edf6c84d716a236f457df8b13901eee896d195` (test-only descendant of the previously validated authoring candidate) |
 | `narrationform` | `POST /api/jobs/narration` | **PASS** | Exact-SHA real-browser journey uses free Edge TTS and FFmpeg/ffprobe; validates 137-word narration, measured 50–60s audio, TTS word-boundary captions, hashes for audio/transcript/captions/report, persistence after reload, one request for a double-click, exact retry reuse, and reconciliation without another TTS call; [workflow 41142796457](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41142796457) on `7c8470a86aab237fe87002adbe8cec8fc47ae4d1` |
 | `narrationreviewform` | `POST /api/jobs/narration/review` | **PASS** | Isolated real-browser journey loads a script-hash-bound narration review bundle, displays transcript/captions and artifact hashes, and exercises the actual TTS audio endpoint: the returned MP3 bytes match the stored audio SHA-256 and the dashboard loads the real audio as a blob URL. A separate synthetic-fixture review journey verifies the three attestation fields and hash-bound APPROVED_FOR_RENDER receipt; no automated test claims a human actually listened to the audio or approved real editorial content. Real-audio playback-bundle coverage is included in [workflow 41142796457](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41142796457); approval-logic fixture coverage remains in [workflow 41139006431](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41139006431). |
-| `productionplanform` | `POST /api/jobs/production-plan` | **NOT_TESTED** | Invalid JSON and backend rejection feedback are covered; successful plan submission and persisted read-back remain unproven |
-| `productionplanreviewform` | `POST /api/jobs/production-plan/review` | **NOT_TESTED** | Successful hash-bound browser review remains unproven |
+| `productionplanform` | `POST /api/jobs/production-plan` | **PASS** | Exact-SHA isolated Chromium journey submits a valid long-form plan through the real dashboard/server, verifies on-disk scene and evidence hashes, persisted plan read-back and audit event; test-only fixture assets are not production media or rights evidence |
+| `productionplanreviewform` | `POST /api/jobs/production-plan/review` | **PASS** | Same journey rejects a tampered narration approval receipt and changed scene asset, then records a hash-bound reviewer decision, persists it across a real server restart and keeps rendering/publishing disabled; fixture review is not genuine human editorial or rights approval |
 | `produceform` | `POST /api/jobs/produce` | **BLOCKED** | UI correctly disables rendering without approved script, narration, production plan and genuine source assets; successful render needs valid reviewed assets |
 | `parentrelationshipform` | `POST /api/jobs/parent-relationship` | **BLOCKED** | Incomplete/stale relationship is rejected; successful binding needs genuine child/parent media, quality evidence and verified parent receipt |
 | `validationform` | `POST /api/jobs/validate` | **BLOCKED** | UI correctly disables validation without a generated job; real media export is not present for successful validation |
@@ -32,7 +46,7 @@ Exact tested application/test candidate for the latest real-narration and audio-
 | `reviewform` | `POST /api/jobs/review` | **BLOCKED** | UI gate prevents review without technically validated and rights-cleared assets; genuine artifacts and approvals are absent |
 | `reconcileform` | `POST /api/uploads/reconcile` | **BLOCKED** | UI disables reconciliation without a durable upload attempt; a genuine uncertain remote upload receipt/history is absent |
 
-Seven PASS entries are form-specific evidence, not a declaration that DASH-001 is accepted. Two forms remain NOT_TESTED and six are BLOCKED; these eight forms have not passed complete successful UI journeys. BLOCKED means the required genuine business/asset state is absent, not that a mock or placeholder should be introduced.
+Nine PASS entries are form-specific evidence, not a declaration that DASH-001 is accepted. Six forms remain BLOCKED; these six forms have not passed complete successful UI journeys. BLOCKED means the required genuine business/asset state is absent, not that a mock or placeholder should be introduced.
 
 ### Exact-SHA CI
 
