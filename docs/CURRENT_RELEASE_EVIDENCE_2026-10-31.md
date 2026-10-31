@@ -1,3 +1,82 @@
+# Latest exact-SHA API concurrency and branch-review update — 31 October 2026, 19:08 UTC
+
+This update supersedes earlier live-state snapshots below. Historical records are retained.
+
+## Live repository state
+
+- Starting branch SHA for this continuation: `29dfd92acc566e864391b3c5be8c821344e008f8`.
+- Exact source/test candidate: `7fb12f05aee8ae646390a0584d7a2605703c2e8f`.
+- Documentation follow-ups: `27cb875be8688fef458922d8f20bb4847ed6a84b` (API matrix) and `cf8813e687b0d44790de58e75ddadb8bd517716d` (GIT-002 human-review briefing).
+- Main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Live branch after documentation updates: `cf8813e687b0d44790de58e75ddadb8bd517716d`; compare: **2,344 ahead / 2 behind / 192 changed files**.
+- PR #1 remains **OPEN, DRAFT, UNMERGED**. Branch protection remains disabled.
+- No main edit, merge, reset, rebase, force-push, branch deletion or destructive reconciliation occurred.
+
+## New implementation/test change
+
+Commit `7fb12f05aee8ae646390a0584d7a2605703c2e8f` adds:
+
+- `test/dashboard-api-readonly-concurrency.integration.test.mjs`
+- Starts the actual dashboard server with isolated persistent state.
+- Runs 20 simultaneous authenticated reads across `/api/state`, `/api/facebook/idea`, `/api/facebook/state`, `/api/facebook/autonomous-status`, and `/api/tasks`.
+- Verifies JSON response contracts, publishing remains disabled, internal state paths are not disclosed, and durable state is byte-identical after all reads.
+
+## Exact-SHA validation for `7fb12f05aee8ae646390a0584d7a2605703c2e8f`
+
+| Workflow | Run | Result |
+|---|---:|---|
+| Automation/security + Node unit tests | [41232372051](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232372051) | **PASS — 448 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities** |
+| Dashboard browser E2E | [41232371801](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232371801) | **PASS — 20/20 Chromium journeys** |
+| Content quality | [41232371823](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232371823) | **PASS** |
+| Metadata | [41232371792](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232371792) | **PASS** |
+| Isolated main/candidate baseline | [41232371843](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232371843) | **PASS** |
+| Lockfile verification | [41232366724](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232366724) | **PASS** |
+| Non-destructive branch inventory | [41232371800](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232371800) | **PASS — inventory only; human review remains required** |
+| Nature Frontiers local draft validation | [41232371841](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232371841) | **PASS — local validation only; provider-side creation job skipped** |
+| Production readiness | [41232371787](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232371787) | **HOLD / FAIL-CLOSED — mandatory prerequisites remain unmet** |
+
+## API acceptance matrix update
+
+The exact-SHA concurrent read test closes the concurrency slice for five read-only GET routes. The matrix was updated in commit `27cb875be8688fef458922d8f20bb4847ed6a84b`:
+
+- `GET /api/state`: PASS.
+- `GET /api/facebook/idea`: PASS.
+- `GET /api/facebook/state`: PASS.
+- `GET /api/facebook/autonomous-status`: PASS.
+- `GET /api/tasks`: PASS.
+
+Each has authorized success, validation, state-preservation, no-audit-mutation, restart and now concurrent-read evidence recorded in the matrix. Current route counts: **35 total / 5 PASS / 25 NOT_TESTED / 5 BLOCKED**. API-001 remains NOT_TESTED because the other routes are not fully accepted.
+
+Evidence: [API route acceptance matrix](https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/API_ROUTE_ACCEPTANCE_MATRIX.json).
+
+## Non-destructive Git inventory and human-review briefing
+
+The inventory artifact from workflow [41232371800](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232371800) records the exact `7fb12f0` snapshot:
+
+- **2,342 branch-only commits / 2 base-only commits**.
+- **0** patch-equivalent branch commits reported by `git cherry`; this does not prove semantic uniqueness.
+- 190 final-tree changed paths at that candidate; zero final-tree deletions.
+- Branch-only categories: 1,041 documentation-only; 539 test-only; 509 implementation-only; 90 workflow-only; 74 mixed; 58 config/content; 31 implementation-and-tests.
+- 17 critical final-tree paths identified for semantic review.
+- CI checkout working tree was clean; this says nothing about a separate developer's local working tree.
+- The two base-only commits add and then delete `test/restore-facebook-draft-history.test.mjs`. The implementation branch retains that test.
+
+A human-review briefing was added at `docs/GIT-002_SEMANTIC_REVIEW_BRIEFING.md` in commit `cf8813e687b0d44790de58e75ddadb8bd517716d`. It identifies the specific code/config/workflow review decisions. **GIT-002 remains NOT_TESTED until an authorized human performs that review.** No history rewrite or integration action was taken.
+
+## Remaining acceptance and release boundary
+
+- Requirement register remains **75 total / 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED**.
+- DASH-001 remains NOT_TESTED: 20 browser journeys plus static inventory do not prove all 101 controls individually.
+- API-001 remains NOT_TESTED: five read-only routes are now accepted; 25 routes remain untested and five are blocked by external dependencies.
+- SCHED-001, STATE-001 and DEPLOY-001 remain NOT_TESTED; the new GET concurrency test does not claim full queue, transaction/recovery or deployment acceptance.
+- GIT-002 remains NOT_TESTED pending human semantic review.
+- Production readiness remains HOLD with the 13 previously recorded fail-closed blockers. YouTube and Meta publishing restrictions remain unchanged.
+- No live YouTube upload, Facebook/Instagram post, campaign activation, visibility change, or Metricool scheduled-record modification occurred. Nature Frontiers remains prohibited as a YouTube target.
+
+**Verdict: engineering implementation remains PARTIALLY COMPLETE; the new concurrent read-only API slice is implemented and CI-verified on exact SHA `7fb12f0`. The application is not production-ready.**
+
+---
+
 # Latest exact-SHA implementation and acceptance update — 31 October 2026, 16:20 UTC
 
 This update supersedes older live-state snapshots below. Older records are retained as historical evidence.
