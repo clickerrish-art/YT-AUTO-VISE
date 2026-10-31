@@ -93,8 +93,22 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   const evaluated = await evaluateResponse.json();
   assert.equal(evaluated.evaluation.ok, false);
 
+  const beforeBlockedApproval = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
   const approvalResponse = await fetch(base + "/api/facebook/drafts/approve", { method: "POST", headers, body: JSON.stringify({ draftId: draft.id, decision: "APPROVE" }) });
   assert.equal(approvalResponse.status, 400, "approval must fail closed while Page identity, rights and compliance blockers remain");
+  assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), beforeBlockedApproval,
+    "a blocked approval must not mutate the draft or append a review event");
+
+  const rejectionResponse = await fetch(base + "/api/facebook/drafts/approve", {
+    method: "POST", headers,
+    body: JSON.stringify({ draftId: draft.id, decision: "REJECT", reason: "Controlled acceptance rejection; compliance blockers remain" })
+  });
+  const rejected = await rejectionResponse.json();
+  assert.equal(rejectionResponse.status, 200, JSON.stringify(rejected));
+  assert.equal(rejected.draft.status, "REJECTED");
+  assert.equal(rejected.draft.approval.decision, "REJECT");
+  assert.equal(rejected.draft.approval.reviewer, "facebook-test-owner");
+  assert.equal(rejected.publishingEnabled, false);
 
   const publishResponse = await fetch(base + "/api/facebook/publish", { method: "POST", headers, body: JSON.stringify({ draftId: draft.id, confirmOperation: true }) });
   assert.equal(publishResponse.status, 409);
@@ -107,6 +121,8 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   assert.ok(saved.facebookDrafts.some(item => item.id === draft.id));
   assert.ok(saved.audit.some(event => event.action === "FACEBOOK_DRAFT_CREATED" && event.itemId === draft.id && event.actor === "facebook-test-owner"));
   assert.ok(saved.audit.some(event => event.action === "FACEBOOK_DRAFT_RECHECKED"));
+  assert.equal(saved.audit.filter(event => event.action === "FACEBOOK_DRAFT_REJECT" && event.itemId === draft.id && event.reviewer === "facebook-test-owner").length, 1,
+    "safe rejection must persist one reviewer-attributed audit event");
 });
 test("dashboard restart moves interrupted Facebook submissions to reconciliation without losing known remote IDs", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-recovery-"));
