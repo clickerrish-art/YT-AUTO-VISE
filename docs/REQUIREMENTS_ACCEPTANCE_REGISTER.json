@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-31T15:52:00Z",
-  "evidencePolicy": "Live reconciliation: branch source/test commit 4eb66910a93bf4b33843b91d9384e1f34bdc902b passed GitHub Actions workflow 41216258636 (exact head SHA; completed success; unit-test step completed with zero skips). The new real-server worker lifecycle test covers heartbeat extension/persistence, invalid-token no-mutation, controlled FAILED completion and duplicate fencing, active/expired lease reaping, audit and restart read-back. Prior exact candidate d9bdfbb4a79d4a1030edb208d8754fda88852c9b separately passed 446 Node / 16 Python / 20 Chromium E2E and proved two-process lease exclusivity/SIGKILL recovery. Overall 75 requirements remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain NOT_TESTED. Production readiness remains HOLD with 13 genuine blockers. Documentation updates are not represented as code-test evidence. Additional route evidence at exact SHA 4eb66910a93bf4b33843b91d9384e1f34bdc902b: real task-runner success for two allowlisted validation commands, arbitrary-task rejection, durable duplicate prevention across two server processes, completion/audit persistence, and startup recovery of an interrupted task. API-001 remains NOT_TESTED.",
+  "recordedAt": "2026-10-31T16:07:00Z",
+  "evidencePolicy": "Live reconciliation: branch source/test commit 4eb66910a93bf4b33843b91d9384e1f34bdc902b passed GitHub Actions workflow 41216258636 (exact head SHA; completed success; unit-test step completed with zero skips). The new real-server worker lifecycle test covers heartbeat extension/persistence, invalid-token no-mutation, controlled FAILED completion and duplicate fencing, active/expired lease reaping, audit and restart read-back. Prior exact candidate d9bdfbb4a79d4a1030edb208d8754fda88852c9b separately passed 446 Node / 16 Python / 20 Chromium E2E and proved two-process lease exclusivity/SIGKILL recovery. Overall 75 requirements remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain NOT_TESTED. Production readiness remains HOLD with 13 genuine blockers. Documentation updates are not represented as code-test evidence. Additional route evidence at exact SHA 4eb66910a93bf4b33843b91d9384e1f34bdc902b: real task-runner success for two allowlisted validation commands, arbitrary-task rejection, durable duplicate prevention across two server processes, completion/audit persistence, and startup recovery of an interrupted task. API-001 remains NOT_TESTED. Exact candidate c533cd8fbf7153ccbf84ab94a2a919069b9abbe0 passed automation/security (unit tests, zero skips), dashboard browser E2E, content quality, metadata, branch inventory and local Facebook draft-package validation. It adds safe Facebook draft rejection persistence/audit assertions. Exact candidate 9ff2de1f046e879f687f3767697e787214cc1e28 adds content-job transition durable-state/audit and unsafe-state no-mutation assertions. Isolated main/candidate baseline for c533cd8 was still in progress at this documentation update. The overall 75-requirement register remains 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001/API-001/SCHED-001/STATE-001/DEPLOY-001/GIT-002 remain NOT_TESTED.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -311,10 +311,15 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835021",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835124",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835151",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d489318421af534988e2d44df4f6666d3dbc4955"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d489318421af534988e2d44df4f6666d3dbc4955",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/9ff2de1f046e879f687f3767697e787214cc1e28",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217247523",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526029"
       ],
-      "nextAction": "Current source inventory after the 31 October Nature Frontiers policy-alignment fix: 101 HTML controls across 15 forms (21 buttons, 41 inputs, 25 selects, 14 textareas); 38 total registered route handlers, comprising 35 /api routes plus /, /healthz and /readyz. The dashboard no longer exposes a Selar/product/affiliate option in the Nature Frontiers Facebook draft form and submits campaignId=null, commercial=false and disclosureRequired=false. Exact candidate d489318421af534988e2d44df4f6666d3dbc4955 passed 440 Node tests, 16 Python tests, 20 Chromium journeys and isolated main/candidate baseline. DASH-001 remains NOT_TESTED until every control and route has route-specific success, invalid-input, authorization, persistence, error, duplicate/concurrency and restart acceptance, with real assets/remote evidence where applicable.",
-      "assessmentCommitSha": "d489318421af534988e2d44df4f6666d3dbc4955",
+      "nextAction": "The source inventory is 101 controls across 15 forms; the current Chromium suite and route-specific test evidence cover useful journeys but do not test each control independently. Exact-SHA c533cd8 automation, dashboard browser E2E, content quality, metadata, branch inventory and local-only Facebook draft validation passed; isolated baseline was still running at the time of this checkpoint. Continue per-control operation, validation, failure feedback, persistence, authorization and refresh acceptance. DASH-001 remains NOT_TESTED.",
+      "assessmentCommitSha": "c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
     {
@@ -1485,10 +1490,15 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41184686381",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41184681953",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/4eb66910a93bf4b33843b91d9384e1f34bdc902b",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41216258636"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41216258636",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/9ff2de1f046e879f687f3767697e787214cc1e28",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217247523",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526029"
       ],
-      "nextAction": "The route matrix now records real-server authorized-success slices for /api/jobs (concurrent idempotency/restart), /api/campaigns/manage (preview/deactivation persistence/restart), /api/tasks/run (allowlisted child-process execution, input rejection, durable RUNNING duplicate prevention, completion/audit), and worker lease claim/heartbeat/complete/reap. Exact-SHA 4eb66910a93bf4b33843b91d9384e1f34bdc902b passed workflow 41216258636; the unit-test step completed with zero skips. Post-completion restart for /api/tasks/run, and route-specific success/failure/audit/persistence/restart coverage for the remaining routes, are still outstanding. Keep API-001 NOT_TESTED.",
-      "assessmentCommitSha": "4eb66910a93bf4b33843b91d9384e1f34bdc902b",
+      "nextAction": "Route-level success coverage has expanded: /api/jobs/transition now verifies authorized state transition, invalid UPLOADING_PRIVATE rejection with byte-identical no-mutation, persisted GENERATING state and exactly one operator audit event (9ff2de1); /api/facebook/drafts/evaluate verifies local reevaluation and audit; /api/facebook/drafts/approve verifies blocked APPROVE no-mutation and safe reviewer-attributed REJECT persistence/audit (c533cd8); worker lease and allowlisted task-runner slices are recorded in docs/API_ROUTE_ACCEPTANCE_MATRIX.json. Exact-SHA automation and dashboard E2E passed on c533cd8. All 35 routes still need route-specific acceptance as applicable; provider-side Meta operations remain blocked. API-001 remains NOT_TESTED.",
+      "assessmentCommitSha": "c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
       "acceptanceCriterion": "A route-by-route acceptance matrix records exact method/path and independently passing authorized success, unauthorized, invalid input, persistence, failure, concurrency/idempotency, audit and restart evidence as applicable."
     },
     {
@@ -1525,7 +1535,7 @@
   ],
   "currentCheckpoint": {
     "applicationCodeSha": "88552e3c38fe30422724da4f6c599933f0335cad",
-    "testedSha": "4eb66910a93bf4b33843b91d9384e1f34bdc902b",
+    "testedSha": "c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
     "checkpointPrHead": "69ea74d67bab056dc42ba242f3b45fe07780f28b",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
@@ -1550,10 +1560,12 @@
       "branchReconciliationInventory": "PASS: non-destructive inventory only; human semantic review remains incomplete",
       "productionReadiness": "BLOCKED / fail-closed as designed; 13 prerequisites",
       "facebookDraftWorkflow": "PASS for local validation only; external provider draft creation skipped",
-      "latestExactShaRun": "SUCCESS: run 41216258636 on 4eb66910a93bf4b33843b91d9384e1f34bdc902b; unit-test step passed with zero skips; dependency/install/security/configuration/syntax/compile steps passed. No numerical test count is asserted for this run.",
+      "latestExactShaRun": "PASS: automation/security 41217525988, dashboard E2E 41217526029, content quality 41217526033, metadata 41217525991, branch inventory 41217525986, local Meta draft validation 41217526054; isolated baseline 41217526036 pending at register update; production readiness 41217526070 remains blocked/fail-closed by 13 prerequisites.",
       "latestNodeTestCount": null,
       "latestPythonTestCount": null,
-      "latestDashboardE2e": "20/20 Chromium journeys passed on prior exact source/test SHA d9bdfbb4a79d4a1030edb208d8754fda88852c9b; not rerun on 4eb66910a93bf4b33843b91d9384e1f34bdc902b"
+      "latestDashboardE2e": "PASS on exact SHA c533cd8fbf7153ccbf84ab94a2a919069b9abbe0; test count not asserted in this summary",
+      "latestNodeTestSkips": 0,
+      "latestIsolatedBaseline": "PENDING at register update"
     },
     "evidence": {
       "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034162",
@@ -1568,7 +1580,15 @@
       "latestWorkerLeaseLifecycleCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/4eb66910a93bf4b33843b91d9384e1f34bdc902b",
       "latestWorkerLeaseLifecycleCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41216258636",
       "taskRunnerRouteCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/4eb66910a93bf4b33843b91d9384e1f34bdc902b",
-      "taskRunnerRouteCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41216258636"
+      "taskRunnerRouteCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41216258636",
+      "latestAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988",
+      "latestDashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526029",
+      "latestContentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526033",
+      "latestMetadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525991",
+      "latestBranchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525986",
+      "latestLocalFacebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526054",
+      "latestProductionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526070",
+      "latestBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526036"
     },
     "implementationCommits": [
       "e40ae4fd38e6bf015af26dcaa0a44335d34d8e1d",
@@ -1614,12 +1634,12 @@
       "8e95b9057d5e031e60474a171bb6aeea07b1cef1",
       "d9bdfbb4a79d4a1030edb208d8754fda88852c9b"
     ],
-    "candidateSourceTestSha": "4eb66910a93bf4b33843b91d9384e1f34bdc902b",
+    "candidateSourceTestSha": "c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
     "latestChangeTestStatus": "PASS",
-    "latestChangeTestReason": "Added test/dashboard-api-worker-lease-multiprocess.integration.test.mjs. Two independent dashboard server processes share an isolated state directory and concurrently attempt to claim one queued content job; exactly one worker obtains the lease and only one claim audit event is recorded. Both servers are SIGKILLed; a fresh server recovers the job to RECOVERY_REQUIRED, clears the worker lease and records one recovery audit event. Exact SHA d9bdfbb4a79d4a1030edb208d8754fda88852c9b passed 446 Node tests (0 failures, 0 skips), 16 Python tests, npm audit 0 vulnerabilities, FFmpeg/ffprobe, syntax and compilation checks, 20/20 Chromium E2E, content quality, metadata, non-destructive branch inventory, local draft validation and isolated exact main/candidate baseline. SCHED-001 remains NOT_TESTED overall. The same exact-SHA unit-test run also reran test/dashboard-task-runner.test.mjs, which proves authorized allowlisted task execution, arbitrary task rejection, cross-process duplicate prevention, completion/audit persistence, and interrupted-task startup recovery. The route matrix records these as partial route evidence; API-001 remains NOT_TESTED.",
-    "latestDocumentedPrHeadBeforeRegisterRefresh": "69ea74d67bab056dc42ba242f3b45fe07780f28b",
+    "latestChangeTestReason": "Added safe Facebook draft rejection acceptance: blocked APPROVE leaves persisted state byte-identical; REJECT succeeds, returns reviewer-bound REJECTED state, and persists exactly one reviewer-attributed audit event. Exact SHA c533cd8fbf7153ccbf84ab94a2a919069b9abbe0 passed the automation/security workflow (unit tests with zero skips), dashboard browser E2E, content quality, metadata, non-destructive branch inventory and local-only Facebook draft validation. Isolated baseline was still running at the time of this register update. Earlier exact SHA 9ff2de1f046e879f687f3767697e787214cc1e28 added durable content-job transition and invalid-transition no-mutation assertions and passed automation, dashboard E2E, content quality, metadata and isolated baseline.",
+    "latestDocumentedPrHeadBeforeRegisterRefresh": "b97a79c10853d2ae4e7e39afdf2b785dd7a931f4",
     "observedBranchHeadBeforeRegisterRefresh": "69ea74d67bab056dc42ba242f3b45fe07780f28b",
-    "latestLiveBranchHeadBeforeRegisterRefresh": "0c1f4d2d3e72f2c04e0038b7110b472c9a012d42",
+    "latestLiveBranchHeadBeforeRegisterRefresh": "b97a79c10853d2ae4e7e39afdf2b785dd7a931f4",
     "latestLiveAheadBy": 2314,
     "latestLiveBehindBy": 2,
     "latestLiveChangedFiles": 189,
@@ -1738,6 +1758,6 @@
       "69ea74d67bab056dc42ba242f3b45fe07780f28b"
     ],
     "apiRouteMatrix": "docs/API_ROUTE_ACCEPTANCE_MATRIX.json",
-    "latestSourceTestSha": "4eb66910a93bf4b33843b91d9384e1f34bdc902b"
+    "latestSourceTestSha": "c533cd8fbf7153ccbf84ab94a2a919069b9abbe0"
   }
 }
