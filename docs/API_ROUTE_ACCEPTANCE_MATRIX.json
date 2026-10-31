@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-31T12:29:00Z",
+  "generatedAt": "2026-10-31T15:46:00Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "d9bdfbb4a79d4a1030edb208d8754fda88852c9b",
+  "testedSourceTestSha": "4eb66910a93bf4b33843b91d9384e1f34bdc902b",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -25,9 +25,12 @@
     "authMatrix": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034162",
     "nodeAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034162",
     "dashboardBrowser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034132",
-    "workerLeaseCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d9bdfbb4a79d4a1030edb208d8754fda88852c9b"
+    "workerLeaseCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d9bdfbb4a79d4a1030edb208d8754fda88852c9b",
+    "workerLeaseLifecycleCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/4eb66910a93bf4b33843b91d9384e1f34bdc902b",
+    "workerLeaseLifecycleCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41216258636",
+    "workerLeaseMultiprocessCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d9bdfbb4a79d4a1030edb208d8754fda88852c9b"
   },
-  "disclaimer": "This matrix separates tested slices from complete route acceptance. The 35-route authentication negative matrix does not prove authorized success. Full API-001 remains NOT_TESTED; routes marked BLOCKED have genuine external prerequisites.",
+  "disclaimer": "This matrix separates tested slices from complete route acceptance. Exact-SHA 4eb66910 adds real-server heartbeat, controlled failure completion and expiry-reaper success/persistence/audit/restart evidence for the three worker routes. It does not test GENERATED completion with real media, overlapping heartbeat/reaper concurrency, or all queue semantics. The 35-route authentication negative matrix does not prove authorized success. Full API-001 remains NOT_TESTED; routes marked BLOCKED have genuine external prerequisites.",
   "routes": [
     {
       "method": "GET",
@@ -515,15 +518,15 @@
       "classification": "worker lease heartbeat",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "NOT_TESTED",
+      "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
-      "durablePersistence": "NOT_TESTED",
-      "auditEvidence": "NOT_TESTED",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
       "concurrency": "NOT_TESTED",
-      "restartRecovery": "NOT_TESTED",
+      "restartRecovery": "PASS",
       "externalOperation": "none",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Exact-SHA 4eb66910 test: valid heartbeat extends and persists lease; invalid token is rejected with byte-identical state; heartbeat audit event is persisted; state survives server restart. Concurrency overlap for heartbeat remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -531,15 +534,15 @@
       "classification": "worker completion",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "NOT_TESTED",
+      "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
-      "durablePersistence": "NOT_TESTED",
-      "auditEvidence": "NOT_TESTED",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
       "concurrency": "NOT_TESTED",
-      "restartRecovery": "NOT_TESTED",
+      "restartRecovery": "PASS",
       "externalOperation": "real MP4/metadata prerequisites for GENERATED completion",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Exact-SHA 4eb66910 test: authorized completion to controlled FAILED state releases lease, persists lease history and audit, rejects duplicate stale-token completion without mutation, and survives restart. Completion to GENERATED with real MP4/metadata remains untested and must not be inferred."
     },
     {
       "method": "POST",
@@ -547,15 +550,15 @@
       "classification": "expired lease recovery",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "NOT_TESTED",
+      "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
-      "durablePersistence": "NOT_TESTED",
-      "auditEvidence": "NOT_TESTED",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
       "concurrency": "NOT_TESTED",
-      "restartRecovery": "NOT_TESTED",
+      "restartRecovery": "PASS",
       "externalOperation": "none",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Exact-SHA 4eb66910 test: active lease reaping returns 409 without mutation; expired lease reaps to retryable FAILED with WORKER_LEASE_EXPIRED, durable audit and restart persistence. Concurrent reaper races remain NOT_TESTED."
     },
     {
       "method": "POST",
