@@ -116,6 +116,24 @@ test("authenticated dashboard read endpoints return real state without mutating 
     item.check(payload);
   }
 
+  for (const route of ["/api/jobs/narration/review", "/api/jobs/narration/audio"]) {
+    const missingId = await fetch(base + route, {
+      method: "GET",
+      headers: { "x-operator-token": token }
+    });
+    assert.equal(missingId.status, 400, "GET " + route + " must require a jobId");
+    assert.deepEqual(await missingId.json(), { error: "jobId is required" });
+
+    const unknownJob = await fetch(base + route + "?jobId=missing-acceptance-job", {
+      method: "GET",
+      headers: { "x-operator-token": token }
+    });
+    assert.equal(unknownJob.status, 404, "GET " + route + " must not expose data for an unknown job");
+    assert.deepEqual(await unknownJob.json(), { error: "Content job not found" });
+    assert.deepEqual(fs.readFileSync(statePath), before,
+      "GET " + route + " must remain read-only for missing and unknown job identifiers");
+  }
+
   assert.deepEqual(fs.readFileSync(statePath), before,
     "read-only dashboard endpoints must not mutate durable state or append audit events");
 });
