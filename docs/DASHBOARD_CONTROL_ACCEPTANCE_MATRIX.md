@@ -8,7 +8,7 @@ Tested code/test candidate: `c533cd8fbf7153ccbf84ab94a2a919069b9abbe0`.
 - Non-destructive branch inventory [run 41217525986](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525986): **SUCCESS**; this is inventory evidence, not human semantic reconciliation.
 - Local Nature Frontiers draft-package validation [run 41217526054](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526054): **SUCCESS** for local validation only; no provider-side Meta draft creation/read-back is claimed.
 - Production readiness [run 41217526070](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526070): **BLOCKED / fail-closed** as intended; the 13 real prerequisites remain.
-- Exact candidate isolated main/candidate baseline [run 41217526036](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526036) was still running when this section was recorded; do not infer its result.
+- Exact candidate isolated main/candidate baseline [run 41217526036](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526036): **SUCCESS** on exact SHA `c533cd8fbf7153ccbf84ab94a2a919069b9abbe0`.
 
 ### Newly evidenced route behavior
 
