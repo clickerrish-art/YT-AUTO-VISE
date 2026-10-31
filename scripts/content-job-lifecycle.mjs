@@ -2,23 +2,23 @@ import crypto from "node:crypto";
 import { assertShortParentRelationship, shortParentRelationshipSha256 } from "./short-parent-relationship.mjs";
 
 export const JOB_STATES = Object.freeze([
-  "QUEUED", "GENERATING", "GENERATED", "VALIDATING", "BLOCKED",
+  "QUEUED", "GENERATING", "GENERATED", "VALIDATING", "BLOCKED", "CANCELLED",
   "AWAITING_HUMAN_REVIEW", "REJECTED", "APPROVED_FOR_PRIVATE_UPLOAD", "UPLOADING_PRIVATE",
   "PRIVATE_UPLOAD_VERIFIED", "FAILED", "RECOVERY_REQUIRED"
 ]);
 
 const transitions = {
-  QUEUED: new Set(["GENERATING", "BLOCKED", "FAILED"]),
-  GENERATING: new Set(["GENERATED", "BLOCKED", "FAILED", "RECOVERY_REQUIRED"]),
-  GENERATED: new Set(["VALIDATING", "BLOCKED", "FAILED"]),
-  VALIDATING: new Set(["AWAITING_HUMAN_REVIEW", "BLOCKED", "FAILED", "RECOVERY_REQUIRED"]),
-  BLOCKED: new Set(["FAILED"]),
-  AWAITING_HUMAN_REVIEW: new Set(["BLOCKED", "FAILED", "REJECTED"]),
+  QUEUED: new Set(["GENERATING", "BLOCKED", "FAILED", "CANCELLED"]),
+  GENERATING: new Set(["GENERATED", "BLOCKED", "FAILED", "RECOVERY_REQUIRED", "CANCELLED"]),
+  GENERATED: new Set(["VALIDATING", "BLOCKED", "FAILED", "CANCELLED"]),
+  VALIDATING: new Set(["AWAITING_HUMAN_REVIEW", "BLOCKED", "FAILED", "RECOVERY_REQUIRED", "CANCELLED"]),
+  BLOCKED: new Set(["FAILED", "CANCELLED"]),
+  AWAITING_HUMAN_REVIEW: new Set(["BLOCKED", "FAILED", "REJECTED", "CANCELLED"]),
   REJECTED: new Set(),
   APPROVED_FOR_PRIVATE_UPLOAD: new Set(),
   UPLOADING_PRIVATE: new Set(),
   PRIVATE_UPLOAD_VERIFIED: new Set(),
-  FAILED: new Set(["QUEUED"]),
+  FAILED: new Set(["QUEUED", "CANCELLED"]),
   RECOVERY_REQUIRED: new Set(["BLOCKED", "FAILED"])
 };
 
@@ -86,6 +86,12 @@ export function transitionContentJob(job, nextState, { actor = "local-operator",
   if (!job || !JOB_STATES.includes(job.state)) throw new Error("Existing job has an invalid state");
   if (!JOB_STATES.includes(nextState)) throw new Error("Unknown job state");
   if (protectedStates.has(nextState)) throw new Error("This state requires a separate verified private-upload workflow and cannot be set through the dashboard transition API");
+  if (nextState === "CANCELLED") {
+    if (job.workerLease) throw new Error("A job with a worker lease cannot be cancelled; wait for the worker to finish or reap its expired lease first");
+    if (["RECOVERY_REQUIRED", "APPROVED_FOR_PRIVATE_UPLOAD", "UPLOADING_PRIVATE", "PRIVATE_UPLOAD_VERIFIED"].includes(job.state)) {
+      throw new Error("A job at or beyond the private-upload boundary cannot be cancelled; reconcile or complete it first");
+    }
+  }
   if (!transitions[job.state]?.has(nextState)) throw new Error("Invalid job transition: " + job.state + " -> " + nextState);
   if (typeof actor !== "string" || !actor.trim() || actor.length > 120) throw new Error("actor is required and must be at most 120 characters");
   if (typeof reason !== "string" || reason.length > 1000) throw new Error("reason must be at most 1000 characters");
@@ -104,7 +110,13 @@ export function transitionContentJob(job, nextState, { actor = "local-operator",
     updated.startedAt ??= now;
     updated.attemptCount = (updated.attemptCount ?? 0) + 1;
   }
-  if (["PRIVATE_UPLOAD_VERIFIED", "FAILED", "BLOCKED", "REJECTED"].includes(nextState)) updated.completedAt = now;
+  if (nextState === "CANCELLED") {
+    updated.cancelledAt = now;
+    updated.cancelledBy = actor.trim();
+    updated.cancelReason = reason.trim() || "Cancelled by operator";
+    updated.nextRetryAt = null;
+  }
+  if (["PRIVATE_UPLOAD_VERIFIED", "FAILED", "BLOCKED", "REJECTED", "CANCELLED"].includes(nextState)) updated.completedAt = now;
   return updated;
 }
 
