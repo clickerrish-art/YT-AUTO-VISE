@@ -17,7 +17,7 @@ This snapshot supersedes older checkpoint values below; historical checklists ar
 - [x] Content quality [41217848765](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848765): PASS.
 - [x] Metadata [41217848778](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848778): PASS.
 - [x] Isolated exact main/candidate baseline [41217848781](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848781): PASS.
-- [x] Non-destructive branch inventory [41217848853](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41218088853): PASS (inventory only).
+- [x] Non-destructive branch inventory [41218088853](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41218088853): PASS (inventory only).
 - [x] Nature Frontiers local draft validation [41218088797](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41218088797): PASS for local validation only; no provider-side draft creation/read-back.
 - [ ] Production readiness [41218088805](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41218088805): HOLD / 13 blockers; expected fail-closed result, do not override.
 
