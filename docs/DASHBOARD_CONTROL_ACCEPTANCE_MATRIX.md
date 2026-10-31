@@ -1,3 +1,24 @@
+## Latest dashboard policy-alignment fix — 31 October 2026
+
+Exact source/test candidate: `d489318421af534988e2d44df4f6666d3dbc4955`.
+
+- The Nature Frontiers Facebook draft form no longer exposes a Selar product-promotion option, commercial/affiliate toggles or commercial disclosure fields. The visible form now states that Nature Frontiers is education-only; the request payload fixes `campaignId: null`, `commercial: false` and `disclosureRequired: false`.
+- Regression coverage in `test/dashboard-ui-contract.test.mjs` asserts the prohibited controls remain absent and the safe payload is fixed.
+- The static inventory was updated after removing four prohibited controls: **101 controls** (21 buttons, 41 inputs, 25 selects, 14 textareas), **15 forms**, **38 total route handlers** (35 `/api/` routes plus `/`, `/healthz` and `/readyz`), and **83 non-submit controls** with JavaScript bindings.
+- Automation/security [41155835021](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835021): **440 Node tests passed, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities**.
+- Dashboard browser E2E [41155835124](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835124): **20/20 Chromium journeys passed**.
+- Content quality [41155835080](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835080) and metadata [41155834980](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155834980): **SUCCESS**.
+- Isolated main/candidate baseline [41155835151](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835151): **SUCCESS**; exact main and candidate checkouts both returned Node and Python exit code 0.
+- Non-destructive branch inventory [41155834996](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155834996): **SUCCESS**. Human semantic review of the full branch divergence remains incomplete.
+- Nature Frontiers local draft validation [41155835138](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835138): **SUCCESS for local validation only**; provider-side draft creation was skipped.
+- Production readiness [41155835201](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835201): **HOLD / BLOCKED by 13 mandatory prerequisites**, as designed. No upload or publication was attempted.
+
+An intermediate run on commit `5a09fb0665f0276dedc09e8f79126f6f73397e64` exposed a malformed test expression and stale static inventory expectations. The test expression was corrected in `60240f3bd8139f215a4c909e6d0a45659c8112ac`, inventory expectations were updated in the final candidate, and the exact candidate above passed all listed checks.
+
+**DASH-001 remains NOT_TESTED.** The inventory and 20 browser journeys do not establish complete behavior-specific acceptance of all controls and routes. The full per-control/per-route success, failure, authorization, persistence, concurrency, audit and restart matrix remains incomplete.
+
+---
+
 ## Live API negative-request acceptance — 31 October 2026
 
 Exact tested application/test SHA: `a16b94e60960aba90fa20adc8fcdaf3057e15d68`.
