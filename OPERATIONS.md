@@ -1,3 +1,31 @@
+# Content-job cancellation
+
+Content jobs can be cancelled through the existing authenticated state-transition endpoint. Cancellation is terminal and records the operator, timestamp, reason, transition history and a `CONTENT_JOB_CANCELLED` audit event.
+
+A queued or otherwise pre-upload job with no worker lease can be cancelled:
+
+```sh
+curl --fail-with-body -X POST "$DASHBOARD_URL/api/jobs/transition" \
+  -H "content-type: application/json" \
+  -H "x-operator-token: $DASHBOARD_OPERATOR_TOKEN" \
+  -d '{
+    "jobId": "REPLACE_WITH_JOB_ID",
+    "nextState": "CANCELLED",
+    "reason": "Operator withdrew the content request"
+  }'
+```
+
+Safety rules:
+
+- A job with any worker lease cannot be cancelled. Let the worker finish or reap an expired lease first; this prevents a live worker from completing against a cancelled job.
+- `RECOVERY_REQUIRED`, `APPROVED_FOR_PRIVATE_UPLOAD`, `UPLOADING_PRIVATE` and `PRIVATE_UPLOAD_VERIFIED` cannot be cancelled through this transition. Reconcile uncertain external outcomes or use the separate verified private-upload workflow.
+- Cancellation clears the next retry time and records a terminal `CANCELLED` state. It does not delete job history, artifacts or audit records.
+- Cancellation never authorizes or performs a YouTube, Facebook or Instagram publication.
+
+Acceptance evidence: `test/content-job-lifecycle.test.mjs` and `test/dashboard-api-job-cancellation.integration.test.mjs`; exact-SHA CI run [41233214540](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41233214540).
+
+---
+
 ## Live implementation checkpoint — 29 October 2026, 07:01 UTC
 
 - **Exact tested source/test SHA:** `bc02a73c2bfc39faa11990468778bb98372a551c`. This is the application/test candidate; subsequent documentation commits do not change it.
