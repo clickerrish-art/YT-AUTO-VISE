@@ -94,3 +94,65 @@ export function validateProductionPlan(plan, { jobId, contentType, scriptSha256 
   }
   return errors;
 }
+
+
+/**
+ * Recompute the immutable narration-review receipt before accepting a later
+ * production-plan review. A decision string alone is not approval evidence.
+ */
+export function validateNarrationApprovalReceipt(jobId, approval) {
+  if (!approval || typeof approval !== "object" || Array.isArray(approval)) {
+    return ["narration approval receipt is missing"];
+  }
+  const payload = {
+    jobId,
+    decision: approval.decision,
+    reviewer: approval.reviewer,
+    reviewedAt: approval.reviewedAt,
+    reason: approval.reason,
+    scriptSha256: approval.scriptSha256,
+    audioSha256: approval.audioSha256,
+    transcriptSha256: approval.transcriptSha256,
+    captionsSha256: approval.captionsSha256,
+    reportSha256: approval.reportSha256,
+    confirmAudioListened: approval.confirmAudioListened,
+    confirmTranscriptReviewed: approval.confirmTranscriptReviewed,
+    confirmCaptionsReviewed: approval.confirmCaptionsReviewed
+  };
+  const expected = crypto.createHash("sha256").update(JSON.stringify(payload)).digest("hex");
+  if (approval.decision !== "APPROVE" || !SHA256.test(approval.approvalSha256 ?? "") ||
+      approval.approvalSha256 !== expected) {
+    return ["narration approval receipt is invalid or has changed since review"];
+  }
+  return [];
+}
+
+/**
+ * Recheck a Short's independently approved parent relationship at review time.
+ * Submission-time validation is not sufficient because persisted state can
+ * change between submission and review.
+ */
+export function validateShortProductionPlanParent(job, jobs) {
+  if (job?.contentType !== "short") return [];
+  const binding = job.authoring?.productionPlan?.plan?.parentRelationship;
+  const parent = Array.isArray(jobs)
+    ? jobs.find(entry => entry?.kind === "CONTENT_PRODUCTION" && entry.id === binding?.parentContentId)
+    : null;
+  const verified = job.shortParentRelationship;
+  if (!parent || parent.contentType !== "long_form" || parent.id === job.id) {
+    return ["Short parent must resolve to an existing distinct long-form content job"];
+  }
+  if (!verified || verified.relationshipApproved !== true ||
+      verified.parentRemoteVerified !== true ||
+      verified.parentChannelTitle !== "SonicVhibez" ||
+      verified.parentPrivacyStatus !== "public" ||
+      verified.parentContentId !== parent.id ||
+      verified.parentRemoteVideoId !== binding.remoteVideoId ||
+      verified.parentCanonicalUrl !== binding.destinationUrl ||
+      verified.parentMediaSha256 !== binding.parentMediaSha256 ||
+      verified.parentChannelId !== binding.channelId ||
+      binding.remoteParentVerified !== true) {
+    return ["Short plan no longer matches its independently approved public SonicVhibez parent relationship"];
+  }
+  return [];
+}
