@@ -1,3 +1,5 @@
+Machine-readable route inventory and coverage: `docs/API_ROUTE_ACCEPTANCE_MATRIX.json` (35 protected routes; authentication-negative evidence is distinct from complete authorized route acceptance).
+
 ## Latest exact-SHA dashboard/API and worker acceptance — 31 October 2026
 
 Tested source/test candidate: `d9bdfbb4a79d4a1030edb208d8754fda88852c9b`.
