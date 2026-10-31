@@ -9,6 +9,8 @@ on:
       - "test/**"
       - "content/queue.json"
       - "config/products.json"
+      - "config/weekly-content-plan.json"
+      - "config/campaigns.json"
       - "package.json"
       - "package-lock.json"
       - ".github/workflows/**"
@@ -24,17 +26,64 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
         with:
-          node-version: 20
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
       - name: Install dependencies
         run: |
           if [ -f package-lock.json ]; then npm ci --ignore-scripts; else npm install --ignore-scripts; fi
+      - name: Verify normal lifecycle-script install in isolated temporary checkout
+        run: |
+          set -eu
+          install_dir="$RUNNER_TEMP/sonicvhibez-normal-install"
+          install_home="$RUNNER_TEMP/sonicvhibez-normal-install-home"
+          mkdir -p "$install_dir" "$install_home"
+          git archive "$(git rev-parse HEAD)" | tar -x -C "$install_dir"
+          cd "$install_dir"
+          env -i PATH="$PATH" HOME="$install_home" CI=1 npm_config_cache="$RUNNER_TEMP/sonicvhibez-normal-npm-cache" npm ci
+          node -e "import('googleapis').then(() => console.log('PASS: googleapis imports after normal npm ci'))"
+      - name: Audit locked npm dependencies
+        run: |
+          set +e
+          npm audit --json > "$RUNNER_TEMP/npm-audit.json"
+          audit_status=$?
+          set -e
+          node --input-type=module - "$RUNNER_TEMP/npm-audit.json" "$audit_status" <<'NODE'
+          import fs from "node:fs";
+          const report = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
+          const auditStatus = Number(process.argv[3]);
+          for (const [name, item] of Object.entries(report.vulnerabilities ?? {})) {
+            const via = (item.via ?? []).map(entry => typeof entry === "string" ? entry : entry.title + " (" + entry.range + ")");
+            console.log("AUDIT:", name, "severity=" + item.severity, "range=" + item.range, "fixAvailable=" + JSON.stringify(item.fixAvailable), "via=" + via.join("; "));
+          }
+          const counts = report.metadata?.vulnerabilities ?? {};
+          console.log("npm audit summary:", JSON.stringify(counts));
+          if ((counts.moderate ?? 0) > 0) console.warn("WARNING: moderate npm advisories remain; review and remediate before production acceptance.");
+          if ((counts.high ?? 0) + (counts.critical ?? 0) > 0) process.exit(1);
+          if (auditStatus !== 0 && (counts.high ?? 0) + (counts.critical ?? 0) === 0) console.warn("npm audit exited nonzero without high/critical findings; see advisory output above.");
+          NODE
       - name: Install Python renderer test dependency
         run: python -m pip install mutagen pillow
-      - name: Run unit tests
-        run: npm test
+      - name: Install FFmpeg for real renderer integration tests
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          ffmpeg -version
+          ffprobe -version
+      - name: Run unit tests and require zero skips
+        shell: bash
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee "$RUNNER_TEMP/node-test.log"
+          if ! grep -Fq 'ℹ skipped 0' "$RUNNER_TEMP/node-test.log"; then
+            echo "FAIL: Node test summary did not explicitly report zero skips."
+            exit 1
+          fi
+      - name: Validate isolated campaign destinations and disclosures
+        run: npm run validate:campaigns
       - name: Test review metadata safety gates
         run: python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Validate queue invariants and approved destination
@@ -43,14 +92,25 @@ jobs:
           import json
           from pathlib import Path
           q = json.loads(Path("content/queue.json").read_text(encoding="utf-8"))
+          plan = json.loads(Path("config/weekly-content-plan.json").read_text(encoding="utf-8"))
           products = json.loads(Path("config/products.json").read_text(encoding="utf-8"))["products"]
           approved = {p["url"] for p in products if p.get("status") == "approved"}
           items = q.get("items", [])
           assert q.get("publishingEnabled") is False, "Public publishing must remain disabled"
           cadence = q.get("cadence", {})
           assert cadence.get("timezone") == "Africa/Johannesburg"
-          assert cadence.get("days") == ["Tuesday", "Thursday", "Saturday"] and cadence.get("postsPerWeek") == 3
-          assert cadence.get("breakdown") == {"longForm": 2, "short": 1}
+          assert cadence.get("formats") == ["long_form", "long_form", "short"]
+          spacing = plan.get("minimumPublicationSpacingHours")
+          cycle_hours = spacing * len(plan.get("publicationCycle", {}).get("formats", [])) if isinstance(spacing, (int, float)) else None
+          assert isinstance(spacing, (int, float)) and 0 < spacing <= 8760, "Configured publication spacing must be finite and positive"
+          assert plan.get("publicationCycle", {}).get("minimumHoursBetweenConsecutivePublications") == spacing
+          assert plan.get("publicationCycle", {}).get("minimumCycleHours") == cycle_hours
+          assert cadence.get("minimumHoursBetweenConsecutivePublications") == spacing
+          assert cadence.get("minimumCycleHours") == cycle_hours
+          fallback = cadence.get("draftPreparationFallback", {})
+          assert fallback.get("days") == ["Tuesday", "Saturday"]
+          assert fallback.get("status") == "DRAFT_ONLY" and fallback.get("notPublicationCadence") is True
+          assert "postsPerWeek" not in cadence
           assert len(items) >= 10, "Queue needs at least ten topics"
           ids = [i.get("id") for i in items]
           assert all(ids) and len(ids) == len(set(ids)), "Queue IDs must be present and unique"
@@ -70,4 +130,4 @@ jobs:
         run: |
           for f in scripts/*.mjs; do node --check "$f"; done
       - name: Compile Python automation scripts
-        run: python -m py_compile scripts/generate-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py scripts/render-reviewed-wildlife-footage.py scripts/prepare-review-metadata.py tests/test_prepare_review_metadata.py tests/test_checked_in_release_metadata.py tests/test_reviewed_footage_renderer.py
+        run: python -m py_compile scripts/generate-narration.py scripts/generate-authoring-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py scripts/render-reviewed-wildlife-footage.py scripts/prepare-review-metadata.py tests/test_prepare_review_metadata.py tests/test_checked_in_release_metadata.py tests/test_reviewed_footage_renderer.py

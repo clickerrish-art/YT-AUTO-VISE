@@ -16,7 +16,7 @@ on:
       - ".github/workflows/queue-readiness.yml"
   workflow_dispatch:
   schedule:
-    # Tuesday/Thursday/Saturday SAST cadence (GitHub Actions cron is UTC).
+    # Operational queue-readiness/replenishment check only; it does not publish. Runs Tue/Thu/Sat UTC cron while content draft slots remain Tue/Sat with a 72-hour minimum.
     - cron: "0 15 * * 2,4,6"
 permissions:
   contents: write
@@ -24,12 +24,13 @@ jobs:
   validate-and-replenish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: main
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          node-version: '24'
+          package-manager-cache: false
       - name: Install production dependencies for regression tests
         run: npm install --ignore-scripts
       - name: Check JavaScript syntax

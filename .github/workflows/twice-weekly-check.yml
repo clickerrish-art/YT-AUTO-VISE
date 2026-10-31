@@ -1,7 +1,7 @@
 name: SonicVhibez three-day readiness check
 on:
   schedule:
-    # Tuesday/Thursday/Saturday SAST cadence (GitHub Actions cron is UTC).
+    # Readiness validation only; it does not publish. Check cadence is independent of the Tue/Sat content draft slots and their 72-hour minimum.
     - cron: "0 15 * * 2,4,6"
   workflow_dispatch:
 permissions:
@@ -10,10 +10,11 @@ jobs:
   readiness:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: '24'
+          package-manager-cache: false
       - run: npm test
       - name: Confirm example content is blocked for missing review approvals
         shell: bash

@@ -1,0 +1,57 @@
+{
+  "version": 2,
+  "destination": "nature_frontiers_facebook",
+  "destinationPageId": "",
+  "destinationPageName": "Nature Frontiers",
+  "publishingEnabled": false,
+  "dryRun": true,
+  "apiVersion": "v26.0",
+  "timezone": "Africa/Johannesburg",
+  "dailyTarget": 1,
+  "defaultLocalTime": "08:00",
+  "comparisonLocalTime": "18:00",
+  "experiment": {
+    "enabled": true,
+    "minimumPostsPerArm": 14,
+    "metrics": [
+      "reach",
+      "meaningfulEngagement",
+      "shares",
+      "outboundLinkClicks",
+      "videoRetention"
+    ],
+    "note": "Use only metrics actually returned by the authorized Page Insights integration; do not infer missing values. No Page-specific timing conclusion is available until enough comparable observations are recorded."
+  },
+  "complianceRuleSet": "nf-facebook-autonomous-policy-2026-10-v2",
+  "pillars": [
+    "wildlife_behaviour",
+    "conservation_education",
+    "habitats_biodiversity",
+    "ethical_photography",
+    "educational_explainer",
+    "authorized_behind_scenes"
+  ],
+  "notes": [
+    "Autonomous mode means eligible posts do not require routine per-post approval; it does not override publishingEnabled=false, dryRun=true, emergencyStop=true, identity/permission checks, policy blockers, or an uncertain remote outcome.",
+    "Publishing is deliberately disabled and dry-run enabled until the exact Nature Frontiers Page connection is securely configured and independently verified.",
+    "The Page ID must be supplied through secure configuration and verified against Meta. No ID, token, permission, or live acceptance is assumed.",
+    "All policy uncertainty, missing source checks, missing rights evidence, unknown media provenance, unapproved destinations, duplicates, and uncertain publish results block the affected slot automatically.",
+    "History and attempt ledger paths must point to durable operator-controlled storage in production; GitHub Actions artifacts are diagnostic exports only.",
+    "The Nature Frontiers Facebook destination is separate from the SonicVhibez YouTube destination.",
+    "Nature Frontiers Facebook and Instagram are education-only: product promotions, affiliate links, paid placements, Selar/Safari storefront links, and promotional campaign IDs are rejected by policy."
+  ],
+  "autonomousMode": true,
+  "autonomousSchedulingEnabled": true,
+  "emergencyStop": true,
+  "dailyCap": 1,
+  "minimumIntervalMinutes": 1200,
+  "historyFile": "facebook-history.json",
+  "attemptLedgerFile": "facebook-attempt-ledger.json",
+  "lockFile": "facebook-publishing.lock",
+  "allowedCampaignIds": [],
+  "allowedDomains": [],
+  "approvedDestinations": [],
+  "sourceCheckTimeoutMs": 8000,
+  "maxSourceRedirects": 0,
+  "maxManagedPageLookupPages": 20
+}

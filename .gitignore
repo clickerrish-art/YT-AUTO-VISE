@@ -1,0 +1,28 @@
+# Local credentials and operator configuration
+.env
+.env.*
+!.env.example
+
+# Durable local application state, upload ledger/receipts, approvals, backups
+/state/
+/run-logs/
+/backups/
+
+# Private rights documents and local production manifests/metadata
+/rights/
+/content/render-manifest.json
+/content/long-form-render-manifest.json
+/content/asset-register.json
+/content/next-short.json
+/content/long-form-next.json
+
+# Local source and generated production media; do not commit large/private assets
+/media/
+/media/next-short.mp4
+/media/long-form-next.mp4
+/media/next-short-thumbnail.*
+/media/long-form-next-thumbnail.*
+
+# Temporary atomic-write files and local runtime artifacts
+*.tmp
+*.lock/

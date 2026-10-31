@@ -7,18 +7,31 @@
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import crypto from "node:crypto";
+import { buildMultiSceneVideoGraph } from "./multi-scene-render.mjs";
+import { prepareSafeRenderOutput, resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
+import { createDeterministicEditPlan, getAudioProfile } from "./content-quality-gates.mjs";
 
 const [manifestArg = "content/long-form-render-manifest.json", outputArg = "media/long-form-next.mp4"] = process.argv.slice(2);
-const manifestPath = path.resolve(manifestArg);
-if (!fs.existsSync(manifestPath)) {
-  console.error("BLOCKED: long-form render manifest not found. Copy content/long-form-render-manifest.example.json and complete it after rights review.");
+let manifestPath;
+try { manifestPath = resolveRegularFileNoSymlinks(manifestArg, process.cwd(), "Long-form render manifest"); }
+catch {
+  console.error("BLOCKED: long-form render manifest not found or unsafe. Copy content/long-form-render-manifest.example.json and complete it after rights review.");
   process.exit(2);
 }
 let m;
 try { m = JSON.parse(fs.readFileSync(manifestPath, "utf8")); }
 catch { console.error("BLOCKED: long-form render manifest is not valid JSON."); process.exit(2); }
 
-const required = ["footagePath", "narrationPath", "captionsPath", "footageLicenseEvidence", "narrationLicenseEvidence"];
+let output;
+try { output = prepareSafeRenderOutput(outputArg); }
+catch {
+  console.error("BLOCKED: long-form render output path is unsafe or contains a symbolic link.");
+  process.exit(1);
+}
+
+const required = ["footagePath", "narrationPath", "captionsPath", "footageLicenseEvidence", "narrationLicenseEvidence", "qualityEvidencePath"];
 const errors = [];
 const missing = required.filter(k => typeof m[k] !== "string" || !m[k].trim());
 if (missing.length) errors.push("missing required fields: " + missing.join(", "));
@@ -32,9 +45,14 @@ for (const key of ["footageLicenseEvidence", "narrationLicenseEvidence"]) {
     errors.push(key + " must contain a real license/permission record reference, not a placeholder");
   }
 }
-for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
-  if (typeof m[key] === "string" && m[key].trim() && !fs.existsSync(path.resolve(path.dirname(manifestPath), m[key]))) {
-    errors.push(key + " does not exist relative to the manifest directory: " + m[key]);
+const resolvedInputs = {};
+for (const key of ["footagePath", "narrationPath", "captionsPath", "qualityEvidencePath"]) {
+  if (typeof m[key] === "string" && m[key].trim()) {
+    try {
+      resolvedInputs[key] = resolveRegularFileNoSymlinks(m[key], path.dirname(manifestPath), key);
+    } catch {
+      errors.push(key + " is missing, unsafe, or contains a symbolic link");
+    }
   }
 }
 if (errors.length) {
@@ -42,10 +60,16 @@ if (errors.length) {
   errors.forEach(e => console.error("- " + e));
   process.exit(1);
 }
-const footage = path.resolve(path.dirname(manifestPath), m.footagePath);
-const narration = path.resolve(path.dirname(manifestPath), m.narrationPath);
-const captions = path.resolve(path.dirname(manifestPath), m.captionsPath);
-const output = path.resolve(outputArg);
+const qualityValidator = spawnSync(process.execPath, [path.join(path.dirname(fileURLToPath(import.meta.url)), "validate-content-quality.mjs"), resolvedInputs.qualityEvidencePath, "long_form", resolvedInputs.footagePath, resolvedInputs.narrationPath], { encoding: "utf8", timeout: 30_000 });
+if (qualityValidator.stdout) process.stdout.write(qualityValidator.stdout);
+if (qualityValidator.stderr) process.stderr.write(qualityValidator.stderr);
+if (qualityValidator.error || qualityValidator.status !== 0) {
+  console.error("BLOCKED: long-form script, provenance, relationship, edit-plan, audio or editorial quality evidence failed.");
+  process.exit(qualityValidator.error?.code === "ETIMEDOUT" ? 124 : 1);
+}
+const footage = resolvedInputs.footagePath;
+const narration = resolvedInputs.narrationPath;
+const captions = resolvedInputs.captionsPath;
 const probe = spawnSync("ffprobe", ["-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1", narration], {encoding:"utf8"});
 if (probe.error || probe.status !== 0 || !Number.isFinite(Number(probe.stdout.trim()))) {
   console.error("BLOCKED: ffprobe could not read narration. Install FFmpeg and provide a valid audio file.");
@@ -61,7 +85,14 @@ if (captionCheck.status !== 0) {
   process.stderr.write(captionCheck.stderr || captionCheck.stdout || "BLOCKED: captions failed validation.\n");
   process.exit(1);
 }
-fs.mkdirSync(path.dirname(output), {recursive:true});
+const captionSyncCheck = spawnSync(process.execPath, ["scripts/validate-caption-sync.mjs", captions, String(duration)], { encoding: "utf8" });
+if (captionSyncCheck.stdout) process.stdout.write(captionSyncCheck.stdout);
+if (captionSyncCheck.stderr) process.stderr.write(captionSyncCheck.stderr);
+if (captionSyncCheck.error || captionSyncCheck.status !== 0) {
+  console.error("BLOCKED: captions do not fit the narration duration; refusing to render.");
+  process.exit(1);
+}
+
 const escapedCaptions = captions
   .replace(/\\/g, "\\\\")
   .replace(/:/g, "\\:")
@@ -69,20 +100,96 @@ const escapedCaptions = captions
   .replace(/,/g, "\\,")
   .replace(/\[/g, "\\[")
   .replace(/\]/g, "\\]");
-const args = [
-  "-y", "-stream_loop", "-1", "-i", footage, "-i", narration,
-  "-shortest",
-  "-vf", "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,setsar=1,subtitles='" + escapedCaptions + "'",
-  "-map", "0:v:0", "-map", "1:a:0",
-  "-c:v", "libx264", "-preset", "medium", "-crf", "21",
-  "-c:a", "aac", "-b:a", "192k", "-pix_fmt", "yuv420p",
-  "-movflags", "+faststart", output
-];
+const qualityEvidence = JSON.parse(fs.readFileSync(resolvedInputs.qualityEvidencePath, "utf8"));
+const editPlan = createDeterministicEditPlan({ seed: qualityEvidence.renderSeed, scenes: qualityEvidence.scenes, profile: qualityEvidence.editProfile ?? {} });
+const selectedScene = editPlan.scenes[0];
+const framingFilter = selectedScene.framing === "fit"
+  ? "scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2:black"
+  : "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080";
+const videoFilter = framingFilter
+  + ",eq=brightness=" + selectedScene.grade.brightness
+  + ":contrast=" + selectedScene.grade.contrast
+  + ":saturation=" + selectedScene.grade.saturation
+  + ",setsar=1,subtitles='" + escapedCaptions + "'";
+const sha256File = file => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+let multiSceneGraph = null;
+if (qualityEvidence.scenes.length > 1) {
+  const provenanceById = new Map((qualityEvidence.assetProvenance ?? []).map(asset => [asset.assetId, asset]));
+  const sceneTimeline = qualityEvidence.scenes.map((scene, index) => {
+    const asset = provenanceById.get(scene.assetId);
+    if (!asset || asset.originalSha256 !== scene.sourceSha256) throw new Error("scene " + index + " is not bound to its exact provenance hash");
+    const scenePath = resolveRegularFileNoSymlinks(asset.path, path.dirname(resolvedInputs.qualityEvidencePath), "Multi-scene source");
+    if (sha256File(scenePath) !== scene.sourceSha256) throw new Error("scene " + index + " source bytes changed after quality validation");
+    return { assetId: scene.assetId, path: scenePath, startSeconds: scene.startSeconds, endSeconds: scene.endSeconds };
+  });
+  if (path.resolve(sceneTimeline[0].path) !== path.resolve(footage)) throw new Error("manifest footagePath must match the first explicit timeline scene");
+  try {
+    multiSceneGraph = buildMultiSceneVideoGraph({
+      editPlan, sceneTimeline, captionsFilter: escapedCaptions, width: 1920, height: 1080,
+      narrationDurationSeconds: duration,
+      transitionDurationSeconds: qualityEvidence.editProfile?.transitionDurationSeconds ?? 0.35,
+      fps: qualityEvidence.editProfile?.fps ?? 30
+    });
+  } catch (error) {
+    console.error("BLOCKED: multi-scene timeline failed validation: " + error.message);
+    process.exit(1);
+  }
+}
+const audioProfile = getAudioProfile(qualityEvidence.audioProfile);
+const compressionThreshold = Math.pow(10, audioProfile.compressionThresholdDb / 20).toFixed(5);
+const narrationDurationSeconds = duration;
+const fadeOutStart = Math.max(0, narrationDurationSeconds - 0.2);
+const audioFilter = "highpass=f=" + audioProfile.highPassHz
+  + ",lowpass=f=" + audioProfile.lowPassHz
+  + ",acompressor=threshold=" + compressionThreshold
+  + ":ratio=" + audioProfile.compressionRatio + ":attack=20:release=250"
+  + ",loudnorm=I=" + audioProfile.narrationTargetLufs
+  + ":TP=" + audioProfile.truePeakDbtpMax + ":LRA=" + audioProfile.loudnessRangeTarget
+  + ",afade=t=in:st=0:d=0.12,afade=t=out:st=" + fadeOutStart.toFixed(3) + ":d=0.2";
+
+const args = multiSceneGraph
+  ? [
+      "-y", ...multiSceneGraph.scenePaths.flatMap(scenePath => ["-i", scenePath]), "-i", narration,
+      "-filter_complex", multiSceneGraph.filterComplex, "-map", multiSceneGraph.outputLabel,
+      "-map", String(multiSceneGraph.narrationInputIndex) + ":a:0", "-shortest",
+      "-c:v", "libx264", "-preset", "medium", "-crf", "21", "-af", audioFilter,
+      "-c:a", "aac", "-b:a", "192k", "-pix_fmt", "yuv420p", "-movflags", "+faststart", output
+    ]
+  : [
+      "-y", "-i", footage, "-i", narration, "-shortest", "-vf", videoFilter,
+      "-map", "0:v:0", "-map", "1:a:0", "-c:v", "libx264", "-preset", "medium", "-crf", "21",
+      "-af", audioFilter, "-c:a", "aac", "-b:a", "192k", "-pix_fmt", "yuv420p", "-movflags", "+faststart", output
+    ];
 const rendered = spawnSync("ffmpeg", args, {stdio:"inherit"});
 if (rendered.error || rendered.status !== 0) {
   console.error("BLOCKED: FFmpeg render failed. Confirm FFmpeg/libass is installed and asset paths are valid.");
   process.exit(2);
 }
-console.log("RENDERED: " + output + " (horizontal 16:9; duration follows narration).");
-console.log("Next: validate the exported MP4 and complete the separate metadata/release review.");
+
+// A successful FFmpeg exit is not proof that the file is complete or decodable.
+// Run the full export gate before emitting any success message.
+const validatorPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "validate-long-form-export.mjs");
+const validation = spawnSync(process.execPath, [validatorPath, output], {
+  encoding: "utf8",
+  timeout: 240_000
+});
+if (validation.stdout) process.stdout.write(validation.stdout);
+if (validation.stderr) process.stderr.write(validation.stderr);
+if (validation.error || validation.status !== 0) {
+  console.error("BLOCKED: rendered output failed technical export validation; it must not be marked successful.");
+  process.exit(validation.error?.code === "ETIMEDOUT" ? 124 : 1);
+}
+const audioValidatorPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "validate-rendered-audio.mjs");
+const audioValidation = spawnSync(process.execPath, [audioValidatorPath, output, qualityEvidence.audioProfile], {
+  encoding: "utf8",
+  timeout: 120_000
+});
+if (audioValidation.stdout) process.stdout.write(audioValidation.stdout);
+if (audioValidation.stderr) process.stderr.write(audioValidation.stderr);
+if (audioValidation.error || audioValidation.status !== 0) {
+  console.error("BLOCKED: rendered audio failed measured loudness/true-peak validation.");
+  process.exit(audioValidation.error?.code === "ETIMEDOUT" ? 124 : 1);
+}
+console.log("RENDERED AND VALIDATED: " + output + " (horizontal 16:9; duration, streams, codec, frame rate and full-file decode passed).");
+console.log("Next: complete separate metadata, rights, thumbnail and human release review.");
 console.log("No upload or publishing action was performed.");

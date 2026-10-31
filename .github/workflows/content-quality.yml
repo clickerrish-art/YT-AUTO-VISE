@@ -11,6 +11,9 @@ on:
       - "test/**"
       - "scripts/check-content.mjs"
       - ".github/workflows/content-quality.yml"
+      - "README.md"
+      - "OPERATIONS.md"
+      - "docs/**"
   pull_request:
     paths:
       - "content/long-form-scripts.md"
@@ -19,6 +22,9 @@ on:
       - "test/**"
       - "scripts/check-content.mjs"
       - ".github/workflows/content-quality.yml"
+      - "README.md"
+      - "OPERATIONS.md"
+      - "docs/**"
   workflow_dispatch:
 
 permissions:
@@ -27,16 +33,31 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
-      - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/checkout@v7
         with:
-          node-version: "20"
-      - name: Run repository tests
-        run: node --test
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+      - name: Install FFmpeg for renderer integration tests
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          ffmpeg -version
+          ffprobe -version
+      - name: Run repository tests and require zero skips
+        shell: bash
+        run: |
+          set -o pipefail
+          node --test 2>&1 | tee "$RUNNER_TEMP/node-test.log"
+          if ! grep -Fq 'ℹ skipped 0' "$RUNNER_TEMP/node-test.log"; then
+            echo "FAIL: Node test summary did not explicitly report zero skips."
+            exit 1
+          fi
       - name: Check long-form script minimum draft length
         run: |
           python - <<'PY'

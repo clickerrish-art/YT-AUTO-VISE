@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "campaigns": [
+    {
+      "id": "selar-wildlife-vault",
+      "type": "selar_digital_product",
+      "name": "Complete YouTube Wildlife Creator's Vault – Premium Combo PDF",
+      "status": "ACTIVE_FOR_DRAFTS_ONLY",
+      "destinationUrl": "https://selar.com/0u19v8u99l",
+      "destinationValidation": "exact_approved_allowlist",
+      "ownerApproved": true,
+      "disclosureRequired": true,
+      "disclosureText": "Promotional link: product details and current terms are available on the seller page."
+    },
+    {
+      "id": "safari-affiliate-inactive",
+      "type": "safari_affiliate",
+      "name": "Safari affiliate campaign (not configured)",
+      "status": "INACTIVE",
+      "destinationUrl": "",
+      "destinationValidation": "not_verified",
+      "ownerApproved": false,
+      "disclosureRequired": true,
+      "disclosureText": ""
+    }
+  ],
+  "notes": [
+    "Selar is approved for draft creation only; this does not authorize public publishing.",
+    "Safari remains inactive until the owner supplies exact destination URLs and confirms approval and disclosure text.",
+    "Never copy a destination, disclosure, price, offer, or tracking parameter from one campaign type into the other."
+  ]
+}

@@ -1,0 +1,101 @@
+name: Generate and verify npm lockfile
+
+on:
+  push:
+    branches:
+      - codex/marketing-machine-audit-fixes
+    paths-ignore:
+      - package-lock.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lockfile-generation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  lockfile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out implementation branch
+        uses: actions/checkout@v7
+        with:
+          ref: codex/marketing-machine-audit-fixes
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Install FFmpeg and ffprobe for media integration tests
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends ffmpeg
+          ffmpeg -version
+          ffprobe -version
+      - name: Decide whether the lockfile must be generated or refreshed
+        id: lockfile-status
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          CURRENT_SHA: ${{ github.sha }}
+        run: |
+          refresh=false
+          if ! test -f package-lock.json; then
+            refresh=true
+          elif node --input-type=module <<'NODE'
+          import fs from "node:fs";
+          const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+          const lock = JSON.parse(fs.readFileSync("package-lock.json", "utf8"));
+          const expected = pkg.dependencies ?? {};
+          const actual = lock.packages?.[""]?.dependencies ?? {};
+          const expectedDev = pkg.devDependencies ?? {};
+          const actualDev = lock.packages?.[""]?.devDependencies ?? {};
+          const mismatch = Object.entries(expected).some(([name, version]) => actual[name] !== version)
+            || Object.keys(actual).some(name => !(name in expected))
+            || Object.entries(expectedDev).some(([name, version]) => actualDev[name] !== version)
+            || Object.keys(actualDev).some(name => !(name in expectedDev));
+          process.exit(mismatch ? 0 : 1);
+          NODE
+          then
+            refresh=true
+          elif [ "$EVENT_NAME" = "push" ] && git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" | grep -qx "package.json"; then
+            refresh=true
+          fi
+          echo "refresh=$refresh" >> "$GITHUB_OUTPUT"
+      - name: Generate or refresh lockfile without lifecycle scripts
+        if: ${{ steps.lockfile-status.outputs.refresh == 'true' }}
+        run: npm install --package-lock-only --ignore-scripts
+      - name: Prove clean locked installation
+        run: npm ci --ignore-scripts
+      - name: Run complete Node test suite
+        run: npm test
+      - name: Validate schedule and campaign configuration
+        run: |
+          npm run validate:schedule
+          npm run validate:campaigns
+      - name: Check JavaScript syntax
+        run: |
+          find scripts test tests -name '*.mjs' -print0 | xargs -0 -n1 node --check
+      - name: Commit lockfile to implementation branch only
+        if: ${{ steps.lockfile-status.outputs.refresh == 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          if git diff --cached --quiet; then
+            echo "No lockfile change to commit."
+          else
+            git commit -m "build: add reproducible npm lockfile"
+            git push origin HEAD:refs/heads/codex/marketing-machine-audit-fixes
+          fi
+      - name: Preserve generated lockfile for recovery if commit is blocked
+        if: ${{ always() && steps.lockfile-status.outputs.refresh == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-npm-lockfile
+          path: package-lock.json
+          if-no-files-found: warn
+          retention-days: 7
