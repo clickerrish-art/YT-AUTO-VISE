@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-10-31T16:07:00Z",
-  "evidencePolicy": "Live reconciliation: branch source/test commit 4eb66910a93bf4b33843b91d9384e1f34bdc902b passed GitHub Actions workflow 41216258636 (exact head SHA; completed success; unit-test step completed with zero skips). The new real-server worker lifecycle test covers heartbeat extension/persistence, invalid-token no-mutation, controlled FAILED completion and duplicate fencing, active/expired lease reaping, audit and restart read-back. Prior exact candidate d9bdfbb4a79d4a1030edb208d8754fda88852c9b separately passed 446 Node / 16 Python / 20 Chromium E2E and proved two-process lease exclusivity/SIGKILL recovery. Overall 75 requirements remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain NOT_TESTED. Production readiness remains HOLD with 13 genuine blockers. Documentation updates are not represented as code-test evidence. Additional route evidence at exact SHA 4eb66910a93bf4b33843b91d9384e1f34bdc902b: real task-runner success for two allowlisted validation commands, arbitrary-task rejection, durable duplicate prevention across two server processes, completion/audit persistence, and startup recovery of an interrupted task. API-001 remains NOT_TESTED. Exact candidate c533cd8fbf7153ccbf84ab94a2a919069b9abbe0 passed automation/security (unit tests, zero skips), dashboard browser E2E, content quality, metadata, branch inventory and local Facebook draft-package validation. It adds safe Facebook draft rejection persistence/audit assertions. Exact candidate 9ff2de1f046e879f687f3767697e787214cc1e28 adds content-job transition durable-state/audit and unsafe-state no-mutation assertions. Isolated main/candidate baseline for c533cd8 was still in progress at this documentation update. The overall 75-requirement register remains 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001/API-001/SCHED-001/STATE-001/DEPLOY-001/GIT-002 remain NOT_TESTED.",
+  "recordedAt": "2026-10-31T16:10:00Z",
+  "evidencePolicy": "Live reconciliation: branch source/test commit 4eb66910a93bf4b33843b91d9384e1f34bdc902b passed GitHub Actions workflow 41216258636 (exact head SHA; completed success; unit-test step completed with zero skips). The new real-server worker lifecycle test covers heartbeat extension/persistence, invalid-token no-mutation, controlled FAILED completion and duplicate fencing, active/expired lease reaping, audit and restart read-back. Prior exact candidate d9bdfbb4a79d4a1030edb208d8754fda88852c9b separately passed 446 Node / 16 Python / 20 Chromium E2E and proved two-process lease exclusivity/SIGKILL recovery. Overall 75 requirements remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain NOT_TESTED. Production readiness remains HOLD with 13 genuine blockers. Documentation updates are not represented as code-test evidence. Additional route evidence at exact SHA 4eb66910a93bf4b33843b91d9384e1f34bdc902b: real task-runner success for two allowlisted validation commands, arbitrary-task rejection, durable duplicate prevention across two server processes, completion/audit persistence, and startup recovery of an interrupted task. API-001 remains NOT_TESTED. Exact candidate c533cd8fbf7153ccbf84ab94a2a919069b9abbe0 passed automation/security (unit tests, zero skips), dashboard browser E2E, content quality, metadata, branch inventory and local Facebook draft-package validation. It adds safe Facebook draft rejection persistence/audit assertions. Exact candidate 9ff2de1f046e879f687f3767697e787214cc1e28 adds content-job transition durable-state/audit and unsafe-state no-mutation assertions. Isolated main/candidate baseline for c533cd8 was still in progress at this documentation update. The overall 75-requirement register remains 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001/API-001/SCHED-001/STATE-001/DEPLOY-001/GIT-002 remain NOT_TESTED. The isolated exact main/candidate baseline workflow 41217526036 subsequently completed SUCCESS on candidate SHA c533cd8fbf7153ccbf84ab94a2a919069b9abbe0.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -1556,7 +1556,7 @@
       "contentQuality": "PASS: 446 Node tests, 0 failures, 0 skips",
       "metadata": "PASS: 446 Node tests, 0 failures, 0 skips",
       "dashboardE2e": "PASS: 20/20 Chromium journeys against the real local dashboard/backend",
-      "isolatedBaseline": "PASS: exact main and candidate isolated checkouts; Node and Python exit code 0; artifact retained",
+      "isolatedBaseline": "PASS: exact main/candidate isolated checkouts; Node and Python exit code 0; artifact retained",
       "branchReconciliationInventory": "PASS: non-destructive inventory only; human semantic review remains incomplete",
       "productionReadiness": "BLOCKED / fail-closed as designed; 13 prerequisites",
       "facebookDraftWorkflow": "PASS for local validation only; external provider draft creation skipped",
@@ -1565,7 +1565,7 @@
       "latestPythonTestCount": null,
       "latestDashboardE2e": "PASS on exact SHA c533cd8fbf7153ccbf84ab94a2a919069b9abbe0; test count not asserted in this summary",
       "latestNodeTestSkips": 0,
-      "latestIsolatedBaseline": "PENDING at register update"
+      "latestIsolatedBaseline": "PASS: exact main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate c533cd8fbf7153ccbf84ab94a2a919069b9abbe0 tested in isolated checkouts; run 41217526036 SUCCESS."
     },
     "evidence": {
       "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034162",
@@ -1637,9 +1637,9 @@
     "candidateSourceTestSha": "c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
     "latestChangeTestStatus": "PASS",
     "latestChangeTestReason": "Added safe Facebook draft rejection acceptance: blocked APPROVE leaves persisted state byte-identical; REJECT succeeds, returns reviewer-bound REJECTED state, and persists exactly one reviewer-attributed audit event. Exact SHA c533cd8fbf7153ccbf84ab94a2a919069b9abbe0 passed the automation/security workflow (unit tests with zero skips), dashboard browser E2E, content quality, metadata, non-destructive branch inventory and local-only Facebook draft validation. Isolated baseline was still running at the time of this register update. Earlier exact SHA 9ff2de1f046e879f687f3767697e787214cc1e28 added durable content-job transition and invalid-transition no-mutation assertions and passed automation, dashboard E2E, content quality, metadata and isolated baseline.",
-    "latestDocumentedPrHeadBeforeRegisterRefresh": "b97a79c10853d2ae4e7e39afdf2b785dd7a931f4",
+    "latestDocumentedPrHeadBeforeRegisterRefresh": "286815d5acdefdd25a4c75515f1fe415fdc72086",
     "observedBranchHeadBeforeRegisterRefresh": "69ea74d67bab056dc42ba242f3b45fe07780f28b",
-    "latestLiveBranchHeadBeforeRegisterRefresh": "b97a79c10853d2ae4e7e39afdf2b785dd7a931f4",
+    "latestLiveBranchHeadBeforeRegisterRefresh": "286815d5acdefdd25a4c75515f1fe415fdc72086",
     "latestLiveAheadBy": 2314,
     "latestLiveBehindBy": 2,
     "latestLiveChangedFiles": 189,
