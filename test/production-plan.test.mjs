@@ -110,3 +110,58 @@ test("rejects unverified, private or wrong-channel parent for a Short", () => {
   const errors = validateProductionPlan(plan, { jobId: "short-job-01", contentType: "short", scriptSha256: hash });
   assert.ok(errors.some(error => /verified private\/public\/unlisted SonicVhibez/.test(error)));
 });
+
+
+test("narration approval receipt is recomputed rather than trusting a persisted APPROVE flag", async () => {
+  const { validateNarrationApprovalReceipt } = await import("../scripts/production-plan.mjs");
+  const approval = {
+    decision: "APPROVE",
+    reviewer: "reviewer@example.test",
+    reviewedAt: "2030-10-24T06:00:00.000Z",
+    reason: "Audio and captions reviewed",
+    scriptSha256: hash,
+    audioSha256: hash,
+    transcriptSha256: hash,
+    captionsSha256: hash,
+    reportSha256: hash,
+    confirmAudioListened: true,
+    confirmTranscriptReviewed: true,
+    confirmCaptionsReviewed: true
+  };
+  const payload = { jobId: "short-job-01", ...approval };
+  const crypto = await import("node:crypto");
+  approval.approvalSha256 = crypto.createHash("sha256").update(JSON.stringify(payload)).digest("hex");
+  assert.deepEqual(validateNarrationApprovalReceipt("short-job-01", approval), []);
+  assert.match(validateNarrationApprovalReceipt("different-job", approval)[0], /invalid|changed/);
+  approval.reason = "Changed after approval";
+  assert.match(validateNarrationApprovalReceipt("short-job-01", approval)[0], /invalid|changed/);
+});
+
+test("Short production-plan review rechecks the exact persisted approved public parent", async () => {
+  const { validateShortProductionPlanParent } = await import("../scripts/production-plan.mjs");
+  const plan = makePlan("short");
+  const job = {
+    id: "short-job-01",
+    kind: "CONTENT_PRODUCTION",
+    contentType: "short",
+    authoring: { productionPlan: { plan } },
+    shortParentRelationship: {
+      relationshipApproved: true,
+      parentRemoteVerified: true,
+      parentChannelTitle: "SonicVhibez",
+      parentPrivacyStatus: "public",
+      parentContentId: "parent-long-01",
+      parentRemoteVideoId: "Abcdef123_-",
+      parentCanonicalUrl: "https://www.youtube.com/watch?v=Abcdef123_-",
+      parentMediaSha256: hash,
+      parentChannelId: "UC" + "a".repeat(22)
+    }
+  };
+  const jobs = [job, { id: "parent-long-01", kind: "CONTENT_PRODUCTION", contentType: "long_form" }];
+  assert.deepEqual(validateShortProductionPlanParent(job, jobs), []);
+  jobs[1].contentType = "short";
+  assert.match(validateShortProductionPlanParent(job, jobs)[0], /long-form/);
+  jobs[1].contentType = "long_form";
+  job.shortParentRelationship.parentPrivacyStatus = "private";
+  assert.match(validateShortProductionPlanParent(job, jobs)[0], /approved public SonicVhibez/);
+});
