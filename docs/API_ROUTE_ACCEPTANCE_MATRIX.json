@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-31T12:27:30Z",
+  "generatedAt": "2026-10-31T12:29:00Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "d9bdfbb4a79d4a1030edb208d8754fda88852c9b",
@@ -22,7 +22,7 @@
     "overallBlocked": 5
   },
   "evidence": {
-    "authMatrix": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529825",
+    "authMatrix": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034162",
     "nodeAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034162",
     "dashboardBrowser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034132",
     "workerLeaseCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d9bdfbb4a79d4a1030edb208d8754fda88852c9b"
