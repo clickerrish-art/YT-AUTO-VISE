@@ -238,6 +238,37 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(invalidDate.status, 400, "invalid calendar dates must be rejected");
   const unsafe = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-unsafe", rightsConfirmed: true }) });
   assert.equal(unsafe.status, 400);
+
+  const updatedDraftResponse = await fetch(base + "/api/drafts/update", {
+    method: "POST", headers,
+    body: JSON.stringify({ ...draft, title: "Updated wildlife planning draft" })
+  });
+  const updatedDraftBody = await updatedDraftResponse.json();
+  assert.equal(updatedDraftResponse.status, 200, JSON.stringify(updatedDraftBody));
+  assert.equal(updatedDraftBody.item.title, "Updated wildlife planning draft");
+  const afterDraftUpdate = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  assert.equal(afterDraftUpdate.queueItems.find(item => item.id === draft.id).title, "Updated wildlife planning draft");
+  assert.equal(afterDraftUpdate.audit.filter(event => event.action === "DRAFT_EDITED" && event.itemId === draft.id && event.actor === "test-owner@example.test").length, 1,
+    "successful draft editing must persist exactly one authenticated audit event");
+
+  const beforeInvalidDraftUpdate = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
+  const invalidDraftUpdate = await fetch(base + "/api/drafts/update", {
+    method: "POST", headers,
+    body: JSON.stringify({ ...draft, scheduledDate: "2026-02-31" })
+  });
+  assert.equal(invalidDraftUpdate.status, 400);
+  assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), beforeInvalidDraftUpdate,
+    "invalid calendar date must not mutate draft state or audit history");
+
+  const beforeUnsafeDraftUpdate = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
+  const unsafeDraftUpdate = await fetch(base + "/api/drafts/update", {
+    method: "POST", headers,
+    body: JSON.stringify({ ...draft, rightsConfirmed: true })
+  });
+  assert.equal(unsafeDraftUpdate.status, 400);
+  assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), beforeUnsafeDraftUpdate,
+    "draft editing must not grant rights confirmation or mutate durable state");
+
   const saved = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
   assert.ok(saved.queueItems.some(item => item.id === draft.id));
   assert.ok(saved.audit.some(event => event.action === "DRAFT_CREATED" && event.itemId === draft.id));
