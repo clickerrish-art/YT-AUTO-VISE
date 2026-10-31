@@ -90,8 +90,11 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   const transitionText = await transition.text();
   assert.equal(transition.status, 200, transitionText);
   assert.equal(JSON.parse(transitionText).job.state, "GENERATING");
+  const beforeUnsafeTransition = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
   const unsafeTransition = await fetch(base + "/api/jobs/transition", { method: "POST", headers, body: JSON.stringify({ jobId: createdJob.id, nextState: "UPLOADING_PRIVATE", reason: "Must remain guarded" }) });
   assert.equal(unsafeTransition.status, 400);
+  assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), beforeUnsafeTransition,
+    "an invalid transition must not mutate durable job state or audit history");
   const denied = await fetch(base + "/api/tasks/run", { method: "POST", headers, body: JSON.stringify({ taskId: "upload:private" }) });
   assert.equal(denied.status, 400, "arbitrary commands must not be executable");
   const response = await fetch(base + "/api/tasks/run", { method: "POST", headers, body: JSON.stringify({ taskId: "validate-schedule" }) });
@@ -102,6 +105,10 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   assert.equal(result.job.status, "SUCCEEDED", result.job.output);
   assert.equal(result.job.exitCode, 0);
   const saved = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  assert.equal(saved.jobs.find(job => job.id === createdJob.id).state, "GENERATING",
+    "authorized transition must persist the new content-job state");
+  assert.equal(saved.audit.filter(event => event.action === "CONTENT_JOB_STATE_CHANGED" && event.jobId === createdJob.id).length, 1,
+    "authorized transition must persist exactly one operator-attributed audit event");
   assert.ok(saved.jobs.some(job => job.id === result.job.id && job.status === "SUCCEEDED"));
   assert.ok(saved.audit.some(event => event.action === "VALIDATION_TASK_SUCCEEDED" && event.jobId === result.job.id));
   assert.equal(saved.jobs.find(job => job.id === result.job.id).publishingEnabled, false);
