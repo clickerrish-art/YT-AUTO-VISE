@@ -1,3 +1,70 @@
+# Latest release gate snapshot — 31 October 2026, 16:20 UTC
+
+This snapshot supersedes older checkpoint values below; historical checklists are retained for traceability.
+
+## Exact tested candidate
+
+- Source/test SHA: `dea284d21b4e7a6923c46a201cd196ed39b72ffa`.
+- Documentation branch head observed before this checklist update: `d6b2fa128adce8e10f087b523591f8870d6efec2`.
+- Main SHA: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Compare: 2,337 ahead / 2 behind / 190 changed files.
+- PR #1 remains OPEN, DRAFT, UNMERGED.
+
+## Exact-SHA CI
+
+- [x] Automation/security [41217848775](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848775): PASS; Node unit tests explicitly reported zero skips; normal install, dependency audit, renderer setup, campaign/review/queue checks, syntax and Python compilation passed.
+- [x] Dashboard browser E2E [41217848763](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848763): PASS.
+- [x] Content quality [41217848765](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848765): PASS.
+- [x] Metadata [41217848778](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848778): PASS.
+- [x] Isolated exact main/candidate baseline [41217848781](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848781): PASS.
+- [x] Non-destructive branch inventory [41217848853](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41218088853): PASS (inventory only).
+- [x] Nature Frontiers local draft validation [41218088797](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41218088797): PASS for local validation only; no provider-side draft creation/read-back.
+- [ ] Production readiness [41218088805](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41218088805): HOLD / 13 blockers; expected fail-closed result, do not override.
+
+## New route-level acceptance
+
+- [x] Worker lease heartbeat, controlled FAILED completion, duplicate/stale token rejection, active/expired lease reaping, durable audit and restart read-back — exact SHA `4eb66910a93bf4b33843b91d9384e1f34bdc902b`, run [41216258636](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41216258636).
+- [x] Content-job transition durable state/audit and invalid UPLOADING_PRIVATE no-mutation — exact SHA `9ff2de1f046e879f687f3767697e787214cc1e28`, run [41217247523](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217247523).
+- [x] Facebook draft local reevaluation and blocked-APPROVE/safe-REJECT workflow with reviewer audit — exact SHA `c533cd8fbf7153ccbf84ab94a2a919069b9abbe0`, run [41217525988](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988).
+- [x] Draft update persistence/audit and invalid-date/rights-promotion no-mutation — exact SHA `dea284d21b4e7a6923c46a201cd196ed39b72ffa`, run [41217848775](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848775).
+- [x] Narration review synthetic fixture attestation, concurrent idempotency and one audit receipt — exact SHA `c533cd8`; not genuine human listening approval.
+- [ ] Full SCHED-001 remains NOT_TESTED: retry, manual retry, cancellation, dead-letter, queue ordering, shutdown and all recovery scenarios remain.
+- [ ] API-001 remains NOT_TESTED: 35 routes require complete applicable success, validation, authorization, persistence, audit, concurrency and restart acceptance.
+- [ ] DASH-001 remains NOT_TESTED: 101 controls and 15 forms require exhaustive per-control acceptance.
+
+## State, deployment and Git
+
+- [ ] STATE-001 backup/restore transaction, corruption/interruption/disk-full failure injection and rollback.
+- [ ] DEPLOY-001 clean installation, supported runtime, configuration, secret handling, startup, upgrade, rollback and recovery.
+- [ ] GIT-002 human semantic review of the 2,337-ahead / 2-behind divergence. Automated inventory is not semantic approval.
+- [ ] Branch protection: owner/admin verification; current branch protection is disabled.
+
+## Production and owner-controlled gates
+
+- [ ] 13 production-readiness blockers resolved independently (see `docs/GO_LIVE_BLOCKERS.md`).
+- [ ] Verified SonicVhibez channel identity and complete public/private/unlisted history.
+- [ ] Real Short and long-form rights-cleared media/manifests; final `media/next-short.mp4`.
+- [ ] Genuine human metadata, rights, compliance and content review.
+- [ ] YouTube OAuth secrets configured securely and exact channel ID verified.
+- [ ] Owner-approved cadence decision.
+- [ ] Meta Page identity/permissions and provider-side draft creation/read-back.
+- [ ] Owner review of eight external Metricool schedules; no remote changes made.
+- [ ] Original `.bundle` supplied; remains BLOCKED.
+
+## Safety
+
+- [x] PR #1 open, draft and unmerged.
+- [x] `main` unchanged; no merge/reset/rebase/force-push/destructive reconciliation.
+- [x] Nature Frontiers is not a YouTube target.
+- [x] Public/unattended YouTube publishing disabled.
+- [x] Facebook/Instagram live publishing disabled.
+- [x] Safari campaign inactive; approved Selar destination unchanged.
+- [x] No remote publishing, campaign activation, visibility or schedule mutation performed.
+
+**Release verdict: IMPLEMENTATION INCOMPLETE — NOT PRODUCTION READY.** Passing exact-SHA tests do not satisfy all application-wide acceptance gates.
+
+---
+
 Machine-readable API route acceptance register: `docs/API_ROUTE_ACCEPTANCE_MATRIX.json` — all 35 protected routes are inventoried; authentication-negative coverage is not a substitute for full route acceptance.
 
 # Latest release gate snapshot — 31 October 2026, 12:27 UTC
