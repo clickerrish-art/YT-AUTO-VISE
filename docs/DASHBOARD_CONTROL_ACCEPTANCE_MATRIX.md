@@ -1,3 +1,25 @@
+## Exact-SHA dashboard/API operation evidence — 31 October 2026
+
+Tested code/test candidate: `c533cd8fbf7153ccbf84ab94a2a919069b9abbe0`.
+
+- Automation/security [run 41217525988](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988): **SUCCESS**; unit-test step passed with zero skips, normal lifecycle install, locked dependency audit, FFmpeg/ffprobe setup, campaign/disclosure checks, review metadata safety, queue invariants, JavaScript syntax and Python compilation passed.
+- Dashboard browser E2E [run 41217526029](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526029): **SUCCESS** against the real local dashboard/backend.
+- Content quality [run 41217526033](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526033): **SUCCESS**. Metadata [run 41217525991](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525991): **SUCCESS**.
+- Non-destructive branch inventory [run 41217525986](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525986): **SUCCESS**; this is inventory evidence, not human semantic reconciliation.
+- Local Nature Frontiers draft-package validation [run 41217526054](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526054): **SUCCESS** for local validation only; no provider-side Meta draft creation/read-back is claimed.
+- Production readiness [run 41217526070](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526070): **BLOCKED / fail-closed** as intended; the 13 real prerequisites remain.
+- Exact candidate isolated main/candidate baseline [run 41217526036](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526036) was still running when this section was recorded; do not infer its result.
+
+### Newly evidenced route behavior
+
+- `POST /api/jobs/transition`: valid QUEUED-to-GENERATING transition persists with exactly one operator-attributed audit event; unsafe direct transition to `UPLOADING_PRIVATE` returns 400 and leaves state byte-identical. Test: `test/dashboard-task-runner.test.mjs`, exact source/test SHA `9ff2de1f046e879f687f3767697e787214cc1e28`, automation [run 41217247523](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217247523).
+- `POST /api/facebook/drafts/evaluate`: local reevaluation persists current blockers and a `FACEBOOK_DRAFT_RECHECKED` audit record.
+- `POST /api/facebook/drafts/approve`: blocked APPROVE returns 400 with byte-identical state; safe REJECT succeeds, persists reviewer-bound REJECTED state and one reviewer-attributed audit record. The test reviewer is synthetic and does not constitute genuine human approval.
+- Facebook draft reevaluation/rejection tests are in `test/facebook-dashboard.test.mjs`, exact source/test SHA `c533cd8fbf7153ccbf84ab94a2a919069b9abbe0`, automation [run 41217525988](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988).
+- These route slices do not prove provider-side Meta draft creation, live Page identity, publication, or full route restart acceptance.
+
+**DASH-001, API-001 and SCHED-001 remain NOT_TESTED.** Static inventory, browser journeys and route-specific test slices do not constitute acceptance of all 101 controls, all 15 forms or all 35 protected routes.
+
 ## Exact-SHA allowlisted task-runner API acceptance — 31 October 2026
 
 The existing real-server test `test/dashboard-task-runner.test.mjs` was rerun by exact-SHA workflow [41216258636](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41216258636) on `4eb66910a93bf4b33843b91d9384e1f34bdc902b`.
