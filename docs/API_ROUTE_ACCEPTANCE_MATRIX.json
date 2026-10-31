@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-31T15:50:00Z",
+  "generatedAt": "2026-10-31T16:05:00Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "4eb66910a93bf4b33843b91d9384e1f34bdc902b",
+  "testedSourceTestSha": "c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -28,9 +28,14 @@
     "workerLeaseCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d9bdfbb4a79d4a1030edb208d8754fda88852c9b",
     "workerLeaseLifecycleCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/4eb66910a93bf4b33843b91d9384e1f34bdc902b",
     "workerLeaseLifecycleCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41216258636",
-    "workerLeaseMultiprocessCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d9bdfbb4a79d4a1030edb208d8754fda88852c9b"
+    "workerLeaseMultiprocessCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d9bdfbb4a79d4a1030edb208d8754fda88852c9b",
+    "transitionRegressionCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/9ff2de1f046e879f687f3767697e787214cc1e28",
+    "transitionRegressionCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217247523",
+    "facebookDraftReviewCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
+    "facebookDraftReviewCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988",
+    "facebookDraftBrowserCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526029"
   },
-  "disclaimer": "This matrix separates tested slices from complete route acceptance. Exact-SHA 4eb66910 adds real-server heartbeat, controlled failure completion and expiry-reaper success/persistence/audit/restart evidence for the three worker routes. It does not test GENERATED completion with real media, overlapping heartbeat/reaper concurrency, or all queue semantics. The 35-route authentication negative matrix does not prove authorized success. Full API-001 remains NOT_TESTED; routes marked BLOCKED have genuine external prerequisites.",
+  "disclaimer": "This matrix records route-level slices only. Exact tested commits include worker lease lifecycle, task runner, content-job transition, Facebook local draft reevaluation and safe rejection. External Meta identity/provider writes remain blocked. A route's overallAcceptance stays NOT_TESTED until every applicable criterion is independently proven; overall API-001 remains NOT_TESTED.",
   "routes": [
     {
       "method": "GET",
@@ -134,15 +139,20 @@
       "classification": "local Facebook policy evaluation",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "NOT_TESTED",
+      "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
-      "durablePersistence": "NOT_TESTED",
-      "auditEvidence": "NOT_TESTED",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
       "concurrency": "NOT_TESTED",
       "restartRecovery": "NOT_TESTED",
       "externalOperation": "none",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Exact-SHA c533cd8 test: authenticated draft reevaluation succeeds locally, returns current blockers, persists evaluation/review state used by the subsequent decision and records FACEBOOK_DRAFT_RECHECKED. This is local validation only, not Meta provider-side draft creation/read-back. Restart read-back remains NOT_TESTED.",
+      "testEvidence": {
+        "test": "test/facebook-dashboard.test.mjs",
+        "exactTestedSha": "c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988"
+      }
     },
     {
       "method": "POST",
@@ -150,15 +160,20 @@
       "classification": "local draft approval / provider workflow boundary",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "NOT_TESTED",
+      "authorizedSuccess": "PASS — safe REJECT decision only",
       "inputValidation": "PASS",
-      "durablePersistence": "NOT_TESTED",
-      "auditEvidence": "NOT_TESTED",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
       "concurrency": "NOT_TESTED",
       "restartRecovery": "NOT_TESTED",
       "externalOperation": "provider-side draft/read-back not verified",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Exact-SHA c533cd8 test: APPROVE is rejected while identity/rights/compliance blockers remain and the rejection leaves state byte-identical; a deliberate REJECT decision succeeds, records the synthetic test reviewer, persists REJECTED status/decision and appends one reviewer-attributed audit event. This is test-fixture workflow evidence, not genuine human approval or provider-side draft acceptance. Restart read-back remains NOT_TESTED.",
+      "testEvidence": {
+        "test": "test/facebook-dashboard.test.mjs",
+        "exactTestedSha": "c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988"
+      }
     },
     {
       "method": "POST",
@@ -571,15 +586,20 @@
       "classification": "operator content-job transition",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "NOT_TESTED",
+      "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
-      "durablePersistence": "NOT_TESTED",
-      "auditEvidence": "NOT_TESTED",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
       "concurrency": "NOT_TESTED",
       "restartRecovery": "NOT_TESTED",
       "externalOperation": "human approval/upload gates remain separate",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Exact-SHA 9ff2de1 test: authorized QUEUED-to-GENERATING transition returns success and is verified in durable state with exactly one operator-attributed CONTENT_JOB_STATE_CHANGED audit event; unsafe direct transition to UPLOADING_PRIVATE returns 400 with byte-identical state. Concurrency and restart read-back remain NOT_TESTED.",
+      "testEvidence": {
+        "test": "test/dashboard-task-runner.test.mjs",
+        "exactTestedSha": "9ff2de1f046e879f687f3767697e787214cc1e28",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217247523"
+      }
     },
     {
       "method": "POST",
