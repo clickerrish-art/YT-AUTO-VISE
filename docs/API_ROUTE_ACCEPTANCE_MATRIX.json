@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-31T16:05:00Z",
+  "generatedAt": "2026-10-31T16:12:00Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
@@ -35,7 +35,7 @@
     "facebookDraftReviewCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988",
     "facebookDraftBrowserCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526029"
   },
-  "disclaimer": "This matrix records route-level slices only. Exact tested commits include worker lease lifecycle, task runner, content-job transition, Facebook local draft reevaluation and safe rejection. External Meta identity/provider writes remain blocked. A route's overallAcceptance stays NOT_TESTED until every applicable criterion is independently proven; overall API-001 remains NOT_TESTED.",
+  "disclaimer": "This matrix records route-level slices only. Exact tested commits include worker lease lifecycle, task runner, content-job transition, Facebook local draft reevaluation and safe rejection. External Meta identity/provider writes remain blocked. A route's overallAcceptance stays NOT_TESTED until every applicable criterion is independently proven; overall API-001 remains NOT_TESTED. The POST /api/jobs/narration/review route now has a tested local fixture success/concurrency/idempotency/audit slice; it is not a genuine human listening approval. Overall API-001 remains NOT_TESTED.",
   "routes": [
     {
       "method": "GET",
@@ -378,15 +378,20 @@
       "classification": "human narration review receipt",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "NOT_TESTED",
+      "authorizedSuccess": "PASS — synthetic fixture attestation only",
       "inputValidation": "PASS",
-      "durablePersistence": "NOT_TESTED",
-      "auditEvidence": "NOT_TESTED",
-      "concurrency": "NOT_TESTED",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
+      "concurrency": "PASS",
       "restartRecovery": "NOT_TESTED",
       "externalOperation": "genuine human listening/review cannot be inferred from test fixture",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Exact-SHA c533cd8 test: missing playback attestations are rejected; two concurrent identical authorized fixture-review requests both resolve to the same approval receipt with exactly one creation and one NARRATION_APPROVED_FOR_RENDER audit event; exact retry reuses the receipt; changed review and tampered artifact retries are rejected. Test attestations are synthetic and do not establish genuine human listening/review. Restart read-back remains NOT_TESTED.",
+      "testEvidence": {
+        "test": "test/dashboard-server.test.mjs",
+        "exactTestedSha": "c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988"
+      }
     },
     {
       "method": "POST",
