@@ -15,7 +15,7 @@ test("every authenticated API route handles an empty request safely without a se
   const routes = [...new Map(inventoryDashboardSources(html, serverSource).routes
     .filter(route => route.path.startsWith("/api/"))
     .map(route => [route.method + " " + route.path, route])).values()];
-  assert.ok(routes.length >= 30, \`expected a complete API route inventory, found \${routes.length}\`);
+  assert.ok(routes.length >= 30, "expected a complete API route inventory, found " + routes.length);
   assert.ok(routes.every(route => ["GET", "POST"].includes(route.method)),
     "every API route must declare an explicit supported HTTP method");
 
@@ -64,7 +64,7 @@ test("every authenticated API route handles an empty request safely without a se
     fs.rmSync(stateDir, { recursive: true, force: true });
   });
 
-  const base = \`http://127.0.0.1:\${port}\`;
+  const base = "http://127.0.0.1:" + port;
   let ready = false;
   for (let attempt = 0; attempt < 80; attempt++) {
     if (child.exitCode !== null) break;
@@ -89,11 +89,12 @@ test("every authenticated API route handles an empty request safely without a se
     });
     const responseText = await response.text();
     assert.ok(response.status < 500,
-      \`authenticated empty request must not produce a server error for \${route.method} \${route.path}; status=\${response.status}; body=\${responseText}\`);
+      "authenticated empty request must not produce a server error for " + route.method + " " + route.path +
+      "; status=" + response.status + "; body=" + responseText);
     assert.match(response.headers.get("content-type") ?? "", /application\/json/i,
-      \`\${route.method} \${route.path} must return the documented JSON API envelope for this invalid/empty request\`);
+      route.method + " " + route.path + " must return the documented JSON API envelope for this invalid/empty request");
     assert.doesNotMatch(responseText, /dashboard-state\.json|stateDir|\/home\/runner|\/tmp\//i,
-      \`\${route.method} \${route.path} leaked an internal filesystem path\`);
+      route.method + " " + route.path + " leaked an internal filesystem path");
     outcomes.push({ route: route.method + " " + route.path, status: response.status });
   }
 
