@@ -1,3 +1,61 @@
+# Live go-live blocker reconciliation — 31 October 2026, 12:27 UTC
+
+Exact source/test candidate: `d9bdfbb4a79d4a1030edb208d8754fda88852c9b`.
+Current documentation branch HEAD before this update: `b06a6ac25645c89a6ec7a03449115400aefe6ce5`.
+PR #1 remains OPEN, DRAFT, UNMERGED. `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; comparison **2,302 ahead / 2 behind / 188 changed files** at the tested source/test candidate.
+
+## Exact readiness status
+
+Production-readiness workflow [41201034135](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034135) returned HOLD with 13 blockers. Human-readable and JSON checks both returned exit code 2. This is the intended fail-closed result, not a green production check.
+
+1. **Owner cadence decision:** approve a feasible cadence mode with a timezone-aware timestamp and non-empty approval reference.
+2. **YouTube history:** independently reconcile complete SonicVhibez public, private and unlisted history and every pending/uncertain upload attempt.
+3. **Short rights manifest:** create `content/render-manifest.json` only from verified real asset sources and rights.
+4. **Long-form rights manifest:** create `content/long-form-render-manifest.json` only after verifying real long-form assets and rights.
+5. **Human metadata review:** mark metadata `READY_FOR_PRIVATE_UPLOAD` only after genuine human review.
+6. **Channel identity:** verify the exact SonicVhibez YouTube channel ID using the authorized account/API; do not guess or silently normalize the previously documented mismatch.
+7. **Rights approval:** genuine media rights must be established.
+8. **Compliance approval:** genuine content/compliance review must be recorded.
+9. **Final Short media:** `media/next-short.mp4` is missing.
+10. **YouTube OAuth:** `YOUTUBE_CLIENT_ID` is not configured.
+11. **YouTube OAuth:** `YOUTUBE_CLIENT_SECRET` is not configured.
+12. **YouTube OAuth:** `YOUTUBE_REFRESH_TOKEN` is not configured.
+13. **Channel configuration:** `SONICVHIBEZ_CHANNEL_ID` is not configured.
+
+No credentials should be pasted into chat or committed. No public/unattended upload is allowed. Private upload still requires explicit one-operation authorization bound to the exact job/media/metadata/review/channel and a verified remote receipt.
+
+## External Metricool operational risk — read-only recheck 31 October 2026
+
+Metricool exposes one connected brand, Nature Frontiers (brand ID `7545638`), with Facebook Page ID `1003575786161492`, Instagram username `naturefrontieers`, and timezone `Africa/Johannesburg`.
+
+A read-only scheduled-post query returned eight records through 31 January 2027. All eight have `draft=false` and `autoPublish=true`. Provider status reports record `406357296` as PUBLISHED and seven records (`406357335`, `406357364`, `406357388`, `406357414`, `406357443`, `406357483`, `406357554`) as PENDING. The copy includes Selar/product promotion, which conflicts with the Nature Frontiers education-only code policy. The pending record `406357554` targets both Facebook and Instagram.
+
+**Owner action required:** review the external Metricool records and decide individually whether to cancel, edit or otherwise handle them. No records were changed. Repository safeguards do not retroactively modify posts already scheduled in Metricool.
+
+## Repository-controlled acceptance still open
+
+- DASH-001: exhaustive 101-control / 15-form behavior acceptance.
+- API-001: authorized business success, persistence, audit, concurrency, restart and failure acceptance for all 35 protected API routes.
+- SCHED-001: full queue lifecycle, heartbeat, lease expiry, retry, actual publication history, cadence/timezone and recovery. The new multi-process lease-claim/restart slice is separately accepted as SCHED-WORKER-MULTIPROCESS-001 only.
+- STATE-001: complete backup/restore and transaction-boundary recovery, including power-loss and disk-full limitations.
+- DEPLOY-001: clean checkout installation, persistent deployment, health/readiness, backup/restore and rollback drill.
+- GIT-002: human semantic review of the 2,302-ahead / 2-behind divergent history. Automated inventory is not semantic approval.
+- Branch protection: owner/admin verification remains unavailable; do not claim protection is enabled.
+- Original Git bundle: **BLOCKED — original file not supplied**. Live GitHub work continues independently.
+
+## Safety decisions unchanged
+
+- Nature Frontiers is never a YouTube target.
+- Public and unattended YouTube publishing remain disabled.
+- Facebook/Instagram external publishing remains disabled in the application.
+- Safari campaign remains inactive.
+- The approved Selar destination remains `https://selar.com/0u19v8u99l`.
+- No PR merge, main edit, reset, rebase, force-push, branch deletion, remote post edit or remote schedule cancellation occurred.
+
+**Verdict: NOT PRODUCTION READY.** Do not bypass a blocker to make readiness green.
+
+---
+
 ## Live blocker update — 30 October 2026, 09:36 SAST
 
 Exact tested source/test candidate: b31149df440a4c02cb2d7541b4894dcd916b8796. Current PR #1 HEAD: ef3eadd005a811f9596e1cc12fa58beaf4770a03, a documentation-only descendant with no application/test changes after the tested candidate. Live main remains fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; compare is 2,167 ahead / 2 behind / 182 changed files. PR #1 remains open, draft and unmerged. No main edit, merge, rebase, reset, force-push or destructive reconciliation occurred.
