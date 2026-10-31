@@ -1,3 +1,5 @@
+Machine-readable API route acceptance register: `docs/API_ROUTE_ACCEPTANCE_MATRIX.json` — all 35 protected routes are inventoried; authentication-negative coverage is not a substitute for full route acceptance.
+
 # Latest release gate snapshot — 31 October 2026, 12:27 UTC
 
 Tested source/test candidate: `d9bdfbb4a79d4a1030edb208d8754fda88852c9b`.
