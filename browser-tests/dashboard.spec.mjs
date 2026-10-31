@@ -1443,6 +1443,30 @@ test("production-plan submission and hash-bound review persist through the real 
     expect(submittedJob.authoring.productionPlan.plan).toEqual(plan);
     expect(submittedState.audit.some(item => item.action === "PRODUCTION_PLAN_SUBMITTED" && item.jobId === jobId && item.planSha256 === planSha256)).toBe(true);
 
+    // A plan approval must fail if the persisted narration approval receipt is altered.
+    const stateFile = path.join(stateDir, "dashboard-state.json");
+    const originalStateBytes = fs.readFileSync(stateFile);
+    const alteredState = JSON.parse(originalStateBytes.toString("utf8"));
+    alteredState.jobs.find(item => item.id === jobId).authoring.narrationApproval.reason = "Tampered after the original narration approval";
+    fs.writeFileSync(stateFile, JSON.stringify(alteredState));
+    const tamperedNarrationResponse = await fetch(base + "/api/jobs/production-plan/review", {
+      method: "POST",
+      headers: { ...headers, "content-type": "application/json" },
+      body: JSON.stringify({
+        jobId,
+        planSha256,
+        decision: "APPROVE",
+        reason: "Attempt to approve with a changed narration receipt.",
+        confirmScenePlanReviewed: true,
+        confirmRightsEvidenceReviewed: true
+      })
+    });
+    expect(tamperedNarrationResponse.status).toBe(409);
+    expect((await tamperedNarrationResponse.json()).error).toMatch(/narration approval evidence is stale or invalid/i);
+    const tamperedState = JSON.parse(fs.readFileSync(stateFile, "utf8"));
+    expect(tamperedState.jobs.find(item => item.id === jobId).authoring.productionPlan.status).toBe("REVIEW_REQUIRED");
+    fs.writeFileSync(stateFile, originalStateBytes);
+
     // A plan approval must fail if any protected source asset changes after submission.
     const scenePath = path.join(evidenceDir, "scene-0.mp4");
     const originalSceneBytes = fs.readFileSync(scenePath);
