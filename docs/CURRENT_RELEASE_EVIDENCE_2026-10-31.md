@@ -151,9 +151,9 @@ Implementation commits:
 ### Live repository state after this documentation refresh
 
 - PR #1: **OPEN, DRAFT, UNMERGED**.
-- Current PR HEAD at this evidence update: `de578e71ef1327147c4b43fa7414b2ca9c55f50b`.
+- PR HEAD immediately before this evidence refresh: `de578e71ef1327147c4b43fa7414b2ca9c55f50b`.
 - Exact application/test candidate: `a16b94e60960aba90fa20adc8fcdaf3057e15d68`.
-- The two commits after the tested candidate are documentation-only updates to the acceptance register and dashboard matrix; no application behavior changed after the tested candidate.
+- All commits after the tested candidate in this evidence sequence are documentation-only updates to the acceptance register, dashboard matrix and release evidence; no application behavior changed after the tested candidate. The current live PR HEAD must be read from GitHub rather than inferred from this pre-update reference.
 - `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
 - Live divergence: **2,278 ahead / 2 behind / 184 changed files**.
