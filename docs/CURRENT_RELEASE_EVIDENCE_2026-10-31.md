@@ -1,3 +1,65 @@
+# Latest safe job cancellation and exact-SHA acceptance — 31 October 2026, 19:18 UTC
+
+This update supersedes earlier live-state snapshots below. Historical records remain retained.
+
+## Live repository state
+
+- Starting SHA for this continuation: `29dfd92acc566e864391b3c5be8c821344e008f8`.
+- Exact latest code/test candidate: `8254abae98d6a99481c7f7c56ce0e490a37d83cb`.
+- Follow-up documentation commits: API matrix `d1860c1a3253f8589334f49c02b91c3097f732f3`; operating instructions `eb42b33497e9f6970c04bbf9920d5bc728812a48`.
+- Current branch HEAD: `eb42b33497e9f6970c04bbf9920d5bc728812a48`.
+- Main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Current compare: **2,357 ahead / 2 behind / 194 changed files**.
+- PR #1 remains **OPEN, DRAFT, UNMERGED**. Branch protection remains disabled.
+- No main edit, merge, reset, rebase, force-push, branch deletion or destructive reconciliation occurred.
+
+## Implemented: safe content-job cancellation
+
+Code commits:
+- `806124366496e0d995d9b17d32f48a44954eb0c1` — added terminal `CANCELLED` job state and transition rules.
+- `97e178adad64e3021ee4f8db460abd8b67d3d38c` — records `CONTENT_JOB_CANCELLED` as a distinct audit event.
+- `e91b3c0447240e3bbbee156653307a2440768df3` — unit tests for safe cancellation and protected boundaries.
+- `8254abae98d6a99481c7f7c56ce0e490a37d83cb` — real-server API integration test.
+
+The authenticated `POST /api/jobs/transition` endpoint now supports `nextState: "CANCELLED"` for eligible pre-upload work. Cancellation records `cancelledAt`, `cancelledBy`, `cancelReason`, `completedAt`, transition history and one `CONTENT_JOB_CANCELLED` audit event; it clears retry scheduling.
+
+Fail-closed restrictions:
+- A job with any worker lease cannot be cancelled; the operator must wait for completion or reap an expired lease.
+- `RECOVERY_REQUIRED`, `APPROVED_FOR_PRIVATE_UPLOAD`, `UPLOADING_PRIVATE` and `PRIVATE_UPLOAD_VERIFIED` cannot be cancelled through this route.
+- Cancellation does not publish, upload, delete artifacts or erase history.
+
+Tests prove queued cancellation persists across restart, an active leased job is rejected without byte-level state mutation, and protected/uncertain states cannot be cancelled. Operating instructions are documented at the top of `OPERATIONS.md`.
+
+## Exact-SHA CI for `8254abae98d6a99481c7f7c56ce0e490a37d83cb`
+
+| Workflow | Run | Result |
+|---|---:|---|
+| Automation/security + Node unit/integration tests | [41233214540](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41233214540) | **PASS — 451 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities** |
+| Dashboard browser E2E | [41233214551](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41233214551) | **PASS — 20/20 Chromium journeys** |
+| Content quality | [41233214547](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41233214547) | **PASS — 451 tests, 0 failures, 0 skips** |
+| Metadata | [41233214553](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41233214553) | **PASS** |
+| Isolated main/candidate baseline | [41233214549](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41233214549) | **PASS** |
+| Lockfile verification | [41233210928](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41233210928) | **PASS** |
+| Non-destructive branch inventory | [41233214544](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41233214544) | **PASS — inventory only** |
+| Nature Frontiers local draft validation | [41233214560](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41233214560) | **PASS — local validation only; provider-side creation job skipped** |
+| Production readiness | [41233214541](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41233214541) | **HOLD / FAIL-CLOSED — 13 blockers remain** |
+
+## Acceptance state after this work
+
+- Requirement register remains **75 total / 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED**.
+- API matrix: **35 routes / 35 authentication-negative checks PASS / 8 overall PASS / 22 NOT_TESTED / 5 BLOCKED**. The transition route now records cancellation, audit and restart evidence, but remains NOT_TESTED overall because its concurrency criterion is open.
+- DASH-001 remains NOT_TESTED: 20 browser journeys and targeted dashboard checks do not prove all 101 controls individually.
+- API-001 remains NOT_TESTED: eight routes accepted, 22 untested, five externally blocked.
+- SCHED-001 remains NOT_TESTED. Safe cancellation and multi-process claim/heartbeat/completion/reaper races are now tested, but full queue ordering, retry/operator recovery, shutdown, all failure paths and end-to-end lifecycle acceptance remain open.
+- STATE-001 and DEPLOY-001 remain NOT_TESTED; backup/restore transaction failure drills and clean deployment/upgrade/rollback acceptance remain incomplete.
+- GIT-002 remains NOT_TESTED pending an authorized human semantic review. The briefing and non-destructive inventory are not human approval.
+- Production readiness remains HOLD with 13 fail-closed blockers. Public/unattended YouTube and live Meta publishing remain disabled.
+- No live YouTube upload, Facebook/Instagram post, campaign activation, visibility change or Metricool scheduled-record modification occurred. Nature Frontiers remains prohibited as a YouTube target.
+
+**Verdict: engineering implementation remains PARTIALLY COMPLETE. Safe cancellation is implemented and exact-SHA CI-verified. The application is not production-ready.**
+
+---
+
 # Latest multi-process worker finalization and heartbeat acceptance — 31 October 2026, 19:13 UTC
 
 This update supersedes earlier live-state snapshots below. Historical checkpoints are retained.
