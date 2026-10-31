@@ -173,5 +173,6 @@ test("independent dashboard processes serialize duplicate worker completion and 
   assert.equal(state.audit.filter(event =>
     event.action === "WORKER_LEASE_EXPIRED" && event.jobId === reapJob.id
   ).length, 1, "concurrent reapers must create exactly one expiry audit event");
-  assert.equal(state.publishingEnabled, false);
+  assert.ok(state.jobs.every(item => item.publishingEnabled === false),
+    "every persisted content job must remain non-publishable");
 });
