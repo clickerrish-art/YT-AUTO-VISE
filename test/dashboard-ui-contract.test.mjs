@@ -36,7 +36,9 @@ test("every dashboard form and ID-addressable action control is wired to a handl
 });
 
 test("Nature Frontiers Facebook draft form cannot offer prohibited product or affiliate promotions", () => {
-  const form = html.match(/<form id="facebookdraftform">([\\s\\S]*?)<\\/form>/)?.[1] ?? "";
+  const formStart = html.indexOf('<form id="facebookdraftform">');
+  const formEnd = html.indexOf("</form>", formStart);
+  const form = formStart >= 0 && formEnd > formStart ? html.slice(formStart, formEnd) : "";
   assert.ok(form, "Facebook draft form must remain present");
   assert.match(form, /Nature Frontiers is education-only/);
   assert.match(form, /Product, affiliate and Selar promotions are not permitted/);
