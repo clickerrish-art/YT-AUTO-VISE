@@ -49,7 +49,7 @@ This snapshot supersedes older checkpoint values below; historical checklists ar
 - [ ] Owner-approved cadence decision.
 - [ ] Meta Page identity/permissions and provider-side draft creation/read-back.
 - [ ] Owner review of eight external Metricool schedules; no remote changes made.
-- [x] Original `.bundle` dependency investigated: no `.bundle` file exists in the branch tree, no checked-in application/test code references it, and current install, CI, backup/restore and API acceptance do not require it. It is **not a blocker for application engineering or release acceptance**. It remains outstanding only if the owner separately requires provenance/integrity verification or recovery of that external archive; no bundle verification is claimed.
+- [x] Original `.bundle` dependency investigated: no `.bundle` file exists in the branch tree, and the inspected core backup/restore implementation plus restore-history tests do not consume or reference it. It is **not required for current application engineering or acceptance**. It remains outstanding only if the owner separately requires provenance/integrity verification or recovery of that external archive; no bundle verification is claimed.
 
 ## Safety
 
@@ -105,7 +105,7 @@ Documentation updates after this candidate do not change application or test cod
 - [ ] Native YouTube Related video evidence without changing private visibility.
 - [ ] Verified Meta Page/Instagram provider-side draft creation and remote read-back.
 - [ ] Owner review of eight live Metricool Nature Frontiers promotional schedules; seven currently PENDING and all eight are `draft=false`, `autoPublish=true`. No remote schedule was changed.
-- [x] Original `.bundle` dependency investigated: no `.bundle` file exists in the branch tree, no checked-in application/test code references it, and current install, CI, backup/restore and API acceptance do not require it. It is **not a blocker for application engineering or release acceptance**. It remains outstanding only if the owner separately requires provenance/integrity verification or recovery of that external archive; no bundle verification is claimed.
+- [x] Original `.bundle` dependency investigated: no `.bundle` file exists in the branch tree, and the inspected core backup/restore implementation plus restore-history tests do not consume or reference it. It is **not required for current application engineering or acceptance**. It remains outstanding only if the owner separately requires provenance/integrity verification or recovery of that external archive; no bundle verification is claimed.
 
 ## Git and safety
 
