@@ -106,9 +106,10 @@ test("authenticated dashboard read endpoints return real state without mutating 
     });
     const responseText = await response.text();
     assert.equal(response.status, 200, "GET " + item.path + ": " + responseText);
-    assert.match(response.headers.get("content-type") ?? "", /application\\/json/i);
-    assert.doesNotMatch(responseText, /dashboard-state\\.json|stateDir|\/home\/runner|\/tmp\//i,
-      "GET " + item.path + " must not disclose filesystem paths");
+    assert.ok((response.headers.get("content-type") ?? "").includes("application/json"));
+    for (const forbidden of ["dashboard-state.json", "stateDir", "/home/runner", "/tmp/"]) {
+      assert.equal(responseText.includes(forbidden), false, "GET " + item.path + " must not disclose " + forbidden);
+    }
     const payload = JSON.parse(responseText);
     assert.ok(payload && typeof payload === "object" && !Array.isArray(payload),
       "GET " + item.path + " must return a JSON object");
