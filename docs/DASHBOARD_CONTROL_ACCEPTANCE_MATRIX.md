@@ -1,3 +1,17 @@
+## Latest exact-SHA dashboard/API and worker acceptance — 31 October 2026
+
+Tested source/test candidate: `d9bdfbb4a79d4a1030edb208d8754fda88852c9b`.
+
+- Static inventory at this candidate: **101 controls** (21 buttons, 41 inputs, 25 selects, 14 textareas), **15 forms**, **38 registered route handlers** (35 protected `/api/` routes plus `/`, `/healthz`, `/readyz`), and **83 non-submit controls** with JavaScript bindings.
+- Exact-SHA Chromium E2E [run 41201034132](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034132): **20/20 journeys passed** against the real local dashboard/backend.
+- Automation/security [run 41201034162](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034162): **446 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities**. Content quality [41201034134](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034134) and metadata [41201034143](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034143) also pass with 446 tests and zero skips.
+- Isolated main/candidate baseline [run 41201034192](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034192): PASS; both exact checkouts have Node and Python exit code 0. [Artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034192/artifacts/13042790814).
+- New real-server acceptance: `test/dashboard-api-worker-lease-multiprocess.integration.test.mjs`. Two independent server processes sharing one persistent state directory race to claim the same queued job; exactly one obtains the lease. After both processes are SIGKILLed, a fresh process recovers the job to `RECOVERY_REQUIRED`, clears the lease and writes one recovery audit event. This narrow slice is recorded as `SCHED-WORKER-MULTIPROCESS-001` PASS.
+- The new test proves one multi-process worker-claim/restart path. It does **not** prove every lease heartbeat/expiry/retry path or all queue lifecycle behavior.
+- The narration read routes `GET /api/jobs/narration/review` and `GET /api/jobs/narration/audio` now have focused missing-ID (400), unknown-job (404), safe-response and byte-identical state-preservation assertions in `test/dashboard-api-readonly.integration.test.mjs`. The separate real-narration browser journey also validates a successful audio stream against the artifact SHA-256.
+- Authentication negative-path coverage is source-derived across all 35 protected API declarations. It does not establish authorized success for all 35 operations.
+- **DASH-001 remains NOT_TESTED. API-001 remains NOT_TESTED.** Inventory counts and 20 browser journeys are not exhaustive acceptance. Route-specific successful business operations, all form outcomes, persistence, audit, concurrency, timeout/failure and restart acceptance remain incomplete.
+
 ## Latest dashboard policy-alignment fix — 31 October 2026
 
 Exact source/test candidate: `d489318421af534988e2d44df4f6666d3dbc4955`.
