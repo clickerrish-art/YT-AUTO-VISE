@@ -1,3 +1,5 @@
+Machine-readable protected API route coverage is maintained in `docs/API_ROUTE_ACCEPTANCE_MATRIX.json`; route-level overall acceptance remains NOT_TESTED unless explicitly proven there.
+
 # Live go-live blocker reconciliation — 31 October 2026, 12:27 UTC
 
 Exact source/test candidate: `d9bdfbb4a79d4a1030edb208d8754fda88852c9b`.
