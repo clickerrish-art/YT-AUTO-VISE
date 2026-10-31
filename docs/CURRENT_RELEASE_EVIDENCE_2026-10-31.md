@@ -143,3 +143,55 @@ Implementation commits:
 - PR #1 remains open, draft and unmerged. `main` remains untouched. Nature Frontiers remains prohibited as a YouTube target; public/unattended YouTube publishing and live Meta publishing remain disabled.
 
 **Decision:** production-plan submission and review mechanics now have exact-SHA browser acceptance with fail-closed tamper checks. This is a meaningful engineering increment, not 100% application completion or production authorization. Keep the overall project on HOLD until the remaining application, external evidence and operational acceptance gates are independently proven.
+
+---
+
+## Live API route acceptance continuation — 31 October 2026
+
+### Live repository state after this documentation refresh
+
+- PR #1: **OPEN, DRAFT, UNMERGED**.
+- Current PR HEAD at this evidence update: `de578e71ef1327147c4b43fa7414b2ca9c55f50b`.
+- Exact application/test candidate: `a16b94e60960aba90fa20adc8fcdaf3057e15d68`.
+- The two commits after the tested candidate are documentation-only updates to the acceptance register and dashboard matrix; no application behavior changed after the tested candidate.
+- `main`: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Live divergence: **2,278 ahead / 2 behind / 184 changed files**.
+- No merge, main edit, reset, rebase, force-push or destructive reconciliation occurred. The local developer working tree is not available through this remote GitHub session; no claim is made about local uncommitted work.
+
+### New API acceptance implementation
+
+- Added `test/dashboard-api-authenticated-route-negative-matrix.test.mjs`.
+- The test starts the actual dashboard server in an isolated temporary state directory and sends authenticated empty requests to every source-discovered API method/path.
+- It verifies no unexpected 5xx response, a JSON response envelope, no internal filesystem path disclosure, and byte-identical persisted dashboard state after the complete route sweep.
+- The current source contains **38 registered route handlers total**: **35 `/api/` routes** plus the dashboard root, `/healthz` and `/readyz`. Older descriptions that call all 38 handlers API routes are inaccurate and should be read as total registered handlers.
+- This test is a negative-request acceptance slice only. It does not prove successful business behavior or complete API-001 acceptance.
+
+### Exact-SHA CI on `a16b94e60960aba90fa20adc8fcdaf3057e15d68`
+
+- Automation/security [run 41149529825](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529825): **SUCCESS** — 439 Node tests passed, 0 failures, 0 skips; 16 Python tests passed; npm audit reported 0 vulnerabilities; FFmpeg/ffprobe, JavaScript syntax and Python compilation steps passed.
+- Dashboard browser E2E [run 41149529722](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529722): **SUCCESS** — 20/20 Chromium journeys passed against the real local dashboard/backend.
+- Metadata validation [run 41149529692](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529692): **SUCCESS** — 439 Node tests, 0 failures, 0 skips; required metadata fail-closed checks passed.
+- Content quality [run 41149529718](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529718): **SUCCESS** — 439 Node tests, 0 failures, 0 skips.
+- Isolated main/candidate baseline [run 41149529768](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529768): **SUCCESS**; retained comparison artifact ID `13022835442`.
+- Non-destructive branch inventory [run 41149529702](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529702): **SUCCESS** (inventory only; human semantic review of all divergent history remains incomplete).
+- Nature Frontiers local draft validation [run 41149529710](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529710): **SUCCESS for local draft-package validation only**; provider-side draft creation/read-back was skipped.
+- Production readiness [run 41149529996](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529996): **HOLD / BLOCKED by 13 mandatory prerequisites**, as intended. The workflow's expected nonzero result is not a code-test failure or a production pass.
+
+### Acceptance register refresh
+
+- Requirements register now contains 73 records: **56 PASS / 9 NOT_TESTED / 8 BLOCKED**.
+- Only the permitted statuses `PASS`, `FAIL`, `NOT_TESTED` and `BLOCKED` are used.
+- `API-NEG-001` is PASS for the narrow all-route negative-request sweep.
+- `API-001` remains NOT_TESTED until route-specific successful operations, invalid-field matrices, persistence, concurrency/idempotency, audit and restart acceptance are complete.
+- `DASH-001` remains NOT_TESTED. Static inventory is 105 controls across 15 forms; 20/20 browser journeys are not exhaustive control acceptance.
+- Production-plan submission and review remain accepted only for isolated test fixtures and application integrity mechanics. They do not establish genuine source-media provenance, commercial licence validity, human editorial approval, final rendering or upload authorization.
+
+### Safety and outstanding external gates
+
+- `test/restore-facebook-draft-history.test.mjs` remains present on the implementation branch and is included in the Node test suite.
+- No YouTube upload, Facebook/Instagram publication, campaign activation, visibility change or external account mutation was performed.
+- Nature Frontiers remains prohibited as a YouTube target. Public/unattended YouTube publishing and live Meta publishing remain disabled. Safari remains inactive. The approved Selar destination remains unchanged.
+- Genuine media/manifests/rights evidence and human approval, verified SonicVhibez YouTube identity/history/OAuth, live Meta identity/permissions, owner-approved feasible cadence, full scheduler/worker lifecycle, full backup/restore/power-loss and deployment/rollback drills, complete per-control/API acceptance and human semantic branch review remain outstanding.
+
+**Decision: PARTIALLY IMPLEMENTED.** The latest exact-SHA automation and browser suites pass, but API-001, DASH-001 and the full business application are not accepted. Production remains on HOLD.
