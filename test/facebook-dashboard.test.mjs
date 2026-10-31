@@ -118,7 +118,11 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   assert.ok(Array.isArray(publishBody.blockers));
 
   const saved = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
-  assert.ok(saved.facebookDrafts.some(item => item.id === draft.id));
+  const savedDraft = saved.facebookDrafts.find(item => item.id === draft.id);
+  assert.ok(savedDraft, "the draft must remain durable after review");
+  assert.equal(savedDraft.status, "REJECTED");
+  assert.equal(savedDraft.approval.decision, "REJECT");
+  assert.equal(savedDraft.approval.reviewer, "facebook-test-owner");
   assert.ok(saved.audit.some(event => event.action === "FACEBOOK_DRAFT_CREATED" && event.itemId === draft.id && event.actor === "facebook-test-owner"));
   assert.ok(saved.audit.some(event => event.action === "FACEBOOK_DRAFT_RECHECKED"));
   assert.equal(saved.audit.filter(event => event.action === "FACEBOOK_DRAFT_REJECT" && event.itemId === draft.id && event.reviewer === "facebook-test-owner").length, 1,
