@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-31T19:12:00Z",
+  "generatedAt": "2026-10-31T19:15:00Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "2904439f53cec6ae13a9a8a58597a69d720a90dc",
+  "testedSourceTestSha": "8254abae98d6a99481c7f7c56ce0e490a37d83cb",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -41,7 +41,7 @@
     "readOnlyConcurrencyTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232372051",
     "workerFinalizationRace": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232932942"
   },
-  "disclaimer": "This matrix records route-level acceptance slices; overall API-001 remains NOT_TESTED. Eight routes have complete acceptance against applicable criteria. The worker completion route still lacks real GENERATED output acceptance; remaining route gaps and five external-operation blockers are separately recorded.",
+  "disclaimer": "API-001 remains NOT_TESTED. Eight routes have complete acceptance against applicable criteria; transition route cancellation and restart evidence are recorded but its concurrency criterion remains NOT_TESTED. Other route gaps and five external-operation blockers remain.",
   "routes": [
     {
       "method": "GET",
@@ -656,14 +656,23 @@
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
       "concurrency": "NOT_TESTED",
-      "restartRecovery": "NOT_TESTED",
+      "restartRecovery": "PASS",
       "externalOperation": "human approval/upload gates remain separate",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "Exact-SHA 9ff2de1 test: authorized QUEUED-to-GENERATING transition returns success and is verified in durable state with exactly one operator-attributed CONTENT_JOB_STATE_CHANGED audit event; unsafe direct transition to UPLOADING_PRIVATE returns 400 with byte-identical state. Concurrency and restart read-back remain NOT_TESTED.",
+      "notes": "Exact-SHA transition tests cover QUEUED-to-GENERATING persistence/audit, safe QUEUED-to-CANCELLED operation with operator/reason attribution, rejection of cancellation while an active worker lease exists without mutation, and restart read-back of the cancelled state. Direct transition to UPLOADING_PRIVATE remains rejected. Concurrency overlap for this route remains NOT_TESTED, so overall route acceptance remains NOT_TESTED.",
       "testEvidence": {
-        "test": "test/dashboard-task-runner.test.mjs",
-        "exactTestedSha": "9ff2de1f046e879f687f3767697e787214cc1e28",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217247523"
+        "priorTransition": {
+          "test": "test/dashboard-task-runner.test.mjs",
+          "exactTestedSha": "9ff2de1f046e879f687f3767697e787214cc1e28",
+          "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217247523",
+          "scenario": "Authorized QUEUED-to-GENERATING transition persists with one operator-attributed CONTENT_JOB_STATE_CHANGED event; unsafe direct UPLOADING_PRIVATE transition is rejected without mutation."
+        },
+        "cancellation": {
+          "test": "test/content-job-lifecycle.test.mjs and test/dashboard-api-job-cancellation.integration.test.mjs",
+          "exactTestedSha": "8254abae98d6a99481c7f7c56ce0e490a37d83cb",
+          "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41233214540",
+          "scenario": "Queued job transitions to CANCELLED with operator/reason/time, one CONTENT_JOB_CANCELLED audit event and restart read-back; cancellation of an actively leased job is rejected with byte-identical state."
+        }
       }
     },
     {
