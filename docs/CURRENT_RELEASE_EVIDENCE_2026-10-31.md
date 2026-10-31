@@ -273,3 +273,33 @@ No YouTube upload, Facebook/Instagram post, campaign activation, visibility chan
 
 **Decision: IMPLEMENTATION INCOMPLETE — ENGINEERING WORK REMAINS.** This exact-SHA dashboard policy fix is verified. It does not complete DASH-001, API-001, scheduler/worker acceptance, full state/deployment drills, semantic branch reconciliation or the external production gates.
 
+---
+
+## Live continuation — campaign API integration and abrupt-restart acceptance — 31 October 2026
+
+Exact source/test SHA: `faf7b993ee58b8761c716ca5dc7b70f2b372caae`.
+
+A new real-server integration test, `test/campaign-management-api.integration.test.mjs`, exercises `POST /api/campaigns/manage` against an isolated dashboard process and persistent state directory. It verifies:
+
+- An unapproved destination is rejected with HTTP 400 and does not mutate the state snapshot.
+- The exact approved Selar destination can be previewed; the pending URL/disclosure are persisted with their SHA-256 destination-version binding.
+- The authenticated operator ID is written to the `CAMPAIGN_PREVIEW` audit event.
+- Deactivation clears the pending preview and records a `CAMPAIGN_DEACTIVATE` audit event.
+- The dashboard process is terminated with `SIGKILL`; a fresh process then reads the deactivated campaign and both audit events from the same state directory.
+- No external provider call is made and `publishingEnabled` remains false.
+
+The API concurrency/restart test also now uses `SIGKILL` after 12 concurrent identical `POST /api/jobs` requests have been acknowledged, then verifies one durable job and one audit event after restart.
+
+### Exact-SHA evidence
+
+- Automation/security [41184686421](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41184686421): **444 Node tests passed, 0 failed, 0 skipped; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/FFprobe, syntax and Python compilation checks passed**.
+- Dashboard browser E2E [41184686381](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41184686381): **20/20 Chromium journeys passed**.
+- Metadata [41184686382](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41184686382): **SUCCESS**.
+- Content quality [41184686487](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41184686487): **SUCCESS**.
+- Local Nature Frontiers draft validation [41184686385](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41184686385): **SUCCESS; provider-side creation skipped**.
+- Non-destructive branch inventory [41184686405](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41184686405): **SUCCESS**.
+- Isolated exact main/candidate baseline [41184681953](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41184681953): **SUCCESS**.
+- Production readiness [41184686378](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41184686378): **HOLD with 13 blockers**, as designed.
+
+**Acceptance boundary:** API-001 and STATE-001 remain NOT_TESTED overall. These tests establish two real-server state-changing routes and recovery after acknowledged writes followed by abrupt process termination. They do not prove all 35 API routes' successful business paths, power-loss/disk-full/interrupted-write behavior, complete backup/restore/rollback drills or ambiguous external side-effect reconciliation. DASH-001 remains NOT_TESTED. No external YouTube or Meta operation was attempted.
+
