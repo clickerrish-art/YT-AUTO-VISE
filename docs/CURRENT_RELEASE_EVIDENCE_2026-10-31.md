@@ -1,3 +1,73 @@
+# Latest multi-process worker finalization and heartbeat acceptance — 31 October 2026, 19:13 UTC
+
+This update supersedes earlier live-state snapshots below. Historical checkpoints are retained.
+
+## Live GitHub state
+
+- Starting branch SHA for this continuation: `29dfd92acc566e864391b3c5be8c821344e008f8`.
+- Exact latest code/test SHA: `2904439f53cec6ae13a9a8a58597a69d720a90dc`.
+- Documentation follow-ups: API matrix commit `27cb875be8688fef458922d8f20bb4847ed6a84b`, Git review briefing `cf8813e687b0d44790de58e75ddadb8bd517716d`, worker route matrix update `6f990b3358a44f0b4aadd6417e862ac396a7cc60`, and final worker route matrix update `e70ad9036b3a868467d963cb34bd9a2d4a8f3768`.
+- Live branch HEAD: `e70ad9036b3a868467d963cb34bd9a2d4a8f3768`; main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Compare: **2,350 ahead / 2 behind / 193 changed files**.
+- PR #1 remains **OPEN, DRAFT, UNMERGED**. Branch protection remains disabled.
+- No main edit, merge, reset, rebase, force-push, branch deletion or destructive reconciliation occurred.
+
+## Worker lifecycle regression and repair
+
+The new real-server test `test/dashboard-api-worker-finalization-race.integration.test.mjs` is on exact code/test SHA `2904439f53cec6ae13a9a8a58597a69d720a90dc`.
+
+It starts two independent dashboard processes sharing an isolated persistent state directory and verifies:
+
+- Two concurrent heartbeats using the same valid lease token are serialized and both succeed; both heartbeat audit events persist.
+- Two concurrent duplicate completion requests against one lease produce exactly one successful completion and one rejected duplicate; exactly one completion audit event persists.
+- Two concurrent expired-lease reaper requests produce exactly one successful reaping and one HTTP 409; exactly one expiry audit event persists.
+- Persisted content jobs remain non-publishable.
+
+The first attempt at SHA `bbd883be32c779c7016a83d59e94ded77fadd64f` failed because the test incorrectly expected a root-level `publishingEnabled` state flag. The actual invariant is stored on each content job. The assertion was corrected in `269c024b103fddf6a440f9bf5cc83d71a1f27761`; the corrected race test passed. This was a test assertion defect, not a discovered production publishing defect.
+
+## Exact-SHA CI for `2904439f53cec6ae13a9a8a58597a69d720a90dc`
+
+| Workflow | Run | Result |
+|---|---:|---|
+| Automation/security + Node unit tests | [41232932942](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232932942) | **PASS — 449 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities** |
+| Dashboard browser E2E | [41232933016](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232933016) | **PASS — 20/20 Chromium journeys** |
+| Content quality | [41232932961](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232932961) | **PASS — 449 tests, 0 failures, 0 skips** |
+| Metadata | [41232933216](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232933216) | **PASS** |
+| Isolated main/candidate baseline | [41232928603](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232928603) | **PASS** |
+| Lockfile verification | [41232928412](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232928412) | **PASS** |
+| Non-destructive branch inventory | [41232932905](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232932905) | **PASS — inventory only** |
+| Nature Frontiers local draft validation | [41232932878](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232932878) | **PASS — local validation only; provider-side creation job skipped** |
+| Production readiness | [41232932910](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232932910) | **HOLD / FAIL-CLOSED — production prerequisites remain unmet** |
+
+## API route matrix improvement
+
+The machine-readable API matrix now records **35 routes / 35 authentication-negative checks passed / 8 overall PASS / 22 NOT_TESTED / 5 BLOCKED**.
+
+Newly accepted route-level evidence:
+- `POST /api/jobs/lease/claim`: two-process claim race has one winner; interrupted work is recovered after SIGKILL/restart.
+- `POST /api/jobs/lease/heartbeat`: concurrent heartbeats serialize successfully; lease extension, audit and restart persistence are tested.
+- `POST /api/jobs/lease/reap`: concurrent reapers yield one success and one 409, with one expiry audit record.
+- `POST /api/jobs/lease/complete`: concurrency and duplicate fencing are now tested, but overall acceptance remains NOT_TESTED because successful `GENERATED` completion with a real MP4 and matching metadata is not yet demonstrated.
+
+The five previously accepted read-only GET routes remain PASS. API-001 remains NOT_TESTED because 22 routes are still not fully accepted and five have external-operation blockers.
+
+Evidence: [API route acceptance matrix](https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/API_ROUTE_ACCEPTANCE_MATRIX.json).
+
+## Overall acceptance boundary
+
+- Requirement register remains **75 total / 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED**.
+- DASH-001 remains NOT_TESTED: 20 browser journeys do not individually accept all 101 controls.
+- API-001 remains NOT_TESTED: eight routes are accepted; 22 remain untested and five are externally blocked.
+- SCHED-001 remains NOT_TESTED. Worker concurrency evidence has improved, but queue cancellation, full retry/recovery boundaries, scheduling semantics, shutdown and complete end-to-end worker acceptance remain open.
+- STATE-001 and DEPLOY-001 remain NOT_TESTED; the new worker race test does not constitute complete transaction/disaster-recovery or clean deployment/rollback acceptance.
+- GIT-002 remains NOT_TESTED pending authorized human semantic review. The non-destructive inventory and `docs/GIT-002_SEMANTIC_REVIEW_BRIEFING.md` are review preparation, not human approval.
+- Production readiness remains HOLD with 13 fail-closed blockers. YouTube and Meta publishing restrictions remain unchanged.
+- No live YouTube upload, Facebook/Instagram post, campaign activation, visibility change, or Metricool scheduled-record modification occurred. Nature Frontiers remains prohibited as a YouTube target.
+
+**Verdict: engineering implementation remains PARTIALLY COMPLETE. The worker heartbeat/completion/reaper concurrency slice is now tested and CI-verified on exact SHA `2904439`. The application is not production-ready.**
+
+---
+
 # Latest exact-SHA API concurrency and branch-review update — 31 October 2026, 19:08 UTC
 
 This update supersedes earlier live-state snapshots below. Historical records are retained.
