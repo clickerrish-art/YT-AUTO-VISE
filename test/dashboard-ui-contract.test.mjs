@@ -34,3 +34,13 @@ test("every dashboard form and ID-addressable action control is wired to a handl
   assert.deepEqual(buttonIds.filter(id => !clickBindings.includes(id)), [],
     "every ID-addressable button must have a click handler");
 });
+
+test("Nature Frontiers Facebook draft form cannot offer prohibited product or affiliate promotions", () => {
+  const form = html.match(/<form id="facebookdraftform">([\\s\\S]*?)<\\/form>/)?.[1] ?? "";
+  assert.ok(form, "Facebook draft form must remain present");
+  assert.match(form, /Nature Frontiers is education-only/);
+  assert.match(form, /Product, affiliate and Selar promotions are not permitted/);
+  assert.doesNotMatch(form, /selar-wildlife-vault|fbcampaign|fbcommercial|fbdisclosure/);
+  assert.match(html, /campaignId:null/);
+  assert.match(html, /disclosureRequired:false,commercial:false/);
+});
