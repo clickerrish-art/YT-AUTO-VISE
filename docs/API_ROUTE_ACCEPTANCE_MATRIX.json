@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-31T19:10:00Z",
+  "generatedAt": "2026-10-31T19:12:00Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "269c024b103fddf6a440f9bf5cc83d71a1f27761",
+  "testedSourceTestSha": "2904439f53cec6ae13a9a8a58597a69d720a90dc",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -18,8 +18,8 @@
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 7,
-    "overallNotTested": 23,
+    "overallPass": 8,
+    "overallNotTested": 22,
     "overallBlocked": 5
   },
   "evidence": {
@@ -39,9 +39,9 @@
     "latestExactCandidateDashboard": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848763",
     "latestExactCandidateBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848781",
     "readOnlyConcurrencyTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232372051",
-    "workerFinalizationRace": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232789132"
+    "workerFinalizationRace": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232932942"
   },
-  "disclaimer": "This matrix records route-level acceptance slices; overall API-001 remains NOT_TESTED. Seven routes have complete acceptance against applicable criteria. The worker completion route still lacks real GENERATED output acceptance; remaining route gaps and five external-operation blockers are separately recorded.",
+  "disclaimer": "This matrix records route-level acceptance slices; overall API-001 remains NOT_TESTED. Eight routes have complete acceptance against applicable criteria. The worker completion route still lacks real GENERATED output acceptance; remaining route gaps and five external-operation blockers are separately recorded.",
   "routes": [
     {
       "method": "GET",
@@ -589,11 +589,17 @@
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "NOT_TESTED",
+      "concurrency": "PASS",
       "restartRecovery": "PASS",
       "externalOperation": "none",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "Exact-SHA 4eb66910 test: valid heartbeat extends and persists lease; invalid token is rejected with byte-identical state; heartbeat audit event is persisted; state survives server restart. Concurrency overlap for heartbeat remains NOT_TESTED."
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA real-server lifecycle test verifies valid and invalid token handling, durable expiry extension, heartbeat audit and restart persistence. A two-process race sends two concurrent heartbeats with the same current lease token; both serialized requests succeed and exactly two heartbeat audit events persist. All applicable route criteria are evidenced.",
+      "testEvidence": {
+        "test": "test/dashboard-api-worker-finalization-race.integration.test.mjs",
+        "exactTestedSha": "2904439f53cec6ae13a9a8a58597a69d720a90dc",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232932942",
+        "scenario": "Two independent dashboard server processes concurrently heartbeat, complete and reap jobs against shared isolated state. Both serialized heartbeats succeed; duplicate completion and reaper requests have exactly one winner and one durable audit event."
+      }
     },
     {
       "method": "POST",
@@ -609,12 +615,12 @@
       "restartRecovery": "PASS",
       "externalOperation": "real MP4/metadata prerequisites for GENERATED completion",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "Exact-SHA worker lifecycle test proves controlled FAILED completion, stale-token duplicate rejection, durable lease/audit persistence and restart read-back. Separate two-process race proves exactly one of two concurrent duplicate completion requests succeeds and only one completion audit event is written. GENERATED completion with a real MP4 and matching metadata remains untested, so overall route acceptance stays NOT_TESTED.",
+      "notes": "Exact-SHA worker lifecycle test proves controlled FAILED completion, stale-token duplicate rejection, durable lease/audit persistence and restart read-back. A separate two-process race proves exactly one of two concurrent duplicate completion requests succeeds and only one completion audit event is written. GENERATED completion with a real MP4 and matching metadata remains untested, so overall route acceptance stays NOT_TESTED.",
       "testEvidence": {
         "test": "test/dashboard-api-worker-finalization-race.integration.test.mjs",
-        "exactTestedSha": "269c024b103fddf6a440f9bf5cc83d71a1f27761",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232789132",
-        "scenario": "Two independent dashboard server processes sharing isolated persistent state submit duplicate worker completion and expired-lease reaping requests concurrently; exactly one completion and one reaper succeeds, with exactly one corresponding audit event."
+        "exactTestedSha": "2904439f53cec6ae13a9a8a58597a69d720a90dc",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232932942",
+        "scenario": "Two independent dashboard server processes concurrently heartbeat, complete and reap jobs against shared isolated state. Both serialized heartbeats succeed; duplicate completion and reaper requests have exactly one winner and one durable audit event."
       }
     },
     {
@@ -631,12 +637,12 @@
       "restartRecovery": "PASS",
       "externalOperation": "none",
       "overallAcceptance": "PASS",
-      "notes": "Exact-SHA worker lifecycle test proves active leases are not reaped, expired leases transition to retryable FAILED, and state/audit survive restart. Separate two-process race proves exactly one reaper succeeds and one receives 409, with exactly one expiry audit event. All applicable route criteria are evidenced.",
+      "notes": "Exact-SHA worker lifecycle test proves active leases are not reaped, expired leases transition to retryable FAILED, and state/audit survive restart. A separate two-process race proves exactly one reaper succeeds and one receives 409, with exactly one expiry audit event. All applicable route criteria are evidenced.",
       "testEvidence": {
         "test": "test/dashboard-api-worker-finalization-race.integration.test.mjs",
-        "exactTestedSha": "269c024b103fddf6a440f9bf5cc83d71a1f27761",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232789132",
-        "scenario": "Two independent dashboard server processes sharing isolated persistent state submit duplicate worker completion and expired-lease reaping requests concurrently; exactly one completion and one reaper succeeds, with exactly one corresponding audit event."
+        "exactTestedSha": "2904439f53cec6ae13a9a8a58597a69d720a90dc",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232932942",
+        "scenario": "Two independent dashboard server processes concurrently heartbeat, complete and reap jobs against shared isolated state. Both serialized heartbeats succeed; duplicate completion and reaper requests have exactly one winner and one durable audit event."
       }
     },
     {
