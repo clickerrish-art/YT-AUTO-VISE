@@ -1,3 +1,57 @@
+# Latest release gate snapshot — 31 October 2026, 12:27 UTC
+
+Tested source/test candidate: `d9bdfbb4a79d4a1030edb208d8754fda88852c9b`.
+Documentation updates after this candidate do not change application or test code.
+
+## Exact-SHA CI
+
+- [x] Automation/security [41201034162](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034162): 446 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, JavaScript syntax and Python compilation passed.
+- [x] Content quality [41201034134](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034134): 446 tests, 0 failures, 0 skips.
+- [x] Metadata [41201034143](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034143): 446 tests, 0 failures, 0 skips.
+- [x] Dashboard Chromium E2E [41201034132](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034132): 20/20 journeys.
+- [x] Isolated main/candidate baseline [41201034192](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034192): PASS; Node and Python exit code 0 for both exact checkouts; artifact retained.
+- [x] Non-destructive branch inventory [41201034144](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034144): PASS.
+- [x] Nature Frontiers local draft validation [41201034174](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034174): local validation PASS; provider-side draft creation SKIPPED.
+- [ ] Production readiness [41201034135](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034135): HOLD / 13 blockers; do not override.
+
+## New worker acceptance
+
+- [x] Two independent dashboard server processes race to claim one job; exactly one obtains the lease.
+- [x] SIGKILL both processes and verify fresh-process recovery to `RECOVERY_REQUIRED`, cleared lease and exactly one recovery audit event.
+- [x] Recorded as SCHED-WORKER-MULTIPROCESS-001 PASS on exact source/test candidate `d9bdfbb`.
+- [ ] Full SCHED-001 remains NOT_TESTED: heartbeat, lease expiry, retry, queue ordering, publication history and full operational recovery remain.
+
+## Application acceptance still incomplete
+
+- [ ] DASH-001 exhaustive acceptance of 101 controls, 15 forms and all relevant dashboard states.
+- [ ] API-001 full authorized success/failure/persistence/audit/concurrency/restart acceptance for all 35 protected API routes.
+- [ ] STATE-001 complete backup/restore and crash-recovery acceptance, including power-loss/disk-full constraints.
+- [ ] DEPLOY-001 clean checkout installation, persistent deployment, health/readiness, backup/restore and rollback drill.
+- [ ] GIT-002 human semantic review of the 2,302-ahead / 2-behind branch divergence.
+- [ ] Owner-approved feasible publication cadence and timestamped decision.
+- [ ] Verified SonicVhibez YouTube identity, complete public/private/unlisted history and uncertain-attempt reconciliation.
+- [ ] Genuine rights-cleared Short and long-form media manifests; final `media/next-short.mp4`.
+- [ ] Genuine human metadata, rights and compliance approval.
+- [ ] YouTube OAuth and exact channel environment configuration.
+- [ ] Native YouTube Related video evidence without changing private visibility.
+- [ ] Verified Meta Page/Instagram provider-side draft creation and remote read-back.
+- [ ] Owner review of eight live Metricool Nature Frontiers promotional schedules; seven currently PENDING and all eight are `draft=false`, `autoPublish=true`. No remote schedule was changed.
+- [ ] Original `.bundle` supplied and independently verified; it remains BLOCKED.
+
+## Git and safety
+
+- [x] PR #1 remains open, draft and unmerged.
+- [x] `main` remains unchanged.
+- [x] No merge, reset, rebase, force-push, branch deletion or destructive reconciliation.
+- [x] Nature Frontiers remains prohibited as a YouTube target.
+- [x] Public/unattended YouTube publishing and application-side Meta publishing remain disabled.
+- [x] Safari remains inactive; approved Selar URL unchanged.
+- [ ] Branch protection: owner/admin verification still required; do not infer enabled protection.
+
+**Release verdict: IMPLEMENTATION INCOMPLETE — ENGINEERING WORK REMAINS.** The exact-SHA tests above are passing, but they do not establish full dashboard/API/scheduler/state/deployment acceptance or production readiness.
+
+---
+
 ## Current release gate snapshot — 30 October 2026, 09:36 SAST
 
 - [x] Exact source/test candidate b31149df440a4c02cb2d7541b4894dcd916b8796 verified; PR #1 HEAD at this snapshot is ef3eadd005a811f9596e1cc12fa58beaf4770a03, a documentation-only descendant.
