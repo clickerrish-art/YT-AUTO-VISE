@@ -15,7 +15,7 @@ import { assertShortParentRelationship, shortParentRelationshipSha256, validateS
 import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
 import { canonicalAuthoringScriptSha256, runAuthoringNarrationStage } from "./authoring-production-pipeline.mjs";
-import { productionPlanSha256, validateProductionPlan } from "./production-plan.mjs";
+import { productionPlanSha256, validateProductionPlan, validateNarrationApprovalReceipt, validateShortProductionPlanParent } from "./production-plan.mjs";
 import { buildApprovedJobRenderManifest } from "./build-approved-job-render-manifest.mjs";
 import { contentJobArtifactPaths } from "./content-job-artifact-paths.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
@@ -1238,6 +1238,14 @@ const server = http.createServer(async (req, res) => {
         if (!narration || narration.status !== "APPROVED_FOR_RENDER" || narration.scriptSha256 !== stage.scriptSha256 ||
             !narrationApproval || narrationApproval.decision !== "APPROVE" || narrationApproval.scriptSha256 !== stage.scriptSha256) {
           return json(res, 409, { error: "Production plan review requires the current narration approval for the exact approved script" });
+        }
+        const narrationReceiptErrors = validateNarrationApprovalReceipt(job.id, narrationApproval);
+        if (narrationReceiptErrors.length) {
+          return json(res, 409, { error: "Narration approval evidence is stale or invalid", validationErrors: narrationReceiptErrors, publishingEnabled: false });
+        }
+        const parentRelationshipErrors = validateShortProductionPlanParent(job, state.jobs);
+        if (parentRelationshipErrors.length) {
+          return json(res, 409, { error: "Short parent relationship is stale or invalid", validationErrors: parentRelationshipErrors, publishingEnabled: false });
         }
         for (const [name, approvedHash] of [
           ["narration.mp3", narrationApproval.audioSha256],
