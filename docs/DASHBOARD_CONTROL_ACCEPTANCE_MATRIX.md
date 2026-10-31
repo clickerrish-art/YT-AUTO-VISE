@@ -1,3 +1,19 @@
+## Live API negative-request acceptance — 31 October 2026
+
+Exact tested application/test SHA: `a16b94e60960aba90fa20adc8fcdaf3057e15d68`.
+
+- Automation/security [run 41149529825](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529825): **439 Node tests passed, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities**.
+- Dashboard browser E2E [run 41149529722](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529722): **20/20 Chromium journeys passed**.
+- Metadata [run 41149529692](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529692) and content quality [run 41149529718](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529718): **439 tests passed, 0 failures, 0 skips**.
+- Isolated main/candidate baseline [run 41149529768](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529768) and non-destructive branch inventory [run 41149529702](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529702): **SUCCESS**.
+- New test: `test/dashboard-api-authenticated-route-negative-matrix.test.mjs`. It starts the actual local dashboard server and exercises every source-discovered `/api/` method/path with an authenticated empty request. It asserts no 5xx response, JSON error/success envelope, no internal path disclosure and byte-identical persisted state after the sweep.
+- Current source inventory is **105 HTML controls across 15 forms and 38 total registered route handlers**. Of those, **35 are `/api/` routes**; the other three are `/`, `/healthz` and `/readyz`. Do not describe the 38 total handlers as 38 API endpoints.
+- This is a narrow negative-request acceptance result. It does **not** complete API-001 or DASH-001: route-specific successful operations, invalid-field matrices, persistence, concurrency/idempotency, audit and restart coverage remain incomplete.
+
+Production readiness [run 41149529996](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529996) remains HOLD because 13 prerequisites are unmet. The local Facebook draft-package workflow [run 41149529710](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41149529710) passed local validation; provider-side draft creation was skipped.
+
+---
+
 ## Production-plan submission and review acceptance — 31 October 2026
 
 Exact browser candidate: `e3a7e8b2bba82b0db96aefe396eaca7dddecf8e9`.
