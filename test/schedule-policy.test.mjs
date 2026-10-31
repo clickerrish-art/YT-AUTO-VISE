@@ -379,3 +379,39 @@ test("active reservations never fall back to createdAt when scheduledAt is missi
       `${status} must report the missing reservation timestamp`);
   }
 });
+
+
+test("publication slot fails closed for unknown or missing existing-item statuses", () => {
+  const proposed = { id: "next", scheduledAt: "2026-10-31T15:00:00.000Z" };
+  for (const item of [
+    { id: "unknown-status", status: "processing", scheduledAt: "2026-10-27T15:00:00.000Z" },
+    { id: "missing-status", scheduledAt: "2026-10-27T15:00:00.000Z" },
+    null
+  ]) {
+    const result = validatePublicationSlot(proposed, [item]);
+    assert.equal(result.valid, false);
+    assert.ok(result.errors.some(error => error.includes("unsupported status") && error.includes("publication spacing cannot be verified")));
+  }
+  assert.equal(validatePublicationSlot(proposed, [
+    { id: "draft-item", status: "draft", scheduledAt: "2026-10-31T15:00:00.000Z" },
+    { id: "cancelled-item", status: "cancelled", scheduledAt: "2026-10-31T15:00:00.000Z" }
+  ]).valid, true);
+});
+
+test("rolling publication gate refuses scheduled entries with unknown or missing statuses", () => {
+  const base = {
+    history: [{ id: "remote-1", status: "private", actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form" }],
+    historyVerified: true,
+    proposedAt: "2026-10-27T15:00:00.000Z",
+    jobId: "next-job",
+    format: "long_form"
+  };
+  for (const item of [
+    { id: "unknown-schedule", status: "processing", scheduledAt: "2026-10-24T15:00:00.000Z" },
+    { id: "missing-schedule-status", scheduledAt: "2026-10-24T15:00:00.000Z" }
+  ]) {
+    const result = evaluateNextPublication({ ...base, scheduledItems: [item] });
+    assert.equal(result.valid, false);
+    assert.ok(result.errors.some(error => error.includes("unsupported status") && error.includes("publication spacing cannot be verified")));
+  }
+});

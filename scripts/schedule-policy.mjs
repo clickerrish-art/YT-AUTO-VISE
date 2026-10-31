@@ -2,6 +2,7 @@ export const DEFAULT_SCHEDULE_TIMEZONE = "Africa/Johannesburg";
 export const DEFAULT_MIN_SPACING_HOURS = 72;
 
 const ACTIVE_STATUSES = new Set(["queued", "queued_for_publication", "pending_schedule", "scheduled", "published", "public", "private", "unlisted", "uploading", "uploading_private", "pending", "pending_upload", "uncertain", "outcome_uncertain", "upload_outcome_uncertain", "recovery_required"]);
+const INACTIVE_STATUSES = new Set(["draft", "cancelled", "canceled", "deleted", "rejected", "skipped"]);
 
 function localDateKey(timestamp, timeZone) {
   return new Intl.DateTimeFormat("en-CA", {
@@ -107,10 +108,19 @@ export function validatePublicationSlot(proposed, existingItems = [], {
   // Fail early if the runtime does not recognize the configured IANA timezone.
   new Intl.DateTimeFormat("en", { timeZone }).format(new Date(0));
 
+  if (!Array.isArray(existingItems)) throw new Error("existingItems must be an array so publication spacing can be verified");
   const proposedAt = asTimestamp(proposed.scheduledAt, "proposed.scheduledAt");
   const proposedId = proposed.id;
   const errors = [];
-  const active = existingItems.filter(item => ACTIVE_STATUSES.has(String(item?.status ?? "").toLowerCase()));
+  const active = [];
+  for (const [index, item] of existingItems.entries()) {
+    const id = item?.id ?? `(index ${index})`;
+    const status = String(item?.status ?? "").trim().toLowerCase();
+    if (ACTIVE_STATUSES.has(status)) active.push(item);
+    else if (!INACTIVE_STATUSES.has(status)) {
+      errors.push(`existing item ${id} has unsupported status: ${status || "(missing)"}; publication spacing cannot be verified`);
+    }
+  }
   const ids = new Set();
   const resolved = [];
 
