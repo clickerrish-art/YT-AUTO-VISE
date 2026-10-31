@@ -210,3 +210,66 @@ Implementation commits:
 - Genuine media/manifests/rights evidence and human approval, verified SonicVhibez YouTube identity/history/OAuth, live Meta identity/permissions, owner-approved feasible cadence, full scheduler/worker lifecycle, full backup/restore/power-loss and deployment/rollback drills, complete per-control/API acceptance and human semantic branch review remain outstanding.
 
 **Decision: PARTIALLY IMPLEMENTED.** The latest exact-SHA automation and browser suites pass, but API-001, DASH-001 and the full business application are not accepted. Production remains on HOLD.
+
+---
+
+## Live continuation — Nature Frontiers dashboard policy alignment — 31 October 2026
+
+### Exact source/test candidate and live PR state
+
+- Exact tested application/test candidate: `d489318421af534988e2d44df4f6666d3dbc4955`.
+- PR #1 was OPEN, DRAFT and UNMERGED at this checkpoint. The PR head immediately before this evidence-only update was `ddbc07932aa863ade7e29a247803d10a59caff80`; this release-evidence commit is documentation-only.
+- `main` remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base remains `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- The exact tested candidate comparison was 2,285 commits ahead / 2 behind / 184 changed files. The implementation branch remains heavily divergent and still requires human semantic review.
+- No merge, main edit, reset, rebase, force-push or destructive reconciliation occurred.
+- The original `YT-AUTO-VISE.bundle` was not attached or found in the current conversation. **No bundle checksum, `git bundle verify`, bundle refs or bundle recovery is claimed.** The live GitHub repository was used as a separate source of truth.
+- No local developer working tree was available through this remote GitHub session; local uncommitted changes cannot be certified clean.
+
+### Implementation change
+
+- `public/dashboard.html`: removed the Selar promotion option and commercial/affiliate/disclosure controls from the Nature Frontiers Facebook draft form. The form now explicitly says Nature Frontiers is education-only.
+- The form's submission payload fixes `campaignId: null`, `commercial: false` and `disclosureRequired: false`; the dashboard can no longer suggest a prohibited promotion that the backend would reject.
+- `test/dashboard-ui-contract.test.mjs`: added a regression test asserting that the prohibited controls remain absent and the request payload remains non-commercial.
+- `test/dashboard-inventory.test.mjs`: refreshed exact inventory expectations after the four controls were removed.
+- Commits: `6af30170db5231fc3d582b63bd88907ea7b89184` (dashboard fix), `60240f3bd8139f215a4c909e6d0a45659c8112ac` (robust regression assertion), and `d489318421af534988e2d44df4f6666d3dbc4955` (inventory test expectations).
+
+### Exact-SHA verification on `d489318421af534988e2d44df4f6666d3dbc4955`
+
+- Automation/security [run 41155835021](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835021): **SUCCESS** — 440 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, JavaScript syntax and Python compilation passed.
+- Dashboard browser E2E [run 41155835124](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835124): **SUCCESS** — 20/20 Chromium journeys against the real local dashboard/backend.
+- Content quality [run 41155835080](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835080): **SUCCESS**.
+- Metadata validation [run 41155834980](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155834980): **SUCCESS**.
+- Isolated main/candidate baseline [run 41155835151](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835151): **SUCCESS** — both exact main and candidate checkouts returned install, Node and Python exit code 0; retained artifact [13025083151](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835151/artifacts/13025083151).
+- Non-destructive branch inventory [run 41155834996](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155834996): **SUCCESS** (inventory only; human semantic review remains outstanding).
+- Nature Frontiers local draft validation [run 41155835138](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835138): **SUCCESS for local draft-package validation only**; the provider-side create-draft job was skipped.
+- Production readiness [run 41155835201](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835201): **HOLD / BLOCKED by 13 prerequisites**, as designed. The report performed no upload, scheduling or publication.
+
+### Current dashboard inventory and acceptance boundary
+
+- **101 HTML controls**: 21 buttons, 41 inputs, 25 selects and 14 textareas.
+- **15 forms**.
+- **38 total registered route handlers**: 35 `/api/` routes plus `/`, `/healthz` and `/readyz`.
+- **83 non-submit controls** have stable IDs and JavaScript bindings.
+- The requirements register now contains **74 records: 57 PASS / 9 NOT_TESTED / 8 BLOCKED**. New item `NF-PROMO-UI-001` passes for the exact UI-policy alignment. `DASH-001` remains NOT_TESTED; inventory and 20 browser journeys are not exhaustive acceptance of all controls/routes.
+
+### Remaining production blockers
+
+The exact readiness run still reports 13 blockers:
+1. Owner-approved feasible cadence mode, timezone-aware approval timestamp and approval reference.
+2. Complete SonicVhibez public/private/unlisted history and reconciliation of all pending/uncertain upload attempts.
+3. Genuine rights-verified `content/render-manifest.json`.
+4. Genuine rights-verified `content/long-form-render-manifest.json`.
+5. Human-reviewed metadata marked `READY_FOR_PRIVATE_UPLOAD`.
+6. Verified SonicVhibez YouTube channel ID bound to metadata.
+7. Actual media rights confirmation.
+8. Content/compliance review confirmation.
+9. Genuine validated `media/next-short.mp4`.
+10. Secure `YOUTUBE_CLIENT_ID`.
+11. Secure `YOUTUBE_CLIENT_SECRET`.
+12. Secure `YOUTUBE_REFRESH_TOKEN`.
+13. Verified `SONICVHIBEZ_CHANNEL_ID`.
+
+No YouTube upload, Facebook/Instagram post, campaign activation, visibility change or external account mutation occurred. The existing provider-side Metricool schedule was not changed or rechecked as part of this code fix; owner review remains separate.
+
+**Decision: IMPLEMENTATION INCOMPLETE — ENGINEERING WORK REMAINS.** This exact-SHA dashboard policy fix is verified. It does not complete DASH-001, API-001, scheduler/worker acceptance, full state/deployment drills, semantic branch reconciliation or the external production gates.
+
