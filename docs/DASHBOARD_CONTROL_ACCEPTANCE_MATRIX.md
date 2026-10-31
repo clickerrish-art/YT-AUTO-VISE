@@ -1,3 +1,14 @@
+## Exact-SHA worker lease lifecycle acceptance — 31 October 2026
+
+Implementation/test commit: `4eb66910a93bf4b33843b91d9384e1f34bdc902b`.
+
+- Real-server integration test: `test/dashboard-api-worker-lease-lifecycle.integration.test.mjs`.
+- Exact-SHA GitHub Actions [run 41216258636](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41216258636): **SUCCESS** on SHA `4eb66910a93bf4b33843b91d9384e1f34bdc902b`; install, isolated lifecycle install, dependency audit, unit tests with zero skips, campaign/disclosure validation, review safety, queue invariants, JavaScript syntax and Python compilation all completed successfully.
+- The real dashboard server test verifies valid heartbeat extends and persists the lease; invalid token is rejected without any byte-level state or audit mutation; controlled worker completion to `FAILED` releases the lease and persists lease history/audit; duplicate stale completion is rejected without mutation; active lease reaping returns 409 without mutation; expired lease reaping records retryable `WORKER_LEASE_EXPIRED`; and both terminal states remain readable after server restart.
+- The earlier real two-process test `test/dashboard-api-worker-lease-multiprocess.integration.test.mjs` at exact SHA `d9bdfbb4a79d4a1030edb208d8754fda88852c9b` independently proves one winner in a competing claim and SIGKILL/restart recovery to `RECOVERY_REQUIRED`.
+- The three worker route slices (`POST /api/jobs/lease/heartbeat`, `/complete`, `/reap`) now have authorized success, persistence, audit and restart evidence in `docs/API_ROUTE_ACCEPTANCE_MATRIX.json`. Their concurrent heartbeat/reaper races remain untested. `/complete` was tested to a controlled `FAILED` outcome; this is not evidence of `GENERATED` completion with genuine MP4/metadata.
+- **DASH-001 remains NOT_TESTED. API-001 remains NOT_TESTED. SCHED-001 remains NOT_TESTED.** This worker lifecycle slice does not accept the 101 dashboard controls, all 35 protected routes, retry policy, manual retry/cancellation, queue ordering, dead-letter handling, corruption recovery, shutdown during active work, or complete scheduling/history semantics.
+
 Machine-readable route inventory and coverage: `docs/API_ROUTE_ACCEPTANCE_MATRIX.json` (35 protected routes; authentication-negative evidence is distinct from complete authorized route acceptance).
 
 ## Latest exact-SHA dashboard/API and worker acceptance — 31 October 2026
