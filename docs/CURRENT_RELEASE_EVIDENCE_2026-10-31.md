@@ -88,3 +88,58 @@ The readiness report explicitly states it never uploads, schedules or publishes.
 ## Decision
 
 This checkpoint demonstrates a real, successful narration-generation and recovery journey and broad passing CI coverage. It does **not** establish that the entire application is complete, that DASH-001 is accepted, or that production is ready. Keep PR #1 open and in draft; keep publishing disabled; continue with production-plan submission/review, remaining successful form journeys, all-route API acceptance, scheduling, backup/restore, deployment/rollback and semantic branch review.
+
+
+---
+
+## Implementation continuation — production-plan integrity and business-flow acceptance — 31 October 2026
+
+### Exact source/test candidate
+
+- Application-code commit: `e7d91d06626c1c9c87314f3d380c57c65943ae83`.
+- Exact browser/test candidate: `e3a7e8b2bba82b0db96aefe396eaca7dddecf8e9`.
+- The subsequent commits `30de9be63fb8db39a9a4ab1869e52186e7650a59` and `068f16aadc4769bd1f08dfd1a2b6a1afaa896268` update only the dashboard acceptance matrix and requirements register; no application behavior changed after the tested candidate.
+- At the exact candidate: `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, 2,270 commits ahead / 2 behind / 183 changed files. PR #1 remained open, draft and unmerged.
+
+### Implementation changes
+
+- Production-plan review now recomputes the exact narration approval receipt and rejects a persisted `APPROVE` decision if any protected receipt field has changed.
+- Production-plan review rechecks a Short's independently approved parent relationship against the persisted parent job, public remote receipt, exact channel identity, parent media hash and canonical URL. Submission-time validation is no longer treated as sufficient.
+- The production-plan API returns a fail-closed 409 when narration approval or parent relationship evidence is stale/invalid; it does not write a review decision or approval audit event.
+- Regression tests cover narration receipt tampering and stale/wrong parent identity.
+- The real dashboard/server Chromium journey additionally alters the persisted narration approval receipt and verifies that review is rejected before restoring the fixture and completing the valid review.
+
+Implementation commits:
+- `119cf6215ae922938941d9ab862ffe4c580e9f9b` — receipt and parent revalidation helpers.
+- `c0e922877a287e077ede4fb6a504c7d24c4e6f0f` — helper regression tests.
+- `e7d91d06626c1c9c87314f3d380c57c65943ae83` — API enforcement.
+- `e3a7e8b2bba82b0db96aefe396eaca7dddecf8e9` — browser tamper regression.
+
+### Exact-SHA CI evidence on `e3a7e8b2bba82b0db96aefe396eaca7dddecf8e9`
+
+- Automation/security [run 41148265949](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148265949): **SUCCESS** — 438 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax and compilation checks passed.
+- Dashboard browser E2E [run 41148260651](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148260651): **SUCCESS** — 20/20 Chromium journeys. The production-plan journey uses an isolated temporary state directory and explicitly test-only media/rights fixtures. It proves dashboard submission, persisted plan read-back, audit event, narration-receipt tamper rejection, changed-scene rejection, reviewer-bound approval, approval hash and server-restart persistence.
+- Content quality [run 41148265966](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148265966): **SUCCESS**.
+- Metadata validation [run 41148265891](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148265891): **SUCCESS**.
+- Isolated main/candidate baseline [run 41148265897](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148265897): **SUCCESS**.
+- Non-destructive branch inventory [run 41148265902](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148265902): **SUCCESS** (inventory only; human semantic review remains incomplete).
+- Nature Frontiers local draft validation [run 41148266077](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148266077): **SUCCESS for local validation only**; provider-side draft creation/read-back was not performed.
+- Lockfile verification [run 41148260623](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148260623): **SUCCESS**.
+- Production readiness [run 41148265917](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41148265917): **HOLD / BLOCKED by 13 mandatory prerequisites**, as designed. This is not a passing production-readiness result.
+
+### Dashboard acceptance status
+
+- `productionplanform`: **PASS** for isolated dashboard/server submission and durable read-back using test-only fixtures.
+- `productionplanreviewform`: **PASS** for exact-hash review, narration receipt tamper rejection, changed scene rejection, persisted reviewer receipt and restart recovery using test-only fixtures.
+- The 20/20 browser result is not exhaustive acceptance of the dashboard. DASH-001 remains **NOT_TESTED**: 105 controls and 38 API routes have not all passed dedicated success, failure, authorization, persistence and concurrency acceptance.
+- Six downstream production forms remain BLOCKED pending genuine assets, independently verifiable rights, real media validation/final review or an actual uncertain remote upload attempt.
+
+### Scope and honest limitations
+
+- The production-plan browser fixture deliberately uses synthetic test bytes and a test-only rights record. It proves the application gate and integrity mechanics; it is not a genuine production asset, commercial licence, human rights approval or editorial approval.
+- No actual production render, YouTube upload, Facebook/Instagram post, visibility change, campaign activation or owner authorization was created by these tests.
+- The verified YouTube channel identity/history and credentials, genuine media manifests, rights and human approvals, external Meta identities/permissions, production deployment/rollback drills, full scheduler/worker lifecycle and human semantic branch review remain outstanding.
+- `SCHED-001`, `STATE-001`, `API-001`, `DEPLOY-001` and `GIT-002` remain **NOT_TESTED overall** until their full acceptance criteria are demonstrated.
+- PR #1 remains open, draft and unmerged. `main` remains untouched. Nature Frontiers remains prohibited as a YouTube target; public/unattended YouTube publishing and live Meta publishing remain disabled.
+
+**Decision:** production-plan submission and review mechanics now have exact-SHA browser acceptance with fail-closed tamper checks. This is a meaningful engineering increment, not 100% application completion or production authorization. Keep the overall project on HOLD until the remaining application, external evidence and operational acceptance gates are independently proven.
