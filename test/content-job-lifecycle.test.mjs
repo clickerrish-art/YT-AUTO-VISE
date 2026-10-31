@@ -164,3 +164,35 @@ test("expired upload lease enters recovery-required rather than retrying", () =>
   assert.equal(recovered.job.errorDetails.retryable, false);
   assert.match(recovered.job.errorDetails.message, /reconciled/);
 });
+
+
+test("content jobs can be cancelled before the private-upload boundary but not during leased or uncertain work", () => {
+  const now = "2026-10-31T12:00:00.000Z";
+  const queued = createContentJob(input, now);
+  const cancelled = transitionContentJob(queued, "CANCELLED", {
+    actor: "operator@example.test",
+    reason: "Owner withdrew this content request"
+  }, now);
+  assert.equal(cancelled.state, "CANCELLED");
+  assert.equal(cancelled.cancelledAt, now);
+  assert.equal(cancelled.cancelledBy, "operator@example.test");
+  assert.equal(cancelled.cancelReason, "Owner withdrew this content request");
+  assert.equal(cancelled.completedAt, now);
+  assert.equal(cancelled.nextRetryAt, null);
+  assert.throws(() => transitionContentJob(cancelled, "QUEUED"), /Invalid job transition/);
+
+  const start = Date.parse(now);
+  const leased = claimWorkerLease(createContentJob({ ...input, idempotencyKey: "cancel:leased-job" }, now),
+    "worker-cancel-test", { leaseMs: 60_000, now: start });
+  assert.throws(() => transitionContentJob(leased.job, "CANCELLED", {
+    actor: "operator@example.test",
+    reason: "Cannot interrupt an active worker"
+  }, now), /worker lease cannot be cancelled/);
+
+  for (const state of ["RECOVERY_REQUIRED", "APPROVED_FOR_PRIVATE_UPLOAD", "UPLOADING_PRIVATE", "PRIVATE_UPLOAD_VERIFIED"]) {
+    assert.throws(() => transitionContentJob({ ...queued, state }, "CANCELLED", {
+      actor: "operator@example.test",
+      reason: "Must preserve uncertain or protected work"
+    }, now), /private-upload boundary cannot be cancelled/);
+  }
+});
