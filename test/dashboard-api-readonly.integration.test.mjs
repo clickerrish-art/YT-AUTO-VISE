@@ -80,7 +80,7 @@ test("authenticated dashboard read endpoints return real state without mutating 
       assert.equal(payload.publishingEnabled, false, "state endpoint must report public publishing disabled");
     } },
     { path: "/api/facebook/idea?date=2026-11-01", check: payload => {
-      assert.equal(typeof payload.idea?.title, "string");
+      assert.equal(typeof payload.idea?.topic, "string");
       assert.equal(payload.publishingEnabled, false);
       assert.equal(payload.publishReady, false);
     } },
