@@ -61,9 +61,9 @@ async function waitForReady(base, child, readLogs) {
   throw new Error("Dashboard did not become ready: " + readLogs());
 }
 
-async function stopChild(child) {
+async function stopChild(child, signal = "SIGTERM") {
   if (child.exitCode !== null) return;
-  child.kill("SIGTERM");
+  child.kill(signal);
   await new Promise((resolve, reject) => {
     const timeout = setTimeout(() => reject(new Error("Dashboard did not stop after SIGTERM")), 5000);
     child.once("exit", () => {
@@ -134,7 +134,9 @@ test("concurrent identical job submissions remain idempotent across a server res
   ).length, 1);
 
   const expectedJobId = parsed[0].job.id;
-  await stopChild(instance.child);
+  // Simulate an unexpected process crash after the API has acknowledged durable state.
+  // SIGKILL prevents shutdown handlers from masking whether the committed snapshot survives.
+  await stopChild(instance.child, "SIGKILL");
   instance = launchDashboard({ port, stateDir, token });
   await waitForReady(base, instance.child, () => instance.logs);
 
