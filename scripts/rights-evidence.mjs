@@ -37,16 +37,16 @@ export function buildVerifiedRightsAssets(items, {
   const seenAssetIds = new Set();
   return items.map((item, index) => {
     if (!item || typeof item !== "object" || Array.isArray(item)) {
-      throw new Error(\`Source asset \${index + 1} must be an object\`);
+      throw new Error("Source asset " + (index + 1) + " must be an object");
     }
     for (const key of REQUIRED_FIELDS) {
       if (typeof item[key] !== "string" || !item[key].trim()) {
-        throw new Error(\`Required source-rights field is missing: \${key}\`);
+        throw new Error("Required source-rights field is missing: " + key);
       }
     }
     const assetId = item.assetId.trim();
     if (seenAssetIds.has(assetId)) {
-      throw new Error(\`Duplicate rights asset ID: \${assetId}\`);
+      throw new Error("Duplicate rights asset ID: " + assetId);
     }
     seenAssetIds.add(assetId);
 
@@ -62,7 +62,7 @@ export function buildVerifiedRightsAssets(items, {
     for (const [label, file] of [["Source asset", assetFile], ["License evidence", evidenceFile]]) {
       const stat = fs.statSync(file);
       if (!stat.isFile() || stat.size <= 0) {
-        throw new Error(\`\${label} must be a non-empty regular file\`);
+        throw new Error(label + " must be a non-empty regular file");
       }
     }
 
