@@ -483,15 +483,21 @@
       "classification": "media/job validation",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "NOT_TESTED",
-      "inputValidation": "PASS",
-      "durablePersistence": "NOT_TESTED",
-      "auditEvidence": "NOT_TESTED",
+      "authorizedSuccess": "PASS — the real HTTP server accepted a generated test-only vertical H.264/AAC export with checksum-bound metadata, captions and 1280×720 thumbnail and returned passed technical validation.",
+      "inputValidation": "PASS — missing job/caption parameters return 400; unknown job returns 404; a media file changed after its recorded SHA-256 returns 409; rejected requests preserve state bytes and audit history.",
+      "durablePersistence": "PASS — successful validation persists VALIDATING state and per-artifact duration, dimensions and SHA-256 validation results.",
+      "auditEvidence": "PASS — successful technical validation writes exactly one CONTENT_JOB_VALIDATION_PASSED event bound to the job and inspected artifact hashes.",
       "concurrency": "NOT_TESTED",
       "restartRecovery": "NOT_TESTED",
-      "externalOperation": "genuine production assets required",
+      "externalOperation": "none — test-only local media; no upload, schedule or provider call",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Exact-SHA real-server test evidence on 8d757013c4cdb7db821420b4bf922b779c285ccb in test/dashboard-server.test.mjs. Synthetic FFmpeg fixtures verify the authorized success path, missing/unknown request rejection, durable validation result, job-bound audit event and tampered-media hash rejection with byte-identical state. The fixture is not production media or rights evidence. Concurrent validation and restart recovery remain NOT_TESTED, so the overall route remains NOT_TESTED.",
+      "testEvidence": {
+        "test": "test/dashboard-server.test.mjs — real HTTP server and generated test-only FFmpeg media",
+        "exactTestedSha": "8d757013c4cdb7db821420b4bf922b779c285ccb",
+        "automationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41288122705",
+        "contentQualityCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41288122753"
+      }
     },
     {
       "method": "POST",
