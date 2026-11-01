@@ -106,11 +106,40 @@ test("production-plan API binds the approved script, checks real file hashes, an
     syntheticDisclosure: "Generated scenes must be disclosed in metadata where applicable.",
     scenes, publishingEnabled: false, humanReviewRequired: true
   };
-  const submitted = await request("/api/jobs/production-plan", { jobId, scriptSha256, productionPlan: plan });
-  assert.equal(submitted.status, 201, JSON.stringify(submitted.body));
+  const concurrentSubmissions = await Promise.all([
+    request("/api/jobs/production-plan", { jobId, scriptSha256, productionPlan: plan }),
+    request("/api/jobs/production-plan", { jobId, scriptSha256, productionPlan: plan })
+  ]);
+  assert.deepEqual(concurrentSubmissions.map(result => result.status).sort(), [200, 201],
+    "concurrent identical production-plan submissions must have one creator and one idempotent reuse");
+  const submitted = concurrentSubmissions.find(result => result.status === 201);
+  const reusedSubmission = concurrentSubmissions.find(result => result.status === 200);
+  assert.ok(submitted && reusedSubmission, "one request must create the plan and one must reuse it");
+  assert.equal(reusedSubmission.body.reused, true);
   assert.equal(submitted.body.validationStatus, "STRUCTURE_AND_FILE_HASHES_VALIDATED");
   assert.equal(submitted.body.publishingEnabled, false);
   assert.equal(submitted.body.planSha256, productionPlanSha256(plan));
+
+  const afterConcurrentSubmission = JSON.parse(fs.readFileSync(stateFile, "utf8"));
+  const submittedPlanAudit = afterConcurrentSubmission.audit.filter(event =>
+    event.action === "PRODUCTION_PLAN_SUBMITTED" && event.jobId === jobId
+  );
+  assert.equal(submittedPlanAudit.length, 1, "concurrent identical submissions must create one durable submission audit event");
+
+  const duplicateRetry = await request("/api/jobs/production-plan", { jobId, scriptSha256, productionPlan: plan });
+  assert.equal(duplicateRetry.status, 200);
+  assert.equal(duplicateRetry.body.reused, true, "a later identical retry must reuse the persisted plan");
+  assert.equal(JSON.parse(fs.readFileSync(stateFile, "utf8")).audit.filter(event =>
+    event.action === "PRODUCTION_PLAN_SUBMITTED" && event.jobId === jobId
+  ).length, 1, "idempotent retry must not append another submission audit event");
+
+  const beforeConflictingPlan = fs.readFileSync(stateFile);
+  const conflictingPlan = structuredClone(plan);
+  conflictingPlan.editorialPremise += " This is a conflicting revision.";
+  const conflict = await request("/api/jobs/production-plan", { jobId, scriptSha256, productionPlan: conflictingPlan });
+  assert.equal(conflict.status, 409, "a different plan must not silently replace the already attached plan");
+  assert.deepEqual(fs.readFileSync(stateFile), beforeConflictingPlan,
+    "conflicting plan rejection must preserve durable state and audit byte-for-byte");
 
   const narrationPath = path.join(repoRoot, narrationArtifacts["narration.mp3"].path);
   const originalAudio = fs.readFileSync(narrationPath);
