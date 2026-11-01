@@ -294,7 +294,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   ], { encoding: "utf8", timeout: 30_000 });
   assert.equal(validationThumbnail.status, 0, "test-only thumbnail fixture must render: " + validationThumbnail.stderr);
   fs.writeFileSync(validationCaptionsPath,
-    "1\\n00:00:00,000 --> 00:00:49,500\\nTest-only caption cue for technical validation.\\n");
+    "1\n00:00:00,000 --> 00:00:49,500\nTest-only caption cue for technical validation.\n");
   fs.writeFileSync(validationMetadataPath, JSON.stringify({
     channel: "SonicVhibez",
     visibility: "private",
@@ -333,7 +333,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   validationJob.metadataPath = metadataRelativePath;
   validationJob.metadataVersion = fileSha256(validationMetadataPath);
   validationJob.thumbnailArtifact = { path: thumbnailRelativePath, sha256: fileSha256(validationThumbnailPath) };
-  fs.writeFileSync(validationStatePath, JSON.stringify(validationState) + "\\n");
+  fs.writeFileSync(validationStatePath, JSON.stringify(validationState) + "\n");
   const validationResponse = await fetch(base + "/api/jobs/validate", {
     method: "POST", headers,
     body: JSON.stringify({ jobId: validationJobId, captionsPath: captionsRelativePath })
