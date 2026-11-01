@@ -302,7 +302,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     title: "Test-only vertical validation fixture",
     description: "Synthetic media used only to verify the technical validation API contract.",
     tags: ["wildlife", "education", "documentary"]
-  }, null, 2) + "\\n");
+  }, null, 2) + "\n");
   const validationDraft = {
     id: "dashboard-validation-short",
     title: "Test-only validation fixture",
