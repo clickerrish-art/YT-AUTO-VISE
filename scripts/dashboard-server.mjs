@@ -119,6 +119,32 @@ function recoverInterruptedTasks() {
     }
   }
   for (const job of state.jobs) {
+    // A process can die after persisting RECONCILING but before the filesystem
+    // verification and final receipt are committed. Restore that stage to an
+    // explicitly retryable recovery state; never regenerate TTS automatically.
+    if (job.kind === "CONTENT_PRODUCTION" && job.authoring?.narrationStage?.status === "RECONCILING") {
+      const interruptedAt = new Date().toISOString();
+      job.authoring.narrationStage = {
+        ...job.authoring.narrationStage,
+        status: "RECOVERY_REQUIRED",
+        recoveryRequired: true,
+        reconciliationInterruptedAt: interruptedAt,
+        error: "Dashboard restarted during narration artifact reconciliation; inspect retained files and retry reconciliation. No TTS retry was performed.",
+        publishable: false,
+        publishingEnabled: false
+      };
+      state.audit.push({
+        id: crypto.randomUUID(),
+        action: "AUTHORING_NARRATION_RECONCILIATION_INTERRUPTED",
+        jobId: job.id,
+        scriptSha256: job.authoring.narrationStage.scriptSha256 ?? null,
+        previousStatus: "RECONCILING",
+        status: "RECOVERY_REQUIRED",
+        actor: "system-recovery",
+        at: interruptedAt
+      });
+      recovered++;
+    }
     if (job.kind === "CONTENT_PRODUCTION" && (job.state === "GENERATING" || job.state === "UPLOADING_PRIVATE" || (["GENERATED", "VALIDATING"].includes(job.state) && job.workerLease))) {
       const previous = job.state;
       job.state = "RECOVERY_REQUIRED";
