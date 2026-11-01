@@ -47,3 +47,39 @@ test("rejects a scene timeline whose source asset order differs from the approve
     narrationDurationSeconds: 20
   }), /does not match the source asset identity or order/);
 });
+
+
+test("supports the full 60-scene production-plan limit in deterministic order", () => {
+  const scenes = Array.from({ length: 60 }, (_, index) => ({
+    assetId: "scene-" + index,
+    sourceSha256: index.toString(16).padStart(2, "0").repeat(32),
+    rightsStatus: "VERIFIED",
+    editorialPurpose: "Advance documentary sequence beat " + index,
+    startSeconds: 0,
+    endSeconds: 10
+  }));
+  const sceneTimeline = scenes.map(scene => ({
+    assetId: scene.assetId,
+    path: "/media/" + scene.assetId + ".mp4",
+    startSeconds: 0,
+    endSeconds: 10
+  }));
+  const editPlan = createDeterministicEditPlan({
+    seed: 60,
+    scenes,
+    profile: { framing: ["fit"], transitions: ["cut"] }
+  });
+  const result = buildMultiSceneVideoGraph({
+    editPlan,
+    sceneTimeline,
+    captionsFilter: "/captions.srt",
+    width: 1920,
+    height: 1080,
+    narrationDurationSeconds: 600
+  });
+  assert.equal(result.sceneInputCount, 60);
+  assert.equal(result.narrationInputIndex, 60);
+  assert.equal(result.plannedDurationSeconds, 600);
+  assert.deepEqual(result.scenePaths, sceneTimeline.map(scene => scene.path));
+  assert.match(result.filterComplex, /\\[59:v:0\\]trim=start=0:end=10/);
+});

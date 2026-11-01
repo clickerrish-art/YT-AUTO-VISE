@@ -7,7 +7,7 @@ export function buildMultiSceneVideoGraph({
   editPlan, sceneTimeline, captionsFilter, width, height, narrationDurationSeconds,
   transitionDurationSeconds = 0.35, fps = 30
 }) {
-  if (!Array.isArray(sceneTimeline) || sceneTimeline.length < 2 || sceneTimeline.length > 30) throw new Error("multi-scene render requires between 2 and 30 explicit source segments");
+  if (!Array.isArray(sceneTimeline) || sceneTimeline.length < 2 || sceneTimeline.length > 60) throw new Error("multi-scene render requires between 2 and 60 explicit source segments");
   if (!editPlan || !Array.isArray(editPlan.scenes) || editPlan.scenes.length !== sceneTimeline.length) throw new Error("edit plan must bind each source segment exactly once");
   if (!Number.isInteger(width) || width < 2 || !Number.isInteger(height) || height < 2) throw new Error("output dimensions must be positive integers");
   if (!Number.isInteger(fps) || fps < 1 || fps > 60) throw new Error("output frame rate must be between 1 and 60 fps");
