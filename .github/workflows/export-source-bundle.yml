@@ -46,4 +46,4 @@ jobs:
             bundle-heads.txt
             bundle-sha256.txt
           retention-days: 7
-# Recovery refresh: export the full-history source bundle after the 561a3fc implementation and d35cd43 acceptance-register reconciliation.
+# Recovery refresh: export the full-history source bundle after the 561a3fc implementation, d35cd43 acceptance register, and c1028a9 README update.
