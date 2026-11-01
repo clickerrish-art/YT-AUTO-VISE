@@ -334,6 +334,20 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   validationJob.metadataVersion = fileSha256(validationMetadataPath);
   validationJob.thumbnailArtifact = { path: thumbnailRelativePath, sha256: fileSha256(validationThumbnailPath) };
   fs.writeFileSync(validationStatePath, JSON.stringify(validationState) + "\n");
+  const beforeRejectedValidation = fs.readFileSync(validationStatePath);
+  const missingValidationInput = await fetch(base + "/api/jobs/validate", {
+    method: "POST", headers, body: JSON.stringify({})
+  });
+  assert.equal(missingValidationInput.status, 400, "missing job/caption parameters must be rejected");
+  assert.deepEqual(fs.readFileSync(validationStatePath), beforeRejectedValidation,
+    "missing validation parameters must not mutate durable state or audit history");
+  const unknownValidationJob = await fetch(base + "/api/jobs/validate", {
+    method: "POST", headers,
+    body: JSON.stringify({ jobId: "unknown-validation-job", captionsPath: captionsRelativePath })
+  });
+  assert.equal(unknownValidationJob.status, 404, "unknown validation jobs must be rejected");
+  assert.deepEqual(fs.readFileSync(validationStatePath), beforeRejectedValidation,
+    "unknown validation jobs must not mutate durable state or audit history");
   const validationResponse = await fetch(base + "/api/jobs/validate", {
     method: "POST", headers,
     body: JSON.stringify({ jobId: validationJobId, captionsPath: captionsRelativePath })
