@@ -22,8 +22,8 @@
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 11,
-    "overallNotTested": 20,
+    "overallPass": 12,
+    "overallNotTested": 19,
     "overallBlocked": 4
   },
   "evidence": {
@@ -173,11 +173,17 @@
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "NOT_TESTED",
-      "restartRecovery": "PASS",
+      "concurrency": "PASS — concurrent identical submissions serialize to exactly one 201 creation and one 409 duplicate rejection; only one durable draft and one FACEBOOK_DRAFT_CREATED audit event are recorded.",
+      "restartRecovery": "PASS — after graceful server shutdown and a fresh server process, GET /api/facebook/state returns the one winning draft and durable audit history; publishing remains disabled.",
       "externalOperation": "none; local draft only",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "overallAcceptance": "PASS",
+      "notes": "Accepted as a local Nature Frontiers draft-creation route, not provider-side Meta creation or publication. Exact-SHA test test/facebook-dashboard.test.mjs on 1ac677fd302cb499e8aa07acc869ace81c8ac1d8 covers authorized draft creation, invalid/duplicate-content/same-day rejection, concurrent identical IDs (one 201, one 409), one durable draft/one creation audit, and real server restart with API read-back. Publishing remains disabled and no external provider mutation occurs.",
+      "testEvidence": {
+        "test": "test/facebook-dashboard.test.mjs — real HTTP server",
+        "exactTestedSha": "1ac677fd302cb499e8aa07acc869ace81c8ac1d8",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41288488223",
+        "scenarios": "Concurrent duplicate creation is single-winner; one persisted draft and audit event; graceful shutdown/restart read-back through GET /api/facebook/state; local-only and publishing disabled."
+      }
     },
     {
       "method": "POST",
