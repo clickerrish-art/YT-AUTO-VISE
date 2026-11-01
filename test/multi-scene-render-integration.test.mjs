@@ -36,8 +36,8 @@ test("FFmpeg assembles distinct approved scene inputs into a fully decodable mul
 
   run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "color=c=red:s=320x180:r=10:d=1.2", "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-t", "1.2", first]);
   run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "color=c=blue:s=320x180:r=10:d=1.2", "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-t", "1.2", second]);
-  run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "sine=frequency=440:duration=2.4", "-c:a", "pcm_s16le", narration]);
-  fs.writeFileSync(captions, "1\n00:00:00,000 --> 00:00:02,400\nIntegration test caption\n", "utf8");
+  run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "sine=frequency=440:duration=12", "-c:a", "pcm_s16le", narration]);
+  fs.writeFileSync(captions, "1\n00:00:00,000 --> 00:00:12,000\nIntegration test caption\n", "utf8");
 
   const sceneTimeline = [
     { assetId: "scene-red", path: first, startSeconds: 0, endSeconds: 1.2 },
@@ -58,7 +58,7 @@ test("FFmpeg assembles distinct approved scene inputs into a fully decodable mul
     captionsFilter: captions,
     width: 320,
     height: 180,
-    narrationDurationSeconds: 2.4,
+    narrationDurationSeconds: 12,
     transitionDurationSeconds: 0.2,
     fps: 10
   });
@@ -77,7 +77,7 @@ test("FFmpeg assembles distinct approved scene inputs into a fully decodable mul
   assert.equal(probe.streams.find(stream => stream.codec_type === "video")?.width, 320);
   assert.equal(probe.streams.find(stream => stream.codec_type === "video")?.height, 180);
   assert.ok(probe.streams.some(stream => stream.codec_type === "audio"), "render must retain narration audio");
-  assert.ok(Math.abs(Number(probe.format.duration) - 2.4) < 0.25, "render duration should match both scenes and narration");
+  assert.ok(Math.abs(Number(probe.format.duration) - 12) < 0.25, "render duration should match both scenes and narration");
   run("ffmpeg", ["-v", "error", "-i", output, "-map", "0:v:0", "-map", "0:a:0", "-f", "null", "-"]);
 
   const firstFrame = spawnSync("ffmpeg", ["-v", "error", "-ss", "0.4", "-i", output, "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "rgb24", "pipe:1"], { timeout: 30_000 });
@@ -102,7 +102,7 @@ test("FFmpeg renders and fully decodes the complete 60-scene production-plan lim
   const captions = path.join(root, "captions.srt");
   const output = path.join(root, "sixty-scenes.mp4");
 
-  run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "color=c=red:s=320x180:r=25:d=2.4", "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", source]);
+  run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "color=c=red:s=320x180:r=25:d=12", "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", source]);
   run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "sine=frequency=440:duration=2.4", "-c:a", "pcm_s16le", narration]);
   fs.writeFileSync(captions, "1\n00:00:00,000 --> 00:00:02,400\nSixty-scene integration caption\n", "utf8");
 
@@ -111,8 +111,8 @@ test("FFmpeg renders and fully decodes the complete 60-scene production-plan lim
     sourceSha256: index.toString(16).padStart(2, "0").repeat(32),
     rightsStatus: "VERIFIED",
     editorialPurpose: "Advance documentary sequence beat " + index,
-    startSeconds: index * 0.04,
-    endSeconds: (index + 1) * 0.04
+    startSeconds: index * 0.2,
+    endSeconds: (index + 1) * 0.2
   }));
   const sceneTimeline = scenes.map(scene => ({
     assetId: scene.assetId,
