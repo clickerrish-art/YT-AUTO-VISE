@@ -151,7 +151,8 @@ test("draft updates serialize concurrent writes and persist with audit history a
       event.actor === "draft-update-concurrency@example.test"
     ).length, 1, "each committed edit must have exactly one operator-attributed audit event");
   }
-  assert.equal(persisted.publishingEnabled, false);
+  assert.ok(persisted.jobs.length >= 2 && persisted.jobs.every(job => job.publishingEnabled === false),
+    "every persisted production job must remain non-publishable");
 
   await stopDashboard(instance);
   instance = null;
