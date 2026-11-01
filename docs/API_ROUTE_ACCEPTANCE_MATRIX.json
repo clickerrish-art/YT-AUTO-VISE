@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-01T08:00:00Z",
+  "generatedAt": "2026-11-01T09:49:04Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "49c5814b4e8bfcea87bd44116f0371d1d8707cf1",
+  "testedSourceTestSha": "77af9f231d9c71f6ec5ee0b4fa757af9009b1941",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -57,7 +57,7 @@
     "draftUpdateConcurrencyCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/49c5814b4e8bfcea87bd44116f0371d1d8707cf1",
     "draftUpdateConcurrencyCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846866"
   },
-  "disclaimer": "API-001 remains NOT_TESTED overall. Nine of 35 routes have complete acceptance against applicable criteria; 22 remain NOT_TESTED and four remain externally BLOCKED. All 35 authentication-negative checks pass. Rights-verification HTTP evidence uses test-only fixtures and does not establish genuine licence authenticity or owner approval.",
+  "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 14 of 35 routes as PASS, 17 as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. The production-plan submission route now has exact-SHA real-server concurrency/idempotency evidence, but the remaining untested route criteria prevent API-001 acceptance. Rights-verification HTTP evidence uses test-only fixtures and does not establish genuine licence authenticity or owner approval.",
   "routes": [
     {
       "method": "GET",
@@ -344,11 +344,17 @@
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "NOT_TESTED",
+      "concurrency": "PASS — exact-SHA real-server test sends two identical submissions concurrently and receives one 201 creation plus one 200 idempotent reuse; a later identical retry returns 200 without another audit event. A different valid plan revision returns 409 and preserves the complete durable state byte-for-byte. Exactly one PRODUCTION_PLAN_SUBMITTED audit event is persisted.",
       "restartRecovery": "PASS",
       "externalOperation": "none; test media/evidence fixtures only",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Concurrency/idempotency is now accepted on exact source/test SHA 77af9f231d9c71f6ec5ee0b4fa757af9009b1941. The route remains NOT_TESTED overall because full workflow/restart acceptance is not yet established for this endpoint.",
+      "testEvidence": {
+        "test": "test/production-plan-api.test.mjs — real HTTP dashboard server",
+        "exactTestedSha": "77af9f231d9c71f6ec5ee0b4fa757af9009b1941",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41290348544",
+        "scenario": "Two concurrent identical production-plan submissions produce one 201 and one 200 reused response; later identical retry reuses the persisted plan; a conflicting plan returns 409; durable state is byte-identical after conflict; one submission audit event exists. Two concurrent identical approvals produce one 200 and one 409 with exactly one durable approval audit event. Synthetic scene/narration/rights fixtures only; no production approval or publishing."
+      }
     },
     {
       "method": "POST",
