@@ -36,10 +36,15 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     sources: [researchSource],
     similarityReview: { status: "REVIEWED", evidenceRef: "provider-claim-must-not-be-trusted" }
   };
+  let providerCalls = 0;
   const provider = createServer((req, res) => {
     let body = "";
     req.on("data", chunk => { body += chunk; });
-    req.on("end", () => {
+    req.on("end", async () => {
+      providerCalls += 1;
+      // Hold the provider response long enough for a concurrent duplicate API
+      // request to observe GENERATING and fail closed without a second call.
+      await new Promise(resolve => setTimeout(resolve, 100));
       res.writeHead(200, { "content-type": "application/json" });
       res.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(generatedScript) } }] }));
     });
@@ -424,9 +429,22 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(authorDraftResponse.status, 201, JSON.stringify(authorDraftBody));
   const authorJob = authorDraftBody.job;
   const authorBrief = { topic: "Interpreting wildlife observations", audience: "Adults", editorialPurpose: "Explain evidence limits", sources: [researchSource], parentRecord: { contentId: "long-parent", weeklyContentCycleId: "cycle-1", format: "long_form", channel: "SonicVhibez" } };
-  const authorResponse = await fetch(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id, brief: authorBrief }) });
-  const authorBody = await authorResponse.json();
-  assert.equal(authorResponse.status, 201, JSON.stringify(authorBody));
+  const concurrentAuthorResponses = await Promise.all([1, 2].map(() =>
+    fetch(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id, brief: authorBrief }) })
+  ));
+  const concurrentAuthorOutcomes = await Promise.all(concurrentAuthorResponses.map(async response => ({
+    status: response.status,
+    body: await response.json()
+  })));
+  assert.deepEqual(
+    concurrentAuthorOutcomes.map(outcome => outcome.status).sort((a, b) => a - b),
+    [201, 409],
+    "concurrent identical authoring requests must start exactly one provider call"
+  );
+  const authorBody = concurrentAuthorOutcomes.find(outcome => outcome.status === 201).body;
+  const blockedAuthor = concurrentAuthorOutcomes.find(outcome => outcome.status === 409).body;
+  assert.match(blockedAuthor.error, /already in progress|duplicate provider calls are blocked/i);
+  assert.equal(providerCalls, 1, "the duplicate request must not call the script provider");
   assert.equal(authorBody.job.authoring.status, "AWAITING_HUMAN_EDITORIAL_REVIEW");
   assert.equal(authorBody.job.authoring.result.script.similarityReview.status, "PENDING", "provider/model claims must never satisfy originality review");
   assert.equal(authorBody.publishable, false);
@@ -436,7 +454,8 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const authorDuplicate = await fetch(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id, brief: authorBrief }) });
   const authorDuplicateBody = await authorDuplicate.json();
   assert.equal(authorDuplicate.status, 200, JSON.stringify(authorDuplicateBody));
-  assert.equal(authorDuplicateBody.reused, true, "identical retries must reuse the persisted authoring result");
+  assert.equal(authorDuplicateBody.reused, true, "identical retries after completion must reuse the persisted authoring result");
+  assert.equal(providerCalls, 1, "a completed idempotent retry must not call the provider again");
   const approvedScriptSha256 = canonicalAuthoringScriptSha256(authorBody.job.authoring.result.script);
   const staleScriptReview = await fetch(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify({
     jobId: authorJob.id, decision: "APPROVE", scriptSha256: "0".repeat(64),
