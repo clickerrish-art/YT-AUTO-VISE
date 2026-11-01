@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-01T09:26:45.921Z",
+  "generatedAt": "2026-11-01T12:19:49.454Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "e1e7dd94ba289ef2d84ac2c35c7124e76521045e",
+  "testedSourceTestSha": "7a72d20efb6741cbf5914fe2638b787bf8176336",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -14,16 +14,16 @@
       "GET /healthz",
       "GET /readyz"
     ],
-    "branchAheadBy": 2425,
+    "branchAheadBy": 2428,
     "branchBehindBy": 2,
-    "changedFiles": 200,
+    "changedFiles": 201,
     "branchProtectionEnabled": false
   },
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 19,
-    "overallNotTested": 12,
+    "overallPass": 20,
+    "overallNotTested": 11,
     "overallBlocked": 4
   },
   "evidence": {
@@ -55,9 +55,14 @@
     "latestExactCandidateLocalDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846829",
     "latestExactCandidateReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846833",
     "draftUpdateConcurrencyCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/49c5814b4e8bfcea87bd44116f0371d1d8707cf1",
-    "draftUpdateConcurrencyCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846866"
+    "draftUpdateConcurrencyCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846866",
+    "validationIdempotencyCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/85fc0056ec8f00f652799b5d934ae5d4cfc7a57b",
+    "validationIdempotencyRestartTestCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/7a72d20efb6741cbf5914fe2638b787bf8176336",
+    "validationIdempotencyAutomationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710316",
+    "validationIdempotencyDashboardCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710197",
+    "validationIdempotencyBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710334"
   },
-  "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 14 of 35 routes as PASS, 17 as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. The production-plan submission route now has exact-SHA real-server concurrency/idempotency evidence, but the remaining untested route criteria prevent API-001 acceptance. Rights-verification HTTP evidence uses test-only fixtures and does not establish genuine licence authenticity or owner approval.",
+  "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 20 of 35 routes as PASS, 11 as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. POST /api/jobs/validate now has real-server success, rejection, state/audit persistence, concurrent idempotent retry and server-restart read-back evidence using generated test-only FFmpeg media; no production media, rights or publication is implied.",
   "routes": [
     {
       "method": "GET",
@@ -531,16 +536,18 @@
       "inputValidation": "PASS — missing job/caption parameters return 400; unknown job returns 404; a media file changed after its recorded SHA-256 returns 409; rejected requests preserve state bytes and audit history.",
       "durablePersistence": "PASS — successful validation persists VALIDATING state and per-artifact duration, dimensions and SHA-256 validation results.",
       "auditEvidence": "PASS — successful technical validation writes exactly one CONTENT_JOB_VALIDATION_PASSED event bound to the job and inspected artifact hashes.",
-      "concurrency": "NOT_TESTED",
-      "restartRecovery": "NOT_TESTED",
+      "concurrency": "PASS — after the first successful validation, an identical retry and two simultaneous identical retries each return HTTP 200 with idempotent=true; durable state and audit remain byte-identical and exactly one CONTENT_JOB_VALIDATION_PASSED event exists.",
+      "restartRecovery": "PASS — after graceful shutdown and a fresh server process, the persisted VALIDATING state and validation receipt are read back; the identical request returns idempotent=true without changing state or audit bytes.",
       "externalOperation": "none — test-only local media; no upload, schedule or provider call",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "Exact-SHA real-server test evidence on 8d757013c4cdb7db821420b4bf922b779c285ccb in test/dashboard-server.test.mjs. Synthetic FFmpeg fixtures verify the authorized success path, missing/unknown request rejection, durable validation result, job-bound audit event and tampered-media hash rejection with byte-identical state. The fixture is not production media or rights evidence. Concurrent validation and restart recovery remain NOT_TESTED, so the overall route remains NOT_TESTED.",
+      "overallAcceptance": "PASS",
+      "notes": "Accepted for local technical-validation API behaviour. Test-only FFmpeg output, metadata, captions and thumbnail are used solely as deterministic engineering fixtures; this does not establish production asset rights or human approval.",
       "testEvidence": {
-        "test": "test/dashboard-server.test.mjs — real HTTP server and generated test-only FFmpeg media",
-        "exactTestedSha": "8d757013c4cdb7db821420b4bf922b779c285ccb",
-        "automationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41288122705",
-        "contentQualityCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41288122753"
+        "test": "test/dashboard-api-validation-idempotency.integration.test.mjs — real HTTP dashboard server with generated FFmpeg media",
+        "exactTestedSha": "7a72d20efb6741cbf5914fe2638b787bf8176336",
+        "automationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710316",
+        "dashboardE2eCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710197",
+        "isolatedBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710334",
+        "scenario": "A generated 50-second 1080×1920 H.264/AAC fixture passes the actual /api/jobs/validate route with checksum-bound private SonicVhibez metadata, SRT captions and a 1280×720 thumbnail. An identical retry returns idempotent=true and preserves state bytes; after graceful shutdown/restart the same request reuses the persisted validation receipt; two simultaneous retries also return idempotent=true. Exactly one validation audit event remains. The fixtures are synthetic test assets only; no external provider action occurs."
       }
     },
     {
