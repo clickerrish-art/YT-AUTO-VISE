@@ -104,6 +104,13 @@ test("campaign management API previews and deactivates the approved campaign wit
   });
   assert.equal(invalidResponse.status, 400, await invalidResponse.text());
   const afterInvalid = fs.readFileSync(statePath);
+  const unknownCampaign = await fetch(base + "/api/campaigns/manage", {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ campaignId: "missing-campaign", action: "deactivate" })
+  });
+  assert.equal(unknownCampaign.status, 400, await unknownCampaign.text());
+  assert.deepEqual(fs.readFileSync(statePath), afterInvalid, "unknown campaign IDs must not mutate state or audit history");
 
   const previewResponse = await fetch(base + "/api/campaigns/manage", {
     method: "POST",
@@ -128,6 +135,23 @@ test("campaign management API previews and deactivates the approved campaign wit
   assert.equal(persisted.audit.filter(event => event.action === "CAMPAIGN_PREVIEW" && event.campaignId === campaignId).length, 1);
   assert.equal(persisted.audit.find(event => event.action === "CAMPAIGN_PREVIEW" && event.campaignId === campaignId).actor, "campaign-api-acceptance@example.test");
   assert.notDeepEqual(fs.readFileSync(statePath), afterInvalid, "successful preview must persist the campaign state");
+
+  const concurrentPreviews = await Promise.all([1, 2].map(() => fetch(base + "/api/campaigns/manage", {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ campaignId, action: "preview", destinationUrl: approvedDestination, disclosureText })
+  })));
+  assert.deepEqual(concurrentPreviews.map(response => response.status), [200, 200]);
+  const concurrentPreviewBodies = await Promise.all(concurrentPreviews.map(response => response.json()));
+  assert.ok(concurrentPreviewBodies.every(body => body.previewOnly === true && body.publicPublishingEnabled === false));
+  persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  campaign = persisted.campaigns.find(item => item.id === campaignId);
+  assert.equal(campaign.pendingDestinationUrl, approvedDestination);
+  assert.equal(campaign.pendingDisclosureText, disclosureText);
+  assert.equal(persisted.audit.filter(event => event.action === "CAMPAIGN_PREVIEW" && event.campaignId === campaignId).length, 3,
+    "each serialized preview operation must be durably audited without losing the shared preview state");
+  assert.equal(persisted.audit.filter(event => event.action === "CAMPAIGN_PREVIEW" && event.campaignId === campaignId)
+    .every(event => event.actor === "campaign-api-acceptance@example.test"), true);
 
   const deactivateResponse = await fetch(base + "/api/campaigns/manage", {
     method: "POST",
@@ -158,7 +182,7 @@ test("campaign management API previews and deactivates the approved campaign wit
   assert.equal(stateResponse.status, 200, stateText);
   const state = JSON.parse(stateText);
   assert.equal(state.campaigns.find(item => item.id === campaignId).status, "INACTIVE");
-  assert.equal(state.audit.filter(event => event.action === "CAMPAIGN_PREVIEW" && event.campaignId === campaignId).length, 1);
+  assert.equal(state.audit.filter(event => event.action === "CAMPAIGN_PREVIEW" && event.campaignId === campaignId).length, 3);
   assert.equal(state.audit.filter(event => event.action === "CAMPAIGN_DEACTIVATE" && event.campaignId === campaignId).length, 1);
   assert.equal(state.publishingEnabled, false);
 });
