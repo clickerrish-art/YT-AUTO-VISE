@@ -22,8 +22,8 @@
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 10,
-    "overallNotTested": 21,
+    "overallPass": 11,
+    "overallNotTested": 20,
     "overallBlocked": 4
   },
   "evidence": {
@@ -684,11 +684,11 @@
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "NOT_TESTED",
+      "concurrency": "PASS — two concurrent QUEUED-to-GENERATING requests serialize to exactly one 200 and one rejected 400; the committed transition creates one audit event. A subsequent duplicate transition is rejected with byte-identical state.",
       "restartRecovery": "PASS",
       "externalOperation": "human approval/upload gates remain separate",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "Exact-SHA transition tests cover QUEUED-to-GENERATING persistence/audit, safe QUEUED-to-CANCELLED operation with operator/reason attribution, rejection of cancellation while an active worker lease exists without mutation, and restart read-back of the cancelled state. Direct transition to UPLOADING_PRIVATE remains rejected. Concurrency overlap for this route remains NOT_TESTED, so overall route acceptance remains NOT_TESTED.",
+      "overallAcceptance": "PASS",
+      "notes": "Accepted with exact-SHA evidence. Existing real-server and lifecycle tests cover authorized QUEUED-to-GENERATING, safe cancellation with operator/reason attribution, rejection of cancellation while an active worker lease exists without mutation, unsafe UPLOADING_PRIVATE transition rejection, and restart read-back. New test/dashboard-server.test.mjs concurrency coverage on 27279f53848dc73f960cd61911509f5ca00394ab proves simultaneous duplicate QUEUED-to-GENERATING requests commit exactly once, create one CONTENT_JOB_STATE_CHANGED event, and reject a repeated stale transition without state/audit mutation. Human approval and private upload remain separate gates.",
       "testEvidence": {
         "priorTransition": {
           "test": "test/dashboard-task-runner.test.mjs",
@@ -701,6 +701,12 @@
           "exactTestedSha": "8254abae98d6a99481c7f7c56ce0e490a37d83cb",
           "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41233214540",
           "scenario": "Queued job transitions to CANCELLED with operator/reason/time, one CONTENT_JOB_CANCELLED audit event and restart read-back; cancellation of an actively leased job is rejected with byte-identical state."
+        },
+        "concurrentTransition": {
+          "test": "test/dashboard-server.test.mjs — real HTTP server",
+          "exactTestedSha": "27279f53848dc73f960cd61911509f5ca00394ab",
+          "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41288303311",
+          "scenario": "Two concurrent QUEUED-to-GENERATING requests yield one success and one invalid-transition rejection; exactly one operator-attributed state-change audit event persists; subsequent duplicate rejection leaves state byte-identical."
         }
       }
     },
