@@ -92,3 +92,63 @@ test("FFmpeg assembles distinct approved scene inputs into a fully decodable mul
   assert.ok(firstRgb[0] > firstRgb[2] * 1.5, "first scene must visibly retain the red source");
   assert.ok(lastRgb[2] > lastRgb[0] * 1.5, "second scene must visibly retain the blue source");
 });
+
+
+test("FFmpeg renders and fully decodes the complete 60-scene production-plan limit", t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "multi-scene-60-render-"));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const source = path.join(root, "source.mp4");
+  const narration = path.join(root, "narration.wav");
+  const captions = path.join(root, "captions.srt");
+  const output = path.join(root, "sixty-scenes.mp4");
+
+  run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "color=c=red:s=320x180:r=25:d=2.4", "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", source]);
+  run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "sine=frequency=440:duration=2.4", "-c:a", "pcm_s16le", narration]);
+  fs.writeFileSync(captions, "1\\n00:00:00,000 --> 00:00:02,400\\nSixty-scene integration caption\\n", "utf8");
+
+  const scenes = Array.from({ length: 60 }, (_, index) => ({
+    assetId: "scene-" + index,
+    sourceSha256: index.toString(16).padStart(2, "0").repeat(32),
+    rightsStatus: "VERIFIED",
+    editorialPurpose: "Advance documentary sequence beat " + index,
+    startSeconds: index * 0.04,
+    endSeconds: (index + 1) * 0.04
+  }));
+  const sceneTimeline = scenes.map(scene => ({
+    assetId: scene.assetId,
+    path: source,
+    startSeconds: scene.startSeconds,
+    endSeconds: scene.endSeconds
+  }));
+  const editPlan = createDeterministicEditPlan({
+    seed: 60,
+    scenes,
+    profile: { framing: ["fit"], transitions: ["cut"] }
+  });
+  const graph = buildMultiSceneVideoGraph({
+    editPlan, sceneTimeline, captionsFilter: captions,
+    width: 320, height: 180, narrationDurationSeconds: 2.4, fps: 25
+  });
+  assert.equal(graph.sceneInputCount, 60);
+  assert.equal(graph.narrationInputIndex, 60);
+
+  const inputs = Array.from({ length: 60 }, () => ["-i", source]).flat();
+  run("ffmpeg", [
+    "-v", "error", ...inputs, "-i", narration,
+    "-filter_complex", graph.filterComplex,
+    "-map", graph.outputLabel, "-map", "60:a:0",
+    "-shortest", "-c:v", "libx264", "-preset", "ultrafast",
+    "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "96k", output
+  ]);
+
+  const probe = JSON.parse(run("ffprobe", [
+    "-v", "error", "-show_entries", "format=duration:stream=codec_type,width,height",
+    "-of", "json", output
+  ]));
+  const video = probe.streams.find(stream => stream.codec_type === "video");
+  assert.equal(video?.width, 320);
+  assert.equal(video?.height, 180);
+  assert.ok(probe.streams.some(stream => stream.codec_type === "audio"));
+  assert.ok(Math.abs(Number(probe.format.duration) - 2.4) < 0.2);
+  run("ffmpeg", ["-v", "error", "-xerror", "-i", output, "-f", "null", "-"]);
+});
