@@ -1,0 +1,53 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import crypto from "node:crypto";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { spawn } from "node:child_process";
+import { createContentJob, transitionContentJob } from "../scripts/content-job-lifecycle.mjs";
+
+const hash = data => crypto.createHash("sha256").update(data).digest("hex");
+test("rights verification API rejects invalid evidence, commits once, and survives restart", async t => {
+  const root = process.cwd(), stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "rights-api-"));
+  const fixtureName = ".rights-api-" + process.pid + "-" + crypto.randomBytes(4).toString("hex"), fixtureDir = path.join(root, fixtureName);
+  fs.mkdirSync(fixtureDir);
+  const media = Buffer.from("test fixture media"), licence = Buffer.from("test-only licence; not legal proof");
+  fs.writeFileSync(path.join(fixtureDir, "media.bin"), media); fs.writeFileSync(path.join(fixtureDir, "licence.txt"), licence);
+  const token = "rights-api-" + crypto.randomBytes(24).toString("hex"), operator = "rights-test@example.test";
+  const port = 24000 + Math.floor(Math.random() * 12000), base = "http://127.0.0.1:" + port, stateFile = path.join(stateDir, "dashboard-state.json");
+  let job = createContentJob({ idempotencyKey: "rights-api-job", title: "Rights API fixture", topic: "Test fixture", contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: "2026-11-03" });
+  for (const state of ["GENERATING", "GENERATED", "VALIDATING"]) job = transitionContentJob(job, state, { actor: "test-worker" });
+  job.outputArtifacts = [{ path: "fixture.mp4", sha256: "a".repeat(64) }]; job.validationResults = { passed: true, fixtureOnly: true };
+  fs.writeFileSync(stateFile, JSON.stringify({ version: 1, queueItems: [], campaigns: [], audit: [], jobs: [job], uploads: [] }));
+  let child, logs = "";
+  const start = async () => {
+    logs = ""; child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], { cwd: root, env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: operator, DASHBOARD_STATE_DIR: stateDir, UPLOAD_LOG_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" }, stdio: ["ignore", "pipe", "pipe"] });
+    child.stdout.on("data", x => logs += x); child.stderr.on("data", x => logs += x);
+    for (let i = 0; i < 100; i++) { if (child.exitCode !== null) throw Error(logs); try { if ((await fetch(base + "/healthz")).ok) return; } catch {} await new Promise(r => setTimeout(r, 50)); }
+    throw Error("server startup timeout: " + logs);
+  };
+  const stop = async () => { if (!child || child.exitCode !== null) return; const p = child; p.kill("SIGTERM"); await new Promise((resolve, reject) => { const timer = setTimeout(() => reject(Error("shutdown timeout")), 5000); p.once("exit", () => { clearTimeout(timer); resolve(); }); }); };
+  const headers = { "content-type": "application/json", "x-operator-token": token };
+  const asset = { assetId: "fixture-1", source: "Test source", rightsHolder: "Test holder", assetPath: fixtureName + "/media.bin", licenseEvidenceLocation: fixtureName + "/licence.txt", permittedUses: ["YouTube"], restrictions: "Test only", attributionRequirements: "No production claim" };
+  const post = async body => { const r = await fetch(base + "/api/jobs/rights/verify", { method: "POST", headers, body: JSON.stringify(body) }); return { status: r.status, body: await r.json() }; };
+  t.after(async () => { await stop().catch(() => {}); fs.rmSync(stateDir, { recursive: true, force: true }); fs.rmSync(fixtureDir, { recursive: true, force: true }); });
+  await start();
+  assert.equal((await fetch(base + "/api/jobs/rights/verify", { method: "POST", headers: { "content-type": "application/json" }, body: "{}" })).status, 401);
+  assert.equal((await post({ jobId: job.id, assets: [] })).status, 400);
+  assert.equal((await post({ confirmRightsVerified: true, jobId: "unknown", assets: [asset] })).status, 404);
+  const before = fs.readFileSync(stateFile), denied = await post({ confirmRightsVerified: true, jobId: job.id, assets: [{ ...asset, permittedUses: ["personal-use"] }] });
+  assert.equal(denied.status, 400); assert.deepEqual(fs.readFileSync(stateFile), before);
+  const pair = await Promise.all([post({ confirmRightsVerified: true, jobId: job.id, assets: [asset] }), post({ confirmRightsVerified: true, jobId: job.id, assets: [asset] })]);
+  assert.deepEqual(pair.map(x => x.status).sort((a,b) => a-b), [200,409]);
+  const accepted = pair.find(x => x.status === 200); assert.equal(accepted.body.job.state, "AWAITING_HUMAN_REVIEW");
+  assert.equal(accepted.body.rightsEvidence.assets[0].assetSha256, hash(media)); assert.equal(accepted.body.rightsEvidence.assets[0].licenseEvidenceSha256, hash(licence));
+  assert.equal(accepted.body.rightsEvidence.verifiedBy, operator); assert.equal(accepted.body.publishingEnabled, false);
+  assert.equal((await post({ confirmRightsVerified: true, jobId: job.id, assets: [asset] })).status, 409);
+  let saved = JSON.parse(fs.readFileSync(stateFile, "utf8"));
+  assert.equal(saved.audit.filter(x => x.action === "CONTENT_JOB_RIGHTS_VERIFIED").length, 1);
+  assert.equal(saved.audit.filter(x => x.action === "CONTENT_JOB_AWAITING_HUMAN_REVIEW").length, 1);
+  await stop(); await start(); saved = JSON.parse(fs.readFileSync(stateFile, "utf8"));
+  assert.equal(saved.jobs[0].rightsChecks.evidenceSha256, accepted.body.job.rightsChecks.evidenceSha256);
+  assert.equal(saved.audit.filter(x => x.action === "CONTENT_JOB_RIGHTS_VERIFIED").length, 1);
+});
