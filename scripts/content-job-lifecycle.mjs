@@ -39,7 +39,7 @@ export function createContentJob(input, now = new Date().toISOString()) {
   if (!title || title.length > 100) throw new Error("title is required and must be at most 100 characters");
   if (!topic || topic.length > 300) throw new Error("topic is required and must be at most 300 characters");
   if (!["long_form", "short"].includes(contentType)) throw new Error("contentType must be long_form or short");
-  if (!["Tuesday", "Thursday", "Saturday"].includes(scheduledDay)) throw new Error("scheduledDay must match an authorized weekly slot");
+  if (!["Tuesday", "Saturday"].includes(scheduledDay)) throw new Error("scheduledDay must be an authorized Tuesday/Saturday draft-preparation slot");
   if ((scheduledDay === "Saturday") !== (contentType === "short")) throw new Error("contentType conflicts with the authoritative scheduled day");
   const inputReferences = input.inputReferences ?? [];
   if (!Array.isArray(inputReferences) || inputReferences.length > 30 || inputReferences.some(x => typeof x !== "string" || !x.trim() || x.length > 500)) {
