@@ -36,7 +36,7 @@ test("FFmpeg assembles distinct approved scene inputs into a fully decodable mul
 
   run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "color=c=red:s=320x180:r=10:d=1.2", "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-t", "1.2", first]);
   run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "color=c=blue:s=320x180:r=10:d=1.2", "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-t", "1.2", second]);
-  run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "sine=frequency=440:duration=12", "-c:a", "pcm_s16le", narration]);
+  run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "sine=frequency=440:duration=2.4", "-c:a", "pcm_s16le", narration]);
   fs.writeFileSync(captions, "1\n00:00:00,000 --> 00:00:02,400\nIntegration test caption\n", "utf8");
 
   const sceneTimeline = [
@@ -103,7 +103,7 @@ test("FFmpeg renders and fully decodes the complete 60-scene production-plan lim
   const output = path.join(root, "sixty-scenes.mp4");
 
   run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "color=c=red:s=320x180:r=25:d=12", "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", source]);
-  run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "sine=frequency=440:duration=2.4", "-c:a", "pcm_s16le", narration]);
+  run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "sine=frequency=440:duration=12", "-c:a", "pcm_s16le", narration]);
   fs.writeFileSync(captions, "1\n00:00:00,000 --> 00:00:12,000\nSixty-scene integration caption\n", "utf8");
 
   const scenes = Array.from({ length: 60 }, (_, index) => ({
