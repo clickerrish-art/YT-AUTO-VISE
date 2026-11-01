@@ -81,5 +81,5 @@ test("supports the full 60-scene production-plan limit in deterministic order", 
   assert.equal(result.narrationInputIndex, 60);
   assert.equal(result.plannedDurationSeconds, 600);
   assert.deepEqual(result.scenePaths, sceneTimeline.map(scene => scene.path));
-  assert.match(result.filterComplex, /\\[59:v:0\\]trim=start=0:end=10/);
+  assert.match(result.filterComplex, /\[59:v:0\]trim=start=0:end=10/);
 });
