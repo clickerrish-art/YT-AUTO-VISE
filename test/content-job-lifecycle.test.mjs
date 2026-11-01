@@ -57,6 +57,27 @@ test("retry requires a retryable failure and respects the attempt limit", () => 
 });
 
 
+test("cancellation is fenced while script or narration work is active or its outcome is uncertain", () => {
+  const now = "2026-10-31T12:00:00.000Z";
+  const queued = createContentJob({ ...input, idempotencyKey: "cancel:active-authoring" }, now);
+  const activeStages = [
+    { authoring: { status: "GENERATING" } },
+    { authoring: { status: "RECOVERY_REQUIRED" } },
+    { authoring: { status: "AWAITING_HUMAN_EDITORIAL_REVIEW", narrationStage: { status: "GENERATING" } } },
+    { authoring: { status: "AWAITING_HUMAN_EDITORIAL_REVIEW", narrationStage: { status: "RECONCILING" } } },
+    { authoring: { status: "AWAITING_HUMAN_EDITORIAL_REVIEW", narrationStage: { status: "RECOVERY_REQUIRED" } } }
+  ];
+  for (const stage of activeStages) {
+    assert.throws(
+      () => transitionContentJob({ ...queued, ...stage }, "CANCELLED", { actor: "operator", reason: "Cancel request" }, now),
+      /active or uncertain script\/narration work/,
+      JSON.stringify(stage)
+    );
+  }
+  const completed = { ...queued, authoring: { status: "AWAITING_HUMAN_EDITORIAL_REVIEW", narrationStage: { status: "DRAFT_REVIEW_REQUIRED" } } };
+  assert.equal(transitionContentJob(completed, "CANCELLED", { actor: "operator", reason: "Withdraw completed draft" }, now).state, "CANCELLED");
+});
+
 test("private-upload approval binds media, thumbnail, validated captions, metadata and rights evidence", () => {
   let job = createContentJob(input);
   const video = { path: "artifacts/fixture.mp4", sha256: "a".repeat(64) };

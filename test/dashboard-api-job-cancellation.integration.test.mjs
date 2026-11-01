@@ -137,6 +137,32 @@ test("job transition API safely cancels queued work, rejects active leases, audi
   assert.deepEqual(fs.readFileSync(statePath), beforeRejectedCancel,
     "rejected cancellation must not mutate job state or audit history");
 
+  // Simulate an in-flight provider-backed authoring stage in durable state.
+  // Cancellation must not mark the job terminal while that operation can still finish.
+  const activeAuthoring = await createJob(
+    "job-cancel-authoring:2026-11-21",
+    "2026-11-21",
+    "Active authoring cancellation rejection"
+  );
+  let seededState = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  const activeAuthoringIndex = seededState.jobs.findIndex(job => job.id === activeAuthoring.id);
+  seededState.jobs[activeAuthoringIndex].authoring = {
+    status: "GENERATING",
+    fingerprint: "a".repeat(64),
+    requestedAt: new Date().toISOString(),
+    publishable: false
+  };
+  fs.writeFileSync(statePath, JSON.stringify(seededState, null, 2) + "\n");
+  const beforeActiveAuthoringCancel = fs.readFileSync(statePath);
+  const activeAuthoringCancel = await post("/api/jobs/transition", {
+    jobId: activeAuthoring.id,
+    nextState: "CANCELLED",
+    reason: "Must not interrupt provider-backed authoring"
+  });
+  assert.equal(activeAuthoringCancel.status, 400, await activeAuthoringCancel.text());
+  assert.deepEqual(fs.readFileSync(statePath), beforeActiveAuthoringCancel,
+    "active authoring cancellation must preserve state and audit history byte-for-byte");
+
   const cancelledResponse = await post("/api/jobs/transition", {
     jobId: queued.id,
     nextState: "CANCELLED",

@@ -88,6 +88,10 @@ export function transitionContentJob(job, nextState, { actor = "local-operator",
   if (protectedStates.has(nextState)) throw new Error("This state requires a separate verified private-upload workflow and cannot be set through the dashboard transition API");
   if (nextState === "CANCELLED") {
     if (job.workerLease) throw new Error("A job with a worker lease cannot be cancelled; wait for the worker to finish or reap its expired lease first");
+    const activeOrUncertainAuthoring = new Set(["GENERATING", "RECONCILING", "RECOVERY_REQUIRED"]);
+    if (activeOrUncertainAuthoring.has(job.authoring?.status) || activeOrUncertainAuthoring.has(job.authoring?.narrationStage?.status)) {
+      throw new Error("A job with active or uncertain script/narration work cannot be cancelled; wait for completion or reconcile the existing attempt first");
+    }
     if (["RECOVERY_REQUIRED", "APPROVED_FOR_PRIVATE_UPLOAD", "UPLOADING_PRIVATE", "PRIVATE_UPLOAD_VERIFIED"].includes(job.state)) {
       throw new Error("A job at or beyond the private-upload boundary cannot be cancelled; reconcile or complete it first");
     }
