@@ -154,10 +154,12 @@ test("independent dashboard processes serialize duplicate worker completion and 
     status: response.status,
     body: await response.json()
   })));
-  assert.equal(completionOutcomes.filter(item => item.status === 200).length, 1,
-    "exactly one process may complete a worker stage");
-  assert.equal(completionOutcomes.filter(item => item.status >= 400 && item.status < 500).length, 1,
-    "the duplicate completion must be rejected as a client conflict");
+  assert.deepEqual(completionOutcomes.map(item => item.status), [200, 200],
+    "both exact concurrent completion requests must receive the durable completion result");
+  assert.equal(completionOutcomes.filter(item => item.body.idempotent === true).length, 1,
+    "exactly one process must reuse the already-committed completion receipt");
+  assert.equal(completionOutcomes.filter(item => item.body.idempotent !== true).length, 1,
+    "exactly one process must create the original completion receipt");
   let state = readState();
   let job = state.jobs.find(item => item.id === completionJob.id);
   assert.equal(job.state, "FAILED");
