@@ -53,8 +53,9 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const providerPort = provider.address().port;
   const port = 18000 + Math.floor(Math.random() * 10000);
   const token = "test-token-" + "x".repeat(40);
-  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
-    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, UPLOAD_LOG_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1", SCRIPT_GENERATION_ENDPOINT: `http://127.0.0.1:${providerPort}/v1/chat/completions`, SCRIPT_GENERATION_TIMEOUT_MS: "5000" },
+  const serverEnv = { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, UPLOAD_LOG_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1", SCRIPT_GENERATION_ENDPOINT: `http://127.0.0.1:${providerPort}/v1/chat/completions`, SCRIPT_GENERATION_TIMEOUT_MS: "5000" };
+  let child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: serverEnv,
     stdio: ["ignore", "pipe", "pipe"]
   });
   let logs = "";
@@ -456,6 +457,34 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(authorDuplicate.status, 200, JSON.stringify(authorDuplicateBody));
   assert.equal(authorDuplicateBody.reused, true, "identical retries after completion must reuse the persisted authoring result");
   assert.equal(providerCalls, 1, "a completed idempotent retry must not call the provider again");
+  const previousAuthoringChild = child;
+  const authoringServerStopped = new Promise(resolve => previousAuthoringChild.once("exit", resolve));
+  previousAuthoringChild.kill("SIGTERM");
+  await authoringServerStopped;
+  child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: serverEnv,
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  let authoringServerRestarted = false;
+  for (let i = 0; i < 60; i++) {
+    if (child.exitCode !== null) break;
+    try {
+      const response = await fetch(base + "/healthz");
+      if (response.ok) { authoringServerRestarted = true; break; }
+    } catch {}
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  assert.equal(authoringServerRestarted, true, "dashboard did not recover after script authoring: " + logs);
+  const recoveredAuthoringResponse = await fetch(base + "/api/state", { headers });
+  assert.equal(recoveredAuthoringResponse.status, 200);
+  const recoveredAuthoringState = await recoveredAuthoringResponse.json();
+  const recoveredAuthoringJob = recoveredAuthoringState.jobs.find(item => item.id === authorJob.id);
+  assert.equal(recoveredAuthoringJob.authoring.status, "AWAITING_HUMAN_EDITORIAL_REVIEW");
+  assert.equal(recoveredAuthoringJob.authoring.fingerprint, authorBody.job.authoring.fingerprint);
+  assert.equal(recoveredAuthoringJob.authoring.scriptSha256, authorBody.job.authoring.scriptSha256);
+  assert.equal(providerCalls, 1, "server restart must not regenerate or re-submit the completed script");
   const approvedScriptSha256 = canonicalAuthoringScriptSha256(authorBody.job.authoring.result.script);
   const staleScriptReview = await fetch(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify({
     jobId: authorJob.id, decision: "APPROVE", scriptSha256: "0".repeat(64),
