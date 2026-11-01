@@ -22,8 +22,8 @@
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 13,
-    "overallNotTested": 18,
+    "overallPass": 14,
+    "overallNotTested": 17,
     "overallBlocked": 4
   },
   "evidence": {
@@ -441,14 +441,15 @@
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
       "concurrency": "PASS",
-      "restartRecovery": "NOT_TESTED",
+      "restartRecovery": "PASS — after a graceful server shutdown and new process, the read-only narration review bundle returns the same APPROVED_FOR_RENDER state and approval SHA-256; the verified narration audio stream remains available and the single approval audit event is unchanged.",
       "externalOperation": "genuine human listening/review cannot be inferred from test fixture",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "Exact-SHA c533cd8 test: missing playback attestations are rejected; two concurrent identical authorized fixture-review requests both resolve to the same approval receipt with exactly one creation and one NARRATION_APPROVED_FOR_RENDER audit event; exact retry reuses the receipt; changed review and tampered artifact retries are rejected. Test attestations are synthetic and do not establish genuine human listening/review. Restart read-back remains NOT_TESTED.",
+      "overallAcceptance": "PASS",
+      "notes": "Accepted for the hash-bound narration-review receipt workflow using synthetic test fixtures only. Existing tests cover explicit listening/transcript/caption attestations, exact-retry idempotency, concurrent identical approvals producing one audit decision, changed-decision rejection and tampered-artifact rejection. New real-server restart coverage on ce0a03d045648e20fa863cadc5d591e365b3ad27 verifies the approved review bundle and audio stream after a fresh process, preserving the exact approval hash and one audit event. This does not assert that a human actually listened to the synthetic audio or authorize video publication.",
       "testEvidence": {
-        "test": "test/dashboard-server.test.mjs",
-        "exactTestedSha": "c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988"
+        "test": "test/dashboard-server.test.mjs — real HTTP server and synthetic hash-bound narration fixtures",
+        "exactTestedSha": "ce0a03d045648e20fa863cadc5d591e365b3ad27",
+        "contentQualityCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41288892498",
+        "scenario": "Concurrent identical narration review requests produce one receipt and one audit event; exact retry reuses it; restart preserves approval SHA and exposes review bundle/audio; tampered artifacts are rejected."
       }
     },
     {
