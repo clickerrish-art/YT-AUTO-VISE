@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -154,7 +155,7 @@ test("narration reconciliation succeeds on retained media, is idempotent, and su
   const durationSeconds = Number(probe.stdout.trim());
   assert.ok(Number.isFinite(durationSeconds) && durationSeconds >= 50 && durationSeconds <= 60);
 
-  const digest = value => crypto.createHash("sha256").update(value).digest("hex");
+  const digest = value => createHash("sha256").update(value).digest("hex");
   const write = (name, bytes) => {
     const file = path.join(outputDir, name);
     fs.writeFileSync(file, bytes, { mode: 0o600 });
