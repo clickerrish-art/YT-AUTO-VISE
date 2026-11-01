@@ -1717,6 +1717,26 @@ const server = http.createServer(async (req, res) => {
           return json(res, 409, { error: "Human script approval bound to this exact revision is required before narration generation" });
         }
         const prior = job.authoring.narrationStage;
+        if (prior?.status === "DRAFT_REVIEW_REQUIRED") {
+          if (prior.scriptSha256 !== body.scriptSha256 || prior.scriptApprovalSha256 !== job.authoring?.scriptApproval?.approvalSha256) {
+            return json(res, 409, { error: "Persisted narration draft no longer matches the exact approved script and review receipt; reconcile before retrying", recoveryRequired: true, publishable: false });
+          }
+          try {
+            const verified = runAuthoringNarrationStage({ job, root, reconcileOnly: true });
+            if (JSON.stringify(verified.artifacts) !== JSON.stringify(prior.artifacts) ||
+                JSON.stringify(verified.narrationReport) !== JSON.stringify(prior.narrationReport)) {
+              return json(res, 409, { error: "Persisted narration draft differs from its verified artifacts; reconciliation is required", recoveryRequired: true, publishable: false });
+            }
+          } catch (error) {
+            const detail = redactOperationalText(error instanceof Error ? error.message : "Narration retry verification failed", { roots: [root, stateDir] });
+            return json(res, 409, { error: "Persisted narration draft failed integrity verification; no regeneration or state mutation was attempted", detail, recoveryRequired: true, publishable: false, publishingEnabled: false });
+          }
+          return json(res, 200, {
+            job, narrationStage: prior, reused: true, idempotent: true,
+            publishable: false, publishingEnabled: false,
+            nextAction: "The exact previously generated narration draft was verified and reused; continue the existing human review rather than regenerating it."
+          });
+        }
         if (prior?.status === "GENERATING") {
           const ageMs = Date.now() - Date.parse(prior.requestedAt);
           if (Number.isFinite(ageMs) && ageMs > 10 * 60_000) {

@@ -1206,11 +1206,18 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
     expect(restartedJob.authoring.narrationStage.publishable).toBe(false);
     expect(restartedState.audit.filter(event => event.action === "AUTHORING_NARRATION_DRAFT_READY" && event.jobId === jobId)).toHaveLength(1);
 
-    const exactRetryResponse = await fetch(base + "/api/jobs/narration", { method: "POST", headers, body: JSON.stringify({ jobId, scriptSha256: approvedSha }) });
-    const exactRetryBody = await exactRetryResponse.json();
-    expect(exactRetryResponse.status).toBe(201);
-    expect(exactRetryBody.narrationStage.reused).toBe(true);
-    expect(exactRetryBody.narrationStage.artifacts["narration.mp3"].sha256).toBe(firstJob.authoring.narrationStage.artifacts["narration.mp3"].sha256);
+    const beforeExactRetries = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
+    const exactRetryResponses = await Promise.all([
+      fetch(base + "/api/jobs/narration", { method: "POST", headers, body: JSON.stringify({ jobId, scriptSha256: approvedSha }) }),
+      fetch(base + "/api/jobs/narration", { method: "POST", headers, body: JSON.stringify({ jobId, scriptSha256: approvedSha }) })
+    ]);
+    const exactRetryBodies = await Promise.all(exactRetryResponses.map(response => response.json()));
+    expect(exactRetryResponses.every(response => response.status === 200)).toBe(true);
+    expect(exactRetryBodies.every(body => body.reused === true && body.idempotent === true)).toBe(true);
+    expect(exactRetryBodies.every(body => body.narrationStage.artifacts["narration.mp3"].sha256 === firstJob.authoring.narrationStage.artifacts["narration.mp3"].sha256)).toBe(true);
+    expect(fs.readFileSync(path.join(stateDir, "dashboard-state.json"))).toEqual(beforeExactRetries);
+    const retryState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+    expect(retryState.audit.filter(event => event.action === "AUTHORING_NARRATION_DRAFT_READY" && event.jobId === jobId)).toHaveLength(1);
     const reviewBundle = await (await page.request.get(base + "/api/jobs/narration/review?jobId=" + encodeURIComponent(jobId), { headers })).json();
     expect(reviewBundle.scriptSha256).toBe(approvedSha);
     expect(reviewBundle.transcript.trim().split(/\s+/u)).toHaveLength(137);
