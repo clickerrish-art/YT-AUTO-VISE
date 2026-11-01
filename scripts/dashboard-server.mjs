@@ -1343,9 +1343,18 @@ const server = http.createServer(async (req, res) => {
         if (!script || typeof script !== "object" || Array.isArray(script)) return json(res, 409, { error: "Structured generated script is missing" });
         const actualScriptSha256 = canonicalAuthoringScriptSha256(script);
         if (body.scriptSha256 !== actualScriptSha256) return json(res, 409, { error: "Script changed after review was prepared; refresh the draft and review its current SHA-256" });
-        if (body.decision === "APPROVE" && job.authoring.scriptApproval?.decision === "APPROVE" &&
-            job.authoring.scriptApproval.scriptSha256 === actualScriptSha256) {
-          return json(res, 200, { job, scriptReview: job.authoring.scriptApproval, reused: true, publishable: false, publishingEnabled: false });
+        const existingApproval = job.authoring.scriptApproval;
+        if (body.decision === "APPROVE" && existingApproval?.decision === "APPROVE" &&
+            existingApproval.scriptSha256 === actualScriptSha256) {
+          const exactRetry = existingApproval.reviewer === actor && existingApproval.reason === body.reason.trim();
+          const expectedReceiptSha256 = crypto.createHash("sha256").update(JSON.stringify({
+            jobId: job.id, decision: "APPROVE", scriptSha256: actualScriptSha256,
+            reviewer: actor, reviewedAt: existingApproval.reviewedAt, reason: body.reason.trim()
+          })).digest("hex");
+          if (!exactRetry || existingApproval.approvalSha256 !== expectedReceiptSha256) {
+            return json(res, 409, { error: "Script is already approved under a different review receipt; changed reviewer, reason or receipt cannot reuse the existing approval" });
+          }
+          return json(res, 200, { job, scriptReview: existingApproval, reused: true, publishable: false, publishingEnabled: false });
         }
         job.authoring.scriptSha256 = actualScriptSha256;
         const reviewedAt = new Date().toISOString();

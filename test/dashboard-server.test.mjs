@@ -513,6 +513,16 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(scriptApprovalState.audit.filter(event =>
     event.action === "SCRIPT_REVISION_APPROVED_FOR_NARRATION" && event.jobId === authorJob.id
   ).length, 1, "concurrent identical script approvals must append exactly one audit event");
+  const beforeChangedScriptReview = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
+  const changedScriptReview = await fetch(base + "/api/jobs/authoring/review", {
+    method: "POST", headers, body: JSON.stringify({
+      ...scriptReviewPayload, reason: "A changed review reason must not reuse the original approval."
+    })
+  });
+  assert.equal(changedScriptReview.status, 409,
+    "a changed script-review reason must not reuse an existing approval receipt");
+  assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), beforeChangedScriptReview,
+    "a changed script-review retry must not mutate state or audit history");
   const narrationWrongRevision = await fetch(base + "/api/jobs/narration", { method: "POST", headers, body: JSON.stringify({
     jobId: authorJob.id, scriptSha256: "0".repeat(64)
   }) });
