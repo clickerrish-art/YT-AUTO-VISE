@@ -17,14 +17,14 @@ test("dashboard static inventory reports all declared controls, forms and litera
   assert.equal(inventory.counts.controls, inventory.controls.length);
   assert.equal(inventory.counts.forms, inventory.forms.length);
   assert.equal(inventory.counts.routes, inventory.routes.length);
-  assert.equal(inventory.counts.controls, 101);
-  assert.equal(inventory.counts.forms, 15);
+  assert.equal(inventory.counts.controls, 104);
+  assert.equal(inventory.counts.forms, 16);
   assert.equal(inventory.counts.routes, 38);
   assert.deepEqual(inventory.counts.controlsByTag, {
-    button: 21,
+    button: 22,
     input: 41,
-    select: 25,
-    textarea: 14,
+    select: 26,
+    textarea: 15,
   });
   assert.deepEqual(inventory.counts.routesByMethod, { GET: 10, POST: 28 });
 
@@ -121,7 +121,7 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
     .map(match => ({ id: match[1], index: match.index }));
   const routeDeclarations = new Set(inventory.routes.map(route => route.path));
 
-  assert.equal(formIds.length, 15, "the dashboard form inventory changed; review the acceptance fixture");
+  assert.equal(formIds.length, 16, "the dashboard form inventory changed; review the acceptance fixture");
   assert.equal(submitBindings.length, formIds.length, "every dashboard form must have exactly one explicit submit handler");
 
   for (const formId of formIds) {
@@ -153,5 +153,5 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
     wiredControls++;
   }
 
-  assert.equal(wiredControls, 83, "the number of non-submit dashboard controls changed; review the acceptance fixture");
+  assert.equal(wiredControls, 85, "the number of non-submit dashboard controls changed; review the acceptance fixture");
 });
