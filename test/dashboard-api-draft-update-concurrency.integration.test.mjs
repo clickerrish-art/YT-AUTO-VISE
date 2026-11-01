@@ -161,6 +161,19 @@ test("draft updates serialize concurrent writes and persist with audit history a
     assert.equal(outcome.body.item.topic, update.topic);
   }
 
+  const duplicateResponses = await Promise.all([
+    post("/api/drafts/update", updates[0]),
+    post("/api/drafts/update", updates[0])
+  ]);
+  const duplicateOutcomes = await Promise.all(duplicateResponses.map(async response => ({
+    status: response.status,
+    body: await response.json()
+  })));
+  assert.deepEqual(duplicateOutcomes.map(item => item.status), [200, 200],
+    "concurrent identical edits must safely resolve against the same existing draft");
+  assert.ok(duplicateOutcomes.every(item => item.body.item?.title === updates[0].title),
+    "each duplicate response must return the same committed draft values");
+
   const persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
   for (const update of updates) {
     const item = persisted.queueItems.find(entry => entry.id === update.id);
@@ -170,7 +183,12 @@ test("draft updates serialize concurrent writes and persist with audit history a
       event.action === "DRAFT_EDITED" &&
       event.itemId === update.id &&
       event.actor === "draft-update-concurrency@example.test"
-    ).length, 1, "each committed edit must have exactly one operator-attributed audit event");
+    ).length, update.id === updates[0].id ? 3 : 1,
+    "each accepted edit request must have one operator-attributed audit event, without duplicating the draft or its job");
+    assert.equal(persisted.queueItems.filter(entry => entry.id === update.id).length, 1,
+      "repeated updates must not duplicate the durable queue item");
+    assert.equal(persisted.jobs.filter(job => job.idempotencyKey === "draft:" + update.id).length, 1,
+      "repeated updates must not duplicate the linked production job");
   }
   assert.ok(persisted.jobs.length >= 2 && persisted.jobs.every(job => job.publishingEnabled === false),
     "every persisted production job must remain non-publishable");
@@ -192,7 +210,10 @@ test("draft updates serialize concurrent writes and persist with audit history a
       event.action === "DRAFT_EDITED" &&
       event.itemId === update.id &&
       event.actor === "draft-update-concurrency@example.test"
-    ).length, 1, "the original edit audit event must survive restart without duplication");
+    ).length, update.id === updates[0].id ? 3 : 1,
+    "all accepted edit audit events must survive restart without creating duplicate queue items or jobs");
+    assert.equal(recovered.queueItems.filter(entry => entry.id === update.id).length, 1);
+    assert.equal(recovered.jobs.filter(job => job.idempotencyKey === "draft:" + update.id).length, 1);
   }
   assert.equal(recovered.publishingEnabled, false);
 });
