@@ -143,6 +143,46 @@ test("operator dashboard loads the authoritative schedule and persists a draft t
 });
 
 
+test("production job management cancels an unstarted job and preserves its audit history", async ({ page, request }) => {
+  const headers = { "content-type": "application/json", "x-operator-token": operatorToken };
+  const stateResponse = await request.get("/api/state", { headers });
+  expect(stateResponse.status()).toBe(200);
+  const state = await stateResponse.json();
+  const slot = state.schedule.schedule[0];
+  const scheduledDate = candidateDateForSlot(state, slot);
+  const draftId = "job-cancel-e2e-" + Date.now().toString(36);
+  const create = await request.post("/api/drafts", { headers, data: {
+    id: draftId,
+    title: "Job cancellation browser test",
+    topic: "Safe cancellation of an unstarted production job",
+    contentType: slot.format,
+    scheduledDay: slot.day,
+    scheduledDate,
+    productUrl: "https://selar.com/0u19v8u99l"
+  } });
+  const created = await create.json();
+  expect(create.status(), JSON.stringify(created)).toBe(201);
+  const jobId = created.job.id;
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+  await page.locator("#canceljob").selectOption(jobId);
+  await page.locator("#cancelreason").fill("Owner withdrew this unstarted draft before production.");
+  await page.getByRole("button", { name: "Cancel selected job" }).click();
+  await expect(page.locator("#canceljobresult")).toContainText("Job cancelled: " + jobId, { timeout: 10_000 });
+
+  const afterResponse = await request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  const after = await afterResponse.json();
+  const cancelled = after.jobs.find(job => job.id === jobId);
+  expect(cancelled.state).toBe("CANCELLED");
+  expect(cancelled.transitionHistory.at(-1).to).toBe("CANCELLED");
+  expect(after.audit.filter(event => event.action === "CONTENT_JOB_CANCELLED" && event.jobId === jobId)).toHaveLength(1);
+  await expect(page.locator("#canceljob option").filter({ hasText: jobId })).toHaveCount(0);
+});
+
 test("campaign controls fail closed on unapproved destinations and retain Safari inactive", async ({ page, request }) => {
   const headers = { "x-operator-token": operatorToken };
   await page.goto("/");
