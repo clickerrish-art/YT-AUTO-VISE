@@ -33,6 +33,19 @@ test("rights verification API rejects invalid evidence, commits once, and surviv
   const post = async body => { const r = await fetch(base + "/api/jobs/rights/verify", { method: "POST", headers, body: JSON.stringify(body) }); return { status: r.status, body: await r.json() }; };
   t.after(async () => { await stop().catch(() => {}); fs.rmSync(stateDir, { recursive: true, force: true }); fs.rmSync(fixtureDir, { recursive: true, force: true }); });
   await start();
+  const reconcile = async body => {
+    const response = await fetch(base + "/api/jobs/narration/reconcile", { method: "POST", headers, body: JSON.stringify(body) });
+    return { status: response.status, body: await response.json() };
+  };
+  const narrationHash = "a".repeat(64);
+  const beforeReconcile = fs.readFileSync(stateFile);
+  assert.equal((await reconcile({})).status, 400, "narration reconciliation requires a job ID and exact script hash");
+  assert.equal((await reconcile({ jobId: "missing-narration-job", scriptSha256: narrationHash })).status, 404,
+    "unknown narration jobs must not be reconciled");
+  const wrongStage = await reconcile({ jobId: job.id, scriptSha256: narrationHash });
+  assert.equal(wrongStage.status, 409, "jobs outside an interrupted narration stage must fail closed");
+  assert.deepEqual(fs.readFileSync(stateFile), beforeReconcile,
+    "invalid, unknown and ineligible narration reconciliation requests must not mutate state or audit history");
   assert.equal((await fetch(base + "/api/jobs/rights/verify", { method: "POST", headers: { "content-type": "application/json" }, body: "{}" })).status, 401);
   assert.equal((await post({ jobId: job.id, assets: [] })).status, 400);
   assert.equal((await post({ confirmRightsVerified: true, jobId: "unknown", assets: [asset] })).status, 404);
