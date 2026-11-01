@@ -1,0 +1,48 @@
+name: Temporary source recovery bundle
+on:
+  push:
+    branches:
+      - codex/marketing-machine-audit-fixes
+    paths:
+      - ".github/workflows/export-source-bundle.yml"
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: "Verified source ref to export"
+        required: true
+        default: "codex/marketing-machine-audit-fixes"
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: source-recovery-bundle
+  cancel-in-progress: false
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out complete repository history
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.source_ref || github.ref }}
+          fetch-depth: 0
+      - name: Fetch all remote branches and tags
+        run: |
+          git fetch --prune origin '+refs/heads/*:refs/remotes/origin/*' --tags
+          git show-ref
+      - name: Create and verify recovery bundle
+        run: |
+          git bundle create YT-AUTO-VISE.bundle --all
+          git bundle verify YT-AUTO-VISE.bundle
+          git bundle list-heads YT-AUTO-VISE.bundle | tee bundle-heads.txt
+          sha256sum YT-AUTO-VISE.bundle | tee bundle-sha256.txt
+      - name: Upload verified source bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: YT-AUTO-VISE-source-bundle
+          path: |
+            YT-AUTO-VISE.bundle
+            bundle-heads.txt
+            bundle-sha256.txt
+          retention-days: 7
