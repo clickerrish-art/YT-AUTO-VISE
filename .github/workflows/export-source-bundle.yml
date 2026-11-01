@@ -46,3 +46,4 @@ jobs:
             bundle-heads.txt
             bundle-sha256.txt
           retention-days: 7
+# Recovery refresh: keep the verified full-history export trigger available for the current implementation head.
