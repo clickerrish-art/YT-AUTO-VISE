@@ -79,6 +79,30 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   assert.ok(created.evaluation.blockers.some(item => /Page ID/i.test(item)));
   assert.ok(created.evaluation.blockers.some(item => /media asset/i.test(item)));
 
+  const concurrentDraft = {
+    ...draft,
+    id: "facebook-dashboard-concurrent-draft",
+    topic: "Mangrove restoration and estuary biodiversity",
+    caption: "Mangrove wetlands support estuary biodiversity by providing habitat and nursery areas for many species. Which wetland habitats have you explored?",
+    scheduledDate: "2030-10-26"
+  };
+  const concurrentResponses = await Promise.all([1, 2].map(() =>
+    fetch(base + "/api/facebook/drafts", {
+      method: "POST", headers, body: JSON.stringify(concurrentDraft)
+    })
+  ));
+  assert.deepEqual(
+    concurrentResponses.map(response => response.status).sort((a, b) => a - b),
+    [201, 409],
+    "concurrent duplicate Facebook draft submissions must persist exactly one local draft"
+  );
+  const concurrentState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  assert.equal(concurrentState.facebookDrafts.filter(item => item.id === concurrentDraft.id).length, 1);
+  assert.equal(concurrentState.audit.filter(event =>
+    event.action === "FACEBOOK_DRAFT_CREATED" && event.itemId === concurrentDraft.id
+  ).length, 1, "only the winning concurrent draft request may append a creation audit event");
+  assert.equal(concurrentState.facebookDrafts.find(item => item.id === concurrentDraft.id).publishingEnabled, false);
+
   const duplicateResponse = await fetch(base + "/api/facebook/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "facebook-dashboard-draft-2" }) });
   assert.equal(duplicateResponse.status, 409, await duplicateResponse.text());
   const sameDayResponse = await fetch(base + "/api/facebook/drafts", { method: "POST", headers, body: JSON.stringify({
