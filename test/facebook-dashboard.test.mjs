@@ -29,8 +29,9 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   // another process's state directory, producing misleading recovery failures.
   const port = await getAvailablePort();
   const token = "facebook-test-token-" + "z".repeat(36);
-  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
-    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "facebook-test-owner", DASHBOARD_STATE_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "" },
+  const serverEnv = { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "facebook-test-owner", DASHBOARD_STATE_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "" };
+  let child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: serverEnv,
     stdio: ["ignore", "pipe", "pipe"]
   });
   let logs = "";
@@ -151,6 +152,38 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   assert.ok(saved.audit.some(event => event.action === "FACEBOOK_DRAFT_RECHECKED"));
   assert.equal(saved.audit.filter(event => event.action === "FACEBOOK_DRAFT_REJECT" && event.itemId === draft.id && event.reviewer === "facebook-test-owner").length, 1,
     "safe rejection must persist one reviewer-attributed audit event");
+
+  const previousChild = child;
+  const stopped = new Promise(resolve => previousChild.once("exit", resolve));
+  previousChild.kill("SIGTERM");
+  await stopped;
+  child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: serverEnv,
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  let restarted = false;
+  for (let i = 0; i < 80; i++) {
+    if (child.exitCode !== null) break;
+    try {
+      const response = await fetch(base + "/healthz");
+      if (response.ok) { restarted = true; break; }
+    } catch {}
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  assert.equal(restarted, true, "dashboard did not recover after a real process restart: " + logs);
+  const recoveredResponse = await fetch(base + "/api/facebook/state", { headers });
+  assert.equal(recoveredResponse.status, 200);
+  const recovered = await recoveredResponse.json();
+  assert.equal(recovered.publishingEnabled, false);
+  assert.equal(recovered.drafts.filter(item => item.id === concurrentDraft.id).length, 1,
+    "the concurrent winner must remain available through the real API after restart");
+  const recoveredState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  assert.equal(recoveredState.facebookDrafts.filter(item => item.id === concurrentDraft.id).length, 1);
+  assert.equal(recoveredState.audit.filter(event =>
+    event.action === "FACEBOOK_DRAFT_CREATED" && event.itemId === concurrentDraft.id
+  ).length, 1, "the one winning creation audit event must survive restart");
 });
 test("dashboard restart moves interrupted Facebook submissions to reconciliation without losing known remote IDs", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-recovery-"));
