@@ -371,6 +371,48 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.deepEqual(fs.readFileSync(validationStatePath), validatedStateBytes,
     "a post-validation media hash mismatch must not mutate job state or audit history");
 
+  const transitionDraft = {
+    id: "dashboard-transition-race",
+    title: "Transition concurrency fixture",
+    topic: "Safe operator transition concurrency",
+    contentType: "short",
+    scheduledDay: "Saturday",
+    scheduledDate: "2026-12-26",
+    productUrl: "https://selar.com/0u19v8u99l"
+  };
+  const transitionDraftResponse = await fetch(base + "/api/drafts", {
+    method: "POST", headers, body: JSON.stringify(transitionDraft)
+  });
+  const transitionDraftBody = await transitionDraftResponse.json();
+  assert.equal(transitionDraftResponse.status, 201, JSON.stringify(transitionDraftBody));
+  const transitionJobId = transitionDraftBody.job.id;
+  const transitionRequests = await Promise.all([1, 2].map(() => fetch(base + "/api/jobs/transition", {
+    method: "POST", headers,
+    body: JSON.stringify({ jobId: transitionJobId, nextState: "GENERATING", reason: "Concurrent transition acceptance test" })
+  })));
+  const transitionStatuses = transitionRequests.map(response => response.status).sort((a, b) => a - b);
+  assert.deepEqual(transitionStatuses, [200, 400],
+    "concurrent duplicate state transitions must commit exactly once and reject the stale second transition");
+  const transitionedStatePath = path.join(stateDir, "dashboard-state.json");
+  const transitionedStateBytes = fs.readFileSync(transitionedStatePath);
+  const transitionedState = JSON.parse(transitionedStateBytes);
+  const transitionedJob = transitionedState.jobs.find(item => item.id === transitionJobId);
+  assert.equal(transitionedJob.state, "GENERATING");
+  assert.equal(transitionedState.audit.filter(event =>
+    event.action === "CONTENT_JOB_STATE_CHANGED" &&
+    event.jobId === transitionJobId &&
+    event.from === "QUEUED" &&
+    event.to === "GENERATING" &&
+    event.actor === "test-owner@example.test"
+  ).length, 1, "only the committed state transition may create an audit event");
+  const duplicateTransition = await fetch(base + "/api/jobs/transition", {
+    method: "POST", headers,
+    body: JSON.stringify({ jobId: transitionJobId, nextState: "GENERATING", reason: "Duplicate transition must not commit" })
+  });
+  assert.equal(duplicateTransition.status, 400);
+  assert.deepEqual(fs.readFileSync(transitionedStatePath), transitionedStateBytes,
+    "a repeated invalid transition must not mutate state or duplicate its audit record");
+
   const saved = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
   assert.ok(saved.queueItems.some(item => item.id === draft.id));
   assert.ok(saved.audit.some(event => event.action === "DRAFT_CREATED" && event.itemId === draft.id));
