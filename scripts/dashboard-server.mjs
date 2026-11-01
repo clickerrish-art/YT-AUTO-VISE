@@ -2089,6 +2089,29 @@ const server = http.createServer(async (req, res) => {
           nativeRelatedVideo: { status: "BLOCKED_EXTERNAL", blocker: "Parent is private under the current policy; native YouTube Related video requires an eligible public/unlisted parent and owner authorization." }
         };
         relationship.relationshipEvidenceSha256 = crypto.createHash("sha256").update(JSON.stringify({ ...relationship, relationshipEvidenceSha256: "" })).digest("hex");
+        if (child.shortParentRelationship) {
+          const stableRelationship = value => {
+            const { relationshipEvidenceSha256, relationshipApprovedAt, ...stable } = value;
+            return JSON.stringify(stable);
+          };
+          const existing = child.shortParentRelationship;
+          if (stableRelationship(existing) !== stableRelationship(relationship)) {
+            return json(res, 409, { error: "A Short-to-parent relationship is already bound; a conflicting retry cannot replace its exact evidence or reviewer decision", publishingEnabled: false });
+          }
+          try {
+            assertShortParentRelationship(existing, { childContentId: child.id, childMediaSha256: childArtifact.sha256, childMetadataSha256: child.metadataVersion, channelId: parentReceipt.channelId, allowPrivateParent: true });
+          } catch {
+            return json(res, 409, { error: "The previously bound Short-to-parent relationship no longer passes integrity validation; reconcile the exact parent and child evidence before retrying", publishingEnabled: false });
+          }
+          return json(res, 200, {
+            job: child,
+            relationshipSha256: shortParentRelationshipSha256(existing),
+            nativeRelatedVideoStatus: existing.nativeRelatedVideo.status,
+            reused: true,
+            idempotent: true,
+            publishingEnabled: false
+          });
+        }
         try {
           assertShortParentRelationship(relationship, { childContentId: child.id, childMediaSha256: relationship.childMediaSha256, childMetadataSha256: child.metadataVersion, channelId: parentReceipt.channelId, allowPrivateParent: true });
         } catch (error) {
