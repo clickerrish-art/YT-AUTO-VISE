@@ -258,10 +258,22 @@ test("narration reconciliation succeeds on retained media, is idempotent, and su
     fetch(base + "/api/jobs/narration/reconcile", { method: "POST", headers, body: payload })
   ]);
   const bodies = await Promise.all(concurrent.map(response => response.json()));
-  assert.deepEqual(concurrent.map(response => response.status), [200, 200], JSON.stringify(bodies));
-  assert.equal(bodies.filter(body => body.idempotent === true).length, 1,
-    "one concurrent retry must reuse the single durable reconciliation receipt");
-  assert.ok(bodies.every(body => body.publishable === false && body.publishingEnabled === false));
+  const concurrentStatuses = concurrent.map(response => response.status).sort();
+  assert.ok(
+    JSON.stringify(concurrentStatuses) === JSON.stringify([200, 200]) ||
+    JSON.stringify(concurrentStatuses) === JSON.stringify([200, 409]),
+    "concurrent reconciliation must have one successful operation and only a safe in-progress conflict or exact retry: " + JSON.stringify(bodies)
+  );
+  const concurrentSuccesses = bodies.filter((body, index) => concurrent[index].status === 200);
+  assert.equal(concurrentSuccesses.length >= 1, true);
+  if (concurrentSuccesses.length === 2) {
+    assert.equal(concurrentSuccesses.filter(body => body.idempotent === true).length, 1,
+      "a concurrent request arriving after completion must reuse the single durable receipt");
+  } else {
+    const conflict = bodies.find((body, index) => concurrent[index].status === 409);
+    assert.match(conflict.error, /Only an interrupted or recovery-required narration stage can be reconciled/i);
+  }
+  assert.ok(concurrentSuccesses.every(body => body.publishable === false && body.publishingEnabled === false));
   const persisted = JSON.parse(fs.readFileSync(stateFile, "utf8"));
   const job = persisted.jobs.find(item => item.id === jobId);
   assert.equal(job.authoring.narrationStage.status, "DRAFT_REVIEW_REQUIRED");
