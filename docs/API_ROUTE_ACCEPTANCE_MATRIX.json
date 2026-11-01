@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-01T12:45:17.537Z",
+  "generatedAt": "2026-11-01T14:43:30.000Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "c007aab36f32b282fbcf012fa6b6f9138686ff3c",
+  "testedSourceTestSha": "3a590759a525f1b4bf365f6edd715c38dee6e327",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -14,16 +14,16 @@
       "GET /healthz",
       "GET /readyz"
     ],
-    "branchAheadBy": 2433,
+    "branchAheadBy": 2442,
     "branchBehindBy": 2,
-    "changedFiles": 202,
+    "changedFiles": 203,
     "branchProtectionEnabled": false
   },
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 23,
-    "overallNotTested": 8,
+    "overallPass": 24,
+    "overallNotTested": 7,
     "overallBlocked": 4
   },
   "evidence": {
@@ -69,9 +69,11 @@
     "workerCompletionBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187",
     "taskRunnerIntegrationTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/c007aab36f32b282fbcf012fa6b6f9138686ff3c/test/dashboard-task-runner.test.mjs",
     "taskRunnerAutomationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209",
-    "taskRunnerBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187"
+    "taskRunnerBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187",
+    "narrationReconciliationSuccess": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/3a590759a525f1b4bf365f6edd715c38dee6e327/test/dashboard-narration-reconciliation-recovery.integration.test.mjs",
+    "narrationReconciliationAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317411877"
   },
-  "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 23 of 35 routes as PASS, eight as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. POST /api/tasks/run and POST /api/jobs/lease/complete retain their separately evidenced acceptance. POST /api/campaigns/manage is accepted for local preview/deactivation, durable state and audit, unknown-ID no-mutation, concurrent preview and restart read-back. Local preview does not establish provider-side campaign activation or publishing. Synthetic fixtures and local validation commands do not establish production rights, human approval or external publication.",
+  "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 24 of 35 routes as PASS, seven as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. POST /api/jobs/narration/reconcile now has real-server success, invalid-input, durable persistence, audit, concurrency/idempotency and restart-recovery evidence on exact source/test SHA 3a590759a525f1b4bf365f6edd715c38dee6e327. POST /api/campaigns/manage is accepted for local preview/deactivation only; this does not establish provider-side campaign activation or publishing. Synthetic FFmpeg fixtures do not establish production rights, human approval or external publication.",
   "routes": [
     {
       "method": "GET",
@@ -432,11 +434,25 @@
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "NOT_TESTED",
-      "restartRecovery": "PASS",
+      "concurrency": "PASS — concurrent exact requests produce one durable start/success receipt; an in-progress duplicate is safely rejected or an after-completion retry reuses the receipt",
+      "restartRecovery": "PASS — interrupted RECONCILING state recovers to RECOVERY_REQUIRED; completed draft remains reviewable after fresh process restart",
       "externalOperation": "none",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "overallAcceptance": "PASS",
+      "notes": "Full real-server reconciliation success, validation, persistence, audit, concurrency/idempotency and restart behavior are accepted on the exact source/test SHA. External publication remains disabled.",
+      "testEvidence": {
+        "test": "test/dashboard-narration-reconciliation-recovery.integration.test.mjs",
+        "sourceTestSha": "3a590759a525f1b4bf365f6edd715c38dee6e327",
+        "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317411877",
+        "scenarios": [
+          "real-server startup recovery from persisted RECONCILING to RECOVERY_REQUIRED with durable audit",
+          "invalid hash, unknown job and mismatched approval rejected without state/audit mutation",
+          "successful reconciliation of retained approved-script, playable MP3 fixture, transcript, word-timed captions and hash-bound report without TTS regeneration",
+          "concurrent identical requests allow one durable reconciliation; duplicate receives safe in-progress conflict or exact idempotent response",
+          "exact post-success retry re-verifies all retained files and returns idempotent success without changing persisted state",
+          "fresh server restart retains the reconciled draft, review bundle, audio bytes and audit receipt"
+        ],
+        "limitation": "The MP3 is generated test audio (silence) for duration/container/hash verification; it is not production narration, a human-reviewed asset, or publishing evidence."
+      }
     },
     {
       "method": "GET",
