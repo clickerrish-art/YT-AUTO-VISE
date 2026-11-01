@@ -309,7 +309,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     topic: "Technical API validation fixture",
     contentType: "short",
     scheduledDay: "Saturday",
-    scheduledDate: "2026-11-21",
+    scheduledDate: "2026-12-19",
     productUrl: "https://selar.com/0u19v8u99l"
   };
   const validationDraftResponse = await fetch(base + "/api/drafts", {
