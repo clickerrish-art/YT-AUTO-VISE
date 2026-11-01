@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-01T14:50:00.000Z",
+  "generatedAt": "2026-11-02T00:36:07+02:00",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "3a590759a525f1b4bf365f6edd715c38dee6e327",
+  "testedSourceTestSha": "561a3fc8354275af20d3eed23e96211441e08869",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -14,7 +14,7 @@
       "GET /healthz",
       "GET /readyz"
     ],
-    "branchAheadBy": 2445,
+    "branchAheadBy": 2448,
     "branchBehindBy": 2,
     "changedFiles": 203,
     "branchProtectionEnabled": false
@@ -22,8 +22,8 @@
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 24,
-    "overallNotTested": 7,
+    "overallPass": 27,
+    "overallNotTested": 4,
     "overallBlocked": 4
   },
   "evidence": {
@@ -71,7 +71,18 @@
     "taskRunnerAutomationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209",
     "taskRunnerBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187",
     "narrationReconciliationSuccess": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/3a590759a525f1b4bf365f6edd715c38dee6e327/test/dashboard-narration-reconciliation-recovery.integration.test.mjs",
-    "narrationReconciliationAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317411877"
+    "narrationReconciliationAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317411877",
+    "latestExactSourceCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/561a3fc8354275af20d3eed23e96211441e08869",
+    "latestExactSourceAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805",
+    "latestExactSourceDashboard": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759885",
+    "latestExactSourceLockfile": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759908",
+    "latestExactSourceContentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763854",
+    "latestExactSourceMetadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357760007",
+    "latestExactSourceBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759940",
+    "latestExactSourceInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763922",
+    "latestExactSourceNatureFrontiersDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763814",
+    "latestExactSourceReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763980",
+    "facebookReviewRetryRegression": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805"
   },
   "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 24 of 35 routes as PASS, seven as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. POST /api/jobs/narration/reconcile now has real-server success, invalid-input, durable persistence, audit, concurrency/idempotency and restart-recovery evidence on exact source/test SHA 3a590759a525f1b4bf365f6edd715c38dee6e327. POST /api/campaigns/manage is accepted for local preview/deactivation only; this does not establish provider-side campaign activation or publishing. Synthetic FFmpeg fixtures do not establish production rights, human approval or external publication.",
   "routes": [
@@ -211,15 +222,16 @@
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "NOT_TESTED",
-      "restartRecovery": "NOT_TESTED",
+      "concurrency": "PASS — two simultaneous authenticated reevaluations both return HTTP 200 under the shared state lock; each accepted reevaluation appends exactly one FACEBOOK_DRAFT_RECHECKED event.",
+      "restartRecovery": "PASS — the real-server integration test stops and restarts the dashboard, then reads the persisted draft and audit history through the authenticated API; publishing remains disabled.",
       "externalOperation": "none",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "Exact-SHA c533cd8 test: authenticated draft reevaluation succeeds locally, returns current blockers, persists evaluation/review state used by the subsequent decision and records FACEBOOK_DRAFT_RECHECKED. This is local validation only, not Meta provider-side draft creation/read-back. Restart read-back remains NOT_TESTED.",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA 561a3fc test/facebook-dashboard.test.mjs proves authenticated evaluation, two concurrent serialized reevaluations, one audit event per accepted request, and restart read-back. This is local policy evaluation only; it is not Meta provider-side draft creation or publication.",
       "testEvidence": {
-        "test": "test/facebook-dashboard.test.mjs",
-        "exactTestedSha": "c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988"
+        "test": "test/facebook-dashboard.test.mjs — real HTTP server",
+        "exactTestedSha": "561a3fc8354275af20d3eed23e96211441e08869",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805",
+        "scenario": "Two concurrent authenticated evaluations return 200; both durable review events and the draft survive a fresh server process; publishing remains disabled."
       }
     },
     {
@@ -232,15 +244,16 @@
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "NOT_TESTED",
-      "restartRecovery": "NOT_TESTED",
+      "concurrency": "PASS — two concurrent identical safe REJECT requests return HTTP 200; exactly one durable review receipt/audit event is created and the second response is idempotent. A changed reason returns 409 without mutation.",
+      "restartRecovery": "PASS — the rejected draft and its single reviewer-attributed audit event survive a fresh server process and authenticated API read-back.",
       "externalOperation": "provider-side draft/read-back not verified",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "Exact-SHA c533cd8 test: APPROVE is rejected while identity/rights/compliance blockers remain and the rejection leaves state byte-identical; a deliberate REJECT decision succeeds, records the synthetic test reviewer, persists REJECTED status/decision and appends one reviewer-attributed audit event. This is test-fixture workflow evidence, not genuine human approval or provider-side draft acceptance. Restart read-back remains NOT_TESTED.",
+      "notes": "Exact-SHA 561a3fc test/facebook-dashboard.test.mjs proves safe REJECT success, concurrent identical retry idempotency, changed-reason conflict with byte-identical state, and restart persistence. APPROVE remains blocked while Page identity, rights and compliance evidence are absent; this test identity is a fixture, not genuine production approval. Provider-side draft creation/read-back is not claimed.",
       "testEvidence": {
-        "test": "test/facebook-dashboard.test.mjs",
-        "exactTestedSha": "c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988"
+        "test": "test/facebook-dashboard.test.mjs — real HTTP server",
+        "exactTestedSha": "561a3fc8354275af20d3eed23e96211441e08869",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805",
+        "scenario": "Concurrent exact REJECT requests produce one review receipt/audit event; exact retry is idempotent; changed reason is 409/no mutation; rejected draft survives restart. Approval and external provider operations remain gated."
       }
     },
     {
@@ -339,8 +352,14 @@
       "concurrency": "PASS",
       "restartRecovery": "PASS",
       "externalOperation": "none",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA real-server coverage in dashboard-server, request-boundary and draft-update concurrency tests verifies authorized creation, validation, duplicate/slot rejection, durable queue/job/audit writes, idempotency and restart read-back. Public publishing remains disabled.",
+      "testEvidence": {
+        "test": "test/dashboard-server.test.mjs; test/dashboard-api-request-boundaries.test.mjs; test/dashboard-api-draft-update-concurrency.integration.test.mjs",
+        "exactTestedSha": "561a3fc8354275af20d3eed23e96211441e08869",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805",
+        "scenario": "Draft creation and update are authenticated, validated, durable and audited; duplicate submissions/slot conflicts fail closed; accepted edits and linked job identity survive restart."
+      }
     },
     {
       "method": "POST",
@@ -355,8 +374,14 @@
       "concurrency": "PASS",
       "restartRecovery": "PASS",
       "externalOperation": "none",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA real-server coverage verifies authenticated job creation, idempotency, conflicting input and schedule-slot rejection, concurrent identical submissions, worker lifecycle and restart persistence.",
+      "testEvidence": {
+        "test": "test/dashboard-api-concurrency-restart.test.mjs; test/dashboard-task-runner.test.mjs; test/dashboard-api-worker-lease-lifecycle.integration.test.mjs",
+        "exactTestedSha": "561a3fc8354275af20d3eed23e96211441e08869",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805",
+        "scenario": "Concurrent identical job submissions reuse one durable job/audit receipt across restart; allowlisted task execution and worker lease lifecycle are covered by real-server tests."
+      }
     },
     {
       "method": "POST",

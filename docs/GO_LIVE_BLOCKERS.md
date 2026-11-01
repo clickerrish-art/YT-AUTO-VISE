@@ -1,4 +1,27 @@
-# Latest verified delivery checkpoint — 1 November 2026, 14:49 UTC
+# Latest exact-source execution — 2 November 2026
+
+- Repository: `clickerrish-art/YT-AUTO-VISE`; implementation branch: `codex/marketing-machine-audit-fixes`.
+- Exact application source/test commit: `561a3fc8354275af20d3eed23e96211441e08869`.
+- Main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Live compare: **2,448 ahead / 2 behind / 203 changed files**. PR #1 remains **OPEN, DRAFT, UNMERGED**. Branch protection remains disabled; no main changes, merge, rebase, reset or force-push occurred.
+- Source recovery: full-history Git bundle export run [41357140684](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357140684) completed successfully; bundle verification reported complete history. The required checkpoint `100a9093b500348e07ba7866076e35c3c8b04a78` is present in that recovered history. The current source/test commit above is a fast-forward descendant.
+- Implementation change: `POST /api/facebook/drafts/approve` now treats an exact same-review retry as idempotent, returns the persisted receipt without a duplicate audit write, and rejects a conflicting reviewer decision/reason with 409 and no state mutation. Concurrent and restart regression coverage is in `test/facebook-dashboard.test.mjs`.
+- Exact-SHA automation/security [41357763805](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805) **PASS**: 467 Node tests passed, 0 failed, 0 skipped; 16 Python tests passed; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax, Python compilation and schedule checks passed.
+- Exact-SHA dashboard Chromium E2E [41357759885](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759885) **PASS**: 20/20 journeys.
+- Locked dependency install and complete Node suite [41357759908](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759908) **PASS**: clean locked install, 467 Node tests, zero skips, lockfile unchanged.
+- Content quality [41357763854](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763854), metadata [41357760007](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357760007), isolated main/candidate comparison [41357759940](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759940), branch inventory [41357763922](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763922), and Nature Frontiers local draft validation [41357763814](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763814) all **PASS**. Nature Frontiers validation is local-only, not Meta provider-side creation.
+- Dashboard inventory remains **101 controls / 15 forms / 38 handlers**. Browser E2E covers 20 journeys, not every control; DASH-001 remains NOT_TESTED.
+- API matrix: **35 routes / 27 PASS / 4 NOT_TESTED / 4 BLOCKED / 35 authentication-negative checks PASS**. API-001 remains NOT_TESTED because four routes still need additional success/concurrency/restart or external evidence.
+- Local targeted tests on the exact modified tree passed: Facebook dashboard review; dashboard server; API request boundaries; task runner; narration reconciliation; 52 schedule-policy/cadence tests; 20 multi-scene FFmpeg tests; 30 backup/restore tests including both protected restore tests; API authentication and read-only concurrency tests. Python tests passed 16/16.
+- Local full `npm ci` could not reach `registry.npmjs.org` because DNS is unavailable; local `npm test` did not complete within the 300-second limit. These are local-environment limitations, not CI failures: the exact-source GitHub locked-install and automation workflows completed successfully with the full 467-test suite.
+- Local server startup and `/healthz` returned healthy; unauthenticated `/api/state` returned 401 and authenticated state returned 200. `/readyz` correctly returned 503 while release prerequisites remain missing. `npm run check` remains blocked by six missing verified channel/review/rights inputs.
+- Production readiness [41357763980](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763980) remains **HOLD** with **13 genuine owner/external blockers**: owner-approved feasible cadence; complete SonicVhibez public/private/unlisted history and uncertain-attempt reconciliation; genuine Short and long-form rights manifests/media; human-reviewed metadata, rights and compliance; independently verified channel identity; and the four YouTube OAuth/channel environment variables.
+- No YouTube upload, public/private publication, Meta provider mutation, campaign activation, Metricool schedule change, spend, or external account action was performed. Public/unattended publishing remains disabled; Nature Frontiers remains a separate draft-only Meta workflow.
+- Acceptance register remains **80 requirements: 58 PASS / 12 NOT_TESTED / 10 BLOCKED / 0 FAIL**. The application is **NOT ACCEPTED for production** until mandatory local acceptance and owner-controlled external prerequisites are completed.
+
+---
+
+# Historical checkpoint — 1 November 2026, 14:49 UTC
 
 This snapshot is the current evidence baseline. The application code/test candidate is `3a590759a525f1b4bf365f6edd715c38dee6e327`. The current branch HEAD is `c96430f760eaec6d30118b3d05701796485b0206`; the two commits after the code/test candidate are documentation-only. Do not confuse the documentation HEAD with the exact application source/test SHA.
 

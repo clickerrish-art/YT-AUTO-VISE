@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-11-01T14:50:00.000Z",
-  "evidencePolicy": "Live reconciliation: branch source/test commit 4eb66910a93bf4b33843b91d9384e1f34bdc902b passed GitHub Actions workflow 41216258636 (exact head SHA; completed success; unit-test step completed with zero skips). The new real-server worker lifecycle test covers heartbeat extension/persistence, invalid-token no-mutation, controlled FAILED completion and duplicate fencing, active/expired lease reaping, audit and restart read-back. Prior exact candidate d9bdfbb4a79d4a1030edb208d8754fda88852c9b separately passed 446 Node / 16 Python / 20 Chromium E2E and proved two-process lease exclusivity/SIGKILL recovery. Overall 75 requirements remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain NOT_TESTED. Production readiness remains HOLD with 13 genuine blockers. Documentation updates are not represented as code-test evidence. Additional route evidence at exact SHA 4eb66910a93bf4b33843b91d9384e1f34bdc902b: real task-runner success for two allowlisted validation commands, arbitrary-task rejection, durable duplicate prevention across two server processes, completion/audit persistence, and startup recovery of an interrupted task. API-001 remains NOT_TESTED. Exact candidate c533cd8fbf7153ccbf84ab94a2a919069b9abbe0 passed automation/security (unit tests, zero skips), dashboard browser E2E, content quality, metadata, branch inventory and local Facebook draft-package validation. It adds safe Facebook draft rejection persistence/audit assertions. Exact candidate 9ff2de1f046e879f687f3767697e787214cc1e28 adds content-job transition durable-state/audit and unsafe-state no-mutation assertions. Isolated main/candidate baseline for c533cd8 was still in progress at this documentation update. The overall 75-requirement register remains 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001/API-001/SCHED-001/STATE-001/DEPLOY-001/GIT-002 remain NOT_TESTED. The isolated exact main/candidate baseline workflow 41217526036 subsequently completed SUCCESS on candidate SHA c533cd8fbf7153ccbf84ab94a2a919069b9abbe0. Exact candidate dea284d21b4e7a6923c46a201cd196ed39b72ffa passed automation/security (Node unit tests, zero skips), dashboard browser E2E, content quality, metadata and isolated exact main/candidate baseline (runs 41217848775, 41217848763, 41217848765, 41217848778, 41217848781). It adds /api/drafts/update authorized editing, durable read-back/audit and invalid-date/rights-promotion no-mutation assertions. The 75 requirement counts remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001/API-001/SCHED-001/STATE-001/DEPLOY-001/GIT-002 remain NOT_TESTED. Exact candidate 77af9f231d9c71f6ec5ee0b4fa757af9009b1941 adds production-plan API real-server concurrency/idempotency acceptance: one 201 plus one 200 for concurrent identical submissions, idempotent later retry, 409 conflicting-plan rejection with byte-identical state preservation, and one audit event; concurrent identical plan approvals yield one 200/one 409 and one approval audit. Automation/security, browser E2E, content quality, metadata, branch inventory, isolated main/candidate baseline and local Nature Frontiers validation passed on the exact candidate. Production readiness remains blocked by genuine owner/external prerequisites; it is not an engineering CI pass. Exact tested candidate 8dddba57804bc04080930742a9bdbd74f6dc05bd passed automation/security workflow 41292433645 (463 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E 41292433623 (20/20), content quality 41292433709, metadata 41292433626, branch inventory 41292433681, local Nature Frontiers draft validation 41292433612, and isolated main/candidate baseline 41292433625. It adds four-way concurrent authenticated reads for both GET /api/jobs/narration/review and GET /api/jobs/narration/audio, exact hash-bound response/audio-byte checks, and byte-identical durable state/audit verification; both routes are now PASS. API matrix: 35 routes / 16 PASS / 15 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED because 15 routes remain unaccepted. Production readiness remains fail-closed with owner/external blockers. Exact candidate e1e7dd94ba289ef2d84ac2c35c7124e76521045e passed automation/security 41292924301 (463 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E 41292924292 (20/20), content quality 41292924308, metadata 41292924299, isolated main/candidate baseline 41292924297, branch inventory 41292924312 and local Nature Frontiers draft validation 41292924317. Script approval retries now require the same reviewer, reason and valid receipt hash; changed-reason retries return 409 without mutation. The API matrix now accepts POST /api/jobs/authoring/review and both production-plan routes using real-server concurrency, audit and restart evidence: 35 routes / 19 PASS / 12 NOT_TESTED / 4 BLOCKED. API-001 remains NOT_TESTED. Production readiness still fails closed on genuine owner/external blockers. Latest implementation cycle: /api/jobs/validate duplicate-success audit mutation fixed in source commit 85fc0056ec8f00f652799b5d934ae5d4cfc7a57b; restart/concurrency regression test committed at 7a72d20efb6741cbf5914fe2638b787bf8176336. Exact source/test SHA 7a72d20efb6741cbf5914fe2638b787bf8176336 passed automation/security (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710316: 464 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710197: 20/20), content quality, metadata, branch inventory, local Nature Frontiers draft validation and isolated main/candidate baseline (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710334). The real-server validation test proves successful validation, identical retry, two concurrent retries, restart read-back and byte-identical state/audit with exactly one validation event. The test media is synthetic and does not establish real rights or production readiness. API matrix now records 20 PASS / 11 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED. Production readiness remains HOLD with 13 owner/external prerequisites. Latest implementation cycle: POST /api/jobs/lease/complete now records a SHA-256-bound completion receipt and safely reuses exact retries; conflicting results under the same worker lease return 409 without mutation. Source change ce6002e229e13b3f6c92fd9a0b4fea9d8821ab6e, independent-process race test 3dd5692a5a050e0cacf47c94dd4bc9fa3e63ee70, and real-server generated-artifact/restart test c007aab36f32b282fbcf012fa6b6f9138686ff3c. Exact source/test SHA c007aab36f32b282fbcf012fa6b6f9138686ff3c passed automation/security (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209: 465 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645272: 20/20), content quality, metadata, branch inventory, local Nature Frontiers draft validation and isolated exact main/candidate baseline (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187). The worker completion test validates real HTTP generated state, artifact/metadata hashes, dimensions/duration, exact/concurrent retries, tamper rejection and restart recovery. All media fixtures are synthetic and not production rights evidence. API matrix: 21 PASS / 10 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED. Production readiness remains HOLD with 13 owner/external prerequisites. Additional route acceptance on exact source/test SHA c007aab36f32b282fbcf012fa6b6f9138686ff3c: POST /api/tasks/run is now PASS based on test/dashboard-task-runner.test.mjs, executed in automation workflow https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209 (465 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities). The test proves allowlisted local task success, arbitrary-task rejection, two-process duplicate prevention, durable task/audit completion and startup recovery of interrupted RUNNING tasks. API matrix now records 22 PASS / 9 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED until all remaining applicable routes are accepted. Production readiness remains HOLD with 13 owner/external prerequisites.",
+  "recordedAt": "2026-11-02T00:36:07+02:00",
+  "evidencePolicy": "Live reconciliation: branch source/test commit 4eb66910a93bf4b33843b91d9384e1f34bdc902b passed GitHub Actions workflow 41216258636 (exact head SHA; completed success; unit-test step completed with zero skips). The new real-server worker lifecycle test covers heartbeat extension/persistence, invalid-token no-mutation, controlled FAILED completion and duplicate fencing, active/expired lease reaping, audit and restart read-back. Prior exact candidate d9bdfbb4a79d4a1030edb208d8754fda88852c9b separately passed 446 Node / 16 Python / 20 Chromium E2E and proved two-process lease exclusivity/SIGKILL recovery. Overall 75 requirements remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain NOT_TESTED. Production readiness remains HOLD with 13 genuine blockers. Documentation updates are not represented as code-test evidence. Additional route evidence at exact SHA 4eb66910a93bf4b33843b91d9384e1f34bdc902b: real task-runner success for two allowlisted validation commands, arbitrary-task rejection, durable duplicate prevention across two server processes, completion/audit persistence, and startup recovery of an interrupted task. API-001 remains NOT_TESTED. Exact candidate c533cd8fbf7153ccbf84ab94a2a919069b9abbe0 passed automation/security (unit tests, zero skips), dashboard browser E2E, content quality, metadata, branch inventory and local Facebook draft-package validation. It adds safe Facebook draft rejection persistence/audit assertions. Exact candidate 9ff2de1f046e879f687f3767697e787214cc1e28 adds content-job transition durable-state/audit and unsafe-state no-mutation assertions. Isolated main/candidate baseline for c533cd8 was still in progress at this documentation update. The overall 75-requirement register remains 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001/API-001/SCHED-001/STATE-001/DEPLOY-001/GIT-002 remain NOT_TESTED. The isolated exact main/candidate baseline workflow 41217526036 subsequently completed SUCCESS on candidate SHA c533cd8fbf7153ccbf84ab94a2a919069b9abbe0. Exact candidate dea284d21b4e7a6923c46a201cd196ed39b72ffa passed automation/security (Node unit tests, zero skips), dashboard browser E2E, content quality, metadata and isolated exact main/candidate baseline (runs 41217848775, 41217848763, 41217848765, 41217848778, 41217848781). It adds /api/drafts/update authorized editing, durable read-back/audit and invalid-date/rights-promotion no-mutation assertions. The 75 requirement counts remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001/API-001/SCHED-001/STATE-001/DEPLOY-001/GIT-002 remain NOT_TESTED. Exact candidate 77af9f231d9c71f6ec5ee0b4fa757af9009b1941 adds production-plan API real-server concurrency/idempotency acceptance: one 201 plus one 200 for concurrent identical submissions, idempotent later retry, 409 conflicting-plan rejection with byte-identical state preservation, and one audit event; concurrent identical plan approvals yield one 200/one 409 and one approval audit. Automation/security, browser E2E, content quality, metadata, branch inventory, isolated main/candidate baseline and local Nature Frontiers validation passed on the exact candidate. Production readiness remains blocked by genuine owner/external prerequisites; it is not an engineering CI pass. Exact tested candidate 8dddba57804bc04080930742a9bdbd74f6dc05bd passed automation/security workflow 41292433645 (463 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E 41292433623 (20/20), content quality 41292433709, metadata 41292433626, branch inventory 41292433681, local Nature Frontiers draft validation 41292433612, and isolated main/candidate baseline 41292433625. It adds four-way concurrent authenticated reads for both GET /api/jobs/narration/review and GET /api/jobs/narration/audio, exact hash-bound response/audio-byte checks, and byte-identical durable state/audit verification; both routes are now PASS. API matrix: 35 routes / 16 PASS / 15 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED because 15 routes remain unaccepted. Production readiness remains fail-closed with owner/external blockers. Exact candidate e1e7dd94ba289ef2d84ac2c35c7124e76521045e passed automation/security 41292924301 (463 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E 41292924292 (20/20), content quality 41292924308, metadata 41292924299, isolated main/candidate baseline 41292924297, branch inventory 41292924312 and local Nature Frontiers draft validation 41292924317. Script approval retries now require the same reviewer, reason and valid receipt hash; changed-reason retries return 409 without mutation. The API matrix now accepts POST /api/jobs/authoring/review and both production-plan routes using real-server concurrency, audit and restart evidence: 35 routes / 19 PASS / 12 NOT_TESTED / 4 BLOCKED. API-001 remains NOT_TESTED. Production readiness still fails closed on genuine owner/external blockers. Latest implementation cycle: /api/jobs/validate duplicate-success audit mutation fixed in source commit 85fc0056ec8f00f652799b5d934ae5d4cfc7a57b; restart/concurrency regression test committed at 7a72d20efb6741cbf5914fe2638b787bf8176336. Exact source/test SHA 7a72d20efb6741cbf5914fe2638b787bf8176336 passed automation/security (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710316: 464 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710197: 20/20), content quality, metadata, branch inventory, local Nature Frontiers draft validation and isolated main/candidate baseline (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710334). The real-server validation test proves successful validation, identical retry, two concurrent retries, restart read-back and byte-identical state/audit with exactly one validation event. The test media is synthetic and does not establish real rights or production readiness. API matrix now records 20 PASS / 11 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED. Production readiness remains HOLD with 13 owner/external prerequisites. Latest implementation cycle: POST /api/jobs/lease/complete now records a SHA-256-bound completion receipt and safely reuses exact retries; conflicting results under the same worker lease return 409 without mutation. Source change ce6002e229e13b3f6c92fd9a0b4fea9d8821ab6e, independent-process race test 3dd5692a5a050e0cacf47c94dd4bc9fa3e63ee70, and real-server generated-artifact/restart test c007aab36f32b282fbcf012fa6b6f9138686ff3c. Exact source/test SHA c007aab36f32b282fbcf012fa6b6f9138686ff3c passed automation/security (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209: 465 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645272: 20/20), content quality, metadata, branch inventory, local Nature Frontiers draft validation and isolated exact main/candidate baseline (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187). The worker completion test validates real HTTP generated state, artifact/metadata hashes, dimensions/duration, exact/concurrent retries, tamper rejection and restart recovery. All media fixtures are synthetic and not production rights evidence. API matrix: 21 PASS / 10 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED. Production readiness remains HOLD with 13 owner/external prerequisites. Additional route acceptance on exact source/test SHA c007aab36f32b282fbcf012fa6b6f9138686ff3c: POST /api/tasks/run is now PASS based on test/dashboard-task-runner.test.mjs, executed in automation workflow https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209 (465 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities). The test proves allowlisted local task success, arbitrary-task rejection, two-process duplicate prevention, durable task/audit completion and startup recovery of interrupted RUNNING tasks. API matrix now records 22 PASS / 9 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED until all remaining applicable routes are accepted. Production readiness remains HOLD with 13 owner/external prerequisites. Latest exact source/test checkpoint 561a3fc8354275af20d3eed23e96211441e08869 passed 467 Node / 16 Python / 20 Chromium, zero skips, zero npm vulnerabilities and locked installation. The Facebook review API now has exact retry idempotency and concurrent/restart coverage; API route matrix is 27 PASS / 4 NOT_TESTED / 4 BLOCKED, while API-001 remains NOT_TESTED.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -325,9 +325,11 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848781",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928329",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/3a590759a525f1b4bf365f6edd715c38dee6e327/public/dashboard.html",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/3a590759a525f1b4bf365f6edd715c38dee6e327/scripts/dashboard-server.mjs"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/3a590759a525f1b4bf365f6edd715c38dee6e327/scripts/dashboard-server.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759885",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763922"
       ],
-      "nextAction": "Reproduced static source inventory on current dashboard HTML/server: 101 controls (21 buttons, 41 inputs, 25 selects, 14 textareas), 15 forms and 38 method/path declarations (35 protected API routes plus GET /, /healthz and /readyz). Exact browser run 41317928329 passes 20/20 journeys. Static inventory and 20 journeys are not full control acceptance; test every control's intended operation, validation, error feedback, persistence, refresh, authorization and accessibility. DASH-001 remains NOT_TESTED.",
+      "nextAction": "Latest exact-source Chromium acceptance passes 20/20 journeys and static inventory remains 101 controls / 15 forms / 38 route declarations. This is a tested subset, not full control-by-control acceptance; every visible control still needs authorized success, validation, error, persistence, refresh and accessibility coverage. DASH-001 remains NOT_TESTED.",
       "assessmentCommitSha": "dea284d21b4e7a6923c46a201cd196ed39b72ffa",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state."
     },
@@ -505,9 +507,10 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119869074",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41119869134",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/dbd65dabcc75e993ae73a9e401cf3f471e860f70",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928381"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928381",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763922"
       ],
-      "nextAction": "Current non-destructive semantic inventory at HEAD c96430f760eaec6d30118b3d05701796485b0206: 2,445 branch-only commits, two base-only commits, zero patch-equivalent pairs, 203 final-tree changes (164 additions, 39 modifications, no deletions). Branch-only categories: 1,076 documentation-only; 587 test-only; 520 implementation; 91 workflow-only; 74 mixed; 58 config/content; 39 implementation-and-tests. Critical changes span dashboard/server, backup/restore, lifecycle, schedule policy, operator auth, Meta adapters, readiness, private upload and YouTube history. The two base-only commits add then revert test/restore-facebook-draft-history.test.mjs; the branch preserves that test and tests/restore-state.test.mjs. Automated inventory is not a full human semantic review of overlapping/superseded behavior; GIT-002 remains NOT_TESTED. No history mutation performed.",
+      "nextAction": "Latest non-destructive inventory at HEAD 561a3fc8354275af20d3eed23e96211441e08869 compares 2,448 branch-ahead commits, two base-only commits and 203 changed files; both protected restore tests remain present and pass. The inventory is not a human semantic review of all overlapping/superseded behavior; GIT-002 remains NOT_TESTED.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants."
     },
@@ -517,8 +520,11 @@
       "owner": "maintainer",
       "requirement": "Demonstrate clean deployment, monitoring, backup/restore and rollback in an authorized isolated environment.",
       "status": "NOT_TESTED",
-      "evidence": [],
-      "nextAction": "Exact branch-head production readiness workflow 41317928313 remains HOLD with 13 blockers and matching human/JSON exit code 2. No production deployment, live credentials or external publication was exercised. Complete isolated deployment, backup/restore/rollback, monitoring and operational recovery drills after owner-controlled prerequisites are supplied.",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763980",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805"
+      ],
+      "nextAction": "Exact-source production readiness remains HOLD with 13 blockers. Local startup and healthz succeed; readyz returns 503 because owner-controlled cadence, verified channel/history, genuine manifests/media, review and OAuth prerequisites are absent. No authorized isolated production deployment/monitoring/rollback environment was supplied; DEPLOY-001 remains NOT_TESTED.",
       "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
       "acceptanceCriterion": "An isolated deployment run records startup, health/readiness, monitoring, backup, restore, rollback and interrupted-deployment outcomes for the exact candidate SHA."
     },
@@ -1529,9 +1535,11 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/c007aab36f32b282fbcf012fa6b6f9138686ff3c/test/dashboard-task-runner.test.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/3a590759a525f1b4bf365f6edd715c38dee6e327/test/dashboard-narration-reconciliation-recovery.integration.test.mjs",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317411877"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317411877",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/561a3fc8354275af20d3eed23e96211441e08869",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805"
       ],
-      "nextAction": "Narration reconciliation now has real-server success, input-validation, persistence/audit, concurrency/idempotency and restart evidence on exact source/test SHA 3a590759a525f1b4bf365f6edd715c38dee6e327. Route matrix: 24 PASS / 7 NOT_TESTED / 4 BLOCKED; all 35 authentication-negative checks pass. API-001 remains NOT_TESTED until the remaining seven routes meet all applicable criteria.",
+      "nextAction": "The exact-source route matrix now records 27 PASS / 4 NOT_TESTED / 4 BLOCKED; all 35 authentication-negative checks pass. Remaining NOT_TESTED routes are Facebook approval (only safe rejection is verified), narration-generation concurrency, verified Short-parent binding, and genuine production human review. Four provider/media routes remain blocked by missing external identity/history/media authorization. API-001 remains NOT_TESTED.",
       "assessmentCommitSha": "3a590759a525f1b4bf365f6edd715c38dee6e327",
       "acceptanceCriterion": "A route-by-route acceptance matrix records exact method/path and independently passing authorized success, unauthorized, invalid input, persistence, failure, concurrency/idempotency, audit and restart evidence as applicable."
     },
@@ -1624,20 +1632,20 @@
     }
   ],
   "currentCheckpoint": {
-    "applicationCodeSha": "18ca6edf6d6e35f0812105b8eb20df153ffb7f74",
-    "testedSha": "3a590759a525f1b4bf365f6edd715c38dee6e327",
-    "checkpointPrHead": "c96430f760eaec6d30118b3d05701796485b0206",
+    "applicationCodeSha": "561a3fc8354275af20d3eed23e96211441e08869",
+    "testedSha": "561a3fc8354275af20d3eed23e96211441e08869",
+    "checkpointPrHead": "561a3fc8354275af20d3eed23e96211441e08869",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 2445,
+    "aheadBy": 2448,
     "behindBy": 2,
     "changedFiles": 203,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "80 REQUIREMENTS: 58 PASS / 12 NOT_TESTED / 10 BLOCKED; API ROUTES 24 PASS / 7 NOT_TESTED / 4 BLOCKED; 467 NODE + 16 PYTHON + 20 CHROMIUM PASS; PRODUCTION HOLD 13 BLOCKERS; DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001, GIT-002, MEDIA-001, SEO-001 AND E2E-001 REMAIN OPEN",
+    "verdict": "80 REQUIREMENTS: 58 PASS / 12 NOT_TESTED / 10 BLOCKED; API ROUTES 27 PASS / 4 NOT_TESTED / 4 BLOCKED; 467 NODE + 16 PYTHON + 20 CHROMIUM PASS; PRODUCTION HOLD 13 BLOCKERS; DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001, GIT-002, MEDIA-001, SEO-001 AND E2E-001 REMAIN OPEN",
     "ci": {
-      "automationSecurity": "PASS: 467 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax and compilation checks passed",
+      "automationSecurity": "PASS: 467 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax, Python compilation and schedule checks passed",
       "nodeTests": 467,
       "nodeFailures": 0,
       "nodeSkipped": 0,
@@ -1647,31 +1655,32 @@
       "metadata": "PASS",
       "dashboardE2e": "PASS: 20/20 Chromium journeys",
       "isolatedBaseline": "PASS: exact main/candidate isolated checkouts",
-      "branchReconciliationInventory": "PASS: 2,445 ahead / 2 behind / 203 changed files; non-destructive only",
-      "productionReadiness": "HOLD: 13 owner/external prerequisites remain",
+      "branchReconciliationInventory": "PASS: 2,448 ahead / 2 behind / 203 changed files; non-destructive only",
+      "productionReadiness": "HOLD: 13 owner/external prerequisites remain; no external publication",
       "facebookDraftWorkflow": "PASS for local Nature Frontiers draft validation only; provider-side creation skipped",
-      "latestExactShaRun": "PASS on application source/test SHA 3a590759a525f1b4bf365f6edd715c38dee6e327; latest branch HEAD c96430f is documentation-only above that tested source",
+      "npmLockfile": "PASS: clean locked install; lockfile unchanged; 467 Node tests, zero skips",
+      "latestExactShaRun": "PASS on application source/test SHA 561a3fc8354275af20d3eed23e96211441e08869",
       "latestNodeTestCount": 467,
       "latestPythonTestCount": 16,
       "latestDashboardE2e": "PASS: 20/20",
       "latestNodeTestSkips": 0,
       "runs": {
-        "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928328",
-        "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928358",
-        "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928301",
-        "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928329",
-        "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928307",
-        "branchReconciliationInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928381",
-        "localFacebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928356",
-        "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928313",
-        "npmLockfile": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317922033"
+        "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805",
+        "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763854",
+        "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357760007",
+        "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759885",
+        "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759940",
+        "branchReconciliationInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763922",
+        "localFacebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763814",
+        "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763980",
+        "npmLockfile": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759908"
       }
     }
   },
-  "candidateSourceTestSha": "3a590759a525f1b4bf365f6edd715c38dee6e327",
-  "latestSourceTestSha": "3a590759a525f1b4bf365f6edd715c38dee6e327",
+  "candidateSourceTestSha": "561a3fc8354275af20d3eed23e96211441e08869",
+  "latestSourceTestSha": "561a3fc8354275af20d3eed23e96211441e08869",
   "latestChangeTestStatus": "PASS",
-  "latestChangeTestReason": "Real-server narration reconciliation success, validation, concurrency/idempotency, durable state/audit and fresh-process restart are covered on exact source/test SHA 3a590759a525f1b4bf365f6edd715c38dee6e327. The test creates playable test MP3 bytes and verifies transcript/caption/report hashes without TTS regeneration; it is not production narration. Exact source/test SHA passed 467 Node tests (0 failures/0 skips), 16 Python tests, npm audit 0 vulnerabilities, 20/20 Chromium journeys, content quality, metadata and isolated baseline.",
+  "latestChangeTestReason": "Exact source/test SHA 561a3fc8354275af20d3eed23e96211441e08869 adds idempotent Facebook review retries: concurrent identical safe REJECT requests produce one durable reviewer-bound receipt/audit event, exact retries reuse it, and changed reasons return 409 without mutation. Local targeted tests pass; exact-SHA GitHub CI passes 467 Node tests (0 failures/0 skips), 16 Python tests, npm audit 0 vulnerabilities, locked npm install, syntax/compilation, content quality, metadata, isolated baseline and 20/20 Chromium journeys. Production readiness remains HOLD with 13 genuine owner/external prerequisites.",
   "requirementCounts": {
     "total": 80,
     "PASS": 58,
@@ -1681,8 +1690,8 @@
   },
   "apiRouteCounts": {
     "routes": 35,
-    "PASS": 24,
-    "NOT_TESTED": 7,
+    "PASS": 27,
+    "NOT_TESTED": 4,
     "BLOCKED": 4,
     "authenticationNegativePass": 35
   },
@@ -1720,30 +1729,31 @@
     "0f0be5b2c98cc0db293f2665007bd3ef3997981f",
     "3a590759a525f1b4bf365f6edd715c38dee6e327",
     "7c20de101f674a424ed50ad97140e5a05e263801",
-    "c96430f760eaec6d30118b3d05701796485b0206"
+    "c96430f760eaec6d30118b3d05701796485b0206",
+    "561a3fc8354275af20d3eed23e96211441e08869"
   ],
-  "latestDocumentedPrHeadBeforeRegisterRefresh": "c96430f760eaec6d30118b3d05701796485b0206",
-  "observedBranchHeadBeforeRegisterRefresh": "c96430f760eaec6d30118b3d05701796485b0206",
-  "latestLiveBranchHeadBeforeRegisterRefresh": "c96430f760eaec6d30118b3d05701796485b0206",
-  "latestLiveAheadBy": 2445,
+  "latestDocumentedPrHeadBeforeRegisterRefresh": "561a3fc8354275af20d3eed23e96211441e08869",
+  "observedBranchHeadBeforeRegisterRefresh": "561a3fc8354275af20d3eed23e96211441e08869",
+  "latestLiveBranchHeadBeforeRegisterRefresh": "561a3fc8354275af20d3eed23e96211441e08869",
+  "latestLiveAheadBy": 2448,
   "latestLiveBehindBy": 2,
   "latestLiveChangedFiles": 203,
-  "currentLiveHeadBeforeRegisterRefresh": "c96430f760eaec6d30118b3d05701796485b0206",
-  "currentLiveAheadBy": 2445,
+  "currentLiveHeadBeforeRegisterRefresh": "561a3fc8354275af20d3eed23e96211441e08869",
+  "currentLiveAheadBy": 2448,
   "currentLiveBehindBy": 2,
   "currentLiveChangedFiles": 203,
-  "latestInventoryHead": "c96430f760eaec6d30118b3d05701796485b0206",
-  "latestInventoryAheadBy": 2445,
+  "latestInventoryHead": "561a3fc8354275af20d3eed23e96211441e08869",
+  "latestInventoryAheadBy": 2448,
   "latestInventoryBehindBy": 2,
   "latestInventoryChangedFiles": 203,
   "changedFilesExact": true,
-  "changedFilesNote": "Live compare at branch HEAD c96430f760eaec6d30118b3d05701796485b0206: 2,445 commits ahead, two behind and 203 changed files against main. The subsequent register-refresh commit is documentation-only.",
+  "changedFilesNote": "Live compare at branch HEAD 561a3fc8354275af20d3eed23e96211441e08869: 2,448 commits ahead, two behind and 203 changed files against main. No main changes or destructive reconciliation.",
   "latestLiveChangedFilesExact": true,
   "currentLiveChangedFilesExact": true,
   "apiRouteMatrixCounts": {
     "routes": 35,
-    "PASS": 24,
-    "NOT_TESTED": 7,
+    "PASS": 27,
+    "NOT_TESTED": 4,
     "BLOCKED": 4,
     "authenticationNegativePass": 35
   },
@@ -1753,21 +1763,24 @@
     "controlInventoryComplete": false
   },
   "evidence": {
-    "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209",
-    "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645217",
-    "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645173",
-    "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645272",
-    "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187",
+    "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805",
+    "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763854",
+    "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357760007",
+    "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759885",
+    "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759940",
     "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645240",
-    "localFacebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645244",
-    "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645206"
+    "localFacebookDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763814",
+    "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763980",
+    "latestExactSourceCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/561a3fc8354275af20d3eed23e96211441e08869",
+    "branchReconciliationInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763922",
+    "npmLockfile": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759908"
   },
-  "implementationBranchHeadBeforeRegisterRefresh": "c96430f760eaec6d30118b3d05701796485b0206",
+  "implementationBranchHeadBeforeRegisterRefresh": "561a3fc8354275af20d3eed23e96211441e08869",
   "documentationOnlyCommitsAfterTest": [
     "7c20de101f674a424ed50ad97140e5a05e263801",
     "c96430f760eaec6d30118b3d05701796485b0206"
   ],
-  "latestInventoryArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928381",
+  "latestInventoryArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763922",
   "ciCheckoutWorkingTreeClean": true,
-  "localRecoveredCheckout": "Not synchronized or modified by this execution; prior stale/dirty recovery-workspace warning remains applicable."
+  "localRecoveredCheckout": "Exact source/test tree for 561a3fc8354275af20d3eed23e96211441e08869 was verified against the remote Git tree SHA; full-history source bundle refresh follows the acceptance-register update."
 }
