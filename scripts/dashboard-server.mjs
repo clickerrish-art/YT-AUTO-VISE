@@ -1066,8 +1066,8 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "POST" && url.pathname === "/api/jobs") {
       const body = await readBody(req);
+      const scheduleConfig = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
       if (typeof body.scheduledDay === "string" && typeof body.contentType === "string") {
-        const scheduleConfig = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
         const configuredSlot = (scheduleConfig.schedule ?? []).find(slot => slot.day === body.scheduledDay);
         if (!configuredSlot || configuredSlot.format !== body.contentType) {
           return json(res, 409, { error: "Job day/format is not an authorized slot in the authoritative schedule", publishingEnabled: false });
