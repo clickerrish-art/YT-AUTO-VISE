@@ -22,8 +22,8 @@
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 12,
-    "overallNotTested": 19,
+    "overallPass": 13,
+    "overallNotTested": 18,
     "overallBlocked": 4
   },
   "evidence": {
@@ -477,11 +477,18 @@
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "NOT_TESTED",
-      "restartRecovery": "PASS",
+      "concurrency": "PASS — concurrent identical requests serialize to one 201 and one 409 while the first provider call is pending; the controlled provider receives exactly one call. A later identical retry returns the persisted result without a second provider call.",
+      "restartRecovery": "PASS — after a graceful server stop and fresh process, GET /api/state returns the same job authoring fingerprint, script SHA-256 and AWAITING_HUMAN_EDITORIAL_REVIEW state; no provider regeneration occurs.",
       "externalOperation": "CI uses controlled local script-generation endpoint; production model/provider availability external",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "overallAcceptance": "PASS",
+      "notes": "Accepted as local script authoring with human editorial review still mandatory. Exact-SHA test/dashboard-server.test.mjs on 5c3a30ba819c686e0a0a89dd220075843ff8b359 verifies concurrent duplicate requests (one provider call only), completed idempotent retry, and persistence of the review-required script/fingerprint/hash across a real server restart. Provider output does not satisfy factual, originality, rights or human review; no script is marked publishable.",
+      "testEvidence": {
+        "test": "test/dashboard-server.test.mjs — controlled local provider and real dashboard HTTP server",
+        "exactTestedSha": "5c3a30ba819c686e0a0a89dd220075843ff8b359",
+        "automationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41288730627",
+        "contentQualityCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41288730565",
+        "scenario": "Two concurrent identical requests produce one successful generation and one in-progress rejection; provider called once; completed retry reuses result; restart preserves script hash/fingerprint and human-review gate."
+      }
     },
     {
       "method": "POST",
