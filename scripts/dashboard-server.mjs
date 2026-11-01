@@ -1198,6 +1198,26 @@ const server = http.createServer(async (req, res) => {
           }
         }
         const planSha256 = productionPlanSha256(body.productionPlan);
+        const existingPlan = job.authoring?.productionPlan;
+        if (existingPlan) {
+          const storedPlanMatches = existingPlan.planSha256 === planSha256 &&
+            existingPlan.scriptSha256 === body.scriptSha256 &&
+            productionPlanSha256(existingPlan.plan) === planSha256;
+          if (storedPlanMatches) {
+            return json(res, 200, {
+              job, planSha256, validationStatus: "STRUCTURE_AND_FILE_HASHES_VALIDATED",
+              humanReviewRequired: true, publishable: false, publishingEnabled: false,
+              reused: true,
+              note: "The identical validated production plan was already persisted; no duplicate audit event was created."
+            });
+          }
+          return json(res, 409, {
+            error: "A different production plan is already attached to this job; reject or explicitly revise it through a separately reviewed workflow",
+            existingPlanSha256: existingPlan.planSha256,
+            submittedPlanSha256: planSha256,
+            publishingEnabled: false
+          });
+        }
         job.authoring.productionPlan = {
           plan: body.productionPlan, planSha256, scriptSha256: body.scriptSha256,
           status: "REVIEW_REQUIRED", submittedBy: operatorId, submittedAt: new Date().toISOString(),
