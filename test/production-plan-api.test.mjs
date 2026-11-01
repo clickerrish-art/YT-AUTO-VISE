@@ -18,14 +18,18 @@ test("production-plan API binds the approved script, checks real file hashes, an
   fs.mkdirSync(evidenceDir);
   const token = "test-token-" + "x".repeat(40);
   const port = 21000 + Math.floor(Math.random() * 10000);
-  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
-    cwd: repoRoot,
-    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, UPLOAD_LOG_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" },
-    stdio: ["ignore", "pipe", "pipe"]
-  });
   let logs = "";
-  child.stdout.on("data", chunk => { logs += chunk.toString(); });
-  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  const spawnServer = () => {
+    const process = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+      cwd: repoRoot,
+      env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, UPLOAD_LOG_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" },
+      stdio: ["ignore", "pipe", "pipe"]
+    });
+    process.stdout.on("data", chunk => { logs += chunk.toString(); });
+    process.stderr.on("data", chunk => { logs += chunk.toString(); });
+    return process;
+  };
+  let child = spawnServer();
   const stateFile = path.join(stateDir, "dashboard-state.json");
   const baseUrl = "http://127.0.0.1:" + port;
   const headers = { "content-type": "application/json", "x-operator-token": token };
@@ -183,4 +187,37 @@ test("production-plan API binds the approved script, checks real file hashes, an
   ).length, 1, "concurrent approval must append exactly one durable approval audit event");
   assert.equal(finalState.jobs.find(item => item.id === jobId).authoring.productionPlan.status, "APPROVED_PLAN_ONLY");
   assert.equal(finalState.jobs.find(item => item.id === jobId).authoring.productionPlan.publishingEnabled, false);
+
+  // A production-plan review is a durable workflow decision, not an in-memory UI state.
+  // Stop the actual HTTP server, start a fresh process against the same state directory,
+  // and verify the plan, hash-bound approval receipt and one audit event are recovered.
+  await new Promise(resolve => {
+    if (child.exitCode !== null || child.signalCode !== null) return resolve();
+    child.once("exit", resolve);
+    child.kill("SIGTERM");
+  });
+  child = spawnServer();
+  let restartedReady = false;
+  for (let attempt = 0; attempt < 100; attempt++) {
+    if (child.exitCode !== null) throw new Error("Dashboard server failed during restart: " + logs);
+    try {
+      const response = await fetch(baseUrl + "/healthz");
+      if (response.ok) { restartedReady = true; break; }
+    } catch {}
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  assert.equal(restartedReady, true, "dashboard backend should recover after a fresh process start; logs: " + logs);
+  const recoveredResponse = await fetch(baseUrl + "/api/state", { headers: { "x-operator-token": token } });
+  assert.equal(recoveredResponse.status, 200);
+  const recovered = await recoveredResponse.json();
+  const recoveredJob = recovered.jobs.find(item => item.id === jobId);
+  assert.ok(recoveredJob, "approved production-plan job must survive server restart");
+  assert.equal(recoveredJob.authoring.productionPlan.status, "APPROVED_PLAN_ONLY");
+  assert.equal(recoveredJob.authoring.productionPlan.planSha256, submitted.body.planSha256);
+  assert.deepEqual(recoveredJob.authoring.productionPlan.review, approved.body.planReview,
+    "the exact plan review receipt must survive restart unchanged");
+  assert.equal(recovered.audit.filter(event =>
+    event.action === "PRODUCTION_PLAN_APPROVED" && event.jobId === jobId
+  ).length, 1, "the single plan-approval audit event must survive restart");
+  assert.equal(recovered.publishingEnabled, false, "restart recovery must not enable publishing");
 });
