@@ -20,14 +20,14 @@ test("production-plan API binds the approved script, checks real file hashes, an
   const port = 21000 + Math.floor(Math.random() * 10000);
   let logs = "";
   const spawnServer = () => {
-    const process = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    const serverProcess = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
       cwd: repoRoot,
       env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, UPLOAD_LOG_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" },
       stdio: ["ignore", "pipe", "pipe"]
     });
-    process.stdout.on("data", chunk => { logs += chunk.toString(); });
-    process.stderr.on("data", chunk => { logs += chunk.toString(); });
-    return process;
+    serverProcess.stdout.on("data", chunk => { logs += chunk.toString(); });
+    serverProcess.stderr.on("data", chunk => { logs += chunk.toString(); });
+    return serverProcess;
   };
   let child = spawnServer();
   const stateFile = path.join(stateDir, "dashboard-state.json");
