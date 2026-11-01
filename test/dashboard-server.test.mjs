@@ -707,10 +707,21 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(heartbeat.status, 200);
   const fakeGeneration = await fetch(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, leaseToken: claimBody.leaseToken, nextState: "GENERATED", metadataPath: "content/nonexistent-test-metadata.json", result: { outputArtifacts: [{ path: "media/test-only-nonexistent.mp4", sha256: "a".repeat(64) }], metadataVersion: "test-only-metadata-version" } }) });
   assert.equal(fakeGeneration.status, 400, "a nonexistent output must never be recorded as generated");
-  const failed = await fetch(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, leaseToken: claimBody.leaseToken, nextState: "FAILED", result: { errorDetails: { retryable: false, message: "test fixture intentionally has no media artifact" } } }) });
+  const failedCompletionPayload = { jobId: productionJob.id, leaseToken: claimBody.leaseToken, nextState: "FAILED", result: { errorDetails: { retryable: false, message: "test fixture intentionally has no media artifact" } } };
+  const failed = await fetch(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify(failedCompletionPayload) });
   const failedBody = await failed.json();
   assert.equal(failed.status, 200, JSON.stringify(failedBody));
   assert.equal(failedBody.job.state, "FAILED");
+  const afterFailedCompletion = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
+  assert.equal(JSON.parse(afterFailedCompletion.toString("utf8")).audit.filter(event => event.action === "WORKER_STAGE_COMPLETED" && event.jobId === productionJob.id).length, 1);
+  const failedRetry = await fetch(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify(failedCompletionPayload) });
+  const failedRetryBody = await failedRetry.json();
+  assert.equal(failedRetry.status, 200, JSON.stringify(failedRetryBody));
+  assert.equal(failedRetryBody.idempotent, true, "an exact worker completion retry must reuse its durable receipt");
+  assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), afterFailedCompletion, "an exact worker completion retry must not duplicate state or audit writes");
+  const changedCompletion = await fetch(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify({ ...failedCompletionPayload, result: { errorDetails: { retryable: false, message: "different completion result" } } }) });
+  assert.equal(changedCompletion.status, 409, "a reused lease token cannot complete a different result");
+  assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), afterFailedCompletion, "a conflicting completion retry must preserve state and audit bytes");
 
   const concurrentDraft = {
     id: "dashboard-test-concurrent-worker-claim",

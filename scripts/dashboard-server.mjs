@@ -2515,6 +2515,12 @@ const server = http.createServer(async (req, res) => {
         if (index < 0) return json(res, 404, { error: "Content job not found" });
         const old = state.jobs[index];
         const resultPatch = body.result ?? {};
+        const completionRequestSha256 = crypto.createHash("sha256").update(JSON.stringify({
+          nextState: body.nextState,
+          metadataPath: body.metadataPath ?? null,
+          result: resultPatch
+        })).digest("hex");
+        const leaseTokenSha256 = crypto.createHash("sha256").update(body.leaseToken).digest("hex");
         if (body.nextState === "GENERATED") {
           if (!Array.isArray(resultPatch.outputArtifacts) || resultPatch.outputArtifacts.length < 1) return json(res, 400, { error: "Generation completion requires at least one real MP4 artifact with a checksum" });
           if (typeof body.metadataPath !== "string") return json(res, 400, { error: "Generation completion requires the actual metadata file path" });
@@ -2545,9 +2551,18 @@ const server = http.createServer(async (req, res) => {
           }
           resultPatch.metadataPath = body.metadataPath;
         }
+        const previousCompletion = old.lastWorkerCompletion;
+        if (previousCompletion?.leaseTokenSha256 === leaseTokenSha256) {
+          if (previousCompletion.requestSha256 === completionRequestSha256) {
+            return json(res, 200, { job: old, publishingEnabled: false, idempotent: true });
+          }
+          return json(res, 409, { error: "This worker lease already completed a different result; claim a new lease before submitting another completion." });
+        }
         const updated = completeWorkerLease(old, body.leaseToken, body.nextState, resultPatch);
+        const completedAt = new Date().toISOString();
+        updated.lastWorkerCompletion = { leaseTokenSha256, requestSha256: completionRequestSha256, nextState: body.nextState, completedAt };
         state.jobs[index] = updated;
-        state.audit.push({ id: crypto.randomUUID(), action: "WORKER_STAGE_COMPLETED", jobId: body.jobId, workerId: old.workerLease.workerId, from: old.state, to: updated.state, at: new Date().toISOString(), actor: operatorId });
+        state.audit.push({ id: crypto.randomUUID(), action: "WORKER_STAGE_COMPLETED", jobId: body.jobId, workerId: old.workerLease.workerId, from: old.state, to: updated.state, at: completedAt, actor: operatorId });
         saveState(state);
         return json(res, 200, { job: updated, publishingEnabled: false });
       } finally { release(); }
