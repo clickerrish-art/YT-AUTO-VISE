@@ -1,3 +1,29 @@
+## Current source inventory and exact-SHA browser evidence — 1 November 2026
+
+Current dashboard source inventory (reproduced from `scripts/dashboard-inventory.mjs` against the live branch source):
+
+| Item | Count |
+|---|---:|
+| Total controls | 101 |
+| Buttons | 21 |
+| Inputs | 41 |
+| Selects | 25 |
+| Textareas | 14 |
+| Forms | 15 |
+| Route declarations | 38 |
+| Protected API routes | 35 |
+| Non-API handlers | 3 (`GET /`, `GET /healthz`, `GET /readyz`) |
+
+- Dashboard HTML SHA-256 Git blob: `c4d95154fada082bb570af2e3b8935142cf566f8`.
+- Dashboard server SHA-256 Git blob: `eef4477dc9da37c88292446f53cbd6ee715de78e`.
+- Exact tested application source/test SHA: `3a590759a525f1b4bf365f6edd715c38dee6e327`.
+- Latest branch-head browser workflow on documentation-only HEAD `c96430f760eaec6d30118b3d05701796485b0206`: [41317928329](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928329), **20/20 Chromium journeys passed**.
+- Exact source/test automation: [41317411877](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317411877), **467 Node / 16 Python / 0 skipped / npm audit 0 vulnerabilities**.
+
+Static counts and 20 browser journeys do not prove every control works. The inventory parser explicitly describes itself as static source inventory only. **DASH-001 remains NOT_TESTED** until all 101 controls and 15 forms have control-by-control acceptance for intended operation, API connection, validation, failure feedback, persistence, refresh, authorization and accessibility. The full business workflow and production media are not certified by this dashboard subset.
+
+---
+
 ## Exact-SHA draft-edit and narration-review API acceptance — 31 October 2026
 
 - Exact code/test candidate: `dea284d21b4e7a6923c46a201cd196ed39b72ffa`.

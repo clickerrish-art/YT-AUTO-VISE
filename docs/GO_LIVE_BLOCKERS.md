@@ -1,3 +1,65 @@
+# Latest verified delivery checkpoint — 1 November 2026, 14:49 UTC
+
+This snapshot is the current evidence baseline. The application code/test candidate is `3a590759a525f1b4bf365f6edd715c38dee6e327`. The current branch HEAD is `c96430f760eaec6d30118b3d05701796485b0206`; the two commits after the code/test candidate are documentation-only. Do not confuse the documentation HEAD with the exact application source/test SHA.
+
+## Repository and CI
+
+- Repository: `clickerrish-art/YT-AUTO-VISE`; branch: `codex/marketing-machine-audit-fixes`.
+- Branch HEAD at this snapshot: `c96430f760eaec6d30118b3d05701796485b0206`.
+- Tested application source/test SHA: `3a590759a525f1b4bf365f6edd715c38dee6e327`.
+- Main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Live comparison: **2,445 ahead / 2 behind / 203 changed files**. Final tree: 164 additions, 39 modifications, no deletions.
+- PR #1 remains **OPEN, DRAFT, UNMERGED**. Main remains untouched. Branch protection is not enabled.
+- Exact-HEAD CI on `c96430f`: automation/security [41317928328](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928328) PASS; content quality [41317928358](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928358) PASS; metadata [41317928301](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928301) PASS; dashboard Chromium E2E [41317928329](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928329) PASS; isolated main/candidate [41317928307](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928307) PASS; branch inventory [41317928381](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928381) PASS; Nature Frontiers local draft validation [41317928356](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928356) PASS; locked install [41317922033](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317922033) PASS.
+- Automation evidence: **467 Node passed / 0 failed / 0 skipped; 16 Python passed; npm audit 0 vulnerabilities; FFmpeg/ffprobe, JavaScript syntax and Python compilation passed**. Dashboard browser acceptance: **20/20 journeys passed**.
+- Production readiness [41317928313](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928313) remains **HOLD — 13 blockers**. The workflow fails its mandatory gate as designed; this is not production acceptance.
+
+## Current dashboard and API inventory
+
+The source-derived inventory at this checkpoint reports **101 controls**: 21 buttons, 41 inputs, 25 selects and 14 textareas; **15 forms**; and **38 route declarations** (35 protected `/api/` routes plus `GET /`, `GET /healthz`, `GET /readyz`). This is a static inventory, not acceptance of every control.
+
+The browser suite's 20/20 pass is a tested subset. DASH-001 remains NOT_TESTED until all 101 controls and all 15 forms have control-by-control success, validation, failure, persistence, authorization, refresh and accessibility acceptance.
+
+API matrix: **35 routes / 35 authentication-negative checks PASS / 24 overall PASS / 7 NOT_TESTED / 4 BLOCKED**. API-001 remains NOT_TESTED overall.
+
+The narration reconciliation route now has real-server success, input-validation, durable persistence, audit, concurrency/idempotency and restart evidence on exact source/test SHA `3a590759a525f1b4bf365f6edd715c38dee6e327`. Its integration test creates a playable test MP3 fixture and verifies retained hashes; that silent fixture is not genuine production narration, a human-reviewed asset or publication evidence.
+
+## Non-destructive branch review
+
+The reproducible inventory on this branch found **2,445 branch-only commits, two base-only commits, zero patch-equivalent pairs**, and 203 final-tree changes. Branch-only commit categories: 1,076 documentation-only; 587 test-only; 520 implementation; 91 workflow-only; 74 mixed; 58 configuration/content; 39 implementation-and-tests. Critical changed modules include the dashboard, dashboard server, backup/restore, job lifecycle, scheduling, operator authentication, Meta/Facebook adapters, production readiness, private upload and YouTube history gates.
+
+The two base-only commits add then revert `test/restore-facebook-draft-history.test.mjs`; the implementation branch retains that test and `tests/restore-state.test.mjs`. The inventory is clean in its isolated CI checkout and reports no destructive reconciliation. Human review of overlapping, superseded and potentially conflicting changes remains incomplete; GIT-002 stays NOT_TESTED.
+
+## The 13 production-readiness blockers
+
+1. Owner-approved feasible publication cadence, with timezone-aware approval timestamp and non-empty approval reference.
+2. Complete SonicVhibez public/private/unlisted video history and reconciliation of all pending or uncertain upload attempts.
+3. Verified Short rights manifest at `content/render-manifest.json`.
+4. Verified long-form rights manifest at `content/long-form-render-manifest.json`.
+5. Human-reviewed metadata explicitly marked `READY_FOR_PRIVATE_UPLOAD`.
+6. Independently verified exact SonicVhibez YouTube channel ID.
+7. Genuine media-rights approval (`rightsConfirmed` only after verification).
+8. Genuine content/compliance approval (`complianceReviewed` only after review).
+9. Final rendered Short `media/next-short.mp4`.
+10. `YOUTUBE_CLIENT_ID`.
+11. `YOUTUBE_CLIENT_SECRET`.
+12. `YOUTUBE_REFRESH_TOKEN`.
+13. `SONICVHIBEZ_CHANNEL_ID`.
+
+These are owner-controlled or external prerequisites; do not fabricate them or weaken readiness thresholds.
+
+## Other known release constraints
+
+- The requested three-publication sequence with 72-hour minimum gaps requires at least 216 hours. A feasible owner-approved cadence is still required; Tuesday/Saturday remain draft-preparation triggers only.
+- Nature Frontiers is a separate Meta brand and is never a SonicVhibez YouTube target.
+- The last documented Metricool read-only check (31 October) found eight Nature Frontiers promotional records, one already published and seven future records with `draft=false` and `autoPublish=true`. They were not changed. This was not rechecked during this verification; treat it as a safety warning requiring owner-authorized review.
+- No YouTube OAuth credentials, verified channel ownership, genuine production media/rights evidence or human approvals were supplied in this run.
+- No external upload, post, schedule mutation, campaign activation, spend, merge, main edit, reset, rebase, force-push or destructive reconciliation occurred.
+
+**Verdict: NOT PRODUCTION READY.** The application has received additional implementation and exact-SHA verification, but DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001, GIT-002, MEDIA-001, SEO-001 and E2E-001 remain open; publishing and Meta provider actions remain safely gated.
+
+---
+
 # Latest live blocker reconciliation — 1 November 2026, 08:00 UTC
 
 This snapshot supersedes older branch/head and CI snapshots below. The latest code/test candidate is distinct from the documentation-only commit that will follow this evidence refresh.
