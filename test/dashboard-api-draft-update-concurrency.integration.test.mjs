@@ -122,6 +122,21 @@ test("draft updates serialize concurrent writes and persist with audit history a
     scheduledDate: "2026-11-14"
   });
 
+  const beforeInvalidPayloads = fs.readFileSync(statePath);
+  const emptyUpdate = await post("/api/drafts/update", {});
+  assert.equal(emptyUpdate.status, 400, "an empty draft update must be rejected");
+  assert.deepEqual(fs.readFileSync(statePath), beforeInvalidPayloads,
+    "an empty draft update must not mutate durable state or audit history");
+
+  const malformedUpdate = await fetch(base() + "/api/drafts/update", {
+    method: "POST",
+    headers,
+    body: "{"
+  });
+  assert.equal(malformedUpdate.status, 400, "malformed JSON must be rejected");
+  assert.deepEqual(fs.readFileSync(statePath), beforeInvalidPayloads,
+    "malformed JSON must not mutate durable state or audit history");
+
   const beforeUnknownUpdate = fs.readFileSync(statePath);
   const unknownUpdate = await post("/api/drafts/update", { ...tuesday, id: "draft-update-concurrency-unknown" });
   assert.equal(unknownUpdate.status, 404, "editing an unknown draft must return not found");
