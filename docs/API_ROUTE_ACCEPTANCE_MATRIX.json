@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-01T09:49:04Z",
+  "generatedAt": "2026-11-01T09:19:42.364Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "77af9f231d9c71f6ec5ee0b4fa757af9009b1941",
+  "testedSourceTestSha": "8dddba57804bc04080930742a9bdbd74f6dc05bd",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -14,7 +14,7 @@
       "GET /healthz",
       "GET /readyz"
     ],
-    "branchAheadBy": 2384,
+    "branchAheadBy": 2422,
     "branchBehindBy": 2,
     "changedFiles": 200,
     "branchProtectionEnabled": false
@@ -22,8 +22,8 @@
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 14,
-    "overallNotTested": 17,
+    "overallPass": 16,
+    "overallNotTested": 15,
     "overallBlocked": 4
   },
   "evidence": {
@@ -412,13 +412,19 @@
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
-      "durablePersistence": "PASS",
-      "auditEvidence": "PASS",
-      "concurrency": "NOT_TESTED",
-      "restartRecovery": "PASS",
+      "durablePersistence": "PASS — read-only; durable state remains byte-identical under concurrent requests.",
+      "auditEvidence": "PASS — no audit event or other state mutation occurs.",
+      "concurrency": "PASS — four simultaneous authenticated reads return the same hash-bound bundle or exact audio bytes.",
+      "restartRecovery": "PASS — successful read-back after server restart is covered by the same real-server test.",
       "externalOperation": "none",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "overallAcceptance": "PASS",
+      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance.",
+      "testEvidence": {
+        "test": "test/dashboard-server.test.mjs — real HTTP server",
+        "exactTestedSha": "8dddba57804bc04080930742a9bdbd74f6dc05bd",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41292433645",
+        "scenarios": "Four simultaneous authenticated GET /api/jobs/narration/review requests return the same hash-bound script/transcript bundle; four simultaneous GET /api/jobs/narration/audio requests return the exact verified audio bytes. Durable dashboard state remains byte-identical, including audit history. The same real-server test also verifies missing/unknown job rejection and successful read-back after restart."
+      }
     },
     {
       "method": "GET",
@@ -428,13 +434,19 @@
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
-      "durablePersistence": "PASS",
-      "auditEvidence": "PASS",
-      "concurrency": "NOT_TESTED",
-      "restartRecovery": "PASS",
+      "durablePersistence": "PASS — read-only; durable state remains byte-identical under concurrent requests.",
+      "auditEvidence": "PASS — no audit event or other state mutation occurs.",
+      "concurrency": "PASS — four simultaneous authenticated reads return the same hash-bound bundle or exact audio bytes.",
+      "restartRecovery": "PASS — successful read-back after server restart is covered by the same real-server test.",
       "externalOperation": "none",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "overallAcceptance": "PASS",
+      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance.",
+      "testEvidence": {
+        "test": "test/dashboard-server.test.mjs — real HTTP server",
+        "exactTestedSha": "8dddba57804bc04080930742a9bdbd74f6dc05bd",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41292433645",
+        "scenarios": "Four simultaneous authenticated GET /api/jobs/narration/review requests return the same hash-bound script/transcript bundle; four simultaneous GET /api/jobs/narration/audio requests return the exact verified audio bytes. Durable dashboard state remains byte-identical, including audit history. The same real-server test also verifies missing/unknown job rejection and successful read-back after restart."
+      }
     },
     {
       "method": "POST",
