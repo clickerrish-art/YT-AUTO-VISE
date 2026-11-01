@@ -1066,31 +1066,49 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
     });
   });
   await new Promise(resolve => provider.listen(0, "127.0.0.1", resolve));
-  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
-    env: {
-      ...process.env,
-      DASHBOARD_OPERATOR_TOKEN: token,
-      DASHBOARD_OPERATOR_ID: "live-narration-e2e-operator",
-      DASHBOARD_STATE_DIR: stateDir,
-      UPLOAD_LOG_DIR: stateDir,
-      PORT: String(port),
-      DASHBOARD_HOST: "127.0.0.1",
-      SCRIPT_GENERATION_ENDPOINT: `http://127.0.0.1:${provider.address().port}/v1/chat/completions`,
-      SCRIPT_GENERATION_TIMEOUT_MS: "10000",
-      AUTHORING_TTS_RATE: "+5%"
-    },
-    stdio: ["ignore", "pipe", "pipe"]
-  });
+  const serverEnv = {
+    ...process.env,
+    DASHBOARD_OPERATOR_TOKEN: token,
+    DASHBOARD_OPERATOR_ID: "live-narration-e2e-operator",
+    DASHBOARD_STATE_DIR: stateDir,
+    UPLOAD_LOG_DIR: stateDir,
+    PORT: String(port),
+    DASHBOARD_HOST: "127.0.0.1",
+    SCRIPT_GENERATION_ENDPOINT: `http://127.0.0.1:${provider.address().port}/v1/chat/completions`,
+    SCRIPT_GENERATION_TIMEOUT_MS: "10000",
+    AUTHORING_TTS_RATE: "+5%"
+  };
+  let child;
   let logs = "";
-  child.stdout.on("data", chunk => { logs += chunk.toString(); });
-  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  function startServer() {
+    child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+      env: serverEnv,
+      stdio: ["ignore", "pipe", "pipe"]
+    });
+    child.stdout.on("data", chunk => { logs += chunk.toString(); });
+    child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  }
+  startServer();
   const jobOutputDir = { value: null };
   async function stopServer() {
-    if (child.exitCode === null) {
+    if (child && child.exitCode === null && child.signalCode === null) {
       const exited = new Promise(resolve => child.once("exit", resolve));
       child.kill("SIGTERM");
       await exited;
     }
+  }
+  async function restartServer() {
+    await stopServer();
+    startServer();
+    for (let attempt = 0; attempt < 100; attempt++) {
+      if (child.exitCode !== null || child.signalCode !== null) break;
+      try {
+        const response = await fetch(base + "/healthz");
+        if (response.ok) return;
+      } catch {}
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    throw new Error("Dashboard did not recover after narration restart: " + logs);
   }
   try {
     let ready = false;
@@ -1178,6 +1196,16 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
       expect(crypto.createHash("sha256").update(fs.readFileSync(absolutePath)).digest("hex")).toBe(artifact.sha256);
       if (name === "narration.mp3") jobOutputDir.value = path.dirname(absolutePath);
     }
+    // Prove the generated narration stage and all four exact-hash artifacts survive
+    // a real process restart before an idempotent retry is accepted.
+    await restartServer();
+    const restartedState = await (await fetch(base + "/api/state", { headers })).json();
+    const restartedJob = restartedState.jobs.find(job => job.id === jobId);
+    expect(restartedJob.authoring.narrationStage.status).toBe("DRAFT_REVIEW_REQUIRED");
+    expect(restartedJob.authoring.narrationStage.artifacts).toEqual(firstJob.authoring.narrationStage.artifacts);
+    expect(restartedJob.authoring.narrationStage.publishable).toBe(false);
+    expect(restartedState.audit.filter(event => event.action === "AUTHORING_NARRATION_DRAFT_READY" && event.jobId === jobId)).toHaveLength(1);
+
     const exactRetryResponse = await fetch(base + "/api/jobs/narration", { method: "POST", headers, body: JSON.stringify({ jobId, scriptSha256: approvedSha }) });
     const exactRetryBody = await exactRetryResponse.json();
     expect(exactRetryResponse.status).toBe(201);
