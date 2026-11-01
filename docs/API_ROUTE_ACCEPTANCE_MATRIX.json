@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-01T12:31:45.473Z",
+  "generatedAt": "2026-11-01T12:33:44.282Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "c007aab36f32b282fbcf012fa6b6f9138686ff3c",
@@ -14,7 +14,7 @@
       "GET /healthz",
       "GET /readyz"
     ],
-    "branchAheadBy": 2432,
+    "branchAheadBy": 2433,
     "branchBehindBy": 2,
     "changedFiles": 202,
     "branchProtectionEnabled": false
@@ -22,8 +22,8 @@
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 21,
-    "overallNotTested": 10,
+    "overallPass": 22,
+    "overallNotTested": 9,
     "overallBlocked": 4
   },
   "evidence": {
@@ -66,9 +66,12 @@
     "workerCompletionIntegrationTestCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c007aab36f32b282fbcf012fa6b6f9138686ff3c",
     "workerCompletionAutomationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209",
     "workerCompletionDashboardCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645272",
-    "workerCompletionBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187"
+    "workerCompletionBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187",
+    "taskRunnerIntegrationTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/c007aab36f32b282fbcf012fa6b6f9138686ff3c/test/dashboard-task-runner.test.mjs",
+    "taskRunnerAutomationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209",
+    "taskRunnerBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187"
   },
-  "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 21 of 35 routes as PASS, 10 as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. POST /api/jobs/lease/complete now has real-server generated-artifact success, checksum/metadata validation, idempotent exact and concurrent retries, conflict/tamper rejection, durable audit, and restart recovery evidence using generated test-only FFmpeg media. No production rights, human approval or external publication is implied.",
+  "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 22 of 35 routes as PASS, nine as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. POST /api/tasks/run is accepted for allowlisted local validation execution, durable result/audit persistence, cross-process duplicate prevention and startup recovery of interrupted tasks. POST /api/jobs/lease/complete is accepted for generated test-artifact verification, idempotent retries and restart recovery. Synthetic fixtures and local validation commands do not establish production rights, human approval or external publication.",
   "routes": [
     {
       "method": "GET",
@@ -282,19 +285,21 @@
       "classification": "operator task execution",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "PASS",
-      "inputValidation": "PASS",
-      "durablePersistence": "PASS",
-      "auditEvidence": "PASS",
-      "concurrency": "PASS",
-      "restartRecovery": "NOT_TESTED",
-      "externalOperation": "task-specific external dependencies vary",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "Exact-SHA 4eb66910 test: allowlisted validate-schedule and validate-campaigns execute through real child processes and return SUCCEEDED/exitCode 0; arbitrary task IDs are rejected; durable RUNNING state prevents cross-process duplicate execution; completed result and audit event persist. Startup recovery of a pre-existing interrupted task is separately exercised. A post-completion restart/read-back for this route is not yet asserted, so restartRecovery remains NOT_TESTED and overall route acceptance remains NOT_TESTED.",
+      "authorizedSuccess": "PASS — the real HTTP server executed allowlisted validate-schedule and validate-campaigns commands, returning SUCCEEDED with exitCode 0 and publishingEnabled=false.",
+      "inputValidation": "PASS — arbitrary/non-allowlisted task IDs return 400; empty/missing payloads are rejected by the 35-route request-boundary matrix; missing/invalid operator tokens are rejected by the 35-route auth matrix.",
+      "durablePersistence": "PASS — task RUNNING record, final SUCCEEDED result, exit code and output persist in the shared state file; a seeded interrupted RUNNING task is recovered to RECOVERY_REQUIRED on startup.",
+      "auditEvidence": "PASS — VALIDATION_TASK_STARTED, VALIDATION_TASK_SUCCEEDED and TASK_INTERRUPTED_RECOVERY_REQUIRED records are persisted with job/task IDs and actor attribution.",
+      "concurrency": "PASS — two independent dashboard processes concurrently submit the same long-running allowlisted task; one receives 200, the other 409, exactly one durable task record and one completion audit remain.",
+      "restartRecovery": "PASS — a fresh server process recovers an interrupted RUNNING task to RECOVERY_REQUIRED, records the recovery audit event and exposes the recovered state through authenticated GET /api/state.",
+      "externalOperation": "none — allowlisted local validation commands only; no provider or publishing action",
+      "overallAcceptance": "PASS",
+      "notes": "The route executes only hard-coded allowlisted local validation commands. Test evidence is real-server and cross-process, with local disposable state; it does not imply production publishing readiness.",
       "testEvidence": {
-        "test": "test/dashboard-task-runner.test.mjs",
-        "exactTestedSha": "4eb66910a93bf4b33843b91d9384e1f34bdc902b",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41216258636"
+        "test": "test/dashboard-task-runner.test.mjs — two real dashboard server processes sharing disposable durable state",
+        "exactTestedSha": "c007aab36f32b282fbcf012fa6b6f9138686ff3c",
+        "automationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209",
+        "isolatedBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187",
+        "scenario": "Authenticated real-server requests execute validate-schedule and validate-campaigns with exitCode 0 and durable SUCCEEDED records; an arbitrary task ID is rejected. Two independent dashboard processes race the same long-running test-suite task, producing one 200 and one 409 with exactly one durable RUNNING/SUCCEEDED task and one success audit. Startup recovers a seeded interrupted RUNNING task to RECOVERY_REQUIRED with audit and read-back. No provider call or publishing action occurs."
       }
     },
     {
