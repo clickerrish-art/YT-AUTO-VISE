@@ -114,7 +114,10 @@ test("private-upload approval binds media, thumbnail, validated captions, metada
     metadataVersion: "9".repeat(64),
     rightsEvidenceSha256: "b".repeat(64),
     shortParentRelationshipSha256: shortParentRelationshipSha256(relationship),
-    relatedArtifacts: [video, thumbnail, captions],
+    relatedArtifacts: [video, thumbnail, captions,
+      { path: "rights/source-asset.mp4", sha256: "c".repeat(64) },
+      { path: "rights/license.txt", sha256: "d".repeat(64) }
+    ],
     id: "review-001"
   };
   const approved = approveContentJobForPrivateUpload(job, review, "2026-10-23T12:00:00.000Z");
@@ -124,6 +127,7 @@ test("private-upload approval binds media, thumbnail, validated captions, metada
   assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, metadataVersion: "changed" }), /metadata version/);
   assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, rightsEvidenceSha256: "f".repeat(64) }), /rights evidence/);
   assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, relatedArtifacts: review.relatedArtifacts.filter(item => item.path !== captions.path) }), /does not bind every current media artifact/);
+  assert.throws(() => approveContentJobForPrivateUpload(job, { ...review, relatedArtifacts: [...review.relatedArtifacts, review.relatedArtifacts[0]] }), /invalid\\/duplicate related-artifact evidence/);
   assert.throws(() => approveContentJobForPrivateUpload({ ...job, validationResults: { passed: true } }, review), /Validated captions path and SHA-256/);
   assert.throws(() => approveContentJobForPrivateUpload({ ...job, validationResults: { ...job.validationResults, passed: false } }, review), /Passing technical validation/);
   assert.throws(() => approveContentJobForPrivateUpload({ ...job, state: "GENERATED" }, review), /awaiting human review/);

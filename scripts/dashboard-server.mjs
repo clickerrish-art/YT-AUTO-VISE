@@ -4,6 +4,7 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { metaCredentialFingerprint, fingerprintsMatch } from "./meta-credential-fingerprint.mjs";
 import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
+import { commitApprovalArtifact } from "./approval-artifact-transaction.mjs";
 import { atomicWriteJson, atomicCreateJson } from "./atomic-json-file.mjs";
 import { redactOperationalText } from "./safe-output.mjs";
 import { matchesOperatorToken } from "./operator-auth.mjs";
@@ -2189,6 +2190,8 @@ const server = http.createServer(async (req, res) => {
         let uploadMetadata;
         try { uploadMetadata = JSON.parse(fs.readFileSync(metadataFile, "utf8")); } catch { return json(res, 400, { error: "Reviewed metadata is invalid JSON" }); }
         if (uploadMetadata.channel !== "SonicVhibez" || uploadMetadata.visibility !== "private" || uploadMetadata.productUrl !== approvedProductUrl || uploadMetadata.status !== "READY_FOR_PRIVATE_UPLOAD" || uploadMetadata.rightsConfirmed !== true || uploadMetadata.complianceReviewed !== true) return json(res, 400, { error: "Metadata must be reviewed and ready for SonicVhibez private upload, with rights/compliance gates and the exact approved Selar destination" });
+        const rightsEvidence = body.rightsEvidence;
+        let authoringArtifactBinding = null;
         const relatedArtifacts = [
           ...(job.outputArtifacts ?? []),
           ...(job.thumbnailArtifact ? [job.thumbnailArtifact] : []),
@@ -2213,7 +2216,6 @@ const server = http.createServer(async (req, res) => {
           const relatedFile = resolveRepositoryFile(related.path);
           if (sha256File(relatedFile) !== related.sha256) return json(res, 409, { error: "A reviewed media artifact or thumbnail changed: " + related.path });
         }
-        let rightsEvidence = body.rightsEvidence;
         if (body.decision === "APPROVE") {
           if (!rightsEvidence || typeof rightsEvidence !== "object") return json(res, 400, { error: "Structured rights evidence is required for approval" });
           if (rightsEvidence.verifiedBy !== reviewer || rightsEvidence.verificationStatus !== "VERIFIED") return json(res, 403, { error: "Rights evidence must be explicitly verified by the authenticated operator before approval" });
@@ -2286,7 +2288,6 @@ const server = http.createServer(async (req, res) => {
             return json(res, 409, { error: "Parent media, metadata or receipt evidence is missing or unsafe; rebind after reconciliation", publishingEnabled: false });
           }
         }
-        let authoringArtifactBinding = null;
         if (body.decision === "APPROVE" && job.authoring) {
           try {
             const renderPackage = buildApprovedJobRenderManifest({ job, root });

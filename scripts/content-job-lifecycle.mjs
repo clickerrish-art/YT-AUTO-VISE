@@ -145,7 +145,11 @@ export function approveContentJobForPrivateUpload(job, review, now = new Date().
   if (typeof captionsPath !== "string" || !captionsPath.trim() || !/^[a-f0-9]{64}$/.test(captionsSha256 ?? "")) throw new Error("Validated captions path and SHA-256 are required before private-upload approval");
   const actualRelated = [...(job.outputArtifacts ?? []), ...(job.thumbnailArtifact ? [job.thumbnailArtifact] : []), { path: captionsPath, sha256: captionsSha256 }].map(item => ({ path: item.path, sha256: item.sha256 })).sort((a,b) => a.path.localeCompare(b.path));
   const reviewedRelated = (review.relatedArtifacts ?? [{ path: review.artifactPath, sha256: review.artifactSha256 }]).map(item => ({ path: item.path, sha256: item.sha256 })).sort((a,b) => a.path.localeCompare(b.path));
-  if (JSON.stringify(actualRelated) !== JSON.stringify(reviewedRelated)) throw new Error("Approval does not bind every current media artifact and thumbnail");
+  if (reviewedRelated.some(item => typeof item.path !== "string" || !item.path.trim() || !/^[a-f0-9]{64}$/.test(item.sha256 ?? "")) ||
+      new Set(reviewedRelated.map(item => item.path)).size !== reviewedRelated.length ||
+      actualRelated.some(expected => !reviewedRelated.some(actual => actual.path === expected.path && actual.sha256 === expected.sha256))) {
+    throw new Error("Approval does not bind every current media artifact and thumbnail or contains invalid/duplicate related-artifact evidence");
+  }
   if (job.metadataVersion !== review.metadataVersion) throw new Error("Approval metadata version does not match the job's validated metadata");
   if (job.rightsChecks?.verified !== true || job.rightsChecks?.evidenceSha256 !== review.rightsEvidenceSha256) {
     throw new Error("Approval rights evidence does not match the job's verified rights record");
