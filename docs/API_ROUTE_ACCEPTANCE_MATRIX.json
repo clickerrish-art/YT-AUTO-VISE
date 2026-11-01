@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-01T12:33:44.282Z",
+  "generatedAt": "2026-11-01T12:45:17.537Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "c007aab36f32b282fbcf012fa6b6f9138686ff3c",
@@ -22,8 +22,8 @@
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 22,
-    "overallNotTested": 9,
+    "overallPass": 23,
+    "overallNotTested": 8,
     "overallBlocked": 4
   },
   "evidence": {
@@ -71,7 +71,7 @@
     "taskRunnerAutomationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209",
     "taskRunnerBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187"
   },
-  "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 22 of 35 routes as PASS, nine as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. POST /api/tasks/run is accepted for allowlisted local validation execution, durable result/audit persistence, cross-process duplicate prevention and startup recovery of interrupted tasks. POST /api/jobs/lease/complete is accepted for generated test-artifact verification, idempotent retries and restart recovery. Synthetic fixtures and local validation commands do not establish production rights, human approval or external publication.",
+  "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 23 of 35 routes as PASS, eight as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. POST /api/tasks/run and POST /api/jobs/lease/complete retain their separately evidenced acceptance. POST /api/campaigns/manage is accepted for local preview/deactivation, durable state and audit, unknown-ID no-mutation, concurrent preview and restart read-back. Local preview does not establish provider-side campaign activation or publishing. Synthetic fixtures and local validation commands do not establish production rights, human approval or external publication.",
   "routes": [
     {
       "method": "GET",
@@ -308,15 +308,21 @@
       "classification": "campaign preview, activation/deactivation",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "PASS",
-      "inputValidation": "PASS",
+      "authorizedSuccess": "PASS — preview and deactivate actions are exercised through the real HTTP server; preview keeps public publishing disabled.",
+      "inputValidation": "PASS — malformed/invalid action and unknown campaign ID are rejected without durable state or audit mutation.",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "NOT_TESTED",
-      "restartRecovery": "PASS",
+      "concurrency": "PASS — two concurrent preview requests both complete successfully under the state lock; all three accepted preview events are durably audited.",
+      "restartRecovery": "PASS — existing integration test restarts the server and verifies the deactivated campaign and audit history.",
       "externalOperation": "no live publishing; campaign external activation gated",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "overallAcceptance": "PASS",
+      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance.",
+      "testEvidence": {
+        "test": "test/campaign-management-api.integration.test.mjs — real HTTP server",
+        "exactTestedSha": "888c7b185a2ce121d252059ea1e3b4ace5bf6b3e",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41307206949",
+        "scenarios": "Unknown campaign ID returns 400 with byte-identical durable state; preview persists state and operator-attributed audit; two concurrent previews both return 200 with publishing disabled and exactly three preview audit events; deactivate persists; fresh process reads back deactivated campaign and audit."
+      }
     },
     {
       "method": "POST",
