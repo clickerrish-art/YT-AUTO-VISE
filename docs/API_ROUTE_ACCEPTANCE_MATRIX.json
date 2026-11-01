@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-01T09:19:42.364Z",
+  "generatedAt": "2026-11-01T09:26:45.921Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "8dddba57804bc04080930742a9bdbd74f6dc05bd",
+  "testedSourceTestSha": "e1e7dd94ba289ef2d84ac2c35c7124e76521045e",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -14,7 +14,7 @@
       "GET /healthz",
       "GET /readyz"
     ],
-    "branchAheadBy": 2422,
+    "branchAheadBy": 2425,
     "branchBehindBy": 2,
     "changedFiles": 200,
     "branchProtectionEnabled": false
@@ -22,8 +22,8 @@
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 16,
-    "overallNotTested": 15,
+    "overallPass": 19,
+    "overallNotTested": 12,
     "overallBlocked": 4
   },
   "evidence": {
@@ -347,13 +347,13 @@
       "concurrency": "PASS — exact-SHA real-server test sends two identical submissions concurrently and receives one 201 creation plus one 200 idempotent reuse; a later identical retry returns 200 without another audit event. A different valid plan revision returns 409 and preserves the complete durable state byte-for-byte. Exactly one PRODUCTION_PLAN_SUBMITTED audit event is persisted.",
       "restartRecovery": "PASS",
       "externalOperation": "none; test media/evidence fixtures only",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "Concurrency/idempotency is now accepted on exact source/test SHA 77af9f231d9c71f6ec5ee0b4fa757af9009b1941. The route remains NOT_TESTED overall because full workflow/restart acceptance is not yet established for this endpoint.",
+      "overallAcceptance": "PASS",
+      "notes": "Local production-plan submission is accepted for engineering behaviour using synthetic fixtures. This does not approve real media, rights or publication.",
       "testEvidence": {
         "test": "test/production-plan-api.test.mjs — real HTTP dashboard server",
         "exactTestedSha": "77af9f231d9c71f6ec5ee0b4fa757af9009b1941",
         "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41290348544",
-        "scenario": "Two concurrent identical production-plan submissions produce one 201 and one 200 reused response; later identical retry reuses the persisted plan; a conflicting plan returns 409; durable state is byte-identical after conflict; one submission audit event exists. Two concurrent identical approvals produce one 200 and one 409 with exactly one durable approval audit event. Synthetic scene/narration/rights fixtures only; no production approval or publishing."
+        "scenarios": "Concurrent identical plan submissions produce one 201 creation and one 200 idempotent reuse; exact retry reuses without a second audit event; a conflicting revision returns 409 with byte-identical state. Concurrent identical approvals produce one 200 and one 409, exactly one approval audit event, and the plan/approval receipt survives a fresh server process. All media, narration and rights records are synthetic engineering fixtures; no genuine human approval or publication."
       }
     },
     {
@@ -366,11 +366,17 @@
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "NOT_TESTED",
+      "concurrency": "PASS — concurrent identical approvals yield one 200 commit and one 409 stale duplicate; exactly one approval audit event is recorded.",
       "restartRecovery": "PASS",
       "externalOperation": "human/media approval remains external",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "overallAcceptance": "PASS",
+      "notes": "The API review transaction is accepted with synthetic fixtures and test operator identity only. Genuine human review and production media approval remain separate gates.",
+      "testEvidence": {
+        "test": "test/production-plan-api.test.mjs — real HTTP dashboard server",
+        "exactTestedSha": "77af9f231d9c71f6ec5ee0b4fa757af9009b1941",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41290348544",
+        "scenarios": "Concurrent identical plan submissions produce one 201 creation and one 200 idempotent reuse; exact retry reuses without a second audit event; a conflicting revision returns 409 with byte-identical state. Concurrent identical approvals produce one 200 and one 409, exactly one approval audit event, and the plan/approval receipt survives a fresh server process. All media, narration and rights records are synthetic engineering fixtures; no genuine human approval or publication."
+      }
     },
     {
       "method": "POST",
@@ -382,11 +388,17 @@
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "NOT_TESTED",
+      "concurrency": "PASS — concurrent identical approvals return one original receipt and one exact-retry reuse; a changed reason returns 409 without state/audit mutation.",
       "restartRecovery": "PASS",
       "externalOperation": "test operator approval only; real human review must remain genuine",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "overallAcceptance": "PASS",
+      "notes": "The route's concurrency and receipt-integrity behaviour is accepted with a synthetic test operator. This does not constitute genuine human editorial approval.",
+      "testEvidence": {
+        "test": "test/dashboard-server.test.mjs — real HTTP dashboard server",
+        "exactTestedSha": "e1e7dd94ba289ef2d84ac2c35c7124e76521045e",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41292924301",
+        "scenarios": "Concurrent identical script approvals return one original 200 response and one idempotent 200 reuse, with exactly one SCRIPT_REVISION_APPROVED_FOR_NARRATION audit event. A changed review reason returns 409 and preserves durable state/audit byte-for-byte. Stale script hashes are rejected; the subsequent server restart and hash-bound narration review read-back verify the current script approval remains intact. This is synthetic test-operator workflow evidence, not genuine human editorial approval."
+      }
     },
     {
       "method": "POST",
