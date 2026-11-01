@@ -122,6 +122,13 @@ test("technical validation retries are idempotent and do not duplicate audit his
   assert.equal(retry.body.idempotent, true);
   assert.deepEqual(fs.readFileSync(stateFile), afterFirst, "identical validation retry must not rewrite durable state or audit history");
 
+  await stop();
+  await start();
+  const afterRestart = await request();
+  assert.equal(afterRestart.status, 200, JSON.stringify(afterRestart.body));
+  assert.equal(afterRestart.body.idempotent, true);
+  assert.deepEqual(fs.readFileSync(stateFile), afterFirst, "restart read-back and idempotent retry must preserve durable validation and audit history");
+
   const concurrent = await Promise.all([request(), request()]);
   assert.deepEqual(concurrent.map(result => result.status), [200, 200]);
   assert.ok(concurrent.every(result => result.body.idempotent === true));
