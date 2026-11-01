@@ -1882,9 +1882,22 @@ const server = http.createServer(async (req, res) => {
         if (thumbnailProbe.error || thumbnailProbe.status !== 0) return json(res, 503, { error: "ffprobe is unavailable or failed to inspect the thumbnail" });
         const thumbnailStream = JSON.parse(thumbnailProbe.stdout).streams?.[0];
         if (!thumbnailStream || thumbnailStream.width !== 1280 || thumbnailStream.height !== 720) return json(res, 400, { error: "Thumbnail must be a readable 1280x720 image" });
+        const captionsSha256 = sha256File(captionsFile);
+        const thumbnailResult = { path: job.thumbnailArtifact.path, sha256: job.thumbnailArtifact.sha256, width: thumbnailStream.width, height: thumbnailStream.height };
+        const existingValidation = job.validationResults;
+        const sameValidatedInputs = job.state === "VALIDATING" &&
+          existingValidation?.passed === true &&
+          existingValidation.metadataVersion === metadataVersion &&
+          existingValidation.captionsPath === body.captionsPath &&
+          existingValidation.captionsSha256 === captionsSha256 &&
+          JSON.stringify(existingValidation.artifacts ?? []) === JSON.stringify(inspectedArtifacts) &&
+          JSON.stringify(existingValidation.thumbnail ?? null) === JSON.stringify(thumbnailResult);
+        if (sameValidatedInputs) {
+          return json(res, 200, { job, publishingEnabled: false, idempotent: true });
+        }
         let updated = job;
         if (job.state === "GENERATED") updated = transitionContentJob(job, "VALIDATING", { actor: operatorId, reason: "Server-side artifact, thumbnail, metadata and caption validation started" });
-        updated.validationResults = { passed: true, checkedAt: new Date().toISOString(), metadataVersion, captionsPath: body.captionsPath, captionsSha256: sha256File(captionsFile), artifacts: inspectedArtifacts, thumbnail: { path: job.thumbnailArtifact.path, sha256: job.thumbnailArtifact.sha256, width: thumbnailStream.width, height: thumbnailStream.height }, checks: ["metadata-sha256", "caption-structure", "mp4-sha256", "ffprobe-duration", "orientation", "audio-stream", "thumbnail-sha256", "thumbnail-dimensions"] };
+        updated.validationResults = { passed: true, checkedAt: new Date().toISOString(), metadataVersion, captionsPath: body.captionsPath, captionsSha256, artifacts: inspectedArtifacts, thumbnail: thumbnailResult, checks: ["metadata-sha256", "caption-structure", "mp4-sha256", "ffprobe-duration", "orientation", "audio-stream", "thumbnail-sha256", "thumbnail-dimensions"] };
         if (updated.workerLease) {
           updated.leaseHistory = [...(updated.leaseHistory ?? []), { workerId: updated.workerLease.workerId, action: "VALIDATION_COMPLETED_RELEASED", at: new Date().toISOString() }];
           updated.workerLease = null;
