@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
@@ -12,6 +12,7 @@ import { inventoryDashboardSources } from "../scripts/dashboard-inventory.mjs";
 test("dashboard API authenticates operators, persists real drafts, and cannot grant approval", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-"));
   let narrationFixtureDir = null;
+  let validationFixtureDir = null;
   const ledgerTarget = path.join(os.tmpdir(), "sonicvhibez-upload-ledger-target-" + path.basename(stateDir) + ".json");
   const ledgerLink = path.join(stateDir, "upload-attempts.json");
   fs.writeFileSync(ledgerTarget, JSON.stringify({ attempts: [{ attemptId: "forged-symlink-attempt", status: "PRIVATE_UPLOAD_VERIFIED", remoteVideoId: "not-authoritative" }] }) + "\n", { mode: 0o600 });
@@ -72,6 +73,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     fs.rmSync(internalSymlinkPath, { force: true });
     fs.rmSync(outsideDir, { recursive: true, force: true });
     if (narrationFixtureDir) fs.rmSync(narrationFixtureDir, { recursive: true, force: true });
+    if (validationFixtureDir) fs.rmSync(validationFixtureDir, { recursive: true, force: true });
   });
   const base = `http://127.0.0.1:${port}`;
   let ready = false;
@@ -268,6 +270,92 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(unsafeDraftUpdate.status, 400);
   assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), beforeUnsafeDraftUpdate,
     "draft editing must not grant rights confirmation or mutate durable state");
+
+  // Exercise the real HTTP technical-validation route with generated, test-only
+  // media. This validates the API contract and FFmpeg/ffprobe integration; it is
+  // not a genuine production asset, rights record, or human approval.
+  validationFixtureDir = fs.mkdtempSync(path.join(process.cwd(), "content", "validation-integration-"));
+  const validationVideoPath = path.join(validationFixtureDir, "validation-short.mp4");
+  const validationThumbnailPath = path.join(validationFixtureDir, "validation-thumbnail.jpg");
+  const validationCaptionsPath = path.join(validationFixtureDir, "validation-captions.srt");
+  const validationMetadataPath = path.join(validationFixtureDir, "validation-metadata.json");
+  const validationVideo = spawnSync("ffmpeg", [
+    "-hide_banner", "-loglevel", "error",
+    "-f", "lavfi", "-i", "color=c=black:s=1080x1920:r=30:d=50",
+    "-f", "lavfi", "-i", "sine=frequency=440:sample_rate=48000:duration=50",
+    "-t", "50", "-c:v", "libx264", "-preset", "ultrafast", "-tune", "stillimage",
+    "-crf", "35", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "128k",
+    "-movflags", "+faststart", "-y", validationVideoPath
+  ], { encoding: "utf8", timeout: 120_000 });
+  assert.equal(validationVideo.status, 0, "test-only vertical Short fixture must render: " + validationVideo.stderr);
+  const validationThumbnail = spawnSync("ffmpeg", [
+    "-hide_banner", "-loglevel", "error", "-f", "lavfi", "-i",
+    "color=c=black:s=1280x720", "-frames:v", "1", "-q:v", "2", "-y", validationThumbnailPath
+  ], { encoding: "utf8", timeout: 30_000 });
+  assert.equal(validationThumbnail.status, 0, "test-only thumbnail fixture must render: " + validationThumbnail.stderr);
+  fs.writeFileSync(validationCaptionsPath,
+    "1\\n00:00:00,000 --> 00:00:49,500\\nTest-only caption cue for technical validation.\\n");
+  fs.writeFileSync(validationMetadataPath, JSON.stringify({
+    channel: "SonicVhibez",
+    visibility: "private",
+    productUrl: "https://selar.com/0u19v8u99l",
+    title: "Test-only vertical validation fixture",
+    description: "Synthetic media used only to verify the technical validation API contract.",
+    tags: ["wildlife", "education", "documentary"]
+  }, null, 2) + "\\n");
+  const validationDraft = {
+    id: "dashboard-validation-short",
+    title: "Test-only validation fixture",
+    topic: "Technical API validation fixture",
+    contentType: "short",
+    scheduledDay: "Saturday",
+    scheduledDate: "2026-11-21",
+    productUrl: "https://selar.com/0u19v8u99l"
+  };
+  const validationDraftResponse = await fetch(base + "/api/drafts", {
+    method: "POST", headers, body: JSON.stringify(validationDraft)
+  });
+  const validationDraftBody = await validationDraftResponse.json();
+  assert.equal(validationDraftResponse.status, 201, JSON.stringify(validationDraftBody));
+  const validationJobId = validationDraftBody.job.id;
+  const validationStatePath = path.join(stateDir, "dashboard-state.json");
+  const validationState = JSON.parse(fs.readFileSync(validationStatePath, "utf8"));
+  const validationJob = validationState.jobs.find(item => item.id === validationJobId);
+  assert.ok(validationJob, "draft creation must persist its linked content-production job");
+  const repositoryPath = file => path.relative(process.cwd(), file).split(path.sep).join("/");
+  const fileSha256 = file => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+  const videoRelativePath = repositoryPath(validationVideoPath);
+  const thumbnailRelativePath = repositoryPath(validationThumbnailPath);
+  const captionsRelativePath = repositoryPath(validationCaptionsPath);
+  const metadataRelativePath = repositoryPath(validationMetadataPath);
+  validationJob.state = "GENERATED";
+  validationJob.outputArtifacts = [{ path: videoRelativePath, sha256: fileSha256(validationVideoPath) }];
+  validationJob.metadataPath = metadataRelativePath;
+  validationJob.metadataVersion = fileSha256(validationMetadataPath);
+  validationJob.thumbnailArtifact = { path: thumbnailRelativePath, sha256: fileSha256(validationThumbnailPath) };
+  fs.writeFileSync(validationStatePath, JSON.stringify(validationState) + "\\n");
+  const validationResponse = await fetch(base + "/api/jobs/validate", {
+    method: "POST", headers,
+    body: JSON.stringify({ jobId: validationJobId, captionsPath: captionsRelativePath })
+  });
+  const validationBody = await validationResponse.json();
+  assert.equal(validationResponse.status, 200, JSON.stringify(validationBody));
+  assert.equal(validationBody.job.state, "VALIDATING");
+  assert.equal(validationBody.job.validationResults.passed, true);
+  assert.equal(validationBody.job.validationResults.artifacts[0].sha256, fileSha256(validationVideoPath));
+  const validatedStateBytes = fs.readFileSync(validationStatePath);
+  const validatedState = JSON.parse(validatedStateBytes);
+  assert.equal(validatedState.audit.filter(event =>
+    event.action === "CONTENT_JOB_VALIDATION_PASSED" && event.jobId === validationJobId
+  ).length, 1, "successful technical validation must persist exactly one job-bound audit event");
+  fs.appendFileSync(validationVideoPath, Buffer.from("tampered-after-validation"));
+  const tamperedValidation = await fetch(base + "/api/jobs/validate", {
+    method: "POST", headers,
+    body: JSON.stringify({ jobId: validationJobId, captionsPath: captionsRelativePath })
+  });
+  assert.equal(tamperedValidation.status, 409, "changed media must be rejected by the exact recorded artifact hash");
+  assert.deepEqual(fs.readFileSync(validationStatePath), validatedStateBytes,
+    "a post-validation media hash mismatch must not mutate job state or audit history");
 
   const saved = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
   assert.ok(saved.queueItems.some(item => item.id === draft.id));
