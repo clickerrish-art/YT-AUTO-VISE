@@ -708,15 +708,15 @@
       "inputValidation": "PASS — empty payload and malformed JSON return 400; unknown draft returns 404; invalid calendar date and attempted rights/approval promotion are rejected without durable mutation.",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "PASS — simultaneous edits to two distinct drafts both persist without lost updates; each receives exactly one operator-attributed DRAFT_EDITED event.",
-      "restartRecovery": "PASS — updated draft values and original audit events survive graceful server stop and a fresh server process; publishing remains disabled.",
+      "concurrency": "PASS — concurrent edits to distinct drafts persist without lost updates; two concurrent identical edits to one draft are serialized, retain one queue item and one linked production job, and record one audit event per accepted request.",
+      "restartRecovery": "PASS — updated draft values, single queue/job identity and all operator-attributed edit audit events survive graceful server stop and a fresh server process; publishing remains disabled.",
       "externalOperation": "none",
       "overallAcceptance": "PASS",
-      "notes": "Exact-SHA real-server coverage on 33d6f4c4e6010578ae961f7cf97a7e0e9d70bac7. test/dashboard-api-draft-update-concurrency.integration.test.mjs covers empty/malformed payload rejection, unknown-ID 404 with byte-identical state, concurrent distinct-draft edits, per-item persistence/audit and restart read-back. test/dashboard-server.test.mjs covers invalid calendar dates and attempted rightsConfirmed promotion with byte-identical state. Duplicate same-draft submission/idempotency semantics remain untested, so overallAcceptance remains NOT_TESTED.",
+      "notes": "Exact-SHA real-server coverage on 1e15718e6987fa50d4f7841854b3539af8baa726. test/dashboard-api-draft-update-concurrency.integration.test.mjs covers empty/malformed payload rejection, unknown-ID 404 with byte-identical state, concurrent distinct-draft edits, concurrent identical same-draft submissions, no duplicate queue item or linked production job, per-request audit evidence and restart read-back. test/dashboard-server.test.mjs covers invalid calendar dates and attempted rightsConfirmed promotion with byte-identical state. The route is accepted as a local draft-edit operation; it does not approve rights or publication.",
       "testEvidence": {
         "test": "test/dashboard-api-draft-update-concurrency.integration.test.mjs; test/dashboard-server.test.mjs",
-        "exactTestedSha": "33d6f4c4e6010578ae961f7cf97a7e0e9d70bac7",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41287549860"
+        "exactTestedSha": "1e15718e6987fa50d4f7841854b3539af8baa726",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41287711399"
       }
     }
   ]
