@@ -2586,4 +2586,38 @@ const recoveredTasks = recoverInterruptedTasks();
 const recoveredLeases = await reapExpiredWorkerLeases();
 const leaseReaperTimer = setInterval(() => { reapExpiredWorkerLeases().catch(() => {}); }, 30_000);
 leaseReaperTimer.unref();
+
+let shutdownPromise;
+function shutdown(signal) {
+  if (shutdownPromise) return shutdownPromise;
+  shutdownPromise = new Promise((resolve, reject) => {
+    clearInterval(leaseReaperTimer);
+    const forceCloseTimer = setTimeout(() => {
+      server.closeAllConnections?.();
+    }, 10_000);
+    forceCloseTimer.unref();
+    server.close(error => {
+      clearTimeout(forceCloseTimer);
+      if (error) {
+        reject(error);
+        return;
+      }
+      console.log(JSON.stringify({ event: "dashboard_stopped", signal }));
+      resolve();
+    });
+    // Stop idle keep-alive sockets immediately while allowing active requests to finish.
+    server.closeIdleConnections?.();
+  });
+  return shutdownPromise;
+}
+
+for (const signal of ["SIGINT", "SIGTERM"]) {
+  process.once(signal, () => {
+    shutdown(signal).then(() => { process.exitCode = 0; }).catch(error => {
+      console.error(JSON.stringify({ event: "dashboard_shutdown_failed", signal, error: String(error?.message ?? error) }));
+      process.exitCode = 1;
+    });
+  });
+}
+
 server.listen(port, host, () => console.log(JSON.stringify({ event: "dashboard_started", host, port, publishingEnabled: false, recoveredTasks, recoveredLeases })));
