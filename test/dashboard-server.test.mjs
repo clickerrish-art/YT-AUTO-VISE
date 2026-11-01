@@ -598,6 +598,40 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(narrationApprovalRetry.status, 200, JSON.stringify(narrationApprovalRetryBody));
   assert.equal(narrationApprovalRetryBody.reused, true, "an exact retry after a timeout must reuse the persisted narration approval");
   assert.equal(narrationApprovalRetryBody.narrationReview.approvalSha256, narrationApprovalBody.narrationReview.approvalSha256);
+  const beforeNarrationRestart = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  const previousNarrationChild = child;
+  const narrationServerStopped = new Promise(resolve => previousNarrationChild.once("exit", resolve));
+  previousNarrationChild.kill("SIGTERM");
+  await narrationServerStopped;
+  child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: serverEnv,
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  let narrationServerRestarted = false;
+  for (let i = 0; i < 60; i++) {
+    if (child.exitCode !== null) break;
+    try {
+      const response = await fetch(base + "/healthz");
+      if (response.ok) { narrationServerRestarted = true; break; }
+    } catch {}
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  assert.equal(narrationServerRestarted, true, "dashboard did not recover the narration review receipt: " + logs);
+  const recoveredNarrationBundleResponse = await fetch(base + "/api/jobs/narration/review?jobId=" + encodeURIComponent(authorJob.id), { headers });
+  assert.equal(recoveredNarrationBundleResponse.status, 200);
+  const recoveredNarrationBundle = await recoveredNarrationBundleResponse.json();
+  assert.equal(recoveredNarrationBundle.stageStatus, "APPROVED_FOR_RENDER");
+  assert.equal(recoveredNarrationBundle.narrationApproval.approvalSha256, narrationApprovalBody.narrationReview.approvalSha256);
+  const recoveredNarrationAudio = await fetch(base + "/api/jobs/narration/audio?jobId=" + encodeURIComponent(authorJob.id), { headers });
+  assert.equal(recoveredNarrationAudio.status, 200, "the exact approved narration audio must remain readable after restart");
+  assert.ok(Number(recoveredNarrationAudio.headers.get("content-length")) > 0);
+  const afterNarrationRestart = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  assert.equal(afterNarrationRestart.audit.filter(event => event.action === "NARRATION_APPROVED_FOR_RENDER" && event.jobId === authorJob.id).length, 1);
+  assert.deepEqual(afterNarrationRestart.jobs.find(job => job.id === authorJob.id).authoring.narrationApproval,
+    beforeNarrationRestart.jobs.find(job => job.id === authorJob.id).authoring.narrationApproval,
+    "the hash-bound narration review receipt must survive restart unchanged");
   const changedNarrationRetry = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify({ ...narrationReviewPayload, reason: "Changed review reason." }) });
   assert.equal(changedNarrationRetry.status, 409, "a changed review cannot overwrite a finalized narration approval");
   fs.writeFileSync(path.join(process.cwd(), audioArtifact.path), "tampered after approval");
