@@ -1,3 +1,50 @@
+# Latest live blocker reconciliation — 1 November 2026, 08:00 UTC
+
+This snapshot supersedes older branch/head and CI snapshots below. The latest code/test candidate is distinct from the documentation-only commit that will follow this evidence refresh.
+
+- Latest tested source/test candidate and branch HEAD at verification: `49c5814b4e8bfcea87bd44116f0371d1d8707cf1`.
+- Main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Compare at verification: **2,384 ahead / 2 behind / 200 changed files**. PR #1 remains **OPEN, DRAFT, UNMERGED**.
+- Branch protection is disabled (`protected=false`). Main was not modified.
+- Exact-candidate CI: automation/security [41286846866](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846866) PASS (461 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe and syntax checks passed); content quality [41286846827](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846827) PASS (461 tests, zero skips); metadata [41286846854](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846854) PASS (461 tests, zero skips); dashboard E2E [41286846873](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846873) PASS (20/20); isolated main/candidate baseline [41286846845](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846845) PASS; branch inventory [41286846889](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846889) PASS; Nature Frontiers local draft validation [41286846829](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846829) PASS for local validation only.
+- Production readiness [41286846833](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846833) remains **HOLD with 13 blockers**; the workflow fails at its mandatory-gates step as designed. This is not a production pass.
+- New implementation: `scripts/multi-scene-render.mjs` now requires each planned scene's asset ID to match the corresponding source timeline asset in the same order. Regression coverage rejects reordered source assets. This prevents an approved scene plan from being rendered against a different order of source media.
+- New API acceptance: `POST /api/drafts/update` now has real-server concurrency and restart coverage. Two distinct draft updates both persist, each has exactly one authenticated audit event, both survive restart, and an unknown draft ID returns 404 without state mutation. The test also confirms publication remains disabled.
+- API route matrix: **35 protected routes / 35 authentication-negative passes / 10 overall PASS / 21 NOT_TESTED / 4 BLOCKED**. The draft-update route moved to PASS; API-001 overall remains NOT_TESTED.
+- Metricool read-only check: only Nature Frontiers brand `7545638` is exposed; no distinct SonicVhibez/Sonic Fire YouTube destination was verified. One Nature Frontiers promotional record is already PUBLISHED (31 October 2026, 10:00 Africa/Johannesburg); seven future records remain scheduled for 4, 7, 11, 14, 18, 21 and 25 November 2026 at 10:00 Africa/Johannesburg. All seven future records have `draft=false` and `autoPublish=true`. No records were changed.
+- The brand's YouTube channel ID does not match the previously recorded SonicVhibez identity. Do not use Nature Frontiers for SonicVhibez promotions.
+- HeyGen read-only check: five items returned; one latest attempt failed with `MOVIO_PAYMENT_INSUFFICIENT_CREDIT`; four completed items have durations 20.4016s, 22.3085s, 24.32s and 48.7967s. No approximately 55-second final asset matching the current two scripts was verified. No generation or paid action occurred.
+- Selar fetch confirms all three supplied listings identify seller Click 47. The Wildlife Vault listing body uses Nature Frontiers branding despite the supplied product title; verify that cross-brand presentation before promotion. The Prompt Pack listing states 20 prompts across six stages; the YouTube Success Blueprint describes a 30/60/90-day creator plan. The pages do not establish this channel's affiliate or paid-promotion relationship.
+- Current keyword evidence is qualitative only: search results support wildlife shot sequencing and hook/value/CTA or hook/payoff/CTA script structures. No measured global search volume or competition score was obtained.
+
+## The 13 mandatory blockers
+
+1. Owner-approved feasible publication cadence with a timezone-aware timestamp and non-empty approval reference.
+2. Complete SonicVhibez public/private/unlisted YouTube history and all pending/uncertain upload attempts reconciled.
+3. Verified Short rights manifest at `content/render-manifest.json`.
+4. Verified long-form rights manifest at `content/long-form-render-manifest.json`.
+5. Genuine human metadata review to `READY_FOR_PRIVATE_UPLOAD`.
+6. Independently verified exact SonicVhibez channel ID; do not guess or normalize the documented mismatch.
+7. Genuine media rights approval.
+8. Genuine content/compliance approval.
+9. Final Short media `media/next-short.mp4`.
+10. `YOUTUBE_CLIENT_ID`.
+11. `YOUTUBE_CLIENT_SECRET`.
+12. `YOUTUBE_REFRESH_TOKEN`.
+13. `SONICVHIBEZ_CHANNEL_ID`.
+
+## Safety
+
+- Nature Frontiers is never a SonicVhibez YouTube destination.
+- Public/unattended YouTube publishing remains disabled; private upload still requires separate one-operation authorization.
+- Facebook/Instagram publishing remains disabled; Safari campaign remains inactive.
+- Approved application Selar destination remains `https://selar.com/0u19v8u99l`.
+- No upload, post, live schedule change, campaign activation, account reconnection, spending, merge, main edit, reset, rebase, force-push or destructive reconciliation occurred.
+
+**Verdict: NOT PRODUCTION READY.** Never bypass a blocker to obtain a green readiness result.
+
+---
+
 # Latest live blocker reconciliation — 1 November 2026, 07:44 UTC
 
 This snapshot supersedes older branch/head and CI snapshots below. It records the exact tested code candidate and the current owner-controlled blockers; documentation refresh commits may follow the tested candidate.

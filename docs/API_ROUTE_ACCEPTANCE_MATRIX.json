@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-01T07:44:30Z",
+  "generatedAt": "2026-11-01T08:00:00Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "cc1f828fdff39d400156427e51868e0d40317c2c",
+  "testedSourceTestSha": "49c5814b4e8bfcea87bd44116f0371d1d8707cf1",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -14,16 +14,16 @@
       "GET /healthz",
       "GET /readyz"
     ],
-    "branchAheadBy": 2376,
+    "branchAheadBy": 2384,
     "branchBehindBy": 2,
-    "changedFiles": 199,
+    "changedFiles": 200,
     "branchProtectionEnabled": false
   },
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 9,
-    "overallNotTested": 22,
+    "overallPass": 10,
+    "overallNotTested": 21,
     "overallBlocked": 4
   },
   "evidence": {
@@ -39,16 +39,23 @@
     "facebookDraftReviewCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
     "facebookDraftReviewCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988",
     "facebookDraftBrowserCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526029",
-    "latestExactCandidateAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809733",
-    "latestExactCandidateDashboard": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809691",
-    "latestExactCandidateBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809692",
+    "latestExactCandidateAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846866",
+    "latestExactCandidateDashboard": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846873",
+    "latestExactCandidateBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846845",
     "readOnlyConcurrencyTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232372051",
     "workerFinalizationRace": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232932942",
     "rightsVerificationHttpTestCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/0ece4e62f285472f14b5fc2b9a071cedbac4e511",
     "rightsVerificationHttpTestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809733",
     "scheduleSlotGuardCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/47107675a7d1cdd989a81944bb6c8f927525bcf8",
     "scheduleSlotGuardRegressionTestCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/5e1a9afef6cdde38bfad7955b7ee9e3d4ea4cf71",
-    "scheduleSlotGuardScopeFixCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/cc1f828fdff39d400156427e51868e0d40317c2c"
+    "scheduleSlotGuardScopeFixCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/cc1f828fdff39d400156427e51868e0d40317c2c",
+    "latestExactCandidateContentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846827",
+    "latestExactCandidateMetadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846854",
+    "latestExactCandidateInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846889",
+    "latestExactCandidateLocalDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846829",
+    "latestExactCandidateReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846833",
+    "draftUpdateConcurrencyCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/49c5814b4e8bfcea87bd44116f0371d1d8707cf1",
+    "draftUpdateConcurrencyCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846866"
   },
   "disclaimer": "API-001 remains NOT_TESTED overall. Nine of 35 routes have complete acceptance against applicable criteria; 22 remain NOT_TESTED and four remain externally BLOCKED. All 35 authentication-negative checks pass. Rights-verification HTTP evidence uses test-only fixtures and does not establish genuine licence authenticity or owner approval.",
   "routes": [
@@ -701,15 +708,24 @@
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "NOT_TESTED",
-      "restartRecovery": "NOT_TESTED",
+      "concurrency": "PASS",
+      "restartRecovery": "PASS",
       "externalOperation": "none",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "Exact-SHA dea284d test: existing queue draft is updated through the real authenticated API; updated title is read back from durable state and one DRAFT_EDITED event is recorded with operator identity. Invalid calendar date and attempt to grant rightsConfirmed both return 400 with byte-identical state and no audit mutation. Concurrency and restart read-back remain NOT_TESTED.",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA tests cover authenticated draft update, validation rejection without mutation, concurrent edits to two distinct drafts, exactly one operator-attributed DRAFT_EDITED event per edit, durable read-back after dashboard restart, and unknown-draft 404 with byte-identical state. The route does not perform an external provider operation. The dashboard remains publishing-disabled.",
       "testEvidence": {
-        "test": "test/dashboard-server.test.mjs",
-        "exactTestedSha": "dea284d21b4e7a6923c46a201cd196ed39b72ffa",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848775"
+        "priorUpdate": {
+          "test": "test/dashboard-server.test.mjs",
+          "exactTestedSha": "dea284d21b4e7a6923c46a201cd196ed39b72ffa",
+          "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848775",
+          "scenario": "Authorized update persists the title and one operator-attributed audit event; invalid calendar date and attempted rightsConfirmed escalation return 400 with byte-identical state."
+        },
+        "concurrencyRestart": {
+          "test": "test/dashboard-api-draft-update-concurrency.integration.test.mjs",
+          "exactTestedSha": "49c5814b4e8bfcea87bd44116f0371d1d8707cf1",
+          "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846866",
+          "scenario": "Two concurrent edits to distinct drafts both return 200; updated fields and one audit event per draft persist; restart read-back preserves both edits and publishing remains disabled; an unknown draft returns 404 without changing state bytes."
+        }
       }
     }
   ]
