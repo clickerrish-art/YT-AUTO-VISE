@@ -149,6 +149,6 @@ test("FFmpeg renders and fully decodes the complete 60-scene production-plan lim
   assert.equal(video?.width, 320);
   assert.equal(video?.height, 180);
   assert.ok(probe.streams.some(stream => stream.codec_type === "audio"));
-  assert.ok(Math.abs(Number(probe.format.duration) - 2.4) < 0.2);
+  assert.ok(Math.abs(Number(probe.format.duration) - 2.4) < 0.2, "60-scene output duration was " + probe.format.duration + " seconds");
   run("ffmpeg", ["-v", "error", "-xerror", "-i", output, "-f", "null", "-"]);
 });
