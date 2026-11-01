@@ -1,3 +1,51 @@
+# Latest live blocker reconciliation — 1 November 2026, 07:44 UTC
+
+This snapshot supersedes older branch/head and CI snapshots below. It records the exact tested code candidate and the current owner-controlled blockers; documentation refresh commits may follow the tested candidate.
+
+- Latest tested source/test candidate and branch head at verification: `cc1f828fdff39d400156427e51868e0d40317c2c`.
+- Main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Compare at verification: **2,376 ahead / 2 behind / 199 changed files**. PR #1 remains **OPEN, DRAFT, UNMERGED**.
+- Branch protection is disabled (`protected=false`, protection endpoint reports disabled). Main was not modified.
+- Exact-candidate CI: automation [41285809733](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809733) PASS (459 Node, 16 Python, zero skipped; npm audit zero vulnerabilities; FFmpeg/ffprobe and syntax/compile checks passed); content quality [41285809704](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809704) PASS; metadata [41285809693](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809693) PASS; dashboard E2E [41285809691](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809691) PASS (20/20); isolated main/candidate baseline [41285809692](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809692) PASS; branch inventory [41285809749](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809749) PASS; Nature Frontiers local draft validation [41285809697](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809697) PASS for local validation only.
+- Production readiness [41285809689](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809689) remains **HOLD with 13 blockers**; human and JSON readiness both returned exit code 2. This is the intended fail-closed result, not a production pass.
+- Rights evidence validation now requires a real timezone-qualified timestamp, non-symlink regular asset/licence files, non-empty file contents, and 64-character SHA-256 digests. Unit tests cover invalid dates/offsets, missing timezone, symlinks and malformed digest output. These checks validate local structure and hashes only; they do not prove licence authenticity or legal permission.
+- A real HTTP integration test covers `POST /api/jobs/rights/verify`: authentication, validation, no-mutation rejection, exactly one success under duplicate concurrency, audit persistence and restart recovery. Fixtures are explicitly test-only; they are not genuine rights evidence.
+- Production job creation now checks the authoritative schedule before job creation and only accepts configured Tuesday/long-form and Saturday/Short draft-preparation slots. The 72-hour publication rule remains separate from these draft triggers; no publication schedule is authorized by this check.
+- The latest API acceptance matrix records 35 protected routes, 35 authentication-negative passes, **9 overall PASS / 22 NOT_TESTED / 4 BLOCKED**. The rights-verification route moved to PASS based on the test-only HTTP integration. API-001 as a whole remains NOT_TESTED.
+- The 13 private-upload readiness blockers remain: owner-approved feasible cadence decision; complete public/private/unlisted SonicVhibez history and uncertain-upload reconciliation; genuine Short and long-form rights manifests; human metadata review; exact verified SonicVhibez channel ID; genuine rights approval; compliance approval; final `media/next-short.mp4`; and securely configured YouTube client ID, client secret, refresh token and channel ID. Do not supply secrets in chat or commit them.
+- External Metricool read-only check: only Nature Frontiers brand `7545638` is exposed. Eight product-promotion records were returned: one is already PUBLISHED (31 October 2026, 10:00 Africa/Johannesburg); seven remain PENDING on 4, 7, 11, 14, 18, 21 and 25 November 2026 at 10:00. All eight records have `draft=false` and `autoPublish=true`. No records were changed. The brand's YouTube ID differs from the previously supplied SonicVhibez ID; do not use this brand for SonicVhibez promotions.
+- HeyGen library read-only check: five items returned, one failed and four completed (20.4016s, 22.3085s, 24.32s and 48.7967s). No finished approximately 55-second asset matching the current Shorts scripts was verified. No generation or paid action occurred.
+- The three supplied Selar pages currently identify seller Click 47. The Wildlife Vault page title is the supplied product, but its body branding says Nature Frontiers; verify this cross-brand presentation before promotion. The Prompt Pack listing describes 20 prompts across six stages; the YouTube Success Blueprint listing describes a 30/60/90-day creator plan. The pages do not establish this channel's affiliate or paid-promotion relationship.
+- VidIQ keyword-volume research required interactive user input and could not run in this non-interactive execution. Web evidence is qualitative only; no search-volume values are claimed.
+
+## The 13 mandatory blockers
+
+1. Owner-approved feasible publication cadence with a timezone-aware timestamp and non-empty approval reference.
+2. Complete SonicVhibez public/private/unlisted YouTube history and all pending/uncertain upload attempts reconciled.
+3. Verified Short rights manifest at `content/render-manifest.json`.
+4. Verified long-form rights manifest at `content/long-form-render-manifest.json`.
+5. Genuine human metadata review to `READY_FOR_PRIVATE_UPLOAD`.
+6. Independently verified exact SonicVhibez channel ID; do not guess or normalize the documented mismatch.
+7. Genuine media rights approval.
+8. Genuine content/compliance approval.
+9. Final Short media `media/next-short.mp4`.
+10. `YOUTUBE_CLIENT_ID`.
+11. `YOUTUBE_CLIENT_SECRET`.
+12. `YOUTUBE_REFRESH_TOKEN`.
+13. `SONICVHIBEZ_CHANNEL_ID`.
+
+## Safety
+
+- Nature Frontiers is never a SonicVhibez YouTube destination.
+- Public/unattended YouTube publishing remains disabled; private upload still requires a separate one-operation authorization.
+- Facebook/Instagram publishing remains disabled; Safari campaign remains inactive.
+- Approved application Selar destination remains `https://selar.com/0u19v8u99l`.
+- No upload, post, live schedule change, campaign activation, account reconnection, spending, merge, main edit, reset, rebase, force-push or destructive reconciliation occurred.
+
+**Verdict: NOT PRODUCTION READY.** Never bypass a blocker to obtain a green readiness result.
+
+---
+
 # Latest live blocker reconciliation — 31 October 2026, 16:20 UTC
 
 This section supersedes older repository/head snapshots below. The blocker count and fail-closed policy remain unchanged.
