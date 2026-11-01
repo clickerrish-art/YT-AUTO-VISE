@@ -1066,6 +1066,13 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "POST" && url.pathname === "/api/jobs") {
       const body = await readBody(req);
+      if (typeof body.scheduledDay === "string" && typeof body.contentType === "string") {
+        const scheduleConfig = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
+        const configuredSlot = (scheduleConfig.schedule ?? []).find(slot => slot.day === body.scheduledDay);
+        if (!configuredSlot || configuredSlot.format !== body.contentType) {
+          return json(res, 409, { error: "Job day/format is not an authorized slot in the authoritative schedule", publishingEnabled: false });
+        }
+      }
       const job = createContentJob(body);
       job.transitionHistory[0].actor = operatorId;
       const release = await acquireStateLock();
@@ -1075,13 +1082,6 @@ const server = http.createServer(async (req, res) => {
         if (existing) {
           if (existing.requestFingerprint !== job.requestFingerprint) return json(res, 409, { error: "Idempotency key already exists with different job inputs", job: existing });
           return json(res, 200, { job: existing, reused: true, publishingEnabled: false });
-        }
-        const scheduleConfig = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
-        if (job.scheduledSlot?.date) {
-          const configuredSlot = (scheduleConfig.schedule ?? []).find(slot => slot.day === job.scheduledSlot.day);
-          if (!configuredSlot || configuredSlot.format !== job.contentType) {
-            return json(res, 409, { error: "Job day/format is not an authorized slot in the authoritative schedule", publishingEnabled: false });
-          }
         }
         const slotConflict = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.scheduledSlot?.date === job.scheduledSlot.date);
         if (slotConflict) {
