@@ -491,15 +491,28 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     reason: "Reviewed factual claims against the supplied research."
   }) });
   assert.equal(staleScriptReview.status, 409, "stale script hashes must never be approved");
-  const scriptReviewResponse = await fetch(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify({
+  const scriptReviewPayload = {
     jobId: authorJob.id, decision: "APPROVE", scriptSha256: approvedScriptSha256,
     reason: "Reviewed factual claims against the supplied research."
-  }) });
-  const scriptReviewBody = await scriptReviewResponse.json();
-  assert.equal(scriptReviewResponse.status, 200, JSON.stringify(scriptReviewBody));
+  };
+  const concurrentScriptReviews = await Promise.all([
+    fetch(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify(scriptReviewPayload) }),
+    fetch(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify(scriptReviewPayload) })
+  ]);
+  const concurrentScriptReviewBodies = await Promise.all(concurrentScriptReviews.map(response => response.json()));
+  assert.ok(concurrentScriptReviews.every(response => response.status === 200),
+    "concurrent identical script approvals must succeed or reuse the persisted decision: " + JSON.stringify(concurrentScriptReviewBodies));
+  assert.equal(concurrentScriptReviewBodies.filter(body => body.reused === true).length, 1,
+    "exactly one concurrent script review must reuse the original approval receipt");
+  const scriptReviewBody = concurrentScriptReviewBodies.find(body => body.reused !== true);
+  assert.ok(scriptReviewBody, "one concurrent request must create the script approval receipt");
   assert.equal(scriptReviewBody.scriptReview.decision, "APPROVE");
   assert.equal(scriptReviewBody.scriptReview.scriptSha256, approvedScriptSha256);
   assert.equal(scriptReviewBody.publishable, false, "script approval must not imply production or publication approval");
+  const scriptApprovalState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  assert.equal(scriptApprovalState.audit.filter(event =>
+    event.action === "SCRIPT_REVISION_APPROVED_FOR_NARRATION" && event.jobId === authorJob.id
+  ).length, 1, "concurrent identical script approvals must append exactly one audit event");
   const narrationWrongRevision = await fetch(base + "/api/jobs/narration", { method: "POST", headers, body: JSON.stringify({
     jobId: authorJob.id, scriptSha256: "0".repeat(64)
   }) });
