@@ -253,6 +253,26 @@ test("narration reconciliation succeeds on retained media, is idempotent, and su
   assert.equal(recovered.jobs[0].authoring.narrationStage.status, "RECOVERY_REQUIRED");
   assert.equal(recovered.audit.filter(event => event.action === "AUTHORING_NARRATION_RECONCILIATION_INTERRUPTED").length, 1);
 
+  const unchangedAfterStartupRecovery = fs.readFileSync(stateFile);
+  const invalidPayload = await fetch(base + "/api/jobs/narration/reconcile", {
+    method: "POST", headers, body: JSON.stringify({ jobId, scriptSha256: "invalid" })
+  });
+  assert.equal(invalidPayload.status, 400);
+  assert.deepEqual(fs.readFileSync(stateFile), unchangedAfterStartupRecovery,
+    "invalid script hashes must not mutate the recovered job or audit history");
+  const missingJob = await fetch(base + "/api/jobs/narration/reconcile", {
+    method: "POST", headers, body: JSON.stringify({ jobId: jobId + "-missing", scriptSha256 })
+  });
+  assert.equal(missingJob.status, 404);
+  assert.deepEqual(fs.readFileSync(stateFile), unchangedAfterStartupRecovery,
+    "unknown job IDs must not mutate persisted state");
+  const mismatchedApproval = await fetch(base + "/api/jobs/narration/reconcile", {
+    method: "POST", headers, body: JSON.stringify({ jobId, scriptSha256: "0".repeat(64) })
+  });
+  assert.equal(mismatchedApproval.status, 409);
+  assert.deepEqual(fs.readFileSync(stateFile), unchangedAfterStartupRecovery,
+    "a mismatched script approval must not mutate persisted state");
+
   const payload = JSON.stringify({ jobId, scriptSha256 });
   const concurrent = await Promise.all([
     fetch(base + "/api/jobs/narration/reconcile", { method: "POST", headers, body: payload }),
