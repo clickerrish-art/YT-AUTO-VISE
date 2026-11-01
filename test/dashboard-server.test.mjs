@@ -566,6 +566,30 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const audioResponse = await fetch(base + "/api/jobs/narration/audio?jobId=" + encodeURIComponent(authorJob.id), { headers });
   assert.equal(audioResponse.status, 200);
   assert.equal(Buffer.from(await audioResponse.arrayBuffer()).toString(), fixtureAudio.toString());
+
+  // Exercise both read routes concurrently and prove they never mutate state/audit.
+  const narrationReadStateBefore = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
+  const parallelReviewResponses = await Promise.all(Array.from({ length: 4 }, () =>
+    fetch(base + "/api/jobs/narration/review?jobId=" + encodeURIComponent(authorJob.id), { headers })
+  ));
+  const parallelReviewBodies = await Promise.all(parallelReviewResponses.map(response => response.json()));
+  assert.ok(parallelReviewResponses.every(response => response.status === 200),
+    "concurrent narration review reads must all succeed: " + JSON.stringify(parallelReviewBodies));
+  assert.ok(parallelReviewBodies.every(body =>
+    body.jobId === authorJob.id && body.scriptSha256 === reauthScriptSha256 &&
+    body.stageStatus === "DRAFT_REVIEW_REQUIRED" && body.transcript === fixtureTranscript
+  ), "concurrent narration review reads must return the same hash-bound bundle");
+
+  const parallelAudioResponses = await Promise.all(Array.from({ length: 4 }, () =>
+    fetch(base + "/api/jobs/narration/audio?jobId=" + encodeURIComponent(authorJob.id), { headers })
+  ));
+  const parallelAudioBodies = await Promise.all(parallelAudioResponses.map(response => response.arrayBuffer()));
+  assert.ok(parallelAudioResponses.every(response => response.status === 200),
+    "concurrent narration audio reads must all succeed");
+  assert.ok(parallelAudioBodies.every(bytes => Buffer.from(bytes).equals(fixtureAudio)),
+    "concurrent audio streams must return the exact verified bytes");
+  assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), narrationReadStateBefore,
+    "concurrent narration reads must not mutate durable job state or append audit events");
   const missingAttestations = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify({
     jobId: authorJob.id, decision: "APPROVE", scriptSha256: reauthScriptSha256,
     audioSha256: audioArtifact.sha256, transcriptSha256: transcriptArtifact.sha256,
