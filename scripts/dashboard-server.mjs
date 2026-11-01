@@ -23,7 +23,7 @@ import { manageCampaign } from "./campaign-management.mjs";
 import { validatePublicationSlot, localDateTimeToIso } from "./schedule-policy.mjs";
 import {
   FACEBOOK_PUBLISHING_DEFAULTS, createFacebookDraft, evaluateFacebookDraft,
-  approveFacebookDraft, chooseFacebookExperimentSlot, summarizeFacebookExperiment, generateFacebookIdea, assertFacebookPublishAllowed
+  approveFacebookDraft, facebookApprovalFingerprint, chooseFacebookExperimentSlot, summarizeFacebookExperiment, generateFacebookIdea, assertFacebookPublishAllowed
 } from "./facebook-pipeline.mjs";
 import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost, fetchMetaPagePost, MetaPageApiError } from "./meta-page-adapter.mjs";
 
@@ -806,7 +806,18 @@ const server = http.createServer(async (req, res) => {
         const expectedPageId = verifiedFacebookPageId(state, config);
         const boundDraft = expectedPageId ? { ...draft, expectedPageId } : draft;
         const evaluation = evaluateFacebookDraft(boundDraft, { existingDrafts: state.facebookDrafts.filter(item => item.id !== draft.id), recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root });
-        const updated = approveFacebookDraft(boundDraft, { reviewer: operatorId, decision: body.decision, reason: body.reason ?? "", evaluation, now: new Date().toISOString() });
+        const reason = String(body.reason ?? "").slice(0, 1000);
+        const priorApproval = draft.approval;
+        if (priorApproval) {
+          const exactRetry = priorApproval.reviewer === operatorId
+            && priorApproval.decision === body.decision
+            && priorApproval.reason === reason
+            && priorApproval.fingerprint === facebookApprovalFingerprint(boundDraft)
+            && priorApproval.complianceVersion === evaluation.complianceVersion;
+          if (exactRetry) return json(res, 200, { draft, evaluation, publishingEnabled: false, idempotent: true });
+          return json(res, 409, { error: "A different review decision is already recorded for this draft; re-evaluate the draft before recording a new decision", publishingEnabled: false });
+        }
+        const updated = approveFacebookDraft(boundDraft, { reviewer: operatorId, decision: body.decision, reason, evaluation, now: new Date().toISOString() });
         state.facebookDrafts[index] = { ...updated, evaluation };
         state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_DRAFT_" + body.decision, itemId: draft.id, reviewer: operatorId, fingerprint: updated.approval.fingerprint, at: updated.approval.reviewedAt, complianceVersion: evaluation.complianceVersion, publishingEnabled: false });
         saveState(state);

@@ -113,10 +113,15 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   assert.equal(sameDayResponse.status, 409);
   assert.match((await sameDayResponse.json()).error, /one-post-per-day collision/i);
 
-  const evaluateResponse = await fetch(base + "/api/facebook/drafts/evaluate", { method: "POST", headers, body: JSON.stringify({ draftId: draft.id }) });
-  assert.equal(evaluateResponse.status, 200);
-  const evaluated = await evaluateResponse.json();
-  assert.equal(evaluated.evaluation.ok, false);
+  const evaluationResponses = await Promise.all([1, 2].map(() =>
+    fetch(base + "/api/facebook/drafts/evaluate", { method: "POST", headers, body: JSON.stringify({ draftId: draft.id }) })
+  ));
+  assert.deepEqual(evaluationResponses.map(response => response.status), [200, 200]);
+  const evaluationBodies = await Promise.all(evaluationResponses.map(response => response.json()));
+  assert.ok(evaluationBodies.every(body => body.evaluation.ok === false));
+  const evaluatedState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  assert.equal(evaluatedState.audit.filter(event => event.action === "FACEBOOK_DRAFT_RECHECKED" && event.itemId === draft.id).length, 2,
+    "both serialized reevaluation operations must retain one audit event each");
 
   const beforeBlockedApproval = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
   const approvalResponse = await fetch(base + "/api/facebook/drafts/approve", { method: "POST", headers, body: JSON.stringify({ draftId: draft.id, decision: "APPROVE" }) });
@@ -124,16 +129,28 @@ test("authenticated Facebook draft endpoints persist review state and refuse liv
   assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), beforeBlockedApproval,
     "a blocked approval must not mutate the draft or append a review event");
 
-  const rejectionResponse = await fetch(base + "/api/facebook/drafts/approve", {
-    method: "POST", headers,
-    body: JSON.stringify({ draftId: draft.id, decision: "REJECT", reason: "Controlled acceptance rejection; compliance blockers remain" })
-  });
-  const rejected = await rejectionResponse.json();
-  assert.equal(rejectionResponse.status, 200, JSON.stringify(rejected));
+  const rejectionPayload = { draftId: draft.id, decision: "REJECT", reason: "Controlled acceptance rejection; compliance blockers remain" };
+  const rejectionResponses = await Promise.all([1, 2].map(() =>
+    fetch(base + "/api/facebook/drafts/approve", { method: "POST", headers, body: JSON.stringify(rejectionPayload) })
+  ));
+  assert.deepEqual(rejectionResponses.map(response => response.status), [200, 200]);
+  const rejectionBodies = await Promise.all(rejectionResponses.map(response => response.json()));
+  assert.equal(rejectionBodies.filter(body => body.idempotent === true).length, 1,
+    "one concurrent exact retry must reuse the first durable review receipt");
+  const rejected = rejectionBodies.find(body => body.idempotent !== true);
+  assert.ok(rejected);
   assert.equal(rejected.draft.status, "REJECTED");
   assert.equal(rejected.draft.approval.decision, "REJECT");
   assert.equal(rejected.draft.approval.reviewer, "facebook-test-owner");
   assert.equal(rejected.publishingEnabled, false);
+  const afterRejection = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
+  const changedReasonRetry = await fetch(base + "/api/facebook/drafts/approve", {
+    method: "POST", headers,
+    body: JSON.stringify({ ...rejectionPayload, reason: "A changed rejection reason must not overwrite the original review" })
+  });
+  assert.equal(changedReasonRetry.status, 409);
+  assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), afterRejection,
+    "a conflicting review retry must not mutate the persisted decision or audit history");
 
   const publishResponse = await fetch(base + "/api/facebook/publish", { method: "POST", headers, body: JSON.stringify({ draftId: draft.id, confirmOperation: true }) });
   assert.equal(publishResponse.status, 409);
