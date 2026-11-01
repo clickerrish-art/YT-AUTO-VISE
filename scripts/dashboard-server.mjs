@@ -14,6 +14,7 @@ import { generateScript } from "./generate-script.mjs";
 import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence, validateConfiguredSonicVhibezChannel, validateParentReceiptTitle, parseShortMetadataJson } from "./short-parent-relationship.mjs";
 import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
+import { buildVerifiedRightsAssets } from "./rights-evidence.mjs";
 import { canonicalAuthoringScriptSha256, runAuthoringNarrationStage } from "./authoring-production-pipeline.mjs";
 import { productionPlanSha256, validateProductionPlan, validateNarrationApprovalReceipt, validateShortProductionPlanParent } from "./production-plan.mjs";
 import { buildApprovedJobRenderManifest } from "./build-approved-job-render-manifest.mjs";
@@ -1982,19 +1983,12 @@ const server = http.createServer(async (req, res) => {
         const job = state.jobs[index];
         if (job.state !== "VALIDATING" || job.validationResults?.passed !== true) return json(res, 409, { error: "Technical validation must pass before rights verification" });
         const timestamp = new Date().toISOString();
-        const assets = [];
-        for (const item of body.assets) {
-          if (!item || typeof item !== "object" || Array.isArray(item)) return json(res, 400, { error: "Each source asset must be an object" });
-          for (const key of ["assetId", "source", "rightsHolder", "assetPath", "licenseEvidenceLocation", "restrictions", "attributionRequirements"]) {
-            if (typeof item[key] !== "string" || !item[key].trim()) return json(res, 400, { error: "Required source-rights field is missing: " + key });
-          }
-          if (!Array.isArray(item.permittedUses) || !item.permittedUses.includes("YouTube")) return json(res, 400, { error: "Every asset must explicitly permit YouTube use" });
-          const assetFile = resolveRepositoryFile(item.assetPath);
-          const evidenceFile = resolveRepositoryFile(item.licenseEvidenceLocation);
-          const assetSha256 = sha256File(assetFile);
-          if (evidenceFile && fs.statSync(evidenceFile).size <= 0) return json(res, 400, { error: "License evidence file is empty" });
-          assets.push({ assetId: item.assetId.trim(), source: item.source.trim(), rightsHolder: item.rightsHolder.trim(), assetPath: item.assetPath, assetSha256, licenseEvidenceLocation: item.licenseEvidenceLocation, licenseEvidenceSha256: sha256File(evidenceFile), permittedUses: [...new Set(item.permittedUses)], restrictions: item.restrictions.trim(), attributionRequirements: item.attributionRequirements.trim(), verificationStatus: "VERIFIED", verifiedBy: actor.trim(), verifiedAt: timestamp });
-        }
+        const assets = buildVerifiedRightsAssets(body.assets, {
+          actor,
+          timestamp,
+          resolveFile: resolveRepositoryFile,
+          sha256File
+        });
         const primary = assets[0];
         const rightsEvidence = { assetId: primary.assetId, source: primary.source, rightsHolder: primary.rightsHolder, assetPath: primary.assetPath, assetSha256: primary.assetSha256, licenseEvidenceLocation: primary.licenseEvidenceLocation, licenseEvidenceSha256: primary.licenseEvidenceSha256, permittedUses: [...new Set(assets.flatMap(a => a.permittedUses))], restrictions: assets.map(a => a.restrictions).filter(Boolean).join(" | "), attributionRequirements: assets.map(a => a.attributionRequirements).filter(Boolean).join(" | "), assets, verificationStatus: "VERIFIED", verifiedBy: actor.trim(), verifiedAt: timestamp };
         const evidenceSha256 = crypto.createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex");
