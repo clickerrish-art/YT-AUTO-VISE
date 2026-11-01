@@ -35,3 +35,15 @@ test("blocks invalid segments, duplicate source segments and narration duration 
   assert.throws(() => buildMultiSceneVideoGraph({ editPlan: plan(), sceneTimeline: [timeline[0], { ...timeline[0] }], captionsFilter: "/captions.srt", width: 1920, height: 1080, narrationDurationSeconds: 20 }), /duplicate source segment/);
   assert.throws(() => buildMultiSceneVideoGraph({ editPlan: plan(), sceneTimeline: timeline, captionsFilter: "/captions.srt", width: 1920, height: 1080, narrationDurationSeconds: 17 }), /must match measured narration duration/);
 });
+
+test("rejects a scene timeline whose source asset order differs from the approved edit plan", () => {
+  const reordered = [timeline[1], timeline[0]];
+  assert.throws(() => buildMultiSceneVideoGraph({
+    editPlan: plan(),
+    sceneTimeline: reordered,
+    captionsFilter: "/captions.srt",
+    width: 1920,
+    height: 1080,
+    narrationDurationSeconds: 20
+  }), /does not match the source asset identity or order/);
+});
