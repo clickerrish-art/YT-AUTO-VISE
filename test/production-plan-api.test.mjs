@@ -160,12 +160,27 @@ test("production-plan API binds the approved script, checks real file hashes, an
   assert.equal(stale.status, 409, "a changed asset must invalidate review");
   fs.writeFileSync(changedAsset, Buffer.from("original scene fixture bytes 0"));
 
-  const approved = await request("/api/jobs/production-plan/review", {
-    jobId, planSha256: submitted.body.planSha256, decision: "APPROVE", reason: "Reviewed fixture evidence and scene alignment",
-    confirmScenePlanReviewed: true, confirmRightsEvidenceReviewed: true
-  });
-  assert.equal(approved.status, 200, JSON.stringify(approved.body));
+  const concurrentReviews = await Promise.all([
+    request("/api/jobs/production-plan/review", {
+      jobId, planSha256: submitted.body.planSha256, decision: "APPROVE", reason: "Reviewed fixture evidence and scene alignment",
+      confirmScenePlanReviewed: true, confirmRightsEvidenceReviewed: true
+    }),
+    request("/api/jobs/production-plan/review", {
+      jobId, planSha256: submitted.body.planSha256, decision: "APPROVE", reason: "Reviewed fixture evidence and scene alignment",
+      confirmScenePlanReviewed: true, confirmRightsEvidenceReviewed: true
+    })
+  ]);
+  assert.deepEqual(concurrentReviews.map(result => result.status).sort(), [200, 409],
+    "concurrent identical plan approvals must commit once and reject the stale duplicate");
+  const approved = concurrentReviews.find(result => result.status === 200);
+  assert.ok(approved, "one concurrent review must commit");
   assert.equal(approved.body.status, "APPROVED_PLAN_ONLY");
   assert.equal(approved.body.publishingEnabled, false);
   assert.equal(approved.body.renderingEnabled, false);
+  const finalState = JSON.parse(fs.readFileSync(stateFile, "utf8"));
+  assert.equal(finalState.audit.filter(event =>
+    event.action === "PRODUCTION_PLAN_APPROVED" && event.jobId === jobId
+  ).length, 1, "concurrent approval must append exactly one durable approval audit event");
+  assert.equal(finalState.jobs.find(item => item.id === jobId).authoring.productionPlan.status, "APPROVED_PLAN_ONLY");
+  assert.equal(finalState.jobs.find(item => item.id === jobId).authoring.productionPlan.publishingEnabled, false);
 });
