@@ -24,9 +24,9 @@ function isValidZonedTimestamp(value) {
   const daysInMonth = [31, leapYear ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   if (day > daysInMonth[month - 1]) return false;
 
-  if (match[2] && match[7]) {
-    const offsetHours = Number(match[8]);
-    const offsetMinutes = Number(match[9]);
+  if (match[8]) {
+    const offsetHours = Number(match[9]);
+    const offsetMinutes = Number(match[10]);
     if (offsetHours > 14 || (offsetHours === 14 && offsetMinutes !== 0)) return false;
   }
   return Number.isFinite(Date.parse(value));
