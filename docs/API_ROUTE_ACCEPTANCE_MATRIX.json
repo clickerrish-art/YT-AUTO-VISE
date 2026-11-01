@@ -705,27 +705,18 @@
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
       "authorizedSuccess": "PASS",
-      "inputValidation": "PASS",
+      "inputValidation": "PASS — empty payload and malformed JSON return 400; unknown draft returns 404; invalid calendar date and attempted rights/approval promotion are rejected without durable mutation.",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "PASS",
-      "restartRecovery": "PASS",
+      "concurrency": "PASS — simultaneous edits to two distinct drafts both persist without lost updates; each receives exactly one operator-attributed DRAFT_EDITED event.",
+      "restartRecovery": "PASS — updated draft values and original audit events survive graceful server stop and a fresh server process; publishing remains disabled.",
       "externalOperation": "none",
       "overallAcceptance": "PASS",
-      "notes": "Exact-SHA tests cover authenticated draft update, validation rejection without mutation, concurrent edits to two distinct drafts, exactly one operator-attributed DRAFT_EDITED event per edit, durable read-back after dashboard restart, and unknown-draft 404 with byte-identical state. The route does not perform an external provider operation. The dashboard remains publishing-disabled.",
+      "notes": "Exact-SHA real-server coverage on 33d6f4c4e6010578ae961f7cf97a7e0e9d70bac7. test/dashboard-api-draft-update-concurrency.integration.test.mjs covers empty/malformed payload rejection, unknown-ID 404 with byte-identical state, concurrent distinct-draft edits, per-item persistence/audit and restart read-back. test/dashboard-server.test.mjs covers invalid calendar dates and attempted rightsConfirmed promotion with byte-identical state. Duplicate same-draft submission/idempotency semantics remain untested, so overallAcceptance remains NOT_TESTED.",
       "testEvidence": {
-        "priorUpdate": {
-          "test": "test/dashboard-server.test.mjs",
-          "exactTestedSha": "dea284d21b4e7a6923c46a201cd196ed39b72ffa",
-          "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848775",
-          "scenario": "Authorized update persists the title and one operator-attributed audit event; invalid calendar date and attempted rightsConfirmed escalation return 400 with byte-identical state."
-        },
-        "concurrencyRestart": {
-          "test": "test/dashboard-api-draft-update-concurrency.integration.test.mjs",
-          "exactTestedSha": "49c5814b4e8bfcea87bd44116f0371d1d8707cf1",
-          "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41286846866",
-          "scenario": "Two concurrent edits to distinct drafts both return 200; updated fields and one audit event per draft persist; restart read-back preserves both edits and publishing remains disabled; an unknown draft returns 404 without changing state bytes."
-        }
+        "test": "test/dashboard-api-draft-update-concurrency.integration.test.mjs; test/dashboard-server.test.mjs",
+        "exactTestedSha": "33d6f4c4e6010578ae961f7cf97a7e0e9d70bac7",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41287549860"
       }
     }
   ]
