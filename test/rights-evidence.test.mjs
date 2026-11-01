@@ -14,6 +14,7 @@ function fixture(t) {
   fs.writeFileSync(asset, Buffer.from("genuine fixture bytes"));
   fs.writeFileSync(licence, "fixture licence evidence");
   return {
+    dir,
     asset,
     licence,
     resolveFile(relative) {
@@ -54,6 +55,54 @@ test("rights evidence binds non-empty source and licence files to SHA-256 hashes
   assert.match(result.assetSha256, /^[a-f0-9]{64}$/);
   assert.match(result.licenseEvidenceSha256, /^[a-f0-9]{64}$/);
   assert.deepEqual(result.permittedUses, ["YouTube"]);
+});
+
+test("rights evidence requires a real timezone-qualified verification timestamp", t => {
+  const f = fixture(t);
+  const options = {
+    actor: "operator@example.test",
+    resolveFile: f.resolveFile,
+    sha256File: f.sha256File
+  };
+  for (const timestamp of [
+    "2026-11-01T08:00:00",
+    "2026-02-30T08:00:00Z",
+    "2026-11-01T08:00:00+15:00",
+    "2026-11-01T08:00:00+14:01"
+  ]) {
+    assert.throws(() => buildVerifiedRightsAssets([f.item()], { ...options, timestamp }),
+      /valid verification timestamp with an explicit timezone/);
+  }
+});
+
+test("rights evidence rejects symbolic links in source and licence paths", t => {
+  const f = fixture(t);
+  const options = {
+    actor: "operator@example.test",
+    timestamp: "2026-11-01T08:00:00+02:00",
+    resolveFile: f.resolveFile,
+    sha256File: f.sha256File
+  };
+  const assetLink = path.join(f.dir, "asset-link.bin");
+  fs.symlinkSync(f.asset, assetLink);
+  assert.throws(() => buildVerifiedRightsAssets([f.item({ assetPath: "asset-link.bin" })], options),
+    /path must not contain symbolic links/);
+  fs.unlinkSync(assetLink);
+
+  const licenceLink = path.join(f.dir, "licence-link.txt");
+  fs.symlinkSync(f.licence, licenceLink);
+  assert.throws(() => buildVerifiedRightsAssets([f.item({ licenseEvidenceLocation: "licence-link.txt" })], options),
+    /path must not contain symbolic links/);
+});
+
+test("rights evidence rejects malformed SHA-256 provider results", t => {
+  const f = fixture(t);
+  assert.throws(() => buildVerifiedRightsAssets([f.item()], {
+    actor: "operator@example.test",
+    timestamp: "2026-11-01T08:00:00+02:00",
+    resolveFile: f.resolveFile,
+    sha256File: () => "not-a-sha256"
+  }), /SHA-256 digest must be 64 hexadecimal characters/);
 });
 
 test("rights evidence rejects empty source assets and empty licence evidence", t => {
