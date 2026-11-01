@@ -104,7 +104,7 @@ test("FFmpeg renders and fully decodes the complete 60-scene production-plan lim
 
   run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "color=c=red:s=320x180:r=25:d=2.4", "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", source]);
   run("ffmpeg", ["-v", "error", "-f", "lavfi", "-i", "sine=frequency=440:duration=2.4", "-c:a", "pcm_s16le", narration]);
-  fs.writeFileSync(captions, "1\\n00:00:00,000 --> 00:00:02,400\\nSixty-scene integration caption\\n", "utf8");
+  fs.writeFileSync(captions, "1\n00:00:00,000 --> 00:00:02,400\nSixty-scene integration caption\n", "utf8");
 
   const scenes = Array.from({ length: 60 }, (_, index) => ({
     assetId: "scene-" + index,
