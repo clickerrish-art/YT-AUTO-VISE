@@ -112,6 +112,51 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const malformedTokenResponse = await fetch(base + "/api/state", { headers: { "x-operator-token": malformedUnicodeToken } });
   assert.equal(malformedTokenResponse.status, 401, "equal JavaScript string lengths with unequal UTF-8 byte lengths must reject cleanly");
   const headers = { "content-type": "application/json", "x-operator-token": token };
+
+  // Route-level boundary acceptance for lifecycle operations whose complete
+  // success path is separately gated by real media, remote receipts and human review.
+  const protectedRouteStatePath = path.join(stateDir, "dashboard-state.json");
+  const beforeProtectedRouteBoundaries = fs.existsSync(protectedRouteStatePath)
+    ? fs.readFileSync(protectedRouteStatePath)
+    : null;
+  const narrationMissing = await fetch(base + "/api/jobs/narration", {
+    method: "POST", headers, body: JSON.stringify({})
+  });
+  assert.equal(narrationMissing.status, 400, "narration generation must reject missing job/hash inputs");
+  const narrationUnknown = await fetch(base + "/api/jobs/narration", {
+    method: "POST", headers, body: JSON.stringify({ jobId: "missing-content-job", scriptSha256: "a".repeat(64) })
+  });
+  assert.equal(narrationUnknown.status, 404, "narration generation must return 404 for an unknown content job");
+
+  const parentRelationshipMissing = await fetch(base + "/api/jobs/parent-relationship", {
+    method: "POST", headers, body: JSON.stringify({})
+  });
+  assert.equal(parentRelationshipMissing.status, 400, "parent relationship must require explicit review and exact artifact inputs");
+  const parentRelationshipUnknown = await fetch(base + "/api/jobs/parent-relationship", {
+    method: "POST", headers, body: JSON.stringify({
+      jobId: "missing-short-job", parentJobId: "missing-parent-job",
+      parentMediaPath: "media/parent.mp4", childMediaPath: "media/child.mp4",
+      parentQualityEvidencePath: "evidence/parent.json",
+      confirmRelationshipReviewed: true, relationshipReviewNotes: "Reviewed test relationship evidence."
+    })
+  });
+  assert.equal(parentRelationshipUnknown.status, 404, "parent relationship must reject unknown child/parent jobs");
+
+  const contentReviewMissing = await fetch(base + "/api/jobs/review", {
+    method: "POST", headers, body: JSON.stringify({})
+  });
+  assert.equal(contentReviewMissing.status, 400, "content review must require a job and explicit decision");
+  const contentReviewUnknown = await fetch(base + "/api/jobs/review", {
+    method: "POST", headers, body: JSON.stringify({ jobId: "missing-review-job", decision: "REJECT" })
+  });
+  assert.equal(contentReviewUnknown.status, 404, "content review must return 404 for an unknown job");
+  if (beforeProtectedRouteBoundaries !== null) {
+    assert.deepEqual(fs.readFileSync(protectedRouteStatePath), beforeProtectedRouteBoundaries,
+      "rejected narration, parent-binding and review requests must preserve durable state byte-for-byte");
+  } else {
+    assert.equal(fs.existsSync(protectedRouteStatePath), false,
+      "rejected lifecycle requests must not create durable state");
+  }
   const malformedJson = await fetch(base + "/api/drafts", {
     method: "POST", headers, body: "{\"id\":"
   });
