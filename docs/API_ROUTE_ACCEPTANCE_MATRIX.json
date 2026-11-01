@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-01T07:38:00Z",
+  "generatedAt": "2026-11-01T07:44:30Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "0ece4e62f285472f14b5fc2b9a071cedbac4e511",
+  "testedSourceTestSha": "cc1f828fdff39d400156427e51868e0d40317c2c",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -13,7 +13,11 @@
       "GET /",
       "GET /healthz",
       "GET /readyz"
-    ]
+    ],
+    "branchAheadBy": 2376,
+    "branchBehindBy": 2,
+    "changedFiles": 199,
+    "branchProtectionEnabled": false
   },
   "counts": {
     "routes": 35,
@@ -35,15 +39,18 @@
     "facebookDraftReviewCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c533cd8fbf7153ccbf84ab94a2a919069b9abbe0",
     "facebookDraftReviewCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217525988",
     "facebookDraftBrowserCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217526029",
-    "latestExactCandidateAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848775",
-    "latestExactCandidateDashboard": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848763",
-    "latestExactCandidateBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41217848781",
+    "latestExactCandidateAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809733",
+    "latestExactCandidateDashboard": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809691",
+    "latestExactCandidateBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809692",
     "readOnlyConcurrencyTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232372051",
     "workerFinalizationRace": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232932942",
     "rightsVerificationHttpTestCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/0ece4e62f285472f14b5fc2b9a071cedbac4e511",
-    "rightsVerificationHttpTestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285392103"
+    "rightsVerificationHttpTestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809733",
+    "scheduleSlotGuardCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/47107675a7d1cdd989a81944bb6c8f927525bcf8",
+    "scheduleSlotGuardRegressionTestCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/5e1a9afef6cdde38bfad7955b7ee9e3d4ea4cf71",
+    "scheduleSlotGuardScopeFixCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/cc1f828fdff39d400156427e51868e0d40317c2c"
   },
-  "disclaimer": "API-001 remains NOT_TESTED. Nine routes have complete acceptance against applicable criteria. Other route gaps and four externally blocked routes remain.",
+  "disclaimer": "API-001 remains NOT_TESTED overall. Nine of 35 routes have complete acceptance against applicable criteria; 22 remain NOT_TESTED and four remain externally BLOCKED. All 35 authentication-negative checks pass. Rights-verification HTTP evidence uses test-only fixtures and does not establish genuine licence authenticity or owner approval.",
   "routes": [
     {
       "method": "GET",
@@ -512,9 +519,9 @@
       "notes": "Exact-SHA real-server integration uses explicitly test-only media/licence fixtures. It covers auth-negative, missing input, unknown job, prohibited use rejection with byte-identical state, successful hash binding, durable state, audit, concurrent duplicate fencing, later duplicate rejection and restart recovery. This is not proof of genuine rights or production approval.",
       "testEvidence": {
         "test": "test/dashboard-api-rights-verification.integration.test.mjs",
-        "exactTestedSha": "0ece4e62f285472f14b5fc2b9a071cedbac4e511",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285392103",
-        "commit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/0ece4e62f285472f14b5fc2b9a071cedbac4e511",
+        "exactTestedSha": "cc1f828fdff39d400156427e51868e0d40317c2c",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41285809733",
+        "commit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/cc1f828fdff39d400156427e51868e0d40317c2c",
         "scenario": "Real HTTP server: unauthorized request rejected; missing input 400; unknown job 404; prohibited-use evidence rejected without state mutation; two concurrent identical requests return one 200 and one 409; hashes and operator attribution persist; duplicate retry rejected; state and audit survive restart."
       }
     },
