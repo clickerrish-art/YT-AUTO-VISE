@@ -28,7 +28,8 @@ export function buildMultiSceneVideoGraph({
   const filters = [];
   for (let i = 0; i < sceneTimeline.length; i++) {
     const planned = editPlan.scenes[i], source = sceneTimeline[i];
-    if (!planned || !["fit", "gentle_crop"].includes(planned.framing)) throw new Error("edit plan scene " + i + " has unsupported framing");
+    if (!planned || planned.assetId !== source.assetId) throw new Error("edit plan scene " + i + " does not match the source asset identity or order");
+    if (!["fit", "gentle_crop"].includes(planned.framing)) throw new Error("edit plan scene " + i + " has unsupported framing");
     const framing = planned.framing === "fit"
       ? "scale=" + width + ":" + height + ":force_original_aspect_ratio=decrease,pad=" + width + ":" + height + ":(ow-iw)/2:(oh-ih)/2:black"
       : "scale=" + width + ":" + height + ":force_original_aspect_ratio=increase,crop=" + width + ":" + height;
