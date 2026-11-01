@@ -122,6 +122,12 @@ test("draft updates serialize concurrent writes and persist with audit history a
     scheduledDate: "2026-11-14"
   });
 
+  const beforeUnknownUpdate = fs.readFileSync(statePath);
+  const unknownUpdate = await post("/api/drafts/update", { ...tuesday, id: "draft-update-concurrency-unknown" });
+  assert.equal(unknownUpdate.status, 404, "editing an unknown draft must return not found");
+  assert.deepEqual(fs.readFileSync(statePath), beforeUnknownUpdate,
+    "an unknown draft update must not mutate durable state or audit history");
+
   const updates = [
     { ...tuesday, title: "Tuesday draft after concurrent edit", topic: "Updated Tuesday planning workflow" },
     { ...saturday, title: "Saturday draft after concurrent edit", topic: "Updated Saturday filming workflow" }
