@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-01T12:19:49.454Z",
+  "generatedAt": "2026-11-01T12:31:45.473Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "7a72d20efb6741cbf5914fe2638b787bf8176336",
+  "testedSourceTestSha": "c007aab36f32b282fbcf012fa6b6f9138686ff3c",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -14,16 +14,16 @@
       "GET /healthz",
       "GET /readyz"
     ],
-    "branchAheadBy": 2428,
+    "branchAheadBy": 2432,
     "branchBehindBy": 2,
-    "changedFiles": 201,
+    "changedFiles": 202,
     "branchProtectionEnabled": false
   },
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 20,
-    "overallNotTested": 11,
+    "overallPass": 21,
+    "overallNotTested": 10,
     "overallBlocked": 4
   },
   "evidence": {
@@ -60,9 +60,15 @@
     "validationIdempotencyRestartTestCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/7a72d20efb6741cbf5914fe2638b787bf8176336",
     "validationIdempotencyAutomationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710316",
     "validationIdempotencyDashboardCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710197",
-    "validationIdempotencyBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710334"
+    "validationIdempotencyBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710334",
+    "workerCompletionSourceCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ce6002e229e13b3f6c92fd9a0b4fea9d8821ab6e",
+    "workerCompletionRaceTestCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3dd5692a5a050e0cacf47c94dd4bc9fa3e63ee70",
+    "workerCompletionIntegrationTestCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c007aab36f32b282fbcf012fa6b6f9138686ff3c",
+    "workerCompletionAutomationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209",
+    "workerCompletionDashboardCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645272",
+    "workerCompletionBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187"
   },
-  "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 20 of 35 routes as PASS, 11 as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. POST /api/jobs/validate now has real-server success, rejection, state/audit persistence, concurrent idempotent retry and server-restart read-back evidence using generated test-only FFmpeg media; no production media, rights or publication is implied.",
+  "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 21 of 35 routes as PASS, 10 as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. POST /api/jobs/lease/complete now has real-server generated-artifact success, checksum/metadata validation, idempotent exact and concurrent retries, conflict/tamper rejection, durable audit, and restart recovery evidence using generated test-only FFmpeg media. No production rights, human approval or external publication is implied.",
   "routes": [
     {
       "method": "GET",
@@ -687,20 +693,22 @@
       "classification": "worker completion",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "PASS",
-      "inputValidation": "PASS",
-      "durablePersistence": "PASS",
-      "auditEvidence": "PASS",
-      "concurrency": "PASS",
-      "restartRecovery": "PASS",
-      "externalOperation": "real MP4/metadata prerequisites for GENERATED completion",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "Exact-SHA worker lifecycle test proves controlled FAILED completion, stale-token duplicate rejection, durable lease/audit persistence and restart read-back. A separate two-process race proves exactly one of two concurrent duplicate completion requests succeeds and only one completion audit event is written. GENERATED completion with a real MP4 and matching metadata remains untested, so overall route acceptance stays NOT_TESTED.",
+      "authorizedSuccess": "PASS — the real HTTP server accepted a generated test-only vertical H.264/AAC MP4 with exact file SHA-256 and metadata SHA-256, and persisted GENERATED state with probed duration and dimensions.",
+      "inputValidation": "PASS — missing completion fields return 400; unknown job returns 404; missing/invalid operator authentication is rejected by the 35-route auth matrix; changed media SHA and conflicting completion payload return 409 without durable state/audit mutation.",
+      "durablePersistence": "PASS — successful completion persists GENERATED state, inspected artifact SHA/duration/dimensions, metadata path/version, worker lease history and a SHA-256-bound lastWorkerCompletion receipt. On restart, an unfinished active lease is moved to RECOVERY_REQUIRED and the completion receipt remains intact.",
+      "auditEvidence": "PASS — one WORKER_STAGE_COMPLETED event is recorded for the exact completion; restart adds one CONTENT_JOB_RECOVERY_REQUIRED event. Exact and concurrent retries do not add duplicate completion events.",
+      "concurrency": "PASS — exact retries and two simultaneous identical retries return HTTP 200 with idempotent=true and byte-identical state/audit; a different result under the same lease token returns 409 without mutation. Independent-process race coverage also verifies one original completion and one idempotent receipt reuse.",
+      "restartRecovery": "PASS — after a fresh server process, GENERATED with an active worker lease is safely changed to RECOVERY_REQUIRED, the lease is cleared, the completion receipt/audit persist, and replaying the exact completion receipt cannot clear the recovery gate or mutate durable state.",
+      "externalOperation": "none — generated local FFmpeg test fixture only; no provider, upload, schedule or publication action",
+      "overallAcceptance": "PASS",
+      "notes": "Engineering acceptance uses synthetic test media and metadata only. It does not establish genuine production media rights, human approval or YouTube publication readiness.",
       "testEvidence": {
-        "test": "test/dashboard-api-worker-finalization-race.integration.test.mjs",
-        "exactTestedSha": "2904439f53cec6ae13a9a8a58597a69d720a90dc",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232932942",
-        "scenario": "Two independent dashboard server processes concurrently heartbeat, complete and reap jobs against shared isolated state. Both serialized heartbeats succeed; duplicate completion and reaper requests have exactly one winner and one durable audit event."
+        "test": "test/dashboard-api-worker-completion.integration.test.mjs plus test/dashboard-api-worker-finalization-race.integration.test.mjs — real HTTP server(s), generated FFmpeg media and durable state",
+        "exactTestedSha": "c007aab36f32b282fbcf012fa6b6f9138686ff3c",
+        "automationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209",
+        "dashboardE2eCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645272",
+        "isolatedBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187",
+        "scenario": "A generated 50-second 1080×1920 H.264/AAC test fixture is submitted through POST /api/jobs/lease/complete with exact metadata and media hashes. The route probes and persists GENERATED state, output dimensions/duration and one completion audit receipt. Exact retries and two concurrent retries return idempotent 200 with byte-identical state; a changed result and tampered media return 409 without mutation. After graceful server restart, the active GENERATED lease is recovered to RECOVERY_REQUIRED, the receipt remains durable, and exact replay cannot clear the recovery gate. Independent-process race coverage confirms one original completion plus one idempotent reuse. All media is synthetic test material; no external action."
       }
     },
     {
