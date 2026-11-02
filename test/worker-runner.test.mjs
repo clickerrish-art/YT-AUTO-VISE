@@ -50,11 +50,13 @@ test("worker dispatches listed jobs sequentially and records fail-closed conflic
   const baseUrl = await listen(server);
   t.after(() => new Promise(resolve => server.close(resolve)));
 
-  const result = await runWorkerCycle({ baseUrl, token, workerId });
+  const cooldowns = new Map();
+  const result = await runWorkerCycle({ baseUrl, token, workerId, cooldowns });
   assert.equal(result.discovered, 2);
   assert.equal(result.queuedCount, 3);
   assert.equal(result.queuedWithoutApprovedAuthoring, 1);
   assert.equal(result.queuedWithoutApprovedRenderPlan, 2);
+  assert.equal(result.deferredByBackoff, 0);
   assert.deepEqual(result.results, [
     { jobId: "job-one", status: "SUCCEEDED", httpStatus: 200, state: "GENERATED" },
     { jobId: "job-two", status: "NOT_DISPATCHED", httpStatus: 409, state: null }
@@ -66,6 +68,13 @@ test("worker dispatches listed jobs sequentially and records fail-closed conflic
     "POST /api/jobs/produce"
   ]);
   assert.ok(requests.every(item => item.workerToken === token && item.workerId === workerId));
+
+  const requestsBeforeCooldownCycle = requests.length;
+  const secondCycle = await runWorkerCycle({ baseUrl, token, workerId, cooldowns });
+  assert.equal(secondCycle.deferredByBackoff, 1, "a preflight conflict must not be retried on every polling interval");
+  assert.equal(secondCycle.results.some(item => item.jobId === "job-two"), false);
+  assert.equal(requests.slice(requestsBeforeCooldownCycle).some(item => item.url === "/api/jobs/produce" && item.method === "POST"), true);
+  assert.deepEqual(cooldowns.get("job-two"), { attempts: 2, nextAttemptAt: Date.now() + 60_000 });
 });
 
 test("worker rejects unencrypted non-loopback API destinations before sending credentials", async () => {
