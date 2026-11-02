@@ -1,3 +1,18 @@
+# Latest exact-source execution — 2 November 2026 (stable publication-slot identity)
+
+- Exact tested source/test commit: `f478c45f438057c8b8e535aa8c3f96dab138c347`; implementation change: `eea2e976d74ad7975ec4b1ae032c6115f0abc423`.
+- `scripts/schedule-policy.mjs` now rejects a proposed publication slot without a stable, non-empty string ID. `test/schedule-policy.test.mjs` covers missing, null, empty and whitespace-only IDs. This closes an ambiguity that could otherwise allow an unidentifiable queue reservation through the standalone slot validator.
+- Exact-SHA automation/security [41410293978](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41410293978) **PASS**: 471 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; renderer, syntax and compilation checks passed.
+- Dashboard Chromium E2E [41410293965](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41410293965) **PASS**: 21/21 journeys. Content quality [41410293992](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41410293992), metadata [41410293971](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41410293971), isolated main/candidate baseline [41410294028](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41410294028), branch inventory [41410294086](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41410294086), and local Nature Frontiers draft validation [41410293953](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41410293953) **PASS**. The Nature Frontiers result is local validation only, not provider-side creation/read-back.
+- Production readiness [41410293985](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41410293985) remains **HOLD / fail-closed with 13 blockers**; its failing workflow conclusion is the expected release gate, not a production pass.
+- At this tested source/test SHA the branch is **2,471 ahead / 2 behind / 205 changed files** versus main. Main remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base remains `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 remains open, draft and unmerged; branch protection remains disabled.
+- Remaining owner-independent work includes exhaustive DASH-001 control acceptance, remaining API-001 route acceptance, full SCHED-001 retry/cancel/dead-letter/recovery drills, STATE-001 failure-injection coverage, DEPLOY-001 clean-install/upgrade/rollback drills, and GIT-002 human semantic review of the divergent history.
+- Owner-controlled production blockers remain: independently verified SonicVhibez/Sonic Fire identity; complete public/private/unlisted history and uncertain-upload reconciliation; genuine rights-cleared media/manifests; human playback, metadata and compliance approval; final rendered Short; secure YouTube OAuth/channel configuration; and a feasible owner-approved publication cadence. No credentials belong in chat.
+- Current Metricool read-only check still exposes only Nature Frontiers brand `7545638`; seven future Nature Frontiers promotional posts remain `draft=false` and `autoPublish=true`. They were not changed. Nature Frontiers is not an authorized SonicVhibez destination.
+- No upload, publication, schedule mutation, campaign activation, spend, account reconnection, visibility change, merge, or main-branch edit occurred. Public publishing remains disabled; Safari remains inactive; the approved Selar URL remains `https://selar.com/0u19v8u99l`.
+
+---
+
 # Latest exact-source execution — 2 November 2026 (narration concurrency and HTTP test reliability)
 
 - Tested application source/test commit: `fadf7ed58d8d1be5dc2e7999152601702df58788`. The evidence refresh below is documentation-only; the tested source/test candidate is unchanged by this refresh.
