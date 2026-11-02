@@ -27,6 +27,7 @@ test("worker dispatches listed jobs sequentially and records fail-closed conflic
         ],
         queuedCount: 3,
         queuedWithoutApprovedAuthoring: 1,
+        queuedWithoutApprovedRenderPlan: 2,
         publishingEnabled: false
       }));
       return;
@@ -53,6 +54,7 @@ test("worker dispatches listed jobs sequentially and records fail-closed conflic
   assert.equal(result.discovered, 2);
   assert.equal(result.queuedCount, 3);
   assert.equal(result.queuedWithoutApprovedAuthoring, 1);
+  assert.equal(result.queuedWithoutApprovedRenderPlan, 2);
   assert.deepEqual(result.results, [
     { jobId: "job-one", status: "SUCCEEDED", httpStatus: 200, state: "GENERATED" },
     { jobId: "job-two", status: "NOT_DISPATCHED", httpStatus: 409, state: null }

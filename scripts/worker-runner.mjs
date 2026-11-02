@@ -65,6 +65,7 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
     discovered: listing.payload.jobs.length,
     queuedCount: Number.isInteger(listing.payload.queuedCount) ? listing.payload.queuedCount : listing.payload.jobs.length,
     queuedWithoutApprovedAuthoring: Number.isInteger(listing.payload.queuedWithoutApprovedAuthoring) ? listing.payload.queuedWithoutApprovedAuthoring : 0,
+    queuedWithoutApprovedRenderPlan: Number.isInteger(listing.payload.queuedWithoutApprovedRenderPlan) ? listing.payload.queuedWithoutApprovedRenderPlan : 0,
     results,
     publishingEnabled: false
   };

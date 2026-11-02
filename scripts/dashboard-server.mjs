@@ -619,13 +619,18 @@ const server = http.createServer(async (req, res) => {
         return json(res, 400, { error: "limit must be an integer from 1 to 100", publishingEnabled: false });
       }
       const queued = state.jobs.filter(job => job.kind === "CONTENT_PRODUCTION" && job.state === "QUEUED");
-      const jobs = queued.filter(job => job.authoring && typeof job.id === "string")
+      const hasApprovedRenderPlan = job =>
+        job.authoring?.productionPlan?.status === "APPROVED_PLAN_ONLY" &&
+        job.authoring.productionPlan.review?.decision === "APPROVE" &&
+        /^[a-f0-9]{64}$/.test(job.authoring.productionPlan.review?.approvalSha256 ?? "");
+      const jobs = queued.filter(job => hasApprovedRenderPlan(job) && typeof job.id === "string")
         .slice(0, requestedLimit)
         .map(job => ({ id: job.id, contentType: job.contentType, state: job.state, createdAt: job.createdAt }));
       return json(res, 200, {
         jobs,
         queuedCount: queued.length,
         queuedWithoutApprovedAuthoring: queued.filter(job => !job.authoring).length,
+        queuedWithoutApprovedRenderPlan: queued.filter(job => !hasApprovedRenderPlan(job)).length,
         publishingEnabled: false,
         readOnly: true
       });
