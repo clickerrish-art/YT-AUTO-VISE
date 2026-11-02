@@ -155,3 +155,23 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
 
   assert.equal(wiredControls, 85, "the number of non-submit dashboard controls changed; review the acceptance fixture");
 });
+
+test("dashboard inventory associates controls with their owning form, including explicit external form references", () => {
+  const inventory = inventoryDashboardSources(
+    '<form id="draft-form"><input id="title"><button id="save" type="submit">Save</button></form>' +
+      '<form id="review-form"><textarea id="notes"></textarea></form>' +
+      '<input id="external-review" form="review-form"><input id="unowned">',
+    "",
+  );
+
+  assert.deepEqual(
+    inventory.controls.map(control => [control.id, control.form]),
+    [
+      ["title", "draft-form"],
+      ["save", "draft-form"],
+      ["notes", "review-form"],
+      ["external-review", "review-form"],
+      ["unowned", null],
+    ],
+  );
+});

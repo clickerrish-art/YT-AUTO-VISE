@@ -10,7 +10,7 @@ function attributesOf(raw) {
   const expression = /([\w:-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
   for (const match of raw.matchAll(expression)) {
     const key = match[1].toLowerCase();
-    if (key === "button" || key === "input" || key === "select" || key === "textarea" || key === "form") continue;
+    if (key === "button" || key === "input" || key === "select" || key === "textarea") continue;
     attributes[key] = match[2] ?? match[3] ?? match[4] ?? true;
   }
   return attributes;
@@ -35,7 +35,19 @@ function* openingTags(source) {
     }
 
     const nameStart = start + 1;
-    if (source[nameStart] === "/" || source[nameStart] === "!" || source[nameStart] === "?") {
+    if (source[nameStart] === "/") {
+      const closingMatch = source.slice(nameStart + 1).match(/^([a-z][a-z0-9:-]*)\b/i);
+      if (closingMatch?.[1].toLowerCase() === "form") {
+        const end = source.indexOf(">", start + closingMatch[0].length + 2);
+        if (end < 0) return;
+        yield { tag: "/form", raw: "", index: start };
+        cursor = end + 1;
+      } else {
+        cursor = nameStart + 1;
+      }
+      continue;
+    }
+    if (source[nameStart] === "!" || source[nameStart] === "?") {
       cursor = nameStart + 1;
       continue;
     }
@@ -89,8 +101,35 @@ function lineAt(source, index) {
 export function inventoryDashboardSources(html, server) {
   const tags = [...openingTags(html)];
   const controls = [];
+  const forms = [];
   const controlIds = new Map();
+  const formIds = new Map();
+  const formStack = [];
   for (const match of tags) {
+    if (match.tag === "/form") {
+      formStack.pop();
+      continue;
+    }
+    if (match.tag === "form") {
+      const attributes = attributesOf(match.raw);
+      const identity = attributes.id
+        ? "id:" + attributes.id
+        : attributes.name
+          ? "name:" + attributes.name
+          : "method:" + (attributes.method ?? "GET") + "|action:" + (attributes.action ?? "default");
+      const form = {
+        index: forms.length + 1,
+        acceptanceId: stableAcceptanceId("form", identity, formIds),
+        line: lineAt(html, match.index),
+        id: typeof attributes.id === "string" ? attributes.id : null,
+        name: typeof attributes.name === "string" ? attributes.name : null,
+        method: typeof attributes.method === "string" ? attributes.method.toUpperCase() : "GET",
+        action: typeof attributes.action === "string" ? attributes.action : null,
+      };
+      forms.push(form);
+      formStack.push(form.id ?? form.acceptanceId);
+      continue;
+    }
     if (!["button", "input", "select", "textarea"].includes(match.tag)) continue;
     const attributes = attributesOf(match.raw);
     const tag = match.tag;
@@ -100,7 +139,7 @@ export function inventoryDashboardSources(html, server) {
         ? "name:" + attributes.name + "|tag:" + tag
         : attributes["aria-label"]
           ? "aria:" + attributes["aria-label"] + "|tag:" + tag
-          : "tag:" + tag + "|type:" + (attributes.type ?? "unspecified") + "|form:" + (attributes.form ?? "default");
+          : "tag:" + tag + "|type:" + (attributes.type ?? "unspecified") + "|form:" + (attributes.form ?? formStack.at(-1) ?? "default");
     controls.push({
       index: controls.length + 1,
       acceptanceId: stableAcceptanceId("control", identity, controlIds),
@@ -109,30 +148,9 @@ export function inventoryDashboardSources(html, server) {
       id: typeof attributes.id === "string" ? attributes.id : null,
       name: typeof attributes.name === "string" ? attributes.name : null,
       type: typeof attributes.type === "string" ? attributes.type : (tag === "button" ? "submit-default" : null),
-      form: typeof attributes.form === "string" ? attributes.form : null,
+      form: typeof attributes.form === "string" ? attributes.form : (formStack.at(-1) ?? null),
       ariaLabel: typeof attributes["aria-label"] === "string" ? attributes["aria-label"] : null,
       disabled: Object.hasOwn(attributes, "disabled"),
-    });
-  }
-
-  const forms = [];
-  const formIds = new Map();
-  for (const match of tags) {
-    if (match.tag !== "form") continue;
-    const attributes = attributesOf(match.raw);
-    const identity = attributes.id
-      ? "id:" + attributes.id
-      : attributes.name
-        ? "name:" + attributes.name
-        : "method:" + (attributes.method ?? "GET") + "|action:" + (attributes.action ?? "default");
-    forms.push({
-      index: forms.length + 1,
-      acceptanceId: stableAcceptanceId("form", identity, formIds),
-      line: lineAt(html, match.index),
-      id: typeof attributes.id === "string" ? attributes.id : null,
-      name: typeof attributes.name === "string" ? attributes.name : null,
-      method: typeof attributes.method === "string" ? attributes.method.toUpperCase() : "GET",
-      action: typeof attributes.action === "string" ? attributes.action : null,
     });
   }
 
