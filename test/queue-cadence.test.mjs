@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import { spawnSync } from "node:child_process";
 import { ROLLING_PUBLICATION_FORMATS, weeklyUtcCronGaps } from "../scripts/schedule-policy.mjs";
 const queue = JSON.parse(fs.readFileSync("content/queue.json", "utf8"));
 const plan = JSON.parse(fs.readFileSync("config/weekly-content-plan.json", "utf8"));
@@ -49,7 +50,7 @@ test("queue has exactly one draft-only preparation item per fallback slot", () =
   for (const item of scheduled) assert.equal(item.contentType, plan.schedule.find(slot=>slot.day===item.scheduledDay).format);
 });
 test("queue IDs are unique and every item uses only the approved Selar URL", () => {
-  const ids=queue.items.map(item=>item.id); assert.equal(new Set(ids).size,ids.length);
+  const ids=queue.items.map(item => item.id); assert.equal(new Set(ids).size,ids.length);
   for (const item of queue.items) assert.equal(item.productUrl,"https://selar.com/0u19v8u99l",item.id);
 });
 test("workflow cron schedules remain draft preparation only", () => {
@@ -58,4 +59,26 @@ test("workflow cron schedules remain draft preparation only", () => {
   assert.ok(longWorkflow.includes('cron: "0 15 * * 2"'));
   assert.ok(shortWorkflow.includes('cron: "0 15 * * 6"'));
   assert.match(longWorkflow,/draft/i); assert.match(shortWorkflow,/draft/i);
+});
+
+test("Saturday narration workflow validates the rolling publication cycle and draft-only fallback, not a weekly target", () => {
+  const shortWorkflow=fs.readFileSync(".github/workflows/free-narration-artifact.yml","utf8");
+  assert.match(shortWorkflow,/config\/weekly-content-plan\.json/);
+  assert.match(shortWorkflow,/minimumHoursBetweenConsecutivePublications/);
+  assert.match(shortWorkflow,/minimumCycleHours/);
+  assert.match(shortWorkflow,/publicationRequiresVerifiedHistory/);
+  assert.match(shortWorkflow,/draftPreparationFallback/);
+  assert.match(shortWorkflow,/notPublicationCadence/);
+  assert.match(shortWorkflow,/"postsPerWeek" not in cadence/);
+  assert.doesNotMatch(shortWorkflow,/cadence\.get\("postsPerWeek"\)/);
+  assert.match(shortWorkflow,/rolling long-form/);
+
+  const validationStep = shortWorkflow.match(/- name: Validate the replenishable queue and destination safety\n        run: \|\n([\s\S]*?)\n      - name: Validate Python generators/);
+  assert.ok(validationStep, "the scheduled workflow must retain its queue validation step");
+  const stepBody = validationStep[1].split("\n").map(line => line.startsWith("          ") ? line.slice(10) : line).join("\n");
+  const pythonBlock = stepBody.match(/python - <<'PY'\n([\s\S]*?)\nPY/);
+  assert.ok(pythonBlock, "the queue validation step must contain an executable Python block");
+  const result = spawnSync("python", ["-c", pythonBlock[1]], { encoding: "utf8" });
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  assert.match(result.stdout, /cycle requires 216 hours/);
 });
