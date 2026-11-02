@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-02T12:28:19.604Z",
+  "generatedAt": "2026-11-02T12:30:34.778Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "7add5c3bf487476880bb78b12da9ba50e419c4d3",
@@ -23,8 +23,8 @@
     "routes": 35,
     "authNegativePass": 35,
     "overallPass": 30,
-    "overallNotTested": 1,
-    "overallBlocked": 4
+    "overallNotTested": 0,
+    "overallBlocked": 5
   },
   "evidence": {
     "authMatrix": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034162",
@@ -244,20 +244,20 @@
       "classification": "local draft approval / provider workflow boundary",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "PASS — safe REJECT decision only",
+      "authorizedSuccess": "PASS — safe REJECT only; APPROVE remains blocked by genuine Page identity, rights and compliance dependencies",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
       "concurrency": "PASS — two concurrent identical safe REJECT requests return HTTP 200; exactly one durable review receipt/audit event is created and the second response is idempotent. A changed reason returns 409 without mutation.",
       "restartRecovery": "PASS — the rejected draft and its single reviewer-attributed audit event survive a fresh server process and authenticated API read-back.",
-      "externalOperation": "provider-side draft/read-back not verified",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "Exact-SHA 561a3fc test/facebook-dashboard.test.mjs proves safe REJECT success, concurrent identical retry idempotency, changed-reason conflict with byte-identical state, and restart persistence. APPROVE remains blocked while Page identity, rights and compliance evidence are absent; this test identity is a fixture, not genuine production approval. Provider-side draft creation/read-back is not claimed.",
+      "externalOperation": "provider-side draft/read-back and production APPROVE require verified Page identity, permissions, rights and compliance evidence",
+      "overallAcceptance": "BLOCKED",
+      "notes": "Exact-SHA real-server test test/facebook-dashboard.test.mjs proves missing Page/rights/compliance prerequisites cause APPROVE to return 400 with byte-identical state, while safe REJECT succeeds with concurrent idempotency, changed-reason conflict protection, one reviewer-bound audit receipt and restart persistence. APPROVE remains BLOCKED by genuine owner/provider evidence; provider-side draft creation/read-back is not claimed.",
       "testEvidence": {
-        "test": "test/facebook-dashboard.test.mjs — real HTTP server",
-        "exactTestedSha": "561a3fc8354275af20d3eed23e96211441e08869",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805",
-        "scenario": "Concurrent exact REJECT requests produce one review receipt/audit event; exact retry is idempotent; changed reason is 409/no mutation; rejected draft survives restart. Approval and external provider operations remain gated."
+        "test": "test/facebook-dashboard.test.mjs",
+        "exactTestedSha": "9c1d8997ac53d3116bfa51a7d9e9dd01194fc3ba",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41440314138",
+        "scenario": "Blocked APPROVE is a 400 with byte-identical state; safe REJECT has concurrent idempotency, conflicting retry rejection, one audit receipt and restart persistence. Synthetic operator/test fixtures only."
       }
     },
     {
