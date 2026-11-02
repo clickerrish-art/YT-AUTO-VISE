@@ -22,6 +22,12 @@ async function reservePort() {
   return port;
 }
 
+async function fetchDashboard(url, options = {}) {
+  const headers = new Headers(options.headers ?? {});
+  headers.set("connection", "close");
+  return fetch(url, { ...options, headers });
+}
+
 test("dashboard API authenticates operators, persists real drafts, and cannot grant approval", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-"));
   let narrationFixtureDir = null;
@@ -98,11 +104,11 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   let ready = false;
   for (let i = 0; i < 60; i++) {
     if (child.exitCode !== null) break;
-    try { const response = await fetch(base + "/healthz"); if (response.ok) { ready = true; break; } } catch {}
+    try { const response = await fetchDashboard(base + "/healthz"); if (response.ok) { ready = true; break; } } catch {}
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   assert.equal(ready, true, "server did not start: " + logs);
-  const unauthorized = await fetch(base + "/api/state");
+  const unauthorized = await fetchDashboard(base + "/api/state");
   assert.equal(unauthorized.status, 401);
   const sourceInventory = inventoryDashboardSources(
     fs.readFileSync(path.join(process.cwd(), "public", "dashboard.html"), "utf8"),
@@ -113,7 +119,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     .map(route => [route.method + " " + route.path, route])).values()];
   assert.ok(apiRoutes.length > 0, "the route inventory must discover API routes");
   for (const route of apiRoutes) {
-    const response = await fetch(base + route.path, { method: route.method });
+    const response = await fetchDashboard(base + route.path, { method: route.method });
     assert.equal(
       response.status,
       401,
@@ -122,7 +128,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   }
   const malformedUnicodeToken = "é" + "x".repeat(token.length - 1);
   assert.equal(malformedUnicodeToken.length, token.length);
-  const malformedTokenResponse = await fetch(base + "/api/state", { headers: { "x-operator-token": malformedUnicodeToken } });
+  const malformedTokenResponse = await fetchDashboard(base + "/api/state", { headers: { "x-operator-token": malformedUnicodeToken } });
   assert.equal(malformedTokenResponse.status, 401, "equal JavaScript string lengths with unequal UTF-8 byte lengths must reject cleanly");
   const headers = { "content-type": "application/json", "x-operator-token": token };
 
@@ -132,20 +138,20 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const beforeProtectedRouteBoundaries = fs.existsSync(protectedRouteStatePath)
     ? fs.readFileSync(protectedRouteStatePath)
     : null;
-  const narrationMissing = await fetch(base + "/api/jobs/narration", {
+  const narrationMissing = await fetchDashboard(base + "/api/jobs/narration", {
     method: "POST", headers, body: JSON.stringify({})
   });
   assert.equal(narrationMissing.status, 400, "narration generation must reject missing job/hash inputs");
-  const narrationUnknown = await fetch(base + "/api/jobs/narration", {
+  const narrationUnknown = await fetchDashboard(base + "/api/jobs/narration", {
     method: "POST", headers, body: JSON.stringify({ jobId: "missing-content-job", scriptSha256: "a".repeat(64) })
   });
   assert.equal(narrationUnknown.status, 404, "narration generation must return 404 for an unknown content job");
 
-  const parentRelationshipMissing = await fetch(base + "/api/jobs/parent-relationship", {
+  const parentRelationshipMissing = await fetchDashboard(base + "/api/jobs/parent-relationship", {
     method: "POST", headers, body: JSON.stringify({})
   });
   assert.equal(parentRelationshipMissing.status, 400, "parent relationship must require explicit review and exact artifact inputs");
-  const parentRelationshipUnknown = await fetch(base + "/api/jobs/parent-relationship", {
+  const parentRelationshipUnknown = await fetchDashboard(base + "/api/jobs/parent-relationship", {
     method: "POST", headers, body: JSON.stringify({
       jobId: "missing-short-job", parentJobId: "missing-parent-job",
       parentMediaPath: "media/parent.mp4", childMediaPath: "media/child.mp4",
@@ -155,11 +161,11 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   });
   assert.equal(parentRelationshipUnknown.status, 404, "parent relationship must reject unknown child/parent jobs");
 
-  const contentReviewMissing = await fetch(base + "/api/jobs/review", {
+  const contentReviewMissing = await fetchDashboard(base + "/api/jobs/review", {
     method: "POST", headers, body: JSON.stringify({})
   });
   assert.equal(contentReviewMissing.status, 400, "content review must require a job and explicit decision");
-  const contentReviewUnknown = await fetch(base + "/api/jobs/review", {
+  const contentReviewUnknown = await fetchDashboard(base + "/api/jobs/review", {
     method: "POST", headers, body: JSON.stringify({ jobId: "missing-review-job", decision: "REJECT" })
   });
   assert.equal(contentReviewUnknown.status, 404, "content review must return 404 for an unknown job");
@@ -170,14 +176,14 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     assert.equal(fs.existsSync(protectedRouteStatePath), false,
       "rejected lifecycle requests must not create durable state");
   }
-  const malformedJson = await fetch(base + "/api/drafts", {
+  const malformedJson = await fetchDashboard(base + "/api/drafts", {
     method: "POST", headers, body: "{\"id\":"
   });
   assert.equal(malformedJson.status, 400, "malformed JSON must be rejected before any draft mutation");
   const malformedJsonBody = await malformedJson.json();
   assert.match(malformedJsonBody.error, /valid JSON/i);
   assert.equal(JSON.stringify(malformedJsonBody).includes(stateDir), false, "malformed-body errors must not expose local state paths");
-  const unsupportedContentType = await fetch(base + "/api/drafts", {
+  const unsupportedContentType = await fetchDashboard(base + "/api/drafts", {
     method: "POST",
     headers: { "content-type": "text/plain", "x-operator-token": token },
     body: JSON.stringify({ id: "must-not-be-created", title: "Unsupported content type" }),
@@ -186,14 +192,14 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const unsupportedContentTypeBody = await unsupportedContentType.json();
   assert.ok(unsupportedContentTypeBody.error.includes("application/json"));
   assert.equal(JSON.stringify(unsupportedContentTypeBody).includes(stateDir), false, "unsupported-content-type errors must not disclose local paths");
-  const oversizedBody = await fetch(base + "/api/drafts", {
+  const oversizedBody = await fetchDashboard(base + "/api/drafts", {
     method: "POST", headers, body: JSON.stringify({ payload: "x".repeat(17_000) })
   });
   assert.equal(oversizedBody.status, 413, "requests above the 16KB body limit must return Payload Too Large before parsing or mutation");
   const oversizedBodyResult = await oversizedBody.json();
   assert.match(oversizedBodyResult.error, /16KB/i);
   assert.equal(JSON.stringify(oversizedBodyResult).includes(stateDir), false, "oversized-body errors must not expose local state paths");
-  const initial = await fetch(base + "/api/state", { headers });
+  const initial = await fetchDashboard(base + "/api/state", { headers });
   assert.equal(initial.status, 200);
   const body = await initial.json();
   assert.equal(body.publishingEnabled, false);
@@ -202,9 +208,9 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(Object.hasOwn(body, "stateFile"), false, "authenticated API responses must not disclose the local state-file path");
   assert.equal(logs.includes(stateDir), false, "startup logs must not disclose the local state directory");
   assert.ok(body.blockers.some(item => /complete SonicVhibez public\/private\/unlisted history is reconciled/i.test(item)), "dashboard state must expose the live history reconciliation blocker");
-  const autonomousUnauth = await fetch(base + "/api/facebook/autonomous-status");
+  const autonomousUnauth = await fetchDashboard(base + "/api/facebook/autonomous-status");
   assert.equal(autonomousUnauth.status, 401, "autonomous publisher status must use the same operator authentication");
-  const autonomousResponse = await fetch(base + "/api/facebook/autonomous-status", { headers });
+  const autonomousResponse = await fetchDashboard(base + "/api/facebook/autonomous-status", { headers });
   assert.equal(autonomousResponse.status, 200);
   const autonomous = await autonomousResponse.json();
   assert.equal(autonomous.destination, "nature_frontiers_facebook");
@@ -214,7 +220,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.ok(Array.isArray(autonomous.blockers));
   assert.equal(typeof autonomous.queueCount, "number");
 
-  const emergencyStoppedPublish = await fetch(base + "/api/facebook/publish", {
+  const emergencyStoppedPublish = await fetchDashboard(base + "/api/facebook/publish", {
     method: "POST", headers, body: JSON.stringify({ draftId: "must-not-publish", confirmOperation: true })
   });
   const emergencyStoppedBody = await emergencyStoppedPublish.json();
@@ -224,7 +230,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const stateBeforeCampaignTests = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
   assert.equal(stateBeforeCampaignTests.facebookAttempts.length, 0, "emergency-stop rejection must not create an external-operation attempt");
 
-  const readinessResponse = await fetch(base + "/readyz");
+  const readinessResponse = await fetchDashboard(base + "/readyz");
   const readiness = await readinessResponse.json();
   assert.equal(readinessResponse.status, 503, "production readiness must fail closed while owner-controlled prerequisites are missing");
   assert.equal(readiness.ready, false);
@@ -232,25 +238,25 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.ok(Array.isArray(readiness.blockers));
   assert.ok(readiness.blockers.some(item => /long-form(?: render manifest|-render-manifest)/i.test(item)));
   assert.ok(readiness.blockers.some(item => /SONICVHIBEZ_CHANNEL_ID|channel ID/i.test(item)));
-  const noPriorReconcile = await fetch(base + "/api/uploads/reconcile", { method: "POST", headers, body: JSON.stringify({ jobId: "no-prior-job", videoPath: "README.md", metadataPath: "README.md", approvalPath: "README.md" }) });
+  const noPriorReconcile = await fetchDashboard(base + "/api/uploads/reconcile", { method: "POST", headers, body: JSON.stringify({ jobId: "no-prior-job", videoPath: "README.md", metadataPath: "README.md", approvalPath: "README.md" }) });
   const noPriorBody = await noPriorReconcile.json();
   assert.equal(noPriorReconcile.status, 409, JSON.stringify(noPriorBody));
   assert.match(noPriorBody.error, /never create a new upload/i);
-  const symlinkReconcile = await fetch(base + "/api/uploads/reconcile", { method: "POST", headers, body: JSON.stringify({ jobId: "symlink-job", videoPath: symlinkName, metadataPath: "README.md", approvalPath: "README.md" }) });
+  const symlinkReconcile = await fetchDashboard(base + "/api/uploads/reconcile", { method: "POST", headers, body: JSON.stringify({ jobId: "symlink-job", videoPath: symlinkName, metadataPath: "README.md", approvalPath: "README.md" }) });
   const symlinkBody = await symlinkReconcile.json();
   assert.equal(symlinkReconcile.status, 400, JSON.stringify(symlinkBody));
   assert.match(symlinkBody.error, /resolves outside repository root/i, "repository-relative symlinks must not expose files outside the repository");
-  const internalSymlinkReconcile = await fetch(base + "/api/uploads/reconcile", { method: "POST", headers, body: JSON.stringify({ jobId: "internal-symlink-job", videoPath: internalSymlinkName, metadataPath: "README.md", approvalPath: "README.md" }) });
+  const internalSymlinkReconcile = await fetchDashboard(base + "/api/uploads/reconcile", { method: "POST", headers, body: JSON.stringify({ jobId: "internal-symlink-job", videoPath: internalSymlinkName, metadataPath: "README.md", approvalPath: "README.md" }) });
   const internalSymlinkBody = await internalSymlinkReconcile.json();
   assert.equal(internalSymlinkReconcile.status, 400, JSON.stringify(internalSymlinkBody));
   assert.match(internalSymlinkBody.error, /must not contain symbolic links/i, "even in-repository symlinks must be rejected for evidence paths");
   const safari = body.campaigns.find(c => c.type === "safari_affiliate");
   assert.equal(safari.status, "INACTIVE");
-  const preview = await fetch(base + "/api/campaigns/manage", { method: "POST", headers, body: JSON.stringify({ campaignId: safari.id, action: "preview", destinationUrl: "https://example.com/verified-stay", disclosureText: "I may earn a commission from eligible bookings." }) });
+  const preview = await fetchDashboard(base + "/api/campaigns/manage", { method: "POST", headers, body: JSON.stringify({ campaignId: safari.id, action: "preview", destinationUrl: "https://example.com/verified-stay", disclosureText: "I may earn a commission from eligible bookings." }) });
   const previewBody = await preview.json();
   assert.equal(preview.status, 200, JSON.stringify(previewBody));
   assert.equal(previewBody.previewOnly, true);
-  const activated = await fetch(base + "/api/campaigns/manage", { method: "POST", headers, body: JSON.stringify({ campaignId: safari.id, action: "activate", confirmOwnerApproval: true }) });
+  const activated = await fetchDashboard(base + "/api/campaigns/manage", { method: "POST", headers, body: JSON.stringify({ campaignId: safari.id, action: "activate", confirmOwnerApproval: true }) });
   const activatedBody = await activated.json();
   assert.equal(activated.status, 400, JSON.stringify(activatedBody));
   assert.match(activatedBody.error, /Safari affiliate campaigns are disabled.*remain INACTIVE/i);
@@ -258,7 +264,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(afterRejectedActivation.campaigns.find(c => c.id === safari.id).status, "INACTIVE");
   assert.equal(afterRejectedActivation.audit.some(event => event.action === "CAMPAIGN_ACTIVATE" && event.campaignId === safari.id), false,
     "rejected Safari activation must not persist an activation audit event");
-  const deactivated = await fetch(base + "/api/campaigns/manage", { method: "POST", headers, body: JSON.stringify({ campaignId: safari.id, action: "deactivate" }) });
+  const deactivated = await fetchDashboard(base + "/api/campaigns/manage", { method: "POST", headers, body: JSON.stringify({ campaignId: safari.id, action: "deactivate" }) });
   const deactivatedBody = await deactivated.json();
   assert.equal(deactivated.status, 200, JSON.stringify(deactivatedBody));
   const inactiveSafari = deactivatedBody.campaign;
@@ -273,18 +279,18 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     id: "dashboard-test-draft", title: "Test wildlife planning draft", topic: "planning a wildlife video",
     contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: "2026-10-27", productUrl: "https://selar.com/0u19v8u99l"
   };
-  const created = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(draft) });
+  const created = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(draft) });
   assert.equal(created.status, 201, await created.text());
-  const duplicate = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(draft) });
+  const duplicate = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(draft) });
   assert.equal(duplicate.status, 409);
-  const conflictingSlot = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-other", title: "Conflicting Tuesday reservation" }) });
+  const conflictingSlot = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-other", title: "Conflicting Tuesday reservation" }) });
   assert.equal(conflictingSlot.status, 409, "different drafts must not reserve the same calendar slot");
   const concurrentDrafts = [
     { ...draft, id: "dashboard-concurrent-a", title: "Concurrent Tuesday reservation A", scheduledDate: "2026-11-03" },
     { ...draft, id: "dashboard-concurrent-b", title: "Concurrent Tuesday reservation B", scheduledDate: "2026-11-03" }
   ];
   const concurrentResponses = await Promise.all(concurrentDrafts.map(item =>
-    fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(item) })
+    fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(item) })
   ));
   assert.deepEqual(
     concurrentResponses.map(response => response.status).sort((a, b) => a - b),
@@ -294,18 +300,18 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const concurrentState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
   assert.equal(concurrentState.queueItems.filter(item => item.scheduledDate === "2026-11-03" && item.reservationType === "SCHEDULED_SLOT").length, 1);
   assert.equal(concurrentState.audit.filter(event => event.action === "DRAFT_CREATED" && concurrentDrafts.some(item => item.id === event.itemId)).length, 1);
-  const unsupportedDirectJob = await fetch(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify({
+  const unsupportedDirectJob = await fetchDashboard(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify({
     idempotencyKey: "draft:thursday-job", title: "Unsupported Thursday job", topic: "schedule boundary test",
     contentType: "long_form", scheduledDay: "Thursday", scheduledDate: "2026-10-29", inputReferences: []
   }) });
   assert.equal(unsupportedDirectJob.status, 409, "direct API jobs must respect the authoritative schedule, not just same-date locks");
   assert.match((await unsupportedDirectJob.json()).error, /not an authorized slot/);
-  const invalidDate = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-invalid-date", scheduledDate: "2026-02-31" }) });
+  const invalidDate = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-invalid-date", scheduledDate: "2026-02-31" }) });
   assert.equal(invalidDate.status, 400, "invalid calendar dates must be rejected");
-  const unsafe = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-unsafe", rightsConfirmed: true }) });
+  const unsafe = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-unsafe", rightsConfirmed: true }) });
   assert.equal(unsafe.status, 400);
 
-  const updatedDraftResponse = await fetch(base + "/api/drafts/update", {
+  const updatedDraftResponse = await fetchDashboard(base + "/api/drafts/update", {
     method: "POST", headers,
     body: JSON.stringify({ ...draft, title: "Updated wildlife planning draft" })
   });
@@ -318,7 +324,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     "successful draft editing must persist exactly one authenticated audit event");
 
   const beforeInvalidDraftUpdate = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
-  const invalidDraftUpdate = await fetch(base + "/api/drafts/update", {
+  const invalidDraftUpdate = await fetchDashboard(base + "/api/drafts/update", {
     method: "POST", headers,
     body: JSON.stringify({ ...draft, scheduledDate: "2026-02-31" })
   });
@@ -327,7 +333,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     "invalid calendar date must not mutate draft state or audit history");
 
   const beforeUnsafeDraftUpdate = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
-  const unsafeDraftUpdate = await fetch(base + "/api/drafts/update", {
+  const unsafeDraftUpdate = await fetchDashboard(base + "/api/drafts/update", {
     method: "POST", headers,
     body: JSON.stringify({ ...draft, rightsConfirmed: true })
   });
@@ -376,7 +382,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     scheduledDate: "2026-12-19",
     productUrl: "https://selar.com/0u19v8u99l"
   };
-  const validationDraftResponse = await fetch(base + "/api/drafts", {
+  const validationDraftResponse = await fetchDashboard(base + "/api/drafts", {
     method: "POST", headers, body: JSON.stringify(validationDraft)
   });
   const validationDraftBody = await validationDraftResponse.json();
@@ -399,20 +405,20 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   validationJob.thumbnailArtifact = { path: thumbnailRelativePath, sha256: fileSha256(validationThumbnailPath) };
   fs.writeFileSync(validationStatePath, JSON.stringify(validationState) + "\n");
   const beforeRejectedValidation = fs.readFileSync(validationStatePath);
-  const missingValidationInput = await fetch(base + "/api/jobs/validate", {
+  const missingValidationInput = await fetchDashboard(base + "/api/jobs/validate", {
     method: "POST", headers, body: JSON.stringify({})
   });
   assert.equal(missingValidationInput.status, 400, "missing job/caption parameters must be rejected");
   assert.deepEqual(fs.readFileSync(validationStatePath), beforeRejectedValidation,
     "missing validation parameters must not mutate durable state or audit history");
-  const unknownValidationJob = await fetch(base + "/api/jobs/validate", {
+  const unknownValidationJob = await fetchDashboard(base + "/api/jobs/validate", {
     method: "POST", headers,
     body: JSON.stringify({ jobId: "unknown-validation-job", captionsPath: captionsRelativePath })
   });
   assert.equal(unknownValidationJob.status, 404, "unknown validation jobs must be rejected");
   assert.deepEqual(fs.readFileSync(validationStatePath), beforeRejectedValidation,
     "unknown validation jobs must not mutate durable state or audit history");
-  const validationResponse = await fetch(base + "/api/jobs/validate", {
+  const validationResponse = await fetchDashboard(base + "/api/jobs/validate", {
     method: "POST", headers,
     body: JSON.stringify({ jobId: validationJobId, captionsPath: captionsRelativePath })
   });
@@ -427,7 +433,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     event.action === "CONTENT_JOB_VALIDATION_PASSED" && event.jobId === validationJobId
   ).length, 1, "successful technical validation must persist exactly one job-bound audit event");
   fs.appendFileSync(validationVideoPath, Buffer.from("tampered-after-validation"));
-  const tamperedValidation = await fetch(base + "/api/jobs/validate", {
+  const tamperedValidation = await fetchDashboard(base + "/api/jobs/validate", {
     method: "POST", headers,
     body: JSON.stringify({ jobId: validationJobId, captionsPath: captionsRelativePath })
   });
@@ -444,13 +450,13 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     scheduledDate: "2026-12-26",
     productUrl: "https://selar.com/0u19v8u99l"
   };
-  const transitionDraftResponse = await fetch(base + "/api/drafts", {
+  const transitionDraftResponse = await fetchDashboard(base + "/api/drafts", {
     method: "POST", headers, body: JSON.stringify(transitionDraft)
   });
   const transitionDraftBody = await transitionDraftResponse.json();
   assert.equal(transitionDraftResponse.status, 201, JSON.stringify(transitionDraftBody));
   const transitionJobId = transitionDraftBody.job.id;
-  const transitionRequests = await Promise.all([1, 2].map(() => fetch(base + "/api/jobs/transition", {
+  const transitionRequests = await Promise.all([1, 2].map(() => fetchDashboard(base + "/api/jobs/transition", {
     method: "POST", headers,
     body: JSON.stringify({ jobId: transitionJobId, nextState: "GENERATING", reason: "Concurrent transition acceptance test" })
   })));
@@ -469,7 +475,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     event.to === "GENERATING" &&
     event.actor === "test-owner@example.test"
   ).length, 1, "only the committed state transition may create an audit event");
-  const duplicateTransition = await fetch(base + "/api/jobs/transition", {
+  const duplicateTransition = await fetchDashboard(base + "/api/jobs/transition", {
     method: "POST", headers,
     body: JSON.stringify({ jobId: transitionJobId, nextState: "GENERATING", reason: "Duplicate transition must not commit" })
   });
@@ -483,13 +489,13 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.ok(saved.audit.filter(event => event.itemId === draft.id).every(event => event.actor === "test-owner@example.test"), "audit records must use the configured authenticated operator identity");
   assert.equal(saved.queueItems.find(item => item.id === draft.id).rightsConfirmed, undefined);
   const authorDraft = { id: "dashboard-test-authoring-short", title: "Evidence-led wildlife Short", topic: "Interpreting wildlife observations", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-11-07", productUrl: "https://selar.com/0u19v8u99l" };
-  const authorDraftResponse = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(authorDraft) });
+  const authorDraftResponse = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(authorDraft) });
   const authorDraftBody = await authorDraftResponse.json();
   assert.equal(authorDraftResponse.status, 201, JSON.stringify(authorDraftBody));
   const authorJob = authorDraftBody.job;
   const authorBrief = { topic: "Interpreting wildlife observations", audience: "Adults", editorialPurpose: "Explain evidence limits", sources: [researchSource], parentRecord: { contentId: "long-parent", weeklyContentCycleId: "cycle-1", format: "long_form", channel: "SonicVhibez" } };
   const concurrentAuthorResponses = await Promise.all([1, 2].map(() =>
-    fetch(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id, brief: authorBrief }) })
+    fetchDashboard(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id, brief: authorBrief }) })
   ));
   const concurrentAuthorOutcomes = await Promise.all(concurrentAuthorResponses.map(async response => ({
     status: response.status,
@@ -510,7 +516,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(authorBody.publishingEnabled, false);
   assert.equal(authorBody.job.authoring.gates.factualVerification, "PENDING");
   assert.equal(authorBody.job.authoring.gates.rightsReview, "PENDING");
-  const authorDuplicate = await fetch(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id, brief: authorBrief }) });
+  const authorDuplicate = await fetchDashboard(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id, brief: authorBrief }) });
   const authorDuplicateBody = await authorDuplicate.json();
   assert.equal(authorDuplicate.status, 200, JSON.stringify(authorDuplicateBody));
   assert.equal(authorDuplicateBody.reused, true, "identical retries after completion must reuse the persisted authoring result");
@@ -529,13 +535,13 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   for (let i = 0; i < 60; i++) {
     if (child.exitCode !== null) break;
     try {
-      const response = await fetch(base + "/healthz");
+      const response = await fetchDashboard(base + "/healthz");
       if (response.ok) { authoringServerRestarted = true; break; }
     } catch {}
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   assert.equal(authoringServerRestarted, true, "dashboard did not recover after script authoring: " + logs);
-  const recoveredAuthoringResponse = await fetch(base + "/api/state", { headers });
+  const recoveredAuthoringResponse = await fetchDashboard(base + "/api/state", { headers });
   assert.equal(recoveredAuthoringResponse.status, 200);
   const recoveredAuthoringState = await recoveredAuthoringResponse.json();
   const recoveredAuthoringJob = recoveredAuthoringState.jobs.find(item => item.id === authorJob.id);
@@ -544,7 +550,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(recoveredAuthoringJob.authoring.scriptSha256, authorBody.job.authoring.scriptSha256);
   assert.equal(providerCalls, 1, "server restart must not regenerate or re-submit the completed script");
   const approvedScriptSha256 = canonicalAuthoringScriptSha256(authorBody.job.authoring.result.script);
-  const staleScriptReview = await fetch(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify({
+  const staleScriptReview = await fetchDashboard(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify({
     jobId: authorJob.id, decision: "APPROVE", scriptSha256: "0".repeat(64),
     reason: "Reviewed factual claims against the supplied research."
   }) });
@@ -554,8 +560,8 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     reason: "Reviewed factual claims against the supplied research."
   };
   const concurrentScriptReviews = await Promise.all([
-    fetch(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify(scriptReviewPayload) }),
-    fetch(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify(scriptReviewPayload) })
+    fetchDashboard(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify(scriptReviewPayload) }),
+    fetchDashboard(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify(scriptReviewPayload) })
   ]);
   const concurrentScriptReviewBodies = await Promise.all(concurrentScriptReviews.map(response => response.json()));
   assert.ok(concurrentScriptReviews.every(response => response.status === 200),
@@ -572,7 +578,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     event.action === "SCRIPT_REVISION_APPROVED_FOR_NARRATION" && event.jobId === authorJob.id
   ).length, 1, "concurrent identical script approvals must append exactly one audit event");
   const beforeChangedScriptReview = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
-  const changedScriptReview = await fetch(base + "/api/jobs/authoring/review", {
+  const changedScriptReview = await fetchDashboard(base + "/api/jobs/authoring/review", {
     method: "POST", headers, body: JSON.stringify({
       ...scriptReviewPayload, reason: "A changed review reason must not reuse the original approval."
     })
@@ -581,24 +587,24 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     "a changed script-review reason must not reuse an existing approval receipt");
   assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), beforeChangedScriptReview,
     "a changed script-review retry must not mutate state or audit history");
-  const narrationWrongRevision = await fetch(base + "/api/jobs/narration", { method: "POST", headers, body: JSON.stringify({
+  const narrationWrongRevision = await fetchDashboard(base + "/api/jobs/narration", { method: "POST", headers, body: JSON.stringify({
     jobId: authorJob.id, scriptSha256: "0".repeat(64)
   }) });
   assert.equal(narrationWrongRevision.status, 409, "narration must reject a script revision that does not match the current draft");
-  const rejectedScriptReview = await fetch(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify({
+  const rejectedScriptReview = await fetchDashboard(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify({
     jobId: authorJob.id, decision: "REJECT", scriptSha256: approvedScriptSha256,
     reason: "Revise the narrative structure before narration."
   }) });
   const rejectedScriptReviewBody = await rejectedScriptReview.json();
   assert.equal(rejectedScriptReview.status, 200, JSON.stringify(rejectedScriptReviewBody));
   assert.equal(rejectedScriptReviewBody.job.authoring.status, "REJECTED");
-  const reauthorResponse = await fetch(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id, brief: authorBrief }) });
+  const reauthorResponse = await fetchDashboard(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id, brief: authorBrief }) });
   const reauthorBody = await reauthorResponse.json();
   assert.equal(reauthorResponse.status, 201, JSON.stringify(reauthorBody));
   assert.equal(reauthorBody.job.authoring.status, "AWAITING_HUMAN_EDITORIAL_REVIEW", "a rejected draft can be replaced by a newly generated review draft");
 
   const reauthScriptSha256 = canonicalAuthoringScriptSha256(reauthorBody.job.authoring.result.script);
-  const reauthApproval = await fetch(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify({
+  const reauthApproval = await fetchDashboard(base + "/api/jobs/authoring/review", { method: "POST", headers, body: JSON.stringify({
     jobId: authorJob.id, decision: "APPROVE", scriptSha256: reauthScriptSha256,
     reason: "Reviewed the replacement script and source mapping."
   }) });
@@ -639,19 +645,19 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     }, publishable: false, publishingEnabled: false
   };
   fs.writeFileSync(stageStatePath, JSON.stringify(stageState, null, 2), { mode: 0o600 });
-  const narrationBundleResponse = await fetch(base + "/api/jobs/narration/review?jobId=" + encodeURIComponent(authorJob.id), { headers });
+  const narrationBundleResponse = await fetchDashboard(base + "/api/jobs/narration/review?jobId=" + encodeURIComponent(authorJob.id), { headers });
   const narrationBundle = await narrationBundleResponse.json();
   assert.equal(narrationBundleResponse.status, 200, JSON.stringify(narrationBundle));
   assert.equal(narrationBundle.scriptSha256, reauthScriptSha256);
   assert.equal(narrationBundle.transcript, fixtureTranscript);
-  const audioResponse = await fetch(base + "/api/jobs/narration/audio?jobId=" + encodeURIComponent(authorJob.id), { headers });
+  const audioResponse = await fetchDashboard(base + "/api/jobs/narration/audio?jobId=" + encodeURIComponent(authorJob.id), { headers });
   assert.equal(audioResponse.status, 200);
   assert.equal(Buffer.from(await audioResponse.arrayBuffer()).toString(), fixtureAudio.toString());
 
   // Exercise both read routes concurrently and prove they never mutate state/audit.
   const narrationReadStateBefore = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
   const parallelReviewResponses = await Promise.all(Array.from({ length: 4 }, () =>
-    fetch(base + "/api/jobs/narration/review?jobId=" + encodeURIComponent(authorJob.id), { headers })
+    fetchDashboard(base + "/api/jobs/narration/review?jobId=" + encodeURIComponent(authorJob.id), { headers })
   ));
   const parallelReviewBodies = await Promise.all(parallelReviewResponses.map(response => response.json()));
   assert.ok(parallelReviewResponses.every(response => response.status === 200),
@@ -662,7 +668,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   ), "concurrent narration review reads must return the same hash-bound bundle");
 
   const parallelAudioResponses = await Promise.all(Array.from({ length: 4 }, () =>
-    fetch(base + "/api/jobs/narration/audio?jobId=" + encodeURIComponent(authorJob.id), { headers })
+    fetchDashboard(base + "/api/jobs/narration/audio?jobId=" + encodeURIComponent(authorJob.id), { headers })
   ));
   const parallelAudioBodies = await Promise.all(parallelAudioResponses.map(response => response.arrayBuffer()));
   assert.ok(parallelAudioResponses.every(response => response.status === 200),
@@ -671,7 +677,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     "concurrent audio streams must return the exact verified bytes");
   assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), narrationReadStateBefore,
     "concurrent narration reads must not mutate durable job state or append audit events");
-  const missingAttestations = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify({
+  const missingAttestations = await fetchDashboard(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify({
     jobId: authorJob.id, decision: "APPROVE", scriptSha256: reauthScriptSha256,
     audioSha256: audioArtifact.sha256, transcriptSha256: transcriptArtifact.sha256,
     captionsSha256: captionsArtifact.sha256, reportSha256: reportArtifact.sha256,
@@ -686,8 +692,8 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     reason: "Test fixture only: exercised hash and attestation checks, not a genuine listening review."
   };
   const concurrentNarrationApprovals = await Promise.all([
-    fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) }),
-    fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) })
+    fetchDashboard(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) }),
+    fetchDashboard(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) })
   ]);
   const concurrentNarrationBodies = await Promise.all(concurrentNarrationApprovals.map(response => response.json()));
   assert.ok(concurrentNarrationApprovals.every(response => response.status === 200), JSON.stringify(concurrentNarrationBodies));
@@ -698,7 +704,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(narrationApprovalBody.publishable, false, "narration approval must not imply video approval or publication");
   const afterConcurrentReviewState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
   assert.equal(afterConcurrentReviewState.audit.filter(event => event.action === "NARRATION_APPROVED_FOR_RENDER" && event.jobId === authorJob.id).length, 1, "concurrent exact submissions must create one audit decision");
-  const narrationApprovalRetry = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) });
+  const narrationApprovalRetry = await fetchDashboard(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) });
   const narrationApprovalRetryBody = await narrationApprovalRetry.json();
   assert.equal(narrationApprovalRetry.status, 200, JSON.stringify(narrationApprovalRetryBody));
   assert.equal(narrationApprovalRetryBody.reused, true, "an exact retry after a timeout must reuse the persisted narration approval");
@@ -718,18 +724,18 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   for (let i = 0; i < 60; i++) {
     if (child.exitCode !== null) break;
     try {
-      const response = await fetch(base + "/healthz");
+      const response = await fetchDashboard(base + "/healthz");
       if (response.ok) { narrationServerRestarted = true; break; }
     } catch {}
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   assert.equal(narrationServerRestarted, true, "dashboard did not recover the narration review receipt: " + logs);
-  const recoveredNarrationBundleResponse = await fetch(base + "/api/jobs/narration/review?jobId=" + encodeURIComponent(authorJob.id), { headers });
+  const recoveredNarrationBundleResponse = await fetchDashboard(base + "/api/jobs/narration/review?jobId=" + encodeURIComponent(authorJob.id), { headers });
   assert.equal(recoveredNarrationBundleResponse.status, 200);
   const recoveredNarrationBundle = await recoveredNarrationBundleResponse.json();
   assert.equal(recoveredNarrationBundle.stageStatus, "APPROVED_FOR_RENDER");
   assert.equal(recoveredNarrationBundle.narrationApproval.approvalSha256, narrationApprovalBody.narrationReview.approvalSha256);
-  const recoveredNarrationAudio = await fetch(base + "/api/jobs/narration/audio?jobId=" + encodeURIComponent(authorJob.id), { headers });
+  const recoveredNarrationAudio = await fetchDashboard(base + "/api/jobs/narration/audio?jobId=" + encodeURIComponent(authorJob.id), { headers });
   assert.equal(recoveredNarrationAudio.status, 200, "the exact approved narration audio must remain readable after restart");
   assert.ok(Number(recoveredNarrationAudio.headers.get("content-length")) > 0);
   const afterNarrationRestart = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
@@ -737,12 +743,12 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.deepEqual(afterNarrationRestart.jobs.find(job => job.id === authorJob.id).authoring.narrationApproval,
     beforeNarrationRestart.jobs.find(job => job.id === authorJob.id).authoring.narrationApproval,
     "the hash-bound narration review receipt must survive restart unchanged");
-  const changedNarrationRetry = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify({ ...narrationReviewPayload, reason: "Changed review reason." }) });
+  const changedNarrationRetry = await fetchDashboard(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify({ ...narrationReviewPayload, reason: "Changed review reason." }) });
   assert.equal(changedNarrationRetry.status, 409, "a changed review cannot overwrite a finalized narration approval");
   fs.writeFileSync(path.join(process.cwd(), audioArtifact.path), "tampered after approval");
-  const tamperedNarrationRetry = await fetch(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) });
+  const tamperedNarrationRetry = await fetchDashboard(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) });
   assert.equal(tamperedNarrationRetry.status, 409, "an exact retry must not replay an approval receipt after an artifact has changed");
-  const authorRenderBypass = await fetch(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id }) });
+  const authorRenderBypass = await fetchDashboard(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id }) });
   const authorRenderBypassBody = await authorRenderBypass.json();
   assert.equal(authorRenderBypass.status, 409, "a generated script must not bypass missing narration/caption/scene integration");
   assert.equal(authorRenderBypassBody.publishable, false);
@@ -755,29 +761,29 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const productionJob = saved.jobs.find(job => job.kind === "CONTENT_PRODUCTION" && job.idempotencyKey === "draft:" + draft.id);
   assert.ok(productionJob);
   assert.equal(productionJob.transitionHistory[0].actor, "test-owner@example.test");
-  const claim = await fetch(base + "/api/jobs/lease/claim", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, workerId: "test-worker-a", leaseMs: 10_000 }) });
+  const claim = await fetchDashboard(base + "/api/jobs/lease/claim", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, workerId: "test-worker-a", leaseMs: 10_000 }) });
   const claimBody = await claim.json();
   assert.equal(claim.status, 200, JSON.stringify(claimBody));
   assert.equal(claimBody.job.state, "GENERATING");
-  const competingClaim = await fetch(base + "/api/jobs/lease/claim", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, workerId: "test-worker-b", leaseMs: 10_000 }) });
+  const competingClaim = await fetchDashboard(base + "/api/jobs/lease/claim", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, workerId: "test-worker-b", leaseMs: 10_000 }) });
   assert.equal(competingClaim.status, 400, "an active lease must prevent a concurrent worker claim");
-  const heartbeat = await fetch(base + "/api/jobs/lease/heartbeat", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, leaseToken: claimBody.leaseToken, leaseMs: 10_000 }) });
+  const heartbeat = await fetchDashboard(base + "/api/jobs/lease/heartbeat", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, leaseToken: claimBody.leaseToken, leaseMs: 10_000 }) });
   assert.equal(heartbeat.status, 200);
-  const fakeGeneration = await fetch(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, leaseToken: claimBody.leaseToken, nextState: "GENERATED", metadataPath: "content/nonexistent-test-metadata.json", result: { outputArtifacts: [{ path: "media/test-only-nonexistent.mp4", sha256: "a".repeat(64) }], metadataVersion: "test-only-metadata-version" } }) });
+  const fakeGeneration = await fetchDashboard(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, leaseToken: claimBody.leaseToken, nextState: "GENERATED", metadataPath: "content/nonexistent-test-metadata.json", result: { outputArtifacts: [{ path: "media/test-only-nonexistent.mp4", sha256: "a".repeat(64) }], metadataVersion: "test-only-metadata-version" } }) });
   assert.equal(fakeGeneration.status, 400, "a nonexistent output must never be recorded as generated");
   const failedCompletionPayload = { jobId: productionJob.id, leaseToken: claimBody.leaseToken, nextState: "FAILED", result: { errorDetails: { retryable: false, message: "test fixture intentionally has no media artifact" } } };
-  const failed = await fetch(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify(failedCompletionPayload) });
+  const failed = await fetchDashboard(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify(failedCompletionPayload) });
   const failedBody = await failed.json();
   assert.equal(failed.status, 200, JSON.stringify(failedBody));
   assert.equal(failedBody.job.state, "FAILED");
   const afterFailedCompletion = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
   assert.equal(JSON.parse(afterFailedCompletion.toString("utf8")).audit.filter(event => event.action === "WORKER_STAGE_COMPLETED" && event.jobId === productionJob.id).length, 1);
-  const failedRetry = await fetch(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify(failedCompletionPayload) });
+  const failedRetry = await fetchDashboard(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify(failedCompletionPayload) });
   const failedRetryBody = await failedRetry.json();
   assert.equal(failedRetry.status, 200, JSON.stringify(failedRetryBody));
   assert.equal(failedRetryBody.idempotent, true, "an exact worker completion retry must reuse its durable receipt");
   assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), afterFailedCompletion, "an exact worker completion retry must not duplicate state or audit writes");
-  const changedCompletion = await fetch(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify({ ...failedCompletionPayload, result: { errorDetails: { retryable: false, message: "different completion result" } } }) });
+  const changedCompletion = await fetchDashboard(base + "/api/jobs/lease/complete", { method: "POST", headers, body: JSON.stringify({ ...failedCompletionPayload, result: { errorDetails: { retryable: false, message: "different completion result" } } }) });
   assert.equal(changedCompletion.status, 409, "a reused lease token cannot complete a different result");
   assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), afterFailedCompletion, "a conflicting completion retry must preserve state and audit bytes");
 
@@ -790,14 +796,14 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     scheduledDate: "2026-11-21",
     productUrl: "https://selar.com/0u19v8u99l"
   };
-  const concurrentDraftResponse = await fetch(base + "/api/drafts", {
+  const concurrentDraftResponse = await fetchDashboard(base + "/api/drafts", {
     method: "POST", headers, body: JSON.stringify(concurrentDraft)
   });
   const concurrentDraftBody = await concurrentDraftResponse.json();
   assert.equal(concurrentDraftResponse.status, 201, JSON.stringify(concurrentDraftBody));
   const concurrentJob = concurrentDraftBody.job;
   const concurrentClaims = await Promise.all(["worker-race-a", "worker-race-b"].map(workerId =>
-    fetch(base + "/api/jobs/lease/claim", {
+    fetchDashboard(base + "/api/jobs/lease/claim", {
       method: "POST",
       headers,
       body: JSON.stringify({ jobId: concurrentJob.id, workerId, leaseMs: 10_000 })
@@ -830,7 +836,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     productUrl: "https://selar.com/0u19v8u99l"
   };
   const duplicateRaceResponses = await Promise.all([1, 2].map(() =>
-    fetch(base + "/api/drafts", {
+    fetchDashboard(base + "/api/drafts", {
       method: "POST", headers, body: JSON.stringify(duplicateRaceDraft)
     })
   ));
@@ -845,14 +851,14 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     "the queue must contain exactly one draft after concurrent duplicate submission");
   assert.equal(duplicateRaceState.jobs.filter(job => job.idempotencyKey === "draft:" + duplicateRaceDraft.id).length, 1,
     "concurrent duplicate submission must not create multiple production jobs");
-  const forgedReview = await fetch(base + "/api/jobs/transition", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, nextState: "AWAITING_HUMAN_REVIEW", reason: "attempted bypass" }) });
+  const forgedReview = await fetchDashboard(base + "/api/jobs/transition", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, nextState: "AWAITING_HUMAN_REVIEW", reason: "attempted bypass" }) });
   assert.equal(forgedReview.status, 400, "worker output alone cannot bypass the rights-evidence gate");
   const shortDraft = { id: "dashboard-test-render-short", title: "Test Short render attempt", topic: "ethical wildlife filming", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-24", productUrl: "https://selar.com/0u19v8u99l" };
-  const shortCreated = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(shortDraft) });
+  const shortCreated = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(shortDraft) });
   const shortCreatedBody = await shortCreated.json();
   assert.equal(shortCreated.status, 201, JSON.stringify(shortCreatedBody));
   const renderJob = shortCreatedBody.job;
-  const renderAttempt = await fetch(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: renderJob.id }) });
+  const renderAttempt = await fetchDashboard(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: renderJob.id }) });
   const renderAttemptBody = await renderAttempt.json();
   assert.equal(renderAttempt.status, 409, JSON.stringify(renderAttemptBody));
   assert.match(renderAttemptBody.error, /legacy fixed-manifest rendering is disabled/i);
@@ -875,7 +881,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     topic: "wildlife observation", contentType: "short", scheduledDay: "Saturday",
     scheduledDate: "2026-10-31", productUrl: "https://selar.com/0u19v8u99l"
   };
-  const protectedCreated = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(protectedDraft) });
+  const protectedCreated = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(protectedDraft) });
   const protectedCreatedBody = await protectedCreated.json();
   assert.equal(protectedCreated.status, 201, JSON.stringify(protectedCreatedBody));
   const protectedJob = protectedCreatedBody.job;
@@ -892,7 +898,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   fs.mkdirSync(protectedDirectory, { recursive: true });
   fs.writeFileSync(protectedOutput, protectedBytes);
   try {
-    const protectedAttempt = await fetch(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: protectedJob.id }) });
+    const protectedAttempt = await fetchDashboard(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: protectedJob.id }) });
     const protectedBody = await protectedAttempt.json();
     assert.equal(protectedAttempt.status, 409, JSON.stringify(protectedBody));
     assert.equal(protectedBody.recoveryRequired, true);
@@ -912,7 +918,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     topic: "wildlife observation", contentType: "short", scheduledDay: "Saturday",
     scheduledDate: "2026-11-14", productUrl: "https://selar.com/0u19v8u99l"
   };
-  const manifestCreated = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(manifestDraft) });
+  const manifestCreated = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(manifestDraft) });
   const manifestCreatedBody = await manifestCreated.json();
   assert.equal(manifestCreated.status, 201, JSON.stringify(manifestCreatedBody));
   const manifestJob = manifestCreatedBody.job;
@@ -927,7 +933,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   fs.mkdirSync(manifestDirectory, { recursive: true });
   fs.writeFileSync(manifestPath, retainedManifestBytes, { flag: "wx", mode: 0o600 });
   try {
-    const manifestAttempt = await fetch(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: manifestJob.id }) });
+    const manifestAttempt = await fetchDashboard(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: manifestJob.id }) });
     const manifestBody = await manifestAttempt.json();
     assert.equal(manifestAttempt.status, 409, JSON.stringify(manifestBody));
     assert.equal(manifestBody.recoveryRequired, true);
@@ -956,7 +962,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     id: "dashboard-test-distant-draft", title: "Distant Saturday draft", topic: "creator workflow planning",
     contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-31", productUrl: "https://selar.com/0u19v8u99l"
   };
-  const blockedByExistingCollision = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(distantDraft) });
+  const blockedByExistingCollision = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(distantDraft) });
   const collisionBody = await blockedByExistingCollision.json();
   assert.equal(blockedByExistingCollision.status, 409, JSON.stringify(collisionBody));
   assert.ok(collisionBody.blockers.some(error => /existing publication date collision/i.test(error)), "pre-existing same-day queue collisions must fail closed");
@@ -1155,11 +1161,11 @@ test("dashboard startup repairs legacy state that had an active Safari campaign"
   let ready = false;
   for (let i = 0; i < 60; i++) {
     if (child.exitCode !== null) break;
-    try { const response = await fetch(base + "/healthz"); if (response.ok) { ready = true; break; } } catch {}
+    try { const response = await fetchDashboard(base + "/healthz"); if (response.ok) { ready = true; break; } } catch {}
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   assert.equal(ready, true, "server did not start with legacy fixture: " + logs);
-  const response = await fetch(base + "/api/state", { headers: { "x-operator-token": token } });
+  const response = await fetchDashboard(base + "/api/state", { headers: { "x-operator-token": token } });
   assert.equal(response.status, 200);
   const body = await response.json();
   const repaired = body.campaigns.find(campaign => campaign.type === "safari_affiliate");
@@ -1203,7 +1209,7 @@ test("every protected dashboard API route rejects missing and invalid operator a
     for (let attempt = 0; attempt < 100; attempt++) {
       if (child.exitCode !== null) break;
       try {
-        const response = await fetch(base + "/healthz", { signal: AbortSignal.timeout(500) });
+        const response = await fetchDashboard(base + "/healthz", { signal: AbortSignal.timeout(500) });
         if (response.status === 200) {
           healthy = true;
           break;
@@ -1229,7 +1235,7 @@ test("every protected dashboard API route rejects missing and invalid operator a
         { label: "missing token", headers: { "content-type": "application/json" } },
         { label: "invalid token", headers: { "content-type": "application/json", "x-operator-token": "invalid-token" } },
       ]) {
-        const response = await fetch(base + route.path, {
+        const response = await fetchDashboard(base + route.path, {
           method: route.method,
           headers: authCase.headers,
           body: "{}",
@@ -1255,7 +1261,7 @@ test("every protected dashboard API route rejects missing and invalid operator a
         { label: "missing token", headers: {} },
         { label: "invalid token", headers: { "x-operator-token": "invalid-token" } },
       ]) {
-        const response = await fetch(base + route.path, {
+        const response = await fetchDashboard(base + route.path, {
           method: "GET",
           headers: authCase.headers,
           signal: AbortSignal.timeout(3000),
@@ -1321,7 +1327,7 @@ test("all dashboard POST routes reject empty operation payloads without mutating
   for (let attempt = 0; attempt < 60; attempt++) {
     if (child.exitCode !== null) break;
     try {
-      const response = await fetch(base + "/healthz");
+      const response = await fetchDashboard(base + "/healthz");
       if (response.ok) { ready = true; break; }
     } catch {}
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -1363,7 +1369,7 @@ test("all dashboard POST routes reject empty operation payloads without mutating
   const headers = { "content-type": "application/json", "x-operator-token": token };
 
   for (const route of routes) {
-    const response = await fetch(base + route, {
+    const response = await fetchDashboard(base + route, {
       method: "POST",
       headers,
       body: "{}"
@@ -1416,7 +1422,7 @@ test("read-only Facebook idea, connection-state and task endpoints return truthf
   for (let attempt = 0; attempt < 60; attempt++) {
     if (child.exitCode !== null) break;
     try {
-      const response = await fetch(base + "/healthz");
+      const response = await fetchDashboard(base + "/healthz");
       if (response.ok) { ready = true; break; }
     } catch {}
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -1427,15 +1433,15 @@ test("read-only Facebook idea, connection-state and task endpoints return truthf
   const stateFile = path.join(stateDir, "dashboard-state.json");
   const originalState = fs.readFileSync(stateFile, "utf8");
 
-  const missingDate = await fetch(base + "/api/facebook/idea", { headers });
+  const missingDate = await fetchDashboard(base + "/api/facebook/idea", { headers });
   assert.equal(missingDate.status, 400);
   assert.match((await missingDate.json()).error, /date is required/i);
 
-  const invalidDate = await fetch(base + "/api/facebook/idea?date=2026-02-30", { headers });
+  const invalidDate = await fetchDashboard(base + "/api/facebook/idea?date=2026-02-30", { headers });
   assert.equal(invalidDate.status, 400);
   assert.match((await invalidDate.json()).error, /date is invalid/i);
 
-  const ideaResponse = await fetch(base + "/api/facebook/idea?date=2026-10-31", { headers });
+  const ideaResponse = await fetchDashboard(base + "/api/facebook/idea?date=2026-10-31", { headers });
   assert.equal(ideaResponse.status, 200);
   const ideaBody = await ideaResponse.json();
   assert.equal(ideaBody.idea.date, "2026-10-31");
@@ -1443,7 +1449,7 @@ test("read-only Facebook idea, connection-state and task endpoints return truthf
   assert.equal(ideaBody.publishReady, false);
   assert.equal(ideaBody.publishingEnabled, false);
 
-  const connectionResponse = await fetch(base + "/api/facebook/state", { headers });
+  const connectionResponse = await fetchDashboard(base + "/api/facebook/state", { headers });
   assert.equal(connectionResponse.status, 200);
   const connection = await connectionResponse.json();
   assert.equal(connection.publishingEnabled, false);
@@ -1453,7 +1459,7 @@ test("read-only Facebook idea, connection-state and task endpoints return truthf
   assert.ok(Array.isArray(connection.blockers));
   assert.ok(connection.blockers.length > 0);
 
-  const tasksResponse = await fetch(base + "/api/tasks", { headers });
+  const tasksResponse = await fetchDashboard(base + "/api/tasks", { headers });
   assert.equal(tasksResponse.status, 200);
   const tasks = await tasksResponse.json();
   assert.equal(tasks.publicPublishingEnabled, false);
