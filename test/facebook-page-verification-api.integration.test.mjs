@@ -102,6 +102,28 @@ test("mocked Meta Page verification persists identity, permission and audit evid
   const afterRestart = JSON.parse(fs.readFileSync(statePath, "utf8"));
   assert.equal(afterRestart.audit.filter(event => event.action === "FACEBOOK_PAGE_IDENTITY_VERIFIED").length, 2);
 
+  // The provider credentials and verified identity are deliberately not
+  // sufficient to publish: the owner-controlled emergency stop, publishing
+  // switch and dry-run defaults remain active in the real repository config.
+  const beforeBlockedPublish = fs.readFileSync(statePath);
+  const providerTraceBeforePublish = fs.readFileSync(tracePath);
+  const blockedPublishResponses = await Promise.all([1, 2].map(() =>
+    fetch(server.base + "/api/facebook/publish", {
+      method: "POST", headers: server.headers,
+      body: JSON.stringify({ draftId: "not-authorized-for-publication", confirmOperation: true })
+    })
+  ));
+  assert.deepEqual(blockedPublishResponses.map(response => response.status), [409, 409]);
+  const blockedPublishBodies = await Promise.all(blockedPublishResponses.map(response => response.json()));
+  assert.ok(blockedPublishBodies.every(body => body.publishingEnabled === false && body.blockers.some(item => /emergency stop is active/i.test(item))));
+  assert.deepEqual(fs.readFileSync(statePath), beforeBlockedPublish, "disabled publication must not create attempts or audit events");
+  assert.deepEqual(fs.readFileSync(tracePath), providerTraceBeforePublish, "disabled publication must not call the Meta provider");
+
+  await stopDashboard(server);
+  server = await startDashboard({ stateDir, token, pageId, pageToken, userToken, tracePath });
+  const afterBlockedPublishRestart = fs.readFileSync(statePath);
+  assert.deepEqual(afterBlockedPublishRestart, beforeBlockedPublish, "disabled publication remains a no-op after restart");
+
   // A provider permission failure must not mutate the last verified record or audit.
   await stopDashboard(server);
   server = await startDashboard({ stateDir, token, pageId, pageToken, userToken, tracePath, failMode: "missing-permission" });
