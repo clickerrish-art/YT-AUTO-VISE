@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createServer } from "node:http";
-import { runWorkerCycle } from "../scripts/worker-runner.mjs";
+import { runWorker, runWorkerCycle } from "../scripts/worker-runner.mjs";
 
 const token = "worker-test-token-" + "x".repeat(32);
 const workerId = "worker-integration-test";
@@ -95,4 +95,31 @@ test("worker fails closed when the dispatch API rejects its credential", async t
   const baseUrl = await listen(server);
   t.after(() => new Promise(resolve => server.close(resolve)));
   await assert.rejects(runWorkerCycle({ baseUrl, token, workerId }), /HTTP 401/);
+});
+
+
+test("worker stops its polling wait promptly after a shutdown signal", async t => {
+  const server = createServer((req, res) => {
+    res.setHeader("content-type", "application/json");
+    res.end(JSON.stringify({ jobs: [], queuedCount: 0, queuedWithoutApprovedAuthoring: 0, queuedWithoutApprovedRenderPlan: 0 }));
+  });
+  const baseUrl = await listen(server);
+  t.after(() => new Promise(resolve => server.close(resolve)));
+  let stopping = false;
+  let cycles = 0;
+  const startedAt = Date.now();
+  await runWorker({
+    baseUrl,
+    token,
+    workerId,
+    pollIntervalMs: 60_000,
+    once: false,
+    onCycle: () => {
+      cycles += 1;
+      setTimeout(() => { stopping = true; }, 25);
+    },
+    shouldStop: () => stopping
+  });
+  assert.equal(cycles, 1);
+  assert.ok(Date.now() - startedAt < 1_000, "worker shutdown should not wait for the full polling interval");
 });
