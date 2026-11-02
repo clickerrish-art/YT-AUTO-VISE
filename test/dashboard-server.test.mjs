@@ -9,6 +9,19 @@ import crypto from "node:crypto";
 import { canonicalAuthoringScriptSha256 } from "../scripts/authoring-production-pipeline.mjs";
 import { inventoryDashboardSources } from "../scripts/dashboard-inventory.mjs";
 
+async function reservePort() {
+  const server = createServer();
+  await new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", resolve);
+  });
+  const port = server.address().port;
+  await new Promise((resolve, reject) => {
+    server.close(error => error ? reject(error) : resolve());
+  });
+  return port;
+}
+
 test("dashboard API authenticates operators, persists real drafts, and cannot grant approval", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-"));
   let narrationFixtureDir = null;
@@ -51,7 +64,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   });
   await new Promise(resolve => provider.listen(0, "127.0.0.1", resolve));
   const providerPort = provider.address().port;
-  const port = 18000 + Math.floor(Math.random() * 10000);
+  const port = await reservePort();
   const token = "test-token-" + "x".repeat(40);
   const serverEnv = { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, UPLOAD_LOG_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1", SCRIPT_GENERATION_ENDPOINT: `http://127.0.0.1:${providerPort}/v1/chat/completions`, SCRIPT_GENERATION_TIMEOUT_MS: "5000" };
   let child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
@@ -964,7 +977,7 @@ test("dashboard refuses to start when persisted Facebook history is malformed", 
     facebookPosts: [],
     facebookAttempts: []
   }) + "\n", { mode: 0o600 });
-  const port = 28000 + Math.floor(Math.random() * 10000);
+  const port = await reservePort();
   const token = "test-token-" + "y".repeat(40);
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
     env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" },
@@ -994,7 +1007,7 @@ test("dashboard refuses startup while an interrupted restore journal exists", as
     version: 1,
     entries: []
   }) + "\n", { mode: 0o600 });
-  const port = 18000 + Math.floor(Math.random() * 10000);
+  const port = await reservePort();
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
     env: {
       ...process.env,
@@ -1033,7 +1046,7 @@ test("dashboard refuses a symlinked persisted state file at startup", async (t) 
   const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-symlink-target-"));
   const outsideFile = path.join(outsideDir, "preserved.json");
   const stateFile = path.join(stateDir, "dashboard-state.json");
-  const port = 28000 + Math.floor(Math.random() * 10000);
+  const port = await reservePort();
   fs.writeFileSync(outsideFile, JSON.stringify({ sentinel: "do-not-touch" }) + "\n", { mode: 0o600 });
   fs.symlinkSync(outsideFile, stateFile);
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
@@ -1065,7 +1078,7 @@ test("dashboard refuses a state directory beneath a symlink before creating nest
   const link = path.join(root, "state-link");
   fs.symlinkSync(outside, link, "dir");
   const stateDir = path.join(link, "new-state");
-  const port = 18000 + Math.floor(Math.random() * 10000);
+  const port = await reservePort();
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
     env: {
       ...process.env,
@@ -1106,7 +1119,7 @@ test("dashboard refuses a state directory beneath a symlink before creating nest
 
 test("dashboard startup repairs legacy state that had an active Safari campaign", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-safari-migration-"));
-  const port = 28000 + Math.floor(Math.random() * 10000);
+  const port = await reservePort();
   const token = "test-token-" + "s".repeat(40);
   const queue = JSON.parse(fs.readFileSync(path.join(process.cwd(), "content/queue.json"), "utf8"));
   const campaignConfig = JSON.parse(fs.readFileSync(path.join(process.cwd(), "config/campaigns.json"), "utf8"));
@@ -1167,7 +1180,7 @@ test("dashboard startup repairs legacy state that had an active Safari campaign"
 test("every protected dashboard API route rejects missing and invalid operator authentication", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-auth-matrix-"));
   const token = "test-token-" + "a".repeat(48);
-  const port = 20000 + Math.floor(Math.random() * 20000);
+  const port = await reservePort();
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
     env: {
       ...process.env,
@@ -1277,7 +1290,7 @@ test("every protected dashboard API route rejects missing and invalid operator a
 
 test("all dashboard POST routes reject empty operation payloads without mutating persisted state", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-route-matrix-"));
-  const port = 18000 + Math.floor(Math.random() * 10000);
+  const port = await reservePort();
   const token = "route-matrix-token-" + "x".repeat(32);
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
     env: {
@@ -1372,7 +1385,7 @@ test("all dashboard POST routes reject empty operation payloads without mutating
 
 test("read-only Facebook idea, connection-state and task endpoints return truthful safe states", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-readonly-"));
-  const port = 18000 + Math.floor(Math.random() * 10000);
+  const port = await reservePort();
   const token = "readonly-route-token-" + "x".repeat(32);
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
     env: {
