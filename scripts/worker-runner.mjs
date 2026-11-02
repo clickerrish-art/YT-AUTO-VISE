@@ -1,10 +1,72 @@
 #!/usr/bin/env node
 import { pathToFileURL } from "node:url";
+import fs from "node:fs";
+import path from "node:path";
+import crypto from "node:crypto";
+import { atomicWriteJson } from "./atomic-json-file.mjs";
+import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
 
 const DEFAULT_API_URL = "http://127.0.0.1:8787";
 const DEFAULT_POLL_INTERVAL_MS = 5_000;
 const MIN_POLL_INTERVAL_MS = 1_000;
 const MAX_POLL_INTERVAL_MS = 60_000;
+const COOLDOWN_SCHEMA_VERSION = 1;
+
+function cooldownStatePath(workerId, configuredPath, stateDirectory) {
+  if (configuredPath !== undefined && configuredPath !== null && String(configuredPath).trim()) {
+    const target = path.resolve(String(configuredPath));
+    ensureSafeDirectoryPath(path.dirname(target), "Worker cooldown state parent directory");
+    return target;
+  }
+  const directory = ensureSafeDirectoryPath(path.resolve(stateDirectory ?? "run-logs"), "Worker cooldown state directory");
+  const identity = crypto.createHash("sha256").update(workerId).digest("hex").slice(0, 20);
+  return path.join(directory, "worker-backoff-" + identity + ".json");
+}
+
+function loadCooldowns(statePath, workerId) {
+  let stat;
+  try {
+    stat = fs.lstatSync(statePath);
+  } catch (error) {
+    if (error?.code === "ENOENT") return new Map();
+    throw error;
+  }
+  if (stat.isSymbolicLink() || !stat.isFile()) {
+    throw new Error("Worker cooldown state must be a regular file; refusing an unsafe path");
+  }
+  let parsed;
+  try {
+    parsed = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  } catch (error) {
+    throw new Error("Worker cooldown state is unreadable or corrupt; refusing to reset retry backoff", { cause: error });
+  }
+  if (parsed?.schemaVersion !== COOLDOWN_SCHEMA_VERSION || parsed.workerId !== workerId ||
+      !parsed.cooldowns || typeof parsed.cooldowns !== "object" || Array.isArray(parsed.cooldowns)) {
+    throw new Error("Worker cooldown state has an unsupported schema or belongs to a different worker");
+  }
+  const cooldowns = new Map();
+  for (const [jobId, value] of Object.entries(parsed.cooldowns)) {
+    if (!jobId || !value || !Number.isInteger(value.attempts) || value.attempts < 1 || value.attempts > 20 ||
+        !Number.isSafeInteger(value.nextAttemptAt) || value.nextAttemptAt <= 0) {
+      throw new Error("Worker cooldown state contains an invalid retry record; refusing to retry jobs early");
+    }
+    cooldowns.set(jobId, { attempts: value.attempts, nextAttemptAt: value.nextAttemptAt });
+  }
+  return cooldowns;
+}
+
+function persistCooldowns(statePath, workerId, cooldowns) {
+  const records = Object.fromEntries([...cooldowns.entries()].map(([jobId, value]) => [jobId, {
+    attempts: value.attempts,
+    nextAttemptAt: value.nextAttemptAt
+  }]));
+  atomicWriteJson(statePath, {
+    schemaVersion: COOLDOWN_SCHEMA_VERSION,
+    workerId,
+    updatedAt: new Date().toISOString(),
+    cooldowns: records
+  }, { mode: 0o600 });
+}
 
 function validateConfiguration({ baseUrl, token, workerId, pollIntervalMs }) {
   let parsed;
@@ -37,7 +99,7 @@ async function requestJson(fetchImpl, url, options, timeoutMs = 15_000) {
   return { status: response.status, payload };
 }
 
-export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerId, fetchImpl = fetch, limit = 20, cooldowns = new Map() }) {
+export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerId, fetchImpl = fetch, limit = 20, cooldowns = new Map(), onCooldownsChanged = () => {} }) {
   const origin = validateConfiguration({ baseUrl, token, workerId, pollIntervalMs: DEFAULT_POLL_INTERVAL_MS });
   if (!Number.isInteger(limit) || limit < 1 || limit > 100) throw new Error("worker dispatch limit must be an integer from 1 to 100");
   const headers = { "x-worker-token": token, "x-worker-id": workerId };
@@ -60,10 +122,12 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
     }, 15 * 60_000);
     if (dispatched.status === 200) {
       cooldowns.delete(job.id);
+      onCooldownsChanged(cooldowns);
     } else {
-      const attempts = (cooldowns.get(job.id)?.attempts ?? 0) + 1;
+      const attempts = Math.min(20, (cooldowns.get(job.id)?.attempts ?? 0) + 1);
       const delayMs = Math.min(15 * 60_000, 30_000 * (2 ** Math.max(0, attempts - 1)));
       cooldowns.set(job.id, { attempts, nextAttemptAt: Date.now() + delayMs });
+      onCooldownsChanged(cooldowns);
     }
     results.push({
       jobId: job.id,
@@ -104,13 +168,17 @@ export async function runWorker({
   once = process.argv.includes("--once"),
   onCycle = result => console.log(JSON.stringify({ event: "worker_cycle_completed", ...result })),
   onError = error => console.error(JSON.stringify({ event: "worker_cycle_failed", message: String(error?.message ?? error).slice(0, 500) })),
-  shouldStop = () => false
+  shouldStop = () => false,
+  cooldownStatePath: configuredCooldownStatePath = process.env.WORKER_BACKOFF_STATE_PATH,
+  stateDirectory = process.env.WORKER_STATE_DIR ?? "run-logs"
 } = {}) {
   validateConfiguration({ baseUrl, token, workerId, pollIntervalMs });
-  const cooldowns = new Map();
+  const statePath = cooldownStatePath(workerId, configuredCooldownStatePath, stateDirectory);
+  const cooldowns = loadCooldowns(statePath, workerId);
+  const persist = () => persistCooldowns(statePath, workerId, cooldowns);
   do {
     try {
-      const result = await runWorkerCycle({ baseUrl, token, workerId, cooldowns });
+      const result = await runWorkerCycle({ baseUrl, token, workerId, cooldowns, onCooldownsChanged: persist });
       onCycle(result);
     } catch (error) {
       onError(error);
