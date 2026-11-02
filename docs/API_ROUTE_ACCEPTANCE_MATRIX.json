@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-02T09:32:16.320+02:00",
+  "generatedAt": "2026-11-02T09:39:05.318+02:00",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "976baed2ecae5c5674edaa8d87ddf58dc2302d25",
+  "testedSourceTestSha": "fadf7ed58d8d1be5dc2e7999152601702df58788",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -14,7 +14,7 @@
       "GET /healthz",
       "GET /readyz"
     ],
-    "branchAheadBy": 2466,
+    "branchAheadBy": 2468,
     "branchBehindBy": 2,
     "changedFiles": 205,
     "branchProtectionEnabled": false
@@ -72,21 +72,21 @@
     "taskRunnerBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187",
     "narrationReconciliationSuccess": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/3a590759a525f1b4bf365f6edd715c38dee6e327/test/dashboard-narration-reconciliation-recovery.integration.test.mjs",
     "narrationReconciliationAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317411877",
-    "latestExactSourceCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/976baed2ecae5c5674edaa8d87ddf58dc2302d25",
-    "latestExactSourceAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41406591894",
-    "latestExactSourceDashboard": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41406591946",
-    "latestExactSourceLockfile": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41406582526",
-    "latestExactSourceContentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41406591908",
-    "latestExactSourceMetadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41406591973",
-    "latestExactSourceBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41406582514",
-    "latestExactSourceInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41406591901",
-    "latestExactSourceNatureFrontiersDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41406591931",
-    "latestExactSourceReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41406591895",
+    "latestExactSourceCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fadf7ed58d8d1be5dc2e7999152601702df58788",
+    "latestExactSourceAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405492",
+    "latestExactSourceDashboard": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405548",
+    "latestExactSourceLockfile": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407400521",
+    "latestExactSourceContentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405429",
+    "latestExactSourceMetadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405401",
+    "latestExactSourceBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407400530",
+    "latestExactSourceInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405498",
+    "latestExactSourceNatureFrontiersDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405395",
+    "latestExactSourceReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405453",
     "facebookReviewRetryRegression": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805",
-    "narrationConcurrencyTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/976baed2ecae5c5674edaa8d87ddf58dc2302d25/browser-tests/dashboard.spec.mjs",
-    "narrationConcurrencyCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41406591946",
-    "dashboardServerPortIsolationTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/976baed2ecae5c5674edaa8d87ddf58dc2302d25/test/dashboard-server.test.mjs",
-    "dashboardServerPortIsolationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41406582526"
+    "narrationConcurrencyTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/fadf7ed58d8d1be5dc2e7999152601702df58788/browser-tests/dashboard.spec.mjs",
+    "narrationConcurrencyCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405548",
+    "dashboardServerPortIsolationTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/fadf7ed58d8d1be5dc2e7999152601702df58788/test/dashboard-server.test.mjs",
+    "dashboardServerPortIsolationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407400521"
   },
   "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 28 of 35 routes as PASS, three as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. POST /api/jobs/narration now has exact-SHA real-dashboard concurrency acceptance: two simultaneous identical requests create one narration draft and return one idempotent reuse response, with identical artifact hashes and exactly one start/ready audit pair. This does not certify genuine rights, human review, production media or publication.",
   "routes": [
@@ -563,11 +563,11 @@
       "restartRecovery": "PASS",
       "externalOperation": "free Edge TTS used in CI; provider availability external",
       "overallAcceptance": "PASS",
-      "notes": "Exact-SHA browser/backend E2E acceptance proves simultaneous duplicate narration requests produce one durable generation and one idempotent reuse, matching artifact hashes, one start/ready audit pair, and publishing remains disabled. The dashboard-server test suite also now reserves OS-selected ephemeral ports for its nine isolated server fixtures, removing random fixed-range port selection. No rights, human media review, production render or upload is implied.",
+      "notes": "Exact-SHA browser/backend E2E acceptance proves simultaneous duplicate narration requests produce one durable generation and one idempotent reuse, matching artifact hashes, one start/ready audit pair, and publishing remains disabled. Dashboard integration requests now disable HTTP keep-alive to avoid stale-socket reuse during long test operations; nine test servers reserve OS-selected ephemeral ports. No rights, human media review, production render or upload is implied.",
       "testEvidence": {
         "test": "browser-tests/dashboard.spec.mjs",
-        "exactTestedSha": "976baed2ecae5c5674edaa8d87ddf58dc2302d25",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41406591946",
+        "exactTestedSha": "fadf7ed58d8d1be5dc2e7999152601702df58788",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405548",
         "scenario": "Two simultaneous identical POST /api/jobs/narration requests return one 201 and one 200 with reused=true/idempotent=true; both responses bind identical artifacts; exactly one start and one ready audit record persist; publishingEnabled remains false."
       }
     },

@@ -1,4 +1,26 @@
-# Latest exact-source execution — 2 November 2026 (narration concurrency and port-isolation acceptance)
+# Latest exact-source execution — 2 November 2026 (narration concurrency and HTTP test reliability)
+
+- Tested application source/test commit: `fadf7ed58d8d1be5dc2e7999152601702df58788`. The evidence refresh below is documentation-only; the tested source/test candidate is unchanged by this refresh.
+- Repository: `clickerrish-art/YT-AUTO-VISE`; implementation branch: `codex/marketing-machine-audit-fixes`.
+- Main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Comparison at the tested source/test commit: **2,468 ahead / 2 behind / 205 changed files**. PR #1 remains **OPEN, DRAFT, UNMERGED**. Branch protection is disabled. Main was not changed; no merge, reset, rebase or force-push occurred.
+- Concurrent narration acceptance remains PASS: two identical simultaneous `POST /api/jobs/narration` requests yield one generation and one idempotent reuse response, with matching artifact hashes and exactly one start/ready audit pair; publishing remains disabled.
+- Test reliability fix: all 100 dashboard HTTP calls in `test/dashboard-server.test.mjs` now send `Connection: close`, avoiding stale keep-alive socket reuse during long-running integration operations. All nine dashboard server fixtures also use OS-selected ephemeral ports rather than random fixed-range ports.
+- The previous docs-only metadata run exposed an intermittent `UND_ERR_SOCKET` in the dashboard integration test. On this exact source/test SHA, automation and lockfile workflows both pass the complete suite; the dashboard E2E also passes.
+- Exact-SHA automation/security [41407405492](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405492) **PASS**: 470 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax and Python compilation passed.
+- Dashboard Chromium E2E [41407405548](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405548) **PASS**: 21/21 journeys.
+- Locked install and complete Node suite [41407400521](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407400521), content quality [41407405429](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405429), metadata [41407405401](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405401), isolated main/candidate baseline [41407400530](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407400530), branch inventory [41407405498](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405498), and Nature Frontiers local draft validation [41407405395](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405395) **PASS**. The Nature Frontiers result is local validation only, not provider-side draft creation/read-back.
+- Production readiness [41407405453](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405453) remains **HOLD / fail-closed with 13 blockers**. This is not a production pass.
+- API matrix: **35 routes / 28 PASS / 3 NOT_TESTED / 4 BLOCKED / 35 authentication-negative checks PASS**. API-001 remains NOT_TESTED overall. The remaining NOT_TESTED routes require provider-side draft read-back, verified YouTube parent identity or genuine human review; the four BLOCKED routes require external Meta/YouTube/media prerequisites.
+- Dashboard inventory remains **101 controls / 15 forms / 38 handlers**. The 21 browser journeys are not exhaustive control-by-control acceptance; DASH-001 remains NOT_TESTED.
+- Application-wide owner-independent acceptance still includes exhaustive dashboard-control coverage, full queue retry/cancel/dead-letter/shutdown/recovery drills, broader backup/restore and deployment drills, and human semantic review of the divergent Git history. SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain open.
+- The 13 owner/external production blockers remain: feasible owner-approved cadence; complete SonicVhibez public/private/unlisted history and uncertain-upload reconciliation; verified Short and long-form rights manifests; human-reviewed metadata, rights and compliance; independently verified channel identity; final rendered Short; and the four YouTube OAuth/channel environment variables. Do not fabricate or weaken any gate.
+- Current read-only Metricool check exposes only Nature Frontiers brand `7545638`; no distinct SonicVhibez/Sonic Fire destination is verified. Seven future Nature Frontiers product-promotion records (4, 7, 11, 14, 18, 21 and 25 November 2026 at 10:00 Africa/Johannesburg) remain `draft=false` and `autoPublish=true`. They were not modified. These are not SonicVhibez YouTube posts and must not be used as its destination.
+- No YouTube upload or publication, Meta provider mutation, campaign activation, Metricool schedule change, spend, account reconnection or auto-publishing change occurred. Public/unattended publishing remains disabled; Safari remains inactive; the approved application Selar destination remains `https://selar.com/0u19v8u99l`.
+
+---
+
+# Previous exact-source execution — 2 November 2026 (narration concurrency and port-isolation acceptance, superseded by the checkpoint above)
 
 - Tested application source/test commit: `976baed2ecae5c5674edaa8d87ddf58dc2302d25`. The evidence refresh below is documentation-only; the tested source/test candidate is unchanged by this refresh.
 - Repository: `clickerrish-art/YT-AUTO-VISE`; implementation branch: `codex/marketing-machine-audit-fixes`.
