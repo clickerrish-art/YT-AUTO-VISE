@@ -66,6 +66,26 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
   assert.equal(payload.readOnly, true);
   assert.equal(fs.readFileSync(statePath).toString(), before.toString(), "dispatch listing must not mutate persisted state");
 
+  const invalidLimit = await fetch(base + "/api/jobs/dispatchable?limit=101", { headers: workerHeaders });
+  assert.equal(invalidLimit.status, 400, "worker dispatch query must enforce its bounded result limit");
+  const invalidWorkerIdentity = await fetch(base + "/api/jobs/dispatchable", {
+    headers: { "x-worker-token": workerToken, "x-worker-id": "x" }
+  });
+  assert.equal(invalidWorkerIdentity.status, 400, "worker operations must require a valid worker identity");
+  const unsupportedWorkerOperation = await fetch(base + "/api/jobs/lease/claim", {
+    method: "POST",
+    headers: { ...workerHeaders, "content-type": "application/json" },
+    body: JSON.stringify({ jobId: "not-authorized", workerId: "worker-api-test" })
+  });
+  assert.equal(unsupportedWorkerOperation.status, 401, "worker credentials must not grant direct lease or general operator operations");
+  const unknownProductionJob = await fetch(base + "/api/jobs/produce", {
+    method: "POST",
+    headers: { ...workerHeaders, "content-type": "application/json" },
+    body: JSON.stringify({ jobId: "unknown-production-job" })
+  });
+  assert.equal(unknownProductionJob.status, 404, "scoped worker dispatch must return 404 for an unknown job");
+  assert.equal(fs.readFileSync(statePath).toString(), before.toString(), "rejected worker operations must preserve state byte-for-byte");
+
   const operatorState = await fetch(base + "/api/state", { headers: workerHeaders });
   assert.equal(operatorState.status, 401, "worker credential must not grant general operator API access");
   const ownerState = await fetch(base + "/api/state", { headers: { "x-operator-token": operatorToken } });
