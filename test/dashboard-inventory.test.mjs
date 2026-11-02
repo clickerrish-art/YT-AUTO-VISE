@@ -19,14 +19,14 @@ test("dashboard static inventory reports all declared controls, forms and litera
   assert.equal(inventory.counts.routes, inventory.routes.length);
   assert.equal(inventory.counts.controls, 104);
   assert.equal(inventory.counts.forms, 16);
-  assert.equal(inventory.counts.routes, 38);
+  assert.equal(inventory.counts.routes, 39);
   assert.deepEqual(inventory.counts.controlsByTag, {
     button: 22,
     input: 41,
     select: 26,
     textarea: 15,
   });
-  assert.deepEqual(inventory.counts.routesByMethod, { GET: 10, POST: 28 });
+  assert.deepEqual(inventory.counts.routesByMethod, { GET: 11, POST: 28 });
 
   assert.ok(inventory.controls.every(control => Number.isInteger(control.line) && control.line > 0));
   assert.ok(inventory.forms.every(form => Number.isInteger(form.line) && form.line > 0));

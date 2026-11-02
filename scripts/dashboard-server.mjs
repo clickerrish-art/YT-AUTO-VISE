@@ -593,7 +593,7 @@ const server = http.createServer(async (req, res) => {
       (req.method === "POST" && url.pathname === "/api/jobs/produce");
     const workerAuthenticated = !operatorAuthenticated && workerRoute &&
       matchesOperatorToken(req.headers["x-worker-token"], workerToken);
-    if (!operatorAuthenticated && !workerAuthenticated) return json(res, 401, { error: "Operator or explicitly scoped worker authentication required" });
+    if (!operatorAuthenticated && !workerAuthenticated) return json(res, 401, { error: "Operator authentication required" });
     const workerId = String(req.headers["x-worker-id"] ?? "");
     if (workerAuthenticated && !/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(workerId)) {
       return json(res, 400, { error: "A valid x-worker-id is required for worker operations" });
