@@ -539,6 +539,37 @@ const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, "http://127.0.0.1");
     if (req.method === "GET" && url.pathname === "/healthz") return json(res, 200, { ok: true, publishingEnabled: false });
+    if (req.method === "GET" && url.pathname === "/operational-readyz") {
+      try {
+        loadState();
+        const schedule = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
+        const campaigns = JSON.parse(fs.readFileSync(path.join(root, "config/campaigns.json"), "utf8"));
+        if (!schedule || typeof schedule !== "object" || Array.isArray(schedule) ||
+            !campaigns || typeof campaigns !== "object" || Array.isArray(campaigns) ||
+            !Array.isArray(campaigns.campaigns) || !fs.statSync(htmlPath).isFile()) {
+          throw new Error("Required local dashboard configuration or UI is invalid");
+        }
+        return json(res, 200, {
+          ready: true,
+          mode: "local-service",
+          localState: "readable",
+          scheduleConfig: "readable",
+          campaignConfig: "readable",
+          dashboard: "readable",
+          publicationReadiness: "separate",
+          publicationGate: "/readyz",
+          publishingEnabled: false,
+          note: "This endpoint verifies local service availability only. It does not certify publication prerequisites, credentials, rights, approvals, remote history or external integrations."
+        });
+      } catch {
+        return json(res, 503, {
+          ready: false,
+          mode: "local-service",
+          publishingEnabled: false,
+          error: "Required local state, configuration or dashboard assets are unreadable"
+        });
+      }
+    }
     if (req.method === "GET" && url.pathname === "/readyz") {
       try {
         loadState();

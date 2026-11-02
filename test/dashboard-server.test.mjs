@@ -238,6 +238,14 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.ok(Array.isArray(readiness.blockers));
   assert.ok(readiness.blockers.some(item => /long-form(?: render manifest|-render-manifest)/i.test(item)));
   assert.ok(readiness.blockers.some(item => /SONICVHIBEZ_CHANNEL_ID|channel ID/i.test(item)));
+  const operationalReadinessResponse = await fetchDashboard(base + "/operational-readyz");
+  const operationalReadiness = await operationalReadinessResponse.json();
+  assert.equal(operationalReadinessResponse.status, 200, "local service readiness must not inherit external publication blockers");
+  assert.equal(operationalReadiness.ready, true);
+  assert.equal(operationalReadiness.mode, "local-service");
+  assert.equal(operationalReadiness.publicationReadiness, "separate");
+  assert.equal(operationalReadiness.publicationGate, "/readyz");
+  assert.equal(operationalReadiness.publishingEnabled, false);
   const noPriorReconcile = await fetchDashboard(base + "/api/uploads/reconcile", { method: "POST", headers, body: JSON.stringify({ jobId: "no-prior-job", videoPath: "README.md", metadataPath: "README.md", approvalPath: "README.md" }) });
   const noPriorBody = await noPriorReconcile.json();
   assert.equal(noPriorReconcile.status, 409, JSON.stringify(noPriorBody));
