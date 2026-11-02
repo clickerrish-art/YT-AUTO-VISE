@@ -73,6 +73,11 @@ if (document.publishingEnabled === true) {
   console.error("BLOCKED: queue replenishment must not enable publishing.");
   process.exit(1);
 }
+if (document.publishingEnabled !== undefined && document.publishingEnabled !== false) {
+  console.error("BLOCKED: queue publishingEnabled must be the boolean false when present.");
+  process.exit(1);
+}
+document.publishingEnabled = false;
 // Keep the queue's operational policy synchronized with the authoritative plan.
 // Retire the former weekly-count fields instead of carrying them into a new file.
 document.cadence = { ...(document.cadence && typeof document.cadence === "object" ? document.cadence : {}), ...authoritativeCadence };

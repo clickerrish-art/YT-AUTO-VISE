@@ -94,3 +94,19 @@ test("a missing queue is initialized from the authoritative rolling publication 
     fs.rmSync(tempDir, { recursive: true, force: true });
   }
 });
+
+test("queue replenishment normalizes an omitted publishing flag to explicit false", () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-queue-default-publishing-"));
+  const queuePath = path.join(tempDir, "queue.json");
+  fs.writeFileSync(queuePath, JSON.stringify({ items: [] }));
+  try {
+    const result = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
+      encoding: "utf8",
+      env: { ...process.env, QUEUE_PATH: queuePath }
+    });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(JSON.parse(fs.readFileSync(queuePath, "utf8")).publishingEnabled, false);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
