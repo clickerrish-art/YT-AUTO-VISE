@@ -9,6 +9,18 @@ on:
       - "scripts/replenish-queue.mjs"
       - "test/queue-cadence.test.mjs"
       - "tests/replenish-queue.test.mjs"
+      - ".env.example"
+      - "package.json"
+      - "OPERATIONS.md"
+      - "scripts/dashboard-server.mjs"
+      - "scripts/worker-runner.mjs"
+      - "test/dashboard-inventory.test.mjs"
+      - "test/dashboard-server.test.mjs"
+      - "test/dashboard-worker-api.integration.test.mjs"
+      - "test/worker-runner.test.mjs"
+      - "docs/API_ROUTE_ACCEPTANCE_MATRIX.json"
+      - "docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md"
+      - "docs/REQUIREMENTS_ACCEPTANCE_REGISTER.json"
   workflow_dispatch:
     inputs:
       source_ref:

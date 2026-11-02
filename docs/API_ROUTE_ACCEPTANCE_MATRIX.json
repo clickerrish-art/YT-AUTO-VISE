@@ -1,28 +1,29 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-02T12:30:34.778Z",
+  "generatedAt": "2026-11-02T19:41:17.051Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "7add5c3bf487476880bb78b12da9ba50e419c4d3",
+  "testedSourceTestSha": "4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
-    "totalHandlers": 38,
-    "protectedApiRoutes": 35,
+    "totalHandlers": 40,
+    "protectedApiRoutes": 36,
     "nonApiHandlers": [
       "GET /",
       "GET /healthz",
-      "GET /readyz"
+      "GET /readyz",
+      "GET /operational-readyz"
     ],
-    "branchAheadBy": 2468,
+    "branchAheadBy": 2502,
     "branchBehindBy": 2,
-    "changedFiles": 205,
+    "changedFiles": 210,
     "branchProtectionEnabled": false
   },
   "counts": {
-    "routes": 35,
-    "authNegativePass": 35,
-    "overallPass": 30,
+    "routes": 36,
+    "authNegativePass": 36,
+    "overallPass": 31,
     "overallNotTested": 0,
     "overallBlocked": 5
   },
@@ -86,9 +87,15 @@
     "narrationConcurrencyTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/fadf7ed58d8d1be5dc2e7999152601702df58788/browser-tests/dashboard.spec.mjs",
     "narrationConcurrencyCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405548",
     "dashboardServerPortIsolationTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/fadf7ed58d8d1be5dc2e7999152601702df58788/test/dashboard-server.test.mjs",
-    "dashboardServerPortIsolationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407400521"
+    "dashboardServerPortIsolationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407400521",
+    "scopedWorkerDispatchCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/6d2a9e3cb183666efbd1615c8d3b2e0f7161df02",
+    "scopedWorkerDispatchTestCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
+    "scopedWorkerDispatchCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698812",
+    "scopedWorkerDispatchDashboard": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698763",
+    "scopedWorkerDispatchBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698737",
+    "localOperationalReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/6d2a9e3cb183666efbd1615c8d3b2e0f7161df02"
   },
-  "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 28 of 35 routes as PASS, three as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. POST /api/jobs/narration now has exact-SHA real-dashboard concurrency acceptance: two simultaneous identical requests create one narration draft and return one idempotent reuse response, with identical artifact hashes and exactly one start/ready audit pair. This does not certify genuine rights, human review, production media or publication.",
+  "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 31 of 36 routes as PASS, zero NOT_TESTED and five externally BLOCKED. All 36 authentication-negative checks pass. GET /api/jobs/dispatchable is accepted as a read-only, least-privilege worker inventory endpoint with limit/identity validation, concurrent-read consistency and byte-identical state preservation. Its synthetic approval fixture proves only the dispatch filter; POST /api/jobs/produce independently revalidates the complete hash-bound render evidence. This does not certify genuine rights, human review, production media or publication.",
   "routes": [
     {
       "method": "GET",
@@ -860,6 +867,28 @@
         "test": "test/dashboard-api-draft-update-concurrency.integration.test.mjs; test/dashboard-server.test.mjs",
         "exactTestedSha": "1e15718e6987fa50d4f7841854b3539af8baa726",
         "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41287711399"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/jobs/dispatchable",
+      "classification": "read-only scoped worker dispatch inventory",
+      "authRequired": "operator token or scoped worker token; worker token is restricted to this GET and POST /api/jobs/produce",
+      "authenticationNegative": "PASS — missing/invalid operator credentials are rejected by the inventory-derived auth matrix; the worker credential is rejected on GET /api/state and POST /api/jobs/lease/claim.",
+      "authorizedSuccess": "PASS — the worker credential receives only queued jobs whose production plan is explicitly APPROVED_PLAN_ONLY with an APPROVE decision and a 64-character approval receipt field; a draft plan is withheld. The fixture is synthetic and is not proof of genuine human approval.",
+      "inputValidation": "PASS — limit must be an integer from 1 to 100; worker identity must match the bounded identifier policy; invalid limit/identity return HTTP 400.",
+      "durablePersistence": "N/A — read-only; four concurrent requests preserve the exact persisted state bytes.",
+      "auditEvidence": "N/A — read-only; no audit event is written.",
+      "concurrency": "PASS — four concurrent authenticated reads return the same payload and leave persisted state byte-identical.",
+      "restartRecovery": "N/A — read-only route with no durable mutation.",
+      "externalOperation": "none",
+      "overallAcceptance": "PASS",
+      "notes": "The endpoint only selects candidates for dispatch. The render endpoint still revalidates the full script/narration/captions/production-plan/rights/compliance/metadata/media evidence and can reject a candidate without rendering. It does not upload or publish.",
+      "testEvidence": {
+        "test": "test/dashboard-worker-api.integration.test.mjs; test/worker-runner.test.mjs; test/dashboard-api-auth-matrix.test.mjs",
+        "exactTestedSha": "4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698812",
+        "scenario": "Real dashboard API test admits a synthetic APPROVED_PLAN_ONLY candidate, withholds a queued draft plan, validates invalid limits/worker IDs, rejects worker access to operator state and direct lease claims, returns 404 for an unknown render job, and verifies four concurrent identical reads preserve state byte-for-byte. Worker-runner tests verify sequential dispatch, 409 handling, 30-second initial backoff, credential scoping, HTTPS/loopback rules and prompt polling shutdown."
       }
     }
   ]

@@ -34,18 +34,28 @@ The current inventory was recalculated by running `node scripts/dashboard-invent
 | Selects | 26 |
 | Textareas | 15 |
 | Forms | 16 |
-| Route declarations | 38 |
-| Protected API routes | 35 |
-| GET / POST route declarations | 10 / 28 |
-| Non-API handlers | 3 (`GET /`, `GET /healthz`, `GET /readyz`) |
+| Route declarations | 40 |
+| Protected API routes | 36 |
+| GET / POST route declarations | 12 / 28 |
+| Non-API handlers | 4 (`GET /`, `GET /healthz`, `GET /readyz`, `GET /operational-readyz`) |
 
-- Inventory source SHA: `9c1d8997ac53d3116bfa51a7d9e9dd01194fc3ba`.
+- Inventory source SHA: `6d2a9e3cb183666efbd1615c8d3b2e0f7161df02` (tested code; final route inventory is 40 handlers).
 - Dashboard HTML Git blob: `700b56454cc4cf6499cb5e0f574d2936aeda41d4`.
-- Dashboard server Git blob: `25873843f1a9e2ec1e59f8b0821b6dcf5d2e4fc0`.
-- Exact-SHA dashboard Chromium E2E: [run 41440314185](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41440314185), **21 journeys passed**.
-- Exact-SHA automation/security: [run 41440314138](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41440314138), **471 Node tests passed, zero failures/skips; 16 Python tests passed; npm audit reported zero vulnerabilities**.
+- Dashboard server Git blob: `ee78c58f6ca1b3002e586338fe9f0c37da3345cc`.
+- Exact source/test SHA: `4fdebfa13f818f9554ea55e3a17ecc54efa82cdc`.
+- Exact-SHA dashboard Chromium E2E: [run 41511698763](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698763), **21/21 journeys passed**.
+- Exact-SHA automation/security: [run 41511698812](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698812), **480 Node tests passed, zero failures/skips; 16 Python tests passed; npm audit reported zero vulnerabilities**.
+- Exact-SHA content quality [run 41511698700](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698700), metadata [run 41511698766](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698766), isolated baseline [run 41511698737](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698737), branch inventory [run 41511698754](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698754), and local Nature Frontiers validation [run 41511698706](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698706) all passed. Production readiness [run 41511698775](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698775) correctly remains HOLD with 13 genuine owner/external blockers.
 
 The prior 101-control / 15-form inventory and its detailed rows are historical and do not cover the full current source inventory. The current source contains 3 additional controls and 1 additional form beyond that snapshot. **DASH-001 remains NOT_TESTED**: the 21 browser journeys do not prove all 104 controls and 16 forms have correct success, validation, authorization, failure feedback, persistence, refresh, concurrency, keyboard and mobile behavior. The static inventory parser explicitly does not claim behavioral acceptance.
+
+### 2 November 2026 — worker dispatch and operational readiness
+
+- Added a dedicated `GET /api/jobs/dispatchable` route and a continuous `npm run worker` process using a separate least-privilege `DASHBOARD_WORKER_TOKEN`. The worker can only list dispatchable jobs and invoke the renderer endpoint; it cannot read general operator state or claim leases directly.
+- The dispatch list filters out queued jobs without an explicitly approved render-plan status and reviewer receipt shape. The renderer still revalidates complete hash-bound evidence. Synthetic test approvals are not genuine human approvals.
+- Worker regression coverage verifies sequential dispatch, 409 conflict handling, bounded exponential backoff, credential boundaries, concurrent read-only listings and prompt polling shutdown.
+- Added `GET /operational-readyz` for local service readiness, separate from `GET /readyz`, which remains the external publication-readiness gate. The real-server test proves the local service can be ready while publication remains blocked.
+- These are accepted implementation slices, not full SCHED-001 or DEPLOY-001 acceptance. **DASH-001 remains NOT_TESTED** because all 104 controls and 16 forms still lack exhaustive control-by-control behavioral acceptance.
 ---
 
 ## Exact-SHA draft-edit and narration-review API acceptance — 31 October 2026

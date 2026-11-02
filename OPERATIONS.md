@@ -408,13 +408,28 @@ Never store Meta tokens in source control, browser state, API responses or audit
 Use Node.js 22+ (CI runs Node.js 24) and run `npm ci --ignore-scripts` (the supported, CI-verified install path). Set `DASHBOARD_OPERATOR_TOKEN` to a random value at least 24 characters long and `DASHBOARD_OPERATOR_ID` to the actual authorized operator. Start with `npm run dashboard`; it binds to loopback (`127.0.0.1) by default. Keep it local. A non-loopback deployment requires a securely authenticated reverse proxy, TLS, network controls and reviewed operational configuration; do not expose the bare server.
 
 Check:
-- `GET /healthz` — process health
-- `GET /readyz` — readiness and external prerequisites
-- dashboard API — requires the operator token in `x-operator-token`
+- `GET /healthz` — process liveness
+- `GET /operational-readyz` — local service readiness (state, local JSON configuration and dashboard asset readability)
+- `GET /readyz` — production/publication readiness and external prerequisites
+- dashboard API — requires the operator token in `x-operator-token` except for the explicitly scoped worker endpoints described below
 
-The `/readyz` endpoint is a **production-readiness gate**, not just a process-health check. It executes the read-only production preflight and returns HTTP 503 with a `blockers` array while required manifests, source assets, rights/compliance checks, reviewed metadata, the Short MP4, or YouTube environment configuration are missing or invalid. Use `/healthz` to distinguish a running local server from production readiness. A clear readiness response does not independently prove that a license is genuine or that editorial review occurred.
+The `/operational-readyz` endpoint is the local deployment/service-readiness check. It verifies that durable dashboard state, the schedule and campaign JSON configuration, and the dashboard HTML are readable. It deliberately does not inherit missing OAuth credentials, genuine-media requirements, owner approvals or remote-history blockers.
+
+The `/readyz` endpoint remains the **production/publication-readiness gate**, not a process-health check. It executes the read-only production preflight and returns HTTP 503 with a `blockers` array while required manifests, source assets, rights/compliance checks, reviewed metadata, the Short MP4, owner-controlled cadence/history or YouTube environment configuration are missing or invalid. A local service can therefore be operational while publication remains blocked. Neither endpoint proves that a license is genuine or that editorial review occurred.
 
 For a structured terminal report, run `npm run readiness:json`. It emits JSON only, with deterministic `RDY-…` blocker identifiers, severity, the observed readiness finding, and a suggested resolution. Exit code `2` means prerequisites remain blocked; exit code `0` means the configured checks found no blockers, not that account identity, licence authenticity, media quality, or human review was independently proven. This command is read-only and never uploads or publishes.
+
+### Scoped content-render worker
+
+The dashboard can run a separate polling worker without sharing the operator credential. Configure a separate random `DASHBOARD_WORKER_TOKEN` (at least 24 characters and not equal to `DASHBOARD_OPERATOR_TOKEN`), a stable `DASHBOARD_WORKER_ID`, `DASHBOARD_API_URL` and `WORKER_POLL_INTERVAL_MS` in the protected runtime environment.
+
+- Start the continuous worker with `npm run worker`.
+- Run one dispatch cycle for a controlled smoke test with `npm run worker -- --once`.
+- The worker credential is accepted only by `GET /api/jobs/dispatchable` and `POST /api/jobs/produce`; it cannot read general operator state or claim/complete worker leases directly.
+- The dispatch list includes only queued jobs with an explicitly approved production-plan status and reviewer receipt shape. The render API still revalidates the complete hash-bound script, narration, caption, plan, rights, compliance, metadata and media evidence before doing work.
+- A preflight conflict returns a non-dispatch result and receives bounded exponential backoff (30 seconds up to 15 minutes). It is not treated as an approval or publication.
+- Plain HTTP worker connections are restricted to loopback. A remote worker connection requires HTTPS and a securely authenticated reverse proxy.
+- The worker never uploads or publishes. Public/unattended YouTube publishing remains disabled.
 
 Never put OAuth tokens in browser code, committed files or logs.
 
