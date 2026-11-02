@@ -57,21 +57,42 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
 
   const statePath = path.join(stateDir, "dashboard-state.json");
   const initialState = JSON.parse(fs.readFileSync(statePath, "utf8"));
-  initialState.jobs.push({
-    kind: "CONTENT_PRODUCTION",
-    id: "queued-without-approved-plan",
-    state: "QUEUED",
-    contentType: "short",
-    authoring: { productionPlan: { status: "DRAFT" } }
-  });
+  initialState.jobs.push(
+    {
+      kind: "CONTENT_PRODUCTION",
+      id: "queued-without-approved-plan",
+      state: "QUEUED",
+      contentType: "short",
+      createdAt: "2026-11-02T18:00:00.000Z",
+      authoring: { productionPlan: { status: "DRAFT" } }
+    },
+    {
+      kind: "CONTENT_PRODUCTION",
+      id: "queued-with-approved-plan",
+      state: "QUEUED",
+      contentType: "short",
+      createdAt: "2026-11-02T18:01:00.000Z",
+      authoring: {
+        productionPlan: {
+          status: "APPROVED_PLAN_ONLY",
+          review: { decision: "APPROVE", approvalSha256: "a".repeat(64) }
+        }
+      }
+    }
+  );
   fs.writeFileSync(statePath, JSON.stringify(initialState, null, 2) + "\n");
   const before = fs.readFileSync(statePath);
   const workerHeaders = { "x-worker-token": workerToken, "x-worker-id": "worker-api-test" };
   const dispatchable = await fetch(base + "/api/jobs/dispatchable", { headers: workerHeaders });
   assert.equal(dispatchable.status, 200);
   const payload = await dispatchable.json();
-  assert.deepEqual(payload.jobs, [], "queued jobs without an approved render plan must never be offered to workers");
-  assert.equal(payload.queuedCount, 1);
+  assert.deepEqual(payload.jobs, [{
+    id: "queued-with-approved-plan",
+    contentType: "short",
+    state: "QUEUED",
+    createdAt: "2026-11-02T18:01:00.000Z"
+  }], "only queued jobs carrying an explicitly approved render plan may be offered to workers");
+  assert.equal(payload.queuedCount, 2);
   assert.equal(payload.queuedWithoutApprovedRenderPlan, 1);
   assert.equal(payload.publishingEnabled, false);
   assert.equal(payload.readOnly, true);
