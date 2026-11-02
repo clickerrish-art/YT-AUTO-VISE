@@ -32,6 +32,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = process.env.DASHBOARD_HOST ?? "127.0.0.1";
 const port = Number(process.env.PORT ?? 8787);
 const token = process.env.DASHBOARD_OPERATOR_TOKEN;
+const workerToken = process.env.DASHBOARD_WORKER_TOKEN;
 const operatorId = process.env.DASHBOARD_OPERATOR_ID?.trim();
 const stateDir = path.resolve(process.env.DASHBOARD_STATE_DIR ?? path.join(root, "state"));
 const stateFile = path.join(stateDir, "dashboard-state.json");
@@ -40,6 +41,10 @@ const htmlPath = path.join(root, "public", "dashboard.html");
 
 if (!token || token.length < 24) {
   console.error("BLOCKED: set DASHBOARD_OPERATOR_TOKEN to a random value of at least 24 characters. No server started.");
+  process.exit(2);
+}
+if (workerToken && (workerToken.length < 24 || workerToken === token)) {
+  console.error("BLOCKED: DASHBOARD_WORKER_TOKEN must be a separate random value of at least 24 characters. No server started.");
   process.exit(2);
 }
 if (!operatorId || operatorId.length < 2 || operatorId.length > 120) {
@@ -583,7 +588,17 @@ const server = http.createServer(async (req, res) => {
     }
     if (!url.pathname.startsWith("/api/")) return json(res, 404, { error: "Not found" });
     const provided = req.headers["x-operator-token"];
-    if (!matchesOperatorToken(provided, token)) return json(res, 401, { error: "Operator authentication required" });
+    const operatorAuthenticated = matchesOperatorToken(provided, token);
+    const workerRoute = (req.method === "GET" && url.pathname === "/api/jobs/dispatchable") ||
+      (req.method === "POST" && url.pathname === "/api/jobs/produce");
+    const workerAuthenticated = !operatorAuthenticated && workerRoute &&
+      matchesOperatorToken(req.headers["x-worker-token"], workerToken);
+    if (!operatorAuthenticated && !workerAuthenticated) return json(res, 401, { error: "Operator or explicitly scoped worker authentication required" });
+    const workerId = String(req.headers["x-worker-id"] ?? "");
+    if (workerAuthenticated && !/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(workerId)) {
+      return json(res, 400, { error: "A valid x-worker-id is required for worker operations" });
+    }
+    const requestActor = workerAuthenticated ? "worker:" + workerId : operatorId;
     if (req.method === "GET" && url.pathname === "/api/state") {
       const state = loadState();
       const schedule = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
@@ -596,6 +611,24 @@ const server = http.createServer(async (req, res) => {
       if (!schedule.channelId) blockers.push("SonicVhibez channel ID has not been verified");
       if (!fs.existsSync(path.join(root, "content/render-manifest.json"))) blockers.push("Rights-reviewed render manifest is missing");
       return json(res, 200, { publishingEnabled: false, schedule, campaigns: campaignConfig.campaigns, campaignValidation: { ok: campaignErrors.length === 0, errors: campaignErrors }, queueItems: state.queueItems, jobs: state.jobs.slice(-30).reverse(), uploads: state.uploads.slice(-30).reverse(), uploadLedger: readUploadLedger(), audit: state.audit.slice(-50).reverse(), blockers });
+    }
+    if (req.method === "GET" && url.pathname === "/api/jobs/dispatchable") {
+      const state = loadState();
+      const requestedLimit = Number(url.searchParams.get("limit") ?? 20);
+      if (!Number.isInteger(requestedLimit) || requestedLimit < 1 || requestedLimit > 100) {
+        return json(res, 400, { error: "limit must be an integer from 1 to 100", publishingEnabled: false });
+      }
+      const queued = state.jobs.filter(job => job.kind === "CONTENT_PRODUCTION" && job.state === "QUEUED");
+      const jobs = queued.filter(job => job.authoring && typeof job.id === "string")
+        .slice(0, requestedLimit)
+        .map(job => ({ id: job.id, contentType: job.contentType, state: job.state, createdAt: job.createdAt }));
+      return json(res, 200, {
+        jobs,
+        queuedCount: queued.length,
+        queuedWithoutApprovedAuthoring: queued.filter(job => !job.authoring).length,
+        publishingEnabled: false,
+        readOnly: true
+      });
     }
     if (req.method === "GET" && url.pathname === "/api/facebook/idea") {
       // This endpoint is read-only: validation errors must not create or alter drafts.
