@@ -85,6 +85,16 @@ test("publication slot rejects duplicate IDs, invalid timestamps, and same Johan
   assert.throws(() => validatePublicationSlot({ id: "x", scheduledAt: "not-a-date" }, []), /valid ISO timestamp/);
 });
 
+test("publication slot requires a stable non-empty proposed ID", () => {
+  for (const id of [undefined, null, "", "   "]) {
+    const proposed = { scheduledAt: "2026-10-27T15:00:00Z" };
+    if (id !== undefined) proposed.id = id;
+    const result = validatePublicationSlot(proposed, []);
+    assert.equal(result.valid, false, JSON.stringify(id));
+    assert.ok(result.errors.includes("proposed slot needs a stable non-empty ID"));
+  }
+});
+
 test("draft items do not block slots but active items must have the correct real timestamps", () => {
   assert.equal(validatePublicationSlot(
     { id: "new", scheduledAt: "2026-10-24T15:00:00Z" },
