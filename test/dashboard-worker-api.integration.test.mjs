@@ -75,7 +75,16 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
   assert.equal(payload.queuedWithoutApprovedRenderPlan, 1);
   assert.equal(payload.publishingEnabled, false);
   assert.equal(payload.readOnly, true);
-  assert.equal(fs.readFileSync(statePath).toString(), before.toString(), "dispatch listing must not mutate persisted state");
+  const concurrentReads = await Promise.all(Array.from({ length: 4 }, () =>
+    fetch(base + "/api/jobs/dispatchable", { headers: workerHeaders }).then(async response => ({
+      status: response.status,
+      body: await response.json()
+    }))
+  ));
+  assert.ok(concurrentReads.every(result => result.status === 200));
+  assert.ok(concurrentReads.every(result => JSON.stringify(result.body) === JSON.stringify(payload)),
+    "concurrent dispatch listings must return the same read-only view");
+  assert.equal(fs.readFileSync(statePath).toString(), before.toString(), "concurrent dispatch listings must not mutate persisted state");
 
   const invalidLimit = await fetch(base + "/api/jobs/dispatchable?limit=101", { headers: workerHeaders });
   assert.equal(invalidLimit.status, 400, "worker dispatch query must enforce its bounded result limit");
