@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-02T09:39:05.318+02:00",
+  "generatedAt": "2026-11-02T12:28:19.604Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "fadf7ed58d8d1be5dc2e7999152601702df58788",
+  "testedSourceTestSha": "7add5c3bf487476880bb78b12da9ba50e419c4d3",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -22,8 +22,8 @@
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 28,
-    "overallNotTested": 3,
+    "overallPass": 29,
+    "overallNotTested": 2,
     "overallBlocked": 4
   },
   "evidence": {
@@ -624,15 +624,20 @@
       "classification": "Short-parent relationship binding",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "NOT_TESTED",
+      "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
-      "durablePersistence": "NOT_TESTED",
-      "auditEvidence": "NOT_TESTED",
-      "concurrency": "NOT_TESTED",
-      "restartRecovery": "NOT_TESTED",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
+      "concurrency": "PASS",
+      "restartRecovery": "PASS",
       "externalOperation": "verified remote parent/YouTube identity required",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA real-server test test/dashboard-api-parent-relationship.integration.test.mjs verifies authenticated validation, concurrent identical binding (one new binding and one idempotent reuse), conflicting retry rejection with byte-identical state, one audit event, and restart read-back. Test-only parent receipts/media are synthetic; no real YouTube identity, private upload or native Related-video eligibility is asserted.",
+      "testEvidence": {
+        "test": "test/dashboard-api-parent-relationship.integration.test.mjs",
+        "exactTestedSha": "9c1d8997ac53d3116bfa51a7d9e9dd01194fc3ba (pre-change exact source; rerun after this test commit)",
+        "scenario": "Concurrent duplicate requests bind exactly once; exact retry reuses the same evidence; conflicting retry does not mutate; one audit record and durable relationship survive process restart."
+      }
     },
     {
       "method": "POST",
@@ -663,15 +668,20 @@
       "classification": "human production review",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "NOT_TESTED",
+      "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
-      "durablePersistence": "NOT_TESTED",
-      "auditEvidence": "NOT_TESTED",
-      "concurrency": "NOT_TESTED",
-      "restartRecovery": "NOT_TESTED",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
+      "concurrency": "PASS",
+      "restartRecovery": "PASS",
       "externalOperation": "genuine human media review required",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA real-server test test/dashboard-api-review-approval.integration.test.mjs verifies invalid hash rejection without mutation, concurrent identical approval requests (one 200 and one 409), hash-bound approval receipt, one audit event, exact reviewer attribution, and restart persistence. All media/rights inputs are explicitly synthetic fixtures; this is engineering transaction acceptance, not genuine human media review or production authorization.",
+      "testEvidence": {
+        "test": "test/dashboard-api-review-approval.integration.test.mjs",
+        "exactTestedSha": "pending CI for this test commit",
+        "scenario": "Two simultaneous identical approval requests serialize to one successful private-upload approval and one conflict; exact hash-bound receipt and audit persist across restart. Synthetic fixtures only."
+      }
     },
     {
       "method": "POST",
