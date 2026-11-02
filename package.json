@@ -32,7 +32,8 @@
     "script:generate": "node scripts/generate-script.mjs",
     "validate:rendered-audio": "node scripts/validate-rendered-audio.mjs",
     "inventory:dashboard": "node scripts/dashboard-inventory.mjs",
-    "report:branch": "node scripts/branch-reconciliation-report.mjs"
+    "report:branch": "node scripts/branch-reconciliation-report.mjs",
+    "worker": "node scripts/worker-runner.mjs"
   },
   "engines": {
     "node": ">=22"
