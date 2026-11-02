@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-02T00:36:07+02:00",
+  "generatedAt": "2026-11-02T09:26:27.986+02:00",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "561a3fc8354275af20d3eed23e96211441e08869",
+  "testedSourceTestSha": "3975131985fdc05095d04f73893e1741a1094bec",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -14,16 +14,16 @@
       "GET /healthz",
       "GET /readyz"
     ],
-    "branchAheadBy": 2448,
+    "branchAheadBy": 2464,
     "branchBehindBy": 2,
-    "changedFiles": 203,
+    "changedFiles": 205,
     "branchProtectionEnabled": false
   },
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 27,
-    "overallNotTested": 4,
+    "overallPass": 28,
+    "overallNotTested": 3,
     "overallBlocked": 4
   },
   "evidence": {
@@ -72,19 +72,21 @@
     "taskRunnerBaselineCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187",
     "narrationReconciliationSuccess": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/3a590759a525f1b4bf365f6edd715c38dee6e327/test/dashboard-narration-reconciliation-recovery.integration.test.mjs",
     "narrationReconciliationAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317411877",
-    "latestExactSourceCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/561a3fc8354275af20d3eed23e96211441e08869",
-    "latestExactSourceAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805",
-    "latestExactSourceDashboard": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759885",
-    "latestExactSourceLockfile": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759908",
-    "latestExactSourceContentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763854",
-    "latestExactSourceMetadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357760007",
-    "latestExactSourceBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357759940",
-    "latestExactSourceInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763922",
-    "latestExactSourceNatureFrontiersDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763814",
-    "latestExactSourceReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763980",
-    "facebookReviewRetryRegression": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805"
+    "latestExactSourceCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3975131985fdc05095d04f73893e1741a1094bec",
+    "latestExactSourceAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41405801467",
+    "latestExactSourceDashboard": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41405795766",
+    "latestExactSourceLockfile": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41405795653",
+    "latestExactSourceContentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41405801455",
+    "latestExactSourceMetadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41405795662",
+    "latestExactSourceBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41405801432",
+    "latestExactSourceInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41405801450",
+    "latestExactSourceNatureFrontiersDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41405801377",
+    "latestExactSourceReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41405801293",
+    "facebookReviewRetryRegression": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805",
+    "narrationConcurrencyTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/3975131985fdc05095d04f73893e1741a1094bec/browser-tests/dashboard.spec.mjs",
+    "narrationConcurrencyCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41405795766"
   },
-  "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 24 of 35 routes as PASS, seven as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. POST /api/jobs/narration/reconcile now has real-server success, invalid-input, durable persistence, audit, concurrency/idempotency and restart-recovery evidence on exact source/test SHA 3a590759a525f1b4bf365f6edd715c38dee6e327. POST /api/campaigns/manage is accepted for local preview/deactivation only; this does not establish provider-side campaign activation or publishing. Synthetic FFmpeg fixtures do not establish production rights, human approval or external publication.",
+  "disclaimer": "API-001 remains NOT_TESTED overall. The current route matrix records 28 of 35 routes as PASS, three as NOT_TESTED and four as externally BLOCKED. All 35 authentication-negative checks pass. POST /api/jobs/narration now has exact-SHA real-dashboard concurrency acceptance: two simultaneous identical requests create one narration draft and return one idempotent reuse response, with identical artifact hashes and exactly one start/ready audit pair. This does not certify genuine rights, human review, production media or publication.",
   "routes": [
     {
       "method": "GET",
@@ -555,11 +557,17 @@
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "NOT_TESTED",
+      "concurrency": "PASS — two simultaneous identical requests returned one 201 generation and one 200 idempotent reuse; both responses shared the same narration artifact hashes, with exactly one AUTHORING_NARRATION_STARTED and one AUTHORING_NARRATION_DRAFT_READY audit event.",
       "restartRecovery": "PASS",
       "externalOperation": "free Edge TTS used in CI; provider availability external",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA browser/backend E2E acceptance in browser-tests/dashboard.spec.mjs proves simultaneous duplicate narration requests produce one durable generation and one idempotent reuse, matching artifact hashes, one start/ready audit pair, and publishing remains disabled. This does not approve rights, human narration review, visual media, rendering or upload.",
+      "testEvidence": {
+        "test": "browser-tests/dashboard.spec.mjs",
+        "exactTestedSha": "3975131985fdc05095d04f73893e1741a1094bec",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41405795766",
+        "scenario": "Two simultaneous identical POST /api/jobs/narration requests return one 201 and one 200 with reused=true/idempotent=true; both responses bind identical artifacts; exactly one start and one ready audit record persist; publishingEnabled remains false."
+      }
     },
     {
       "method": "POST",
