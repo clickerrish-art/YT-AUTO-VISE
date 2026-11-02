@@ -112,6 +112,9 @@ export function validatePublicationSlot(proposed, existingItems = [], {
   const proposedAt = asTimestamp(proposed.scheduledAt, "proposed.scheduledAt");
   const proposedId = proposed.id;
   const errors = [];
+  if (typeof proposedId !== "string" || !proposedId.trim()) {
+    errors.push("proposed slot needs a stable non-empty ID");
+  }
   const active = [];
   for (const [index, item] of existingItems.entries()) {
     const id = item?.id ?? `(index ${index})`;
