@@ -5,6 +5,10 @@ on:
       - codex/marketing-machine-audit-fixes
     paths:
       - ".github/workflows/export-source-bundle.yml"
+      - ".github/workflows/free-narration-artifact.yml"
+      - "scripts/replenish-queue.mjs"
+      - "test/queue-cadence.test.mjs"
+      - "tests/replenish-queue.test.mjs"
   workflow_dispatch:
     inputs:
       source_ref:
