@@ -2550,7 +2550,7 @@ const server = http.createServer(async (req, res) => {
         claim = claimWorkerLease(job, "dashboard-renderer-" + job.contentType, { leaseMs: 15 * 60_000 });
         jobTitle = job.title;
         state.jobs[index] = claim.job;
-        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_RENDER_STARTED", jobId: job.id, taskId, actor: operatorId, at: new Date().toISOString(), reason: taskArgs ? "Renderer launched with a per-job manifest built from exact approved script, narration, scene, rights, quality and metadata evidence; no upload/publication path" : "Legacy fixed-manifest renderer launched through dashboard; no upload/publication path" });
+        state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_RENDER_STARTED", jobId: job.id, taskId, actor: requestActor, at: new Date().toISOString(), reason: taskArgs ? "Renderer launched with a per-job manifest built from exact approved script, narration, scene, rights, quality and metadata evidence; no upload/publication path" : "Legacy fixed-manifest renderer launched through dashboard; no upload/publication path" });
         saveState(state);
       } finally { release(); }
 
@@ -2616,7 +2616,7 @@ const server = http.createServer(async (req, res) => {
         }
         updated.renderExecution = { taskId, status: result.status, outputPath: outputPath ?? current.renderExecution?.outputPath ?? null, exitCode: result.exitCode, startedAt: result.startedAt, finishedAt: result.finishedAt, output: result.output, truncated: result.truncated === true };
         state.jobs[index] = updated;
-        state.audit.push({ id: crypto.randomUUID(), action: updated.state === "GENERATED" ? "CONTENT_RENDER_SUCCEEDED" : updated.state === "BLOCKED" ? "CONTENT_RENDER_BLOCKED" : "CONTENT_RENDER_FAILED", jobId: updated.id, taskId, state: updated.state, at: new Date().toISOString(), actor: operatorId });
+        state.audit.push({ id: crypto.randomUUID(), action: updated.state === "GENERATED" ? "CONTENT_RENDER_SUCCEEDED" : updated.state === "BLOCKED" ? "CONTENT_RENDER_BLOCKED" : "CONTENT_RENDER_FAILED", jobId: updated.id, taskId, state: updated.state, at: new Date().toISOString(), actor: requestActor });
         saveState(state);
         return json(res, updated.state === "GENERATED" ? 200 : 409, { job: updated, publishingEnabled: false });
       } finally { finishRelease(); }
