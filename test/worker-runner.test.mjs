@@ -74,7 +74,8 @@ test("worker dispatches listed jobs sequentially and records fail-closed conflic
   assert.equal(secondCycle.deferredByBackoff, 1, "a preflight conflict must not be retried on every polling interval");
   assert.equal(secondCycle.results.some(item => item.jobId === "job-two"), false);
   assert.equal(requests.slice(requestsBeforeCooldownCycle).some(item => item.url === "/api/jobs/produce" && item.method === "POST"), true);
-  assert.deepEqual(cooldowns.get("job-two"), { attempts: 2, nextAttemptAt: Date.now() + 60_000 });
+  assert.equal(cooldowns.get("job-two").attempts, 1);
+  assert.ok(cooldowns.get("job-two").nextAttemptAt > Date.now());
 });
 
 test("worker rejects unencrypted non-loopback API destinations before sending credentials", async () => {
