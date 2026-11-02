@@ -1207,6 +1207,32 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
     await expect(page.locator("#app")).toBeVisible();
     await page.locator("#narrationjob").selectOption(jobId);
     await expect(page.locator("#narrationsha")).toHaveValue(approvedSha);
+    // Exercise the API itself with two simultaneous identical generation requests.
+    // Exactly one request may generate TTS; the other must reuse its durable receipt.
+    const narrationPayload = JSON.stringify({ jobId, scriptSha256: approvedSha });
+    const concurrentNarrationResponses = await Promise.all([
+      fetch(base + "/api/jobs/narration", { method: "POST", headers, body: narrationPayload }),
+      fetch(base + "/api/jobs/narration", { method: "POST", headers, body: narrationPayload })
+    ]);
+    const concurrentNarrationBodies = await Promise.all(concurrentNarrationResponses.map(response => response.json()));
+    expect(concurrentNarrationResponses.map(response => response.status).sort()).toEqual([200, 201]);
+    const createdIndex = concurrentNarrationResponses.findIndex(response => response.status === 201);
+    const reusedIndex = concurrentNarrationResponses.findIndex(response => response.status === 200);
+    expect(concurrentNarrationBodies[createdIndex].narrationStage.status).toBe("DRAFT_REVIEW_REQUIRED");
+    expect(concurrentNarrationBodies[reusedIndex].reused).toBe(true);
+    expect(concurrentNarrationBodies[reusedIndex].idempotent).toBe(true);
+    expect(concurrentNarrationBodies[reusedIndex].narrationStage.artifacts)
+      .toEqual(concurrentNarrationBodies[createdIndex].narrationStage.artifacts);
+    const concurrentNarrationState = await (await fetch(base + "/api/state", { headers })).json();
+    expect(concurrentNarrationState.audit.filter(event =>
+      event.action === "AUTHORING_NARRATION_STARTED" && event.jobId === jobId
+    )).toHaveLength(1);
+    expect(concurrentNarrationState.audit.filter(event =>
+      event.action === "AUTHORING_NARRATION_DRAFT_READY" && event.jobId === jobId
+    )).toHaveLength(1);
+    expect(concurrentNarrationState.publishingEnabled).toBe(false);
+
+    // Keep the UI double-click guard covered independently after the API-level race.
     let narrationRequests = 0;
     await page.route("**/api/jobs/narration", async route => {
       narrationRequests += 1;
@@ -1215,7 +1241,7 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
       await route.fulfill({ response });
     });
     await page.locator("#narrationform button[type=submit]").dblclick();
-    await expect(page.locator("#narrationresult")).toContainText("Narration stage: DRAFT_REVIEW_REQUIRED", { timeout: 240_000 });
+    await expect(page.locator("#narrationresult")).toContainText("Narration stage: DRAFT_REVIEW_REQUIRED", { timeout: 30_000 });
     expect(narrationRequests).toBe(1);
 
     const firstState = await (await page.request.get(base + "/api/state", { headers })).json();
