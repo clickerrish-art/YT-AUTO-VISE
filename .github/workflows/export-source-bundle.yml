@@ -85,4 +85,4 @@ jobs:
             delivery-sha256.txt
             source-identity.json
           retention-days: 7
-# Recovery refresh: export the full-history source bundle after the 2 November API review-concurrency test and recalculated dashboard/API acceptance evidence.
+# Recovery refresh: export the full-history source bundle after the 2 November API, dashboard inventory and acceptance-register refresh.
