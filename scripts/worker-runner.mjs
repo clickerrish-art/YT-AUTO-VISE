@@ -37,7 +37,7 @@ async function requestJson(fetchImpl, url, options, timeoutMs = 15_000) {
   return { status: response.status, payload };
 }
 
-export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerId, fetchImpl = fetch, limit = 20, cooldowns = new Map(), now = Date.now() }) {
+export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerId, fetchImpl = fetch, limit = 20, cooldowns = new Map() }) {
   const origin = validateConfiguration({ baseUrl, token, workerId, pollIntervalMs: DEFAULT_POLL_INTERVAL_MS });
   if (!Number.isInteger(limit) || limit < 1 || limit > 100) throw new Error("worker dispatch limit must be an integer from 1 to 100");
   const headers = { "x-worker-token": token, "x-worker-id": workerId };
@@ -47,7 +47,7 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
   }
   const eligibleJobs = listing.payload.jobs.filter(job => {
     const cooldown = cooldowns.get(job?.id);
-    return !cooldown || cooldown.nextAttemptAt <= now;
+    return !cooldown || cooldown.nextAttemptAt <= Date.now();
   });
   const deferredByBackoff = listing.payload.jobs.length - eligibleJobs.length;
   const results = [];
@@ -63,7 +63,7 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
     } else {
       const attempts = (cooldowns.get(job.id)?.attempts ?? 0) + 1;
       const delayMs = Math.min(15 * 60_000, 30_000 * (2 ** Math.max(0, attempts - 1)));
-      cooldowns.set(job.id, { attempts, nextAttemptAt: now + delayMs });
+      cooldowns.set(job.id, { attempts, nextAttemptAt: Date.now() + delayMs });
     }
     results.push({
       jobId: job.id,
@@ -87,6 +87,15 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
 
 const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
+async function waitForNextCycle(milliseconds, shouldStop) {
+  const deadline = Date.now() + milliseconds;
+  while (!shouldStop()) {
+    const remaining = deadline - Date.now();
+    if (remaining <= 0) return;
+    await delay(Math.min(250, remaining));
+  }
+}
+
 export async function runWorker({
   baseUrl = process.env.DASHBOARD_API_URL ?? DEFAULT_API_URL,
   token = process.env.DASHBOARD_WORKER_TOKEN,
@@ -108,7 +117,7 @@ export async function runWorker({
       if (once) throw error;
     }
     if (once || shouldStop()) break;
-    await delay(pollIntervalMs);
+    await waitForNextCycle(pollIntervalMs, shouldStop);
   } while (!shouldStop());
 }
 
