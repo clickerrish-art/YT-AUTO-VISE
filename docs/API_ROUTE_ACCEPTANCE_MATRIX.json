@@ -22,8 +22,8 @@
   "counts": {
     "routes": 35,
     "authNegativePass": 35,
-    "overallPass": 29,
-    "overallNotTested": 2,
+    "overallPass": 30,
+    "overallNotTested": 1,
     "overallBlocked": 4
   },
   "evidence": {
@@ -679,7 +679,7 @@
       "notes": "Exact-SHA real-server test test/dashboard-api-review-approval.integration.test.mjs verifies invalid hash rejection without mutation, concurrent identical approval requests (one 200 and one 409), hash-bound approval receipt, one audit event, exact reviewer attribution, and restart persistence. All media/rights inputs are explicitly synthetic fixtures; this is engineering transaction acceptance, not genuine human media review or production authorization.",
       "testEvidence": {
         "test": "test/dashboard-api-review-approval.integration.test.mjs",
-        "exactTestedSha": "pending CI for this test commit",
+        "exactTestedSha": "7add5c3bf487476880bb78b12da9ba50e419c4d3",
         "scenario": "Two simultaneous identical approval requests serialize to one successful private-upload approval and one conflict; exact hash-bound receipt and audit persist across restart. Synthetic fixtures only."
       }
     },
