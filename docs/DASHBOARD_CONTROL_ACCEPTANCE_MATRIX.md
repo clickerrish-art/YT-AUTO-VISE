@@ -22,6 +22,30 @@ Current dashboard source inventory (reproduced from `scripts/dashboard-inventory
 
 Static counts and 20 browser journeys do not prove every control works. The inventory parser explicitly describes itself as static source inventory only. **DASH-001 remains NOT_TESTED** until all 101 controls and 15 forms have control-by-control acceptance for intended operation, API connection, validation, failure feedback, persistence, refresh, authorization and accessibility. The full business workflow and production media are not certified by this dashboard subset.
 
+## Live dashboard source inventory — recalculated 2 November 2026
+
+The current inventory was recalculated by running `node scripts/dashboard-inventory.mjs` against the recovered implementation-branch source. This is a static source inventory, not behavioral acceptance.
+
+| Item | Count |
+|---|---:|
+| Total controls | 104 |
+| Buttons | 22 |
+| Inputs | 41 |
+| Selects | 26 |
+| Textareas | 15 |
+| Forms | 16 |
+| Route declarations | 38 |
+| Protected API routes | 35 |
+| GET / POST route declarations | 10 / 28 |
+| Non-API handlers | 3 (`GET /`, `GET /healthz`, `GET /readyz`) |
+
+- Inventory source SHA: `9c1d8997ac53d3116bfa51a7d9e9dd01194fc3ba`.
+- Dashboard HTML Git blob: `700b56454cc4cf6499cb5e0f574d2936aeda41d4`.
+- Dashboard server Git blob: `25873843f1a9e2ec1e59f8b0821b6dcf5d2e4fc0`.
+- Exact-SHA dashboard Chromium E2E: [run 41440314185](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41440314185), **21 journeys passed**.
+- Exact-SHA automation/security: [run 41440314138](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41440314138), **471 Node tests passed, zero failures/skips; 16 Python tests passed; npm audit reported zero vulnerabilities**.
+
+The prior 101-control / 15-form inventory and its detailed rows are historical and do not cover the full current source inventory. The current source contains 3 additional controls and 1 additional form beyond that snapshot. **DASH-001 remains NOT_TESTED**: the 21 browser journeys do not prove all 104 controls and 16 forms have correct success, validation, authorization, failure feedback, persistence, refresh, concurrency, keyboard and mobile behavior. The static inventory parser explicitly does not claim behavioral acceptance.
 ---
 
 ## Exact-SHA draft-edit and narration-review API acceptance — 31 October 2026
