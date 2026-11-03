@@ -175,14 +175,22 @@ export async function runWorker({
   validateConfiguration({ baseUrl, token, workerId, pollIntervalMs });
   const statePath = cooldownStatePath(workerId, configuredCooldownStatePath, stateDirectory);
   const cooldowns = loadCooldowns(statePath, workerId);
-  const persist = () => persistCooldowns(statePath, workerId, cooldowns);
+  const persist = () => {
+    try {
+      persistCooldowns(statePath, workerId, cooldowns);
+    } catch (cause) {
+      const error = new Error("Worker retry backoff could not be persisted; stopping to avoid an early redispatch", { cause });
+      error.code = "WORKER_BACKOFF_PERSISTENCE_FAILED";
+      throw error;
+    }
+  };
   do {
     try {
       const result = await runWorkerCycle({ baseUrl, token, workerId, cooldowns, onCooldownsChanged: persist });
       onCycle(result);
     } catch (error) {
       onError(error);
-      if (once) throw error;
+      if (once || error?.code === "WORKER_BACKOFF_PERSISTENCE_FAILED") throw error;
     }
     if (once || shouldStop()) break;
     await waitForNextCycle(pollIntervalMs, shouldStop);
