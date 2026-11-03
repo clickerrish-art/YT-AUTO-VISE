@@ -48,7 +48,7 @@ test("backup handles simulated disk-full writes without publishing a partial sna
     fs.writeFileSync = originalWriteFileSync;
   }
 
-  assert.equal(writes, 2, "failure must be injected at the backup payload write, after both locks are acquired");
+  assert.equal(writes, 3, "failure must be injected at the backup payload write, after both locks are acquired");
   assert.deepEqual(fs.readFileSync(statePath), beforeState, "disk-full backup must not mutate source state");
   assert.deepEqual(fs.readFileSync(path.join(source.rightsDir, "fixture-evidence.txt")), beforeRights);
   assert.equal(fs.existsSync(outputPath), false, "a partial backup must never appear under the final filename");

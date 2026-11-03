@@ -527,12 +527,12 @@ export async function restoreState(options = {}) {
       // replaced lock or an operator's recovery artifact.
       try {
         const lockStat = fs.lstatSync(lockPath);
-      if (!lockStat.isSymbolicLink() && lockStat.isFile()) {
-        const current = JSON.parse(fs.readFileSync(lockPath, "utf8"));
-        if (current.format === "sonicvhibez-restore-operation-lock" && current.token === token) {
-          fs.unlinkSync(lockPath);
+        if (!lockStat.isSymbolicLink() && lockStat.isFile()) {
+          const current = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+          if (current.format === "sonicvhibez-restore-operation-lock" && current.token === token) {
+            fs.unlinkSync(lockPath);
+          }
         }
-      }
       } catch (error) {
         if (error?.code !== "ENOENT") {
           throw new Error("Restore finished but its operation lock could not be safely cleared; inspect the lock before retrying", { cause: error });
