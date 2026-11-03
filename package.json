@@ -6,7 +6,7 @@
   "description": "Safety-first SonicVhibez content workflow, media validation and private-upload tooling.",
   "scripts": {
     "check": "node scripts/check-content.mjs",
-    "test": "node --test",
+    "test": "node scripts/run-node-tests.mjs",
     "dashboard": "node scripts/dashboard-server.mjs",
     "backup:state": "node scripts/backup-state.mjs",
     "restore:state": "node scripts/restore-state.mjs",
