@@ -7,6 +7,7 @@ import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
 import { commitApprovalArtifact } from "./approval-artifact-transaction.mjs";
 import { atomicWriteJson, atomicCreateJson } from "./atomic-json-file.mjs";
 import { startWorkerLeaseHeartbeat } from "./worker-lease-heartbeat.mjs";
+import { terminateProcessTree } from "./terminate-process-tree.mjs";
 import { redactOperationalText } from "./safe-output.mjs";
 import { matchesOperatorToken } from "./operator-auth.mjs";
 import { fileURLToPath } from "node:url";
@@ -443,7 +444,14 @@ function runTask(taskId, commandOverride = null, { signal } = {}) {
   const commandArgs = commandOverride ? args.slice(1) : args;
   return new Promise((resolve) => {
     const startedAt = new Date().toISOString();
-    const child = spawn(command, commandArgs, { cwd: root, shell: false, env: { ...process.env, CI: "1", ...(taskId === "test-suite" ? { DASHBOARD_TEST_CHILD: "1" } : {}) }, windowsHide: true, stdio: ["ignore", "pipe", "pipe"] });
+    const child = spawn(command, commandArgs, {
+      cwd: root,
+      shell: false,
+      env: { ...process.env, CI: "1", ...(taskId === "test-suite" ? { DASHBOARD_TEST_CHILD: "1" } : {}) },
+      windowsHide: true,
+      detached: process.platform !== "win32",
+      stdio: ["ignore", "pipe", "pipe"]
+    });
     let output = "";
     let truncated = false;
     let timedOut = false;
@@ -465,9 +473,9 @@ function runTask(taskId, commandOverride = null, { signal } = {}) {
     };
     abortChild = () => {
       if (child.exitCode !== null || child.signalCode !== null) return;
-      child.kill("SIGTERM");
+      terminateProcessTree(child, "SIGTERM");
       killTimer = setTimeout(() => {
-        if (child.exitCode === null && child.signalCode === null) child.kill("SIGKILL");
+        if (child.exitCode === null && child.signalCode === null) terminateProcessTree(child, "SIGKILL");
       }, 3000);
       killTimer.unref();
     };
