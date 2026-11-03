@@ -1673,7 +1673,7 @@ test("all 104 dashboard controls have stable identities and accessible names", a
 
       const ariaLabel = control.getAttribute("aria-label")?.trim() ?? "";
       const labelledBy = (control.getAttribute("aria-labelledby") ?? "").trim();
-      const labelledByValid = labelledBy.length > 0 && labelledBy.split(/\\s+/).every(reference => document.getElementById(reference));
+      const labelledByValid = labelledBy.length > 0 && labelledBy.split(/\s+/).every(reference => document.getElementById(reference));
       const labels = control.labels ? [...control.labels].map(label => label.textContent.trim()).filter(Boolean) : [];
       const buttonText = tag === "button" ? control.textContent.trim() : "";
       const title = (control.getAttribute("title") ?? "").trim();
