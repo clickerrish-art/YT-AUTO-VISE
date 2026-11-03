@@ -1648,3 +1648,56 @@ test("production-plan submission and hash-bound review persist through the real 
     fs.rmSync(evidenceDir, { recursive: true, force: true });
   }
 });
+
+test("all 104 dashboard controls have stable identities and accessible names", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  const audit = await page.evaluate(() => {
+    const controls = [...document.querySelectorAll("button, input, select, textarea")];
+    const forms = [...document.querySelectorAll("form")];
+    const failures = [];
+    const controlIds = new Set();
+
+    for (const control of controls) {
+      const tag = control.tagName.toLowerCase();
+      const id = control.id;
+      if (id) {
+        if (controlIds.has(id)) failures.push(`${tag}#${id}: duplicate control ID`);
+        controlIds.add(id);
+      } else if (!(tag === "button" && control.type === "submit")) {
+        failures.push(`${tag}: missing stable control ID`);
+      }
+
+      const ariaLabel = control.getAttribute("aria-label")?.trim() ?? "";
+      const labelledBy = (control.getAttribute("aria-labelledby") ?? "").trim();
+      const labelledByValid = labelledBy.length > 0 && labelledBy.split(/\\s+/).every(reference => document.getElementById(reference));
+      const labels = control.labels ? [...control.labels].map(label => label.textContent.trim()).filter(Boolean) : [];
+      const buttonText = tag === "button" ? control.textContent.trim() : "";
+      const title = (control.getAttribute("title") ?? "").trim();
+      const hasAccessibleName = Boolean(ariaLabel || labelledByValid || labels.length || buttonText || title);
+      if (!hasAccessibleName) failures.push(`${tag}${id ? "#" + id : ""}: missing accessible name`);
+
+      if (tag !== "button" && control.type !== "hidden" && !labels.length && !ariaLabel && !labelledByValid) {
+        failures.push(`${tag}${id ? "#" + id : ""}: missing associated label`);
+      }
+    }
+
+    const formIds = new Set();
+    for (const form of forms) {
+      if (!form.id) failures.push("form: missing stable ID");
+      else if (formIds.has(form.id)) failures.push(`form#${form.id}: duplicate ID`);
+      else formIds.add(form.id);
+      const hasSubmit = [...form.querySelectorAll("button, input")].some(control => control.type === "submit");
+      if (!hasSubmit) failures.push(`form#${form.id || "(anonymous)"}: missing submit control`);
+    }
+
+    return { controlCount: controls.length, formCount: forms.length, failures };
+  });
+
+  expect(audit.controlCount).toBe(104);
+  expect(audit.formCount).toBe(16);
+  expect(audit.failures).toEqual([]);
+});
