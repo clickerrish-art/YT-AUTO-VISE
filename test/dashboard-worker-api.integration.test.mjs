@@ -57,6 +57,10 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
 
   const statePath = path.join(stateDir, "dashboard-state.json");
   const initialState = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  const approvedPlan = {
+    status: "APPROVED_PLAN_ONLY",
+    review: { decision: "APPROVE", approvalSha256: "a".repeat(64) }
+  };
   initialState.jobs.push(
     {
       kind: "CONTENT_PRODUCTION",
@@ -72,12 +76,25 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       state: "QUEUED",
       contentType: "short",
       createdAt: "2026-11-02T18:01:00.000Z",
-      authoring: {
-        productionPlan: {
-          status: "APPROVED_PLAN_ONLY",
-          review: { decision: "APPROVE", approvalSha256: "a".repeat(64) }
-        }
-      }
+      authoring: { productionPlan: approvedPlan }
+    },
+    {
+      kind: "CONTENT_PRODUCTION",
+      id: "queued-approved-later-slot",
+      state: "QUEUED",
+      contentType: "long_form",
+      createdAt: "2026-11-02T17:59:00.000Z",
+      scheduledSlot: { date: "2026-11-21", time: "17:00", timezone: "Africa/Johannesburg" },
+      authoring: { productionPlan: structuredClone(approvedPlan) }
+    },
+    {
+      kind: "CONTENT_PRODUCTION",
+      id: "queued-approved-earlier-slot",
+      state: "QUEUED",
+      contentType: "long_form",
+      createdAt: "2026-11-02T18:02:00.000Z",
+      scheduledSlot: { date: "2026-11-14", time: "17:00", timezone: "Africa/Johannesburg" },
+      authoring: { productionPlan: structuredClone(approvedPlan) }
     }
   );
   fs.writeFileSync(statePath, JSON.stringify(initialState, null, 2) + "\n");
@@ -86,14 +103,35 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
   const dispatchable = await fetch(base + "/api/jobs/dispatchable", { headers: workerHeaders });
   assert.equal(dispatchable.status, 200);
   const payload = await dispatchable.json();
-  assert.deepEqual(payload.jobs, [{
-    id: "queued-with-approved-plan",
-    contentType: "short",
-    state: "QUEUED",
-    createdAt: "2026-11-02T18:01:00.000Z"
-  }], "only queued jobs carrying an explicitly approved render plan may be offered to workers");
-  assert.equal(payload.queuedCount, 2);
+  assert.deepEqual(payload.jobs, [
+    {
+      id: "queued-with-approved-plan",
+      contentType: "short",
+      state: "QUEUED",
+      createdAt: "2026-11-02T18:01:00.000Z"
+    },
+    {
+      id: "queued-approved-earlier-slot",
+      contentType: "long_form",
+      state: "QUEUED",
+      createdAt: "2026-11-02T18:02:00.000Z"
+    },
+    {
+      id: "queued-approved-later-slot",
+      contentType: "long_form",
+      state: "QUEUED",
+      createdAt: "2026-11-02T17:59:00.000Z"
+    }
+  ], "approved jobs must be dispatched by scheduled Africa/Johannesburg slot, not insertion or creation order");
+  assert.equal(payload.queuedCount, 4);
   assert.equal(payload.queuedWithoutApprovedRenderPlan, 1);
+  const limited = await fetch(base + "/api/jobs/dispatchable?limit=2", { headers: workerHeaders });
+  const limitedPayload = await limited.json();
+  assert.equal(limited.status, 200);
+  assert.deepEqual(limitedPayload.jobs.map(job => job.id), [
+    "queued-with-approved-plan",
+    "queued-approved-earlier-slot"
+  ], "the dispatch limit must apply after chronological ordering");
   assert.equal(payload.publishingEnabled, false);
   assert.equal(payload.readOnly, true);
   const concurrentReads = await Promise.all(Array.from({ length: 4 }, () =>

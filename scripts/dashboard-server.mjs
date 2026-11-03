@@ -676,7 +676,21 @@ const server = http.createServer(async (req, res) => {
         job.authoring?.productionPlan?.status === "APPROVED_PLAN_ONLY" &&
         job.authoring.productionPlan.review?.decision === "APPROVE" &&
         /^[a-f0-9]{64}$/.test(job.authoring.productionPlan.review?.approvalSha256 ?? "");
+      const dispatchTimestamp = job => {
+        const slot = job.scheduledSlot;
+        if (slot?.timezone === "Africa/Johannesburg" &&
+            /^\\d{4}-\\d{2}-\\d{2}$/.test(slot.date ?? "") &&
+            /^(?:[01]\\d|2[0-3]):[0-5]\\d$/.test(slot.time ?? "")) {
+          const scheduledAt = Date.parse(slot.date + "T" + slot.time + ":00+02:00");
+          if (Number.isFinite(scheduledAt)) return scheduledAt;
+        }
+        const createdAt = Date.parse(job.createdAt ?? "");
+        return Number.isFinite(createdAt) ? createdAt : Number.MAX_SAFE_INTEGER;
+      };
       const jobs = queued.filter(job => hasApprovedRenderPlan(job) && typeof job.id === "string")
+        .sort((a, b) => dispatchTimestamp(a) - dispatchTimestamp(b) ||
+          String(a.createdAt ?? "").localeCompare(String(b.createdAt ?? "")) ||
+          a.id.localeCompare(b.id))
         .slice(0, requestedLimit)
         .map(job => ({ id: job.id, contentType: job.contentType, state: job.state, createdAt: job.createdAt }));
       return json(res, 200, {
