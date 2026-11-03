@@ -164,6 +164,11 @@ test("worker lease fences concurrent claims and permits guarded heartbeat/stage 
 test("expired leases fence stale results and enforce bounded retry backoff", () => {
   const start = Date.parse("2026-10-23T12:00:00.000Z");
   const first = claimWorkerLease(createContentJob(input), "worker-a", { leaseMs: 5_000, now: start });
+  assert.throws(
+    () => heartbeatWorkerLease(first.job, first.leaseToken, { leaseMs: 5_000, now: start + 5_000 }),
+    /lease has expired/,
+    "renewal at the exact expiry boundary must be rejected"
+  );
   const expired = expireWorkerLease(first.job, start + 5_001);
   assert.equal(expired.expired, true);
   assert.equal(expired.job.state, "FAILED");
@@ -175,6 +180,16 @@ test("expired leases fence stale results and enforce bounded retry backoff", () 
   const retry = claimWorkerLease(expired.job, "worker-b", { now: Date.parse(expired.job.nextRetryAt) + 1 });
   assert.equal(retry.job.state, "GENERATING");
   assert.equal(retry.job.attemptCount, 2);
+  assert.throws(
+    () => heartbeatWorkerLease(retry.job, first.leaseToken, { now: Date.now() }),
+    /does not match/,
+    "the previous worker's token must remain fenced after a new owner claims the retry"
+  );
+  assert.throws(
+    () => completeWorkerLease(retry.job, first.leaseToken, "GENERATED", {}, Date.now()),
+    /does not match/,
+    "a stale worker must not complete a job after ownership transfers"
+  );
   const secondExpiry = expireWorkerLease(retry.job, Date.parse(retry.job.workerLease.expiresAt) + 1);
   assert.equal(secondExpiry.job.state, "FAILED");
   assert.equal(secondExpiry.job.errorDetails.retryable, false);
