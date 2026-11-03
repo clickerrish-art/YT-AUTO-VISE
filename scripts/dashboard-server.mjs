@@ -6,6 +6,7 @@ import { metaCredentialFingerprint, fingerprintsMatch } from "./meta-credential-
 import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
 import { commitApprovalArtifact } from "./approval-artifact-transaction.mjs";
 import { atomicWriteJson, atomicCreateJson } from "./atomic-json-file.mjs";
+import { startWorkerLeaseHeartbeat } from "./worker-lease-heartbeat.mjs";
 import { redactOperationalText } from "./safe-output.mjs";
 import { matchesOperatorToken } from "./operator-auth.mjs";
 import { fileURLToPath } from "node:url";
@@ -435,7 +436,7 @@ const allowedTasks = new Map([
 ]);
 const activeTasks = new Set();
 const taskTimeoutMs = new Map([["validate-schedule", 30_000], ["validate-campaigns", 30_000], ["check-captions", 45_000], ["production-readiness", 60_000], ["test-suite", 180_000], ["render-short", 600_000], ["render-long-form", 600_000]]);
-function runTask(taskId, commandOverride = null) {
+function runTask(taskId, commandOverride = null, { signal } = {}) {
   const args = commandOverride ?? (allowedTasks.get(taskId) ?? productionTasks.get(taskId));
   if (!args) return Promise.reject(new Error("Task is not on the dashboard allowlist"));
   const command = commandOverride ? args[0] : "npm";
@@ -447,10 +448,14 @@ function runTask(taskId, commandOverride = null) {
     let truncated = false;
     let timedOut = false;
     let settled = false;
+    let abortChild = () => {};
+    let killTimer = null;
     const finish = result => {
       if (settled) return;
       settled = true;
       clearTimeout(timer);
+      if (killTimer) clearTimeout(killTimer);
+      signal?.removeEventListener("abort", abortChild);
       const safeOutput = redactOperationalText(result.output ?? output, { roots: [root, stateDir] });
       resolve({ taskId, startedAt, finishedAt: new Date().toISOString(), truncated, ...result, output: safeOutput });
     };
@@ -458,12 +463,21 @@ function runTask(taskId, commandOverride = null) {
       output += chunk.toString();
       if (output.length > 12000) { output = output.slice(-12000); truncated = true; }
     };
+    abortChild = () => {
+      if (child.exitCode !== null || child.signalCode !== null) return;
+      child.kill("SIGTERM");
+      killTimer = setTimeout(() => {
+        if (child.exitCode === null && child.signalCode === null) child.kill("SIGKILL");
+      }, 3000);
+      killTimer.unref();
+    };
     const timer = setTimeout(() => {
       timedOut = true;
       output += "\\nTask exceeded its time limit; termination requested.";
-      child.kill("SIGTERM");
-      setTimeout(() => { if (child.exitCode === null) child.kill("SIGKILL"); }, 3000).unref();
+      abortChild();
     }, taskTimeoutMs.get(taskId) ?? 60_000);
+    if (signal?.aborted) abortChild();
+    else signal?.addEventListener("abort", abortChild, { once: true });
     child.stdout.on("data", collect);
     child.stderr.on("data", collect);
     child.on("error", error => finish({ exitCode: null, status: "FAILED", output: redactOperationalText((output + "\\n" + error.message).slice(-12000), { roots: [root, stateDir] }) }));
@@ -2583,7 +2597,8 @@ const server = http.createServer(async (req, res) => {
             });
           }
         }
-        claim = claimWorkerLease(job, "dashboard-renderer-" + job.contentType, { leaseMs: 15 * 60_000 });
+        // Bind durable lease ownership to the authenticated continuous worker.
+        claim = claimWorkerLease(job, workerAuthenticated ? workerId : "dashboard-renderer-" + job.contentType, { leaseMs: 15 * 60_000 });
         jobTitle = job.title;
         state.jobs[index] = claim.job;
         state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_RENDER_STARTED", jobId: job.id, taskId, actor: requestActor, at: new Date().toISOString(), reason: taskArgs ? "Renderer launched with a per-job manifest built from exact approved script, narration, scene, rights, quality and metadata evidence; no upload/publication path" : "Legacy fixed-manifest renderer launched through dashboard; no upload/publication path" });
@@ -2591,9 +2606,47 @@ const server = http.createServer(async (req, res) => {
       } finally { release(); }
 
       activeTasks.add(taskId);
+      const leaseAbort = new AbortController();
+      const leaseHeartbeat = startWorkerLeaseHeartbeat({
+        intervalMs: 30_000,
+        onFailure: () => leaseAbort.abort(),
+        heartbeat: async () => {
+          const heartbeatRelease = await acquireStateLock();
+          try {
+            const state = loadState();
+            const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+            if (index < 0) throw new Error("Leased production job disappeared before heartbeat");
+            const renewed = heartbeatWorkerLease(state.jobs[index], claim.leaseToken, { leaseMs: 15 * 60_000 });
+            state.jobs[index] = renewed;
+            state.audit.push({
+              id: crypto.randomUUID(),
+              action: "WORKER_LEASE_HEARTBEAT",
+              jobId: body.jobId,
+              workerId: renewed.workerLease.workerId,
+              expiresAt: renewed.workerLease.expiresAt,
+              at: new Date().toISOString(),
+              actor: requestActor,
+              source: "continuous-production-dispatch"
+            });
+            saveState(state);
+          } finally { heartbeatRelease(); }
+        }
+      });
       let result;
-      try { result = await runTask(taskId, taskArgs); }
-      finally { activeTasks.delete(taskId); }
+      let leaseHeartbeatFailure;
+      try {
+        result = await runTask(taskId, taskArgs, { signal: leaseAbort.signal });
+      } finally {
+        leaseHeartbeatFailure = await leaseHeartbeat.stop();
+        activeTasks.delete(taskId);
+      }
+      if (leaseHeartbeatFailure) {
+        return json(res, 409, {
+          error: "Worker lease heartbeat failed; production result was not committed and requires lease expiry/reconciliation",
+          recoveryRequired: true,
+          publishingEnabled: false
+        });
+      }
 
       const finishRelease = await acquireStateLock();
       try {
