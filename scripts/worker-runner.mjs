@@ -99,7 +99,7 @@ async function requestJson(fetchImpl, url, options, timeoutMs = 15_000) {
   return { status: response.status, payload };
 }
 
-export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerId, fetchImpl = fetch, limit = 20, cooldowns = new Map(), onCooldownsChanged = () => {} }) {
+export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerId, fetchImpl = fetch, limit = 20, cooldowns = new Map(), onCooldownsChanged = () => {}, shouldStop = () => false }) {
   const origin = validateConfiguration({ baseUrl, token, workerId, pollIntervalMs: DEFAULT_POLL_INTERVAL_MS });
   if (!Number.isInteger(limit) || limit < 1 || limit > 100) throw new Error("worker dispatch limit must be an integer from 1 to 100");
   const headers = { "x-worker-token": token, "x-worker-id": workerId };
@@ -113,7 +113,12 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
   });
   const deferredByBackoff = listing.payload.jobs.length - eligibleJobs.length;
   const results = [];
+  let stoppedBeforeDispatch = false;
   for (const job of eligibleJobs) {
+    if (shouldStop()) {
+      stoppedBeforeDispatch = true;
+      break;
+    }
     if (!job || typeof job.id !== "string" || !job.id.trim()) throw new Error("Dashboard worker API returned a job without a valid identifier");
     const dispatched = await requestJson(fetchImpl, origin + "/api/jobs/produce", {
       method: "POST",
@@ -145,6 +150,8 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
     queuedWithoutApprovedRenderPlan: Number.isInteger(listing.payload.queuedWithoutApprovedRenderPlan) ? listing.payload.queuedWithoutApprovedRenderPlan : 0,
     deferredByBackoff,
     results,
+    stoppedBeforeDispatch,
+    undispatchedAfterStop: stoppedBeforeDispatch ? eligibleJobs.length - results.length : 0,
     publishingEnabled: false
   };
 }
@@ -186,7 +193,7 @@ export async function runWorker({
   };
   do {
     try {
-      const result = await runWorkerCycle({ baseUrl, token, workerId, cooldowns, onCooldownsChanged: persist });
+      const result = await runWorkerCycle({ baseUrl, token, workerId, cooldowns, onCooldownsChanged: persist, shouldStop });
       onCycle(result);
     } catch (error) {
       onError(error);

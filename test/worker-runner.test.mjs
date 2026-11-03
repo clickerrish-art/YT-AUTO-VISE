@@ -123,3 +123,42 @@ test("worker stops its polling wait promptly after a shutdown signal", async t =
   assert.equal(cycles, 1);
   assert.ok(Date.now() - startedAt < 1_000, "worker shutdown should not wait for the full polling interval");
 });
+
+test("worker stops dispatching remaining jobs when shutdown is requested during an active dispatch", async t => {
+  const dispatched = [];
+  let stopping = false;
+  const server = createServer(async (req, res) => {
+    res.setHeader("content-type", "application/json");
+    if (req.method === "GET" && req.url?.startsWith("/api/jobs/dispatchable")) {
+      res.end(JSON.stringify({ jobs: [{ id: "job-one" }, { id: "job-two" }], queuedCount: 2 }));
+      return;
+    }
+    if (req.method === "POST" && req.url === "/api/jobs/produce") {
+      let body = "";
+      for await (const chunk of req) body += chunk;
+      const jobId = JSON.parse(body).jobId;
+      dispatched.push(jobId);
+      // Simulate SIGTERM arriving while the first dispatch is in flight.
+      stopping = true;
+      res.end(JSON.stringify({ job: { id: jobId, state: "GENERATED" }, publishingEnabled: false }));
+      return;
+    }
+    res.statusCode = 404;
+    res.end(JSON.stringify({ error: "not found" }));
+  });
+  const baseUrl = await listen(server);
+  t.after(() => new Promise(resolve => server.close(resolve)));
+
+  const result = await runWorkerCycle({
+    baseUrl,
+    token,
+    workerId,
+    cooldowns: new Map(),
+    shouldStop: () => stopping
+  });
+
+  assert.deepEqual(dispatched, ["job-one"], "shutdown must prevent the next queued job from being dispatched");
+  assert.equal(result.results.length, 1);
+  assert.equal(result.stoppedBeforeDispatch, true);
+  assert.equal(result.undispatchedAfterStop, 1);
+});
