@@ -20,12 +20,52 @@ export function acquireDashboardStateFileLock(stateFile) {
   try {
     fs.mkdirSync(lockDirectory, { mode: 0o700 });
   } catch (error) {
-    if (error?.code === "EEXIST") {
-      const busy = new Error("Dashboard state is busy in another process; backup/restore must wait until the active state operation finishes");
-      busy.code = "DASHBOARD_STATE_BUSY";
-      throw busy;
+    if (error?.code !== "EEXIST") throw error;
+
+    // Match the dashboard's lock-recovery rule: never steal a live or unknown
+    // lock, and reap only when its recorded PID is demonstrably gone and the
+    // owner identity is unchanged at the final check.
+    let ownerAlive = true;
+    let existingOwner;
+    try {
+      const ownerStat = fs.lstatSync(ownerPath);
+      if (ownerStat.isSymbolicLink() || !ownerStat.isFile()) {
+        throw new Error("Dashboard state lock owner metadata is not a regular file");
+      }
+      existingOwner = JSON.parse(fs.readFileSync(ownerPath, "utf8"));
+      if (!Number.isSafeInteger(existingOwner.pid) || existingOwner.pid <= 0 ||
+          typeof existingOwner.ownerId !== "string" || !existingOwner.ownerId) {
+        throw new Error("Dashboard state lock owner metadata is invalid");
+      }
+      try {
+        process.kill(existingOwner.pid, 0);
+      } catch (ownerError) {
+        if (ownerError?.code === "ESRCH") ownerAlive = false;
+        else if (ownerError?.code !== "EPERM") throw ownerError;
+      }
+      if (!ownerAlive) {
+        const latestStat = fs.lstatSync(ownerPath);
+        if (latestStat.isSymbolicLink() || !latestStat.isFile()) {
+          throw new Error("Dashboard state lock owner metadata changed during stale-lock recovery");
+        }
+        const latestOwner = JSON.parse(fs.readFileSync(ownerPath, "utf8"));
+        if (latestOwner.pid === existingOwner.pid && latestOwner.ownerId === existingOwner.ownerId) {
+          fs.rmSync(lockDirectory, { recursive: true, force: true });
+          return acquireDashboardStateFileLock(stateFile);
+        }
+      }
+    } catch (ownerError) {
+      if (ownerError?.code !== "ENOENT") {
+        const blocked = new Error("Dashboard state lock cannot be safely recovered; inspect its owner before backup/restore");
+        blocked.code = "DASHBOARD_STATE_BUSY";
+        throw blocked;
+      }
+      return acquireDashboardStateFileLock(stateFile);
     }
-    throw error;
+
+    const busy = new Error("Dashboard state is busy in another process; backup/restore must wait until the active state operation finishes");
+    busy.code = "DASHBOARD_STATE_BUSY";
+    throw busy;
   }
 
   let fd;
