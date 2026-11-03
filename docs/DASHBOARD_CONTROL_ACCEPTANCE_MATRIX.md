@@ -1101,3 +1101,13 @@ The dashboard browser suite passed 15 Chromium journeys on source/test SHA `bd98
 At source/test SHA `115fe82252b4fa1ef1eb2f9587bf0653356a6dc9`, the browser E2E workflow passed 15 Chromium journeys ([run 40940647329](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647329)); the full Node suite passed 426 tests with no failures/skips ([run 40940647523](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647523)); isolated baseline passed ([run 40940647321](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647321)). The latest code change hardens human-review receipt timestamp creation and validation, not dashboard control behavior.
 
 **DASH-001 remains NOT_TESTED.** The current static inventory is still 105 HTML controls, 15 forms and 37 protected API route declarations. Fifteen browser journeys and targeted authorization, request-boundary and concurrency regressions do not constitute behavior-specific success/failure/persistence/audit/accessibility evidence for every control, form and route.
+
+
+## 3 November 2026 — all-control identity and accessible-name browser check
+
+- Exact tested source/test SHA: `423a670ea56ec38fb9ec5c174f95614c69ac72be`.
+- Added a real Chromium test in `browser-tests/dashboard.spec.mjs` that inspects every current control after operator connection: **104 controls / 16 forms**.
+- The test checks unique control IDs where applicable, accessible names, associated labels or valid `aria-labelledby` references, unique stable form IDs and a submit control for every form.
+- Exact browser workflow [41595436080](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41595436080): **22/22 journeys passed**, including the new all-control check.
+- This closes only the identity/accessibility slice. It does not prove all controls' complete intended behavior, validation, authorization, API calls, persistence, refresh, concurrency or restart behavior. **DASH-001 remains NOT_TESTED overall.**
+- Full checkpoint and other current blockers: [CURRENT_RELEASE_EVIDENCE_2026-11-03.md](CURRENT_RELEASE_EVIDENCE_2026-11-03.md).

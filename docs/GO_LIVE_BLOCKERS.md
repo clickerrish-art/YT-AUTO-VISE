@@ -1,3 +1,14 @@
+# Latest exact-source execution — 3 November 2026 (worker backoff fail-closed and dashboard control accessibility)
+
+- Exact tested source/test candidate: `423a670ea56ec38fb9ec5c174f95614c69ac72be`; live branch at test time: 2,513 ahead / 2 behind / 218 changed files.
+- Worker retry-backoff persistence failure now stops the worker instead of allowing an early redispatch; regression test proves one dispatch request only.
+- New Chromium acceptance checks all 104 dashboard controls and 16 forms for stable IDs where applicable, accessible names, label/ARIA associations and submit controls. Exact browser run [41595436080](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41595436080): **22/22 passed**.
+- Exact-SHA automation [41595440424](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41595440424): **105/105 Node test files, 16 Python tests, zero skips**. Content quality [41595440398](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41595440398), metadata [41595440441](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41595440441), isolated baseline [41595440603](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41595440603), branch inventory [41595440403](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41595440403), local draft validation [41595440458](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41595440458), and lockfile [41595436069](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41595436069) **PASS**.
+- Production readiness [41595440415](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41595440415) remains **HOLD with 13 blockers**; fail-closed as designed. DASH-001 remains NOT_TESTED overall; this is only a control identity/accessibility slice.
+- Full checkpoint, Metricool risk and remaining owner gates: [CURRENT_RELEASE_EVIDENCE_2026-11-03.md](CURRENT_RELEASE_EVIDENCE_2026-11-03.md).
+
+---
+
 # Latest exact-source execution — 2 November 2026 (stable publication-slot identity)
 
 - Exact tested source/test commit: `f478c45f438057c8b8e535aa8c3f96dab138c347`; implementation change: `eea2e976d74ad7975ec4b1ae032c6115f0abc423`.

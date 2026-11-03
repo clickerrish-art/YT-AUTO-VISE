@@ -1,3 +1,13 @@
+# Latest release-gate evidence — 3 November 2026
+
+- Tested source/test candidate: `423a670ea56ec38fb9ec5c174f95614c69ac72be`.
+- Dashboard browser E2E: [41595436080](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41595436080), **22/22 journeys**; added all-104-control/16-form identity and accessible-name acceptance.
+- Automation/security: [41595440424](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41595440424), **105/105 Node test files, 16 Python tests, zero skips**. Content quality, metadata, isolated baseline, inventory, local draft validation and lockfile checks pass.
+- Production readiness: [41595440415](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41595440415), **HOLD / 13 blockers**. Passing tests do not satisfy all six acceptance gates.
+- Current channel/destination mismatch, eight unsafe future Nature Frontiers schedules and exact owner-controlled blockers are recorded in [CURRENT_RELEASE_EVIDENCE_2026-11-03.md](CURRENT_RELEASE_EVIDENCE_2026-11-03.md).
+
+---
+
 # Latest exact-source execution — 2 November 2026 (stable publication-slot identity)
 
 - Exact tested source/test commit: `f478c45f438057c8b8e535aa8c3f96dab138c347`; implementation change: `eea2e976d74ad7975ec4b1ae032c6115f0abc423`.
