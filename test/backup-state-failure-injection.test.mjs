@@ -30,9 +30,9 @@ test("backup handles simulated disk-full writes without publishing a partial sna
   let writes = 0;
   fs.writeFileSync = function (...args) {
     writes += 1;
-    // The first write is the operation lock. Simulate ENOSPC on the next write,
-    // which is the staged backup payload, after the lock has been acquired.
-    if (writes === 2) {
+    // The first write is the backup/restore operation lock, the second is the
+    // dashboard-state lock owner record, and the third is the staged payload.
+    if (writes === 3) {
       const error = new Error("simulated disk full while writing backup payload");
       error.code = "ENOSPC";
       throw error;
@@ -48,7 +48,7 @@ test("backup handles simulated disk-full writes without publishing a partial sna
     fs.writeFileSync = originalWriteFileSync;
   }
 
-  assert.equal(writes, 2, "failure must be injected at the backup payload write, not lock creation");
+  assert.equal(writes, 2, "failure must be injected at the backup payload write, after both locks are acquired");
   assert.deepEqual(fs.readFileSync(statePath), beforeState, "disk-full backup must not mutate source state");
   assert.deepEqual(fs.readFileSync(path.join(source.rightsDir, "fixture-evidence.txt")), beforeRights);
   assert.equal(fs.existsSync(outputPath), false, "a partial backup must never appear under the final filename");
@@ -123,4 +123,31 @@ test("SIGKILL during backup leaves no final snapshot and retains the lock and te
   assert.equal(remainingLock.token, lock.token);
   assert.equal(remainingLock.pid, child.pid);
   fs.unlinkSync(lockPath);
+});
+
+
+test("backup refuses to snapshot while the dashboard owns its state-write lock", async t => {
+  const source = fixture();
+  t.after(() => fs.rmSync(source.root, { recursive: true, force: true }));
+  const lockDirectory = path.join(source.stateDir, "dashboard-state.json.lock");
+  fs.mkdirSync(lockDirectory, { mode: 0o700 });
+  const owner = { pid: process.pid, ownerId: "live-dashboard-test-owner", acquiredAt: new Date().toISOString() };
+  fs.writeFileSync(path.join(lockDirectory, "owner.json"), JSON.stringify(owner), { mode: 0o600 });
+
+  await assert.rejects(
+    backupState({
+      rootDir: source.root,
+      stateDir: source.stateDir,
+      uploadLogDir: source.uploadLogDir,
+      rightsDir: source.rightsDir,
+      outputPath: path.join(source.root, "backups", "must-not-exist.json")
+    }),
+    error => error?.code === "DASHBOARD_STATE_BUSY"
+  );
+
+  assert.equal(fs.existsSync(path.join(source.root, "backups", "must-not-exist.json")), false);
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(lockDirectory, "owner.json"), "utf8")), owner,
+    "backup must not remove or rewrite the live dashboard lock");
+  assert.equal(fs.existsSync(path.join(source.stateDir, ".restore-operation.lock")), false,
+    "the backup/restore serialization lock must be released after refusing a busy dashboard state");
 });

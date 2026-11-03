@@ -178,3 +178,36 @@ test("restore recovery validates the entire journal before mutating duplicate de
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+
+test("restore refuses to replace dashboard state while the live dashboard holds its write lock", async () => {
+  const dir = makeTempDir();
+  try {
+    const stateDir = path.join(dir, "state");
+    fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+    const stateFile = path.join(stateDir, "dashboard-state.json");
+    const originalState = JSON.stringify({ version: 1, jobs: [{ id: "preserve-me" }], audit: [] });
+    fs.writeFileSync(stateFile, originalState, { mode: 0o600 });
+    const backupPath = path.join(dir, "backup.json");
+    fs.writeFileSync(backupPath, validEmptyBackup, { mode: 0o600 });
+
+    const lockDirectory = stateFile + ".lock";
+    fs.mkdirSync(lockDirectory, { mode: 0o700 });
+    const owner = { pid: process.pid, ownerId: "live-dashboard-test-owner", acquiredAt: new Date().toISOString() };
+    fs.writeFileSync(path.join(lockDirectory, "owner.json"), JSON.stringify(owner), { mode: 0o600 });
+
+    await assert.rejects(
+      restoreState({ backupPath, rootDir: dir, confirm: "YES", now: Date.parse("2026-10-02T00:00:00.000Z") }),
+      error => error?.code === "DASHBOARD_STATE_BUSY"
+    );
+
+    assert.equal(fs.readFileSync(stateFile, "utf8"), originalState,
+      "restore must not overwrite state while the dashboard may have an in-flight mutation");
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(lockDirectory, "owner.json"), "utf8")), owner,
+      "restore must not remove or rewrite the live dashboard lock");
+    assert.equal(fs.existsSync(path.join(stateDir, ".restore-operation.lock")), false,
+      "the backup/restore serialization lock must be released after refusing a busy dashboard state");
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});

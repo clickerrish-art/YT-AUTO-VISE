@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { acquireDashboardStateFileLock } from "./dashboard-state-file-lock.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sha256 = value => crypto.createHash("sha256").update(value).digest("hex");
@@ -239,7 +240,9 @@ export async function backupState(options = {}) {
     throw error;
   }
 
+  let releaseDashboardStateLock;
   try {
+    releaseDashboardStateLock = acquireDashboardStateFileLock(path.join(stateRoot, "dashboard-state.json"));
     const interruptedRestoreJournal = path.join(stateRoot, ".restore-transaction.json");
     try {
       const journalStat = fs.lstatSync(interruptedRestoreJournal);
@@ -253,16 +256,20 @@ export async function backupState(options = {}) {
     return await backupStateUnlocked(options);
   } finally {
     try {
-      const lockStat = fs.lstatSync(lockPath);
+      releaseDashboardStateLock?.();
+    } finally {
+      try {
+        const lockStat = fs.lstatSync(lockPath);
       if (!lockStat.isSymbolicLink() && lockStat.isFile()) {
         const current = JSON.parse(fs.readFileSync(lockPath, "utf8"));
         if (current.format === "sonicvhibez-restore-operation-lock" && current.token === token) {
           fs.unlinkSync(lockPath);
         }
       }
-    } catch (error) {
-      if (error?.code !== "ENOENT") {
-        throw new Error("Backup finished but its state-operation lock could not be safely cleared; inspect the lock before retrying", { cause: error });
+      } catch (error) {
+        if (error?.code !== "ENOENT") {
+          throw new Error("Backup finished but its state-operation lock could not be safely cleared; inspect the lock before retrying", { cause: error });
+        }
       }
     }
   }
