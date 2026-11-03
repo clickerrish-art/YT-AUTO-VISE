@@ -28,6 +28,10 @@ export function acquireDashboardStateFileLock(stateFile) {
     let ownerAlive = true;
     let existingOwner;
     try {
+      const lockStat = fs.lstatSync(lockDirectory);
+      if (lockStat.isSymbolicLink() || !lockStat.isDirectory()) {
+        throw new Error("Dashboard state lock path is not a real directory");
+      }
       const ownerStat = fs.lstatSync(ownerPath);
       if (ownerStat.isSymbolicLink() || !ownerStat.isFile()) {
         throw new Error("Dashboard state lock owner metadata is not a regular file");
@@ -55,12 +59,12 @@ export function acquireDashboardStateFileLock(stateFile) {
         }
       }
     } catch (ownerError) {
-      if (ownerError?.code !== "ENOENT") {
-        const blocked = new Error("Dashboard state lock cannot be safely recovered; inspect its owner before backup/restore");
-        blocked.code = "DASHBOARD_STATE_BUSY";
-        throw blocked;
+      if (ownerError?.code === "ENOENT" && !fs.existsSync(lockDirectory)) {
+        return acquireDashboardStateFileLock(stateFile);
       }
-      return acquireDashboardStateFileLock(stateFile);
+      const blocked = new Error("Dashboard state lock cannot be safely recovered; inspect its owner before backup/restore");
+      blocked.code = "DASHBOARD_STATE_BUSY";
+      throw blocked;
     }
 
     const busy = new Error("Dashboard state is busy in another process; backup/restore must wait until the active state operation finishes");
