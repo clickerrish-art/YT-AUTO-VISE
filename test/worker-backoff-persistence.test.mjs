@@ -88,3 +88,54 @@ test("worker refuses corrupt or symlinked retry state instead of resetting backo
     /regular file|unsafe path/i,
   );
 });
+
+test("worker stops after a dispatch conflict when retry-backoff persistence fails", async t => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-backoff-write-failure-"));
+  const stateDirectory = path.join(directory, "worker-state");
+  fs.mkdirSync(stateDirectory);
+  let produceRequests = 0;
+  const server = createServer(async (req, res) => {
+    res.setHeader("content-type", "application/json");
+    if (req.method === "GET" && req.url?.startsWith("/api/jobs/dispatchable")) {
+      res.end(JSON.stringify({ jobs: [{ id: "job-blocked-by-render-prerequisites" }], queuedCount: 1 }));
+      return;
+    }
+    if (req.method === "POST" && req.url === "/api/jobs/produce") {
+      produceRequests += 1;
+      // Make the cooldown-state parent unusable after the worker has loaded its
+      // initial state but before it attempts to persist the 409 backoff.
+      fs.rmdirSync(stateDirectory);
+      fs.writeFileSync(stateDirectory, "parent directory replaced during dispatch");
+      res.statusCode = 409;
+      res.end(JSON.stringify({ error: "render prerequisites are not satisfied", publishingEnabled: false }));
+      return;
+    }
+    res.statusCode = 404;
+    res.end(JSON.stringify({ error: "not found" }));
+  });
+  const baseUrl = await listen(server);
+  const errors = [];
+  t.after(async () => {
+    await new Promise(resolve => server.close(resolve));
+    fs.rmSync(directory, { recursive: true, force: true });
+  });
+
+  await assert.rejects(
+    runWorker({
+      baseUrl,
+      token,
+      workerId,
+      once: false,
+      pollIntervalMs: 1_000,
+      stateDirectory,
+      cooldownStatePath: path.join(stateDirectory, "worker-backoff.json"),
+      onError: error => errors.push(error),
+      shouldStop: () => produceRequests >= 2
+    }),
+    error => error?.code === "WORKER_BACKOFF_PERSISTENCE_FAILED"
+  );
+
+  assert.equal(produceRequests, 1, "the worker must stop rather than retrying before a cooldown can be persisted");
+  assert.equal(errors.length, 1);
+  assert.equal(errors[0].code, "WORKER_BACKOFF_PERSISTENCE_FAILED");
+});
