@@ -94,7 +94,11 @@ async function requestJson(fetchImpl, url, options, timeoutMs = 15_000) {
   try { payload = await response.json(); }
   catch { throw new Error("Dashboard worker API returned a non-JSON response (HTTP " + response.status + ")"); }
   if (!response.ok && response.status !== 409) {
-    throw new Error("Dashboard worker API request failed with HTTP " + response.status + ": " + String(payload.error ?? "request failed").slice(0, 300));
+    const error = new Error("Dashboard worker API request failed with HTTP " + response.status + ": " + String(payload.error ?? "request failed").slice(0, 300));
+    error.code = "WORKER_API_HTTP_" + response.status;
+    error.status = response.status;
+    error.retryable = response.status === 408 || response.status === 429 || response.status >= 500;
+    throw error;
   }
   return { status: response.status, payload };
 }
@@ -197,7 +201,7 @@ export async function runWorker({
       onCycle(result);
     } catch (error) {
       onError(error);
-      if (once || error?.code === "WORKER_BACKOFF_PERSISTENCE_FAILED") throw error;
+      if (once || error?.code === "WORKER_BACKOFF_PERSISTENCE_FAILED" || error?.retryable === false) throw error;
     }
     if (once || shouldStop()) break;
     await waitForNextCycle(pollIntervalMs, shouldStop);

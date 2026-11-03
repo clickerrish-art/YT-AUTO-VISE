@@ -162,3 +162,30 @@ test("worker stops dispatching remaining jobs when shutdown is requested during 
   assert.equal(result.stoppedBeforeDispatch, true);
   assert.equal(result.undispatchedAfterStop, 1);
 });
+
+test("continuous worker stops after a non-retryable API authorization failure", async t => {
+  let polls = 0;
+  const errors = [];
+  const server = createServer((req, res) => {
+    polls += 1;
+    res.writeHead(401, { "content-type": "application/json" });
+    res.end(JSON.stringify({ error: "Worker authentication rejected" }));
+  });
+  const baseUrl = await listen(server);
+  t.after(() => new Promise(resolve => server.close(resolve)));
+
+  await assert.rejects(
+    runWorker({
+      baseUrl,
+      token,
+      workerId,
+      once: false,
+      pollIntervalMs: 1_000,
+      onError: error => errors.push(error),
+      shouldStop: () => false
+    }),
+    error => error?.code === "WORKER_API_HTTP_401" && error.retryable === false
+  );
+  assert.equal(polls, 1, "invalid worker credentials must not cause an endless polling loop");
+  assert.equal(errors.length, 1);
+});
