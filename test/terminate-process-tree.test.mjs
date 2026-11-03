@@ -48,18 +48,28 @@ if (process.platform !== "win32") {
   test("POSIX termination stops a real detached renderer and its FFmpeg-like descendant", async t => {
     const directory = fs.mkdtempSync(path.join(os.tmpdir(), "renderer-process-tree-"));
     const marker = path.join(directory, "descendant-terminated.txt");
+    const ready = path.join(directory, "descendant-ready.txt");
     const descendantSource = `
       const fs = require("node:fs");
       process.on("SIGTERM", () => {
         fs.writeFileSync(${JSON.stringify(marker)}, "terminated");
         process.exit(0);
       });
+      fs.writeFileSync(${JSON.stringify(ready)}, "ready");
       setInterval(() => {}, 1000);
     `;
     const parentSource = `
       const { spawn } = require("node:child_process");
+      const fs = require("node:fs");
       const descendant = spawn(process.execPath, ["-e", ${JSON.stringify(descendantSource)}], { stdio: "ignore" });
-      process.stdout.write(String(descendant.pid) + "\\n");
+      const reportWhenReady = () => {
+        if (fs.existsSync(${JSON.stringify(ready)})) {
+          process.stdout.write(String(descendant.pid) + "\\\\n");
+          return;
+        }
+        setTimeout(reportWhenReady, 10);
+      };
+      reportWhenReady();
       setInterval(() => {}, 1000);
     `;
     const parent = spawn(process.execPath, ["-e", parentSource], {
