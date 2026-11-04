@@ -238,15 +238,19 @@ export async function runWorker({
     }
   };
   do {
+    let nextWaitMs = pollIntervalMs;
     try {
       const result = await runWorkerCycle({ baseUrl, token, workerId, fetchImpl, cooldowns, onCooldownsChanged: persist, shouldStop });
       onCycle(result);
     } catch (error) {
       onError(error);
+      if (error?.status === 429 && error?.retryable === true) {
+        nextWaitMs = Math.max(pollIntervalMs, error.retryAfterMs ?? 0);
+      }
       if (once || error?.code === "WORKER_BACKOFF_PERSISTENCE_FAILED" || error?.retryable === false) throw error;
     }
     if (once || shouldStop()) break;
-    await waitForNextCycle(pollIntervalMs, shouldStop);
+    await waitForNextCycle(nextWaitMs, shouldStop);
   } while (!shouldStop());
 }
 
