@@ -125,7 +125,7 @@ async function requestJson(fetchImpl, url, options, timeoutMs = 15_000) {
       const seconds = retryAfter && /^\d+(?:\.\d+)?$/.test(retryAfter) ? Number(retryAfter) : NaN;
       const dateDelay = retryAfter && !Number.isFinite(seconds) ? Date.parse(retryAfter) - Date.now() : NaN;
       error.retryAfterMs = Math.max(1_000, Math.min(15 * 60_000,
-        Number.isFinite(seconds) ? seconds * 1_000 : Number.isFinite(dateDelay) ? dateDelay : 30_000));
+        Number.isFinite(seconds) ? seconds * 1_000 : Number.isFinite(dateDelay) && dateDelay > 0 ? dateDelay : 30_000));
     }
     throw error;
   }
