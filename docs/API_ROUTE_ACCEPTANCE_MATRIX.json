@@ -147,15 +147,15 @@
       "classification": "external identity and permission verification",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "BLOCKED",
+      "authorizedSuccess": "BLOCKED — successful external verification requires owner-verified Page ID and real Meta credentials; fail-closed 409 response is covered by test/facebook-page-verification-fail-closed.integration.test.mjs.",
       "inputValidation": "PASS",
-      "durablePersistence": "NOT_TESTED",
-      "auditEvidence": "NOT_TESTED",
-      "concurrency": "NOT_TESTED",
-      "restartRecovery": "NOT_TESTED",
+      "durablePersistence": "PASS — the fail-closed missing-identity response leaves dashboard-state.json byte-for-byte unchanged; successful external verification persistence remains untested.",
+      "auditEvidence": "PASS — no identity-verification audit event is appended when the owner-verified Page ID is absent; successful external verification audit remains untested.",
+      "concurrency": "NOT_TESTED — concurrent live Meta identity/permission verification is not exercised.",
+      "restartRecovery": "NOT_TESTED — successful external identity-verification persistence and restart read-back require genuine Page credentials.",
       "externalOperation": "Meta identity/permission verification",
       "overallAcceptance": "BLOCKED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Local fail-closed precondition behavior is accepted only; no live Meta API request, Page identity, permission grant, or publishing capability is claimed. A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
     },
     {
       "method": "GET",
