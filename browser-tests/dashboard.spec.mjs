@@ -1701,3 +1701,48 @@ test("all 104 dashboard controls have stable identities and accessible names", a
   expect(audit.formCount).toBe(16);
   expect(audit.failures).toEqual([]);
 });
+
+
+test("Facebook draft form rejects malformed claims and media JSON without issuing a draft request", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  const beforeResponse = await request.get("/api/facebook/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+  const beforeIds = (before.drafts ?? []).map(draft => draft.id).sort();
+
+  let draftRequests = 0;
+  page.on("request", outgoing => {
+    if (outgoing.method() === "POST" && new URL(outgoing.url()).pathname === "/api/facebook/drafts") {
+      draftRequests++;
+    }
+  });
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  const draftId = "fb-json-validation-" + Date.now().toString(36);
+  await page.locator("#fbid").fill(draftId);
+  await page.locator("#fbtopic").fill("Malformed JSON validation regression");
+  await page.locator("#fbdate").fill("2030-10-25");
+  await page.locator("#fbpageid").fill("123456789");
+  await page.locator("#fbcaption").fill("A research-first wildlife education draft used only to verify local form validation.");
+  await page.locator("#fbclaims").fill("{ malformed claims JSON");
+  await page.getByRole("button", { name: "Save Facebook draft and run checks" }).click();
+  await expect(page.locator("#facebookdraftresult")).toContainText("Facebook draft blocked:");
+  expect(draftRequests).toBe(0);
+
+  await page.locator("#fbclaims").fill("[]");
+  await page.locator("#fbmedia").fill("{ malformed media JSON");
+  await page.getByRole("button", { name: "Save Facebook draft and run checks" }).click();
+  await expect(page.locator("#facebookdraftresult")).toContainText("Facebook draft blocked:");
+  expect(draftRequests).toBe(0);
+
+  const afterResponse = await request.get("/api/facebook/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  const after = await afterResponse.json();
+  expect((after.drafts ?? []).map(draft => draft.id).sort()).toEqual(beforeIds);
+  expect((after.drafts ?? []).some(draft => draft.id === draftId)).toBe(false);
+  expect(after.publishingEnabled).toBe(false);
+});
