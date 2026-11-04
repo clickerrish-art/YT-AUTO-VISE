@@ -75,7 +75,7 @@ export async function verifyMetaPagePermissions({
   let permissionsResponse;
   try {
     permissionsResponse = await fetchImpl(endpoint(apiVersion, "me/permissions"), {
-      method: "GET", headers: headers(userAccessToken), signal: AbortSignal.timeout(timeoutMs)
+      method: "GET", headers: headers(userAccessToken), redirect: "error", signal: AbortSignal.timeout(timeoutMs)
     });
   } catch {
     throw new MetaPageApiError("Meta permission check failed before a response; publishing remains blocked", { retryable: true });
@@ -96,7 +96,7 @@ export async function verifyMetaPagePermissions({
     let accountsResponse;
     try {
       accountsResponse = await fetchImpl(endpoint(apiVersion, "me/accounts?" + query.toString()), {
-        method: "GET", headers: headers(userAccessToken), signal: AbortSignal.timeout(timeoutMs)
+        method: "GET", headers: headers(userAccessToken), redirect: "error", signal: AbortSignal.timeout(timeoutMs)
       });
     } catch {
       throw new MetaPageApiError("Meta managed-Page lookup failed before a response; publishing remains blocked", { retryable: true });
@@ -133,7 +133,7 @@ export async function verifyMetaPageIdentity({
   let response;
   try {
     response = await fetchImpl(endpoint(apiVersion, encodeURIComponent(pageId) + "?fields=id,name"), {
-      method: "GET", headers: headers(accessToken), signal: AbortSignal.timeout(timeoutMs)
+      method: "GET", headers: headers(accessToken), redirect: "error", signal: AbortSignal.timeout(timeoutMs)
     });
   } catch {
     throw new MetaPageApiError("Meta Page identity check failed before a response; do not publish until connectivity is verified", { retryable: true });
@@ -192,7 +192,7 @@ export async function publishMetaPagePost({
   let response;
   try {
     response = await fetchImpl(endpoint(apiVersion, pathPart), {
-      method: "POST", headers: headers(accessToken), body: form, signal: AbortSignal.timeout(timeoutMs)
+      method: "POST", headers: headers(accessToken), body: form, redirect: "error", signal: AbortSignal.timeout(timeoutMs)
     });
   } catch {
     throw new MetaPageApiError("Meta publish request ended without a definitive response; outcome is uncertain and must be reconciled before retry", { retryable: false, uncertain: true });
@@ -221,7 +221,7 @@ export async function fetchMetaPagePost({
   let response;
   try {
     response = await fetchImpl(endpoint(apiVersion, encodeURIComponent(remotePostId) + "?fields=id,message,created_time,permalink_url,is_published,scheduled_publish_time"), {
-      method: "GET", headers: headers(accessToken), signal: AbortSignal.timeout(timeoutMs)
+      method: "GET", headers: headers(accessToken), redirect: "error", signal: AbortSignal.timeout(timeoutMs)
     });
   } catch {
     throw new MetaPageApiError("Remote post verification failed; retain the known ID and reconcile later", { retryable: true });
@@ -277,7 +277,7 @@ export async function reconcileMetaPagePost({
       let response;
       try {
         response = await fetchImpl(endpoint(apiVersion, encodeURIComponent(pageId) + "/" + edge.name + "?" + query.toString()), {
-          method: "GET", headers: headers(accessToken), signal: AbortSignal.timeout(timeoutMs)
+          method: "GET", headers: headers(accessToken), redirect: "error", signal: AbortSignal.timeout(timeoutMs)
         });
       } catch {
         return { outcome: "UNRESOLVED", reason: "RECONCILIATION_REQUEST_FAILED", matches: [], checkedAt: new Date().toISOString() };
