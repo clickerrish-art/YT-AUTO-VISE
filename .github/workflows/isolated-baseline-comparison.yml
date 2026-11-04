@@ -25,7 +25,7 @@ jobs:
   compare-baselines:
     name: Test exact main and PR candidate in isolated checkouts
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 45
     steps:
       - name: Check out exact main/base SHA
         uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
           set -euo pipefail
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
             sudo apt-get update -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30
-            timeout 480s sudo apt-get install -y --no-install-recommends -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 ffmpeg
+            timeout 900s sudo apt-get install -y --no-install-recommends -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 ffmpeg
           fi
           command -v ffmpeg
           command -v ffprobe
