@@ -22,6 +22,7 @@ test("Meta Page identity verification checks exact Page ID without putting token
   assert.equal(result.pageId, PAGE_ID);
   assert.equal(new URL(called.url).searchParams.has("access_token"), false);
   assert.equal(called.options.headers.authorization, "Bearer " + TOKEN);
+  assert.equal(called.options.redirect, "error");
   await assert.rejects(() => verifyMetaPageIdentity({
     pageId: PAGE_ID, expectedPageId: "999999999999999", accessToken: TOKEN, apiVersion: API,
     fetchImpl: async () => { throw new Error("must not call"); }
@@ -47,6 +48,7 @@ test("Meta permission verification requires granted scopes, Page task and matchi
   assert.deepEqual(result.grantedPermissions, ["pages_show_list", "pages_read_engagement", "pages_manage_posts"]);
   assert.ok(result.tasks.includes("CREATE_CONTENT"));
   assert.equal(calls.length, 2);
+  assert.ok(calls.every(call => call.options.redirect === "error"));
   assert.equal(new URL(calls[0].url).searchParams.has("access_token"), false);
   await assert.rejects(() => verifyMetaPagePermissions({
     pageId: PAGE_ID, userAccessToken: userToken, pageAccessToken: "different-page-token-" + "y".repeat(25), apiVersion: API,
@@ -72,6 +74,7 @@ test("Meta publish adapter schedules a future post and performs no retries", asy
   assert.equal(result.remotePostId, PAGE_ID + "_999");
   assert.equal(result.verifiedRemotely, false);
   assert.equal(request.options.headers.authorization, "Bearer " + TOKEN);
+  assert.equal(request.options.redirect, "error");
   const form = request.options.body;
   assert.equal(form.get("message"), draft.caption);
   assert.equal(form.get("published"), "false");
@@ -98,7 +101,7 @@ test("Meta adapter validates local image checksums and remote verification statu
   const bytes = Buffer.from("test-only image fixture");
   fs.writeFileSync(path.join(root, "image.jpg"), bytes);
   const sha = crypto.createHash("sha256").update(bytes).digest("hex");
-  let request;
+  let request, readRequest;
   const draft = { kind: "FACEBOOK_PAGE_DRAFT", caption: "Caption", scheduledAt: "2026-10-25T06:00:00.000Z", media: { path: "image.jpg", sha256: sha } };
   const published = await publishMetaPagePost({
     draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API, permissionsVerified: true, rootDir: root, now: NOW, probeImage: () => ({ width: 640, height: 480 }),
@@ -115,12 +118,14 @@ test("Meta adapter validates local image checksums and remote verification statu
 
   const verified = await fetchMetaPagePost({
     remotePostId: PAGE_ID + "_888", expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
-    fetchImpl: async url => {
+    fetchImpl: async (url, options) => {
+      readRequest = { url, options };
       assert.match(url, /fields=id,message,created_time,permalink_url,is_published,scheduled_publish_time/);
       return response({ id: PAGE_ID + "_888", message: "Caption", created_time: "2026-10-24T10:00:00Z", permalink_url: "https://www.facebook.com/" + PAGE_ID + "_888", is_published: false, scheduled_publish_time: 1792908000 });
     }
   });
   assert.equal(verified.status, "SCHEDULED_VERIFIED");
+  assert.equal(readRequest.options.redirect, "error");
   assert.equal(verified.remotePostId, PAGE_ID + "_888");
 });
 
@@ -138,11 +143,12 @@ test("Meta API errors redact access tokens and network failures are marked uncer
 
 test("Meta permission verification follows cursor pagination to find the exact managed Page", async () => {
   const userToken = "user-access-token-" + "p".repeat(30);
-  const urls = [];
+  const urls = [], requestOptions = [];
   const result = await verifyMetaPagePermissions({
     pageId: PAGE_ID, userAccessToken: userToken, pageAccessToken: TOKEN, apiVersion: API,
-    fetchImpl: async url => {
+    fetchImpl: async (url, options) => {
       urls.push(String(url));
+      requestOptions.push(options);
       if (String(url).endsWith("/me/permissions")) return response({ data: [
         { permission: "pages_show_list", status: "granted" },
         { permission: "pages_read_engagement", status: "granted" },
@@ -159,18 +165,20 @@ test("Meta permission verification follows cursor pagination to find the exact m
   assert.equal(result.verified, true);
   assert.equal(result.pageId, PAGE_ID);
   assert.equal(urls.length, 3);
+  assert.ok(requestOptions.every(options => options.redirect === "error"));
   assert.ok(urls.every(url => !url.includes(userToken) && !url.includes(TOKEN)));
 });
 
 
 test("uncertain Facebook mutation is reconciled against the scheduled-post edge with bounded pagination", async () => {
-  const calls = [];
+  const calls = [], requestOptions = [];
   const result = await reconcileMetaPagePost({
     pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
     caption: "Exact scheduled caption", scheduledAt: "2026-10-25T06:00:00.000Z",
     attemptStartedAt: "2026-10-24T10:00:00.000Z",
-    fetchImpl: async url => {
+    fetchImpl: async (url, options) => {
       calls.push(String(url));
+      requestOptions.push(options);
       if (String(url).includes("/scheduled_posts")) {
         const u = new URL(url);
         if (!u.searchParams.has("after")) return response({
@@ -191,6 +199,7 @@ test("uncertain Facebook mutation is reconciled against the scheduled-post edge 
   assert.equal(result.receipt.remotePostId, PAGE_ID + "_confirmed");
   assert.equal(result.receipt.status, "SCHEDULED_VERIFIED");
   assert.equal(calls.length, 3);
+  assert.ok(requestOptions.every(options => options.redirect === "error"));
   assert.ok(calls.every(url => !url.includes(TOKEN)));
 });
 
