@@ -115,9 +115,18 @@ export function acquireExclusiveUploadLock(lockPath, { jobId, now = () => new Da
   return () => {
     if (released) return;
     released = true;
-    try { fs.closeSync(fd); } catch {}
-    try { fs.unlinkSync(lockPath); } catch (error) {
+    // Keep the descriptor open while checking the path identity. Another
+    // process may have replaced the pathname; never unlink its lock.
+    try {
+      const owned = fs.fstatSync(fd);
+      const current = fs.lstatSync(lockPath);
+      if (current.isFile() && !current.isSymbolicLink() && current.dev === owned.dev && current.ino === owned.ino) {
+        fs.unlinkSync(lockPath);
+      }
+    } catch (error) {
       if (error?.code !== "ENOENT") throw error;
+    } finally {
+      try { fs.closeSync(fd); } catch {}
     }
   };
 }

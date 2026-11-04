@@ -238,6 +238,22 @@ test("failed private upload lock initialization removes only its own incomplete 
   }
 });
 
+test("private upload lock release does not unlink a replacement lock", async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-upload-lock-replaced-"));
+  const lockPath = path.join(dir, "upload-operation.lock");
+  const displacedPath = path.join(dir, "displaced-lock");
+  try {
+    const release = (await import("../scripts/upload-private.mjs")).acquireExclusiveUploadLock(lockPath, { jobId: "job-original-lock" });
+    fs.renameSync(lockPath, displacedPath);
+    fs.writeFileSync(lockPath, JSON.stringify({ jobId: "job-replacement-lock" }));
+    release();
+    assert.equal(JSON.parse(fs.readFileSync(lockPath, "utf8")).jobId, "job-replacement-lock");
+    assert.equal(fs.existsSync(displacedPath), true, "release must not remove the displaced original lock");
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("private upload lock prevents concurrent workers and stale locks fail closed", async () => {
   const fs = await import("node:fs");
   const os = await import("node:os");
