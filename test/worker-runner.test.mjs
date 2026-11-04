@@ -2,6 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import { runWorker, runWorkerCycle } from "../scripts/worker-runner.mjs";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 
 const token = "worker-test-token-" + "x".repeat(32);
 const workerId = "worker-integration-test";
@@ -188,4 +191,44 @@ test("continuous worker stops after a non-retryable API authorization failure", 
   );
   assert.equal(polls, 1, "invalid worker credentials must not cause an endless polling loop");
   assert.equal(errors.length, 1);
+});
+
+
+test("continuous worker stops after a render dispatch transport failure with an uncertain outcome", async t => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-uncertain-"));
+  const statePath = path.join(tempDir, "cooldowns.json");
+  const requests = [];
+  const errors = [];
+  const fetchImpl = async (url, options = {}) => {
+    const method = options.method ?? "GET";
+    requests.push({ method, url: String(url) });
+    if (method === "GET") {
+      return new Response(JSON.stringify({
+        jobs: [{ id: "job-outcome-unknown", state: "QUEUED" }],
+        queuedCount: 1,
+        publishingEnabled: false
+      }), { status: 200, headers: { "content-type": "application/json" } });
+    }
+    throw new TypeError("connection closed after request submission");
+  };
+  t.after(() => {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  });
+  await assert.rejects(
+    runWorker({
+      baseUrl: "http://127.0.0.1:8787",
+      token,
+      workerId,
+      once: false,
+      pollIntervalMs: 1_000,
+      cooldownStatePath: statePath,
+      fetchImpl,
+      onError: error => errors.push(error),
+      shouldStop: () => false
+    }),
+    error => error?.code === "WORKER_DISPATCH_OUTCOME_UNCERTAIN" && error.retryable === false
+  );
+  assert.deepEqual(requests.map(item => item.method), ["GET", "POST"]);
+  assert.equal(errors.length, 1);
+  assert.equal(errors[0].code, "WORKER_DISPATCH_OUTCOME_UNCERTAIN");
 });
