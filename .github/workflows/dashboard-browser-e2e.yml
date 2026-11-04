@@ -26,7 +26,7 @@ concurrency:
 jobs:
   browser-e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Check out the exact candidate
         uses: actions/checkout@v7
@@ -46,8 +46,8 @@ jobs:
           set -euo pipefail
           timeout 240s python -m pip install --disable-pip-version-check --retries 2 --timeout 20 edge-tts
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
-            sudo timeout 180s apt-get update
-            sudo timeout 180s apt-get install -y ffmpeg
+            sudo apt-get update -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30
+            timeout 480s sudo apt-get install -y --no-install-recommends -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 ffmpeg
           fi
           command -v ffmpeg
           command -v ffprobe
