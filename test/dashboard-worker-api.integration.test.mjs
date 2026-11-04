@@ -130,7 +130,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       createdAt: "2026-11-02T17:59:00.000Z"
     }
   ], "approved jobs must be dispatched by scheduled Africa/Johannesburg slot, not insertion or creation order");
-  assert.equal(payload.queuedCount, 4);
+  assert.equal(payload.queuedCount, 5);
   assert.equal(payload.queuedWithoutApprovedRenderPlan, 1);
   const limited = await fetch(base + "/api/jobs/dispatchable?limit=2", { headers: workerHeaders });
   const limitedPayload = await limited.json();
