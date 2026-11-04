@@ -26,10 +26,15 @@ function acquireLock(file) {
     fs.writeFileSync(handle, JSON.stringify({ pid: process.pid, acquiredAt: new Date().toISOString() }));
     fs.fsyncSync(handle);
   } catch (error) {
-    // The exclusive file is ours until this function returns its release handle.
-    // Do not strand a stale lock if writing or making the lock durable fails.
+    // Remove only the exact inode created by this acquisition. If another
+    // actor replaced the path, leave it untouched for operator inspection.
+    try {
+      const owned = fs.fstatSync(handle);
+      const current = fs.lstatSync(file);
+      if (current.isFile() && !current.isSymbolicLink() &&
+          current.dev === owned.dev && current.ino === owned.ino) fs.unlinkSync(file);
+    } catch {}
     try { fs.closeSync(handle); } catch {}
-    try { fs.unlinkSync(file); } catch {}
     throw error;
   }
   return () => { try { fs.closeSync(handle); } finally { try { fs.unlinkSync(file); } catch {} } };

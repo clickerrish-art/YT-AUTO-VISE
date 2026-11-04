@@ -97,7 +97,17 @@ export function acquireExclusiveUploadLock(lockPath, { jobId, now = () => new Da
     fs.writeFileSync(fd, JSON.stringify({ pid: process.pid, jobId, startedAt: now().toISOString() }) + "\n");
     fs.fsyncSync(fd);
   } catch (error) {
-    if (fd !== undefined) { try { fs.closeSync(fd); } catch {} }
+    if (fd !== undefined) {
+      // A failed write/fsync must not strand our own incomplete lock. Compare
+      // inode identity before unlinking so a replaced path is never removed.
+      try {
+        const owned = fs.fstatSync(fd);
+        const current = fs.lstatSync(lockPath);
+        if (current.isFile() && !current.isSymbolicLink() &&
+            current.dev === owned.dev && current.ino === owned.ino) fs.unlinkSync(lockPath);
+      } catch {}
+      try { fs.closeSync(fd); } catch {}
+    }
     if (error?.code === "EEXIST") throw new Error("another upload operation is active or left a stale lock; reconcile the attempt ledger and inspect the lock before any retry");
     throw error;
   }

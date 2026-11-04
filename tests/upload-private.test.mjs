@@ -215,6 +215,27 @@ test("private uploader preserves remote video ID and marks recovery if receipt p
 });
 
 
+test("failed private upload lock initialization removes only its own incomplete lock", async () => {
+  const { acquireExclusiveUploadLock } = await import("../scripts/upload-private.mjs");
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-upload-lock-fsync-"));
+  const lockPath = path.join(dir, "upload-operation.lock");
+  const originalFsync = fs.fsyncSync;
+  try {
+    fs.fsyncSync = () => { const error = new Error("simulated upload lock fsync failure"); error.code = "EIO"; throw error; };
+    assert.throws(() => acquireExclusiveUploadLock(lockPath, { jobId: "job-lock-fsync" }), /simulated upload lock fsync failure/);
+  } finally {
+    fs.fsyncSync = originalFsync;
+  }
+  try {
+    assert.equal(fs.existsSync(lockPath), false, "failed lock initialization must not strand an incomplete lock");
+    const release = acquireExclusiveUploadLock(lockPath, { jobId: "job-lock-after-failure" });
+    assert.equal(JSON.parse(fs.readFileSync(lockPath, "utf8")).jobId, "job-lock-after-failure");
+    release();
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("private upload lock prevents concurrent workers and stale locks fail closed", async () => {
   const fs = await import("node:fs");
   const os = await import("node:os");
