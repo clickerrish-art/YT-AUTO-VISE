@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createServer } from "node:http";
-import { runWorker, runWorkerCycle } from "../scripts/worker-runner.mjs";
+import { parseRetryAfterMs, runWorker, runWorkerCycle } from "../scripts/worker-runner.mjs";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -381,4 +381,13 @@ test("worker honors Retry-After when the dispatchable-job listing is rate limite
   } finally {
     fs.rmSync(directory, { recursive: true, force: true });
   }
+});
+
+test("Retry-After parser clamps excessive values and safely falls back for malformed or expired dates", () => {
+  const now = Date.parse("2026-11-04T12:00:00.000Z");
+  assert.equal(parseRetryAfterMs("60", now), 60_000);
+  assert.equal(parseRetryAfterMs("not-a-date", now), 30_000);
+  assert.equal(parseRetryAfterMs(new Date(now - 60_000).toUTCString(), now), 30_000);
+  assert.equal(parseRetryAfterMs(new Date(now + 2 * 60 * 60_000).toUTCString(), now), 15 * 60_000);
+  assert.equal(parseRetryAfterMs("0", now), 1_000);
 });
