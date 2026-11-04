@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-04T19:16:27.393Z",
+  "generatedAt": "2026-11-04T19:18:58.661Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
@@ -720,11 +720,11 @@
       "restartRecovery": "NOT_TESTED",
       "externalOperation": "genuine rights-cleared media and final manifests required",
       "overallAcceptance": "BLOCKED",
-      "notes": "Local fail-closed legacy-job behavior has a new candidate integration test; validation is pending from successful production. A queued job without the approved authoring pipeline must return 409 before manifest creation, media-directory creation, worker-lease claim or durable state/audit mutation. Successful rendering remains externally blocked until genuine rights-cleared media and complete approved authoring evidence exist. Do not infer full route acceptance from this negative-path test.",
+      "notes": "Local fail-closed legacy-job behavior has a candidate integration test with assertions against the actual repository-root artifact paths; validation is pending from successful production. A queued job without the approved authoring pipeline must return 409 before manifest creation, media-directory creation, worker-lease claim or durable state/audit mutation. Successful rendering remains externally blocked until genuine rights-cleared media and complete approved authoring evidence exist. Do not infer full route acceptance from this negative-path test.",
       "testEvidence": {
         "test": "test/dashboard-worker-api.integration.test.mjs — real dashboard HTTP server",
-        "candidateCommit": "be7c9a990ec3540b601104fa666e05546f94b1bc",
-        "scenario": "A queued legacy job without authoring is submitted through the scoped worker credential; POST /api/jobs/produce must return 409, preserve dashboard-state.json byte-for-byte, and create neither a per-job render manifest nor a media directory. Exact-SHA CI not yet confirmed. Candidate is not yet accepted; CI is pending."
+        "candidateCommit": "7fbcf0123dbcd6a8175c93000a18b0ee78796d65",
+        "scenario": "A queued legacy job without authoring is submitted through the scoped worker credential; POST /api/jobs/produce must return 409, preserve dashboard-state.json byte-for-byte, and create neither a per-job render manifest nor a media directory at the actual repository-root artifact paths. Exact-SHA CI not yet confirmed."
       }
     },
     {
