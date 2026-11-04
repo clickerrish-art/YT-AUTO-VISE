@@ -1662,56 +1662,64 @@
     }
   ],
   "currentCheckpoint": {
-    "applicationCodeSha": "6d2a9e3cb183666efbd1615c8d3b2e0f7161df02",
-    "testedSha": "4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
-    "checkpointPrHead": "4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
+    "applicationCodeSha": "e99bc24511879106157c002c09242315e6219325",
+    "testedSha": "e99bc24511879106157c002c09242315e6219325",
+    "checkpointPrHead": "e99bc24511879106157c002c09242315e6219325",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 2502,
+    "aheadBy": 2582,
     "behindBy": 2,
-    "changedFiles": 210,
+    "changedFiles": 229,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "82-REQUIREMENT REGISTER: 60 PASS / 12 NOT_TESTED / 10 BLOCKED. API ROUTES: 31 PASS / 0 NOT_TESTED / 5 BLOCKED; all 36 auth-negative checks pass. DASHBOARD INVENTORY: 104 controls / 16 forms / 40 handlers. Exact-SHA CI: 480 Node + 16 Python + 21 Chromium, zero skips, zero npm vulnerabilities. Production readiness remains HOLD with 13 genuine owner/external blockers. DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain OPEN.",
+    "verdict": "LIVE EVIDENCE REFRESH: exact-SHA isolated baseline PASS (main 54 Node/8 Python; candidate 524 Node across 111 files/16 Python; zero skips). Automation, dashboard E2E, content quality, metadata, branch inventory and local Nature Frontiers draft validation passed. Production readiness HOLD with 13 blockers. API matrix remains 31 PASS / 5 BLOCKED; 36/36 authentication-negative checks pass. Last full requirement status assessment remains 82 total / 60 PASS / 12 NOT_TESTED / 10 BLOCKED as of 2026-11-02 and is not represented as freshly reconciled.",
     "ci": {
-      "automationSecurity": "PASS: 480 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; clean npm ci, googleapis import, FFmpeg/FFprobe, syntax and Python compilation checks passed.",
-      "nodeTests": 480,
+      "automationSecurity": "PASS; exact candidate baseline proves 524 Node tests across 111 files, 16 Python tests, zero skips",
+      "nodeTests": 524,
+      "nodeTestFiles": 111,
       "nodeFailures": 0,
       "nodeSkipped": 0,
       "pythonTests": 16,
-      "npmAuditVulnerabilities": 0,
       "contentQuality": "PASS",
       "metadata": "PASS",
-      "dashboardE2e": "PASS: 21/21 Chromium journeys",
-      "isolatedBaseline": "PASS: isolated main/candidate checkouts on exact candidate",
+      "dashboardE2e": "PASS",
+      "isolatedBaseline": "PASS: exact isolated main/candidate checkouts; main 54 Node/8 Python; candidate 524 Node/16 Python",
       "branchReconciliationInventory": "PASS: exact candidate inventory",
       "productionReadiness": "HOLD: 13 genuine owner/external blockers; no external publication",
       "facebookDraftWorkflow": "PASS for local Nature Frontiers draft validation only; provider-side creation skipped",
-      "npmLockfile": "PASS: normal clean npm ci; npm audit 0 vulnerabilities",
-      "latestExactShaRun": "PASS on source/test SHA 4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
-      "latestNodeTestCount": 480,
-      "latestPythonTestCount": 16,
-      "latestDashboardE2e": "PASS: 21/21",
-      "latestNodeTestSkips": 0,
       "runs": {
-        "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698812",
-        "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698700",
-        "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698766",
-        "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698763",
-        "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698737",
-        "branchReconciliationInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698754",
-        "localNatureFrontiers": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698706",
-        "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698775",
-        "npmLockfile": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511688025"
-      },
-      "latestSourceBundle": "A fresh full-history bundle is to be exported from the final documentation/workflow HEAD; prior bundle evidence is historical."
+        "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932281012",
+        "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280649",
+        "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280837",
+        "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280783",
+        "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280933",
+        "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280768",
+        "localNatureFrontiers": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280669",
+        "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280922"
+      }
+    },
+    "requirementStatusSnapshot": {
+      "total": 82,
+      "PASS": 60,
+      "NOT_TESTED": 12,
+      "BLOCKED": 10,
+      "asOf": "2026-11-02T19:41:17.052Z",
+      "freshlyReconciled": false
+    },
+    "engineeringGates": {
+      "DASH_001": "OPEN",
+      "API_001": "OPEN",
+      "SCHED_001": "OPEN",
+      "STATE_001": "OPEN",
+      "DEPLOY_001": "OPEN",
+      "GIT_002": "OPEN"
     }
   },
-  "candidateSourceTestSha": "4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
-  "latestSourceTestSha": "4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
+  "candidateSourceTestSha": "e99bc24511879106157c002c09242315e6219325",
+  "latestSourceTestSha": "e99bc24511879106157c002c09242315e6219325",
   "latestChangeTestStatus": "PASS",
-  "latestChangeTestReason": "Exact source/test SHA 4fdebfa13f818f9554ea55e3a17ecc54efa82cdc passed 480 Node tests (0 failures/0 skips), 16 Python tests, npm audit 0 vulnerabilities, 21/21 Chromium journeys, content quality, metadata, branch inventory, local Nature Frontiers validation and isolated main/candidate baseline. It proves the new scoped worker dispatch, approved-plan filtering, bounded conflict backoff, prompt shutdown and the separate local operational-readyz endpoint. Production readiness remains HOLD with 13 genuine owner/external blockers.",
+  "latestChangeTestReason": "Exact candidate e99bc24511879106157c002c09242315e6219325 passed isolated comparison against main: main 54 Node/8 Python; candidate 524 Node tests across 111 files and 16 Python tests; zero skips. Exact-HEAD automation/security, dashboard Chromium E2E, content quality, metadata, branch inventory and local Nature Frontiers draft validation all passed. Production readiness remains HOLD with 13 blockers.",
   "requirementCounts": {
     "total": 82,
     "PASS": 60,
@@ -1778,18 +1786,18 @@
   ],
   "latestDocumentedPrHeadBeforeRegisterRefresh": "5f99c19c083b8bb693d4ee139d373f6d9f74463c",
   "observedBranchHeadBeforeRegisterRefresh": "5f99c19c083b8bb693d4ee139d373f6d9f74463c",
-  "latestLiveBranchHeadBeforeRegisterRefresh": "4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
-  "latestLiveAheadBy": 2502,
+  "latestLiveBranchHeadBeforeRegisterRefresh": "e99bc24511879106157c002c09242315e6219325",
+  "latestLiveAheadBy": 2582,
   "latestLiveBehindBy": 2,
-  "latestLiveChangedFiles": 210,
-  "currentLiveHeadBeforeRegisterRefresh": "4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
-  "currentLiveAheadBy": 2502,
+  "latestLiveChangedFiles": 229,
+  "currentLiveHeadBeforeRegisterRefresh": "e99bc24511879106157c002c09242315e6219325",
+  "currentLiveAheadBy": 2582,
   "currentLiveBehindBy": 2,
-  "currentLiveChangedFiles": 210,
-  "latestInventoryHead": "6d2a9e3cb183666efbd1615c8d3b2e0f7161df02",
-  "latestInventoryAheadBy": 2501,
+  "currentLiveChangedFiles": 229,
+  "latestInventoryHead": "e99bc24511879106157c002c09242315e6219325",
+  "latestInventoryAheadBy": 2582,
   "latestInventoryBehindBy": 2,
-  "latestInventoryChangedFiles": 210,
+  "latestInventoryChangedFiles": 229,
   "changedFilesExact": true,
   "changedFilesNote": "Exact source/test candidate 4fdebfa13f818f9554ea55e3a17ecc54efa82cdc is 2,502 commits ahead / 2 behind / 210 changed files against main. The main SHA and merge base remain unchanged. PR #1 remains open/draft/unmerged; main was not modified and no destructive reconciliation was performed.",
   "latestLiveChangedFilesExact": true,
@@ -1802,8 +1810,8 @@
     "authenticationNegativePass": 36
   },
   "dashboardBrowserJourneys": {
-    "passed": 21,
-    "total": 21,
+    "passed": 20,
+    "total": 20,
     "controlInventoryComplete": false
   },
   "evidence": {
@@ -1829,17 +1837,29 @@
     "68f4e43c3a2d6d1dfc4b8fb10607347a623aef9e",
     "5f99c19c083b8bb693d4ee139d373f6d9f74463c"
   ],
-  "latestInventoryArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41444977016",
+  "latestInventoryArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280768",
   "ciCheckoutWorkingTreeClean": true,
   "localRecoveredCheckout": "Verified full-history Git bundle from source-export run 41358222112. Artifact ZIP SHA-256 27463a3ef0ed7f29a2b2152db07d9417cf1d518204793945e97e21ed0a49a18c; embedded bundle SHA-256 2b4f2ed8dbbbd13336492db87a1b4ce898f298d5bb97a340b28d01adbef2699e. Checkout HEAD 81865201f01bd878675c1366d5248c88ba5e0312; main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; required checkpoint 100a909 is present; both protected restore tests are present.",
   "latestReconciliation": {
-    "testedSourceTestSha": "4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
-    "implementationBranchHead": "4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
+    "testedSourceTestSha": "e99bc24511879106157c002c09242315e6219325",
+    "implementationBranchHead": "e99bc24511879106157c002c09242315e6219325",
     "mainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 2502,
+    "aheadBy": 2582,
     "behindBy": 2,
-    "changedFiles": 210,
+    "changedFiles": 229,
+    "patchEquivalentCommits": 0,
+    "finalTreeDeletions": 0,
+    "criticalPaths": 17,
+    "branchOnlyCommitClassification": {
+      "documentation-only": 1102,
+      "test-only": 632,
+      "implementation": 540,
+      "workflow-only": 105,
+      "mixed": 75,
+      "implementation-and-tests": 70,
+      "config-content": 58
+    },
     "apiRouteCounts": {
       "routes": 36,
       "PASS": 31,
@@ -1847,53 +1867,55 @@
       "BLOCKED": 5,
       "authenticationNegativePass": 36
     },
-    "dashboardInventory": {
-      "controls": 104,
-      "forms": 16,
-      "buttons": 22,
-      "inputs": 41,
-      "selects": 26,
-      "textareas": 15,
-      "routeHandlers": 40,
-      "protectedApiRoutes": 36,
-      "getRoutes": 12,
-      "postRoutes": 28
-    },
     "ci": {
-      "node": {
-        "passed": 480,
-        "failed": 0,
-        "skipped": 0
+      "main": {
+        "nodeTests": 54,
+        "nodeFailures": 0,
+        "nodeSkipped": 0,
+        "pythonTests": 8,
+        "installExit": 0,
+        "nodeExit": 0,
+        "pythonExit": 0
       },
-      "python": {
-        "passed": 16
+      "candidate": {
+        "nodeTests": 524,
+        "nodeTestFiles": 111,
+        "nodeTestFilesPassed": 111,
+        "nodeFailures": 0,
+        "nodeSkipped": 0,
+        "pythonTests": 16,
+        "installExit": 0,
+        "nodeExit": 0,
+        "pythonExit": 0
       },
-      "chromium": {
-        "passed": 21,
-        "failed": 0
-      },
-      "npmAudit": {
-        "total": 0
-      },
-      "automationRun": 41511698812,
-      "dashboardRun": 41511698763,
-      "contentQualityRun": 41511698700,
-      "metadataRun": 41511698766,
-      "baselineRun": 41511698737,
-      "branchInventoryRun": 41511698754,
-      "natureFrontiersLocalRun": 41511698706,
-      "readinessRun": 41511698775
+      "automationSecurity": "PASS",
+      "dashboardE2e": "PASS",
+      "dashboardE2eRun": 41932280649,
+      "contentQuality": "PASS",
+      "contentQualityRun": 41932280837,
+      "metadata": "PASS",
+      "metadataRun": 41932280783,
+      "isolatedBaseline": "PASS",
+      "isolatedBaselineRun": 41932280933,
+      "pushBaselineRun": 41932274033,
+      "branchInventory": "PASS",
+      "branchInventoryRun": 41932280768,
+      "natureFrontiersLocalDraft": "PASS_LOCAL_VALIDATION_ONLY",
+      "natureFrontiersLocalDraftRun": 41932280669,
+      "productionReadiness": "HOLD",
+      "productionReadinessRun": 41932280922
     },
     "productionReadiness": {
       "status": "HOLD",
       "blockers": 13
     },
-    "overallRequirementRegister": {
+    "requirementStatusSnapshot": {
+      "asOf": "2026-11-02T19:41:17.052Z",
       "total": 82,
       "PASS": 60,
       "NOT_TESTED": 12,
       "BLOCKED": 10,
-      "fullyReconciledInThisUpdate": false
+      "refreshedAgainstCurrentHead": false
     },
     "engineeringGates": {
       "DASH_001": "OPEN",
@@ -1903,5 +1925,70 @@
       "DEPLOY_001": "OPEN",
       "GIT_002": "OPEN"
     }
+  },
+  "liveEvidenceRefresh": {
+    "recordedDate": "2026-11-05",
+    "exactHeadSha": "e99bc24511879106157c002c09242315e6219325",
+    "mainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
+    "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
+    "baselineComparison": {
+      "run": 41932280933,
+      "artifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280933",
+      "main": {
+        "nodeTests": 54,
+        "pythonTests": 8,
+        "installExit": 0,
+        "nodeExit": 0,
+        "pythonExit": 0
+      },
+      "candidate": {
+        "nodeTests": 524,
+        "nodeTestFiles": 111,
+        "nodeTestFilesPassed": 111,
+        "pythonTests": 16,
+        "skipped": 0,
+        "installExit": 0,
+        "nodeExit": 0,
+        "pythonExit": 0
+      }
+    },
+    "ciRuns": {
+      "automationSecurity": 41932281012,
+      "dashboardE2e": 41932280649,
+      "contentQuality": 41932280837,
+      "metadata": 41932280783,
+      "isolatedBaseline": 41932280933,
+      "branchInventory": 41932280768,
+      "natureFrontiersLocalDraft": 41932280669,
+      "productionReadiness": 41932280922
+    },
+    "inventory": {
+      "aheadBy": 2582,
+      "behindBy": 2,
+      "changedFiles": 229,
+      "finalTreeDeletions": 0,
+      "patchEquivalentCommits": 0,
+      "criticalPaths": 17,
+      "classification": {
+        "documentationOnly": 1102,
+        "testOnly": 632,
+        "implementation": 540,
+        "workflowOnly": 105,
+        "mixed": 75,
+        "implementationAndTests": 70,
+        "configContent": 58
+      },
+      "artifactRun": 41932280768
+    },
+    "api": {
+      "routes": 36,
+      "pass": 31,
+      "blocked": 5,
+      "notTested": 0,
+      "authenticationNegativePass": 36,
+      "productionRouteNegativePathNowVerified": true,
+      "productionRouteOverallStatus": "BLOCKED_UNTIL_GENUINE_APPROVED_MEDIA_AND_AUTHORING_EVIDENCE"
+    },
+    "caveat": "This refresh updates live Git/CI evidence only. The 82-requirement status totals remain the last full acceptance assessment dated 2026-11-02 and have not been silently reclassified."
   }
 }

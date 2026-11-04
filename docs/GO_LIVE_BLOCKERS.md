@@ -1,3 +1,15 @@
+# Live checkpoint — 5 November 2026
+
+The exact current candidate is `e99bc24511879106157c002c09242315e6219325`. Main remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. Branch divergence is 2,582 ahead / 2 behind / 229 changed paths. PR #1 remains open, draft and unmerged.
+
+The exact-SHA isolated main/candidate comparison [41932280933](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280933) passed: main 54 Node and 8 Python tests; candidate 524 Node tests across 111 test files and 16 Python tests; zero candidate skips. Automation/security, dashboard E2E, content quality, metadata and branch inventory also passed. The production-readiness run [41932280922](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280922) remains HOLD with 13 blockers.
+
+The 13 current blockers are: (1) owner-approved feasible cadence with explicit timezone-aware timestamp/reference; (2) complete public/private/unlisted YouTube history and uncertain-attempt reconciliation; (3) genuine Short rights manifest and final export; (4) genuine long-form rights manifest and final export; (5) human-reviewed Short metadata and approval receipt; (6) independently verified SonicVhibez channel identity; (7) genuine rights evidence for every asset; (8) human compliance review; (9) playable `media/next-short.mp4`; (10–12) secure `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, and `YOUTUBE_REFRESH_TOKEN`; (13) independently verified `SONICVHIBEZ_CHANNEL_ID` configured securely.
+
+No credentials, media rights, human approvals or channel identity have been fabricated. Public/unattended publishing remains disabled. Readiness remains fail-closed.
+
+---
+
 # Current execution checkpoint — 4 November 2026
 
 This checkpoint supersedes older live-state snapshots below. Historical entries remain for traceability. The exact tested source/test candidate is separated from this documentation-only refresh.
