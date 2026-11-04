@@ -275,3 +275,28 @@ test("continuous worker stops after a successful-status dispatch returns an unre
   assert.equal(errors.length, 1);
   assert.equal(errors[0].code, "WORKER_DISPATCH_OUTCOME_UNCERTAIN");
 });
+
+
+test("worker honors an HTTP-date Retry-After value from the dispatch API", async () => {
+  const retryAt = Date.now() + 60_000;
+  const retryAfter = new Date(retryAt).toUTCString();
+  const cooldowns = new Map();
+  const fetchImpl = async (url, options = {}) => {
+    if ((options.method ?? "GET") === "GET") {
+      return new Response(JSON.stringify({ jobs: [{ id: "job-http-date-rate-limit" }], queuedCount: 1 }), {
+        status: 200,
+        headers: { "content-type": "application/json" }
+      });
+    }
+    return new Response(JSON.stringify({ error: "rate limited" }), {
+      status: 429,
+      headers: { "content-type": "application/json", "retry-after": retryAfter }
+    });
+  };
+  const result = await runWorkerCycle({ baseUrl: "http://127.0.0.1:8787", token, workerId, fetchImpl, cooldowns });
+  const cooldown = cooldowns.get("job-http-date-rate-limit");
+  assert.equal(result.results[0].httpStatus, 429);
+  assert.equal(result.results[0].status, "NOT_DISPATCHED");
+  assert.ok(cooldown.nextAttemptAt >= retryAt - 1_000, "HTTP-date Retry-After must be honored");
+  assert.ok(cooldown.nextAttemptAt <= retryAt + 1_000, "HTTP-date Retry-After must not be extended unnecessarily");
+});
