@@ -8,6 +8,7 @@ import { commitApprovalArtifact } from "./approval-artifact-transaction.mjs";
 import { atomicWriteJson, atomicCreateJson } from "./atomic-json-file.mjs";
 import { startWorkerLeaseHeartbeat } from "./worker-lease-heartbeat.mjs";
 import { terminateProcessTree } from "./terminate-process-tree.mjs";
+import { runExclusiveTask } from "./active-task-lock.mjs";
 import { redactOperationalText } from "./safe-output.mjs";
 import { matchesOperatorToken } from "./operator-auth.mjs";
 import { fileURLToPath } from "node:url";
@@ -2478,10 +2479,7 @@ const server = http.createServer(async (req, res) => {
         state.audit.push({ id: crypto.randomUUID(), action: body.decision === "APPROVE" ? "CONTENT_ARTIFACT_APPROVED_FOR_PRIVATE_UPLOAD" : "CONTENT_ARTIFACT_REJECTED", jobId: job.id, artifactPath, artifactSha256, metadataVersion, reviewId: review.id, uploadApprovalPath: uploadApprovalPath ? path.relative(root, uploadApprovalPath) : null, actor: reviewer, reason: String(body.reason ?? "").slice(0, 1000), at: new Date().toISOString() });
         if (pendingApprovalCommit) pendingApprovalCommit();
         else saveState(state);
-        return json(res, 200, { job: state.jobs[index], review, uploadApprovalRecord, uploadApprovalPath: uploadApprovalPath ? path.relative(root, uploadApprovalPath) : null, publishingEnabled: false });
-      } finally { release(); }
-    }
-    if (req.method === "POST" && url.pathname === "/api/uploads/reconcile") {
+        return json(res, 200, { job: state.jobs[index], review, uploadApprovalRecord, uploadApprovalPath: uploadApprovalPath ? path.relative(root, uploadApprovalPath) : null, publishingEif (req.method === "POST" && url.pathname === "/api/uploads/reconcile") {
       const body = await readBody(req);
       const actor = process.env.DASHBOARD_OPERATOR_ID;
       if (!actor || actor.trim().length < 2) return json(res, 503, { error: "Upload reconciliation requires DASHBOARD_OPERATOR_ID" });
@@ -2495,7 +2493,8 @@ const server = http.createServer(async (req, res) => {
       if (activeTasks.has("upload-reconcile:" + body.jobId)) return json(res, 409, { error: "Reconciliation is already running for this job" });
       const metadataFile = resolveRepositoryFile(body.metadataPath);
       const approvalFile = resolveRepositoryFile(body.approvalPath);
-      activeTasks.add("upload-reconcile:" + body.jobId);
+      const taskKey = "upload-reconcile:" + body.jobId;
+      const taskResult = await runExclusiveTask(activeTasks, taskKey, async () => {
       const output = await new Promise(resolve => {
         const child = spawn(process.execPath, ["scripts/upload-private.mjs", body.metadataPath, body.videoPath], {
           cwd: root, shell: false, windowsHide: true, stdio: ["ignore", "pipe", "pipe"],
@@ -2511,7 +2510,6 @@ const server = http.createServer(async (req, res) => {
         child.on("error", error => { clearTimeout(timer); resolve({ status: "FAILED", exitCode: null, output: (textOutput + "\n" + error.message).slice(-12000), truncated }); });
         child.on("close", code => { clearTimeout(timer); resolve({ status: timedOut ? "TIMED_OUT" : code === 0 ? "SUCCEEDED" : "FAILED", exitCode: code, output: textOutput, truncated }); });
       });
-      activeTasks.delete("upload-reconcile:" + body.jobId);
       const release = await acquireStateLock();
       try {
         const state = loadState();
@@ -2520,6 +2518,9 @@ const server = http.createServer(async (req, res) => {
       } finally { release(); }
       const updatedLedger = readUploadLedger();
       return json(res, output.status === "SUCCEEDED" ? 200 : 409, { reconciliation: output, uploadLedger: updatedLedger, publishingEnabled: false, uploadAttemptCreated: false });
+      });
+      if (!taskResult.acquired) return json(res, 409, { error: "Reconciliation is already running for this job" });
+      return taskResult.value;
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/produce") {
       const body = await readBody(req);
