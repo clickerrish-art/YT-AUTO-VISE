@@ -341,3 +341,44 @@ test("worker falls back safely when Retry-After is malformed or already expired"
     assert.ok(delayMs <= 31_000, "first-attempt fallback must remain bounded to 30 seconds");
   }
 });
+
+test("worker honors Retry-After when the dispatchable-job listing is rate limited", async t => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-list-rate-limit-"));
+  const statePath = path.join(directory, "worker-backoff.json");
+  let listingRequests = 0;
+  let stopping = false;
+  const fetchImpl = async () => {
+    listingRequests += 1;
+    if (listingRequests === 1) {
+      return new Response(JSON.stringify({ error: "rate limited" }), {
+        status: 429,
+        headers: { "content-type": "application/json", "retry-after": "2" }
+      });
+    }
+    return new Response(JSON.stringify({ jobs: [], queuedCount: 0 }), {
+      status: 200, headers: { "content-type": "application/json" }
+    });
+  };
+  const errors = [];
+  const startedAt = Date.now();
+  try {
+    await runWorker({
+      baseUrl: "http://127.0.0.1:8787",
+      token,
+      workerId,
+      pollIntervalMs: 1_000,
+      once: false,
+      cooldownStatePath: statePath,
+      fetchImpl,
+      onError: error => errors.push(error),
+      onCycle: () => { stopping = true; },
+      shouldStop: () => stopping
+    });
+    assert.equal(listingRequests, 2);
+    assert.equal(errors.length, 1);
+    assert.equal(errors[0].status, 429);
+    assert.ok(Date.now() - startedAt >= 1_900, "the worker must wait for the server Retry-After rather than polling at its shorter interval");
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
