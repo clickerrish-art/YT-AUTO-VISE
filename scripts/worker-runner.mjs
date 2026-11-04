@@ -12,6 +12,15 @@ const MIN_POLL_INTERVAL_MS = 1_000;
 const MAX_POLL_INTERVAL_MS = 60_000;
 const COOLDOWN_SCHEMA_VERSION = 1;
 
+export function parseRetryAfterMs(retryAfter, now = Date.now()) {
+  const seconds = retryAfter && /^\d+(?:\.\d+)?$/.test(retryAfter) ? Number(retryAfter) : NaN;
+  const dateDelay = retryAfter && !Number.isFinite(seconds) ? Date.parse(retryAfter) - now : NaN;
+  const requestedDelay = Number.isFinite(seconds)
+    ? seconds * 1_000
+    : Number.isFinite(dateDelay) && dateDelay > 0 ? dateDelay : 30_000;
+  return Math.max(1_000, Math.min(15 * 60_000, requestedDelay));
+}
+
 function cooldownStatePath(workerId, configuredPath, stateDirectory) {
   if (configuredPath !== undefined && configuredPath !== null && String(configuredPath).trim()) {
     const target = path.resolve(String(configuredPath));
@@ -121,11 +130,7 @@ async function requestJson(fetchImpl, url, options, timeoutMs = 15_000) {
     error.status = response.status;
     error.retryable = !uncertainDispatch && (response.status === 408 || response.status === 429 || response.status >= 500);
     if (response.status === 429) {
-      const retryAfter = response.headers.get("retry-after");
-      const seconds = retryAfter && /^\d+(?:\.\d+)?$/.test(retryAfter) ? Number(retryAfter) : NaN;
-      const dateDelay = retryAfter && !Number.isFinite(seconds) ? Date.parse(retryAfter) - Date.now() : NaN;
-      error.retryAfterMs = Math.max(1_000, Math.min(15 * 60_000,
-        Number.isFinite(seconds) ? seconds * 1_000 : Number.isFinite(dateDelay) && dateDelay > 0 ? dateDelay : 30_000));
+      error.retryAfterMs = parseRetryAfterMs(response.headers.get("retry-after"));
     }
     throw error;
   }
