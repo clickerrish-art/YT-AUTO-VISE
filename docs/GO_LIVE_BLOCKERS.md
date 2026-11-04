@@ -1,3 +1,40 @@
+# Current execution checkpoint — 4 November 2026
+
+This checkpoint supersedes older live-state snapshots below. Historical entries remain for traceability. The exact tested source/test candidate is separated from this documentation-only refresh.
+
+## Exact tested source/test candidate
+
+- Source/test SHA: `c7fa402671528da06a180914d04a88a719766321`.
+- New implementation: `scripts/dashboard-server.mjs` now converts dispatchable-job wall-clock slots with the strict IANA-aware `localDateTimeToIso` helper. Impossible legacy dates or malformed times fall back to `createdAt` instead of allowing `Date.parse` to normalize an invalid calendar date.
+- New integration test: `test/dashboard-dispatchable-ordering.integration.test.mjs` seeds deliberately contradictory creation and schedule ordering, verifies chronological Johannesburg slot ordering, verifies invalid 31 November fallback, and confirms the authenticated `GET /api/jobs/dispatchable` response is read-only byte-for-byte with publishing disabled.
+
+## Exact-SHA CI evidence
+
+- Automation/security [41791967846](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41791967846): **PASS** — 108/108 Node test files, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, JavaScript syntax and Python compilation passed.
+- Dashboard Chromium E2E [41791967793](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41791967793): **PASS — 22/22 journeys**.
+- Content quality [41791967824](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41791967824): **PASS**.
+- Metadata [41791967873](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41791967873): **PASS**.
+- Isolated main/candidate baseline [41791967771](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41791967771): **PASS**.
+- Non-destructive branch inventory [41791967981](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41791967981): **PASS — inventory only; human semantic review remains open**.
+- Nature Frontiers local draft-package validation [41791967914](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41791967914): **PASS for local validation only**; provider-side Meta draft creation/read-back was skipped.
+- Production readiness [41791967832](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41791967832): **HOLD / fail-closed with 13 blockers**. This is not a production pass.
+
+## Live Git state at the source/test candidate
+
+- Main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Compare: **2,528 ahead / 2 behind / 225 changed files**.
+- PR #1: **OPEN, DRAFT, UNMERGED**. Branch protection is disabled. Main was not changed; no merge, reset, rebase, force-push or destructive reconciliation occurred.
+
+## Current external and operational blockers
+
+- Metricool exposes only Nature Frontiers brand `7545638`; no distinct SonicVhibez/Sonic Fire brand is selectable. Eight future Nature Frontiers records were returned; four are promotions for the supplied creator products (11, 14, 18 and 25 November 2026). All eight records have `draft=false` and `autoPublish=true`. They were not modified. Nature Frontiers is not an authorized SonicVhibez destination.
+- vidIQ exposes channel title `SonicVibes`, handle `@sonicvhibez`, and ID `UCSlkuPfHH78oC1o418HV4w`. The owned-video history endpoint rejected this ID because it does not satisfy that endpoint's required channel-ID length pattern. Complete public/private/unlisted timestamp history therefore remains **UNVERIFIED**; do not schedule or claim a 72-hour clearance.
+- The current destination schedule is not inspectable through a distinct SonicVhibez Metricool brand. Publication spacing remains **UNVERIFIED**.
+- The existing 13 production blockers remain fail-closed, including verified channel identity and complete history/uncertain-upload reconciliation, genuine rights-cleared assets/manifests, human review, final media, secure OAuth configuration, and owner-approved cadence.
+- No video upload, publication, new schedule, Metricool mutation, account reconnection, spend, public publishing enablement, or Safari activation occurred.
+
+---
+
 # Latest exact-source execution — 3 November 2026 (worker backoff fail-closed and dashboard control accessibility)
 
 - Exact tested source/test candidate: `423a670ea56ec38fb9ec5c174f95614c69ac72be`; live branch at test time: 2,513 ahead / 2 behind / 218 changed files.
