@@ -105,7 +105,8 @@ async function requestJson(fetchImpl, url, options, timeoutMs = 15_000) {
   try { payload = await response.json(); }
   catch (cause) {
     const error = new Error("Dashboard worker API returned a non-JSON response (HTTP " + response.status + ")", { cause });
-    if (options.method === "POST" && response.status >= 500) {
+    if (options.method === "POST") {
+      error.message = "Worker dispatch returned an unreadable response (HTTP " + response.status + "); outcome is uncertain and requires reconciliation";
       error.code = "WORKER_DISPATCH_OUTCOME_UNCERTAIN";
       error.retryable = false;
     }
