@@ -696,15 +696,15 @@
       "classification": "uncertain remote upload reconciliation",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "BLOCKED",
+      "authorizedSuccess": "BLOCKED — successful reconciliation requires an authoritative prior upload attempt and remote video ID; no live YouTube reconciliation is claimed. Missing-prior-attempt 409 is covered by test/upload-reconcile-fail-closed.integration.test.mjs.",
       "inputValidation": "PASS",
-      "durablePersistence": "NOT_TESTED",
-      "auditEvidence": "NOT_TESTED",
-      "concurrency": "NOT_TESTED",
-      "restartRecovery": "NOT_TESTED",
+      "durablePersistence": "PASS — missing prior attempt returns 409 without changing dashboard-state.json or creating upload-attempts.json; successful remote reconciliation persistence remains untested.",
+      "auditEvidence": "PASS — no reconciliation audit event is appended when no authoritative prior attempt exists; successful remote reconciliation audit remains untested.",
+      "concurrency": "NOT_TESTED — concurrent remote reconciliation is not exercised.",
+      "restartRecovery": "NOT_TESTED — successful remote reconciliation and verified read-back require an authoritative YouTube attempt and remote ID.",
       "externalOperation": "complete YouTube history and authorized provider identity required",
       "overallAcceptance": "BLOCKED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Local no-prior-attempt fail-closed behavior is accepted only. The endpoint is read-only and never creates a new upload; live YouTube remote reconciliation remains an external prerequisite. A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
     },
     {
       "method": "POST",
