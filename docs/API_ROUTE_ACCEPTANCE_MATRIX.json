@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-02T19:41:17.051Z",
+  "generatedAt": "2026-11-04T19:16:27.393Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
@@ -15,9 +15,9 @@
       "GET /readyz",
       "GET /operational-readyz"
     ],
-    "branchAheadBy": 2502,
+    "branchAheadBy": 2554,
     "branchBehindBy": 2,
-    "changedFiles": 210,
+    "changedFiles": 227,
     "branchProtectionEnabled": false
   },
   "counts": {
@@ -714,17 +714,17 @@
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
       "authorizedSuccess": "BLOCKED — a legacy queued job without the approved authoring pipeline is now covered by a real-server fail-closed test; successful rendering still requires genuine rights-cleared media, approved script/narration/scene evidence and final manifests.",
       "inputValidation": "PASS",
-      "durablePersistence": "PASS — the new real-server negative-path test asserts HTTP 409 leaves dashboard-state.json byte-for-byte unchanged and creates no per-job render manifest or media directory; exact-SHA CI is pending.",
-      "auditEvidence": "PASS — the same negative-path test asserts the blocked request creates no worker lease or audit mutation by verifying byte-identical durable state; exact-SHA CI is pending.",
+      "durablePersistence": "NOT_TESTED — a real-server negative-path assertion has been authored to prove byte-identical state and no artifact creation, but exact-SHA CI has not yet completed.",
+      "auditEvidence": "NOT_TESTED — the same candidate test asserts no lease/audit mutation; exact-SHA CI has not yet completed.",
       "concurrency": "NOT_TESTED",
       "restartRecovery": "NOT_TESTED",
       "externalOperation": "genuine rights-cleared media and final manifests required",
       "overallAcceptance": "BLOCKED",
-      "notes": "Local fail-closed legacy-job behavior is being covered independently from successful production. A queued job without the approved authoring pipeline must return 409 before manifest creation, media-directory creation, worker-lease claim or durable state/audit mutation. Successful rendering remains externally blocked until genuine rights-cleared media and complete approved authoring evidence exist. Do not infer full route acceptance from this negative-path test.",
+      "notes": "Local fail-closed legacy-job behavior has a new candidate integration test; validation is pending from successful production. A queued job without the approved authoring pipeline must return 409 before manifest creation, media-directory creation, worker-lease claim or durable state/audit mutation. Successful rendering remains externally blocked until genuine rights-cleared media and complete approved authoring evidence exist. Do not infer full route acceptance from this negative-path test.",
       "testEvidence": {
         "test": "test/dashboard-worker-api.integration.test.mjs — real dashboard HTTP server",
         "candidateCommit": "be7c9a990ec3540b601104fa666e05546f94b1bc",
-        "scenario": "A queued legacy job without authoring is submitted through the scoped worker credential; POST /api/jobs/produce must return 409, preserve dashboard-state.json byte-for-byte, and create neither a per-job render manifest nor a media directory. Exact-SHA CI not yet confirmed."
+        "scenario": "A queued legacy job without authoring is submitted through the scoped worker credential; POST /api/jobs/produce must return 409, preserve dashboard-state.json byte-for-byte, and create neither a per-job render manifest nor a media directory. Exact-SHA CI not yet confirmed. Candidate is not yet accepted; CI is pending."
       }
     },
     {
