@@ -712,15 +712,20 @@
       "classification": "media rendering/production",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "BLOCKED",
+      "authorizedSuccess": "BLOCKED — a legacy queued job without the approved authoring pipeline is now covered by a real-server fail-closed test; successful rendering still requires genuine rights-cleared media, approved script/narration/scene evidence and final manifests.",
       "inputValidation": "PASS",
-      "durablePersistence": "NOT_TESTED",
-      "auditEvidence": "NOT_TESTED",
+      "durablePersistence": "PASS — the new real-server negative-path test asserts HTTP 409 leaves dashboard-state.json byte-for-byte unchanged and creates no per-job render manifest or media directory; exact-SHA CI is pending.",
+      "auditEvidence": "PASS — the same negative-path test asserts the blocked request creates no worker lease or audit mutation by verifying byte-identical durable state; exact-SHA CI is pending.",
       "concurrency": "NOT_TESTED",
       "restartRecovery": "NOT_TESTED",
       "externalOperation": "genuine rights-cleared media and final manifests required",
       "overallAcceptance": "BLOCKED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Local fail-closed legacy-job behavior is being covered independently from successful production. A queued job without the approved authoring pipeline must return 409 before manifest creation, media-directory creation, worker-lease claim or durable state/audit mutation. Successful rendering remains externally blocked until genuine rights-cleared media and complete approved authoring evidence exist. Do not infer full route acceptance from this negative-path test.",
+      "testEvidence": {
+        "test": "test/dashboard-worker-api.integration.test.mjs — real dashboard HTTP server",
+        "candidateCommit": "be7c9a990ec3540b601104fa666e05546f94b1bc",
+        "scenario": "A queued legacy job without authoring is submitted through the scoped worker credential; POST /api/jobs/produce must return 409, preserve dashboard-state.json byte-for-byte, and create neither a per-job render manifest nor a media directory. Exact-SHA CI not yet confirmed."
+      }
     },
     {
       "method": "POST",
