@@ -101,7 +101,7 @@ function validateConfiguration({ baseUrl, token, workerId, pollIntervalMs }) {
 async function requestJson(fetchImpl, url, options, timeoutMs = 15_000) {
   let response;
   try {
-    response = await fetchImpl(url, { ...options, signal: AbortSignal.timeout(timeoutMs) });
+    response = await fetchImpl(url, { ...options, redirect: "error", signal: AbortSignal.timeout(timeoutMs) });
   } catch (cause) {
     if (options.method === "POST") {
       const error = new Error("Worker dispatch transport failed after submission; outcome is uncertain and requires reconciliation", { cause });
