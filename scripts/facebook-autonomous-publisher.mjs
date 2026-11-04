@@ -22,8 +22,16 @@ function acquireLock(file) {
   let handle;
   try { handle = fs.openSync(file, "wx", 0o600); }
   catch { throw new Error("Facebook publisher lock already exists; do not run concurrently or remove it without reconciliation"); }
-  fs.writeFileSync(handle, JSON.stringify({ pid: process.pid, acquiredAt: new Date().toISOString() }));
-  fs.fsyncSync(handle);
+  try {
+    fs.writeFileSync(handle, JSON.stringify({ pid: process.pid, acquiredAt: new Date().toISOString() }));
+    fs.fsyncSync(handle);
+  } catch (error) {
+    // The exclusive file is ours until this function returns its release handle.
+    // Do not strand a stale lock if writing or making the lock durable fails.
+    try { fs.closeSync(handle); } catch {}
+    try { fs.unlinkSync(file); } catch {}
+    throw error;
+  }
   return () => { try { fs.closeSync(handle); } finally { try { fs.unlinkSync(file); } catch {} } };
 }
 function validateConfig(config) {

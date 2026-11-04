@@ -23,6 +23,31 @@ function setup() {
   return { root, configPath, queuePath, stateDir, config, cleanup: () => fs.rmSync(root, { recursive: true, force: true }) };
 }
 
+test("failed durable lock initialization removes only its own incomplete lock", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const lockPath = path.join(f.stateDir, "facebook-publishing.lock");
+    const originalFsync = fs.fsyncSync;
+    try {
+      fs.fsyncSync = () => { const error = new Error("simulated lock fsync failure"); error.code = "EIO"; throw error; };
+      await assert.rejects(() => runAutonomousFacebookPublisher({
+        rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+        env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) }
+      }), /simulated lock fsync failure/);
+    } finally {
+      fs.fsyncSync = originalFsync;
+    }
+    assert.equal(fs.existsSync(lockPath), false, "failed initialization must not strand a lock file");
+    const result = await runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) }
+    });
+    assert.equal(result.status, "COMPLETED", "a subsequent run must acquire the released lock");
+  } finally { f.cleanup(); }
+});
+
 test("safe defaults are a no-op and never attempt a Meta request", async () => {
   const f = setup();
   try {
