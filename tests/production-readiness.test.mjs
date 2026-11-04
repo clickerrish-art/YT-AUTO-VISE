@@ -166,9 +166,23 @@ test("readiness reports malformed render-manifest asset paths without crashing J
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "readiness-manifest-path-"));
   try {
     for (const relative of ["scripts", "config", "content", "media"]) fs.mkdirSync(path.join(directory, relative), { recursive: true });
-    for (const relative of ["scripts/production-readiness.mjs", "scripts/schedule-policy.mjs", "scripts/safe-project-file.mjs", "config/weekly-content-plan.json", "content/queue.json", "content/long-form-render-manifest.json", "content/next-short.json"]) {
+    for (const relative of ["scripts/production-readiness.mjs", "scripts/schedule-policy.mjs", "scripts/safe-project-file.mjs", "config/weekly-content-plan.json", "content/queue.json", "content/next-short.json"]) {
       fs.copyFileSync(path.join(sourceRoot, relative), path.join(directory, relative));
     }
+    fs.writeFileSync(path.join(directory, "content/long-form-render-manifest.json"), JSON.stringify({
+      channel: "SonicVhibez",
+      targetAspectRatio: "16:9",
+      title: "Fixture long-form title",
+      footagePath: "missing-long-form-footage.mp4",
+      narrationPath: "missing-long-form-narration.mp3",
+      captionsPath: "missing-long-form-captions.srt",
+      footageLicenseEvidence: "pending fixture evidence",
+      narrationLicenseEvidence: "pending fixture evidence",
+      rightsConfirmed: false,
+      complianceReviewed: false,
+      containsSyntheticMedia: false,
+      hasPaidPromotion: false
+    }));
     fs.writeFileSync(path.join(directory, "content/render-manifest.json"), JSON.stringify({
       channel: "SonicVhibez",
       footagePath: { unexpected: "object" },
