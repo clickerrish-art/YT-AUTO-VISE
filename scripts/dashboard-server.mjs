@@ -8,7 +8,6 @@ import { commitApprovalArtifact } from "./approval-artifact-transaction.mjs";
 import { atomicWriteJson, atomicCreateJson } from "./atomic-json-file.mjs";
 import { startWorkerLeaseHeartbeat } from "./worker-lease-heartbeat.mjs";
 import { terminateProcessTree } from "./terminate-process-tree.mjs";
-import { runExclusiveTask } from "./active-task-lock.mjs";
 import { redactOperationalText } from "./safe-output.mjs";
 import { matchesOperatorToken } from "./operator-auth.mjs";
 import { fileURLToPath } from "node:url";
@@ -2479,7 +2478,10 @@ const server = http.createServer(async (req, res) => {
         state.audit.push({ id: crypto.randomUUID(), action: body.decision === "APPROVE" ? "CONTENT_ARTIFACT_APPROVED_FOR_PRIVATE_UPLOAD" : "CONTENT_ARTIFACT_REJECTED", jobId: job.id, artifactPath, artifactSha256, metadataVersion, reviewId: review.id, uploadApprovalPath: uploadApprovalPath ? path.relative(root, uploadApprovalPath) : null, actor: reviewer, reason: String(body.reason ?? "").slice(0, 1000), at: new Date().toISOString() });
         if (pendingApprovalCommit) pendingApprovalCommit();
         else saveState(state);
-        return json(res, 200, { job: state.jobs[index], review, uploadApprovalRecord, uploadApprovalPath: uploadApprovalPath ? path.relative(root, uploadApprovalPath) : null, publishingEif (req.method === "POST" && url.pathname === "/api/uploads/reconcile") {
+        return json(res, 200, { job: state.jobs[index], review, uploadApprovalRecord, uploadApprovalPath: uploadApprovalPath ? path.relative(root, uploadApprovalPath) : null, publishingEnabled: false });
+      } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/uploads/reconcile") {
       const body = await readBody(req);
       const actor = process.env.DASHBOARD_OPERATOR_ID;
       if (!actor || actor.trim().length < 2) return json(res, 503, { error: "Upload reconciliation requires DASHBOARD_OPERATOR_ID" });
