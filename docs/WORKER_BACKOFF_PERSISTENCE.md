@@ -13,7 +13,7 @@ The worker writes retry state atomically with mode `0600`. Keep the directory on
 ## Failure behavior
 
 - A HTTP 409 preflight conflict receives bounded exponential backoff from 30 seconds to 15 minutes.
-- A HTTP 429 rate-limit response honors either numeric-seconds or HTTP-date `Retry-After` values, subject to a 15-minute maximum. Invalid or expired values fall back to the bounded exponential delay.
+- A HTTP 429 rate-limit response from either queue listing or render dispatch honors numeric-seconds or HTTP-date `Retry-After` values, subject to a 15-minute maximum. Queue-listing rate limits delay the next poll; render-dispatch rate limits persist the job-specific cooldown across restarts. Invalid or expired values fall back to the bounded exponential delay.
 - Attempt counts and absolute next-attempt timestamps are saved after each dispatch result. A successful dispatch clears that job's cooldown.
 - A POST transport failure, timeout, unreadable response, HTTP 408 or HTTP 5xx is treated as an uncertain dispatch outcome. The worker stops and requires reconciliation instead of blindly retrying a possibly accepted render request.
 - If retry-state persistence fails, the worker stops rather than polling and redispatching without a durable cooldown.
