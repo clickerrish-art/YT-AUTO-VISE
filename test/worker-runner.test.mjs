@@ -232,3 +232,46 @@ test("continuous worker stops after a render dispatch transport failure with an 
   assert.equal(errors.length, 1);
   assert.equal(errors[0].code, "WORKER_DISPATCH_OUTCOME_UNCERTAIN");
 });
+
+
+test("continuous worker stops after a successful-status dispatch returns an unreadable response", async t => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-unreadable-"));
+  const statePath = path.join(tempDir, "cooldowns.json");
+  const requests = [];
+  const errors = [];
+  const fetchImpl = async (url, options = {}) => {
+    const method = options.method ?? "GET";
+    requests.push({ method, url: String(url) });
+    if (method === "GET") {
+      return new Response(JSON.stringify({
+        jobs: [{ id: "job-response-unreadable", state: "QUEUED" }],
+        queuedCount: 1,
+        publishingEnabled: false
+      }), { status: 200, headers: { "content-type": "application/json" } });
+    }
+    return new Response("dispatch accepted but response body is not JSON", {
+      status: 200,
+      headers: { "content-type": "text/plain" }
+    });
+  };
+  t.after(() => {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  });
+  await assert.rejects(
+    runWorker({
+      baseUrl: "http://127.0.0.1:8787",
+      token,
+      workerId,
+      once: false,
+      pollIntervalMs: 1_000,
+      cooldownStatePath: statePath,
+      fetchImpl,
+      onError: error => errors.push(error),
+      shouldStop: () => false
+    }),
+    error => error?.code === "WORKER_DISPATCH_OUTCOME_UNCERTAIN" && error.retryable === false
+  );
+  assert.deepEqual(requests.map(item => item.method), ["GET", "POST"]);
+  assert.equal(errors.length, 1);
+  assert.equal(errors[0].code, "WORKER_DISPATCH_OUTCOME_UNCERTAIN");
+});
