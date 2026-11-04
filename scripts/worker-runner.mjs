@@ -89,15 +89,36 @@ function validateConfiguration({ baseUrl, token, workerId, pollIntervalMs }) {
 }
 
 async function requestJson(fetchImpl, url, options, timeoutMs = 15_000) {
-  const response = await fetchImpl(url, { ...options, signal: AbortSignal.timeout(timeoutMs) });
+  let response;
+  try {
+    response = await fetchImpl(url, { ...options, signal: AbortSignal.timeout(timeoutMs) });
+  } catch (cause) {
+    if (options.method === "POST") {
+      const error = new Error("Worker dispatch transport failed after submission; outcome is uncertain and requires reconciliation", { cause });
+      error.code = "WORKER_DISPATCH_OUTCOME_UNCERTAIN";
+      error.retryable = false;
+      throw error;
+    }
+    throw cause;
+  }
   let payload;
   try { payload = await response.json(); }
-  catch { throw new Error("Dashboard worker API returned a non-JSON response (HTTP " + response.status + ")"); }
+  catch (cause) {
+    const error = new Error("Dashboard worker API returned a non-JSON response (HTTP " + response.status + ")", { cause });
+    if (options.method === "POST" && response.status >= 500) {
+      error.code = "WORKER_DISPATCH_OUTCOME_UNCERTAIN";
+      error.retryable = false;
+    }
+    throw error;
+  }
   if (!response.ok && response.status !== 409) {
-    const error = new Error("Dashboard worker API request failed with HTTP " + response.status + ": " + String(payload.error ?? "request failed").slice(0, 300));
-    error.code = "WORKER_API_HTTP_" + response.status;
+    const uncertainDispatch = options.method === "POST" && (response.status === 408 || response.status >= 500);
+    const error = new Error(uncertainDispatch
+      ? "Worker dispatch returned HTTP " + response.status + "; outcome is uncertain and requires reconciliation"
+      : "Dashboard worker API request failed with HTTP " + response.status + ": " + String(payload.error ?? "request failed").slice(0, 300));
+    error.code = uncertainDispatch ? "WORKER_DISPATCH_OUTCOME_UNCERTAIN" : "WORKER_API_HTTP_" + response.status;
     error.status = response.status;
-    error.retryable = response.status === 408 || response.status === 429 || response.status >= 500;
+    error.retryable = !uncertainDispatch && (response.status === 408 || response.status === 429 || response.status >= 500);
     throw error;
   }
   return { status: response.status, payload };
@@ -181,7 +202,8 @@ export async function runWorker({
   onError = error => console.error(JSON.stringify({ event: "worker_cycle_failed", message: String(error?.message ?? error).slice(0, 500) })),
   shouldStop = () => false,
   cooldownStatePath: configuredCooldownStatePath = process.env.WORKER_BACKOFF_STATE_PATH,
-  stateDirectory = process.env.WORKER_STATE_DIR ?? "run-logs"
+  stateDirectory = process.env.WORKER_STATE_DIR ?? "run-logs",
+  fetchImpl = fetch
 } = {}) {
   validateConfiguration({ baseUrl, token, workerId, pollIntervalMs });
   const statePath = cooldownStatePath(workerId, configuredCooldownStatePath, stateDirectory);
@@ -197,7 +219,7 @@ export async function runWorker({
   };
   do {
     try {
-      const result = await runWorkerCycle({ baseUrl, token, workerId, cooldowns, onCooldownsChanged: persist, shouldStop });
+      const result = await runWorkerCycle({ baseUrl, token, workerId, fetchImpl, cooldowns, onCooldownsChanged: persist, shouldStop });
       onCycle(result);
     } catch (error) {
       onError(error);
