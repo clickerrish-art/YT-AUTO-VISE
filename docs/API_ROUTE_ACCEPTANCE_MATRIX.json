@@ -147,15 +147,15 @@
       "classification": "external identity and permission verification",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "BLOCKED — successful external verification requires owner-verified Page ID and real Meta credentials; fail-closed 409 response is covered by test/facebook-page-verification-fail-closed.integration.test.mjs.",
+      "authorizedSuccess": "PASS — deterministic mocked Meta Graph integration verifies identity and permissions through read-only GET calls; real Meta provider acceptance remains external and unverified.",
       "inputValidation": "PASS",
-      "durablePersistence": "PASS — the fail-closed missing-identity response leaves dashboard-state.json byte-for-byte unchanged; successful external verification persistence remains untested.",
-      "auditEvidence": "PASS — no identity-verification audit event is appended when the owner-verified Page ID is absent; successful external verification audit remains untested.",
-      "concurrency": "NOT_TESTED — concurrent live Meta identity/permission verification is not exercised.",
-      "restartRecovery": "NOT_TESTED — successful external identity-verification persistence and restart read-back require genuine Page credentials.",
+      "durablePersistence": "PASS — mocked successful verification persists Page identity, permission state and credential fingerprints; missing Page ID and provider permission failures preserve state byte-for-byte.",
+      "auditEvidence": "PASS — each successful mocked verification appends one operator-attributed FACEBOOK_PAGE_IDENTITY_VERIFIED event; failed/missing-identity paths append none.",
+      "concurrency": "PASS — two simultaneous mocked verification requests complete with two explicit verification receipts and exactly six read-only provider GET calls; no provider mutation.",
+      "restartRecovery": "PASS — mocked verified Page identity, permissions and audit history survive a fresh dashboard process and authenticated read-back; live Meta credentials are not used.",
       "externalOperation": "Meta identity/permission verification",
       "overallAcceptance": "BLOCKED",
-      "notes": "Local fail-closed precondition behavior is accepted only; no live Meta API request, Page identity, permission grant, or publishing capability is claimed. A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Mock-provider route behavior, fail-closed missing-identity behavior and restart durability are tested. Real Meta Page identity/permissions and publishing remain external owner prerequisites and are not claimed. A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
     },
     {
       "method": "GET",
