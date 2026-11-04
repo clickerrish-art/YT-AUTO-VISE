@@ -273,15 +273,15 @@
       "classification": "external Meta publication",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 35-route authentication matrix",
-      "authorizedSuccess": "BLOCKED",
+      "authorizedSuccess": "BLOCKED — explicit publishing remains disabled by the active emergency stop and dry-run defaults; the mocked provider integration test verifies HTTP 409 without provider mutation.",
       "inputValidation": "PASS",
-      "durablePersistence": "NOT_TESTED",
-      "auditEvidence": "NOT_TESTED",
-      "concurrency": "NOT_TESTED",
-      "restartRecovery": "NOT_TESTED",
+      "durablePersistence": "PASS — two concurrent blocked publish requests preserve dashboard-state.json byte-for-byte; no publish attempt is persisted.",
+      "auditEvidence": "PASS — blocked publication appends no audit event and creates no provider-side post.",
+      "concurrency": "PASS — two simultaneous publish attempts both return 409 and preserve state/provider trace byte-for-byte.",
+      "restartRecovery": "PASS — after server restart the disabled publish path remains a no-op and durable state remains byte-identical.",
       "externalOperation": "live Meta publishing disabled; provider action not authorized",
       "overallAcceptance": "BLOCKED",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Fail-closed disabled-publish behavior is tested against a mocked verified Page; no live Meta publication, provider-side post, or owner authorization is claimed. A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
     },
     {
       "method": "GET",
