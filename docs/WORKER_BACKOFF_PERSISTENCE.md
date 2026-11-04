@@ -1,6 +1,6 @@
 # Worker retry-backoff persistence
 
-The scoped content-render worker persists preflight-conflict backoff so a process restart cannot reset a blocked job to an immediate retry.
+The scoped content-render worker persists both preflight-conflict and HTTP 429 rate-limit backoff so a process restart cannot reset a blocked job to an immediate retry.
 
 ## Configuration
 
@@ -12,7 +12,11 @@ The worker writes retry state atomically with mode `0600`. Keep the directory on
 
 ## Failure behavior
 
-A HTTP 409 preflight conflict receives bounded exponential backoff from 30 seconds to 15 minutes. Attempt counts and absolute next-attempt timestamps are saved after each dispatch result. A successful dispatch clears that job's cooldown.
+- A HTTP 409 preflight conflict receives bounded exponential backoff from 30 seconds to 15 minutes.
+- A HTTP 429 rate-limit response honors either numeric-seconds or HTTP-date `Retry-After` values, subject to a 15-minute maximum. Invalid or expired values fall back to the bounded exponential delay.
+- Attempt counts and absolute next-attempt timestamps are saved after each dispatch result. A successful dispatch clears that job's cooldown.
+- A POST transport failure, timeout, unreadable response, HTTP 408 or HTTP 5xx is treated as an uncertain dispatch outcome. The worker stops and requires reconciliation instead of blindly retrying a possibly accepted render request.
+- If retry-state persistence fails, the worker stops rather than polling and redispatching without a durable cooldown.
 
 If the state file is corrupt, belongs to another worker identity, has an invalid schema, or is a symlink/non-regular file, the worker stops instead of silently clearing the retry delay. Repair the state file from a trusted backup or remove it only after an operator has confirmed that resetting the backoff is safe.
 
