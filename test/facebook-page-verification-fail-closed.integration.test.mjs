@@ -90,7 +90,7 @@ test("Facebook Page verification fails closed without owner-verified identity an
   assert.equal(status.status, 200);
   const payload = await status.json();
   assert.equal(payload.publishingEnabled, false);
-  assert.equal(payload.pageVerified, false);
+  assert.equal(payload.pageIdentityVerified, false);
   assert.deepEqual(fs.readFileSync(statePath), before,
     "verification failure and subsequent status read must remain mutation-free");
 });
