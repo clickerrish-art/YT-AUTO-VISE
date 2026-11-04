@@ -139,3 +139,46 @@ test("worker stops after a dispatch conflict when retry-backoff persistence fail
   assert.equal(errors.length, 1);
   assert.equal(errors[0].code, "WORKER_BACKOFF_PERSISTENCE_FAILED");
 });
+
+
+test("worker persists Retry-After backoff after HTTP 429 and honors it after restart", async t => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-rate-limit-"));
+  const statePath = path.join(directory, "worker-backoff.json");
+  let produceRequests = 0;
+  const server = createServer(async (req, res) => {
+    res.setHeader("content-type", "application/json");
+    if (req.method === "GET" && req.url?.startsWith("/api/jobs/dispatchable")) {
+      res.end(JSON.stringify({ jobs: [{ id: "job-rate-limited" }], queuedCount: 1 }));
+      return;
+    }
+    if (req.method === "POST" && req.url === "/api/jobs/produce") {
+      produceRequests += 1;
+      res.writeHead(429, { "retry-after": "60", "content-type": "application/json" });
+      res.end(JSON.stringify({ error: "rate limited", publishingEnabled: false }));
+      return;
+    }
+    res.statusCode = 404;
+    res.end(JSON.stringify({ error: "not found" }));
+  });
+  const baseUrl = await listen(server);
+  t.after(async () => {
+    await new Promise(resolve => server.close(resolve));
+    fs.rmSync(directory, { recursive: true, force: true });
+  });
+
+  const firstCycles = [];
+  await runWorker({ baseUrl, token, workerId, once: true, cooldownStatePath: statePath, onCycle: value => firstCycles.push(value) });
+  assert.equal(produceRequests, 1);
+  assert.equal(firstCycles[0].results[0].httpStatus, 429);
+  assert.equal(firstCycles[0].results[0].status, "NOT_DISPATCHED");
+  assert.ok(firstCycles[0].results[0].retryAfterMs >= 60_000);
+  const saved = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  assert.equal(saved.cooldowns["job-rate-limited"].attempts, 1);
+  assert.ok(saved.cooldowns["job-rate-limited"].nextAttemptAt >= Date.now() + 59_000);
+
+  const restartedCycles = [];
+  await runWorker({ baseUrl, token, workerId, once: true, cooldownStatePath: statePath, onCycle: value => restartedCycles.push(value) });
+  assert.equal(restartedCycles[0].deferredByBackoff, 1);
+  assert.deepEqual(restartedCycles[0].results, []);
+  assert.equal(produceRequests, 1, "restart must honor the provider's Retry-After window");
+});
