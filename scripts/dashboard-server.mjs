@@ -678,11 +678,16 @@ const server = http.createServer(async (req, res) => {
         /^[a-f0-9]{64}$/.test(job.authoring.productionPlan.review?.approvalSha256 ?? "");
       const dispatchTimestamp = job => {
         const slot = job.scheduledSlot;
-        if (slot?.timezone === "Africa/Johannesburg" &&
-            /^\d{4}-\d{2}-\d{2}$/.test(slot.date ?? "") &&
-            /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(slot.time ?? "")) {
-          const scheduledAt = Date.parse(slot.date + "T" + slot.time + ":00+02:00");
-          if (Number.isFinite(scheduledAt)) return scheduledAt;
+        if (slot?.timezone === "Africa/Johannesburg") {
+          try {
+            // Reuse the strict IANA wall-clock converter so impossible calendar
+            // dates and malformed times cannot be normalized by Date.parse.
+            const scheduledAt = Date.parse(localDateTimeToIso(slot.date, slot.time, slot.timezone));
+            if (Number.isFinite(scheduledAt)) return scheduledAt;
+          } catch {
+            // A malformed legacy slot falls back to creation order, never a
+            // normalized or guessed publication instant.
+          }
         }
         const createdAt = Date.parse(job.createdAt ?? "");
         return Number.isFinite(createdAt) ? createdAt : Number.MAX_SAFE_INTEGER;
