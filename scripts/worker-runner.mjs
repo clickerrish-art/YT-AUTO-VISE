@@ -120,6 +120,13 @@ async function requestJson(fetchImpl, url, options, timeoutMs = 15_000) {
     error.code = uncertainDispatch ? "WORKER_DISPATCH_OUTCOME_UNCERTAIN" : "WORKER_API_HTTP_" + response.status;
     error.status = response.status;
     error.retryable = !uncertainDispatch && (response.status === 408 || response.status === 429 || response.status >= 500);
+    if (response.status === 429) {
+      const retryAfter = response.headers.get("retry-after");
+      const seconds = retryAfter && /^\\d+(?:\\.\\d+)?$/.test(retryAfter) ? Number(retryAfter) : NaN;
+      const dateDelay = retryAfter && !Number.isFinite(seconds) ? Date.parse(retryAfter) - Date.now() : NaN;
+      error.retryAfterMs = Math.max(1_000, Math.min(15 * 60_000,
+        Number.isFinite(seconds) ? seconds * 1_000 : Number.isFinite(dateDelay) ? dateDelay : 30_000));
+    }
     throw error;
   }
   return { status: response.status, payload };
@@ -146,11 +153,23 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
       break;
     }
     if (!job || typeof job.id !== "string" || !job.id.trim()) throw new Error("Dashboard worker API returned a job without a valid identifier");
-    const dispatched = await requestJson(fetchImpl, origin + "/api/jobs/produce", {
-      method: "POST",
-      headers: { ...headers, "content-type": "application/json" },
-      body: JSON.stringify({ jobId: job.id })
-    }, 15 * 60_000);
+    let dispatched;
+    try {
+      dispatched = await requestJson(fetchImpl, origin + "/api/jobs/produce", {
+        method: "POST",
+        headers: { ...headers, "content-type": "application/json" },
+        body: JSON.stringify({ jobId: job.id })
+      }, 15 * 60_000);
+    } catch (error) {
+      if (error?.status !== 429 || error.retryable !== true) throw error;
+      const attempts = Math.min(20, (cooldowns.get(job.id)?.attempts ?? 0) + 1);
+      const fallbackDelayMs = Math.min(15 * 60_000, 30_000 * (2 ** Math.max(0, attempts - 1)));
+      const delayMs = Math.max(error.retryAfterMs ?? 0, fallbackDelayMs);
+      cooldowns.set(job.id, { attempts, nextAttemptAt: Date.now() + delayMs });
+      onCooldownsChanged(cooldowns);
+      results.push({ jobId: job.id, status: "NOT_DISPATCHED", httpStatus: 429, state: null, retryAfterMs: delayMs });
+      continue;
+    }
     if (dispatched.status === 200) {
       cooldowns.delete(job.id);
       onCooldownsChanged(cooldowns);
