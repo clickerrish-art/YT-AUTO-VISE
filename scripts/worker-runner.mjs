@@ -122,7 +122,7 @@ async function requestJson(fetchImpl, url, options, timeoutMs = 15_000) {
     error.retryable = !uncertainDispatch && (response.status === 408 || response.status === 429 || response.status >= 500);
     if (response.status === 429) {
       const retryAfter = response.headers.get("retry-after");
-      const seconds = retryAfter && /^\\d+(?:\\.\\d+)?$/.test(retryAfter) ? Number(retryAfter) : NaN;
+      const seconds = retryAfter && /^\d+(?:\.\d+)?$/.test(retryAfter) ? Number(retryAfter) : NaN;
       const dateDelay = retryAfter && !Number.isFinite(seconds) ? Date.parse(retryAfter) - Date.now() : NaN;
       error.retryAfterMs = Math.max(1_000, Math.min(15 * 60_000,
         Number.isFinite(seconds) ? seconds * 1_000 : Number.isFinite(dateDelay) ? dateDelay : 30_000));
