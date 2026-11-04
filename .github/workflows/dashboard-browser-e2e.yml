@@ -3,18 +3,6 @@ name: Dashboard browser end-to-end acceptance
 on:
   pull_request:
     branches: [main]
-  push:
-    branches: [codex/marketing-machine-audit-fixes]
-    paths:
-      - "public/dashboard.html"
-      - "scripts/dashboard-server.mjs"
-      - "scripts/content-job-lifecycle.mjs"
-      - "scripts/schedule-policy.mjs"
-      - "browser-tests/**"
-      - "playwright.config.mjs"
-      - "package.json"
-      - "package-lock.json"
-      - ".github/workflows/dashboard-browser-e2e.yml"
 
 permissions:
   contents: read
