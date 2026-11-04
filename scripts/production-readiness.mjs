@@ -93,7 +93,12 @@ if (!exists(manifestPath)) {
   if (manifest) {
     if (manifest.channel !== "SonicVhibez") blockers.push("Render manifest target must be exactly SonicVhibez.");
     for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
-      if (!manifest[key] || !exists(path.join("content", manifest[key]))) blockers.push(`Manifest asset ${key} is missing: ${manifest[key] ?? "(unset)"}.`);
+      const assetPath = manifest[key];
+      if (typeof assetPath !== "string" || !assetPath.trim()) {
+        blockers.push(`Manifest asset ${key} must be a non-empty relative path string.`);
+      } else if (!exists(path.join("content", assetPath))) {
+        blockers.push(`Manifest asset ${key} is missing: ${assetPath}.`);
+      }
     }
     for (const key of ["footageLicenseEvidence", "narrationLicenseEvidence"]) {
       if (typeof manifest[key] !== "string" || manifest[key].trim().length < 12 || /replace_with|placeholder|todo|unknown|tbd/i.test(manifest[key])) {

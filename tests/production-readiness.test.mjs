@@ -159,3 +159,37 @@ test("readiness rejects valid JSON roots that are not objects for every required
     }
   }
 });
+
+
+test("readiness reports malformed render-manifest asset paths without crashing JSON diagnostics", () => {
+  const sourceRoot = process.cwd();
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "readiness-manifest-path-"));
+  try {
+    for (const relative of ["scripts", "config", "content", "media"]) fs.mkdirSync(path.join(directory, relative), { recursive: true });
+    for (const relative of ["scripts/production-readiness.mjs", "scripts/schedule-policy.mjs", "scripts/safe-project-file.mjs", "config/weekly-content-plan.json", "content/queue.json", "content/long-form-render-manifest.json", "content/next-short.json"]) {
+      fs.copyFileSync(path.join(sourceRoot, relative), path.join(directory, relative));
+    }
+    fs.writeFileSync(path.join(directory, "content/render-manifest.json"), JSON.stringify({
+      channel: "SonicVhibez",
+      footagePath: { unexpected: "object" },
+      narrationPath: 42,
+      captionsPath: null,
+      footageLicenseEvidence: "evidence reference pending review",
+      narrationLicenseEvidence: "evidence reference pending review",
+      rightsConfirmed: false,
+      complianceReviewed: false
+    }));
+    const env = { ...process.env, YOUTUBE_CLIENT_ID: "", YOUTUBE_CLIENT_SECRET: "", YOUTUBE_REFRESH_TOKEN: "", SONICVHIBEZ_CHANNEL_ID: "" };
+    delete env.QUEUE_PATH;
+    const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
+      cwd: directory, env, encoding: "utf8"
+    });
+    assert.equal(result.status, 2);
+    const report = JSON.parse(result.stdout);
+    assert.ok(report.blockers.some(blocker => blocker.message.includes("Manifest asset footagePath must be a non-empty relative path string.")));
+    assert.ok(report.blockers.some(blocker => blocker.message.includes("Manifest asset narrationPath must be a non-empty relative path string.")));
+    assert.ok(report.blockers.some(blocker => blocker.message.includes("Manifest asset captionsPath must be a non-empty relative path string.")));
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
