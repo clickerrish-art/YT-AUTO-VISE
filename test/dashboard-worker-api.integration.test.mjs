@@ -181,9 +181,9 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
     /not linked to the required approved authoring pipeline/);
   assert.equal(fs.readFileSync(statePath).toString(), before.toString(),
     "blocked production without approved authoring must not mutate job state, audit or worker lease");
-  assert.equal(fs.existsSync(path.join(stateDir, "content", "job-render-manifests", "queued-legacy-without-authoring.json")), false,
+  assert.equal(fs.existsSync(path.join(process.cwd(), "content", "job-render-manifests", "queued-legacy-without-authoring.json")), false,
     "blocked production must not create a render manifest");
-  assert.equal(fs.existsSync(path.join(stateDir, "media", "jobs", "queued-legacy-without-authoring")), false,
+  assert.equal(fs.existsSync(path.join(process.cwd(), "media", "jobs", "queued-legacy-without-authoring")), false,
     "blocked production must not create a per-job media directory");
 
   const operatorState = await fetch(base + "/api/state", { headers: workerHeaders });
