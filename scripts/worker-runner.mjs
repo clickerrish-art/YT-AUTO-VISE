@@ -84,7 +84,8 @@ function validateConfiguration({ baseUrl, token, workerId, pollIntervalMs }) {
   if (!["http:", "https:"].includes(parsed.protocol) || parsed.username || parsed.password || parsed.search || parsed.hash) {
     throw new Error("DASHBOARD_API_URL must be an HTTP(S) origin without embedded credentials, query or fragment");
   }
-  if (parsed.protocol === "http:" && !["127.0.0.1", "::1", "localhost"].includes(parsed.hostname)) {
+  const hostname = parsed.hostname.replace(/^\[|\]$/g, "").toLowerCase();
+  if (parsed.protocol === "http:" && !["127.0.0.1", "::1", "localhost"].includes(hostname)) {
     throw new Error("Unencrypted worker API connections are restricted to loopback");
   }
   if (typeof token !== "string" || token.length < 24) throw new Error("DASHBOARD_WORKER_TOKEN must contain at least 24 characters");

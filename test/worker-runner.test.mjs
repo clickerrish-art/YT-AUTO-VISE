@@ -85,6 +85,28 @@ test("worker rejects unencrypted non-loopback API destinations before sending cr
   await assert.rejects(runWorkerCycle({ baseUrl: "http://example.com", token, workerId }), /restricted to loopback/);
 });
 
+test("worker accepts bracketed IPv6 loopback while retaining loopback-only HTTP policy", async () => {
+  const requests = [];
+  const fetchImpl = async (url, options = {}) => {
+    requests.push({ url: String(url), options });
+    return new Response(JSON.stringify({ jobs: [], queuedCount: 0 }), {
+      status: 200,
+      headers: { "content-type": "application/json" }
+    });
+  };
+  const result = await runWorkerCycle({
+    baseUrl: "http://[::1]:8787",
+    token,
+    workerId,
+    fetchImpl
+  });
+  assert.equal(result.discovered, 0);
+  assert.equal(requests.length, 1);
+  assert.equal(requests[0].url, "http://[::1]:8787/api/jobs/dispatchable?limit=20");
+  assert.equal(requests[0].options.headers["x-worker-token"], token);
+  await assert.rejects(runWorkerCycle({ baseUrl: "http://example.com", token, workerId, fetchImpl }), /restricted to loopback/);
+});
+
 test("worker requires a strong scoped credential and valid worker identity", async () => {
   await assert.rejects(runWorkerCycle({ baseUrl: "http://127.0.0.1:8787", token: "short", workerId }), /at least 24 characters/);
   await assert.rejects(runWorkerCycle({ baseUrl: "http://127.0.0.1:8787", token, workerId: "x" }), /safe 2–120 character identifier/);
