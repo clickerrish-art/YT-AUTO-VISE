@@ -128,3 +128,34 @@ test("readiness never accepts an owner-approved cadence that weakens the 72-hour
   assert.equal(schedule.publicationCycle.minimumCycleHours, 216);
   assert.ok(!schedule.cadenceDecision.options.includes("WEEKLY_TARGET_WITH_SHORTER_SPACING"));
 });
+
+
+test("readiness rejects valid JSON roots that are not objects for every required config artifact", () => {
+  const sourceRoot = process.cwd();
+  const cases = [
+    ["content/queue.json", "Queue must be a JSON object with an items array"],
+    ["content/render-manifest.json", "content/render-manifest.json must contain a JSON object"],
+    ["content/long-form-render-manifest.json", "content/long-form-render-manifest.json must contain a JSON object"],
+    ["content/next-short.json", "content/next-short.json must contain a JSON object"]
+  ];
+  for (const [targetPath, expected] of cases) {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "readiness-json-root-"));
+    try {
+      for (const relative of ["scripts", "config", "content"]) fs.mkdirSync(path.join(directory, relative), { recursive: true });
+      for (const relative of ["scripts/production-readiness.mjs", "scripts/schedule-policy.mjs", "scripts/safe-project-file.mjs", "config/weekly-content-plan.json", "content/queue.json"]) {
+        fs.copyFileSync(path.join(sourceRoot, relative), path.join(directory, relative));
+      }
+      fs.writeFileSync(path.join(directory, targetPath), "null\n");
+      const env = { ...process.env, YOUTUBE_CLIENT_ID: "", YOUTUBE_CLIENT_SECRET: "", YOUTUBE_REFRESH_TOKEN: "", SONICVHIBEZ_CHANNEL_ID: "" };
+      delete env.QUEUE_PATH;
+      const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
+        cwd: directory, env, encoding: "utf8"
+      });
+      assert.equal(result.status, 2, targetPath);
+      const report = JSON.parse(result.stdout);
+      assert.ok(report.blockers.some(blocker => blocker.message.includes(expected)), targetPath);
+    } finally {
+      fs.rmSync(directory, { recursive: true, force: true });
+    }
+  }
+});

@@ -54,13 +54,14 @@ if (!queueExists) {
   let queue;
   try {
     queue = JSON.parse(fs.readFileSync(path.resolve(root, queuePath), "utf8"));
+    if (!queue || typeof queue !== "object" || Array.isArray(queue)) {
+      blockers.push("Queue must be a JSON object with an items array.");
+      queue = undefined;
+    }
   } catch {
     blockers.push("content/queue.json is not valid JSON; queue checks cannot be trusted.");
   }
   if (queue) {
-    if (!queue || typeof queue !== "object" || Array.isArray(queue)) {
-      blockers.push("Queue must be a JSON object with an items array.");
-    } else {
       if (queue.publishingEnabled !== false) blockers.push("Queue must keep publishingEnabled=false until private upload and human review are verified.");
       if (queue.cadence?.minimumHoursBetweenConsecutivePublications !== minimumSpacingHours || queue.cadence?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0) || JSON.stringify(queue.cadence?.formats) !== JSON.stringify(["long_form", "long_form", "short"])) blockers.push("Queue cadence must match the configured rolling publication cycle policy.");
       if (queue.cadence?.draftPreparationFallback?.notPublicationCadence !== true) blockers.push("Tuesday/Saturday fallback must be marked draft preparation only, not publication cadence.");
@@ -76,15 +77,19 @@ if (!queueExists) {
         blockers.push("Queue contains duplicate item IDs; remove duplicates before relying on cadence tracking.");
       }
       notes.push(`Queue: ${items.length} items; public publishing ${queue.publishingEnabled === false ? "disabled" : "not safely disabled"}.`);
-    }
   }
 }
 if (!exists(manifestPath)) {
   blockers.push("Create content/render-manifest.json from the example and fill it only after verifying asset rights.");
 } else {
   let manifest;
-  try { manifest = JSON.parse(fs.readFileSync(path.resolve(root, manifestPath), "utf8")); }
-  catch { blockers.push("content/render-manifest.json is not valid JSON."); }
+  try {
+    manifest = JSON.parse(fs.readFileSync(path.resolve(root, manifestPath), "utf8"));
+    if (!manifest || typeof manifest !== "object" || Array.isArray(manifest)) {
+      blockers.push("content/render-manifest.json must contain a JSON object.");
+      manifest = undefined;
+    }
+  } catch { blockers.push("content/render-manifest.json is not valid JSON."); }
   if (manifest) {
     if (manifest.channel !== "SonicVhibez") blockers.push("Render manifest target must be exactly SonicVhibez.");
     for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
@@ -104,8 +109,13 @@ if (!exists(longFormManifestPath)) {
   blockers.push("Create content/long-form-render-manifest.json from the example only after verifying real long-form assets and rights.");
 } else {
   let longManifest;
-  try { longManifest = JSON.parse(fs.readFileSync(path.resolve(root, longFormManifestPath), "utf8")); }
-  catch { blockers.push("content/long-form-render-manifest.json is not valid JSON."); }
+  try {
+    longManifest = JSON.parse(fs.readFileSync(path.resolve(root, longFormManifestPath), "utf8"));
+    if (!longManifest || typeof longManifest !== "object" || Array.isArray(longManifest)) {
+      blockers.push("content/long-form-render-manifest.json must contain a JSON object.");
+      longManifest = undefined;
+    }
+  } catch { blockers.push("content/long-form-render-manifest.json is not valid JSON."); }
   if (longManifest) {
     if (longManifest.channel !== "SonicVhibez") blockers.push("Long-form render manifest target must be exactly SonicVhibez.");
     if (longManifest.targetAspectRatio !== "16:9") blockers.push("Long-form render manifest must specify targetAspectRatio 16:9.");
@@ -132,8 +142,13 @@ if (!exists(metadataPath)) {
   blockers.push("Reviewed metadata file content/next-short.json is missing.");
 } else {
   let metadata;
-  try { metadata = JSON.parse(fs.readFileSync(path.resolve(root, metadataPath), "utf8")); }
-  catch { blockers.push("content/next-short.json is not valid JSON."); }
+  try {
+    metadata = JSON.parse(fs.readFileSync(path.resolve(root, metadataPath), "utf8"));
+    if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) {
+      blockers.push("content/next-short.json must contain a JSON object.");
+      metadata = undefined;
+    }
+  } catch { blockers.push("content/next-short.json is not valid JSON."); }
   if (metadata) {
     if (metadata.channel !== "SonicVhibez") blockers.push("Metadata target must be exactly SonicVhibez.");
     if (metadata.status !== "READY_FOR_PRIVATE_UPLOAD") blockers.push("Metadata must be human-reviewed and explicitly marked READY_FOR_PRIVATE_UPLOAD before upload.");
