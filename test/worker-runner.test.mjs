@@ -128,6 +128,26 @@ test("worker refuses API redirects so scoped worker credentials cannot be forwar
   assert.equal(requests[1].url, "http://127.0.0.1:8787/api/jobs/produce");
 });
 
+test("native fetch does not forward worker credentials to a redirect destination", async t => {
+  const receivedAtRedirectTarget = [];
+  const redirectTarget = createServer((req, res) => {
+    receivedAtRedirectTarget.push({ url: req.url, workerToken: req.headers["x-worker-token"] });
+    res.end("unexpected redirect target request");
+  });
+  const redirectTargetUrl = await listen(redirectTarget);
+  t.after(() => new Promise(resolve => redirectTarget.close(resolve)));
+
+  const api = createServer((req, res) => {
+    res.writeHead(302, { location: redirectTargetUrl + "/collect", "content-type": "application/json" });
+    res.end(JSON.stringify({ jobs: [] }));
+  });
+  const apiUrl = await listen(api);
+  t.after(() => new Promise(resolve => api.close(resolve)));
+
+  await assert.rejects(runWorkerCycle({ baseUrl: apiUrl, token, workerId }), /fetch failed|redirect/i);
+  assert.deepEqual(receivedAtRedirectTarget, [], "redirect destination must never receive the worker token or request");
+});
+
 test("worker requires a strong scoped credential and valid worker identity", async () => {
   await assert.rejects(runWorkerCycle({ baseUrl: "http://127.0.0.1:8787", token: "short", workerId }), /at least 24 characters/);
   await assert.rejects(runWorkerCycle({ baseUrl: "http://127.0.0.1:8787", token, workerId: "x" }), /safe 2–120 character identifier/);
