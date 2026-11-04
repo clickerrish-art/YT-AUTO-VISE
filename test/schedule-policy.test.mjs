@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validatePublicationSlot, weeklyUtcCronGaps, localDateTimeToIso, evaluateNextPublication, isValidZonedIsoTimestamp } from "../scripts/schedule-policy.mjs";
+import { validatePublicationSlot, weeklyUtcCronGaps, localDateTimeToIso, evaluateNextPublication, isValidZonedIsoTimestamp, validateCadenceDecision } from "../scripts/schedule-policy.mjs";
 
 test("strict timestamp validator requires timezone and rejects normalized invalid dates", () => {
   assert.equal(isValidZonedIsoTimestamp("2026-10-25T12:00:00+02:00"), true);
@@ -424,4 +424,57 @@ test("rolling publication gate refuses scheduled entries with unknown or missing
     assert.equal(result.valid, false);
     assert.ok(result.errors.some(error => error.includes("unsupported status") && error.includes("publication spacing cannot be verified")));
   }
+});
+
+
+test("owner cadence approval requires explicit, timezone-qualified, feasible evidence", () => {
+  const approved = {
+    status: "OWNER_APPROVED",
+    ownerApproved: true,
+    approvedMode: "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
+    approvedAt: "2026-11-04T18:00:00+02:00",
+    approvalReference: "owner-decision-2026-11-04"
+  };
+  assert.deepEqual(validateCadenceDecision(approved, 72), { valid: true, errors: [] });
+
+  const missingApproval = validateCadenceDecision({
+    ...approved,
+    ownerApproved: false,
+    approvedAt: "2026-02-31T18:00:00Z",
+    approvalReference: "   "
+  }, 72);
+  assert.equal(missingApproval.valid, false);
+  assert.ok(missingApproval.errors.some(error => error.includes("ownerApproved must be true")));
+  assert.ok(missingApproval.errors.some(error => error.includes("calendar-valid ISO timestamp")));
+  assert.ok(missingApproval.errors.some(error => error.includes("approvalReference must be a non-empty")));
+
+  const unsupportedMode = validateCadenceDecision({ ...approved, approvedMode: "WEEKLY_TARGET" }, 72);
+  assert.equal(unsupportedMode.valid, false);
+  assert.ok(unsupportedMode.errors.some(error => error.includes("approvedMode must be a supported cadence mode")));
+
+  const infeasibleCustomPolicy = validateCadenceDecision({
+    ...approved,
+    approvedMode: "OTHER_OWNER_DEFINED_FEASIBLE_POLICY",
+    ownerDefinedPolicy: {
+      description: "Three publications in one week",
+      publicationsPerCycle: 3,
+      cycleHours: 168
+    }
+  }, 72);
+  assert.equal(infeasibleCustomPolicy.valid, false);
+  assert.ok(infeasibleCustomPolicy.errors.some(error => error.includes("mathematically infeasible")));
+
+  const feasibleCustomPolicy = validateCadenceDecision({
+    ...approved,
+    approvedMode: "OTHER_OWNER_DEFINED_FEASIBLE_POLICY",
+    ownerDefinedPolicy: {
+      description: "Two publications over one week",
+      publicationsPerCycle: 2,
+      cycleHours: 168
+    }
+  }, 72);
+  assert.deepEqual(feasibleCustomPolicy, { valid: true, errors: [] });
+
+  assert.equal(validateCadenceDecision(approved, 71).valid, false,
+    "an owner decision cannot weaken the hard 72-hour spacing invariant");
 });
