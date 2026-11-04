@@ -72,6 +72,10 @@ test("readiness JSON distinguishes external reconciliation from code-controlled 
   const cadence = report.blockers.find(blocker => /CADENCE DECISION REQUIRED/.test(blocker.message));
   assert.equal(cadence.evidence.kind, "repository-path-check");
   assert.equal(cadence.evidence.path, "config/weekly-content-plan.json");
+  assert.match(cadence.resolution, /feasible owner-approved cadence/i);
+  assert.match(cadence.resolution, /72-hour minimum spacing/i);
+  assert.match(cadence.resolution, /timezone-aware timestamp/i);
+  assert.doesNotMatch(cadence.resolution, /inspect the final media/i);
   const metadata = report.blockers.find(blocker => /Metadata needs the verified SonicVhibez YouTube channel ID/.test(blocker.message));
   assert.equal(metadata.evidence.path, "content/next-short.json");
 });

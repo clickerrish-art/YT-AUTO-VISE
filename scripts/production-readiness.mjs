@@ -156,6 +156,7 @@ if (process.env.SONICVHIBEZ_CHANNEL_ID && !/^UC[a-zA-Z0-9_-]{22}$/.test(process.
   blockers.push("SONICVHIBEZ_CHANNEL_ID does not match the expected YouTube channel-ID format; verify it manually.");
 }
 function resolutionFor(blocker) {
+  if (/CADENCE DECISION REQUIRED/i.test(blocker)) return "Choose a feasible owner-approved cadence that preserves the 72-hour minimum spacing and long_form → long_form → short cycle; record the approval with an explicit timezone-aware timestamp and non-empty reference in config/weekly-content-plan.json. Keep publication disabled until the decision is recorded.";
   if (/history|uncertain upload|remote/i.test(blocker)) return "Authenticate to the approved SonicVhibez channel, retrieve public/private/unlisted history, reconcile every pending or uncertain attempt, and retain the reviewed reconciliation ledger.";
   if (/license|licen[cs]e|rights evidence|rightsConfirmed/i.test(blocker)) return "Supply genuine source and licence/permission evidence for every asset, verify the permitted uses and restrictions, and retain evidence files plus SHA-256 hashes. Do not use placeholder strings.";
   if (/human|review|approval|compliance/i.test(blocker)) return "Have the authorized human reviewer inspect the final media, captions, thumbnail, metadata, claims and disclosures; record the decision against exact final artifact hashes.";
