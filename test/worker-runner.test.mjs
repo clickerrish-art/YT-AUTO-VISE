@@ -300,3 +300,44 @@ test("worker honors an HTTP-date Retry-After value from the dispatch API", async
   assert.ok(cooldown.nextAttemptAt >= retryAt - 1_000, "HTTP-date Retry-After must be honored");
   assert.ok(cooldown.nextAttemptAt <= retryAt + 1_000, "HTTP-date Retry-After must not be extended unnecessarily");
 });
+
+test("worker caps an excessive HTTP-date Retry-After to the maximum cooldown", async () => {
+  const retryAfter = new Date(Date.now() + 2 * 60 * 60_000).toUTCString();
+  const cooldowns = new Map();
+  const fetchImpl = async (url, options = {}) => {
+    if ((options.method ?? "GET") === "GET") {
+      return new Response(JSON.stringify({ jobs: [{ id: "job-excessive-retry-after" }], queuedCount: 1 }), {
+        status: 200, headers: { "content-type": "application/json" }
+      });
+    }
+    return new Response(JSON.stringify({ error: "rate limited" }), {
+      status: 429, headers: { "content-type": "application/json", "retry-after": retryAfter }
+    });
+  };
+  const before = Date.now();
+  await runWorkerCycle({ baseUrl: "http://127.0.0.1:8787", token, workerId, fetchImpl, cooldowns });
+  const delayMs = cooldowns.get("job-excessive-retry-after").nextAttemptAt - before;
+  assert.ok(delayMs >= 899_000, "cooldown must not be shorter than the 15-minute cap");
+  assert.ok(delayMs <= 901_000, "untrusted Retry-After values must not extend cooldown beyond 15 minutes");
+});
+
+test("worker falls back safely when Retry-After is malformed or already expired", async () => {
+  for (const retryAfter of ["not-a-date", new Date(Date.now() - 60_000).toUTCString()]) {
+    const cooldowns = new Map();
+    const fetchImpl = async (url, options = {}) => {
+      if ((options.method ?? "GET") === "GET") {
+        return new Response(JSON.stringify({ jobs: [{ id: "job-invalid-retry-after" }], queuedCount: 1 }), {
+          status: 200, headers: { "content-type": "application/json" }
+        });
+      }
+      return new Response(JSON.stringify({ error: "rate limited" }), {
+        status: 429, headers: { "content-type": "application/json", "retry-after": retryAfter }
+      });
+    };
+    const before = Date.now();
+    await runWorkerCycle({ baseUrl: "http://127.0.0.1:8787", token, workerId, fetchImpl, cooldowns });
+    const delayMs = cooldowns.get("job-invalid-retry-after").nextAttemptAt - before;
+    assert.ok(delayMs >= 29_000, "invalid or expired Retry-After must use exponential fallback");
+    assert.ok(delayMs <= 31_000, "first-attempt fallback must remain bounded to 30 seconds");
+  }
+});
