@@ -95,6 +95,13 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       createdAt: "2026-11-02T18:02:00.000Z",
       scheduledSlot: { date: "2026-11-14", time: "17:00", timezone: "Africa/Johannesburg" },
       authoring: { productionPlan: structuredClone(approvedPlan) }
+    },
+    {
+      kind: "CONTENT_PRODUCTION",
+      id: "queued-legacy-without-authoring",
+      state: "QUEUED",
+      contentType: "short",
+      createdAt: "2026-11-02T18:03:00.000Z"
     }
   );
   fs.writeFileSync(statePath, JSON.stringify(initialState, null, 2) + "\n");
@@ -163,7 +170,21 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
     body: JSON.stringify({ jobId: "unknown-production-job" })
   });
   assert.equal(unknownProductionJob.status, 404, "scoped worker dispatch must return 404 for an unknown job");
-  assert.equal(fs.readFileSync(statePath).toString(), before.toString(), "rejected worker operations must preserve state byte-for-byte");
+  const unapprovedLegacyProduction = await fetch(base + "/api/jobs/produce", {
+    method: "POST",
+    headers: { ...workerHeaders, "content-type": "application/json" },
+    body: JSON.stringify({ jobId: "queued-legacy-without-authoring" })
+  });
+  assert.equal(unapprovedLegacyProduction.status, 409,
+    "a queued job without the approved authoring pipeline must not start rendering");
+  assert.match((await unapprovedLegacyProduction.json()).error,
+    /not linked to the required approved authoring pipeline/);
+  assert.equal(fs.readFileSync(statePath).toString(), before.toString(),
+    "blocked production without approved authoring must not mutate job state, audit or worker lease");
+  assert.equal(fs.existsSync(path.join(stateDir, "content", "job-render-manifests", "queued-legacy-without-authoring.json")), false,
+    "blocked production must not create a render manifest");
+  assert.equal(fs.existsSync(path.join(stateDir, "media", "jobs", "queued-legacy-without-authoring")), false,
+    "blocked production must not create a per-job media directory");
 
   const operatorState = await fetch(base + "/api/state", { headers: workerHeaders });
   assert.equal(operatorState.status, 401, "worker credential must not grant general operator API access");
