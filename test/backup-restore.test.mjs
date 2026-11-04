@@ -848,3 +848,82 @@ test("restore recovery rolls back after every destination-commit boundary", asyn
     fs.rmSync(source.root, { recursive: true, force: true });
   }
 });
+
+
+test("restore cleans partial staged files after a simulated disk-full write before any destination commit", async () => {
+  const source = fixture();
+  const destination = fixture();
+  const originalOpen = fs.openSync;
+  const originalWrite = fs.writeFileSync;
+  let restoreTempFd = null;
+  let injected = false;
+  try {
+    fs.rmSync(destination.stateDir, { recursive: true, force: true });
+    fs.rmSync(destination.logDir, { recursive: true, force: true });
+    fs.rmSync(destination.rightsDir, { recursive: true, force: true });
+    const backupPath = path.join(source.root, "backup.json");
+    await backupState({
+      rootDir: source.root,
+      stateDir: source.stateDir,
+      uploadLogDir: source.logDir,
+      rightsDir: source.rightsDir,
+      outputPath: backupPath
+    });
+
+    fs.openSync = function (filePath, flags, ...rest) {
+      const fd = originalOpen.call(this, filePath, flags, ...rest);
+      if (typeof filePath === "string" && filePath.endsWith(".restore-tmp")) {
+        restoreTempFd = fd;
+      }
+      return fd;
+    };
+    fs.writeFileSync = function (fileOrFd, data, ...rest) {
+      if (!injected && fileOrFd === restoreTempFd) {
+        injected = true;
+        const bytes = Buffer.isBuffer(data) ? data : Buffer.from(String(data));
+        const partial = bytes.subarray(0, Math.max(1, Math.floor(bytes.length / 2)));
+        originalWrite.call(this, fileOrFd, partial);
+        const error = new Error("injected disk-full failure during restore staging");
+        error.code = "ENOSPC";
+        throw error;
+      }
+      return originalWrite.call(this, fileOrFd, data, ...rest);
+    };
+
+    await assert.rejects(
+      restoreState({
+        backupPath,
+        rootDir: destination.root,
+        stateDir: destination.stateDir,
+        uploadLogDir: destination.logDir,
+        rightsDir: destination.rightsDir,
+        confirm: "YES"
+      }),
+      /all committed destination changes were rolled back.*injected disk-full failure/
+    );
+    assert.equal(injected, true, "the restore must reach the staged temporary-file write");
+    const destinations = [
+      path.join(destination.stateDir, "dashboard-state.json"),
+      path.join(destination.stateDir, "facebook-recovery-ledger.jsonl"),
+      path.join(destination.logDir, "upload-attempts.json"),
+      path.join(destination.logDir, "upload-VIDEO001.json"),
+      path.join(destination.logDir, "upload-approvals", "approval001.json"),
+      path.join(destination.rightsDir, "license.txt")
+    ];
+    for (const target of destinations) {
+      assert.equal(fs.existsSync(target), false, "no destination may be committed after a staging write failure: " + target);
+    }
+    for (const directory of [destination.stateDir, destination.logDir, path.join(destination.logDir, "upload-approvals"), destination.rightsDir]) {
+      if (!fs.existsSync(directory)) continue;
+      const leftovers = fs.readdirSync(directory).filter(name => name.endsWith(".restore-tmp"));
+      assert.deepEqual(leftovers, [], "partial restore staging files must be removed");
+    }
+    assert.equal(fs.existsSync(path.join(destination.stateDir, ".restore-operation.lock")), false,
+      "the failed restore must release its operation lock");
+  } finally {
+    fs.openSync = originalOpen;
+    fs.writeFileSync = originalWrite;
+    fs.rmSync(source.root, { recursive: true, force: true });
+    fs.rmSync(destination.root, { recursive: true, force: true });
+  }
+});
