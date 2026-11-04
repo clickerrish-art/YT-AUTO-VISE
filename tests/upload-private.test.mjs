@@ -2,6 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import crypto from "node:crypto";
 import { shortParentEvidenceSha256, shortParentRelationshipSha256 } from "../scripts/short-parent-relationship.mjs";
 
