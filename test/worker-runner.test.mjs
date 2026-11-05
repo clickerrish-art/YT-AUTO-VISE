@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { inspectDashboardReconciliation, inspectWorkerState, parseRetryAfterMs, runWorker, runWorkerCycle } from "../scripts/worker-runner.mjs";
+import { inspectDashboardReconciliation, inspectWorkerState, parseRetryAfterMs, reconcileDashboardUpload, runWorker, runWorkerCycle } from "../scripts/worker-runner.mjs";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -778,4 +778,32 @@ test("dashboard reconciliation inspection fails closed on missing authentication
   await assert.rejects(inspectDashboardReconciliation({ jobId: "job-safe", operatorToken: "" }), /DASHBOARD_OPERATOR_TOKEN/);
   await assert.rejects(inspectDashboardReconciliation({ baseUrl: "http://example.com", jobId: "job-safe", operatorToken: "x".repeat(32) }), /HTTPS or a loopback/);
   await assert.rejects(inspectDashboardReconciliation({ jobId: "job-safe", operatorToken: "x".repeat(32), fetchImpl: async () => new Response(JSON.stringify({ jobs: [] }), { status: 200 }) }), /state response is incomplete/);
+});
+
+
+test("upload reconciliation calls the authenticated read-only YouTube reconciliation route and never releases local quarantine", async () => {
+  const calls = [];
+  const fakeFetch = async (url, options) => {
+    calls.push({ url: String(url), method: options.method, body: options.body ? JSON.parse(options.body) : null });
+    if (String(url).endsWith("/api/state")) return new Response(JSON.stringify({ publishingEnabled: false, jobs: [{ id: "job-reconcile-live", state: "RECOVERY_REQUIRED" }], uploads: [], uploadLedger: { attempts: [{ jobId: "job-reconcile-live", attemptId: "attempt-live", artifactSha256: "b".repeat(64), remoteVideoId: "remote-123" }] } }), { status: 200, headers: { "content-type": "application/json" } });
+    return new Response(JSON.stringify({ reconciliation: { status: "SUCCEEDED", exitCode: 0 }, uploadAttemptCreated: false, publishingEnabled: false }), { status: 200, headers: { "content-type": "application/json" } });
+  };
+  const report = await reconcileDashboardUpload({ baseUrl: "http://127.0.0.1:8787", operatorToken: "operator-test-token-" + "x".repeat(32), jobId: "job-reconcile-live", metadataPath: "content/metadata.json", videoPath: "media/next-short.mp4", approvalPath: "content/upload-approval.json", fetchImpl: fakeFetch });
+  assert.equal(calls.length, 2);
+  assert.equal(calls[0].method, "GET");
+  assert.equal(calls[1].method, "POST");
+  assert.deepEqual(calls[1].body, { jobId: "job-reconcile-live", metadataPath: "content/metadata.json", videoPath: "media/next-short.mp4", approvalPath: "content/upload-approval.json" });
+  assert.equal(report.verified, true);
+  assert.equal(report.uploadAttemptCreated, false);
+  assert.equal(report.quarantineReleased, false);
+  assert.equal(report.quarantineReleasePermitted, false);
+});
+
+test("upload reconciliation remains blocked when the dashboard cannot prove private remote state", async () => {
+  const fakeFetch = async url => String(url).endsWith("/api/state")
+    ? new Response(JSON.stringify({ publishingEnabled: false, jobs: [{ id: "job-reconcile-live", state: "RECOVERY_REQUIRED" }], uploads: [], uploadLedger: { attempts: [{ jobId: "job-reconcile-live", artifactSha256: "b".repeat(64) }] } }), { status: 200, headers: { "content-type": "application/json" } })
+    : new Response(JSON.stringify({ reconciliation: { status: "FAILED" }, uploadAttemptCreated: false, publishingEnabled: false }), { status: 409, headers: { "content-type": "application/json" } });
+  const report = await reconcileDashboardUpload({ baseUrl: "http://127.0.0.1:8787", operatorToken: "operator-test-token-" + "x".repeat(32), jobId: "job-reconcile-live", metadataPath: "content/metadata.json", videoPath: "media/next-short.mp4", approvalPath: "content/upload-approval.json", fetchImpl: fakeFetch });
+  assert.equal(report.verified, false);
+  assert.equal(report.quarantineReleased, false);
 });
