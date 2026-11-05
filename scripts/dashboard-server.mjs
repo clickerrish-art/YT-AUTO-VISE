@@ -2675,14 +2675,21 @@ const server = http.createServer(async (req, res) => {
         const job = state.jobs.find(item => item.kind === "CONTENT_PRODUCTION" && item.id === body.jobId);
         const receipt = job?.uploadReceipt;
         const configuredChannelId = process.env.SONICVHIBEZ_CHANNEL_ID?.trim();
-        if (!job || job.state !== "PRIVATE_UPLOAD_VERIFIED" || !receipt ||
+        const ledger = readUploadLedger();
+        const ledgerAttempt = ledger.available && receipt
+          ? ledger.attempts.find(item => item.jobId === job.id && item.attemptId === receipt.attemptId)
+          : null;
+        if (ledger.error || !job || job.state !== "PRIVATE_UPLOAD_VERIFIED" || !receipt ||
             receipt.jobId !== job.id || !receipt.attemptId ||
             !/^[a-f0-9]{64}$/.test(receipt.artifactSha256 ?? "") ||
             !receipt.videoId || receipt.channelId !== configuredChannelId ||
             receipt.channelTitle !== "SonicVhibez" || receipt.privacyStatus !== "private" ||
             receipt.remoteStatusVerified !== true || receipt.publishingEnabled !== false ||
-            !Number.isFinite(Date.parse(receipt.actualPublishedAt ?? ""))) {
-          return json(res, 409, { error: "Dashboard cannot prove the exact terminal private-upload receipt; worker quarantine remains" });
+            !Number.isFinite(Date.parse(receipt.actualPublishedAt ?? "")) ||
+            !ledgerAttempt || ledgerAttempt.status !== "PRIVATE_UPLOAD_VERIFIED" ||
+            ledgerAttempt.remoteVideoId !== receipt.videoId ||
+            ledgerAttempt.artifactSha256 !== receipt.artifactSha256) {
+          return json(res, 409, { error: "Dashboard ledger and job receipt cannot prove the exact terminal private upload; worker quarantine remains" });
         }
         const signedReceipt = createWorkerQuarantineReleaseReceipt({
           workerId: body.workerId, jobId: job.id, attemptId: receipt.attemptId,
