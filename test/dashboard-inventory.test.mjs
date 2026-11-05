@@ -175,3 +175,14 @@ test("dashboard inventory associates controls with their owning form, including 
     ],
   );
 });
+
+test("production readiness task exposes structured owner-specific blockers in the dashboard", () => {
+  const dashboard = fs.readFileSync(path.join(root, "public", "dashboard.html"), "utf8");
+  const server = fs.readFileSync(path.join(root, "scripts", "dashboard-server.mjs"), "utf8");
+
+  assert.match(server, /\["production-readiness", \["run", "readiness:json"\]\]/);
+  assert.match(dashboard, /JSON\.parse\(job\.output\)/);
+  assert.match(dashboard, /item\.controlOwner/);
+  assert.match(dashboard, /item\.resolution/);
+  assert.match(dashboard, /publishing remains disabled/);
+});
