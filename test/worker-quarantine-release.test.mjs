@@ -1,5 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { applyWorkerQuarantineRelease } from "../scripts/worker-runner.mjs";
 import {
   createWorkerQuarantineReleaseReceipt,
   verifyWorkerQuarantineReleaseReceipt
@@ -34,4 +38,38 @@ test("receipt rejects tampering, wrong binding, wrong secret and expiry", () => 
 test("receipt creation rejects malformed identities and weak signing secrets", () => {
   assert.throws(() => createWorkerQuarantineReleaseReceipt({ ...binding, secret: "short" }), /worker authentication secret/i);
   assert.throws(() => createWorkerQuarantineReleaseReceipt({ ...binding, artifactSha256: "bad" }), /fields are invalid/i);
+});
+
+test("worker consumes a signed release once and persists the nonce against replay", t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "worker-release-consume-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const statePath = path.join(dir, "cooldowns.json");
+  const state = {
+    schemaVersion: 1,
+    workerId: binding.workerId,
+    updatedAt: new Date(binding.nowMs).toISOString(),
+    cooldowns: {},
+    uncertainDispatches: {
+      [binding.jobId]: { code: "WORKER_DISPATCH_OUTCOME_UNCERTAIN", recordedAt: new Date(binding.nowMs - 1000).toISOString() }
+    },
+    consumedReleaseNonces: []
+  };
+  fs.writeFileSync(statePath, JSON.stringify(state), { mode: 0o600 });
+  const receipt = createWorkerQuarantineReleaseReceipt(binding);
+  const released = applyWorkerQuarantineRelease({
+    statePath, ...binding, receipt, nowMs: binding.nowMs
+  });
+  assert.equal(released.released, true);
+  let persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  assert.equal(Object.hasOwn(persisted.uncertainDispatches, binding.jobId), false);
+  assert.ok(persisted.consumedReleaseNonces.includes(binding.nonce));
+
+  persisted.uncertainDispatches[binding.jobId] = {
+    code: "WORKER_DISPATCH_OUTCOME_UNCERTAIN",
+    recordedAt: new Date(binding.nowMs).toISOString()
+  };
+  fs.writeFileSync(statePath, JSON.stringify(persisted), { mode: 0o600 });
+  assert.throws(() => applyWorkerQuarantineRelease({
+    statePath, ...binding, receipt, nowMs: binding.nowMs
+  }), /already been consumed/i);
 });
