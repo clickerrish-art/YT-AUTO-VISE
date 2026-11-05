@@ -116,6 +116,26 @@ test("quarantine release serializes consumers and fails closed on an existing re
   assert.deepEqual(persisted.consumedReleaseNonces, []);
 });
 
+test("worker startup refuses an active quarantine release lock", async t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "worker-start-release-lock-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const worker = "release-startup-test-worker";
+  const identity = crypto.createHash("sha256").update(worker).digest("hex").slice(0, 20);
+  const statePath = path.join(dir, "worker-backoff-" + identity + ".json");
+  fs.writeFileSync(statePath + ".release.lock", JSON.stringify({ pid: process.pid }), { mode: 0o600 });
+  let fetchCalled = false;
+  await assert.rejects(runWorker({
+    baseUrl: "http://127.0.0.1:8787",
+    token: "worker-token-for-lock-test-123456",
+    workerId: worker,
+    once: true,
+    stateDirectory: dir,
+    fetchImpl: async () => { fetchCalled = true; return new Response(JSON.stringify({ jobs: [] }), { status: 200 }); }
+  }), /already locked|quarantine release is in progress/i);
+  assert.equal(fetchCalled, false, "worker must not contact the dashboard while release lock is held");
+  assert.equal(fs.existsSync(statePath + ".process.lock"), false, "failed worker startup must not leave a stale process lock");
+});
+
 test("worker process lock is created and released around its cycle", async t => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "worker-process-lock-"));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
