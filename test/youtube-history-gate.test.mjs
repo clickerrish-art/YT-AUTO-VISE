@@ -56,14 +56,15 @@ test("history reconciliation separates future scheduled videos from actual publi
     jobId: "job-4",
     format: "short"
   }), /blocked upload/);
-  assert.equal(assertNextPublicationAllowed({
+  assert.throws(() => assertNextPublicationAllowed({
     history: snapshot.history,
     scheduledItems: snapshot.scheduledItems,
     pendingAttempts: [],
     proposedAt: "2026-10-13T15:00:00.000Z",
     jobId: "job-4",
     format: "short"
-  }).valid, true, "exactly 72 elapsed hours after the scheduled slot is permitted");
+  }), /owner-approved cadence decision blocks private upload/,
+  "a valid 72-hour slot must still be held until the owner approves a feasible cadence");
   assert.throws(() => validateHistoryReconciliationSnapshot({
     channelId,
     remoteVideos: [...remoteVideos, scheduledVideo],
@@ -116,7 +117,22 @@ test("unresolved or uncertain upload attempts block new uploads", () => {
 
 test("cycle gate uses verified history and requires the next expected format and 72-hour gap", () => {
   const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
-  assert.equal(assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-10-07T15:00:00.000Z", jobId: "job-3", format: "short" }).valid, true);
+  assert.throws(
+    () => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-10-07T15:00:00.000Z", jobId: "job-3", format: "short" }),
+    /owner-approved cadence decision blocks private upload/
+  );
   assert.throws(() => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-10-07T14:59:59.999Z", jobId: "job-3", format: "short" }), /blocked upload/);
   assert.throws(() => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-10-07T15:00:00.000Z", jobId: "job-3", format: "long_form" }), /next format must be short/);
+});
+
+
+test("private upload gate enforces the authoritative owner cadence decision", () => {
+  const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
+  assert.throws(() => assertNextPublicationAllowed({
+    history,
+    pendingAttempts: [],
+    proposedAt: "2026-10-07T15:00:00.000Z",
+    jobId: "job-owner-cadence",
+    format: "short"
+  }), /owner-approved cadence decision blocks private upload/);
 });
