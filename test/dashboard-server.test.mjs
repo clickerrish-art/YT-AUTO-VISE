@@ -782,6 +782,20 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   fs.writeFileSync(path.join(process.cwd(), audioArtifact.path), "tampered after approval");
   const tamperedNarrationRetry = await fetchDashboard(base + "/api/jobs/narration/review", { method: "POST", headers, body: JSON.stringify(narrationReviewPayload) });
   assert.equal(tamperedNarrationRetry.status, 409, "an exact retry must not replay an approval receipt after an artifact has changed");
+  // Give the preflight assertion an already-due Johannesburg slot so it tests
+  // render readiness rather than being stopped earlier by the scheduler gate.
+  const dueDispatchStatePath = path.join(stateDir, "dashboard-state.json");
+  const dueDispatchState = JSON.parse(fs.readFileSync(dueDispatchStatePath, "utf8"));
+  const dueDispatchJob = dueDispatchState.jobs.find(job => job.id === authorJob.id);
+  const dueDispatchNow = Date.now();
+  const dueDispatchDate = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
+  }).format(new Date(dueDispatchNow));
+  const dueDispatchTime = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Africa/Johannesburg", hour: "2-digit", minute: "2-digit", hourCycle: "h23"
+  }).format(new Date(dueDispatchNow - 2 * 60_000));
+  dueDispatchJob.scheduledSlot = { date: dueDispatchDate, time: dueDispatchTime, timezone: "Africa/Johannesburg" };
+  fs.writeFileSync(dueDispatchStatePath, JSON.stringify(dueDispatchState, null, 2) + "\n", { mode: 0o600 });
   const authorRenderBypass = await fetchDashboard(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id }) });
   const authorRenderBypassBody = await authorRenderBypass.json();
   assert.equal(authorRenderBypass.status, 409, "a generated script must not bypass missing narration/caption/scene integration");
