@@ -18,15 +18,26 @@ function payloadBytes(payload) {
   }));
 }
 
-function signingKey(secret) {
-  if (typeof secret !== "string" || secret.length < 24) {
-    throw new Error("A distinct worker authentication secret is required to sign quarantine release receipts");
+function ed25519PrivateKey(pem) {
+  if (typeof pem !== "string" || !pem.trim()) {
+    throw new Error("Dashboard-only Ed25519 quarantine signing private key is not configured");
   }
-  return crypto.createHash("sha256").update("sonicvhibez-worker-quarantine-release:v1:").update(secret).digest();
+  const key = crypto.createPrivateKey(pem);
+  if (key.asymmetricKeyType !== "ed25519") throw new Error("Quarantine signing private key must be Ed25519");
+  return key;
+}
+
+function ed25519PublicKey(pem) {
+  if (typeof pem !== "string" || !pem.trim()) {
+    throw new Error("Worker Ed25519 quarantine verification public key is not configured");
+  }
+  const key = crypto.createPublicKey(pem);
+  if (key.asymmetricKeyType !== "ed25519") throw new Error("Quarantine verification public key must be Ed25519");
+  return key;
 }
 
 export function createWorkerQuarantineReleaseReceipt({
-  workerId, jobId, attemptId, artifactSha256, secret,
+  workerId, jobId, attemptId, artifactSha256, privateKeyPem,
   nowMs = Date.now(), nonce = crypto.randomBytes(24).toString("hex")
 }) {
   if (!WORKER.test(workerId ?? "") || !IDENTIFIER.test(jobId ?? "") ||
@@ -40,18 +51,18 @@ export function createWorkerQuarantineReleaseReceipt({
     expiresAt: new Date(nowMs + MAX_TTL_MS).toISOString(),
     nonce
   };
-  const signature = crypto.createHmac("sha256", signingKey(secret)).update(payloadBytes(payload)).digest("hex");
+  const signature = crypto.sign(null, payloadBytes(payload), ed25519PrivateKey(privateKeyPem)).toString("base64url");
   return { ...payload, signature };
 }
 
 export function verifyWorkerQuarantineReleaseReceipt(receipt, {
-  workerId, jobId, attemptId, artifactSha256, secret, nowMs = Date.now()
+  workerId, jobId, attemptId, artifactSha256, publicKeyPem, nowMs = Date.now()
 } = {}) {
   if (!receipt || receipt.version !== 1 || receipt.workerId !== workerId ||
       receipt.jobId !== jobId || receipt.attemptId !== attemptId ||
       receipt.artifactSha256 !== artifactSha256 ||
       !/^[a-f0-9]{48}$/.test(receipt.nonce ?? "") ||
-      !/^[a-f0-9]{64}$/.test(receipt.signature ?? "")) {
+      typeof receipt.signature !== "string" || !/^[A-Za-z0-9_-]{86}$/.test(receipt.signature)) {
     throw new Error("Signed quarantine release receipt does not bind the exact worker, job, attempt and artifact");
   }
   const issued = Date.parse(receipt.issuedAt ?? "");
@@ -61,9 +72,11 @@ export function verifyWorkerQuarantineReleaseReceipt(receipt, {
       expires - issued !== MAX_TTL_MS || nowMs - issued > MAX_TTL_MS) {
     throw new Error("Signed quarantine release receipt is expired or has an invalid validity window");
   }
-  const expected = crypto.createHmac("sha256", signingKey(secret)).update(payloadBytes(receipt)).digest();
-  const supplied = Buffer.from(receipt.signature, "hex");
-  if (supplied.length !== expected.length || !crypto.timingSafeEqual(supplied, expected)) {
+  let signature;
+  try { signature = Buffer.from(receipt.signature, "base64url"); }
+  catch { throw new Error("Signed quarantine release receipt signature encoding is invalid"); }
+  if (signature.length !== 64 ||
+      !crypto.verify(null, payloadBytes(receipt), ed25519PublicKey(publicKeyPem), signature)) {
     throw new Error("Signed quarantine release receipt signature is invalid");
   }
   return { nonce: receipt.nonce, workerId, jobId, attemptId, artifactSha256 };
