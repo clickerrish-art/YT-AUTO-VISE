@@ -738,6 +738,10 @@ const server = http.createServer(async (req, res) => {
         queuedWithoutApprovedAuthoring: queued.filter(job => !job.authoring).length,
         queuedWithoutApprovedRenderPlan: queued.filter(job => !hasApprovedRenderPlan(job)).length,
         queuedWithoutValidSlot: queued.filter(job => dispatchTimestamp(job) === null).length,
+        queuedWithExpiredSlot: queued.filter(job => {
+          const scheduledAt = dispatchTimestamp(job);
+          return scheduledAt !== null && scheduledAt <= dispatchCheckAt;
+        }).length,
         publishingEnabled: false,
         readOnly: true
       });
