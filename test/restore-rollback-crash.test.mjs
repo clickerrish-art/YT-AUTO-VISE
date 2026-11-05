@@ -205,6 +205,32 @@ test("restart recovery completes rollback after process death during rollback-te
   assert.equal(fs.existsSync(rollbackTempPath), false, "permission failure must not leave a partial rollback temp");
   assert.equal(fs.existsSync(lockPath), false, "permission failure must release only its own operation lock");
 
+  // Inject EACCES at the final rollback rename, after the recovery bytes
+  // have been written and fsynced. The journal must survive this commit failure.
+  const originalRenameForPermissionFailure = fs.renameSync;
+  let destinationRenameDenied = false;
+  fs.renameSync = function (from, to, ...args) {
+    if (from === rollbackTempPath && to === destinationState && !destinationRenameDenied) {
+      destinationRenameDenied = true;
+      const error = new Error("injected EACCES replacing dashboard state during rollback");
+      error.code = "EACCES";
+      throw error;
+    }
+    return originalRenameForPermissionFailure.call(this, from, to, ...args);
+  };
+  try {
+    await assert.rejects(
+      restoreState({ backupPath, rootDir: destination.root, confirm: "YES", overwriteState: true }),
+      error => error?.code === "EACCES"
+    );
+  } finally {
+    fs.renameSync = originalRenameForPermissionFailure;
+  }
+  assert.equal(destinationRenameDenied, true, "recovery must reach the destination rollback rename");
+  assert.equal(fs.existsSync(journalPath), true, "destination permission failure must retain the journal");
+  assert.equal(fs.existsSync(rollbackTempPath), false, "failed rollback rename must clean its temporary file");
+  assert.equal(fs.existsSync(lockPath), false, "failed rollback rename must release its operation lock");
+
   await assert.rejects(
     restoreState({ backupPath, rootDir: destination.root, confirm: "YES", overwriteState: true }),
     /rolled back safely.*rerun restore explicitly/i
