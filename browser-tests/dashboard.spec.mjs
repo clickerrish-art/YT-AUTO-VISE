@@ -701,7 +701,19 @@ test("authoring and approval forms reject malformed evidence without false succe
 
   await page.locator("#assetsJson").fill("{invalid-json");
   await submitWithoutNativeValidation("rightsform");
-  await expect(page.locator("#rightsresult")).toContainText("Rights verification blocked:");
+  await expect(page.locator("#rightsresult")).toContainText("Rights verification blocked: Source asset records must be valid JSON.");
+
+  await page.locator("#assetsJson").fill(JSON.stringify([{ assetId: "asset-incomplete" }]));
+  await submitWithoutNativeValidation("rightsform");
+  await expect(page.locator("#rightsresult")).toContainText("Asset 1 is missing one or more required");
+
+  await page.locator("#assetsJson").fill(JSON.stringify([{ assetId: "asset-no-youtube", source: "Source record", rightsHolder: "Rights holder", assetPath: "media/source.mp4", licenseEvidenceLocation: "evidence/licence.txt", restrictions: "No additional restrictions", attributionRequirements: "Attribution required", permittedUses: ["Instagram"] }]));
+  await submitWithoutNativeValidation("rightsform");
+  await expect(page.locator("#rightsresult")).toContainText("must list its permitted uses and explicitly include YouTube");
+
+  await page.locator("#assetsJson").fill(JSON.stringify([{ assetId: "asset-confirmation", source: "Source record", rightsHolder: "Rights holder", assetPath: "media/source.mp4", licenseEvidenceLocation: "evidence/licence.txt", restrictions: "No additional restrictions", attributionRequirements: "Attribution required", permittedUses: ["YouTube"] }]));
+  await submitWithoutNativeValidation("rightsform");
+  await expect(page.locator("#rightsresult")).toContainText("explicitly confirm the YouTube use");
 
   const afterResponse = await request.get("/api/state", { headers });
   expect(afterResponse.status()).toBe(200);
