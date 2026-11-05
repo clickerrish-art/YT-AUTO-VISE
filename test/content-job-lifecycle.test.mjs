@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "../scripts/content-job-lifecycle.mjs";
+import { createContentJob, transitionContentJob, authorizeContentJobRetry, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "../scripts/content-job-lifecycle.mjs";
 import { shortParentRelationshipSha256, shortParentEvidenceSha256 } from "../scripts/short-parent-relationship.mjs";
 
 const input = { idempotencyKey: "draft:short-001", title: "Wildlife storytelling", topic: "How to plan a wildlife documentary", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-24", inputReferences: ["content/short-001-wildlife-video-storytelling.md"] };
@@ -40,20 +40,84 @@ test("content job state machine enforces allowed transitions and protects upload
   assert.throws(() => transitionContentJob(job, "PRIVATE_UPLOAD_VERIFIED"), /separate verified private-upload workflow/);
 });
 
-test("retry requires a retryable failure and respects the attempt limit", () => {
-  let job = createContentJob(input);
-  job = transitionContentJob(job, "FAILED", { reason: "Input missing" });
-  assert.throws(() => transitionContentJob(job, "QUEUED"), /not marked safe for retry/);
-  job = { ...job, errorDetails: { retryable: true } };
-  job = transitionContentJob(job, "QUEUED", { reason: "Operator approved retry" });
-  job = transitionContentJob(job, "GENERATING", { reason: "First attempt started" });
-  job = { ...job, errorDetails: { retryable: true } };
-  job = transitionContentJob(job, "FAILED", { reason: "First attempt failed" });
-  job = transitionContentJob(job, "QUEUED", { reason: "Operator approved second attempt" });
-  job = transitionContentJob(job, "GENERATING", { reason: "Second attempt started" });
-  job = { ...job, errorDetails: { retryable: true } };
-  job = transitionContentJob(job, "FAILED", { reason: "Second attempt failed" });
-  assert.throws(() => transitionContentJob(job, "QUEUED"), /Retry limit reached/);
+test("failed jobs require an explicit operator retry authorization and exhausted retries enter a recoverable dead letter", () => {
+  const now = Date.parse("2026-10-23T12:00:00.000Z");
+  const afterBackoff = new Date(now + 1).toISOString();
+  let job = {
+    ...createContentJob(input, new Date(now).toISOString()),
+    state: "FAILED",
+    attemptCount: 1,
+    completedAt: new Date(now).toISOString(),
+    errorDetails: { code: "TRANSIENT_RENDER_FAILURE", retryable: true },
+    nextRetryAt: afterBackoff
+  };
+
+  assert.throws(
+    () => transitionContentJob(job, "QUEUED", { actor: "operator", reason: "Retry" }, afterBackoff),
+    /explicit operator authorization/
+  );
+  assert.throws(
+    () => claimWorkerLease(job, "worker-auto-retry", { now: Date.parse(afterBackoff) + 1 }),
+    /explicit operator retry authorization/
+  );
+  assert.throws(
+    () => authorizeContentJobRetry(job, { actor: "operator", reason: "Reviewed failure and approve retry" }, now),
+    /backoff has not elapsed/
+  );
+  assert.throws(
+    () => authorizeContentJobRetry(job, { actor: "worker-auto-retry", reason: "Reviewed failure and approve retry" }, Date.parse(afterBackoff) + 1),
+    /authenticated operator identity/
+  );
+
+  job = authorizeContentJobRetry(job, {
+    actor: "authorized-operator",
+    reason: "Reviewed retained render error and confirmed a safe retry"
+  }, Date.parse(afterBackoff) + 1);
+  assert.equal(job.state, "QUEUED");
+  assert.equal(job.completedAt, null);
+  assert.equal(job.retryAuthorizations.length, 1);
+  assert.equal(job.retryAuthorizations[0].actor, "authorized-operator");
+
+  const secondAttempt = claimWorkerLease(job, "worker-after-approval", { now: Date.parse(afterBackoff) + 2 });
+  assert.equal(secondAttempt.job.attemptCount, 2);
+  const deadLetter = completeWorkerLease(secondAttempt.job, secondAttempt.leaseToken, "FAILED", {
+    errorDetails: { code: "TRANSIENT_RENDER_FAILURE", retryable: true, message: "Second attempt failed" }
+  }, Date.parse(afterBackoff) + 3);
+  assert.equal(deadLetter.state, "DEAD_LETTER");
+  assert.equal(deadLetter.errorDetails.retryable, false);
+  assert.equal(deadLetter.errorDetails.retryableAfterOperatorReview, true);
+  assert.equal(deadLetter.deadLetter.reasonCode, "MAX_ATTEMPTS_EXHAUSTED");
+  assert.equal(deadLetter.deadLetter.attemptCount, 2);
+  assert.equal(deadLetter.transitionHistory.at(-1).to, "DEAD_LETTER");
+  assert.throws(
+    () => claimWorkerLease(deadLetter, "worker-without-review", { now: Date.parse(afterBackoff) + 4 }),
+    /explicit operator retry authorization/
+  );
+  assert.throws(
+    () => authorizeContentJobRetry(deadLetter, {
+      actor: "authorized-operator",
+      reason: "Attempt to bypass exhausted retry policy"
+    }, Date.parse(afterBackoff) + 5),
+    /one-attempt operator override/
+  );
+
+  const recovered = authorizeContentJobRetry(deadLetter, {
+    actor: "authorized-operator",
+    reason: "Reviewed dead-letter evidence and explicitly approved one final attempt",
+    overrideRetryLimit: true
+  }, Date.parse(afterBackoff) + 6);
+  assert.equal(recovered.state, "QUEUED");
+  assert.equal(recovered.retryPolicy.maxAttempts, 3);
+  assert.equal(recovered.retryAuthorizations.length, 2);
+  assert.equal(recovered.retryAuthorizations[1].overrideRetryLimit, true);
+  const finalAttempt = claimWorkerLease(recovered, "worker-explicit-override", { now: Date.parse(afterBackoff) + 7 });
+  assert.equal(finalAttempt.job.attemptCount, 3);
+  const exhaustedAgain = completeWorkerLease(finalAttempt.job, finalAttempt.leaseToken, "FAILED", {
+    errorDetails: { code: "TRANSIENT_RENDER_FAILURE", retryable: true, message: "Explicitly approved final attempt failed" }
+  }, Date.parse(afterBackoff) + 8);
+  assert.equal(exhaustedAgain.state, "DEAD_LETTER");
+  assert.equal(exhaustedAgain.deadLetterHistory.length, 2);
+  assert.equal(exhaustedAgain.retryPolicy.maxAttempts, 3);
 });
 
 
@@ -191,9 +255,10 @@ test("expired leases fence stale results and enforce bounded retry backoff", () 
     "a stale worker must not complete a job after ownership transfers"
   );
   const secondExpiry = expireWorkerLease(retry.job, Date.parse(retry.job.workerLease.expiresAt) + 1);
-  assert.equal(secondExpiry.job.state, "FAILED");
+  assert.equal(secondExpiry.job.state, "DEAD_LETTER");
   assert.equal(secondExpiry.job.errorDetails.retryable, false);
-  assert.throws(() => claimWorkerLease(secondExpiry.job, "worker-c", { now: Date.parse(secondExpiry.job.nextRetryAt ?? 0) + 1 }), /Retry limit reached/);
+  assert.equal(secondExpiry.job.errorDetails.retryableAfterOperatorReview, true);
+  assert.throws(() => claimWorkerLease(secondExpiry.job, "worker-c", { now: Date.parse(secondExpiry.job.nextRetryAt ?? 0) + 1 }), /explicit operator retry authorization/);
 });
 
 test("expired upload lease enters recovery-required rather than retrying", () => {
