@@ -349,7 +349,12 @@ test("continuous worker stops after HTTP 408/5xx dispatch responses with uncerta
       assert.equal(errors.length, 1);
       assert.equal(errors[0].code, "WORKER_DISPATCH_OUTCOME_UNCERTAIN");
       assert.equal(errors[0].status, status);
-      assert.equal(fs.existsSync(statePath), false,
+      assert.equal(fs.existsSync(statePath), true,
+        "uncertain remote outcomes must persist quarantine state");
+      const persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
+      assert.equal(persisted.uncertainDispatches["job-outcome-unknown-" + status].code,
+        "WORKER_DISPATCH_OUTCOME_UNCERTAIN");
+      assert.equal(Object.hasOwn(persisted.cooldowns, "job-outcome-unknown-" + status), false,
         "uncertain remote outcomes must not be converted into a normal retry cooldown");
     } finally {
       fs.rmSync(tempDir, { recursive: true, force: true });
