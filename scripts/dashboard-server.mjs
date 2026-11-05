@@ -23,6 +23,7 @@ import { productionPlanSha256, validateProductionPlan, validateNarrationApproval
 import { buildApprovedJobRenderManifest } from "./build-approved-job-render-manifest.mjs";
 import { contentJobArtifactPaths } from "./content-job-artifact-paths.mjs";
 import { buildVerifiedUploadReconciliationJob } from "./upload-reconciliation-transition.mjs";
+import { createWorkerQuarantineReleaseReceipt } from "./worker-quarantine-release.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
 import { validatePublicationSlot, localDateTimeToIso } from "./schedule-policy.mjs";
 import {
@@ -2658,6 +2659,46 @@ const server = http.createServer(async (req, res) => {
       });
       if (!taskResult.acquired) return json(res, 409, { error: "Reconciliation is already running for this job" });
       return taskResult.value;
+    }
+    if (req.method === "POST" && url.pathname === "/api/worker/quarantine-release") {
+      if (!workerToken || workerToken.length < 24) {
+        return json(res, 503, { error: "Signed quarantine release requires a separately configured DASHBOARD_WORKER_TOKEN" });
+      }
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || typeof body.workerId !== "string" ||
+          !/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(body.workerId)) {
+        return json(res, 400, { error: "Exact jobId and safe workerId are required" });
+      }
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const job = state.jobs.find(item => item.kind === "CONTENT_PRODUCTION" && item.id === body.jobId);
+        const receipt = job?.uploadReceipt;
+        const configuredChannelId = process.env.SONICVHIBEZ_CHANNEL_ID?.trim();
+        if (!job || job.state !== "PRIVATE_UPLOAD_VERIFIED" || !receipt ||
+            receipt.jobId !== job.id || !receipt.attemptId ||
+            !/^[a-f0-9]{64}$/.test(receipt.artifactSha256 ?? "") ||
+            !receipt.videoId || receipt.channelId !== configuredChannelId ||
+            receipt.channelTitle !== "SonicVhibez" || receipt.privacyStatus !== "private" ||
+            receipt.remoteStatusVerified !== true || receipt.publishingEnabled !== false ||
+            !Number.isFinite(Date.parse(receipt.actualPublishedAt ?? ""))) {
+          return json(res, 409, { error: "Dashboard cannot prove the exact terminal private-upload receipt; worker quarantine remains" });
+        }
+        const signedReceipt = createWorkerQuarantineReleaseReceipt({
+          workerId: body.workerId, jobId: job.id, attemptId: receipt.attemptId,
+          artifactSha256: receipt.artifactSha256, secret: workerToken
+        });
+        const at = new Date().toISOString();
+        state.audit.push({
+          id: crypto.randomUUID(), action: "WORKER_QUARANTINE_RELEASE_RECEIPT_ISSUED",
+          jobId: job.id, workerId: body.workerId, attemptId: receipt.attemptId,
+          artifactSha256: receipt.artifactSha256, nonce: signedReceipt.nonce,
+          actor: operatorId, at,
+          reason: "Operator-authorized, short-lived signed receipt bound to the exact verified private upload"
+        });
+        saveState(state);
+        return json(res, 200, { receipt: signedReceipt, publishingEnabled: false });
+      } finally { release(); }
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/produce") {
       const body = await readBody(req);
