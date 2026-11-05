@@ -176,7 +176,7 @@ export async function reconcileDashboardUpload({
     quarantineReleasePermitted: false,
     dashboardCorrelation: inspected,
     responseError: payload?.error ?? null,
-    limitation: verified ? "Remote private upload identity and visibility were reverified and the dashboard audit route returned success. Worker quarantine remains until a separate operator-reviewed job-state transition is implemented." : "Remote reconciliation did not return a verified success. Worker quarantine remains in place."
+    limitation: verified ? "Remote private upload identity and visibility were reverified. Worker quarantine is released only after the dashboard issues a short-lived operator-authorized signature and the worker consumes its one-time nonce." : "Remote reconciliation did not return a verified success. Worker quarantine remains in place."
   };
 }
 
