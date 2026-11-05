@@ -77,7 +77,7 @@ test("all 16 dashboard form landmarks have unique, resolvable accessible names",
   await expect(page.locator("#app")).toBeVisible();
 
   const formNames = await page.locator("form:visible").evaluateAll(forms => forms.map(form => {
-    const references = (form.getAttribute("aria-labelledby") ?? "").trim().split(/\\s+/).filter(Boolean);
+    const references = (form.getAttribute("aria-labelledby") ?? "").trim().split(/\s+/).filter(Boolean);
     const missingReferences = references.filter(id => !document.getElementById(id));
     const name = references.map(id => document.getElementById(id)?.textContent?.trim() ?? "").filter(Boolean).join(" ").trim();
     return { id: form.id || null, name, missingReferences };
