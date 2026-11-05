@@ -2576,7 +2576,7 @@ const server = http.createServer(async (req, res) => {
           if (!updatedAttempt || updatedAttempt.status !== "PRIVATE_UPLOAD_VERIFIED" ||
               updatedAttempt.remoteVideoId !== prior.remoteVideoId ||
               updatedAttempt.artifactSha256 !== videoSha256 ||
-              !/^[A-Za-z0-9_-]+\\.json$/.test(updatedAttempt.receiptPath ?? "")) {
+              !/^[A-Za-z0-9_-]+\.json$/.test(updatedAttempt.receiptPath ?? "")) {
             throw new Error("Updated upload ledger does not identify the exact verified attempt and remote video");
           }
           const uploadLogDir = path.resolve(root, process.env.UPLOAD_LOG_DIR ?? "run-logs");
