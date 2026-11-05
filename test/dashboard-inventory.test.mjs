@@ -153,7 +153,7 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
     wiredControls++;
   }
 
-  assert.equal(wiredControls, 88, "the number of non-submit dashboard controls changed; review the acceptance fixture");
+  assert.equal(wiredControls, 96, "the number of non-submit dashboard controls changed; review the acceptance fixture");
 });
 
 test("dashboard inventory associates controls with their owning form, including explicit external form references", () => {
