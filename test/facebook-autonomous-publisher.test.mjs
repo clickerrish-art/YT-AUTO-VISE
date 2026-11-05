@@ -48,6 +48,52 @@ test("failed durable lock initialization removes only its own incomplete lock", 
   } finally { f.cleanup(); }
 });
 
+test("lock release never removes a replacement lock owned by another process", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const now = Date.parse("2026-10-25T05:30:00.000Z");
+    const payload = {
+      slotId: "nature-frontiers-2026-10-25-0800",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Educational wildlife habitat note.", links: [], media: [], claims: [], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    let enteredResolve, continueResolve;
+    const entered = new Promise(resolve => { enteredResolve = resolve; });
+    const continueGate = new Promise(resolve => { continueResolve = resolve; });
+    const env = {
+      FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345",
+      META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30)
+    };
+    const publisher = runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now, env,
+      policyEvaluator: async () => ({ eligible: true, blockers: [], warnings: [], contentFingerprint: "f".repeat(64), policyRuleVersion: f.config.complianceRuleSet, mediaFingerprints: [], reason: "ELIGIBLE" }),
+      verifyPermissions: async () => {
+        enteredResolve();
+        await continueGate;
+        return { permissionsVerified: false };
+      },
+      verifyIdentity: async () => { throw new Error("identity verification must not follow a failed permission check"); },
+      publish: async () => { throw new Error("no Meta mutation is permitted in this lock test"); }
+    });
+    await entered;
+    const lockPath = path.join(f.stateDir, "facebook-publishing.lock");
+    assert.ok(fs.existsSync(lockPath), "publisher must hold its lock while permission verification is paused");
+    fs.unlinkSync(lockPath);
+    const replacement = "replacement lock belongs to another process\n";
+    fs.writeFileSync(lockPath, replacement, { mode: 0o600 });
+    continueResolve();
+    const result = await publisher;
+    assert.equal(result.status, "COMPLETED");
+    assert.equal(result.skipped, 1);
+    assert.equal(fs.readFileSync(lockPath, "utf8"), replacement,
+      "releasing the original lock must not delete a replacement lock owned by another process");
+  } finally { f.cleanup(); }
+});
+
 test("safe defaults are a no-op and never attempt a Meta request", async () => {
   const f = setup();
   try {

@@ -37,7 +37,19 @@ function acquireLock(file) {
     try { fs.closeSync(handle); } catch {}
     throw error;
   }
-  return () => { try { fs.closeSync(handle); } finally { try { fs.unlinkSync(file); } catch {} } };
+  return () => {
+    // A stale-lock cleanup or another actor may have replaced the path while this
+    // publisher was running. Never unlink a lock inode we did not create.
+    let owned = null;
+    try { owned = fs.fstatSync(handle); } catch {}
+    try { fs.closeSync(handle); } finally {
+      try {
+        const current = fs.lstatSync(file);
+        if (owned && current.isFile() && !current.isSymbolicLink() &&
+            current.dev === owned.dev && current.ino === owned.ino) fs.unlinkSync(file);
+      } catch {}
+    }
+  };
 }
 function validateConfig(config) {
   if (!config || config.destination !== "nature_frontiers_facebook" || config.timezone !== "Africa/Johannesburg") throw new Error("Facebook publisher configuration destination/timezone is invalid");
