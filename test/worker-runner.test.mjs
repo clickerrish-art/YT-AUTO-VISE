@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { inspectWorkerState, parseRetryAfterMs, runWorker, runWorkerCycle } from "../scripts/worker-runner.mjs";
+import { inspectDashboardReconciliation, inspectWorkerState, parseRetryAfterMs, runWorker, runWorkerCycle } from "../scripts/worker-runner.mjs";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -753,4 +753,29 @@ test("separate worker processes quarantine an uncertain dispatch across restart"
     await new Promise(resolve => server.close(resolve));
     fs.rmSync(directory, { recursive: true, force: true });
   }
+});
+
+
+test("dashboard reconciliation inspection correlates exact job and upload attempts without authorizing quarantine release", async () => {
+  const calls = [];
+  const report = await inspectDashboardReconciliation({
+    baseUrl: "http://127.0.0.1:8787", operatorToken: "operator-test-token-" + "x".repeat(32), jobId: "job-reconcile-readonly",
+    fetchImpl: async (url, options) => {
+      calls.push({ url: String(url), method: options.method, token: options.headers["x-operator-token"] });
+      return new Response(JSON.stringify({ publishingEnabled: false, jobs: [{ id: "job-reconcile-readonly", state: "RECOVERY_REQUIRED", updatedAt: "2026-11-05T10:00:00.000Z", errorDetails: { code: "INTERRUPTED_DURING_ACTIVE_STAGE" }, leaseHistory: [{ action: "INTERRUPTED_ON_RESTART" }] }], uploads: [], uploadLedger: { attempts: [{ jobId: "job-reconcile-readonly", attemptId: "attempt-1", status: "UNCERTAIN", remoteVideoId: null, artifactSha256: "a".repeat(64) }, { jobId: "other-job", attemptId: "other" }] } }), { status: 200, headers: { "content-type": "application/json" } });
+    }
+  });
+  assert.deepEqual(calls, [{ url: "http://127.0.0.1:8787/api/state", method: "GET", token: "operator-test-token-" + "x".repeat(32) }]);
+  assert.equal(report.dashboardJobVisible, true);
+  assert.equal(report.dashboardJob.state, "RECOVERY_REQUIRED");
+  assert.equal(report.uploadAttempts.length, 1);
+  assert.equal(report.uploadAttempts[0].attemptId, "attempt-1");
+  assert.equal(report.remoteEffectVerified, false);
+  assert.equal(report.quarantineReleasePermitted, false);
+});
+
+test("dashboard reconciliation inspection fails closed on missing authentication, unsafe transport, or incomplete state", async () => {
+  await assert.rejects(inspectDashboardReconciliation({ jobId: "job-safe", operatorToken: "" }), /DASHBOARD_OPERATOR_TOKEN/);
+  await assert.rejects(inspectDashboardReconciliation({ baseUrl: "http://example.com", jobId: "job-safe", operatorToken: "x".repeat(32) }), /HTTPS or a loopback/);
+  await assert.rejects(inspectDashboardReconciliation({ jobId: "job-safe", operatorToken: "x".repeat(32), fetchImpl: async () => new Response(JSON.stringify({ jobs: [] }), { status: 200 }) }), /state response is incomplete/);
 });
