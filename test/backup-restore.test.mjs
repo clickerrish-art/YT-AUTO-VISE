@@ -62,6 +62,86 @@ test("backup and restore preserve dashboard state, audit, review, upload ledger,
   }
 });
 
+test("isolated backup lifecycle verifies every payload hash, clean restore, exact bytes and safe idempotent retry", async t => {
+  const source = fixture();
+  const destination = fixture();
+  t.after(() => {
+    fs.rmSync(source.root, { recursive: true, force: true });
+    fs.rmSync(destination.root, { recursive: true, force: true });
+  });
+
+  // The destination starts as a separate disposable installation. Remove its
+  // fixture records to exercise a clean restore rather than an in-place merge.
+  fs.rmSync(destination.stateDir, { recursive: true, force: true });
+  fs.rmSync(destination.logDir, { recursive: true, force: true });
+  fs.rmSync(destination.rightsDir, { recursive: true, force: true });
+
+  const sourceState = path.join(source.stateDir, "dashboard-state.json");
+  const secretSentinel = "DO_NOT_BACK_UP_TEST_SECRET_7f19";
+  const state = JSON.parse(fs.readFileSync(sourceState, "utf8"));
+  state.testOnlySecretSentinel = secretSentinel;
+  fs.writeFileSync(sourceState, JSON.stringify(state, null, 2) + "\n", { mode: 0o600 });
+
+  const backupPath = path.join(source.root, "backups", "lifecycle.json");
+  const before = new Map();
+  const expectedTargetPath = target => {
+    switch (target.kind) {
+      case "dashboard-state": return path.join(destination.stateDir, "dashboard-state.json");
+      case "facebook-recovery-ledger": return path.join(destination.stateDir, "facebook-recovery-ledger.jsonl");
+      case "upload-ledger": return path.join(destination.logDir, "upload-attempts.json");
+      case "upload-receipt": return path.join(destination.logDir, target.path);
+      case "upload-approval": return path.join(destination.logDir, "upload-approvals", target.path);
+      case "rights-evidence": return target.path === "content/asset-register.json"
+        ? path.join(destination.root, "content", "asset-register.json")
+        : path.join(destination.rightsDir, target.path.slice("rights/".length));
+      default: throw new Error("Unexpected backup target kind: " + target.kind);
+    }
+  };
+
+  const made = await backupState({
+    rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.logDir,
+    rightsDir: source.rightsDir, outputPath: backupPath
+  });
+  assert.equal(made.includesSecrets, false);
+  assert.equal(fs.existsSync(backupPath), true);
+  const backupBytes = fs.readFileSync(backupPath);
+  const backup = JSON.parse(backupBytes.toString("utf8"));
+  assert.equal(backup.format, "sonicvhibez-state-backup");
+  assert.equal(backup.includesSecrets, false);
+  assert.ok(backup.entries.length >= 6, "lifecycle fixture must include state, ledgers, receipt, approval and rights evidence");
+  assert.equal(backupBytes.toString("utf8").includes(secretSentinel), false,
+    "backup must not include an explicitly marked test secret");
+  for (const entry of backup.entries) {
+    const bytes = Buffer.from(entry.contentBase64, "base64");
+    assert.equal(bytes.length, entry.bytes, "backup entry length must match its declaration");
+    assert.equal(crypto.createHash("sha256").update(bytes).digest("hex"), entry.sha256,
+      "every backup entry must pass its SHA-256 integrity check");
+    before.set(entry.target.kind + ":" + entry.target.path, bytes);
+  }
+
+  const first = await restoreState({
+    backupPath, rootDir: destination.root, stateDir: destination.stateDir,
+    uploadLogDir: destination.logDir, rightsDir: destination.rightsDir, confirm: "YES"
+  });
+  assert.equal(first.status, "RESTORE_COMPLETED");
+  assert.equal(first.restored, backup.entries.length);
+  for (const entry of backup.entries) {
+    const actual = fs.readFileSync(expectedTargetPath(entry.target));
+    assert.deepEqual(actual, before.get(entry.target.kind + ":" + entry.target.path),
+      "restored bytes must exactly match the verified backup entry: " + entry.target.kind + ":" + entry.target.path);
+  }
+
+  const second = await restoreState({
+    backupPath, rootDir: destination.root, stateDir: destination.stateDir,
+    uploadLogDir: destination.logDir, rightsDir: destination.rightsDir, confirm: "YES"
+  });
+  assert.equal(second.status, "RESTORE_COMPLETED");
+  assert.equal(second.restored, 0, "identical retry must not rewrite any destination");
+  assert.equal(second.unchanged, backup.entries.length);
+  assert.equal(fs.existsSync(path.join(destination.stateDir, ".restore-transaction.json")), false);
+  assert.equal(fs.existsSync(path.join(destination.stateDir, ".restore-operation.lock")), false);
+});
+
 test("restore rolls back earlier file commits when a later destination rename fails", async () => {
   const source = fixture();
   const destination = fixture();
