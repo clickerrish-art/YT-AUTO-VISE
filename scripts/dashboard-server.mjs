@@ -691,31 +691,33 @@ const server = http.createServer(async (req, res) => {
         /^[a-f0-9]{64}$/.test(job.authoring.productionPlan.review?.approvalSha256 ?? "");
       const dispatchTimestamp = job => {
         const slot = job.scheduledSlot;
-        if (slot?.timezone === "Africa/Johannesburg") {
-          try {
-            // Reuse the strict IANA wall-clock converter so impossible calendar
-            // dates and malformed times cannot be normalized by Date.parse.
-            const scheduledAt = Date.parse(localDateTimeToIso(slot.date, slot.time, slot.timezone));
-            if (Number.isFinite(scheduledAt)) return scheduledAt;
-          } catch {
-            // A malformed legacy slot falls back to creation order, never a
-            // normalized or guessed publication instant.
-          }
+        if (slot?.timezone !== "Africa/Johannesburg") return null;
+        try {
+          // A queued job without a valid, explicit Johannesburg slot is held.
+          // Creation time is never a substitute for publication authorization.
+          const scheduledAt = Date.parse(localDateTimeToIso(slot.date, slot.time, slot.timezone));
+          return Number.isFinite(scheduledAt) ? scheduledAt : null;
+        } catch {
+          // Impossible calendar dates and malformed wall-clock times stay held.
+          return null;
         }
-        const createdAt = Date.parse(job.createdAt ?? "");
-        return Number.isFinite(createdAt) ? createdAt : Number.MAX_SAFE_INTEGER;
       };
-      const jobs = queued.filter(job => hasApprovedRenderPlan(job) && typeof job.id === "string")
-        .sort((a, b) => dispatchTimestamp(a) - dispatchTimestamp(b) ||
-          String(a.createdAt ?? "").localeCompare(String(b.createdAt ?? "")) ||
-          a.id.localeCompare(b.id))
-        .slice(0, requestedLimit)
-        .map(job => ({ id: job.id, contentType: job.contentType, state: job.state, createdAt: job.createdAt }));
+      const dispatchable = queued
+        .filter(job => hasApprovedRenderPlan(job) && typeof job.id === "string")
+        .map(job => ({ job, scheduledAt: dispatchTimestamp(job) }))
+        .filter(entry => entry.scheduledAt !== null)
+        .sort((a, b) => a.scheduledAt - b.scheduledAt ||
+          String(a.job.createdAt ?? "").localeCompare(String(b.job.createdAt ?? "")) ||
+          a.job.id.localeCompare(b.job.id));
+      const jobs = dispatchable.slice(0, requestedLimit)
+        .map(({ job }) => ({ id: job.id, contentType: job.contentType, state: job.state, createdAt: job.createdAt }));
       return json(res, 200, {
         jobs,
         queuedCount: queued.length,
+        dispatchableCount: dispatchable.length,
         queuedWithoutApprovedAuthoring: queued.filter(job => !job.authoring).length,
         queuedWithoutApprovedRenderPlan: queued.filter(job => !hasApprovedRenderPlan(job)).length,
+        queuedWithoutValidSlot: queued.filter(job => dispatchTimestamp(job) === null).length,
         publishingEnabled: false,
         readOnly: true
       });
