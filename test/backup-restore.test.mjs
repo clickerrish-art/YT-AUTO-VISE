@@ -77,11 +77,8 @@ test("isolated backup lifecycle verifies every payload hash, clean restore, exac
   fs.rmSync(destination.logDir, { recursive: true, force: true });
   fs.rmSync(destination.rightsDir, { recursive: true, force: true });
 
-  const sourceState = path.join(source.stateDir, "dashboard-state.json");
   const secretSentinel = "DO_NOT_BACK_UP_TEST_SECRET_7f19";
-  const state = JSON.parse(fs.readFileSync(sourceState, "utf8"));
-  state.testOnlySecretSentinel = secretSentinel;
-  fs.writeFileSync(sourceState, JSON.stringify(state, null, 2) + "\n", { mode: 0o600 });
+  fs.writeFileSync(path.join(source.root, ".env"), "API_SECRET=" + secretSentinel + "\n", { mode: 0o600 });
 
   const backupPath = path.join(source.root, "backups", "lifecycle.json");
   const before = new Map();
