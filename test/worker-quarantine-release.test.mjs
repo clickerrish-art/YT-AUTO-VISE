@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { applyWorkerQuarantineRelease } from "../scripts/worker-runner.mjs";
+import { applyWorkerQuarantineRelease, assertWorkerStoppedForQuarantineRelease } from "../scripts/worker-runner.mjs";
 import {
   createWorkerQuarantineReleaseReceipt,
   verifyWorkerQuarantineReleaseReceipt
@@ -80,4 +80,12 @@ test("worker consumes a signed release once and persists the nonce against repla
   assert.throws(() => applyWorkerQuarantineRelease({
     statePath, workerId: binding.workerId, jobId: binding.jobId, attemptId: binding.attemptId, artifactSha256: binding.artifactSha256, publicKeyPem, receipt, nowMs: binding.nowMs
   }), /already been consumed/i);
+});
+
+test("quarantine release refuses to race a running worker process", t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "worker-release-lock-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const statePath = path.join(dir, "cooldowns.json");
+  fs.writeFileSync(statePath + ".process.lock", JSON.stringify({ pid: process.pid }));
+  assert.throws(() => assertWorkerStoppedForQuarantineRelease(statePath), /Stop the worker process/i);
 });
