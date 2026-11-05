@@ -17,16 +17,16 @@ test("dashboard static inventory reports all declared controls, forms and litera
   assert.equal(inventory.counts.controls, inventory.controls.length);
   assert.equal(inventory.counts.forms, inventory.forms.length);
   assert.equal(inventory.counts.routes, inventory.routes.length);
-  assert.equal(inventory.counts.controls, 104);
-  assert.equal(inventory.counts.forms, 16);
-  assert.equal(inventory.counts.routes, 40);
+  assert.equal(inventory.counts.controls, 108);
+  assert.equal(inventory.counts.forms, 17);
+  assert.equal(inventory.counts.routes, 41);
   assert.deepEqual(inventory.counts.controlsByTag, {
-    button: 22,
-    input: 41,
-    select: 26,
-    textarea: 15,
+    button: 23,
+    input: 42,
+    select: 27,
+    textarea: 16,
   });
-  assert.deepEqual(inventory.counts.routesByMethod, { GET: 12, POST: 28 });
+  assert.deepEqual(inventory.counts.routesByMethod, { GET: 12, POST: 29 });
 
   assert.ok(inventory.controls.every(control => Number.isInteger(control.line) && control.line > 0));
   assert.ok(inventory.forms.every(form => Number.isInteger(form.line) && form.line > 0));
@@ -121,7 +121,7 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
     .map(match => ({ id: match[1], index: match.index }));
   const routeDeclarations = new Set(inventory.routes.map(route => route.path));
 
-  assert.equal(formIds.length, 16, "the dashboard form inventory changed; review the acceptance fixture");
+  assert.equal(formIds.length, 17, "the dashboard form inventory changed; review the acceptance fixture");
   assert.equal(submitBindings.length, formIds.length, "every dashboard form must have exactly one explicit submit handler");
 
   for (const formId of formIds) {
@@ -153,7 +153,7 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
     wiredControls++;
   }
 
-  assert.equal(wiredControls, 85, "the number of non-submit dashboard controls changed; review the acceptance fixture");
+  assert.equal(wiredControls, 88, "the number of non-submit dashboard controls changed; review the acceptance fixture");
 });
 
 test("dashboard inventory associates controls with their owning form, including explicit external form references", () => {
