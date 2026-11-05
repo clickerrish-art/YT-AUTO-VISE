@@ -467,9 +467,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       const report = await reconcileDashboardUpload({ jobId, metadataPath, videoPath, approvalPath });
       if (report.verified) {
         const operatorToken = process.env.DASHBOARD_OPERATOR_TOKEN;
-        const workerSecret = process.env.DASHBOARD_WORKER_TOKEN;
-        if (!workerSecret || workerSecret.length < 24 || workerSecret === operatorToken) {
-          throw new Error("A distinct DASHBOARD_WORKER_TOKEN is required to verify a signed quarantine release");
+        const verificationPublicKey = process.env.DASHBOARD_QUARANTINE_SIGNING_PUBLIC_KEY;
+        if (!verificationPublicKey?.trim()) {
+          throw new Error("DASHBOARD_QUARANTINE_SIGNING_PUBLIC_KEY is required; the dashboard private signing key must never be installed on the worker");
         }
         const videoSha256 = crypto.createHash("sha256").update(fs.readFileSync(path.resolve(videoPath))).digest("hex");
         const exactAttempts = report.dashboardCorrelation.uploadAttempts.filter(item => item.artifactSha256 === videoSha256);
@@ -498,7 +498,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         const release = applyWorkerQuarantineRelease({
           statePath, workerId: local.workerId, jobId,
           attemptId: exactAttempts[0].attemptId, artifactSha256: videoSha256,
-          receipt: payload.receipt, secret: workerSecret
+          receipt: payload.receipt, publicKeyPem: verificationPublicKey
         });
         report.quarantineReleased = release.released;
         report.quarantineRelease = release;
