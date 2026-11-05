@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { assertNoUnresolvedUploadAttempts, validateHistoryReconciliation, assertNextPublicationAllowed } from "../scripts/youtube-history-gate.mjs";
+import { assertNoUnresolvedUploadAttempts, validateHistoryReconciliation, validateHistoryReconciliationSnapshot, assertNextPublicationAllowed } from "../scripts/youtube-history-gate.mjs";
 
 const channelId = "UC1234567890123456789012";
 const remoteVideos = [
@@ -20,6 +20,62 @@ test("history reconciliation binds all public/private/unlisted remote IDs, times
   assert.equal(history.length, 2);
   assert.deepEqual(history.map(item => item.status), ["private", "unlisted"]);
   assert.equal(history[1].actualPublishedAt, "2026-10-04T15:00:00.000Z");
+});
+
+test("history reconciliation separates future scheduled videos from actual publication history and enforces their slots", () => {
+  const scheduledVideo = {
+    id: "vid-scheduled",
+    snippet: { channelId, publishedAt: "2026-10-05T00:00:00.000Z" },
+    status: { privacyStatus: "private", publishAt: "2026-10-10T15:00:00.000Z" }
+  };
+  const scheduledReconciliation = {
+    ...reconciliation,
+    videos: [
+      ...reconciliation.videos,
+      { id: "vid-scheduled", format: "short", visibility: "private", scheduledAt: "2026-10-10T15:00:00.000Z" }
+    ]
+  };
+  const snapshot = validateHistoryReconciliationSnapshot({
+    channelId,
+    remoteVideos: [...remoteVideos, scheduledVideo],
+    reconciliation: scheduledReconciliation,
+    now: new Date("2026-10-05T00:00:00.000Z")
+  });
+  assert.equal(snapshot.history.length, 2, "a future scheduled upload must not advance the actual-publication cycle");
+  assert.deepEqual(snapshot.scheduledItems, [{
+    id: "vid-scheduled",
+    status: "scheduled",
+    scheduledAt: "2026-10-10T15:00:00.000Z",
+    format: "short"
+  }]);
+  assert.throws(() => assertNextPublicationAllowed({
+    history: snapshot.history,
+    scheduledItems: snapshot.scheduledItems,
+    pendingAttempts: [],
+    proposedAt: "2026-10-12T15:00:00.000Z",
+    jobId: "job-4",
+    format: "short"
+  }), /blocked upload/);
+  assert.equal(assertNextPublicationAllowed({
+    history: snapshot.history,
+    scheduledItems: snapshot.scheduledItems,
+    pendingAttempts: [],
+    proposedAt: "2026-10-13T15:00:00.000Z",
+    jobId: "job-4",
+    format: "short"
+  }).valid, true, "exactly 72 elapsed hours after the scheduled slot is permitted");
+  assert.throws(() => validateHistoryReconciliationSnapshot({
+    channelId,
+    remoteVideos: [...remoteVideos, scheduledVideo],
+    reconciliation: { ...scheduledReconciliation, videos: reconciliation.videos },
+    now: new Date("2026-10-05T00:00:00.000Z")
+  }), /does not cover every remote channel video/);
+  assert.throws(() => validateHistoryReconciliationSnapshot({
+    channelId,
+    remoteVideos: [...remoteVideos, scheduledVideo],
+    reconciliation: scheduledReconciliation,
+    now: new Date("2026-10-11T00:00:00.000Z")
+  }), /past publishAt/);
 });
 
 test("history reconciliation fails closed on missing remote videos, duplicate IDs or mismatched timestamps", () => {

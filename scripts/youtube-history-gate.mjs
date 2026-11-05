@@ -34,37 +34,106 @@ export function assertNoUnresolvedUploadAttempts(ledger) {
   return true;
 }
 
-export function validateHistoryReconciliation({ channelId, remoteVideos, reconciliation }) {
+export function validateHistoryReconciliationSnapshot({ channelId, remoteVideos, reconciliation, now = new Date() }) {
   if (!channelId || !Array.isArray(remoteVideos)) throw new Error("authenticated channel and complete remote video list are required");
   if (!reconciliation || reconciliation.complete !== true || reconciliation.channelId !== channelId) throw new Error("channel history reconciliation must be complete and bound to the authenticated channel ID");
   if (typeof reconciliation.verifiedBy !== "string" || reconciliation.verifiedBy.trim().length < 2 || !Number.isFinite(strictIsoTimestamp(reconciliation.verifiedAt))) throw new Error("channel history reconciliation needs reviewer identity and a valid verification timestamp");
   if (!Array.isArray(reconciliation.videos)) throw new Error("channel history reconciliation must contain a videos array");
+  const nowTimestamp = now instanceof Date ? now.getTime() : strictIsoTimestamp(now);
+  if (!Number.isFinite(nowTimestamp)) throw new Error("history verification time must be valid");
   const remoteById = new Map();
   for (const video of remoteVideos) {
     if (!video?.id || remoteById.has(video.id)) throw new Error("remote channel history contains a missing or duplicate video ID");
     if (video.snippet?.channelId !== channelId) throw new Error("remote video channel ID does not match the authenticated channel ID: " + video.id);
-    const actualPublishedAt = video.snippet?.publishedAt;
     const visibility = video.status?.privacyStatus;
-    if (!Number.isFinite(strictIsoTimestamp(actualPublishedAt)) || !allowedVisibility.has(visibility)) throw new Error("remote video is missing an actual publication timestamp or known visibility: " + video.id);
-    remoteById.set(video.id, { id: video.id, actualPublishedAt: new Date(strictIsoTimestamp(actualPublishedAt)).toISOString(), status: visibility });
+    if (!allowedVisibility.has(visibility)) throw new Error("remote video has an unknown visibility: " + video.id);
+    const publishAt = video.status?.publishAt;
+    if (publishAt !== undefined && publishAt !== null && publishAt !== "") {
+      if (visibility !== "private") throw new Error("scheduled YouTube videos must remain private until publication: " + video.id);
+      const scheduledTimestamp = strictIsoTimestamp(publishAt);
+      if (!Number.isFinite(scheduledTimestamp)) throw new Error("remote scheduled video has an invalid publishAt timestamp: " + video.id);
+      if (scheduledTimestamp <= nowTimestamp) throw new Error("remote scheduled video has a past publishAt and requires reconciliation: " + video.id);
+      remoteById.set(video.id, {
+        id: video.id,
+        scheduledAt: new Date(scheduledTimestamp).toISOString(),
+        status: visibility,
+        scheduled: true
+      });
+      continue;
+    }
+    const actualPublishedAt = video.snippet?.publishedAt;
+    if (!Number.isFinite(strictIsoTimestamp(actualPublishedAt))) throw new Error("remote video is missing an actual publication timestamp: " + video.id);
+    remoteById.set(video.id, {
+      id: video.id,
+      actualPublishedAt: new Date(strictIsoTimestamp(actualPublishedAt)).toISOString(),
+      status: visibility,
+      scheduled: false
+    });
   }
   const records = new Map();
   for (const item of reconciliation.videos) {
     if (!item?.id || records.has(item.id)) throw new Error("reconciled history contains a missing or duplicate video ID");
     if (!allowedFormats.has(item.format)) throw new Error("each reconciled video must be classified as long_form or short: " + item.id);
-    if (!allowedVisibility.has(item.visibility) || !Number.isFinite(strictIsoTimestamp(item.actualPublishedAt))) throw new Error("reconciled history requires visibility and actualPublishedAt for " + item.id);
-    records.set(item.id, item);
+    if (!allowedVisibility.has(item.visibility)) throw new Error("reconciled history requires a known visibility for " + item.id);
+    if (item.scheduledAt !== undefined && item.scheduledAt !== null && item.scheduledAt !== "") {
+      if (item.visibility !== "private") throw new Error("scheduled reconciliation records must have private visibility: " + item.id);
+      if (item.actualPublishedAt !== undefined && item.actualPublishedAt !== null && item.actualPublishedAt !== "") {
+        throw new Error("scheduled reconciliation records cannot also claim an actual publication timestamp: " + item.id);
+      }
+      const scheduledTimestamp = strictIsoTimestamp(item.scheduledAt);
+      if (!Number.isFinite(scheduledTimestamp) || scheduledTimestamp <= nowTimestamp) throw new Error("scheduled reconciliation record requires a valid future scheduledAt timestamp for " + item.id);
+      records.set(item.id, {
+        id: item.id,
+        format: item.format,
+        visibility: item.visibility,
+        scheduledAt: new Date(scheduledTimestamp).toISOString()
+      });
+      continue;
+    }
+    if (!Number.isFinite(strictIsoTimestamp(item.actualPublishedAt))) throw new Error("reconciled history requires actualPublishedAt for " + item.id);
+    records.set(item.id, {
+      id: item.id,
+      format: item.format,
+      visibility: item.visibility,
+      actualPublishedAt: new Date(strictIsoTimestamp(item.actualPublishedAt)).toISOString()
+    });
   }
   if (remoteById.size !== records.size) throw new Error("reconciled history does not cover every remote channel video; history is incomplete");
+  const history = [];
+  const scheduledItems = [];
   for (const [id, remote] of remoteById) {
     const record = records.get(id);
     if (!record) throw new Error("remote video is missing from reconciled history: " + id);
-    if (new Date(strictIsoTimestamp(record.actualPublishedAt)).toISOString() !== remote.actualPublishedAt || record.visibility !== remote.status) throw new Error("reconciled timestamp/visibility does not match YouTube for video " + id);
+    if (remote.scheduled) {
+      if (!record.scheduledAt || record.scheduledAt !== remote.scheduledAt || record.visibility !== remote.status) {
+        throw new Error("reconciled scheduled timestamp/visibility does not match YouTube for video " + id);
+      }
+      scheduledItems.push({
+        id,
+        status: "scheduled",
+        scheduledAt: remote.scheduledAt,
+        format: record.format
+      });
+      continue;
+    }
+    if (record.scheduledAt || record.actualPublishedAt !== remote.actualPublishedAt || record.visibility !== remote.status) {
+      throw new Error("reconciled timestamp/visibility does not match YouTube for video " + id);
+    }
+    history.push({
+      id,
+      status: record.visibility,
+      actualPublishedAt: remote.actualPublishedAt,
+      format: record.format
+    });
   }
-  return [...records.values()].map(item => ({ id: item.id, status: item.visibility, actualPublishedAt: new Date(strictIsoTimestamp(item.actualPublishedAt)).toISOString(), format: item.format }));
+  return { history, scheduledItems };
 }
 
-export async function fetchCompleteYoutubeHistory(youtube, channel, reconciliationPath, channelId) {
+export function validateHistoryReconciliation(args) {
+  return validateHistoryReconciliationSnapshot(args).history;
+}
+
+async function readCompleteYoutubeHistoryInputs(youtube, channel, reconciliationPath) {
   const uploadsPlaylistId = channel?.contentDetails?.relatedPlaylists?.uploads;
   if (!uploadsPlaylistId) throw new Error("authenticated SonicVhibez uploads playlist is unavailable; cannot verify complete channel history");
   const playlistItems = [];
@@ -88,10 +157,19 @@ export async function fetchCompleteYoutubeHistory(youtube, channel, reconciliati
   let reconciliation;
   try { reconciliation = JSON.parse(fs.readFileSync(path.resolve(reconciliationPath), "utf8")); }
   catch { throw new Error("CHANNEL_HISTORY_RECONCILIATION_PATH is missing or invalid; complete owner-reviewed history is required"); }
-  return validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
+  return { remoteVideos, reconciliation };
 }
 
-export function assertNextPublicationAllowed({ history, pendingAttempts, proposedAt, jobId, format, timeZone, minSpacingHours } = {}) {
+export async function fetchCompleteYoutubeHistorySnapshot(youtube, channel, reconciliationPath, channelId, options = {}) {
+  const { remoteVideos, reconciliation } = await readCompleteYoutubeHistoryInputs(youtube, channel, reconciliationPath);
+  return validateHistoryReconciliationSnapshot({ channelId, remoteVideos, reconciliation, ...options });
+}
+
+export async function fetchCompleteYoutubeHistory(youtube, channel, reconciliationPath, channelId) {
+  return (await fetchCompleteYoutubeHistorySnapshot(youtube, channel, reconciliationPath, channelId)).history;
+}
+
+export function assertNextPublicationAllowed({ history, pendingAttempts, scheduledItems = [], proposedAt, jobId, format, timeZone, minSpacingHours } = {}) {
   let policy = {};
   try {
     policy = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), "config/weekly-content-plan.json"), "utf8"));
@@ -107,7 +185,7 @@ export function assertNextPublicationAllowed({ history, pendingAttempts, propose
     throw new Error("authoritative publication schedule has inconsistent spacing/cycle values; refusing upload");
   }
   const result = evaluateNextPublication({
-    history, historyVerified: true, pendingAttempts, proposedAt, jobId, format,
+    history, historyVerified: true, pendingAttempts, scheduledItems, proposedAt, jobId, format,
     timeZone: timeZone ?? policy.timezone ?? DEFAULT_SCHEDULE_TIMEZONE,
     minSpacingHours: minSpacingHours ?? configuredSpacing ?? DEFAULT_MIN_SPACING_HOURS
   });

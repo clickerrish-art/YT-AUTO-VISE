@@ -406,11 +406,12 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   if (!youtubeFactory) {
     assertNoUnresolvedUploadAttempts(ledger);
     const safeHistoryPath = resolveRepositoryFileNoSymlinks(env.CHANNEL_HISTORY_RECONCILIATION_PATH, "Channel history reconciliation");
-    const history = await fetchCompleteYoutubeHistory(youtube, matchedChannel, safeHistoryPath, expectedChannelId);
+    const historySnapshot = await fetchCompleteYoutubeHistorySnapshot(youtube, matchedChannel, safeHistoryPath, expectedChannelId, { now: now() });
+    const history = historySnapshot.history;
     const format = metadata.contentType ?? metadata.format;
     if (!["long_form", "short"].includes(format)) throw new Error("metadata must explicitly identify contentType as long_form or short for rolling cycle enforcement");
     cycleHistoryLength = history.length;
-    cycleGate = assertNextPublicationAllowed({ history, pendingAttempts: ledger.attempts, proposedAt: now().toISOString(), jobId, format });
+    cycleGate = assertNextPublicationAllowed({ history, scheduledItems: historySnapshot.scheduledItems, pendingAttempts: ledger.attempts, proposedAt: now().toISOString(), jobId, format });
   }
   const attempt = {
     attemptId: crypto.randomUUID(), jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256,
