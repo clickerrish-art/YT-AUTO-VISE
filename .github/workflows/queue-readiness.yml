@@ -14,6 +14,20 @@ on:
       - "content/*.md"
       - "content/*.json"
       - ".github/workflows/queue-readiness.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/replenish-queue.mjs"
+      - "scripts/production-readiness.mjs"
+      - "tests/**"
+      - "scripts/render-short.mjs"
+      - "package.json"
+      - "README.md"
+      - "content/queue.json"
+      - "content/*.srt"
+      - "content/*.md"
+      - "content/*.json"
+      - ".github/workflows/queue-readiness.yml"
   workflow_dispatch:
   schedule:
     # Operational queue-readiness/replenishment check only; it does not publish.
@@ -26,7 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: main
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
