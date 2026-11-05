@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import crypto from "node:crypto";
 import { spawn } from "node:child_process";
 import { backupState } from "../scripts/backup-state.mjs";
 import { restoreState } from "../scripts/restore-state.mjs";
