@@ -507,6 +507,74 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       console.error("BLOCKED: " + String(error?.message ?? error));
       process.exitCode = 2;
     }
+  } else if (process.argv.includes("--issue-quarantine-release")) {
+    try {
+      const args = process.argv.slice(2);
+      const value = name => { const index = args.indexOf(name); return index >= 0 ? args[index + 1] : undefined; };
+      const jobId = value("--job-id");
+      const attemptId = value("--attempt-id");
+      const artifactSha256 = value("--artifact-sha256");
+      const outputPath = value("--receipt-output");
+      const workerId = value("--worker-id") ?? process.env.DASHBOARD_WORKER_ID ?? "sonicvhibez-render-worker";
+      const operatorToken = process.env.DASHBOARD_OPERATOR_TOKEN;
+      const releaseToken = process.env.DASHBOARD_QUARANTINE_RELEASE_TOKEN;
+      const publicKeyPem = process.env.DASHBOARD_QUARANTINE_SIGNING_PUBLIC_KEY;
+      if (!jobId || !attemptId || !/^[a-f0-9]{64}$/.test(artifactSha256 ?? "") || !outputPath) {
+        throw new Error("--job-id, --attempt-id, --artifact-sha256 and --receipt-output are required");
+      }
+      if (!operatorToken || operatorToken.length < 24 || !releaseToken || releaseToken.length < 24) {
+        throw new Error("Operator token and separate quarantine release credential are required on the authorized operator host");
+      }
+      if (!publicKeyPem?.trim()) {
+        throw new Error("DASHBOARD_QUARANTINE_SIGNING_PUBLIC_KEY is required to verify the issued receipt before saving it");
+      }
+      if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(workerId)) throw new Error("Worker ID is invalid");
+      const baseUrl = process.env.DASHBOARD_API_URL ?? DEFAULT_API_URL;
+      const parsed = new URL(baseUrl);
+      if (parsed.username || parsed.password || parsed.search || parsed.hash ||
+          (parsed.protocol !== "https:" && !["127.0.0.1", "localhost", "::1"].includes(parsed.hostname))) {
+        throw new Error("Quarantine release endpoint must use HTTPS, or loopback HTTP, without URL credentials, query or fragment");
+      }
+      const response = await fetch(new URL("/api/worker/quarantine-release", parsed.origin), {
+        method: "POST",
+        headers: {
+          "x-operator-token": operatorToken,
+          "x-quarantine-release-token": releaseToken,
+          "content-type": "application/json",
+          accept: "application/json"
+        },
+        body: JSON.stringify({ workerId, jobId }),
+        redirect: "error",
+        signal: AbortSignal.timeout(15_000)
+      });
+      let payload;
+      try { payload = await response.json(); }
+      catch (cause) { throw new Error("Dashboard returned unreadable signed release response", { cause }); }
+      if (!response.ok || !payload?.receipt || payload.publishingEnabled !== false) {
+        throw new Error("Dashboard did not authorize a signed quarantine release receipt");
+      }
+      verifyWorkerQuarantineReleaseReceipt(payload.receipt, {
+        workerId, jobId, attemptId, artifactSha256, publicKeyPem
+      });
+      const resolvedOutput = path.resolve(outputPath);
+      ensureSafeDirectoryPath(path.dirname(resolvedOutput), "Quarantine release receipt output directory");
+      let outputFd;
+      try {
+        outputFd = fs.openSync(resolvedOutput, "wx", 0o600);
+        fs.writeFileSync(outputFd, JSON.stringify(payload.receipt, null, 2) + "\\n");
+        fs.fsyncSync(outputFd);
+      } finally {
+        if (outputFd !== undefined) fs.closeSync(outputFd);
+      }
+      console.log(JSON.stringify({
+        workerId, jobId, attemptId, artifactSha256,
+        receiptOutput: resolvedOutput, expiresAt: payload.receipt.expiresAt,
+        publishingEnabled: false
+      }));
+    } catch (error) {
+      console.error("BLOCKED: " + String(error?.message ?? error));
+      process.exitCode = 2;
+    }
   } else if (process.argv.includes("--consume-quarantine-release")) {
     try {
       const args = process.argv.slice(2);
