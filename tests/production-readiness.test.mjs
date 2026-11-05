@@ -20,7 +20,8 @@ test("readiness report identifies blockers, preserves safety defaults, and exits
   assert.match(result.stdout, /content\/render-manifest\.json/);
   assert.match(result.stdout, /long-form-render-manifest/);
   assert.match(result.stdout, /Metadata complianceReviewed must be true/);
-  assert.match(result.stdout, /verified SonicVhibez YouTube channel ID/);
+  assert.doesNotMatch(result.stdout, /Metadata needs the verified SonicVhibez YouTube channel ID/);
+  assert.match(result.stdout, /SONICVHIBEZ_CHANNEL_ID/);
   assert.match(result.stdout, /YOUTUBE_CLIENT_ID/);
   assert.match(result.stdout, /never uploads, schedules, or publishes/i);
 });
@@ -76,8 +77,8 @@ test("readiness JSON distinguishes external reconciliation from code-controlled 
   assert.match(cadence.resolution, /72-hour minimum spacing/i);
   assert.match(cadence.resolution, /timezone-aware timestamp/i);
   assert.doesNotMatch(cadence.resolution, /inspect the final media/i);
-  const metadata = report.blockers.find(blocker => /Metadata needs the verified SonicVhibez YouTube channel ID/.test(blocker.message));
-  assert.equal(metadata.evidence.path, "content/next-short.json");
+  assert.equal(report.blockers.some(blocker => /Metadata needs the verified SonicVhibez YouTube channel ID/.test(blocker.message)), false);
+  assert.ok(report.blockers.some(blocker => /SONICVHIBEZ_CHANNEL_ID/.test(blocker.message)), "the secure OAuth environment binding remains an owner-controlled gate");
 });
 
 test("readiness workflow compares retained exit-code evidence and avoids false mismatches from missing step outputs", () => {
