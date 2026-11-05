@@ -507,6 +507,43 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       console.error("BLOCKED: " + String(error?.message ?? error));
       process.exitCode = 2;
     }
+  } else if (process.argv.includes("--consume-quarantine-release")) {
+    try {
+      const args = process.argv.slice(2);
+      const value = name => { const index = args.indexOf(name); return index >= 0 ? args[index + 1] : undefined; };
+      const receiptPath = value("--receipt-file");
+      if (!receiptPath) throw new Error("--receipt-file is required for signed quarantine release consumption");
+      const resolvedReceiptPath = path.resolve(receiptPath);
+      const receiptStat = fs.lstatSync(resolvedReceiptPath);
+      if (receiptStat.isSymbolicLink() || !receiptStat.isFile() || receiptStat.size > 64 * 1024) {
+        throw new Error("Quarantine release receipt must be a regular, non-symlink file no larger than 64 KiB");
+      }
+      const receipt = JSON.parse(fs.readFileSync(resolvedReceiptPath, "utf8"));
+      const local = inspectWorkerState();
+      if (typeof receipt?.jobId !== "string" ||
+          !local.uncertainDispatches.some(record => record.jobId === receipt.jobId)) {
+        throw new Error("Signed receipt does not identify a job currently quarantined by this worker");
+      }
+      const statePath = cooldownStatePath(
+        local.workerId,
+        process.env.WORKER_BACKOFF_STATE_PATH,
+        process.env.WORKER_STATE_DIR ?? "run-logs"
+      );
+      assertWorkerStoppedForQuarantineRelease(statePath);
+      const publicKeyPem = process.env.DASHBOARD_QUARANTINE_SIGNING_PUBLIC_KEY;
+      if (!publicKeyPem?.trim()) {
+        throw new Error("DASHBOARD_QUARANTINE_SIGNING_PUBLIC_KEY is required; workers receive only the dashboard verification public key");
+      }
+      const release = applyWorkerQuarantineRelease({
+        statePath, workerId: local.workerId, jobId: receipt.jobId,
+        attemptId: receipt.attemptId, artifactSha256: receipt.artifactSha256,
+        receipt, publicKeyPem
+      });
+      console.log(JSON.stringify({ workerId: local.workerId, quarantineRelease: release, publishingEnabled: false }));
+    } catch (error) {
+      console.error("BLOCKED: " + String(error?.message ?? error));
+      process.exitCode = 2;
+    }
   } else if (process.argv.includes("--reconcile-uncertain")) {
     try {
       const args = process.argv.slice(2);
