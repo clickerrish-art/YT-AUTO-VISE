@@ -783,10 +783,17 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const authorRenderBypassBody = await authorRenderBypass.json();
   assert.equal(authorRenderBypass.status, 409, "a generated script must not bypass missing narration/caption/scene integration");
   assert.equal(authorRenderBypassBody.publishable, false);
-  assert.match(authorRenderBypassBody.error, /not render-ready; mandatory approval, provenance, quality, compliance or artifact-integrity evidence is missing or stale/i);
+  assert.match(authorRenderBypassBody.error, /failed render preflight/i);
+  assert.equal(authorRenderBypassBody.jobState, "FAILED");
+  assert.equal(authorRenderBypassBody.requiresOperatorRetry, true);
 
   const authorState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
-  assert.equal(authorState.jobs.find(job => job.id === authorJob.id).authoring.result.script.narration, narration);
+  const preflightFailedJob = authorState.jobs.find(job => job.id === authorJob.id);
+  assert.equal(preflightFailedJob.state, "FAILED", "a deterministic render preflight failure must leave the dispatchable queue");
+  assert.equal(preflightFailedJob.errorDetails.code, "RENDER_PREFLIGHT_NOT_READY");
+  assert.equal(preflightFailedJob.errorDetails.retryableAfterOperatorReview, true);
+  assert.equal(authorState.audit.filter(event => event.action === "CONTENT_RENDER_PREFLIGHT_FAILED" && event.jobId === authorJob.id).length, 1);
+  assert.equal(preflightFailedJob.authoring.result.script.narration, narration);
   assert.deepEqual(authorState.jobs.find(job => job.id === authorJob.id).authoring.researchBrief, authorBrief, "the exact supplied research brief and evidence locators must remain auditable");
   assert.ok(authorState.audit.some(event => event.action === "SCRIPT_AUTHORING_COMPLETED_REVIEW_REQUIRED" && event.jobId === authorJob.id));
   const productionJob = saved.jobs.find(job => job.kind === "CONTENT_PRODUCTION" && job.idempotencyKey === "draft:" + draft.id);
