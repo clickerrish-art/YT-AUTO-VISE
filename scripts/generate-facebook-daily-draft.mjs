@@ -65,6 +65,17 @@ function readArtifactHistory() {
   return [...seen.values()];
 }
 
+function removeCreatedFileIfOwned(file, handle) {
+  // A competing recovery action may replace the pathname while this descriptor
+  // remains open. Remove only the exact inode created by this invocation.
+  try {
+    const owned = fs.fstatSync(handle);
+    const current = fs.lstatSync(file);
+    if (current.isFile() && !current.isSymbolicLink() &&
+        current.dev === owned.dev && current.ino === owned.ino) fs.unlinkSync(file);
+  } catch {}
+}
+
 function makePackage(date, idea, slot, now) {
   const scheduledAt = localDateTimeToIso(date, slot, FACEBOOK_TIMEZONE);
   const slotHasPassed = Date.parse(scheduledAt) <= Date.parse(now);
@@ -144,7 +155,7 @@ export function generateDailyFacebookDraft({ date, outputDir, now = new Date().t
       fs.writeFileSync(handle, canonical + "\n", "utf8");
       fs.fsyncSync(handle);
     } catch (error) {
-      try { fs.unlinkSync(file); } catch {}
+      removeCreatedFileIfOwned(file, handle);
       throw error;
     } finally {
       fs.closeSync(handle);
@@ -160,7 +171,7 @@ export function generateDailyFacebookDraft({ date, outputDir, now = new Date().t
     fs.writeFileSync(handle, JSON.stringify(draft, null, 2) + "\n", "utf8");
     fs.fsyncSync(handle);
   } catch (error) {
-    try { fs.unlinkSync(file); } catch {}
+    removeCreatedFileIfOwned(file, handle);
     throw error;
   } finally {
     fs.closeSync(handle);

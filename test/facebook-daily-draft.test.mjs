@@ -36,6 +36,41 @@ test("daily Facebook draft package is research-only, timezone-labelled and idemp
   assert.equal(fs.readdirSync(root).filter(name => name.endsWith(".json")).length, 1);
 });
 
+test("failed daily draft writes never delete a replacement file", (t) => {
+  for (const mode of ["new-draft", "retained-history"]) {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-daily-replaced-"));
+    t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+    const date = "2030-10-25";
+    let existingDrafts = [];
+    if (mode === "retained-history") {
+      const historyRoot = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-daily-replaced-history-"));
+      t.after(() => fs.rmSync(historyRoot, { recursive: true, force: true }));
+      existingDrafts = [generateDailyFacebookDraft({
+        date, outputDir: historyRoot, now: "2030-10-24T05:30:00.000Z"
+      }).package];
+    }
+    const outputPath = path.join(root, date + ".json");
+    const replacement = "replacement artifact belongs to another process\\n";
+    const originalFsync = fs.fsyncSync;
+    try {
+      fs.fsyncSync = () => {
+        fs.unlinkSync(outputPath);
+        fs.writeFileSync(outputPath, replacement, { flag: "wx", mode: 0o600 });
+        const error = new Error("simulated draft fsync failure");
+        error.code = "EIO";
+        throw error;
+      };
+      assert.throws(() => generateDailyFacebookDraft({
+        date, outputDir: root, now: "2030-10-24T05:30:00.000Z", existingDrafts
+      }), /simulated draft fsync failure/);
+    } finally {
+      fs.fsyncSync = originalFsync;
+    }
+    assert.equal(fs.readFileSync(outputPath, "utf8"), replacement,
+      mode + " cleanup must not unlink a replacement file created after the original descriptor was opened");
+  }
+});
+
 test("missed daily experiment slots are flagged instead of silently backdated", (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-daily-missed-"));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
