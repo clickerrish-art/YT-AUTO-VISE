@@ -28,8 +28,8 @@ function ed25519PrivateKey(pem) {
 }
 
 function ed25519PublicKey(pem) {
-  if (typeof pem !== "string" || !pem.trim()) {
-    throw new Error("Worker Ed25519 quarantine verification public key is not configured");
+  if (typeof pem !== "string" || !pem.trim() || !pem.includes("-----BEGIN PUBLIC KEY-----")) {
+    throw new Error("Worker Ed25519 quarantine verification PUBLIC key is not configured; private keys are not accepted");
   }
   const key = crypto.createPublicKey(pem);
   if (key.asymmetricKeyType !== "ed25519") throw new Error("Quarantine verification public key must be Ed25519");
