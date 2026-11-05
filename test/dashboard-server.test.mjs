@@ -249,8 +249,8 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(operationalReadiness.publishingEnabled, false);
   const noPriorReconcile = await fetchDashboard(base + "/api/uploads/reconcile", { method: "POST", headers, body: JSON.stringify({ jobId: "no-prior-job", videoPath: "README.md", metadataPath: "README.md", approvalPath: "README.md" }) });
   const noPriorBody = await noPriorReconcile.json();
-  assert.equal(noPriorReconcile.status, 409, JSON.stringify(noPriorBody));
-  assert.match(noPriorBody.error, /never create a new upload/i);
+  assert.equal(noPriorReconcile.status, 503, JSON.stringify(noPriorBody));
+  assert.match(noPriorBody.error, /unreadable or unsafe/i, "a symlinked attempt ledger must be reported as unavailable, not as an absent prior attempt");
   const symlinkReconcile = await fetchDashboard(base + "/api/uploads/reconcile", { method: "POST", headers, body: JSON.stringify({ jobId: "symlink-job", videoPath: symlinkName, metadataPath: "README.md", approvalPath: "README.md" }) });
   const symlinkBody = await symlinkReconcile.json();
   assert.equal(symlinkReconcile.status, 400, JSON.stringify(symlinkBody));
