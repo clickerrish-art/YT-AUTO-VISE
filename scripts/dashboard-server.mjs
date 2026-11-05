@@ -2661,6 +2661,11 @@ const server = http.createServer(async (req, res) => {
       return taskResult.value;
     }
     if (req.method === "POST" && url.pathname === "/api/worker/quarantine-release") {
+      const releaseToken = process.env.DASHBOARD_QUARANTINE_RELEASE_TOKEN;
+      if (!releaseToken || releaseToken.length < 24 ||
+          matchesOperatorToken(req.headers["x-quarantine-release-token"], releaseToken) !== true) {
+        return json(res, 403, { error: "A separate operator-only quarantine release credential is required" });
+      }
       if (!process.env.DASHBOARD_QUARANTINE_SIGNING_PRIVATE_KEY?.trim()) {
         return json(res, 503, { error: "Signed quarantine release requires a dashboard-only Ed25519 private signing key" });
       }
