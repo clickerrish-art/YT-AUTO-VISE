@@ -4,7 +4,7 @@ import { assertShortParentRelationship, shortParentRelationshipSha256 } from "./
 export const JOB_STATES = Object.freeze([
   "QUEUED", "GENERATING", "GENERATED", "VALIDATING", "BLOCKED", "CANCELLED",
   "AWAITING_HUMAN_REVIEW", "REJECTED", "APPROVED_FOR_PRIVATE_UPLOAD", "UPLOADING_PRIVATE",
-  "PRIVATE_UPLOAD_VERIFIED", "FAILED", "RECOVERY_REQUIRED"
+  "PRIVATE_UPLOAD_VERIFIED", "FAILED", "DEAD_LETTER", "RECOVERY_REQUIRED"
 ]);
 
 const transitions = {
@@ -18,7 +18,8 @@ const transitions = {
   APPROVED_FOR_PRIVATE_UPLOAD: new Set(),
   UPLOADING_PRIVATE: new Set(),
   PRIVATE_UPLOAD_VERIFIED: new Set(),
-  FAILED: new Set(["QUEUED", "CANCELLED"]),
+  FAILED: new Set(["CANCELLED"]),
+  DEAD_LETTER: new Set(["CANCELLED"]),
   RECOVERY_REQUIRED: new Set(["BLOCKED", "FAILED"])
 };
 
@@ -71,6 +72,8 @@ export function createContentJob(input, now = new Date().toISOString()) {
     humanApproval: null,
     attemptCount: 0,
     retryPolicy: { maxAttempts: 2, requiresOperatorRetry: true },
+    retryAuthorizations: [],
+    deadLetterHistory: [],
     workerLease: null,
     metadataPath: null,
     leaseHistory: [],
@@ -105,9 +108,8 @@ export function transitionContentJob(job, nextState, { actor = "local-operator",
     if (job.rightsChecks?.verified !== true) throw new Error("Verified rights evidence is required before human review");
     if (!job.outputArtifacts?.some(a => typeof a.sha256 === "string" && /^[a-f0-9]{64}$/.test(a.sha256))) throw new Error("A checksummed output artifact is required before human review");
   }
-  if (job.state === "FAILED" && nextState === "QUEUED") {
-    if (job.attemptCount >= (job.retryPolicy?.maxAttempts ?? 0)) throw new Error("Retry limit reached");
-    if (job.errorDetails?.retryable !== true) throw new Error("Failure is not marked safe for retry");
+  if (["FAILED", "DEAD_LETTER"].includes(job.state) && nextState === "QUEUED") {
+    throw new Error("Retry requires explicit operator authorization through the retry workflow");
   }
   const updated = { ...job, state: nextState, updatedAt: now, transitionHistory: [...(job.transitionHistory ?? []), { from: job.state, to: nextState, at: now, actor: actor.trim(), reason: reason.trim() }] };
   if (nextState === "GENERATING") {
@@ -170,6 +172,104 @@ export function approveContentJobForPrivateUpload(job, review, now = new Date().
 }
 
 
+/**
+ * Re-queue a failed job only after an authenticated operator explicitly reviews
+ * the failure and records a reason. Exhausted jobs require a one-attempt override.
+ */
+export function authorizeContentJobRetry(job, {
+  actor,
+  reason,
+  overrideRetryLimit = false
+} = {}, now = Date.now()) {
+  if (!job || !["FAILED", "DEAD_LETTER"].includes(job.state)) {
+    throw new Error("Only failed or dead-letter jobs can receive retry authorization");
+  }
+  if (job.workerLease) throw new Error("A leased job cannot be manually re-queued");
+  if (typeof actor !== "string" || !actor.trim() || actor.length > 120) {
+    throw new Error("An authenticated operator identity is required for retry authorization");
+  }
+  if (typeof reason !== "string" || reason.trim().length < 8 || reason.length > 1000) {
+    throw new Error("A retry review reason of 8–1000 characters is required");
+  }
+  if (job.retryPolicy?.requiresOperatorRetry !== true) {
+    throw new Error("This job does not declare the required operator retry policy");
+  }
+  if (job.nextRetryAt) {
+    const retryAt = Date.parse(job.nextRetryAt);
+    if (!Number.isFinite(retryAt)) throw new Error("Persisted retry time is invalid; operator reconciliation is required");
+    if (retryAt > now) throw new Error("Retry backoff has not elapsed");
+  }
+  const maxAttempts = job.retryPolicy?.maxAttempts;
+  const attemptCount = job.attemptCount;
+  if (!Number.isInteger(maxAttempts) || maxAttempts < 1 || !Number.isInteger(attemptCount) || attemptCount < 0) {
+    throw new Error("Retry policy or attempt count is invalid");
+  }
+  const exhausted = attemptCount >= maxAttempts;
+  if (exhausted) {
+    if (job.state !== "DEAD_LETTER" || overrideRetryLimit !== true || job.errorDetails?.retryableAfterOperatorReview !== true) {
+      throw new Error("Retry limit exhausted; a dead-letter job requires an explicit one-attempt operator override after review");
+    }
+  } else if (job.errorDetails?.retryable !== true) {
+    throw new Error("Failure is not marked safe for retry");
+  }
+  if (!exhausted && overrideRetryLimit === true) {
+    throw new Error("Retry-limit override is only valid for an exhausted dead-letter job");
+  }
+  const timestamp = new Date(now).toISOString();
+  const authorization = {
+    actor: actor.trim(),
+    reason: reason.trim(),
+    at: timestamp,
+    attemptCount,
+    previousMaxAttempts: maxAttempts,
+    overrideRetryLimit: exhausted
+  };
+  return {
+    ...job,
+    state: "QUEUED",
+    updatedAt: timestamp,
+    completedAt: null,
+    nextRetryAt: null,
+    retryPolicy: exhausted ? { ...job.retryPolicy, maxAttempts: attemptCount + 1 } : job.retryPolicy,
+    errorDetails: { ...job.errorDetails, retryable: true, retryableAfterOperatorReview: false },
+    retryAuthorizations: [...(job.retryAuthorizations ?? []), authorization],
+    transitionHistory: [...(job.transitionHistory ?? []), {
+      from: job.state,
+      to: "QUEUED",
+      at: timestamp,
+      actor: actor.trim(),
+      reason: reason.trim()
+    }]
+  };
+}
+
+function deadLetterExhaustedJob(job, now, reasonCode = "MAX_ATTEMPTS_EXHAUSTED") {
+  const timestamp = new Date(now).toISOString();
+  const entry = {
+    reasonCode,
+    at: timestamp,
+    attemptCount: job.attemptCount,
+    maxAttempts: job.retryPolicy?.maxAttempts ?? null,
+    errorCode: job.errorDetails?.code ?? null,
+    message: "Automatic retries are exhausted. An operator must review the retained failure evidence before authorizing one additional attempt."
+  };
+  return {
+    ...job,
+    state: "DEAD_LETTER",
+    updatedAt: timestamp,
+    completedAt: timestamp,
+    deadLetter: entry,
+    deadLetterHistory: [...(job.deadLetterHistory ?? []), entry],
+    transitionHistory: [...(job.transitionHistory ?? []), {
+      from: "FAILED",
+      to: "DEAD_LETTER",
+      at: timestamp,
+      actor: "retry-policy",
+      reason: "Retry limit exhausted; held for explicit operator recovery"
+    }]
+  };
+}
+
 const leaseDurationBounds = { min: 5_000, max: 15 * 60_000 };
 const retryDelay = (attemptCount) => Math.min(15 * 60_000, 30_000 * (2 ** Math.max(0, attemptCount - 1)));
 const hashLeaseToken = token => crypto.createHash("sha256").update(token).digest("hex");
@@ -179,14 +279,11 @@ export function claimWorkerLease(job, workerId, { leaseMs = 60_000, now = Date.n
   if (typeof workerId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(workerId)) throw new Error("workerId must be a safe 2–120 character identifier");
   if (!Number.isInteger(leaseMs) || leaseMs < leaseDurationBounds.min || leaseMs > leaseDurationBounds.max) throw new Error("lease duration must be between 5 seconds and 15 minutes");
   if (job.workerLease && Date.parse(job.workerLease.expiresAt) > now) throw new Error("Job already has an active worker lease");
-  let working = job;
-  if (working.state === "FAILED") {
-    if (working.attemptCount >= (working.retryPolicy?.maxAttempts ?? 0)) throw new Error("Retry limit reached");
-    if (working.errorDetails?.retryable !== true) throw new Error("Only retryable failures may be leased again");
-    if (working.nextRetryAt && Date.parse(working.nextRetryAt) > now) throw new Error("Retry backoff has not elapsed");
-    working = transitionContentJob(working, "QUEUED", { actor: workerId, reason: "Retry backoff elapsed; worker claimed retry" }, new Date(now).toISOString());
+  const working = job;
+  if (working.state === "FAILED" || working.state === "DEAD_LETTER") {
+    throw new Error("A failed job requires explicit operator retry authorization before a worker can claim it");
   }
-  if (working.state !== "QUEUED") throw new Error("Only queued or eligible retryable jobs can be claimed");
+  if (working.state !== "QUEUED") throw new Error("Only queued jobs with explicit retry authorization can be claimed");
   const claimedAt = new Date(now).toISOString();
   const token = crypto.randomUUID();
   working = transitionContentJob(working, "GENERATING", { actor: workerId, reason: "Worker lease acquired" }, claimedAt);
@@ -226,9 +323,15 @@ export function completeWorkerLease(job, leaseToken, nextState, patch = {}, now 
   updated.workerLease = terminalStage ? null : job.workerLease;
   updated.leaseHistory = [...(updated.leaseHistory ?? []), { workerId: job.workerLease.workerId, action: terminalStage ? "RELEASED" : "STAGE_COMPLETED", at: timestamp, state: nextState }];
   if (nextState === "FAILED") {
-    const retryable = updated.errorDetails?.retryable === true && updated.attemptCount < (updated.retryPolicy?.maxAttempts ?? 0);
-    updated.errorDetails = { ...updated.errorDetails, retryable };
-    updated.nextRetryAt = retryable ? new Date(now + retryDelay(updated.attemptCount)).toISOString() : null;
+    const failureCanRetry = updated.errorDetails?.retryable === true;
+    const exhausted = failureCanRetry && updated.attemptCount >= (updated.retryPolicy?.maxAttempts ?? 0);
+    updated.errorDetails = {
+      ...updated.errorDetails,
+      retryable: failureCanRetry && !exhausted,
+      ...(exhausted ? { retryableAfterOperatorReview: true, retryLimitReached: true } : {})
+    };
+    updated.nextRetryAt = failureCanRetry && !exhausted ? new Date(now + retryDelay(updated.attemptCount)).toISOString() : null;
+    if (exhausted) updated = deadLetterExhaustedJob(updated, now);
   }
   return updated;
 }
@@ -245,8 +348,14 @@ export function expireWorkerLease(job, now = Date.now()) {
   } else {
     const canRetry = job.attemptCount < (job.retryPolicy?.maxAttempts ?? 0);
     updated = transitionContentJob(job, "FAILED", { actor: "lease-reaper", reason: "Worker lease expired; stale worker results are fenced off" }, timestamp);
-    updated.errorDetails = { code: "WORKER_LEASE_EXPIRED", retryable: canRetry, message: "Worker lease expired; inspect outputs before retrying." };
+    updated.errorDetails = {
+      code: "WORKER_LEASE_EXPIRED",
+      retryable: canRetry,
+      ...(canRetry ? {} : { retryableAfterOperatorReview: true, retryLimitReached: true }),
+      message: "Worker lease expired; inspect outputs before retrying."
+    };
     updated.nextRetryAt = canRetry ? new Date(now + retryDelay(updated.attemptCount)).toISOString() : null;
+    if (!canRetry) updated = deadLetterExhaustedJob(updated, now, "LEASE_EXPIRY_RETRY_LIMIT_EXHAUSTED");
   }
   updated.workerLease = null;
   updated.leaseHistory = [...(updated.leaseHistory ?? []), { workerId: job.workerLease.workerId, action: "EXPIRED", at: timestamp, previousState: previous }];
