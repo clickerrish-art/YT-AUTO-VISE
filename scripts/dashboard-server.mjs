@@ -2661,8 +2661,8 @@ const server = http.createServer(async (req, res) => {
       return taskResult.value;
     }
     if (req.method === "POST" && url.pathname === "/api/worker/quarantine-release") {
-      if (!workerToken || workerToken.length < 24) {
-        return json(res, 503, { error: "Signed quarantine release requires a separately configured DASHBOARD_WORKER_TOKEN" });
+      if (!process.env.DASHBOARD_QUARANTINE_SIGNING_PRIVATE_KEY?.trim()) {
+        return json(res, 503, { error: "Signed quarantine release requires a dashboard-only Ed25519 private signing key" });
       }
       const body = await readBody(req);
       if (typeof body.jobId !== "string" || typeof body.workerId !== "string" ||
@@ -2693,7 +2693,7 @@ const server = http.createServer(async (req, res) => {
         }
         const signedReceipt = createWorkerQuarantineReleaseReceipt({
           workerId: body.workerId, jobId: job.id, attemptId: receipt.attemptId,
-          artifactSha256: receipt.artifactSha256, secret: workerToken
+          artifactSha256: receipt.artifactSha256, privateKeyPem: process.env.DASHBOARD_QUARANTINE_SIGNING_PRIVATE_KEY
         });
         const at = new Date().toISOString();
         state.audit.push({
