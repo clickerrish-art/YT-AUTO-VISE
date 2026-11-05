@@ -293,6 +293,34 @@ test("restart recovery completes rollback after process death during rollback-te
   assert.equal(fs.existsSync(rollbackTempPath), false, "failed rollback rename must clean its temporary file");
   assert.equal(fs.existsSync(lockPath), false, "failed rollback rename must release its operation lock");
 
+  // Recovery can finish restoring every destination but still fail to durably
+  // remove its journal. A denied journal unlink must preserve the journal and
+  // release the lock so a later restart can safely finish cleanup.
+  const originalUnlinkForJournalFailure = fs.unlinkSync;
+  let journalRemovalDenied = false;
+  fs.unlinkSync = function (target, ...args) {
+    if (path.resolve(String(target)) === path.resolve(journalPath) && !journalRemovalDenied) {
+      journalRemovalDenied = true;
+      const error = new Error("injected EACCES removing completed restore journal");
+      error.code = "EACCES";
+      throw error;
+    }
+    return originalUnlinkForJournalFailure.call(this, target, ...args);
+  };
+  try {
+    await assert.rejects(
+      restoreState({ backupPath, rootDir: destination.root, confirm: "YES", overwriteState: true }),
+      error => error?.code === "EACCES"
+    );
+  } finally {
+    fs.unlinkSync = originalUnlinkForJournalFailure;
+  }
+  assert.equal(journalRemovalDenied, true, "recovery must reach the final journal-removal boundary");
+  assert.deepEqual(fs.readFileSync(destinationState), originalStateBytes,
+    "journal cleanup failure must not undo the already-restored original state");
+  assert.equal(fs.existsSync(journalPath), true, "denied journal removal must retain the recovery journal");
+  assert.equal(fs.existsSync(lockPath), false, "journal cleanup failure must release its operation lock");
+
   await assert.rejects(
     restoreState({ backupPath, rootDir: destination.root, confirm: "YES", overwriteState: true }),
     /rolled back safely.*rerun restore explicitly/i
