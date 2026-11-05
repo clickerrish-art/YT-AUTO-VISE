@@ -239,6 +239,14 @@ test("worker lease heartbeat, completion fencing, expiry reaping and restart per
   fs.writeFileSync(statePath, JSON.stringify(persisted, null, 2) + "\n", { mode: 0o600 });
 
   const beforeUnauthorizedRetry = fs.readFileSync(statePath);
+  const unauthenticatedRetry = await fetch(base + "/api/jobs/retry", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-operator-token": "not-the-operator-token" },
+    body: JSON.stringify({ jobId: retryJob.id, reason: "Unauthorized retry attempt" })
+  });
+  assert.equal(unauthenticatedRetry.status, 401);
+  assert.deepEqual(fs.readFileSync(statePath), beforeUnauthorizedRetry,
+    "retry authorization must be restricted to an authenticated operator");
   const genericTransitionRetry = await post("/api/jobs/transition", {
     jobId: retryJob.id,
     nextState: "QUEUED",
