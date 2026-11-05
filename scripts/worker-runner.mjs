@@ -459,9 +459,50 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       if (!jobId) throw new Error("--job-id is required for a single-job reconciliation");
       const local = inspectWorkerState();
       if (!local.uncertainDispatches.some(record => record.jobId === jobId)) throw new Error("The exact job is not present in this worker's uncertain-dispatch quarantine");
-      const report = await reconcileDashboardUpload({ jobId, metadataPath: value("--metadata"), videoPath: value("--video"), approvalPath: value("--approval") });
+      const metadataPath = value("--metadata");
+      const videoPath = value("--video");
+      const approvalPath = value("--approval");
+      const report = await reconcileDashboardUpload({ jobId, metadataPath, videoPath, approvalPath });
+      if (report.verified) {
+        const operatorToken = process.env.DASHBOARD_OPERATOR_TOKEN;
+        const workerSecret = process.env.DASHBOARD_WORKER_TOKEN;
+        if (!workerSecret || workerSecret.length < 24 || workerSecret === operatorToken) {
+          throw new Error("A distinct DASHBOARD_WORKER_TOKEN is required to verify a signed quarantine release");
+        }
+        const videoSha256 = crypto.createHash("sha256").update(fs.readFileSync(path.resolve(videoPath))).digest("hex");
+        const exactAttempts = report.dashboardCorrelation.uploadAttempts.filter(item => item.artifactSha256 === videoSha256);
+        if (exactAttempts.length !== 1 || !exactAttempts[0].attemptId) {
+          throw new Error("Dashboard correlation does not identify exactly one attempt for the reconciled artifact; quarantine remains");
+        }
+        const baseUrl = process.env.DASHBOARD_API_URL ?? DEFAULT_API_URL;
+        const parsed = new URL(baseUrl);
+        const response = await fetch(new URL("/api/worker/quarantine-release", parsed.origin), {
+          method: "POST",
+          headers: { "x-operator-token": operatorToken, "content-type": "application/json", accept: "application/json" },
+          body: JSON.stringify({ workerId: local.workerId, jobId }),
+          redirect: "error", signal: AbortSignal.timeout(15_000)
+        });
+        let payload;
+        try { payload = await response.json(); }
+        catch (cause) { throw new Error("Signed quarantine release endpoint returned unreadable JSON; quarantine remains", { cause }); }
+        if (!response.ok || !payload?.receipt || payload.publishingEnabled !== false) {
+          throw new Error("Dashboard did not issue a signed quarantine release receipt; quarantine remains");
+        }
+        const statePath = cooldownStatePath(
+          local.workerId,
+          process.env.WORKER_BACKOFF_STATE_PATH,
+          process.env.WORKER_STATE_DIR ?? "run-logs"
+        );
+        const release = applyWorkerQuarantineRelease({
+          statePath, workerId: local.workerId, jobId,
+          attemptId: exactAttempts[0].attemptId, artifactSha256: videoSha256,
+          receipt: payload.receipt, secret: workerSecret
+        });
+        report.quarantineReleased = release.released;
+        report.quarantineRelease = release;
+      }
       console.log(JSON.stringify({ workerId: local.workerId, report }));
-      if (!report.verified) process.exitCode = 2;
+      if (!report.verified || !report.quarantineReleased) process.exitCode = 2;
     } catch (error) {
       console.error("BLOCKED: " + String(error?.message ?? error));
       process.exitCode = 2;
