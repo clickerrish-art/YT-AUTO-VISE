@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createContentJob, transitionContentJob, authorizeContentJobRetry, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "../scripts/content-job-lifecycle.mjs";
+import { createContentJob, transitionContentJob, authorizeContentJobRetry, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease, deadLetterExhaustedJob } from "../scripts/content-job-lifecycle.mjs";
 import { shortParentRelationshipSha256, shortParentEvidenceSha256 } from "../scripts/short-parent-relationship.mjs";
 
 const input = { idempotencyKey: "draft:short-001", title: "Wildlife storytelling", topic: "How to plan a wildlife documentary", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-24", inputReferences: ["content/short-001-wildlife-video-storytelling.md"] };
@@ -115,6 +115,24 @@ test("failed jobs require an explicit operator retry authorization and exhausted
   assert.equal(exhaustedAgain.retryPolicy.maxAttempts, 3);
 });
 
+
+test("preflight failures can be dead-lettered only after the configured retry limit is exhausted", () => {
+  const failed = {
+    ...createContentJob(input),
+    state: "FAILED",
+    attemptCount: 2,
+    retryPolicy: { maxAttempts: 2, requiresOperatorRetry: true },
+    errorDetails: { code: "RENDER_PREFLIGHT_NOT_READY", retryable: true, retryableAfterOperatorReview: true }
+  };
+  assert.throws(() => deadLetterExhaustedJob({ ...failed, attemptCount: 1 }), /must exhaust its configured attempts/);
+  assert.throws(() => deadLetterExhaustedJob({ ...failed, errorDetails: { retryable: true } }), /operator-review recovery evidence/);
+  const deadLetter = deadLetterExhaustedJob(failed, "2026-11-05T12:00:00.000Z", "RENDER_PREFLIGHT_RETRY_LIMIT_EXHAUSTED");
+  assert.equal(deadLetter.state, "DEAD_LETTER");
+  assert.equal(deadLetter.deadLetter.reasonCode, "RENDER_PREFLIGHT_RETRY_LIMIT_EXHAUSTED");
+  assert.equal(deadLetter.deadLetter.attemptCount, 2);
+  assert.equal(deadLetter.transitionHistory.at(-1).from, "FAILED");
+  assert.equal(deadLetter.transitionHistory.at(-1).to, "DEAD_LETTER");
+});
 
 test("cancellation is fenced while script or narration work is active or its outcome is uncertain", () => {
   const now = "2026-10-31T12:00:00.000Z";
