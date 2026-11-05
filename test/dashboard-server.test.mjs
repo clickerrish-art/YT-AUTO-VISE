@@ -448,6 +448,9 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   validationJob.metadataPath = metadataRelativePath;
   validationJob.metadataVersion = fileSha256(validationMetadataPath);
   validationJob.thumbnailArtifact = { path: thumbnailRelativePath, sha256: fileSha256(validationThumbnailPath) };
+  validationJob.authoring = { narrationStage: { artifacts: { "captions.srt": {
+    path: captionsRelativePath, sha256: fileSha256(validationCaptionsPath)
+  } } } };
   fs.writeFileSync(validationStatePath, JSON.stringify(validationState) + "\n");
   const beforeRejectedValidation = fs.readFileSync(validationStatePath);
   const missingValidationInput = await fetchDashboard(base + "/api/jobs/validate", {
