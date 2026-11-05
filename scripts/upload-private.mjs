@@ -84,7 +84,10 @@ function sha256FileDescriptor(fd) {
 }
 
 function openPinnedVideoFile(filePath) {
-  const flags = fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0);
+  if (typeof fs.constants.O_NOFOLLOW !== "number") {
+    throw new Error("This platform cannot guarantee symlink rejection for the approved upload artifact; refusing to open it");
+  }
+  const flags = fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW;
   const fd = fs.openSync(filePath, flags);
   try {
     const descriptor = fs.fstatSync(fd);
