@@ -357,7 +357,7 @@ export function evaluateNextPublication({
       .map(item => ({
         id: item?.jobId,
         status: String(item?.status ?? "").toLowerCase(),
-        scheduledAt: item?.scheduledAt ?? item?.createdAt
+        scheduledAt: item?.scheduledAt
       }))
   ];
   if (Number.isFinite(proposedTimestamp)) {
