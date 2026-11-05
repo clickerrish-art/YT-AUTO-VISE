@@ -2565,14 +2565,106 @@ const server = http.createServer(async (req, res) => {
         child.on("error", error => { clearTimeout(timer); resolve({ status: "FAILED", exitCode: null, output: (textOutput + "\n" + error.message).slice(-12000), truncated }); });
         child.on("close", code => { clearTimeout(timer); resolve({ status: timedOut ? "TIMED_OUT" : code === 0 ? "SUCCEEDED" : "FAILED", exitCode: code, output: textOutput, truncated }); });
       });
+      const updatedLedger = readUploadLedger();
+      const updatedAttempt = updatedLedger.available
+        ? updatedLedger.attempts.find(item => item.attemptId === prior.attemptId && item.jobId === body.jobId)
+        : null;
+      let verifiedReceipt = null;
+      let verificationError = null;
+      if (output.status === "SUCCEEDED") {
+        try {
+          if (!updatedAttempt || updatedAttempt.status !== "PRIVATE_UPLOAD_VERIFIED" ||
+              updatedAttempt.remoteVideoId !== prior.remoteVideoId ||
+              updatedAttempt.artifactSha256 !== videoSha256 ||
+              !/^[A-Za-z0-9_-]+\\.json$/.test(updatedAttempt.receiptPath ?? "")) {
+            throw new Error("Updated upload ledger does not identify the exact verified attempt and remote video");
+          }
+          const uploadLogDir = path.resolve(root, process.env.UPLOAD_LOG_DIR ?? "run-logs");
+          const receiptRelative = path.relative(root, path.join(uploadLogDir, updatedAttempt.receiptPath));
+          const receiptFile = resolveRepositoryFile(receiptRelative);
+          const receipt = JSON.parse(fs.readFileSync(receiptFile, "utf8"));
+          const configuredChannelId = process.env.SONICVHIBEZ_CHANNEL_ID?.trim();
+          if (!configuredChannelId || receipt.jobId !== body.jobId ||
+              receipt.attemptId !== prior.attemptId ||
+              receipt.videoId !== prior.remoteVideoId ||
+              receipt.artifactSha256 !== videoSha256 ||
+              receipt.channelId !== configuredChannelId ||
+              receipt.channelTitle !== "SonicVhibez" ||
+              receipt.privacyStatus !== "private" ||
+              receipt.remoteStatusVerified !== true ||
+              receipt.publishingEnabled !== false ||
+              !Number.isFinite(Date.parse(receipt.actualPublishedAt ?? ""))) {
+            throw new Error("Persisted receipt does not independently bind the exact private SonicVhibez upload, artifact and actual timestamp");
+          }
+          verifiedReceipt = receipt;
+        } catch (error) {
+          verificationError = String(error?.message ?? "Verified upload receipt could not be validated").slice(0, 500);
+        }
+      }
       const release = await acquireStateLock();
+      let jobStateUpdated = false;
       try {
         const state = loadState();
-        state.audit.push({ id: crypto.randomUUID(), action: output.status === "SUCCEEDED" ? "UPLOAD_RECONCILIATION_VERIFIED" : "UPLOAD_RECONCILIATION_BLOCKED", jobId: body.jobId, remoteVideoId: prior.remoteVideoId, artifactSha256: videoSha256, actor: actor.trim(), at: new Date().toISOString(), reason: output.status === "SUCCEEDED" ? "Read-only YouTube reconciliation completed" : "Read-only reconciliation did not prove private status" });
+        const jobIndex = state.jobs.findIndex(item => item.kind === "CONTENT_PRODUCTION" && item.id === body.jobId);
+        const job = jobIndex >= 0 ? state.jobs[jobIndex] : null;
+        const eligibleState = job && ["RECOVERY_REQUIRED", "UPLOADING_PRIVATE", "APPROVED_FOR_PRIVATE_UPLOAD", "PRIVATE_UPLOAD_VERIFIED"].includes(job.state);
+        const verified = output.status === "SUCCEEDED" && verifiedReceipt && eligibleState;
+        const at = new Date().toISOString();
+        if (verified && job.state !== "PRIVATE_UPLOAD_VERIFIED") {
+          const previousState = job.state;
+          const updatedJob = {
+            ...job,
+            state: "PRIVATE_UPLOAD_VERIFIED",
+            remoteVideoId: verifiedReceipt.videoId,
+            uploadReceipt: structuredClone(verifiedReceipt),
+            completedAt: at,
+            updatedAt: at,
+            workerLease: null,
+            transitionHistory: [...(job.transitionHistory ?? []), {
+              from: previousState,
+              to: "PRIVATE_UPLOAD_VERIFIED",
+              at,
+              actor: actor.trim(),
+              reason: "Exact prior upload attempt and persisted private SonicVhibez receipt independently reconciled"
+            }]
+          };
+          if (job.workerLease) updatedJob.leaseHistory = [...(job.leaseHistory ?? []), { workerId: job.workerLease.workerId, action: "RECONCILIATION_RELEASED", at, state: "PRIVATE_UPLOAD_VERIFIED" }];
+          state.jobs[jobIndex] = updatedJob;
+          jobStateUpdated = true;
+        } else if (verified && job.remoteVideoId === verifiedReceipt.videoId &&
+                   job.uploadReceipt?.attemptId === verifiedReceipt.attemptId) {
+          jobStateUpdated = true;
+        }
+        state.audit.push({
+          id: crypto.randomUUID(),
+          action: verified ? "UPLOAD_RECONCILIATION_VERIFIED" : "UPLOAD_RECONCILIATION_BLOCKED",
+          jobId: body.jobId,
+          attemptId: prior.attemptId,
+          remoteVideoId: prior.remoteVideoId,
+          artifactSha256: videoSha256,
+          metadataVersion: updatedAttempt?.metadataVersion ?? null,
+          channelId: verifiedReceipt?.channelId ?? null,
+          visibility: verifiedReceipt?.privacyStatus ?? null,
+          jobState: job ? state.jobs[jobIndex]?.state ?? job.state : null,
+          actor: actor.trim(),
+          at,
+          reason: verified
+            ? "Exact persisted private-upload receipt verified; job made terminal and non-dispatchable"
+            : verificationError ?? (output.status === "SUCCEEDED"
+              ? "Remote verification completed but the exact dashboard job/receipt binding was not eligible for terminal transition"
+              : "Read-only reconciliation did not prove private status")
+        });
         saveState(state);
       } finally { release(); }
-      const updatedLedger = readUploadLedger();
-      return json(res, output.status === "SUCCEEDED" ? 200 : 409, { reconciliation: output, uploadLedger: updatedLedger, publishingEnabled: false, uploadAttemptCreated: false });
+      const reconciled = output.status === "SUCCEEDED" && verifiedReceipt !== null && jobStateUpdated;
+      return json(res, reconciled ? 200 : 409, {
+        reconciliation: { ...output, status: reconciled ? "SUCCEEDED" : "FAILED", verificationError },
+        uploadLedger: updatedLedger,
+        jobStateUpdated,
+        publishingEnabled: false,
+        uploadAttemptCreated: false,
+        quarantineReleased: false
+      });
       });
       if (!taskResult.acquired) return json(res, 409, { error: "Reconciliation is already running for this job" });
       return taskResult.value;
