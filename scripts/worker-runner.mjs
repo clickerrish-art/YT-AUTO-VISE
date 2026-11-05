@@ -585,8 +585,11 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       let receiptFd;
       let receiptText;
       try {
-        // O_NOFOLLOW closes the lstat/read symlink-swap window for the signed handoff file.
-        receiptFd = fs.openSync(resolvedReceiptPath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+        // Fail closed on platforms that cannot atomically refuse symlinks during open.
+        if (typeof fs.constants.O_NOFOLLOW !== "number") {
+          throw new Error("This platform cannot safely consume signed quarantine receipt files without O_NOFOLLOW");
+        }
+        receiptFd = fs.openSync(resolvedReceiptPath, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW);
         const receiptStat = fs.fstatSync(receiptFd);
         if (!receiptStat.isFile() || receiptStat.size > 64 * 1024) {
           throw new Error("Quarantine release receipt must be a regular file no larger than 64 KiB");
