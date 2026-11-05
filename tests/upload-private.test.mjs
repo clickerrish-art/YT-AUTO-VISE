@@ -15,9 +15,9 @@ const PARENT_SOURCE_EVIDENCE_SHA256 = crypto.createHash("sha256").update(fs.read
 test("private uploader never substitutes local upload time for a missing remote publication timestamp", () => {
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
   assert.match(source, /REMOTE_ACTUAL_PUBLICATION_TIMESTAMP_MISSING/);
-  assert.match(source, /Number\\.isFinite\\(strictIsoTimestamp\\(actualPublishedAt\\)\\)/);
-  assert.doesNotMatch(source, /actualPublishedAt:\\s*[^,\\n]+\\?\\?\\s*(?:timestamp|prior\\.startedAt)/);
-  assert.doesNotMatch(source, /(?:prior|attempt)\\.actualPublishedAt\\s*=\\s*[^;]+\\?\\?/);
+  assert.match(source, /Number\.isFinite\(strictIsoTimestamp\(actualPublishedAt\)\)/);
+  assert.doesNotMatch(source, /actualPublishedAt:\s*[^,\n]+\?\?\s*(?:timestamp|prior\.startedAt)/);
+  assert.doesNotMatch(source, /(?:prior|attempt)\.actualPublishedAt\s*=\s*[^;]+\?\?/);
 });
 function makeShortParentRelationship(jobId, childMediaSha256, childMetadataSha256) {
   const relationship = {
