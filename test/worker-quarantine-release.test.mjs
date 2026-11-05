@@ -116,6 +116,25 @@ test("quarantine release serializes consumers and fails closed on an existing re
   assert.deepEqual(persisted.consumedReleaseNonces, []);
 });
 
+test("worker startup preserves a process lock owned by another worker", async t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "worker-existing-process-lock-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const worker = "existing-process-lock-test";
+  const identity = crypto.createHash("sha256").update(worker).digest("hex").slice(0, 20);
+  const statePath = path.join(dir, "worker-backoff-" + identity + ".json");
+  const lockContents = JSON.stringify({ pid: process.pid, owner: "existing-worker" });
+  fs.writeFileSync(statePath + ".process.lock", lockContents, { mode: 0o600 });
+  await assert.rejects(runWorker({
+    baseUrl: "http://127.0.0.1:8787",
+    token: "worker-token-for-lock-test-123456",
+    workerId: worker,
+    once: true,
+    stateDirectory: dir,
+    fetchImpl: async () => new Response(JSON.stringify({ jobs: [] }), { status: 200 })
+  }), /already locked/i);
+  assert.equal(fs.readFileSync(statePath + ".process.lock", "utf8"), lockContents, "failed startup must not unlink another worker's lock");
+});
+
 test("worker startup refuses an active quarantine release lock", async t => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "worker-start-release-lock-"));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
