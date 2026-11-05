@@ -509,3 +509,25 @@ test("rolling-cycle owner approval requires a calendar-valid timezone-qualified 
     assert.ok(result.errors.some(error => error.includes("calendar-valid ISO approval timestamp")));
   }
 });
+
+
+test("rolling-cycle validator returns a structured error for an invalid timezone", () => {
+  const items = [
+    { id: "cycle-1", contentType: "long_form", scheduledAt: "2026-11-01T15:00:00Z" },
+    { id: "cycle-2", contentType: "long_form", scheduledAt: "2026-11-04T15:00:00Z" }
+  ];
+  const result = validateRollingPublicationCycle(items, {
+    timeZone: "Not/A_Real_Timezone",
+    ownerApprovedPolicy: {
+      ownerApproved: true,
+      approvedBy: "project-owner",
+      approvedAt: "2026-10-30T18:00:00+02:00",
+      timeZone: "Not/A_Real_Timezone",
+      minSpacingHours: 72,
+      mode: "rolling",
+      weeklyPublicationTarget: 1
+    }
+  });
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.includes("timeZone must be a valid IANA timezone"));
+});
