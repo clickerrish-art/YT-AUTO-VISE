@@ -113,6 +113,12 @@ test("dispatchable queue is read-only, approval-gated, ordered by scheduled inst
   const state = JSON.parse(fs.readFileSync(statePath, "utf8"));
   const saturday = futureScheduleDate("Saturday", 1);
   const tuesday = futureScheduleDate("Tuesday", 2);
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
+  }).format(new Date());
+  const currentTime = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Africa/Johannesburg", hour: "2-digit", minute: "2-digit", hourCycle: "h23"
+  }).format(new Date());
   const fixedCreatedAt = "2026-11-05T12:00:00.000Z";
 
   state.jobs = [
@@ -123,6 +129,7 @@ test("dispatchable queue is read-only, approval-gated, ordered by scheduled inst
     job("job-malformed-slot", { scheduledDate: saturday, scheduledTime: "not-a-time", timezone: "UTC", createdAt: "2026-11-05T11:00:00.000Z" }),
     job("job-expired-slot", { scheduledDate: "2026-11-04", scheduledTime: "17:00", createdAt: "2026-11-04T08:00:00.000Z" }),
     job("job-no-slot", { createdAt: "2026-11-05T10:00:00.000Z" }),
+    job("job-due-slot", { scheduledDate: today, scheduledTime: currentTime, createdAt: "2026-11-05T06:00:00.000Z" }),
     job("job-unapproved", { scheduledDate: saturday, createdAt: "2026-11-05T07:00:00.000Z", approved: false }),
     job("job-not-queued", { scheduledDate: saturday, state: "GENERATING" })
   ];
@@ -138,21 +145,33 @@ test("dispatchable queue is read-only, approval-gated, ordered by scheduled inst
   assert.equal(response.status, 200, JSON.stringify(body));
   assert.equal(body.readOnly, true);
   assert.equal(body.publishingEnabled, false);
-  assert.equal(body.queuedCount, 8, "all queued jobs are counted, including jobs held behind approval or an expired slot");
+  assert.equal(body.queuedCount, 9, "all queued jobs are counted, including jobs held behind approval, future slots or expired dates");
   assert.equal(body.queuedWithoutApprovedRenderPlan, 1);
-  assert.equal(body.dispatchableCount, 4);
-  assert.equal(body.jobs.some(item => item.id === "job-expired-slot"), false,
-    "an approved job whose explicit Johannesburg slot has elapsed must remain held rather than dispatch immediately");
+  assert.equal(body.dispatchableCount, 1);
+  assert.deepEqual(body.jobs.map(item => item.id), ["job-due-slot"],
+    "only approved jobs whose explicit Johannesburg slot is due today may be dispatched");
   assert.equal(body.queuedWithoutValidSlot, 2);
-  assert.equal(body.queuedWithExpiredSlot, 1, "the read-only queue response must explain how many jobs are held because their slots expired");
-  assert.deepEqual(body.jobs.map(item => item.id), [
-    "job-earlier-slot",
-    "job-tie-a",
-    "job-tie-z",
-    "job-later-slot"
-  ], "only valid explicit Johannesburg slots are dispatchable; malformed or absent slots remain held");
+  assert.equal(body.queuedWithFutureSlot, 4, "future slots must remain queued until their local scheduled time arrives");
+  assert.equal(body.queuedWithExpiredSlot, 1, "prior-date slots require explicit operator rescheduling rather than immediate dispatch");
   assert.deepEqual(fs.readFileSync(statePath), before,
     "dispatch discovery must not mutate durable job state or audit history");
+
+  const earlyDispatch = await fetch(base + "/api/jobs/produce", {
+    method: "POST",
+    headers: {
+      "x-worker-token": "dispatch-worker-" + "y".repeat(40),
+      "x-worker-id": "dispatch-order-worker",
+      "content-type": "application/json"
+    },
+    body: JSON.stringify({ jobId: "job-later-slot" })
+  });
+  const earlyDispatchBody = await earlyDispatch.json();
+  assert.equal(earlyDispatch.status, 409, JSON.stringify(earlyDispatchBody));
+  assert.equal(earlyDispatchBody.renderStarted, false);
+  assert.equal(earlyDispatchBody.publishingEnabled, false);
+  assert.match(earlyDispatchBody.error, /slot.*due today/i);
+  assert.deepEqual(fs.readFileSync(statePath), before,
+    "direct worker API calls must not start a future-slot job or mutate state/audit history");
 
   const limited = await fetch(base + "/api/jobs/dispatchable?limit=3", {
     headers: { "x-worker-token": "dispatch-worker-" + "y".repeat(40), "x-worker-id": "dispatch-order-worker" }
