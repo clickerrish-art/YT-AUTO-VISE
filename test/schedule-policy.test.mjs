@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validatePublicationSlot, weeklyUtcCronGaps, localDateTimeToIso, evaluateNextPublication, isValidZonedIsoTimestamp, validateCadenceDecision } from "../scripts/schedule-policy.mjs";
+import { validatePublicationSlot, weeklyUtcCronGaps, localDateTimeToIso, evaluateNextPublication, isValidZonedIsoTimestamp, validateCadenceDecision, validateRollingPublicationCycle } from "../scripts/schedule-policy.mjs";
 
 test("strict timestamp validator requires timezone and rejects normalized invalid dates", () => {
   assert.equal(isValidZonedIsoTimestamp("2026-10-25T12:00:00+02:00"), true);
@@ -477,4 +477,35 @@ test("owner cadence approval requires explicit, timezone-qualified, feasible evi
 
   assert.equal(validateCadenceDecision(approved, 71).valid, false,
     "an owner decision cannot weaken the hard 72-hour spacing invariant");
+});
+
+
+test("rolling-cycle owner approval requires a calendar-valid timezone-qualified timestamp", () => {
+  const items = [
+    { id: "cycle-1", contentType: "long_form", scheduledAt: "2026-11-01T15:00:00Z" },
+    { id: "cycle-2", contentType: "long_form", scheduledAt: "2026-11-04T15:00:00Z" },
+    { id: "cycle-3", contentType: "short", scheduledAt: "2026-11-07T15:00:00Z" }
+  ];
+  const ownerApprovedPolicy = {
+    ownerApproved: true,
+    approvedBy: "project-owner",
+    approvedAt: "2026-10-30T18:00:00+02:00",
+    timeZone: "Africa/Johannesburg",
+    minSpacingHours: 72,
+    mode: "rolling",
+    weeklyPublicationTarget: 1
+  };
+  assert.equal(validateRollingPublicationCycle(items, { ownerApprovedPolicy }).valid, true);
+  for (const approvedAt of [
+    "2026-02-31T18:00:00Z",
+    "2026-10-30T18:00:00",
+    "2026-10-30T18:00:00+15:00",
+    "not-a-date"
+  ]) {
+    const result = validateRollingPublicationCycle(items, {
+      ownerApprovedPolicy: { ...ownerApprovedPolicy, approvedAt }
+    });
+    assert.equal(result.valid, false, "must reject invalid owner approval timestamp " + approvedAt);
+    assert.ok(result.errors.some(error => error.includes("calendar-valid ISO approval timestamp")));
+  }
 });
