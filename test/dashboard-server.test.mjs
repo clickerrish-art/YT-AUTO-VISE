@@ -1474,7 +1474,7 @@ test("all dashboard POST routes reject empty operation payloads without mutating
   const unsignedRelease = await fetchDashboard(base + "/api/worker/quarantine-release", {
     method: "POST", headers, body: JSON.stringify({ jobId: "job-release-123", workerId: "worker-test" })
   });
-  assert.equal(unsignedRelease.status, 503, "release endpoint must fail closed when the dashboard-only signing key is absent");
+  assert.equal(unsignedRelease.status, 403, "release endpoint must require the separate operator-only release credential");
   assert.equal(fs.readFileSync(stateFile, "utf8"), originalState, "unsigned release must not mutate dashboard state");
 });
 
