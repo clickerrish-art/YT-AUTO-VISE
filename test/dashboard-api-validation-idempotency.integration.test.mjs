@@ -54,6 +54,9 @@ test("technical validation retries are idempotent and do not duplicate audit his
   job.metadataVersion = sha256(metadataBytes);
   job.outputArtifacts = [{ path: relative(mediaPath), sha256: sha256(mediaBytes) }];
   job.thumbnailArtifact = { path: relative(thumbnailPath), sha256: sha256(thumbnailBytes) };
+  job.authoring = { narrationStage: { artifacts: { "captions.srt": {
+    path: relative(captionsPath), sha256: sha256(fs.readFileSync(captionsPath))
+  } } } };
   const stateFile = path.join(stateDir, "dashboard-state.json");
   fs.writeFileSync(stateFile, JSON.stringify({
     version: 1, queueItems: [], campaigns: [], audit: [], jobs: [job], uploads: [],
