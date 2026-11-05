@@ -76,7 +76,7 @@ Artifact: [Non-destructive branch inventory workflow 41940205685](https://github
 ## Human review decisions required
 
 1. Review the final diff and tests for the 17 critical paths, prioritizing authentication/authorization, private upload authorization, history reconciliation, Meta identity boundaries, restore transaction recovery, and schedule policy.
-2. Review the 509 implementation-only, 31 implementation-and-test, and 74 mixed branch-only commits for superseded or conflicting implementations; do not infer semantic duplication from commit subjects or file overlap alone.
+2. Review the 540 implementation-only, 71 implementation-and-test, and 75 mixed branch-only commits for superseded or conflicting implementations; do not infer semantic duplication from commit subjects or file overlap alone.
 3. Review the 90 workflow-only and 58 config/content commits for secret exposure, permission broadening, publishing activation, environment drift, and changes to protected brand/channel boundaries.
 4. Confirm that the branch's restored `test/restore-facebook-draft-history.test.mjs` is the intended test and that the main-side revert does not represent a product decision to remove it.
 5. Decide the eventual integration strategy only after the above review. No merge, rebase, reset, force-push, or branch rewrite is authorized by this inventory.

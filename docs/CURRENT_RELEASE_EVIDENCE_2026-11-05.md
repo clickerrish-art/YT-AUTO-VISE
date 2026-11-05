@@ -13,25 +13,27 @@
 
 ## Exact-SHA automated evidence
 
-All results below are tied to candidate `e99bc24511879106157c002c09242315e6219325`.
+The candidate source/test SHA is `8272d2e39868237c05b2951f37bcade6ae6608c4`. The separate documentation-only evidence refresh is on the PR head `2c10dc4f1239113566e14e82aba80416ea47c98c`; application source is unchanged by that documentation commit.
+
+All results below are tied to candidate `8272d2e39868237c05b2951f37bcade6ae6608c4`.
 
 | Check | Run | Result |
 |---|---:|---|
-| Automation/security | [41940205668](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932281012) | PASS |
-| Dashboard Chromium E2E | [41937791880](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41937791880) | PASS — 23/23 tests |
-| Content quality | [41940205730](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280837) | PASS |
-| Metadata validation | [41940205670](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280783) | PASS |
-| Isolated main/candidate baseline | [41940197671](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280933) | PASS |
-| Branch reconciliation inventory | [41940205685](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280768) | PASS — inventory only |
-| Nature Frontiers local draft validation | [41940205706](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280669) | PASS — local validation only |
-| Production readiness | [41940205652](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280922) | HOLD — 13 blockers |
+| Automation/security | [41940205668](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205668) | PASS |
+| Dashboard Chromium E2E | [41940205660](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205660) | PASS — 23/23 tests |
+| Content quality | [41940205730](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205730) | PASS |
+| Metadata validation | [41940205670](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205670) | PASS |
+| Isolated main/candidate baseline | [41940197671](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940197671) | PASS |
+| Branch reconciliation inventory | [41940205685](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205685) | PASS — inventory only |
+| Nature Frontiers local draft validation | [41940205706](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205706) | PASS — local validation only |
+| Production readiness | [41940205652](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205652) | HOLD — 13 blockers |
 
 ### Exact isolated baseline
 
-The retained [baseline-comparison artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280933) records exact checkout SHAs and test exits:
+The retained [baseline-comparison artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940197671) records exact checkout SHAs and test exits:
 
 - Main `fa00d28e7f58911482686e4ad69fac9f4701a2e6`: installation exit 0; 54 Node tests passed, 0 failed, 0 skipped; 8 Python tests passed.
-- Candidate `e99bc24511879106157c002c09242315e6219325`: installation exit 0; 524 Node tests passed across 111/111 test files, 0 failed, 0 skipped; 16 Python tests passed.
+- Candidate `8272d2e39868237c05b2951f37bcade6ae6608c4`: installation exit 0; 524 Node tests passed across 111/111 test files, 0 failed, 0 skipped; 16 Python tests passed.
 - Both Node and Python test commands exited 0 on both checkouts.
 - FFmpeg/FFprobe installation and verification passed.
 - The candidate worker API integration test proves that a scoped worker cannot access operator state or lease claims, that an unknown production job returns 404, and that a queued legacy job without the approved authoring pipeline returns 409 with byte-identical persisted state and no render manifest or per-job media directory.
@@ -40,9 +42,11 @@ The baseline is a test comparison, not proof that every business workflow or pro
 
 ## Live Git and integration state
 
+Branch protection is **UNVERIFIED** because GitHub returned 403 for the main branch protection endpoint; no enabled/disabled assertion is made.
+
 Branch protection is **UNVERIFIED**: GitHub returned 403 when reading the main branch protection endpoint. This report makes no claim that protection is enabled or disabled.
 
-- Candidate branch HEAD: `e99bc24511879106157c002c09242315e6219325`.
+- Candidate branch HEAD: `8272d2e39868237c05b2951f37bcade6ae6608c4`.
 - Main HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6` — unchanged.
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
 - Branch divergence: **2,586 ahead / 2 behind**.
@@ -58,7 +62,7 @@ The inventory's classification is heuristic. GIT-002 human semantic review remai
 
 ## Dashboard acceptance snapshot
 
-The exact-head dashboard run [41937791880](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41937791880) passed **23/23 browser tests**. The source inventory contains 104 controls, 16 forms and 40 route handlers (36 protected API routes). Ten forms have demonstrated successful UI journeys; six downstream forms remain blocked by genuine production prerequisites. DASH-001 remains NOT_TESTED overall because full per-control success, validation, failure, authorization, persistence and recovery acceptance is not complete.
+The exact-head dashboard run [41940205660](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205660) passed **23/23 browser tests**. The source inventory contains 104 controls, 16 forms and 40 route handlers (36 protected API routes). Ten forms have demonstrated successful UI journeys; six downstream forms remain blocked by genuine production prerequisites. DASH-001 remains NOT_TESTED overall because full per-control success, validation, failure, authorization, persistence and recovery acceptance is not complete.
 
 ## Scheduler hardening added on the current candidate
 
