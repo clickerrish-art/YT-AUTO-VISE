@@ -38,7 +38,7 @@ function loadCooldowns(statePath, workerId) {
   try {
     stat = fs.lstatSync(statePath);
   } catch (error) {
-    if (error?.code === "ENOENT") return { cooldowns: new Map(), uncertainDispatches: new Map() };
+    if (error?.code === "ENOENT") return { cooldowns: new Map(), uncertainDispatches: new Map(), consumedReleaseNonces: new Set() };
     throw error;
   }
   if (stat.isSymbolicLink() || !stat.isFile()) {
