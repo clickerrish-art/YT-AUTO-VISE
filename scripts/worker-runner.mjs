@@ -61,19 +61,33 @@ function loadCooldowns(statePath, workerId) {
     }
     cooldowns.set(jobId, { attempts: value.attempts, nextAttemptAt: value.nextAttemptAt });
   }
-  return cooldowns;
+  const uncertainDispatches = new Map();
+  const storedUncertain = parsed.uncertainDispatches ?? {};
+  if (!storedUncertain || typeof storedUncertain !== "object" || Array.isArray(storedUncertain)) {
+    throw new Error("Worker uncertain-dispatch state is invalid; refusing to redispatch quarantined jobs");
+  }
+  for (const [jobId, value] of Object.entries(storedUncertain)) {
+    if (!jobId || !value || value.code !== "WORKER_DISPATCH_OUTCOME_UNCERTAIN" ||
+        typeof value.recordedAt !== "string" || !Number.isFinite(Date.parse(value.recordedAt))) {
+      throw new Error("Worker uncertain-dispatch state contains an invalid quarantine record; refusing to redispatch");
+    }
+    uncertainDispatches.set(jobId, value);
+  }
+  return { cooldowns, uncertainDispatches };
 }
 
-function persistCooldowns(statePath, workerId, cooldowns) {
+function persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches = new Map()) {
   const records = Object.fromEntries([...cooldowns.entries()].map(([jobId, value]) => [jobId, {
     attempts: value.attempts,
     nextAttemptAt: value.nextAttemptAt
   }]));
+  const quarantined = Object.fromEntries([...uncertainDispatches.entries()]);
   atomicWriteJson(statePath, {
     schemaVersion: COOLDOWN_SCHEMA_VERSION,
     workerId,
     updatedAt: new Date().toISOString(),
-    cooldowns: records
+    cooldowns: records,
+    uncertainDispatches: quarantined
   }, { mode: 0o600 });
 }
 
@@ -138,7 +152,7 @@ async function requestJson(fetchImpl, url, options, timeoutMs = 15_000) {
   return { status: response.status, payload };
 }
 
-export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerId, fetchImpl = fetch, limit = 20, cooldowns = new Map(), onCooldownsChanged = () => {}, shouldStop = () => false }) {
+export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerId, fetchImpl = fetch, limit = 20, cooldowns = new Map(), uncertainDispatches = new Map(), onCooldownsChanged = () => {}, onUncertainDispatchesChanged = () => {}, shouldStop = () => false }) {
   const origin = validateConfiguration({ baseUrl, token, workerId, pollIntervalMs: DEFAULT_POLL_INTERVAL_MS });
   if (!Number.isInteger(limit) || limit < 1 || limit > 100) throw new Error("worker dispatch limit must be an integer from 1 to 100");
   const headers = { "x-worker-token": token, "x-worker-id": workerId };
@@ -147,10 +161,12 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
     throw new Error("Dashboard worker API returned an invalid dispatchable-job response");
   }
   const eligibleJobs = listing.payload.jobs.filter(job => {
+    if (uncertainDispatches.has(job?.id)) return false;
     const cooldown = cooldowns.get(job?.id);
     return !cooldown || cooldown.nextAttemptAt <= Date.now();
   });
-  const deferredByBackoff = listing.payload.jobs.length - eligibleJobs.length;
+  const deferredByUncertainOutcome = listing.payload.jobs.filter(job => uncertainDispatches.has(job?.id)).length;
+  const deferredByBackoff = listing.payload.jobs.length - eligibleJobs.length - deferredByUncertainOutcome;
   const results = [];
   let stoppedBeforeDispatch = false;
   for (const job of eligibleJobs) {
@@ -167,6 +183,14 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
         body: JSON.stringify({ jobId: job.id })
       }, 15 * 60_000);
     } catch (error) {
+      if (error?.code === "WORKER_DISPATCH_OUTCOME_UNCERTAIN") {
+        uncertainDispatches.set(job.id, {
+          code: "WORKER_DISPATCH_OUTCOME_UNCERTAIN",
+          recordedAt: new Date().toISOString()
+        });
+        onUncertainDispatchesChanged(uncertainDispatches);
+        throw error;
+      }
       if (error?.status !== 429 || error.retryable !== true) throw error;
       const attempts = Math.min(20, (cooldowns.get(job.id)?.attempts ?? 0) + 1);
       const fallbackDelayMs = Math.min(15 * 60_000, 30_000 * (2 ** Math.max(0, attempts - 1)));
@@ -200,6 +224,7 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
     queuedWithoutApprovedAuthoring: Number.isInteger(listing.payload.queuedWithoutApprovedAuthoring) ? listing.payload.queuedWithoutApprovedAuthoring : 0,
     queuedWithoutApprovedRenderPlan: Number.isInteger(listing.payload.queuedWithoutApprovedRenderPlan) ? listing.payload.queuedWithoutApprovedRenderPlan : 0,
     deferredByBackoff,
+    deferredByUncertainOutcome,
     results,
     stoppedBeforeDispatch,
     undispatchedAfterStop: stoppedBeforeDispatch ? eligibleJobs.length - results.length : 0,
@@ -233,10 +258,12 @@ export async function runWorker({
 } = {}) {
   validateConfiguration({ baseUrl, token, workerId, pollIntervalMs });
   const statePath = cooldownStatePath(workerId, configuredCooldownStatePath, stateDirectory);
-  const cooldowns = loadCooldowns(statePath, workerId);
+  const persistedState = loadCooldowns(statePath, workerId);
+  const cooldowns = persistedState.cooldowns;
+  const uncertainDispatches = persistedState.uncertainDispatches;
   const persist = () => {
     try {
-      persistCooldowns(statePath, workerId, cooldowns);
+      persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches);
     } catch (cause) {
       const error = new Error("Worker retry backoff could not be persisted; stopping to avoid an early redispatch", { cause });
       error.code = "WORKER_BACKOFF_PERSISTENCE_FAILED";
@@ -246,7 +273,7 @@ export async function runWorker({
   do {
     let nextWaitMs = pollIntervalMs;
     try {
-      const result = await runWorkerCycle({ baseUrl, token, workerId, fetchImpl, cooldowns, onCooldownsChanged: persist, shouldStop });
+      const result = await runWorkerCycle({ baseUrl, token, workerId, fetchImpl, cooldowns, uncertainDispatches, onCooldownsChanged: persist, onUncertainDispatchesChanged: persist, shouldStop });
       onCycle(result);
     } catch (error) {
       onError(error);
