@@ -121,6 +121,7 @@ test("dispatchable queue is read-only, approval-gated, ordered by scheduled inst
     job("job-tie-z", { scheduledDate: saturday, scheduledTime: "18:00", createdAt: fixedCreatedAt }),
     job("job-tie-a", { scheduledDate: saturday, scheduledTime: "18:00", createdAt: fixedCreatedAt }),
     job("job-malformed-slot", { scheduledDate: saturday, scheduledTime: "not-a-time", timezone: "UTC", createdAt: "2026-11-05T11:00:00.000Z" }),
+    job("job-expired-slot", { scheduledDate: "2026-11-04", scheduledTime: "17:00", createdAt: "2026-11-04T08:00:00.000Z" }),
     job("job-no-slot", { createdAt: "2026-11-05T10:00:00.000Z" }),
     job("job-unapproved", { scheduledDate: saturday, createdAt: "2026-11-05T07:00:00.000Z", approved: false }),
     job("job-not-queued", { scheduledDate: saturday, state: "GENERATING" })
@@ -137,9 +138,11 @@ test("dispatchable queue is read-only, approval-gated, ordered by scheduled inst
   assert.equal(response.status, 200, JSON.stringify(body));
   assert.equal(body.readOnly, true);
   assert.equal(body.publishingEnabled, false);
-  assert.equal(body.queuedCount, 7, "all queued jobs are counted, including jobs held behind approval");
+  assert.equal(body.queuedCount, 8, "all queued jobs are counted, including jobs held behind approval or an expired slot");
   assert.equal(body.queuedWithoutApprovedRenderPlan, 1);
   assert.equal(body.dispatchableCount, 4);
+  assert.equal(body.jobs.some(item => item.id === "job-expired-slot"), false,
+    "an approved job whose explicit Johannesburg slot has elapsed must remain held rather than dispatch immediately");
   assert.equal(body.queuedWithoutValidSlot, 2);
   assert.deepEqual(body.jobs.map(item => item.id), [
     "job-earlier-slot",
