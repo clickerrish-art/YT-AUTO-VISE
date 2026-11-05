@@ -437,7 +437,7 @@ export function validateRollingPublicationCycle(items, {
     errors.push("an explicit owner-approved rolling publication policy is required");
   } else {
     if (typeof policy.approvedBy !== "string" || policy.approvedBy.trim().length < 2) errors.push("owner-approved policy must identify the approving owner");
-    if (!Number.isFinite(Date.parse(policy.approvedAt ?? ""))) errors.push("owner-approved policy must include a valid approval timestamp");
+    if (!isValidZonedIsoTimestamp(policy.approvedAt)) errors.push("owner-approved policy must include a calendar-valid ISO approval timestamp with an explicit timezone");
     if (policy.timeZone !== timeZone) errors.push("owner-approved policy timezone must match the validated schedule timezone");
     if (policy.minSpacingHours !== minSpacingHours) errors.push("owner-approved policy minimum spacing must match the validated minimum");
     if (policy.mode !== "rolling") errors.push("owner-approved policy mode must be rolling");
