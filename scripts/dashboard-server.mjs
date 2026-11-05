@@ -518,11 +518,17 @@ function safeItem(item) {
   }
   return { id, title, topic, contentType, scheduledDay, scheduledDate, scheduledAt, reservationType: "SCHEDULED_SLOT", productUrl: approvedProductUrl, status: "DRAFT_REVIEW_REQUIRED", updatedAt: new Date().toISOString() };
 }
+const inactivePublicationReservationJobStates = new Set(["CANCELLED", "REJECTED"]);
+const inactiveQueueReservationStatuses = new Set(["cancelled", "canceled", "deleted", "rejected", "skipped"]);
+function isActivePublicationReservationJob(job) {
+  return Boolean(job && job.kind === "CONTENT_PRODUCTION" &&
+    !inactivePublicationReservationJobStates.has(String(job.state ?? "").trim().toUpperCase()));
+}
+
 function reservedPublicationSlots(state, excludeItemId = null) {
   const scheduleConfig = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
   const slots = [];
   const queueReservationDates = new Map();
-  const inactiveQueueReservationStatuses = new Set(["cancelled", "canceled", "deleted", "rejected", "skipped"]);
   for (const item of state.queueItems ?? []) {
     const status = String(item?.status ?? "").toLowerCase();
     if (item.id === excludeItemId || item.reservationType !== "SCHEDULED_SLOT" || inactiveQueueReservationStatuses.has(status)) continue;
@@ -536,11 +542,9 @@ function reservedPublicationSlots(state, excludeItemId = null) {
     queueReservationDates.set(item.id, item.scheduledDate);
   }
   const representedQueueJobs = new Set();
-  const inactiveJobReservationStates = new Set(["CANCELLED", "REJECTED"]);
   for (const job of state.jobs ?? []) {
-    const jobState = String(job?.state ?? "").trim().toUpperCase();
     const date = job?.scheduledSlot?.date;
-    if (!job || inactiveJobReservationStates.has(jobState) || job.kind !== "CONTENT_PRODUCTION" || !date || job.idempotencyKey === "draft:" + excludeItemId) continue;
+    if (!isActivePublicationReservationJob(job) || !date || job.idempotencyKey === "draft:" + excludeItemId) continue;
     const match = /^draft:(.+)$/.exec(String(job.idempotencyKey ?? ""));
     const queueItemId = match?.[1];
     // A queue item and its first matching production job represent one slot. Do
@@ -1207,7 +1211,7 @@ const server = http.createServer(async (req, res) => {
         const spacing = validateReservedPublicationSlot({ id: item.id, scheduledAt: item.scheduledAt }, state);
         if (!spacing.valid) return json(res, 409, { error: "Schedule slot conflicts with an existing reservation or violates minimum publication spacing", blockers: spacing.errors, publishingEnabled: false });
         const slotFingerprint = item.scheduledDate + ":17:00:Africa/Johannesburg";
-        const slotAlreadyReserved = state.jobs.some(existing => existing.kind === "CONTENT_PRODUCTION" && existing.scheduledSlot?.date === item.scheduledDate);
+        const slotAlreadyReserved = state.jobs.some(existing => isActivePublicationReservationJob(existing) && existing.scheduledSlot?.date === item.scheduledDate);
         if (slotAlreadyReserved) return json(res, 409, { error: "This dated schedule slot is already reserved; reuse or edit its existing job", slotFingerprint });
         const job = createContentJob({ idempotencyKey: "draft:" + item.id, title: item.title, topic: item.topic, contentType: item.contentType, scheduledDay: item.scheduledDay, scheduledDate: item.scheduledDate, inputReferences: [] });
         job.transitionHistory[0].actor = operatorId;
@@ -1238,7 +1242,7 @@ const server = http.createServer(async (req, res) => {
           if (existing.requestFingerprint !== job.requestFingerprint) return json(res, 409, { error: "Idempotency key already exists with different job inputs", job: existing });
           return json(res, 200, { job: existing, reused: true, publishingEnabled: false });
         }
-        const slotConflict = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.scheduledSlot?.date === job.scheduledSlot.date);
+        const slotConflict = state.jobs.find(entry => isActivePublicationReservationJob(entry) && entry.scheduledSlot?.date === job.scheduledSlot.date);
         if (slotConflict) {
           if (slotConflict.requestFingerprint === job.requestFingerprint) return json(res, 200, { job: slotConflict, reused: true, publishingEnabled: false, reservationReused: true });
           return json(res, 409, { error: "The requested schedule slot is already reserved by a different job; reuse the existing job for retries", job: slotConflict });
@@ -2890,7 +2894,7 @@ const server = http.createServer(async (req, res) => {
         if (state.queueItems.some(existing => existing.id !== item.id && existing.scheduledDate === item.scheduledDate && existing.reservationType === "SCHEDULED_SLOT" && existing.status !== "CANCELLED")) {
           return json(res, 409, { error: "Another draft already occupies this dated schedule slot" });
         }
-        if (state.jobs.some(existing => existing.kind === "CONTENT_PRODUCTION" && existing.id !== state.jobs.find(j => j.kind === "CONTENT_PRODUCTION" && j.idempotencyKey === "draft:" + item.id)?.id && existing.scheduledSlot?.date === item.scheduledDate)) {
+        if (state.jobs.some(existing => isActivePublicationReservationJob(existing) && existing.id !== state.jobs.find(j => j.kind === "CONTENT_PRODUCTION" && j.idempotencyKey === "draft:" + item.id)?.id && existing.scheduledSlot?.date === item.scheduledDate)) {
           return json(res, 409, { error: "Another production job already occupies this dated schedule slot" });
         }
         state.queueItems[index] = { ...old, ...item, status: old.status, rightsConfirmed: old.rightsConfirmed, complianceReviewed: old.complianceReviewed, updatedAt: new Date().toISOString() };
