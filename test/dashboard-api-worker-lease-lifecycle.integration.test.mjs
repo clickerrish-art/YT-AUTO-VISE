@@ -215,6 +215,107 @@ test("worker lease heartbeat, completion fencing, expiry reaping and restart per
   assert.equal(persistedJob.workerLease, null);
   assert.equal(persisted.audit.filter(event => event.action === "WORKER_LEASE_EXPIRED" && event.jobId === expiringJob.id).length, 1);
 
+  const retryJob = await createJob(
+    "lease-lifecycle-operator-retry:future-slot-3",
+    futureScheduleDate("Saturday", 3),
+    "Operator-authorized retry and dead-letter recovery acceptance"
+  );
+  const firstRetryClaim = await claimJob(retryJob.id, "retry-worker-first", 60_000);
+  const firstFailureResponse = await post("/api/jobs/lease/complete", {
+    jobId: retryJob.id,
+    leaseToken: firstRetryClaim.leaseToken,
+    nextState: "FAILED",
+    result: { errorDetails: { code: "TRANSIENT_RENDER_FAILURE", retryable: true, message: "First controlled retryable failure" } }
+  });
+  const firstFailure = await firstFailureResponse.json();
+  assert.equal(firstFailureResponse.status, 200, JSON.stringify(firstFailure));
+  assert.equal(firstFailure.job.state, "FAILED");
+  assert.equal(firstFailure.job.errorDetails.retryable, true);
+
+  // Move only the isolated fixture's backoff timestamp into the past so this
+  // integration test remains fast while exercising the real operator API.
+  persisted = readPersisted();
+  persisted.jobs.find(job => job.id === retryJob.id).nextRetryAt = new Date(Date.now() - 1_000).toISOString();
+  fs.writeFileSync(statePath, JSON.stringify(persisted, null, 2) + "\n", { mode: 0o600 });
+
+  const beforeUnauthorizedRetry = fs.readFileSync(statePath);
+  const workerAttemptedRetry = await post("/api/jobs/lease/claim", {
+    jobId: retryJob.id,
+    workerId: "retry-worker-without-approval",
+    leaseMs: 60_000
+  });
+  assert.equal(workerAttemptedRetry.status, 400);
+  assert.deepEqual(fs.readFileSync(statePath), beforeUnauthorizedRetry,
+    "a worker must not bypass the operator retry requirement after backoff");
+
+  const operatorRetryResponse = await post("/api/jobs/retry", {
+    jobId: retryJob.id,
+    reason: "Reviewed retained failure evidence and approved the bounded retry"
+  });
+  const operatorRetry = await operatorRetryResponse.json();
+  assert.equal(operatorRetryResponse.status, 200, JSON.stringify(operatorRetry));
+  assert.equal(operatorRetry.retryAuthorized, true);
+  assert.equal(operatorRetry.job.state, "QUEUED");
+  assert.equal(operatorRetry.job.retryAuthorizations.length, 1);
+  assert.equal(operatorRetry.job.retryAuthorizations[0].actor, "worker-lease-lifecycle@example.test");
+  persisted = readPersisted();
+  assert.equal(persisted.audit.filter(event => event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === retryJob.id).length, 1);
+
+  const secondRetryClaim = await claimJob(retryJob.id, "retry-worker-second", 60_000);
+  const secondFailureResponse = await post("/api/jobs/lease/complete", {
+    jobId: retryJob.id,
+    leaseToken: secondRetryClaim.leaseToken,
+    nextState: "FAILED",
+    result: { errorDetails: { code: "TRANSIENT_RENDER_FAILURE", retryable: true, message: "Second controlled retryable failure" } }
+  });
+  const secondFailure = await secondFailureResponse.json();
+  assert.equal(secondFailureResponse.status, 200, JSON.stringify(secondFailure));
+  assert.equal(secondFailure.job.state, "DEAD_LETTER");
+  assert.equal(secondFailure.job.deadLetter.reasonCode, "MAX_ATTEMPTS_EXHAUSTED");
+  assert.equal(secondFailure.job.errorDetails.retryableAfterOperatorReview, true);
+  assert.equal(secondFailure.job.workerLease, null);
+  persisted = readPersisted();
+  assert.equal(persisted.audit.filter(event => event.action === "CONTENT_JOB_DEAD_LETTERED" && event.jobId === retryJob.id).length, 1);
+
+  const beforeRejectedOverride = fs.readFileSync(statePath);
+  const rejectedOverride = await post("/api/jobs/retry", {
+    jobId: retryJob.id,
+    reason: "Reviewed dead-letter evidence but did not authorize an override"
+  });
+  assert.equal(rejectedOverride.status, 400);
+  assert.deepEqual(fs.readFileSync(statePath), beforeRejectedOverride,
+    "an exhausted retry limit must not be bypassed without an explicit override");
+
+  const overrideResponse = await post("/api/jobs/retry", {
+    jobId: retryJob.id,
+    reason: "Reviewed dead-letter evidence and explicitly approved one final attempt",
+    overrideRetryLimit: true
+  });
+  const override = await overrideResponse.json();
+  assert.equal(overrideResponse.status, 200, JSON.stringify(override));
+  assert.equal(override.job.state, "QUEUED");
+  assert.equal(override.job.retryPolicy.maxAttempts, 3);
+  assert.equal(override.job.retryAuthorizations.length, 2);
+  assert.equal(override.job.retryAuthorizations[1].overrideRetryLimit, true);
+  persisted = readPersisted();
+  assert.equal(persisted.audit.filter(event => event.action === "CONTENT_JOB_DEAD_LETTER_RECOVERED" && event.jobId === retryJob.id).length, 1);
+
+  const finalRetryClaim = await claimJob(retryJob.id, "retry-worker-final", 60_000);
+  const finalFailureResponse = await post("/api/jobs/lease/complete", {
+    jobId: retryJob.id,
+    leaseToken: finalRetryClaim.leaseToken,
+    nextState: "FAILED",
+    result: { errorDetails: { code: "TRANSIENT_RENDER_FAILURE", retryable: true, message: "Final explicitly authorized attempt failed" } }
+  });
+  const finalFailure = await finalFailureResponse.json();
+  assert.equal(finalFailureResponse.status, 200, JSON.stringify(finalFailure));
+  assert.equal(finalFailure.job.state, "DEAD_LETTER");
+  assert.equal(finalFailure.job.deadLetterHistory.length, 2);
+  assert.equal(finalFailure.job.retryPolicy.maxAttempts, 3);
+  persisted = readPersisted();
+  assert.equal(persisted.audit.filter(event => event.action === "CONTENT_JOB_DEAD_LETTERED" && event.jobId === retryJob.id).length, 2);
+  assert.equal(persisted.audit.filter(event => event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === retryJob.id).length, 2);
+
   await stopDashboard(instance);
   instance = launchDashboard(await reservePort(), stateDir);
   await waitForReady(instance);
