@@ -512,3 +512,87 @@ test("Retry-After parser clamps excessive values and safely falls back for malfo
   assert.equal(parseRetryAfterMs(new Date(now + 2 * 60 * 60_000).toUTCString(), now), 15 * 60_000);
   assert.equal(parseRetryAfterMs("0", now), 1_000);
 });
+
+
+test("worker persists retry cooldown across restart and does not redispatch early", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-restart-backoff-"));
+  const statePath = path.join(directory, "worker-backoff.json");
+  let postCount = 0;
+  let firstCycle;
+  const fetchImpl = async (url, options = {}) => {
+    if ((options.method ?? "GET") === "GET") {
+      return new Response(JSON.stringify({
+        jobs: [{ id: "job-persisted-backoff", state: "QUEUED" }],
+        queuedCount: 1,
+        publishingEnabled: false
+      }), { status: 200, headers: { "content-type": "application/json" } });
+    }
+    postCount += 1;
+    return new Response(JSON.stringify({ error: "rate limited" }), {
+      status: 429,
+      headers: { "content-type": "application/json", "retry-after": "900" }
+    });
+  };
+  try {
+    await runWorker({
+      baseUrl: "http://127.0.0.1:8787",
+      token,
+      workerId,
+      once: true,
+      pollIntervalMs: 1_000,
+      cooldownStatePath: statePath,
+      fetchImpl,
+      onCycle: result => { firstCycle = result; }
+    });
+    assert.equal(postCount, 1);
+    assert.equal(firstCycle.results[0].httpStatus, 429);
+    const persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
+    assert.equal(persisted.schemaVersion, 1);
+    assert.equal(persisted.workerId, workerId);
+    assert.equal(persisted.cooldowns["job-persisted-backoff"].attempts, 1);
+    assert.ok(persisted.cooldowns["job-persisted-backoff"].nextAttemptAt > Date.now());
+
+    let restartedCycle;
+    await runWorker({
+      baseUrl: "http://127.0.0.1:8787",
+      token,
+      workerId,
+      once: true,
+      pollIntervalMs: 1_000,
+      cooldownStatePath: statePath,
+      fetchImpl,
+      onCycle: result => { restartedCycle = result; }
+    });
+    assert.equal(postCount, 1, "restart must not redispatch the job while its persisted cooldown is active");
+    assert.equal(restartedCycle.deferredByBackoff, 1);
+    assert.deepEqual(restartedCycle.results, []);
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test("worker refuses corrupt persisted cooldown state without contacting the dispatch API", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-corrupt-backoff-"));
+  const statePath = path.join(directory, "worker-backoff.json");
+  fs.writeFileSync(statePath, "{invalid-json");
+  let requests = 0;
+  try {
+    await assert.rejects(runWorker({
+      baseUrl: "http://127.0.0.1:8787",
+      token,
+      workerId,
+      once: true,
+      pollIntervalMs: 1_000,
+      cooldownStatePath: statePath,
+      fetchImpl: async () => {
+        requests += 1;
+        return new Response(JSON.stringify({ jobs: [] }), {
+          status: 200, headers: { "content-type": "application/json" }
+        });
+      }
+    }), /unreadable or corrupt; refusing to reset retry backoff/);
+    assert.equal(requests, 0, "corrupt backoff state must fail before any dispatch request");
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
