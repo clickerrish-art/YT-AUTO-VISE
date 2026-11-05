@@ -514,11 +514,20 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       const receiptPath = value("--receipt-file");
       if (!receiptPath) throw new Error("--receipt-file is required for signed quarantine release consumption");
       const resolvedReceiptPath = path.resolve(receiptPath);
-      const receiptStat = fs.lstatSync(resolvedReceiptPath);
-      if (receiptStat.isSymbolicLink() || !receiptStat.isFile() || receiptStat.size > 64 * 1024) {
-        throw new Error("Quarantine release receipt must be a regular, non-symlink file no larger than 64 KiB");
+      let receiptFd;
+      let receiptText;
+      try {
+        // O_NOFOLLOW closes the lstat/read symlink-swap window for the signed handoff file.
+        receiptFd = fs.openSync(resolvedReceiptPath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+        const receiptStat = fs.fstatSync(receiptFd);
+        if (!receiptStat.isFile() || receiptStat.size > 64 * 1024) {
+          throw new Error("Quarantine release receipt must be a regular file no larger than 64 KiB");
+        }
+        receiptText = fs.readFileSync(receiptFd, "utf8");
+      } finally {
+        if (receiptFd !== undefined) fs.closeSync(receiptFd);
       }
-      const receipt = JSON.parse(fs.readFileSync(resolvedReceiptPath, "utf8"));
+      const receipt = JSON.parse(receiptText);
       const local = inspectWorkerState();
       if (typeof receipt?.jobId !== "string" ||
           !local.uncertainDispatches.some(record => record.jobId === receipt.jobId)) {
