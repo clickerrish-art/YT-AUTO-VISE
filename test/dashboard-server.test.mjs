@@ -807,6 +807,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const dueDispatchTime = new Intl.DateTimeFormat("en-GB", {
     timeZone: "Africa/Johannesburg", hour: "2-digit", minute: "2-digit", hourCycle: "h23"
   }).format(new Date(dueDispatchNow - 2 * 60_000));
+  const originalAuthorScheduledSlot = structuredClone(dueDispatchJob.scheduledSlot);
   dueDispatchJob.scheduledSlot = { date: dueDispatchDate, time: dueDispatchTime, timezone: "Africa/Johannesburg" };
   fs.writeFileSync(dueDispatchStatePath, JSON.stringify(dueDispatchState, null, 2) + "\n", { mode: 0o600 });
   const authorRenderBypass = await fetchDashboard(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: authorJob.id }) });
@@ -816,6 +817,10 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.match(authorRenderBypassBody.error, /failed render preflight/i);
   assert.equal(authorRenderBypassBody.jobState, "FAILED");
   assert.equal(authorRenderBypassBody.requiresOperatorRetry, true);
+  const restoredAuthorState = JSON.parse(fs.readFileSync(dueDispatchStatePath, "utf8"));
+  const restoredAuthorJob = restoredAuthorState.jobs.find(job => job.id === authorJob.id);
+  restoredAuthorJob.scheduledSlot = originalAuthorScheduledSlot;
+  fs.writeFileSync(dueDispatchStatePath, JSON.stringify(restoredAuthorState, null, 2) + "\n", { mode: 0o600 });
 
   const authorState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
   const preflightFailedJob = authorState.jobs.find(job => job.id === authorJob.id);
@@ -959,6 +964,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const protectedState = JSON.parse(fs.readFileSync(protectedStatePath, "utf8"));
   const protectedJobIndex = protectedState.jobs.findIndex(job => job.id === protectedJob.id);
   protectedState.jobs[protectedJobIndex].authoring = { status: "TEST_FIXTURE_ONLY" };
+  const originalProtectedScheduledSlot = structuredClone(protectedState.jobs[protectedJobIndex].scheduledSlot);
   protectedState.jobs[protectedJobIndex].scheduledSlot = dueJohannesburgSlot();
   fs.writeFileSync(protectedStatePath, JSON.stringify(protectedState, null, 2), { mode: 0o600 });
   const protectedDirectory = path.join(process.cwd(), "media", "jobs", protectedJob.id);
@@ -976,6 +982,8 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     assert.deepEqual(fs.readFileSync(protectedOutput), protectedBytes, "existing render output must remain byte-for-byte unchanged");
     const protectedState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
     assert.equal(protectedState.jobs.find(job => job.id === protectedJob.id).state, "QUEUED", "refusal must happen before worker claim");
+    protectedState.jobs.find(job => job.id === protectedJob.id).scheduledSlot = originalProtectedScheduledSlot;
+    fs.writeFileSync(path.join(stateDir, "dashboard-state.json"), JSON.stringify(protectedState, null, 2) + "\n", { mode: 0o600 });
   } finally {
     fs.rmSync(protectedDirectory, { recursive: true, force: true });
   }
@@ -995,6 +1003,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const manifestState = JSON.parse(fs.readFileSync(manifestStatePath, "utf8"));
   const manifestJobIndex = manifestState.jobs.findIndex(job => job.id === manifestJob.id);
   manifestState.jobs[manifestJobIndex].authoring = { status: "TEST_FIXTURE_ONLY" };
+  const originalManifestScheduledSlot = structuredClone(manifestState.jobs[manifestJobIndex].scheduledSlot);
   manifestState.jobs[manifestJobIndex].scheduledSlot = dueJohannesburgSlot();
   fs.writeFileSync(manifestStatePath, JSON.stringify(manifestState, null, 2), { mode: 0o600 });
   const manifestDirectory = path.join(process.cwd(), "content", "job-render-manifests");
@@ -1008,6 +1017,9 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     assert.equal(manifestAttempt.status, 409, JSON.stringify(manifestBody));
     assert.equal(manifestBody.recoveryRequired, true);
     assert.equal(manifestBody.retryAllowed, false);
+    const restoredManifestState = JSON.parse(fs.readFileSync(manifestStatePath, "utf8"));
+    restoredManifestState.jobs.find(job => job.id === manifestJob.id).scheduledSlot = originalManifestScheduledSlot;
+    fs.writeFileSync(manifestStatePath, JSON.stringify(restoredManifestState, null, 2) + "\n", { mode: 0o600 });
     assert.equal(manifestBody.artifactPath, "content/job-render-manifests/" + manifestJob.id + ".json");
     assert.deepEqual(fs.readFileSync(manifestPath), retainedManifestBytes, "an existing render manifest must remain byte-for-byte unchanged");
     const stateAfterManifestRefusal = JSON.parse(fs.readFileSync(manifestStatePath, "utf8"));
