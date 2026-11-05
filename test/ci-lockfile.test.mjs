@@ -37,7 +37,7 @@ test("isolated baseline runs once per PR update and bounds free-runner dependenc
   assert.doesNotMatch(baselineWorkflow, /^  push:/m,
     "the PR-scoped baseline must not queue a duplicate push run for the same candidate SHA");
   assert.match(baselineWorkflow, /timeout 600s sudo apt-get update/);
-  assert.match(baselineWorkflow, /timeout 600s sudo apt-get install/);
+  assert.match(baselineWorkflow, /timeout 900s sudo apt-get install/);
   assert.match(baselineWorkflow, /timeout 600s npm ci --ignore-scripts/);
   assert.match(baselineWorkflow, /timeout 600s npm install --ignore-scripts/);
   assert.match(baselineWorkflow, /timeout 300s python -m pip install/);
