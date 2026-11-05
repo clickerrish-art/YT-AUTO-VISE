@@ -494,7 +494,11 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       const report = await reconcileDashboardUpload({ jobId, metadataPath, videoPath, approvalPath });
       if (report.verified) {
         const operatorToken = process.env.DASHBOARD_OPERATOR_TOKEN;
+        const releaseToken = process.env.DASHBOARD_QUARANTINE_RELEASE_TOKEN;
         const verificationPublicKey = process.env.DASHBOARD_QUARANTINE_SIGNING_PUBLIC_KEY;
+        if (!releaseToken || releaseToken.length < 24) {
+          throw new Error("DASHBOARD_QUARANTINE_RELEASE_TOKEN is an operator-only credential; configure it only on the authorized reconciliation host");
+        }
         if (!verificationPublicKey?.trim()) {
           throw new Error("DASHBOARD_QUARANTINE_SIGNING_PUBLIC_KEY is required; the dashboard private signing key must never be installed on the worker");
         }
@@ -507,7 +511,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         const parsed = new URL(baseUrl);
         const response = await fetch(new URL("/api/worker/quarantine-release", parsed.origin), {
           method: "POST",
-          headers: { "x-operator-token": operatorToken, "content-type": "application/json", accept: "application/json" },
+          headers: { "x-operator-token": operatorToken, "x-quarantine-release-token": releaseToken, "content-type": "application/json", accept: "application/json" },
           body: JSON.stringify({ workerId: local.workerId, jobId }),
           redirect: "error", signal: AbortSignal.timeout(15_000)
         });
