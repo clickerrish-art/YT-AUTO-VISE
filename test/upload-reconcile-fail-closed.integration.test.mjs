@@ -180,7 +180,7 @@ test("duplicate upload attempt identities make reconciliation unavailable withou
       { attemptId: "duplicate-attempt-b", jobId: "no-authoritative-upload-attempt", artifactSha256, status: "PRIVATE_UPLOAD_VERIFIED", remoteVideoId: "ambiguous-remote-id" }
     ]
   };
-  const ledgerBytes = Buffer.from(JSON.stringify(duplicateLedger) + "\\n");
+  const ledgerBytes = Buffer.from(JSON.stringify(duplicateLedger) + "\n");
   fs.writeFileSync(ledgerPath, ledgerBytes, { mode: 0o600 });
   const before = fs.readFileSync(statePath);
 
