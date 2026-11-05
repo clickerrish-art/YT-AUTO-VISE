@@ -141,6 +141,44 @@ test("restart recovery completes rollback after process death during rollback-te
   // The fixture is isolated and the child is confirmed dead. Model the operator
   // removing only the stale lock before restart recovery; leave journal and temp.
   fs.unlinkSync(lockPath);
+
+  // Simulate a torn rollback temp from the killed process, then inject ENOSPC
+  // while recovery rebuilds it from the durable journal. Recovery must fail
+  // closed, retain the journal, and permit a later clean retry.
+  const rollbackTempPath = path.join(destination.stateDir, rollbackTemps[0]);
+  fs.writeFileSync(rollbackTempPath, Buffer.from("partial rollback bytes"));
+  const originalOpen = fs.openSync;
+  const originalWriteFile = fs.writeFileSync;
+  const openedPaths = new Map();
+  let diskFullInjected = false;
+  fs.openSync = function (filePath, ...args) {
+    const fd = originalOpen.call(this, filePath, ...args);
+    if (typeof filePath === "string") openedPaths.set(fd, filePath);
+    return fd;
+  };
+  fs.writeFileSync = function (target, ...args) {
+    if (typeof target === "number" && openedPaths.get(target) === rollbackTempPath && !diskFullInjected) {
+      diskFullInjected = true;
+      const error = new Error("injected ENOSPC while rebuilding rollback temp");
+      error.code = "ENOSPC";
+      throw error;
+    }
+    return originalWriteFile.call(this, target, ...args);
+  };
+  try {
+    await assert.rejects(
+      restoreState({ backupPath, rootDir: destination.root, confirm: "YES", overwriteState: true }),
+      error => error?.code === "ENOSPC"
+    );
+  } finally {
+    fs.openSync = originalOpen;
+    fs.writeFileSync = originalWriteFile;
+  }
+  assert.equal(diskFullInjected, true, "recovery must reach the rollback-temp write before ENOSPC is injected");
+  assert.equal(fs.existsSync(journalPath), true, "failed recovery must retain its durable journal");
+  assert.equal(fs.existsSync(rollbackTempPath), false, "failed rollback-temp write must clean its partial temporary file");
+  assert.equal(fs.existsSync(lockPath), false, "failed recovery must release only its own operation lock");
+
   await assert.rejects(
     restoreState({ backupPath, rootDir: destination.root, confirm: "YES", overwriteState: true }),
     /rolled back safely.*rerun restore explicitly/i
