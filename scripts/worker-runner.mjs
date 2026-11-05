@@ -482,6 +482,12 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       if (!jobId) throw new Error("--job-id is required for a single-job reconciliation");
       const local = inspectWorkerState();
       if (!local.uncertainDispatches.some(record => record.jobId === jobId)) throw new Error("The exact job is not present in this worker's uncertain-dispatch quarantine");
+      const statePath = cooldownStatePath(
+        local.workerId,
+        process.env.WORKER_BACKOFF_STATE_PATH,
+        process.env.WORKER_STATE_DIR ?? "run-logs"
+      );
+      assertWorkerStoppedForQuarantineRelease(statePath);
       const metadataPath = value("--metadata");
       const videoPath = value("--video");
       const approvalPath = value("--approval");
@@ -511,11 +517,6 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
         if (!response.ok || !payload?.receipt || payload.publishingEnabled !== false) {
           throw new Error("Dashboard did not issue a signed quarantine release receipt; quarantine remains");
         }
-        const statePath = cooldownStatePath(
-          local.workerId,
-          process.env.WORKER_BACKOFF_STATE_PATH,
-          process.env.WORKER_STATE_DIR ?? "run-logs"
-        );
         const release = applyWorkerQuarantineRelease({
           statePath, workerId: local.workerId, jobId,
           attemptId: exactAttempts[0].attemptId, artifactSha256: videoSha256,
