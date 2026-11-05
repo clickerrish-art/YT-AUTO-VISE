@@ -2798,7 +2798,7 @@ const server = http.createServer(async (req, res) => {
             const thumbnailPath = current.authoring
               ? contentJobArtifactPaths(current.id).thumbnailPath
               : isShort ? "media/next-short-thumbnail.jpg" : "media/long-form-next-thumbnail.jpg";
-            const thumbnailRun = spawnSync(process.execPath, ["scripts/render-thumbnail.mjs", artifactPath, metadata.title, thumbnailPath], { encoding: "utf8", timeout: 120_000 });
+            const thumbnailRun = spawnSync(process.execPath, [path.join(root, "scripts", "render-thumbnail.mjs"), artifactPath, metadata.title, thumbnailPath], { cwd: root, encoding: "utf8", timeout: 120_000 });
             if (thumbnailRun.error || thumbnailRun.status !== 0) throw new Error("Thumbnail generation failed; install FFmpeg drawtext support and verify the rendered frame");
             const thumbnailFile = resolveRepositoryFile(thumbnailPath);
             const thumbnailProbe = spawnSync("ffprobe", ["-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "json", thumbnailFile], { encoding: "utf8", timeout: 15_000 });
