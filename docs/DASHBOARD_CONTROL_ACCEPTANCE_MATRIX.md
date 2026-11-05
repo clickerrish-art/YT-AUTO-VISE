@@ -1,3 +1,50 @@
+# Dashboard control acceptance — live refresh 5 November 2026
+
+**Current application source/test SHA:** `e99bc24511879106157c002c09242315e6219325`  
+**Documentation-only PR head used for the latest browser run:** `fb8a591bf6739c569c0c6faaed29c16afc75f408`
+
+## Current static inventory
+
+| Item | Count |
+|---|---:|
+| Total controls | 104 |
+| Buttons | 22 |
+| Inputs | 41 |
+| Selects | 26 |
+| Textareas | 15 |
+| Forms | 16 |
+| Route declarations | 40 |
+| Protected API routes | 36 |
+| Non-API handlers | 4 (`GET /`, `GET /healthz`, `GET /readyz`, `GET /operational-readyz`) |
+
+Static inventory is not behavioral acceptance.
+
+## Exact-head browser acceptance
+
+[Dashboard Chromium E2E run 41937791880](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41937791880) completed successfully on documentation-only head `fb8a591bf6739c569c0c6faaed29c16afc75f408`, with application source unchanged from `e99bc24511879106157c002c09242315e6219325`: **23/23 browser tests passed**.
+
+Coverage includes:
+- Operator authentication, keyboard-only connection and token redaction.
+- Accessible names for visible controls, all 104 control identities, all 16 forms, and 320px mobile overflow.
+- Draft creation, queue persistence, refresh, duplicate rejection and cancellation with audit history.
+- Campaign preview/activation safeguards and inactive Safari behavior.
+- Nature Frontiers local draft handling, malformed input rejection and no publishing.
+- Real dashboard/server restart persistence.
+- Fail-closed YouTube publishing and production controls.
+- Short-parent and production-plan UI behavior.
+- Source-bound script authoring, real Edge TTS narration, measured media/caption artifacts and recovery without a second TTS call.
+- Hash-bound production-plan review.
+
+The exact browser log reports 23 tests passed, zero failed. This is broader than the earlier 20-journey checkpoint, but does not establish every control's complete business behavior.
+
+## Current form status
+
+The form-by-form matrix below now includes all 16 form IDs. Ten forms have demonstrated successful UI journeys, including the cancellation form. Six downstream production forms remain blocked because the genuine media, rights, parent, validated export, review or uncertain remote-upload evidence needed for successful operation is not present.
+
+**DASH-001 remains NOT_TESTED overall.** The 23 browser tests and static 104-control inventory do not constitute control-by-control acceptance of every field, validation branch, error state, persistence behavior, authorization boundary and failure/restart path.
+ 
+---
+
 ## Current source inventory and exact-SHA browser evidence — 1 November 2026
 
 Current dashboard source inventory (reproduced from `scripts/dashboard-inventory.mjs` against the live branch source):
@@ -213,6 +260,7 @@ Exact tested application/test candidate for the latest real-narration and audio-
 | `facebookdraftform` | `POST /api/facebook/drafts` | **PASS** | Real local Facebook draft saved and read back; `publishingEnabled=false`; no provider-side post claimed |
 | `authoringform` | `POST /api/jobs/author` | **PASS** | Exact-SHA real-browser journey creates a queued job, submits a source-bound brief through the UI, persists and reads back the script, resets model similarity claims to PENDING, reloads the dashboard, and verifies exact retry reuses the result without a second provider call; [workflow 41137041295](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137041295) on `1334f9380dafbf5f9e6cf272e1bd14feab0045f3` |
 | `scriptreviewform` | `POST /api/jobs/authoring/review` | **PASS** | Same isolated real-browser journey submits an APPROVE decision against the displayed script SHA-256, persists reviewer/reason/approval hash, verifies publishable remains false, and confirms exact repeat reuses the approval; [workflow 41137335224](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41137335224) on `67edf6c84d716a236f457df8b13901eee896d195` (test-only descendant of the previously validated authoring candidate) |
+| `canceljobform` | `POST /api/jobs/transition` | **PASS** | Real-browser cancellation of an unstarted production job; verifies the job becomes `CANCELLED`, transition history records the terminal transition, exactly one operator-attributed `CONTENT_JOB_CANCELLED` audit event persists, and the job disappears from the cancellable selector. Active-lease cancellation is separately rejected without state mutation by the real-server integration test. [Exact-HEAD dashboard E2E 41937791880](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41937791880). |
 | `narrationform` | `POST /api/jobs/narration` | **PASS** | Exact-SHA real-browser journey uses free Edge TTS and FFmpeg/ffprobe; validates 137-word narration, measured 50–60s audio, TTS word-boundary captions, hashes for audio/transcript/captions/report, persistence after reload, one request for a double-click, exact retry reuse, and reconciliation without another TTS call; [workflow 41142796457](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41142796457) on `7c8470a86aab237fe87002adbe8cec8fc47ae4d1` |
 | `narrationreviewform` | `POST /api/jobs/narration/review` | **PASS** | Isolated real-browser journey loads a script-hash-bound narration review bundle, displays transcript/captions and artifact hashes, and exercises the actual TTS audio endpoint: the returned MP3 bytes match the stored audio SHA-256 and the dashboard loads the real audio as a blob URL. A separate synthetic-fixture review journey verifies the three attestation fields and hash-bound APPROVED_FOR_RENDER receipt; no automated test claims a human actually listened to the audio or approved real editorial content. Real-audio playback-bundle coverage is included in [workflow 41142796457](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41142796457); approval-logic fixture coverage remains in [workflow 41139006431](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41139006431). |
 | `productionplanform` | `POST /api/jobs/production-plan` | **PASS** | Exact-SHA isolated Chromium journey submits a valid long-form plan through the real dashboard/server, verifies on-disk scene and evidence hashes, persisted plan read-back and audit event; test-only fixture assets are not production media or rights evidence |
@@ -224,7 +272,7 @@ Exact tested application/test candidate for the latest real-narration and audio-
 | `reviewform` | `POST /api/jobs/review` | **BLOCKED** | UI gate prevents review without technically validated and rights-cleared assets; genuine artifacts and approvals are absent |
 | `reconcileform` | `POST /api/uploads/reconcile` | **BLOCKED** | UI disables reconciliation without a durable upload attempt; a genuine uncertain remote upload receipt/history is absent |
 
-Nine PASS entries are form-specific evidence, not a declaration that DASH-001 is accepted. Six forms remain BLOCKED; these six forms have not passed complete successful UI journeys. BLOCKED means the required genuine business/asset state is absent, not that a mock or placeholder should be introduced.
+Ten PASS entries are form-specific evidence, not a declaration that DASH-001 is accepted. Six forms remain BLOCKED; these six forms have not passed complete successful UI journeys. BLOCKED means the required genuine business/asset state is absent, not that a mock or placeholder should be introduced.
 
 ### Exact-SHA CI
 

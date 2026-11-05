@@ -18,7 +18,7 @@ All results below are tied to candidate `e99bc24511879106157c002c09242315e621932
 | Check | Run | Result |
 |---|---:|---|
 | Automation/security | [41932281012](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932281012) | PASS |
-| Dashboard Chromium E2E | [41932280649](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280649) | PASS |
+| Dashboard Chromium E2E | [41937791880](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41937791880) | PASS — 23/23 tests |
 | Content quality | [41932280837](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280837) | PASS |
 | Metadata validation | [41932280783](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280783) | PASS |
 | Isolated main/candidate baseline | [41932280933](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280933) | PASS |
@@ -53,6 +53,10 @@ The baseline is a test comparison, not proof that every business workflow or pro
 - PR #1 remains **OPEN, DRAFT, UNMERGED**. No merge, reset, rebase, force-push or main-branch edit occurred.
 
 The inventory's classification is heuristic. GIT-002 human semantic review remains NOT TESTED.
+
+## Dashboard acceptance snapshot
+
+The exact-head dashboard run [41937791880](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41937791880) passed **23/23 browser tests**. The source inventory contains 104 controls, 16 forms and 40 route handlers (36 protected API routes). Ten forms have demonstrated successful UI journeys; six downstream forms remain blocked by genuine production prerequisites. DASH-001 remains NOT_TESTED overall because full per-control success, validation, failure, authorization, persistence and recovery acceptance is not complete.
 
 ## API acceptance snapshot
 
