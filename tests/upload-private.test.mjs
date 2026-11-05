@@ -301,7 +301,7 @@ test("private uploader preserves remote video ID and marks recovery if receipt p
         insert: async request => { for await (const _chunk of request.media.body) {} return { data: { id: "VIDEO_PRIVATE_TEST" } }; },
         list: async ({ id }) => {
           if (id === TEST_PARENT_ID) return { data: { items: [{ id: TEST_PARENT_ID, snippet: { channelId: TEST_CHANNEL_ID, title: "Parent test documentary" }, status: { privacyStatus: "private" } }] } };
-          return { data: { items: [{ id: "VIDEO_PRIVATE_TEST", snippet: { channelId: TEST_CHANNEL_ID, title: metadata.title }, status: { privacyStatus: "private" } }] } };
+          return { data: { items: [{ id: "VIDEO_PRIVATE_TEST", snippet: { channelId: TEST_CHANNEL_ID, title: metadata.title, publishedAt: "2026-11-05T12:00:00.000Z" }, status: { privacyStatus: "private" } }] } };
         }
       }
     });
