@@ -15,7 +15,7 @@ import { spawn, spawnSync } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
 import { generateScript } from "./generate-script.mjs";
 import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence, validateConfiguredSonicVhibezChannel, validateParentReceiptTitle, parseShortMetadataJson } from "./short-parent-relationship.mjs";
-import { createContentJob, transitionContentJob, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
+import { createContentJob, transitionContentJob, authorizeContentJobRetry, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
 import { buildVerifiedRightsAssets } from "./rights-evidence.mjs";
 import { canonicalAuthoringScriptSha256, runAuthoringNarrationStage } from "./authoring-production-pipeline.mjs";
@@ -202,7 +202,9 @@ async function reapExpiredWorkerLeases() {
       const result = expireWorkerLease(job);
       if (!result.expired) continue;
       state.jobs[i] = result.job;
-      state.audit.push({ id: crypto.randomUUID(), action: "WORKER_LEASE_AUTO_REAPED", jobId: job.id, workerId: job.workerLease.workerId, previousState: job.state, state: result.job.state, at: new Date().toISOString(), actor: "lease-reaper" });
+      const reapedAt = new Date().toISOString();
+      state.audit.push({ id: crypto.randomUUID(), action: "WORKER_LEASE_AUTO_REAPED", jobId: job.id, workerId: job.workerLease.workerId, previousState: job.state, state: result.job.state, at: reapedAt, actor: "lease-reaper" });
+      if (result.job.state === "DEAD_LETTER") state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_DEAD_LETTERED", jobId: job.id, reasonCode: result.job.deadLetter?.reasonCode ?? "LEASE_EXPIRY_RETRY_LIMIT_EXHAUSTED", attemptCount: result.job.attemptCount, maxAttempts: result.job.retryPolicy?.maxAttempts ?? null, at: reapedAt, actor: "retry-policy" });
       recovered++;
     }
     if (recovered) saveState(state);
@@ -2841,6 +2843,9 @@ const server = http.createServer(async (req, res) => {
         updated.lastWorkerCompletion = { leaseTokenSha256, requestSha256: completionRequestSha256, nextState: body.nextState, completedAt };
         state.jobs[index] = updated;
         state.audit.push({ id: crypto.randomUUID(), action: "WORKER_STAGE_COMPLETED", jobId: body.jobId, workerId: old.workerLease.workerId, from: old.state, to: updated.state, at: completedAt, actor: operatorId });
+        if (updated.state === "DEAD_LETTER") {
+          state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_DEAD_LETTERED", jobId: body.jobId, reasonCode: updated.deadLetter?.reasonCode ?? "MAX_ATTEMPTS_EXHAUSTED", attemptCount: updated.attemptCount, maxAttempts: updated.retryPolicy?.maxAttempts ?? null, at: completedAt, actor: "retry-policy" });
+        }
         saveState(state);
         return json(res, 200, { job: updated, publishingEnabled: false });
       } finally { release(); }
@@ -2856,9 +2861,59 @@ const server = http.createServer(async (req, res) => {
         const result = expireWorkerLease(state.jobs[index]);
         if (!result.expired) return json(res, 409, { error: "No expired worker lease is available to reap", job: state.jobs[index] });
         state.jobs[index] = result.job;
-        state.audit.push({ id: crypto.randomUUID(), action: "WORKER_LEASE_EXPIRED", jobId: body.jobId, previousState: result.job.transitionHistory?.at(-1)?.from, state: result.job.state, at: new Date().toISOString(), actor: "lease-reaper" });
+        const reapedAt = new Date().toISOString();
+        state.audit.push({ id: crypto.randomUUID(), action: "WORKER_LEASE_EXPIRED", jobId: body.jobId, previousState: result.job.transitionHistory?.at(-1)?.from, state: result.job.state, at: reapedAt, actor: "lease-reaper" });
+        if (result.job.state === "DEAD_LETTER") state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_DEAD_LETTERED", jobId: body.jobId, reasonCode: result.job.deadLetter?.reasonCode ?? "LEASE_EXPIRY_RETRY_LIMIT_EXHAUSTED", attemptCount: result.job.attemptCount, maxAttempts: result.job.retryPolicy?.maxAttempts ?? null, at: reapedAt, actor: "retry-policy" });
         saveState(state);
         return json(res, 200, { job: result.job, publishingEnabled: false });
+      } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/jobs/retry") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || typeof body.reason !== "string") {
+        return json(res, 400, { error: "jobId and an operator review reason are required", publishingEnabled: false });
+      }
+      if (body.overrideRetryLimit !== undefined && typeof body.overrideRetryLimit !== "boolean") {
+        return json(res, 400, { error: "overrideRetryLimit must be a boolean when supplied", publishingEnabled: false });
+      }
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const previous = state.jobs[index];
+        const updated = authorizeContentJobRetry(previous, {
+          actor: operatorId,
+          reason: body.reason,
+          overrideRetryLimit: body.overrideRetryLimit === true
+        });
+        state.jobs[index] = updated;
+        const authorization = updated.retryAuthorizations.at(-1);
+        state.audit.push({
+          id: crypto.randomUUID(),
+          action: "CONTENT_JOB_RETRY_AUTHORIZED",
+          jobId: updated.id,
+          from: previous.state,
+          to: updated.state,
+          actor: operatorId,
+          reason: authorization.reason,
+          attemptCount: updated.attemptCount,
+          maxAttempts: updated.retryPolicy.maxAttempts,
+          overrideRetryLimit: authorization.overrideRetryLimit,
+          at: authorization.at
+        });
+        if (previous.state === "DEAD_LETTER") {
+          state.audit.push({
+            id: crypto.randomUUID(),
+            action: "CONTENT_JOB_DEAD_LETTER_RECOVERED",
+            jobId: updated.id,
+            actor: operatorId,
+            reason: authorization.reason,
+            at: authorization.at
+          });
+        }
+        saveState(state);
+        return json(res, 200, { job: updated, publishingEnabled: false, retryAuthorized: true });
       } finally { release(); }
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/transition") {
