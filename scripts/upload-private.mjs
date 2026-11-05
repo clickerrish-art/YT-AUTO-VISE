@@ -377,13 +377,21 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       persistJson(ledgerPath, ledger);
       throw new Error("Existing remote video title, channel or private visibility does not match this approved upload; do not retry");
     }
+    const actualPublishedAt = remoteItem.snippet?.publishedAt;
+    if (!Number.isFinite(strictIsoTimestamp(actualPublishedAt))) {
+      prior.status = "RECOVERY_REQUIRED";
+      prior.errorCode = "REMOTE_ACTUAL_PUBLICATION_TIMESTAMP_MISSING";
+      prior.updatedAt = now().toISOString();
+      persistJson(ledgerPath, ledger);
+      throw new Error("Existing remote video has no valid actual publication timestamp; reconcile it before retrying and never substitute upload time");
+    }
     const timestamp = now().toISOString();
     const receipt = {
       attemptId: prior.attemptId, jobId, timestamp, channelId: expectedChannelId,
       channelTitle: matchedChannel.snippet.title, videoId: prior.remoteVideoId,
       privacyStatus: remoteItem.status.privacyStatus, title: metadata.title,
       format: metadata.contentType ?? metadata.format ?? null,
-      actualPublishedAt: remoteItem.snippet?.publishedAt ?? prior.startedAt,
+      actualPublishedAt,
       artifactSha256: videoSha256, metadataVersion: metadataSha256, reviewer: approval.reviewer,
       rightsEvidenceSha256: approval.rightsEvidenceSha256, remoteStatusVerified: true,
       publishingEnabled: false, url: "https://www.youtube.com/watch?v=" + prior.remoteVideoId
@@ -391,7 +399,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     const receiptPath = path.join(logDir, "upload-" + prior.remoteVideoId + ".json");
     persistJson(receiptPath, receipt);
     prior.status = "PRIVATE_UPLOAD_VERIFIED";
-    prior.actualPublishedAt = remoteItem.snippet?.publishedAt ?? prior.startedAt;
+    prior.actualPublishedAt = actualPublishedAt;
     prior.format = metadata.contentType ?? metadata.format ?? prior.format ?? null;
     prior.receiptPath = path.basename(receiptPath);
     prior.verifiedAt = timestamp;
@@ -557,12 +565,20 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     throw new Error("YouTube may have accepted the upload, but private visibility could not be independently verified; reconcile before retrying");
   }
 
+  const actualPublishedAt = verified.snippet?.publishedAt;
+  if (!Number.isFinite(strictIsoTimestamp(actualPublishedAt))) {
+    attempt.status = "RECOVERY_REQUIRED";
+    attempt.errorCode = "REMOTE_ACTUAL_PUBLICATION_TIMESTAMP_MISSING";
+    attempt.updatedAt = now().toISOString();
+    persistJson(ledgerPath, ledger);
+    throw new Error("YouTube accepted the private upload but returned no valid actual publication timestamp; reconcile the remote video before any retry");
+  }
   const timestamp = now().toISOString();
   const receipt = {
     attemptId: attempt.attemptId, jobId, timestamp, channelId: matchedChannel.id,
     channelTitle: matchedChannel.snippet.title, videoId, privacyStatus: verified.status.privacyStatus,
     title: metadata.title, format: metadata.contentType ?? metadata.format ?? null,
-    actualPublishedAt: verified.snippet?.publishedAt ?? timestamp,
+    actualPublishedAt,
     parentContentId: (metadata.contentType ?? metadata.format) === "short" ? approval.shortParentRelationship.parentContentId : null,
     parentRemoteVideoId: (metadata.contentType ?? metadata.format) === "short" ? approval.shortParentRelationship.parentRemoteVideoId : null,
     shortParentRelationshipSha256: (metadata.contentType ?? metadata.format) === "short" ? approval.shortParentRelationshipSha256 : null,
@@ -575,7 +591,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   try {
     persistJson(receiptPath, receipt);
     attempt.status = "PRIVATE_UPLOAD_VERIFIED";
-    attempt.actualPublishedAt = verified.snippet?.publishedAt ?? timestamp;
+    attempt.actualPublishedAt = actualPublishedAt;
     attempt.receiptPath = path.basename(receiptPath);
     attempt.verifiedAt = timestamp;
     attempt.updatedAt = timestamp;
