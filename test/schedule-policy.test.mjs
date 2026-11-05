@@ -531,3 +531,25 @@ test("rolling-cycle validator returns a structured error for an invalid timezone
   assert.equal(result.valid, false);
   assert.ok(result.errors.includes("timeZone must be a valid IANA timezone"));
 });
+
+test("pending scheduled attempts require scheduledAt and never fall back to createdAt", () => {
+  for (const status of ["scheduled", "queued_for_publication", "pending_schedule"]) {
+    const result = evaluateNextPublication({
+      history: [{
+        id: "remote-prior", status: "private",
+        actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form"
+      }],
+      historyVerified: true,
+      pendingAttempts: [{
+        jobId: "reserved-attempt", status,
+        createdAt: "2026-10-23T15:00:00.000Z"
+      }],
+      proposedAt: "2026-10-26T15:00:00.000Z",
+      jobId: "next-job",
+      format: "long_form"
+    });
+    assert.equal(result.valid, false, status + " without scheduledAt must fail closed");
+    assert.ok(result.errors.some(error => error.includes("missing scheduledAt")),
+      status + " must not use createdAt as a reserved publication time");
+  }
+});
