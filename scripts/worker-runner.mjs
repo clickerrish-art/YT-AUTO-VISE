@@ -93,7 +93,8 @@ function persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches = 
     workerId,
     updatedAt: new Date().toISOString(),
     cooldowns: records,
-    uncertainDispatches: quarantined
+    uncertainDispatches: quarantined,
+    consumedReleaseNonces: [...consumedReleaseNonces].slice(-10000)
   }, { mode: 0o600 });
 }
 
