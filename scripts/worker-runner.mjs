@@ -64,7 +64,7 @@ function loadCooldowns(statePath, workerId) {
   }
   const uncertainDispatches = new Map();
   const storedNonces = parsed.consumedReleaseNonces ?? [];
-  if (!Array.isArray(storedNonces) || storedNonces.length > 10000 || storedNonces.some(value => typeof value !== "string" || !/^[a-f0-9]{48}$/.test(value))) {
+  if (!Array.isArray(storedNonces) || storedNonces.length > 1000000 || storedNonces.some(value => typeof value !== "string" || !/^[a-f0-9]{48}$/.test(value))) {
     throw new Error("Worker consumed release nonce state is invalid; refusing quarantine release");
   }
   const consumedReleaseNonces = new Set(storedNonces);
@@ -94,7 +94,7 @@ function persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches = 
     updatedAt: new Date().toISOString(),
     cooldowns: records,
     uncertainDispatches: quarantined,
-    consumedReleaseNonces: [...consumedReleaseNonces].slice(-10000)
+    consumedReleaseNonces: [...consumedReleaseNonces]
   }, { mode: 0o600 });
 }
 
