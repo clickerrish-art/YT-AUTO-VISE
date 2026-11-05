@@ -68,3 +68,21 @@ test("connected dashboard fits a 320px mobile viewport without page-level horizo
   expect(overflow.documentWidth, JSON.stringify(overflow)).toBeLessThanOrEqual(overflow.viewportWidth);
   expect(overflow.bodyWidth, JSON.stringify(overflow)).toBeLessThanOrEqual(overflow.viewportWidth);
 });
+
+
+test("all 16 dashboard form landmarks have unique, resolvable accessible names", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Operator API token", { exact: true }).fill(operatorToken);
+  await page.getByRole("button", { name: "Connect", exact: true }).click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  const formNames = await page.locator("form:visible").evaluateAll(forms => forms.map(form => {
+    const references = (form.getAttribute("aria-labelledby") ?? "").trim().split(/\\s+/).filter(Boolean);
+    const missingReferences = references.filter(id => !document.getElementById(id));
+    const name = references.map(id => document.getElementById(id)?.textContent?.trim() ?? "").filter(Boolean).join(" ").trim();
+    return { id: form.id || null, name, missingReferences };
+  }));
+  expect(formNames).toHaveLength(16);
+  expect(formNames.filter(form => !form.id || !form.name || form.missingReferences.length), "every form landmark must reference a visible, named heading").toEqual([]);
+  expect(new Set(formNames.map(form => form.name)).size, "form landmark names must distinguish the 16 workflows").toBe(16);
+});
