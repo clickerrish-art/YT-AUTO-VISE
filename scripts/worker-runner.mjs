@@ -109,6 +109,51 @@ export function inspectWorkerState({
   };
 }
 
+export async function reconcileDashboardUpload({
+  baseUrl = process.env.DASHBOARD_API_URL ?? DEFAULT_API_URL,
+  operatorToken = process.env.DASHBOARD_OPERATOR_TOKEN,
+  jobId, metadataPath, videoPath, approvalPath, fetchImpl = fetch
+} = {}) {
+  const inspected = await inspectDashboardReconciliation({ baseUrl, operatorToken, jobId, fetchImpl });
+  for (const [name, value] of Object.entries({ metadataPath, videoPath, approvalPath })) {
+    if (typeof value !== "string" || !value.trim() || value.length > 500 || value.startsWith("/") || value.includes("\\") || value.split("/").some(part => !part || part === "." || part === "..")) {
+      throw new Error(name + " must be a safe repository-relative path");
+    }
+  }
+  if (!inspected.dashboardJobVisible) throw new Error("Dashboard job is not visible; remote reconciliation is blocked");
+  if (!inspected.uploadAttempts.length || !inspected.uploadAttempts.some(item => item.artifactSha256)) {
+    throw new Error("Dashboard has no matching upload attempt evidence; remote reconciliation is blocked");
+  }
+  const parsed = new URL(baseUrl);
+  let response;
+  try {
+    response = await fetchImpl(new URL("/api/uploads/reconcile", parsed.origin), {
+      method: "POST",
+      headers: { "x-operator-token": operatorToken, "content-type": "application/json", accept: "application/json" },
+      body: JSON.stringify({ jobId, metadataPath, videoPath, approvalPath }),
+      redirect: "error", signal: AbortSignal.timeout(75_000)
+    });
+  } catch (cause) {
+    throw new Error("Authenticated upload reconciliation request failed; quarantine remains in place", { cause });
+  }
+  let payload;
+  try { payload = await response.json(); }
+  catch (cause) { throw new Error("Upload reconciliation returned unreadable JSON; quarantine remains in place", { cause }); }
+  const verified = response.status === 200 && payload?.reconciliation?.status === "SUCCEEDED" &&
+    payload?.uploadAttemptCreated === false && payload?.publishingEnabled === false;
+  return {
+    jobId, httpStatus: response.status, verified,
+    reconciliation: payload?.reconciliation ?? null,
+    uploadAttemptCreated: payload?.uploadAttemptCreated ?? null,
+    publishingEnabled: payload?.publishingEnabled === true,
+    quarantineReleased: false,
+    quarantineReleasePermitted: false,
+    dashboardCorrelation: inspected,
+    responseError: payload?.error ?? null,
+    limitation: verified ? "Remote private upload identity and visibility were reverified and the dashboard audit route returned success. Worker quarantine remains until a separate operator-reviewed job-state transition is implemented." : "Remote reconciliation did not return a verified success. Worker quarantine remains in place."
+  };
+}
+
 export async function inspectDashboardReconciliation({
   baseUrl = process.env.DASHBOARD_API_URL ?? DEFAULT_API_URL,
   operatorToken = process.env.DASHBOARD_OPERATOR_TOKEN,
@@ -383,13 +428,15 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     }
   } else if (process.argv.includes("--reconcile-uncertain")) {
     try {
+      const args = process.argv.slice(2);
+      const value = name => { const index = args.indexOf(name); return index >= 0 ? args[index + 1] : undefined; };
+      const jobId = value("--job-id");
+      if (!jobId) throw new Error("--job-id is required for a single-job reconciliation");
       const local = inspectWorkerState();
-      const reports = [];
-      for (const record of local.uncertainDispatches) {
-        reports.push(await inspectDashboardReconciliation({ jobId: record.jobId }));
-      }
-      console.log(JSON.stringify({ workerId: local.workerId, uncertainDispatches: local.uncertainDispatches,
-        dashboardCorrelations: reports, publishingEnabled: false, quarantineReleasePermitted: false }));
+      if (!local.uncertainDispatches.some(record => record.jobId === jobId)) throw new Error("The exact job is not present in this worker's uncertain-dispatch quarantine");
+      const report = await reconcileDashboardUpload({ jobId, metadataPath: value("--metadata"), videoPath: value("--video"), approvalPath: value("--approval") });
+      console.log(JSON.stringify({ workerId: local.workerId, report }));
+      if (!report.verified) process.exitCode = 2;
     } catch (error) {
       console.error("BLOCKED: " + String(error?.message ?? error));
       process.exitCode = 2;
