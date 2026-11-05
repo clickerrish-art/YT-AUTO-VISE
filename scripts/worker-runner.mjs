@@ -456,9 +456,11 @@ export async function runWorker({
       throw new Error("A quarantine release is in progress or requires operator inspection; worker startup is blocked");
     }
   } catch (error) {
-    if (lockFd !== undefined) fs.closeSync(lockFd);
-    try { fs.unlinkSync(lockPath); } catch (cleanupError) {
-      if (cleanupError?.code !== "ENOENT") throw cleanupError;
+    if (lockFd !== undefined) {
+      fs.closeSync(lockFd);
+      try { fs.unlinkSync(lockPath); } catch (cleanupError) {
+        if (cleanupError?.code !== "ENOENT") throw cleanupError;
+      }
     }
     throw new Error("Worker state is already locked or a quarantine release is in progress; inspect the state locks before continuing", { cause: error });
   }
