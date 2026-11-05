@@ -5,6 +5,7 @@ import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
 
 const root = process.cwd();
 
@@ -112,7 +113,7 @@ test("authorized content-job creation persists one audit event and enforces idem
     topic: "How to plan a wildlife documentary",
     contentType: "short",
     scheduledDay: "Saturday",
-    scheduledDate: "2026-11-07",
+    scheduledDate: futureScheduleDate("Saturday", 1),
     inputReferences: ["content/short-001-wildlife-video-storytelling.md"]
   };
   const headers = { "content-type": "application/json", "x-operator-token": token };
@@ -205,7 +206,7 @@ test("new schedule reservation fails closed when an existing reserved queue item
       topic: "Fail closed when an existing reservation has no date",
       contentType: "long_form",
       scheduledDay: "Tuesday",
-      scheduledDate: "2027-04-06",
+      scheduledDate: futureScheduleDate("Tuesday", 2),
       inputReferences: []
     })
   });

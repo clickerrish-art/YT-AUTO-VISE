@@ -5,6 +5,7 @@ import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
 
 const root = process.cwd();
 const token = "draft-update-concurrency-" + "x".repeat(40);
@@ -111,7 +112,7 @@ test("draft updates serialize concurrent writes and persist with audit history a
     topic: "A wildlife creator planning workflow",
     contentType: "long_form",
     scheduledDay: "Tuesday",
-    scheduledDate: "2026-11-10"
+    scheduledDate: futureScheduleDate("Tuesday", 1)
   });
   const saturday = await createDraft({
     id: "draft-update-concurrency-saturday",
@@ -119,7 +120,7 @@ test("draft updates serialize concurrent writes and persist with audit history a
     topic: "An ethical wildlife filming workflow",
     contentType: "short",
     scheduledDay: "Saturday",
-    scheduledDate: "2026-11-14"
+    scheduledDate: futureScheduleDate("Saturday", 1)
   });
 
   const beforeInvalidPayloads = fs.readFileSync(statePath);

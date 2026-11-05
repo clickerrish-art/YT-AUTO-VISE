@@ -552,6 +552,10 @@ function reservedPublicationSlots(state, excludeItemId = null) {
 }
 function validateReservedPublicationSlot(proposed, state, excludeItemId = null) {
   const { scheduleConfig, slots } = reservedPublicationSlots(state, excludeItemId);
+  const proposedTimestamp = typeof proposed?.scheduledAt === "string" ? Date.parse(proposed.scheduledAt) : NaN;
+  if (Number.isFinite(proposedTimestamp) && proposedTimestamp <= Date.now()) {
+    return { valid: false, errors: ["proposed schedule slot must be in the future"] };
+  }
   return validatePublicationSlot(proposed, slots, {
     timeZone: scheduleConfig.timezone,
     minSpacingHours: scheduleConfig.minimumPublicationSpacingHours ?? 72

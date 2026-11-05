@@ -5,6 +5,7 @@ import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
 
 const root = process.cwd();
 
@@ -91,12 +92,12 @@ test("concurrent identical job submissions remain idempotent across a server res
   await waitForReady(base, instance.child, () => instance.logs);
 
   const request = {
-    idempotencyKey: "concurrent-restart-acceptance:short-2026-11-07",
+    idempotencyKey: "concurrent-restart-acceptance:short-future-slot",
     title: "Concurrent API acceptance test",
     topic: "How wildlife researchers distinguish observation from interpretation",
     contentType: "short",
     scheduledDay: "Saturday",
-    scheduledDate: "2026-11-07",
+    scheduledDate: futureScheduleDate("Saturday", 1),
     inputReferences: ["content/short-001-wildlife-video-storytelling.md"]
   };
   const headers = {

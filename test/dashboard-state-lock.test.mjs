@@ -4,6 +4,7 @@ import { spawn } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
 
 test("dashboard never steals an old-looking lock owned by a live process", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-lock-"));
@@ -59,7 +60,7 @@ test("dashboard never steals an old-looking lock owned by a live process", async
       topic: "state lock regression test",
       contentType: "long_form",
       scheduledDay: "Tuesday",
-      scheduledDate: "2026-10-27",
+      scheduledDate: futureScheduleDate("Tuesday", 1),
       productUrl: "https://selar.com/0u19v8u99l"
     })
   });

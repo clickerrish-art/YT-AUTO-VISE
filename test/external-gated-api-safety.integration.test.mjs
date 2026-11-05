@@ -4,6 +4,7 @@ import { spawn } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
 import net from "node:net";
 
 async function availablePort() {
@@ -67,7 +68,7 @@ test("external-gated render and upload-reconciliation routes fail closed without
     topic: "ethical wildlife observation",
     contentType: "short",
     scheduledDay: "Saturday",
-    scheduledDate: "2026-12-05",
+    scheduledDate: futureScheduleDate("Saturday", 1),
     productUrl: "https://selar.com/0u19v8u99l"
   };
   const createdResponse = await fetch(server.base + "/api/drafts", {

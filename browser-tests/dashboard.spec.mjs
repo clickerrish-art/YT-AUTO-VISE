@@ -5,6 +5,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
+import { futureScheduleDate } from "../test/helpers/schedule-fixtures.mjs";
 
 const operatorToken = "e2e-only-token-" + "x".repeat(40);
 
@@ -1168,7 +1169,7 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
       topic: "Interpreting wildlife observations",
       contentType: "short",
       scheduledDay: "Saturday",
-      scheduledDate: "2026-11-07",
+      scheduledDate: futureScheduleDate("Saturday", 1),
       productUrl: "https://selar.com/0u19v8u99l"
     };
     const draftResponse = await fetch(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(draft) });

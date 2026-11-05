@@ -5,6 +5,7 @@ import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
 
 const root = process.cwd();
 const token = "worker-lease-multiprocess-" + "x".repeat(40);
@@ -94,12 +95,12 @@ test("two independent dashboard processes cannot claim the same worker job and r
     method: "POST",
     headers,
     body: JSON.stringify({
-      idempotencyKey: "multiprocess-worker-lease:short:2026-11-07",
+      idempotencyKey: "multiprocess-worker-lease:short:future-slot",
       title: "Worker lease concurrency acceptance",
       topic: "How wildlife researchers distinguish observation from interpretation",
       contentType: "short",
       scheduledDay: "Saturday",
-      scheduledDate: "2026-11-07",
+      scheduledDate: futureScheduleDate("Saturday", 1),
       inputReferences: ["content/short-001-wildlife-video-storytelling.md"]
     })
   });

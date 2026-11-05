@@ -8,6 +8,7 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { canonicalAuthoringScriptSha256 } from "../scripts/authoring-production-pipeline.mjs";
 import { inventoryDashboardSources } from "../scripts/dashboard-inventory.mjs";
+import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
 
 async function reservePort() {
   const server = createServer();
@@ -285,7 +286,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.ok(afterCampaignChanges.audit.some(event => event.action === "CAMPAIGN_DEACTIVATE"));
   const draft = {
     id: "dashboard-test-draft", title: "Test wildlife planning draft", topic: "planning a wildlife video",
-    contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: "2026-10-27", productUrl: "https://selar.com/0u19v8u99l"
+    contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: futureScheduleDate("Tuesday", 1), productUrl: "https://selar.com/0u19v8u99l"
   };
   const created = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(draft) });
   assert.equal(created.status, 201, await created.text());
@@ -294,7 +295,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const conflictingSlot = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-other", title: "Conflicting Tuesday reservation" }) });
   assert.equal(conflictingSlot.status, 409, "different drafts must not reserve the same calendar slot");
   const concurrentDrafts = [
-    { ...draft, id: "dashboard-concurrent-a", title: "Concurrent Tuesday reservation A", scheduledDate: "2026-11-03" },
+    { ...draft, id: "dashboard-concurrent-a", title: "Concurrent Tuesday reservation A", scheduledDate: futureScheduleDate("Tuesday", 2) },
     { ...draft, id: "dashboard-concurrent-b", title: "Concurrent Tuesday reservation B", scheduledDate: "2026-11-03" }
   ];
   const concurrentResponses = await Promise.all(concurrentDrafts.map(item =>
@@ -306,11 +307,11 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     "concurrent requests for the same publication slot must persist exactly one reservation and reject the other"
   );
   const concurrentState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
-  assert.equal(concurrentState.queueItems.filter(item => item.scheduledDate === "2026-11-03" && item.reservationType === "SCHEDULED_SLOT").length, 1);
+  assert.equal(concurrentState.queueItems.filter(item => item.scheduledDate === futureScheduleDate("Tuesday", 2) && item.reservationType === "SCHEDULED_SLOT").length, 1);
   assert.equal(concurrentState.audit.filter(event => event.action === "DRAFT_CREATED" && concurrentDrafts.some(item => item.id === event.itemId)).length, 1);
   const unsupportedDirectJob = await fetchDashboard(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify({
     idempotencyKey: "draft:thursday-job", title: "Unsupported Thursday job", topic: "schedule boundary test",
-    contentType: "long_form", scheduledDay: "Thursday", scheduledDate: "2026-10-29", inputReferences: []
+    contentType: "long_form", scheduledDay: "Thursday", scheduledDate: futureScheduleDate("Thursday", 1), inputReferences: []
   }) });
   assert.equal(unsupportedDirectJob.status, 409, "direct API jobs must respect the authoritative schedule, not just same-date locks");
   assert.match((await unsupportedDirectJob.json()).error, /not an authorized slot/);
@@ -318,6 +319,28 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(invalidDate.status, 400, "invalid calendar dates must be rejected");
   const unsafe = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-unsafe", rightsConfirmed: true }) });
   assert.equal(unsafe.status, 400);
+
+  const beforePastDraft = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
+  const pastDraft = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify({ ...draft, id: "dashboard-test-past-slot", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2000-01-01" }) });
+  const pastDraftBody = await pastDraft.json();
+  assert.equal(pastDraft.status, 409, JSON.stringify(pastDraftBody));
+  assert.match(pastDraftBody.blockers.join(" "), /must be in the future/i);
+  assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), beforePastDraft,
+    "a past draft slot must be rejected without changing queue, jobs or audit state");
+
+  const pastDirectJob = await fetchDashboard(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify({ idempotencyKey: "past-direct-job-fixture", title: "Past direct API slot", topic: "Past schedule fail-closed test", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2000-01-01", inputReferences: [] }) });
+  const pastDirectJobBody = await pastDirectJob.json();
+  assert.equal(pastDirectJob.status, 409, JSON.stringify(pastDirectJobBody));
+  assert.match(pastDirectJobBody.blockers.join(" "), /must be in the future/i);
+  assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), beforePastDraft,
+    "a past direct job slot must be rejected without changing queue, jobs or audit state");
+
+  const pastDraftUpdate = await fetchDashboard(base + "/api/drafts/update", { method: "POST", headers, body: JSON.stringify({ ...draft, scheduledDate: "2000-01-04" }) });
+  const pastDraftUpdateBody = await pastDraftUpdate.json();
+  assert.equal(pastDraftUpdate.status, 409, JSON.stringify(pastDraftUpdateBody));
+  assert.match(pastDraftUpdateBody.blockers.join(" "), /must be in the future/i);
+  assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), beforePastDraft,
+    "moving an existing draft to a past slot must not mutate state or audit history");
 
   const updatedDraftResponse = await fetchDashboard(base + "/api/drafts/update", {
     method: "POST", headers,
@@ -387,7 +410,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     topic: "Technical API validation fixture",
     contentType: "short",
     scheduledDay: "Saturday",
-    scheduledDate: "2026-12-19",
+    scheduledDate: futureScheduleDate("Saturday", 2),
     productUrl: "https://selar.com/0u19v8u99l"
   };
   const validationDraftResponse = await fetchDashboard(base + "/api/drafts", {
@@ -455,7 +478,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     topic: "Safe operator transition concurrency",
     contentType: "short",
     scheduledDay: "Saturday",
-    scheduledDate: "2026-12-26",
+    scheduledDate: futureScheduleDate("Saturday", 3),
     productUrl: "https://selar.com/0u19v8u99l"
   };
   const transitionDraftResponse = await fetchDashboard(base + "/api/drafts", {
@@ -496,7 +519,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.ok(saved.audit.some(event => event.action === "DRAFT_CREATED" && event.itemId === draft.id));
   assert.ok(saved.audit.filter(event => event.itemId === draft.id).every(event => event.actor === "test-owner@example.test"), "audit records must use the configured authenticated operator identity");
   assert.equal(saved.queueItems.find(item => item.id === draft.id).rightsConfirmed, undefined);
-  const authorDraft = { id: "dashboard-test-authoring-short", title: "Evidence-led wildlife Short", topic: "Interpreting wildlife observations", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-11-07", productUrl: "https://selar.com/0u19v8u99l" };
+  const authorDraft = { id: "dashboard-test-authoring-short", title: "Evidence-led wildlife Short", topic: "Interpreting wildlife observations", contentType: "short", scheduledDay: "Saturday", scheduledDate: futureScheduleDate("Saturday", 1), productUrl: "https://selar.com/0u19v8u99l" };
   const authorDraftResponse = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(authorDraft) });
   const authorDraftBody = await authorDraftResponse.json();
   assert.equal(authorDraftResponse.status, 201, JSON.stringify(authorDraftBody));
@@ -801,7 +824,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     topic: "wildlife observation",
     contentType: "short",
     scheduledDay: "Saturday",
-    scheduledDate: "2026-11-21",
+    scheduledDate: futureScheduleDate("Saturday", 4),
     productUrl: "https://selar.com/0u19v8u99l"
   };
   const concurrentDraftResponse = await fetchDashboard(base + "/api/drafts", {
@@ -840,7 +863,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     topic: "ethical wildlife observation",
     contentType: "short",
     scheduledDay: "Saturday",
-    scheduledDate: "2026-12-05",
+    scheduledDate: futureScheduleDate("Saturday", 5),
     productUrl: "https://selar.com/0u19v8u99l"
   };
   const duplicateRaceResponses = await Promise.all([1, 2].map(() =>
@@ -861,7 +884,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     "concurrent duplicate submission must not create multiple production jobs");
   const forgedReview = await fetchDashboard(base + "/api/jobs/transition", { method: "POST", headers, body: JSON.stringify({ jobId: productionJob.id, nextState: "AWAITING_HUMAN_REVIEW", reason: "attempted bypass" }) });
   assert.equal(forgedReview.status, 400, "worker output alone cannot bypass the rights-evidence gate");
-  const shortDraft = { id: "dashboard-test-render-short", title: "Test Short render attempt", topic: "ethical wildlife filming", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-24", productUrl: "https://selar.com/0u19v8u99l" };
+  const shortDraft = { id: "dashboard-test-render-short", title: "Test Short render attempt", topic: "ethical wildlife filming", contentType: "short", scheduledDay: "Saturday", scheduledDate: futureScheduleDate("Saturday", 6), productUrl: "https://selar.com/0u19v8u99l" };
   const shortCreated = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(shortDraft) });
   const shortCreatedBody = await shortCreated.json();
   assert.equal(shortCreated.status, 201, JSON.stringify(shortCreatedBody));
@@ -887,7 +910,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const protectedDraft = {
     id: "dashboard-test-protected-render-output", title: "Protected render output",
     topic: "wildlife observation", contentType: "short", scheduledDay: "Saturday",
-    scheduledDate: "2026-10-31", productUrl: "https://selar.com/0u19v8u99l"
+    scheduledDate: futureScheduleDate("Saturday", 7), productUrl: "https://selar.com/0u19v8u99l"
   };
   const protectedCreated = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(protectedDraft) });
   const protectedCreatedBody = await protectedCreated.json();
@@ -924,7 +947,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const manifestDraft = {
     id: "dashboard-test-protected-render-manifest", title: "Protected render manifest",
     topic: "wildlife observation", contentType: "short", scheduledDay: "Saturday",
-    scheduledDate: "2026-11-14", productUrl: "https://selar.com/0u19v8u99l"
+    scheduledDate: futureScheduleDate("Saturday", 8), productUrl: "https://selar.com/0u19v8u99l"
   };
   const manifestCreated = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(manifestDraft) });
   const manifestCreatedBody = await manifestCreated.json();
@@ -968,7 +991,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   fs.writeFileSync(statePath, JSON.stringify(collisionState, null, 2) + "\n", { mode: 0o600 });
   const distantDraft = {
     id: "dashboard-test-distant-draft", title: "Distant Saturday draft", topic: "creator workflow planning",
-    contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-31", productUrl: "https://selar.com/0u19v8u99l"
+    contentType: "short", scheduledDay: "Saturday", scheduledDate: futureScheduleDate("Saturday", 9), productUrl: "https://selar.com/0u19v8u99l"
   };
   const blockedByExistingCollision = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(distantDraft) });
   const collisionBody = await blockedByExistingCollision.json();

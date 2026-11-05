@@ -4,6 +4,7 @@ import { spawn } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
 
 test("dashboard runs only allowlisted real validation commands and persists results", { skip: process.env.DASHBOARD_TEST_CHILD === "1" }, async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-tasks-"));
@@ -62,7 +63,7 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   assert.equal(recoveredBody.campaignValidation.ok, true);
   assert.equal(recoveredBody.campaigns.find(campaign => campaign.type === "safari_affiliate").status, "INACTIVE");
   assert.equal(recoveredBody.campaigns.find(campaign => campaign.type === "safari_affiliate").destinationUrl, "");
-  const jobInput = { idempotencyKey: "test-job:001", title: "Wildlife storytelling", topic: "How to plan a wildlife documentary", contentType: "short", scheduledDay: "Saturday", scheduledDate: "2026-10-24", inputReferences: ["content/short-001-wildlife-video-storytelling.md"] };
+  const jobInput = { idempotencyKey: "test-job:001", title: "Wildlife storytelling", topic: "How to plan a wildlife documentary", contentType: "short", scheduledDay: "Saturday", scheduledDate: futureScheduleDate("Saturday", 1), inputReferences: ["content/short-001-wildlife-video-storytelling.md"] };
   const createJob = await fetch(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify(jobInput) });
   const createdJobText = await createJob.text();
   assert.equal(createJob.status, 201, createdJobText);
@@ -81,7 +82,7 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   assert.equal(conflictingJob.status, 409);
   const slotConflict = await fetch(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify({ ...jobInput, idempotencyKey: "test-job:other", title: "Conflicting slot" }) });
   assert.equal(slotConflict.status, 409, "different jobs must not reserve the same dated slot");
-  const concurrentInput = { ...jobInput, idempotencyKey: "test-job:concurrent", scheduledDate: "2026-10-31", title: "Concurrent duplicate" };
+  const concurrentInput = { ...jobInput, idempotencyKey: "test-job:concurrent", scheduledDate: futureScheduleDate("Saturday", 2), title: "Concurrent duplicate" };
   const concurrent = await Promise.all([fetch(base + "/api/jobs", { method: "POST", headers, body: JSON.stringify(concurrentInput) }), fetch(base2 + "/api/jobs", { method: "POST", headers, body: JSON.stringify(concurrentInput) })]);
   assert.deepEqual(concurrent.map(response => response.status).sort(), [200, 201]);
   const concurrentBodies = await Promise.all(concurrent.map(response => response.json()));
