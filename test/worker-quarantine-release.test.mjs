@@ -103,7 +103,11 @@ test("worker process lock is created and released around its cycle", async t => 
     workerId: worker,
     once: true,
     stateDirectory: dir,
-    fetchImpl: async () => {\n      lockObservedDuringCycle = fs.existsSync(lockPath);\n      return new Response(JSON.stringify({ jobs: [] }), { status: 200 });\n    }
+    fetchImpl: async () => {
+      lockObservedDuringCycle = fs.existsSync(lockPath);
+      return new Response(JSON.stringify({ jobs: [] }), { status: 200 });
+    }
   });
-  assert.equal(lockObservedDuringCycle, true, "worker must hold its process lock while dispatch state is in use");\n  assert.equal(fs.existsSync(lockPath), false, "worker must release its process lock after a clean cycle");
+  assert.equal(lockObservedDuringCycle, true, "worker must hold its process lock while dispatch state is in use");
+  assert.equal(fs.existsSync(lockPath), false, "worker must release its process lock after a clean cycle");
 });
