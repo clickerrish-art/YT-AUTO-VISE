@@ -5,6 +5,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
+import http from "node:http";
 import { applyWorkerQuarantineRelease, assertWorkerStoppedForQuarantineRelease, runWorker } from "../scripts/worker-runner.mjs";
 import {
   createWorkerQuarantineReleaseReceipt,
@@ -258,4 +259,59 @@ test("worker CLI rejects a symlinked release receipt without changing quarantine
   const persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
   assert.ok(Object.hasOwn(persisted.uncertainDispatches, jobId));
   assert.deepEqual(persisted.consumedReleaseNonces, []);
+});
+
+
+test("operator CLI requests, verifies and securely writes a signed release handoff without worker state access", async t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "operator-release-handoff-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const workerId = "remote-worker-01";
+  const jobId = "remote-job-123";
+  const attemptId = "remote-attempt-456";
+  const artifactSha256 = "e".repeat(64);
+  const receipt = createWorkerQuarantineReleaseReceipt({
+    workerId, jobId, attemptId, artifactSha256, privateKeyPem
+  });
+  const server = http.createServer((req, res) => {
+    assert.equal(req.method, "POST");
+    assert.equal(req.url, "/api/worker/quarantine-release");
+    assert.equal(req.headers["x-operator-token"], "operator-token-012345678901234567");
+    assert.equal(req.headers["x-quarantine-release-token"], "release-token-012345678901234567");
+    let body = "";
+    req.setEncoding("utf8");
+    req.on("data", chunk => { body += chunk; });
+    req.on("end", () => {
+      assert.deepEqual(JSON.parse(body), { workerId, jobId });
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify({ receipt, publishingEnabled: false }));
+    });
+  });
+  await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
+  t.after(() => new Promise(resolve => server.close(resolve)));
+  const address = server.address();
+  const outputPath = path.join(dir, "handoff", "receipt.json");
+  fs.mkdirSync(path.dirname(outputPath), { mode: 0o700 });
+  const result = spawnSync(process.execPath, [
+    path.join(process.cwd(), "scripts", "worker-runner.mjs"),
+    "--issue-quarantine-release",
+    "--worker-id", workerId,
+    "--job-id", jobId,
+    "--attempt-id", attemptId,
+    "--artifact-sha256", artifactSha256,
+    "--receipt-output", outputPath
+  ], {
+    cwd: process.cwd(), encoding: "utf8",
+    env: {
+      ...process.env,
+      DASHBOARD_API_URL: `http://127.0.0.1:${address.port}`,
+      DASHBOARD_OPERATOR_TOKEN: "operator-token-012345678901234567",
+      DASHBOARD_QUARANTINE_RELEASE_TOKEN: "release-token-012345678901234567",
+      DASHBOARD_QUARANTINE_SIGNING_PUBLIC_KEY: publicKeyPem
+    }
+  });
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  const saved = JSON.parse(fs.readFileSync(outputPath, "utf8"));
+  assert.deepEqual(saved, receipt);
+  assert.equal(fs.statSync(outputPath).mode & 0o777, 0o600);
+  assert.match(result.stdout, /"publishingEnabled":false/);
 });
