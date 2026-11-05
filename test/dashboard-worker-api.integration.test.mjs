@@ -109,7 +109,8 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       id: "queued-legacy-without-authoring",
       state: "QUEUED",
       contentType: "short",
-      createdAt: "2026-11-02T18:03:00.000Z"
+      createdAt: "2026-11-02T18:03:00.000Z",
+      scheduledSlot: { date: today, time: localTime(1), timezone: "Africa/Johannesburg" }
     }
   );
   fs.writeFileSync(statePath, JSON.stringify(initialState, null, 2) + "\n");
@@ -141,7 +142,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
   assert.equal(payload.queuedCount, 5);
   assert.equal(payload.queuedWithoutApprovedRenderPlan, 2);
   assert.equal(payload.dispatchableCount, 3);
-  assert.equal(payload.queuedWithoutValidSlot, 2);
+  assert.equal(payload.queuedWithoutValidSlot, 1);
   const limited = await fetch(base + "/api/jobs/dispatchable?limit=2", { headers: workerHeaders });
   const limitedPayload = await limited.json();
   assert.equal(limited.status, 200);
