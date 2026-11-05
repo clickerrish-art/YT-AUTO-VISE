@@ -453,7 +453,7 @@ const productionTasks = new Map([
 const allowedTasks = new Map([
   ["validate-schedule", ["run", "validate:schedule"]],
   ["check-captions", ["run", "check:captions"]],
-  ["production-readiness", ["run", "readiness"]],
+  ["production-readiness", ["run", "readiness:json"]],
   ["test-suite", ["test"]],
   ["validate-campaigns", ["run", "validate:campaigns"]]
 ]);
