@@ -29,6 +29,19 @@ async function fetchDashboard(url, options = {}) {
   return fetch(url, { ...options, headers });
 }
 
+function dueJohannesburgSlot(minutesAgo = 2) {
+  const now = Date.now() - minutesAgo * 60_000;
+  return {
+    date: new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
+    }).format(new Date(now)),
+    time: new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Africa/Johannesburg", hour: "2-digit", minute: "2-digit", hourCycle: "h23"
+    }).format(new Date(now)),
+    timezone: "Africa/Johannesburg"
+  };
+}
+
 test("dashboard API authenticates operators, persists real drafts, and cannot grant approval", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-"));
   let narrationFixtureDir = null;
@@ -946,6 +959,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const protectedState = JSON.parse(fs.readFileSync(protectedStatePath, "utf8"));
   const protectedJobIndex = protectedState.jobs.findIndex(job => job.id === protectedJob.id);
   protectedState.jobs[protectedJobIndex].authoring = { status: "TEST_FIXTURE_ONLY" };
+  protectedState.jobs[protectedJobIndex].scheduledSlot = dueJohannesburgSlot();
   fs.writeFileSync(protectedStatePath, JSON.stringify(protectedState, null, 2), { mode: 0o600 });
   const protectedDirectory = path.join(process.cwd(), "media", "jobs", protectedJob.id);
   const protectedOutput = path.join(protectedDirectory, "final.mp4");
@@ -981,6 +995,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const manifestState = JSON.parse(fs.readFileSync(manifestStatePath, "utf8"));
   const manifestJobIndex = manifestState.jobs.findIndex(job => job.id === manifestJob.id);
   manifestState.jobs[manifestJobIndex].authoring = { status: "TEST_FIXTURE_ONLY" };
+  manifestState.jobs[manifestJobIndex].scheduledSlot = dueJohannesburgSlot();
   fs.writeFileSync(manifestStatePath, JSON.stringify(manifestState, null, 2), { mode: 0o600 });
   const manifestDirectory = path.join(process.cwd(), "content", "job-render-manifests");
   const manifestPath = path.join(manifestDirectory, manifestJob.id + ".json");
