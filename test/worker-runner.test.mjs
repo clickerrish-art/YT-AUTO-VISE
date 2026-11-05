@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { parseRetryAfterMs, runWorker, runWorkerCycle } from "../scripts/worker-runner.mjs";
+import { inspectWorkerState, parseRetryAfterMs, runWorker, runWorkerCycle } from "../scripts/worker-runner.mjs";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -18,6 +18,32 @@ async function listen(server) {
   });
   return "http://127.0.0.1:" + server.address().port;
 }
+
+
+test("worker quarantine inspection is read-only and reports exact persisted uncertain jobs", async t => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-inspect-"));
+  const statePath = path.join(tempDir, "cooldowns.json");
+  const recordedAt = "2026-11-05T18:00:00.000Z";
+  fs.writeFileSync(statePath, JSON.stringify({
+    schemaVersion: 1,
+    workerId,
+    updatedAt: recordedAt,
+    cooldowns: {},
+    uncertainDispatches: {
+      "job-needs-reconciliation": { code: "WORKER_DISPATCH_OUTCOME_UNCERTAIN", recordedAt }
+    }
+  }), { mode: 0o600 });
+  const before = fs.readFileSync(statePath);
+  const result = inspectWorkerState({ workerId, cooldownStatePath: statePath });
+  assert.deepEqual(result, {
+    workerId,
+    uncertainDispatches: [{ jobId: "job-needs-reconciliation", code: "WORKER_DISPATCH_OUTCOME_UNCERTAIN", recordedAt }],
+    cooldownCount: 0,
+    publishingEnabled: false
+  });
+  assert.deepEqual(fs.readFileSync(statePath), before, "inspection must not mutate or release quarantine");
+  fs.rmSync(tempDir, { recursive: true, force: true });
+});
 
 test("worker dispatches listed jobs sequentially and records fail-closed conflicts", async t => {
   const requests = [];
