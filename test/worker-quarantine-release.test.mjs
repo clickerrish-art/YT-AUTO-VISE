@@ -39,6 +39,7 @@ test("receipt rejects tampering, wrong binding, wrong public key and expiry", ()
   assert.throws(() => verifyWorkerQuarantineReleaseReceipt(receipt, { ...binding, publicKeyPem: wrongPublicKeyPem }), /signature is invalid/i);
   assert.throws(() => verifyWorkerQuarantineReleaseReceipt(receipt, { ...binding, nowMs: binding.nowMs + 300_001 }), /expired/i);
   assert.throws(() => verifyWorkerQuarantineReleaseReceipt(receipt, { ...binding, attemptId: "other-attempt" }), /does not bind/i);
+  assert.throws(() => verifyWorkerQuarantineReleaseReceipt(receipt, { ...binding, publicKeyPem: privateKeyPem }), /PUBLIC key is not configured/i);
 });
 
 test("receipt creation rejects malformed identities and missing or malformed private keys", () => {
