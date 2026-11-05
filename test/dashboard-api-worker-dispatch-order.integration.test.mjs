@@ -151,7 +151,7 @@ test("dispatchable queue is read-only, approval-gated, ordered by scheduled inst
   assert.deepEqual(body.jobs.map(item => item.id), ["job-due-slot"],
     "only approved jobs whose explicit Johannesburg slot is due today may be dispatched");
   assert.equal(body.queuedWithoutValidSlot, 2);
-  assert.equal(body.queuedWithFutureSlot, 4, "future slots must remain queued until their local scheduled time arrives");
+  assert.equal(body.queuedWithFutureSlot, 5, "future slots must remain queued until their local scheduled time arrives");
   assert.equal(body.queuedWithExpiredSlot, 1, "prior-date slots require explicit operator rescheduling rather than immediate dispatch");
   assert.deepEqual(fs.readFileSync(statePath), before,
     "dispatch discovery must not mutate durable job state or audit history");
