@@ -61,6 +61,13 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
     status: "APPROVED_PLAN_ONLY",
     review: { decision: "APPROVE", approvalSha256: "a".repeat(64) }
   };
+  const now = new Date();
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
+  }).format(now);
+  const localTime = minutesAgo => new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Africa/Johannesburg", hour: "2-digit", minute: "2-digit", hourCycle: "h23"
+  }).format(new Date(Date.now() - minutesAgo * 60_000));
   initialState.jobs.push(
     {
       kind: "CONTENT_PRODUCTION",
@@ -76,7 +83,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       state: "QUEUED",
       contentType: "short",
       createdAt: "2026-11-02T18:01:00.000Z",
-      scheduledSlot: { date: "2026-11-07", time: "17:00", timezone: "Africa/Johannesburg" },
+      scheduledSlot: { date: today, time: localTime(3), timezone: "Africa/Johannesburg" },
       authoring: { productionPlan: approvedPlan }
     },
     {
@@ -85,7 +92,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       state: "QUEUED",
       contentType: "long_form",
       createdAt: "2026-11-02T17:59:00.000Z",
-      scheduledSlot: { date: "2026-11-21", time: "17:00", timezone: "Africa/Johannesburg" },
+      scheduledSlot: { date: today, time: localTime(1), timezone: "Africa/Johannesburg" },
       authoring: { productionPlan: structuredClone(approvedPlan) }
     },
     {
@@ -94,7 +101,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       state: "QUEUED",
       contentType: "long_form",
       createdAt: "2026-11-02T18:02:00.000Z",
-      scheduledSlot: { date: "2026-11-14", time: "17:00", timezone: "Africa/Johannesburg" },
+      scheduledSlot: { date: today, time: localTime(2), timezone: "Africa/Johannesburg" },
       authoring: { productionPlan: structuredClone(approvedPlan) }
     },
     {
