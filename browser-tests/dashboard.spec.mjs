@@ -1650,7 +1650,7 @@ test("production-plan submission and hash-bound review persist through the real 
   }
 });
 
-test("all 104 dashboard controls have stable identities and accessible names", async ({ page }) => {
+test("all 108 dashboard controls have stable identities and accessible names", async ({ page }) => {
   await page.goto("/");
   await page.locator("#token").fill(operatorToken);
   await page.locator("#connect").click();
@@ -1698,8 +1698,8 @@ test("all 104 dashboard controls have stable identities and accessible names", a
     return { controlCount: controls.length, formCount: forms.length, failures };
   });
 
-  expect(audit.controlCount).toBe(104);
-  expect(audit.formCount).toBe(16);
+  expect(audit.controlCount).toBe(108);
+  expect(audit.formCount).toBe(17);
   expect(audit.failures).toEqual([]);
 });
 
