@@ -279,7 +279,7 @@ test("a fresh restore invocation restores byte-exact dashboard state after an in
         originalSha256: crypto.createHash("sha256").update(originalBytes).digest("hex"),
         originalBase64: originalBytes.toString("base64"),
         tempName,
-        rollbackTempName: tempName.replace(/\\.restore-tmp$/, ".rollback-tmp")
+        rollbackTempName: tempName.replace(".restore-tmp", ".rollback-tmp")
       }]
     }), { mode: 0o600 });
     const backupPath = path.join(dir, "backup.json");
@@ -298,7 +298,7 @@ test("a fresh restore invocation restores byte-exact dashboard state after an in
       "the recovery invocation must release its operation lock");
     assert.equal(fs.existsSync(path.join(stateDir, tempName)), false,
       "the interrupted staging file must not remain after recovery");
-    assert.equal(fs.existsSync(path.join(stateDir, tempName.replace(/\\.restore-tmp$/, ".rollback-tmp"))), false,
+    assert.equal(fs.existsSync(path.join(stateDir, tempName.replace(".restore-tmp", ".rollback-tmp"))), false,
       "the rollback staging file must not remain after recovery");
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
