@@ -985,7 +985,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const manifestDraft = {
     id: "dashboard-test-protected-render-manifest", title: "Protected render manifest",
     topic: "wildlife observation", contentType: "short", scheduledDay: "Saturday",
-    scheduledDate: futureScheduleDate("Saturday", 8), productUrl: "https://selar.com/0u19v8u99l"
+    scheduledDate: futureScheduleDate("Saturday", 20), productUrl: "https://selar.com/0u19v8u99l"
   };
   const manifestCreated = await fetchDashboard(base + "/api/drafts", { method: "POST", headers, body: JSON.stringify(manifestDraft) });
   const manifestCreatedBody = await manifestCreated.json();
