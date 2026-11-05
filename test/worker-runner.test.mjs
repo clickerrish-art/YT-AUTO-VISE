@@ -669,3 +669,57 @@ test("separate worker processes preserve retry cooldown across an actual process
   }
 });
 
+
+
+test("separate worker processes quarantine an uncertain dispatch across restart", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-uncertain-process-restart-"));
+  const statePath = path.join(directory, "worker-backoff.json");
+  let postCount = 0;
+  const server = createServer((req, res) => {
+    res.setHeader("content-type", "application/json");
+    if (req.method === "GET" && req.url?.startsWith("/api/jobs/dispatchable")) {
+      res.end(JSON.stringify({ jobs: [{ id: "job-uncertain-restart", state: "QUEUED" }], queuedCount: 1, publishingEnabled: false }));
+      return;
+    }
+    if (req.method === "POST" && req.url === "/api/jobs/produce") {
+      postCount += 1;
+      // Simulate the server accepting the operation, then returning an ambiguous 5xx.
+      res.statusCode = 500;
+      res.end(JSON.stringify({ error: "response lost after acceptance" }));
+      return;
+    }
+    res.statusCode = 404;
+    res.end(JSON.stringify({ error: "not found" }));
+  });
+  const runWorkerProcess = baseUrl => new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, [fileURLToPath(new URL("../scripts/worker-runner.mjs", import.meta.url)), "--once"], {
+      env: { ...process.env, DASHBOARD_API_URL: baseUrl, DASHBOARD_WORKER_TOKEN: token, DASHBOARD_WORKER_ID: workerId,
+        WORKER_POLL_INTERVAL_MS: "1000", WORKER_BACKOFF_STATE_PATH: statePath },
+      stdio: ["ignore", "pipe", "pipe"]
+    });
+    let stdout = "", stderr = "";
+    child.stdout.setEncoding("utf8").on("data", chunk => { stdout += chunk; });
+    child.stderr.setEncoding("utf8").on("data", chunk => { stderr += chunk; });
+    child.once("error", reject);
+    child.once("close", (code, signal) => resolve({ code, signal, stdout, stderr }));
+  });
+  try {
+    const baseUrl = await listen(server);
+    const first = await runWorkerProcess(baseUrl);
+    assert.equal(first.code, 2, "the first process must stop after an uncertain dispatch outcome");
+    assert.match(first.stderr, /outcome is uncertain and requires reconciliation/i);
+    assert.equal(postCount, 1);
+    const persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
+    assert.equal(persisted.uncertainDispatches["job-uncertain-restart"].code, "WORKER_DISPATCH_OUTCOME_UNCERTAIN");
+    assert.ok(Number.isFinite(Date.parse(persisted.uncertainDispatches["job-uncertain-restart"].recordedAt)));
+
+    const restarted = await runWorkerProcess(baseUrl);
+    assert.equal(restarted.code, 0, restarted.stderr);
+    assert.match(restarted.stdout, /"deferredByUncertainOutcome":1/);
+    assert.match(restarted.stdout, /"results":\[\]/);
+    assert.equal(postCount, 1, "a fresh OS process must not repeat a dispatch whose remote outcome is uncertain");
+  } finally {
+    await new Promise(resolve => server.close(resolve));
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
