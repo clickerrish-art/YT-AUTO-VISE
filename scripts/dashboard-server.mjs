@@ -2585,6 +2585,20 @@ const server = http.createServer(async (req, res) => {
         if (index < 0) return json(res, 404, { error: "Content job not found" });
         const job = state.jobs[index];
         if (job.state !== "QUEUED") return json(res, 409, { error: "Only a queued content job can start production" });
+        if (!job.authoring) {
+          return json(res, 409, {
+            error: "Content job is not linked to the required approved authoring pipeline; legacy fixed-manifest rendering is disabled. Complete research, exact-script and narration/caption review, scene and rights checks, quality/compliance review, and the hash-bound production plan before retrying.",
+            blockers: [
+              "Research and source evidence must be attached to the job",
+              "The exact script and narration/caption stages must be reviewed and approved",
+              "Scene plan, rights/provenance, quality and compliance evidence must be current",
+              "A hash-bound production plan must authorize the exact render inputs"
+            ],
+            publishable: false,
+            publishingEnabled: false,
+            renderStarted: false
+          });
+        }
         const dispatchNow = Date.now();
         const dispatchToday = new Intl.DateTimeFormat("en-CA", {
           timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
@@ -2601,19 +2615,6 @@ const server = http.createServer(async (req, res) => {
         if (!Number.isFinite(scheduledAt) || job.scheduledSlot?.date !== dispatchToday || scheduledAt > dispatchNow) {
           return json(res, 409, {
             error: "Production dispatch requires an explicit valid Africa/Johannesburg slot that is due today; future, expired and invalid slots must be held or rescheduled",
-            publishingEnabled: false,
-            renderStarted: false
-          });
-        }
-        if (!job.authoring) {
-          return json(res, 409, {
-            error: "Content job is not linked to the required approved authoring pipeline; legacy fixed-manifest rendering is disabled. Complete research, exact-script and narration/caption review, scene and rights checks, quality/compliance review, and the hash-bound production plan before retrying.",
-            blockers: [
-              "Research and source evidence must be attached to the job",
-              "The exact script and narration/caption stages must be reviewed and approved",
-              "Scene plan, rights/provenance, quality and compliance evidence must be current",
-              "A hash-bound production plan must authorize the exact render inputs"
-            ],
             publishable: false,
             publishingEnabled: false,
             renderStarted: false
