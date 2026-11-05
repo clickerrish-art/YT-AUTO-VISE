@@ -142,6 +142,68 @@ test("restart recovery completes rollback after process death during rollback-te
   // removing only the stale lock before restart recovery; leave journal and temp.
   fs.unlinkSync(lockPath);
 
+  // Interrupt recovery itself at the same durable-temp fsync boundary. This
+  // exercises a second process death while replaying the original journal,
+  // rather than only a single crash followed by in-process retries.
+  const repeatedRollbackTempPath = path.join(destination.stateDir, rollbackTemps[0]);
+  fs.writeFileSync(repeatedRollbackTempPath, Buffer.from("partial rollback bytes"));
+  const recoveryChildSource = `
+    import fs from "node:fs";
+    const moduleUrl = ${JSON.stringify(restoreModule)};
+    const rootDir = ${JSON.stringify(destination.root)};
+    const rollbackTempPath = ${JSON.stringify(path.join(destination.stateDir, rollbackTemps[0]))};
+    const originalOpen = fs.openSync;
+    const originalFsync = fs.fsyncSync;
+    const openedPaths = new Map();
+    fs.openSync = function (filePath, ...args) {
+      const fd = originalOpen.call(this, filePath, ...args);
+      if (typeof filePath === "string") openedPaths.set(fd, filePath);
+      return fd;
+    };
+    fs.fsyncSync = function (fd, ...args) {
+      if (openedPaths.get(fd) === rollbackTempPath) {
+        process.stdout.write("RECOVERY_ROLLBACK_TEMP_READY\\n");
+        Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0);
+      }
+      return originalFsync.call(this, fd, ...args);
+    };
+    const { restoreState } = await import(moduleUrl);
+    await restoreState({
+      backupPath: ${JSON.stringify(backupPath)},
+      rootDir,
+      confirm: "YES",
+      overwriteState: true
+    });
+  `;
+  const recoveryChild = spawn(process.execPath, ["--input-type=module", "-e", recoveryChildSource], {
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let recoveryStdout = "";
+  let recoveryStderr = "";
+  recoveryChild.stdout.setEncoding("utf8");
+  recoveryChild.stderr.setEncoding("utf8");
+  recoveryChild.stdout.on("data", chunk => { recoveryStdout += chunk; });
+  recoveryChild.stderr.on("data", chunk => { recoveryStderr += chunk; });
+  const recoveryDeadline = Date.now() + 10000;
+  while (!recoveryStdout.includes("RECOVERY_ROLLBACK_TEMP_READY") &&
+         Date.now() < recoveryDeadline &&
+         recoveryChild.exitCode === null && recoveryChild.signalCode === null) {
+    await new Promise(resolve => setTimeout(resolve, 20));
+  }
+  assert.ok(recoveryStdout.includes("RECOVERY_ROLLBACK_TEMP_READY"),
+    "second process did not reach recovery rollback-temp fsync; stderr: " + recoveryStderr);
+  assert.equal(fs.existsSync(journalPath), true, "journal must survive the second crash boundary");
+  assert.equal(fs.existsSync(lockPath), true, "second recovery process must hold the operation lock");
+  recoveryChild.kill("SIGKILL");
+  const recoveryExit = await new Promise(resolve =>
+    recoveryChild.once("exit", (code, signal) => resolve({ code, signal })));
+  assert.equal(recoveryExit.signal, "SIGKILL",
+    "second recovery process must be killed while rollback-temp fsync is blocked");
+  fs.unlinkSync(lockPath);
+  assert.equal(fs.existsSync(journalPath), true, "repeated interruption must retain the recovery journal");
+  assert.equal(fs.existsSync(repeatedRollbackTempPath), true,
+    "repeated interruption must leave the journal-owned rollback temp for the next restart");
+
   // Simulate a torn rollback temp from the killed process, then inject ENOSPC
   // while recovery rebuilds it from the durable journal. Recovery must fail
   // closed, retain the journal, and permit a later clean retry.
