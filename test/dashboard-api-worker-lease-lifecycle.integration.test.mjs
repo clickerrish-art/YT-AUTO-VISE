@@ -239,6 +239,14 @@ test("worker lease heartbeat, completion fencing, expiry reaping and restart per
   fs.writeFileSync(statePath, JSON.stringify(persisted, null, 2) + "\n", { mode: 0o600 });
 
   const beforeUnauthorizedRetry = fs.readFileSync(statePath);
+  const genericTransitionRetry = await post("/api/jobs/transition", {
+    jobId: retryJob.id,
+    nextState: "QUEUED",
+    reason: "Attempt to bypass the explicit retry workflow"
+  });
+  assert.equal(genericTransitionRetry.status, 400);
+  assert.deepEqual(fs.readFileSync(statePath), beforeUnauthorizedRetry,
+    "the generic state-transition endpoint must not bypass retry authorization");
   const workerAttemptedRetry = await post("/api/jobs/lease/claim", {
     jobId: retryJob.id,
     workerId: "retry-worker-without-approval",
@@ -329,5 +337,8 @@ test("worker lease heartbeat, completion fencing, expiry reaping and restart per
   assert.equal(recovered.jobs.find(job => job.id === expiringJob.id).state, "FAILED");
   assert.equal(recovered.jobs.find(job => job.id === completedJob.id).workerLease, null);
   assert.equal(recovered.jobs.find(job => job.id === expiringJob.id).workerLease, null);
+  assert.equal(recovered.jobs.find(job => job.id === retryJob.id).state, "DEAD_LETTER");
+  assert.equal(recovered.jobs.find(job => job.id === retryJob.id).deadLetterHistory.length, 2);
+  assert.equal(recovered.audit.filter(event => event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === retryJob.id).length, 2);
   assert.equal(recovered.publishingEnabled, false);
 });
