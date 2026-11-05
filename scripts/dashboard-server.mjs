@@ -2091,7 +2091,14 @@ const server = http.createServer(async (req, res) => {
         const metadata = JSON.parse(fs.readFileSync(metadataFile, "utf8"));
         if (metadata.channel !== "SonicVhibez" || metadata.visibility !== "private" || metadata.productUrl !== approvedProductUrl) return json(res, 400, { error: "Metadata must target SonicVhibez, remain private and use the approved Selar URL" });
         if (typeof metadata.title !== "string" || !metadata.title.trim() || typeof metadata.description !== "string" || !metadata.description.trim() || !Array.isArray(metadata.tags) || metadata.tags.length < 3) return json(res, 400, { error: "Metadata needs a title, description and at least three tags" });
+        const approvedCaptions = job.authoring?.narrationStage?.artifacts?.["captions.srt"];
+        if (!approvedCaptions || approvedCaptions.path !== body.captionsPath) {
+          return json(res, 409, { error: "Validation captions must be the exact captions artifact bound to the approved narration stage" });
+        }
         const captionsFile = resolveRepositoryFile(body.captionsPath);
+        if (sha256File(captionsFile) !== approvedCaptions.sha256) {
+          return json(res, 409, { error: "Approved narration captions changed after approval; regenerate or reapprove narration before validation" });
+        }
         const captionCheck = spawnSync(process.execPath, [path.join(root, "scripts", "check-captions.mjs"), captionsFile], { cwd: root, encoding: "utf8", timeout: 15_000 });
         if (captionCheck.error || captionCheck.status !== 0 || !String(captionCheck.stdout ?? "").includes("PASS:")) return json(res, 400, { error: "Caption validation failed; see the local caption checker output" });
         const inspectedArtifacts = [];
