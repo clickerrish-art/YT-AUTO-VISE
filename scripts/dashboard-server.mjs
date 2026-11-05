@@ -2500,6 +2500,7 @@ const server = http.createServer(async (req, res) => {
       const videoFile = resolveRepositoryFile(body.videoPath);
       const videoSha256 = sha256File(videoFile);
       const ledger = readUploadLedger();
+      if (ledger.error) return json(res, 503, { error: ledger.error });
       const prior = ledger.attempts.find(item => item.jobId === body.jobId && item.artifactSha256 === videoSha256);
       if (!prior) return json(res, 409, { error: "No matching prior upload attempt exists. Read-only reconciliation will never create a new upload." });
       if (!prior.remoteVideoId) return json(res, 409, { error: "This attempt has no authoritative remote video ID. Reconcile manually in YouTube Studio/API before any retry; no upload was attempted." });
