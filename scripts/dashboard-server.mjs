@@ -2636,9 +2636,33 @@ const server = http.createServer(async (req, res) => {
             job.renderExecution = { taskId, status: "PREPARED", outputPath, preparedAt: new Date().toISOString() };
             taskArgs = [process.execPath, scriptFile, manifestFile, outputFile];
           } catch (error) {
+            const reason = String(error?.message ?? error).slice(0, 1000);
+            const failedAt = new Date().toISOString();
+            state.jobs[index] = transitionContentJob(job, "FAILED", {
+              actor: "worker-preflight",
+              reason: "Render preflight failed; operator remediation and explicit retry authorization are required"
+            }, failedAt);
+            state.jobs[index].errorDetails = {
+              code: "RENDER_PREFLIGHT_NOT_READY",
+              retryable: true,
+              retryableAfterOperatorReview: true,
+              message: reason
+            };
+            state.audit.push({
+              id: crypto.randomUUID(),
+              action: "CONTENT_RENDER_PREFLIGHT_FAILED",
+              jobId: job.id,
+              at: failedAt,
+              actor: "worker-preflight",
+              reason
+            });
+            saveState(state);
             return json(res, 409, {
-              error: "Authoring job is not render-ready; mandatory approval, provenance, quality, compliance or artifact-integrity evidence is missing or stale",
-              detail: String(error?.message ?? error).slice(0, 1000),
+              error: "Authoring job failed render preflight; it has been removed from automatic dispatch and requires operator remediation and explicit retry authorization",
+              detail: reason,
+              jobState: "FAILED",
+              retryable: true,
+              requiresOperatorRetry: true,
               publishable: false, publishingEnabled: false
             });
           }
