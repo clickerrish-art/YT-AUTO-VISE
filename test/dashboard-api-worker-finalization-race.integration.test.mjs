@@ -5,6 +5,7 @@ import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
 
 const root = process.cwd();
 const token = "worker-finalization-race-" + "x".repeat(40);
@@ -112,8 +113,8 @@ test("independent dashboard processes serialize duplicate worker completion and 
   const readState = () => JSON.parse(fs.readFileSync(statePath, "utf8"));
 
   const completionJob = await createJob(
-    "worker-finalization-race:completion:2026-11-07",
-    "2026-11-07",
+    "worker-finalization-race:completion:future-slot-1",
+    futureScheduleDate("Saturday", 1),
     "Duplicate completion race"
   );
   const completionLease = await claimJob(completionJob.id, "race-worker-complete", 60_000);
@@ -169,8 +170,8 @@ test("independent dashboard processes serialize duplicate worker completion and 
   ).length, 1, "duplicate completion must create exactly one durable audit event");
 
   const reapJob = await createJob(
-    "worker-finalization-race:reap:2026-11-14",
-    "2026-11-14",
+    "worker-finalization-race:reap:future-slot-2",
+    futureScheduleDate("Saturday", 2),
     "Duplicate lease reaper race"
   );
   await claimJob(reapJob.id, "race-worker-reap", 5_000);

@@ -5,6 +5,7 @@ import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
 
 const root = process.cwd();
 const token = "job-cancellation-acceptance-" + "x".repeat(40);
@@ -110,13 +111,13 @@ test("job transition API safely cancels queued work, rejects active leases, audi
   };
 
   const queued = await createJob(
-    "job-cancel-queued:2026-11-07",
-    "2026-11-07",
+    "job-cancel-queued:future-slot-1",
+    futureScheduleDate("Saturday", 1),
     "Queued job cancellation acceptance"
   );
   const leased = await createJob(
-    "job-cancel-leased:2026-11-14",
-    "2026-11-14",
+    "job-cancel-leased:future-slot-2",
+    futureScheduleDate("Saturday", 2),
     "Active lease cancellation rejection"
   );
   const claimResponse = await post("/api/jobs/lease/claim", {
@@ -140,8 +141,8 @@ test("job transition API safely cancels queued work, rejects active leases, audi
   // Simulate an in-flight provider-backed authoring stage in durable state.
   // Cancellation must not mark the job terminal while that operation can still finish.
   const activeAuthoring = await createJob(
-    "job-cancel-authoring:2026-11-21",
-    "2026-11-21",
+    "job-cancel-authoring:future-slot-3",
+    futureScheduleDate("Saturday", 3),
     "Active authoring cancellation rejection"
   );
   let seededState = JSON.parse(fs.readFileSync(statePath, "utf8"));

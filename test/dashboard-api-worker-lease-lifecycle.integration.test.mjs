@@ -5,6 +5,7 @@ import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
 
 const root = process.cwd();
 const token = "worker-lease-lifecycle-" + "x".repeat(40);
@@ -115,8 +116,8 @@ test("worker lease heartbeat, completion fencing, expiry reaping and restart per
   const readPersisted = () => JSON.parse(fs.readFileSync(statePath, "utf8"));
 
   const completedJob = await createJob(
-    "lease-lifecycle-heartbeat-complete:2026-11-07",
-    "2026-11-07",
+    "lease-lifecycle-heartbeat-complete:future-slot-1",
+    futureScheduleDate("Saturday", 1),
     "Worker heartbeat and completion acceptance"
   );
   const claim = await claimJob(completedJob.id, "lifecycle-worker-alpha", 60_000);
@@ -187,8 +188,8 @@ test("worker lease heartbeat, completion fencing, expiry reaping and restart per
     "a duplicate completion must not alter the completed job or its audit history");
 
   const expiringJob = await createJob(
-    "lease-lifecycle-expiry-reap:2026-11-14",
-    "2026-11-14",
+    "lease-lifecycle-expiry-reap:future-slot-2",
+    futureScheduleDate("Saturday", 2),
     "Worker lease expiry and reaping acceptance"
   );
   await claimJob(expiringJob.id, "lifecycle-worker-bravo", 5_000);
