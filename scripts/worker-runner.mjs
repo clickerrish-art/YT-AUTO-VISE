@@ -98,9 +98,16 @@ function persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches = 
   }, { mode: 0o600 });
 }
 
+export function assertWorkerStoppedForQuarantineRelease(statePath) {
+  if (fs.existsSync(statePath + ".process.lock")) {
+    throw new Error("Stop the worker process before releasing its quarantine; worker state is locked");
+  }
+}
+
 export function applyWorkerQuarantineRelease({
   statePath, workerId, jobId, attemptId, artifactSha256, receipt, publicKeyPem, nowMs = Date.now()
 }) {
+  assertWorkerStoppedForQuarantineRelease(statePath);
   const state = loadCooldowns(statePath, workerId);
   if (!state.uncertainDispatches.has(jobId)) {
     throw new Error("Exact job is not currently quarantined by this worker");
@@ -415,34 +422,48 @@ export async function runWorker({
 } = {}) {
   validateConfiguration({ baseUrl, token, workerId, pollIntervalMs });
   const statePath = cooldownStatePath(workerId, configuredCooldownStatePath, stateDirectory);
-  const persistedState = loadCooldowns(statePath, workerId);
-  const cooldowns = persistedState.cooldowns;
-  const uncertainDispatches = persistedState.uncertainDispatches;
-  const consumedReleaseNonces = persistedState.consumedReleaseNonces;
-  const persist = () => {
-    try {
-      persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches, consumedReleaseNonces);
-    } catch (cause) {
-      const error = new Error("Worker retry backoff could not be persisted; stopping to avoid an early redispatch", { cause });
-      error.code = "WORKER_BACKOFF_PERSISTENCE_FAILED";
-      throw error;
-    }
-  };
-  do {
-    let nextWaitMs = pollIntervalMs;
-    try {
-      const result = await runWorkerCycle({ baseUrl, token, workerId, fetchImpl, cooldowns, uncertainDispatches, onCooldownsChanged: persist, onUncertainDispatchesChanged: persist, shouldStop });
-      onCycle(result);
-    } catch (error) {
-      onError(error);
-      if (error?.status === 429 && error?.retryable === true) {
-        nextWaitMs = Math.max(pollIntervalMs, error.retryAfterMs ?? 0);
+  const lockPath = statePath + ".process.lock";
+  let lockFd;
+  try {
+    lockFd = fs.openSync(lockPath, "wx", 0o600);
+    fs.writeFileSync(lockFd, JSON.stringify({ pid: process.pid, workerId, startedAt: new Date().toISOString() }));
+  } catch (error) {
+    if (lockFd !== undefined) fs.closeSync(lockFd);
+    throw new Error("Worker state is already locked by another worker process or a stale lock; inspect and stop the worker before continuing", { cause: error });
+  }
+  try {
+    const persistedState = loadCooldowns(statePath, workerId);
+    const cooldowns = persistedState.cooldowns;
+    const uncertainDispatches = persistedState.uncertainDispatches;
+    const consumedReleaseNonces = persistedState.consumedReleaseNonces;
+    const persist = () => {
+      try {
+        persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches, consumedReleaseNonces);
+      } catch (cause) {
+        const error = new Error("Worker retry backoff could not be persisted; stopping to avoid an early redispatch", { cause });
+        error.code = "WORKER_BACKOFF_PERSISTENCE_FAILED";
+        throw error;
       }
-      if (once || error?.code === "WORKER_BACKOFF_PERSISTENCE_FAILED" || error?.retryable === false) throw error;
-    }
-    if (once || shouldStop()) break;
-    await waitForNextCycle(nextWaitMs, shouldStop);
-  } while (!shouldStop());
+    };
+    do {
+      let nextWaitMs = pollIntervalMs;
+      try {
+        const result = await runWorkerCycle({ baseUrl, token, workerId, fetchImpl, cooldowns, uncertainDispatches, onCooldownsChanged: persist, onUncertainDispatchesChanged: persist, shouldStop });
+        onCycle(result);
+      } catch (error) {
+        onError(error);
+        if (error?.status === 429 && error?.retryable === true) {
+          nextWaitMs = Math.max(pollIntervalMs, error.retryAfterMs ?? 0);
+        }
+        if (once || error?.code === "WORKER_BACKOFF_PERSISTENCE_FAILED" || error?.retryable === false) throw error;
+      }
+      if (once || shouldStop()) break;
+      await waitForNextCycle(nextWaitMs, shouldStop);
+    } while (!shouldStop());
+  } finally {
+    try { fs.closeSync(lockFd); } catch {}
+    try { fs.unlinkSync(lockPath); } catch {}
+  }
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
