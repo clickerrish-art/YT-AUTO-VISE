@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { evaluateNextPublication, DEFAULT_MIN_SPACING_HOURS, DEFAULT_SCHEDULE_TIMEZONE } from "./schedule-policy.mjs";
+import { evaluateNextPublication, validateCadenceDecision, DEFAULT_MIN_SPACING_HOURS, DEFAULT_SCHEDULE_TIMEZONE } from "./schedule-policy.mjs";
 
 const allowedFormats = new Set(["long_form", "short"]);
 const allowedVisibility = new Set(["public", "private", "unlisted"]);
@@ -190,5 +190,9 @@ export function assertNextPublicationAllowed({ history, pendingAttempts, schedul
     minSpacingHours: minSpacingHours ?? configuredSpacing ?? DEFAULT_MIN_SPACING_HOURS
   });
   if (!result.valid) throw new Error("rolling publication cycle gate blocked upload: " + result.errors.join("; "));
+  const cadenceDecision = validateCadenceDecision(policy.cadenceDecision, configuredSpacing);
+  if (!cadenceDecision.valid) {
+    throw new Error("owner-approved cadence decision blocks private upload: " + cadenceDecision.errors.join("; "));
+  }
   return result;
 }
