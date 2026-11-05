@@ -218,3 +218,44 @@ test("worker CLI consumes an operator-signed receipt handoff with only its publi
   assert.ok(persisted.consumedReleaseNonces.includes(receipt.nonce));
   assert.match(result.stdout, /"publishingEnabled":false/);
 });
+
+
+test("worker CLI rejects a symlinked release receipt without changing quarantine state", t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "worker-release-symlink-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const workerId = "symlink-worker-01";
+  const jobId = "symlink-job-123";
+  const statePath = path.join(dir, "worker-state.json");
+  const state = {
+    schemaVersion: 1, workerId, updatedAt: new Date().toISOString(),
+    cooldowns: {},
+    uncertainDispatches: {
+      [jobId]: { code: "WORKER_DISPATCH_OUTCOME_UNCERTAIN", recordedAt: new Date().toISOString() }
+    },
+    consumedReleaseNonces: []
+  };
+  fs.writeFileSync(statePath, JSON.stringify(state), { mode: 0o600 });
+  const legitimatePath = path.join(dir, "legitimate-receipt.json");
+  fs.writeFileSync(legitimatePath, JSON.stringify(createWorkerQuarantineReleaseReceipt({
+    workerId, jobId, attemptId: "symlink-attempt-123", artifactSha256: "d".repeat(64), privateKeyPem
+  })), { mode: 0o600 });
+  const symlinkPath = path.join(dir, "receipt-link.json");
+  fs.symlinkSync(legitimatePath, symlinkPath);
+  const result = spawnSync(process.execPath, [
+    path.join(process.cwd(), "scripts", "worker-runner.mjs"),
+    "--consume-quarantine-release", "--receipt-file", symlinkPath
+  ], {
+    cwd: process.cwd(), encoding: "utf8",
+    env: {
+      ...process.env, DASHBOARD_WORKER_ID: workerId,
+      WORKER_BACKOFF_STATE_PATH: statePath,
+      DASHBOARD_QUARANTINE_SIGNING_PUBLIC_KEY: publicKeyPem,
+      DASHBOARD_WORKER_TOKEN: ""
+    }
+  });
+  assert.equal(result.status, 2);
+  assert.match(result.stderr, /symbolic link|too many levels of symbolic links|ELOOP/i);
+  const persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  assert.ok(Object.hasOwn(persisted.uncertainDispatches, jobId));
+  assert.deepEqual(persisted.consumedReleaseNonces, []);
+});
