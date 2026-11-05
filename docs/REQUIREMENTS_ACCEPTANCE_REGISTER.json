@@ -356,9 +356,16 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/4eb66910a93bf4b33843b91d9384e1f34bdc902b",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41216258636",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205668",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/8272d2e39868237c05b2951f37bcade6ae6608c4/scripts/dashboard-server.mjs"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/8272d2e39868237c05b2951f37bcade6ae6608c4/scripts/dashboard-server.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e349a5ec29440ef62de65e141638d3866c58465e",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/e349a5ec29440ef62de65e141638d3866c58465e/test/dashboard-api-worker-dispatch-order.integration.test.mjs",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42041048296",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42041048230",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42041048112",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42041048096",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42041048186"
       ],
-      "nextAction": "Exact candidate 8272d2e39868237c05b2951f37bcade6ae6608c4 adds a server-side future-instant gate to every reserved dashboard publication slot. Past POST /api/drafts, POST /api/jobs and POST /api/drafts/update requests return 409 with byte-identical durable state and no audit mutation. Time-sensitive fixtures now calculate future Africa/Johannesburg dates rather than expiring hard-coded dates. Exact-HEAD automation passes. This is a scheduler safety improvement, not full SCHED-001 acceptance: queue ordering, retry/manual retry/cancellation, all worker races, actual YouTube history, owner-approved cadence and complete operational recovery remain open.",
+      "nextAction": "Exact candidate e349a5ec29440ef62de65e141638d3866c58465e adds real-server GET /api/jobs/dispatchable integration coverage: valid scheduled-instant ordering, stable tie-breaking, unapproved-plan exclusion, non-queued exclusion, malformed/missing slot fallback, stable limit prefix, and byte-for-byte durable state/audit immutability. The test passed in automation CI (run 42041048296; 113 Node test files, zero skips). Automation/security, content quality, dashboard Chromium E2E, metadata, isolated main/candidate baseline, branch inventory and local Nature Frontiers draft validation passed; readiness remains HOLD with 12 blockers. SCHED-001 remains NOT_TESTED: this does not yet prove rolling long_form → long_form → short enforcement, actual YouTube history reconciliation, 72 elapsed hours/no same-day publication across all production paths, DST edge cases, all worker/process races, or end-to-end restart/recovery and owner-approved feasible cadence.",
       "assessmentCommitSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
       "acceptanceCriterion": "The same 72-hour minimum, rolling long_form → long_form → short cycle, actual-history ordering and DST/timezone policy are enforced by config, queue, dashboard, workflows and tests."
     },
@@ -1755,7 +1762,7 @@
   "candidateSourceTestSha": "05daf438c889079853c6521df1cb54a1223424ff",
   "latestSourceTestSha": "05daf438c889079853c6521df1cb54a1223424ff",
   "latestChangeTestStatus": "PASS",
-  "latestChangeTestReason": "Exact candidate 05daf438c889079853c6521df1cb54a1223424ff passed 111/111 Node test files (524 Node tests, zero failures/skips), 16 Python tests, npm audit with zero vulnerabilities, FFmpeg/ffprobe verification, 23/23 Chromium browser tests, content-quality validation, metadata validation, Nature Frontiers local draft validation, non-destructive branch inventory, lockfile workflow and isolated main/candidate baseline. Production readiness remains HOLD with 13 genuine owner/external blockers.",
+  "latestChangeTestReason": "Dispatch queue ordering/read-only integration test passed at exact candidate e349a5ec29440ef62de65e141638d3866c58465e; SCHED-001 overall remains NOT_TESTED.",
   "requirementCounts": {
     "total": 82,
     "PASS": 60,
