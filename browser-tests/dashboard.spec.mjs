@@ -1794,7 +1794,7 @@ test("Facebook research suggestion control fills an idea without saving a draft 
   await page.locator("#fbsuggest").click();
   await expect(page.locator("#facebookdraftresult")).toContainText("Research-first idea:", { timeout: 10_000 });
   await expect(page.locator("#fbtopic")).not.toHaveValue("");
-  await expect(page.locator("#fbcaption")).toContainText("[Add one specific, sourced fact here");
+  await expect(page.locator("#fbcaption")).toHaveValue(/\[Add one specific, sourced fact here/);
   await expect(page.locator("#fbclaims")).toHaveValue("");
   await expect(page.locator("#fbmedia")).toHaveValue("");
 
