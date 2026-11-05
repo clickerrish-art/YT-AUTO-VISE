@@ -335,6 +335,10 @@ test("restart recovery rolls back a process death after destination rename and b
   const expectedCommittedSha = backedUpState.sha256;
 
   const destinationState = path.join(destination.stateDir, "dashboard-state.json");
+  const preRestoreState = JSON.parse(fs.readFileSync(destinationState, "utf8"));
+  preRestoreState.jobs[0].state = "OPERATOR_REVIEW_REQUIRED";
+  preRestoreState.audit = [{ action: "PRESERVE_POST_RESTORE_CRASH_AUDIT", actor: "destination-before-restore" }];
+  fs.writeFileSync(destinationState, JSON.stringify(preRestoreState, null, 2) + "\n", { mode: 0o600 });
   const originalStateBytes = fs.readFileSync(destinationState);
   const originalAudit = JSON.parse(originalStateBytes.toString("utf8")).audit;
   const olderThanBackup = new Date(Date.parse(backup.createdAt) - 1000);
