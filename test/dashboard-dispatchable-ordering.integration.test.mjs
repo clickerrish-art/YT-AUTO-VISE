@@ -50,8 +50,9 @@ test("dispatchable jobs require valid explicit Johannesburg slots and hold inval
     audit: [],
     jobs: [
       // Creation order deliberately disagrees with the valid scheduled-slot order.
+      // Both slots must remain in the future for the full duration of CI execution.
       approvedQueuedJob("slot-later", "2026-10-01T08:00:00.000Z", "2026-11-10"),
-      approvedQueuedJob("slot-earlier", "2026-12-15T08:00:00.000Z", "2026-11-05"),
+      approvedQueuedJob("slot-earlier", "2026-12-15T08:00:00.000Z", "2026-11-06"),
       // November 31 is not a real calendar date. It must fall back to createdAt,
       // rather than Date.parse silently normalizing it into December.
       approvedQueuedJob("invalid-slot", "2026-10-15T08:00:00.000Z", "2026-11-31")
