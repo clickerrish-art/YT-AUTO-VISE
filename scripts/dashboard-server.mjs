@@ -2086,7 +2086,7 @@ const server = http.createServer(async (req, res) => {
         if (metadata.channel !== "SonicVhibez" || metadata.visibility !== "private" || metadata.productUrl !== approvedProductUrl) return json(res, 400, { error: "Metadata must target SonicVhibez, remain private and use the approved Selar URL" });
         if (typeof metadata.title !== "string" || !metadata.title.trim() || typeof metadata.description !== "string" || !metadata.description.trim() || !Array.isArray(metadata.tags) || metadata.tags.length < 3) return json(res, 400, { error: "Metadata needs a title, description and at least three tags" });
         const captionsFile = resolveRepositoryFile(body.captionsPath);
-        const captionCheck = spawnSync(process.execPath, ["scripts/check-captions.mjs", captionsFile], { encoding: "utf8", timeout: 15_000 });
+        const captionCheck = spawnSync(process.execPath, [path.join(root, "scripts", "check-captions.mjs"), captionsFile], { cwd: root, encoding: "utf8", timeout: 15_000 });
         if (captionCheck.error || captionCheck.status !== 0 || !String(captionCheck.stdout ?? "").includes("PASS:")) return json(res, 400, { error: "Caption validation failed; see the local caption checker output" });
         const inspectedArtifacts = [];
         for (const artifact of job.outputArtifacts) {
@@ -2094,8 +2094,8 @@ const server = http.createServer(async (req, res) => {
           const actualSha = sha256File(artifactFile);
           if (actualSha !== artifact.sha256) return json(res, 409, { error: "Artifact changed after generation: " + artifact.path });
           const isShort = job.contentType === "short";
-        const exportValidator = isShort ? "scripts/validate-short-export.mjs" : "scripts/validate-long-form-export.mjs";
-        const exportValidation = spawnSync(process.execPath, [exportValidator, artifactFile], { encoding: "utf8", timeout: isShort ? 180_000 : 300_000 });
+        const exportValidator = path.join(root, "scripts", isShort ? "validate-short-export.mjs" : "validate-long-form-export.mjs");
+        const exportValidation = spawnSync(process.execPath, [exportValidator, artifactFile], { cwd: root, encoding: "utf8", timeout: isShort ? 180_000 : 300_000 });
         if (exportValidation.error || exportValidation.status !== 0 || !String(exportValidation.stdout ?? "").includes("PASS:")) {
           return json(res, 400, { error: "Format-specific media export validation failed; human review remains blocked", publishingEnabled: false });
         }
@@ -2108,7 +2108,7 @@ const server = http.createServer(async (req, res) => {
           const video = streams.find(stream => stream.codec_type === "video");
           const audio = streams.some(stream => stream.codec_type === "audio");
           if (!Number.isFinite(duration) || (isShort ? duration < 50 || duration > 60 : duration < 360 || duration > 600)) return json(res, 400, { error: "Artifact duration does not match the scheduled format" });
-          const captionSync = spawnSync(process.execPath, ["scripts/validate-caption-sync.mjs", captionsFile, String(duration)], { encoding: "utf8", timeout: 15_000 });
+          const captionSync = spawnSync(process.execPath, [path.join(root, "scripts", "validate-caption-sync.mjs"), captionsFile, String(duration)], { cwd: root, encoding: "utf8", timeout: 15_000 });
           if (captionSync.error || captionSync.status !== 0 || !String(captionSync.stdout ?? "").includes("PASS:")) {
             return json(res, 400, { error: "Caption timings do not fit the actual media duration; regenerate and validate the captions before review" });
           }
