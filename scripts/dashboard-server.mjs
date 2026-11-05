@@ -707,12 +707,14 @@ const server = http.createServer(async (req, res) => {
         job.authoring?.productionPlan?.status === "APPROVED_PLAN_ONLY" &&
         job.authoring.productionPlan.review?.decision === "APPROVE" &&
         /^[a-f0-9]{64}$/.test(job.authoring.productionPlan.review?.approvalSha256 ?? "");
+      const dispatchCheckAt = Date.now();
       const dispatchTimestamp = job => {
         const slot = job.scheduledSlot;
         if (slot?.timezone !== "Africa/Johannesburg") return null;
         try {
-          // A queued job without a valid, explicit Johannesburg slot is held.
-          // Creation time is never a substitute for publication authorization.
+          // A queued job without a valid, explicit future Johannesburg slot is held.
+          // Creation time is never a substitute for publication authorization, and
+          // an expired slot must not silently become an immediate dispatch.
           const scheduledAt = Date.parse(localDateTimeToIso(slot.date, slot.time, slot.timezone));
           return Number.isFinite(scheduledAt) ? scheduledAt : null;
         } catch {
@@ -723,7 +725,7 @@ const server = http.createServer(async (req, res) => {
       const dispatchable = queued
         .filter(job => hasApprovedRenderPlan(job) && typeof job.id === "string")
         .map(job => ({ job, scheduledAt: dispatchTimestamp(job) }))
-        .filter(entry => entry.scheduledAt !== null)
+        .filter(entry => entry.scheduledAt !== null && entry.scheduledAt > dispatchCheckAt)
         .sort((a, b) => a.scheduledAt - b.scheduledAt ||
           String(a.job.createdAt ?? "").localeCompare(String(b.job.createdAt ?? "")) ||
           a.job.id.localeCompare(b.job.id));
