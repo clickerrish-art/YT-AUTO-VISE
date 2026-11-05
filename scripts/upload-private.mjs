@@ -16,6 +16,21 @@ import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
 
 export const APPROVED_SELAR_URL = "https://selar.com/0u19v8u99l";
 
+const APPROVED_SONICVHIBEZ_HANDLE = "sonicvhibez";
+
+function normalizeChannelHandle(value) {
+  return typeof value === "string" ? value.trim().replace(/^@/, "").toLowerCase() : "";
+}
+
+/** Match the verified SonicVhibez handle, not an assumed display-name spelling. */
+export function matchesApprovedSonicVhibezChannel(channel, expectedChannelId) {
+  if (!channel || channel.id !== expectedChannelId) return false;
+  if (channel.snippet?.title === "SonicVhibez") return true;
+  return channel.snippet?.title === "SonicVibes" &&
+    normalizeChannelHandle(channel.snippet?.customUrl) === APPROVED_SONICVHIBEZ_HANDLE;
+}
+
+
 function strictIsoTimestamp(value) {
   if (typeof value !== "string") return NaN;
   const match = value.match(/^(\d{4})-(\d{2})-(\d{2})T([01]\d|2[0-3]):([0-5]\d):([0-5]\d)(?:\.(\d{1,3}))?(Z|([+-])(\d{2}):(\d{2}))$/);
@@ -311,7 +326,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   const expectedChannelId = env.SONICVHIBEZ_CHANNEL_ID;
   const matchedChannel = authenticatedChannels.find(item => item.id === expectedChannelId);
   if (!matchedChannel || metadata.channelId !== expectedChannelId) throw new Error("authenticated YouTube channel ID does not match configured SonicVhibez channel ID");
-  if (matchedChannel.snippet?.title !== "SonicVhibez") throw new Error("authenticated channel is not exactly SonicVhibez");
+  if (!matchesApprovedSonicVhibezChannel(matchedChannel, expectedChannelId)) throw new Error("authenticated channel must match the verified @sonicvhibez handle or the legacy SonicVhibez channel title");
   if ((metadata.contentType ?? metadata.format) === "short") {
     const relationship = approval.shortParentRelationship;
     if (metadata.parentContentId !== relationship.parentContentId || metadata.parentVideoId !== relationship.parentRemoteVideoId || metadata.parentVideoUrl !== relationship.parentCanonicalUrl) {
@@ -446,7 +461,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       if (sha256File(safeArtifactPath) !== item.sha256) throw new Error("approval-bound artifact changed: " + path.basename(safeArtifactPath));
     }
     const finalChannel = await youtube.channels.list({ part: ["id", "snippet"], mine: true });
-    const finalChannelMatch = (finalChannel.data.items ?? []).find(item => item.id === expectedChannelId && item.snippet?.title === "SonicVhibez");
+    const finalChannelMatch = (finalChannel.data.items ?? []).find(item => matchesApprovedSonicVhibezChannel(item, expectedChannelId));
     if (!finalChannelMatch || matchedChannel.id !== expectedChannelId) throw new Error("authenticated SonicVhibez channel identity changed before upload");
     if ((metadata.contentType ?? metadata.format) === "short") {
       const relationship = approval.shortParentRelationship;

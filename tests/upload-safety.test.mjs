@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { validateUploadApproval, validateOneShotUploadAuthorization, assertReconciliationOnlyHasPriorAttempt, verifyRetainedRightsEvidence, sha256File, resolveRegularFileNoSymlinks, resolveRepositoryFileNoSymlinks, prepareUploadLogDirectory, remoteUploadMatchesApprovedMetadata } from "../scripts/upload-private.mjs";
+import { validateUploadApproval, validateOneShotUploadAuthorization, assertReconciliationOnlyHasPriorAttempt, verifyRetainedRightsEvidence, sha256File, resolveRegularFileNoSymlinks, resolveRepositoryFileNoSymlinks, prepareUploadLogDirectory, remoteUploadMatchesApprovedMetadata, matchesApprovedSonicVhibezChannel } from "../scripts/upload-private.mjs";
 
 test("YouTube uploader is private-only and binds upload to the verified SonicVhibez channel", () => {
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
@@ -14,7 +14,8 @@ test("YouTube uploader is private-only and binds upload to the verified SonicVhi
   assert.match(source, /metadata\.visibility\s*!==\s*"private"/);
   assert.match(source, /item\.id\s*===\s*expectedChannelId/);
   assert.match(source, /metadata\.channelId\s*!==\s*expectedChannelId/);
-  assert.match(source, /matchedChannel\.snippet\?\.title\s*!==\s*"SonicVhibez"/);
+  assert.match(source, /matchesApprovedSonicVhibezChannel\(matchedChannel, expectedChannelId\)/);
+  assert.match(source, /matchesApprovedSonicVhibezChannel\(item, expectedChannelId\)/);
   assert.match(source, /remoteUploadMatchesApprovedMetadata\(remoteItem/);
   assert.match(source, /remoteUploadMatchesApprovedMetadata\(item/);
 
@@ -22,6 +23,26 @@ test("YouTube uploader is private-only and binds upload to the verified SonicVhi
   assert.doesNotMatch(source, /privacyStatus:\s*["']public["']/);
   assert.doesNotMatch(source, /publishAt\s*:/);
   assert.doesNotMatch(source, /youtube\.videos\.update\s*\(/);
+});
+
+
+test("verified @sonicvhibez handle is accepted when the channel display title is SonicVibes", () => {
+  const channelId = "UCSlkuPfHH78oGC1o418HV4w";
+  assert.equal(matchesApprovedSonicVhibezChannel({
+    id: channelId, snippet: { title: "SonicVibes", customUrl: "@sonicvhibez" }
+  }, channelId), true);
+  assert.equal(matchesApprovedSonicVhibezChannel({
+    id: channelId, snippet: { title: "SonicVibes", customUrl: "@differentchannel" }
+  }, channelId), false);
+  assert.equal(matchesApprovedSonicVhibezChannel({
+    id: "UC" + "A".repeat(22), snippet: { title: "SonicVibes", customUrl: "@sonicvhibez" }
+  }, channelId), false);
+  assert.equal(matchesApprovedSonicVhibezChannel({
+    id: channelId, snippet: { title: "Nature Frontiers", customUrl: "@naturefrontiers" }
+  }, channelId), false);
+  assert.equal(matchesApprovedSonicVhibezChannel({
+    id: channelId, snippet: { title: "SonicVhibez" }
+  }, channelId), true);
 });
 
 test("upload workflow requires media preflight before the YouTube insert call", () => {

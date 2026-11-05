@@ -96,9 +96,9 @@ test("uploader verifies authenticated channel ID and exact channel name before u
   const fs = await import("node:fs");
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
   assert.match(source, /youtube\.channels\.list\(\{ part: \["id", "snippet", "contentDetails"\], mine: true \}\)/);
-  assert.match(source, /matchedChannel\.snippet\?\.title !== \"SonicVhibez\"/);
+  assert.match(source, /matchesApprovedSonicVhibezChannel\(matchedChannel, expectedChannelId\)/);
   assert.match(source, /metadata\.channelId !== expectedChannelId/);
-  assert.ok(source.indexOf("matchedChannel.snippet?.title !== \"SonicVhibez\"") < source.indexOf("youtube.videos.insert"));
+  assert.ok(source.indexOf("matchesApprovedSonicVhibezChannel(matchedChannel, expectedChannelId)") < source.indexOf("youtube.videos.insert"));
   assert.match(source, /privacyStatus: \"private\"/);
 });
 
