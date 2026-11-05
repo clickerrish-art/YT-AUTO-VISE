@@ -27,3 +27,18 @@ test("private upload workflow installs from the lockfile and uses the built-in A
   assert.match(privateUploadWorkflow, /github-token: \$\{\{ github\.token \}\}/);
   assert.doesNotMatch(privateUploadWorkflow, /github-token: \$\{\{ secrets\.GITHUB_TOKEN \}\}/);
 });
+
+
+const baselineWorkflow = fs.readFileSync(new URL(".github/workflows/isolated-baseline-comparison.yml", root), "utf8");
+
+test("isolated baseline runs once per PR update and bounds free-runner dependency installation", () => {
+  assert.match(baselineWorkflow, /^  workflow_dispatch:/m);
+  assert.match(baselineWorkflow, /^  pull_request:/m);
+  assert.doesNotMatch(baselineWorkflow, /^  push:/m,
+    "the PR-scoped baseline must not queue a duplicate push run for the same candidate SHA");
+  assert.match(baselineWorkflow, /timeout 600s sudo apt-get update/);
+  assert.match(baselineWorkflow, /timeout 600s sudo apt-get install/);
+  assert.match(baselineWorkflow, /timeout 600s npm ci --ignore-scripts/);
+  assert.match(baselineWorkflow, /timeout 600s npm install --ignore-scripts/);
+  assert.match(baselineWorkflow, /timeout 300s python -m pip install/);
+});
