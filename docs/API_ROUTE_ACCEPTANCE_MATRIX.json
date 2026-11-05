@@ -104,7 +104,7 @@
     "exactHeadReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205652",
     "pastScheduleSlotRegression": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/8272d2e39868237c05b2951f37bcade6ae6608c4/test/dashboard-server.test.mjs"
   },
-  "disclaimer": "API-001 remains NOT_TESTED overall. The current exact-head route matrix records 31 of 36 routes as PASS, zero NOT_TESTED and five externally BLOCKED; all 36 authentication-negative checks pass. The past-slot guard for POST /api/drafts, POST /api/jobs and POST /api/drafts/update passes on 8272d2e39868237c05b2951f37bcade6ae6608c4, rejecting expired dates before durable state or audit mutation. The POST /api/jobs/produce negative legacy-job path also fails closed with HTTP 409 and byte-identical state/no artifacts. These do not certify successful production or provider operations; genuine approved media, rights, identity, history and human review remain absent. Branch protection status is unverified due a 403 response. Live full-suite and branch evidence refreshed on 2026-11-05 to 05daf438c889079853c6521df1cb54a1223424ff (524 Node tests across 111 files, 16 Python tests, 23/23 Chromium journeys; isolated baseline PASS). Route-by-route matrix statuses remain sourced from 8272d2e39868237c05b2951f37bcade6ae6608c4 and are not re-labelled as newly tested on the newer SHA. API-001 remains NOT_TESTED overall.",
+  "disclaimer": "API-001 remains NOT_TESTED overall. The current exact-head route matrix records 31 of 36 routes as PASS, zero NOT_TESTED and five externally BLOCKED; all 36 authentication-negative checks pass. The past-slot guard for POST /api/drafts, POST /api/jobs and POST /api/drafts/update passes on 8272d2e39868237c05b2951f37bcade6ae6608c4, rejecting expired dates before durable state or audit mutation. The POST /api/jobs/produce negative legacy-job path also fails closed with HTTP 409 and byte-identical state/no artifacts. These do not certify successful production or provider operations; genuine approved media, rights, identity, history and human review remain absent. Branch protection status is unverified due a 403 response. Live full-suite and branch evidence refreshed on 2026-11-05 to 05daf438c889079853c6521df1cb54a1223424ff (524 Node tests across 111 files, 16 Python tests, 23/23 Chromium journeys; isolated baseline PASS). Route-by-route matrix statuses remain sourced from 8272d2e39868237c05b2951f37bcade6ae6608c4 and are not re-labelled as newly tested on the newer SHA. API-001 remains NOT_TESTED overall. Targeted update on 2026-11-05: POST /api/uploads/reconcile now has exact-SHA concurrent and restart regression coverage for both absent-ledger (409) and unreadable/unsafe-ledger (503) fail-closed paths on f42c8a0eeb0ca63a9d5212888f811aeee863303b; content-quality CI 41997377068 passed. This does not test successful remote YouTube reconciliation and does not change the route's overall BLOCKED status or API-001's overall NOT_TESTED status.",
   "routes": [
     {
       "method": "GET",
@@ -705,15 +705,21 @@
       "classification": "uncertain remote upload reconciliation",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid token are rejected before validation/mutation by the source-derived 36-route authentication matrix",
-      "authorizedSuccess": "BLOCKED — successful reconciliation requires an authoritative prior upload attempt and remote video ID; no live YouTube reconciliation is claimed. Missing-prior-attempt 409 is covered by test/upload-reconcile-fail-closed.integration.test.mjs.",
+      "authorizedSuccess": "BLOCKED — successful reconciliation still requires an authoritative prior upload attempt and remote video ID; no live YouTube reconciliation is claimed. Missing-ledger and unreadable-ledger fail-closed behavior is covered by exact-SHA real-server tests.",
       "inputValidation": "PASS",
-      "durablePersistence": "PASS — missing prior attempt returns 409 without changing dashboard-state.json or creating upload-attempts.json; successful remote reconciliation persistence remains untested.",
-      "auditEvidence": "PASS — no reconciliation audit event is appended when no authoritative prior attempt exists; successful remote reconciliation audit remains untested.",
-      "concurrency": "NOT_TESTED — concurrent remote reconciliation is not exercised.",
-      "restartRecovery": "NOT_TESTED — successful remote reconciliation and verified read-back require an authoritative YouTube attempt and remote ID.",
+      "durablePersistence": "PASS for fail-closed negative paths: absent ledger returns 409 and unreadable/unsafe ledger returns 503 without changing dashboard-state.json; successful remote reconciliation persistence remains untested.",
+      "auditEvidence": "PASS for fail-closed negative paths: absent or unreadable ledger appends no audit event; successful remote reconciliation audit remains untested.",
+      "concurrency": "PASS for fail-closed negative paths: six simultaneous absent-ledger requests return 409 and six simultaneous unreadable-ledger requests return 503; state and ledger remain unchanged. Successful provider reconciliation concurrency remains untested.",
+      "restartRecovery": "PASS for fail-closed negative paths: after restart, missing ledger still returns 409 and unreadable ledger still returns 503 with byte-identical state; successful remote reconciliation and verified read-back remain untested.",
       "externalOperation": "complete YouTube history and authorized provider identity required",
       "overallAcceptance": "BLOCKED",
-      "notes": "Local no-prior-attempt fail-closed behavior is accepted only. The endpoint is read-only and never creates a new upload; live YouTube remote reconciliation remains an external prerequisite. A PASS in an individual field records only that tested slice; it does not imply full route acceptance."
+      "notes": "Local reconciliation remains read-only and never creates a new upload. The endpoint now distinguishes absent attempt evidence (409) from an existing corrupt/unsafe/unreadable ledger (503). Real YouTube remote reconciliation remains an external prerequisite; the route remains BLOCKED overall.",
+      "testEvidence": {
+        "test": "test/upload-reconcile-fail-closed.integration.test.mjs and test/dashboard-server.test.mjs",
+        "exactTestedSha": "f42c8a0eeb0ca63a9d5212888f811aeee863303b",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41997377068",
+        "scenarios": "Six concurrent missing-ledger requests return 409; six concurrent unreadable-ledger requests return 503; both paths preserve dashboard-state.json byte-for-byte, create no upload attempt or audit mutation, and retain their behavior after a dashboard restart. The symlink-ledger server test expects the explicit 503 unavailable result. This does not test a successful remote reconciliation."
+      }
     },
     {
       "method": "POST",
@@ -932,5 +938,12 @@
     },
     "routeMatrixSnapshotSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
     "note": "This refresh updates live branch inventory and links the full exact-SHA test suite. The route-by-route PASS/BLOCKED classifications and route-specific test evidence remain the earlier matrix snapshot; the full suite passing does not independently re-certify every route. API-001 remains NOT_TESTED overall."
+  },
+  "latestTargetedEvidence": {
+    "updatedAt": "2026-11-05T09:00:34.027Z",
+    "exactTestedSha": "f42c8a0eeb0ca63a9d5212888f811aeee863303b",
+    "route": "POST /api/uploads/reconcile",
+    "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41997377068",
+    "note": "Targeted route evidence only; the full matrix's other route statuses remain tied to its previously recorded source/test SHA."
   }
 }
