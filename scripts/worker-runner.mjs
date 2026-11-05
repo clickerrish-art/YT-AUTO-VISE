@@ -561,7 +561,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       let outputFd;
       try {
         outputFd = fs.openSync(resolvedOutput, "wx", 0o600);
-        fs.writeFileSync(outputFd, JSON.stringify(payload.receipt, null, 2) + "\\n");
+        fs.writeFileSync(outputFd, JSON.stringify(payload.receipt, null, 2) + "\n");
         fs.fsyncSync(outputFd);
       } finally {
         if (outputFd !== undefined) fs.closeSync(outputFd);
