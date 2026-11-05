@@ -15,7 +15,7 @@ import { spawn, spawnSync } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
 import { generateScript } from "./generate-script.mjs";
 import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence, validateConfiguredSonicVhibezChannel, validateParentReceiptTitle, parseShortMetadataJson } from "./short-parent-relationship.mjs";
-import { createContentJob, transitionContentJob, authorizeContentJobRetry, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease } from "./content-job-lifecycle.mjs";
+import { createContentJob, transitionContentJob, authorizeContentJobRetry, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease, deadLetterExhaustedJob } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File } from "./human-review.mjs";
 import { buildVerifiedRightsAssets } from "./rights-evidence.mjs";
 import { canonicalAuthoringScriptSha256, runAuthoringNarrationStage } from "./authoring-production-pipeline.mjs";
@@ -2648,6 +2648,19 @@ const server = http.createServer(async (req, res) => {
               retryableAfterOperatorReview: true,
               message: reason
             };
+            if (state.jobs[index].attemptCount >= state.jobs[index].retryPolicy?.maxAttempts) {
+              state.jobs[index] = deadLetterExhaustedJob(state.jobs[index], failedAt);
+              state.audit.push({
+                id: crypto.randomUUID(),
+                action: "CONTENT_JOB_DEAD_LETTERED",
+                jobId: job.id,
+                reasonCode: state.jobs[index].deadLetter.reasonCode,
+                attemptCount: state.jobs[index].attemptCount,
+                maxAttempts: state.jobs[index].retryPolicy.maxAttempts,
+                at: failedAt,
+                actor: "retry-policy"
+              });
+            }
             state.audit.push({
               id: crypto.randomUUID(),
               action: "CONTENT_RENDER_PREFLIGHT_FAILED",
@@ -2660,9 +2673,10 @@ const server = http.createServer(async (req, res) => {
             return json(res, 409, {
               error: "Authoring job failed render preflight; it has been removed from automatic dispatch and requires operator remediation and explicit retry authorization",
               detail: reason,
-              jobState: "FAILED",
+              jobState: state.jobs[index].state,
               retryable: true,
               requiresOperatorRetry: true,
+              deadLettered: state.jobs[index].state === "DEAD_LETTER",
               publishable: false, publishingEnabled: false
             });
           }
