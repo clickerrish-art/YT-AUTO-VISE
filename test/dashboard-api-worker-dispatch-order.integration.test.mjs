@@ -139,14 +139,14 @@ test("dispatchable queue is read-only, approval-gated, ordered by scheduled inst
   assert.equal(body.publishingEnabled, false);
   assert.equal(body.queuedCount, 7, "all queued jobs are counted, including jobs held behind approval");
   assert.equal(body.queuedWithoutApprovedRenderPlan, 1);
+  assert.equal(body.dispatchableCount, 4);
+  assert.equal(body.queuedWithoutValidSlot, 2);
   assert.deepEqual(body.jobs.map(item => item.id), [
-    "job-no-slot",
-    "job-malformed-slot",
     "job-earlier-slot",
     "job-tie-a",
     "job-tie-z",
     "job-later-slot"
-  ], "valid scheduled instants lead the order; malformed or absent slots use deterministic creation/id fallbacks");
+  ], "only valid explicit Johannesburg slots are dispatchable; malformed or absent slots remain held");
   assert.deepEqual(fs.readFileSync(statePath), before,
     "dispatch discovery must not mutate durable job state or audit history");
 
@@ -156,7 +156,7 @@ test("dispatchable queue is read-only, approval-gated, ordered by scheduled inst
   const limitedBody = await limited.json();
   assert.equal(limited.status, 200, JSON.stringify(limitedBody));
   assert.deepEqual(limitedBody.jobs.map(item => item.id), body.jobs.slice(0, 3).map(item => item.id),
-    "the requested limit must return a stable prefix of the ordered dispatch queue");
+    "the requested limit must return a stable prefix of the approved, valid-slot dispatch queue");
   assert.deepEqual(fs.readFileSync(statePath), before,
     "repeated and limited dispatch discovery must remain byte-for-byte read-only");
 });
