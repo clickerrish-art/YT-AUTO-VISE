@@ -86,7 +86,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const providerPort = provider.address().port;
   const port = await reservePort();
   const token = "test-token-" + "x".repeat(40);
-  const serverEnv = { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, UPLOAD_LOG_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1", SCRIPT_GENERATION_ENDPOINT: `http://127.0.0.1:${providerPort}/v1/chat/completions`, SCRIPT_GENERATION_TIMEOUT_MS: "5000" };
+  const serverEnv = { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_WORKER_TOKEN: "worker-test-token-" + "y".repeat(40), DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, UPLOAD_LOG_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1", SCRIPT_GENERATION_ENDPOINT: `http://127.0.0.1:${providerPort}/v1/chat/completions`, SCRIPT_GENERATION_TIMEOUT_MS: "5000" };
   const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-outside-path-"));
   let child = spawn(process.execPath, [path.join(process.cwd(), "scripts", "dashboard-server.mjs")], {
     cwd: outsideDir,
@@ -1441,6 +1441,7 @@ test("all dashboard POST routes reject empty operation payloads without mutating
     "/api/jobs/rights/verify",
     "/api/jobs/review",
     "/api/uploads/reconcile",
+    "/api/worker/quarantine-release",
     "/api/jobs/produce",
     "/api/jobs/lease/claim",
     "/api/jobs/lease/heartbeat",
