@@ -452,9 +452,15 @@ export async function runWorker({
   try {
     lockFd = fs.openSync(lockPath, "wx", 0o600);
     fs.writeFileSync(lockFd, JSON.stringify({ pid: process.pid, workerId, startedAt: new Date().toISOString() }));
+    if (fs.existsSync(statePath + ".release.lock")) {
+      throw new Error("A quarantine release is in progress or requires operator inspection; worker startup is blocked");
+    }
   } catch (error) {
     if (lockFd !== undefined) fs.closeSync(lockFd);
-    throw new Error("Worker state is already locked by another worker process or a stale lock; inspect and stop the worker before continuing", { cause: error });
+    try { fs.unlinkSync(lockPath); } catch (cleanupError) {
+      if (cleanupError?.code !== "ENOENT") throw cleanupError;
+    }
+    throw new Error("Worker state is already locked or a quarantine release is in progress; inspect the state locks before continuing", { cause: error });
   }
   try {
     const persistedState = loadCooldowns(statePath, workerId);
