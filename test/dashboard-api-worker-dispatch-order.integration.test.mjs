@@ -144,6 +144,7 @@ test("dispatchable queue is read-only, approval-gated, ordered by scheduled inst
   assert.equal(body.jobs.some(item => item.id === "job-expired-slot"), false,
     "an approved job whose explicit Johannesburg slot has elapsed must remain held rather than dispatch immediately");
   assert.equal(body.queuedWithoutValidSlot, 2);
+  assert.equal(body.queuedWithExpiredSlot, 1, "the read-only queue response must explain how many jobs are held because their slots expired");
   assert.deepEqual(body.jobs.map(item => item.id), [
     "job-earlier-slot",
     "job-tie-a",
