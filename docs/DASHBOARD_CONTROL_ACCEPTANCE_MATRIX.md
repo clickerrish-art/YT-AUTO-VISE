@@ -1,3 +1,13 @@
+# Current evidence checkpoint — 5 November 2026
+
+- Exact tested source/test SHA: `05daf438c889079853c6521df1cb54a1223424ff`.
+- Dashboard Chromium E2E: [run 41941480117](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480117), **23/23 passed**.
+- Static inventory: **104 controls, 16 forms, 40 route handlers, 36 protected API routes**.
+- **DASH-001 remains NOT_TESTED overall.** The 23 browser journeys do not establish exhaustive per-control success, validation, error feedback, authorization, persistence, refresh, concurrency, recovery and accessibility acceptance.
+- Main remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; PR #1 remains open, draft and unmerged. Public/unattended publishing remains disabled.
+
+---
+
 # Dashboard control acceptance — live refresh 5 November 2026
 
 **Current application source/test SHA:** `8272d2e39868237c05b2951f37bcade6ae6608c4`  

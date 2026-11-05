@@ -1,16 +1,25 @@
-# Live checkpoint — 5 November 2026
+# Live checkpoint — 5 November 2026, exact candidate 05daf438c889079853c6521df1cb54a1223424ff
 
-The exact current candidate is `8272d2e39868237c05b2951f37bcade6ae6608c4`. Main remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. Branch divergence is **2,586 ahead / 2 behind / 231 changed paths**. The exact inventory reports 17 critical paths, zero final-tree deletions and zero patch-equivalent commits. PR #1 remains open, draft and unmerged.
+This checkpoint supersedes older live-state snapshots below. Evidence is tied to exact candidate `05daf438c889079853c6521df1cb54a1223424ff`; the release decision remains **HOLD / NOT PRODUCTION READY**.
 
-The exact-SHA isolated comparison [41940197671](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940197671) passed: main 54 Node and 8 Python tests; candidate 524 Node tests across 111 test files and 16 Python tests; zero candidate skips. Exact-HEAD automation/security [41940205668](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205668) passed 111/111 Node test files, 524 Node tests, 16 Python tests, npm audit 0 vulnerabilities and FFmpeg/ffprobe verification. Dashboard Chromium E2E [41940205660](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205660) passed 23/23; content quality, metadata, branch inventory and Nature Frontiers local draft validation passed. Production readiness [41940205652](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205652) remains HOLD with 13 blockers.
+- Main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged); merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Live branch at snapshot: **2,589 ahead / 2 behind / 231 changed paths**.
+- Exact inventory: 17 critical paths, zero final-tree deletions, zero patch-equivalent commits, clean CI working tree; semantic integration decision remains `REQUIRES_REVIEW`.
+- PR #1 remains **OPEN, DRAFT, UNMERGED**. Branch protection is **UNVERIFIED** (GitHub protection endpoint returned 403).
+- Exact-SHA automation/security [41941480162](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480162): **PASS**, 111/111 Node test files, 524 Node tests, zero failures/skips, 16 Python tests, npm audit 0 vulnerabilities, FFmpeg/ffprobe and syntax checks passed.
+- Dashboard Chromium E2E [41941480117](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480117): **PASS — 23/23**. Content quality [41941480128](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480128), metadata [41941480299](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480299), lockfile [41941470991](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941470991), branch inventory [41941480110](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480110), and local Nature Frontiers draft validation [41941480386](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480386) passed.
+- Isolated exact-SHA baseline [41941480198](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480198): main 54 Node/8 Python; candidate 524 Node across 111 files/16 Python; zero candidate skips; all test commands exited 0.
+- Production readiness [41941480109](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480109): **HOLD**, 13 blockers; report uploaded, mandatory final gate failed as designed.
+- The API matrix route snapshot remains 36 routes / 31 PASS / 5 BLOCKED / 0 NOT_TESTED, with 36/36 auth-negative checks passing. Route-by-route evidence was last generated at `8272d2e`; API-001 remains NOT_TESTED overall.
+- The last full requirement assessment remains 82 total / 60 PASS / 12 NOT_TESTED / 10 BLOCKED as of 2 November; it is not reclassified by this live CI refresh.
+- Production blockers remain the owner cadence decision, complete remote upload history, genuine rights-cleared media/manifests, final playable Short, human review, verified channel identity and secure YouTube OAuth/channel configuration.
+- Public/unattended publishing remains disabled. No upload, publication, provider mutation, account reconnection, spend, merge or main-branch edit occurred.
 
-The dashboard scheduler now rejects past dates for draft creation, direct job creation and draft rescheduling with HTTP 409 before state or audit mutation. This does not replace owner-approved cadence or remote YouTube history reconciliation. Public/unattended publishing remains disabled.
-
-The 13 current blockers are: (1) owner-approved feasible cadence with explicit timezone-aware timestamp/reference; (2) complete public/private/unlisted YouTube history and uncertain-attempt reconciliation; (3) genuine Short rights manifest and final export; (4) genuine long-form rights manifest and final export; (5) human-reviewed Short metadata and approval receipt; (6) independently verified SonicVhibez channel identity; (7) genuine rights evidence for every asset; (8) human compliance review; (9) playable `media/next-short.mp4`; (10–12) secure `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, and `YOUTUBE_REFRESH_TOKEN`; (13) independently verified `SONICVHIBEZ_CHANNEL_ID` configured securely.
-
-No credentials, media rights, human approvals or channel identity have been fabricated. Public/unattended publishing remains disabled. Readiness remains fail-closed.
+See [CURRENT_RELEASE_EVIDENCE_2026-11-05.md](CURRENT_RELEASE_EVIDENCE_2026-11-05.md) for the full exact-SHA report.
 
 ---
+
+
 
 # Current execution checkpoint — 4 November 2026
 

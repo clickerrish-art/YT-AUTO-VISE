@@ -1,133 +1,128 @@
 # SonicVhibez Marketing Machine — current release evidence
 
-**Evidence date:** 5 November 2026  
+**Evidence snapshot:** 5 November 2026, 00:30 UTC  
 **Repository:** `clickerrish-art/YT-AUTO-VISE`  
-**Branch:** `codex/marketing-machine-audit-fixes`  
-**Candidate HEAD:** `8272d2e39868237c05b2951f37bcade6ae6608c4`  
-**Main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6`  
-**Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`
+**Implementation branch:** `codex/marketing-machine-audit-fixes`  
+**Exact tested source/test SHA:** `05daf438c889079853c6521df1cb54a1223424ff`  
+**Branch HEAD at evidence snapshot:** `05daf438c889079853c6521df1cb54a1223424ff`  
+**Main HEAD:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged)  
+**Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`  
+**PR #1:** OPEN · DRAFT · UNMERGED
 
 ## Release decision
 
-**NOT PRODUCTION READY — HOLD.** This document refreshes repository, CI, API and branch-inventory evidence only. It does not authorize a merge, a provider action, upload or publication.
+**NOT PRODUCTION READY — HOLD.** This is an exact-SHA engineering and release-evidence refresh. It does not authorize merge, external provider mutation, upload, scheduling or publication.
 
-## Exact-SHA automated evidence
+## Exact-SHA CI results
 
-The candidate source/test SHA is `8272d2e39868237c05b2951f37bcade6ae6608c4`. The separate documentation-only evidence refresh is on the PR head `2c10dc4f1239113566e14e82aba80416ea47c98c`; application source is unchanged by that documentation commit.
+All listed workflows completed against exact candidate SHA `05daf438c889079853c6521df1cb54a1223424ff`.
 
-All results below are tied to candidate `8272d2e39868237c05b2951f37bcade6ae6608c4`.
-
-| Check | Run | Result |
+| Validation | Run | Result |
 |---|---:|---|
-| Automation/security | [41940205668](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205668) | PASS |
-| Dashboard Chromium E2E | [41940205660](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205660) | PASS — 23/23 tests |
-| Content quality | [41940205730](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205730) | PASS |
-| Metadata validation | [41940205670](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205670) | PASS |
-| Isolated main/candidate baseline | [41940197671](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940197671) | PASS |
-| Branch reconciliation inventory | [41940205685](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205685) | PASS — inventory only |
-| Nature Frontiers local draft validation | [41940205706](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205706) | PASS — local validation only |
-| Production readiness | [41940205652](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205652) | HOLD — 13 blockers |
+| Automation/security | [41941480162](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480162) | **PASS** — 111/111 Node test files, 524 tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax and Python compilation passed |
+| Dashboard Chromium E2E | [41941480117](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480117) | **PASS — 23/23** |
+| Content quality | [41941480128](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480128) | **PASS** |
+| Metadata validation | [41941480299](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480299) | **PASS** |
+| Isolated main/candidate baseline | [41941480198](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480198) | **PASS** — exact checkout and test exits verified below |
+| Branch reconciliation inventory | [41941480110](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480110) | **PASS** — non-destructive inventory only |
+| Nature Frontiers local draft validation | [41941480386](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480386) | **PASS** — local validation only; provider-side creation/read-back skipped |
+| npm lockfile workflow | [41941470991](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941470991) | **PASS** — clean locked install and complete Node test suite |
+| Production readiness | [41941480109](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480109) | **HOLD** — readiness report generated and uploaded; final mandatory gate correctly failed with 13 blockers |
 
-### Exact isolated baseline
+### Retained isolated baseline evidence
 
-The retained [baseline-comparison artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940197671) records exact checkout SHAs and test exits:
+The [baseline-comparison artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480198) records:
 
-- Main `fa00d28e7f58911482686e4ad69fac9f4701a2e6`: installation exit 0; 54 Node tests passed, 0 failed, 0 skipped; 8 Python tests passed.
-- Candidate `8272d2e39868237c05b2951f37bcade6ae6608c4`: installation exit 0; 524 Node tests passed across 111/111 test files, 0 failed, 0 skipped; 16 Python tests passed.
-- Both Node and Python test commands exited 0 on both checkouts.
-- FFmpeg/FFprobe installation and verification passed.
-- The candidate worker API integration test proves that a scoped worker cannot access operator state or lease claims, that an unknown production job returns 404, and that a queued legacy job without the approved authoring pipeline returns 409 with byte-identical persisted state and no render manifest or per-job media directory.
+- Main `fa00d28e7f58911482686e4ad69fac9f4701a2e6`: install exit 0; 54 Node tests passed, 0 failed, 0 skipped; 8 Python tests passed; both test commands exit 0.
+- Candidate `05daf438c889079853c6521df1cb54a1223424ff`: install exit 0; 524 Node tests passed across 111/111 files, 0 failed, 0 skipped; 16 Python tests passed; both test commands exit 0.
+- Candidate locked dependency installation reported 0 vulnerabilities.
+- FFmpeg and FFprobe installation/verification passed.
 
-The baseline is a test comparison, not proof that every business workflow or provider integration is production-ready.
+The main baseline's older dependency install reported four moderate audit findings. This does not alter the candidate result; no automated dependency fix was applied to main.
 
-## Live Git and integration state
+The comparison is test evidence, not proof that all business workflows, deployment paths or external providers are accepted.
 
-Branch protection is **UNVERIFIED** because GitHub returned 403 for the main branch protection endpoint; no enabled/disabled assertion is made.
+## Live Git and history inventory
 
-Branch protection is **UNVERIFIED**: GitHub returned 403 when reading the main branch protection endpoint. This report makes no claim that protection is enabled or disabled.
+The exact [branch inventory artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480110) was generated from candidate `05daf438c889079853c6521df1cb54a1223424ff` and records:
 
-- Candidate branch HEAD: `8272d2e39868237c05b2951f37bcade6ae6608c4`.
-- Main HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6` — unchanged.
-- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
-- Branch divergence: **2,586 ahead / 2 behind**.
-- Final tree: **231 changed paths**, zero final-tree deletions.
-- Patch-equivalent branch commits reported by the inventory: **0**; this is not proof of semantic uniqueness.
-- Critical paths requiring semantic review: **17**.
-- Branch-only commit classification: 1,104 documentation-only; 633 test-only; 540 implementation; 105 workflow-only; 75 mixed; 71 implementation-and-tests; 58 config/content.
-- The two base-only commits add then revert `test/restore-facebook-draft-history.test.mjs`; the branch retains that test and `tests/restore-state.test.mjs`.
-- The CI inventory working tree was clean; no destructive reconciliation was performed.
-- PR #1 remains **OPEN, DRAFT, UNMERGED**. No merge, reset, rebase, force-push or main-branch edit occurred.
+| Measure | Result |
+|---|---:|
+| Branch-only commits | 2,589 |
+| Main-only commits | 2 |
+| Changed final-tree paths | 231 |
+| Final-tree deletions | 0 |
+| Patch-equivalent commits | 0 |
+| Critical paths requiring semantic review | 17 |
+| CI inventory working tree | Clean |
 
-The inventory's classification is heuristic. GIT-002 human semantic review remains NOT TESTED.
+Branch-only commit classification (heuristic, not semantic approval):
 
-## Dashboard acceptance snapshot
+- 1,106 documentation-only
+- 633 test-only
+- 540 implementation
+- 106 workflow-only
+- 75 mixed
+- 71 implementation-and-tests
+- 58 configuration/content
 
-The exact-head dashboard run [41940205660](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205660) passed **23/23 browser tests**. The source inventory contains 104 controls, 16 forms and 40 route handlers (36 protected API routes). Ten forms have demonstrated successful UI journeys; six downstream forms remain blocked by genuine production prerequisites. DASH-001 remains NOT_TESTED overall because full per-control success, validation, failure, authorization, persistence and recovery acceptance is not complete.
+The two main-only commits add and then revert `test/restore-facebook-draft-history.test.mjs`. The implementation branch retains that test and `tests/restore-state.test.mjs`; both must be preserved pending review.
 
-## Scheduler hardening added on the current candidate
+The inventory explicitly records `REQUIRES_REVIEW`. Zero patch-equivalent commits does not prove semantic uniqueness. **GIT-002 remains open for human review of the 17 critical paths and divergent implementation history.**
 
-The dashboard server now rejects any reserved draft/job slot whose resolved Africa/Johannesburg timestamp is not in the future. This applies to draft creation, direct content-job creation and draft rescheduling. Real-server regression cases assert HTTP 409 and byte-for-byte unchanged state/audit data for all three operations. Time-sensitive fixtures now use `test/helpers/schedule-fixtures.mjs` so the suite does not become invalid as the calendar advances. Exact-HEAD automation passed all 111 Node test files and 16 Python tests.
+Main remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. No merge, reset, rebase, force-push, main-branch edit or destructive reconciliation occurred. Branch protection remains **UNVERIFIED** because the GitHub protection endpoint returned 403; no claim is made that protection is enabled or disabled.
 
-## API acceptance snapshot
+## Dashboard and API acceptance
 
-The existing API matrix contains 36 protected routes:
+- Dashboard source inventory: 104 controls, 16 forms, 40 route handlers, 36 protected API routes.
+- Dashboard browser workflow: 23/23 passed on exact candidate `05daf438c889079853c6521df1cb54a1223424ff`.
+- **DASH-001 remains NOT_TESTED overall.** The browser journeys and static inventory do not prove exhaustive control-by-control behavior, validation, persistence, authorization, recovery and accessibility.
+- The API route matrix retains its route-specific snapshot: 36 routes, 36/36 authentication-negative checks passed, 31 overall PASS and 5 BLOCKED. Its route-by-route evidence snapshot was last generated on source/test SHA `8272d2e39868237c05b2951f37bcade6ae6608c4`; the complete test suite passed on `05daf438c889079853c6521df1cb54a1223424ff`, but this does not independently re-certify every route's acceptance status.
+- **API-001 remains NOT_TESTED overall.** The five provider/production-gated routes remain blocked: `POST /api/facebook/verify-page`, `POST /api/facebook/drafts/approve`, `POST /api/facebook/publish`, `POST /api/uploads/reconcile`, and `POST /api/jobs/produce`.
 
-- 31 overall PASS.
-- 5 overall BLOCKED.
-- 0 overall NOT TESTED.
-- 36/36 authentication-negative checks pass.
+## Requirements register status caveat
 
-The five blocked operations remain:
-- `POST /api/facebook/verify-page`
-- `POST /api/facebook/drafts/approve`
-- `POST /api/facebook/publish`
-- `POST /api/uploads/reconcile`
-- `POST /api/jobs/produce`
+The last full requirement assessment remains **82 requirements: 60 PASS / 12 NOT_TESTED / 10 BLOCKED**, dated 2 November 2026. This evidence refresh does not silently change those requirement statuses. The register now records the newer exact-SHA CI and Git evidence while retaining the original assessment date.
 
-For `POST /api/jobs/produce`, the fail-closed negative path is now verified on this exact candidate. A legacy job without the approved authoring pipeline is rejected before state, audit, lease or artifact mutation. Successful rendering remains blocked pending genuine approved script, narration, scene and rights-cleared media evidence.
+Open engineering gates remain: **DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002**.
 
-API-001 remains NOT TESTED overall; individual route acceptance does not replace complete business API acceptance.
+## Production readiness — 13 genuine blockers
 
-## Requirement register status caveat
+The exact-HEAD read-only readiness artifact for `05daf438c889079853c6521df1cb54a1223424ff` reports `blocked`, exit code 2, and 13 blockers:
 
-The existing register's last full status assessment remains **82 requirements: 60 PASS / 12 NOT_TESTED / 10 BLOCKED**, recorded 2 November 2026. This evidence refresh does not silently relabel those statuses. The following remain open: DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002. The register has been annotated with the newer live SHA and CI evidence while retaining the historical status-assessment date.
+1. Owner-approved feasible publication cadence, with timezone-aware approval timestamp and non-empty approval reference, preserving the 72-hour minimum and `long_form → long_form → short` cycle.
+2. Complete SonicVhibez public, private and unlisted YouTube history reconciliation, including pending and uncertain upload attempts.
+3. Genuine `content/render-manifest.json` and verified rights for the Short.
+4. Genuine `content/long-form-render-manifest.json` and verified long-form assets and rights.
+5. Human-reviewed Short metadata and a hash-bound approval receipt; `READY_FOR_PRIVATE_UPLOAD` only after review.
+6. Independently verified SonicVhibez YouTube channel identity.
+7. Genuine source and licence/permission evidence for every asset.
+8. Human compliance review of final media, captions, thumbnail, metadata, claims and disclosures.
+9. Playable final `media/next-short.mp4`.
+10. Secure runtime `YOUTUBE_CLIENT_ID`.
+11. Secure runtime `YOUTUBE_CLIENT_SECRET`.
+12. Secure runtime `YOUTUBE_REFRESH_TOKEN`.
+13. Secure runtime `SONICVHIBEZ_CHANNEL_ID`, independently verified against the authenticated account.
 
-## Production readiness — 13 blockers
-
-The exact-HEAD read-only readiness artifact reports status `blocked`, exit code 2, and these blockers:
-
-1. Owner decision on a feasible publication cadence, preserving the 72-hour minimum and `long_form → long_form → short` cycle, with a timezone-aware approval timestamp and non-empty reference.
-2. Independent reconciliation of complete SonicVhibez public, private and unlisted YouTube history, including pending and uncertain attempts.
-3. Genuine `content/render-manifest.json` with verified rights and final media evidence.
-4. Genuine `content/long-form-render-manifest.json` with verified long-form assets and rights.
-5. Human review of final media, captions, thumbnail, metadata, claims and disclosures; metadata must be marked `READY_FOR_PRIVATE_UPLOAD` only after review.
-6. Verified SonicVhibez YouTube channel identity.
-7. Genuine source and licence/permission evidence for every asset before `rightsConfirmed` can be true.
-8. Human compliance review before `complianceReviewed` can be true.
-9. Final playable `media/next-short.mp4`.
-10. `YOUTUBE_CLIENT_ID` in the secure runtime environment.
-11. `YOUTUBE_CLIENT_SECRET` in the secure runtime environment.
-12. `YOUTUBE_REFRESH_TOKEN` in the secure runtime environment.
-13. `SONICVHIBEZ_CHANNEL_ID` in the secure runtime environment and independently verified against the authenticated account.
-
-The readiness artifact reports all four YouTube environment variables missing in the CI environment. No secret values are recorded here.
+The CI readiness process reports all four required YouTube environment variables absent. No secret values are recorded. No media rights, human approvals or channel identity have been fabricated.
 
 ## Publishing and brand safety
 
 - YouTube public and unattended publishing remain disabled.
 - Nature Frontiers remains separate from SonicVhibez.
-- Nature Frontiers local draft validation does not claim provider-side Page creation or publishing.
-- No upload, publication, account reconnection, paid GPU generation or external provider mutation occurred in these checks. The schedule guard only rejects past local reservation timestamps; it does not approve or trigger a publication.
-- The approved product URL remains `https://selar.com/0u19v8u99l`; no additional product claim or destination is authorized.
+- Nature Frontiers workflow success is local draft validation only; no provider-side Page creation or publication is claimed.
+- No upload, publication, account reconnection, paid GPU generation, schedule mutation or external provider write occurred in these checks.
+- The 72-hour minimum is not weakened. The three-gap cycle requires at least 216 hours; no weekly three-publication target is promised.
+- The approved product URL remains `https://selar.com/0u19v8u99l`.
 
 ## Next engineering acceptance order
 
-1. Complete DASH-001 exhaustive dashboard control behavior and accessible interaction acceptance.
-2. Complete API-001 route-level success, validation, persistence, audit, concurrency and restart coverage; retain provider-gated routes as blocked.
-3. Complete SCHED-001 end-to-end scheduling, retry, cancellation, lease expiry and recovery drills without weakening the 72-hour rule.
-4. Complete STATE-001 crash/failure-injection and recovery acceptance.
-5. Complete DEPLOY-001 clean install, upgrade, service operation and rollback drills.
-6. Complete GIT-002 human semantic review of the 17 critical paths and divergent implementation history.
-7. Re-run the exact-HEAD readiness gate after genuine owner-controlled prerequisites are supplied.
+1. Finish exhaustive DASH-001 dashboard control acceptance.
+2. Finish API-001 route-level success, validation, persistence, audit, concurrency and restart acceptance; keep provider-gated operations blocked.
+3. Finish SCHED-001 scheduling, retry, cancellation, lease expiry and recovery drills without weakening the 72-hour rule.
+4. Finish STATE-001 crash/failure-injection and recovery acceptance.
+5. Finish DEPLOY-001 clean-install, upgrade, service operation and rollback drills.
+6. Complete GIT-002 human semantic review of the 17 critical paths and divergent history.
+7. Re-run readiness only after genuine owner-controlled prerequisites are supplied.
 
-No branch integration or publishing action is authorized by this report.
+No branch integration or publishing action is authorized by this evidence.

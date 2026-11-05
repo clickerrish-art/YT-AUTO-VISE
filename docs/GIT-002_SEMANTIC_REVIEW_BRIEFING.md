@@ -1,3 +1,23 @@
+# Current inventory refresh — 5 November 2026
+
+The latest non-destructive inventory was generated from exact candidate `05daf438c889079853c6521df1cb54a1223424ff` in [workflow run 41941480110](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480110).
+
+- Main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Candidate: `05daf438c889079853c6521df1cb54a1223424ff`.
+- Divergence: **2,589 branch-only commits / 2 base-only commits**.
+- Final tree: **231 changed paths**, zero final-tree deletions.
+- Patch-equivalent branch commits: **0** (patch-ID heuristic only; not semantic equivalence).
+- Critical paths requiring review: **17**.
+- CI working tree clean; destructive reconciliation: **none**.
+- Branch-only heuristic classification: 1,106 documentation-only; 633 test-only; 540 implementation; 106 workflow-only; 75 mixed; 71 implementation-and-tests; 58 config/content.
+- Inventory decision: **REQUIRES_REVIEW**. GIT-002 remains **NOT TESTED** until a human reviews critical implementation, security, workflow, configuration and history changes.
+- PR #1 remains open/draft/unmerged; main unchanged. Branch protection remains unverified due GitHub 403.
+- Preserve `test/restore-facebook-draft-history.test.mjs` and `tests/restore-state.test.mjs`.
+
+The older inventory snapshot below is retained as historical evidence and is superseded by this exact-head refresh.
+
+---
+
 # GIT-002 semantic review briefing — 5 November 2026
 
 ## Decision
