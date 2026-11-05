@@ -240,8 +240,17 @@ test("expired leases fence stale results and enforce bounded retry backoff", () 
   assert.ok(Date.parse(expired.job.nextRetryAt) > start + 5_001);
   assert.equal(expired.job.workerLease, null);
   assert.throws(() => completeWorkerLease(expired.job, first.leaseToken, "GENERATED", {}, start + 5_002), /does not match/);
-  assert.throws(() => claimWorkerLease(expired.job, "worker-b", { now: start + 5_002 }), /backoff has not elapsed/);
-  const retry = claimWorkerLease(expired.job, "worker-b", { now: Date.parse(expired.job.nextRetryAt) + 1 });
+  assert.throws(() => claimWorkerLease(expired.job, "worker-b", { now: start + 5_002 }), /explicit operator retry authorization/);
+  assert.throws(() => authorizeContentJobRetry(expired.job, {
+    actor: "operator",
+    reason: "Reviewed expired worker lease and retained outputs"
+  }, start + 5_002), /backoff has not elapsed/);
+  const retryAuthorizationTime = Date.parse(expired.job.nextRetryAt) + 1;
+  const authorizedRetry = authorizeContentJobRetry(expired.job, {
+    actor: "operator",
+    reason: "Reviewed expired worker lease and retained outputs"
+  }, retryAuthorizationTime);
+  const retry = claimWorkerLease(authorizedRetry, "worker-b", { now: retryAuthorizationTime + 1 });
   assert.equal(retry.job.state, "GENERATING");
   assert.equal(retry.job.attemptCount, 2);
   assert.throws(
