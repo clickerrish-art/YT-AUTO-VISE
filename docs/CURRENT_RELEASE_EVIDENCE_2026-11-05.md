@@ -413,3 +413,49 @@ Content quality log confirms 538/538 Node tests passed with zero skips. Browser 
 This adds one recovery failure boundary to the tested backup/restore implementation. It does **not** close STATE-001: a complete isolated end-to-end operational restore drill, owner acceptance and remaining operational/recovery requirements are still outstanding. DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain open/not accepted as applicable. Production readiness remains HOLD; no upload, publication, schedule mutation, provider-side campaign action, account reconnection or spend was performed. Public/unattended publishing remains disabled.
 
 No main-branch edit, merge, PR state change, reset, rebase, force-push or destructive reconciliation occurred.
+
+
+---
+
+# Backup lifecycle and browser acceptance checkpoint — 5 November 2026
+
+**Exact source/test candidate:** `eee32fc63bb45c33ed79b2a241e8a56cb5879b58`  
+**Branch:** `codex/marketing-machine-audit-fixes`  
+**Main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged)  
+**Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`  
+**Live comparison:** 2,635 ahead / 2 behind / 234 changed files; inventory only, not semantic integration approval.  
+**PR #1:** OPEN · DRAFT · UNMERGED; exact head verified as `eee32fc63bb45c33ed79b2a241e8a56cb5879b58`.
+
+## New isolated backup lifecycle test
+
+`test/backup-restore.test.mjs` adds the test `isolated backup lifecycle verifies every payload hash, clean restore, exact bytes and safe idempotent retry`. It:
+- builds isolated source and clean destination fixtures;
+- places a sentinel secret in an out-of-scope `.env` file and verifies the backup excludes it;
+- checks backup format, entry count, payload byte lengths and SHA-256 hashes;
+- restores every entry and compares destination bytes exactly with the backed-up payloads;
+- repeats the restore and verifies a safe idempotent no-op (`restored=0`, all entries unchanged); and
+- verifies transaction journal and operation lock cleanup.
+
+The test does not replace the existing crash, rollback, permission-denial, disk-full, lock-ownership, symlink and conflicting-ledger tests. The protected restore-history tests remain untouched.
+
+## Exact-SHA CI — candidate `eee32fc63bb45c33ed79b2a241e8a56cb5879b58`
+
+| Validation | Run | Result |
+|---|---:|---|
+| Content quality | [42035905339](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42035905339) | **PASS — 539 Node tests, 0 failures, 0 skips** |
+| Automation/security | [42035905154](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42035905154) | **PASS — 112/112 Node test files; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe and syntax/compile checks passed** |
+| Dashboard Chromium E2E | [42035905273](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42035905273) | **PASS — 26/26 journeys** on retry attempt 2, job [127276050304](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42035905273/job/127276050304); Chromium, Edge TTS and FFmpeg setup passed. The real measured-TTS narration and reconciliation journey passed without a second TTS call. |
+| Isolated main/candidate baseline | [42035905201](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42035905201) | **PASS** |
+| Metadata validation | [42035905226](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42035905226) | **PASS** |
+| Branch reconciliation inventory | [42035905464](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42035905464) | **PASS — inventory only, not semantic approval** |
+| Nature Frontiers local draft validation | [42035905360](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42035905360) | **PASS — local-only validation; no provider-side draft creation/read-back** |
+| npm lockfile | [42035899120](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42035899120) | **PASS** |
+| Production readiness | [42035905263](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42035905263) | **HOLD — expected fail-closed result; external and owner-controlled production prerequisites remain unmet** |
+
+The first browser attempt was blocked by an external Edge TTS network connection reset. The exact same candidate's browser job was rerun; the successful retry completed setup and all 26 browser journeys. The earlier setup failure is not counted as an application test failure.
+
+## Acceptance interpretation and safety
+
+This checkpoint verifies backup payload integrity, clean restore, exact byte equivalence, idempotent retry, and the dashboard browser journeys on the exact candidate. It does **not** establish a production-host restore drill or owner acceptance and does not close STATE-001. DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain open/not accepted as applicable. Production readiness remains **HOLD**.
+
+No upload, publication, schedule mutation, provider-side campaign action, account reconnection, paid generation, spend, main-branch edit, merge, PR status change, reset, rebase, force-push or destructive reconciliation occurred. Public/unattended publishing remains disabled.
