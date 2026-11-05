@@ -9,7 +9,7 @@ The latest non-destructive inventory was generated from exact candidate `05daf43
 - Patch-equivalent branch commits: **0** (patch-ID heuristic only; not semantic equivalence).
 - Critical paths requiring review: **17**.
 - CI working tree clean; destructive reconciliation: **none**.
-- Branch-only heuristic classification: 1,106 documentation-only; 633 test-only; 540 implementation; 106 workflow-only; 75 mixed; 71 implementation-and-tests; 58 config/content.
+- Branch-only heuristic classification: 1,107 documentation-only; 639 test-only; 543 implementation; 106 workflow-only; 75 mixed; 71 implementation-and-tests; 58 config/content.
 - Inventory decision: **REQUIRES_REVIEW**. GIT-002 remains **NOT TESTED** until a human reviews critical implementation, security, workflow, configuration and history changes.
 - PR #1 remains open/draft/unmerged; main unchanged. Branch protection remains unverified due GitHub 403.
 - Preserve `test/restore-facebook-draft-history.test.mjs` and `tests/restore-state.test.mjs`.
@@ -43,7 +43,7 @@ This document records a reproducible, non-destructive history inventory and iden
 
 ## Branch-only commit classification
 
-The CI inventory classified 2,586 branch-only commits as follows:
+The CI inventory classified 2,599 branch-only commits as follows:
 
 | Classification | Commits |
 |---|---:|
@@ -56,7 +56,7 @@ The CI inventory classified 2,586 branch-only commits as follows:
 | Implementation and tests | 71 |
 | **Total** | **2,599** |
 
-The volume of documentation-only and test-only commits indicates a long, incremental implementation history. It is not evidence that those commits are disposable. The 540 implementation-only and 71 implementation-plus-test commits require review against the final source tree and each other.
+The volume of documentation-only and test-only commits indicates a long, incremental implementation history. It is not evidence that those commits are disposable. The 543 implementation-only and 71 implementation-plus-test commits require review against the final source tree and each other.
 
 ## Base-only history and restore-history preservation
 
@@ -96,7 +96,7 @@ Artifact: [Non-destructive branch inventory workflow 41950432546](https://github
 ## Human review decisions required
 
 1. Review the final diff and tests for the 17 critical paths, prioritizing authentication/authorization, private upload authorization, history reconciliation, Meta identity boundaries, restore transaction recovery, and schedule policy.
-2. Review the 540 implementation-only, 71 implementation-and-test, and 75 mixed branch-only commits for superseded or conflicting implementations; do not infer semantic duplication from commit subjects or file overlap alone.
+2. Review the 543 implementation-only, 71 implementation-and-test, and 75 mixed branch-only commits for superseded or conflicting implementations; do not infer semantic duplication from commit subjects or file overlap alone.
 3. Review the 90 workflow-only and 58 config/content commits for secret exposure, permission broadening, publishing activation, environment drift, and changes to protected brand/channel boundaries.
 4. Confirm that the branch's restored `test/restore-facebook-draft-history.test.mjs` is the intended test and that the main-side revert does not represent a product decision to remove it.
 5. Decide the eventual integration strategy only after the above review. No merge, rebase, reset, force-push, or branch rewrite is authorized by this inventory.
