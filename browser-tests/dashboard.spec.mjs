@@ -1747,3 +1747,32 @@ test("Facebook draft form rejects malformed claims and media JSON without issuin
   expect((after.drafts ?? []).some(draft => draft.id === draftId)).toBe(false);
   expect(after.publishingEnabled).toBe(false);
 });
+
+
+test("validation task control runs an allowlisted check and displays its durable result", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  const beforeResponse = await request.get("/api/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+  const previousTaskIds = new Set((before.jobs ?? []).map(job => job.id));
+  expect(before.publishingEnabled).toBe(false);
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  await page.locator("#task").selectOption("validate-schedule");
+  await page.locator("#runTask").click();
+  await expect(page.locator("#taskresult")).toContainText("SUCCEEDED · exit 0 · validate-schedule", { timeout: 30_000 });
+
+  const afterResponse = await request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  const after = await afterResponse.json();
+  const taskJob = (after.jobs ?? []).find(job => !previousTaskIds.has(job.id) && job.kind === "VALIDATION_TASK" && job.taskId === "validate-schedule");
+  expect(taskJob, "the dashboard task control must persist a new validation-task record").toBeTruthy();
+  expect(taskJob.status).toBe("SUCCEEDED");
+  expect(taskJob.exitCode).toBe(0);
+  expect(after.audit.filter(event => event.action === "VALIDATION_TASK_SUCCEEDED" && event.jobId === taskJob.id)).toHaveLength(1);
+  expect(after.publishingEnabled).toBe(false);
+});
