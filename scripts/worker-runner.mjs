@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { pathToFileURL } from "node:url";
+import { verifyWorkerQuarantineReleaseReceipt } from "./worker-quarantine-release.mjs";
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
@@ -62,6 +63,11 @@ function loadCooldowns(statePath, workerId) {
     cooldowns.set(jobId, { attempts: value.attempts, nextAttemptAt: value.nextAttemptAt });
   }
   const uncertainDispatches = new Map();
+  const storedNonces = parsed.consumedReleaseNonces ?? [];
+  if (!Array.isArray(storedNonces) || storedNonces.length > 10000 || storedNonces.some(value => typeof value !== "string" || !/^[a-f0-9]{48}$/.test(value))) {
+    throw new Error("Worker consumed release nonce state is invalid; refusing quarantine release");
+  }
+  const consumedReleaseNonces = new Set(storedNonces);
   const storedUncertain = parsed.uncertainDispatches ?? {};
   if (!storedUncertain || typeof storedUncertain !== "object" || Array.isArray(storedUncertain)) {
     throw new Error("Worker uncertain-dispatch state is invalid; refusing to redispatch quarantined jobs");
@@ -73,10 +79,10 @@ function loadCooldowns(statePath, workerId) {
     }
     uncertainDispatches.set(jobId, value);
   }
-  return { cooldowns, uncertainDispatches };
+  return { cooldowns, uncertainDispatches, consumedReleaseNonces };
 }
 
-function persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches = new Map()) {
+function persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches = new Map(), consumedReleaseNonces = new Set()) {
   const records = Object.fromEntries([...cooldowns.entries()].map(([jobId, value]) => [jobId, {
     attempts: value.attempts,
     nextAttemptAt: value.nextAttemptAt
@@ -89,6 +95,25 @@ function persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches = 
     cooldowns: records,
     uncertainDispatches: quarantined
   }, { mode: 0o600 });
+}
+
+export function applyWorkerQuarantineRelease({
+  statePath, workerId, jobId, attemptId, artifactSha256, receipt, secret, nowMs = Date.now()
+}) {
+  const state = loadCooldowns(statePath, workerId);
+  if (!state.uncertainDispatches.has(jobId)) {
+    throw new Error("Exact job is not currently quarantined by this worker");
+  }
+  const verified = verifyWorkerQuarantineReleaseReceipt(receipt, {
+    workerId, jobId, attemptId, artifactSha256, secret, nowMs
+  });
+  if (state.consumedReleaseNonces.has(verified.nonce)) {
+    throw new Error("Quarantine release receipt nonce has already been consumed");
+  }
+  state.uncertainDispatches.delete(jobId);
+  state.consumedReleaseNonces.add(verified.nonce);
+  persistCooldowns(statePath, workerId, state.cooldowns, state.uncertainDispatches, state.consumedReleaseNonces);
+  return { workerId, jobId, attemptId, artifactSha256, released: true, nonceConsumed: true };
 }
 
 export function inspectWorkerState({
@@ -394,7 +419,7 @@ export async function runWorker({
   const uncertainDispatches = persistedState.uncertainDispatches;
   const persist = () => {
     try {
-      persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches);
+      persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches, consumedReleaseNonces);
     } catch (cause) {
       const error = new Error("Worker retry backoff could not be persisted; stopping to avoid an early redispatch", { cause });
       error.code = "WORKER_BACKOFF_PERSISTENCE_FAILED";
