@@ -74,14 +74,15 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const port = await reservePort();
   const token = "test-token-" + "x".repeat(40);
   const serverEnv = { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-owner@example.test", DASHBOARD_STATE_DIR: stateDir, UPLOAD_LOG_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1", SCRIPT_GENERATION_ENDPOINT: `http://127.0.0.1:${providerPort}/v1/chat/completions`, SCRIPT_GENERATION_TIMEOUT_MS: "5000" };
-  let child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+  const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-outside-path-"));
+  let child = spawn(process.execPath, [path.join(process.cwd(), "scripts", "dashboard-server.mjs")], {
+    cwd: outsideDir,
     env: serverEnv,
     stdio: ["ignore", "pipe", "pipe"]
   });
   let logs = "";
   child.stdout.on("data", chunk => { logs += chunk.toString(); });
   child.stderr.on("data", chunk => { logs += chunk.toString(); });
-  const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-outside-path-"));
   const outsideFile = path.join(outsideDir, "private-evidence.txt");
   const symlinkName = ".dashboard-test-outside-" + path.basename(stateDir) + ".txt";
   const symlinkPath = path.join(process.cwd(), symlinkName);
@@ -556,7 +557,8 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const authoringServerStopped = new Promise(resolve => previousAuthoringChild.once("exit", resolve));
   previousAuthoringChild.kill("SIGTERM");
   await authoringServerStopped;
-  child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+  child = spawn(process.execPath, [path.join(process.cwd(), "scripts", "dashboard-server.mjs")], {
+    cwd: outsideDir,
     env: serverEnv,
     stdio: ["ignore", "pipe", "pipe"]
   });
@@ -745,7 +747,8 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const narrationServerStopped = new Promise(resolve => previousNarrationChild.once("exit", resolve));
   previousNarrationChild.kill("SIGTERM");
   await narrationServerStopped;
-  child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+  child = spawn(process.execPath, [path.join(process.cwd(), "scripts", "dashboard-server.mjs")], {
+    cwd: outsideDir,
     env: serverEnv,
     stdio: ["ignore", "pipe", "pipe"]
   });
