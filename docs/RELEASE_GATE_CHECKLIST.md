@@ -1,3 +1,37 @@
+# Live release checkpoint — 5 November 2026
+
+**Exact tested source/test candidate:** `3e988b8019946cddda40975ec8d9d992e907e9bb`  
+**Current branch HEAD:** `3e988b8019946cddda40975ec8d9d992e907e9bb`  
+**Decision:** **HOLD / NOT PRODUCTION READY**. This documentation update does not authorize merge, upload, schedule or publication.
+
+## Exact-SHA engineering evidence
+
+- [x] Cancelled/rejected terminal job states are excluded from active job-slot reservation checks.
+- [x] The shared reservation predicate is applied to reservation collection and all explicit draft/job slot-conflict checks.
+- [x] Regression verifies active job reservation still blocks a duplicate (409, state unchanged).
+- [x] Regression verifies an explicitly cancelled direct job releases its date for a replacement job.
+- [x] 535/535 Node tests, zero failures/skips — [content quality run 41994223850](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41994223850).
+- [x] 16 Python tests, npm audit 0 vulnerabilities, FFmpeg/ffprobe, JS syntax and Python compilation — [automation run 41994223823](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41994223823).
+- [x] Chromium E2E 26/26 — [41994223963](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41994223963).
+- [x] Metadata, isolated baseline, branch inventory, local draft validation and lockfile workflows passed — [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41994223877), [baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41994223874), [inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41994223840), [local draft validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41994223873), [lockfile](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41994218493).
+- [ ] Production readiness: 12 blockers remain; [run 41994223917](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41994223917) correctly holds and retains the [diagnostic artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41994223917/artifacts/13399372187).
+
+## Remaining acceptance and owner gates
+
+- [ ] DASH-001 — exhaustive dashboard control/form business acceptance.
+- [ ] API-001 — full route-by-route success, validation, persistence, audit, concurrency and restart acceptance.
+- [ ] SCHED-001 — retry, cancellation, dead-letter and restart recovery drills.
+- [ ] STATE-001 — backup/restore failure injection and rollback acceptance.
+- [ ] DEPLOY-001 — clean install, upgrade, rollback and recovery drills.
+- [ ] GIT-002 — semantic review of the 2,613-commit divergence; inventory alone is not approval.
+- [ ] Owner cadence decision, remote YouTube public/private/unlisted history and uncertain-attempt reconciliation, genuine rights-cleared assets/manifests, final MP4, human review, secure OAuth configuration and verified channel identity.
+- [ ] Resolve the mixed Metricool brand mapping and the 7 future Nature Frontiers records (`draft=false`, `autoPublish=true`) through owner-directed account administration. Do not mutate those records in this workflow.
+- [ ] Confirm the Wildlife Creator's Vault's Nature Frontiers wording is authorized for SonicVhibez; verify affiliate/paid relationship before disclosure is finalized.
+
+Main remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. Branch is 2,613 ahead / 2 behind / 233 changed files. PR #1 remains open, draft and unmerged. Branch protection is disabled. Public publishing remains disabled; Safari remains inactive. GitHub scheduled workflows execute from main, not from this PR branch.
+
+---
+
 # Current execution checkpoint — 4 November 2026
 
 This checkpoint supersedes older live-state snapshots below. Historical entries remain for traceability. The exact tested source/test candidate is separated from this documentation-only refresh.
