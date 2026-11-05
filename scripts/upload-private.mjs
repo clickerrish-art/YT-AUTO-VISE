@@ -49,6 +49,42 @@ export function sha256File(filePath) {
   return crypto.createHash("sha256").update(fs.readFileSync(filePath)).digest("hex");
 }
 
+function sha256FileDescriptor(fd) {
+  const initial = fs.fstatSync(fd);
+  if (!initial.isFile()) throw new Error("Pinned upload video descriptor is not a regular file");
+  const hash = crypto.createHash("sha256");
+  const buffer = Buffer.allocUnsafe(1024 * 1024);
+  let position = 0;
+  while (position < initial.size) {
+    const bytesRead = fs.readSync(fd, buffer, 0, Math.min(buffer.length, initial.size - position), position);
+    if (bytesRead <= 0) throw new Error("Pinned upload video changed or truncated while hashing");
+    hash.update(buffer.subarray(0, bytesRead));
+    position += bytesRead;
+  }
+  const final = fs.fstatSync(fd);
+  if (final.size !== initial.size || final.mtimeMs !== initial.mtimeMs) {
+    throw new Error("Pinned upload video changed while hashing");
+  }
+  return hash.digest("hex");
+}
+
+function openPinnedVideoFile(filePath) {
+  const flags = fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0);
+  const fd = fs.openSync(filePath, flags);
+  try {
+    const descriptor = fs.fstatSync(fd);
+    const currentPath = fs.lstatSync(filePath);
+    if (!descriptor.isFile() || !currentPath.isFile() || currentPath.isSymbolicLink() ||
+        descriptor.dev !== currentPath.dev || descriptor.ino !== currentPath.ino) {
+      throw new Error("Video path changed while opening the approved upload artifact");
+    }
+    return fd;
+  } catch (error) {
+    try { fs.closeSync(fd); } catch {}
+    throw error;
+  }
+}
+
 /** Resolve an evidence path only when every component is a real, non-symlink
  * directory and the final component is a regular file. */
 export function resolveRegularFileNoSymlinks(filePath, label = "Evidence file") {
@@ -296,6 +332,8 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   const logDir = prepareUploadLogDirectory(path.resolve(env.UPLOAD_LOG_DIR ?? "run-logs"));
   const ledgerPath = path.join(logDir, "upload-attempts.json");
   const releaseUploadLock = acquireExclusiveUploadLock(path.join(logDir, "upload-operation.lock"), { jobId, now });
+  let videoFd = null;
+  let videoStatBeforeUpload = null;
   try {
   let ledger = { version: 1, attempts: [] };
   if (fs.existsSync(ledgerPath)) ledger = readJson(ledgerPath, "Upload attempt ledger");
@@ -395,6 +433,10 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   // the irreversible remote insert. A failed recheck records recovery and sends
   // no upload request; the operator must reconcile/reapprove rather than retry.
   try {
+    // Pin the approved inode. The upload stream must use this descriptor rather than reopen a path after validation.
+    videoFd = openPinnedVideoFile(safeVideoPath);
+    if (sha256FileDescriptor(videoFd) !== videoSha256) throw new Error("pinned video bytes do not match the approved artifact hash");
+    videoStatBeforeUpload = fs.fstatSync(videoFd);
     if (sha256File(safeVideoPath) !== videoSha256 || sha256File(safeMetadataPath) !== metadataSha256 || sha256File(safeApprovalPath) !== approvalSha256) {
       throw new Error("video, metadata or approval hash changed after initial validation");
     }
@@ -418,6 +460,12 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
         throw new Error("exact approved parent remote state changed immediately before upload");
       }
     }
+    const finalPinnedStat = fs.fstatSync(videoFd);
+    if (sha256FileDescriptor(videoFd) !== videoSha256 ||
+        finalPinnedStat.size !== videoStatBeforeUpload?.size ||
+        finalPinnedStat.mtimeMs !== videoStatBeforeUpload?.mtimeMs) {
+      throw new Error("pinned video bytes changed before the remote insert");
+    }
   } catch (error) {
     attempt.status = "RECOVERY_REQUIRED";
     attempt.errorCode = "PRE_UPLOAD_REVALIDATION_FAILED";
@@ -439,7 +487,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
           paidProductPlacementDetails: { hasPaidProductPlacement: metadata.hasPaidPromotion === true }
         }
       },
-      media: { body: fs.createReadStream(safeVideoPath) }
+      media: { body: fs.createReadStream(safeVideoPath, { fd: videoFd, autoClose: false, start: 0 }) }
     });
   } catch (error) {
     attempt.status = "RECOVERY_REQUIRED";
@@ -461,6 +509,21 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   attempt.status = "REMOTE_ACCEPTED_RECONCILIATION_REQUIRED";
   attempt.updatedAt = now().toISOString();
   persistJson(ledgerPath, ledger);
+  let pinnedVideoStillMatches = false;
+  try {
+    const afterUploadHash = sha256FileDescriptor(videoFd);
+    const afterUploadStat = fs.fstatSync(videoFd);
+    pinnedVideoStillMatches = afterUploadHash === videoSha256 &&
+      afterUploadStat.size === videoStatBeforeUpload?.size &&
+      afterUploadStat.mtimeMs === videoStatBeforeUpload?.mtimeMs;
+  } catch {}
+  if (!pinnedVideoStillMatches) {
+    attempt.status = "RECOVERY_REQUIRED";
+    attempt.errorCode = "VIDEO_CHANGED_DURING_UPLOAD";
+    attempt.updatedAt = now().toISOString();
+    persistJson(ledgerPath, ledger);
+    throw new Error("YouTube accepted a video upload while the pinned source changed; reconcile the private remote video before any retry");
+  }
 
   let verified;
   try {
@@ -510,7 +573,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   }
   return { receipt, reused: false };
   } finally {
-    releaseUploadLock();
+    try { if (videoFd !== null) fs.closeSync(videoFd); } finally { releaseUploadLock(); }
   }
 }
 

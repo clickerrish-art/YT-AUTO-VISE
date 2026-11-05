@@ -154,6 +154,110 @@ test("private uploader records uncertain remote outcomes and refuses blind retri
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 
+test("private uploader streams the exact approved video bytes even if its path is replaced after revalidation", async () => {
+  const { uploadPrivate, sha256File } = await import("../scripts/upload-private.mjs");
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-upload-pinned-video-"));
+  try {
+    const videoPath = path.join(dir, "video.mp4");
+    const metadataPath = path.join(dir, "metadata.json");
+    const approvalPath = path.join(dir, "approval.json");
+    const originalVideo = Buffer.from("approved-video-bytes-bound-to-the-review");
+    const replacementVideo = Buffer.from("different-video-bytes-not-approved");
+    fs.writeFileSync(videoPath, originalVideo);
+    const metadata = { channel: "SonicVhibez", channelId: TEST_CHANNEL_ID, contentType: "long_form", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Pinned stream test", description: "Test description", tags: ["wildlife", "documentary", "education"] };
+    fs.writeFileSync(metadataPath, JSON.stringify(metadata));
+    const videoSha = sha256File(videoPath);
+    const thumbnailPath = path.join(dir, "thumbnail.jpg");
+    fs.writeFileSync(thumbnailPath, "test-thumbnail");
+    const captionsPath = path.join(dir, "captions.srt");
+    fs.writeFileSync(captionsPath, "1\n00:00:00,000 --> 00:00:01,000\nTest caption\n");
+    const sourceAssetPath = path.join(dir, "source-asset.mp4");
+    const licenseEvidencePath = path.join(dir, "license-evidence.txt");
+    fs.writeFileSync(sourceAssetPath, "test-source-asset-fixture");
+    fs.writeFileSync(licenseEvidencePath, "TEST FIXTURE ONLY: mock rights evidence; not a real license.");
+    const rightsEvidence = { assetId: "fixture-asset", source: "isolated test fixture", rightsHolder: "test fixture", assetPath: sourceAssetPath, assetSha256: sha256File(sourceAssetPath), licenseEvidenceLocation: licenseEvidencePath, licenseEvidenceSha256: sha256File(licenseEvidencePath), permittedUses: ["YouTube"], restrictions: "mock only", attributionRequirements: "mock only", verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z", assets: [{ assetId: "fixture-asset", source: "isolated test fixture", rightsHolder: "test fixture", assetPath: sourceAssetPath, assetSha256: sha256File(sourceAssetPath), licenseEvidenceLocation: licenseEvidencePath, licenseEvidenceSha256: sha256File(licenseEvidencePath), permittedUses: ["YouTube"], restrictions: "mock only", attributionRequirements: "mock only", verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z" }] };
+    const rightsEvidenceSha256 = crypto.createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex");
+    const thumbnailSha = sha256File(thumbnailPath), captionsSha = sha256File(captionsPath), metadataSha = sha256File(metadataPath);
+    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-pinned-video-001", contentType: "long_form", artifactSha256: videoSha, metadataVersion: metadataSha, reviewer: "Test Operator", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }, { path: captionsPath, sha256: captionsSha }, { path: metadataPath, sha256: metadataSha }] }));
+    const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES", YOUTUBE_EMERGENCY_STOP: "false", UPLOAD_LOG_DIR: path.join(dir, "logs") };
+    let uploadedBytes = null;
+    const youtubeFactory = () => ({
+      channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez" } }] } }) },
+      videos: {
+        insert: async request => {
+          fs.unlinkSync(videoPath);
+          fs.writeFileSync(videoPath, replacementVideo, { flag: "wx" });
+          const chunks = [];
+          for await (const chunk of request.media.body) chunks.push(chunk);
+          uploadedBytes = Buffer.concat(chunks);
+          return { data: { id: "VIDEO_PINNED_TEST" } };
+        },
+        list: async ({ id }) => ({ data: { items: id === "VIDEO_PINNED_TEST" ? [{ id, snippet: { channelId: TEST_CHANNEL_ID, title: metadata.title, publishedAt: "2026-10-24T00:00:00.000Z" }, status: { privacyStatus: "private" } }] : [] } })
+      }
+    });
+    const result = await uploadPrivate({ metadataPath, videoPath, approvalPath, jobId: "job-pinned-video-001", env, youtubeFactory, preflightRunner: args => args[0].includes("check-content") ? "PASS" : "PASS:" });
+    assert.equal(crypto.createHash("sha256").update(uploadedBytes).digest("hex"), videoSha,
+      "the bytes consumed by the YouTube client must equal the approved artifact hash");
+    assert.deepEqual(uploadedBytes, originalVideo);
+    assert.deepEqual(fs.readFileSync(videoPath), replacementVideo,
+      "the replacement path remains untouched while the pinned descriptor supplies the approved bytes");
+    assert.equal(result.receipt.artifactSha256, videoSha);
+    assert.equal(result.receipt.privacyStatus, "private");
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("private uploader records the remote ID and requires reconciliation if pinned video bytes change during upload", async () => {
+  const { uploadPrivate, sha256File } = await import("../scripts/upload-private.mjs");
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-upload-mutated-video-"));
+  try {
+    const videoPath = path.join(dir, "video.mp4");
+    const metadataPath = path.join(dir, "metadata.json");
+    const approvalPath = path.join(dir, "approval.json");
+    const originalVideo = Buffer.from("approved-video-bytes-bound-to-the-review");
+    const changedVideo = Buffer.from("changed-in-place-during-the-remote-upload");
+    fs.writeFileSync(videoPath, originalVideo);
+    const metadata = { channel: "SonicVhibez", channelId: TEST_CHANNEL_ID, contentType: "long_form", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Mutated stream test", description: "Test description", tags: ["wildlife", "documentary", "education"] };
+    fs.writeFileSync(metadataPath, JSON.stringify(metadata));
+    const videoSha = sha256File(videoPath);
+    const thumbnailPath = path.join(dir, "thumbnail.jpg");
+    fs.writeFileSync(thumbnailPath, "test-thumbnail");
+    const captionsPath = path.join(dir, "captions.srt");
+    fs.writeFileSync(captionsPath, "1\n00:00:00,000 --> 00:00:01,000\nTest caption\n");
+    const sourceAssetPath = path.join(dir, "source-asset.mp4");
+    const licenseEvidencePath = path.join(dir, "license-evidence.txt");
+    fs.writeFileSync(sourceAssetPath, "test-source-asset-fixture");
+    fs.writeFileSync(licenseEvidencePath, "TEST FIXTURE ONLY: mock rights evidence; not a real license.");
+    const rightsEvidence = { assetId: "fixture-asset", source: "isolated test fixture", rightsHolder: "test fixture", assetPath: sourceAssetPath, assetSha256: sha256File(sourceAssetPath), licenseEvidenceLocation: licenseEvidencePath, licenseEvidenceSha256: sha256File(licenseEvidencePath), permittedUses: ["YouTube"], restrictions: "mock only", attributionRequirements: "mock only", verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z", assets: [{ assetId: "fixture-asset", source: "isolated test fixture", rightsHolder: "test fixture", assetPath: sourceAssetPath, assetSha256: sha256File(sourceAssetPath), licenseEvidenceLocation: licenseEvidencePath, licenseEvidenceSha256: sha256File(licenseEvidencePath), permittedUses: ["YouTube"], restrictions: "mock only", attributionRequirements: "mock only", verificationStatus: "VERIFIED", verifiedBy: "Test Operator", verifiedAt: "2026-10-24T00:00:00.000Z" }] };
+    const rightsEvidenceSha256 = crypto.createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex");
+    const thumbnailSha = sha256File(thumbnailPath), captionsSha = sha256File(captionsPath), metadataSha = sha256File(metadataPath);
+    fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-mutated-video-001", contentType: "long_form", artifactSha256: videoSha, metadataVersion: metadataSha, reviewer: "Test Operator", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }, { path: captionsPath, sha256: captionsSha }, { path: metadataPath, sha256: metadataSha }] }));
+    const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES", YOUTUBE_EMERGENCY_STOP: "false", UPLOAD_LOG_DIR: path.join(dir, "logs") };
+    let uploadedBytes = null, remoteVideoListCalls = 0;
+    const youtubeFactory = () => ({
+      channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez" } }] } }) },
+      videos: {
+        insert: async request => {
+          fs.writeFileSync(videoPath, changedVideo);
+          const chunks = [];
+          for await (const chunk of request.media.body) chunks.push(chunk);
+          uploadedBytes = Buffer.concat(chunks);
+          return { data: { id: "VIDEO_MUTATED_TEST" } };
+        },
+        list: async ({ id }) => { if (id === "VIDEO_MUTATED_TEST") remoteVideoListCalls += 1; return { data: { items: [] } }; }
+      }
+    });
+    await assert.rejects(uploadPrivate({ metadataPath, videoPath, approvalPath, jobId: "job-mutated-video-001", env, youtubeFactory, preflightRunner: args => args[0].includes("check-content") ? "PASS" : "PASS:" }), /pinned source changed/);
+    assert.deepEqual(uploadedBytes, changedVideo);
+    const ledger = JSON.parse(fs.readFileSync(path.join(env.UPLOAD_LOG_DIR, "upload-attempts.json"), "utf8"));
+    assert.equal(ledger.attempts.length, 1);
+    assert.equal(ledger.attempts[0].remoteVideoId, "VIDEO_MUTATED_TEST");
+    assert.equal(ledger.attempts[0].status, "RECOVERY_REQUIRED");
+    assert.equal(ledger.attempts[0].errorCode, "VIDEO_CHANGED_DURING_UPLOAD");
+    assert.equal(remoteVideoListCalls, 0, "the mutated upload must not be represented as verified or complete");
+    assert.equal(fs.existsSync(path.join(env.UPLOAD_LOG_DIR, "upload-VIDEO_MUTATED_TEST.json")), false);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
 test("private uploader preserves remote video ID and marks recovery if receipt persistence fails", async () => {
   const fs = await import("node:fs");
   const os = await import("node:os");
