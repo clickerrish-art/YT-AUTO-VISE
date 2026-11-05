@@ -297,6 +297,64 @@ test("continuous worker stops after a render dispatch transport failure with an 
 });
 
 
+test("continuous worker stops after HTTP 408/5xx dispatch responses with uncertain outcome", async t => {
+  for (const status of [408, 503]) {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-http-uncertain-"));
+    const statePath = path.join(tempDir, "cooldowns.json");
+    const requests = [];
+    const errors = [];
+    const fetchImpl = async (url, options = {}) => {
+      const method = options.method ?? "GET";
+      requests.push({
+        method,
+        url: String(url),
+        body: options.body ? JSON.parse(options.body) : null
+      });
+      if (method === "GET") {
+        return new Response(JSON.stringify({
+          jobs: [
+            { id: "job-outcome-unknown-" + status, state: "QUEUED" },
+            { id: "job-must-not-dispatch-" + status, state: "QUEUED" }
+          ],
+          queuedCount: 2,
+          publishingEnabled: false
+        }), { status: 200, headers: { "content-type": "application/json" } });
+      }
+      return new Response(JSON.stringify({ error: "upstream timeout" }), {
+        status,
+        headers: { "content-type": "application/json" }
+      });
+    };
+    try {
+      await assert.rejects(
+        runWorker({
+          baseUrl: "http://127.0.0.1:8787",
+          token,
+          workerId,
+          once: false,
+          pollIntervalMs: 1_000,
+          cooldownStatePath: statePath,
+          fetchImpl,
+          onError: error => errors.push(error),
+          shouldStop: () => false
+        }),
+        error => error?.code === "WORKER_DISPATCH_OUTCOME_UNCERTAIN" &&
+          error.status === status && error.retryable === false
+      );
+      assert.deepEqual(requests.map(item => item.method), ["GET", "POST"],
+        "an uncertain HTTP " + status + " response must stop the worker before another queued job is dispatched");
+      assert.equal(requests[1].body.jobId, "job-outcome-unknown-" + status);
+      assert.equal(errors.length, 1);
+      assert.equal(errors[0].code, "WORKER_DISPATCH_OUTCOME_UNCERTAIN");
+      assert.equal(errors[0].status, status);
+      assert.equal(fs.existsSync(statePath), false,
+        "uncertain remote outcomes must not be converted into a normal retry cooldown");
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  }
+});
+
 test("continuous worker stops after a successful-status dispatch returns an unreadable response", async t => {
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-unreadable-"));
   const statePath = path.join(tempDir, "cooldowns.json");
