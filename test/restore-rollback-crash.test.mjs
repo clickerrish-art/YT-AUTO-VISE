@@ -179,6 +179,32 @@ test("restart recovery completes rollback after process death during rollback-te
   assert.equal(fs.existsSync(rollbackTempPath), false, "failed rollback-temp write must clean its partial temporary file");
   assert.equal(fs.existsSync(lockPath), false, "failed recovery must release only its own operation lock");
 
+  // Repeat with a permissions failure at the deterministic rollback-temp
+  // creation boundary. The journal must survive and a later restart must retry.
+  const originalOpenForPermissionFailure = fs.openSync;
+  let permissionFailureInjected = false;
+  fs.openSync = function (filePath, ...args) {
+    if (filePath === rollbackTempPath && !permissionFailureInjected) {
+      permissionFailureInjected = true;
+      const error = new Error("injected EACCES while creating rollback temp");
+      error.code = "EACCES";
+      throw error;
+    }
+    return originalOpenForPermissionFailure.call(this, filePath, ...args);
+  };
+  try {
+    await assert.rejects(
+      restoreState({ backupPath, rootDir: destination.root, confirm: "YES", overwriteState: true }),
+      error => error?.code === "EACCES"
+    );
+  } finally {
+    fs.openSync = originalOpenForPermissionFailure;
+  }
+  assert.equal(permissionFailureInjected, true, "recovery must reach rollback-temp creation before EACCES is injected");
+  assert.equal(fs.existsSync(journalPath), true, "permission failure must retain the durable journal");
+  assert.equal(fs.existsSync(rollbackTempPath), false, "permission failure must not leave a partial rollback temp");
+  assert.equal(fs.existsSync(lockPath), false, "permission failure must release only its own operation lock");
+
   await assert.rejects(
     restoreState({ backupPath, rootDir: destination.root, confirm: "YES", overwriteState: true }),
     /rolled back safely.*rerun restore explicitly/i
