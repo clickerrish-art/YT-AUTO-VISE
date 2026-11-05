@@ -65,9 +65,17 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
   const today = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
   }).format(now);
-  const localTime = minutesAgo => new Intl.DateTimeFormat("en-GB", {
+  const localNowParts = new Intl.DateTimeFormat("en-GB", {
     timeZone: "Africa/Johannesburg", hour: "2-digit", minute: "2-digit", hourCycle: "h23"
-  }).format(new Date(Date.now() - minutesAgo * 60_000));
+  }).formatToParts(now);
+  const localNowMinutes = Number(localNowParts.find(part => part.type === "hour").value) * 60 +
+    Number(localNowParts.find(part => part.type === "minute").value);
+  const localTime = minutesAgo => {
+    const minuteOfDay = localNowMinutes - minutesAgo;
+    assert.ok(minuteOfDay >= 0, "test must run after the first three minutes of the Johannesburg day");
+    return String(Math.floor(minuteOfDay / 60)).padStart(2, "0") + ":" +
+      String(minuteOfDay % 60).padStart(2, "0");
+  };
   initialState.jobs.push(
     {
       kind: "CONTENT_PRODUCTION",
@@ -83,7 +91,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       state: "QUEUED",
       contentType: "short",
       createdAt: "2026-11-02T18:01:00.000Z",
-      scheduledSlot: { date: today, time: localTime(15), timezone: "Africa/Johannesburg" },
+      scheduledSlot: { date: today, time: localTime(3), timezone: "Africa/Johannesburg" },
       authoring: { productionPlan: approvedPlan }
     },
     {
@@ -92,7 +100,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       state: "QUEUED",
       contentType: "long_form",
       createdAt: "2026-11-02T17:59:00.000Z",
-      scheduledSlot: { date: today, time: localTime(5), timezone: "Africa/Johannesburg" },
+      scheduledSlot: { date: today, time: localTime(1), timezone: "Africa/Johannesburg" },
       authoring: { productionPlan: structuredClone(approvedPlan) }
     },
     {
@@ -101,7 +109,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       state: "QUEUED",
       contentType: "long_form",
       createdAt: "2026-11-02T18:02:00.000Z",
-      scheduledSlot: { date: today, time: localTime(10), timezone: "Africa/Johannesburg" },
+      scheduledSlot: { date: today, time: localTime(2), timezone: "Africa/Johannesburg" },
       authoring: { productionPlan: structuredClone(approvedPlan) }
     },
     {
