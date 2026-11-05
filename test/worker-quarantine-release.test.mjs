@@ -349,14 +349,14 @@ test("dashboard issues a signed quarantine release only for a terminal verified 
       }
     }],
     uploads: [], facebookDrafts: [], facebookPosts: [], facebookAttempts: []
-  }) + "\\n", { mode: 0o600 });
+  }) + "\n", { mode: 0o600 });
   fs.writeFileSync(path.join(dir, "upload-attempts.json"), JSON.stringify({
     attempts: [{
       attemptId, jobId, artifactSha256, status: "PRIVATE_UPLOAD_VERIFIED",
       remoteVideoId, channelId, channelTitle: "SonicVhibez",
       visibility: "private", publishingEnabled: false
     }]
-  }) + "\\n", { mode: 0o600 });
+  }) + "\n", { mode: 0o600 });
 
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
     cwd: process.cwd(),
