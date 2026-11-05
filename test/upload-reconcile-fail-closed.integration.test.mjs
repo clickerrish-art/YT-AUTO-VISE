@@ -166,3 +166,39 @@ test("unreadable upload ledger is reported as unavailable, not misreported as no
   assert.deepEqual(fs.readFileSync(statePath), before);
   assert.deepEqual(fs.readFileSync(ledgerPath), corruptLedger);
 });
+
+test("duplicate upload attempt identities make reconciliation unavailable without state or ledger mutation", async t => {
+  const h = await createHarness(t, "duplicate-ledger");
+  const statePath = path.join(h.stateDir, "dashboard-state.json");
+  const ledgerPath = path.join(h.stateDir, "upload-attempts.json");
+  const videoPath = path.join(root, "config/weekly-content-plan.json");
+  const artifactSha256 = (await import("node:crypto")).createHash("sha256").update(fs.readFileSync(videoPath)).digest("hex");
+  const duplicateLedger = {
+    version: 1,
+    attempts: [
+      { attemptId: "duplicate-attempt-a", jobId: "no-authoritative-upload-attempt", artifactSha256, status: "RECOVERY_REQUIRED" },
+      { attemptId: "duplicate-attempt-b", jobId: "no-authoritative-upload-attempt", artifactSha256, status: "PRIVATE_UPLOAD_VERIFIED", remoteVideoId: "ambiguous-remote-id" }
+    ]
+  };
+  const ledgerBytes = Buffer.from(JSON.stringify(duplicateLedger) + "\\n");
+  fs.writeFileSync(ledgerPath, ledgerBytes, { mode: 0o600 });
+  const before = fs.readFileSync(statePath);
+
+  const responses = await Promise.all(Array.from({ length: 6 }, () => reconcile(h.base, h.token)));
+  for (const response of responses) {
+    assert.equal(response.status, 503);
+    assert.deepEqual(await response.json(), {
+      error: "Upload ledger contains duplicate attempt identities; do not retry an uncertain upload"
+    });
+  }
+  assert.deepEqual(fs.readFileSync(statePath), before,
+    "ambiguous upload history must not append reconciliation audit events");
+  assert.deepEqual(fs.readFileSync(ledgerPath), ledgerBytes,
+    "ambiguous upload history must remain untouched for operator investigation");
+
+  await h.restart();
+  const afterRestart = await reconcile(h.base, h.token);
+  assert.equal(afterRestart.status, 503);
+  assert.deepEqual(fs.readFileSync(statePath), before);
+  assert.deepEqual(fs.readFileSync(ledgerPath), ledgerBytes);
+});
