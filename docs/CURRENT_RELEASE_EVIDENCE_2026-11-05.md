@@ -1,3 +1,38 @@
+# STATE-001 rollback-crash evidence refresh — 5 November 2026
+
+**Exact source/test candidate:** `a2e24533e1608274bade7cf8e53ff1c27151d083`  
+**Evidence commit:** `a2e24533e1608274bade7cf8e53ff1c27151d083`  
+**Branch:** `codex/marketing-machine-audit-fixes`  
+**Main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged)  
+**PR #1:** OPEN · DRAFT · UNMERGED.
+
+## New isolated crash-recovery regression
+
+Commit [a2e2453](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/a2e24533e1608274bade7cf8e53ff1c27151d083) adds `test/restore-rollback-crash.test.mjs`. The isolated child reaches deterministic rollback-temp fsync after a later destination commit is forced to fail. The parent confirms the transaction journal, lock and rollback temp exist, kills the child, then invokes restart recovery after removing only the stale lock left by the confirmed dead child.
+
+Assertions verify the original dashboard-state bytes are restored exactly, the pre-existing audit bytes remain unchanged, and recovery removes the transaction journal, lock and all restore/rollback temporary files. The two protected restore-history tests remain present and were not modified.
+
+## Exact-SHA validation — `a2e24533e1608274bade7cf8e53ff1c27151d083`
+
+| Validation | Run | Result |
+|---|---:|---|
+| Content quality | [42025005931](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42025005931) | **PASS — 537 Node tests, 0 failures, 0 skips**; new rollback-crash test passed |
+| Automation/security | [42025005878](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42025005878) | **PASS — 112/112 Node test files; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax and compilation checks passed** |
+| Dashboard Chromium E2E | [42025007353](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42025007353) | **PASS — 26/26 journeys** |
+| Isolated main/candidate baseline | [42025007112](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42025007112) | **PASS** — exact main and candidate test/install commands passed |
+| Metadata validation | Exact-SHA workflow | **PASS** |
+| Branch reconciliation inventory | [42025005739](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42025005739) | **PASS** — inventory only, not semantic integration approval |
+| Nature Frontiers local draft validation | [42024990931](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42024990931) | **PASS** — local validation only; no provider-side draft creation/read-back |
+| Production readiness | [42025005729](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42025005729) | **HOLD — 12 blockers; fail-closed by design; not a production pass** |
+
+## Acceptance interpretation
+
+This closes the newly identified deterministic rollback-temp crash window. It does **not** close overall STATE-001: the acceptance register remains **NOT_TESTED** pending remaining disk-full/permission/power-loss and interrupted-write coverage, ambiguous remote side-effect reconciliation, and full operational restore acceptance. DEPLOY-001 and GIT-002 remain open. Production readiness remains HOLD with 12 owner/external blockers.
+
+No upload, publication, live schedule mutation, provider-side campaign action, account reconnection, spend, main-branch edit, merge, PR status change, reset, rebase, force-push or destructive reconciliation occurred. Public/unattended publishing remains disabled.
+
+---
+
 # Latest code/test checkpoint — 5 November 2026
 
 **Exact application and test candidate:** `f42c8a0eeb0ca63a9d5212888f811aeee863303b`  
