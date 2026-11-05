@@ -708,15 +708,15 @@ const server = http.createServer(async (req, res) => {
         job.authoring.productionPlan.review?.decision === "APPROVE" &&
         /^[a-f0-9]{64}$/.test(job.authoring.productionPlan.review?.approvalSha256 ?? "");
       const dispatchCheckAt = Date.now();
-      const dispatchTimestamp = job => {
+      const dispatchLocalDate = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
+      }).format(new Date(dispatchCheckAt));
+      const dispatchSlot = job => {
         const slot = job.scheduledSlot;
         if (slot?.timezone !== "Africa/Johannesburg") return null;
         try {
-          // A queued job without a valid, explicit future Johannesburg slot is held.
-          // Creation time is never a substitute for publication authorization, and
-          // an expired slot must not silently become an immediate dispatch.
           const scheduledAt = Date.parse(localDateTimeToIso(slot.date, slot.time, slot.timezone));
-          return Number.isFinite(scheduledAt) ? scheduledAt : null;
+          return Number.isFinite(scheduledAt) ? { scheduledAt, localDate: slot.date } : null;
         } catch {
           // Impossible calendar dates and malformed wall-clock times stay held.
           return null;
@@ -724,9 +724,11 @@ const server = http.createServer(async (req, res) => {
       };
       const dispatchable = queued
         .filter(job => hasApprovedRenderPlan(job) && typeof job.id === "string")
-        .map(job => ({ job, scheduledAt: dispatchTimestamp(job) }))
-        .filter(entry => entry.scheduledAt !== null && entry.scheduledAt > dispatchCheckAt)
-        .sort((a, b) => a.scheduledAt - b.scheduledAt ||
+        .map(job => ({ job, slot: dispatchSlot(job) }))
+        // A worker may dispatch only a slot that is due today in Johannesburg.
+        // Future slots must wait; slots from prior dates require operator rescheduling.
+        .filter(entry => entry.slot !== null && entry.slot.localDate === dispatchLocalDate && entry.slot.scheduledAt <= dispatchCheckAt)
+        .sort((a, b) => a.slot.scheduledAt - b.slot.scheduledAt ||
           String(a.job.createdAt ?? "").localeCompare(String(b.job.createdAt ?? "")) ||
           a.job.id.localeCompare(b.job.id));
       const jobs = dispatchable.slice(0, requestedLimit)
@@ -737,10 +739,14 @@ const server = http.createServer(async (req, res) => {
         dispatchableCount: dispatchable.length,
         queuedWithoutApprovedAuthoring: queued.filter(job => !job.authoring).length,
         queuedWithoutApprovedRenderPlan: queued.filter(job => !hasApprovedRenderPlan(job)).length,
-        queuedWithoutValidSlot: queued.filter(job => dispatchTimestamp(job) === null).length,
+        queuedWithoutValidSlot: queued.filter(job => dispatchSlot(job) === null).length,
+        queuedWithFutureSlot: queued.filter(job => {
+          const slot = dispatchSlot(job);
+          return slot !== null && slot.scheduledAt > dispatchCheckAt;
+        }).length,
         queuedWithExpiredSlot: queued.filter(job => {
-          const scheduledAt = dispatchTimestamp(job);
-          return scheduledAt !== null && scheduledAt <= dispatchCheckAt;
+          const slot = dispatchSlot(job);
+          return slot !== null && slot.localDate < dispatchLocalDate;
         }).length,
         publishingEnabled: false,
         readOnly: true
@@ -2579,6 +2585,26 @@ const server = http.createServer(async (req, res) => {
         if (index < 0) return json(res, 404, { error: "Content job not found" });
         const job = state.jobs[index];
         if (job.state !== "QUEUED") return json(res, 409, { error: "Only a queued content job can start production" });
+        const dispatchNow = Date.now();
+        const dispatchToday = new Intl.DateTimeFormat("en-CA", {
+          timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
+        }).format(new Date(dispatchNow));
+        let scheduledAt = NaN;
+        try {
+          const slot = job.scheduledSlot;
+          if (slot?.timezone === "Africa/Johannesburg") {
+            scheduledAt = Date.parse(localDateTimeToIso(slot.date, slot.time, slot.timezone));
+          }
+        } catch {
+          // Invalid or ambiguous wall-clock slots remain blocked before any lease or state mutation.
+        }
+        if (!Number.isFinite(scheduledAt) || job.scheduledSlot?.date !== dispatchToday || scheduledAt > dispatchNow) {
+          return json(res, 409, {
+            error: "Production dispatch requires an explicit valid Africa/Johannesburg slot that is due today; future, expired and invalid slots must be held or rescheduled",
+            publishingEnabled: false,
+            renderStarted: false
+          });
+        }
         if (!job.authoring) {
           return json(res, 409, {
             error: "Content job is not linked to the required approved authoring pipeline; legacy fixed-manifest rendering is disabled. Complete research, exact-script and narration/caption review, scene and rights checks, quality/compliance review, and the hash-bound production plan before retrying.",
