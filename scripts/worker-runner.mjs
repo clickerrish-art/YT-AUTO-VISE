@@ -109,6 +109,74 @@ export function inspectWorkerState({
   };
 }
 
+export async function inspectDashboardReconciliation({
+  baseUrl = process.env.DASHBOARD_API_URL ?? DEFAULT_API_URL,
+  operatorToken = process.env.DASHBOARD_OPERATOR_TOKEN,
+  jobId,
+  fetchImpl = fetch
+} = {}) {
+  if (typeof jobId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._:-]{1,159}$/.test(jobId)) {
+    throw new Error("A safe exact jobId is required for dashboard reconciliation inspection");
+  }
+  let parsed;
+  try { parsed = new URL(baseUrl); }
+  catch { throw new Error("DASHBOARD_API_URL must be a valid absolute URL"); }
+  const hostname = parsed.hostname.replace(/^\\[|\\]$/g, "").toLowerCase();
+  if (!["http:", "https:"].includes(parsed.protocol) || parsed.username || parsed.password || parsed.search || parsed.hash ||
+      (parsed.protocol === "http:" && !["127.0.0.1", "::1", "localhost"].includes(hostname))) {
+    throw new Error("Dashboard reconciliation requires HTTPS or a loopback HTTP URL without embedded credentials, query or fragment");
+  }
+  if (typeof operatorToken !== "string" || operatorToken.length < 24) {
+    throw new Error("DASHBOARD_OPERATOR_TOKEN must contain at least 24 characters for read-only reconciliation inspection");
+  }
+  let response;
+  try {
+    response = await fetchImpl(new URL("/api/state", parsed.origin), {
+      method: "GET", headers: { "x-operator-token": operatorToken, accept: "application/json" },
+      redirect: "error", signal: AbortSignal.timeout(15_000)
+    });
+  } catch (cause) {
+    throw new Error("Dashboard reconciliation inspection could not reach the authenticated state endpoint", { cause });
+  }
+  let payload;
+  try { payload = await response.json(); }
+  catch (cause) { throw new Error("Dashboard reconciliation endpoint returned unreadable JSON", { cause }); }
+  if (!response.ok) throw new Error("Dashboard reconciliation endpoint returned HTTP " + response.status);
+  if (!payload || !Array.isArray(payload.jobs) || !payload.uploadLedger || !Array.isArray(payload.uploadLedger.attempts)) {
+    throw new Error("Dashboard state response is incomplete; reconciliation evidence is unavailable");
+  }
+  const job = payload.jobs.find(item => item?.id === jobId) ?? null;
+  const attempts = payload.uploadLedger.attempts.filter(item => item?.jobId === jobId).map(item => ({
+    attemptId: item.attemptId ?? null,
+    status: item.status ?? null,
+    remoteVideoId: item.remoteVideoId ?? null,
+    artifactSha256: item.artifactSha256 ?? null,
+    startedAt: item.startedAt ?? null,
+    finishedAt: item.finishedAt ?? null
+  }));
+  const uploads = Array.isArray(payload.uploads) ? payload.uploads.filter(item => item?.jobId === jobId).map(item => ({
+    status: item.status ?? null, remoteVideoId: item.remoteVideoId ?? null,
+    artifactSha256: item.artifactSha256 ?? null, createdAt: item.createdAt ?? null
+  })) : [];
+  return {
+    jobId,
+    dashboardJobVisible: Boolean(job),
+    dashboardJob: job ? {
+      state: job.state ?? null,
+      updatedAt: job.updatedAt ?? null,
+      errorCode: job.errorDetails?.code ?? null,
+      workerLease: job.workerLease ? { workerId: job.workerLease.workerId ?? null, acquiredAt: job.workerLease.acquiredAt ?? null } : null,
+      lastLeaseEvent: Array.isArray(job.leaseHistory) ? job.leaseHistory.at(-1) ?? null : null
+    } : null,
+    uploadAttempts: attempts,
+    uploadRecords: uploads,
+    dashboardPublishingEnabled: payload.publishingEnabled === true,
+    remoteEffectVerified: false,
+    quarantineReleasePermitted: false,
+    limitation: job ? "Dashboard correlation is read-only. Remote YouTube state and exact artifact identity still require authoritative reconciliation; quarantine remains in place." : "Job is not present in the dashboard's bounded state response. No inference about remote effects is permitted; quarantine remains in place."
+  };
+}
+
 function validateConfiguration({ baseUrl, token, workerId, pollIntervalMs }) {
   let parsed;
   try { parsed = new URL(baseUrl); }
@@ -309,6 +377,19 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   if (process.argv.includes("--inspect-uncertain")) {
     try {
       console.log(JSON.stringify(inspectWorkerState()));
+    } catch (error) {
+      console.error("BLOCKED: " + String(error?.message ?? error));
+      process.exitCode = 2;
+    }
+  } else if (process.argv.includes("--reconcile-uncertain")) {
+    try {
+      const local = inspectWorkerState();
+      const reports = [];
+      for (const record of local.uncertainDispatches) {
+        reports.push(await inspectDashboardReconciliation({ jobId: record.jobId }));
+      }
+      console.log(JSON.stringify({ workerId: local.workerId, uncertainDispatches: local.uncertainDispatches,
+        dashboardCorrelations: reports, publishingEnabled: false, quarantineReleasePermitted: false }));
     } catch (error) {
       console.error("BLOCKED: " + String(error?.message ?? error));
       process.exitCode = 2;
