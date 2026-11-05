@@ -1476,6 +1476,13 @@ test("all dashboard POST routes reject empty operation payloads without mutating
   });
   assert.equal(unsignedRelease.status, 403, "release endpoint must require the separate operator-only release credential");
   assert.equal(fs.readFileSync(stateFile, "utf8"), originalState, "unsigned release must not mutate dashboard state");
+  const workerOnlyRelease = await fetchDashboard(base + "/api/worker/quarantine-release", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-worker-token": "worker-test-token-" + "y".repeat(40), "x-worker-id": "worker-test" },
+    body: JSON.stringify({ jobId: "job-release-123", workerId: "worker-test" })
+  });
+  assert.equal(workerOnlyRelease.status, 401, "worker-scoped credentials must not authorize operator quarantine release");
+  assert.equal(fs.readFileSync(stateFile, "utf8"), originalState, "worker-only release attempt must not mutate dashboard state");
 });
 
 
