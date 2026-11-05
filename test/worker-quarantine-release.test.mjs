@@ -1,5 +1,5 @@
 import test from "node:test";
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
@@ -314,4 +314,119 @@ test("operator CLI requests, verifies and securely writes a signed release hando
   assert.deepEqual(saved, receipt);
   assert.equal(fs.statSync(outputPath).mode & 0o777, 0o600);
   assert.match(result.stdout, /"publishingEnabled":false/);
+});
+
+
+test("dashboard issues a signed quarantine release only for a terminal verified private upload and audits issuance", async t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "dashboard-quarantine-release-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const portProbe = http.createServer();
+  await new Promise((resolve, reject) => {
+    portProbe.once("error", reject);
+    portProbe.listen(0, "127.0.0.1", resolve);
+  });
+  const port = portProbe.address().port;
+  await new Promise(resolve => portProbe.close(resolve));
+
+  const operatorToken = "dashboard-release-operator-token-" + "x".repeat(40);
+  const releaseToken = "dashboard-release-separate-token-" + "y".repeat(40);
+  const workerId = "verified-worker-01";
+  const jobId = "verified-private-job-123";
+  const attemptId = "verified-attempt-456";
+  const artifactSha256 = "f".repeat(64);
+  const channelId = "UC" + "s".repeat(22);
+  const remoteVideoId = "remote-private-video-789";
+  const actualPublishedAt = "2026-11-05T17:00:00.000Z";
+  const statePath = path.join(dir, "dashboard-state.json");
+  fs.writeFileSync(statePath, JSON.stringify({
+    version: 1, queueItems: [], campaigns: [], audit: [],
+    jobs: [{
+      id: jobId, kind: "CONTENT_PRODUCTION", state: "PRIVATE_UPLOAD_VERIFIED",
+      uploadReceipt: {
+        jobId, attemptId, artifactSha256, videoId: remoteVideoId,
+        channelId, channelTitle: "SonicVhibez", privacyStatus: "private",
+        remoteStatusVerified: true, publishingEnabled: false, actualPublishedAt
+      }
+    }],
+    uploads: [], facebookDrafts: [], facebookPosts: [], facebookAttempts: []
+  }) + "\\n", { mode: 0o600 });
+  fs.writeFileSync(path.join(dir, "upload-attempts.json"), JSON.stringify({
+    attempts: [{
+      attemptId, jobId, artifactSha256, status: "PRIVATE_UPLOAD_VERIFIED",
+      remoteVideoId, channelId, channelTitle: "SonicVhibez",
+      visibility: "private", publishingEnabled: false
+    }]
+  }) + "\\n", { mode: 0o600 });
+
+  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    cwd: process.cwd(),
+    env: {
+      ...process.env,
+      DASHBOARD_OPERATOR_TOKEN: operatorToken,
+      DASHBOARD_OPERATOR_ID: "release-test-operator@example.test",
+      DASHBOARD_QUARANTINE_RELEASE_TOKEN: releaseToken,
+      DASHBOARD_QUARANTINE_SIGNING_PRIVATE_KEY: privateKeyPem,
+      DASHBOARD_STATE_DIR: dir,
+      UPLOAD_LOG_DIR: dir,
+      PORT: String(port),
+      DASHBOARD_HOST: "127.0.0.1",
+      SONICVHIBEZ_CHANNEL_ID: channelId,
+      YOUTUBE_CLIENT_ID: "", YOUTUBE_CLIENT_SECRET: "", YOUTUBE_REFRESH_TOKEN: "",
+      YOUTUBE_EMERGENCY_STOP: "YES"
+    },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let logs = "";
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  t.after(async () => {
+    if (child.exitCode === null && child.signalCode === null) {
+      child.kill("SIGTERM");
+      await new Promise(resolve => {
+        if (child.exitCode !== null || child.signalCode !== null) return resolve();
+        child.once("exit", resolve);
+        setTimeout(resolve, 5000);
+      });
+    }
+    if (child.exitCode === null && child.signalCode === null) child.kill("SIGKILL");
+  });
+
+  const base = "http://127.0.0.1:" + port;
+  let ready = false;
+  for (let attempt = 0; attempt < 100; attempt++) {
+    if (child.exitCode !== null || child.signalCode !== null) break;
+    try {
+      const response = await fetch(base + "/healthz");
+      if (response.ok) { ready = true; break; }
+    } catch {}
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  assert.equal(ready, true, "dashboard failed to start: " + logs);
+
+  const response = await fetch(base + "/api/worker/quarantine-release", {
+    method: "POST",
+    headers: {
+      "x-operator-token": operatorToken,
+      "x-quarantine-release-token": releaseToken,
+      "content-type": "application/json"
+    },
+    body: JSON.stringify({ workerId, jobId })
+  });
+  assert.equal(response.status, 200, await response.clone().text());
+  const payload = await response.json();
+  assert.equal(payload.publishingEnabled, false);
+  assert.equal(verifyWorkerQuarantineReleaseReceipt(payload.receipt, {
+    workerId, jobId, attemptId, artifactSha256, publicKeyPem
+  }).jobId, jobId);
+
+  const persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  const audit = persisted.audit.filter(item => item.action === "WORKER_QUARANTINE_RELEASE_RECEIPT_ISSUED");
+  assert.equal(audit.length, 1);
+  assert.equal(audit[0].jobId, jobId);
+  assert.equal(audit[0].workerId, workerId);
+  assert.equal(audit[0].attemptId, attemptId);
+  assert.equal(audit[0].artifactSha256, artifactSha256);
+  assert.equal(persisted.jobs[0].state, "PRIVATE_UPLOAD_VERIFIED");
+  assert.equal(fs.existsSync(path.join(dir, "worker-backoff-" + crypto.createHash("sha256").update(workerId).digest("hex").slice(0, 20) + ".json")), false,
+    "dashboard issuance must not mutate worker quarantine state");
 });
