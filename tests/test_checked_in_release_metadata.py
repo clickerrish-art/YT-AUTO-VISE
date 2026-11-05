@@ -15,7 +15,8 @@ class CheckedInReleaseMetadataTests(unittest.TestCase):
         self.assertEqual(metadata.get("status"), "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW")
         self.assertFalse(metadata.get("rightsConfirmed"))
         self.assertFalse(metadata.get("complianceReviewed"))
-        self.assertFalse(metadata.get("channelId"))
+        self.assertEqual(metadata.get("channelId"), "UCSlkuPfHH78oGC1o418HV4w")
+        self.assertRegex(metadata.get("channelId"), r"^UC[A-Za-z0-9_-]{22}$")
 
     def test_all_queued_items_remain_held_and_use_only_approved_destination(self):
         queue = json.loads((ROOT / "content" / "queue.json").read_text(encoding="utf-8"))
