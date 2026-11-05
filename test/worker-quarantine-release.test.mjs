@@ -90,6 +90,32 @@ test("quarantine release refuses to race a running worker process", t => {
   assert.throws(() => assertWorkerStoppedForQuarantineRelease(statePath), /Stop the worker process/i);
 });
 
+test("quarantine release serializes consumers and fails closed on an existing release lock", t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "worker-release-serialization-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const statePath = path.join(dir, "cooldowns.json");
+  const state = {
+    schemaVersion: 1,
+    workerId: binding.workerId,
+    updatedAt: new Date(binding.nowMs).toISOString(),
+    cooldowns: {},
+    uncertainDispatches: {
+      [binding.jobId]: { code: "WORKER_DISPATCH_OUTCOME_UNCERTAIN", recordedAt: new Date(binding.nowMs - 1000).toISOString() }
+    },
+    consumedReleaseNonces: []
+  };
+  fs.writeFileSync(statePath, JSON.stringify(state), { mode: 0o600 });
+  fs.writeFileSync(statePath + ".release.lock", JSON.stringify({ pid: process.pid }), { mode: 0o600 });
+  const receipt = createWorkerQuarantineReleaseReceipt(binding);
+  assert.throws(() => applyWorkerQuarantineRelease({
+    statePath, workerId: binding.workerId, jobId: binding.jobId, attemptId: binding.attemptId,
+    artifactSha256: binding.artifactSha256, publicKeyPem, receipt, nowMs: binding.nowMs
+  }), /release is already in progress|stale release lock/i);
+  const persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  assert.ok(Object.hasOwn(persisted.uncertainDispatches, binding.jobId), "quarantine must remain intact when release lock acquisition fails");
+  assert.deepEqual(persisted.consumedReleaseNonces, []);
+});
+
 test("worker process lock is created and released around its cycle", async t => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "worker-process-lock-"));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
