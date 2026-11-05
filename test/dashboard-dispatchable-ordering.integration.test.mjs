@@ -43,18 +43,22 @@ function approvedQueuedJob(id, createdAt, date, time = "17:00") {
 test("dispatchable jobs require valid explicit Johannesburg slots and hold invalid legacy slots", async t => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dispatchable-order-"));
   const stateFile = path.join(stateDir, "dashboard-state.json");
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
+  }).format(new Date());
+  const dueTime = minutesAgo => new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Africa/Johannesburg", hour: "2-digit", minute: "2-digit", hourCycle: "h23"
+  }).format(new Date(Date.now() - minutesAgo * 60_000));
   const state = {
     version: 1,
     queueItems: [],
     campaigns: [],
     audit: [],
     jobs: [
-      // Creation order deliberately disagrees with the valid scheduled-slot order.
-      // Both slots must remain in the future for the full duration of CI execution.
-      approvedQueuedJob("slot-later", "2026-10-01T08:00:00.000Z", "2026-11-10"),
-      approvedQueuedJob("slot-earlier", "2026-12-15T08:00:00.000Z", "2026-11-06"),
-      // November 31 is not a real calendar date. It must fall back to createdAt,
-      // rather than Date.parse silently normalizing it into December.
+      // Creation order deliberately disagrees with the already-due scheduled-slot order.
+      approvedQueuedJob("slot-later", "2026-10-01T08:00:00.000Z", today, dueTime(1)),
+      approvedQueuedJob("slot-earlier", "2026-12-15T08:00:00.000Z", today, dueTime(2)),
+      // November 31 is not a real calendar date and must remain held, never fall back to createdAt.
       approvedQueuedJob("invalid-slot", "2026-10-15T08:00:00.000Z", "2026-11-31")
     ],
     uploads: [],
@@ -112,6 +116,8 @@ test("dispatchable jobs require valid explicit Johannesburg slots and hold inval
   assert.equal(body.queuedCount, 3);
   assert.equal(body.dispatchableCount, 2);
   assert.equal(body.queuedWithoutValidSlot, 1);
+  assert.equal(body.queuedWithFutureSlot, 0);
+  assert.equal(body.queuedWithExpiredSlot, 0);
   assert.equal(body.publishingEnabled, false);
   assert.equal(body.readOnly, true);
   assert.deepEqual(fs.readFileSync(stateFile), beforeRead, "the dispatchable read must not mutate persisted state");
