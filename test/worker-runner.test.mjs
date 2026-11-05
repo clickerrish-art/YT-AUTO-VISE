@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createServer } from "node:http";
+import { spawn } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { parseRetryAfterMs, runWorker, runWorkerCycle } from "../scripts/worker-runner.mjs";
 import fs from "node:fs";
 import os from "node:os";
@@ -596,3 +598,74 @@ test("worker refuses corrupt persisted cooldown state without contacting the dis
     fs.rmSync(directory, { recursive: true, force: true });
   }
 });
+
+test("separate worker processes preserve retry cooldown across an actual process restart", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-process-restart-"));
+  const statePath = path.join(directory, "worker-backoff.json");
+  let postCount = 0;
+  const server = createServer((req, res) => {
+    res.setHeader("content-type", "application/json");
+    if (req.method === "GET" && req.url?.startsWith("/api/jobs/dispatchable")) {
+      res.end(JSON.stringify({
+        jobs: [{ id: "job-process-restart", state: "QUEUED" }],
+        queuedCount: 1,
+        publishingEnabled: false
+      }));
+      return;
+    }
+    if (req.method === "POST" && req.url === "/api/jobs/produce") {
+      postCount += 1;
+      res.statusCode = 429;
+      res.setHeader("retry-after", "900");
+      res.end(JSON.stringify({ error: "rate limited" }));
+      return;
+    }
+    res.statusCode = 404;
+    res.end(JSON.stringify({ error: "not found" }));
+  });
+
+  const runWorkerProcess = baseUrl => new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, [
+      fileURLToPath(new URL("../scripts/worker-runner.mjs", import.meta.url)),
+      "--once"
+    ], {
+      env: {
+        ...process.env,
+        DASHBOARD_API_URL: baseUrl,
+        DASHBOARD_WORKER_TOKEN: token,
+        DASHBOARD_WORKER_ID: workerId,
+        WORKER_POLL_INTERVAL_MS: "1000",
+        WORKER_BACKOFF_STATE_PATH: statePath
+      },
+      stdio: ["ignore", "pipe", "pipe"]
+    });
+    let stdout = "";
+    let stderr = "";
+    child.stdout.setEncoding("utf8").on("data", chunk => { stdout += chunk; });
+    child.stderr.setEncoding("utf8").on("data", chunk => { stderr += chunk; });
+    child.once("error", reject);
+    child.once("close", (code, signal) => {
+      if (code === 0) resolve({ stdout, stderr });
+      else reject(new Error("Worker child exited with code " + code + " signal " + signal + ": " + stderr));
+    });
+  });
+
+  try {
+    const baseUrl = await listen(server);
+    const first = await runWorkerProcess(baseUrl);
+    assert.match(first.stdout, /"httpStatus":429/);
+    assert.equal(postCount, 1, "the first process should make exactly one rate-limited dispatch attempt");
+    const persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
+    assert.equal(persisted.cooldowns["job-process-restart"].attempts, 1);
+    assert.ok(persisted.cooldowns["job-process-restart"].nextAttemptAt > Date.now());
+
+    const restarted = await runWorkerProcess(baseUrl);
+    assert.match(restarted.stdout, /"deferredByBackoff":1/);
+    assert.equal(postCount, 1, "a fresh OS process must not redispatch during the persisted cooldown");
+    assert.match(restarted.stdout, /"results":\[\]/);
+  } finally {
+    await new Promise(resolve => server.close(resolve));
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
