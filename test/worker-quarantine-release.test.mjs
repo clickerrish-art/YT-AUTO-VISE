@@ -96,13 +96,14 @@ test("worker process lock is created and released around its cycle", async t => 
   const worker = "release-lock-test-worker";
   const identity = crypto.createHash("sha256").update(worker).digest("hex").slice(0, 20);
   const lockPath = path.join(dir, "worker-backoff-" + identity + ".json.process.lock");
+  let lockObservedDuringCycle = false;
   await runWorker({
     baseUrl: "http://127.0.0.1:8787",
     token: "worker-token-for-lock-test-123456",
     workerId: worker,
     once: true,
     stateDirectory: dir,
-    fetchImpl: async () => new Response(JSON.stringify({ jobs: [] }), { status: 200 })
+    fetchImpl: async () => {\n      lockObservedDuringCycle = fs.existsSync(lockPath);\n      return new Response(JSON.stringify({ jobs: [] }), { status: 200 });\n    }
   });
-  assert.equal(fs.existsSync(lockPath), false, "worker must release its process lock after a clean cycle");
+  assert.equal(lockObservedDuringCycle, true, "worker must hold its process lock while dispatch state is in use");\n  assert.equal(fs.existsSync(lockPath), false, "worker must release its process lock after a clean cycle");
 });
