@@ -40,7 +40,7 @@ function fixture() {
   const scriptSha256 = canonicalAuthoringScriptSha256(script);
   const audio = write(root, "content/jobs/job-123/narration.mp3", "test-audio-bytes");
   const transcript = write(root, "content/jobs/job-123/narration.txt", narrationText + "\n");
-  const captions = write(root, "content/jobs/job-123/captions.srt", "1\n00:00:00,000 --> 00:00:01,000\nA complete documentary narration.\n");
+  const captions = write(root, "content/jobs/job-123/captions.srt", "1\n00:00:00,000 --> 00:00:01,000\nA complete documentary narration.\n\n2\n00:05:59,000 --> 00:06:00,000\nThe documentary reaches its closing conclusion.\n");
   const report = write(root, "content/jobs/job-123/narration-report.json", JSON.stringify({ status: "DRAFT_REVIEW_REQUIRED" }));
   const narrationRights = write(root, "content/rights/narration-rights.json", JSON.stringify({ permittedUse: "COMMERCIAL_DERIVATIVE", reviewed: true }));
   const metadata = write(root, "content/job-metadata.json", JSON.stringify({
@@ -140,7 +140,7 @@ function fixture() {
       }
     }
   };
-  return { root, job, plan, quality, metadata, scenes, cleanup: () => fs.rmSync(root, { recursive: true, force: true }) };
+  return { root, job, plan, quality, metadata, captions, scenes, cleanup: () => fs.rmSync(root, { recursive: true, force: true }) };
 }
 
 test("builds a renderer manifest only from exact approved, hash-bound job evidence", () => {
@@ -379,7 +379,7 @@ const output = process.argv[3];
 fs.mkdirSync(path.dirname(output), { recursive: true });
 const result = spawnSync("ffmpeg", [
   "-hide_banner", "-loglevel", "error",
-  "-f", "lavfi", "-i", "color=c=black:s=1280x720:r=24:d=360",
+  "-f", "lavfi", "-i", "color=c=black:s=1920x1080:r=24:d=360",
   "-f", "lavfi", "-i", "sine=frequency=440:sample_rate=44100:duration=360",
   "-c:v", "libx264", "-preset", "ultrafast", "-crf", "35", "-pix_fmt", "yuv420p",
   "-c:a", "aac", "-b:a", "64k", "-t", "360", "-shortest", "-movflags", "+faststart", output
@@ -425,8 +425,8 @@ process.stdout.write("TEST_FIXTURE_RENDER_SUCCEEDED; fixture output is not publi
   assert.equal(payload.job.publishingEnabled, false);
   assert.equal(payload.job.outputArtifacts.length, 1);
   assert.equal(payload.job.outputArtifacts[0].durationSeconds >= 360, true);
-  assert.equal(payload.job.outputArtifacts[0].width, 1280);
-  assert.equal(payload.job.outputArtifacts[0].height, 720);
+  assert.equal(payload.job.outputArtifacts[0].width, 1920);
+  assert.equal(payload.job.outputArtifacts[0].height, 1080);
   assert.equal(payload.job.thumbnailArtifact.width, 1280);
   assert.equal(payload.job.thumbnailArtifact.height, 720);
   assert.match(payload.job.outputArtifacts[0].sha256, /^[a-f0-9]{64}$/);
@@ -442,4 +442,52 @@ process.stdout.write("TEST_FIXTURE_RENDER_SUCCEEDED; fixture output is not publi
   assert.equal(saved.leaseHistory.at(-1)?.action, "STAGE_COMPLETED", "the successful render must record an intermediate lease completion");
   assert.equal(saved.publishable, undefined, "a generated fixture must not be represented as publishable");
   assert.equal(saved.publishingEnabled, false);
+
+  const approvedCaptionsPath = f.job.authoring.narrationStage.artifacts["captions.srt"].path;
+  assert.equal(approvedCaptionsPath, f.captions.path);
+  const decoyCaptions = "content/jobs/job-123/unapproved-captions.srt";
+  write(f.root, decoyCaptions, fs.readFileSync(path.join(f.root, approvedCaptionsPath), "utf8"));
+  const beforeRejectedValidation = fs.readFileSync(stateFile, "utf8");
+  const rejectedValidation = await fetch(base + "/api/jobs/validate", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-operator-token": token },
+    body: JSON.stringify({ jobId: job.id, captionsPath: decoyCaptions })
+  });
+  const rejectedPayload = await rejectedValidation.json();
+  assert.equal(rejectedValidation.status, 409, JSON.stringify(rejectedPayload));
+  assert.match(rejectedPayload.error, /exact captions artifact bound to the approved narration stage/);
+  assert.equal(fs.readFileSync(stateFile, "utf8"), beforeRejectedValidation, "rejected unapproved captions must not mutate persisted job state");
+
+  const validationResponse = await fetch(base + "/api/jobs/validate", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-operator-token": token },
+    body: JSON.stringify({ jobId: job.id, captionsPath: approvedCaptionsPath })
+  });
+  const validationPayload = await validationResponse.json();
+  assert.equal(validationResponse.status, 200, JSON.stringify(validationPayload));
+  assert.equal(validationPayload.job.state, "VALIDATING");
+  assert.equal(validationPayload.job.validationResults?.passed, true);
+  assert.equal(validationPayload.job.validationResults?.captionsPath, approvedCaptionsPath);
+  assert.equal(validationPayload.job.validationResults?.artifacts?.[0]?.width, 1920);
+  assert.equal(validationPayload.job.validationResults?.artifacts?.[0]?.height, 1080);
+  assert.equal(validationPayload.job.validationResults?.thumbnail?.width, 1280);
+  assert.equal(validationPayload.job.validationResults?.thumbnail?.height, 720);
+  assert.equal(validationPayload.job.workerLease, null, "successful technical validation releases the render lease");
+  assert.equal(validationPayload.job.leaseHistory.at(-1)?.action, "VALIDATION_COMPLETED_RELEASED");
+  const afterValidation = fs.readFileSync(stateFile, "utf8");
+  const validatedState = JSON.parse(afterValidation);
+  const validatedJob = validatedState.jobs.find(entry => entry.id === job.id);
+  assert.equal(validatedJob.validationResults?.passed, true);
+  assert.equal(validatedState.audit.filter(event => event.action === "CONTENT_JOB_VALIDATION_PASSED" && event.jobId === job.id).length, 1);
+  assert.equal(validatedJob.publishingEnabled, false);
+
+  const idempotentResponse = await fetch(base + "/api/jobs/validate", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-operator-token": token },
+    body: JSON.stringify({ jobId: job.id, captionsPath: approvedCaptionsPath })
+  });
+  const idempotentPayload = await idempotentResponse.json();
+  assert.equal(idempotentResponse.status, 200, JSON.stringify(idempotentPayload));
+  assert.equal(idempotentPayload.idempotent, true);
+  assert.equal(fs.readFileSync(stateFile, "utf8"), afterValidation, "repeated validation with identical inputs must not mutate state");
 });
