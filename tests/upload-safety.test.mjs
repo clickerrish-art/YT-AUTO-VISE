@@ -103,7 +103,8 @@ test("both manual upload workflows default the emergency stop to active and requ
   assert.match(source, /const resolveInputFile = youtubeFactory \? resolveRegularFileNoSymlinks : resolveRepositoryFileNoSymlinks/);
   assert.match(source, /verifyRetainedRightsEvidence\(approval, youtubeFactory \? \{\} : \{ repositoryRoot: process\.cwd\(\) \}\)/);
   assert.match(source, /resolveRepositoryFileNoSymlinks\(env\.CHANNEL_HISTORY_RECONCILIATION_PATH, "Channel history reconciliation"\)/);
-  assert.match(source, /fetchCompleteYoutubeHistory\(youtube, matchedChannel, safeHistoryPath, expectedChannelId\)/);
+  assert.match(source, /fetchCompleteYoutubeHistorySnapshot\(youtube, matchedChannel, safeHistoryPath, expectedChannelId, \{ now: now\(\) \}\)/);
+  assert.match(source, /scheduledItems: historySnapshot\.scheduledItems/);
 });
 
 test("reconciliation-only mode cannot create a new upload attempt", () => {

@@ -90,7 +90,7 @@ export function validateHistoryReconciliationSnapshot({ channelId, remoteVideos,
       });
       continue;
     }
-    if (!Number.isFinite(strictIsoTimestamp(item.actualPublishedAt))) throw new Error("reconciled history requires actualPublishedAt for " + item.id);
+    if (!Number.isFinite(strictIsoTimestamp(item.actualPublishedAt))) throw new Error("reconciled history requires visibility and actualPublishedAt for " + item.id);
     records.set(item.id, {
       id: item.id,
       format: item.format,
