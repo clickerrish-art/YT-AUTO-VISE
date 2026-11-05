@@ -4,6 +4,9 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
+import { spawn, spawnSync } from "node:child_process";
+import { createServer } from "node:net";
+import { createContentJob } from "../scripts/content-job-lifecycle.mjs";
 import { buildApprovedJobRenderManifest } from "../scripts/build-approved-job-render-manifest.mjs";
 import { canonicalAuthoringScriptSha256 } from "../scripts/authoring-production-pipeline.mjs";
 import { productionPlanSha256 } from "../scripts/production-plan.mjs";
@@ -275,4 +278,167 @@ test("rejects narration artifacts modified after approval", () => {
     fs.appendFileSync(path.join(f.root, f.job.authoring.narrationStage.artifacts["narration.mp3"].path), "changed");
     assert.throws(() => buildApprovedJobRenderManifest({ job: f.job, root: f.root }), /artifact changed/);
   } finally { f.cleanup(); }
+});
+
+
+async function reservePort() {
+  const server = createServer();
+  await new Promise((resolve, reject) => server.listen(0, "127.0.0.1", resolve).once("error", reject));
+  const port = server.address().port;
+  await new Promise(resolve => server.close(resolve));
+  return port;
+}
+
+function dueJohannesburgSlot() {
+  const now = Date.now() - 2 * 60_000;
+  return {
+    date: new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(now)),
+    time: new Intl.DateTimeFormat("en-GB", { timeZone: "Africa/Johannesburg", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date(now)),
+    timezone: "Africa/Johannesburg"
+  };
+}
+
+test("approved long-form job runs through /api/jobs/produce to a verified, persisted GENERATED artifact", async t => {
+  const f = fixture();
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "approved-render-state-"));
+  const token = "approved-render-" + crypto.randomBytes(24).toString("hex");
+  const port = await reservePort();
+  const base = "http://127.0.0.1:" + port;
+  let child;
+  let logs = "";
+  const stop = async () => {
+    if (!child || child.exitCode !== null) return;
+    const running = child;
+    running.kill("SIGTERM");
+    await new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error("Dashboard shutdown timed out: " + logs)), 5000);
+      running.once("exit", () => { clearTimeout(timer); resolve(); });
+    });
+  };
+  t.after(async () => {
+    await stop().catch(() => {});
+    fs.rmSync(stateDir, { recursive: true, force: true });
+    f.cleanup();
+  });
+
+  // The dashboard derives its repository root from its own script location.
+  // Copy the production scripts into this isolated fixture root so the test
+  // never writes manifests, media, metadata or state into the working tree.
+  for (const directory of ["scripts", "config", "public"]) {
+    const source = path.join(process.cwd(), directory);
+    if (fs.existsSync(source)) fs.cpSync(source, path.join(f.root, directory), { recursive: true });
+  }
+  const oldMetadataFile = path.join(f.root, f.metadata.path);
+  const productionMetadataPath = "content/long-form-next.json";
+  const productionMetadataFile = path.join(f.root, productionMetadataPath);
+  fs.mkdirSync(path.dirname(productionMetadataFile), { recursive: true });
+  fs.renameSync(oldMetadataFile, productionMetadataFile);
+  f.metadata.path = productionMetadataPath;
+  f.plan.renderEvidence.metadataPath = productionMetadataPath;
+  const planSha256 = productionPlanSha256(f.plan);
+  f.job.authoring.productionPlan.planSha256 = planSha256;
+  f.job.authoring.productionPlan.review.planSha256 = planSha256;
+  rehashPlanReview(f.job);
+
+  const scheduledDate = (() => {
+    const date = new Date();
+    for (let i = 0; i < 14; i++) {
+      const candidate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + i, 12));
+      if (candidate.toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" }) === "Tuesday") return candidate.toISOString().slice(0, 10);
+    }
+    throw new Error("Unable to find a valid Tuesday schedule fixture");
+  })();
+  const lifecycleJob = createContentJob({
+    idempotencyKey: "approved-render-integration",
+    title: "Approved render integration fixture",
+    topic: "Test-only approved documentary render",
+    contentType: "long_form",
+    scheduledDay: "Tuesday",
+    scheduledDate
+  });
+  const job = {
+    ...lifecycleJob,
+    id: f.job.id,
+    scheduledSlot: dueJohannesburgSlot(),
+    authoring: f.job.authoring
+  };
+  const stateFile = path.join(stateDir, "dashboard-state.json");
+  fs.writeFileSync(stateFile, JSON.stringify({
+    version: 1, queueItems: [], campaigns: [], audit: [], jobs: [job], uploads: [],
+    facebookDrafts: [], facebookPosts: [], facebookAttempts: []
+  }, null, 2) + "\n", { mode: 0o600 });
+
+  // This test renderer is deliberately confined to the temporary repository.
+  // It ignores fixture source bytes and emits a real FFmpeg MP4 so the API's
+  // production output inspection, thumbnail generation and persistence run.
+  const rendererPath = path.join(f.root, "scripts", "render-long-form.mjs");
+  fs.writeFileSync(rendererPath, `import fs from "node:fs";
+import path from "node:path";
+import { spawnSync } from "node:child_process";
+const output = process.argv[4];
+fs.mkdirSync(path.dirname(output), { recursive: true });
+const result = spawnSync("ffmpeg", [
+  "-hide_banner", "-loglevel", "error",
+  "-f", "lavfi", "-i", "color=c=black:s=1280x720:r=24:d=360",
+  "-f", "lavfi", "-i", "sine=frequency=440:sample_rate=44100:duration=360",
+  "-c:v", "libx264", "-preset", "ultrafast", "-crf", "35", "-pix_fmt", "yuv420p",
+  "-c:a", "aac", "-b:a", "64k", "-t", "360", "-shortest", "-movflags", "+faststart", output
+], { encoding: "utf8", timeout: 180000 });
+if (result.error || result.status !== 0) {
+  process.stderr.write(result.stderr || String(result.error || "FFmpeg fixture renderer failed"));
+  process.exit(result.status || 1);
+}
+process.stdout.write("TEST_FIXTURE_RENDER_SUCCEEDED; fixture output is not publishable\n");
+`);
+
+  child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    cwd: f.root,
+    env: {
+      ...process.env,
+      DASHBOARD_OPERATOR_TOKEN: token,
+      DASHBOARD_OPERATOR_ID: "approved-render-test@example.test",
+      DASHBOARD_STATE_DIR: stateDir,
+      UPLOAD_LOG_DIR: stateDir,
+      PORT: String(port),
+      DASHBOARD_HOST: "127.0.0.1"
+    },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  let ready = false;
+  for (let attempt = 0; attempt < 100; attempt++) {
+    if (child.exitCode !== null) throw new Error("Dashboard server exited: " + logs);
+    try { if ((await fetch(base + "/healthz")).ok) { ready = true; break; } } catch {}
+    await new Promise(resolve => setTimeout(resolve, 50));
+  }
+  assert.equal(ready, true, "Dashboard server did not start: " + logs);
+
+  const response = await fetch(base + "/api/jobs/produce", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-operator-token": token },
+    body: JSON.stringify({ jobId: job.id })
+  });
+  const payload = await response.json();
+  assert.equal(response.status, 200, JSON.stringify(payload));
+  assert.equal(payload.job.state, "GENERATED");
+  assert.equal(payload.job.publishingEnabled, false);
+  assert.equal(payload.job.outputArtifacts.length, 1);
+  assert.equal(payload.job.outputArtifacts[0].durationSeconds >= 360, true);
+  assert.equal(payload.job.outputArtifacts[0].width, 1280);
+  assert.equal(payload.job.outputArtifacts[0].height, 720);
+  assert.equal(payload.job.thumbnailArtifact.width, 1280);
+  assert.equal(payload.job.thumbnailArtifact.height, 720);
+  assert.match(payload.job.outputArtifacts[0].sha256, /^[a-f0-9]{64}$/);
+  assert.match(payload.job.thumbnailArtifact.sha256, /^[a-f0-9]{64}$/);
+  assert.equal(fs.existsSync(path.join(f.root, payload.job.outputArtifacts[0].path)), true);
+  assert.equal(fs.existsSync(path.join(f.root, payload.job.thumbnailArtifact.path)), true);
+  const persisted = JSON.parse(fs.readFileSync(stateFile, "utf8"));
+  const saved = persisted.jobs.find(entry => entry.id === job.id);
+  assert.equal(saved.state, "GENERATED", "successful output validation must persist the terminal render state");
+  assert.equal(persisted.audit.filter(event => event.action === "CONTENT_RENDER_STARTED" && event.jobId === job.id).length, 1);
+  assert.equal(persisted.audit.filter(event => event.action === "CONTENT_RENDER_SUCCEEDED" && event.jobId === job.id).length, 1);
+  assert.equal(saved.workerLease, null, "successful rendering must release the worker lease");
+  assert.equal(saved.publishable, undefined, "a generated fixture must not be represented as publishable");
+  assert.equal(saved.publishingEnabled, false);
 });
