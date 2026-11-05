@@ -243,7 +243,10 @@ export function authorizeContentJobRetry(job, {
   };
 }
 
-function deadLetterExhaustedJob(job, now, reasonCode = "MAX_ATTEMPTS_EXHAUSTED") {
+export function deadLetterExhaustedJob(job, now = Date.now(), reasonCode = "MAX_ATTEMPTS_EXHAUSTED") {
+  if (!job || job.state !== "FAILED") throw new Error("Only a failed job can be moved to dead letter");
+  if (!Number.isInteger(job.attemptCount) || !Number.isInteger(job.retryPolicy?.maxAttempts) || job.attemptCount < job.retryPolicy.maxAttempts) throw new Error("A job must exhaust its configured attempts before dead-lettering");
+  if (job.errorDetails?.retryableAfterOperatorReview !== true) throw new Error("Dead-lettering requires retained operator-review recovery evidence");
   const timestamp = new Date(now).toISOString();
   const entry = {
     reasonCode,
