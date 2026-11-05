@@ -459,3 +459,48 @@ The first browser attempt was blocked by an external Edge TTS network connection
 This checkpoint verifies backup payload integrity, clean restore, exact byte equivalence, idempotent retry, and the dashboard browser journeys on the exact candidate. It does **not** establish a production-host restore drill or owner acceptance and does not close STATE-001. DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain open/not accepted as applicable. Production readiness remains **HOLD**.
 
 No upload, publication, schedule mutation, provider-side campaign action, account reconnection, paid generation, spend, main-branch edit, merge, PR status change, reset, rebase, force-push or destructive reconciliation occurred. Public/unattended publishing remains disabled.
+
+
+---
+
+# SCHED-001 retry authorization and dead-letter checkpoint — 5 November 2026
+
+**Exact code/test candidate:** `0abc7adace2c3c7555c1ce059e3f6efc35b743a1`  
+**Branch:** `codex/marketing-machine-audit-fixes`  
+**Main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged)  
+**Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`  
+**Comparison at the tested code SHA:** 2,651 ahead / 2 behind / 234 changed files. This is inventory evidence only, not semantic integration approval.  
+**PR #1:** OPEN · DRAFT · UNMERGED; tested code SHA is the PR head for this checkpoint.
+
+## Implemented scheduler controls
+
+- `claimWorkerLease` accepts only `QUEUED` jobs. It no longer changes a failed job back to queued when backoff elapses.
+- Generic state transition rejects both `FAILED → QUEUED` and `DEAD_LETTER → QUEUED`.
+- Added operator-authenticated `POST /api/jobs/retry`. It requires a job ID and review reason, derives the actor from authenticated operator identity, enforces retry backoff and policy, persists a retry-authorization record, and writes `CONTENT_JOB_RETRY_AUTHORIZED` to the audit ledger.
+- Retryable failures that exhaust `maxAttempts` enter `DEAD_LETTER`, retain the failure details and dead-letter history, and have no active worker lease.
+- A dead-letter recovery requires explicit `overrideRetryLimit: true` plus a review reason. It grants exactly one additional attempt by incrementing the attempt ceiling by one; a retryable failure on that attempt returns the job to `DEAD_LETTER`.
+- Dead-letter creation and recovery are separately audited. The dashboard exposes the operator review reason and one-attempt override, and its inventory/accessibility fixtures were updated for the new controls and route.
+- The new endpoint is excluded from the worker-token allowlist. No provider, upload or publication capability was added.
+
+## Exact-SHA CI — candidate `0abc7adace2c3c7555c1ce059e3f6efc35b743a1`
+
+| Validation | Run | Result |
+|---|---:|---|
+| Content quality | [42040403339](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42040403339) | **PASS — 539 Node tests, 0 failures, 0 skips** |
+| Automation/security | [42040403561](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42040403561) | **PASS — 112/112 Node test files; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg, JavaScript syntax and Python compilation checks passed** |
+| Dashboard Chromium E2E | [42040403453](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42040403453) | **PASS — 26/26 journeys**, including all 17 form landmarks, all 108 controls, and the real measured-TTS narration/reconciliation journey |
+| Isolated main/candidate baseline | [42040403442](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42040403442) | **PASS** — exact main and candidate test baselines completed |
+| Branch reconciliation inventory | [42040403438](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42040403438) | **PASS — inventory only; no semantic merge approval** |
+| Metadata validation | [42040403226](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42040403226) | **PASS** |
+| Nature Frontiers local draft validation | [42040403236](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42040403236) | **PASS — local-only; no Meta API write** |
+| Production readiness | [42040403564](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42040403564) | **HOLD — 12 blockers remain; both human-readable and JSON checks exited 2** |
+
+The production-readiness report confirms missing owner-approved cadence evidence and live YouTube history/uncertain-attempt reconciliation, plus all four YouTube environment variables. The report does not verify ownership, license authenticity, factual accuracy or visual quality. Its diagnostic artifact is retained by the workflow; no gate was bypassed.
+
+## Acceptance interpretation and safety
+
+The new tests verify operator-only retry authorization, rejection of generic and worker retry bypasses, persisted retry authorization/audit history across restart, exhaustion into dead letter, and explicit one-attempt recovery. The exact-SHA content and automation suites and all browser journeys pass.
+
+This is a verified SCHED-001 implementation slice, **not** full scheduler acceptance. SCHED-001 remains open until the complete scheduler/worker lifecycle, cadence owner decision, and operational acceptance evidence are closed. STATE-001 remains NOT_TESTED until the production-host restore drill and owner acceptance are completed. Production readiness remains **HOLD**.
+
+No upload, publication, schedule mutation, provider-side campaign action, account reconnection, paid generation, spend, main-branch edit, merge, PR status change, reset, rebase, force-push or destructive reconciliation occurred. Public/unattended publishing remains disabled.
