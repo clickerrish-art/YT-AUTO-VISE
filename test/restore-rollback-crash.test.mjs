@@ -311,3 +311,126 @@ test("restart recovery completes rollback after process death during rollback-te
     "restart recovery must clean all transaction temporary files"
   );
 });
+
+
+test("restart recovery rolls back a process death after destination rename and before directory fsync", async t => {
+  const source = fixture();
+  const destination = fixture();
+  t.after(() => {
+    fs.rmSync(source.root, { recursive: true, force: true });
+    fs.rmSync(destination.root, { recursive: true, force: true });
+  });
+
+  const backupPath = path.join(source.root, "backup.json");
+  await backupState({
+    rootDir: source.root,
+    stateDir: source.stateDir,
+    uploadLogDir: source.logDir,
+    rightsDir: source.rightsDir,
+    outputPath: backupPath
+  });
+  const backup = JSON.parse(fs.readFileSync(backupPath, "utf8"));
+  const backedUpState = backup.entries.find(entry => entry.target.kind === "dashboard-state");
+  assert.ok(backedUpState, "fixture backup must include dashboard state");
+  const expectedCommittedSha = backedUpState.sha256;
+
+  const destinationState = path.join(destination.stateDir, "dashboard-state.json");
+  const originalStateBytes = fs.readFileSync(destinationState);
+  const originalAudit = JSON.parse(originalStateBytes.toString("utf8")).audit;
+  const olderThanBackup = new Date(Date.parse(backup.createdAt) - 1000);
+  fs.utimesSync(destinationState, olderThanBackup, olderThanBackup);
+
+  const restoreModule = new URL("../scripts/restore-state.mjs", import.meta.url).href;
+  const childSource = `
+    import fs from "node:fs";
+    import crypto from "node:crypto";
+    const moduleUrl = ${JSON.stringify(restoreModule)};
+    const rootDir = ${JSON.stringify(destination.root)};
+    const stateDir = ${JSON.stringify(destination.stateDir)};
+    const destinationState = ${JSON.stringify(destinationState)};
+    const expectedCommittedSha = ${JSON.stringify(expectedCommittedSha)};
+    const originalOpen = fs.openSync;
+    const originalFsync = fs.fsyncSync;
+    const openedPaths = new Map();
+    fs.openSync = function (filePath, ...args) {
+      const fd = originalOpen.call(this, filePath, ...args);
+      if (typeof filePath === "string") openedPaths.set(fd, filePath);
+      return fd;
+    };
+    fs.fsyncSync = function (fd, ...args) {
+      if (openedPaths.get(fd) === stateDir && fs.existsSync(destinationState)) {
+        const currentSha = crypto.createHash("sha256").update(fs.readFileSync(destinationState)).digest("hex");
+        if (currentSha === expectedCommittedSha) {
+          process.stdout.write("DESTINATION_RENAMED_BEFORE_DIRECTORY_FSYNC\\n");
+          Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0);
+        }
+      }
+      return originalFsync.call(this, fd, ...args);
+    };
+    const { restoreState } = await import(moduleUrl);
+    await restoreState({
+      backupPath: ${JSON.stringify(backupPath)},
+      rootDir,
+      confirm: "YES",
+      overwriteState: true
+    });
+  `;
+
+  const child = spawn(process.execPath, ["--input-type=module", "-e", childSource], {
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let stdout = "";
+  let stderr = "";
+  child.stdout.setEncoding("utf8");
+  child.stderr.setEncoding("utf8");
+  child.stdout.on("data", chunk => { stdout += chunk; });
+  child.stderr.on("data", chunk => { stderr += chunk; });
+  t.after(async () => {
+    if (child.exitCode === null && child.signalCode === null) child.kill("SIGKILL");
+    if (child.exitCode === null && child.signalCode === null) {
+      await new Promise(resolve => child.once("exit", resolve));
+    }
+  });
+
+  const deadline = Date.now() + 10000;
+  while (!stdout.includes("DESTINATION_RENAMED_BEFORE_DIRECTORY_FSYNC") &&
+         Date.now() < deadline && child.exitCode === null && child.signalCode === null) {
+    await new Promise(resolve => setTimeout(resolve, 20));
+  }
+  assert.ok(stdout.includes("DESTINATION_RENAMED_BEFORE_DIRECTORY_FSYNC"),
+    "child did not reach the post-rename/pre-directory-fsync boundary; stderr: " + stderr);
+  assert.equal(fs.readFileSync(destinationState).length > 0, true,
+    "the destination must contain the committed replacement at the crash boundary");
+
+  const journalPath = path.join(destination.stateDir, ".restore-transaction.json");
+  const lockPath = path.join(destination.stateDir, ".restore-operation.lock");
+  assert.equal(fs.existsSync(journalPath), true, "durable rollback journal must exist before destination mutation");
+  assert.equal(fs.existsSync(lockPath), true, "restore operation lock must remain held at the crash boundary");
+  assert.equal(
+    fs.readFileSync(destinationState).toString("utf8"),
+    Buffer.from(backedUpState.contentBase64, "base64").toString("utf8"),
+    "destination rename must have installed the backup state before directory fsync is interrupted"
+  );
+
+  child.kill("SIGKILL");
+  const exit = await new Promise(resolve => child.once("exit", (code, signal) => resolve({ code, signal })));
+  assert.equal(exit.signal, "SIGKILL", "the child must die after rename and before directory fsync");
+  fs.unlinkSync(lockPath);
+
+  await assert.rejects(
+    restoreState({ backupPath, rootDir: destination.root, confirm: "YES", overwriteState: true }),
+    /rolled back safely.*rerun restore explicitly/i
+  );
+  assert.deepEqual(fs.readFileSync(destinationState), originalStateBytes,
+    "restart recovery must restore exact pre-restore bytes after the interrupted commit rename");
+  assert.deepEqual(JSON.parse(fs.readFileSync(destinationState, "utf8")).audit, originalAudit,
+    "restart recovery must preserve the pre-restore audit trail");
+  assert.equal(fs.existsSync(journalPath), false, "successful restart recovery must remove the transaction journal");
+  assert.equal(fs.existsSync(lockPath), false, "restart recovery must release its operation lock");
+  assert.deepEqual(
+    fs.readdirSync(destination.stateDir).filter(name =>
+      name.endsWith(".restore-tmp") || name.endsWith(".rollback-tmp")),
+    [],
+    "restart recovery must remove all staged and rollback temporary files"
+  );
+});
