@@ -375,7 +375,7 @@ test("approved long-form job runs through /api/jobs/produce to a verified, persi
   fs.writeFileSync(rendererPath, `import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
-const output = process.argv[4];
+const output = process.argv[3];
 fs.mkdirSync(path.dirname(output), { recursive: true });
 const result = spawnSync("ffmpeg", [
   "-hide_banner", "-loglevel", "error",
