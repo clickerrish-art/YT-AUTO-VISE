@@ -108,20 +108,45 @@ export function applyWorkerQuarantineRelease({
   statePath, workerId, jobId, attemptId, artifactSha256, receipt, publicKeyPem, nowMs = Date.now()
 }) {
   assertWorkerStoppedForQuarantineRelease(statePath);
-  const state = loadCooldowns(statePath, workerId);
-  if (!state.uncertainDispatches.has(jobId)) {
-    throw new Error("Exact job is not currently quarantined by this worker");
+  const releaseLockPath = statePath + ".release.lock";
+  let releaseLockFd;
+  try {
+    releaseLockFd = fs.openSync(releaseLockPath, "wx", 0o600);
+  } catch (error) {
+    if (error?.code === "EEXIST") {
+      throw new Error("Another quarantine release is already in progress, or a stale release lock requires operator inspection");
+    }
+    throw error;
   }
-  const verified = verifyWorkerQuarantineReleaseReceipt(receipt, {
-    workerId, jobId, attemptId, artifactSha256, publicKeyPem, nowMs
-  });
-  if (state.consumedReleaseNonces.has(verified.nonce)) {
-    throw new Error("Quarantine release receipt nonce has already been consumed");
+  try {
+    fs.writeFileSync(releaseLockFd, JSON.stringify({
+      pid: process.pid,
+      workerId,
+      jobId,
+      startedAt: new Date().toISOString()
+    }));
+    assertWorkerStoppedForQuarantineRelease(statePath);
+    const state = loadCooldowns(statePath, workerId);
+    if (!state.uncertainDispatches.has(jobId)) {
+      throw new Error("Exact job is not currently quarantined by this worker");
+    }
+    const verified = verifyWorkerQuarantineReleaseReceipt(receipt, {
+      workerId, jobId, attemptId, artifactSha256, publicKeyPem, nowMs
+    });
+    if (state.consumedReleaseNonces.has(verified.nonce)) {
+      throw new Error("Quarantine release receipt nonce has already been consumed");
+    }
+    state.uncertainDispatches.delete(jobId);
+    state.consumedReleaseNonces.add(verified.nonce);
+    persistCooldowns(statePath, workerId, state.cooldowns, state.uncertainDispatches, state.consumedReleaseNonces);
+    return { workerId, jobId, attemptId, artifactSha256, released: true, nonceConsumed: true };
+  } finally {
+    if (releaseLockFd !== undefined) fs.closeSync(releaseLockFd);
+    try { fs.unlinkSync(releaseLockPath); }
+    catch (error) {
+      if (error?.code !== "ENOENT") throw error;
+    }
   }
-  state.uncertainDispatches.delete(jobId);
-  state.consumedReleaseNonces.add(verified.nonce);
-  persistCooldowns(statePath, workerId, state.cooldowns, state.uncertainDispatches, state.consumedReleaseNonces);
-  return { workerId, jobId, attemptId, artifactSha256, released: true, nonceConsumed: true };
 }
 
 export function inspectWorkerState({
