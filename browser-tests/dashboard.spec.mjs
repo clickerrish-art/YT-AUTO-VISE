@@ -1731,7 +1731,7 @@ test("all 108 dashboard controls have stable identities and accessible names", a
     return { controlCount: controls.length, formCount: forms.length, failures };
   });
 
-  expect(audit.controlCount).toBe(108);
+  expect(audit.controlCount).toBe(116);
   expect(audit.formCount).toBe(17);
   expect(audit.failures).toEqual([]);
 });
