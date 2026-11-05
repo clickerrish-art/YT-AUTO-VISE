@@ -388,7 +388,7 @@ if (result.error || result.status !== 0) {
   process.stderr.write(result.stderr || String(result.error || "FFmpeg fixture renderer failed"));
   process.exit(result.status || 1);
 }
-process.stdout.write("TEST_FIXTURE_RENDER_SUCCEEDED; fixture output is not publishable\n");
+process.stdout.write("TEST_FIXTURE_RENDER_SUCCEEDED; fixture output is not publishable\\n");
 `);
 
   child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
