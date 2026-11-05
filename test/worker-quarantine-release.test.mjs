@@ -41,8 +41,9 @@ test("receipt rejects tampering, wrong binding, wrong public key and expiry", ()
   assert.throws(() => verifyWorkerQuarantineReleaseReceipt(receipt, { ...binding, attemptId: "other-attempt" }), /does not bind/i);
 });
 
-test("receipt creation rejects malformed identities and weak signing secrets", () => {
-  assert.throws(() => createWorkerQuarantineReleaseReceipt({ ...binding, secret: "short" }), /worker authentication secret/i);
+test("receipt creation rejects malformed identities and missing or malformed private keys", () => {
+  assert.throws(() => createWorkerQuarantineReleaseReceipt({ ...binding, privateKeyPem: "" }), /private key is not configured/i);
+  assert.throws(() => createWorkerQuarantineReleaseReceipt({ ...binding, privateKeyPem: "not a key" }), /private key|decoder/i);
   assert.throws(() => createWorkerQuarantineReleaseReceipt({ ...binding, artifactSha256: "bad" }), /fields are invalid/i);
 });
 
