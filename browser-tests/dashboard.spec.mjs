@@ -1776,3 +1776,32 @@ test("validation task control runs an allowlisted check and displays its durable
   expect(after.audit.filter(event => event.action === "VALIDATION_TASK_SUCCEEDED" && event.jobId === taskJob.id)).toHaveLength(1);
   expect(after.publishingEnabled).toBe(false);
 });
+
+
+test("Facebook research suggestion control fills an idea without saving a draft or publishing", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  const beforeResponse = await request.get("/api/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+  expect(before.publishingEnabled).toBe(false);
+
+  await page.locator("#fbdate").fill(futureScheduleDate("Tuesday", 1));
+  await page.locator("#fbsuggest").click();
+  await expect(page.locator("#facebookdraftresult")).toContainText("Research-first idea:", { timeout: 10_000 });
+  await expect(page.locator("#fbtopic")).not.toHaveValue("");
+  await expect(page.locator("#fbcaption")).toContainText("[Add one specific, sourced fact here");
+  await expect(page.locator("#fbclaims")).toHaveValue("");
+  await expect(page.locator("#fbmedia")).toHaveValue("");
+
+  const afterResponse = await request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  const after = await afterResponse.json();
+  expect(after).toEqual(before);
+  expect(after.publishingEnabled).toBe(false);
+  await expect(page.locator("#facebookdraftresult")).toContainText("not publish-ready");
+});
