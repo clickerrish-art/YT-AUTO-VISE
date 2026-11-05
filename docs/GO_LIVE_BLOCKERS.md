@@ -1,30 +1,20 @@
-# Live checkpoint — 5 November 2026, exact source/test candidate b036174641a51bf9e4220ba4e612d6aaab7752cd
+# Live checkpoint — 5 November 2026, exact source/test candidate 51ad2bbcd502c9e44717cd4a529794993cfc50fe
 
-This checkpoint supersedes older live-state snapshots below. Evidence is tied to exact source/test candidate `b036174641a51bf9e4220ba4e612d6aaab7752cd`; the release decision remains **HOLD / NOT PRODUCTION READY**.
+This checkpoint supersedes older live-state snapshots below. Evidence is tied to exact source/test candidate `51ad2bbcd502c9e44717cd4a529794993cfc50fe`; the release decision remains **HOLD / NOT PRODUCTION READY**.
 
 - Main: `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged); merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
-- Live branch at snapshot: **2,599 ahead / 2 behind / 231 changed paths**.
-- Exact inventory [41950432546](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432546): 17 critical paths, zero final-tree deletions, zero patch-equivalent commits, clean CI working tree; semantic integration decision remains `REQUIRES_REVIEW`.
+- Live branch at snapshot: **2,604 ahead / 2 behind / 231 changed paths**.
+- Exact inventory [41951888807](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888807): 17 critical paths, zero final-tree deletions, zero patch-equivalent commits, clean CI working tree; semantic integration decision remains `REQUIRES_REVIEW`.
 - PR #1 remains **OPEN, DRAFT, UNMERGED**. Branch protection is **UNVERIFIED** (GitHub protection endpoint returned 403).
-- Exact-SHA automation/security [41950432631](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432631): **PASS**, 111/111 Node test files, 524 Node tests, zero failures/skips, 16 Python tests, npm audit 0 vulnerabilities, FFmpeg/ffprobe, syntax and Python compilation passed.
-- Dashboard Chromium E2E [41950432596](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432596): **PASS — 26/26**. Content quality [41950432618](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432618), metadata [41950432753](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432753), lockfile [41950425761](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950425761), branch inventory [41950432546](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432546), and local Nature Frontiers draft validation [41950432557](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432557) passed.
-- Isolated exact-SHA baseline [41950432551](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432551): main 54 Node/8 Python; candidate 524 Node across 111 files/16 Python; zero candidate skips; all test commands exited 0.
-- Production readiness [41950432665](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432665): **HOLD**, 13 blockers; read-only report uploaded, mandatory final gate failed as designed.
+- Exact-SHA automation/security [41951888776](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888776): **PASS**, 111/111 Node test files, 529 tests, zero failures/skips, 16 Python tests, npm audit 0 vulnerabilities, FFmpeg/ffprobe, syntax and Python compilation passed.
+- Dashboard Chromium E2E [41951888813](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888813): **PASS — 26/26**. Content quality [41951888729](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888729), metadata [41951888810](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888810), lockfile [41951882085](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951882085), branch inventory [41951888807](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888807), and local Nature Frontiers draft validation [41951889001](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951889001) passed.
+- Isolated exact-SHA baseline [41951888702](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888702): main 54 Node/8 Python; candidate 529 Node across 111 files/16 Python; zero candidate skips.
+- Production readiness [41951888791](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888791): **HOLD**, 13 blockers; read-only report uploaded, mandatory final gate failed as designed.
+- Semantic review found and fixed two file-ownership races: publisher lock release and daily-draft write-failure cleanup now verify the original inode before unlinking. Worker tests cover uncertain HTTP 408/5xx dispatch outcomes. Focused local regressions passed 44/44.
 - The API matrix route snapshot remains 36 routes / 31 PASS / 5 BLOCKED / 0 NOT_TESTED, with 36/36 auth-negative checks passing. Route-by-route evidence was last generated at `8272d2e`; API-001 remains NOT_TESTED overall.
 - The last full requirement assessment remains 82 total / 60 PASS / 12 NOT_TESTED / 10 BLOCKED as of 2 November; it is not reclassified by this live CI refresh.
 - Production blockers remain the owner cadence decision, complete remote upload history, genuine rights-cleared media/manifests, final playable Short, human review, verified channel identity and secure YouTube OAuth/channel configuration.
 - Public/unattended publishing remains disabled. No upload, publication, provider mutation, account reconnection, spend, merge or main-branch edit occurred.
-
-See [CURRENT_RELEASE_EVIDENCE_2026-11-05.md](CURRENT_RELEASE_EVIDENCE_2026-11-05.md) for the full exact-SHA report.
-
----
-
-
-
-# Current execution checkpoint — 4 November 2026
-
-This checkpoint supersedes older live-state snapshots below. Historical entries remain for traceability. The exact tested source/test candidate is separated from this documentation-only refresh.
-
 ## Exact tested source/test candidate
 
 - Source/test SHA: `c7fa402671528da06a180914d04a88a719766321`.

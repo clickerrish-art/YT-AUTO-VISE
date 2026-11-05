@@ -1,7 +1,7 @@
 # Current evidence checkpoint — 5 November 2026
 
-- Exact tested source/test SHA: `b036174641a51bf9e4220ba4e612d6aaab7752cd`.
-- Dashboard Chromium E2E: [run 41950432596](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432596), **26/26 passed**.
+- Exact tested source/test SHA: `51ad2bbcd502c9e44717cd4a529794993cfc50fe`.
+- Dashboard Chromium E2E: [run 41951888813](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888813), **26/26 passed**.
 - Static inventory: **104 controls, 16 forms, 40 route handlers, 36 protected API routes**.
 - **DASH-001 remains NOT_TESTED overall.** The 26 browser journeys do not establish exhaustive per-control success, validation, error feedback, authorization, persistence, refresh, concurrency, recovery and accessibility acceptance.
 - Main remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; PR #1 remains open, draft and unmerged. Public/unattended publishing remains disabled.
@@ -10,8 +10,8 @@
 
 # Dashboard control acceptance — live refresh 5 November 2026
 
-**Current application source/test SHA:** `b036174641a51bf9e4220ba4e612d6aaab7752cd`  
-**Latest browser run:** `41950432596` on the exact current candidate HEAD.
+**Current application source/test SHA:** `51ad2bbcd502c9e44717cd4a529794993cfc50fe`  
+**Latest browser run:** `41951888813` on the exact current candidate HEAD.
 
 ## Current static inventory
 
@@ -31,7 +31,7 @@ Static inventory is not behavioral acceptance.
 
 ## Exact-head browser acceptance
 
-[Dashboard Chromium E2E run 41950432596](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432596) completed successfully on exact source/test SHA `b036174641a51bf9e4220ba4e612d6aaab7752cd`: **26/26 browser tests passed**. The added Facebook research-suggestion journey verifies that the topic and caption starter populate the form while state remains unchanged and no draft or publication is created.
+[Dashboard Chromium E2E run 41951888813](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432596) completed successfully on exact source/test SHA `b036174641a51bf9e4220ba4e612d6aaab7752cd`: **26/26 browser tests passed**. The added Facebook research-suggestion journey verifies that the topic and caption starter populate the form while state remains unchanged and no draft or publication is created.
 
 Coverage includes:
 - Operator authentication, keyboard-only connection and token redaction.

@@ -1,10 +1,10 @@
 # SonicVhibez Marketing Machine — current release evidence
 
-**Evidence snapshot:** 5 November 2026, 01:45 UTC  
+**Evidence snapshot:** 5 November 2026, 02:05 UTC  
 **Repository:** `clickerrish-art/YT-AUTO-VISE`  
 **Implementation branch:** `codex/marketing-machine-audit-fixes`  
-**Exact tested source/test SHA:** `b036174641a51bf9e4220ba4e612d6aaab7752cd`  
-**Branch HEAD at evidence snapshot:** `b036174641a51bf9e4220ba4e612d6aaab7752cd`  
+**Exact tested source/test SHA:** `51ad2bbcd502c9e44717cd4a529794993cfc50fe`  
+**Branch HEAD at evidence snapshot:** `51ad2bbcd502c9e44717cd4a529794993cfc50fe`  
 **Main HEAD:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged)  
 **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`  
 **PR #1:** OPEN · DRAFT · UNMERGED
@@ -13,17 +13,52 @@
 
 **NOT PRODUCTION READY — HOLD.** This is an exact-SHA engineering and release-evidence refresh. It does not authorize merge, external provider mutation, upload, scheduling or publication.
 
-## Latest exact-SHA validation — `b036174641a51bf9e4220ba4e612d6aaab7752cd`
+## Latest exact-SHA validation — `51ad2bbcd502c9e44717cd4a529794993cfc50fe`
+
+The current source/test candidate fixes two file-ownership races in Facebook draft/publisher cleanup and adds a worker regression for uncertain HTTP dispatch outcomes (408/5xx). No external publishing behavior was enabled.
+
+| Validation | Run | Result |
+|---|---:|---|
+| Automation/security | [41951888776](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888776) | **PASS** — 111/111 Node test files, 529 tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax and Python compilation passed |
+| Dashboard Chromium E2E | [41951888813](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888813) | **PASS — 26/26** |
+| Content quality | [41951888729](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888729) | **PASS** |
+| Metadata validation | [41951888810](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888810) | **PASS** |
+| Isolated main/candidate baseline | [41951888702](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888702) | **PASS** — main 54 Node/8 Python; candidate 529 Node/16 Python; zero candidate skips |
+| Branch reconciliation inventory | [41951888807](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888807) | **PASS** — non-destructive inventory; semantic integration review remains open |
+| Nature Frontiers local draft validation | [41951889001](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951889001) | **PASS** — local validation only; no Meta provider creation/read-back |
+| npm lockfile workflow | [41951882085](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951882085) | **PASS** — clean locked install and complete Node suite |
+| Production readiness | [41951888791](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888791) | **HOLD** — read-only report generated; final gate failed as designed with 13 blockers |
+
+### Latest focused regression evidence
+
+Local exact-source focused tests passed **44/44** across worker runner, Facebook autonomous publisher and Facebook daily-draft suites. The full exact-SHA CI suite independently passed 529 Node tests across 111 files, 16 Python tests, zero skips and zero npm audit vulnerabilities.
+
+### Latest live Git inventory
+
+The [non-destructive inventory artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888807) records 2,604 branch-only commits, 2 main-only commits, 231 changed paths, zero final-tree deletions, zero patch-equivalent commits and 17 critical paths. Heuristic classification: 1,109 documentation-only; 640 test-only; 543 implementation; 106 workflow-only; 75 mixed; 73 implementation-and-tests; 58 configuration/content. Integration remains `REQUIRES_REVIEW`.
+
+### Latest dashboard and API checkpoint
+
+- Dashboard inventory: 104 controls, 16 forms, 40 route handlers, 36 protected API routes.
+- Dashboard Chromium E2E: **26/26 passed** on exact source/test SHA `51ad2bbcd502c9e44717cd4a529794993cfc50fe`.
+- **DASH-001 remains NOT_TESTED overall**; the 26 browser journeys do not prove exhaustive per-control business acceptance.
+- API matrix remains 36 routes / 31 PASS / 5 BLOCKED / 0 NOT_TESTED with 36/36 auth-negative checks. Route-by-route evidence remains sourced from `8272d2e39868237c05b2951f37bcade6ae6608c4`; **API-001 remains NOT_TESTED overall**.
+
+### Latest production readiness
+
+The exact-`51ad2bb` read-only report [41951888791](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888791) reports **HOLD / 13 blockers**. Public publishing remains disabled. Remaining blockers include owner cadence approval, remote YouTube history and uncertain-attempt reconciliation, genuine rights-cleared Short and long-form media/manifests, human review, verified channel identity and four missing YouTube environment values. No upload, schedule or publication was attempted.
+
+## Previous exact-SHA validation — `b036174641a51bf9e4220ba4e612d6aaab7752cd`
 
 The current source/test candidate is `b036174641a51bf9e4220ba4e612d6aaab7752cd`. The only code-tree change since the preceding candidate was a browser-test assertion correction: the Facebook caption suggestion is a textarea value, so the test now uses Playwright `toHaveValue` rather than text-content matching. No application runtime code or publishing behavior changed in this commit.
 
 | Validation | Run | Result |
 |---|---:|---|
-| Automation/security | [41950432631](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432631) | **PASS** — 111/111 Node test files, 524 tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax and Python compilation passed |
+| Automation/security | [41950432631](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432631) | **PASS** — 111/111 Node test files, 526 tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax and Python compilation passed |
 | Dashboard Chromium E2E | [41950432596](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432596) | **PASS — 26/26** |
 | Content quality | [41950432618](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432618) | **PASS** |
 | Metadata validation | [41950432753](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432753) | **PASS** |
-| Isolated main/candidate baseline | [41950432551](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432551) | **PASS** — exact main and candidate checkouts; candidate 524 Node / 16 Python, zero skips |
+| Isolated main/candidate baseline | [41950432551](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432551) | **PASS** — exact main and candidate checkouts; candidate 526 Node / 16 Python, zero skips |
 | Branch reconciliation inventory | [41950432546](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432546) | **PASS** — non-destructive inventory only; semantic review remains open |
 | Nature Frontiers local draft validation | [41950432557](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432557) | **PASS** — local validation only; provider-side Meta creation/read-back skipped |
 | npm lockfile workflow | [41950425761](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950425761) | **PASS** — clean locked install and complete Node suite |
