@@ -257,7 +257,7 @@ function recoverInterruptedRestore(options) {
       if (error?.code !== "ENOENT") throw error;
     }
     if (entry.action === "REPLACE_STATE") {
-      const expectedRollbackName = tempName.replace(/\\.restore-tmp$/, ".rollback-tmp");
+      const expectedRollbackName = tempName.replace(/\.restore-tmp$/, ".rollback-tmp");
       const rollbackName = entry.rollbackTempName ?? expectedRollbackName;
       if (rollbackName !== expectedRollbackName || path.basename(rollbackName) !== rollbackName ||
           validatedTemps.has(path.join(path.dirname(destination), rollbackName))) {
@@ -313,7 +313,7 @@ function recoverInterruptedRestore(options) {
       }
       const originalBytes = Buffer.from(entry.originalBase64, "base64");
       if (sha256(originalBytes) !== entry.originalSha256) throw new Error("Interrupted replacement journal original-state checksum is invalid");
-      const expectedRollbackName = tempName.replace(/\\.restore-tmp$/, ".rollback-tmp");
+      const expectedRollbackName = tempName.replace(/\.restore-tmp$/, ".rollback-tmp");
       const rollbackName = entry.rollbackTempName ?? expectedRollbackName;
       const rollbackTemp = path.join(path.dirname(destination), rollbackName);
       assertNoSymlinkComponents(safeRestoreAnchor(entry.target, options, destination), rollbackTemp);
@@ -460,7 +460,7 @@ async function restoreStateUnlocked({ backupPath, rootDir = root, stateDir = pro
         ...(item.action === "REPLACE_STATE" ? {
           originalSha256: sha256(item.originalBytes),
           originalBase64: item.originalBytes.toString("base64"),
-          rollbackTempName: path.basename(item.temp).replace(/\\.restore-tmp$/, ".rollback-tmp")
+          rollbackTempName: path.basename(item.temp).replace(/\.restore-tmp$/, ".rollback-tmp")
         } : {})
       }))
     });
