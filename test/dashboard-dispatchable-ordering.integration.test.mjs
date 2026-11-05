@@ -40,7 +40,7 @@ function approvedQueuedJob(id, createdAt, date, time = "17:00") {
   };
 }
 
-test("dispatchable jobs sort by valid Johannesburg slots and use creation time for invalid legacy slots", async t => {
+test("dispatchable jobs require valid explicit Johannesburg slots and hold invalid legacy slots", async t => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dispatchable-order-"));
   const stateFile = path.join(stateDir, "dashboard-state.json");
   const state = {
@@ -107,8 +107,10 @@ test("dispatchable jobs sort by valid Johannesburg slots and use creation time f
   });
   assert.equal(response.status, 200);
   const body = await response.json();
-  assert.deepEqual(body.jobs.map(job => job.id), ["invalid-slot", "slot-earlier", "slot-later"]);
+  assert.deepEqual(body.jobs.map(job => job.id), ["slot-earlier", "slot-later"]);
   assert.equal(body.queuedCount, 3);
+  assert.equal(body.dispatchableCount, 2);
+  assert.equal(body.queuedWithoutValidSlot, 1);
   assert.equal(body.publishingEnabled, false);
   assert.equal(body.readOnly, true);
   assert.deepEqual(fs.readFileSync(stateFile), beforeRead, "the dispatchable read must not mutate persisted state");
