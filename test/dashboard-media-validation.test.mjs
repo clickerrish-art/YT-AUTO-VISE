@@ -88,6 +88,9 @@ test("dashboard does not persist a passing validation when the strict Short expo
     kind: "CONTENT_PRODUCTION",
     state: "GENERATED",
     contentType: "short",
+    authoring: { narrationStage: { artifacts: { "captions.srt": {
+      path: relative(captionsFile), sha256: hash(fs.readFileSync(captionsFile))
+    } } } },
     outputArtifacts: [{ path: relative(videoFile), sha256: hash(fs.readFileSync(videoFile)) }],
     thumbnailArtifact: { path: relative(thumbnailFile), sha256: hash(fs.readFileSync(thumbnailFile)) },
     metadataPath: relative(metadataFile),
