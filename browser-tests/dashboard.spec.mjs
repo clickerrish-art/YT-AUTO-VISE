@@ -699,6 +699,27 @@ test("authoring and approval forms reject malformed evidence without false succe
   await submitWithoutNativeValidation("productionplanform");
   await expect(page.locator("#productionplanresult")).toContainText("Production plan must be valid JSON.");
 
+  await page.locator("#rightsAssetId").fill("builder-asset-001");
+  await page.locator("#rightsAssetSource").fill("https://example.org/source");
+  await page.locator("#rightsAssetHolder").fill("Documented rights holder");
+  await page.locator("#rightsAssetPath").fill("media/source.mp4");
+  await page.locator("#rightsLicensePath").fill("evidence/license.txt");
+  await page.locator("#rightsRestrictions").fill("Documented restrictions");
+  await page.locator("#rightsAttribution").fill("Required attribution");
+  await page.locator("#addRightsAsset").click();
+  const builtAsset = JSON.parse(await page.locator("#assetsJson").inputValue());
+  expect(builtAsset).toHaveLength(1);
+  expect(builtAsset[0]).toMatchObject({
+    assetId: "builder-asset-001",
+    source: "https://example.org/source",
+    rightsHolder: "Documented rights holder",
+    assetPath: "media/source.mp4",
+    licenseEvidenceLocation: "evidence/license.txt",
+    permittedUses: ["YouTube"],
+    restrictions: "Documented restrictions",
+    attributionRequirements: "Required attribution"
+  });
+  await expect(page.locator("#rightsAssetBuilderResult")).toContainText("Confirm the source and licence evidence yourself");
   await page.locator("#assetsJson").fill("{invalid-json");
   await submitWithoutNativeValidation("rightsform");
   await expect(page.locator("#rightsresult")).toContainText("Rights verification blocked: Source asset records must be valid JSON.");
