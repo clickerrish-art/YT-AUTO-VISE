@@ -392,8 +392,12 @@ export function validateRollingPublicationCycle(items, {
   if (!Number.isFinite(minSpacingHours) || minSpacingHours < DEFAULT_MIN_SPACING_HOURS) {
     errors.push("rolling cycle must preserve the project minimum of 72 elapsed hours");
   }
+  let validTimeZone = true;
   try { new Intl.DateTimeFormat("en", { timeZone }).format(new Date(0)); }
-  catch { errors.push("timeZone must be a valid IANA timezone"); }
+  catch {
+    validTimeZone = false;
+    errors.push("timeZone must be a valid IANA timezone");
+  }
 
   const orderedItems = items.map((item, index) => {
     if (!item || typeof item !== "object") {
@@ -427,7 +431,7 @@ export function validateRollingPublicationCycle(items, {
     const gapHours = (next.timestamp - current.timestamp) / 3_600_000;
     gaps.push({ from: current.id, to: next.id, hours: gapHours });
     if (gapHours < minSpacingHours) errors.push("spacing between " + current.id + " and " + next.id + " is " + gapHours + " hours; minimum is " + minSpacingHours);
-    if (localDateKey(current.timestamp, timeZone) === localDateKey(next.timestamp, timeZone)) {
+    if (validTimeZone && localDateKey(current.timestamp, timeZone) === localDateKey(next.timestamp, timeZone)) {
       errors.push("same-local-date publication collision between " + current.id + " and " + next.id + " in " + timeZone);
     }
   }
