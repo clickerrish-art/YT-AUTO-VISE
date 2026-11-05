@@ -368,3 +368,48 @@ This adds deterministic permission-denied recovery evidence alongside the existi
 The isolated baseline compared main `fa00d28e7f58911482686e4ad69fac9f4701a2e6` and candidate `e4e14e9bf449f041144784b3e2615975d8a911e0`; both exact revisions passed install, Node and Python commands. Live branch comparison is **2,624 ahead / 2 behind / 234 changed files**. This is inventory, not semantic approval.
 
 No upload, publication, schedule mutation, provider-side campaign action, account reconnection, spend, main edit, merge, PR status change, reset, rebase, force-push or destructive reconciliation occurred. Public/unattended publishing remains disabled.
+
+
+---
+
+# Latest verified checkpoint — 5 November 2026
+
+**Exact source/test candidate:** `9df99ee7fcd291736af67f663feac3efe01cbf3b`  
+**Parent:** `7c13fbd6ffd5586812e4465e2a8711fb0cdb3cd0`  
+**Branch:** `codex/marketing-machine-audit-fixes`  
+**Main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged)  
+**Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`  
+**Live compare:** 2,631 ahead / 2 behind. This is inventory only, not semantic integration approval.  
+**PR #1:** OPEN · DRAFT · UNMERGED; exact head verified as `9df99ee7fcd291736af67f663feac3efe01cbf3b`.
+
+## New recovery-journal cleanup failure injection
+
+The test `test/restore-rollback-crash.test.mjs` now injects `EACCES` at the final transaction-journal unlink after rollback recovery has restored the original destination bytes. It asserts:
+- the exact original dashboard-state bytes and audit are preserved;
+- the durable journal remains when journal deletion is denied;
+- the recovery operation lock is released;
+- a later recovery retry safely completes and cleans the journal and temporary files.
+
+This is a deterministic isolated filesystem failure test. It is not a real power-loss or production-host restore drill. The protected tests `tests/restore-state.test.mjs` and `test/restore-facebook-draft-history.test.mjs` remain untouched.
+
+## Exact-SHA CI — candidate `9df99ee7fcd291736af67f663feac3efe01cbf3b`
+
+| Validation | Run | Result |
+|---|---:|---|
+| Content quality | [42033737696](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42033737696) | **PASS — 538 Node tests, 0 failures, 0 skips** |
+| Automation/security | [42033737912](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42033737912) | **PASS** — locked install, npm audit, Python renderer dependency, FFmpeg, Node/Python tests, campaign safety, metadata gates, queue invariants, syntax and compilation |
+| Dashboard Chromium E2E | [42033737880](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42033737880) | **PASS — 26/26 journeys**, including real measured TTS narration and reconciliation |
+| Isolated main/candidate baseline | [42033737761](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42033737761) | **PASS** — exact main and candidate install, Node and Python commands all exit 0 |
+| Metadata | [42033737741](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42033737741) | **PASS** |
+| Branch reconciliation inventory | [42033737754](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42033737754) | **PASS** — inventory only |
+| Nature Frontiers local draft validation | [42033737764](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42033737764) | **PASS** — local validation only; no provider-side draft creation/read-back |
+| npm lockfile | [42033724966](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42033724966) | **PASS** |
+| Production readiness | [42033737786](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42033737786) | **HOLD** — diagnostic report generated and uploaded; mandatory external/owner gates remain blocked |
+
+Content quality log confirms 538/538 Node tests passed with zero skips. Browser log confirms 26/26 journeys passed. Isolated baseline log confirms main `fa00d28e7f58911482686e4ad69fac9f4701a2e6` and candidate `9df99ee7fcd291736af67f663feac3efe01cbf3b` both passed install, Node and Python commands.
+
+## Acceptance interpretation
+
+This adds one recovery failure boundary to the tested backup/restore implementation. It does **not** close STATE-001: a complete isolated end-to-end operational restore drill, owner acceptance and remaining operational/recovery requirements are still outstanding. DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain open/not accepted as applicable. Production readiness remains HOLD; no upload, publication, schedule mutation, provider-side campaign action, account reconnection or spend was performed. Public/unattended publishing remains disabled.
+
+No main-branch edit, merge, PR state change, reset, rebase, force-push or destructive reconciliation occurred.
