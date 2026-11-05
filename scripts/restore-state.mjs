@@ -156,8 +156,7 @@ function fsyncDirectory(directory) {
   }
 }
 
-function writeDurableBytes(destination, bytes) {
-  const temp = destination + "." + crypto.randomUUID() + ".rollback-tmp";
+function writeDurableBytes(destination, bytes, temp) {
   let fd;
   try {
     fd = fs.openSync(temp, "wx", 0o600);
@@ -257,6 +256,27 @@ function recoverInterruptedRestore(options) {
     } catch (error) {
       if (error?.code !== "ENOENT") throw error;
     }
+    if (entry.action === "REPLACE_STATE") {
+      const expectedRollbackName = tempName.replace(/\\.restore-tmp$/, ".rollback-tmp");
+      const rollbackName = entry.rollbackTempName ?? expectedRollbackName;
+      if (rollbackName !== expectedRollbackName || path.basename(rollbackName) !== rollbackName ||
+          validatedTemps.has(path.join(path.dirname(destination), rollbackName))) {
+        throw new Error("Interrupted replacement journal contains an unsafe rollback temporary path");
+      }
+      const rollbackPath = path.join(path.dirname(destination), rollbackName);
+      validatedTemps.add(rollbackPath);
+      assertNoSymlinkComponents(safeRestoreAnchor(entry.target, options, destination), rollbackPath);
+      try {
+        const rollbackStat = fs.lstatSync(rollbackPath);
+        if (rollbackStat.isSymbolicLink() || !rollbackStat.isFile()) {
+          throw new Error("Interrupted rollback temporary path is not a regular file");
+        }
+      } catch (error) {
+        if (error?.code !== "ENOENT") throw error;
+      }
+    } else if (entry.rollbackTempName !== undefined) {
+      throw new Error("Interrupted missing-file journal contains unexpected rollback temporary data");
+    }
   }
 
   for (const entry of [...journal.entries].reverse()) {
@@ -293,10 +313,40 @@ function recoverInterruptedRestore(options) {
       }
       const originalBytes = Buffer.from(entry.originalBase64, "base64");
       if (sha256(originalBytes) !== entry.originalSha256) throw new Error("Interrupted replacement journal original-state checksum is invalid");
-      if (exists && currentSha === entry.newSha256) writeDurableBytes(destination, originalBytes);
-      else if (exists && currentSha === entry.originalSha256) { /* already rolled back */ }
-      else if (!exists) writeDurableBytes(destination, originalBytes);
+      const expectedRollbackName = tempName.replace(/\\.restore-tmp$/, ".rollback-tmp");
+      const rollbackName = entry.rollbackTempName ?? expectedRollbackName;
+      const rollbackTemp = path.join(path.dirname(destination), rollbackName);
+      assertNoSymlinkComponents(safeRestoreAnchor(entry.target, options, destination), rollbackTemp);
+      const restoreOriginal = () => {
+        try {
+          const rollbackStat = fs.lstatSync(rollbackTemp);
+          if (rollbackStat.isSymbolicLink() || !rollbackStat.isFile()) {
+            throw new Error("Interrupted rollback temporary path is not a regular file");
+          }
+          if (sha256(fs.readFileSync(rollbackTemp)) === entry.originalSha256) {
+            fs.renameSync(rollbackTemp, destination);
+            fsyncDirectory(path.dirname(destination));
+            return;
+          }
+          // A process can die during rollback writing, leaving a partial file.
+          // Discard this journal-owned temp and rebuild from durable journal bytes.
+          fs.unlinkSync(rollbackTemp);
+          fsyncDirectory(path.dirname(destination));
+        } catch (error) {
+          if (error?.code !== "ENOENT") throw error;
+        }
+        writeDurableBytes(destination, originalBytes, rollbackTemp);
+      };
+      if (exists && currentSha === entry.newSha256) restoreOriginal();
+      else if (exists && currentSha === entry.originalSha256) fsyncDirectory(path.dirname(destination));
+      else if (!exists) restoreOriginal();
       else throw new Error("Interrupted restore found unexpected replacement contents; manual recovery is required: " + path.basename(destination));
+      try {
+        fs.unlinkSync(rollbackTemp);
+        fsyncDirectory(path.dirname(destination));
+      } catch (error) {
+        if (error?.code !== "ENOENT") throw error;
+      }
     }
 
     try {
@@ -409,7 +459,8 @@ async function restoreStateUnlocked({ backupPath, rootDir = root, stateDir = pro
         tempName: path.basename(item.temp),
         ...(item.action === "REPLACE_STATE" ? {
           originalSha256: sha256(item.originalBytes),
-          originalBase64: item.originalBytes.toString("base64")
+          originalBase64: item.originalBytes.toString("base64"),
+          rollbackTempName: path.basename(item.temp).replace(/\\.restore-tmp$/, ".rollback-tmp")
         } : {})
       }))
     });
