@@ -91,6 +91,24 @@ function persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches = 
   }, { mode: 0o600 });
 }
 
+export function inspectWorkerState({
+  workerId = process.env.DASHBOARD_WORKER_ID ?? "sonicvhibez-render-worker",
+  cooldownStatePath: configuredCooldownStatePath = process.env.WORKER_BACKOFF_STATE_PATH,
+  stateDirectory = process.env.WORKER_STATE_DIR ?? "run-logs"
+} = {}) {
+  if (typeof workerId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(workerId)) {
+    throw new Error("DASHBOARD_WORKER_ID must be a safe 2–120 character identifier");
+  }
+  const statePath = cooldownStatePath(workerId, configuredCooldownStatePath, stateDirectory);
+  const state = loadCooldowns(statePath, workerId);
+  return {
+    workerId,
+    uncertainDispatches: [...state.uncertainDispatches.entries()].map(([jobId, record]) => ({ jobId, ...record })),
+    cooldownCount: state.cooldowns.size,
+    publishingEnabled: false
+  };
+}
+
 function validateConfiguration({ baseUrl, token, workerId, pollIntervalMs }) {
   let parsed;
   try { parsed = new URL(baseUrl); }
@@ -288,10 +306,19 @@ export async function runWorker({
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  let stopping = false;
-  for (const signal of ["SIGINT", "SIGTERM"]) process.once(signal, () => { stopping = true; });
-  runWorker({ shouldStop: () => stopping }).catch(error => {
-    console.error("BLOCKED: " + String(error?.message ?? error));
-    process.exitCode = 2;
-  });
+  if (process.argv.includes("--inspect-uncertain")) {
+    try {
+      console.log(JSON.stringify(inspectWorkerState()));
+    } catch (error) {
+      console.error("BLOCKED: " + String(error?.message ?? error));
+      process.exitCode = 2;
+    }
+  } else {
+    let stopping = false;
+    for (const signal of ["SIGINT", "SIGTERM"]) process.once(signal, () => { stopping = true; });
+    runWorker({ shouldStop: () => stopping }).catch(error => {
+      console.error("BLOCKED: " + String(error?.message ?? error));
+      process.exitCode = 2;
+    });
+  }
 }
