@@ -470,7 +470,7 @@ No upload, publication, schedule mutation, provider-side campaign action, accoun
 **Main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged)  
 **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`  
 **Comparison at the tested code SHA:** 2,651 ahead / 2 behind / 234 changed files. This is inventory evidence only, not semantic integration approval.  
-**PR #1:** OPEN · DRAFT · UNMERGED; tested code SHA is the PR head for this checkpoint.
+**PR #1:** OPEN · DRAFT · UNMERGED. The tested source/test SHA is `0abc7adace2c3c7555c1ce059e3f6efc35b743a1`; subsequent commits in this checkpoint are documentation-only and do not change the tested code.
 
 ## Implemented scheduler controls
 
