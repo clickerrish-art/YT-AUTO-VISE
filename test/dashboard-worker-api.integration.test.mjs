@@ -83,7 +83,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       state: "QUEUED",
       contentType: "short",
       createdAt: "2026-11-02T18:01:00.000Z",
-      scheduledSlot: { date: today, time: localTime(3), timezone: "Africa/Johannesburg" },
+      scheduledSlot: { date: today, time: localTime(15), timezone: "Africa/Johannesburg" },
       authoring: { productionPlan: approvedPlan }
     },
     {
@@ -92,7 +92,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       state: "QUEUED",
       contentType: "long_form",
       createdAt: "2026-11-02T17:59:00.000Z",
-      scheduledSlot: { date: today, time: localTime(1), timezone: "Africa/Johannesburg" },
+      scheduledSlot: { date: today, time: localTime(5), timezone: "Africa/Johannesburg" },
       authoring: { productionPlan: structuredClone(approvedPlan) }
     },
     {
@@ -101,7 +101,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       state: "QUEUED",
       contentType: "long_form",
       createdAt: "2026-11-02T18:02:00.000Z",
-      scheduledSlot: { date: today, time: localTime(2), timezone: "Africa/Johannesburg" },
+      scheduledSlot: { date: today, time: localTime(10), timezone: "Africa/Johannesburg" },
       authoring: { productionPlan: structuredClone(approvedPlan) }
     },
     {
