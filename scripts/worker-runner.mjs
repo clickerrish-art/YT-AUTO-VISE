@@ -99,14 +99,14 @@ function persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches = 
 }
 
 export function applyWorkerQuarantineRelease({
-  statePath, workerId, jobId, attemptId, artifactSha256, receipt, secret, nowMs = Date.now()
+  statePath, workerId, jobId, attemptId, artifactSha256, receipt, publicKeyPem, nowMs = Date.now()
 }) {
   const state = loadCooldowns(statePath, workerId);
   if (!state.uncertainDispatches.has(jobId)) {
     throw new Error("Exact job is not currently quarantined by this worker");
   }
   const verified = verifyWorkerQuarantineReleaseReceipt(receipt, {
-    workerId, jobId, attemptId, artifactSha256, secret, nowMs
+    workerId, jobId, attemptId, artifactSha256, publicKeyPem, nowMs
   });
   if (state.consumedReleaseNonces.has(verified.nonce)) {
     throw new Error("Quarantine release receipt nonce has already been consumed");
