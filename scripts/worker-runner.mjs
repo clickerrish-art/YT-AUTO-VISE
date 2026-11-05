@@ -418,6 +418,7 @@ export async function runWorker({
   const persistedState = loadCooldowns(statePath, workerId);
   const cooldowns = persistedState.cooldowns;
   const uncertainDispatches = persistedState.uncertainDispatches;
+  const consumedReleaseNonces = persistedState.consumedReleaseNonces;
   const persist = () => {
     try {
       persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches, consumedReleaseNonces);
