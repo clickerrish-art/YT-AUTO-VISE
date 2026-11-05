@@ -3,7 +3,7 @@
 **Evidence date:** 5 November 2026  
 **Repository:** `clickerrish-art/YT-AUTO-VISE`  
 **Branch:** `codex/marketing-machine-audit-fixes`  
-**Candidate HEAD:** `e99bc24511879106157c002c09242315e6219325`  
+**Candidate HEAD:** `8272d2e39868237c05b2951f37bcade6ae6608c4`  
 **Main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6`  
 **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`
 
@@ -17,14 +17,14 @@ All results below are tied to candidate `e99bc24511879106157c002c09242315e621932
 
 | Check | Run | Result |
 |---|---:|---|
-| Automation/security | [41932281012](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932281012) | PASS |
+| Automation/security | [41940205668](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932281012) | PASS |
 | Dashboard Chromium E2E | [41937791880](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41937791880) | PASS — 23/23 tests |
-| Content quality | [41932280837](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280837) | PASS |
-| Metadata validation | [41932280783](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280783) | PASS |
-| Isolated main/candidate baseline | [41932280933](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280933) | PASS |
-| Branch reconciliation inventory | [41932280768](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280768) | PASS — inventory only |
-| Nature Frontiers local draft validation | [41932280669](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280669) | PASS — local validation only |
-| Production readiness | [41932280922](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280922) | HOLD — 13 blockers |
+| Content quality | [41940205730](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280837) | PASS |
+| Metadata validation | [41940205670](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280783) | PASS |
+| Isolated main/candidate baseline | [41940197671](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280933) | PASS |
+| Branch reconciliation inventory | [41940205685](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280768) | PASS — inventory only |
+| Nature Frontiers local draft validation | [41940205706](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280669) | PASS — local validation only |
+| Production readiness | [41940205652](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280922) | HOLD — 13 blockers |
 
 ### Exact isolated baseline
 
@@ -40,14 +40,16 @@ The baseline is a test comparison, not proof that every business workflow or pro
 
 ## Live Git and integration state
 
+Branch protection is **UNVERIFIED**: GitHub returned 403 when reading the main branch protection endpoint. This report makes no claim that protection is enabled or disabled.
+
 - Candidate branch HEAD: `e99bc24511879106157c002c09242315e6219325`.
 - Main HEAD: `fa00d28e7f58911482686e4ad69fac9f4701a2e6` — unchanged.
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
-- Branch divergence: **2,582 ahead / 2 behind**.
-- Final tree: **229 changed paths**, zero final-tree deletions.
+- Branch divergence: **2,586 ahead / 2 behind**.
+- Final tree: **231 changed paths**, zero final-tree deletions.
 - Patch-equivalent branch commits reported by the inventory: **0**; this is not proof of semantic uniqueness.
 - Critical paths requiring semantic review: **17**.
-- Branch-only commit classification: 1,102 documentation-only; 632 test-only; 540 implementation; 105 workflow-only; 75 mixed; 70 implementation-and-tests; 58 config/content.
+- Branch-only commit classification: 1,104 documentation-only; 633 test-only; 540 implementation; 105 workflow-only; 75 mixed; 71 implementation-and-tests; 58 config/content.
 - The two base-only commits add then revert `test/restore-facebook-draft-history.test.mjs`; the branch retains that test and `tests/restore-state.test.mjs`.
 - The CI inventory working tree was clean; no destructive reconciliation was performed.
 - PR #1 remains **OPEN, DRAFT, UNMERGED**. No merge, reset, rebase, force-push or main-branch edit occurred.
@@ -57,6 +59,10 @@ The inventory's classification is heuristic. GIT-002 human semantic review remai
 ## Dashboard acceptance snapshot
 
 The exact-head dashboard run [41937791880](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41937791880) passed **23/23 browser tests**. The source inventory contains 104 controls, 16 forms and 40 route handlers (36 protected API routes). Ten forms have demonstrated successful UI journeys; six downstream forms remain blocked by genuine production prerequisites. DASH-001 remains NOT_TESTED overall because full per-control success, validation, failure, authorization, persistence and recovery acceptance is not complete.
+
+## Scheduler hardening added on the current candidate
+
+The dashboard server now rejects any reserved draft/job slot whose resolved Africa/Johannesburg timestamp is not in the future. This applies to draft creation, direct content-job creation and draft rescheduling. Real-server regression cases assert HTTP 409 and byte-for-byte unchanged state/audit data for all three operations. Time-sensitive fixtures now use `test/helpers/schedule-fixtures.mjs` so the suite does not become invalid as the calendar advances. Exact-HEAD automation passed all 111 Node test files and 16 Python tests.
 
 ## API acceptance snapshot
 
@@ -107,7 +113,7 @@ The readiness artifact reports all four YouTube environment variables missing in
 - YouTube public and unattended publishing remain disabled.
 - Nature Frontiers remains separate from SonicVhibez.
 - Nature Frontiers local draft validation does not claim provider-side Page creation or publishing.
-- No upload, publication, schedule mutation, account reconnection, paid GPU generation or external provider mutation occurred in these checks.
+- No upload, publication, account reconnection, paid GPU generation or external provider mutation occurred in these checks. The schedule guard only rejects past local reservation timestamps; it does not approve or trigger a publication.
 - The approved product URL remains `https://selar.com/0u19v8u99l`; no additional product claim or destination is authorized.
 
 ## Next engineering acceptance order

@@ -2,7 +2,7 @@
 
 ## Decision
 
-**Live inventory refreshed 5 November 2026 on exact candidate `e99bc24511879106157c002c09242315e6219325`.** The latest exact-SHA inventory reports 2,582 branch-only commits, 2 base-only commits, 229 changed paths, zero final-tree deletions, zero patch-equivalent commits and 17 critical paths. The inventory is non-destructive; semantic review is still not performed and integration remains unauthorized.
+**Live inventory refreshed 5 November 2026 on exact candidate `8272d2e39868237c05b2951f37bcade6ae6608c4`.** The latest exact-SHA inventory reports 2,586 branch-only commits, 2 base-only commits, 231 changed paths, zero final-tree deletions, zero patch-equivalent commits and 17 critical paths. The inventory is non-destructive; semantic review is still not performed and integration remains unauthorized.
 
 **Status: NOT TESTED — human semantic review remains required.**
 
@@ -12,31 +12,31 @@ This document records a reproducible, non-destructive history inventory and iden
 
 - Repository: `clickerrish-art/YT-AUTO-VISE`
 - Base: `main` at `fa00d28e7f58911482686e4ad69fac9f4701a2e6`
-- Candidate: `codex/marketing-machine-audit-fixes` at `e99bc24511879106157c002c09242315e6219325`
+- Candidate: `codex/marketing-machine-audit-fixes` at `8272d2e39868237c05b2951f37bcade6ae6608c4`
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
-- Divergence: **2,582 branch-only commits / 2 base-only commits**
-- Final base-to-head tree: **229 paths changed** after the read-only concurrency test commit; the inventory artifact was generated on the exact code/test candidate before the subsequent documentation-only matrix refresh.
-- Inventory snapshot before the test commit's documentation update: 229 changed paths, zero final-tree deletions, 2,582 branch-only commits, 2 base-only commits.
+- Divergence: **2,586 branch-only commits / 2 base-only commits**
+- Final base-to-head tree: **231 paths changed** on exact candidate `8272d2e39868237c05b2951f37bcade6ae6608c4`.
+- Exact-head inventory: 231 changed paths, zero final-tree deletions, 2,586 branch-only commits and 2 base-only commits.
 - Patch-equivalent branch commits reported by `git cherry`: **0**. This is not proof that no changes are semantically duplicated; it only reports no patch IDs matched.
 - CI checkout working tree: clean. This does not assert anything about a developer's separate local working tree.
 - Destructive reconciliation performed: **no**.
 
 ## Branch-only commit classification
 
-The CI inventory classified 2,582 branch-only commits as follows:
+The CI inventory classified 2,586 branch-only commits as follows:
 
 | Classification | Commits |
 |---|---:|
-| Documentation-only | 1,102 |
-| Test-only | 632 |
+| Documentation-only | 1,104 |
+| Test-only | 633 |
 | Implementation | 540 |
 | Workflow-only | 105 |
 | Mixed | 75 |
 | Config/content | 58 |
-| Implementation and tests | 70 |
-| **Total** | **2,342** |
+| Implementation and tests | 71 |
+| **Total** | **2,586** |
 
-The volume of documentation-only and test-only commits indicates a long, incremental implementation history. It is not evidence that those commits are disposable. The 509 implementation-only and 31 implementation-plus-test commits require review against the final source tree and each other.
+The volume of documentation-only and test-only commits indicates a long, incremental implementation history. It is not evidence that those commits are disposable. The 540 implementation-only and 71 implementation-plus-test commits require review against the final source tree and each other.
 
 ## Base-only history and restore-history preservation
 
@@ -71,7 +71,7 @@ The inventory identified 17 critical paths:
 
 The full branch inventory artifact contains commit chronology, per-commit changed paths, branch/base-only commit lists, deletion records, and the final-tree changed-file list.
 
-Artifact: [Non-destructive branch inventory workflow 41932280768](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41932280768). Its retained artifact was generated on exact SHA `e99bc24511879106157c002c09242315e6219325`.
+Artifact: [Non-destructive branch inventory workflow 41940205685](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205685). Its retained artifact was generated on exact SHA `8272d2e39868237c05b2951f37bcade6ae6608c4`.
 
 ## Human review decisions required
 

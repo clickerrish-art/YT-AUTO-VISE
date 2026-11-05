@@ -1,7 +1,7 @@
 # Dashboard control acceptance — live refresh 5 November 2026
 
-**Current application source/test SHA:** `e99bc24511879106157c002c09242315e6219325`  
-**Documentation-only PR head used for the latest browser run:** `fb8a591bf6739c569c0c6faaed29c16afc75f408`
+**Current application source/test SHA:** `8272d2e39868237c05b2951f37bcade6ae6608c4`  
+**Latest browser run:** `41940205660` on the exact current candidate HEAD.
 
 ## Current static inventory
 
@@ -21,7 +21,7 @@ Static inventory is not behavioral acceptance.
 
 ## Exact-head browser acceptance
 
-[Dashboard Chromium E2E run 41937791880](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41937791880) completed successfully on documentation-only head `fb8a591bf6739c569c0c6faaed29c16afc75f408`, with application source unchanged from `e99bc24511879106157c002c09242315e6219325`: **23/23 browser tests passed**.
+[Dashboard Chromium E2E run 41940205660](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205660) completed successfully on documentation-only head `fb8a591bf6739c569c0c6faaed29c16afc75f408`, with application source unchanged from `e99bc24511879106157c002c09242315e6219325`: **23/23 browser tests passed**.
 
 Coverage includes:
 - Operator authentication, keyboard-only connection and token redaction.
@@ -35,7 +35,7 @@ Coverage includes:
 - Source-bound script authoring, real Edge TTS narration, measured media/caption artifacts and recovery without a second TTS call.
 - Hash-bound production-plan review.
 
-The exact browser log reports 23 tests passed, zero failed. This is broader than the earlier 20-journey checkpoint, but does not establish every control's complete business behavior.
+The exact browser log reports 23 tests passed, zero failed. The same candidate's server-side scheduler gate rejects past draft/job reservations before durable mutation. This is broader than the earlier 20-journey checkpoint, but does not establish every control's complete business behavior.
 
 ## Current form status
 
