@@ -99,6 +99,9 @@ export function transitionContentJob(job, nextState, { actor = "local-operator",
       throw new Error("A job at or beyond the private-upload boundary cannot be cancelled; reconcile or complete it first");
     }
   }
+  if (["FAILED", "DEAD_LETTER"].includes(job.state) && nextState === "QUEUED") {
+    throw new Error("Retry requires explicit operator authorization through the retry workflow");
+  }
   if (!transitions[job.state]?.has(nextState)) throw new Error("Invalid job transition: " + job.state + " -> " + nextState);
   if (typeof actor !== "string" || !actor.trim() || actor.length > 120) throw new Error("actor is required and must be at most 120 characters");
   if (typeof reason !== "string" || reason.length > 1000) throw new Error("reason must be at most 1000 characters");
@@ -107,9 +110,6 @@ export function transitionContentJob(job, nextState, { actor = "local-operator",
     if (job.validationResults?.passed !== true) throw new Error("A passing format-specific validation result is required before human review");
     if (job.rightsChecks?.verified !== true) throw new Error("Verified rights evidence is required before human review");
     if (!job.outputArtifacts?.some(a => typeof a.sha256 === "string" && /^[a-f0-9]{64}$/.test(a.sha256))) throw new Error("A checksummed output artifact is required before human review");
-  }
-  if (["FAILED", "DEAD_LETTER"].includes(job.state) && nextState === "QUEUED") {
-    throw new Error("Retry requires explicit operator authorization through the retry workflow");
   }
   const updated = { ...job, state: nextState, updatedAt: now, transitionHistory: [...(job.transitionHistory ?? []), { from: job.state, to: nextState, at: now, actor: actor.trim(), reason: reason.trim() }] };
   if (nextState === "GENERATING") {
