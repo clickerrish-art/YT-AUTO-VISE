@@ -1,4 +1,5 @@
 import test from "node:test";
+import { spawnSync } from "node:child_process";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
@@ -175,4 +176,45 @@ test("worker process lock is created and released around its cycle", async t => 
   });
   assert.equal(lockObservedDuringCycle, true, "worker must hold its process lock while dispatch state is in use");
   assert.equal(fs.existsSync(lockPath), false, "worker must release its process lock after a clean cycle");
+});
+
+
+test("worker CLI consumes an operator-signed receipt handoff with only its public key", t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "worker-release-handoff-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const workerId = "handoff-worker-01";
+  const jobId = "handoff-job-123";
+  const attemptId = "handoff-attempt-456";
+  const artifactSha256 = "c".repeat(64);
+  const statePath = path.join(dir, "worker-state.json");
+  fs.writeFileSync(statePath, JSON.stringify({
+    schemaVersion: 1, workerId, updatedAt: new Date().toISOString(),
+    cooldowns: {},
+    uncertainDispatches: {
+      [jobId]: { code: "WORKER_DISPATCH_OUTCOME_UNCERTAIN", recordedAt: new Date().toISOString() }
+    },
+    consumedReleaseNonces: []
+  }), { mode: 0o600 });
+  const receipt = createWorkerQuarantineReleaseReceipt({
+    workerId, jobId, attemptId, artifactSha256, privateKeyPem, nowMs: Date.now()
+  });
+  const receiptPath = path.join(dir, "release-receipt.json");
+  fs.writeFileSync(receiptPath, JSON.stringify(receipt), { mode: 0o600 });
+  const scriptPath = path.join(process.cwd(), "scripts", "worker-runner.mjs");
+  const result = spawnSync(process.execPath, [scriptPath, "--consume-quarantine-release", "--receipt-file", receiptPath], {
+    cwd: process.cwd(),
+    encoding: "utf8",
+    env: {
+      ...process.env,
+      DASHBOARD_WORKER_ID: workerId,
+      WORKER_BACKOFF_STATE_PATH: statePath,
+      DASHBOARD_QUARANTINE_SIGNING_PUBLIC_KEY: publicKeyPem,
+      DASHBOARD_WORKER_TOKEN: ""
+    }
+  });
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  const persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  assert.equal(Object.hasOwn(persisted.uncertainDispatches, jobId), false);
+  assert.ok(persisted.consumedReleaseNonces.includes(receipt.nonce));
+  assert.match(result.stdout, /"publishingEnabled":false/);
 });
