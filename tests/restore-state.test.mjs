@@ -211,3 +211,97 @@ test("restore refuses to replace dashboard state while the live dashboard holds 
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test("a fresh restore invocation rolls back an interrupted missing-file commit", async () => {
+  const crypto = await import("node:crypto");
+  const dir = makeTempDir();
+  try {
+    const stateDir = path.join(dir, "state");
+    const logDir = path.join(dir, "run-logs");
+    fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+    fs.mkdirSync(logDir, { recursive: true, mode: 0o700 });
+
+    const destination = path.join(logDir, "upload-attempts.json");
+    const partiallyRestored = Buffer.from(JSON.stringify({ attempts: [{ id: "interrupted" }] }));
+    fs.writeFileSync(destination, partiallyRestored, { mode: 0o600 });
+    const journalPath = path.join(stateDir, ".restore-transaction.json");
+    fs.writeFileSync(journalPath, JSON.stringify({
+      format: "sonicvhibez-restore-transaction",
+      version: 1,
+      createdAt: "2026-10-29T00:00:00.000Z",
+      entries: [{
+        target: { kind: "upload-ledger", path: "upload-attempts.json" },
+        action: "RESTORE_MISSING",
+        newSha256: crypto.createHash("sha256").update(partiallyRestored).digest("hex"),
+        tempName: "upload-attempts.json.interrupted.restore-tmp"
+      }]
+    }), { mode: 0o600 });
+    const backupPath = path.join(dir, "backup.json");
+    fs.writeFileSync(backupPath, validEmptyBackup, { mode: 0o600 });
+
+    await assert.rejects(
+      restoreState({ backupPath, rootDir: dir, confirm: "YES", now: Date.parse("2026-10-30T00:00:00.000Z") }),
+      /interrupted restore was rolled back safely/i
+    );
+
+    assert.equal(fs.existsSync(destination), false,
+      "a file created by the interrupted restore must be removed on restart");
+    assert.equal(fs.existsSync(journalPath), false,
+      "the completed rollback must remove its transaction journal");
+    assert.equal(fs.existsSync(path.join(stateDir, ".restore-operation.lock")), false,
+      "the recovery invocation must release its operation lock");
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("a fresh restore invocation restores byte-exact dashboard state after an interrupted replacement", async () => {
+  const crypto = await import("node:crypto");
+  const dir = makeTempDir();
+  try {
+    const stateDir = path.join(dir, "state");
+    fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+    const destination = path.join(stateDir, "dashboard-state.json");
+    const originalBytes = Buffer.from(JSON.stringify({ version: 1, jobs: [{ id: "before" }], audit: [] }));
+    const partiallyRestored = Buffer.from(JSON.stringify({ version: 1, jobs: [{ id: "from-backup" }], audit: [] }));
+    fs.writeFileSync(destination, partiallyRestored, { mode: 0o600 });
+
+    const tempName = "dashboard-state.json.interrupted.restore-tmp";
+    const journalPath = path.join(stateDir, ".restore-transaction.json");
+    fs.writeFileSync(journalPath, JSON.stringify({
+      format: "sonicvhibez-restore-transaction",
+      version: 1,
+      createdAt: "2026-10-29T00:00:00.000Z",
+      entries: [{
+        target: { kind: "dashboard-state", path: "dashboard-state.json" },
+        action: "REPLACE_STATE",
+        newSha256: crypto.createHash("sha256").update(partiallyRestored).digest("hex"),
+        originalSha256: crypto.createHash("sha256").update(originalBytes).digest("hex"),
+        originalBase64: originalBytes.toString("base64"),
+        tempName,
+        rollbackTempName: tempName.replace(/\\.restore-tmp$/, ".rollback-tmp")
+      }]
+    }), { mode: 0o600 });
+    const backupPath = path.join(dir, "backup.json");
+    fs.writeFileSync(backupPath, validEmptyBackup, { mode: 0o600 });
+
+    await assert.rejects(
+      restoreState({ backupPath, rootDir: dir, confirm: "YES", now: Date.parse("2026-10-30T00:00:00.000Z") }),
+      /interrupted restore was rolled back safely/i
+    );
+
+    assert.deepEqual(fs.readFileSync(destination), originalBytes,
+      "recovery must restore the exact pre-transaction dashboard-state bytes");
+    assert.equal(fs.existsSync(journalPath), false,
+      "the completed rollback must remove its transaction journal");
+    assert.equal(fs.existsSync(path.join(stateDir, ".restore-operation.lock")), false,
+      "the recovery invocation must release its operation lock");
+    assert.equal(fs.existsSync(path.join(stateDir, tempName)), false,
+      "the interrupted staging file must not remain after recovery");
+    assert.equal(fs.existsSync(path.join(stateDir, tempName.replace(/\\.restore-tmp$/, ".rollback-tmp"))), false,
+      "the rollback staging file must not remain after recovery");
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
