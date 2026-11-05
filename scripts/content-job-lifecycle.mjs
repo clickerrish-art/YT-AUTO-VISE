@@ -279,7 +279,7 @@ export function claimWorkerLease(job, workerId, { leaseMs = 60_000, now = Date.n
   if (typeof workerId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(workerId)) throw new Error("workerId must be a safe 2–120 character identifier");
   if (!Number.isInteger(leaseMs) || leaseMs < leaseDurationBounds.min || leaseMs > leaseDurationBounds.max) throw new Error("lease duration must be between 5 seconds and 15 minutes");
   if (job.workerLease && Date.parse(job.workerLease.expiresAt) > now) throw new Error("Job already has an active worker lease");
-  const working = job;
+  let working = job;
   if (working.state === "FAILED" || working.state === "DEAD_LETTER") {
     throw new Error("A failed job requires explicit operator retry authorization before a worker can claim it");
   }
