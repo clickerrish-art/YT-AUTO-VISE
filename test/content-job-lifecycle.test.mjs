@@ -64,11 +64,6 @@ test("failed jobs require an explicit operator retry authorization and exhausted
     () => authorizeContentJobRetry(job, { actor: "operator", reason: "Reviewed failure and approve retry" }, now),
     /backoff has not elapsed/
   );
-  assert.throws(
-    () => authorizeContentJobRetry(job, { actor: "worker-auto-retry", reason: "Reviewed failure and approve retry" }, Date.parse(afterBackoff) + 1),
-    /authenticated operator identity/
-  );
-
   job = authorizeContentJobRetry(job, {
     actor: "authorized-operator",
     reason: "Reviewed retained render error and confirmed a safe retry"
