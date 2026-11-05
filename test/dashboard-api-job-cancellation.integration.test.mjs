@@ -128,6 +128,21 @@ test("job transition API safely cancels queued work, rejects active leases, audi
   const claim = await claimResponse.json();
   assert.equal(claimResponse.status, 200, JSON.stringify(claim));
 
+  const beforeActiveSlotConflict = fs.readFileSync(statePath);
+  const activeSlotConflict = await post("/api/jobs", {
+    idempotencyKey: "job-cancel-active-slot-conflict",
+    title: "An active job must retain its publication slot",
+    topic: "A source-backed wildlife explainer for safe cancellation acceptance",
+    contentType: "short",
+    scheduledDay: "Saturday",
+    scheduledDate: futureScheduleDate("Saturday", 2),
+    inputReferences: ["content/short-001-wildlife-video-storytelling.md"]
+  });
+  const activeSlotConflictBody = await activeSlotConflict.json();
+  assert.equal(activeSlotConflict.status, 409, JSON.stringify(activeSlotConflictBody));
+  assert.deepEqual(fs.readFileSync(statePath), beforeActiveSlotConflict,
+    "an active job must continue reserving its date and a rejected collision must not mutate state");
+
   const beforeRejectedCancel = fs.readFileSync(statePath);
   const rejected = await post("/api/jobs/transition", {
     jobId: leased.id,
@@ -177,6 +192,14 @@ test("job transition API safely cancels queued work, rejects active leases, audi
   assert.equal(cancelledBody.job.cancelledAt, cancelledBody.job.completedAt);
   assert.equal(cancelledBody.job.nextRetryAt, null);
   assert.equal(cancelledBody.publishingEnabled, false);
+
+  const replacement = await createJob(
+    "job-cancel-reuse:future-slot-1",
+    futureScheduleDate("Saturday", 1),
+    "Replacement job after explicit cancellation"
+  );
+  assert.equal(replacement.scheduledSlot.date, futureScheduleDate("Saturday", 1),
+    "a cancelled direct job must release its unshared publication reservation");
 
   let state = JSON.parse(fs.readFileSync(statePath, "utf8"));
   assert.equal(state.jobs.find(job => job.id === queued.id).state, "CANCELLED");

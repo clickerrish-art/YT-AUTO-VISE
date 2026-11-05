@@ -522,9 +522,10 @@ function reservedPublicationSlots(state, excludeItemId = null) {
   const scheduleConfig = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
   const slots = [];
   const queueReservationDates = new Map();
+  const inactiveQueueReservationStatuses = new Set(["cancelled", "canceled", "deleted", "rejected", "skipped"]);
   for (const item of state.queueItems ?? []) {
     const status = String(item?.status ?? "").toLowerCase();
-    if (item.id === excludeItemId || item.reservationType !== "SCHEDULED_SLOT" || status === "cancelled") continue;
+    if (item.id === excludeItemId || item.reservationType !== "SCHEDULED_SLOT" || inactiveQueueReservationStatuses.has(status)) continue;
     if (status === "published") {
       // Published items must be checked against when they actually went live, not
       // the old planned slot. Missing actual time intentionally fails closed.
@@ -535,9 +536,11 @@ function reservedPublicationSlots(state, excludeItemId = null) {
     queueReservationDates.set(item.id, item.scheduledDate);
   }
   const representedQueueJobs = new Set();
+  const inactiveJobReservationStates = new Set(["CANCELLED", "REJECTED"]);
   for (const job of state.jobs ?? []) {
-    const date = job.scheduledSlot?.date;
-    if (job.kind !== "CONTENT_PRODUCTION" || !date || job.idempotencyKey === "draft:" + excludeItemId) continue;
+    const jobState = String(job?.state ?? "").trim().toUpperCase();
+    const date = job?.scheduledSlot?.date;
+    if (!job || inactiveJobReservationStates.has(jobState) || job.kind !== "CONTENT_PRODUCTION" || !date || job.idempotencyKey === "draft:" + excludeItemId) continue;
     const match = /^draft:(.+)$/.exec(String(job.idempotencyKey ?? ""));
     const queueItemId = match?.[1];
     // A queue item and its first matching production job represent one slot. Do
