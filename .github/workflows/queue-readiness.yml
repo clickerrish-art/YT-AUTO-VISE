@@ -16,12 +16,12 @@ on:
       - ".github/workflows/queue-readiness.yml"
   workflow_dispatch:
   schedule:
-    # Operational queue-readiness/replenishment check only; it does not publish. Runs Tue/Thu/Sat UTC cron while content draft slots remain Tue/Sat with a 72-hour minimum.
+    # Operational queue-readiness/replenishment check only; it does not publish.
     - cron: "0 15 * * 2,4,6"
 permissions:
-  contents: write
+  contents: read
 jobs:
-  validate-and-replenish:
+  validate-and-propose:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -59,16 +59,28 @@ jobs:
           for (const item of q.items) if (!approved.has(item.productUrl)) throw new Error("Unapproved product URL in queue: " + item.id);
           console.log("PASS: " + q.items.length + " queue items; all product links approved; publishing disabled.");
           '
-      - name: Replenish draft topic queue
-        run: node scripts/replenish-queue.mjs
-      - name: Commit queue only when changed
+      - name: Prepare an isolated queue proposal
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add content/queue.json
-          if git diff --cached --quiet; then
-            echo "Queue already contains all seed topics."
-          else
-            git commit -m "chore: replenish reviewed-topic queue"
-            git push origin HEAD:main
-          fi
+          mkdir -p "$RUNNER_TEMP/queue-proposal"
+          cp content/queue.json "$RUNNER_TEMP/queue-proposal/queue.json"
+      - name: Replenish draft topics in the isolated proposal only
+        env:
+          QUEUE_PATH: ${{ runner.temp }}/queue-proposal/queue.json
+        run: node scripts/replenish-queue.mjs
+      - name: Retain queue proposal for operator review
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-queue-proposal-${{ github.run_id }}
+          path: ${{ runner.temp }}/queue-proposal/queue.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Report non-mutating workflow boundary
+        run: |
+          {
+            echo "## Queue readiness and proposal"
+            echo "- Existing repository queue was validated read-only."
+            echo "- Replenishment ran against an isolated temporary copy."
+            echo "- A queue proposal artifact was retained for operator review."
+            echo "- This workflow has contents: read and cannot push or modify main."
+            echo "- No rendering, upload, scheduling or publication was performed."
+          } >> "$GITHUB_STEP_SUMMARY"
