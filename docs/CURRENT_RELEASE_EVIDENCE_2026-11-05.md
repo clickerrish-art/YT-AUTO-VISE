@@ -326,3 +326,45 @@ The CI readiness process reports all four required YouTube environment variables
 7. Re-run readiness only after genuine owner-controlled prerequisites are supplied.
 
 No branch integration or publishing action is authorized by this evidence.
+
+
+---
+
+# STATE-001 permission-failure recovery evidence — 5 November 2026
+
+**Exact source/test candidate:** `e4e14e9bf449f041144784b3e2615975d8a911e0`  
+**Branch:** `codex/marketing-machine-audit-fixes`  
+**Main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged)  
+**PR #1:** OPEN · DRAFT · UNMERGED.
+
+## Added failure injection
+
+The existing isolated rollback-crash test now repeats restart recovery with an injected `EACCES` at deterministic rollback-temp creation after the preceding `ENOSPC` recovery failure. It asserts that permission-denied recovery:
+- returns the original `EACCES` error rather than claiming recovery succeeded;
+- retains the durable transaction journal;
+- leaves no partial rollback temp;
+- releases only its own operation lock; and
+- allows the subsequent explicit recovery retry to restore the exact original dashboard-state bytes and clear transaction artifacts.
+
+The preceding SIGKILL test still forces process death at rollback-temp fsync. The ENOSPC case still proves a partial rollback temp is cleaned and the journal retained for retry. The protected restore-history tests were not modified.
+
+## Exact-SHA validation — `e4e14e9bf449f041144784b3e2615975d8a911e0`
+
+| Validation | Run | Result |
+|---|---:|---|
+| Content quality | [42027712558](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42027712558) | **PASS — 537 Node tests, 0 failures, 0 skips** |
+| Automation/security | [42027712320](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42027712320) | **PASS — 112/112 Node test files; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax and compilation checks passed** |
+| Dashboard Chromium E2E | [42027712227](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42027712227) | **PASS — 26/26 journeys** |
+| Isolated main/candidate baseline | [42027712657](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42027712657) | **PASS — exact main and candidate install, Node and Python test commands exited 0** |
+| Metadata validation | [42027712141](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42027712141) | **PASS** |
+| Branch inventory | [42027712541](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42027712541) | **PASS — inventory only, not semantic integration approval** |
+| Nature Frontiers local draft validation | [42027712151](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42027712151) | **PASS — local-only validation; no provider-side creation/read-back** |
+| Production readiness | [42027712353](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42027712353) | **HOLD — fail-closed; required YouTube OAuth variables/channel ID and authoritative live upload reconciliation are unavailable** |
+
+## Acceptance interpretation
+
+This adds deterministic permission-denied recovery evidence alongside the existing process-death and disk-full recovery cases. It does **not** close STATE-001. The acceptance register remains **60 PASS / 0 FAIL / 12 NOT_TESTED / 10 BLOCKED** across 82 requirements; STATE-001, DASH-001, API-001, SCHED-001, DEPLOY-001 and GIT-002 remain open.
+
+The isolated baseline compared main `fa00d28e7f58911482686e4ad69fac9f4701a2e6` and candidate `e4e14e9bf449f041144784b3e2615975d8a911e0`; both exact revisions passed install, Node and Python commands. Live branch comparison is **2,624 ahead / 2 behind / 234 changed files**. This is inventory, not semantic approval.
+
+No upload, publication, schedule mutation, provider-side campaign action, account reconnection, spend, main edit, merge, PR status change, reset, rebase, force-push or destructive reconciliation occurred. Public/unattended publishing remains disabled.
