@@ -104,7 +104,8 @@ test("worker stops after a dispatch conflict when retry-backoff persistence fail
       produceRequests += 1;
       // Make the cooldown-state parent unusable after the worker has loaded its
       // initial state but before it attempts to persist the 409 backoff.
-      fs.rmdirSync(stateDirectory);
+      // Preserve the active process lock while making the configured state parent unusable.
+      fs.renameSync(stateDirectory, stateDirectory + ".held");
       fs.writeFileSync(stateDirectory, "parent directory replaced during dispatch");
       res.statusCode = 409;
       res.end(JSON.stringify({ error: "render prerequisites are not satisfied", publishingEnabled: false }));
