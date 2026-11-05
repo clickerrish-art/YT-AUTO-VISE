@@ -2094,8 +2094,8 @@ const server = http.createServer(async (req, res) => {
           const actualSha = sha256File(artifactFile);
           if (actualSha !== artifact.sha256) return json(res, 409, { error: "Artifact changed after generation: " + artifact.path });
           const isShort = job.contentType === "short";
-        const exportValidator = path.join(root, "scripts", isShort ? "validate-short-export.mjs" : "validate-long-form-export.mjs");
-        const exportValidation = spawnSync(process.execPath, [exportValidator, artifactFile], { cwd: root, encoding: "utf8", timeout: isShort ? 180_000 : 300_000 });
+        const exportValidator = isShort ? "scripts/validate-short-export.mjs" : "scripts/validate-long-form-export.mjs";
+        const exportValidation = spawnSync(process.execPath, [path.join(root, exportValidator), artifactFile], { cwd: root, encoding: "utf8", timeout: isShort ? 180_000 : 300_000 });
         if (exportValidation.error || exportValidation.status !== 0 || !String(exportValidation.stdout ?? "").includes("PASS:")) {
           return json(res, 400, { error: "Format-specific media export validation failed; human review remains blocked", publishingEnabled: false });
         }
