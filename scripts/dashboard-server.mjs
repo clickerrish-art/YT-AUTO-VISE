@@ -22,6 +22,7 @@ import { canonicalAuthoringScriptSha256, runAuthoringNarrationStage } from "./au
 import { productionPlanSha256, validateProductionPlan, validateNarrationApprovalReceipt, validateShortProductionPlanParent } from "./production-plan.mjs";
 import { buildApprovedJobRenderManifest } from "./build-approved-job-render-manifest.mjs";
 import { contentJobArtifactPaths } from "./content-job-artifact-paths.mjs";
+import { buildVerifiedUploadReconciliationJob } from "./upload-reconciliation-transition.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
 import { validatePublicationSlot, localDateTimeToIso } from "./schedule-policy.mjs";
 import {
@@ -2607,33 +2608,22 @@ const server = http.createServer(async (req, res) => {
         const state = loadState();
         const jobIndex = state.jobs.findIndex(item => item.kind === "CONTENT_PRODUCTION" && item.id === body.jobId);
         const job = jobIndex >= 0 ? state.jobs[jobIndex] : null;
-        const eligibleState = job && ["RECOVERY_REQUIRED", "UPLOADING_PRIVATE", "APPROVED_FOR_PRIVATE_UPLOAD", "PRIVATE_UPLOAD_VERIFIED"].includes(job.state);
-        const verified = output.status === "SUCCEEDED" && verifiedReceipt && eligibleState;
         const at = new Date().toISOString();
-        if (verified && job.state !== "PRIVATE_UPLOAD_VERIFIED") {
-          const previousState = job.state;
-          const updatedJob = {
-            ...job,
-            state: "PRIVATE_UPLOAD_VERIFIED",
-            remoteVideoId: verifiedReceipt.videoId,
-            uploadReceipt: structuredClone(verifiedReceipt),
-            completedAt: at,
-            updatedAt: at,
-            workerLease: null,
-            transitionHistory: [...(job.transitionHistory ?? []), {
-              from: previousState,
-              to: "PRIVATE_UPLOAD_VERIFIED",
-              at,
-              actor: actor.trim(),
-              reason: "Exact prior upload attempt and persisted private SonicVhibez receipt independently reconciled"
-            }]
-          };
-          if (job.workerLease) updatedJob.leaseHistory = [...(job.leaseHistory ?? []), { workerId: job.workerLease.workerId, action: "RECONCILIATION_RELEASED", at, state: "PRIVATE_UPLOAD_VERIFIED" }];
-          state.jobs[jobIndex] = updatedJob;
-          jobStateUpdated = true;
-        } else if (verified && job.remoteVideoId === verifiedReceipt.videoId &&
-                   job.uploadReceipt?.attemptId === verifiedReceipt.attemptId) {
-          jobStateUpdated = true;
+        let transitionResult = null;
+        let verified = false;
+        if (output.status === "SUCCEEDED" && verifiedReceipt && job && updatedAttempt) {
+          try {
+            transitionResult = buildVerifiedUploadReconciliationJob({
+              job, attempt: updatedAttempt, receipt: verifiedReceipt,
+              configuredChannelId: process.env.SONICVHIBEZ_CHANNEL_ID?.trim(),
+              actor: actor.trim(), at
+            });
+            verified = true;
+            if (transitionResult.changed) state.jobs[jobIndex] = transitionResult.job;
+            jobStateUpdated = true;
+          } catch (error) {
+            verificationError = String(error?.message ?? "Job transition validation failed").slice(0, 500);
+          }
         }
         state.audit.push({
           id: crypto.randomUUID(),
