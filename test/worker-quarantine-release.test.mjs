@@ -291,7 +291,7 @@ test("operator CLI requests, verifies and securely writes a signed release hando
   const address = server.address();
   const outputPath = path.join(dir, "handoff", "receipt.json");
   fs.mkdirSync(path.dirname(outputPath), { mode: 0o700 });
-  const result = spawnSync(process.execPath, [
+  const child = spawn(process.execPath, [
     path.join(process.cwd(), "scripts", "worker-runner.mjs"),
     "--issue-quarantine-release",
     "--worker-id", workerId,
@@ -300,14 +300,25 @@ test("operator CLI requests, verifies and securely writes a signed release hando
     "--artifact-sha256", artifactSha256,
     "--receipt-output", outputPath
   ], {
-    cwd: process.cwd(), encoding: "utf8",
+    cwd: process.cwd(),
     env: {
       ...process.env,
       DASHBOARD_API_URL: `http://127.0.0.1:${address.port}`,
       DASHBOARD_OPERATOR_TOKEN: "operator-token-012345678901234567",
       DASHBOARD_QUARANTINE_RELEASE_TOKEN: "release-token-012345678901234567",
       DASHBOARD_QUARANTINE_SIGNING_PUBLIC_KEY: publicKeyPem
-    }
+    },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let stdout = "";
+  let stderr = "";
+  child.stdout.setEncoding("utf8");
+  child.stderr.setEncoding("utf8");
+  child.stdout.on("data", chunk => { stdout += chunk; });
+  child.stderr.on("data", chunk => { stderr += chunk; });
+  const result = await new Promise((resolve, reject) => {
+    child.once("error", reject);
+    child.once("close", (status, signal) => resolve({ status, signal, stdout, stderr }));
   });
   assert.equal(result.status, 0, result.stderr || result.stdout);
   const saved = JSON.parse(fs.readFileSync(outputPath, "utf8"));
