@@ -70,7 +70,7 @@ test("connected dashboard fits a 320px mobile viewport without page-level horizo
 });
 
 
-test("all 16 dashboard form landmarks have unique, resolvable accessible names", async ({ page }) => {
+test("all 17 dashboard form landmarks have unique, resolvable accessible names", async ({ page }) => {
   await page.goto("/");
   await page.getByLabel("Operator API token", { exact: true }).fill(operatorToken);
   await page.getByRole("button", { name: "Connect", exact: true }).click();
@@ -82,7 +82,7 @@ test("all 16 dashboard form landmarks have unique, resolvable accessible names",
     const name = references.map(id => document.getElementById(id)?.textContent?.trim() ?? "").filter(Boolean).join(" ").trim();
     return { id: form.id || null, name, missingReferences };
   }));
-  expect(formNames).toHaveLength(16);
+  expect(formNames).toHaveLength(17);
   expect(formNames.filter(form => !form.id || !form.name || form.missingReferences.length), "every form landmark must reference a visible, named heading").toEqual([]);
-  expect(new Set(formNames.map(form => form.name)).size, "form landmark names must distinguish the 16 workflows").toBe(16);
+  expect(new Set(formNames.map(form => form.name)).size, "form landmark names must distinguish the 17 workflows").toBe(17);
 });
