@@ -121,7 +121,7 @@ export async function inspectDashboardReconciliation({
   let parsed;
   try { parsed = new URL(baseUrl); }
   catch { throw new Error("DASHBOARD_API_URL must be a valid absolute URL"); }
-  const hostname = parsed.hostname.replace(/^\\[|\\]$/g, "").toLowerCase();
+  const hostname = parsed.hostname.replace(/^\[|\]$/g, "").toLowerCase();
   if (!["http:", "https:"].includes(parsed.protocol) || parsed.username || parsed.password || parsed.search || parsed.hash ||
       (parsed.protocol === "http:" && !["127.0.0.1", "::1", "localhost"].includes(hostname))) {
     throw new Error("Dashboard reconciliation requires HTTPS or a loopback HTTP URL without embedded credentials, query or fragment");
