@@ -13,6 +13,15 @@ test("metadata validation installs the checked-in dependency lockfile reproducib
   assert.doesNotMatch(validationWorkflow, /- run: npm install --ignore-scripts\b/);
 });
 
+test("metadata validation runs once per PR update and bounds FFmpeg installation", () => {
+  assert.match(validationWorkflow, /^  pull_request:/m);
+  assert.match(validationWorkflow, /^  workflow_dispatch:/m);
+  assert.doesNotMatch(validationWorkflow, /^  push:/m,
+    "the PR-scoped metadata validation must not duplicate the same candidate push run");
+  assert.match(validationWorkflow, /timeout 600s sudo apt-get update/);
+  assert.match(validationWorkflow, /timeout 900s sudo apt-get install/);
+});
+
 test("package manifest and lockfile root metadata agree", () => {
   assert.equal(lock.name, manifest.name);
   assert.equal(lock.version, manifest.version);

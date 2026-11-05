@@ -1,6 +1,5 @@
 name: Validate SonicVhibez metadata
 on:
-  push:
   pull_request:
   workflow_dispatch:
 permissions:
@@ -20,8 +19,8 @@ jobs:
       - run: npm ci --ignore-scripts
       - name: Install FFmpeg for renderer integration tests
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
+          timeout 600s sudo apt-get update -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30
+          timeout 900s sudo apt-get install -y --no-install-recommends -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 ffmpeg
           ffmpeg -version
           ffprobe -version
       - run: node --check scripts/render-long-form.mjs
