@@ -30,7 +30,7 @@ test("Ed25519-signed quarantine release receipt verifies exact worker, job, atte
   assert.equal(receipt.expiresAt, "2026-11-05T18:05:00.000Z");
 });
 
-test("receipt rejects tampering, wrong binding, wrong secret and expiry", () => {
+test("receipt rejects tampering, wrong binding, wrong public key and expiry", () => {
   const receipt = createWorkerQuarantineReleaseReceipt(binding);
   assert.throws(() => verifyWorkerQuarantineReleaseReceipt({ ...receipt, jobId: "other-job" }, binding), /does not bind/i);
   assert.throws(() => verifyWorkerQuarantineReleaseReceipt(receipt, { ...binding, workerId: "other-worker" }), /does not bind/i);
