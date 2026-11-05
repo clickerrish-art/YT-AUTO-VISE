@@ -365,6 +365,24 @@ function readUploadLedger() {
     if (ledger.attempts.some(item => !item || typeof item !== "object" || Array.isArray(item))) {
       return { available: false, attempts: [], error: "Upload ledger contains an invalid attempt; do not retry an uncertain upload" };
     }
+    // A job/artifact pair must identify exactly one upload attempt. Choosing the
+    // first of multiple matching records could reconcile the wrong remote video
+    // and conceal an unresolved duplicate, so ambiguous ledgers are unavailable.
+    const seenAttemptIds = new Set();
+    const seenArtifactAttempts = new Set();
+    for (const item of ledger.attempts) {
+      if (typeof item.attemptId !== "string" || !item.attemptId.trim() ||
+          typeof item.jobId !== "string" || !item.jobId.trim() ||
+          typeof item.artifactSha256 !== "string" || !/^[a-f0-9]{64}$/.test(item.artifactSha256)) {
+        return { available: false, attempts: [], error: "Upload ledger contains an invalid attempt identity; do not retry an uncertain upload" };
+      }
+      const artifactAttemptKey = item.jobId + "\\0" + item.artifactSha256;
+      if (seenAttemptIds.has(item.attemptId) || seenArtifactAttempts.has(artifactAttemptKey)) {
+        return { available: false, attempts: [], error: "Upload ledger contains duplicate attempt identities; do not retry an uncertain upload" };
+      }
+      seenAttemptIds.add(item.attemptId);
+      seenArtifactAttempts.add(artifactAttemptKey);
+    }
     return { available: true, attempts: ledger.attempts.map(item => Object.fromEntries(safeFields.filter(key => item[key] !== undefined).map(key => [key, item[key]]))).slice(-50).reverse() };
   } catch (error) {
     if (fd !== undefined) { try { fs.closeSync(fd); } catch {} }
