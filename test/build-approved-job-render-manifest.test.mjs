@@ -438,7 +438,8 @@ process.stdout.write("TEST_FIXTURE_RENDER_SUCCEEDED; fixture output is not publi
   assert.equal(saved.state, "GENERATED", "successful output validation must persist the terminal render state");
   assert.equal(persisted.audit.filter(event => event.action === "CONTENT_RENDER_STARTED" && event.jobId === job.id).length, 1);
   assert.equal(persisted.audit.filter(event => event.action === "CONTENT_RENDER_SUCCEEDED" && event.jobId === job.id).length, 1);
-  assert.equal(saved.workerLease, null, "successful rendering must release the worker lease");
+  assert.equal(saved.workerLease?.workerId, "dashboard-renderer-long_form", "the render lease remains held across the GENERATED intermediate stage");
+  assert.equal(saved.leaseHistory.at(-1)?.action, "STAGE_COMPLETED", "the successful render must record an intermediate lease completion");
   assert.equal(saved.publishable, undefined, "a generated fixture must not be represented as publishable");
   assert.equal(saved.publishingEnabled, false);
 });
