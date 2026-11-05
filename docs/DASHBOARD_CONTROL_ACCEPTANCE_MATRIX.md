@@ -1,17 +1,17 @@
 # Current evidence checkpoint — 5 November 2026
 
-- Exact tested source/test SHA: `05daf438c889079853c6521df1cb54a1223424ff`.
-- Dashboard Chromium E2E: [run 41941480117](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480117), **23/23 passed**.
+- Exact tested source/test SHA: `b036174641a51bf9e4220ba4e612d6aaab7752cd`.
+- Dashboard Chromium E2E: [run 41950432596](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432596), **26/26 passed**.
 - Static inventory: **104 controls, 16 forms, 40 route handlers, 36 protected API routes**.
-- **DASH-001 remains NOT_TESTED overall.** The 23 browser journeys do not establish exhaustive per-control success, validation, error feedback, authorization, persistence, refresh, concurrency, recovery and accessibility acceptance.
+- **DASH-001 remains NOT_TESTED overall.** The 26 browser journeys do not establish exhaustive per-control success, validation, error feedback, authorization, persistence, refresh, concurrency, recovery and accessibility acceptance.
 - Main remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; PR #1 remains open, draft and unmerged. Public/unattended publishing remains disabled.
 
 ---
 
 # Dashboard control acceptance — live refresh 5 November 2026
 
-**Current application source/test SHA:** `8272d2e39868237c05b2951f37bcade6ae6608c4`  
-**Latest browser run:** `41940205660` on the exact current candidate HEAD.
+**Current application source/test SHA:** `b036174641a51bf9e4220ba4e612d6aaab7752cd`  
+**Latest browser run:** `41950432596` on the exact current candidate HEAD.
 
 ## Current static inventory
 
@@ -31,7 +31,7 @@ Static inventory is not behavioral acceptance.
 
 ## Exact-head browser acceptance
 
-[Dashboard Chromium E2E run 41940205660](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205660) completed successfully on documentation-only head `fb8a591bf6739c569c0c6faaed29c16afc75f408`, with application source unchanged from `e99bc24511879106157c002c09242315e6219325`: **23/23 browser tests passed**.
+[Dashboard Chromium E2E run 41950432596](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432596) completed successfully on exact source/test SHA `b036174641a51bf9e4220ba4e612d6aaab7752cd`: **26/26 browser tests passed**. The added Facebook research-suggestion journey verifies that the topic and caption starter populate the form while state remains unchanged and no draft or publication is created.
 
 Coverage includes:
 - Operator authentication, keyboard-only connection and token redaction.
@@ -45,13 +45,13 @@ Coverage includes:
 - Source-bound script authoring, real Edge TTS narration, measured media/caption artifacts and recovery without a second TTS call.
 - Hash-bound production-plan review.
 
-The exact browser log reports 23 tests passed, zero failed. The same candidate's server-side scheduler gate rejects past draft/job reservations before durable mutation. This is broader than the earlier 20-journey checkpoint, but does not establish every control's complete business behavior.
+The exact browser log reports 26 tests passed, zero failed. The same candidate's server-side scheduler gate rejects past draft/job reservations before durable mutation. This is broader than the earlier 23-journey checkpoint, but does not establish every control's complete business behavior.
 
 ## Current form status
 
 The form-by-form matrix below now includes all 16 form IDs. Ten forms have demonstrated successful UI journeys, including the cancellation form. Six downstream production forms remain blocked because the genuine media, rights, parent, validated export, review or uncertain remote-upload evidence needed for successful operation is not present.
 
-**DASH-001 remains NOT_TESTED overall.** The 23 browser tests and static 104-control inventory do not constitute control-by-control acceptance of every field, validation branch, error state, persistence behavior, authorization boundary and failure/restart path.
+**DASH-001 remains NOT_TESTED overall.** The 26 browser tests and static 104-control inventory do not constitute control-by-control acceptance of every field, validation branch, error state, persistence behavior, authorization boundary and failure/restart path.
  
 ---
 

@@ -1,10 +1,10 @@
 # SonicVhibez Marketing Machine — current release evidence
 
-**Evidence snapshot:** 5 November 2026, 00:30 UTC  
+**Evidence snapshot:** 5 November 2026, 01:45 UTC  
 **Repository:** `clickerrish-art/YT-AUTO-VISE`  
 **Implementation branch:** `codex/marketing-machine-audit-fixes`  
-**Exact tested source/test SHA:** `05daf438c889079853c6521df1cb54a1223424ff`  
-**Branch HEAD at evidence snapshot:** `05daf438c889079853c6521df1cb54a1223424ff`  
+**Exact tested source/test SHA:** `b036174641a51bf9e4220ba4e612d6aaab7752cd`  
+**Branch HEAD at evidence snapshot:** `b036174641a51bf9e4220ba4e612d6aaab7752cd`  
 **Main HEAD:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged)  
 **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`  
 **PR #1:** OPEN · DRAFT · UNMERGED
@@ -13,7 +13,58 @@
 
 **NOT PRODUCTION READY — HOLD.** This is an exact-SHA engineering and release-evidence refresh. It does not authorize merge, external provider mutation, upload, scheduling or publication.
 
-## Exact-SHA CI results
+## Latest exact-SHA validation — `b036174641a51bf9e4220ba4e612d6aaab7752cd`
+
+The current source/test candidate is `b036174641a51bf9e4220ba4e612d6aaab7752cd`. The only code-tree change since the preceding candidate was a browser-test assertion correction: the Facebook caption suggestion is a textarea value, so the test now uses Playwright `toHaveValue` rather than text-content matching. No application runtime code or publishing behavior changed in this commit.
+
+| Validation | Run | Result |
+|---|---:|---|
+| Automation/security | [41950432631](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432631) | **PASS** — 111/111 Node test files, 524 tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax and Python compilation passed |
+| Dashboard Chromium E2E | [41950432596](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432596) | **PASS — 26/26** |
+| Content quality | [41950432618](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432618) | **PASS** |
+| Metadata validation | [41950432753](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432753) | **PASS** |
+| Isolated main/candidate baseline | [41950432551](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432551) | **PASS** — exact main and candidate checkouts; candidate 524 Node / 16 Python, zero skips |
+| Branch reconciliation inventory | [41950432546](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432546) | **PASS** — non-destructive inventory only; semantic review remains open |
+| Nature Frontiers local draft validation | [41950432557](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432557) | **PASS** — local validation only; provider-side Meta creation/read-back skipped |
+| npm lockfile workflow | [41950425761](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950425761) | **PASS** — clean locked install and complete Node suite |
+| Production readiness | [41950432665](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432665) | **HOLD** — read-only readiness report generated; final mandatory gate failed as designed with 13 blockers |
+
+### Latest isolated baseline evidence
+
+The [baseline-comparison artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432551) records:
+
+- Main `fa00d28e7f58911482686e4ad69fac9f4701a2e6`: 54 Node tests and 8 Python tests passed; zero failures/skips; test commands exit 0. The older main dependency tree reported four moderate npm audit findings.
+- Candidate `b036174641a51bf9e4220ba4e612d6aaab7752cd`: 524 Node tests across 111/111 files and 16 Python tests passed; zero failures/skips; test commands exit 0. Candidate npm audit reported zero vulnerabilities.
+- FFmpeg/ffprobe installation and verification passed.
+
+### Latest live Git inventory
+
+The [non-destructive inventory artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432546) records:
+
+| Measure | Result |
+|---|---:|
+| Branch-only commits | 2,599 |
+| Main-only commits | 2 |
+| Changed final-tree paths | 231 |
+| Final-tree deletions | 0 |
+| Patch-equivalent commits | 0 |
+| Critical paths requiring semantic review | 17 |
+| CI inventory working tree | Clean |
+
+Branch-only classification is heuristic, not semantic approval: 1,107 documentation-only; 639 test-only; 543 implementation; 106 workflow-only; 75 mixed; 71 implementation-and-tests; 58 configuration/content. Integration remains `REQUIRES_REVIEW`; no destructive Git operation occurred.
+
+### Latest dashboard and API checkpoint
+
+- Dashboard inventory: 104 controls, 16 forms, 40 route handlers, 36 protected API routes.
+- Dashboard Chromium E2E: **26/26 passed** on exact source/test SHA `b036174641a51bf9e4220ba4e612d6aaab7752cd`. The added Facebook research-suggestion journey verifies that the topic and caption starter populate the UI, the state remains byte-identical, and no draft or publication is created.
+- **DASH-001 remains NOT_TESTED overall.** The browser suite and static inventory do not prove exhaustive control-by-control success, validation, authorization, failure feedback, persistence, concurrency, recovery and accessibility.
+- The API route matrix remains 36 routes / 31 PASS / 5 BLOCKED / 0 NOT_TESTED, with 36/36 authentication-negative checks passing. Its route-by-route evidence remains sourced from `8272d2e39868237c05b2951f37bcade6ae6608c4`; it is not silently re-certified by this dashboard-only test change. **API-001 remains NOT_TESTED overall.**
+
+### Latest production readiness
+
+The exact-`b036174` read-only report [41950432665](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41950432665) reports **HOLD / 13 blockers**. The queue contains 16 items and public publishing remains disabled. The 13 blockers remain the owner cadence decision, complete remote YouTube history/uncertain-attempt reconciliation, genuine rights-cleared Short and long-form manifests/media, human review, verified SonicVhibez channel identity, and four missing YouTube environment values. The report never uploads, schedules or publishes.
+
+## Historical exact-SHA CI results — prior candidate `05daf438c889079853c6521df1cb54a1223424ff`
 
 All listed workflows completed against exact candidate SHA `05daf438c889079853c6521df1cb54a1223424ff`.
 
@@ -29,7 +80,7 @@ All listed workflows completed against exact candidate SHA `05daf438c889079853c6
 | npm lockfile workflow | [41941470991](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941470991) | **PASS** — clean locked install and complete Node test suite |
 | Production readiness | [41941480109](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480109) | **HOLD** — readiness report generated and uploaded; final mandatory gate correctly failed with 13 blockers |
 
-### Retained isolated baseline evidence
+### Historical retained isolated baseline evidence — `05daf438c889079853c6521df1cb54a1223424ff`
 
 The [baseline-comparison artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480198) records:
 
@@ -42,7 +93,7 @@ The main baseline's older dependency install reported four moderate audit findin
 
 The comparison is test evidence, not proof that all business workflows, deployment paths or external providers are accepted.
 
-## Live Git and history inventory
+## Historical Git and history inventory — `05daf438c889079853c6521df1cb54a1223424ff`
 
 The exact [branch inventory artifact](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480110) was generated from candidate `05daf438c889079853c6521df1cb54a1223424ff` and records:
 
@@ -72,7 +123,7 @@ The inventory explicitly records `REQUIRES_REVIEW`. Zero patch-equivalent commit
 
 Main remains `fa00d28e7f58911482686e4ad69fac9f4701a2e6`. No merge, reset, rebase, force-push, main-branch edit or destructive reconciliation occurred. Branch protection remains **UNVERIFIED** because the GitHub protection endpoint returned 403; no claim is made that protection is enabled or disabled.
 
-## Dashboard and API acceptance
+## Historical dashboard and API acceptance — `05daf438c889079853c6521df1cb54a1223424ff`
 
 - Dashboard source inventory: 104 controls, 16 forms, 40 route handlers, 36 protected API routes.
 - Dashboard browser workflow: 23/23 passed on exact candidate `05daf438c889079853c6521df1cb54a1223424ff`.
@@ -86,7 +137,7 @@ The last full requirement assessment remains **82 requirements: 60 PASS / 12 NOT
 
 Open engineering gates remain: **DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002**.
 
-## Production readiness — 13 genuine blockers
+## Historical production readiness — 13 blockers on `05daf438c889079853c6521df1cb54a1223424ff`
 
 The exact-HEAD read-only readiness artifact for `05daf438c889079853c6521df1cb54a1223424ff` reports `blocked`, exit code 2, and 13 blockers:
 
