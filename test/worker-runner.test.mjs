@@ -547,6 +547,62 @@ test("Retry-After parser clamps excessive values and safely falls back for malfo
 });
 
 
+test("worker persists HTTP 409 preflight cooldown across restart and does not redispatch early", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-restart-409-backoff-"));
+  const statePath = path.join(directory, "worker-backoff.json");
+  let postCount = 0;
+  let firstCycle;
+  const fetchImpl = async (url, options = {}) => {
+    if ((options.method ?? "GET") === "GET") {
+      return new Response(JSON.stringify({
+        jobs: [{ id: "job-persisted-409-backoff", state: "QUEUED" }],
+        queuedCount: 1,
+        publishingEnabled: false
+      }), { status: 200, headers: { "content-type": "application/json" } });
+    }
+    postCount += 1;
+    return new Response(JSON.stringify({ error: "renderer prerequisites are not satisfied" }), {
+      status: 409,
+      headers: { "content-type": "application/json" }
+    });
+  };
+  try {
+    await runWorker({
+      baseUrl: "http://127.0.0.1:8787",
+      token,
+      workerId,
+      once: true,
+      pollIntervalMs: 1_000,
+      cooldownStatePath: statePath,
+      fetchImpl,
+      onCycle: result => { firstCycle = result; }
+    });
+    assert.equal(postCount, 1);
+    assert.equal(firstCycle.results[0].httpStatus, 409);
+    const persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
+    assert.equal(persisted.cooldowns["job-persisted-409-backoff"].attempts, 1);
+    assert.ok(persisted.cooldowns["job-persisted-409-backoff"].nextAttemptAt > Date.now());
+
+    let restartedCycle;
+    await runWorker({
+      baseUrl: "http://127.0.0.1:8787",
+      token,
+      workerId,
+      once: true,
+      pollIntervalMs: 1_000,
+      cooldownStatePath: statePath,
+      fetchImpl,
+      onCycle: result => { restartedCycle = result; }
+    });
+    assert.equal(postCount, 1, "restart must not redispatch after a persisted 409 preflight cooldown");
+    assert.equal(restartedCycle.deferredByBackoff, 1);
+    assert.deepEqual(restartedCycle.results, []);
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+
 test("worker persists retry cooldown across restart and does not redispatch early", async () => {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-restart-backoff-"));
   const statePath = path.join(directory, "worker-backoff.json");
