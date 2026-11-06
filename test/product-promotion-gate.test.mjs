@@ -123,3 +123,17 @@ test("new supplied Selar products have verified sellers but remain blocked from 
     assert.ok(errors.some(error => /viewer-facing disclosure must be owner-approved/i.test(error)));
   }
 });
+
+test("YouTube channel monetization is not evidence of Selar compensation", () => {
+  const config = JSON.parse(fs.readFileSync("config/products.json", "utf8"));
+  const product = config.products[0];
+  assert.equal(product.promotionGate.compensation.status, "UNVERIFIED");
+  assert.match(product.promotionGate.compensation.note, /YouTube channel monetization is separate/i);
+  assert.match(product.promotionGate.compensation.note, /not evidence of an affiliate commission/i);
+
+  const fixture = verifiedFixture("affiliate");
+  fixture.product.promotionGate.compensation.type = "youtube_monetization";
+  const errors = validateProductPromotionGate(fixture.product, fixture.metadata);
+  assert.ok(errors.some(error => /compensation type must be affiliate, paid, or none/i.test(error)));
+  assert.ok(errors.some(error => /hasPaidPromotion must match/i.test(error)));
+});
