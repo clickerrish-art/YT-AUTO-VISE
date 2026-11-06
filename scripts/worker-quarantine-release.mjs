@@ -67,7 +67,9 @@ export function verifyWorkerQuarantineReleaseReceipt(receipt, {
   }
   const issued = Date.parse(receipt.issuedAt ?? "");
   const expires = Date.parse(receipt.expiresAt ?? "");
-  if (!Number.isFinite(issued) || !Number.isFinite(expires) ||
+  const canonicalIssued = Number.isFinite(issued) && new Date(issued).toISOString() === receipt.issuedAt;
+  const canonicalExpires = Number.isFinite(expires) && new Date(expires).toISOString() === receipt.expiresAt;
+  if (!canonicalIssued || !canonicalExpires ||
       expires <= nowMs || issued > nowMs + 30_000 ||
       expires - issued !== MAX_TTL_MS || nowMs - issued > MAX_TTL_MS) {
     throw new Error("Signed quarantine release receipt is expired or has an invalid validity window");
