@@ -13,7 +13,7 @@ for (const file of files) {
     failed = true;
     continue;
   }
-  const text = fs.readFileSync(file, "utf8").replace(/\r\n/g, "\n").trim();
+  const text = fs.readFileSync(file, "utf8").replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
   const blocks = text.split(/\n\s*\n/);
   let previousEnd = 0;
   let fileErrors = [];
@@ -29,6 +29,11 @@ for (const file of files) {
       continue;
     }
     const nums = match.slice(1).map(Number);
+    const [, startMinutes, startSeconds, , endMinutes, endSeconds] = nums;
+    if (startMinutes > 59 || startSeconds > 59 || endMinutes > 59 || endSeconds > 59) {
+      fileErrors.push(`block ${i + 1}: minute and second timestamp fields must be between 00 and 59`);
+      continue;
+    }
     const toMs = (h, m, s, ms) => (((h * 60 + m) * 60 + s) * 1000 + ms);
     const start = toMs(...nums.slice(0, 4));
     const end = toMs(...nums.slice(4, 8));
