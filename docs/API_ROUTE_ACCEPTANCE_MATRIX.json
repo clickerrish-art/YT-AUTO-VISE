@@ -957,6 +957,16 @@
     "isolatedMainCandidateBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42295242971",
     "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42295243033",
     "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42295242942",
-    "routeAcceptanceBoundary": "The complete automation/security suite and dashboard browser suite pass on this exact application SHA. This does not refresh route-by-route business acceptance: the routes[] records and their detailed per-route evidence remain tied to testedSourceTestSha and older route-specific testEvidence. API-001 remains NOT_TESTED overall until every applicable route has current exact-SHA success, validation, persistence, audit, concurrency and restart evidence; externally blocked provider routes remain blocked."
+    "routeAcceptanceBoundary": "The complete automation/security suite and dashboard browser suite pass on this exact application SHA. This does not refresh route-by-route business acceptance: the routes[] records and their detailed per-route evidence remain tied to testedSourceTestSha and older route-specific testEvidence. API-001 remains NOT_TESTED overall until every applicable route has current exact-SHA success, validation, persistence, audit, concurrency and restart evidence; externally blocked provider routes remain blocked.",
+    "authenticationNegativeMatrix": {
+      "test": "test/dashboard-api-auth-matrix.test.mjs",
+      "exactApplicationSourceTestSha": "8b98c70e189a73e6afa6d9727cba0b5be8fa0899",
+      "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42295243016",
+      "behavior": "Dynamically inventories all declared API routes on the exact source SHA and verifies missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; verifies byte-identical persisted state. This current-SHA auth-negative evidence does not by itself establish authorized success, route-specific validation, persistence, audit, concurrency or restart acceptance.",
+      "authenticatedEmptyRequestMatrix": {
+        "test": "test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
+        "behavior": "Dynamically inventories all declared API routes and sends authenticated empty requests; asserts safe JSON responses without HTTP 5xx, internal path disclosure or persisted state mutation."
+      }
+    }
   }
 }
