@@ -223,6 +223,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(Object.hasOwn(body, "stateFile"), false, "authenticated API responses must not disclose the local state-file path");
   assert.equal(logs.includes(stateDir), false, "startup logs must not disclose the local state directory");
   assert.ok(body.blockers.some(item => /complete SonicVhibez public\/private\/unlisted history is reconciled/i.test(item)), "dashboard state must expose the live history reconciliation blocker");
+  assert.ok(body.blockers.some(item => /CADENCE DECISION REQUIRED/.test(item)), "dashboard state must expose the owner cadence decision blocker");
   const autonomousUnauth = await fetchDashboard(base + "/api/facebook/autonomous-status");
   assert.equal(autonomousUnauth.status, 401, "autonomous publisher status must use the same operator authentication");
   const autonomousResponse = await fetchDashboard(base + "/api/facebook/autonomous-status", { headers });
@@ -253,6 +254,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.ok(Array.isArray(readiness.blockers));
   assert.ok(readiness.blockers.some(item => /long-form(?: render manifest|-render-manifest)/i.test(item)));
   assert.ok(readiness.blockers.some(item => /SONICVHIBEZ_CHANNEL_ID|channel ID/i.test(item)));
+  assert.ok(readiness.blockers.some(item => /CADENCE DECISION REQUIRED/.test(item)));
   const operationalReadinessResponse = await fetchDashboard(base + "/operational-readyz");
   const operationalReadiness = await operationalReadinessResponse.json();
   assert.equal(operationalReadinessResponse.status, 200, "local service readiness must not inherit external publication blockers");
@@ -1574,4 +1576,6 @@ test("dashboard readiness and state diagnostics enforce the non-waivable 72-hour
   const source = fs.readFileSync(new URL("../scripts/dashboard-server.mjs", import.meta.url), "utf8");
   assert.equal((source.match(/schedule\.minimumPublicationSpacingHours < 72/g) ?? []).length, 2);
   assert.doesNotMatch(source, /schedule\.minimumPublicationSpacingHours <= 0/);
+  assert.ok(source.includes("validateCadenceDecision(schedule.cadenceDecision, schedule.minimumPublicationSpacingHours)"));
+  assert.equal(source.includes("schedule.ownerApprovedPolicy"), false);
 });
