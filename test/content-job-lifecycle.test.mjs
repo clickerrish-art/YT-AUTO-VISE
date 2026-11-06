@@ -324,3 +324,31 @@ test("content jobs can be cancelled before the private-upload boundary but not d
     }, now), /private-upload boundary cannot be cancelled/);
   }
 });
+
+test("malformed persisted worker lease expiry timestamps fail closed across claim, heartbeat, completion and reaping", () => {
+  const start = Date.parse("2026-11-06T12:00:00.000Z");
+  const claimed = claimWorkerLease(createContentJob(input), "worker-malformed-lease", { leaseMs: 10_000, now: start });
+  const malformed = {
+    ...claimed.job,
+    workerLease: { ...claimed.job.workerLease, expiresAt: "not-a-timestamp" }
+  };
+  const before = structuredClone(malformed);
+
+  assert.throws(
+    () => claimWorkerLease(malformed, "worker-replacement", { now: start + 1 }),
+    /expiry timestamp is invalid; operator reconciliation is required/
+  );
+  assert.throws(
+    () => heartbeatWorkerLease(malformed, claimed.leaseToken, { now: start + 1 }),
+    /expiry timestamp is invalid; operator reconciliation is required/
+  );
+  assert.throws(
+    () => completeWorkerLease(malformed, claimed.leaseToken, "GENERATED", {}, start + 1),
+    /expiry timestamp is invalid; operator reconciliation is required/
+  );
+  assert.throws(
+    () => expireWorkerLease(malformed, start + 20_000),
+    /expiry timestamp is invalid; operator reconciliation is required/
+  );
+  assert.deepEqual(malformed, before, "invalid persisted lease data must remain untouched for operator inspection");
+});
