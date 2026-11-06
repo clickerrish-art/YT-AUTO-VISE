@@ -19,5 +19,11 @@
   "complianceReviewed": false,
   "mediaPath": "",
   "scriptPath": "content/short-002-plan-wildlife-documentary.md",
-  "notes": "Existing weekly Short 2 of 2; SEO packaging refreshed from vidIQ research dated 2026-11-06. Hold: seller/brand authorization, affiliate/paid relationship, channel identity, rights-cleared media and human review are unverified."
+  "notes": "Existing weekly Short 2 of 2; SEO packaging refreshed from vidIQ research dated 2026-11-06. Hold: seller/brand authorization, affiliate/paid relationship, channel identity, rights-cleared media and human review are unverified.",
+  "hasPaidPromotion": null,
+  "promotionDisclosure": {
+    "status": "UNVERIFIED",
+    "type": null,
+    "text": ""
+  }
 }
