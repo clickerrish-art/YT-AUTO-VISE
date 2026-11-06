@@ -321,7 +321,7 @@ export function heartbeatWorkerLease(job, leaseToken, { leaseMs = 60_000, now = 
 
 export function completeWorkerLease(job, leaseToken, nextState, patch = {}, now = Date.now()) {
   if (!job?.workerLease || job.workerLease.tokenHash !== hashLeaseToken(String(leaseToken ?? ""))) throw new Error("Worker lease token does not match");
-  if (Date.parse(job.workerLease.expiresAt) <= now) throw new Error("Worker lease has expired");
+  if (workerLeaseExpiryMs(job) <= now) throw new Error("Worker lease has expired");
   if (!patch || typeof patch !== "object" || Array.isArray(patch)) throw new Error("Worker result must be an object");
   const allowedPatchKeys = new Set(["outputArtifacts", "thumbnailArtifact", "metadataPath", "metadataVersion", "errorDetails"]);
   for (const key of Object.keys(patch)) if (!allowedPatchKeys.has(key)) throw new Error("Worker cannot modify protected job field: " + key);
