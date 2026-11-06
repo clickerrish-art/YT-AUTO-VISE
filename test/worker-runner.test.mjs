@@ -1014,6 +1014,51 @@ test("worker retains its process lock when an uncertain dispatch quarantine cann
   }
 });
 
+test("worker retains its startup process lock when lock fsync fails before any API request", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-startup-fsync-failure-"));
+  const statePath = path.join(directory, "worker-backoff.json");
+  const lockPath = statePath + ".process.lock";
+  const originalFsync = fs.fsyncSync;
+  const requests = [];
+  const fetchImpl = async () => {
+    requests.push("request");
+    return new Response(JSON.stringify({ jobs: [], queuedCount: 0, publishingEnabled: false }), {
+      status: 200, headers: { "content-type": "application/json" }
+    });
+  };
+  try {
+    fs.fsyncSync = function () {
+      const error = new Error("simulated storage durability failure");
+      error.code = "EIO";
+      throw error;
+    };
+    await assert.rejects(
+      runWorker({
+        baseUrl: "http://127.0.0.1:8787", token, workerId, once: true,
+        cooldownStatePath: statePath, fetchImpl
+      }),
+      error => error?.cause?.code === "EIO" && /already locked/.test(error.message)
+    );
+    assert.deepEqual(requests, [], "worker must not poll or dispatch when startup lock durability is uncertain");
+    assert.equal(fs.existsSync(lockPath), true, "possibly non-durable startup lock must be retained for operator inspection");
+    const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+    assert.equal(lock.workerId, workerId);
+    assert.ok(Number.isInteger(lock.pid));
+    fs.fsyncSync = originalFsync;
+    await assert.rejects(
+      runWorker({
+        baseUrl: "http://127.0.0.1:8787", token, workerId, once: true,
+        cooldownStatePath: statePath, fetchImpl
+      }),
+      /already locked/
+    );
+    assert.deepEqual(requests, [], "restart must remain blocked before the first API request");
+  } finally {
+    fs.fsyncSync = originalFsync;
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
 test("worker flushes its exclusive process lock before polling and removes it after a clean cycle", async () => {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-lock-fsync-"));
   const statePath = path.join(directory, "worker-backoff.json");
