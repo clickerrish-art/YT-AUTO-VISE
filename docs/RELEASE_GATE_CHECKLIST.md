@@ -1788,3 +1788,18 @@ At the candidate snapshot, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merg
 - [x] Narration-review retry safety: exact same-operator retry reuses the stored approval receipt only if the current script, script-approval receipt and all four narration artifact files still match their submitted hashes. Changed retry and tampered-artifact retry are rejected. API regression is covered by automation workflow [41139006397](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41139006397) on the same exact SHA; 436 Node tests, 16 Python tests, 0 skipped, npm audit 0 vulnerabilities.
 - [ ] Successful `narrationform` real TTS generation/reconciliation is still NOT_TESTED. The synthetic narration-review fixture is not evidence of TTS generation.
 - [ ] Six of 15 dashboard forms have successful browser journeys; nine remain NOT_TESTED or BLOCKED. DASH-001 remains NOT_TESTED.
+
+
+# 6 November 2026 — promotional Shorts draft-plan gate
+
+- [x] A dedicated draft-only plan exists for the week beginning 9 November 2026 with exactly two ~55-second SonicVhibez creator-education Shorts.
+- [x] The plan includes exact Prompt Pack and Success Blueprint Selar URLs, scripts, first-line keyword placement, vidIQ estimate evidence, hashtags, thumbnail direction and production checklists.
+- [x] Only the Wildlife Creator's Vault remains `approved`; the other two products are `candidate` records. Seller Click 47 was rechecked on all three exact Selar pages on 6 November. SonicVhibez brand authorization, compensation type and disclosure remain unresolved for the candidates.
+- [x] `npm run validate:promotional-shorts` enforces the two-per-week cap, SonicVhibez-only channel, Africa/Johannesburg timezone, 50–60-second target, exact product URL, verified seller evidence, keyword evidence, disclosure hold and no publication/schedule timestamps. Exact candidate `64a049e6a87fafff0d0c56e5a8b5791102de0bdf` passed this validator; the same step is pending on `eeaef86f76a46229a5994133c6a11b87e8c16164` at the time of this checkpoint.
+- [x] The plan is draft preparation only. No publication date, YouTube queue item, Metricool post, upload or schedule was created.
+- [ ] Do not promote until SonicVhibez brand authorization, affiliate/paid/no-compensation status and exact disclosure are owner-approved, final rights-cleared media and thumbnail exist, human review passes, and a separate SonicVhibez YouTube-only Metricool destination is verifiable.
+- [ ] Do not schedule until complete YouTube public/private/unlisted history and the exact destination schedule are inspected and each proposed publication gap is explicitly at least 72 full hours in Africa/Johannesburg.
+
+## Current external exception
+
+Metricool brand `7545638` is still labelled Nature Frontiers and mixes its Facebook/Instagram/TikTok/Pinterest identities with the SonicVibes `@sonicvhibez` YouTube channel ID. Seven future Nature Frontiers posts were returned; all seven have `draft=false` and `autoPublish=true`, including four creator-product promotions. They were not changed because this workflow is not authorized to mutate existing scheduled posts. Treat this as an owner review item, not a passed draft-safety gate.

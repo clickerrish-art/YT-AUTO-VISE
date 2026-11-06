@@ -1,3 +1,50 @@
+# Latest execution checkpoint — 6 November 2026
+
+**Exact source/test candidate:** `eeaef86f76a46229a5994133c6a11b87e8c16164`  
+**Implementation branch:** `codex/marketing-machine-audit-fixes`  
+**main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged)  
+**Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`  
+**Compare:** **2,837 ahead / 2 behind / 250 changed files**. Inventory is not semantic integration approval.  
+**PR #1:** OPEN · DRAFT · UNMERGED. No merge, main edit, reset, rebase, force-push or destructive reconciliation occurred.
+
+## Owner-independent implementation added
+
+- `config/products.json`: retained the exact approved Wildlife Creator's Vault URL and added the two other user-supplied Selar URLs as `candidate` records. A read-only recheck of all three exact listings on 6 November identifies **Click 47** as seller. The Prompt Pack listing describes 20 prompts across six connected production stages; the Blueprint listing describes a 30/60/90-day creator plan. The Vault listing body uses **Nature Frontiers** wording.
+- Candidate records remain blocked: SonicVhibez brand authorization is `OWNER_CONFIRMATION_REQUIRED`; compensation type and viewer-facing disclosure remain `UNVERIFIED`. Seller verification does not approve promotion.
+- `content/promotional-short-plan.json`: two approximately 55-second creator-education drafts for the week beginning 9 November 2026. One explains a practical YouTube video-prompt framework and links to the Prompt Pack; the other teaches a 30/60/90-day review cycle and links to the Success Blueprint. Both include SEO metadata, current keyword evidence, thumbnail direction, production checks and an explicit disclosure hold. There are **no publication timestamps** and no scheduling/publication flags.
+- `scripts/validate-promotional-short-plan.mjs`, `test/promotional-short-plan.test.mjs`, `test/product-promotion-gate.test.mjs`, and `tests/check-content.test.mjs` enforce the maximum two Shorts per preparation week, SonicVhibez-only destination, Johannesburg timezone, 50–60-second target, exact product registry match, verified seller evidence, unresolved owner gates, SEO evidence, disclosure hold and absence of scheduled/published timestamps.
+- `package.json` exposes `npm run validate:promotional-shorts`; `.github/workflows/validate-automation.yml` runs it in CI and watches the plan file. This validates a draft plan only; it is not a publication schedule or production-readiness pass.
+
+## Exact-SHA CI for `eeaef86f76a46229a5994133c6a11b87e8c16164`
+
+- [x] Content-quality suite [42191655705](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42191655705): **595/595 Node tests passed, 0 failures, 0 skips**.
+- [x] Chromium dashboard E2E [42191655570](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42191655570): **26/26 passed**.
+- [x] Candidate-draft validation [42191655987](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42191655987): **PASS**; local draft-only validation, no provider write.
+- [x] Non-destructive branch inventory [42191655833](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42191655833): **PASS**.
+- [x] Isolated main/candidate baseline [42191655618](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42191655618): **PASS**.
+- [ ] Automation/security and weekly-plan validator [42191655634](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42191655634): **IN PROGRESS** at checkpoint time; the new `validate:promotional-shorts` step is still pending on this exact SHA. The previous exact candidate `64a049e6a87fafff0d0c56e5a8b5791102de0bdf` passed the same weekly-plan validator and its full 117/117 Node test-file run.
+- [ ] Additional syntax/schedule validation [42191655563](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42191655563) and lockfile verification [42191649597](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42191649597): **IN PROGRESS** at checkpoint time.
+- [ ] Production readiness [42191655698](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42191655698): **HOLD — 27 blockers**, intentionally fail-closed.
+- [ ] Validate-and-propose [42191655629](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42191655629): regression suite passed **595/595, zero skips**, then the read-only production-readiness gate exited 2 with **27 blockers**. No queue proposal was published and no provider write occurred. This is a readiness hold, not a test-suite failure.
+
+## Live destination, assets and publication-spacing check
+
+- Metricool still exposes only brand `7545638`, labelled **Nature Frontiers**. Its YouTube field matches the vidIQ channel record `SonicVibes` / `@sonicvhibez` / `UCSlkuPfHH78oGC1o418HV4w`, but the same Metricool brand also contains Nature Frontiers Facebook, Instagram, TikTok and Pinterest identities. There is no separate SonicVhibez/Sonic Fire YouTube-only brand to select safely.
+- Metricool returned **7 future Nature Frontiers records** from 7–28 November 2026. All seven have `draft=false` and `autoPublish=true`. Four creator-product promotions are scheduled for 11, 14, 18 and 25 November at 10:00 Africa/Johannesburg; they are Facebook-only except 25 November, which is also Instagram. The 18 November Blueprint post uses a generic storefront URL instead of the supplied direct product URL. These existing records were **not changed**.
+- vidIQ channel history returned one public upload, zero private, zero unlisted and zero scheduled records; pagination was complete. The last actual publication is **22 October 2026 17:05:56 Africa/Johannesburg**. The 72-hour threshold passed **25 October 2026 17:05:56**. At **6 November 2026 10:46:19**, the elapsed gap is **14 days 17 hours 40 minutes 23 seconds (353 hours 40 minutes 23 seconds)**. No next publication timestamp was proposed. Historical spacing is satisfied, but do not schedule while Metricool lacks a separately selectable SonicVhibez YouTube destination.
+- HeyGen read-only library inspection returned three completed videos of **20.4, 22.3 and 24.32 seconds**, plus one failed render. None is a verified final ~55-second asset for these new drafts. No generation, quota use or paid action occurred.
+- The current week already has **2/2** Short drafts. The two new drafts are held for the next preparation week, 9–15 November; no third item was added to the current week. No new MP4, final approved thumbnail, rights-cleared asset set or human playback review exists.
+- All three exact Selar listings currently identify Click 47. The Vault page contains Nature Frontiers brand wording. Affiliate/paid/uncompensated relationship and SonicVhibez cross-brand authorization remain unverified; descriptions therefore retain a disclosure hold.
+- Public/unattended publishing remains disabled. Safari remains inactive. No upload, publication, live schedule, account reconnection, spend or existing-post mutation occurred. GitHub scheduled workflows execute from `main`; PR-branch CI is not production automation.
+
+## Remaining gates
+
+Owner-controlled: SonicVhibez-only Metricool destination mapping; confirmation of SonicVhibez promotion authorization; affiliate/paid/no-compensation classification and approved disclosure; genuine rights-cleared footage, narration and music; real render manifests and final MP4/thumbnail; human factual/compliance playback review; secure OAuth identity and per-operation private-upload authorization; and an owner-approved feasible cadence.
+
+Owner-independent acceptance remains open: exhaustive DASH-001 dashboard journeys, full API-001 route acceptance, SCHED-001 recovery drills, STATE-001 backup/restore failure injection, DEPLOY-001 clean install/upgrade/rollback, and GIT-002 semantic review of the 2,837-commit divergence. Do not infer readiness from passing CI.
+
+---
+
 # Latest code/test checkpoint — 5 November 2026
 
 **Exact application and test candidate:** `f42c8a0eeb0ca63a9d5212888f811aeee863303b`  
