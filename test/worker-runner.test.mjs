@@ -918,3 +918,31 @@ test("upload reconciliation remains blocked when the dashboard cannot prove priv
   assert.equal(report.verified, false);
   assert.equal(report.quarantineReleased, false);
 });
+
+test("worker refuses non-canonical quarantine timestamps before contacting the dispatch API", () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-invalid-quarantine-time-"));
+  const statePath = path.join(directory, "worker-backoff.json");
+  fs.writeFileSync(statePath, JSON.stringify({
+    schemaVersion: 1,
+    workerId,
+    updatedAt: "2026-11-05T18:00:00.000Z",
+    cooldowns: {},
+    uncertainDispatches: {
+      "job-invalid-quarantine-time": {
+        code: "WORKER_DISPATCH_OUTCOME_UNCERTAIN",
+        recordedAt: "2026-02-30T18:00:00.000Z"
+      }
+    }
+  }), { mode: 0o600 });
+  const before = fs.readFileSync(statePath);
+  try {
+    assert.throws(
+      () => inspectWorkerState({ workerId, cooldownStatePath: statePath }),
+      /invalid quarantine record; refusing to redispatch/
+    );
+    assert.deepEqual(fs.readFileSync(statePath), before,
+      "invalid quarantine evidence must be preserved for operator inspection");
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
