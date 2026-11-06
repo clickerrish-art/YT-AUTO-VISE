@@ -14,6 +14,7 @@ import { prepareSafeRenderOutput, resolveRegularFileNoSymlinks } from "./safe-me
 import { createDeterministicEditPlan, getAudioProfile } from "./content-quality-gates.mjs";
 
 const [manifestArg = "content/long-form-render-manifest.json", outputArg = "media/long-form-next.mp4"] = process.argv.slice(2);
+const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 let manifestPath;
 try { manifestPath = resolveRegularFileNoSymlinks(manifestArg, process.cwd(), "Long-form render manifest"); }
 catch {
@@ -60,7 +61,7 @@ if (errors.length) {
   errors.forEach(e => console.error("- " + e));
   process.exit(1);
 }
-const qualityValidator = spawnSync(process.execPath, [path.join(path.dirname(fileURLToPath(import.meta.url)), "validate-content-quality.mjs"), resolvedInputs.qualityEvidencePath, "long_form", resolvedInputs.footagePath, resolvedInputs.narrationPath], { encoding: "utf8", timeout: 30_000 });
+const qualityValidator = spawnSync(process.execPath, [path.join(scriptDir, "validate-content-quality.mjs"), resolvedInputs.qualityEvidencePath, "long_form", resolvedInputs.footagePath, resolvedInputs.narrationPath], { encoding: "utf8", timeout: 30_000 });
 if (qualityValidator.stdout) process.stdout.write(qualityValidator.stdout);
 if (qualityValidator.stderr) process.stderr.write(qualityValidator.stderr);
 if (qualityValidator.error || qualityValidator.status !== 0) {
@@ -80,12 +81,12 @@ if (duration < 360 || duration > 600) {
   console.error("BLOCKED: narration must be 6–10 minutes; found " + duration.toFixed(2) + " seconds.");
   process.exit(1);
 }
-const captionCheck = spawnSync(process.execPath, ["scripts/check-captions.mjs", captions], {encoding:"utf8"});
+const captionCheck = spawnSync(process.execPath, [path.join(scriptDir, "check-captions.mjs"), captions], {encoding:"utf8"});
 if (captionCheck.status !== 0) {
   process.stderr.write(captionCheck.stderr || captionCheck.stdout || "BLOCKED: captions failed validation.\n");
   process.exit(1);
 }
-const captionSyncCheck = spawnSync(process.execPath, ["scripts/validate-caption-sync.mjs", captions, String(duration)], { encoding: "utf8" });
+const captionSyncCheck = spawnSync(process.execPath, [path.join(scriptDir, "validate-caption-sync.mjs"), captions, String(duration)], { encoding: "utf8" });
 if (captionSyncCheck.stdout) process.stdout.write(captionSyncCheck.stdout);
 if (captionSyncCheck.stderr) process.stderr.write(captionSyncCheck.stderr);
 if (captionSyncCheck.error || captionSyncCheck.status !== 0) {
@@ -168,7 +169,7 @@ if (rendered.error || rendered.status !== 0) {
 
 // A successful FFmpeg exit is not proof that the file is complete or decodable.
 // Run the full export gate before emitting any success message.
-const validatorPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "validate-long-form-export.mjs");
+const validatorPath = path.join(scriptDir, "validate-long-form-export.mjs");
 const validation = spawnSync(process.execPath, [validatorPath, output], {
   encoding: "utf8",
   timeout: 240_000
@@ -179,7 +180,7 @@ if (validation.error || validation.status !== 0) {
   console.error("BLOCKED: rendered output failed technical export validation; it must not be marked successful.");
   process.exit(validation.error?.code === "ETIMEDOUT" ? 124 : 1);
 }
-const audioValidatorPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "validate-rendered-audio.mjs");
+const audioValidatorPath = path.join(scriptDir, "validate-rendered-audio.mjs");
 const audioValidation = spawnSync(process.execPath, [audioValidatorPath, output, qualityEvidence.audioProfile], {
   encoding: "utf8",
   timeout: 120_000
