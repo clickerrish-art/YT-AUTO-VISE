@@ -75,7 +75,11 @@ export function validatePromotionalShortPlan(plan, products) {
       if (product?.status === "candidate") {
         if (item?.status !== "DRAFT_ONLY") errors.push(`${label}: candidate products may appear only in DRAFT_ONLY content`);
         const gate = product.promotionGate ?? {};
-        if (gate.seller?.status !== "UNVERIFIED") errors.push(`${label}: candidate seller evidence must remain UNVERIFIED`);
+        if (gate.seller?.status !== "VERIFIED") errors.push(`${label}: candidate seller evidence must be VERIFIED from its exact Selar URL`);
+        if (gate.seller?.name !== "Click 47") errors.push(`${label}: candidate seller name must match the verified Selar listing`);
+        if (gate.seller?.sourceUrl !== product.url) errors.push(`${label}: candidate seller evidence URL must match the exact product URL`);
+        if (!isValidZonedIsoTimestamp(gate.seller?.verifiedAt)) errors.push(`${label}: candidate seller verification needs a valid timezone-qualified timestamp`);
+        if (typeof gate.seller?.evidenceReference !== "string" || !gate.seller.evidenceReference.trim()) errors.push(`${label}: candidate seller verification needs an evidence reference`);
         if (gate.brandAuthorization?.status !== "OWNER_CONFIRMATION_REQUIRED") errors.push(`${label}: candidate SonicVhibez brand authorization must remain owner-controlled`);
         if (gate.compensation?.status !== "UNVERIFIED") errors.push(`${label}: candidate compensation status must remain UNVERIFIED`);
         if (gate.disclosure?.status !== "UNVERIFIED") errors.push(`${label}: candidate disclosure status must remain UNVERIFIED`);

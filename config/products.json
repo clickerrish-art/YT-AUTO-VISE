@@ -10,14 +10,15 @@
           "status": "VERIFIED",
           "name": "Click 47",
           "sourceUrl": "https://selar.com/0u19v8u99l",
-          "verifiedAt": "2026-11-06T08:32:34.408Z",
-          "evidenceReference": "Exact Selar listing page title identifies Click 47 as seller; live read-only page rechecked 2026-11-06."
+          "verifiedAt": "2026-11-06T10:46:19+02:00",
+          "evidenceReference": "Read-only live Selar listing rechecked 2026-11-06; page title and visible seller line identify Click 47."
         },
         "brandAuthorization": {
           "status": "OWNER_CONFIRMATION_REQUIRED",
           "brand": "SonicVhibez",
           "confirmedAt": "",
-          "approvalReference": ""
+          "approvalReference": "",
+          "note": "The listing body uses Nature Frontiers wording; explicit owner confirmation is required before cross-brand SonicVhibez promotion."
         },
         "compensation": {
           "status": "UNVERIFIED",
@@ -40,11 +41,11 @@
       "status": "candidate",
       "promotionGate": {
         "seller": {
-          "status": "UNVERIFIED",
-          "name": "",
+          "status": "VERIFIED",
+          "name": "Click 47",
           "sourceUrl": "https://selar.com/539497q11t",
-          "verifiedAt": "",
-          "evidenceReference": ""
+          "verifiedAt": "2026-11-06T10:46:19+02:00",
+          "evidenceReference": "Read-only live Selar listing rechecked 2026-11-06; page title and visible seller line identify Click 47."
         },
         "brandAuthorization": {
           "status": "OWNER_CONFIRMATION_REQUIRED",
@@ -73,11 +74,11 @@
       "status": "candidate",
       "promotionGate": {
         "seller": {
-          "status": "UNVERIFIED",
-          "name": "",
+          "status": "VERIFIED",
+          "name": "Click 47",
           "sourceUrl": "https://selar.com/91j893378q",
-          "verifiedAt": "",
-          "evidenceReference": ""
+          "verifiedAt": "2026-11-06T10:46:19+02:00",
+          "evidenceReference": "Read-only live Selar listing rechecked 2026-11-06; page title and visible seller line identify Click 47."
         },
         "brandAuthorization": {
           "status": "OWNER_CONFIRMATION_REQUIRED",

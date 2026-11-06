@@ -15,6 +15,14 @@ test("next-week creator-education Shorts pass as a draft-only two-item plan", ()
   assert.ok(checkedInPlan.weeks[0].items.every(item => item.targetSeconds === 55));
 });
 
+test("candidate seller verification is required while the other promotion gates remain unresolved", () => {
+  const candidates = clone(products);
+  const candidate = candidates.find(product => product.status === "candidate");
+  assert.ok(candidate);
+  candidate.promotionGate.seller.status = "UNVERIFIED";
+  assert.ok(validatePromotionalShortPlan(checkedInPlan, candidates).some(error => /seller evidence must be VERIFIED/.test(error)));
+});
+
 test("the weekly promotional Short cap rejects a third item", () => {
   const plan = clone(checkedInPlan);
   plan.weeks[0].items.push(clone(plan.weeks[0].items[0]));

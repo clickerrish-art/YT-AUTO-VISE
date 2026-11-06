@@ -105,3 +105,20 @@ test("Short 001 keeps the required title format and an explicit disclosure hold"
   assert.match(brief, /DISCLOSURE HOLD/i);
   assert.match(brief, /never Nature Frontiers/i);
 });
+
+
+test("new supplied Selar products have verified sellers but remain blocked from SonicVhibez promotion", () => {
+  const config = JSON.parse(fs.readFileSync("config/products.json", "utf8"));
+  const candidates = config.products.filter(product => product.status === "candidate");
+  assert.equal(candidates.length, 2);
+  for (const product of candidates) {
+    assert.equal(product.promotionGate.seller.status, "VERIFIED");
+    assert.equal(product.promotionGate.seller.name, "Click 47");
+    const errors = validateProductPromotionGate(product, undefined, { requireMetadataDisclosure: false });
+    assert.ok(!errors.some(error => /seller details must be reverified/i.test(error)));
+    assert.ok(errors.some(error => /product must remain approved/i.test(error)));
+    assert.ok(errors.some(error => /brand authorization must be owner-confirmed/i.test(error)));
+    assert.ok(errors.some(error => /compensation relationship must be verified/i.test(error)));
+    assert.ok(errors.some(error => /viewer-facing disclosure must be owner-approved/i.test(error)));
+  }
+});

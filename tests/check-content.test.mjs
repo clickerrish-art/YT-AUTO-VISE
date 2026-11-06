@@ -14,7 +14,10 @@ test("only the owner-provided vault URL is approved; other supplied links remain
     "https://selar.com/539497q11t",
     "https://selar.com/91j893378q"
   ].sort());
-  assert.ok(candidates.every(product => product.promotionGate.seller.status === "UNVERIFIED"));
+  assert.ok(candidates.every(product => product.promotionGate.seller.status === "VERIFIED"));
+  assert.ok(candidates.every(product => product.promotionGate.seller.name === "Click 47"));
+  assert.ok(candidates.every(product => product.promotionGate.seller.sourceUrl === product.url));
+  assert.ok(candidates.every(product => product.promotionGate.seller.evidenceReference.includes("2026-11-06")));
   assert.ok(candidates.every(product => product.promotionGate.brandAuthorization.status === "OWNER_CONFIRMATION_REQUIRED"));
   assert.ok(candidates.every(product => product.promotionGate.compensation.status === "UNVERIFIED"));
   assert.ok(candidates.every(product => product.promotionGate.disclosure.status === "UNVERIFIED"));
