@@ -946,3 +946,70 @@ test("worker refuses non-canonical quarantine timestamps before contacting the d
     fs.rmSync(directory, { recursive: true, force: true });
   }
 });
+
+
+test("worker retains its process lock when an uncertain dispatch quarantine cannot be persisted", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-uncertain-persist-failure-"));
+  const statePath = path.join(directory, "worker-backoff.json");
+  const lockPath = statePath + ".process.lock";
+  const requests = [];
+  const errors = [];
+  const fetchImpl = async (url, options = {}) => {
+    const method = options.method ?? "GET";
+    requests.push(method);
+    if (method === "GET") {
+      // Turn the absent state-file path into a directory after startup. The
+      // ambiguous POST can then be received, but its quarantine write fails.
+      fs.mkdirSync(statePath);
+      return new Response(JSON.stringify({
+        jobs: [{ id: "job-uncertain-persist-failure", state: "QUEUED" }],
+        queuedCount: 1,
+        publishingEnabled: false
+      }), { status: 200, headers: { "content-type": "application/json" } });
+    }
+    return new Response(JSON.stringify({ error: "accepted but response is ambiguous" }), {
+      status: 500,
+      headers: { "content-type": "application/json" }
+    });
+  };
+
+  try {
+    await assert.rejects(
+      runWorker({
+        baseUrl: "http://127.0.0.1:8787",
+        token,
+        workerId,
+        once: true,
+        pollIntervalMs: 1_000,
+        cooldownStatePath: statePath,
+        fetchImpl,
+        onError: error => errors.push(error)
+      }),
+      error => error?.code === "WORKER_BACKOFF_PERSISTENCE_FAILED" &&
+        error.retryable === false &&
+        /process lock retained/.test(error.message)
+    );
+    assert.deepEqual(requests, ["GET", "POST"]);
+    assert.equal(errors.length, 1);
+    assert.equal(errors[0].code, "WORKER_BACKOFF_PERSISTENCE_FAILED");
+    assert.equal(fs.existsSync(lockPath), true,
+      "the process lock must remain as a durable stop signal when uncertain dispatch quarantine cannot be saved");
+
+    await assert.rejects(
+      runWorker({
+        baseUrl: "http://127.0.0.1:8787",
+        token,
+        workerId,
+        once: true,
+        pollIntervalMs: 1_000,
+        cooldownStatePath: statePath,
+        fetchImpl
+      }),
+      /already locked/
+    );
+    assert.deepEqual(requests, ["GET", "POST"],
+      "a restart must be blocked before it can poll or redispatch the ambiguous job");
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
