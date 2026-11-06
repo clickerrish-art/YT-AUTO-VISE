@@ -37,6 +37,7 @@ permissions:
 jobs:
   validate-and-propose:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
         with:
@@ -58,8 +59,12 @@ jobs:
           node --check scripts/upload-private.mjs
       - name: Install FFmpeg for media integration tests
         run: |
-          sudo apt-get update
-          sudo apt-get install --yes ffmpeg
+          if command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1; then
+            echo "FFmpeg and FFprobe are already available; skipping package installation."
+          else
+            sudo apt-get update
+            sudo apt-get install --yes ffmpeg
+          fi
           ffmpeg -version
           ffprobe -version
       - name: Run repository regression tests
