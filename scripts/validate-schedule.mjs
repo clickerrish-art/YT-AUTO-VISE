@@ -12,7 +12,7 @@ if (plan.channel !== "SonicVhibez") errors.push("schedule channel must be SonicV
 if (plan.timezone !== "Africa/Johannesburg") errors.push("schedule timezone must be Africa/Johannesburg");
 if (plan.publishingEnabled !== false || queue.publishingEnabled !== false || plan.publicationCycle?.publicationEnabled !== false) errors.push("publishing must remain disabled in schedule, cycle policy and queue");
 const minSpacing = plan.minimumPublicationSpacingHours;
-if (!Number.isFinite(minSpacing) || minSpacing <= 0 || minSpacing > 8760) errors.push("minimumPublicationSpacingHours must be a finite positive number no greater than 8760 hours");
+if (!Number.isFinite(minSpacing) || minSpacing < 72 || minSpacing > 8760) errors.push("minimumPublicationSpacingHours must be at least 72 elapsed hours and no greater than 8760 hours");
 if (plan.publicationCycle?.minimumHoursBetweenConsecutivePublications !== minSpacing) errors.push("publicationCycle minimum spacing must match minimumPublicationSpacingHours");
 if (plan.spacingPolicy?.minimumHoursBetweenPosts !== minSpacing) errors.push("spacingPolicy minimumHoursBetweenPosts must match minimumPublicationSpacingHours");
 if (JSON.stringify(plan.publicationCycle?.formats) !== JSON.stringify(ROLLING_PUBLICATION_FORMATS)) errors.push("publicationCycle formats must be long_form, long_form, short in that order");
@@ -23,7 +23,7 @@ if ("targetCadence" in plan || "requestedTargetCadence" in plan || "interimDraft
 const requestedCadence = plan.requestedWeeklyCadence;
 if (requestedCadence?.longFormPerWeek !== 2 || requestedCadence?.shortsPerWeek !== 1 || requestedCadence?.totalPublicationsPerWeek !== 3 || requestedCadence?.status !== "CONFLICTS_WITH_72_HOUR_MINIMUM") errors.push("requestedWeeklyCadence must explicitly record the requested 2 long-form + 1 Short weekly target and its 72-hour conflict");
 const cadenceDecision = plan.cadenceDecision;
-const supportedCadenceModes = ["ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET", "WEEKLY_TARGET_WITH_SHORTER_SPACING", "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"];
+const supportedCadenceModes = ["ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET", "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"];
 if (!cadenceDecision || !["OWNER_DECISION_REQUIRED", "OWNER_APPROVED"].includes(cadenceDecision.status) || typeof cadenceDecision.ownerApproved !== "boolean") errors.push("cadenceDecision must explicitly record owner decision status");
 if (cadenceDecision?.status === "OWNER_APPROVED" && cadenceDecision.ownerApproved !== true) errors.push("cadenceDecision OWNER_APPROVED status requires ownerApproved=true");
 if (cadenceDecision?.ownerApproved === true || cadenceDecision?.status === "OWNER_APPROVED") {
@@ -32,7 +32,6 @@ if (cadenceDecision?.ownerApproved === true || cadenceDecision?.status === "OWNE
  if (!isValidZonedIsoTimestamp(cadenceDecision.approvedAt)) errors.push("approved cadence decision requires approvedAt as a valid ISO timestamp with explicit timezone");
  if (typeof cadenceDecision.approvalReference !== "string" || !cadenceDecision.approvalReference.trim()) errors.push("approved cadence decision requires a non-empty approvalReference");
  if (cadenceDecision.approvedMode === "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET" && minSpacing < 72) errors.push("rolling-cycle mode must retain at least 72 hours between publications");
- if (cadenceDecision.approvedMode === "WEEKLY_TARGET_WITH_SHORTER_SPACING" && minSpacing > 56) errors.push("weekly target mode requires a minimum gap no greater than 56 hours for three recurring publications per 168-hour cycle");
  if (cadenceDecision.approvedMode === "OTHER_OWNER_DEFINED_FEASIBLE_POLICY") {
   const custom = cadenceDecision.ownerDefinedPolicy;
   if (!custom || typeof custom.description !== "string" || !custom.description.trim() || !Number.isFinite(custom.publicationsPerCycle) || custom.publicationsPerCycle < 1 || !Number.isFinite(custom.cycleHours) || custom.cycleHours <= 0 || custom.publicationsPerCycle * minSpacing > custom.cycleHours) errors.push("custom cadence mode requires a documented policy whose publication count times minimum spacing fits within its cycle duration");
