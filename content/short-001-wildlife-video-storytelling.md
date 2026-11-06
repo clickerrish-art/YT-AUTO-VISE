@@ -9,7 +9,6 @@
 **Product URL:** https://selar.com/0u19v8u99l
 
 ## YouTube title
-
 Wildlife Documentary Storytelling: 3 Shots, One Clear Story
 
 ## Narration draft (aligned to the supplied 55-second caption timing; record and verify final audio before rendering)
