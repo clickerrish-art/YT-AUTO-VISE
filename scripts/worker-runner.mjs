@@ -455,6 +455,7 @@ export async function runWorker({
   const statePath = cooldownStatePath(workerId, configuredCooldownStatePath, stateDirectory);
   const lockPath = statePath + ".process.lock";
   let lockFd;
+  let preserveProcessLock = false;
   try {
     lockFd = fs.openSync(lockPath, "wx", 0o600);
     fs.writeFileSync(lockFd, JSON.stringify({ pid: process.pid, workerId, startedAt: new Date().toISOString() }));
@@ -485,10 +486,24 @@ export async function runWorker({
         throw error;
       }
     };
+    const persistUncertainDispatches = () => {
+      try {
+        persist();
+      } catch (cause) {
+        // An ambiguous POST may already have been accepted remotely. If its
+        // quarantine cannot be made durable, retain the process lock so a
+        // restart cannot silently redispatch the same job from empty state.
+        preserveProcessLock = true;
+        const error = new Error("Worker uncertain-dispatch quarantine could not be persisted; process lock retained to prevent a potentially duplicate redispatch", { cause });
+        error.code = "WORKER_BACKOFF_PERSISTENCE_FAILED";
+        error.retryable = false;
+        throw error;
+      }
+    };
     do {
       let nextWaitMs = pollIntervalMs;
       try {
-        const result = await runWorkerCycle({ baseUrl, token, workerId, fetchImpl, cooldowns, uncertainDispatches, onCooldownsChanged: persist, onUncertainDispatchesChanged: persist, shouldStop });
+        const result = await runWorkerCycle({ baseUrl, token, workerId, fetchImpl, cooldowns, uncertainDispatches, onCooldownsChanged: persist, onUncertainDispatchesChanged: persistUncertainDispatches, shouldStop });
         onCycle(result);
       } catch (error) {
         onError(error);
@@ -502,7 +517,9 @@ export async function runWorker({
     } while (!shouldStop());
   } finally {
     try { fs.closeSync(lockFd); } catch {}
-    try { fs.unlinkSync(lockPath); } catch {}
+    if (!preserveProcessLock) {
+      try { fs.unlinkSync(lockPath); } catch {}
+    }
   }
 }
 
