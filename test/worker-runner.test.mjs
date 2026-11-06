@@ -1013,3 +1013,35 @@ test("worker retains its process lock when an uncertain dispatch quarantine cann
     fs.rmSync(directory, { recursive: true, force: true });
   }
 });
+
+test("worker flushes its exclusive process lock before polling and removes it after a clean cycle", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-lock-fsync-"));
+  const statePath = path.join(directory, "worker-backoff.json");
+  const lockPath = statePath + ".process.lock";
+  const originalFsync = fs.fsyncSync;
+  let syncCalls = 0;
+  const fetchImpl = async () => new Response(JSON.stringify({ jobs: [], queuedCount: 0, publishingEnabled: false }), {
+    status: 200, headers: { "content-type": "application/json" }
+  });
+  try {
+    fs.fsyncSync = function (...args) {
+      syncCalls += 1;
+      return originalFsync.apply(this, args);
+    };
+    await runWorker({
+      baseUrl: "http://127.0.0.1:8787", token, workerId, once: true,
+      cooldownStatePath: statePath, fetchImpl,
+      onCycle: () => {
+        assert.equal(fs.existsSync(lockPath), true, "exclusive process lock must exist throughout dispatch polling");
+        const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+        assert.equal(lock.workerId, workerId);
+        assert.ok(Number.isInteger(lock.pid));
+      }
+    });
+    assert.ok(syncCalls >= 3, "lock file and containing directory must be flushed, in addition to atomic state persistence");
+    assert.equal(fs.existsSync(lockPath), false, "a cleanly stopped worker must release its process lock");
+  } finally {
+    fs.fsyncSync = originalFsync;
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
