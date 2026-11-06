@@ -42,12 +42,14 @@ jobs:
             sudo apt-get install -y --no-install-recommends ffmpeg
           fi
           ffprobe -version
-      - name: Validate narration extraction
-        run: python scripts/generate-narration.py --short both --extract-only
+      - name: Run narration extraction and caption unit tests
+        run: |
+          python -m unittest discover -s tests -p 'test_generate_narration.py' -v
+          python scripts/generate-narration.py --short both --extract-only
       - name: Generate audio and word-boundary captions
         env:
           SELECTED_SHORT: ${{ github.event.inputs.short || 'both' }}
-        run: python scripts/generate-narration.py --short "$SELECTED_SHORT" --voice en-US-GuyNeural --rate=-10%
+        run: python scripts/generate-narration.py --short "$SELECTED_SHORT" --voice en-US-GuyNeural --rate=-5%
       - name: Validate SRT structure and safety metadata
         run: |
           python - <<'PY'
