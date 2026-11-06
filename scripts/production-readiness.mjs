@@ -51,7 +51,7 @@ if (!exists(schedulePath)) {
     if (schedule.timezone !== "Africa/Johannesburg") blockers.push("Schedule timezone must be Africa/Johannesburg.");
     minimumSpacingHours = schedule.minimumPublicationSpacingHours;
     cycleFormats = schedule.publicationCycle?.formats ?? [];
-    if (!Number.isFinite(minimumSpacingHours) || minimumSpacingHours <= 0 || minimumSpacingHours > 8760) blockers.push("Schedule minimumPublicationSpacingHours must be a finite positive value no greater than 8760 hours.");
+    if (!Number.isFinite(minimumSpacingHours) || minimumSpacingHours < 72 || minimumSpacingHours > 8760) blockers.push("Schedule minimumPublicationSpacingHours must be at least 72 elapsed hours and no greater than 8760 hours.");
     if (schedule.spacingPolicy?.minimumHoursBetweenPosts !== minimumSpacingHours) blockers.push("Schedule spacingPolicy must match minimumPublicationSpacingHours.");
     if (JSON.stringify(schedule.publicationCycle?.formats) !== JSON.stringify(["long_form", "long_form", "short"])) blockers.push("Publication cycle must be long-form, long-form, Short.");
     if (schedule.publicationCycle?.minimumHoursBetweenConsecutivePublications !== minimumSpacingHours || schedule.publicationCycle?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0) || schedule.spacingPolicy?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0)) blockers.push("Publication cycle and spacingPolicy must use the configured minimum gap and its derived cycle duration.");
