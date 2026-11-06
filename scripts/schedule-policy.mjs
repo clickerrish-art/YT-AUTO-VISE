@@ -446,7 +446,7 @@ export function validateRollingPublicationCycle(items, {
     if (!isValidZonedIsoTimestamp(policy.approvedAt)) errors.push("owner-approved policy must include a calendar-valid ISO approval timestamp with an explicit timezone");
     if (policy.timeZone !== timeZone) errors.push("owner-approved policy timezone must match the validated schedule timezone");
     if (policy.minSpacingHours !== minSpacingHours) errors.push("owner-approved policy minimum spacing must match the validated minimum");
-    if (policy.mode !== "rolling") errors.push("owner-approved policy mode must be rolling");
+    if (!["rolling", "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET", "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"].includes(policy.mode)) errors.push("owner-approved policy mode must be a supported rolling cadence mode");
     if (policy.mode === "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET") {
       if (Object.hasOwn(policy, "weeklyPublicationTarget")) {
         errors.push("rolling-cycle-without-weekly-target approval must omit weeklyPublicationTarget");
