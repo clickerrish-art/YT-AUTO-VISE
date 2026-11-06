@@ -252,7 +252,7 @@ test("complete history fetch rejects missing IDs, inconsistent totals and incomp
         items: [{ contentDetails: { videoId: "video-a" } }]
       } }) },
       videos: { list: async () => ({ data: { items: [] } }) }
-    }, channel, reconciliationPath, channelId), /did not return every upload-playlist video/);
+    }, channel, reconciliationPath, channelId), /video details omitted one or more requested playlist video IDs/);
 
     await assert.rejects(fetchCompleteYoutubeHistorySnapshot({
       playlistItems: { list: async () => ({ data: {
