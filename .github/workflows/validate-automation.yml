@@ -109,7 +109,7 @@ jobs:
           assert cadence.get("formats") == ["long_form", "long_form", "short"]
           spacing = plan.get("minimumPublicationSpacingHours")
           cycle_hours = spacing * len(plan.get("publicationCycle", {}).get("formats", [])) if isinstance(spacing, (int, float)) else None
-          assert isinstance(spacing, (int, float)) and 0 < spacing <= 8760, "Configured publication spacing must be finite and positive"
+          assert isinstance(spacing, (int, float)) and 72 <= spacing <= 8760, "Configured publication spacing must be at least 72 elapsed hours and no greater than 8760 hours"
           assert plan.get("publicationCycle", {}).get("minimumHoursBetweenConsecutivePublications") == spacing
           assert plan.get("publicationCycle", {}).get("minimumCycleHours") == cycle_hours
           assert cadence.get("minimumHoursBetweenConsecutivePublications") == spacing
