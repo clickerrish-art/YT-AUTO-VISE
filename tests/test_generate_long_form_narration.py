@@ -42,6 +42,21 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
         self.assertLess(intervals[0][0], intervals[0][1])
         self.assertLessEqual(intervals[0][1], intervals[1][0])
 
+    def test_rejects_out_of_order_tts_word_boundaries(self):
+        boundaries = [
+            {"text": "Later.", "offset": 20_000_000, "duration": 2_000_000},
+            {"text": "Earlier.", "offset": 10_000_000, "duration": 2_000_000},
+        ]
+        with self.assertRaisesRegex(ValueError, "out of order"):
+            MODULE.captions_from_boundaries(boundaries)
+
+    def test_rejects_non_finite_tts_word_boundary_offsets(self):
+        boundaries = [
+            {"text": "Invalid.", "offset": float("nan"), "duration": 2_000_000},
+        ]
+        with self.assertRaisesRegex(ValueError, "finite and non-negative"):
+            MODULE.captions_from_boundaries(boundaries)
+
     def test_clips_overlapping_tts_word_durations_at_next_caption_start(self):
         boundaries = [
             {"text": "First.", "offset": 0, "duration": 20_000_000},
