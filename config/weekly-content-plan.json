@@ -59,14 +59,12 @@
     "status": "CONFLICTS_WITH_72_HOUR_MINIMUM"
   },
   "cadenceDecision": {
-    "status": "OWNER_DECISION_REQUIRED",
-    "ownerApproved": false,
-    "proposedMode": "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
-    "options": [
-      "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
-      "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"
-    ],
-    "explanation": "Three weekly publications require three cyclic gaps averaging 56 hours; the required 72-hour minimum requires at least 216 hours across a complete three-publication cycle. No publication cadence is approved until the owner selects a feasible mode."
+    "status": "OWNER_APPROVED",
+    "ownerApproved": true,
+    "approvedMode": "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
+    "approvedAt": "2026-11-07T00:57:33+02:00",
+    "approvalReference": "User approval in ChatGPT conversation on 2026-11-07 (Africa/Johannesburg)",
+    "explanation": "Owner approved the rolling long_form → long_form → short sequence with at least 72 elapsed hours between consecutive actual publications and no weekly publication target. Tuesday/Saturday remain draft-preparation triggers only. Public/unattended publishing remains disabled."
   },
   "spacingPolicy": {
     "minimumHoursBetweenPosts": 72,
