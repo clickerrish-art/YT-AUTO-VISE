@@ -64,8 +64,24 @@ jobs:
           ffprobe -version
       - name: Run repository regression tests
         run: node --test
-      - name: Report production blockers without publishing
-        run: node scripts/production-readiness.mjs
+      - name: Record production readiness HOLD without stopping safe queue preparation
+        run: |
+          if node scripts/production-readiness.mjs --json > "$RUNNER_TEMP/production-readiness.json"; then
+            echo "Production readiness report: prerequisites are present. This workflow still does not publish."
+          else
+            readiness_status=$?
+            if [ "$readiness_status" -ne 2 ]; then
+              echo "Production readiness command failed unexpectedly with exit code $readiness_status."
+              exit "$readiness_status"
+            fi
+            echo "::warning::Production readiness is HOLD. The structured blocker report is retained with the isolated queue proposal; safe draft preparation may continue."
+            {
+              echo "## Production readiness: HOLD"
+              echo "- The read-only readiness check reported blockers (exit 2)."
+              echo "- This is not a production pass and does not authorize upload, scheduling or publication."
+              echo "- Safe local queue validation and isolated proposal generation continue independently."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Validate existing caption files
         run: node scripts/check-captions.mjs content/short-001-wildlife-video-storytelling.srt content/short-002-plan-wildlife-documentary.srt
       - name: Validate queue and approved product URLs
@@ -83,6 +99,7 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/queue-proposal"
           cp content/queue.json "$RUNNER_TEMP/queue-proposal/queue.json"
+          cp "$RUNNER_TEMP/production-readiness.json" "$RUNNER_TEMP/queue-proposal/production-readiness.json"
       - name: Replenish draft topics in the isolated proposal only
         env:
           QUEUE_PATH: ${{ runner.temp }}/queue-proposal/queue.json
@@ -91,7 +108,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: sonicvhibez-queue-proposal-${{ github.run_id }}
-          path: ${{ runner.temp }}/queue-proposal/queue.json
+          path: ${{ runner.temp }}/queue-proposal/
           if-no-files-found: error
           retention-days: 14
       - name: Report non-mutating workflow boundary
