@@ -277,11 +277,20 @@ const leaseDurationBounds = { min: 5_000, max: 15 * 60_000 };
 const retryDelay = (attemptCount) => Math.min(15 * 60_000, 30_000 * (2 ** Math.max(0, attemptCount - 1)));
 const hashLeaseToken = token => crypto.createHash("sha256").update(token).digest("hex");
 
+function workerLeaseExpiryMs(job) {
+  const value = job?.workerLease?.expiresAt;
+  const timestamp = typeof value === "string" ? Date.parse(value) : NaN;
+  if (!Number.isFinite(timestamp) || new Date(timestamp).toISOString() !== value) {
+    throw new Error("Worker lease expiry timestamp is invalid; operator reconciliation is required");
+  }
+  return timestamp;
+}
+
 export function claimWorkerLease(job, workerId, { leaseMs = 60_000, now = Date.now() } = {}) {
   if (!job || !JOB_STATES.includes(job.state)) throw new Error("Existing job has an invalid state");
   if (typeof workerId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(workerId)) throw new Error("workerId must be a safe 2–120 character identifier");
   if (!Number.isInteger(leaseMs) || leaseMs < leaseDurationBounds.min || leaseMs > leaseDurationBounds.max) throw new Error("lease duration must be between 5 seconds and 15 minutes");
-  if (job.workerLease && Date.parse(job.workerLease.expiresAt) > now) throw new Error("Job already has an active worker lease");
+  if (job.workerLease && workerLeaseExpiryMs(job) > now) throw new Error("Job already has an active worker lease");
   let working = job;
   if (working.state === "FAILED" || working.state === "DEAD_LETTER") {
     throw new Error("A failed job requires explicit operator retry authorization before a worker can claim it");
@@ -298,7 +307,7 @@ export function claimWorkerLease(job, workerId, { leaseMs = 60_000, now = Date.n
 
 export function heartbeatWorkerLease(job, leaseToken, { leaseMs = 60_000, now = Date.now() } = {}) {
   if (!job?.workerLease || job.workerLease.tokenHash !== hashLeaseToken(String(leaseToken ?? ""))) throw new Error("Worker lease token does not match");
-  if (Date.parse(job.workerLease.expiresAt) <= now) throw new Error("Worker lease has expired");
+  if (workerLeaseExpiryMs(job) <= now) throw new Error("Worker lease has expired");
   if (!Number.isInteger(leaseMs) || leaseMs < leaseDurationBounds.min || leaseMs > leaseDurationBounds.max) throw new Error("lease duration must be between 5 seconds and 5 minutes");
   const timestamp = new Date(now).toISOString();
   const expiresAt = new Date(now + leaseMs).toISOString();
@@ -340,7 +349,8 @@ export function completeWorkerLease(job, leaseToken, nextState, patch = {}, now 
 }
 
 export function expireWorkerLease(job, now = Date.now()) {
-  if (!job?.workerLease || Date.parse(job.workerLease.expiresAt) > now) return { job, expired: false };
+  if (!job?.workerLease) return { job, expired: false };
+  if (workerLeaseExpiryMs(job) > now) return { job, expired: false };
   const previous = job.state;
   const timestamp = new Date(now).toISOString();
   let updated;
