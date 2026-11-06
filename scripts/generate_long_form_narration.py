@@ -94,16 +94,27 @@ def captions_from_boundaries(boundaries):
             group = []
     if group:
         cues.append(group)
+    # Distinct caption groups can begin less than 50 ms apart. They cannot
+    # both have a positive-duration, non-overlapping SRT interval, so merge
+    # those groups before assigning cue times (readability limits are advisory
+    # in this rare TTS-boundary edge case).
+    normalized_cues = []
+    for cue in cues:
+        if normalized_cues and cue[0]["start"] < normalized_cues[-1][0]["start"] + 0.05:
+            normalized_cues[-1].extend(cue)
+        else:
+            normalized_cues.append(cue)
+
     lines = []
-    for index, cue in enumerate(cues, 1):
+    for index, cue in enumerate(normalized_cues, 1):
         start = cue[0]["start"]
         end = max(start + 0.05, cue[-1]["end"])
-        # TTS word-boundary durations can overlap slightly across adjacent words.
-        # End each cue at the next cue's start so SRT blocks never overlap.
-        if index < len(cues):
-            next_start = cues[index][0]["start"]
-            if end > next_start:
-                end = max(start + 0.05, next_start)
+        # TTS word-boundary durations can overlap across adjacent words.
+        # Clip the earlier cue at the next start; the merge above guarantees
+        # that this still leaves the minimum 50 ms cue duration.
+        if index < len(normalized_cues):
+            next_start = normalized_cues[index][0]["start"]
+            end = min(end, next_start)
         lines.extend([str(index), f"{srt_time(start)} --> {srt_time(end)}", " ".join(x["text"] for x in cue), ""])
     return "\n".join(lines).rstrip() + "\n"
 
