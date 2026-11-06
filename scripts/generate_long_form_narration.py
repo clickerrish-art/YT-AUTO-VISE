@@ -85,6 +85,8 @@ def captions_from_boundaries(boundaries):
         word = str(item.get("text", "")).strip()
         if not word:
             continue
+        if len(word) > CAPTION_MAX_CHARS:
+            raise ValueError("A TTS word exceeds the maximum caption character count; manual caption editing is required")
         offset = float(item.get("offset", 0))
         duration = float(item.get("duration", 0))
         if not math.isfinite(offset) or not math.isfinite(duration) or offset < 0 or duration < 0:
@@ -136,6 +138,8 @@ def captions_from_text_estimate(text: str, duration: float) -> str:
         raise ValueError("Cannot generate estimated captions from empty narration text")
     groups, group = [], []
     for word in words:
+        if len(word) > CAPTION_MAX_CHARS:
+            raise ValueError("A narration word exceeds the maximum caption character count; manual caption editing is required")
         candidate = " ".join(group + [word])
         if group and (len(group) >= CAPTION_MAX_WORDS or len(candidate) > CAPTION_MAX_CHARS):
             groups.append(group)
