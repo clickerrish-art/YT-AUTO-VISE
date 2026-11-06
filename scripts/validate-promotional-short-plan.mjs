@@ -8,7 +8,7 @@ const WORD_MIN = 90;
 const WORD_MAX = 135;
 
 function isRealMonday(value) {
-  if (typeof value !== "string" || !/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false;
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const [year, month, day] = value.split("-").map(Number);
   const date = new Date(0);
   date.setUTCFullYear(year, month - 1, day);
@@ -66,14 +66,19 @@ export function validatePromotionalShortPlan(plan, products) {
       if (typeof item?.title !== "string" || !item.title.trim() || item.title.length > 100) {
         errors.push(`${label}: title must be non-empty and at most 100 characters`);
       }
-      const wordCount = typeof item?.script === "string" ? item.script.trim().split(/\\s+/).filter(Boolean).length : 0;
+      const wordCount = typeof item?.script === "string" ? item.script.trim().split(/\s+/).filter(Boolean).length : 0;
       if (wordCount < WORD_MIN || wordCount > WORD_MAX) errors.push(`${label}: script must contain ${WORD_MIN}–${WORD_MAX} words for an approximately 55-second Short`);
 
       const product = productByUrl.get(item?.productUrl);
       if (!product) errors.push(`${label}: productUrl must exactly match a product in config/products.json`);
       else if (!["approved", "candidate"].includes(product.status)) errors.push(`${label}: product must be an approved or explicitly held candidate record`);
-      if (product?.status === "candidate" && item?.status !== "DRAFT_ONLY") {
-        errors.push(`${label}: candidate products may appear only in DRAFT_ONLY content`);
+      if (product?.status === "candidate") {
+        if (item?.status !== "DRAFT_ONLY") errors.push(`${label}: candidate products may appear only in DRAFT_ONLY content`);
+        const gate = product.promotionGate ?? {};
+        if (gate.seller?.status !== "UNVERIFIED") errors.push(`${label}: candidate seller evidence must remain UNVERIFIED`);
+        if (gate.brandAuthorization?.status !== "OWNER_CONFIRMATION_REQUIRED") errors.push(`${label}: candidate SonicVhibez brand authorization must remain owner-controlled`);
+        if (gate.compensation?.status !== "UNVERIFIED") errors.push(`${label}: candidate compensation status must remain UNVERIFIED`);
+        if (gate.disclosure?.status !== "UNVERIFIED") errors.push(`${label}: candidate disclosure status must remain UNVERIFIED`);
       }
       if (typeof item?.productId !== "string" || item.productId !== product?.id) {
         errors.push(`${label}: productId must match the exact product registry record`);
@@ -98,7 +103,7 @@ export function validatePromotionalShortPlan(plan, products) {
         errors.push(`${label}: unresolved promotion relationship must remain on disclosure hold`);
       }
       if (!Array.isArray(item?.keywordPhrases) || item.keywordPhrases.length < 3
-          || !item.keywordPhrases.some(row => row?.phrase?.toLowerCase() === item?.primaryKeyword?.toLowerCase())) {
+          || !item.keywordPhrases.some(row => typeof row?.phrase === "string" && row.phrase.toLowerCase() === item?.primaryKeyword?.toLowerCase())) {
         errors.push(`${label}: keywordPhrases must include the primary phrase and at least two related phrases`);
       }
       const evidence = item?.keywordEvidence;
