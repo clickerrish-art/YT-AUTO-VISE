@@ -9,7 +9,6 @@
 **Product URL:** https://selar.com/0u19v8u99l
 
 ## YouTube title
-
 How to Make a Wildlife Documentary Short: 3 Planning Steps
 
 ## Narration draft (122 words; approximately 54–56 seconds at a measured 130–135 words per minute)
