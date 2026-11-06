@@ -466,17 +466,35 @@ export async function runWorker({
   const lockPath = statePath + ".process.lock";
   let lockFd;
   let preserveProcessLock = false;
+  let preserveStartupLock = false;
   try {
     lockFd = fs.openSync(lockPath, "wx", 0o600);
+    // Once the exclusive lock name exists, retain it on any durability error.
+    // Removing a possibly-not-durable lock could let a restart redispatch an
+    // operation whose remote outcome is already uncertain.
+    preserveStartupLock = true;
     fs.writeFileSync(lockFd, JSON.stringify({ pid: process.pid, workerId, startedAt: new Date().toISOString() }));
+    fs.fsyncSync(lockFd);
+    let lockDirectoryFd;
+    try {
+      lockDirectoryFd = fs.openSync(path.dirname(lockPath), "r");
+      fs.fsyncSync(lockDirectoryFd);
+    } catch (error) {
+      if (!["EINVAL", "ENOTSUP", "EISDIR", "EPERM"].includes(error?.code)) throw error;
+    } finally {
+      if (lockDirectoryFd !== undefined) fs.closeSync(lockDirectoryFd);
+    }
     if (lockPathExists(statePath + ".release.lock")) {
       throw new Error("A quarantine release is in progress or requires operator inspection; worker startup is blocked");
     }
+    preserveStartupLock = false;
   } catch (error) {
     if (lockFd !== undefined) {
       fs.closeSync(lockFd);
-      try { fs.unlinkSync(lockPath); } catch (cleanupError) {
-        if (cleanupError?.code !== "ENOENT") throw cleanupError;
+      if (!preserveStartupLock) {
+        try { fs.unlinkSync(lockPath); } catch (cleanupError) {
+          if (cleanupError?.code !== "ENOENT") throw cleanupError;
+        }
       }
     }
     throw new Error("Worker state is already locked or a quarantine release is in progress; inspect the state locks before continuing", { cause: error });
