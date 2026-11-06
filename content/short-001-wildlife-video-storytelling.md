@@ -8,7 +8,7 @@
 **Voice:** friendly, natural documentary narration  
 **Product URL:** https://selar.com/0u19v8u99l
 
-## SEO title
+## YouTube title
 
 Wildlife Documentary Storytelling: 3 Shots, One Clear Story
 
@@ -79,5 +79,5 @@ Use one genuine, rights-cleared animal image in its actual habitat. Keep the ani
 - [ ] Human playback and compliance review must be recorded against the final media and thumbnail hashes.
 
 **Destination guard:** SonicVhibez only; never Nature Frontiers.  
-**SEO safety:** No SEO score, ranking, reach, sales or income outcome is guaranteed.  
+**SEO safety:** No SEO score, ranking, reach, or sales outcome is guaranteed. No income outcome is guaranteed.  
 **Release state:** HOLD — seller/brand/compensation evidence, genuine media rights, final assets, destination identity and human review remain unverified.
