@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validateRollingPublicationCycle } from "../scripts/schedule-policy.mjs";
+import { evaluateNextPublication, validateRollingPublicationCycle } from "../scripts/schedule-policy.mjs";
 
 const approval = {
   ownerApproved: true,
