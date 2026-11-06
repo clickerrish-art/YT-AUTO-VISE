@@ -13,6 +13,12 @@ const MIN_POLL_INTERVAL_MS = 1_000;
 const MAX_POLL_INTERVAL_MS = 60_000;
 const COOLDOWN_SCHEMA_VERSION = 1;
 
+function isCanonicalIsoTimestamp(value) {
+  if (typeof value !== "string") return false;
+  const timestamp = Date.parse(value);
+  return Number.isFinite(timestamp) && new Date(timestamp).toISOString() === value;
+}
+
 export function parseRetryAfterMs(retryAfter, now = Date.now()) {
   const seconds = retryAfter && /^\d+(?:\.\d+)?$/.test(retryAfter) ? Number(retryAfter) : NaN;
   const dateDelay = retryAfter && !Number.isFinite(seconds) ? Date.parse(retryAfter) - now : NaN;
@@ -74,7 +80,7 @@ function loadCooldowns(statePath, workerId) {
   }
   for (const [jobId, value] of Object.entries(storedUncertain)) {
     if (!jobId || !value || value.code !== "WORKER_DISPATCH_OUTCOME_UNCERTAIN" ||
-        typeof value.recordedAt !== "string" || !Number.isFinite(Date.parse(value.recordedAt))) {
+        !isCanonicalIsoTimestamp(value.recordedAt)) {
       throw new Error("Worker uncertain-dispatch state contains an invalid quarantine record; refusing to redispatch");
     }
     uncertainDispatches.set(jobId, value);
