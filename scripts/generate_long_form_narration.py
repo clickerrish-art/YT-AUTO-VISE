@@ -3,6 +3,7 @@
 This script only creates local draft files. It never uploads or publishes.
 """
 from pathlib import Path
+import math
 import asyncio
 import re
 import sys
@@ -79,12 +80,20 @@ def srt_time(seconds: float) -> str:
 def captions_from_boundaries(boundaries):
     """Group actual TTS word-boundary events into readable draft caption cues."""
     cues, group = [], []
+    previous_start = -1.0
     for item in boundaries:
         word = str(item.get("text", "")).strip()
         if not word:
             continue
-        start = max(0.0, float(item.get("offset", 0)) / 10_000_000)
-        end = max(start + 0.15, (float(item.get("offset", 0)) + float(item.get("duration", 0))) / 10_000_000)
+        offset = float(item.get("offset", 0))
+        duration = float(item.get("duration", 0))
+        if not math.isfinite(offset) or not math.isfinite(duration) or offset < 0 or duration < 0:
+            raise ValueError("TTS word-boundary offsets and durations must be finite and non-negative")
+        start = offset / 10_000_000
+        if start < previous_start:
+            raise ValueError("TTS word-boundary events are out of order; refusing to generate misleading captions")
+        previous_start = start
+        end = max(start + 0.15, (offset + duration) / 10_000_000)
         if group and (len(group) >= CAPTION_MAX_WORDS or len(" ".join(x["text"] for x in group)) + len(word) + 1 > CAPTION_MAX_CHARS):
             cues.append(group)
             group = []
