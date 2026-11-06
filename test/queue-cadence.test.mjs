@@ -71,6 +71,8 @@ test("Saturday narration workflow validates the rolling publication cycle and dr
   const shortWorkflow=fs.readFileSync(".github/workflows/free-narration-artifact.yml","utf8");
   assert.match(shortWorkflow,/config\/weekly-content-plan\.json/);
   assert.match(shortWorkflow,/minimumHoursBetweenConsecutivePublications/);
+  assert.match(shortWorkflow,/72 <= spacing <= 8760/);
+  assert.doesNotMatch(shortWorkflow,/spacing == 72/);
   assert.match(shortWorkflow,/minimumCycleHours/);
   assert.match(shortWorkflow,/publicationRequiresVerifiedHistory/);
   assert.match(shortWorkflow,/draftPreparationFallback/);
