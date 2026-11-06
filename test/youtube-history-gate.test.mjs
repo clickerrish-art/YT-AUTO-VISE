@@ -115,6 +115,14 @@ test("history reconciliation rejects normalized invalid dates and timezone-free 
 test("unresolved or uncertain upload attempts block new uploads", () => {
   assert.equal(assertNoUnresolvedUploadAttempts({ attempts: [{ jobId: "job-1", status: "PRIVATE_UPLOAD_VERIFIED" }] }), true);
   assert.throws(() => assertNoUnresolvedUploadAttempts({ attempts: [{ jobId: "job-2", status: "RECOVERY_REQUIRED" }] }), /unresolved upload attempts/);
+  assert.throws(() => assertNoUnresolvedUploadAttempts({ attempts: [{ jobId: "job-3", status: "REMOTE_ACCEPTED_RECONCILIATION_REQUIRED" }] }), /unresolved upload attempts/);
+  for (const status of ["", "UNKNOWN_STATE", "UPLOADED", null]) {
+    assert.throws(
+      () => assertNoUnresolvedUploadAttempts({ attempts: [{ jobId: "job-unknown", status }] }),
+      /unknown or missing status/
+    );
+  }
+  assert.throws(() => assertNoUnresolvedUploadAttempts({ attempts: [{}] }), /unknown or missing status/);
   assert.throws(() => assertNoUnresolvedUploadAttempts({}), /missing or invalid/);
 });
 
