@@ -4,7 +4,34 @@
       "id": "wildlife-creators-vault",
       "name": "Complete YouTube Wildlife Creator's Vault – Premium Combo PDF",
       "url": "https://selar.com/0u19v8u99l",
-      "status": "approved"
+      "status": "approved",
+      "promotionGate": {
+        "seller": {
+          "status": "RECHECK_REQUIRED",
+          "name": "",
+          "sourceUrl": "https://selar.com/0u19v8u99l",
+          "verifiedAt": "",
+          "evidenceReference": ""
+        },
+        "brandAuthorization": {
+          "status": "OWNER_CONFIRMATION_REQUIRED",
+          "brand": "SonicVhibez",
+          "confirmedAt": "",
+          "approvalReference": ""
+        },
+        "compensation": {
+          "status": "UNVERIFIED",
+          "type": "",
+          "verifiedAt": "",
+          "evidenceReference": ""
+        },
+        "disclosure": {
+          "status": "UNVERIFIED",
+          "text": "",
+          "approvedAt": "",
+          "approvalReference": ""
+        }
+      }
     }
   ]
 }
