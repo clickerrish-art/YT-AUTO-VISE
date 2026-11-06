@@ -326,7 +326,9 @@ export function evaluateNextPublication({
   const scheduledAttemptStatuses = new Set(["scheduled", "queued_for_publication", "pending_schedule"]);
   const allPlanned = [
     ...scheduledItems,
-    ...pendingAttempts.filter(a => scheduledAttemptStatuses.has(String(a?.status ?? "").toLowerCase()))
+    ...pendingAttempts
+      .filter(a => scheduledAttemptStatuses.has(String(a?.status ?? "").toLowerCase()))
+      .map(a => ({ ...a, id: a?.jobId }))
   ];
   const ids = new Set();
   for (const item of [...allPlanned, ...history]) {
