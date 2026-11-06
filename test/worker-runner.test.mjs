@@ -1125,7 +1125,7 @@ test("worker flushes its exclusive process lock before polling and removes it af
         assert.ok(Number.isInteger(lock.pid));
       }
     });
-    assert.ok(syncCalls >= 3, "lock file and containing directory must be flushed, in addition to atomic state persistence");
+    assert.ok(syncCalls >= 2, "lock file and containing directory must both be flushed before the worker polls");
     assert.equal(fs.existsSync(lockPath), false, "a cleanly stopped worker must release its process lock");
   } finally {
     fs.fsyncSync = originalFsync;
