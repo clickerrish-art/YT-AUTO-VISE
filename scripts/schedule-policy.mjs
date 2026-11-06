@@ -264,7 +264,7 @@ export function localDateTimeToIso(date, time = "17:00", timeZone = DEFAULT_SCHE
 
 
 export const ROLLING_PUBLICATION_FORMATS = Object.freeze(["long_form", "long_form", "short"]);
-export const UNCERTAIN_UPLOAD_STATUSES = Object.freeze(["uploading", "uploading_private", "pending", "pending_upload", "uncertain", "outcome_uncertain", "upload_outcome_uncertain", "recovery_required"]);
+export const UNCERTAIN_UPLOAD_STATUSES = Object.freeze(["uploading", "uploading_private", "pending", "pending_upload", "uncertain", "outcome_uncertain", "upload_outcome_uncertain", "recovery_required", "remote_accepted_reconciliation_required"]);
 
 /**
  * Fail-closed gate for the next actual publication. A queue is not evidence of
@@ -313,17 +313,23 @@ export function evaluateNextPublication({
     }
     return { id: String(item.id), status, timestamp: parsedTimestamp, format: item.format ?? item.contentType ?? null };
   }).filter(Boolean);
+  const scheduledAttemptStatuses = new Set(["scheduled", "queued_for_publication", "pending_schedule"]);
+  const verifiedAttemptStatuses = new Set(["private_upload_verified"]);
+  const knownAttemptStatuses = new Set([...UNCERTAIN_UPLOAD_STATUSES, ...scheduledAttemptStatuses, ...verifiedAttemptStatuses]);
   for (const attempt of pendingAttempts) {
     const status = String(attempt?.status ?? "").toLowerCase();
-    if (!attempt?.jobId || UNCERTAIN_UPLOAD_STATUSES.includes(status)) {
-      errors.push(`upload attempt ${attempt?.jobId ?? "(unknown)"} has an unresolved/uncertain outcome and must be reconciled`);
+    if (!attempt?.jobId) {
+      errors.push("upload attempt (unknown) is missing its stable job ID");
+    } else if (!knownAttemptStatuses.has(status)) {
+      errors.push("upload attempt " + attempt.jobId + " has unsupported status " + (status || "(missing)") + "; refusing to assume it is safe");
+    } else if (UNCERTAIN_UPLOAD_STATUSES.includes(status)) {
+      errors.push(`upload attempt ${attempt.jobId} has an unresolved/uncertain outcome and must be reconciled`);
     }
   }
   // Completed ledger attempts are evidence to reconcile, not future scheduled slots.
   // The authenticated remote history is authoritative for completed publications; counting
   // a verified ledger receipt again would compare the publication with itself and falsely
   // block every subsequent upload. Only explicit future scheduling states belong here.
-  const scheduledAttemptStatuses = new Set(["scheduled", "queued_for_publication", "pending_schedule"]);
   const allPlanned = [
     ...scheduledItems,
     ...pendingAttempts
