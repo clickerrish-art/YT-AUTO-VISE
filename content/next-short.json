@@ -1,7 +1,7 @@
 {
   "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
   "channel": "SonicVhibez",
-  "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+  "channelId": null,
   "title": "How to Make Better Wildlife Videos for YouTube",
   "description": "Turn wildlife clips into a clear story: choose one animal behavior, build a hook, and use only footage you have permission to publish.\n\nPROMOTION DISCLOSURE: This video promotes the Complete YouTube Wildlife Creator's Vault. The creator may receive compensation if you purchase. Check the product page for current details.\n\nAI DISCLOSURE: Some visuals or narration in this video may be generated or altered using AI. Realistic synthetic wildlife scenes will be disclosed using YouTube's altered or synthetic content setting.\n\nExplore the Complete YouTube Wildlife Creator's Vault: https://selar.com/0u19v8u99l\n\nAlways verify footage, music, image rights, and factual accuracy before publishing.",
   "tags": [
@@ -19,5 +19,5 @@
   "containsSyntheticMedia": true,
   "rightsConfirmed": false,
   "complianceReviewed": false,
-  "notes": "Disclosure-ready draft metadata only. Channel ID, media rights, factual accuracy, product destination, final captions, and compliance must be verified by a human before upload. Status intentionally remains HOLD_FOR_MEDIA_AND_HUMAN_REVIEW."
+  "notes": "Disclosure-ready draft metadata only. Channel ID must be populated only after authenticated YouTube OAuth confirms the exact @sonicvhibez identity. Media rights, factual accuracy, final captions, and compliance require human verification before upload. Status intentionally remains HOLD_FOR_MEDIA_AND_HUMAN_REVIEW."
 }
