@@ -184,7 +184,11 @@ test("worker retains its process lock when uncertain dispatch quarantine cannot 
   assert.equal(fs.existsSync(retainedLockPath), true,
     "the process lock must remain with the renamed state directory as a fail-closed fence when quarantine persistence fails");
   await assert.rejects(
-    runWorker({ baseUrl, token, workerId, once: true, cooldownStatePath: statePath }),
+    runWorker({
+      baseUrl, token, workerId, once: true,
+      stateDirectory: stateDirectory + ".held",
+      cooldownStatePath: path.join(stateDirectory + ".held", "worker-backoff.json")
+    }),
     /already locked|quarantine release/i,
     "a restart must not clear the retained uncertainty fence"
   );
