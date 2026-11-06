@@ -135,7 +135,7 @@ async def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--short", choices=["short-001", "short-002", "both"], default="both")
     parser.add_argument("--voice", default="en-US-GuyNeural")
-    parser.add_argument("--rate", default="-10%")
+    parser.add_argument("--rate", default="-5%")
     parser.add_argument("--extract-only", action="store_true")
     args = parser.parse_args()
     if not MASTER.is_file() or MASTER.is_symlink():
