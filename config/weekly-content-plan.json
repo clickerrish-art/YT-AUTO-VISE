@@ -1,7 +1,6 @@
 {
   "version": 3,
   "channel": "SonicVhibez",
-  "channelId": "UCSlkuPfHH78oC1o418HV4w",
   "timezone": "Africa/Johannesburg",
   "publishingEnabled": false,
   "schedule": [
@@ -46,7 +45,7 @@
     "These are draft-production slots only. Before any publication operation, independently inspect all actual and planned YouTube timestamps and enforce the 72-hour minimum.",
     "Schedule triggers draft production only; it does not enable public publishing.",
     "Public publishing and unattended public scheduling remain disabled.",
-    "The channelId is populated from the connected SonicVibes channel inventory (handle @sonicvhibez); re-confirm the same ID through authenticated YouTube OAuth before any private upload.",
+    "A previously supplied channel identifier does not satisfy the repository channel-ID format check; do not treat it as verified. Populate the channel ID only after authenticated YouTube OAuth confirms the exact @sonicvhibez channel identity.",
     "Publication policy is a rolling sequence: long_form, long_form, short; at least 72 elapsed hours between consecutive actual publications, minimum 216 hours for three cyclic gaps.",
     "Tuesday/Saturday workflow cron slots are draft-preparation triggers only and are not the authoritative publication schedule.",
     "Before upload, reconcile public/private/unlisted channel history, scheduled items and every pending or uncertain upload attempt; missing or incomplete history blocks publication.",
