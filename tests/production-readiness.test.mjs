@@ -71,12 +71,7 @@ test("readiness JSON distinguishes external reconciliation from code-controlled 
     /secret values are never included/.test(blocker.evidence.observed)
   ));
   const cadence = report.blockers.find(blocker => /CADENCE DECISION REQUIRED/.test(blocker.message));
-  assert.equal(cadence.evidence.kind, "repository-path-check");
-  assert.equal(cadence.evidence.path, "config/weekly-content-plan.json");
-  assert.match(cadence.resolution, /feasible owner-approved cadence/i);
-  assert.match(cadence.resolution, /72-hour minimum spacing/i);
-  assert.match(cadence.resolution, /timezone-aware timestamp/i);
-  assert.doesNotMatch(cadence.resolution, /inspect the final media/i);
+  assert.equal(cadence, undefined, "the persisted owner-approved rolling cadence must not remain a readiness blocker");
   assert.ok(report.blockers.some(blocker => /Metadata needs the verified SonicVhibez YouTube channel ID/.test(blocker.message)), "metadata cannot pass until the channel ID is verified");
   assert.ok(report.blockers.some(blocker => /SONICVHIBEZ_CHANNEL_ID/.test(blocker.message)), "the secure OAuth environment binding remains an owner-controlled gate");
 });
@@ -128,7 +123,10 @@ test("readiness never accepts an owner-approved cadence that weakens the 72-hour
   assert.equal(schedule.minimumPublicationSpacingHours, 72);
   assert.equal(schedule.publicationCycle.minimumHoursBetweenConsecutivePublications, 72);
   assert.equal(schedule.publicationCycle.minimumCycleHours, 216);
-  assert.ok(!schedule.cadenceDecision.options.includes("WEEKLY_TARGET_WITH_SHORTER_SPACING"));
+  assert.equal(schedule.cadenceDecision.status, "OWNER_APPROVED");
+  assert.equal(schedule.cadenceDecision.ownerApproved, true);
+  assert.equal(schedule.cadenceDecision.approvedMode, "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET");
+  assert.doesNotMatch(schedule.cadenceDecision.approvedMode, /WEEKLY_TARGET_WITH_SHORTER_SPACING/);
 });
 
 
