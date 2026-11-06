@@ -133,3 +133,30 @@ test("rejects a weekly target in the no-weekly-target policy mode", () => {
   assert.equal(result.valid, false);
   assert.match(result.errors.join(" "), /must omit weeklyPublicationTarget/);
 });
+
+
+test("blocks remote-accepted attempts until reconciliation is complete", () => {
+  const result = evaluateNextPublication({
+    history: [{ id: "remote-1", status: "private", actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form" }],
+    historyVerified: true,
+    pendingAttempts: [{ jobId: "job-uncertain", status: "REMOTE_ACCEPTED_RECONCILIATION_REQUIRED" }],
+    proposedAt: "2026-10-27T15:00:00.000Z",
+    jobId: "job-next",
+    format: "long_form"
+  });
+  assert.equal(result.valid, false);
+  assert.match(result.errors.join(" "), /unresolved\/uncertain outcome/);
+});
+
+test("fails closed on an unknown upload-attempt status", () => {
+  const result = evaluateNextPublication({
+    history: [{ id: "remote-1", status: "private", actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form" }],
+    historyVerified: true,
+    pendingAttempts: [{ jobId: "job-unknown", status: "REMOTE_STATE_MAYBE" }],
+    proposedAt: "2026-10-27T15:00:00.000Z",
+    jobId: "job-next",
+    format: "long_form"
+  });
+  assert.equal(result.valid, false);
+  assert.match(result.errors.join(" "), /unsupported status REMOTE_STATE_MAYBE/);
+});
