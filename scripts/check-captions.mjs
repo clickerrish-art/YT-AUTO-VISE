@@ -19,8 +19,8 @@ for (const file of files) {
   let fileErrors = [];
   for (let i = 0; i < blocks.length; i++) {
     const lines = blocks[i].split("\n");
-    if (lines.length < 3 || Number(lines[0]) !== i + 1) {
-      fileErrors.push(`block ${i + 1}: invalid sequence or missing caption text`);
+    if (lines.length < 2 || Number(lines[0]) !== i + 1) {
+      fileErrors.push(`block ${i + 1}: invalid sequence or missing timestamp`);
       continue;
     }
     const match = lines[1].match(/^(\d{2}):(\d{2}):(\d{2}),(\d{3}) --> (\d{2}):(\d{2}):(\d{2}),(\d{3})$/);
