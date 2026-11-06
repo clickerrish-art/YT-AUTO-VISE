@@ -133,7 +133,10 @@ test("YouTube channel monetization is not evidence of Selar compensation", () =>
 
   const fixture = verifiedFixture("affiliate");
   fixture.product.promotionGate.compensation.type = "youtube_monetization";
-  const errors = validateProductPromotionGate(fixture.product, fixture.metadata);
-  assert.ok(errors.some(error => /compensation type must be affiliate, paid, or none/i.test(error)));
-  assert.ok(errors.some(error => /hasPaidPromotion must match/i.test(error)));
+  const invalidTypeErrors = validateProductPromotionGate(fixture.product, fixture.metadata);
+  assert.ok(invalidTypeErrors.some(error => /compensation type must be affiliate, paid, or none/i.test(error)));
+
+  fixture.product.promotionGate.compensation.type = "none";
+  const mismatchErrors = validateProductPromotionGate(fixture.product, fixture.metadata);
+  assert.ok(mismatchErrors.some(error => /hasPaidPromotion must match/i.test(error)));
 });
