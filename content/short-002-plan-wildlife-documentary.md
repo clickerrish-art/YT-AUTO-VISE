@@ -11,15 +11,15 @@
 ## YouTube title
 How to Make a Wildlife Documentary Short: 3 Planning Steps
 
-## Narration draft (122 words; approximately 54–56 seconds at a measured 130–135 words per minute)
+## Narration draft (110 words; approximately 52–55 seconds at a measured 120–125 words per minute)
 
-“Planning a wildlife documentary Short? Use three steps before you edit.
+“Planning a wildlife documentary Short? Plan three things before editing.
 
-Step one: choose one subject and one question. Are you showing how an animal finds food, communicates, moves, or cares for its young? Describe only what the footage actually shows.
+First, choose one subject and one question: how does this animal feed, move, communicate, or care for its young? Describe only what your footage shows.
 
-Step two: map the story. Open with a moment that raises the question, add the habitat context, then show the behavior and explain why it matters. Do not splice separate clips to suggest they happened together. Never bait, chase, or disturb wildlife. Avoid claims the footage cannot support.
+Second, build a simple story. Open with a moment that raises the question, add habitat context, then show the behavior and explain why it matters. Keep separate clips in their real sequence.
 
-Step three: check every asset. Confirm your footage and music rights, fact-check each claim, and keep captions readable on a phone.
+Third, check every asset. Confirm footage and music rights, fact-check each claim, and keep captions readable on a phone.
 
 A focused story is easier to follow than a rushed list of facts. The Wildlife Creator’s Vault is linked below as a planning resource.”
 
@@ -76,6 +76,7 @@ Use one genuine, rights-cleared animal image in its actual habitat, with natural
 ## Production checklist
 
 - [ ] Use genuine, species- and habitat-matched footage; no invented chronology.
+- [ ] Never bait, chase, or disturb wildlife; avoid claims the footage cannot support.
 - [ ] Verify commercial and YouTube rights for every video, still, music and sound effect.
 - [ ] Confirm each clips/music element is owned, licensed, or otherwise cleared.
 - [ ] Fact-check each wildlife claim against reliable sources.
