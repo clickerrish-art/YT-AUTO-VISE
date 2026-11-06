@@ -4,6 +4,9 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - "scripts/validate-schedule.mjs"
+      - "scripts/schedule-policy.mjs"
+      - ".github/workflows/twice-weekly-check.yml"
       - "scripts/production-readiness.mjs"
       - "tests/production-readiness.test.mjs"
       - ".github/workflows/production-readiness.yml"
