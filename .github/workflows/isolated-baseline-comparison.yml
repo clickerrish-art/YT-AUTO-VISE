@@ -119,7 +119,7 @@ jobs:
           {
             echo "## Isolated baseline comparison"
             echo
-            printf -- '- Main/base SHA: %s\n' "$main_sha"
+            printf -- '- Live main HEAD SHA: %s\n' "$main_sha"
             printf -- '- Candidate SHA: %s\n' "$candidate_sha"
             if [ "$main_failed" -eq 0 ]; then echo "- Main baseline result: PASS"; else echo "- Main baseline result: FAIL"; fi
             if [ "$candidate_failed" -eq 0 ]; then echo "- Candidate baseline result: PASS"; else echo "- Candidate baseline result: FAIL"; fi
