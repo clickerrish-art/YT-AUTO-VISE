@@ -18,8 +18,10 @@ except ImportError:
     print("ERROR: Install edge-tts first: python -m pip install edge-tts", file=sys.stderr)
     raise SystemExit(2)
 
-SOURCE = Path("content/long-form-scripts.md")
-OUT = Path("media/long-form-drafts")
+SCRIPT_DIR = Path(__file__).resolve().parent
+REPO_ROOT = SCRIPT_DIR.parent
+SOURCE = REPO_ROOT / "content" / "long-form-scripts.md"
+OUT = REPO_ROOT / "media" / "long-form-drafts"
 VOICE = "en-US-GuyNeural"
 CAPTION_MAX_WORDS = 7
 CAPTION_MAX_CHARS = 42
