@@ -56,6 +56,12 @@ jobs:
           node --check scripts/render-short.mjs
           node --check scripts/production-readiness.mjs
           node --check scripts/upload-private.mjs
+      - name: Install FFmpeg for media integration tests
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ffmpeg
+          ffmpeg -version
+          ffprobe -version
       - name: Run repository regression tests
         run: node --test
       - name: Report production blockers without publishing
