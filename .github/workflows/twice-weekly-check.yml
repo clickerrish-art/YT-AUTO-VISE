@@ -16,6 +16,8 @@ jobs:
           node-version: '24'
           package-manager-cache: false
       - run: npm test
+      - name: Validate rolling publication policy and draft-preparation slots
+        run: npm run validate:schedule
       - name: Confirm example content is blocked for missing review approvals
         shell: bash
         run: |
