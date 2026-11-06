@@ -732,17 +732,18 @@
       "inputValidation": "PASS",
       "durablePersistence": "PASS for the tested fail-closed negative path: HTTP 409 preserves dashboard-state.json byte-for-byte and creates no render manifest or media directory. Successful production persistence remains untested because genuine approved production inputs are absent.",
       "auditEvidence": "PASS for the tested fail-closed negative path: no lease or audit mutation occurs on rejected legacy job. Successful production audit evidence remains untested.",
-      "concurrency": "PENDING CI — new exact-source regression test submits two simultaneous legacy production attempts and asserts both fail closed with byte-identical state; do not count as PASS until CI succeeds.",
-      "restartRecovery": "PENDING CI — the same regression test restarts the dashboard and verifies the legacy job remains non-executable with byte-identical state; do not count as PASS until CI succeeds.",
+      "concurrency": "PASS — exact-SHA real-server test submits two simultaneous worker-authenticated legacy production attempts; both return 409 with renderStarted=false and publishingEnabled=false, while dashboard-state.json remains byte-identical and no render manifest or per-job media directory is created.",
+      "restartRecovery": "PASS — exact-SHA real-server test gracefully stops and restarts the dashboard, retries the same legacy job, receives 409 with renderStarted=false, and verifies byte-identical durable state and no render artifacts.",
       "externalOperation": "genuine rights-cleared media and final manifests required",
       "overallAcceptance": "BLOCKED",
       "notes": "Exact candidate e99bc24511879106157c002c09242315e6219325 passed the real-server test test/dashboard-worker-api.integration.test.mjs. A scoped worker submits a queued legacy job without the approved authoring pipeline; POST /api/jobs/produce returns 409, preserves persisted state byte-for-byte, and creates neither render manifest nor per-job media directory. This accepts the negative fail-closed behavior only. Successful rendering remains BLOCKED until genuine rights-cleared media, approved script/narration/scene evidence and complete final manifests exist.",
       "testEvidence": {
         "test": "test/dashboard-api-produce-fail-closed-recovery.integration.test.mjs",
         "exactTestedSha": "74c1f79e5dc9011eec81722e1d9eefafcbd6a4b1",
-        "ci": null,
-        "status": "ADDED — CI pending",
-        "scenario": "Two concurrent worker-authenticated POST /api/jobs/produce requests for a legacy QUEUED CONTENT_PRODUCTION job without authoring must both return 409 with renderStarted=false and publishingEnabled=false; persisted state remains byte-identical; no manifest or per-job media directory is created. After graceful server restart, the same request remains 409 and state remains byte-identical. This is fail-closed safety coverage only; it does not authorize production."
+        "contentQualityWorkflowRun": 42296617161,
+        "browserE2EWorkflowRun": 42296617339,
+        "status": "PASS — fail-closed concurrency and restart regression; successful production remains untested and externally/input blocked.",
+        "scenario": "Two simultaneous worker-authenticated POST /api/jobs/produce requests for a legacy QUEUED CONTENT_PRODUCTION job without authoring both return 409 with renderStarted=false and publishingEnabled=false; persisted state remains byte-identical; no manifest or per-job media directory is created. After graceful server restart, the same request remains 409 and state remains byte-identical."
       }
     },
     {
@@ -969,11 +970,13 @@
         "behavior": "Dynamically inventories all declared API routes and sends authenticated empty requests; asserts safe JSON responses without HTTP 5xx, internal path disclosure or persisted state mutation."
       }
     },
-    "pendingRouteRegression": {
+    "verifiedRouteRegression": {
       "route": "POST /api/jobs/produce",
       "test": "test/dashboard-api-produce-fail-closed-recovery.integration.test.mjs",
       "exactTestSourceSha": "74c1f79e5dc9011eec81722e1d9eefafcbd6a4b1",
-      "status": "Awaiting GitHub Actions; no PASS claim until exact-SHA run succeeds."
+      "contentQualityWorkflowRun": 42296617161,
+      "browserE2EWorkflowRun": 42296617339,
+      "status": "PASS for fail-closed concurrency/restart regression; successful render remains blocked."
     }
   }
 }
