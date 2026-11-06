@@ -463,6 +463,12 @@ export function validateRollingPublicationCycle(items, {
       } else if (policy.weeklyPublicationTarget * minSpacingHours > WEEK_HOURS) {
         errors.push("weekly target is mathematically infeasible: " + policy.weeklyPublicationTarget + " publications at " + minSpacingHours + "-hour spacing require at least " + (policy.weeklyPublicationTarget * minSpacingHours) + " hours per weekly cycle");
       }
+    } else if (Object.hasOwn(policy, "weeklyPublicationTarget")) {
+      if (!Number.isInteger(policy.weeklyPublicationTarget) || policy.weeklyPublicationTarget < 1) {
+        errors.push("weeklyPublicationTarget must be a positive integer when supplied");
+      } else if (policy.weeklyPublicationTarget * minSpacingHours > WEEK_HOURS) {
+        errors.push("weekly target is mathematically infeasible: " + policy.weeklyPublicationTarget + " publications at " + minSpacingHours + "-hour spacing require at least " + (policy.weeklyPublicationTarget * minSpacingHours) + " hours per weekly cycle");
+      }
     }
   }
 
