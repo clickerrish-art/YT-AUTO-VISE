@@ -8,7 +8,7 @@
 **Voice:** friendly, clear, conversational documentary narration  
 **Product URL:** https://selar.com/0u19v8u99l
 
-## SEO title
+## YouTube title
 
 How to Make a Wildlife Documentary Short: 3 Planning Steps
 
@@ -18,7 +18,7 @@ How to Make a Wildlife Documentary Short: 3 Planning Steps
 
 Step one: choose one subject and one question. Are you showing how an animal finds food, communicates, moves, or cares for its young? Describe only what the footage actually shows.
 
-Step two: map the story. Open with a moment that raises the question, add the habitat context, then show the behavior and explain why it matters. Do not splice separate clips to suggest they happened together.
+Step two: map the story. Open with a moment that raises the question, add the habitat context, then show the behavior and explain why it matters. Do not splice separate clips to suggest they happened together. Never bait, chase, or disturb wildlife. Avoid claims the footage cannot support.
 
 Step three: check every asset. Confirm your footage and music rights, fact-check each claim, and keep captions readable on a phone.
 
@@ -78,6 +78,7 @@ Use one genuine, rights-cleared animal image in its actual habitat, with natural
 
 - [ ] Use genuine, species- and habitat-matched footage; no invented chronology.
 - [ ] Verify commercial and YouTube rights for every video, still, music and sound effect.
+- [ ] Confirm each clips/music element is owned, licensed, or otherwise cleared.
 - [ ] Fact-check each wildlife claim against reliable sources.
 - [ ] Record narration and retime captions to the actual voice track.
 - [ ] Confirm final runtime is about 55 seconds without unnatural time-stretching.
@@ -86,5 +87,9 @@ Use one genuine, rights-cleared animal image in its actual habitat, with natural
 - [ ] Verify the exact SonicVhibez destination and full YouTube timestamp history before any calendar decision.
 - [ ] Keep as a private draft; do not upload or schedule until all gates pass.
 - [ ] Human playback and compliance review must be completed before any review flag is changed.
+
+**Destination guard:** SonicVhibez only; never Nature Frontiers.
+
+**SEO safety:** No SEO score, ranking, reach, or sales outcome is guaranteed.
 
 **Release state:** HOLD — product-brand/relationship authorization, genuine media rights, final assets, destination identity and human review remain unverified. No video has been rendered or published.
