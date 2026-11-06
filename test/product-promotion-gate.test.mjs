@@ -31,10 +31,14 @@ function verifiedFixture(type = "affiliate") {
   return { product, metadata };
 }
 
-test("checked-in product registry remains blocked while promotion evidence is unverified", () => {
+test("checked-in product registry records the seller but remains blocked on promotion authorization", () => {
   const config = JSON.parse(fs.readFileSync("config/products.json", "utf8"));
+  const seller = config.products[0].promotionGate.seller;
+  assert.equal(seller.status, "VERIFIED");
+  assert.equal(seller.name, "Click 47");
+  assert.ok(seller.evidenceReference.includes("2026-11-06"));
   const errors = validateProductPromotionGate(config.products[0], undefined, { requireMetadataDisclosure: false });
-  assert.ok(errors.some(error => /seller details must be reverified/i.test(error)));
+  assert.equal(errors.some(error => /seller details must be reverified/i.test(error)), false);
   assert.ok(errors.some(error => /brand authorization must be owner-confirmed/i.test(error)));
   assert.ok(errors.some(error => /compensation relationship must be verified/i.test(error)));
   assert.ok(errors.some(error => /viewer-facing disclosure must be owner-approved/i.test(error)));
@@ -77,7 +81,6 @@ test("content checker surfaces the product gate before any private-upload readin
     env: { ...process.env, SONICVHIBEZ_CHANNEL_ID: "UC_TEST_ONLY_NOT_A_REAL_CHANNEL" }
   });
   assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /product promotion gate: seller details must be reverified/i);
   assert.match(result.stderr, /brand authorization must be owner-confirmed/i);
   assert.match(result.stderr, /compensation relationship must be verified/i);
 });
@@ -90,7 +93,6 @@ test("readiness JSON identifies product promotion gates as owner-controlled bloc
   assert.equal(result.status, 2);
   const report = JSON.parse(result.stdout);
   const blockers = report.blockers.filter(item => item.message.startsWith("Product promotion gate:"));
-  assert.ok(blockers.some(item => /seller details must be reverified/i.test(item.message)));
   assert.ok(blockers.some(item => /brand authorization must be owner-confirmed/i.test(item.message)));
   assert.ok(blockers.some(item => /compensation relationship must be verified/i.test(item.message)));
   assert.ok(blockers.every(item => item.evidence.path === "config/products.json"));
