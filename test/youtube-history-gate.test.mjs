@@ -245,6 +245,18 @@ test("complete history fetch rejects missing IDs, inconsistent totals and incomp
       } }) },
       videos: { list: async () => ({ data: { items: [] } }) }
     }, channel, reconciliationPath, channelId), /did not return every upload-playlist video/);
+
+    await assert.rejects(fetchCompleteYoutubeHistorySnapshot({
+      playlistItems: { list: async () => ({ data: {
+        pageInfo: { totalResults: 1 },
+        items: [{ contentDetails: { videoId: "video-a" } }]
+      } }) },
+      videos: { list: async () => ({ data: { items: [{
+        id: "video-b",
+        snippet: { channelId, publishedAt: "2026-10-01T15:00:00.000Z" },
+        status: { privacyStatus: "private" }
+      }] } }) }
+    }, channel, reconciliationPath, channelId), /did not match the requested playlist video IDs/);
   } finally {
     fs.rmSync(directory, { recursive: true, force: true });
   }
