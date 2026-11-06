@@ -69,6 +69,8 @@ jobs:
           ffprobe -version
       - name: Run repository regression tests
         run: node --test
+      - name: Validate rolling publication policy and draft-preparation slots
+        run: npm run validate:schedule
       - name: Record production readiness HOLD without stopping safe queue preparation
         run: |
           if node scripts/production-readiness.mjs --json > "$RUNNER_TEMP/production-readiness.json"; then
