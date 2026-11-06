@@ -132,6 +132,45 @@ test("quarantine release treats a dangling process-lock symlink as a held lock",
   assert.throws(() => assertWorkerStoppedForQuarantineRelease(statePath), /Stop the worker process/i);
 });
 
+test("quarantine release leaves state unchanged when a dangling process-lock symlink exists", t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "worker-release-dangling-lock-state-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const statePath = path.join(dir, "cooldowns.json");
+  const state = {
+    schemaVersion: 1,
+    workerId: binding.workerId,
+    updatedAt: new Date(binding.nowMs).toISOString(),
+    cooldowns: {},
+    uncertainDispatches: {
+      [binding.jobId]: {
+        code: "WORKER_DISPATCH_OUTCOME_UNCERTAIN",
+        recordedAt: new Date(binding.nowMs - 1000).toISOString()
+      }
+    },
+    consumedReleaseNonces: []
+  };
+  fs.writeFileSync(statePath, JSON.stringify(state), { mode: 0o600 });
+  const originalBytes = fs.readFileSync(statePath);
+  const processLockPath = statePath + ".process.lock";
+  fs.symlinkSync(path.join(dir, "missing-process-owner"), processLockPath);
+  const receipt = createWorkerQuarantineReleaseReceipt(binding);
+
+  assert.throws(() => applyWorkerQuarantineRelease({
+    statePath,
+    workerId: binding.workerId,
+    jobId: binding.jobId,
+    attemptId: binding.attemptId,
+    artifactSha256: binding.artifactSha256,
+    publicKeyPem,
+    receipt,
+    nowMs: binding.nowMs
+  }), /Stop the worker process/i);
+
+  assert.deepEqual(fs.readFileSync(statePath), originalBytes, "failed release must preserve quarantine bytes");
+  assert.equal(fs.lstatSync(processLockPath).isSymbolicLink(), true, "the pre-existing lock path must remain untouched");
+  assert.equal(fs.existsSync(statePath + ".release.lock"), false, "release must not acquire a release lock when a process lock exists");
+});
+
 test("quarantine release serializes consumers and fails closed on an existing release lock", t => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "worker-release-serialization-"));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
