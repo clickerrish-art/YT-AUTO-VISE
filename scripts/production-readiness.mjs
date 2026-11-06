@@ -7,6 +7,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { validateCadenceDecision } from "./schedule-policy.mjs";
+import { validateProductPromotionGate } from "./product-promotion-gate.mjs";
 import { isSafeRegularFileWithinRoot } from "./safe-project-file.mjs";
 
 const root = process.cwd();
@@ -22,6 +23,24 @@ const manifestPath = "content/render-manifest.json";
 const metadataPath = "content/next-short.json";
 const videoPath = "media/next-short.mp4";
 const schedulePath = "config/weekly-content-plan.json";
+const productsPath = "config/products.json";
+const approvedProductUrl = "https://selar.com/0u19v8u99l";
+let approvedProduct;
+if (!exists(productsPath)) {
+  blockers.push("Approved product registry config/products.json is missing.");
+} else {
+  try {
+    const productConfig = JSON.parse(fs.readFileSync(path.resolve(root, productsPath), "utf8"));
+    if (!productConfig || typeof productConfig !== "object" || Array.isArray(productConfig) || !Array.isArray(productConfig.products)) {
+      blockers.push("config/products.json must contain a products array.");
+    } else {
+      approvedProduct = productConfig.products.find(product => product?.url === approvedProductUrl && product?.status === "approved");
+      if (!approvedProduct) blockers.push("config/products.json must retain the exact approved Selar product URL as an approved product.");
+    }
+  } catch {
+    blockers.push("config/products.json is not valid JSON; product promotion authorization cannot be verified.");
+  }
+}
 let minimumSpacingHours = NaN;
 let cycleFormats = [];
 if (!exists(schedulePath)) {
@@ -143,6 +162,7 @@ if (!exists(longFormManifestPath)) {
     if (typeof longManifest.hasPaidPromotion !== "boolean") blockers.push("Long-form manifest must explicitly record hasPaidPromotion as true or false.");
   }
 }
+let reviewedMetadata;
 if (!exists(metadataPath)) {
   blockers.push("Reviewed metadata file content/next-short.json is missing.");
 } else {
@@ -155,6 +175,7 @@ if (!exists(metadataPath)) {
     }
   } catch { blockers.push("content/next-short.json is not valid JSON."); }
   if (metadata) {
+    reviewedMetadata = metadata;
     if (metadata.channel !== "SonicVhibez") blockers.push("Metadata target must be exactly SonicVhibez.");
     if (metadata.status !== "READY_FOR_PRIVATE_UPLOAD") blockers.push("Metadata must be human-reviewed and explicitly marked READY_FOR_PRIVATE_UPLOAD before upload.");
     if (!metadata.channelId || !/^UC[a-zA-Z0-9_-]{22}$/.test(metadata.channelId)) blockers.push("Metadata needs the verified SonicVhibez YouTube channel ID.");
@@ -168,6 +189,12 @@ if (!exists(metadataPath)) {
     if (metadata.productUrl !== "https://selar.com/0u19v8u99l") blockers.push("Metadata must use the sole approved Selar product URL.");
   }
 }
+if (approvedProduct) {
+  const promotionGateErrors = validateProductPromotionGate(approvedProduct, reviewedMetadata, {
+    requireMetadataDisclosure: Boolean(reviewedMetadata)
+  });
+  promotionGateErrors.forEach(message => blockers.push("Product promotion gate: " + message));
+}
 if (!exists(videoPath)) blockers.push("Rendered MP4 media/next-short.mp4 is missing.");
 for (const key of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN", "SONICVHIBEZ_CHANNEL_ID"]) {
   if (!process.env[key]?.trim()) blockers.push(`Required YouTube environment variable ${key} is not configured in this execution environment.`);
@@ -176,6 +203,7 @@ if (process.env.SONICVHIBEZ_CHANNEL_ID && !/^UC[a-zA-Z0-9_-]{22}$/.test(process.
   blockers.push("SONICVHIBEZ_CHANNEL_ID does not match the expected YouTube channel-ID format; verify it manually.");
 }
 function resolutionFor(blocker) {
+  if (/product promotion gate/i.test(blocker)) return "Recheck the exact Selar listing; record seller identity evidence, obtain explicit owner confirmation that SonicVhibez may promote the product, verify whether the relationship is affiliate, paid or none, and approve matching viewer-facing disclosure text with a timestamp and reference. Keep publication disabled until every field is verified.";
   if (/CADENCE DECISION REQUIRED/i.test(blocker)) return "Choose a feasible owner-approved cadence that preserves the 72-hour minimum spacing and long_form → long_form → short cycle; record the approval with an explicit timezone-aware timestamp and non-empty reference in config/weekly-content-plan.json. Keep publication disabled until the decision is recorded.";
   if (/history|uncertain upload|remote/i.test(blocker)) return "Authenticate to the approved SonicVhibez channel, retrieve public/private/unlisted history, reconcile every pending or uncertain attempt, and retain the reviewed reconciliation ledger.";
   if (/license|licen[cs]e|rights evidence|rightsConfirmed/i.test(blocker)) return "Supply genuine source and licence/permission evidence for every asset, verify the permitted uses and restrictions, and retain evidence files plus SHA-256 hashes. Do not use placeholder strings.";
@@ -188,6 +216,7 @@ function resolutionFor(blocker) {
 }
 
 function controlOwnerFor(message) {
+  if (/product promotion gate/i.test(message)) return "external_owner_or_human_reviewer";
   if (/LIVE BLOCKER|CADENCE DECISION REQUIRED|YOUTUBE_CLIENT_ID|YOUTUBE_CLIENT_SECRET|YOUTUBE_REFRESH_TOKEN|SONICVHIBEZ_CHANNEL_ID|verified SonicVhibez YouTube channel ID|rightsConfirmed|complianceReviewed|human-reviewed|human review|owner-approved/i.test(message)) {
     return "external_owner_or_human_reviewer";
   }
@@ -198,6 +227,7 @@ function controlOwnerFor(message) {
 }
 
 function evidenceInspectedFor(message) {
+  if (/product promotion gate/i.test(message)) return { kind: "repository-path-check", path: productsPath, observed: message };
   if (/YOUTUBE_CLIENT_ID|YOUTUBE_CLIENT_SECRET|YOUTUBE_REFRESH_TOKEN|SONICVHIBEZ_CHANNEL_ID/.test(message)) {
     return {
       kind: "environment-presence-check",
@@ -226,7 +256,7 @@ function evidenceInspectedFor(message) {
 
 const structuredBlockers = blockers.map((message) => {
   const digest = createHash("sha256").update(message).digest("hex").slice(0, 12).toUpperCase();
-  const critical = /LIVE BLOCKER|uncertain|OAuth|YOUTUBE_|channel ID|rights|licen[cs]e|human|approval|upload|private/i.test(message);
+  const critical = /LIVE BLOCKER|uncertain|OAuth|YOUTUBE_|channel ID|rights|licen[cs]e|human|approval|upload|private|seller|brand authorization|compensation|disclosure/i.test(message);
   return {
     id: `RDY-${digest}`,
     severity: critical ? "critical" : "high",
