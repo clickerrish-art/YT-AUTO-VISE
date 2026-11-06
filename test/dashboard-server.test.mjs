@@ -223,7 +223,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(Object.hasOwn(body, "stateFile"), false, "authenticated API responses must not disclose the local state-file path");
   assert.equal(logs.includes(stateDir), false, "startup logs must not disclose the local state directory");
   assert.ok(body.blockers.some(item => /complete SonicVhibez public\/private\/unlisted history is reconciled/i.test(item)), "dashboard state must expose the live history reconciliation blocker");
-  assert.ok(body.blockers.some(item => /CADENCE DECISION REQUIRED/.test(item)), "dashboard state must expose the owner cadence decision blocker");
+  assert.ok(!body.blockers.some(item => /CADENCE DECISION REQUIRED/.test(item)), "the recorded owner approval must clear only the cadence-decision blocker");
   const autonomousUnauth = await fetchDashboard(base + "/api/facebook/autonomous-status");
   assert.equal(autonomousUnauth.status, 401, "autonomous publisher status must use the same operator authentication");
   const autonomousResponse = await fetchDashboard(base + "/api/facebook/autonomous-status", { headers });
