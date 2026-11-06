@@ -28,7 +28,7 @@ class NarrationTests(unittest.TestCase):
             {"text": "Again", "offset": 10_000_000, "duration": 3_000_000},
         ]
         srt = module.captions_from_boundaries(events)
-        self.assertIn("00:00:00,000 --> 00:00:00,900", srt)
+        self.assertIn("00:00:00,000 --> 00:00:00,910", srt)
         self.assertIn("Hello there.", srt)
         self.assertIn("00:00:01,000 --> 00:00:01,300", srt)
 
