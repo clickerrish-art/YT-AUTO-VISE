@@ -11,7 +11,7 @@
 ## YouTube title
 Wildlife Documentary Storytelling: 3 Shots, One Clear Story
 
-## Narration draft (aligned to the supplied 55-second caption timing; record and verify final audio before rendering)
+## Narration draft (130 words; provisional 55-second caption layout; record and retime against final audio before rendering)
 
 “Want better wildlife videos? Start with one clear story, not a collection of random animal clips. First, choose a question: what behavior will viewers discover? Next, plan three shots: a wide view, a closer detail, and the behavior itself. Write the question down before filming, then check that each shot helps answer it. Keep a safe distance. Never bait, chase, or disturb wildlife just to get a shot. Let natural movement tell the story. Use steady framing and patient observation. Then edit tightly. Remove pauses that don’t add information. Add readable captions and only music you have permission to use. Finish with one useful takeaway so viewers leave having learned something. Build your next wildlife video with a plan. Find the Wildlife Creator’s Vault at the link in the description.”
 
