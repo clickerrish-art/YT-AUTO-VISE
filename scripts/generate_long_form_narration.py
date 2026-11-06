@@ -32,13 +32,13 @@ def clean_script(text: str) -> str:
     # Paid-product narration is withheld until the owner explicitly authorizes
     # this channel/product relationship and any required compensation disclosure.
     text = re.sub(
-        r"(?:^|\\n\\n)If you want a paid resource\\b.*?(?=\\n\\n|$)",
+        r"(?:^|\n\n)If you want a paid resource\b.*?(?=\n\n|$)",
         "",
         text,
         flags=re.DOTALL,
     )
     text = re.sub(r"(?m)^Promotional resource:.*$", "", text)
-    text = re.sub(r"https://selar\\.com/0u19v8u99l", "", text)
+    text = re.sub(r"https://selar\.com/0u19v8u99l", "", text)
     text = re.sub(r"\[[^\]]*\]", " ", text)
     text = re.sub(r"\*\*(.*?)\*\*", r"\1", text)
     text = re.sub(r"(?m)^[-*]\s+", "", text)
