@@ -59,3 +59,47 @@ test("rejects same-local-date slots even when their timestamp syntax is valid", 
   assert.equal(result.valid, false);
   assert.match(result.errors.join(" "), /same-local-date publication collision/);
 });
+
+
+test("scheduled upload attempts participate in stable-ID collision checks via jobId", () => {
+  const history = [{
+    id: "remote-video-1",
+    status: "private",
+    actualPublishedAt: "2026-10-20T15:00:00.000Z",
+    format: "long_form"
+  }];
+  const duplicatePendingJob = evaluateNextPublication({
+    history,
+    historyVerified: true,
+    pendingAttempts: [{
+      jobId: "remote-video-1",
+      status: "scheduled",
+      scheduledAt: "2026-10-24T15:00:00.000Z"
+    }],
+    proposedAt: "2026-10-27T15:00:00.000Z",
+    jobId: "job-next",
+    format: "long_form"
+  });
+  assert.equal(duplicatePendingJob.valid, false);
+  assert.ok(duplicatePendingJob.errors.some(error => error.includes("duplicate stable job/remote ID: remote-video-1")));
+
+  const duplicateWithScheduledItem = evaluateNextPublication({
+    history,
+    historyVerified: true,
+    scheduledItems: [{
+      id: "job-shared",
+      status: "scheduled",
+      scheduledAt: "2026-10-24T15:00:00.000Z"
+    }],
+    pendingAttempts: [{
+      jobId: "job-shared",
+      status: "queued_for_publication",
+      scheduledAt: "2026-10-24T15:00:00.000Z"
+    }],
+    proposedAt: "2026-10-27T15:00:00.000Z",
+    jobId: "job-next",
+    format: "long_form"
+  });
+  assert.equal(duplicateWithScheduledItem.valid, false);
+  assert.ok(duplicateWithScheduledItem.errors.some(error => error.includes("duplicate stable job/remote ID: job-shared")));
+});
