@@ -14,11 +14,11 @@
           "evidenceReference": "Read-only live Selar listing rechecked 2026-11-06; page title and visible seller line identify Click 47."
         },
         "brandAuthorization": {
-          "status": "OWNER_CONFIRMATION_REQUIRED",
+          "status": "OWNER_CONFIRMED",
           "brand": "SonicVhibez",
-          "confirmedAt": "",
-          "approvalReference": "",
-          "note": "The listing body uses Nature Frontiers wording; explicit owner confirmation is required before cross-brand SonicVhibez promotion."
+          "confirmedAt": "2026-11-06T20:02:19+02:00",
+          "approvalReference": "Owner explicitly authorized SonicVhibez promotion of this Selar product in the ChatGPT conversation on 2026-11-06 (reply: “yes. proceed”).",
+          "note": "Brand-level permission confirmed by owner. This does not verify compensation or approve viewer-facing disclosure; those remain separate release gates."
         },
         "compensation": {
           "status": "UNVERIFIED",
