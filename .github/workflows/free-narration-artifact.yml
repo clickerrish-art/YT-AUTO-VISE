@@ -67,8 +67,7 @@ jobs:
           assert cadence.get("timezone") == "Africa/Johannesburg"
           assert plan.get("timezone") == cadence.get("timezone")
           assert cadence.get("formats") == formats and cycle.get("formats") == formats
-          assert isinstance(spacing, (int, float)) and 0 < spacing <= 8760
-          assert spacing == 72, "Each actual publication must remain at least 72 elapsed hours apart"
+          assert isinstance(spacing, (int, float)) and 72 <= spacing <= 8760, "Each actual publication must remain at least 72 elapsed hours apart"
           assert cadence.get("minimumHoursBetweenConsecutivePublications") == spacing
           assert cycle.get("minimumHoursBetweenConsecutivePublications") == spacing
           assert cadence.get("minimumCycleHours") == cycle_hours == 216
