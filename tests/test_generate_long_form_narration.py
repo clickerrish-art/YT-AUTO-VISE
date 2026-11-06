@@ -76,6 +76,17 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "finite and positive"):
                     MODULE.captions_from_text_estimate("A sentence.", duration)
 
+    def test_estimated_captions_reject_a_single_word_wider_than_caption_limit(self):
+        oversized_word = "x" * (MODULE.CAPTION_MAX_CHARS + 1)
+        with self.assertRaisesRegex(ValueError, "maximum caption character count"):
+            MODULE.captions_from_text_estimate(oversized_word, 10)
+
+    def test_tts_captions_reject_a_single_word_wider_than_caption_limit(self):
+        oversized_word = "x" * (MODULE.CAPTION_MAX_CHARS + 1)
+        boundaries = [{"text": oversized_word, "offset": 0, "duration": 1_000_000}]
+        with self.assertRaisesRegex(ValueError, "maximum caption character count"):
+            MODULE.captions_from_boundaries(boundaries)
+
     def test_estimated_captions_reject_empty_text_and_too_short_duration(self):
         with self.assertRaisesRegex(ValueError, "empty narration"):
             MODULE.captions_from_text_estimate("   ", 10)
