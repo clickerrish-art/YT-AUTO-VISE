@@ -15,6 +15,14 @@ SPEC.loader.exec_module(MODULE)
 
 
 class LongFormNarrationCleaningTests(unittest.TestCase):
+
+    def test_source_and_output_paths_are_anchored_to_repository_not_caller_working_directory(self):
+        expected_root = MODULE_PATH.resolve().parents[1]
+        self.assertEqual(MODULE.SOURCE, expected_root / "content" / "long-form-scripts.md")
+        self.assertEqual(MODULE.OUT, expected_root / "media" / "long-form-drafts")
+        self.assertTrue(MODULE.SOURCE.is_absolute())
+        self.assertTrue(MODULE.OUT.is_absolute())
+
     def test_removes_unapproved_paid_promotion_paragraph_and_destination(self):
         source = (
             "Opening narration remains.\n\n"
