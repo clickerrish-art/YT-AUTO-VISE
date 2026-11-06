@@ -70,6 +70,36 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
         second_start = blocks[1].splitlines()[1].split(" --> ")[0]
         self.assertEqual(first_end, second_start)
 
+    def test_estimated_captions_reject_non_finite_or_non_positive_duration(self):
+        for duration in (0, -1, float("nan"), float("inf")):
+            with self.subTest(duration=duration):
+                with self.assertRaisesRegex(ValueError, "finite and positive"):
+                    MODULE.captions_from_text_estimate("A sentence.", duration)
+
+    def test_estimated_captions_reject_empty_text_and_too_short_duration(self):
+        with self.assertRaisesRegex(ValueError, "empty narration"):
+            MODULE.captions_from_text_estimate("   ", 10)
+        with self.assertRaisesRegex(ValueError, "too short"):
+            MODULE.captions_from_text_estimate("One. Two. Three.", 0.2)
+
+    def test_estimated_captions_keep_positive_non_overlapping_intervals(self):
+        rendered = MODULE.captions_from_text_estimate(
+            "First sentence. A much longer second sentence follows. Final sentence.",
+            12.0,
+        )
+        blocks = rendered.strip().split("\\n\\n")
+        self.assertEqual(len(blocks), 3)
+        previous_end_ms = 0
+        for block in blocks:
+            start_text, end_text = block.splitlines()[1].split(" --> ")
+            start_ms = MODULE.parse_srt_time_for_test(start_text) if hasattr(MODULE, "parse_srt_time_for_test") else None
+            self.assertNotEqual(start_text, end_text)
+            self.assertLessEqual(start_text, end_text)
+            if previous_end_ms:
+                self.assertGreaterEqual(start_text, previous_end_text)
+            previous_end_text = end_text
+            previous_end_ms += 1
+
     def test_removes_unapproved_paid_promotion_paragraph_and_destination(self):
         source = (
             "Opening narration remains.\n\n"
