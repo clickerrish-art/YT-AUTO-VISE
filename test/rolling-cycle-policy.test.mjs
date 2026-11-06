@@ -103,3 +103,33 @@ test("scheduled upload attempts participate in stable-ID collision checks via jo
   assert.equal(duplicateWithScheduledItem.valid, false);
   assert.ok(duplicateWithScheduledItem.errors.some(error => error.includes("duplicate stable job/remote ID: job-shared")));
 });
+
+
+test("accepts owner-approved rolling cycle without inventing a weekly target", () => {
+  const policy = {
+    ownerApproved: true,
+    approvedBy: "project-owner",
+    approvedAt: "2026-10-27T10:00:00+02:00",
+    timeZone: "Africa/Johannesburg",
+    minSpacingHours: 72,
+    mode: "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET"
+  };
+  const result = validateRollingPublicationCycle(validCycle, { ownerApprovedPolicy: policy });
+  assert.equal(result.valid, true, result.errors.join("; "));
+  assert.equal(result.publishingEnabled, false);
+});
+
+test("rejects a weekly target in the no-weekly-target policy mode", () => {
+  const policy = {
+    ownerApproved: true,
+    approvedBy: "project-owner",
+    approvedAt: "2026-10-27T10:00:00+02:00",
+    timeZone: "Africa/Johannesburg",
+    minSpacingHours: 72,
+    mode: "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
+    weeklyPublicationTarget: 2
+  };
+  const result = validateRollingPublicationCycle(validCycle, { ownerApprovedPolicy: policy });
+  assert.equal(result.valid, false);
+  assert.match(result.errors.join(" "), /must omit weeklyPublicationTarget/);
+});
