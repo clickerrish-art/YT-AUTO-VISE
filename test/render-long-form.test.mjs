@@ -97,6 +97,20 @@ test("blocks incorrect aspect ratio and wrong channel", () => {
   }
 });
 
+test("renderer resolves every validator from its own script directory", () => {
+  const source = fs.readFileSync(script, "utf8");
+  assert.match(source, /const scriptDir = path\.dirname\(fileURLToPath\(import\.meta\.url\)\)/);
+  for (const validator of [
+    "validate-content-quality.mjs",
+    "check-captions.mjs",
+    "validate-caption-sync.mjs",
+    "validate-long-form-export.mjs",
+    "validate-rendered-audio.mjs"
+  ]) {
+    assert.ok(source.includes(`path.join(scriptDir, "${validator}")`), `${validator} must resolve independently of process.cwd()`);
+  }
+});
+
 test("renderer runs the complete export validator before reporting success", () => {
   const source = fs.readFileSync(script, "utf8");
   const validatorIndex = source.indexOf("validate-long-form-export.mjs");
