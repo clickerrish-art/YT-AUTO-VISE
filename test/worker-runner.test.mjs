@@ -1059,6 +1059,48 @@ test("worker retains its startup process lock when lock fsync fails before any A
   }
 });
 
+test("worker retains its startup process lock when containing-directory fsync fails", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-directory-fsync-failure-"));
+  const statePath = path.join(directory, "worker-backoff.json");
+  const lockPath = statePath + ".process.lock";
+  const originalFsync = fs.fsyncSync;
+  let syncCalls = 0;
+  const requests = [];
+  const fetchImpl = async () => {
+    requests.push("request");
+    return new Response(JSON.stringify({ jobs: [], queuedCount: 0, publishingEnabled: false }), {
+      status: 200, headers: { "content-type": "application/json" }
+    });
+  };
+  try {
+    fs.fsyncSync = function (...args) {
+      syncCalls += 1;
+      if (syncCalls === 2) {
+        const error = new Error("simulated containing-directory durability failure");
+        error.code = "EIO";
+        throw error;
+      }
+      return originalFsync.apply(this, args);
+    };
+    await assert.rejects(
+      runWorker({
+        baseUrl: "http://127.0.0.1:8787", token, workerId, once: true,
+        cooldownStatePath: statePath, fetchImpl
+      }),
+      error => error?.cause?.code === "EIO" && /already locked/.test(error.message)
+    );
+    assert.equal(syncCalls, 2, "lock-file fsync must succeed before the containing-directory fsync is attempted");
+    assert.deepEqual(requests, [], "worker must not poll when the lock directory entry may not be durable");
+    assert.equal(fs.existsSync(lockPath), true, "the exclusive lock must be retained after directory fsync failure");
+    const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+    assert.equal(lock.workerId, workerId);
+    assert.ok(Number.isInteger(lock.pid));
+  } finally {
+    fs.fsyncSync = originalFsync;
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
 test("worker flushes its exclusive process lock before polling and removes it after a clean cycle", async () => {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-lock-fsync-"));
   const statePath = path.join(directory, "worker-backoff.json");
