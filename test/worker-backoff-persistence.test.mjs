@@ -142,6 +142,53 @@ test("worker stops after a dispatch conflict when retry-backoff persistence fail
 });
 
 
+test("worker retains its process lock when uncertain dispatch quarantine cannot be persisted", async t => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-uncertain-write-failure-"));
+  const stateDirectory = path.join(directory, "worker-state");
+  fs.mkdirSync(stateDirectory);
+  const statePath = path.join(stateDirectory, "worker-backoff.json");
+  let produceRequests = 0;
+  const server = createServer(async (req, res) => {
+    res.setHeader("content-type", "application/json");
+    if (req.method === "GET" && req.url?.startsWith("/api/jobs/dispatchable")) {
+      res.end(JSON.stringify({ jobs: [{ id: "job-uncertain-dispatch" }], queuedCount: 1 }));
+      return;
+    }
+    if (req.method === "POST" && req.url === "/api/jobs/produce") {
+      produceRequests += 1;
+      // Simulate the API accepting the POST while the worker loses its durable
+      // state directory before the response can be observed.
+      fs.renameSync(stateDirectory, stateDirectory + ".held");
+      fs.writeFileSync(stateDirectory, "state directory replaced during uncertain dispatch");
+      req.socket.destroy();
+      return;
+    }
+    res.statusCode = 404;
+    res.end(JSON.stringify({ error: "not found" }));
+  });
+  const baseUrl = await listen(server);
+  t.after(async () => {
+    await new Promise(resolve => server.close(resolve));
+    fs.rmSync(directory, { recursive: true, force: true });
+  });
+
+  await assert.rejects(
+    runWorker({
+      baseUrl, token, workerId, once: false, pollIntervalMs: 1_000,
+      stateDirectory, cooldownStatePath: statePath
+    }),
+    error => error?.code === "WORKER_BACKOFF_PERSISTENCE_FAILED"
+  );
+  assert.equal(produceRequests, 1, "an uncertain POST must never be automatically repeated");
+  assert.equal(fs.existsSync(statePath + ".process.lock"), true,
+    "the process lock must remain as a fail-closed fence when quarantine persistence fails");
+  await assert.rejects(
+    runWorker({ baseUrl, token, workerId, once: true, cooldownStatePath: statePath }),
+    /already locked|quarantine release/i,
+    "a restart must not clear the retained uncertainty fence"
+  );
+});
+
 test("worker persists Retry-After backoff after HTTP 429 and honors it after restart", async t => {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-rate-limit-"));
   const statePath = path.join(directory, "worker-backoff.json");
