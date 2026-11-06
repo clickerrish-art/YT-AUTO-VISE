@@ -18,10 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-      - name: Check out exact main/base SHA
+      - name: Check out live main branch HEAD
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.base.sha || 'main' }}
+          ref: main
           path: baseline-main
           fetch-depth: 1
 
