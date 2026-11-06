@@ -158,5 +158,5 @@ test("fails closed on an unknown upload-attempt status", () => {
     format: "long_form"
   });
   assert.equal(result.valid, false);
-  assert.match(result.errors.join(" "), /unsupported status REMOTE_STATE_MAYBE/);
+  assert.match(result.errors.join(" "), /unsupported status remote_state_maybe/);
 });
