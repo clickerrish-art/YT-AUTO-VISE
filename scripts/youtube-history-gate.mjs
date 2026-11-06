@@ -133,27 +133,78 @@ export function validateHistoryReconciliation(args) {
   return validateHistoryReconciliationSnapshot(args).history;
 }
 
-async function readCompleteYoutubeHistoryInputs(youtube, channel, reconciliationPath) {
-  const uploadsPlaylistId = channel?.contentDetails?.relatedPlaylists?.uploads;
-  if (!uploadsPlaylistId) throw new Error("authenticated SonicVhibez uploads playlist is unavailable; cannot verify complete channel history");
-  const playlistItems = [];
-  let pageToken;
-  for (let page = 0; page < 100; page++) {
-    const response = await youtube.playlistItems.list({ part: ["contentDetails"], playlistId: uploadsPlaylistId, maxResults: 50, ...(pageToken ? { pageToken } : {}) });
-    playlistItems.push(...(response.data.items ?? []).map(item => item.contentDetails?.videoId).filter(Boolean));
-    pageToken = response.data.nextPageToken;
-    if (!pageToken) break;
-    if (page === 99) throw new Error("channel history exceeded the 5,000-item verification bound; refusing incomplete history");
+async function readCompleteYoutubeHistoryInputs(youtube, channel, reconciliationPath, channelId) {
+  if (!channelId || channel?.id !== channelId) {
+    throw new Error("authenticated channel object does not match the configured SonicVhibez channel ID; refusing to inspect another uploads playlist");
   }
-  if (new Set(playlistItems).size !== playlistItems.length) throw new Error("uploads playlist contains duplicate video IDs; history requires reconciliation");
+  const uploadsPlaylistId = channel?.contentDetails?.relatedPlaylists?.uploads;
+  if (typeof uploadsPlaylistId !== "string" || !uploadsPlaylistId.trim()) {
+    throw new Error("authenticated SonicVhibez uploads playlist is unavailable; cannot verify complete channel history");
+  }
+  const playlistItems = [];
+  const seenPageTokens = new Set();
+  let pageToken;
+  let expectedTotal = null;
+  let paginationComplete = false;
+  for (let page = 0; page < 100; page++) {
+    const response = await youtube.playlistItems.list({
+      part: ["contentDetails"],
+      playlistId: uploadsPlaylistId,
+      maxResults: 50,
+      ...(pageToken ? { pageToken } : {})
+    });
+    const data = response?.data;
+    const reportedTotal = data?.pageInfo?.totalResults;
+    if (!Number.isSafeInteger(reportedTotal) || reportedTotal < 0) {
+      throw new Error("YouTube uploads playlist response omitted a valid pageInfo.totalResults; history completeness cannot be verified");
+    }
+    if (expectedTotal === null) expectedTotal = reportedTotal;
+    else if (reportedTotal !== expectedTotal) {
+      throw new Error("YouTube uploads playlist total changed during pagination; history snapshot is inconsistent");
+    }
+    if (!Array.isArray(data.items)) {
+      throw new Error("YouTube uploads playlist returned an invalid page; refusing incomplete history");
+    }
+    for (const [index, item] of data.items.entries()) {
+      const videoId = item?.contentDetails?.videoId;
+      if (typeof videoId !== "string" || !videoId.trim()) {
+        throw new Error("YouTube uploads playlist item " + (playlistItems.length + index) + " is missing its remote video ID");
+      }
+      playlistItems.push(videoId);
+    }
+    const nextPageToken = data.nextPageToken;
+    if (!nextPageToken) {
+      paginationComplete = true;
+      break;
+    }
+    if (seenPageTokens.has(nextPageToken)) {
+      throw new Error("YouTube uploads playlist repeated a pagination token; refusing an incomplete history snapshot");
+    }
+    seenPageTokens.add(nextPageToken);
+    pageToken = nextPageToken;
+    if (page === 99) {
+      throw new Error("channel history exceeded the 5,000-item verification bound; refusing incomplete history");
+    }
+  }
+  if (!paginationComplete || playlistItems.length !== expectedTotal) {
+    throw new Error("YouTube uploads playlist pagination did not cover its reported total; history is incomplete");
+  }
+  if (new Set(playlistItems).size !== playlistItems.length) {
+    throw new Error("uploads playlist contains duplicate video IDs; history requires reconciliation");
+  }
   const remoteVideos = [];
   for (let offset = 0; offset < playlistItems.length; offset += 50) {
     const ids = playlistItems.slice(offset, offset + 50);
-    if (!ids.length) continue;
     const response = await youtube.videos.list({ part: ["id", "snippet", "status"], id: ids.join(",") });
-    remoteVideos.push(...(response.data.items ?? []));
+    const returned = response?.data?.items;
+    if (!Array.isArray(returned)) {
+      throw new Error("YouTube video details response was invalid; history is incomplete");
+    }
+    remoteVideos.push(...returned);
   }
-  if (remoteVideos.length !== playlistItems.length) throw new Error("YouTube did not return every upload-playlist video; history is incomplete");
+  if (remoteVideos.length !== playlistItems.length) {
+    throw new Error("YouTube did not return every upload-playlist video; history is incomplete");
+  }
   let reconciliation;
   try { reconciliation = JSON.parse(fs.readFileSync(path.resolve(reconciliationPath), "utf8")); }
   catch { throw new Error("CHANNEL_HISTORY_RECONCILIATION_PATH is missing or invalid; complete owner-reviewed history is required"); }
@@ -161,7 +212,7 @@ async function readCompleteYoutubeHistoryInputs(youtube, channel, reconciliation
 }
 
 export async function fetchCompleteYoutubeHistorySnapshot(youtube, channel, reconciliationPath, channelId, options = {}) {
-  const { remoteVideos, reconciliation } = await readCompleteYoutubeHistoryInputs(youtube, channel, reconciliationPath);
+  const { remoteVideos, reconciliation } = await readCompleteYoutubeHistoryInputs(youtube, channel, reconciliationPath, channelId);
   return validateHistoryReconciliationSnapshot({ channelId, remoteVideos, reconciliation, ...options });
 }
 
