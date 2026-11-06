@@ -21,7 +21,7 @@ Second, build a simple story. Open with a moment that raises the question, add h
 
 Third, check every asset. Confirm footage and music rights, fact-check each claim, and keep captions readable on a phone.
 
-A focused story is easier to follow than a rushed list of facts. The Wildlife Creator’s Vault is linked below as a planning resource.”
+Before editing, note where each clip came from, what it actually shows, and which details still need checking. A focused story is easier to follow than a rushed list of facts. The Wildlife Creator’s Vault is linked below as a planning resource.”
 
 ## Draft description — internal hold, not publish-ready
 
