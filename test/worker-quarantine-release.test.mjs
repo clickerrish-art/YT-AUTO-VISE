@@ -124,6 +124,14 @@ test("quarantine release refuses to race a running worker process", t => {
   assert.throws(() => assertWorkerStoppedForQuarantineRelease(statePath), /Stop the worker process/i);
 });
 
+test("quarantine release treats a dangling process-lock symlink as a held lock", t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "worker-release-dangling-process-lock-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const statePath = path.join(dir, "cooldowns.json");
+  fs.symlinkSync(path.join(dir, "missing-process-owner"), statePath + ".process.lock");
+  assert.throws(() => assertWorkerStoppedForQuarantineRelease(statePath), /Stop the worker process/i);
+});
+
 test("quarantine release serializes consumers and fails closed on an existing release lock", t => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "worker-release-serialization-"));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
@@ -187,6 +195,27 @@ test("worker startup refuses an active quarantine release lock", async t => {
   }), /already locked|quarantine release is in progress/i);
   assert.equal(fetchCalled, false, "worker must not contact the dashboard while release lock is held");
   assert.equal(fs.existsSync(statePath + ".process.lock"), false, "failed worker startup must not leave a stale process lock");
+});
+
+test("worker startup refuses a dangling quarantine-release lock symlink", async t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "worker-start-dangling-release-lock-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const worker = "dangling-release-lock-worker";
+  const identity = crypto.createHash("sha256").update(worker).digest("hex").slice(0, 20);
+  const statePath = path.join(dir, "worker-backoff-" + identity + ".json");
+  fs.symlinkSync(path.join(dir, "missing-release-owner"), statePath + ".release.lock");
+  let fetchCalled = false;
+  await assert.rejects(runWorker({
+    baseUrl: "http://127.0.0.1:8787",
+    token: "worker-token-for-lock-test-123456",
+    workerId: worker,
+    once: true,
+    stateDirectory: dir,
+    fetchImpl: async () => { fetchCalled = true; return new Response(JSON.stringify({ jobs: [] }), { status: 200 }); }
+  }), /already locked|quarantine release is in progress/i);
+  assert.equal(fetchCalled, false, "a dangling release lock must block all worker API requests");
+  assert.equal(fs.existsSync(statePath + ".process.lock"), false, "failed startup must clean only its own process lock");
+  assert.equal(fs.lstatSync(statePath + ".release.lock").isSymbolicLink(), true, "the pre-existing release lock must remain untouched");
 });
 
 test("worker process lock is created and released around its cycle", async t => {
