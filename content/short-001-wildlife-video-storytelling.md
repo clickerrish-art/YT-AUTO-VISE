@@ -72,11 +72,12 @@ Use one genuine, rights-cleared animal image in its actual habitat. Keep the ani
 - [ ] Record narration and retime the existing captions to the actual voice track.
 - [ ] Confirm final runtime is about 55 seconds without unnatural time-stretching.
 - [ ] Check captions at phone size, audio levels, framing and vertical safe areas.
-- [ ] Reverify seller details, obtain explicit SonicVhibez brand authorization, verify affiliate/paid/no-compensation status and approve the exact viewer-facing disclosure.
+- [x] Seller identity verified as Click 47 from the exact Selar listing on 6 November 2026; the Vault listing uses Nature Frontiers branding.
+- [ ] Obtain explicit SonicVhibez brand authorization, verify affiliate/paid/no-compensation status and approve the exact viewer-facing disclosure.
 - [ ] Verify SonicVhibez destination identity and inspect complete public/private/unlisted timestamp history before any calendar decision.
 - [ ] Keep private and unscheduled; do not upload or publish until every gate passes.
 - [ ] Human playback and compliance review must be recorded against the final media and thumbnail hashes.
 
 **Destination guard:** SonicVhibez only; never Nature Frontiers.  
 **SEO safety:** No SEO score, ranking, reach, or sales outcome is guaranteed. No income outcome is guaranteed.  
-**Release state:** HOLD — seller/brand/compensation evidence, genuine media rights, final assets, destination identity and human review remain unverified.
+**Release state:** HOLD — SonicVhibez brand authorization and compensation/disclosure evidence, genuine media rights, final assets, destination identity and human review remain unverified.
