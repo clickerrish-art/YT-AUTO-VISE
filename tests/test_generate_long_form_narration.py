@@ -87,7 +87,7 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
             "First sentence. A much longer second sentence follows. Final sentence.",
             12.0,
         )
-        blocks = rendered.strip().split("\\n\\n")
+        blocks = rendered.strip().split("\n\n")
         self.assertEqual(len(blocks), 3)
 
         def milliseconds(value):
