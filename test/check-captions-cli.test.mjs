@@ -31,7 +31,7 @@ test("caption checker accepts valid CRLF SRT and hour values above 23", () => {
 });
 
 test("caption checker rejects zero-length cues", () => {
-  const result = runChecker("1\\n00:00:01,000 --> 00:00:01,000\\nZero duration.\\n");
+  const result = runChecker("1\n00:00:01,000 --> 00:00:01,000\nZero duration.\n");
   assert.equal(result.status, 1);
   assert.match(result.stderr, /end must follow start/);
 });
@@ -40,18 +40,18 @@ test("caption checker rejects overlapping cues", () => {
   const srt = [
     "1", "00:00:00,000 --> 00:00:03,000", "First cue.", "",
     "2", "00:00:02,500 --> 00:00:04,000", "Overlapping cue.", ""
-  ].join("\\n");
+  ].join("\n");
   const result = runChecker(srt);
   assert.equal(result.status, 1);
   assert.match(result.stderr, /overlap or are out of order/);
 });
 
 test("caption checker rejects non-sequential numbering and empty cue text", () => {
-  const wrongSequence = runChecker("2\\n00:00:00,000 --> 00:00:01,000\\nCaption.\\n");
+  const wrongSequence = runChecker("2\n00:00:00,000 --> 00:00:01,000\nCaption.\n");
   assert.equal(wrongSequence.status, 1);
   assert.match(wrongSequence.stderr, /invalid sequence/);
 
-  const emptyText = runChecker("1\\n00:00:00,000 --> 00:00:01,000\\n   \\n");
+  const emptyText = runChecker("1\n00:00:00,000 --> 00:00:01,000\n   \n");
   assert.equal(emptyText.status, 1);
   assert.match(emptyText.stderr, /caption text is empty/);
 });
