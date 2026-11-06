@@ -23,6 +23,38 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
         self.assertTrue(MODULE.SOURCE.is_absolute())
         self.assertTrue(MODULE.OUT.is_absolute())
 
+    def test_merges_caption_groups_that_cannot_fit_a_positive_non_overlapping_interval(self):
+        boundaries = [
+            {"text": "Hello.", "offset": 0, "duration": 2_000_000},
+            {"text": "World.", "offset": 200_000, "duration": 3_000_000},
+            {"text": "Again.", "offset": 10_000_000, "duration": 2_000_000},
+        ]
+
+        rendered = MODULE.captions_from_boundaries(boundaries)
+        blocks = rendered.strip().split("\\n\\n")
+        self.assertEqual(len(blocks), 2)
+        self.assertIn("Hello. World.", blocks[0])
+        intervals = []
+        for block in blocks:
+            timestamp = block.splitlines()[1]
+            start, end = timestamp.split(" --> ")
+            intervals.append((start, end))
+        self.assertLess(intervals[0][0], intervals[0][1])
+        self.assertLessEqual(intervals[0][1], intervals[1][0])
+
+    def test_clips_overlapping_tts_word_durations_at_next_caption_start(self):
+        boundaries = [
+            {"text": "First.", "offset": 0, "duration": 20_000_000},
+            {"text": "Second.", "offset": 10_000_000, "duration": 5_000_000},
+        ]
+
+        rendered = MODULE.captions_from_boundaries(boundaries)
+        blocks = rendered.strip().split("\\n\\n")
+        self.assertEqual(len(blocks), 2)
+        first_end = blocks[0].splitlines()[1].split(" --> ")[1]
+        second_start = blocks[1].splitlines()[1].split(" --> ")[0]
+        self.assertEqual(first_end, second_start)
+
     def test_removes_unapproved_paid_promotion_paragraph_and_destination(self):
         source = (
             "Opening narration remains.\n\n"
