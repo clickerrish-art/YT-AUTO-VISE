@@ -1569,3 +1569,9 @@ test("read-only Facebook idea, connection-state and task endpoints return truthf
     "read-only dashboard endpoints must not mutate persisted state"
   );
 });
+
+test("dashboard readiness and state diagnostics enforce the non-waivable 72-hour publication minimum", () => {
+  const source = fs.readFileSync(new URL("../scripts/dashboard-server.mjs", import.meta.url), "utf8");
+  assert.equal((source.match(/schedule\\.minimumPublicationSpacingHours < 72/g) ?? []).length, 2);
+  assert.doesNotMatch(source, /schedule\\.minimumPublicationSpacingHours <= 0/);
+});
