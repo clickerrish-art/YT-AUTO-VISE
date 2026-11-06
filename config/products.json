@@ -7,11 +7,11 @@
       "status": "approved",
       "promotionGate": {
         "seller": {
-          "status": "RECHECK_REQUIRED",
-          "name": "",
+          "status": "VERIFIED",
+          "name": "Click 47",
           "sourceUrl": "https://selar.com/0u19v8u99l",
-          "verifiedAt": "",
-          "evidenceReference": ""
+          "verifiedAt": "2026-11-06T08:32:34.408Z",
+          "evidenceReference": "Exact Selar listing page title identifies Click 47 as seller; live read-only page rechecked 2026-11-06."
         },
         "brandAuthorization": {
           "status": "OWNER_CONFIRMATION_REQUIRED",
