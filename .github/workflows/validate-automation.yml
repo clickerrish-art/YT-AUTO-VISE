@@ -8,6 +8,7 @@ on:
       - "tests/**"
       - "test/**"
       - "content/queue.json"
+      - "content/promotional-short-plan.json"
       - "config/products.json"
       - "config/weekly-content-plan.json"
       - "config/campaigns.json"
@@ -84,6 +85,8 @@ jobs:
           fi
       - name: Validate isolated campaign destinations and disclosures
         run: npm run validate:campaigns
+      - name: Validate promotional Shorts weekly cap and draft-only plan
+        run: npm run validate:promotional-shorts
       - name: Test review metadata safety gates
         run: python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Validate queue invariants and approved destination

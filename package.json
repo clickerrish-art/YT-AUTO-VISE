@@ -33,7 +33,8 @@
     "validate:rendered-audio": "node scripts/validate-rendered-audio.mjs",
     "inventory:dashboard": "node scripts/dashboard-inventory.mjs",
     "report:branch": "node scripts/branch-reconciliation-report.mjs",
-    "worker": "node scripts/worker-runner.mjs"
+    "worker": "node scripts/worker-runner.mjs",
+    "validate:promotional-shorts": "node scripts/validate-promotional-short-plan.mjs"
   },
   "engines": {
     "node": ">=22"

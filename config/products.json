@@ -32,6 +32,72 @@
           "approvalReference": ""
         }
       }
+    },
+    {
+      "id": "video-creation-prompt-pack-premium",
+      "name": "The Full Video Creation Prompt Pack Premium Edition",
+      "url": "https://selar.com/539497q11t",
+      "status": "candidate",
+      "promotionGate": {
+        "seller": {
+          "status": "UNVERIFIED",
+          "name": "",
+          "sourceUrl": "https://selar.com/539497q11t",
+          "verifiedAt": "",
+          "evidenceReference": ""
+        },
+        "brandAuthorization": {
+          "status": "OWNER_CONFIRMATION_REQUIRED",
+          "brand": "SonicVhibez",
+          "confirmedAt": "",
+          "approvalReference": ""
+        },
+        "compensation": {
+          "status": "UNVERIFIED",
+          "type": "",
+          "verifiedAt": "",
+          "evidenceReference": ""
+        },
+        "disclosure": {
+          "status": "UNVERIFIED",
+          "text": "",
+          "approvedAt": "",
+          "approvalReference": ""
+        }
+      }
+    },
+    {
+      "id": "youtube-success-blueprint-90-day",
+      "name": "The YouTube Success Blueprint 90-Day Creator System",
+      "url": "https://selar.com/91j893378q",
+      "status": "candidate",
+      "promotionGate": {
+        "seller": {
+          "status": "UNVERIFIED",
+          "name": "",
+          "sourceUrl": "https://selar.com/91j893378q",
+          "verifiedAt": "",
+          "evidenceReference": ""
+        },
+        "brandAuthorization": {
+          "status": "OWNER_CONFIRMATION_REQUIRED",
+          "brand": "SonicVhibez",
+          "confirmedAt": "",
+          "approvalReference": ""
+        },
+        "compensation": {
+          "status": "UNVERIFIED",
+          "type": "",
+          "verifiedAt": "",
+          "evidenceReference": ""
+        },
+        "disclosure": {
+          "status": "UNVERIFIED",
+          "text": "",
+          "approvedAt": "",
+          "approvalReference": ""
+        }
+      }
     }
   ]
 }

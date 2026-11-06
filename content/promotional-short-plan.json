@@ -1,0 +1,182 @@
+{
+  "version": 1,
+  "channel": "SonicVhibez",
+  "timezone": "Africa/Johannesburg",
+  "maxShortsPerWeek": 2,
+  "publicationEnabled": false,
+  "schedulingEnabled": false,
+  "calendarStatus": "DRAFT_PREPARATION_ONLY_NO_PUBLICATION_DATES",
+  "notes": [
+    "This is a draft-preparation plan for the week beginning 2026-11-09, not a publication calendar.",
+    "No publicationAt, publishedAt or scheduledAt values are permitted in this plan.",
+    "A separate verified SonicVhibez destination schedule and complete public/private/unlisted YouTube history are required before any publication-slot calculation or scheduling.",
+    "Candidate products remain blocked from promotion until seller details are rechecked, SonicVhibez brand authorization is confirmed, the affiliate/paid/no-compensation relationship is verified, and the exact viewer-facing disclosure is approved."
+  ],
+  "weeks": [
+    {
+      "weekOf": "2026-11-09",
+      "status": "DRAFT_ONLY",
+      "items": [
+        {
+          "id": "sonicvhibez-short-003-prompt-framework",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "How to Script a YouTube Video: 5 Prompt Details to Include",
+          "primaryKeyword": "how to script a YouTube video",
+          "script": "Need a YouTube video prompt that gives you something usable? Don't start with “make it cinematic.” Give the prompt five anchors. One: the subject. Two: the action or lesson the viewer should see. Three: the setting and time of day. Four: the shot size and camera movement. Five: the format, duration and limits. For wildlife, add a safety rule: observe from a distance, never stage or disturb an animal, and don't invent behaviour the footage cannot support. Then request separate shot-list and narration drafts so you can fact-check every claim. A prompt is a brief, not a rights licence. The Full Video Creation Prompt Pack Premium Edition is linked below as a planning resource.",
+          "productId": "video-creation-prompt-pack-premium",
+          "productUrl": "https://selar.com/539497q11t",
+          "description": "How to script a YouTube video with a clear prompt: define the subject, action, setting, shot and output constraints before requesting a shot list or narration draft.\n\nPlanning resource: The Full Video Creation Prompt Pack Premium Edition\nhttps://selar.com/539497q11t\n\nDISCLOSURE HOLD: Seller details, SonicVhibez brand authorization, and whether this link is affiliate, paid, or uncompensated are not verified for this promotion. Replace this hold with the accurate approved viewer-facing disclosure before release. Do not publish while unresolved.\n\nA prompt is a planning brief, not a fact-check, footage licence or music licence.",
+          "keywordPhrases": [
+            {
+              "phrase": "how to script a YouTube video",
+              "estimatedMonthlySearches": 44388,
+              "volumeScore": 69,
+              "competition": 46,
+              "growthPct": 16.4
+            },
+            {
+              "phrase": "YouTube video prompts",
+              "estimatedMonthlySearches": 3952,
+              "volumeScore": 54,
+              "competition": 29,
+              "growthPct": null
+            },
+            {
+              "phrase": "YouTube video ideas",
+              "estimatedMonthlySearches": 56566,
+              "volumeScore": 71,
+              "competition": 27,
+              "growthPct": 12.3
+            },
+            {
+              "phrase": "how to write YouTube scripts",
+              "estimatedMonthlySearches": 54951,
+              "volumeScore": 71,
+              "competition": 44,
+              "growthPct": 3.4
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "vidIQ",
+            "researchedAt": "2026-11-06T10:46:19+02:00",
+            "type": "estimated_monthly_searches",
+            "note": "Estimates and 0–100 scores returned by vidIQ; not independently audited. The selected how-to phrase matches the lesson; related prompt and idea phrases are supporting terms, not a reason to change the topic."
+          },
+          "hashtags": [
+            "#YouTubeVideoPrompts",
+            "#YouTubeScript",
+            "#VideoCreation",
+            "#ContentPlanning",
+            "#YouTubeCreator"
+          ],
+          "thumbnailDirection": "A clean five-row prompt card beside a creator's editing desk; labels SUBJECT, ACTION, SETTING, SHOT, FORMAT; large text “5 PROMPT DETAILS”. Keep the graphic legible on a phone and do not imply that a generated result is automatically accurate.",
+          "disclosure": {
+            "status": "HOLD",
+            "relationshipStatus": "UNVERIFIED",
+            "requiredBeforeRelease": true,
+            "holdText": "Confirm whether the link is affiliate, paid placement, or uncompensated; then insert the exact truthful, owner-approved disclosure."
+          },
+          "productionChecklist": [
+            "Keep the lesson practical and show one original example prompt.",
+            "Check every generated factual claim; a prompt is not a source.",
+            "For wildlife examples, prohibit baiting, chasing, staging or disturbing animals.",
+            "Use only original or commercially cleared visuals, music and sound effects.",
+            "Record narration naturally and confirm a final runtime near 55 seconds.",
+            "Retiming captions to the actual voice track; check phone-size readability and vertical safe areas.",
+            "Recheck the exact Selar listing and seller before promotion.",
+            "Obtain SonicVhibez brand authorization and verify affiliate, paid or no-compensation status.",
+            "Replace the disclosure hold with the exact approved viewer-facing disclosure.",
+            "Complete human playback, factual and thumbnail review against final asset hashes.",
+            "Do not schedule until the SonicVhibez destination and full YouTube history are verified and every 72-hour gap is calculated."
+          ]
+        },
+        {
+          "id": "sonicvhibez-short-004-90-day-review",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "YouTube Growth Strategy: Build a 90-Day Content Plan",
+          "primaryKeyword": "YouTube growth strategy",
+          "script": "Want a YouTube growth strategy you can actually review? Build a 90-day plan in three blocks. Days 1–14: choose one audience problem, audit your existing videos, and write down a realistic production capacity. Days 15–60: publish a repeatable series at a pace you can sustain. For every video, record the topic, viewer promise, and one metric to review. Days 61–90: compare patterns—click-through rate, average view duration, and returning viewers—then keep what the evidence supports and change one thing at a time. Don't treat one upload as proof of a trend. A 90-day plan is a learning cycle, not a guarantee of growth. The YouTube Success Blueprint 90-Day Creator System is linked below as a planning resource.",
+          "productId": "youtube-success-blueprint-90-day",
+          "productUrl": "https://selar.com/91j893378q",
+          "description": "Build a YouTube growth strategy with a 90-day content plan: set realistic production capacity, test a repeatable series, then review patterns in your own analytics.\n\nPlanning resource: The YouTube Success Blueprint 90-Day Creator System\nhttps://selar.com/91j893378q\n\nDISCLOSURE HOLD: Seller details, SonicVhibez brand authorization, and whether this link is affiliate, paid, or uncompensated are not verified for this promotion. Replace this hold with the accurate approved viewer-facing disclosure before release. Do not publish while unresolved.\n\nA 90-day plan is a review cycle, not a guarantee of views, subscribers, monetisation or income.",
+          "keywordPhrases": [
+            {
+              "phrase": "YouTube growth strategy",
+              "estimatedMonthlySearches": 23008,
+              "volumeScore": 65,
+              "competition": 46,
+              "growthPct": 3.5
+            },
+            {
+              "phrase": "content planning",
+              "estimatedMonthlySearches": 11673,
+              "volumeScore": 61,
+              "competition": 23,
+              "growthPct": -21.7
+            },
+            {
+              "phrase": "YouTube content strategy",
+              "estimatedMonthlySearches": 9352,
+              "volumeScore": 59,
+              "competition": 50,
+              "growthPct": -57.8
+            },
+            {
+              "phrase": "YouTube video ideas",
+              "estimatedMonthlySearches": 56566,
+              "volumeScore": 71,
+              "competition": 27,
+              "growthPct": 12.3
+            },
+            {
+              "phrase": "90 day YouTube content plan",
+              "estimatedMonthlySearches": null,
+              "belowReportingThreshold": true,
+              "volumeScore": 0,
+              "competition": 34,
+              "growthPct": null
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "vidIQ",
+            "researchedAt": "2026-11-06T10:46:19+02:00",
+            "type": "estimated_monthly_searches",
+            "note": "The exact 90-day long-tail seed is below the tool's reporting threshold (<750 estimated monthly searches); the title therefore leads with the better-supported, directly relevant YouTube growth strategy phrase. Estimates are not independently audited."
+          },
+          "hashtags": [
+            "#YouTubeGrowthStrategy",
+            "#YouTubeContentPlan",
+            "#ContentPlanning",
+            "#YouTubeCreator",
+            "#CreatorEducation"
+          ],
+          "thumbnailDirection": "A simple 90-day timeline split into PLAN, PUBLISH and REVIEW, with three clearly separated blocks and the words “90-DAY PLAN”. Avoid subscriber or income promises and keep all labels readable at phone size.",
+          "disclosure": {
+            "status": "HOLD",
+            "relationshipStatus": "UNVERIFIED",
+            "requiredBeforeRelease": true,
+            "holdText": "Confirm whether the link is affiliate, paid placement, or uncompensated; then insert the exact truthful, owner-approved disclosure."
+          },
+          "productionChecklist": [
+            "Keep the plan realistic and avoid implying that one cadence fits every channel.",
+            "Explain the 14/46/30-day phases clearly without promising growth outcomes.",
+            "Use the creator's own analytics; do not invent performance figures.",
+            "Check metric definitions and avoid treating one upload as a trend.",
+            "Use original or commercially cleared graphics, music and sound effects.",
+            "Record narration naturally and confirm a final runtime near 55 seconds.",
+            "Retiming captions to the actual voice track; check phone-size readability and vertical safe areas.",
+            "Recheck the exact Selar listing and seller before promotion.",
+            "Obtain SonicVhibez brand authorization and verify affiliate, paid or no-compensation status.",
+            "Replace the disclosure hold with the exact approved viewer-facing disclosure.",
+            "Complete human playback, factual and thumbnail review against final asset hashes.",
+            "Do not schedule until the SonicVhibez destination and full YouTube history are verified and every 72-hour gap is calculated."
+          ]
+        }
+      ]
+    }
+  ]
+}
