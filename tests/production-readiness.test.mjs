@@ -143,7 +143,7 @@ test("readiness rejects valid JSON roots that are not objects for every required
     const directory = fs.mkdtempSync(path.join(os.tmpdir(), "readiness-json-root-"));
     try {
       for (const relative of ["scripts", "config", "content"]) fs.mkdirSync(path.join(directory, relative), { recursive: true });
-      for (const relative of ["scripts/production-readiness.mjs", "scripts/schedule-policy.mjs", "scripts/safe-project-file.mjs", "config/weekly-content-plan.json", "content/queue.json"]) {
+      for (const relative of ["scripts/production-readiness.mjs", "scripts/product-promotion-gate.mjs", "scripts/schedule-policy.mjs", "scripts/safe-project-file.mjs", "config/products.json", "config/weekly-content-plan.json", "content/queue.json"]) {
         fs.copyFileSync(path.join(sourceRoot, relative), path.join(directory, relative));
       }
       fs.writeFileSync(path.join(directory, targetPath), "null\n");
@@ -167,7 +167,7 @@ test("readiness reports malformed render-manifest asset paths without crashing J
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "readiness-manifest-path-"));
   try {
     for (const relative of ["scripts", "config", "content", "media"]) fs.mkdirSync(path.join(directory, relative), { recursive: true });
-    for (const relative of ["scripts/production-readiness.mjs", "scripts/schedule-policy.mjs", "scripts/safe-project-file.mjs", "config/weekly-content-plan.json", "content/queue.json", "content/next-short.json"]) {
+    for (const relative of ["scripts/production-readiness.mjs", "scripts/product-promotion-gate.mjs", "scripts/schedule-policy.mjs", "scripts/safe-project-file.mjs", "config/products.json", "config/weekly-content-plan.json", "content/queue.json", "content/next-short.json"]) {
       fs.copyFileSync(path.join(sourceRoot, relative), path.join(directory, relative));
     }
     fs.writeFileSync(path.join(directory, "content/long-form-render-manifest.json"), JSON.stringify({
