@@ -21,11 +21,12 @@ function runWithPlanMutation(mutate){
   return spawnSync(process.execPath,[path.join(repoRoot,"scripts/validate-schedule.mjs")],{cwd:temp,encoding:"utf8"});
  }finally{fs.rmSync(temp,{recursive:true,force:true});}
 }
-test("validator surfaces the mathematically incompatible weekly target and requires an owner decision",()=>{
+test("validator honors the owner-approved rolling cadence without a weekly target",()=>{
  const result=spawnSync(process.execPath,["scripts/validate-schedule.mjs"],{cwd:repoRoot,encoding:"utf8"});
  assert.equal(result.status,0,result.stdout+result.stderr);
- assert.match(result.stdout,/BLOCKED — CADENCE DECISION/);
- assert.match(result.stdout,/2 long-form \+ 1 Short per week conflicts with 72-hour spacing/);
+ assert.match(result.stdout,/PASS: rolling long_form, long_form, short cycle/);
+ assert.doesNotMatch(result.stdout,/BLOCKED — CADENCE DECISION/);
+ assert.match(result.stdout,/BLOCKED — LIVE HISTORY/);
 });
 test("validator rejects missing or falsely approved cadence decisions",()=>{
  const missing=runWithPlanMutation(plan=>{delete plan.cadenceDecision;});
