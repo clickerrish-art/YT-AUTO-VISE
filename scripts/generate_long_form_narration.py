@@ -146,16 +146,18 @@ def captions_from_text_estimate(text: str, duration: float) -> str:
             group = []
     if group:
         groups.append(group)
-    # SRT timestamps are rounded to milliseconds. Require enough time for
-    # every generated cue to retain a positive interval after rounding.
-    if duration * 1000 < len(groups):
-        raise ValueError("Narration is too short to assign a positive millisecond interval to every estimated caption cue")
+    # Reserve at least 100 ms per cue, then distribute the remaining
+    # duration by text length. This prevents tiny groups rounding to zero.
+    minimum_cue_seconds = 0.1
+    if duration < len(groups) * minimum_cue_seconds:
+        raise ValueError("Narration is too short to assign a positive 100 ms interval to every estimated caption cue")
     total_chars = sum(len(" ".join(g)) for g in groups) or 1
+    distributable_duration = duration - len(groups) * minimum_cue_seconds
     cursor = 0.0
     lines = []
     for index, words_group in enumerate(groups, 1):
         caption = " ".join(words_group)
-        share = duration * len(caption) / total_chars
+        share = minimum_cue_seconds + distributable_duration * len(caption) / total_chars
         start = cursor
         end = duration if index == len(groups) else min(duration, cursor + share)
         if end <= start:
