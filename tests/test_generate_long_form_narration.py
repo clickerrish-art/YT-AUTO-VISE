@@ -31,7 +31,7 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
         ]
 
         rendered = MODULE.captions_from_boundaries(boundaries)
-        blocks = rendered.strip().split("\\n\\n")
+        blocks = rendered.strip().split("\n\n")
         self.assertEqual(len(blocks), 2)
         self.assertIn("Hello. World.", blocks[0])
         intervals = []
@@ -49,7 +49,7 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
         ]
 
         rendered = MODULE.captions_from_boundaries(boundaries)
-        blocks = rendered.strip().split("\\n\\n")
+        blocks = rendered.strip().split("\n\n")
         self.assertEqual(len(blocks), 2)
         first_end = blocks[0].splitlines()[1].split(" --> ")[1]
         second_start = blocks[1].splitlines()[1].split(" --> ")[0]
