@@ -50,7 +50,7 @@ test("validator accepts only a fully evidenced feasible owner-approved cadence m
  const impossibleWeekly=runWithPlanMutation(plan=>{
   plan.cadenceDecision={...plan.cadenceDecision,status:"OWNER_APPROVED",ownerApproved:true,approvedMode:"WEEKLY_TARGET_WITH_SHORTER_SPACING",approvedAt:"2026-10-25T12:00:00Z",approvalReference:"owner-decision-record-001"};
  });
- assert.notEqual(impossibleWeekly.status,0);assert.match(impossibleWeekly.stderr,/no greater than 56 hours/);
+ assert.notEqual(impossibleWeekly.status,0);assert.match(impossibleWeekly.stderr,/supported approvedMode/);
  const infeasibleCustom=runWithPlanMutation(plan=>{
   plan.cadenceDecision={...plan.cadenceDecision,status:"OWNER_APPROVED",ownerApproved:true,approvedMode:"OTHER_OWNER_DEFINED_FEASIBLE_POLICY",approvedAt:"2026-10-25T12:00:00Z",approvalReference:"owner-decision-record-001",ownerDefinedPolicy:{description:"Impossible custom policy",publicationsPerCycle:3,cycleHours:168}};
  });
@@ -66,6 +66,20 @@ test("validator rejects calendar-invalid owner approval timestamps",()=>{
 test("validator rejects stale weekly-count fields",()=>{
  const result=runWithPlanMutation(plan=>{plan.targetCadence={longFormVideosPerWeek:2,shortsPerWeek:1,totalVideosPerWeek:3};});
  assert.notEqual(result.status,0);assert.match(result.stderr,/stale weekly-count cadence fields must be removed/);
+});
+test("validator rejects any attempt to lower the non-waivable 72-hour minimum even when all policy fields agree",()=>{
+ const result=runWithPlanMutation((plan,queue)=>{
+  plan.minimumPublicationSpacingHours=56;
+  plan.spacingPolicy.minimumHoursBetweenPosts=56;
+  plan.spacingPolicy.minimumCycleHours=168;
+  plan.publicationCycle.minimumHoursBetweenConsecutivePublications=56;
+  plan.publicationCycle.minimumCycleHours=168;
+  queue.cadence.minimumHoursBetweenConsecutivePublications=56;
+  queue.cadence.minimumCycleHours=168;
+  plan.cadenceDecision={...plan.cadenceDecision,status:"OWNER_APPROVED",ownerApproved:true,approvedMode:"OTHER_OWNER_DEFINED_FEASIBLE_POLICY",approvedAt:"2026-10-25T12:00:00Z",approvalReference:"test-owner-decision",ownerDefinedPolicy:{description:"Three publications in a 168-hour cycle",publicationsPerCycle:3,cycleHours:168}};
+ });
+ assert.notEqual(result.status,0);
+ assert.match(result.stderr,/minimumPublicationSpacingHours must be at least 72 elapsed hours/);
 });
 test("validator rejects any draft fallback cyclic gap shorter than 72 hours",()=>{
  const result=runWithPlanMutation(plan=>{plan.schedule[1].day="Thursday";plan.schedule[1].cronUtc="0 15 * * 4";});
