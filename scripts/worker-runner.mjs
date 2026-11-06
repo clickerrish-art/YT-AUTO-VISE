@@ -484,10 +484,10 @@ export async function runWorker({
     } finally {
       if (lockDirectoryFd !== undefined) fs.closeSync(lockDirectoryFd);
     }
+    preserveStartupLock = false;
     if (lockPathExists(statePath + ".release.lock")) {
       throw new Error("A quarantine release is in progress or requires operator inspection; worker startup is blocked");
     }
-    preserveStartupLock = false;
   } catch (error) {
     if (lockFd !== undefined) {
       fs.closeSync(lockFd);
