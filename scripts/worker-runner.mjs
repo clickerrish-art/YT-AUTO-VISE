@@ -475,6 +475,7 @@ export async function runWorker({
       } catch (cause) {
         const error = new Error("Worker retry backoff could not be persisted; stopping to avoid an early redispatch", { cause });
         error.code = "WORKER_BACKOFF_PERSISTENCE_FAILED";
+        error.retryable = false;
         throw error;
       }
     };

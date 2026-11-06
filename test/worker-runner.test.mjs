@@ -604,6 +604,61 @@ test("worker persists retry cooldown across restart and does not redispatch earl
   }
 });
 
+test("continuous worker stops after HTTP 409 when retry cooldown cannot be persisted", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-409-persist-failure-"));
+  const statePath = path.join(directory, "worker-backoff.json");
+  const requests = [];
+  const errors = [];
+  let removedStateDirectory = false;
+  const fetchImpl = async (url, options = {}) => {
+    const method = options.method ?? "GET";
+    requests.push({ method, url: String(url) });
+    if (method === "GET") {
+      // Remove the persistent-state parent only after worker startup and state
+      // loading, so the next cooldown write fails after the 409 is received.
+      fs.rmSync(directory, { recursive: true, force: true });
+      removedStateDirectory = true;
+      return new Response(JSON.stringify({
+        jobs: [{ id: "job-409-persist-failure", state: "QUEUED" }],
+        queuedCount: 1,
+        publishingEnabled: false
+      }), { status: 200, headers: { "content-type": "application/json" } });
+    }
+    return new Response(JSON.stringify({ error: "renderer prerequisites are not satisfied" }), {
+      status: 409,
+      headers: { "content-type": "application/json" }
+    });
+  };
+
+  try {
+    await assert.rejects(
+      runWorker({
+        baseUrl: "http://127.0.0.1:8787",
+        token,
+        workerId,
+        once: false,
+        pollIntervalMs: 1_000,
+        cooldownStatePath: statePath,
+        fetchImpl,
+        onError: error => errors.push(error),
+        shouldStop: () => false
+      }),
+      error => error?.code === "WORKER_BACKOFF_PERSISTENCE_FAILED" &&
+        error.retryable === false &&
+        /stopping to avoid an early redispatch/.test(error.message)
+    );
+    assert.equal(removedStateDirectory, true);
+    assert.deepEqual(requests.map(item => item.method), ["GET", "POST"],
+      "a 409 whose cooldown cannot be persisted must stop before another poll or dispatch");
+    assert.equal(errors.length, 1);
+    assert.equal(errors[0].code, "WORKER_BACKOFF_PERSISTENCE_FAILED");
+    assert.equal(errors[0].retryable, false);
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+
 test("worker refuses corrupt persisted cooldown state without contacting the dispatch API", async () => {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-corrupt-backoff-"));
   const statePath = path.join(directory, "worker-backoff.json");
