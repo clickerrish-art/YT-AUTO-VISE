@@ -200,6 +200,17 @@ async function readCompleteYoutubeHistoryInputs(youtube, channel, reconciliation
     if (!Array.isArray(returned)) {
       throw new Error("YouTube video details response was invalid; history is incomplete");
     }
+    const requestedIds = new Set(ids);
+    const returnedIds = new Set();
+    for (const video of returned) {
+      if (typeof video?.id !== "string" || !requestedIds.has(video.id) || returnedIds.has(video.id)) {
+        throw new Error("YouTube video details did not match the requested playlist video IDs; history is incomplete");
+      }
+      returnedIds.add(video.id);
+    }
+    if (returnedIds.size !== requestedIds.size) {
+      throw new Error("YouTube video details omitted one or more requested playlist video IDs; history is incomplete");
+    }
     remoteVideos.push(...returned);
   }
   if (remoteVideos.length !== playlistItems.length) {
