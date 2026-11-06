@@ -96,3 +96,10 @@ test("readiness JSON identifies product promotion gates as owner-controlled bloc
   assert.ok(blockers.every(item => item.evidence.path === "config/products.json"));
   assert.ok(blockers.every(item => item.controlOwner === "external_owner_or_human_reviewer"));
 });
+
+test("Short 001 keeps the required title format and an explicit disclosure hold", () => {
+  const brief = fs.readFileSync("content/short-001-wildlife-video-storytelling.md", "utf8");
+  assert.match(brief, /^## YouTube title\n\S/m);
+  assert.match(brief, /DISCLOSURE HOLD/i);
+  assert.match(brief, /never Nature Frontiers/i);
+});
