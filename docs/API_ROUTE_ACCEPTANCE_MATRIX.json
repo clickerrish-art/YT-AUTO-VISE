@@ -15,11 +15,12 @@
       "GET /readyz",
       "GET /operational-readyz"
     ],
-    "branchAheadBy": 2589,
+    "branchAheadBy": 2897,
     "branchBehindBy": 2,
-    "changedFiles": 231,
+    "changedFiles": 261,
     "branchProtectionEnabled": null,
-    "branchProtectionStatus": "UNVERIFIED — GitHub returned 403 for the protection endpoint."
+    "branchProtectionStatus": "UNVERIFIED — GitHub returned 403 for the protection endpoint.",
+    "comparisonSourceSha": "8b98c70e189a73e6afa6d9727cba0b5be8fa0899"
   },
   "counts": {
     "routes": 36,
@@ -945,5 +946,17 @@
     "route": "POST /api/uploads/reconcile",
     "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41997377068",
     "note": "Targeted route evidence only; the full matrix's other route statuses remain tied to its previously recorded source/test SHA."
+  },
+  "latestCiCheckpoint": {
+    "recordedAt": "2026-11-06",
+    "exactApplicationSourceTestSha": "8b98c70e189a73e6afa6d9727cba0b5be8fa0899",
+    "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42295243016",
+    "dashboardBrowser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42295243299",
+    "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42295243314",
+    "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42295243139",
+    "isolatedMainCandidateBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42295242971",
+    "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42295243033",
+    "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42295242942",
+    "routeAcceptanceBoundary": "The complete automation/security suite and dashboard browser suite pass on this exact application SHA. This does not refresh route-by-route business acceptance: the routes[] records and their detailed per-route evidence remain tied to testedSourceTestSha and older route-specific testEvidence. API-001 remains NOT_TESTED overall until every applicable route has current exact-SHA success, validation, persistence, audit, concurrency and restart evidence; externally blocked provider routes remain blocked."
   }
 }
