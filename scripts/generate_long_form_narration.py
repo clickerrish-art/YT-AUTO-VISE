@@ -129,7 +129,11 @@ def captions_from_boundaries(boundaries):
 
 def captions_from_text_estimate(text: str, duration: float) -> str:
     """Build explicitly approximate draft caption timings when TTS word events are absent."""
+    if not math.isfinite(duration) or duration <= 0:
+        raise ValueError("Estimated caption duration must be finite and positive")
     words = text.split()
+    if not words:
+        raise ValueError("Cannot generate estimated captions from empty narration text")
     groups, group = [], []
     for word in words:
         candidate = " ".join(group + [word])
@@ -142,6 +146,10 @@ def captions_from_text_estimate(text: str, duration: float) -> str:
             group = []
     if group:
         groups.append(group)
+    # SRT timestamps are rounded to milliseconds. Require enough time for
+    # every generated cue to retain a positive interval after rounding.
+    if duration * 1000 < len(groups):
+        raise ValueError("Narration is too short to assign a positive millisecond interval to every estimated caption cue")
     total_chars = sum(len(" ".join(g)) for g in groups) or 1
     cursor = 0.0
     lines = []
