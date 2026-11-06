@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { spawnSync } from "node:child_process";
-import { ROLLING_PUBLICATION_FORMATS, weeklyUtcCronGaps } from "../scripts/schedule-policy.mjs";
+import { ROLLING_PUBLICATION_FORMATS, weeklyUtcCronGaps, validateCadenceDecision } from "../scripts/schedule-policy.mjs";
 const queue = JSON.parse(fs.readFileSync("content/queue.json", "utf8"));
 const plan = JSON.parse(fs.readFileSync("config/weekly-content-plan.json", "utf8"));
 test("authoritative plan defines the rolling long-form, long-form, Short publication cycle", () => {
@@ -81,4 +81,35 @@ test("Saturday narration workflow validates the rolling publication cycle and dr
   const result = spawnSync("python", ["-c", pythonBlock[1]], { encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr || result.stdout);
   assert.match(result.stdout, /cycle requires 216 hours/);
+});
+
+
+test("owner-approved rolling cadence preserves the 72-hour minimum and records a timezone-qualified decision", () => {
+  const decision = {
+    status: "OWNER_APPROVED",
+    ownerApproved: true,
+    approvedMode: "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
+    approvedAt: "2026-11-06T20:38:00+02:00",
+    approvalReference: "test-fixture-owner-decision"
+  };
+  assert.equal(validateCadenceDecision(decision, 72).valid, true);
+  assert.equal(validateCadenceDecision(decision, 71.99).valid, false);
+});
+
+test("owner-defined cadence rejects three publications compressed into a 168-hour week", () => {
+  const decision = {
+    status: "OWNER_APPROVED",
+    ownerApproved: true,
+    approvedMode: "OTHER_OWNER_DEFINED_FEASIBLE_POLICY",
+    approvedAt: "2026-11-06T20:38:00+02:00",
+    approvalReference: "test-fixture-owner-decision",
+    ownerDefinedPolicy: {
+      description: "Three publications per week",
+      publicationsPerCycle: 3,
+      cycleHours: 168
+    }
+  };
+  const result = validateCadenceDecision(decision, 72);
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some(error => error.includes("mathematically infeasible")));
 });
