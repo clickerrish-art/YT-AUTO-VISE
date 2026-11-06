@@ -180,8 +180,9 @@ test("worker retains its process lock when uncertain dispatch quarantine cannot 
     error => error?.code === "WORKER_BACKOFF_PERSISTENCE_FAILED"
   );
   assert.equal(produceRequests, 1, "an uncertain POST must never be automatically repeated");
-  assert.equal(fs.existsSync(statePath + ".process.lock"), true,
-    "the process lock must remain as a fail-closed fence when quarantine persistence fails");
+  const retainedLockPath = stateDirectory + ".held/worker-backoff.json.process.lock";
+  assert.equal(fs.existsSync(retainedLockPath), true,
+    "the process lock must remain with the renamed state directory as a fail-closed fence when quarantine persistence fails");
   await assert.rejects(
     runWorker({ baseUrl, token, workerId, once: true, cooldownStatePath: statePath }),
     /already locked|quarantine release/i,
