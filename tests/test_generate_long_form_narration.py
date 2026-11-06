@@ -89,16 +89,19 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
         )
         blocks = rendered.strip().split("\\n\\n")
         self.assertEqual(len(blocks), 3)
-        previous_end_ms = 0
+
+        def milliseconds(value):
+            hours, minutes, rest = value.split(":")
+            seconds, millis = rest.split(",")
+            return (((int(hours) * 60 + int(minutes)) * 60 + int(seconds)) * 1000) + int(millis)
+
+        previous_end = 0
         for block in blocks:
             start_text, end_text = block.splitlines()[1].split(" --> ")
-            start_ms = MODULE.parse_srt_time_for_test(start_text) if hasattr(MODULE, "parse_srt_time_for_test") else None
-            self.assertNotEqual(start_text, end_text)
-            self.assertLessEqual(start_text, end_text)
-            if previous_end_ms:
-                self.assertGreaterEqual(start_text, previous_end_text)
-            previous_end_text = end_text
-            previous_end_ms += 1
+            start_ms, end_ms = milliseconds(start_text), milliseconds(end_text)
+            self.assertGreater(end_ms, start_ms)
+            self.assertGreaterEqual(start_ms, previous_end)
+            previous_end = end_ms
 
     def test_removes_unapproved_paid_promotion_paragraph_and_destination(self):
         source = (
