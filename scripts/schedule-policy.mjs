@@ -447,10 +447,16 @@ export function validateRollingPublicationCycle(items, {
     if (policy.timeZone !== timeZone) errors.push("owner-approved policy timezone must match the validated schedule timezone");
     if (policy.minSpacingHours !== minSpacingHours) errors.push("owner-approved policy minimum spacing must match the validated minimum");
     if (policy.mode !== "rolling") errors.push("owner-approved policy mode must be rolling");
-    if (!Number.isInteger(policy.weeklyPublicationTarget) || policy.weeklyPublicationTarget < 1) {
-      errors.push("owner-approved policy must declare a positive integer weeklyPublicationTarget");
-    } else if (policy.weeklyPublicationTarget * minSpacingHours > WEEK_HOURS) {
-      errors.push("weekly target is mathematically infeasible: " + policy.weeklyPublicationTarget + " publications at " + minSpacingHours + "-hour spacing require at least " + (policy.weeklyPublicationTarget * minSpacingHours) + " hours per weekly cycle");
+    if (policy.mode === "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET") {
+      if (Object.hasOwn(policy, "weeklyPublicationTarget")) {
+        errors.push("rolling-cycle-without-weekly-target approval must omit weeklyPublicationTarget");
+      }
+    } else if (policy.mode === "OTHER_OWNER_DEFINED_FEASIBLE_POLICY") {
+      if (!Number.isInteger(policy.weeklyPublicationTarget) || policy.weeklyPublicationTarget < 1) {
+        errors.push("owner-defined cadence policy must declare a positive integer weeklyPublicationTarget");
+      } else if (policy.weeklyPublicationTarget * minSpacingHours > WEEK_HOURS) {
+        errors.push("weekly target is mathematically infeasible: " + policy.weeklyPublicationTarget + " publications at " + minSpacingHours + "-hour spacing require at least " + (policy.weeklyPublicationTarget * minSpacingHours) + " hours per weekly cycle");
+      }
     }
   }
 
