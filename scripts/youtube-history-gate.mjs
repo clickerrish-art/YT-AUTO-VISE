@@ -27,9 +27,20 @@ function strictIsoTimestamp(value) {
   return Number.isFinite(timestamp) ? timestamp : NaN;
 }
 
+const VERIFIED_UPLOAD_STATES = new Set(["PRIVATE_UPLOAD_VERIFIED"]);
+const KNOWN_UPLOAD_STATES = new Set([
+  ...unresolvedStates,
+  ...VERIFIED_UPLOAD_STATES
+]);
+
 export function assertNoUnresolvedUploadAttempts(ledger) {
   if (!ledger || !Array.isArray(ledger.attempts)) throw new Error("upload attempt ledger is missing or invalid; publication history cannot be trusted");
-  const unresolved = ledger.attempts.filter(attempt => unresolvedStates.has(String(attempt?.status ?? "").toUpperCase()));
+  const unknown = ledger.attempts.filter(attempt => !KNOWN_UPLOAD_STATES.has(String(attempt?.status ?? "").toUpperCase()));
+  if (unknown.length) {
+    throw new Error("upload attempt ledger contains an unknown or missing status; reconcile the ledger before another upload: " +
+      unknown.map(a => a?.jobId ?? a?.attemptId ?? "(unknown)").join(", "));
+  }
+  const unresolved = ledger.attempts.filter(attempt => unresolvedStates.has(String(attempt.status).toUpperCase()));
   if (unresolved.length) throw new Error("unresolved upload attempts require remote reconciliation before another upload: " + unresolved.map(a => a.jobId ?? a.attemptId ?? "(unknown)").join(", "));
   return true;
 }
