@@ -32,6 +32,38 @@ test("Ed25519-signed quarantine release receipt verifies exact worker, job, atte
   assert.equal(receipt.expiresAt, "2026-11-05T18:05:00.000Z");
 });
 
+test("receipt rejects signed but non-canonical ISO timestamps", () => {
+  const nowMs = Date.parse("2026-03-02T18:00:00.000Z");
+  const unsigned = {
+    version: 1,
+    workerId: binding.workerId,
+    jobId: binding.jobId,
+    attemptId: binding.attemptId,
+    artifactSha256: binding.artifactSha256,
+    issuedAt: "2026-02-30T18:00:00.000Z",
+    expiresAt: "2026-03-02T18:05:00.000Z",
+    nonce: "c".repeat(48)
+  };
+  const signedPayload = Buffer.from(JSON.stringify({
+    version: unsigned.version,
+    workerId: unsigned.workerId,
+    jobId: unsigned.jobId,
+    attemptId: unsigned.attemptId,
+    artifactSha256: unsigned.artifactSha256,
+    issuedAt: unsigned.issuedAt,
+    expiresAt: unsigned.expiresAt,
+    nonce: unsigned.nonce
+  }));
+  const receipt = {
+    ...unsigned,
+    signature: crypto.sign(null, signedPayload, keyPair.privateKey).toString("base64url")
+  };
+  assert.throws(
+    () => verifyWorkerQuarantineReleaseReceipt(receipt, { ...binding, nowMs }),
+    /expired or has an invalid validity window/i
+  );
+});
+
 test("receipt rejects tampering, wrong binding, wrong public key and expiry", () => {
   const receipt = createWorkerQuarantineReleaseReceipt(binding);
   assert.throws(() => verifyWorkerQuarantineReleaseReceipt({ ...receipt, jobId: "other-job" }, binding), /does not bind/i);
