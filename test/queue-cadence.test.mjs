@@ -53,6 +53,12 @@ test("queue IDs are unique and every item uses only the approved Selar URL", () 
   const ids=queue.items.map(item => item.id); assert.equal(new Set(ids).size,ids.length);
   for (const item of queue.items) assert.equal(item.productUrl,"https://selar.com/0u19v8u99l",item.id);
 });
+test("automation workflow queue validation enforces the hard 72-hour publication minimum", () => {
+  const automationWorkflow = fs.readFileSync(".github/workflows/validate-automation.yml", "utf8");
+  assert.match(automationWorkflow, /72 <= spacing <= 8760/);
+  assert.doesNotMatch(automationWorkflow, /0 < spacing <= 8760/);
+});
+
 test("workflow cron schedules remain draft preparation only", () => {
   const longWorkflow=fs.readFileSync(".github/workflows/generate-long-form-narration.yml","utf8");
   const shortWorkflow=fs.readFileSync(".github/workflows/free-narration-artifact.yml","utf8");
