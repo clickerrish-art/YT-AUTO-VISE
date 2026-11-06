@@ -1,3 +1,13 @@
+# Latest exact-SHA evidence — 6 November 2026
+
+- Application source/test SHA: `8b98c70e189a73e6afa6d9727cba0b5be8fa0899`.
+- Dashboard Chromium E2E: [run 42295243299](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42295243299), **26/26 passed on that exact SHA**.
+- Automation/security: [run 42295243016](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42295243016), **119/119 Node test files passed**, 16 Python tests passed, npm audit zero vulnerabilities; FFmpeg and ffprobe verified.
+- The 26 browser journeys and 119 Node test-file pass do **not** establish exhaustive dashboard control/form acceptance. **DASH-001 remains NOT_TESTED overall** until every applicable control/form has traceable business-success, validation, error feedback, authorization, persistence, refresh, concurrency, restart and accessibility evidence.
+- The detailed control/form statuses below are historical per-control evidence and have not been re-labelled as newly tested on the 6 November SHA.
+
+---
+
 # Current evidence checkpoint — 5 November 2026
 
 - Exact tested source/test SHA: `51ad2bbcd502c9e44717cd4a529794993cfc50fe`.
