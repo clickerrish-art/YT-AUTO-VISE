@@ -4,6 +4,10 @@ on:
     branches: [main]
     paths:
       - "scripts/replenish-queue.mjs"
+      - "scripts/validate-schedule.mjs"
+      - "scripts/schedule-policy.mjs"
+      - "config/weekly-content-plan.json"
+      - ".github/workflows/twice-weekly-check.yml"
       - "scripts/production-readiness.mjs"
       - "tests/**"
       - "scripts/render-short.mjs"
