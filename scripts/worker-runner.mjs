@@ -104,8 +104,18 @@ function persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches = 
   }, { mode: 0o600 });
 }
 
+function lockPathExists(lockPath) {
+  try {
+    fs.lstatSync(lockPath);
+    return true;
+  } catch (error) {
+    if (error?.code === "ENOENT") return false;
+    throw error;
+  }
+}
+
 export function assertWorkerStoppedForQuarantineRelease(statePath) {
-  if (fs.existsSync(statePath + ".process.lock")) {
+  if (lockPathExists(statePath + ".process.lock")) {
     throw new Error("Stop the worker process before releasing its quarantine; worker state is locked");
   }
 }
@@ -459,7 +469,7 @@ export async function runWorker({
   try {
     lockFd = fs.openSync(lockPath, "wx", 0o600);
     fs.writeFileSync(lockFd, JSON.stringify({ pid: process.pid, workerId, startedAt: new Date().toISOString() }));
-    if (fs.existsSync(statePath + ".release.lock")) {
+    if (lockPathExists(statePath + ".release.lock")) {
       throw new Error("A quarantine release is in progress or requires operator inspection; worker startup is blocked");
     }
   } catch (error) {
