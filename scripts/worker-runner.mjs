@@ -401,13 +401,17 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
   if (listing.status !== 200 || !Array.isArray(listing.payload.jobs)) {
     throw new Error("Dashboard worker API returned an invalid dispatchable-job response");
   }
-  const eligibleJobs = listing.payload.jobs.filter(job => {
+  // Enforce the caller's limit locally as well as in the API query. A server
+  // that accidentally over-returns must never cause this runner to dispatch
+  // more jobs than the configured per-cycle cap.
+  const listedJobs = listing.payload.jobs.slice(0, limit);
+  const eligibleJobs = listedJobs.filter(job => {
     if (uncertainDispatches.has(job?.id)) return false;
     const cooldown = cooldowns.get(job?.id);
     return !cooldown || cooldown.nextAttemptAt <= Date.now();
   });
-  const deferredByUncertainOutcome = listing.payload.jobs.filter(job => uncertainDispatches.has(job?.id)).length;
-  const deferredByBackoff = listing.payload.jobs.length - eligibleJobs.length - deferredByUncertainOutcome;
+  const deferredByUncertainOutcome = listedJobs.filter(job => uncertainDispatches.has(job?.id)).length;
+  const deferredByBackoff = listedJobs.length - eligibleJobs.length - deferredByUncertainOutcome;
   const results = [];
   let stoppedBeforeDispatch = false;
   for (const job of eligibleJobs) {
