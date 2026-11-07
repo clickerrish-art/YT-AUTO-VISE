@@ -382,3 +382,15 @@ test("job cancellation is audited, revision-guarded and refuses active worker le
   assert.equal(snapshot().state.audit.at(-1).action, "CONTENT_JOB_CANCELLED");
   assert.equal(snapshot().state.jobs.find(job => job.id === "leased-job").state, "GENERATING");
 });
+
+test("cancel route rejects malformed job identifiers without reading durable state", async () => {
+  let reads = 0;
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: { prepare() { reads++; throw new Error("must not access state"); } } };
+  const response = await handleRequest(new Request("https://state.example/api/jobs/not%2Fa%2Fjob/cancel", {
+    method: "POST",
+    headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
+    body: JSON.stringify({ reason: "Invalid identifier test" })
+  }), env);
+  assert.equal(response.status, 404);
+  assert.equal(reads, 0);
+});
