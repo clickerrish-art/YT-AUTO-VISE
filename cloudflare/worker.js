@@ -85,7 +85,7 @@ async function verifyRepositoryRunnerToken(token, { fetchImpl = fetch, nowMs = D
         claims.ref !== RUNNER_OIDC_REF ||
         claims.workflow_ref !== RUNNER_OIDC_WORKFLOW ||
         claims.sub !== "repo:" + RUNNER_OIDC_REPOSITORY + ":ref:" + RUNNER_OIDC_REF ||
-        claims.event_name !== "workflow_dispatch" ||
+        !["workflow_dispatch", "push"].includes(claims.event_name) ||
         !Number.isFinite(claims.exp) || claims.exp * 1000 <= nowMs ||
         !Number.isFinite(claims.iat) || claims.iat * 1000 > nowMs + 60_000 ||
         nowMs - claims.iat * 1000 > 10 * 60_000 ||
@@ -104,9 +104,19 @@ async function verifyRepositoryRunnerToken(token, { fetchImpl = fetch, nowMs = D
       name: "RSASSA-PKCS1-v1_5", hash: "SHA-256"
     }, false, ["verify"]);
     const signingInput = new TextEncoder().encode(parts[0] + "." + parts[1]);
-    return await crypto.subtle.verify(
+    const signatureValid = await crypto.subtle.verify(
       { name: "RSASSA-PKCS1-v1_5" }, publicKey, decodeBase64Url(parts[2]), signingInput
     );
+    if (!signatureValid) return false;
+    if (claims.event_name === "workflow_dispatch") return true;
+    if (typeof claims.sha !== "string" || !/^[a-f0-9]{40}$/.test(claims.sha)) return false;
+    const commitResponse = await fetchImpl(
+      "https://api.github.com/repos/" + RUNNER_OIDC_REPOSITORY + "/commits/" + claims.sha,
+      { headers: { accept: "application/vnd.github+json" }, redirect: "error" }
+    );
+    if (!commitResponse.ok) return false;
+    const commit = await commitResponse.json();
+    return typeof commit.commit?.message === "string" && commit.commit.message.includes("[run-production]");
   } catch {
     return false;
   }
