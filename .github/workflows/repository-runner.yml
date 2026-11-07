@@ -45,14 +45,17 @@ jobs:
           ffprobe -version | head -n 1
           node --check scripts/cloudflare-runner-bridge.mjs
           node --check scripts/worker-runner.mjs
-      - name: Acquire durable single-runner session
-        id: session
-        run: node scripts/cloudflare-runner-bridge.mjs start-session
       - name: Pull durable dashboard snapshot and worker retry state
         id: sync_in
         run: |
           node scripts/cloudflare-runner-bridge.mjs pull-snapshot
           node scripts/cloudflare-runner-bridge.mjs pull-backoff
+      - name: Verify private R2 storage and free-tier headroom
+        id: storage_preflight
+        run: node scripts/cloudflare-runner-bridge.mjs verify-storage
+      - name: Acquire durable single-runner session
+        id: session
+        run: node scripts/cloudflare-runner-bridge.mjs start-session
       - name: Start isolated loopback dashboard execution service
         id: server
         shell: bash
