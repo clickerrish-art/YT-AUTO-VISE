@@ -151,7 +151,7 @@ test("private upload gate accepts the approved cadence but still enforces all ot
     proposedAt: "2026-10-07T15:00:00.000Z",
     jobId: "job-owner-cadence",
     format: "short"
-  }), /unresolved upload attempts/);
+  }), /unresolved\/uncertain outcome and must be reconciled/);
 });
 
 
