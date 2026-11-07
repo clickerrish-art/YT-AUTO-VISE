@@ -1333,7 +1333,7 @@ test("private R2 artifact creation rejects unbound SHA, unsafe paths and storage
 });
 
 
-test("repository runner preflight proves private R2 write/read/delete and enforces 1 GiB free-tier headroom", async () => {
+test("repository runner preflight proves private R2 write/read/delete and enforces 2 GiB free-tier headroom", async () => {
   const fixture = await createRunnerOidcFixture();
   const calls = [];
   const database = {
@@ -1360,7 +1360,7 @@ test("repository runner preflight proves private R2 write/read/delete and enforc
   assert.deepEqual(calls.map(call => call[0]), ["put", "get", "delete"]);
 });
 
-test("repository runner preflight blocks production when private R2 headroom is below 1 GiB", async () => {
+test("repository runner preflight blocks production when private R2 headroom is below 2 GiB", async () => {
   const fixture = await createRunnerOidcFixture();
   let writes = 0;
   const env = {
