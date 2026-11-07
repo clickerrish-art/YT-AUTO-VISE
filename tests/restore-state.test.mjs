@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { restoreState } from "../scripts/restore-state.mjs";
+import { restoreState, readBackupFileNoSymlinks } from "../scripts/restore-state.mjs";
 
 function makeTempDir() {
   return fs.mkdtempSync(path.join(os.tmpdir(), "sonic-restore-symlink-"));
@@ -15,6 +15,20 @@ const validEmptyBackup = JSON.stringify({
   includesSecrets: false,
   createdAt: "2026-10-01T00:00:00.000Z",
   entries: []
+});
+
+test("restore backup reader pins regular-file contents and rejects symlinks", () => {
+  const dir = makeTempDir();
+  try {
+    const real = path.join(dir, "stable.json");
+    const link = path.join(dir, "linked.json");
+    fs.writeFileSync(real, validEmptyBackup, { mode: 0o600 });
+    assert.equal(readBackupFileNoSymlinks(real), validEmptyBackup);
+    fs.symlinkSync(real, link);
+    assert.throws(() => readBackupFileNoSymlinks(link), /symbolic link|too many levels/i);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test("restore refuses a backup file that is itself a symbolic link", async () => {
