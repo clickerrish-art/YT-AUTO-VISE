@@ -77,7 +77,11 @@ export function assertPrivateUploadPresentInCompleteHistory(snapshot, {
     throw new Error("private upload is absent from complete verified channel history; retain recovery state and do not advance the publication cycle");
   }
   const [item] = matches;
-  if (item.status !== "private" || item.format !== format || item.actualPublishedAt !== actualPublishedAt) {
+  const reconciledTimestamp = strictIsoTimestamp(item.actualPublishedAt);
+  const expectedTimestamp = strictIsoTimestamp(actualPublishedAt);
+  if (item.status !== "private" || item.format !== format ||
+      !Number.isFinite(reconciledTimestamp) || !Number.isFinite(expectedTimestamp) ||
+      reconciledTimestamp !== expectedTimestamp) {
     throw new Error("private upload channel-history record does not match the exact remote video, format and actual publication timestamp");
   }
   if (snapshot.scheduledItems.some(item => item?.id === videoId)) {
@@ -457,12 +461,13 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       }
     }
     const timestamp = now().toISOString();
+    const normalizedActualPublishedAt = new Date(strictIsoTimestamp(actualPublishedAt)).toISOString();
     const receipt = {
       attemptId: prior.attemptId, jobId, timestamp, channelId: expectedChannelId,
       channelTitle: matchedChannel.snippet.title, videoId: prior.remoteVideoId,
       privacyStatus: remoteItem.status.privacyStatus, title: metadata.title,
       format: metadata.contentType ?? metadata.format ?? null,
-      actualPublishedAt,
+      actualPublishedAt: normalizedActualPublishedAt,
       artifactSha256: videoSha256, metadataVersion: metadataSha256, reviewer: approval.reviewer,
       rightsEvidenceSha256: approval.rightsEvidenceSha256, remoteStatusVerified: true,
       channelHistoryReconciled: historyVerification !== null,
@@ -475,7 +480,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     const receiptPath = path.join(logDir, "upload-" + prior.remoteVideoId + ".json");
     persistJson(receiptPath, receipt);
     prior.status = "PRIVATE_UPLOAD_VERIFIED";
-    prior.actualPublishedAt = actualPublishedAt;
+    prior.actualPublishedAt = normalizedActualPublishedAt;
     prior.format = metadata.contentType ?? metadata.format ?? prior.format ?? null;
     prior.receiptPath = path.basename(receiptPath);
     prior.verifiedAt = timestamp;
@@ -672,12 +677,13 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
         (error instanceof Error ? error.message : "history reconciliation failed"));
     }
   }
+  const normalizedActualPublishedAt = new Date(strictIsoTimestamp(actualPublishedAt)).toISOString();
   const timestamp = now().toISOString();
   const receipt = {
     attemptId: attempt.attemptId, jobId, timestamp, channelId: matchedChannel.id,
     channelTitle: matchedChannel.snippet.title, videoId, privacyStatus: verified.status.privacyStatus,
     title: metadata.title, format: metadata.contentType ?? metadata.format ?? null,
-    actualPublishedAt,
+    actualPublishedAt: normalizedActualPublishedAt,
     parentContentId: (metadata.contentType ?? metadata.format) === "short" ? approval.shortParentRelationship.parentContentId : null,
     parentRemoteVideoId: (metadata.contentType ?? metadata.format) === "short" ? approval.shortParentRelationship.parentRemoteVideoId : null,
     shortParentRelationshipSha256: (metadata.contentType ?? metadata.format) === "short" ? approval.shortParentRelationshipSha256 : null,
@@ -696,7 +702,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   try {
     persistJson(receiptPath, receipt);
     attempt.status = "PRIVATE_UPLOAD_VERIFIED";
-    attempt.actualPublishedAt = actualPublishedAt;
+    attempt.actualPublishedAt = normalizedActualPublishedAt;
     attempt.receiptPath = path.basename(receiptPath);
     attempt.verifiedAt = timestamp;
     attempt.updatedAt = timestamp;
