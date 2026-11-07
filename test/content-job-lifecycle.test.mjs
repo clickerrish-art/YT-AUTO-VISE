@@ -283,6 +283,39 @@ test("expired leases fence stale results and enforce bounded retry backoff", () 
   assert.throws(() => claimWorkerLease(secondExpiry.job, "worker-c", { now: Date.parse(secondExpiry.job.nextRetryAt ?? 0) + 1 }), /explicit operator retry authorization/);
 });
 
+test("render artifact recovery must be verified before an operator can authorize retry", () => {
+  const failed = {
+    ...createContentJob(input, "2026-11-07T12:00:00.000Z"),
+    state: "FAILED",
+    attemptCount: 0,
+    retryPolicy: { maxAttempts: 2, requiresOperatorRetry: true },
+    errorDetails: {
+      code: "RENDER_ARTIFACT_RECOVERY_REQUIRED",
+      retryable: true,
+      retryableAfterOperatorReview: true
+    }
+  };
+  assert.throws(() => authorizeContentJobRetry(failed, {
+    actor: "operator",
+    reason: "Reviewed the retained render failure"
+  }), /must be reconciled and verified absent/);
+  const reconciled = {
+    ...failed,
+    renderRecovery: {
+      verifiedAbsent: true,
+      checkedBy: "operator",
+      checkedAt: "2026-11-07T12:05:00.000Z",
+      reason: "Retained output and manifest inspected and archived"
+    }
+  };
+  const retry = authorizeContentJobRetry(reconciled, {
+    actor: "operator",
+    reason: "Verified old render artifacts were archived"
+  }, Date.parse("2026-11-07T12:06:00.000Z"));
+  assert.equal(retry.state, "QUEUED");
+  assert.equal(retry.renderRecovery.verifiedAbsent, true);
+});
+
 test("expired upload lease enters recovery-required rather than retrying", () => {
   const start = Date.parse("2026-10-23T12:00:00.000Z");
   const claimed = claimWorkerLease(createContentJob(input), "worker-a", { leaseMs: 5_000, now: start });
