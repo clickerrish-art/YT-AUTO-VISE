@@ -4,6 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { restoreState, readBackupFileNoSymlinks } from "../scripts/restore-state.mjs";
+import { backupState } from "../scripts/backup-state.mjs";
 
 function makeTempDir() {
   return fs.mkdtempSync(path.join(os.tmpdir(), "sonic-restore-symlink-"));
@@ -509,6 +510,36 @@ test("restore preserves a newer Facebook recovery ledger instead of replacing it
     );
     assert.deepEqual(fs.readFileSync(destination), current,
       "the existing Facebook recovery history must remain byte-exact");
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+
+test("backup refuses to run while a restore owns the shared operation lock", async () => {
+  const dir = makeTempDir();
+  try {
+    const stateDir = path.join(dir, "state");
+    fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+    const lockPath = path.join(stateDir, ".restore-operation.lock");
+    const owner = {
+      format: "sonicvhibez-restore-operation-lock",
+      version: 1,
+      token: "active-restore-owner-token",
+      pid: 12345,
+      createdAt: "2026-10-29T00:00:00.000Z",
+      operation: "restore"
+    };
+    fs.writeFileSync(lockPath, JSON.stringify(owner), { mode: 0o600 });
+
+    await assert.rejects(
+      backupState({ rootDir: dir }),
+      /Another backup or restore operation holds the state-operation lock/
+    );
+    assert.deepEqual(JSON.parse(fs.readFileSync(lockPath, "utf8")), owner,
+      "backup must not steal, rewrite or remove a restore-owned lock");
+    assert.equal(fs.readdirSync(stateDir).includes(".restore-transaction.json"), false,
+      "a blocked backup must not create or alter a restore journal");
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
