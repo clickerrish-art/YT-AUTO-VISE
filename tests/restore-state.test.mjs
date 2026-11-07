@@ -319,3 +319,67 @@ test("a fresh restore invocation restores byte-exact dashboard state after an in
   }
 });
 
+
+
+test("a fresh restore invocation completes rollback when the original-state temp was fsynced before a crash", async () => {
+  const crypto = await import("node:crypto");
+  const dir = makeTempDir();
+  try {
+    const stateDir = path.join(dir, "state");
+    fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+    const destination = path.join(stateDir, "dashboard-state.json");
+    const originalBytes = Buffer.from(JSON.stringify({
+      version: 1,
+      jobs: [{ id: "preserve-original-after-crash" }],
+      audit: [{ event: "BEFORE_RESTORE" }]
+    }));
+    const replacementBytes = Buffer.from(JSON.stringify({
+      version: 1,
+      jobs: [{ id: "partially-restored" }],
+      audit: []
+    }));
+    const originalSha256 = crypto.createHash("sha256").update(originalBytes).digest("hex");
+    const tempName = "dashboard-state.json.interrupted.restore-tmp";
+    const rollbackTempName = "dashboard-state.json.interrupted.rollback-tmp";
+    const journalPath = path.join(stateDir, ".restore-transaction.json");
+
+    // Model the crash window after the rollback bytes were written and fsynced,
+    // but before rename(rollbackTemp, destination) completed.
+    fs.writeFileSync(path.join(stateDir, rollbackTempName), originalBytes, { mode: 0o600 });
+    fs.writeFileSync(journalPath, JSON.stringify({
+      format: "sonicvhibez-restore-transaction",
+      version: 1,
+      createdAt: "2026-10-29T00:00:00.000Z",
+      entries: [{
+        target: { kind: "dashboard-state", path: "dashboard-state.json" },
+        action: "REPLACE_STATE",
+        newSha256: crypto.createHash("sha256").update(replacementBytes).digest("hex"),
+        originalSha256,
+        originalBase64: originalBytes.toString("base64"),
+        tempName,
+        rollbackTempName
+      }]
+    }), { mode: 0o600 });
+
+    const backupPath = path.join(dir, "backup.json");
+    fs.writeFileSync(backupPath, validEmptyBackup, { mode: 0o600 });
+
+    await assert.rejects(
+      restoreState({ backupPath, rootDir: dir, confirm: "YES", now: Date.parse("2026-10-30T00:00:00.000Z") }),
+      /interrupted restore was rolled back safely/i
+    );
+
+    assert.deepEqual(fs.readFileSync(destination), originalBytes,
+      "recovery must promote the already-durable rollback temp without rebuilding or losing original bytes");
+    assert.equal(fs.existsSync(journalPath), false,
+      "the recovery journal is removed only after rollback is complete");
+    assert.equal(fs.existsSync(path.join(stateDir, rollbackTempName)), false,
+      "the promoted rollback temp must no longer remain");
+    assert.equal(fs.existsSync(path.join(stateDir, tempName)), false,
+      "the interrupted restore staging temp must not remain");
+    assert.equal(fs.existsSync(path.join(stateDir, ".restore-operation.lock")), false,
+      "the recovery operation lock must be released after the completed rollback");
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
