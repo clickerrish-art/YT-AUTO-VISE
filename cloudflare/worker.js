@@ -8,6 +8,8 @@ import { DEFAULT_WEEKLY_PLAN } from "./weekly-plan-compat.js";
 
 const STATE_ID = 1;
 const MAX_STATE_BYTES = 2 * 1024 * 1024;
+const MAX_ARTIFACT_BYTES = 8 * 1024 * 1024 * 1024;
+const ARTIFACT_PART_BYTES = 8 * 1024 * 1024;
 
 
 function json(body, status = 200, headers = {}) {
@@ -302,6 +304,160 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
       return json({ released: true, sessionId: input.sessionId, reason: input.reason.trim(), publishingEnabled: false });
     }
     if (!(await authenticateRepositoryRunner(request, fetchImpl))) return json({ error: "Unauthorized", code: "WORKER_OIDC_UNAUTHORIZED" }, 401);
+
+    if (url.pathname === "/api/runner/artifacts/create" && method === "POST") {
+      if (!env.ARTIFACTS || typeof env.ARTIFACTS.createMultipartUpload !== "function") {
+        return json({ error: "Private R2 artifact binding is unavailable", code: "ARTIFACT_STORAGE_NOT_CONFIGURED" }, 503);
+      }
+      let input;
+      try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+      const { jobId, sourcePath, artifactKind, sha256: digest, sizeBytes } = input ?? {};
+      const contentTypes = { video: "video/mp4", thumbnail: "image/jpeg", metadata: "application/json" };
+      const filename = typeof sourcePath === "string" ? sourcePath.split("/").at(-1) : "";
+      const safePath = typeof sourcePath === "string" && sourcePath.length <= 500 &&
+        !sourcePath.startsWith("/") && !sourcePath.includes("\\") &&
+        sourcePath.split("/").every(part => part && part !== "." && part !== "..");
+      if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(jobId ?? "") ||
+          !safePath || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,119}$/.test(filename) ||
+          !Object.hasOwn(contentTypes, artifactKind) || input.contentType !== contentTypes[artifactKind] ||
+          !/^[a-f0-9]{64}$/.test(digest ?? "") ||
+          !Number.isSafeInteger(sizeBytes) || sizeBytes < 1 || sizeBytes > MAX_ARTIFACT_BYTES) {
+        return json({ error: "Artifact identity, type, path, SHA-256 or size is invalid; uploads are limited to 8 GiB per artifact", code: "ARTIFACT_INPUT_INVALID" }, 400);
+      }
+      const current = await currentState(env);
+      if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+      let state;
+      try { state = validateDashboardState(JSON.parse(current.state_json)); }
+      catch { return json({ error: "Persisted state is invalid", code: "STATE_INVALID" }, 503); }
+      const job = state.jobs.find(item => item?.kind === "CONTENT_PRODUCTION" && item.id === jobId);
+      if (!job || !["GENERATED", "VALIDATING"].includes(job.state)) {
+        return json({ error: "Only a generated content job may persist production artifacts", code: "ARTIFACT_JOB_NOT_GENERATED" }, 409);
+      }
+      const bound = artifactKind === "video"
+        ? job.outputArtifacts?.some(item => item?.path === sourcePath && item.sha256 === digest)
+        : artifactKind === "thumbnail"
+          ? job.thumbnailArtifact?.path === sourcePath && job.thumbnailArtifact?.sha256 === digest
+          : job.metadataPath === sourcePath && job.metadataVersion === digest;
+      if (!bound) return json({ error: "Artifact path and SHA-256 must match the exact generated job receipt", code: "ARTIFACT_RECEIPT_MISMATCH" }, 409);
+      const existing = await env.STATE_DB.prepare(
+        "SELECT artifact_id, upload_id, object_key, status, size_bytes, part_size_bytes, expected_parts FROM runner_artifacts WHERE job_id = ? AND source_path = ? AND sha256 = ?"
+      ).bind(jobId, sourcePath, digest).first();
+      if (existing?.status === "READY") {
+        return json({ artifactId: existing.artifact_id, objectKey: existing.object_key, status: "READY", idempotent: true, publishingEnabled: false });
+      }
+      if (existing?.status === "UPLOADING") {
+        const parts = await env.STATE_DB.prepare(
+          "SELECT part_number, etag FROM runner_artifact_parts WHERE artifact_id = ? ORDER BY part_number"
+        ).bind(existing.artifact_id).all();
+        return json({
+          artifactId: existing.artifact_id, uploadId: existing.upload_id, objectKey: existing.object_key,
+          status: "UPLOADING", partSizeBytes: existing.part_size_bytes, expectedParts: existing.expected_parts,
+          uploadedParts: (parts.results ?? []).map(part => ({ partNumber: part.part_number, etag: part.etag })),
+          publishingEnabled: false
+        });
+      }
+      const usage = await env.STATE_DB.prepare(
+        "SELECT COALESCE(SUM(size_bytes), 0) AS total_bytes FROM runner_artifacts WHERE status IN ('UPLOADING', 'READY')"
+      ).first();
+      if (Number(usage?.total_bytes ?? 0) + sizeBytes > MAX_ARTIFACT_BYTES) {
+        return json({ error: "The private staging artifact budget is capped at 8 GiB to stay below the R2 free storage allowance", code: "R2_APPLICATION_BUDGET_EXCEEDED" }, 413);
+      }
+      const artifactId = crypto.randomUUID();
+      const objectKey = "jobs/" + jobId + "/" + digest + "/" + filename;
+      const partSizeBytes = ARTIFACT_PART_BYTES;
+      const expectedParts = Math.ceil(sizeBytes / partSizeBytes);
+      if (expectedParts > 10000) return json({ error: "Artifact exceeds the R2 multipart part-count limit" }, 413);
+      const createdAt = new Date().toISOString();
+      let multipart;
+      try {
+        multipart = await env.ARTIFACTS.createMultipartUpload(objectKey, {
+          httpMetadata: { contentType: contentTypes[artifactKind] },
+          customMetadata: { jobId, sourcePath, artifactKind, sha256: digest }
+        });
+        await env.STATE_DB.prepare(
+          "INSERT INTO runner_artifacts (artifact_id, job_id, source_path, artifact_kind, filename, object_key, upload_id, sha256, size_bytes, part_size_bytes, expected_parts, content_type, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'UPLOADING', ?)"
+        ).bind(artifactId, jobId, sourcePath, artifactKind, filename, objectKey, multipart.uploadId, digest, sizeBytes, partSizeBytes, expectedParts, contentTypes[artifactKind], createdAt).run();
+      } catch {
+        if (multipart) {
+          try { await multipart.abort(); } catch {}
+        }
+        return json({ error: "Could not initialize durable private artifact upload", code: "ARTIFACT_UPLOAD_INIT_FAILED" }, 503);
+      }
+      return json({
+        artifactId, uploadId: multipart.uploadId, objectKey, status: "UPLOADING",
+        partSizeBytes, expectedParts, uploadedParts: [], publishingEnabled: false
+      }, 201);
+    }
+
+    if (url.pathname === "/api/runner/artifacts/part" && method === "PUT") {
+      if (!env.ARTIFACTS || typeof env.ARTIFACTS.resumeMultipartUpload !== "function") return json({ error: "Private R2 artifact binding is unavailable" }, 503);
+      const artifactId = url.searchParams.get("artifactId") ?? "";
+      const partNumber = Number(url.searchParams.get("partNumber"));
+      const contentLength = Number(request.headers.get("content-length"));
+      if (!/^[a-f0-9-]{36}$/.test(artifactId) || !Number.isInteger(partNumber) || partNumber < 1 ||
+          !Number.isSafeInteger(contentLength) || contentLength < 1 || contentLength > ARTIFACT_PART_BYTES || !request.body) {
+        return json({ error: "artifactId, partNumber, known Content-Length and a bounded part body are required" }, 400);
+      }
+      const artifact = await env.STATE_DB.prepare(
+        "SELECT upload_id, object_key, size_bytes, part_size_bytes, expected_parts, status FROM runner_artifacts WHERE artifact_id = ?"
+      ).bind(artifactId).first();
+      if (!artifact || artifact.status !== "UPLOADING" || partNumber > artifact.expected_parts) return json({ error: "Active artifact upload was not found", code: "ARTIFACT_UPLOAD_NOT_FOUND" }, 404);
+      const expectedLength = partNumber === artifact.expected_parts
+        ? Number(artifact.size_bytes) - Number(artifact.part_size_bytes) * (Number(artifact.expected_parts) - 1)
+        : Number(artifact.part_size_bytes);
+      if (contentLength !== expectedLength) return json({ error: "Part length does not match the declared artifact size and part plan" }, 400);
+      try {
+        const upload = env.ARTIFACTS.resumeMultipartUpload(artifact.object_key, artifact.upload_id);
+        const part = await upload.uploadPart(partNumber, request.body);
+        await env.STATE_DB.prepare(
+          "INSERT INTO runner_artifact_parts (artifact_id, part_number, etag) VALUES (?, ?, ?) ON CONFLICT(artifact_id, part_number) DO UPDATE SET etag = excluded.etag"
+        ).bind(artifactId, partNumber, part.etag).run();
+        return json({ artifactId, partNumber: part.partNumber, etag: part.etag, publishingEnabled: false });
+      } catch {
+        return json({ error: "R2 multipart part upload failed; the incomplete upload remains quarantined for retry", code: "ARTIFACT_PART_UPLOAD_FAILED" }, 503);
+      }
+    }
+
+    if (url.pathname === "/api/runner/artifacts/complete" && method === "POST") {
+      if (!env.ARTIFACTS || typeof env.ARTIFACTS.resumeMultipartUpload !== "function") return json({ error: "Private R2 artifact binding is unavailable" }, 503);
+      let input;
+      try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+      if (typeof input?.artifactId !== "string" || !/^[a-f0-9-]{36}$/.test(input.artifactId)) return json({ error: "artifactId is invalid" }, 400);
+      const artifact = await env.STATE_DB.prepare(
+        "SELECT artifact_id, upload_id, object_key, size_bytes, expected_parts, status, sha256 FROM runner_artifacts WHERE artifact_id = ?"
+      ).bind(input.artifactId).first();
+      if (!artifact) return json({ error: "Artifact upload was not found" }, 404);
+      if (artifact.status === "READY") return json({ artifactId: artifact.artifact_id, objectKey: artifact.object_key, sha256: artifact.sha256, sizeBytes: artifact.size_bytes, status: "READY", idempotent: true });
+      if (artifact.status !== "UPLOADING") return json({ error: "Artifact upload is not completable", code: "ARTIFACT_UPLOAD_NOT_ACTIVE" }, 409);
+      const rows = await env.STATE_DB.prepare(
+        "SELECT part_number, etag FROM runner_artifact_parts WHERE artifact_id = ? ORDER BY part_number"
+      ).bind(input.artifactId).all();
+      const parts = (rows.results ?? []).map(part => ({ partNumber: Number(part.part_number), etag: part.etag }));
+      if (parts.length !== Number(artifact.expected_parts) ||
+          parts.some((part, index) => part.partNumber !== index + 1 || typeof part.etag !== "string" || !part.etag)) {
+        return json({ error: "Every multipart segment must be uploaded before completion", code: "ARTIFACT_PARTS_INCOMPLETE" }, 409);
+      }
+      let object;
+      try {
+        object = await env.ARTIFACTS.resumeMultipartUpload(artifact.object_key, artifact.upload_id).complete(parts);
+      } catch {
+        return json({ error: "R2 multipart completion failed; the upload remains available for reconciliation", code: "ARTIFACT_COMPLETE_FAILED" }, 503);
+      }
+      if (Number(object.size) !== Number(artifact.size_bytes)) {
+        await env.ARTIFACTS.delete(artifact.object_key);
+        await env.STATE_DB.prepare("UPDATE runner_artifacts SET status = 'FAILED' WHERE artifact_id = ?").bind(input.artifactId).run();
+        return json({ error: "R2 object size did not match the declared artifact size; object was deleted", code: "ARTIFACT_SIZE_MISMATCH" }, 409);
+      }
+      const completedAt = new Date().toISOString();
+      await env.STATE_DB.prepare(
+        "UPDATE runner_artifacts SET status = 'READY', etag = ?, completed_at = ? WHERE artifact_id = ? AND status = 'UPLOADING'"
+      ).bind(object.httpEtag, completedAt, input.artifactId).run();
+      return json({
+        artifactId: artifact.artifact_id, objectKey: artifact.object_key,
+        sha256: artifact.sha256, sizeBytes: object.size, etag: object.httpEtag,
+        status: "READY", completedAt, publishingEnabled: false
+      }, 201);
+    }
     if (url.pathname === "/api/runner/session" && method === "POST") {
       let input;
       try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
