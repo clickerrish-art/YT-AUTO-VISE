@@ -1,8 +1,8 @@
+import { normalizeDashboardState, toDashboardStateResponse } from "./dashboard-state-compat.js";
+
 const STATE_ID = 1;
 const MAX_STATE_BYTES = 2 * 1024 * 1024;
 
-const REQUIRED_ARRAYS = ["queueItems", "audit", "jobs", "uploads"];
-const OPTIONAL_ARRAYS = ["campaigns", "facebookDrafts", "facebookPosts", "facebookAttempts"];
 
 function json(body, status = 200, headers = {}) {
   return new Response(JSON.stringify(body), {
@@ -21,28 +21,7 @@ function constantTimeEqual(left, right) {
 }
 
 function validateDashboardState(value) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    throw new Error("State must be a JSON object");
-  }
-  if (value.version !== 1) throw new Error("Unsupported dashboard state version");
-  for (const key of REQUIRED_ARRAYS) {
-    if (!Array.isArray(value[key])) throw new Error("Invalid state schema: " + key);
-  }
-  for (const key of OPTIONAL_ARRAYS) {
-    if (value[key] !== undefined && !Array.isArray(value[key])) {
-      throw new Error("Invalid state schema: " + key);
-    }
-  }
-  if (value.publishingEnabled === true || value.publicPublishingEnabled === true ||
-      value.unattendedPublishingEnabled === true) {
-    throw new Error("Publishing must remain disabled in the Cloudflare state service");
-  }
-  for (const campaign of Array.isArray(value.campaigns) ? value.campaigns : []) {
-    if (campaign?.type === "safari_affiliate" && campaign.status !== "INACTIVE") {
-      throw new Error("Safari affiliate campaigns must remain inactive");
-    }
-  }
-  return { ...value, publishingEnabled: false };
+  return normalizeDashboardState(value);
 }
 
 async function readJson(request) {
@@ -99,7 +78,7 @@ async function handleRequest(request, env) {
     } catch {
       return json({ error: "Persisted state is corrupt or has an unsupported schema", code: "STATE_INVALID" }, 503);
     }
-    return json({ revision: row.revision, updatedAt: row.updated_at, state }, 200, { etag: '"' + row.revision + '"' });
+    return json(toDashboardStateResponse(state, { revision: row.revision, updatedAt: row.updated_at }), 200, { etag: '"' + row.revision + '"' });
   }
 
   if (url.pathname === "/api/state/bootstrap" && method === "POST") {
