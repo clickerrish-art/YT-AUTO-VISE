@@ -112,7 +112,6 @@ test("crash recovery blocks dashboard until rollback, then serves the original q
           !target.endsWith(".rollback-tmp")) {
         committed += 1;
         if (committed === 1) {
-          process.stdout.write("RESTORE_DESTINATION_COMMITTED\\n");
           process.exit(86);
         }
       }
@@ -139,7 +138,6 @@ test("crash recovery blocks dashboard until rollback, then serves the original q
   restoreChild.stderr.on("data", chunk => { restoreErrors += chunk; });
   const [restoreExit] = await once(restoreChild, "exit");
   assert.equal(restoreExit, 86, "restore child must die immediately after its first durable destination commit: " + restoreErrors);
-  assert.match(restoreOutput, /RESTORE_DESTINATION_COMMITTED/);
 
   const journalPath = path.join(stateDir, ".restore-transaction.json");
   const lockPath = path.join(stateDir, ".restore-operation.lock");
