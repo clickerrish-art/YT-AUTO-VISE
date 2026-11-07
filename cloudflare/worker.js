@@ -138,6 +138,34 @@ async function authenticateRepositoryRunner(request, fetchImpl = fetch) {
   return match ? verifyRepositoryRunnerToken(match[1], { fetchImpl }) : false;
 }
 
+async function measureArtifactUsage(env) {
+  if (!env.ARTIFACTS || typeof env.ARTIFACTS.list !== "function") {
+    throw new Error("R2 object listing is unavailable");
+  }
+  let completedBytes = 0;
+  let objectCount = 0;
+  let cursor;
+  do {
+    const page = await env.ARTIFACTS.list({ prefix: "jobs/", limit: 1000, ...(cursor ? { cursor } : {}) });
+    if (!Array.isArray(page.objects)) throw new Error("R2 returned an invalid object listing");
+    for (const object of page.objects) {
+      if (!Number.isSafeInteger(object.size) || object.size < 0) throw new Error("R2 object size is invalid");
+      completedBytes += object.size;
+      objectCount++;
+      if (!Number.isSafeInteger(completedBytes) || objectCount > 100000) throw new Error("R2 artifact listing exceeds safe accounting limits");
+    }
+    if (!page.truncated) break;
+    if (typeof page.cursor !== "string" || !page.cursor || page.cursor === cursor) throw new Error("R2 pagination cursor is invalid");
+    cursor = page.cursor;
+  } while (true);
+  const pending = await env.STATE_DB.prepare(
+    "SELECT COALESCE(SUM(size_bytes), 0) AS total_bytes FROM runner_artifacts WHERE status = 'UPLOADING'"
+  ).first();
+  const pendingBytes = Number(pending?.total_bytes ?? 0);
+  if (!Number.isSafeInteger(pendingBytes) || pendingBytes < 0) throw new Error("D1 pending artifact reservations are invalid");
+  return { usedBytes: completedBytes + pendingBytes, objectCount, completedBytes, pendingBytes };
+}
+
 function validateRunnerBackoff(value, workerId) {
   if (!value || typeof value !== "object" || Array.isArray(value) ||
       value.schemaVersion !== 1 || value.workerId !== workerId ||
@@ -318,10 +346,10 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
           typeof env.ARTIFACTS.get !== "function" || typeof env.ARTIFACTS.delete !== "function") {
         return json({ ready: false, code: "ARTIFACT_STORAGE_NOT_CONFIGURED", blockers: ["Private R2 storage binding is unavailable."] }, 503);
       }
-      const usage = await env.STATE_DB.prepare(
-        "SELECT COALESCE(SUM(size_bytes), 0) AS total_bytes FROM runner_artifacts WHERE status IN ('UPLOADING', 'READY')"
-      ).first();
-      const usedBytes = Number(usage?.total_bytes ?? 0);
+      let usage;
+      try { usage = await measureArtifactUsage(env); }
+      catch { return json({ ready: false, code: "R2_ARTIFACT_ACCOUNTING_FAILED", blockers: ["Private R2 storage usage could not be reconciled safely."] }, 503); }
+      const usedBytes = usage.usedBytes;
       const remainingBytes = Math.max(0, MAX_ARTIFACT_BYTES - usedBytes);
       if (remainingBytes < 2 * 1024 * 1024 * 1024) {
         return json({ ready: false, code: "R2_ARTIFACT_HEADROOM_LOW", usedBytes, remainingBytes, requiredHeadroomBytes: 2 * 1024 * 1024 * 1024 }, 503);
@@ -415,10 +443,10 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
           publishingEnabled: false
         });
       }
-      const usage = await env.STATE_DB.prepare(
-        "SELECT COALESCE(SUM(size_bytes), 0) AS total_bytes FROM runner_artifacts WHERE status IN ('UPLOADING', 'READY')"
-      ).first();
-      if (Number(usage?.total_bytes ?? 0) + sizeBytes > MAX_ARTIFACT_BYTES) {
+      let usage;
+      try { usage = await measureArtifactUsage(env); }
+      catch { return json({ error: "Private R2 storage usage could not be reconciled safely", code: "R2_ARTIFACT_ACCOUNTING_FAILED" }, 503); }
+      if (usage.usedBytes + sizeBytes > MAX_ARTIFACT_BYTES) {
         return json({ error: "The private staging artifact budget is capped at 8 GiB to stay below the R2 free storage allowance", code: "R2_APPLICATION_BUDGET_EXCEEDED" }, 413);
       }
       const artifactId = existing?.artifact_id ?? crypto.randomUUID();
