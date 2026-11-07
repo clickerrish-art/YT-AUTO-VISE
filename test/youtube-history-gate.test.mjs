@@ -34,6 +34,7 @@ test("history reconciliation separates future scheduled videos from actual publi
   };
   const scheduledReconciliation = {
     ...reconciliation,
+    verifiedAt: "2026-10-04T23:59:59.000Z",
     videos: [
       ...reconciliation.videos,
       { id: "vid-scheduled", format: "short", visibility: "private", scheduledAt: "2026-10-10T15:00:00.000Z" }
