@@ -300,3 +300,85 @@ test("schedule read API exposes rolling safety constraints but blocks absent aut
   assert.equal(body.publishingEnabled, false);
   assert.equal(body.readOnly, true);
 });
+
+function mutableDatabase(initialState, initialRevision = 1) {
+  let revision = initialRevision;
+  let stateJson = JSON.stringify(initialState);
+  let updatedAt = "2026-11-08T00:00:00.000Z";
+  const database = {
+    prepare(sql) {
+      return {
+        sql,
+        args: [],
+        bind(...args) { this.args = args; return this; },
+        async first() { return { revision, state_json: stateJson, updated_at: updatedAt }; }
+      };
+    },
+    async batch(statements) {
+      const update = statements.find(statement => statement.sql.startsWith("UPDATE dashboard_state"));
+      if (update && revision === update.args[3]) {
+        stateJson = update.args[0];
+        updatedAt = update.args[1];
+        revision++;
+        return [{ meta: { changes: 1 } }, { meta: { changes: 1 } }];
+      }
+      return [{ meta: { changes: 0 } }, { meta: { changes: 0 } }];
+    }
+  };
+  return { database, snapshot: () => ({ revision, state: JSON.parse(stateJson), updatedAt }) };
+}
+
+test("content job creation enforces preparation slots and persists an idempotent queued job with a backup", async () => {
+  const { database, snapshot } = mutableDatabase(validState());
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const payload = { idempotencyKey: "job:2026-11-10:longform", title: "Wildlife behaviour", topic: "Observe animal behaviour responsibly", contentType: "long_form", scheduledDate: "2026-11-10", scheduledDay: "Tuesday", inputReferences: ["research:field-notes"] };
+  const request = () => new Request("https://state.example/api/jobs", { method: "POST", headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" }, body: JSON.stringify(payload) });
+  const created = await handleRequest(request(), env);
+  const createdBody = await created.json();
+  assert.equal(created.status, 201);
+  assert.equal(createdBody.job.state, "QUEUED");
+  assert.equal(createdBody.job.scheduledSlot.timezone, "Africa/Johannesburg");
+  assert.equal(createdBody.job.publishingEnabled, false);
+  assert.equal(createdBody.revision, 2);
+  assert.equal(snapshot().state.jobs.length, 1);
+  const replay = await handleRequest(request(), env);
+  const replayBody = await replay.json();
+  assert.equal(replay.status, 200);
+  assert.equal(replayBody.idempotentReplay, true);
+  assert.equal(replayBody.job.id, createdBody.job.id);
+  assert.equal(snapshot().revision, 2);
+});
+
+test("content job creation rejects mismatched weekdays, invalid type/day pairs and idempotency conflicts", async () => {
+  const { database } = mutableDatabase(validState());
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const send = async payload => handleRequest(new Request("https://state.example/api/jobs", { method: "POST", headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" }, body: JSON.stringify(payload) }), env);
+  const base = { idempotencyKey: "job:2026-11-10:longform", title: "Wildlife behaviour", topic: "Observe animal behaviour responsibly", contentType: "long_form", scheduledDate: "2026-11-10", scheduledDay: "Tuesday" };
+  assert.equal((await send({ ...base, scheduledDay: "Saturday" })).status, 400);
+  assert.equal((await send({ ...base, contentType: "short" })).status, 400);
+  assert.equal((await send(base)).status, 201);
+  const conflict = await send({ ...base, title: "Different title" });
+  assert.equal(conflict.status, 409);
+  assert.equal((await conflict.json()).code, "IDEMPOTENCY_CONFLICT");
+});
+
+test("job cancellation is audited, revision-guarded and refuses active worker leases", async () => {
+  const state = validState();
+  state.jobs = [
+    { id: "queued-job", state: "QUEUED", transitionHistory: [], workerLease: null },
+    { id: "leased-job", state: "GENERATING", transitionHistory: [], workerLease: { workerId: "worker-1", expiresAt: "2099-01-01T00:00:00.000Z" } }
+  ];
+  const { database, snapshot } = mutableDatabase(state);
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const send = id => handleRequest(new Request(`https://state.example/api/jobs/${id}/cancel`, { method: "POST", headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" }, body: JSON.stringify({ reason: "Owner cancelled the draft request" }) }), env);
+  const blocked = await send("leased-job");
+  assert.equal(blocked.status, 409);
+  const cancelled = await send("queued-job");
+  const body = await cancelled.json();
+  assert.equal(cancelled.status, 200);
+  assert.equal(body.job.state, "CANCELLED");
+  assert.equal(body.job.cancelledBy, "sonicvhibez-owner");
+  assert.equal(body.revision, 2);
+  assert.equal(snapshot().state.audit.at(-1).action, "CONTENT_JOB_CANCELLED");
+  assert.equal(snapshot().state.jobs.find(job => job.id === "leased-job").state, "GENERATING");
+});
