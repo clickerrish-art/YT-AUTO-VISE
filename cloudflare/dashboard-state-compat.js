@@ -1,3 +1,6 @@
+import { DEFAULT_WEEKLY_PLAN } from "./weekly-plan-compat.js";
+import { validateCampaigns } from "./campaigns-compat.js";
+
 const REQUIRED_ARRAYS = ["queueItems", "audit", "jobs", "uploads"];
 const OPTIONAL_ARRAYS = ["campaigns", "facebookDrafts", "facebookPosts", "facebookAttempts"];
 
@@ -41,26 +44,31 @@ export function normalizeDashboardState(value) {
 }
 
 /**
- * Keep the existing browser's /api/state response contract while also exposing
- * the revision envelope used by new clients. No synthetic schedule, upload ledger,
- * campaign validation, or provider verification is invented here.
+ * Preserve the existing browser's /api/state contract using authoritative repository
+ * configuration and persisted D1 state. Filesystem-only upload-ledger data remains
+ * explicitly unavailable; no remote history or readiness is inferred.
  */
 export function toDashboardStateResponse(state, { revision, updatedAt }) {
   const normalized = normalizeDashboardState(state);
+  const campaigns = normalized.campaigns;
+  const campaignErrors = validateCampaigns({ version: 1, campaigns });
+  const blockers = [
+    ...campaignErrors.map(error => "Campaign configuration: " + error),
+    "The filesystem-backed upload ledger is not available in the durable-state adapter.",
+    "This is a durable-state compatibility response, not a production-readiness result.",
+    "Live publishing remains disabled; verify complete SonicVhibez YouTube history and all production gates in the repository runner."
+  ];
   return {
     publishingEnabled: false,
-    schedule: null,
-    campaigns: normalized.campaigns,
-    campaignValidation: { ok: false, errors: ["Campaign validation requires the authoritative repository configuration; unavailable in the state service."] },
+    schedule: DEFAULT_WEEKLY_PLAN,
+    campaigns,
+    campaignValidation: { ok: campaignErrors.length === 0, errors: campaignErrors },
     queueItems: normalized.queueItems,
     jobs: normalized.jobs.slice(-30).reverse(),
     uploads: normalized.uploads.slice(-30).reverse(),
     uploadLedger: null,
     audit: normalized.audit.slice(-50).reverse(),
-    blockers: [
-      "This is a durable-state compatibility response, not a production-readiness result.",
-      "Live publishing remains disabled; verify complete SonicVhibez YouTube history and all production gates in the repository runner."
-    ],
+    blockers,
     revision,
     updatedAt,
     state: normalized
