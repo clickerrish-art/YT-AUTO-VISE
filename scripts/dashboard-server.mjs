@@ -3222,6 +3222,67 @@ const server = http.createServer(async (req, res) => {
         return json(res, 200, { job: result.job, publishingEnabled: false });
       } finally { release(); }
     }
+    if (req.method === "POST" && url.pathname === "/api/jobs/render-recovery/reconcile") {
+      const body = await readBody(req);
+      if (typeof body.jobId !== "string" || typeof body.reason !== "string" ||
+          body.reason.trim().length < 8 || body.reason.length > 1000) {
+        return json(res, 400, { error: "jobId and an 8–1000 character operator recovery review reason are required", publishingEnabled: false });
+      }
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
+        if (index < 0) return json(res, 404, { error: "Content job not found" });
+        const job = state.jobs[index];
+        if (!["FAILED", "DEAD_LETTER"].includes(job.state) || job.workerLease ||
+            !["RENDER_ARTIFACT_RECOVERY_REQUIRED", "RENDER_MANIFEST_RECOVERY_REQUIRED"].includes(job.errorDetails?.code)) {
+          return json(res, 409, { error: "Only an unleased render-artifact or render-manifest recovery failure can be reconciled" });
+        }
+        const artifactPaths = contentJobArtifactPaths(job.id);
+        const protectedPaths = [
+          artifactPaths.videoPath,
+          artifactPaths.thumbnailPath,
+          "content/job-render-manifests/" + job.id + ".json"
+        ];
+        for (const relativePath of protectedPaths) {
+          const absolutePath = path.resolve(root, relativePath);
+          let current = root;
+          const parts = path.relative(root, absolutePath).split(path.sep);
+          for (let partIndex = 0; partIndex < parts.length; partIndex++) {
+            current = path.join(current, parts[partIndex]);
+            let stat;
+            try { stat = fs.lstatSync(current); }
+            catch (error) {
+              if (error?.code === "ENOENT") break;
+              throw error;
+            }
+            if (stat.isSymbolicLink()) return json(res, 409, { error: "A protected render path contains a symbolic link; manual security review is required", artifactPath: relativePath });
+            if (partIndex < parts.length - 1 && !stat.isDirectory()) return json(res, 409, { error: "A protected render path ancestor is not a directory; manual recovery is required", artifactPath: relativePath });
+            if (partIndex === parts.length - 1) return json(res, 409, { error: "Retained render artifact still exists; inspect and archive it before reconciliation", artifactPath: relativePath });
+          }
+        }
+        const checkedAt = new Date().toISOString();
+        job.renderRecovery = {
+          verifiedAbsent: true,
+          checkedPaths: protectedPaths,
+          checkedBy: operatorId,
+          checkedAt,
+          reason: body.reason.trim()
+        };
+        state.jobs[index] = job;
+        state.audit.push({
+          id: crypto.randomUUID(),
+          action: "CONTENT_RENDER_RECOVERY_RECONCILED",
+          jobId: job.id,
+          checkedPaths: protectedPaths,
+          actor: operatorId,
+          at: checkedAt,
+          reason: body.reason.trim()
+        });
+        saveState(state);
+        return json(res, 200, { job, recoveryReconciled: true, retryAuthorized: false, publishingEnabled: false });
+      } finally { release(); }
+    }
     if (req.method === "POST" && url.pathname === "/api/jobs/retry") {
       const body = await readBody(req);
       if (typeof body.jobId !== "string" || typeof body.reason !== "string") {
