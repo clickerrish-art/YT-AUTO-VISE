@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import crypto from "node:crypto";
 import os from "node:os";
 import path from "node:path";
 import { assertNoUnresolvedUploadAttempts, validateHistoryReconciliation, validateHistoryReconciliationSnapshot, assertNextPublicationAllowed, fetchCompleteYoutubeHistorySnapshot } from "../scripts/youtube-history-gate.mjs";
@@ -209,6 +210,7 @@ test("complete history fetch verifies authenticated playlist ownership and every
       channelId
     );
     assert.equal(snapshot.history.length, 51);
+    assert.equal(snapshot.reconciliationSha256, crypto.createHash("sha256").update(fs.readFileSync(reconciliationPath)).digest("hex"), "snapshot must bind the exact reviewed reconciliation document bytes");
     assert.equal(pageCalls.length, 2);
     assert.equal(pageCalls[0].maxResults, 50);
     assert.equal(pageCalls[1].pageToken, "page-2");
