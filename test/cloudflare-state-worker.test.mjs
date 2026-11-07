@@ -339,7 +339,7 @@ test("content job creation enforces preparation slots and persists an idempotent
   const request = () => new Request("https://state.example/api/jobs", { method: "POST", headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" }, body: JSON.stringify(payload) });
   const created = await handleRequest(request(), env);
   const createdBody = await created.json();
-  assert.equal(created.status, 201, JSON.stringify(body));
+  assert.equal(created.status, 201, JSON.stringify(createdBody));
   assert.equal(createdBody.job.state, "QUEUED");
   assert.equal(createdBody.job.scheduledSlot.timezone, "Africa/Johannesburg");
   assert.equal(createdBody.job.publishingEnabled, false);
