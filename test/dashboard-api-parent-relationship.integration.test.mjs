@@ -40,6 +40,12 @@ test("Short-parent binding is idempotent under concurrency, rejects conflicts an
  const post=async body=>{const r=await fetch(base()+"/api/jobs/parent-relationship",{method:"POST",headers,body:JSON.stringify(body)});return{status:r.status,body:await r.json()}};
  assert.equal((await fetch(base()+"/api/jobs/parent-relationship",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)})).status,401);
  const beforeInvalid=fs.readFileSync(stateFile);assert.equal((await post({...payload,confirmRelationshipReviewed:false})).status,400);assert.deepEqual(fs.readFileSync(stateFile),beforeInvalid);
+ const receiptPath=path.join(uploads,"parent-receipt.json"),originalReceipt=fs.readFileSync(receiptPath);
+ const incompleteReceipt=JSON.parse(originalReceipt);delete incompleteReceipt.channelHistoryReconciled;
+ fs.writeFileSync(receiptPath,JSON.stringify(incompleteReceipt));
+ assert.equal((await post(payload)).status,409,"Short parent binding must reject a receipt without complete channel-history proof");
+ assert.deepEqual(fs.readFileSync(stateFile),beforeInvalid,"rejected parent receipt must not mutate dashboard state");
+ fs.writeFileSync(receiptPath,originalReceipt);
  const pair=await Promise.all([post(payload),post(payload)]);assert.deepEqual(pair.map(x=>x.status),[200,200],JSON.stringify(pair));assert.equal(pair.filter(x=>x.body.reused===true).length,1);
  const accepted=pair.find(x=>x.body.reused!==true);assert.ok(accepted);assert.equal(accepted.body.nativeRelatedVideoStatus,"BLOCKED_EXTERNAL");assert.equal(accepted.body.publishingEnabled,false);
  const relationship=accepted.body.job.shortParentRelationship;assert.equal(relationship.parentRemoteVideoId,videoId);assert.equal(relationship.parentPrivacyStatus,"private");assert.equal(relationship.relationshipReviewer,operator);assert.equal(accepted.body.relationshipSha256,shortParentRelationshipSha256(relationship));
