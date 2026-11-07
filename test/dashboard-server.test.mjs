@@ -987,7 +987,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     assert.equal(protectedBody.artifactPath, "media/jobs/" + protectedJob.id + "/final.mp4");
     assert.deepEqual(fs.readFileSync(protectedOutput), protectedBytes, "existing render output must remain byte-for-byte unchanged");
     const protectedState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
-    assert.equal(protectedState.jobs.find(job => job.id === protectedJob.id).state, "QUEUED", "refusal must happen before worker claim");
+    assert.equal(protectedState.jobs.find(job => job.id === protectedJob.id).state, "FAILED", "retained render artifacts must quarantine the job for operator recovery");
     protectedState.jobs.find(job => job.id === protectedJob.id).scheduledSlot = originalProtectedScheduledSlot;
     fs.writeFileSync(path.join(stateDir, "dashboard-state.json"), JSON.stringify(protectedState, null, 2) + "\n", { mode: 0o600 });
   } finally {
