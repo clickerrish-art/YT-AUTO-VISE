@@ -137,7 +137,7 @@ export function validateHistoryReconciliationSnapshot({ channelId, remoteVideos,
       format: record.format
     });
   }
-  return { history, scheduledItems };
+  return { history, scheduledItems, complete: true, channelId, verifiedAt: reconciliation.verifiedAt, verifiedBy: reconciliation.verifiedBy.trim() };
 }
 
 export function validateHistoryReconciliation(args) {
