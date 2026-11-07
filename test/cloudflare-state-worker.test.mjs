@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { normalizeDashboardState, toDashboardStateResponse } from "../cloudflare/dashboard-state-compat.js";
 import { authenticate, constantTimeEqual, handleRequest, operatorIdentity, validateDashboardState } from "../cloudflare/worker.js";
 
 const validState = () => ({
@@ -112,4 +113,40 @@ test("queue diagnostics rejects invalid limits without changing state", async ()
   assert.equal(response.status, 400);
   assert.equal(reads, 1);
   assert.deepEqual(state.jobs, []);
+});
+
+test("compatibility adapter normalizes legacy optional collections without dropping unknown fields", () => {
+  const legacy = validState();
+  delete legacy.campaigns;
+  delete legacy.facebookDrafts;
+  delete legacy.facebookPosts;
+  delete legacy.facebookAttempts;
+  legacy.legacyExtension = { retained: true };
+  const normalized = normalizeDashboardState(legacy);
+  assert.deepEqual(normalized.campaigns, []);
+  assert.deepEqual(normalized.facebookDrafts, []);
+  assert.deepEqual(normalized.facebookPosts, []);
+  assert.deepEqual(normalized.facebookAttempts, []);
+  assert.deepEqual(normalized.legacyExtension, { retained: true });
+  assert.equal(normalized.publishingEnabled, false);
+});
+
+test("compatibility adapter rejects legacy Safari campaign records that are not fully inert", () => {
+  const state = validState();
+  state.campaigns = [{ type: "safari_affiliate", status: "INACTIVE", destinationUrl: "https://unsafe.example", ownerApproved: false, destinationValidation: "not_verified", disclosureText: "" }];
+  assert.throws(() => normalizeDashboardState(state), /Safari affiliate campaigns/);
+});
+
+test("legacy state response preserves browser fields and exposes revision without fabricating readiness", () => {
+  const state = validState();
+  state.queueItems = [{ id: "draft-1" }];
+  state.jobs = [{ id: "job-1" }];
+  const response = toDashboardStateResponse(state, { revision: 7, updatedAt: "2026-11-08T00:00:00.000Z" });
+  assert.equal(response.revision, 7);
+  assert.deepEqual(response.queueItems, [{ id: "draft-1" }]);
+  assert.equal(response.jobs[0].id, "job-1");
+  assert.equal(response.schedule, null);
+  assert.equal(response.uploadLedger, null);
+  assert.equal(response.campaignValidation.ok, false);
+  assert.equal(response.publishingEnabled, false);
 });
