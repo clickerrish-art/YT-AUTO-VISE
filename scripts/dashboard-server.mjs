@@ -2680,6 +2680,7 @@ const server = http.createServer(async (req, res) => {
             artifactSha256,
             metadataVersion,
             technicalValidationSha256: review.technicalValidationSha256,
+            technicalValidationReceipt: structuredClone(job.validationResults),
             rightsEvidenceSha256: review.rightsEvidenceSha256,
             rightsEvidence,
             authoringArtifactBinding,
