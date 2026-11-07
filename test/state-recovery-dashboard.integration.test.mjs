@@ -193,3 +193,88 @@ test("crash recovery blocks dashboard until rollback, then serves the original q
     await stopDashboard(recovered.child);
   }
 });
+
+
+test("dashboard remains available with unchanged state when restore destination permission is denied", async t => {
+  const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-state-permission-recovery-"));
+  const stateDir = path.join(rootDir, "state");
+  const uploadLogDir = path.join(rootDir, "run-logs");
+  const rightsDir = path.join(rootDir, "rights");
+  const backupDir = path.join(rootDir, "backups");
+  for (const directory of [stateDir, uploadLogDir, rightsDir, backupDir]) {
+    fs.mkdirSync(directory, { recursive: true });
+  }
+  t.after(() => fs.rmSync(rootDir, { recursive: true, force: true }));
+
+  const statePath = path.join(stateDir, "dashboard-state.json");
+  const currentState = {
+    version: 1,
+    queueItems: [{ id: "permission-denied-state", title: "Keep current work", status: "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW" }],
+    campaigns: [],
+    audit: [{ id: "audit-before-permission-failure", action: "KEEP_CURRENT_STATE" }],
+    jobs: [],
+    uploads: [],
+    facebookDrafts: [],
+    facebookPosts: [],
+    facebookAttempts: []
+  };
+  fs.writeFileSync(statePath, JSON.stringify(currentState, null, 2) + "\\n", { mode: 0o600 });
+  const backupPath = path.join(backupDir, "state-backup.json");
+  await backupState({ rootDir, stateDir, uploadLogDir, rightsDir, outputPath: backupPath });
+
+  const replacementState = {
+    ...currentState,
+    queueItems: [],
+    audit: [{ id: "must-not-commit", action: "RESTORE_REPLACEMENT" }]
+  };
+  fs.writeFileSync(statePath, JSON.stringify(replacementState, null, 2) + "\\n", { mode: 0o600 });
+  const expectedBytes = fs.readFileSync(statePath);
+  const earlierThanBackup = new Date(Date.parse(JSON.parse(fs.readFileSync(backupPath, "utf8")).createdAt) - 1000);
+  fs.utimesSync(statePath, earlierThanBackup, earlierThanBackup);
+
+  const originalRename = fs.renameSync;
+  let destinationDenied = false;
+  fs.renameSync = function (from, to, ...args) {
+    if (path.resolve(String(to)) === path.resolve(statePath) &&
+        String(from).endsWith(".restore-tmp") && !destinationDenied) {
+      destinationDenied = true;
+      const error = new Error("injected EACCES replacing dashboard state");
+      error.code = "EACCES";
+      throw error;
+    }
+    return originalRename.call(this, from, to, ...args);
+  };
+  try {
+    await assert.rejects(
+      restoreState({ backupPath, rootDir, stateDir, uploadLogDir, rightsDir, confirm: "YES", overwriteState: true }),
+      error => error?.code === "EACCES"
+    );
+  } finally {
+    fs.renameSync = originalRename;
+  }
+
+  assert.equal(destinationDenied, true, "restore must reach the protected destination commit boundary");
+  assert.deepEqual(fs.readFileSync(statePath), expectedBytes,
+    "a denied destination replacement must preserve the exact existing state bytes");
+  assert.equal(fs.existsSync(path.join(stateDir, ".restore-transaction.json")), false,
+    "a pre-commit permission denial must not leave a misleading recovery journal");
+  assert.equal(fs.existsSync(path.join(stateDir, ".restore-operation.lock")), false,
+    "the failed operation must release its own lock");
+  assert.equal(fs.readdirSync(stateDir).some(name => name.endsWith(".restore-tmp")), false,
+    "the denied destination must not leave staged restore files behind");
+
+  const dashboard = await startDashboard(stateDir);
+  assert.ok(dashboard.port > 0, "dashboard must remain available after the denied restore: " + dashboard.errors());
+  try {
+    const response = await fetch(`http://127.0.0.1:${dashboard.port}/api/state`, {
+      headers: { "x-operator-token": operatorToken }
+    });
+    assert.equal(response.status, 200);
+    const served = await response.json();
+    assert.deepEqual(served.queueItems, replacementState.queueItems);
+    assert.deepEqual(served.audit, replacementState.audit);
+    assert.equal(served.publishingEnabled, false);
+  } finally {
+    await stopDashboard(dashboard.child);
+  }
+});
