@@ -771,3 +771,23 @@ test("draft creation blocks invalid campaigns and any non-allowlisted destinatio
   assert.equal(snapshot().revision, 1);
   assert.equal(snapshot().state.queueItems.length, 0);
 });
+
+
+test("Worker serves the dashboard entry document from static assets while keeping API authentication separate", async () => {
+  let requestedAsset = null;
+  const env = {
+    ASSETS: {
+      async fetch(request) {
+        requestedAsset = new URL(request.url).pathname;
+        return new Response("dashboard-shell", { status: 200, headers: { "content-type": "text/html" } });
+      }
+    },
+    DASHBOARD_OPERATOR_TOKEN: "a".repeat(24)
+  };
+  const root = await handleRequest(new Request("https://state.example/"), env);
+  assert.equal(root.status, 200);
+  assert.equal(await root.text(), "dashboard-shell");
+  assert.equal(requestedAsset, "/dashboard.html");
+  const api = await handleRequest(new Request("https://state.example/api/state"), env);
+  assert.equal(api.status, 401);
+});
