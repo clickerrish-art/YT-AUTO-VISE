@@ -40,7 +40,7 @@ test("worker persists retry backoff across process restarts and does not immedia
     if (req.method === "POST" && req.url === "/api/jobs/produce") {
       produceRequests += 1;
       res.writeHead(409, { "retry-after": "60", "content-type": "application/json" });
-      res.end(JSON.stringify({ error: "render prerequisites are not satisfied", publishingEnabled: false }));
+      res.end(JSON.stringify({ error: "Authoring job failed render preflight", detail: "Approved scene evidence is missing", publishingEnabled: false }));
       return;
     }
     res.statusCode = 404;
@@ -56,7 +56,7 @@ test("worker persists retry backoff across process restarts and does not immedia
   await runWorker({ baseUrl, token, workerId, once: true, cooldownStatePath: statePath, onCycle: value => firstCycles.push(value) });
   assert.equal(produceRequests, 1);
   assert.equal(firstCycles[0].results[0].httpStatus, 409);
-  assert.equal(firstCycles[0].results[0].responseError, "render prerequisites are not satisfied");
+  assert.equal(firstCycles[0].results[0].responseError, "Approved scene evidence is missing");
   assert.ok(firstCycles[0].results[0].retryAfterMs >= 59_000,
     "HTTP 409 Retry-After must override the shorter local fallback delay");
   const saved = JSON.parse(fs.readFileSync(statePath, "utf8"));
