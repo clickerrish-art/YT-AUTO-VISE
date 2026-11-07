@@ -1356,7 +1356,7 @@ test("repository runner preflight proves private R2 write/read/delete and enforc
   assert.equal(response.status, 200);
   assert.equal(body.ready, true);
   assert.equal(body.storageProvider, "Cloudflare R2 Standard");
-  assert.ok(body.remainingBytes >= 1024 * 1024 * 1024);
+  assert.ok(body.remainingBytes >= 2 * 1024 * 1024 * 1024);
   assert.deepEqual(calls.map(call => call[0]), ["put", "get", "delete"]);
 });
 
@@ -1364,7 +1364,7 @@ test("repository runner preflight blocks production when private R2 headroom is 
   const fixture = await createRunnerOidcFixture();
   let writes = 0;
   const env = {
-    STATE_DB: { prepare() { return { bind() { return this; }, async first() { return { total_bytes: 8 * 1024 * 1024 * 1024 - 1024 * 1024 * 1024 + 1 }; } }; } },
+    STATE_DB: { prepare() { return { bind() { return this; }, async first() { return { total_bytes: 8 * 1024 * 1024 * 1024 - 2 * 1024 * 1024 * 1024 + 1 }; } }; } },
     ARTIFACTS: { async put() { writes++; }, async get() {}, async delete() {} }
   };
   const response = await handleRequest(new Request("https://state.example/api/runner/ready", {
