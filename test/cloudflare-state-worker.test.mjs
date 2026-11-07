@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { normalizeDashboardState, toDashboardStateResponse } from "../cloudflare/dashboard-state-compat.js";
-import { authenticate, constantTimeEqual, handleRequest, operatorIdentity, validateDashboardState } from "../cloudflare/worker.js";
+import { authenticate, constantTimeEqual, handleRequest, operatorIdentity, validateDashboardState, verifyRepositoryRunnerToken } from "../cloudflare/worker.js";
 import { canonicalAuthoringScriptSha256 } from "../cloudflare/authoring-review-compat.js";
 import { readFileSync } from "node:fs";
 import { DEFAULT_CAMPAIGNS, manageCampaign, validateCampaigns } from "../cloudflare/campaigns-compat.js";
@@ -894,60 +894,105 @@ test("bundled Worker weekly plan exactly matches repository schedule configurati
 });
 
 
-test("repository runner token is separate from operator authentication and grants only runner snapshot APIs", async () => {
-  const { database, snapshot } = mutableDatabase(validState());
-  const env = {
-    DASHBOARD_OPERATOR_TOKEN: "o".repeat(32),
-    DASHBOARD_WORKER_TOKEN: "w".repeat(32),
-    DASHBOARD_OPERATOR_ID: "sonicvhibez-owner",
-    STATE_DB: database
+
+async function createRunnerOidcFixture(overrides = {}) {
+  const now = Math.floor(Date.now() / 1000);
+  const pair = await crypto.subtle.generateKey({
+    name: "RSASSA-PKCS1-v1_5", modulusLength: 2048,
+    publicExponent: new Uint8Array([1, 0, 1]), hash: "SHA-256"
+  }, true, ["sign", "verify"]);
+  const jwk = await crypto.subtle.exportKey("jwk", pair.publicKey);
+  Object.assign(jwk, { kid: "runner-test-key", use: "sig", alg: "RS256" });
+  const encode = value => Buffer.from(JSON.stringify(value)).toString("base64url");
+  const header = encode({ alg: "RS256", typ: "JWT", kid: jwk.kid });
+  const claims = {
+    iss: "https://token.actions.githubusercontent.com",
+    aud: "sonicvhibez-dashboard-runner",
+    sub: "repo:clickerrish-art/YT-AUTO-VISE:ref:refs/heads/codex/dashboard-cloudflare-adapter",
+    repository: "clickerrish-art/YT-AUTO-VISE",
+    repository_owner: "clickerrish-art",
+    ref: "refs/heads/codex/dashboard-cloudflare-adapter",
+    workflow_ref: "clickerrish-art/YT-AUTO-VISE/.github/workflows/repository-runner.yml@refs/heads/codex/dashboard-cloudflare-adapter",
+    event_name: "workflow_dispatch",
+    iat: now,
+    nbf: now - 5,
+    exp: now + 300,
+    ...overrides
   };
+  const payload = encode(claims);
+  const signingInput = header + "." + payload;
+  const signature = await crypto.subtle.sign("RSASSA-PKCS1-v1_5", pair.privateKey, new TextEncoder().encode(signingInput));
+  const token = signingInput + "." + Buffer.from(signature).toString("base64url");
+  const fetchImpl = async url => {
+    assert.equal(String(url), "https://token.actions.githubusercontent.com/.well-known/jwks");
+    return new Response(JSON.stringify({ keys: [jwk] }), { status: 200, headers: { "content-type": "application/json" } });
+  };
+  return { token, fetchImpl, nowMs: now * 1000 };
+}
+
+test("repository runner OIDC accepts only the exact repository, branch, workflow, audience and event", async () => {
+  const fixture = await createRunnerOidcFixture();
+  assert.equal(await verifyRepositoryRunnerToken(fixture.token, fixture), true);
+  for (const overrides of [
+    { repository: "attacker/other-repo" },
+    { ref: "refs/heads/main" },
+    { workflow_ref: "clickerrish-art/YT-AUTO-VISE/.github/workflows/other.yml@refs/heads/codex/dashboard-cloudflare-adapter" },
+    { aud: "wrong-audience" },
+    { event_name: "pull_request" },
+    { iss: "https://attacker.example" },
+    { exp: Math.floor(Date.now() / 1000) - 1 }
+  ]) {
+    const invalid = await createRunnerOidcFixture(overrides);
+    assert.equal(await verifyRepositoryRunnerToken(invalid.token, invalid), false);
+  }
+});
+
+test("repository runner OIDC snapshot API is separate from operator APIs and revision guarded", async () => {
+  const fixture = await createRunnerOidcFixture();
+  const { database, snapshot } = mutableDatabase(validState());
+  const env = { DASHBOARD_OPERATOR_TOKEN: "o".repeat(32), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
   const read = await handleRequest(new Request("https://state.example/api/runner/snapshot", {
-    headers: { "x-worker-token": "w".repeat(32), "x-worker-id": "runner-test" }
-  }), env);
+    headers: { authorization: "Bearer " + fixture.token, "x-worker-id": "runner-test" }
+  }), env, fixture);
   const readBody = await read.json();
   assert.equal(read.status, 200);
   assert.equal(readBody.revision, 1);
   assert.deepEqual(readBody.state, validState());
   const workerCannotReadOperatorApi = await handleRequest(new Request("https://state.example/api/state", {
-    headers: { "x-worker-token": "w".repeat(32) }
-  }), env);
+    headers: { authorization: "Bearer " + fixture.token }
+  }), env, fixture);
   assert.equal(workerCannotReadOperatorApi.status, 401);
   const operatorCannotUseRunnerApi = await handleRequest(new Request("https://state.example/api/runner/snapshot", {
     headers: { "x-operator-token": "o".repeat(32) }
-  }), env);
+  }), env, fixture);
   assert.equal(operatorCannotUseRunnerApi.status, 401);
   const next = { ...validState(), queueItems: [{ id: "runner-produced-record" }] };
   const write = await handleRequest(new Request("https://state.example/api/runner/snapshot", {
     method: "PUT",
-    headers: { "x-worker-token": "w".repeat(32), "x-worker-id": "runner-test", "if-match": '"1"', "content-type": "application/json" },
+    headers: { authorization: "Bearer " + fixture.token, "x-worker-id": "runner-test", "if-match": '"1"', "content-type": "application/json" },
     body: JSON.stringify({ state: next })
-  }), env);
+  }), env, fixture);
   assert.equal(write.status, 200);
   assert.equal((await write.json()).revision, 2);
   assert.equal(snapshot().state.queueItems[0].id, "runner-produced-record");
   assert.equal(snapshot().state.audit.at(-1).action, "REPOSITORY_RUNNER_STATE_RECONCILED");
   const stale = await handleRequest(new Request("https://state.example/api/runner/snapshot", {
     method: "PUT",
-    headers: { "x-worker-token": "w".repeat(32), "if-match": '"1"', "content-type": "application/json" },
+    headers: { authorization: "Bearer " + fixture.token, "if-match": '"1"', "content-type": "application/json" },
     body: JSON.stringify({ state: next })
-  }), env);
+  }), env, fixture);
   assert.equal(stale.status, 409);
 });
 
-test("repository runner snapshot rejects invalid state and operator-token reuse", async () => {
+test("repository runner snapshot rejects invalid publishing state", async () => {
+  const fixture = await createRunnerOidcFixture();
   const { database } = mutableDatabase(validState());
-  const env = { DASHBOARD_OPERATOR_TOKEN: "same".repeat(8), DASHBOARD_WORKER_TOKEN: "same".repeat(8), STATE_DB: database };
-  const reused = await handleRequest(new Request("https://state.example/api/runner/snapshot", {
-    headers: { "x-worker-token": "same".repeat(8) }
-  }), env);
-  assert.equal(reused.status, 401);
-  const distinct = { ...env, DASHBOARD_WORKER_TOKEN: "w".repeat(32) };
+  const env = { DASHBOARD_OPERATOR_TOKEN: "o".repeat(32), STATE_DB: database };
   const invalid = await handleRequest(new Request("https://state.example/api/runner/snapshot", {
     method: "PUT",
-    headers: { "x-worker-token": "w".repeat(32), "if-match": '"1"', "content-type": "application/json" },
+    headers: { authorization: "Bearer " + fixture.token, "if-match": '"1"', "content-type": "application/json" },
     body: JSON.stringify({ state: { ...validState(), publishingEnabled: true } })
-  }), distinct);
+  }), env, fixture);
   assert.equal(invalid.status, 400);
 });
 
@@ -978,11 +1023,11 @@ test("repository runner backoff state is durable, worker-scoped and revision gua
       };
     }
   };
-  const token = "w".repeat(32);
-  const env = { DASHBOARD_WORKER_TOKEN: token, DASHBOARD_OPERATOR_TOKEN: "o".repeat(32), STATE_DB: db };
+  const fixture = await createRunnerOidcFixture();
+  const env = { DASHBOARD_OPERATOR_TOKEN: "o".repeat(32), STATE_DB: db };
   const get = () => handleRequest(new Request("https://state.example/api/runner/backoff?workerId=runner-one", {
-    headers: { "x-worker-token": token }
-  }), env);
+    headers: { authorization: "Bearer " + fixture.token }
+  }), env, fixture);
   const initial = await (await get()).json();
   assert.equal(initial.revision, 0);
   assert.equal(initial.state, null);
@@ -993,9 +1038,9 @@ test("repository runner backoff state is durable, worker-scoped and revision gua
     consumedReleaseNonces: []
   };
   const save = () => handleRequest(new Request("https://state.example/api/runner/backoff", {
-    method: "PUT", headers: { "x-worker-token": token, "content-type": "application/json" },
+    method: "PUT", headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
     body: JSON.stringify({ workerId: "runner-one", expectedRevision: 0, state })
-  }), env);
+  }), env, fixture);
   const saved = await save();
   assert.equal(saved.status, 200);
   assert.equal((await saved.json()).revision, 1);
@@ -1006,6 +1051,6 @@ test("repository runner backoff state is durable, worker-scoped and revision gua
   const invalid = await handleRequest(new Request("https://state.example/api/runner/backoff", {
     method: "PUT", headers: { "x-worker-token": token, "content-type": "application/json" },
     body: JSON.stringify({ workerId: "runner-one", expectedRevision: 1, state: { ...state, workerId: "runner-two" } })
-  }), env);
+  }), env, fixture);
   assert.equal(invalid.status, 400);
 });
