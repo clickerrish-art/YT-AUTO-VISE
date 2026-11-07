@@ -173,6 +173,9 @@ async function pullBackoff() {
 }
 
 async function pushBackoff() {
+  if (fs.existsSync(backoffFile + ".process.lock")) {
+    throw new Error("Worker runner retained its process lock after a durability failure; refusing to release the durable Cloudflare runner session");
+  }
   const meta = readJsonFile(backoffMetaFile);
   const state = readJsonFile(backoffFile);
   const stateSha256 = sha256(JSON.stringify(state));
