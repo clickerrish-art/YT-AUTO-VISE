@@ -161,6 +161,18 @@ test("state compatibility reports real campaign validation and repository schedu
   state.campaigns = [{ id: "bad-campaign", type: "affiliate", status: "ACTIVE", destinationUrl: "https://unapproved.example" }];
   const response = toDashboardStateResponse(state, { revision: 11, updatedAt: "2026-11-08T01:00:00.000Z" });
   assert.deepEqual(response.schedule, DEFAULT_WEEKLY_PLAN);
+  assert.equal(response.campaignValidation.ok, true);
+  assert.ok(response.campaignValidation.errors.length > 0);
+  assert.equal(response.uploadLedger, null);
+  assert.ok(response.blockers.some(item => item.includes("upload ledger")));
+  assert.equal(response.publishingEnabled, false);
+});
+
+test("state compatibility reports real campaign validation and repository schedule without fabricating upload history", () => {
+  const state = validState();
+  state.campaigns = [{ id: "bad-campaign", type: "affiliate", status: "ACTIVE", destinationUrl: "https://unapproved.example" }];
+  const response = toDashboardStateResponse(state, { revision: 11, updatedAt: "2026-11-08T01:00:00.000Z" });
+  assert.deepEqual(response.schedule, DEFAULT_WEEKLY_PLAN);
   assert.equal(response.campaignValidation.ok, false);
   assert.ok(response.campaignValidation.errors.length > 0);
   assert.equal(response.uploadLedger, null);
