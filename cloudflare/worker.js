@@ -267,7 +267,52 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
   }
   const runnerRoute = url.pathname.startsWith("/api/runner/");
   if (runnerRoute) {
+    if (url.pathname === "/api/runner/session/status" && method === "GET") {
+      if (!(await authenticate(request, env))) return json({ error: "Unauthorized" }, 401);
+      const row = await env.STATE_DB.prepare("SELECT session_id, worker_id, status, started_at, completed_at, release_reason FROM runner_control WHERE singleton_id = 1").first();
+      return json({ active: row?.status === "ACTIVE", session: row ?? null, publishingEnabled: false });
+    }
+    if (url.pathname === "/api/runner/session/release" && method === "POST") {
+      if (!(await authenticate(request, env))) return json({ error: "Unauthorized" }, 401);
+      let input;
+      try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+      if (typeof input?.sessionId !== "string" || typeof input?.reason !== "string" || input.reason.trim().length < 10 || input.reason.trim().length > 1000) {
+        return json({ error: "Exact sessionId and a 10–1000 character operator release reason are required" }, 400);
+      }
+      const result = await env.STATE_DB.prepare(
+        "UPDATE runner_control SET status = 'RELEASED', completed_at = ?, release_reason = ? WHERE singleton_id = 1 AND session_id = ? AND status = 'ACTIVE'"
+      ).bind(new Date().toISOString(), input.reason.trim(), input.sessionId).run();
+      if (Number(result.meta?.changes ?? 0) !== 1) return json({ error: "Active runner session was not found or session ID did not match", code: "RUNNER_SESSION_CONFLICT" }, 409);
+      return json({ released: true, sessionId: input.sessionId, reason: input.reason.trim(), publishingEnabled: false });
+    }
     if (!(await authenticateRepositoryRunner(request, fetchImpl))) return json({ error: "Unauthorized", code: "WORKER_OIDC_UNAUTHORIZED" }, 401);
+    if (url.pathname === "/api/runner/session" && method === "POST") {
+      let input;
+      try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+      const workerId = input?.workerId;
+      if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(workerId ?? "")) return json({ error: "workerId is invalid" }, 400);
+      const sessionId = crypto.randomUUID();
+      const now = new Date().toISOString();
+      const result = await env.STATE_DB.prepare(
+        "INSERT INTO runner_control (singleton_id, session_id, worker_id, status, started_at, completed_at, release_reason) VALUES (1, ?, ?, 'ACTIVE', ?, NULL, NULL) ON CONFLICT(singleton_id) DO UPDATE SET session_id = excluded.session_id, worker_id = excluded.worker_id, status = 'ACTIVE', started_at = excluded.started_at, completed_at = NULL, release_reason = NULL WHERE runner_control.status = 'RELEASED'"
+      ).bind(sessionId, workerId, now).run();
+      if (Number(result.meta?.changes ?? 0) !== 1) {
+        const active = await env.STATE_DB.prepare("SELECT session_id, worker_id, started_at FROM runner_control WHERE singleton_id = 1 AND status = 'ACTIVE'").first();
+        return json({ error: "A previous repository runner session is still active; reconcile or explicitly release it before another run", code: "RUNNER_SESSION_ACTIVE", activeSession: active ?? null }, 409);
+      }
+      return json({ sessionId, workerId, startedAt: now, publishingEnabled: false }, 201);
+    }
+    if (url.pathname === "/api/runner/session/complete" && method === "POST") {
+      let input;
+      try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+      if (typeof input?.sessionId !== "string") return json({ error: "sessionId is required" }, 400);
+      const now = new Date().toISOString();
+      const result = await env.STATE_DB.prepare(
+        "UPDATE runner_control SET status = 'RELEASED', completed_at = ?, release_reason = 'RUNNER_RECONCILIATION_COMPLETE' WHERE singleton_id = 1 AND session_id = ? AND status = 'ACTIVE'"
+      ).bind(now, input.sessionId).run();
+      if (Number(result.meta?.changes ?? 0) !== 1) return json({ error: "Runner session does not match the active lease", code: "RUNNER_SESSION_CONFLICT" }, 409);
+      return json({ completed: true, sessionId: input.sessionId, completedAt: now, publishingEnabled: false });
+    }
     if (url.pathname === "/api/runner/snapshot" && method === "GET") {
       const row = await currentState(env);
       if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
