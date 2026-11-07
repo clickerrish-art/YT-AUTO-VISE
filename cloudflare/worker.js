@@ -8,7 +8,7 @@ import { DEFAULT_WEEKLY_PLAN } from "./weekly-plan-compat.js";
 
 const STATE_ID = 1;
 const MAX_STATE_BYTES = 2 * 1024 * 1024;
-const MAX_ARTIFACT_BYTES = 8 * 1024 * 1024 * 1024;
+const MAX_ARTIFACT_BYTES = 8 * 2 * 1024 * 1024 * 1024;
 const ARTIFACT_PART_BYTES = 8 * 1024 * 1024;
 
 
@@ -323,8 +323,8 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
       ).first();
       const usedBytes = Number(usage?.total_bytes ?? 0);
       const remainingBytes = Math.max(0, MAX_ARTIFACT_BYTES - usedBytes);
-      if (remainingBytes < 1024 * 1024 * 1024) {
-        return json({ ready: false, code: "R2_ARTIFACT_HEADROOM_LOW", usedBytes, remainingBytes, requiredHeadroomBytes: 1024 * 1024 * 1024 }, 503);
+      if (remainingBytes < 2 * 1024 * 1024 * 1024) {
+        return json({ ready: false, code: "R2_ARTIFACT_HEADROOM_LOW", usedBytes, remainingBytes, requiredHeadroomBytes: 2 * 1024 * 1024 * 1024 }, 503);
       }
       const probeKey = "health/runner-probe-" + crypto.randomUUID();
       const nonce = crypto.randomUUID();
