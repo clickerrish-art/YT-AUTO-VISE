@@ -70,6 +70,10 @@ export function validateCadenceDecision(decision, minimumSpacingHours, now = Dat
     errors.push("minimum publication spacing must be at least 72 elapsed hours");
   }
 
+  if (decision.approvedMode === "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET" && Object.hasOwn(decision, "weeklyPublicationTarget")) {
+    errors.push("rolling-cycle-without-weekly-target approval must omit weeklyPublicationTarget");
+  }
+
   if (decision.approvedMode === "OTHER_OWNER_DEFINED_FEASIBLE_POLICY") {
     const custom = decision.ownerDefinedPolicy;
     if (!custom || typeof custom !== "object" || Array.isArray(custom)) {
