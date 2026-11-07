@@ -82,7 +82,7 @@ test("final media review exposes verified video, thumbnail, captions and evidenc
   assert.match(html, /id="reviewMetadata"/);
   assert.match(html, /id="reviewRights"/);
   assert.match(html, /\/api\/jobs\/review\/bundle/);
-  assert.match(html, /\/api\/jobs\/review\/preview(?:\?|["'])/);
+  assert.match(html, /bundle\.previewUrls\[kind\]/);
   assert.match(html, /Integrity verified/);
   assert.match(html, /actual media, thumbnail and captions loaded/);
 });
