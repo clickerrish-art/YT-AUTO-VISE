@@ -18,6 +18,7 @@ const backoffDir = ensureSafeDirectoryPath(path.resolve(process.env.WORKER_STATE
 const workerHash = crypto.createHash("sha256").update(workerId).digest("hex").slice(0, 20);
 const backoffFile = path.join(backoffDir, "worker-backoff-" + workerHash + ".json");
 const backoffMetaFile = path.join(backoffDir, "worker-backoff-" + workerHash + ".revision.json");
+const sessionFile = path.join(backoffDir, "repository-runner-session.json");
 
 function configuration() {
   const parsed = new URL(baseUrl);
@@ -86,6 +87,34 @@ function readJsonFile(filePath) {
   const stat = fs.lstatSync(filePath);
   if (stat.isSymbolicLink() || !stat.isFile()) throw new Error("Refusing unsafe runner state file: " + filePath);
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
+}
+
+async function startSession() {
+  const payload = await requestJson("/api/runner/session", {
+    method: "POST",
+    body: JSON.stringify({ workerId })
+  });
+  if (typeof payload.sessionId !== "string" || payload.workerId !== workerId) {
+    throw new Error("Cloudflare did not issue a valid exclusive runner session");
+  }
+  atomicWriteJson(sessionFile, { schemaVersion: 1, sessionId: payload.sessionId, workerId, startedAt: payload.startedAt }, { mode: 0o600 });
+  console.log(JSON.stringify({ event: "cloudflare_runner_session_started", workerId, sessionId: payload.sessionId }));
+}
+
+async function completeSession() {
+  const session = readJsonFile(sessionFile);
+  if (session.schemaVersion !== 1 || session.workerId !== workerId || typeof session.sessionId !== "string") {
+    throw new Error("Local runner session record is invalid");
+  }
+  const payload = await requestJson("/api/runner/session/complete", {
+    method: "POST",
+    body: JSON.stringify({ sessionId: session.sessionId })
+  });
+  if (payload.completed !== true || payload.sessionId !== session.sessionId) {
+    throw new Error("Cloudflare did not confirm completion of the exact runner session");
+  }
+  fs.unlinkSync(sessionFile);
+  console.log(JSON.stringify({ event: "cloudflare_runner_session_completed", workerId, sessionId: session.sessionId }));
 }
 
 async function pullSnapshot() {
@@ -165,11 +194,13 @@ async function pushBackoff() {
 
 const command = process.argv[2];
 try {
-  if (command === "pull-snapshot") await pullSnapshot();
+  if (command === "start-session") await startSession();
+  else if (command === "complete-session") await completeSession();
+  else if (command === "pull-snapshot") await pullSnapshot();
   else if (command === "push-snapshot") await pushSnapshot();
   else if (command === "pull-backoff") await pullBackoff();
   else if (command === "push-backoff") await pushBackoff();
-  else throw new Error("Usage: node scripts/cloudflare-runner-bridge.mjs <pull-snapshot|push-snapshot|pull-backoff|push-backoff>");
+  else throw new Error("Usage: node scripts/cloudflare-runner-bridge.mjs <start-session|pull-snapshot|pull-backoff|push-backoff|push-snapshot|complete-session>");
 } catch (error) {
   console.error("BLOCKED: " + String(error?.message ?? error).slice(0, 1000));
   process.exitCode = 2;
