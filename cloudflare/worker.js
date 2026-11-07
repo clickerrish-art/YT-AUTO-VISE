@@ -151,6 +151,54 @@ async function handleRequest(request, env) {
     return json({ revision: row.revision, updatedAt: row.updated_at, state: JSON.parse(row.state_json) }, 200, { etag: '"' + row.revision + '"' });
   }
 
+
+  if (url.pathname === "/api/campaigns" && method === "GET") {
+    const row = await currentState(env);
+    if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(row.state_json)); }
+    catch { return json({ error: "Persisted state is corrupt or has an unsupported schema", code: "STATE_INVALID" }, 503); }
+    const campaigns = state.campaigns ?? [];
+    return json({
+      campaigns,
+      source: "durable_dashboard_state",
+      authoritativeConfigImported: false,
+      validation: { status: "NOT_RUN", errors: ["Authoritative config/campaigns.json validation is not executed in the Worker adapter."] },
+      publishingEnabled: false,
+      readOnly: true,
+      revision: row.revision
+    });
+  }
+
+  if (url.pathname === "/api/schedule" && method === "GET") {
+    const row = await currentState(env);
+    if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(row.state_json)); }
+    catch { return json({ error: "Persisted state is corrupt or has an unsupported schema", code: "STATE_INVALID" }, 503); }
+    return json({
+      schedule: null,
+      timezone: "Africa/Johannesburg",
+      publicationCycle: {
+        formats: ["long_form", "long_form", "short"],
+        minimumHoursBetweenConsecutivePublications: 72,
+        minimumCycleHours: 216
+      },
+      draftPreparationSlots: null,
+      authoritativeScheduleConfigImported: false,
+      publicationHistoryReconciled: false,
+      blockers: [
+        "Authoritative config/weekly-content-plan.json is not imported into the Worker adapter.",
+        "Complete SonicVhibez public, private and unlisted publication history and uncertain attempts have not been reconciled here.",
+        "No publication or unattended scheduling operation is authorized by this read endpoint."
+      ],
+      queuedReservations: state.queueItems.filter(item => item?.reservationType === "SCHEDULED_SLOT"),
+      publishingEnabled: false,
+      readOnly: true,
+      revision: row.revision
+    });
+  }
+
   if (url.pathname === "/api/tasks" && method === "GET") {
     return json({ publicPublishingEnabled: false, tasks: ["validate-schedule", "check-captions", "production-readiness", "test-suite", "validate-campaigns"], readOnly: true });
   }
