@@ -4,7 +4,7 @@ import fs from "node:fs";
 import crypto from "node:crypto";
 import os from "node:os";
 import path from "node:path";
-import { assertNoUnresolvedUploadAttempts, validateHistoryReconciliation, validateHistoryReconciliationSnapshot, assertNextPublicationAllowed, fetchCompleteYoutubeHistorySnapshot } from "../scripts/youtube-history-gate.mjs";
+import { assertNoUnresolvedUploadAttempts, validateHistoryReconciliation, validateHistoryReconciliationSnapshot, assertNextPublicationAllowed, fetchCompleteYoutubeHistorySnapshot, readRegularFileNoFollow } from "../scripts/youtube-history-gate.mjs";
 
 const channelId = "UC1234567890123456789012";
 const remoteVideos = [
@@ -274,6 +274,22 @@ test("complete history fetch rejects missing IDs, inconsistent totals and incomp
         status: { privacyStatus: "private" }
       }] } }) }
     }, channel, reconciliationPath, channelId), /did not match the requested playlist video IDs/);
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+
+test("channel-history evidence is read through a pinned no-follow descriptor and rejects symlink paths", () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "youtube-history-pinned-"));
+  const targetPath = path.join(directory, "history.json");
+  const linkPath = path.join(directory, "history-link.json");
+  const bytes = Buffer.from(JSON.stringify(reconciliation));
+  fs.writeFileSync(targetPath, bytes);
+  try {
+    assert.deepEqual(readRegularFileNoFollow(targetPath), bytes);
+    fs.symlinkSync(targetPath, linkPath);
+    assert.throws(() => readRegularFileNoFollow(linkPath), /ELOOP|symbolic link|changed while opening/i);
   } finally {
     fs.rmSync(directory, { recursive: true, force: true });
   }
