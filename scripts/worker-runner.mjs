@@ -500,6 +500,7 @@ export async function runWorker({
   token = process.env.DASHBOARD_WORKER_TOKEN,
   workerId = process.env.DASHBOARD_WORKER_ID ?? "sonicvhibez-render-worker",
   pollIntervalMs = Number(process.env.WORKER_POLL_INTERVAL_MS ?? DEFAULT_POLL_INTERVAL_MS),
+  dispatchLimit = Number(process.env.WORKER_DISPATCH_LIMIT ?? 20),
   once = process.argv.includes("--once"),
   onCycle = result => console.log(JSON.stringify({ event: "worker_cycle_completed", ...result })),
   onError = error => console.error(JSON.stringify({ event: "worker_cycle_failed", message: String(error?.message ?? error).slice(0, 500) })),
@@ -509,6 +510,9 @@ export async function runWorker({
   fetchImpl = fetch
 } = {}) {
   validateConfiguration({ baseUrl, token, workerId, pollIntervalMs });
+  if (!Number.isInteger(dispatchLimit) || dispatchLimit < 1 || dispatchLimit > 100) {
+    throw new Error("WORKER_DISPATCH_LIMIT must be an integer from 1 to 100");
+  }
   const statePath = cooldownStatePath(workerId, configuredCooldownStatePath, stateDirectory);
   const lockPath = statePath + ".process.lock";
   let lockFd;
@@ -581,7 +585,7 @@ export async function runWorker({
     do {
       let nextWaitMs = pollIntervalMs;
       try {
-        const result = await runWorkerCycle({ baseUrl, token, workerId, fetchImpl, cooldowns, uncertainDispatches, onCooldownsChanged: persist, onUncertainDispatchesChanged: persistUncertainDispatches, shouldStop });
+        const result = await runWorkerCycle({ baseUrl, token, workerId, fetchImpl, limit: dispatchLimit, cooldowns, uncertainDispatches, onCooldownsChanged: persist, onUncertainDispatchesChanged: persistUncertainDispatches, shouldStop });
         onCycle(result);
       } catch (error) {
         onError(error);
