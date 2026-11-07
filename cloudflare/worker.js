@@ -108,6 +108,65 @@ async function handleRequest(request, env) {
     return json({ status: "ok", service: "sonicvhibez-durable-state", publishingEnabled: false });
   }
 
+  if (url.pathname === "/operational-readyz" && method === "GET") {
+    const blockers = [];
+    let stateStatus = "NOT_INITIALIZED";
+    let campaignStatus = "NOT_VALIDATED";
+    let assetStatus = "NOT_CONFIGURED";
+    try {
+      const row = await currentState(env);
+      if (row) {
+        const state = validateDashboardState(JSON.parse(row.state_json));
+        stateStatus = "READABLE";
+        const campaigns = state.campaigns?.length ? state.campaigns : structuredClone(DEFAULT_CAMPAIGNS);
+        const campaignErrors = validateCampaigns({ version: 1, campaigns });
+        campaignStatus = campaignErrors.length ? "BLOCKED" : "PASS";
+        if (campaignErrors.length) blockers.push(...campaignErrors.map(error => "Campaign configuration: " + error));
+      } else {
+        blockers.push("Durable dashboard state has not been bootstrapped.");
+      }
+    } catch {
+      stateStatus = "INVALID_OR_UNAVAILABLE";
+      blockers.push("Durable dashboard state is unreadable or has an unsupported schema.");
+    }
+    if (env.ASSETS && typeof env.ASSETS.fetch === "function") {
+      try {
+        const asset = await env.ASSETS.fetch(new Request(new URL("/dashboard.html", url.origin)));
+        if (asset.ok) assetStatus = "READABLE";
+        else blockers.push("Dashboard static asset /dashboard.html is unavailable.");
+      } catch {
+        blockers.push("Dashboard static asset /dashboard.html could not be read.");
+      }
+    } else {
+      blockers.push("Cloudflare Static Assets binding ASSETS is not configured.");
+    }
+    blockers.push("This endpoint verifies service, state and dashboard-asset availability only; it does not certify publication readiness.");
+    const ready = stateStatus === "READABLE" && campaignStatus === "PASS" && assetStatus === "READABLE";
+    return json({
+      ready, mode: "cloudflare-worker", durableState: stateStatus,
+      campaignConfig: campaignStatus, dashboardAssets: assetStatus,
+      publicationReadiness: "SEPARATE", publicationGate: "/readyz",
+      blockers, publishingEnabled: false
+    }, ready ? 200 : 503);
+  }
+
+  if (url.pathname === "/readyz" && method === "GET") {
+    return json({
+      ready: false,
+      publicationReadiness: "BLOCKED",
+      blockers: [
+        "Complete SonicVhibez public, private and unlisted YouTube history has not been independently reconciled in this Worker.",
+        "Every pending or uncertain upload attempt must be reconciled against remote YouTube records before publication.",
+        "The next rolling long_form → long_form → short position and 72-hour actual-publication spacing must be verified against complete remote history.",
+        "Private upload requires a separate one-shot authorization bound to the exact job, media, metadata, thumbnail, captions, rights evidence, human review and SonicVhibez channel.",
+        "No Worker route may enable public or unattended publishing."
+      ],
+      publishingEnabled: false,
+      publicPublishingEnabled: false,
+      unattendedPublishingEnabled: false
+    }, 503);
+  }
+
   if (!url.pathname.startsWith("/api/")) {
     if (method === "GET" && env.ASSETS && typeof env.ASSETS.fetch === "function") {
       const assetUrl = new URL(request.url);
