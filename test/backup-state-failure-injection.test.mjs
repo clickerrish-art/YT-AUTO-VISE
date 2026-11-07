@@ -3,8 +3,9 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import crypto from "node:crypto";
 import { spawn } from "node:child_process";
-import { backupState, readRegularFileNoFollow } from "../scripts/backup-state.mjs";
+import { backupState, readRegularFileNoFollow, recoverInterruptedBackup } from "../scripts/backup-state.mjs";
 
 test("backup input reader pins a regular file and refuses a symlink", t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-backup-pinned-read-"));
@@ -162,4 +163,51 @@ test("backup refuses to snapshot while the dashboard owns its state-write lock",
     "backup must not remove or rewrite the live dashboard lock");
   assert.equal(fs.existsSync(path.join(source.stateDir, ".restore-operation.lock")), false,
     "the backup/restore serialization lock must be released after refusing a busy dashboard state");
+});
+
+function recoveryFixture(root, { pid = 2147483647, token = "12345678-1234-4234-8234-123456789abc" } = {}) {
+  const stateDir = path.join(root, "state"), backupDir = path.join(root, "backups");
+  fs.mkdirSync(stateDir, { recursive: true }); fs.mkdirSync(backupDir, { recursive: true });
+  const outputPath = path.join(backupDir, "interrupted.json"), temporaryPath = outputPath + ".aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa.tmp";
+  const bytes = Buffer.from("verified recovery fixture");
+  const createHash = crypto.createHash;
+  const payload = { format: "sonicvhibez-state-backup", version: 1, createdAt: new Date().toISOString(), includesSecrets: false, entries: [{ target: { kind: "dashboard-state", path: "dashboard-state.json" }, sha256: createHash("sha256").update(bytes).digest("hex"), bytes: bytes.length, contentBase64: bytes.toString("base64") }] };
+  fs.writeFileSync(temporaryPath, JSON.stringify(payload), { mode: 0o600 });
+  const lockPath = path.join(stateDir, ".restore-operation.lock");
+  fs.writeFileSync(lockPath, JSON.stringify({ format: "sonicvhibez-restore-operation-lock", version: 1, token, pid, createdAt: new Date().toISOString(), operation: "backup" }), { mode: 0o600 });
+  return { stateDir, backupDir, outputPath, temporaryPath, lockPath, token };
+}
+test("interrupted backup recovery requires owner attestation and exact token", t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-recover-attestation-")); t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const f = recoveryFixture(root);
+  assert.throws(() => recoverInterruptedBackup({ ...f, confirmOwnerStopped: false }), /explicit confirmation/);
+  assert.throws(() => recoverInterruptedBackup({ ...f, lockToken: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", confirmOwnerStopped: true }), /malformed or mismatched/);
+  assert.equal(fs.existsSync(f.outputPath), false); assert.equal(fs.existsSync(f.temporaryPath), true); assert.equal(fs.existsSync(f.lockPath), true);
+});
+test("interrupted backup recovery refuses live owner PID and malformed lock metadata", t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-recover-live-")); t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const f = recoveryFixture(root, { pid: process.pid });
+  assert.throws(() => recoverInterruptedBackup({ ...f, confirmOwnerStopped: true }), /PID is still live/);
+  fs.writeFileSync(f.lockPath, JSON.stringify({ format: "wrong", version: 1, token: f.token, pid: 2147483647, operation: "backup", createdAt: "invalid" }));
+  assert.throws(() => recoverInterruptedBackup({ ...f, confirmOwnerStopped: true }), /malformed or mismatched/);
+});
+test("interrupted backup recovery refuses ambiguous temporary files and existing final backups", t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-recover-ambiguous-")); t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const f = recoveryFixture(root);
+  const second = f.outputPath + ".bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb.tmp"; fs.copyFileSync(f.temporaryPath, second);
+  assert.throws(() => recoverInterruptedBackup({ ...f, confirmOwnerStopped: true }), /unambiguous/);
+  fs.unlinkSync(second); fs.writeFileSync(f.outputPath, "existing backup");
+  assert.throws(() => recoverInterruptedBackup({ ...f, confirmOwnerStopped: true }), /already exists/);
+});
+test("interrupted backup recovery validates checksums and refuses corrupt or unsafe entries", t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-recover-corrupt-")); t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const f = recoveryFixture(root); const payload = JSON.parse(fs.readFileSync(f.temporaryPath, "utf8")); payload.entries[0].contentBase64 = Buffer.from("tampered").toString("base64"); fs.writeFileSync(f.temporaryPath, JSON.stringify(payload));
+  assert.throws(() => recoverInterruptedBackup({ ...f, confirmOwnerStopped: true }), /checksum or byte length mismatch/);
+  assert.equal(fs.existsSync(f.outputPath), false); assert.equal(fs.existsSync(f.lockPath), true);
+});
+test("interrupted backup recovery atomically promotes one verified snapshot and clears its matching lock", t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-recover-success-")); t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const f = recoveryFixture(root); const result = recoverInterruptedBackup({ ...f, confirmOwnerStopped: true });
+  assert.equal(result.path, f.outputPath); assert.equal(result.entries, 1); assert.equal(result.includesSecrets, false);
+  assert.equal(fs.existsSync(f.outputPath), true); assert.equal(fs.existsSync(f.temporaryPath), false); assert.equal(fs.existsSync(f.lockPath), false);
 });
