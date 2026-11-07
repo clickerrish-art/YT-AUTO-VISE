@@ -346,7 +346,7 @@ async function handleRequest(request, env) {
       return json({ job: prior, revision: current.revision, idempotentReplay: true, publishingEnabled: false }, 200, { etag: '"' + current.revision + '"' });
     }
     const slotKey = `slot:${scheduledDate}:17:00:Africa/Johannesburg`;
-    if (state.jobs.some(job => job.scheduledSlot?.idempotencyKey === slotKey && !["CANCELLED", "REJECTED", "FAILED", "DEAD_LETTER"].includes(job.state))) {
+    if (state.jobs.some(job => job.scheduledSlot?.idempotencyKey === slotKey && !["CANCELLED", "REJECTED", "FAILED", "DEAD_LETTER"].includes(job.state)) || state.queueItems.some(item => item?.scheduledSlot?.idempotencyKey === slotKey || item?.slotIdempotencyKey === slotKey)) {
       return json({ error: "A job already reserves this draft-preparation slot", code: "SLOT_CONFLICT" }, 409);
     }
     const now = new Date().toISOString();
@@ -387,7 +387,7 @@ async function handleRequest(request, env) {
     if (job.workerLease || ["GENERATING", "RECONCILING"].includes(job.authoring?.status) || ["GENERATING", "RECONCILING"].includes(job.authoring?.narrationStage?.status)) {
       return json({ error: "A leased or active/uncertain authoring job cannot be cancelled; reconcile the attempt first", code: "ACTIVE_WORK" }, 409);
     }
-    if (job.state !== "QUEUED" && job.state !== "FAILED" && job.state !== "DEAD_LETTER") return json({ error: "Only an unleased queued, failed or dead-letter job can be cancelled" }, 409);
+    if (!["QUEUED", "BLOCKED", "AWAITING_HUMAN_REVIEW", "FAILED", "DEAD_LETTER"].includes(job.state)) return json({ error: "Only an unleased queued, blocked, review-pending, failed or dead-letter job can be cancelled" }, 409);
     const now = new Date().toISOString();
     const cancelled = { ...job, state: "CANCELLED", updatedAt: now, completedAt: now, cancelledAt: now, cancelledBy: actor, cancelReason: reason,
       transitionHistory: [...(job.transitionHistory ?? []), { from: job.state, to: "CANCELLED", at: now, actor, reason }] };
