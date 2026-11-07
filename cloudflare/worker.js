@@ -1313,7 +1313,7 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
   return json({ error: "Not found" }, 404);
 }
 
-export { authenticate, constantTimeEqual, handleRequest, operatorIdentity, validateDashboardState };
+export { authenticate, constantTimeEqual, handleRequest, operatorIdentity, validateDashboardState, verifyRepositoryRunnerToken };
 
 export default {
   async fetch(request, env) {
