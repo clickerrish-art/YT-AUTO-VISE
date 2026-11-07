@@ -4,6 +4,7 @@ import { normalizeDashboardState, toDashboardStateResponse } from "../cloudflare
 import { authenticate, constantTimeEqual, handleRequest, operatorIdentity, validateDashboardState, verifyRepositoryRunnerToken } from "../cloudflare/worker.js";
 import { canonicalAuthoringScriptSha256 } from "../cloudflare/authoring-review-compat.js";
 import { readFileSync } from "node:fs";
+import { Script } from "node:vm";
 import { DEFAULT_CAMPAIGNS, manageCampaign, validateCampaigns } from "../cloudflare/campaigns-compat.js";
 import { DEFAULT_WEEKLY_PLAN } from "../cloudflare/weekly-plan-compat.js";
 
@@ -1384,4 +1385,12 @@ test("dashboard job cards list private R2 artifacts and download them through op
   assert.ok(html.includes('data-artifact-download='));
   assert.ok(html.includes('"/api/artifacts/"+encodeURIComponent(button.dataset.artifactDownload)+"/download"'));
   assert.ok(html.includes('"x-operator-token":$("token").value'));
+});
+
+
+test("dashboard inline JavaScript remains syntactically valid after artifact controls are added", () => {
+  const html = readFileSync(new URL("../public/dashboard.html", import.meta.url), "utf8");
+  const scripts = [...html.matchAll(/<script\\b[^>]*>([\\s\\S]*?)<\\/script>/gi)].map(match => match[1]);
+  assert.ok(scripts.length > 0);
+  for (const source of scripts) assert.doesNotThrow(() => new Script(source));
 });
