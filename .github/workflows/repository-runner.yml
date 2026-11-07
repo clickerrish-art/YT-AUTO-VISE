@@ -107,6 +107,10 @@ jobs:
         id: push_snapshot
         if: always() && steps.server.outcome == 'success'
         run: node scripts/cloudflare-runner-bridge.mjs push-snapshot
+      - name: Upload generated video, thumbnail and metadata to private R2
+        id: upload_artifacts
+        if: always() && steps.push_snapshot.outcome == 'success'
+        run: node scripts/cloudflare-artifact-sync.mjs
       - name: Release runner session after both durable reconciliations succeed
         if: always() && steps.session.outcome == 'success' && steps.push_backoff.outcome == 'success' && steps.push_snapshot.outcome == 'success'
         run: node scripts/cloudflare-runner-bridge.mjs complete-session
@@ -123,6 +127,7 @@ jobs:
             echo "## SonicVhibez repository runner"
             echo "- Worker: ${DASHBOARD_WORKER_ID}"
             echo "- Durable state: Cloudflare D1"
+            echo "- Generated artifacts: private Cloudflare R2"
             echo "- Retry and uncertain-dispatch state: Cloudflare D1"
             echo "- Public/unattended publishing: disabled"
             echo "- Runner cycle: ${{ steps.run_cycle.outcome || 'not started' }}"
