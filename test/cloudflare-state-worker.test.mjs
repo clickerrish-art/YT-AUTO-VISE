@@ -241,9 +241,9 @@ test("GET /api/state serves the legacy dashboard payload and durable revision en
   assert.deepEqual(body.queueItems, [{ id: "queue-1" }]);
   assert.deepEqual(body.jobs, [{ id: "job-1" }]);
   assert.equal(body.publishingEnabled, false);
-  assert.equal(body.schedule, null);
+  assert.deepEqual(body.schedule, DEFAULT_WEEKLY_PLAN);
   assert.equal(body.uploadLedger, null);
-  assert.equal(body.campaignValidation.ok, false);
+  assert.equal(body.campaignValidation.ok, true);
   assert.equal(body.state.facebookDrafts.length, 0);
 });
 
