@@ -69,3 +69,68 @@ export function transitionContentJob(job, nextState, { actor = "local-operator",
   if (["PRIVATE_UPLOAD_VERIFIED", "FAILED", "BLOCKED", "REJECTED", "CANCELLED"].includes(nextState)) updated.completedAt = now;
   return updated;
 }
+
+
+/** Re-queue a failed job only after authenticated operator review and retry-policy checks. */
+export function authorizeContentJobRetry(job, {
+  actor,
+  reason,
+  overrideRetryLimit = false
+} = {}, now = Date.now()) {
+  if (!job || !["FAILED", "DEAD_LETTER"].includes(job.state)) {
+    throw new Error("Only failed or dead-letter jobs can receive retry authorization");
+  }
+  if (job.workerLease) throw new Error("A leased job cannot be manually re-queued");
+  if (typeof actor !== "string" || !actor.trim() || actor.length > 120) {
+    throw new Error("An authenticated operator identity is required for retry authorization");
+  }
+  if (typeof reason !== "string" || reason.trim().length < 8 || reason.length > 1000) {
+    throw new Error("A retry review reason of 8–1000 characters is required");
+  }
+  if (job.retryPolicy?.requiresOperatorRetry !== true) {
+    throw new Error("This job does not declare the required operator retry policy");
+  }
+  if (/^RENDER_(?:ARTIFACT|MANIFEST)_RECOVERY_REQUIRED$/.test(job.errorDetails?.code ?? "") &&
+      job.renderRecovery?.verifiedAbsent !== true) {
+    throw new Error("Retained render artifacts must be reconciled and verified absent before retry authorization");
+  }
+  if (job.nextRetryAt) {
+    const retryAt = Date.parse(job.nextRetryAt);
+    if (!Number.isFinite(retryAt)) throw new Error("Persisted retry time is invalid; operator reconciliation is required");
+    if (retryAt > now) throw new Error("Retry backoff has not elapsed");
+  }
+  const maxAttempts = job.retryPolicy?.maxAttempts;
+  const attemptCount = job.attemptCount;
+  if (!Number.isInteger(maxAttempts) || maxAttempts < 1 || !Number.isInteger(attemptCount) || attemptCount < 0) {
+    throw new Error("Retry policy or attempt count is invalid");
+  }
+  const exhausted = attemptCount >= maxAttempts;
+  if (exhausted) {
+    if (job.state !== "DEAD_LETTER" || overrideRetryLimit !== true || job.errorDetails?.retryableAfterOperatorReview !== true) {
+      throw new Error("Retry limit exhausted; a dead-letter job requires an explicit one-attempt operator override after review");
+    }
+  } else if (job.errorDetails?.retryable !== true) {
+    throw new Error("Failure is not marked safe for retry");
+  }
+  if (!exhausted && overrideRetryLimit === true) {
+    throw new Error("Retry-limit override is only valid for an exhausted dead-letter job");
+  }
+  const timestamp = new Date(now).toISOString();
+  const authorization = {
+    actor: actor.trim(), reason: reason.trim(), at: timestamp,
+    attemptCount, previousMaxAttempts: maxAttempts, overrideRetryLimit: exhausted
+  };
+  return {
+    ...job,
+    state: "QUEUED",
+    updatedAt: timestamp,
+    completedAt: null,
+    nextRetryAt: null,
+    retryPolicy: exhausted ? { ...job.retryPolicy, maxAttempts: attemptCount + 1 } : job.retryPolicy,
+    errorDetails: { ...job.errorDetails, retryable: true, retryableAfterOperatorReview: false },
+    retryAuthorizations: [...(job.retryAuthorizations ?? []), authorization],
+    transitionHistory: [...(job.transitionHistory ?? []), {
+      from: job.state, to: "QUEUED", at: timestamp, actor: actor.trim(), reason: reason.trim()
+    }]
+  };
+}
