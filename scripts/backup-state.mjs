@@ -326,7 +326,11 @@ export function recoverInterruptedBackup({ rootDir = root, stateDir = process.en
   assertNoSymlinkComponents(path.dirname(destination), "recovery output directory");
   for (const [file, label] of [[lockPath, "lock"], [temporary, "temporary backup"]]) { const st = fs.lstatSync(file); if (st.isSymbolicLink() || !st.isFile()) throw new Error("Recovery refuses unsafe " + label); }
   try { fs.lstatSync(destination); throw new Error("Recovery destination already exists; refusing overwrite"); } catch (e) { if (e?.code !== "ENOENT") throw e; }
-  const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+  const lockStat = fs.lstatSync(lockPath, { bigint: true });
+  const lockRaw = readRegularFileNoFollow(lockPath);
+  const lockAfterRead = fs.lstatSync(lockPath, { bigint: true });
+  if (lockAfterRead.isSymbolicLink() || !lockAfterRead.isFile() || lockStat.dev !== lockAfterRead.dev || lockStat.ino !== lockAfterRead.ino) throw new Error("Recovery lock changed while being read");
+  const lock = JSON.parse(lockRaw.toString("utf8"));
   if (!lock || lock.format !== "sonicvhibez-restore-operation-lock" || lock.version !== 1 || lock.operation !== "backup" || lock.token !== lockToken || !Number.isSafeInteger(lock.pid) || lock.pid < 1 || !Number.isFinite(Date.parse(lock.createdAt))) throw new Error("Recovery lock metadata is malformed or mismatched");
   try { process.kill(lock.pid, 0); throw new Error("Recovery owner PID is still live; refusing recovery"); } catch (e) { if (e?.code !== "ESRCH") throw e; }
   const prefix = path.basename(destination) + ".", candidates = fs.readdirSync(path.dirname(destination)).filter(n => n.startsWith(prefix) && n.endsWith(".tmp"));
@@ -336,13 +340,18 @@ export function recoverInterruptedBackup({ rootDir = root, stateDir = process.en
   const seen = new Set();
   for (const entry of payload.entries) {
     const p = entry?.target?.path, b64 = entry?.contentBase64;
-    if (!entry.target || typeof entry.target.kind !== "string" || typeof p !== "string" || !p || path.posix.isAbsolute(p) || (p.includes(String.fromCharCode(92)) || p.split("/").some(x => !x || x === "..")) || !/^[a-f0-9]{64}$/.test(entry.sha256) || !Number.isSafeInteger(entry.bytes) || entry.bytes < 0 || typeof b64 !== "string" || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(b64)) throw new Error("Backup contains an invalid or unsafe entry");
+    if (!entry.target || typeof entry.target.kind !== "string" || !entry.target.kind || typeof p !== "string" || !p || p.includes("\\0") || path.posix.isAbsolute(p) || (p.includes(String.fromCharCode(92)) || p.split("/").some(x => !x || x === "." || x === "..")) || !/^[a-f0-9]{64}$/.test(entry.sha256) || !Number.isSafeInteger(entry.bytes) || entry.bytes < 0 || typeof b64 !== "string" || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(b64)) throw new Error("Backup contains an invalid or unsafe entry");
     const id = entry.target.kind + ":" + p; if (seen.has(id)) throw new Error("Backup contains duplicate target entries"); seen.add(id);
     const bytes = Buffer.from(b64, "base64"); if (bytes.length !== entry.bytes || bytes.toString("base64") !== b64 || sha256(bytes) !== entry.sha256) throw new Error("Backup entry checksum or byte length mismatch");
   }
   fs.linkSync(temporary, destination); fs.unlinkSync(temporary);
   if (process.platform !== "win32") { const fd = fs.openSync(path.dirname(destination), fs.constants.O_RDONLY); try { fs.fsyncSync(fd); } finally { fs.closeSync(fd); } }
-  const current = JSON.parse(fs.readFileSync(lockPath, "utf8")); if (current.token !== lockToken || current.pid !== lock.pid || current.operation !== "backup") throw new Error("Backup promoted but lock ownership changed; inspect manually");
+  const currentStat = fs.lstatSync(lockPath, { bigint: true });
+  if (currentStat.isSymbolicLink() || !currentStat.isFile() || currentStat.dev !== lockStat.dev || currentStat.ino !== lockStat.ino) throw new Error("Backup promoted but lock file identity changed; inspect manually");
+  const current = JSON.parse(readRegularFileNoFollow(lockPath).toString("utf8"));
+  if (current.token !== lockToken || current.pid !== lock.pid || current.operation !== "backup" || current.createdAt !== lock.createdAt) throw new Error("Backup promoted but lock ownership changed; inspect manually");
+  const finalLockStat = fs.lstatSync(lockPath, { bigint: true });
+  if (finalLockStat.isSymbolicLink() || !finalLockStat.isFile() || finalLockStat.dev !== lockStat.dev || finalLockStat.ino !== lockStat.ino) throw new Error("Backup promoted but lock file identity changed; inspect manually");
   fs.unlinkSync(lockPath); return { path: destination, createdAt: payload.createdAt, entries: payload.entries.length, sha256: sha256(raw), includesSecrets: false };
 }
 
