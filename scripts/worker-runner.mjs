@@ -456,7 +456,10 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
       status: dispatched.status === 200 ? "SUCCEEDED" : "NOT_DISPATCHED",
       httpStatus: dispatched.status,
       state: dispatched.payload.job?.state ?? null,
-      ...(dispatched.status === 409 ? { retryAfterMs: cooldowns.get(job.id)?.nextAttemptAt - Date.now() } : {})
+      ...(dispatched.status === 409 ? {
+        responseError: typeof dispatched.payload.error === "string" ? dispatched.payload.error.slice(0, 500) : null,
+        retryAfterMs: cooldowns.get(job.id)?.nextAttemptAt - Date.now()
+      } : {})
     });
   }
   return {
