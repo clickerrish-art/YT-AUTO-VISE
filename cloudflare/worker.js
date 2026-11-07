@@ -1130,7 +1130,8 @@ async function handleRequest(request, env) {
     "POST /api/jobs/review",
     "GET /api/jobs/review/bundle",
     "GET /api/jobs/review/preview",
-    "POST /api/worker/quarantine-release"
+    "POST /api/worker/quarantine-release",
+    "POST /api/jobs/render-recovery/reconcile"
   ]);
   const providerGatedRoutes = new Set([
     "POST /api/uploads/reconcile",
@@ -1138,7 +1139,8 @@ async function handleRequest(request, env) {
     "POST /api/facebook/drafts",
     "POST /api/facebook/drafts/evaluate",
     "POST /api/facebook/drafts/approve",
-    "GET /api/facebook/autonomous-status"
+    "GET /api/facebook/autonomous-status",
+    "POST /api/facebook/publish"
   ]);
   const routeKey = method + " " + url.pathname;
   if (runnerGatedRoutes.has(routeKey)) {
