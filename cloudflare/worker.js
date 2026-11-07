@@ -171,6 +171,71 @@ async function handleRequest(request, env) {
     return json({ revision: row.revision, updatedAt: row.updated_at, state: JSON.parse(row.state_json) }, 200, { etag: '"' + row.revision + '"' });
   }
 
+  if (url.pathname === "/api/jobs/queue-diagnostics" && method === "GET") {
+    const row = await currentState(env);
+    if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(row.state_json)); }
+    catch { return json({ error: "Persisted state is corrupt or has an unsupported schema", code: "STATE_INVALID" }, 503); }
+    const requestedLimit = Number(url.searchParams.get("limit") ?? 50);
+    if (!Number.isInteger(requestedLimit) || requestedLimit < 1 || requestedLimit > 100) {
+      return json({ error: "limit must be an integer from 1 to 100", publishingEnabled: false, readOnly: true }, 400);
+    }
+    const queued = state.jobs.filter(job => job?.kind === "CONTENT_PRODUCTION" && job.state === "QUEUED");
+    const hasApprovedRenderPlan = job =>
+      job.authoring?.productionPlan?.status === "APPROVED_PLAN_ONLY" &&
+      job.authoring.productionPlan.review?.decision === "APPROVE" &&
+      /^[a-f0-9]{64}$/.test(job.authoring.productionPlan.review?.approvalSha256 ?? "");
+    const checkedAt = Date.now();
+    const localDate = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
+    }).format(new Date(checkedAt));
+    const items = queued.map(job => {
+      const blockers = [];
+      if (!job.authoring) blockers.push("APPROVED_AUTHORING_MISSING");
+      if (!hasApprovedRenderPlan(job)) blockers.push("APPROVED_RENDER_PLAN_MISSING");
+      let slot = null;
+      const scheduled = job.scheduledSlot;
+      if (scheduled?.timezone === "Africa/Johannesburg" &&
+          /^\\d{4}-\\d{2}-\\d{2}$/.test(scheduled.date ?? "") &&
+          /^(?:[01]\\d|2[0-3]):[0-5]\\d$/.test(scheduled.time ?? "")) {
+        const instant = new Date(scheduled.date + "T" + scheduled.time + ":00+02:00");
+        if (Number.isFinite(instant.getTime()) && instant.toISOString().startsWith(scheduled.date)) {
+          slot = { scheduledAt: instant.getTime(), localDate: scheduled.date };
+        }
+      }
+      if (!slot) blockers.push("VALID_JOHANNESBURG_SLOT_MISSING");
+      else if (slot.localDate < localDate) blockers.push("SLOT_EXPIRED_RESCHEDULE_REQUIRED");
+      else if (slot.localDate > localDate) blockers.push("SLOT_IN_FUTURE");
+      else if (slot.scheduledAt > checkedAt) blockers.push("SLOT_NOT_DUE_YET");
+      return {
+        id: typeof job.id === "string" ? job.id : null,
+        contentType: typeof job.contentType === "string" ? job.contentType : null,
+        state: job.state,
+        createdAt: job.createdAt ?? null,
+        scheduledSlot: scheduled ? { date: scheduled.date ?? null, time: scheduled.time ?? null, timezone: scheduled.timezone ?? null } : null,
+        scheduledAt: slot ? new Date(slot.scheduledAt).toISOString() : null,
+        status: blockers.length ? "HELD" : "DISPATCHABLE",
+        blockers
+      };
+    });
+    const blockerCounts = {};
+    for (const item of items) for (const blocker of item.blockers) blockerCounts[blocker] = (blockerCounts[blocker] ?? 0) + 1;
+    return json({
+      checkedAt: new Date(checkedAt).toISOString(),
+      timezone: "Africa/Johannesburg",
+      queuedCount: queued.length,
+      dispatchableCount: items.filter(item => item.status === "DISPATCHABLE").length,
+      heldCount: items.filter(item => item.status === "HELD").length,
+      blockerCounts,
+      items: items.slice(0, requestedLimit),
+      returnedCount: Math.min(items.length, requestedLimit),
+      truncated: items.length > requestedLimit,
+      publishingEnabled: false,
+      readOnly: true
+    });
+  }
+
   if (url.pathname === "/api/backups" && method === "GET") {
     const result = await env.STATE_DB.prepare(
       "SELECT backup_id, source_revision, sha256, created_at, reason FROM dashboard_backups ORDER BY created_at DESC LIMIT 100"
