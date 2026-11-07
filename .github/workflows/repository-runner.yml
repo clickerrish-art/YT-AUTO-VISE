@@ -42,7 +42,11 @@ jobs:
           ffprobe -version | head -n 1
           node --check scripts/cloudflare-runner-bridge.mjs
           node --check scripts/worker-runner.mjs
+      - name: Acquire durable single-runner session
+        id: session
+        run: node scripts/cloudflare-runner-bridge.mjs start-session
       - name: Pull durable dashboard snapshot and worker retry state
+        id: sync_in
         run: |
           node scripts/cloudflare-runner-bridge.mjs pull-snapshot
           node scripts/cloudflare-runner-bridge.mjs pull-backoff
@@ -93,11 +97,16 @@ jobs:
             kill -9 "$(cat "$RUNNER_TEMP/dashboard-server.pid")" 2>/dev/null || true
           fi
       - name: Persist worker cooldowns and uncertain-dispatch quarantine
+        id: push_backoff
         if: always() && steps.run_cycle.outcome != 'skipped'
         run: node scripts/cloudflare-runner-bridge.mjs push-backoff
       - name: Reconcile local production changes into D1 with revision compare-and-swap
+        id: push_snapshot
         if: always() && steps.server.outcome == 'success'
         run: node scripts/cloudflare-runner-bridge.mjs push-snapshot
+      - name: Release runner session after both durable reconciliations succeed
+        if: always() && steps.session.outcome == 'success' && steps.push_backoff.outcome == 'success' && steps.push_snapshot.outcome == 'success'
+        run: node scripts/cloudflare-runner-bridge.mjs complete-session
       - name: Fail the workflow if dispatch infrastructure failed
         if: always() && steps.run_cycle.outcome == 'failure'
         run: |
@@ -114,4 +123,5 @@ jobs:
             echo "- Retry and uncertain-dispatch state: Cloudflare D1"
             echo "- Public/unattended publishing: disabled"
             echo "- Runner cycle: ${{ steps.run_cycle.outcome || 'not started' }}"
+            echo "- Durable session reconciliation: ${{ steps.session.outcome || 'not started' }}"
           } >> "$GITHUB_STEP_SUMMARY"
