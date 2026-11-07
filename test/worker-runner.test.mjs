@@ -660,20 +660,22 @@ test("worker persists retry cooldown across restart and does not redispatch earl
   }
 });
 
-test("continuous worker stops after HTTP 409 when retry cooldown cannot be persisted", async () => {
+test("continuous worker retains its process lock after HTTP 409 cooldown persistence fails", async () => {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-409-persist-failure-"));
   const statePath = path.join(directory, "worker-backoff.json");
+  const lockPath = statePath + ".process.lock";
   const requests = [];
   const errors = [];
-  let removedStateDirectory = false;
+  let blockingStatePathCreated = false;
   const fetchImpl = async (url, options = {}) => {
     const method = options.method ?? "GET";
     requests.push({ method, url: String(url) });
     if (method === "GET") {
-      // Remove the persistent-state parent only after worker startup and state
-      // loading, so the next cooldown write fails after the 409 is received.
-      fs.rmSync(directory, { recursive: true, force: true });
-      removedStateDirectory = true;
+      // The worker has already loaded the absent state file. Create a directory
+      // at that exact path so the cooldown write fails without deleting the
+      // parent directory or the worker's exclusive process lock.
+      fs.mkdirSync(statePath);
+      blockingStatePathCreated = true;
       return new Response(JSON.stringify({
         jobs: [{ id: "job-409-persist-failure", state: "QUEUED" }],
         queuedCount: 1,
@@ -703,12 +705,35 @@ test("continuous worker stops after HTTP 409 when retry cooldown cannot be persi
         error.retryable === false &&
         /stopping to avoid an early redispatch/.test(error.message)
     );
-    assert.equal(removedStateDirectory, true);
+    assert.equal(blockingStatePathCreated, true);
     assert.deepEqual(requests.map(item => item.method), ["GET", "POST"],
       "a 409 whose cooldown cannot be persisted must stop before another poll or dispatch");
     assert.equal(errors.length, 1);
     assert.equal(errors[0].code, "WORKER_BACKOFF_PERSISTENCE_FAILED");
     assert.equal(errors[0].retryable, false);
+    assert.equal(fs.existsSync(lockPath), true,
+      "failed cooldown persistence must retain the process lock as a durable restart stop signal");
+
+    let restartRequests = 0;
+    await assert.rejects(
+      runWorker({
+        baseUrl: "http://127.0.0.1:8787",
+        token,
+        workerId,
+        once: true,
+        pollIntervalMs: 1_000,
+        cooldownStatePath: statePath,
+        fetchImpl: async () => {
+          restartRequests += 1;
+          return new Response(JSON.stringify({ jobs: [] }), {
+            status: 200, headers: { "content-type": "application/json" }
+          });
+        }
+      }),
+      /Worker state is already locked/
+    );
+    assert.equal(restartRequests, 0,
+      "a restart must be blocked before contacting the dispatch API when cooldown persistence failed");
   } finally {
     fs.rmSync(directory, { recursive: true, force: true });
   }

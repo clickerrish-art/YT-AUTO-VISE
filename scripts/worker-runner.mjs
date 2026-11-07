@@ -508,7 +508,10 @@ export async function runWorker({
       try {
         persistCooldowns(statePath, workerId, cooldowns, uncertainDispatches, consumedReleaseNonces);
       } catch (cause) {
-        const error = new Error("Worker retry backoff could not be persisted; stopping to avoid an early redispatch", { cause });
+        // A failed cooldown write leaves a restart with stale or empty retry state.
+        // Keep the exclusive process lock so a restart cannot redispatch early.
+        preserveProcessLock = true;
+        const error = new Error("Worker retry backoff could not be persisted; stopping to avoid an early redispatch and retaining the process lock", { cause });
         error.code = "WORKER_BACKOFF_PERSISTENCE_FAILED";
         error.retryable = false;
         throw error;
