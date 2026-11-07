@@ -63,11 +63,15 @@ export function remoteUploadMatchesApprovedMetadata(item, { videoId, channelId, 
 /** A local receipt is not publication history until the exact remote upload is
  * present in a complete, owner-reviewed channel-history snapshot. */
 export function assertPrivateUploadPresentInCompleteHistory(snapshot, {
-  videoId, format, actualPublishedAt
+  videoId, channelId, format, actualPublishedAt
 } = {}) {
-  if (!snapshot || !Array.isArray(snapshot.history) || !Array.isArray(snapshot.scheduledItems)) {
-    throw new Error("complete verified channel-history snapshot is required before a private upload can be marked reconciled");
+  if (!snapshot || snapshot.complete !== true || !Array.isArray(snapshot.history) ||
+      !Array.isArray(snapshot.scheduledItems) || !snapshot.channelId ||
+      typeof snapshot.verifiedBy !== "string" || snapshot.verifiedBy.trim().length < 2 ||
+      !Number.isFinite(strictIsoTimestamp(snapshot.verifiedAt))) {
+    throw new Error("complete owner-verified channel-history snapshot is required before a private upload can be marked reconciled");
   }
+  if (snapshot.channelId !== channelId) throw new Error("complete channel-history snapshot is bound to a different YouTube channel");
   const matches = snapshot.history.filter(item => item?.id === videoId);
   if (matches.length !== 1) {
     throw new Error("private upload is absent from complete verified channel history; retain recovery state and do not advance the publication cycle");
@@ -438,10 +442,11 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
         );
         assertPrivateUploadPresentInCompleteHistory(completeSnapshot, {
           videoId: prior.remoteVideoId,
+          channelId: expectedChannelId,
           format: metadata.contentType ?? metadata.format ?? null,
           actualPublishedAt
         });
-        historyVerification = { verifiedAt: now().toISOString(), videoCount: completeSnapshot.history.length };
+        historyVerification = { verifiedAt: completeSnapshot.verifiedAt, verifiedBy: completeSnapshot.verifiedBy, videoCount: completeSnapshot.history.length };
       } catch (error) {
         prior.status = "RECOVERY_REQUIRED";
         prior.errorCode = "CHANNEL_HISTORY_NOT_RECONCILED";
@@ -462,6 +467,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       rightsEvidenceSha256: approval.rightsEvidenceSha256, remoteStatusVerified: true,
       channelHistoryReconciled: historyVerification !== null,
       historyVerifiedAt: historyVerification?.verifiedAt ?? null,
+      historyVerifiedBy: historyVerification?.verifiedBy ?? null,
       historyVideoCount: historyVerification?.videoCount ?? null,
       publishingEnabled: false, url: "https://www.youtube.com/watch?v=" + prior.remoteVideoId
     };
@@ -651,10 +657,11 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       );
       assertPrivateUploadPresentInCompleteHistory(completeSnapshot, {
         videoId,
+        channelId: expectedChannelId,
         format: metadata.contentType ?? metadata.format ?? null,
         actualPublishedAt
       });
-      historyVerification = { verifiedAt: now().toISOString(), videoCount: completeSnapshot.history.length };
+      historyVerification = { verifiedAt: completeSnapshot.verifiedAt, verifiedBy: completeSnapshot.verifiedBy, videoCount: completeSnapshot.history.length };
     } catch (error) {
       attempt.status = "REMOTE_ACCEPTED_RECONCILIATION_REQUIRED";
       attempt.errorCode = "CHANNEL_HISTORY_NOT_RECONCILED";
@@ -679,6 +686,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     remoteStatusVerified: true,
     channelHistoryReconciled: historyVerification !== null,
     historyVerifiedAt: historyVerification?.verifiedAt ?? null,
+    historyVerifiedBy: historyVerification?.verifiedBy ?? null,
     historyVideoCount: historyVerification?.videoCount ?? null,
     publishingEnabled: false, url: "https://www.youtube.com/watch?v=" + videoId
   };
