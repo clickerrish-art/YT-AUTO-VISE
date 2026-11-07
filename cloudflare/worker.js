@@ -94,7 +94,7 @@ async function handleRequest(request, env) {
     } catch {
       return json({ error: "Persisted state is corrupt or has an unsupported schema", code: "STATE_INVALID" }, 503);
     }
-    return json({ revision: row.revision, updatedAt: row.updated_at, state: JSON.parse(row.state_json) }, 200, { etag: '"' + row.revision + '"' });
+    return json({ revision: row.revision, updatedAt: row.updated_at, state }, 200, { etag: '"' + row.revision + '"' });
   }
 
   if (url.pathname === "/api/state/bootstrap" && method === "POST") {
