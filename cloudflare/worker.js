@@ -212,6 +212,7 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
     let stateStatus = "NOT_INITIALIZED";
     let campaignStatus = "NOT_VALIDATED";
     let assetStatus = "NOT_CONFIGURED";
+    let artifactStatus = "NOT_CONFIGURED";
     try {
       const row = await currentState(env);
       if (row) {
@@ -240,12 +241,17 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
       blockers.push("Cloudflare Static Assets binding ASSETS is not configured.");
     }
 
-    const ready = stateStatus === "READABLE" && campaignStatus === "PASS" && assetStatus === "READABLE";
+    if (env.ARTIFACTS && typeof env.ARTIFACTS.put === "function" && typeof env.ARTIFACTS.get === "function") {
+      artifactStatus = "BOUND";
+    } else {
+      blockers.push("Private R2 artifact storage binding ARTIFACTS is not configured.");
+    }
+    const ready = stateStatus === "READABLE" && campaignStatus === "PASS" && assetStatus === "READABLE" && artifactStatus === "BOUND";
     return json({
       ready, mode: "cloudflare-worker", durableState: stateStatus,
-      campaignConfig: campaignStatus, dashboardAssets: assetStatus,
+      campaignConfig: campaignStatus, dashboardAssets: assetStatus, artifactStorage: artifactStatus,
       publicationReadiness: "SEPARATE", publicationGate: "/readyz",
-      blockers, note: "This endpoint verifies service, state and dashboard-asset availability only; it does not certify publication readiness.",
+      blockers, note: "R2 binding presence is checked, but artifact upload/download integrity is not yet end-to-end verified; publication readiness remains a separate gate.",
       publishingEnabled: false
     }, ready ? 200 : 503);
   }
@@ -521,6 +527,7 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
     return json({
       service: "sonicvhibez-dashboard-worker",
       statePersistence: { provider: "Cloudflare D1", configured: Boolean(env.STATE_DB), initialized: Boolean(row), revision: row?.revision ?? null },
+      artifactStorage: { provider: "Cloudflare R2 Standard", configured: Boolean(env.ARTIFACTS), bucket: "sonicvhibez-artifacts-staging", access: "private-by-default", applicationBudgetBytes: 8589934592, uploadDownloadE2E: "NOT_TESTED" },
       dashboardHosting: { provider: "Cloudflare Workers Static Assets", configured: Boolean(env.ASSETS) },
       supported: [
         "state read/write with revision checks and backups",
@@ -537,6 +544,7 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
         "script generation provider and narration/TTS execution",
         "on-disk media validation, rights evidence verification and media review",
         "production-plan file verification and Short-parent remote receipt binding",
+        "private R2 multipart artifact upload, integrity ledger and authenticated download",
         "YouTube OAuth upload and remote history reconciliation",
         "Meta Page identity verification and Facebook/Instagram provider actions"
       ],
