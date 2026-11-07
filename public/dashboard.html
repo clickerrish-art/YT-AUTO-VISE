@@ -15,7 +15,7 @@
 </div>
 <div id="queueDiagnosticsStatus" class="muted" role="status" aria-live="polite">Queue diagnostics not loaded.</div>
 <h3>Hold reasons</h3><div id="queueDiagnosticsBlockers" class="muted">No diagnostics loaded.</div>
-<h3>Queued jobs</h3><div class="tablewrap"><table><thead><tr><th>Job ID</th><th>Format</th><th>Scheduled (Johannesburg)</th><th>Status</th><th>Blockers</th></tr></thead><tbody id="queueDiagnosticsItems"><tr><td colspan="5">Connect to load queue diagnostics.</td></tr></tbody></table></div>
+<h3>Queued jobs</h3><div class="tablewrap"><table><thead><tr><th>Job ID</th><th>Format</th><th>Scheduled (Johannesburg)</th><th>Status</th><th>Blockers</th><th>Operator next step</th></tr></thead><tbody id="queueDiagnosticsItems"><tr><td colspan="6">Connect to load queue diagnostics.</td></tr></tbody></table></div>
 </section>
 <section class="panel"><h2>System health & blockers</h2><p id="schedule" class="muted"></p><div id="blockers"></div><p class="notice">This dashboard does not offer public publishing or visibility changes. Media rights, editorial approvals, channel identity, and upload reconciliation remain explicit gates.</p></section>
 <section class="panel"><h2>Campaigns & destination gates</h2><p class="muted">Campaign configuration is validated by the backend. Only the approved Selar destination is available for draft creation. Safari campaigns are disabled by project policy and remain inactive; a preview does not authorize activation.</p><div id="campaigns"></div><h3 id="campaignform-heading">Campaign preview and controls</h3><form id="campaignform" aria-labelledby="campaignform-heading"><div class="formgrid"><div><label for="campaignid">Campaign</label><select id="campaignid" required></select></div><div><label for="campaignaction">Action</label><select id="campaignaction"><option value="preview">Save preview (does not activate)</option><option value="activate">Activate for drafts only</option><option value="deactivate">Deactivate campaign</option></select></div><div><label for="campaignurl">Exact destination URL</label><input id="campaignurl" type="url" placeholder="https://..."></div><div><label for="campaigndisclosure">Disclosure text</label><textarea id="campaigndisclosure" rows="2"></textarea></div></div><label><input id="campaignapproval" type="checkbox" style="width:auto"> I explicitly approve the exact previewed destination and disclosure for draft-only use</label><button type="submit">Apply campaign action</button></form><div id="campaignresult" class="notice" role="status">No campaign action taken.</div></section>
@@ -64,6 +64,19 @@ async function api(path,opts={}){let response;try{response=await fetch(path,{...
 async function connect(){try{state=await api("/api/state");try{queueDiagnostics=await api("/api/jobs/queue-diagnostics?limit=100")}catch(diagnosticsError){queueDiagnostics={error:diagnosticsError.message}}try{facebookState=await api("/api/facebook/state")}catch(fbError){facebookState={blockers:[fbError.message],drafts:[],publishingEnabled:false}}try{facebookAutonomousState=await api("/api/facebook/autonomous-status")}catch(fbError){facebookAutonomousState={blockers:[fbError.message],publishingEnabled:false}}$("app").classList.remove("hide");render();renderQueueDiagnostics();renderFacebook();renderFacebookAutonomous();msg("Connected. Queue diagnostics and dashboard data are read from the authenticated local API.");}catch(e){msg(e.message)}}
 async function runTask(){const button=$("runTask");button.disabled=true;const result=$("taskresult");result.textContent="Running real repository task…";try{const response=await fetch("/api/tasks/run",{method:"POST",headers:{"content-type":"application/json","x-operator-token":$("token").value},body:JSON.stringify({taskId:$("task").value})});let data;try{data=await response.json()}catch{throw new Error("Dashboard task returned an invalid response")};const job=data.job;if(job&&job.taskId==="production-readiness"&&typeof job.output==="string"){let report;try{report=JSON.parse(job.output)}catch{throw new Error("Readiness task returned malformed structured diagnostics: "+(job.output||"no output"))};const blockers=Array.isArray(report.blockers)?report.blockers:[];result.textContent=(report.status==="blocked"?"HOLD":"PREREQUISITES PRESENT")+" · "+(report.blockerCount??blockers.length)+" blocker(s) · publishing remains disabled\\n\\n"+blockers.map(item=>item.id+" · "+item.severity.toUpperCase()+" · "+item.controlOwner+"\\n"+item.message+"\\nNext: "+item.resolution).join("\\n\\n")+"\\n\\n"+(report.limitations||[]).join("\\n");}else{if(!response.ok)throw new Error(data.error||"Task failed");result.textContent=job.status+" · exit "+job.exitCode+" · "+job.taskId+"\\n"+(job.output||"No output");}await connect();}catch(e){result.textContent="Task failed: "+e.message;}finally{button.disabled=false;}}
 function setGateForm(formId,enabled,resultId,blockedReason,emptyMessage){const button=$(formId).querySelector('button[type="submit"]');if(button)button.disabled=!enabled;const result=$(resultId);if(!enabled&&(result.textContent===emptyMessage||result.textContent.startsWith("Action unavailable:")))result.textContent="Action unavailable: "+blockedReason;else if(enabled&&result.textContent.startsWith("Action unavailable:"))result.textContent=emptyMessage;}
+function queueOperatorNextStep(item){
+  const guidance={
+    APPROVED_AUTHORING_MISSING:"Create the authoring draft, then complete human script review and approval.",
+    APPROVED_RENDER_PLAN_MISSING:"Complete the render plan and record its explicit approval with the required digest.",
+    VALID_JOHANNESBURG_SLOT_MISSING:"Assign a valid date and time in Africa/Johannesburg; do not guess or auto-shift a slot.",
+    SLOT_EXPIRED_RESCHEDULE_REQUIRED:"Operator must choose and approve a new slot; expired slots are never silently moved.",
+    SLOT_IN_FUTURE:"Keep the job queued until its scheduled Johannesburg date.",
+    SLOT_NOT_DUE_YET:"Wait until the scheduled Johannesburg time; do not dispatch early."
+  };
+  const blockers=Array.isArray(item.blockers)?item.blockers:[];
+  if(!blockers.length)return "Queue checks pass only; complete media, rights, human-review and upload gates separately.";
+  return [...new Set(blockers.map(code=>guidance[code]||("Investigate unrecognized blocker: "+String(code))))].join(" ");
+}
 function renderQueueDiagnostics(){
   const body=$("queueDiagnosticsItems");
   body.replaceChildren();
@@ -71,7 +84,7 @@ function renderQueueDiagnostics(){
     $("diagnosticsQueued").textContent="—";$("diagnosticsDispatchable").textContent="—";$("diagnosticsHeld").textContent="—";
     $("queueDiagnosticsStatus").textContent="Queue diagnostics unavailable: "+(queueDiagnostics?.error||"No response from the operator API.");
     $("queueDiagnosticsBlockers").textContent="No blocker counts available.";
-    const row=document.createElement("tr"),cell=document.createElement("td");cell.colSpan=5;cell.textContent="Diagnostics unavailable. Use Refresh data after checking operator access.";row.append(cell);body.append(row);return;
+    const row=document.createElement("tr"),cell=document.createElement("td");cell.colSpan=6;cell.textContent="Diagnostics unavailable. Use Refresh data after checking operator access.";row.append(cell);body.append(row);return;
   }
   const data=queueDiagnostics;
   $("diagnosticsQueued").textContent=String(data.queuedCount??0);
@@ -81,10 +94,10 @@ function renderQueueDiagnostics(){
   const blockerCounts=data.blockerCounts&&typeof data.blockerCounts==="object"?Object.entries(data.blockerCounts):[];
   $("queueDiagnosticsBlockers").textContent=blockerCounts.length?blockerCounts.map(([code,count])=>code.replaceAll("_"," ")+" ("+count+")").join(" · "):"No queue blockers reported.";
   const items=Array.isArray(data.items)?data.items:[];
-  if(!items.length){const row=document.createElement("tr"),cell=document.createElement("td");cell.colSpan=5;cell.textContent="No queued production jobs.";row.append(cell);body.append(row);return;}
+  if(!items.length){const row=document.createElement("tr"),cell=document.createElement("td");cell.colSpan=6;cell.textContent="No queued production jobs.";row.append(cell);body.append(row);return;}
   for(const item of items){
     const row=document.createElement("tr");
-    for(const value of [item.id||"—",item.contentType||"—",item.scheduledSlot?.date&&item.scheduledSlot?.time?item.scheduledSlot.date+" "+item.scheduledSlot.time+" "+(item.scheduledSlot.timezone||""):"No valid slot",item.status||"UNKNOWN",Array.isArray(item.blockers)&&item.blockers.length?item.blockers.join(", "):"None"]){
+    for(const value of [item.id||"—",item.contentType||"—",item.scheduledSlot?.date&&item.scheduledSlot?.time?item.scheduledSlot.date+" "+item.scheduledSlot.time+" "+(item.scheduledSlot.timezone||""):"No valid slot",item.status||"UNKNOWN",Array.isArray(item.blockers)&&item.blockers.length?item.blockers.join(", "):"None",queueOperatorNextStep(item)]){
       const cell=document.createElement("td");cell.textContent=String(value);row.append(cell);
     }
     body.append(row);
