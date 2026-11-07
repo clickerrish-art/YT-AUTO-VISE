@@ -199,7 +199,7 @@ async function handleRequest(request, env) {
     let state;
     try { state = validateDashboardState(JSON.parse(row.state_json)); }
     catch { return json({ error: "Persisted state is corrupt or has an unsupported schema", code: "STATE_INVALID" }, 503); }
-    const campaigns = state.campaigns ?? structuredClone(DEFAULT_CAMPAIGNS);
+    const campaigns = (state.campaigns?.length ? state.campaigns : structuredClone(DEFAULT_CAMPAIGNS));
     const errors = validateCampaigns({ version: 1, campaigns });
     return json({
       campaigns,
@@ -382,7 +382,7 @@ async function handleRequest(request, env) {
     if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
     let state;
     try { state = validateDashboardState(JSON.parse(current.state_json)); } catch { return json({ error: "Persisted state is invalid", code: "STATE_INVALID" }, 503); }
-    const config = { version: 1, campaigns: state.campaigns ?? structuredClone(DEFAULT_CAMPAIGNS) };
+    const config = { version: 1, campaigns: (state.campaigns?.length ? state.campaigns : structuredClone(DEFAULT_CAMPAIGNS)) };
     const existingErrors = validateCampaigns(config);
     if (existingErrors.length) return json({ error: "Campaign configuration is invalid", validationErrors: existingErrors }, 409);
     let result;
@@ -409,7 +409,7 @@ async function handleRequest(request, env) {
     if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
     let state;
     try { state = validateDashboardState(JSON.parse(current.state_json)); } catch { return json({ error: "Persisted state is invalid", code: "STATE_INVALID" }, 503); }
-    const campaigns = state.campaigns ?? structuredClone(DEFAULT_CAMPAIGNS);
+    const campaigns = (state.campaigns?.length ? state.campaigns : structuredClone(DEFAULT_CAMPAIGNS));
     const campaignErrors = validateCampaigns({ version: 1, campaigns });
     if (campaignErrors.length) return json({ error: "Campaign configuration is invalid", validationErrors: campaignErrors }, 409);
     const selarCampaign = campaigns.find(campaign => campaign.type === "selar_digital_product");
