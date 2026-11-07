@@ -4,7 +4,19 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { spawn } from "node:child_process";
-import { backupState } from "../scripts/backup-state.mjs";
+import { backupState, readRegularFileNoFollow } from "../scripts/backup-state.mjs";
+
+test("backup input reader pins a regular file and refuses a symlink", t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-backup-pinned-read-"));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const source = path.join(root, "evidence.txt");
+  const link = path.join(root, "evidence-link.txt");
+  fs.writeFileSync(source, "stable evidence bytes", { mode: 0o600 });
+  assert.deepEqual(readRegularFileNoFollow(source), Buffer.from("stable evidence bytes"));
+  fs.symlinkSync(source, link);
+  assert.throws(() => readRegularFileNoFollow(link), error =>
+    error?.code === "ELOOP" || /symbolic link|too many levels/i.test(error?.message ?? ""));
+});
 
 function fixture() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-backup-failure-injection-"));
