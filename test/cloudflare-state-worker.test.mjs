@@ -895,7 +895,7 @@ test("bundled Worker weekly plan exactly matches repository schedule configurati
 
 
 
-async function createRunnerOidcFixture(overrides = {}) {
+async function createRunnerOidcFixture(overrides = {}, commitMessage = "[run-production] owner-approved test trigger") {
   const now = Math.floor(Date.now() / 1000);
   const pair = await crypto.subtle.generateKey({
     name: "RSASSA-PKCS1-v1_5", modulusLength: 2048,
@@ -914,6 +914,7 @@ async function createRunnerOidcFixture(overrides = {}) {
     ref: "refs/heads/codex/dashboard-cloudflare-adapter",
     workflow_ref: "clickerrish-art/YT-AUTO-VISE/.github/workflows/repository-runner.yml@refs/heads/codex/dashboard-cloudflare-adapter",
     event_name: "workflow_dispatch",
+    sha: "a".repeat(40),
     iat: now,
     nbf: now - 5,
     exp: now + 300,
@@ -924,11 +925,26 @@ async function createRunnerOidcFixture(overrides = {}) {
   const signature = await crypto.subtle.sign("RSASSA-PKCS1-v1_5", pair.privateKey, new TextEncoder().encode(signingInput));
   const token = signingInput + "." + Buffer.from(signature).toString("base64url");
   const fetchImpl = async url => {
-    assert.equal(String(url), "https://token.actions.githubusercontent.com/.well-known/jwks");
-    return new Response(JSON.stringify({ keys: [jwk] }), { status: 200, headers: { "content-type": "application/json" } });
+    const requested = String(url);
+    if (requested === "https://token.actions.githubusercontent.com/.well-known/jwks") {
+      return new Response(JSON.stringify({ keys: [jwk] }), { status: 200, headers: { "content-type": "application/json" } });
+    }
+    if (requested === "https://api.github.com/repos/clickerrish-art/YT-AUTO-VISE/commits/" + claims.sha) {
+      return new Response(JSON.stringify({ commit: { message: commitMessage } }), { status: 200, headers: { "content-type": "application/json" } });
+    }
+    throw new Error("Unexpected OIDC verification fetch: " + requested);
   };
   return { token, fetchImpl, nowMs: now * 1000 };
 }
+
+test("repository runner OIDC permits push only when its exact commit message carries the explicit execution marker", async () => {
+  const marked = await createRunnerOidcFixture({ event_name: "push" });
+  assert.equal(await verifyRepositoryRunnerToken(marked.token, marked), true);
+  const unmarked = await createRunnerOidcFixture({ event_name: "push" }, "routine maintenance update");
+  assert.equal(await verifyRepositoryRunnerToken(unmarked.token, unmarked), false);
+  const invalidSha = await createRunnerOidcFixture({ event_name: "push", sha: "not-a-commit-sha" });
+  assert.equal(await verifyRepositoryRunnerToken(invalidSha.token, invalidSha), false);
+});
 
 test("repository runner OIDC accepts only the exact repository, branch, workflow, audience and event", async () => {
   const fixture = await createRunnerOidcFixture();
