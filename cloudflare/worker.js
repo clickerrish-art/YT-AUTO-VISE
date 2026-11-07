@@ -140,13 +140,14 @@ async function handleRequest(request, env) {
     } else {
       blockers.push("Cloudflare Static Assets binding ASSETS is not configured.");
     }
-    blockers.push("This endpoint verifies service, state and dashboard-asset availability only; it does not certify publication readiness.");
+
     const ready = stateStatus === "READABLE" && campaignStatus === "PASS" && assetStatus === "READABLE";
     return json({
       ready, mode: "cloudflare-worker", durableState: stateStatus,
       campaignConfig: campaignStatus, dashboardAssets: assetStatus,
       publicationReadiness: "SEPARATE", publicationGate: "/readyz",
-      blockers, publishingEnabled: false
+      blockers, note: "This endpoint verifies service, state and dashboard-asset availability only; it does not certify publication readiness.",
+      publishingEnabled: false
     }, ready ? 200 : 503);
   }
 
