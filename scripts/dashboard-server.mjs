@@ -746,6 +746,74 @@ const server = http.createServer(async (req, res) => {
         readOnly: true
       });
     }
+    if (req.method === "GET" && url.pathname === "/api/jobs/queue-diagnostics") {
+      const state = loadState();
+      const requestedLimit = Number(url.searchParams.get("limit") ?? 50);
+      if (!Number.isInteger(requestedLimit) || requestedLimit < 1 || requestedLimit > 100) {
+        return json(res, 400, { error: "limit must be an integer from 1 to 100", publishingEnabled: false, readOnly: true });
+      }
+      const queued = state.jobs.filter(job => job.kind === "CONTENT_PRODUCTION" && job.state === "QUEUED");
+      const hasApprovedRenderPlan = job =>
+        job.authoring?.productionPlan?.status === "APPROVED_PLAN_ONLY" &&
+        job.authoring.productionPlan.review?.decision === "APPROVE" &&
+        /^[a-f0-9]{64}$/.test(job.authoring.productionPlan.review?.approvalSha256 ?? "");
+      const checkedAt = Date.now();
+      const localDate = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
+      }).format(new Date(checkedAt));
+      const diagnostics = queued.map(job => {
+        const blockers = [];
+        if (!job.authoring) blockers.push("APPROVED_AUTHORING_MISSING");
+        if (!hasApprovedRenderPlan(job)) blockers.push("APPROVED_RENDER_PLAN_MISSING");
+        let slot = null;
+        if (job.scheduledSlot?.timezone === "Africa/Johannesburg") {
+          try {
+            const scheduledAt = Date.parse(localDateTimeToIso(
+              job.scheduledSlot.date, job.scheduledSlot.time, job.scheduledSlot.timezone
+            ));
+            if (Number.isFinite(scheduledAt)) slot = { scheduledAt, localDate: job.scheduledSlot.date };
+          } catch {
+            // Invalid calendar dates and wall-clock times remain explicit operator blockers.
+          }
+        }
+        if (!slot) blockers.push("VALID_JOHANNESBURG_SLOT_MISSING");
+        else if (slot.localDate < localDate) blockers.push("SLOT_EXPIRED_RESCHEDULE_REQUIRED");
+        else if (slot.localDate > localDate) blockers.push("SLOT_IN_FUTURE");
+        else if (slot.scheduledAt > checkedAt) blockers.push("SLOT_NOT_DUE_YET");
+        const ready = blockers.length === 0;
+        return {
+          id: typeof job.id === "string" ? job.id : null,
+          contentType: typeof job.contentType === "string" ? job.contentType : null,
+          state: job.state,
+          createdAt: job.createdAt ?? null,
+          scheduledSlot: job.scheduledSlot ? {
+            date: job.scheduledSlot.date ?? null,
+            time: job.scheduledSlot.time ?? null,
+            timezone: job.scheduledSlot.timezone ?? null
+          } : null,
+          scheduledAt: slot ? new Date(slot.scheduledAt).toISOString() : null,
+          status: ready ? "DISPATCHABLE" : "HELD",
+          blockers
+        };
+      });
+      const blockerCounts = {};
+      for (const item of diagnostics) for (const blocker of item.blockers) {
+        blockerCounts[blocker] = (blockerCounts[blocker] ?? 0) + 1;
+      }
+      return json(res, 200, {
+        checkedAt: new Date(checkedAt).toISOString(),
+        timezone: "Africa/Johannesburg",
+        queuedCount: queued.length,
+        dispatchableCount: diagnostics.filter(item => item.status === "DISPATCHABLE").length,
+        heldCount: diagnostics.filter(item => item.status === "HELD").length,
+        blockerCounts,
+        items: diagnostics.slice(0, requestedLimit),
+        returnedCount: Math.min(diagnostics.length, requestedLimit),
+        truncated: diagnostics.length > requestedLimit,
+        publishingEnabled: false,
+        readOnly: true
+      });
+    }
     if (req.method === "GET" && url.pathname === "/api/facebook/idea") {
       // This endpoint is read-only: validation errors must not create or alter drafts.
       const date = url.searchParams.get("date") ?? "";
