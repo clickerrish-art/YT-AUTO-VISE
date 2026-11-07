@@ -557,6 +557,47 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
 
   if (!(await authenticate(request, env))) return json({ error: "Unauthorized" }, 401);
 
+  if (url.pathname === "/api/artifacts" && method === "GET") {
+    const jobId = url.searchParams.get("jobId") ?? "";
+    if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(jobId)) return json({ error: "A valid jobId is required" }, 400);
+    const rows = await env.STATE_DB.prepare(
+      "SELECT artifact_id, job_id, source_path, artifact_kind, filename, sha256, size_bytes, content_type, status, etag, created_at, completed_at FROM runner_artifacts WHERE job_id = ? ORDER BY created_at DESC"
+    ).bind(jobId).all();
+    return json({
+      artifacts: (rows.results ?? []).map(row => ({
+        artifactId: row.artifact_id, jobId: row.job_id, sourcePath: row.source_path,
+        kind: row.artifact_kind, filename: row.filename, sha256: row.sha256,
+        sizeBytes: row.size_bytes, contentType: row.content_type, status: row.status,
+        etag: row.etag, createdAt: row.created_at, completedAt: row.completed_at
+      })),
+      storageBudgetBytes: MAX_ARTIFACT_BYTES,
+      publishingEnabled: false
+    });
+  }
+
+  const artifactDownload = url.pathname.match(/^\/api\/artifacts\/([a-f0-9-]{36})\/download$/);
+  if (artifactDownload && method === "GET") {
+    if (!env.ARTIFACTS || typeof env.ARTIFACTS.get !== "function") return json({ error: "Private R2 artifact binding is unavailable" }, 503);
+    const row = await env.STATE_DB.prepare(
+      "SELECT object_key, filename, sha256, size_bytes, content_type, status FROM runner_artifacts WHERE artifact_id = ?"
+    ).bind(artifactDownload[1]).first();
+    if (!row || row.status !== "READY") return json({ error: "Verified artifact was not found", code: "ARTIFACT_NOT_READY" }, 404);
+    const object = await env.ARTIFACTS.get(row.object_key);
+    if (!object || Number(object.size) !== Number(row.size_bytes) ||
+        object.customMetadata?.sha256 !== row.sha256) {
+      return json({ error: "R2 object does not match the durable artifact receipt", code: "ARTIFACT_INTEGRITY_MISMATCH" }, 409);
+    }
+    const headers = new Headers();
+    object.writeHttpMetadata(headers);
+    headers.set("content-type", row.content_type);
+    headers.set("content-disposition", 'attachment; filename="' + row.filename.replace(/["\\\\]/g, "_") + '"');
+    headers.set("content-length", String(object.size));
+    headers.set("cache-control", "private, no-store");
+    headers.set("x-artifact-sha256", row.sha256);
+    headers.set("etag", object.httpEtag);
+    return new Response(object.body, { status: 200, headers });
+  }
+
   if (url.pathname === "/api/state" && method === "GET") {
     const row = await currentState(env);
     if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
