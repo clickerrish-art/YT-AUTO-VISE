@@ -3526,4 +3526,4 @@ for (const signal of ["SIGINT", "SIGTERM"]) {
   });
 }
 
-server.listen(port, host, () => console.log(JSON.stringify({ event: "dashboard_started", host, port, publishingEnabled: false, recoveredTasks, recoveredLeases })));
+server.listen(port, host, () => console.log(JSON.stringify({ event: "dashboard_started", host, port: server.address()?.port ?? port, publishingEnabled: false, recoveredTasks, recoveredLeases })));
