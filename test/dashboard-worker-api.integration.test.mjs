@@ -347,6 +347,6 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
   const ownerState = await fetch(base + "/api/state", { headers: { "x-operator-token": operatorToken } });
   assert.equal(ownerState.status, 200);
   const ownerPayload = await ownerState.json();
-  assert.ok(ownerPayload.jobs.some(item => item.id === "recovery-output-job" && item.state === "FAILED"));
-  assert.ok(ownerPayload.jobs.some(item => item.id === "recovery-manifest-job" && item.state === "FAILED"));
+  assert.ok(ownerPayload.jobs.some(item => item.id === "recovery-output-job" && item.state === "QUEUED"));
+  assert.ok(ownerPayload.jobs.some(item => item.id === "recovery-manifest-job" && item.state === "QUEUED"));
 });
