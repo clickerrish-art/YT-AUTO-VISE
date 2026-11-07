@@ -765,6 +765,7 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
         "job creation, cancellation, transitions, operator retry and dead-letter recovery",
         "worker lease claim, heartbeat, completion and expiry reaping",
         "GitHub Actions OIDC-restricted runner snapshot and durable retry/quarantine reconciliation",
+        "private R2 multipart storage for generated videos, thumbnails and metadata with an 8 GiB application budget",
         "hash-bound human script review"
       ],
       blockedUntilIntegration: [
@@ -772,7 +773,7 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
         "script generation provider and narration/TTS execution",
         "on-disk media validation, rights evidence verification and media review",
         "production-plan file verification and Short-parent remote receipt binding",
-        "private R2 multipart artifact upload, integrity ledger and authenticated download",
+        "live R2 multipart upload/download integrity verification against the staging bucket",
         "YouTube OAuth upload and remote history reconciliation",
         "Meta Page identity verification and Facebook/Instagram provider actions"
       ],
