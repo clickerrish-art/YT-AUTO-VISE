@@ -15,6 +15,12 @@
       "migrations_dir": "cloudflare/migrations"
     }
   ],
+  "r2_buckets": [
+    {
+      "binding": "ARTIFACTS",
+      "bucket_name": "sonicvhibez-artifacts-staging"
+    }
+  ],
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
