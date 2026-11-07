@@ -244,3 +244,48 @@ test("interrupted backup recovery rejects empty kinds, dot segments and NUL targ
     }
   }
 });
+
+
+test("backup keeps a complete promoted snapshot when directory fsync fails after atomic publication", async t => {
+  const source = fixture();
+  t.after(() => fs.rmSync(source.root, { recursive: true, force: true }));
+  const outputPath = path.join(source.root, "backups", "directory-sync-failure.json");
+  const originalFsync = fs.fsyncSync;
+  let fsyncCalls = 0;
+  fs.fsyncSync = function (fd) {
+    fsyncCalls += 1;
+    // First fsync makes the staged file durable; second flushes the containing
+    // directory after linkSync has atomically created the final name.
+    if (fsyncCalls === 2) {
+      const error = new Error("simulated directory fsync failure after backup promotion");
+      error.code = "EIO";
+      throw error;
+    }
+    return originalFsync.call(this, fd);
+  };
+  try {
+    await assert.rejects(
+      backupState({ rootDir: source.root, stateDir: source.stateDir, uploadLogDir: source.uploadLogDir, rightsDir: source.rightsDir, outputPath }),
+      error => error?.code === "EIO",
+    );
+  } finally {
+    fs.fsyncSync = originalFsync;
+  }
+
+  assert.equal(fsyncCalls, 2, "failure must occur only after the staged file was flushed and linked into place");
+  assert.equal(fs.existsSync(outputPath), true, "a complete atomically promoted snapshot must not be deleted after directory-sync failure");
+  const payload = JSON.parse(fs.readFileSync(outputPath, "utf8"));
+  assert.equal(payload.format, "sonicvhibez-state-backup");
+  assert.equal(payload.version, 1);
+  assert.equal(payload.includesSecrets, false);
+  assert.ok(payload.entries.length > 0);
+  for (const entry of payload.entries) {
+    const bytes = Buffer.from(entry.contentBase64, "base64");
+    assert.equal(bytes.length, entry.bytes);
+    assert.equal(crypto.createHash("sha256").update(bytes).digest("hex"), entry.sha256);
+  }
+  assert.deepEqual(fs.readdirSync(path.dirname(outputPath)), [path.basename(outputPath)],
+    "no staged temporary file may remain beside the promoted snapshot");
+  assert.equal(fs.existsSync(path.join(source.stateDir, ".restore-operation.lock")), false,
+    "the operation lock must be released even when directory durability confirmation fails");
+});
