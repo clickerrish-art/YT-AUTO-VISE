@@ -303,6 +303,45 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
   assert.equal(remainingJobs.some(item => item.id.startsWith("recovery-")), false,
     "recovery-required jobs must no longer be returned to the worker poller");
 
+  // Recovery confirmation must refuse retained files, then succeed only
+  // after the operator has archived them; retry remains a separate action.
+  for (const [jobId, retainedFile] of [
+    ["recovery-output-job", retainedOutput],
+    ["recovery-manifest-job", retainedManifest]
+  ]) {
+    const reconcileUrl = base + "/api/jobs/render-recovery/reconcile";
+    const reconcileBody = JSON.stringify({
+      jobId,
+      reason: "Inspected and archived retained render evidence before retry"
+    });
+    const stillPresent = await fetch(reconcileUrl, {
+      method: "POST",
+      headers: { ...operatorHeaders, "content-type": "application/json" },
+      body: reconcileBody
+    });
+    assert.equal(stillPresent.status, 409, "recovery must not be confirmed while retained evidence exists");
+    fs.rmSync(retainedFile, { force: true });
+    const reconciled = await fetch(reconcileUrl, {
+      method: "POST",
+      headers: { ...operatorHeaders, "content-type": "application/json" },
+      body: reconcileBody
+    });
+    assert.equal(reconciled.status, 200);
+    const receipt = await reconciled.json();
+    assert.equal(receipt.recoveryReconciled, true);
+    assert.equal(receipt.retryAuthorized, false, "reconciliation must not silently requeue the job");
+    const retry = await fetch(base + "/api/jobs/retry", {
+      method: "POST",
+      headers: { ...operatorHeaders, "content-type": "application/json" },
+      body: JSON.stringify({ jobId, reason: "Verified retained artifacts were archived; authorize a fresh render attempt" })
+    });
+    assert.equal(retry.status, 200);
+    const retryPayload = await retry.json();
+    assert.equal(retryPayload.retryAuthorized, true);
+    assert.equal(retryPayload.job.state, "QUEUED");
+    assert.equal(retryPayload.job.renderRecovery.verifiedAbsent, true);
+  }
+
   const operatorState = await fetch(base + "/api/state", { headers: workerHeaders });
   assert.equal(operatorState.status, 401, "worker credential must not grant general operator API access");
   const ownerState = await fetch(base + "/api/state", { headers: { "x-operator-token": operatorToken } });
