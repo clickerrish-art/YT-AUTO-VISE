@@ -1,6 +1,6 @@
 import { normalizeDashboardState, toDashboardStateResponse } from "./dashboard-state-compat.js";
 import { generateDashboardFacebookIdea } from "./facebook-idea-compat.js";
-import { authorizeContentJobRetry, transitionContentJob } from "./content-job-lifecycle-compat.js";
+import { authorizeContentJobRetry, claimWorkerLease, completeWorkerLease, expireWorkerLease, heartbeatWorkerLease, transitionContentJob } from "./content-job-lifecycle-compat.js";
 
 const STATE_ID = 1;
 const MAX_STATE_BYTES = 2 * 1024 * 1024;
@@ -367,6 +367,142 @@ async function handleRequest(request, env) {
     const saved = await commitStateRevision(env, current, updated, actor, "CONTENT_JOB_CREATED", { jobId: job.id, idempotencyKey });
     if (saved.error) return saved.error;
     return json({ job, revision: saved.row.revision, idempotentReplay: false, publishingEnabled: false }, 201, { etag: '"' + saved.row.revision + '"' });
+  }
+
+  if (url.pathname === "/api/jobs/lease/claim" && method === "POST") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
+    let input;
+    try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+    if (!input || typeof input.jobId !== "string" || typeof input.workerId !== "string") return json({ error: "jobId and workerId are required" }, 400);
+    const current = await currentState(env);
+    if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(current.state_json)); } catch { return json({ error: "Persisted state is invalid", code: "STATE_INVALID" }, 503); }
+    const index = state.jobs.findIndex(job => job.kind === "CONTENT_PRODUCTION" && job.id === input.jobId);
+    if (index < 0) return json({ error: "Content job not found" }, 404);
+    let claimed;
+    try { claimed = await claimWorkerLease(state.jobs[index], input.workerId, { leaseMs: input.leaseMs ?? 60_000 }); }
+    catch (error) { return json({ error: error.message || "Worker lease cannot be claimed", code: "LEASE_CLAIM_REJECTED" }, 409); }
+    const jobs = [...state.jobs]; jobs[index] = claimed.job;
+    const saved = await commitStateRevision(env, current, { ...state, jobs }, actor, "WORKER_LEASE_CLAIMED", {
+      jobId: input.jobId, workerId: input.workerId, expiresAt: claimed.job.workerLease.expiresAt
+    });
+    if (saved.error) return saved.error;
+    return json({ job: claimed.job, leaseToken: claimed.leaseToken, revision: saved.row.revision, publishingEnabled: false }, 200, { etag: '"' + saved.row.revision + '"' });
+  }
+
+  if (url.pathname === "/api/jobs/lease/heartbeat" && method === "POST") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
+    let input;
+    try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+    if (!input || typeof input.jobId !== "string" || typeof input.leaseToken !== "string") return json({ error: "jobId and leaseToken are required" }, 400);
+    const current = await currentState(env);
+    if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(current.state_json)); } catch { return json({ error: "Persisted state is invalid", code: "STATE_INVALID" }, 503); }
+    const index = state.jobs.findIndex(job => job.kind === "CONTENT_PRODUCTION" && job.id === input.jobId);
+    if (index < 0) return json({ error: "Content job not found" }, 404);
+    let updated;
+    try { updated = await heartbeatWorkerLease(state.jobs[index], input.leaseToken, { leaseMs: input.leaseMs ?? 60_000 }); }
+    catch (error) { return json({ error: error.message || "Worker lease heartbeat rejected", code: "LEASE_HEARTBEAT_REJECTED" }, 409); }
+    const jobs = [...state.jobs]; jobs[index] = updated;
+    const saved = await commitStateRevision(env, current, { ...state, jobs }, actor, "WORKER_LEASE_HEARTBEAT", {
+      jobId: input.jobId, workerId: updated.workerLease.workerId, expiresAt: updated.workerLease.expiresAt
+    });
+    if (saved.error) return saved.error;
+    return json({ job: updated, revision: saved.row.revision, publishingEnabled: false }, 200, { etag: '"' + saved.row.revision + '"' });
+  }
+
+  if (url.pathname === "/api/jobs/lease/complete" && method === "POST") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
+    let input;
+    try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+    if (!input || typeof input.jobId !== "string" || typeof input.leaseToken !== "string" || typeof input.nextState !== "string") {
+      return json({ error: "jobId, leaseToken and nextState are required" }, 400);
+    }
+    if (input.nextState === "GENERATED") {
+      return json({ error: "Generated media can only be accepted after repository-runner verification of real MP4 bytes, SHA-256, metadata and ffprobe output; this Worker has no filesystem verifier", code: "ARTIFACT_VERIFICATION_REQUIRED" }, 409);
+    }
+    if (!["VALIDATING", "FAILED", "BLOCKED"].includes(input.nextState)) {
+      return json({ error: "Worker completion may only advance to VALIDATING, FAILED or BLOCKED; human review and upload states require separate gates" }, 400);
+    }
+    const patch = input.result ?? {};
+    if (!patch || typeof patch !== "object" || Array.isArray(patch)) return json({ error: "result must be an object" }, 400);
+    const current = await currentState(env);
+    if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(current.state_json)); } catch { return json({ error: "Persisted state is invalid", code: "STATE_INVALID" }, 503); }
+    const index = state.jobs.findIndex(job => job.kind === "CONTENT_PRODUCTION" && job.id === input.jobId);
+    if (index < 0) return json({ error: "Content job not found" }, 404);
+    const previous = state.jobs[index];
+    const requestSha256 = await sha256(JSON.stringify({ nextState: input.nextState, metadataPath: input.metadataPath ?? null, result: patch }));
+    const leaseTokenSha256 = await sha256(input.leaseToken);
+    if (previous.lastWorkerCompletion?.leaseTokenSha256 === leaseTokenSha256) {
+      if (previous.lastWorkerCompletion.requestSha256 === requestSha256) return json({ job: previous, revision: current.revision, publishingEnabled: false, idempotent: true });
+      return json({ error: "This worker lease already completed a different result; claim a new lease before submitting another completion." }, 409);
+    }
+    let updated;
+    try { updated = await completeWorkerLease(previous, input.leaseToken, input.nextState, patch); }
+    catch (error) { return json({ error: error.message || "Worker completion rejected", code: "LEASE_COMPLETION_REJECTED" }, 409); }
+    const completedAt = new Date().toISOString();
+    updated.lastWorkerCompletion = { leaseTokenSha256, requestSha256, nextState: input.nextState, completedAt };
+    const jobs = [...state.jobs]; jobs[index] = updated;
+    const nextState = {
+      ...state,
+      jobs,
+      audit: updated.state === "DEAD_LETTER"
+        ? [...state.audit, {
+            id: crypto.randomUUID(), action: "CONTENT_JOB_DEAD_LETTERED", jobId: input.jobId,
+            reasonCode: updated.deadLetter?.reasonCode ?? "MAX_ATTEMPTS_EXHAUSTED",
+            attemptCount: updated.attemptCount, maxAttempts: updated.retryPolicy?.maxAttempts ?? null,
+            at: completedAt, actor: "retry-policy"
+          }]
+        : state.audit
+    };
+    const saved = await commitStateRevision(env, current, nextState, actor, "WORKER_STAGE_COMPLETED", {
+      jobId: input.jobId, workerId: previous.workerLease.workerId,
+      from: previous.state, to: updated.state, at: completedAt
+    });
+    if (saved.error) return saved.error;
+    return json({ job: updated, revision: saved.row.revision, publishingEnabled: false }, 200, { etag: '"' + saved.row.revision + '"' });
+  }
+
+  if (url.pathname === "/api/jobs/lease/reap" && method === "POST") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
+    let input;
+    try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+    if (!input || typeof input.jobId !== "string") return json({ error: "jobId is required" }, 400);
+    const current = await currentState(env);
+    if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(current.state_json)); } catch { return json({ error: "Persisted state is invalid", code: "STATE_INVALID" }, 503); }
+    const index = state.jobs.findIndex(job => job.kind === "CONTENT_PRODUCTION" && job.id === input.jobId);
+    if (index < 0) return json({ error: "Content job not found" }, 404);
+    let result;
+    try { result = expireWorkerLease(state.jobs[index]); }
+    catch (error) { return json({ error: error.message || "Lease expiry reconciliation failed", code: "LEASE_REAP_REJECTED" }, 409); }
+    if (!result.expired) return json({ error: "No expired worker lease is available to reap", job: state.jobs[index] }, 409);
+    const reapedAt = new Date().toISOString();
+    const jobs = [...state.jobs]; jobs[index] = result.job;
+    const extraAudit = [
+      ...(result.job.state === "DEAD_LETTER" ? [{
+        id: crypto.randomUUID(), action: "CONTENT_JOB_DEAD_LETTERED", jobId: input.jobId,
+        reasonCode: result.job.deadLetter?.reasonCode ?? "LEASE_EXPIRY_RETRY_LIMIT_EXHAUSTED",
+        attemptCount: result.job.attemptCount, maxAttempts: result.job.retryPolicy?.maxAttempts ?? null,
+        at: reapedAt, actor: "retry-policy"
+      }] : [])
+    ];
+    const nextState = { ...state, jobs, audit: [...state.audit, ...extraAudit] };
+    const saved = await commitStateRevision(env, current, nextState, actor, "WORKER_LEASE_EXPIRED", {
+      jobId: input.jobId, previousState: result.job.transitionHistory?.at(-1)?.from,
+      state: result.job.state, at: reapedAt
+    });
+    if (saved.error) return saved.error;
+    return json({ job: result.job, revision: saved.row.revision, publishingEnabled: false }, 200, { etag: '"' + saved.row.revision + '"' });
   }
 
   if (url.pathname === "/api/jobs/retry" && method === "POST") {
