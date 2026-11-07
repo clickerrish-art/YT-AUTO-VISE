@@ -8,6 +8,7 @@ on:
       - "wrangler.jsonc"
       - "test/cloudflare-state-worker.test.mjs"
       - "scripts/cloudflare-runner-bridge.mjs"
+      - "scripts/cloudflare-artifact-sync.mjs"
       - ".github/workflows/repository-runner.yml"
       - ".github/workflows/cloudflare-state.yml"
       - ".github/workflows/dashboard-cloudflare-adapter.yml"
@@ -30,6 +31,7 @@ jobs:
         run: |
           node --check cloudflare/worker.js
           node --check scripts/cloudflare-runner-bridge.mjs
+          node --check scripts/cloudflare-artifact-sync.mjs
           node --check test/cloudflare-state-worker.test.mjs
           ruby -e 'require "yaml"; YAML.load_file(".github/workflows/repository-runner.yml")'
       - name: Durable-state tests
