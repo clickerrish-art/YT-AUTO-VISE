@@ -394,3 +394,44 @@ test("cancel route rejects malformed job identifiers without reading durable sta
   assert.equal(response.status, 404);
   assert.equal(reads, 0);
 });
+
+
+test("content job transition API enforces the authoritative lifecycle and records audit history", async () => {
+  const state = validState();
+  state.jobs = [{ id: "content-1", kind: "CONTENT_PRODUCTION", state: "QUEUED", transitionHistory: [], attemptCount: 0, workerLease: null }];
+  const { database, snapshot } = mutableDatabase(state);
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const send = nextState => handleRequest(new Request("https://state.example/api/jobs/transition", {
+    method: "POST",
+    headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
+    body: JSON.stringify({ jobId: "content-1", nextState, reason: "Operator advanced the verified workflow stage" })
+  }), env);
+  const started = await send("GENERATING");
+  const startedBody = await started.json();
+  assert.equal(started.status, 200);
+  assert.equal(startedBody.job.state, "GENERATING");
+  assert.equal(startedBody.job.attemptCount, 1);
+  assert.equal(startedBody.job.startedAt, startedBody.job.updatedAt);
+  assert.equal(startedBody.job.transitionHistory.at(-1).actor, "sonicvhibez-owner");
+  assert.equal(snapshot().state.audit.at(-1).action, "CONTENT_JOB_STATE_CHANGED");
+  const protectedAttempt = await send("APPROVED_FOR_PRIVATE_UPLOAD");
+  assert.equal(protectedAttempt.status, 409);
+  assert.equal((await protectedAttempt.json()).code, "INVALID_JOB_TRANSITION");
+  assert.equal(snapshot().state.jobs[0].state, "GENERATING");
+});
+
+test("content job transition API requires verified evidence before human review", async () => {
+  const state = validState();
+  state.jobs = [{ id: "content-review", kind: "CONTENT_PRODUCTION", state: "VALIDATING", transitionHistory: [], outputArtifacts: [], validationResults: null, rightsChecks: null }];
+  const { database, snapshot } = mutableDatabase(state);
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const response = await handleRequest(new Request("https://state.example/api/jobs/transition", {
+    method: "POST",
+    headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
+    body: JSON.stringify({ jobId: "content-review", nextState: "AWAITING_HUMAN_REVIEW" })
+  }), env);
+  assert.equal(response.status, 409);
+  assert.equal((await response.json()).code, "INVALID_JOB_TRANSITION");
+  assert.equal(snapshot().revision, 1);
+  assert.equal(snapshot().state.jobs[0].state, "VALIDATING");
+});
