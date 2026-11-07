@@ -1230,6 +1230,7 @@ test("private R2 artifact upload requires an exact generated receipt and complet
     }
   };
   const r2 = {
+    async list() { return { objects: [], truncated: false }; },
     async createMultipartUpload(key, options) {
       assert.equal(key, "jobs/job-r2-001/" + digest + "/generated-video.mp4");
       assert.equal(options.customMetadata.sha256, digest);
@@ -1319,7 +1320,7 @@ test("private R2 artifact creation rejects unbound SHA, unsafe paths and storage
       };
     }
   };
-  const env = { STATE_DB: database, ARTIFACTS: { async put() {}, async get() {}, async delete() {}, async createMultipartUpload() { throw new Error("must not create"); } } };
+  const env = { STATE_DB: database, ARTIFACTS: { async list() { return { objects: [{ size: 8 * 1024 * 1024 * 1024 }], truncated: false }; }, async put() {}, async get() {}, async delete() {}, async createMultipartUpload() { throw new Error("must not create"); } } };
   const send = body => handleRequest(new Request("https://state.example/api/runner/artifacts/create", {
     method: "POST", headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
     body: JSON.stringify(body)
@@ -1344,6 +1345,7 @@ test("repository runner preflight proves private R2 write/read/delete and enforc
   const env = {
     STATE_DB: database,
     ARTIFACTS: {
+      async list() { return { objects: [], truncated: false }; },
       async put(key, value, options) { calls.push(["put", key, value, options.customMetadata.purpose]); },
       async get(key) { calls.push(["get", key]); return { async text() { return calls[0][2]; } }; },
       async delete(key) { calls.push(["delete", key]); }
@@ -1365,7 +1367,7 @@ test("repository runner preflight blocks production when private R2 headroom is 
   let writes = 0;
   const env = {
     STATE_DB: { prepare() { return { bind() { return this; }, async first() { return { total_bytes: 8 * 1024 * 1024 * 1024 - 2 * 1024 * 1024 * 1024 + 1 }; } }; } },
-    ARTIFACTS: { async put() { writes++; }, async get() {}, async delete() {} }
+    ARTIFACTS: { async list() { return { objects: [{ size: 8 * 1024 * 1024 * 1024 - 2 * 1024 * 1024 * 1024 + 1 }], truncated: false }; }, async put() { writes++; }, async get() {}, async delete() {} }
   };
   const response = await handleRequest(new Request("https://state.example/api/runner/ready", {
     headers: { authorization: "Bearer " + fixture.token }
