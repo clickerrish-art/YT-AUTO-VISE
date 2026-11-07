@@ -228,7 +228,7 @@ test("interrupted backup recovery rejects empty kinds, dot segments and NUL targ
   for (const mutate of [
     entry => { entry.target.kind = ""; },
     entry => { entry.target.path = "nested/./dashboard-state.json"; },
-    entry => { entry.target.path = "nested/\\0dashboard-state.json"; }
+    entry => { entry.target.path = "nested/\u0000dashboard-state.json"; }
   ]) {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-recover-unsafe-target-"));
     try {
