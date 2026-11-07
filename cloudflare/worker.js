@@ -58,12 +58,64 @@ async function authenticate(request, env) {
     constantTimeEqual(supplied, configured);
 }
 
-async function authenticateWorker(request, env) {
-  const configured = env.DASHBOARD_WORKER_TOKEN;
-  const supplied = request.headers.get("x-worker-token");
-  return typeof configured === "string" && configured.length >= 24 &&
-    configured !== env.DASHBOARD_OPERATOR_TOKEN &&
-    constantTimeEqual(supplied, configured);
+const RUNNER_OIDC_AUDIENCE = "sonicvhibez-dashboard-runner";
+const RUNNER_OIDC_REPOSITORY = "clickerrish-art/YT-AUTO-VISE";
+const RUNNER_OIDC_REF = "refs/heads/codex/dashboard-cloudflare-adapter";
+const RUNNER_OIDC_WORKFLOW = RUNNER_OIDC_REPOSITORY +
+  "/.github/workflows/repository-runner.yml@" + RUNNER_OIDC_REF;
+
+function decodeBase64Url(value) {
+  const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
+  const binary = atob(normalized + "=".repeat((4 - normalized.length % 4) % 4));
+  return Uint8Array.from(binary, character => character.charCodeAt(0));
+}
+
+async function verifyRepositoryRunnerToken(token, { fetchImpl = fetch, nowMs = Date.now() } = {}) {
+  if (typeof token !== "string" || token.length < 100 || token.length > 16_384) return false;
+  const parts = token.split(".");
+  if (parts.length !== 3) return false;
+  try {
+    const header = JSON.parse(new TextDecoder().decode(decodeBase64Url(parts[0])));
+    const claims = JSON.parse(new TextDecoder().decode(decodeBase64Url(parts[1])));
+    if (header.alg !== "RS256" || typeof header.kid !== "string" ||
+        claims.iss !== "https://token.actions.githubusercontent.com" ||
+        !(claims.aud === RUNNER_OIDC_AUDIENCE || (Array.isArray(claims.aud) && claims.aud.includes(RUNNER_OIDC_AUDIENCE))) ||
+        claims.repository !== RUNNER_OIDC_REPOSITORY ||
+        claims.repository_owner !== "clickerrish-art" ||
+        claims.ref !== RUNNER_OIDC_REF ||
+        claims.workflow_ref !== RUNNER_OIDC_WORKFLOW ||
+        claims.sub !== "repo:" + RUNNER_OIDC_REPOSITORY + ":ref:" + RUNNER_OIDC_REF ||
+        claims.event_name !== "workflow_dispatch" ||
+        !Number.isFinite(claims.exp) || claims.exp * 1000 <= nowMs ||
+        !Number.isFinite(claims.iat) || claims.iat * 1000 > nowMs + 60_000 ||
+        nowMs - claims.iat * 1000 > 10 * 60_000 ||
+        (claims.nbf !== undefined && (!Number.isFinite(claims.nbf) || claims.nbf * 1000 > nowMs + 60_000))) {
+      return false;
+    }
+    const response = await fetchImpl("https://token.actions.githubusercontent.com/.well-known/jwks", {
+      headers: { accept: "application/json" },
+      redirect: "error"
+    });
+    if (!response.ok) return false;
+    const jwks = await response.json();
+    const jwk = jwks.keys?.find(key => key.kid === header.kid && key.kty === "RSA" && key.use === "sig");
+    if (!jwk) return false;
+    const publicKey = await crypto.subtle.importKey("jwk", jwk, {
+      name: "RSASSA-PKCS1-v1_5", hash: "SHA-256"
+    }, false, ["verify"]);
+    const signingInput = new TextEncoder().encode(parts[0] + "." + parts[1]);
+    return await crypto.subtle.verify(
+      { name: "RSASSA-PKCS1-v1_5" }, publicKey, decodeBase64Url(parts[2]), signingInput
+    );
+  } catch {
+    return false;
+  }
+}
+
+async function authenticateRepositoryRunner(request) {
+  const authorization = request.headers.get("authorization") ?? "";
+  const match = authorization.match(/^Bearer ([A-Za-z0-9._~-]+)$/);
+  return match ? verifyRepositoryRunnerToken(match[1]) : false;
 }
 
 function validateRunnerBackoff(value, workerId) {
@@ -215,7 +267,7 @@ async function handleRequest(request, env) {
   }
   const runnerRoute = url.pathname.startsWith("/api/runner/");
   if (runnerRoute) {
-    if (!(await authenticateWorker(request, env))) return json({ error: "Unauthorized", code: "WORKER_UNAUTHORIZED" }, 401);
+    if (!(await authenticateRepositoryRunner(request))) return json({ error: "Unauthorized", code: "WORKER_OIDC_UNAUTHORIZED" }, 401);
     if (url.pathname === "/api/runner/snapshot" && method === "GET") {
       const row = await currentState(env);
       if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
