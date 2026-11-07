@@ -63,3 +63,14 @@ test("dashboard exposes authenticated read-only production queue diagnostics", (
   assert.doesNotMatch(html, /queueDiagnostics.*retry/i,
     "read-only diagnostics must not introduce retry controls");
 });
+
+test("queue diagnostics give explicit non-automatic operator remediation guidance", () => {
+  assert.match(html, /function queueOperatorNextStep\(item\)/);
+  assert.match(html, /Create the authoring draft, then complete human script review and approval/);
+  assert.match(html, /record its explicit approval with the required digest/);
+  assert.match(html, /Assign a valid date and time in Africa\/Johannesburg/);
+  assert.match(html, /expired slots are never silently moved/);
+  assert.match(html, /complete media, rights, human-review and upload gates separately/);
+  assert.match(html, /<th>Operator next step<\/th>/);
+  assert.match(html, /queueOperatorNextStep\(item\)/);
+});
