@@ -3,6 +3,7 @@ import { generateDashboardFacebookIdea } from "./facebook-idea-compat.js";
 import { authorizeContentJobRetry, claimWorkerLease, completeWorkerLease, expireWorkerLease, heartbeatWorkerLease, transitionContentJob } from "./content-job-lifecycle-compat.js";
 import { canonicalAuthoringScriptSha256 } from "./authoring-review-compat.js";
 import { safeDraftItem, validateReservedPublicationSlot } from "./draft-compat.js";
+import { DEFAULT_CAMPAIGNS, manageCampaign, validateCampaigns } from "./campaigns-compat.js";
 
 const STATE_ID = 1;
 const MAX_STATE_BYTES = 2 * 1024 * 1024;
@@ -198,12 +199,13 @@ async function handleRequest(request, env) {
     let state;
     try { state = validateDashboardState(JSON.parse(row.state_json)); }
     catch { return json({ error: "Persisted state is corrupt or has an unsupported schema", code: "STATE_INVALID" }, 503); }
-    const campaigns = state.campaigns ?? [];
+    const campaigns = state.campaigns ?? structuredClone(DEFAULT_CAMPAIGNS);
+    const errors = validateCampaigns({ version: 1, campaigns });
     return json({
       campaigns,
-      source: "durable_dashboard_state",
-      authoritativeConfigImported: false,
-      validation: { status: "NOT_RUN", errors: ["Authoritative config/campaigns.json validation is not executed in the Worker adapter."] },
+      source: state.campaigns ? "durable_dashboard_state" : "repository_campaign_config",
+      authoritativeConfigImported: true,
+      validation: { status: errors.length ? "BLOCKED" : "PASS", errors },
       publishingEnabled: false,
       readOnly: true,
       revision: row.revision
@@ -369,6 +371,94 @@ async function handleRequest(request, env) {
     const saved = await commitStateRevision(env, current, updated, actor, "CONTENT_JOB_CREATED", { jobId: job.id, idempotencyKey });
     if (saved.error) return saved.error;
     return json({ job, revision: saved.row.revision, idempotentReplay: false, publishingEnabled: false }, 201, { etag: '"' + saved.row.revision + '"' });
+  }
+
+  if (url.pathname === "/api/campaigns/manage" && method === "POST") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Campaign changes require DASHBOARD_OPERATOR_ID to identify the authenticated operator" }, 503);
+    let input;
+    try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+    const current = await currentState(env);
+    if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(current.state_json)); } catch { return json({ error: "Persisted state is invalid", code: "STATE_INVALID" }, 503); }
+    const config = { version: 1, campaigns: state.campaigns ?? structuredClone(DEFAULT_CAMPAIGNS) };
+    const existingErrors = validateCampaigns(config);
+    if (existingErrors.length) return json({ error: "Campaign configuration is invalid", validationErrors: existingErrors }, 409);
+    let result;
+    try { result = await manageCampaign(config, input, actor); }
+    catch (error) { return json({ error: error.message || "Campaign action rejected", code: "CAMPAIGN_ACTION_REJECTED" }, 409); }
+    const campaigns = result.config.campaigns;
+    const destinationVersion = result.campaign.approval?.destinationVersion ?? result.campaign.pendingDestinationVersion ?? null;
+    const saved = await commitStateRevision(env, current, { ...state, campaigns }, actor, "CAMPAIGN_" + String(input.action).toUpperCase(), {
+      campaignId: result.campaign.id, campaignType: result.campaign.type,
+      status: result.campaign.status, destinationVersion, previewOnly: result.previewOnly === true
+    });
+    if (saved.error) return saved.error;
+    return json({ campaign: result.campaign, previewOnly: result.previewOnly, publicPublishingEnabled: false, revision: saved.row.revision }, 200, { etag: '"' + saved.row.revision + '"' });
+  }
+
+  if (url.pathname === "/api/drafts" && method === "POST") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
+    let input;
+    try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+    let item;
+    try { item = safeDraftItem(input); } catch (error) { return json({ error: error.message || "Draft validation failed" }, 400); }
+    const current = await currentState(env);
+    if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(current.state_json)); } catch { return json({ error: "Persisted state is invalid", code: "STATE_INVALID" }, 503); }
+    const campaigns = state.campaigns ?? structuredClone(DEFAULT_CAMPAIGNS);
+    const campaignErrors = validateCampaigns({ version: 1, campaigns });
+    if (campaignErrors.length) return json({ error: "Campaign configuration is invalid", validationErrors: campaignErrors }, 409);
+    const selarCampaign = campaigns.find(campaign => campaign.type === "selar_digital_product");
+    if (!selarCampaign || selarCampaign.status !== "ACTIVE_FOR_DRAFTS_ONLY" || selarCampaign.destinationUrl !== "https://selar.com/0u19v8u99l") {
+      return json({ error: "The approved Selar campaign is inactive; preview and activate it for drafts first" }, 409);
+    }
+    if (state.queueItems.some(existing => existing.id === item.id)) return json({ error: "That queue ID already exists" }, 409);
+    const spacing = validateReservedPublicationSlot({ id: item.id, scheduledAt: item.scheduledAt }, state);
+    if (!spacing.valid) return json({ error: "Schedule slot conflicts with an existing reservation or violates minimum publication spacing", blockers: spacing.errors, publishingEnabled: false }, 409);
+    const slotAlreadyReserved = state.jobs.some(existing => existing.kind === "CONTENT_PRODUCTION" &&
+      !["CANCELLED", "REJECTED"].includes(String(existing.state ?? "").toUpperCase()) &&
+      existing.scheduledSlot?.date === item.scheduledDate);
+    if (slotAlreadyReserved) return json({ error: "This dated schedule slot is already reserved; reuse or edit its existing job", slotFingerprint: item.scheduledDate + ":17:00:Africa/Johannesburg" }, 409);
+    const now = new Date().toISOString();
+    const idempotencyKey = "draft:" + item.id;
+    const inputReferences = [];
+    const fingerprint = await sha256(JSON.stringify({
+      title: item.title, topic: item.topic, contentType: item.contentType,
+      scheduledDay: item.scheduledDay, scheduledDate: item.scheduledDate, inputReferences
+    }));
+    const job = {
+      id: crypto.randomUUID(), idempotencyKey, requestFingerprint: fingerprint,
+      kind: "CONTENT_PRODUCTION", title: item.title, topic: item.topic, contentType: item.contentType,
+      scheduledSlot: {
+        date: item.scheduledDate, day: item.scheduledDay, time: "17:00",
+        timezone: "Africa/Johannesburg", idempotencyKey: "slot:" + item.scheduledDate + ":17:00:Africa/Johannesburg"
+      },
+      inputReferences, publicationCycleId: null, shortParentRelationship: null,
+      state: "QUEUED", createdAt: now, startedAt: null, completedAt: null, updatedAt: now,
+      transitionHistory: [{ from: null, to: "QUEUED", at: now, actor, reason: "Job created" }],
+      outputArtifacts: [], thumbnailArtifact: null, validationResults: null, rightsChecks: null, humanApproval: null,
+      attemptCount: 0, retryPolicy: { maxAttempts: 2, requiresOperatorRetry: true }, retryAuthorizations: [],
+      deadLetterHistory: [], workerLease: null, metadataPath: null, leaseHistory: [], nextRetryAt: null,
+      errorDetails: null, remoteVideoId: null, uploadReceipt: null, publishingEnabled: false
+    };
+    const nextState = {
+      ...state,
+      campaigns,
+      queueItems: [...state.queueItems, item],
+      jobs: [...state.jobs, job],
+      audit: [...state.audit, {
+        id: crypto.randomUUID(), action: "DRAFT_CREATED", itemId: item.id, at: now, actor
+      }]
+    };
+    const saved = await commitStateRevision(env, current, nextState, actor, "CONTENT_JOB_QUEUED", {
+      itemId: item.id, jobId: job.id, idempotencyKey
+    });
+    if (saved.error) return saved.error;
+    return json({ item, job, revision: saved.row.revision, publishingEnabled: false }, 201, { etag: '"' + saved.row.revision + '"' });
   }
 
   if (url.pathname === "/api/drafts/update" && method === "POST") {
