@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import crypto from "node:crypto";
 import path from "node:path";
 import { evaluateNextPublication, validateCadenceDecision, DEFAULT_MIN_SPACING_HOURS, DEFAULT_SCHEDULE_TIMEZONE } from "./schedule-policy.mjs";
 
@@ -45,11 +46,12 @@ export function assertNoUnresolvedUploadAttempts(ledger) {
   return true;
 }
 
-export function validateHistoryReconciliationSnapshot({ channelId, remoteVideos, reconciliation, now = new Date() }) {
+export function validateHistoryReconciliationSnapshot({ channelId, remoteVideos, reconciliation, reconciliationSha256 = crypto.createHash("sha256").update(JSON.stringify(reconciliation)).digest("hex"), now = new Date() }) {
   if (!channelId || !Array.isArray(remoteVideos)) throw new Error("authenticated channel and complete remote video list are required");
   if (!reconciliation || reconciliation.complete !== true || reconciliation.channelId !== channelId) throw new Error("channel history reconciliation must be complete and bound to the authenticated channel ID");
   if (typeof reconciliation.verifiedBy !== "string" || reconciliation.verifiedBy.trim().length < 2 || !Number.isFinite(strictIsoTimestamp(reconciliation.verifiedAt))) throw new Error("channel history reconciliation needs reviewer identity and a valid verification timestamp");
   if (!Array.isArray(reconciliation.videos)) throw new Error("channel history reconciliation must contain a videos array");
+  if (!/^[a-f0-9]{64}$/.test(reconciliationSha256 ?? "")) throw new Error("channel history reconciliation document checksum is invalid");
   const nowTimestamp = now instanceof Date ? now.getTime() : strictIsoTimestamp(now);
   if (!Number.isFinite(nowTimestamp)) throw new Error("history verification time must be valid");
   const remoteById = new Map();
@@ -137,7 +139,7 @@ export function validateHistoryReconciliationSnapshot({ channelId, remoteVideos,
       format: record.format
     });
   }
-  return { history, scheduledItems, complete: true, channelId, verifiedAt: reconciliation.verifiedAt, verifiedBy: reconciliation.verifiedBy.trim() };
+  return { history, scheduledItems, complete: true, channelId, verifiedAt: reconciliation.verifiedAt, verifiedBy: reconciliation.verifiedBy.trim(), reconciliationSha256 };
 }
 
 export function validateHistoryReconciliation(args) {
@@ -227,15 +229,18 @@ async function readCompleteYoutubeHistoryInputs(youtube, channel, reconciliation
   if (remoteVideos.length !== playlistItems.length) {
     throw new Error("YouTube did not return every upload-playlist video; history is incomplete");
   }
-  let reconciliation;
-  try { reconciliation = JSON.parse(fs.readFileSync(path.resolve(reconciliationPath), "utf8")); }
-  catch { throw new Error("CHANNEL_HISTORY_RECONCILIATION_PATH is missing or invalid; complete owner-reviewed history is required"); }
-  return { remoteVideos, reconciliation };
+  let reconciliation, reconciliationSha256;
+  try {
+    const reconciliationBytes = fs.readFileSync(path.resolve(reconciliationPath));
+    reconciliationSha256 = crypto.createHash("sha256").update(reconciliationBytes).digest("hex");
+    reconciliation = JSON.parse(reconciliationBytes.toString("utf8"));
+  } catch { throw new Error("CHANNEL_HISTORY_RECONCILIATION_PATH is missing or invalid; complete owner-reviewed history is required"); }
+  return { remoteVideos, reconciliation, reconciliationSha256 };
 }
 
 export async function fetchCompleteYoutubeHistorySnapshot(youtube, channel, reconciliationPath, channelId, options = {}) {
-  const { remoteVideos, reconciliation } = await readCompleteYoutubeHistoryInputs(youtube, channel, reconciliationPath, channelId);
-  return validateHistoryReconciliationSnapshot({ channelId, remoteVideos, reconciliation, ...options });
+  const { remoteVideos, reconciliation, reconciliationSha256 } = await readCompleteYoutubeHistoryInputs(youtube, channel, reconciliationPath, channelId);
+  return validateHistoryReconciliationSnapshot({ channelId, remoteVideos, reconciliation, reconciliationSha256, ...options });
 }
 
 export async function fetchCompleteYoutubeHistory(youtube, channel, reconciliationPath, channelId) {
