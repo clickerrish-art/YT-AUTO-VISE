@@ -383,3 +383,133 @@ test("a fresh restore invocation completes rollback when the original-state temp
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+
+test("restart rolls back an interrupted multi-file restore across upload and Facebook ledgers", async () => {
+  const crypto = await import("node:crypto");
+  const dir = makeTempDir();
+  try {
+    const stateDir = path.join(dir, "state");
+    const logDir = path.join(dir, "run-logs");
+    fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+    fs.mkdirSync(logDir, { recursive: true, mode: 0o700 });
+    const entries = [
+      {
+        target: { kind: "upload-ledger", path: "upload-attempts.json" },
+        destination: path.join(logDir, "upload-attempts.json"),
+        bytes: Buffer.from(JSON.stringify({ attempts: [{ id: "partial-upload-restore" }] })),
+        tempName: "upload-attempts.json.multi.restore-tmp"
+      },
+      {
+        target: { kind: "facebook-recovery-ledger", path: "facebook-recovery-ledger.jsonl" },
+        destination: path.join(stateDir, "facebook-recovery-ledger.jsonl"),
+        bytes: Buffer.from(JSON.stringify({ event: "partial-facebook-recovery" }) + "\n"),
+        tempName: "facebook-recovery-ledger.jsonl.multi.restore-tmp"
+      }
+    ];
+    for (const entry of entries) {
+      fs.writeFileSync(entry.destination, entry.bytes, { mode: 0o600 });
+    }
+    const journalPath = path.join(stateDir, ".restore-transaction.json");
+    fs.writeFileSync(journalPath, JSON.stringify({
+      format: "sonicvhibez-restore-transaction",
+      version: 1,
+      createdAt: "2026-10-29T00:00:00.000Z",
+      entries: entries.map(entry => ({
+        target: entry.target,
+        action: "RESTORE_MISSING",
+        newSha256: crypto.createHash("sha256").update(entry.bytes).digest("hex"),
+        tempName: entry.tempName
+      }))
+    }), { mode: 0o600 });
+    const backupPath = path.join(dir, "backup.json");
+    fs.writeFileSync(backupPath, validEmptyBackup, { mode: 0o600 });
+
+    await assert.rejects(
+      restoreState({ backupPath, rootDir: dir, confirm: "YES", now: Date.parse("2026-10-30T00:00:00.000Z") }),
+      /interrupted restore was rolled back safely/i
+    );
+    for (const entry of entries) {
+      assert.equal(fs.existsSync(entry.destination), false,
+        entry.target.kind + " created by the interrupted transaction must be rolled back");
+    }
+    assert.equal(fs.existsSync(journalPath), false,
+      "the multi-file journal is removed only after every destination has been rolled back");
+    assert.equal(fs.existsSync(path.join(stateDir, ".restore-operation.lock")), false,
+      "the shared operation lock is released after recovery");
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("restore preserves a newer upload ledger instead of replacing it from backup", async () => {
+  const crypto = await import("node:crypto");
+  const dir = makeTempDir();
+  try {
+    const logDir = path.join(dir, "run-logs");
+    fs.mkdirSync(logDir, { recursive: true, mode: 0o700 });
+    const destination = path.join(logDir, "upload-attempts.json");
+    const current = Buffer.from(JSON.stringify({ attempts: [{ id: "newer-remote-attempt" }] }));
+    const older = Buffer.from(JSON.stringify({ attempts: [{ id: "older-backup-attempt" }] }));
+    fs.writeFileSync(destination, current, { mode: 0o600 });
+    const backup = {
+      format: "sonicvhibez-state-backup",
+      version: 1,
+      includesSecrets: false,
+      createdAt: "2026-10-01T00:00:00.000Z",
+      entries: [{
+        target: { kind: "upload-ledger", path: "upload-attempts.json" },
+        contentBase64: older.toString("base64"),
+        bytes: older.length,
+        sha256: crypto.createHash("sha256").update(older).digest("hex")
+      }]
+    };
+    const backupPath = path.join(dir, "backup.json");
+    fs.writeFileSync(backupPath, JSON.stringify(backup), { mode: 0o600 });
+
+    await assert.rejects(
+      restoreState({ backupPath, rootDir: dir, confirm: "YES", now: Date.parse("2026-10-02T00:00:00.000Z") }),
+      /Refusing to overwrite an existing, different upload ledger/
+    );
+    assert.deepEqual(fs.readFileSync(destination), current,
+      "the existing upload-attempt history must remain byte-exact");
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("restore preserves a newer Facebook recovery ledger instead of replacing it from backup", async () => {
+  const crypto = await import("node:crypto");
+  const dir = makeTempDir();
+  try {
+    const stateDir = path.join(dir, "state");
+    fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+    const destination = path.join(stateDir, "facebook-recovery-ledger.jsonl");
+    const current = Buffer.from(JSON.stringify({ event: "newer-provider-readback" }) + "\n");
+    const older = Buffer.from(JSON.stringify({ event: "older-draft-attempt" }) + "\n");
+    fs.writeFileSync(destination, current, { mode: 0o600 });
+    const backup = {
+      format: "sonicvhibez-state-backup",
+      version: 1,
+      includesSecrets: false,
+      createdAt: "2026-10-01T00:00:00.000Z",
+      entries: [{
+        target: { kind: "facebook-recovery-ledger", path: "facebook-recovery-ledger.jsonl" },
+        contentBase64: older.toString("base64"),
+        bytes: older.length,
+        sha256: crypto.createHash("sha256").update(older).digest("hex")
+      }]
+    };
+    const backupPath = path.join(dir, "backup.json");
+    fs.writeFileSync(backupPath, JSON.stringify(backup), { mode: 0o600 });
+
+    await assert.rejects(
+      restoreState({ backupPath, rootDir: dir, confirm: "YES", now: Date.parse("2026-10-02T00:00:00.000Z") }),
+      /Refusing to overwrite an existing, different Facebook recovery ledger/
+    );
+    assert.deepEqual(fs.readFileSync(destination), current,
+      "the existing Facebook recovery history must remain byte-exact");
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
