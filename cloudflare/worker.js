@@ -150,6 +150,58 @@ async function handleRequest(request, env) {
     return json({ revision: row.revision, updatedAt: row.updated_at, state: JSON.parse(row.state_json) }, 200, { etag: '"' + row.revision + '"' });
   }
 
+  if (url.pathname === "/api/jobs" && method === "GET") {
+    const row = await currentState(env);
+    if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(row.state_json)); }
+    catch { return json({ error: "Persisted state is corrupt or has an unsupported schema", code: "STATE_INVALID" }, 503); }
+    const limit = Number(url.searchParams.get("limit") ?? 30);
+    if (!Number.isInteger(limit) || limit < 1 || limit > 100) return json({ error: "limit must be an integer from 1 to 100" }, 400);
+    return json({ jobs: state.jobs.slice(-limit).reverse(), publishingEnabled: false, readOnly: true, revision: row.revision });
+  }
+
+  if (url.pathname === "/api/jobs/dispatchable" && method === "GET") {
+    const row = await currentState(env);
+    if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(row.state_json)); }
+    catch { return json({ error: "Persisted state is corrupt or has an unsupported schema", code: "STATE_INVALID" }, 503); }
+    const limit = Number(url.searchParams.get("limit") ?? 20);
+    if (!Number.isInteger(limit) || limit < 1 || limit > 100) return json({ error: "limit must be an integer from 1 to 100", publishingEnabled: false }, 400);
+    const queued = state.jobs.filter(job => job?.kind === "CONTENT_PRODUCTION" && job.state === "QUEUED");
+    const approved = job => job.authoring?.productionPlan?.status === "APPROVED_PLAN_ONLY" &&
+      job.authoring.productionPlan.review?.decision === "APPROVE" &&
+      /^[a-f0-9]{64}$/.test(job.authoring.productionPlan.review?.approvalSha256 ?? "");
+    const now = Date.now();
+    const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(now));
+    const slotFor = job => {
+      const slot = job.scheduledSlot;
+      if (slot?.timezone !== "Africa/Johannesburg" ||
+          !/^\\d{4}-\\d{2}-\\d{2}$/.test(slot.date ?? "") ||
+          !/^(?:[01]\\d|2[0-3]):[0-5]\\d$/.test(slot.time ?? "")) return null;
+      const instant = new Date(slot.date + "T" + slot.time + ":00+02:00");
+      const local = Number.isFinite(instant.getTime()) ? new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit" }).format(instant) : null;
+      return local === slot.date ? { at: instant.getTime(), date: slot.date } : null;
+    };
+    const candidates = queued.filter(job => approved(job) && typeof job.id === "string")
+      .map(job => ({ job, slot: slotFor(job) }))
+      .filter(entry => entry.slot && entry.slot.date === today && entry.slot.at <= now)
+      .sort((a, b) => a.slot.at - b.slot.at || String(a.job.createdAt ?? "").localeCompare(String(b.job.createdAt ?? "")) || a.job.id.localeCompare(b.job.id));
+    return json({
+      jobs: candidates.slice(0, limit).map(({ job }) => ({ id: job.id, contentType: job.contentType, state: job.state, createdAt: job.createdAt })),
+      queuedCount: queued.length,
+      dispatchableCount: candidates.length,
+      queuedWithoutApprovedAuthoring: queued.filter(job => !job.authoring).length,
+      queuedWithoutApprovedRenderPlan: queued.filter(job => !approved(job)).length,
+      queuedWithoutValidSlot: queued.filter(job => !slotFor(job)).length,
+      queuedWithFutureSlot: queued.filter(job => { const slot = slotFor(job); return slot && slot.at > now; }).length,
+      queuedWithExpiredSlot: queued.filter(job => { const slot = slotFor(job); return slot && slot.date < today; }).length,
+      publishingEnabled: false,
+      readOnly: true
+    });
+  }
+
   if (url.pathname === "/api/jobs/queue-diagnostics" && method === "GET") {
     const row = await currentState(env);
     if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
