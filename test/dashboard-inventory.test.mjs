@@ -148,7 +148,7 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
     // Artifact download controls are generated per persisted artifact ID and
     // use one delegated listener on #productionjobs. Their stable identity is
     // the data-artifact-download value, not a duplicate static DOM id.
-    if (tag === "button" && /\\bdata-artifact-download=["']/.test(attributes)) {
+    if (tag === "button" && /\bdata-artifact-download=["']/.test(attributes)) {
       assert.ok(scriptSource.includes('closest("[data-artifact-download]")'),
         "artifact download control must use the delegated stable artifact key");
       assert.ok(server.includes("/api/artifacts/"),
