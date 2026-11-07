@@ -85,6 +85,38 @@ test("approval becomes stale when the reviewed thumbnail checksum changes", () =
 });
 
 
+test("final approval receipt preserves the complete inspected artifact package", () => {
+  const reviewed = {
+    ...artifact,
+    relatedArtifacts: [
+      artifact,
+      { path: "media/thumbnail.jpg", sha256: "d".repeat(64) },
+      { path: "captions/final.srt", sha256: "e".repeat(64) },
+      { path: "content/metadata.json", sha256: "f".repeat(64) },
+      { path: "content/render-manifest.json", sha256: "1".repeat(64) },
+      { path: "media/narration.mp3", sha256: "2".repeat(64) }
+    ]
+  };
+  const review = createReviewDecision({ ...base, artifact: reviewed }, "2026-10-23T10:03:00.000Z");
+  assert.deepEqual(review.relatedArtifacts, reviewed.relatedArtifacts);
+  assert.equal(isReviewCurrent(review, {
+    artifact: reviewed,
+    metadataVersion: base.metadataVersion,
+    rightsEvidence
+  }), true);
+  const changedCaptions = {
+    ...reviewed,
+    relatedArtifacts: reviewed.relatedArtifacts.map(item =>
+      item.path === "captions/final.srt" ? { ...item, sha256: "3".repeat(64) } : item
+    )
+  };
+  assert.equal(isReviewCurrent(review, {
+    artifact: changedCaptions,
+    metadataVersion: base.metadataVersion,
+    rightsEvidence
+  }), false);
+});
+
 test("final review must use the exact artifact, metadata and thumbnail covered by technical validation", () => {
   const job = {
     metadataPath: "metadata/job.json",
