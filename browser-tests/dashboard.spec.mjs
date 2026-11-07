@@ -1566,7 +1566,7 @@ test("production-plan submission and hash-bound review persist through the real 
     await page.getByRole("button", { name: "Validate and persist production plan" }).click();
     await expect(page.locator("#productionplanresult")).toContainText("Plan persisted for review", { timeout: 10_000 });
     await expect(page.locator("#productionplanresult")).toContainText("STRUCTURE_AND_FILE_HASHES_VALIDATED");
-    await expect(page.locator("#productionplanresult")).toContainText("Rendering and publishing remain disabled");
+    await expect(page.locator("#productionplanresult")).toContainText("Rendering remains held until the plan is approved; publishing remains disabled");
 
     const headers = { "x-operator-token": token };
     const submittedResponse = await fetch(base + "/api/state", { headers });
