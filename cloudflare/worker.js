@@ -1,5 +1,6 @@
 import { normalizeDashboardState, toDashboardStateResponse } from "./dashboard-state-compat.js";
 import { generateDashboardFacebookIdea } from "./facebook-idea-compat.js";
+import { transitionContentJob } from "./content-job-lifecycle-compat.js";
 
 const STATE_ID = 1;
 const MAX_STATE_BYTES = 2 * 1024 * 1024;
@@ -368,6 +369,43 @@ async function handleRequest(request, env) {
     return json({ job, revision: saved.row.revision, idempotentReplay: false, publishingEnabled: false }, 201, { etag: '"' + saved.row.revision + '"' });
   }
 
+  if (url.pathname === "/api/jobs/transition" && method === "POST") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
+    let input;
+    try { input = await readJson(request); }
+    catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+    if (!input || typeof input.jobId !== "string" || typeof input.nextState !== "string") {
+      return json({ error: "jobId and nextState are required" }, 400);
+    }
+    const current = await currentState(env);
+    if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(current.state_json)); }
+    catch { return json({ error: "Persisted state is invalid", code: "STATE_INVALID" }, 503); }
+    const index = state.jobs.findIndex(job => job.kind === "CONTENT_PRODUCTION" && job.id === input.jobId);
+    if (index < 0) return json({ error: "Content job not found" }, 404);
+    const previous = state.jobs[index];
+    let updated;
+    try {
+      updated = transitionContentJob(previous, input.nextState, {
+        actor,
+        reason: input.reason ?? ""
+      });
+    } catch (error) {
+      return json({ error: error.message || "Invalid job transition", code: "INVALID_JOB_TRANSITION" }, 409);
+    }
+    const jobs = [...state.jobs];
+    jobs[index] = updated;
+    const action = updated.state === "CANCELLED" ? "CONTENT_JOB_CANCELLED" : "CONTENT_JOB_STATE_CHANGED";
+    const saved = await commitStateRevision(env, current, { ...state, jobs }, actor, action, {
+      jobId: updated.id, from: previous.state, to: updated.state,
+      reason: String(input.reason ?? "").slice(0, 1000)
+    });
+    if (saved.error) return saved.error;
+    return json({ job: updated, revision: saved.row.revision, publishingEnabled: false }, 200, { etag: '"' + saved.row.revision + '"' });
+  }
+
   const cancelParts = url.pathname.split("/");
   const cancelJobId = cancelParts.length === 5 && cancelParts[1] === "api" && cancelParts[2] === "jobs" && cancelParts[4] === "cancel" && /^[A-Za-z0-9-]+$/.test(cancelParts[3]) ? cancelParts[3] : null;
   if (cancelJobId && method === "POST") {
@@ -384,15 +422,14 @@ async function handleRequest(request, env) {
     const index = state.jobs.findIndex(job => job.id === cancelJobId);
     if (index < 0) return json({ error: "Job not found" }, 404);
     const job = state.jobs[index];
-    if (job.workerLease || ["GENERATING", "RECONCILING"].includes(job.authoring?.status) || ["GENERATING", "RECONCILING"].includes(job.authoring?.narrationStage?.status)) {
-      return json({ error: "A leased or active/uncertain authoring job cannot be cancelled; reconcile the attempt first", code: "ACTIVE_WORK" }, 409);
+    let cancelled;
+    try {
+      cancelled = transitionContentJob(job, "CANCELLED", { actor, reason });
+    } catch (error) {
+      return json({ error: error.message || "Job cannot be cancelled", code: "INVALID_JOB_TRANSITION" }, 409);
     }
-    if (!["QUEUED", "BLOCKED", "AWAITING_HUMAN_REVIEW", "FAILED", "DEAD_LETTER"].includes(job.state)) return json({ error: "Only an unleased queued, blocked, review-pending, failed or dead-letter job can be cancelled" }, 409);
-    const now = new Date().toISOString();
-    const cancelled = { ...job, state: "CANCELLED", updatedAt: now, completedAt: now, cancelledAt: now, cancelledBy: actor, cancelReason: reason,
-      transitionHistory: [...(job.transitionHistory ?? []), { from: job.state, to: "CANCELLED", at: now, actor, reason }] };
     const jobs = [...state.jobs]; jobs[index] = cancelled;
-    const saved = await commitStateRevision(env, current, { ...state, jobs }, actor, "CONTENT_JOB_CANCELLED", { jobId: job.id });
+    const saved = await commitStateRevision(env, current, { ...state, jobs }, actor, "CONTENT_JOB_CANCELLED", { jobId: job.id, from: job.state, to: "CANCELLED", reason });
     if (saved.error) return saved.error;
     return json({ job: cancelled, revision: saved.row.revision, publishingEnabled: false }, 200, { etag: '"' + saved.row.revision + '"' });
   }
