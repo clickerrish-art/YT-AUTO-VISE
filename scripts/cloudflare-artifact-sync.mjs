@@ -184,10 +184,12 @@ async function main() {
     const descriptors = job.outputArtifacts.map(item => ({
       sourcePath: item.path, sha256: item.sha256, kind: "video", contentType: "video/mp4"
     }));
-    if (job.thumbnailArtifact?.path && job.thumbnailArtifact?.sha256) descriptors.push({
-      sourcePath: job.thumbnailArtifact.path, sha256: job.thumbnailArtifact.sha256,
-      kind: "thumbnail", contentType: "image/jpeg"
-    });
+    if (job.thumbnailArtifact?.path && job.thumbnailArtifact?.sha256) {
+      const extension = path.extname(job.thumbnailArtifact.path).toLowerCase();
+      const contentType = ({ ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp" })[extension];
+      if (!contentType) throw new Error("Generated thumbnail has an unsupported image format: " + job.thumbnailArtifact.path);
+      descriptors.push({ sourcePath: job.thumbnailArtifact.path, sha256: job.thumbnailArtifact.sha256, kind: "thumbnail", contentType });
+    }
     if (job.metadataPath && job.metadataVersion) descriptors.push({
       sourcePath: job.metadataPath, sha256: job.metadataVersion,
       kind: "metadata", contentType: "application/json"
