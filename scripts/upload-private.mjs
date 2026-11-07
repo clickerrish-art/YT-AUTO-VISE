@@ -146,20 +146,39 @@ function readJson(filePath, label) {
 export function acquireExclusiveUploadLock(lockPath, { jobId, now = () => new Date() } = {}) {
   fs.mkdirSync(path.dirname(lockPath), { recursive: true });
   let fd;
+  let lockFileSynced = false;
   try {
     fd = fs.openSync(lockPath, "wx", 0o600);
     fs.writeFileSync(fd, JSON.stringify({ pid: process.pid, jobId, startedAt: now().toISOString() }) + "\n");
     fs.fsyncSync(fd);
+    lockFileSynced = true;
+
+    // The lock's directory entry is part of the safety boundary too. A file
+    // fsync alone does not guarantee that the new name survives a crash.
+    let directoryFd;
+    try {
+      directoryFd = fs.openSync(path.dirname(lockPath), "r");
+      fs.fsyncSync(directoryFd);
+    } catch (error) {
+      if (!["EINVAL", "ENOTSUP", "EISDIR", "EPERM"].includes(error?.code)) {
+        throw new Error("Upload lock directory durability is uncertain; the lock is retained and no upload may proceed", { cause: error });
+      }
+    } finally {
+      if (directoryFd !== undefined) fs.closeSync(directoryFd);
+    }
   } catch (error) {
     if (fd !== undefined) {
-      // A failed write/fsync must not strand our own incomplete lock. Compare
-      // inode identity before unlinking so a replaced path is never removed.
-      try {
-        const owned = fs.fstatSync(fd);
-        const current = fs.lstatSync(lockPath);
-        if (current.isFile() && !current.isSymbolicLink() &&
-            current.dev === owned.dev && current.ino === owned.ino) fs.unlinkSync(lockPath);
-      } catch {}
+      // Remove only an incomplete lock whose file contents were not durably
+      // flushed. Once the file is synced, retain it on any directory-durability
+      // failure: deleting it could permit a duplicate upload after restart.
+      if (!lockFileSynced) {
+        try {
+          const owned = fs.fstatSync(fd);
+          const current = fs.lstatSync(lockPath);
+          if (current.isFile() && !current.isSymbolicLink() &&
+              current.dev === owned.dev && current.ino === owned.ino) fs.unlinkSync(lockPath);
+        } catch {}
+      }
       try { fs.closeSync(fd); } catch {}
     }
     if (error?.code === "EEXIST") throw new Error("another upload operation is active or left a stale lock; reconcile the attempt ledger and inspect the lock before any retry");
