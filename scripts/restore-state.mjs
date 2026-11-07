@@ -18,7 +18,10 @@ const isInvoked = process.argv[1] && import.meta.url === pathToFileURL(path.reso
  * components cannot be eliminated portably with path-based Node APIs and remain
  * an operational isolation requirement.
  */
-function readBackupFileNoSymlinks(filePath) {
+export function readBackupFileNoSymlinks(filePath) {
+  if (typeof fs.constants.O_NOFOLLOW !== "number") {
+    throw new Error("Restore requires O_NOFOLLOW support to read backup files safely");
+  }
   const absolute = path.resolve(filePath);
   const parsed = path.parse(absolute);
   let current = parsed.root;
@@ -36,11 +39,28 @@ function readBackupFileNoSymlinks(filePath) {
     if (!isFinal && !stat.isDirectory()) throw new Error("Backup path contains a non-directory component");
     if (isFinal && !stat.isFile()) throw new Error("Backup source must be a regular file");
   }
-  const flags = fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0);
-  const fd = fs.openSync(absolute, flags);
+  const fd = fs.openSync(absolute, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW);
   try {
-    if (!fs.fstatSync(fd).isFile()) throw new Error("Backup source must be a regular file");
-    return fs.readFileSync(fd, "utf8");
+    const openedBefore = fs.fstatSync(fd, { bigint: true });
+    if (!openedBefore.isFile()) throw new Error("Backup source must be a regular file");
+    const pathBefore = fs.lstatSync(absolute, { bigint: true });
+    const sameIdentity = (left, right) => left.dev === right.dev && left.ino === right.ino;
+    if (pathBefore.isSymbolicLink() || !pathBefore.isFile() || !sameIdentity(openedBefore, pathBefore)) {
+      throw new Error("Restore backup changed while it was being opened; refusing an inconsistent read");
+    }
+    const bytes = fs.readFileSync(fd);
+    const openedAfter = fs.fstatSync(fd, { bigint: true });
+    const pathAfter = fs.lstatSync(absolute, { bigint: true });
+    const unchanged = sameIdentity(openedBefore, openedAfter)
+      && sameIdentity(openedAfter, pathAfter)
+      && openedBefore.size === openedAfter.size
+      && openedBefore.mtimeNs === openedAfter.mtimeNs
+      && openedBefore.ctimeNs === openedAfter.ctimeNs
+      && bytes.length === Number(openedAfter.size)
+      && !pathAfter.isSymbolicLink()
+      && pathAfter.isFile();
+    if (!unchanged) throw new Error("Restore backup changed during read; refusing an inconsistent snapshot");
+    return bytes.toString("utf8");
   } finally {
     fs.closeSync(fd);
   }
