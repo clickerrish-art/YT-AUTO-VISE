@@ -368,8 +368,9 @@ async function handleRequest(request, env) {
     return json({ job, revision: saved.row.revision, idempotentReplay: false, publishingEnabled: false }, 201, { etag: '"' + saved.row.revision + '"' });
   }
 
-  const cancelMatch = url.pathname.match(/^\\/api\\/jobs\\/([A-Za-z0-9-]+)\\/cancel$/);
-  if (cancelMatch && method === "POST") {
+  const cancelParts = url.pathname.split("/");
+  const cancelJobId = cancelParts.length === 5 && cancelParts[1] === "api" && cancelParts[2] === "jobs" && cancelParts[4] === "cancel" && /^[A-Za-z0-9-]+$/.test(cancelParts[3]) ? cancelParts[3] : null;
+  if (cancelJobId && method === "POST") {
     const actor = operatorIdentity(env);
     if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
     let input = {};
@@ -380,7 +381,7 @@ async function handleRequest(request, env) {
     if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
     let state;
     try { state = validateDashboardState(JSON.parse(current.state_json)); } catch { return json({ error: "Persisted state is invalid" }, 503); }
-    const index = state.jobs.findIndex(job => job.id === cancelMatch[1]);
+    const index = state.jobs.findIndex(job => job.id === cancelJobId);
     if (index < 0) return json({ error: "Job not found" }, 404);
     const job = state.jobs[index];
     if (job.workerLease || ["GENERATING", "RECONCILING"].includes(job.authoring?.status) || ["GENERATING", "RECONCILING"].includes(job.authoring?.narrationStage?.status)) {
