@@ -92,9 +92,15 @@ test("human-review bundle and previews require operator auth and reject changed 
     assert.equal(response.status, 200, kind + " preview should be available to the authenticated operator");
     assert.deepEqual(Buffer.from(await response.arrayBuffer()), artifacts[kind]);
   }
-  fs.writeFileSync(path.join(process.cwd(), paths.video), Buffer.from("tampered media"));
-  const tamperedPreview = await fetch(base + bundle.previewUrls.video, { headers });
-  assert.equal(tamperedPreview.status, 409, "changed media must never be served as the approved preview");
-  const tamperedBundle = await fetch(base + "/api/jobs/review/bundle?jobId=" + fixtureId, { headers });
-  assert.equal(tamperedBundle.status, 409, "the complete review package must fail closed after artifact mutation");
+  for (const kind of ["video", "thumbnail", "captions"]) {
+    fs.writeFileSync(path.join(process.cwd(), paths[kind]), Buffer.from("tampered " + kind));
+    const tamperedPreview = await fetch(base + bundle.previewUrls[kind], { headers });
+    assert.equal(tamperedPreview.status, 409, "changed " + kind + " must never be served as the approved preview");
+    const tamperedBundle = await fetch(base + "/api/jobs/review/bundle?jobId=" + fixtureId, { headers });
+    assert.equal(tamperedBundle.status, 409, "the complete review package must fail closed after " + kind + " mutation");
+    fs.writeFileSync(path.join(process.cwd(), paths[kind]), artifacts[kind]);
+  }
+  fs.writeFileSync(metadataAbsolute, Buffer.from("tampered metadata"));
+  const tamperedMetadataBundle = await fetch(base + "/api/jobs/review/bundle?jobId=" + fixtureId, { headers });
+  assert.equal(tamperedMetadataBundle.status, 409, "changed metadata must invalidate the complete review package");
 });
