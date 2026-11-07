@@ -4,7 +4,7 @@ import { evaluateNextPublication, validateCadenceDecision, DEFAULT_MIN_SPACING_H
 
 const allowedFormats = new Set(["long_form", "short"]);
 const allowedVisibility = new Set(["public", "private", "unlisted"]);
-const unresolvedStates = new Set(["UPLOADING_PRIVATE", "REMOTE_ACCEPTED_RECONCILIATION_REQUIRED", "RECOVERY_REQUIRED", "UNCERTAIN", "OUTCOME_UNCERTAIN"]);
+const unresolvedStates = new Set(["UPLOADING_PRIVATE", "REMOTE_ACCEPTED_RECONCILIATION_REQUIRED", "RECOVERY_REQUIRED", "UNCERTAIN", "OUTCOME_UNCERTAIN", "UPLOAD_OUTCOME_UNCERTAIN"]);
 
 
 function strictIsoTimestamp(value) {
