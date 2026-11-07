@@ -60,6 +60,28 @@ export function remoteUploadMatchesApprovedMetadata(item, { videoId, channelId, 
     && item.snippet?.channelId === channelId && item.snippet?.title === title);
 }
 
+/** A local receipt is not publication history until the exact remote upload is
+ * present in a complete, owner-reviewed channel-history snapshot. */
+export function assertPrivateUploadPresentInCompleteHistory(snapshot, {
+  videoId, format, actualPublishedAt
+} = {}) {
+  if (!snapshot || !Array.isArray(snapshot.history) || !Array.isArray(snapshot.scheduledItems)) {
+    throw new Error("complete verified channel-history snapshot is required before a private upload can be marked reconciled");
+  }
+  const matches = snapshot.history.filter(item => item?.id === videoId);
+  if (matches.length !== 1) {
+    throw new Error("private upload is absent from complete verified channel history; retain recovery state and do not advance the publication cycle");
+  }
+  const [item] = matches;
+  if (item.status !== "private" || item.format !== format || item.actualPublishedAt !== actualPublishedAt) {
+    throw new Error("private upload channel-history record does not match the exact remote video, format and actual publication timestamp");
+  }
+  if (snapshot.scheduledItems.some(item => item?.id === videoId)) {
+    throw new Error("a scheduled video cannot be treated as an actual publication");
+  }
+  return item;
+}
+
 export function sha256File(filePath) {
   return crypto.createHash("sha256").update(fs.readFileSync(filePath)).digest("hex");
 }
@@ -406,6 +428,26 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       prior.updatedAt = now().toISOString();
       persistJson(ledgerPath, ledger);
       throw new Error("Existing remote video has no valid actual publication timestamp; reconcile it before retrying and never substitute upload time");
+    }
+    if (!youtubeFactory) {
+      try {
+        const safeHistoryPath = resolveRepositoryFileNoSymlinks(env.CHANNEL_HISTORY_RECONCILIATION_PATH, "Channel history reconciliation");
+        const completeSnapshot = await fetchCompleteYoutubeHistorySnapshot(
+          youtube, matchedChannel, safeHistoryPath, expectedChannelId, { now: now() }
+        );
+        assertPrivateUploadPresentInCompleteHistory(completeSnapshot, {
+          videoId: prior.remoteVideoId,
+          format: metadata.contentType ?? metadata.format ?? null,
+          actualPublishedAt
+        });
+      } catch (error) {
+        prior.status = "RECOVERY_REQUIRED";
+        prior.errorCode = "CHANNEL_HISTORY_NOT_RECONCILED";
+        prior.updatedAt = now().toISOString();
+        persistJson(ledgerPath, ledger);
+        throw new Error("Remote private upload is not yet reconciled against complete SonicVhibez channel history; publication cycle remains blocked: " +
+          (error instanceof Error ? error.message : "history reconciliation failed"));
+      }
     }
     const timestamp = now().toISOString();
     const receipt = {
