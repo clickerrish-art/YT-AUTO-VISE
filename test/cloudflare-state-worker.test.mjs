@@ -1078,7 +1078,10 @@ test("repository runner session lock blocks overlap and releases only after exac
               if (session.session_id !== sessionId) return { meta: { changes: 0 } };
             }
             const [completedAt, releaseReason] = this.args;
-            session = { ...session, status: "RELEASED", completed_at: completedAt, release_reason: releaseReason };
+            session = {
+              ...session, status: "RELEASED", completed_at: completedAt,
+              release_reason: sql.includes("RUNNER_RECONCILIATION_COMPLETE") ? "RUNNER_RECONCILIATION_COMPLETE" : releaseReason
+            };
             return { meta: { changes: 1 } };
           }
           return { meta: { changes: 0 } };
