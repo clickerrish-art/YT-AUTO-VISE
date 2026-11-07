@@ -316,14 +316,14 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
     });
     const stillPresent = await fetch(reconcileUrl, {
       method: "POST",
-      headers: { ...operatorHeaders, "content-type": "application/json" },
+      headers: { "x-operator-token": operatorToken, "content-type": "application/json" },
       body: reconcileBody
     });
     assert.equal(stillPresent.status, 409, "recovery must not be confirmed while retained evidence exists");
     fs.rmSync(retainedFile, { force: true });
     const reconciled = await fetch(reconcileUrl, {
       method: "POST",
-      headers: { ...operatorHeaders, "content-type": "application/json" },
+      headers: { "x-operator-token": operatorToken, "content-type": "application/json" },
       body: reconcileBody
     });
     assert.equal(reconciled.status, 200);
@@ -332,7 +332,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
     assert.equal(receipt.retryAuthorized, false, "reconciliation must not silently requeue the job");
     const retry = await fetch(base + "/api/jobs/retry", {
       method: "POST",
-      headers: { ...operatorHeaders, "content-type": "application/json" },
+      headers: { "x-operator-token": operatorToken, "content-type": "application/json" },
       body: JSON.stringify({ jobId, reason: "Verified retained artifacts were archived; authorize a fresh render attempt" })
     });
     assert.equal(retry.status, 200);
