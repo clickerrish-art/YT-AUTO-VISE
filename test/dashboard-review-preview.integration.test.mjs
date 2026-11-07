@@ -80,7 +80,7 @@ test("human-review bundle and previews require operator auth and reject changed 
   const unauthBundle = await fetch(base + "/api/jobs/review/bundle?jobId=" + fixtureId);
   assert.equal(unauthBundle.status, 401);
   const bundleResponse = await fetch(base + "/api/jobs/review/bundle?jobId=" + fixtureId, { headers });
-  assert.equal(bundleResponse.status, 200, await bundleResponse.text());
+  assert.equal(bundleResponse.status, 200);
   const bundle = await bundleResponse.json();
   assert.equal(bundle.publishingEnabled, false);
   assert.equal(bundle.artifacts.length, 3);
