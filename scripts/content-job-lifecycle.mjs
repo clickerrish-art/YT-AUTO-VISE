@@ -194,6 +194,10 @@ export function authorizeContentJobRetry(job, {
   if (job.retryPolicy?.requiresOperatorRetry !== true) {
     throw new Error("This job does not declare the required operator retry policy");
   }
+  if (/^RENDER_(?:ARTIFACT|MANIFEST)_RECOVERY_REQUIRED$/.test(job.errorDetails?.code ?? "") &&
+      job.renderRecovery?.verifiedAbsent !== true) {
+    throw new Error("Retained render artifacts must be reconciled and verified absent before retry authorization");
+  }
   if (job.nextRetryAt) {
     const retryAt = Date.parse(job.nextRetryAt);
     if (!Number.isFinite(retryAt)) throw new Error("Persisted retry time is invalid; operator reconciliation is required");
