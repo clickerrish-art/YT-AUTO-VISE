@@ -1638,7 +1638,7 @@ test("production-plan submission and hash-bound review persist through the real 
     await page.locator("#productionplanreviewreason").fill("Reviewed the exact plan and test evidence fixture.");
     await page.getByRole("button", { name: "Record plan review decision" }).click();
     await expect(page.locator("#productionplanreviewresult")).toContainText("APPROVED_PLAN_ONLY", { timeout: 10_000 });
-    await expect(page.locator("#productionplanreviewresult")).toContainText("Rendering remains disabled until");
+    await expect(page.locator("#productionplanreviewresult")).toContainText("Rendering is available only if the plan is approved and its Johannesburg slot is due.");
     const reviewedResponse = await fetch(base + "/api/state", { headers });
     expect(reviewedResponse.status).toBe(200);
     const reviewedState = await reviewedResponse.json();
