@@ -150,6 +150,59 @@ async function handleRequest(request, env) {
     return json({ revision: row.revision, updatedAt: row.updated_at, state: JSON.parse(row.state_json) }, 200, { etag: '"' + row.revision + '"' });
   }
 
+  if (url.pathname === "/api/drafts" && method === "GET") {
+    const row = await currentState(env);
+    if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(row.state_json)); }
+    catch { return json({ error: "Persisted state is corrupt or has an unsupported schema", code: "STATE_INVALID" }, 503); }
+    return json({ items: state.queueItems, queueItems: state.queueItems, publishingEnabled: false, readOnly: true, revision: row.revision });
+  }
+
+  if (url.pathname === "/api/facebook/drafts" && method === "GET") {
+    const row = await currentState(env);
+    if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(row.state_json)); }
+    catch { return json({ error: "Persisted state is corrupt or has an unsupported schema", code: "STATE_INVALID" }, 503); }
+    return json({ drafts: state.facebookDrafts.slice(-30).reverse(), publishingEnabled: false, readOnly: true, destination: "nature_frontiers_facebook" });
+  }
+
+  if (url.pathname === "/api/facebook/state" && method === "GET") {
+    const row = await currentState(env);
+    if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(row.state_json)); }
+    catch { return json({ error: "Persisted state is corrupt or has an unsupported schema", code: "STATE_INVALID" }, 503); }
+    return json({
+      destination: "nature_frontiers_facebook",
+      destinationPageId: null,
+      pageIdentityVerified: false,
+      pageName: null,
+      lastIdentityCheck: null,
+      metaAdapterImplemented: false,
+      permissionsConfirmed: false,
+      accessTokenConfigured: false,
+      publishingEnabled: false,
+      dryRun: true,
+      timezone: null,
+      dailyTarget: null,
+      defaultLocalTime: null,
+      comparisonLocalTime: null,
+      drafts: state.facebookDrafts.slice(-30).reverse(),
+      posts: state.facebookPosts.slice(-30).reverse(),
+      attempts: state.facebookAttempts.slice(-30).reverse(),
+      experiment: null,
+      blockers: [
+        "Meta Page identity and permissions have not been verified by this Cloudflare state adapter.",
+        "Meta credentials and publishing configuration are not imported into staging.",
+        "Nature Frontiers publishing remains disabled; use the existing repository dashboard for live provider checks."
+      ],
+      complianceRuleSet: null,
+      readOnly: true
+    });
+  }
+
   if (url.pathname === "/api/jobs" && method === "GET") {
     const row = await currentState(env);
     if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
