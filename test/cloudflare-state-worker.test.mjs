@@ -5,6 +5,7 @@ import { authenticate, constantTimeEqual, handleRequest, operatorIdentity, valid
 import { canonicalAuthoringScriptSha256 } from "../cloudflare/authoring-review-compat.js";
 import { readFileSync } from "node:fs";
 import { DEFAULT_CAMPAIGNS, manageCampaign, validateCampaigns } from "../cloudflare/campaigns-compat.js";
+import { DEFAULT_WEEKLY_PLAN } from "../cloudflare/weekly-plan-compat.js";
 
 const validState = () => ({
   version: 1,
@@ -284,7 +285,7 @@ test("campaign read API validates persisted campaign records against the reposit
   assert.equal(body.readOnly, true);
 });
 
-test("schedule read API exposes rolling safety constraints but blocks absent authoritative config and history", async () => {
+test("schedule read API exposes the authoritative draft slots while keeping publication history blocked", async () => {
   const state = validState();
   state.queueItems = [{ id: "slot-1", reservationType: "SCHEDULED_SLOT", scheduledDate: "2026-11-10" }];
   const database = { prepare() { return { bind() { return this; }, async first() { return { revision: 5, state_json: JSON.stringify(state) }; } }; } };
@@ -297,7 +298,9 @@ test("schedule read API exposes rolling safety constraints but blocks absent aut
   assert.deepEqual(body.publicationCycle.formats, ["long_form", "long_form", "short"]);
   assert.equal(body.publicationCycle.minimumHoursBetweenConsecutivePublications, 72);
   assert.equal(body.publicationCycle.minimumCycleHours, 216);
-  assert.equal(body.authoritativeScheduleConfigImported, false);
+  assert.equal(body.authoritativeScheduleConfigImported, true);
+  assert.deepEqual(body.schedule, DEFAULT_WEEKLY_PLAN);
+  assert.deepEqual(body.draftPreparationSlots, DEFAULT_WEEKLY_PLAN.schedule);
   assert.equal(body.publicationHistoryReconciled, false);
   assert.equal(body.queuedReservations.length, 1);
   assert.ok(body.blockers.length >= 2);
@@ -879,4 +882,13 @@ test("Wrangler staging config binds the dashboard static assets and existing D1 
   assert.equal(config.assets.run_worker_first, true);
   assert.equal(config.d1_databases[0].binding, "STATE_DB");
   assert.equal(config.d1_databases[0].database_id, "f018ee20-2d7f-41ec-9744-ee058bce80f8");
+});
+
+
+test("bundled Worker weekly plan exactly matches repository schedule configuration", () => {
+  const repositoryPlan = JSON.parse(readFileSync(new URL("../config/weekly-content-plan.json", import.meta.url), "utf8"));
+  assert.deepEqual(DEFAULT_WEEKLY_PLAN, repositoryPlan);
+  assert.equal(DEFAULT_WEEKLY_PLAN.publishingEnabled, false);
+  assert.equal(DEFAULT_WEEKLY_PLAN.publicationCycle.publicationEnabled, false);
+  assert.equal(DEFAULT_WEEKLY_PLAN.cadenceDecision.approvedMode, "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET");
 });
