@@ -68,7 +68,7 @@ export function assertPrivateUploadPresentInCompleteHistory(snapshot, {
   if (!snapshot || snapshot.complete !== true || !Array.isArray(snapshot.history) ||
       !Array.isArray(snapshot.scheduledItems) || !snapshot.channelId ||
       typeof snapshot.verifiedBy !== "string" || snapshot.verifiedBy.trim().length < 2 ||
-      !Number.isFinite(strictIsoTimestamp(snapshot.verifiedAt))) {
+      !Number.isFinite(strictIsoTimestamp(snapshot.verifiedAt)) || !/^[a-f0-9]{64}$/.test(snapshot.reconciliationSha256 ?? "")) {
     throw new Error("complete owner-verified channel-history snapshot is required before a private upload can be marked reconciled");
   }
   if (snapshot.channelId !== channelId) throw new Error("complete channel-history snapshot is bound to a different YouTube channel");
@@ -446,7 +446,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
           format: metadata.contentType ?? metadata.format ?? null,
           actualPublishedAt
         });
-        historyVerification = { verifiedAt: completeSnapshot.verifiedAt, verifiedBy: completeSnapshot.verifiedBy, videoCount: completeSnapshot.history.length };
+        historyVerification = { verifiedAt: completeSnapshot.verifiedAt, verifiedBy: completeSnapshot.verifiedBy, reconciliationSha256: completeSnapshot.reconciliationSha256, videoCount: completeSnapshot.history.length };
       } catch (error) {
         prior.status = "RECOVERY_REQUIRED";
         prior.errorCode = "CHANNEL_HISTORY_NOT_RECONCILED";
@@ -468,6 +468,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       channelHistoryReconciled: historyVerification !== null,
       historyVerifiedAt: historyVerification?.verifiedAt ?? null,
       historyVerifiedBy: historyVerification?.verifiedBy ?? null,
+      historyReconciliationSha256: historyVerification?.reconciliationSha256 ?? null,
       historyVideoCount: historyVerification?.videoCount ?? null,
       publishingEnabled: false, url: "https://www.youtube.com/watch?v=" + prior.remoteVideoId
     };
@@ -687,6 +688,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     channelHistoryReconciled: historyVerification !== null,
     historyVerifiedAt: historyVerification?.verifiedAt ?? null,
     historyVerifiedBy: historyVerification?.verifiedBy ?? null,
+    historyReconciliationSha256: historyVerification?.reconciliationSha256 ?? null,
     historyVideoCount: historyVerification?.videoCount ?? null,
     publishingEnabled: false, url: "https://www.youtube.com/watch?v=" + videoId
   };
