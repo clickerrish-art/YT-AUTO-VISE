@@ -1331,3 +1331,46 @@ test("private R2 artifact creation rejects unbound SHA, unsafe paths and storage
   const overBudget = await send({ jobId: job.id, sourcePath: "media/a.mp4", artifactKind: "video", sha256: digest, sizeBytes: 1, contentType: "video/mp4" });
   assert.equal(overBudget.status, 413);
 });
+
+
+test("repository runner preflight proves private R2 write/read/delete and enforces 1 GiB free-tier headroom", async () => {
+  const fixture = await createRunnerOidcFixture();
+  const calls = [];
+  const database = {
+    prepare() {
+      return { bind() { return this; }, async first() { return { total_bytes: 1024 }; } };
+    }
+  };
+  const env = {
+    STATE_DB: database,
+    ARTIFACTS: {
+      async put(key, value, options) { calls.push(["put", key, value, options.customMetadata.purpose]); },
+      async get(key) { calls.push(["get", key]); return { async text() { return calls[0][2]; } }; },
+      async delete(key) { calls.push(["delete", key]); }
+    }
+  };
+  const response = await handleRequest(new Request("https://state.example/api/runner/ready", {
+    headers: { authorization: "Bearer " + fixture.token }
+  }), env, fixture);
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.ready, true);
+  assert.equal(body.storageProvider, "Cloudflare R2 Standard");
+  assert.ok(body.remainingBytes >= 1024 * 1024 * 1024);
+  assert.deepEqual(calls.map(call => call[0]), ["put", "get", "delete"]);
+});
+
+test("repository runner preflight blocks production when private R2 headroom is below 1 GiB", async () => {
+  const fixture = await createRunnerOidcFixture();
+  let writes = 0;
+  const env = {
+    STATE_DB: { prepare() { return { bind() { return this; }, async first() { return { total_bytes: 8 * 1024 * 1024 * 1024 - 1024 * 1024 * 1024 + 1 }; } }; } },
+    ARTIFACTS: { async put() { writes++; }, async get() {}, async delete() {} }
+  };
+  const response = await handleRequest(new Request("https://state.example/api/runner/ready", {
+    headers: { authorization: "Bearer " + fixture.token }
+  }), env, fixture);
+  assert.equal(response.status, 503);
+  assert.equal((await response.json()).code, "R2_ARTIFACT_HEADROOM_LOW");
+  assert.equal(writes, 0);
+});
