@@ -41,6 +41,7 @@ function cooldownStatePath(workerId, configuredPath, stateDirectory) {
 
 /** Read persisted worker state from one pinned regular file, refusing final-component symlinks and replacement during the read. */
 export function readCooldownStateFile(statePath) {
+  ensureSafeDirectoryPath(path.dirname(path.resolve(statePath)), "Worker cooldown state parent directory");
   if (typeof fs.constants.O_NOFOLLOW !== "number") {
     throw new Error("Worker cooldown state requires O_NOFOLLOW support for safe reads");
   }
