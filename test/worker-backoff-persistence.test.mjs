@@ -4,10 +4,20 @@ import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { runWorker, readCooldownStateFile } from "../scripts/worker-runner.mjs";
+import { runWorker, readCooldownStateFile, parseRetryAfterMs } from "../scripts/worker-runner.mjs";
 
 const token = "worker-backoff-test-token-" + "x".repeat(32);
 const workerId = "worker-backoff-restart-test";
+
+test("Retry-After parser supports delta seconds and HTTP dates with bounded fallback", () => {
+  const now = Date.parse("2026-11-07T12:00:00.000Z");
+  assert.equal(parseRetryAfterMs("60", now), 60_000);
+  assert.equal(parseRetryAfterMs("2026-11-07T12:01:30.000Z", now), 90_000);
+  assert.equal(parseRetryAfterMs("invalid", now), 30_000);
+  assert.equal(parseRetryAfterMs("0", now), 1_000);
+  assert.equal(parseRetryAfterMs("99999", now), 15 * 60_000);
+});
+
 
 async function listen(server) {
   await new Promise((resolve, reject) => {
