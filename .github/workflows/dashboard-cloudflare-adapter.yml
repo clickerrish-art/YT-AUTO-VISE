@@ -7,6 +7,8 @@ on:
       - "cloudflare/**"
       - "wrangler.jsonc"
       - "test/cloudflare-state-worker.test.mjs"
+      - "scripts/cloudflare-runner-bridge.mjs"
+      - ".github/workflows/repository-runner.yml"
       - ".github/workflows/cloudflare-state.yml"
       - ".github/workflows/dashboard-cloudflare-adapter.yml"
 
@@ -27,6 +29,7 @@ jobs:
       - name: Syntax checks
         run: |
           node --check cloudflare/worker.js
+          node --check scripts/cloudflare-runner-bridge.mjs
           node --check test/cloudflare-state-worker.test.mjs
       - name: Durable-state tests
         run: node --test test/cloudflare-state-worker.test.mjs
