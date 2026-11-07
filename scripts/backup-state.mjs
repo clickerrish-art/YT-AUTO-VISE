@@ -320,7 +320,7 @@ export function recoverInterruptedBackup({ rootDir = root, stateDir = process.en
   if (!outputPath || !temporaryPath) throw new Error("Recovery requires exact final and temporary paths");
   const stateRoot = path.resolve(rootDir, stateDir), destination = path.resolve(outputPath), temporary = path.resolve(temporaryPath);
   const lockPath = path.join(stateRoot, ".restore-operation.lock");
-  if (path.dirname(destination) !== path.dirname(temporary) || !path.basename(temporary).startsWith(path.basename(destination) + ".") || !/^[0-9a-f-]{36}\\.tmp$/.test(path.basename(temporary).slice(path.basename(destination).length + 1))) throw new Error("Temporary backup must be the UUID-named sibling of the final backup");
+  const tempSuffix = path.basename(temporary).slice(path.basename(destination).length + 1);\n  if (path.dirname(destination) !== path.dirname(temporary) || !path.basename(temporary).startsWith(path.basename(destination) + ".") || tempSuffix.length !== 40 || tempSuffix.slice(36) !== ".tmp" || !/^[0-9a-f-]{36}$/.test(tempSuffix.slice(0, 36))) throw new Error("Temporary backup must be the UUID-named sibling of the final backup");
   assertNoSymlinkComponents(stateRoot, "recovery state directory");
   assertNoSymlinkComponents(path.dirname(destination), "recovery output directory");
   for (const [file, label] of [[lockPath, "lock"], [temporary, "temporary backup"]]) { const st = fs.lstatSync(file); if (st.isSymbolicLink() || !st.isFile()) throw new Error("Recovery refuses unsafe " + label); }
@@ -335,7 +335,7 @@ export function recoverInterruptedBackup({ rootDir = root, stateDir = process.en
   const seen = new Set();
   for (const entry of payload.entries) {
     const p = entry?.target?.path, b64 = entry?.contentBase64;
-    if (!entry.target || typeof entry.target.kind !== "string" || typeof p !== "string" || !p || path.posix.isAbsolute(p) || p.split(/[\\\\/]/).some(x => !x || x === "..") || !/^[a-f0-9]{64}$/.test(entry.sha256) || !Number.isSafeInteger(entry.bytes) || entry.bytes < 0 || typeof b64 !== "string" || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(b64)) throw new Error("Backup contains an invalid or unsafe entry");
+    if (!entry.target || typeof entry.target.kind !== "string" || typeof p !== "string" || !p || path.posix.isAbsolute(p) || (p.includes(String.fromCharCode(92)) || p.split("/").some(x => !x || x === "..")) || !/^[a-f0-9]{64}$/.test(entry.sha256) || !Number.isSafeInteger(entry.bytes) || entry.bytes < 0 || typeof b64 !== "string" || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(b64)) throw new Error("Backup contains an invalid or unsafe entry");
     const id = entry.target.kind + ":" + p; if (seen.has(id)) throw new Error("Backup contains duplicate target entries"); seen.add(id);
     const bytes = Buffer.from(b64, "base64"); if (bytes.length !== entry.bytes || bytes.toString("base64") !== b64 || sha256(bytes) !== entry.sha256) throw new Error("Backup entry checksum or byte length mismatch");
   }
