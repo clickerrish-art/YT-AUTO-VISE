@@ -2656,7 +2656,8 @@ const server = http.createServer(async (req, res) => {
             return json(res, 409, { error: "A complete reviewed-package artifact changed before the decision was committed: " + entry.path, publishingEnabled: false });
           }
         }
-        const review = createReviewDecision({ artifact, rightsEvidence, metadataVersion, reviewer, decision: body.decision, reason: body.reason ?? "", shortParentRelationshipSha256: shortParentRelationshipSha256Value });
+        const technicalValidationSha256 = crypto.createHash("sha256").update(JSON.stringify(job.validationResults)).digest("hex");
+        const review = createReviewDecision({ artifact, rightsEvidence, metadataVersion, technicalValidationSha256, reviewer, decision: body.decision, reason: body.reason ?? "", shortParentRelationshipSha256: shortParentRelationshipSha256Value });
         if (body.decision === "APPROVE") {
           state.jobs[index] = approveContentJobForPrivateUpload({ ...job, rightsChecks: { verified: true, evidenceSha256: review.rightsEvidenceSha256, verifiedBy: reviewer, verifiedAt: review.reviewedAt } }, review);
         } else {
@@ -2678,6 +2679,7 @@ const server = http.createServer(async (req, res) => {
             reviewer,
             artifactSha256,
             metadataVersion,
+            technicalValidationSha256: review.technicalValidationSha256,
             rightsEvidenceSha256: review.rightsEvidenceSha256,
             rightsEvidence,
             authoringArtifactBinding,
