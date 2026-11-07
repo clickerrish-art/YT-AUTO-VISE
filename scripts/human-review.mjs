@@ -74,3 +74,30 @@ export function isReviewCurrent(review, { artifact, metadataVersion, rightsEvide
     && review.metadataVersion === metadataVersion
     && review.rightsEvidenceSha256 === rightsHash;
 }
+
+export function validateTechnicalReviewBinding({ job, artifactPath, artifactSha256, metadataPath, metadataVersion }) {
+  const errors = [];
+  const validation = job?.validationResults;
+  if (validation?.passed !== true) errors.push("technical validation must pass");
+  if (typeof artifactPath !== "string" || !artifactPath.trim() || !/^[a-f0-9]{64}$/.test(artifactSha256 ?? "")) {
+    errors.push("review artifact path and SHA-256 are required");
+  }
+  const recorded = (job?.outputArtifacts ?? []).find(item => item.path === artifactPath && item.sha256 === artifactSha256);
+  if (!recorded) errors.push("review artifact must match an exact recorded job output and checksum");
+  const validated = (validation?.artifacts ?? []).find(item => item.path === artifactPath && item.sha256 === artifactSha256);
+  if (!validated) errors.push("review artifact must be the exact file that passed technical validation");
+  if (typeof job?.metadataPath !== "string" || metadataPath !== job.metadataPath) errors.push("review metadata path must match the job's generated metadata path");
+  if (typeof metadataVersion !== "string" || metadataVersion !== job?.metadataVersion || metadataVersion !== validation?.metadataVersion) {
+    errors.push("review metadata checksum must match both the job and technical validation receipt");
+  }
+  const thumbnail = job?.thumbnailArtifact;
+  const validatedThumbnail = validation?.thumbnail;
+  if (!thumbnail?.path || !/^[a-f0-9]{64}$/.test(thumbnail.sha256 ?? "") ||
+      validatedThumbnail?.path !== thumbnail.path || validatedThumbnail?.sha256 !== thumbnail.sha256) {
+    errors.push("the exact recorded thumbnail must be present in the technical validation receipt");
+  }
+  if (typeof validation?.captionsPath !== "string" || !validation.captionsPath.trim() || !/^[a-f0-9]{64}$/.test(validation.captionsSha256 ?? "")) {
+    errors.push("validated captions path and SHA-256 are required");
+  }
+  return errors;
+}
