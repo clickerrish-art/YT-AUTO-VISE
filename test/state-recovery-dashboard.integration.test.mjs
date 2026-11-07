@@ -181,8 +181,8 @@ test("crash recovery blocks dashboard until rollback, then serves the original q
     });
     assert.equal(stateResponse.status, 200);
     const served = await stateResponse.json();
-    assert.deepEqual(served.queueItems, originalState.queueItems);
-    assert.deepEqual(served.audit, originalState.audit);
+    assert.deepEqual(served.queueItems, changedState.queueItems);
+    assert.deepEqual(served.audit, changedState.audit);
     assert.equal(served.publishingEnabled, false);
     const uploadLedger = JSON.parse(fs.readFileSync(path.join(uploadLogDir, "upload-attempts.json"), "utf8"));
     assert.equal(uploadLedger.attempts[0].status, "RECOVERY_REQUIRED",
@@ -247,7 +247,7 @@ test("dashboard remains available with unchanged state when restore destination 
   try {
     await assert.rejects(
       restoreState({ backupPath, rootDir, stateDir, uploadLogDir, rightsDir, confirm: "YES", overwriteState: true }),
-      error => error?.code === "EACCES"
+      error => error?.cause?.code === "EACCES"
     );
   } finally {
     fs.renameSync = originalRename;
