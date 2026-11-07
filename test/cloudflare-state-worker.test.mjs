@@ -869,3 +869,14 @@ test("capabilities endpoint distinguishes implemented durable operations from ru
   assert.ok(body.blockedUntilIntegration.some(item => item.includes("YouTube OAuth")));
   assert.equal(body.publishingEnabled, false);
 });
+
+
+test("Wrangler staging config binds the dashboard static assets and existing D1 database without deploying", () => {
+  const config = JSON.parse(readFileSync(new URL("../wrangler.jsonc", import.meta.url), "utf8"));
+  assert.equal(config.name, "sonicvhibez-durable-state-staging");
+  assert.equal(config.assets.directory, "./public");
+  assert.equal(config.assets.binding, "ASSETS");
+  assert.equal(config.assets.run_worker_first, true);
+  assert.equal(config.d1_databases[0].binding, "STATE_DB");
+  assert.equal(config.d1_databases[0].database_id, "f018ee20-2d7f-41ec-9744-ee058bce80f8");
+});
