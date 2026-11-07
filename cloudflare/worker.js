@@ -108,7 +108,14 @@ async function handleRequest(request, env) {
     return json({ status: "ok", service: "sonicvhibez-durable-state", publishingEnabled: false });
   }
 
-  if (!url.pathname.startsWith("/api/")) return json({ error: "Not found" }, 404);
+  if (!url.pathname.startsWith("/api/")) {
+    if (method === "GET" && env.ASSETS && typeof env.ASSETS.fetch === "function") {
+      const assetUrl = new URL(request.url);
+      if (assetUrl.pathname === "/") assetUrl.pathname = "/dashboard.html";
+      return env.ASSETS.fetch(new Request(assetUrl.toString(), request));
+    }
+    return json({ error: "Not found" }, 404);
+  }
   if (!(await authenticate(request, env))) return json({ error: "Unauthorized" }, 401);
 
   if (url.pathname === "/api/state" && method === "GET") {
