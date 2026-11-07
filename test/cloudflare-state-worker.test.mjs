@@ -178,3 +178,23 @@ test("dispatchable jobs endpoint never releases queued work without approved aut
   assert.equal(body.jobs.length, 0);
   assert.equal(body.publishingEnabled, false);
 });
+
+test("draft and Facebook read APIs expose persisted records without enabling publishing", async () => {
+  const state = validState();
+  state.queueItems = [{ id: "draft-1" }];
+  state.facebookDrafts = [{ id: "nf-1", status: "DRAFT" }];
+  const database = { prepare() { return { bind() { return this; }, async first() { return { revision: 5, state_json: JSON.stringify(state) }; } }; } };
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: database };
+  const headers = { "x-operator-token": "a".repeat(24) };
+  const drafts = await handleRequest(new Request("https://state.example/api/drafts", { headers }), env);
+  assert.deepEqual((await drafts.json()).items, [{ id: "draft-1" }]);
+  const facebookDrafts = await handleRequest(new Request("https://state.example/api/facebook/drafts", { headers }), env);
+  assert.deepEqual((await facebookDrafts.json()).drafts, [{ id: "nf-1", status: "DRAFT" }]);
+  const facebookState = await handleRequest(new Request("https://state.example/api/facebook/state", { headers }), env);
+  const body = await facebookState.json();
+  assert.equal(body.destination, "nature_frontiers_facebook");
+  assert.equal(body.pageIdentityVerified, false);
+  assert.equal(body.dryRun, true);
+  assert.equal(body.publishingEnabled, false);
+  assert.equal(body.readOnly, true);
+});
