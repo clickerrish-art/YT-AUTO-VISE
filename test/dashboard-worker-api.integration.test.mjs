@@ -160,6 +160,37 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
   ], "the dispatch limit must apply after chronological ordering");
   assert.equal(payload.publishingEnabled, false);
   assert.equal(payload.readOnly, true);
+
+  const queueDiagnostics = await fetch(base + "/api/jobs/queue-diagnostics?limit=10", {
+    headers: { "x-operator-token": operatorToken }
+  });
+  assert.equal(queueDiagnostics.status, 200, "queue diagnostics must be available to the authenticated operator");
+  const diagnostics = await queueDiagnostics.json();
+  assert.equal(diagnostics.queuedCount, 5);
+  assert.equal(diagnostics.dispatchableCount, 3);
+  assert.equal(diagnostics.heldCount, 2);
+  assert.equal(diagnostics.publishingEnabled, false);
+  assert.equal(diagnostics.readOnly, true);
+  assert.equal(diagnostics.timezone, "Africa/Johannesburg");
+  const byId = Object.fromEntries(diagnostics.items.map(item => [item.id, item]));
+  assert.equal(byId["queued-with-approved-plan"].status, "DISPATCHABLE");
+  assert.equal(byId["queued-without-approved-plan"].status, "HELD");
+  assert.ok(byId["queued-without-approved-plan"].blockers.includes("APPROVED_RENDER_PLAN_MISSING"));
+  assert.equal(byId["queued-legacy-without-authoring"].status, "HELD");
+  assert.ok(byId["queued-legacy-without-authoring"].blockers.includes("APPROVED_AUTHORING_MISSING"));
+  assert.ok(byId["queued-legacy-without-authoring"].blockers.includes("APPROVED_RENDER_PLAN_MISSING"));
+  const workerDiagnostics = await fetch(base + "/api/jobs/queue-diagnostics", { headers: workerHeaders });
+  assert.equal(workerDiagnostics.status, 401, "worker credentials must not expose operator queue diagnostics");
+  const limitedDiagnostics = await fetch(base + "/api/jobs/queue-diagnostics?limit=2", {
+    headers: { "x-operator-token": operatorToken }
+  });
+  const limitedBody = await limitedDiagnostics.json();
+  assert.equal(limitedDiagnostics.status, 200);
+  assert.equal(limitedBody.returnedCount, 2);
+  assert.equal(limitedBody.truncated, true);
+  assert.equal(fs.readFileSync(statePath).toString(), before.toString(),
+    "queue diagnostics must remain read-only and leave persisted state byte-for-byte unchanged");
+
   const concurrentReads = await Promise.all(Array.from({ length: 4 }, () =>
     fetch(base + "/api/jobs/dispatchable", { headers: workerHeaders }).then(async response => ({
       status: response.status,
