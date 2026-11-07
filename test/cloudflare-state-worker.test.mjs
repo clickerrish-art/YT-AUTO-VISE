@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { authenticate, constantTimeEqual, validateDashboardState } from "../cloudflare/worker.js";
+import { authenticate, constantTimeEqual, handleRequest, validateDashboardState } from "../cloudflare/worker.js";
 
 const validState = () => ({
   version: 1,
@@ -53,4 +53,20 @@ test("accepts legacy state without optional Facebook arrays without inventing th
   delete legacy.facebookPosts;
   delete legacy.facebookAttempts;
   assert.equal(validateDashboardState(legacy).facebookDrafts, undefined);
+});
+
+test("health endpoint exposes only the fail-closed service status", async () => {
+  const response = await handleRequest(new Request("https://state.example/healthz"), {});
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), {
+    status: "ok",
+    service: "sonicvhibez-durable-state",
+    publishingEnabled: false
+  });
+});
+
+test("state endpoints reject missing operator authentication before database access", async () => {
+  const response = await handleRequest(new Request("https://state.example/api/state"), {});
+  assert.equal(response.status, 401);
+  assert.deepEqual(await response.json(), { error: "Unauthorized" });
 });
