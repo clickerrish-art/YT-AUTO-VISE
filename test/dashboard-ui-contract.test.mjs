@@ -46,3 +46,20 @@ test("Nature Frontiers Facebook draft form cannot offer prohibited product or af
   assert.match(html, /campaignId:null/);
   assert.match(html, /disclosureRequired:false,commercial:false/);
 });
+
+test("dashboard exposes authenticated read-only production queue diagnostics", () => {
+  assert.match(html, /api\("\/api\/jobs\/queue-diagnostics\?limit=100"\)/);
+  assert.match(html, /Production queue operations/);
+  assert.match(html, /diagnosticsQueued/);
+  assert.match(html, /diagnosticsDispatchable/);
+  assert.match(html, /diagnosticsHeld/);
+  assert.match(html, /queueDiagnosticsBlockers/);
+  assert.match(html, /queueDiagnosticsItems/);
+  assert.match(html, /renderQueueDiagnostics\(\)/);
+  assert.match(html, /cell\.textContent=String\(value\)/,
+    "queue diagnostics must render untrusted job values as text, not HTML");
+  assert.match(html, /data\.readOnly===true/);
+  assert.match(html, /data\.publishingEnabled===false/);
+  assert.doesNotMatch(html, /queueDiagnostics.*retry/i,
+    "read-only diagnostics must not introduce retry controls");
+});
