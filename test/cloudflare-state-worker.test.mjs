@@ -217,3 +217,48 @@ test("GET /api/state serves the legacy dashboard payload and durable revision en
   assert.equal(body.campaignValidation.ok, false);
   assert.equal(body.state.facebookDrafts.length, 0);
 });
+
+test("task catalog is exposed as a read-only allowlist and never enables publishing", async () => {
+  const response = await handleRequest(new Request("https://state.example/api/tasks", {
+    headers: { "x-operator-token": "a".repeat(24) }
+  }), { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24) });
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.deepEqual(body.tasks, ["validate-schedule", "check-captions", "production-readiness", "test-suite", "validate-campaigns"]);
+  assert.equal(body.publicPublishingEnabled, false);
+  assert.equal(body.readOnly, true);
+});
+
+test("Facebook idea API returns a deterministic research-first idea without creating a draft", async () => {
+  const state = validState();
+  const database = { prepare() { return { bind() { return this; }, async first() { return { revision: 3, state_json: JSON.stringify(state) }; } }; } };
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: database };
+  const headers = { "x-operator-token": "a".repeat(24) };
+  const first = await handleRequest(new Request("https://state.example/api/facebook/idea?date=2026-11-08", { headers }), env);
+  const second = await handleRequest(new Request("https://state.example/api/facebook/idea?date=2026-11-08", { headers }), env);
+  const firstBody = await first.json();
+  const secondBody = await second.json();
+  assert.equal(first.status, 200);
+  assert.deepEqual(firstBody, secondBody);
+  assert.equal(firstBody.idea.date, "2026-11-08");
+  assert.equal(firstBody.idea.publishReady, false);
+  assert.deepEqual(firstBody.idea.factualClaims, []);
+  assert.equal(firstBody.publishingEnabled, false);
+  assert.equal(firstBody.readOnly, true);
+  assert.deepEqual(state.facebookDrafts, []);
+});
+
+test("Facebook idea API rejects invalid dates and excludes overlapping active topics", async () => {
+  const state = validState();
+  state.facebookDrafts = [{ id: "existing", topic: "How to observe wildlife without disturbing natural behaviour", status: "DRAFT" }];
+  const database = { prepare() { return { bind() { return this; }, async first() { return { revision: 1, state_json: JSON.stringify(state) }; } }; } };
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: database };
+  const headers = { "x-operator-token": "a".repeat(24) };
+  const invalid = await handleRequest(new Request("https://state.example/api/facebook/idea?date=2026-02-30", { headers }), env);
+  assert.equal(invalid.status, 400);
+  const valid = await handleRequest(new Request("https://state.example/api/facebook/idea?date=2026-11-08", { headers }), env);
+  const body = await valid.json();
+  assert.equal(valid.status, 200);
+  assert.notEqual(body.idea.topic, state.facebookDrafts[0].topic);
+  assert.equal(body.idea.publishReady, false);
+});
