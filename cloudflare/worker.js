@@ -2,6 +2,7 @@ import { normalizeDashboardState, toDashboardStateResponse } from "./dashboard-s
 import { generateDashboardFacebookIdea } from "./facebook-idea-compat.js";
 import { authorizeContentJobRetry, claimWorkerLease, completeWorkerLease, expireWorkerLease, heartbeatWorkerLease, transitionContentJob } from "./content-job-lifecycle-compat.js";
 import { canonicalAuthoringScriptSha256 } from "./authoring-review-compat.js";
+import { safeDraftItem, validateReservedPublicationSlot } from "./draft-compat.js";
 
 const STATE_ID = 1;
 const MAX_STATE_BYTES = 2 * 1024 * 1024;
@@ -368,6 +369,45 @@ async function handleRequest(request, env) {
     const saved = await commitStateRevision(env, current, updated, actor, "CONTENT_JOB_CREATED", { jobId: job.id, idempotencyKey });
     if (saved.error) return saved.error;
     return json({ job, revision: saved.row.revision, idempotentReplay: false, publishingEnabled: false }, 201, { etag: '"' + saved.row.revision + '"' });
+  }
+
+  if (url.pathname === "/api/drafts/update" && method === "POST") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
+    let input;
+    try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+    let item;
+    try { item = safeDraftItem(input); }
+    catch (error) { return json({ error: error.message || "Draft validation failed" }, 400); }
+    const current = await currentState(env);
+    if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(current.state_json)); } catch { return json({ error: "Persisted state is invalid", code: "STATE_INVALID" }, 503); }
+    const index = state.queueItems.findIndex(existing => existing.id === item.id);
+    if (index < 0) return json({ error: "Queue item not found" }, 404);
+    const old = state.queueItems[index];
+    const spacing = validateReservedPublicationSlot({ id: item.id, scheduledAt: item.scheduledAt }, state, item.id);
+    if (!spacing.valid) return json({ error: "Updated schedule slot conflicts with an existing reservation or violates minimum publication spacing", blockers: spacing.errors, publishingEnabled: false }, 409);
+    if (state.queueItems.some(existing => existing.id !== item.id && existing.scheduledDate === item.scheduledDate &&
+        existing.reservationType === "SCHEDULED_SLOT" && String(existing.status ?? "").toUpperCase() !== "CANCELLED")) {
+      return json({ error: "Another draft already occupies this dated schedule slot" }, 409);
+    }
+    if (state.jobs.some(existing => existing.kind === "CONTENT_PRODUCTION" &&
+        !["CANCELLED", "REJECTED"].includes(String(existing.state ?? "").toUpperCase()) &&
+        existing.scheduledSlot?.date === item.scheduledDate &&
+        existing.id !== state.jobs.find(job => job.kind === "CONTENT_PRODUCTION" && job.idempotencyKey === "draft:" + item.id)?.id)) {
+      return json({ error: "Another production job already occupies this dated schedule slot" }, 409);
+    }
+    const updatedItem = {
+      ...old, ...item, status: old.status,
+      rightsConfirmed: old.rightsConfirmed,
+      complianceReviewed: old.complianceReviewed,
+      updatedAt: new Date().toISOString()
+    };
+    const queueItems = [...state.queueItems]; queueItems[index] = updatedItem;
+    const saved = await commitStateRevision(env, current, { ...state, queueItems }, actor, "DRAFT_EDITED", { itemId: item.id });
+    if (saved.error) return saved.error;
+    return json({ item: updatedItem, revision: saved.row.revision, publishingEnabled: false }, 200, { etag: '"' + saved.row.revision + '"' });
   }
 
   if (url.pathname === "/api/jobs/authoring/review" && method === "POST") {
