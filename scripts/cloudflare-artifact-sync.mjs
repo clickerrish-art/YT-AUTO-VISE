@@ -95,6 +95,13 @@ function resolveArtifact(sourcePath) {
   }
   const resolved = path.resolve(root, sourcePath);
   if (!resolved.startsWith(root + path.sep)) throw new Error("Artifact path escaped the repository");
+  let cursor = root;
+  const segments = sourcePath.split("/");
+  for (const segment of segments.slice(0, -1)) {
+    cursor = path.join(cursor, segment);
+    const parent = fs.lstatSync(cursor);
+    if (parent.isSymbolicLink() || !parent.isDirectory()) throw new Error("Artifact parent path contains a symlink or non-directory: " + sourcePath);
+  }
   const stat = fs.lstatSync(resolved);
   if (stat.isSymbolicLink() || !stat.isFile()) throw new Error("Artifact must be a real regular file: " + sourcePath);
   return { resolved, sizeBytes: stat.size };
@@ -163,6 +170,8 @@ async function uploadArtifact(job, descriptor, existing) {
 }
 
 async function main() {
+  const stateDirectoryStat = fs.lstatSync(stateDir);
+  if (stateDirectoryStat.isSymbolicLink() || !stateDirectoryStat.isDirectory()) throw new Error("Dashboard state directory is missing or unsafe");
   const stateStat = fs.lstatSync(stateFile);
   if (stateStat.isSymbolicLink() || !stateStat.isFile()) throw new Error("Dashboard state file is missing or unsafe");
   const state = JSON.parse(fs.readFileSync(stateFile, "utf8"));
