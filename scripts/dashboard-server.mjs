@@ -2183,7 +2183,8 @@ const server = http.createServer(async (req, res) => {
         const configuredChannelErrors = validateConfiguredSonicVhibezChannel(parentReceipt, configuredSonicVhibezChannelId);
         if (!configuredSonicVhibezChannelId || !/^UC[A-Za-z0-9_-]{22}$/.test(configuredSonicVhibezChannelId)) return json(res, 503, { error: "Parent binding requires a valid owner-configured SONICVHIBEZ_CHANNEL_ID; no channel ID may be inferred from the receipt" });
         if (configuredChannelErrors.length || parentReceipt.jobId !== parentJob.id || parentReceipt.videoId !== parentAttempt.remoteVideoId || parentReceipt.channelId !== parentAttempt.channelId || parentReceipt.privacyStatus !== "private" || parentReceipt.remoteStatusVerified !== true || parentReceipt.channelHistoryReconciled !== true || !Number.isFinite(Date.parse(parentReceipt.historyVerifiedAt ?? "")) ||
-            typeof parentReceipt.historyVerifiedBy !== "string" || parentReceipt.historyVerifiedBy.trim().length < 2 || !Number.isSafeInteger(parentReceipt.historyVideoCount) || parentReceipt.historyVideoCount < 1) return json(res, 409, { error: "Parent receipt does not independently verify the exact private video on the configured SonicVhibez channel" + (configuredChannelErrors.length ? ": " + configuredChannelErrors.join("; ") : "") });
+            typeof parentReceipt.historyVerifiedBy !== "string" || parentReceipt.historyVerifiedBy.trim().length < 2 ||
+            !/^[a-f0-9]{64}$/.test(parentReceipt.historyReconciliationSha256 ?? "") || !Number.isSafeInteger(parentReceipt.historyVideoCount) || parentReceipt.historyVideoCount < 1) return json(res, 409, { error: "Parent receipt does not independently verify the exact private video on the configured SonicVhibez channel" + (configuredChannelErrors.length ? ": " + configuredChannelErrors.join("; ") : "") });
         parentReceipt.remoteVideoId = parentReceipt.videoId;
         const parentArtifact = (parentJob.outputArtifacts ?? []).find(entry => entry.path === body.parentMediaPath);
         if (!parentArtifact || !/^[a-f0-9]{64}$/.test(parentArtifact.sha256 ?? "")) return json(res, 409, { error: "parentMediaPath must exactly match a checksummed artifact on the selected parent job" });
@@ -2439,7 +2440,8 @@ const server = http.createServer(async (req, res) => {
             const receiptFile = resolveRepositoryFile(path.relative(root, path.join(path.resolve(root, process.env.UPLOAD_LOG_DIR ?? "run-logs"), parentAttempt.receiptPath)));
             const receipt = JSON.parse(fs.readFileSync(receiptFile, "utf8"));
             if (receipt.jobId !== parentJob.id || receipt.videoId !== parentAttempt.remoteVideoId || receipt.channelId !== job.shortParentRelationship.parentChannelId || receipt.channelTitle !== "SonicVhibez" || receipt.privacyStatus !== "private" || receipt.remoteStatusVerified !== true || receipt.channelHistoryReconciled !== true || !Number.isFinite(Date.parse(receipt.historyVerifiedAt ?? "")) ||
-              typeof receipt.historyVerifiedBy !== "string" || receipt.historyVerifiedBy.trim().length < 2 || !Number.isSafeInteger(receipt.historyVideoCount) || receipt.historyVideoCount < 1) return json(res, 409, { error: "Parent upload receipt no longer proves the exact approved remote parent", publishingEnabled: false });
+              typeof receipt.historyVerifiedBy !== "string" || receipt.historyVerifiedBy.trim().length < 2 ||
+              !/^[a-f0-9]{64}$/.test(receipt.historyReconciliationSha256 ?? "") || !Number.isSafeInteger(receipt.historyVideoCount) || receipt.historyVideoCount < 1) return json(res, 409, { error: "Parent upload receipt no longer proves the exact approved remote parent", publishingEnabled: false });
             const currentParentApprovalSha256 = crypto.createHash("sha256").update(JSON.stringify(parentJob.humanApproval)).digest("hex");
             if (currentParentApprovalSha256 !== job.shortParentRelationship.parentApprovalSha256) return json(res, 409, { error: "Parent approval changed after the Short relationship was bound", publishingEnabled: false });
           } catch {
@@ -2591,6 +2593,7 @@ const server = http.createServer(async (req, res) => {
               receipt.channelHistoryReconciled !== true ||
               !Number.isFinite(Date.parse(receipt.historyVerifiedAt ?? "")) ||
               typeof receipt.historyVerifiedBy !== "string" || receipt.historyVerifiedBy.trim().length < 2 ||
+              !/^[a-f0-9]{64}$/.test(receipt.historyReconciliationSha256 ?? "") ||
               !Number.isSafeInteger(receipt.historyVideoCount) || receipt.historyVideoCount < 1 ||
               receipt.publishingEnabled !== false ||
               !Number.isFinite(Date.parse(receipt.actualPublishedAt ?? ""))) {
@@ -2690,6 +2693,7 @@ const server = http.createServer(async (req, res) => {
             receipt.remoteStatusVerified !== true || receipt.channelHistoryReconciled !== true ||
             !Number.isFinite(Date.parse(receipt.historyVerifiedAt ?? "")) ||
               typeof receipt.historyVerifiedBy !== "string" || receipt.historyVerifiedBy.trim().length < 2 ||
+              !/^[a-f0-9]{64}$/.test(receipt.historyReconciliationSha256 ?? "") ||
             !Number.isSafeInteger(receipt.historyVideoCount) || receipt.historyVideoCount < 1 ||
             receipt.publishingEnabled !== false ||
             !Number.isFinite(Date.parse(receipt.actualPublishedAt ?? "")) ||
