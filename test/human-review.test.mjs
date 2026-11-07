@@ -83,3 +83,27 @@ test("approval becomes stale when the reviewed thumbnail checksum changes", () =
   const changedSet = { ...artifact, relatedArtifacts: [artifact, { ...thumbnail, sha256: "e".repeat(64) }] };
   assert.equal(isReviewCurrent(review, { artifact: changedSet, metadataVersion: base.metadataVersion, rightsEvidence }), false);
 });
+
+
+test("final review must use the exact artifact, metadata and thumbnail covered by technical validation", () => {
+  const job = {
+    metadataPath: "metadata/job.json",
+    metadataVersion: "c".repeat(64),
+    outputArtifacts: [{ path: artifact.path, sha256: artifact.sha256 }],
+    thumbnailArtifact: { path: "media/fixture-thumbnail.jpg", sha256: "d".repeat(64) },
+    validationResults: {
+      passed: true,
+      metadataVersion: "c".repeat(64),
+      artifacts: [{ path: artifact.path, sha256: artifact.sha256 }],
+      thumbnail: { path: "media/fixture-thumbnail.jpg", sha256: "d".repeat(64) },
+      captionsPath: "captions/fixture.srt",
+      captionsSha256: "e".repeat(64)
+    }
+  };
+  const input = { job, artifactPath: artifact.path, artifactSha256: artifact.sha256, metadataPath: job.metadataPath, metadataVersion: job.metadataVersion };
+  assert.deepEqual(validateTechnicalReviewBinding(input), []);
+  assert.match(validateTechnicalReviewBinding({ ...input, artifactSha256: "f".repeat(64) }).join("; "), /exact file that passed technical validation/);
+  assert.match(validateTechnicalReviewBinding({ ...input, metadataPath: "metadata/other.json" }).join("; "), /metadata path must match/);
+  assert.match(validateTechnicalReviewBinding({ ...input, metadataVersion: "a".repeat(64) }).join("; "), /metadata checksum/);
+  assert.match(validateTechnicalReviewBinding({ ...input, job: { ...job, validationResults: { ...job.validationResults, thumbnail: { path: job.thumbnailArtifact.path, sha256: "f".repeat(64) } } } }).join("; "), /exact recorded thumbnail/);
+});
