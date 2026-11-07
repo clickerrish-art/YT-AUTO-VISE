@@ -175,7 +175,7 @@ function recoveryFixture(root, { pid = 2147483647, token = "12345678-1234-4234-8
   fs.writeFileSync(temporaryPath, JSON.stringify(payload), { mode: 0o600 });
   const lockPath = path.join(stateDir, ".restore-operation.lock");
   fs.writeFileSync(lockPath, JSON.stringify({ format: "sonicvhibez-restore-operation-lock", version: 1, token, pid, createdAt: new Date().toISOString(), operation: "backup" }), { mode: 0o600 });
-  return { stateDir, backupDir, outputPath, temporaryPath, lockPath, token };
+  return { stateDir, backupDir, outputPath, temporaryPath, lockPath, token, lockToken: token };
 }
 test("interrupted backup recovery requires owner attestation and exact token", t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-recover-attestation-")); t.after(() => fs.rmSync(root, { recursive: true, force: true }));
