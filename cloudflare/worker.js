@@ -400,25 +400,23 @@ async function handleRequest(request, env) {
     const authorization = updated.retryAuthorizations.at(-1);
     const jobs = [...state.jobs];
     jobs[index] = updated;
-    const audit = [{
-      action: "CONTENT_JOB_RETRY_AUTHORIZED", jobId: updated.id, from: previous.state,
-      to: updated.state, reason: authorization.reason, attemptCount: updated.attemptCount,
-      maxAttempts: updated.retryPolicy.maxAttempts, overrideRetryLimit: authorization.overrideRetryLimit,
-      at: authorization.at
-    }];
-    if (previous.state === "DEAD_LETTER") {
-      audit.push({ action: "CONTENT_JOB_DEAD_LETTER_RECOVERED", jobId: updated.id, reason: authorization.reason, at: authorization.at });
-    }
-    const saved = await commitStateRevision(env, current, { ...state, jobs }, actor, audit[0].action, audit[0]);
+    const nextState = {
+      ...state,
+      jobs,
+      audit: previous.state === "DEAD_LETTER"
+        ? [...state.audit, {
+            id: crypto.randomUUID(), action: "CONTENT_JOB_DEAD_LETTER_RECOVERED",
+            jobId: updated.id, actor, reason: authorization.reason, at: authorization.at
+          }]
+        : state.audit
+    };
+    const saved = await commitStateRevision(env, current, nextState, actor, "CONTENT_JOB_RETRY_AUTHORIZED", {
+      jobId: updated.id, from: previous.state, to: updated.state,
+      reason: authorization.reason, attemptCount: updated.attemptCount,
+      maxAttempts: updated.retryPolicy.maxAttempts,
+      overrideRetryLimit: authorization.overrideRetryLimit, at: authorization.at
+    });
     if (saved.error) return saved.error;
-    if (audit.length > 1) {
-      const currentAfter = saved.row;
-      const second = await commitStateRevision(env, currentAfter, { ...saved.state, audit: [...saved.state.audit, {
-        id: crypto.randomUUID(), ...audit[1], actor
-      }] }, actor, audit[1].action, { jobId: updated.id, reason: authorization.reason });
-      if (second.error) return second.error;
-      return json({ job: updated, revision: second.row.revision, publishingEnabled: false, retryAuthorized: true }, 200, { etag: '"' + second.row.revision + '"' });
-    }
     return json({ job: updated, revision: saved.row.revision, publishingEnabled: false, retryAuthorized: true }, 200, { etag: '"' + saved.row.revision + '"' });
   }
 
