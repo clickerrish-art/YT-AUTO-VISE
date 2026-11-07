@@ -9,6 +9,7 @@ const completeSnapshot = {
   channelId,
   verifiedAt: "2026-11-06T18:00:00.000Z",
   verifiedBy: "history-reviewer@example.test",
+  reconciliationSha256: "a".repeat(64),
   history: [{
     id: "remote-video-123",
     status: "private",
