@@ -197,6 +197,35 @@ test("reconciled successful upload ledger entries do not count as future schedul
 });
 
 
+test("verified upload ledger attempts must bind to the exact remote history ID, timestamp and format", () => {
+  const history = [{
+    id: "remote-video-1", status: "private",
+    actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form"
+  }];
+  const base = {
+    history, historyVerified: true,
+    proposedAt: "2026-10-23T15:00:00.000Z",
+    jobId: "job-next", format: "long_form"
+  };
+  const validAttempt = {
+    jobId: "job-long-form-1", remoteVideoId: "remote-video-1",
+    status: "PRIVATE_UPLOAD_VERIFIED",
+    actualPublishedAt: "2026-10-20T15:00:00.000Z",
+    format: "long_form"
+  };
+  for (const attempt of [
+    { ...validAttempt, remoteVideoId: "missing-remote-video" },
+    { ...validAttempt, remoteVideoId: null },
+    { ...validAttempt, actualPublishedAt: "2026-10-20T15:00:01.000Z" },
+    { ...validAttempt, format: "short" }
+  ]) {
+    const result = evaluateNextPublication({ ...base, pendingAttempts: [attempt] });
+    assert.equal(result.valid, false, "a locally verified receipt must not bypass remote-history reconciliation");
+  }
+  const result = evaluateNextPublication({ ...base, pendingAttempts: [validAttempt] });
+  assert.equal(result.valid, true, result.errors.join("; "));
+});
+
 test("publication timestamps reject normalized invalid dates, missing zones, and malformed offsets", () => {
   const base = { history: [{ id: "remote-1", status: "private", actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form" }], historyVerified: true, jobId: "next", format: "long_form" };
   for (const proposedAt of [
