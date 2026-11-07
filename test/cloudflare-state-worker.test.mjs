@@ -488,3 +488,68 @@ test("dead-letter retry requires an explicit one-attempt override and records re
   assert.equal(body.job.retryAuthorizations[0].overrideRetryLimit, true);
   assert.ok(snapshot().state.audit.some(entry => entry.action === "CONTENT_JOB_DEAD_LETTER_RECOVERED"));
 });
+
+
+test("worker leases are claimed, heartbeated and completed with token fencing and idempotency", async () => {
+  const state = validState();
+  state.jobs = [{
+    id: "leased-content", kind: "CONTENT_PRODUCTION", state: "QUEUED",
+    transitionHistory: [], attemptCount: 0, retryPolicy: { maxAttempts: 2, requiresOperatorRetry: true },
+    leaseHistory: [], workerLease: null
+  }];
+  const { database, snapshot } = mutableDatabase(state);
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const send = (path, body) => handleRequest(new Request("https://state.example" + path, {
+    method: "POST",
+    headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
+    body: JSON.stringify(body)
+  }), env);
+  const claim = await send("/api/jobs/lease/claim", { jobId: "leased-content", workerId: "runner-01" });
+  const claimBody = await claim.json();
+  assert.equal(claim.status, 200);
+  assert.equal(claimBody.job.state, "GENERATING");
+  assert.equal(claimBody.job.attemptCount, 1);
+  assert.equal(typeof claimBody.leaseToken, "string");
+  const badHeartbeat = await send("/api/jobs/lease/heartbeat", { jobId: "leased-content", leaseToken: "wrong-token" });
+  assert.equal(badHeartbeat.status, 409);
+  const heartbeat = await send("/api/jobs/lease/heartbeat", { jobId: "leased-content", leaseToken: claimBody.leaseToken });
+  assert.equal(heartbeat.status, 200);
+  assert.equal((await heartbeat.json()).job.leaseHistory.at(-1).action, "HEARTBEAT");
+  const completionPayload = { jobId: "leased-content", leaseToken: claimBody.leaseToken, nextState: "BLOCKED", result: { errorDetails: { code: "MISSING_PREREQUISITE", retryable: false } } };
+  const completion = await send("/api/jobs/lease/complete", completionPayload);
+  const completionBody = await completion.json();
+  assert.equal(completion.status, 200);
+  assert.equal(completionBody.job.state, "BLOCKED");
+  assert.equal(completionBody.job.workerLease, null);
+  const replay = await send("/api/jobs/lease/complete", completionPayload);
+  assert.equal(replay.status, 200);
+  assert.equal((await replay.json()).idempotent, true);
+  assert.equal(snapshot().state.audit.at(-1).action, "WORKER_STAGE_COMPLETED");
+});
+
+test("worker lease expiry is reaped and generated media cannot bypass repository artifact verification", async () => {
+  const state = validState();
+  state.jobs = [{
+    id: "expired-content", kind: "CONTENT_PRODUCTION", state: "GENERATING",
+    transitionHistory: [], attemptCount: 1, retryPolicy: { maxAttempts: 2, requiresOperatorRetry: true },
+    workerLease: { workerId: "runner-old", tokenHash: "0".repeat(64), claimedAt: "2026-11-07T00:00:00.000Z", heartbeatAt: "2026-11-07T00:00:00.000Z", expiresAt: "2026-11-07T00:01:00.000Z" },
+    leaseHistory: []
+  }];
+  const { database, snapshot } = mutableDatabase(state);
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const send = (path, body) => handleRequest(new Request("https://state.example" + path, {
+    method: "POST",
+    headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
+    body: JSON.stringify(body)
+  }), env);
+  const generated = await send("/api/jobs/lease/complete", { jobId: "expired-content", leaseToken: "not-a-token", nextState: "GENERATED", result: { outputArtifacts: [{ path: "media/fake.mp4", sha256: "a".repeat(64) }] } });
+  assert.equal(generated.status, 409);
+  assert.equal((await generated.json()).code, "ARTIFACT_VERIFICATION_REQUIRED");
+  const reaped = await send("/api/jobs/lease/reap", { jobId: "expired-content" });
+  const reapedBody = await reaped.json();
+  assert.equal(reaped.status, 200);
+  assert.equal(reapedBody.job.state, "FAILED");
+  assert.equal(reapedBody.job.workerLease, null);
+  assert.equal(reapedBody.job.errorDetails.code, "WORKER_LEASE_EXPIRED");
+  assert.equal(snapshot().state.audit.at(-1).action, "WORKER_LEASE_EXPIRED");
+});
