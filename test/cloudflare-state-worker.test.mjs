@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import { normalizeDashboardState, toDashboardStateResponse } from "../cloudflare/dashboard-state-compat.js";
 import { authenticate, constantTimeEqual, handleRequest, operatorIdentity, validateDashboardState } from "../cloudflare/worker.js";
 import { canonicalAuthoringScriptSha256 } from "../cloudflare/authoring-review-compat.js";
+import { readFileSync } from "node:fs";
+import { DEFAULT_CAMPAIGNS, manageCampaign, validateCampaigns } from "../cloudflare/campaigns-compat.js";
 
 const validState = () => ({
   version: 1,
@@ -674,4 +676,97 @@ test("draft editing blocks another reserved slot on the same Johannesburg calend
   assert.equal(response.status, 409);
   assert.equal(snapshot().revision, 1);
   assert.equal(snapshot().state.queueItems[1].scheduledDate, "2026-11-24");
+});
+
+
+test("Worker campaign defaults exactly match repository config and keep Safari inactive", () => {
+  const repositoryConfig = JSON.parse(readFileSync(new URL("../config/campaigns.json", import.meta.url), "utf8"));
+  assert.deepEqual(DEFAULT_CAMPAIGNS, repositoryConfig.campaigns);
+  assert.deepEqual(validateCampaigns({ version: 1, campaigns: DEFAULT_CAMPAIGNS }), []);
+  assert.equal(DEFAULT_CAMPAIGNS.find(campaign => campaign.type === "safari_affiliate").status, "INACTIVE");
+});
+
+test("campaign preview and activation require the exact approved Selar destination and disclosure", async () => {
+  const state = validState();
+  const { database, snapshot } = mutableDatabase(state);
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const send = body => handleRequest(new Request("https://state.example/api/campaigns/manage", {
+    method: "POST",
+    headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
+    body: JSON.stringify(body)
+  }), env);
+  const disclosureText = "Promotional link: product details and current terms are available on the seller page.";
+  const preview = await send({
+    action: "preview", campaignId: "selar-wildlife-vault",
+    destinationUrl: "https://selar.com/0u19v8u99l", disclosureText
+  });
+  const previewBody = await preview.json();
+  assert.equal(preview.status, 200);
+  assert.equal(previewBody.previewOnly, true);
+  assert.equal(previewBody.campaign.pendingDestinationUrl, "https://selar.com/0u19v8u99l");
+  const activate = await send({
+    action: "activate", campaignId: "selar-wildlife-vault",
+    destinationUrl: "https://selar.com/0u19v8u99l", disclosureText, confirmOwnerApproval: true
+  });
+  const activateBody = await activate.json();
+  assert.equal(activate.status, 200);
+  assert.equal(activateBody.campaign.status, "ACTIVE_FOR_DRAFTS_ONLY");
+  assert.equal(activateBody.campaign.approval.approvedBy, "sonicvhibez-owner");
+  assert.equal(activateBody.publicPublishingEnabled, false);
+  assert.equal(snapshot().state.audit.at(-1).action, "CAMPAIGN_ACTIVATE");
+  const safari = await send({
+    action: "activate", campaignId: "safari-affiliate-inactive",
+    destinationUrl: "https://example.com/affiliate", disclosureText: "A clearly disclosed affiliate relationship", confirmOwnerApproval: true
+  });
+  assert.equal(safari.status, 409);
+  assert.equal(snapshot().state.campaigns.find(campaign => campaign.type === "safari_affiliate").status, "INACTIVE");
+});
+
+test("draft creation persists a queue item and linked production job with safe defaults", async () => {
+  const { database, snapshot } = mutableDatabase(validState());
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const payload = {
+    id: "wildlife-draft-01", title: "Wildlife behaviour explained",
+    topic: "Observe animal behaviour responsibly in natural habitats",
+    contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: "2026-11-10",
+    productUrl: "https://selar.com/0u19v8u99l"
+  };
+  const request = () => handleRequest(new Request("https://state.example/api/drafts", {
+    method: "POST",
+    headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
+    body: JSON.stringify(payload)
+  }), env);
+  const created = await request();
+  const body = await created.json();
+  assert.equal(created.status, 201);
+  assert.equal(body.item.status, "DRAFT_REVIEW_REQUIRED");
+  assert.equal(body.job.state, "QUEUED");
+  assert.equal(body.job.idempotencyKey, "draft:wildlife-draft-01");
+  assert.equal(body.job.publishingEnabled, false);
+  assert.equal(snapshot().state.queueItems.length, 1);
+  assert.equal(snapshot().state.jobs.length, 1);
+  assert.equal(snapshot().state.audit.at(-1).action, "CONTENT_JOB_QUEUED");
+  const duplicate = await request();
+  assert.equal(duplicate.status, 409);
+  assert.equal(snapshot().revision, 2);
+});
+
+test("draft creation blocks invalid campaigns and any non-allowlisted destination", async () => {
+  const state = validState();
+  state.campaigns = [{ id: "selar-wildlife-vault", type: "selar_digital_product", status: "ACTIVE_FOR_DRAFTS_ONLY", destinationUrl: "https://evil.example", ownerApproved: true, destinationValidation: "exact_approved_allowlist", disclosureRequired: true, disclosureText: "Promotional disclosure" }];
+  const { database, snapshot } = mutableDatabase(state);
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const response = await handleRequest(new Request("https://state.example/api/drafts", {
+    method: "POST",
+    headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
+    body: JSON.stringify({
+      id: "wildlife-draft-02", title: "Wildlife behaviour explained",
+      topic: "Observe animal behaviour responsibly in natural habitats",
+      contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: "2026-11-10",
+      productUrl: "https://selar.com/0u19v8u99l"
+    })
+  }), env);
+  assert.equal(response.status, 409);
+  assert.equal(snapshot().revision, 1);
+  assert.equal(snapshot().state.queueItems.length, 0);
 });
