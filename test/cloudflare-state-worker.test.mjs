@@ -1376,3 +1376,12 @@ test("repository runner preflight blocks production when private R2 headroom is 
   assert.equal((await response.json()).code, "R2_ARTIFACT_HEADROOM_LOW");
   assert.equal(writes, 0);
 });
+
+
+test("dashboard job cards list private R2 artifacts and download them through operator authentication", () => {
+  const html = readFileSync(new URL("../public/dashboard.html", import.meta.url), "utf8");
+  assert.ok(html.includes('api("/api/artifacts?jobId="'));
+  assert.ok(html.includes('data-artifact-download='));
+  assert.ok(html.includes('"/api/artifacts/"+encodeURIComponent(button.dataset.artifactDownload)+"/download"'));
+  assert.ok(html.includes('"x-operator-token":$("token").value'));
+});
