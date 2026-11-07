@@ -827,7 +827,7 @@ test("publication readiness remains blocked until complete remote history and on
 
 test("filesystem-heavy operations fail explicitly until the repository runner is connected", async () => {
   const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner" };
-  for (const [method, path] of [["POST", "/api/tasks/run"], ["POST", "/api/jobs/produce"], ["GET", "/api/jobs/review/bundle?jobId=job-1"]]) {
+  for (const [method, path] of [["POST", "/api/tasks/run"], ["POST", "/api/jobs/produce"], ["GET", "/api/jobs/review/bundle?jobId=job-1"], ["POST", "/api/jobs/render-recovery/reconcile"]]) {
     const response = await handleRequest(new Request("https://state.example" + path, {
       method, headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
       body: method === "POST" ? JSON.stringify({ taskId: "production-readiness" }) : undefined
@@ -841,7 +841,7 @@ test("filesystem-heavy operations fail explicitly until the repository runner is
 
 test("Meta and YouTube provider operations fail closed without external adapters", async () => {
   const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner" };
-  for (const [method, path] of [["POST", "/api/uploads/reconcile"], ["POST", "/api/facebook/verify-page"], ["POST", "/api/facebook/drafts"]]) {
+  for (const [method, path] of [["POST", "/api/uploads/reconcile"], ["POST", "/api/facebook/verify-page"], ["POST", "/api/facebook/drafts"], ["POST", "/api/facebook/publish"]]) {
     const response = await handleRequest(new Request("https://state.example" + path, {
       method, headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
       body: JSON.stringify({})
