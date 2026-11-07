@@ -1,6 +1,7 @@
 import { normalizeDashboardState, toDashboardStateResponse } from "./dashboard-state-compat.js";
 import { generateDashboardFacebookIdea } from "./facebook-idea-compat.js";
 import { authorizeContentJobRetry, claimWorkerLease, completeWorkerLease, expireWorkerLease, heartbeatWorkerLease, transitionContentJob } from "./content-job-lifecycle-compat.js";
+import { canonicalAuthoringScriptSha256 } from "./authoring-review-compat.js";
 
 const STATE_ID = 1;
 const MAX_STATE_BYTES = 2 * 1024 * 1024;
@@ -367,6 +368,80 @@ async function handleRequest(request, env) {
     const saved = await commitStateRevision(env, current, updated, actor, "CONTENT_JOB_CREATED", { jobId: job.id, idempotencyKey });
     if (saved.error) return saved.error;
     return json({ job, revision: saved.row.revision, idempotentReplay: false, publishingEnabled: false }, 201, { etag: '"' + saved.row.revision + '"' });
+  }
+
+  if (url.pathname === "/api/jobs/authoring/review" && method === "POST") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
+    let input;
+    try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+    if (!input || typeof input.jobId !== "string" || !["APPROVE", "REJECT"].includes(input.decision) ||
+        typeof input.scriptSha256 !== "string" || !/^[a-f0-9]{64}$/.test(input.scriptSha256) ||
+        typeof input.reason !== "string" || input.reason.trim().length < 5 || input.reason.length > 1000) {
+      return json({ error: "jobId, script SHA-256, APPROVE/REJECT decision and a 5–1000 character review reason are required" }, 400);
+    }
+    const current = await currentState(env);
+    if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(current.state_json)); } catch { return json({ error: "Persisted state is invalid", code: "STATE_INVALID" }, 503); }
+    const index = state.jobs.findIndex(job => job.kind === "CONTENT_PRODUCTION" && job.id === input.jobId);
+    if (index < 0) return json({ error: "Content job not found" }, 404);
+    const job = state.jobs[index];
+    if (job.state !== "QUEUED" || !job.authoring || job.authoring.status !== "AWAITING_HUMAN_EDITORIAL_REVIEW") {
+      return json({ error: "Only a queued job with a persisted authoring draft can receive script review" }, 409);
+    }
+    const script = job.authoring.result?.script;
+    if (!script || typeof script !== "object" || Array.isArray(script)) return json({ error: "Structured generated script is missing" }, 409);
+    let actualScriptSha256;
+    try { actualScriptSha256 = await canonicalAuthoringScriptSha256(script); }
+    catch (error) { return json({ error: error.message || "Script hash could not be calculated" }, 409); }
+    if (input.scriptSha256 !== actualScriptSha256) return json({ error: "Script changed after review was prepared; refresh the draft and review its current SHA-256" }, 409);
+    const existingApproval = job.authoring.scriptApproval;
+    if (input.decision === "APPROVE" && existingApproval?.decision === "APPROVE" && existingApproval.scriptSha256 === actualScriptSha256) {
+      const exactRetry = existingApproval.reviewer === actor && existingApproval.reason === input.reason.trim();
+      const expectedReceiptSha256 = await sha256(JSON.stringify({
+        jobId: job.id, decision: "APPROVE", scriptSha256: actualScriptSha256,
+        reviewer: actor, reviewedAt: existingApproval.reviewedAt, reason: input.reason.trim()
+      }));
+      if (!exactRetry || existingApproval.approvalSha256 !== expectedReceiptSha256) {
+        return json({ error: "Script is already approved under a different review receipt; changed reviewer, reason or receipt cannot reuse the existing approval" }, 409);
+      }
+      return json({ job, scriptReview: existingApproval, revision: current.revision, reused: true, publishable: false, publishingEnabled: false });
+    }
+    job.authoring.scriptSha256 = actualScriptSha256;
+    const reviewedAt = new Date().toISOString();
+    const decision = {
+      decision: input.decision, scriptSha256: actualScriptSha256, reviewer: actor,
+      reviewedAt, reason: input.reason.trim()
+    };
+    decision.approvalSha256 = await sha256(JSON.stringify({
+      jobId: job.id, decision: input.decision, scriptSha256: actualScriptSha256,
+      reviewer: actor, reviewedAt, reason: input.reason.trim()
+    }));
+    if (input.decision === "APPROVE") {
+      job.authoring.scriptApproval = decision;
+      job.authoring.scriptReview = decision;
+    } else {
+      delete job.authoring.scriptApproval;
+      delete job.authoring.narrationApproval;
+      job.authoring.scriptReview = decision;
+      delete job.authoring.narrationStage;
+      job.authoring.status = "REJECTED";
+    }
+    const jobs = [...state.jobs]; jobs[index] = job;
+    const action = input.decision === "APPROVE" ? "SCRIPT_REVISION_APPROVED_FOR_NARRATION" : "SCRIPT_REVISION_REJECTED";
+    const saved = await commitStateRevision(env, current, { ...state, jobs }, actor, action, {
+      jobId: job.id, scriptSha256: actualScriptSha256, reviewer: actor,
+      reason: input.reason.trim(), approvalSha256: decision.approvalSha256, at: reviewedAt
+    });
+    if (saved.error) return saved.error;
+    return json({
+      job, scriptReview: decision, revision: saved.row.revision,
+      publishable: false, publishingEnabled: false,
+      nextAction: input.decision === "APPROVE"
+        ? "Generate narration as a draft, then separately review narration and provide approved visual assets, rights evidence and a scene plan."
+        : "Revise the script brief and generate a new draft; rejected script approval cannot be reused."
+    }, 200, { etag: '"' + saved.row.revision + '"' });
   }
 
   if (url.pathname === "/api/jobs/lease/claim" && method === "POST") {
