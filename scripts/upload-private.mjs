@@ -662,7 +662,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
         format: metadata.contentType ?? metadata.format ?? null,
         actualPublishedAt
       });
-      historyVerification = { verifiedAt: completeSnapshot.verifiedAt, verifiedBy: completeSnapshot.verifiedBy, videoCount: completeSnapshot.history.length };
+      historyVerification = { verifiedAt: completeSnapshot.verifiedAt, verifiedBy: completeSnapshot.verifiedBy, reconciliationSha256: completeSnapshot.reconciliationSha256, videoCount: completeSnapshot.history.length };
     } catch (error) {
       attempt.status = "REMOTE_ACCEPTED_RECONCILIATION_REQUIRED";
       attempt.errorCode = "CHANNEL_HISTORY_NOT_RECONCILED";
