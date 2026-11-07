@@ -44,28 +44,38 @@ async function getToken() {
 
 async function requestJson(route, options = {}) {
   const token = await getToken();
-  const response = await fetch(origin() + route, {
-    ...options,
-    headers: {
-      accept: "application/json",
-      authorization: "Bearer " + token,
-      "x-worker-id": workerId,
-      ...(options.body && typeof options.body === "string" ? { "content-type": "application/json" } : {}),
-      ...options.headers
-    },
-    redirect: "error",
-    signal: options.signal ?? AbortSignal.timeout(60_000)
-  });
-  let payload;
-  try { payload = await response.json(); }
-  catch (cause) { throw new Error("Artifact API returned unreadable JSON (HTTP " + response.status + ")", { cause }); }
-  if (!response.ok) {
-    const error = new Error(payload?.error ?? "Artifact API failed with HTTP " + response.status);
-    error.status = response.status;
-    error.code = payload?.code;
-    throw error;
+  const { timeoutMs = 60_000, ...fetchOptions } = options;
+  let lastError;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    try {
+      const response = await fetch(origin() + route, {
+        ...fetchOptions,
+        headers: {
+          accept: "application/json",
+          authorization: "Bearer " + token,
+          "x-worker-id": workerId,
+          ...(fetchOptions.body && typeof fetchOptions.body === "string" ? { "content-type": "application/json" } : {}),
+          ...fetchOptions.headers
+        },
+        redirect: "error",
+        signal: AbortSignal.timeout(timeoutMs)
+      });
+      let payload;
+      try { payload = await response.json(); }
+      catch (cause) { throw new Error("Artifact API returned unreadable JSON (HTTP " + response.status + ")", { cause }); }
+      if (response.ok) return payload;
+      const error = new Error(payload?.error ?? "Artifact API failed with HTTP " + response.status);
+      error.status = response.status;
+      error.code = payload?.code;
+      if (response.status !== 429 && response.status < 500) throw error;
+      lastError = error;
+    } catch (error) {
+      if (error?.status && error.status !== 429 && error.status < 500) throw error;
+      lastError = error;
+    }
+    if (attempt < 3) await new Promise(resolve => setTimeout(resolve, 750 * (2 ** attempt)));
   }
-  return payload;
+  throw lastError ?? new Error("Artifact API request failed after bounded retries");
 }
 
 function hashFile(filePath) {
@@ -131,7 +141,7 @@ async function uploadArtifact(job, descriptor, existing) {
           method: "PUT",
           body: buffer,
           headers: { "content-type": "application/octet-stream" },
-          signal: AbortSignal.timeout(120_000)
+          timeoutMs: 120_000
         });
     }
   } finally {
