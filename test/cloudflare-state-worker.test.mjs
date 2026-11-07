@@ -1390,7 +1390,17 @@ test("dashboard job cards list private R2 artifacts and download them through op
 
 test("dashboard inline JavaScript remains syntactically valid after artifact controls are added", () => {
   const html = readFileSync(new URL("../public/dashboard.html", import.meta.url), "utf8");
-  const scripts = [...html.matchAll(/<script\\b[^>]*>([\\s\\S]*?)<\\/script>/gi)].map(match => match[1]);
+  const scripts = [];
+  let cursor = 0;
+  while (true) {
+    const start = html.indexOf("<script", cursor);
+    if (start < 0) break;
+    const contentStart = html.indexOf(">", start) + 1;
+    const end = html.indexOf("</script>", contentStart);
+    assert.ok(contentStart > start && end >= contentStart, "script tag must be closed");
+    scripts.push(html.slice(contentStart, end));
+    cursor = end + "</script>".length;
+  }
   assert.ok(scripts.length > 0);
   for (const source of scripts) assert.doesNotThrow(() => new Script(source));
 });
