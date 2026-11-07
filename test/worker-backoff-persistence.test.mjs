@@ -4,7 +4,7 @@ import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { runWorker } from "../scripts/worker-runner.mjs";
+import { runWorker, readCooldownStateFile } from "../scripts/worker-runner.mjs";
 
 const token = "worker-backoff-test-token-" + "x".repeat(32);
 const workerId = "worker-backoff-restart-test";
@@ -234,4 +234,19 @@ test("worker persists Retry-After backoff after HTTP 429 and honors it after res
   assert.equal(restartedCycles[0].deferredByBackoff, 1);
   assert.deepEqual(restartedCycles[0].results, []);
   assert.equal(produceRequests, 1, "restart must honor the provider's Retry-After window");
+});
+
+
+test("worker cooldown reader pins a regular file and refuses final-component symlinks", t => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-state-reader-"));
+  const statePath = path.join(directory, "worker-backoff.json");
+  const targetPath = path.join(directory, "target.json");
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  const state = JSON.stringify({ schemaVersion: 1, workerId, cooldowns: {} });
+  fs.writeFileSync(statePath, state, { mode: 0o600 });
+  assert.equal(readCooldownStateFile(statePath), state);
+  fs.renameSync(statePath, targetPath);
+  fs.symlinkSync(targetPath, statePath);
+  assert.throws(() => readCooldownStateFile(statePath), error =>
+    error?.code === "ELOOP" || /symbolic link|too many levels/i.test(error?.message ?? ""));
 });
