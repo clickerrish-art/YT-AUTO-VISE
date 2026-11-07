@@ -8,7 +8,7 @@ import { DEFAULT_WEEKLY_PLAN } from "./weekly-plan-compat.js";
 
 const STATE_ID = 1;
 const MAX_STATE_BYTES = 2 * 1024 * 1024;
-const MAX_ARTIFACT_BYTES = 8 * 2 * 1024 * 1024 * 1024;
+const MAX_ARTIFACT_BYTES = 8 * 1024 * 1024 * 1024;
 const ARTIFACT_PART_BYTES = 8 * 1024 * 1024;
 
 
