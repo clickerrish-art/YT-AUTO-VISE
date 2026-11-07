@@ -313,6 +313,33 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
     }
     if (!(await authenticateRepositoryRunner(request, fetchImpl))) return json({ error: "Unauthorized", code: "WORKER_OIDC_UNAUTHORIZED" }, 401);
 
+    if (url.pathname === "/api/runner/ready" && method === "GET") {
+      if (!env.ARTIFACTS || typeof env.ARTIFACTS.put !== "function" ||
+          typeof env.ARTIFACTS.get !== "function" || typeof env.ARTIFACTS.delete !== "function") {
+        return json({ ready: false, code: "ARTIFACT_STORAGE_NOT_CONFIGURED", blockers: ["Private R2 storage binding is unavailable."] }, 503);
+      }
+      const usage = await env.STATE_DB.prepare(
+        "SELECT COALESCE(SUM(size_bytes), 0) AS total_bytes FROM runner_artifacts WHERE status IN ('UPLOADING', 'READY')"
+      ).first();
+      const usedBytes = Number(usage?.total_bytes ?? 0);
+      const remainingBytes = Math.max(0, MAX_ARTIFACT_BYTES - usedBytes);
+      if (remainingBytes < 1024 * 1024 * 1024) {
+        return json({ ready: false, code: "R2_ARTIFACT_HEADROOM_LOW", usedBytes, remainingBytes, requiredHeadroomBytes: 1024 * 1024 * 1024 }, 503);
+      }
+      const probeKey = "health/runner-probe-" + crypto.randomUUID();
+      const nonce = crypto.randomUUID();
+      try {
+        await env.ARTIFACTS.put(probeKey, nonce, { customMetadata: { purpose: "runner-readiness-probe" } });
+        const probe = await env.ARTIFACTS.get(probeKey);
+        if (!probe || await probe.text() !== nonce) throw new Error("R2 readiness probe read-back did not match");
+        return json({ ready: true, usedBytes, remainingBytes, storageProvider: "Cloudflare R2 Standard", publishingEnabled: false });
+      } catch {
+        return json({ ready: false, code: "R2_ARTIFACT_PROBE_FAILED", blockers: ["Private R2 write/read integrity probe failed."] }, 503);
+      } finally {
+        try { await env.ARTIFACTS.delete(probeKey); } catch {}
+      }
+    }
+
     if (url.pathname === "/api/runner/artifacts" && method === "GET") {
       const jobId = url.searchParams.get("jobId") ?? "";
       if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(jobId)) return json({ error: "A valid jobId is required" }, 400);
