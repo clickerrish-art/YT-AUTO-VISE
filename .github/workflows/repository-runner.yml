@@ -2,11 +2,10 @@ name: SonicVhibez repository production runner
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "*/5 * * * *"
 
 permissions:
   contents: read
+  id-token: write
 
 concurrency:
   group: sonicvhibez-repository-runner
@@ -18,7 +17,6 @@ jobs:
     timeout-minutes: 12
     env:
       DASHBOARD_API_URL: https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev
-      DASHBOARD_WORKER_TOKEN: ${{ secrets.DASHBOARD_WORKER_TOKEN }}
       DASHBOARD_WORKER_ID: sonicvhibez-render-worker
       DASHBOARD_STATE_DIR: ${{ github.workspace }}/state
       WORKER_STATE_DIR: ${{ github.workspace }}/run-logs
@@ -36,8 +34,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [[ -z "${DASHBOARD_WORKER_TOKEN}" || ${#DASHBOARD_WORKER_TOKEN} -lt 24 ]]; then
-            echo "::error::Add the same dedicated DASHBOARD_WORKER_TOKEN as a Cloudflare Worker secret and a GitHub Actions repository secret. Do not use the operator token."
+          if [[ -z "${ACTIONS_ID_TOKEN_REQUEST_URL:-}" || -z "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}" ]]; then
+            echo "::error::GitHub Actions OIDC is unavailable. The workflow requires id-token: write permission."
             exit 2
           fi
           ffmpeg -version | head -n 1
@@ -54,11 +52,14 @@ jobs:
         run: |
           set -euo pipefail
           OPERATOR_TOKEN="$(openssl rand -hex 32)"
+          LOCAL_WORKER_TOKEN="$(openssl rand -hex 32)"
           echo "::add-mask::${OPERATOR_TOKEN}"
+          echo "::add-mask::${LOCAL_WORKER_TOKEN}"
           echo "DASHBOARD_OPERATOR_TOKEN=${OPERATOR_TOKEN}" >> "$GITHUB_ENV"
+          echo "DASHBOARD_WORKER_TOKEN=${LOCAL_WORKER_TOKEN}" >> "$GITHUB_ENV"
           DASHBOARD_OPERATOR_TOKEN="${OPERATOR_TOKEN}" \
           DASHBOARD_OPERATOR_ID="repository-runner" \
-          DASHBOARD_WORKER_TOKEN="${DASHBOARD_WORKER_TOKEN}" \
+          DASHBOARD_WORKER_TOKEN="${LOCAL_WORKER_TOKEN}" \
           DASHBOARD_STATE_DIR="${DASHBOARD_STATE_DIR}" \
           PORT=8787 node scripts/dashboard-server.mjs > "$RUNNER_TEMP/dashboard-server.log" 2>&1 &
           echo "$!" > "$RUNNER_TEMP/dashboard-server.pid"
