@@ -1366,7 +1366,7 @@ test("repository runner preflight blocks production when private R2 headroom is 
   const fixture = await createRunnerOidcFixture();
   let writes = 0;
   const env = {
-    STATE_DB: { prepare() { return { bind() { return this; }, async first() { return { total_bytes: 8 * 1024 * 1024 * 1024 - 2 * 1024 * 1024 * 1024 + 1 }; } }; } },
+    STATE_DB: { prepare() { return { bind() { return this; }, async first() { return { total_bytes: 0 }; } }; } },
     ARTIFACTS: { async list() { return { objects: [{ size: 8 * 1024 * 1024 * 1024 - 2 * 1024 * 1024 * 1024 + 1 }], truncated: false }; }, async put() { writes++; }, async get() {}, async delete() {} }
   };
   const response = await handleRequest(new Request("https://state.example/api/runner/ready", {
