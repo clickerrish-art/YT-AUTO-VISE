@@ -963,15 +963,16 @@ test("repository runner backoff state is durable, worker-scoped and revision gua
           return row ? { ...row } : null;
         },
         async run() {
-          const [workerId, revisionOrState, maybeUpdatedAt, expectedRevision] = this.args;
           if (sql.startsWith("INSERT OR IGNORE")) {
+            const [workerId, stateJson, updatedAt] = this.args;
             if (records.has(workerId)) return { meta: { changes: 0 } };
-            records.set(workerId, { revision: 1, state_json: revisionOrState, updated_at: maybeUpdatedAt });
+            records.set(workerId, { revision: 1, state_json: stateJson, updated_at: updatedAt });
             return { meta: { changes: 1 } };
           }
+          const [stateJson, updatedAt, workerId, expectedRevision] = this.args;
           const row = records.get(workerId);
           if (!row || row.revision !== expectedRevision) return { meta: { changes: 0 } };
-          records.set(workerId, { revision: row.revision + 1, state_json: revisionOrState, updated_at: maybeUpdatedAt });
+          records.set(workerId, { revision: row.revision + 1, state_json: stateJson, updated_at: updatedAt });
           return { meta: { changes: 1 } };
         }
       };
