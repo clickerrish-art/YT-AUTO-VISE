@@ -11,12 +11,14 @@ This directory is a separate migration track. It does **not** replace the existi
 
 ## Explicitly not complete
 
-- No D1 database, R2 bucket, Worker, domain, secret, or deployment has been created by this branch.
-- The D1 binding has no account database ID until a deliberate resource-creation step is authorized and completed.
+- A staging-only D1 database (`sonicvhibez-state-staging`, ID `f018ee20-2d7f-41ec-9744-ee058bce80f8`) and Worker (`sonicvhibez-durable-state-staging`) are deployed. The Worker is version 3 and binds `STATE_DB` to that database.
+- Operator secrets `DASHBOARD_OPERATOR_TOKEN` and `DASHBOARD_OPERATOR_ID` are configured as Worker secrets. Secret values are not stored in this repository or exposed in logs.
+- No production state has been imported. The staging D1 database currently contains zero rows in both `dashboard_state` and `dashboard_backups`.
 - The dashboard UI and existing Node API routes have not been ported. This is a durable-state service slice, not a replacement dashboard.
 - The existing production JSON state has not been imported; no production instance exists and no production snapshot was available.
 - The logical backups in D1 are not independent disaster-recovery copies. Before production acceptance, add and verify an independent R2 export/restore path and exercise D1 Time Travel recovery against a disposable database.
-- No end-to-end D1 runtime test or Cloudflare deployment has yet passed.
+- Worker source/unit checks passed on commit `0fefa89ed000bd396362fbd0ae425bfc74f89156` (8 tests, zero skips). Cloudflare staging deployment version 3 and the `STATE_DB` binding were independently inspected.
+- A D1 Time Travel recovery drill was executed against the staging database from a clean zero-row baseline: captured a pre-fixture bookmark, inserted one synthetic state row and one synthetic backup row, restored the exact bookmark, and verified both tables returned to zero rows. Cloudflare returned `success: true`; this is a real D1 point-in-time restore, but it is not an off-account backup.
 
 ## Safety and API contract
 
@@ -40,8 +42,8 @@ This directory is a separate migration track. It does **not** replace the existi
 
 ## Current decision
 
-The app remains **NOT DEPLOYED**. No public URL, operational dashboard, production persistence, or production recovery capability is claimed by this branch.
+The **dashboard application remains NOT DEPLOYED**. The separate staging state Worker is deployed at `https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev`; its public `/healthz` endpoint was previously observed returning HTTP 200 with publishing disabled. The dashboard UI/API is not integrated with this Worker, and no production persistence or production recovery capability is claimed.
 
 ## Current account verification
 
-The connected Cloudflare account currently shows zero D1 databases and only an unrelated `hello-world` Worker. The account API reports account type `standard` and Workers usage model `standard`; neither value establishes the Free vs Paid billing plan. The billing-subscriptions endpoint rejects the connected OAuth session because it lacks Billing Read scope. Therefore no D1/R2 resource was created: the zero-cost plan could not be independently confirmed.
+Current connected-account inspection confirms the staging D1 database and Worker described above. The database schema contains `dashboard_state`, `dashboard_backups`, and `dashboard_backups_created_at_idx`. Latest post-Time-Travel row counts are zero/zero. No R2 bucket, paid upgrade, or production resource was created. The dashboard app itself remains undeployed.
