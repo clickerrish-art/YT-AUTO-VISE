@@ -31,6 +31,9 @@ export function buildVerifiedUploadReconciliationJob({
       receipt.channelTitle !== "SonicVhibez" ||
       receipt.privacyStatus !== "private" ||
       receipt.remoteStatusVerified !== true ||
+      receipt.channelHistoryReconciled !== true ||
+      !Number.isFinite(Date.parse(receipt.historyVerifiedAt ?? "")) ||
+      !Number.isSafeInteger(receipt.historyVideoCount) || receipt.historyVideoCount < 1 ||
       receipt.publishingEnabled !== false ||
       !Number.isFinite(Date.parse(receipt.actualPublishedAt ?? ""))) {
     throw new Error("Persisted receipt does not independently bind the exact private SonicVhibez upload");
