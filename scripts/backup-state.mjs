@@ -120,7 +120,7 @@ function collectFiles(dir, relativePrefix, output, { maxBytes = 10 * 1024 * 1024
     }
     if (!itemStat.isFile()) continue;
     if (itemStat.size > maxBytes) throw new Error("Backup file exceeds 10 MiB limit: " + relative);
-    const bytes = fs.readFileSync(absolute);
+    const bytes = readRegularFileNoFollow(absolute);
     output.push({ target: { kind: "rights-evidence", path: relative }, sha256: sha256(bytes), bytes: bytes.length, contentBase64: bytes.toString("base64") });
   }
 }
@@ -136,7 +136,7 @@ async function backupStateUnlocked({ rootDir = root, stateDir = process.env.DASH
     const stat = fs.lstatSync(absolute);
     if (stat.isSymbolicLink() || !stat.isFile()) throw new Error("Backup accepts only regular files: " + absolute);
     if (stat.size > maxBytes) throw new Error("Backup file exceeds 10 MiB limit: " + path.basename(absolute));
-    const bytes = fs.readFileSync(absolute);
+    const bytes = readRegularFileNoFollow(absolute);
     entries.push({ target, sha256: sha256(bytes), bytes: bytes.length, contentBase64: bytes.toString("base64") });
   };
   add(stateFile, { kind: "dashboard-state", path: "dashboard-state.json" });
