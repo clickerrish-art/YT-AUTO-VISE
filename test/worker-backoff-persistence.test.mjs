@@ -250,3 +250,17 @@ test("worker cooldown reader pins a regular file and refuses final-component sym
   assert.throws(() => readCooldownStateFile(statePath), error =>
     error?.code === "ELOOP" || /symbolic link|too many levels/i.test(error?.message ?? ""));
 });
+
+
+test("worker cooldown reader rejects a symlinked parent directory", t => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-state-parent-"));
+  const outside = path.join(directory, "outside");
+  const linked = path.join(directory, "linked");
+  fs.mkdirSync(outside);
+  const targetPath = path.join(outside, "worker-backoff.json");
+  const state = JSON.stringify({ schemaVersion: 1, workerId, cooldowns: {} });
+  fs.writeFileSync(targetPath, state, { mode: 0o600 });
+  fs.symlinkSync(outside, linked, "dir");
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  assert.throws(() => readCooldownStateFile(path.join(linked, "worker-backoff.json")), /symbolic link/i);
+});
