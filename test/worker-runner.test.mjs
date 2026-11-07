@@ -115,6 +115,23 @@ test("worker dispatches listed jobs sequentially and records fail-closed conflic
   assert.ok(cooldowns.get("job-two").nextAttemptAt > Date.now());
 });
 
+test("worker rejects an invalid configured dispatch limit before acquiring a process lock", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-invalid-dispatch-limit-"));
+  try {
+    await assert.rejects(
+      runWorker({
+        baseUrl: "http://127.0.0.1:8787", token, workerId, once: true,
+        dispatchLimit: 0, stateDirectory: directory,
+        fetchImpl: async () => { throw new Error("must not contact API"); }
+      }),
+      /WORKER_DISPATCH_LIMIT must be an integer from 1 to 100/
+    );
+    assert.deepEqual(fs.readdirSync(directory), []);
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
 test("repository runner dispatch limit leaves additional approved jobs queued for a later cycle", async t => {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-dispatch-limit-"));
   const requests = [];
