@@ -16,7 +16,7 @@ import { validateCampaigns } from "./validate-campaigns.mjs";
 import { generateScript } from "./generate-script.mjs";
 import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence, validateConfiguredSonicVhibezChannel, validateParentReceiptTitle, parseShortMetadataJson } from "./short-parent-relationship.mjs";
 import { createContentJob, transitionContentJob, authorizeContentJobRetry, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease, deadLetterExhaustedJob } from "./content-job-lifecycle.mjs";
-import { createReviewDecision, sha256File } from "./human-review.mjs";
+import { createReviewDecision, sha256File, validateTechnicalReviewBinding } from "./human-review.mjs";
 import { buildVerifiedRightsAssets } from "./rights-evidence.mjs";
 import { canonicalAuthoringScriptSha256, runAuthoringNarrationStage } from "./authoring-production-pipeline.mjs";
 import { productionPlanSha256, validateProductionPlan, validateNarrationApprovalReceipt, validateShortProductionPlanParent } from "./production-plan.mjs";
@@ -2406,6 +2406,8 @@ const server = http.createServer(async (req, res) => {
         const metadataFile = resolveRepositoryFile(metadataPath);
         const metadataVersion = sha256File(metadataFile);
         if (body.metadataVersion !== metadataVersion || job.metadataVersion !== metadataVersion) return json(res, 409, { error: "Metadata version must match both the actual metadata file and validated job metadata" });
+        const technicalBindingErrors = validateTechnicalReviewBinding({ job, artifactPath, artifactSha256: body.artifactSha256, metadataPath, metadataVersion });
+        if (technicalBindingErrors.length) return json(res, 409, { error: "Final review is not bound to the exact technical validation receipt: " + technicalBindingErrors.join("; "), publishingEnabled: false });
         const captionsPath = job.validationResults?.captionsPath;
         const captionsSha256 = job.validationResults?.captionsSha256;
         if (typeof captionsPath !== "string" || !captionsPath.trim() || !/^[a-f0-9]{64}$/.test(captionsSha256 ?? "")) return json(res, 409, { error: "Validated captions path and SHA-256 are required before approval" });
