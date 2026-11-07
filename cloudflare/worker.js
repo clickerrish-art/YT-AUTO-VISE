@@ -58,6 +58,42 @@ async function authenticate(request, env) {
     constantTimeEqual(supplied, configured);
 }
 
+async function authenticateWorker(request, env) {
+  const configured = env.DASHBOARD_WORKER_TOKEN;
+  const supplied = request.headers.get("x-worker-token");
+  return typeof configured === "string" && configured.length >= 24 &&
+    configured !== env.DASHBOARD_OPERATOR_TOKEN &&
+    constantTimeEqual(supplied, configured);
+}
+
+function validateRunnerBackoff(value, workerId) {
+  if (!value || typeof value !== "object" || Array.isArray(value) ||
+      value.schemaVersion !== 1 || value.workerId !== workerId ||
+      !value.cooldowns || typeof value.cooldowns !== "object" || Array.isArray(value.cooldowns) ||
+      !value.uncertainDispatches || typeof value.uncertainDispatches !== "object" || Array.isArray(value.uncertainDispatches) ||
+      !Array.isArray(value.consumedReleaseNonces)) {
+    throw new Error("Runner backoff state has an invalid schema or worker identity");
+  }
+  for (const [jobId, entry] of Object.entries(value.cooldowns)) {
+    if (!jobId || !entry || !Number.isInteger(entry.attempts) || entry.attempts < 1 || entry.attempts > 20 ||
+        !Number.isSafeInteger(entry.nextAttemptAt) || entry.nextAttemptAt <= 0) {
+      throw new Error("Runner cooldown entry is invalid");
+    }
+  }
+  for (const [jobId, entry] of Object.entries(value.uncertainDispatches)) {
+    if (!jobId || entry?.code !== "WORKER_DISPATCH_OUTCOME_UNCERTAIN" ||
+        typeof entry.recordedAt !== "string" || !Number.isFinite(Date.parse(entry.recordedAt)) ||
+        new Date(entry.recordedAt).toISOString() !== entry.recordedAt) {
+      throw new Error("Runner uncertain-dispatch entry is invalid");
+    }
+  }
+  if (value.consumedReleaseNonces.length > 1000000 ||
+      value.consumedReleaseNonces.some(nonce => typeof nonce !== "string" || !/^[a-f0-9]{48}$/.test(nonce))) {
+    throw new Error("Runner consumed release nonce list is invalid");
+  }
+  return value;
+}
+
 async function currentState(env) {
   return env.STATE_DB.prepare(
     "SELECT revision, state_json, updated_at FROM dashboard_state WHERE singleton_id = ?"
@@ -177,6 +213,72 @@ async function handleRequest(request, env) {
     }
     return json({ error: "Not found" }, 404);
   }
+  const runnerRoute = url.pathname.startsWith("/api/runner/");
+  if (runnerRoute) {
+    if (!(await authenticateWorker(request, env))) return json({ error: "Unauthorized", code: "WORKER_UNAUTHORIZED" }, 401);
+    if (url.pathname === "/api/runner/snapshot" && method === "GET") {
+      const row = await currentState(env);
+      if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+      let state;
+      try { state = validateDashboardState(JSON.parse(row.state_json)); }
+      catch { return json({ error: "Persisted state is corrupt or invalid", code: "STATE_INVALID" }, 503); }
+      return json({ revision: row.revision, updatedAt: row.updated_at, state, publishingEnabled: false });
+    }
+    if (url.pathname === "/api/runner/snapshot" && method === "PUT") {
+      const actor = "repository-runner";
+      const revisionHeader = request.headers.get("if-match") ?? "";
+      const match = revisionHeader.match(/^"?([0-9]+)"?$/);
+      const expectedRevision = match ? Number(match[1]) : NaN;
+      if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 1) {
+        return json({ error: "If-Match must contain the snapshot revision", code: "REVISION_REQUIRED" }, 428);
+      }
+      let input;
+      try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+      let state;
+      try { state = validateDashboardState(input?.state); }
+      catch (error) { return json({ error: error.message, code: "STATE_INVALID" }, 400); }
+      const current = await currentState(env);
+      if (!current || Number(current.revision) !== expectedRevision) {
+        return json({ error: "Durable state changed during runner execution; refusing to overwrite it", code: "REVISION_CONFLICT" }, 409);
+      }
+      const saved = await commitStateRevision(env, current, state, actor, "REPOSITORY_RUNNER_STATE_RECONCILED", {
+        workerId: request.headers.get("x-worker-id") ?? "repository-runner"
+      });
+      if (saved.error) return saved.error;
+      return json({ revision: saved.row.revision, updatedAt: saved.row.updated_at, publishingEnabled: false }, 200, { etag: '"' + saved.row.revision + '"' });
+    }
+    if (url.pathname === "/api/runner/backoff" && method === "GET") {
+      const workerId = url.searchParams.get("workerId") ?? "";
+      if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(workerId)) return json({ error: "workerId is invalid" }, 400);
+      const row = await env.STATE_DB.prepare("SELECT revision, state_json, updated_at FROM runner_state WHERE worker_id = ?").bind(workerId).first();
+      return json({ workerId, revision: Number(row?.revision ?? 0), updatedAt: row?.updated_at ?? null, state: row ? JSON.parse(row.state_json) : null });
+    }
+    if (url.pathname === "/api/runner/backoff" && method === "PUT") {
+      let input;
+      try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+      const workerId = input?.workerId;
+      const expectedRevision = input?.expectedRevision;
+      if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(workerId ?? "") ||
+          !Number.isSafeInteger(expectedRevision) || expectedRevision < 0) {
+        return json({ error: "workerId and a non-negative expectedRevision are required" }, 400);
+      }
+      let state;
+      try { state = validateRunnerBackoff(input.state, workerId); }
+      catch (error) { return json({ error: error.message, code: "BACKOFF_STATE_INVALID" }, 400); }
+      const now = new Date().toISOString();
+      const stateJson = JSON.stringify({ ...state, updatedAt: now });
+      const statement = expectedRevision === 0
+        ? env.STATE_DB.prepare("INSERT OR IGNORE INTO runner_state (worker_id, revision, state_json, updated_at) VALUES (?, 1, ?, ?)")
+            .bind(workerId, stateJson, now)
+        : env.STATE_DB.prepare("UPDATE runner_state SET revision = revision + 1, state_json = ?, updated_at = ? WHERE worker_id = ? AND revision = ?")
+            .bind(stateJson, now, workerId, expectedRevision);
+      const result = await statement.run();
+      if (Number(result.meta?.changes ?? 0) !== 1) return json({ error: "Runner backoff revision conflict", code: "REVISION_CONFLICT" }, 409);
+      return json({ workerId, revision: expectedRevision + 1, updatedAt: now, publishingEnabled: false });
+    }
+    return json({ error: "Runner endpoint not found" }, 404);
+  }
+
   if (!(await authenticate(request, env))) return json({ error: "Unauthorized" }, 401);
 
   if (url.pathname === "/api/state" && method === "GET") {
