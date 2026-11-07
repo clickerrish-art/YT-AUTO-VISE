@@ -150,3 +150,31 @@ test("legacy state response preserves browser fields and exposes revision withou
   assert.equal(response.campaignValidation.ok, false);
   assert.equal(response.publishingEnabled, false);
 });
+
+test("jobs list returns the legacy newest-first read-only collection", async () => {
+  const state = validState();
+  state.jobs = [{ id: "old" }, { id: "new" }];
+  const database = { prepare() { return { bind() { return this; }, async first() { return { revision: 4, state_json: JSON.stringify(state) }; } }; } };
+  const response = await handleRequest(new Request("https://state.example/api/jobs?limit=1", { headers: { "x-operator-token": "a".repeat(24) } }), { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: database });
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.deepEqual(body.jobs.map(job => job.id), ["new"]);
+  assert.equal(body.readOnly, true);
+  assert.equal(body.publishingEnabled, false);
+});
+
+test("dispatchable jobs endpoint never releases queued work without approved authoring, approved plan, and due Johannesburg slot", async () => {
+  const state = validState();
+  state.jobs = [
+    { id: "held", kind: "CONTENT_PRODUCTION", state: "QUEUED", contentType: "short" },
+    { id: "future", kind: "CONTENT_PRODUCTION", state: "QUEUED", contentType: "long_form", authoring: { productionPlan: { status: "APPROVED_PLAN_ONLY", review: { decision: "APPROVE", approvalSha256: "a".repeat(64) } } }, scheduledSlot: { date: "2099-01-01", time: "17:00", timezone: "Africa/Johannesburg" } }
+  ];
+  const database = { prepare() { return { bind() { return this; }, async first() { return { revision: 2, state_json: JSON.stringify(state) }; } }; } };
+  const response = await handleRequest(new Request("https://state.example/api/jobs/dispatchable", { headers: { "x-operator-token": "a".repeat(24) } }), { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: database });
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.queuedCount, 2);
+  assert.equal(body.dispatchableCount, 0);
+  assert.equal(body.jobs.length, 0);
+  assert.equal(body.publishingEnabled, false);
+});
