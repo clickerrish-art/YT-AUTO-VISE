@@ -320,7 +320,8 @@ export function recoverInterruptedBackup({ rootDir = root, stateDir = process.en
   if (!outputPath || !temporaryPath) throw new Error("Recovery requires exact final and temporary paths");
   const stateRoot = path.resolve(rootDir, stateDir), destination = path.resolve(outputPath), temporary = path.resolve(temporaryPath);
   const lockPath = path.join(stateRoot, ".restore-operation.lock");
-  const tempSuffix = path.basename(temporary).slice(path.basename(destination).length + 1);\n  if (path.dirname(destination) !== path.dirname(temporary) || !path.basename(temporary).startsWith(path.basename(destination) + ".") || tempSuffix.length !== 40 || tempSuffix.slice(36) !== ".tmp" || !/^[0-9a-f-]{36}$/.test(tempSuffix.slice(0, 36))) throw new Error("Temporary backup must be the UUID-named sibling of the final backup");
+  const tempSuffix = path.basename(temporary).slice(path.basename(destination).length + 1);
+  if (path.dirname(destination) !== path.dirname(temporary) || !path.basename(temporary).startsWith(path.basename(destination) + ".") || tempSuffix.length !== 40 || tempSuffix.slice(36) !== ".tmp" || !/^[0-9a-f-]{36}$/.test(tempSuffix.slice(0, 36))) throw new Error("Temporary backup must be the UUID-named sibling of the final backup");
   assertNoSymlinkComponents(stateRoot, "recovery state directory");
   assertNoSymlinkComponents(path.dirname(destination), "recovery output directory");
   for (const [file, label] of [[lockPath, "lock"], [temporary, "temporary backup"]]) { const st = fs.lstatSync(file); if (st.isSymbolicLink() || !st.isFile()) throw new Error("Recovery refuses unsafe " + label); }
