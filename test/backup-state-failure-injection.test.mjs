@@ -254,9 +254,9 @@ test("backup keeps a complete promoted snapshot when directory fsync fails after
   let fsyncCalls = 0;
   fs.fsyncSync = function (fd) {
     fsyncCalls += 1;
-    // First fsync makes the staged file durable; second flushes the containing
-    // directory after linkSync has atomically created the final name.
-    if (fsyncCalls === 2) {
+    // The operation lock, dashboard-state lock and staged payload are flushed
+    // first; the fourth fsync flushes the directory after atomic promotion.
+    if (fsyncCalls === 4) {
       const error = new Error("simulated directory fsync failure after backup promotion");
       error.code = "EIO";
       throw error;
@@ -272,7 +272,7 @@ test("backup keeps a complete promoted snapshot when directory fsync fails after
     fs.fsyncSync = originalFsync;
   }
 
-  assert.equal(fsyncCalls, 2, "failure must occur only after the staged file was flushed and linked into place");
+  assert.equal(fsyncCalls, 4, "failure must occur only after the staged file was flushed and linked into place");
   assert.equal(fs.existsSync(outputPath), true, "a complete atomically promoted snapshot must not be deleted after directory-sync failure");
   const payload = JSON.parse(fs.readFileSync(outputPath, "utf8"));
   assert.equal(payload.format, "sonicvhibez-state-backup");
