@@ -59,6 +59,43 @@ async function currentState(env) {
   ).bind(STATE_ID).first();
 }
 
+
+async function commitStateRevision(env, current, nextState, actor, action, details = {}) {
+  const now = new Date().toISOString();
+  const next = {
+    ...nextState,
+    audit: [...nextState.audit, {
+      id: crypto.randomUUID(), action, actor, at: now,
+      ...details
+    }]
+  };
+  const stateJson = JSON.stringify(next);
+  if (new TextEncoder().encode(stateJson).byteLength > MAX_STATE_BYTES) {
+    return { error: json({ error: "Updated state exceeds the 2 MiB limit" }, 413) };
+  }
+  const backupId = crypto.randomUUID();
+  const digest = await sha256(current.state_json);
+  const results = await env.STATE_DB.batch([
+    env.STATE_DB.prepare(
+      "INSERT INTO dashboard_backups (backup_id, source_revision, state_json, sha256, created_at, reason) SELECT ?, revision, state_json, ?, ?, ? FROM dashboard_state WHERE singleton_id = ? AND revision = ?"
+    ).bind(backupId, digest, now, action, STATE_ID, current.revision),
+    env.STATE_DB.prepare(
+      "UPDATE dashboard_state SET revision = revision + 1, state_json = ?, updated_at = ? WHERE singleton_id = ? AND revision = ?"
+    ).bind(stateJson, now, STATE_ID, current.revision)
+  ]);
+  if (Number(results?.[1]?.meta?.changes ?? 0) !== 1) {
+    return { error: json({ error: "State revision conflict; reload before retrying", code: "REVISION_CONFLICT" }, 409) };
+  }
+  const row = await currentState(env);
+  return { row, state: next };
+}
+
+function validRealDate(value) {
+  if (typeof value !== "string" || !/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false;
+  const date = new Date(value + "T12:00:00Z");
+  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
+}
+
 async function handleRequest(request, env) {
   const url = new URL(request.url);
   const method = request.method.toUpperCase();
@@ -272,6 +309,91 @@ async function handleRequest(request, env) {
       complianceRuleSet: null,
       readOnly: true
     });
+  }
+
+
+  if (url.pathname === "/api/jobs" && method === "POST") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
+    let input;
+    try { input = await readJson(request); }
+    catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+    if (!input || typeof input !== "object" || Array.isArray(input)) return json({ error: "Job request must be an object" }, 400);
+    const idempotencyKey = String(input.idempotencyKey ?? "").trim();
+    if (!/^[A-Za-z0-9][A-Za-z0-9:_-]{2,119}$/.test(idempotencyKey)) return json({ error: "idempotencyKey must be 3–120 safe characters" }, 400);
+    const title = String(input.title ?? "").trim();
+    const topic = String(input.topic ?? "").trim();
+    const contentType = input.contentType;
+    const scheduledDate = String(input.scheduledDate ?? "").trim();
+    const scheduledDay = input.scheduledDay;
+    if (!title || title.length > 100 || !topic || topic.length > 300) return json({ error: "title (1–100 chars) and topic (1–300 chars) are required" }, 400);
+    if (!["long_form", "short"].includes(contentType)) return json({ error: "contentType must be long_form or short" }, 400);
+    if (!validRealDate(scheduledDate)) return json({ error: "scheduledDate must be a real YYYY-MM-DD date" }, 400);
+    const weekday = new Date(scheduledDate + "T12:00:00Z").toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" });
+    if (weekday !== scheduledDay || !["Tuesday", "Saturday"].includes(scheduledDay)) return json({ error: "scheduledDate must match an authorized Tuesday/Saturday draft-preparation slot" }, 400);
+    if ((scheduledDay === "Saturday") !== (contentType === "short")) return json({ error: "contentType conflicts with the authorized draft-preparation day" }, 400);
+    const inputReferences = input.inputReferences ?? [];
+    if (!Array.isArray(inputReferences) || inputReferences.length > 30 || inputReferences.some(value => typeof value !== "string" || !value.trim() || value.length > 500)) return json({ error: "inputReferences must contain at most 30 non-empty strings (max 500 chars each)" }, 400);
+    const fingerprint = await sha256(JSON.stringify({ title, topic, contentType, scheduledDay, scheduledDate, inputReferences }));
+    const current = await currentState(env);
+    if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(current.state_json)); }
+    catch { return json({ error: "Persisted state is corrupt or has an unsupported schema", code: "STATE_INVALID" }, 503); }
+    const prior = state.jobs.find(job => job.idempotencyKey === idempotencyKey);
+    if (prior) {
+      if (prior.requestFingerprint !== fingerprint) return json({ error: "Idempotency key was already used for a different job request", code: "IDEMPOTENCY_CONFLICT" }, 409);
+      return json({ job: prior, revision: current.revision, idempotentReplay: true, publishingEnabled: false }, 200, { etag: '"' + current.revision + '"' });
+    }
+    const slotKey = `slot:${scheduledDate}:17:00:Africa/Johannesburg`;
+    if (state.jobs.some(job => job.scheduledSlot?.idempotencyKey === slotKey && !["CANCELLED", "REJECTED", "FAILED", "DEAD_LETTER"].includes(job.state))) {
+      return json({ error: "A job already reserves this draft-preparation slot", code: "SLOT_CONFLICT" }, 409);
+    }
+    const now = new Date().toISOString();
+    const job = {
+      id: crypto.randomUUID(), idempotencyKey, requestFingerprint: fingerprint,
+      kind: "CONTENT_PRODUCTION", title, topic, contentType,
+      scheduledSlot: { date: scheduledDate, day: scheduledDay, time: "17:00", timezone: "Africa/Johannesburg", idempotencyKey: slotKey },
+      inputReferences, publicationCycleId: typeof input.publicationCycleId === "string" && input.publicationCycleId.trim() ? input.publicationCycleId.trim() : null,
+      shortParentRelationship: null, state: "QUEUED", createdAt: now, startedAt: null, completedAt: null, updatedAt: now,
+      transitionHistory: [{ from: null, to: "QUEUED", at: now, actor, reason: "Job created through authenticated dashboard API" }],
+      outputArtifacts: [], thumbnailArtifact: null, validationResults: null, rightsChecks: null, humanApproval: null,
+      attemptCount: 0, retryPolicy: { maxAttempts: 2, requiresOperatorRetry: true }, retryAuthorizations: [],
+      deadLetterHistory: [], workerLease: null, metadataPath: null, leaseHistory: [], nextRetryAt: null,
+      errorDetails: null, remoteVideoId: null, uploadReceipt: null, publishingEnabled: false
+    };
+    const updated = { ...state, jobs: [...state.jobs, job] };
+    const saved = await commitStateRevision(env, current, updated, actor, "CONTENT_JOB_CREATED", { jobId: job.id, idempotencyKey });
+    if (saved.error) return saved.error;
+    return json({ job, revision: saved.row.revision, idempotentReplay: false, publishingEnabled: false }, 201, { etag: '"' + saved.row.revision + '"' });
+  }
+
+  const cancelMatch = url.pathname.match(/^\\/api\\/jobs\\/([A-Za-z0-9-]+)\\/cancel$/);
+  if (cancelMatch && method === "POST") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
+    let input = {};
+    try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+    const reason = typeof input.reason === "string" ? input.reason.trim() : "";
+    if (!reason || reason.length > 1000) return json({ error: "A cancellation reason of 1–1000 characters is required" }, 400);
+    const current = await currentState(env);
+    if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(current.state_json)); } catch { return json({ error: "Persisted state is invalid" }, 503); }
+    const index = state.jobs.findIndex(job => job.id === cancelMatch[1]);
+    if (index < 0) return json({ error: "Job not found" }, 404);
+    const job = state.jobs[index];
+    if (job.workerLease || ["GENERATING", "RECONCILING"].includes(job.authoring?.status) || ["GENERATING", "RECONCILING"].includes(job.authoring?.narrationStage?.status)) {
+      return json({ error: "A leased or active/uncertain authoring job cannot be cancelled; reconcile the attempt first", code: "ACTIVE_WORK" }, 409);
+    }
+    if (job.state !== "QUEUED" && job.state !== "FAILED" && job.state !== "DEAD_LETTER") return json({ error: "Only an unleased queued, failed or dead-letter job can be cancelled" }, 409);
+    const now = new Date().toISOString();
+    const cancelled = { ...job, state: "CANCELLED", updatedAt: now, completedAt: now, cancelledAt: now, cancelledBy: actor, cancelReason: reason,
+      transitionHistory: [...(job.transitionHistory ?? []), { from: job.state, to: "CANCELLED", at: now, actor, reason }] };
+    const jobs = [...state.jobs]; jobs[index] = cancelled;
+    const saved = await commitStateRevision(env, current, { ...state, jobs }, actor, "CONTENT_JOB_CANCELLED", { jobId: job.id });
+    if (saved.error) return saved.error;
+    return json({ job: cancelled, revision: saved.row.revision, publishingEnabled: false }, 200, { etag: '"' + saved.row.revision + '"' });
   }
 
   if (url.pathname === "/api/jobs" && method === "GET") {
