@@ -198,3 +198,22 @@ test("draft and Facebook read APIs expose persisted records without enabling pub
   assert.equal(body.publishingEnabled, false);
   assert.equal(body.readOnly, true);
 });
+
+test("GET /api/state serves the legacy dashboard payload and durable revision envelope", async () => {
+  const state = validState();
+  state.queueItems = [{ id: "queue-1" }];
+  state.jobs = [{ id: "job-1" }];
+  const database = { prepare() { return { bind() { return this; }, async first() { return { revision: 9, updated_at: "2026-11-08T01:00:00.000Z", state_json: JSON.stringify(state) }; } }; } };
+  const response = await handleRequest(new Request("https://state.example/api/state", { headers: { "x-operator-token": "a".repeat(24) } }), { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: database });
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("etag"), '"9"');
+  assert.equal(body.revision, 9);
+  assert.deepEqual(body.queueItems, [{ id: "queue-1" }]);
+  assert.deepEqual(body.jobs, [{ id: "job-1" }]);
+  assert.equal(body.publishingEnabled, false);
+  assert.equal(body.schedule, null);
+  assert.equal(body.uploadLedger, null);
+  assert.equal(body.campaignValidation.ok, false);
+  assert.equal(body.state.facebookDrafts.length, 0);
+});
