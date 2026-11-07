@@ -74,3 +74,15 @@ test("queue diagnostics give explicit non-automatic operator remediation guidanc
   assert.match(html, /<th>Operator next step<\/th>/);
   assert.match(html, /queueOperatorNextStep\(item\)/);
 });
+
+test("final media review exposes verified video, thumbnail, captions and evidence previews", () => {
+  assert.match(html, /id="reviewVideo"/);
+  assert.match(html, /id="reviewThumbnail"/);
+  assert.match(html, /id="reviewCaptions"/);
+  assert.match(html, /id="reviewMetadata"/);
+  assert.match(html, /id="reviewRights"/);
+  assert.match(html, /\/api\/jobs\/review\/bundle/);
+  assert.match(html, /\/api\/jobs\/review\/preview/);
+  assert.match(html, /Integrity verified/);
+  assert.match(html, /actual media, thumbnail and captions loaded/);
+});
