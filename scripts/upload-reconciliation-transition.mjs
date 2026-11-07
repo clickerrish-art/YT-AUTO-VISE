@@ -34,6 +34,7 @@ export function buildVerifiedUploadReconciliationJob({
       receipt.channelHistoryReconciled !== true ||
       !Number.isFinite(Date.parse(receipt.historyVerifiedAt ?? "")) ||
       typeof receipt.historyVerifiedBy !== "string" || receipt.historyVerifiedBy.trim().length < 2 ||
+      !/^[a-f0-9]{64}$/.test(receipt.historyReconciliationSha256 ?? "") ||
       !Number.isSafeInteger(receipt.historyVideoCount) || receipt.historyVideoCount < 1 ||
       receipt.publishingEnabled !== false ||
       !Number.isFinite(Date.parse(receipt.actualPublishedAt ?? ""))) {
