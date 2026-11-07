@@ -429,6 +429,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       persistJson(ledgerPath, ledger);
       throw new Error("Existing remote video has no valid actual publication timestamp; reconcile it before retrying and never substitute upload time");
     }
+    let historyVerification = null;
     if (!youtubeFactory) {
       try {
         const safeHistoryPath = resolveRepositoryFileNoSymlinks(env.CHANNEL_HISTORY_RECONCILIATION_PATH, "Channel history reconciliation");
@@ -440,6 +441,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
           format: metadata.contentType ?? metadata.format ?? null,
           actualPublishedAt
         });
+        historyVerification = { verifiedAt: now().toISOString(), videoCount: completeSnapshot.history.length };
       } catch (error) {
         prior.status = "RECOVERY_REQUIRED";
         prior.errorCode = "CHANNEL_HISTORY_NOT_RECONCILED";
@@ -458,6 +460,9 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       actualPublishedAt,
       artifactSha256: videoSha256, metadataVersion: metadataSha256, reviewer: approval.reviewer,
       rightsEvidenceSha256: approval.rightsEvidenceSha256, remoteStatusVerified: true,
+      channelHistoryReconciled: historyVerification !== null,
+      historyVerifiedAt: historyVerification?.verifiedAt ?? null,
+      historyVideoCount: historyVerification?.videoCount ?? null,
       publishingEnabled: false, url: "https://www.youtube.com/watch?v=" + prior.remoteVideoId
     };
     const receiptPath = path.join(logDir, "upload-" + prior.remoteVideoId + ".json");
@@ -637,6 +642,28 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     persistJson(ledgerPath, ledger);
     throw new Error("YouTube accepted the private upload but returned no valid actual publication timestamp; reconcile the remote video before any retry");
   }
+  let historyVerification = null;
+  if (!youtubeFactory) {
+    try {
+      const safeHistoryPath = resolveRepositoryFileNoSymlinks(env.CHANNEL_HISTORY_RECONCILIATION_PATH, "Channel history reconciliation");
+      const completeSnapshot = await fetchCompleteYoutubeHistorySnapshot(
+        youtube, matchedChannel, safeHistoryPath, expectedChannelId, { now: now() }
+      );
+      assertPrivateUploadPresentInCompleteHistory(completeSnapshot, {
+        videoId,
+        format: metadata.contentType ?? metadata.format ?? null,
+        actualPublishedAt
+      });
+      historyVerification = { verifiedAt: now().toISOString(), videoCount: completeSnapshot.history.length };
+    } catch (error) {
+      attempt.status = "REMOTE_ACCEPTED_RECONCILIATION_REQUIRED";
+      attempt.errorCode = "CHANNEL_HISTORY_NOT_RECONCILED";
+      attempt.updatedAt = now().toISOString();
+      persistJson(ledgerPath, ledger);
+      throw new Error("YouTube accepted the private upload, but complete SonicVhibez channel history has not reconciled it; no verified receipt was written and no retry is allowed: " +
+        (error instanceof Error ? error.message : "history reconciliation failed"));
+    }
+  }
   const timestamp = now().toISOString();
   const receipt = {
     attemptId: attempt.attemptId, jobId, timestamp, channelId: matchedChannel.id,
@@ -649,7 +676,11 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     nativeRelatedVideoStatus: (metadata.contentType ?? metadata.format) === "short" ? approval.shortParentRelationship.nativeRelatedVideo.status : null,
     artifactSha256: videoSha256, metadataVersion: metadataSha256,
     reviewer: approval.reviewer, rightsEvidenceSha256: approval.rightsEvidenceSha256,
-    remoteStatusVerified: true, publishingEnabled: false, url: "https://www.youtube.com/watch?v=" + videoId
+    remoteStatusVerified: true,
+    channelHistoryReconciled: historyVerification !== null,
+    historyVerifiedAt: historyVerification?.verifiedAt ?? null,
+    historyVideoCount: historyVerification?.videoCount ?? null,
+    publishingEnabled: false, url: "https://www.youtube.com/watch?v=" + videoId
   };
   const receiptPath = path.join(logDir, "upload-" + videoId + ".json");
   try {
