@@ -262,3 +262,41 @@ test("Facebook idea API rejects invalid dates and excludes overlapping active to
   assert.notEqual(body.idea.topic, state.facebookDrafts[0].topic);
   assert.equal(body.idea.publishReady, false);
 });
+
+test("campaign read API returns only persisted records and clearly withholds authoritative validation", async () => {
+  const state = validState();
+  state.campaigns = [{ id: "selar-wildlife-vault", status: "ACTIVE_FOR_DRAFTS_ONLY" }];
+  const database = { prepare() { return { bind() { return this; }, async first() { return { revision: 4, state_json: JSON.stringify(state) }; } }; } };
+  const response = await handleRequest(new Request("https://state.example/api/campaigns", {
+    headers: { "x-operator-token": "a".repeat(24) }
+  }), { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: database });
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.deepEqual(body.campaigns, state.campaigns);
+  assert.equal(body.source, "durable_dashboard_state");
+  assert.equal(body.authoritativeConfigImported, false);
+  assert.equal(body.validation.status, "NOT_RUN");
+  assert.equal(body.publishingEnabled, false);
+  assert.equal(body.readOnly, true);
+});
+
+test("schedule read API exposes rolling safety constraints but blocks absent authoritative config and history", async () => {
+  const state = validState();
+  state.queueItems = [{ id: "slot-1", reservationType: "SCHEDULED_SLOT", scheduledDate: "2026-11-10" }];
+  const database = { prepare() { return { bind() { return this; }, async first() { return { revision: 5, state_json: JSON.stringify(state) }; } }; } };
+  const response = await handleRequest(new Request("https://state.example/api/schedule", {
+    headers: { "x-operator-token": "a".repeat(24) }
+  }), { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: database });
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.timezone, "Africa/Johannesburg");
+  assert.deepEqual(body.publicationCycle.formats, ["long_form", "long_form", "short"]);
+  assert.equal(body.publicationCycle.minimumHoursBetweenConsecutivePublications, 72);
+  assert.equal(body.publicationCycle.minimumCycleHours, 216);
+  assert.equal(body.authoritativeScheduleConfigImported, false);
+  assert.equal(body.publicationHistoryReconciled, false);
+  assert.equal(body.queuedReservations.length, 1);
+  assert.ok(body.blockers.length >= 2);
+  assert.equal(body.publishingEnabled, false);
+  assert.equal(body.readOnly, true);
+});
