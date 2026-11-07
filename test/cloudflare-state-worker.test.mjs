@@ -77,3 +77,39 @@ test("write operations require an explicit operator identity for audit attributi
   assert.equal(operatorIdentity({ DASHBOARD_OPERATOR_ID: "x".repeat(121) }), null);
   assert.equal(operatorIdentity({}), null);
 });
+
+test("queue diagnostics is authenticated, read-only, and holds incomplete queued jobs", async () => {
+  const state = validState();
+  state.jobs = [{ id: "job-1", kind: "CONTENT_PRODUCTION", state: "QUEUED", contentType: "long_form" }];
+  const database = {
+    prepare(sql) {
+      return {
+        bind() { return this; },
+        async first() { return { revision: 1, state_json: JSON.stringify(state), updated_at: "2026-11-08T00:00:00.000Z" }; }
+      };
+    }
+  };
+  const response = await handleRequest(new Request("https://state.example/api/jobs/queue-diagnostics", {
+    headers: { "x-operator-token": "a".repeat(24) }
+  }), { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: database });
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.equal(body.queuedCount, 1);
+  assert.equal(body.dispatchableCount, 0);
+  assert.equal(body.heldCount, 1);
+  assert.deepEqual(body.items[0].blockers, ["APPROVED_AUTHORING_MISSING", "APPROVED_RENDER_PLAN_MISSING", "VALID_JOHANNESBURG_SLOT_MISSING"]);
+  assert.equal(body.readOnly, true);
+  assert.equal(body.publishingEnabled, false);
+});
+
+test("queue diagnostics rejects invalid limits without changing state", async () => {
+  const state = validState();
+  let reads = 0;
+  const database = { prepare() { return { bind() { return this; }, async first() { reads++; return { revision: 1, state_json: JSON.stringify(state) }; } }; } };
+  const response = await handleRequest(new Request("https://state.example/api/jobs/queue-diagnostics?limit=101", {
+    headers: { "x-operator-token": "a".repeat(24) }
+  }), { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: database });
+  assert.equal(response.status, 400);
+  assert.equal(reads, 1);
+  assert.deepEqual(state.jobs, []);
+});
