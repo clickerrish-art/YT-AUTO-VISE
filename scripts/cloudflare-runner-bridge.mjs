@@ -84,15 +84,21 @@ async function pullSnapshot() {
 async function pushSnapshot() {
   const meta = readJsonFile(snapshotMetaFile);
   const state = readJsonFile(stateFile);
+  const stateSha256 = sha256(JSON.stringify(state));
   if (meta.schemaVersion !== 1 || !Number.isSafeInteger(meta.revision) || meta.revision < 1 ||
-      sha256(JSON.stringify(state)) === "" || state.version !== 1 || state.publishingEnabled === true) {
+      typeof meta.stateSha256 !== "string" || state.version !== 1 || state.publishingEnabled === true) {
     throw new Error("Local runner snapshot metadata or state is invalid");
+  }
+  if (stateSha256 === meta.stateSha256) {
+    console.log(JSON.stringify({ event: "cloudflare_snapshot_unchanged", revision: meta.revision }));
+    return;
   }
   const payload = await requestJson("/api/runner/snapshot", {
     method: "PUT",
     headers: { "if-match": '"' + meta.revision + '"' },
     body: JSON.stringify({ state })
   });
+  atomicWriteJson(snapshotMetaFile, { ...meta, revision: payload.revision, updatedAt: payload.updatedAt, stateSha256 }, { mode: 0o600 });
   console.log(JSON.stringify({ event: "cloudflare_snapshot_committed", previousRevision: meta.revision, revision: payload.revision, publishingEnabled: false }));
 }
 
@@ -109,21 +115,27 @@ async function pullBackoff() {
     throw new Error("Cloudflare worker backoff record is invalid");
   }
   atomicWriteJson(backoffFile, state, { mode: 0o600 });
-  atomicWriteJson(backoffMetaFile, { schemaVersion: 1, workerId, revision: payload.revision }, { mode: 0o600 });
+  atomicWriteJson(backoffMetaFile, { schemaVersion: 1, workerId, revision: payload.revision, stateSha256: sha256(JSON.stringify(state)) }, { mode: 0o600 });
   console.log(JSON.stringify({ event: "cloudflare_backoff_pulled", workerId, revision: payload.revision, quarantinedJobs: Object.keys(state.uncertainDispatches).length }));
 }
 
 async function pushBackoff() {
   const meta = readJsonFile(backoffMetaFile);
   const state = readJsonFile(backoffFile);
-  if (meta.schemaVersion !== 1 || meta.workerId !== workerId || !Number.isSafeInteger(meta.revision) || meta.revision < 0) {
+  const stateSha256 = sha256(JSON.stringify(state));
+  if (meta.schemaVersion !== 1 || meta.workerId !== workerId || !Number.isSafeInteger(meta.revision) ||
+      meta.revision < 0 || typeof meta.stateSha256 !== "string") {
     throw new Error("Local runner backoff revision metadata is invalid");
+  }
+  if (stateSha256 === meta.stateSha256) {
+    console.log(JSON.stringify({ event: "cloudflare_backoff_unchanged", workerId, revision: meta.revision }));
+    return;
   }
   const payload = await requestJson("/api/runner/backoff", {
     method: "PUT",
     body: JSON.stringify({ workerId, expectedRevision: meta.revision, state })
   });
-  atomicWriteJson(backoffMetaFile, { schemaVersion: 1, workerId, revision: payload.revision }, { mode: 0o600 });
+  atomicWriteJson(backoffMetaFile, { schemaVersion: 1, workerId, revision: payload.revision, stateSha256 }, { mode: 0o600 });
   console.log(JSON.stringify({ event: "cloudflare_backoff_committed", workerId, revision: payload.revision, quarantinedJobs: Object.keys(state.uncertainDispatches ?? {}).length }));
 }
 
