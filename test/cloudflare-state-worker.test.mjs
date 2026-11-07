@@ -435,3 +435,56 @@ test("content job transition API requires verified evidence before human review"
   assert.equal(snapshot().revision, 1);
   assert.equal(snapshot().state.jobs[0].state, "VALIDATING");
 });
+
+
+test("failed content jobs require operator retry authorization and preserve the retry receipt", async () => {
+  const state = validState();
+  state.jobs = [{
+    id: "retryable-job", kind: "CONTENT_PRODUCTION", state: "FAILED",
+    transitionHistory: [], attemptCount: 1,
+    retryPolicy: { maxAttempts: 2, requiresOperatorRetry: true },
+    retryAuthorizations: [], errorDetails: { retryable: true }, workerLease: null
+  }];
+  const { database, snapshot } = mutableDatabase(state);
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const response = await handleRequest(new Request("https://state.example/api/jobs/retry", {
+    method: "POST",
+    headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
+    body: JSON.stringify({ jobId: "retryable-job", reason: "Reviewed retained failure evidence and confirmed safe retry" })
+  }), env);
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.retryAuthorized, true);
+  assert.equal(body.job.state, "QUEUED");
+  assert.equal(body.job.retryAuthorizations.length, 1);
+  assert.equal(body.job.retryAuthorizations[0].actor, "sonicvhibez-owner");
+  assert.equal(body.job.nextRetryAt, null);
+  assert.equal(snapshot().state.audit.at(-1).action, "CONTENT_JOB_RETRY_AUTHORIZED");
+});
+
+test("dead-letter retry requires an explicit one-attempt override and records recovery", async () => {
+  const state = validState();
+  state.jobs = [{
+    id: "dead-job", kind: "CONTENT_PRODUCTION", state: "DEAD_LETTER",
+    transitionHistory: [], attemptCount: 2,
+    retryPolicy: { maxAttempts: 2, requiresOperatorRetry: true },
+    retryAuthorizations: [], errorDetails: { retryableAfterOperatorReview: true }, workerLease: null
+  }];
+  const { database, snapshot } = mutableDatabase(state);
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const send = overrideRetryLimit => handleRequest(new Request("https://state.example/api/jobs/retry", {
+    method: "POST",
+    headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
+    body: JSON.stringify({ jobId: "dead-job", reason: "Reviewed dead-letter evidence and approved one controlled retry", overrideRetryLimit })
+  }), env);
+  const denied = await send(false);
+  assert.equal(denied.status, 409);
+  assert.equal(snapshot().revision, 1);
+  const approved = await send(true);
+  const body = await approved.json();
+  assert.equal(approved.status, 200);
+  assert.equal(body.job.state, "QUEUED");
+  assert.equal(body.job.retryPolicy.maxAttempts, 3);
+  assert.equal(body.job.retryAuthorizations[0].overrideRetryLimit, true);
+  assert.ok(snapshot().state.audit.some(entry => entry.action === "CONTENT_JOB_DEAD_LETTER_RECOVERED"));
+});
