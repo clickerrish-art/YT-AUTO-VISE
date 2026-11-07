@@ -39,6 +39,9 @@ export function validateReviewEvidence({ artifact, rightsEvidence, metadataVersi
 export function createReviewDecision(input, now = new Date().toISOString()) {
   const errors = validateReviewEvidence(input);
   if (errors.length) throw new Error("Review blocked: " + errors.join("; "));
+  if (input.decision === "APPROVE" && !/^[a-f0-9]{64}$/.test(input.technicalValidationSha256 ?? "")) {
+    throw new Error("Review blocked: exact technical-validation receipt SHA-256 is required");
+  }
   if (!isValidZonedIsoTimestamp(now)) throw new Error("Review blocked: review timestamp must be a calendar-valid ISO timestamp with an explicit timezone");
   const relatedArtifacts = Array.isArray(input.artifact.relatedArtifacts) && input.artifact.relatedArtifacts.length
     ? structuredClone(input.artifact.relatedArtifacts)
@@ -52,6 +55,7 @@ export function createReviewDecision(input, now = new Date().toISOString()) {
     artifactSha256: input.artifact.sha256,
     relatedArtifacts,
     metadataVersion: input.metadataVersion,
+    technicalValidationSha256: input.technicalValidationSha256 ?? null,
     shortParentRelationshipSha256: input.shortParentRelationshipSha256 ?? null,
     rightsEvidenceSha256: input.decision === "APPROVE"
       ? crypto.createHash("sha256").update(JSON.stringify(input.rightsEvidence)).digest("hex")
