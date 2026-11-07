@@ -92,7 +92,7 @@ function readJsonFile(filePath) {
 async function verifyStorage() {
   const payload = await requestJson("/api/runner/ready");
   if (payload.ready !== true || !Number.isSafeInteger(payload.remainingBytes) ||
-      payload.remainingBytes < 1024 * 1024 * 1024) {
+      payload.remainingBytes < 2 * 1024 * 1024 * 1024) {
     throw new Error("Cloudflare R2 artifact storage failed its live preflight or has less than 1 GiB headroom");
   }
   console.log(JSON.stringify({
