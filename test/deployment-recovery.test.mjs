@@ -145,7 +145,7 @@ test("failed replacement startup rolls back to the previous release without losi
     facebookDrafts: [],
     facebookPosts: [],
     facebookAttempts: []
-  }, null, 2) + "\\n", { mode: 0o600 });
+  }, null, 2) + "\n", { mode: 0o600 });
 
   // Establish the known-good release, then stop it as a deployment would.
   const knownGood = await startRelease(previousRelease, stateDir);
