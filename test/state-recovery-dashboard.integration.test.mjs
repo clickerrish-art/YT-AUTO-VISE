@@ -218,7 +218,7 @@ test("dashboard remains available with unchanged state when restore destination 
     facebookPosts: [],
     facebookAttempts: []
   };
-  fs.writeFileSync(statePath, JSON.stringify(currentState, null, 2) + "\\n", { mode: 0o600 });
+  fs.writeFileSync(statePath, JSON.stringify(currentState, null, 2) + "\n", { mode: 0o600 });
   const backupPath = path.join(backupDir, "state-backup.json");
   await backupState({ rootDir, stateDir, uploadLogDir, rightsDir, outputPath: backupPath });
 
@@ -227,7 +227,7 @@ test("dashboard remains available with unchanged state when restore destination 
     queueItems: [],
     audit: [{ id: "must-not-commit", action: "RESTORE_REPLACEMENT" }]
   };
-  fs.writeFileSync(statePath, JSON.stringify(replacementState, null, 2) + "\\n", { mode: 0o600 });
+  fs.writeFileSync(statePath, JSON.stringify(replacementState, null, 2) + "\n", { mode: 0o600 });
   const expectedBytes = fs.readFileSync(statePath);
   const earlierThanBackup = new Date(Date.parse(JSON.parse(fs.readFileSync(backupPath, "utf8")).createdAt) - 1000);
   fs.utimesSync(statePath, earlierThanBackup, earlierThanBackup);
