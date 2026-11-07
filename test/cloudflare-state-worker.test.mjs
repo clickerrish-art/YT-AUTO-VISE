@@ -1313,7 +1313,7 @@ test("private R2 artifact creation rejects unbound SHA, unsafe paths and storage
         async first() {
           if (sql.includes("FROM dashboard_state")) return { revision: 1, state_json: JSON.stringify(state), updated_at: "2026-11-08T00:00:00.000Z" };
           if (sql.includes("FROM runner_artifacts WHERE job_id")) return null;
-          if (sql.includes("SUM(size_bytes)")) return { total_bytes: 8 * 1024 * 1024 * 1024 };
+          if (sql.includes("SUM(size_bytes)")) return { total_bytes: 0 };
           return null;
         },
         async run() { return { meta: { changes: 1 } }; }
