@@ -308,6 +308,35 @@ async function handleRequest(request, env) {
     });
   }
 
+  if (url.pathname === "/api/capabilities" && method === "GET") {
+    const row = await currentState(env);
+    return json({
+      service: "sonicvhibez-dashboard-worker",
+      statePersistence: { provider: "Cloudflare D1", configured: Boolean(env.STATE_DB), initialized: Boolean(row), revision: row?.revision ?? null },
+      dashboardHosting: { provider: "Cloudflare Workers Static Assets", configured: Boolean(env.ASSETS) },
+      supported: [
+        "state read/write with revision checks and backups",
+        "queue diagnostics and read-only dispatchable-job inspection",
+        "campaign validation, preview, activation and deactivation",
+        "draft creation and safe editing with Johannesburg slot checks",
+        "job creation, cancellation, transitions, operator retry and dead-letter recovery",
+        "worker lease claim, heartbeat, completion and expiry reaping",
+        "hash-bound human script review"
+      ],
+      blockedUntilIntegration: [
+        "repository task execution and Node/FFmpeg production pipeline",
+        "script generation provider and narration/TTS execution",
+        "on-disk media validation, rights evidence verification and media review",
+        "production-plan file verification and Short-parent remote receipt binding",
+        "YouTube OAuth upload and remote history reconciliation",
+        "Meta Page identity verification and Facebook/Instagram provider actions"
+      ],
+      publishingEnabled: false,
+      publicPublishingEnabled: false,
+      unattendedPublishingEnabled: false
+    });
+  }
+
   if (url.pathname === "/api/tasks" && method === "GET") {
     return json({ publicPublishingEnabled: false, tasks: ["validate-schedule", "check-captions", "production-readiness", "test-suite", "validate-campaigns"], readOnly: true });
   }
