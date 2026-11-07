@@ -20,7 +20,8 @@ This directory is a separate migration track. It does **not** replace the existi
 
 ## Safety and API contract
 
-- All `/api/*` endpoints require `x-operator-token` matching a Worker secret named `DASHBOARD_OPERATOR_TOKEN` (at least 24 characters).\n- Every mutating endpoint also requires `DASHBOARD_OPERATOR_ID` (2–120 characters) to be configured as a Worker environment variable; writes fail with HTTP 503 until the real operator identity is supplied. This prevents anonymous/generic audit attribution.
+- All `/api/*` endpoints require `x-operator-token` matching a Worker secret named `DASHBOARD_OPERATOR_TOKEN` (at least 24 characters).
+- Every mutating endpoint also requires `DASHBOARD_OPERATOR_ID` (2–120 characters) to be configured as a Worker environment variable; writes fail with HTTP 503 until the real operator identity is supplied. This prevents anonymous/generic audit attribution.
 - The service rejects publishing-enabled state and active Safari affiliate campaigns.
 - `POST /api/state/bootstrap` is one-time only. Supply the reviewed, complete existing state snapshot; do not bootstrap with an empty or guessed production state.
 - `PUT /api/state` requires `If-Match` with the current revision. A mismatch returns HTTP 409. Each update creates a pre-update logical backup and appends an operator-attributed audit event.
@@ -40,4 +41,7 @@ This directory is a separate migration track. It does **not** replace the existi
 ## Current decision
 
 The app remains **NOT DEPLOYED**. No public URL, operational dashboard, production persistence, or production recovery capability is claimed by this branch.
-\n## Current account verification\n\nThe connected Cloudflare account currently shows zero D1 databases and only an unrelated `hello-world` Worker. The account API reports account type `standard` and Workers usage model `standard`; neither value establishes the Free vs Paid billing plan. The billing-subscriptions endpoint rejects the connected OAuth session because it lacks Billing Read scope. Therefore no D1/R2 resource was created: the zero-cost plan could not be independently confirmed.\n
+
+## Current account verification
+
+The connected Cloudflare account currently shows zero D1 databases and only an unrelated `hello-world` Worker. The account API reports account type `standard` and Workers usage model `standard`; neither value establishes the Free vs Paid billing plan. The billing-subscriptions endpoint rejects the connected OAuth session because it lacks Billing Read scope. Therefore no D1/R2 resource was created: the zero-cost plan could not be independently confirmed.
