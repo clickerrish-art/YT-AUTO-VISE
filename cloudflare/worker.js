@@ -474,10 +474,11 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
         "draft creation and safe editing with Johannesburg slot checks",
         "job creation, cancellation, transitions, operator retry and dead-letter recovery",
         "worker lease claim, heartbeat, completion and expiry reaping",
+        "GitHub Actions OIDC-restricted runner snapshot and durable retry/quarantine reconciliation",
         "hash-bound human script review"
       ],
       blockedUntilIntegration: [
-        "repository task execution and Node/FFmpeg production pipeline",
+        "repository task execution and Node/FFmpeg production pipeline (runner workflow is authored but not yet activated against this Worker)",
         "script generation provider and narration/TTS execution",
         "on-disk media validation, rights evidence verification and media review",
         "production-plan file verification and Short-parent remote receipt binding",
