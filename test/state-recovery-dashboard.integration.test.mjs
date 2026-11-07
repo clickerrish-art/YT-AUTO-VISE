@@ -94,6 +94,10 @@ test("crash recovery blocks dashboard until rollback, then serves the original q
   const changedState = { ...originalState, queueItems: [], audit: [{ id: "post-backup-change", action: "MUST_BE_ROLLED_BACK" }] };
   fs.writeFileSync(statePath, JSON.stringify(changedState, null, 2) + "\n", { mode: 0o600 });
   const beforeRestoreBytes = fs.readFileSync(statePath);
+  // Preserve the production stale-state guard: this fixture models a pre-existing
+  // state snapshot, so its mtime must be earlier than the backup timestamp.
+  const earlierThanBackup = new Date(Date.parse(JSON.parse(fs.readFileSync(backupPath, "utf8")).createdAt) - 1000);
+  fs.utimesSync(statePath, earlierThanBackup, earlierThanBackup);
 
   const restoreModule = new URL("../scripts/restore-state.mjs", import.meta.url).href;
   const childSource = `
