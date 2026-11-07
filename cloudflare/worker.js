@@ -1084,6 +1084,48 @@ async function handleRequest(request, env) {
     return json({ revision: row.revision, updatedAt: row.updated_at, state: JSON.parse(row.state_json) }, 200, { etag: '"' + row.revision + '"' });
   }
 
+  const runnerGatedRoutes = new Set([
+    "POST /api/tasks/run",
+    "POST /api/jobs/author",
+    "POST /api/jobs/narration",
+    "POST /api/jobs/narration/reconcile",
+    "GET /api/jobs/narration/review",
+    "GET /api/jobs/narration/audio",
+    "POST /api/jobs/narration/review",
+    "POST /api/jobs/production-plan",
+    "POST /api/jobs/production-plan/review",
+    "POST /api/jobs/parent-relationship",
+    "POST /api/jobs/produce",
+    "POST /api/jobs/validate",
+    "POST /api/jobs/rights/verify",
+    "POST /api/jobs/review",
+    "GET /api/jobs/review/bundle",
+    "GET /api/jobs/review/preview",
+    "POST /api/worker/quarantine-release"
+  ]);
+  const providerGatedRoutes = new Set([
+    "POST /api/uploads/reconcile",
+    "POST /api/facebook/verify-page",
+    "POST /api/facebook/drafts",
+    "POST /api/facebook/drafts/evaluate",
+    "POST /api/facebook/drafts/approve",
+    "GET /api/facebook/autonomous-status"
+  ]);
+  const routeKey = method + " " + url.pathname;
+  if (runnerGatedRoutes.has(routeKey)) {
+    return json({
+      error: "This operation requires the repository-backed Node/FFmpeg runner. That runner callback is not connected to the Worker, so no task was executed and no state was changed.",
+      code: "REPOSITORY_RUNNER_NOT_CONNECTED",
+      publishingEnabled: false
+    }, 503);
+  }
+  if (providerGatedRoutes.has(routeKey)) {
+    return json({
+      error: "The required external provider adapter is not connected to this Worker. No provider request, upload, page verification or publication was attempted.",
+      code: "EXTERNAL_PROVIDER_NOT_CONNECTED",
+      publishingEnabled: false
+    }, 503);
+  }
   return json({ error: "Not found" }, 404);
 }
 
