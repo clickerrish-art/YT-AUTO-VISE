@@ -616,3 +616,62 @@ test("script review rejects stale hashes and rejection invalidates narration app
   assert.equal(body.job.authoring.narrationStage, undefined);
   assert.equal(snapshot().state.audit.at(-1).action, "SCRIPT_REVISION_REJECTED");
 });
+
+
+test("draft editing preserves review flags and enforces Johannesburg publication reservations", async () => {
+  const state = validState();
+  state.queueItems = [{
+    id: "draft-queue-01", title: "Old title", topic: "Old topic", contentType: "long_form",
+    scheduledDay: "Tuesday", scheduledDate: "2026-11-10", scheduledAt: "2026-11-10T15:00:00.000Z",
+    reservationType: "SCHEDULED_SLOT", productUrl: "https://selar.com/0u19v8u99l",
+    status: "DRAFT_REVIEW_REQUIRED", rightsConfirmed: true, complianceReviewed: false,
+    humanApproved: false, approvedForPrivateUpload: false
+  }];
+  const { database, snapshot } = mutableDatabase(state);
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const payload = {
+    id: "draft-queue-01", title: "Updated wildlife behaviour", topic: "Observe animal behaviour responsibly",
+    contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: "2026-11-17",
+    productUrl: "https://selar.com/0u19v8u99l"
+  };
+  const send = body => handleRequest(new Request("https://state.example/api/drafts/update", {
+    method: "POST",
+    headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
+    body: JSON.stringify(body)
+  }), env);
+  const updated = await send(payload);
+  const body = await updated.json();
+  assert.equal(updated.status, 200);
+  assert.equal(body.item.title, payload.title);
+  assert.equal(body.item.scheduledAt, "2026-11-17T15:00:00.000Z");
+  assert.equal(body.item.status, "DRAFT_REVIEW_REQUIRED");
+  assert.equal(body.item.rightsConfirmed, true);
+  assert.equal(body.item.complianceReviewed, false);
+  assert.equal(body.item.humanApproved, false);
+  assert.equal(snapshot().state.audit.at(-1).action, "DRAFT_EDITED");
+  const grantAttempt = await send({ ...payload, humanApproved: true });
+  assert.equal(grantAttempt.status, 400);
+  assert.equal(snapshot().revision, 2);
+});
+
+test("draft editing blocks another reserved slot on the same Johannesburg calendar date", async () => {
+  const state = validState();
+  state.queueItems = [
+    { id: "draft-a", reservationType: "SCHEDULED_SLOT", scheduledDate: "2026-11-17", scheduledAt: "2026-11-17T15:00:00.000Z", status: "DRAFT_REVIEW_REQUIRED" },
+    { id: "draft-b", reservationType: "SCHEDULED_SLOT", scheduledDate: "2026-11-24", scheduledAt: "2026-11-24T15:00:00.000Z", status: "DRAFT_REVIEW_REQUIRED" }
+  ];
+  const { database, snapshot } = mutableDatabase(state);
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const response = await handleRequest(new Request("https://state.example/api/drafts/update", {
+    method: "POST",
+    headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
+    body: JSON.stringify({
+      id: "draft-b", title: "Updated wildlife behaviour", topic: "Observe animal behaviour responsibly",
+      contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: "2026-11-17",
+      productUrl: "https://selar.com/0u19v8u99l"
+    })
+  }), env);
+  assert.equal(response.status, 409);
+  assert.equal(snapshot().revision, 1);
+  assert.equal(snapshot().state.queueItems[1].scheduledDate, "2026-11-24");
+});
