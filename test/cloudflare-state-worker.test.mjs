@@ -852,3 +852,19 @@ test("Meta and YouTube provider operations fail closed without external adapters
     assert.equal(body.publishingEnabled, false);
   }
 });
+
+
+test("capabilities endpoint distinguishes implemented durable operations from runner/provider blockers", async () => {
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: {}, ASSETS: {} };
+  const response = await handleRequest(new Request("https://state.example/api/capabilities", {
+    headers: { "x-operator-token": "a".repeat(24) }
+  }), env);
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.statePersistence.configured, true);
+  assert.equal(body.dashboardHosting.configured, true);
+  assert.ok(body.supported.some(item => item.includes("worker lease")));
+  assert.ok(body.blockedUntilIntegration.some(item => item.includes("Node/FFmpeg")));
+  assert.ok(body.blockedUntilIntegration.some(item => item.includes("YouTube OAuth")));
+  assert.equal(body.publishingEnabled, false);
+});
