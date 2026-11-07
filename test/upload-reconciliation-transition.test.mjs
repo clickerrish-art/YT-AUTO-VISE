@@ -15,6 +15,7 @@ const receipt = {
   channelHistoryReconciled: true,
   historyVerifiedAt: "2026-11-05T17:45:00.000Z",
   historyVerifiedBy: "history-reviewer@example.test",
+  historyReconciliationSha256: "a".repeat(64),
   historyVideoCount: 42,
   publishingEnabled: false,
   actualPublishedAt: "2026-11-05T17:30:00.000Z"
