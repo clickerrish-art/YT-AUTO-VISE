@@ -1,46 +1,45 @@
-# Latest code/test checkpoint — 5 November 2026
+# Latest release-gate checkpoint — 7 November 2026
 
-**Exact application and test candidate:** `f42c8a0eeb0ca63a9d5212888f811aeee863303b`  
-**Branch at the time this evidence was verified:** `codex/marketing-machine-audit-fixes` at `f42c8a0eeb0ca63a9d5212888f811aeee863303b`. This documentation update is a docs-only descendant; all test results below apply to the exact code/test candidate above.  
-**main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged). **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`.  
-**Compare at the tested candidate:** **2,616 ahead / 2 behind / 233 changed files**. This is a non-destructive inventory, not a semantic integration approval.  
-**PR #1:** OPEN · DRAFT · UNMERGED. Branch protection is disabled. No merge, main edit, reset, rebase, force-push or destructive reconciliation occurred.
+**Exact application/source/test candidate:** `9e04b6bf86784665a48e2b0f8c48b6b48287ec6c`  
+**Decision:** **HOLD / NOT PRODUCTION READY**. This checkpoint records implementation and CI evidence; it does not authorize merge, upload, scheduling or publication.  
+**main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627` · **tested-candidate compare:** 2,985 ahead / 2 behind / 269 changed files.  
+**PR #1:** OPEN · DRAFT · UNMERGED.
 
-## New owner-independent implementation
+## Implementation verified on the exact candidate
 
-- `scripts/dashboard-server.mjs`: `POST /api/uploads/reconcile` now distinguishes a genuinely absent attempt ledger from an existing but unreadable/unsafe ledger. A missing ledger still returns HTTP 409 (“no matching prior attempt”). A corrupt, invalid-schema, symlinked or otherwise unreadable ledger returns HTTP 503 with the ledger-safety error instead of incorrectly claiming that no prior attempt exists.
-- `test/upload-reconcile-fail-closed.integration.test.mjs`: covers six concurrent requests and restart persistence for both the missing-ledger 409 path and unreadable-ledger 503 path. It verifies byte-for-byte dashboard-state preservation, no audit mutation, no invented upload attempt, and that the corrupt ledger is not repaired or overwritten.
-- `test/dashboard-server.test.mjs`: the existing symlinked-ledger case now expects 503 and the explicit unsafe-ledger message.
-- This is a local fail-closed API improvement only. It does not claim successful remote YouTube reconciliation or authorize an upload.
+- [x] Worker cooldown persistence failure retains the process lock; restart is blocked before a new dispatch API request.
+- [x] Regression test covers HTTP 409 plus failed cooldown write and proves the durable restart stop signal.
+- [x] Two supplied candidate Selar products have owner-confirmed SonicVhibez brand authorization; compensation/disclosure gates remain held.
+- [x] Promotional Short plan validates exactly 2 draft items for the week of 9 November, no publication timestamps and no scheduling/publication.
+- [x] SEO keyword evidence refreshed from vidIQ on 7 November; provider-estimated monthly searches are explicitly caveated.
 
-## Exact-SHA CI for `f42c8a0eeb0ca63a9d5212888f811aeee863303b`
+## Exact-SHA CI
 
-- [x] Content quality [41997377068](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41997377068): **PASS — 536/536 Node tests, zero failures, zero skips**.
-- [x] Automation/security [41997376879](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41997376879): **PASS — 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe verified; JavaScript syntax checks and Python compilation passed**.
-- [x] Dashboard Chromium E2E [41997376696](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41997376696): **PASS — 26/26 journeys**.
-- [x] Metadata [41997376657](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41997376657): **PASS**.
-- [x] Isolated main/candidate baseline [41997376667](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41997376667): **PASS**.
-- [x] Non-destructive branch inventory [41997376678](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41997376678): **PASS — inventory only, not semantic approval**.
-- [x] Local Nature Frontiers draft validation [41997376725](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41997376725): **PASS — local validation only; no Meta provider draft was created or read back**.
-- [x] npm lockfile [41997369409](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41997369409) and source recovery bundle [41997369442](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41997369442): **PASS**.
-- [ ] Production readiness [41997376666](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41997376666): **HOLD — 12 blockers; exit code 2**, intentionally fail-closed. Diagnostic artifact: [readiness report](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41997376666/artifacts/13401036595). This is not a production pass.
+- [x] Automation/security [42351724517](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42351724517): 635 Node tests, 34 Python tests, zero skips, npm audit 0 vulnerabilities; Short-plan validation PASS.
+- [x] Content quality [42351723953](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42351723953): PASS.
+- [x] Chromium dashboard E2E [42351723872](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42351723872): 26/26 PASS.
+- [x] Metadata [42351723937](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42351723937): PASS.
+- [x] Isolated main/candidate baseline [42351723921](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42351723921): PASS.
+- [x] Non-destructive branch inventory [42351723910](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42351723910): PASS; not semantic review.
+- [x] Nature Frontiers local draft validation [42351723901](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42351723901): PASS; local-only, not provider-side creation/read-back.
+- [x] Queue readiness [42351723885](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42351723885): PASS for the non-mutating preparation workflow.
+- [ ] Production readiness [42351723913](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42351723913): HOLD / fail-closed; this is not a production pass.
 
-## API-001 route evidence update
+## Remaining acceptance gates
 
-The full route matrix remains **36 routes / 31 PASS / 5 BLOCKED**, with **36/36 authentication-negative checks passing**. API-001 remains NOT_TESTED overall because complete route-by-route success, persistence, audit, concurrency, restart and external-operation acceptance is not complete. The `POST /api/uploads/reconcile` row now records the new concurrency/restart-tested negative paths, while overall acceptance remains BLOCKED until a real authoritative prior attempt and remote video ID can be safely reconciled with YouTube.
+- [ ] DASH-001 — exhaustive dashboard control/form business journeys.
+- [ ] API-001 — full route-by-route success, validation, persistence, audit, concurrency and restart acceptance.
+- [ ] SCHED-001 — retry, cancellation, dead-letter, lease and restart recovery drills.
+- [ ] STATE-001 — backup/restore failure injection and rollback acceptance.
+- [ ] DEPLOY-001 — clean install, upgrade, rollback and recovery drills.
+- [ ] GIT-002 — semantic review of the 2,985-commit divergence; inventory alone is not approval.
+- [ ] Owner-controlled product compensation classification and exact viewer-facing disclosure approval.
+- [ ] Distinct SonicVhibez/Sonic Fire YouTube-only Metricool destination and inspectable schedule.
+- [ ] Genuine rights-cleared media/manifests, final MP4/thumbnail, human playback/compliance review, secure OAuth identity and per-operation private-upload authorization.
 
-## Live external and content status
+Full live evidence: [CURRENT_RELEASE_EVIDENCE_2026-11-07.md](CURRENT_RELEASE_EVIDENCE_2026-11-07.md).
 
-- Metricool exposes only brand `7545638`, labelled **Nature Frontiers**. Its YouTube field matches the pinned SonicVhibez/SonicVibes channel ID, but the same brand includes Nature Frontiers Facebook, Instagram, TikTok and Pinterest identities. No distinct SonicVhibez/Sonic Fire brand is selectable; do not use this mixed brand for SonicVhibez promotions.
-- The read-only schedule query returned **7 future Nature Frontiers records** (7, 11, 14, 18, 21, 25 and 28 November 2026). All seven have `draft=false` and `autoPublish=true`. Four creator-product promotions are scheduled for 11, 14, 18 and 25 November at 10:00 Africa/Johannesburg. They were not changed. The 18 November YouTube Success Blueprint post uses a generic storefront URL instead of the supplied direct product URL.
-- The supplied Selar listings identify Click 47 as seller. The Wildlife Creator's Vault listing also uses Nature Frontiers wording; owner confirmation is required before SonicVhibez cross-brand promotion. Affiliate commission and paid-placement status are not established by the listings.
-- The two weekly wildlife-education Short briefs remain drafts (2/2 weekly allowance); no third Short was added. Both current repository briefs still use the exact approved Vault URL `https://selar.com/0u19v8u99l`. The Prompt Pack and Success Blueprint links remain supplied candidate products, not yet configured as production metadata. No MP4, final thumbnail, rights-cleared asset set or human playback review is available.
-- The connected Metricool schedule is not a SonicVhibez-only YouTube schedule, and complete public/private/unlisted YouTube history is not verified. The 72-hour spacing check is therefore **UNVERIFIED**. No publication calendar was proposed and nothing was scheduled.
-- Public/unattended publishing remains disabled; Safari remains inactive; no upload, publication, live schedule mutation, account reconnection, spend or provider-side campaign action occurred. GitHub scheduled workflows execute from `main`; PR-branch workflow runs are CI evidence, not production automation.
-
-## Remaining gates
-
-DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain open. Owner-controlled prerequisites still include complete remote YouTube history and uncertain-attempt reconciliation, genuine rights-cleared footage/narration/music and manifests, final rendered media and thumbnail, human playback/compliance approval, secure OAuth identity and per-operation private-upload authorization, plus the owner-approved feasible cadence. Do not request secrets in chat.
+---
 
 ---
 
