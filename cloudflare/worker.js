@@ -102,7 +102,8 @@ async function verifyRepositoryRunnerToken(token, { fetchImpl = fetch, nowMs = D
         (claims.nbf !== undefined && (!Number.isFinite(claims.nbf) || claims.nbf * 1000 > nowMs + 60_000))) {
       return false;
     }
-    let jwks = cachedGithubJwks;
+    const cacheableFetch = fetchImpl === fetch;
+    let jwks = cacheableFetch ? cachedGithubJwks : null;
     if (!jwks || nowMs - cachedGithubJwksAt > 5 * 60_000) {
       const response = await fetchImpl("https://token.actions.githubusercontent.com/.well-known/jwks", {
         headers: { accept: "application/json" },
@@ -111,8 +112,10 @@ async function verifyRepositoryRunnerToken(token, { fetchImpl = fetch, nowMs = D
       if (!response.ok) return false;
       jwks = await response.json();
       if (!Array.isArray(jwks.keys)) return false;
-      cachedGithubJwks = jwks;
-      cachedGithubJwksAt = nowMs;
+      if (cacheableFetch) {
+        cachedGithubJwks = jwks;
+        cachedGithubJwksAt = nowMs;
+      }
     }
     const jwk = jwks.keys?.find(key => key.kid === header.kid && key.kty === "RSA" && key.use === "sig");
     if (!jwk) return false;
