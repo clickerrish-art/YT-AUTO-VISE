@@ -2586,6 +2586,9 @@ const server = http.createServer(async (req, res) => {
               receipt.channelTitle !== "SonicVhibez" ||
               receipt.privacyStatus !== "private" ||
               receipt.remoteStatusVerified !== true ||
+              receipt.channelHistoryReconciled !== true ||
+              !Number.isFinite(Date.parse(receipt.historyVerifiedAt ?? "")) ||
+              !Number.isSafeInteger(receipt.historyVideoCount) || receipt.historyVideoCount < 1 ||
               receipt.publishingEnabled !== false ||
               !Number.isFinite(Date.parse(receipt.actualPublishedAt ?? ""))) {
             throw new Error("Persisted receipt does not independently bind the exact private SonicVhibez upload, artifact and actual timestamp");
@@ -2681,7 +2684,10 @@ const server = http.createServer(async (req, res) => {
             !/^[a-f0-9]{64}$/.test(receipt.artifactSha256 ?? "") ||
             !receipt.videoId || receipt.channelId !== configuredChannelId ||
             receipt.channelTitle !== "SonicVhibez" || receipt.privacyStatus !== "private" ||
-            receipt.remoteStatusVerified !== true || receipt.publishingEnabled !== false ||
+            receipt.remoteStatusVerified !== true || receipt.channelHistoryReconciled !== true ||
+            !Number.isFinite(Date.parse(receipt.historyVerifiedAt ?? "")) ||
+            !Number.isSafeInteger(receipt.historyVideoCount) || receipt.historyVideoCount < 1 ||
+            receipt.publishingEnabled !== false ||
             !Number.isFinite(Date.parse(receipt.actualPublishedAt ?? "")) ||
             !ledgerAttempt || ledgerAttempt.status !== "PRIVATE_UPLOAD_VERIFIED" ||
             ledgerAttempt.remoteVideoId !== receipt.videoId ||
