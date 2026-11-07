@@ -39,6 +39,35 @@ function cooldownStatePath(workerId, configuredPath, stateDirectory) {
   return path.join(directory, "worker-backoff-" + identity + ".json");
 }
 
+/** Read persisted worker state from one pinned regular file, refusing final-component symlinks and replacement during the read. */
+export function readCooldownStateFile(statePath) {
+  if (typeof fs.constants.O_NOFOLLOW !== "number") {
+    throw new Error("Worker cooldown state requires O_NOFOLLOW support for safe reads");
+  }
+  const fd = fs.openSync(statePath, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW);
+  try {
+    const openedBefore = fs.fstatSync(fd, { bigint: true });
+    const pathBefore = fs.lstatSync(statePath, { bigint: true });
+    const sameIdentity = (left, right) => left.dev === right.dev && left.ino === right.ino;
+    if (!openedBefore.isFile() || pathBefore.isSymbolicLink() || !pathBefore.isFile() ||
+        !sameIdentity(openedBefore, pathBefore)) {
+      throw new Error("Worker cooldown state changed while opening; refusing an inconsistent read");
+    }
+    const bytes = fs.readFileSync(fd);
+    const openedAfter = fs.fstatSync(fd, { bigint: true });
+    const pathAfter = fs.lstatSync(statePath, { bigint: true });
+    if (!sameIdentity(openedBefore, openedAfter) || !sameIdentity(openedAfter, pathAfter) ||
+        openedBefore.size !== openedAfter.size || openedBefore.mtimeNs !== openedAfter.mtimeNs ||
+        openedBefore.ctimeNs !== openedAfter.ctimeNs || bytes.length !== Number(openedAfter.size) ||
+        pathAfter.isSymbolicLink() || !pathAfter.isFile()) {
+      throw new Error("Worker cooldown state changed during read; refusing an inconsistent snapshot");
+    }
+    return bytes.toString("utf8");
+  } finally {
+    fs.closeSync(fd);
+  }
+}
+
 function loadCooldowns(statePath, workerId) {
   let stat;
   try {
@@ -52,7 +81,7 @@ function loadCooldowns(statePath, workerId) {
   }
   let parsed;
   try {
-    parsed = JSON.parse(fs.readFileSync(statePath, "utf8"));
+    parsed = JSON.parse(readCooldownStateFile(statePath));
   } catch (error) {
     throw new Error("Worker cooldown state is unreadable or corrupt; refusing to reset retry backoff", { cause: error });
   }
