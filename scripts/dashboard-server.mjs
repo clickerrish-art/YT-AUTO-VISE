@@ -2855,11 +2855,34 @@ const server = http.createServer(async (req, res) => {
           try {
             const existing = fs.lstatSync(absolutePath);
             const kind = existing.isSymbolicLink() ? "symbolic link" : existing.isFile() ? "file" : "non-file";
+            const failedAt = new Date().toISOString();
+            const failed = transitionContentJob(job, "FAILED", {
+              actor: "worker-preflight",
+              reason: "Existing render output requires operator reconciliation before another attempt"
+            }, failedAt);
+            failed.errorDetails = {
+              code: "RENDER_ARTIFACT_RECOVERY_REQUIRED",
+              retryable: true,
+              retryableAfterOperatorReview: true,
+              message: "Retained render output exists (" + kind + "); inspect and reconcile or safely archive it before explicitly authorizing another attempt."
+            };
+            state.jobs[index] = failed;
+            state.audit.push({
+              id: crypto.randomUUID(), action: "CONTENT_RENDER_RECOVERY_REQUIRED",
+              jobId: job.id, artifactPath: relativePath, at: failedAt,
+              actor: "worker-preflight", reason: failed.errorDetails.message
+            });
+            saveState(state);
             return json(res, 409, {
               error: "Render output already exists (" + kind + "); refusing to overwrite retained artifacts",
+              detail: failed.errorDetails.message,
               artifactPath: relativePath,
+              jobState: failed.state,
+              retryable: true,
+              requiresOperatorRetry: true,
               recoveryRequired: true,
               retryAllowed: false,
+              publishable: false,
               publishingEnabled: false
             });
           } catch (error) {
@@ -2877,11 +2900,35 @@ const server = http.createServer(async (req, res) => {
             try {
               const existingStat = fs.lstatSync(manifestFile);
               const kind = existingStat.isSymbolicLink() ? "symbolic link" : existingStat.isFile() ? "file" : "non-file";
+              const relativeManifestPath = path.relative(root, manifestFile).split(path.sep).join("/");
+              const failedAt = new Date().toISOString();
+              const failed = transitionContentJob(job, "FAILED", {
+                actor: "worker-preflight",
+                reason: "Existing render manifest requires operator reconciliation before another attempt"
+              }, failedAt);
+              failed.errorDetails = {
+                code: "RENDER_MANIFEST_RECOVERY_REQUIRED",
+                retryable: true,
+                retryableAfterOperatorReview: true,
+                message: "Retained render manifest exists (" + kind + "); inspect and reconcile or safely archive it before explicitly authorizing another attempt."
+              };
+              state.jobs[index] = failed;
+              state.audit.push({
+                id: crypto.randomUUID(), action: "CONTENT_RENDER_RECOVERY_REQUIRED",
+                jobId: job.id, artifactPath: relativeManifestPath, at: failedAt,
+                actor: "worker-preflight", reason: failed.errorDetails.message
+              });
+              saveState(state);
               return json(res, 409, {
                 error: "Render manifest already exists (" + kind + "); refusing to replace retained evidence",
-                artifactPath: path.relative(root, manifestFile).split(path.sep).join("/"),
+                detail: failed.errorDetails.message,
+                artifactPath: relativeManifestPath,
+                jobState: failed.state,
+                retryable: true,
+                requiresOperatorRetry: true,
                 recoveryRequired: true,
                 retryAllowed: false,
+                publishable: false,
                 publishingEnabled: false
               });
             } catch (error) {
