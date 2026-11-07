@@ -25,6 +25,7 @@
 - This does **not** establish whether any link is affiliate, paid placement or uncompensated. Compensation and viewer-facing disclosure remain `UNVERIFIED`; the products remain held from release. The descriptions carry an internal **DISCLOSURE HOLD** and are not publish-ready.
 - `content/promotional-short-plan.json` contains exactly two drafts for the week of **9 November 2026**, no publication timestamps, no live schedule, and no third item. The validator still enforces the two-per-week cap, SonicVhibez-only channel, Africa/Johannesburg, 50–60-second target, exact product URLs, keyword evidence, and disabled scheduling/publication.
 - `scripts/validate-promotional-short-plan.mjs` now requires candidate products used in SonicVhibez draft content to have explicit owner-confirmed brand authorization (exact brand, valid zoned timestamp and approval reference). Compensation/disclosure checks still keep those candidates on hold.
+- The production checklist wording was corrected to describe three 30-day blocks (days 1–30, 31–60 and 61–90) and to time captions against the actual voice track.
 - The exact approved Vault URL remains `https://selar.com/0u19v8u99l`; the two new draft links are the exact Prompt Pack and Success Blueprint URLs.
 
 ## Exact-SHA CI for `9e04b6bf86784665a48e2b0f8c48b6b48287ec6c`
