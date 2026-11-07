@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { authenticate, constantTimeEqual, handleRequest, validateDashboardState } from "../cloudflare/worker.js";
+import { authenticate, constantTimeEqual, handleRequest, operatorIdentity, validateDashboardState } from "../cloudflare/worker.js";
 
 const validState = () => ({
   version: 1,
@@ -69,4 +69,11 @@ test("state endpoints reject missing operator authentication before database acc
   const response = await handleRequest(new Request("https://state.example/api/state"), {});
   assert.equal(response.status, 401);
   assert.deepEqual(await response.json(), { error: "Unauthorized" });
+});
+
+test("write operations require an explicit operator identity for audit attribution", () => {
+  assert.equal(operatorIdentity({ DASHBOARD_OPERATOR_ID: "owner-operator" }), "owner-operator");
+  assert.equal(operatorIdentity({ DASHBOARD_OPERATOR_ID: " " }), null);
+  assert.equal(operatorIdentity({ DASHBOARD_OPERATOR_ID: "x".repeat(121) }), null);
+  assert.equal(operatorIdentity({}), null);
 });
