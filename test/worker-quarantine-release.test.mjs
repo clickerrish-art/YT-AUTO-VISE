@@ -542,7 +542,7 @@ test("dashboard issues a signed quarantine release only for a terminal verified 
     "dashboard issuance must not mutate worker quarantine state");
 
   delete persisted.jobs[0].uploadReceipt.channelHistoryReconciled;
-  fs.writeFileSync(statePath, JSON.stringify(persisted) + "\\n", { mode: 0o600 });
+  fs.writeFileSync(statePath, JSON.stringify(persisted) + "\n", { mode: 0o600 });
   const rejected = await fetch(base + "/api/worker/quarantine-release", {
     method: "POST",
     headers: {
