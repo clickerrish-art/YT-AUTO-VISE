@@ -324,6 +324,24 @@ export function evaluateNextPublication({
       errors.push("upload attempt " + attempt.jobId + " has unsupported status " + (status || "(missing)") + "; refusing to assume it is safe");
     } else if (UNCERTAIN_UPLOAD_STATUSES.includes(status)) {
       errors.push(`upload attempt ${attempt.jobId} has an unresolved/uncertain outcome and must be reconciled`);
+    } else if (verifiedAttemptStatuses.has(status)) {
+      const remoteVideoId = attempt.remoteVideoId ?? attempt.videoId;
+      if (typeof remoteVideoId !== "string" || !remoteVideoId.trim()) {
+        errors.push("verified upload attempt " + attempt.jobId + " is missing its remote video ID; it cannot be trusted as reconciled history");
+        continue;
+      }
+      const matches = normalizedHistory.filter(item => item.id === remoteVideoId);
+      if (matches.length !== 1) {
+        errors.push("verified upload attempt " + attempt.jobId + " does not resolve to exactly one record in complete remote channel history");
+        continue;
+      }
+      const recordedAt = parseStrictTimestamp(attempt.actualPublishedAt);
+      if (!Number.isFinite(recordedAt) || recordedAt !== matches[0].timestamp) {
+        errors.push("verified upload attempt " + attempt.jobId + " actual publication timestamp does not match remote channel history");
+      }
+      if (!attempt.format || attempt.format !== matches[0].format) {
+        errors.push("verified upload attempt " + attempt.jobId + " content format does not match remote channel history");
+      }
     }
   }
   // Completed ledger attempts are evidence to reconcile, not future scheduled slots.
