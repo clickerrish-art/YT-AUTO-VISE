@@ -8,7 +8,8 @@ test("dashboard approval rechecks and binds the exact validated captions and met
   const lifecycle = fs.readFileSync(path.resolve("scripts/content-job-lifecycle.mjs"), "utf8");
   assert.match(server, /const captionsPath = job\.validationResults\?\.captionsPath/);
   assert.match(server, /sha256File\(captionsFile\) !== captionsSha256/);
-  assert.match(server, /relatedArtifacts: \[\.\.\.relatedArtifacts, \{ path: metadataPath, sha256: metadataVersion \}\]/);
+  assert.match(server, /metadataVersion,/);
+  assert.match(server, /technicalValidationReceipt: structuredClone\(job\.validationResults\)/);
   assert.match(lifecycle, /Validated captions path and SHA-256 are required before private-upload approval/);
   assert.match(lifecycle, /\{ path: captionsPath, sha256: captionsSha256 \}/);
 });
