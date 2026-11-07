@@ -4,6 +4,7 @@ import { authorizeContentJobRetry, claimWorkerLease, completeWorkerLease, expire
 import { canonicalAuthoringScriptSha256 } from "./authoring-review-compat.js";
 import { safeDraftItem, validateReservedPublicationSlot } from "./draft-compat.js";
 import { DEFAULT_CAMPAIGNS, manageCampaign, validateCampaigns } from "./campaigns-compat.js";
+import { DEFAULT_WEEKLY_PLAN } from "./weekly-plan-compat.js";
 
 const STATE_ID = 1;
 const MAX_STATE_BYTES = 2 * 1024 * 1024;
@@ -285,22 +286,20 @@ async function handleRequest(request, env) {
     let state;
     try { state = validateDashboardState(JSON.parse(row.state_json)); }
     catch { return json({ error: "Persisted state is corrupt or has an unsupported schema", code: "STATE_INVALID" }, 503); }
+    const plan = DEFAULT_WEEKLY_PLAN;
+    const blockers = [
+      "Complete SonicVhibez public, private and unlisted publication history and uncertain attempts have not been reconciled here.",
+      "Pending or uncertain YouTube upload attempts must be reconciled before any publication operation.",
+      "No publication or unattended scheduling operation is authorized by this read endpoint."
+    ];
     return json({
-      schedule: null,
-      timezone: "Africa/Johannesburg",
-      publicationCycle: {
-        formats: ["long_form", "long_form", "short"],
-        minimumHoursBetweenConsecutivePublications: 72,
-        minimumCycleHours: 216
-      },
-      draftPreparationSlots: null,
-      authoritativeScheduleConfigImported: false,
+      schedule: plan,
+      timezone: plan.timezone,
+      publicationCycle: plan.publicationCycle,
+      draftPreparationSlots: plan.schedule,
+      authoritativeScheduleConfigImported: true,
       publicationHistoryReconciled: false,
-      blockers: [
-        "Authoritative config/weekly-content-plan.json is not imported into the Worker adapter.",
-        "Complete SonicVhibez public, private and unlisted publication history and uncertain attempts have not been reconciled here.",
-        "No publication or unattended scheduling operation is authorized by this read endpoint."
-      ],
+      blockers,
       queuedReservations: state.queueItems.filter(item => item?.reservationType === "SCHEDULED_SLOT"),
       publishingEnabled: false,
       readOnly: true,
