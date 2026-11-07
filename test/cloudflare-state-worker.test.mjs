@@ -1319,7 +1319,7 @@ test("private R2 artifact creation rejects unbound SHA, unsafe paths and storage
       };
     }
   };
-  const env = { STATE_DB: database, ARTIFACTS: { async createMultipartUpload() { throw new Error("must not create"); } } };
+  const env = { STATE_DB: database, ARTIFACTS: { async put() {}, async get() {}, async delete() {}, async createMultipartUpload() { throw new Error("must not create"); } } };
   const send = body => handleRequest(new Request("https://state.example/api/runner/artifacts/create", {
     method: "POST", headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
     body: JSON.stringify(body)
