@@ -540,4 +540,20 @@ test("dashboard issues a signed quarantine release only for a terminal verified 
   assert.equal(persisted.jobs[0].state, "PRIVATE_UPLOAD_VERIFIED");
   assert.equal(fs.existsSync(path.join(dir, "worker-backoff-" + crypto.createHash("sha256").update(workerId).digest("hex").slice(0, 20) + ".json")), false,
     "dashboard issuance must not mutate worker quarantine state");
+
+  delete persisted.jobs[0].uploadReceipt.channelHistoryReconciled;
+  fs.writeFileSync(statePath, JSON.stringify(persisted) + "\\n", { mode: 0o600 });
+  const rejected = await fetch(base + "/api/worker/quarantine-release", {
+    method: "POST",
+    headers: {
+      "x-operator-token": operatorToken,
+      "x-quarantine-release-token": releaseToken,
+      "content-type": "application/json"
+    },
+    body: JSON.stringify({ workerId, jobId })
+  });
+  assert.equal(rejected.status, 409, "quarantine release must reject a legacy receipt without complete channel-history proof");
+  const afterRejected = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  assert.equal(afterRejected.audit.filter(item => item.action === "WORKER_QUARANTINE_RELEASE_RECEIPT_ISSUED").length, 1,
+    "rejected legacy receipt must not issue another release or append an audit event");
 });
