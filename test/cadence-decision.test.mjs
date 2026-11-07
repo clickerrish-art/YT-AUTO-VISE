@@ -15,6 +15,12 @@ test("accepts an explicit timezone-qualified owner decision that preserves the 7
   assert.deepEqual(validateCadenceDecision(rollingApproval, 96), { valid: true, errors: [] });
 });
 
+test("rolling-cycle approval rejects a contradictory weekly publication target", () => {
+  const result = validateCadenceDecision({ ...rollingApproval, weeklyPublicationTarget: 3 }, 72);
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some(error => /must omit weeklyPublicationTarget/.test(error)));
+});
+
 test("requires owner approval, a supported mode, a valid zoned timestamp and a reference", () => {
   for (const patch of [
     { status: "DRAFT" },
