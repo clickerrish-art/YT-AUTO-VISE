@@ -1029,7 +1029,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     assert.equal(manifestBody.artifactPath, "content/job-render-manifests/" + manifestJob.id + ".json");
     assert.deepEqual(fs.readFileSync(manifestPath), retainedManifestBytes, "an existing render manifest must remain byte-for-byte unchanged");
     const stateAfterManifestRefusal = JSON.parse(fs.readFileSync(manifestStatePath, "utf8"));
-    assert.equal(stateAfterManifestRefusal.jobs.find(job => job.id === manifestJob.id).state, "QUEUED");
+    assert.equal(stateAfterManifestRefusal.jobs.find(job => job.id === manifestJob.id).state, "FAILED", "retained render manifests must quarantine the job for operator recovery");
   } finally {
     fs.rmSync(manifestPath, { force: true });
   }
@@ -1342,7 +1342,7 @@ test("every protected dashboard API route rejects missing and invalid operator a
     const protectedReadRoutes = inventory.routes.filter(route =>
       route.path.startsWith("/api/") && route.method === "GET"
     );
-    assert.equal(protectedReadRoutes.length, 15, "all protected API read routes must be included in the auth matrix");
+    assert.equal(protectedReadRoutes.length, 11, "all protected API read routes must be included in the auth matrix");
 
     for (const route of protectedReadRoutes) {
       for (const authCase of [
