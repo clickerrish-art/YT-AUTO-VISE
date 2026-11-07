@@ -108,7 +108,7 @@ test("Short 001 keeps the required title format and an explicit disclosure hold"
 });
 
 
-test("new supplied Selar products have verified sellers but remain blocked from SonicVhibez promotion", () => {
+test("new supplied Selar products have owner-confirmed brand authorization but remain blocked until disclosure is verified", () => {
   const config = JSON.parse(fs.readFileSync("config/products.json", "utf8"));
   const candidates = config.products.filter(product => product.status === "candidate");
   assert.equal(candidates.length, 2);
@@ -118,7 +118,7 @@ test("new supplied Selar products have verified sellers but remain blocked from 
     const errors = validateProductPromotionGate(product, undefined, { requireMetadataDisclosure: false });
     assert.ok(!errors.some(error => /seller details must be reverified/i.test(error)));
     assert.ok(errors.some(error => /product must remain approved/i.test(error)));
-    assert.ok(errors.some(error => /brand authorization must be owner-confirmed/i.test(error)));
+    assert.equal(errors.some(error => /brand authorization must be owner-confirmed/i.test(error)), false);
     assert.ok(errors.some(error => /compensation relationship must be verified/i.test(error)));
     assert.ok(errors.some(error => /viewer-facing disclosure must be owner-approved/i.test(error)));
   }

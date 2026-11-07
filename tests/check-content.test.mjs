@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-test("only the owner-provided vault URL is approved; other supplied links remain held candidates", () => {
+test("all supplied Selar links are owner-authorized for SonicVhibez while two remain held candidates", () => {
   const config = JSON.parse(fs.readFileSync("config/products.json", "utf8"));
   const approved = config.products.filter(product => product.status === "approved");
   const candidates = config.products.filter(product => product.status === "candidate");
@@ -18,7 +18,10 @@ test("only the owner-provided vault URL is approved; other supplied links remain
   assert.ok(candidates.every(product => product.promotionGate.seller.name === "Click 47"));
   assert.ok(candidates.every(product => product.promotionGate.seller.sourceUrl === product.url));
   assert.ok(candidates.every(product => product.promotionGate.seller.evidenceReference.includes("2026-11-06")));
-  assert.ok(candidates.every(product => product.promotionGate.brandAuthorization.status === "OWNER_CONFIRMATION_REQUIRED"));
+  assert.ok(candidates.every(product => product.promotionGate.brandAuthorization.status === "OWNER_CONFIRMED"));
+  assert.ok(candidates.every(product => product.promotionGate.brandAuthorization.brand === "SonicVhibez"));
+  assert.ok(candidates.every(product => product.promotionGate.brandAuthorization.confirmedAt === "2026-11-07T09:15:59+02:00"));
+  assert.ok(candidates.every(product => product.promotionGate.brandAuthorization.approvalReference.includes("2026-11-07")));
   assert.ok(candidates.every(product => product.promotionGate.compensation.status === "UNVERIFIED"));
   assert.ok(candidates.every(product => product.promotionGate.disclosure.status === "UNVERIFIED"));
 });

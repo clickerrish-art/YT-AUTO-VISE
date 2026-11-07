@@ -31,38 +31,38 @@
           "keywordPhrases": [
             {
               "phrase": "how to script a YouTube video",
-              "estimatedMonthlySearches": 44388,
+              "estimatedMonthlySearches": 44320,
               "volumeScore": 69,
               "competition": 46,
-              "growthPct": 16.4
+              "growthPct": 70.6
             },
             {
               "phrase": "YouTube video prompts",
-              "estimatedMonthlySearches": 3952,
+              "estimatedMonthlySearches": 3946,
               "volumeScore": 54,
               "competition": 29,
               "growthPct": null
             },
             {
               "phrase": "YouTube video ideas",
-              "estimatedMonthlySearches": 56566,
+              "estimatedMonthlySearches": 53941,
               "volumeScore": 71,
               "competition": 27,
-              "growthPct": 12.3
+              "growthPct": null
             },
             {
-              "phrase": "how to write YouTube scripts",
-              "estimatedMonthlySearches": 54951,
-              "volumeScore": 71,
-              "competition": 44,
-              "growthPct": 3.4
+              "phrase": "how to come up with YouTube video ideas",
+              "estimatedMonthlySearches": 18637,
+              "volumeScore": 64,
+              "competition": 31,
+              "growthPct": 41.4
             }
           ],
           "keywordEvidence": {
             "provider": "vidIQ",
-            "researchedAt": "2026-11-06T10:46:19+02:00",
+            "researchedAt": "2026-11-07T09:15:59+02:00",
             "type": "estimated_monthly_searches",
-            "note": "Estimates and 0–100 scores returned by vidIQ; not independently audited. The selected how-to phrase matches the lesson; related prompt and idea phrases are supporting terms, not a reason to change the topic."
+            "note": "Fresh vidIQ research on 2026-11-07. Primary phrase: 44,320 estimated monthly searches, competition 46/100 and search-demand growth +70.6%. Related intent: YouTube video prompts 3,946 (competition 29), YouTube video ideas 53,941 (competition 27; top markets IN 29%, US 12%, PH 6%), and how to come up with YouTube video ideas 18,637 (+41.4%, competition 31). Estimates are provider estimates, not independently audited; the primary phrase directly matches the scripting lesson."
           },
           "hashtags": [
             "#YouTubeVideoPrompts",
@@ -86,7 +86,7 @@
             "Record narration naturally and confirm a final runtime near 55 seconds.",
             "Retiming captions to the actual voice track; check phone-size readability and vertical safe areas.",
             "Recheck the exact Selar listing and seller before promotion.",
-            "Obtain SonicVhibez brand authorization and verify affiliate, paid or no-compensation status.",
+            "Record the owner-confirmed SonicVhibez brand authorization and verify affiliate, paid or no-compensation status.",
             "Replace the disclosure hold with the exact approved viewer-facing disclosure.",
             "Complete human playback, factual and thumbnail review against final asset hashes.",
             "Do not schedule until the SonicVhibez destination and full YouTube history are verified and every 72-hour gap is calculated."
@@ -99,53 +99,45 @@
           "targetSeconds": 55,
           "title": "YouTube Growth Strategy: Build a 90-Day Content Plan",
           "primaryKeyword": "YouTube growth strategy",
-          "script": "Want a YouTube growth strategy you can actually review? Build a 90-day plan in three blocks. Days 1–30: choose one audience, clarify its problem, and set a realistic production capacity. Days 31–60: build a repeatable series, publish at a sustainable pace, and test hooks and packaging. Days 61–90: review your own analytics—click-through rate, average view duration, and returning viewers—then keep what the evidence supports and change one thing at a time. Don't treat one upload as proof of a trend. The YouTube Success Blueprint 90-Day Creator System listing describes a 30/60/90-day creator plan; review its contents and decide whether it fits your needs. A plan is a learning cycle, not a guarantee of growth.",
+          "script": "Want a YouTube growth strategy you can actually review? Build a 90-day plan in three blocks. Days 1–30: choose one audience, name the problem your videos solve, and set a production pace you can maintain. Days 31–60: create a repeatable series, publish at that pace, and test one hook or thumbnail change at a time. Days 61–90: review your own analytics—click-through rate, average view duration and returning viewers. Compare similar videos and time windows. Write down what you expected, what the numbers show, and one change to test next. The YouTube Success Blueprint 90-Day Creator System listing describes a 30/60/90-day plan; check the details before deciding if it fits. A plan is a learning cycle, not a growth guarantee.",
           "productId": "youtube-success-blueprint-90-day",
           "productUrl": "https://selar.com/91j893378q",
           "description": "Build a YouTube growth strategy with a 90-day content plan: set realistic production capacity, test a repeatable series, then review patterns in your own analytics.\n\nPlanning resource: The YouTube Success Blueprint 90-Day Creator System\nThe Selar listing outlines a 30/60/90-day creator plan and topics including niche and audience, repeatable video ideas, hooks, titles and thumbnails, analytics and pre-publish checks. Review the listing for full contents.\nhttps://selar.com/91j893378q\n\nDISCLOSURE HOLD: SonicVhibez brand authorization and whether this link is affiliate, paid, or uncompensated are not verified for this promotion. Replace this hold with the accurate approved viewer-facing disclosure before release. Do not publish while unresolved.\n\nA 90-day plan is a review cycle, not a guarantee of views, subscribers, monetisation or income.",
           "keywordPhrases": [
             {
               "phrase": "YouTube growth strategy",
-              "estimatedMonthlySearches": 23008,
+              "estimatedMonthlySearches": 22973,
               "volumeScore": 65,
               "competition": 46,
-              "growthPct": 3.5
-            },
-            {
-              "phrase": "content planning",
-              "estimatedMonthlySearches": 11673,
-              "volumeScore": 61,
-              "competition": 23,
-              "growthPct": -21.7
-            },
-            {
-              "phrase": "YouTube content strategy",
-              "estimatedMonthlySearches": 9352,
-              "volumeScore": 59,
-              "competition": 50,
-              "growthPct": -57.8
-            },
-            {
-              "phrase": "YouTube video ideas",
-              "estimatedMonthlySearches": 56566,
-              "volumeScore": 71,
-              "competition": 27,
-              "growthPct": 12.3
-            },
-            {
-              "phrase": "90 day YouTube content plan",
-              "estimatedMonthlySearches": null,
-              "belowReportingThreshold": true,
-              "volumeScore": 0,
-              "competition": 34,
               "growthPct": null
+            },
+            {
+              "phrase": "how to grow YouTube channel",
+              "estimatedMonthlySearches": 214276,
+              "volumeScore": 80,
+              "competition": 40,
+              "growthPct": 43
+            },
+            {
+              "phrase": "YouTube growth tips",
+              "estimatedMonthlySearches": 86457,
+              "volumeScore": 74,
+              "competition": 33,
+              "growthPct": null
+            },
+            {
+              "phrase": "how to grow a small YouTube channel",
+              "estimatedMonthlySearches": 129456,
+              "volumeScore": 76,
+              "competition": 36,
+              "growthPct": 238.3
             }
           ],
           "keywordEvidence": {
             "provider": "vidIQ",
-            "researchedAt": "2026-11-06T10:46:19+02:00",
+            "researchedAt": "2026-11-07T09:15:59+02:00",
             "type": "estimated_monthly_searches",
-            "note": "The exact 90-day long-tail seed is below the tool's reporting threshold (<750 estimated monthly searches); the title therefore leads with the better-supported, directly relevant YouTube growth strategy phrase. Estimates are not independently audited."
+            "note": "Fresh vidIQ research on 2026-11-07. Primary phrase: YouTube growth strategy, 22,973 estimated monthly searches and competition 46/100. Closely related searches include how to grow YouTube channel 214,276 (+43%, competition 40), YouTube growth tips 86,457 (competition 33), and how to grow a small YouTube channel 129,456 (+238.3%, competition 36). The title keeps the more precise strategy phrase; broader growth terms remain supporting phrases, not a promise of results. Estimates are provider estimates, not independently audited."
           },
           "hashtags": [
             "#YouTubeGrowthStrategy",
@@ -170,7 +162,7 @@
             "Record narration naturally and confirm a final runtime near 55 seconds.",
             "Retiming captions to the actual voice track; check phone-size readability and vertical safe areas.",
             "Recheck the exact Selar listing and seller before promotion.",
-            "Obtain SonicVhibez brand authorization and verify affiliate, paid or no-compensation status.",
+            "Record the owner-confirmed SonicVhibez brand authorization and verify affiliate, paid or no-compensation status.",
             "Replace the disclosure hold with the exact approved viewer-facing disclosure.",
             "Complete human playback, factual and thumbnail review against final asset hashes.",
             "Do not schedule until the SonicVhibez destination and full YouTube history are verified and every 72-hour gap is calculated."

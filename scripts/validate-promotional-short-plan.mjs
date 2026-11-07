@@ -80,7 +80,10 @@ export function validatePromotionalShortPlan(plan, products) {
         if (gate.seller?.sourceUrl !== product.url) errors.push(`${label}: candidate seller evidence URL must match the exact product URL`);
         if (!isValidZonedIsoTimestamp(gate.seller?.verifiedAt)) errors.push(`${label}: candidate seller verification needs a valid timezone-qualified timestamp`);
         if (typeof gate.seller?.evidenceReference !== "string" || !gate.seller.evidenceReference.trim()) errors.push(`${label}: candidate seller verification needs an evidence reference`);
-        if (gate.brandAuthorization?.status !== "OWNER_CONFIRMATION_REQUIRED") errors.push(`${label}: candidate SonicVhibez brand authorization must remain owner-controlled`);
+        if (gate.brandAuthorization?.status !== "OWNER_CONFIRMED") errors.push(`${label}: candidate SonicVhibez brand authorization must be owner-confirmed`);
+        if (gate.brandAuthorization?.brand !== "SonicVhibez") errors.push(`${label}: candidate brand authorization must name exactly SonicVhibez`);
+        if (!isValidZonedIsoTimestamp(gate.brandAuthorization?.confirmedAt)) errors.push(`${label}: candidate brand authorization needs a valid timezone-qualified confirmation timestamp`);
+        if (typeof gate.brandAuthorization?.approvalReference !== "string" || !gate.brandAuthorization.approvalReference.trim()) errors.push(`${label}: candidate brand authorization needs an owner approval reference`);
         if (gate.compensation?.status !== "UNVERIFIED") errors.push(`${label}: candidate compensation status must remain UNVERIFIED`);
         if (gate.disclosure?.status !== "UNVERIFIED") errors.push(`${label}: candidate disclosure status must remain UNVERIFIED`);
       }
