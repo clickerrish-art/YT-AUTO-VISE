@@ -16,7 +16,7 @@ test("dashboard runs only allowlisted real validation commands and persists resu
     stdio: ["ignore", "pipe", "pipe"]
   });
   let logs = "";
-  child.stdout.on("data", chunk => { logs += chunk.toString(); for (const line of chunk.toString().split(/\\r?\\n/)) { try { const event = JSON.parse(line); if (event.event === "dashboard_started") port = event.port; } catch {} } });
+  child.stdout.on("data", chunk => { logs += chunk.toString(); for (const line of chunk.toString().split(/\r?\n/)) { try { const event = JSON.parse(line); if (event.event === "dashboard_started") port = event.port; } catch {} } });
   child.stderr.on("data", chunk => { logs += chunk.toString(); });
   t.after(() => { child.kill("SIGTERM"); fs.rmSync(stateDir, { recursive: true, force: true }); });
   let base = null;
@@ -40,7 +40,7 @@ test("dashboard runs only allowlisted real validation commands and persists resu
     stdio: ["ignore", "pipe", "pipe"]
   });
   let logs2 = "";
-  child2.stdout.on("data", chunk => { logs2 += chunk.toString(); for (const line of chunk.toString().split(/\\r?\\n/)) { try { const event = JSON.parse(line); if (event.event === "dashboard_started") port2 = event.port; } catch {} } });
+  child2.stdout.on("data", chunk => { logs2 += chunk.toString(); for (const line of chunk.toString().split(/\r?\n/)) { try { const event = JSON.parse(line); if (event.event === "dashboard_started") port2 = event.port; } catch {} } });
   child2.stderr.on("data", chunk => { logs2 += chunk.toString(); });
   t.after(() => child2.kill("SIGTERM"));
   let base2 = null;
