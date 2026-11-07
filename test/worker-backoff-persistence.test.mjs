@@ -29,7 +29,7 @@ test("worker persists retry backoff across process restarts and does not immedia
     }
     if (req.method === "POST" && req.url === "/api/jobs/produce") {
       produceRequests += 1;
-      res.statusCode = 409;
+      res.writeHead(409, { "retry-after": "60", "content-type": "application/json" });
       res.end(JSON.stringify({ error: "render prerequisites are not satisfied", publishingEnabled: false }));
       return;
     }
@@ -46,11 +46,14 @@ test("worker persists retry backoff across process restarts and does not immedia
   await runWorker({ baseUrl, token, workerId, once: true, cooldownStatePath: statePath, onCycle: value => firstCycles.push(value) });
   assert.equal(produceRequests, 1);
   assert.equal(firstCycles[0].results[0].httpStatus, 409);
+  assert.ok(firstCycles[0].results[0].retryAfterMs >= 59_000,
+    "HTTP 409 Retry-After must override the shorter local fallback delay");
   const saved = JSON.parse(fs.readFileSync(statePath, "utf8"));
   assert.equal(saved.schemaVersion, 1);
   assert.equal(saved.workerId, workerId);
   assert.equal(saved.cooldowns["job-awaiting-render-prerequisites"].attempts, 1);
-  assert.ok(saved.cooldowns["job-awaiting-render-prerequisites"].nextAttemptAt > Date.now());
+  assert.ok(saved.cooldowns["job-awaiting-render-prerequisites"].nextAttemptAt >= Date.now() + 59_000,
+    "the server's 60-second Retry-After must be persisted");
   assert.equal(fs.statSync(statePath).mode & 0o777, 0o600, "retry state must be private to the worker account");
 
   const restartedCycles = [];
