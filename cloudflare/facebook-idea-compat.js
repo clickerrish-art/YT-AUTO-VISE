@@ -27,8 +27,8 @@ const IDEA_BANK = Object.freeze([
 
 function normalizeText(value) {
   return String(value ?? "").normalize("NFKC").toLocaleLowerCase("en-ZA")
-    .replace(/https?:\\/\\/\\S+/g, " ")
-    .replace(/[^\\p{L}\\p{N}]+/gu, " ").trim().replace(/\\s+/g, " ");
+    .replace(/https?:[^ ]+/g, " ")
+    .replace(/[^a-z0-9]+/g, " ").trim().replace(/ +/g, " ");
 }
 function similarityRatio(left, right) {
   const a = new Set(normalizeText(left).split(" ").filter(word => word.length > 2));
@@ -40,7 +40,7 @@ function similarityRatio(left, right) {
 }
 
 export function generateDashboardFacebookIdea({ date, existingDrafts = [], recentPosts = [] }) {
-  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(String(date))) throw new Error("A valid YYYY-MM-DD date is required");
+  if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(String(date))) throw new Error("A valid YYYY-MM-DD date is required");
   const dateValue = new Date(date + "T12:00:00Z");
   if (Number.isNaN(dateValue.getTime()) || dateValue.toISOString().slice(0, 10) !== date) throw new Error("Idea date is invalid");
   const used = [...existingDrafts, ...recentPosts].filter(item => !["REJECTED", "CANCELLED"].includes(item.status));
