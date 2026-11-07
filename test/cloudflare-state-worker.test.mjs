@@ -855,7 +855,8 @@ test("Meta and YouTube provider operations fail closed without external adapters
 
 
 test("capabilities endpoint distinguishes implemented durable operations from runner/provider blockers", async () => {
-  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: {}, ASSETS: {} };
+  const { database } = mutableDatabase(validState());
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: database, ASSETS: {} };
   const response = await handleRequest(new Request("https://state.example/api/capabilities", {
     headers: { "x-operator-token": "a".repeat(24) }
   }), env);
