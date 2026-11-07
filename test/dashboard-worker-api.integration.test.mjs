@@ -258,7 +258,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
   ];
   const recoveryState = JSON.parse(fs.readFileSync(statePath, "utf8"));
   recoveryState.jobs.push(...recoveryJobs);
-  fs.writeFileSync(statePath, JSON.stringify(recoveryState, null, 2) + "\\n");
+  fs.writeFileSync(statePath, JSON.stringify(recoveryState, null, 2) + "\n");
   const outputDirectory = path.join(process.cwd(), "media", "jobs", "recovery-output-job");
   const manifestDirectory = path.join(process.cwd(), "content", "job-render-manifests");
   fs.mkdirSync(outputDirectory, { recursive: true });
