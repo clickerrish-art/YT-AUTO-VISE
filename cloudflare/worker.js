@@ -112,10 +112,10 @@ async function verifyRepositoryRunnerToken(token, { fetchImpl = fetch, nowMs = D
   }
 }
 
-async function authenticateRepositoryRunner(request) {
+async function authenticateRepositoryRunner(request, fetchImpl = fetch) {
   const authorization = request.headers.get("authorization") ?? "";
   const match = authorization.match(/^Bearer ([A-Za-z0-9._~-]+)$/);
-  return match ? verifyRepositoryRunnerToken(match[1]) : false;
+  return match ? verifyRepositoryRunnerToken(match[1], { fetchImpl }) : false;
 }
 
 function validateRunnerBackoff(value, workerId) {
@@ -189,7 +189,7 @@ function validRealDate(value) {
   return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
 }
 
-async function handleRequest(request, env) {
+async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
   const url = new URL(request.url);
   const method = request.method.toUpperCase();
 
@@ -267,7 +267,7 @@ async function handleRequest(request, env) {
   }
   const runnerRoute = url.pathname.startsWith("/api/runner/");
   if (runnerRoute) {
-    if (!(await authenticateRepositoryRunner(request))) return json({ error: "Unauthorized", code: "WORKER_OIDC_UNAUTHORIZED" }, 401);
+    if (!(await authenticateRepositoryRunner(request, fetchImpl))) return json({ error: "Unauthorized", code: "WORKER_OIDC_UNAUTHORIZED" }, 401);
     if (url.pathname === "/api/runner/snapshot" && method === "GET") {
       const row = await currentState(env);
       if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
