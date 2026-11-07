@@ -1,5 +1,5 @@
 import { DEFAULT_WEEKLY_PLAN } from "./weekly-plan-compat.js";
-import { validateCampaigns } from "./campaigns-compat.js";
+import { DEFAULT_CAMPAIGNS, validateCampaigns } from "./campaigns-compat.js";
 
 const REQUIRED_ARRAYS = ["queueItems", "audit", "jobs", "uploads"];
 const OPTIONAL_ARRAYS = ["campaigns", "facebookDrafts", "facebookPosts", "facebookAttempts"];
@@ -50,7 +50,7 @@ export function normalizeDashboardState(value) {
  */
 export function toDashboardStateResponse(state, { revision, updatedAt }) {
   const normalized = normalizeDashboardState(state);
-  const campaigns = normalized.campaigns;
+  const campaigns = normalized.campaigns.length ? normalized.campaigns : structuredClone(DEFAULT_CAMPAIGNS);
   const campaignErrors = validateCampaigns({ version: 1, campaigns });
   const blockers = [
     ...campaignErrors.map(error => "Campaign configuration: " + error),
