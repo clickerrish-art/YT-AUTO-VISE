@@ -45,15 +45,15 @@ test("rejects publishing enablement and active Safari campaigns", () => {
   assert.throws(() => validateDashboardState(publishing), /Publishing must remain disabled/);
   const safari = validState();
   safari.campaigns = [{ type: "safari_affiliate", status: "ACTIVE" }];
-  assert.throws(() => validateDashboardState(safari), /Safari affiliate campaigns must remain inactive/);
+  assert.throws(() => validateDashboardState(safari), /Safari affiliate campaigns must remain fully inactive and unapproved/);
 });
 
-test("accepts legacy state without optional Facebook arrays without inventing them", () => {
+test("normalizes legacy state without optional Facebook arrays to empty compatibility collections", () => {
   const legacy = validState();
   delete legacy.facebookDrafts;
   delete legacy.facebookPosts;
   delete legacy.facebookAttempts;
-  assert.equal(validateDashboardState(legacy).facebookDrafts, undefined);
+  assert.deepEqual(validateDashboardState(legacy).facebookDrafts, []);
 });
 
 test("health endpoint exposes only the fail-closed service status", async () => {
