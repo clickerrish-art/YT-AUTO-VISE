@@ -1049,7 +1049,7 @@ test("repository runner backoff state is durable, worker-scoped and revision gua
   assert.equal(loaded.state.cooldowns["job-1"].attempts, 1);
   assert.equal((await save()).status, 409);
   const invalid = await handleRequest(new Request("https://state.example/api/runner/backoff", {
-    method: "PUT", headers: { "x-worker-token": token, "content-type": "application/json" },
+    method: "PUT", headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
     body: JSON.stringify({ workerId: "runner-one", expectedRevision: 1, state: { ...state, workerId: "runner-two" } })
   }), env, fixture);
   assert.equal(invalid.status, 400);
