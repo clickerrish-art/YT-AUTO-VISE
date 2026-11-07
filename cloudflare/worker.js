@@ -305,6 +305,30 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
     }
     if (!(await authenticateRepositoryRunner(request, fetchImpl))) return json({ error: "Unauthorized", code: "WORKER_OIDC_UNAUTHORIZED" }, 401);
 
+    if (url.pathname === "/api/runner/artifacts" && method === "GET") {
+      const jobId = url.searchParams.get("jobId") ?? "";
+      if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(jobId)) return json({ error: "A valid jobId is required" }, 400);
+      const rows = await env.STATE_DB.prepare(
+        "SELECT artifact_id, source_path, artifact_kind, filename, sha256, size_bytes, content_type, status, object_key, upload_id, part_size_bytes, expected_parts, created_at, completed_at FROM runner_artifacts WHERE job_id = ? ORDER BY created_at"
+      ).bind(jobId).all();
+      const artifacts = [];
+      for (const row of rows.results ?? []) {
+        const parts = row.status === "UPLOADING"
+          ? await env.STATE_DB.prepare("SELECT part_number, etag FROM runner_artifact_parts WHERE artifact_id = ? ORDER BY part_number").bind(row.artifact_id).all()
+          : { results: [] };
+        artifacts.push({
+          artifactId: row.artifact_id, sourcePath: row.source_path, kind: row.artifact_kind,
+          filename: row.filename, sha256: row.sha256, sizeBytes: row.size_bytes,
+          contentType: row.content_type, status: row.status, objectKey: row.object_key,
+          uploadId: row.status === "UPLOADING" ? row.upload_id : undefined,
+          partSizeBytes: row.part_size_bytes, expectedParts: row.expected_parts,
+          uploadedParts: (parts.results ?? []).map(part => ({ partNumber: part.part_number, etag: part.etag })),
+          createdAt: row.created_at, completedAt: row.completed_at
+        });
+      }
+      return json({ jobId, artifacts, publishingEnabled: false });
+    }
+
     if (url.pathname === "/api/runner/artifacts/create" && method === "POST") {
       if (!env.ARTIFACTS || typeof env.ARTIFACTS.createMultipartUpload !== "function") {
         return json({ error: "Private R2 artifact binding is unavailable", code: "ARTIFACT_STORAGE_NOT_CONFIGURED" }, 503);
