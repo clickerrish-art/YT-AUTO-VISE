@@ -379,7 +379,7 @@ test("next-publication gate cannot be weakened below 72 hours through an option 
 
 
 test("active reservations never fall back to createdAt when scheduledAt is missing", () => {
-  for (const status of ["queued", "queued_for_publication", "pending_schedule", "scheduled", "uploading", "uncertain", "recovery_required"]) {
+  for (const status of ["queued", "queued_for_publication", "pending_schedule", "scheduled", "uploading", "uncertain", "recovery_required", "remote_accepted_reconciliation_required"]) {
     const result = validatePublicationSlot(
       { id: "next", scheduledAt: "2026-10-28T15:00:00Z" },
       [{ id: `reservation-${status}`, status, createdAt: "2026-10-20T15:00:00Z" }]
