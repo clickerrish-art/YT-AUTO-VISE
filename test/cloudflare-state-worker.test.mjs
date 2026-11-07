@@ -817,7 +817,7 @@ test("publication readiness remains blocked until complete remote history and on
   assert.equal(response.status, 503);
   assert.equal(body.ready, false);
   assert.equal(body.publicationReadiness, "BLOCKED");
-  assert.ok(body.blockers.some(blocker => blocker.includes("complete SonicVhibez")));
+  assert.ok(body.blockers.some(blocker => blocker.includes("Complete SonicVhibez")));
   assert.ok(body.blockers.some(blocker => blocker.includes("one-shot authorization")));
   assert.equal(body.publishingEnabled, false);
   assert.equal(body.publicPublishingEnabled, false);
