@@ -122,3 +122,68 @@ test("deployment replacement and process restart preserve external persistent da
     await stopRelease(second.child);
   }
 });
+
+
+test("failed replacement startup rolls back to the previous release without losing persistent state", async t => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-deploy-rollback-"));
+  const stateDir = path.join(temporaryRoot, "persistent-state");
+  const previousRelease = path.join(temporaryRoot, "previous-release");
+  const failedReplacement = path.join(temporaryRoot, "failed-replacement");
+  t.after(() => fs.rmSync(temporaryRoot, { recursive: true, force: true }));
+  fs.mkdirSync(stateDir, { recursive: true });
+  copyRelease(previousRelease);
+  copyRelease(failedReplacement);
+
+  const marker = { id: "rollback-queue-marker", title: "Retain across failed deployment", status: "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW" };
+  fs.writeFileSync(path.join(stateDir, "dashboard-state.json"), JSON.stringify({
+    version: 1,
+    queueItems: [marker],
+    campaigns: [],
+    audit: [{ id: "rollback-audit-marker", action: "PREVIOUS_RELEASE_ACTIVE" }],
+    jobs: [],
+    uploads: [],
+    facebookDrafts: [],
+    facebookPosts: [],
+    facebookAttempts: []
+  }, null, 2) + "\\n", { mode: 0o600 });
+
+  // Establish the known-good release, then stop it as a deployment would.
+  const knownGood = await startRelease(previousRelease, stateDir);
+  try {
+    assert.equal((await fetch(`http://127.0.0.1:${knownGood.port}/healthz`)).status, 200);
+    assert.deepEqual((await readPersistedState(knownGood.port)).queueItems, [marker]);
+  } finally {
+    await stopRelease(knownGood.child);
+  }
+
+  // Model a bad replacement artifact: its server entry point is missing.
+  fs.rmSync(path.join(failedReplacement, "scripts", "dashboard-server.mjs"));
+  const failed = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    cwd: failedReplacement,
+    env: {
+      ...process.env,
+      DASHBOARD_HOST: "127.0.0.1",
+      DASHBOARD_STATE_DIR: stateDir,
+      PORT: "0",
+      FACEBOOK_PUBLISH_ENABLED: "NO"
+    },
+    stdio: "ignore"
+  });
+  const [exitCode] = await once(failed, "exit");
+  assert.notEqual(exitCode, 0, "replacement with a missing entry point must fail startup");
+
+  // Roll back by restarting the previous release against the same persistent volume.
+  const recovered = await startRelease(previousRelease, stateDir);
+  try {
+    const health = await fetch(`http://127.0.0.1:${recovered.port}/healthz`);
+    assert.equal(health.status, 200);
+    assert.equal((await health.json()).publishingEnabled, false);
+    const restored = await readPersistedState(recovered.port);
+    assert.deepEqual(restored.queueItems, [marker]);
+    assert.equal(restored.audit[0].id, "rollback-audit-marker");
+    assert.equal(restored.publishingEnabled, false);
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8")).queueItems, [marker]);
+  } finally {
+    await stopRelease(recovered.child);
+  }
+});
