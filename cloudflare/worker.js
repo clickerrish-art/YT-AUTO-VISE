@@ -101,8 +101,16 @@ async function handleRequest(request, env) {
     let state;
     try { state = validateDashboardState(await readJson(request)); }
     catch (error) { return json({ error: error.message }, 400); }
-    const stateJson = JSON.stringify(state);
     const now = new Date().toISOString();
+    const stateJson = JSON.stringify({
+      ...state,
+      audit: [...state.audit, {
+        id: crypto.randomUUID(),
+        action: "DASHBOARD_STATE_BOOTSTRAPPED",
+        actor: env.DASHBOARD_OPERATOR_ID ?? "authorized-operator",
+        at: now
+      }]
+    });
     const result = await env.STATE_DB.prepare(
       "INSERT OR IGNORE INTO dashboard_state (singleton_id, revision, state_json, updated_at) VALUES (?, 1, ?, ?)"
     ).bind(STATE_ID, stateJson, now).run();
@@ -122,8 +130,23 @@ async function handleRequest(request, env) {
     let state;
     try { state = validateDashboardState(await readJson(request)); }
     catch (error) { return json({ error: error.message }, 400); }
-    const stateJson = JSON.stringify({ ...state, audit: [...state.audit, { id: crypto.randomUUID(), action: "DASHBOARD_STATE_BOOTSTRAPPED", actor: env.DASHBOARD_OPERATOR_ID ?? "authorized-operator", at: new Date().toISOString() }] });
+    const current = await currentState(env);
+    if (!current || Number(current.revision) !== expectedRevision) {
+      return json({ error: "State revision conflict; reload before retrying", code: "REVISION_CONFLICT" }, 409);
+    }
     const now = new Date().toISOString();
+    const stateJson = JSON.stringify({
+      ...state,
+      audit: [...state.audit, {
+        id: crypto.randomUUID(),
+        action: "DASHBOARD_STATE_SNAPSHOT_UPDATED",
+        actor: env.DASHBOARD_OPERATOR_ID ?? "authorized-operator",
+        at: now,
+        previousRevision: expectedRevision
+      }]
+    });
+    const backupId = crypto.randomUUID();
+    const digest = await sha256(current.state_json);
     const results = await env.STATE_DB.batch([
       env.STATE_DB.prepare(
         "INSERT INTO dashboard_backups (backup_id, source_revision, state_json, sha256, created_at, reason) SELECT ?, revision, state_json, ?, ?, 'AUTOMATIC_PRE_UPDATE' FROM dashboard_state WHERE singleton_id = ? AND revision = ?"
@@ -136,7 +159,7 @@ async function handleRequest(request, env) {
       return json({ error: "State revision conflict; reload before retrying", code: "REVISION_CONFLICT" }, 409);
     }
     const row = await currentState(env);
-    return json({ revision: row.revision, updatedAt: row.updated_at, state }, 200, { etag: String(row.revision) });
+    return json({ revision: row.revision, updatedAt: row.updated_at, state: JSON.parse(row.state_json) }, 200, { etag: '"' + row.revision + '"' });
   }
 
   if (url.pathname === "/api/backups" && method === "GET") {
