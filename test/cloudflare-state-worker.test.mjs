@@ -954,6 +954,14 @@ async function createRunnerOidcFixture(overrides = {}) {
   return { token, fetchImpl, nowMs: now * 1000 };
 }
 
+test("repository production workflow dispatches at most one job per runner cycle", () => {
+  const workflow = readFileSync(new URL("../.github/workflows/repository-runner.yml", import.meta.url), "utf8");
+  assert.match(workflow, /^      WORKER_DISPATCH_LIMIT: "1"$/m);
+  assert.match(workflow, /node scripts\/worker-runner\.mjs --once/);
+  assert.match(workflow, /Acquire durable single-runner session/);
+  assert.match(workflow, /Persist worker cooldowns and uncertain-dispatch quarantine/);
+});
+
 test("repository runner OIDC restricts push triggers to the repository owner identity", async () => {
   const ownerPush = await createRunnerOidcFixture({ event_name: "push" });
   assert.equal(await verifyRepositoryRunnerToken(ownerPush.token, ownerPush), true);
