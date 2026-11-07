@@ -2437,14 +2437,23 @@ const server = http.createServer(async (req, res) => {
       try {
         if (!artifact || typeof artifact.path !== "string" || !/^[a-f0-9]{64}$/.test(artifact.sha256 ?? "")) throw new Error("Preview artifact record is incomplete");
         const file = resolveRepositoryFile(artifact.path);
-        const stat = fs.lstatSync(file);
-        if (stat.isSymbolicLink() || !stat.isFile() || sha256File(file) !== artifact.sha256) throw new Error("Preview artifact is missing, unsafe or changed");
         const ext = path.extname(file).toLowerCase();
         const types = { ".mp4": "video/mp4", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".srt": "text/plain; charset=utf-8", ".vtt": "text/vtt; charset=utf-8" };
         const contentType = types[ext];
         if (!contentType || (kind === "video" && ext !== ".mp4") || (kind === "thumbnail" && ![".jpg", ".jpeg", ".png", ".webp"].includes(ext)) || (kind === "captions" && ![".srt", ".vtt"].includes(ext))) throw new Error("Preview file type is not permitted");
-        res.writeHead(200, { "content-type": contentType, "content-length": stat.size, "cache-control": "no-store", "x-content-type-options": "nosniff", "content-security-policy": "default-src 'none'; sandbox" });
-        fs.createReadStream(file).pipe(res);
+        // Open without following a final-component symlink, then hash and serve
+        // the same descriptor bytes so a path swap cannot bypass integrity checks.
+        const fd = fs.openSync(file, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+        try {
+          const stat = fs.fstatSync(fd);
+          if (!stat.isFile()) throw new Error("Preview artifact is not a regular file");
+          const bytes = fs.readFileSync(fd);
+          if (crypto.createHash("sha256").update(bytes).digest("hex") !== artifact.sha256) throw new Error("Preview artifact is missing, unsafe or changed");
+          res.writeHead(200, { "content-type": contentType, "content-length": bytes.length, "cache-control": "no-store", "x-content-type-options": "nosniff", "content-security-policy": "default-src 'none'; sandbox" });
+          res.end(bytes);
+        } finally {
+          fs.closeSync(fd);
+        }
       } catch (error) {
         return json(res, 409, { error: "Preview unavailable", detail: redactOperationalText(error instanceof Error ? error.message : "Preview integrity failure", { roots: [root, stateDir] }), publishingEnabled: false });
       }
