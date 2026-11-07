@@ -1,6 +1,6 @@
 import { normalizeDashboardState, toDashboardStateResponse } from "./dashboard-state-compat.js";
 import { generateDashboardFacebookIdea } from "./facebook-idea-compat.js";
-import { transitionContentJob } from "./content-job-lifecycle-compat.js";
+import { authorizeContentJobRetry, transitionContentJob } from "./content-job-lifecycle-compat.js";
 
 const STATE_ID = 1;
 const MAX_STATE_BYTES = 2 * 1024 * 1024;
@@ -367,6 +367,59 @@ async function handleRequest(request, env) {
     const saved = await commitStateRevision(env, current, updated, actor, "CONTENT_JOB_CREATED", { jobId: job.id, idempotencyKey });
     if (saved.error) return saved.error;
     return json({ job, revision: saved.row.revision, idempotentReplay: false, publishingEnabled: false }, 201, { etag: '"' + saved.row.revision + '"' });
+  }
+
+  if (url.pathname === "/api/jobs/retry" && method === "POST") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
+    let input;
+    try { input = await readJson(request); }
+    catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
+    if (!input || typeof input.jobId !== "string" || typeof input.reason !== "string") {
+      return json({ error: "jobId and an operator review reason are required" }, 400);
+    }
+    if (input.overrideRetryLimit !== undefined && typeof input.overrideRetryLimit !== "boolean") {
+      return json({ error: "overrideRetryLimit must be a boolean when supplied" }, 400);
+    }
+    const current = await currentState(env);
+    if (!current) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(current.state_json)); }
+    catch { return json({ error: "Persisted state is invalid", code: "STATE_INVALID" }, 503); }
+    const index = state.jobs.findIndex(job => job.kind === "CONTENT_PRODUCTION" && job.id === input.jobId);
+    if (index < 0) return json({ error: "Content job not found" }, 404);
+    const previous = state.jobs[index];
+    let updated;
+    try {
+      updated = authorizeContentJobRetry(previous, {
+        actor, reason: input.reason, overrideRetryLimit: input.overrideRetryLimit === true
+      });
+    } catch (error) {
+      return json({ error: error.message || "Retry authorization rejected", code: "RETRY_NOT_AUTHORIZED" }, 409);
+    }
+    const authorization = updated.retryAuthorizations.at(-1);
+    const jobs = [...state.jobs];
+    jobs[index] = updated;
+    const audit = [{
+      action: "CONTENT_JOB_RETRY_AUTHORIZED", jobId: updated.id, from: previous.state,
+      to: updated.state, reason: authorization.reason, attemptCount: updated.attemptCount,
+      maxAttempts: updated.retryPolicy.maxAttempts, overrideRetryLimit: authorization.overrideRetryLimit,
+      at: authorization.at
+    }];
+    if (previous.state === "DEAD_LETTER") {
+      audit.push({ action: "CONTENT_JOB_DEAD_LETTER_RECOVERED", jobId: updated.id, reason: authorization.reason, at: authorization.at });
+    }
+    const saved = await commitStateRevision(env, current, { ...state, jobs }, actor, audit[0].action, audit[0]);
+    if (saved.error) return saved.error;
+    if (audit.length > 1) {
+      const currentAfter = saved.row;
+      const second = await commitStateRevision(env, currentAfter, { ...saved.state, audit: [...saved.state.audit, {
+        id: crypto.randomUUID(), ...audit[1], actor
+      }] }, actor, audit[1].action, { jobId: updated.id, reason: authorization.reason });
+      if (second.error) return second.error;
+      return json({ job: updated, revision: second.row.revision, publishingEnabled: false, retryAuthorized: true }, 200, { etag: '"' + second.row.revision + '"' });
+    }
+    return json({ job: updated, revision: saved.row.revision, publishingEnabled: false, retryAuthorized: true }, 200, { etag: '"' + saved.row.revision + '"' });
   }
 
   if (url.pathname === "/api/jobs/transition" && method === "POST") {
