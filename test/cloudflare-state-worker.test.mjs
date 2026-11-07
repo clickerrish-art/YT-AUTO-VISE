@@ -1054,3 +1054,94 @@ test("repository runner backoff state is durable, worker-scoped and revision gua
   }), env, fixture);
   assert.equal(invalid.status, 400);
 });
+
+
+test("repository runner session lock blocks overlap and releases only after exact successful reconciliation", async () => {
+  let session = null;
+  const db = {
+    prepare(sql) {
+      return {
+        args: [],
+        bind(...args) { this.args = args; return this; },
+        async first() { return session ? { ...session } : null; },
+        async run() {
+          if (sql.startsWith("INSERT INTO runner_control")) {
+            const [sessionId, workerId, startedAt] = this.args;
+            if (session?.status === "ACTIVE") return { meta: { changes: 0 } };
+            session = { session_id: sessionId, worker_id: workerId, status: "ACTIVE", started_at: startedAt, completed_at: null, release_reason: null };
+            return { meta: { changes: 1 } };
+          }
+          if (sql.startsWith("UPDATE runner_control")) {
+            if (!session || session.status !== "ACTIVE") return { meta: { changes: 0 } };
+            if (sql.includes("session_id = ? AND status = 'ACTIVE'")) {
+              const sessionId = this.args.at(-1);
+              if (session.session_id !== sessionId) return { meta: { changes: 0 } };
+            }
+            const [completedAt, releaseReason] = this.args;
+            session = { ...session, status: "RELEASED", completed_at: completedAt, release_reason: releaseReason };
+            return { meta: { changes: 1 } };
+          }
+          return { meta: { changes: 0 } };
+        }
+      };
+    }
+  };
+  const fixture = await createRunnerOidcFixture();
+  const env = { DASHBOARD_OPERATOR_TOKEN: "o".repeat(32), STATE_DB: db };
+  const start = () => handleRequest(new Request("https://state.example/api/runner/session", {
+    method: "POST", headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
+    body: JSON.stringify({ workerId: "runner-one" })
+  }), env, fixture);
+  const first = await start();
+  assert.equal(first.status, 201);
+  const firstBody = await first.json();
+  assert.ok(firstBody.sessionId);
+  const overlapping = await start();
+  assert.equal(overlapping.status, 409);
+  assert.equal((await overlapping.json()).code, "RUNNER_SESSION_ACTIVE");
+  const wrongCompletion = await handleRequest(new Request("https://state.example/api/runner/session/complete", {
+    method: "POST", headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
+    body: JSON.stringify({ sessionId: "not-the-active-session" })
+  }), env, fixture);
+  assert.equal(wrongCompletion.status, 409);
+  const completed = await handleRequest(new Request("https://state.example/api/runner/session/complete", {
+    method: "POST", headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
+    body: JSON.stringify({ sessionId: firstBody.sessionId })
+  }), env, fixture);
+  assert.equal(completed.status, 200);
+  assert.equal(session.status, "RELEASED");
+  assert.equal(session.release_reason, "RUNNER_RECONCILIATION_COMPLETE");
+  assert.equal((await start()).status, 201);
+});
+
+test("operator can inspect and explicitly release a stale runner session with exact ID and reason", async () => {
+  let session = { session_id: "stale-session", worker_id: "runner-one", status: "ACTIVE", started_at: "2026-11-08T00:00:00.000Z", completed_at: null, release_reason: null };
+  const db = {
+    prepare(sql) {
+      return {
+        args: [],
+        bind(...args) { this.args = args; return this; },
+        async first() { return session ? { ...session } : null; },
+        async run() {
+          const [completedAt, reason, sessionId] = this.args;
+          if (!session || session.status !== "ACTIVE" || session.session_id !== sessionId) return { meta: { changes: 0 } };
+          session = { ...session, status: "RELEASED", completed_at: completedAt, release_reason: reason };
+          return { meta: { changes: 1 } };
+        }
+      };
+    }
+  };
+  const env = { DASHBOARD_OPERATOR_TOKEN: "o".repeat(32), STATE_DB: db };
+  const status = await handleRequest(new Request("https://state.example/api/runner/session/status", {
+    headers: { "x-operator-token": "o".repeat(32) }
+  }), env);
+  assert.equal((await status.json()).active, true);
+  const release = await handleRequest(new Request("https://state.example/api/runner/session/release", {
+    method: "POST",
+    headers: { "x-operator-token": "o".repeat(32), "content-type": "application/json" },
+    body: JSON.stringify({ sessionId: "stale-session", reason: "Owner inspected the failed workflow and verified no active process remains." })
+  }), env);
+  assert.equal(release.status, 200);
+  assert.equal(session.status, "RELEASED");
+  assert.match(session.release_reason, /Owner inspected/);
+});
