@@ -399,14 +399,18 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
       let input;
       try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
       const { jobId, sourcePath, artifactKind, sha256: digest, sizeBytes } = input ?? {};
-      const contentTypes = { video: "video/mp4", thumbnail: "image/jpeg", metadata: "application/json" };
       const filename = typeof sourcePath === "string" ? sourcePath.split("/").at(-1) : "";
+      const extension = filename.includes(".") ? filename.split(".").at(-1).toLowerCase() : "";
+      const contentType = artifactKind === "video" ? "video/mp4"
+        : artifactKind === "metadata" ? "application/json"
+          : artifactKind === "thumbnail" ? ({ jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" })[extension]
+            : undefined;
       const safePath = typeof sourcePath === "string" && sourcePath.length <= 500 &&
         !sourcePath.startsWith("/") && !sourcePath.includes("\\") &&
         sourcePath.split("/").every(part => part && part !== "." && part !== "..");
       if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(jobId ?? "") ||
           !safePath || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,119}$/.test(filename) ||
-          !Object.hasOwn(contentTypes, artifactKind) || input.contentType !== contentTypes[artifactKind] ||
+          !["video", "thumbnail", "metadata"].includes(artifactKind) || !contentType || input.contentType !== contentType ||
           !/^[a-f0-9]{64}$/.test(digest ?? "") ||
           !Number.isSafeInteger(sizeBytes) || sizeBytes < 1 || sizeBytes > MAX_ARTIFACT_BYTES) {
         return json({ error: "Artifact identity, type, path, SHA-256 or size is invalid; uploads are limited to 8 GiB per artifact", code: "ARTIFACT_INPUT_INVALID" }, 400);
@@ -461,7 +465,7 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
           try { await env.ARTIFACTS.resumeMultipartUpload(existing.object_key, existing.upload_id).abort(); } catch {}
         }
         multipart = await env.ARTIFACTS.createMultipartUpload(objectKey, {
-          httpMetadata: { contentType: contentTypes[artifactKind] },
+          httpMetadata: { contentType },
           customMetadata: { jobId, sourcePath, artifactKind, sha256: digest }
         });
         if (existing?.status === "FAILED") {
@@ -472,7 +476,7 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
         } else {
           await env.STATE_DB.prepare(
             "INSERT INTO runner_artifacts (artifact_id, job_id, source_path, artifact_kind, filename, object_key, upload_id, sha256, size_bytes, part_size_bytes, expected_parts, content_type, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'UPLOADING', ?)"
-          ).bind(artifactId, jobId, sourcePath, artifactKind, filename, objectKey, multipart.uploadId, digest, sizeBytes, partSizeBytes, expectedParts, contentTypes[artifactKind], createdAt).run();
+          ).bind(artifactId, jobId, sourcePath, artifactKind, filename, objectKey, multipart.uploadId, digest, sizeBytes, partSizeBytes, expectedParts, contentType, createdAt).run();
         }
       } catch {
         if (multipart) {
