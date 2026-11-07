@@ -28,7 +28,7 @@ const IDEA_BANK = Object.freeze([
 function normalizeText(value) {
   return String(value ?? "").normalize("NFKC").toLocaleLowerCase("en-ZA")
     .replace(/https?:[^ ]+/g, " ")
-    .replace(new RegExp("[^\\\\p{L}\\\\p{N}]+", "gu"), " ").trim().replace(/ +/g, " ");
+    .replace(new RegExp("[^\\p{L}\\p{N}]+", "gu"), " ").trim().replace(/ +/g, " ");
 }
 function similarityRatio(left, right) {
   const a = new Set(normalizeText(left).split(" ").filter(word => word.length > 2));
