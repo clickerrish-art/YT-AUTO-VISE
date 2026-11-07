@@ -146,6 +146,41 @@ export function validateHistoryReconciliation(args) {
   return validateHistoryReconciliationSnapshot(args).history;
 }
 
+/**
+ * Read the exact reviewed document through a pinned descriptor. Reject symlinks,
+ * path replacement and mutation while reading so the checksum and parsed JSON
+ * refer to the same stable regular-file bytes.
+ */
+export function readRegularFileNoFollow(filePath) {
+  if (typeof filePath !== "string" || !filePath.trim()) throw new Error("History reconciliation path is required");
+  if (typeof fs.constants.O_NOFOLLOW !== "number") {
+    throw new Error("This platform cannot guarantee symlink rejection for channel-history evidence");
+  }
+  const absolute = path.resolve(filePath);
+  const fd = fs.openSync(absolute, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW);
+  try {
+    const before = fs.fstatSync(fd);
+    const currentPath = fs.lstatSync(absolute);
+    if (!before.isFile() || !currentPath.isFile() || currentPath.isSymbolicLink() ||
+        before.dev !== currentPath.dev || before.ino !== currentPath.ino) {
+      throw new Error("Channel-history evidence path changed while opening");
+    }
+    const bytes = fs.readFileSync(fd);
+    const after = fs.fstatSync(fd);
+    const pathAfter = fs.lstatSync(absolute);
+    if (!pathAfter.isFile() || pathAfter.isSymbolicLink() ||
+        after.dev !== before.dev || after.ino !== before.ino ||
+        pathAfter.dev !== before.dev || pathAfter.ino !== before.ino ||
+        after.size !== before.size || bytes.length !== before.size ||
+        after.mtimeMs !== before.mtimeMs || after.ctimeMs !== before.ctimeMs) {
+      throw new Error("Channel-history evidence changed while being read");
+    }
+    return bytes;
+  } finally {
+    fs.closeSync(fd);
+  }
+}
+
 async function readCompleteYoutubeHistoryInputs(youtube, channel, reconciliationPath, channelId) {
   if (!channelId || channel?.id !== channelId) {
     throw new Error("authenticated channel object does not match the configured SonicVhibez channel ID; refusing to inspect another uploads playlist");
@@ -231,10 +266,10 @@ async function readCompleteYoutubeHistoryInputs(youtube, channel, reconciliation
   }
   let reconciliation, reconciliationSha256;
   try {
-    const reconciliationBytes = fs.readFileSync(path.resolve(reconciliationPath));
+    const reconciliationBytes = readRegularFileNoFollow(reconciliationPath);
     reconciliationSha256 = crypto.createHash("sha256").update(reconciliationBytes).digest("hex");
     reconciliation = JSON.parse(reconciliationBytes.toString("utf8"));
-  } catch { throw new Error("CHANNEL_HISTORY_RECONCILIATION_PATH is missing or invalid; complete owner-reviewed history is required"); }
+  } catch { throw new Error("CHANNEL_HISTORY_RECONCILIATION_PATH is missing, unsafe or invalid; complete owner-reviewed history is required"); }
   return { remoteVideos, reconciliation, reconciliationSha256 };
 }
 
