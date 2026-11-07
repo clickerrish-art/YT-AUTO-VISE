@@ -56,6 +56,7 @@ test("worker persists retry backoff across process restarts and does not immedia
   await runWorker({ baseUrl, token, workerId, once: true, cooldownStatePath: statePath, onCycle: value => firstCycles.push(value) });
   assert.equal(produceRequests, 1);
   assert.equal(firstCycles[0].results[0].httpStatus, 409);
+  assert.equal(firstCycles[0].results[0].responseError, "render prerequisites are not satisfied");
   assert.ok(firstCycles[0].results[0].retryAfterMs >= 59_000,
     "HTTP 409 Retry-After must override the shorter local fallback delay");
   const saved = JSON.parse(fs.readFileSync(statePath, "utf8"));
