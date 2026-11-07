@@ -34,7 +34,8 @@
     "inventory:dashboard": "node scripts/dashboard-inventory.mjs",
     "report:branch": "node scripts/branch-reconciliation-report.mjs",
     "worker": "node scripts/worker-runner.mjs",
-    "validate:promotional-shorts": "node scripts/validate-promotional-short-plan.mjs"
+    "validate:promotional-shorts": "node scripts/validate-promotional-short-plan.mjs",
+    "backup:recover": "node scripts/backup-state.mjs --recover"
   },
   "engines": {
     "node": ">=22"
