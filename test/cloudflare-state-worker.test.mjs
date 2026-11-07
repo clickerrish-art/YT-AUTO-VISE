@@ -892,3 +892,119 @@ test("bundled Worker weekly plan exactly matches repository schedule configurati
   assert.equal(DEFAULT_WEEKLY_PLAN.publicationCycle.publicationEnabled, false);
   assert.equal(DEFAULT_WEEKLY_PLAN.cadenceDecision.approvedMode, "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET");
 });
+
+
+test("repository runner token is separate from operator authentication and grants only runner snapshot APIs", async () => {
+  const { database, snapshot } = mutableDatabase(validState());
+  const env = {
+    DASHBOARD_OPERATOR_TOKEN: "o".repeat(32),
+    DASHBOARD_WORKER_TOKEN: "w".repeat(32),
+    DASHBOARD_OPERATOR_ID: "sonicvhibez-owner",
+    STATE_DB: database
+  };
+  const read = await handleRequest(new Request("https://state.example/api/runner/snapshot", {
+    headers: { "x-worker-token": "w".repeat(32), "x-worker-id": "runner-test" }
+  }), env);
+  const readBody = await read.json();
+  assert.equal(read.status, 200);
+  assert.equal(readBody.revision, 1);
+  assert.deepEqual(readBody.state, validState());
+  const workerCannotReadOperatorApi = await handleRequest(new Request("https://state.example/api/state", {
+    headers: { "x-worker-token": "w".repeat(32) }
+  }), env);
+  assert.equal(workerCannotReadOperatorApi.status, 401);
+  const operatorCannotUseRunnerApi = await handleRequest(new Request("https://state.example/api/runner/snapshot", {
+    headers: { "x-operator-token": "o".repeat(32) }
+  }), env);
+  assert.equal(operatorCannotUseRunnerApi.status, 401);
+  const next = { ...validState(), queueItems: [{ id: "runner-produced-record" }] };
+  const write = await handleRequest(new Request("https://state.example/api/runner/snapshot", {
+    method: "PUT",
+    headers: { "x-worker-token": "w".repeat(32), "x-worker-id": "runner-test", "if-match": '"1"', "content-type": "application/json" },
+    body: JSON.stringify({ state: next })
+  }), env);
+  assert.equal(write.status, 200);
+  assert.equal((await write.json()).revision, 2);
+  assert.equal(snapshot().state.queueItems[0].id, "runner-produced-record");
+  assert.equal(snapshot().state.audit.at(-1).action, "REPOSITORY_RUNNER_STATE_RECONCILED");
+  const stale = await handleRequest(new Request("https://state.example/api/runner/snapshot", {
+    method: "PUT",
+    headers: { "x-worker-token": "w".repeat(32), "if-match": '"1"', "content-type": "application/json" },
+    body: JSON.stringify({ state: next })
+  }), env);
+  assert.equal(stale.status, 409);
+});
+
+test("repository runner snapshot rejects invalid state and operator-token reuse", async () => {
+  const { database } = mutableDatabase(validState());
+  const env = { DASHBOARD_OPERATOR_TOKEN: "same".repeat(8), DASHBOARD_WORKER_TOKEN: "same".repeat(8), STATE_DB: database };
+  const reused = await handleRequest(new Request("https://state.example/api/runner/snapshot", {
+    headers: { "x-worker-token": "same".repeat(8) }
+  }), env);
+  assert.equal(reused.status, 401);
+  const distinct = { ...env, DASHBOARD_WORKER_TOKEN: "w".repeat(32) };
+  const invalid = await handleRequest(new Request("https://state.example/api/runner/snapshot", {
+    method: "PUT",
+    headers: { "x-worker-token": "w".repeat(32), "if-match": '"1"', "content-type": "application/json" },
+    body: JSON.stringify({ state: { ...validState(), publishingEnabled: true } })
+  }), distinct);
+  assert.equal(invalid.status, 400);
+});
+
+test("repository runner backoff state is durable, worker-scoped and revision guarded", async () => {
+  const records = new Map();
+  const db = {
+    prepare(sql) {
+      return {
+        args: [],
+        bind(...args) { this.args = args; return this; },
+        async first() {
+          const row = records.get(this.args[0]);
+          return row ? { ...row } : null;
+        },
+        async run() {
+          const [workerId, revisionOrState, maybeUpdatedAt, expectedRevision] = this.args;
+          if (sql.startsWith("INSERT OR IGNORE")) {
+            if (records.has(workerId)) return { meta: { changes: 0 } };
+            records.set(workerId, { revision: 1, state_json: revisionOrState, updated_at: maybeUpdatedAt });
+            return { meta: { changes: 1 } };
+          }
+          const row = records.get(workerId);
+          if (!row || row.revision !== expectedRevision) return { meta: { changes: 0 } };
+          records.set(workerId, { revision: row.revision + 1, state_json: revisionOrState, updated_at: maybeUpdatedAt });
+          return { meta: { changes: 1 } };
+        }
+      };
+    }
+  };
+  const token = "w".repeat(32);
+  const env = { DASHBOARD_WORKER_TOKEN: token, DASHBOARD_OPERATOR_TOKEN: "o".repeat(32), STATE_DB: db };
+  const get = () => handleRequest(new Request("https://state.example/api/runner/backoff?workerId=runner-one", {
+    headers: { "x-worker-token": token }
+  }), env);
+  const initial = await (await get()).json();
+  assert.equal(initial.revision, 0);
+  assert.equal(initial.state, null);
+  const state = {
+    schemaVersion: 1, workerId: "runner-one", updatedAt: new Date(0).toISOString(),
+    cooldowns: { "job-1": { attempts: 1, nextAttemptAt: 1799999999999 } },
+    uncertainDispatches: { "job-2": { code: "WORKER_DISPATCH_OUTCOME_UNCERTAIN", recordedAt: "2026-11-08T00:00:00.000Z" } },
+    consumedReleaseNonces: []
+  };
+  const save = () => handleRequest(new Request("https://state.example/api/runner/backoff", {
+    method: "PUT", headers: { "x-worker-token": token, "content-type": "application/json" },
+    body: JSON.stringify({ workerId: "runner-one", expectedRevision: 0, state })
+  }), env);
+  const saved = await save();
+  assert.equal(saved.status, 200);
+  assert.equal((await saved.json()).revision, 1);
+  const loaded = await (await get()).json();
+  assert.equal(loaded.state.uncertainDispatches["job-2"].code, "WORKER_DISPATCH_OUTCOME_UNCERTAIN");
+  assert.equal(loaded.state.cooldowns["job-1"].attempts, 1);
+  assert.equal((await save()).status, 409);
+  const invalid = await handleRequest(new Request("https://state.example/api/runner/backoff", {
+    method: "PUT", headers: { "x-worker-token": token, "content-type": "application/json" },
+    body: JSON.stringify({ workerId: "runner-one", expectedRevision: 1, state: { ...state, workerId: "runner-two" } })
+  }), env);
+  assert.equal(invalid.status, 400);
+});
