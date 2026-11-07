@@ -458,9 +458,14 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
       state: dispatched.payload.job?.state ?? null,
       ...(dispatched.status === 409 ? {
         responseError: typeof dispatched.payload.detail === "string" && dispatched.payload.detail.trim()
-          ? dispatched.payload.detail.slice(0, 500)
-          : typeof dispatched.payload.error === "string" ? dispatched.payload.error.slice(0, 500) : null,
-        retryAfterMs: cooldowns.get(job.id)?.nextAttemptAt - Date.now()
+          ? dispatched.payload.detail.trim().slice(0, 500)
+          : typeof dispatched.payload.error === "string" ? dispatched.payload.error.trim().slice(0, 500) : null,
+        ...(typeof dispatched.payload.jobState === "string" ? { jobState: dispatched.payload.jobState.slice(0, 80) } : {}),
+        ...(typeof dispatched.payload.retryable === "boolean" ? { retryable: dispatched.payload.retryable } : {}),
+        ...(typeof dispatched.payload.requiresOperatorRetry === "boolean" ? { requiresOperatorRetry: dispatched.payload.requiresOperatorRetry } : {}),
+        ...(typeof dispatched.payload.deadLettered === "boolean" ? { deadLettered: dispatched.payload.deadLettered } : {}),
+        ...(typeof dispatched.payload.publishable === "boolean" ? { publishable: dispatched.payload.publishable } : {}),
+        retryAfterMs: Math.max(0, cooldowns.get(job.id)?.nextAttemptAt - Date.now())
       } : {})
     });
   }
