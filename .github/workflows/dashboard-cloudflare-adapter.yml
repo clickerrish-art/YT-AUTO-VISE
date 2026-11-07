@@ -31,5 +31,6 @@ jobs:
           node --check cloudflare/worker.js
           node --check scripts/cloudflare-runner-bridge.mjs
           node --check test/cloudflare-state-worker.test.mjs
+          ruby -e 'require "yaml"; YAML.load_file(".github/workflows/repository-runner.yml")'
       - name: Durable-state tests
         run: node --test test/cloudflare-state-worker.test.mjs
