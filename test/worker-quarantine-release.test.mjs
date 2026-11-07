@@ -456,7 +456,7 @@ test("dashboard issues a signed quarantine release only for a terminal verified 
       uploadReceipt: {
         jobId, attemptId, artifactSha256, videoId: remoteVideoId,
         channelId, channelTitle: "SonicVhibez", privacyStatus: "private",
-        remoteStatusVerified: true, channelHistoryReconciled: true, historyVerifiedAt: "2026-11-06T18:00:00.000Z", historyVideoCount: 12, publishingEnabled: false, actualPublishedAt
+        remoteStatusVerified: true, channelHistoryReconciled: true, historyVerifiedAt: "2026-11-06T18:00:00.000Z", historyVerifiedBy: "history-reviewer@example.test", historyVideoCount: 12, publishingEnabled: false, actualPublishedAt
       }
     }],
     uploads: [], facebookDrafts: [], facebookPosts: [], facebookAttempts: []
