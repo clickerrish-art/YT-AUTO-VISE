@@ -17,11 +17,11 @@ test("dashboard static inventory reports all declared controls, forms and litera
   assert.equal(inventory.counts.controls, inventory.controls.length);
   assert.equal(inventory.counts.forms, inventory.forms.length);
   assert.equal(inventory.counts.routes, inventory.routes.length);
-  assert.equal(inventory.counts.controls, 116);
+  assert.equal(inventory.counts.controls, 117);
   assert.equal(inventory.counts.forms, 17);
   assert.equal(inventory.counts.routes, 46);
   assert.deepEqual(inventory.counts.controlsByTag, {
-    button: 24,
+    button: 25,
     input: 49,
     select: 27,
     textarea: 16,
@@ -145,6 +145,18 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
       ?? (tag === "button" ? "submit" : "");
     if (tag === "button" && type === "submit") continue;
 
+    // Artifact download controls are generated per persisted artifact ID and
+    // use one delegated listener on #productionjobs. Their stable identity is
+    // the data-artifact-download value, not a duplicate static DOM id.
+    if (tag === "button" && /\\bdata-artifact-download=["']/.test(attributes)) {
+      assert.ok(scriptSource.includes('closest("[data-artifact-download]")'),
+        "artifact download control must use the delegated stable artifact key");
+      assert.ok(server.includes("/api/artifacts/"),
+        "artifact download control must target the authenticated artifact route");
+      wiredControls++;
+      continue;
+    }
+
     assert.ok(id, "non-submit " + tag + " control is missing a stable id");
     assert.ok(
       scriptSource.includes('$("' + id + '")') || scriptSource.includes("$('#" + id + "')"),
@@ -153,7 +165,7 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
     wiredControls++;
   }
 
-  assert.equal(wiredControls, 96, "the number of non-submit dashboard controls changed; review the acceptance fixture");
+  assert.equal(wiredControls, 97, "the number of non-submit dashboard controls changed; review the acceptance fixture");
 });
 
 test("dashboard inventory associates controls with their owning form, including explicit external form references", () => {
