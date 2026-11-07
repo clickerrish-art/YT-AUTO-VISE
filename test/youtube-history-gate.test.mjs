@@ -112,6 +112,24 @@ test("history reconciliation rejects normalized invalid dates and timezone-free 
   assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos, reconciliation: badRecord }), /requires visibility and actualPublishedAt/);
 });
 
+test("history reconciliation rejects future verification and actual publication timestamps", () => {
+  const futureVerification = { ...reconciliation, verifiedAt: "2026-10-24T10:00:00.000Z" };
+  assert.throws(() => validateHistoryReconciliationSnapshot({
+    channelId,
+    remoteVideos,
+    reconciliation: futureVerification,
+    now: new Date("2026-10-24T09:59:59.999Z")
+  }), /verification timestamp.*future/);
+
+  const pastVerification = { ...reconciliation, verifiedAt: "2026-10-04T14:00:00.000Z" };
+  assert.throws(() => validateHistoryReconciliationSnapshot({
+    channelId,
+    remoteVideos,
+    reconciliation: pastVerification,
+    now: new Date("2026-10-04T14:59:59.999Z")
+  }), /actual publication timestamp.*future/);
+});
+
 test("unresolved or uncertain upload attempts block new uploads", () => {
   assert.equal(assertNoUnresolvedUploadAttempts({ attempts: [{ jobId: "job-1", status: "PRIVATE_UPLOAD_VERIFIED" }] }), true);
   assert.throws(() => assertNoUnresolvedUploadAttempts({ attempts: [{ jobId: "job-2", status: "RECOVERY_REQUIRED" }] }), /unresolved upload attempts/);

@@ -43,7 +43,7 @@ export function isValidZonedIsoTimestamp(value) {
  * Validate the explicit owner decision that resolves the requested cadence conflict.
  * Publication spacing is a hard invariant and cannot be waived by a custom policy.
  */
-export function validateCadenceDecision(decision, minimumSpacingHours) {
+export function validateCadenceDecision(decision, minimumSpacingHours, now = Date.now()) {
   const errors = [];
   if (!decision || typeof decision !== "object" || Array.isArray(decision)) {
     return { valid: false, errors: ["an owner-approved cadence decision is required"] };
@@ -53,8 +53,15 @@ export function validateCadenceDecision(decision, minimumSpacingHours) {
   if (!["ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET", "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"].includes(decision.approvedMode)) {
     errors.push("approvedMode must be a supported cadence mode");
   }
-  if (!isValidZonedIsoTimestamp(decision.approvedAt)) {
+  const approvedAtTimestamp = isValidZonedIsoTimestamp(decision.approvedAt)
+    ? parseStrictTimestamp(decision.approvedAt)
+    : NaN;
+  if (!Number.isFinite(approvedAtTimestamp)) {
     errors.push("approvedAt must be a calendar-valid ISO timestamp with an explicit timezone");
+  } else {
+    const nowTimestamp = now instanceof Date ? now.getTime() : parseStrictTimestamp(now);
+    if (!Number.isFinite(nowTimestamp)) errors.push("cadence validation time must be a valid timestamp");
+    else if (approvedAtTimestamp > nowTimestamp) errors.push("approvedAt must not be in the future");
   }
   if (typeof decision.approvalReference !== "string" || !decision.approvalReference.trim()) {
     errors.push("approvalReference must be a non-empty owner decision reference");
@@ -409,7 +416,8 @@ const WEEK_HOURS = 168;
 export function validateRollingPublicationCycle(items, {
   minSpacingHours = DEFAULT_MIN_SPACING_HOURS,
   timeZone = DEFAULT_SCHEDULE_TIMEZONE,
-  ownerApprovedPolicy = null
+  ownerApprovedPolicy = null,
+  now = Date.now()
 } = {}) {
   const errors = [];
   if (!Array.isArray(items) || items.length === 0) {
@@ -467,7 +475,11 @@ export function validateRollingPublicationCycle(items, {
     errors.push("an explicit owner-approved rolling publication policy is required");
   } else {
     if (typeof policy.approvedBy !== "string" || policy.approvedBy.trim().length < 2) errors.push("owner-approved policy must identify the approving owner");
-    if (!isValidZonedIsoTimestamp(policy.approvedAt)) errors.push("owner-approved policy must include a calendar-valid ISO approval timestamp with an explicit timezone");
+    const policyApprovedAt = isValidZonedIsoTimestamp(policy.approvedAt) ? parseStrictTimestamp(policy.approvedAt) : NaN;
+    const nowTimestamp = now instanceof Date ? now.getTime() : parseStrictTimestamp(now);
+    if (!Number.isFinite(policyApprovedAt)) errors.push("owner-approved policy must include a calendar-valid ISO approval timestamp with an explicit timezone");
+    else if (!Number.isFinite(nowTimestamp)) errors.push("rolling-cycle validation time must be a valid timestamp");
+    else if (policyApprovedAt > nowTimestamp) errors.push("owner-approved policy approval timestamp must not be in the future");
     if (policy.timeZone !== timeZone) errors.push("owner-approved policy timezone must match the validated schedule timezone");
     if (policy.minSpacingHours !== minSpacingHours) errors.push("owner-approved policy minimum spacing must match the validated minimum");
     if (!["rolling", "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET", "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"].includes(policy.mode)) errors.push("owner-approved policy mode must be a supported rolling cadence mode");

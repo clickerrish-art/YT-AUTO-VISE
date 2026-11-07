@@ -49,11 +49,13 @@ export function assertNoUnresolvedUploadAttempts(ledger) {
 export function validateHistoryReconciliationSnapshot({ channelId, remoteVideos, reconciliation, reconciliationSha256 = crypto.createHash("sha256").update(JSON.stringify(reconciliation)).digest("hex"), now = new Date() }) {
   if (!channelId || !Array.isArray(remoteVideos)) throw new Error("authenticated channel and complete remote video list are required");
   if (!reconciliation || reconciliation.complete !== true || reconciliation.channelId !== channelId) throw new Error("channel history reconciliation must be complete and bound to the authenticated channel ID");
-  if (typeof reconciliation.verifiedBy !== "string" || reconciliation.verifiedBy.trim().length < 2 || !Number.isFinite(strictIsoTimestamp(reconciliation.verifiedAt))) throw new Error("channel history reconciliation needs reviewer identity and a valid verification timestamp");
   if (!Array.isArray(reconciliation.videos)) throw new Error("channel history reconciliation must contain a videos array");
   if (!/^[a-f0-9]{64}$/.test(reconciliationSha256 ?? "")) throw new Error("channel history reconciliation document checksum is invalid");
   const nowTimestamp = now instanceof Date ? now.getTime() : strictIsoTimestamp(now);
   if (!Number.isFinite(nowTimestamp)) throw new Error("history verification time must be valid");
+  const verifiedAtTimestamp = strictIsoTimestamp(reconciliation.verifiedAt);
+  if (typeof reconciliation.verifiedBy !== "string" || reconciliation.verifiedBy.trim().length < 2 || !Number.isFinite(verifiedAtTimestamp)) throw new Error("channel history reconciliation needs reviewer identity and a valid verification timestamp");
+  if (verifiedAtTimestamp > nowTimestamp) throw new Error("channel history reconciliation verification timestamp must not be in the future");
   const remoteById = new Map();
   for (const video of remoteVideos) {
     if (!video?.id || remoteById.has(video.id)) throw new Error("remote channel history contains a missing or duplicate video ID");
@@ -75,10 +77,12 @@ export function validateHistoryReconciliationSnapshot({ channelId, remoteVideos,
       continue;
     }
     const actualPublishedAt = video.snippet?.publishedAt;
-    if (!Number.isFinite(strictIsoTimestamp(actualPublishedAt))) throw new Error("remote video is missing an actual publication timestamp: " + video.id);
+    const actualPublishedTimestamp = strictIsoTimestamp(actualPublishedAt);
+    if (!Number.isFinite(actualPublishedTimestamp)) throw new Error("remote video is missing an actual publication timestamp: " + video.id);
+    if (actualPublishedTimestamp > nowTimestamp) throw new Error("remote video actual publication timestamp must not be in the future: " + video.id);
     remoteById.set(video.id, {
       id: video.id,
-      actualPublishedAt: new Date(strictIsoTimestamp(actualPublishedAt)).toISOString(),
+      actualPublishedAt: new Date(actualPublishedTimestamp).toISOString(),
       status: visibility,
       scheduled: false
     });

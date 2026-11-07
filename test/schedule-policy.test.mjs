@@ -465,6 +465,9 @@ test("owner cadence approval requires explicit, timezone-qualified, feasible evi
     approvalReference: "owner-decision-2026-11-04"
   };
   assert.deepEqual(validateCadenceDecision(approved, 72), { valid: true, errors: [] });
+  const futureApproval = validateCadenceDecision(approved, 72, Date.parse("2026-11-04T17:59:59+02:00"));
+  assert.equal(futureApproval.valid, false);
+  assert.ok(futureApproval.errors.some(error => error.includes("approvedAt must not be in the future")));
 
   const missingApproval = validateCadenceDecision({
     ...approved,
@@ -525,6 +528,12 @@ test("rolling-cycle owner approval requires a calendar-valid timezone-qualified 
     weeklyPublicationTarget: 1
   };
   assert.equal(validateRollingPublicationCycle(items, { ownerApprovedPolicy }).valid, true);
+  const futureApproval = validateRollingPublicationCycle(items, {
+    ownerApprovedPolicy,
+    now: Date.parse("2026-10-30T17:59:59+02:00")
+  });
+  assert.equal(futureApproval.valid, false);
+  assert.ok(futureApproval.errors.some(error => error.includes("approval timestamp must not be in the future")));
   for (const approvedAt of [
     "2026-02-31T18:00:00Z",
     "2026-10-30T18:00:00",
