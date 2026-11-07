@@ -1,0 +1,32 @@
+name: Dashboard Cloudflare state adapter checks
+
+on:
+  pull_request:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - "cloudflare/**"
+      - "wrangler.jsonc"
+      - "test/cloudflare-state-worker.test.mjs"
+      - ".github/workflows/cloudflare-state.yml"
+      - ".github/workflows/dashboard-cloudflare-adapter.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  durable-state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - name: Syntax checks
+        run: |
+          node --check cloudflare/worker.js
+          node --check test/cloudflare-state-worker.test.mjs
+      - name: Durable-state tests
+        run: node --test test/cloudflare-state-worker.test.mjs
