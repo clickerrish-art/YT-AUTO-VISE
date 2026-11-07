@@ -14,7 +14,7 @@ const rightsEvidence = {
   verifiedAt: "2026-10-23T10:00:00.000Z",
   assetSha256: "b".repeat(64)
 };
-const base = { artifact, rightsEvidence, metadataVersion: "metadata-sha256:cccc", reviewer: "reviewer@example.test", decision: "APPROVE", reason: "" };
+const base = { artifact, rightsEvidence, metadataVersion: "metadata-sha256:cccc", technicalValidationSha256: "c".repeat(64), reviewer: "reviewer@example.test", decision: "APPROVE", reason: "" };
 
 test("approval is bound to artifact checksum, metadata version and rights evidence", () => {
   const review = createReviewDecision(base, "2026-10-23T10:01:00.000Z");
@@ -22,6 +22,15 @@ test("approval is bound to artifact checksum, metadata version and rights eviden
   assert.equal(isReviewCurrent(review, { artifact: { ...artifact, sha256: "d".repeat(64) }, metadataVersion: base.metadataVersion, rightsEvidence }), false);
   assert.equal(isReviewCurrent(review, { artifact, metadataVersion: "metadata-sha256:changed", rightsEvidence }), false);
   assert.equal(isReviewCurrent(review, { artifact, metadataVersion: base.metadataVersion, rightsEvidence: { ...rightsEvidence, licenseEvidenceLocation: "evidence/changed.txt" } }), false);
+});
+
+test("approval requires and records the exact technical-validation receipt digest", () => {
+  assert.throws(
+    () => createReviewDecision({ ...base, technicalValidationSha256: undefined }),
+    /exact technical-validation receipt SHA-256 is required/
+  );
+  const review = createReviewDecision(base, "2026-10-23T10:00:30.000Z");
+  assert.equal(review.technicalValidationSha256, base.technicalValidationSha256);
 });
 
 test("approval fails closed when rights evidence is missing or incomplete", () => {
