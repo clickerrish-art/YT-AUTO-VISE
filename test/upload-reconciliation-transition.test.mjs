@@ -12,6 +12,9 @@ const receipt = {
   channelTitle: "SonicVhibez",
   privacyStatus: "private",
   remoteStatusVerified: true,
+  channelHistoryReconciled: true,
+  historyVerifiedAt: "2026-11-05T17:45:00.000Z",
+  historyVideoCount: 42,
   publishingEnabled: false,
   actualPublishedAt: "2026-11-05T17:30:00.000Z"
 };
@@ -64,6 +67,9 @@ test("receipt cannot terminalize a different job, attempt, artifact, channel or 
     { receipt: { ...receipt, channelId: "UC" + "b".repeat(22) } },
     { receipt: { ...receipt, privacyStatus: "public" } },
     { receipt: { ...receipt, remoteStatusVerified: false } },
+    { receipt: { ...receipt, channelHistoryReconciled: false } },
+    { receipt: { ...receipt, historyVerifiedAt: null } },
+    { receipt: { ...receipt, historyVideoCount: 0 } },
     { receipt: { ...receipt, publishingEnabled: true } },
     { receipt: { ...receipt, actualPublishedAt: "not-a-date" } }
   ];
