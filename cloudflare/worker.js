@@ -402,6 +402,9 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
       const createdAt = new Date().toISOString();
       let multipart;
       try {
+        if (existing?.status === "FAILED" && existing.upload_id) {
+          try { await env.ARTIFACTS.resumeMultipartUpload(existing.object_key, existing.upload_id).abort(); } catch {}
+        }
         multipart = await env.ARTIFACTS.createMultipartUpload(objectKey, {
           httpMetadata: { contentType: contentTypes[artifactKind] },
           customMetadata: { jobId, sourcePath, artifactKind, sha256: digest }
