@@ -89,6 +89,20 @@ function readJsonFile(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
 }
 
+async function verifyStorage() {
+  const payload = await requestJson("/api/runner/ready");
+  if (payload.ready !== true || !Number.isSafeInteger(payload.remainingBytes) ||
+      payload.remainingBytes < 1024 * 1024 * 1024) {
+    throw new Error("Cloudflare R2 artifact storage failed its live preflight or has less than 1 GiB headroom");
+  }
+  console.log(JSON.stringify({
+    event: "cloudflare_artifact_storage_ready",
+    storageProvider: payload.storageProvider,
+    usedBytes: payload.usedBytes,
+    remainingBytes: payload.remainingBytes
+  }));
+}
+
 async function startSession() {
   const payload = await requestJson("/api/runner/session", {
     method: "POST",
@@ -197,7 +211,8 @@ async function pushBackoff() {
 
 const command = process.argv[2];
 try {
-  if (command === "start-session") await startSession();
+  if (command === "verify-storage") await verifyStorage();
+  else if (command === "start-session") await startSession();
   else if (command === "complete-session") await completeSession();
   else if (command === "pull-snapshot") await pullSnapshot();
   else if (command === "push-snapshot") await pushSnapshot();
