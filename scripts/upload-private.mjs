@@ -261,7 +261,9 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
   if (approval.metadataVersion !== metadataVersion) throw new Error("approval metadata version does not match the actual metadata file");
   if (typeof approval.reviewer !== "string" || approval.reviewer.trim().length < 2) throw new Error("authenticated human reviewer identity is missing");
   if (!/^[a-f0-9]{64}$/.test(approval.rightsEvidenceSha256 ?? "")) throw new Error("rights-evidence checksum is missing");
-  if (!/^[a-f0-9]{64}$/.test(approval.technicalValidationSha256 ?? "")) throw new Error("exact technical-validation receipt checksum is missing");
+  if (!approval.technicalValidationReceipt || typeof approval.technicalValidationReceipt !== "object" || Array.isArray(approval.technicalValidationReceipt)) throw new Error("exact technical-validation receipt is missing");
+  const actualTechnicalValidationSha256 = crypto.createHash("sha256").update(JSON.stringify(approval.technicalValidationReceipt)).digest("hex");
+  if (approval.technicalValidationSha256 !== actualTechnicalValidationSha256) throw new Error("technical-validation receipt checksum does not match the approval-bound receipt");
   if (approval.publishingEnabled !== false || approval.visibility !== "private") throw new Error("approval must explicitly preserve private-only publishing");
   if (!Array.isArray(approval.relatedArtifacts) || !approval.relatedArtifacts.some(item => item?.sha256 === artifactSha256)) throw new Error("approval must bind the complete reviewed artifact set, including the uploaded MP4");
   if (!approval.relatedArtifacts.some(item => typeof item?.path === "string" && /\.(jpg|jpeg|png|webp)$/i.test(item.path) && /^[a-f0-9]{64}$/.test(item.sha256 ?? ""))) throw new Error("approval must include the reviewed thumbnail checksum");
