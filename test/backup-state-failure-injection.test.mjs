@@ -211,3 +211,36 @@ test("interrupted backup recovery atomically promotes one verified snapshot and 
   assert.equal(result.path, f.outputPath); assert.equal(result.entries, 1); assert.equal(result.includesSecrets, false);
   assert.equal(fs.existsSync(f.outputPath), true); assert.equal(fs.existsSync(f.temporaryPath), false); assert.equal(fs.existsSync(f.lockPath), false);
 });
+
+
+test("interrupted backup recovery rejects symlinked lock files before reading or promotion", t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-recover-lock-symlink-")); t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const f = recoveryFixture(root);
+  const originalLock = f.lockPath + ".original";
+  fs.renameSync(f.lockPath, originalLock);
+  fs.symlinkSync(originalLock, f.lockPath);
+  assert.throws(() => recoverInterruptedBackup({ ...f, confirmOwnerStopped: true }), /unsafe lock/);
+  assert.equal(fs.existsSync(f.outputPath), false);
+  assert.equal(fs.existsSync(f.temporaryPath), true);
+});
+
+test("interrupted backup recovery rejects empty kinds, dot segments and NUL target paths", t => {
+  for (const mutate of [
+    entry => { entry.target.kind = ""; },
+    entry => { entry.target.path = "nested/./dashboard-state.json"; },
+    entry => { entry.target.path = "nested/\\0dashboard-state.json"; }
+  ]) {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-recover-unsafe-target-"));
+    try {
+      const f = recoveryFixture(root);
+      const payload = JSON.parse(fs.readFileSync(f.temporaryPath, "utf8"));
+      mutate(payload.entries[0]);
+      fs.writeFileSync(f.temporaryPath, JSON.stringify(payload));
+      assert.throws(() => recoverInterruptedBackup({ ...f, confirmOwnerStopped: true }), /invalid or unsafe entry/);
+      assert.equal(fs.existsSync(f.outputPath), false);
+      assert.equal(fs.existsSync(f.lockPath), true);
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
+  }
+});
