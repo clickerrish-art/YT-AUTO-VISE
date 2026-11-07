@@ -266,7 +266,7 @@ test("Facebook idea API rejects invalid dates and excludes overlapping active to
   assert.equal(body.idea.publishReady, false);
 });
 
-test("campaign read API returns only persisted records and clearly withholds authoritative validation", async () => {
+test("campaign read API validates persisted campaign records against the repository policy", async () => {
   const state = validState();
   state.campaigns = [{ id: "selar-wildlife-vault", status: "ACTIVE_FOR_DRAFTS_ONLY" }];
   const database = { prepare() { return { bind() { return this; }, async first() { return { revision: 4, state_json: JSON.stringify(state) }; } }; } };
@@ -277,8 +277,9 @@ test("campaign read API returns only persisted records and clearly withholds aut
   assert.equal(response.status, 200);
   assert.deepEqual(body.campaigns, state.campaigns);
   assert.equal(body.source, "durable_dashboard_state");
-  assert.equal(body.authoritativeConfigImported, false);
-  assert.equal(body.validation.status, "NOT_RUN");
+  assert.equal(body.authoritativeConfigImported, true);
+  assert.equal(body.validation.status, "BLOCKED");
+  assert.ok(body.validation.errors.length > 0);
   assert.equal(body.publishingEnabled, false);
   assert.equal(body.readOnly, true);
 });
