@@ -1170,3 +1170,166 @@ test("operator can inspect and explicitly release a stale runner session with ex
   assert.equal(session.status, "RELEASED");
   assert.match(session.release_reason, /Owner inspected/);
 });
+
+
+test("private R2 artifact upload requires an exact generated receipt and completes a resumable multipart object", async () => {
+  const fixture = await createRunnerOidcFixture();
+  const digest = "a".repeat(64);
+  const job = {
+    kind: "CONTENT_PRODUCTION", id: "job-r2-001", state: "GENERATED",
+    outputArtifacts: [{ path: "media/generated-video.mp4", sha256: digest }],
+    thumbnailArtifact: { path: "media/generated-thumbnail.jpg", sha256: "b".repeat(64) },
+    metadataPath: "content/generated-metadata.json", metadataVersion: "c".repeat(64)
+  };
+  const state = { ...validState(), jobs: [job] };
+  const artifactRows = new Map();
+  const partRows = new Map();
+  let uploadedPart = null;
+  const database = {
+    prepare(sql) {
+      return {
+        args: [],
+        bind(...args) { this.args = args; return this; },
+        async first() {
+          if (sql.includes("FROM dashboard_state")) return { revision: 4, state_json: JSON.stringify(state), updated_at: "2026-11-08T00:00:00.000Z" };
+          if (sql.includes("FROM runner_artifacts WHERE job_id")) {
+            return [...artifactRows.values()].find(row => row.job_id === this.args[0] && row.source_path === this.args[1] && row.sha256 === this.args[2]) ?? null;
+          }
+          if (sql.includes("SUM(size_bytes)")) return { total_bytes: 0 };
+          if (sql.includes("FROM runner_artifacts WHERE artifact_id")) return artifactRows.get(this.args[0]) ?? null;
+          return null;
+        },
+        async all() {
+          if (sql.includes("FROM runner_artifact_parts")) {
+            return { results: [...(partRows.get(this.args[0]) ?? new Map()).entries()].map(([part_number, etag]) => ({ part_number, etag })) };
+          }
+          if (sql.includes("FROM runner_artifacts WHERE job_id")) {
+            return { results: [...artifactRows.values()].filter(row => row.job_id === this.args[0]) };
+          }
+          return { results: [] };
+        },
+        async run() {
+          if (sql.startsWith("INSERT INTO runner_artifacts")) {
+            const [artifact_id, job_id, source_path, artifact_kind, filename, object_key, upload_id, sha256, size_bytes, part_size_bytes, expected_parts, content_type, created_at] = this.args;
+            artifactRows.set(artifact_id, { artifact_id, job_id, source_path, artifact_kind, filename, object_key, upload_id, sha256, size_bytes, part_size_bytes, expected_parts, content_type, status: "UPLOADING", created_at, completed_at: null });
+            return { meta: { changes: 1 } };
+          }
+          if (sql.startsWith("INSERT INTO runner_artifact_parts")) {
+            const [artifactId, partNumber, etag] = this.args;
+            if (!partRows.has(artifactId)) partRows.set(artifactId, new Map());
+            partRows.get(artifactId).set(partNumber, etag);
+            return { meta: { changes: 1 } };
+          }
+          if (sql.startsWith("UPDATE runner_artifacts SET status = 'READY'")) {
+            const [etag, completedAt, artifactId] = this.args;
+            const row = artifactRows.get(artifactId);
+            if (row) Object.assign(row, { status: "READY", etag, completed_at: completedAt });
+            return { meta: { changes: row ? 1 : 0 } };
+          }
+          return { meta: { changes: 1 } };
+        }
+      };
+    }
+  };
+  const r2 = {
+    async createMultipartUpload(key, options) {
+      assert.equal(key, "jobs/job-r2-001/" + digest + "/generated-video.mp4");
+      assert.equal(options.customMetadata.sha256, digest);
+      return { key, uploadId: "upload-r2-1", async abort() {} };
+    },
+    resumeMultipartUpload(key, uploadId) {
+      assert.equal(uploadId, "upload-r2-1");
+      return {
+        async uploadPart(partNumber, body) {
+          uploadedPart = { partNumber, bytes: await new Response(body).arrayBuffer() };
+          return { partNumber, etag: "part-etag-1" };
+        },
+        async complete(parts) {
+          assert.deepEqual(parts, [{ partNumber: 1, etag: "part-etag-1" }]);
+          return { size: 5, httpEtag: "object-etag" };
+        }
+      };
+    },
+    async get(key) {
+      return {
+        size: 5, httpEtag: "object-etag", customMetadata: { sha256: digest },
+        body: new Response("video").body,
+        writeHttpMetadata(headers) { headers.set("content-type", "video/mp4"); }
+      };
+    }
+  };
+  const env = {
+    DASHBOARD_OPERATOR_TOKEN: "o".repeat(32),
+    STATE_DB: database,
+    ARTIFACTS: r2
+  };
+  const call = (url, method = "GET", body, headers = {}) => handleRequest(new Request("https://state.example" + url, {
+    method, headers: { authorization: "Bearer " + fixture.token, ...(body !== undefined ? { "content-type": "application/json" } : {}), ...headers },
+    body: body === undefined ? undefined : typeof body === "string" ? body : JSON.stringify(body)
+  }), env, fixture);
+  const create = await call("/api/runner/artifacts/create", "POST", {
+    jobId: job.id, sourcePath: "media/generated-video.mp4", artifactKind: "video",
+    sha256: digest, sizeBytes: 5, contentType: "video/mp4"
+  });
+  assert.equal(create.status, 201);
+  const created = await create.json();
+  assert.equal(created.status, "UPLOADING");
+  const badReceipt = await call("/api/runner/artifacts/create", "POST", {
+    jobId: job.id, sourcePath: "media/other.mp4", artifactKind: "video",
+    sha256: digest, sizeBytes: 5, contentType: "video/mp4"
+  });
+  assert.equal(badReceipt.status, 409);
+  const part = await handleRequest(new Request("https://state.example/api/runner/artifacts/part?artifactId=" + created.artifactId + "&partNumber=1", {
+    method: "PUT", headers: {
+      authorization: "Bearer " + fixture.token, "content-type": "application/octet-stream", "content-length": "5"
+    }, body: new Uint8Array([1, 2, 3, 4, 5])
+  }), env, fixture);
+  assert.equal(part.status, 200);
+  assert.equal(uploadedPart.partNumber, 1);
+  const complete = await call("/api/runner/artifacts/complete", "POST", { artifactId: created.artifactId });
+  assert.equal(complete.status, 201);
+  assert.equal((await complete.json()).status, "READY");
+  const list = await handleRequest(new Request("https://state.example/api/artifacts?jobId=" + job.id, {
+    headers: { "x-operator-token": "o".repeat(32) }
+  }), env);
+  assert.equal(list.status, 200);
+  assert.equal((await list.json()).artifacts[0].status, "READY");
+  const download = await handleRequest(new Request("https://state.example/api/artifacts/" + created.artifactId + "/download", {
+    headers: { "x-operator-token": "o".repeat(32) }
+  }), env);
+  assert.equal(download.status, 200);
+  assert.equal(await download.text(), "video");
+  assert.equal(download.headers.get("x-artifact-sha256"), digest);
+});
+
+test("private R2 artifact creation rejects unbound SHA, unsafe paths and storage over-budget", async () => {
+  const fixture = await createRunnerOidcFixture();
+  const digest = "a".repeat(64);
+  const job = { kind: "CONTENT_PRODUCTION", id: "job-r2-002", state: "GENERATED", outputArtifacts: [{ path: "media/a.mp4", sha256: digest }] };
+  const state = { ...validState(), jobs: [job] };
+  const database = {
+    prepare(sql) {
+      return {
+        args: [], bind(...args) { this.args = args; return this; },
+        async first() {
+          if (sql.includes("FROM dashboard_state")) return { revision: 1, state_json: JSON.stringify(state), updated_at: "2026-11-08T00:00:00.000Z" };
+          if (sql.includes("FROM runner_artifacts WHERE job_id")) return null;
+          if (sql.includes("SUM(size_bytes)")) return { total_bytes: 8 * 1024 * 1024 * 1024 };
+          return null;
+        },
+        async run() { return { meta: { changes: 1 } }; }
+      };
+    }
+  };
+  const env = { STATE_DB: database, ARTIFACTS: { async createMultipartUpload() { throw new Error("must not create"); } } };
+  const send = body => handleRequest(new Request("https://state.example/api/runner/artifacts/create", {
+    method: "POST", headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
+    body: JSON.stringify(body)
+  }), env, fixture);
+  const mismatch = await send({ jobId: job.id, sourcePath: "media/other.mp4", artifactKind: "video", sha256: digest, sizeBytes: 1, contentType: "video/mp4" });
+  assert.equal(mismatch.status, 409);
+  const unsafe = await send({ jobId: job.id, sourcePath: "../media/a.mp4", artifactKind: "video", sha256: digest, sizeBytes: 1, contentType: "video/mp4" });
+  assert.equal(unsafe.status, 400);
+  const overBudget = await send({ jobId: job.id, sourcePath: "media/a.mp4", artifactKind: "video", sha256: digest, sizeBytes: 1, contentType: "video/mp4" });
+  assert.equal(overBudget.status, 413);
+});
