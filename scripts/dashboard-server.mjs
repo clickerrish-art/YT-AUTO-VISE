@@ -2630,6 +2630,32 @@ const server = http.createServer(async (req, res) => {
             });
           }
         }
+        // Bind the final decision to the complete package the operator inspected.
+        // The first related-artifact list is assembled before authoring evidence is
+        // resolved, so append those exact receipts here, after their hashes exist.
+        const appendReviewedArtifact = (entry) => {
+          if (!entry || typeof entry.path !== "string" || !/^[a-f0-9]{64}$/.test(entry.sha256 ?? "")) {
+            throw new Error("Reviewed artifact binding is incomplete");
+          }
+          const existing = relatedArtifacts.find(item => item.path === entry.path);
+          if (existing && existing.sha256 !== entry.sha256) throw new Error("Reviewed artifact path has conflicting checksums: " + entry.path);
+          if (!existing) relatedArtifacts.push({ path: entry.path, sha256: entry.sha256 });
+        };
+        appendReviewedArtifact({ path: metadataPath, sha256: metadataVersion });
+        if (authoringArtifactBinding) {
+          for (const entry of Object.values(authoringArtifactBinding.narrationArtifacts)) appendReviewedArtifact(entry);
+          appendReviewedArtifact({ path: authoringArtifactBinding.qualityEvidencePath, sha256: authoringArtifactBinding.qualityEvidenceSha256 });
+          appendReviewedArtifact({
+            path: authoringArtifactBinding.narrationRightsEvidencePath,
+            sha256: sha256File(resolveRepositoryFile(authoringArtifactBinding.narrationRightsEvidencePath))
+          });
+          appendReviewedArtifact({ path: authoringArtifactBinding.renderManifestPath, sha256: authoringArtifactBinding.renderManifestSha256 });
+        }
+        for (const entry of relatedArtifacts) {
+          if (sha256File(resolveRepositoryFile(entry.path)) !== entry.sha256) {
+            return json(res, 409, { error: "A complete reviewed-package artifact changed before the decision was committed: " + entry.path, publishingEnabled: false });
+          }
+        }
         const review = createReviewDecision({ artifact, rightsEvidence, metadataVersion, reviewer, decision: body.decision, reason: body.reason ?? "", shortParentRelationshipSha256: shortParentRelationshipSha256Value });
         if (body.decision === "APPROVE") {
           state.jobs[index] = approveContentJobForPrivateUpload({ ...job, rightsChecks: { verified: true, evidenceSha256: review.rightsEvidenceSha256, verifiedBy: reviewer, verifiedAt: review.reviewedAt } }, review);
@@ -2655,7 +2681,7 @@ const server = http.createServer(async (req, res) => {
             rightsEvidenceSha256: review.rightsEvidenceSha256,
             rightsEvidence,
             authoringArtifactBinding,
-            relatedArtifacts: [...relatedArtifacts, { path: metadataPath, sha256: metadataVersion }],
+            relatedArtifacts: structuredClone(relatedArtifacts),
             publishingEnabled: false,
             visibility: "private"
           };
