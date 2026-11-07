@@ -9,21 +9,21 @@ import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
 test("dashboard runs only allowlisted real validation commands and persists results", { skip: process.env.DASHBOARD_TEST_CHILD === "1" }, async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-tasks-"));
   fs.writeFileSync(path.join(stateDir, "dashboard-state.json"), JSON.stringify({ version: 1, queueItems: [], audit: [], jobs: [{ id: "interrupted-1", kind: "VALIDATION_TASK", taskId: "validate-schedule", status: "RUNNING" }, { id: "upload-interrupted-1", kind: "CONTENT_PRODUCTION", title: "Uncertain upload", state: "UPLOADING_PRIVATE", transitionHistory: [], attemptCount: 1 }], uploads: [] }));
-  const port = 28000 + Math.floor(Math.random() * 10000);
+  let port = null;
   const token = "task-test-" + "x".repeat(40);
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
-    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-task-operator", DASHBOARD_STATE_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" },
+    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-task-operator", DASHBOARD_STATE_DIR: stateDir, PORT: "0", DASHBOARD_HOST: "127.0.0.1" },
     stdio: ["ignore", "pipe", "pipe"]
   });
   let logs = "";
-  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stdout.on("data", chunk => { logs += chunk.toString(); for (const line of chunk.toString().split(/\\r?\\n/)) { try { const event = JSON.parse(line); if (event.event === "dashboard_started") port = event.port; } catch {} } });
   child.stderr.on("data", chunk => { logs += chunk.toString(); });
   t.after(() => { child.kill("SIGTERM"); fs.rmSync(stateDir, { recursive: true, force: true }); });
-  const base = `http://127.0.0.1:${port}`;
+  let base = null;
   let ready = false;
   for (let i = 0; i < 60; i++) {
     if (child.exitCode !== null) break;
-    try { if ((await fetch(base + "/healthz")).ok) { ready = true; break; } } catch {}
+    try { if (port !== null) { base = `http://127.0.0.1:${port}`; if ((await fetch(base + "/healthz")).ok) { ready = true; break; } } } catch {}
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   assert.equal(ready, true, "server did not start: " + logs);
@@ -34,20 +34,20 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   assert.equal(readiness.publishingEnabled, false);
   assert.ok(Array.isArray(readiness.blockers));
   assert.ok(readiness.blockers.length > 0);
-  const port2 = port + 10_000;
+  let port2 = null;
   const child2 = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
-    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-task-operator", DASHBOARD_STATE_DIR: stateDir, PORT: String(port2), DASHBOARD_HOST: "127.0.0.1" },
+    env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: "test-task-operator", DASHBOARD_STATE_DIR: stateDir, PORT: "0", DASHBOARD_HOST: "127.0.0.1" },
     stdio: ["ignore", "pipe", "pipe"]
   });
   let logs2 = "";
-  child2.stdout.on("data", chunk => { logs2 += chunk.toString(); });
+  child2.stdout.on("data", chunk => { logs2 += chunk.toString(); for (const line of chunk.toString().split(/\\r?\\n/)) { try { const event = JSON.parse(line); if (event.event === "dashboard_started") port2 = event.port; } catch {} } });
   child2.stderr.on("data", chunk => { logs2 += chunk.toString(); });
   t.after(() => child2.kill("SIGTERM"));
-  const base2 = `http://127.0.0.1:${port2}`;
+  let base2 = null;
   let ready2 = false;
   for (let i = 0; i < 60; i++) {
     if (child2.exitCode !== null) break;
-    try { if ((await fetch(base2 + "/healthz")).ok) { ready2 = true; break; } } catch {}
+    try { if (port2 !== null) { base2 = `http://127.0.0.1:${port2}`; if ((await fetch(base2 + "/healthz")).ok) { ready2 = true; break; } } } catch {}
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   assert.equal(ready2, true, "second process did not start: " + logs2);
