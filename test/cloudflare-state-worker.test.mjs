@@ -800,7 +800,8 @@ test("operational readiness requires readable D1 state, valid campaigns and dash
   const state = validState();
   const env = {
     STATE_DB: { prepare() { return { bind() { return this; }, async first() { return { revision: 7, state_json: JSON.stringify(state), updated_at: "2026-11-08T00:00:00.000Z" }; } }; } },
-    ASSETS: { async fetch() { return new Response("dashboard", { status: 200 }); } }
+    ASSETS: { async fetch() { return new Response("dashboard", { status: 200 }); } },
+    ARTIFACTS: { async put() {}, async get() {} }
   };
   const response = await handleRequest(new Request("https://state.example/operational-readyz"), env);
   const body = await response.json();
@@ -809,6 +810,7 @@ test("operational readiness requires readable D1 state, valid campaigns and dash
   assert.equal(body.durableState, "READABLE");
   assert.equal(body.campaignConfig, "PASS");
   assert.equal(body.dashboardAssets, "READABLE");
+  assert.equal(body.artifactStorage, "BOUND");
   assert.equal(body.publicationReadiness, "SEPARATE");
   assert.equal(body.publishingEnabled, false);
   assert.equal(body.blockers.length, 0);
@@ -867,6 +869,8 @@ test("capabilities endpoint distinguishes implemented durable operations from ru
   assert.equal(response.status, 200);
   assert.equal(body.statePersistence.configured, true);
   assert.equal(body.dashboardHosting.configured, true);
+  assert.equal(body.artifactStorage.configured, false);
+  assert.equal(body.artifactStorage.uploadDownloadE2E, "NOT_TESTED");
   assert.ok(body.supported.some(item => item.includes("worker lease")));
   assert.ok(body.blockedUntilIntegration.some(item => item.includes("Node/FFmpeg")));
   assert.ok(body.blockedUntilIntegration.some(item => item.includes("YouTube OAuth")));
@@ -882,6 +886,8 @@ test("Wrangler staging config binds the dashboard static assets and existing D1 
   assert.equal(config.assets.run_worker_first, true);
   assert.equal(config.d1_databases[0].binding, "STATE_DB");
   assert.equal(config.d1_databases[0].database_id, "f018ee20-2d7f-41ec-9744-ee058bce80f8");
+  assert.equal(config.r2_buckets[0].binding, "ARTIFACTS");
+  assert.equal(config.r2_buckets[0].bucket_name, "sonicvhibez-artifacts-staging");
 });
 
 
