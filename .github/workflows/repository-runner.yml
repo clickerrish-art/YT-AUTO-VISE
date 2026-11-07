@@ -23,6 +23,7 @@ jobs:
       DASHBOARD_WORKER_ID: sonicvhibez-render-worker
       DASHBOARD_STATE_DIR: ${{ github.workspace }}/state
       WORKER_STATE_DIR: ${{ github.workspace }}/run-logs
+      WORKER_DISPATCH_LIMIT: "1"
     steps:
       - uses: actions/checkout@v7
         with:
