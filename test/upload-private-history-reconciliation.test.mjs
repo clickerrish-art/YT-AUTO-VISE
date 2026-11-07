@@ -61,6 +61,10 @@ test("incomplete or unreviewed snapshot and scheduled-only video cannot be treat
   }, expected), /complete owner-verified channel-history snapshot is required/);
   assert.throws(() => assertPrivateUploadPresentInCompleteHistory({
     ...completeSnapshot,
+    reconciliationSha256: "invalid"
+  }, expected), /complete owner-verified channel-history snapshot is required/);
+  assert.throws(() => assertPrivateUploadPresentInCompleteHistory({
+    ...completeSnapshot,
     history: [],
     scheduledItems: [{ id: "remote-video-123", status: "scheduled" }]
   }, expected), /absent from complete verified channel history/);
