@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { normalizeDashboardState, toDashboardStateResponse } from "../cloudflare/dashboard-state-compat.js";
 import { authenticate, constantTimeEqual, handleRequest, operatorIdentity, validateDashboardState } from "../cloudflare/worker.js";
+import { canonicalAuthoringScriptSha256 } from "../cloudflare/authoring-review-compat.js";
 
 const validState = () => ({
   version: 1,
@@ -552,4 +553,66 @@ test("worker lease expiry is reaped and generated media cannot bypass repository
   assert.equal(reapedBody.job.workerLease, null);
   assert.equal(reapedBody.job.errorDetails.code, "WORKER_LEASE_EXPIRED");
   assert.equal(snapshot().state.audit.at(-1).action, "WORKER_LEASE_EXPIRED");
+});
+
+
+test("human script review binds approval to the exact canonical script and safely reuses an identical receipt", async () => {
+  const script = { title: "Wildlife behaviour", narration: "A researched wildlife story.", sections: [{ narration: "A researched wildlife story." }] };
+  const state = validState();
+  state.jobs = [{
+    id: "script-job", kind: "CONTENT_PRODUCTION", state: "QUEUED",
+    authoring: { status: "AWAITING_HUMAN_EDITORIAL_REVIEW", result: { script } }
+  }];
+  const { database, snapshot } = mutableDatabase(state);
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const scriptSha256 = await canonicalAuthoringScriptSha256(script);
+  const payload = { jobId: "script-job", decision: "APPROVE", scriptSha256, reason: "Reviewed factual structure, evidence and editorial accuracy" };
+  const send = () => handleRequest(new Request("https://state.example/api/jobs/authoring/review", {
+    method: "POST",
+    headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
+    body: JSON.stringify(payload)
+  }), env);
+  const approved = await send();
+  const body = await approved.json();
+  assert.equal(approved.status, 200);
+  assert.equal(body.scriptReview.decision, "APPROVE");
+  assert.equal(body.scriptReview.scriptSha256, scriptSha256);
+  assert.equal(body.job.authoring.scriptApproval.approvalSha256.length, 64);
+  assert.equal(body.publishable, false);
+  const replay = await send();
+  assert.equal(replay.status, 200);
+  assert.equal((await replay.json()).reused, true);
+  assert.equal(snapshot().revision, 2);
+  assert.equal(snapshot().state.audit.at(-1).action, "SCRIPT_REVISION_APPROVED_FOR_NARRATION");
+});
+
+test("script review rejects stale hashes and rejection invalidates narration approvals", async () => {
+  const script = { title: "Wildlife behaviour", narration: "Current approved script text." };
+  const state = validState();
+  state.jobs = [{
+    id: "script-reject", kind: "CONTENT_PRODUCTION", state: "QUEUED",
+    authoring: {
+      status: "AWAITING_HUMAN_EDITORIAL_REVIEW", result: { script },
+      narrationApproval: { decision: "APPROVE" }, narrationStage: { status: "DRAFT_REVIEW_REQUIRED" }
+    }
+  }];
+  const { database, snapshot } = mutableDatabase(state);
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const send = payload => handleRequest(new Request("https://state.example/api/jobs/authoring/review", {
+    method: "POST",
+    headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
+    body: JSON.stringify(payload)
+  }), env);
+  const stale = await send({ jobId: "script-reject", decision: "REJECT", scriptSha256: "0".repeat(64), reason: "The script needs factual corrections" });
+  assert.equal(stale.status, 409);
+  assert.equal(snapshot().revision, 1);
+  const scriptSha256 = await canonicalAuthoringScriptSha256(script);
+  const rejected = await send({ jobId: "script-reject", decision: "REJECT", scriptSha256, reason: "The script needs factual corrections" });
+  const body = await rejected.json();
+  assert.equal(rejected.status, 200);
+  assert.equal(body.job.authoring.status, "REJECTED");
+  assert.equal(body.job.authoring.scriptApproval, undefined);
+  assert.equal(body.job.authoring.narrationApproval, undefined);
+  assert.equal(body.job.authoring.narrationStage, undefined);
+  assert.equal(snapshot().state.audit.at(-1).action, "SCRIPT_REVISION_REJECTED");
 });
