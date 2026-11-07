@@ -153,6 +153,12 @@ test("crash recovery blocks dashboard until rollback, then serves the original q
   assert.equal(blocked.child.exitCode, 2);
   assert.match(blocked.errors(), /interrupted state restore journal exists/);
 
+  // The restore child is confirmed exited. Remove only its exact stale lock,
+  // matching the documented operator recovery step; never reap a live owner.
+  const staleLock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+  assert.equal(staleLock.pid, restoreChild.pid);
+  fs.unlinkSync(lockPath);
+
   await assert.rejects(
     restoreState({ backupPath, rootDir, stateDir, uploadLogDir, rightsDir, confirm: "YES", overwriteState: true }),
     /interrupted restore was rolled back safely.*rerun restore explicitly/i
