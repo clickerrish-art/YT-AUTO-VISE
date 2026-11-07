@@ -21,7 +21,7 @@ relationship.relationshipEvidenceSha256 = shortParentEvidenceSha256(relationship
 const rightsEvidence = { assets: [{ assetPath: "media/scene.mp4", licenseEvidenceLocation: "rights/license.txt", assetSha256: sha("c"), licenseEvidenceSha256: sha("d"), permittedUses: ["YouTube"], verificationStatus: "VERIFIED", verifiedBy: "operator-1", verifiedAt: "2026-10-26T10:00:00.000Z" }] };
 const baseApproval = {
   decision: "APPROVE", jobId: "child-job-001", contentType: "short",
-  artifactSha256: sha("a"), metadataVersion: sha("b"), technicalValidationSha256: sha("9"), reviewer: "operator-1",
+  artifactSha256: sha("a"), metadataVersion: sha("b"), technicalValidationSha256: crypto.createHash("sha256").update(JSON.stringify({ passed: true, fixtureOnly: true })).digest("hex"), technicalValidationReceipt: { passed: true, fixtureOnly: true }, reviewer: "operator-1",
   rightsEvidence,
   rightsEvidenceSha256: crypto.createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex"), publishingEnabled: false, visibility: "private",
   relatedArtifacts: [
