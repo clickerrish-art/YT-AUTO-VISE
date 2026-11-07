@@ -1,4 +1,5 @@
 import { normalizeDashboardState, toDashboardStateResponse } from "./dashboard-state-compat.js";
+import { generateDashboardFacebookIdea } from "./facebook-idea-compat.js";
 
 const STATE_ID = 1;
 const MAX_STATE_BYTES = 2 * 1024 * 1024;
@@ -148,6 +149,28 @@ async function handleRequest(request, env) {
     }
     const row = await currentState(env);
     return json({ revision: row.revision, updatedAt: row.updated_at, state: JSON.parse(row.state_json) }, 200, { etag: '"' + row.revision + '"' });
+  }
+
+  if (url.pathname === "/api/tasks" && method === "GET") {
+    return json({ publicPublishingEnabled: false, tasks: ["validate-schedule", "check-captions", "production-readiness", "test-suite", "validate-campaigns"], readOnly: true });
+  }
+
+  if (url.pathname === "/api/facebook/idea" && method === "GET") {
+    const row = await currentState(env);
+    if (!row) return json({ error: "State has not been bootstrapped", code: "STATE_NOT_INITIALIZED" }, 503);
+    let state;
+    try { state = validateDashboardState(JSON.parse(row.state_json)); }
+    catch { return json({ error: "Persisted state is corrupt or has an unsupported schema", code: "STATE_INVALID" }, 503); }
+    const date = url.searchParams.get("date") ?? "";
+    try {
+      const idea = generateDashboardFacebookIdea({ date, existingDrafts: state.facebookDrafts, recentPosts: state.facebookPosts });
+      return json({ idea, publishingEnabled: false, publishReady: false, readOnly: true });
+    } catch (error) {
+      if (error instanceof Error && /date is required|date is invalid/i.test(error.message)) {
+        return json({ error: error.message, publishingEnabled: false, publishReady: false }, 400);
+      }
+      throw error;
+    }
   }
 
   if (url.pathname === "/api/drafts" && method === "GET") {
