@@ -1,56 +1,96 @@
 # SonicVhibez Short 002 — production brief
 
-**Status:** SCRIPT DRAFT — not rendered, uploaded, or published  
+**Status:** SCRIPT DRAFT — revised SEO packaging; not rendered, uploaded, scheduled, or published  
+**Weekly allowance:** Existing item 2 of 2; this is a revision, not a third Short  
 **Channel:** SonicVhibez only  
-**Target runtime:** 55 seconds  
+**Target runtime:** about 55 seconds  
 **Format:** 9:16 vertical  
-**Voice:** friendly, natural American male narrator, approximately 40  
-**Product URL (approved):** https://selar.com/0u19v8u99l
+**Voice:** friendly, clear, conversational documentary narration  
+**Product URL:** https://selar.com/0u19v8u99l
 
 ## YouTube title
-3 Steps to Plan a Wildlife Documentary Short
+How to Make a Wildlife Documentary Short: 3 Planning Steps
 
-## Narration draft (~120 words; time to be confirmed in edit)
-“Before you edit your next wildlife Short, plan three things.
+## Narration draft (128 words; provisional 55-second caption layout; record and retime against final audio before rendering)
 
-First, choose one clear subject. Instead of trying to cover an entire species, focus on one behavior: hunting, feeding, migration, courtship, or caring for young. Only describe what the footage actually shows.
+“Planning a wildlife documentary Short? Plan three things before editing.
 
-Second, build a beginning, middle, and end. Open with a moment that raises a question. Add enough habitat and behavior detail to help viewers understand what is happening. Finish with a meaningful reveal, a natural conclusion, or a question worth thinking about.
+First, choose one subject and one question: how does this animal feed, move, communicate, or care for its young? Describe only what your footage shows.
 
-Third, edit for clarity. Remove repetition, keep captions easy to read on a phone, and use music and sound effects only when you have the rights to use them. Never let dramatic editing turn observation into a false claim.
+Second, build a simple story. Open with a moment that raises the question, add habitat context, then show the behavior and explain why it matters. Keep separate clips in their real sequence.
 
-For more help planning wildlife videos, explore the Complete YouTube Wildlife Creator’s Vault — Premium Combo PDF at the link in the description.”
+Third, check every asset. Confirm footage and music rights, fact-check each claim, and keep captions readable on a phone.
 
-## Shot-by-shot visual plan
-- **0–3s:** Compelling genuine wildlife close-up; caption: “Plan your next wildlife Short”
-- **3–15s:** One animal behavior shown clearly; label “1. One subject”
-- **15–29s:** Three-part sequence: opening question, context, conclusion; label “2. Beginning → middle → end”
-- **29–42s:** Phone-shaped caption preview and editing timeline; label “3. Edit for clarity”
-- **42–49s:** Calm, respectful wildlife observation; caption: “Show what the footage proves”
-- **49–55s:** Wildlife montage and product end card with the approved URL
+Before editing, note where each clip came from, what it actually shows, and which details still need checking. A focused story is easier to follow than a rushed list of facts. The Wildlife Creator’s Vault is linked below as a planning resource.”
 
-## Description draft
-Plan a wildlife documentary Short around one subject, a clear beginning-middle-end, and an edit that stays faithful to the footage. Use cleared video, music, and sound effects, and avoid claims the footage cannot support.
+## Draft description — internal hold, not publish-ready
 
-**Promotion:** This video promotes the Complete YouTube Wildlife Creator’s Vault. The creator may receive compensation if you purchase. Check the product page for current details.
+Learn how to make a wildlife documentary Short with one subject, habitat context, a clear story arc and rights-checked footage. This creator lesson covers three planning steps before editing.
 
-Explore the Complete YouTube Wildlife Creator’s Vault — Premium Combo PDF:
+Promotional resource: Complete YouTube Wildlife Creator’s Vault — Premium Combo PDF  
 https://selar.com/0u19v8u99l
 
-**Synthetic-media disclosure (use when applicable):** Some visuals or narration in this video were generated or altered using AI. Any realistic AI-generated wildlife scene must be disclosed using YouTube’s altered/synthetic content setting. Do not claim a real animal encounter was filmed if it was generated or reconstructed.
+**DISCLOSURE HOLD:** The live Selar listing identifies Click 47 as the seller and its copy uses Nature Frontiers branding. The affiliate/paid relationship and SonicVhibez’s authorization to promote this listing are not established by the listing. Do not publish until the owner confirms the relationship and the accurate viewer-facing disclosure.
 
-## Suggested tags
-wildlife documentary, wildlife filmmaking tips, YouTube Shorts tips, wildlife video editing, animal behavior, nature documentary, storytelling tips, wildlife creator
+Use only footage and music you own or are licensed to use. Keep the edit faithful to the observed sequence.
 
-## Required pre-publication checks
-- [ ] Generate/render the video when an authorized video-generation allowance is available.
-- [ ] Confirm final duration is close to 55 seconds and voice sounds natural.
-- [ ] Confirm every clip/music element is owned, licensed, or otherwise cleared; keep evidence.
-- [ ] If using AI-generated realistic wildlife imagery, accurately disclose it in the video/description and set YouTube's altered/synthetic content flag.
-- [ ] Make the paid-promotion/affiliate relationship clear in the video and description.
-- [ ] Check captions against actual narration, product URL, title, description, and tags.
-- [ ] Confirm destination channel ID is SonicVhibez; never Nature Frontiers.
-- [ ] Keep upload private for review before any public scheduling.
-- [ ] Mark review flags true only after a human actually completes the checks.
+#WildlifeDocumentary #WildlifeFilmmaking #YouTubeShorts #WildlifeStorytelling #NatureEducation
 
-**SEO note:** Metadata is keyword-relevant, but no SEO score, ranking, reach, or sales outcome is guaranteed.
+## Keyword phrase cluster
+
+- **Primary:** how to make a wildlife documentary
+- **Secondary:** wildlife documentary; wildlife stories; wildlife video; wildlife filmmaking
+- **Supporting intent:** plan a wildlife documentary Short; wildlife documentary storytelling; wildlife video planning; animal behavior storytelling
+
+### Current keyword evidence (vidIQ research, 6 November 2026)
+
+The research tool returned estimated global monthly searches, not independently audited search counts:
+
+| Phrase | Estimated monthly searches | Volume score | Competition | Search-demand growth |
+|---|---:|---:|---:|---:|
+| how to make wildlife documentary | 18,193 | 64 | 32 | +20.4% |
+| wildlife documentary | 670,929 | 87 | 56 | +41.0% |
+| wildlife stories | 34,924 | 68 | 41 | -19.7% |
+| wildlife video | 24,334 | 65 | 40 | +12.9% |
+| wildlife filmmaking tips (seed) | <750 | 0 | 17 | unavailable |
+
+The long-tail phrase is the best title fit: it expresses a how-to intent and has lower reported competition than the broad “wildlife documentary” term. Use the broad term naturally as a supporting phrase, not as a promise of reach. Missing top-market data is unknown, not zero. No third-party SEO score is claimed.
+
+## Hashtags
+
+#WildlifeDocumentary #WildlifeFilmmaking #YouTubeShorts #WildlifeStorytelling #NatureEducation
+
+## Thumbnail direction
+
+Use one genuine, rights-cleared animal image in its actual habitat, with natural anatomy and lighting. Keep the animal on the right and simple negative space on the left for **“3 STEPS TO PLAN”**. No fake predator-prey composite, fabricated danger, logos, watermarks, or implied encounter that the footage does not show. Keep key detail inside the vertical Shorts safe area.
+
+## Shot plan
+
+- **0–4s:** Genuine wildlife detail; hook: “Plan your wildlife documentary”
+- **4–15s:** One subject and one question; label “1. ONE SUBJECT”
+- **15–29s:** Habitat context and behavior; label “2. BUILD THE STORY”
+- **29–42s:** Editing timeline and accurate sequence; label “3. CHECK THE EVIDENCE”
+- **42–50s:** Rights/caption reminder over calm observation footage
+- **50–55s:** Neutral end frame; product mention only after the promotion gate is cleared
+
+## Production checklist
+
+- [ ] Use genuine, species- and habitat-matched footage; no invented chronology.
+- [ ] Never bait, chase, or disturb wildlife; avoid claims the footage cannot support.
+- [ ] Verify commercial and YouTube rights for every video, still, music and sound effect.
+- [ ] Confirm each clips/music element is owned, licensed, or otherwise cleared.
+- [ ] Fact-check each wildlife claim against reliable sources.
+- [ ] Record narration and retime captions to the actual voice track.
+- [ ] Confirm final runtime is about 55 seconds without unnatural time-stretching.
+- [ ] Check captions at phone size, audio levels and vertical safe areas.
+- [x] Seller identity is Click 47 on the live Selar listing; the Vault listing uses Nature Frontiers branding.
+- [ ] Obtain explicit SonicVhibez brand authorization, verify the affiliate/paid/no-compensation relationship and insert the truthful viewer-facing disclosure.
+- [ ] Verify the exact SonicVhibez destination and full YouTube timestamp history before any calendar decision.
+- [ ] Keep as a private draft; do not upload or schedule until all gates pass.
+- [ ] Human playback and compliance review must be completed before any review flag is changed.
+
+**Destination guard:** SonicVhibez only; never Nature Frontiers.
+
+**SEO safety:** No SEO score, ranking, reach, or sales outcome is guaranteed.
+
+**Release state:** HOLD — product-brand/relationship authorization, genuine media rights, final assets, destination identity and human review remain unverified. No video has been rendered or published.

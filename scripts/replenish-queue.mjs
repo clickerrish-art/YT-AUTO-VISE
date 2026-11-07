@@ -2,7 +2,45 @@ import fs from "node:fs";
 import path from "node:path";
 
 const queuePath = process.env.QUEUE_PATH ?? "content/queue.json";
+const planPath = process.env.WEEKLY_CONTENT_PLAN_PATH ?? "config/weekly-content-plan.json";
 fs.mkdirSync(path.dirname(queuePath), { recursive: true });
+
+let authoritativeCadence;
+try {
+  const plan = JSON.parse(fs.readFileSync(planPath, "utf8"));
+  const cycle = plan.publicationCycle;
+  const draftSlots = Array.isArray(plan.schedule) ? plan.schedule.filter(slot => slot?.status === "DRAFT_ONLY") : [];
+  if (plan.publishingEnabled !== false || plan.timezone !== "Africa/Johannesburg" ||
+      !cycle || cycle.id !== "sonicvhibez-rolling-cycle-v1" ||
+      JSON.stringify(cycle.formats) !== JSON.stringify(["long_form", "long_form", "short"]) ||
+      cycle.minimumHoursBetweenConsecutivePublications !== 72 || cycle.minimumCycleHours !== 216 ||
+      cycle.timezone !== plan.timezone || cycle.publicationRequiresVerifiedHistory !== true || cycle.publicationEnabled !== false ||
+      draftSlots.length !== 2 ||
+      !draftSlots.some(slot => slot.day === "Tuesday" && slot.format === "long_form") ||
+      !draftSlots.some(slot => slot.day === "Saturday" && slot.format === "short")) {
+    throw new Error("weekly content plan does not match the fail-closed rolling publication policy");
+  }
+  authoritativeCadence = {
+    publicationCycleId: cycle.id,
+    formats: [...cycle.formats],
+    minimumHoursBetweenConsecutivePublications: cycle.minimumHoursBetweenConsecutivePublications,
+    minimumCycleHours: cycle.minimumCycleHours,
+    timezone: plan.timezone,
+    draftPreparationFallback: {
+      days: draftSlots.map(slot => slot.day),
+      breakdown: {
+        longForm: draftSlots.filter(slot => slot.format === "long_form").length,
+        short: draftSlots.filter(slot => slot.format === "short").length
+      },
+      status: "DRAFT_ONLY",
+      notPublicationCadence: true
+    },
+    note: "Draft preparation only. Actual publication follows the rolling three-publication cycle and verified remote history; no weekly publication count is promised."
+  };
+} catch (error) {
+  console.error(`BLOCKED: cannot load authoritative publication policy: ${error.message}`);
+  process.exit(2);
+}
 
 const seed = [
   { id: "wildlife-short-story-structure", title: "How to Tell a Better Wildlife Story", topic: "wildlife video storytelling", keywords: ["wildlife video storytelling","wildlife filmmaking","nature documentary tips"], hook: "Wildlife footage becomes a story when every shot answers one clear question.", outline: ["Choose one animal behavior to explain","Plan a wide shot, detail, and behavior shot","Use only rights-cleared footage and music"], productUrl: "https://selar.com/0u19v8u99l", targetSeconds: 55, status: "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW" },
@@ -19,7 +57,7 @@ const seed = [
   { id: "wildlife-short-description-seo", title: "Write a Clear YouTube Description for Wildlife Videos", topic: "YouTube wildlife video descriptions and metadata", keywords: ["YouTube description SEO","wildlife video keywords","YouTube metadata tips"], hook: "Metadata works best when it accurately describes what viewers will learn.", outline: ["Put the topic and viewer benefit first","Use relevant phrases naturally","Keep links accurate and disclose promotion clearly"], productUrl: "https://selar.com/0u19v8u99l", targetSeconds: 55, status: "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW" }
 ];
 
-let document = { cadence: { postsPerWeek: 2, days: ["Tuesday", "Friday"], timezone: "Africa/Johannesburg" }, publishingEnabled: false, items: [] };
+let document = { cadence: authoritativeCadence, publishingEnabled: false, items: [] };
 if (fs.existsSync(queuePath)) {
   try {
     const parsed = JSON.parse(fs.readFileSync(queuePath, "utf8"));
@@ -35,6 +73,17 @@ if (document.publishingEnabled === true) {
   console.error("BLOCKED: queue replenishment must not enable publishing.");
   process.exit(1);
 }
+if (document.publishingEnabled !== undefined && document.publishingEnabled !== false) {
+  console.error("BLOCKED: queue publishingEnabled must be the boolean false when present.");
+  process.exit(1);
+}
+document.publishingEnabled = false;
+// Keep the queue's operational policy synchronized with the authoritative plan.
+// Retire the former weekly-count fields instead of carrying them into a new file.
+document.cadence = { ...(document.cadence && typeof document.cadence === "object" ? document.cadence : {}), ...authoritativeCadence };
+delete document.cadence.postsPerWeek;
+delete document.cadence.days;
+delete document.cadence.breakdown;
 const known = new Set(document.items.map(item => item.id));
 const additions = seed.filter(item => !known.has(item.id));
 document.items.push(...additions);

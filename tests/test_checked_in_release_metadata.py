@@ -15,7 +15,13 @@ class CheckedInReleaseMetadataTests(unittest.TestCase):
         self.assertEqual(metadata.get("status"), "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW")
         self.assertFalse(metadata.get("rightsConfirmed"))
         self.assertFalse(metadata.get("complianceReviewed"))
-        self.assertFalse(metadata.get("channelId"))
+        self.assertIsNone(metadata.get("channelId"), "unverified channel IDs must never be embedded in release metadata")
+
+    def test_long_form_queue_does_not_embed_an_unverified_channel_id(self):
+        queue = json.loads((ROOT / "content" / "long-form-queue.json").read_text(encoding="utf-8"))
+        self.assertEqual(queue.get("channel"), "SonicVhibez")
+        self.assertIs(queue.get("publishingEnabled"), False)
+        self.assertNotIn("channelId", queue, "long-form queue must wait for authenticated OAuth channel identity")
 
     def test_all_queued_items_remain_held_and_use_only_approved_destination(self):
         queue = json.loads((ROOT / "content" / "queue.json").read_text(encoding="utf-8"))

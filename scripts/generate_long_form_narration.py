@@ -3,6 +3,7 @@
 This script only creates local draft files. It never uploads or publishes.
 """
 from pathlib import Path
+import math
 import asyncio
 import re
 import sys
@@ -18,8 +19,10 @@ except ImportError:
     print("ERROR: Install edge-tts first: python -m pip install edge-tts", file=sys.stderr)
     raise SystemExit(2)
 
-SOURCE = Path("content/long-form-scripts.md")
-OUT = Path("media/long-form-drafts")
+SCRIPT_DIR = Path(__file__).resolve().parent
+REPO_ROOT = SCRIPT_DIR.parent
+SOURCE = REPO_ROOT / "content" / "long-form-scripts.md"
+OUT = REPO_ROOT / "media" / "long-form-drafts"
 VOICE = "en-US-GuyNeural"
 CAPTION_MAX_WORDS = 7
 CAPTION_MAX_CHARS = 42
@@ -29,8 +32,16 @@ def clean_script(text: str) -> str:
     text = re.sub(r"(?m)^\*\*[^\n]*\*\*\s*$", "", text)
     text = re.sub(r"(?m)^\*\*\[.*?\]\*\*.*$", "", text)
     text = re.sub(r"(?m)^### Suggested (description|tags).*$", "", text)
+    # Paid-product narration is withheld until the owner explicitly authorizes
+    # this channel/product relationship and any required compensation disclosure.
+    text = re.sub(
+        r"(?:^|\n\n)If you want a paid resource\b.*?(?=\n\n|$)",
+        "",
+        text,
+        flags=re.DOTALL,
+    )
     text = re.sub(r"(?m)^Promotional resource:.*$", "", text)
-    text = re.sub(r"https://selar\.com/0u19v8u99l", "the approved creator resource linked in the video description", text)
+    text = re.sub(r"https://selar\.com/0u19v8u99l", "", text)
     text = re.sub(r"\[[^\]]*\]", " ", text)
     text = re.sub(r"\*\*(.*?)\*\*", r"\1", text)
     text = re.sub(r"(?m)^[-*]\s+", "", text)
@@ -69,12 +80,22 @@ def srt_time(seconds: float) -> str:
 def captions_from_boundaries(boundaries):
     """Group actual TTS word-boundary events into readable draft caption cues."""
     cues, group = [], []
+    previous_start = -1.0
     for item in boundaries:
         word = str(item.get("text", "")).strip()
         if not word:
             continue
-        start = max(0.0, float(item.get("offset", 0)) / 10_000_000)
-        end = max(start + 0.15, (float(item.get("offset", 0)) + float(item.get("duration", 0))) / 10_000_000)
+        if len(word) > CAPTION_MAX_CHARS:
+            raise ValueError("A TTS word exceeds the maximum caption character count; manual caption editing is required")
+        offset = float(item.get("offset", 0))
+        duration = float(item.get("duration", 0))
+        if not math.isfinite(offset) or not math.isfinite(duration) or offset < 0 or duration < 0:
+            raise ValueError("TTS word-boundary offsets and durations must be finite and non-negative")
+        start = offset / 10_000_000
+        if start < previous_start:
+            raise ValueError("TTS word-boundary events are out of order; refusing to generate misleading captions")
+        previous_start = start
+        end = max(start + 0.15, (offset + duration) / 10_000_000)
         if group and (len(group) >= CAPTION_MAX_WORDS or len(" ".join(x["text"] for x in group)) + len(word) + 1 > CAPTION_MAX_CHARS):
             cues.append(group)
             group = []
@@ -84,24 +105,41 @@ def captions_from_boundaries(boundaries):
             group = []
     if group:
         cues.append(group)
+    # Distinct caption groups can begin less than 50 ms apart. They cannot
+    # both have a positive-duration, non-overlapping SRT interval, so merge
+    # those groups before assigning cue times (readability limits are advisory
+    # in this rare TTS-boundary edge case).
+    normalized_cues = []
+    for cue in cues:
+        if normalized_cues and cue[0]["start"] < normalized_cues[-1][0]["start"] + 0.05:
+            normalized_cues[-1].extend(cue)
+        else:
+            normalized_cues.append(cue)
+
     lines = []
-    for index, cue in enumerate(cues, 1):
+    for index, cue in enumerate(normalized_cues, 1):
         start = cue[0]["start"]
         end = max(start + 0.05, cue[-1]["end"])
-        # TTS word-boundary durations can overlap slightly across adjacent words.
-        # End each cue at the next cue's start so SRT blocks never overlap.
-        if index < len(cues):
-            next_start = cues[index][0]["start"]
-            if end > next_start:
-                end = max(start + 0.05, next_start)
+        # TTS word-boundary durations can overlap across adjacent words.
+        # Clip the earlier cue at the next start; the merge above guarantees
+        # that this still leaves the minimum 50 ms cue duration.
+        if index < len(normalized_cues):
+            next_start = normalized_cues[index][0]["start"]
+            end = min(end, next_start)
         lines.extend([str(index), f"{srt_time(start)} --> {srt_time(end)}", " ".join(x["text"] for x in cue), ""])
     return "\n".join(lines).rstrip() + "\n"
 
 def captions_from_text_estimate(text: str, duration: float) -> str:
     """Build explicitly approximate draft caption timings when TTS word events are absent."""
+    if not math.isfinite(duration) or duration <= 0:
+        raise ValueError("Estimated caption duration must be finite and positive")
     words = text.split()
+    if not words:
+        raise ValueError("Cannot generate estimated captions from empty narration text")
     groups, group = [], []
     for word in words:
+        if len(word) > CAPTION_MAX_CHARS:
+            raise ValueError("A narration word exceeds the maximum caption character count; manual caption editing is required")
         candidate = " ".join(group + [word])
         if group and (len(group) >= CAPTION_MAX_WORDS or len(candidate) > CAPTION_MAX_CHARS):
             groups.append(group)
@@ -112,12 +150,18 @@ def captions_from_text_estimate(text: str, duration: float) -> str:
             group = []
     if group:
         groups.append(group)
+    # Reserve at least 100 ms per cue, then distribute the remaining
+    # duration by text length. This prevents tiny groups rounding to zero.
+    minimum_cue_seconds = 0.1
+    if duration < len(groups) * minimum_cue_seconds:
+        raise ValueError("Narration is too short to assign a positive 100 ms interval to every estimated caption cue")
     total_chars = sum(len(" ".join(g)) for g in groups) or 1
+    distributable_duration = duration - len(groups) * minimum_cue_seconds
     cursor = 0.0
     lines = []
     for index, words_group in enumerate(groups, 1):
         caption = " ".join(words_group)
-        share = duration * len(caption) / total_chars
+        share = minimum_cue_seconds + distributable_duration * len(caption) / total_chars
         start = cursor
         end = duration if index == len(groups) else min(duration, cursor + share)
         if end <= start:

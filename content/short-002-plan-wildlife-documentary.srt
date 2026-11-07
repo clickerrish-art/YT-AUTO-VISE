@@ -1,53 +1,43 @@
 1
-00:00:00,000 --> 00:00:04,000
-Planning a wildlife documentary Short?
+00:00:00,000 --> 00:00:05,000
+Planning a wildlife documentary Short? Plan three things before editing.
 
 2
-00:00:04,000 --> 00:00:09,000
-Use three simple steps
-before you start editing.
+00:00:05,000 --> 00:00:10,000
+First, choose one subject and one question: how does this animal
 
 3
-00:00:09,000 --> 00:00:15,000
-Step one: choose one subject
-and one question your video will answer.
+00:00:10,000 --> 00:00:15,000
+feed, move, communicate, or care for its young? Describe only what
 
 4
-00:00:15,000 --> 00:00:21,000
-Maybe it's how an animal finds food,
-communicates, or adapts to its habitat.
+00:00:15,000 --> 00:00:20,000
+your footage shows. Second, build a simple story. Open with a moment
 
 5
-00:00:21,000 --> 00:00:27,000
-Step two: map the story.
-Open with a hook,
-show the behavior, then explain why it matters.
+00:00:20,000 --> 00:00:25,000
+that raises the question, add habitat context, then show the behavior
 
 6
-00:00:27,000 --> 00:00:33,000
-Choose footage that supports each beat.
-Don't imply that separate clips
-happened at the same moment.
+00:00:25,000 --> 00:00:30,000
+and explain why it matters. Keep separate clips in their real sequence.
 
 7
-00:00:33,000 --> 00:00:39,000
-Step three: check every asset.
-Confirm footage, music, and image rights
-before publishing.
+00:00:30,000 --> 00:00:35,000
+Third, check every asset. Confirm footage and music rights,
 
 8
-00:00:39,000 --> 00:00:45,000
-Keep narration clear,
-captions readable,
-and every claim supported.
+00:00:35,000 --> 00:00:40,000
+fact-check each claim, and keep captions readable on a phone.
 
 9
-00:00:45,000 --> 00:00:50,000
-A focused story is easier to follow
-than a rushed list of facts.
+00:00:40,000 --> 00:00:45,000
+Before editing, note where each clip came from, what it actually shows,
 
 10
+00:00:45,000 --> 00:00:50,000
+and which details still need checking. A focused story is easier to follow
+
+11
 00:00:50,000 --> 00:00:55,000
-Plan your next wildlife Short with confidence.
-The Wildlife Creator's Vault
-is linked in the description.
+than a rushed list of facts. The Wildlife Creator’s Vault is linked below as a planning resource.

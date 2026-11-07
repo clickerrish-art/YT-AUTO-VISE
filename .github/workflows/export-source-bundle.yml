@@ -1,0 +1,104 @@
+name: Temporary source recovery bundle
+on:
+  push:
+    branches:
+      - codex/marketing-machine-audit-fixes
+    paths:
+      - ".github/workflows/export-source-bundle.yml"
+      - ".github/workflows/free-narration-artifact.yml"
+      - "scripts/replenish-queue.mjs"
+      - "test/queue-cadence.test.mjs"
+      - "tests/replenish-queue.test.mjs"
+      - ".env.example"
+      - "package.json"
+      - "OPERATIONS.md"
+      - "scripts/dashboard-server.mjs"
+      - "scripts/worker-runner.mjs"
+      - "test/dashboard-inventory.test.mjs"
+      - "test/dashboard-server.test.mjs"
+      - "test/dashboard-worker-api.integration.test.mjs"
+      - "test/worker-runner.test.mjs"
+      - "docs/API_ROUTE_ACCEPTANCE_MATRIX.json"
+      - "docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md"
+      - "docs/REQUIREMENTS_ACCEPTANCE_REGISTER.json"
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: "Verified source ref to export"
+        required: true
+        default: "codex/marketing-machine-audit-fixes"
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: source-recovery-bundle
+  cancel-in-progress: false
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out complete repository history
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.source_ref || github.ref }}
+          fetch-depth: 0
+      - name: Fetch all remote branches and tags
+        run: |
+          git fetch --prune origin '+refs/heads/*:refs/remotes/origin/*' --tags
+          git show-ref
+      - name: Create and verify recovery bundle
+        run: |
+          git bundle create YT-AUTO-VISE.bundle --all
+          git bundle verify YT-AUTO-VISE.bundle
+          git bundle list-heads YT-AUTO-VISE.bundle | tee bundle-heads.txt
+          sha256sum YT-AUTO-VISE.bundle | tee bundle-sha256.txt
+      - name: Create source archive and exact source identity manifest
+        env:
+          SOURCE_BRANCH: ${{ github.event.inputs.source_ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          source_sha="$(git rev-parse HEAD)"
+          main_sha="$(git rev-parse refs/remotes/origin/main)"
+          merge_base="$(git merge-base "$main_sha" "$source_sha")"
+          ahead="$(git rev-list --count "$main_sha..$source_sha")"
+          behind="$(git rev-list --count "$source_sha..$main_sha")"
+          changed_files="$(git diff --name-only "$merge_base" "$source_sha" | wc -l | tr -d ' ')"
+          git archive --format=zip --output=YT-AUTO-VISE-source.zip "$source_sha"
+          unzip -t YT-AUTO-VISE-source.zip
+          git bundle verify YT-AUTO-VISE.bundle
+          git bundle list-heads YT-AUTO-VISE.bundle > bundle-heads.txt
+          sha256sum YT-AUTO-VISE.bundle YT-AUTO-VISE-source.zip > delivery-sha256.txt
+          SOURCE_SHA="$source_sha" SOURCE_BRANCH="$SOURCE_BRANCH" MAIN_SHA="$main_sha" MERGE_BASE="$merge_base" AHEAD="$ahead" BEHIND="$behind" CHANGED_FILES="$changed_files" node --input-type=module <<'NODE'
+          import fs from "node:fs";
+          import crypto from "node:crypto";
+          const digest = file => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+          const manifest = {
+            repository: "clickerrish-art/YT-AUTO-VISE",
+            branch: process.env.SOURCE_BRANCH,
+            sourceSha: process.env.SOURCE_SHA,
+            mainSha: process.env.MAIN_SHA,
+            mergeBaseSha: process.env.MERGE_BASE,
+            aheadBy: Number(process.env.AHEAD),
+            behindBy: Number(process.env.BEHIND),
+            changedFiles: Number(process.env.CHANGED_FILES),
+            sourceArchive: { path: "YT-AUTO-VISE-source.zip", sha256: digest("YT-AUTO-VISE-source.zip") },
+            fullHistoryBundle: { path: "YT-AUTO-VISE.bundle", sha256: digest("YT-AUTO-VISE.bundle") },
+            bundleHeadsPath: "bundle-heads.txt",
+            generatedAt: new Date().toISOString()
+          };
+          fs.writeFileSync("source-identity.json", JSON.stringify(manifest, null, 2) + "\n");
+          NODE
+          sha256sum -c delivery-sha256.txt
+      - name: Upload verified source bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: YT-AUTO-VISE-source-bundle
+          path: |
+            YT-AUTO-VISE.bundle
+            YT-AUTO-VISE-source.zip
+            bundle-heads.txt
+            delivery-sha256.txt
+            source-identity.json
+          retention-days: 7
+# Recovery refresh: export the full-history source bundle after the 2 November API, dashboard inventory and acceptance-register refresh.

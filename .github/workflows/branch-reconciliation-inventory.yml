@@ -1,0 +1,36 @@
+name: Non-destructive branch reconciliation inventory
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    name: Inventory base/head commit and file divergence
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact candidate with full history
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Fetch authoritative main ref
+        run: git fetch --no-tags origin main
+      - name: Generate machine-readable and human-readable inventory
+        run: |
+          mkdir -p artifacts
+          npm run report:branch -- --base origin/main --head HEAD --json artifacts/branch-reconciliation-report.json --markdown artifacts/branch-reconciliation-report.md
+      - name: Retain full reconciliation inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: branch-reconciliation-${{ github.sha }}
+          path: |
+            artifacts/branch-reconciliation-report.json
+            artifacts/branch-reconciliation-report.md
+          if-no-files-found: error
+          retention-days: 30

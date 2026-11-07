@@ -1,17 +1,27 @@
 {
   "cadence": {
-    "postsPerWeek": 3,
-    "days": [
-      "Tuesday",
-      "Thursday",
-      "Saturday"
+    "publicationCycleId": "sonicvhibez-rolling-cycle-v1",
+    "formats": [
+      "long_form",
+      "long_form",
+      "short"
     ],
+    "minimumHoursBetweenConsecutivePublications": 72,
+    "minimumCycleHours": 216,
     "timezone": "Africa/Johannesburg",
-    "breakdown": {
-      "longForm": 2,
-      "short": 1
+    "draftPreparationFallback": {
+      "days": [
+        "Tuesday",
+        "Saturday"
+      ],
+      "breakdown": {
+        "longForm": 1,
+        "short": 1
+      },
+      "status": "DRAFT_ONLY",
+      "notPublicationCadence": true
     },
-    "note": "Target cadence only. This queue does not itself schedule or publish. Public publishing remains disabled until each item passes rights, content, media, metadata, and channel-identity checks."
+    "note": "Draft preparation only. Actual publication is governed by the rolling three-publication cycle and verified remote history; no weekly publication count is promised."
   },
   "publishingEnabled": false,
   "items": [
@@ -35,7 +45,6 @@
       "title": "A Beginner Workflow for Faceless Wildlife Videos",
       "topic": "faceless wildlife video production workflow",
       "productUrl": "https://selar.com/0u19v8u99l",
-      "scheduledDay": "Saturday",
       "targetMinutes": {
         "min": 6,
         "max": 10
@@ -49,7 +58,7 @@
       "productUrl": "https://selar.com/0u19v8u99l",
       "status": "SCRIPT_AND_CAPTIONS_READY_NEEDS_MEDIA_AND_HUMAN_REVIEW",
       "contentType": "short",
-      "scheduledDay": "Thursday",
+      "scheduledDay": "Saturday",
       "targetSeconds": 55
     },
     {
@@ -299,5 +308,6 @@
       "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
       "contentType": "short"
     }
-  ]
+  ],
+  "version": 2
 }

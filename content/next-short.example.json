@@ -17,5 +17,6 @@
   "status": "DRAFT_REVIEW_REQUIRED",
   "targetSeconds": 55,
   "hasPaidPromotion": true,
-  "containsSyntheticMedia": true
+  "containsSyntheticMedia": true,
+  "contentType": "short"
 }

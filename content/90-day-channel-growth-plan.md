@@ -2,7 +2,7 @@
 
 **Status:** Planning document only. This does not authorize publication or paid usage.
 
-- Channel: SonicVhibez (`UCSlkuPfHH78oGC1o418HV4w`)
+- Channel: SonicVhibez (`@sonicvhibez`); confirm the exact channel ID through authenticated YouTube OAuth before any upload.
 - Time zone: `Africa/Johannesburg`
 - Budget: target ZAR 0; use free tools and existing connected services only.
 - Goal: improve the chance of YouTube Partner Program eligibility within 90 days. This is an ambitious target, not a guarantee.
@@ -11,13 +11,9 @@
 
 Focus on wildlife filmmaking and creator education: documentary storytelling, planning, ethical filming, editing, sound, captions, fact-checking, thumbnails and metadata. Videos must provide original, useful value and must not be repetitive template-driven uploads. Mention the approved Wildlife Creator's Vault only when relevant and disclose affiliate/paid promotion clearly.
 
-## Target cadence
+## Publication cadence and draft preparation
 
-- Tuesday: one original 6–10 minute horizontal long-form video.
-- Thursday: one original vertical Short, approximately 35–60 seconds.
-- Saturday: one original 6–10 minute horizontal long-form video.
-
-This is a production target, not a live schedule. Hold any upload if assets, narration, captions, rights, facts or review are incomplete. Avoid duplicating the existing live Short `LjePS02hA1o`; preserve at least 72 hours between promotional uploads.
+The publication sequence is a rolling `long_form → long_form → short` cycle, with at least 72 elapsed hours between consecutive actual publications and no same-Johannesburg-calendar-day publications. A complete three-publication cycle therefore takes at least 216 hours; do not promise three publications per week. Tuesday and Saturday workflow triggers are draft-preparation slots only, not publication appointments. Publication remains blocked until the owner explicitly approves a feasible cadence, the complete channel history and uncertain attempts are reconciled, and every media, rights, metadata and human-review gate passes. Avoid duplicating the existing live Short `LjePS02hA1o`.
 
 ## Long-form topic pipeline
 
@@ -40,7 +36,7 @@ Use the existing FFmpeg/Python renderer as the basis for a repeatable workflow. 
 
 **Days 1–14:** test the end-to-end production pipeline, finish two long-form videos and one Short, verify exports and caption timing, and record rights evidence.
 
-**Days 15–30:** publish only fully cleared content; record impressions, click-through rate, average view duration, retention, returning viewers and subscriber conversion.
+**Days 15–30:** publish only after the owner-approved cadence and all release gates are in place; otherwise continue draft preparation only. Record impressions, click-through rate, average view duration, retention, returning viewers and subscriber conversion only for actual published content.
 
 **Days 31–60:** use real analytics to choose follow-up topics; improve opening seconds, pacing, thumbnails and internal linking.
 
@@ -66,4 +62,4 @@ The primary plan is to use Shorts for discovery and original long-form videos to
 
 ## Current blockers
 
-The queue targets two long-form videos (Tuesday/Saturday) and one Short (Thursday) each week; publishing remains disabled. Short #2 still needs verified rights-cleared media, final narration, thumbnail, rendered MP4, captions synchronized to the final narration, rights evidence and human review. Secure YouTube upload credentials must be configured before private upload testing. Long-form production is not integrated until a 16:9 render/export path and corresponding metadata/preflight checks are tested. This plan does not claim those tasks are complete.
+The queue retains draft-preparation triggers only; the rolling publication cycle has no weekly count because three cyclic gaps of at least 72 hours require at least 216 hours. Publishing remains disabled pending an explicit owner cadence decision. Short #2 still needs verified rights-cleared media, final narration, thumbnail, rendered MP4, captions synchronized to the final narration, rights evidence and human review. Secure YouTube upload credentials must be configured before private upload testing. Long-form production is not integrated until a 16:9 render/export path and corresponding metadata/preflight checks are tested. This plan does not claim those tasks are complete.

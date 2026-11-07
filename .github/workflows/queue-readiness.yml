@@ -4,6 +4,24 @@ on:
     branches: [main]
     paths:
       - "scripts/replenish-queue.mjs"
+      - "scripts/validate-schedule.mjs"
+      - "scripts/schedule-policy.mjs"
+      - "config/weekly-content-plan.json"
+      - ".github/workflows/twice-weekly-check.yml"
+      - "scripts/production-readiness.mjs"
+      - "tests/**"
+      - "scripts/render-short.mjs"
+      - "package.json"
+      - "README.md"
+      - "content/queue.json"
+      - "content/*.srt"
+      - "content/*.md"
+      - "content/*.json"
+      - ".github/workflows/queue-readiness.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/replenish-queue.mjs"
       - "scripts/production-readiness.mjs"
       - "tests/**"
       - "scripts/render-short.mjs"
@@ -16,20 +34,22 @@ on:
       - ".github/workflows/queue-readiness.yml"
   workflow_dispatch:
   schedule:
-    # Tuesday/Thursday/Saturday SAST cadence (GitHub Actions cron is UTC).
+    # Operational queue-readiness/replenishment check only; it does not publish.
     - cron: "0 15 * * 2,4,6"
 permissions:
-  contents: write
+  contents: read
 jobs:
-  validate-and-replenish:
+  validate-and-propose:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
-          ref: main
-      - uses: actions/setup-node@v4
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          node-version: '24'
+          package-manager-cache: false
       - name: Install production dependencies for regression tests
         run: npm install --ignore-scripts
       - name: Check JavaScript syntax
@@ -41,10 +61,38 @@ jobs:
           node --check scripts/render-short.mjs
           node --check scripts/production-readiness.mjs
           node --check scripts/upload-private.mjs
+      - name: Install FFmpeg for media integration tests
+        run: |
+          if command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1; then
+            echo "FFmpeg and FFprobe are already available; skipping package installation."
+          else
+            sudo apt-get update
+            sudo apt-get install --yes ffmpeg
+          fi
+          ffmpeg -version
+          ffprobe -version
       - name: Run repository regression tests
         run: node --test
-      - name: Report production blockers without publishing
-        run: node scripts/production-readiness.mjs
+      - name: Validate rolling publication policy and draft-preparation slots
+        run: npm run validate:schedule
+      - name: Record production readiness HOLD without stopping safe queue preparation
+        run: |
+          if node scripts/production-readiness.mjs --json > "$RUNNER_TEMP/production-readiness.json"; then
+            echo "Production readiness report: prerequisites are present. This workflow still does not publish."
+          else
+            readiness_status=$?
+            if [ "$readiness_status" -ne 2 ]; then
+              echo "Production readiness command failed unexpectedly with exit code $readiness_status."
+              exit "$readiness_status"
+            fi
+            echo "::warning::Production readiness is HOLD. The structured blocker report is retained with the isolated queue proposal; safe draft preparation may continue."
+            {
+              echo "## Production readiness: HOLD"
+              echo "- The read-only readiness check reported blockers (exit 2)."
+              echo "- This is not a production pass and does not authorize upload, scheduling or publication."
+              echo "- Safe local queue validation and isolated proposal generation continue independently."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Validate existing caption files
         run: node scripts/check-captions.mjs content/short-001-wildlife-video-storytelling.srt content/short-002-plan-wildlife-documentary.srt
       - name: Validate queue and approved product URLs
@@ -58,16 +106,29 @@ jobs:
           for (const item of q.items) if (!approved.has(item.productUrl)) throw new Error("Unapproved product URL in queue: " + item.id);
           console.log("PASS: " + q.items.length + " queue items; all product links approved; publishing disabled.");
           '
-      - name: Replenish draft topic queue
-        run: node scripts/replenish-queue.mjs
-      - name: Commit queue only when changed
+      - name: Prepare an isolated queue proposal
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add content/queue.json
-          if git diff --cached --quiet; then
-            echo "Queue already contains all seed topics."
-          else
-            git commit -m "chore: replenish reviewed-topic queue"
-            git push origin HEAD:main
-          fi
+          mkdir -p "$RUNNER_TEMP/queue-proposal"
+          cp content/queue.json "$RUNNER_TEMP/queue-proposal/queue.json"
+          cp "$RUNNER_TEMP/production-readiness.json" "$RUNNER_TEMP/queue-proposal/production-readiness.json"
+      - name: Replenish draft topics in the isolated proposal only
+        env:
+          QUEUE_PATH: ${{ runner.temp }}/queue-proposal/queue.json
+        run: node scripts/replenish-queue.mjs
+      - name: Retain queue proposal for operator review
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-queue-proposal-${{ github.run_id }}
+          path: ${{ runner.temp }}/queue-proposal/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Report non-mutating workflow boundary
+        run: |
+          {
+            echo "## Queue readiness and proposal"
+            echo "- Existing repository queue was validated read-only."
+            echo "- Replenishment ran against an isolated temporary copy."
+            echo "- A queue proposal artifact was retained for operator review."
+            echo "- This workflow has contents: read and cannot push or modify main."
+            echo "- No rendering, upload, scheduling or publication was performed."
+          } >> "$GITHUB_STEP_SUMMARY"
