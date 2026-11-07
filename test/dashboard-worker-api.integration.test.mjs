@@ -236,9 +236,78 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
   assert.equal(fs.existsSync(path.join(process.cwd(), "media", "jobs", "queued-legacy-without-authoring")), false,
     "blocked production must not create a per-job media directory");
 
+  // A retained output or manifest is evidence of a previous/partial render.
+  // It must move the job out of QUEUED so the worker cannot poll it forever.
+  const recoveryJobs = [
+    {
+      kind: "CONTENT_PRODUCTION", id: "recovery-output-job", state: "QUEUED",
+      contentType: "short", createdAt: "2026-11-07T10:00:00.000Z",
+      scheduledSlot: { date: today, time: localTime(3), timezone: "Africa/Johannesburg" },
+      authoring: { productionPlan: structuredClone(approvedPlan) },
+      transitionHistory: [{ from: null, to: "QUEUED", at: new Date().toISOString(), actor: "test", reason: "fixture" }],
+      attemptCount: 0, retryPolicy: { maxAttempts: 2, requiresOperatorRetry: true }
+    },
+    {
+      kind: "CONTENT_PRODUCTION", id: "recovery-manifest-job", state: "QUEUED",
+      contentType: "short", createdAt: "2026-11-07T10:01:00.000Z",
+      scheduledSlot: { date: today, time: localTime(3), timezone: "Africa/Johannesburg" },
+      authoring: { productionPlan: structuredClone(approvedPlan) },
+      transitionHistory: [{ from: null, to: "QUEUED", at: new Date().toISOString(), actor: "test", reason: "fixture" }],
+      attemptCount: 0, retryPolicy: { maxAttempts: 2, requiresOperatorRetry: true }
+    }
+  ];
+  const recoveryState = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  recoveryState.jobs.push(...recoveryJobs);
+  fs.writeFileSync(statePath, JSON.stringify(recoveryState, null, 2) + "\\n");
+  const outputDirectory = path.join(process.cwd(), "media", "jobs", "recovery-output-job");
+  const manifestDirectory = path.join(process.cwd(), "content", "job-render-manifests");
+  fs.mkdirSync(outputDirectory, { recursive: true });
+  fs.mkdirSync(manifestDirectory, { recursive: true });
+  const retainedOutput = path.join(outputDirectory, "final.mp4");
+  const retainedManifest = path.join(manifestDirectory, "recovery-manifest-job.json");
+  fs.writeFileSync(retainedOutput, "retained render evidence");
+  fs.writeFileSync(retainedManifest, JSON.stringify({ retained: true }));
+  t.after(() => {
+    fs.rmSync(outputDirectory, { recursive: true, force: true });
+    fs.rmSync(retainedManifest, { force: true });
+  });
+
+  for (const [jobId, expectedArtifact] of [
+    ["recovery-output-job", "media/jobs/recovery-output-job/final.mp4"],
+    ["recovery-manifest-job", "content/job-render-manifests/recovery-manifest-job.json"]
+  ]) {
+    const response = await fetch(base + "/api/jobs/produce", {
+      method: "POST",
+      headers: { ...workerHeaders, "content-type": "application/json" },
+      body: JSON.stringify({ jobId })
+    });
+    assert.equal(response.status, 409);
+    const payload = await response.json();
+    assert.equal(payload.jobState, "FAILED");
+    assert.equal(payload.recoveryRequired, true);
+    assert.equal(payload.requiresOperatorRetry, true);
+    assert.equal(payload.retryAllowed, false);
+    assert.equal(payload.artifactPath, expectedArtifact);
+  }
+  const afterRecovery = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  for (const jobId of ["recovery-output-job", "recovery-manifest-job"]) {
+    const job = afterRecovery.jobs.find(item => item.id === jobId);
+    assert.equal(job.state, "FAILED", "retained render evidence must remove the job from automatic dispatch");
+    assert.equal(job.errorDetails.code.startsWith("RENDER_"), true);
+    assert.equal(job.errorDetails.retryable, true, "a retry may be authorized only after operator reconciliation");
+    assert.equal(job.errorDetails.retryableAfterOperatorReview, true);
+    assert.ok(afterRecovery.audit.some(item => item.action === "CONTENT_RENDER_RECOVERY_REQUIRED" && item.jobId === jobId));
+  }
+  const remainingDispatchable = await fetch(base + "/api/jobs/dispatchable", { headers: workerHeaders });
+  const remainingJobs = (await remainingDispatchable.json()).jobs;
+  assert.equal(remainingJobs.some(item => item.id.startsWith("recovery-")), false,
+    "recovery-required jobs must no longer be returned to the worker poller");
+
   const operatorState = await fetch(base + "/api/state", { headers: workerHeaders });
   assert.equal(operatorState.status, 401, "worker credential must not grant general operator API access");
   const ownerState = await fetch(base + "/api/state", { headers: { "x-operator-token": operatorToken } });
   assert.equal(ownerState.status, 200);
-  assert.equal(fs.readFileSync(statePath).toString(), before.toString());
+  const ownerPayload = await ownerState.json();
+  assert.ok(ownerPayload.jobs.some(item => item.id === "recovery-output-job" && item.state === "FAILED"));
+  assert.ok(ownerPayload.jobs.some(item => item.id === "recovery-manifest-job" && item.state === "FAILED"));
 });
