@@ -2383,6 +2383,73 @@ const server = http.createServer(async (req, res) => {
         return json(res, 200, { job: reviewed, rightsEvidence, publishingEnabled: false });
       } finally { release(); }
     }
+    if (req.method === "GET" && url.pathname === "/api/jobs/review/bundle") {
+      const jobId = url.searchParams.get("jobId");
+      if (!jobId) return json(res, 400, { error: "jobId is required" });
+      const state = loadState();
+      const job = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === jobId);
+      if (!job) return json(res, 404, { error: "Content job not found" });
+      if (job.state !== "AWAITING_HUMAN_REVIEW" || job.validationResults?.passed !== true) return json(res, 409, { error: "Only technically validated jobs awaiting human review can be inspected" });
+      try {
+        const checked = [];
+        const add = (kind, artifact) => {
+          if (!artifact || typeof artifact.path !== "string" || !/^[a-f0-9]{64}$/.test(artifact.sha256 ?? "")) throw new Error(kind + " artifact record is incomplete");
+          const file = resolveRepositoryFile(artifact.path);
+          const stat = fs.lstatSync(file);
+          if (stat.isSymbolicLink() || !stat.isFile() || sha256File(file) !== artifact.sha256) throw new Error(kind + " artifact is missing, unsafe or has changed");
+          checked.push({ kind, path: artifact.path, sha256: artifact.sha256, sizeBytes: stat.size });
+        };
+        const video = (job.outputArtifacts ?? []).find(item => path.extname(item.path ?? "").toLowerCase() === ".mp4");
+        if (!video) throw new Error("Recorded MP4 artifact is missing");
+        add("video", video);
+        add("thumbnail", job.thumbnailArtifact);
+        const captionsPath = job.validationResults.captionsPath;
+        add("captions", { path: captionsPath, sha256: job.validationResults.captionsSha256 });
+        const metadataPath = job.metadataPath;
+        const metadataFile = resolveRepositoryFile(metadataPath);
+        const metadataStat = fs.lstatSync(metadataFile);
+        if (metadataStat.isSymbolicLink() || !metadataStat.isFile() || sha256File(metadataFile) !== job.metadataVersion) throw new Error("Validated metadata is missing, unsafe or has changed");
+        const metadata = JSON.parse(fs.readFileSync(metadataFile, "utf8"));
+        const rights = job.rightsChecks?.evidence ?? null;
+        return json(res, 200, {
+          jobId, title: job.title, state: job.state, contentType: job.contentType,
+          artifacts: checked, metadata: { path: metadataPath, sha256: job.metadataVersion, value: metadata },
+          technicalValidation: job.validationResults, rightsEvidence: rights,
+          rightsEvidenceSha256: job.rightsChecks?.evidenceSha256 ?? null,
+          reviewer: operatorId ?? null, publishingEnabled: false,
+          previewUrls: { video: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=video", thumbnail: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=thumbnail", captions: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=captions" }
+        });
+      } catch (error) {
+        return json(res, 409, { error: "Human-review evidence bundle failed integrity checks", detail: redactOperationalText(error instanceof Error ? error.message : "Evidence integrity failure", { roots: [root, stateDir] }), publishingEnabled: false });
+      }
+    }
+    if (req.method === "GET" && url.pathname === "/api/jobs/review/preview") {
+      const jobId = url.searchParams.get("jobId");
+      const kind = url.searchParams.get("kind");
+      if (!jobId || !["video", "thumbnail", "captions"].includes(kind)) return json(res, 400, { error: "jobId and a supported preview kind are required" });
+      const state = loadState();
+      const job = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === jobId);
+      if (!job || job.state !== "AWAITING_HUMAN_REVIEW" || job.validationResults?.passed !== true) return json(res, 404, { error: "Reviewable job not found" });
+      const artifact = kind === "video"
+        ? (job.outputArtifacts ?? []).find(item => path.extname(item.path ?? "").toLowerCase() === ".mp4")
+        : kind === "thumbnail" ? job.thumbnailArtifact
+        : { path: job.validationResults.captionsPath, sha256: job.validationResults.captionsSha256 };
+      try {
+        if (!artifact || typeof artifact.path !== "string" || !/^[a-f0-9]{64}$/.test(artifact.sha256 ?? "")) throw new Error("Preview artifact record is incomplete");
+        const file = resolveRepositoryFile(artifact.path);
+        const stat = fs.lstatSync(file);
+        if (stat.isSymbolicLink() || !stat.isFile() || sha256File(file) !== artifact.sha256) throw new Error("Preview artifact is missing, unsafe or changed");
+        const ext = path.extname(file).toLowerCase();
+        const types = { ".mp4": "video/mp4", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".srt": "text/plain; charset=utf-8", ".vtt": "text/vtt; charset=utf-8" };
+        const contentType = types[ext];
+        if (!contentType || (kind === "video" && ext !== ".mp4") || (kind === "thumbnail" && ![".jpg", ".jpeg", ".png", ".webp"].includes(ext)) || (kind === "captions" && ![".srt", ".vtt"].includes(ext))) throw new Error("Preview file type is not permitted");
+        res.writeHead(200, { "content-type": contentType, "content-length": stat.size, "cache-control": "no-store", "x-content-type-options": "nosniff", "content-security-policy": "default-src 'none'; sandbox" });
+        fs.createReadStream(file).pipe(res);
+      } catch (error) {
+        return json(res, 409, { error: "Preview unavailable", detail: redactOperationalText(error instanceof Error ? error.message : "Preview integrity failure", { roots: [root, stateDir] }), publishingEnabled: false });
+      }
+      return;
+    }
     if (req.method === "POST" && url.pathname === "/api/jobs/review") {
       const body = await readBody(req);
       const reviewer = process.env.DASHBOARD_OPERATOR_ID;
