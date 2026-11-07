@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createReviewDecision, isReviewCurrent, validateReviewEvidence } from "../scripts/human-review.mjs";
+import { createReviewDecision, isReviewCurrent, validateReviewEvidence, validateTechnicalReviewBinding } from "../scripts/human-review.mjs";
 
 const artifact = { path: "artifacts/fixture.mp4", sha256: "a".repeat(64) };
 const rightsEvidence = {
