@@ -17,7 +17,7 @@ test("all supplied Selar links are owner-authorized for SonicVhibez while two re
   assert.ok(candidates.every(product => product.promotionGate.seller.status === "VERIFIED"));
   assert.ok(candidates.every(product => product.promotionGate.seller.name === "Click 47"));
   assert.ok(candidates.every(product => product.promotionGate.seller.sourceUrl === product.url));
-  assert.ok(candidates.every(product => product.promotionGate.seller.evidenceReference.includes("2026-11-06")));
+  assert.ok(candidates.every(product => product.promotionGate.seller.evidenceReference.includes("2026-11-07")));
   assert.ok(candidates.every(product => product.promotionGate.brandAuthorization.status === "OWNER_CONFIRMED"));
   assert.ok(candidates.every(product => product.promotionGate.brandAuthorization.brand === "SonicVhibez"));
   assert.ok(candidates.every(product => product.promotionGate.brandAuthorization.confirmedAt === "2026-11-07T09:15:59+02:00"));
