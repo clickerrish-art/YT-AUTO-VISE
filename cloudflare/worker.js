@@ -63,6 +63,10 @@ async function authenticate(request, env) {
 const RUNNER_OIDC_AUDIENCE = "sonicvhibez-dashboard-runner";
 const RUNNER_OIDC_REPOSITORY = "clickerrish-art/YT-AUTO-VISE";
 const RUNNER_OIDC_REF = "refs/heads/codex/dashboard-cloudflare-adapter";
+const RUNNER_OIDC_REPOSITORY_ID = "1210809338";
+const RUNNER_OIDC_OWNER_ID = "251036666";
+let cachedGithubJwks = null;
+let cachedGithubJwksAt = 0;
 const RUNNER_OIDC_WORKFLOW = RUNNER_OIDC_REPOSITORY +
   "/.github/workflows/repository-runner.yml@" + RUNNER_OIDC_REF;
 
@@ -83,7 +87,11 @@ async function verifyRepositoryRunnerToken(token, { fetchImpl = fetch, nowMs = D
         claims.iss !== "https://token.actions.githubusercontent.com" ||
         !(claims.aud === RUNNER_OIDC_AUDIENCE || (Array.isArray(claims.aud) && claims.aud.includes(RUNNER_OIDC_AUDIENCE))) ||
         claims.repository !== RUNNER_OIDC_REPOSITORY ||
+        claims.repository_id !== RUNNER_OIDC_REPOSITORY_ID ||
         claims.repository_owner !== "clickerrish-art" ||
+        claims.repository_owner_id !== RUNNER_OIDC_OWNER_ID ||
+        claims.actor !== "clickerrish-art" ||
+        claims.actor_id !== RUNNER_OIDC_OWNER_ID ||
         claims.ref !== RUNNER_OIDC_REF ||
         claims.workflow_ref !== RUNNER_OIDC_WORKFLOW ||
         claims.sub !== "repo:" + RUNNER_OIDC_REPOSITORY + ":ref:" + RUNNER_OIDC_REF ||
@@ -94,12 +102,18 @@ async function verifyRepositoryRunnerToken(token, { fetchImpl = fetch, nowMs = D
         (claims.nbf !== undefined && (!Number.isFinite(claims.nbf) || claims.nbf * 1000 > nowMs + 60_000))) {
       return false;
     }
-    const response = await fetchImpl("https://token.actions.githubusercontent.com/.well-known/jwks", {
-      headers: { accept: "application/json" },
-      redirect: "error"
-    });
-    if (!response.ok) return false;
-    const jwks = await response.json();
+    let jwks = cachedGithubJwks;
+    if (!jwks || nowMs - cachedGithubJwksAt > 5 * 60_000) {
+      const response = await fetchImpl("https://token.actions.githubusercontent.com/.well-known/jwks", {
+        headers: { accept: "application/json" },
+        redirect: "error"
+      });
+      if (!response.ok) return false;
+      jwks = await response.json();
+      if (!Array.isArray(jwks.keys)) return false;
+      cachedGithubJwks = jwks;
+      cachedGithubJwksAt = nowMs;
+    }
     const jwk = jwks.keys?.find(key => key.kid === header.kid && key.kty === "RSA" && key.use === "sig");
     if (!jwk) return false;
     const publicKey = await crypto.subtle.importKey("jwk", jwk, {
@@ -109,16 +123,7 @@ async function verifyRepositoryRunnerToken(token, { fetchImpl = fetch, nowMs = D
     const signatureValid = await crypto.subtle.verify(
       { name: "RSASSA-PKCS1-v1_5" }, publicKey, decodeBase64Url(parts[2]), signingInput
     );
-    if (!signatureValid) return false;
-    if (claims.event_name === "workflow_dispatch") return true;
-    if (typeof claims.sha !== "string" || !/^[a-f0-9]{40}$/.test(claims.sha)) return false;
-    const commitResponse = await fetchImpl(
-      "https://api.github.com/repos/" + RUNNER_OIDC_REPOSITORY + "/commits/" + claims.sha,
-      { headers: { accept: "application/vnd.github+json" }, redirect: "error" }
-    );
-    if (!commitResponse.ok) return false;
-    const commit = await commitResponse.json();
-    return typeof commit.commit?.message === "string" && commit.commit.message.includes("[run-production]");
+    return signatureValid;
   } catch {
     return false;
   }
