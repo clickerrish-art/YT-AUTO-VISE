@@ -313,12 +313,48 @@ export async function backupState(options = {}) {
   }
 }
 
+/** Explicitly promote one verified temporary backup after operator-confirmed process death. */
+export function recoverInterruptedBackup({ rootDir = root, stateDir = process.env.DASHBOARD_STATE_DIR ?? "state", outputPath, temporaryPath, lockToken, confirmOwnerStopped = false } = {}) {
+  if (confirmOwnerStopped !== true) throw new Error("Recovery requires explicit confirmation that the backup owner has been stopped");
+  if (typeof lockToken !== "string" || !/^[0-9a-f-]{36}$/i.test(lockToken)) throw new Error("Recovery requires the exact backup lock token");
+  if (!outputPath || !temporaryPath) throw new Error("Recovery requires exact final and temporary paths");
+  const stateRoot = path.resolve(rootDir, stateDir), destination = path.resolve(outputPath), temporary = path.resolve(temporaryPath);
+  const lockPath = path.join(stateRoot, ".restore-operation.lock");
+  if (path.dirname(destination) !== path.dirname(temporary) || !path.basename(temporary).startsWith(path.basename(destination) + ".") || !/^[0-9a-f-]{36}\\.tmp$/.test(path.basename(temporary).slice(path.basename(destination).length + 1))) throw new Error("Temporary backup must be the UUID-named sibling of the final backup");
+  assertNoSymlinkComponents(stateRoot, "recovery state directory");
+  assertNoSymlinkComponents(path.dirname(destination), "recovery output directory");
+  for (const [file, label] of [[lockPath, "lock"], [temporary, "temporary backup"]]) { const st = fs.lstatSync(file); if (st.isSymbolicLink() || !st.isFile()) throw new Error("Recovery refuses unsafe " + label); }
+  try { fs.lstatSync(destination); throw new Error("Recovery destination already exists; refusing overwrite"); } catch (e) { if (e?.code !== "ENOENT") throw e; }
+  const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+  if (!lock || lock.format !== "sonicvhibez-restore-operation-lock" || lock.version !== 1 || lock.operation !== "backup" || lock.token !== lockToken || !Number.isSafeInteger(lock.pid) || lock.pid < 1 || !Number.isFinite(Date.parse(lock.createdAt))) throw new Error("Recovery lock metadata is malformed or mismatched");
+  try { process.kill(lock.pid, 0); throw new Error("Recovery owner PID is still live; refusing recovery"); } catch (e) { if (e?.code !== "ESRCH") throw e; }
+  const prefix = path.basename(destination) + ".", candidates = fs.readdirSync(path.dirname(destination)).filter(n => n.startsWith(prefix) && n.endsWith(".tmp"));
+  if (candidates.length !== 1 || candidates[0] !== path.basename(temporary)) throw new Error("Recovery requires exactly one unambiguous temporary backup");
+  const raw = readRegularFileNoFollow(temporary), payload = JSON.parse(raw.toString("utf8"));
+  if (!payload || payload.format !== "sonicvhibez-state-backup" || payload.version !== 1 || payload.includesSecrets !== false || !Number.isFinite(Date.parse(payload.createdAt)) || !Array.isArray(payload.entries) || !payload.entries.length) throw new Error("Temporary file is not a valid secret-excluding backup");
+  const seen = new Set();
+  for (const entry of payload.entries) {
+    const p = entry?.target?.path, b64 = entry?.contentBase64;
+    if (!entry.target || typeof entry.target.kind !== "string" || typeof p !== "string" || !p || path.posix.isAbsolute(p) || p.split(/[\\\\/]/).some(x => !x || x === "..") || !/^[a-f0-9]{64}$/.test(entry.sha256) || !Number.isSafeInteger(entry.bytes) || entry.bytes < 0 || typeof b64 !== "string" || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(b64)) throw new Error("Backup contains an invalid or unsafe entry");
+    const id = entry.target.kind + ":" + p; if (seen.has(id)) throw new Error("Backup contains duplicate target entries"); seen.add(id);
+    const bytes = Buffer.from(b64, "base64"); if (bytes.length !== entry.bytes || bytes.toString("base64") !== b64 || sha256(bytes) !== entry.sha256) throw new Error("Backup entry checksum or byte length mismatch");
+  }
+  fs.linkSync(temporary, destination); fs.unlinkSync(temporary);
+  if (process.platform !== "win32") { const fd = fs.openSync(path.dirname(destination), fs.constants.O_RDONLY); try { fs.fsyncSync(fd); } finally { fs.closeSync(fd); } }
+  const current = JSON.parse(fs.readFileSync(lockPath, "utf8")); if (current.token !== lockToken || current.pid !== lock.pid || current.operation !== "backup") throw new Error("Backup promoted but lock ownership changed; inspect manually");
+  fs.unlinkSync(lockPath); return { path: destination, createdAt: payload.createdAt, entries: payload.entries.length, sha256: sha256(raw), includesSecrets: false };
+}
+
 if (isInvoked) {
   try {
-    const result = await backupState({ outputPath: process.argv[2] ? path.resolve(process.argv[2]) : undefined });
-    console.log(JSON.stringify({ status: "BACKUP_CREATED", ...result }, null, 2));
-  } catch (error) {
-    console.error("BACKUP_BLOCKED: " + (error instanceof Error ? error.message : "backup failed"));
-    process.exitCode = 1;
-  }
+    let result;
+    if (process.argv[2] === "--recover") {
+      if (process.argv[6] !== "--confirm-owner-stopped") throw new Error("Usage: npm run backup:recover -- <final-path> <temporary-path> <lock-token> --confirm-owner-stopped");
+      result = recoverInterruptedBackup({ outputPath: process.argv[3], temporaryPath: process.argv[4], lockToken: process.argv[5], confirmOwnerStopped: true });
+      console.log(JSON.stringify({ status: "INTERRUPTED_BACKUP_RECOVERED", ...result }, null, 2));
+    } else {
+      result = await backupState({ outputPath: process.argv[2] ? path.resolve(process.argv[2]) : undefined });
+      console.log(JSON.stringify({ status: "BACKUP_CREATED", ...result }, null, 2));
+    }
+  } catch (error) { console.error("BACKUP_BLOCKED: " + (error instanceof Error ? error.message : "backup failed")); process.exitCode = 1; }
 }
