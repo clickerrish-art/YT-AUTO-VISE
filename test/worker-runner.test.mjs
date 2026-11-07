@@ -90,7 +90,7 @@ test("worker dispatches listed jobs sequentially and records fail-closed conflic
   assert.equal(result.deferredByBackoff, 0);
   assert.deepEqual(result.results, [
     { jobId: "job-one", status: "SUCCEEDED", httpStatus: 200, state: "GENERATED" },
-    { jobId: "job-two", status: "NOT_DISPATCHED", httpStatus: 409, state: null, retryAfterMs: 30_000 }
+    { jobId: "job-two", status: "NOT_DISPATCHED", httpStatus: 409, state: null, responseError: "renderer prerequisites are not satisfied", retryAfterMs: 30_000 }
   ]);
   assert.equal(result.publishingEnabled, false);
   assert.deepEqual(requests.map(item => item.method + " " + item.url.split("?")[0]), [
