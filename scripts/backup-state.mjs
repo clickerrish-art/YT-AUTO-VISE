@@ -64,6 +64,44 @@ function assertNoSymlinkComponents(filePath, label = "backup input") {
   }
 }
 
+/**
+ * Read a regular backup input through a pinned descriptor. O_NOFOLLOW blocks
+ * final-component symlink swaps; inode and metadata checks ensure the path
+ * still names the same unchanged file after the descriptor read.
+ */
+export function readRegularFileNoFollow(filePath) {
+  if (typeof fs.constants.O_NOFOLLOW !== "number") {
+    throw new Error("Backup requires O_NOFOLLOW support to read evidence safely");
+  }
+  const absolute = path.resolve(filePath);
+  const flags = fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW;
+  const fd = fs.openSync(absolute, flags);
+  try {
+    const openedBefore = fs.fstatSync(fd, { bigint: true });
+    if (!openedBefore.isFile()) throw new Error("Backup accepts only regular files: " + absolute);
+    const pathBefore = fs.lstatSync(absolute, { bigint: true });
+    const sameIdentity = (left, right) => left.dev === right.dev && left.ino === right.ino;
+    if (pathBefore.isSymbolicLink() || !pathBefore.isFile() || !sameIdentity(openedBefore, pathBefore)) {
+      throw new Error("Backup input changed while it was being opened; refusing an inconsistent snapshot");
+    }
+    const bytes = fs.readFileSync(fd);
+    const openedAfter = fs.fstatSync(fd, { bigint: true });
+    const pathAfter = fs.lstatSync(absolute, { bigint: true });
+    const unchanged = sameIdentity(openedBefore, openedAfter)
+      && sameIdentity(openedAfter, pathAfter)
+      && openedBefore.size === openedAfter.size
+      && openedBefore.mtimeNs === openedAfter.mtimeNs
+      && openedBefore.ctimeNs === openedAfter.ctimeNs
+      && bytes.length === Number(openedAfter.size)
+      && !pathAfter.isSymbolicLink()
+      && pathAfter.isFile();
+    if (!unchanged) throw new Error("Backup input changed during read; refusing an inconsistent snapshot");
+    return bytes;
+  } finally {
+    fs.closeSync(fd);
+  }
+}
+
 function collectFiles(dir, relativePrefix, output, { maxBytes = 10 * 1024 * 1024 } = {}) {
   if (!fs.existsSync(dir)) return;
   assertNoSymlinkComponents(dir, "rights-evidence input");
