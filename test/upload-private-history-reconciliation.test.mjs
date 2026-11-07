@@ -27,6 +27,16 @@ test("private upload receipt is reconciled only when the exact remote video appe
   );
 });
 
+test("private upload history matching compares exact instants across equivalent RFC3339 timestamp spellings", () => {
+  assert.deepEqual(
+    assertPrivateUploadPresentInCompleteHistory(completeSnapshot, {
+      ...expected,
+      actualPublishedAt: "2026-11-06T15:30:00Z"
+    }),
+    completeSnapshot.history[0]
+  );
+});
+
 test("private upload receipt cannot advance the cycle when its remote video is absent from complete history", () => {
   assert.throws(() => assertPrivateUploadPresentInCompleteHistory({
     ...completeSnapshot,
