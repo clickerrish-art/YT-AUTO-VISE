@@ -384,7 +384,13 @@ async function requestJson(fetchImpl, url, options, timeoutMs = 15_000) {
     }
     throw error;
   }
-  return { status: response.status, payload };
+  return {
+    status: response.status,
+    payload,
+    ...(response.status === 409 && response.headers.get("retry-after")
+      ? { retryAfterMs: parseRetryAfterMs(response.headers.get("retry-after")) }
+      : {})
+  };
 }
 
 export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerId, fetchImpl = fetch, limit = 20, cooldowns = new Map(), uncertainDispatches = new Map(), onCooldownsChanged = () => {}, onUncertainDispatchesChanged = () => {}, shouldStop = () => false }) {
@@ -440,7 +446,8 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
       onCooldownsChanged(cooldowns);
     } else {
       const attempts = Math.min(20, (cooldowns.get(job.id)?.attempts ?? 0) + 1);
-      const delayMs = Math.min(15 * 60_000, 30_000 * (2 ** Math.max(0, attempts - 1)));
+      const fallbackDelayMs = Math.min(15 * 60_000, 30_000 * (2 ** Math.max(0, attempts - 1)));
+      const delayMs = Math.max(dispatched.retryAfterMs ?? 0, fallbackDelayMs);
       cooldowns.set(job.id, { attempts, nextAttemptAt: Date.now() + delayMs });
       onCooldownsChanged(cooldowns);
     }
@@ -449,7 +456,7 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
       status: dispatched.status === 200 ? "SUCCEEDED" : "NOT_DISPATCHED",
       httpStatus: dispatched.status,
       state: dispatched.payload.job?.state ?? null,
-      ...(dispatched.status === 409 ? { retryAfterMs: Math.min(15 * 60_000, 30_000 * (2 ** Math.max(0, (cooldowns.get(job.id)?.attempts ?? 1) - 1))) } : {})
+      ...(dispatched.status === 409 ? { retryAfterMs: cooldowns.get(job.id)?.nextAttemptAt - Date.now() } : {})
     });
   }
   return {
