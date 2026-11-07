@@ -791,3 +791,35 @@ test("Worker serves the dashboard entry document from static assets while keepin
   const api = await handleRequest(new Request("https://state.example/api/state"), env);
   assert.equal(api.status, 401);
 });
+
+
+test("operational readiness requires readable D1 state, valid campaigns and dashboard assets", async () => {
+  const state = validState();
+  const env = {
+    STATE_DB: { prepare() { return { bind() { return this; }, async first() { return { revision: 7, state_json: JSON.stringify(state), updated_at: "2026-11-08T00:00:00.000Z" }; } }; } },
+    ASSETS: { async fetch() { return new Response("dashboard", { status: 200 }); } }
+  };
+  const response = await handleRequest(new Request("https://state.example/operational-readyz"), env);
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.ready, true);
+  assert.equal(body.durableState, "READABLE");
+  assert.equal(body.campaignConfig, "PASS");
+  assert.equal(body.dashboardAssets, "READABLE");
+  assert.equal(body.publicationReadiness, "SEPARATE");
+  assert.equal(body.publishingEnabled, false);
+  assert.equal(body.blockers.length, 0);
+});
+
+test("publication readiness remains blocked until complete remote history and one-shot authorization are verified", async () => {
+  const response = await handleRequest(new Request("https://state.example/readyz"), {});
+  const body = await response.json();
+  assert.equal(response.status, 503);
+  assert.equal(body.ready, false);
+  assert.equal(body.publicationReadiness, "BLOCKED");
+  assert.ok(body.blockers.some(blocker => blocker.includes("complete SonicVhibez")));
+  assert.ok(body.blockers.some(blocker => blocker.includes("one-shot authorization")));
+  assert.equal(body.publishingEnabled, false);
+  assert.equal(body.publicPublishingEnabled, false);
+  assert.equal(body.unattendedPublishingEnabled, false);
+});
