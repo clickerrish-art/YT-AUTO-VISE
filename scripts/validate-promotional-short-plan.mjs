@@ -66,6 +66,13 @@ export function validatePromotionalShortPlan(plan, products) {
       if (typeof item?.title !== "string" || !item.title.trim() || item.title.length > 100) {
         errors.push(`${label}: title must be non-empty and at most 100 characters`);
       }
+      const titleKeyword = typeof item?.primaryKeyword === "string" ? item.primaryKeyword.trim().toLowerCase() : "";
+      if (titleKeyword && typeof item?.title === "string") {
+        const titleKeywordPosition = item.title.toLowerCase().indexOf(titleKeyword);
+        if (titleKeywordPosition < 0 || titleKeywordPosition > 24) {
+          errors.push(`${label}: primary keyword must appear near the start of the title (within the first 25 characters)`);
+        }
+      }
       const wordCount = typeof item?.script === "string" ? item.script.trim().split(/\s+/).filter(Boolean).length : 0;
       if (wordCount < WORD_MIN || wordCount > WORD_MAX) errors.push(`${label}: script must contain ${WORD_MIN}–${WORD_MAX} words for an approximately 55-second Short`);
 

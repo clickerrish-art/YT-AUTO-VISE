@@ -65,3 +65,17 @@ test("SEO and keyword evidence are required before a draft can pass", () => {
   assert.ok(errors.some(error => /primary keyword must appear naturally near the start/.test(error)));
   assert.ok(errors.some(error => /valid research timestamp/.test(error)));
 });
+
+test("primary keyword must appear near the start of the SEO title", () => {
+  const plan = clone(checkedInPlan);
+  const item = plan.weeks[0].items[0];
+  const originalTitle = item.title;
+
+  item.title = "A complete beginner guide: " + originalTitle;
+  const lateKeywordErrors = validatePromotionalShortPlan(plan, products);
+  assert.ok(lateKeywordErrors.some(error => /primary keyword must appear near the start of the title/.test(error)));
+
+  item.title = "Quick tip: " + originalTitle;
+  const earlyKeywordErrors = validatePromotionalShortPlan(plan, products);
+  assert.equal(earlyKeywordErrors.some(error => /primary keyword must appear near the start of the title/.test(error)), false);
+});
