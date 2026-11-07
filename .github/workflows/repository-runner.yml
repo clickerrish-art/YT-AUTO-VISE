@@ -112,7 +112,7 @@ jobs:
         if: always() && steps.push_snapshot.outcome == 'success'
         run: node scripts/cloudflare-artifact-sync.mjs
       - name: Release runner session after both durable reconciliations succeed
-        if: always() && steps.session.outcome == 'success' && steps.push_backoff.outcome == 'success' && steps.push_snapshot.outcome == 'success'
+        if: always() && steps.session.outcome == 'success' && steps.push_backoff.outcome == 'success' && steps.push_snapshot.outcome == 'success' && steps.upload_artifacts.outcome == 'success'
         run: node scripts/cloudflare-runner-bridge.mjs complete-session
       - name: Fail the workflow if dispatch infrastructure failed
         if: always() && steps.run_cycle.outcome == 'failure'
