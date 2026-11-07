@@ -61,6 +61,11 @@ async function sha256(value) {
   return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, "0")).join("");
 }
 
+function operatorIdentity(env) {
+  const actor = typeof env.DASHBOARD_OPERATOR_ID === "string" ? env.DASHBOARD_OPERATOR_ID.trim() : "";
+  return actor.length >= 2 && actor.length <= 120 ? actor : null;
+}
+
 async function authenticate(request, env) {
   const configured = env.DASHBOARD_OPERATOR_TOKEN;
   const supplied = request.headers.get("x-operator-token");
@@ -98,6 +103,8 @@ async function handleRequest(request, env) {
   }
 
   if (url.pathname === "/api/state/bootstrap" && method === "POST") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
     let state;
     try { state = validateDashboardState(await readJson(request)); }
     catch (error) { return json({ error: error.message }, 400); }
@@ -107,7 +114,7 @@ async function handleRequest(request, env) {
       audit: [...state.audit, {
         id: crypto.randomUUID(),
         action: "DASHBOARD_STATE_BOOTSTRAPPED",
-        actor: env.DASHBOARD_OPERATOR_ID ?? "authorized-operator",
+        actor,
         at: now
       }]
     });
@@ -121,6 +128,8 @@ async function handleRequest(request, env) {
   }
 
   if (url.pathname === "/api/state" && method === "PUT") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
     const revisionHeader = request.headers.get("if-match") ?? "";
     const revisionMatch = revisionHeader.match(/^"?([1-9][0-9]*)"?$/);
     const expectedRevision = revisionMatch ? Number(revisionMatch[1]) : NaN;
@@ -149,8 +158,8 @@ async function handleRequest(request, env) {
     const digest = await sha256(current.state_json);
     const results = await env.STATE_DB.batch([
       env.STATE_DB.prepare(
-        "INSERT INTO dashboard_backups (backup_id, source_revision, state_json, sha256, created_at, reason) SELECT ?, revision, state_json, ?, ?, 'AUTOMATIC_PRE_UPDATE' FROM dashboard_state WHERE singleton_id = ? AND revision = ?"
-      ).bind(backupId, digest, now, STATE_ID, expectedRevision),
+        "INSERT INTO dashboard_backups (backup_id, source_revision, state_json, sha256, created_at, reason) SELECT ?, revision, state_json, ?, ?, 'AUTOMATIC_PRE_UPDATE:' || ? FROM dashboard_state WHERE singleton_id = ? AND revision = ?"
+      ).bind(backupId, digest, now, actor, STATE_ID, expectedRevision),
       env.STATE_DB.prepare(
         "UPDATE dashboard_state SET revision = revision + 1, state_json = ?, updated_at = ? WHERE singleton_id = ? AND revision = ?"
       ).bind(stateJson, now, STATE_ID, expectedRevision)
@@ -170,18 +179,22 @@ async function handleRequest(request, env) {
   }
 
   if (url.pathname === "/api/backups" && method === "POST") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
     const row = await currentState(env);
     if (!row) return json({ error: "State has not been bootstrapped" }, 503);
     const backupId = crypto.randomUUID();
     const digest = await sha256(row.state_json);
     const createdAt = new Date().toISOString();
     await env.STATE_DB.prepare(
-      "INSERT INTO dashboard_backups (backup_id, source_revision, state_json, sha256, created_at, reason) VALUES (?, ?, ?, ?, ?, 'OPERATOR_REQUESTED')"
-    ).bind(backupId, row.revision, row.state_json, digest, createdAt).run();
+      "INSERT INTO dashboard_backups (backup_id, source_revision, state_json, sha256, created_at, reason) VALUES (?, ?, ?, ?, ?, 'OPERATOR_REQUESTED:' || ?)"
+    ).bind(backupId, row.revision, row.state_json, digest, createdAt, actor).run();
     return json({ backupId, sourceRevision: row.revision, sha256: digest, createdAt }, 201);
   }
 
   if (url.pathname === "/api/backups/restore" && method === "POST") {
+    const actor = operatorIdentity(env);
+    if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
     let body;
     try { body = await readJson(request); }
     catch (error) { return json({ error: error.message }, 400); }
@@ -218,8 +231,8 @@ async function handleRequest(request, env) {
     });
     const results = await env.STATE_DB.batch([
       env.STATE_DB.prepare(
-        "INSERT INTO dashboard_backups (backup_id, source_revision, state_json, sha256, created_at, reason) SELECT ?, revision, state_json, ?, ?, 'AUTOMATIC_PRE_RESTORE' FROM dashboard_state WHERE singleton_id = ? AND revision = ?"
-      ).bind(beforeRestoreId, beforeRestoreDigest, now, STATE_ID, body.expectedRevision),
+        "INSERT INTO dashboard_backups (backup_id, source_revision, state_json, sha256, created_at, reason) SELECT ?, revision, state_json, ?, ?, 'AUTOMATIC_PRE_RESTORE:' || ? FROM dashboard_state WHERE singleton_id = ? AND revision = ?"
+      ).bind(beforeRestoreId, beforeRestoreDigest, now, actor, STATE_ID, body.expectedRevision),
       env.STATE_DB.prepare(
         "UPDATE dashboard_state SET revision = revision + 1, state_json = ?, updated_at = ? WHERE singleton_id = ? AND revision = ?"
       ).bind(restoredJson, now, STATE_ID, body.expectedRevision)
@@ -234,7 +247,7 @@ async function handleRequest(request, env) {
   return json({ error: "Not found" }, 404);
 }
 
-export { authenticate, constantTimeEqual, handleRequest, validateDashboardState };
+export { authenticate, constantTimeEqual, handleRequest, operatorIdentity, validateDashboardState };
 
 export default {
   async fetch(request, env) {
