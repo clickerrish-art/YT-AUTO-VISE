@@ -1,10 +1,13 @@
-# Latest exact-SHA evidence — 6 November 2026
+# Latest exact-SHA evidence — 8 November 2026
 
-- Application source/test SHA: `8b98c70e189a73e6afa6d9727cba0b5be8fa0899`.
-- Dashboard Chromium E2E: [run 42295243299](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42295243299), **26/26 passed on that exact SHA**.
-- Automation/security: [run 42295243016](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42295243016), **119/119 Node test files passed**, 16 Python tests passed, npm audit zero vulnerabilities; FFmpeg and ffprobe verified.
-- The 26 browser journeys and 119 Node test-file pass do **not** establish exhaustive dashboard control/form acceptance. **DASH-001 remains NOT_TESTED overall** until every applicable control/form has traceable business-success, validation, error feedback, authorization, persistence, refresh, concurrency, restart and accessibility evidence.
-- The detailed control/form statuses below are historical per-control evidence and have not been re-labelled as newly tested on the 6 November SHA.
+- Application source/test SHA: `202b9277509bb6f9d1fe2cb1fa62ecff0b9761f0`.
+- Dashboard Chromium E2E: [run 42489826855](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42489826855), **28/28 passed on that exact SHA**. The added browser assertions verify the read-only queue panel displays a held production job, Johannesburg timezone, authoring/render-plan/future-slot blockers and publishing-disabled state, while queue/job/audit snapshots remain unchanged.
+- Content quality: [run 42489832466](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42489832466), **721 Node tests passed, zero failures/skips**.
+- Static inventory recalculated from the exact source: **118 controls** (26 buttons, 49 inputs, 27 selects, 16 textareas), **17 forms**, **49 route handlers**, **45 protected API routes**, and 4 non-API handlers (`GET /`, `GET /healthz`, `GET /readyz`, `GET /operational-readyz`).
+- API route acceptance matrix: **37 PASS, 0 NOT_TESTED, 8 BLOCKED**; all 45 protected routes have authentication-negative coverage. See `docs/API_ROUTE_ACCEPTANCE_MATRIX.json`.
+- Cloudflare staging infrastructure is provisioned and D1 initialized, but authenticated Node-to-Worker integration remains blocked by missing Access service-token/runtime credentials. No live backup/restore through the Node dashboard is claimed.
+- **DASH-001 remains NOT_TESTED overall.** The 28 browser journeys and static 118-control/17-form inventory do not establish exhaustive control-by-control business success, validation, error feedback, authorization, persistence, refresh, concurrency, restart and accessibility acceptance.
+- Main remains unchanged at `fa00d28e7f58911482686e4ad69fac9f4701a2e6`; PR #1 remains open, draft and unmerged. Public/unattended publishing remains disabled.
 
 ---
 
