@@ -1342,7 +1342,7 @@ test("every protected dashboard API route rejects missing and invalid operator a
     const protectedReadRoutes = inventory.routes.filter(route =>
       route.path.startsWith("/api/") && route.method === "GET"
     );
-    assert.equal(protectedReadRoutes.length, 11, "all protected API read routes must be included in the auth matrix");
+    assert.equal(protectedReadRoutes.length, 12, "all protected API read routes must be included in the auth matrix");
 
     for (const route of protectedReadRoutes) {
       for (const authCase of [
