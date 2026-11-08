@@ -143,11 +143,15 @@ async function uploadArtifact(job, descriptor, existing) {
       const buffer = Buffer.alloc(length);
       const bytesRead = fs.readSync(fd, buffer, 0, length, offset);
       if (bytesRead !== length) throw new Error("Could not read the complete artifact segment " + partNumber);
+      const expectedPartMd5 = crypto.createHash("md5").update(buffer).digest("hex");
       await requestJson("/api/runner/artifacts/part?artifactId=" + encodeURIComponent(upload.artifactId) +
         "&partNumber=" + partNumber, {
           method: "PUT",
           body: buffer,
-          headers: { "content-type": "application/octet-stream" },
+          headers: {
+            "content-type": "application/octet-stream",
+            "x-part-md5": expectedPartMd5
+          },
           timeoutMs: 120_000
         });
     }
