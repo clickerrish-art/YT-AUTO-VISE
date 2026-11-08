@@ -1,3 +1,34 @@
+# Follow-up verification — 8 November 2026
+
+**Exact test-verified branch HEAD:** `b149254a3d5b080be704790fa26529067e88a24a` · **source implementation candidate:** `6c71814aebc8a384badef8ebecd8ada67c76cb93` · **main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`. At this verification point the PR branch was 3,155 commits ahead / 2 behind, with 285 changed files. PR #1 remains OPEN · DRAFT · UNMERGED; branch protection is disabled. This is a test-only descendant: no application source code changed after the `6c71814` candidate.
+
+## Change made
+
+`test/dashboard-ui-contract.test.mjs` now distinguishes static ID-addressable buttons from the dynamically generated Cloudflare restore buttons. The restore buttons use a delegated `click` listener on `#stateBackupList` and a `data-restore-backup` selector, not a static per-button `.onclick` assignment. The contract test now excludes the interpolated dynamic ID from the static-button scan and explicitly asserts that the delegated handler targets restore buttons. This fixes the single false-negative UI-contract test that caused the prior `71daca1` CI run to fail; it does not weaken the real handler requirement.
+
+## Exact-HEAD CI results
+
+- Automation/security [42461823297](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42461823297): **PASS** — 130/130 Node test files, zero skips; 34/34 Python tests; npm audit 0 vulnerabilities; promotional-plan validator passed.
+- Content quality [42461823010](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42461823010): **PASS** — 712/712 tests, zero failures/skips.
+- Dashboard Chromium E2E [42461823058](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42461823058): **PASS** — 27/27 journeys.
+- Cloudflare durable-state tests [42461822976](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42461822976): **PASS** — 8/8.
+- Queue readiness [42461822939](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42461822939): **PASS** — 16 queue items; 72-hour minimum and 216-hour rolling cycle policy; publication and scheduling disabled.
+- Metadata fail-closed validation [42461822887](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42461822887): **PASS**.
+- Isolated main/candidate baseline [42461823020](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42461823020): **PASS**.
+- Branch inventory [42461822971](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42461822971): **PASS** — inventory only, not semantic approval.
+- Deployment recovery [42461822982](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42461822982): **PASS**.
+- Local Nature Frontiers draft-package validation [42461823145](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42461823145): **PASS, local-only**; no provider-side post was created or read back.
+- Lockfile validation [42461819192](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42461819192): **PASS**.
+- Production readiness [42461822968](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42461822968): **HOLD / 24 blockers**; the non-zero result is the intended fail-closed outcome, not a production pass.
+
+## Safety and remaining work
+
+No main-branch edit, PR merge, upload, publication, live scheduling, account reconnection, paid generation or mutation of existing Metricool records occurred. Scheduled GitHub workflows still execute from `main`; these PR runs are CI evidence only.
+
+Owner-independent acceptance remains open: DASH-001 exhaustive UI journeys, API-001 full route acceptance, SCHED-001 complete queue/history/recovery proof, STATE-001 durable-state backup/restore failure drills, DEPLOY-001 install/upgrade/rollback drills, and GIT-002 semantic review of the large branch divergence.
+
+Owner-controlled gates remain: a SonicVhibez-only Metricool destination and complete public/private/unlisted YouTube history; product compensation classification and exact viewer disclosure; genuine rights-cleared media and manifests; final MP4/thumbnail and human playback review; secure OAuth identity; and one-shot private-upload authorization. Nature Frontiers' six future Metricool records remain `draft=false` and `autoPublish=true`; they were not changed. The Wildlife Vault Selar listing is sold by Click 47 but its page copy uses Nature Frontiers branding, so final SonicVhibez context review and the compensation/disclosure decision remain required.
+
 # Current release evidence — 8 November 2026
 
 **Exact code/test candidate:** `6c71814aebc8a384badef8ebecd8ada67c76cb93`  
