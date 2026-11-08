@@ -2,8 +2,12 @@ name: SonicVhibez repository production runner
 
 on:
   workflow_dispatch:
-  push:
-    branches: [codex/cloudflare-adapter-integration-20261108]
+    inputs:
+      run_staging_smoke:
+        description: "Run read-only D1/R2 staging smoke checks before the one-job runner cycle"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -15,7 +19,7 @@ concurrency:
 
 jobs:
   repository-runner:
-    if: (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/codex/cloudflare-adapter-integration-20261108') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-production]'))
+    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/codex/cloudflare-adapter-integration-20261108' }}
     runs-on: ubuntu-latest
     timeout-minutes: 12
     env:
@@ -139,7 +143,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
   staging-smoke:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/codex/cloudflare-adapter-integration-20261108' && contains(github.event.head_commit.message, '[staging-smoke]')
+    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/codex/cloudflare-adapter-integration-20261108' && inputs.run_staging_smoke == true }}
     runs-on: ubuntu-latest
     timeout-minutes: 8
     permissions:
