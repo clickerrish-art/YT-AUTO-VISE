@@ -1424,3 +1424,25 @@ test("dashboard inline JavaScript remains syntactically valid after artifact con
   assert.ok(scripts.length > 0);
   for (const source of scripts) assert.doesNotThrow(() => new Script(source));
 });
+
+
+test("dispatchable jobs accepts a valid due Johannesburg calendar slot", async () => {
+  const localDate = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
+  }).format(new Date());
+  const state = validState();
+  state.jobs = [{
+    id: "due-valid-slot", kind: "CONTENT_PRODUCTION", state: "QUEUED", contentType: "long_form",
+    authoring: { productionPlan: { status: "APPROVED_PLAN_ONLY", review: { decision: "APPROVE", approvalSha256: "a".repeat(64) } } },
+    scheduledSlot: { date: localDate, time: "00:00", timezone: "Africa/Johannesburg" }
+  }];
+  const database = { prepare() { return { bind() { return this; }, async first() { return { revision: 3, state_json: JSON.stringify(state) }; } }; } };
+  const response = await handleRequest(new Request("https://state.example/api/jobs/dispatchable", {
+    headers: { "x-operator-token": "a".repeat(24) }
+  }), { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: database });
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.dispatchableCount, 1);
+  assert.deepEqual(body.jobs.map(job => job.id), ["due-valid-slot"]);
+  assert.equal(body.publishingEnabled, false);
+});
