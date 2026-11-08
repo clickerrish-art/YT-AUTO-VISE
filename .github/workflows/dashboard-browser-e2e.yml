@@ -1,6 +1,15 @@
 name: Dashboard browser end-to-end acceptance
 
 on:
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - "browser-tests/**"
+      - "public/dashboard.html"
+      - "scripts/dashboard-server.mjs"
+      - "package.json"
+      - "playwright.config.*"
+      - ".github/workflows/dashboard-browser-e2e.yml"
   pull_request:
     branches: [main]
 
