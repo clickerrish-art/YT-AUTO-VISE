@@ -39,9 +39,10 @@ test("remote state validation preserves fail-closed publishing and Safari rules"
   assert.throws(() => validateRemoteDashboardState({ ...state(), campaigns: [{ type: "safari_affiliate", status: "ACTIVE" }] }), /Safari/);
 });
 
-test("client requires a secure endpoint and a sufficiently strong operator token", () => {
+test("client requires a secure endpoint, strong operator token, and paired Access credentials", () => {
   assert.throws(() => new CloudflareDashboardStateClient({ baseUrl: "http://example.com", operatorToken: TOKEN }), /HTTPS/);
   assert.throws(() => new CloudflareDashboardStateClient({ baseUrl: "https://state.example", operatorToken: "short" }), /24 characters/);
+  assert.throws(() => new CloudflareDashboardStateClient({ baseUrl: "https://state.example", operatorToken: TOKEN, accessClientId: "id-only" }), /supplied together/);
 });
 
 test("bootstrap creates the first state revision and verifies its receipt", async t => {
@@ -55,6 +56,21 @@ test("bootstrap creates the first state revision and verifies its receipt", asyn
   const result = await client.bootstrapState(state(["seed"]));
   assert.equal(result.revision, 1);
   assert.deepEqual(result.state.queueItems, ["seed"]);
+});
+
+test("client attaches Cloudflare Access service-token headers when configured", async () => {
+  const client = new CloudflareDashboardStateClient({
+    baseUrl: "https://state.example", operatorToken: TOKEN,
+    accessClientId: "access-client-id", accessClientSecret: "access-client-secret",
+    fetchImpl: async (_url, options) => {
+      assert.equal(options.headers["cf-access-client-id"], "access-client-id");
+      assert.equal(options.headers["cf-access-client-secret"], "access-client-secret");
+      return new Response(JSON.stringify({ revision: 1, state: state() }), {
+        status: 200, headers: { "content-type": "application/json", etag: '"1"' }
+      });
+    }
+  });
+  assert.equal((await client.getState()).revision, 1);
 });
 
 test("GET reads authenticated state and verifies the revision ETag", async t => {

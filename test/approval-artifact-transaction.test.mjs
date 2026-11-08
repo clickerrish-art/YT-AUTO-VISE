@@ -5,17 +5,18 @@ import os from "node:os";
 import path from "node:path";
 import { commitApprovalArtifact } from "../scripts/approval-artifact-transaction.mjs";
 
-test("approval artifact becomes visible only after durable state persistence", (t) => {
+test("approval artifact becomes visible only after durable state persistence", async t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "approval-transaction-"));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const destination = path.join(root, "approvals", "job.json");
   let statePersisted = false;
   const record = { decision: "APPROVE", visibility: "private", jobId: "job-1" };
 
-  commitApprovalArtifact({
+  await commitApprovalArtifact({
     destination,
     record,
-    persistState: () => {
+    persistState: async () => {
+      await Promise.resolve();
       assert.equal(fs.existsSync(destination), false, "final approval must not exist before state persistence");
       statePersisted = true;
     }
@@ -26,12 +27,12 @@ test("approval artifact becomes visible only after durable state persistence", (
   assert.equal(fs.readdirSync(path.dirname(destination)).filter(name => name.endsWith(".tmp")).length, 0);
 });
 
-test("failed state persistence leaves no uploadable approval artifact or temporary file", (t) => {
+test("failed state persistence leaves no uploadable approval artifact or temporary file", async t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "approval-transaction-fail-"));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const destination = path.join(root, "approvals", "job.json");
 
-  assert.throws(() => commitApprovalArtifact({
+  await assert.rejects(commitApprovalArtifact({
     destination,
     record: { decision: "APPROVE", visibility: "private", jobId: "job-2" },
     persistState: () => { throw new Error("simulated durable state failure"); }
@@ -41,7 +42,7 @@ test("failed state persistence leaves no uploadable approval artifact or tempora
   assert.equal(fs.readdirSync(path.dirname(destination)).some(name => name.endsWith(".tmp")), false);
 });
 
-test("existing or symlinked approval destinations fail closed before state persistence", (t) => {
+test("existing or symlinked approval destinations fail closed before state persistence", async t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "approval-transaction-path-"));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const parent = path.join(root, "approvals");
@@ -50,7 +51,7 @@ test("existing or symlinked approval destinations fail closed before state persi
   fs.writeFileSync(existing, "preserve");
   let persisted = false;
 
-  assert.throws(() => commitApprovalArtifact({
+  await assert.rejects(commitApprovalArtifact({
     destination: existing,
     record: { decision: "APPROVE" },
     persistState: () => { persisted = true; }
@@ -62,7 +63,7 @@ test("existing or symlinked approval destinations fail closed before state persi
   fs.writeFileSync(outside, "preserve outside");
   const link = path.join(parent, "linked.json");
   fs.symlinkSync(outside, link);
-  assert.throws(() => commitApprovalArtifact({
+  await assert.rejects(commitApprovalArtifact({
     destination: link,
     record: { decision: "APPROVE" },
     persistState: () => { persisted = true; }
@@ -72,7 +73,7 @@ test("existing or symlinked approval destinations fail closed before state persi
 });
 
 
-test("post-publication cleanup failure rolls back the final approval artifact", (t) => {
+test("post-publication cleanup failure rolls back the final approval artifact", async t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "approval-transaction-rollback-"));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const destination = path.join(root, "approvals", "job.json");
@@ -90,7 +91,7 @@ test("post-publication cleanup failure rolls back the final approval artifact", 
   };
   t.after(() => { fs.unlinkSync = originalUnlink; });
 
-  assert.throws(() => commitApprovalArtifact({
+  await assert.rejects(commitApprovalArtifact({
     destination,
     record: { decision: "APPROVE", visibility: "private", jobId: "job-rollback" },
     persistState: () => {}
@@ -102,7 +103,7 @@ test("post-publication cleanup failure rolls back the final approval artifact", 
 });
 
 
-test("symlinked approval parent is rejected before creating any directory through the link", (t) => {
+test("symlinked approval parent is rejected before creating any directory through the link", async t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "approval-transaction-parent-link-"));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const outside = path.join(root, "outside");
@@ -112,7 +113,7 @@ test("symlinked approval parent is rejected before creating any directory throug
   const destination = path.join(linkedParent, "new-subdirectory", "job.json");
   let persisted = false;
 
-  assert.throws(() => commitApprovalArtifact({
+  await assert.rejects(commitApprovalArtifact({
     destination,
     record: { decision: "APPROVE", jobId: "must-not-escape" },
     persistState: () => { persisted = true; }

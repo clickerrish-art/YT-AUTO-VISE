@@ -43,7 +43,7 @@ export function validateRemoteDashboardState(state) {
 }
 
 export class CloudflareDashboardStateClient {
-  constructor({ baseUrl, operatorToken, fetchImpl = globalThis.fetch, timeoutMs = 10_000 } = {}) {
+  constructor({ baseUrl, operatorToken, accessClientId = "", accessClientSecret = "", fetchImpl = globalThis.fetch, timeoutMs = 10_000 } = {}) {
     if (typeof baseUrl !== "string" || !baseUrl.trim()) throw new TypeError("DASHBOARD_STATE_API_URL is required");
     const parsed = new URL(baseUrl);
     if (parsed.protocol !== "https:" && !(["localhost", "127.0.0.1", "::1"].includes(parsed.hostname) && parsed.protocol === "http:")) {
@@ -51,10 +51,14 @@ export class CloudflareDashboardStateClient {
     }
     if (parsed.username || parsed.password || parsed.search || parsed.hash) throw new TypeError("Dashboard state API URL must not contain credentials, query, or fragment");
     if (typeof operatorToken !== "string" || operatorToken.length < 24) throw new TypeError("DASHBOARD_OPERATOR_TOKEN must contain at least 24 characters");
+    if (Boolean(accessClientId) !== Boolean(accessClientSecret)) throw new TypeError("Cloudflare Access client ID and secret must be supplied together");
+    if (accessClientId && (typeof accessClientId !== "string" || typeof accessClientSecret !== "string")) throw new TypeError("Cloudflare Access service-token credentials must be strings");
     if (typeof fetchImpl !== "function") throw new TypeError("A fetch implementation is required");
     if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 100 || timeoutMs > 120_000) throw new TypeError("timeoutMs must be between 100 and 120000");
     this.baseUrl = parsed.toString().replace(/\/+$/, "");
     this.operatorToken = operatorToken;
+    this.accessClientId = accessClientId;
+    this.accessClientSecret = accessClientSecret;
     this.fetchImpl = fetchImpl;
     this.timeoutMs = timeoutMs;
   }
@@ -63,6 +67,10 @@ export class CloudflareDashboardStateClient {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), this.timeoutMs);
     const headers = { accept: "application/json", "x-operator-token": this.operatorToken };
+    if (this.accessClientId) {
+      headers["cf-access-client-id"] = this.accessClientId;
+      headers["cf-access-client-secret"] = this.accessClientSecret;
+    }
     if (body !== undefined) headers["content-type"] = "application/json";
     if (revision !== undefined) headers["if-match"] = String(revision);
     try {

@@ -31,7 +31,7 @@ function ensureSafeParentDirectories(parent) {
  * state has been saved. The final path is created exclusively with a hard link,
  * so an existing approval cannot be silently overwritten.
  */
-export function commitApprovalArtifact({ destination, record, persistState }) {
+export async function commitApprovalArtifact({ destination, record, persistState }) {
   if (typeof destination !== "string" || !destination.trim()) throw new Error("approval artifact destination is required");
   if (typeof persistState !== "function") throw new Error("approval state persistence callback is required");
   if (!record || typeof record !== "object" || Array.isArray(record)) throw new Error("approval artifact record must be an object");
@@ -63,7 +63,7 @@ export function commitApprovalArtifact({ destination, record, persistState }) {
     fd = undefined;
 
     // If this throws, no final approval file is made available to the uploader.
-    persistState();
+    await persistState();
 
     // link() is exclusive: EEXIST fails instead of replacing a concurrent file.
     fs.linkSync(temporary, target);
