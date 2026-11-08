@@ -313,3 +313,46 @@ test("channel-history evidence is read through a pinned no-follow descriptor and
     fs.rmSync(directory, { recursive: true, force: true });
   }
 });
+
+
+
+test("complete history fetch rejects repeated page tokens and duplicate playlist video IDs", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "youtube-history-pagination-"));
+  const reconciliationPath = path.join(directory, "history.json");
+  fs.writeFileSync(reconciliationPath, JSON.stringify(reconciliation));
+  const channel = { id: channelId, contentDetails: { relatedPlaylists: { uploads: "uploads-playlist" } } };
+  const firstPageIds = Array.from({ length: 50 }, (_, index) => "page-one-" + index);
+  let repeatedTokenCalls = 0;
+  try {
+    await assert.rejects(fetchCompleteYoutubeHistorySnapshot({
+      playlistItems: { list: async () => {
+        repeatedTokenCalls += 1;
+        return { data: {
+          pageInfo: { totalResults: 100 },
+          nextPageToken: "repeat-token",
+          items: (repeatedTokenCalls === 1 ? firstPageIds : Array.from({ length: 50 }, (_, index) => "page-two-" + index))
+            .map(videoId => ({ contentDetails: { videoId } }))
+        } };
+      } },
+      videos: { list: async () => { throw new Error("video details must not be requested for a looping page token"); } }
+    }, channel, reconciliationPath, channelId), /repeated a pagination token/);
+    assert.equal(repeatedTokenCalls, 2, "the repeated token must be rejected before a third page request");
+
+    let duplicatePage = 0;
+    await assert.rejects(fetchCompleteYoutubeHistorySnapshot({
+      playlistItems: { list: async () => {
+        duplicatePage += 1;
+        return { data: {
+          pageInfo: { totalResults: 51 },
+          ...(duplicatePage === 1 ? { nextPageToken: "second-page" } : {}),
+          items: (duplicatePage === 1 ? firstPageIds : [firstPageIds[0]])
+            .map(videoId => ({ contentDetails: { videoId } }))
+        } };
+      } },
+      videos: { list: async () => { throw new Error("video details must not be requested for duplicate playlist IDs"); } }
+    }, channel, reconciliationPath, channelId), /duplicate video IDs/);
+    assert.equal(duplicatePage, 2, "duplicate IDs across pages must fail before video-detail reconciliation");
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
