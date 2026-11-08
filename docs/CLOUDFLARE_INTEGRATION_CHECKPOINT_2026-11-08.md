@@ -111,3 +111,14 @@ Implemented on the integration branch:
 Exact latest integration workflow run:
 - Run `42471785224`, commit `41d46f598d56dba4fa8112e2a4498f45bb011066`: **28/28 Chromium journeys**, **138/138 Cloudflare adapter/Worker/dashboard tests**, zero failures, zero skips; syntax checks PASS.
 - This run verifies the Worker route against a mocked R2 binding. It does not establish that the live staging Worker has the deployed binding or that the real R2 object is present; that remains blocked by the invalid Cloudflare API token / missing GitHub Actions secret.
+
+## Exact-head cross-workflow verification — 8 November 2026
+
+All checks below ran against exact commit `a6c092a073bceaa2fdd5422336e83caf01dfdd80` after the private R2 dashboard route and regression tests were added:
+
+- Content quality workflow `42471912588`: **780 Node tests passed, 0 failed, 0 skipped**; long-form minimum draft-length gate passed.
+- Dashboard adapter workflow `42471912557`: **28/28 Chromium journeys**, **138/138 Cloudflare Worker/adapter tests**, 0 failures, 0 skips; syntax checks passed.
+- Metadata workflow `42471912632`: completed successfully; test groups all reported zero failures and zero skips; metadata fail-closed check, authoritative draft schedule, production-blocker report, timed subtitle validation, and unreviewed-metadata blocking steps all passed.
+- The metadata workflow's success means the safety/validation checks passed; it does **not** mean production metadata is approved or publishing is ready. The production readiness endpoint intentionally remains held.
+
+The exact candidate remains an open integration branch only. Live staging deployment is still blocked by Cloudflare authentication; no live Worker update, R2 upload, production runner dispatch, YouTube upload, or Meta publication has occurred.
