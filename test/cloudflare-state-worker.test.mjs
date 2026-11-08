@@ -61,6 +61,42 @@ test("normalizes legacy state without optional Facebook arrays to empty compatib
   assert.deepEqual(validateDashboardState(legacy).facebookDrafts, []);
 });
 
+test("dashboard root serves the private R2 shell with no-store security headers", async () => {
+  const html = "<!doctype html><title>SonicVhibez</title>";
+  const response = await handleRequest(new Request("https://state.example/"), {
+    ARTIFACTS: {
+      get: async key => {
+        assert.equal(key, "dashboard/dashboard.html");
+        return { body: new Response(html).body };
+      }
+    }
+  });
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("content-type"), "text/html; charset=utf-8");
+  assert.equal(response.headers.get("cache-control"), "no-store");
+  assert.equal(response.headers.get("x-content-type-options"), "nosniff");
+  assert.equal(response.headers.get("referrer-policy"), "no-referrer");
+  assert.equal(await response.text(), html);
+});
+
+test("dashboard root fails closed when the private R2 shell is missing or unreadable", async () => {
+  const unavailable = await handleRequest(new Request("https://state.example/"), {});
+  assert.equal(unavailable.status, 503);
+  assert.equal((await unavailable.json()).code, "DASHBOARD_ASSET_STORAGE_UNAVAILABLE");
+
+  const missing = await handleRequest(new Request("https://state.example/dashboard"), {
+    ARTIFACTS: { get: async () => null }
+  });
+  assert.equal(missing.status, 503);
+  assert.equal((await missing.json()).code, "DASHBOARD_ASSET_NOT_FOUND");
+
+  const unreadable = await handleRequest(new Request("https://state.example/"), {
+    ARTIFACTS: { get: async () => { throw new Error("synthetic R2 failure"); } }
+  });
+  assert.equal(unreadable.status, 503);
+  assert.equal((await unreadable.json()).code, "DASHBOARD_ASSET_READ_FAILED");
+});
+
 test("health endpoint exposes only the fail-closed service status", async () => {
   const response = await handleRequest(new Request("https://state.example/healthz"), {});
   assert.equal(response.status, 200);
