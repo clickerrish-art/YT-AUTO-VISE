@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-08T14:00:00.000Z",
+  "generatedAt": "2026-11-08T14:06:32.000Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "5a4d7ca1299c58732c64d38886622b1fe8d4183c",
+  "testedSourceTestSha": "47ab814c00e0ab31ab3075bb31630f43430ff32b",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -25,8 +25,8 @@
   "counts": {
     "routes": 45,
     "authNegativePass": 45,
-    "overallPass": 33,
-    "overallNotTested": 4,
+    "overallPass": 34,
+    "overallNotTested": 3,
     "overallBlocked": 8
   },
   "evidence": {
@@ -107,7 +107,8 @@
     "latestExactHeadAuthMatrix": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42486667603",
     "latestExactHeadAuthMatrixTest": "test/dashboard-api-auth-matrix.test.mjs",
     "latestExactHeadNegativeMatrixTest": "test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
-    "latestExactHeadRoutePositiveTests": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423"
+    "latestExactHeadRoutePositiveTests": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423",
+    "latestRetryRaceTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488026325"
   },
   "disclaimer": "This matrix is synchronized to the live dashboard-server.mjs route inventory at exact source/test SHA 06c2443d9d1308cdf071063634864b5a7088b8cf. Authentication-negative PASS does not imply authorized route success. API-001 remains NOT_TESTED overall; routes marked NOT_TESTED or BLOCKED require route-specific positive, validation, persistence, audit, concurrency and restart evidence before acceptance.",
   "routes": [
@@ -1045,19 +1046,19 @@
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived 45-route authentication matrix on exact SHA 06c2443d9d1308cdf071063634864b5a7088b8cf; see test/dashboard-api-auth-matrix.test.mjs and run 42486667603.",
       "authorizedSuccess": "PASS — operator review authorizes a retryable failed job and a dead-letter override grants exactly one additional attempt.",
-      "inputValidation": "PASS — missing/short review reason is rejected without mutation; unknown jobs are not accepted by the route.",
+      "inputValidation": "PASS — missing/short reasons and malformed override flags are rejected as HTTP 400; exhausted retry without explicit override is HTTP 409.",
       "durablePersistence": "PASS — authorized job state and retry authorization persist and survive a fresh dashboard process.",
       "auditEvidence": "PASS — one operator-attributed retry authorization event is persisted; dead-letter recovery adds its distinct audit event.",
-      "concurrency": "NOT_TESTED — simultaneous identical retry requests have not yet been proven to produce one authorization.",
+      "concurrency": "PASS — two simultaneous identical retry requests serialize to one HTTP 200 and one HTTP 409; exactly one retry authorization and one audit event persist.",
       "restartRecovery": "PASS — retry state, attempt limit and audit history are read back after a clean dashboard restart.",
       "externalOperation": "worker queue",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "Positive real-server route coverage exists, including failed-job authorization, exact one-attempt dead-letter override, no publish enablement, durable audit and restart read-back. Overall acceptance remains NOT_TESTED pending a concurrent duplicate-request race test.",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA real-server coverage proves unauthorized/invalid requests do not mutate state; a successful retry and one-attempt dead-letter override persist and survive restart; concurrent duplicate requests produce one success and one 409 with one authorization/audit event. Publishing remains disabled.",
       "testEvidence": {
-        "test": "test/dashboard-api-job-retry.integration.test.mjs",
-        "exactTestedSha": "5a4d7ca1299c58732c64d38886622b1fe8d4183c",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423",
-        "scenario": "Unauthorized and invalid-reason requests leave bytes unchanged; authorized retry and one-attempt dead-letter override persist exactly one audit each and survive a fresh server process."
+        "test": "test/dashboard-api-job-retry.integration.test.mjs; test/dashboard-api-worker-lease-lifecycle.integration.test.mjs",
+        "exactTestedSha": "47ab814c00e0ab31ab3075bb31630f43430ff32b",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488026325",
+        "scenario": "The exact-SHA content-quality suite passed 718 Node tests with zero failures/skips, including operator retry validation, dead-letter override, concurrent duplicate serialization, one audit winner and restart read-back."
       }
     },
     {
@@ -1180,7 +1181,7 @@
       "browserE2EWorkflowRun": 42296617339,
       "status": "PASS for fail-closed concurrency/restart regression; successful render remains blocked."
     },
-    "exactSourceTestSha": "5a4d7ca1299c58732c64d38886622b1fe8d4183c",
+    "exactSourceTestSha": "47ab814c00e0ab31ab3075bb31630f43430ff32b",
     "authMatrixRun": 42486667603,
     "authMatrixResult": "PASS — source-derived 45 API routes; missing and invalid operator credentials rejected; full route success acceptance is not implied.",
     "automationRun": 42487353423,
@@ -1190,9 +1191,11 @@
     "apiMatrixCounts": {
       "routes": 45,
       "authNegativePass": 45,
-      "overallPass": 33,
-      "overallNotTested": 4,
+      "overallPass": 34,
+      "overallNotTested": 3,
       "overallBlocked": 8
-    }
+    },
+    "contentQualityRun": 42488026325,
+    "contentQualityResult": "PASS — 718 Node tests, zero failures/skips; includes retry authorization race and restart regression."
   }
 }
