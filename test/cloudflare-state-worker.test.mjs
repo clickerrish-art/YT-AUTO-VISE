@@ -1549,12 +1549,13 @@ test("repository runner preflight proves private R2 write/read/delete and enforc
 test("repository runner preflight fails closed when the temporary R2 probe cannot be deleted", async () => {
   const fixture = await createRunnerOidcFixture();
   const calls = [];
+  let storedProbeValue;
   const env = {
     STATE_DB: { prepare() { return { bind() { return this; }, async first() { return { total_bytes: 0 }; } }; } },
     ARTIFACTS: {
       async list() { return { objects: [], truncated: false }; },
-      async put(key) { calls.push(["put", key]); },
-      async get(key) { calls.push(["get", key]); return { async text() { return calls[0][1] ? "probe-value" : ""; } }; },
+      async put(key, value) { calls.push(["put", key]); storedProbeValue = value; },
+      async get(key) { calls.push(["get", key]); return { async text() { return storedProbeValue; } }; },
       async delete(key) { calls.push(["delete", key]); throw new Error("simulated R2 delete failure"); }
     }
   };
