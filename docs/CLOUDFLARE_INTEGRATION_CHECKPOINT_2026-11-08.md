@@ -1,89 +1,94 @@
 # Cloudflare integration checkpoint — 2026-11-08
 
-## Exact candidate and verification
+## Exact candidate and automated verification
 
 - Repository: `clickerrish-art/YT-AUTO-VISE`
 - Integration branch: `codex/cloudflare-adapter-integration-20261108`
-- Exact verified commit: `e0893cb4819278f9996db52ee139381b387eb9d4`
-- Pull request: #4, open integration candidate; not merged.
-- Main was not modified. The integration branch remains divergent from main; no reset, rebase, force-push, or history rewrite was performed.
+- Deployed and verified source commit: `f90d68b8e690f0d3c26d56b8984e1e34b0f96f88`
+- Pull request #4 remains open and draft; it has not been merged.
+- PR #1 and PR #3 remain open and draft.
+- `main` remains unchanged at `fa00d28e7f58911482686e4ad69fac9f4701a2e6`.
+- No reset, rebase, force-push, history rewrite, merge, or production publishing was performed.
 
 Exact-commit GitHub Actions evidence:
 
-| Check | Result | Evidence |
+| Check | Result | Workflow run |
 |---|---:|---|
-| Chromium dashboard journeys | 27 passed | Dashboard Cloudflare adapter workflow #248 |
-| Cloudflare adapter, runner, dashboard, and artifact-sync tests | 136 passed, 0 failed, 0 skipped | Workflow #248 |
-| Full repository Node test suite | 778 passed, 0 failed, 0 skipped | Content quality workflow #3114 |
-| Workflow/module syntax checks | Passed | Workflow #248 |
-| Long-form minimum draft-length gate | Passed | Workflow #3114 |
+| Chromium dashboard journeys | 28 passed | `42470745658` |
+| Cloudflare adapter, runner, dashboard, and artifact-sync tests | 136 passed, 0 failed, 0 skipped | `42470745658` |
+| Full repository Node suite | 778 passed, 0 failed, 0 skipped | `42470745621` |
+| Metadata validation and schedule gates | Passed | `42470745592` |
+| Worker/module syntax checks | Passed | `42470745658` |
 
-Workflow run IDs:
-- Adapter PR run: `42469584944`
-- Adapter push run: `42469579834`
-- Full Node suite: `42469584933`
+The browser suite includes narration generation and duplicate-request receipt reuse, dashboard backup/restore, and the operator retry journey. The adapter tests cover D1 state compatibility, runner backoff/quarantine, R2 artifact-sync receipts, and dashboard API behavior.
 
-The browser suite includes a real narration-generation journey and the new dashboard backup/restore journey. The adapter suite includes two new client-side artifact-sync tests: one verifies source SHA-256, multipart MD5 receipt, and final READY receipt handling; the other verifies that a mismatched source hash is refused before any upload is created.
+## Live staging deployment — verified through Cloudflare API
 
-## Implementation retained on the candidate branch
+The staging Worker was updated directly through the connected Cloudflare account after the guarded GitHub deployment workflow confirmed that no `CLOUDFLARE_API_TOKEN` Actions secret is configured. The direct Cloudflare deployment succeeded.
 
-- Cloudflare Worker D1 snapshot persistence uses revision compare-and-swap.
-- Worker retry/backoff and uncertain-dispatch state are worker-scoped and revision guarded.
-- Durable runner sessions prevent overlapping execution and are released only after backoff, snapshot, and artifact reconciliation all succeed.
-- Private R2 multipart artifact APIs verify source hashes, part MD5 receipts, and final completion receipts.
-- The artifact-sync client verifies repository file paths, source hashes, resumable part receipts, and final object metadata.
-- Dashboard backup creation and restore are exercised through Chromium; static inventory excludes markup-like strings inside script/style blocks rather than counting JavaScript templates as real controls.
-- The current promotional short plan and its qualitative web-search evidence validation were preserved from the PR #1 baseline. The plan retains two draft items for the week of 2026-11-09 and one for the week of 2026-11-16.
+- Worker: `sonicvhibez-durable-state-staging`
+- Worker URL: `https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev`
+- Previous active version: `a2cca9d9-98da-475f-9f91-bcbd798859c3`
+- New active version: `b12ebdd9-b457-46a7-93cb-1895d76423f4`
+- Deployment ID: `574ec845-2a98-4f34-a003-51ee2fbf2cd2`
+- Active traffic: 100% on the new version.
+- Worker subdomain: enabled.
+- Compatibility date: `2026-11-07`; observability enabled.
 
-## Live staging inspection — read-only
+Live Worker bindings after deployment:
 
-The Cloudflare account was inspected without changing resources or reading secret values.
+| Binding | Type | Result |
+|---|---|---|
+| `STATE_DB` | D1 | Present |
+| `ARTIFACTS` | R2 bucket | Present |
+| `DASHBOARD_OPERATOR_ID` | secret_text | Preserved |
+| `DASHBOARD_OPERATOR_TOKEN` | secret_text | Preserved |
 
-- The staging D1 database has the dashboard state and backup schema. Read-only row counts showed one dashboard state row and one backup row; runner state, runner control, runner artifact, and runner artifact-part tables had zero rows.
-- The staging R2 bucket exists.
-- The currently deployed staging Worker reports `has_assets: false` and its live bindings do not include the configured `ASSETS` static-asset binding or `ARTIFACTS` R2 binding.
-- The candidate `wrangler.jsonc` defines those bindings, but that configuration has not been deployed to the live Worker.
+The existing operator secret values were not read or exposed.
 
-**Consequently, a live hosted-dashboard smoke test and a live R2 upload/download have not been proven.** The client and Worker API paths have automated test coverage, but those tests do not substitute for a deployed staging integration.
+### Private dashboard hosting
 
-## Safety and remaining gates
+The static-assets upload API required a per-upload JWT Authorization header that the connected API request tool cannot supply. Rather than leave the dashboard unhosted or expose the bucket publicly, the candidate was adjusted and tested to serve the dashboard shell from the existing private R2 bucket through the Worker.
 
-- No Cloudflare deployment or resource mutation was performed.
-- No repository production-runner dispatch was performed.
-- No YouTube or Meta publishing, upload, or public release was attempted.
-- No PR was merged or marked ready; main remains untouched.
-- The staging Worker must receive the exact candidate build with both `ASSETS` and `ARTIFACTS` bindings before live hosting and R2 preflight can be accepted.
-- Production execution remains gated on owner authorization, verified remote YouTube publication history and timestamps, an owner-approved feasible cadence decision, exact job/media approval, rights evidence, and human review. A passing test suite does not satisfy those external gates.
+- R2 bucket: `sonicvhibez-artifacts-staging`
+- Public custom domains: none.
+- Managed `r2.dev` public access: disabled.
+- Private object: `dashboard/dashboard.html`
+- Object size: 98,508 bytes.
+- ETag: `6c5b24c6ff9980b4d7da38d9c0620cdc`
+- Worker routes `/` and `/dashboard.html` read that exact R2 object and set an HTML content type; API routes remain separately authenticated.
+- The Worker operational-readiness check verifies that the dashboard object exists in R2.
 
-## Staging deployment attempt — 8 November 2026
+### D1 state preserved
 
-- A direct Cloudflare asset-upload request returned HTTP 401 `Invalid API Token` before any asset upload or Worker script update. A subsequent token-verification read also returned 401. No Cloudflare mutation succeeded.
-- A guarded GitHub Actions deployment workflow, `.github/workflows/deploy-staging.yml`, was added. Run `42469914484` confirmed that the repository has no `CLOUDFLARE_API_TOKEN` Actions secret; checkout, deployment, and smoke-test steps were safely skipped.
-- The live staging Worker therefore remains unchanged: no `ASSETS` or `ARTIFACTS` binding was attached, and no live dashboard or R2 upload/download smoke test was performed.
-- To finish this external step, the Cloudflare connection must be reauthorized in ChatGPT, or the repository must receive a `CLOUDFLARE_API_TOKEN` Actions secret with Workers Scripts/Assets deployment and the required D1/R2 access. Do not paste the token into chat. Once credentials are available, rerun the guarded staging deployment and then the live R2/D1 smoke check.
-- The deployment workflow is staging-only and gated by the `[deploy-staging]` commit marker. It does not dispatch the repository production runner or publish content.
+Read-only row counts after deployment:
 
-## Final workflow-only verification — 8 November 2026
+| Table | Rows |
+|---|---:|
+| `dashboard_state` | 1 |
+| `dashboard_backups` | 1 |
+| `runner_state` | 0 |
+| `runner_control` | 0 |
+| `runner_artifacts` | 0 |
+| `runner_artifact_parts` | 0 |
 
-After the code candidate `e0893cb4819278f9996db52ee139381b387eb9d4` passed, the following workflow-only changes were added at `ee5e0755ca8d7fd46682ac889e5be8a85d1e7ee9`:
+The existing dashboard state and backup were preserved. No runner session, artifact upload, or production job was created.
 
-- A guarded staging deployment workflow was added. It only attempts deployment when a `[deploy-staging]` commit is pushed to this exact integration branch and a `CLOUDFLARE_API_TOKEN` Actions secret exists.
-- A separate `[staging-smoke]` job was added to `repository-runner.yml`. It only reads the D1 snapshot/backoff state and performs a temporary R2 write/read/delete/capacity probe; it does not start a runner session or execute a production job. It has not been run because staging deployment is blocked by credentials.
+## Verification limits and remaining staging work
 
-Exact-commit verification at `ee5e0755ca8d7fd46682ac889e5be8a85d1e7ee9`:
-- Dashboard adapter workflow #253: **27/27 Chromium journeys**, **136/136 adapter tests**, syntax checks PASS.
-- Full content-quality workflow #3118: **778/778 Node tests**, **0 failures**, **0 skips**, long-form minimum draft-length gate PASS.
-- Push-triggered adapter workflow #252 also completed successfully.
+- The active Worker version, 100% deployment, bindings, preserved operator secrets, R2 object, private-bucket settings, and D1 row counts were verified through Cloudflare's account API.
+- Automated tests verify the Worker routes and R2-backed dashboard response.
+- A live HTTP request to the `workers.dev` URL could not be completed from this execution environment because outbound requests to that domain are blocked by the available network tools. Therefore, do not treat the live `/operational-readyz` or dashboard HTTP response as independently smoke-tested here.
+- No live repository-runner workflow dispatch was performed. The runner workflow is manual-only and the Worker accepts only the exact manual-dispatch OIDC event on this integration branch.
+- The GitHub Actions deployment workflow remains guarded by the `[deploy-staging]` commit marker and a repository `CLOUDFLARE_API_TOKEN` secret. That secret is absent; the staging deployment above succeeded through the connected Cloudflare API instead.
 
-The workflow-only changes do not alter the tested application code at `e0893cb4819278f9996db52ee139381b387eb9d4`. The staging deployment and live D1/R2 smoke remain unverified until the Cloudflare credential blocker above is resolved.
+## Production safety and remaining owner gates
 
-## Additional dashboard retry journey — 8 November 2026
+- YouTube publishing remains disabled. No YouTube upload, public release, or Meta publishing action was attempted.
+- SonicVhibez remains the only YouTube target; Nature Frontiers remains separate.
+- The remote YouTube publication history and actual publication timestamps still need authoritative verification.
+- The requested 72-hour spacing and three-publications-per-week cadence conflict: three 72-hour intervals require 216 hours, exceeding a 168-hour week. An owner-approved feasible cadence is required.
+- Production execution still requires exact-job one-shot authorization, verified media/metadata/thumbnail/captions, rights evidence, and human review.
+- Passing CI, a deployed staging Worker, and a valid D1/R2 configuration do not satisfy those external production gates.
 
-A browser journey was added for the operator retry form. It seeds a synthetic failed production job, verifies the operator must provide a review reason, confirms exactly one retry authorization is recorded, and asserts that no production render, upload, or publication request is issued by the UI.
-
-Exact-commit results at `a2f651ff4111f2559848109c13b35a6e997012ec`:
-- Chromium dashboard journeys: **28 passed**.
-- Cloudflare adapter and dashboard contract tests: **136 passed, 0 failed, 0 skipped**.
-- Workflow/module syntax checks: PASS.
-
-The full repository Node suite remains verified at `ee5e0755ca8d7fd46682ac889e5be8a85d1e7ee9`: **778 passed, 0 failed, 0 skipped**. The later change only adds a browser test; it does not alter application code or the Node test set.
+**Current result:** the integrated Cloudflare Worker and private R2 dashboard hosting are deployed to staging, with D1 and operator-secret bindings preserved. Automated checks pass. The live HTTP smoke and live runner-cycle checks remain unverified, and production publishing remains safely held.
