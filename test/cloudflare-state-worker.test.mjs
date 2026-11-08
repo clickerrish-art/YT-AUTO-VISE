@@ -1013,13 +1013,13 @@ test("repository production workflow dispatches at most one job per runner cycle
   assert.match(workflow, /Persist worker cooldowns and uncertain-dispatch quarantine/);
 });
 
-test("repository runner OIDC restricts push triggers to the repository owner identity", async () => {
+test("repository runner OIDC accepts only manual owner dispatches", async () => {
+  const ownerDispatch = await createRunnerOidcFixture();
+  assert.equal(await verifyRepositoryRunnerToken(ownerDispatch.token, ownerDispatch), true);
   const ownerPush = await createRunnerOidcFixture({ event_name: "push" });
-  assert.equal(await verifyRepositoryRunnerToken(ownerPush.token, ownerPush), true);
-  const otherActor = await createRunnerOidcFixture({ event_name: "push", actor: "another-contributor", actor_id: "999999" });
+  assert.equal(await verifyRepositoryRunnerToken(ownerPush.token, ownerPush), false);
+  const otherActor = await createRunnerOidcFixture({ actor: "another-contributor", actor_id: "999999" });
   assert.equal(await verifyRepositoryRunnerToken(otherActor.token, otherActor), false);
-  const wrongRepoId = await createRunnerOidcFixture({ repository_id: "999999999" });
-  assert.equal(await verifyRepositoryRunnerToken(wrongRepoId.token, wrongRepoId), false);
 });
 
 test("repository runner OIDC accepts only the exact repository, branch, workflow, audience and event", async () => {
