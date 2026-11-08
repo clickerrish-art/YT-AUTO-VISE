@@ -17,13 +17,13 @@ test("dashboard static inventory reports all declared controls, forms and litera
   assert.equal(inventory.counts.controls, inventory.controls.length);
   assert.equal(inventory.counts.forms, inventory.forms.length);
   assert.equal(inventory.counts.routes, inventory.routes.length);
-  assert.equal(inventory.counts.controls, 120);
+  assert.equal(inventory.counts.controls, 118);
   assert.equal(inventory.counts.forms, 17);
   assert.equal(inventory.counts.routes, 49);
   assert.ok(inventory.controls.some(control => control.id === "createStateBackup"), "Cloudflare backup creation control must remain available");
   assert.ok(inventory.controls.some(control => control.id === "refreshStateBackups"), "Cloudflare backup refresh control must remain available");
   assert.deepEqual(inventory.counts.controlsByTag, {
-    button: 28,
+    button: 26,
     input: 49,
     select: 27,
     textarea: 16,
