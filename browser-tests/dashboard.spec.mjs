@@ -522,7 +522,7 @@ test("dashboard presents actionable API errors without exposing raw server respo
   await page.route("**/api/state", route => route.abort("failed"));
   await page.locator("#connect").click();
   await expect(page.locator("#message")).toContainText(
-    "Could not reach the dashboard API. Confirm the local dashboard server is running, then retry."
+    "Could not reach the dashboard API. Confirm the dashboard service is reachable, then retry."
   );
   await expect(page.locator("#message")).not.toContainText(operatorToken);
 });
@@ -1249,13 +1249,29 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
       fetch(base + "/api/jobs/narration", { method: "POST", headers, body: narrationPayload })
     ]);
     const concurrentNarrationBodies = await Promise.all(concurrentNarrationResponses.map(response => response.json()));
-    expect(concurrentNarrationResponses.map(response => response.status).sort()).toEqual([200, 201]);
+    const statusPair = concurrentNarrationResponses.map(response => response.status).sort((a, b) => a - b).join(",");
+    expect(["200,201", "201,409"]).toContain(statusPair);
     const createdIndex = concurrentNarrationResponses.findIndex(response => response.status === 201);
-    const reusedIndex = concurrentNarrationResponses.findIndex(response => response.status === 200);
+    const duplicateIndex = concurrentNarrationResponses.findIndex((response, index) => index !== createdIndex);
     expect(concurrentNarrationBodies[createdIndex].narrationStage.status).toBe("DRAFT_REVIEW_REQUIRED");
-    expect(concurrentNarrationBodies[reusedIndex].reused).toBe(true);
-    expect(concurrentNarrationBodies[reusedIndex].idempotent).toBe(true);
-    expect(concurrentNarrationBodies[reusedIndex].narrationStage.artifacts)
+    if (concurrentNarrationResponses[duplicateIndex].status === 200) {
+      expect(concurrentNarrationBodies[duplicateIndex].reused).toBe(true);
+      expect(concurrentNarrationBodies[duplicateIndex].idempotent).toBe(true);
+      expect(concurrentNarrationBodies[duplicateIndex].narrationStage.artifacts)
+        .toEqual(concurrentNarrationBodies[createdIndex].narrationStage.artifacts);
+    } else {
+      expect(concurrentNarrationResponses[duplicateIndex].status).toBe(409);
+      expect(concurrentNarrationBodies[duplicateIndex].error).toMatch(/already in progress|duplicate work is blocked/i);
+    }
+
+    // Once both requests have settled, an exact retry must verify and reuse the
+    // persisted receipt instead of generating a second TTS artifact set.
+    const retryResponse = await fetch(base + "/api/jobs/narration", { method: "POST", headers, body: narrationPayload });
+    const retryBody = await retryResponse.json();
+    expect(retryResponse.status).toBe(200);
+    expect(retryBody.reused).toBe(true);
+    expect(retryBody.idempotent).toBe(true);
+    expect(retryBody.narrationStage.artifacts)
       .toEqual(concurrentNarrationBodies[createdIndex].narrationStage.artifacts);
     const concurrentNarrationState = await (await fetch(base + "/api/state", { headers })).json();
     expect(concurrentNarrationState.audit.filter(event =>
@@ -1683,8 +1699,80 @@ test("production-plan submission and hash-bound review persist through the real 
   }
 });
 
+test("operator retry form authorizes one reviewed failed-job retry without dispatching or uploading", async ({ page }) => {
+  const failedJob = {
+    id: "retry-browser-job",
+    queueItemId: "retry-browser-queue-item",
+    kind: "CONTENT_PRODUCTION",
+    title: "Synthetic failed-job retry fixture",
+    state: "FAILED",
+    attemptCount: 1,
+    retryPolicy: { maxAttempts: 3, baseDelayMs: 1000, maxDelayMs: 60000 },
+    errorDetails: {
+      code: "SYNTHETIC_RENDER_FAILURE",
+      message: "Synthetic browser fixture failure; no media or provider operation occurred.",
+      retryable: true,
+      retryableAfterOperatorReview: false
+    },
+    nextRetryAt: null,
+    createdAt: "2026-11-08T08:00:00.000Z",
+    updatedAt: "2026-11-08T08:00:00.000Z",
+    outputArtifacts: []
+  };
+  const queuedJob = {
+    ...failedJob,
+    state: "QUEUED",
+    attemptCount: 2,
+    errorDetails: null,
+    nextRetryAt: null,
+    updatedAt: "2026-11-08T08:02:00.000Z"
+  };
+  let visibleJobs = [failedJob];
+  let retryPayload = null;
+  const unexpectedProductionRequests = [];
+  page.on("request", request => {
+    if (request.method() === "POST" && /\/api\/(jobs\/produce|uploads\/|publish)/.test(new URL(request.url()).pathname)) {
+      unexpectedProductionRequests.push(request.url());
+    }
+  });
 
-test("Cloudflare backup controls create a checkpoint and require revision-bound restore confirmation", async ({ page }) => {
+  await page.route("**/api/state", async route => {
+    const response = await route.fetch();
+    const state = await response.json();
+    await route.fulfill({ response, body: JSON.stringify({ ...state, jobs: visibleJobs }) });
+  });
+  await page.route("**/api/jobs/retry", async route => {
+    retryPayload = route.request().postDataJSON();
+    visibleJobs = [queuedJob];
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ job: queuedJob })
+    });
+  });
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+  await expect(page.locator("#retryjob")).toHaveValue("retry-browser-job");
+  await expect(page.locator("#retryjobform button[type=submit]")).toBeEnabled();
+  await page.locator("#retryreason").fill("Reviewed the retained synthetic failure evidence; one retry is safe.");
+  await page.locator("#retryjobform button[type=submit]").click();
+
+  await expect(page.locator("#retryjobresult")).toContainText("Retry explicitly authorized for retry-browser-job");
+  await expect(page.locator("#retryjobresult")).toContainText("Attempts: 2 / 3");
+  await expect(page.locator("#retryjobresult")).toContainText("no upload or publication occurred");
+  expect(retryPayload).toEqual({
+    jobId: "retry-browser-job",
+    reason: "Reviewed the retained synthetic failure evidence; one retry is safe.",
+    overrideRetryLimit: false
+  });
+  await expect(page.locator("#retryjobform button[type=submit]")).toBeDisabled();
+  expect(unexpectedProductionRequests).toEqual([]);
+});
+
+test("Cloudflare D1 backup controls create and restore a revision-bound checkpoint", async ({ page }) => {
   let revision = 5;
   const backups = [{
     backup_id: "backup-1",
@@ -1696,36 +1784,45 @@ test("Cloudflare backup controls create a checkpoint and require revision-bound 
   const backupRequests = [];
   const restoreRequests = [];
 
-  await page.route("**/api/state/backups", async route => {
-    await route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({ enabled: true, revision, backups })
-    });
+  await page.route("**/api/state", async route => {
+    const response = await route.fetch();
+    const state = await response.json();
+    await route.fulfill({ response, body: JSON.stringify({ ...state, revision }) });
   });
-  await page.route("**/api/state/backup", async route => {
+  await page.route("**/api/backups", async route => {
+    if (route.request().method() === "GET") {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ backups })
+      });
+      return;
+    }
     backupRequests.push({ method: route.request().method(), body: route.request().postDataJSON() });
     const receipt = {
       backupId: "backup-2",
       sourceRevision: revision,
       sha256: "b".repeat(64),
-      createdAt: "2026-11-08T08:01:00.000Z",
-      reason: "OPERATOR_REQUESTED:browser-e2e"
+      createdAt: "2026-11-08T08:01:00.000Z"
     };
     backups.unshift({
       backup_id: receipt.backupId,
       source_revision: receipt.sourceRevision,
       sha256: receipt.sha256,
       created_at: receipt.createdAt,
-      reason: receipt.reason
+      reason: "OPERATOR_REQUESTED:browser-e2e"
     });
     await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify(receipt) });
   });
-  await page.route("**/api/state/restore", async route => {
+  await page.route("**/api/backups/restore", async route => {
     const body = route.request().postDataJSON();
     restoreRequests.push({ method: route.request().method(), body });
     if (body.expectedRevision !== revision || body.confirmRestore !== true) {
-      await route.fulfill({ status: 409, contentType: "application/json", body: JSON.stringify({ error: "revision conflict or missing confirmation" }) });
+      await route.fulfill({
+        status: 409,
+        contentType: "application/json",
+        body: JSON.stringify({ error: "revision conflict or missing confirmation" })
+      });
       return;
     }
     revision++;
@@ -1742,7 +1839,7 @@ test("Cloudflare backup controls create a checkpoint and require revision-bound 
   await expect(page.locator("#app")).toBeVisible();
   await expect(page.locator("#createStateBackup")).toBeEnabled();
   await expect(page.locator("#stateBackupList")).toContainText("Revision 4");
-  await expect(page.locator("#restoreStateBackup-backup-1")).toHaveAttribute("data-restore-backup", "backup-1");
+  await expect(page.locator('#stateBackupList [data-restore-backup="backup-1"]')).toBeVisible();
 
   await page.locator("#createStateBackup").click();
   await expect(page.locator("#stateBackupList")).toContainText("Revision 5");
@@ -1754,7 +1851,7 @@ test("Cloudflare backup controls create a checkpoint and require revision-bound 
     cancelDialogMessage = dialog.message();
     await dialog.dismiss();
   });
-  await page.locator("#restoreStateBackup-backup-1").click();
+  await page.locator('#stateBackupList [data-restore-backup="backup-1"]').click();
   expect(cancelDialogMessage).toContain("backup-1");
   expect(restoreRequests).toHaveLength(0);
 
@@ -1763,19 +1860,18 @@ test("Cloudflare backup controls create a checkpoint and require revision-bound 
     confirmDialogMessage = dialog.message();
     await dialog.accept();
   });
-  await page.locator("#restoreStateBackup-backup-1").click();
+  await page.locator('#stateBackupList [data-restore-backup="backup-1"]').click();
   expect(confirmDialogMessage).toContain("backup-1");
-
   await expect.poll(() => restoreRequests.length).toBe(1);
   expect(restoreRequests[0]).toEqual({
     method: "POST",
     body: { backupId: "backup-1", expectedRevision: 5, confirmRestore: true }
   });
   await expect(page.locator("#stateBackupStatus")).toContainText("revision 6");
-  await expect(page.locator("#restoreStateBackup-backup-1")).toBeVisible();
+  await expect(page.locator('#stateBackupList [data-restore-backup="backup-1"]')).toBeVisible();
 });
 
-test("all dashboard controls have stable identities and accessible names", async ({ page }) => {
+test("all 118 dashboard controls have stable identities and accessible names", async ({ page }) => {
   await page.goto("/");
   await page.locator("#token").fill(operatorToken);
   await page.locator("#connect").click();

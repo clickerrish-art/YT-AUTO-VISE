@@ -18,8 +18,8 @@ function attributesOf(raw) {
 
 /**
  * Read opening tags without treating a greater-than sign inside a quoted
- * attribute as the end of the tag. Comments and executable script/style
- * contents are skipped so markup-like strings are not counted as live controls.
+ * attribute as the end of the tag. Comments are skipped so example markup
+ * cannot be mistaken for live dashboard controls or forms.
  */
 function* openingTags(source) {
   const trackedTags = new Set(["button", "input", "select", "textarea", "form"]);

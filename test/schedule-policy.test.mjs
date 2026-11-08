@@ -591,3 +591,19 @@ test("pending scheduled attempts require scheduledAt and never fall back to crea
       status + " must not use createdAt as a reserved publication time");
   }
 });
+
+
+test("proposed job ID cannot reuse an older remote history ID", () => {
+  const result = evaluateNextPublication({
+    history: [
+      { id: "remote-old", status: "private", actualPublishedAt: "2026-10-01T15:00:00.000Z", format: "long_form" },
+      { id: "remote-latest", status: "unlisted", actualPublishedAt: "2026-10-04T15:00:00.000Z", format: "long_form" }
+    ],
+    historyVerified: true,
+    proposedAt: "2026-10-07T15:00:00.000Z",
+    jobId: "remote-old",
+    format: "short"
+  });
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some(error => error.includes("proposed job ID duplicates an existing job/remote ID: remote-old")));
+});
