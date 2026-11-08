@@ -31,6 +31,8 @@ on:
       - "wrangler.jsonc"
       - "scripts/cloudflare-runner-bridge.mjs"
       - "scripts/cloudflare-artifact-sync.mjs"
+      - "scripts/artifact-integrity.mjs"
+      - "test/artifact-integrity.test.mjs"
       - "scripts/worker-runner.mjs"
       - "scripts/dashboard-inventory.mjs"
       - "test/cloudflare-state-worker.test.mjs"
