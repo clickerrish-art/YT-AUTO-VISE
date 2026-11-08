@@ -92,6 +92,7 @@ test("operator dashboard loads the authoritative schedule and persists a draft t
   expect(persisted.queueItems.some(item => item.id === draftId)).toBe(true);
   expect(persisted.jobs.some(job => job.kind === "CONTENT_PRODUCTION" && job.idempotencyKey === "draft:" + draftId)).toBe(true);
 
+  // The operator panel must expose held-job reasons without mutating queue or audit state.
   const beforeDiagnosticsRefresh = await request.get("/api/state", { headers: { "x-operator-token": operatorToken } });
   expect(beforeDiagnosticsRefresh.status()).toBe(200);
   const beforeDiagnosticsState = await beforeDiagnosticsRefresh.json();
