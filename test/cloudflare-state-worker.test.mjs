@@ -1267,7 +1267,13 @@ test("private R2 artifact upload requires an exact generated receipt and complet
         },
         async complete(parts) {
           assert.deepEqual(parts, [{ partNumber: 1, etag: "7cfdd07889b3295d6a550914ab35e068" }]);
-          return { size: 5, httpEtag: "object-etag" };
+          return {
+            size: 5, httpEtag: "object-etag",
+            customMetadata: {
+              jobId: job.id, sourcePath: "media/generated-video.mp4",
+              artifactKind: "video", sha256: digest
+            }
+          };
         }
       };
     },
