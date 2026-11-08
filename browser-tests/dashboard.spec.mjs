@@ -92,8 +92,29 @@ test("operator dashboard loads the authoritative schedule and persists a draft t
   expect(persisted.queueItems.some(item => item.id === draftId)).toBe(true);
   expect(persisted.jobs.some(job => job.kind === "CONTENT_PRODUCTION" && job.idempotencyKey === "draft:" + draftId)).toBe(true);
 
+  const beforeDiagnosticsRefresh = await request.get("/api/state", { headers: { "x-operator-token": operatorToken } });
+  expect(beforeDiagnosticsRefresh.status()).toBe(200);
+  const beforeDiagnosticsState = await beforeDiagnosticsRefresh.json();
+
   await page.locator("#refresh").click();
   await expect(page.locator("#queue")).toContainText(draftId);
+  await expect(page.locator("#diagnosticsQueued")).toHaveText("1");
+  await expect(page.locator("#diagnosticsDispatchable")).toHaveText("0");
+  await expect(page.locator("#diagnosticsHeld")).toHaveText("1");
+  await expect(page.locator("#queueDiagnosticsStatus")).toContainText("Africa/Johannesburg");
+  await expect(page.locator("#queueDiagnosticsStatus")).toContainText("Read-only");
+  await expect(page.locator("#queueDiagnosticsStatus")).toContainText("publishing disabled");
+  await expect(page.locator("#queueDiagnosticsBlockers")).toContainText("APPROVED_AUTHORING_MISSING");
+  await expect(page.locator("#queueDiagnosticsBlockers")).toContainText("APPROVED_RENDER_PLAN_MISSING");
+  await expect(page.locator("#queueDiagnosticsBlockers")).toContainText("SLOT_IN_FUTURE");
+  await expect(page.locator("#queueDiagnosticsItems")).toContainText("HELD");
+
+  const afterDiagnosticsRefresh = await request.get("/api/state", { headers: { "x-operator-token": operatorToken } });
+  expect(afterDiagnosticsRefresh.status()).toBe(200);
+  const afterDiagnosticsState = await afterDiagnosticsRefresh.json();
+  expect(afterDiagnosticsState.queueItems).toEqual(beforeDiagnosticsState.queueItems);
+  expect(afterDiagnosticsState.jobs).toEqual(beforeDiagnosticsState.jobs);
+  expect(afterDiagnosticsState.audit).toEqual(beforeDiagnosticsState.audit);
 
   await page.locator("#search").fill(draftId);
   await expect(page.locator("#queue")).toContainText(draftId);
