@@ -151,8 +151,10 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
     if (tag === "button" && /\bdata-artifact-download=["']/.test(attributes)) {
       assert.ok(scriptSource.includes('closest("[data-artifact-download]")'),
         "artifact download control must use the delegated stable artifact key");
-      assert.ok(server.includes("/api/artifacts/"),
-        "artifact download control must target the authenticated artifact route");
+      assert.ok(scriptSource.includes('fetch("/api/artifacts/"+encodeURIComponent(button.dataset.artifactDownload)+"/download"'),
+        "artifact download control must call the exact artifact download endpoint");
+      assert.ok(scriptSource.includes('"x-operator-token"'),
+        "artifact download control must send the operator authorization header");
       wiredControls++;
       continue;
     }
