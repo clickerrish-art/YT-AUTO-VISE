@@ -297,7 +297,7 @@ test("concurrent duplicate retry authorization commits exactly once and returns 
     facebookDrafts: [],
     facebookPosts: [],
     facebookAttempts: []
-  }, null, 2) + "\\n");
+  }, null, 2) + "\n");
 
   const port = await reservePort();
   const base = "http://127.0.0.1:" + port;
