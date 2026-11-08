@@ -789,13 +789,18 @@ test("draft creation blocks invalid campaigns and any non-allowlisted destinatio
 });
 
 
-test("Worker serves the dashboard entry document from static assets while keeping API authentication separate", async () => {
+test("Worker serves the dashboard entry document from private R2 while keeping API authentication separate", async () => {
   let requestedAsset = null;
   const env = {
-    ASSETS: {
-      async fetch(request) {
-        requestedAsset = new URL(request.url).pathname;
-        return new Response("dashboard-shell", { status: 200, headers: { "content-type": "text/html" } });
+    ARTIFACTS: {
+      async get(key) {
+        requestedAsset = key;
+        return {
+          body: new Response("dashboard-shell").body,
+          size: 15,
+          httpEtag: '"dashboard-etag"',
+          httpMetadata: { contentType: "text/html; charset=utf-8" }
+        };
       }
     },
     DASHBOARD_OPERATOR_TOKEN: "a".repeat(24)
@@ -803,7 +808,9 @@ test("Worker serves the dashboard entry document from static assets while keepin
   const root = await handleRequest(new Request("https://state.example/"), env);
   assert.equal(root.status, 200);
   assert.equal(await root.text(), "dashboard-shell");
-  assert.equal(requestedAsset, "/dashboard.html");
+  assert.equal(requestedAsset, "dashboard/dashboard.html");
+  assert.equal(root.headers.get("content-type"), "text/html; charset=utf-8");
+  assert.equal(root.headers.get("x-content-type-options"), "nosniff");
   const api = await handleRequest(new Request("https://state.example/api/state"), env);
   assert.equal(api.status, 401);
 });
@@ -813,8 +820,11 @@ test("operational readiness requires readable D1 state, valid campaigns and dash
   const state = validState();
   const env = {
     STATE_DB: { prepare() { return { bind() { return this; }, async first() { return { revision: 7, state_json: JSON.stringify(state), updated_at: "2026-11-08T00:00:00.000Z" }; } }; } },
-    ASSETS: { async fetch() { return new Response("dashboard", { status: 200 }); } },
-    ARTIFACTS: { async put() {}, async get() {} }
+    ARTIFACTS: {
+      async head(key) { assert.equal(key, "dashboard/dashboard.html"); return { size: 9 }; },
+      async put() {},
+      async get() { return { body: new Response("dashboard").body }; }
+    }
   };
   const response = await handleRequest(new Request("https://state.example/operational-readyz"), env);
   const body = await response.json();
@@ -917,7 +927,7 @@ test("every dashboard API path has a Worker route, dynamic artifact handler, or 
 
 test("capabilities endpoint distinguishes implemented durable operations from runner/provider blockers", async () => {
   const { database } = mutableDatabase(validState());
-  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: database, ASSETS: {} };
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: database, ARTIFACTS: { async head() { return { size: 1 }; }, async get() { return {}; } } };
   const response = await handleRequest(new Request("https://state.example/api/capabilities", {
     headers: { "x-operator-token": "a".repeat(24) }
   }), env);
@@ -925,7 +935,7 @@ test("capabilities endpoint distinguishes implemented durable operations from ru
   assert.equal(response.status, 200);
   assert.equal(body.statePersistence.configured, true);
   assert.equal(body.dashboardHosting.configured, true);
-  assert.equal(body.artifactStorage.configured, false);
+  assert.equal(body.artifactStorage.configured, true);
   assert.equal(body.artifactStorage.uploadDownloadE2E, "NOT_TESTED");
   assert.ok(body.supported.some(item => item.includes("worker lease")));
   assert.ok(body.blockedUntilIntegration.some(item => item.includes("Node/FFmpeg")));
@@ -934,12 +944,10 @@ test("capabilities endpoint distinguishes implemented durable operations from ru
 });
 
 
-test("Wrangler staging config binds the dashboard static assets and existing D1 database without deploying", () => {
+test("Wrangler staging config binds private R2 dashboard and artifact storage with the existing D1 database", () => {
   const config = JSON.parse(readFileSync(new URL("../wrangler.jsonc", import.meta.url), "utf8"));
   assert.equal(config.name, "sonicvhibez-durable-state-staging");
-  assert.equal(config.assets.directory, "./public");
-  assert.equal(config.assets.binding, "ASSETS");
-  assert.equal(config.assets.run_worker_first, true);
+  assert.equal(config.assets, undefined, "dashboard HTML is served through the private R2 binding");
   assert.equal(config.d1_databases[0].binding, "STATE_DB");
   assert.equal(config.d1_databases[0].database_id, "f018ee20-2d7f-41ec-9744-ee058bce80f8");
   assert.equal(config.r2_buckets[0].binding, "ARTIFACTS");
