@@ -544,3 +544,57 @@ test("backup refuses to run while a restore owns the shared operation lock", asy
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+
+test("backup rejects an empty symlinked upload-log directory instead of silently omitting evidence", async () => {
+  const dir = makeTempDir();
+  try {
+    const stateDir = path.join(dir, "state");
+    const externalLogs = path.join(dir, "external-empty-logs");
+    const logLink = path.join(dir, "run-logs");
+    fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+    fs.mkdirSync(externalLogs, { mode: 0o700 });
+    const stateBytes = Buffer.from(JSON.stringify({ version: 1, jobs: [], uploads: [] }));
+    fs.writeFileSync(path.join(stateDir, "dashboard-state.json"), stateBytes, { mode: 0o600 });
+    fs.symlinkSync(externalLogs, logLink, "dir");
+    const outputPath = path.join(dir, "backup.json");
+
+    await assert.rejects(
+      backupState({ rootDir: dir, stateDir: "state", uploadLogDir: "run-logs", rightsDir: "rights", outputPath }),
+      /symbolic link in upload-log input path|upload-log input must be a real directory/i
+    );
+    assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), stateBytes,
+      "backup validation must not mutate dashboard state");
+    assert.equal(fs.existsSync(outputPath), false,
+      "a backup must not be reported or left behind when its evidence directory is unsafe");
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("backup rejects an empty symlinked upload-approvals directory instead of silently omitting approvals", async () => {
+  const dir = makeTempDir();
+  try {
+    const stateDir = path.join(dir, "state");
+    const logDir = path.join(dir, "run-logs");
+    const externalApprovals = path.join(dir, "external-empty-approvals");
+    fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+    fs.mkdirSync(logDir, { mode: 0o700 });
+    fs.mkdirSync(externalApprovals, { mode: 0o700 });
+    const stateBytes = Buffer.from(JSON.stringify({ version: 1, jobs: [], uploads: [] }));
+    fs.writeFileSync(path.join(stateDir, "dashboard-state.json"), stateBytes, { mode: 0o600 });
+    fs.symlinkSync(externalApprovals, path.join(logDir, "upload-approvals"), "dir");
+    const outputPath = path.join(dir, "backup.json");
+
+    await assert.rejects(
+      backupState({ rootDir: dir, stateDir: "state", uploadLogDir: "run-logs", rightsDir: "rights", outputPath }),
+      /symbolic link in upload-approval input path|upload-approval input must be a real directory/i
+    );
+    assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), stateBytes,
+      "backup validation must not mutate dashboard state");
+    assert.equal(fs.existsSync(outputPath), false,
+      "a backup must not silently omit an unsafe approvals directory");
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
