@@ -1,0 +1,64 @@
+name: Deploy SonicVhibez Cloudflare staging
+
+on:
+  push:
+    branches: [codex/cloudflare-adapter-integration-20261108]
+    paths:
+      - "cloudflare/**"
+      - "public/**"
+      - "wrangler.jsonc"
+      - ".github/workflows/deploy-staging.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-staging:
+    if: contains(github.event.head_commit.message, '[deploy-staging]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check deployment credential availability without exposing it
+        id: credentials
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [[ -n "${CLOUDFLARE_API_TOKEN:-}" ]]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+            echo "Cloudflare deployment credential is configured."
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::CLOUDFLARE_API_TOKEN is not configured; staging deployment was safely skipped."
+          fi
+
+      - uses: actions/checkout@v7
+        if: steps.credentials.outputs.available == 'true'
+
+      - name: Deploy exact staging configuration
+        if: steps.credentials.outputs.available == 'true'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: bba3ba6fc08653dc66349b5a313f518d
+          wranglerVersion: "4"
+          command: deploy --config wrangler.jsonc --keep-vars
+
+      - name: Verify hosted dashboard and health endpoint
+        if: steps.credentials.outputs.available == 'true'
+        env:
+          BASE_URL: https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 10); do
+            if curl --fail --silent --show-error "$BASE_URL/healthz" -o /tmp/healthz.json; then
+              break
+            fi
+            if [[ "$attempt" -eq 10 ]]; then
+              echo "Staging health endpoint did not become ready."
+              exit 1
+            fi
+            sleep 3
+          done
+          curl --fail --silent --show-error "$BASE_URL/" -o /tmp/dashboard.html
+          grep -qi "SonicVhibez" /tmp/dashboard.html
+          echo "Staging health and dashboard asset checks passed."
