@@ -1,3 +1,29 @@
+# Verified worker retry-classification follow-up — 8 November 2026
+
+**Exact code/test candidate:** `774b35382cf78bb706acd7a56c7befe0477eaeb0`  
+**PR #1:** OPEN · DRAFT · UNMERGED · implementation branch `codex/marketing-machine-audit-fixes`.  
+**main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged).
+
+## Owner-independent implementation
+
+- `scripts/worker-runner.mjs` now distinguishes dashboard HTTP 409 responses requiring operator remediation from transient dispatch conflicts. `requiresOperatorRetry=true` or `deadLettered=true` returns `OPERATOR_REQUIRED` or `DEAD_LETTERED`, clears any stale local retry cooldown, and does not expose a misleading retry timer.
+- Transient 409 responses without those operator-only signals continue to use bounded `Retry-After` and persisted exponential backoff.
+- `test/worker-runner.test.mjs` and `test/worker-backoff-persistence.test.mjs` cover the operator-only response, transient retry behavior, and restart behavior. The dashboard removes an operator-blocked job from automatic dispatch; remediation and explicit retry authorization remain operator-controlled.
+
+## Exact-SHA verification for `774b35382cf78bb706acd7a56c7befe0477eaeb0`
+
+- Content quality [42505747207](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42505747207): **PASS — 722/722 Node tests, zero failures, zero skips**; includes the new operator-only 409 regression.
+- Automation/security [42505747242](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42505747242): **PASS — 34/34 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, syntax and compilation checks passed**.
+- Dashboard Chromium E2E [42505747131](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42505747131): **PASS — 29/29 journeys**.
+- Cloudflare durable-state [42505747199](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42505747199): **PASS — 8/8**.
+- Queue readiness [42505747137](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42505747137): **PASS — 16 queue items; 72-hour elapsed minimum; 216-hour rolling cycle; publishing disabled**.
+- Metadata [42505747247](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42505747247), isolated main/candidate baseline [42505747180](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42505747180), deployment recovery [42505747200](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42505747200), branch inventory [42505747167](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42505747167), and local Nature Frontiers draft validation [42505747246](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42505747246): **PASS**.
+- Production readiness [42505747214](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42505747214): **HOLD — 24 blockers**, intentionally fail-closed; not a production pass.
+
+No upload, publication, live scheduling, account reconnection, paid generation, merge, main edit, or destructive Git operation occurred. The 24 production blockers and all owner-controlled gates remain open; see the detailed blocker section below.
+
+---
+
 # Follow-up verification — 8 November 2026
 
 **Exact test-verified branch HEAD:** `b149254a3d5b080be704790fa26529067e88a24a` · **source implementation candidate:** `6c71814aebc8a384badef8ebecd8ada67c76cb93` · **main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`. At this verification point the PR branch was 3,155 commits ahead / 2 behind, with 285 changed files. PR #1 remains OPEN · DRAFT · UNMERGED; branch protection is disabled. This is a test-only descendant: no application source code changed after the `6c71814` candidate.
