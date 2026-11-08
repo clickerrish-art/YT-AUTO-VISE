@@ -561,7 +561,7 @@ test("backup rejects an empty symlinked upload-log directory instead of silently
 
     await assert.rejects(
       backupState({ rootDir: dir, stateDir: "state", uploadLogDir: "run-logs", rightsDir: "rights", outputPath }),
-      /symbolic link in upload-log input path|upload-log input must be a real directory/i
+      /symbolic links? in upload-log input path|upload-log input must be a real directory/i
     );
     assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), stateBytes,
       "backup validation must not mutate dashboard state");
@@ -588,7 +588,7 @@ test("backup rejects an empty symlinked upload-approvals directory instead of si
 
     await assert.rejects(
       backupState({ rootDir: dir, stateDir: "state", uploadLogDir: "run-logs", rightsDir: "rights", outputPath }),
-      /symbolic link in upload-approval input path|upload-approval input must be a real directory/i
+      /symbolic links? in upload-approval input path|upload-approval input must be a real directory/i
     );
     assert.deepEqual(fs.readFileSync(path.join(stateDir, "dashboard-state.json")), stateBytes,
       "backup validation must not mutate dashboard state");
