@@ -1546,6 +1546,26 @@ test("repository runner preflight proves private R2 write/read/delete and enforc
   assert.deepEqual(calls.map(call => call[0]), ["put", "get", "delete"]);
 });
 
+test("repository runner preflight fails closed when the temporary R2 probe cannot be deleted", async () => {
+  const fixture = await createRunnerOidcFixture();
+  const calls = [];
+  const env = {
+    STATE_DB: { prepare() { return { bind() { return this; }, async first() { return { total_bytes: 0 }; } }; } },
+    ARTIFACTS: {
+      async list() { return { objects: [], truncated: false }; },
+      async put(key) { calls.push(["put", key]); },
+      async get(key) { calls.push(["get", key]); return { async text() { return calls[0][1] ? "probe-value" : ""; } }; },
+      async delete(key) { calls.push(["delete", key]); throw new Error("simulated R2 delete failure"); }
+    }
+  };
+  const response = await handleRequest(new Request("https://state.example/api/runner/ready", {
+    headers: { authorization: "Bearer " + fixture.token }
+  }), env, fixture);
+  assert.equal(response.status, 503);
+  assert.equal((await response.json()).code, "R2_ARTIFACT_PROBE_CLEANUP_FAILED");
+  assert.deepEqual(calls.map(call => call[0]), ["put", "get", "delete"]);
+});
+
 test("repository runner preflight blocks production when private R2 headroom is below 2 GiB", async () => {
   const fixture = await createRunnerOidcFixture();
   let writes = 0;
