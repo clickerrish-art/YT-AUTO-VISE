@@ -585,14 +585,14 @@ test("concurrent and restarted quarantine release requests reuse one exact signe
     version: 1, queueItems: [], campaigns: [], audit: [],
     jobs: [{ id: jobId, kind: "CONTENT_PRODUCTION", state: "PRIVATE_UPLOAD_VERIFIED", uploadReceipt }],
     uploads: [], facebookDrafts: [], facebookPosts: [], facebookAttempts: []
-  }, null, 2) + "\\n", { mode: 0o600 });
+  }, null, 2) + "\n", { mode: 0o600 });
   fs.writeFileSync(path.join(dir, "upload-attempts.json"), JSON.stringify({
     attempts: [{
       attemptId, jobId, artifactSha256, status: "PRIVATE_UPLOAD_VERIFIED",
       remoteVideoId, channelId, channelTitle: "SonicVhibez",
       visibility: "private", publishingEnabled: false
     }]
-  }, null, 2) + "\\n", { mode: 0o600 });
+  }, null, 2) + "\n", { mode: 0o600 });
 
   const portProbe = http.createServer();
   await new Promise((resolve, reject) => {
