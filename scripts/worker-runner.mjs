@@ -441,7 +441,15 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
       results.push({ jobId: job.id, status: "NOT_DISPATCHED", httpStatus: 429, state: null, retryAfterMs: delayMs });
       continue;
     }
-    if (dispatched.status === 200) {
+    const operatorRetryRequired = dispatched.status === 409 && (
+      dispatched.payload.requiresOperatorRetry === true ||
+      dispatched.payload.deadLettered === true ||
+      dispatched.payload.retryAllowed === false
+    );
+    if (dispatched.status === 200 || operatorRetryRequired) {
+      // The dashboard has durably moved this job out of automatic dispatch.
+      // Do not leave a local cooldown that could imply an automatic retry;
+      // operator remediation and an explicit dashboard retry are required.
       cooldowns.delete(job.id);
       onCooldownsChanged(cooldowns);
     } else {
@@ -453,7 +461,9 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
     }
     results.push({
       jobId: job.id,
-      status: dispatched.status === 200 ? "SUCCEEDED" : "NOT_DISPATCHED",
+      status: dispatched.status === 200 ? "SUCCEEDED" : operatorRetryRequired
+        ? (dispatched.payload.deadLettered === true ? "DEAD_LETTERED" : "OPERATOR_REQUIRED")
+        : "NOT_DISPATCHED",
       httpStatus: dispatched.status,
       state: dispatched.payload.job?.state ?? null,
       ...(dispatched.status === 409 ? {
