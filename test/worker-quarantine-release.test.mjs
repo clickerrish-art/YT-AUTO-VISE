@@ -557,3 +557,142 @@ test("dashboard issues a signed quarantine release only for a terminal verified 
   assert.equal(afterRejected.audit.filter(item => item.action === "WORKER_QUARANTINE_RELEASE_RECEIPT_ISSUED").length, 1,
     "rejected legacy receipt must not issue another release or append an audit event");
 });
+
+
+test("concurrent and restarted quarantine release requests reuse one exact signed receipt and audit", async t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "dashboard-quarantine-release-idempotency-"));
+  const statePath = path.join(dir, "dashboard-state.json");
+  const operatorToken = "dashboard-release-idempotency-operator-" + "x".repeat(40);
+  const releaseToken = "dashboard-release-idempotency-token-" + "y".repeat(40);
+  const workerId = "verified-worker-idempotency";
+  const jobId = "verified-private-idempotency-job";
+  const attemptId = "verified-attempt-idempotency";
+  const artifactSha256 = "e".repeat(64);
+  const channelId = "UC" + "i".repeat(22);
+  const remoteVideoId = "remote-private-idempotency-video";
+  const uploadReceipt = {
+    jobId, attemptId, artifactSha256, videoId: remoteVideoId,
+    channelId, channelTitle: "SonicVhibez", privacyStatus: "private",
+    remoteStatusVerified: true, channelHistoryReconciled: true,
+    historyVerifiedAt: "2026-11-06T18:00:00.000Z",
+    historyVerifiedBy: "history-reviewer@example.test",
+    historyReconciliationSha256: "d".repeat(64),
+    historyVideoCount: 12,
+    publishingEnabled: false,
+    actualPublishedAt: "2026-11-05T17:00:00.000Z"
+  };
+  fs.writeFileSync(statePath, JSON.stringify({
+    version: 1, queueItems: [], campaigns: [], audit: [],
+    jobs: [{ id: jobId, kind: "CONTENT_PRODUCTION", state: "PRIVATE_UPLOAD_VERIFIED", uploadReceipt }],
+    uploads: [], facebookDrafts: [], facebookPosts: [], facebookAttempts: []
+  }, null, 2) + "\\n", { mode: 0o600 });
+  fs.writeFileSync(path.join(dir, "upload-attempts.json"), JSON.stringify({
+    attempts: [{
+      attemptId, jobId, artifactSha256, status: "PRIVATE_UPLOAD_VERIFIED",
+      remoteVideoId, channelId, channelTitle: "SonicVhibez",
+      visibility: "private", publishingEnabled: false
+    }]
+  }, null, 2) + "\\n", { mode: 0o600 });
+
+  const portProbe = http.createServer();
+  await new Promise((resolve, reject) => {
+    portProbe.once("error", reject);
+    portProbe.listen(0, "127.0.0.1", resolve);
+  });
+  const port = portProbe.address().port;
+  await new Promise(resolve => portProbe.close(resolve));
+  const base = "http://127.0.0.1:" + port;
+  let logs = "";
+  const launch = () => {
+    const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+      cwd: process.cwd(),
+      env: {
+        ...process.env,
+        DASHBOARD_OPERATOR_TOKEN: operatorToken,
+        DASHBOARD_OPERATOR_ID: "release-idempotency-operator@example.test",
+        DASHBOARD_QUARANTINE_RELEASE_TOKEN: releaseToken,
+        DASHBOARD_QUARANTINE_SIGNING_PRIVATE_KEY: privateKeyPem,
+        DASHBOARD_STATE_DIR: dir,
+        UPLOAD_LOG_DIR: dir,
+        PORT: String(port),
+        DASHBOARD_HOST: "127.0.0.1",
+        SONICVHIBEZ_CHANNEL_ID: channelId,
+        YOUTUBE_CLIENT_ID: "",
+        YOUTUBE_CLIENT_SECRET: "",
+        YOUTUBE_REFRESH_TOKEN: "",
+        YOUTUBE_EMERGENCY_STOP: "YES"
+      },
+      stdio: ["ignore", "pipe", "pipe"]
+    });
+    child.stdout.on("data", chunk => { logs += chunk.toString(); });
+    child.stderr.on("data", chunk => { logs += chunk.toString(); });
+    return child;
+  };
+  let child = launch();
+  const stop = async () => {
+    if (child.exitCode !== null || child.signalCode !== null) return;
+    child.kill("SIGTERM");
+    await new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error("Dashboard did not stop: " + logs)), 5000);
+      child.once("exit", () => { clearTimeout(timeout); resolve(); });
+    });
+  };
+  const waitForReady = async () => {
+    for (let attempt = 0; attempt < 100; attempt++) {
+      if (child.exitCode !== null || child.signalCode !== null) throw new Error("Dashboard exited before ready: " + logs);
+      try {
+        if ((await fetch(base + "/healthz")).ok) return;
+      } catch {}
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    throw new Error("Dashboard did not become ready: " + logs);
+  };
+  t.after(async () => {
+    await stop().catch(() => {});
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+  await waitForReady();
+
+  const issue = () => fetch(base + "/api/worker/quarantine-release", {
+    method: "POST",
+    headers: {
+      "x-operator-token": operatorToken,
+      "x-quarantine-release-token": releaseToken,
+      "content-type": "application/json"
+    },
+    body: JSON.stringify({ workerId, jobId })
+  });
+  const responses = await Promise.all([issue(), issue()]);
+  assert.deepEqual(responses.map(response => response.status), [200, 200]);
+  const payloads = await Promise.all(responses.map(response => response.json()));
+  const firstIssue = payloads.find(payload => payload.alreadyIssued === false);
+  const duplicateIssue = payloads.find(payload => payload.alreadyIssued === true);
+  assert.ok(firstIssue, "one request must create the signed receipt");
+  assert.ok(duplicateIssue, "the concurrent duplicate must reuse the persisted receipt");
+  assert.deepEqual(duplicateIssue.receipt, firstIssue.receipt);
+  assert.equal(firstIssue.publishingEnabled, false);
+  assert.equal(duplicateIssue.publishingEnabled, false);
+  assert.equal(verifyWorkerQuarantineReleaseReceipt(firstIssue.receipt, {
+    workerId, jobId, attemptId, artifactSha256, publicKeyPem
+  }).jobId, jobId);
+
+  let persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  assert.deepEqual(persisted.jobs[0].quarantineReleaseReceipt, firstIssue.receipt);
+  assert.equal(persisted.audit.filter(event =>
+    event.action === "WORKER_QUARANTINE_RELEASE_RECEIPT_ISSUED" && event.jobId === jobId
+  ).length, 1);
+
+  await stop();
+  child = launch();
+  await waitForReady();
+  const afterRestart = await issue();
+  assert.equal(afterRestart.status, 200);
+  const restartedPayload = await afterRestart.json();
+  assert.equal(restartedPayload.alreadyIssued, true);
+  assert.deepEqual(restartedPayload.receipt, firstIssue.receipt,
+    "restart must return the exact same unexpired signed receipt rather than minting a second nonce");
+  persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  assert.equal(persisted.audit.filter(event =>
+    event.action === "WORKER_QUARANTINE_RELEASE_RECEIPT_ISSUED" && event.jobId === jobId
+  ).length, 1);
+});
