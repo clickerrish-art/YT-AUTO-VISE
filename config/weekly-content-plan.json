@@ -59,12 +59,12 @@
     "status": "CONFLICTS_WITH_72_HOUR_MINIMUM"
   },
   "cadenceDecision": {
-    "status": "OWNER_DECISION_REQUIRED",
-    "ownerApproved": false,
-    "approvedMode": null,
-    "approvedAt": null,
-    "approvalReference": null,
-    "explanation": "The requested long_form → long_form → short cycle with at least 72 elapsed hours requires 216 hours for three consecutive gaps and cannot promise three publications in a 168-hour week. No independently confirmed owner approval is recorded in the current project conversation. Tuesday/Saturday remain draft-preparation triggers only. Public/unattended publishing remains disabled."
+    "status": "OWNER_APPROVED",
+    "ownerApproved": true,
+    "approvedMode": "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
+    "approvedAt": "2026-11-07T00:57:33+02:00",
+    "approvalReference": "User approval in ChatGPT conversation on 2026-11-07 (Africa/Johannesburg)",
+    "explanation": "Owner approved the rolling long_form → long_form → short sequence with at least 72 elapsed hours between consecutive actual publications and no weekly publication target. Tuesday/Saturday remain draft-preparation triggers only. Public/unattended publishing remains disabled."
   },
   "spacingPolicy": {
     "minimumHoursBetweenPosts": 72,
