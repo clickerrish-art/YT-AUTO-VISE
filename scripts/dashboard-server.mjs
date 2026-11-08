@@ -25,7 +25,7 @@ import { productionPlanSha256, validateProductionPlan, validateNarrationApproval
 import { buildApprovedJobRenderManifest } from "./build-approved-job-render-manifest.mjs";
 import { contentJobArtifactPaths } from "./content-job-artifact-paths.mjs";
 import { buildVerifiedUploadReconciliationJob } from "./upload-reconciliation-transition.mjs";
-import { createWorkerQuarantineReleaseReceipt } from "./worker-quarantine-release.mjs";
+import { createWorkerQuarantineReleaseReceipt, verifyWorkerQuarantineReleaseReceipt } from "./worker-quarantine-release.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
 import { validatePublicationSlot, validateCadenceDecision, localDateTimeToIso } from "./schedule-policy.mjs";
 import {
@@ -2935,10 +2935,33 @@ const server = http.createServer(async (req, res) => {
             ledgerAttempt.artifactSha256 !== receipt.artifactSha256) {
           return json(res, 409, { error: "Dashboard ledger and job receipt cannot prove the exact terminal private upload; worker quarantine remains" });
         }
+        if (job.quarantineReleaseReceipt) {
+          try {
+            const publicKeyPem = crypto.createPublicKey(process.env.DASHBOARD_QUARANTINE_SIGNING_PRIVATE_KEY)
+              .export({ type: "spki", format: "pem" }).toString();
+            verifyWorkerQuarantineReleaseReceipt(job.quarantineReleaseReceipt, {
+              workerId: body.workerId,
+              jobId: job.id,
+              attemptId: receipt.attemptId,
+              artifactSha256: receipt.artifactSha256,
+              publicKeyPem
+            });
+          } catch {
+            return json(res, 409, {
+              error: "A prior quarantine release receipt exists but cannot be safely reused; inspect worker quarantine state before retrying"
+            });
+          }
+          return json(res, 200, {
+            receipt: job.quarantineReleaseReceipt,
+            publishingEnabled: false,
+            alreadyIssued: true
+          });
+        }
         const signedReceipt = createWorkerQuarantineReleaseReceipt({
           workerId: body.workerId, jobId: job.id, attemptId: receipt.attemptId,
           artifactSha256: receipt.artifactSha256, privateKeyPem: process.env.DASHBOARD_QUARANTINE_SIGNING_PRIVATE_KEY
         });
+        job.quarantineReleaseReceipt = signedReceipt;
         const at = new Date().toISOString();
         state.audit.push({
           id: crypto.randomUUID(), action: "WORKER_QUARANTINE_RELEASE_RECEIPT_ISSUED",
@@ -2948,7 +2971,7 @@ const server = http.createServer(async (req, res) => {
           reason: "Operator-authorized, short-lived signed receipt bound to the exact verified private upload"
         });
         await saveState(state);
-        return json(res, 200, { receipt: signedReceipt, publishingEnabled: false });
+        return json(res, 200, { receipt: signedReceipt, publishingEnabled: false, alreadyIssued: false });
       } finally { release(); }
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/produce") {
