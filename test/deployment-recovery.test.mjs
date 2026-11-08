@@ -187,3 +187,11 @@ test("failed replacement startup rolls back to the previous release without losi
     await stopRelease(recovered.child);
   }
 });
+
+test("manual repository runner defaults to read-only staging checks and requires explicit production dispatch opt-in", () => {
+  const workflow = fs.readFileSync(path.join(repositoryRoot, ".github", "workflows", "repository-runner.yml"), "utf8");
+  assert.match(workflow, /run_staging_smoke:[\\s\\S]*?type: boolean[\\s\\S]*?default: true/);
+  assert.match(workflow, /run_repository_runner:[\\s\\S]*?type: boolean[\\s\\S]*?default: false/);
+  assert.match(workflow, /repository-runner:[\\s\\S]*?inputs\\.run_repository_runner == true/);
+  assert.match(workflow, /staging-smoke:[\\s\\S]*?inputs\\.run_staging_smoke == true/);
+});
