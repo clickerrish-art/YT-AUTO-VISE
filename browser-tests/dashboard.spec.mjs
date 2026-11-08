@@ -1249,7 +1249,7 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
       fetch(base + "/api/jobs/narration", { method: "POST", headers, body: narrationPayload })
     ]);
     const concurrentNarrationBodies = await Promise.all(concurrentNarrationResponses.map(response => response.json()));
-    expect(concurrentNarrationResponses.map(response => response.status).sort()).toEqual([201, 409]);
+    expect(concurrentNarrationResponses.map(response => response.status).sort(), JSON.stringify(concurrentNarrationBodies)).toEqual([201, 409]);
     const createdIndex = concurrentNarrationResponses.findIndex(response => response.status === 201);
     const blockedIndex = concurrentNarrationResponses.findIndex(response => response.status === 409);
     expect(concurrentNarrationBodies[createdIndex].narrationStage.status).toBe("DRAFT_REVIEW_REQUIRED");
