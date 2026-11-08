@@ -111,7 +111,29 @@
     "latestRetryRaceTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488026325",
     "latestQueueDiagnosticsAcceptance": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488289397",
     "latestRenderRecoveryReconciliation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488557887",
-    "latestQuarantineReleaseIdempotency": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488848771"
+    "latestQuarantineReleaseIdempotency": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488848771",
+    "cloudflareStagingInfrastructure": {
+      "observedAt": "2026-11-08",
+      "worker": "sonicvhibez-durable-state-staging",
+      "workerDeployment": "deployed; D1 STATE_DB binding present",
+      "d1ApplicationTables": 6,
+      "state": {
+        "revision": 1,
+        "updatedAt": "2026-11-08T00:00:00.000Z",
+        "queueItems": 16,
+        "jobs": 0,
+        "auditEvents": 1,
+        "uploads": 0,
+        "publishingEnabled": false
+      },
+      "backups": 1,
+      "accessApplication": "SonicVhibez Dashboard Staging",
+      "accessPolicy": "email-only allow policy",
+      "accessServiceTokens": 0,
+      "unauthenticatedHealth": "BLOCKED_BY_ACCESS_LOGIN_REQUIRED",
+      "nodeRuntimeIntegration": "BLOCKED — DASHBOARD_STATE_API_URL, DASHBOARD_STATE_OPERATOR_TOKEN and Cloudflare Access service-token credentials are not verified in the Node dashboard runtime",
+      "classification": "Infrastructure provisioning PASS; Node route end-to-end acceptance remains BLOCKED."
+    }
   },
   "disclaimer": "This matrix is synchronized to the live dashboard-server.mjs route inventory at exact source/test SHA 06c2443d9d1308cdf071063634864b5a7088b8cf. Authentication-negative PASS does not imply authorized route success. API-001 remains NOT_TESTED overall; routes marked NOT_TESTED or BLOCKED require route-specific positive, validation, persistence, audit, concurrency and restart evidence before acceptance.",
   "routes": [
@@ -121,15 +143,15 @@
       "classification": "Cloudflare durable-state backup listing",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived 45-route authentication matrix on exact SHA 06c2443d9d1308cdf071063634864b5a7088b8cf; see test/dashboard-api-auth-matrix.test.mjs and run 42486667603.",
-      "authorizedSuccess": "BLOCKED — Cloudflare state sync is not configured in the CI environment.",
+      "authorizedSuccess": "BLOCKED — staging infrastructure is provisioned, but the Node dashboard cannot complete an authenticated end-to-end call in CI without DASHBOARD_STATE_API_URL, DASHBOARD_STATE_OPERATOR_TOKEN and Cloudflare Access service-token credentials.",
       "inputValidation": "NOT_TESTED — route-specific success and invalid-input matrix is pending.",
-      "durablePersistence": "BLOCKED — Cloudflare state sync is not configured in the CI environment.",
+      "durablePersistence": "BLOCKED — staging D1 has an initialized revision-1 snapshot and backup; route-level live read/write/backup/restore through the Node dashboard remains unverified.",
       "auditEvidence": "NOT_TESTED.",
       "concurrency": "NOT_TESTED.",
       "restartRecovery": "NOT_TESTED.",
-      "externalOperation": "Cloudflare state service",
+      "externalOperation": "Cloudflare staging Worker is deployed and D1 is initialized; authenticated Node-to-Worker access still requires a Cloudflare Access service token and app-runtime state API credentials.",
       "overallAcceptance": "BLOCKED",
-      "notes": "Cloudflare state sync is not configured in the CI environment; endpoint fails closed.",
+      "notes": "Read-only Cloudflare account verification on 2026-11-08 confirms the staging Worker is deployed with the D1 binding, six application tables exist, dashboard_state revision 1 contains 16 queue items and publishingEnabled=false, and one backup exists. The Access application is email-only and no Access service tokens are configured; an unauthenticated health request is intercepted with login_required. The Node app runtime still lacks a verified service-token-backed DASHBOARD_STATE_API_URL/DASHBOARD_STATE_OPERATOR_TOKEN configuration, so these three Node routes remain BLOCKED until authenticated end-to-end read/write/backup/restore is proven. No token or state snapshot was exposed.",
       "testEvidence": {
         "test": "test/dashboard-api-auth-matrix.test.mjs; test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
         "exactTestedSha": "06c2443d9d1308cdf071063634864b5a7088b8cf",
@@ -143,15 +165,15 @@
       "classification": "Cloudflare durable-state backup creation",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived 45-route authentication matrix on exact SHA 06c2443d9d1308cdf071063634864b5a7088b8cf; see test/dashboard-api-auth-matrix.test.mjs and run 42486667603.",
-      "authorizedSuccess": "BLOCKED — Cloudflare state sync is not configured in the CI environment.",
+      "authorizedSuccess": "BLOCKED — staging infrastructure is provisioned, but the Node dashboard cannot complete an authenticated end-to-end call in CI without DASHBOARD_STATE_API_URL, DASHBOARD_STATE_OPERATOR_TOKEN and Cloudflare Access service-token credentials.",
       "inputValidation": "NOT_TESTED — route-specific success and invalid-input matrix is pending.",
-      "durablePersistence": "BLOCKED — Cloudflare state sync is not configured in the CI environment.",
+      "durablePersistence": "BLOCKED — staging D1 has an initialized revision-1 snapshot and backup; route-level live read/write/backup/restore through the Node dashboard remains unverified.",
       "auditEvidence": "NOT_TESTED.",
       "concurrency": "NOT_TESTED.",
       "restartRecovery": "NOT_TESTED.",
-      "externalOperation": "Cloudflare state service",
+      "externalOperation": "Cloudflare staging Worker is deployed and D1 is initialized; authenticated Node-to-Worker access still requires a Cloudflare Access service token and app-runtime state API credentials.",
       "overallAcceptance": "BLOCKED",
-      "notes": "Cloudflare state sync is not configured in the CI environment; endpoint fails closed.",
+      "notes": "Read-only Cloudflare account verification on 2026-11-08 confirms the staging Worker is deployed with the D1 binding, six application tables exist, dashboard_state revision 1 contains 16 queue items and publishingEnabled=false, and one backup exists. The Access application is email-only and no Access service tokens are configured; an unauthenticated health request is intercepted with login_required. The Node app runtime still lacks a verified service-token-backed DASHBOARD_STATE_API_URL/DASHBOARD_STATE_OPERATOR_TOKEN configuration, so these three Node routes remain BLOCKED until authenticated end-to-end read/write/backup/restore is proven. No token or state snapshot was exposed.",
       "testEvidence": {
         "test": "test/dashboard-api-auth-matrix.test.mjs; test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
         "exactTestedSha": "06c2443d9d1308cdf071063634864b5a7088b8cf",
@@ -165,15 +187,15 @@
       "classification": "Cloudflare durable-state backup restore",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived 45-route authentication matrix on exact SHA 06c2443d9d1308cdf071063634864b5a7088b8cf; see test/dashboard-api-auth-matrix.test.mjs and run 42486667603.",
-      "authorizedSuccess": "BLOCKED — Cloudflare state sync is not configured in the CI environment.",
+      "authorizedSuccess": "BLOCKED — staging infrastructure is provisioned, but the Node dashboard cannot complete an authenticated end-to-end call in CI without DASHBOARD_STATE_API_URL, DASHBOARD_STATE_OPERATOR_TOKEN and Cloudflare Access service-token credentials.",
       "inputValidation": "NOT_TESTED — route-specific success and invalid-input matrix is pending.",
-      "durablePersistence": "BLOCKED — Cloudflare state sync is not configured in the CI environment.",
+      "durablePersistence": "BLOCKED — staging D1 has an initialized revision-1 snapshot and backup; route-level live read/write/backup/restore through the Node dashboard remains unverified.",
       "auditEvidence": "NOT_TESTED.",
       "concurrency": "NOT_TESTED.",
       "restartRecovery": "NOT_TESTED.",
-      "externalOperation": "Cloudflare state service",
+      "externalOperation": "Cloudflare staging Worker is deployed and D1 is initialized; authenticated Node-to-Worker access still requires a Cloudflare Access service token and app-runtime state API credentials.",
       "overallAcceptance": "BLOCKED",
-      "notes": "Cloudflare state sync is not configured in the CI environment; endpoint fails closed.",
+      "notes": "Read-only Cloudflare account verification on 2026-11-08 confirms the staging Worker is deployed with the D1 binding, six application tables exist, dashboard_state revision 1 contains 16 queue items and publishingEnabled=false, and one backup exists. The Access application is email-only and no Access service tokens are configured; an unauthenticated health request is intercepted with login_required. The Node app runtime still lacks a verified service-token-backed DASHBOARD_STATE_API_URL/DASHBOARD_STATE_OPERATOR_TOKEN configuration, so these three Node routes remain BLOCKED until authenticated end-to-end read/write/backup/restore is proven. No token or state snapshot was exposed.",
       "testEvidence": {
         "test": "test/dashboard-api-auth-matrix.test.mjs; test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
         "exactTestedSha": "06c2443d9d1308cdf071063634864b5a7088b8cf",
@@ -1199,6 +1221,7 @@
       "overallBlocked": 8
     },
     "contentQualityRun": 42488848771,
-    "contentQualityResult": "PASS — 721 Node tests, zero failures/skips; includes quarantine-release concurrency and restart receipt reuse."
+    "contentQualityResult": "PASS — 721 Node tests, zero failures/skips; includes quarantine-release concurrency and restart receipt reuse.",
+    "cloudflareStagingInfrastructure": "PASS — deployed staging Worker and initialized D1 state/backup verified via Cloudflare API; Node dashboard-to-Worker service-token integration remains BLOCKED."
   }
 }
