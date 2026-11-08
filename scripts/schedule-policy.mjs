@@ -322,7 +322,12 @@ export function evaluateNextPublication({
       errors.push(`history item ${item.id} is missing a verified actual ISO timestamp with timezone`);
       return null;
     }
-    return { id: String(item.id), status, timestamp: parsedTimestamp, format: item.format ?? item.contentType ?? null };
+    const format = item.format ?? item.contentType ?? null;
+    if (!ROLLING_PUBLICATION_FORMATS.includes(format)) {
+      errors.push(`history item ${item.id} is missing a supported long_form/short format classification`);
+      return null;
+    }
+    return { id: String(item.id), status, timestamp: parsedTimestamp, format };
   }).filter(Boolean);
   const scheduledAttemptStatuses = new Set(["scheduled", "queued_for_publication", "pending_schedule"]);
   const verifiedAttemptStatuses = new Set(["private_upload_verified"]);
@@ -374,6 +379,12 @@ export function evaluateNextPublication({
   const proposedTimestamp = parseStrictTimestamp(proposedAt);
   if (!Number.isFinite(proposedTimestamp)) errors.push("proposedAt must be a valid ISO timestamp with explicit timezone");
   const actualSorted = normalizedHistory.sort((a, b) => a.timestamp - b.timestamp);
+  for (let index = 0; index < actualSorted.length; index++) {
+    const expectedHistoricalFormat = ROLLING_PUBLICATION_FORMATS[index % ROLLING_PUBLICATION_FORMATS.length];
+    if (actualSorted[index].format !== expectedHistoricalFormat) {
+      errors.push(`remote history position ${index + 1} must be ${expectedHistoricalFormat} in the rolling long_form, long_form, short cycle; got ${actualSorted[index].format}`);
+    }
+  }
   const latestActual = actualSorted.at(-1);
   const expectedFormat = ROLLING_PUBLICATION_FORMATS[actualSorted.length % ROLLING_PUBLICATION_FORMATS.length];
   if (format !== expectedFormat) errors.push(`next format must be ${expectedFormat} in the rolling long_form, long_form, short cycle`);
