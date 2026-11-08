@@ -44,6 +44,16 @@ function normalizePolicy(input) {
   return validateRemoteDashboardState(state);
 }
 
+function matchesPendingSnapshot(remoteState, pending) {
+  const remote = normalizePolicy(remoteState);
+  const sent = normalizePolicy(pending.state);
+  if (remote.audit.length !== sent.audit.length + 1) return false;
+  const receipt = remote.audit.at(-1);
+  if (receipt?.action !== "DASHBOARD_STATE_SNAPSHOT_UPDATED" ||
+      receipt.previousRevision !== pending.expectedRevision) return false;
+  return digest({ ...remote, audit: remote.audit.slice(0, -1) }) === pending.stateSha256;
+}
+
 function mergeSeedSnapshot(local, remote, actor) {
   const merged = { ...remote, ...local };
   for (const key of ARRAY_KEYS) {
@@ -109,6 +119,7 @@ export class CloudflareDashboardStateStore {
   async initialize() {
     let local = this.readLocalState();
     let remote;
+    let bootstrapped = false;
     try {
       remote = await this.client.getState();
     } catch (error) {
@@ -116,11 +127,13 @@ export class CloudflareDashboardStateStore {
       const bootstrap = normalizePolicy(local);
       try {
         remote = await this.client.bootstrapState(bootstrap);
+        bootstrapped = true;
       } catch (bootstrapError) {
         if (bootstrapError?.status !== 409) throw bootstrapError;
         remote = await this.client.getState();
       }
     }
+    if (bootstrapped) return this.finalize(remote.revision, remote.state, remote.updatedAt);
 
     const pending = readJsonFile(this.journalFile);
     if (pending) {
@@ -128,7 +141,7 @@ export class CloudflareDashboardStateStore {
           !pending.state || pending.stateSha256 !== digest(normalizePolicy(pending.state))) {
         throw new Error("Cloudflare state sync journal is invalid; preserve it and inspect remote state before continuing");
       }
-      if (remote.revision === pending.expectedRevision + 1 && digest(remote.state) === pending.stateSha256) {
+      if (remote.revision === pending.expectedRevision + 1 && matchesPendingSnapshot(remote.state, pending)) {
         return this.finalize(remote.revision, remote.state, remote.updatedAt);
       }
       if (remote.revision === pending.expectedRevision) {
@@ -163,6 +176,9 @@ export class CloudflareDashboardStateStore {
     if (metadata.version !== 1 || !Number.isSafeInteger(metadata.revision) ||
         metadata.revision < 1 || !/^[a-f0-9]{64}$/.test(metadata.stateSha256 ?? "")) {
       throw new Error("Cloudflare state sync metadata is invalid; preserve both state copies for inspection");
+    }
+    if (remote.revision < metadata.revision) {
+      throw new Error("Cloudflare state revision moved backwards; preserve both state copies for inspection");
     }
     if (localHash === remoteHash) {
       this.writeMetadata(remote.revision, remote.state, remote.updatedAt);

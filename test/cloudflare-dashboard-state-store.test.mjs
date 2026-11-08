@@ -19,17 +19,26 @@ function fixture(t, initialLocal = makeState()) {
   return { dir, stateFile };
 }
 function remoteClient(initial = makeState()) {
-  const db = { revision: 1, state: clone(initial), backups: 0, failOnce: false };
+  const db = { revision: 1, state: clone(initial), backups: 0, failOnce: false, commitThenFailOnce: false };
   const client = {
     async getState() { return { revision: db.revision, state: clone(db.state), updatedAt: "2026-11-08T00:00:00.000Z" }; },
     async createBackup() { db.backups++; return { backupId: "backup", sourceRevision: db.revision, sha256: "a".repeat(64) }; },
-    async bootstrapState(state) { db.revision = 1; db.state = clone(state); return { revision: 1, state: clone(state) }; },
+    async bootstrapState(state) {
+      db.revision = 1;
+      db.state = clone(state);
+      db.state.audit.push({ id: "bootstrap-receipt", action: "DASHBOARD_STATE_BOOTSTRAPPED", actor: "owner" });
+      return { revision: 1, state: clone(db.state) };
+    },
     async updateState(state, expected) {
       if (db.revision !== expected) { const error = new Error("conflict"); error.status = 409; error.code = "REVISION_CONFLICT"; throw error; }
       if (db.failOnce) { db.failOnce = false; throw new Error("simulated connection loss after request"); }
+      const previousRevision = db.revision;
       db.revision++;
       db.state = clone(state);
-      return { revision: db.revision, state: clone(state), updatedAt: "2026-11-08T00:01:00.000Z" };
+      db.state.audit.push({ id: "worker-receipt-" + db.revision, action: "DASHBOARD_STATE_SNAPSHOT_UPDATED", previousRevision });
+      const result = { revision: db.revision, state: clone(db.state), updatedAt: "2026-11-08T00:01:00.000Z" };
+      if (db.commitThenFailOnce) { db.commitThenFailOnce = false; throw new Error("simulated lost response after remote commit"); }
+      return result;
     }
   };
   return { client, db };
@@ -80,7 +89,7 @@ test("persist commits remotely before replacing the local state and records the 
   await store.persist(next);
   assert.equal(db.revision, 2);
   assert.equal(store.revision, 2);
-  assert.deepEqual(JSON.parse(fs.readFileSync(stateFile, "utf8")), next);
+  assert.deepEqual(JSON.parse(fs.readFileSync(stateFile, "utf8")), db.state);
   assert.equal(JSON.parse(fs.readFileSync(stateFile + ".cloudflare-meta.json", "utf8")).revision, 2);
   assert.equal(fs.existsSync(stateFile + ".cloudflare-pending.json"), false);
 });
@@ -110,6 +119,22 @@ test("an uncertain write leaves a journal and startup completes it after observi
   assert.equal(fs.existsSync(stateFile + ".cloudflare-pending.json"), true);
   const recovered = await new CloudflareDashboardStateStore({ client, stateFile }).initialize();
   assert.equal(recovered.queueItems[0].title, "recover me");
+  assert.equal(db.revision, 2);
+  assert.equal(fs.existsSync(stateFile + ".cloudflare-pending.json"), false);
+});
+
+test("startup recognizes a remote commit whose HTTP response was lost", async t => {
+  const initial = makeState();
+  const { stateFile } = fixture(t, initial);
+  const { client, db } = remoteClient(initial);
+  const store = new CloudflareDashboardStateStore({ client, stateFile });
+  await store.initialize();
+  db.commitThenFailOnce = true;
+  const next = makeState({ queueItems: [{ id: "draft-1", title: "committed before disconnect" }] });
+  await assert.rejects(store.persist(next), /lost response/);
+  assert.equal(db.revision, 2);
+  const recovered = await new CloudflareDashboardStateStore({ client, stateFile }).initialize();
+  assert.equal(recovered.queueItems[0].title, "committed before disconnect");
   assert.equal(db.revision, 2);
   assert.equal(fs.existsSync(stateFile + ".cloudflare-pending.json"), false);
 });
