@@ -148,6 +148,37 @@ test("rolling cycle advances long-form, long-form, Short and treats private/unli
   assert.equal(result.expectedFormat, "short");
 });
 
+test("rolling publication gate rejects channel history without a supported format classification", () => {
+  const result = evaluateNextPublication({
+    history: [{
+      id: "remote-unclassified",
+      status: "private",
+      actualPublishedAt: "2026-10-20T15:00:00.000Z"
+    }],
+    historyVerified: true,
+    proposedAt: "2026-10-23T15:00:00.000Z",
+    jobId: "next-job",
+    format: "long_form"
+  });
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some(error => error.includes("missing a supported long_form/short format classification")));
+});
+
+test("rolling publication gate rejects out-of-sequence verified channel history", () => {
+  const result = evaluateNextPublication({
+    history: [
+      { id: "remote-1", status: "private", actualPublishedAt: "2026-10-01T15:00:00.000Z", format: "long_form" },
+      { id: "remote-2", status: "unlisted", actualPublishedAt: "2026-10-04T15:00:00.000Z", format: "short" }
+    ],
+    historyVerified: true,
+    proposedAt: "2026-10-07T15:00:00.000Z",
+    jobId: "next-job",
+    format: "short"
+  });
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some(error => error.includes("remote history position 2 must be long_form")));
+});
+
 test("rolling cycle fails closed for missing/incomplete history and unresolved upload attempts", () => {
   assert.equal(evaluateNextPublication({ history: [], historyVerified: false, proposedAt: "2026-10-01T15:00:00Z", jobId: "job-next", format: "long_form" }).valid, false);
   const unresolved = evaluateNextPublication({
