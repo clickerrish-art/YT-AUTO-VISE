@@ -2,7 +2,7 @@ name: Dashboard Cloudflare state adapter checks
 
 on:
   push:
-    branches: [codex/dashboard-cloudflare-adapter]
+    branches: [codex/dashboard-cloudflare-adapter, codex/cloudflare-adapter-integration-20261108]
     paths:
       - "cloudflare/**"
       - "public/**"
