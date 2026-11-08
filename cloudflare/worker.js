@@ -319,7 +319,7 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
       const asset = await env.ARTIFACTS.get("dashboard/dashboard.html");
       if (!asset?.body) return json({ error: "Dashboard asset is unavailable" }, 503);
       const headers = new Headers({
-        "content-type": asset.httpMetadata?.contentType || "text/html; charset=utf-8",
+        "content-type": "text/html; charset=utf-8",
         "cache-control": "no-store",
         "x-content-type-options": "nosniff"
       });
