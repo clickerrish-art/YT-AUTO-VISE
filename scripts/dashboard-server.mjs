@@ -3462,11 +3462,19 @@ const server = http.createServer(async (req, res) => {
         const index = state.jobs.findIndex(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === body.jobId);
         if (index < 0) return json(res, 404, { error: "Content job not found" });
         const previous = state.jobs[index];
-        const updated = authorizeContentJobRetry(previous, {
-          actor: operatorId,
-          reason: body.reason,
-          overrideRetryLimit: body.overrideRetryLimit === true
-        });
+        let updated;
+        try {
+          updated = authorizeContentJobRetry(previous, {
+            actor: operatorId,
+            reason: body.reason,
+            overrideRetryLimit: body.overrideRetryLimit === true
+          });
+        } catch (error) {
+          return json(res, 409, {
+            error: error instanceof Error ? error.message : "Content job is no longer eligible for retry authorization",
+            publishingEnabled: false
+          });
+        }
         state.jobs[index] = updated;
         const authorization = updated.retryAuthorizations.at(-1);
         state.audit.push({
