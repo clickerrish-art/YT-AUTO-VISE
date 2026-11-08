@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-08T14:12:41.000Z",
+  "generatedAt": "2026-11-08T14:18:01.000Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "c3e81f374d616b19b1fc3a16a2fdd578942041e5",
+  "testedSourceTestSha": "c75864be94e4e6827995b1446c6cf960c83d9228",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -25,8 +25,8 @@
   "counts": {
     "routes": 45,
     "authNegativePass": 45,
-    "overallPass": 36,
-    "overallNotTested": 1,
+    "overallPass": 37,
+    "overallNotTested": 0,
     "overallBlocked": 8
   },
   "evidence": {
@@ -110,7 +110,8 @@
     "latestExactHeadRoutePositiveTests": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423",
     "latestRetryRaceTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488026325",
     "latestQueueDiagnosticsAcceptance": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488289397",
-    "latestRenderRecoveryReconciliation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488557887"
+    "latestRenderRecoveryReconciliation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488557887",
+    "latestQuarantineReleaseIdempotency": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488848771"
   },
   "disclaimer": "This matrix is synchronized to the live dashboard-server.mjs route inventory at exact source/test SHA 06c2443d9d1308cdf071063634864b5a7088b8cf. Authentication-negative PASS does not imply authorized route success. API-001 remains NOT_TESTED overall; routes marked NOT_TESTED or BLOCKED require route-specific positive, validation, persistence, audit, concurrency and restart evidence before acceptance.",
   "routes": [
@@ -889,20 +890,20 @@
       "classification": "operator-reviewed worker quarantine release",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived 45-route authentication matrix on exact SHA 06c2443d9d1308cdf071063634864b5a7088b8cf; see test/dashboard-api-auth-matrix.test.mjs and run 42486667603.",
-      "authorizedSuccess": "PASS — separate quarantine-release credential plus operator authentication issue an Ed25519-signed receipt bound to the exact terminal private upload.",
-      "inputValidation": "PASS — legacy receipt without complete channel-history proof is rejected with HTTP 409.",
-      "durablePersistence": "PASS — issuance audit persists; dashboard does not mutate worker quarantine state.",
-      "auditEvidence": "PASS — one WORKER_QUARANTINE_RELEASE_RECEIPT_ISSUED event binds worker, job, attempt and artifact digest.",
-      "concurrency": "NOT_TESTED — concurrent duplicate receipt issuance is not covered by the dashboard route integration.",
-      "restartRecovery": "NOT_TESTED — endpoint issuance read-back after dashboard restart is not yet covered.",
-      "externalOperation": "worker recovery state",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "Exact-SHA real-server test verifies a signed receipt only for a terminal verified private SonicVhibez upload with complete history reconciliation, records an operator audit event, leaves worker state untouched and rejects a legacy receipt lacking history proof. Overall acceptance remains NOT_TESTED pending route concurrency and restart acceptance.",
+      "authorizedSuccess": "PASS — separate quarantine-release credential plus operator authentication issue one Ed25519-signed receipt bound to the exact terminal private SonicVhibez upload.",
+      "inputValidation": "PASS — missing separate release credential is rejected; legacy receipts without complete channel-history proof return HTTP 409.",
+      "durablePersistence": "PASS — the signed receipt is stored with the exact job and survives a fresh dashboard process.",
+      "auditEvidence": "PASS — exactly one operator-attributed WORKER_QUARANTINE_RELEASE_RECEIPT_ISSUED event binds worker, job, attempt, artifact digest and nonce.",
+      "concurrency": "PASS — two concurrent duplicate requests return the same signed receipt; exactly one issuance audit event is committed.",
+      "restartRecovery": "PASS — after dashboard restart, the same unexpired signed receipt is reused; no second nonce or audit event is created.",
+      "externalOperation": "none — issues a short-lived signed receipt only; worker consumes it separately, and dashboard does not mutate worker quarantine state.",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA real-server integration verifies separate release credential, operator auth, full remote private-upload and channel-history binding, signed receipt integrity, single audit event, byte-exact receipt reuse under concurrent duplicates and after restart. Legacy receipts without complete history are rejected. Worker quarantine state remains untouched and publishing remains disabled.",
       "testEvidence": {
-        "test": "test/worker-quarantine-release.test.mjs",
-        "exactTestedSha": "5a4d7ca1299c58732c64d38886622b1fe8d4183c",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423",
-        "scenario": "Real dashboard endpoint issues an Ed25519-signed release receipt for an exact verified private upload, audits the issuance, leaves worker quarantine state untouched and rejects incomplete channel-history evidence."
+        "test": "test/worker-quarantine-release.test.mjs; test/dashboard-server.test.mjs",
+        "exactTestedSha": "c75864be94e4e6827995b1446c6cf960c83d9228",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488848771",
+        "scenario": "Exact-SHA content-quality CI passed 721 Node tests with zero failures/skips; route tests verify signed receipt binding, one audit event, duplicate request idempotency, restart reuse and fail-closed handling of incomplete channel-history proof."
       }
     },
     {
@@ -1183,7 +1184,7 @@
       "browserE2EWorkflowRun": 42296617339,
       "status": "PASS for fail-closed concurrency/restart regression; successful render remains blocked."
     },
-    "exactSourceTestSha": "c3e81f374d616b19b1fc3a16a2fdd578942041e5",
+    "exactSourceTestSha": "c75864be94e4e6827995b1446c6cf960c83d9228",
     "authMatrixRun": 42486667603,
     "authMatrixResult": "PASS — source-derived 45 API routes; missing and invalid operator credentials rejected; full route success acceptance is not implied.",
     "automationRun": 42487353423,
@@ -1193,11 +1194,11 @@
     "apiMatrixCounts": {
       "routes": 45,
       "authNegativePass": 45,
-      "overallPass": 36,
-      "overallNotTested": 1,
+      "overallPass": 37,
+      "overallNotTested": 0,
       "overallBlocked": 8
     },
-    "contentQualityRun": 42488557887,
-    "contentQualityResult": "PASS — 720 Node tests, zero failures/skips; includes idempotent render-recovery reconciliation acceptance."
+    "contentQualityRun": 42488848771,
+    "contentQualityResult": "PASS — 721 Node tests, zero failures/skips; includes quarantine-release concurrency and restart receipt reuse."
   }
 }
