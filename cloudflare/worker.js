@@ -241,6 +241,36 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
   const url = new URL(request.url);
   const method = request.method.toUpperCase();
 
+  if ((url.pathname === "/" || url.pathname === "/dashboard") && method === "GET") {
+    if (!env.ARTIFACTS || typeof env.ARTIFACTS.get !== "function") {
+      return json({ error: "Private dashboard hosting is unavailable", code: "DASHBOARD_ASSET_STORAGE_UNAVAILABLE" }, 503, {
+        "cache-control": "no-store"
+      });
+    }
+    let dashboard;
+    try {
+      dashboard = await env.ARTIFACTS.get("dashboard/dashboard.html");
+    } catch {
+      return json({ error: "Private dashboard asset could not be read", code: "DASHBOARD_ASSET_READ_FAILED" }, 503, {
+        "cache-control": "no-store"
+      });
+    }
+    if (!dashboard || !dashboard.body) {
+      return json({ error: "Private dashboard asset is not installed", code: "DASHBOARD_ASSET_NOT_FOUND" }, 503, {
+        "cache-control": "no-store"
+      });
+    }
+    return new Response(dashboard.body, {
+      status: 200,
+      headers: {
+        "content-type": "text/html; charset=utf-8",
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "referrer-policy": "no-referrer"
+      }
+    });
+  }
+
   if (url.pathname === "/healthz" && method === "GET") {
     return json({ status: "ok", service: "sonicvhibez-durable-state", publishingEnabled: false });
   }
