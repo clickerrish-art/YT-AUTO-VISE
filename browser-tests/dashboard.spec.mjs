@@ -105,9 +105,9 @@ test("operator dashboard loads the authoritative schedule and persists a draft t
   await expect(page.locator("#queueDiagnosticsStatus")).toContainText("Africa/Johannesburg");
   await expect(page.locator("#queueDiagnosticsStatus")).toContainText("Read-only");
   await expect(page.locator("#queueDiagnosticsStatus")).toContainText("publishing disabled");
-  await expect(page.locator("#queueDiagnosticsBlockers")).toContainText("APPROVED_AUTHORING_MISSING");
-  await expect(page.locator("#queueDiagnosticsBlockers")).toContainText("APPROVED_RENDER_PLAN_MISSING");
-  await expect(page.locator("#queueDiagnosticsBlockers")).toContainText("SLOT_IN_FUTURE");
+  await expect(page.locator("#queueDiagnosticsBlockers")).toContainText("APPROVED AUTHORING MISSING");
+  await expect(page.locator("#queueDiagnosticsBlockers")).toContainText("APPROVED RENDER PLAN MISSING");
+  await expect(page.locator("#queueDiagnosticsBlockers")).toContainText("SLOT IN FUTURE");
   await expect(page.locator("#queueDiagnosticsItems")).toContainText("HELD");
 
   const afterDiagnosticsRefresh = await request.get("/api/state", { headers: { "x-operator-token": operatorToken } });
