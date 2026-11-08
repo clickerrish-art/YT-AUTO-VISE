@@ -88,10 +88,14 @@ test("worker dispatches listed jobs sequentially and records fail-closed conflic
   assert.equal(result.queuedWithoutApprovedAuthoring, 1);
   assert.equal(result.queuedWithoutApprovedRenderPlan, 2);
   assert.equal(result.deferredByBackoff, 0);
-  assert.deepEqual(result.results, [
-    { jobId: "job-one", status: "SUCCEEDED", httpStatus: 200, state: "GENERATED" },
-    { jobId: "job-two", status: "NOT_DISPATCHED", httpStatus: 409, state: null, responseError: "renderer prerequisites are not satisfied", retryAfterMs: 30_000 }
-  ]);
+  assert.equal(result.results.length, 2);
+  assert.deepEqual(result.results[0], { jobId: "job-one", status: "SUCCEEDED", httpStatus: 200, state: "GENERATED" });
+  assert.deepEqual({ ...result.results[1], retryAfterMs: undefined }, {
+    jobId: "job-two", status: "NOT_DISPATCHED", httpStatus: 409, state: null,
+    responseError: "renderer prerequisites are not satisfied", retryAfterMs: undefined
+  });
+  assert.ok(result.results[1].retryAfterMs <= 30_000 && result.results[1].retryAfterMs > 29_000,
+    "the retry window must remain approximately the configured 30 seconds without assuming millisecond-exact wall-clock timing");
   assert.equal(result.publishingEnabled, false);
   assert.deepEqual(requests.map(item => item.method + " " + item.url.split("?")[0]), [
     "GET /api/jobs/dispatchable",
