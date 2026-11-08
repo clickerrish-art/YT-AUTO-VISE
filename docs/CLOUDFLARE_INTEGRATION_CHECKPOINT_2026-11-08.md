@@ -74,6 +74,11 @@ Read-only row counts after deployment:
 
 The existing dashboard state and backup were preserved. No runner session, artifact upload, or production job was created.
 
+Additional integrity check:
+- `dashboard_state` revision: 1; JSON valid; 10,050 bytes.
+- Backup ID: `4f7b94b0-3ba9-473c-8759-26a3f40f623f`; JSON valid; 10,050 bytes.
+- Stored backup SHA-256 matches a fresh SHA-256 calculation: `a388118968b1e6ad37e300fc20a3858065e792e3ffeb8f28d443e0c1b9766983`.
+
 ## Verification limits and remaining staging work
 
 - The active Worker version, 100% deployment, bindings, preserved operator secrets, R2 object, private-bucket settings, and D1 row counts were verified through Cloudflare's account API.
