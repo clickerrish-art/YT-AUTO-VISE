@@ -5,7 +5,7 @@ import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { createContentJob } from "../scripts/content-job-lifecycle.mjs";
+import { createContentJob, deadLetterExhaustedJob } from "../scripts/content-job-lifecycle.mjs";
 import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
 
 const root = process.cwd();
@@ -110,12 +110,43 @@ test("operator retry API authorizes one reviewed failed job, audits once and per
     actor: "test-worker",
     reason: "Test-only render failure"
   });
+
+  const exhausted = createContentJob({
+    idempotencyKey: "job-retry-api:dead-letter-slot",
+    title: "Dead-letter retry authorization integration fixture",
+    topic: "A test-only exhausted job for one-attempt override acceptance",
+    contentType: "short",
+    scheduledDay: "Saturday",
+    scheduledDate: futureScheduleDate("Saturday", 2),
+    inputReferences: ["content/short-001-wildlife-video-storytelling.md"]
+  }, now);
+  exhausted.state = "FAILED";
+  exhausted.startedAt = now;
+  exhausted.completedAt = now;
+  exhausted.updatedAt = now;
+  exhausted.attemptCount = exhausted.retryPolicy.maxAttempts;
+  exhausted.errorDetails = {
+    code: "TEST_RENDER_FAILURE_EXHAUSTED",
+    message: "A test-only exhausted render failure.",
+    retryable: false,
+    retryableAfterOperatorReview: true,
+    retryLimitReached: true
+  };
+  exhausted.transitionHistory.push({
+    from: "QUEUED",
+    to: "FAILED",
+    at: now,
+    actor: "test-worker",
+    reason: "Test-only retry limit exhausted"
+  });
+  const deadLetterJob = deadLetterExhaustedJob(exhausted, Date.parse(now));
+
   fs.writeFileSync(statePath, JSON.stringify({
     version: 1,
     queueItems: [],
     campaigns: [],
     audit: [],
-    jobs: [job],
+    jobs: [job, deadLetterJob],
     uploads: [],
     facebookDrafts: [],
     facebookPosts: [],
@@ -172,14 +203,35 @@ test("operator retry API authorizes one reviewed failed job, audits once and per
   });
   assert.equal(Number.isFinite(Date.parse(authorized.body.job.retryAuthorizations[0].at)), true);
 
+  const deadLetterAuthorization = await post({
+    jobId: deadLetterJob.id,
+    reason: "Reviewed exhausted failure evidence; authorize exactly one additional attempt.",
+    overrideRetryLimit: true
+  });
+  assert.equal(deadLetterAuthorization.status, 200, JSON.stringify(deadLetterAuthorization.body));
+  assert.equal(deadLetterAuthorization.body.retryAuthorized, true);
+  assert.equal(deadLetterAuthorization.body.job.state, "QUEUED");
+  assert.equal(deadLetterAuthorization.body.job.attemptCount, 2);
+  assert.equal(deadLetterAuthorization.body.job.retryPolicy.maxAttempts, 3,
+    "an exhausted dead-letter override must add exactly one authorized attempt");
+  assert.equal(deadLetterAuthorization.body.job.retryAuthorizations.at(-1).overrideRetryLimit, true);
+
   const persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
   assert.equal(persisted.jobs.find(item => item.id === job.id).state, "QUEUED");
+  assert.equal(persisted.jobs.find(item => item.id === deadLetterJob.id).state, "QUEUED");
+  assert.equal(persisted.jobs.find(item => item.id === deadLetterJob.id).retryPolicy.maxAttempts, 3);
   assert.equal(persisted.audit.filter(event =>
     event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === job.id
   ).length, 1);
   assert.equal(persisted.audit.find(event =>
     event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === job.id
   ).actor, operatorId);
+  assert.equal(persisted.audit.filter(event =>
+    event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === deadLetterJob.id
+  ).length, 1);
+  assert.equal(persisted.audit.filter(event =>
+    event.action === "CONTENT_JOB_DEAD_LETTER_RECOVERED" && event.jobId === deadLetterJob.id
+  ).length, 1);
 
   await stopDashboard(instance);
   instance = launchDashboard(port, stateDir);
@@ -192,6 +244,13 @@ test("operator retry API authorizes one reviewed failed job, audits once and per
   assert.equal(recoveredJob.retryAuthorizations.length, 1);
   assert.equal(recovered.audit.filter(event =>
     event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === job.id
+  ).length, 1);
+  const recoveredDeadLetter = recovered.jobs.find(item => item.id === deadLetterJob.id);
+  assert.equal(recoveredDeadLetter.state, "QUEUED");
+  assert.equal(recoveredDeadLetter.retryPolicy.maxAttempts, 3);
+  assert.equal(recoveredDeadLetter.retryAuthorizations.at(-1).overrideRetryLimit, true);
+  assert.equal(recovered.audit.filter(event =>
+    event.action === "CONTENT_JOB_DEAD_LETTER_RECOVERED" && event.jobId === deadLetterJob.id
   ).length, 1);
   assert.equal(recovered.publishingEnabled, false);
 });
