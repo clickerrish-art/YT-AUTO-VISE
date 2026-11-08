@@ -534,7 +534,7 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
       try { input = await readJson(request); } catch (error) { return json({ error: error.message || "Invalid JSON body" }, 400); }
       if (typeof input?.artifactId !== "string" || !/^[a-f0-9-]{36}$/.test(input.artifactId)) return json({ error: "artifactId is invalid" }, 400);
       const artifact = await env.STATE_DB.prepare(
-        "SELECT artifact_id, upload_id, object_key, size_bytes, expected_parts, status, sha256 FROM runner_artifacts WHERE artifact_id = ?"
+        "SELECT artifact_id, upload_id, object_key, size_bytes, expected_parts, status, sha256, job_id, source_path, artifact_kind FROM runner_artifacts WHERE artifact_id = ?"
       ).bind(input.artifactId).first();
       if (!artifact) return json({ error: "Artifact upload was not found" }, 404);
       if (artifact.status === "READY") return json({ artifactId: artifact.artifact_id, objectKey: artifact.object_key, sha256: artifact.sha256, sizeBytes: artifact.size_bytes, status: "READY", idempotent: true });
