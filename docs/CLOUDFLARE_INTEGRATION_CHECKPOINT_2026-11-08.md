@@ -76,3 +76,14 @@ Exact-commit verification at `ee5e0755ca8d7fd46682ac889e5be8a85d1e7ee9`:
 - Push-triggered adapter workflow #252 also completed successfully.
 
 The workflow-only changes do not alter the tested application code at `e0893cb4819278f9996db52ee139381b387eb9d4`. The staging deployment and live D1/R2 smoke remain unverified until the Cloudflare credential blocker above is resolved.
+
+## Additional dashboard retry journey — 8 November 2026
+
+A browser journey was added for the operator retry form. It seeds a synthetic failed production job, verifies the operator must provide a review reason, confirms exactly one retry authorization is recorded, and asserts that no production render, upload, or publication request is issued by the UI.
+
+Exact-commit results at `a2f651ff4111f2559848109c13b35a6e997012ec`:
+- Chromium dashboard journeys: **28 passed**.
+- Cloudflare adapter and dashboard contract tests: **136 passed, 0 failed, 0 skipped**.
+- Workflow/module syntax checks: PASS.
+
+The full repository Node suite remains verified at `ee5e0755ca8d7fd46682ac889e5be8a85d1e7ee9`: **778 passed, 0 failed, 0 skipped**. The later change only adds a browser test; it does not alter application code or the Node test set.
