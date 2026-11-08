@@ -30,7 +30,7 @@ class MemoryD1 {
   async run(sql,v){
     if(sql.startsWith("INSERT OR IGNORE INTO dashboard_state")){
       if(this.row)return {meta:{changes:0}};
-      const [singleton_id,revision,state_json,updated_at]=v;
+      const [singleton_id,state_json,updated_at]=v; const revision=1;
       this.row={singleton_id,revision,state_json,updated_at};return {meta:{changes:1}};
     }
     if(sql.includes("INSERT INTO dashboard_backups")&&sql.includes("SELECT ?, revision, state_json")){
