@@ -1748,18 +1748,23 @@ test("Cloudflare backup controls create a checkpoint and require revision-bound 
   await expect(page.locator("#stateBackupList")).toContainText("Revision 5");
   expect(backupRequests).toEqual([{ method: "POST", body: {} }]);
 
-  const cancelDialogPromise = page.waitForEvent("dialog");
+  let cancelDialogMessage = "";
+  page.once("dialog", async dialog => {
+    expect(dialog.type()).toBe("confirm");
+    cancelDialogMessage = dialog.message();
+    await dialog.dismiss();
+  });
   await page.locator("#restoreStateBackup-backup-1").click();
-  const cancelDialog = await cancelDialogPromise;
-  expect(cancelDialog.type()).toBe("confirm");
-  await cancelDialog.dismiss();
+  expect(cancelDialogMessage).toContain("backup-1");
   expect(restoreRequests).toHaveLength(0);
 
-  const confirmDialogPromise = page.waitForEvent("dialog");
+  let confirmDialogMessage = "";
+  page.once("dialog", async dialog => {
+    confirmDialogMessage = dialog.message();
+    await dialog.accept();
+  });
   await page.locator("#restoreStateBackup-backup-1").click();
-  const confirmDialog = await confirmDialogPromise;
-  expect(confirmDialog.message()).toContain("backup-1");
-  await confirmDialog.accept();
+  expect(confirmDialogMessage).toContain("backup-1");
 
   await expect.poll(() => restoreRequests.length).toBe(1);
   expect(restoreRequests[0]).toEqual({
