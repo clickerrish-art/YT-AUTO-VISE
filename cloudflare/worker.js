@@ -95,7 +95,7 @@ async function verifyRepositoryRunnerToken(token, { fetchImpl = fetch, nowMs = D
         claims.ref !== RUNNER_OIDC_REF ||
         claims.workflow_ref !== RUNNER_OIDC_WORKFLOW ||
         claims.sub !== "repo:" + RUNNER_OIDC_REPOSITORY + ":ref:" + RUNNER_OIDC_REF ||
-        !["workflow_dispatch", "push"].includes(claims.event_name) ||
+        claims.event_name !== "workflow_dispatch" ||
         !Number.isFinite(claims.exp) || claims.exp * 1000 <= nowMs ||
         !Number.isFinite(claims.iat) || claims.iat * 1000 > nowMs + 60_000 ||
         nowMs - claims.iat * 1000 > 10 * 60_000 ||
