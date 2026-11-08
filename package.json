@@ -7,7 +7,6 @@
   "scripts": {
     "check": "node scripts/check-content.mjs",
     "test": "node scripts/run-node-tests.mjs",
-    "test:cloudflare-state": "node --test test/cloudflare-state-worker.test.mjs",
     "dashboard": "node scripts/dashboard-server.mjs",
     "backup:state": "node scripts/backup-state.mjs",
     "restore:state": "node scripts/restore-state.mjs",

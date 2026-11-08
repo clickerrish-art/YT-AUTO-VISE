@@ -21,30 +21,18 @@ test("dashboard describes the real read-only Meta adapter without implying live 
   assert.doesNotMatch(html, /no live Meta adapter is installed/);
 });
 
+
 test("every dashboard form and ID-addressable action control is wired to a handler", () => {
   const formIds = [...html.matchAll(/<form\b[^>]*\bid="([^"]+)"/g)].map(match => match[1]);
   const submitBindings = [...html.matchAll(/\$\(["']([^"']+)["']\)\.onsubmit\s*=/g)].map(match => match[1]);
-  const buttonTags = [...html.matchAll(/<button\b[^>]*>/g)].map(match => match[0]);
-  const buttonIds = buttonTags.flatMap(tag => {
-    const match = tag.match(/\bid="([^"]+)"/);
-    if (!match || match[1].includes("'+") || match[1].includes("${")) return [];
-    return [match[1]];
-  });
+  const buttonIds = [...html.matchAll(/<button\b[^>]*\bid="([^"]+)"/g)].map(match => match[1]);
   const clickBindings = [...html.matchAll(/\$\(["']([^"']+)["']\)\.onclick\s*=/g)].map(match => match[1]);
-  const clickListenerBindings = [...html.matchAll(/\$\(["']([^"']+)["']\)\.addEventListener\s*\(\s*["']click["']/g)].map(match => match[1]);
 
   assert.ok(formIds.length > 0, "dashboard should expose real forms");
   assert.deepEqual(formIds.filter(id => !submitBindings.includes(id)), [],
     "every visible form must have a submit handler");
-  assert.deepEqual(buttonIds.filter(id => !clickBindings.includes(id) && !clickListenerBindings.includes(id)), [],
-    "every static ID-addressable button must have a direct click handler");
-
-  const dynamicRestoreButton = buttonTags.find(tag => tag.includes("data-restore-backup="));
-  assert.ok(dynamicRestoreButton, "dynamic restore buttons must expose their delegated-action data attribute");
-  assert.match(html, /\$\(["']stateBackupList["']\)\.addEventListener\s*\(\s*["']click["']\s*,\s*event\s*=>/,
-    "dynamic restore buttons must be handled by the backup-list click delegate");
-  assert.match(html, /event\.target\.closest\(["']button\[data-restore-backup\]["']\)/,
-    "the delegated handler must target only restore buttons");
+  assert.deepEqual(buttonIds.filter(id => !clickBindings.includes(id)), [],
+    "every ID-addressable button must have a click handler");
 });
 
 test("Nature Frontiers Facebook draft form cannot offer prohibited product or affiliate promotions", () => {

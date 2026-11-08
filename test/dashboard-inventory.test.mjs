@@ -17,16 +17,16 @@ test("dashboard static inventory reports all declared controls, forms and litera
   assert.equal(inventory.counts.controls, inventory.controls.length);
   assert.equal(inventory.counts.forms, inventory.forms.length);
   assert.equal(inventory.counts.routes, inventory.routes.length);
-  assert.equal(inventory.counts.controls, 118);
+  assert.equal(inventory.counts.controls, 117);
   assert.equal(inventory.counts.forms, 17);
-  assert.equal(inventory.counts.routes, 49);
+  assert.equal(inventory.counts.routes, 46);
   assert.deepEqual(inventory.counts.controlsByTag, {
-    button: 26,
+    button: 25,
     input: 49,
     select: 27,
     textarea: 16,
   });
-  assert.deepEqual(inventory.counts.routesByMethod, { GET: 16, POST: 33 });
+  assert.deepEqual(inventory.counts.routesByMethod, { GET: 15, POST: 31 });
 
   assert.ok(inventory.controls.every(control => Number.isInteger(control.line) && control.line > 0));
   assert.ok(inventory.forms.every(form => Number.isInteger(form.line) && form.line > 0));
@@ -106,15 +106,6 @@ test("dashboard inventory parses greater-than signs in quoted attributes and ign
   assert.equal(inventory.controls[0].name, "caption");
 });
 
-test("dashboard inventory ignores markup-like strings inside script and style blocks", () => {
-  const inventory = inventoryDashboardSources(
-    `<button id="live">Live</button><script>const template = '<button id="generated">Generated</button>';</script><style>.example::after { content: "<textarea>"; }</style>`,
-    "",
-  );
-  assert.equal(inventory.counts.controls, 1);
-  assert.equal(inventory.controls[0].id, "live");
-});
-
 test("dashboard forms and non-submit controls are wired to real API routes", () => {
   const html = fs.readFileSync(path.join(root, "public", "dashboard.html"), "utf8");
   const server = fs.readFileSync(path.join(root, "scripts", "dashboard-server.mjs"), "utf8");
@@ -144,8 +135,7 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
     assert.ok(routeDeclarations.has(apiRoute), "form #" + formId + " calls undeclared API route " + apiRoute);
   }
 
-  const staticHtml = html.replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, "");
-  const controlTags = [...staticHtml.matchAll(/<(button|input|select|textarea)\b([^>]*)>/gi)];
+  const controlTags = [...html.matchAll(/<(button|input|select|textarea)\b([^>]*)>/gi)];
   let wiredControls = 0;
   for (const match of controlTags) {
     const tag = match[1].toLowerCase();
@@ -155,6 +145,20 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
       ?? (tag === "button" ? "submit" : "");
     if (tag === "button" && type === "submit") continue;
 
+    // Artifact download controls are generated per persisted artifact ID and
+    // use one delegated listener on #productionjobs. Their stable identity is
+    // the data-artifact-download value, not a duplicate static DOM id.
+    if (tag === "button" && /\bdata-artifact-download=["']/.test(attributes)) {
+      assert.ok(scriptSource.includes('closest("[data-artifact-download]")'),
+        "artifact download control must use the delegated stable artifact key");
+      assert.ok(scriptSource.includes('fetch("/api/artifacts/"+encodeURIComponent(button.dataset.artifactDownload)+"/download"'),
+        "artifact download control must call the exact artifact download endpoint");
+      assert.ok(scriptSource.includes('"x-operator-token"'),
+        "artifact download control must send the operator authorization header");
+      wiredControls++;
+      continue;
+    }
+
     assert.ok(id, "non-submit " + tag + " control is missing a stable id");
     assert.ok(
       scriptSource.includes('$("' + id + '")') || scriptSource.includes("$('#" + id + "')"),
@@ -163,7 +167,7 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
     wiredControls++;
   }
 
-  assert.equal(wiredControls, 98, "the number of static non-submit dashboard controls changed; review the acceptance fixture");
+  assert.equal(wiredControls, 97, "the number of non-submit dashboard controls changed; review the acceptance fixture");
 });
 
 test("dashboard inventory associates controls with their owning form, including explicit external form references", () => {

@@ -121,30 +121,9 @@ export function validatePromotionalShortPlan(plan, products) {
         errors.push(`${label}: keywordPhrases must include the primary phrase and at least two related phrases`);
       }
       const evidence = item?.keywordEvidence;
-      const evidenceTimestampValid = isValidZonedIsoTimestamp(evidence?.researchedAt);
-      if (!evidenceTimestampValid) {
-        errors.push(`${label}: keyword evidence needs a valid research timestamp`);
-      }
-      const evidenceNote = typeof evidence?.note === "string" ? evidence.note.trim() : "";
-      if (evidence?.provider === "vidIQ") {
-        if (evidence.type !== "estimated_monthly_searches" || !evidenceNote || !/estimate|estimated|provider/i.test(evidenceNote)) {
-          errors.push(`${label}: measured keyword evidence must identify vidIQ and clearly label search-volume figures as estimates`);
-        }
-      } else if (evidence?.provider === "web_search") {
-        const sourcesValid = Array.isArray(evidence.sources) && evidence.sources.length > 0
-          && evidence.sources.every(source => typeof source?.title === "string" && source.title.trim()
-            && typeof source?.url === "string" && /^https:\/\//i.test(source.url)
-            && typeof source?.whyRelevant === "string" && source.whyRelevant.trim());
-        const hasUnmeasuredVolume = Array.isArray(item?.keywordPhrases) && item.keywordPhrases.some(row =>
-          ["estimatedMonthlySearches", "volume", "volumeScore", "competition", "growthPct"].some(key => Object.hasOwn(row ?? {}, key))
-        );
-        if (evidence.type !== "qualitative_search_intent" || !evidenceNote
-            || !/qualitative|no measured volume|volume unavailable/i.test(evidenceNote)
-            || !sourcesValid || hasUnmeasuredVolume) {
-          errors.push(`${label}: qualitative keyword evidence needs a clear no-volume caveat, dated HTTPS sources and no invented volume or competition metrics`);
-        }
-      } else {
-        errors.push(`${label}: keyword evidence must use measured vidIQ estimates or qualitative web-search intent evidence`);
+      if (evidence?.provider !== "vidIQ" || evidence.type !== "estimated_monthly_searches"
+          || !isValidZonedIsoTimestamp(evidence.researchedAt) || typeof evidence.note !== "string" || !evidence.note.trim()) {
+        errors.push(`${label}: current keyword evidence must identify vidIQ, a valid research timestamp and the estimate caveat`);
       }
       if (!Array.isArray(item?.hashtags) || item.hashtags.length < 3
           || item.hashtags.some(tag => typeof tag !== "string" || !/^#[A-Za-z0-9]+$/.test(tag))) {

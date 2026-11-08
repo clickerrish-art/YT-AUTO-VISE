@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
+import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -9,7 +10,18 @@ const root = process.cwd();
 const campaignId = "selar-wildlife-vault";
 const approvedDestination = "https://selar.com/0u19v8u99l";
 
-function launchDashboard({ stateDir, token }) {
+async function reservePort() {
+  const probe = createServer();
+  await new Promise((resolve, reject) => {
+    probe.once("error", reject);
+    probe.listen(0, "127.0.0.1", resolve);
+  });
+  const port = probe.address().port;
+  await new Promise(resolve => probe.close(resolve));
+  return port;
+}
+
+function launchDashboard({ port, stateDir, token }) {
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
     cwd: root,
     env: {
@@ -18,7 +30,7 @@ function launchDashboard({ stateDir, token }) {
       DASHBOARD_OPERATOR_ID: "campaign-api-acceptance@example.test",
       DASHBOARD_STATE_DIR: stateDir,
       UPLOAD_LOG_DIR: stateDir,
-      PORT: "0",
+      PORT: String(port),
       DASHBOARD_HOST: "127.0.0.1",
       META_PAGE_ACCESS_TOKEN: "",
       META_USER_ACCESS_TOKEN: "",
@@ -37,29 +49,16 @@ function launchDashboard({ stateDir, token }) {
   return { child, get logs() { return logs; } };
 }
 
-async function waitForReady(instance) {
+async function waitForReady(base, child, readLogs) {
   for (let attempt = 0; attempt < 100; attempt++) {
-    if (instance.child.exitCode !== null) throw new Error("Dashboard exited before readiness: " + instance.logs);
-    let started;
-    for (const line of instance.logs.split(/\r?\n/)) {
-      try {
-        const event = JSON.parse(line);
-        if (event.event === "dashboard_started" && Number.isInteger(event.port) && event.port > 0) {
-          started = event;
-          break;
-        }
-      } catch {}
-    }
-    if (started) {
-      const base = "http://127.0.0.1:" + started.port;
-      try {
-        const response = await fetch(base + "/healthz");
-        if (response.ok) return base;
-      } catch {}
-    }
+    if (child.exitCode !== null) throw new Error("Dashboard exited before readiness: " + readLogs());
+    try {
+      const response = await fetch(base + "/healthz");
+      if (response.ok) return;
+    } catch {}
     await new Promise(resolve => setTimeout(resolve, 100));
   }
-  throw new Error("Dashboard did not become ready: " + instance.logs);
+  throw new Error("Dashboard did not become ready: " + readLogs());
 }
 
 async function stopChild(child, signal = "SIGTERM") {
@@ -76,10 +75,11 @@ async function stopChild(child, signal = "SIGTERM") {
 
 test("campaign management API previews and deactivates the approved campaign with durable audit and restart recovery", async t => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-campaign-api-"));
+  const port = await reservePort();
   const token = "campaign-api-acceptance-" + "x".repeat(40);
-  let base;
+  const base = "http://127.0.0.1:" + port;
   const statePath = path.join(stateDir, "dashboard-state.json");
-  let instance = launchDashboard({ stateDir, token });
+  let instance = launchDashboard({ port, stateDir, token });
 
   t.after(async () => {
     if (instance?.child && instance.child.exitCode === null) {
@@ -88,7 +88,7 @@ test("campaign management API previews and deactivates the approved campaign wit
     fs.rmSync(stateDir, { recursive: true, force: true });
   });
 
-  base = await waitForReady(instance);
+  await waitForReady(base, instance.child, () => instance.logs);
   const headers = { "content-type": "application/json", "x-operator-token": token };
   const disclosureText = "Promotional link: review current details and terms on the seller page.";
 
@@ -175,8 +175,8 @@ test("campaign management API previews and deactivates the approved campaign wit
   assert.equal(persisted.audit.filter(event => event.campaignId === campaignId).every(event => event.actor === "campaign-api-acceptance@example.test"), true);
 
   await stopChild(instance.child, "SIGKILL");
-  instance = launchDashboard({ stateDir, token });
-  base = await waitForReady(instance);
+  instance = launchDashboard({ port, stateDir, token });
+  await waitForReady(base, instance.child, () => instance.logs);
   const stateResponse = await fetch(base + "/api/state", { headers: { "x-operator-token": token } });
   const stateText = await stateResponse.text();
   assert.equal(stateResponse.status, 200, stateText);

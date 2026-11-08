@@ -1,0 +1,139 @@
+name: SonicVhibez repository production runner
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/dashboard-cloudflare-adapter]
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: sonicvhibez-repository-runner
+  cancel-in-progress: false
+
+jobs:
+  repository-runner:
+    if: (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/codex/dashboard-cloudflare-adapter') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-production]'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      DASHBOARD_API_URL: https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev
+      DASHBOARD_WORKER_ID: sonicvhibez-render-worker
+      DASHBOARD_STATE_DIR: ${{ github.workspace }}/state
+      WORKER_STATE_DIR: ${{ github.workspace }}/run-logs
+      WORKER_DISPATCH_LIMIT: "1"
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install repository dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Verify runner prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${ACTIONS_ID_TOKEN_REQUEST_URL:-}" || -z "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}" ]]; then
+            echo "::error::GitHub Actions OIDC is unavailable. The workflow requires id-token: write permission."
+            exit 2
+          fi
+          ffmpeg -version | head -n 1
+          ffprobe -version | head -n 1
+          node --check scripts/cloudflare-runner-bridge.mjs
+          node --check scripts/worker-runner.mjs
+      - name: Pull durable dashboard snapshot and worker retry state
+        id: sync_in
+        run: |
+          node scripts/cloudflare-runner-bridge.mjs pull-snapshot
+          node scripts/cloudflare-runner-bridge.mjs pull-backoff
+      - name: Verify private R2 storage and free-tier headroom
+        id: storage_preflight
+        run: node scripts/cloudflare-runner-bridge.mjs verify-storage
+      - name: Acquire durable single-runner session
+        id: session
+        run: node scripts/cloudflare-runner-bridge.mjs start-session
+      - name: Start isolated loopback dashboard execution service
+        id: server
+        shell: bash
+        run: |
+          set -euo pipefail
+          OPERATOR_TOKEN="$(openssl rand -hex 32)"
+          LOCAL_WORKER_TOKEN="$(openssl rand -hex 32)"
+          echo "::add-mask::${OPERATOR_TOKEN}"
+          echo "::add-mask::${LOCAL_WORKER_TOKEN}"
+          echo "DASHBOARD_OPERATOR_TOKEN=${OPERATOR_TOKEN}" >> "$GITHUB_ENV"
+          echo "DASHBOARD_WORKER_TOKEN=${LOCAL_WORKER_TOKEN}" >> "$GITHUB_ENV"
+          DASHBOARD_OPERATOR_TOKEN="${OPERATOR_TOKEN}" \
+          DASHBOARD_OPERATOR_ID="repository-runner" \
+          DASHBOARD_WORKER_TOKEN="${LOCAL_WORKER_TOKEN}" \
+          DASHBOARD_STATE_DIR="${DASHBOARD_STATE_DIR}" \
+          PORT=8787 node scripts/dashboard-server.mjs > "$RUNNER_TEMP/dashboard-server.log" 2>&1 &
+          echo "$!" > "$RUNNER_TEMP/dashboard-server.pid"
+          for attempt in $(seq 1 30); do
+            if curl --silent --show-error --fail \
+              -H "x-operator-token: ${OPERATOR_TOKEN}" \
+              http://127.0.0.1:8787/api/state > /dev/null; then
+              echo "Loopback repository execution service is ready."
+              exit 0
+            fi
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/dashboard-server.log"
+          exit 1
+      - name: Dispatch one approved due production job
+        id: run_cycle
+        continue-on-error: true
+        env:
+          DASHBOARD_API_URL: http://127.0.0.1:8787
+        run: node scripts/worker-runner.mjs --once
+      - name: Stop repository execution service
+        if: always() && steps.server.outcome == 'success'
+        shell: bash
+        run: |
+          if [[ -f "$RUNNER_TEMP/dashboard-server.pid" ]]; then
+            kill "$(cat "$RUNNER_TEMP/dashboard-server.pid")" 2>/dev/null || true
+            for attempt in $(seq 1 10); do
+              kill -0 "$(cat "$RUNNER_TEMP/dashboard-server.pid")" 2>/dev/null || exit 0
+              sleep 1
+            done
+            kill -9 "$(cat "$RUNNER_TEMP/dashboard-server.pid")" 2>/dev/null || true
+          fi
+      - name: Persist worker cooldowns and uncertain-dispatch quarantine
+        id: push_backoff
+        if: always() && steps.run_cycle.outcome != 'skipped'
+        run: node scripts/cloudflare-runner-bridge.mjs push-backoff
+      - name: Reconcile local production changes into D1 with revision compare-and-swap
+        id: push_snapshot
+        if: always() && steps.server.outcome == 'success'
+        run: node scripts/cloudflare-runner-bridge.mjs push-snapshot
+      - name: Upload generated video, thumbnail and metadata to private R2
+        id: upload_artifacts
+        if: always() && steps.push_snapshot.outcome == 'success'
+        run: node scripts/cloudflare-artifact-sync.mjs
+      - name: Release runner session after both durable reconciliations succeed
+        if: always() && steps.session.outcome == 'success' && steps.push_backoff.outcome == 'success' && steps.push_snapshot.outcome == 'success' && steps.upload_artifacts.outcome == 'success'
+        run: node scripts/cloudflare-runner-bridge.mjs complete-session
+      - name: Fail the workflow if dispatch infrastructure failed
+        if: always() && steps.run_cycle.outcome == 'failure'
+        run: |
+          echo "::error::The repository runner cycle failed. Inspect the run logs; retry quarantine and state reconciliation must be preserved."
+          exit 1
+      - name: Publish runner summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## SonicVhibez repository runner"
+            echo "- Worker: ${DASHBOARD_WORKER_ID}"
+            echo "- Durable state: Cloudflare D1"
+            echo "- Generated artifacts: private Cloudflare R2"
+            echo "- Retry and uncertain-dispatch state: Cloudflare D1"
+            echo "- Public/unattended publishing: disabled"
+            echo "- Runner cycle: ${{ steps.run_cycle.outcome || 'not started' }}"
+            echo "- Durable session reconciliation: ${{ steps.session.outcome || 'not started' }}"
+          } >> "$GITHUB_STEP_SUMMARY"

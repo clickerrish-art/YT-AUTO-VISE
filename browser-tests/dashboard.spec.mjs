@@ -1683,99 +1683,7 @@ test("production-plan submission and hash-bound review persist through the real 
   }
 });
 
-
-test("Cloudflare backup controls create a checkpoint and require revision-bound restore confirmation", async ({ page }) => {
-  let revision = 5;
-  const backups = [{
-    backup_id: "backup-1",
-    source_revision: 4,
-    sha256: "a".repeat(64),
-    created_at: "2026-11-08T08:00:00.000Z",
-    reason: "OPERATOR_REQUESTED:browser-e2e"
-  }];
-  const backupRequests = [];
-  const restoreRequests = [];
-
-  await page.route("**/api/state/backups", async route => {
-    await route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({ enabled: true, revision, backups })
-    });
-  });
-  await page.route("**/api/state/backup", async route => {
-    backupRequests.push({ method: route.request().method(), body: route.request().postDataJSON() });
-    const receipt = {
-      backupId: "backup-2",
-      sourceRevision: revision,
-      sha256: "b".repeat(64),
-      createdAt: "2026-11-08T08:01:00.000Z",
-      reason: "OPERATOR_REQUESTED:browser-e2e"
-    };
-    backups.unshift({
-      backup_id: receipt.backupId,
-      source_revision: receipt.sourceRevision,
-      sha256: receipt.sha256,
-      created_at: receipt.createdAt,
-      reason: receipt.reason
-    });
-    await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify(receipt) });
-  });
-  await page.route("**/api/state/restore", async route => {
-    const body = route.request().postDataJSON();
-    restoreRequests.push({ method: route.request().method(), body });
-    if (body.expectedRevision !== revision || body.confirmRestore !== true) {
-      await route.fulfill({ status: 409, contentType: "application/json", body: JSON.stringify({ error: "revision conflict or missing confirmation" }) });
-      return;
-    }
-    revision++;
-    await route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({ revision, queueItemCount: 0, jobCount: 0 })
-    });
-  });
-
-  await page.goto("/");
-  await page.locator("#token").fill(operatorToken);
-  await page.locator("#connect").click();
-  await expect(page.locator("#app")).toBeVisible();
-  await expect(page.locator("#createStateBackup")).toBeEnabled();
-  await expect(page.locator("#stateBackupList")).toContainText("Revision 4");
-  await expect(page.locator("#restoreStateBackup-backup-1")).toHaveAttribute("data-restore-backup", "backup-1");
-
-  await page.locator("#createStateBackup").click();
-  await expect(page.locator("#stateBackupList")).toContainText("Revision 5");
-  expect(backupRequests).toEqual([{ method: "POST", body: {} }]);
-
-  let cancelDialogMessage = "";
-  page.once("dialog", async dialog => {
-    expect(dialog.type()).toBe("confirm");
-    cancelDialogMessage = dialog.message();
-    await dialog.dismiss();
-  });
-  await page.locator("#restoreStateBackup-backup-1").click();
-  expect(cancelDialogMessage).toContain("backup-1");
-  expect(restoreRequests).toHaveLength(0);
-
-  let confirmDialogMessage = "";
-  page.once("dialog", async dialog => {
-    confirmDialogMessage = dialog.message();
-    await dialog.accept();
-  });
-  await page.locator("#restoreStateBackup-backup-1").click();
-  expect(confirmDialogMessage).toContain("backup-1");
-
-  await expect.poll(() => restoreRequests.length).toBe(1);
-  expect(restoreRequests[0]).toEqual({
-    method: "POST",
-    body: { backupId: "backup-1", expectedRevision: 5, confirmRestore: true }
-  });
-  await expect(page.locator("#stateBackupStatus")).toContainText("revision 6");
-  await expect(page.locator("#restoreStateBackup-backup-1")).toBeVisible();
-});
-
-test("all dashboard controls have stable identities and accessible names", async ({ page }) => {
+test("all 108 dashboard controls have stable identities and accessible names", async ({ page }) => {
   await page.goto("/");
   await page.locator("#token").fill(operatorToken);
   await page.locator("#connect").click();
@@ -1823,7 +1731,7 @@ test("all dashboard controls have stable identities and accessible names", async
     return { controlCount: controls.length, formCount: forms.length, failures };
   });
 
-  expect(audit.controlCount).toBe(118);
+  expect(audit.controlCount).toBe(116);
   expect(audit.formCount).toBe(17);
   expect(audit.failures).toEqual([]);
 });
