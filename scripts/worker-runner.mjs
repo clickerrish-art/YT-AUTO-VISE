@@ -401,13 +401,16 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
   if (listing.status !== 200 || !Array.isArray(listing.payload.jobs)) {
     throw new Error("Dashboard worker API returned an invalid dispatchable-job response");
   }
-  const eligibleJobs = listing.payload.jobs.filter(job => {
+  // Enforce the per-cycle cap locally as well as in the API query. An over-returning
+  // or regressed server must never cause more jobs to be dispatched than configured.
+  const listedJobs = listing.payload.jobs.slice(0, limit);
+  const eligibleJobs = listedJobs.filter(job => {
     if (uncertainDispatches.has(job?.id)) return false;
     const cooldown = cooldowns.get(job?.id);
     return !cooldown || cooldown.nextAttemptAt <= Date.now();
   });
-  const deferredByUncertainOutcome = listing.payload.jobs.filter(job => uncertainDispatches.has(job?.id)).length;
-  const deferredByBackoff = listing.payload.jobs.length - eligibleJobs.length - deferredByUncertainOutcome;
+  const deferredByUncertainOutcome = listedJobs.filter(job => uncertainDispatches.has(job?.id)).length;
+  const deferredByBackoff = listedJobs.length - eligibleJobs.length - deferredByUncertainOutcome;
   const results = [];
   let stoppedBeforeDispatch = false;
   for (const job of eligibleJobs) {
@@ -511,6 +514,7 @@ export async function runWorker({
   token = process.env.DASHBOARD_WORKER_TOKEN,
   workerId = process.env.DASHBOARD_WORKER_ID ?? "sonicvhibez-render-worker",
   pollIntervalMs = Number(process.env.WORKER_POLL_INTERVAL_MS ?? DEFAULT_POLL_INTERVAL_MS),
+  dispatchLimit = Number(process.env.WORKER_DISPATCH_LIMIT ?? 20),
   once = process.argv.includes("--once"),
   onCycle = result => console.log(JSON.stringify({ event: "worker_cycle_completed", ...result })),
   onError = error => console.error(JSON.stringify({ event: "worker_cycle_failed", message: String(error?.message ?? error).slice(0, 500) })),
@@ -520,6 +524,9 @@ export async function runWorker({
   fetchImpl = fetch
 } = {}) {
   validateConfiguration({ baseUrl, token, workerId, pollIntervalMs });
+  if (!Number.isInteger(dispatchLimit) || dispatchLimit < 1 || dispatchLimit > 100) {
+    throw new Error("WORKER_DISPATCH_LIMIT must be an integer from 1 to 100");
+  }
   const statePath = cooldownStatePath(workerId, configuredCooldownStatePath, stateDirectory);
   const lockPath = statePath + ".process.lock";
   let lockFd;
@@ -592,7 +599,7 @@ export async function runWorker({
     do {
       let nextWaitMs = pollIntervalMs;
       try {
-        const result = await runWorkerCycle({ baseUrl, token, workerId, fetchImpl, cooldowns, uncertainDispatches, onCooldownsChanged: persist, onUncertainDispatchesChanged: persistUncertainDispatches, shouldStop });
+        const result = await runWorkerCycle({ baseUrl, token, workerId, fetchImpl, limit: dispatchLimit, cooldowns, uncertainDispatches, onCooldownsChanged: persist, onUncertainDispatchesChanged: persistUncertainDispatches, shouldStop });
         onCycle(result);
       } catch (error) {
         onError(error);
