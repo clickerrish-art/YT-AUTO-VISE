@@ -495,9 +495,11 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
       const artifactId = url.searchParams.get("artifactId") ?? "";
       const partNumber = Number(url.searchParams.get("partNumber"));
       const contentLength = Number(request.headers.get("content-length"));
+      const expectedPartMd5 = request.headers.get("x-part-md5") ?? "";
       if (!/^[a-f0-9-]{36}$/.test(artifactId) || !Number.isInteger(partNumber) || partNumber < 1 ||
-          !Number.isSafeInteger(contentLength) || contentLength < 1 || contentLength > ARTIFACT_PART_BYTES || !request.body) {
-        return json({ error: "artifactId, partNumber, known Content-Length and a bounded part body are required" }, 400);
+          !Number.isSafeInteger(contentLength) || contentLength < 1 || contentLength > ARTIFACT_PART_BYTES || !request.body ||
+          !/^[a-f0-9]{32}$/.test(expectedPartMd5)) {
+        return json({ error: "artifactId, partNumber, known Content-Length, bounded part body and expected x-part-md5 are required" }, 400);
       }
       const artifact = await env.STATE_DB.prepare(
         "SELECT upload_id, object_key, size_bytes, part_size_bytes, expected_parts, status FROM runner_artifacts WHERE artifact_id = ?"
@@ -510,10 +512,17 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
       try {
         const upload = env.ARTIFACTS.resumeMultipartUpload(artifact.object_key, artifact.upload_id);
         const part = await upload.uploadPart(partNumber, request.body);
+        const receivedPartMd5 = String(part?.etag ?? "").replace(/^"|"$/g, "").toLowerCase();
+        if (!/^[a-f0-9]{32}$/.test(receivedPartMd5) || receivedPartMd5 !== expectedPartMd5) {
+          return json({
+            error: "R2 multipart part ETag did not match the sender's MD5 for the uploaded bytes; the part was not accepted into the durable upload ledger",
+            code: "ARTIFACT_PART_CHECKSUM_MISMATCH"
+          }, 409);
+        }
         await env.STATE_DB.prepare(
           "INSERT INTO runner_artifact_parts (artifact_id, part_number, etag) VALUES (?, ?, ?) ON CONFLICT(artifact_id, part_number) DO UPDATE SET etag = excluded.etag"
         ).bind(artifactId, partNumber, part.etag).run();
-        return json({ artifactId, partNumber: part.partNumber, etag: part.etag, publishingEnabled: false });
+        return json({ artifactId, partNumber: part.partNumber, etag: part.etag, md5Verified: true, publishingEnabled: false });
       } catch {
         return json({ error: "R2 multipart part upload failed; the incomplete upload remains quarantined for retry", code: "ARTIFACT_PART_UPLOAD_FAILED" }, 503);
       }
