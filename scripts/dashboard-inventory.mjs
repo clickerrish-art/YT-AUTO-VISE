@@ -73,6 +73,13 @@ function* openingTags(source) {
       }
     }
     if (end < 0) return;
+    if (tag === "script" || tag === "style") {
+      const closingTag = new RegExp("</" + tag + "\\s*>", "ig");
+      closingTag.lastIndex = end + 1;
+      const closingMatch = closingTag.exec(source);
+      cursor = closingMatch ? closingTag.lastIndex : source.length;
+      continue;
+    }
     if (trackedTags.has(tag)) {
       yield { tag, raw: source.slice(attributesStart, end), index: start };
     }
