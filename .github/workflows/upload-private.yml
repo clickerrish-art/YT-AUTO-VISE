@@ -59,6 +59,32 @@ permissions:
   actions: read
 
 jobs:
+  # Default dispatch input is NO, so this job performs read-only identity/history
+  # inventory verification. The upload job below remains gated by an explicit YES.
+  verify-channel-read-only:
+    if: ${{ inputs.confirm_private_upload != 'YES' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out selected implementation branch
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+      - name: Run deterministic identity and pagination regression tests
+        run: node --test test/verify-youtube-channel.test.mjs
+      - name: Verify authenticated SonicVhibez channel and complete uploads inventory (read-only)
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
+        run: node scripts/verify-youtube-channel.mjs
+
   private-upload:
     if: ${{ inputs.confirm_private_upload == 'YES' }}
     runs-on: ubuntu-latest
