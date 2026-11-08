@@ -184,46 +184,33 @@ test("production job management cancels an unstarted job and preserves its audit
   await expect(page.locator("#canceljob option").filter({ hasText: jobId })).toHaveCount(0);
 });
 
-test("operator retry form authorizes reviewed failures and one dead-letter override through the real dashboard", async ({ page, request }) => {
-  const stateDir = process.env.DASHBOARD_PLAYWRIGHT_STATE_DIR;
-  expect(stateDir, "Playwright must expose its isolated dashboard fixture directory").toBeTruthy();
+test("operator retry form authorizes reviewed failures and one dead-letter override through the real dashboard", async ({ page }) => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-retry-browser-"));
   const statePath = path.join(stateDir, "dashboard-state.json");
-  const headers = { "content-type": "application/json", "x-operator-token": operatorToken };
-  const stateResponse = await request.get("/api/state", { headers });
-  expect(stateResponse.status()).toBe(200);
-  const initialState = await stateResponse.json();
-  const slot = initialState.schedule.schedule.find(item => item.day === "Saturday");
-  expect(slot).toBeTruthy();
+  const token = "retry-browser-e2e-" + "x".repeat(40);
+  const operatorId = "retry-browser-operator";
+  const now = new Date().toISOString();
+  const retryableJob = createContentJob({
+    idempotencyKey: "retry-browser-normal:slot",
+    title: "Operator retry browser fixture",
+    topic: "Safe operator retry acceptance without production media",
+    contentType: "short",
+    scheduledDay: "Saturday",
+    scheduledDate: futureScheduleDate("Saturday", 1),
+    inputReferences: ["content/short-001-wildlife-video-storytelling.md"]
+  }, now);
+  const deadLetterSeed = createContentJob({
+    idempotencyKey: "retry-browser-dead-letter:slot",
+    title: "Dead-letter retry browser fixture",
+    topic: "Safe one-attempt dead-letter override acceptance",
+    contentType: "short",
+    scheduledDay: "Saturday",
+    scheduledDate: futureScheduleDate("Saturday", 2),
+    inputReferences: ["content/short-001-wildlife-video-storytelling.md"]
+  }, now);
 
-  async function createDraft(id) {
-    const currentResponse = await request.get("/api/state", { headers });
-    expect(currentResponse.status()).toBe(200);
-    const currentState = await currentResponse.json();
-    const scheduledDate = candidateDateForSlot(currentState, slot);
-    const response = await request.post("/api/drafts", { headers, data: {
-      id,
-      title: "Operator retry browser fixture",
-      topic: "Safe operator retry acceptance without production media",
-      contentType: slot.format,
-      scheduledDay: slot.day,
-      scheduledDate,
-      productUrl: "https://selar.com/0u19v8u99l"
-    } });
-    const body = await response.json();
-    expect(response.status(), JSON.stringify(body)).toBe(201);
-    return body.job;
-  }
-
-  const suffix = Date.now().toString(36);
-  const retryableJob = await createDraft("retry-e2e-" + suffix);
-  const deadLetterJob = await createDraft("deadletter-e2e-" + suffix);
-
-  const durable = JSON.parse(fs.readFileSync(statePath, "utf8"));
-  function seedFailure(jobId, { exhausted = false } = {}) {
-    const job = durable.jobs.find(item => item.id === jobId);
-    expect(job).toBeTruthy();
-    const now = new Date().toISOString();
-    job.state = exhausted ? "DEAD_LETTER" : "FAILED";
+  function markFailed(job, { exhausted = false } = {}) {
+    job.state = "FAILED";
     job.startedAt = now;
     job.completedAt = now;
     job.updatedAt = now;
@@ -248,82 +235,140 @@ test("operator retry form authorizes reviewed failures and one dead-letter overr
       actor: "e2e-test-worker",
       reason: "Test fixture failure"
     });
-    if (exhausted) {
-      const deadLetter = {
-        reasonCode: "MAX_ATTEMPTS_EXHAUSTED",
-        at: now,
-        attemptCount: job.attemptCount,
-        maxAttempts: job.retryPolicy.maxAttempts,
-        errorCode: job.errorDetails.code,
-        message: "Test fixture requires one explicit operator-authorized retry."
-      };
-      job.deadLetter = deadLetter;
-      job.deadLetterHistory = [deadLetter];
-      job.transitionHistory.push({
-        from: "FAILED",
-        to: "DEAD_LETTER",
-        at: now,
-        actor: "retry-policy",
-        reason: "Test fixture exhausted the retry limit"
-      });
-    }
+    return exhausted ? deadLetterExhaustedJob(job, Date.parse(now)) : job;
   }
-  seedFailure(retryableJob.id);
-  seedFailure(deadLetterJob.id, { exhausted: true });
-  fs.writeFileSync(statePath, JSON.stringify(durable, null, 2) + "\n");
 
-  await page.goto("/");
-  await page.locator("#token").fill(operatorToken);
-  await page.locator("#connect").click();
-  await expect(page.locator("#app")).toBeVisible();
+  const deadLetterJob = markFailed(deadLetterSeed, { exhausted: true });
+  const failedJob = markFailed(retryableJob);
+  fs.writeFileSync(statePath, JSON.stringify({
+    version: 1,
+    queueItems: [],
+    campaigns: [],
+    audit: [],
+    jobs: [failedJob, deadLetterJob],
+    uploads: [],
+    facebookDrafts: [],
+    facebookPosts: [],
+    facebookAttempts: []
+  }, null, 2) + "\n");
 
-  await expect(page.locator("#retryjob option").filter({ hasText: retryableJob.id })).toHaveCount(1);
-  await page.locator("#retryjob").selectOption(retryableJob.id);
-  await page.locator("#retryreason").fill("Reviewed retained failure evidence; this retry is safe.");
-  await page.getByRole("button", { name: "Authorize selected retry" }).click();
-  await expect(page.locator("#retryjobresult")).toContainText(
-    "Retry explicitly authorized for " + retryableJob.id,
-    { timeout: 10_000 }
-  );
+  const probe = createServer();
+  await new Promise((resolve, reject) => {
+    probe.once("error", reject);
+    probe.listen(0, "127.0.0.1", resolve);
+  });
+  const port = probe.address().port;
+  await new Promise(resolve => probe.close(resolve));
+  const base = "http://127.0.0.1:" + port;
+  let child = null;
+  let logs = "";
 
-  let savedResponse = await request.get("/api/state", { headers });
-  expect(savedResponse.status()).toBe(200);
-  let saved = await savedResponse.json();
-  let retried = saved.jobs.find(job => job.id === retryableJob.id);
-  expect(retried.state).toBe("QUEUED");
-  expect(retried.retryAuthorizations).toHaveLength(1);
-  expect(retried.retryAuthorizations[0].actor).toBe("playwright-test-operator");
-  expect(retried.retryAuthorizations[0].overrideRetryLimit).toBe(false);
-  expect(saved.audit.filter(event =>
-    event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === retryableJob.id
-  )).toHaveLength(1);
+  try {
+    child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+      cwd: process.cwd(),
+      env: {
+        ...process.env,
+        DASHBOARD_OPERATOR_TOKEN: token,
+        DASHBOARD_OPERATOR_ID: operatorId,
+        DASHBOARD_STATE_DIR: stateDir,
+        UPLOAD_LOG_DIR: path.join(stateDir, "run-logs"),
+        PORT: String(port),
+        DASHBOARD_HOST: "127.0.0.1",
+        META_PAGE_ACCESS_TOKEN: "",
+        META_USER_ACCESS_TOKEN: "",
+        NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "",
+        FACEBOOK_PUBLISH_ENABLED: "",
+        YOUTUBE_CLIENT_ID: "",
+        YOUTUBE_CLIENT_SECRET: "",
+        YOUTUBE_REFRESH_TOKEN: "",
+        SONICVHIBEZ_CHANNEL_ID: ""
+      },
+      stdio: ["ignore", "pipe", "pipe"]
+    });
+    child.stdout.on("data", chunk => { logs += chunk.toString(); });
+    child.stderr.on("data", chunk => { logs += chunk.toString(); });
 
-  await expect(page.locator("#retryjob option").filter({ hasText: deadLetterJob.id })).toHaveCount(1);
-  await page.locator("#retryjob").selectOption(deadLetterJob.id);
-  await page.locator("#retryreason").fill("Reviewed exhausted failure evidence; approve one more attempt.");
-  await page.locator("#retryoverride").check();
-  await page.getByRole("button", { name: "Authorize selected retry" }).click();
-  await expect(page.locator("#retryjobresult")).toContainText(
-    "Retry explicitly authorized for " + deadLetterJob.id,
-    { timeout: 10_000 }
-  );
+    let ready = false;
+    for (let attempt = 0; attempt < 100; attempt++) {
+      if (child.exitCode !== null || child.signalCode !== null) {
+        throw new Error("Retry acceptance dashboard exited before ready: " + logs);
+      }
+      try {
+        const response = await fetch(base + "/healthz");
+        if (response.ok) {
+          ready = true;
+          break;
+        }
+      } catch {}
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    expect(ready, "isolated retry dashboard must become healthy: " + logs).toBe(true);
 
-  savedResponse = await request.get("/api/state", { headers });
-  expect(savedResponse.status()).toBe(200);
-  saved = await savedResponse.json();
-  const recoveredDeadLetter = saved.jobs.find(job => job.id === deadLetterJob.id);
-  expect(recoveredDeadLetter.state).toBe("QUEUED");
-  expect(recoveredDeadLetter.attemptCount).toBe(2);
-  expect(recoveredDeadLetter.retryPolicy.maxAttempts).toBe(3);
-  expect(recoveredDeadLetter.retryAuthorizations.at(-1).overrideRetryLimit).toBe(true);
-  expect(saved.audit.filter(event =>
-    event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === deadLetterJob.id
-  )).toHaveLength(1);
-  expect(saved.audit.filter(event =>
-    event.action === "CONTENT_JOB_DEAD_LETTER_RECOVERED" && event.jobId === deadLetterJob.id
-  )).toHaveLength(1);
-  expect(saved.publishingEnabled).toBe(false);
+    const headers = { "x-operator-token": token };
+    const readState = async () => {
+      const response = await fetch(base + "/api/state", { headers });
+      const body = await response.json();
+      expect(response.status, JSON.stringify(body)).toBe(200);
+      return body;
+    };
+
+    await page.goto(base + "/");
+    await page.locator("#token").fill(token);
+    await page.locator("#connect").click();
+    await expect(page.locator("#app")).toBeVisible();
+
+    await expect(page.locator("#retryjob option").filter({ hasText: failedJob.id })).toHaveCount(1);
+    await page.locator("#retryjob").selectOption(failedJob.id);
+    await page.locator("#retryreason").fill("Reviewed retained failure evidence; this retry is safe.");
+    await page.getByRole("button", { name: "Authorize selected retry" }).click();
+    await expect(page.locator("#retryjobresult")).toContainText(
+      "Retry explicitly authorized for " + failedJob.id,
+      { timeout: 10_000 }
+    );
+
+    let saved = await readState();
+    let retried = saved.jobs.find(job => job.id === failedJob.id);
+    expect(retried.state).toBe("QUEUED");
+    expect(retried.retryAuthorizations).toHaveLength(1);
+    expect(retried.retryAuthorizations[0].actor).toBe(operatorId);
+    expect(retried.retryAuthorizations[0].overrideRetryLimit).toBe(false);
+    expect(saved.audit.filter(event =>
+      event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === failedJob.id
+    )).toHaveLength(1);
+
+    await expect(page.locator("#retryjob option").filter({ hasText: deadLetterJob.id })).toHaveCount(1);
+    await page.locator("#retryjob").selectOption(deadLetterJob.id);
+    await page.locator("#retryreason").fill("Reviewed exhausted failure evidence; approve one more attempt.");
+    await page.locator("#retryoverride").check();
+    await page.getByRole("button", { name: "Authorize selected retry" }).click();
+    await expect(page.locator("#retryjobresult")).toContainText(
+      "Retry explicitly authorized for " + deadLetterJob.id,
+      { timeout: 10_000 }
+    );
+
+    saved = await readState();
+    const recoveredDeadLetter = saved.jobs.find(job => job.id === deadLetterJob.id);
+    expect(recoveredDeadLetter.state).toBe("QUEUED");
+    expect(recoveredDeadLetter.attemptCount).toBe(2);
+    expect(recoveredDeadLetter.retryPolicy.maxAttempts).toBe(3);
+    expect(recoveredDeadLetter.retryAuthorizations.at(-1).overrideRetryLimit).toBe(true);
+    expect(saved.audit.filter(event =>
+      event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === deadLetterJob.id
+    )).toHaveLength(1);
+    expect(saved.audit.filter(event =>
+      event.action === "CONTENT_JOB_DEAD_LETTER_RECOVERED" && event.jobId === deadLetterJob.id
+    )).toHaveLength(1);
+    expect(saved.publishingEnabled).toBe(false);
+  } finally {
+    if (child && child.exitCode === null && child.signalCode === null) {
+      const exited = new Promise(resolve => child.once("exit", resolve));
+      child.kill("SIGTERM");
+      await exited;
+    }
+    fs.rmSync(stateDir, { recursive: true, force: true });
+  }
 });
+
 
 test("campaign controls fail closed on unapproved destinations and retain Safari inactive", async ({ page, request }) => {
   const headers = { "x-operator-token": operatorToken };
