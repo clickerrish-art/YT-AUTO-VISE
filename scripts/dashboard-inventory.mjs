@@ -18,8 +18,8 @@ function attributesOf(raw) {
 
 /**
  * Read opening tags without treating a greater-than sign inside a quoted
- * attribute as the end of the tag. Comments are skipped so example markup
- * cannot be mistaken for live dashboard controls or forms.
+ * attribute as the end of the tag. Comments and executable script/style
+ * contents are skipped so markup-like strings are not counted as live controls.
  */
 function* openingTags(source) {
   const trackedTags = new Set(["button", "input", "select", "textarea", "form"]);
@@ -73,6 +73,13 @@ function* openingTags(source) {
       }
     }
     if (end < 0) return;
+    if (tag === "script" || tag === "style") {
+      const closingTag = new RegExp("</" + tag + "\\s*>", "ig");
+      closingTag.lastIndex = end + 1;
+      const closingMatch = closingTag.exec(source);
+      cursor = closingMatch ? closingTag.lastIndex : source.length;
+      continue;
+    }
     if (trackedTags.has(tag)) {
       yield { tag, raw: source.slice(attributesStart, end), index: start };
     }

@@ -182,7 +182,7 @@ test("dashboard startup recovers local work through authenticated Cloudflare per
     fs.rmSync(stateDir, { recursive: true, force: true });
   });
 
-  await waitForReady(instance);
+  const base = await waitForReady(instance);
   assert.equal(authFailures, 0, "every state request must carry both Access service-token headers and the operator token");
   assert.equal(revision, 2, "startup recovery must persist through the remote revisioned API");
   assert.equal(remoteState.jobs[0].status, "RECOVERY_REQUIRED");

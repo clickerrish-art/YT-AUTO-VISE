@@ -88,9 +88,20 @@ test("every authenticated API route handles an empty request safely without a se
       body: route.method === "POST" ? "{}" : undefined
     });
     const responseText = await response.text();
-    assert.ok(response.status < 500,
-      "authenticated empty request must not produce a server error for " + route.method + " " + route.path +
-      "; status=" + response.status + "; body=" + responseText);
+    const routeKey = route.method + " " + route.path;
+    const cloudflareBackupRoutes = new Set([
+      "GET /api/state/backups",
+      "POST /api/state/backup",
+      "POST /api/state/restore"
+    ]);
+    if (cloudflareBackupRoutes.has(routeKey)) {
+      assert.equal(response.status, 503, routeKey + " must fail closed when Cloudflare state sync is not configured");
+      assert.equal(JSON.parse(responseText).error, "Cloudflare state sync is not configured");
+    } else {
+      assert.ok(response.status < 500,
+        "authenticated empty request must not produce a server error for " + routeKey +
+        "; status=" + response.status + "; body=" + responseText);
+    }
     assert.match(response.headers.get("content-type") ?? "", /application\/json/i,
       route.method + " " + route.path + " must return the documented JSON API envelope for this invalid/empty request");
     assert.doesNotMatch(responseText, /dashboard-state\.json|stateDir|\/home\/runner|\/tmp\//i,
