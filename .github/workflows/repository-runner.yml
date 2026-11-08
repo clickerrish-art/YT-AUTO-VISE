@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       run_staging_smoke:
-        description: "Run read-only D1/R2 staging checks only (safe default)"
+        description: "Run non-production D1 checks and a temporary R2 integrity probe (safe default)"
         required: false
         type: boolean
         default: true
