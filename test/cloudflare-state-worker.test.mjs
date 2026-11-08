@@ -1631,8 +1631,13 @@ test("operator backup restore verifies integrity, preserves the pre-restore stat
   changed.queueItems = [{ id: "after-backup", title: "Changed state" }];
   database.current.revision = 5;
   database.current.state_json = JSON.stringify(changed);
-  const restoreResponse = await handleRequest(new Request("https://state.example/api/backups/restore", {
+  const unconfirmed = await handleRequest(new Request("https://state.example/api/backups/restore", {
     method: "POST", headers, body: JSON.stringify({ backupId: receipt.backupId, expectedRevision: 5 })
+  }), env);
+  assert.equal(unconfirmed.status, 400);
+  assert.equal(database.current.revision, 5, "unconfirmed restore must not mutate the durable revision");
+  const restoreResponse = await handleRequest(new Request("https://state.example/api/backups/restore", {
+    method: "POST", headers, body: JSON.stringify({ backupId: receipt.backupId, expectedRevision: 5, confirmRestore: true })
   }), env);
   assert.equal(restoreResponse.status, 200);
   const restored = await restoreResponse.json();
@@ -1655,7 +1660,7 @@ test("operator backup restore refuses corrupted backup bytes and stale state rev
   stored.sha256 = "0".repeat(64);
   const before = { ...database.current };
   const corrupted = await handleRequest(new Request("https://state.example/api/backups/restore", {
-    method: "POST", headers, body: JSON.stringify({ backupId: receipt.backupId, expectedRevision: 8 })
+    method: "POST", headers, body: JSON.stringify({ backupId: receipt.backupId, expectedRevision: 8, confirmRestore: true })
   }), env);
   assert.equal(corrupted.status, 409);
   assert.match((await corrupted.json()).error, /integrity check failed/);
@@ -1663,7 +1668,7 @@ test("operator backup restore refuses corrupted backup bytes and stale state rev
 
   stored.sha256 = receipt.sha256;
   const stale = await handleRequest(new Request("https://state.example/api/backups/restore", {
-    method: "POST", headers, body: JSON.stringify({ backupId: receipt.backupId, expectedRevision: 7 })
+    method: "POST", headers, body: JSON.stringify({ backupId: receipt.backupId, expectedRevision: 7, confirmRestore: true })
   }), env);
   assert.equal(stale.status, 409);
   assert.equal((await stale.json()).code, "REVISION_CONFLICT");
