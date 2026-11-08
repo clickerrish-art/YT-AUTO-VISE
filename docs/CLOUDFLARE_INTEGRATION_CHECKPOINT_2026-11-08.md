@@ -62,3 +62,17 @@ The Cloudflare account was inspected without changing resources or reading secre
 - The live staging Worker therefore remains unchanged: no `ASSETS` or `ARTIFACTS` binding was attached, and no live dashboard or R2 upload/download smoke test was performed.
 - To finish this external step, the Cloudflare connection must be reauthorized in ChatGPT, or the repository must receive a `CLOUDFLARE_API_TOKEN` Actions secret with Workers Scripts/Assets deployment and the required D1/R2 access. Do not paste the token into chat. Once credentials are available, rerun the guarded staging deployment and then the live R2/D1 smoke check.
 - The deployment workflow is staging-only and gated by the `[deploy-staging]` commit marker. It does not dispatch the repository production runner or publish content.
+
+## Final workflow-only verification — 8 November 2026
+
+After the code candidate `e0893cb4819278f9996db52ee139381b387eb9d4` passed, the following workflow-only changes were added at `ee5e0755ca8d7fd46682ac889e5be8a85d1e7ee9`:
+
+- A guarded staging deployment workflow was added. It only attempts deployment when a `[deploy-staging]` commit is pushed to this exact integration branch and a `CLOUDFLARE_API_TOKEN` Actions secret exists.
+- A separate `[staging-smoke]` job was added to `repository-runner.yml`. It only reads the D1 snapshot/backoff state and performs a temporary R2 write/read/delete/capacity probe; it does not start a runner session or execute a production job. It has not been run because staging deployment is blocked by credentials.
+
+Exact-commit verification at `ee5e0755ca8d7fd46682ac889e5be8a85d1e7ee9`:
+- Dashboard adapter workflow #253: **27/27 Chromium journeys**, **136/136 adapter tests**, syntax checks PASS.
+- Full content-quality workflow #3118: **778/778 Node tests**, **0 failures**, **0 skips**, long-form minimum draft-length gate PASS.
+- Push-triggered adapter workflow #252 also completed successfully.
+
+The workflow-only changes do not alter the tested application code at `e0893cb4819278f9996db52ee139381b387eb9d4`. The staging deployment and live D1/R2 smoke remain unverified until the Cloudflare credential blocker above is resolved.
