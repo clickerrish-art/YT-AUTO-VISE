@@ -11,11 +11,14 @@ on:
       - "scripts/cloudflare-artifact-sync.mjs"
       - "scripts/worker-runner.mjs"
       - "scripts/dashboard-inventory.mjs"
+      - "scripts/dashboard-server.mjs"
+      - "scripts/atomic-json-file.mjs"
+      - "scripts/safe-directory-path.mjs"
+      - "scripts/worker-quarantine-release.mjs"
       - "test/cloudflare-state-worker.test.mjs"
       - "test/worker-runner.test.mjs"
       - "test/dashboard-inventory.test.mjs"
       - ".github/workflows/repository-runner.yml"
-      - ".github/workflows/cloudflare-state.yml"
       - ".github/workflows/dashboard-cloudflare-adapter.yml"
   pull_request:
     branches: [codex/marketing-machine-audit-fixes]
