@@ -140,13 +140,18 @@ test("operator retry API authorizes one reviewed failed job, audits once and per
     reason: "Test-only retry limit exhausted"
   });
   const deadLetterJob = deadLetterExhaustedJob(exhausted, Date.parse(now));
+  const concurrentJob = structuredClone(job);
+  concurrentJob.id = job.id + "-concurrent";
+  concurrentJob.idempotencyKey = "job-retry-api:concurrent-authorization";
+  concurrentJob.title = "Concurrent retry authorization integration fixture";
+
 
   fs.writeFileSync(statePath, JSON.stringify({
     version: 1,
     queueItems: [],
     campaigns: [],
     audit: [],
-    jobs: [job, deadLetterJob],
+    jobs: [job, deadLetterJob, concurrentJob],
     uploads: [],
     facebookDrafts: [],
     facebookPosts: [],
@@ -216,10 +221,30 @@ test("operator retry API authorizes one reviewed failed job, audits once and per
     "an exhausted dead-letter override must add exactly one authorized attempt");
   assert.equal(deadLetterAuthorization.body.job.retryAuthorizations.at(-1).overrideRetryLimit, true);
 
+
+  const concurrentPayload = {
+    jobId: concurrentJob.id,
+    reason: "Concurrent requests reviewed; authorize at most one retry."
+  };
+  const concurrentResults = await Promise.all([
+    post(concurrentPayload),
+    post(concurrentPayload)
+  ]);
+  assert.equal(concurrentResults.filter(result => result.status === 200).length, 1,
+    "concurrent retry requests must grant exactly one authorization");
+  assert.equal(concurrentResults.filter(result => result.status !== 200).length, 1,
+    "the duplicate concurrent retry request must be rejected");
+  assert.equal(concurrentResults.every(result => result.body.publishingEnabled === false), true);
+
   const persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
   assert.equal(persisted.jobs.find(item => item.id === job.id).state, "QUEUED");
   assert.equal(persisted.jobs.find(item => item.id === deadLetterJob.id).state, "QUEUED");
   assert.equal(persisted.jobs.find(item => item.id === deadLetterJob.id).retryPolicy.maxAttempts, 3);
+  assert.equal(persisted.jobs.find(item => item.id === concurrentJob.id).state, "QUEUED");
+  assert.equal(persisted.jobs.find(item => item.id === concurrentJob.id).retryAuthorizations.length, 1);
+  assert.equal(persisted.audit.filter(event =>
+    event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === concurrentJob.id
+  ).length, 1, "concurrent duplicate requests must not duplicate retry audit records");
   assert.equal(persisted.audit.filter(event =>
     event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === job.id
   ).length, 1);
@@ -244,6 +269,12 @@ test("operator retry API authorizes one reviewed failed job, audits once and per
   assert.equal(recoveredJob.retryAuthorizations.length, 1);
   assert.equal(recovered.audit.filter(event =>
     event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === job.id
+  ).length, 1);
+  const recoveredConcurrent = recovered.jobs.find(item => item.id === concurrentJob.id);
+  assert.equal(recoveredConcurrent.state, "QUEUED");
+  assert.equal(recoveredConcurrent.retryAuthorizations.length, 1);
+  assert.equal(recovered.audit.filter(event =>
+    event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === concurrentJob.id
   ).length, 1);
   const recoveredDeadLetter = recovered.jobs.find(item => item.id === deadLetterJob.id);
   assert.equal(recoveredDeadLetter.state, "QUEUED");
