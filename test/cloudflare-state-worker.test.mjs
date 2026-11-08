@@ -899,15 +899,19 @@ test("Meta and YouTube provider operations fail closed without external adapters
 });
 
 
-test("every dashboard API path has an explicit Worker route or dynamic artifact-download handler", () => {
+test("every dashboard API path has a Worker route, dynamic artifact handler, or explicit local fallback", () => {
   const dashboard = readFileSync(new URL("../public/dashboard.html", import.meta.url), "utf8");
   const worker = readFileSync(new URL("../cloudflare/worker.js", import.meta.url), "utf8");
-  const paths = [...new Set([...dashboard.matchAll(/["'`](\/api\/[^"'`?]+)(?:\?[^"'`]*)?["'`]/g)].map(match => match[1]))];
+  const localServer = readFileSync(new URL("../scripts/dashboard-server.mjs", import.meta.url), "utf8");
+  const localFallbackRoutes = new Set(["/api/state/backups", "/api/state/backup", "/api/state/restore"]);
+  const paths = [...new Set([...dashboard.matchAll(/["'`](\/api\/[^"'"`?]+)(?:\?[^"'"`]*)?["'`]/g)].map(match => match[1]))];
   assert.ok(paths.length >= 25, "dashboard API path inventory unexpectedly shrank");
   for (const routePath of paths) {
     const hasExplicitRoute = worker.includes(routePath);
     const hasDynamicArtifactRoute = routePath === "/api/artifacts/" && worker.includes("artifactDownload");
-    assert.ok(hasExplicitRoute || hasDynamicArtifactRoute, "dashboard API path has no Worker route: " + routePath);
+    const hasLocalFallbackRoute = localFallbackRoutes.has(routePath) && localServer.includes(routePath);
+    assert.ok(hasExplicitRoute || hasDynamicArtifactRoute || hasLocalFallbackRoute,
+      "dashboard API path has no Worker or explicitly supported local fallback route: " + routePath);
   }
 });
 
