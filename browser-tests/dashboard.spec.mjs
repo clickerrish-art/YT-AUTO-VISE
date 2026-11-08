@@ -2139,3 +2139,56 @@ test("Facebook research suggestion control fills an idea without saving a draft 
   expect(after.publishingEnabled).toBe(false);
   await expect(page.locator("#facebookdraftresult")).toContainText("not publish-ready");
 });
+
+test("dashboard fails closed when Cloudflare backup state is unavailable", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  const beforeResponse = await request.get("/api/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+  const attemptedMutations = [];
+
+  await page.route("**/api/state/backups", async route => {
+    await route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "Cloudflare state sync is not configured" })
+    });
+  });
+  await page.route("**/api/state/backup", async route => {
+    attemptedMutations.push({ method: route.request().method(), url: route.request().url() });
+    await route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "Cloudflare state sync is not configured" })
+    });
+  });
+  await page.route("**/api/state/restore", async route => {
+    attemptedMutations.push({ method: route.request().method(), url: route.request().url() });
+    await route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "Cloudflare state sync is not configured" })
+    });
+  });
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  await expect(page.locator("#createStateBackup")).toBeDisabled();
+  await expect(page.locator("#stateBackupStatus")).toContainText(
+    "Cloudflare backups unavailable: Cloudflare state sync is not configured"
+  );
+  await expect(page.locator("#stateBackupStatus")).toContainText(
+    "Local-only mode remains active; no remote operation was attempted."
+  );
+  await expect(page.locator("#stateBackupList")).toContainText("No Cloudflare backups are available.");
+  await expect(page.locator("#stateBackupList button[data-restore-backup]")).toHaveCount(0);
+  expect(attemptedMutations).toEqual([]);
+
+  const afterResponse = await request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  expect(await afterResponse.json()).toEqual(before);
+});
+
