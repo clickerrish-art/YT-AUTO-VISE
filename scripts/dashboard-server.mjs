@@ -3426,6 +3426,21 @@ const server = http.createServer(async (req, res) => {
             if (partIndex === parts.length - 1) return json(res, 409, { error: "Retained render artifact still exists; inspect and archive it before reconciliation", artifactPath: relativePath });
           }
         }
+        const previousRecovery = job.renderRecovery;
+        if (previousRecovery?.verifiedAbsent === true &&
+            previousRecovery.checkedBy === operatorId &&
+            previousRecovery.reason === body.reason.trim() &&
+            Array.isArray(previousRecovery.checkedPaths) &&
+            previousRecovery.checkedPaths.length === protectedPaths.length &&
+            previousRecovery.checkedPaths.every((item, index) => item === protectedPaths[index])) {
+          return json(res, 200, {
+            job,
+            recoveryReconciled: true,
+            retryAuthorized: false,
+            alreadyReconciled: true,
+            publishingEnabled: false
+          });
+        }
         const checkedAt = new Date().toISOString();
         job.renderRecovery = {
           verifiedAbsent: true,
@@ -3445,7 +3460,7 @@ const server = http.createServer(async (req, res) => {
           reason: body.reason.trim()
         });
         await saveState(state);
-        return json(res, 200, { job, recoveryReconciled: true, retryAuthorized: false, publishingEnabled: false });
+        return json(res, 200, { job, recoveryReconciled: true, retryAuthorized: false, alreadyReconciled: false, publishingEnabled: false });
       } finally { release(); }
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/retry") {
