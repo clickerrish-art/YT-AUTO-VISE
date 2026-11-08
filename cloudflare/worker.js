@@ -1606,6 +1606,9 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
         !Number.isSafeInteger(body.expectedRevision) || body.expectedRevision < 1) {
       return json({ error: "backupId and expectedRevision are required" }, 400);
     }
+    if (body.confirmRestore !== true) {
+      return json({ error: "Explicit confirmRestore=true is required before restoring dashboard state" }, 400);
+    }
     const backup = await env.STATE_DB.prepare(
       "SELECT state_json, sha256 FROM dashboard_backups WHERE backup_id = ?"
     ).bind(body.backupId).first();
