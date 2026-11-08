@@ -1699,6 +1699,78 @@ test("production-plan submission and hash-bound review persist through the real 
   }
 });
 
+test("operator retry form authorizes one reviewed failed-job retry without dispatching or uploading", async ({ page }) => {
+  const failedJob = {
+    id: "retry-browser-job",
+    queueItemId: "retry-browser-queue-item",
+    title: "Synthetic failed-job retry fixture",
+    state: "FAILED",
+    attemptCount: 1,
+    retryPolicy: { maxAttempts: 3, baseDelayMs: 1000, maxDelayMs: 60000 },
+    errorDetails: {
+      code: "SYNTHETIC_RENDER_FAILURE",
+      message: "Synthetic browser fixture failure; no media or provider operation occurred.",
+      retryable: true,
+      retryableAfterOperatorReview: false
+    },
+    nextRetryAt: null,
+    createdAt: "2026-11-08T08:00:00.000Z",
+    updatedAt: "2026-11-08T08:00:00.000Z",
+    outputArtifacts: []
+  };
+  const queuedJob = {
+    ...failedJob,
+    state: "QUEUED",
+    attemptCount: 2,
+    errorDetails: null,
+    nextRetryAt: null,
+    updatedAt: "2026-11-08T08:02:00.000Z"
+  };
+  let visibleJobs = [failedJob];
+  let retryPayload = null;
+  const unexpectedProductionRequests = [];
+  page.on("request", request => {
+    if (request.method() === "POST" && /\/api\/(jobs\/produce|uploads\/|publish)/.test(new URL(request.url()).pathname)) {
+      unexpectedProductionRequests.push(request.url());
+    }
+  });
+
+  await page.route("**/api/state", async route => {
+    const response = await route.fetch();
+    const state = await response.json();
+    await route.fulfill({ response, body: JSON.stringify({ ...state, jobs: visibleJobs }) });
+  });
+  await page.route("**/api/jobs/retry", async route => {
+    retryPayload = route.request().postDataJSON();
+    visibleJobs = [queuedJob];
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ job: queuedJob })
+    });
+  });
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+  await expect(page.locator("#retryjob")).toHaveValue("retry-browser-job");
+  await expect(page.locator("#retryjobform button[type=submit]")).toBeEnabled();
+  await page.locator("#retryreason").fill("Reviewed the retained synthetic failure evidence; one retry is safe.");
+  await page.locator("#retryjobform button[type=submit]").click();
+
+  await expect(page.locator("#retryjobresult")).toContainText("Retry explicitly authorized for retry-browser-job");
+  await expect(page.locator("#retryjobresult")).toContainText("Attempts: 2 / 3");
+  await expect(page.locator("#retryjobresult")).toContainText("no upload or publication occurred");
+  expect(retryPayload).toEqual({
+    jobId: "retry-browser-job",
+    reason: "Reviewed the retained synthetic failure evidence; one retry is safe.",
+    overrideRetryLimit: false
+  });
+  await expect(page.locator("#retryjobform button[type=submit]")).toBeDisabled();
+  expect(unexpectedProductionRequests).toEqual([]);
+});
+
 test("Cloudflare D1 backup controls create and restore a revision-bound checkpoint", async ({ page }) => {
   let revision = 5;
   const backups = [{
