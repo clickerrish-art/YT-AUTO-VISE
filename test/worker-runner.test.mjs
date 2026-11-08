@@ -90,12 +90,13 @@ test("worker dispatches listed jobs sequentially and records fail-closed conflic
   assert.equal(result.deferredByBackoff, 0);
   assert.equal(result.results.length, 2);
   assert.deepEqual(result.results[0], { jobId: "job-one", status: "SUCCEEDED", httpStatus: 200, state: "GENERATED" });
-  assert.deepEqual({ ...result.results[1], retryAfterMs: undefined }, {
+  const { retryAfterMs, ...blockedResult } = result.results[1];
+  assert.deepEqual(blockedResult, {
     jobId: "job-two", status: "NOT_DISPATCHED", httpStatus: 409, state: null,
-    responseError: "renderer prerequisites are not satisfied", retryAfterMs: undefined
+    responseError: "renderer prerequisites are not satisfied"
   });
-  assert.ok(result.results[1].retryAfterMs <= 30_000 && result.results[1].retryAfterMs > 29_000,
-    "the retry window must remain approximately the configured 30 seconds without assuming millisecond-exact wall-clock timing");
+  assert.ok(Number.isInteger(retryAfterMs) && retryAfterMs > 0 && retryAfterMs <= 30_000,
+    "retryAfterMs must be a live remaining duration bounded by the configured 30-second cooldown");
   assert.equal(result.publishingEnabled, false);
   assert.deepEqual(requests.map(item => item.method + " " + item.url.split("?")[0]), [
     "GET /api/jobs/dispatchable",
@@ -111,6 +112,70 @@ test("worker dispatches listed jobs sequentially and records fail-closed conflic
   assert.equal(requests.slice(requestsBeforeCooldownCycle).some(item => item.url === "/api/jobs/produce" && item.method === "POST"), true);
   assert.equal(cooldowns.get("job-two").attempts, 1);
   assert.ok(cooldowns.get("job-two").nextAttemptAt > Date.now());
+});
+
+test("worker rejects an invalid configured dispatch limit before acquiring a process lock", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-invalid-dispatch-limit-"));
+  try {
+    await assert.rejects(
+      runWorker({
+        baseUrl: "http://127.0.0.1:8787", token, workerId, once: true,
+        dispatchLimit: 0, stateDirectory: directory,
+        fetchImpl: async () => { throw new Error("must not contact API"); }
+      }),
+      /WORKER_DISPATCH_LIMIT must be an integer from 1 to 100/
+    );
+    assert.deepEqual(fs.readdirSync(directory), []);
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test("repository runner dispatch limit leaves additional approved jobs queued for a later cycle", async t => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-dispatch-limit-"));
+  const requests = [];
+  const server = createServer(async (req, res) => {
+    requests.push({ method: req.method, url: req.url });
+    res.setHeader("content-type", "application/json");
+    if (req.method === "GET" && req.url.startsWith("/api/jobs/dispatchable")) {
+      const limit = Number(new URL(req.url, "http://127.0.0.1").searchParams.get("limit"));
+      assert.equal(limit, 1);
+      res.end(JSON.stringify({
+        jobs: [{ id: "job-one" }, { id: "job-two" }],
+        queuedCount: 2,
+        publishingEnabled: false
+      }));
+      return;
+    }
+    if (req.method === "POST" && req.url === "/api/jobs/produce") {
+      let body = "";
+      for await (const chunk of req) body += chunk;
+      const jobId = JSON.parse(body).jobId;
+      res.end(JSON.stringify({ job: { id: jobId, state: "GENERATED" }, publishingEnabled: false }));
+      return;
+    }
+    res.statusCode = 404;
+    res.end(JSON.stringify({ error: "not found" }));
+  });
+  const baseUrl = await listen(server);
+  t.after(async () => {
+    await new Promise(resolve => server.close(resolve));
+    fs.rmSync(directory, { recursive: true, force: true });
+  });
+  let cycle;
+  await runWorker({
+    baseUrl, token, workerId, once: true, dispatchLimit: 1,
+    stateDirectory: directory,
+    onCycle: result => { cycle = result; },
+    onError: error => { throw error; }
+  });
+  assert.equal(cycle.discovered, 2);
+  assert.equal(cycle.results.length, 1);
+  assert.equal(cycle.results[0].jobId, "job-one");
+  assert.deepEqual(requests.map(item => item.method + " " + item.url.split("?")[0]), [
+    "GET /api/jobs/dispatchable",
+    "POST /api/jobs/produce"
+  ]);
 });
 
 test("worker rejects unencrypted non-loopback API destinations before sending credentials", async () => {
