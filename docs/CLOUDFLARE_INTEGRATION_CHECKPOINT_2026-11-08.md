@@ -145,3 +145,13 @@ Read-only persistence verification immediately after the version-5 activation:
 - D1 `dashboard_backups`: 1 row.
 - D1 `runner_state`, `runner_control`, `runner_artifacts`, and `runner_artifact_parts`: 0 rows each.
 - All queries completed successfully with zero rows written and `changed_db=false`; no state, backup, or runner data was modified by this deployment.
+
+## Live staging HTTP access-control check — 8 November 2026
+
+A read-only GitHub Actions smoke workflow was added at `.github/workflows/staging-http-smoke.yml`. It does not use credentials, write to Cloudflare, dispatch the repository runner, or publish content.
+
+- First probe correctly exposed that all unauthenticated HTTP requests are intercepted before reaching the Worker; the initial smoke attempt failed because it expected anonymous HTML and the application is intentionally behind Cloudflare Access.
+- The Cloudflare Access control plane confirms the staging hostname has an Access self-hosted application named `SonicVhibez Dashboard Staging`, with a single allow policy restricted to the configured operator email and the configured identity provider.
+- The corrected live HTTP smoke passed on source commit `4b8a3e0795c6e54639ea000ae5a4a40f4fa71bfc`, run `42473115450`. It received HTTP 302 for `/`, `/dashboard`, `/operational-readyz`, and `/readyz`; each redirect was to the configured `kajiboye44.cloudflareaccess.com/cdn-cgi/access/login/` flow.
+- This verifies the external Access boundary is active and consistent. It does **not** verify the authenticated HTML response or authenticated operational readiness; those remain **NOT_TESTED** in this session. No public Access bypass was added because that would weaken the private dashboard boundary.
+- The dashboard route, private R2 object, active Worker version, D1 preservation, and CI route/fail-closed tests remain separately verified as described above.
