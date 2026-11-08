@@ -122,3 +122,20 @@ All checks below ran against exact commit `a6c092a073bceaa2fdd5422336e83caf01dfd
 - The metadata workflow's success means the safety/validation checks passed; it does **not** mean production metadata is approved or publishing is ready. The production readiness endpoint intentionally remains held.
 
 The exact candidate remains an open integration branch only. Live staging deployment is still blocked by Cloudflare authentication; no live Worker update, R2 upload, production runner dispatch, YouTube upload, or Meta publication has occurred.
+
+## Staging deployment follow-up — 8 November 2026, 10:44 UTC
+
+This section supersedes the earlier statements in this checkpoint that staging deployment was still blocked by Cloudflare authentication.
+
+A direct deployment through the connected Cloudflare account was completed after the integration-branch Worker source gained the private-R2 dashboard root route:
+
+- Source branch: `codex/cloudflare-adapter-integration-20261108`
+- Source commit annotation: `352e490660f77f8bf1f3215802a950d282da30cf`
+- Uploaded Worker version: `9f768b51-602f-4ef9-82f5-54f2e7710347` (version 5)
+- Active deployment: `b97c69a6-663a-4128-bcc8-c53a72250563`
+- Active traffic allocation: 100% to version 5
+- Preserved bindings, verified from the version resource: `STATE_DB` (D1, database `f018ee20-2d7f-41ec-9744-ee058bce80f8`), `ARTIFACTS` (R2 bucket `sonicvhibez-artifacts-staging`), and both existing `secret_text` operator bindings. Secret values were not read or changed.
+- The deployed Worker source was fetched again after activation; it contains the root/dashboard route and all three fail-closed dashboard asset error codes.
+- The private R2 dashboard object remains present at `dashboard/dashboard.html`, size 98,508 bytes, with public R2 access disabled.
+
+Verification boundary: Cloudflare's control-plane API confirms the active 100% deployment, exact version, binding preservation, and R2 object metadata. The external HTTP smoke request to `/`, `/operational-readyz`, and `/readyz` could not be completed by the available browser/fetch tools in this session. Therefore, the live HTTP response is **NOT_TESTED**, not PASS. Automated CI tests for the same route and fail-closed behavior remain PASS on the integration source. No production publication or runner dispatch was performed; `/readyz` remains a separate, held publication gate.
