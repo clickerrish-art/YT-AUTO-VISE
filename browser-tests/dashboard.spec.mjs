@@ -522,7 +522,7 @@ test("dashboard presents actionable API errors without exposing raw server respo
   await page.route("**/api/state", route => route.abort("failed"));
   await page.locator("#connect").click();
   await expect(page.locator("#message")).toContainText(
-    "Could not reach the dashboard API. Confirm the local dashboard server is running, then retry."
+    "Could not reach the dashboard API. Confirm the dashboard service is reachable, then retry."
   );
   await expect(page.locator("#message")).not.toContainText(operatorToken);
 });
@@ -1249,13 +1249,20 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
       fetch(base + "/api/jobs/narration", { method: "POST", headers, body: narrationPayload })
     ]);
     const concurrentNarrationBodies = await Promise.all(concurrentNarrationResponses.map(response => response.json()));
-    expect(concurrentNarrationResponses.map(response => response.status).sort()).toEqual([200, 201]);
+    expect(concurrentNarrationResponses.map(response => response.status).sort()).toEqual([201, 409]);
     const createdIndex = concurrentNarrationResponses.findIndex(response => response.status === 201);
-    const reusedIndex = concurrentNarrationResponses.findIndex(response => response.status === 200);
+    const blockedIndex = concurrentNarrationResponses.findIndex(response => response.status === 409);
     expect(concurrentNarrationBodies[createdIndex].narrationStage.status).toBe("DRAFT_REVIEW_REQUIRED");
-    expect(concurrentNarrationBodies[reusedIndex].reused).toBe(true);
-    expect(concurrentNarrationBodies[reusedIndex].idempotent).toBe(true);
-    expect(concurrentNarrationBodies[reusedIndex].narrationStage.artifacts)
+    expect(concurrentNarrationBodies[blockedIndex].error).toMatch(/already in progress|duplicate work is blocked/i);
+
+    // Once the in-flight attempt has completed, an exact retry must verify and reuse
+    // the persisted receipt instead of generating a second TTS artifact set.
+    const retryResponse = await fetch(base + "/api/jobs/narration", { method: "POST", headers, body: narrationPayload });
+    const retryBody = await retryResponse.json();
+    expect(retryResponse.status, JSON.stringify(retryBody)).toBe(200);
+    expect(retryBody.reused).toBe(true);
+    expect(retryBody.idempotent).toBe(true);
+    expect(retryBody.narrationStage.artifacts)
       .toEqual(concurrentNarrationBodies[createdIndex].narrationStage.artifacts);
     const concurrentNarrationState = await (await fetch(base + "/api/state", { headers })).json();
     expect(concurrentNarrationState.audit.filter(event =>
@@ -1782,7 +1789,7 @@ test("Cloudflare D1 backup controls create and restore a revision-bound checkpoi
   await expect(page.locator('#stateBackupList [data-restore-backup="backup-1"]')).toBeVisible();
 });
 
-test("all 116 dashboard controls have stable identities and accessible names", async ({ page }) => {
+test("all 118 dashboard controls have stable identities and accessible names", async ({ page }) => {
   await page.goto("/");
   await page.locator("#token").fill(operatorToken);
   await page.locator("#connect").click();
@@ -1830,7 +1837,7 @@ test("all 116 dashboard controls have stable identities and accessible names", a
     return { controlCount: controls.length, formCount: forms.length, failures };
   });
 
-  expect(audit.controlCount).toBe(116);
+  expect(audit.controlCount).toBe(118);
   expect(audit.formCount).toBe(17);
   expect(audit.failures).toEqual([]);
 });
