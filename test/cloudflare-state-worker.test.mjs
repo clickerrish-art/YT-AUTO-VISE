@@ -1031,6 +1031,7 @@ test("repository runner OIDC accepts only the exact repository, branch, workflow
     { workflow_ref: "clickerrish-art/YT-AUTO-VISE/.github/workflows/other.yml@refs/heads/codex/cloudflare-adapter-integration-20261108" },
     { aud: "wrong-audience" },
     { event_name: "pull_request" },
+    { event_name: "push" },
     { iss: "https://attacker.example" },
     { exp: Math.floor(Date.now() / 1000) - 1 }
   ]) {
