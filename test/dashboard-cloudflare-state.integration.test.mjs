@@ -65,6 +65,7 @@ test("dashboard startup recovers local work through authenticated Cloudflare per
   let remoteState = null;
   let revision = 0;
   let authFailures = 0;
+  const backups = [];
   const stateServer = http.createServer(async (req, res) => {
     try {
       if (req.headers["x-operator-token"] !== stateToken ||
@@ -89,6 +90,36 @@ test("dashboard startup recovers local work through authenticated Cloudflare per
         revision = 1;
         remoteState = { ...body, audit: [...body.audit, { id: "bootstrap", action: "DASHBOARD_STATE_BOOTSTRAPPED", actor: "integration-operator" }] };
         send(res, 201, { revision, updatedAt: "2026-11-08T00:00:00.000Z", state: remoteState }, { etag: '"1"' });
+        return;
+      }
+      if (req.method === "GET" && req.url === "/api/backups") {
+        send(res, 200, { backups: backups.map(item => ({
+          backup_id: item.backupId, source_revision: item.sourceRevision, sha256: item.sha256,
+          created_at: item.createdAt, reason: item.reason
+        })) });
+        return;
+      }
+      if (req.method === "POST" && req.url === "/api/backups") {
+        const receipt = {
+          backupId: "backup-" + (backups.length + 1), sourceRevision: revision,
+          sha256: "a".repeat(64), createdAt: "2026-11-08T00:02:00.000Z",
+          reason: "OPERATOR_REQUESTED:integration-operator", state: JSON.parse(JSON.stringify(remoteState))
+        };
+        backups.push(receipt);
+        const { state: _snapshot, ...publicReceipt } = receipt;
+        send(res, 201, publicReceipt);
+        return;
+      }
+      if (req.method === "POST" && req.url === "/api/backups/restore") {
+        const backup = backups.find(item => item.backupId === body?.backupId);
+        if (!backup) { send(res, 404, { error: "Backup not found" }); return; }
+        if (Number(body.expectedRevision) !== revision) { send(res, 409, { code: "REVISION_CONFLICT", error: "reload" }); return; }
+        revision++;
+        remoteState = {
+          ...JSON.parse(JSON.stringify(backup.state)),
+          audit: [...backup.state.audit, { id: "restore-" + revision, action: "DASHBOARD_STATE_RESTORED", backupId: body.backupId }]
+        };
+        send(res, 200, { revision, updatedAt: "2026-11-08T00:02:00.000Z", state: remoteState }, { etag: '"' + revision + '"' });
         return;
       }
       if (req.method === "PUT" && req.url === "/api/state") {
@@ -160,6 +191,33 @@ test("dashboard startup recovers local work through authenticated Cloudflare per
   const local = JSON.parse(fs.readFileSync(stateFile, "utf8"));
   assert.equal(local.jobs[0].status, "RECOVERY_REQUIRED");
   assert.deepEqual(local, remoteState);
+  const headers = { "x-operator-token": dashboardToken };
+  const backupResponse = await fetch(base + "/api/state/backup", { method: "POST", headers });
+  assert.equal(backupResponse.status, 201);
+  const backup = await backupResponse.json();
+  assert.equal(backup.sourceRevision, 2);
+  const listResponse = await fetch(base + "/api/state/backups", { headers });
+  assert.equal(listResponse.status, 200);
+  const listed = await listResponse.json();
+  assert.equal(listed.backups.length, 1);
+  assert.equal(listed.backups[0].backup_id, backup.backupId);
+  const unconfirmed = await fetch(base + "/api/state/restore", {
+    method: "POST", headers: { ...headers, "content-type": "application/json" },
+    body: JSON.stringify({ backupId: backup.backupId, expectedRevision: 2 })
+  });
+  assert.equal(unconfirmed.status, 400, "restore must require an explicit confirmation flag");
+  assert.equal(revision, 2, "unconfirmed restore must not contact or mutate the remote state");
+  const restoreResponse = await fetch(base + "/api/state/restore", {
+    method: "POST", headers: { ...headers, "content-type": "application/json" },
+    body: JSON.stringify({ backupId: backup.backupId, expectedRevision: 2, confirmRestore: true })
+  });
+  assert.equal(restoreResponse.status, 200);
+  const restoreReceipt = await restoreResponse.json();
+  assert.equal(restoreReceipt.revision, 3);
+  assert.equal(remoteState.audit.at(-1).action, "DASHBOARD_STATE_RESTORED");
+  assert.equal(remoteState.audit.at(-1).backupId, backup.backupId);
+  const restoredLocal = JSON.parse(fs.readFileSync(stateFile, "utf8"));
+  assert.deepEqual(restoredLocal, remoteState);
   const metadata = JSON.parse(fs.readFileSync(stateFile + ".cloudflare-meta.json", "utf8"));
-  assert.equal(metadata.revision, 2);
+  assert.equal(metadata.revision, 3);
 });

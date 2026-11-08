@@ -707,6 +707,32 @@ const server = http.createServer(async (req, res) => {
       return json(res, 400, { error: "A valid x-worker-id is required for worker operations" });
     }
     const requestActor = workerAuthenticated ? "worker:" + workerId : operatorId;
+    if (req.method === "GET" && url.pathname === "/api/state/backups") {
+      if (!remoteStateStore) return json(res, 503, { error: "Cloudflare state sync is not configured" });
+      return json(res, 200, { enabled: true, revision: remoteStateStore.revision, backups: await remoteStateStore.listBackups() });
+    }
+    if (req.method === "POST" && url.pathname === "/api/state/backup") {
+      if (!remoteStateStore) return json(res, 503, { error: "Cloudflare state sync is not configured" });
+      return json(res, 201, await remoteStateStore.createBackup());
+    }
+    if (req.method === "POST" && url.pathname === "/api/state/restore") {
+      if (!remoteStateStore) return json(res, 503, { error: "Cloudflare state sync is not configured" });
+      const body = await readBody(req);
+      if (body.confirmRestore !== true) return json(res, 400, { error: "Explicit confirmRestore=true is required" });
+      if (typeof body.backupId !== "string" || !body.backupId.trim() ||
+          !Number.isSafeInteger(body.expectedRevision) || body.expectedRevision < 1) {
+        return json(res, 400, { error: "backupId and positive expectedRevision are required" });
+      }
+      if (body.expectedRevision !== remoteStateStore.revision) {
+        return json(res, 409, { error: "Dashboard state revision changed; refresh before restoring", revision: remoteStateStore.revision });
+      }
+      const restored = await remoteStateStore.restoreBackup(body.backupId, body.expectedRevision);
+      return json(res, 200, {
+        restored: true, backupId: body.backupId, revision: remoteStateStore.revision,
+        queueItemCount: restored.queueItems.length, jobCount: restored.jobs.length,
+        publishingEnabled: false
+      });
+    }
     if (req.method === "GET" && url.pathname === "/api/state") {
       const state = loadState();
       const schedule = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));

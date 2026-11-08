@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import crypto from "node:crypto";
 import { atomicWriteJson } from "./atomic-json-file.mjs";
-import { validateRemoteDashboardState } from "./cloudflare-dashboard-state-client.mjs";
+import { DashboardStateConflictError, validateRemoteDashboardState } from "./cloudflare-dashboard-state-client.mjs";
 
 const ARRAY_KEYS = ["queueItems", "campaigns", "audit", "jobs", "uploads", "facebookDrafts", "facebookPosts", "facebookAttempts"];
 
@@ -80,7 +80,8 @@ function mergeSeedSnapshot(local, remote, actor) {
 
 export class CloudflareDashboardStateStore {
   constructor({ client, stateFile, actor = "dashboard-operator", localStateIsFresh = false } = {}) {
-    if (!client || typeof client.getState !== "function" || typeof client.updateState !== "function") {
+    if (!client || typeof client.getState !== "function" || typeof client.updateState !== "function" ||
+        typeof client.listBackups !== "function" || typeof client.createBackup !== "function" || typeof client.restoreBackup !== "function") {
       throw new TypeError("A Cloudflare dashboard state client is required");
     }
     if (typeof stateFile !== "string" || !stateFile.trim()) throw new TypeError("stateFile is required");
@@ -126,6 +127,10 @@ export class CloudflareDashboardStateStore {
       remote = await this.client.getState();
     } catch (error) {
       if (error?.code !== "STATE_NOT_INITIALIZED") throw error;
+      if (readJsonFile(this.journalFile)) {
+        throw new Error("Cloudflare state is uninitialized while a local sync journal exists; preserve the journal and local snapshot for manual reconciliation");
+      }
+      if (!local) throw new Error("Cloudflare state is uninitialized and no local snapshot is available for bootstrap");
       const bootstrap = normalizePolicy(local);
       try {
         remote = await this.client.bootstrapState(bootstrap);
@@ -139,8 +144,28 @@ export class CloudflareDashboardStateStore {
 
     const pending = readJsonFile(this.journalFile);
     if (pending) {
-      if (!Number.isSafeInteger(pending.expectedRevision) || pending.expectedRevision < 1 ||
-          !pending.state || pending.stateSha256 !== digest(normalizePolicy(pending.state))) {
+      if (!Number.isSafeInteger(pending.expectedRevision) || pending.expectedRevision < 1) {
+        throw new Error("Cloudflare state sync journal is invalid; preserve it and inspect remote state before continuing");
+      }
+      if (pending.operation === "restore") {
+        if (typeof pending.backupId !== "string" || !pending.backupId) {
+          throw new Error("Cloudflare restore journal is invalid; preserve it and inspect remote state before continuing");
+        }
+        const receipt = remote.state.audit.at(-1);
+        if (remote.revision === pending.expectedRevision + 1 &&
+            receipt?.action === "DASHBOARD_STATE_RESTORED" && receipt.backupId === pending.backupId) {
+          return this.finalize(remote.revision, remote.state, remote.updatedAt);
+        }
+        if (remote.revision === pending.expectedRevision) {
+          const restored = await this.client.restoreBackup(pending.backupId, pending.expectedRevision);
+          return this.finalize(restored.revision, restored.state, restored.updatedAt);
+        }
+        throw new Error("Cloudflare state changed during an interrupted restore; preserve local and remote snapshots for reconciliation");
+      }
+      if (pending.operation && pending.operation !== "update") {
+        throw new Error("Cloudflare state sync journal contains an unknown operation; preserve it for inspection");
+      }
+      if (!pending.state || pending.stateSha256 !== digest(normalizePolicy(pending.state))) {
         throw new Error("Cloudflare state sync journal is invalid; preserve it and inspect remote state before continuing");
       }
       if (remote.revision === pending.expectedRevision + 1 && matchesPendingSnapshot(remote.state, pending)) {
@@ -200,21 +225,57 @@ export class CloudflareDashboardStateStore {
     }
     const state = normalizePolicy(input);
     const expectedRevision = this.revision;
-    const pending = { version: 1, expectedRevision, state, stateSha256: digest(state), createdAt: new Date().toISOString() };
+    const pending = { version: 1, operation: "update", expectedRevision, state, stateSha256: digest(state), createdAt: new Date().toISOString() };
     writeJsonFile(this.journalFile, pending);
     let committed;
     try {
       committed = await this.client.updateState(state, expectedRevision);
     } catch (error) {
-      if (error?.status === 409 || error?.code === "REVISION_CONFLICT") {
+      if (Number.isInteger(error?.status) && error.status >= 400 && error.status < 500) {
         removeFile(this.journalFile);
-        try { await this.initialize(); }
-        catch (refreshError) {
-          throw new Error("Cloudflare state revision conflict; automatic local refresh failed: " + refreshError.message, { cause: error });
+        if (error.status === 409 || error?.code === "REVISION_CONFLICT") {
+          try { await this.initialize(); }
+          catch (refreshError) {
+            throw new Error("Cloudflare state revision conflict; automatic local refresh failed: " + refreshError.message, { cause: error });
+          }
         }
       }
       throw error;
     }
     return this.finalize(committed.revision, committed.state, committed.updatedAt);
+  }
+
+  async listBackups() {
+    if (!Number.isSafeInteger(this.revision) || this.revision < 1) throw new Error("Cloudflare state store has not completed startup reconciliation");
+    return this.client.listBackups();
+  }
+
+  async createBackup() {
+    if (!Number.isSafeInteger(this.revision) || this.revision < 1) throw new Error("Cloudflare state store has not completed startup reconciliation");
+    return this.client.createBackup();
+  }
+
+  async restoreBackup(backupId, expectedRevision = this.revision) {
+    if (typeof backupId !== "string" || !backupId.trim()) throw new TypeError("backupId is required");
+    if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 1) throw new TypeError("expectedRevision must be a positive integer");
+    if (expectedRevision !== this.revision) throw new DashboardStateConflictError();
+    const pending = { version: 1, operation: "restore", expectedRevision, backupId, createdAt: new Date().toISOString() };
+    writeJsonFile(this.journalFile, pending);
+    let restored;
+    try {
+      restored = await this.client.restoreBackup(backupId, expectedRevision);
+    } catch (error) {
+      if (Number.isInteger(error?.status) && error.status >= 400 && error.status < 500) {
+        removeFile(this.journalFile);
+        if (error.status === 409 || error?.code === "REVISION_CONFLICT") {
+          try { await this.initialize(); }
+          catch (refreshError) {
+            throw new Error("Cloudflare restore revision conflict; automatic local refresh failed: " + refreshError.message, { cause: error });
+          }
+        }
+      }
+      throw error;
+    }
+    return this.finalize(restored.revision, restored.state, restored.updatedAt);
   }
 }

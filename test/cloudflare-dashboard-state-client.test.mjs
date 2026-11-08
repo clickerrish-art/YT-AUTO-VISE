@@ -123,6 +123,25 @@ test("PUT refuses invalid state before making a network request", async t => {
   assert.equal(calls, 0);
 });
 
+test("backup listing validates metadata before exposing restore choices", async t => {
+  const client = await fixture(t, (req, res) => {
+    assert.equal(req.method, "GET");
+    assert.equal(req.url, "/api/backups");
+    respond(res, 200, { backups: [{
+      backup_id: "backup-1", source_revision: 4, sha256: "a".repeat(64),
+      created_at: "2026-11-08T00:00:00.000Z", reason: "OPERATOR_REQUESTED:owner"
+    }] });
+  });
+  const backups = await client.listBackups();
+  assert.equal(backups.length, 1);
+  assert.equal(backups[0].backup_id, "backup-1");
+});
+
+test("backup listing rejects incomplete or corrupt metadata", async t => {
+  const client = await fixture(t, (_req, res) => respond(res, 200, { backups: [{ backup_id: "backup-1", source_revision: 4, sha256: "bad" }] }));
+  await assert.rejects(client.listBackups(), error => error.code === "INVALID_RESPONSE");
+});
+
 test("backup and restore return verified, monotonic receipts", async t => {
   const client = await fixture(t, (req, res, body) => {
     if (req.url === "/api/backups" && req.method === "POST") {

@@ -19,10 +19,41 @@ function fixture(t, initialLocal = makeState()) {
   return { dir, stateFile };
 }
 function remoteClient(initial = makeState()) {
-  const db = { revision: 1, state: clone(initial), backups: 0, failOnce: false, commitThenFailOnce: false };
+  const db = { revision: 1, state: clone(initial), backups: 0, savedBackups: [], failOnce: false, commitThenFailOnce: false, restoreThenFailOnce: false };
   const client = {
     async getState() { return { revision: db.revision, state: clone(db.state), updatedAt: "2026-11-08T00:00:00.000Z" }; },
-    async createBackup() { db.backups++; return { backupId: "backup", sourceRevision: db.revision, sha256: "a".repeat(64) }; },
+    async listBackups() {
+      return db.savedBackups.map(item => ({
+        backup_id: item.backupId, source_revision: item.sourceRevision, sha256: item.sha256,
+        created_at: item.createdAt, reason: item.reason
+      }));
+    },
+    async createBackup() {
+      db.backups++;
+      const receipt = {
+        backupId: "backup-" + (db.savedBackups.length + 1), sourceRevision: db.revision,
+        sha256: "a".repeat(64), createdAt: "2026-11-08T00:00:00.000Z", reason: "OPERATOR_REQUESTED:owner"
+      };
+      db.savedBackups.push({ ...receipt, state: clone(db.state) });
+      return receipt;
+    },
+    async restoreBackup(backupId, expectedRevision) {
+      if (db.revision !== expectedRevision) { const error = new Error("conflict"); error.status = 409; error.code = "REVISION_CONFLICT"; throw error; }
+      const backup = db.savedBackups.find(item => item.backupId === backupId);
+      if (!backup) { const error = new Error("not found"); error.status = 404; throw error; }
+      const previousState = clone(db.state);
+      db.revision++;
+      db.state = clone(backup.state);
+      db.state.audit.push({ id: "restore-receipt-" + db.revision, action: "DASHBOARD_STATE_RESTORED", backupId });
+      db.savedBackups.push({
+        backupId: "pre-restore-" + db.revision, sourceRevision: expectedRevision,
+        sha256: "b".repeat(64), createdAt: "2026-11-08T00:02:00.000Z",
+        reason: "AUTOMATIC_PRE_RESTORE", state: previousState
+      });
+      const result = { revision: db.revision, state: clone(db.state), updatedAt: "2026-11-08T00:02:00.000Z" };
+      if (db.restoreThenFailOnce) { db.restoreThenFailOnce = false; throw new Error("simulated lost restore response"); }
+      return result;
+    },
     async bootstrapState(state) {
       db.revision = 1;
       db.state = clone(state);
@@ -43,6 +74,45 @@ function remoteClient(initial = makeState()) {
   };
   return { client, db };
 }
+
+test("manual backup listing and revision-checked restore update both copies", async t => {
+  const initial = makeState({ jobs: [{ id: "original-job" }] });
+  const { stateFile } = fixture(t, initial);
+  const { client, db } = remoteClient(initial);
+  const store = new CloudflareDashboardStateStore({ client, stateFile });
+  await store.initialize();
+  const backup = await store.createBackup();
+  assert.equal(backup.sourceRevision, 1);
+  assert.equal((await store.listBackups()).length, 1);
+  await store.persist(makeState({ jobs: [{ id: "newer-job" }] }));
+  const restored = await store.restoreBackup(backup.backupId, 2);
+  assert.equal(restored.jobs[0].id, "original-job");
+  assert.equal(store.revision, 3);
+  assert.equal(db.revision, 3);
+  assert.equal(restored.audit.at(-1).action, "DASHBOARD_STATE_RESTORED");
+  assert.equal(restored.audit.at(-1).backupId, backup.backupId);
+  assert.deepEqual(JSON.parse(fs.readFileSync(stateFile, "utf8")), db.state);
+  assert.equal(JSON.parse(fs.readFileSync(stateFile + ".cloudflare-meta.json", "utf8")).revision, 3);
+  assert.equal(fs.existsSync(stateFile + ".cloudflare-pending.json"), false);
+});
+
+test("startup completes an interrupted restore when the remote commit succeeded but its response was lost", async t => {
+  const initial = makeState({ jobs: [{ id: "original-job" }] });
+  const { stateFile } = fixture(t, initial);
+  const { client, db } = remoteClient(initial);
+  const store = new CloudflareDashboardStateStore({ client, stateFile });
+  await store.initialize();
+  const backup = await store.createBackup();
+  await store.persist(makeState({ jobs: [{ id: "newer-job" }] }));
+  db.restoreThenFailOnce = true;
+  await assert.rejects(store.restoreBackup(backup.backupId, 2), /lost restore response/);
+  assert.equal(db.revision, 3);
+  const recovered = await new CloudflareDashboardStateStore({ client, stateFile }).initialize();
+  assert.equal(recovered.jobs[0].id, "original-job");
+  assert.equal(recovered.audit.at(-1).backupId, backup.backupId);
+  assert.equal(db.revision, 3);
+  assert.equal(fs.existsSync(stateFile + ".cloudflare-pending.json"), false);
+});
 
 test("initialization hydrates a missing local file from the authoritative remote snapshot", async t => {
   const { stateFile } = fixture(t, null);

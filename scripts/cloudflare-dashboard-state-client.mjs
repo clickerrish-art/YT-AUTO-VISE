@@ -142,6 +142,23 @@ export class CloudflareDashboardStateClient {
     return { revision, updatedAt: payload.updatedAt ?? null, state: savedState };
   }
 
+  async listBackups() {
+    const { payload } = await this.request("/api/backups");
+    if (!Array.isArray(payload?.backups)) {
+      throw new DashboardStateServiceError("State service returned an invalid backup list", { code: "INVALID_RESPONSE" });
+    }
+    for (const backup of payload.backups) {
+      if (typeof backup?.backup_id !== "string" || !backup.backup_id ||
+          !Number.isSafeInteger(Number(backup.source_revision)) || Number(backup.source_revision) < 1 ||
+          !/^[a-f0-9]{64}$/.test(backup.sha256 ?? "") ||
+          !Number.isFinite(Date.parse(backup.created_at ?? "")) ||
+          typeof backup.reason !== "string") {
+        throw new DashboardStateServiceError("State service returned incomplete backup metadata", { code: "INVALID_RESPONSE" });
+      }
+    }
+    return payload.backups;
+  }
+
   async createBackup() {
     const { payload } = await this.request("/api/backups", { method: "POST", body: {} });
     if (typeof payload?.backupId !== "string" || !payload.backupId || !/^[a-f0-9]{64}$/.test(payload.sha256 ?? "") ||
