@@ -1,6 +1,17 @@
 name: Dashboard Cloudflare state adapter checks
 
 on:
+  push:
+    branches: [codex/dashboard-cloudflare-adapter]
+    paths:
+      - "cloudflare/**"
+      - "wrangler.jsonc"
+      - "test/cloudflare-state-worker.test.mjs"
+      - "scripts/cloudflare-runner-bridge.mjs"
+      - "scripts/cloudflare-artifact-sync.mjs"
+      - ".github/workflows/repository-runner.yml"
+      - ".github/workflows/cloudflare-state.yml"
+      - ".github/workflows/dashboard-cloudflare-adapter.yml"
   pull_request:
     branches: [codex/marketing-machine-audit-fixes]
     paths:
