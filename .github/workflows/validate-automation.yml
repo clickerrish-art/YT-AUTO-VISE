@@ -2,7 +2,7 @@ name: Validate SonicVhibez automation
 
 on:
   push:
-    branches: [main]
+    branches: [main, codex/cloudflare-adapter-integration-20261108]
     paths:
       - "scripts/**"
       - "tests/**"
@@ -16,7 +16,7 @@ on:
       - "package-lock.json"
       - ".github/workflows/**"
   pull_request:
-    branches: [main]
+    branches: [main, codex/marketing-machine-audit-fixes]
   workflow_dispatch:
 
 permissions:
