@@ -97,3 +97,17 @@ Additional integrity check:
 - Passing CI, a deployed staging Worker, and a valid D1/R2 configuration do not satisfy those external production gates.
 
 **Current result:** the integrated Cloudflare Worker and private R2 dashboard hosting are deployed to staging, with D1 and operator-secret bindings preserved. Automated checks pass. The live HTTP smoke and live runner-cycle checks remain unverified, and production publishing remains safely held.
+
+## Worker-hosted dashboard shell route — 8 November 2026
+
+A deployment review found that the staging workflow uploads `dashboard/dashboard.html` to private R2 and then smoke-checks `GET /`, while the Worker had no root/dashboard route. The deployment could therefore pass its R2 upload step but still leave the dashboard inaccessible.
+
+Implemented on the integration branch:
+- `GET /` and `GET /dashboard` now read `dashboard/dashboard.html` from the private `ARTIFACTS` R2 binding and stream the HTML response.
+- Responses set `text/html; charset=utf-8`, `Cache-Control: no-store`, `X-Content-Type-Options: nosniff`, and `Referrer-Policy: no-referrer`.
+- Missing binding, missing object, and R2 read failure return explicit HTTP 503 responses; no public R2 object or alternate storage fallback is created.
+- Three regression tests cover successful shell delivery, missing storage/object, and read failure.
+
+Exact latest integration workflow run:
+- Run `42471785224`, commit `41d46f598d56dba4fa8112e2a4498f45bb011066`: **28/28 Chromium journeys**, **138/138 Cloudflare adapter/Worker/dashboard tests**, zero failures, zero skips; syntax checks PASS.
+- This run verifies the Worker route against a mocked R2 binding. It does not establish that the live staging Worker has the deployed binding or that the real R2 object is present; that remains blocked by the invalid Cloudflare API token / missing GitHub Actions secret.
