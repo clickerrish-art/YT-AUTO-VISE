@@ -31,38 +31,45 @@
           "keywordPhrases": [
             {
               "phrase": "how to script a YouTube video",
-              "estimatedMonthlySearches": 44320,
+              "estimatedMonthlySearches": 44243,
               "volumeScore": 69,
               "competition": 46,
-              "growthPct": 70.6
+              "growthPct": 70.7
             },
             {
-              "phrase": "YouTube video prompts",
-              "estimatedMonthlySearches": 3946,
-              "volumeScore": 54,
-              "competition": 29,
+              "phrase": "how to write a video script for youtube",
+              "estimatedMonthlySearches": 17752,
+              "volumeScore": 63,
+              "competition": 56,
               "growthPct": null
             },
             {
-              "phrase": "YouTube video ideas",
-              "estimatedMonthlySearches": 53941,
-              "volumeScore": 71,
-              "competition": 27,
+              "phrase": "how to write a script for youtube",
+              "estimatedMonthlySearches": 7377,
+              "volumeScore": 58,
+              "competition": 43,
               "growthPct": null
             },
             {
-              "phrase": "how to come up with YouTube video ideas",
-              "estimatedMonthlySearches": 18637,
-              "volumeScore": 64,
-              "competition": 31,
-              "growthPct": 41.4
+              "phrase": "how to script youtube videos",
+              "estimatedMonthlySearches": 33672,
+              "volumeScore": 68,
+              "competition": 43,
+              "growthPct": -39.4
+            },
+            {
+              "phrase": "how to write scripts for youtube videos",
+              "estimatedMonthlySearches": 15707,
+              "volumeScore": 63,
+              "competition": 47,
+              "growthPct": null
             }
           ],
           "keywordEvidence": {
             "provider": "vidIQ",
-            "researchedAt": "2026-11-07T09:15:59+02:00",
+            "researchedAt": "2026-11-08T09:38:00+02:00",
             "type": "estimated_monthly_searches",
-            "note": "Fresh vidIQ research on 2026-11-07. Primary phrase: 44,320 estimated monthly searches, competition 46/100 and search-demand growth +70.6%. Related intent: YouTube video prompts 3,946 (competition 29), YouTube video ideas 53,941 (competition 27; top markets IN 29%, US 12%, PH 6%), and how to come up with YouTube video ideas 18,637 (+41.4%, competition 31). Estimates are provider estimates, not independently audited; the primary phrase directly matches the scripting lesson."
+            "note": "Fresh vidIQ research on 2026-11-08: the primary phrase has 44,243 estimated monthly searches, competition 46/100 and search-demand growth +70.7%. Related phrases include how to write a video script for YouTube (17,752), how to script YouTube videos (33,672) and how to write scripts for YouTube videos (15,707). These are provider estimates, not independently audited; the primary phrase directly matches the scripting lesson."
           },
           "hashtags": [
             "#YouTubeVideoPrompts",
@@ -137,7 +144,20 @@
             "provider": "vidIQ",
             "researchedAt": "2026-11-07T09:15:59+02:00",
             "type": "estimated_monthly_searches",
-            "note": "Fresh vidIQ research on 2026-11-07. Primary phrase: YouTube growth strategy, 22,973 estimated monthly searches and competition 46/100. Closely related searches include how to grow YouTube channel 214,276 (+43%, competition 40), YouTube growth tips 86,457 (competition 33), and how to grow a small YouTube channel 129,456 (+238.3%, competition 36). The title keeps the more precise strategy phrase; broader growth terms remain supporting phrases, not a promise of results. Estimates are provider estimates, not independently audited."
+            "note": "vidIQ estimate researched 2026-11-07: YouTube growth strategy had 22,973 estimated monthly searches and competition 46/100; related estimates included how to grow YouTube channel (214,276; +43%) and how to grow a small YouTube channel (129,456; +238.3%). On 2026-11-08, current web search results also surfaced 90-day YouTube content strategy resources covering audience, content pillars, calendars and analytics review. Volume figures are vidIQ provider estimates, not independently audited; today's web results are qualitative, not additional volume measurements.",
+            "qualitativeCheckedAt": "2026-11-08T09:38:00+02:00",
+            "qualitativeSources": [
+              {
+                "title": "YouTube Content Strategy Template (Free Excel, Word & PDF)",
+                "url": "https://alpha.outlierkit.com/resources/youtube-content-strategy-template/",
+                "whyRelevant": "Current search result covers audience positioning, content pillars, a 90-day calendar, production pipeline and monthly KPI review—closely matching the video's planning lesson."
+              },
+              {
+                "title": "The YouTube Content Strategy Framework: Plan Videos That Compound",
+                "url": "https://www.overseeros.com/blog/youtube-content-strategy-framework-how-to-plan-videos-that-compound",
+                "whyRelevant": "Current search result outlines a 90-day strategy with research, planning, publishing and review phases; qualitative evidence of matching informational intent."
+              }
+            ]
           },
           "hashtags": [
             "#YouTubeGrowthStrategy",
@@ -167,6 +187,87 @@
             "Complete human playback, factual and thumbnail review against final asset hashes.",
             "Do not schedule until the SonicVhibez destination and full YouTube history are verified and every 72-hour gap is calculated."
           ]
+        }
+      ]
+    },
+    {
+      "weekOf": "2026-11-16",
+      "status": "DRAFT_ONLY",
+      "items": [
+        {
+          "id": "sonicvhibez-short-005-wildlife-story-sequence",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "How to Make a Wildlife Documentary: 3 Storytelling Shots",
+          "primaryKeyword": "how to make a wildlife documentary",
+          "script": "How do you make a wildlife documentary from footage that feels like a story, not a random collection of clips? Plan three shots before editing. First, a wide view that establishes the habitat. Second, a medium shot that shows where the animal sits in that environment. Third, a close detail that captures something you genuinely recorded—movement, feeding, or a natural interaction. Connect the shots with one simple line of context: what are we seeing, and why does it matter? Never bait, chase, stage, or disturb an animal to force a scene. If you're planning a wildlife-focused channel, the Complete YouTube Wildlife Creator's Vault is one resource to review; check the listing before deciding if it fits.",
+          "description": "How to make a wildlife documentary: plan a habitat wide shot, an animal-in-context shot and a truthful detail shot before editing.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault\nReview the exact Selar listing and its contents here:\nhttps://selar.com/0u19v8u99l\n\nDISCLOSURE HOLD: The seller was last recorded as Click 47 in the 6 November 2026 verification. The compensation relationship (affiliate, paid placement or no compensation) remains unverified. Confirm the exact relationship and owner-approved viewer-facing disclosure before release. The listing's brand wording also needs a final SonicVhibez context review.\n\nA wildlife video should document what actually happened. Do not stage animal behaviour or disturb wildlife for footage.",
+          "productUrl": "https://selar.com/0u19v8u99l",
+          "productId": "wildlife-creators-vault",
+          "visibility": "private",
+          "keywordPhrases": [
+            {
+              "phrase": "how to make a wildlife documentary"
+            },
+            {
+              "phrase": "wildlife filmmaking tips"
+            },
+            {
+              "phrase": "wildlife documentary storytelling"
+            },
+            {
+              "phrase": "how to tell a story with wildlife footage"
+            },
+            {
+              "phrase": "wildlife video storytelling"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-08T09:38:00+02:00",
+            "note": "No measured search-volume data was available for this wildlife seed on 2026-11-08. Qualitative search-result evidence only: a wildlife-filmmaker guide recommends thinking in sequences and combining wide/establishing shots with close-ups; FAO training covers storytelling through photos and videos. This supports the tutorial angle but does not prove query volume, ranking opportunity or demand size.",
+            "sources": [
+              {
+                "title": "In 10 Schritten zur Wildlife-Filmemacherin",
+                "url": "https://www.mpb.com/de-de/inhalt/tipps-und-techniken/leitfaden-in-10-schritten-zum-wildtier-filmemacher",
+                "whyRelevant": "A professional wildlife-filmmaker guide advises planning sequences and combining wide/establishing shots with close-ups; directly supports the three-shot lesson."
+              },
+              {
+                "title": "Nine tips for telling stories through photos and videos",
+                "url": "https://www.fao.org/forestry/resources/videos/nine-tips-for-telling-stories-through-photos-and-videos/en",
+                "whyRelevant": "FAO video training addresses storytelling through photos and videos, supporting the tutorial's creator-education angle."
+              }
+            ]
+          },
+          "hashtags": [
+            "#WildlifeDocumentary",
+            "#WildlifeFilmmaking",
+            "#WildlifeStorytelling",
+            "#YouTubeCreator",
+            "#NatureVideo"
+          ],
+          "thumbnailDirection": "Three-panel storyboard: habitat wide shot → animal-in-context shot → truthful close detail. Large text: “3 SHOTS / 1 STORY”. Use only final rights-cleared footage; never depict staged animal behaviour.",
+          "productionChecklist": [
+            "Keep the lesson practical: habitat, animal-in-context and truthful detail shots.",
+            "Use only footage that genuinely records the described behaviour; verify every factual claim.",
+            "Never bait, chase, stage, approach or disturb wildlife to obtain a shot.",
+            "Use only original or commercially cleared footage, narration, music and sound effects.",
+            "Avoid AI-generated or illustrative footage being presented as documentary evidence.",
+            "Record narration naturally and confirm a final runtime near 55 seconds.",
+            "Time captions to the final voice track; check phone-size readability and vertical safe areas.",
+            "Recheck the exact Selar listing, seller and its brand wording before promotion.",
+            "Keep the compensation relationship and viewer-facing disclosure on hold until verified.",
+            "Complete human playback, factual and thumbnail review against final asset hashes.",
+            "Do not create a publication slot until the SonicVhibez destination and complete YouTube history are verified and every 72-hour gap is calculated."
+          ],
+          "disclosure": {
+            "status": "HOLD",
+            "relationshipStatus": "UNVERIFIED",
+            "requiredBeforeRelease": true,
+            "holdText": "Confirm whether the link is affiliate, paid placement, or uncompensated; then insert the exact truthful, owner-approved viewer-facing disclosure."
+          }
         }
       ]
     }
