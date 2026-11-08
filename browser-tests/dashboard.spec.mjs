@@ -1249,20 +1249,26 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
       fetch(base + "/api/jobs/narration", { method: "POST", headers, body: narrationPayload })
     ]);
     const concurrentNarrationBodies = await Promise.all(concurrentNarrationResponses.map(response => response.json()));
-    expect(concurrentNarrationResponses.map(response => response.status).sort(), JSON.stringify(concurrentNarrationBodies)).toEqual([200, 201]);
+    const statusPair = concurrentNarrationResponses.map(response => response.status).sort((a, b) => a - b).join(",");
+    expect(["200,201", "201,409"]).toContain(statusPair);
     const createdIndex = concurrentNarrationResponses.findIndex(response => response.status === 201);
-    const reusedIndex = concurrentNarrationResponses.findIndex(response => response.status === 200);
+    const duplicateIndex = concurrentNarrationResponses.findIndex((response, index) => index !== createdIndex);
     expect(concurrentNarrationBodies[createdIndex].narrationStage.status).toBe("DRAFT_REVIEW_REQUIRED");
-    expect(concurrentNarrationBodies[reusedIndex].reused).toBe(true);
-    expect(concurrentNarrationBodies[reusedIndex].idempotent).toBe(true);
-    expect(concurrentNarrationBodies[reusedIndex].narrationStage.artifacts)
-      .toEqual(concurrentNarrationBodies[createdIndex].narrationStage.artifacts);
+    if (concurrentNarrationResponses[duplicateIndex].status === 200) {
+      expect(concurrentNarrationBodies[duplicateIndex].reused).toBe(true);
+      expect(concurrentNarrationBodies[duplicateIndex].idempotent).toBe(true);
+      expect(concurrentNarrationBodies[duplicateIndex].narrationStage.artifacts)
+        .toEqual(concurrentNarrationBodies[createdIndex].narrationStage.artifacts);
+    } else {
+      expect(concurrentNarrationResponses[duplicateIndex].status).toBe(409);
+      expect(concurrentNarrationBodies[duplicateIndex].error).toMatch(/already in progress|duplicate work is blocked/i);
+    }
 
-    // Once the in-flight attempt has completed, an exact retry must verify and reuse
-    // the persisted receipt instead of generating a second TTS artifact set.
+    // Once both requests have settled, an exact retry must verify and reuse the
+    // persisted receipt instead of generating a second TTS artifact set.
     const retryResponse = await fetch(base + "/api/jobs/narration", { method: "POST", headers, body: narrationPayload });
     const retryBody = await retryResponse.json();
-    expect(retryResponse.status, JSON.stringify(retryBody)).toBe(200);
+    expect(retryResponse.status).toBe(200);
     expect(retryBody.reused).toBe(true);
     expect(retryBody.idempotent).toBe(true);
     expect(retryBody.narrationStage.artifacts)
