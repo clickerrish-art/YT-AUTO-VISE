@@ -9,6 +9,8 @@ on:
       - "wrangler.jsonc"
       - "scripts/cloudflare-runner-bridge.mjs"
       - "scripts/cloudflare-artifact-sync.mjs"
+      - "scripts/artifact-integrity.mjs"
+      - "test/artifact-integrity.test.mjs"
       - "scripts/worker-runner.mjs"
       - "scripts/dashboard-inventory.mjs"
       - "scripts/dashboard-server.mjs"
@@ -62,6 +64,8 @@ jobs:
           node --check cloudflare/worker.js
           node --check scripts/cloudflare-runner-bridge.mjs
           node --check scripts/cloudflare-artifact-sync.mjs
+          node --check scripts/artifact-integrity.mjs
+          node --check test/artifact-integrity.test.mjs
           node --check scripts/worker-runner.mjs
           node --check scripts/dashboard-inventory.mjs
           node --check test/cloudflare-state-worker.test.mjs
@@ -70,4 +74,4 @@ jobs:
           node --check test/deployment-recovery.test.mjs
           ruby -e 'require "yaml"; YAML.load_file(".github/workflows/repository-runner.yml")'
       - name: Cloudflare state, repository runner and dashboard inventory tests
-        run: node --test test/cloudflare-state-worker.test.mjs test/worker-runner.test.mjs test/dashboard-inventory.test.mjs test/deployment-recovery.test.mjs
+        run: node --test test/cloudflare-state-worker.test.mjs test/worker-runner.test.mjs test/dashboard-inventory.test.mjs test/deployment-recovery.test.mjs test/artifact-integrity.test.mjs
