@@ -1,0 +1,65 @@
+name: Live Cloudflare staging HTTP smoke
+
+on:
+  push:
+    branches: [codex/cloudflare-adapter-integration-20261108]
+    paths:
+      - ".github/workflows/staging-http-smoke.yml"
+      - "cloudflare/**"
+      - "public/**"
+      - "wrangler.jsonc"
+
+permissions:
+  contents: read
+
+jobs:
+  staging-http-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      STAGING_BASE_URL: https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+      - name: Verify dashboard routes, operational readiness and publication hold
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from "node:assert/strict";
+
+          const base = process.env.STAGING_BASE_URL;
+          for (const route of ["/", "/dashboard"]) {
+            const response = await fetch(base + route, { redirect: "error", signal: AbortSignal.timeout(20000) });
+            assert.equal(response.status, 200, route + " must serve the private dashboard shell");
+            assert.match(response.headers.get("content-type") ?? "", /^text\/html;\s*charset=utf-8/i);
+            assert.equal(response.headers.get("cache-control"), "no-store");
+            assert.equal(response.headers.get("x-content-type-options"), "nosniff");
+            assert.equal(response.headers.get("referrer-policy"), "no-referrer");
+            const html = await response.text();
+            assert.match(html, /SonicVhibez/i, route + " must serve the expected dashboard");
+            console.log(JSON.stringify({ route, status: response.status, bytes: Buffer.byteLength(html), dashboard: "PASS" }));
+          }
+
+          const operational = await fetch(base + "/operational-readyz", { redirect: "error", signal: AbortSignal.timeout(20000) });
+          const operationalBody = await operational.json();
+          assert.equal(operational.status, 200, "operational staging must be ready");
+          assert.equal(operationalBody.ready, true);
+          assert.equal(operationalBody.publishingEnabled, false);
+          assert.deepEqual(operationalBody.blockers, []);
+          assert.equal(operationalBody.durableState, "READABLE");
+          assert.equal(operationalBody.campaignConfig, "PASS");
+          assert.equal(operationalBody.dashboardAssets, "READABLE");
+          assert.equal(operationalBody.artifactStorage, "BOUND");
+          console.log(JSON.stringify({ route: "/operational-readyz", status: operational.status, ...operationalBody }));
+
+          const publication = await fetch(base + "/readyz", { redirect: "error", signal: AbortSignal.timeout(20000) });
+          const publicationBody = await publication.json();
+          assert.equal(publication.status, 503, "production publication must remain held");
+          assert.equal(publicationBody.ready, false);
+          assert.equal(publicationBody.publishingEnabled, false);
+          assert.equal(publicationBody.publicPublishingEnabled, false);
+          assert.equal(publicationBody.unattendedPublishingEnabled, false);
+          assert.ok(Array.isArray(publicationBody.blockers) && publicationBody.blockers.length > 0);
+          console.log(JSON.stringify({ route: "/readyz", status: publication.status, ready: publicationBody.ready, publishingEnabled: publicationBody.publishingEnabled, blockers: publicationBody.blockers.length }));
+          NODE
