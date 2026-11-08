@@ -10,6 +10,8 @@ import { startWorkerLeaseHeartbeat } from "./worker-lease-heartbeat.mjs";
 import { terminateProcessTree } from "./terminate-process-tree.mjs";
 import { redactOperationalText } from "./safe-output.mjs";
 import { matchesOperatorToken } from "./operator-auth.mjs";
+import { CloudflareDashboardStateClient } from "./cloudflare-dashboard-state-client.mjs";
+import { CloudflareDashboardStateStore } from "./cloudflare-dashboard-state-store.mjs";
 import { fileURLToPath } from "node:url";
 import { spawn, spawnSync } from "node:child_process";
 import { validateCampaigns } from "./validate-campaigns.mjs";
@@ -40,6 +42,15 @@ const workerToken = process.env.DASHBOARD_WORKER_TOKEN;
 const operatorId = process.env.DASHBOARD_OPERATOR_ID?.trim();
 const stateDir = path.resolve(process.env.DASHBOARD_STATE_DIR ?? path.join(root, "state"));
 const stateFile = path.join(stateDir, "dashboard-state.json");
+const stateApiUrl = process.env.DASHBOARD_STATE_API_URL?.trim() ?? "";
+const stateApiToken = process.env.DASHBOARD_STATE_OPERATOR_TOKEN ?? "";
+const stateAccessClientId = process.env.DASHBOARD_STATE_ACCESS_CLIENT_ID ?? "";
+const stateAccessClientSecret = process.env.DASHBOARD_STATE_ACCESS_CLIENT_SECRET ?? "";
+if (stateApiUrl && (stateApiToken.length < 24 || !stateAccessClientId || !stateAccessClientSecret)) {
+  console.error("BLOCKED: Cloudflare state sync requires DASHBOARD_STATE_OPERATOR_TOKEN plus the Cloudflare Access service-token ID and secret. No state was changed.");
+  process.exit(2);
+}
+let remoteStateStore = null;
 const approvedProductUrl = "https://selar.com/0u19v8u99l";
 const htmlPath = path.join(root, "public", "dashboard.html");
 
@@ -55,6 +66,7 @@ if (!operatorId || operatorId.length < 2 || operatorId.length > 120) {
   console.error("BLOCKED: set DASHBOARD_OPERATOR_ID to the actual authorized operator identity (2–120 characters). No server started.");
   process.exit(2);
 }
+
 if (!["127.0.0.1", "::1", "localhost"].includes(host)) {
   console.error("BLOCKED: dashboard binds to loopback only; use a secure authenticated reverse proxy before changing this.");
   process.exit(2);
@@ -90,8 +102,24 @@ if (!initialStateEntry) {
     if (error?.code !== "EEXIST") throw error;
     const current = fs.lstatSync(stateFile);
     if (current.isSymbolicLink() || !current.isFile()) throw new Error("Dashboard state initialization collided with an unsafe destination");
+    initialStateEntry = current;
   }
 }
+
+if (stateApiUrl) {
+  remoteStateStore = new CloudflareDashboardStateStore({
+    client: new CloudflareDashboardStateClient({
+      baseUrl: stateApiUrl,
+      operatorToken: stateApiToken,
+      accessClientId: stateAccessClientId,
+      accessClientSecret: stateAccessClientSecret
+    }),
+    stateFile,
+    actor: operatorId,
+    localStateIsFresh: !initialStateEntry
+  });
+}
+
 function loadState() {
   const state = JSON.parse(fs.readFileSync(stateFile, "utf8"));
   for (const key of ["queueItems", "audit", "jobs", "uploads"]) if (!Array.isArray(state[key])) throw new Error("Invalid state schema: " + key);
@@ -103,7 +131,7 @@ function loadState() {
   }
   return state;
 }
-function recoverInterruptedTasks() {
+async function recoverInterruptedTasks() {
   const state = loadState();
   let recovered = 0;
   // Enforce the repository-level Safari prohibition on persisted legacy state as well as
@@ -190,7 +218,7 @@ function recoverInterruptedTasks() {
       recovered++;
     }
   }
-  if (recovered) saveState(state);
+  if (recovered) await saveState(state);
   return recovered;
 }
 async function reapExpiredWorkerLeases() {
@@ -209,11 +237,15 @@ async function reapExpiredWorkerLeases() {
       if (result.job.state === "DEAD_LETTER") state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_DEAD_LETTERED", jobId: job.id, reasonCode: result.job.deadLetter?.reasonCode ?? "LEASE_EXPIRY_RETRY_LIMIT_EXHAUSTED", attemptCount: result.job.attemptCount, maxAttempts: result.job.retryPolicy?.maxAttempts ?? null, at: reapedAt, actor: "retry-policy" });
       recovered++;
     }
-    if (recovered) saveState(state);
+    if (recovered) await saveState(state);
     return recovered;
   } finally { release(); }
 }
-function saveState(state) {
+async function saveState(state) {
+  if (remoteStateStore) {
+    await remoteStateStore.persist(state);
+    return;
+  }
   atomicWriteJson(stateFile, state, { mode: 0o600 });
 }
 function appendFacebookRecoveryReceipt(record) {
@@ -675,6 +707,32 @@ const server = http.createServer(async (req, res) => {
       return json(res, 400, { error: "A valid x-worker-id is required for worker operations" });
     }
     const requestActor = workerAuthenticated ? "worker:" + workerId : operatorId;
+    if (req.method === "GET" && url.pathname === "/api/state/backups") {
+      if (!remoteStateStore) return json(res, 503, { error: "Cloudflare state sync is not configured" });
+      return json(res, 200, { enabled: true, revision: remoteStateStore.revision, backups: await remoteStateStore.listBackups() });
+    }
+    if (req.method === "POST" && url.pathname === "/api/state/backup") {
+      if (!remoteStateStore) return json(res, 503, { error: "Cloudflare state sync is not configured" });
+      return json(res, 201, await remoteStateStore.createBackup());
+    }
+    if (req.method === "POST" && url.pathname === "/api/state/restore") {
+      if (!remoteStateStore) return json(res, 503, { error: "Cloudflare state sync is not configured" });
+      const body = await readBody(req);
+      if (body.confirmRestore !== true) return json(res, 400, { error: "Explicit confirmRestore=true is required" });
+      if (typeof body.backupId !== "string" || !body.backupId.trim() ||
+          !Number.isSafeInteger(body.expectedRevision) || body.expectedRevision < 1) {
+        return json(res, 400, { error: "backupId and positive expectedRevision are required" });
+      }
+      if (body.expectedRevision !== remoteStateStore.revision) {
+        return json(res, 409, { error: "Dashboard state revision changed; refresh before restoring", revision: remoteStateStore.revision });
+      }
+      const restored = await remoteStateStore.restoreBackup(body.backupId, body.expectedRevision);
+      return json(res, 200, {
+        restored: true, backupId: body.backupId, revision: remoteStateStore.revision,
+        queueItemCount: restored.queueItems.length, jobCount: restored.jobs.length,
+        publishingEnabled: false
+      });
+    }
     if (req.method === "GET" && url.pathname === "/api/state") {
       const state = loadState();
       const schedule = JSON.parse(fs.readFileSync(path.join(root, "config/weekly-content-plan.json"), "utf8"));
@@ -852,7 +910,7 @@ const server = http.createServer(async (req, res) => {
         const state = loadState();
         state.facebookConnection = { verified: true, permissionsVerified: identity.permissionsVerified, grantedPermissions: identity.grantedPermissions, tasks: identity.tasks, pageId: identity.pageId, pageName: identity.pageName, verifiedAt: identity.verifiedAt, apiVersion: identity.apiVersion, pageTokenFingerprint: metaCredentialFingerprint(pageAccessToken, "meta-page-token", token), userTokenFingerprint: metaCredentialFingerprint(userAccessToken, "meta-user-token", token), actor: operatorId };
         state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_PAGE_IDENTITY_VERIFIED", destinationPageId: identity.pageId, pageName: identity.pageName, verifiedAt: identity.verifiedAt, grantedPermissions: identity.grantedPermissions, tasks: identity.tasks, apiVersion: identity.apiVersion, actor: operatorId });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { identity: { pageId: identity.pageId, pageName: identity.pageName, verifiedAt: identity.verifiedAt, grantedPermissions: identity.grantedPermissions, tasks: identity.tasks }, permissionsConfirmed: identity.permissionsVerified, publishingEnabled: false, note: "Identity was checked read-only. Publishing permissions must be confirmed separately and every mutation still requires explicit operation authorization." });
       } finally { release(); }
     }
@@ -985,7 +1043,7 @@ const server = http.createServer(async (req, res) => {
         draft.evaluation = evaluation;
         state.facebookDrafts.push(draft);
         state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_DRAFT_CREATED", itemId: draft.id, destination: "nature_frontiers_facebook", contentFingerprint: draft.contentFingerprint, complianceVersion: evaluation.complianceVersion, blockers: evaluation.blockers, at: new Date().toISOString(), actor: operatorId, publishingEnabled: false });
-        saveState(state);
+        await saveState(state);
         return json(res, 201, { draft, evaluation, publishingEnabled: false });
       } finally { release(); }
     }
@@ -1007,7 +1065,7 @@ const server = http.createServer(async (req, res) => {
         });
         state.facebookDrafts[index] = { ...boundDraft, evaluation, updatedAt: new Date().toISOString(), status: draft.status === "APPROVED_DRAFT" ? "DRAFT_REVIEW_REQUIRED" : draft.status, approval: draft.status === "APPROVED_DRAFT" ? null : draft.approval };
         state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_DRAFT_RECHECKED", itemId: draft.id, ok: evaluation.ok, blockers: evaluation.blockers, flags: evaluation.flags, complianceVersion: evaluation.complianceVersion, at: new Date().toISOString(), actor: operatorId });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { draft: state.facebookDrafts[index], evaluation, publishingEnabled: false });
       } finally { release(); }
     }
@@ -1038,7 +1096,7 @@ const server = http.createServer(async (req, res) => {
         const updated = approveFacebookDraft(boundDraft, { reviewer: operatorId, decision: body.decision, reason, evaluation, now: new Date().toISOString() });
         state.facebookDrafts[index] = { ...updated, evaluation };
         state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_DRAFT_" + body.decision, itemId: draft.id, reviewer: operatorId, fingerprint: updated.approval.fingerprint, at: updated.approval.reviewedAt, complianceVersion: evaluation.complianceVersion, publishingEnabled: false });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { draft: state.facebookDrafts[index], evaluation, publishingEnabled: false });
       } finally { release(); }
     }
@@ -1118,7 +1176,7 @@ const server = http.createServer(async (req, res) => {
           };
           state.facebookAttempts.push(attempt);
           state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_PUBLISH_ATTEMPT_PREPARED", attemptId: attempt.id, draftId: current.id, idempotencyKey, destinationPageId: expectedPageId, at: attempt.startedAt, actor: operatorId, explicitOperationAuthorization: true });
-          saveState(state);
+          await saveState(state);
           draftSnapshot = current;
         } finally { release(); }
       }
@@ -1137,7 +1195,7 @@ const server = http.createServer(async (req, res) => {
           const index = state.facebookAttempts.findIndex(item => item.id === attempt.id);
           if (index >= 0) state.facebookAttempts[index] = { ...state.facebookAttempts[index], status: uncertain ? "NEEDS_RECONCILIATION" : "FAILED", retryAllowed: false, error: error instanceof Error ? error.message : "Meta request failed", errorCode: error instanceof MetaPageApiError ? error.code : null, updatedAt: new Date().toISOString() };
           state.audit.push({ id: crypto.randomUUID(), action: uncertain ? "FACEBOOK_PUBLISH_OUTCOME_UNCERTAIN" : "FACEBOOK_PUBLISH_FAILED", attemptId: attempt.id, at: new Date().toISOString(), actor: operatorId, retryAllowed: false });
-          saveState(state);
+          await saveState(state);
         } finally { release(); }
         return json(res, uncertain ? 502 : 409, { error: error instanceof Error ? error.message : "Meta publish failed", attemptId: attempt.id, status: uncertain ? "NEEDS_RECONCILIATION" : "FAILED", retryAllowed: false, publishingEnabled: false });
       }
@@ -1150,7 +1208,7 @@ const server = http.createServer(async (req, res) => {
           if (index < 0) throw new Error("Durable Facebook attempt record disappeared after remote submission");
           state.facebookAttempts[index] = { ...state.facebookAttempts[index], status: "REMOTE_SCHEDULED_UNVERIFIED", remotePostId: submitted.remotePostId, photoId: submitted.photoId, scheduledPublishTime: submitted.scheduledPublishTime, updatedAt: new Date().toISOString() };
           state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_REMOTE_ID_RECORDED", attemptId: attempt.id, remotePostId: submitted.remotePostId, at: new Date().toISOString(), actor: operatorId });
-          saveState(state);
+          await saveState(state);
         } finally { release(); }
       } catch {
         const ledgerWritten = appendFacebookRecoveryReceipt({ attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", reason: "Meta accepted the request but state receipt persistence failed" });
@@ -1169,7 +1227,7 @@ const server = http.createServer(async (req, res) => {
             const index = state.facebookAttempts.findIndex(item => item.id === attempt.id);
             if (index >= 0) state.facebookAttempts[index] = { ...state.facebookAttempts[index], status: "NEEDS_RECONCILIATION", remotePostId: submitted.remotePostId, retryAllowed: false, error: error instanceof Error ? error.message : "Remote verification failed", updatedAt: new Date().toISOString() };
             state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_REMOTE_VERIFICATION_FAILED", attemptId: attempt.id, remotePostId: submitted.remotePostId, at: new Date().toISOString(), actor: operatorId, retryAllowed: false });
-            saveState(state); persisted = true;
+            await saveState(state); persisted = true;
           } finally { release(); }
         } catch {}
         const ledgerWritten = persisted ? false : appendFacebookRecoveryReceipt({ attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", reason: "Remote verification failed and state persistence failed" });
@@ -1181,7 +1239,7 @@ const server = http.createServer(async (req, res) => {
           const state = loadState();
           const index = state.facebookAttempts.findIndex(item => item.id === attempt.id);
           if (index >= 0) state.facebookAttempts[index] = { ...state.facebookAttempts[index], status: "NEEDS_RECONCILIATION", remotePostId: submitted.remotePostId, remoteVerification: remote, retryAllowed: false, updatedAt: new Date().toISOString() };
-          saveState(state);
+          await saveState(state);
         } finally { release(); }
         return json(res, 502, { error: "Meta returned a remote object but its scheduled/published state could not be verified", attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", retryAllowed: false });
       }
@@ -1202,7 +1260,7 @@ const server = http.createServer(async (req, res) => {
         });        const draftIndex = state.facebookDrafts.findIndex(item => item.id === draftSnapshot.id);
         if (draftIndex >= 0) state.facebookDrafts[draftIndex] = { ...state.facebookDrafts[draftIndex], status: remote.status, remote: { remotePostId: remote.remotePostId, remoteUrl: remote.remoteUrl, verifiedAt: remote.verifiedAt } };
         state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_REMOTE_POST_VERIFIED", attemptId: attempt.id, draftId: draftSnapshot.id, remotePostId: remote.remotePostId, remoteUrl: remote.remoteUrl, status: remote.status, at: remote.verifiedAt, actor: operatorId });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { attempt: finalAttempt, remote, publishingEnabled: false, note: "This operation was individually authorized. Future operations remain disabled unless separately authorized." });
       } catch {
         const ledgerWritten = appendFacebookRecoveryReceipt({ attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", reason: "Remote post verified but final receipt persistence failed" });
@@ -1242,7 +1300,7 @@ const server = http.createServer(async (req, res) => {
           };
           state.jobs.push(job);
           state.audit.push({ id: crypto.randomUUID(), action: "VALIDATION_TASK_STARTED", jobId: job.id, taskId: body.taskId, at: new Date().toISOString(), actor: operatorId });
-          saveState(state);
+          await saveState(state);
         } finally { release(); }
 
         let result;
@@ -1267,7 +1325,7 @@ const server = http.createServer(async (req, res) => {
             jobId: job.id, taskId: body.taskId, exitCode: result.exitCode,
             at: new Date().toISOString(), actor: operatorId
           });
-          saveState(latest);
+          await saveState(latest);
           return json(res, result.status === "SUCCEEDED" ? 200 : 500, {
             job: latest.jobs.find(entry => entry.id === job.id),
             publicPublishingEnabled: false
@@ -1289,7 +1347,7 @@ const server = http.createServer(async (req, res) => {
         const result = manageCampaign(current, body, actor);
         state.campaigns = result.config.campaigns;
         state.audit.push({ id: crypto.randomUUID(), action: "CAMPAIGN_" + String(body.action).toUpperCase(), campaignId: result.campaign.id, campaignType: result.campaign.type, status: result.campaign.status, destinationVersion: result.campaign.approval?.destinationVersion ?? result.campaign.pendingDestinationVersion ?? null, actor, at: new Date().toISOString(), previewOnly: result.previewOnly === true });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { campaign: result.campaign, previewOnly: result.previewOnly, publicPublishingEnabled: false });
       } finally { release(); }
     }
@@ -1315,7 +1373,7 @@ const server = http.createServer(async (req, res) => {
         state.jobs.push(job);
         state.audit.push({ id: crypto.randomUUID(), action: "DRAFT_CREATED", itemId: item.id, at: new Date().toISOString(), actor: operatorId });
         state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", itemId: item.id, jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: operatorId });
-        saveState(state);
+        await saveState(state);
         return json(res, 201, { item, job });
       } finally { release(); }
     }
@@ -1350,7 +1408,7 @@ const server = http.createServer(async (req, res) => {
         }
         state.jobs.push(job);
         state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_QUEUED", jobId: job.id, idempotencyKey: job.idempotencyKey, at: new Date().toISOString(), actor: operatorId });
-        saveState(state);
+        await saveState(state);
         return json(res, 201, { job, reused: false, publishingEnabled: false });
       } finally { release(); }
     }
@@ -1480,7 +1538,7 @@ const server = http.createServer(async (req, res) => {
         };
         state.jobs[index] = job;
         state.audit.push({ id: crypto.randomUUID(), action: "PRODUCTION_PLAN_SUBMITTED", jobId: job.id, planSha256, scriptSha256: body.scriptSha256, actor: operatorId, at: job.authoring.productionPlan.submittedAt, reason: "Validated scene manifest and on-disk asset/evidence hashes; human plan review remains required" });
-        saveState(state);
+        await saveState(state);
         return json(res, 201, { job, planSha256, validationStatus: "STRUCTURE_AND_FILE_HASHES_VALIDATED", humanReviewRequired: true, publishable: false, publishingEnabled: false, note: "This does not certify rights validity, originality, factual accuracy or realism, and does not enable rendering or publishing." });
       } finally { release(); }
     }
@@ -1573,7 +1631,7 @@ const server = http.createServer(async (req, res) => {
         stage.publishingEnabled = false;
         state.jobs[index] = job;
         state.audit.push({ id: crypto.randomUUID(), action: body.decision === "APPROVE" ? "PRODUCTION_PLAN_APPROVED" : "PRODUCTION_PLAN_REJECTED", jobId: job.id, planSha256: body.planSha256, approvalSha256: approval.approvalSha256, actor: operatorId, at: reviewedAt, reason: body.reason.trim() });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { job, planReview: approval, status: stage.status, renderingEnabled: false, publishable: false, publishingEnabled: false, nextAction: "The reviewed plan is persisted. POST /api/jobs/produce revalidates the exact hash-bound approvals and evidence before rendering; final media still requires technical validation and full human review. Publishing remains disabled." });
       } finally { release(); }
     }
@@ -1641,7 +1699,7 @@ const server = http.createServer(async (req, res) => {
           jobId: job.id, scriptSha256: actualScriptSha256, reviewer: actor, at: reviewedAt,
           reason: body.reason.trim(), approvalSha256: decision.approvalSha256
         });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, {
           job, scriptReview: decision, publishable: false, publishingEnabled: false,
           nextAction: body.decision === "APPROVE"
@@ -1696,7 +1754,7 @@ const server = http.createServer(async (req, res) => {
           job.authoring.narrationStage = { ...stage, status: "RECONCILING", reconciliationStartedAt: new Date().toISOString(), reconciliationActor: operatorId };
           state.jobs[index] = job;
           state.audit.push({ id: crypto.randomUUID(), action: "AUTHORING_NARRATION_RECONCILIATION_STARTED", jobId: job.id, scriptSha256: body.scriptSha256, actor: operatorId, at: job.authoring.narrationStage.reconciliationStartedAt, reason: "Reconcile retained narration files without invoking TTS or overwriting partial outputs" });
-          saveState(state);
+          await saveState(state);
           snapshot = structuredClone(job);
         }
       } finally { release(); }
@@ -1730,7 +1788,7 @@ const server = http.createServer(async (req, res) => {
               error: message.slice(0, 1200), publishable: false, publishingEnabled: false
             };
             state.audit.push({ id: crypto.randomUUID(), action: "AUTHORING_NARRATION_RECONCILIATION_FAILED", jobId: body.jobId, scriptSha256: body.scriptSha256, actor: operatorId, at: new Date().toISOString(), reason: message.slice(0, 500) });
-            saveState(state);
+            await saveState(state);
           }
         } finally { failRelease(); }
         return json(res, 409, { error: "Narration reconciliation could not prove a complete intact draft; no TTS retry was performed", detail: message, recoveryRequired: true, publishable: false });
@@ -1755,7 +1813,7 @@ const server = http.createServer(async (req, res) => {
         delete current.authoring.narrationStage.error;
         state.jobs[index] = current;
         state.audit.push({ id: crypto.randomUUID(), action: "AUTHORING_NARRATION_RECONCILIATION_SUCCEEDED", jobId: current.id, scriptSha256: body.scriptSha256, actor: operatorId, at: completedAt, reason: "Complete audio/transcript/caption artifacts and their hashes were verified without regenerating narration" });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { job: current, narrationStage: current.authoring.narrationStage, reused: true, publishable: false, publishingEnabled: false });
       } finally { finishRelease(); }
     }
@@ -1911,7 +1969,7 @@ const server = http.createServer(async (req, res) => {
         job.authoring.narrationStage = { ...stage, status: body.decision === "APPROVE" ? "APPROVED_FOR_RENDER" : "REJECTED", reviewedAt, reviewedBy: operatorId, publishable: false, publishingEnabled: false };
         state.jobs[index] = job;
         state.audit.push({ id: crypto.randomUUID(), action: body.decision === "APPROVE" ? "NARRATION_APPROVED_FOR_RENDER" : "NARRATION_REJECTED", jobId: job.id, scriptSha256: body.scriptSha256, audioSha256: body.audioSha256, transcriptSha256: body.transcriptSha256, captionsSha256: body.captionsSha256, approvalSha256: review.approvalSha256, actor: operatorId, at: reviewedAt, reason: body.reason.trim() });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { job, narrationReview: review, publishable: false, publishingEnabled: false, nextAction: body.decision === "APPROVE" ? "Narration is approved only for a later render stage; rights, visual assets, scene plan, factual alignment and final-video review remain mandatory." : "Narration was rejected; revise or regenerate the script and narration as a new revision." });
       } finally { release(); }
     }
@@ -1961,7 +2019,7 @@ const server = http.createServer(async (req, res) => {
             job.authoring.narrationStage = { ...prior, status: "RECOVERY_REQUIRED", recoveryRequired: true, recoveryDetectedAt: new Date().toISOString() };
             state.jobs[index] = job;
             state.audit.push({ id: crypto.randomUUID(), action: "NARRATION_RECOVERY_REQUIRED", jobId: job.id, at: new Date().toISOString(), actor: operatorId, reason: "Prior narration generation exceeded recovery threshold; no automatic retry was performed" });
-            saveState(state);
+            await saveState(state);
             return json(res, 409, { error: "Prior narration attempt may have been interrupted; reconcile its job-specific artifacts before retrying", recoveryRequired: true });
           }
           return json(res, 409, { error: "Narration generation is already in progress; duplicate work is blocked" });
@@ -1976,7 +2034,7 @@ const server = http.createServer(async (req, res) => {
         };
         state.jobs[index] = job;
         state.audit.push({ id: crypto.randomUUID(), action: "AUTHORING_NARRATION_STARTED", jobId: job.id, scriptSha256: body.scriptSha256, actor: operatorId, at: requestedAt });
-        saveState(state);
+        await saveState(state);
         snapshot = structuredClone(job);
       } finally { release(); }
 
@@ -2002,7 +2060,7 @@ const server = http.createServer(async (req, res) => {
               publishable: false, publishingEnabled: false
             };
             state.audit.push({ id: crypto.randomUUID(), action: recoveryRequired ? "AUTHORING_NARRATION_RECOVERY_REQUIRED" : "AUTHORING_NARRATION_BLOCKED", jobId: body.jobId, scriptSha256: body.scriptSha256, actor: operatorId, at: new Date().toISOString(), reason: message.slice(0, 500) });
-            saveState(state);
+            await saveState(state);
           }
         } finally { failRelease(); }
         return json(res, 409, { error: "Narration stage did not complete; production remains blocked", detail: message, recoveryRequired, publishable: false, publishingEnabled: false });
@@ -2028,7 +2086,7 @@ const server = http.createServer(async (req, res) => {
         };
         state.jobs[index] = current;
         state.audit.push({ id: crypto.randomUUID(), action: "AUTHORING_NARRATION_DRAFT_READY", jobId: current.id, scriptSha256: body.scriptSha256, narrationReportSha256: sha256File(path.join(root, generated.artifacts["narration-report.json"].path)), actor: operatorId, at: current.authoring.narrationStage.completedAt, reason: "Narration and timed captions generated; human narration review and source-asset/rights gates remain pending" });
-        saveState(state);
+        await saveState(state);
         return json(res, 201, {
           job: current, narrationStage: current.authoring.narrationStage,
           publishable: false, publishingEnabled: false,
@@ -2064,7 +2122,7 @@ const server = http.createServer(async (req, res) => {
             job.authoring = { ...job.authoring, status: "RECOVERY_REQUIRED", recoveryRequired: true, recoveryDetectedAt: new Date().toISOString(), publishable: false };
             state.jobs[index] = job;
             state.audit.push({ id: crypto.randomUUID(), action: "SCRIPT_AUTHORING_RECOVERY_REQUIRED", jobId: job.id, fingerprint: job.authoring.fingerprint, at: job.authoring.recoveryDetectedAt, actor: operatorId, reason: "Prior authoring attempt exceeded the recovery threshold; no automatic retry was performed" });
-            saveState(state);
+            await saveState(state);
             return json(res, 409, { error: "Prior authoring attempt appears interrupted; inspect the provider and persisted job before creating a new job", recoveryRequired: true, job });
           }
           return json(res, 409, { error: "Authoring is already in progress; duplicate provider calls are blocked", recoveryRequired: false });
@@ -2073,7 +2131,7 @@ const server = http.createServer(async (req, res) => {
         job.authoring = { status: "GENERATING", fingerprint, researchBrief: structuredClone(body.brief), requestedAt: new Date().toISOString(), requestedBy: operatorId, publishable: false, editorialReviewRequired: true };
         state.jobs[index] = job;
         state.audit.push({ id: crypto.randomUUID(), action: "SCRIPT_AUTHORING_STARTED", jobId: job.id, fingerprint, at: job.authoring.requestedAt, actor: operatorId });
-        saveState(state);
+        await saveState(state);
         jobSnapshot = structuredClone(job);
       } finally { release(); }
 
@@ -2095,7 +2153,7 @@ const server = http.createServer(async (req, res) => {
           if (index >= 0 && state.jobs[index].authoring?.fingerprint === fingerprint) {
             state.jobs[index].authoring = { ...state.jobs[index].authoring, status: "FAILED", failedAt: new Date().toISOString(), error: redactOperationalText(error instanceof Error ? error.message : "Script generation failed", { roots: [root, stateDir] }), publishable: false, recoveryRequired: false };
             state.audit.push({ id: crypto.randomUUID(), action: "SCRIPT_AUTHORING_FAILED", jobId: body.jobId, fingerprint, at: new Date().toISOString(), actor: operatorId });
-            saveState(state);
+            await saveState(state);
           }
         } finally { failRelease(); }
         return json(res, 409, { error: "Script authoring failed closed; inspect the job's authoring error before retrying", detail: redactOperationalText(error instanceof Error ? error.message : "Script generation failed", { roots: [root, stateDir] }), publishable: false, publishingEnabled: false });
@@ -2118,7 +2176,7 @@ const server = http.createServer(async (req, res) => {
           };
           state.jobs[index] = current;
           state.audit.push({ id: crypto.randomUUID(), action: "SCRIPT_AUTHORING_OUTPUT_INVALID", jobId: current.id, fingerprint, at: current.authoring.failedAt, actor: operatorId, reason: "Generated output did not satisfy the structured script contract" });
-          saveState(state);
+          await saveState(state);
           return json(res, 409, { error: "Generated script did not satisfy the structured script contract; no reviewable draft was persisted", publishable: false, publishingEnabled: false });
         }
         current.authoring = {
@@ -2132,7 +2190,7 @@ const server = http.createServer(async (req, res) => {
         };
         state.jobs[index] = current;
         state.audit.push({ id: crypto.randomUUID(), action: "SCRIPT_AUTHORING_COMPLETED_REVIEW_REQUIRED", jobId: current.id, fingerprint, at: current.authoring.completedAt, actor: operatorId });
-        saveState(state);
+        await saveState(state);
         return json(res, 201, { job: current, reused: false, publishable: false, publishingEnabled: false, nextAction: "Complete separate factual, originality, rights and human editorial review; narration, captions, scene rendering and technical validation are not complete." });
       } finally { finishRelease(); }
     }
@@ -2220,7 +2278,7 @@ const server = http.createServer(async (req, res) => {
         updated.updatedAt = new Date().toISOString();
         state.jobs[index] = updated;
         state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_VALIDATION_PASSED", jobId: job.id, metadataVersion, captionsPath: body.captionsPath, artifacts: inspectedArtifacts.map(a => ({ path: a.path, sha256: a.sha256 })), at: updated.updatedAt, actor: operatorId });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { job: updated, publishingEnabled: false });
       } finally { release(); }
     }
@@ -2348,7 +2406,7 @@ const server = http.createServer(async (req, res) => {
         child.updatedAt = new Date().toISOString();
         state.jobs[childIndex] = child;
         state.audit.push({ id: crypto.randomUUID(), action: "SHORT_PARENT_RELATIONSHIP_BOUND", jobId: child.id, parentJobId: parentJob.id, parentRemoteVideoId: parentReceipt.videoId, relationshipSha256: shortParentRelationshipSha256(relationship), actor: reviewer, at: child.updatedAt, nativeRelatedVideoStatus: "BLOCKED_EXTERNAL" });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { job: child, relationshipSha256: shortParentRelationshipSha256(relationship), nativeRelatedVideoStatus: "BLOCKED_EXTERNAL", publishingEnabled: false });
       } finally { release(); }
     }
@@ -2379,7 +2437,7 @@ const server = http.createServer(async (req, res) => {
         state.jobs[index] = reviewed;
         state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_RIGHTS_VERIFIED", jobId: job.id, evidenceSha256, assetCount: assets.length, actor: actor.trim(), at: timestamp, reason: "Operator attested to retained license evidence and permitted uses" });
         state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_AWAITING_HUMAN_REVIEW", jobId: job.id, at: timestamp, actor: actor.trim() });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { job: reviewed, rightsEvidence, publishingEnabled: false });
       } finally { release(); }
     }
@@ -2701,8 +2759,8 @@ const server = http.createServer(async (req, res) => {
           });
         }
         state.audit.push({ id: crypto.randomUUID(), action: body.decision === "APPROVE" ? "CONTENT_ARTIFACT_APPROVED_FOR_PRIVATE_UPLOAD" : "CONTENT_ARTIFACT_REJECTED", jobId: job.id, artifactPath, artifactSha256, metadataVersion, reviewId: review.id, uploadApprovalPath: uploadApprovalPath ? path.relative(root, uploadApprovalPath) : null, actor: reviewer, reason: String(body.reason ?? "").slice(0, 1000), at: new Date().toISOString() });
-        if (pendingApprovalCommit) pendingApprovalCommit();
-        else saveState(state);
+        if (pendingApprovalCommit) await pendingApprovalCommit();
+        else await saveState(state);
         return json(res, 200, { job: state.jobs[index], review, uploadApprovalRecord, uploadApprovalPath: uploadApprovalPath ? path.relative(root, uploadApprovalPath) : null, publishingEnabled: false });
       } finally { release(); }
     }
@@ -2821,7 +2879,7 @@ const server = http.createServer(async (req, res) => {
               ? "Remote verification completed but the exact dashboard job/receipt binding was not eligible for terminal transition"
               : "Read-only reconciliation did not prove private status")
         });
-        saveState(state);
+        await saveState(state);
       } finally { release(); }
       const reconciled = output.status === "SUCCEEDED" && verifiedReceipt !== null && jobStateUpdated;
       return json(res, reconciled ? 200 : 409, {
@@ -2889,7 +2947,7 @@ const server = http.createServer(async (req, res) => {
           actor: operatorId, at,
           reason: "Operator-authorized, short-lived signed receipt bound to the exact verified private upload"
         });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { receipt: signedReceipt, publishingEnabled: false });
       } finally { release(); }
     }
@@ -2979,7 +3037,7 @@ const server = http.createServer(async (req, res) => {
               jobId: job.id, artifactPath: relativePath, at: failedAt,
               actor: "worker-preflight", reason: failed.errorDetails.message
             });
-            saveState(state);
+            await saveState(state);
             return json(res, 409, {
               error: "Render output already exists (" + kind + "); refusing to overwrite retained artifacts",
               detail: failed.errorDetails.message,
@@ -3025,7 +3083,7 @@ const server = http.createServer(async (req, res) => {
                 jobId: job.id, artifactPath: relativeManifestPath, at: failedAt,
                 actor: "worker-preflight", reason: failed.errorDetails.message
               });
-              saveState(state);
+              await saveState(state);
               return json(res, 409, {
                 error: "Render manifest already exists (" + kind + "); refusing to replace retained evidence",
                 detail: failed.errorDetails.message,
@@ -3090,7 +3148,7 @@ const server = http.createServer(async (req, res) => {
               actor: "worker-preflight",
               reason
             });
-            saveState(state);
+            await saveState(state);
             return json(res, 409, {
               error: "Authoring job failed render preflight; it has been removed from automatic dispatch and requires operator remediation and explicit retry authorization",
               detail: reason,
@@ -3107,7 +3165,7 @@ const server = http.createServer(async (req, res) => {
         jobTitle = job.title;
         state.jobs[index] = claim.job;
         state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_RENDER_STARTED", jobId: job.id, taskId, actor: requestActor, at: new Date().toISOString(), reason: taskArgs ? "Renderer launched with a per-job manifest built from exact approved script, narration, scene, rights, quality and metadata evidence; no upload/publication path" : "Legacy fixed-manifest renderer launched through dashboard; no upload/publication path" });
-        saveState(state);
+        await saveState(state);
       } finally { release(); }
 
       activeTasks.add(taskId);
@@ -3133,7 +3191,7 @@ const server = http.createServer(async (req, res) => {
               actor: requestActor,
               source: "continuous-production-dispatch"
             });
-            saveState(state);
+            await saveState(state);
           } finally { heartbeatRelease(); }
         }
       });
@@ -3211,7 +3269,7 @@ const server = http.createServer(async (req, res) => {
         updated.renderExecution = { taskId, status: result.status, outputPath: outputPath ?? current.renderExecution?.outputPath ?? null, exitCode: result.exitCode, startedAt: result.startedAt, finishedAt: result.finishedAt, output: result.output, truncated: result.truncated === true };
         state.jobs[index] = updated;
         state.audit.push({ id: crypto.randomUUID(), action: updated.state === "GENERATED" ? "CONTENT_RENDER_SUCCEEDED" : updated.state === "BLOCKED" ? "CONTENT_RENDER_BLOCKED" : "CONTENT_RENDER_FAILED", jobId: updated.id, taskId, state: updated.state, at: new Date().toISOString(), actor: requestActor });
-        saveState(state);
+        await saveState(state);
         return json(res, updated.state === "GENERATED" ? 200 : 409, { job: updated, publishingEnabled: false });
       } finally { finishRelease(); }
     }
@@ -3226,7 +3284,7 @@ const server = http.createServer(async (req, res) => {
         const claimed = claimWorkerLease(state.jobs[index], body.workerId, { leaseMs: body.leaseMs ?? 60_000 });
         state.jobs[index] = claimed.job;
         state.audit.push({ id: crypto.randomUUID(), action: "WORKER_LEASE_CLAIMED", jobId: body.jobId, workerId: body.workerId, expiresAt: claimed.job.workerLease.expiresAt, at: new Date().toISOString(), actor: operatorId });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { job: claimed.job, leaseToken: claimed.leaseToken, publishingEnabled: false });
       } finally { release(); }
     }
@@ -3241,7 +3299,7 @@ const server = http.createServer(async (req, res) => {
         const updated = heartbeatWorkerLease(state.jobs[index], body.leaseToken, { leaseMs: body.leaseMs ?? 60_000 });
         state.jobs[index] = updated;
         state.audit.push({ id: crypto.randomUUID(), action: "WORKER_LEASE_HEARTBEAT", jobId: body.jobId, workerId: updated.workerLease.workerId, expiresAt: updated.workerLease.expiresAt, at: new Date().toISOString(), actor: operatorId });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { job: updated, publishingEnabled: false });
       } finally { release(); }
     }
@@ -3307,7 +3365,7 @@ const server = http.createServer(async (req, res) => {
         if (updated.state === "DEAD_LETTER") {
           state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_DEAD_LETTERED", jobId: body.jobId, reasonCode: updated.deadLetter?.reasonCode ?? "MAX_ATTEMPTS_EXHAUSTED", attemptCount: updated.attemptCount, maxAttempts: updated.retryPolicy?.maxAttempts ?? null, at: completedAt, actor: "retry-policy" });
         }
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { job: updated, publishingEnabled: false });
       } finally { release(); }
     }
@@ -3325,7 +3383,7 @@ const server = http.createServer(async (req, res) => {
         const reapedAt = new Date().toISOString();
         state.audit.push({ id: crypto.randomUUID(), action: "WORKER_LEASE_EXPIRED", jobId: body.jobId, previousState: result.job.transitionHistory?.at(-1)?.from, state: result.job.state, at: reapedAt, actor: "lease-reaper" });
         if (result.job.state === "DEAD_LETTER") state.audit.push({ id: crypto.randomUUID(), action: "CONTENT_JOB_DEAD_LETTERED", jobId: body.jobId, reasonCode: result.job.deadLetter?.reasonCode ?? "LEASE_EXPIRY_RETRY_LIMIT_EXHAUSTED", attemptCount: result.job.attemptCount, maxAttempts: result.job.retryPolicy?.maxAttempts ?? null, at: reapedAt, actor: "retry-policy" });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { job: result.job, publishingEnabled: false });
       } finally { release(); }
     }
@@ -3386,7 +3444,7 @@ const server = http.createServer(async (req, res) => {
           at: checkedAt,
           reason: body.reason.trim()
         });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { job, recoveryReconciled: true, retryAuthorized: false, publishingEnabled: false });
       } finally { release(); }
     }
@@ -3434,7 +3492,7 @@ const server = http.createServer(async (req, res) => {
             at: authorization.at
           });
         }
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { job: updated, publishingEnabled: false, retryAuthorized: true });
       } finally { release(); }
     }
@@ -3450,7 +3508,7 @@ const server = http.createServer(async (req, res) => {
         const updated = transitionContentJob(old, body.nextState, { actor: operatorId, reason: body.reason ?? "" });
         state.jobs[index] = updated;
         state.audit.push({ id: crypto.randomUUID(), action: updated.state === "CANCELLED" ? "CONTENT_JOB_CANCELLED" : "CONTENT_JOB_STATE_CHANGED", jobId: updated.id, from: old.state, to: updated.state, at: updated.updatedAt, actor: operatorId, reason: String(body.reason ?? "").slice(0, 1000) });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { job: updated, publishingEnabled: false });
       } finally { release(); }
     }
@@ -3477,18 +3535,29 @@ const server = http.createServer(async (req, res) => {
         }
         state.queueItems[index] = { ...old, ...item, status: old.status, rightsConfirmed: old.rightsConfirmed, complianceReviewed: old.complianceReviewed, updatedAt: new Date().toISOString() };
         state.audit.push({ id: crypto.randomUUID(), action: "DRAFT_EDITED", itemId: item.id, at: new Date().toISOString(), actor: operatorId });
-        saveState(state);
+        await saveState(state);
         return json(res, 200, { item: state.queueItems[index] });
       } finally { release(); }
     }
     return json(res, 404, { error: "Not found" });
   } catch (error) {
     const message = redactOperationalText(error instanceof Error ? error.message : "Request failed", { roots: [root, stateDir] });
-    const status = /Unsupported content type/i.test(message) ? 415 : (/Request body exceeds 16KB/i.test(message) ? 413 : (/State is busy in another process/i.test(message) ? 409 : 400));
+    const status = Number.isInteger(error?.status) && error.status >= 400 && error.status <= 599
+      ? error.status
+      : (/Unsupported content type/i.test(message) ? 415 : (/Request body exceeds 16KB/i.test(message) ? 413 : (/State is busy in another process/i.test(message) ? 409 : 400)));
     return json(res, status, { error: message });
   }
 });
-const recoveredTasks = recoverInterruptedTasks();
+if (remoteStateStore) {
+  try {
+    await remoteStateStore.initialize();
+  } catch (error) {
+    const message = redactOperationalText(error instanceof Error ? error.message : "Cloudflare state reconciliation failed", { roots: [root, stateDir] });
+    console.error("BLOCKED: Cloudflare dashboard state reconciliation failed; local and remote snapshots were preserved. " + message);
+    process.exit(2);
+  }
+}
+const recoveredTasks = await recoverInterruptedTasks();
 const recoveredLeases = await reapExpiredWorkerLeases();
 const leaseReaperTimer = setInterval(() => { reapExpiredWorkerLeases().catch(() => {}); }, 30_000);
 leaseReaperTimer.unref();
