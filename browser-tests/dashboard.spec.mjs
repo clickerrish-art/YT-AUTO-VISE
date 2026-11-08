@@ -6,6 +6,7 @@ import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
 import { futureScheduleDate } from "../test/helpers/schedule-fixtures.mjs";
+import { createContentJob, deadLetterExhaustedJob } from "../scripts/content-job-lifecycle.mjs";
 
 const operatorToken = "e2e-only-token-" + "x".repeat(40);
 
