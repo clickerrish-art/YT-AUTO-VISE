@@ -137,3 +137,30 @@ jobs:
             echo "- Runner cycle: ${{ steps.run_cycle.outcome || 'not started' }}"
             echo "- Durable session reconciliation: ${{ steps.session.outcome || 'not started' }}"
           } >> "$GITHUB_STEP_SUMMARY"
+
+  staging-smoke:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/codex/cloudflare-adapter-integration-20261108' && contains(github.event.head_commit.message, '[staging-smoke]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      DASHBOARD_API_URL: https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev
+      DASHBOARD_WORKER_ID: sonicvhibez-render-worker
+      DASHBOARD_STATE_DIR: ${{ runner.temp }}/sonicvhibez-state
+      WORKER_STATE_DIR: ${{ runner.temp }}/sonicvhibez-worker
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+      - name: Prepare isolated smoke-test state directories
+        run: |
+          mkdir -p "$DASHBOARD_STATE_DIR" "$WORKER_STATE_DIR"
+      - name: Read authoritative D1 snapshot
+        run: node scripts/cloudflare-runner-bridge.mjs pull-snapshot
+      - name: Read durable retry and backoff state
+        run: node scripts/cloudflare-runner-bridge.mjs pull-backoff
+      - name: Verify R2 write, read, delete, and capacity
+        run: node scripts/cloudflare-runner-bridge.mjs verify-storage
