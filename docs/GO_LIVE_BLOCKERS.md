@@ -1,3 +1,9 @@
+## Follow-up verification — 8 November 2026
+
+The test-only follow-up at `b149254a3d5b080be704790fa26529067e88a24a` corrects the dashboard UI contract test for delegated Cloudflare restore-button events. Exact-HEAD CI now passes 130/130 Node test files, 34 Python tests, 712/712 content-quality tests, 27/27 Chromium journeys, 8/8 Cloudflare state tests, queue readiness, metadata validation, isolated baseline, branch inventory, deployment recovery and lockfile checks. Production readiness remains **HOLD — 24 blockers**. Full run links and owner/acceptance gates are in [CURRENT_RELEASE_EVIDENCE_2026-11-08.md](CURRENT_RELEASE_EVIDENCE_2026-11-08.md). No main edit, merge, upload, publication, live schedule, account reconnection or existing Metricool record mutation occurred.
+
+---
+
 # Latest execution checkpoint — 8 November 2026
 
 **Exact code/test candidate:** `6c71814aebc8a384badef8ebecd8ada67c76cb93` · **branch:** `codex/marketing-machine-audit-fixes`  
