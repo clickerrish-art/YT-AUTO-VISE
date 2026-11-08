@@ -551,6 +551,48 @@ test("Retry-After parser clamps excessive values and safely falls back for malfo
 });
 
 
+test("worker honors operator-only 409 responses without creating an automatic retry cooldown", async () => {
+  const jobId = "job-requires-operator-retry";
+  let listingCount = 0;
+  let postCount = 0;
+  const cooldowns = new Map([[jobId, { attempts: 2, nextAttemptAt: Date.now() - 1 }]]);
+  const fetchImpl = async (url, options = {}) => {
+    if ((options.method ?? "GET") === "GET") {
+      listingCount += 1;
+      return new Response(JSON.stringify({
+        jobs: listingCount === 1 ? [{ id: jobId, state: "QUEUED" }] : [],
+        queuedCount: listingCount === 1 ? 1 : 0,
+        publishingEnabled: false
+      }), { status: 200, headers: { "content-type": "application/json" } });
+    }
+    postCount += 1;
+    return new Response(JSON.stringify({
+      error: "render preflight requires operator remediation",
+      jobState: "DEAD_LETTER",
+      retryable: true,
+      requiresOperatorRetry: true,
+      retryAllowed: false,
+      deadLettered: true,
+      publishingEnabled: false
+    }), { status: 409, headers: { "content-type": "application/json" } });
+  };
+
+  const first = await runWorkerCycle({ baseUrl: "http://127.0.0.1:8787", token, workerId, fetchImpl, cooldowns });
+  assert.equal(first.results.length, 1);
+  assert.equal(first.results[0].status, "DEAD_LETTERED");
+  assert.equal(first.results[0].httpStatus, 409);
+  assert.equal(first.results[0].deadLettered, true);
+  assert.equal(first.results[0].requiresOperatorRetry, true);
+  assert.equal(cooldowns.has(jobId), false,
+    "a dashboard-dead-lettered job must not retain an automatic worker retry cooldown");
+
+  const second = await runWorkerCycle({ baseUrl: "http://127.0.0.1:8787", token, workerId, fetchImpl, cooldowns });
+  assert.equal(second.discovered, 0);
+  assert.deepEqual(second.results, []);
+  assert.equal(postCount, 1, "the dashboard must remove the operator-blocked job from automatic dispatch");
+  assert.equal(listingCount, 2);
+});
+
 test("worker persists HTTP 409 preflight cooldown across restart and does not redispatch early", async () => {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-restart-409-backoff-"));
   const statePath = path.join(directory, "worker-backoff.json");
