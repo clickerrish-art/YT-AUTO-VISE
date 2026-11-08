@@ -1204,6 +1204,7 @@ test("private R2 artifact upload requires an exact generated receipt and complet
   const artifactRows = new Map();
   const partRows = new Map();
   let uploadedPart = null;
+  let r2PartEtag = "bad";
   const database = {
     prepare(sql) {
       return {
@@ -1262,10 +1263,10 @@ test("private R2 artifact upload requires an exact generated receipt and complet
       return {
         async uploadPart(partNumber, body) {
           uploadedPart = { partNumber, bytes: await new Response(body).arrayBuffer() };
-          return { partNumber, etag: "part-etag-1" };
+          return { partNumber, etag: r2PartEtag };
         },
         async complete(parts) {
-          assert.deepEqual(parts, [{ partNumber: 1, etag: "part-etag-1" }]);
+          assert.deepEqual(parts, [{ partNumber: 1, etag: "7cfdd07889b3295d6a550914ab35e068" }]);
           return { size: 5, httpEtag: "object-etag" };
         }
       };
@@ -1299,12 +1300,25 @@ test("private R2 artifact upload requires an exact generated receipt and complet
     sha256: digest, sizeBytes: 5, contentType: "video/mp4"
   });
   assert.equal(badReceipt.status, 409);
-  const part = await handleRequest(new Request("https://state.example/api/runner/artifacts/part?artifactId=" + created.artifactId + "&partNumber=1", {
-    method: "PUT", headers: {
-      authorization: "Bearer " + fixture.token, "content-type": "application/octet-stream", "content-length": "5"
-    }, body: new Uint8Array([1, 2, 3, 4, 5])
+  const partUrl = "https://state.example/api/runner/artifacts/part?artifactId=" + created.artifactId + "&partNumber=1";
+  const partBytes = new Uint8Array([1, 2, 3, 4, 5]);
+  const partHeaders = {
+    authorization: "Bearer " + fixture.token, "content-type": "application/octet-stream",
+    "content-length": "5", "x-part-md5": "7cfdd07889b3295d6a550914ab35e068"
+  };
+  const mismatchedPart = await handleRequest(new Request(partUrl, {
+    method: "PUT", headers: partHeaders, body: partBytes
+  }), env, fixture);
+  assert.equal(mismatchedPart.status, 409);
+  assert.equal((await mismatchedPart.json()).code, "ARTIFACT_PART_CHECKSUM_MISMATCH");
+  assert.equal(partRows.has(created.artifactId), false);
+
+  r2PartEtag = "7cfdd07889b3295d6a550914ab35e068";
+  const part = await handleRequest(new Request(partUrl, {
+    method: "PUT", headers: partHeaders, body: partBytes
   }), env, fixture);
   assert.equal(part.status, 200);
+  assert.equal((await part.json()).md5Verified, true);
   assert.equal(uploadedPart.partNumber, 1);
   const complete = await call("/api/runner/artifacts/complete", "POST", { artifactId: created.artifactId });
   assert.equal(complete.status, 201);
