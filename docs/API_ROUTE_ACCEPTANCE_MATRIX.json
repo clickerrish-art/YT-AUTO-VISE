@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-08T00:00:00.000Z",
+  "generatedAt": "2026-11-08T14:00:00.000Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "06c2443d9d1308cdf071063634864b5a7088b8cf",
+  "testedSourceTestSha": "5a4d7ca1299c58732c64d38886622b1fe8d4183c",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -25,8 +25,8 @@
   "counts": {
     "routes": 45,
     "authNegativePass": 45,
-    "overallPass": 31,
-    "overallNotTested": 6,
+    "overallPass": 33,
+    "overallNotTested": 4,
     "overallBlocked": 8
   },
   "evidence": {
@@ -106,7 +106,8 @@
     "pastScheduleSlotRegression": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/8272d2e39868237c05b2951f37bcade6ae6608c4/test/dashboard-server.test.mjs",
     "latestExactHeadAuthMatrix": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42486667603",
     "latestExactHeadAuthMatrixTest": "test/dashboard-api-auth-matrix.test.mjs",
-    "latestExactHeadNegativeMatrixTest": "test/dashboard-api-authenticated-route-negative-matrix.test.mjs"
+    "latestExactHeadNegativeMatrixTest": "test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
+    "latestExactHeadRoutePositiveTests": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423"
   },
   "disclaimer": "This matrix is synchronized to the live dashboard-server.mjs route inventory at exact source/test SHA 06c2443d9d1308cdf071063634864b5a7088b8cf. Authentication-negative PASS does not imply authorized route success. API-001 remains NOT_TESTED overall; routes marked NOT_TESTED or BLOCKED require route-specific positive, validation, persistence, audit, concurrency and restart evidence before acceptance.",
   "routes": [
@@ -798,20 +799,20 @@
       "classification": "local production-review evidence bundle",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived 45-route authentication matrix on exact SHA 06c2443d9d1308cdf071063634864b5a7088b8cf; see test/dashboard-api-auth-matrix.test.mjs and run 42486667603.",
-      "authorizedSuccess": "NOT_TESTED — no exact-SHA positive route acceptance evidence is recorded yet.",
-      "inputValidation": "NOT_TESTED — route-specific success and invalid-input matrix is pending.",
-      "durablePersistence": "NOT_TESTED.",
-      "auditEvidence": "NOT_TESTED.",
-      "concurrency": "NOT_TESTED.",
-      "restartRecovery": "NOT_TESTED.",
+      "authorizedSuccess": "PASS — authenticated operator receives only the hash-verified review bundle or the requested exact media preview.",
+      "inputValidation": "PASS — incomplete/mutated artifact evidence is rejected with HTTP 409; preview kinds are constrained to video, thumbnail and captions.",
+      "durablePersistence": "N/A — read-only GET; no state mutation.",
+      "auditEvidence": "N/A — read-only GET; no audit mutation.",
+      "concurrency": "N/A — read-only GET.",
+      "restartRecovery": "N/A — read-only GET; the route does not create durable state.",
       "externalOperation": "local media/artifact access",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "The bundle endpoint exposes review evidence only; human approval and upload authorization remain separate.",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA real-server integration verifies operator authentication, byte-exact video/thumbnail/captions previews, metadata hash binding and fail-closed 409 responses after any artifact or metadata mutation. No publication or state mutation occurs.",
       "testEvidence": {
-        "test": "test/dashboard-api-auth-matrix.test.mjs; test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
-        "exactTestedSha": "06c2443d9d1308cdf071063634864b5a7088b8cf",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42486667603",
-        "scenario": "The source-derived auth matrix checks missing and invalid credentials on every discovered API route. This is authentication-negative evidence only; it does not establish authorized success or full route acceptance."
+        "test": "test/dashboard-review-preview.integration.test.mjs",
+        "exactTestedSha": "5a4d7ca1299c58732c64d38886622b1fe8d4183c",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423",
+        "scenario": "Real HTTP integration test proves unauthenticated bundle/preview requests return 401; authenticated review bundle returns verified video, thumbnail, captions and metadata; previews serve byte-exact artifacts; changed video, thumbnail, captions or metadata returns 409. Publishing remains disabled."
       }
     },
     {
@@ -820,20 +821,20 @@
       "classification": "local production-review media preview",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived 45-route authentication matrix on exact SHA 06c2443d9d1308cdf071063634864b5a7088b8cf; see test/dashboard-api-auth-matrix.test.mjs and run 42486667603.",
-      "authorizedSuccess": "NOT_TESTED — no exact-SHA positive route acceptance evidence is recorded yet.",
-      "inputValidation": "NOT_TESTED — route-specific success and invalid-input matrix is pending.",
-      "durablePersistence": "NOT_TESTED.",
-      "auditEvidence": "NOT_TESTED.",
-      "concurrency": "NOT_TESTED.",
-      "restartRecovery": "NOT_TESTED.",
+      "authorizedSuccess": "PASS — authenticated operator receives only the hash-verified review bundle or the requested exact media preview.",
+      "inputValidation": "PASS — incomplete/mutated artifact evidence is rejected with HTTP 409; preview kinds are constrained to video, thumbnail and captions.",
+      "durablePersistence": "N/A — read-only GET; no state mutation.",
+      "auditEvidence": "N/A — read-only GET; no audit mutation.",
+      "concurrency": "N/A — read-only GET.",
+      "restartRecovery": "N/A — read-only GET; the route does not create durable state.",
       "externalOperation": "local media/artifact access",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "The preview endpoint must not mutate state or imply that a human reviewed the media.",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA real-server integration verifies operator authentication, byte-exact video/thumbnail/captions previews, metadata hash binding and fail-closed 409 responses after any artifact or metadata mutation. No publication or state mutation occurs.",
       "testEvidence": {
-        "test": "test/dashboard-api-auth-matrix.test.mjs; test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
-        "exactTestedSha": "06c2443d9d1308cdf071063634864b5a7088b8cf",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42486667603",
-        "scenario": "The source-derived auth matrix checks missing and invalid credentials on every discovered API route. This is authentication-negative evidence only; it does not establish authorized success or full route acceptance."
+        "test": "test/dashboard-review-preview.integration.test.mjs",
+        "exactTestedSha": "5a4d7ca1299c58732c64d38886622b1fe8d4183c",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423",
+        "scenario": "Real HTTP integration test proves unauthenticated bundle/preview requests return 401; authenticated review bundle returns verified video, thumbnail, captions and metadata; previews serve byte-exact artifacts; changed video, thumbnail, captions or metadata returns 409. Publishing remains disabled."
       }
     },
     {
@@ -885,20 +886,20 @@
       "classification": "operator-reviewed worker quarantine release",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived 45-route authentication matrix on exact SHA 06c2443d9d1308cdf071063634864b5a7088b8cf; see test/dashboard-api-auth-matrix.test.mjs and run 42486667603.",
-      "authorizedSuccess": "NOT_TESTED — no exact-SHA positive route acceptance evidence is recorded yet.",
-      "inputValidation": "NOT_TESTED — route-specific success and invalid-input matrix is pending.",
-      "durablePersistence": "NOT_TESTED.",
-      "auditEvidence": "NOT_TESTED.",
-      "concurrency": "NOT_TESTED.",
-      "restartRecovery": "NOT_TESTED.",
+      "authorizedSuccess": "PASS — separate quarantine-release credential plus operator authentication issue an Ed25519-signed receipt bound to the exact terminal private upload.",
+      "inputValidation": "PASS — legacy receipt without complete channel-history proof is rejected with HTTP 409.",
+      "durablePersistence": "PASS — issuance audit persists; dashboard does not mutate worker quarantine state.",
+      "auditEvidence": "PASS — one WORKER_QUARANTINE_RELEASE_RECEIPT_ISSUED event binds worker, job, attempt and artifact digest.",
+      "concurrency": "NOT_TESTED — concurrent duplicate receipt issuance is not covered by the dashboard route integration.",
+      "restartRecovery": "NOT_TESTED — endpoint issuance read-back after dashboard restart is not yet covered.",
       "externalOperation": "worker recovery state",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "Quarantine release must remain bound to exact job/recovery evidence and must not cause publication.",
+      "notes": "Exact-SHA real-server test verifies a signed receipt only for a terminal verified private SonicVhibez upload with complete history reconciliation, records an operator audit event, leaves worker state untouched and rejects a legacy receipt lacking history proof. Overall acceptance remains NOT_TESTED pending route concurrency and restart acceptance.",
       "testEvidence": {
-        "test": "test/dashboard-api-auth-matrix.test.mjs; test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
-        "exactTestedSha": "06c2443d9d1308cdf071063634864b5a7088b8cf",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42486667603",
-        "scenario": "The source-derived auth matrix checks missing and invalid credentials on every discovered API route. This is authentication-negative evidence only; it does not establish authorized success or full route acceptance."
+        "test": "test/worker-quarantine-release.test.mjs",
+        "exactTestedSha": "5a4d7ca1299c58732c64d38886622b1fe8d4183c",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423",
+        "scenario": "Real dashboard endpoint issues an Ed25519-signed release receipt for an exact verified private upload, audits the issuance, leaves worker quarantine state untouched and rejects incomplete channel-history evidence."
       }
     },
     {
@@ -1043,20 +1044,20 @@
       "classification": "operator-authorized failed-job retry",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived 45-route authentication matrix on exact SHA 06c2443d9d1308cdf071063634864b5a7088b8cf; see test/dashboard-api-auth-matrix.test.mjs and run 42486667603.",
-      "authorizedSuccess": "NOT_TESTED — no exact-SHA positive route acceptance evidence is recorded yet.",
-      "inputValidation": "NOT_TESTED — route-specific success and invalid-input matrix is pending.",
-      "durablePersistence": "NOT_TESTED.",
-      "auditEvidence": "NOT_TESTED.",
-      "concurrency": "NOT_TESTED.",
-      "restartRecovery": "NOT_TESTED.",
+      "authorizedSuccess": "PASS — operator review authorizes a retryable failed job and a dead-letter override grants exactly one additional attempt.",
+      "inputValidation": "PASS — missing/short review reason is rejected without mutation; unknown jobs are not accepted by the route.",
+      "durablePersistence": "PASS — authorized job state and retry authorization persist and survive a fresh dashboard process.",
+      "auditEvidence": "PASS — one operator-attributed retry authorization event is persisted; dead-letter recovery adds its distinct audit event.",
+      "concurrency": "NOT_TESTED — simultaneous identical retry requests have not yet been proven to produce one authorization.",
+      "restartRecovery": "PASS — retry state, attempt limit and audit history are read back after a clean dashboard restart.",
       "externalOperation": "worker queue",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "Retry must remain subject to bounded retry policy and operator review; no upload is authorized.",
+      "notes": "Positive real-server route coverage exists, including failed-job authorization, exact one-attempt dead-letter override, no publish enablement, durable audit and restart read-back. Overall acceptance remains NOT_TESTED pending a concurrent duplicate-request race test.",
       "testEvidence": {
-        "test": "test/dashboard-api-auth-matrix.test.mjs; test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
-        "exactTestedSha": "06c2443d9d1308cdf071063634864b5a7088b8cf",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42486667603",
-        "scenario": "The source-derived auth matrix checks missing and invalid credentials on every discovered API route. This is authentication-negative evidence only; it does not establish authorized success or full route acceptance."
+        "test": "test/dashboard-api-job-retry.integration.test.mjs",
+        "exactTestedSha": "5a4d7ca1299c58732c64d38886622b1fe8d4183c",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423",
+        "scenario": "Unauthorized and invalid-reason requests leave bytes unchanged; authorized retry and one-attempt dead-letter override persist exactly one audit each and survive a fresh server process."
       }
     },
     {
@@ -1179,8 +1180,19 @@
       "browserE2EWorkflowRun": 42296617339,
       "status": "PASS for fail-closed concurrency/restart regression; successful render remains blocked."
     },
-    "exactSourceTestSha": "06c2443d9d1308cdf071063634864b5a7088b8cf",
+    "exactSourceTestSha": "5a4d7ca1299c58732c64d38886622b1fe8d4183c",
     "authMatrixRun": 42486667603,
-    "authMatrixResult": "PASS — source-derived 45 API routes; missing and invalid operator credentials rejected; full route success acceptance is not implied."
+    "authMatrixResult": "PASS — source-derived 45 API routes; missing and invalid operator credentials rejected; full route success acceptance is not implied.",
+    "automationRun": 42487353423,
+    "automationResult": "PASS — 131/131 Node test files, 34 Python tests, zero skips; npm audit 0 vulnerabilities.",
+    "dashboardRun": 42487353359,
+    "dashboardResult": "PASS — Chromium end-to-end acceptance.",
+    "apiMatrixCounts": {
+      "routes": 45,
+      "authNegativePass": 45,
+      "overallPass": 33,
+      "overallNotTested": 4,
+      "overallBlocked": 8
+    }
   }
 }
