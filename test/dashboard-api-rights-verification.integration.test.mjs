@@ -15,16 +15,26 @@ test("rights verification API rejects invalid evidence, commits once, and surviv
   const media = Buffer.from("test fixture media"), licence = Buffer.from("test-only licence; not legal proof");
   fs.writeFileSync(path.join(fixtureDir, "media.bin"), media); fs.writeFileSync(path.join(fixtureDir, "licence.txt"), licence);
   const token = "rights-api-" + crypto.randomBytes(24).toString("hex"), operator = "rights-test@example.test";
-  const port = 24000 + Math.floor(Math.random() * 12000), base = "http://127.0.0.1:" + port, stateFile = path.join(stateDir, "dashboard-state.json");
+  let base = ""; const stateFile = path.join(stateDir, "dashboard-state.json");
   let job = createContentJob({ idempotencyKey: "rights-api-job", title: "Rights API fixture", topic: "Test fixture", contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: "2026-11-03" });
   for (const state of ["GENERATING", "GENERATED", "VALIDATING"]) job = transitionContentJob(job, state, { actor: "test-worker" });
   job.outputArtifacts = [{ path: "fixture.mp4", sha256: "a".repeat(64) }]; job.validationResults = { passed: true, fixtureOnly: true };
   fs.writeFileSync(stateFile, JSON.stringify({ version: 1, queueItems: [], campaigns: [], audit: [], jobs: [job], uploads: [] }));
   let child, logs = "";
   const start = async () => {
-    logs = ""; child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], { cwd: root, env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: operator, DASHBOARD_STATE_DIR: stateDir, UPLOAD_LOG_DIR: stateDir, PORT: String(port), DASHBOARD_HOST: "127.0.0.1" }, stdio: ["ignore", "pipe", "pipe"] });
+    logs = ""; base = ""; child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], { cwd: root, env: { ...process.env, DASHBOARD_OPERATOR_TOKEN: token, DASHBOARD_OPERATOR_ID: operator, DASHBOARD_STATE_DIR: stateDir, UPLOAD_LOG_DIR: stateDir, PORT: "0", DASHBOARD_HOST: "127.0.0.1" }, stdio: ["ignore", "pipe", "pipe"] });
     child.stdout.on("data", x => logs += x); child.stderr.on("data", x => logs += x);
-    for (let i = 0; i < 100; i++) { if (child.exitCode !== null) throw Error(logs); try { if ((await fetch(base + "/healthz")).ok) return; } catch {} await new Promise(r => setTimeout(r, 50)); }
+    for (let i = 0; i < 100; i++) {
+      if (child.exitCode !== null) throw Error(logs);
+      const started = logs.split(/\\r?\\n/).find(line => { try { return JSON.parse(line).event === "dashboard_started"; } catch { return false; } });
+      if (started) {
+        const address = JSON.parse(started);
+        if (!Number.isInteger(address.port) || address.port < 1 || address.port > 65535) throw Error("dashboard did not report a valid ephemeral port: " + started);
+        base = "http://127.0.0.1:" + address.port;
+        try { if ((await fetch(base + "/healthz")).ok) return; } catch {}
+      }
+      await new Promise(r => setTimeout(r, 50));
+    }
     throw Error("server startup timeout: " + logs);
   };
   const stop = async () => { if (!child || child.exitCode !== null) return; const p = child; p.kill("SIGTERM"); await new Promise((resolve, reject) => { const timer = setTimeout(() => reject(Error("shutdown timeout")), 5000); p.once("exit", () => { clearTimeout(timer); resolve(); }); }); };
