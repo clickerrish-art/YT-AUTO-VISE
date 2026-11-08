@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-08T14:18:01.000Z",
+  "generatedAt": "2026-11-08T17:44:14.000Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "c75864be94e4e6827995b1446c6cf960c83d9228",
+  "testedSourceTestSha": "6b8bfe653490b829f6036648ab5bae51e131f4ac",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -20,7 +20,7 @@
     "changedFiles": 286,
     "branchProtectionEnabled": null,
     "branchProtectionStatus": "UNVERIFIED — GitHub returned 403 for the protection endpoint.",
-    "comparisonSourceSha": "06c2443d9d1308cdf071063634864b5a7088b8cf"
+    "comparisonSourceSha": "6b8bfe653490b829f6036648ab5bae51e131f4ac"
   },
   "counts": {
     "routes": 45,
@@ -104,7 +104,7 @@
     "exactHeadBranchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205685",
     "exactHeadReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205652",
     "pastScheduleSlotRegression": "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/8272d2e39868237c05b2951f37bcade6ae6608c4/test/dashboard-server.test.mjs",
-    "latestExactHeadAuthMatrix": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42486667603",
+    "latestExactHeadAuthMatrix": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189335",
     "latestExactHeadAuthMatrixTest": "test/dashboard-api-auth-matrix.test.mjs",
     "latestExactHeadNegativeMatrixTest": "test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
     "latestExactHeadRoutePositiveTests": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423",
@@ -133,16 +133,24 @@
       "unauthenticatedHealth": "BLOCKED_BY_ACCESS_LOGIN_REQUIRED",
       "nodeRuntimeIntegration": "BLOCKED — DASHBOARD_STATE_API_URL, DASHBOARD_STATE_OPERATOR_TOKEN and Cloudflare Access service-token credentials are not verified in the Node dashboard runtime",
       "classification": "Infrastructure provisioning PASS; Node route end-to-end acceptance remains BLOCKED."
-    }
+    },
+    "latestExactHeadContentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189435",
+    "latestExactHeadDashboardE2E": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189415",
+    "latestExactHeadAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189417",
+    "latestExactHeadMetadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189397",
+    "latestExactHeadBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189409",
+    "latestExactHeadInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189369",
+    "latestExactHeadReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189528",
+    "latestExactHeadCloudflareDurableState": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189364"
   },
-  "disclaimer": "This matrix is synchronized to the live dashboard-server.mjs route inventory at exact source/test SHA 06c2443d9d1308cdf071063634864b5a7088b8cf. Authentication-negative PASS does not imply authorized route success. API-001 remains NOT_TESTED overall; routes marked NOT_TESTED or BLOCKED require route-specific positive, validation, persistence, audit, concurrency and restart evidence before acceptance.",
+  "disclaimer": "This matrix is synchronized to dashboard-server.mjs, public/dashboard.html and the source-derived API route tests at exact source/test SHA 6b8bfe653490b829f6036648ab5bae51e131f4ac. The exact-head content-quality workflow passed 722 Node tests, including the source-derived authentication matrix; authentication-negative PASS does not imply authorized route success. API-001 remains NOT_TESTED overall; routes marked NOT_TESTED or BLOCKED require route-specific positive, validation, persistence, audit, concurrency and restart evidence before acceptance.",
   "routes": [
     {
       "method": "GET",
       "path": "/api/state/backups",
       "classification": "Cloudflare durable-state backup listing",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived 45-route authentication matrix on exact SHA 06c2443d9d1308cdf071063634864b5a7088b8cf; see test/dashboard-api-auth-matrix.test.mjs and run 42486667603.",
+      "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived route authentication matrix on exact SHA 6b8bfe653490b829f6036648ab5bae51e131f4ac; see test/dashboard-api-auth-matrix.test.mjs and test/dashboard-api-authenticated-route-negative-matrix.test.mjs, included in the 722-test content-quality run.",
       "authorizedSuccess": "BLOCKED — staging infrastructure is provisioned, but the Node dashboard cannot complete an authenticated end-to-end call in CI without DASHBOARD_STATE_API_URL, DASHBOARD_STATE_OPERATOR_TOKEN and Cloudflare Access service-token credentials.",
       "inputValidation": "NOT_TESTED — route-specific success and invalid-input matrix is pending.",
       "durablePersistence": "BLOCKED — staging D1 has an initialized revision-1 snapshot and backup; route-level live read/write/backup/restore through the Node dashboard remains unverified.",
@@ -154,8 +162,8 @@
       "notes": "Read-only Cloudflare account verification on 2026-11-08 confirms the staging Worker is deployed with the D1 binding, six application tables exist, dashboard_state revision 1 contains 16 queue items and publishingEnabled=false, and one backup exists. The Access application is email-only and no Access service tokens are configured; an unauthenticated health request is intercepted with login_required. The Node app runtime still lacks a verified service-token-backed DASHBOARD_STATE_API_URL/DASHBOARD_STATE_OPERATOR_TOKEN configuration, so these three Node routes remain BLOCKED until authenticated end-to-end read/write/backup/restore is proven. No token or state snapshot was exposed.",
       "testEvidence": {
         "test": "test/dashboard-api-auth-matrix.test.mjs; test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
-        "exactTestedSha": "06c2443d9d1308cdf071063634864b5a7088b8cf",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42486667603",
+        "exactTestedSha": "6b8bfe653490b829f6036648ab5bae51e131f4ac",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189435",
         "scenario": "The source-derived auth matrix checks missing and invalid credentials on every discovered API route. This is authentication-negative evidence only; it does not establish authorized success or full route acceptance."
       }
     },
@@ -164,7 +172,7 @@
       "path": "/api/state/backup",
       "classification": "Cloudflare durable-state backup creation",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived 45-route authentication matrix on exact SHA 06c2443d9d1308cdf071063634864b5a7088b8cf; see test/dashboard-api-auth-matrix.test.mjs and run 42486667603.",
+      "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived route authentication matrix on exact SHA 6b8bfe653490b829f6036648ab5bae51e131f4ac; see test/dashboard-api-auth-matrix.test.mjs and test/dashboard-api-authenticated-route-negative-matrix.test.mjs, included in the 722-test content-quality run.",
       "authorizedSuccess": "BLOCKED — staging infrastructure is provisioned, but the Node dashboard cannot complete an authenticated end-to-end call in CI without DASHBOARD_STATE_API_URL, DASHBOARD_STATE_OPERATOR_TOKEN and Cloudflare Access service-token credentials.",
       "inputValidation": "NOT_TESTED — route-specific success and invalid-input matrix is pending.",
       "durablePersistence": "BLOCKED — staging D1 has an initialized revision-1 snapshot and backup; route-level live read/write/backup/restore through the Node dashboard remains unverified.",
@@ -176,8 +184,8 @@
       "notes": "Read-only Cloudflare account verification on 2026-11-08 confirms the staging Worker is deployed with the D1 binding, six application tables exist, dashboard_state revision 1 contains 16 queue items and publishingEnabled=false, and one backup exists. The Access application is email-only and no Access service tokens are configured; an unauthenticated health request is intercepted with login_required. The Node app runtime still lacks a verified service-token-backed DASHBOARD_STATE_API_URL/DASHBOARD_STATE_OPERATOR_TOKEN configuration, so these three Node routes remain BLOCKED until authenticated end-to-end read/write/backup/restore is proven. No token or state snapshot was exposed.",
       "testEvidence": {
         "test": "test/dashboard-api-auth-matrix.test.mjs; test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
-        "exactTestedSha": "06c2443d9d1308cdf071063634864b5a7088b8cf",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42486667603",
+        "exactTestedSha": "6b8bfe653490b829f6036648ab5bae51e131f4ac",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189435",
         "scenario": "The source-derived auth matrix checks missing and invalid credentials on every discovered API route. This is authentication-negative evidence only; it does not establish authorized success or full route acceptance."
       }
     },
@@ -186,7 +194,7 @@
       "path": "/api/state/restore",
       "classification": "Cloudflare durable-state backup restore",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived 45-route authentication matrix on exact SHA 06c2443d9d1308cdf071063634864b5a7088b8cf; see test/dashboard-api-auth-matrix.test.mjs and run 42486667603.",
+      "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived route authentication matrix on exact SHA 6b8bfe653490b829f6036648ab5bae51e131f4ac; see test/dashboard-api-auth-matrix.test.mjs and test/dashboard-api-authenticated-route-negative-matrix.test.mjs, included in the 722-test content-quality run.",
       "authorizedSuccess": "BLOCKED — staging infrastructure is provisioned, but the Node dashboard cannot complete an authenticated end-to-end call in CI without DASHBOARD_STATE_API_URL, DASHBOARD_STATE_OPERATOR_TOKEN and Cloudflare Access service-token credentials.",
       "inputValidation": "NOT_TESTED — route-specific success and invalid-input matrix is pending.",
       "durablePersistence": "BLOCKED — staging D1 has an initialized revision-1 snapshot and backup; route-level live read/write/backup/restore through the Node dashboard remains unverified.",
@@ -198,8 +206,8 @@
       "notes": "Read-only Cloudflare account verification on 2026-11-08 confirms the staging Worker is deployed with the D1 binding, six application tables exist, dashboard_state revision 1 contains 16 queue items and publishingEnabled=false, and one backup exists. The Access application is email-only and no Access service tokens are configured; an unauthenticated health request is intercepted with login_required. The Node app runtime still lacks a verified service-token-backed DASHBOARD_STATE_API_URL/DASHBOARD_STATE_OPERATOR_TOKEN configuration, so these three Node routes remain BLOCKED until authenticated end-to-end read/write/backup/restore is proven. No token or state snapshot was exposed.",
       "testEvidence": {
         "test": "test/dashboard-api-auth-matrix.test.mjs; test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
-        "exactTestedSha": "06c2443d9d1308cdf071063634864b5a7088b8cf",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42486667603",
+        "exactTestedSha": "6b8bfe653490b829f6036648ab5bae51e131f4ac",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189435",
         "scenario": "The source-derived auth matrix checks missing and invalid credentials on every discovered API route. This is authentication-negative evidence only; it does not establish authorized success or full route acceptance."
       }
     },
@@ -230,7 +238,7 @@
       "path": "/api/jobs/dispatchable",
       "classification": "read-only scoped worker dispatch inventory",
       "authRequired": "operator token or scoped worker token; worker token is restricted to this GET and POST /api/jobs/produce",
-      "authenticationNegative": "PASS — missing/invalid operator credentials are rejected by the inventory-derived auth matrix; the worker credential is rejected on GET /api/state and POST /api/jobs/lease/claim.",
+      "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived route authentication matrix on exact SHA 6b8bfe653490b829f6036648ab5bae51e131f4ac; see test/dashboard-api-auth-matrix.test.mjs and test/dashboard-api-authenticated-route-negative-matrix.test.mjs, included in the 722-test content-quality run.",
       "authorizedSuccess": "PASS — the worker credential receives only queued jobs whose production plan is explicitly APPROVED_PLAN_ONLY with an APPROVE decision and a 64-character approval receipt field; a draft plan is withheld. The fixture is synthetic and is not proof of genuine human approval.",
       "inputValidation": "PASS — limit must be an integer from 1 to 100; worker identity must match the bounded identifier policy; invalid limit/identity return HTTP 400.",
       "durablePersistence": "N/A — read-only; four concurrent requests preserve the exact persisted state bytes.",
@@ -242,8 +250,8 @@
       "notes": "The endpoint only selects candidates for dispatch. The render endpoint still revalidates the full script/narration/captions/production-plan/rights/compliance/metadata/media evidence and can reject a candidate without rendering. It does not upload or publish.",
       "testEvidence": {
         "test": "test/dashboard-worker-api.integration.test.mjs; test/worker-runner.test.mjs; test/dashboard-api-auth-matrix.test.mjs",
-        "exactTestedSha": "4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698812",
+        "exactTestedSha": "6b8bfe653490b829f6036648ab5bae51e131f4ac",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189435",
         "scenario": "Real dashboard API test admits a synthetic APPROVED_PLAN_ONLY candidate, withholds a queued draft plan, validates invalid limits/worker IDs, rejects worker access to operator state and direct lease claims, returns 404 for an unknown render job, and verifies four concurrent identical reads preserve state byte-for-byte. Worker-runner tests verify sequential dispatch, 409 handling, 30-second initial backoff, credential scoping, HTTPS/loopback rules and prompt polling shutdown."
       }
     },
