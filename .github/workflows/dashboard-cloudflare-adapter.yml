@@ -26,6 +26,10 @@ on:
       - "test/dashboard-inventory.test.mjs"
       - "test/deployment-recovery.test.mjs"
       - ".github/workflows/repository-runner.yml"
+      - "scripts/validate-promotional-short-plan.mjs"
+      - "content/promotional-short-plan.json"
+      - "test/promotional-short-plan.test.mjs"
+      - "test/dashboard-ui-contract.test.mjs"
       - ".github/workflows/dashboard-cloudflare-adapter.yml"
   pull_request:
     branches: [codex/marketing-machine-audit-fixes]
@@ -53,6 +57,10 @@ on:
       - "test/deployment-recovery.test.mjs"
       - ".github/workflows/repository-runner.yml"
       - ".github/workflows/cloudflare-state.yml"
+      - "scripts/validate-promotional-short-plan.mjs"
+      - "content/promotional-short-plan.json"
+      - "test/promotional-short-plan.test.mjs"
+      - "test/dashboard-ui-contract.test.mjs"
       - ".github/workflows/dashboard-cloudflare-adapter.yml"
 
 permissions:
@@ -102,4 +110,4 @@ jobs:
           node --check test/deployment-recovery.test.mjs
           ruby -e 'require "yaml"; YAML.load_file(".github/workflows/repository-runner.yml")'
       - name: Cloudflare state, repository runner and dashboard inventory tests
-        run: node --test test/cloudflare-state-worker.test.mjs test/worker-runner.test.mjs test/dashboard-inventory.test.mjs test/deployment-recovery.test.mjs test/artifact-integrity.test.mjs
+        run: node --test test/cloudflare-state-worker.test.mjs test/worker-runner.test.mjs test/dashboard-inventory.test.mjs test/dashboard-ui-contract.test.mjs test/promotional-short-plan.test.mjs test/deployment-recovery.test.mjs test/artifact-integrity.test.mjs
