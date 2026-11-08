@@ -190,7 +190,7 @@ test("failed replacement startup rolls back to the previous release without losi
 
 test("manual repository runner defaults to read-only staging checks and requires explicit production dispatch opt-in", () => {
   const workflow = fs.readFileSync(path.join(repositoryRoot, ".github", "workflows", "repository-runner.yml"), "utf8");
-  assert.ok(workflow.includes("run_staging_smoke:\n        description: \"Run read-only D1/R2 staging checks only (safe default)\"\n        required: false\n        type: boolean\n        default: true"));
+  assert.ok(workflow.includes("run_staging_smoke:\n        description: \"Run non-production D1 checks and a temporary R2 integrity probe (safe default)\"\n        required: false\n        type: boolean\n        default: true"));
   assert.ok(workflow.includes("run_repository_runner:\n        description: \"Explicitly opt in to dispatching one approved due production job\"\n        required: false\n        type: boolean\n        default: false"));
   assert.ok(workflow.includes("inputs.run_repository_runner == true"));
   assert.ok(workflow.includes("inputs.run_staging_smoke == true"));
