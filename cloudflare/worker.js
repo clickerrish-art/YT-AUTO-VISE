@@ -396,16 +396,27 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
       }
       const probeKey = "health/runner-probe-" + crypto.randomUUID();
       const nonce = crypto.randomUUID();
+      let probeFailed = false;
+      let cleanupFailed = false;
       try {
         await env.ARTIFACTS.put(probeKey, nonce, { customMetadata: { purpose: "runner-readiness-probe" } });
         const probe = await env.ARTIFACTS.get(probeKey);
         if (!probe || await probe.text() !== nonce) throw new Error("R2 readiness probe read-back did not match");
-        return json({ ready: true, usedBytes, remainingBytes, storageProvider: "Cloudflare R2 Standard", publishingEnabled: false });
       } catch {
-        return json({ ready: false, code: "R2_ARTIFACT_PROBE_FAILED", blockers: ["Private R2 write/read integrity probe failed."] }, 503);
-      } finally {
-        try { await env.ARTIFACTS.delete(probeKey); } catch {}
+        probeFailed = true;
       }
+      try {
+        await env.ARTIFACTS.delete(probeKey);
+      } catch {
+        cleanupFailed = true;
+      }
+      if (cleanupFailed) {
+        return json({ ready: false, code: "R2_ARTIFACT_PROBE_CLEANUP_FAILED", blockers: ["Private R2 readiness probe could not be deleted; storage must be reconciled before production dispatch."] }, 503);
+      }
+      if (probeFailed) {
+        return json({ ready: false, code: "R2_ARTIFACT_PROBE_FAILED", blockers: ["Private R2 write/read integrity probe failed."] }, 503);
+      }
+      return json({ ready: true, usedBytes, remainingBytes, storageProvider: "Cloudflare R2 Standard", publishingEnabled: false });
     }
 
     if (url.pathname === "/api/runner/artifacts" && method === "GET") {
