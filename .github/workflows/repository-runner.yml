@@ -4,7 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       run_staging_smoke:
-        description: "Run read-only D1/R2 staging smoke checks before the one-job runner cycle"
+        description: "Run read-only D1/R2 staging checks only (safe default)"
+        required: false
+        type: boolean
+        default: true
+      run_repository_runner:
+        description: "Explicitly opt in to dispatching one approved due production job"
         required: false
         type: boolean
         default: false
@@ -19,7 +24,7 @@ concurrency:
 
 jobs:
   repository-runner:
-    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/codex/cloudflare-adapter-integration-20261108' }}
+    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/codex/cloudflare-adapter-integration-20261108' && inputs.run_repository_runner == true }}
     runs-on: ubuntu-latest
     timeout-minutes: 12
     env:
