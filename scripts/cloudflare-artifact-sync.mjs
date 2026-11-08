@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { artifactPartMd5, assertArtifactPartMatches } from "./artifact-integrity.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const stateDir = path.resolve(process.env.DASHBOARD_STATE_DIR ?? path.join(root, "state"));
@@ -133,18 +134,23 @@ async function uploadArtifact(job, descriptor, existing) {
   if (upload.status === "READY" || upload.idempotent) return;
   if (!upload.artifactId || !upload.uploadId || !Number.isSafeInteger(upload.partSizeBytes) ||
       !Number.isSafeInteger(upload.expectedParts)) throw new Error("Artifact upload session response is invalid");
-  const uploaded = new Set((upload.uploadedParts ?? []).map(part => Number(part.partNumber)));
+  const uploaded = new Map((upload.uploadedParts ?? []).map(part => [Number(part.partNumber), part.etag]));
+  const streamedSha256 = crypto.createHash("sha256");
   const fd = fs.openSync(file.resolved, "r");
   try {
     for (let partNumber = 1; partNumber <= upload.expectedParts; partNumber++) {
-      if (uploaded.has(partNumber)) continue;
       const offset = (partNumber - 1) * upload.partSizeBytes;
       const length = Math.min(upload.partSizeBytes, file.sizeBytes - offset);
       const buffer = Buffer.alloc(length);
       const bytesRead = fs.readSync(fd, buffer, 0, length, offset);
       if (bytesRead !== length) throw new Error("Could not read the complete artifact segment " + partNumber);
-      const expectedPartMd5 = crypto.createHash("md5").update(buffer).digest("hex");
-      await requestJson("/api/runner/artifacts/part?artifactId=" + encodeURIComponent(upload.artifactId) +
+      streamedSha256.update(buffer);
+      const expectedPartMd5 = artifactPartMd5(buffer);
+      if (uploaded.has(partNumber)) {
+        assertArtifactPartMatches(buffer, uploaded.get(partNumber));
+        continue;
+      }
+      const receipt = await requestJson("/api/runner/artifacts/part?artifactId=" + encodeURIComponent(upload.artifactId) +
         "&partNumber=" + partNumber, {
           method: "PUT",
           body: buffer,
@@ -154,9 +160,16 @@ async function uploadArtifact(job, descriptor, existing) {
           },
           timeoutMs: 120_000
         });
+      if (receipt.md5Verified !== true || receipt.partNumber !== partNumber ||
+          assertArtifactPartMatches(buffer, receipt.etag) !== expectedPartMd5) {
+        throw new Error("R2 did not return a verified receipt for artifact segment " + partNumber);
+      }
     }
   } finally {
     fs.closeSync(fd);
+  }
+  if (streamedSha256.digest("hex") !== descriptor.sha256) {
+    throw new Error("Artifact bytes changed during upload or resumed parts do not match the generated SHA-256 receipt");
   }
   const completed = await requestJson("/api/runner/artifacts/complete", {
     method: "POST",
