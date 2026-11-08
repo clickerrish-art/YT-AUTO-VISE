@@ -3453,6 +3453,9 @@ const server = http.createServer(async (req, res) => {
       if (typeof body.jobId !== "string" || typeof body.reason !== "string") {
         return json(res, 400, { error: "jobId and an operator review reason are required", publishingEnabled: false });
       }
+      if (body.reason.trim().length < 8 || body.reason.length > 1000) {
+        return json(res, 400, { error: "A retry review reason of 8–1000 characters is required", publishingEnabled: false });
+      }
       if (body.overrideRetryLimit !== undefined && typeof body.overrideRetryLimit !== "boolean") {
         return json(res, 400, { error: "overrideRetryLimit must be a boolean when supplied", publishingEnabled: false });
       }
