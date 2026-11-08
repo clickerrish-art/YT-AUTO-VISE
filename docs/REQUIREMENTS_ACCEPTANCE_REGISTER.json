@@ -1699,16 +1699,16 @@
   "currentCheckpoint": {
     "applicationCodeSha": "c75864be94e4e6827995b1446c6cf960c83d9228",
     "testedSha": "c75864be94e4e6827995b1446c6cf960c83d9228",
-    "checkpointPrHead": "1ff7122e855dd8370d828ebba655c64483b0c4ff",
+    "checkpointPrHead": "c4fdb072dd70e275b01871b7a0b058558675912d",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 3192,
+    "aheadBy": 3194,
     "behindBy": 2,
     "changedFiles": 288,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "EXACT-SHA EVIDENCE REFRESH (2026-11-08): API route inventory synchronized to 45 protected API routes; 37 PASS, 0 NOT_TESTED, 8 BLOCKED; 45/45 authentication-negative checks pass. The 8 blocked routes remain external/owner-gated, so API-001 remains OPEN. Exact code/test SHA c75864be94e4e6827995b1446c6cf960c83d9228 passed 133/133 Node test files, 721 Node tests, 34 Python tests, zero skips and npm audit with 0 vulnerabilities. Dashboard Chromium E2E 28/28; content quality, queue readiness, metadata, Cloudflare unit, deployment recovery, branch inventory, isolated baseline and local Nature Frontiers draft validation passed. Production readiness remains HOLD. The full 82-requirement status snapshot is still dated 2026-11-02 and is not freshly reconciled; DASH-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain open.",
+    "verdict": "EXACT-SHA EVIDENCE REFRESH (2026-11-08): API route inventory synchronized to 45 protected API routes; 37 PASS, 0 NOT_TESTED, 8 BLOCKED; 45/45 authentication-negative checks pass. The 8 blocked routes remain external/owner-gated, so API-001 remains OPEN. Exact code/test SHA c75864be94e4e6827995b1446c6cf960c83d9228 passed 133/133 Node test files, 721 Node tests, 34 Python tests, zero skips and npm audit with 0 vulnerabilities. Dashboard Chromium E2E 28/28; content quality, queue readiness, metadata, Cloudflare unit checks, deployment recovery, branch inventory, isolated baseline and local Nature Frontiers draft validation passed. Cloudflare staging Worker/D1 are provisioned: six application tables, revision 1 with 16 queue items, publishing disabled and one backup; however no Access service token is configured and the Node dashboard runtime has not completed authenticated state API integration, so three Cloudflare-backed routes remain BLOCKED. Production readiness remains HOLD. The full 82-requirement status snapshot is still dated 2026-11-02 and is not freshly reconciled; DASH-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain open.",
     "ci": {
       "automationSecurity": "PASS — 133/133 Node test files; 721 Node tests; zero failures/skips; 34 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe verified.",
       "nodeTests": 721,
@@ -1740,7 +1740,10 @@
       },
       "queueReadiness": "PASS — safe queue proposal and draft-only policy validation.",
       "cloudflareDurableState": "PASS — local durable-state unit tests; production Cloudflare state sync still blocked until configured.",
-      "deploymentRecovery": "PASS — replacement/restart/persistent-state recovery smoke."
+      "deploymentRecovery": "PASS — replacement/restart/persistent-state recovery smoke.",
+      "cloudflareDurableStateUnitTests": "PASS — local Worker/D1 unit suite.",
+      "cloudflareStagingInfrastructure": "PASS — deployed staging Worker with D1 binding, six application tables, revision-1 state, 16 queue items, publishing disabled and one backup.",
+      "cloudflareNodeRuntimeIntegration": "BLOCKED — no Access service token; authenticated Node-to-Worker runtime variables and live read/write/backup/restore are not verified."
     },
     "requirementStatusSnapshot": {
       "total": 82,
@@ -2067,5 +2070,26 @@
       "freshlyReconciled": false
     },
     "caveat": "Live Git and CI evidence refreshed to the exact candidate SHA. The 82-requirement status totals remain the last full acceptance assessment dated 2026-11-02 and have not been silently reclassified."
+  },
+  "cloudflareStagingInfrastructure": {
+    "observedAt": "2026-11-08",
+    "worker": "sonicvhibez-durable-state-staging",
+    "workerDeployment": "deployed; D1 STATE_DB binding present",
+    "d1ApplicationTables": 6,
+    "state": {
+      "revision": 1,
+      "updatedAt": "2026-11-08T00:00:00.000Z",
+      "queueItems": 16,
+      "jobs": 0,
+      "auditEvents": 1,
+      "uploads": 0,
+      "publishingEnabled": false
+    },
+    "backups": 1,
+    "accessApplication": "SonicVhibez Dashboard Staging",
+    "accessPolicy": "email-only allow policy",
+    "accessServiceTokens": 0,
+    "nodeRuntimeIntegration": "BLOCKED — DASHBOARD_STATE_API_URL, DASHBOARD_STATE_OPERATOR_TOKEN and Cloudflare Access service-token credentials are not verified in the Node dashboard runtime",
+    "classification": "Infrastructure provisioning PASS; Node route end-to-end acceptance remains BLOCKED."
   }
 }
