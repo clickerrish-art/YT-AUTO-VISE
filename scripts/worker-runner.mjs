@@ -443,8 +443,7 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
     }
     const operatorRetryRequired = dispatched.status === 409 && (
       dispatched.payload.requiresOperatorRetry === true ||
-      dispatched.payload.deadLettered === true ||
-      dispatched.payload.retryAllowed === false
+      dispatched.payload.deadLettered === true
     );
     if (dispatched.status === 200 || operatorRetryRequired) {
       // The dashboard has durably moved this job out of automatic dispatch.
@@ -475,7 +474,9 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
         ...(typeof dispatched.payload.requiresOperatorRetry === "boolean" ? { requiresOperatorRetry: dispatched.payload.requiresOperatorRetry } : {}),
         ...(typeof dispatched.payload.deadLettered === "boolean" ? { deadLettered: dispatched.payload.deadLettered } : {}),
         ...(typeof dispatched.payload.publishable === "boolean" ? { publishable: dispatched.payload.publishable } : {}),
-        retryAfterMs: Math.max(0, cooldowns.get(job.id)?.nextAttemptAt - Date.now())
+        ...(cooldowns.has(job.id)
+          ? { retryAfterMs: Math.max(0, cooldowns.get(job.id).nextAttemptAt - Date.now()) }
+          : {})
       } : {})
     });
   }
