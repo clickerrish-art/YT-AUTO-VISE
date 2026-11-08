@@ -54,3 +54,11 @@ The Cloudflare account was inspected without changing resources or reading secre
 - No PR was merged or marked ready; main remains untouched.
 - The staging Worker must receive the exact candidate build with both `ASSETS` and `ARTIFACTS` bindings before live hosting and R2 preflight can be accepted.
 - Production execution remains gated on owner authorization, verified remote YouTube publication history and timestamps, an owner-approved feasible cadence decision, exact job/media approval, rights evidence, and human review. A passing test suite does not satisfy those external gates.
+
+## Staging deployment attempt — 8 November 2026
+
+- A direct Cloudflare asset-upload request returned HTTP 401 `Invalid API Token` before any asset upload or Worker script update. A subsequent token-verification read also returned 401. No Cloudflare mutation succeeded.
+- A guarded GitHub Actions deployment workflow, `.github/workflows/deploy-staging.yml`, was added. Run `42469914484` confirmed that the repository has no `CLOUDFLARE_API_TOKEN` Actions secret; checkout, deployment, and smoke-test steps were safely skipped.
+- The live staging Worker therefore remains unchanged: no `ASSETS` or `ARTIFACTS` binding was attached, and no live dashboard or R2 upload/download smoke test was performed.
+- To finish this external step, the Cloudflare connection must be reauthorized in ChatGPT, or the repository must receive a `CLOUDFLARE_API_TOKEN` Actions secret with Workers Scripts/Assets deployment and the required D1/R2 access. Do not paste the token into chat. Once credentials are available, rerun the guarded staging deployment and then the live R2/D1 smoke check.
+- The deployment workflow is staging-only and gated by the `[deploy-staging]` commit marker. It does not dispatch the repository production runner or publish content.
