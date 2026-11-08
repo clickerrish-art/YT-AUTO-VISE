@@ -298,7 +298,8 @@ test("worker lease heartbeat, completion fencing, expiry reaping and restart per
     jobId: retryJob.id,
     reason: "Reviewed dead-letter evidence but did not authorize an override"
   });
-  assert.equal(rejectedOverride.status, 400);
+  assert.equal(rejectedOverride.status, 409,
+    "an exhausted retry limit is a state conflict until an explicit override is supplied");
   assert.deepEqual(fs.readFileSync(statePath), beforeRejectedOverride,
     "an exhausted retry limit must not be bypassed without an explicit override");
 
