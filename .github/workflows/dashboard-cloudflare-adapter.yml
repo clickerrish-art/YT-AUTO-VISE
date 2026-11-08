@@ -18,6 +18,7 @@ on:
       - "test/cloudflare-state-worker.test.mjs"
       - "test/worker-runner.test.mjs"
       - "test/dashboard-inventory.test.mjs"
+      - "test/deployment-recovery.test.mjs"
       - ".github/workflows/repository-runner.yml"
       - ".github/workflows/dashboard-cloudflare-adapter.yml"
   pull_request:
@@ -61,6 +62,7 @@ jobs:
           node --check test/cloudflare-state-worker.test.mjs
           node --check test/worker-runner.test.mjs
           node --check test/dashboard-inventory.test.mjs
+          node --check test/deployment-recovery.test.mjs
           ruby -e 'require "yaml"; YAML.load_file(".github/workflows/repository-runner.yml")'
       - name: Cloudflare state, repository runner and dashboard inventory tests
-        run: node --test test/cloudflare-state-worker.test.mjs test/worker-runner.test.mjs test/dashboard-inventory.test.mjs
+        run: node --test test/cloudflare-state-worker.test.mjs test/worker-runner.test.mjs test/dashboard-inventory.test.mjs test/deployment-recovery.test.mjs
