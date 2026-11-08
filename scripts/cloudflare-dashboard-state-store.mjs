@@ -203,7 +203,13 @@ export class CloudflareDashboardStateStore {
     try {
       committed = await this.client.updateState(state, expectedRevision);
     } catch (error) {
-      if (error?.status === 409 || error?.code === "REVISION_CONFLICT") removeFile(this.journalFile);
+      if (error?.status === 409 || error?.code === "REVISION_CONFLICT") {
+        removeFile(this.journalFile);
+        try { await this.initialize(); }
+        catch (refreshError) {
+          throw new Error("Cloudflare state revision conflict; automatic local refresh failed: " + refreshError.message, { cause: error });
+        }
+      }
       throw error;
     }
     return this.finalize(committed.revision, committed.state, committed.updatedAt);

@@ -50,16 +50,7 @@ if (stateApiUrl && (stateApiToken.length < 24 || !stateAccessClientId || !stateA
   console.error("BLOCKED: Cloudflare state sync requires DASHBOARD_STATE_OPERATOR_TOKEN plus the Cloudflare Access service-token ID and secret. No state was changed.");
   process.exit(2);
 }
-const remoteStateStore = stateApiUrl ? new CloudflareDashboardStateStore({
-  client: new CloudflareDashboardStateClient({
-    baseUrl: stateApiUrl,
-    operatorToken: stateApiToken,
-    accessClientId: stateAccessClientId,
-    accessClientSecret: stateAccessClientSecret
-  }),
-  stateFile,
-  actor: operatorId
-}) : null;
+let remoteStateStore = null;
 const approvedProductUrl = "https://selar.com/0u19v8u99l";
 const htmlPath = path.join(root, "public", "dashboard.html");
 
@@ -74,6 +65,18 @@ if (workerToken && (workerToken.length < 24 || workerToken === token)) {
 if (!operatorId || operatorId.length < 2 || operatorId.length > 120) {
   console.error("BLOCKED: set DASHBOARD_OPERATOR_ID to the actual authorized operator identity (2–120 characters). No server started.");
   process.exit(2);
+}
+if (stateApiUrl) {
+  remoteStateStore = new CloudflareDashboardStateStore({
+    client: new CloudflareDashboardStateClient({
+      baseUrl: stateApiUrl,
+      operatorToken: stateApiToken,
+      accessClientId: stateAccessClientId,
+      accessClientSecret: stateAccessClientSecret
+    }),
+    stateFile,
+    actor: operatorId
+  });
 }
 if (!["127.0.0.1", "::1", "localhost"].includes(host)) {
   console.error("BLOCKED: dashboard binds to loopback only; use a secure authenticated reverse proxy before changing this.");

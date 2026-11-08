@@ -103,7 +103,8 @@ test("known revision conflicts do not change the local committed copy or retain 
   db.revision++;
   db.state = makeState({ queueItems: [{ id: "draft-1", title: "other operator" }] });
   await assert.rejects(store.persist(makeState({ queueItems: [{ id: "draft-1", title: "stale" }] })), error => error.status === 409);
-  assert.deepEqual(JSON.parse(fs.readFileSync(stateFile, "utf8")), initial);
+  assert.equal(JSON.parse(fs.readFileSync(stateFile, "utf8")).queueItems[0].title, "other operator");
+  assert.equal(store.revision, 2);
   assert.equal(fs.existsSync(stateFile + ".cloudflare-pending.json"), false);
 });
 
