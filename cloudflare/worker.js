@@ -558,6 +558,16 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
         await env.STATE_DB.prepare("UPDATE runner_artifacts SET status = 'FAILED' WHERE artifact_id = ?").bind(input.artifactId).run();
         return json({ error: "R2 object size did not match the declared artifact size; object was deleted", code: "ARTIFACT_SIZE_MISMATCH" }, 409);
       }
+      const metadata = object.customMetadata ?? {};
+      if (metadata.sha256 !== artifact.sha256 || metadata.jobId !== artifact.job_id ||
+          metadata.sourcePath !== artifact.source_path || metadata.artifactKind !== artifact.artifact_kind) {
+        await env.ARTIFACTS.delete(artifact.object_key);
+        await env.STATE_DB.prepare("UPDATE runner_artifacts SET status = 'FAILED' WHERE artifact_id = ?").bind(input.artifactId).run();
+        return json({
+          error: "Completed R2 object metadata did not match the exact durable job artifact receipt; object was deleted",
+          code: "ARTIFACT_RECEIPT_MISMATCH"
+        }, 409);
+      }
       const completedAt = new Date().toISOString();
       await env.STATE_DB.prepare(
         "UPDATE runner_artifacts SET status = 'READY', etag = ?, completed_at = ? WHERE artifact_id = ? AND status = 'UPLOADING'"
