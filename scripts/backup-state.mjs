@@ -142,14 +142,34 @@ async function backupStateUnlocked({ rootDir = root, stateDir = process.env.DASH
   add(stateFile, { kind: "dashboard-state", path: "dashboard-state.json" });
   add(path.join(path.dirname(stateFile), "facebook-recovery-ledger.jsonl"), { kind: "facebook-recovery-ledger", path: "facebook-recovery-ledger.jsonl" });
   add(path.join(logDir, "upload-attempts.json"), { kind: "upload-ledger", path: "upload-attempts.json" });
-  if (fs.existsSync(logDir)) {
+  let logDirStat;
+  try {
+    logDirStat = fs.lstatSync(logDir);
+  } catch (error) {
+    if (error?.code !== "ENOENT") throw error;
+  }
+  if (logDirStat) {
+    assertNoSymlinkComponents(logDir, "upload-log input");
+    if (logDirStat.isSymbolicLink() || !logDirStat.isDirectory()) {
+      throw new Error("Backup upload-log input must be a real directory, not a symlink or special file");
+    }
     for (const name of fs.readdirSync(logDir)) {
-      if (/^upload-[A-Za-z0-9_-]+\.json$/.test(name) && name !== "upload-attempts.json") add(path.join(logDir, name), { kind: "upload-receipt", path: name });
+      if (/^upload-[A-Za-z0-9_-]+\\.json$/.test(name) && name !== "upload-attempts.json") add(path.join(logDir, name), { kind: "upload-receipt", path: name });
     }
     const approvals = path.join(logDir, "upload-approvals");
-    if (fs.existsSync(approvals)) {
+    let approvalsStat;
+    try {
+      approvalsStat = fs.lstatSync(approvals);
+    } catch (error) {
+      if (error?.code !== "ENOENT") throw error;
+    }
+    if (approvalsStat) {
+      assertNoSymlinkComponents(approvals, "upload-approval input");
+      if (approvalsStat.isSymbolicLink() || !approvalsStat.isDirectory()) {
+        throw new Error("Backup upload-approval input must be a real directory, not a symlink or special file");
+      }
       for (const name of fs.readdirSync(approvals)) {
-        if (!/^[A-Za-z0-9_-]+\.json$/.test(name)) continue;
+        if (!/^[A-Za-z0-9_-]+\\.json$/.test(name)) continue;
         add(path.join(approvals, name), { kind: "upload-approval", path: name });
       }
     }
