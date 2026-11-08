@@ -163,3 +163,32 @@ test("every declared API route rejects unauthenticated requests without mutating
     "unauthenticated API requests must not mutate persisted dashboard state");
   assert.equal(results.length, apiRoutes.length);
 });
+
+
+test("API acceptance matrix exactly matches every live server API route", () => {
+  const matrixPath = path.join(root, "docs", "API_ROUTE_ACCEPTANCE_MATRIX.json");
+  const matrix = JSON.parse(fs.readFileSync(matrixPath, "utf8"));
+  const actual = [...new Map(apiRoutes.map(route => [
+    route.method + " " + route.path,
+    route.method + " " + route.path
+  ])).keys()].sort();
+  const documented = [...new Map(matrix.routes.map(route => [
+    route.method + " " + route.path,
+    route.method + " " + route.path
+  ])).keys()].sort();
+
+  assert.deepEqual(documented, actual,
+    "every API route declared by dashboard-server.mjs must have exactly one acceptance-matrix row");
+  assert.equal(matrix.counts.routes, actual.length,
+    "the acceptance matrix route count must match the live source inventory");
+  assert.equal(matrix.counts.authNegativePass, actual.length,
+    "every inventoried route must have exact-source missing/invalid-credential coverage");
+  assert.equal(matrix.counts.overallPass,
+    matrix.routes.filter(route => route.overallAcceptance === "PASS").length);
+  assert.equal(matrix.counts.overallNotTested,
+    matrix.routes.filter(route => route.overallAcceptance === "NOT_TESTED").length);
+  assert.equal(matrix.counts.overallBlocked,
+    matrix.routes.filter(route => route.overallAcceptance === "BLOCKED").length);
+  assert.ok(matrix.routes.every(route => /PASS/.test(route.authenticationNegative)),
+    "authentication-negative evidence must be recorded for every route without implying positive acceptance");
+});
