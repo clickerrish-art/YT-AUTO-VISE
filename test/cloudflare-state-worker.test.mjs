@@ -1342,6 +1342,61 @@ test("private R2 artifact upload requires an exact generated receipt and complet
   assert.equal(download.headers.get("x-artifact-sha256"), digest);
 });
 
+test("private R2 multipart completion deletes an object whose receipt metadata is mismatched", async () => {
+  const fixture = await createRunnerOidcFixture();
+  const artifact = {
+    artifact_id: "11111111-1111-4111-8111-111111111111",
+    upload_id: "upload-corrupt-1",
+    object_key: "jobs/job-corrupt/" + "a".repeat(64) + "/video.mp4",
+    size_bytes: 5,
+    expected_parts: 1,
+    status: "UPLOADING",
+    sha256: "a".repeat(64),
+    job_id: "job-corrupt",
+    source_path: "media/video.mp4",
+    artifact_kind: "video"
+  };
+  let failedStatus = false;
+  let deletedKey = null;
+  const env = {
+    STATE_DB: {
+      prepare(sql) {
+        return {
+          bind() { return this; },
+          async first() { return artifact; },
+          async all() { return { results: [{ part_number: 1, etag: "part-etag" }] }; },
+          async run() { failedStatus = true; return { meta: { changes: 1 } }; }
+        };
+      }
+    },
+    ARTIFACTS: {
+      resumeMultipartUpload(key, uploadId) {
+        assert.equal(key, artifact.object_key);
+        assert.equal(uploadId, artifact.upload_id);
+        return { async complete() {
+          return {
+            size: 5, httpEtag: "object-etag",
+            customMetadata: {
+              jobId: artifact.job_id, sourcePath: artifact.source_path,
+              artifactKind: artifact.artifact_kind, sha256: "b".repeat(64)
+            }
+          };
+        } };
+      },
+      async delete(key) { deletedKey = key; }
+    }
+  };
+  const response = await handleRequest(new Request("https://state.example/api/runner/artifacts/complete", {
+    method: "POST",
+    headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
+    body: JSON.stringify({ artifactId: artifact.artifact_id })
+  }), env, fixture);
+  assert.equal(response.status, 409);
+  assert.equal((await response.json()).code, "ARTIFACT_RECEIPT_MISMATCH");
+  assert.equal(deletedKey, artifact.object_key);
+  assert.equal(failedStatus, true);
+});
+
 test("private R2 artifact creation rejects unbound SHA, unsafe paths and storage over-budget", async () => {
   const fixture = await createRunnerOidcFixture();
   const digest = "a".repeat(64);
