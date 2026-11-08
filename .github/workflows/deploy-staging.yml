@@ -1,4 +1,5 @@
 name: Deploy SonicVhibez Cloudflare staging
+# Intentional staging-only rollout: commit marker [deploy-staging] is required.
 
 on:
   push:
