@@ -34,7 +34,8 @@ test("worker persists retry backoff across process restarts and does not immedia
   const server = createServer(async (req, res) => {
     res.setHeader("content-type", "application/json");
     if (req.method === "GET" && req.url?.startsWith("/api/jobs/dispatchable")) {
-      res.end(JSON.stringify({ jobs: [{ id: "job-awaiting-render-prerequisites" }], queuedCount: 1 }));
+      const jobs = produceRequests === 0 ? [{ id: "job-awaiting-render-prerequisites" }] : [];
+      res.end(JSON.stringify({ jobs, queuedCount: jobs.length }));
       return;
     }
     if (req.method === "POST" && req.url === "/api/jobs/produce") {
@@ -62,21 +63,21 @@ test("worker persists retry backoff across process restarts and does not immedia
   assert.equal(firstCycles[0].results[0].requiresOperatorRetry, true);
   assert.equal(firstCycles[0].results[0].deadLettered, false);
   assert.equal(firstCycles[0].results[0].publishable, false);
-  assert.ok(firstCycles[0].results[0].retryAfterMs >= 59_000,
-    "HTTP 409 Retry-After must override the shorter local fallback delay");
+  assert.equal(firstCycles[0].results[0].status, "OPERATOR_REQUIRED");
+  assert.equal(Object.hasOwn(firstCycles[0].results[0], "retryAfterMs"), false,
+    "operator-only remediation must not be represented as a timed automatic retry");
   const saved = JSON.parse(fs.readFileSync(statePath, "utf8"));
   assert.equal(saved.schemaVersion, 1);
   assert.equal(saved.workerId, workerId);
-  assert.equal(saved.cooldowns["job-awaiting-render-prerequisites"].attempts, 1);
-  assert.ok(saved.cooldowns["job-awaiting-render-prerequisites"].nextAttemptAt >= Date.now() + 59_000,
-    "the server's 60-second Retry-After must be persisted");
+  assert.equal(Object.hasOwn(saved.cooldowns, "job-awaiting-render-prerequisites"), false,
+    "the dashboard has removed this job from automatic dispatch; no local retry cooldown should be written");
   assert.equal(fs.statSync(statePath).mode & 0o777, 0o600, "retry state must be private to the worker account");
 
   const restartedCycles = [];
   await runWorker({ baseUrl, token, workerId, once: true, cooldownStatePath: statePath, onCycle: value => restartedCycles.push(value) });
-  assert.equal(restartedCycles[0].deferredByBackoff, 1);
+  assert.equal(restartedCycles[0].deferredByBackoff, 0);
   assert.deepEqual(restartedCycles[0].results, []);
-  assert.equal(produceRequests, 1, "restart must not immediately retry a still-blocked job");
+  assert.equal(produceRequests, 1, "the dashboard must keep an operator-blocked job out of automatic dispatch after restart");
 });
 
 test("worker refuses corrupt or symlinked retry state instead of resetting backoff", async t => {
