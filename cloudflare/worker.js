@@ -62,7 +62,7 @@ async function authenticate(request, env) {
 
 const RUNNER_OIDC_AUDIENCE = "sonicvhibez-dashboard-runner";
 const RUNNER_OIDC_REPOSITORY = "clickerrish-art/YT-AUTO-VISE";
-const RUNNER_OIDC_REF = "refs/heads/codex/dashboard-cloudflare-adapter";
+const RUNNER_OIDC_REF = "refs/heads/codex/cloudflare-adapter-integration-20261108";
 const RUNNER_OIDC_REPOSITORY_ID = "1210809338";
 const RUNNER_OIDC_OWNER_ID = "251036666";
 let cachedGithubJwks = null;
