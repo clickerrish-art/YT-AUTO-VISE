@@ -318,7 +318,7 @@ test("operator retry form authorizes reviewed failures and one dead-letter overr
     await page.locator("#connect").click();
     await expect(page.locator("#app")).toBeVisible();
 
-    await expect(page.locator("#retryjob option").filter({ hasText: failedJob.id })).toHaveCount(1);
+    await expect(page.locator("#retryjob option[value="" + failedJob.id + "]")).toHaveCount(1);
     await page.locator("#retryjob").selectOption(failedJob.id);
     await page.locator("#retryreason").fill("Reviewed retained failure evidence; this retry is safe.");
     await page.getByRole("button", { name: "Authorize selected retry" }).click();
@@ -337,7 +337,7 @@ test("operator retry form authorizes reviewed failures and one dead-letter overr
       event.action === "CONTENT_JOB_RETRY_AUTHORIZED" && event.jobId === failedJob.id
     )).toHaveLength(1);
 
-    await expect(page.locator("#retryjob option").filter({ hasText: deadLetterJob.id })).toHaveCount(1);
+    await expect(page.locator("#retryjob option[value="" + deadLetterJob.id + "]")).toHaveCount(1);
     await page.locator("#retryjob").selectOption(deadLetterJob.id);
     await page.locator("#retryreason").fill("Reviewed exhausted failure evidence; approve one more attempt.");
     await page.locator("#retryoverride").check();
