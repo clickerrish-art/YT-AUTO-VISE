@@ -267,16 +267,16 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
       stateStatus = "INVALID_OR_UNAVAILABLE";
       blockers.push("Durable dashboard state is unreadable or has an unsupported schema.");
     }
-    if (env.ASSETS && typeof env.ASSETS.fetch === "function") {
+    if (env.ARTIFACTS && typeof env.ARTIFACTS.head === "function") {
       try {
-        const asset = await env.ASSETS.fetch(new Request(new URL("/dashboard.html", url.origin)));
-        if (asset.ok) assetStatus = "READABLE";
-        else blockers.push("Dashboard static asset /dashboard.html is unavailable.");
+        const asset = await env.ARTIFACTS.head("dashboard/dashboard.html");
+        if (asset && Number.isSafeInteger(asset.size) && asset.size > 0) assetStatus = "READABLE";
+        else blockers.push("Private R2 dashboard object dashboard/dashboard.html is unavailable.");
       } catch {
-        blockers.push("Dashboard static asset /dashboard.html could not be read.");
+        blockers.push("Private R2 dashboard object dashboard/dashboard.html could not be read.");
       }
     } else {
-      blockers.push("Cloudflare Static Assets binding ASSETS is not configured.");
+      blockers.push("Private R2 dashboard hosting requires the ARTIFACTS binding.");
     }
 
     if (env.ARTIFACTS && typeof env.ARTIFACTS.put === "function" && typeof env.ARTIFACTS.get === "function") {
@@ -312,10 +312,20 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
   }
 
   if (!url.pathname.startsWith("/api/")) {
-    if (method === "GET" && env.ASSETS && typeof env.ASSETS.fetch === "function") {
-      const assetUrl = new URL(request.url);
-      if (assetUrl.pathname === "/") assetUrl.pathname = "/dashboard.html";
-      return env.ASSETS.fetch(new Request(assetUrl.toString(), request));
+    if (method === "GET" && ["/", "/dashboard.html"].includes(url.pathname)) {
+      if (!env.ARTIFACTS || typeof env.ARTIFACTS.get !== "function") {
+        return json({ error: "Private dashboard storage is not configured" }, 503);
+      }
+      const asset = await env.ARTIFACTS.get("dashboard/dashboard.html");
+      if (!asset?.body) return json({ error: "Dashboard asset is unavailable" }, 503);
+      const headers = new Headers({
+        "content-type": asset.httpMetadata?.contentType || "text/html; charset=utf-8",
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff"
+      });
+      if (asset.httpEtag) headers.set("etag", asset.httpEtag);
+      if (Number.isSafeInteger(asset.size) && asset.size > 0) headers.set("content-length", String(asset.size));
+      return new Response(asset.body, { status: 200, headers });
     }
     return json({ error: "Not found" }, 404);
   }
@@ -845,7 +855,7 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
       service: "sonicvhibez-dashboard-worker",
       statePersistence: { provider: "Cloudflare D1", configured: Boolean(env.STATE_DB), initialized: Boolean(row), revision: row?.revision ?? null },
       artifactStorage: { provider: "Cloudflare R2 Standard", configured: Boolean(env.ARTIFACTS), bucket: "sonicvhibez-artifacts-staging", access: "private-by-default", applicationBudgetBytes: 8589934592, uploadDownloadE2E: "NOT_TESTED" },
-      dashboardHosting: { provider: "Cloudflare Workers Static Assets", configured: Boolean(env.ASSETS) },
+      dashboardHosting: { provider: "Cloudflare R2 private object via Worker", configured: Boolean(env.ARTIFACTS && typeof env.ARTIFACTS.get === "function"), objectKey: "dashboard/dashboard.html" },
       supported: [
         "state read/write with revision checks and backups",
         "queue diagnostics and read-only dispatchable-job inspection",
