@@ -5,6 +5,7 @@ import { defineConfig } from "@playwright/test";
 
 const stateDir = path.join(os.tmpdir(), "sonicvhibez-dashboard-playwright-" + process.pid);
 fs.rmSync(stateDir, { recursive: true, force: true });
+process.env.DASHBOARD_PLAYWRIGHT_STATE_DIR = stateDir;
 
 export default defineConfig({
   testDir: "./browser-tests",
