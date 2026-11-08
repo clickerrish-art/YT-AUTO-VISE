@@ -1,0 +1,79 @@
+name: Dashboard Cloudflare state adapter checks
+
+on:
+  push:
+    branches: [codex/dashboard-cloudflare-adapter]
+    paths:
+      - "cloudflare/**"
+      - "public/**"
+      - "wrangler.jsonc"
+      - "scripts/cloudflare-runner-bridge.mjs"
+      - "scripts/cloudflare-artifact-sync.mjs"
+      - "scripts/artifact-integrity.mjs"
+      - "test/artifact-integrity.test.mjs"
+      - "scripts/worker-runner.mjs"
+      - "scripts/dashboard-inventory.mjs"
+      - "scripts/dashboard-server.mjs"
+      - "scripts/atomic-json-file.mjs"
+      - "scripts/safe-directory-path.mjs"
+      - "scripts/worker-quarantine-release.mjs"
+      - "test/cloudflare-state-worker.test.mjs"
+      - "test/worker-runner.test.mjs"
+      - "test/dashboard-inventory.test.mjs"
+      - "test/deployment-recovery.test.mjs"
+      - ".github/workflows/repository-runner.yml"
+      - ".github/workflows/dashboard-cloudflare-adapter.yml"
+  pull_request:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - "cloudflare/**"
+      - "public/**"
+      - "wrangler.jsonc"
+      - "scripts/cloudflare-runner-bridge.mjs"
+      - "scripts/cloudflare-artifact-sync.mjs"
+      - "scripts/artifact-integrity.mjs"
+      - "test/artifact-integrity.test.mjs"
+      - "scripts/worker-runner.mjs"
+      - "scripts/dashboard-inventory.mjs"
+      - "test/cloudflare-state-worker.test.mjs"
+      - "test/worker-runner.test.mjs"
+      - "test/dashboard-inventory.test.mjs"
+      - "scripts/dashboard-server.mjs"
+      - "scripts/atomic-json-file.mjs"
+      - "scripts/safe-directory-path.mjs"
+      - "scripts/worker-quarantine-release.mjs"
+      - "test/deployment-recovery.test.mjs"
+      - ".github/workflows/repository-runner.yml"
+      - ".github/workflows/cloudflare-state.yml"
+      - ".github/workflows/dashboard-cloudflare-adapter.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  dashboard-adapter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - name: Syntax checks
+        run: |
+          node --check cloudflare/worker.js
+          node --check scripts/cloudflare-runner-bridge.mjs
+          node --check scripts/cloudflare-artifact-sync.mjs
+          node --check scripts/artifact-integrity.mjs
+          node --check test/artifact-integrity.test.mjs
+          node --check scripts/worker-runner.mjs
+          node --check scripts/dashboard-inventory.mjs
+          node --check test/cloudflare-state-worker.test.mjs
+          node --check test/worker-runner.test.mjs
+          node --check test/dashboard-inventory.test.mjs
+          node --check test/deployment-recovery.test.mjs
+          ruby -e 'require "yaml"; YAML.load_file(".github/workflows/repository-runner.yml")'
+      - name: Cloudflare state, repository runner and dashboard inventory tests
+        run: node --test test/cloudflare-state-worker.test.mjs test/worker-runner.test.mjs test/dashboard-inventory.test.mjs test/deployment-recovery.test.mjs test/artifact-integrity.test.mjs
