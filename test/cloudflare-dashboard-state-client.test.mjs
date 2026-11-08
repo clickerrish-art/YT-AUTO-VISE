@@ -146,7 +146,7 @@ test("network errors do not leak the operator token", async () => {
     fetchImpl: async () => { throw new Error("socket failed for " + TOKEN); }
   });
   await assert.rejects(client.getState(), error =>
-    error instanceof DashboardStateServiceError && error.code === "NETWORK_ERROR" && !error.message.includes(TOKEN));
+    error instanceof DashboardStateServiceError && error.code === "NETWORK_ERROR" && error.status === 503 && !error.message.includes(TOKEN));
 });
 
 test("a timeout fails closed with a stable error", async () => {
@@ -156,5 +156,5 @@ test("a timeout fails closed with a stable error", async () => {
       const error = new Error("aborted"); error.name = "AbortError"; reject(error);
     }, { once: true }))
   });
-  await assert.rejects(client.getState(), error => error.code === "TIMEOUT");
+  await assert.rejects(client.getState(), error => error.code === "TIMEOUT" && error.status === 503);
 });

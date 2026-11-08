@@ -92,8 +92,8 @@ export class CloudflareDashboardStateClient {
       return { payload, etag: response.headers.get("etag") };
     } catch (error) {
       if (error instanceof DashboardStateServiceError) throw error;
-      if (error?.name === "AbortError") throw new DashboardStateServiceError("State service request timed out", { code: "TIMEOUT" });
-      throw new DashboardStateServiceError("State service could not be reached", { code: "NETWORK_ERROR" });
+      if (error?.name === "AbortError") throw new DashboardStateServiceError("State service request timed out", { status: 503, code: "TIMEOUT" });
+      throw new DashboardStateServiceError("State service could not be reached", { status: 503, code: "NETWORK_ERROR" });
     } finally {
       clearTimeout(timer);
     }

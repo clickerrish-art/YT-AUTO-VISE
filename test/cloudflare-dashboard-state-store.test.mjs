@@ -56,6 +56,23 @@ test("initialization hydrates a missing local file from the authoritative remote
   assert.equal(db.revision, 1);
 });
 
+test("a newly created local seed adopts an already advanced remote history", async t => {
+  const local = makeState();
+  const remote = makeState({
+    jobs: [{ id: "remote-job" }],
+    audit: [{ id: "remote-bootstrap", action: "DASHBOARD_STATE_BOOTSTRAPPED" }]
+  });
+  const { stateFile } = fixture(t, local);
+  const { client, db } = remoteClient(remote);
+  db.revision = 2;
+  const store = new CloudflareDashboardStateStore({ client, stateFile, localStateIsFresh: true });
+  const result = await store.initialize();
+  assert.equal(result.jobs[0].id, "remote-job");
+  assert.equal(store.revision, 2);
+  assert.equal(db.backups, 0);
+  assert.deepEqual(JSON.parse(fs.readFileSync(stateFile, "utf8")), remote);
+});
+
 test("first migration backs up the tracked staging seed and preserves local jobs and Facebook history", async t => {
   const remote = makeState({
     queueItems: [{ id: "draft-1", title: "tracked title" }, { id: "draft-2", title: "tracked second" }],

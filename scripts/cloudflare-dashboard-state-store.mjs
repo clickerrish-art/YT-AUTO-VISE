@@ -79,7 +79,7 @@ function mergeSeedSnapshot(local, remote, actor) {
 }
 
 export class CloudflareDashboardStateStore {
-  constructor({ client, stateFile, actor = "dashboard-operator" } = {}) {
+  constructor({ client, stateFile, actor = "dashboard-operator", localStateIsFresh = false } = {}) {
     if (!client || typeof client.getState !== "function" || typeof client.updateState !== "function") {
       throw new TypeError("A Cloudflare dashboard state client is required");
     }
@@ -90,6 +90,7 @@ export class CloudflareDashboardStateStore {
     this.metadataFile = stateFile + ".cloudflare-meta.json";
     this.journalFile = stateFile + ".cloudflare-pending.json";
     this.actor = actor.trim();
+    this.localStateIsFresh = localStateIsFresh === true;
     this.revision = null;
   }
 
@@ -113,6 +114,7 @@ export class CloudflareDashboardStateStore {
     this.writeMetadata(revision, normalized, updatedAt);
     removeFile(this.journalFile);
     this.revision = revision;
+    this.localStateIsFresh = false;
     return normalized;
   }
 
@@ -166,6 +168,7 @@ export class CloudflareDashboardStateStore {
       }
       const seeded = remote.revision === 1 &&
         (remote.state.audit ?? []).some(entry => entry?.action === "STAGING_BASELINE_IMPORTED_FROM_TRACKED_SOURCE");
+      if (!seeded && this.localStateIsFresh) return this.finalize(remote.revision, remote.state, remote.updatedAt);
       if (!seeded) throw new Error("Local dashboard history differs from Cloudflare and has no sync checkpoint; refusing to overwrite either copy");
       await this.client.createBackup();
       const merged = mergeSeedSnapshot(local, remote.state, this.actor);

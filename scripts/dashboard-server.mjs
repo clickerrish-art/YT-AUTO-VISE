@@ -66,18 +66,7 @@ if (!operatorId || operatorId.length < 2 || operatorId.length > 120) {
   console.error("BLOCKED: set DASHBOARD_OPERATOR_ID to the actual authorized operator identity (2–120 characters). No server started.");
   process.exit(2);
 }
-if (stateApiUrl) {
-  remoteStateStore = new CloudflareDashboardStateStore({
-    client: new CloudflareDashboardStateClient({
-      baseUrl: stateApiUrl,
-      operatorToken: stateApiToken,
-      accessClientId: stateAccessClientId,
-      accessClientSecret: stateAccessClientSecret
-    }),
-    stateFile,
-    actor: operatorId
-  });
-}
+
 if (!["127.0.0.1", "::1", "localhost"].includes(host)) {
   console.error("BLOCKED: dashboard binds to loopback only; use a secure authenticated reverse proxy before changing this.");
   process.exit(2);
@@ -113,8 +102,24 @@ if (!initialStateEntry) {
     if (error?.code !== "EEXIST") throw error;
     const current = fs.lstatSync(stateFile);
     if (current.isSymbolicLink() || !current.isFile()) throw new Error("Dashboard state initialization collided with an unsafe destination");
+    initialStateEntry = current;
   }
 }
+
+if (stateApiUrl) {
+  remoteStateStore = new CloudflareDashboardStateStore({
+    client: new CloudflareDashboardStateClient({
+      baseUrl: stateApiUrl,
+      operatorToken: stateApiToken,
+      accessClientId: stateAccessClientId,
+      accessClientSecret: stateAccessClientSecret
+    }),
+    stateFile,
+    actor: operatorId,
+    localStateIsFresh: !initialStateEntry
+  });
+}
+
 function loadState() {
   const state = JSON.parse(fs.readFileSync(stateFile, "utf8"));
   for (const key of ["queueItems", "audit", "jobs", "uploads"]) if (!Array.isArray(state[key])) throw new Error("Invalid state schema: " + key);
