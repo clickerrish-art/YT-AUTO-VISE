@@ -26,7 +26,7 @@ test("dashboard static inventory reports all declared controls, forms and litera
     select: 27,
     textarea: 16,
   });
-  assert.deepEqual(inventory.counts.routesByMethod, { GET: 15, POST: 31 });
+  assert.deepEqual(inventory.counts.routesByMethod, { GET: 16, POST: 33 });
 
   assert.ok(inventory.controls.every(control => Number.isInteger(control.line) && control.line > 0));
   assert.ok(inventory.forms.every(form => Number.isInteger(form.line) && form.line > 0));
