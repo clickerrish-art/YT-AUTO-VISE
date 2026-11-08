@@ -1697,44 +1697,50 @@
     }
   ],
   "currentCheckpoint": {
-    "applicationCodeSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
-    "testedSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
-    "checkpointPrHead": "8272d2e39868237c05b2951f37bcade6ae6608c4",
+    "applicationCodeSha": "c75864be94e4e6827995b1446c6cf960c83d9228",
+    "testedSha": "c75864be94e4e6827995b1446c6cf960c83d9228",
+    "checkpointPrHead": "1ff7122e855dd8370d828ebba655c64483b0c4ff",
     "currentMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 2586,
+    "aheadBy": 3192,
     "behindBy": 2,
-    "changedFiles": 231,
+    "changedFiles": 288,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "LIVE EVIDENCE REFRESH: exact-SHA isolated baseline PASS (main 54 Node/8 Python; candidate 524 Node across 111 files/16 Python; zero skips). Exact-HEAD automation/security passed with npm audit 0 vulnerabilities; dashboard E2E 23/23; content quality, metadata, branch inventory and local Nature Frontiers draft validation passed. Production readiness HOLD with 13 blockers. API matrix remains 31 PASS / 5 BLOCKED; 36/36 authentication-negative checks pass. Server now rejects past draft/job reservations with 409 and byte-identical state. Last full requirement status assessment remains 82 total / 60 PASS / 12 NOT_TESTED / 10 BLOCKED as of 2026-11-02 and is not represented as freshly reconciled.",
+    "verdict": "EXACT-SHA EVIDENCE REFRESH (2026-11-08): API route inventory synchronized to 45 protected API routes; 37 PASS, 0 NOT_TESTED, 8 BLOCKED; 45/45 authentication-negative checks pass. The 8 blocked routes remain external/owner-gated, so API-001 remains OPEN. Exact code/test SHA c75864be94e4e6827995b1446c6cf960c83d9228 passed 133/133 Node test files, 721 Node tests, 34 Python tests, zero skips and npm audit with 0 vulnerabilities. Dashboard Chromium E2E 28/28; content quality, queue readiness, metadata, Cloudflare unit, deployment recovery, branch inventory, isolated baseline and local Nature Frontiers draft validation passed. Production readiness remains HOLD. The full 82-requirement status snapshot is still dated 2026-11-02 and is not freshly reconciled; DASH-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain open.",
     "ci": {
-      "automationSecurity": "PASS — 111/111 Node test files, 524 Node tests, zero failures/skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe verified",
-      "nodeTests": 524,
-      "nodeTestFiles": 111,
+      "automationSecurity": "PASS — 133/133 Node test files; 721 Node tests; zero failures/skips; 34 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe verified.",
+      "nodeTests": 721,
+      "nodeTestFiles": 133,
       "nodeFailures": 0,
       "nodeSkipped": 0,
-      "pythonTests": 16,
-      "contentQuality": "PASS",
-      "metadata": "PASS",
-      "dashboardE2e": "PASS — 23/23 Chromium tests",
-      "isolatedBaseline": "PASS — exact isolated main/candidate checkouts; main 54 Node/8 Python; candidate 524 Node/16 Python",
-      "branchReconciliationInventory": "PASS — exact candidate inventory",
-      "productionReadiness": "HOLD — 13 owner/external blockers; no external publication",
-      "facebookDraftWorkflow": "PASS — local Nature Frontiers draft validation only; provider-side creation skipped",
-      "npmLockfile": "PENDING — separate lockfile workflow; npm ci and npm audit passed in automation/E2E workflows",
+      "pythonTests": 34,
+      "contentQuality": "PASS — 721 Node tests; zero failures/skips.",
+      "metadata": "PASS — exact-SHA metadata workflow.",
+      "dashboardE2e": "PASS — 28/28 Chromium browser tests.",
+      "isolatedBaseline": "PASS — exact isolated main/candidate comparison; branch divergence preserved.",
+      "branchReconciliationInventory": "PASS — exact candidate inventory; no destructive reconciliation.",
+      "productionReadiness": "HOLD — mandatory owner/external gates blocked; no external publication.",
+      "facebookDraftWorkflow": "PASS — local Nature Frontiers draft validation only; no provider-side creation or publication.",
+      "npmLockfile": "PASS — locked install and npm audit checks.",
       "runs": {
-        "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205668",
-        "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205660",
-        "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205730",
-        "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205670",
-        "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940197671",
-        "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205685",
-        "localNatureFrontiers": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205706",
-        "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205652",
-        "npmLockfile": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940197663"
-      }
+        "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488844321",
+        "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488848847",
+        "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488848771",
+        "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488848801",
+        "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488848814",
+        "branchReconciliationInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488848837",
+        "localNatureFrontiers": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488848777",
+        "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488848788",
+        "queueReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488848772",
+        "cloudflareDurableState": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488848768",
+        "deploymentRecovery": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488848774",
+        "npmLockfile": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488844316"
+      },
+      "queueReadiness": "PASS — safe queue proposal and draft-only policy validation.",
+      "cloudflareDurableState": "PASS — local durable-state unit tests; production Cloudflare state sync still blocked until configured.",
+      "deploymentRecovery": "PASS — replacement/restart/persistent-state recovery smoke."
     },
     "requirementStatusSnapshot": {
       "total": 82,
@@ -1760,7 +1766,7 @@
     }
   },
   "candidateSourceTestSha": "05daf438c889079853c6521df1cb54a1223424ff",
-  "latestSourceTestSha": "05daf438c889079853c6521df1cb54a1223424ff",
+  "latestSourceTestSha": "c75864be94e4e6827995b1446c6cf960c83d9228",
   "latestChangeTestStatus": "PASS",
   "latestChangeTestReason": "Dispatch queue ordering/read-only integration test passed at exact candidate e349a5ec29440ef62de65e141638d3866c58465e; SCHED-001 overall remains NOT_TESTED.",
   "requirementCounts": {
@@ -1770,11 +1776,11 @@
     "BLOCKED": 10
   },
   "apiRouteCounts": {
-    "routes": 36,
-    "PASS": 31,
+    "routes": 45,
+    "PASS": 37,
     "NOT_TESTED": 0,
-    "BLOCKED": 5,
-    "authenticationNegativePass": 36
+    "BLOCKED": 8,
+    "authenticationNegativePass": 45
   },
   "implementationCommits": [
     "33d6f4c4e6010578ae961f7cf97a7e0e9d70bac7",
@@ -1852,11 +1858,10 @@
     "BLOCKED": 5
   },
   "dashboardBrowserJourneys": {
-    "passed": 23,
-    "total": 23,
-    "controlInventoryComplete": false,
-    "latestRun": 41940205660,
-    "applicationSourceTestSha": "8272d2e39868237c05b2951f37bcade6ae6608c4"
+    "passed": 28,
+    "total": 28,
+    "run": 42488848847,
+    "applicationSourceTestSha": "c75864be94e4e6827995b1446c6cf960c83d9228"
   },
   "evidence": {
     "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205668",
