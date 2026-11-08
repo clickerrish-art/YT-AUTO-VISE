@@ -1466,8 +1466,8 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
     const slotFor = job => {
       const slot = job.scheduledSlot;
       if (slot?.timezone !== "Africa/Johannesburg" ||
-          !/^\\d{4}-\\d{2}-\\d{2}$/.test(slot.date ?? "") ||
-          !/^(?:[01]\\d|2[0-3]):[0-5]\\d$/.test(slot.time ?? "")) return null;
+          !/^\d{4}-\d{2}-\d{2}$/.test(slot.date ?? "") ||
+          !/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(slot.time ?? "")) return null;
       const instant = new Date(slot.date + "T" + slot.time + ":00+02:00");
       const local = Number.isFinite(instant.getTime()) ? new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit" }).format(instant) : null;
       return local === slot.date ? { at: instant.getTime(), date: slot.date } : null;
@@ -1516,8 +1516,8 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
       let slot = null;
       const scheduled = job.scheduledSlot;
       if (scheduled?.timezone === "Africa/Johannesburg" &&
-          /^\\d{4}-\\d{2}-\\d{2}$/.test(scheduled.date ?? "") &&
-          /^(?:[01]\\d|2[0-3]):[0-5]\\d$/.test(scheduled.time ?? "")) {
+          /^\d{4}-\d{2}-\d{2}$/.test(scheduled.date ?? "") &&
+          /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(scheduled.time ?? "")) {
         const instant = new Date(scheduled.date + "T" + scheduled.time + ":00+02:00");
         const resolvedLocalDate = Number.isFinite(instant.getTime()) ? new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit" }).format(instant) : null;
         if (resolvedLocalDate === scheduled.date) {
