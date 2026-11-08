@@ -139,3 +139,9 @@ A direct deployment through the connected Cloudflare account was completed after
 - The private R2 dashboard object remains present at `dashboard/dashboard.html`, size 98,508 bytes, with public R2 access disabled.
 
 Verification boundary: Cloudflare's control-plane API confirms the active 100% deployment, exact version, binding preservation, and R2 object metadata. The external HTTP smoke request to `/`, `/operational-readyz`, and `/readyz` could not be completed by the available browser/fetch tools in this session. Therefore, the live HTTP response is **NOT_TESTED**, not PASS. Automated CI tests for the same route and fail-closed behavior remain PASS on the integration source. No production publication or runner dispatch was performed; `/readyz` remains a separate, held publication gate.
+
+Read-only persistence verification immediately after the version-5 activation:
+- D1 `dashboard_state`: 1 row; revision 1; 10,050-byte JSON.
+- D1 `dashboard_backups`: 1 row.
+- D1 `runner_state`, `runner_control`, `runner_artifacts`, and `runner_artifact_parts`: 0 rows each.
+- All queries completed successfully with zero rows written and `changed_db=false`; no state, backup, or runner data was modified by this deployment.
