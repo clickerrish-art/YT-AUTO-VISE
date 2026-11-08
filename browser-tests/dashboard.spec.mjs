@@ -1703,6 +1703,7 @@ test("operator retry form authorizes one reviewed failed-job retry without dispa
   const failedJob = {
     id: "retry-browser-job",
     queueItemId: "retry-browser-queue-item",
+    kind: "CONTENT_PRODUCTION",
     title: "Synthetic failed-job retry fixture",
     state: "FAILED",
     attemptCount: 1,
