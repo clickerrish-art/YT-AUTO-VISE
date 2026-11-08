@@ -899,6 +899,18 @@ test("Meta and YouTube provider operations fail closed without external adapters
 });
 
 
+test("every dashboard API path has an explicit Worker route or dynamic artifact-download handler", () => {
+  const dashboard = readFileSync(new URL("../public/dashboard.html", import.meta.url), "utf8");
+  const worker = readFileSync(new URL("../cloudflare/worker.js", import.meta.url), "utf8");
+  const paths = [...new Set([...dashboard.matchAll(/["'`](\/api\/[^"'`?]+)(?:\?[^"'`]*)?["'`]/g)].map(match => match[1]))];
+  assert.ok(paths.length >= 25, "dashboard API path inventory unexpectedly shrank");
+  for (const routePath of paths) {
+    const hasExplicitRoute = worker.includes(routePath);
+    const hasDynamicArtifactRoute = routePath === "/api/artifacts/" && worker.includes("artifactDownload");
+    assert.ok(hasExplicitRoute || hasDynamicArtifactRoute, "dashboard API path has no Worker route: " + routePath);
+  }
+});
+
 test("capabilities endpoint distinguishes implemented durable operations from runner/provider blockers", async () => {
   const { database } = mutableDatabase(validState());
   const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), STATE_DB: database, ASSETS: {} };
