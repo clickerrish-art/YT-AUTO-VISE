@@ -29,6 +29,7 @@ on:
       - "scripts/validate-promotional-short-plan.mjs"
       - "content/promotional-short-plan.json"
       - "test/promotional-short-plan.test.mjs"
+      - "test/cloudflare-artifact-sync.test.mjs"
       - "test/dashboard-ui-contract.test.mjs"
       - ".github/workflows/dashboard-cloudflare-adapter.yml"
   pull_request:
@@ -60,6 +61,7 @@ on:
       - "scripts/validate-promotional-short-plan.mjs"
       - "content/promotional-short-plan.json"
       - "test/promotional-short-plan.test.mjs"
+      - "test/cloudflare-artifact-sync.test.mjs"
       - "test/dashboard-ui-contract.test.mjs"
       - ".github/workflows/dashboard-cloudflare-adapter.yml"
 
@@ -110,4 +112,4 @@ jobs:
           node --check test/deployment-recovery.test.mjs
           ruby -e 'require "yaml"; YAML.load_file(".github/workflows/repository-runner.yml")'
       - name: Cloudflare state, repository runner and dashboard inventory tests
-        run: node --test test/cloudflare-state-worker.test.mjs test/worker-runner.test.mjs test/dashboard-inventory.test.mjs test/dashboard-ui-contract.test.mjs test/promotional-short-plan.test.mjs test/deployment-recovery.test.mjs test/artifact-integrity.test.mjs
+        run: node --test test/cloudflare-state-worker.test.mjs test/worker-runner.test.mjs test/dashboard-inventory.test.mjs test/dashboard-ui-contract.test.mjs test/promotional-short-plan.test.mjs test/cloudflare-artifact-sync.test.mjs test/deployment-recovery.test.mjs test/artifact-integrity.test.mjs
