@@ -19,7 +19,7 @@ test("dashboard static inventory reports all declared controls, forms and litera
   assert.equal(inventory.counts.routes, inventory.routes.length);
   assert.equal(inventory.counts.controls, 117);
   assert.equal(inventory.counts.forms, 17);
-  assert.equal(inventory.counts.routes, 46);
+  assert.equal(inventory.counts.routes, 49);
   assert.deepEqual(inventory.counts.controlsByTag, {
     button: 25,
     input: 49,
