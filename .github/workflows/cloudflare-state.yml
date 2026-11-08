@@ -24,7 +24,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "24"
-          package-manager-cache: false
       - name: Check Worker and test syntax
         run: |
           node --check cloudflare/worker.js
