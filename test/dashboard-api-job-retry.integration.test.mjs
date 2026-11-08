@@ -254,3 +254,101 @@ test("operator retry API authorizes one reviewed failed job, audits once and per
   ).length, 1);
   assert.equal(recovered.publishingEnabled, false);
 });
+
+
+test("concurrent duplicate retry authorization commits exactly once and returns conflict to the stale request", async t => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-job-retry-race-"));
+  const statePath = path.join(stateDir, "dashboard-state.json");
+  const now = new Date().toISOString();
+  const job = createContentJob({
+    idempotencyKey: "job-retry-race:future-slot",
+    title: "Concurrent retry authorization fixture",
+    topic: "A test-only failed job for duplicate operator retry acceptance",
+    contentType: "short",
+    scheduledDay: "Saturday",
+    scheduledDate: futureScheduleDate("Saturday", 1),
+    inputReferences: ["content/short-001-wildlife-video-storytelling.md"]
+  }, now);
+  job.state = "FAILED";
+  job.startedAt = now;
+  job.completedAt = now;
+  job.updatedAt = now;
+  job.attemptCount = 1;
+  job.nextRetryAt = null;
+  job.errorDetails = {
+    code: "TEST_RENDER_FAILURE",
+    message: "A test-only retryable render failure.",
+    retryable: true
+  };
+  job.transitionHistory.push({
+    from: "QUEUED",
+    to: "FAILED",
+    at: now,
+    actor: "test-worker",
+    reason: "Test-only render failure"
+  });
+  fs.writeFileSync(statePath, JSON.stringify({
+    version: 1,
+    queueItems: [],
+    campaigns: [],
+    audit: [],
+    jobs: [job],
+    uploads: [],
+    facebookDrafts: [],
+    facebookPosts: [],
+    facebookAttempts: []
+  }, null, 2) + "\\n");
+
+  const port = await reservePort();
+  const base = "http://127.0.0.1:" + port;
+  let instance = launchDashboard(port, stateDir);
+  t.after(async () => {
+    await stopDashboard(instance).catch(() => {});
+    fs.rmSync(stateDir, { recursive: true, force: true });
+  });
+  await waitForReady(instance);
+
+  const postRetry = async () => {
+    const response = await fetch(base + "/api/jobs/retry", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-operator-token": token },
+      body: JSON.stringify({
+        jobId: job.id,
+        reason: "Reviewed the retained failure; one retry is safe.",
+        overrideRetryLimit: false
+      })
+    });
+    return { status: response.status, body: await response.json() };
+  };
+
+  const outcomes = await Promise.all([postRetry(), postRetry()]);
+  assert.deepEqual(outcomes.map(item => item.status).sort((a, b) => a - b), [200, 409],
+    "one concurrent request must authorize the retry and the stale duplicate must receive HTTP 409");
+  const winner = outcomes.find(item => item.status === 200);
+  const conflict = outcomes.find(item => item.status === 409);
+  assert.equal(winner.body.retryAuthorized, true);
+  assert.equal(winner.body.publishingEnabled, false);
+  assert.match(conflict.body.error, /Only failed or dead-letter jobs can receive retry authorization/i);
+
+  const persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  const saved = persisted.jobs.find(item => item.id === job.id);
+  assert.equal(saved.state, "QUEUED");
+  assert.equal(saved.retryAuthorizations.length, 1);
+  assert.equal(persisted.audit.filter(item =>
+    item.action === "CONTENT_JOB_RETRY_AUTHORIZED" && item.jobId === job.id
+  ).length, 1, "a duplicate request must not create a second retry authorization audit event");
+
+  await stopDashboard(instance);
+  instance = launchDashboard(port, stateDir);
+  await waitForReady(instance);
+  const recoveredResponse = await fetch(base + "/api/state", { headers: { "x-operator-token": token } });
+  const recovered = await recoveredResponse.json();
+  assert.equal(recoveredResponse.status, 200);
+  const recoveredJob = recovered.jobs.find(item => item.id === job.id);
+  assert.equal(recoveredJob.state, "QUEUED");
+  assert.equal(recoveredJob.retryAuthorizations.length, 1);
+  assert.equal(recovered.audit.filter(item =>
+    item.action === "CONTENT_JOB_RETRY_AUTHORIZED" && item.jobId === job.id
+  ).length, 1);
+  assert.equal(recovered.publishingEnabled, false);
+});
