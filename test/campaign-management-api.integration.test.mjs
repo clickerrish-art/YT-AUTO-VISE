@@ -51,7 +51,7 @@ async function waitForReady(instance) {
       } catch {}
     }
     if (started) {
-      const base = "http://127.0.0.1:" + Number(started[1]);
+      const base = "http://127.0.0.1:" + started.port;
       try {
         const response = await fetch(base + "/healthz");
         if (response.ok) return base;
