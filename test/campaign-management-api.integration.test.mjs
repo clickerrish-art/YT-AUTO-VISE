@@ -40,7 +40,16 @@ function launchDashboard({ stateDir, token }) {
 async function waitForReady(instance) {
   for (let attempt = 0; attempt < 100; attempt++) {
     if (instance.child.exitCode !== null) throw new Error("Dashboard exited before readiness: " + instance.logs);
-    const started = instance.logs.match(/"event":"dashboard_started"[^\\r\\n]*"port":(\\d+)/);
+    let started;
+    for (const line of instance.logs.split(/\r?\n/)) {
+      try {
+        const event = JSON.parse(line);
+        if (event.event === "dashboard_started" && Number.isInteger(event.port) && event.port > 0) {
+          started = event;
+          break;
+        }
+      } catch {}
+    }
     if (started) {
       const base = "http://127.0.0.1:" + Number(started[1]);
       try {
