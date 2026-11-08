@@ -1,0 +1,33 @@
+name: Cloudflare durable-state unit checks
+
+on:
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths: ["cloudflare/**", "test/cloudflare-state-worker.test.mjs", ".github/workflows/cloudflare-state.yml"]
+  pull_request:
+    branches: [main]
+    paths: ["cloudflare/**", "test/cloudflare-state-worker.test.mjs", ".github/workflows/cloudflare-state.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  durable-state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          package-manager-cache: false
+      - name: Check Worker and test syntax
+        run: |
+          node --check cloudflare/worker.js
+          node --check test/cloudflare-state-worker.test.mjs
+      - name: Run durable-state unit tests
+        run: node --test test/cloudflare-state-worker.test.mjs
