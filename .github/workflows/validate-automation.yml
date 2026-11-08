@@ -2,9 +2,10 @@ name: Validate SonicVhibez automation
 
 on:
   push:
-    branches: [main]
+    branches: [main, codex/marketing-machine-audit-fixes]
     paths:
       - "scripts/**"
+      - "cloudflare/**"
       - "tests/**"
       - "test/**"
       - "content/queue.json"
