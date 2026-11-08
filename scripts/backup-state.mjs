@@ -154,7 +154,7 @@ async function backupStateUnlocked({ rootDir = root, stateDir = process.env.DASH
       throw new Error("Backup upload-log input must be a real directory, not a symlink or special file");
     }
     for (const name of fs.readdirSync(logDir)) {
-      if (/^upload-[A-Za-z0-9_-]+\\.json$/.test(name) && name !== "upload-attempts.json") add(path.join(logDir, name), { kind: "upload-receipt", path: name });
+      if (/^upload-[A-Za-z0-9_-]+\.json$/.test(name) && name !== "upload-attempts.json") add(path.join(logDir, name), { kind: "upload-receipt", path: name });
     }
     const approvals = path.join(logDir, "upload-approvals");
     let approvalsStat;
@@ -169,7 +169,7 @@ async function backupStateUnlocked({ rootDir = root, stateDir = process.env.DASH
         throw new Error("Backup upload-approval input must be a real directory, not a symlink or special file");
       }
       for (const name of fs.readdirSync(approvals)) {
-        if (!/^[A-Za-z0-9_-]+\\.json$/.test(name)) continue;
+        if (!/^[A-Za-z0-9_-]+\.json$/.test(name)) continue;
         add(path.join(approvals, name), { kind: "upload-approval", path: name });
       }
     }
