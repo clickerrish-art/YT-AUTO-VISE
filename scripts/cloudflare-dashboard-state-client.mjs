@@ -91,6 +91,18 @@ export class CloudflareDashboardStateClient {
     }
   }
 
+  async bootstrapState(state) {
+    const validated = validateRemoteDashboardState(state);
+    const { payload, etag } = await this.request("/api/state/bootstrap", { method: "POST", body: validated });
+    if (Number(payload?.revision) !== 1 || !payload?.state || String(etag ?? "") !== '"1"') {
+      throw new DashboardStateServiceError("State service returned an invalid bootstrap receipt", { code: "INVALID_RESPONSE" });
+    }
+    let savedState;
+    try { savedState = validateRemoteDashboardState(payload.state); }
+    catch (error) { throw new DashboardStateServiceError(error.message, { code: "INVALID_STATE" }); }
+    return { revision: 1, updatedAt: payload.updatedAt ?? null, state: savedState };
+  }
+
   async getState() {
     const { payload, etag } = await this.request("/api/state");
     const revision = Number(payload?.revision);
@@ -110,9 +122,10 @@ export class CloudflareDashboardStateClient {
   async updateState(state, expectedRevision) {
     if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 1) throw new TypeError("expectedRevision must be a positive integer");
     const validated = validateRemoteDashboardState(state);
-    const { payload } = await this.request("/api/state", { method: "PUT", body: validated, revision: expectedRevision });
+    const { payload, etag } = await this.request("/api/state", { method: "PUT", body: validated, revision: expectedRevision });
     const revision = Number(payload?.revision);
-    if (!Number.isSafeInteger(revision) || revision !== expectedRevision + 1 || !payload?.state) {
+    if (!Number.isSafeInteger(revision) || revision !== expectedRevision + 1 || !payload?.state ||
+        String(etag ?? "") !== '"' + revision + '"') {
       throw new DashboardStateServiceError("State service returned an unexpected update revision", { code: "INVALID_RESPONSE" });
     }
     let savedState;
@@ -133,11 +146,12 @@ export class CloudflareDashboardStateClient {
   async restoreBackup(backupId, expectedRevision) {
     if (typeof backupId !== "string" || !backupId.trim()) throw new TypeError("backupId is required");
     if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 1) throw new TypeError("expectedRevision must be a positive integer");
-    const { payload } = await this.request("/api/backups/restore", {
+    const { payload, etag } = await this.request("/api/backups/restore", {
       method: "POST", body: { backupId, expectedRevision }
     });
     const revision = Number(payload?.revision);
-    if (!Number.isSafeInteger(revision) || revision !== expectedRevision + 1 || !payload?.state) {
+    if (!Number.isSafeInteger(revision) || revision !== expectedRevision + 1 || !payload?.state ||
+        String(etag ?? "") !== '"' + revision + '"') {
       throw new DashboardStateServiceError("State service returned an unexpected restore revision", { code: "INVALID_RESPONSE" });
     }
     let state;

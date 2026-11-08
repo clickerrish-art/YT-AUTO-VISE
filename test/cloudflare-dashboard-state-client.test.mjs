@@ -44,6 +44,19 @@ test("client requires a secure endpoint and a sufficiently strong operator token
   assert.throws(() => new CloudflareDashboardStateClient({ baseUrl: "https://state.example", operatorToken: "short" }), /24 characters/);
 });
 
+test("bootstrap creates the first state revision and verifies its receipt", async t => {
+  const client = await fixture(t, (req, res, body) => {
+    assert.equal(req.method, "POST");
+    assert.equal(req.url, "/api/state/bootstrap");
+    assert.equal(req.headers["x-operator-token"], TOKEN);
+    assert.equal(body.publishingEnabled, false);
+    respond(res, 201, { revision: 1, state: body }, { etag: '"1"' });
+  });
+  const result = await client.bootstrapState(state(["seed"]));
+  assert.equal(result.revision, 1);
+  assert.deepEqual(result.state.queueItems, ["seed"]);
+});
+
 test("GET reads authenticated state and verifies the revision ETag", async t => {
   const client = await fixture(t, (req, res) => {
     assert.equal(req.url, "/api/state");
@@ -73,6 +86,13 @@ test("PUT sends If-Match and validates the incremented revision", async t => {
   assert.deepEqual(result.state.queueItems, ["updated"]);
 });
 
+test("PUT rejects a successful response with a mismatched ETag", async t => {
+  const client = await fixture(t, (_req, res, body) =>
+    respond(res, 200, { revision: 8, state: body }, { etag: '"7"' }));
+  await assert.rejects(client.updateState(state(), 7), error =>
+    error instanceof DashboardStateServiceError && error.code === "INVALID_RESPONSE");
+});
+
 test("PUT exposes revision conflicts and never retries a stale write", async t => {
   let calls = 0;
   const client = await fixture(t, (_req, res) => { calls++; respond(res, 409, { code: "REVISION_CONFLICT", error: "reload" }); });
@@ -95,7 +115,7 @@ test("backup and restore return verified, monotonic receipts", async t => {
     }
     assert.equal(req.url, "/api/backups/restore");
     assert.deepEqual(body, { backupId: "backup-1", expectedRevision: 4 });
-    respond(res, 200, { revision: 5, state: state(["restored"]) });
+    respond(res, 200, { revision: 5, state: state(["restored"]) }, { etag: '"5"' });
   });
   const backup = await client.createBackup();
   assert.equal(backup.sourceRevision, 4);
