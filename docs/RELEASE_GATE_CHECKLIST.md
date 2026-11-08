@@ -1,3 +1,45 @@
+# Latest release-gate checkpoint — 8 November 2026
+
+**Exact code/test candidate:** `6c71814aebc8a384badef8ebecd8ada67c76cb93`  
+**Decision:** **HOLD / NOT PRODUCTION READY**. This checkpoint does not authorize merge, upload, scheduling or publication.  
+**main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627` · **compare:** 3,150 ahead / 2 behind / 284 changed files.  
+**PR #1:** OPEN · DRAFT · UNMERGED.
+
+## Implementation verified on exact code/test candidate
+
+- [x] Dashboard inventory ignores markup-like script/style strings; current static inventory is 118 controls, 17 forms and 49 routes.
+- [x] Protected-route auth matrix covers 12 GET and 33 mutating API routes; unconfigured Cloudflare backup endpoints fail closed with an explicit 503.
+- [x] Cloudflare integration test captures the ready server base URL; browser control count and backup controls are covered.
+- [x] Promotional-plan validator accepts measured vidIQ estimates with caveats or qualitative HTTPS-cited search evidence without invented volume.
+- [x] Three creator-education Short drafts are stored: 2 for 9 November, 1 for 16 November; all target about 55 seconds, remain DRAFT_ONLY, and have no publication timestamps.
+- [x] Weekly maximum of 2 is enforced; publication and scheduling remain disabled.
+
+## Exact-SHA CI
+
+- [x] Automation/security [42460609571](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42460609571): 130/130 Node, 34 Python, zero skips, npm audit 0 vulnerabilities.
+- [x] Content quality [42460609479](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42460609479): 712/712, zero failures/skips.
+- [x] Chromium E2E [42460609449](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42460609449): 26/26.
+- [x] Cloudflare durable-state unit checks [42460609491](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42460609491): 8/8.
+- [x] Queue readiness [42460609549](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42460609549), metadata fail-closed validation [42460609489](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42460609489), isolated baseline [42460609494](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42460609494), branch inventory [42460609455](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42460609455), deployment recovery smoke [42460609598](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42460609598) and local Nature Frontiers draft-package validation [42460609492](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42460609492): PASS. The Nature Frontiers check is local-only, not provider-side creation/read-back.
+- [ ] Production readiness [42460609465](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42460609465): HOLD — 24 blockers; intentionally fail-closed.
+
+## Remaining acceptance gates
+
+- [ ] DASH-001 — exhaustive dashboard control/form business journeys.
+- [ ] API-001 — full route-by-route success, validation, persistence, audit, concurrency and restart acceptance.
+- [ ] SCHED-001 — complete remote public/private/unlisted history, uncertain-attempt reconciliation, spacing and recovery acceptance.
+- [ ] STATE-001 — configured durable remote state plus backup/restore failure injection and rollback acceptance.
+- [ ] DEPLOY-001 — clean install, upgrade, rollback and recovery drills.
+- [ ] GIT-002 — semantic review of the 3,150-commit divergence; inventory alone is not approval.
+- [ ] Product compensation classification and exact viewer-facing disclosure approval for each Selar product.
+- [ ] Distinct SonicVhibez/Sonic Fire YouTube-only destination and inspectable schedule.
+- [ ] Genuine rights-cleared media/manifests, final MP4/thumbnail, human playback/compliance review, secure OAuth identity and per-operation private-upload authorization.
+- [ ] Nature Frontiers future Metricool records must be owner-reviewed: six are pending with `draft=false` and `autoPublish=true`; they were not modified.
+
+Full evidence: [CURRENT_RELEASE_EVIDENCE_2026-11-08.md](CURRENT_RELEASE_EVIDENCE_2026-11-08.md).
+
+---
+
 # Latest release-gate checkpoint — 7 November 2026
 
 **Exact application/source/test candidate:** `9e04b6bf86784665a48e2b0f8c48b6b48287ec6c`  

@@ -1,3 +1,29 @@
+# Latest execution checkpoint — 8 November 2026
+
+**Exact code/test candidate:** `6c71814aebc8a384badef8ebecd8ada67c76cb93` · **branch:** `codex/marketing-machine-audit-fixes`  
+**main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` (unchanged) · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`  
+**Compare:** **3,150 ahead / 2 behind / 284 changed files**. Inventory is not semantic integration approval.  
+**PR #1:** OPEN · DRAFT · UNMERGED. No main edit, merge, reset, rebase, force-push or destructive reconciliation occurred.
+
+## Implementation and verification
+
+- Dashboard backup-control inventory, fail-closed backup API behavior and the auth/browser acceptance fixtures were aligned; exact details are recorded in [CURRENT_RELEASE_EVIDENCE_2026-11-08.md](CURRENT_RELEASE_EVIDENCE_2026-11-08.md).
+- Promotional keyword validation now supports measured vidIQ estimates or honest qualitative web-search evidence with HTTPS sources and no invented metrics.
+- The content plan contains 2 drafts for the week of 9 November and 1 for the week of 16 November; all remain DRAFT_ONLY with no publication dates.
+- Exact-SHA CI on `6c71814`: 130/130 Node + 34 Python, 712/712 content-quality tests, 26/26 Chromium E2E, 8/8 Cloudflare durable-state tests, queue readiness, metadata fail-closed validation, isolated baseline, deployment recovery and branch inventory all PASS. Production readiness remains HOLD with 24 blockers.
+
+## Live safety status
+
+Metricool still exposes only the mixed Nature Frontiers brand. Six future records remain pending with `draft=false` and `autoPublish=true`; they were not changed. No separate SonicVhibez YouTube schedule or complete public/private/unlisted history is inspectable, so the 72-hour spacing gate remains UNVERIFIED. No video files or final thumbnails exist in the repository. Public publishing and scheduling remain disabled; Safari remains inactive.
+
+## Remaining gates
+
+DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain open. Product compensation/disclosure, destination identity, complete history, genuine media rights, final media, human review, secure OAuth and per-operation private-upload authorization remain owner-controlled. Scheduled workflows execute from `main`, not from this PR branch.
+
+Full evidence: [CURRENT_RELEASE_EVIDENCE_2026-11-08.md](CURRENT_RELEASE_EVIDENCE_2026-11-08.md).
+
+---
+
 # Latest execution checkpoint — 7 November 2026
 
 **Exact application/source/test candidate:** `9e04b6bf86784665a48e2b0f8c48b6b48287ec6c`  
