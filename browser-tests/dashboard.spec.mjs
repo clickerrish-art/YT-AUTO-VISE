@@ -1249,11 +1249,14 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
       fetch(base + "/api/jobs/narration", { method: "POST", headers, body: narrationPayload })
     ]);
     const concurrentNarrationBodies = await Promise.all(concurrentNarrationResponses.map(response => response.json()));
-    expect(concurrentNarrationResponses.map(response => response.status).sort(), JSON.stringify(concurrentNarrationBodies)).toEqual([201, 409]);
+    expect(concurrentNarrationResponses.map(response => response.status).sort(), JSON.stringify(concurrentNarrationBodies)).toEqual([200, 201]);
     const createdIndex = concurrentNarrationResponses.findIndex(response => response.status === 201);
-    const blockedIndex = concurrentNarrationResponses.findIndex(response => response.status === 409);
+    const reusedIndex = concurrentNarrationResponses.findIndex(response => response.status === 200);
     expect(concurrentNarrationBodies[createdIndex].narrationStage.status).toBe("DRAFT_REVIEW_REQUIRED");
-    expect(concurrentNarrationBodies[blockedIndex].error).toMatch(/already in progress|duplicate work is blocked/i);
+    expect(concurrentNarrationBodies[reusedIndex].reused).toBe(true);
+    expect(concurrentNarrationBodies[reusedIndex].idempotent).toBe(true);
+    expect(concurrentNarrationBodies[reusedIndex].narrationStage.artifacts)
+      .toEqual(concurrentNarrationBodies[createdIndex].narrationStage.artifacts);
 
     // Once the in-flight attempt has completed, an exact retry must verify and reuse
     // the persisted receipt instead of generating a second TTS artifact set.
