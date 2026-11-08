@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-08T14:09:39.000Z",
+  "generatedAt": "2026-11-08T14:12:41.000Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "e3a872309b6531d7bc03a22ae0f941a40d77c51a",
+  "testedSourceTestSha": "c3e81f374d616b19b1fc3a16a2fdd578942041e5",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -25,8 +25,8 @@
   "counts": {
     "routes": 45,
     "authNegativePass": 45,
-    "overallPass": 35,
-    "overallNotTested": 2,
+    "overallPass": 36,
+    "overallNotTested": 1,
     "overallBlocked": 8
   },
   "evidence": {
@@ -109,7 +109,8 @@
     "latestExactHeadNegativeMatrixTest": "test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
     "latestExactHeadRoutePositiveTests": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423",
     "latestRetryRaceTest": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488026325",
-    "latestQueueDiagnosticsAcceptance": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488289397"
+    "latestQueueDiagnosticsAcceptance": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488289397",
+    "latestRenderRecoveryReconciliation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488557887"
   },
   "disclaimer": "This matrix is synchronized to the live dashboard-server.mjs route inventory at exact source/test SHA 06c2443d9d1308cdf071063634864b5a7088b8cf. Authentication-negative PASS does not imply authorized route success. API-001 remains NOT_TESTED overall; routes marked NOT_TESTED or BLOCKED require route-specific positive, validation, persistence, audit, concurrency and restart evidence before acceptance.",
   "routes": [
@@ -1024,20 +1025,20 @@
       "classification": "render artifact recovery reconciliation",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — missing and invalid credentials are rejected by the source-derived 45-route authentication matrix on exact SHA 06c2443d9d1308cdf071063634864b5a7088b8cf; see test/dashboard-api-auth-matrix.test.mjs and run 42486667603.",
-      "authorizedSuccess": "NOT_TESTED — no exact-SHA positive route acceptance evidence is recorded yet.",
-      "inputValidation": "NOT_TESTED — route-specific success and invalid-input matrix is pending.",
-      "durablePersistence": "NOT_TESTED.",
-      "auditEvidence": "NOT_TESTED.",
-      "concurrency": "NOT_TESTED.",
-      "restartRecovery": "NOT_TESTED.",
+      "authorizedSuccess": "PASS — an operator can reconcile a failed/dead-letter render only after the exact video, thumbnail and manifest paths are verified absent.",
+      "inputValidation": "PASS — a short review reason returns HTTP 400; retained render artifacts return HTTP 409 without state mutation.",
+      "durablePersistence": "PASS — the verified-absent recovery receipt persists and survives a fresh dashboard process.",
+      "auditEvidence": "PASS — exactly one operator-attributed CONTENT_RENDER_RECOVERY_RECONCILED event is recorded for an exact duplicate request.",
+      "concurrency": "PASS — two concurrent identical requests serialize to one committed receipt; the second reuses it without a second audit event.",
+      "restartRecovery": "PASS — the failed job remains FAILED and its exact recovery receipt/audit survive dashboard restart; reconciliation does not authorize retry.",
       "externalOperation": "local render artifacts",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "Recovery reconciliation must not silently rerender or upload an uncertain artifact.",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA real-server test proves invalid reasons and retained artifacts fail closed without mutation; the valid absent-artifact reconciliation persists a verified-absent receipt; concurrent duplicates return one committed and one reused result with one audit event; restart read-back succeeds. The job remains FAILED, retry is not authorized and publishing remains disabled.",
       "testEvidence": {
-        "test": "test/dashboard-api-auth-matrix.test.mjs; test/dashboard-api-authenticated-route-negative-matrix.test.mjs",
-        "exactTestedSha": "06c2443d9d1308cdf071063634864b5a7088b8cf",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42486667603",
-        "scenario": "The source-derived auth matrix checks missing and invalid credentials on every discovered API route. This is authentication-negative evidence only; it does not establish authorized success or full route acceptance."
+        "test": "test/dashboard-api-render-recovery-reconcile.integration.test.mjs",
+        "exactTestedSha": "c3e81f374d616b19b1fc3a16a2fdd578942041e5",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488557887",
+        "scenario": "Exact-SHA content-quality CI passed 720 Node tests with zero failures/skips; integration test covers 400 invalid reason, 409 retained artifact, concurrent duplicate idempotency, one audit event and restart persistence without retry authorization."
       }
     },
     {
@@ -1182,7 +1183,7 @@
       "browserE2EWorkflowRun": 42296617339,
       "status": "PASS for fail-closed concurrency/restart regression; successful render remains blocked."
     },
-    "exactSourceTestSha": "e3a872309b6531d7bc03a22ae0f941a40d77c51a",
+    "exactSourceTestSha": "c3e81f374d616b19b1fc3a16a2fdd578942041e5",
     "authMatrixRun": 42486667603,
     "authMatrixResult": "PASS — source-derived 45 API routes; missing and invalid operator credentials rejected; full route success acceptance is not implied.",
     "automationRun": 42487353423,
@@ -1192,11 +1193,11 @@
     "apiMatrixCounts": {
       "routes": 45,
       "authNegativePass": 45,
-      "overallPass": 35,
-      "overallNotTested": 2,
+      "overallPass": 36,
+      "overallNotTested": 1,
       "overallBlocked": 8
     },
-    "contentQualityRun": 42488289397,
-    "contentQualityResult": "PASS — 719 Node tests, zero failures/skips; includes queue-diagnostics authenticated/read-only/concurrency acceptance."
+    "contentQualityRun": 42488557887,
+    "contentQualityResult": "PASS — 720 Node tests, zero failures/skips; includes idempotent render-recovery reconciliation acceptance."
   }
 }
