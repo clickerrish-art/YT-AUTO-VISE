@@ -371,6 +371,7 @@ export function evaluateNextPublication({
     if (item?.id) ids.add(String(item.id));
   }
   if (!jobId || typeof jobId !== "string" || !jobId.trim()) errors.push("proposed publication requires a stable job ID");
+  else if (ids.has(jobId)) errors.push(`proposed job ID duplicates an existing job/remote ID: ${jobId}`);
   const proposedTimestamp = parseStrictTimestamp(proposedAt);
   if (!Number.isFinite(proposedTimestamp)) errors.push("proposedAt must be a valid ISO timestamp with explicit timezone");
   const actualSorted = normalizedHistory.sort((a, b) => a.timestamp - b.timestamp);
