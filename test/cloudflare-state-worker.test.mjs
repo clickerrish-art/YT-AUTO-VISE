@@ -889,7 +889,7 @@ test("Meta and YouTube provider operations fail closed without external adapters
   ]) {
     const response = await handleRequest(new Request("https://state.example" + path, {
       method, headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
-      body: JSON.stringify({})
+      body: method === "POST" ? JSON.stringify({}) : undefined
     }), env);
     const body = await response.json();
     assert.equal(response.status, 503);
