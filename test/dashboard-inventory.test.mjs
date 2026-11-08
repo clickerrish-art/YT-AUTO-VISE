@@ -17,13 +17,13 @@ test("dashboard static inventory reports all declared controls, forms and litera
   assert.equal(inventory.counts.controls, inventory.controls.length);
   assert.equal(inventory.counts.forms, inventory.forms.length);
   assert.equal(inventory.counts.routes, inventory.routes.length);
-  assert.equal(inventory.counts.controls, 119);
+  assert.equal(inventory.counts.controls, 120);
   assert.equal(inventory.counts.forms, 17);
   assert.equal(inventory.counts.routes, 49);
   assert.ok(inventory.controls.some(control => control.id === "createStateBackup"), "Cloudflare backup creation control must remain available");
   assert.ok(inventory.controls.some(control => control.id === "refreshStateBackups"), "Cloudflare backup refresh control must remain available");
   assert.deepEqual(inventory.counts.controlsByTag, {
-    button: 27,
+    button: 28,
     input: 49,
     select: 27,
     textarea: 16,
@@ -161,6 +161,19 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
       continue;
     }
 
+    // Backup restore buttons are generated from persisted backup IDs and use a
+    // delegated listener so arbitrary IDs never become static DOM selectors.
+    if (tag === "button" && /\bdata-restore-backup=["']/.test(attributes)) {
+      assert.ok(scriptSource.includes('closest("button[data-restore-backup]")'),
+        "backup restore controls must use a delegated stable backup key");
+      assert.ok(scriptSource.includes("restoreStateBackup(button.dataset.restoreBackup)"),
+        "backup restore controls must call the exact selected-backup handler");
+      assert.ok(scriptSource.includes('"/api/backups/restore"'),
+        "backup restore must use the protected Cloudflare restore endpoint");
+      wiredControls++;
+      continue;
+    }
+
     assert.ok(id, "non-submit " + tag + " control is missing a stable id");
     assert.ok(
       scriptSource.includes('$("' + id + '")') || scriptSource.includes("$('#" + id + "')"),
@@ -169,7 +182,7 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
     wiredControls++;
   }
 
-  assert.equal(wiredControls, 97, "the number of non-submit dashboard controls changed; review the acceptance fixture");
+  assert.equal(wiredControls, 100, "the number of non-submit dashboard controls changed; review the acceptance fixture");
 });
 
 test("dashboard inventory associates controls with their owning form, including explicit external form references", () => {
