@@ -61,7 +61,7 @@ permissions:
 jobs:
   dashboard-adapter:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
         with:
@@ -73,6 +73,18 @@ jobs:
         run: |
           npm ci --ignore-scripts --no-audit --no-fund
           npx playwright install --with-deps chromium
+      - name: Install free Edge TTS and verify FFmpeg for real narration journey
+        run: |
+          set -euo pipefail
+          timeout 240s python -m pip install --disable-pip-version-check --retries 2 --timeout 20 edge-tts
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            sudo apt-get update -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30
+            timeout 1200s sudo apt-get install -y --no-install-recommends -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 ffmpeg
+          fi
+          command -v ffmpeg
+          command -v ffprobe
+          ffmpeg -version
+          ffprobe -version
       - name: Dashboard Chromium browser journeys
         run: npm run test:browser
       - name: Syntax checks
