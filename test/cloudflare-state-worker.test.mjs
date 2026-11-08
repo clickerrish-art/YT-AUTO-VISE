@@ -1446,3 +1446,112 @@ test("dispatchable jobs accepts a valid due Johannesburg calendar slot", async (
   assert.deepEqual(body.jobs.map(job => job.id), ["due-valid-slot"]);
   assert.equal(body.publishingEnabled, false);
 });
+
+
+function backupTestDatabase(initialState, initialRevision = 4) {
+  let current = { revision: initialRevision, state_json: JSON.stringify(initialState), updated_at: "2026-11-08T00:00:00.000Z" };
+  const backups = new Map();
+  const prepare = sql => ({
+    sql,
+    values: [],
+    bind(...values) { this.values = values; return this; },
+    async first() {
+      if (sql.includes("FROM dashboard_state")) return current ? { ...current } : null;
+      if (sql.includes("FROM dashboard_backups WHERE backup_id")) {
+        const backup = backups.get(this.values[0]);
+        return backup ? { state_json: backup.state_json, sha256: backup.sha256 } : null;
+      }
+      return null;
+    },
+    async all() {
+      return { results: [...backups.values()].map(({ state_json, ...row }) => row) };
+    },
+    async run() {
+      if (sql.startsWith("INSERT INTO dashboard_backups") && !sql.includes("SELECT")) {
+        const [backupId, sourceRevision, stateJson, digest, createdAt, actor] = this.values;
+        backups.set(backupId, { backup_id: backupId, source_revision: sourceRevision, state_json: stateJson, sha256: digest, created_at: createdAt, reason: "OPERATOR_REQUESTED:" + actor });
+        return { meta: { changes: 1 } };
+      }
+      return { meta: { changes: 0 } };
+    }
+  });
+  return {
+    backups,
+    get current() { return current; },
+    prepare,
+    async batch(statements) {
+      const results = [];
+      for (const statement of statements) {
+        if (statement.sql.startsWith("INSERT INTO dashboard_backups") && statement.sql.includes("SELECT")) {
+          const [backupId, digest, createdAt, actor, , expectedRevision] = statement.values;
+          if (current && current.revision === expectedRevision) {
+            backups.set(backupId, { backup_id: backupId, source_revision: current.revision, state_json: current.state_json, sha256: digest, created_at: createdAt, reason: "AUTOMATIC_PRE_RESTORE:" + actor });
+          }
+          results.push({ meta: { changes: current?.revision === expectedRevision ? 1 : 0 } });
+        } else if (statement.sql.startsWith("UPDATE dashboard_state")) {
+          const [stateJson, updatedAt, , expectedRevision] = statement.values;
+          if (current && current.revision === expectedRevision) {
+            current = { revision: current.revision + 1, state_json: stateJson, updated_at: updatedAt };
+            results.push({ meta: { changes: 1 } });
+          } else results.push({ meta: { changes: 0 } });
+        }
+      }
+      return results;
+    }
+  };
+}
+
+test("operator backup restore verifies integrity, preserves the pre-restore state and advances the revision", async () => {
+  const original = validState();
+  original.queueItems = [{ id: "before-backup", title: "Original durable item" }];
+  const database = backupTestDatabase(original, 4);
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const headers = { "x-operator-token": "a".repeat(24), "content-type": "application/json" };
+  const backupResponse = await handleRequest(new Request("https://state.example/api/backups", { method: "POST", headers }), env);
+  assert.equal(backupResponse.status, 201);
+  const receipt = await backupResponse.json();
+  assert.equal(receipt.sourceRevision, 4);
+  assert.equal(database.backups.get(receipt.backupId).sha256, receipt.sha256);
+
+  const changed = validState();
+  changed.queueItems = [{ id: "after-backup", title: "Changed state" }];
+  database.current.revision = 5;
+  database.current.state_json = JSON.stringify(changed);
+  const restoreResponse = await handleRequest(new Request("https://state.example/api/backups/restore", {
+    method: "POST", headers, body: JSON.stringify({ backupId: receipt.backupId, expectedRevision: 5 })
+  }), env);
+  assert.equal(restoreResponse.status, 200);
+  const restored = await restoreResponse.json();
+  assert.equal(restored.revision, 6);
+  assert.deepEqual(restored.state.queueItems, original.queueItems);
+  assert.equal(restored.state.audit.at(-1).action, "DASHBOARD_STATE_RESTORED");
+  assert.equal(restored.state.audit.at(-1).backupId, receipt.backupId);
+  assert.ok([...database.backups.values()].some(item => item.reason.startsWith("AUTOMATIC_PRE_RESTORE:")));
+});
+
+test("operator backup restore refuses corrupted backup bytes and stale state revisions without mutation", async () => {
+  const state = validState();
+  state.queueItems = [{ id: "keep-me" }];
+  const database = backupTestDatabase(state, 8);
+  const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
+  const headers = { "x-operator-token": "a".repeat(24), "content-type": "application/json" };
+  const backupResponse = await handleRequest(new Request("https://state.example/api/backups", { method: "POST", headers }), env);
+  const receipt = await backupResponse.json();
+  const stored = database.backups.get(receipt.backupId);
+  stored.sha256 = "0".repeat(64);
+  const before = { ...database.current };
+  const corrupted = await handleRequest(new Request("https://state.example/api/backups/restore", {
+    method: "POST", headers, body: JSON.stringify({ backupId: receipt.backupId, expectedRevision: 8 })
+  }), env);
+  assert.equal(corrupted.status, 409);
+  assert.match((await corrupted.json()).error, /integrity check failed/);
+  assert.deepEqual(database.current, before);
+
+  stored.sha256 = receipt.sha256;
+  const stale = await handleRequest(new Request("https://state.example/api/backups/restore", {
+    method: "POST", headers, body: JSON.stringify({ backupId: receipt.backupId, expectedRevision: 7 })
+  }), env);
+  assert.equal(stale.status, 409);
+  assert.equal((await stale.json()).code, "REVISION_CONFLICT");
+  assert.deepEqual(database.current, before);
+});
