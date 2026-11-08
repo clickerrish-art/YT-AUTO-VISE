@@ -104,3 +104,17 @@ The 24 blockers include: complete public/private/unlisted SonicVhibez history an
 
 DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain OPEN. Remaining owner-controlled gates include the exact compensation/disclosure classification for each Selar product; a SonicVhibez-only destination and complete YouTube history; genuine rights-cleared footage, narration and music; real manifests, final MP4/thumbnail and human review; secure OAuth identity; and one-shot private-upload authorization. Do not infer readiness from CI.
 
+
+## Exact-head follow-up — 8 November 2026, 17:44 UTC
+
+**Verified PR head:** `6b8bfe653490b829f6036648ab5bae51e131f4ac` (application source/test SHA). The exact-head workflow set completed:
+- Content quality: [42506189435](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189435) — 722/722 Node tests passed, zero skips.
+- Dashboard browser E2E: [42506189415](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189415) — 29/29 passed.
+- Automation/security: [42506189417](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189417) — successful.
+- Metadata: [42506189397](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189397) — successful.
+- Isolated main/candidate baseline: [42506189409](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189409) — successful.
+- Cloudflare durable-state [42506189364](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189364), branch inventory [42506189369](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189369), local Nature Frontiers draft validation [42506189370](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189370), deployment recovery [42506189344](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189344), and queue readiness [42506189422](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189422) — successful.
+- Production readiness [42506189528](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189528) — **HOLD, 24 blockers**, intentionally fail-closed.
+
+The API acceptance JSON was refreshed to this source/test SHA, preserving 45 protected routes, 45 authentication-negative passes, 37 overall passes, and 8 externally blocked routes. Its JSON was parsed after the edit. This documentation update does not change application behavior or convert API-001 to PASS; the authorized route, persistence, audit, concurrency and restart evidence remains incomplete. Staging Cloudflare Access service-token/runtime configuration is still unavailable.
+
