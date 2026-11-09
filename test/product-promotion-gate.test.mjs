@@ -40,7 +40,7 @@ test("checked-in product registry records the seller but remains blocked on prom
   const errors = validateProductPromotionGate(config.products[0], undefined, { requireMetadataDisclosure: false });
   assert.equal(errors.some(error => /seller details must be reverified/i.test(error)), false);
   assert.equal(errors.some(error => /brand authorization must be owner-confirmed/i.test(error)), false);
-  assert.ok(errors.some(error => /commercial compensation relationship must be verified or owner-confirmed/i.test(error)));
+  assert.equal(errors.some(error => /commercial compensation relationship must be verified or owner-confirmed/i.test(error)), false);
   assert.ok(errors.some(error => /viewer-facing disclosure must be owner-approved/i.test(error)));
 });
 
@@ -110,7 +110,7 @@ test("content checker surfaces the product gate before any private-upload readin
   });
   assert.notEqual(result.status, 0);
   assert.doesNotMatch(result.stderr, /brand authorization must be owner-confirmed/i);
-  assert.match(result.stderr, /compensation relationship must be verified/i);
+  assert.doesNotMatch(result.stderr, /compensation relationship must be verified/i);
   assert.match(result.stderr, /viewer-facing disclosure must be owner-approved/i);
 });
 
@@ -123,7 +123,7 @@ test("readiness JSON identifies product promotion gates as owner-controlled bloc
   const report = JSON.parse(result.stdout);
   const blockers = report.blockers.filter(item => item.message.startsWith("Product promotion gate:"));
   assert.equal(blockers.some(item => /brand authorization must be owner-confirmed/i.test(item.message)), false);
-  assert.ok(blockers.some(item => /commercial compensation relationship must be verified or owner-confirmed/i.test(item.message)));
+  assert.equal(blockers.some(item => /commercial compensation relationship must be verified or owner-confirmed/i.test(item.message)), false);
   assert.ok(blockers.every(item => item.evidence.path === "config/products.json"));
   assert.ok(blockers.every(item => item.controlOwner === "external_owner_or_human_reviewer"));
 });
@@ -155,9 +155,9 @@ test("new supplied Selar products have owner-confirmed brand authorization but r
 test("YouTube channel monetization is not evidence of Selar compensation", () => {
   const config = JSON.parse(fs.readFileSync("config/products.json", "utf8"));
   const product = config.products[0];
-  assert.equal(product.promotionGate.compensation.status, "UNVERIFIED");
-  assert.match(product.promotionGate.compensation.note, /YouTube channel monetization is separate/i);
-  assert.match(product.promotionGate.compensation.note, /not evidence of an affiliate commission/i);
+  assert.equal(product.promotionGate.compensation.status, "OWNER_CONFIRMED");
+  assert.match(product.promotionGate.compensation.note, /direct commercial relationship/i);
+  assert.match(product.promotionGate.compensation.note, /Do not classify as an affiliate commission/i);
 
   const fixture = verifiedFixture("affiliate");
   fixture.product.promotionGate.compensation.type = "youtube_monetization";
