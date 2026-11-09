@@ -10,7 +10,7 @@
 - These are educational creator-workflow videos, not wildlife-science documentaries. If examples introduce species-specific claims, verify them against reputable sources and cite those sources in the published description.
 - Use original or explicitly licensed footage, stills, music, sound effects, and fonts. Retain the license or permission record for each asset.
 - Replace every bracketed visual cue with rights-cleared media. Do not use fabricated wildlife interactions or edit shots to imply an event that did not happen.
-- Keep the promotional segment transparent. The linked Vault is a paid digital product; viewers should inspect its current sales page. Do not promise views, income, viral reach, or monetization.
+- Keep the promotional segment transparent. Selar is the owner's own business and purchases generate direct sales revenue, not affiliate commission. The proposed viewer-facing disclosure wording is not owner-approved; do not record or release the promotional CTA until the owner approves the exact wording. The narration generator currently withholds the paid-product paragraph from review audio.
 - Review captions, audio, factual accuracy, thumbnail accuracy, paid-promotion disclosure, and YouTube synthetic/altered-media settings before any upload.
 
 ---
