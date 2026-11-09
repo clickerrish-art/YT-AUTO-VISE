@@ -44,6 +44,16 @@ test("checked-in product registry records the seller but remains blocked on prom
   assert.ok(errors.some(error => /viewer-facing disclosure must be owner-approved/i.test(error)));
 });
 
+test("checked-in uppercase DIRECT_SALES_REVENUE is accepted as owner-confirmed Selar business revenue", () => {
+  const config = JSON.parse(fs.readFileSync("config/products.json", "utf8"));
+  const product = config.products.find(item => item.id === "wildlife-creators-vault");
+  const errors = validateProductPromotionGate(product, undefined, { requireMetadataDisclosure: false });
+  assert.equal(errors.some(error => /commercial compensation relationship/i.test(error)), false);
+  assert.equal(errors.some(error => /compensation type must be/i.test(error)), false);
+  assert.equal(errors.some(error => /Selar products must be classified/i.test(error)), false);
+  assert.ok(errors.some(error => /viewer-facing disclosure must be owner-approved/i.test(error)));
+});
+
 test("verified seller, SonicVhibez authorization, compensation and exact disclosure pass", () => {
   const fixture = verifiedFixture("affiliate");
   assert.deepEqual(validateProductPromotionGate(fixture.product, fixture.metadata), []);
@@ -162,7 +172,7 @@ test("YouTube channel monetization is not evidence of Selar compensation", () =>
   const fixture = verifiedFixture("affiliate");
   fixture.product.promotionGate.compensation.type = "youtube_monetization";
   const invalidTypeErrors = validateProductPromotionGate(fixture.product, fixture.metadata);
-  assert.ok(invalidTypeErrors.some(error => /compensation type must be affiliate, paid, or none/i.test(error)));
+  assert.ok(invalidTypeErrors.some(error => /compensation type must be affiliate, paid, direct_sales_revenue, or none/i.test(error)));
 
   fixture.product.promotionGate.compensation.type = "none";
   const mismatchErrors = validateProductPromotionGate(fixture.product, fixture.metadata);
