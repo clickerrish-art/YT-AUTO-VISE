@@ -19,7 +19,7 @@ test("creator-education Shorts stay within the two-item weekly cap across draft-
   assert.ok(checkedInPlan.weeks.every(week => week.items.every(item => item.targetSeconds === 55)));
 });
 
-test("candidate seller verification is required while the other promotion gates remain unresolved", () => {
+test("candidate seller verification is required while direct Selar sales are owner-confirmed and disclosure remains unresolved", () => {
   const candidates = clone(products);
   const candidate = candidates.find(product => product.status === "candidate");
   assert.ok(candidate);
