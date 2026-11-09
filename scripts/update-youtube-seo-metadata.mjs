@@ -74,11 +74,11 @@ export function validateSeoMetadataApproval(approval, { channelId, now = new Dat
       new Set(desired.tags.map(tag => tag.toLowerCase())).size !== desired.tags.length) {
     throw new Error("SEO approval desired metadata is invalid (title, description, or unique tags)");
   }
-  if (approval.evidence?.searchVolume !== null || !Array.isArray(approval.evidence?.sources) || approval.evidence.sources.length < 1 || approval.evidence.sources.some(source => typeof source !== "string" || !/^https:\/\//.test(source))) {
-    throw new Error("SEO approval must record source evidence and set searchVolume=null; YouTube Data API results do not supply search volume");
-  }
   if (approval.evidence?.volumeClaimPerMinute !== undefined) {
     throw new Error("unsupported per-minute keyword search-volume claims are prohibited");
+  }
+  if (approval.evidence?.searchVolume !== null || !Array.isArray(approval.evidence?.sources) || approval.evidence.sources.length < 1 || approval.evidence.sources.some(source => typeof source !== "string" || !/^https:\/\//.test(source))) {
+    throw new Error("SEO approval must record source evidence and set searchVolume=null; YouTube Data API results do not supply search volume");
   }
   return Object.freeze({
     videoId: approval.videoId,
@@ -130,9 +130,16 @@ export async function updateApprovedYoutubeSeo({
   if (!current || current.snippet?.channelId !== channelId) throw new Error("approved video does not exist on the verified SonicVhibez channel");
   const before = canonicalSnippet(current.snippet);
   if (snippetSha256(before) !== approval.expectedCurrentSha256) throw new Error("remote video metadata changed since approval; refusing stale or conflicting SEO write");
-  const nextSnippet = { ...current.snippet, ...approval.desired };
-  // Keep category and every other existing snippet field; the API request is
-  // restricted to part=snippet and contains no status/privacy fields.
+  const nextSnippet = {
+    title: approval.desired.title,
+    description: approval.desired.description,
+    tags: [...approval.desired.tags],
+    categoryId: String(current.snippet?.categoryId ?? "15"),
+    ...(current.snippet?.defaultLanguage ? { defaultLanguage: current.snippet.defaultLanguage } : {}),
+    ...(current.snippet?.defaultAudioLanguage ? { defaultAudioLanguage: current.snippet.defaultAudioLanguage } : {})
+  };
+  // Send only writable snippet fields; omit read-only channel/published/thumb data.
+  // The request is restricted to part=snippet and contains no status/privacy fields.
   if (dryRun) return Object.freeze({ status: "PASS_SEO_METADATA_DRY_RUN", videoId: approval.videoId, channelId, beforeSha256: approval.expectedCurrentSha256, proposedSha256: snippetSha256(nextSnippet), writesPerformed: false, privacyStatus: current.status?.privacyStatus ?? null });
 
   const write = await youtube.videos.update({ part: ["snippet"], requestBody: { id: approval.videoId, snippet: nextSnippet } });
