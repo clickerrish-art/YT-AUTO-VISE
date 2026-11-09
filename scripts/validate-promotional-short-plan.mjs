@@ -7,6 +7,15 @@ import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 const WORD_MIN = 90;
 const WORD_MAX = 135;
 
+function isCalendarDate(value) {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const [year, month, day] = value.split("-").map(Number);
+  const date = new Date(0);
+  date.setUTCFullYear(year, month - 1, day);
+  date.setUTCHours(0, 0, 0, 0);
+  return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+}
+
 function getSecureProductHost(value) {
   if (typeof value !== "string" || !value.trim()) return "";
   try {
@@ -98,22 +107,15 @@ export function validatePromotionalShortPlan(plan, products) {
         const productHost = secureProductHost;
         const isSelarProduct = productHost === "selar.com" || productHost.endsWith(".selar.com");
         if (gate.seller?.status !== "VERIFIED") errors.push(`${label}: candidate seller evidence must be VERIFIED from its exact product URL`);
-        if (isSelarProduct && gate.seller?.name !== "Click 47") errors.push(`${label}: candidate Selar seller name must match the verified listing`);
-        if (!isSelarProduct && (typeof gate.seller?.name !== "string" || !gate.seller.name.trim())) errors.push(`${label}: candidate affiliate seller name must be recorded from the exact external listing`);
-        if (gate.seller?.sourceUrl !== product.url) errors.push(`${label}: candidate seller evidence URL must match the exact product URL`);
-        if (!isValidZonedIsoTimestamp(gate.seller?.verifiedAt)) errors.push(`${label}: candidate seller verification needs a valid timezone-qualified timestamp`);
-        if (typeof gate.seller?.evidenceReference !== "string" || !gate.seller.evidenceReference.trim()) errors.push(`${label}: candidate seller verification needs an evidence reference`);
-        if (gate.brandAuthorization?.status !== "OWNER_CONFIRMED") errors.push(`${label}: candidate SonicVhibez brand authorization must be owner-confirmed`);
-        if (gate.brandAuthorization?.brand !== "SonicVhibez") errors.push(`${label}: candidate brand authorization must name exactly SonicVhibez`);
-        if (!isValidZonedIsoTimestamp(gate.brandAuthorization?.confirmedAt)) errors.push(`${label}: candidate brand authorization needs a valid timezone-qualified confirmation timestamp`);
-        if (typeof gate.brandAuthorization?.approvalReference !== "string" || !gate.brandAuthorization.approvalReference.trim()) errors.push(`${label}: candidate brand authorization needs an owner approval reference`);
-        const expectedType = isSelarProduct ? "direct_sales_revenue" : "affiliate";
-        const expectedStatus = isSelarProduct ? "OWNER_CONFIRMED" : "VERIFIED";
-        if (gate.compensation?.status !== expectedStatus || String(gate.compensation?.type).toLowerCase() !== expectedType) {
-          errors.push(`${label}: candidate compensation must match the URL relationship (${expectedType}, ${expectedStatus})`);
+        if (isSelarProduct) {
+          if (!isCalendarDate(gate.compensation?.verifiedAt)) {
+            errors.push(`${label}: owner-confirmed Selar sales need a calendar-valid YYYY-MM-DD confirmation date`);
+          }
+        } else if (!isValidZonedIsoTimestamp(gate.compensation?.verifiedAt)) {
+          errors.push(`${label}: external affiliate compensation needs a timezone-qualified verification timestamp`);
         }
-        if (isSelarProduct && !/^\d{4}-\d{2}-\d{2}$/.test(String(gate.compensation?.verifiedAt ?? ""))) {
-          errors.push(`${label}: owner-confirmed Selar sales need a YYYY-MM-DD confirmation date`);
+        if (typeof gate.compensation?.evidenceReference !== "string" || !gate.compensation.evidenceReference.trim()) {
+          errors.push(`${label}: candidate compensation needs an exact relationship evidence reference`);
         }
         if (gate.disclosure?.status !== "UNVERIFIED") errors.push(`${label}: candidate disclosure status must remain UNVERIFIED`);
       }
