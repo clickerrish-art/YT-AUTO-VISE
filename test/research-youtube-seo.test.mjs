@@ -1,7 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
 import {
   SEO_SEED_QUERIES,
@@ -97,7 +96,7 @@ test("SEO report ranks the configured phrases using view evidence and never inve
 
 test("monthly research verifies the real channel and writes JSON plus Markdown review artifacts", async () => {
   const { api, calls } = fakeYoutube();
-  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-seo-"));
+  const directory = fs.mkdtempSync(path.join(process.cwd(), ".tmp-sonic-seo-"));
   try {
     const result = await researchSonicVhibezSeo({
       env,
