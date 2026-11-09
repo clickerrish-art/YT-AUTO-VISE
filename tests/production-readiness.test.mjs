@@ -20,7 +20,7 @@ test("readiness report identifies blockers, preserves safety defaults, and exits
   assert.match(result.stdout, /content\/render-manifest\.json/);
   assert.match(result.stdout, /long-form-render-manifest/);
   assert.match(result.stdout, /Metadata complianceReviewed must be true/);
-  assert.match(result.stdout, /Metadata needs the verified SonicVhibez YouTube channel ID/);
+  assert.doesNotMatch(result.stdout, /Metadata needs the verified SonicVhibez YouTube channel ID/);
   assert.match(result.stdout, /SONICVHIBEZ_CHANNEL_ID/);
   assert.doesNotMatch(result.stdout, /read-only YouTube identity and uploads inventory verification is BLOCKED; OAuth error invalid_client/);
   assert.match(result.stdout, /YOUTUBE_CLIENT_ID/);
@@ -74,7 +74,9 @@ test("readiness JSON distinguishes external reconciliation from code-controlled 
   ));
   const cadence = report.blockers.find(blocker => /CADENCE DECISION REQUIRED/.test(blocker.message));
   assert.equal(cadence, undefined, "the persisted owner-approved rolling cadence must not remain a readiness blocker");
-  assert.ok(report.blockers.some(blocker => /Metadata needs the verified SonicVhibez YouTube channel ID/.test(blocker.message)), "metadata cannot pass until the channel ID is verified");
+  assert.equal(report.blockers.some(blocker => /Metadata needs the verified SonicVhibez YouTube channel ID/.test(blocker.message)), false, "metadata already contains the authenticated SonicVhibez channel ID");
+  const metadata = JSON.parse(fs.readFileSync("content/next-short.json", "utf8"));
+  assert.equal(metadata.channelId, "UCSlkuPfHH78oGC1o418HV4w");
   assert.ok(report.blockers.some(blocker => /SONICVHIBEZ_CHANNEL_ID/.test(blocker.message)), "the secure OAuth environment binding remains an owner-controlled gate");
 });
 
