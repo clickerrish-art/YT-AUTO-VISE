@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import crypto from "node:crypto";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -53,8 +54,12 @@ export function validateCampaigns(config) {
         if (campaign.ownerApproved !== true || campaign.destinationValidation !== "owner_confirmed_exact_https") errors.push("active affiliate campaign requires explicit owner approval of the exact HTTPS destination");
         if (campaign.compensationType !== "affiliate") errors.push("external affiliate campaign must be classified as affiliate compensation");
         if (typeof campaign.disclosureText !== "string" || campaign.disclosureText.trim().length < 8) errors.push("active affiliate campaign requires an approved viewer-facing affiliate disclosure");
+        const expectedDestinationVersion = crypto.createHash("sha256")
+          .update(campaign.destinationUrl + "\\n" + String(campaign.disclosureText ?? "").trim())
+          .digest("hex");
         if (!campaign.approval || typeof campaign.approval.approvedBy !== "string" || campaign.approval.approvedBy.trim().length < 2 ||
-            !Number.isFinite(Date.parse(campaign.approval.approvedAt)) || !/^[a-f0-9]{64}$/.test(campaign.approval.destinationVersion ?? "")) {
+            !Number.isFinite(Date.parse(campaign.approval.approvedAt)) ||
+            campaign.approval.destinationVersion !== expectedDestinationVersion) {
           errors.push("active affiliate campaign requires a timestamped approval bound to the exact destination and disclosure");
         }
       }
