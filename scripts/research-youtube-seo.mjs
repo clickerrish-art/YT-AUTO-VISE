@@ -124,7 +124,7 @@ export function buildSeoResearchReport({ channel, queryResults, generatedAt, win
       excludedSampleVideos: excluded.slice(0, 3),
       relevanceStatus: "TITLE_SIGNAL_ONLY_REQUIRES_OWNER_REVIEW"
     };
-  }).sort((a, b) => b.combinedViews - a.combinedViews || b.relevantResultsCount - a.relevantResultsCount)
+  }).sort((a, b) => b.combinedTitleSignalViews - a.combinedTitleSignalViews || b.titleSignalResultsCount - a.titleSignalResultsCount)
     .map((item, index) => ({ rank: index + 1, ...item }));
   return Object.freeze({
     schemaVersion: 1,
