@@ -5,25 +5,25 @@ on:
     inputs:
       metadata_path:
         description: Reviewed metadata JSON committed to the repository
-        required: true
+        required: false
         default: content/next-short.json
         type: string
       video_path:
         description: Reviewed MP4 committed to the repository or available in the checkout
-        required: true
+        required: false
         default: media/next-short.mp4
         type: string
       job_id:
-        description: Stable production job ID bound to the approval record
-        required: true
+        description: Stable production job ID bound to the approval record (required only for private upload)
+        required: false
         type: string
       approval_path:
-        description: Path to the artifact-bound human approval JSON
-        required: true
+        description: Path to the artifact-bound human approval JSON (required only for private upload)
+        required: false
         type: string
       one_shot_authorization_path:
-        description: Owner-issued one-shot authorization bound to this exact final upload
-        required: true
+        description: Owner-issued one-shot authorization bound to this exact final upload (required only for private upload)
+        required: false
         default: content/one-shot-private-upload-authorization.json
         type: string
       confirm_private_upload:
@@ -99,6 +99,26 @@ jobs:
           package-manager-cache: false
       - name: Install uploader dependencies
         run: npm ci --ignore-scripts
+      - name: Require exact upload inputs before any private-upload work
+        env:
+          METADATA_PATH: ${{ inputs.metadata_path }}
+          VIDEO_PATH: ${{ inputs.video_path }}
+          JOB_ID: ${{ inputs.job_id }}
+          APPROVAL_PATH: ${{ inputs.approval_path }}
+          AUTHORIZATION_PATH: ${{ inputs.one_shot_authorization_path }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in METADATA_PATH VIDEO_PATH JOB_ID APPROVAL_PATH AUTHORIZATION_PATH; do
+            if [[ -z "${!name//[[:space:]]/}" ]]; then
+              echo "::error::${name} is required when private upload is explicitly selected."
+              exit 2
+            fi
+          done
+          if [[ ! "$JOB_ID" =~ ^[A-Za-z0-9][A-Za-z0-9:_-]{2,119}$ ]]; then
+            echo "::error::JOB_ID must be a stable 3-120 character identifier."
+            exit 2
+          fi
       - name: Refuse ledger bypass after any prior manual upload run
         env:
           GH_TOKEN: ${{ github.token }}
