@@ -7,6 +7,17 @@ import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 const WORD_MIN = 90;
 const WORD_MAX = 135;
 
+function getSecureProductHost(value) {
+  if (typeof value !== "string" || !value.trim()) return "";
+  try {
+    const parsed = new URL(value);
+    if (parsed.protocol !== "https:" || parsed.username || parsed.password) return "";
+    return parsed.hostname.toLowerCase();
+  } catch {
+    return "";
+  }
+}
+
 function isRealMonday(value) {
   if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const [year, month, day] = value.split("-").map(Number);
@@ -79,11 +90,12 @@ export function validatePromotionalShortPlan(plan, products) {
       const product = productByUrl.get(item?.productUrl);
       if (!product) errors.push(`${label}: productUrl must exactly match a product in config/products.json`);
       else if (!["approved", "candidate"].includes(product.status)) errors.push(`${label}: product must be an approved or explicitly held candidate record`);
+      const secureProductHost = product ? getSecureProductHost(product.url) : "";
+      if (product && !secureProductHost) errors.push(`${label}: product registry URL must be HTTPS and must not contain embedded credentials`);
       if (product?.status === "candidate") {
         if (item?.status !== "DRAFT_ONLY") errors.push(`${label}: candidate products may appear only in DRAFT_ONLY content`);
         const gate = product.promotionGate ?? {};
-        let productHost = "";
-        try { productHost = new URL(product.url).hostname.toLowerCase(); } catch {}
+        const productHost = secureProductHost;
         const isSelarProduct = productHost === "selar.com" || productHost.endsWith(".selar.com");
         if (gate.seller?.status !== "VERIFIED") errors.push(`${label}: candidate seller evidence must be VERIFIED from its exact product URL`);
         if (isSelarProduct && gate.seller?.name !== "Click 47") errors.push(`${label}: candidate Selar seller name must match the verified listing`);
