@@ -40,7 +40,7 @@ test("checked-in product registry records the seller but remains blocked on prom
   const errors = validateProductPromotionGate(config.products[0], undefined, { requireMetadataDisclosure: false });
   assert.equal(errors.some(error => /seller details must be reverified/i.test(error)), false);
   assert.equal(errors.some(error => /brand authorization must be owner-confirmed/i.test(error)), false);
-  assert.ok(errors.some(error => /compensation relationship must be verified/i.test(error)));
+  assert.ok(errors.some(error => /commercial compensation relationship must be verified or owner-confirmed/i.test(error)));
   assert.ok(errors.some(error => /viewer-facing disclosure must be owner-approved/i.test(error)));
 });
 
@@ -95,7 +95,7 @@ test("readiness JSON identifies product promotion gates as owner-controlled bloc
   const report = JSON.parse(result.stdout);
   const blockers = report.blockers.filter(item => item.message.startsWith("Product promotion gate:"));
   assert.equal(blockers.some(item => /brand authorization must be owner-confirmed/i.test(item.message)), false);
-  assert.ok(blockers.some(item => /compensation relationship must be verified/i.test(item.message)));
+  assert.ok(blockers.some(item => /commercial compensation relationship must be verified or owner-confirmed/i.test(item.message)));
   assert.ok(blockers.every(item => item.evidence.path === "config/products.json"));
   assert.ok(blockers.every(item => item.controlOwner === "external_owner_or_human_reviewer"));
 });
