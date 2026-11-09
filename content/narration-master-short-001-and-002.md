@@ -12,13 +12,13 @@ Start with one clear story, not a collection of random animal clips.
 
 First, choose a question: what behavior will viewers discover?
 
-Next, plan three shots: a wide view, a closer detail, and the behavior itself.
+Next, plan three shots: wide, detail, and the behavior itself.
 
-Write the question down before filming, then check that each shot helps answer it.
+Write the question down before filming; check each shot answers it.
 
-Keep a safe distance. Never bait, chase, or disturb wildlife just to get a shot.
+Keep a safe distance. Never bait, chase, or disturb wildlife.
 
-Let natural movement tell the story. Use steady framing and patient observation.
+Let natural movement tell the story. Frame steadily and observe wildlife patiently.
 
 Then edit tightly. Remove pauses that don’t add information.
 
@@ -42,7 +42,7 @@ Second, build a simple story. Open with a moment that raises the question, add h
 
 Third, check every asset. Confirm footage and music rights, fact-check each claim, and keep captions readable on a phone.
 
-Before editing, note where each clip came from, what it actually shows, and which details still need checking. A focused story is easier to follow than a rushed list of facts. The Wildlife Creator’s Vault is sold through my own Selar business; purchases generate revenue for my business. The link is below.
+Record each clip's source, what it shows, and what still needs checking. A focused story beats a rushed list of facts. The Wildlife Creator’s Vault is sold through my own Selar business; purchases generate revenue for my business. The link is below.
 
 **Performance notes:** Make each step distinct, but keep the delivery warm and steady. Do not add claims about guaranteed growth or results.
 
