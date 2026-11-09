@@ -19,6 +19,17 @@ export const SEO_SEED_QUERIES = Object.freeze([
 const WINDOW_DAYS = 90;
 const MAX_RESULTS_PER_QUERY = 10;
 
+export function describeSeoResearchFailure(error) {
+  const code = String(error?.response?.data?.error ?? error?.code ?? error?.message ?? error);
+  if (code.includes("invalid_grant")) {
+    return "Google OAuth rejected the stored refresh token (invalid_grant). Re-authorize the existing OAuth client with the required YouTube scopes, then replace YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets. Do not create a new OAuth client or share the token in chat.";
+  }
+  if (code.includes("invalid_client")) {
+    return "Google OAuth rejected the client credentials (invalid_client). Correct the matching existing YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET GitHub Actions secrets; the YouTube channel ID is not the OAuth client ID.";
+  }
+  return error?.message ?? String(error);
+}
+
 function required(env, key) {
   const value = env[key];
   if (typeof value !== "string" || !value.trim()) {
