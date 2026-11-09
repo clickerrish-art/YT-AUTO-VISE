@@ -22,7 +22,7 @@ Learn wildlife documentary storytelling with three purposeful shots: establish t
 Promotional resource: Complete YouTube Wildlife Creator’s Vault — Premium Combo PDF  
 https://selar.com/0u19v8u99l
 
-**DISCLOSURE HOLD:** Seller details, SonicVhibez brand authorization and the affiliate/paid relationship are unverified. Do not publish until they are verified and the accurate viewer-facing disclosure is approved.
+**DISCLOSURE HOLD:** Owner-confirmed relationship: Selar is the owner's own business and purchases generate direct sales revenue; this is not an affiliate commission. SonicVhibez promotion authorization is recorded separately. The exact viewer-facing commercial disclosure remains unapproved. Do not publish until the owner approves the exact wording and all media, rights and human-review gates pass.
 
 #WildlifeDocumentary #WildlifeStorytelling #WildlifeFilmmaking #YouTubeShorts #NatureEducation
 
