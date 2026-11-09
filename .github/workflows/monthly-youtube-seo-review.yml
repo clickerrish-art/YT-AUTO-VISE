@@ -1,4 +1,4 @@
-name: Monthly SonicVhibez YouTube SEO research (read-only)
+name: Monthly SonicVhibez SEO research and guarded metadata refresh
 
 on:
   # GitHub schedules execute only from the default branch. This branch push
