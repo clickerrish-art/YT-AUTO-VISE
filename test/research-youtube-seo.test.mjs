@@ -191,8 +191,8 @@ test("SEO ranking excludes obvious comedy and skit results from wildlife relevan
   });
   const first = report.keywordCandidates.find(item => item.phrase === SEO_SEED_QUERIES[0]);
   assert.equal(first.resultsCount, 2);
-  assert.equal(first.relevantResultsCount, 1);
+  assert.equal(first.titleSignalResultsCount, 1);
   assert.equal(first.excludedResultsCount, 1);
-  assert.equal(first.combinedViews, 1000);
+  assert.equal(first.combinedTitleSignalViews, 1000);
   assert.equal(first.excludedSampleVideos[0].title, "Funny animal encounters skit #comedy");
 });
