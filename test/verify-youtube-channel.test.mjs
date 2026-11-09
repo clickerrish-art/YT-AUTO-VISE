@@ -124,6 +124,6 @@ test("read-only verification writes a complete owner-review inventory artifact w
     assert.equal(inventory.videos.length, 2);
     assert.equal(inventory.videos[0].format, "UNCLASSIFIED_REQUIRES_OWNER_REVIEW");
     assert.equal(inventory.videos[0].duration, "PT55S");
-    assert.match(inventory.verifiedAt, /^\\d{4}-\\d{2}-\\d{2}T/);
+    assert.match(inventory.verifiedAt, /^\d{4}-\d{2}-\d{2}T/);
   } finally { fs.rmSync(directory, { recursive: true, force: true }); }
 });
