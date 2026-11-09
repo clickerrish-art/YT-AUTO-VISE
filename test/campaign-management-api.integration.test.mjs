@@ -4,6 +4,7 @@ import { spawn } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import crypto from "node:crypto";
 
 const root = process.cwd();
 const campaignId = "selar-wildlife-vault";
@@ -233,7 +234,7 @@ test("generic affiliate campaign API requires preview and owner approval, then p
   const selar = state.campaigns.find(item => item.id === "selar-wildlife-vault");
   assert.equal(affiliate.status, "ACTIVE_FOR_DRAFTS_ONLY");
   assert.equal(affiliate.destinationUrl, destinationUrl);
-  assert.equal(affiliate.approval.destinationVersion, affiliate.pendingDestinationVersion ?? affiliate.approval.destinationVersion);
+  assert.equal(affiliate.approval.destinationVersion, crypto.createHash("sha256").update(destinationUrl + "\n" + disclosureText).digest("hex"));
   assert.equal(selar.destinationUrl, approvedDestination);
   assert.equal(selar.compensationType, "direct_sales_revenue");
   assert.equal(state.publishingEnabled, false);
