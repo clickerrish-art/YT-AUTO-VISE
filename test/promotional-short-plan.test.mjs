@@ -50,7 +50,8 @@ test("external candidate links require verified affiliate classification rather 
   const item = plan.weeks.flatMap(week => week.items).find(row => row.productId === candidate.id);
   assert.ok(item);
   item.productUrl = externalUrl;
-  item.description = item.description.replace(/https:\/\/selar\\.com\\/[^\\s)]+/g, externalUrl);
+  const previousUrl = item.productUrl;
+  item.description = item.description.replaceAll(previousUrl, externalUrl);
   item.disclosure.relationshipStatus = "UNVERIFIED";
   const errors = validatePromotionalShortPlan(plan, candidateProducts);
   assert.equal(errors.some(error => /Click 47/.test(error)), false);
