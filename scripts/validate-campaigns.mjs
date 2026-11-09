@@ -29,6 +29,22 @@ export function validateCampaigns(config) {
       if (campaign.ownerApproved !== true) errors.push("Selar campaign requires owner approval for " + campaign.id);
       if (!["ACTIVE_FOR_DRAFTS_ONLY", "INACTIVE"].includes(campaign.status)) errors.push("Selar campaign must be active for drafts only or inactive");
       if (campaign.disclosureText !== SELAR_DIRECT_SALES_DISCLOSURE) errors.push("Selar disclosure must accurately identify the owner direct-sales relationship for " + campaign.id);
+      if (!["PENDING_OWNER_APPROVAL", "OWNER_APPROVED"].includes(campaign.disclosureApprovalStatus)) {
+        errors.push("Selar viewer-facing disclosure approval status must be explicit for " + campaign.id);
+      }
+      if (campaign.disclosureApprovalStatus === "OWNER_APPROVED") {
+        const expectedVersion = crypto.createHash("sha256")
+          .update(campaign.destinationUrl + "\\n" + String(campaign.disclosureText ?? "").trim())
+          .digest("hex");
+        if (!campaign.approval || typeof campaign.approval.approvedBy !== "string" ||
+            campaign.approval.approvedBy.trim().length < 2 ||
+            !Number.isFinite(Date.parse(campaign.approval.approvedAt)) ||
+            campaign.approval.destinationVersion !== expectedVersion) {
+          errors.push("owner-approved Selar disclosure requires timestamped approval bound to the exact destination and wording for " + campaign.id);
+        }
+      } else if (campaign.approval) {
+        errors.push("pending Selar disclosure must not carry an approval record for " + campaign.id);
+      }
     }
     if (campaign.type === "safari_affiliate") {
       if (campaign.status === "INACTIVE") {
