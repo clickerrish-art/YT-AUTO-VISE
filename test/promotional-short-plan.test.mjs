@@ -60,6 +60,21 @@ test("external candidate links require verified affiliate classification rather 
   assert.equal(errors.some(error => /exact relationship status recorded/.test(error)), false);
 });
 
+test("promotional draft plans reject insecure product registry URLs", () => {
+  const candidateProducts = clone(products);
+  const candidate = candidateProducts.find(product => product.status === "candidate");
+  assert.ok(candidate);
+  const insecureUrl = "http://example-affiliate-store.test/product";
+  candidate.url = insecureUrl;
+  candidate.promotionGate.seller.sourceUrl = insecureUrl;
+  const plan = clone(checkedInPlan);
+  const item = plan.weeks.flatMap(week => week.items).find(row => row.productId === candidate.id);
+  assert.ok(item);
+  item.productUrl = insecureUrl;
+  const errors = validatePromotionalShortPlan(plan, candidateProducts);
+  assert.ok(errors.some(error => /product registry URL must be HTTPS and must not contain embedded credentials/.test(error)));
+});
+
 test("the weekly promotional Short cap rejects a third item", () => {
   const plan = clone(checkedInPlan);
   plan.weeks[0].items.push(clone(plan.weeks[0].items[0]));
