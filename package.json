@@ -36,7 +36,8 @@
     "report:branch": "node scripts/branch-reconciliation-report.mjs",
     "worker": "node scripts/worker-runner.mjs",
     "validate:promotional-shorts": "node scripts/validate-promotional-short-plan.mjs",
-    "backup:recover": "node scripts/backup-state.mjs --recover"
+    "backup:recover": "node scripts/backup-state.mjs --recover",
+    "seo:research": "node scripts/research-youtube-seo.mjs"
   },
   "engines": {
     "node": ">=22"
