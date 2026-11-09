@@ -12,6 +12,8 @@ test("campaign config preserves Selar and keeps Safari inactive", () => {
   const affiliate = baseline.campaigns.find(c => c.type === "affiliate");
   assert.equal(selar.destinationUrl, "https://selar.com/0u19v8u99l");
   assert.equal(selar.status, "ACTIVE_FOR_DRAFTS_ONLY");
+  assert.equal(selar.disclosureApprovalStatus, "PENDING_OWNER_APPROVAL");
+  assert.equal(Object.hasOwn(selar, "approval"), false, "the proposed wording must not be represented as approved");
   assert.equal(safari.status, "INACTIVE");
   assert.equal(safari.destinationUrl, "");
   assert.equal(safari.ownerApproved, false);
