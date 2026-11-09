@@ -81,9 +81,9 @@
           "thumbnailDirection": "A clean five-row prompt card beside a creator's editing desk; labels SUBJECT, ACTION, SETTING, SHOT, FORMAT; large text “5 PROMPT DETAILS”. Keep the graphic legible on a phone and do not imply that a generated result is automatically accurate.",
           "disclosure": {
             "status": "HOLD",
-            "relationshipStatus": "UNVERIFIED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
             "requiredBeforeRelease": true,
-            "holdText": "Classify Selar links as the owner's direct-sales revenue; classify non-Selar links (including Serengeti) as affiliate promotions. Verify the exact relationship and insert its truthful, owner-approved viewer-facing disclosure."
+            "holdText": "The owner confirms this is a direct sale through their own Selar business, not an affiliate commission. The viewer-facing commercial disclosure is still unapproved; keep this promotion on HOLD until the owner approves the exact wording."
           },
           "productionChecklist": [
             "Keep the lesson practical and show one original example prompt.",
@@ -169,9 +169,9 @@
           "thumbnailDirection": "A simple 90-day timeline split into PLAN, PUBLISH and REVIEW, with three clearly separated blocks and the words “90-DAY PLAN”. Avoid subscriber or income promises and keep all labels readable at phone size.",
           "disclosure": {
             "status": "HOLD",
-            "relationshipStatus": "UNVERIFIED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
             "requiredBeforeRelease": true,
-            "holdText": "Classify Selar links as the owner's direct-sales revenue; classify non-Selar links (including Serengeti) as affiliate promotions. Verify the exact relationship and insert its truthful, owner-approved viewer-facing disclosure."
+            "holdText": "The owner confirms this is a direct sale through their own Selar business, not an affiliate commission. The viewer-facing commercial disclosure is still unapproved; keep this promotion on HOLD until the owner approves the exact wording."
           },
           "productionChecklist": [
             "Keep the plan realistic and avoid implying that one cadence fits every channel.",
@@ -264,9 +264,9 @@
           ],
           "disclosure": {
             "status": "HOLD",
-            "relationshipStatus": "UNVERIFIED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
             "requiredBeforeRelease": true,
-            "holdText": "Classify Selar links as the owner's direct-sales revenue; classify non-Selar links (including Serengeti) as affiliate promotions. Verify the exact relationship and insert its truthful, owner-approved viewer-facing disclosure."
+            "holdText": "The owner confirms this is a direct sale through their own Selar business, not an affiliate commission. The viewer-facing commercial disclosure is still unapproved; keep this promotion on HOLD until the owner approves the exact wording."
           }
         },
         {
@@ -323,9 +323,9 @@
           "thumbnailDirection": "Show three simple topic cards beside a focused audience icon; highlight one card with a clear check mark. Large mobile-readable text: “4 NICHE CHECKS”. Avoid income, subscriber or growth promises.",
           "disclosure": {
             "status": "HOLD",
-            "relationshipStatus": "UNVERIFIED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
             "requiredBeforeRelease": true,
-            "holdText": "Confirm whether the link is affiliate, paid placement or uncompensated; then insert the exact truthful, owner-approved viewer-facing disclosure."
+            "holdText": "The owner confirms this is a direct sale through their own Selar business, not an affiliate commission. The viewer-facing commercial disclosure is still unapproved; keep this promotion on HOLD until the owner approves the exact wording."
           },
           "productionChecklist": [
             "Keep the four checks practical and explain each in one short sentence.",
