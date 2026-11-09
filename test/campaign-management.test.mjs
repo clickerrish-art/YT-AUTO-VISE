@@ -134,3 +134,28 @@ test("Selar deactivation discards an unapproved pending preview", () => {
   assert.equal(Object.hasOwn(inactive.campaign, "pendingDestinationVersion"), false);
   assert.deepEqual(validateCampaigns(inactive.config), []);
 });
+
+
+test("generic external affiliate preview and activation are bound to exact destination and disclosure", () => {
+  const id = baseline.campaigns.find(c => c.type === "affiliate").id;
+  const destinationUrl = "https://affiliate.example/serengeti?ref=sonicvhibez";
+  const disclosureText = "I may earn a commission if you book through this affiliate link.";
+  assert.throws(() => manageCampaign(baseline, { campaignId: id, action: "preview", destinationUrl: "http://affiliate.example/serengeti", disclosureText }, operator), /HTTPS/);
+  const preview = manageCampaign(baseline, { campaignId: id, action: "preview", destinationUrl, disclosureText }, operator);
+  assert.equal(preview.previewOnly, true);
+  assert.equal(preview.campaign.status, "INACTIVE");
+  assert.equal(preview.campaign.pendingDestinationUrl, destinationUrl);
+  assert.throws(() => manageCampaign(preview.config, { campaignId: id, action: "activate", destinationUrl, disclosureText }, operator), /Explicit owner approval/);
+  assert.throws(() => manageCampaign(preview.config, { campaignId: id, action: "activate", destinationUrl, disclosureText: disclosureText + " changed", confirmOwnerApproval: true }, operator), /pending preview must match/);
+  const activated = manageCampaign(preview.config, { campaignId: id, action: "activate", destinationUrl, disclosureText, confirmOwnerApproval: true }, operator, "2026-11-09T10:00:00Z");
+  assert.equal(activated.campaign.status, "ACTIVE_FOR_DRAFTS_ONLY");
+  assert.equal(activated.campaign.compensationType, "affiliate");
+  assert.equal(activated.campaign.destinationUrl, destinationUrl);
+  assert.equal(activated.campaign.approval.approvedBy, operator);
+  assert.deepEqual(validateCampaigns(activated.config), []);
+  const deactivated = manageCampaign(activated.config, { campaignId: id, action: "deactivate" }, operator);
+  assert.equal(deactivated.campaign.status, "INACTIVE");
+  assert.equal(deactivated.campaign.destinationUrl, "");
+  assert.equal(deactivated.campaign.ownerApproved, false);
+  assert.deepEqual(validateCampaigns(deactivated.config), []);
+});
