@@ -53,15 +53,16 @@ export function validateSeoMetadataApproval(approval, { channelId, now = new Dat
   if (!/^[a-f0-9]{64}$/.test(approval.expectedCurrentSha256 ?? "")) throw new Error("SEO approval must bind the exact current remote metadata SHA-256");
   const desired = approval.desired;
   if (!desired || typeof desired !== "object" || Array.isArray(desired) ||
-      typeof desired.title !== "string" || desired.title.trim().length < 5 || desired.title.length > 100 ||
-      typeof desired.description !== "string" || desired.description.length > 5000 ||
+      typeof desired.title !== "string" || desired.title.trim().length < 5 || desired.title.length > 100 || /[<>]/.test(desired.title) ||
+      typeof desired.description !== "string" || Buffer.byteLength(desired.description, "utf8") > 5000 || /[<>]/.test(desired.description) ||
       !Array.isArray(desired.tags) || desired.tags.length < 1 || desired.tags.length > 30 ||
       desired.tags.some(tag => typeof tag !== "string" || !tag.trim() || tag.length > 100) ||
+      desired.tags.reduce((total, tag) => total + tag.length, 0) > 500 ||
       new Set(desired.tags.map(tag => tag.toLowerCase())).size !== desired.tags.length) {
     throw new Error("SEO approval desired metadata is invalid (title, description, or unique tags)");
   }
-  if (approval.evidence?.searchVolume !== null && approval.evidence?.searchVolume !== undefined) {
-    throw new Error("Do not claim a search-volume figure unless an independently verifiable provider/source is recorded; YouTube Data API results do not supply search volume");
+  if (approval.evidence?.searchVolume !== null || !Array.isArray(approval.evidence?.sources) || approval.evidence.sources.length < 1) {
+    throw new Error("SEO approval must record source evidence and set searchVolume=null; YouTube Data API results do not supply search volume");
   }
   if (approval.evidence?.volumeClaimPerMinute !== undefined) {
     throw new Error("unsupported per-minute keyword search-volume claims are prohibited");
