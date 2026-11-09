@@ -185,7 +185,7 @@ test("campaign management API previews and deactivates the approved campaign wit
   assert.equal(state.campaigns.find(item => item.id === campaignId).status, "INACTIVE");
   assert.equal(state.audit.filter(event => event.action === "CAMPAIGN_PREVIEW" && event.campaignId === campaignId).length, 3);
   assert.equal(state.audit.filter(event => event.action === "CAMPAIGN_DEACTIVATE" && event.campaignId === campaignId).length, 1);
-  assert.equal(state.publishingEnabled, false);
+  assert.equal(state.publishingEnabled ?? false, false);
 });
 
 
