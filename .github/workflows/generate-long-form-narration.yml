@@ -2,7 +2,7 @@ name: Generate long-form narration drafts
 
 on:
   push:
-    branches: [main]
+    branches: [main, codex/marketing-machine-audit-fixes]
     paths:
       - "content/long-form-scripts.md"
       - "scripts/generate_long_form_narration.py"
