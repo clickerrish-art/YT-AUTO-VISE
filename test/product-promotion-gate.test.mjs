@@ -84,6 +84,8 @@ test("no-material-connection classification requires a matching non-paid flag an
 
 test("Selar is direct business revenue and non-Selar product links are affiliate promotions", () => {
   const selar = verifiedFixture("direct_sales_revenue");
+  selar.product.url = "https://selar.com/0u19v8u99l";
+  selar.product.promotionGate.seller.sourceUrl = selar.product.url;
   selar.product.promotionGate.compensation.status = "OWNER_CONFIRMED";
   selar.product.promotionGate.compensation.verifiedAt = "2026-11-09";
   selar.product.promotionGate.compensation.evidenceReference = "owner-confirmed-own-Selar-business";
