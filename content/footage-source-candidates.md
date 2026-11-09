@@ -54,6 +54,15 @@ The latest retained acquisition artifact was downloaded for a second, independen
 - **Spiny lobster package:** the opening slate explicitly requests credit to **“NOAA’s Office of National Marine Sanctuaries”** and states the footage is courtesy of NOAA. The sampled frames show underwater rocky reef habitat, fish and California spiny lobsters. Use the exact requested credit; do not replace it with a generic NOAA Fisheries credit.
 - **Leatherback turtle package:** the opening slate explicitly requests credit to **“NOAA Fisheries.”** Additional sampled in-video title cards describe NOAA Fisheries researchers capturing a leatherback turtle near Destin, Florida, using a breakaway hoop net, then assessing the animal and applying a satellite tag. Sampled footage shows boats and researchers conducting the operation. Narration must retain this specific context and must not imply a different species, location, or behaviour.
 
+
+### Embedded attribution-card inspection — leatherback package
+
+A timeline scan identified seven full black interstitial cards at approximately 5–10 s, 108–113 s, 135–140 s, 262–267 s, 489–494 s, 526–531 s and 577–582 s. The cards were extracted and their text checked. Each requests **“NOAA Fisheries”** credit. The final three cards additionally identify **Videographer: Lisa Belskis**. Two further narrative cards were checked around 160 s and 317 s; they describe the capture near Destin, Florida, the breakaway hoop-net method, health assessment and satellite-tagging, and also request NOAA Fisheries credit.
+
+The lobster package's sampled species card identifies **California spiny lobster (*Panulirus interruptus*)** and repeats the requested credit to **NOAA's Office of National Marine Sanctuaries**.
+
+This improves attribution discovery but does not establish that no other contributor, rights restriction, or audio condition exists elsewhere in either package. The complete clip/credit inventory remains open.
+
 ### What this review does not establish
 
 - The 12-frame sample does not inspect every shot, transition, contributor, or embedded credit card.
