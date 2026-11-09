@@ -27,6 +27,7 @@ jobs:
       - name: Check Worker and test syntax
         run: |
           node --check cloudflare/worker.js
+          for file in cloudflare/staging-snapshot/*.js; do node --check "$file"; done
           node --check test/cloudflare-state-worker.test.mjs
       - name: Run durable-state unit tests
         run: node --test test/cloudflare-state-worker.test.mjs
