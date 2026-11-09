@@ -150,6 +150,7 @@ test("generic external affiliate preview and activation are bound to exact desti
   const activated = manageCampaign(preview.config, { campaignId: id, action: "activate", destinationUrl, disclosureText, confirmOwnerApproval: true }, operator, "2026-11-09T10:00:00Z");
   assert.equal(activated.campaign.status, "ACTIVE_FOR_DRAFTS_ONLY");
   assert.equal(activated.campaign.compensationType, "affiliate");
+  assert.equal(activated.campaign.destinationValidation, "owner_confirmed_exact_https");
   assert.equal(activated.campaign.destinationUrl, destinationUrl);
   assert.equal(activated.campaign.approval.approvedBy, operator);
   assert.deepEqual(validateCampaigns(activated.config), []);
