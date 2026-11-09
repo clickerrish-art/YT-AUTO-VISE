@@ -60,6 +60,21 @@ test("external candidate links require verified affiliate classification rather 
   assert.equal(errors.some(error => /exact relationship status recorded/.test(error)), false);
 });
 
+test("candidate commercial evidence requires valid dates and exact relationship references", () => {
+  const candidateProducts = clone(products);
+  const candidate = candidateProducts.find(product => product.status === "candidate");
+  assert.ok(candidate);
+  candidate.promotionGate.compensation.verifiedAt = "2026-02-31";
+  const plan = clone(checkedInPlan);
+  const errors = validatePromotionalShortPlan(plan, candidateProducts);
+  assert.ok(errors.some(error => /calendar-valid YYYY-MM-DD confirmation date/.test(error)));
+
+  candidate.promotionGate.compensation.verifiedAt = "2026-11-09";
+  candidate.promotionGate.compensation.evidenceReference = "";
+  assert.ok(validatePromotionalShortPlan(plan, candidateProducts)
+    .some(error => /candidate compensation needs an exact relationship evidence reference/.test(error)));
+});
+
 test("promotional draft plans reject insecure product registry URLs", () => {
   const candidateProducts = clone(products);
   const candidate = candidateProducts.find(product => product.status === "candidate");
