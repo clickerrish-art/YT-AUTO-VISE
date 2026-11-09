@@ -46,7 +46,8 @@ export function validateProductPromotionGate(product, metadata, options = {}) {
   if (!hasText(authorization.approvalReference)) errors.push("brand authorization needs a non-empty owner approval reference");
 
   const compensation = gate.compensation ?? {};
-  const directSalesRevenue = compensation.type === "direct_sales_revenue";
+  const compensationType = typeof compensation.type === "string" ? compensation.type.toLowerCase() : "";
+  const directSalesRevenue = compensationType === "direct_sales_revenue";
   // Owner-confirmed business rule: Selar is the owner's own storefront;
   // products hosted anywhere else are affiliate promotions.
   let productHost = "";
@@ -54,7 +55,7 @@ export function validateProductPromotionGate(product, metadata, options = {}) {
   const expectedCompensationType = productHost === "selar.com" || productHost.endsWith(".selar.com")
     ? "direct_sales_revenue"
     : "affiliate";
-  if (hasText(product.url) && compensation.type !== expectedCompensationType) {
+  if (hasText(product.url) && compensationType !== expectedCompensationType) {
     errors.push(expectedCompensationType === "direct_sales_revenue"
       ? "Selar products must be classified as direct_sales_revenue, not affiliate"
       : "non-Selar products must be classified as affiliate promotions");
@@ -65,7 +66,7 @@ export function validateProductPromotionGate(product, metadata, options = {}) {
   if (!acceptedCompensationStatuses.has(compensation.status)) {
     errors.push("commercial compensation relationship must be verified or owner-confirmed for direct sales revenue");
   }
-  if (!COMPENSATION_TYPES.has(compensation.type)) errors.push("compensation type must be affiliate, paid, or none");
+  if (!COMPENSATION_TYPES.has(compensationType)) errors.push("compensation type must be affiliate, paid, direct_sales_revenue, or none");
   if (!(directSalesRevenue && compensation.status === "OWNER_CONFIRMED"
     ? isValidOwnerConfirmationDate(compensation.verifiedAt)
     : isValidZonedIsoTimestamp(compensation.verifiedAt))) {
@@ -80,7 +81,7 @@ export function validateProductPromotionGate(product, metadata, options = {}) {
   if (!hasText(disclosure.approvalReference)) errors.push("disclosure approval needs a non-empty owner approval reference");
 
   if (metadata && typeof metadata === "object" && COMPENSATION_TYPES.has(compensation.type)) {
-    const expectedPaidFlag = compensation.type !== "none";
+    const expectedPaidFlag = compensationType !== "none";
     if (metadata.hasPaidPromotion !== expectedPaidFlag) {
       errors.push("hasPaidPromotion must match the verified affiliate/paid/none relationship");
     }
@@ -89,7 +90,7 @@ export function validateProductPromotionGate(product, metadata, options = {}) {
   if (requireMetadataDisclosure) {
     const viewerDisclosure = metadata?.promotionDisclosure;
     if (viewerDisclosure?.status !== "APPROVED") errors.push("metadata promotionDisclosure must be APPROVED");
-    if (viewerDisclosure?.type !== compensation.type) errors.push("metadata promotionDisclosure type must match the verified compensation type");
+    if (typeof viewerDisclosure?.type !== "string" || viewerDisclosure.type.toLowerCase() !== compensationType) errors.push("metadata promotionDisclosure type must match the verified compensation type");
     if (viewerDisclosure?.text !== disclosure.text) errors.push("metadata promotionDisclosure text must exactly match the owner-approved disclosure");
     if (!hasText(metadata?.description) || !hasText(disclosure.text) || !metadata.description.includes(disclosure.text)) {
       errors.push("description must contain the exact owner-approved viewer-facing disclosure");
