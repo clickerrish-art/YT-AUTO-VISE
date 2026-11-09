@@ -52,6 +52,12 @@ test("checked-in uppercase DIRECT_SALES_REVENUE is accepted as owner-confirmed S
   assert.equal(errors.some(error => /compensation type must be/i.test(error)), false);
   assert.equal(errors.some(error => /Selar products must be classified/i.test(error)), false);
   assert.ok(errors.some(error => /viewer-facing disclosure must be owner-approved/i.test(error)));
+  const metadata = { hasPaidPromotion: false };
+  assert.ok(validateProductPromotionGate(product, metadata, { requireMetadataDisclosure: false })
+    .some(error => /hasPaidPromotion must match/i.test(error)));
+  metadata.hasPaidPromotion = true;
+  assert.equal(validateProductPromotionGate(product, metadata, { requireMetadataDisclosure: false })
+    .some(error => /hasPaidPromotion must match/i.test(error)), false);
 });
 
 test("verified seller, SonicVhibez authorization, compensation and exact disclosure pass", () => {
