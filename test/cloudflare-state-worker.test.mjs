@@ -113,10 +113,10 @@ test("state updates create immutable pre-update backups and reject stale revisio
 test("operator backup restores prior state with an audit record",async()=>{
   const db=new MemoryD1(),e=env(db);
   await handleRequest(req("/api/state/bootstrap","POST",state(["original"])),e);
-  await handleRequest(req("/api/backups","POST"),e);
+  await handleRequest(req("/api/state/backup","POST"),e);
   const id=db.backups[0].backup_id;
   await handleRequest(req("/api/state","PUT",state(["changed"]),{"if-match":'"1"'}),e);
-  const restored=await handleRequest(req("/api/backups/restore","POST",{backupId:id,expectedRevision:2}),e);
+  const restored=await handleRequest(req("/api/state/restore","POST",{backupId:id,expectedRevision:2,confirmRestore:true}),e);
   assert.equal(restored.status,200);
   const result=await json(restored);
   assert.equal(result.revision,3);assert.deepEqual(result.state.queueItems,["original"]);
@@ -124,12 +124,29 @@ test("operator backup restores prior state with an audit record",async()=>{
   assert.equal(result.state.audit.at(-1).actor,ACTOR);
   assert.equal(db.backups.length,3);
 });
+test("state backup aliases preserve explicit restore confirmation",async()=>{
+  const db=new MemoryD1(),e=env(db);
+  await handleRequest(req("/api/state/bootstrap","POST",state(["original"])),e);
+  const created=await handleRequest(req("/api/state/backup","POST"),e);
+  assert.equal(created.status,201);
+  const listed=await handleRequest(req("/api/state/backups"),e);
+  assert.equal(listed.status,200);
+  assert.equal((await json(listed)).backups.length,1);
+  const backupId=(await json(created)).backupId;
+  const denied=await handleRequest(req("/api/state/restore","POST",{backupId,expectedRevision:1}),e);
+  assert.equal(denied.status,400);
+  assert.equal(db.row.revision,1);
+  const restored=await handleRequest(req("/api/state/restore","POST",{backupId,expectedRevision:1,confirmRestore:true}),e);
+  assert.equal(restored.status,200);
+  assert.equal(db.row.revision,2);
+});
+
 test("restore refuses tampered backup bytes",async()=>{
   const db=new MemoryD1(),e=env(db);
   await handleRequest(req("/api/state/bootstrap","POST",state(["original"])),e);
   await handleRequest(req("/api/backups","POST"),e);
   db.backups[0].state_json=JSON.stringify(state(["tampered"]));
-  const r=await handleRequest(req("/api/backups/restore","POST",{backupId:db.backups[0].backup_id,expectedRevision:1}),e);
+  const r=await handleRequest(req("/api/backups/restore","POST",{backupId:db.backups[0].backup_id,expectedRevision:1,confirmRestore:true}),e);
   assert.equal(r.status,409);assert.match((await json(r)).error,/integrity check failed/);
   assert.equal(db.row.revision,1);
 });
