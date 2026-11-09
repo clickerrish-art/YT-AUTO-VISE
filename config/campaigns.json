@@ -10,7 +10,8 @@
       "destinationValidation": "exact_approved_allowlist",
       "ownerApproved": true,
       "disclosureRequired": true,
-      "disclosureText": "Promotional link: product details and current terms are available on the seller page."
+      "disclosureText": "This product is sold through my own Selar business; purchases generate revenue for my business.",
+      "compensationType": "direct_sales_revenue"
     },
     {
       "id": "safari-affiliate-inactive",
