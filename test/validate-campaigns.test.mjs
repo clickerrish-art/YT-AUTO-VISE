@@ -66,6 +66,38 @@ test("campaign approval timestamps must be calendar-valid ISO values with explic
   assert.deepEqual(validateCampaigns(makeApprovedSelar("2026-11-09T10:00:00+02:00")), []);
 });
 
+test("campaign approval timestamps in the future are rejected", () => {
+  const future = "2099-01-01T00:00:00Z";
+  const selarConfig = structuredClone(baseline);
+  const selar = selarConfig.campaigns.find(c => c.type === "selar_digital_product");
+  selar.disclosureApprovalStatus = "OWNER_APPROVED";
+  selar.approval = {
+    approvedBy: "owner",
+    approvedAt: future,
+    destinationVersion: crypto.createHash("sha256")
+      .update(selar.destinationUrl + "\\n" + selar.disclosureText.trim())
+      .digest("hex")
+  };
+  assert.ok(validateCampaigns(selarConfig).some(error => /timestamp must not be in the future/i.test(error)));
+
+  const affiliateConfig = structuredClone(baseline);
+  const affiliate = affiliateConfig.campaigns.find(c => c.type === "affiliate");
+  affiliate.status = "ACTIVE_FOR_DRAFTS_ONLY";
+  affiliate.destinationUrl = "https://affiliate.example/booking";
+  affiliate.destinationValidation = "owner_confirmed_exact_https";
+  affiliate.ownerApproved = true;
+  affiliate.compensationType = "affiliate";
+  affiliate.disclosureText = "I may earn a commission from eligible bookings.";
+  affiliate.approval = {
+    approvedBy: "owner",
+    approvedAt: future,
+    destinationVersion: crypto.createHash("sha256")
+      .update(affiliate.destinationUrl + "\\n" + affiliate.disclosureText.trim())
+      .digest("hex")
+  };
+  assert.ok(validateCampaigns(affiliateConfig).some(error => /approval timestamp must not be in the future/i.test(error)));
+});
+
 test("generic external affiliate activation requires a verified HTTPS destination and explicit disclosure approval", () => {
   const bad = structuredClone(baseline);
   const affiliate = bad.campaigns.find(c => c.type === "affiliate");
