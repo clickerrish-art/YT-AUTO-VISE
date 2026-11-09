@@ -95,6 +95,15 @@ export async function updateApprovedYoutubeSeo({
     const { google } = await import("googleapis");
     const oauth = new google.auth.OAuth2(clientId, clientSecret);
     oauth.setCredentials({ refresh_token: refreshToken });
+    // Fail before any write unless the stored refresh token was re-consented
+    // with the exact YouTube write scope required for metadata.
+    const access = await oauth.getAccessToken();
+    if (!access?.token) throw new Error("Google OAuth did not return an access token");
+    const tokenInfo = await oauth.getTokenInfo(access.token);
+    const scopes = Array.isArray(tokenInfo?.scopes) ? tokenInfo.scopes : [];
+    if (!scopes.includes("https://www.googleapis.com/auth/youtube.force-ssl")) {
+      throw new Error("OAuth token lacks youtube.force-ssl; re-authorize the existing Google OAuth client with that scope and replace YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets before enabling metadata writes");
+    }
     youtube = google.youtube({ version: "v3", auth: oauth });
   }
 
