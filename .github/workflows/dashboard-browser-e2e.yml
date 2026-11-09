@@ -7,6 +7,8 @@ on:
       - "browser-tests/**"
       - "public/dashboard.html"
       - "scripts/dashboard-server.mjs"
+      - "scripts/campaign-management.mjs"
+      - "scripts/validate-campaigns.mjs"
       - "package.json"
       - "playwright.config.*"
       - ".github/workflows/dashboard-browser-e2e.yml"
