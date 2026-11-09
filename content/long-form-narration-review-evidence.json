@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "channel": "SonicVhibez",
+  "status": "DRAFT_REVIEW_REQUIRED",
+  "generatedAt": "2026-11-09T08:59:34Z",
+  "workflowRunId": 42589947310,
+  "workflowArtifactId": 13660413544,
+  "sourceCommit": "c4e4fef39e69d9d85220e0bd022cb6e3c4745bb8",
+  "sourceScriptPath": "content/long-form-scripts.md",
+  "sourceScriptBlobSha": "390dfdcf15f896b135238237f9753f5cfddf710e",
+  "generator": "scripts/generate_long_form_narration.py",
+  "voice": "en-US-GuyNeural",
+  "items": [
+    {
+      "id": "long-001",
+      "audioPath": "media/long-form-drafts/long-001-narration-draft.mp3",
+      "audioSha256": "d4932bcecb3666d6b09ddb25b7dcc8a126ef471fd861651aee3d964e35ed9873",
+      "durationSeconds": 366.24,
+      "wordCount": 963,
+      "captionPath": "media/long-form-drafts/long-001-captions-draft.srt",
+      "captionSha256": "afbc6e3f4b7aed7161c350adb919361ff049be68ff618aec587bcdb8fa261648",
+      "captionCueCount": 151,
+      "captionEndSeconds": 365.35,
+      "captionsCoverAudio": true
+    },
+    {
+      "id": "long-002",
+      "audioPath": "media/long-form-drafts/long-002-narration-draft.mp3",
+      "audioSha256": "b171da4793d93c41b697b5377fad3850cb47ada07fe53f6240930b51b557edb2",
+      "durationSeconds": 382.13,
+      "wordCount": 984,
+      "captionPath": "media/long-form-drafts/long-002-captions-draft.srt",
+      "captionSha256": "44f2e04dee12c797fa1901e75a0e192d4939d9247fdd87b9b5d5aa2f6224420f",
+      "captionCueCount": 157,
+      "captionEndSeconds": 381.24,
+      "captionsCoverAudio": true
+    }
+  ],
+  "rightsStatus": "NOT_VERIFIED",
+  "humanReviewRequired": true,
+  "publishingEnabled": false,
+  "limitations": [
+    "These are narration and caption drafts only; no rendered long-form MP4 is represented by this report.",
+    "Voice-use and commercial-use permissions are not verified by the generation workflow.",
+    "Captions are generated from TTS word boundaries and still require human timing, punctuation and readability review.",
+    "All factual claims, final edit, thumbnail, rights, compliance and any promotional disclosure require human review."
+  ]
+}
