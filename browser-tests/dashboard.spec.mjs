@@ -977,7 +977,7 @@ test("campaign form single-flights a double-click and persists the successful pr
   await page.locator("#campaignid").selectOption("selar-wildlife-vault");
   await page.locator("#campaignaction").selectOption("preview");
   await page.locator("#campaignurl").fill("https://selar.com/0u19v8u99l");
-  await page.locator("#campaigndisclosure").fill("Promotional link; check the seller page for current product details and terms.");
+  await page.locator("#campaigndisclosure").fill("This product is sold through my own Selar business; purchases generate revenue for my business.");
 
   await page.locator("#campaignform button[type=submit]").dblclick();
   await expect(page.locator("#campaignresult")).toContainText("Preview saved; campaign remains unactivated", { timeout: 10_000 });
