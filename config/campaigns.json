@@ -23,11 +23,24 @@
       "ownerApproved": false,
       "disclosureRequired": true,
       "disclosureText": ""
+    },
+    {
+      "id": "external-affiliate-unconfigured",
+      "type": "affiliate",
+      "name": "External affiliate campaign (e.g. Serengeti; not configured)",
+      "status": "INACTIVE",
+      "destinationUrl": "",
+      "destinationValidation": "not_verified",
+      "ownerApproved": false,
+      "disclosureRequired": true,
+      "disclosureText": "",
+      "compensationType": "affiliate"
     }
   ],
   "notes": [
     "Selar is approved for draft creation only; this does not authorize public publishing.",
     "Safari remains inactive until the owner supplies exact destination URLs and confirms approval and disclosure text.",
-    "Never copy a destination, disclosure, price, offer, or tracking parameter from one campaign type into the other."
+    "Never copy a destination, disclosure, price, offer, or tracking parameter from one campaign type into the other.",
+    "Every non-Selar commercial destination is classified as an affiliate campaign; the generic affiliate record remains inactive until an exact HTTPS destination and viewer-facing disclosure are owner-approved."
   ]
 }
