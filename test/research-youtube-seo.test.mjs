@@ -196,3 +196,9 @@ test("SEO ranking excludes obvious comedy and skit results from wildlife relevan
   assert.equal(first.combinedTitleSignalViews, 1000);
   assert.equal(first.excludedSampleVideos[0].title, "Funny animal encounters skit #comedy");
 });
+
+test("Google OAuth failures give precise recovery guidance without exposing secrets", () => {
+  assert.match(describeSeoResearchFailure({ message: "invalid_grant" }), /replace YOUTUBE_REFRESH_TOKEN/);
+  assert.match(describeSeoResearchFailure({ response: { data: { error: "invalid_client" } } }), /YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET/);
+  assert.match(describeSeoResearchFailure(new Error("network unavailable")), /network unavailable/);
+});
