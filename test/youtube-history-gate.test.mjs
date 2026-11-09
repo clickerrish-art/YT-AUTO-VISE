@@ -14,7 +14,7 @@ const remoteVideos = [
 const reconciliation = {
   complete: true, channelId, verifiedBy: "Owner Reviewer", verifiedAt: "2026-10-24T10:00:00.000Z",
   videos: [
-    { id: "vid-a", format: "short", visibility: "private", uploadedAt: "2026-10-01T15:00:00.000Z" },
+    { id: "vid-a", format: "short", visibility: "private", uploadedAt: "2026-10-01T15:00:00.000Z", publicationState: "NEVER_PUBLISHED" },
     { id: "vid-b", format: "long_form", visibility: "unlisted", actualPublishedAt: "2026-10-04T15:00:00.000Z" }
   ]
 };
@@ -31,12 +31,32 @@ test("history reconciliation records private uploads without advancing the actua
     format: "short"
   }]);
 
+  const previouslyPublished = structuredClone(reconciliation);
+  previouslyPublished.videos[0] = {
+    id: "vid-a",
+    format: "short",
+    visibility: "private",
+    uploadedAt: "2026-10-01T15:00:00.000Z",
+    publicationState: "PREVIOUSLY_PUBLISHED",
+    actualPublishedAt: "2026-10-02T15:00:00.000Z",
+    publicationEvidenceReference: "owner-reviewed-youtube-studio-publication-history-export-vid-a"
+  };
+  const previousPublicationSnapshot = validateHistoryReconciliationSnapshot({
+    channelId, remoteVideos, reconciliation: previouslyPublished
+  });
+  assert.deepEqual(previousPublicationSnapshot.history[0], {
+    id: "vid-a",
+    status: "private",
+    actualPublishedAt: "2026-10-02T15:00:00.000Z",
+    format: "short"
+  });
+  assert.equal(previousPublicationSnapshot.privateUploads.length, 0);
+
   const misclassifiedPrivate = structuredClone(reconciliation);
   misclassifiedPrivate.videos[0].actualPublishedAt = "2026-10-01T15:00:00.000Z";
-  delete misclassifiedPrivate.videos[0].uploadedAt;
   assert.throws(
     () => validateHistoryReconciliationSnapshot({ channelId, remoteVideos, reconciliation: misclassifiedPrivate }),
-    /private upload reconciliation cannot claim an actual publication timestamp/
+    /never-published private upload cannot claim a publication timestamp/
   );
 });
 
@@ -209,7 +229,8 @@ test("complete history fetch verifies authenticated playlist ownership and every
       id,
       format: "long_form",
       visibility: "private",
-      uploadedAt: "2026-10-01T15:00:00.000Z"
+      uploadedAt: "2026-10-01T15:00:00.000Z",
+      publicationState: "NEVER_PUBLISHED"
     }))
   }));
   const pageCalls = [];
