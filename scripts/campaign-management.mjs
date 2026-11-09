@@ -31,10 +31,10 @@ export function manageCampaign(config, request, actor, now = new Date().toISOStr
         .digest("hex");
       return { config: campaigns, campaign, previewOnly: true };
     }
-    if (campaign.type !== "safari_affiliate") throw new Error("Unsupported campaign type");
+    if (!["safari_affiliate", "affiliate"].includes(campaign.type)) throw new Error("Unsupported campaign type");
     const destinationUrl = safeHttps(String(request.destinationUrl ?? ""));
     if (!destinationUrl) throw new Error("Safari preview requires the exact HTTPS destination without embedded credentials");
-    if (typeof request.disclosureText !== "string" || request.disclosureText.trim().length < 8) throw new Error("Safari affiliate disclosure is required");
+    if (typeof request.disclosureText !== "string" || request.disclosureText.trim().length < 8) throw new Error("Affiliate disclosure is required");
     campaign.pendingDestinationUrl = destinationUrl;
     campaign.pendingDisclosureText = request.disclosureText.trim();
     campaign.pendingDestinationVersion = crypto.createHash("sha256").update(destinationUrl + "\n" + campaign.pendingDisclosureText).digest("hex");
@@ -43,7 +43,7 @@ export function manageCampaign(config, request, actor, now = new Date().toISOStr
 
   if (action === "deactivate") {
     campaign.status = "INACTIVE";
-    if (campaign.type === "safari_affiliate") {
+    if (["safari_affiliate", "affiliate"].includes(campaign.type)) {
       campaign.destinationUrl = "";
       campaign.destinationValidation = "not_verified";
       campaign.ownerApproved = false;
@@ -83,9 +83,36 @@ export function manageCampaign(config, request, actor, now = new Date().toISOStr
     delete campaign.pendingDestinationUrl;
     delete campaign.pendingDisclosureText;
     delete campaign.pendingDestinationVersion;
+  } else if (campaign.type === "affiliate") {
+    const destinationUrl = safeHttps(String(request.destinationUrl ?? ""));
+    if (!destinationUrl || destinationUrl !== campaign.pendingDestinationUrl) {
+      throw new Error("Affiliate activation must use the exact HTTPS destination saved in the pending preview");
+    }
+    if (request.confirmOwnerApproval !== true) {
+      throw new Error("Explicit owner approval of the exact affiliate destination and disclosure is required before activation");
+    }
+    const submittedDisclosure = typeof request.disclosureText === "string" ? request.disclosureText.trim() : "";
+    const expectedPreviewVersion = crypto.createHash("sha256")
+      .update(destinationUrl + "\n" + submittedDisclosure)
+      .digest("hex");
+    if (campaign.pendingDisclosureText !== submittedDisclosure ||
+        campaign.pendingDestinationVersion !== expectedPreviewVersion) {
+      throw new Error("Preview the exact affiliate destination and disclosure before activation; the pending preview must match this request");
+    }
+    if (submittedDisclosure.length < 8) throw new Error("Affiliate disclosure is required");
+    campaign.destinationUrl = destinationUrl;
+    campaign.destinationValidation = "owner_verified";
+    campaign.ownerApproved = true;
+    campaign.disclosureText = submittedDisclosure;
+    campaign.compensationType = "affiliate";
+    campaign.status = "ACTIVE_FOR_DRAFTS_ONLY";
+    campaign.approval = { approvedBy: actor.trim(), approvedAt: now, destinationVersion: expectedPreviewVersion };
+    delete campaign.pendingDestinationUrl;
+    delete campaign.pendingDisclosureText;
+    delete campaign.pendingDestinationVersion;
   } else if (campaign.type === "safari_affiliate") {
-    // This project explicitly keeps Safari campaigns inactive. A preview and a generic
-    // owner-confirmation flag are not sufficient to override that repository-level policy.
+    // Legacy Safari remains explicitly disabled; use the separate generic affiliate
+    // campaign after supplying its exact destination and owner-approved disclosure.
     throw new Error("Safari affiliate campaigns are disabled for this project and must remain INACTIVE");
   } else throw new Error("Unsupported campaign type");
 
