@@ -13,7 +13,8 @@ test("creator-education Shorts stay within the two-item weekly cap across draft-
   assert.equal(checkedInPlan.weeks[0].weekOf, "2026-11-09");
   assert.equal(checkedInPlan.weeks[0].items.length, 2);
   assert.equal(checkedInPlan.weeks[1].weekOf, "2026-11-16");
-  assert.equal(checkedInPlan.weeks[1].items.length, 1);
+  assert.equal(checkedInPlan.weeks[1].items.length, 2);
+  assert.ok(checkedInPlan.weeks[1].items.some(item => item.id === "sonicvhibez-short-006-niche-selection"));
   assert.ok(checkedInPlan.weeks.every(week => week.items.length <= 2));
   assert.ok(checkedInPlan.weeks.every(week => week.items.every(item => item.targetSeconds === 55)));
 });
