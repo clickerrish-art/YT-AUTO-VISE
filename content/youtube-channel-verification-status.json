@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "status": "BLOCKED",
   "mode": "READ_ONLY",
-  "workflowRunId": 42591153889,
-  "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42591153889",
-  "sourceCommit": "6bea87fabf3459b9a45b2ef8ddf92e22960dc88a",
-  "checkedAt": "2026-11-09T09:08:59Z",
+  "workflowRunId": 42591293612,
+  "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42591293612",
+  "sourceCommit": "71356a56d1b50146251659a5b62ed726e8515dfc",
+  "checkedAt": "2026-11-09T09:10:05Z",
   "deterministicIdentityAndPaginationTests": {
     "status": "PASS",
     "passed": 5,
@@ -14,7 +14,7 @@
   "oauth": {
     "status": "BLOCKED",
     "errorCode": "invalid_client",
-    "message": "Google rejected the configured OAuth client ID/secret pair before returning an authenticated channel."
+    "message": "Google rejected the configured OAuth client ID/secret pair (invalid_client). The workflow did not authenticate a channel."
   },
   "channelIdentityVerified": false,
   "uploadsInventoryComplete": false,
@@ -22,5 +22,35 @@
   "secretValuesLogged": false,
   "publishingEnabled": false,
   "uploadAttempted": false,
-  "resolution": "Verify the existing matching YOUTUBE_CLIENT_ID and single YOUTUBE_CLIENT_SECRET in GitHub Actions secrets. Do not create another OAuth client or paste secret values into chat. Rerun the read-only verification workflow after correcting the existing pair."
+  "resolution": "Verify the existing matching YOUTUBE_CLIENT_ID and single YOUTUBE_CLIENT_SECRET in GitHub Actions secrets. Do not create another OAuth client or paste secret values into chat. Rerun the read-only verification workflow after correcting the existing pair.",
+  "attempts": [
+    {
+      "workflowRunId": 42591153889,
+      "sourceCommit": "6bea87fabf3459b9a45b2ef8ddf92e22960dc88a",
+      "checkedAt": "2026-11-09T09:08:59Z",
+      "tests": {
+        "status": "PASS",
+        "passed": 5,
+        "failed": 0
+      },
+      "oauth": {
+        "status": "BLOCKED",
+        "errorCode": "invalid_client"
+      }
+    },
+    {
+      "workflowRunId": 42591293612,
+      "sourceCommit": "71356a56d1b50146251659a5b62ed726e8515dfc",
+      "checkedAt": "2026-11-09T09:10:05Z",
+      "tests": {
+        "status": "PASS",
+        "passed": 5,
+        "failed": 0
+      },
+      "oauth": {
+        "status": "BLOCKED",
+        "errorCode": "invalid_client"
+      }
+    }
+  ]
 }
