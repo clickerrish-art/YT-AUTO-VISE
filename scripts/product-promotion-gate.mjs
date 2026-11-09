@@ -12,6 +12,16 @@ const isValidOwnerConfirmationDate = value => {
 const validCompensationEvidenceDate = value =>
   isValidZonedIsoTimestamp(value) || isValidOwnerConfirmationDate(value);
 const hasText = value => typeof value === "string" && value.trim().length > 0;
+const getProductHost = value => {
+  if (!hasText(value)) return "";
+  try {
+    const parsed = new URL(value);
+    if (parsed.protocol !== "https:" || parsed.username || parsed.password) return "";
+    return parsed.hostname.toLowerCase();
+  } catch {
+    return "";
+  }
+};
 
 /**
  * An approved product URL is not permission to promote it.
@@ -25,6 +35,10 @@ export function validateProductPromotionGate(product, metadata, options = {}) {
   if (!product || typeof product !== "object" || Array.isArray(product)) return ["approved product record is missing"];
   if (product.status !== "approved") errors.push("product must remain approved in config/products.json");
   if (!hasText(product.url)) errors.push("exact approved product URL must be recorded");
+  const productHost = getProductHost(product.url);
+  if (hasText(product.url) && !productHost) {
+    errors.push("product URL must be a valid HTTPS URL without embedded credentials");
+  }
 
   const gate = product.promotionGate;
   if (!gate || typeof gate !== "object" || Array.isArray(gate)) {
@@ -50,8 +64,6 @@ export function validateProductPromotionGate(product, metadata, options = {}) {
   const directSalesRevenue = compensationType === "direct_sales_revenue";
   // Owner-confirmed business rule: Selar is the owner's own storefront;
   // products hosted anywhere else are affiliate promotions.
-  let productHost = "";
-  try { productHost = new URL(product.url).hostname.toLowerCase(); } catch {}
   const expectedCompensationType = productHost === "selar.com" || productHost.endsWith(".selar.com")
     ? "direct_sales_revenue"
     : "affiliate";
