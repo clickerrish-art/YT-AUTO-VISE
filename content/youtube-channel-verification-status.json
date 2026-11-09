@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "status": "BLOCKED",
+  "mode": "READ_ONLY",
+  "workflowRunId": 42591153889,
+  "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42591153889",
+  "sourceCommit": "6bea87fabf3459b9a45b2ef8ddf92e22960dc88a",
+  "checkedAt": "2026-11-09T09:08:59Z",
+  "deterministicIdentityAndPaginationTests": {
+    "status": "PASS",
+    "passed": 5,
+    "failed": 0
+  },
+  "oauth": {
+    "status": "BLOCKED",
+    "errorCode": "invalid_client",
+    "message": "Google rejected the configured OAuth client ID/secret pair before returning an authenticated channel."
+  },
+  "channelIdentityVerified": false,
+  "uploadsInventoryComplete": false,
+  "visibilityCounts": null,
+  "secretValuesLogged": false,
+  "publishingEnabled": false,
+  "uploadAttempted": false,
+  "resolution": "Verify the existing matching YOUTUBE_CLIENT_ID and single YOUTUBE_CLIENT_SECRET in GitHub Actions secrets. Do not create another OAuth client or paste secret values into chat. Rerun the read-only verification workflow after correcting the existing pair."
+}
