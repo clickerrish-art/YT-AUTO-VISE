@@ -101,7 +101,7 @@ export function manageCampaign(config, request, actor, now = new Date().toISOStr
     }
     if (submittedDisclosure.length < 8) throw new Error("Affiliate disclosure is required");
     campaign.destinationUrl = destinationUrl;
-    campaign.destinationValidation = "owner_verified";
+    campaign.destinationValidation = "owner_confirmed_exact_https";
     campaign.ownerApproved = true;
     campaign.disclosureText = submittedDisclosure;
     campaign.compensationType = "affiliate";
