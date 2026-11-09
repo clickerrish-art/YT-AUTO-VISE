@@ -156,3 +156,43 @@ test("SEO research rejects an unsafe output directory", async () => {
     /SEO_REPORT_DIR must be a safe repository-relative directory/
   );
 });
+
+
+test("SEO ranking excludes obvious comedy and skit results from wildlife relevance totals", () => {
+  const queryResults = SEO_SEED_QUERIES.map((query, index) => ({
+    query,
+    videos: index === 0 ? [
+      {
+        videoId: ids[0],
+        title: "Lion and crocodile African wildlife documentary",
+        channelTitle: "Wildlife Research Channel",
+        publishedAt: "2026-10-10T12:00:00Z",
+        viewCount: 1000
+      },
+      {
+        videoId: ids[1],
+        title: "Funny animal encounters skit #comedy",
+        channelTitle: "Comedy Channel",
+        publishedAt: "2026-10-10T12:00:00Z",
+        viewCount: 50000
+      }
+    ] : [{
+      videoId: ids[0],
+      title: "African wildlife documentary",
+      channelTitle: "Wildlife Research Channel",
+      publishedAt: "2026-10-10T12:00:00Z",
+      viewCount: 100
+    }]
+  }));
+  const report = buildSeoResearchReport({
+    channel: { id: CHANNEL_ID, title: "SonicVibes", handle: "@sonicvhibez" },
+    queryResults,
+    generatedAt: "2026-11-09T16:00:00Z"
+  });
+  const first = report.keywordCandidates.find(item => item.phrase === SEO_SEED_QUERIES[0]);
+  assert.equal(first.resultsCount, 2);
+  assert.equal(first.relevantResultsCount, 1);
+  assert.equal(first.excludedResultsCount, 1);
+  assert.equal(first.combinedViews, 1000);
+  assert.equal(first.excludedSampleVideos[0].title, "Funny animal encounters skit #comedy");
+});
