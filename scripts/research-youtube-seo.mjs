@@ -86,7 +86,7 @@ function formatMarkdown(report) {
 }
 
 export function buildSeoResearchReport({ channel, queryResults, generatedAt, windowDays = WINDOW_DAYS }) {
-  if (!channel || channel.id !== "UCSlkuPfHH78oGC1o418HV4w" ||
+  if (!channel || typeof channel.id !== "string" || !channel.id.trim() ||
       channel.handle?.replace(/^@/, "").toLowerCase() !== "sonicvhibez") {
     throw new Error("SEO report requires the verified SonicVhibez channel identity");
   }
