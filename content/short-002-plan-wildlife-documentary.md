@@ -30,7 +30,7 @@ Learn how to make a wildlife documentary Short with one subject, habitat context
 Promotional resource: Complete YouTube Wildlife Creator’s Vault — Premium Combo PDF  
 https://selar.com/0u19v8u99l
 
-**DISCLOSURE HOLD:** The live Selar listing identifies Click 47 as the seller and its copy uses Nature Frontiers branding. The affiliate/paid relationship and SonicVhibez’s authorization to promote this listing are not established by the listing. Do not publish until the owner confirms the relationship and the accurate viewer-facing disclosure.
+**DISCLOSURE HOLD:** Owner-confirmed relationship: Selar is the owner's own business and purchases generate direct sales revenue; this is not an affiliate commission. SonicVhibez promotion authorization is recorded separately. The exact viewer-facing commercial disclosure remains unapproved. Do not publish until the owner approves the exact wording and all media, rights and human-review gates pass.
 
 Use only footage and music you own or are licensed to use. Keep the edit faithful to the observed sequence.
 
