@@ -1,25 +1,26 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  APPROVED_SONICVHIBEZ_CHANNEL_ID,
   isApprovedSonicVhibezChannel,
   verifySonicVhibezChannel
 } from "../scripts/verify-youtube-channel.mjs";
 
+const CHANNEL_ID = "UC1111111111111111111111";
 const env = {
   YOUTUBE_CLIENT_ID: "client-id",
   YOUTUBE_CLIENT_SECRET: "client-secret",
   YOUTUBE_REFRESH_TOKEN: "refresh-token",
-  SONICVHIBEZ_CHANNEL_ID: APPROVED_SONICVHIBEZ_CHANNEL_ID
+  SONICVHIBEZ_CHANNEL_ID: CHANNEL_ID
 };
 const channel = {
-  id: APPROVED_SONICVHIBEZ_CHANNEL_ID,
+  id: CHANNEL_ID,
   snippet: { title: "SonicVibes", customUrl: "@SonicVhibez" },
   contentDetails: { relatedPlaylists: { uploads: "uploads-id" } }
 };
 
-test("approved channel identity requires exact owner-supplied ID and verified handle/title", () => {
+test("channel identity requires the authenticated ID plus exact SonicVhibez handle/title, without a hard-coded ID", () => {
   assert.equal(isApprovedSonicVhibezChannel(channel), true);
+  assert.equal(isApprovedSonicVhibezChannel({ ...channel, id: "UC2222222222222222222222" }), true);
   assert.equal(isApprovedSonicVhibezChannel({ ...channel, id: "UC0000000000000000000000" }), false);
   assert.equal(isApprovedSonicVhibezChannel({ ...channel, snippet: { title: "Unrelated", customUrl: "@sonicvhibez" } }), false);
   assert.equal(isApprovedSonicVhibezChannel({ ...channel, snippet: { title: "SonicVibes", customUrl: "@other" } }), false);
@@ -42,7 +43,7 @@ test("read-only verification checks every page and every video without exposing 
     videos: { list: async ({ id }) => ({
       data: { items: id.split(",").map(videoId => ({
         id: videoId,
-        snippet: { channelId: APPROVED_SONICVHIBEZ_CHANNEL_ID },
+        snippet: { channelId: CHANNEL_ID },
         status: { privacyStatus: videoId === "video-50" ? "unlisted" : "private" }
       })) }
     }) }
@@ -86,7 +87,7 @@ test("read-only verification fails closed when pagination or video details are i
 test("read-only verification rejects a mismatched configured channel ID and missing secrets", async () => {
   await assert.rejects(
     verifySonicVhibezChannel({ env: { ...env, SONICVHIBEZ_CHANNEL_ID: "UC0000000000000000000000" } }),
-    /does not match the owner-supplied Studio channel ID/
+    /does not own or manage the configured SonicVhibez channel ID/
   );
   await assert.rejects(
     verifySonicVhibezChannel({ env: { ...env, YOUTUBE_REFRESH_TOKEN: "" } }),
