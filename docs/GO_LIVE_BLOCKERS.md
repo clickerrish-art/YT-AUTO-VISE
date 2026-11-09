@@ -1,3 +1,34 @@
+# Current checkpoint — 9 November 2026, 16:32 UTC
+
+**Implementation branch HEAD:** `f9428de9f5c669cfe9df7ea77c638f3fb907e831` · **main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged · **PR #1:** OPEN, DRAFT, UNMERGED. This checkpoint supersedes older statements below that still describe YouTube OAuth as `invalid_client`.
+
+## Verified YouTube identity and inventory
+
+- Read-only OAuth and complete uploads-playlist inventory **PASS** on workflow run [42609557970, attempt 4](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42609557970), source SHA `20bc3f12039f562bfe5412eacb838ba4f8555434`.
+- Authenticated channel: `UCSlkuPfHH78oGC1o418HV4w`, handle `@sonicvhibez`, display title `SonicVibes`.
+- Complete inventory: 1 public, 0 private, 0 unlisted uploads. The one public video is `LjePS02hA1o`, 20 seconds, published 22 October 2026; the owner confirmed it is theirs. Its format remains UNCLASSIFIED pending review.
+- The inventory is not yet an owner-approved publication-cycle reconciliation: local pending/uncertain upload attempts and the video format/publication-cycle classification still require reconciliation.
+- `content/youtube-channel-verification-status.json` now records the successful run. `content/next-short.json` now carries the authenticated channel ID. The Short remains held.
+
+## Monthly YouTube SEO research
+
+- Added `scripts/research-youtube-seo.mjs`, `npm run seo:research`, tests and `.github/workflows/monthly-youtube-seo-review.yml`.
+- Read-only workflow [42654889048](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42654889048) **PASS** on SHA `2842a2f1874b2dbbdde610117c59330cf30451a6`; artifact `sonicvhibez-monthly-seo-42654889048` (artifact ID `13691148320`).
+- South Africa (ZA), English-language, 90-day research candidates included: wild animals (8/10 title-signal matches), animal encounters (5/10), animal documentary (8/10), African wildlife (10/10), wildlife documentary (10/10). The view totals in the artifact are performance of returned videos, **not keyword search volume**. Title matching is heuristic and needs content review; no ranking guarantee is claimed.
+- No video metadata, channel keywords, description, branding, schedule or publication state was changed. The existing OAuth is read-only; Google does not provide a metadata-only write scope. A separate, explicitly authorized write connection and strict approval controls would be required before any live SEO edits.
+- The monthly cron is set for the 9th at 08:17 Africa/Johannesburg. GitHub scheduled workflows run only from the default branch, so this schedule is staged but **not active while PR #1 remains draft/unmerged**. No existing schedules were removed or modified.
+
+## Current readiness and test evidence
+
+- Automation/security run [42654495622](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42654495622) **PASS** on SHA `0333844d1b3fdb7fe35e27af3ab731d431792d75`: 136/136 Node test files, 34 Python tests, zero skips, npm audit 0 vulnerabilities. This predates the final metadata channel-ID correction and latest test edits; exact-HEAD validation is pending.
+- Production readiness run [42654868732](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42654868732) reported HOLD with 13 blockers on SHA `691a79ca976bbf8a807b3c269c973941d45f430e`. Two channel-ID findings have since been corrected in the implementation branch. The exact-HEAD readiness run is pending; do not reuse the old blocker count as current.
+- The repository contains example manifests, not genuine completed Short/long-form manifests or `media/next-short.mp4`. Library search found project instructions and audit documents, not a final wildlife video or rights licence. Rights confirmation, human compliance review, exact Selar disclosure approval, and complete upload-attempt reconciliation remain genuine gates.
+- Publishing remains disabled. No upload, public publication, OAuth write authorization, main edit, merge, reset, rebase or force-push occurred.
+
+**Verdict:** OAuth identity verification and monthly read-only SEO research now work. The SEO report is not an automatic metadata writer, the monthly schedule is not active until the workflow is on the default branch, and the overall application remains HOLD—not 100% production-ready.
+
+---
+
 ## Latest verified checkpoint — 9 November 2026
 
 **Exact source/test candidate:** `ac02833e38f70e4806b12d8583b07e968e5a19fa` · **PR HEAD before this evidence update:** `efb91a3b74213c0e20efbe6a3a1ad9a1328f8333`.  
