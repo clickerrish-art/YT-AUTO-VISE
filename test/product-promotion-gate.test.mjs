@@ -74,12 +74,14 @@ test("metadata cannot substitute a different or partial disclosure", () => {
   assert.ok(errors.some(error => /must contain the exact owner-approved viewer-facing disclosure/i.test(error)));
 });
 
-test("no-material-connection classification requires a matching non-paid flag and explicit disclosure", () => {
+test("no-material-connection cannot bypass the owner-confirmed URL relationship rule", () => {
   const fixture = verifiedFixture("none");
   assert.equal(fixture.metadata.hasPaidPromotion, false);
-  assert.deepEqual(validateProductPromotionGate(fixture.product, fixture.metadata), []);
+  assert.ok(validateProductPromotionGate(fixture.product, fixture.metadata)
+    .some(error => /non-Selar products must be classified as affiliate promotions/i.test(error)));
   fixture.metadata.hasPaidPromotion = true;
-  assert.ok(validateProductPromotionGate(fixture.product, fixture.metadata).some(error => /hasPaidPromotion must match/i.test(error)));
+  assert.ok(validateProductPromotionGate(fixture.product, fixture.metadata)
+    .some(error => /hasPaidPromotion must match/i.test(error)));
 });
 
 test("Selar is direct business revenue and non-Selar product links are affiliate promotions", () => {
@@ -102,6 +104,8 @@ test("Selar is direct business revenue and non-Selar product links are affiliate
   assert.deepEqual(validateProductPromotionGate(external.product, external.metadata), []);
 
   const misclassifiedSelar = verifiedFixture("affiliate");
+  misclassifiedSelar.product.url = "https://selar.com/0u19v8u99l";
+  misclassifiedSelar.product.promotionGate.seller.sourceUrl = misclassifiedSelar.product.url;
   assert.ok(validateProductPromotionGate(misclassifiedSelar.product, misclassifiedSelar.metadata)
     .some(error => /Selar products must be classified as direct_sales_revenue/i.test(error)));
 
