@@ -1,6 +1,6 @@
 # Narration master — SonicVhibez Shorts
 
-These reads are written to follow the current 55-second subtitle drafts. Timing is approximate; the final editor must align captions to the recorded audio. Voice direction: friendly, clear, natural American male voice, conversational rather than salesy. Aim for an unhurried documentary pace and leave short pauses between ideas.
+These reads are written to follow the current 55-second subtitle drafts. Timing is approximate; the final editor must align captions to the recorded audio. The Selar direct-sales sentence is a proposed disclosure draft, not owner-approved release wording; all resulting audio remains review-only until the owner approves the exact wording. Voice direction: friendly, clear, natural American male voice, conversational rather than salesy. Aim for an unhurried documentary pace and leave short pauses between ideas.
 
 ## Short 001 — How to Make Better Wildlife Videos for YouTube
 
@@ -26,7 +26,7 @@ Add readable captions and only music you have permission to use.
 
 Finish with one useful takeaway so viewers leave having learned something.
 
-Build your next wildlife video with a plan. Find the Wildlife Creator’s Vault at the link in the description.
+Build your next wildlife video with a plan. The Wildlife Creator’s Vault is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.
 
 **Performance notes:** Brief pause after the opening question. Emphasize “safe distance” without sounding alarmist. Keep the product mention matter-of-fact.
 
@@ -42,7 +42,7 @@ Second, build a simple story. Open with a moment that raises the question, add h
 
 Third, check every asset. Confirm footage and music rights, fact-check each claim, and keep captions readable on a phone.
 
-Before editing, note where each clip came from, what it actually shows, and which details still need checking. A focused story is easier to follow than a rushed list of facts. The Wildlife Creator’s Vault is linked below as a planning resource.
+Before editing, note where each clip came from, what it actually shows, and which details still need checking. A focused story is easier to follow than a rushed list of facts. The Wildlife Creator’s Vault is sold through my own Selar business; purchases generate revenue for my business. The link is below.
 
 **Performance notes:** Make each step distinct, but keep the delivery warm and steady. Do not add claims about guaranteed growth or results.
 
