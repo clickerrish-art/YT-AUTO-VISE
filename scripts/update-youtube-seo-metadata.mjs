@@ -23,9 +23,22 @@ function safeJson(file, label) {
   if (typeof file !== "string" || !file.trim() || path.isAbsolute(file) || path.normalize(file).split(path.sep).includes("..")) {
     throw new Error(label + " must be a safe repository-relative path");
   }
-  const full = path.resolve(process.cwd(), file);
-  const stat = fs.lstatSync(full);
-  if (!stat.isFile() || stat.isSymbolicLink()) throw new Error(label + " must be a regular non-symlink file");
+  const root = path.resolve(process.cwd());
+  const full = path.resolve(root, file);
+  const relative = path.relative(root, full);
+  if (!relative || relative === ".." || relative.startsWith(".." + path.sep) || path.isAbsolute(relative)) {
+    throw new Error(label + " must remain inside the repository");
+  }
+  let cursor = root;
+  const parts = relative.split(path.sep);
+  for (let index = 0; index < parts.length; index++) {
+    cursor = path.join(cursor, parts[index]);
+    const stat = fs.lstatSync(cursor);
+    if (stat.isSymbolicLink() || (index < parts.length - 1 && !stat.isDirectory()) ||
+        (index === parts.length - 1 && !stat.isFile())) {
+      throw new Error(label + " path must contain only real directories and a regular file");
+    }
+  }
   return JSON.parse(fs.readFileSync(full, "utf8"));
 }
 export function canonicalSnippet(snippet) {
@@ -61,7 +74,7 @@ export function validateSeoMetadataApproval(approval, { channelId, now = new Dat
       new Set(desired.tags.map(tag => tag.toLowerCase())).size !== desired.tags.length) {
     throw new Error("SEO approval desired metadata is invalid (title, description, or unique tags)");
   }
-  if (approval.evidence?.searchVolume !== null || !Array.isArray(approval.evidence?.sources) || approval.evidence.sources.length < 1) {
+  if (approval.evidence?.searchVolume !== null || !Array.isArray(approval.evidence?.sources) || approval.evidence.sources.length < 1 || approval.evidence.sources.some(source => typeof source !== "string" || !/^https:\/\//.test(source))) {
     throw new Error("SEO approval must record source evidence and set searchVolume=null; YouTube Data API results do not supply search volume");
   }
   if (approval.evidence?.volumeClaimPerMinute !== undefined) {
