@@ -182,7 +182,11 @@ async function main() {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch(error => {
-    process.stderr.write("BLOCKED: " + (error?.message ?? String(error)) + "\n");
+    const message = error?.message ?? String(error);
+    const safeMessage = message === "invalid_client"
+      ? "Google rejected the configured OAuth client ID/secret pair (invalid_client). Verify the existing matching pair in GitHub Actions secrets; do not create another OAuth client. Secret values are never logged."
+      : message;
+    process.stderr.write("BLOCKED: " + safeMessage + "\n");
     process.exitCode = 2;
   });
 }
