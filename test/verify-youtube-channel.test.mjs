@@ -103,7 +103,7 @@ test("read-only verification rejects a mismatched configured channel ID and miss
 
  
 test("read-only verification writes a complete owner-review inventory artifact without logging private IDs", async () => {
-  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-youtube-inventory-"));
+  const directory = fs.mkdtempSync(path.join(process.cwd(), ".tmp-youtube-inventory-"));
   const inventoryPath = path.join(directory, "inventory.json");
   const youtube = {
     channels: { list: async () => ({ data: { items: [channel] } }) },
@@ -117,7 +117,7 @@ test("read-only verification writes a complete owner-review inventory artifact w
     ] } }) }
   };
   try {
-    const result = await verifySonicVhibezChannel({ env: { ...env, YOUTUBE_HISTORY_INVENTORY_PATH: inventoryPath }, youtubeFactory: () => youtube });
+    const result = await verifySonicVhibezChannel({ env: { ...env, YOUTUBE_HISTORY_INVENTORY_PATH: path.relative(process.cwd(), inventoryPath) }, youtubeFactory: () => youtube });
     assert.equal(result.totalUploads, 2);
     const inventory = JSON.parse(fs.readFileSync(inventoryPath, "utf8"));
     assert.equal(inventory.complete, true);
