@@ -51,24 +51,28 @@ function formatMarkdown(report) {
     "",
     "## Candidate search phrases",
     "",
-    "| Rank | Phrase | Results | Combined views | Top result views |",
-    "|---:|---|---:|---:|---:|"
+    "| Rank | Phrase | Results | Relevant | Filtered | Combined relevant views | Top relevant views |",
+    "|---:|---|---:|---:|---:|---:|---:|"
   ];
   for (const item of report.keywordCandidates) {
     lines.push("| " + item.rank + " | " + item.phrase + " | " + item.resultsCount +
+      " | " + item.relevantResultsCount + " | " + item.excludedResultsCount +
       " | " + item.combinedViews + " | " + item.topResultViews + " |");
   }
   lines.push("", "## Evidence and review");
   for (const item of report.keywordCandidates) {
     lines.push("", "### " + item.phrase);
     if (!item.sampleVideos.length) {
-      lines.push("- No recent search results were returned for this phrase.");
-      continue;
+      lines.push("- No recent title-filtered wildlife results were returned for this phrase.");
     }
     for (const video of item.sampleVideos) {
-      lines.push("- [" + video.title.replace(/[\[\]]/g, "") + "](https://www.youtube.com/watch?v=" +
+      lines.push("- [" + video.title.replace(/[\\[\\]]/g, "") + "](https://www.youtube.com/watch?v=" +
         video.videoId + ") — " + video.viewCount + " views; published " + video.publishedAt +
         "; channel: " + video.channelTitle);
+    }
+    if (item.excludedSampleVideos.length) {
+      lines.push("- Filtered as likely off-topic by title signals (manual review still advised): " +
+        item.excludedSampleVideos.map(video => video.title).join("; "));
     }
   }
   lines.push(
@@ -93,6 +97,8 @@ export function buildSeoResearchReport({ channel, queryResults, generatedAt, win
   if (!Array.isArray(queryResults) || queryResults.length !== SEO_SEED_QUERIES.length) {
     throw new Error("SEO research must contain one result set for every configured seed query");
   }
+  const wildlifeTitleSignal = /\\b(wildlife|wild|animal|animals|safari|lion|elephant|crocodile|hippo|leopard|zebra|rhino|buffalo|giraffe|cheetah|hyena|pangolin|mamba|meerkat|predator|bird|snake|turtle|whale|shark|bear|wolf|fox|monkey|gorilla|chimpanzee|baboon|bison|owl|mammal)\\b/i;
+  const offTopicTitleSignal = /\\b(skit|funny|comedy|ranking|reaction|meme|prank|gaming|cartoon|gameplay)\\b/i;
   const candidates = queryResults.map((entry, index) => {
     if (entry.query !== SEO_SEED_QUERIES[index] || !Array.isArray(entry.videos)) {
       throw new Error("SEO search result set does not match the configured query sequence");
@@ -104,14 +110,19 @@ export function buildSeoResearchReport({ channel, queryResults, generatedAt, win
       publishedAt: String(video.publishedAt ?? ""),
       viewCount: Number.isSafeInteger(video.viewCount) && video.viewCount >= 0 ? video.viewCount : 0
     })).filter(video => /^[A-Za-z0-9_-]{11}$/.test(video.videoId) && video.title);
+    const relevant = videos.filter(video => wildlifeTitleSignal.test(video.title) && !offTopicTitleSignal.test(video.title));
+    const excluded = videos.filter(video => !relevant.includes(video));
     return {
       phrase: entry.query,
       resultsCount: videos.length,
-      combinedViews: videos.reduce((sum, video) => sum + video.viewCount, 0),
-      topResultViews: videos.reduce((max, video) => Math.max(max, video.viewCount), 0),
-      sampleVideos: videos.slice(0, 5)
+      relevantResultsCount: relevant.length,
+      excludedResultsCount: excluded.length,
+      combinedViews: relevant.reduce((sum, video) => sum + video.viewCount, 0),
+      topResultViews: relevant.reduce((max, video) => Math.max(max, video.viewCount), 0),
+      sampleVideos: relevant.slice(0, 5),
+      excludedSampleVideos: excluded.slice(0, 3)
     };
-  }).sort((a, b) => b.combinedViews - a.combinedViews || b.resultsCount - a.resultsCount)
+  }).sort((a, b) => b.combinedViews - a.combinedViews || b.relevantResultsCount - a.relevantResultsCount)
     .map((item, index) => ({ rank: index + 1, ...item }));
   return Object.freeze({
     schemaVersion: 1,
@@ -122,6 +133,7 @@ export function buildSeoResearchReport({ channel, queryResults, generatedAt, win
     evidenceType: "YOUTUBE_SEARCH_RESULT_VIDEO_PERFORMANCE_PROXY_NOT_SEARCH_VOLUME",
     searchVolume: null,
     keywordCompetition: null,
+    relevanceFilter: "Title contains wildlife/animal/species signals and excludes obvious skit/funny/comedy/ranking/reaction/meme/prank/gaming/cartoon signals; this is a heuristic, not human content verification.",
     keywordCandidates: candidates,
     actions: {
       metadataWritesPerformed: false,
