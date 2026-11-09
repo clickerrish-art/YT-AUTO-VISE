@@ -97,8 +97,8 @@ export function buildSeoResearchReport({ channel, queryResults, generatedAt, win
   if (!Array.isArray(queryResults) || queryResults.length !== SEO_SEED_QUERIES.length) {
     throw new Error("SEO research must contain one result set for every configured seed query");
   }
-  const wildlifeTitleSignal = /\\b(wildlife|wild|animal|animals|safari|lion|elephant|crocodile|hippo|leopard|zebra|rhino|buffalo|giraffe|cheetah|hyena|pangolin|mamba|meerkat|predator|bird|snake|turtle|whale|shark|bear|wolf|fox|monkey|gorilla|chimpanzee|baboon|bison|owl|mammal)\\b/i;
-  const offTopicTitleSignal = /\\b(skit|funny|comedy|ranking|reaction|meme|prank|gaming|cartoon|gameplay)\\b/i;
+  const wildlifeTitleSignal = /\b(wildlife|wild|animal|animals|safari|lion|elephant|crocodile|hippo|leopard|zebra|rhino|buffalo|giraffe|cheetah|hyena|pangolin|mamba|meerkat|predator|bird|snake|turtle|whale|shark|bear|wolf|fox|monkey|gorilla|chimpanzee|baboon|bison|owl|mammal)\b/i;
+  const offTopicTitleSignal = /\b(skit|funny|comedy|ranking|reaction|meme|prank|gaming|cartoon|gameplay)\b/i;
   const candidates = queryResults.map((entry, index) => {
     if (entry.query !== SEO_SEED_QUERIES[index] || !Array.isArray(entry.videos)) {
       throw new Error("SEO search result set does not match the configured query sequence");
