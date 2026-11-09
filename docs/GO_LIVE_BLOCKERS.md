@@ -1,3 +1,39 @@
+## Latest verified checkpoint — 9 November 2026
+
+**Exact source/test candidate:** `ac02833e38f70e4806b12d8583b07e968e5a19fa` · **PR HEAD before this evidence update:** `efb91a3b74213c0e20efbe6a3a1ad9a1328f8333`.  
+**main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`. PR #1 remains OPEN · DRAFT · UNMERGED.
+
+### Exact-SHA verification
+
+- Automation/security [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611619215): 135 Node test files, 34 Python tests, zero skips, npm audit 0 vulnerabilities.
+- Content quality [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627825): 747/747 tests.
+- Dashboard Chromium E2E [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627852): 29/29 journeys.
+- Queue readiness [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627886): 16 queue items; 72 elapsed-hour spacing; 216-hour long_form/long_form/short cycle; publication disabled.
+- Cloudflare durable-state unit and recovered-source syntax checks [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611320175).
+- Non-destructive branch inventory [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627830): 3,364 ahead / 2 behind / 308 changed paths / zero deletions / 17 critical modules; semantic integration requires review.
+- Production readiness [HOLD — 14 blockers](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627930). This is intentionally fail-closed, not a production pass.
+
+### New owner-independent work
+
+- Generic external affiliate campaign workflow added; Selar remains direct-sales revenue, Safari remains inactive. Exact HTTPS destination and disclosure are bound to explicit owner approval; activation is draft-only.
+- Read-only YouTube verification can export a complete public/private/unlisted uploads inventory artifact after OAuth succeeds. Deterministic inventory tests pass 6/6; live Google OAuth remains BLOCKED by `invalid_client`.
+- Recovered all eight deployed Cloudflare staging Worker source modules into `cloudflare/staging-snapshot/` at [commit a93b649](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/a93b649d4a5f8f4e516b93d1fd3192173eef8949). This is a source-recovery snapshot only; no live Cloudflare resource was changed.
+- `docs/API_ROUTE_ACCEPTANCE_MATRIX.json` now records current campaign-route evidence. API-001 remains NOT_TESTED overall; eight routes remain externally blocked.
+
+### Current external blockers
+
+The production-readiness report identifies 14 blockers: complete authenticated YouTube public/private/unlisted history and uncertain-attempt reconciliation; genuine Short and long-form render manifests and asset-rights evidence; final `media/next-short.mp4`; exact channel-ID verification and metadata correction; human metadata/compliance review; explicit owner approval of the exact Selar viewer-facing disclosure (timestamp and approval reference); matching approved `promotionDisclosure`; and successful YouTube OAuth identity/history verification.
+
+The live OAuth attempt returned `invalid_client`. Verify that the existing single OAuth web client's `YOUTUBE_CLIENT_ID` and `YOUTUBE_CLIENT_SECRET` in GitHub Actions secrets are the matching pair. Do not create another client or share secrets in chat.
+
+Cloudflare staging is provisioned but not current-branch deployed: the Worker source annotation is `0ecea4c`; D1 is revision 1 with 16 queue items and two campaigns (Selar and inactive Safari); the stored backup checksum and bytes match current state. The generic affiliate campaign is not migrated into staging. The Access app is email-only with zero service tokens; Node/GitHub Actions integration remains blocked. Runner-state and artifact records are empty.
+
+No upload, public publication, live schedule, paid generation, Cloudflare mutation, main edit, merge, reset, rebase or force-push occurred. Keep publishing disabled until all owner-controlled and external gates are resolved.
+
+**Verdict: implementation and exact-SHA CI have advanced, but the app is not 100% functional or production-ready.**
+
+---
+
 ## Follow-up verification — 8 November 2026
 
 The test-only follow-up at `b149254a3d5b080be704790fa26529067e88a24a` corrects the dashboard UI contract test for delegated Cloudflare restore-button events. Exact-HEAD CI now passes 130/130 Node test files, 34 Python tests, 712/712 content-quality tests, 27/27 Chromium journeys, 8/8 Cloudflare state tests, queue readiness, metadata validation, isolated baseline, branch inventory, deployment recovery and lockfile checks. Production readiness remains **HOLD — 24 blockers**. Full run links and owner/acceptance gates are in [CURRENT_RELEASE_EVIDENCE_2026-11-08.md](CURRENT_RELEASE_EVIDENCE_2026-11-08.md). No main edit, merge, upload, publication, live schedule, account reconnection or existing Metricool record mutation occurred.
