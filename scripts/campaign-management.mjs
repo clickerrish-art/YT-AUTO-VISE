@@ -33,7 +33,7 @@ export function manageCampaign(config, request, actor, now = new Date().toISOStr
     }
     if (!["safari_affiliate", "affiliate"].includes(campaign.type)) throw new Error("Unsupported campaign type");
     const destinationUrl = safeHttps(String(request.destinationUrl ?? ""));
-    if (!destinationUrl) throw new Error("Safari preview requires the exact HTTPS destination without embedded credentials");
+    if (!destinationUrl) throw new Error("Affiliate preview requires the exact HTTPS destination without embedded credentials");
     if (typeof request.disclosureText !== "string" || request.disclosureText.trim().length < 8) throw new Error("Affiliate disclosure is required");
     campaign.pendingDestinationUrl = destinationUrl;
     campaign.pendingDisclosureText = request.disclosureText.trim();
