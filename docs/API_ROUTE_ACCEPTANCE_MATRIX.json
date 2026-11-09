@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-08T17:44:14.000Z",
+  "generatedAt": "2026-11-09T11:48:00.000Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "6b8bfe653490b829f6036648ab5bae51e131f4ac",
@@ -15,12 +15,14 @@
       "GET /readyz",
       "GET /operational-readyz"
     ],
-    "branchAheadBy": 3172,
+    "branchAheadBy": 3364,
     "branchBehindBy": 2,
-    "changedFiles": 286,
+    "changedFiles": 308,
     "branchProtectionEnabled": null,
     "branchProtectionStatus": "UNVERIFIED — GitHub returned 403 for the protection endpoint.",
-    "comparisonSourceSha": "6b8bfe653490b829f6036648ab5bae51e131f4ac"
+    "comparisonSourceSha": "6b8bfe653490b829f6036648ab5bae51e131f4ac",
+    "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
+    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627830"
   },
   "counts": {
     "routes": 45,
@@ -504,7 +506,11 @@
         "test": "test/campaign-management-api.integration.test.mjs — real HTTP server",
         "exactTestedSha": "888c7b185a2ce121d252059ea1e3b4ace5bf6b3e",
         "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41307206949",
-        "scenarios": "Unknown campaign ID returns 400 with byte-identical durable state; preview persists state and operator-attributed audit; two concurrent previews both return 200 with publishing disabled and exactly three preview audit events; deactivate persists; fresh process reads back deactivated campaign and audit."
+        "scenarios": "Unknown campaign ID returns 400 with byte-identical durable state; preview persists state and operator-attributed audit; two concurrent previews both return 200 with publishing disabled and exactly three preview audit events; deactivate persists; fresh process reads back deactivated campaign and audit.",
+        "latestExactTestedSha": "ac02833e38f70e4806b12d8583b07e968e5a19fa",
+        "latestContentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627825",
+        "latestBrowserE2E": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627852",
+        "latestScenarios": "Generic external affiliate preview and activation now persist through the real HTTP server; exact HTTPS destination and disclosure are bound by SHA-256; explicit owner confirmation is required; Selar remains direct_sales_revenue; Safari remains INACTIVE; publicPublishingEnabled stays false."
       }
     },
     {
@@ -1178,11 +1184,13 @@
     "note": "This refresh updates live branch inventory and links the full exact-SHA test suite. The route-by-route PASS/BLOCKED classifications and route-specific test evidence remain the earlier matrix snapshot; the full suite passing does not independently re-certify every route. API-001 remains NOT_TESTED overall."
   },
   "latestTargetedEvidence": {
-    "updatedAt": "2026-11-05T09:00:34.027Z",
-    "exactTestedSha": "f42c8a0eeb0ca63a9d5212888f811aeee863303b",
-    "route": "POST /api/uploads/reconcile",
-    "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41997377068",
-    "note": "Targeted route evidence only; the full matrix's other route statuses remain tied to its previously recorded source/test SHA."
+    "updatedAt": "2026-11-09T11:48:00.000Z",
+    "exactTestedSha": "ac02833e38f70e4806b12d8583b07e968e5a19fa",
+    "route": "POST /api/campaigns/manage",
+    "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627825",
+    "browser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627852",
+    "status": "PASS — targeted generic affiliate workflow; overall API-001 remains NOT_TESTED until all 45 protected routes have current route-specific positive and recovery evidence.",
+    "note": "New affiliate flow is isolated from Selar direct sales; preview/activation is owner-confirmed and draft-only. This evidence does not authorize public publishing."
   },
   "latestCiCheckpoint": {
     "recordedAt": "2026-11-06",
@@ -1230,5 +1238,59 @@
     "contentQualityRun": 42488848771,
     "contentQualityResult": "PASS — 721 Node tests, zero failures/skips; includes quarantine-release concurrency and restart receipt reuse.",
     "cloudflareStagingInfrastructure": "PASS — deployed staging Worker and initialized D1 state/backup verified via Cloudflare API; Node dashboard-to-Worker service-token integration remains BLOCKED."
+  },
+  "latestYouTubeInventoryEvidence": {
+    "updatedAt": "2026-11-09T11:32:14Z",
+    "exactTestedSha": "20bc3f12039f562bfe5412eacb838ba4f8555434",
+    "workflow": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42609557970",
+    "deterministicTests": "PASS — 6/6",
+    "liveOAuth": "BLOCKED — invalid_client",
+    "inventoryArtifactCreated": false,
+    "note": "Read-only inventory export is implemented; no channel history was authenticated or reconciled because Google rejected the configured OAuth client pair."
+  },
+  "latestExactCiCheckpoint": {
+    "recordedAt": "2026-11-09T11:48:00Z",
+    "exactSourceTestSha": "ac02833e38f70e4806b12d8583b07e968e5a19fa",
+    "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627825",
+    "contentQualityResult": "PASS — 747/747 Node tests, zero failures and zero skips.",
+    "dashboardBrowser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627852",
+    "dashboardBrowserResult": "PASS — 29/29 Chromium journeys.",
+    "queueReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627886",
+    "queueReadinessResult": "PASS — 16 items; 72-hour minimum spacing; 216-hour full cycle; publishing disabled.",
+    "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627830",
+    "branchInventoryResult": "PASS — inventory only; 3,364 commits ahead, 2 behind, 308 changed files, zero deletions; semantic integration decision REQUIRES_REVIEW.",
+    "cloudflareState": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611320175",
+    "cloudflareStateResult": "PASS — durable-state unit checks and recovered staging source syntax checks.",
+    "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627930",
+    "productionReadinessResult": "HOLD — 14 blockers; no upload, schedule or publication authorized.",
+    "routeAcceptanceBoundary": "This exact-SHA suite adds current targeted evidence for the campaign-management route but does not re-certify all 45 protected routes. API-001 remains NOT_TESTED overall."
+  },
+  "cloudflareStagingInfrastructure": {
+    "observedAt": "2026-11-09",
+    "worker": "sonicvhibez-durable-state-staging",
+    "workerDeployment": "deployed; D1 STATE_DB binding and R2 ARTIFACTS binding present",
+    "workerDeploymentId": "4f26b391-0009-4948-ad3e-c4081ed7a1d5",
+    "workerSourceAnnotation": "0ecea4caa817364d2f38b31b15a0f0c8033f68ca",
+    "recoveredSourceSnapshotCommit": "a93b649d4a5f8f4e516b93d1fd3192173eef8949",
+    "d1ApplicationTables": 6,
+    "state": {
+      "revision": 1,
+      "updatedAt": "2026-11-08T00:00:00.000Z",
+      "queueItems": 16,
+      "jobs": 0,
+      "auditEvents": 1,
+      "uploads": 0,
+      "campaigns": 2,
+      "publishingEnabled": false
+    },
+    "backups": 1,
+    "backupIntegrity": "PASS — stored SHA-256 matches backup bytes and backup bytes match current state",
+    "runnerStates": 0,
+    "artifactRecords": 0,
+    "accessApplication": "SonicVhibez Dashboard Staging",
+    "accessPolicy": "email-only allow policy",
+    "accessServiceTokens": 0,
+    "nodeRuntimeIntegration": "BLOCKED — no Cloudflare Access service token is configured for unattended Node/GitHub Actions integration",
+    "classification": "Infrastructure provisioning PASS; deployed Worker source is older than the current repository branch and staging campaign-state migration is not applied. Node route end-to-end acceptance remains BLOCKED."
   }
 }
