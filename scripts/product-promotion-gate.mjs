@@ -1,6 +1,17 @@
 import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 
-const COMPENSATION_TYPES = new Set(["affiliate", "paid", "none"]);
+const COMPENSATION_TYPES = new Set(["affiliate", "paid", "none", "direct_sales_revenue"]);
+const OWNER_CONFIRMED_COMPENSATION_TYPES = new Set(["direct_sales_revenue"]);
+const isValidOwnerConfirmationDate = value => {
+  if (typeof value !== "string" || !/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false;
+  const [year, month, day] = value.split("-").map(Number);
+  const date = new Date(0);
+  date.setUTCFullYear(year, month - 1, day);
+  date.setUTCHours(0, 0, 0, 0);
+  return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+};
+const validCompensationEvidenceDate = value =>
+  isValidZonedIsoTimestamp(value) || isValidOwnerConfirmationDate(value);
 const hasText = value => typeof value === "string" && value.trim().length > 0;
 
 /**
@@ -36,9 +47,19 @@ export function validateProductPromotionGate(product, metadata, options = {}) {
   if (!hasText(authorization.approvalReference)) errors.push("brand authorization needs a non-empty owner approval reference");
 
   const compensation = gate.compensation ?? {};
-  if (compensation.status !== "VERIFIED") errors.push("affiliate/paid compensation relationship must be verified");
+  const directSalesRevenue = compensation.type === "direct_sales_revenue";
+  const acceptedCompensationStatuses = directSalesRevenue
+    ? new Set(["OWNER_CONFIRMED", "VERIFIED"])
+    : new Set(["VERIFIED"]);
+  if (!acceptedCompensationStatuses.has(compensation.status)) {
+    errors.push("commercial compensation relationship must be verified or owner-confirmed for direct sales revenue");
+  }
   if (!COMPENSATION_TYPES.has(compensation.type)) errors.push("compensation type must be affiliate, paid, or none");
-  if (!isValidZonedIsoTimestamp(compensation.verifiedAt)) errors.push("compensation verification needs a calendar-valid timezone-qualified timestamp");
+  if (!(directSalesRevenue && compensation.status === "OWNER_CONFIRMED"
+    ? isValidOwnerConfirmationDate(compensation.verifiedAt)
+    : isValidZonedIsoTimestamp(compensation.verifiedAt))) {
+    errors.push("compensation verification needs a calendar-valid date; owner-confirmed direct sales may use YYYY-MM-DD");
+  }
   if (!hasText(compensation.evidenceReference)) errors.push("compensation verification needs a non-empty evidence reference");
 
   const disclosure = gate.disclosure ?? {};
