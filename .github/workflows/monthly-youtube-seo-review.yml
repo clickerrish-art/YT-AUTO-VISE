@@ -8,6 +8,9 @@ on:
     branches: [codex/marketing-machine-audit-fixes]
     paths:
       - "scripts/research-youtube-seo.mjs"
+      - "scripts/update-youtube-seo-metadata.mjs"
+      - "test/update-youtube-seo-metadata.test.mjs"
+      - "config/seo-metadata-approval.json"
       - "scripts/verify-youtube-channel.mjs"
       - "test/research-youtube-seo.test.mjs"
       - ".github/workflows/monthly-youtube-seo-review.yml"
@@ -38,6 +41,8 @@ jobs:
         run: npm ci --ignore-scripts
       - name: Test read-only SEO research and approval boundaries
         run: node --test test/research-youtube-seo.test.mjs
+      - name: Test guarded metadata update and approval boundaries
+        run: node --test test/update-youtube-seo-metadata.test.mjs
       - name: Research South Africa-relevant wildlife search results
         env:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
@@ -45,6 +50,17 @@ jobs:
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
         run: node scripts/research-youtube-seo.mjs
+      - name: Apply exact owner-approved SEO metadata (opt-in; never changes privacy or publishing state)
+        if: ${{ vars.SEO_METADATA_WRITE_ENABLED == 'YES' && vars.SEO_METADATA_DRY_RUN == 'NO' && vars.SEO_METADATA_LIVE_CONFIRM == 'YES' && hashFiles('config/seo-metadata-approval.json') != '' }}
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
+          SEO_METADATA_WRITE_ENABLED: ${{ vars.SEO_METADATA_WRITE_ENABLED }}
+          SEO_METADATA_DRY_RUN: ${{ vars.SEO_METADATA_DRY_RUN }}
+          SEO_METADATA_LIVE_CONFIRM: ${{ vars.SEO_METADATA_LIVE_CONFIRM }}
+        run: node scripts/update-youtube-seo-metadata.mjs
       - name: Retain monthly SEO research for owner review
         uses: actions/upload-artifact@v4
         with:
