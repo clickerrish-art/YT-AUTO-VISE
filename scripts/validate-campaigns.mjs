@@ -34,7 +34,7 @@ export function validateCampaigns(config) {
       }
       if (campaign.disclosureApprovalStatus === "OWNER_APPROVED") {
         const expectedVersion = crypto.createHash("sha256")
-          .update(campaign.destinationUrl + "\\n" + String(campaign.disclosureText ?? "").trim())
+          .update(campaign.destinationUrl + "\n" + String(campaign.disclosureText ?? "").trim())
           .digest("hex");
         if (!campaign.approval || typeof campaign.approval.approvedBy !== "string" ||
             campaign.approval.approvedBy.trim().length < 2 ||
