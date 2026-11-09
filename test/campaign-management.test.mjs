@@ -66,6 +66,8 @@ test("Selar URL cannot be edited and campaign activation remains draft-only", ()
   }, operator);
   assert.equal(result.campaign.destinationUrl, "https://selar.com/0u19v8u99l");
   assert.equal(result.campaign.status, "ACTIVE_FOR_DRAFTS_ONLY");
+  assert.equal(result.campaign.disclosureApprovalStatus, "OWNER_APPROVED");
+  assert.equal(result.campaign.approval.approvedBy, operator);
   assert.deepEqual(validateCampaigns(result.config), []);
 });
 
