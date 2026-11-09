@@ -286,7 +286,7 @@ async function main() {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch(error => {
-    process.stderr.write("BLOCKED: " + (error?.message ?? String(error)) + "\n");
+    process.stderr.write("BLOCKED: " + describeSeoResearchFailure(error) + "\n");
     process.exitCode = 2;
   });
 }
