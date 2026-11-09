@@ -22,14 +22,14 @@
         },
         "compensation": {
           "status": "OWNER_CONFIRMED",
-          "type": "NONE",
+          "type": "DIRECT_SALES_REVENUE",
           "verifiedAt": "2026-11-09",
-          "evidenceReference": "Owner confirmed in the ChatGPT conversation on 2026-11-09 that SonicVhibez receives no compensation for promoting this product.",
-          "note": "Owner confirmation applies to the Complete YouTube Wildlife Creator's Vault only. It does not approve the viewer-facing wording or complete content/compliance review."
+          "evidenceReference": "Owner clarified in the ChatGPT conversation on 2026-11-09 that Selar is their own business and customer payments are received directly through Selar.",
+          "note": "This is a direct commercial relationship through the owner's own Selar business. Purchases generate revenue for the owner's business. Do not describe the promotion as uncompensated or as having no commercial benefit."
         },
         "disclosure": {
           "status": "UNVERIFIED",
-          "text": "",
+          "text": "This product is sold through my own Selar business; purchases generate revenue for my business.",
           "approvedAt": "",
           "approvalReference": ""
         }
