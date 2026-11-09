@@ -30,11 +30,11 @@ test("campaign validator rejects activating Safari without verified owner URL", 
   assert.ok(validateCampaigns(bad).some(error => error.includes("owner approval and verified destination")));
 });
 
-test("campaign validator rejects duplicate IDs and missing disclosure", () => {
+test("campaign validator rejects duplicate IDs and misleading disclosure", () => {
   const bad = structuredClone(baseline);
   bad.campaigns[1].id = bad.campaigns[0].id;
   bad.campaigns[0].disclosureText = "";
   const errors = validateCampaigns(bad);
   assert.ok(errors.some(error => error.includes("duplicate campaign ID")));
-  assert.ok(errors.some(error => error.includes("Selar disclosure text is required")));
+  assert.ok(errors.some(error => error.includes("Selar disclosure must accurately identify")));
 });
