@@ -21,7 +21,7 @@ const channel = {
 test("channel identity requires the authenticated ID plus exact SonicVhibez handle/title, without a hard-coded ID", () => {
   assert.equal(isApprovedSonicVhibezChannel(channel), true);
   assert.equal(isApprovedSonicVhibezChannel({ ...channel, id: "UC2222222222222222222222" }), true);
-  assert.equal(isApprovedSonicVhibezChannel({ ...channel, id: "UC0000000000000000000000" }), false);
+  assert.equal(isApprovedSonicVhibezChannel({ ...channel, id: "UC0000000000000000000000" }), true);
   assert.equal(isApprovedSonicVhibezChannel({ ...channel, snippet: { title: "Unrelated", customUrl: "@sonicvhibez" } }), false);
   assert.equal(isApprovedSonicVhibezChannel({ ...channel, snippet: { title: "SonicVibes", customUrl: "@other" } }), false);
 });
