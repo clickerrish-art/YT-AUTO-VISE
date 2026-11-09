@@ -56,7 +56,7 @@ class MemoryD1 {
     catch(e){this.row=row;this.backups=backups;throw e}
   }
 }
-const env=(db=new MemoryD1())=>({STATE_DB:db,DASHBOARD_OPERATOR_TOKEN:TOKEN,DASHBOARD_OPERATOR_ID:ACTOR});
+const env=(db=new MemoryD1())=>({STATE_DB:db,DASHBOARD_OPERATOR_TOKEN:TOKEN,DASHBOARD_OPERATOR_ID:"  "+ACTOR+"  "});
 const req=(path,method="GET",value,headers={})=>new Request("https://worker.test"+path,{
   method,headers:{...(path.startsWith("/api/")?{"x-operator-token":TOKEN}:{}),...headers,...(value===undefined?{}:{"content-type":"application/json"})},
   ...(value===undefined?{}:{body:JSON.stringify(value)})
@@ -104,6 +104,7 @@ test("state updates create immutable pre-update backups and reject stale revisio
   const updated=await handleRequest(req("/api/state","PUT",state(["after"]),{"if-match":'"1"'}),e);
   assert.equal(updated.status,200);assert.equal((await json(updated)).revision,2);
   assert.equal(db.backups.length,1);assert.equal(db.backups[0].source_revision,1);
+  assert.equal(db.backups[0].reason,"AUTOMATIC_PRE_UPDATE:"+ACTOR);
   assert.match(db.backups[0].sha256,/^[a-f0-9]{64}$/);
   const stale=await handleRequest(req("/api/state","PUT",state(["stale"]),{"if-match":'"1"'}),e);
   assert.equal(stale.status,409);assert.equal(db.row.revision,2);
@@ -120,6 +121,7 @@ test("operator backup restores prior state with an audit record",async()=>{
   const result=await json(restored);
   assert.equal(result.revision,3);assert.deepEqual(result.state.queueItems,["original"]);
   assert.equal(result.state.audit.at(-1).action,"DASHBOARD_STATE_RESTORED");
+  assert.equal(result.state.audit.at(-1).actor,ACTOR);
   assert.equal(db.backups.length,3);
 });
 test("restore refuses tampered backup bytes",async()=>{
