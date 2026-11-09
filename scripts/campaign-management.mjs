@@ -23,7 +23,7 @@ export function manageCampaign(config, request, actor, now = new Date().toISOStr
   if (action === "preview") {
     if (campaign.type === "selar_digital_product") {
       if (request.destinationUrl !== APPROVED_SELAR_URL) throw new Error("Selar destination must exactly match the approved URL");
-      if (request.disclosureText?.trim() !== SELAR_DIRECT_SALES_DISCLOSURE) throw new Error("Selar disclosure must exactly identify the owner direct-sales relationship");
+      if (request.disclosureText?.trim() !== SELAR_DIRECT_SALES_DISCLOSURE) throw new Error("Selar disclosure must exactly identify the owner's own business and direct sales revenue");
       campaign.pendingDestinationUrl = APPROVED_SELAR_URL;
       campaign.pendingDisclosureText = request.disclosureText.trim();
       campaign.pendingDestinationVersion = crypto.createHash("sha256")
@@ -63,7 +63,7 @@ export function manageCampaign(config, request, actor, now = new Date().toISOStr
 
   if (campaign.type === "selar_digital_product") {
     if (request.destinationUrl !== APPROVED_SELAR_URL) throw new Error("Selar destination must exactly match the approved URL");
-    if (request.disclosureText?.trim() !== SELAR_DIRECT_SALES_DISCLOSURE) throw new Error("Selar disclosure must exactly identify the owner direct-sales relationship");
+    if (request.disclosureText?.trim() !== SELAR_DIRECT_SALES_DISCLOSURE) throw new Error("Selar disclosure must exactly identify the owner's own business and direct sales revenue");
     if (request.confirmOwnerApproval !== true) throw new Error("Explicit owner approval of the exact preview is required before activation");
     const submittedDisclosure = request.disclosureText.trim();
     const expectedPreviewVersion = crypto.createHash("sha256")
