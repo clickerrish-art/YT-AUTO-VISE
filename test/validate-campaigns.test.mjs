@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import crypto from "node:crypto";
 import { validateCampaigns } from "../scripts/validate-campaigns.mjs";
 
 const baseline = JSON.parse(fs.readFileSync(new URL("../config/campaigns.json", import.meta.url), "utf8"));
@@ -45,6 +46,25 @@ test("campaign validator rejects duplicate IDs and misleading disclosure", () =>
   assert.ok(errors.some(error => error.includes("Selar disclosure must accurately identify")));
 });
 
+test("campaign approval timestamps must be calendar-valid ISO values with explicit timezones", () => {
+  const makeApprovedSelar = approvedAt => {
+    const config = structuredClone(baseline);
+    const selar = config.campaigns.find(c => c.type === "selar_digital_product");
+    selar.disclosureApprovalStatus = "OWNER_APPROVED";
+    selar.approval = {
+      approvedBy: "owner",
+      approvedAt,
+      destinationVersion: crypto.createHash("sha256")
+        .update(selar.destinationUrl + "\n" + selar.disclosureText.trim())
+        .digest("hex")
+    };
+    return config;
+  };
+  for (const invalid of ["2026-02-30T10:00:00Z", "2026-11-09T10:00:00", "2026-11-09T25:00:00+02:00"]) {
+    assert.ok(validateCampaigns(makeApprovedSelar(invalid)).some(error => /calendar-valid timezone-qualified timestamp/i.test(error)), invalid);
+  }
+  assert.deepEqual(validateCampaigns(makeApprovedSelar("2026-11-09T10:00:00+02:00")), []);
+});
 
 test("generic external affiliate activation requires a verified HTTPS destination and explicit disclosure approval", () => {
   const bad = structuredClone(baseline);
