@@ -47,6 +47,18 @@ export function validateProductPromotionGate(product, metadata, options = {}) {
 
   const compensation = gate.compensation ?? {};
   const directSalesRevenue = compensation.type === "direct_sales_revenue";
+  // Owner-confirmed business rule: Selar is the owner's own storefront;
+  // products hosted anywhere else are affiliate promotions.
+  let productHost = "";
+  try { productHost = new URL(product.url).hostname.toLowerCase(); } catch {}
+  const expectedCompensationType = productHost === "selar.com" || productHost.endsWith(".selar.com")
+    ? "direct_sales_revenue"
+    : "affiliate";
+  if (hasText(product.url) && compensation.type !== expectedCompensationType) {
+    errors.push(expectedCompensationType === "direct_sales_revenue"
+      ? "Selar products must be classified as direct_sales_revenue, not affiliate"
+      : "non-Selar products must be classified as affiliate promotions");
+  }
   const acceptedCompensationStatuses = directSalesRevenue
     ? new Set(["OWNER_CONFIRMED", "VERIFIED"])
     : new Set(["VERIFIED"]);
