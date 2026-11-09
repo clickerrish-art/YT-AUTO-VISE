@@ -27,7 +27,7 @@ test("explicit private upload validates all artifact-bound inputs before ledger 
   for (const variable of ["METADATA_PATH", "VIDEO_PATH", "JOB_ID", "APPROVAL_PATH", "AUTHORIZATION_PATH"]) {
     assert.match(privateUploadJob, new RegExp(variable));
   }
-  assert.match(privateUploadJob, /JOB_ID.*A-Za-z0-9/);
+  assert.match(privateUploadJob, /A-Za-z0-9:_-/);
   assert.match(privateUploadJob, /CONFIRM_PRIVATE_UPLOAD: \\$\\{\\{ inputs\\.confirm_private_upload \\}\\}/);
   assert.match(privateUploadJob, /YOUTUBE_EMERGENCY_STOP: \\$\\{\\{ inputs\\.confirm_emergency_stop_release == 'YES'/);
 });
