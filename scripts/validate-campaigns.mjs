@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 export const APPROVED_SELAR_URL = "https://selar.com/0u19v8u99l";
+export const SELAR_DIRECT_SALES_DISCLOSURE = "This product is sold through my own Selar business; purchases generate revenue for my business.";
 const allowedTypes = new Set(["selar_digital_product", "safari_affiliate"]);
 const allowedStatuses = new Set(["ACTIVE_FOR_DRAFTS_ONLY", "INACTIVE"]);
 
@@ -23,9 +24,10 @@ export function validateCampaigns(config) {
     if (campaign.type === "selar_digital_product") {
       if (campaign.destinationUrl !== APPROVED_SELAR_URL) errors.push("Selar destination must exactly match the approved URL for " + campaign.id);
       if (campaign.destinationValidation !== "exact_approved_allowlist") errors.push("Selar destination must use the exact approved allowlist for " + campaign.id);
+      if (campaign.compensationType !== "direct_sales_revenue") errors.push("Selar campaign must be classified as direct sales revenue for " + campaign.id);
       if (campaign.ownerApproved !== true) errors.push("Selar campaign requires owner approval for " + campaign.id);
       if (!["ACTIVE_FOR_DRAFTS_ONLY", "INACTIVE"].includes(campaign.status)) errors.push("Selar campaign must be active for drafts only or inactive");
-      if (typeof campaign.disclosureText !== "string" || !campaign.disclosureText.trim()) errors.push("Selar disclosure text is required for " + campaign.id);
+      if (campaign.disclosureText !== SELAR_DIRECT_SALES_DISCLOSURE) errors.push("Selar disclosure must accurately identify the owner direct-sales relationship for " + campaign.id);
     }
     if (campaign.type === "safari_affiliate") {
       if (campaign.status === "INACTIVE") {
