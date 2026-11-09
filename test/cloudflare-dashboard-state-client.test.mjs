@@ -149,7 +149,7 @@ test("backup and restore return verified, monotonic receipts", async t => {
       return;
     }
     assert.equal(req.url, "/api/backups/restore");
-    assert.deepEqual(body, { backupId: "backup-1", expectedRevision: 4 });
+    assert.deepEqual(body, { backupId: "backup-1", expectedRevision: 4, confirmRestore: true });
     respond(res, 200, { revision: 5, state: state(["restored"]) }, { etag: '"5"' });
   });
   const backup = await client.createBackup();
