@@ -4,6 +4,8 @@
  * This script never inserts, updates, schedules, or deletes YouTube content.
  */
 import { pathToFileURL } from "node:url";
+import fs from "node:fs";
+import path from "node:path";
 
 const APPROVED_HANDLE = "sonicvhibez";
 const ALLOWED_VISIBILITY = new Set(["public", "private", "unlisted"]);
@@ -118,6 +120,7 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
   }
 
   const counts = { public: 0, private: 0, unlisted: 0 };
+  const inventoryVideos = [];
   let verifiedVideoCount = 0;
   for (let offset = 0; offset < videoIds.length; offset += 50) {
     const batch = videoIds.slice(offset, offset + 50);
@@ -142,6 +145,7 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
       }
       returned.add(video.id);
       counts[visibility] += 1;
+      inventoryVideos.push({ id: video.id, channelId: configuredChannelId, visibility, youtubePublishedAt: video.snippet?.publishedAt ?? null, scheduledPublishAt: video.status?.publishAt ?? null, duration: video.contentDetails?.duration ?? null, format: "UNCLASSIFIED_REQUIRES_OWNER_REVIEW" });
       verifiedVideoCount += 1;
     }
     if (returned.size !== expected.size) {
@@ -151,6 +155,31 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
 
   if (verifiedVideoCount !== expectedTotal) {
     throw new Error("verified video count does not match the uploads playlist total");
+  }
+  const inventoryPathValue = env.YOUTUBE_HISTORY_INVENTORY_PATH;
+  if (inventoryPathValue) {
+    if (typeof inventoryPathValue !== "string" || !inventoryPathValue.trim() ||
+        path.isAbsolute(inventoryPathValue) || path.normalize(inventoryPathValue).split(path.sep).includes("..")) {
+      throw new Error("YOUTUBE_HISTORY_INVENTORY_PATH must be a safe repository-relative path");
+    }
+    const inventoryPath = path.resolve(process.cwd(), inventoryPathValue);
+    const inventory = {
+      schemaVersion: 1, complete: true, mode: "READ_ONLY_OWNER_REVIEW_REQUIRED",
+      channelId: configuredChannelId, channelTitle: channel.snippet?.title ?? "",
+      channelHandle: channel.snippet?.customUrl ?? "", verifiedAt: new Date().toISOString(),
+      uploadsPlaylistPages: pages, totalUploads: verifiedVideoCount,
+      visibilityCounts: counts, videos: inventoryVideos,
+      reviewNotes: [
+        "This is a complete read-only uploads-playlist inventory, not an owner-approved publication-history reconciliation.",
+        "Classify each video's format and verify actual public publication timestamps before using it for cadence decisions.",
+        "youtubePublishedAt is the YouTube API snippet timestamp; scheduledPublishAt is not an actual publication timestamp.",
+        "Reconcile every local pending or uncertain upload attempt separately."
+      ]
+    };
+    fs.mkdirSync(path.dirname(inventoryPath), { recursive: true, mode: 0o700 });
+    const temporaryPath = inventoryPath + ".tmp-" + process.pid;
+    fs.writeFileSync(temporaryPath, JSON.stringify(inventory, null, 2) + "\n", { mode: 0o600, flag: "wx" });
+    fs.renameSync(temporaryPath, inventoryPath);
   }
   return Object.freeze({
     status: "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
