@@ -86,7 +86,10 @@ test("read-only verification fails closed when pagination or video details are i
 
 test("read-only verification rejects a mismatched configured channel ID and missing secrets", async () => {
   await assert.rejects(
-    verifySonicVhibezChannel({ env: { ...env, SONICVHIBEZ_CHANNEL_ID: "UC0000000000000000000000" } }),
+    verifySonicVhibezChannel({
+      env: { ...env, SONICVHIBEZ_CHANNEL_ID: "UC0000000000000000000000" },
+      youtubeFactory: () => ({ channels: { list: async () => ({ data: { items: [channel] } }) } })
+    }),
     /does not own or manage the configured SonicVhibez channel ID/
   );
   await assert.rejects(
