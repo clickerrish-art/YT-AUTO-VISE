@@ -172,7 +172,7 @@ export class CloudflareDashboardStateClient {
     if (typeof backupId !== "string" || !backupId.trim()) throw new TypeError("backupId is required");
     if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 1) throw new TypeError("expectedRevision must be a positive integer");
     const { payload, etag } = await this.request("/api/backups/restore", {
-      method: "POST", body: { backupId, expectedRevision }
+      method: "POST", body: { backupId, expectedRevision, confirmRestore: true }
     });
     const revision = Number(payload?.revision);
     if (!Number.isSafeInteger(revision) || revision !== expectedRevision + 1 || !payload?.state ||
