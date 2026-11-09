@@ -73,7 +73,8 @@ Use one genuine, rights-cleared animal image in its actual habitat. Keep the ani
 - [ ] Confirm final runtime is about 55 seconds without unnatural time-stretching.
 - [ ] Check captions at phone size, audio levels, framing and vertical safe areas.
 - [x] Seller identity verified as Click 47 from the exact Selar listing on 6 November 2026; the Vault listing uses Nature Frontiers branding.
-- [ ] Obtain explicit SonicVhibez brand authorization, verify affiliate/paid/no-compensation status and approve the exact viewer-facing disclosure.
+- [x] Owner-confirmed Selar relationship: the owner's own business; purchases generate direct sales revenue, not affiliate commission. SonicVhibez promotion authorization is separately recorded.
+- [ ] Obtain owner approval of the exact viewer-facing disclosure wording, with a timezone-qualified timestamp and approval reference.
 - [ ] Verify SonicVhibez destination identity and inspect complete public/private/unlisted timestamp history before any calendar decision.
 - [ ] Keep private and unscheduled; do not upload or publish until every gate passes.
 - [ ] Human playback and compliance review must be recorded against the final media and thumbnail hashes.
