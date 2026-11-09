@@ -78,8 +78,16 @@ export function validateHistoryReconciliationSnapshot({ channelId, remoteVideos,
     }
     const observedTimestamp = video.snippet?.publishedAt;
     const observedTimestampMs = strictIsoTimestamp(observedTimestamp);
-    if (!Number.isFinite(observedTimestampMs)) throw new Error("remote video is missing a valid timestamp: " + video.id);
-    if (observedTimestampMs > nowTimestamp) throw new Error("remote video timestamp must not be in the future: " + video.id);
+    if (!Number.isFinite(observedTimestampMs)) {
+      throw new Error(visibility === "private"
+        ? "remote private upload is missing a valid uploadedAt timestamp: " + video.id
+        : "remote video is missing an actual publication timestamp: " + video.id);
+    }
+    if (observedTimestampMs > nowTimestamp) {
+      throw new Error(visibility === "private"
+        ? "remote private upload timestamp must not be in the future: " + video.id
+        : "remote video actual publication timestamp must not be in the future: " + video.id);
+    }
     remoteById.set(video.id, {
       id: video.id,
       observedTimestamp: new Date(observedTimestampMs).toISOString(),
