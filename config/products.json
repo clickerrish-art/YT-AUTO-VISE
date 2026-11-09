@@ -21,11 +21,11 @@
           "note": "Brand-level permission confirmed by owner. This does not verify compensation or approve viewer-facing disclosure; those remain separate release gates."
         },
         "compensation": {
-          "status": "UNVERIFIED",
-          "type": "",
-          "verifiedAt": "",
-          "evidenceReference": "",
-          "note": "YouTube channel monetization is separate from the Selar seller/payment arrangement and is not evidence of an affiliate commission or other compensation from this product."
+          "status": "OWNER_CONFIRMED",
+          "type": "NONE",
+          "verifiedAt": "2026-11-09",
+          "evidenceReference": "Owner confirmed in the ChatGPT conversation on 2026-11-09 that SonicVhibez receives no compensation for promoting this product.",
+          "note": "Owner confirmation applies to the Complete YouTube Wildlife Creator's Vault only. It does not approve the viewer-facing wording or complete content/compliance review."
         },
         "disclosure": {
           "status": "UNVERIFIED",
