@@ -90,7 +90,7 @@ test("campaign management API previews and deactivates the approved campaign wit
 
   base = await waitForReady(instance);
   const headers = { "content-type": "application/json", "x-operator-token": token };
-  const disclosureText = "Promotional link: review current details and terms on the seller page.";
+  const disclosureText = "This product is sold through my own Selar business; purchases generate revenue for my business.";
 
   const invalidResponse = await fetch(base + "/api/campaigns/manage", {
     method: "POST",
