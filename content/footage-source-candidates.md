@@ -27,6 +27,19 @@ These are relevant candidates for short establishing shots, not approved assets:
 
 The detail URLs above are candidates; if a link redirects, search the exact package title from the official library. The page-level reuse statement is not a substitute for the package's actual slate and credits.
 
+## Acquisition evidence — 9 November 2026
+
+A review-only acquisition run downloaded two official NOAA Fisheries B-roll package files. Workflow run: `42589870532`; artifact: `sonicvhibez-noaa-broll-candidates` (artifact ID `13660453540`). The artifact is retained in GitHub Actions; these source files are not committed to the repository.
+
+| Candidate | Technical inspection | SHA-256 | Opening-slate attribution observed |
+|---|---|---|---|
+| B-Roll: Spiny Lobsters in California | MP4, H.264/AAC, 1280×720, 380.810 s, 100,223,664 bytes | `1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb` | “NOAA’s Office of National Marine Sanctuaries” |
+| B-Roll: Leatherback Turtle Tagging | MP4, H.264/AAC, 1280×720, 628.724 s, 166,534,262 bytes | `a2b0252cd5fdda4bfe09d5953df55fbebf748c8bba3b0139f2f8ebc755b2f568` | “NOAA Fisheries” |
+
+The official NOAA Fisheries B-roll library states that B-roll packages are public domain for download and use with NOAA Fisheries credit, and that each package’s opening slate provides specific attribution, possible third-party contributions and applicable permit numbers. The package pages identify the lobster footage as California spiny lobster (*Panulirus interruptus*) and the turtle footage as NOAA researchers tagging leatherback turtles in the Gulf of Mexico near Destin, Florida. Official policy: https://videos.fisheries.noaa.gov/category/videos/b-roll-packages---all
+
+**Review status: DOWNLOADED; OPENING SLATES AND TECHNICAL HEADERS INSPECTED; NOT APPROVED FOR PRODUCTION.** The full packages have not yet received exhaustive clip-by-clip visual/credit review, the source audio has not been cleared, and no owner/human rights approval has been recorded. Keep `rightsEvidenceReviewed=false`, `humanApproved=false`, and `rightsConfirmed=false`. Do not extract, render, or publish these clips until the remaining review is complete.
+
 ## Download and clearance checklist
 
 For each selected package:
