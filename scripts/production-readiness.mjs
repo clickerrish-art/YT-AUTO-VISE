@@ -22,6 +22,7 @@ const queueExists = process.env.QUEUE_PATH
 const manifestPath = "content/render-manifest.json";
 const metadataPath = "content/next-short.json";
 const videoPath = "media/next-short.mp4";
+const youtubeVerificationPath = "content/youtube-channel-verification-status.json";
 const schedulePath = "config/weekly-content-plan.json";
 const productsPath = "config/products.json";
 const approvedProductUrl = "https://selar.com/0u19v8u99l";
@@ -202,7 +203,22 @@ for (const key of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRES
 if (process.env.SONICVHIBEZ_CHANNEL_ID && !/^UC[a-zA-Z0-9_-]{22}$/.test(process.env.SONICVHIBEZ_CHANNEL_ID)) {
   blockers.push("SONICVHIBEZ_CHANNEL_ID does not match the expected YouTube channel-ID format; verify it manually.");
 }
+if (!exists(youtubeVerificationPath)) {
+  blockers.push("LIVE BLOCKER: read-only YouTube identity and uploads inventory verification evidence is missing.");
+} else {
+  try {
+    const verification = JSON.parse(fs.readFileSync(path.join(root, youtubeVerificationPath), "utf8"));
+    if (verification.status !== "PASS_READ_ONLY_IDENTITY_AND_INVENTORY") {
+      const code = typeof verification.oauth?.errorCode === "string" ? verification.oauth.errorCode : "not-passing";
+      blockers.push(`LIVE BLOCKER: read-only YouTube identity and uploads inventory verification is ${verification.status ?? "unknown"}; OAuth error ${code}.`);
+    }
+  } catch {
+    blockers.push("YouTube channel verification status file is not valid JSON.");
+  }
+}
 function resolutionFor(blocker) {
+  if (/read-only YouTube identity and uploads inventory verification.*invalid_client/i.test(blocker)) return "Google rejected the existing OAuth client ID/secret pair. Verify the matching values for the existing single client in GitHub Actions secrets; do not create another client or share secret values. Rerun the read-only verification workflow after correcting the pair.";
+  if (/read-only YouTube identity and uploads inventory verification evidence is missing/i.test(blocker)) return "Run the read-only YouTube identity and uploads inventory workflow and retain its status report. Do not upload or publish while the check is missing or blocked.";
   if (/product promotion gate/i.test(blocker)) return "Owner-confirmed business rule: Selar is the owner’s own business and purchases generate direct sales revenue; do not classify this Selar product as an affiliate or ask the owner to reconfirm the relationship. Viewer-facing disclosure remains UNVERIFIED and is not approved: obtain explicit owner approval of the exact disclosure wording with a calendar-valid timezone-qualified timestamp and non-empty approval reference. Keep publication disabled until that separate approval and all other gates are verified.";
   if (/CADENCE DECISION REQUIRED/i.test(blocker)) return "Choose a feasible owner-approved cadence that preserves the 72-hour minimum spacing and long_form → long_form → short cycle; record the approval with an explicit timezone-aware timestamp and non-empty reference in config/weekly-content-plan.json. Keep publication disabled until the decision is recorded.";
   if (/history|uncertain upload|remote/i.test(blocker)) return "Authenticate to the approved SonicVhibez channel, retrieve public/private/unlisted history, reconcile every pending or uncertain attempt, and retain the reviewed reconciliation ledger.";
@@ -227,6 +243,11 @@ function controlOwnerFor(message) {
 }
 
 function evidenceInspectedFor(message) {
+  if (/read-only YouTube identity|OAuth error/i.test(message)) return {
+    kind: "repository-path-check",
+    path: youtubeVerificationPath,
+    observed: message
+  };
   if (/product promotion gate/i.test(message)) return { kind: "repository-path-check", path: productsPath, observed: message };
   if (/YOUTUBE_CLIENT_ID|YOUTUBE_CLIENT_SECRET|YOUTUBE_REFRESH_TOKEN|SONICVHIBEZ_CHANNEL_ID/.test(message)) {
     return {
