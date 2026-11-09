@@ -38,4 +38,12 @@ jobs:
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
+          YOUTUBE_HISTORY_INVENTORY_PATH: artifacts/youtube-history-inventory.json
         run: node scripts/verify-youtube-channel.mjs
+      - name: Retain complete private/public/unlisted inventory for owner review
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-youtube-history-inventory
+          path: artifacts/youtube-history-inventory.json
+          if-no-files-found: error
+          retention-days: 7
