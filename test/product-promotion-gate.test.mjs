@@ -66,6 +66,34 @@ test("no-material-connection classification requires a matching non-paid flag an
   assert.ok(validateProductPromotionGate(fixture.product, fixture.metadata).some(error => /hasPaidPromotion must match/i.test(error)));
 });
 
+test("Selar is direct business revenue and non-Selar product links are affiliate promotions", () => {
+  const selar = verifiedFixture("direct_sales_revenue");
+  selar.product.promotionGate.compensation.status = "OWNER_CONFIRMED";
+  selar.product.promotionGate.compensation.verifiedAt = "2026-11-09";
+  selar.product.promotionGate.compensation.evidenceReference = "owner-confirmed-own-Selar-business";
+  selar.product.promotionGate.disclosure.text = "This product is sold through my own Selar business; purchases generate revenue for my business.";
+  selar.product.promotionGate.disclosure.approvedAt = "2026-11-09T08:00:00Z";
+  selar.metadata.hasPaidPromotion = true;
+  selar.metadata.description = "Creator lesson. " + selar.product.promotionGate.disclosure.text;
+  selar.metadata.promotionDisclosure = { status: "APPROVED", type: "direct_sales_revenue", text: selar.product.promotionGate.disclosure.text };
+  assert.deepEqual(validateProductPromotionGate(selar.product, selar.metadata), []);
+
+  const external = verifiedFixture("affiliate");
+  external.product.url = "https://example-affiliate-store.test/product";
+  external.product.promotionGate.seller.sourceUrl = external.product.url;
+  assert.deepEqual(validateProductPromotionGate(external.product, external.metadata), []);
+
+  const misclassifiedSelar = verifiedFixture("affiliate");
+  assert.ok(validateProductPromotionGate(misclassifiedSelar.product, misclassifiedSelar.metadata)
+    .some(error => /Selar products must be classified as direct_sales_revenue/i.test(error)));
+
+  const misclassifiedExternal = verifiedFixture("none");
+  misclassifiedExternal.product.url = "https://serengeti.example/product";
+  misclassifiedExternal.product.promotionGate.seller.sourceUrl = misclassifiedExternal.product.url;
+  assert.ok(validateProductPromotionGate(misclassifiedExternal.product, misclassifiedExternal.metadata)
+    .some(error => /non-Selar products must be classified as affiliate promotions/i.test(error)));
+});
+
 test("promotion evidence rejects timezone-free or invalid verification timestamps", () => {
   const fixture = verifiedFixture("paid");
   fixture.product.promotionGate.seller.verifiedAt = "2026-11-06T08:00:00";
