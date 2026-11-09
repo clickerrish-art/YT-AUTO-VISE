@@ -33,7 +33,7 @@ export function validateProductPromotionGate(product, metadata, options = {}) {
   }
 
   const seller = gate.seller ?? {};
-  if (seller.status !== "VERIFIED") errors.push("seller details must be reverified from the exact Selar listing");
+  if (seller.status !== "VERIFIED") errors.push("seller details must be reverified from the exact product listing");
   if (!hasText(seller.name)) errors.push("verified seller name must be recorded");
   if (seller.sourceUrl !== product.url) errors.push("seller evidence URL must match the exact approved product URL");
   if (!isValidZonedIsoTimestamp(seller.verifiedAt)) errors.push("seller verification needs a calendar-valid timezone-qualified timestamp");
@@ -80,10 +80,10 @@ export function validateProductPromotionGate(product, metadata, options = {}) {
   if (!isValidZonedIsoTimestamp(disclosure.approvedAt)) errors.push("disclosure approval needs a calendar-valid timezone-qualified timestamp");
   if (!hasText(disclosure.approvalReference)) errors.push("disclosure approval needs a non-empty owner approval reference");
 
-  if (metadata && typeof metadata === "object" && COMPENSATION_TYPES.has(compensation.type)) {
+  if (metadata && typeof metadata === "object" && COMPENSATION_TYPES.has(compensationType)) {
     const expectedPaidFlag = compensationType !== "none";
     if (metadata.hasPaidPromotion !== expectedPaidFlag) {
-      errors.push("hasPaidPromotion must match the verified affiliate/paid/none relationship");
+      errors.push("hasPaidPromotion must match the verified direct-sales/affiliate/paid/none relationship");
     }
   }
 
