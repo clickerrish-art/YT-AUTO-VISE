@@ -1,6 +1,6 @@
 # Current checkpoint — 9 November 2026, 16:32 UTC
 
-**Implementation branch HEAD:** `f9428de9f5c669cfe9df7ea77c638f3fb907e831` · **main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged · **PR #1:** OPEN, DRAFT, UNMERGED. This checkpoint supersedes older statements below that still describe YouTube OAuth as `invalid_client`.
+**Implementation branch HEAD:** `668fba344c9accdf5a678b5ce5240318e7fff256` · **main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged · **PR #1:** OPEN, DRAFT, UNMERGED. This checkpoint supersedes older statements below that still describe YouTube OAuth as `invalid_client`.
 
 ## Verified YouTube identity and inventory
 
@@ -20,8 +20,8 @@
 
 ## Current readiness and test evidence
 
-- Automation/security run [42654495622](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42654495622) **PASS** on SHA `0333844d1b3fdb7fe35e27af3ab731d431792d75`: 136/136 Node test files, 34 Python tests, zero skips, npm audit 0 vulnerabilities. This predates the final metadata channel-ID correction and latest test edits; exact-HEAD validation is pending.
-- Production readiness run [42654868732](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42654868732) reported HOLD with 13 blockers on SHA `691a79ca976bbf8a807b3c269c973941d45f430e`. Two channel-ID findings have since been corrected in the implementation branch. The exact-HEAD readiness run is pending; do not reuse the old blocker count as current.
+- Automation/security run [42654495622](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42654495622) **PASS** on SHA `0333844d1b3fdb7fe35e27af3ab731d431792d75`: 136/136 Node test files, 34 Python tests, zero skips, npm audit 0 vulnerabilities. The newer exact-branch automation run [42655988192](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42655988192) was still in progress at the last check; the current HEAD differs from its tested SHA only by the duplicate-note cleanup in held metadata.
+- Production readiness [42655987653](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42655987653) **HOLD — 11 blockers** on SHA `0f3ed7813966e524df57ce6d4f5323832778b8a1`. The two metadata channel-ID findings are now cleared. Remaining gates: full upload-attempt/history reconciliation; genuine Short and long-form render manifests; final `media/next-short.mp4`; human metadata review; genuine rights evidence; human compliance review; and exact Selar disclosure approval, timestamp, reference and approved metadata state. The current HEAD `668fba344c9accdf5a678b5ce5240318e7fff256` differs only by a note cleanup; exact-HEAD readiness validation is queued.
 - The repository contains example manifests, not genuine completed Short/long-form manifests or `media/next-short.mp4`. Library search found project instructions and audit documents, not a final wildlife video or rights licence. Rights confirmation, human compliance review, exact Selar disclosure approval, and complete upload-attempt reconciliation remain genuine gates.
 - Publishing remains disabled. No upload, public publication, OAuth write authorization, main edit, merge, reset, rebase or force-push occurred.
 
