@@ -11,11 +11,11 @@ import { google } from "googleapis";
 import { verifySonicVhibezChannel } from "./verify-youtube-channel.mjs";
 
 export const SEO_SEED_QUERIES = Object.freeze([
-  "African wildlife documentary",
-  "wildlife encounters",
-  "animal encounters",
-  "African safari animals",
-  "wildlife documentary"
+  "wildlife documentary",
+  "animal documentary",
+  "wild animals",
+  "African wildlife",
+  "animal encounters"
 ]);
 const WINDOW_DAYS = 90;
 const MAX_RESULTS_PER_QUERY = 10;
