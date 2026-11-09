@@ -94,7 +94,7 @@ test("history reconciliation separates future scheduled videos from actual publi
     pendingAttempts: [],
     proposedAt: "2026-10-12T15:00:00.000Z",
     jobId: "job-4",
-    format: "short"
+    format: "long_form"
   }), /blocked upload/);
   assert.doesNotThrow(() => assertNextPublicationAllowed({
     history: snapshot.history,
@@ -102,7 +102,7 @@ test("history reconciliation separates future scheduled videos from actual publi
     pendingAttempts: [],
     proposedAt: "2026-10-13T15:00:00.000Z",
     jobId: "job-4",
-    format: "short"
+    format: "long_form"
   }), "the recorded owner approval clears the cadence-decision blocker while history and slot checks remain enforced");
   assert.throws(() => validateHistoryReconciliationSnapshot({
     channelId,
@@ -184,11 +184,11 @@ test("unresolved or uncertain upload attempts block new uploads", () => {
 test("cycle gate uses verified history and requires the next expected format and 72-hour gap", () => {
   const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
   assert.doesNotThrow(
-    () => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-10-07T15:00:00.000Z", jobId: "job-3", format: "short" }),
+    () => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-10-07T15:00:00.000Z", jobId: "job-3", format: "long_form" }),
     "an approved cadence permits a valid next-format slot exactly 72 elapsed hours after the prior publication"
   );
-  assert.throws(() => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-10-07T14:59:59.999Z", jobId: "job-3", format: "short" }), /blocked upload/);
-  assert.throws(() => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-10-07T15:00:00.000Z", jobId: "job-3", format: "long_form" }), /next format must be short/);
+  assert.throws(() => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-10-07T14:59:59.999Z", jobId: "job-3", format: "long_form" }), /blocked upload/);
+  assert.throws(() => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-10-07T15:00:00.000Z", jobId: "job-3", format: "short" }), /next format must be long_form/);
 });
 
 
@@ -199,14 +199,14 @@ test("private upload gate accepts the approved cadence but still enforces all ot
     pendingAttempts: [],
     proposedAt: "2026-10-07T15:00:00.000Z",
     jobId: "job-owner-cadence",
-    format: "short"
+    format: "long_form"
   }));
   assert.throws(() => assertNextPublicationAllowed({
     history,
     pendingAttempts: [{ jobId: "uncertain-job", status: "RECOVERY_REQUIRED" }],
     proposedAt: "2026-10-07T15:00:00.000Z",
     jobId: "job-owner-cadence",
-    format: "short"
+    format: "long_form"
   }), /unresolved\/uncertain outcome and must be reconciled/);
 });
 
