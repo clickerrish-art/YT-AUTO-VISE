@@ -131,8 +131,8 @@ export function validateHistoryReconciliationSnapshot({ channelId, remoteVideos,
       if (item.publicationState === "PREVIOUSLY_PUBLISHED") {
         const actualPublishedAt = strictIsoTimestamp(item.actualPublishedAt);
         const evidenceReference = typeof item.publicationEvidenceReference === "string" ? item.publicationEvidenceReference.trim() : "";
-        if (!Number.isFinite(actualPublishedAt) || actualPublishedAt < uploadedAt) {
-          throw new Error("previously published private video requires an actualPublishedAt no earlier than uploadedAt for " + item.id);
+        if (!Number.isFinite(actualPublishedAt) || actualPublishedAt < uploadedAt || actualPublishedAt > nowTimestamp) {
+          throw new Error("previously published private video requires an actualPublishedAt between uploadedAt and the current verification time for " + item.id);
         }
         if (evidenceReference.length < 12 || /placeholder|replace_with|todo|unknown|tbd/i.test(evidenceReference)) {
           throw new Error("previously published private video requires a real publicationEvidenceReference for " + item.id);
