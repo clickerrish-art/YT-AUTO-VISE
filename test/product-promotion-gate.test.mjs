@@ -112,6 +112,30 @@ test("Selar is direct business revenue and non-Selar product links are affiliate
     .some(error => /non-Selar products must be classified as affiliate promotions/i.test(error)));
 });
 
+test("Selar host matching rejects deceptive suffixes and accepts genuine Selar subdomains", () => {
+  const deceptive = verifiedFixture("affiliate");
+  deceptive.product.url = "https://selar.com.attacker.example/product";
+  deceptive.product.promotionGate.seller.sourceUrl = deceptive.product.url;
+  assert.equal(validateProductPromotionGate(deceptive.product, deceptive.metadata).length, 0);
+
+  const genuineSubdomain = verifiedFixture("direct_sales_revenue");
+  genuineSubdomain.product.url = "https://shop.selar.com/product";
+  genuineSubdomain.product.promotionGate.seller.sourceUrl = genuineSubdomain.product.url;
+  genuineSubdomain.product.promotionGate.compensation.status = "OWNER_CONFIRMED";
+  genuineSubdomain.product.promotionGate.compensation.verifiedAt = "2026-11-09";
+  genuineSubdomain.product.promotionGate.compensation.evidenceReference = "owner-confirmed-direct-Selar-sales";
+  genuineSubdomain.product.promotionGate.disclosure.text = "This is sold through my own Selar business.";
+  genuineSubdomain.product.promotionGate.disclosure.approvedAt = "2026-11-09T08:00:00Z";
+  genuineSubdomain.metadata.hasPaidPromotion = true;
+  genuineSubdomain.metadata.description = "Creator lesson. " + genuineSubdomain.product.promotionGate.disclosure.text;
+  genuineSubdomain.metadata.promotionDisclosure = {
+    status: "APPROVED",
+    type: "direct_sales_revenue",
+    text: genuineSubdomain.product.promotionGate.disclosure.text
+  };
+  assert.deepEqual(validateProductPromotionGate(genuineSubdomain.product, genuineSubdomain.metadata), []);
+});
+
 test("promotion evidence rejects timezone-free or invalid verification timestamps", () => {
   const fixture = verifiedFixture("paid");
   fixture.product.promotionGate.seller.verifiedAt = "2026-11-06T08:00:00";
