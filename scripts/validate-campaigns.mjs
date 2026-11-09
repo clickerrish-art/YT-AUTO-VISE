@@ -2,6 +2,7 @@ import fs from "node:fs";
 import crypto from "node:crypto";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 
 export const APPROVED_SELAR_URL = "https://selar.com/0u19v8u99l";
 export const SELAR_DIRECT_SALES_DISCLOSURE = "This product is sold through my own Selar business; purchases generate revenue for my business.";
@@ -38,9 +39,9 @@ export function validateCampaigns(config) {
           .digest("hex");
         if (!campaign.approval || typeof campaign.approval.approvedBy !== "string" ||
             campaign.approval.approvedBy.trim().length < 2 ||
-            !Number.isFinite(Date.parse(campaign.approval.approvedAt)) ||
+            !isValidZonedIsoTimestamp(campaign.approval.approvedAt) ||
             campaign.approval.destinationVersion !== expectedVersion) {
-          errors.push("owner-approved Selar disclosure requires timestamped approval bound to the exact destination and wording for " + campaign.id);
+          errors.push("owner-approved Selar disclosure requires a calendar-valid timezone-qualified timestamp and approval bound to the exact destination and wording for " + campaign.id);
         }
       } else if (campaign.approval) {
         errors.push("pending Selar disclosure must not carry an approval record for " + campaign.id);
@@ -74,9 +75,9 @@ export function validateCampaigns(config) {
           .update(campaign.destinationUrl + "\n" + String(campaign.disclosureText ?? "").trim())
           .digest("hex");
         if (!campaign.approval || typeof campaign.approval.approvedBy !== "string" || campaign.approval.approvedBy.trim().length < 2 ||
-            !Number.isFinite(Date.parse(campaign.approval.approvedAt)) ||
+            !isValidZonedIsoTimestamp(campaign.approval.approvedAt) ||
             campaign.approval.destinationVersion !== expectedDestinationVersion) {
-          errors.push("active affiliate campaign requires a timestamped approval bound to the exact destination and disclosure");
+          errors.push("active affiliate campaign requires a calendar-valid timezone-qualified timestamp and approval bound to the exact destination and disclosure");
         }
       }
     }
