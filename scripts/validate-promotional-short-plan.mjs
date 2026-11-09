@@ -112,9 +112,13 @@ export function validatePromotionalShortPlan(plan, products) {
         errors.push(`${label}: description must contain the exact product URL`);
       }
       if (!/DISCLOSURE HOLD/i.test(item?.description ?? "")) errors.push(`${label}: description must retain an explicit disclosure hold`);
-      if (item?.disclosure?.status !== "HOLD" || item.disclosure.relationshipStatus !== "UNVERIFIED"
+      const expectedRelationshipStatus = product?.url && (() => {
+        try { const host = new URL(product.url).hostname.toLowerCase(); return host === "selar.com" || host.endsWith(".selar.com"); }
+        catch { return false; }
+      })() ? "OWNER_CONFIRMED_DIRECT_SALES" : "UNVERIFIED";
+      if (item?.disclosure?.status !== "HOLD" || item.disclosure.relationshipStatus !== expectedRelationshipStatus
           || item.disclosure.requiredBeforeRelease !== true) {
-        errors.push(`${label}: unresolved promotion relationship must remain on disclosure hold`);
+        errors.push(`${label}: disclosure must remain on HOLD with the exact relationship status recorded`);
       }
       if (!Array.isArray(item?.keywordPhrases) || item.keywordPhrases.length < 3
           || !item.keywordPhrases.some(row => typeof row?.phrase === "string" && row.phrase.toLowerCase() === item?.primaryKeyword?.toLowerCase())) {
