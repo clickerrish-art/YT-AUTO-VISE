@@ -75,7 +75,7 @@ test("campaign approval timestamps in the future are rejected", () => {
     approvedBy: "owner",
     approvedAt: future,
     destinationVersion: crypto.createHash("sha256")
-      .update(selar.destinationUrl + "\\n" + selar.disclosureText.trim())
+      .update(selar.destinationUrl + "\n" + selar.disclosureText.trim())
       .digest("hex")
   };
   assert.ok(validateCampaigns(selarConfig).some(error => /timestamp must not be in the future/i.test(error)));
@@ -92,7 +92,7 @@ test("campaign approval timestamps in the future are rejected", () => {
     approvedBy: "owner",
     approvedAt: future,
     destinationVersion: crypto.createHash("sha256")
-      .update(affiliate.destinationUrl + "\\n" + affiliate.disclosureText.trim())
+      .update(affiliate.destinationUrl + "\n" + affiliate.disclosureText.trim())
       .digest("hex")
   };
   assert.ok(validateCampaigns(affiliateConfig).some(error => /approval timestamp must not be in the future/i.test(error)));
