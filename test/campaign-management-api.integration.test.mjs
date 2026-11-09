@@ -186,3 +186,55 @@ test("campaign management API previews and deactivates the approved campaign wit
   assert.equal(state.audit.filter(event => event.action === "CAMPAIGN_DEACTIVATE" && event.campaignId === campaignId).length, 1);
   assert.equal(state.publishingEnabled, false);
 });
+
+
+test("generic affiliate campaign API requires preview and owner approval, then persists the isolated draft-only activation", async t => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-affiliate-api-"));
+  const token = "affiliate-api-acceptance-" + "x".repeat(40);
+  let instance = launchDashboard({ stateDir, token });
+  let base;
+  t.after(async () => {
+    if (instance?.child && instance.child.exitCode === null) {
+      try { await stopChild(instance.child); } catch { instance.child.kill("SIGKILL"); }
+    }
+    fs.rmSync(stateDir, { recursive: true, force: true });
+  });
+  base = await waitForReady(instance);
+  const headers = { "content-type": "application/json", "x-operator-token": token };
+  const campaignId = "external-affiliate-unconfigured";
+  const destinationUrl = "https://affiliate.example/serengeti?ref=sonicvhibez";
+  const disclosureText = "I may earn a commission if you book through this affiliate link.";
+  const previewResponse = await fetch(base + "/api/campaigns/manage", {
+    method: "POST", headers, body: JSON.stringify({ campaignId, action: "preview", destinationUrl, disclosureText })
+  });
+  const previewText = await previewResponse.text();
+  assert.equal(previewResponse.status, 200, previewText);
+  const preview = JSON.parse(previewText);
+  assert.equal(preview.previewOnly, true);
+  assert.equal(preview.campaign.status, "INACTIVE");
+  assert.equal(preview.publicPublishingEnabled, false);
+  const deniedActivation = await fetch(base + "/api/campaigns/manage", {
+    method: "POST", headers, body: JSON.stringify({ campaignId, action: "activate", destinationUrl, disclosureText })
+  });
+  assert.equal(deniedActivation.status, 400);
+  assert.match((await deniedActivation.json()).error, /Explicit owner approval/);
+  const activation = await fetch(base + "/api/campaigns/manage", {
+    method: "POST", headers, body: JSON.stringify({ campaignId, action: "activate", destinationUrl, disclosureText, confirmOwnerApproval: true })
+  });
+  const activationText = await activation.text();
+  assert.equal(activation.status, 200, activationText);
+  const saved = JSON.parse(activationText);
+  assert.equal(saved.campaign.status, "ACTIVE_FOR_DRAFTS_ONLY");
+  assert.equal(saved.campaign.compensationType, "affiliate");
+  assert.equal(saved.campaign.destinationUrl, destinationUrl);
+  assert.equal(saved.publicPublishingEnabled, false);
+  const state = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
+  const affiliate = state.campaigns.find(item => item.id === campaignId);
+  const selar = state.campaigns.find(item => item.id === "selar-wildlife-vault");
+  assert.equal(affiliate.status, "ACTIVE_FOR_DRAFTS_ONLY");
+  assert.equal(affiliate.destinationUrl, destinationUrl);
+  assert.equal(affiliate.approval.destinationVersion, affiliate.pendingDestinationVersion ?? affiliate.approval.destinationVersion);
+  assert.equal(selar.destinationUrl, approvedDestination);
+  assert.equal(selar.compensationType, "direct_sales_revenue");
+  assert.equal(state.publishingEnabled, false);
+});
