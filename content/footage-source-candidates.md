@@ -40,6 +40,29 @@ The official NOAA Fisheries B-roll library states that B-roll packages are publi
 
 **Review status: DOWNLOADED; OPENING SLATES AND TECHNICAL HEADERS INSPECTED; NOT APPROVED FOR PRODUCTION.** The full packages have not yet received exhaustive clip-by-clip visual/credit review, the source audio has not been cleared, and no owner/human rights approval has been recorded. Keep `rightsEvidenceReviewed=false`, `humanApproved=false`, and `rightsConfirmed=false`. Do not extract, render, or publish these clips until the remaining review is complete.
 
+
+## Independent visual sample review — 9 November 2026
+
+The latest retained acquisition artifact was downloaded for a second, independent review:
+- GitHub Actions artifact: `sonicvhibez-noaa-broll-candidates`, run `42594716333`, artifact ID `13662524700` (266,763,096 bytes as downloaded).
+- Both MP4 SHA-256 values were recomputed locally and match the values above exactly.
+- `ffprobe` independently confirmed H.264 video, AAC audio, 1280×720 resolution, and durations matching the opening slates (lobster 380.810 s / 6:20.8; turtle 628.724 s / 10:28.7).
+- A 12-frame visual contact sheet was sampled across each full package, including the opening slate. This is a content overview only, not exhaustive clip-by-clip review.
+
+### Observations and attribution
+
+- **Spiny lobster package:** the opening slate explicitly requests credit to **“NOAA’s Office of National Marine Sanctuaries”** and states the footage is courtesy of NOAA. The sampled frames show underwater rocky reef habitat, fish and California spiny lobsters. Use the exact requested credit; do not replace it with a generic NOAA Fisheries credit.
+- **Leatherback turtle package:** the opening slate explicitly requests credit to **“NOAA Fisheries.”** Additional sampled in-video title cards describe NOAA Fisheries researchers capturing a leatherback turtle near Destin, Florida, using a breakaway hoop net, then assessing the animal and applying a satellite tag. Sampled footage shows boats and researchers conducting the operation. Narration must retain this specific context and must not imply a different species, location, or behaviour.
+
+### What this review does not establish
+
+- The 12-frame sample does not inspect every shot, transition, contributor, or embedded credit card.
+- AAC source audio remains uncleared and must be removed unless its separate reuse rights are documented.
+- The package-level NOAA public-domain statement and visible slates do not establish that every individual shot is free of third-party restrictions.
+- No asset-register entries, rights-confirmed flags, human approvals, render manifests, or production permissions were created by this review.
+
+**Disposition: retain both as source candidates for further review only.** The next clearance step is a full timeline/credit inspection and shot-level selection, followed by the actual asset-register evidence and human approval. No clip may be rendered or published on the basis of this sample review alone.
+
 ## Download and clearance checklist
 
 For each selected package:
