@@ -5,7 +5,8 @@ import path from "node:path";
 import {
   SEO_SEED_QUERIES,
   buildSeoResearchReport,
-  researchSonicVhibezSeo
+  researchSonicVhibezSeo,
+  describeSeoResearchFailure
 } from "../scripts/research-youtube-seo.mjs";
 
 const CHANNEL_ID = "UC1111111111111111111111";
