@@ -32,10 +32,23 @@ test("Safari deactivation clears pending destination and approval data", () => {
   assert.deepEqual(validateCampaigns(inactive.config), []);
 });
 
+test("Selar campaign rejects generic wording that hides the owner's direct-sales relationship", () => {
+  const id = baseline.campaigns.find(c => c.type === "selar_digital_product").id;
+  assert.throws(() => manageCampaign(baseline, {
+    campaignId: id,
+    action: "preview",
+    destinationUrl: "https://selar.com/0u19v8u99l",
+    disclosureText: "Promotional link: product details and current terms are available on the seller page."
+  }, operator), /own business and direct sales revenue/);
+  const invalid = structuredClone(baseline);
+  invalid.campaigns.find(c => c.id === id).compensationType = "affiliate";
+  assert.ok(validateCampaigns(invalid).some(error => /direct sales revenue/i.test(error)));
+});
+
 test("Selar URL cannot be edited and campaign activation remains draft-only", () => {
   const id = baseline.campaigns.find(c => c.type === "selar_digital_product").id;
   assert.throws(() => manageCampaign(baseline, { campaignId: id, action: "activate", destinationUrl: "https://example.com", disclosureText: "Promotional link" }, operator), /exactly match/);
-  const disclosureText = "Promotional link: product details are on the seller page.";
+  const disclosureText = "This product is sold through my own Selar business; purchases generate revenue for my business.";
   assert.throws(() => manageCampaign(baseline, {
     campaignId: id, action: "activate", destinationUrl: "https://selar.com/0u19v8u99l", disclosureText, confirmOwnerApproval: true
   }, operator), /Preview the exact destination and disclosure before activation/);
@@ -60,7 +73,7 @@ test("Selar URL cannot be edited and campaign activation remains draft-only", ()
 test("Selar preview persists pending destination and disclosure without changing the approved campaign", () => {
   const id = baseline.campaigns.find(c => c.type === "selar_digital_product").id;
   const original = structuredClone(baseline.campaigns.find(c => c.id === id));
-  const disclosure = "  Promotional link: review current details and terms on the seller page.  ";
+  const disclosure = "  This product is sold through my own Selar business; purchases generate revenue for my business.  ";
   const result = manageCampaign(baseline, {
     campaignId: id,
     action: "preview",
@@ -83,7 +96,7 @@ test("Selar preview persists pending destination and disclosure without changing
 
 test("Selar activation applies the submitted disclosure and clears the pending preview", () => {
   const id = baseline.campaigns.find(c => c.type === "selar_digital_product").id;
-  const disclosure = "Promotional link: review current details and terms on the seller page.";
+  const disclosure = "This product is sold through my own Selar business; purchases generate revenue for my business.";
   const preview = manageCampaign(baseline, {
     campaignId: id,
     action: "preview",
@@ -111,7 +124,7 @@ test("Selar deactivation discards an unapproved pending preview", () => {
     campaignId: id,
     action: "preview",
     destinationUrl: "https://selar.com/0u19v8u99l",
-    disclosureText: "Promotional link: pending disclosure for a later owner decision."
+    disclosureText: "This product is sold through my own Selar business; purchases generate revenue for my business."
   }, operator);
   assert.ok(preview.campaign.pendingDestinationVersion);
   const inactive = manageCampaign(preview.config, { campaignId: id, action: "deactivate" }, operator);
