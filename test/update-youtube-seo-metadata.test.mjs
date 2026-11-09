@@ -50,6 +50,7 @@ function approval(overrides = {}) {
 }
 function fakeYoutube() {
   const calls = { updates: [], lists: [] };
+  let remoteSnippet = { ...currentSnippet };
   const api = {
     channels: { list: async () => ({ data: { items: [{
       id: channelId,
