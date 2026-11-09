@@ -51,6 +51,12 @@ test("all prepared production metadata templates remain blocked until review is 
     assert.match(result.stderr, /rightsConfirmed/);
     assert.match(result.stderr, /complianceReviewed/);
     assert.match(result.stderr, /READY_FOR_PRIVATE_UPLOAD/);
+    const metadata = JSON.parse(fs.readFileSync(templatePath, "utf8"));
+    assert.equal(metadata.hasPaidPromotion, true);
+    assert.equal(metadata.promotionDisclosure.status, "UNVERIFIED");
+    assert.equal(metadata.promotionDisclosure.type, "direct_sales_revenue");
+    assert.match(metadata.description, /my own Selar business/i);
+    assert.doesNotMatch(metadata.description, /may receive compensation|affiliate\/paid relationship/i);
   }
 });
 
