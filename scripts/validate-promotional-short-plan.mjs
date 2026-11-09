@@ -91,7 +91,7 @@ export function validatePromotionalShortPlan(plan, products) {
         if (gate.brandAuthorization?.brand !== "SonicVhibez") errors.push(`${label}: candidate brand authorization must name exactly SonicVhibez`);
         if (!isValidZonedIsoTimestamp(gate.brandAuthorization?.confirmedAt)) errors.push(`${label}: candidate brand authorization needs a valid timezone-qualified confirmation timestamp`);
         if (typeof gate.brandAuthorization?.approvalReference !== "string" || !gate.brandAuthorization.approvalReference.trim()) errors.push(`${label}: candidate brand authorization needs an owner approval reference`);
-        if (gate.compensation?.status !== "UNVERIFIED") errors.push(`${label}: candidate compensation status must remain UNVERIFIED`);
+        if (gate.compensation?.status !== "OWNER_CONFIRMED" || String(gate.compensation?.type).toLowerCase() !== "direct_sales_revenue") errors.push(`${label}: Selar candidate compensation must be owner-confirmed direct sales revenue`);
         if (gate.disclosure?.status !== "UNVERIFIED") errors.push(`${label}: candidate disclosure status must remain UNVERIFIED`);
       }
       if (typeof item?.productId !== "string" || item.productId !== product?.id) {
