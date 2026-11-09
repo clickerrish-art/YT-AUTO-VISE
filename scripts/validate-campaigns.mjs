@@ -42,6 +42,8 @@ export function validateCampaigns(config) {
             !isValidZonedIsoTimestamp(campaign.approval.approvedAt) ||
             campaign.approval.destinationVersion !== expectedVersion) {
           errors.push("owner-approved Selar disclosure requires a calendar-valid timezone-qualified timestamp and approval bound to the exact destination and wording for " + campaign.id);
+        } else if (Date.parse(campaign.approval.approvedAt) > Date.now()) {
+          errors.push("owner-approved Selar disclosure timestamp must not be in the future for " + campaign.id);
         }
       } else if (campaign.approval) {
         errors.push("pending Selar disclosure must not carry an approval record for " + campaign.id);
@@ -78,6 +80,8 @@ export function validateCampaigns(config) {
             !isValidZonedIsoTimestamp(campaign.approval.approvedAt) ||
             campaign.approval.destinationVersion !== expectedDestinationVersion) {
           errors.push("active affiliate campaign requires a calendar-valid timezone-qualified timestamp and approval bound to the exact destination and disclosure");
+        } else if (Date.parse(campaign.approval.approvedAt) > Date.now()) {
+          errors.push("active affiliate campaign approval timestamp must not be in the future");
         }
       }
     }
