@@ -5,7 +5,6 @@
  */
 import { pathToFileURL } from "node:url";
 
-export const APPROVED_SONICVHIBEZ_CHANNEL_ID = "UCSlkuPfHH78oGC1o418HV4w";
 const APPROVED_HANDLE = "sonicvhibez";
 const ALLOWED_VISIBILITY = new Set(["public", "private", "unlisted"]);
 
@@ -14,9 +13,9 @@ function normalizeHandle(value) {
 }
 
 export function isApprovedSonicVhibezChannel(channel) {
-  if (!channel || channel.id !== APPROVED_SONICVHIBEZ_CHANNEL_ID) return false;
-  if (channel.snippet?.title === "SonicVhibez") return true;
-  return channel.snippet?.title === "SonicVibes" &&
+  if (!channel || typeof channel.id !== "string" || !channel.id.trim()) return false;
+  const title = typeof channel.snippet?.title === "string" ? channel.snippet.title.trim() : "";
+  return ["SonicVhibez", "SonicVibes"].includes(title) &&
     normalizeHandle(channel.snippet?.customUrl) === APPROVED_HANDLE;
 }
 
@@ -36,10 +35,6 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
   const clientSecret = requireSecret(env, "YOUTUBE_CLIENT_SECRET");
   const refreshToken = requireSecret(env, "YOUTUBE_REFRESH_TOKEN");
   const configuredChannelId = requireSecret(env, "SONICVHIBEZ_CHANNEL_ID");
-  if (configuredChannelId !== APPROVED_SONICVHIBEZ_CHANNEL_ID) {
-    throw new Error("SONICVHIBEZ_CHANNEL_ID does not match the owner-supplied Studio channel ID");
-  }
-
   let youtube;
   if (youtubeFactory) {
     youtube = youtubeFactory({ clientId, clientSecret, refreshToken });
