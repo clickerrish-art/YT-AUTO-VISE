@@ -136,6 +136,20 @@ test("Selar host matching rejects deceptive suffixes and accepts genuine Selar s
   assert.deepEqual(validateProductPromotionGate(genuineSubdomain.product, genuineSubdomain.metadata), []);
 });
 
+test("product promotion gate rejects insecure or credential-bearing product URLs", () => {
+  const insecure = verifiedFixture("affiliate");
+  insecure.product.url = "http://example-affiliate-store.test/product";
+  insecure.product.promotionGate.seller.sourceUrl = insecure.product.url;
+  assert.ok(validateProductPromotionGate(insecure.product, insecure.metadata)
+    .some(error => /valid HTTPS URL without embedded credentials/.test(error)));
+
+  const credentialed = verifiedFixture("affiliate");
+  credentialed.product.url = "https://seller:password@example-affiliate-store.test/product";
+  credentialed.product.promotionGate.seller.sourceUrl = credentialed.product.url;
+  assert.ok(validateProductPromotionGate(credentialed.product, credentialed.metadata)
+    .some(error => /valid HTTPS URL without embedded credentials/.test(error)));
+});
+
 test("promotion evidence rejects timezone-free or invalid verification timestamps", () => {
   const fixture = verifiedFixture("paid");
   fixture.product.promotionGate.seller.verifiedAt = "2026-11-06T08:00:00";
