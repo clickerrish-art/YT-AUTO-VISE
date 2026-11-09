@@ -4,7 +4,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 export const APPROVED_SELAR_URL = "https://selar.com/0u19v8u99l";
 export const SELAR_DIRECT_SALES_DISCLOSURE = "This product is sold through my own Selar business; purchases generate revenue for my business.";
-const allowedTypes = new Set(["selar_digital_product", "safari_affiliate"]);
+const allowedTypes = new Set(["selar_digital_product", "safari_affiliate", "affiliate"]);
 const allowedStatuses = new Set(["ACTIVE_FOR_DRAFTS_ONLY", "INACTIVE"]);
 
 export function validateCampaigns(config) {
@@ -40,11 +40,30 @@ export function validateCampaigns(config) {
         if (typeof campaign.disclosureText !== "string" || !campaign.disclosureText.trim()) errors.push("active Safari campaign requires approved affiliate disclosure text");
       }
     }
+    if (campaign.type === "affiliate") {
+      if (campaign.status === "INACTIVE") {
+        if (campaign.destinationUrl !== "" || campaign.ownerApproved !== false || campaign.destinationValidation !== "not_verified" || campaign.disclosureText !== "") {
+          errors.push("inactive affiliate campaign must have no destination, approval claim, or disclosure");
+        }
+      } else {
+        let url;
+        try { url = new URL(campaign.destinationUrl); } catch {}
+        if (!url || url.protocol !== "https:" || url.username || url.password) errors.push("active affiliate campaign requires an exact HTTPS destination without embedded credentials");
+        if (campaign.ownerApproved !== true || campaign.destinationValidation !== "owner_verified") errors.push("active affiliate campaign requires explicit owner approval and a verified destination");
+        if (typeof campaign.disclosureText !== "string" || campaign.disclosureText.trim().length < 8) errors.push("active affiliate campaign requires an approved viewer-facing affiliate disclosure");
+        if (!campaign.approval || typeof campaign.approval.approvedBy !== "string" || campaign.approval.approvedBy.trim().length < 2 ||
+            !Number.isFinite(Date.parse(campaign.approval.approvedAt)) || !/^[a-f0-9]{64}$/.test(campaign.approval.destinationVersion ?? "")) {
+          errors.push("active affiliate campaign requires a timestamped approval bound to the exact destination and disclosure");
+        }
+      }
+    }
   }
   const selar = config.campaigns.filter(c => c.type === "selar_digital_product");
   const safari = config.campaigns.filter(c => c.type === "safari_affiliate");
+  const affiliate = config.campaigns.filter(c => c.type === "affiliate");
   if (selar.length !== 1) errors.push("exactly one approved Selar campaign is required");
   if (safari.length !== 1) errors.push("exactly one separate Safari campaign record is required");
+  if (affiliate.length !== 1) errors.push("exactly one separate external affiliate campaign record is required");
   return errors;
 }
 
@@ -57,7 +76,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
       for (const error of errors) console.error("FAIL: " + error);
       process.exitCode = 1;
     } else {
-      console.log("PASS: Selar and Safari campaign records are isolated; Selar destination is exact; Safari remains inactive without a verified URL; disclosure gates are present. This does not validate a live destination or authorize publishing.");
+      console.log("PASS: Selar direct sales, external affiliate and legacy Safari campaign records are isolated; Selar destination is exact; Safari remains inactive; affiliate activation requires an exact owner-approved HTTPS destination and disclosure. This does not validate a live destination or authorize publishing.");
     }
   } catch (error) {
     console.error("FAIL: " + error.message);
