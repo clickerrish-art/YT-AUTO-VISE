@@ -44,7 +44,7 @@ function approval(overrides = {}) {
       description: "A carefully verified wildlife story.",
       tags: ["African wildlife", "wildlife documentary", "animal behaviour"]
     },
-    evidence: { searchVolume: null, sources: ["YouTube search-result relevance review"] },
+    evidence: { searchVolume: null, sources: ["https://www.youtube.com/results?search_query=African+wildlife"] },
     ...overrides
   };
 }
