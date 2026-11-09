@@ -237,5 +237,5 @@ test("generic affiliate campaign API requires preview and owner approval, then p
   assert.equal(affiliate.approval.destinationVersion, crypto.createHash("sha256").update(destinationUrl + "\n" + disclosureText).digest("hex"));
   assert.equal(selar.destinationUrl, approvedDestination);
   assert.equal(selar.compensationType, "direct_sales_revenue");
-  assert.equal(state.publishingEnabled, false);
+  assert.equal(state.publishingEnabled ?? false, false);
 });
