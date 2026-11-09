@@ -14,7 +14,7 @@ const remoteVideos = [
 const reconciliation = {
   complete: true, channelId, verifiedBy: "Owner Reviewer", verifiedAt: "2026-10-24T10:00:00.000Z",
   videos: [
-    { id: "vid-a", format: "long_form", visibility: "private", uploadedAt: "2026-10-01T15:00:00.000Z" },
+    { id: "vid-a", format: "short", visibility: "private", uploadedAt: "2026-10-01T15:00:00.000Z" },
     { id: "vid-b", format: "long_form", visibility: "unlisted", actualPublishedAt: "2026-10-04T15:00:00.000Z" }
   ]
 };
@@ -28,7 +28,7 @@ test("history reconciliation records private uploads without advancing the actua
     id: "vid-a",
     status: "private",
     uploadedAt: "2026-10-01T15:00:00.000Z",
-    format: "long_form"
+    format: "short"
   }]);
 });
 
