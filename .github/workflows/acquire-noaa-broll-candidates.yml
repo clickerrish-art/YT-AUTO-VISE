@@ -54,6 +54,14 @@ jobs:
               "$download_url" --output "$output"
             test -s "$output"
             file "$output" | tee "media/rights-review/${slug}-file-type.txt"
+            mime_type="$(file --brief --mime-type "$output")"
+            printf 'Detected MIME type: %s\\n' "$mime_type" | tee "media/rights-review/${slug}-mime-type.txt"
+            case "$mime_type" in
+              text/*|application/json|application/xml)
+                echo "Refusing a text/error response instead of a binary source package."
+                exit 1
+                ;;
+            esac
             sha256sum "$output" | tee "media/rights-review/${slug}-sha256.txt"
             cat >> media/rights-review/SOURCE-REVIEW-REQUIRED.txt <<EOF
           Candidate: $title
