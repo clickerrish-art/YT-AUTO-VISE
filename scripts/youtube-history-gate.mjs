@@ -116,17 +116,36 @@ export function validateHistoryReconciliationSnapshot({ channelId, remoteVideos,
       continue;
     }
     if (item.visibility === "private") {
-      if (item.actualPublishedAt !== undefined && item.actualPublishedAt !== null && item.actualPublishedAt !== "") {
-        throw new Error("private upload reconciliation cannot claim an actual publication timestamp: " + item.id);
-      }
       const uploadedAt = strictIsoTimestamp(item.uploadedAt);
       if (!Number.isFinite(uploadedAt)) throw new Error("private reconciliation record requires visibility and uploadedAt for " + item.id);
-      records.set(item.id, {
+      if (!["NEVER_PUBLISHED", "PREVIOUSLY_PUBLISHED"].includes(item.publicationState)) {
+        throw new Error("private reconciliation record must declare publicationState NEVER_PUBLISHED or PREVIOUSLY_PUBLISHED for " + item.id);
+      }
+      const record = {
         id: item.id,
         format: item.format,
         visibility: item.visibility,
-        uploadedAt: new Date(uploadedAt).toISOString()
-      });
+        uploadedAt: new Date(uploadedAt).toISOString(),
+        publicationState: item.publicationState
+      };
+      if (item.publicationState === "PREVIOUSLY_PUBLISHED") {
+        const actualPublishedAt = strictIsoTimestamp(item.actualPublishedAt);
+        const evidenceReference = typeof item.publicationEvidenceReference === "string" ? item.publicationEvidenceReference.trim() : "";
+        if (!Number.isFinite(actualPublishedAt) || actualPublishedAt < uploadedAt) {
+          throw new Error("previously published private video requires an actualPublishedAt no earlier than uploadedAt for " + item.id);
+        }
+        if (evidenceReference.length < 12 || /placeholder|replace_with|todo|unknown|tbd/i.test(evidenceReference)) {
+          throw new Error("previously published private video requires a real publicationEvidenceReference for " + item.id);
+        }
+        record.actualPublishedAt = new Date(actualPublishedAt).toISOString();
+        record.publicationEvidenceReference = evidenceReference;
+      } else if (
+        (item.actualPublishedAt !== undefined && item.actualPublishedAt !== null && item.actualPublishedAt !== "") ||
+        (item.publicationEvidenceReference !== undefined && item.publicationEvidenceReference !== null && item.publicationEvidenceReference !== "")
+      ) {
+        throw new Error("never-published private upload cannot claim a publication timestamp or publication evidence: " + item.id);
+      }
+      records.set(item.id, record);
       continue;
     }
     const actualPublishedAt = strictIsoTimestamp(item.actualPublishedAt);
@@ -158,15 +177,24 @@ export function validateHistoryReconciliationSnapshot({ channelId, remoteVideos,
       continue;
     }
     if (remote.status === "private") {
-      if (!record.uploadedAt || record.actualPublishedAt || record.uploadedAt !== remote.observedTimestamp || record.visibility !== remote.status) {
+      if (!record.uploadedAt || record.uploadedAt !== remote.observedTimestamp || record.visibility !== remote.status) {
         throw new Error("reconciled private upload timestamp/visibility does not match YouTube for video " + id);
       }
-      privateUploads.push({
-        id,
-        status: "private",
-        uploadedAt: remote.observedTimestamp,
-        format: record.format
-      });
+      if (record.publicationState === "PREVIOUSLY_PUBLISHED") {
+        history.push({
+          id,
+          status: "private",
+          actualPublishedAt: record.actualPublishedAt,
+          format: record.format
+        });
+      } else {
+        privateUploads.push({
+          id,
+          status: "private",
+          uploadedAt: remote.observedTimestamp,
+          format: record.format
+        });
+      }
       continue;
     }
     if (record.scheduledAt || record.uploadedAt || record.actualPublishedAt !== remote.observedTimestamp || record.visibility !== remote.status) {
