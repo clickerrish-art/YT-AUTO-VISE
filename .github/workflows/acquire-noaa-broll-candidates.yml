@@ -2,7 +2,7 @@ name: Acquire NOAA B-roll candidates for rights review
 
 on:
   push:
-    branches: [main]
+    branches: [main, codex/marketing-machine-audit-fixes]
     paths:
       - ".github/workflows/acquire-noaa-broll-candidates.yml"
   workflow_dispatch:
