@@ -88,7 +88,7 @@ test("candidate products stay draft-only and keep the disclosure hold", () => {
   assert.ok(validatePromotionalShortPlan(plan, products).some(error => /status must remain DRAFT_ONLY/.test(error)));
   plan.weeks[0].items[0].status = "DRAFT_ONLY";
   plan.weeks[0].items[0].disclosure.status = "APPROVED";
-  assert.ok(validatePromotionalShortPlan(plan, products).some(error => /disclosure hold/.test(error)));
+  assert.ok(validatePromotionalShortPlan(plan, products).some(error => /disclosure must remain on HOLD/i.test(error)));
 });
 
 test("publication timestamps and live scheduling are forbidden in the draft plan", () => {
