@@ -76,13 +76,13 @@ export function validateHistoryReconciliationSnapshot({ channelId, remoteVideos,
       });
       continue;
     }
-    const actualPublishedAt = video.snippet?.publishedAt;
-    const actualPublishedTimestamp = strictIsoTimestamp(actualPublishedAt);
-    if (!Number.isFinite(actualPublishedTimestamp)) throw new Error("remote video is missing an actual publication timestamp: " + video.id);
-    if (actualPublishedTimestamp > nowTimestamp) throw new Error("remote video actual publication timestamp must not be in the future: " + video.id);
+    const observedTimestamp = video.snippet?.publishedAt;
+    const observedTimestampMs = strictIsoTimestamp(observedTimestamp);
+    if (!Number.isFinite(observedTimestampMs)) throw new Error("remote video is missing a valid timestamp: " + video.id);
+    if (observedTimestampMs > nowTimestamp) throw new Error("remote video timestamp must not be in the future: " + video.id);
     remoteById.set(video.id, {
       id: video.id,
-      actualPublishedAt: new Date(actualPublishedTimestamp).toISOString(),
+      observedTimestamp: new Date(observedTimestampMs).toISOString(),
       status: visibility,
       scheduled: false
     });
@@ -107,17 +107,33 @@ export function validateHistoryReconciliationSnapshot({ channelId, remoteVideos,
       });
       continue;
     }
-    if (!Number.isFinite(strictIsoTimestamp(item.actualPublishedAt))) throw new Error("reconciled history requires visibility and actualPublishedAt for " + item.id);
+    if (item.visibility === "private") {
+      if (item.actualPublishedAt !== undefined && item.actualPublishedAt !== null && item.actualPublishedAt !== "") {
+        throw new Error("private upload reconciliation cannot claim an actual publication timestamp: " + item.id);
+      }
+      const uploadedAt = strictIsoTimestamp(item.uploadedAt);
+      if (!Number.isFinite(uploadedAt)) throw new Error("private reconciliation record requires visibility and uploadedAt for " + item.id);
+      records.set(item.id, {
+        id: item.id,
+        format: item.format,
+        visibility: item.visibility,
+        uploadedAt: new Date(uploadedAt).toISOString()
+      });
+      continue;
+    }
+    const actualPublishedAt = strictIsoTimestamp(item.actualPublishedAt);
+    if (!Number.isFinite(actualPublishedAt)) throw new Error("reconciled history requires visibility and actualPublishedAt for " + item.id);
     records.set(item.id, {
       id: item.id,
       format: item.format,
       visibility: item.visibility,
-      actualPublishedAt: new Date(strictIsoTimestamp(item.actualPublishedAt)).toISOString()
+      actualPublishedAt: new Date(actualPublishedAt).toISOString()
     });
   }
   if (remoteById.size !== records.size) throw new Error("reconciled history does not cover every remote channel video; history is incomplete");
   const history = [];
   const scheduledItems = [];
+  const privateUploads = [];
   for (const [id, remote] of remoteById) {
     const record = records.get(id);
     if (!record) throw new Error("remote video is missing from reconciled history: " + id);
@@ -133,17 +149,29 @@ export function validateHistoryReconciliationSnapshot({ channelId, remoteVideos,
       });
       continue;
     }
-    if (record.scheduledAt || record.actualPublishedAt !== remote.actualPublishedAt || record.visibility !== remote.status) {
+    if (remote.status === "private") {
+      if (!record.uploadedAt || record.actualPublishedAt || record.uploadedAt !== remote.observedTimestamp || record.visibility !== remote.status) {
+        throw new Error("reconciled private upload timestamp/visibility does not match YouTube for video " + id);
+      }
+      privateUploads.push({
+        id,
+        status: "private",
+        uploadedAt: remote.observedTimestamp,
+        format: record.format
+      });
+      continue;
+    }
+    if (record.scheduledAt || record.uploadedAt || record.actualPublishedAt !== remote.observedTimestamp || record.visibility !== remote.status) {
       throw new Error("reconciled timestamp/visibility does not match YouTube for video " + id);
     }
     history.push({
       id,
       status: record.visibility,
-      actualPublishedAt: remote.actualPublishedAt,
+      actualPublishedAt: remote.observedTimestamp,
       format: record.format
     });
   }
-  return { history, scheduledItems, complete: true, channelId, verifiedAt: reconciliation.verifiedAt, verifiedBy: reconciliation.verifiedBy.trim(), reconciliationSha256 };
+  return { history, scheduledItems, privateUploads, complete: true, channelId, verifiedAt: reconciliation.verifiedAt, verifiedBy: reconciliation.verifiedBy.trim(), reconciliationSha256 };
 }
 
 export function validateHistoryReconciliation(args) {
