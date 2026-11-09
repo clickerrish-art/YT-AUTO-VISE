@@ -30,6 +30,14 @@ test("history reconciliation records private uploads without advancing the actua
     uploadedAt: "2026-10-01T15:00:00.000Z",
     format: "short"
   }]);
+
+  const misclassifiedPrivate = structuredClone(reconciliation);
+  misclassifiedPrivate.videos[0].actualPublishedAt = "2026-10-01T15:00:00.000Z";
+  delete misclassifiedPrivate.videos[0].uploadedAt;
+  assert.throws(
+    () => validateHistoryReconciliationSnapshot({ channelId, remoteVideos, reconciliation: misclassifiedPrivate }),
+    /private upload reconciliation cannot claim an actual publication timestamp/
+  );
 });
 
 test("history reconciliation separates future scheduled videos from actual publication history and enforces their slots", () => {
