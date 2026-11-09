@@ -149,7 +149,7 @@ async function handleRequest(request, env) {
       audit: [...state.audit, {
         id: crypto.randomUUID(),
         action: "DASHBOARD_STATE_SNAPSHOT_UPDATED",
-        actor: env.DASHBOARD_OPERATOR_ID ?? "authorized-operator",
+        actor,
         at: now,
         previousRevision: expectedRevision
       }]
@@ -224,7 +224,7 @@ async function handleRequest(request, env) {
       audit: [...restoredState.audit, {
         id: crypto.randomUUID(),
         action: "DASHBOARD_STATE_RESTORED",
-        actor: env.DASHBOARD_OPERATOR_ID ?? "authorized-operator",
+        actor,
         at: now,
         backupId: body.backupId
       }]
