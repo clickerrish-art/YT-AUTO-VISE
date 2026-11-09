@@ -1,0 +1,41 @@
+name: Verify SonicVhibez YouTube identity and uploads inventory (read-only)
+
+on:
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - "scripts/verify-youtube-channel.mjs"
+      - "test/verify-youtube-channel.test.mjs"
+      - ".github/workflows/verify-youtube-channel-readonly.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sonicvhibez-youtube-readonly-inventory
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out implementation branch
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          package-manager-cache: false
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+      - name: Run deterministic identity and pagination tests
+        run: node --test test/verify-youtube-channel.test.mjs
+      - name: Verify authenticated channel and complete uploads inventory (read-only)
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
+        run: node scripts/verify-youtube-channel.mjs
