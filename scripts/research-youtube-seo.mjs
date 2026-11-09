@@ -7,7 +7,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { google } from "googleapis";
 import { verifySonicVhibezChannel } from "./verify-youtube-channel.mjs";
 
 export const SEO_SEED_QUERIES = Object.freeze([
@@ -165,6 +164,9 @@ export async function researchSonicVhibezSeo({
   if (youtubeFactory) {
     youtube = youtubeFactory({ clientId, clientSecret, refreshToken });
   } else {
+    // Load the production client only for real API access. Tests inject a
+    // deterministic client and must not require googleapis to be installed.
+    const { google } = await import("googleapis");
     const oauth = new google.auth.OAuth2(clientId, clientSecret);
     oauth.setCredentials({ refresh_token: refreshToken });
     youtube = google.youtube({ version: "v3", auth: oauth });
