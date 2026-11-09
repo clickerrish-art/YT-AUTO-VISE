@@ -66,7 +66,7 @@ function fakeYoutube() {
           status: { privacyStatus: "private" }
         }] } };
       },
-      update: async args => { calls.updates.push(args); remoteSnippet = { ...args.requestBody.snippet }; return { data: { id: videoId } }; }
+      update: async args => { calls.updates.push(args); remoteSnippet = { ...args.requestBody.snippet, channelId }; return { data: { id: videoId } }; }
     }
   };
   return { api, calls };
