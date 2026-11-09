@@ -19,5 +19,10 @@
   "containsSyntheticMedia": true,
   "rightsConfirmed": false,
   "complianceReviewed": false,
-  "notes": "Draft metadata only. Owner clarified on 2026-11-09 that Selar is their own business and customer payments are received directly through Selar; the product promotion therefore has a direct sales-revenue relationship. The disclosure wording is recorded as a draft and is NOT owner-approved for publication. Treat the paid-promotion flag conservatively as enabled pending final platform/compliance review. Channel ID must be populated only after authenticated YouTube OAuth confirms the exact @sonicvhibez identity. Media rights, factual accuracy, final captions, and compliance require human verification. Status intentionally remains HOLD_FOR_MEDIA_AND_HUMAN_REVIEW."
+  "notes": "Draft metadata only. Owner clarified on 2026-11-09 that Selar is their own business and customer payments are received directly through Selar; the product promotion therefore has a direct sales-revenue relationship. The disclosure wording is recorded as a draft and is NOT owner-approved for publication. Treat the paid-promotion flag conservatively as enabled pending final platform/compliance review. Channel ID must be populated only after authenticated YouTube OAuth confirms the exact @sonicvhibez identity. Media rights, factual accuracy, final captions, and compliance require human verification. Status intentionally remains HOLD_FOR_MEDIA_AND_HUMAN_REVIEW.",
+  "promotionDisclosure": {
+    "status": "UNVERIFIED",
+    "type": "direct_sales_revenue",
+    "text": "This product is sold through my own Selar business; purchases generate revenue for my business."
+  }
 }
