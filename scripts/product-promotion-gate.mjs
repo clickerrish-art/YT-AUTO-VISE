@@ -16,7 +16,7 @@ const hasText = value => typeof value === "string" && value.trim().length > 0;
 /**
  * An approved product URL is not permission to promote it.
  * Require current seller evidence, explicit SonicVhibez authorization,
- * a verified compensation relationship, and matching approved disclosure.
+ * the correctly classified commercial relationship, and matching owner-approved disclosure.
  */
 export function validateProductPromotionGate(product, metadata, options = {}) {
   const requireMetadataDisclosure = options.requireMetadataDisclosure !== false;
@@ -64,7 +64,9 @@ export function validateProductPromotionGate(product, metadata, options = {}) {
     ? new Set(["OWNER_CONFIRMED", "VERIFIED"])
     : new Set(["VERIFIED"]);
   if (!acceptedCompensationStatuses.has(compensation.status)) {
-    errors.push("commercial compensation relationship must be verified or owner-confirmed for direct sales revenue");
+    errors.push(directSalesRevenue
+      ? "direct Selar sales relationship must be owner-confirmed or verified"
+      : "external affiliate relationship must be verified");
   }
   if (!COMPENSATION_TYPES.has(compensationType)) errors.push("compensation type must be affiliate, paid, direct_sales_revenue, or none");
   if (!(directSalesRevenue && compensation.status === "OWNER_CONFIRMED"
