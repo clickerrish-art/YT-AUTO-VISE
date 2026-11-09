@@ -14,16 +14,22 @@ const remoteVideos = [
 const reconciliation = {
   complete: true, channelId, verifiedBy: "Owner Reviewer", verifiedAt: "2026-10-24T10:00:00.000Z",
   videos: [
-    { id: "vid-a", format: "long_form", visibility: "private", actualPublishedAt: "2026-10-01T15:00:00.000Z" },
+    { id: "vid-a", format: "long_form", visibility: "private", uploadedAt: "2026-10-01T15:00:00.000Z" },
     { id: "vid-b", format: "long_form", visibility: "unlisted", actualPublishedAt: "2026-10-04T15:00:00.000Z" }
   ]
 };
 
-test("history reconciliation binds all public/private/unlisted remote IDs, timestamps and visibility", () => {
-  const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
-  assert.equal(history.length, 2);
-  assert.deepEqual(history.map(item => item.status), ["private", "unlisted"]);
-  assert.equal(history[1].actualPublishedAt, "2026-10-04T15:00:00.000Z");
+test("history reconciliation records private uploads without advancing the actual-publication cycle", () => {
+  const snapshot = validateHistoryReconciliationSnapshot({ channelId, remoteVideos, reconciliation });
+  assert.equal(snapshot.history.length, 1);
+  assert.deepEqual(snapshot.history.map(item => item.status), ["unlisted"]);
+  assert.equal(snapshot.history[0].actualPublishedAt, "2026-10-04T15:00:00.000Z");
+  assert.deepEqual(snapshot.privateUploads, [{
+    id: "vid-a",
+    status: "private",
+    uploadedAt: "2026-10-01T15:00:00.000Z",
+    format: "long_form"
+  }]);
 });
 
 test("history reconciliation separates future scheduled videos from actual publication history and enforces their slots", () => {
@@ -46,7 +52,8 @@ test("history reconciliation separates future scheduled videos from actual publi
     reconciliation: scheduledReconciliation,
     now: new Date("2026-10-05T00:00:00.000Z")
   });
-  assert.equal(snapshot.history.length, 2, "a future scheduled upload must not advance the actual-publication cycle");
+  assert.equal(snapshot.history.length, 1, "private uploads and future scheduled items must not advance the actual-publication cycle");
+  assert.equal(snapshot.privateUploads.length, 1);
   assert.deepEqual(snapshot.scheduledItems, [{
     id: "vid-scheduled",
     status: "scheduled",
@@ -93,7 +100,7 @@ test("history reconciliation fails closed on missing remote videos, duplicate ID
   assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos, reconciliation: { ...reconciliation, videos: reconciliation.videos.slice(0, 1) } }), /does not cover every remote channel video/);
   assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos: [...remoteVideos, remoteVideos[0]], reconciliation }), /duplicate video ID/);
   const changed = structuredClone(reconciliation);
-  changed.videos[0].actualPublishedAt = "2026-10-01T16:00:00.000Z";
+  changed.videos[0].uploadedAt = "2026-10-01T16:00:00.000Z";
   assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos, reconciliation: changed }), /timestamp\/visibility does not match/);
 });
 
@@ -109,8 +116,8 @@ test("history reconciliation rejects normalized invalid dates and timezone-free 
     assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos, reconciliation: badReconciliation }), /verification timestamp/);
   }
   const badRecord = structuredClone(reconciliation);
-  badRecord.videos[0].actualPublishedAt = "2026-02-30T15:00:00.000Z";
-  assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos, reconciliation: badRecord }), /requires visibility and actualPublishedAt/);
+  badRecord.videos[0].uploadedAt = "2026-02-30T15:00:00.000Z";
+  assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos, reconciliation: badRecord }), /requires visibility and uploadedAt/);
 });
 
 test("history reconciliation rejects future verification and actual publication timestamps", () => {
@@ -194,7 +201,7 @@ test("complete history fetch verifies authenticated playlist ownership and every
       id,
       format: "long_form",
       visibility: "private",
-      actualPublishedAt: "2026-10-01T15:00:00.000Z"
+      uploadedAt: "2026-10-01T15:00:00.000Z"
     }))
   }));
   const pageCalls = [];
@@ -228,7 +235,8 @@ test("complete history fetch verifies authenticated playlist ownership and every
       reconciliationPath,
       channelId
     );
-    assert.equal(snapshot.history.length, 51);
+    assert.equal(snapshot.history.length, 0);
+    assert.equal(snapshot.privateUploads.length, 51);
     assert.equal(snapshot.reconciliationSha256, crypto.createHash("sha256").update(fs.readFileSync(reconciliationPath)).digest("hex"), "snapshot must bind the exact reviewed reconciliation document bytes");
     assert.equal(pageCalls.length, 2);
     assert.equal(pageCalls[0].maxResults, 50);
