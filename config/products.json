@@ -25,7 +25,7 @@
           "type": "DIRECT_SALES_REVENUE",
           "verifiedAt": "2026-11-09",
           "evidenceReference": "Owner clarified in the ChatGPT conversation on 2026-11-09 that Selar is their own business and customer payments are received directly through Selar.",
-          "note": "This is a direct commercial relationship through the owner's own Selar business. Purchases generate revenue for the owner's business. Do not describe the promotion as uncompensated or as having no commercial benefit."
+          "note": "This is a direct commercial relationship through the owner's own Selar business. Purchases generate revenue for the owner's business. Do not classify as an affiliate commission or describe the promotion as having no commercial benefit."
         },
         "disclosure": {
           "status": "UNVERIFIED",
@@ -56,14 +56,15 @@
           "note": "Owner explicitly requested SonicVhibez creator-education YouTube promotions connected to this supplied Selar product. This does not verify affiliate/paid/no-compensation status or approve a viewer-facing disclosure."
         },
         "compensation": {
-          "status": "UNVERIFIED",
-          "type": "",
-          "verifiedAt": "",
-          "evidenceReference": ""
+          "status": "OWNER_CONFIRMED",
+          "type": "DIRECT_SALES_REVENUE",
+          "verifiedAt": "2026-11-09",
+          "evidenceReference": "Owner clarified in the ChatGPT conversation on 2026-11-09 that Selar is their own business and customer payments are received directly through Selar.",
+          "note": "This is a direct commercial relationship through the owner's own Selar business. Purchases generate revenue for the owner's business. Do not classify as an affiliate commission or describe the promotion as having no commercial benefit."
         },
         "disclosure": {
           "status": "UNVERIFIED",
-          "text": "",
+          "text": "This product is sold through my own Selar business; purchases generate revenue for my business.",
           "approvedAt": "",
           "approvalReference": ""
         }
@@ -90,14 +91,15 @@
           "note": "Owner explicitly requested SonicVhibez creator-education YouTube promotions connected to this supplied Selar product. This does not verify affiliate/paid/no-compensation status or approve a viewer-facing disclosure."
         },
         "compensation": {
-          "status": "UNVERIFIED",
-          "type": "",
-          "verifiedAt": "",
-          "evidenceReference": ""
+          "status": "OWNER_CONFIRMED",
+          "type": "DIRECT_SALES_REVENUE",
+          "verifiedAt": "2026-11-09",
+          "evidenceReference": "Owner clarified in the ChatGPT conversation on 2026-11-09 that Selar is their own business and customer payments are received directly through Selar.",
+          "note": "This is a direct commercial relationship through the owner's own Selar business. Purchases generate revenue for the owner's business. Do not classify as an affiliate commission or describe the promotion as having no commercial benefit."
         },
         "disclosure": {
           "status": "UNVERIFIED",
-          "text": "",
+          "text": "This product is sold through my own Selar business; purchases generate revenue for my business.",
           "approvedAt": "",
           "approvalReference": ""
         }
