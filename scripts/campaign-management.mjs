@@ -78,6 +78,7 @@ export function manageCampaign(config, request, actor, now = new Date().toISOStr
     campaign.destinationValidation = "exact_approved_allowlist";
     campaign.ownerApproved = true;
     campaign.disclosureText = request.disclosureText.trim();
+    campaign.disclosureApprovalStatus = "OWNER_APPROVED";
     campaign.status = "ACTIVE_FOR_DRAFTS_ONLY";
     campaign.approval = { approvedBy: actor.trim(), approvedAt: now, destinationVersion: expectedPreviewVersion };
     delete campaign.pendingDestinationUrl;
