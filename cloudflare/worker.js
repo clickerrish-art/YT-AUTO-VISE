@@ -171,14 +171,14 @@ async function handleRequest(request, env) {
     return json({ revision: row.revision, updatedAt: row.updated_at, state: JSON.parse(row.state_json) }, 200, { etag: '"' + row.revision + '"' });
   }
 
-  if (url.pathname === "/api/backups" && method === "GET") {
+  if (["/api/backups", "/api/state/backups"].includes(url.pathname) && method === "GET") {
     const result = await env.STATE_DB.prepare(
       "SELECT backup_id, source_revision, sha256, created_at, reason FROM dashboard_backups ORDER BY created_at DESC LIMIT 100"
     ).all();
     return json({ backups: result.results ?? [] });
   }
 
-  if (url.pathname === "/api/backups" && method === "POST") {
+  if (["/api/backups", "/api/state/backup"].includes(url.pathname) && method === "POST") {
     const actor = operatorIdentity(env);
     if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
     const row = await currentState(env);
@@ -192,7 +192,7 @@ async function handleRequest(request, env) {
     return json({ backupId, sourceRevision: row.revision, sha256: digest, createdAt }, 201);
   }
 
-  if (url.pathname === "/api/backups/restore" && method === "POST") {
+  if (["/api/backups/restore", "/api/state/restore"].includes(url.pathname) && method === "POST") {
     const actor = operatorIdentity(env);
     if (!actor) return json({ error: "Authorized operator identity is not configured", code: "OPERATOR_ID_NOT_CONFIGURED" }, 503);
     let body;
@@ -201,6 +201,9 @@ async function handleRequest(request, env) {
     if (typeof body.backupId !== "string" || !body.backupId ||
         !Number.isSafeInteger(body.expectedRevision) || body.expectedRevision < 1) {
       return json({ error: "backupId and expectedRevision are required" }, 400);
+    }
+    if (body.confirmRestore !== true) {
+      return json({ error: "Explicit confirmRestore=true is required before restoring dashboard state" }, 400);
     }
     const backup = await env.STATE_DB.prepare(
       "SELECT state_json, sha256 FROM dashboard_backups WHERE backup_id = ?"
