@@ -1,3 +1,20 @@
+# Latest exact-SHA evidence — 9 November 2026
+
+- Exact application source/test SHA: `ac02833e38f70e4806b12d8583b07e968e5a19fa`.
+- Dashboard Chromium E2E: [run 42611627852](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627852), **29/29 passed on that exact SHA**. The campaign journey now verifies Selar direct-sales isolation, generic external affiliate preview/activation, exact destination/disclosure approval, Safari inactivity and publishing-disabled state.
+- Content quality: [run 42611627825](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627825), **747/747 tests passed, zero failures/skips**.
+- Automation/security: [run 42611619215](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611619215), **135 Node test files passed; 34 Python tests; zero skips; npm audit 0 vulnerabilities; FFmpeg/ffprobe and syntax checks passed**.
+- Queue readiness: [run 42611627886](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627886), **16 items; 72 elapsed-hour minimum; 216-hour full long_form/long_form/short cycle; publishing disabled**.
+- Static inventory remains **118 controls, 17 forms, 49 route handlers, 45 protected API routes**.
+- Form status remains **11 PASS / 6 BLOCKED**. The six blocked production forms still require genuine media, rights, verified parent, validated export, human review or uncertain remote-upload evidence; they must not be marked successful with fixtures.
+- API route matrix: **37 PASS / 8 BLOCKED**; all 45 protected routes have authentication-negative coverage. The campaign route has new current-SHA generic affiliate evidence; API-001 remains NOT_TESTED overall until all applicable routes have current positive, persistence, audit, concurrency and restart acceptance.
+- Cloudflare staging infrastructure is provisioned, but Node-to-Worker integration remains blocked by missing Access service-token/runtime credentials. The deployed Worker is older than the current branch; its exact source has been recovered to `cloudflare/staging-snapshot/`, not deployed.
+- Production readiness: [HOLD — 14 blockers](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627930). Main remains unchanged; PR #1 remains open, draft and unmerged. Public/unattended publishing remains disabled.
+
+**DASH-001 remains NOT_TESTED overall.** The 29 browser journeys and static inventory do not establish exhaustive control-by-control business success, validation, error feedback, authorization, persistence, refresh, concurrency, restart and accessibility acceptance.
+
+---
+
 # Latest exact-SHA evidence — 8 November 2026
 
 - Application source/test SHA: `774b35382cf78bb706acd7a56c7befe0477eaeb0`.
