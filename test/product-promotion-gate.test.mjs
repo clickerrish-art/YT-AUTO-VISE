@@ -4,7 +4,7 @@ import fs from "node:fs";
 import { spawnSync } from "node:child_process";
 import { validateProductPromotionGate } from "../scripts/product-promotion-gate.mjs";
 
-const url = "https://selar.com/0u19v8u99l";
+const url = "https://example-affiliate-store.test/product";
 const affiliateDisclosure = "Affiliate disclosure: I may earn a commission if you purchase through this link.";
 
 function verifiedFixture(type = "affiliate") {
@@ -36,7 +36,7 @@ test("checked-in product registry records the seller but remains blocked on prom
   const seller = config.products[0].promotionGate.seller;
   assert.equal(seller.status, "VERIFIED");
   assert.equal(seller.name, "Click 47");
-  assert.ok(seller.evidenceReference.includes("2026-11-06"));
+  assert.ok(seller.evidenceReference.includes("2026-11-09"));
   const errors = validateProductPromotionGate(config.products[0], undefined, { requireMetadataDisclosure: false });
   assert.equal(errors.some(error => /seller details must be reverified/i.test(error)), false);
   assert.equal(errors.some(error => /brand authorization must be owner-confirmed/i.test(error)), false);
