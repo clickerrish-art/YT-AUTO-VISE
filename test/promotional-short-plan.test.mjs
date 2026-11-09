@@ -27,6 +27,38 @@ test("candidate seller verification is required while direct Selar sales are own
   assert.ok(validatePromotionalShortPlan(checkedInPlan, candidates).some(error => /seller evidence must be VERIFIED/.test(error)));
 });
 
+test("external candidate links require verified affiliate classification rather than Selar seller assumptions", () => {
+  const candidateProducts = clone(products);
+  const candidate = candidateProducts.find(product => product.status === "candidate");
+  assert.ok(candidate);
+  const externalUrl = "https://www.serengeti.example/creator-product";
+  candidate.url = externalUrl;
+  candidate.promotionGate.seller = {
+    status: "VERIFIED",
+    name: "Serengeti Partner Store",
+    sourceUrl: externalUrl,
+    verifiedAt: "2026-11-09T10:00:00+02:00",
+    evidenceReference: "owner-supplied external affiliate listing evidence"
+  };
+  candidate.promotionGate.compensation = {
+    status: "VERIFIED",
+    type: "affiliate",
+    verifiedAt: "2026-11-09T10:00:00+02:00",
+    evidenceReference: "verified affiliate relationship for the exact external listing"
+  };
+  const plan = clone(checkedInPlan);
+  const item = plan.weeks.flatMap(week => week.items).find(row => row.productId === candidate.id);
+  assert.ok(item);
+  item.productUrl = externalUrl;
+  item.description = item.description.replace(/https:\/\/selar\\.com\\/[^\\s)]+/g, externalUrl);
+  item.disclosure.relationshipStatus = "UNVERIFIED";
+  const errors = validatePromotionalShortPlan(plan, candidateProducts);
+  assert.equal(errors.some(error => /Click 47/.test(error)), false);
+  assert.equal(errors.some(error => /affiliate seller name must be recorded/.test(error)), false);
+  assert.equal(errors.some(error => /candidate compensation must match the URL relationship/.test(error)), false);
+  assert.equal(errors.some(error => /exact relationship status recorded/.test(error)), false);
+});
+
 test("the weekly promotional Short cap rejects a third item", () => {
   const plan = clone(checkedInPlan);
   plan.weeks[0].items.push(clone(plan.weeks[0].items[0]));
