@@ -1,72 +1,78 @@
 {
   "schemaVersion": 1,
-  "status": "BLOCKED",
-  "mode": "READ_ONLY",
+  "status": "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
+  "mode": "READ_ONLY_OWNER_REVIEW_REQUIRED",
   "workflowRunId": 42609557970,
+  "workflowRunAttempt": 4,
   "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42609557970",
   "sourceCommit": "20bc3f12039f562bfe5412eacb838ba4f8555434",
-  "checkedAt": "2026-11-09T11:32:14Z",
+  "checkedAt": "2026-11-09T15:57:20.079Z",
   "deterministicIdentityAndPaginationTests": {
     "status": "PASS",
     "passed": 6,
     "failed": 0
   },
   "oauth": {
-    "status": "BLOCKED",
-    "errorCode": "invalid_client",
-    "message": "Google rejected the configured OAuth client ID/secret pair (invalid_client). The workflow did not authenticate a channel."
+    "status": "PASS",
+    "errorCode": null,
+    "message": "Google OAuth authenticated the configured SonicVhibez channel using the existing matching client credentials and refresh token. Secret values were not logged."
   },
-  "channelIdentityVerified": false,
-  "uploadsInventoryComplete": false,
-  "visibilityCounts": null,
+  "channel": {
+    "id": "UCSlkuPfHH78oGC1o418HV4w",
+    "title": "SonicVibes",
+    "handle": "@sonicvhibez",
+    "identityVerified": true
+  },
+  "channelIdentityVerified": true,
+  "uploadsInventoryComplete": true,
+  "uploadsPlaylistPages": 1,
+  "totalUploads": 1,
+  "visibilityCounts": {
+    "public": 1,
+    "private": 0,
+    "unlisted": 0
+  },
+  "inventoryArtifact": {
+    "id": 13689103271,
+    "name": "sonicvhibez-youtube-history-inventory",
+    "sha256": "70269df128ca12cefbf1f9e596c507230fb55c4d46142d474e44d959360b9656",
+    "expiresAt": "2026-11-16T15:57:20Z"
+  },
+  "videos": [
+    {
+      "id": "LjePS02hA1o",
+      "visibility": "public",
+      "youtubePublishedAt": "2026-10-22T15:05:56Z",
+      "duration": "PT20S",
+      "format": "UNCLASSIFIED_REQUIRES_OWNER_REVIEW",
+      "ownerConfirmed": true,
+      "publicationCycleReconciled": false
+    }
+  ],
+  "publicationHistoryReconciliation": {
+    "status": "NOT_TESTED",
+    "reason": "The inventory is complete, but format classification, actual publication-time review and reconciliation against all pending or uncertain local upload attempts remain separate owner/release gates."
+  },
   "secretValuesLogged": false,
   "publishingEnabled": false,
   "uploadAttempted": false,
-  "resolution": "Verify that YOUTUBE_CLIENT_ID and the single YOUTUBE_CLIENT_SECRET in GitHub Actions secrets are the matching pair from the existing OAuth web application. Do not create another client or paste secret values into chat. Rerun the read-only verification workflow after correcting the pair.",
+  "metadataWriteAttempted": false,
   "attempts": [
     {
       "workflowRunId": 42591153889,
-      "sourceCommit": "6bea87fabf3459b9a45b2ef8ddf92e22960dc88a",
-      "checkedAt": "2026-11-09T09:08:59Z",
-      "tests": {
-        "status": "PASS",
-        "passed": 5,
-        "failed": 0
-      },
-      "oauth": {
-        "status": "BLOCKED",
-        "errorCode": "invalid_client"
-      }
+      "status": "BLOCKED",
+      "errorCode": "invalid_client"
     },
     {
       "workflowRunId": 42591293612,
-      "sourceCommit": "71356a56d1b50146251659a5b62ed726e8515dfc",
-      "checkedAt": "2026-11-09T09:10:05Z",
-      "tests": {
-        "status": "PASS",
-        "passed": 5,
-        "failed": 0
-      },
-      "oauth": {
-        "status": "BLOCKED",
-        "errorCode": "invalid_client"
-      }
+      "status": "BLOCKED",
+      "errorCode": "invalid_client"
     },
     {
       "workflowRunId": 42609557970,
-      "sourceCommit": "20bc3f12039f562bfe5412eacb838ba4f8555434",
-      "checkedAt": "2026-11-09T11:32:14Z",
-      "tests": {
-        "status": "PASS",
-        "passed": 6,
-        "failed": 0
-      },
-      "oauth": {
-        "status": "BLOCKED",
-        "errorCode": "invalid_client"
-      },
-      "inventoryArtifactCreated": false
+      "attempt": 4,
+      "status": "PASS",
+      "sourceCommit": "20bc3f12039f562bfe5412eacb838ba4f8555434"
     }
-  ],
-  "inventoryArtifactCreated": false
+  ]
 }
