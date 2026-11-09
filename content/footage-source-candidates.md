@@ -1,6 +1,6 @@
 # SonicVhibez footage acquisition queue — candidates, not yet cleared
 
-**Status: SOURCE CANDIDATES ONLY. No footage has been downloaded, inspected, or approved by this file.** Do not change any rights or release flags based on this list.
+**Status: TWO SOURCE CANDIDATE PACKAGES DOWNLOADED; OPENING SLATES AND TECHNICAL METADATA INSPECTED; NONE APPROVED FOR PRODUCTION.** Do not change any rights or release flags based on this list.
 
 ## Preferred acquisition source
 
@@ -29,7 +29,7 @@ The detail URLs above are candidates; if a link redirects, search the exact pack
 
 ## Acquisition evidence — 9 November 2026
 
-A review-only acquisition run downloaded two official NOAA Fisheries B-roll package files. Workflow run: `42589870532`; artifact: `sonicvhibez-noaa-broll-candidates` (artifact ID `13660453540`). The artifact is retained in GitHub Actions; these source files are not committed to the repository.
+A review-only acquisition run downloaded two official NOAA Fisheries B-roll package files. Latest repeat workflow run: `42594716333`; artifact: `sonicvhibez-noaa-broll-candidates` (artifact ID `13662524700`, 266,154,848 bytes). Its two MP4 SHA-256 values match the earlier acquisition run `42589870532` (artifact ID `13660453540`), confirming reproducible downloads. The latest artifact is retained in GitHub Actions; these source files are not committed to the repository.
 
 | Candidate | Technical inspection | SHA-256 | Opening-slate attribution observed |
 |---|---|---|---|
