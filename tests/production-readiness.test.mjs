@@ -22,7 +22,7 @@ test("readiness report identifies blockers, preserves safety defaults, and exits
   assert.match(result.stdout, /Metadata complianceReviewed must be true/);
   assert.match(result.stdout, /Metadata needs the verified SonicVhibez YouTube channel ID/);
   assert.match(result.stdout, /SONICVHIBEZ_CHANNEL_ID/);
-  assert.match(result.stdout, /read-only YouTube identity and uploads inventory verification is BLOCKED; OAuth error invalid_client/);
+  assert.doesNotMatch(result.stdout, /read-only YouTube identity and uploads inventory verification is BLOCKED; OAuth error invalid_client/);
   assert.match(result.stdout, /YOUTUBE_CLIENT_ID/);
   assert.match(result.stdout, /never uploads, schedules, or publishes/i);
 });
@@ -50,7 +50,7 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and actionab
     assert.ok(blocker.resolution.length > 20);
   }
   assert.ok(report.blockers.some(blocker => /SonicVhibez public, private and unlisted history/.test(blocker.message)));
-  assert.ok(report.blockers.some(blocker => /OAuth error invalid_client/.test(blocker.message) && blocker.evidence.path === "content/youtube-channel-verification-status.json"));
+  assert.equal(report.blockers.some(blocker => /OAuth error invalid_client/.test(blocker.message) && blocker.evidence.path === "content/youtube-channel-verification-status.json"), false, "the verified read-only OAuth inventory must not remain incorrectly marked as invalid_client");
   assert.ok(report.limitations.some(item => /never uploads/.test(item)));
 });
 
