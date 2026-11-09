@@ -54,6 +54,15 @@ test("generic external affiliate activation requires a verified HTTPS destinatio
   affiliate.disclosureText = "I may earn a commission.";
   affiliate.approval = { approvedBy: "owner", approvedAt: "2026-11-09T10:00:00Z", destinationVersion: "a".repeat(64) };
   assert.ok(validateCampaigns(bad).some(error => /exact HTTPS destination/i.test(error)));
+  const selarAffiliate = structuredClone(baseline);
+  const selarCampaign = selarAffiliate.campaigns.find(c => c.type === "affiliate");
+  selarCampaign.status = "ACTIVE_FOR_DRAFTS_ONLY";
+  selarCampaign.destinationUrl = "https://selar.com/another-product";
+  selarCampaign.destinationValidation = "owner_confirmed_exact_https";
+  selarCampaign.ownerApproved = true;
+  selarCampaign.disclosureText = "I may earn a commission from this affiliate link.";
+  selarCampaign.approval = { approvedBy: "owner", approvedAt: "2026-11-09T10:00:00Z", destinationVersion: "a".repeat(64) };
+  assert.ok(validateCampaigns(selarAffiliate).some(error => /dedicated direct-sales campaign/i.test(error)));
   const missingDisclosure = structuredClone(baseline);
   const candidate = missingDisclosure.campaigns.find(c => c.type === "affiliate");
   candidate.status = "ACTIVE_FOR_DRAFTS_ONLY";
