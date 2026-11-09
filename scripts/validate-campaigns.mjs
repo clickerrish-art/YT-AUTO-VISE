@@ -49,7 +49,9 @@ export function validateCampaigns(config) {
         let url;
         try { url = new URL(campaign.destinationUrl); } catch {}
         if (!url || url.protocol !== "https:" || url.username || url.password) errors.push("active affiliate campaign requires an exact HTTPS destination without embedded credentials");
-        if (campaign.ownerApproved !== true || campaign.destinationValidation !== "owner_verified") errors.push("active affiliate campaign requires explicit owner approval and a verified destination");
+        if (url && (url.hostname === "selar.com" || url.hostname.endsWith(".selar.com"))) errors.push("Selar destinations must use the dedicated direct-sales campaign, not an affiliate campaign");
+        if (campaign.ownerApproved !== true || campaign.destinationValidation !== "owner_confirmed_exact_https") errors.push("active affiliate campaign requires explicit owner approval of the exact HTTPS destination");
+        if (campaign.compensationType !== "affiliate") errors.push("external affiliate campaign must be classified as affiliate compensation");
         if (typeof campaign.disclosureText !== "string" || campaign.disclosureText.trim().length < 8) errors.push("active affiliate campaign requires an approved viewer-facing affiliate disclosure");
         if (!campaign.approval || typeof campaign.approval.approvedBy !== "string" || campaign.approval.approvedBy.trim().length < 2 ||
             !Number.isFinite(Date.parse(campaign.approval.approvedAt)) || !/^[a-f0-9]{64}$/.test(campaign.approval.destinationVersion ?? "")) {
@@ -63,7 +65,7 @@ export function validateCampaigns(config) {
   const affiliate = config.campaigns.filter(c => c.type === "affiliate");
   if (selar.length !== 1) errors.push("exactly one approved Selar campaign is required");
   if (safari.length !== 1) errors.push("exactly one separate Safari campaign record is required");
-  if (affiliate.length !== 1) errors.push("exactly one separate external affiliate campaign record is required");
+  if (affiliate.length < 1) errors.push("at least one separate external affiliate campaign record is required");
   return errors;
 }
 
