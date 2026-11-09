@@ -431,6 +431,26 @@ test("campaign controls fail closed on unapproved destinations and retain Safari
   expect(safari.ownerApproved).toBe(false);
   expect(safari.destinationUrl).toBe("");
 
+  await page.locator("#campaignid").selectOption("external-affiliate-unconfigured");
+  await page.locator("#campaignaction").selectOption("preview");
+  await page.locator("#campaignurl").fill("https://affiliate.example/serengeti?ref=sonicvhibez");
+  await page.locator("#campaigndisclosure").fill("I may earn a commission if you book through this affiliate link.");
+  await page.getByRole("button", { name: "Apply campaign action" }).click();
+  await expect(page.locator("#campaignresult")).toContainText("Preview saved; campaign remains unactivated");
+  await page.locator("#campaignaction").selectOption("activate");
+  await page.locator("#campaignapproval").check();
+  await page.getByRole("button", { name: "Apply campaign action" }).click();
+  await expect(page.locator("#campaignresult")).toContainText("Campaign action saved: ACTIVE_FOR_DRAFTS_ONLY");
+  stateResponse = await request.get("/api/state", { headers });
+  state = await stateResponse.json();
+  const affiliate = state.campaigns.find(campaign => campaign.id === "external-affiliate-unconfigured");
+  expect(affiliate.type).toBe("affiliate");
+  expect(affiliate.compensationType).toBe("affiliate");
+  expect(affiliate.destinationUrl).toBe("https://affiliate.example/serengeti?ref=sonicvhibez");
+  expect(affiliate.status).toBe("ACTIVE_FOR_DRAFTS_ONLY");
+  expect(state.campaigns.find(campaign => campaign.id === "selar-wildlife-vault").compensationType).toBe("direct_sales_revenue");
+  expect(state.publishingEnabled).toBe(false);
+
   await page.locator("#campaignid").selectOption("selar-wildlife-vault");
   await page.locator("#campaignaction").selectOption("preview");
   await page.locator("#campaignurl").fill("https://selar.com/unauthorized-destination");
