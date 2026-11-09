@@ -268,6 +268,78 @@
             "requiredBeforeRelease": true,
             "holdText": "Confirm whether the link is affiliate, paid placement, or uncompensated; then insert the exact truthful, owner-approved viewer-facing disclosure."
           }
+        },
+        {
+          "id": "sonicvhibez-short-006-niche-selection",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "How to choose a YouTube niche you can sustain",
+          "primaryKeyword": "how to choose a YouTube niche",
+          "script": "How do you choose a YouTube niche you can keep creating for—not just one that sounds popular? Run four checks. First, name one specific viewer and the problem they want solved. Second, list ten useful video ideas that genuinely fit your knowledge and access. Third, check whether people already ask related questions in search suggestions, comments and your own audience feedback. Fourth, make sure you can produce the videos safely and consistently with the time and budget you have. Compare two or three niche options, then test a small series and review the audience response. The YouTube Success Blueprint 90-Day Creator System is a planning resource to review. A niche is a hypothesis, not a growth guarantee.",
+          "productId": "youtube-success-blueprint-90-day",
+          "productUrl": "https://selar.com/91j893378q",
+          "visibility": "private",
+          "description": "How to choose a YouTube niche: compare a specific audience problem, useful expertise, repeatable ideas and realistic production capacity before committing.\n\nUse this four-check process to shortlist a channel topic, then test a small series and review what your actual audience watches.\n\nPlanning resource: The YouTube Success Blueprint 90-Day Creator System\nThe Selar listing describes a 30/60/90-day creator system. Review the full listing for exact contents:\nhttps://selar.com/91j893378q\n\nDISCLOSURE HOLD: Seller Click 47 was last verified on 7 November 2026. The compensation relationship (affiliate, paid placement or no compensation) is unverified. Confirm the exact relationship and owner-approved viewer-facing disclosure before release. Do not publish while unresolved.\n\nA niche test is a planning exercise, not a promise of views, subscribers or income.",
+          "keywordPhrases": [
+            {
+              "phrase": "how to choose a YouTube niche"
+            },
+            {
+              "phrase": "how to find your YouTube niche"
+            },
+            {
+              "phrase": "how to pick a YouTube channel topic"
+            },
+            {
+              "phrase": "best YouTube niche for beginners"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-09T09:49:01+02:00",
+            "note": "No measured global search-volume or competition data is available in this run: vidIQ has 4 credits remaining, below its 5-credit keyword-research call cost. Fresh qualitative search results surfaced an English-language guide matching the exact query and an official YouTube Help page explaining that Studio Trends reports top searches, audience interest and Shorts content gaps over the last 28 days. The connected channel's private Studio Trends data was not accessed, so these are intent signals only, not measured demand or competition.",
+            "sources": [
+              {
+                "title": "How Do You Choose a YouTube Niche You Can Sustain?",
+                "url": "https://mitaschool.com/choose-youtube-niche/",
+                "whyRelevant": "A recently indexed English-language creator guide frames niche choice around a specific audience problem, demonstrable knowledge and videos the creator can reliably produce—directly matching this Short's four-check lesson."
+              },
+              {
+                "title": "Explore trends on YouTube — YouTube Help",
+                "url": "https://support.google.com/youtube/answer/11962757?co=GENIE.Platform%3DDesktop&hl=en",
+                "whyRelevant": "Official guidance explains that YouTube Studio Trends surfaces audience top searches, audience interest and Shorts content gaps using recent 28-day signals. This is relevant evidence for how creators should validate a niche, but the user's Studio data was not accessed."
+              }
+            ]
+          },
+          "hashtags": [
+            "#YouTubeNiche",
+            "#YouTubeChannelIdeas",
+            "#YouTubeStrategy",
+            "#CreatorEducation",
+            "#YouTubeBeginners"
+          ],
+          "thumbnailDirection": "Show three simple topic cards beside a focused audience icon; highlight one card with a clear check mark. Large mobile-readable text: “4 NICHE CHECKS”. Avoid income, subscriber or growth promises.",
+          "disclosure": {
+            "status": "HOLD",
+            "relationshipStatus": "UNVERIFIED",
+            "requiredBeforeRelease": true,
+            "holdText": "Confirm whether the link is affiliate, paid placement or uncompensated; then insert the exact truthful, owner-approved viewer-facing disclosure."
+          },
+          "productionChecklist": [
+            "Keep the four checks practical and explain each in one short sentence.",
+            "Use a concrete example of a viewer problem and a repeatable video idea.",
+            "Do not imply that a niche guarantees views, subscribers, monetisation or income.",
+            "Use original or commercially cleared graphics, music and sound effects.",
+            "Record natural narration and confirm a final runtime near 55 seconds.",
+            "Time captions to the actual voice track and check phone-size readability.",
+            "Verify the exact Selar listing and retain the recorded seller evidence reference.",
+            "Confirm the exact affiliate, paid-placement or no-compensation relationship.",
+            "Replace the disclosure hold only after the owner-approved truthful disclosure is available.",
+            "Complete human playback, factual and thumbnail review against final asset hashes.",
+            "Do not schedule until SonicVhibez destination identity and complete YouTube history are verified and every 72-hour gap is calculated."
+          ]
         }
       ]
     }
