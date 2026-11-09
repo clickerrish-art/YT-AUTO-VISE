@@ -62,11 +62,11 @@ function fakeYoutube() {
         calls.lists.push(args);
         return { data: { items: [{
           id: videoId,
-          snippet: { ...currentSnippet },
+          snippet: { ...remoteSnippet },
           status: { privacyStatus: "private" }
         }] } };
       },
-      update: async args => { calls.updates.push(args); return { data: { id: videoId } }; }
+      update: async args => { calls.updates.push(args); remoteSnippet = { ...args.requestBody.snippet }; return { data: { id: videoId } }; }
     }
   };
   return { api, calls };
@@ -113,4 +113,29 @@ test("live metadata writes require a separate explicit live confirmation", async
 test("canonical metadata hash is stable and includes tags and category", () => {
   assert.equal(snippetSha256(canonicalSnippet(currentSnippet)), snippetSha256(currentSnippet));
   assert.notEqual(snippetSha256(currentSnippet), snippetSha256({ ...currentSnippet, tags: ["changed"] }));
+});
+
+test("live update writes only snippet fields and verifies the exact result without touching privacy", async () => {
+  const file = path.join(process.cwd(), ".tmp-seo-live-approval-" + process.pid + ".json");
+  fs.writeFileSync(file, JSON.stringify(approval()), { flag: "wx" });
+  const { api, calls } = fakeYoutube();
+  try {
+    const result = await updateApprovedYoutubeSeo({
+      env: { ...env, SEO_METADATA_LIVE_CONFIRM: "YES", SEO_METADATA_DRY_RUN: "NO" },
+      approvalPath: path.basename(file),
+      youtubeFactory: () => api,
+      now,
+      dryRun: false
+    });
+    assert.equal(result.status, "PASS_SEO_METADATA_UPDATED_AND_VERIFIED");
+    assert.equal(result.writesPerformed, true);
+    assert.equal(result.privacyStatus, "private");
+    assert.equal(calls.updates.length, 1);
+    assert.deepEqual(calls.updates[0].part, ["snippet"]);
+    assert.equal("status" in calls.updates[0].requestBody, false);
+    assert.equal(calls.updates[0].requestBody.snippet.title, approval().desired.title);
+    assert.equal(calls.updates[0].requestBody.snippet.categoryId, "15");
+  } finally {
+    fs.rmSync(file, { force: true });
+  }
 });
