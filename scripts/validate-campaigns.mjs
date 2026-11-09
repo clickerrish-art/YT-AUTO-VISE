@@ -78,7 +78,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
       for (const error of errors) console.error("FAIL: " + error);
       process.exitCode = 1;
     } else {
-      console.log("PASS: Selar direct sales, external affiliate and legacy Safari campaign records are isolated; Selar destination is exact; Safari remains inactive; affiliate activation requires an exact owner-approved HTTPS destination and disclosure. This does not validate a live destination or authorize publishing.");
+      console.log("PASS: Selar and Safari campaign records are isolated; the external affiliate campaign is separate; Selar destination is exact; Safari remains inactive; affiliate activation requires an exact owner-approved HTTPS destination and disclosure. This does not validate a live destination or authorize publishing.");
     }
   } catch (error) {
     console.error("FAIL: " + error.message);
