@@ -90,6 +90,8 @@ Here is the quick checklist: one answerable question, a clear beginning and payo
 
 **[Visual: checklist ticks on screen]**
 
+Before export, check the final sequence for continuity, accurate labels, readable captions, and clear sound.
+
 Planning does not guarantee views or income. It gives you a repeatable process for making a more coherent video and for catching avoidable problems before publication.
 
 If you want a paid resource to help organize your creator workflow, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** using the link in the description: https://selar.com/0u19v8u99l. It is a paid digital product, so check the current sales page, contents, and terms before deciding whether it suits you. No product can guarantee channel growth or monetization.
