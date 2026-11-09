@@ -49,7 +49,7 @@ jobs:
       - name: Generate audio and word-boundary captions
         env:
           SELECTED_SHORT: ${{ github.event.inputs.short || 'both' }}
-        run: python scripts/generate-narration.py --short "$SELECTED_SHORT" --voice en-US-GuyNeural --rate=-5%
+        run: python scripts/generate-narration.py --short "$SELECTED_SHORT" --voice en-US-GuyNeural --rate=+0%
       - name: Validate SRT structure and safety metadata
         run: |
           python - <<'PY'
