@@ -47,31 +47,31 @@ function formatMarkdown(report) {
     "- Research window: last " + report.windowDays + " days",
     "- Evidence: YouTube search-result video performance proxy",
     "",
-    "> These rankings are NOT monthly search-volume estimates and do not prove how many people searched for a phrase. They summarize view counts for recent videos returned by YouTube search for each seed query. Use them as topic-discovery evidence only.",
+    "> These rankings are NOT monthly search-volume estimates and do not prove how many people searched for a phrase. They summarize view counts for recent videos returned by YouTube search. Title matches are heuristic only; review the actual video before using any phrase.",
     "",
     "## Candidate search phrases",
     "",
-    "| Rank | Phrase | Results | Relevant | Filtered | Combined relevant views | Top relevant views |",
+    "| Rank | Phrase | Results | Title matches | Filtered | Combined title-signal views | Top title-signal views |",
     "|---:|---|---:|---:|---:|---:|---:|"
   ];
   for (const item of report.keywordCandidates) {
     lines.push("| " + item.rank + " | " + item.phrase + " | " + item.resultsCount +
-      " | " + item.relevantResultsCount + " | " + item.excludedResultsCount +
-      " | " + item.combinedViews + " | " + item.topResultViews + " |");
+      " | " + item.titleSignalResultsCount + " | " + item.excludedResultsCount +
+      " | " + item.combinedTitleSignalViews + " | " + item.topTitleSignalViews + " |");
   }
   lines.push("", "## Evidence and review");
   for (const item of report.keywordCandidates) {
     lines.push("", "### " + item.phrase);
-    if (!item.sampleVideos.length) {
-      lines.push("- No recent title-filtered wildlife results were returned for this phrase.");
+    if (!item.sampleTitleSignalVideos.length) {
+      lines.push("- No title-signal wildlife results were returned for this phrase.");
     }
-    for (const video of item.sampleVideos) {
-      lines.push("- [" + video.title.replace(/[\\[\\]]/g, "") + "](https://www.youtube.com/watch?v=" +
+    for (const video of item.sampleTitleSignalVideos) {
+      lines.push("- [" + video.title.replace(/[\[\]]/g, "") + "](https://www.youtube.com/watch?v=" +
         video.videoId + ") — " + video.viewCount + " views; published " + video.publishedAt +
         "; channel: " + video.channelTitle);
     }
     if (item.excludedSampleVideos.length) {
-      lines.push("- Filtered as likely off-topic by title signals (manual review still advised): " +
+      lines.push("- Filtered by off-topic title signals (manual review still advised): " +
         item.excludedSampleVideos.map(video => video.title).join("; "));
     }
   }
@@ -80,6 +80,7 @@ function formatMarkdown(report) {
     "## Recommended use",
     "",
     "- Use a phrase only when it accurately describes the actual footage and story.",
+    "- Title matching is a heuristic only; it does not verify the video's footage or transcript.",
     "- Treat this as a research shortlist, not permission to edit titles, descriptions, tags or channel keywords.",
     "- Do not add 4K, species, location, rescue, attack or other factual claims unless the footage verifies them.",
     "- No channel branding or YouTube metadata was changed.",
@@ -97,8 +98,8 @@ export function buildSeoResearchReport({ channel, queryResults, generatedAt, win
   if (!Array.isArray(queryResults) || queryResults.length !== SEO_SEED_QUERIES.length) {
     throw new Error("SEO research must contain one result set for every configured seed query");
   }
-  const wildlifeTitleSignal = /\b(wildlife|wild|animal|animals|safari|lion|elephant|crocodile|hippo|leopard|zebra|rhino|buffalo|giraffe|cheetah|hyena|pangolin|mamba|meerkat|predator|bird|snake|turtle|whale|shark|bear|wolf|fox|monkey|gorilla|chimpanzee|baboon|bison|owl|mammal)\b/i;
-  const offTopicTitleSignal = /\b(skit|funny|comedy|ranking|reaction|meme|prank|gaming|cartoon|gameplay)\b/i;
+  const wildlifeTitleSignal = /\b(wildlife|wild|animals?|safari|lions?|elephants?|crocodiles?|hippos?|leopards?|zebras?|rhinos?|buffalo(?:es)?|giraffes?|cheetahs?|hyenas?|pangolins?|mambas?|meerkats?|predators?|birds?|snakes?|turtles?|whales?|sharks?|bears?|wolves?|foxes?|monkeys?|gorillas?|chimpanzees?|baboons?|bisons?|owls?|mammals?|silverbacks?|parrots?|deer|antelopes?|dogs?|cats?|chicks?)\b/i;
+  const offTopicTitleSignal = /\b(skit|funny|hilarious|comedy|ranking|reaction|meme|prank|gaming|cartoon|gameplay|coffee|feces|poop|kopi|expensive)\b/i;
   const candidates = queryResults.map((entry, index) => {
     if (entry.query !== SEO_SEED_QUERIES[index] || !Array.isArray(entry.videos)) {
       throw new Error("SEO search result set does not match the configured query sequence");
@@ -110,17 +111,18 @@ export function buildSeoResearchReport({ channel, queryResults, generatedAt, win
       publishedAt: String(video.publishedAt ?? ""),
       viewCount: Number.isSafeInteger(video.viewCount) && video.viewCount >= 0 ? video.viewCount : 0
     })).filter(video => /^[A-Za-z0-9_-]{11}$/.test(video.videoId) && video.title);
-    const relevant = videos.filter(video => wildlifeTitleSignal.test(video.title) && !offTopicTitleSignal.test(video.title));
-    const excluded = videos.filter(video => !relevant.includes(video));
+    const titleMatches = videos.filter(video => wildlifeTitleSignal.test(video.title) && !offTopicTitleSignal.test(video.title));
+    const excluded = videos.filter(video => !titleMatches.includes(video));
     return {
       phrase: entry.query,
       resultsCount: videos.length,
-      relevantResultsCount: relevant.length,
+      titleSignalResultsCount: titleMatches.length,
       excludedResultsCount: excluded.length,
-      combinedViews: relevant.reduce((sum, video) => sum + video.viewCount, 0),
-      topResultViews: relevant.reduce((max, video) => Math.max(max, video.viewCount), 0),
-      sampleVideos: relevant.slice(0, 5),
-      excludedSampleVideos: excluded.slice(0, 3)
+      combinedTitleSignalViews: titleMatches.reduce((sum, video) => sum + video.viewCount, 0),
+      topTitleSignalViews: titleMatches.reduce((max, video) => Math.max(max, video.viewCount), 0),
+      sampleTitleSignalVideos: titleMatches.slice(0, 5),
+      excludedSampleVideos: excluded.slice(0, 3),
+      relevanceStatus: "TITLE_SIGNAL_ONLY_REQUIRES_OWNER_REVIEW"
     };
   }).sort((a, b) => b.combinedViews - a.combinedViews || b.relevantResultsCount - a.relevantResultsCount)
     .map((item, index) => ({ rank: index + 1, ...item }));
@@ -133,7 +135,7 @@ export function buildSeoResearchReport({ channel, queryResults, generatedAt, win
     evidenceType: "YOUTUBE_SEARCH_RESULT_VIDEO_PERFORMANCE_PROXY_NOT_SEARCH_VOLUME",
     searchVolume: null,
     keywordCompetition: null,
-    relevanceFilter: "Title contains wildlife/animal/species signals and excludes obvious skit/funny/comedy/ranking/reaction/meme/prank/gaming/cartoon signals; this is a heuristic, not human content verification.",
+    relevanceFilter: "Title contains wildlife/animal/species signals and excludes obvious off-topic entertainment/non-wildlife signals; this is a heuristic, not content verification.",
     keywordCandidates: candidates,
     actions: {
       metadataWritesPerformed: false,
