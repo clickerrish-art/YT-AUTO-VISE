@@ -9,6 +9,7 @@
       "destinationUrl": "https://selar.com/0u19v8u99l",
       "destinationValidation": "exact_approved_allowlist",
       "ownerApproved": true,
+      "disclosureApprovalStatus": "PENDING_OWNER_APPROVAL",
       "disclosureRequired": true,
       "disclosureText": "This product is sold through my own Selar business; purchases generate revenue for my business.",
       "compensationType": "direct_sales_revenue"
