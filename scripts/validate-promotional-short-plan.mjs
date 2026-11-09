@@ -82,8 +82,12 @@ export function validatePromotionalShortPlan(plan, products) {
       if (product?.status === "candidate") {
         if (item?.status !== "DRAFT_ONLY") errors.push(`${label}: candidate products may appear only in DRAFT_ONLY content`);
         const gate = product.promotionGate ?? {};
-        if (gate.seller?.status !== "VERIFIED") errors.push(`${label}: candidate seller evidence must be VERIFIED from its exact Selar URL`);
-        if (gate.seller?.name !== "Click 47") errors.push(`${label}: candidate seller name must match the verified Selar listing`);
+        let productHost = "";
+        try { productHost = new URL(product.url).hostname.toLowerCase(); } catch {}
+        const isSelarProduct = productHost === "selar.com" || productHost.endsWith(".selar.com");
+        if (gate.seller?.status !== "VERIFIED") errors.push(`${label}: candidate seller evidence must be VERIFIED from its exact product URL`);
+        if (isSelarProduct && gate.seller?.name !== "Click 47") errors.push(`${label}: candidate Selar seller name must match the verified listing`);
+        if (!isSelarProduct && (typeof gate.seller?.name !== "string" || !gate.seller.name.trim())) errors.push(`${label}: candidate affiliate seller name must be recorded from the exact external listing`);
         if (gate.seller?.sourceUrl !== product.url) errors.push(`${label}: candidate seller evidence URL must match the exact product URL`);
         if (!isValidZonedIsoTimestamp(gate.seller?.verifiedAt)) errors.push(`${label}: candidate seller verification needs a valid timezone-qualified timestamp`);
         if (typeof gate.seller?.evidenceReference !== "string" || !gate.seller.evidenceReference.trim()) errors.push(`${label}: candidate seller verification needs an evidence reference`);
@@ -91,7 +95,14 @@ export function validatePromotionalShortPlan(plan, products) {
         if (gate.brandAuthorization?.brand !== "SonicVhibez") errors.push(`${label}: candidate brand authorization must name exactly SonicVhibez`);
         if (!isValidZonedIsoTimestamp(gate.brandAuthorization?.confirmedAt)) errors.push(`${label}: candidate brand authorization needs a valid timezone-qualified confirmation timestamp`);
         if (typeof gate.brandAuthorization?.approvalReference !== "string" || !gate.brandAuthorization.approvalReference.trim()) errors.push(`${label}: candidate brand authorization needs an owner approval reference`);
-        if (gate.compensation?.status !== "OWNER_CONFIRMED" || String(gate.compensation?.type).toLowerCase() !== "direct_sales_revenue") errors.push(`${label}: Selar candidate compensation must be owner-confirmed direct sales revenue`);
+        const expectedType = isSelarProduct ? "direct_sales_revenue" : "affiliate";
+        const expectedStatus = isSelarProduct ? "OWNER_CONFIRMED" : "VERIFIED";
+        if (gate.compensation?.status !== expectedStatus || String(gate.compensation?.type).toLowerCase() !== expectedType) {
+          errors.push(`${label}: candidate compensation must match the URL relationship (${expectedType}, ${expectedStatus})`);
+        }
+        if (isSelarProduct && !/^\d{4}-\d{2}-\d{2}$/.test(String(gate.compensation?.verifiedAt ?? ""))) {
+          errors.push(`${label}: owner-confirmed Selar sales need a YYYY-MM-DD confirmation date`);
+        }
         if (gate.disclosure?.status !== "UNVERIFIED") errors.push(`${label}: candidate disclosure status must remain UNVERIFIED`);
       }
       if (typeof item?.productId !== "string" || item.productId !== product?.id) {
