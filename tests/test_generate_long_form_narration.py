@@ -176,6 +176,15 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
             self.assertIn(MODULE.APPROVED_DISCLOSURE_TEXT, narration)
             self.assertIn("Advertisement.", narration)
 
+    def test_both_long_form_descriptions_identify_the_commercial_segment(self):
+        source = MODULE.SOURCE.read_text(encoding="utf-8")
+        self.assertEqual(source.count("ADVERTISEMENT — Promotional resource:"), 2)
+        episodes = MODULE.extract_episodes(source)
+        self.assertEqual(len(episodes), 2)
+        for _, _, narration in episodes:
+            self.assertIn("Advertisement.", narration)
+            self.assertIn(MODULE.APPROVED_DISCLOSURE_TEXT, narration)
+
     def test_owner_gate_is_defined_once_and_requires_all_evidence_references(self):
         source = MODULE_PATH.read_text(encoding="utf-8")
         self.assertEqual(source.count("def has_owner_approved_selar_disclosure("), 1)
