@@ -98,12 +98,12 @@ test("both manual upload workflows require explicit private confirmation and pre
     assert.match(workflow, /PRIVATE_UPLOAD_AUTHORIZATION_PATH:/);
     assert.match(workflow, /group: sonicvhibez-private-upload/);
     assert.match(workflow, /cancel-in-progress: false/);
-    assert.match(workflow, /Refuse ledger bypass after any prior manual upload run/);
-    assert.match(workflow, /event=workflow_dispatch&per_page=100/);
+    assert.match(workflow, /Validate previous upload ledger against executed private-upload jobs/);
+    assert.match(workflow, /run: node scripts\\/validate-upload-ledger-run\\.mjs/);
     assert.match(workflow, /PREVIOUS_LEDGER_RUN_ID/);
-    assert.match(workflow, /previous_ledger_run_id cannot be NONE because prior manual private-upload workflow history exists/);
     assert.match(workflow, /previous_ledger_run_id/);
     assert.match(workflow, /sonicvhibez-upload-ledger/);
+    assert.doesNotMatch(workflow, /Refuse ledger bypass after any prior manual upload run/);
     assert.match(workflow, /run: npm ci --ignore-scripts/);
     assert.doesNotMatch(workflow, /run: npm install --ignore-scripts/);
     assert.match(workflow, /privacyStatus|private/i);
@@ -242,4 +242,13 @@ test("remote YouTube read-back must match exact video ID, channel, approved titl
   assert.equal(remoteUploadMatchesApprovedMetadata({ ...remote, snippet: { ...remote.snippet, title: "Different title" } }, expected), false);
   assert.equal(remoteUploadMatchesApprovedMetadata({ ...remote, status: { privacyStatus: "unlisted" } }, expected), false);
   assert.equal(remoteUploadMatchesApprovedMetadata(null, expected), false);
+});
+
+test("ledger guard distinguishes skipped read-only jobs from executed private-upload jobs", () => {
+  const guard = fs.readFileSync("scripts/validate-upload-ledger-run.mjs", "utf8");
+  assert.match(guard, /event=workflow_dispatch&per_page=/);
+  assert.match(guard, /job\?\.name === "private-upload"/);
+  assert.match(guard, /job\?\.conclusion !== "skipped"/);
+  assert.match(guard, /earlier read-only or skipped/);
+  assert.match(guard, /exactly one unexpired sonicvhibez-upload-ledger artifact/);
 });
