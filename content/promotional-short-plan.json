@@ -115,7 +115,8 @@
                 "whyRelevant": "Search result shows a structured prompt asking for channel niche, audience, goals and actionable steps; supports demand for practical, context-rich creator prompts."
               }
             ]
-          }
+          },
+          "visibility": "private"
         },
         {
           "id": "sonicvhibez-short-004-90-day-review",
@@ -222,7 +223,8 @@
                 "whyRelevant": "The template includes a 90-day calendar, production pipeline and monthly KPI tracker, supporting search intent around a practical 90-day creator plan."
               }
             ]
-          }
+          },
+          "visibility": "private"
         }
       ]
     },
