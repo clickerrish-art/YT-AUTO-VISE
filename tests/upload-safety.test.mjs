@@ -31,7 +31,7 @@ test("YouTube insert uses the documented paid-promotion and synthetic-media API 
   assert.match(source, /part: \["snippet", "status", "paidProductPlacementDetails"\]/);
   assert.match(source, /status:\s*\{[\s\S]*?containsSyntheticMedia: metadata\.containsSyntheticMedia\s*\}/);
   assert.match(source, /paidProductPlacementDetails:\s*\{\s*hasPaidProductPlacement: metadata\.hasPaidPromotion\s*\}/);
-  assert.doesNotMatch(source, /status:\s*\{[\s\S]*?paidProductPlacementDetails:/);
+  assert.doesNotMatch(source, /status:\s*\{[^}]*paidProductPlacementDetails:/);
 });
 
 test("promotion disclosure validation fails closed unless metadata and final captions are exact", () => {
