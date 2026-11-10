@@ -4,6 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { runAutonomousFacebookPublisher } from "../scripts/facebook-autonomous-publisher.mjs";
+import { FACEBOOK_POLICY_RULE_VERSION } from "../scripts/facebook-policy-engine.mjs";
 
 function setup() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-publisher-"));
@@ -16,7 +17,7 @@ function setup() {
     autonomousMode: true, autonomousSchedulingEnabled: true, emergencyStop: true,
     publishingEnabled: false, dryRun: true, dailyCap: 1, minimumIntervalMinutes: 1200,
     allowedDomains: [], allowedCampaignIds: [], approvedDestinations: [],
-    complianceRuleSet: "nf-facebook-autonomous-policy-2026-10-v1"
+    complianceRuleSet: FACEBOOK_POLICY_RULE_VERSION
   };
   fs.writeFileSync(configPath, JSON.stringify(config));
   fs.writeFileSync(queuePath, "[]");
