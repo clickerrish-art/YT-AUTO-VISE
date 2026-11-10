@@ -37,8 +37,8 @@ test("Short 001 captions exactly match narration and include the approved direct
   }
 
   assert.equal(previousEnd, 60_000, "the reviewed draft target is 60 seconds");
-  assert.ok(cues.includes("ADVERTISEMENT"), "the commercial segment must carry a clear Advertisement identifier");
-  assert.equal(normalize(cues.filter(cue => cue !== "ADVERTISEMENT").join(" ")), narration, "all spoken captions must match every spoken word exactly");
+  assert.ok(cues.includes("Advertisement."), "the spoken commercial segment must carry a clear Advertisement identifier");
+  assert.equal(normalize(cues.join(" ")), narration, "captions must match every spoken word exactly");
   assert.ok(cues.includes(disclosure), "the exact owner-approved disclosure must be a complete readable caption cue");
 });
 
@@ -56,4 +56,5 @@ test("Short 001 metadata preserves private-only and policy disclosure safeguards
   assert.equal(metadata.rightsConfirmed, false);
   assert.equal(metadata.complianceReviewed, false);
   assert.equal(metadata.status, "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW");
+  assert.match(metadata.description, /ADVERTISEMENT.*OWNER-APPROVED DIRECT-SALES DISCLOSURE/);
 });
