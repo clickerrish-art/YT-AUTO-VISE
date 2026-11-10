@@ -15,8 +15,9 @@ This checkpoint supersedes earlier statements that Selar disclosure approval was
 ## Still blocking production release
 
 - `content/render-manifest.json`, `content/long-form-render-manifest.json`, and `media/next-short.mp4` are absent. Example manifests are templates, not production evidence.
-- Genuine wildlife footage, source/licence/permission records, final narration audio, complete render artifacts and hashes are not present. Do not synthesize or fabricate these as proof of authentic wildlife footage.
-- Rights confirmation, factual review, full-playback human review and final compliance approval remain false.
+- A genuine NOAA Spiny Lobsters B-roll package is retained in workflow artifact `13662524700` and has a full 1-second-interval visual review recorded in `content/footage-source-candidates.md`. Its opening slate requires credit to NOAA’s Office of National Marine Sanctuaries. It remains a candidate, not an approved production asset: no asset-register record or owner human approval exists, and its AAC source audio is not cleared and must be removed.
+- Final narration audio, a rights-bound render, complete render artifacts and final hashes are not present. Do not synthesize or fabricate wildlife footage as proof of authentic animal behaviour.
+- Rights confirmation, owner approval of the NOAA footage selection, factual review, full-playback human review and final compliance approval remain outstanding.
 - The Short has no eligible, verified long-form parent video relationship. Keep its parent IDs, URL and hashes unset until a real long-form parent is published and reconciled.
 - Complete the upload-attempt ledger and live YouTube history check immediately before any authorized private upload. Read-only OAuth identity/inventory verification is not write-access or upload proof.
 - No exact-head Actions result is currently available for the latest implementation commits; do not claim tests or production readiness from older queued runs.
