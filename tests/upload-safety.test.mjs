@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { validateUploadApproval, validateOneShotUploadAuthorization, assertReconciliationOnlyHasPriorAttempt, verifyRetainedRightsEvidence, sha256File, resolveRegularFileNoSymlinks, resolveRepositoryFileNoSymlinks, prepareUploadLogDirectory, remoteUploadMatchesApprovedMetadata, matchesApprovedSonicVhibezChannel } from "../scripts/upload-private.mjs";
+import { validateUploadApproval, validateOneShotUploadAuthorization, assertReconciliationOnlyHasPriorAttempt, verifyRetainedRightsEvidence, sha256File, resolveRegularFileNoSymlinks, resolveRepositoryFileNoSymlinks, prepareUploadLogDirectory, remoteUploadMatchesApprovedMetadata, matchesApprovedSonicVhibezChannel, validatePromotionDisclosure, APPROVED_SELAR_DISCLOSURE } from "../scripts/upload-private.mjs";
 
 test("YouTube uploader is private-only and binds upload to the verified SonicVhibez channel", () => {
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
@@ -25,6 +25,31 @@ test("YouTube uploader is private-only and binds upload to the verified SonicVhi
   assert.doesNotMatch(source, /youtube\.videos\.update\s*\(/);
 });
 
+
+test("YouTube insert uses the documented paid-promotion and synthetic-media API fields", () => {
+  const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
+  assert.match(source, /part: \["snippet", "status", "paidProductPlacementDetails"\]/);
+  assert.match(source, /status:\s*\{[\s\S]*?containsSyntheticMedia: metadata\.containsSyntheticMedia\s*\}/);
+  assert.match(source, /paidProductPlacementDetails:\s*\{\s*hasPaidProductPlacement: metadata\.hasPaidPromotion\s*\}/);
+  assert.doesNotMatch(source, /status:\s*\{[\s\S]*?paidProductPlacementDetails:/);
+});
+
+test("promotion disclosure validation fails closed unless metadata and final captions are exact", () => {
+  const metadata = {
+    productUrl: "https://selar.com/0u19v8u99l",
+    hasPaidPromotion: true,
+    containsSyntheticMedia: true,
+    description: "ADVERTISEMENT — " + APPROVED_SELAR_DISCLOSURE,
+    promotionDisclosure: { status: "APPROVED", type: "direct_sales_revenue", text: APPROVED_SELAR_DISCLOSURE }
+  };
+  const captions = "Advertisement.\n" + APPROVED_SELAR_DISCLOSURE;
+  assert.equal(validatePromotionDisclosure(metadata, captions), true);
+  assert.throws(() => validatePromotionDisclosure({ ...metadata, hasPaidPromotion: false }, captions), /paid-promotion declaration/);
+  assert.throws(() => validatePromotionDisclosure({ ...metadata, containsSyntheticMedia: undefined }, captions), /synthetic-media declaration/);
+  assert.throws(() => validatePromotionDisclosure({ ...metadata, promotionDisclosure: { ...metadata.promotionDisclosure, status: "UNVERIFIED" } }, captions), /owner-approved/);
+  assert.throws(() => validatePromotionDisclosure({ ...metadata, description: "Product link: " + APPROVED_SELAR_DISCLOSURE }, captions), /identify the advertisement/);
+  assert.throws(() => validatePromotionDisclosure(metadata, "No ad label or disclosure"), /final captions/);
+});
 
 test("verified @sonicvhibez handle is accepted when the channel display title is SonicVibes", () => {
   const channelId = "UCSlkuPfHH78oGC1o418HV4w";
