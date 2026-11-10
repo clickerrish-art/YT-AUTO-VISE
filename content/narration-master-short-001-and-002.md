@@ -1,6 +1,6 @@
 # Narration master — SonicVhibez Shorts
 
-These reads are written to follow the current 55-second subtitle drafts. Timing is approximate; the final editor must align captions to the recorded audio. The Selar direct-sales sentence is a proposed disclosure draft, not owner-approved release wording; all resulting audio remains review-only until the owner approves the exact wording. Voice direction: friendly, clear, natural American male voice, conversational rather than salesy. Aim for an unhurried documentary pace and leave short pauses between ideas.
+These reads target 50–60 seconds. Timing is approximate; the final editor must align captions to the recorded audio. The owner approved this exact Selar direct-sales disclosure on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Use it verbatim in spoken audio and as readable on-screen text immediately alongside the product CTA. Keep YouTube’s paid-promotion declaration enabled. All generated audio remains review-only until human review; no rights or publication approval is implied. Voice direction: friendly, clear, natural American male voice, conversational rather than salesy. Aim for an unhurried documentary pace and leave short pauses between ideas.
 
 ## Short 001 — How to Make Better Wildlife Videos for YouTube
 
@@ -26,7 +26,7 @@ Add readable captions and only music you have permission to use.
 
 Finish with one useful takeaway so viewers leave having learned something.
 
-Build your next wildlife video with a plan. The Wildlife Creator’s Vault is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.
+Build your next wildlife video with a plan. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.
 
 **Performance notes:** Brief pause after the opening question. Emphasize “safe distance” without sounding alarmist. Keep the product mention matter-of-fact.
 
@@ -42,7 +42,7 @@ Second, build a simple story. Open with a moment that raises the question, add h
 
 Third, check every asset. Confirm footage and music rights, fact-check each claim, and keep captions readable on a phone.
 
-Record each clip's source, what it shows, and what still needs checking. A focused story beats a rushed list of facts. The Wildlife Creator’s Vault is sold through my own Selar business; purchases generate revenue for my business. The link is below.
+Record each clip's source, what it shows, and what still needs checking. A focused story beats a rushed list of facts. This product is sold through my own Selar business; purchases generate revenue for my business. The link is below.
 
 **Performance notes:** Make each step distinct, but keep the delivery warm and steady. Do not add claims about guaranteed growth or results.
 
