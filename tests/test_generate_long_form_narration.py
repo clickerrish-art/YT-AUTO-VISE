@@ -131,10 +131,10 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
 
     def test_includes_paid_product_paragraph_only_with_exact_owner_approved_disclosure(self):
         source = (
-            "Opening narration remains.\\n\\n"
+            "Opening narration remains.\n\n"
             "If you want a paid resource, review the product. "
             "This product is sold through my own Selar business; purchases generate revenue for my business. "
-            "The link is in the description.\\n\\n"
+            "The link is in the description.\n\n"
             "Closing narration remains."
         )
 
@@ -145,7 +145,7 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
         self.assertNotIn("selar.com", cleaned)
 
     def test_rejects_paid_product_paragraph_without_exact_approved_disclosure(self):
-        source = "If you want a paid resource, review the product.\\n\\nClosing narration remains."
+        source = "If you want a paid resource, review the product.\n\nClosing narration remains."
         with self.assertRaisesRegex(ValueError, "exact owner-approved Selar disclosure"):
             MODULE.clean_script(source, include_paid_product=True)
 
