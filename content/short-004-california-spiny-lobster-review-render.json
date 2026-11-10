@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "contentId": "SHORT-004-CALIFORNIA-SPINY-LOBSTER",
+  "status": "REVIEW_RENDER_ONLY_NOT_FOR_PUBLICATION",
+  "productionApproved": false,
+  "sourceAssetId": "NOAA-SPINY-LOBSTERS-CA-2026-11",
+  "sourceSha256": "1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb",
+  "sourceWorkflowRunId": 42594716333,
+  "sourceArtifactId": 13662524700,
+  "selectedSourceRangesSeconds": [
+    [
+      160,
+      175
+    ],
+    [
+      245,
+      257
+    ],
+    [
+      320,
+      335
+    ],
+    [
+      360,
+      373
+    ]
+  ],
+  "sourceAudioIncluded": false,
+  "sourceAudioRemoved": true,
+  "attribution": "NOAA’s Office of National Marine Sanctuaries",
+  "narration": {
+    "type": "synthetic_text_to_speech",
+    "engine": "eSpeak",
+    "voice": "en-us",
+    "speedWpm": 125,
+    "exactScriptPath": "content/short-004-california-spiny-lobster-script.md",
+    "disclosureOverlay": "AI-GENERATED NARRATION",
+    "humanVoiceApproval": false,
+    "replaceBeforePublication": true
+  },
+  "captions": {
+    "path": "content/short-004-california-spiny-lobster.srt",
+    "intendedToMatchNarrationWordForWord": true,
+    "timingStatus": "PROVISIONAL_TIMING_REQUIRES_HUMAN_REVIEW"
+  },
+  "output": {
+    "filename": "NOAA-california-spiny-lobster-short-review.mp4",
+    "sha256": "c0735b95efa5a70fba2eba3a87cbacd2355c400288b320d97dd3190dce1cf280",
+    "durationSeconds": 55.235,
+    "width": 1080,
+    "height": 1920,
+    "frameRate": 30,
+    "videoCodec": "H.264",
+    "audioCodec": "AAC",
+    "audioMeanVolumeDb": -17,
+    "fullFileDecode": "PASS",
+    "sourceAudioStream": "ABSENT",
+    "localPath": "/mnt/data/noaa-source/NOAA-california-spiny-lobster-short-review.mp4"
+  },
+  "remainingReview": [
+    "Human full-playback review of the complete video, narration, captions, attribution, framing and factual claims",
+    "Human editorial decision on synthetic eSpeak voice quality; replace with approved natural narration before publication",
+    "Shot-level review remains sampled at two-second intervals for the selected ranges, not frame-by-frame",
+    "Verify exact credit is legible on mobile across the complete video",
+    "Complete rights and compliance approval; keep all production approval flags false until then"
+  ],
+  "uploadAllowed": false,
+  "scheduleAllowed": false
+}
