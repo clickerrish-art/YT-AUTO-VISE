@@ -36,7 +36,7 @@ test("intake queues only candidates that pass the final policy evaluator", async
     const result = await runFacebookContentIntake({
       ...f, now: Date.parse("2026-10-24T10:00:00Z"), rootDir: f.rootDir,
       policyEvaluator: async candidate => candidate.slotId === "eligible-slot"
-        ? { eligible: true, contentFingerprint: "a".repeat(64), policyRuleVersion: "nf-facebook-autonomous-policy-2026-10-v1", reason: "ELIGIBLE" }
+        ? { eligible: true, contentFingerprint: "a".repeat(64), policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION, reason: "ELIGIBLE" }
         : { eligible: false, blockers: ["MISSING_RIGHTS"], reason: "MISSING_RIGHTS" }
     });
     assert.equal(result.accepted, 1);
