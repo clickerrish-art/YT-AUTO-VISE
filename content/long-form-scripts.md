@@ -96,7 +96,7 @@ Planning does not guarantee views or income. It gives you a repeatable process f
 
 **[Visual: display a clear ADVERTISEMENT identifier, then the exact approved Selar direct-sales disclosure in large, high-contrast text while the narration speaks it verbatim; hold it long enough to read]**
 
-If you want a paid resource to help organize your creator workflow, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** using the link in the description: https://selar.com/0u19v8u99l. This product is sold through my own Selar business; purchases generate revenue for my business. Check the current sales page, contents, and terms before deciding whether it suits you. No product can guarantee channel growth or monetization.
+Advertisement. If you want a paid resource to help organize your creator workflow, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** using the link in the description: https://selar.com/0u19v8u99l. This product is sold through my own Selar business; purchases generate revenue for my business. Check the current sales page, contents, and terms before deciding whether it suits you. No product can guarantee channel growth or monetization.
 
 Thanks for watching SonicVhibez. Choose one question for your next video, check that you can answer it honestly, and plan the story before you open the editing timeline.
 
@@ -106,7 +106,7 @@ Thanks for watching SonicVhibez. Choose one question for your next video, check 
 
 Learn a practical, story-first workflow for planning wildlife and nature videos: choose one viewer question, structure a clear narrative, verify facts, plan rights-cleared visuals, edit for clarity, and check captions and packaging before publishing. This is educational guidance, not a promise of views, revenue, or YouTube monetization. Narration uses AI-generated text-to-speech; any realistic AI-generated wildlife scenes or meaningful alterations of real events or places must be disclosed using YouTube's AI use setting.
 
-ADVERTISEMENT — Promotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF  
+ADVERTISEMENT — ADVERTISEMENT — Promotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF  
 This product is sold through my own Selar business; purchases generate revenue for my business.  
 https://selar.com/0u19v8u99l
 
@@ -189,9 +189,9 @@ Keep a copy of the project files and evidence. If a claim, license, or disclosur
 
 The repeatable process is simple: research one focused question, write narration that adds context, use visuals you have permission to publish, edit for clarity, and review the finished video carefully. Improvement comes from learning from each upload and from real audience data—not from assuming a workflow guarantees success.
 
-**[Visual: display the exact approved Selar direct-sales disclosure in large, high-contrast text while the narration speaks it verbatim; hold it long enough to read]**
+**[Visual: display a clear ADVERTISEMENT identifier, then the exact approved Selar direct-sales disclosure in large, high-contrast text while the narration speaks it verbatim; hold it long enough to read]**
 
-If you want a paid resource for organizing your creator process, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** at the link in the description: https://selar.com/0u19v8u99l. This product is sold through my own Selar business; purchases generate revenue for my business. Read the current sales page and terms before purchasing, and decide whether it meets your needs. It does not guarantee views, revenue, or monetization.
+Advertisement. If you want a paid resource for organizing your creator process, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** at the link in the description: https://selar.com/0u19v8u99l. This product is sold through my own Selar business; purchases generate revenue for my business. Read the current sales page and terms before purchasing, and decide whether it meets your needs. It does not guarantee views, revenue, or monetization.
 
 Thanks for watching SonicVhibez. Start with one focused idea, keep your sources and rights evidence organized, and make the next video a little clearer than the last.
 
