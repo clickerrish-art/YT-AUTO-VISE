@@ -70,6 +70,16 @@ test("verified @sonicvhibez handle is accepted when the channel display title is
   }, channelId), true);
 });
 
+test("promotion disclosure artifacts are validated before any YouTube insert", () => {
+  const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
+  const disclosureGate = source.indexOf("validatePromotionDisclosure(metadata, finalCaptions)");
+  const upload = source.indexOf("youtube.videos.insert(");
+  assert.notEqual(disclosureGate, -1);
+  assert.ok(disclosureGate < upload, "final description and caption disclosure must be checked before upload");
+  assert.match(source, /part: \["id", "snippet", "status", "paidProductPlacementDetails"\], id: videoId/);
+  assert.match(source, /remoteUploadMatchesApprovedMetadata\(item, \{[\s\S]*?hasPaidPromotion: metadata\.hasPaidPromotion[\s\S]*?containsSyntheticMedia: metadata\.containsSyntheticMedia/);
+});
+
 test("upload workflow requires media preflight before the YouTube insert call", () => {
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
   const preflightIndex = source.indexOf('scripts/preflight-media.mjs');
