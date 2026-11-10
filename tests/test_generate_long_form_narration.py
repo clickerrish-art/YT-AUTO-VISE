@@ -179,6 +179,7 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
     def test_both_long_form_descriptions_identify_the_commercial_segment(self):
         source = MODULE.SOURCE.read_text(encoding="utf-8")
         self.assertEqual(source.count("ADVERTISEMENT — Promotional resource:"), 2)
+        self.assertNotIn("ADVERTISEMENT — ADVERTISEMENT", source)
         episodes = MODULE.extract_episodes(source)
         self.assertEqual(len(episodes), 2)
         for _, _, narration in episodes:
