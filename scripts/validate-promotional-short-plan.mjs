@@ -127,7 +127,7 @@ export function validatePromotionalShortPlan(plan, products) {
           || (Object.hasOwn(item ?? {}, "publicationAt") && item.publicationAt !== null)) {
         errors.push(`${label}: publication timestamps are forbidden in a draft-preparation plan`);
       }
-      if (item?.visibility && item.visibility !== "private") errors.push(`${label}: only private visibility may be represented`);
+      if (item?.visibility !== "private") errors.push(`${label}: visibility must be exactly private while the Short remains draft-only`);
       if (typeof item?.primaryKeyword !== "string" || !item.primaryKeyword.trim()) errors.push(`${label}: primaryKeyword is required`);
       const firstDescriptionLines = String(item?.description ?? "").slice(0, 240).toLowerCase();
       if (!firstDescriptionLines.includes(String(item?.primaryKeyword ?? "").toLowerCase())) {
