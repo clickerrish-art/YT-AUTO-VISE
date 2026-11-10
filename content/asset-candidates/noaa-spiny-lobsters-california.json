@@ -59,5 +59,36 @@
   "publication": {
     "allowed": false,
     "note": "Owner approval is conditional source-use authorization only. It is not final-video approval, upload authorization, or permission to enable publishing."
+  },
+  "reviewCut": {
+    "filename": "NOAA-spiny-lobster-review-cut.mp4",
+    "localOutput": "/mnt/data/noaa-review/NOAA-spiny-lobster-review-cut.mp4",
+    "durationSeconds": 64,
+    "dimensions": "1280x720",
+    "videoCodec": "H.264",
+    "audioStreams": 0,
+    "sourceAudioRemoved": true,
+    "sourceRangesSeconds": [
+      [
+        160,
+        175
+      ],
+      [
+        245,
+        260
+      ],
+      [
+        320,
+        335
+      ],
+      [
+        360,
+        375
+      ]
+    ],
+    "sha256": "74fe43b1beae68574d2f75fd7b95737bde87be1ebad48451d4b50b94645b9181",
+    "purpose": "Silent source-review assembly only; contains a persistent review-only warning, exact NOAA attribution, and a not-approved-for-publication end slate.",
+    "productionApproved": false,
+    "notes": "This is not the final Short, has no narration, and has not completed full human/compliance review."
   }
 }
