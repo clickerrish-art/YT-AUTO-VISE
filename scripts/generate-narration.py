@@ -5,14 +5,58 @@ All outputs are review-only. No footage, rights approval, video render or public
 """
 from __future__ import annotations
 import argparse, asyncio, hashlib, json, re, subprocess, tempfile
+from datetime import datetime
 from pathlib import Path
 import edge_tts
 
 ROOT = Path(__file__).resolve().parents[1]
 MASTER = ROOT / "content" / "narration-master-short-001-and-002.md"
 OUTPUT = ROOT / "media" / "narration"
+PRODUCTS = ROOT / "config" / "products.json"
+APPROVED_SELLAR_URL = "https://selar.com/0u19v8u99l"
+APPROVED_DISCLOSURE_TEXT = "This product is sold through my own Selar business; purchases generate revenue for my business."
 SHORTS = {"short-001": "Short 001", "short-002": "Short 002"}
 MIN_WORDS, MAX_WORDS = 125, 150
+
+def _has_timezone(value: str) -> bool:
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        return parsed.tzinfo is not None and parsed.utcoffset() is not None
+    except (TypeError, ValueError):
+        return False
+
+
+def has_owner_approved_selar_disclosure(product_config=None) -> bool:
+    """Fail closed unless the exact Selar product, relationship and disclosure are owner-approved."""
+    try:
+        if product_config is None:
+            product_config = json.loads(PRODUCTS.read_text(encoding="utf-8"))
+        products = product_config.get("products", [])
+        product = next((item for item in products if item.get("url") == APPROVED_SELLAR_URL), None)
+        if not product or product.get("status") != "approved":
+            return False
+        gate = product.get("promotionGate", {})
+        seller = gate.get("seller", {})
+        brand = gate.get("brandAuthorization", {})
+        compensation = gate.get("compensation", {})
+        disclosure = gate.get("disclosure", {})
+        return (
+            seller.get("status") == "VERIFIED"
+            and seller.get("sourceUrl") == APPROVED_SELLAR_URL
+            and _has_timezone(seller.get("verifiedAt", ""))
+            and brand.get("status") == "OWNER_CONFIRMED"
+            and brand.get("brand") == "SonicVhibez"
+            and _has_timezone(brand.get("confirmedAt", ""))
+            and compensation.get("status") == "OWNER_CONFIRMED"
+            and compensation.get("type") == "DIRECT_SALES_REVENUE"
+            and disclosure.get("status") == "OWNER_APPROVED"
+            and disclosure.get("text") == APPROVED_DISCLOSURE_TEXT
+            and _has_timezone(disclosure.get("approvedAt", ""))
+            and bool(str(disclosure.get("approvalReference", "")).strip())
+        )
+    except (OSError, ValueError, TypeError, AttributeError):
+        return False
+
 
 def extract_read(master: str, short_id: str) -> str:
     if short_id not in SHORTS:
@@ -140,6 +184,8 @@ async def main() -> int:
     args = parser.parse_args()
     if not MASTER.is_file() or MASTER.is_symlink():
         raise SystemExit("Narration master missing or unsafe")
+    if not has_owner_approved_selar_disclosure():
+        raise SystemExit("BLOCKED: paid-product narration requires the exact owner-approved Selar direct-sales disclosure in config/products.json")
     master = MASTER.read_text(encoding="utf-8")
     selected = list(SHORTS) if args.short == "both" else [args.short]
     reports = []
