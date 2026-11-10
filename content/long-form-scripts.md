@@ -94,7 +94,7 @@ Before export, check the final sequence for continuity, accurate labels, readabl
 
 Planning does not guarantee views or income. It gives you a repeatable process for making a more coherent video and for catching avoidable problems before publication.
 
-**[Visual: display the exact approved Selar direct-sales disclosure in large, high-contrast text while the narration speaks it verbatim; hold it long enough to read]**
+**[Visual: display a clear ADVERTISEMENT identifier, then the exact approved Selar direct-sales disclosure in large, high-contrast text while the narration speaks it verbatim; hold it long enough to read]**
 
 If you want a paid resource to help organize your creator workflow, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** using the link in the description: https://selar.com/0u19v8u99l. This product is sold through my own Selar business; purchases generate revenue for my business. Check the current sales page, contents, and terms before deciding whether it suits you. No product can guarantee channel growth or monetization.
 
@@ -106,7 +106,7 @@ Thanks for watching SonicVhibez. Choose one question for your next video, check 
 
 Learn a practical, story-first workflow for planning wildlife and nature videos: choose one viewer question, structure a clear narrative, verify facts, plan rights-cleared visuals, edit for clarity, and check captions and packaging before publishing. This is educational guidance, not a promise of views, revenue, or YouTube monetization.
 
-Promotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF  
+ADVERTISEMENT — Promotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF  
 This product is sold through my own Selar business; purchases generate revenue for my business.  
 https://selar.com/0u19v8u99l
 
