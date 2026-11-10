@@ -104,7 +104,7 @@ Thanks for watching SonicVhibez. Choose one question for your next video, check 
 
 ### Suggested description
 
-Learn a practical, story-first workflow for planning wildlife and nature videos: choose one viewer question, structure a clear narrative, verify facts, plan rights-cleared visuals, edit for clarity, and check captions and packaging before publishing. This is educational guidance, not a promise of views, revenue, or YouTube monetization.
+Learn a practical, story-first workflow for planning wildlife and nature videos: choose one viewer question, structure a clear narrative, verify facts, plan rights-cleared visuals, edit for clarity, and check captions and packaging before publishing. This is educational guidance, not a promise of views, revenue, or YouTube monetization. Narration uses AI-generated text-to-speech; any realistic AI-generated wildlife scenes or meaningful alterations of real events or places must be disclosed using YouTube's AI use setting.
 
 ADVERTISEMENT — Promotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF  
 This product is sold through my own Selar business; purchases generate revenue for my business.  
@@ -199,7 +199,7 @@ Thanks for watching SonicVhibez. Start with one focused idea, keep your sources 
 
 ### Suggested description
 
-A beginner-friendly workflow for faceless wildlife videos, covering focused research, evidence-based narration, licensed visuals and audio, editing, captions, thumbnails, disclosures, and a final quality check. No workflow can guarantee views, revenue, or YouTube monetization.
+A beginner-friendly workflow for faceless wildlife videos, covering focused research, evidence-based narration, licensed visuals and audio, editing, captions, thumbnails, disclosures, and a final quality check. No workflow can guarantee views, revenue, or YouTube monetization. Narration uses AI-generated text-to-speech; any realistic AI-generated wildlife scenes or meaningful alterations of real events or places must be disclosed using YouTube's AI use setting.
 
 Promotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF  
 This product is sold through my own Selar business; purchases generate revenue for my business.  
