@@ -174,6 +174,27 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
         self.assertEqual(len(episodes), 2)
         for _, _, narration in episodes:
             self.assertIn(MODULE.APPROVED_DISCLOSURE_TEXT, narration)
+            self.assertIn("Advertisement.", narration)
+
+    def test_owner_gate_is_defined_once_and_requires_all_evidence_references(self):
+        source = MODULE_PATH.read_text(encoding="utf-8")
+        self.assertEqual(source.count("def has_owner_approved_selar_disclosure("), 1)
+        valid = {
+            "products": [{
+                "url": "https://selar.com/0u19v8u99l", "status": "approved",
+                "promotionGate": {
+                    "seller": {"status": "VERIFIED", "name": "Click 47", "sourceUrl": "https://selar.com/0u19v8u99l", "verifiedAt": "2026-11-09T09:49:01+02:00", "evidenceReference": "seller proof"},
+                    "brandAuthorization": {"status": "OWNER_CONFIRMED", "brand": "SonicVhibez", "confirmedAt": "2026-11-06T20:02:19+02:00", "approvalReference": "brand approval"},
+                    "compensation": {"status": "OWNER_CONFIRMED", "type": "DIRECT_SALES_REVENUE", "verifiedAt": "2026-11-09", "evidenceReference": "direct sales evidence"},
+                    "disclosure": {"status": "OWNER_APPROVED", "text": MODULE.APPROVED_DISCLOSURE_TEXT, "approvedAt": "2026-11-10T07:02:41+02:00", "approvalReference": "owner approval"}
+                }
+            }]
+        }
+        for section, field in (("seller", "evidenceReference"), ("brandAuthorization", "approvalReference"), ("compensation", "evidenceReference"), ("disclosure", "approvalReference")):
+            candidate = __import__("copy").deepcopy(valid)
+            candidate["products"][0]["promotionGate"][section].pop(field)
+            with self.subTest(section=section, field=field):
+                self.assertFalse(MODULE.has_owner_approved_selar_disclosure(candidate))
 
     def test_removes_promotional_resource_line_and_selar_url(self):
         source = (
