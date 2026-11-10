@@ -38,7 +38,7 @@ if (missing.length) errors.push("missing required fields: " + missing.join(", ")
 if (m.channel !== "SonicVhibez") errors.push("channel must be exactly SonicVhibez");
 if (m.rightsConfirmed !== true) errors.push("rightsConfirmed must be true after human review");
 if (m.complianceReviewed !== true) errors.push("complianceReviewed must be true after human review");
-if (m.targetSeconds !== 55) errors.push("targetSeconds must be 55");
+if (!Number.isInteger(m.targetSeconds) || m.targetSeconds < 50 || m.targetSeconds > 60) errors.push("targetSeconds must be an integer from 50 to 60");
 for (const key of ["footageLicenseEvidence", "narrationLicenseEvidence"]) {
   const evidence = typeof m[key] === "string" ? m[key].trim() : "";
   if (evidence.length < 12 || /replace_with|placeholder|todo|unknown|tbd/i.test(evidence)) {
