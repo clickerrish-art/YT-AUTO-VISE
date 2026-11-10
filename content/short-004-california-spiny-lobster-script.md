@@ -22,7 +22,7 @@ A hidden reef resident by day. A night-time forager after dark. That is the Cali
 ## Edit and disclosure instructions
 
 - Use only the owner-authorized source package, verified against its SHA-256 before editing.
-- The existing 55.235-second technical review render is **not** a source master; its warning labels are baked in. Restore the original source artifact from the recorded workflow artifact and render the production candidate from that original source file.
+- The 55.235-second vertical technical review render is **not** a source master; its warning labels are baked in. A separate 64-second silent source-review assembly is also review-only. Restore the original source artifact from the recorded workflow artifact and render the production candidate from that original source file.
 - Inspect every selected shot and transition, confirm no extra third-party credits, and retain exact NOAA attribution legibly on screen. Do not use NOAA marks as channel branding or imply endorsement.
 - Remove the entire source audio stream. Use newly recorded/licensed narration only; do not retain or sample source audio.
 - The natural-history facts are narration context, not a claim that every behaviour occurs in the displayed shots. Do not imply the daytime footage depicts nocturnal feeding.
