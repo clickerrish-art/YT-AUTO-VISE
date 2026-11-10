@@ -1,3 +1,17 @@
+# Owner approval update — 10 November 2026, 07:02 SAST
+
+This section supersedes older Selar-disclosure statements below; older entries are retained as historical checkpoints.
+
+- Owner approved the exact disclosure for the **Complete YouTube Wildlife Creator's Vault**: “This product is sold through my own Selar business; purchases generate revenue for my business.”
+- Approval is recorded at `2026-11-10T07:02:41+02:00` in `config/products.json` and bound to `content/next-short.json` as `promotionDisclosure.status=APPROVED`.
+- This is a direct-sales disclosure, not an affiliate commission. The product's paid-promotion flag remains enabled.
+- Approval applies to this product's disclosure wording only. It does not approve any other Selar product's disclosure, certify platform compliance, confirm media rights, or approve the final video.
+- Production remains HOLD: no genuine final Short MP4 or completed rights-bound Short/long-form render manifests are evidenced; asset rights, factual accuracy, final captions, human media review and human compliance review remain outstanding. Upload-attempt ledger reconciliation and pre-insert safeguards must also pass.
+- YouTube public/unattended publishing remains disabled; private upload remains one-shot, exact-artifact authorized only. No publishing, OAuth write, schedule change, Cloudflare mutation, main edit, PR merge, reset, rebase or force-push was performed.
+- Current code/test verification for the metadata-only commits must be checked at their exact resulting SHA before claiming a new CI pass. PR #1 remains OPEN · DRAFT · UNMERGED.
+
+---
+
 # Current checkpoint — 10 November 2026
 
 **Implementation branch:** `codex/marketing-machine-audit-fixes` · **main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged · **PR #1:** OPEN, DRAFT, UNMERGED. The changes below are confined to the implementation branch.
