@@ -2093,3 +2093,16 @@ The application/test candidate `1334f9380dafbf5f9e6cf272e1bd14feab0045f3` passed
 The owner has now explicitly authorized the specific NOAA Fisheries **B-Roll: Spiny Lobsters in California's Channel Islands** package for conditional SonicVhibez use, subject to the exact credit **“NOAA’s Office of National Marine Sanctuaries”** and complete removal of the source audio. The source is identified by SHA-256 `1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb` and acquisition artifact run `42594716333` / artifact `13662524700`.
 
 This closes the owner-permission question for this package only; it does **not** close production rights/compliance gates. The one-second timeline review is not frame-by-frame clearance. Selected shots, transitions and any additional embedded credits still require review; final edit must be checked for exact attribution and absence of source audio. Do not set `rightsConfirmed=true` or `complianceReviewed=true`, create a production-ready manifest, or enable/upload/publish on the basis of this authorization alone. Keep the footage as a conditionally authorized source candidate until shot-level and final-edit review are complete. Leatherback footage and all other sources remain separate and unapproved.
+
+
+## California spiny-lobster Short 004 — technical review render — 10 November 2026
+
+A separate educational Short candidate has been drafted from the owner-authorized NOAA source. It does not replace either existing promotional Short and is not added to the live schedule. Its script, provisional captions and held metadata are recorded in:
+
+- `content/short-004-california-spiny-lobster-script.md`
+- `content/short-004-california-spiny-lobster.srt`
+- `content/short-004-california-spiny-lobster-metadata.json`
+
+A 55.235-second 1080×1920 H.264/AAC review render was produced from the exact source hash. Selected source ranges are 160–175, 245–257, 320–335 and 360–373 seconds. The source audio was removed before assembly; the only audio is a draft eSpeak text-to-speech narration. The review render displays **REVIEW DRAFT — NOT FOR PUBLICATION**, **AI-GENERATED NARRATION**, and the exact NOAA attribution. SHA-256: `c0735b95efa5a70fba2eba3a87cbacd2355c400288b320d97dd3190dce1cf280`. Full-file FFmpeg decode, H.264/AAC stream inspection, 1080×1920 resolution, 30 fps and 55.235-second duration were verified.
+
+This is an editorial/technical review render, **not** a production master. The eSpeak voice is a low-fidelity placeholder and must be replaced with approved narration before publication. Captions and timing need human full-playback review; selected footage has been sampled at two-second intervals, not inspected frame-by-frame. Rights and compliance approvals remain false. The item is unscheduled, upload is prohibited, and the existing long_form → long_form → short cycle and all existing schedules remain unchanged.
