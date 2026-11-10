@@ -176,7 +176,7 @@ test("private uploader streams the exact approved video bytes even if its path i
     const originalVideo = Buffer.from("approved-video-bytes-bound-to-the-review");
     const replacementVideo = Buffer.from("different-video-bytes-not-approved");
     fs.writeFileSync(videoPath, originalVideo);
-    const metadata = { channel: "SonicVhibez", channelId: TEST_CHANNEL_ID, contentType: "long_form", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Pinned stream test", description: "Test description", tags: ["wildlife", "documentary", "education"] };
+    const metadata = { channel: "SonicVhibez", channelId: TEST_CHANNEL_ID, contentType: "long_form", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Pinned stream test", description: APPROVED_DESCRIPTION, hasPaidPromotion: true, containsSyntheticMedia: true, promotionDisclosure: APPROVED_PROMOTION_DISCLOSURE, tags: ["wildlife", "documentary", "education"] };
     fs.writeFileSync(metadataPath, JSON.stringify(metadata));
     const videoSha = sha256File(videoPath);
     const thumbnailPath = path.join(dir, "thumbnail.jpg");
