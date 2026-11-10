@@ -1,3 +1,35 @@
+# Current compliance and production checkpoint — 10 November 2026
+
+This checkpoint supersedes earlier statements that Selar disclosure approval was still outstanding.
+
+## Completed on the implementation branch
+
+- The owner-approved exact direct-sales wording is recorded as `OWNER_APPROVED` for the Complete YouTube Wildlife Creator's Vault only. It is not classified as an affiliate commission.
+- The Short metadata carries the matching approved disclosure, `hasPaidPromotion=true`, `containsSyntheticMedia=true`, `contentType=short`, private visibility, and a 60-second target. Its status remains `HOLD_FOR_MEDIA_AND_HUMAN_REVIEW`.
+- The Short narration and long-form narration generators now fail closed unless the product registry contains the matching verified seller, owner-confirmed SonicVhibez authorization, direct-sales compensation, exact owner-approved wording, timezone-qualified approval timestamp and approval reference.
+- The narration scripts use the exact approved sentence. The Short captions are word-for-word aligned to the narration; a separate `ADVERTISEMENT` cue precedes the disclosure. Long-form scripts instruct the editor to show the same clear identifier and disclosure beside each CTA.
+- The Short renderer now accepts the documented 50–60 second target range. Its example manifest is set to 60 seconds and retains rights/compliance review as false.
+- The uploader maps the paid-promotion flag and synthetic-media flag into the YouTube upload status. Publishing remains disabled; no upload or metadata write was attempted.
+- These safeguards align with YouTube's paid-promotion declaration and realistic AI-content disclosure guidance, and South Africa's ARB Appendix K requirement for a clear advertising identifier.
+
+## Still blocking production release
+
+- `content/render-manifest.json`, `content/long-form-render-manifest.json`, and `media/next-short.mp4` are absent. Example manifests are templates, not production evidence.
+- Genuine wildlife footage, source/licence/permission records, final narration audio, complete render artifacts and hashes are not present. Do not synthesize or fabricate these as proof of authentic wildlife footage.
+- Rights confirmation, factual review, full-playback human review and final compliance approval remain false.
+- The Short has no eligible, verified long-form parent video relationship. Keep its parent IDs, URL and hashes unset until a real long-form parent is published and reconciled.
+- Complete the upload-attempt ledger and live YouTube history check immediately before any authorized private upload. Read-only OAuth identity/inventory verification is not write-access or upload proof.
+- No exact-head Actions result is currently available for the latest implementation commits; do not claim tests or production readiness from older queued runs.
+
+## Safety state
+
+- Target remains SonicVhibez only; Nature Frontiers is not a YouTube target.
+- Existing schedules and the owner-approved rolling `long_form → long_form → short` cadence remain unchanged.
+- Public/unattended publishing remains disabled. Any private upload requires one-shot authorization bound to the exact final media, metadata, approval, channel and required relationship evidence.
+- PR #1 remains OPEN · DRAFT · UNMERGED. Do not modify `main`, merge, rebase, reset, force-push or rewrite history.
+
+---
+
 # Owner approval update — 10 November 2026, 07:02 SAST
 
 This section supersedes older Selar-disclosure statements below; older entries are retained as historical checkpoints.
