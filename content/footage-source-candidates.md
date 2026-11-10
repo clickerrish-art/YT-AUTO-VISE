@@ -105,3 +105,18 @@ The retained acquisition artifact was downloaded and the complete 380.810-second
 
 **Disposition: best current candidate for a marine-wildlife creator-education edit, but still not approved for production.** The one-second visual sample is not a frame-by-frame legal clearance and cannot rule out sub-second material or restrictions not visible in the video. A human must review the original package/source terms and final edit, approve the exact clip selection and credit, and sign off the finished video. Until then, do not add it as an approved asset, set `humanApproved`, `rightsConfirmed` or `complianceReviewed` true, or render/publish it as production content. The leatherback tagging package remains a separate, context-sensitive candidate and is not cleared by this review.
 
+
+
+## Owner authorization — NOAA Spiny Lobsters package — 10 November 2026
+
+**Owner decision: APPROVED FOR CONDITIONAL SONICVHIBEZ USE**, recorded in the ChatGPT conversation on 10 November 2026. The owner explicitly approved using this specific NOAA Spiny Lobsters in California's Channel Islands B-roll package, provided the exact package credit is displayed and the entire source audio track is removed.
+
+Approved source identity (must match before any derivative is created):
+- Official source page: https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6313425635112/b-roll%3A-spiny-lobsters-in-california
+- Acquired source filename: `noaa-spiny-lobsters-california.download`
+- SHA-256: `1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb`
+- Exact required credit: **“NOAA’s Office of National Marine Sanctuaries”**.
+- Source audio: **REMOVE COMPLETELY**; no source AAC audio may be used.
+- NOAA seals/logos may not be used as SonicVhibez branding, and the edit must not imply NOAA endorsement of SonicVhibez or the Selar product.
+
+**Scope and remaining controls:** this owner authorization applies only to the identified spiny-lobster package and the conditions above. It is not a blanket approval for the leatherback package, other NOAA material, music, third-party assets, or any other source. It does not itself establish legal clearance of every individual shot, substitute for inspection of selected in/out points and final edit, or authorize publication. The one-second full-timeline visual sample remains a sampling method, not frame-by-frame review. Before production use, inspect each selected shot and its transitions/credits, retain the exact source and credit evidence, verify the final edit contains the exact credit and no source audio, and complete the separate final-video human/compliance review. Until those checks are complete, keep the asset out of the approved production register and keep `rightsConfirmed=false`, `complianceReviewed=false`, and publishing disabled.
