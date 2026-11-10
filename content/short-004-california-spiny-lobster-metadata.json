@@ -38,5 +38,13 @@
   "requiredAttribution": "NOAA’s Office of National Marine Sanctuaries",
   "scheduleStatus": "UNSCHEDULED_NEXT_SHORT_CANDIDATE",
   "uploadAllowed": false,
-  "notes": "Editorial wildlife Short, not a Selar promotion. Source permission is conditional only; source-file reacquisition, shot-level/transition review, final edit review, rights evidence and human compliance approval remain open. Do not alter existing schedule or rolling cycle."
+  "notes": "Editorial wildlife Short, not a Selar promotion. Source permission is conditional only; source-file reacquisition, shot-level/transition review, final edit review, rights evidence and human compliance approval remain open. Do not alter existing schedule or rolling cycle. A 55.235-second technical review render exists with AI-generated eSpeak narration and exact NOAA credit; it is explicitly not a production master. Replace the synthetic draft voice with approved narration and complete human review before any publication.",
+  "containsSyntheticMedia": false,
+  "renderReview": {
+    "status": "REVIEW_RENDER_ONLY_NOT_FOR_PUBLICATION",
+    "evidencePath": "content/short-004-california-spiny-lobster-review-render.json",
+    "outputSha256": "c0735b95efa5a70fba2eba3a87cbacd2355c400288b320d97dd3190dce1cf280",
+    "narrationDisclosure": "AI-GENERATED NARRATION",
+    "requiresHumanVoiceReview": true
+  }
 }
