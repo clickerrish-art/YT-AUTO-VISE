@@ -37,7 +37,7 @@ test("intake queues only candidates that pass the final policy evaluator", async
       ...f, now: Date.parse("2026-10-24T10:00:00Z"), rootDir: f.rootDir,
       policyEvaluator: async candidate => candidate.slotId === "eligible-slot"
         ? { eligible: true, contentFingerprint: "a".repeat(64), policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION, reason: "ELIGIBLE" }
-        : { eligible: false, blockers: ["MISSING_RIGHTS"], reason: "MISSING_RIGHTS" }
+        : { eligible: false, blockers: ["MISSING_RIGHTS"], policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION, reason: "MISSING_RIGHTS" }
     });
     assert.equal(result.accepted, 1);
     assert.equal(result.blocked, 1);
