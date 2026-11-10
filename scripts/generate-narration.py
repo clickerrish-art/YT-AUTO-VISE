@@ -69,38 +69,6 @@ def has_owner_approved_selar_disclosure(product_config=None) -> bool:
     except (OSError, ValueError, TypeError, AttributeError):
         return False
 
-def has_owner_approved_selar_disclosure(product_config=None) -> bool:
-    """Fail closed unless the exact Selar product, relationship and disclosure are owner-approved."""
-    try:
-        if product_config is None:
-            product_config = json.loads(PRODUCTS.read_text(encoding="utf-8"))
-        products = product_config.get("products", [])
-        product = next((item for item in products if item.get("url") == APPROVED_SELLAR_URL), None)
-        if not product or product.get("status") != "approved":
-            return False
-        gate = product.get("promotionGate", {})
-        seller = gate.get("seller", {})
-        brand = gate.get("brandAuthorization", {})
-        compensation = gate.get("compensation", {})
-        disclosure = gate.get("disclosure", {})
-        return (
-            seller.get("status") == "VERIFIED"
-            and seller.get("sourceUrl") == APPROVED_SELLAR_URL
-            and _has_timezone(seller.get("verifiedAt", ""))
-            and brand.get("status") == "OWNER_CONFIRMED"
-            and brand.get("brand") == "SonicVhibez"
-            and _has_timezone(brand.get("confirmedAt", ""))
-            and compensation.get("status") == "OWNER_CONFIRMED"
-            and compensation.get("type") == "DIRECT_SALES_REVENUE"
-            and disclosure.get("status") == "OWNER_APPROVED"
-            and disclosure.get("text") == APPROVED_DISCLOSURE_TEXT
-            and _has_timezone(disclosure.get("approvedAt", ""))
-            and bool(str(disclosure.get("approvalReference", "")).strip())
-        )
-    except (OSError, ValueError, TypeError, AttributeError):
-        return False
-
-
 def extract_read(master: str, short_id: str) -> str:
     if short_id not in SHORTS:
         raise ValueError(f"Unknown Short ID: {short_id}")
