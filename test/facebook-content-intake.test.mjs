@@ -4,6 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { runFacebookContentIntake } from "../scripts/facebook-content-intake.mjs";
+import { FACEBOOK_POLICY_RULE_VERSION } from "../scripts/facebook-policy-engine.mjs";
 
 function fixture() {
   const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-intake-"));
@@ -15,7 +16,7 @@ function fixture() {
   fs.writeFileSync(configPath, JSON.stringify({
     destination: "nature_frontiers_facebook", timezone: "Africa/Johannesburg",
     autonomousMode: true, autonomousSchedulingEnabled: true,
-    complianceRuleSet: "nf-facebook-autonomous-policy-2026-10-v2",
+    complianceRuleSet: FACEBOOK_POLICY_RULE_VERSION,
     destinationPageId: "123456789012345", destinationPageName: "Nature Frontiers",
     allowedDomains: [], allowedCampaignIds: [], approvedDestinations: [],
     dailyCap: 1, minimumIntervalMinutes: 1200
