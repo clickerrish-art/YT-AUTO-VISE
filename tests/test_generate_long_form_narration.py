@@ -155,9 +155,9 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
                 "url": "https://selar.com/0u19v8u99l",
                 "status": "approved",
                 "promotionGate": {
-                    "seller": {"status": "VERIFIED", "sourceUrl": "https://selar.com/0u19v8u99l", "verifiedAt": "2026-11-09T09:49:01+02:00"},
-                    "brandAuthorization": {"status": "OWNER_CONFIRMED", "brand": "SonicVhibez", "confirmedAt": "2026-11-06T20:02:19+02:00"},
-                    "compensation": {"status": "OWNER_CONFIRMED", "type": "DIRECT_SALES_REVENUE"},
+                    "seller": {"status": "VERIFIED", "name": "Click 47", "sourceUrl": "https://selar.com/0u19v8u99l", "verifiedAt": "2026-11-09T09:49:01+02:00", "evidenceReference": "seller proof"},
+                    "brandAuthorization": {"status": "OWNER_CONFIRMED", "brand": "SonicVhibez", "confirmedAt": "2026-11-06T20:02:19+02:00", "approvalReference": "brand approval"},
+                    "compensation": {"status": "OWNER_CONFIRMED", "type": "DIRECT_SALES_REVENUE", "verifiedAt": "2026-11-09", "evidenceReference": "direct sales evidence"},
                     "disclosure": {"status": "OWNER_APPROVED", "text": "This product is sold through my own Selar business; purchases generate revenue for my business.", "approvedAt": "2026-11-10T07:02:41+02:00", "approvalReference": "owner approval"}
                 }
             }]
@@ -168,6 +168,12 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
             "disclosure": {**valid["products"][0]["promotionGate"]["disclosure"], "status": "UNVERIFIED"}
         }}]}
         self.assertFalse(MODULE.has_owner_approved_selar_disclosure(invalid))
+
+    def test_current_episodes_include_paid_cta_only_with_owner_approved_disclosure(self):
+        episodes = MODULE.extract_episodes(MODULE.SOURCE.read_text(encoding="utf-8"))
+        self.assertEqual(len(episodes), 2)
+        for _, _, narration in episodes:
+            self.assertIn(MODULE.APPROVED_DISCLOSURE_TEXT, narration)
 
     def test_removes_promotional_resource_line_and_selar_url(self):
         source = (
