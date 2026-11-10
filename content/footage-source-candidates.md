@@ -120,3 +120,15 @@ Approved source identity (must match before any derivative is created):
 - NOAA seals/logos may not be used as SonicVhibez branding, and the edit must not imply NOAA endorsement of SonicVhibez or the Selar product.
 
 **Scope and remaining controls:** this owner authorization applies only to the identified spiny-lobster package and the conditions above. It is not a blanket approval for the leatherback package, other NOAA material, music, third-party assets, or any other source. It does not itself establish legal clearance of every individual shot, substitute for inspection of selected in/out points and final edit, or authorize publication. The one-second full-timeline visual sample remains a sampling method, not frame-by-frame review. Before production use, inspect each selected shot and its transitions/credits, retain the exact source and credit evidence, verify the final edit contains the exact credit and no source audio, and complete the separate final-video human/compliance review. Until those checks are complete, keep the asset out of the approved production register and keep `rightsConfirmed=false`, `complianceReviewed=false`, and publishing disabled.
+
+
+## Silent source-review assembly — 10 November 2026
+
+A 64-second, 16:9 silent review assembly was created from the exact owner-authorized source. Selected source ranges: 160–175 s, 245–260 s, 320–335 s and 360–375 s. The output is H.264, 1280×720, contains no audio stream, displays the exact credit **“NOAA’s Office of National Marine Sanctuaries”** throughout the footage, and carries persistent “REVIEW ONLY — NOT FOR PUBLICATION” labeling plus a not-approved end slate.
+
+- Review output: `NOAA-spiny-lobster-review-cut.mp4` (local review artifact; not committed as a production asset).
+- SHA-256: `74fe43b1beae68574d2f75fd7b95737bde87be1ebad48451d4b50b94645b9181`.
+- Source SHA-256: `1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb`.
+- Verification: ffprobe reports one H.264 video stream and no audio streams; extracted footage frame and end slate were visually checked.
+
+This assembly is only a source/credit/audio-removal proof. It has no narration, script, captions, product promotion, final metadata, or final-video compliance review. It is not the planned Short or a publishable video. Keep the asset outside the approved production register and keep all rights/final-review flags false until selected-shot review and full final-video approval are complete.
