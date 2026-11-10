@@ -88,9 +88,14 @@ export function prepareUploadLogDirectory(directory) {
   return ensureSafeDirectoryPath(directory, "Upload log");
 }
 
-export function remoteUploadMatchesApprovedMetadata(item, { videoId, channelId, title } = {}) {
+export function remoteUploadMatchesApprovedMetadata(item, {
+  videoId, channelId, title, description, hasPaidPromotion, containsSyntheticMedia
+} = {}) {
   return Boolean(item && item.id === videoId && item.status?.privacyStatus === "private"
-    && item.snippet?.channelId === channelId && item.snippet?.title === title);
+    && item.status?.containsSyntheticMedia === containsSyntheticMedia
+    && item.paidProductPlacementDetails?.hasPaidProductPlacement === hasPaidPromotion
+    && item.snippet?.channelId === channelId && item.snippet?.title === title
+    && item.snippet?.description === description);
 }
 
 /** A local receipt is not publication history until the exact remote upload is
@@ -451,7 +456,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     }
     let remoteItem;
     try {
-      const remote = await youtube.videos.list({ part: ["id", "snippet", "status"], id: prior.remoteVideoId });
+      const remote = await youtube.videos.list({ part: ["id", "snippet", "status", "paidProductPlacementDetails"], id: prior.remoteVideoId });
       remoteItem = (remote.data.items ?? []).find(candidate => candidate.id === prior.remoteVideoId);
     } catch {
       prior.status = "RECOVERY_REQUIRED";
@@ -460,7 +465,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       persistJson(ledgerPath, ledger);
       throw new Error("Existing upload outcome could not be reconciled with YouTube; do not retry");
     }
-    if (!remoteUploadMatchesApprovedMetadata(remoteItem, { videoId: prior.remoteVideoId, channelId: expectedChannelId, title: metadata.title })) {
+    if (!remoteUploadMatchesApprovedMetadata(remoteItem, { videoId: prior.remoteVideoId, channelId: expectedChannelId, title: metadata.title, description: metadata.description, hasPaidPromotion: metadata.hasPaidPromotion, containsSyntheticMedia: metadata.containsSyntheticMedia })) {
       prior.status = "RECOVERY_REQUIRED";
       prior.errorCode = "REMOTE_PRIVACY_OR_CHANNEL_MISMATCH";
       prior.updatedAt = now().toISOString();
@@ -672,9 +677,9 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
 
   let verified;
   try {
-    const remote = await youtube.videos.list({ part: ["id", "snippet", "status"], id: videoId });
+    const remote = await youtube.videos.list({ part: ["id", "snippet", "status", "paidProductPlacementDetails"], id: videoId });
     const item = (remote.data.items ?? []).find(candidate => candidate.id === videoId);
-    if (!remoteUploadMatchesApprovedMetadata(item, { videoId, channelId: expectedChannelId, title: metadata.title })) {
+    if (!remoteUploadMatchesApprovedMetadata(item, { videoId, channelId: expectedChannelId, title: metadata.title, description: metadata.description, hasPaidPromotion: metadata.hasPaidPromotion, containsSyntheticMedia: metadata.containsSyntheticMedia })) {
       throw new Error("remote title, privacy or channel verification failed");
     }
     verified = item;
