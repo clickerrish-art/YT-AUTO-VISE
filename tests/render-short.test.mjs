@@ -16,9 +16,15 @@ test("example render manifest defaults to a blocked state", () => {
   assert.equal(manifest.channel, "SonicVhibez");
   assert.equal(manifest.rightsConfirmed, false);
   assert.equal(manifest.complianceReviewed, false);
-  assert.equal(manifest.targetSeconds, 55);
+  assert.equal(manifest.targetSeconds, 60);
 });
 
+
+test("renderer accepts any integer target from 50 through 60 seconds", () => {
+  const source = fs.readFileSync("scripts/render-short.mjs", "utf8");
+  assert.match(source, /Number\.isInteger\(m\.targetSeconds\).*m\.targetSeconds < 50.*m\.targetSeconds > 60/);
+  assert.match(source, /targetSeconds must be an integer from 50 to 60/);
+});
 
 test("renderer uses manifest-resolved absolute caption path in FFmpeg filter", () => {
   const source = fs.readFileSync("scripts/render-short.mjs", "utf8");
