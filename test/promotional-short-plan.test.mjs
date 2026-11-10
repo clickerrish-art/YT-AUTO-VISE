@@ -77,12 +77,14 @@ test("external candidate links require verified affiliate classification rather 
     evidenceReference: "verified affiliate relationship for the exact external listing"
   };
   const plan = clone(checkedInPlan);
-  const item = plan.weeks.flatMap(week => week.items).find(row => row.productId === candidate.id);
-  assert.ok(item);
-  const previousUrl = item.productUrl;
-  item.productUrl = externalUrl;
-  item.description = item.description.replaceAll(previousUrl, externalUrl);
-  item.disclosure.relationshipStatus = "UNVERIFIED";
+  const items = plan.weeks.flatMap(week => week.items).filter(row => row.productId === candidate.id);
+  assert.ok(items.length);
+  for (const item of items) {
+    const previousUrl = item.productUrl;
+    item.productUrl = externalUrl;
+    item.description = item.description.replaceAll(previousUrl, externalUrl);
+    item.disclosure.relationshipStatus = "UNVERIFIED";
+  }
   const errors = validatePromotionalShortPlan(plan, candidateProducts);
   assert.equal(errors.some(error => /Click 47/.test(error)), false);
   assert.equal(errors.some(error => /affiliate seller name must be recorded/.test(error)), false);
