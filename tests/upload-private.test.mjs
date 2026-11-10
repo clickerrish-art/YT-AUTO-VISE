@@ -8,6 +8,10 @@ import crypto from "node:crypto";
 import { shortParentEvidenceSha256, shortParentRelationshipSha256 } from "../scripts/short-parent-relationship.mjs";
 
 const TEST_CHANNEL_ID = "UC" + "A".repeat(22);
+const APPROVED_DISCLOSURE = "This product is sold through my own Selar business; purchases generate revenue for my business.";
+const APPROVED_PROMOTION_DISCLOSURE = { status: "APPROVED", type: "direct_sales_revenue", text: APPROVED_DISCLOSURE };
+const APPROVED_DESCRIPTION = "ADVERTISEMENT — " + APPROVED_DISCLOSURE;
+const APPROVED_CAPTIONS = "1\n00:00:00,000 --> 00:00:00,500\nAdvertisement.\n\n2\n00:00:00,500 --> 00:00:01,000\n" + APPROVED_DISCLOSURE + "\n";
 const TEST_PARENT_ID = "PARENT00001";
 const PARENT_SOURCE_EVIDENCE_PATH = "test/fixtures/parent-quality-evidence.json";
 const PARENT_SOURCE_EVIDENCE_SHA256 = crypto.createHash("sha256").update(fs.readFileSync(PARENT_SOURCE_EVIDENCE_PATH)).digest("hex");
@@ -122,14 +126,14 @@ test("private uploader records uncertain remote outcomes and refuses blind retri
     const metadataPath = path.join(dir, "metadata.json");
     const approvalPath = path.join(dir, "approval.json");
     fs.writeFileSync(videoPath, "test-fixture-not-real-video");
-    const metadata = { channel: "SonicVhibez", channelId: TEST_CHANNEL_ID, contentType: "long_form", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Test title", description: "Test description", tags: ["wildlife", "documentary", "education"], parentContentId: "parent-job-001", parentVideoId: TEST_PARENT_ID, parentVideoUrl: "https://www.youtube.com/watch?v=" + TEST_PARENT_ID };
+    const metadata = { channel: "SonicVhibez", channelId: TEST_CHANNEL_ID, contentType: "long_form", visibility: "private", productUrl: "https://selar.com/0u19v8u99l", rightsConfirmed: true, complianceReviewed: true, status: "READY_FOR_PRIVATE_UPLOAD", title: "Test title", description: APPROVED_DESCRIPTION, hasPaidPromotion: true, containsSyntheticMedia: true, promotionDisclosure: APPROVED_PROMOTION_DISCLOSURE, tags: ["wildlife", "documentary", "education"], parentContentId: "parent-job-001", parentVideoId: TEST_PARENT_ID, parentVideoUrl: "https://www.youtube.com/watch?v=" + TEST_PARENT_ID };
     fs.writeFileSync(metadataPath, JSON.stringify(metadata));
     const videoSha = sha256File(videoPath);
     const thumbnailPath = path.join(dir, "thumbnail.jpg");
     fs.writeFileSync(thumbnailPath, "test-thumbnail");
     const thumbnailSha = sha256File(thumbnailPath);
     const captionsPath = path.join(dir, "captions.srt");
-    fs.writeFileSync(captionsPath, "1\n00:00:00,000 --> 00:00:01,000\nTest caption\n");
+    fs.writeFileSync(captionsPath, APPROVED_CAPTIONS);
     const captionsSha = sha256File(captionsPath);
     const sourceAssetPath = path.join(dir, "source-asset.mp4");
     const licenseEvidencePath = path.join(dir, "license-evidence.txt");
@@ -189,10 +193,12 @@ test("private uploader streams the exact approved video bytes even if its path i
     fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-pinned-video-001", contentType: "long_form", artifactSha256: videoSha, metadataVersion: metadataSha, technicalValidationSha256: crypto.createHash("sha256").update(JSON.stringify({ passed: true, fixtureOnly: true })).digest("hex"), technicalValidationReceipt: { passed: true, fixtureOnly: true }, reviewer: "Test Operator", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }, { path: captionsPath, sha256: captionsSha }, { path: metadataPath, sha256: metadataSha }] }));
     const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES", YOUTUBE_EMERGENCY_STOP: "false", UPLOAD_LOG_DIR: path.join(dir, "logs") };
     let uploadedBytes = null;
+    let uploadRequest = null;
     const youtubeFactory = () => ({
       channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez" } }] } }) },
       videos: {
         insert: async request => {
+          uploadRequest = request;
           fs.unlinkSync(videoPath);
           fs.writeFileSync(videoPath, replacementVideo, { flag: "wx" });
           const chunks = [];
@@ -211,6 +217,11 @@ test("private uploader streams the exact approved video bytes even if its path i
       "the replacement path remains untouched while the pinned descriptor supplies the approved bytes");
     assert.equal(result.receipt.artifactSha256, videoSha);
     assert.equal(result.receipt.privacyStatus, "private");
+    assert.ok(uploadRequest.part.includes("paidProductPlacementDetails"));
+    assert.equal(uploadRequest.requestBody.paidProductPlacementDetails.hasPaidProductPlacement, true);
+    assert.equal(uploadRequest.requestBody.status.containsSyntheticMedia, true);
+    assert.equal(uploadRequest.requestBody.status.privacyStatus, "private");
+    assert.equal(Object.hasOwn(uploadRequest.requestBody.status, "paidProductPlacementDetails"), false);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 
