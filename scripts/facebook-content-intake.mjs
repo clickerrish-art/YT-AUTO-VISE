@@ -142,6 +142,14 @@ export async function runFacebookContentIntake({
     } catch {
       decision = { eligible: false, blockers: ["POLICY_ENGINE_ERROR"], warnings: [], reason: "POLICY_ENGINE_ERROR", checkedAt: new Date(now).toISOString() };
     }
+    if (decision?.policyRuleVersion !== FACEBOOK_POLICY_RULE_VERSION) {
+      decision = {
+        ...(decision && typeof decision === "object" ? decision : {}),
+        eligible: false,
+        blockers: [...new Set([...(Array.isArray(decision?.blockers) ? decision.blockers : []), "POLICY_RULE_VERSION_MISMATCH"])],
+        reason: "POLICY_RULE_VERSION_MISMATCH"
+      };
+    }
     if (!decision?.eligible) {
       decisions.push({ slotId: candidate.slotId, eligible: false, contentFingerprint: decision?.contentFingerprint ?? null, policyDecision: decision, reason: decision?.reason ?? "POLICY_UNKNOWN" });
       blocked++;
