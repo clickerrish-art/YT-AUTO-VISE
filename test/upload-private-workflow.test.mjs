@@ -21,9 +21,10 @@ test("explicit private upload validates all artifact-bound inputs before ledger 
   assert.match(workflow, /confirm_private_upload:\s+description:[\s\S]*?required: true\s+default: 'NO'/);
   assert.ok(privateUploadJob.includes("if: ${{ inputs.confirm_private_upload == 'YES' }}"));
   const guard = privateUploadJob.indexOf("Require exact upload inputs before any private-upload work");
-  const ledger = privateUploadJob.indexOf("Refuse ledger bypass after any prior manual upload run");
+  const ledger = privateUploadJob.indexOf("Validate previous upload ledger against executed private-upload jobs");
   const uploader = privateUploadJob.indexOf("node scripts/upload-private.mjs");
   assert.ok(guard >= 0 && ledger > guard && uploader > ledger, "upload input guard precedes ledger handling and uploader");
+  assert.ok(privateUploadJob.includes("node scripts/validate-upload-ledger-run.mjs"));
   for (const variable of ["METADATA_PATH", "VIDEO_PATH", "JOB_ID", "APPROVAL_PATH", "AUTHORIZATION_PATH"]) {
     assert.ok(privateUploadJob.includes(variable), `${variable} is validated in the private-upload job`);
   }
@@ -36,4 +37,13 @@ test("workflow keeps the emergency stop default engaged and private upload expli
   assert.match(workflow, /confirm_emergency_stop_release:\s+description:[\s\S]*?required: true\s+default: 'NO'/);
   assert.ok(workflow.includes("group: sonicvhibez-private-upload"));
   assert.ok(workflow.includes("cancel-in-progress: false"));
+});
+
+test("both private-upload entry points validate actual prior upload jobs instead of counting read-only dispatches", () => {
+  const artifactWorkflow = fs.readFileSync(".github/workflows/upload-artifact-privately.yml", "utf8");
+  for (const candidate of [workflow, artifactWorkflow]) {
+    assert.ok(candidate.includes("node scripts/validate-upload-ledger-run.mjs"));
+    assert.ok(candidate.includes("Latest prior run that actually executed private-upload"));
+    assert.ok(!candidate.includes("Refuse ledger bypass after any prior manual upload run"));
+  }
 });
