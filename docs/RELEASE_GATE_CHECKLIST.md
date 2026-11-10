@@ -1,3 +1,46 @@
+# Latest release-gate checkpoint — 10 November 2026
+
+**Current source/test candidate:** `102e83cae844abfbc6f6cf51f1628e9a8e5011cc`  
+**Implementation branch:** `codex/marketing-machine-audit-fixes` · **PR #1:** OPEN · DRAFT · UNMERGED  
+**main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`  
+**Divergence:** 3,498 ahead / 2 behind · PR changed files: 318. No main edit, merge, reset, rebase, force-push or destructive reconciliation.
+
+## Owner-independent implementation completed
+
+- The promotional Short validator now derives disclosure requirements from the exact product-registry approval record instead of forcing every product to remain on the same generic hold.
+- For a product whose registry disclosure is `OWNER_APPROVED`, the draft must carry the exact matching approval timestamp and reference, an `ADVERTISEMENT` identifier and exact approved wording in the description, and the exact wording in the narration after an advertisement identifier.
+- Products whose disclosure remains `UNVERIFIED` stay on `HOLD`; the rule does not transfer one product's approval to another.
+- Short 005 (`How to Make a Wildlife Documentary: 3 Storytelling Shots`) now includes the owner-approved direct-sales disclosure for the Complete YouTube Wildlife Creator's Vault in its narration and description. It remains `DRAFT_ONLY`, 55-second target, with no publication timestamp.
+- The first implementation candidate `e2f64208a527ae022a3520846d89a453594258e2` exposed three test assertions about disclosure ordering and a test fixture selecting the newly approved item. Those failures were corrected in `102e83cae844abfbc6f6cf51f1628e9a8e5011cc`; only the corrected exact-head results below are current.
+
+## Exact-head CI evidence
+
+- Content quality: [PASS — 776/776 Node tests, zero failures/skips](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42783860662).
+- Automation/security: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42783860621) — 139/139 Node test files, 44 Python tests, npm audit 0 vulnerabilities, FFmpeg, JavaScript syntax and Python compilation checks.
+- Dashboard Chromium E2E: [PASS — 29/29](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42783860732).
+- Queue readiness: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42783860664) — 16 queue items; rolling long-form → long-form → Short policy; 72 elapsed-hour minimum; 216-hour cycle; publishing disabled.
+- Cloudflare durable-state unit checks: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42783860619) — 9/9.
+- Isolated main/candidate baseline: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42783860598).
+- Non-destructive branch inventory: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42783860694).
+- Deployment recovery smoke: [PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42783860979).
+- Nature Frontiers local draft-package validation: [PASS, local-only](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42783860840); no provider-side post was created or changed.
+- Metadata validation: still in progress at this checkpoint; no PASS is claimed.
+- Production readiness: [HOLD — 7 blockers](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42783860889). This is the intentional fail-closed result.
+
+## Promotional workflow and external gates
+
+- The checked-in plan contains four creator-education drafts: two for the week of 9 November and two for the week of 16 November. The two-item weekly cap is respected; no fifth item or publication timestamp was added.
+- Fresh keyword evidence is qualitative web-search intent only. No current measured volume or competition is claimed because the vidIQ five-credit keyword-research call was unavailable. Wildlife sequence guidance, structured YouTube script templates and 90-day planning templates support the selected lessons; see the corresponding source notes in `content/promotional-short-plan.json`.
+- The latest authenticated YouTube inventory is complete as of 10 November 2026 04:35:06Z: one public Short, zero private and zero unlisted. The only known actual publication was 22 October 2026 17:05:56 SAST. At the 10 November 10:23:27 SAST inspection time, the elapsed interval was 449h 17m 31s. The upload-attempt ledger still requires immediate pre-upload reconciliation.
+- Metricool exposes only Nature Frontiers brand `7545638`, with a SonicVibes YouTube channel field but no distinct SonicVhibez-only brand. Nine future records were returned through 10 February 2027; all are `draft=false` and `autoPublish=true`. Five are creator-product promotions; they are Facebook/Instagram records, not a verified SonicVhibez YouTube queue. No records were changed.
+- Therefore the destination schedule and full 72-hour clearance remain UNVERIFIED; no publication date, live queue or schedule was created.
+- Public/unattended publishing remains disabled. Safari remains inactive. No upload, publication, live scheduling, account reconnection, paid generation or existing-post mutation occurred.
+- The seven current production blockers are listed in `docs/GO_LIVE_BLOCKERS.md`: final MP4 and rights-bound render manifests are absent; rights and compliance review plus human approval are incomplete; upload-attempt reconciliation is required immediately before any authorized private upload.
+
+GitHub scheduled workflows execute from `main`; PR-branch runs are CI evidence, not active production automation.
+
+---
+
 ## Follow-up verification — 8 November 2026
 
 The test-only follow-up at `b149254a3d5b080be704790fa26529067e88a24a` corrects the dashboard UI contract test for delegated Cloudflare restore-button events. Exact-HEAD CI now passes 130/130 Node test files, 34 Python tests, 712/712 content-quality tests, 27/27 Chromium journeys, 8/8 Cloudflare state tests, queue readiness, metadata validation, isolated baseline, branch inventory, deployment recovery and lockfile checks. Production readiness remains **HOLD — 24 blockers**. Full run links and owner/acceptance gates are in [CURRENT_RELEASE_EVIDENCE_2026-11-08.md](CURRENT_RELEASE_EVIDENCE_2026-11-08.md). No main edit, merge, upload, publication, live schedule, account reconnection or existing Metricool record mutation occurred.

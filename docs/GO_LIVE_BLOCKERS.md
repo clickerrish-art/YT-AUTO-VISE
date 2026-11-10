@@ -20,7 +20,7 @@ This checkpoint supersedes earlier statements that Selar disclosure approval was
 - Selected-shot/transition review, review of the exact final edit, factual review, full-playback human review and final compliance approval remain outstanding. Do not set `rightsEvidenceReviewed`, `humanApproved`, `rightsConfirmed` or `complianceReviewed` true based only on the conditional source authorization or silent review cut.
 - The Short has no eligible, verified long-form parent video relationship. Keep its parent IDs, URL and hashes unset until a real long-form parent is published and reconciled.
 - Complete the upload-attempt ledger and live YouTube history check immediately before any authorized private upload. Read-only OAuth identity/inventory verification is not write-access or upload proof.
-- No exact-head Actions result is currently available for the latest implementation commits; do not claim tests or production readiness from older queued runs.
+- Exact-head verification is now available for source/test candidate `102e83cae844abfbc6f6cf51f1628e9a8e5011cc`: content quality 776/776, automation/security 139/139 Node test files plus 44 Python tests and npm audit 0 vulnerabilities, Chromium 29/29, queue readiness PASS, Cloudflare durable-state PASS, isolated main/candidate baseline PASS, branch inventory PASS, deployment recovery PASS, and local Nature Frontiers draft-package validation PASS (local-only). The metadata-validation workflow was still in progress at this checkpoint. Production readiness remains HOLD with the seven blockers above; these CI results do not authorize upload, scheduling or publication.
 
 ## Safety state
 
