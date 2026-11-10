@@ -15,6 +15,39 @@ import { atomicWriteJson } from "./atomic-json-file.mjs";
 import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
 
 export const APPROVED_SELAR_URL = "https://selar.com/0u19v8u99l";
+export const APPROVED_SELAR_DISCLOSURE = "This product is sold through my own Selar business; purchases generate revenue for my business.";
+
+export function validatePromotionDisclosure(metadata, captionsText) {
+  if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) {
+    throw new Error("approved video metadata is required for promotion disclosure validation");
+  }
+  if (metadata.productUrl !== APPROVED_SELAR_URL) {
+    throw new Error("video promotion must use the exact owner-approved Selar destination");
+  }
+  if (metadata.hasPaidPromotion !== true) {
+    throw new Error("Selar product promotion requires YouTube's paid-promotion declaration");
+  }
+  if (typeof metadata.containsSyntheticMedia !== "boolean") {
+    throw new Error("YouTube synthetic-media declaration must be explicitly reviewed as true or false");
+  }
+  const disclosure = metadata.promotionDisclosure;
+  if (!disclosure || disclosure.status !== "APPROVED" ||
+      disclosure.type !== "direct_sales_revenue" ||
+      disclosure.text !== APPROVED_SELAR_DISCLOSURE) {
+    throw new Error("exact owner-approved Selar direct-sales disclosure is required");
+  }
+  if (typeof metadata.description !== "string" ||
+      !/ADVERTISEMENT/i.test(metadata.description) ||
+      !metadata.description.includes(APPROVED_SELAR_DISCLOSURE)) {
+    throw new Error("video description must prominently identify the advertisement and include the exact direct-sales disclosure");
+  }
+  if (typeof captionsText !== "string" ||
+      !/Advertisement/i.test(captionsText) ||
+      !captionsText.includes(APPROVED_SELAR_DISCLOSURE)) {
+    throw new Error("final captions must identify the advertisement and include the exact spoken direct-sales disclosure");
+  }
+  return true;
+}
 
 const APPROVED_SONICVHIBEZ_HANDLE = "sonicvhibez";
 
@@ -358,6 +391,8 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
 
   const captionArtifact = relatedArtifacts.find(item => typeof item?.path === "string" && /\.srt$/i.test(item.path));
   if (!captionArtifact) throw new Error("approval must include a final reviewed SRT captions file");
+  const finalCaptions = fs.readFileSync(resolveInputFile(captionArtifact.path, "Final captions"), "utf8");
+  validatePromotionDisclosure(metadata, finalCaptions);
   const captionsCheck = preflightRunner(["scripts/check-captions.mjs", captionArtifact.path], env);
   if (!captionsCheck.includes("PASS:")) throw new Error("final approved captions did not pass the caption validator");
   const metadataCheck = preflightRunner(["scripts/check-content.mjs", safeMetadataPath], env);
@@ -585,14 +620,16 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   let response;
   try {
     response = await youtube.videos.insert({
-      part: ["snippet", "status"],
+      part: ["snippet", "status", "paidProductPlacementDetails"],
       requestBody: {
         snippet: { title: metadata.title, description: metadata.description, tags: metadata.tags, categoryId: "27" },
         status: {
           privacyStatus: "private",
           selfDeclaredMadeForKids: false,
-          containsSyntheticMedia: metadata.containsSyntheticMedia === true,
-          paidProductPlacementDetails: { hasPaidProductPlacement: metadata.hasPaidPromotion === true }
+          containsSyntheticMedia: metadata.containsSyntheticMedia
+        },
+        paidProductPlacementDetails: {
+          hasPaidProductPlacement: metadata.hasPaidPromotion
         }
       },
       media: { body: fs.createReadStream(safeVideoPath, { fd: videoFd, autoClose: false, start: 0 }) }
