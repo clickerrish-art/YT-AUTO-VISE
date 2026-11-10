@@ -14,14 +14,15 @@ spec.loader.exec_module(module)
 class NarrationTests(unittest.TestCase):
     def test_current_scripts_are_in_required_word_range(self):
         master = module.MASTER.read_text(encoding="utf-8")
-        self.assertEqual(len(module.extract_read(master, "short-001").split()), 128)
-        self.assertEqual(len(module.extract_read(master, "short-002").split()), 126)
+        self.assertEqual(len(module.extract_read(master, "short-001").split()), 129)
+        self.assertEqual(len(module.extract_read(master, "short-002").split()), 127)
 
     def test_current_scripts_use_exact_owner_approved_disclosure(self):
         master = module.MASTER.read_text(encoding="utf-8")
         for short_id in ("short-001", "short-002"):
             narration = module.extract_read(master, short_id)
             self.assertIn(module.APPROVED_DISCLOSURE_TEXT, narration)
+            self.assertIn("Advertisement.", narration)
 
     def test_owner_approved_selar_gate_requires_exact_matching_disclosure(self):
         valid = {
@@ -39,6 +40,28 @@ class NarrationTests(unittest.TestCase):
         self.assertTrue(module.has_owner_approved_selar_disclosure(valid))
         valid["products"][0]["promotionGate"]["disclosure"]["status"] = "UNVERIFIED"
         self.assertFalse(module.has_owner_approved_selar_disclosure(valid))
+
+    def test_owner_gate_rejects_missing_seller_and_approval_evidence(self):
+        valid = {
+            "products": [{
+                "url": "https://selar.com/0u19v8u99l", "status": "approved",
+                "promotionGate": {
+                    "seller": {"status": "VERIFIED", "name": "Click 47", "sourceUrl": "https://selar.com/0u19v8u99l", "verifiedAt": "2026-11-09T09:49:01+02:00", "evidenceReference": "seller proof"},
+                    "brandAuthorization": {"status": "OWNER_CONFIRMED", "brand": "SonicVhibez", "confirmedAt": "2026-11-06T20:02:19+02:00", "approvalReference": "brand approval"},
+                    "compensation": {"status": "OWNER_CONFIRMED", "type": "DIRECT_SALES_REVENUE", "verifiedAt": "2026-11-09", "evidenceReference": "direct sales evidence"},
+                    "disclosure": {"status": "OWNER_APPROVED", "text": module.APPROVED_DISCLOSURE_TEXT, "approvedAt": "2026-11-10T07:02:41+02:00", "approvalReference": "owner approval"}
+                }
+            }]
+        }
+        for section, field in (("seller", "evidenceReference"), ("brandAuthorization", "approvalReference"), ("compensation", "evidenceReference"), ("disclosure", "approvalReference")):
+            candidate = __import__("copy").deepcopy(valid)
+            candidate["products"][0]["promotionGate"][section].pop(field)
+            with self.subTest(section=section, field=field):
+                self.assertFalse(module.has_owner_approved_selar_disclosure(candidate))
+
+    def test_owner_approval_gate_is_defined_once(self):
+        source = path.read_text(encoding="utf-8")
+        self.assertEqual(source.count("def has_owner_approved_selar_disclosure("), 1)
 
     def test_rejects_short_narration(self):
         with self.assertRaisesRegex(ValueError, "125–150"):
