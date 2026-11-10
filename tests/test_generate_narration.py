@@ -29,9 +29,9 @@ class NarrationTests(unittest.TestCase):
                 "url": "https://selar.com/0u19v8u99l",
                 "status": "approved",
                 "promotionGate": {
-                    "seller": {"status": "VERIFIED", "sourceUrl": "https://selar.com/0u19v8u99l", "verifiedAt": "2026-11-09T09:49:01+02:00"},
-                    "brandAuthorization": {"status": "OWNER_CONFIRMED", "brand": "SonicVhibez", "confirmedAt": "2026-11-06T20:02:19+02:00"},
-                    "compensation": {"status": "OWNER_CONFIRMED", "type": "DIRECT_SALES_REVENUE"},
+                    "seller": {"status": "VERIFIED", "name": "Click 47", "sourceUrl": "https://selar.com/0u19v8u99l", "verifiedAt": "2026-11-09T09:49:01+02:00", "evidenceReference": "seller proof"},
+                    "brandAuthorization": {"status": "OWNER_CONFIRMED", "brand": "SonicVhibez", "confirmedAt": "2026-11-06T20:02:19+02:00", "approvalReference": "brand approval"},
+                    "compensation": {"status": "OWNER_CONFIRMED", "type": "DIRECT_SALES_REVENUE", "verifiedAt": "2026-11-09", "evidenceReference": "direct sales evidence"},
                     "disclosure": {"status": "OWNER_APPROVED", "text": module.APPROVED_DISCLOSURE_TEXT, "approvedAt": "2026-11-10T07:02:41+02:00", "approvalReference": "owner approval"}
                 }
             }]
