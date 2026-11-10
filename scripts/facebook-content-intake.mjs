@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { evaluateFinalFacebookPayload } from "./facebook-policy-engine.mjs";
+import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION } from "./facebook-policy-engine.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = file => JSON.parse(fs.readFileSync(file, "utf8"));
@@ -92,7 +92,7 @@ export async function runFacebookContentIntake({
   };
   if (config.destination !== "nature_frontiers_facebook" || config.timezone !== "Africa/Johannesburg" ||
       config.autonomousMode !== true || config.autonomousSchedulingEnabled !== true ||
-      config.complianceRuleSet !== "nf-facebook-autonomous-policy-2026-10-v2") {
+      config.complianceRuleSet !== FACEBOOK_POLICY_RULE_VERSION) {
     throw new Error("Facebook intake configuration is invalid or policy version does not match");
   }
   const lockPath = stateFile(config.lockFile ?? "facebook-publishing.lock");
