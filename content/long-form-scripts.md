@@ -94,6 +94,8 @@ Before export, check the final sequence for continuity, accurate labels, readabl
 
 Planning does not guarantee views or income. It gives you a repeatable process for making a more coherent video and for catching avoidable problems before publication.
 
+**[Visual: display the exact approved Selar direct-sales disclosure in large, high-contrast text while the narration speaks it verbatim; hold it long enough to read]**
+
 If you want a paid resource to help organize your creator workflow, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** using the link in the description: https://selar.com/0u19v8u99l. This product is sold through my own Selar business; purchases generate revenue for my business. Check the current sales page, contents, and terms before deciding whether it suits you. No product can guarantee channel growth or monetization.
 
 Thanks for watching SonicVhibez. Choose one question for your next video, check that you can answer it honestly, and plan the story before you open the editing timeline.
@@ -186,6 +188,8 @@ Keep a copy of the project files and evidence. If a claim, license, or disclosur
 **[Visual: final checklist: facts, rights, audio, captions, thumbnail, disclosures]**
 
 The repeatable process is simple: research one focused question, write narration that adds context, use visuals you have permission to publish, edit for clarity, and review the finished video carefully. Improvement comes from learning from each upload and from real audience data—not from assuming a workflow guarantees success.
+
+**[Visual: display the exact approved Selar direct-sales disclosure in large, high-contrast text while the narration speaks it verbatim; hold it long enough to read]**
 
 If you want a paid resource for organizing your creator process, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** at the link in the description: https://selar.com/0u19v8u99l. This product is sold through my own Selar business; purchases generate revenue for my business. Read the current sales page and terms before purchasing, and decide whether it meets your needs. It does not guarantee views, revenue, or monetization.
 
