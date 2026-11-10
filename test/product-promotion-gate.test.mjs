@@ -31,33 +31,35 @@ function verifiedFixture(type = "affiliate") {
   return { product, metadata };
 }
 
-test("checked-in product registry records the seller but remains blocked on promotion authorization", () => {
+test("checked-in Wildlife Vault registry records verified seller, SonicVhibez authorization and owner-approved direct-sales disclosure", () => {
   const config = JSON.parse(fs.readFileSync("config/products.json", "utf8"));
-  const seller = config.products[0].promotionGate.seller;
+  const product = config.products.find(item => item.id === "wildlife-creators-vault");
+  const seller = product.promotionGate.seller;
   assert.equal(seller.status, "VERIFIED");
   assert.equal(seller.name, "Click 47");
   assert.ok(seller.evidenceReference.includes("2026-11-09"));
-  const errors = validateProductPromotionGate(config.products[0], undefined, { requireMetadataDisclosure: false });
-  assert.equal(errors.some(error => /seller details must be reverified/i.test(error)), false);
-  assert.equal(errors.some(error => /brand authorization must be owner-confirmed/i.test(error)), false);
-  assert.equal(errors.some(error => /commercial compensation relationship must be verified or owner-confirmed/i.test(error)), false);
-  assert.ok(errors.some(error => /viewer-facing disclosure must be owner-approved/i.test(error)));
+  assert.equal(product.promotionGate.brandAuthorization.brand, "SonicVhibez");
+  assert.equal(product.promotionGate.compensation.type, "DIRECT_SALES_REVENUE");
+  assert.equal(product.promotionGate.disclosure.status, "OWNER_APPROVED");
+  const text = product.promotionGate.disclosure.text;
+  const metadata = {
+    hasPaidPromotion: true,
+    description: "Advertisement. " + text,
+    promotionDisclosure: { status: "APPROVED", type: "direct_sales_revenue", text }
+  };
+  assert.deepEqual(validateProductPromotionGate(product, metadata), []);
 });
 
-test("checked-in uppercase DIRECT_SALES_REVENUE is accepted as owner-confirmed Selar business revenue", () => {
+test("checked-in uppercase DIRECT_SALES_REVENUE and approved disclosure pass; paid flag must match", () => {
   const config = JSON.parse(fs.readFileSync("config/products.json", "utf8"));
   const product = config.products.find(item => item.id === "wildlife-creators-vault");
   const errors = validateProductPromotionGate(product, undefined, { requireMetadataDisclosure: false });
-  assert.equal(errors.some(error => /commercial compensation relationship/i.test(error)), false);
-  assert.equal(errors.some(error => /compensation type must be/i.test(error)), false);
-  assert.equal(errors.some(error => /Selar products must be classified/i.test(error)), false);
-  assert.ok(errors.some(error => /viewer-facing disclosure must be owner-approved/i.test(error)));
+  assert.deepEqual(errors, []);
   const metadata = { hasPaidPromotion: false };
   assert.ok(validateProductPromotionGate(product, metadata, { requireMetadataDisclosure: false })
     .some(error => /hasPaidPromotion must match/i.test(error)));
   metadata.hasPaidPromotion = true;
-  assert.equal(validateProductPromotionGate(product, metadata, { requireMetadataDisclosure: false })
-    .some(error => /hasPaidPromotion must match/i.test(error)), false);
+  assert.deepEqual(validateProductPromotionGate(product, metadata, { requireMetadataDisclosure: false }), []);
 });
 
 test("verified seller, SonicVhibez authorization, compensation and exact disclosure pass", () => {
@@ -171,7 +173,7 @@ test("content checker surfaces the product gate before any private-upload readin
   assert.notEqual(result.status, 0);
   assert.doesNotMatch(result.stderr, /brand authorization must be owner-confirmed/i);
   assert.doesNotMatch(result.stderr, /compensation relationship must be verified/i);
-  assert.match(result.stderr, /viewer-facing disclosure must be owner-approved/i);
+  assert.match(result.stderr, /metadata promotionDisclosure must be APPROVED/i);
 });
 
 test("readiness JSON identifies product promotion gates as owner-controlled blockers", () => {
@@ -188,13 +190,16 @@ test("readiness JSON identifies product promotion gates as owner-controlled bloc
   assert.ok(blockers.every(item => item.controlOwner === "external_owner_or_human_reviewer"));
 });
 
-test("Short 001 keeps the required title format and an explicit disclosure hold", () => {
+test("Short 001 keeps the required title format, approved direct-sales disclosure and media release hold", () => {
   const brief = fs.readFileSync("content/short-001-wildlife-video-storytelling.md", "utf8");
   assert.match(brief, /^## YouTube title\n\S/m);
-  assert.match(brief, /DISCLOSURE HOLD/i);
+  assert.match(brief, /ADVERTISEMENT — OWNER-APPROVED DIRECT-SALES DISCLOSURE/i);
+  assert.match(brief, /This product is sold through my own Selar business; purchases generate revenue for my business\./);
+  assert.match(brief, /Release state/);
+  assert.match(brief, /HOLD —/);
   assert.match(brief, /never Nature Frontiers/i);
+  assert.doesNotMatch(brief, /DISCLOSURE HOLD/i);
 });
-
 
 test("new supplied Selar products have owner-confirmed brand authorization but remain blocked until disclosure is verified", () => {
   const config = JSON.parse(fs.readFileSync("config/products.json", "utf8"));

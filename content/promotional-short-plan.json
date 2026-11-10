@@ -97,7 +97,25 @@
             "Replace the disclosure hold with the exact approved viewer-facing disclosure.",
             "Complete human playback, factual and thumbnail review against final asset hashes.",
             "Do not schedule until the SonicVhibez destination and full YouTube history are verified and every 72-hour gap is calculated."
-          ]
+          ],
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T09:55:27+02:00",
+            "note": "Fresh indexed search results show creator-facing prompt builders explicitly structure a YouTube prompt around video type, audience, topic, hook, length, title, thumbnail and description. This is qualitative search-intent evidence only; no current global volume or competition measurement was available because vidIQ had 4 credits and a keyword call costs 5.",
+            "sources": [
+              {
+                "title": "YouTube Script Prompt Generator — Free AI Video Script Builder (2026)",
+                "url": "https://promptifyer.online/youtube-script-prompt-generator",
+                "whyRelevant": "Current result describes prompts organized around video type, audience, hook style, length, title, thumbnail and description, matching the Short's prompt-brief lesson."
+              },
+              {
+                "title": "YouTube Growth Strategy ChatGPT Prompt",
+                "url": "https://promptslove.com/prompts/youtube-growth-strategy-chatgpt-prompt/",
+                "whyRelevant": "Search result shows a structured prompt asking for channel niche, audience, goals and actionable steps; supports demand for practical, context-rich creator prompts."
+              }
+            ]
+          }
         },
         {
           "id": "sonicvhibez-short-004-90-day-review",
@@ -186,7 +204,25 @@
             "Replace the disclosure hold with the exact approved viewer-facing disclosure.",
             "Complete human playback, factual and thumbnail review against final asset hashes.",
             "Do not schedule until the SonicVhibez destination and full YouTube history are verified and every 72-hour gap is calculated."
-          ]
+          ],
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T09:55:27+02:00",
+            "note": "Fresh indexed results discuss 90-day YouTube growth sprints, day-30/day-60/day-90 reviews, measurable leading indicators and a 90-day content calendar/KPI tracker. This supports the planning and review angle qualitatively; it does not establish search volume or guarantee outcomes.",
+            "sources": [
+              {
+                "title": "YouTube Growth Strategy That Actually Works in 2026",
+                "url": "https://alanspicer.com/youtube-growth-strategy/",
+                "whyRelevant": "The result outlines a 90-day sprint and reviews at days 30, 60 and 90, closely matching the Short's three-phase review structure."
+              },
+              {
+                "title": "YouTube Content Strategy Template",
+                "url": "https://alpha.outlierkit.com/resources/youtube-content-strategy-template/",
+                "whyRelevant": "The template includes a 90-day calendar, production pipeline and monthly KPI tracker, supporting search intent around a practical 90-day creator plan."
+              }
+            ]
+          }
         }
       ]
     },
@@ -267,6 +303,19 @@
             "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
             "requiredBeforeRelease": true,
             "holdText": "The owner confirms this is a direct sale through their own Selar business, not an affiliate commission. The viewer-facing commercial disclosure is still unapproved; keep this promotion on HOLD until the owner approves the exact wording."
+          },
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T09:55:27+02:00",
+            "note": "Fresh indexed wildlife-filmmaking guidance explains building sequences from wide, medium and close shots, organizing clips by behavior and using pacing deliberately. This supports the actual three-shot storytelling lesson; no measured search volume or competition is claimed.",
+            "sources": [
+              {
+                "title": "How To Become a Wildlife Filmmaker (7 Proven Steps)",
+                "url": "https://www.docfilmacademy.com/blog/how-to-become-a-wildlife-filmmaker",
+                "whyRelevant": "The result explicitly recommends wide, mid and close-up sequences, organization by behavior and deliberate pacing for wildlife storytelling."
+              }
+            ]
           }
         },
         {
@@ -339,7 +388,30 @@
             "Replace the disclosure hold only after the owner-approved truthful disclosure is available.",
             "Complete human playback, factual and thumbnail review against final asset hashes.",
             "Do not schedule until SonicVhibez destination identity and complete YouTube history are verified and every 72-hour gap is calculated."
-          ]
+          ],
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T09:55:27+02:00",
+            "note": "Fresh indexed results frame YouTube niche selection around sustainable audience demand, recurring viewer problems, production capacity and validating a small test series rather than chasing trends. This is qualitative intent evidence, not measured global volume or competition.",
+            "sources": [
+              {
+                "title": "Free YouTube Niche Finder",
+                "url": "https://www.sonuker.com/tools/free-youtube-niche-finder",
+                "whyRelevant": "The result emphasizes sustainable niches, recurring audience demand and production cadence rather than trend chasing."
+              },
+              {
+                "title": "How to Choose a YouTube Niche: A Decision Framework That Holds Up",
+                "url": "https://stitchr.app/guides/how-to-choose-youtube-niche",
+                "whyRelevant": "The guide centers audience demand and consistency, matching the Short's four-check niche-selection method."
+              },
+              {
+                "title": "How to Choose a YouTube Niche: Stop Guessing, Read Demand",
+                "url": "https://onetube.io/blog/how-to-choose-youtube-niche",
+                "whyRelevant": "The result recommends checking recurring audience questions and competitor comments to validate a niche's real viewer problem."
+              }
+            ]
+          }
         }
       ]
     }

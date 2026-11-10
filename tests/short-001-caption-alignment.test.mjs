@@ -36,7 +36,7 @@ test("Short 001 captions exactly match narration and include the approved direct
     cues.push(lines.slice(2).join(" "));
   }
 
-  assert.equal(previousEnd, 60_000, "the reviewed draft target is 60 seconds");
+  assert.equal(previousEnd, 55_000, "the draft target is approximately 55 seconds");
   assert.ok(cues.includes("Advertisement."), "the spoken commercial segment must carry a clear Advertisement identifier");
   assert.equal(normalize(cues.join(" ")), narration, "captions must match every spoken word exactly");
   assert.ok(cues.includes(disclosure), "the exact owner-approved disclosure must be a complete readable caption cue");
@@ -46,7 +46,7 @@ test("Short 001 metadata preserves private-only and policy disclosure safeguards
   const metadata = JSON.parse(fs.readFileSync("content/next-short.json", "utf8"));
   assert.equal(metadata.channel, "SonicVhibez");
   assert.equal(metadata.contentType, "short");
-  assert.equal(metadata.targetSeconds, 60);
+  assert.equal(metadata.targetSeconds, 55);
   assert.equal(metadata.visibility, "private");
   assert.equal(metadata.hasPaidPromotion, true);
   assert.equal(metadata.containsSyntheticMedia, true);

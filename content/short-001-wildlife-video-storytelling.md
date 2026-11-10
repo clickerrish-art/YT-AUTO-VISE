@@ -1,6 +1,6 @@
 # SonicVhibez Short 001 — production brief
 
-**Status:** SCRIPT DRAFT — SEO refreshed 6 November 2026; not rendered, uploaded, scheduled, or published  
+**Status:** SCRIPT DRAFT — narration and approved disclosure aligned 10 November 2026; not rendered, uploaded, scheduled, or published  
 **Weekly allowance:** Existing item 1 of 2; this is a revision, not a third Short  
 **Channel:** SonicVhibez only  
 **Target runtime:** 55 seconds  
@@ -13,7 +13,7 @@ Wildlife Documentary Storytelling: 3 Shots, One Clear Story
 
 ## Narration draft (130 words; provisional 55-second caption layout; record and retime against final audio before rendering)
 
-“Want better wildlife videos? Start with one clear story, not a collection of random animal clips. First, choose a question: what behavior will viewers discover? Next, plan three shots: a wide view, a closer detail, and the behavior itself. Write the question down before filming, then check that each shot helps answer it. Keep a safe distance. Never bait, chase, or disturb wildlife just to get a shot. Let natural movement tell the story. Use steady framing and patient observation. Then edit tightly. Remove pauses that don’t add information. Add readable captions and only music you have permission to use. Finish with one useful takeaway so viewers leave having learned something. Build your next wildlife video with a plan. Find the Wildlife Creator’s Vault at the link in the description.”
+Want better wildlife videos? Start with one clear story, not a pile of random animal clips. Choose one question your footage can actually answer. Plan three shots: a wide habitat view, a meaningful detail, and the behavior itself. Keep a safe distance. Never bait, chase, or disturb wildlife. Use patient observation and steady framing; let natural movement tell the story. Edit out pauses that add no information. Add readable captions and only music you have permission to use. Finish with one useful takeaway. For more wildlife creator planning, review the Complete YouTube Wildlife Creator's Vault. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.
 
 ## Draft description — internal hold, not publish-ready
 
@@ -22,7 +22,11 @@ Learn wildlife documentary storytelling with three purposeful shots: establish t
 Promotional resource: Complete YouTube Wildlife Creator’s Vault — Premium Combo PDF  
 https://selar.com/0u19v8u99l
 
-**DISCLOSURE HOLD:** Owner-confirmed relationship: Selar is the owner's own business and purchases generate direct sales revenue; this is not an affiliate commission. SonicVhibez promotion authorization is recorded separately. The exact viewer-facing commercial disclosure remains unapproved. Do not publish until the owner approves the exact wording and all media, rights and human-review gates pass.
+**ADVERTISEMENT — OWNER-APPROVED DIRECT-SALES DISCLOSURE:** This product is sold through my own Selar business; purchases generate revenue for my business.
+
+This is a direct sale through the owner's own Selar business, not an affiliate commission. Keep YouTube's paid-promotion declaration enabled. The listing includes Nature Frontiers wording, but this campaign's promotional destination is SonicVhibez only.
+
+**Release hold:** This draft is not cleared for upload or publication. Genuine rights evidence, final MP4 and thumbnail, factual review, human playback/compliance review, upload-attempt reconciliation, destination verification and the 72-hour spacing check remain required.
 
 #WildlifeDocumentary #WildlifeStorytelling #WildlifeFilmmaking #YouTubeShorts #NatureEducation
 
@@ -74,11 +78,11 @@ Use one genuine, rights-cleared animal image in its actual habitat. Keep the ani
 - [ ] Check captions at phone size, audio levels, framing and vertical safe areas.
 - [x] Seller identity verified as Click 47 from the exact Selar listing; the listing includes Nature Frontiers branding, while SonicVhibez promotion authorization is separately recorded by the owner.
 - [x] Owner-confirmed Selar relationship: the owner's own business; purchases generate direct sales revenue, not affiliate commission. SonicVhibez promotion authorization is separately recorded.
-- [ ] Obtain owner approval of the exact viewer-facing disclosure wording, with a timezone-qualified timestamp and approval reference.
+- [ ] Use the exact owner-approved direct-sales disclosure verbatim, say “Advertisement” before it, and show the disclosure clearly on screen; keep the paid-promotion declaration enabled.
 - [ ] Verify SonicVhibez destination identity and inspect complete public/private/unlisted timestamp history before any calendar decision.
 - [ ] Keep private and unscheduled; do not upload or publish until every gate passes.
 - [ ] Human playback and compliance review must be recorded against the final media and thumbnail hashes.
 
 **Destination guard:** SonicVhibez only; never Nature Frontiers.  
 **SEO safety:** No SEO score, ranking, reach, or sales outcome is guaranteed. No income outcome is guaranteed.  
-**Release state:** HOLD — Selar direct-sales relationship and SonicVhibez promotion authorization are owner-confirmed; exact viewer-facing disclosure remains unapproved; genuine media rights, final assets, destination identity and human review remain outstanding.
+**Release state:** HOLD — the exact direct-sales disclosure is owner-approved for this product, but genuine media rights, final assets, human review, upload-attempt reconciliation, destination inspection and spacing verification remain outstanding.

@@ -6,27 +6,7 @@ These reads target 50–60 seconds. Timing is approximate; the final editor must
 
 **Read:**
 
-Want better wildlife videos?
-
-Start with one clear story, not a collection of random animal clips.
-
-First, choose a question: what behavior will viewers discover?
-
-Next, plan three shots: wide, detail, and the behavior itself.
-
-Write the question down before filming; check each shot answers it.
-
-Keep a safe distance. Never bait, chase, or disturb wildlife.
-
-Let natural movement tell the story. Frame steadily and observe wildlife patiently.
-
-Then edit tightly. Remove pauses that don’t add information.
-
-Add readable captions and only music you have permission to use.
-
-Finish with one useful takeaway so viewers leave having learned something.
-
-Build your next wildlife video with a plan. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.
+Want better wildlife videos? Start with one clear story, not a pile of random animal clips. Choose one question your footage can actually answer. Plan three shots: a wide habitat view, a meaningful detail, and the behavior itself. Keep a safe distance. Never bait, chase, or disturb wildlife. Use patient observation and steady framing; let natural movement tell the story. Edit out pauses that add no information. Add readable captions and only music you have permission to use. Finish with one useful takeaway. For more wildlife creator planning, review the Complete YouTube Wildlife Creator's Vault. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.
 
 **Performance notes:** Brief pause after the opening question. Emphasize “safe distance” without sounding alarmist. Keep the product mention matter-of-fact. Show a clear “ADVERTISEMENT” identifier at the start of the promotional segment, then display the exact approved direct-sales disclosure clearly on screen while it is spoken.
 
@@ -34,15 +14,7 @@ Build your next wildlife video with a plan. Advertisement. This product is sold 
 
 **Read:**
 
-Planning a wildlife documentary Short? Plan three things before editing.
-
-First, choose one subject and one question: how does this animal feed, move, communicate, or care for its young? Describe only what your footage shows.
-
-Second, build a simple story. Open with a moment that raises the question, add habitat context, then show the behavior and explain why it matters. Keep separate clips in their real sequence.
-
-Third, check every asset. Confirm footage and music rights, fact-check each claim, and keep captions readable on a phone.
-
-Record each clip's source, what it shows, and what still needs checking. A focused story beats a rushed list of facts. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The link is below.
+Planning a wildlife documentary Short? Plan three things before editing. First, choose one subject and one question: how does it feed, move, communicate, or care for its young? Describe only what your footage shows. Second, build a simple story: open with the question, add habitat context, then show the behavior. Keep separate clips in their real sequence. Third, check every asset. Confirm footage and music rights, fact-check each claim, and keep captions readable on a phone. Record each clip's source and what it shows. Review the Complete YouTube Wildlife Creator's Vault for more wildlife creator planning. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. Link below.
 
 **Performance notes:** Make each step distinct, but keep the delivery warm and steady. Do not add claims about guaranteed growth or results. Show a clear ADVERTISEMENT identifier at the start of the promotional segment, then display the exact approved direct-sales disclosure clearly on screen while it is spoken.
 
