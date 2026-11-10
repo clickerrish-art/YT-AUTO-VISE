@@ -89,3 +89,19 @@ For each selected package:
 - Do not mark `rightsEvidenceReviewed`, `humanApproved`, `rightsConfirmed`, or `complianceReviewed` true until the actual evidence and final edit have been inspected by a human.
 - Do not claim this repository contains licensed wildlife footage or a completed wildlife video yet.
 - Keep public publishing disabled.
+
+## Full timeline review — NOAA Spiny Lobsters package — 10 November 2026
+
+The retained acquisition artifact was downloaded and the complete 380.810-second source was inspected at one-second intervals (381 decoded frames, 1280×720, H.264 video, AAC 48 kHz stereo). Four contact sheets cover the complete one-second sample.
+
+- Source package: **B-Roll: Spiny Lobsters in California's Channel Islands**.
+- Official source page: https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6313425635112/b-roll%3A-spiny-lobsters-in-california
+- NOAA's B-roll library states that B-roll packages are public domain and may be downloaded and used with credit; the package's own slate supplies the specific attribution. This is distinct from NOAA narrative videos, which may contain third-party licensed clips that cannot be extracted.
+- Exact opening-slate instruction: **“Please credit ‘NOAA’s Office of National Marine Sanctuaries’.”** The slate says all footage is courtesy of the National Oceanic and Atmospheric Administration.
+- SHA-256 recomputed from the downloaded source: `1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb`.
+- Artifact: workflow run `42594716333`, artifact ID `13662524700`, file `noaa-spiny-lobsters-california.download`.
+- The one-second visual review shows underwater reef habitat, fish, and California spiny lobsters. It shows no people, animal handling, baiting, staged interaction, or graphic animal harm. No additional attribution cards or third-party credits were observed in the one-second timeline sample after the opening slate.
+- The source contains AAC audio. It is **not cleared for reuse**; remove the entire source audio track from any derivative. Do not use the NOAA seal/logo as SonicVhibez branding, and do not imply NOAA endorses SonicVhibez or the Selar product.
+
+**Disposition: best current candidate for a marine-wildlife creator-education edit, but still not approved for production.** The one-second visual sample is not a frame-by-frame legal clearance and cannot rule out sub-second material or restrictions not visible in the video. A human must review the original package/source terms and final edit, approve the exact clip selection and credit, and sign off the finished video. Until then, do not add it as an approved asset, set `humanApproved`, `rightsConfirmed` or `complianceReviewed` true, or render/publish it as production content. The leatherback tagging package remains a separate, context-sensitive candidate and is not cleared by this review.
+
