@@ -3,6 +3,8 @@
 This script only creates local draft files. It never uploads or publishes.
 """
 from pathlib import Path
+from datetime import datetime
+import json
 import math
 import asyncio
 import re
@@ -23,23 +25,73 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
 SOURCE = REPO_ROOT / "content" / "long-form-scripts.md"
 OUT = REPO_ROOT / "media" / "long-form-drafts"
+PRODUCTS = REPO_ROOT / "config" / "products.json"
+APPROVED_SELLAR_URL = "https://selar.com/0u19v8u99l"
+APPROVED_DISCLOSURE_TEXT = "This product is sold through my own Selar business; purchases generate revenue for my business."
 VOICE = "en-US-GuyNeural"
 CAPTION_MAX_WORDS = 7
 CAPTION_MAX_CHARS = 42
 
-def clean_script(text: str) -> str:
-    text = re.sub(r"(?m)^#{1,6} .*\n", "", text)
-    text = re.sub(r"(?m)^\*\*[^\n]*\*\*\s*$", "", text)
-    text = re.sub(r"(?m)^\*\*\[.*?\]\*\*.*$", "", text)
+def _has_timezone(value: str) -> bool:
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        return parsed.tzinfo is not None and parsed.utcoffset() is not None
+    except (TypeError, ValueError):
+        return False
+
+
+def has_owner_approved_selar_disclosure(product_config=None) -> bool:
+    """Fail closed unless the exact Selar product, relationship and disclosure are owner-approved."""
+    try:
+        if product_config is None:
+            product_config = json.loads(PRODUCTS.read_text(encoding="utf-8"))
+        products = product_config.get("products", [])
+        product = next((item for item in products if item.get("url") == APPROVED_SELLAR_URL), None)
+        if not product or product.get("status") != "approved":
+            return False
+        gate = product.get("promotionGate", {})
+        seller = gate.get("seller", {})
+        brand = gate.get("brandAuthorization", {})
+        compensation = gate.get("compensation", {})
+        disclosure = gate.get("disclosure", {})
+        return (
+            seller.get("status") == "VERIFIED"
+            and seller.get("sourceUrl") == APPROVED_SELLAR_URL
+            and _has_timezone(seller.get("verifiedAt", ""))
+            and brand.get("status") == "OWNER_CONFIRMED"
+            and brand.get("brand") == "SonicVhibez"
+            and _has_timezone(brand.get("confirmedAt", ""))
+            and compensation.get("status") == "OWNER_CONFIRMED"
+            and compensation.get("type") == "DIRECT_SALES_REVENUE"
+            and disclosure.get("status") == "OWNER_APPROVED"
+            and disclosure.get("text") == APPROVED_DISCLOSURE_TEXT
+            and _has_timezone(disclosure.get("approvedAt", ""))
+            and bool(str(disclosure.get("approvalReference", "")).strip())
+        )
+    except (OSError, ValueError, TypeError, AttributeError):
+        return False
+
+
+def clean_script(text: str, include_paid_product: bool = False) -> str:
+    text = re.sub(r"(?m)^#{1,6} .*\\n", "", text)
+    text = re.sub(r"(?m)^\\*\\*[^\\n]*\\*\\*\\s*$", "", text)
+    text = re.sub(r"(?m)^\\*\\*\\[.*?\\]\\*\\*.*$", "", text)
     text = re.sub(r"(?m)^### Suggested (description|tags).*$", "", text)
-    # Paid-product narration is withheld until the owner explicitly authorizes
-    # this channel/product relationship and any required compensation disclosure.
-    text = re.sub(
-        r"(?:^|\n\n)If you want a paid resource\b.*?(?=\n\n|$)",
-        "",
+    paid_paragraphs = re.findall(
+        r"(?:^|\\n\\n)(If you want a paid resource\\b.*?)(?=\\n\\n|$)",
         text,
         flags=re.DOTALL,
     )
+    if include_paid_product:
+        if any(APPROVED_DISCLOSURE_TEXT not in paragraph for paragraph in paid_paragraphs):
+            raise ValueError("Paid-product narration must contain the exact owner-approved Selar disclosure")
+    else:
+        text = re.sub(
+            r"(?:^|\\n\\n)If you want a paid resource\\b.*?(?=\\n\\n|$)",
+            "",
+            text,
+            flags=re.DOTALL,
+        )
     text = re.sub(r"(?m)^Promotional resource:.*$", "", text)
     text = re.sub(r"https://selar\.com/0u19v8u99l", "", text)
     text = re.sub(r"\[[^\]]*\]", " ", text)
@@ -62,7 +114,7 @@ def extract_episodes(markdown: str):
         description = re.search(r"(?m)^### Suggested description\s*$", body)
         if description:
             body = body[:description.start()]
-        cleaned = clean_script(body)
+        cleaned = clean_script(body, include_paid_product=has_owner_approved_selar_disclosure())
         if len(cleaned.split()) < 500:
             raise ValueError(f"Episode {match.group(1)} script seems unexpectedly short ({len(cleaned.split())} words)")
         episodes.append((match.group(1), match.group(2).strip(), cleaned))
