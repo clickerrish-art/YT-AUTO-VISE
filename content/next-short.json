@@ -3,7 +3,7 @@
   "channel": "SonicVhibez",
   "channelId": "UCSlkuPfHH78oGC1o418HV4w",
   "title": "How to Make Better Wildlife Videos for YouTube",
-  "description": "Turn wildlife clips into a clear story: choose one animal behavior, build a hook, and use only footage you have permission to publish.\n\nPRODUCT MENTION (DRAFT — OWNER REVIEW REQUIRED): This video features the Complete YouTube Wildlife Creator's Vault: https://selar.com/0u19v8u99l. This product is sold through my own Selar business; purchases generate revenue for my business.\n\nAI DISCLOSURE: Some visuals or narration in this video may be generated or altered using AI. Realistic synthetic wildlife scenes will be disclosed using YouTube's altered or synthetic content setting.\n\nExplore the Complete YouTube Wildlife Creator's Vault: https://selar.com/0u19v8u99l\n\nAlways verify footage, music, image rights, and factual accuracy before publishing.",
+  "description": "Turn wildlife clips into a clear story: choose one animal behavior, build a hook, and use only footage you have permission to publish.\n\nPRODUCT DISCLOSURE (OWNER-APPROVED): This video features the Complete YouTube Wildlife Creator's Vault: https://selar.com/0u19v8u99l. This product is sold through my own Selar business; purchases generate revenue for my business.\n\nAI DISCLOSURE: Some visuals or narration in this video may be generated or altered using AI. Realistic synthetic wildlife scenes will be disclosed using YouTube's altered or synthetic content setting.\n\nExplore the Complete YouTube Wildlife Creator's Vault: https://selar.com/0u19v8u99l\n\nAlways verify footage, music, image rights, and factual accuracy before publishing.",
   "tags": [
     "wildlife video",
     "wildlife filmmaking",
@@ -21,8 +21,10 @@
   "complianceReviewed": false,
   "notes": "Draft metadata only. Owner clarified on 2026-11-09 that Selar is their own business and customer payments are received directly through Selar; the product promotion therefore has a direct sales-revenue relationship. The disclosure wording is recorded as a draft and is NOT owner-approved for publication. Treat the paid-promotion flag conservatively as enabled pending final platform/compliance review. Channel ID was populated after authenticated YouTube OAuth confirmed the exact @sonicvhibez identity on 2026-11-09; media rights, factual accuracy, final captions, and compliance still require human verification. Status intentionally remains HOLD_FOR_MEDIA_AND_HUMAN_REVIEW.",
   "promotionDisclosure": {
-    "status": "UNVERIFIED",
+    "status": "APPROVED",
     "type": "direct_sales_revenue",
-    "text": "This product is sold through my own Selar business; purchases generate revenue for my business."
+    "text": "This product is sold through my own Selar business; purchases generate revenue for my business.",
+    "approvedAt": "2026-11-10T07:02:41+02:00",
+    "approvalReference": "Owner explicitly approved the exact viewer-facing Selar direct-sales disclosure in the ChatGPT conversation on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Approval applies to the Complete YouTube Wildlife Creator's Vault promotion only."
   }
 }
