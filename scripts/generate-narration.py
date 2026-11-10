@@ -22,9 +22,52 @@ def _has_timezone(value: str) -> bool:
     try:
         parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
         return parsed.tzinfo is not None and parsed.utcoffset() is not None
+    except (TypeError, ValueError, AttributeError):
+        return False
+
+
+def _valid_owner_date(value: str) -> bool:
+    try:
+        return datetime.strptime(value, "%Y-%m-%d").strftime("%Y-%m-%d") == value
     except (TypeError, ValueError):
         return False
 
+
+def has_owner_approved_selar_disclosure(product_config=None) -> bool:
+    """Fail closed unless the exact Selar product, relationship and disclosure are owner-approved."""
+    try:
+        if product_config is None:
+            product_config = json.loads(PRODUCTS.read_text(encoding="utf-8"))
+        products = product_config.get("products", [])
+        product = next((item for item in products if item.get("url") == APPROVED_SELLAR_URL), None)
+        if not product or product.get("status") != "approved":
+            return False
+        gate = product.get("promotionGate", {})
+        seller = gate.get("seller", {})
+        brand = gate.get("brandAuthorization", {})
+        compensation = gate.get("compensation", {})
+        disclosure = gate.get("disclosure", {})
+        return (
+            seller.get("status") == "VERIFIED"
+            and seller.get("sourceUrl") == APPROVED_SELLAR_URL
+            and bool(str(seller.get("name", "")).strip())
+            and _has_timezone(seller.get("verifiedAt", ""))
+            and bool(str(seller.get("evidenceReference", "")).strip())
+            and brand.get("status") == "OWNER_CONFIRMED"
+            and brand.get("brand") == "SonicVhibez"
+            and _has_timezone(brand.get("confirmedAt", ""))
+            and bool(str(brand.get("approvalReference", "")).strip())
+            and compensation.get("status") == "OWNER_CONFIRMED"
+            and compensation.get("type") == "DIRECT_SALES_REVENUE"
+            and _valid_owner_date(compensation.get("verifiedAt", ""))
+            and bool(str(compensation.get("evidenceReference", "")).strip())
+            and disclosure.get("status") == "OWNER_APPROVED"
+            and disclosure.get("text") == APPROVED_DISCLOSURE_TEXT
+            and _has_timezone(disclosure.get("approvedAt", ""))
+            and bool(str(disclosure.get("approvalReference", "")).strip())
+        )
+    except (OSError, ValueError, TypeError, AttributeError):
+        return False
 
 def has_owner_approved_selar_disclosure(product_config=None) -> bool:
     """Fail closed unless the exact Selar product, relationship and disclosure are owner-approved."""
