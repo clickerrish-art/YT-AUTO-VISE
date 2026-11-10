@@ -8,5 +8,8 @@
   "footageLicenseEvidence": "REPLACE_WITH_LICENSE_OR_PERMISSION_RECORD",
   "narrationLicenseEvidence": "REPLACE_WITH_VOICE_LICENSE_OR_GENERATION_RECORD",
   "rightsConfirmed": false,
-  "complianceReviewed": false
+  "complianceReviewed": false,
+  "containsSyntheticMedia": true,
+  "hasPaidPromotion": true,
+  "notes": "Example only. The current planned Short uses synthetic TTS narration and includes an owner-approved direct-sales promotion, so keep both disclosure flags true unless the final reviewed assets and promotion differ. Complete this manifest only with genuine source files and verified rights; no placeholders or fabricated evidence."
 }
