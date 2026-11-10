@@ -1,47 +1,51 @@
 1
-00:00:00,000 --> 00:00:05,000
+00:00:00,000 --> 00:00:04,000
 Planning a wildlife documentary Short? Plan three things before editing.
 
 2
-00:00:05,000 --> 00:00:12,000
+00:00:04,000 --> 00:00:10,000
 First, choose one subject and one question: how does it feed, move, communicate, or care for its young?
 
 3
-00:00:12,000 --> 00:00:16,000
+00:00:10,000 --> 00:00:13,000
 Describe only what your footage shows.
 
 4
-00:00:16,000 --> 00:00:23,000
+00:00:13,000 --> 00:00:20,000
 Second, build a simple story: open with the question, add habitat context, then show the behavior.
 
 5
-00:00:23,000 --> 00:00:27,000
+00:00:20,000 --> 00:00:24,000
 Keep separate clips in their real sequence.
 
 6
-00:00:27,000 --> 00:00:30,000
+00:00:24,000 --> 00:00:27,000
 Third, check every asset.
 
 7
-00:00:30,000 --> 00:00:37,000
+00:00:27,000 --> 00:00:34,000
 Confirm footage and music rights, fact-check each claim, and keep captions readable on a phone.
 
 8
-00:00:37,000 --> 00:00:41,000
+00:00:34,000 --> 00:00:38,000
 Record each clip's source and what it shows.
 
 9
-00:00:41,000 --> 00:00:47,000
-Review the Complete YouTube Wildlife Creator's Vault for more wildlife creator planning.
+00:00:38,000 --> 00:00:43,000
+Record each clip's location, date, source, and any detail that still needs checking.
 
 10
+00:00:43,000 --> 00:00:47,000
+Review the Complete YouTube Wildlife Creator's Vault for more wildlife creator planning.
+
+11
 00:00:47,000 --> 00:00:48,000
 Advertisement.
 
-11
+12
 00:00:48,000 --> 00:00:54,000
 This product is sold through my own Selar business; purchases generate revenue for my business.
 
-12
+13
 00:00:54,000 --> 00:00:55,000
 Link below.
