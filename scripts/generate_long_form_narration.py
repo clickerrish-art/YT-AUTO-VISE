@@ -73,12 +73,12 @@ def has_owner_approved_selar_disclosure(product_config=None) -> bool:
 
 
 def clean_script(text: str, include_paid_product: bool = False) -> str:
-    text = re.sub(r"(?m)^#{1,6} .*\\n", "", text)
-    text = re.sub(r"(?m)^\\*\\*[^\\n]*\\*\\*\\s*$", "", text)
-    text = re.sub(r"(?m)^\\*\\*\\[.*?\\]\\*\\*.*$", "", text)
+    text = re.sub(r"(?m)^#{1,6} .*\n", "", text)
+    text = re.sub(r"(?m)^\*\*[^\n]*\*\*\s*$", "", text)
+    text = re.sub(r"(?m)^\*\*\[.*?\]\*\*.*$", "", text)
     text = re.sub(r"(?m)^### Suggested (description|tags).*$", "", text)
     paid_paragraphs = re.findall(
-        r"(?:^|\\n\\n)(If you want a paid resource\\b.*?)(?=\\n\\n|$)",
+        r"(?:^|\n\n)(If you want a paid resource\b.*?)(?=\n\n|$)",
         text,
         flags=re.DOTALL,
     )
@@ -87,7 +87,7 @@ def clean_script(text: str, include_paid_product: bool = False) -> str:
             raise ValueError("Paid-product narration must contain the exact owner-approved Selar disclosure")
     else:
         text = re.sub(
-            r"(?:^|\\n\\n)If you want a paid resource\\b.*?(?=\\n\\n|$)",
+            r"(?:^|\n\n)If you want a paid resource\b.*?(?=\n\n|$)",
             "",
             text,
             flags=re.DOTALL,
