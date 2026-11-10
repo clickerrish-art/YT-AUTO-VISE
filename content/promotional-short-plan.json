@@ -415,6 +415,220 @@
           }
         }
       ]
+    },
+    {
+      "weekOf": "2026-11-23",
+      "status": "DRAFT_ONLY",
+      "items": [
+        {
+          "id": "sonicvhibez-short-007-ethical-wildlife-filming",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "Ethical Wildlife Photography: 4 Rules for Safer Filming",
+          "primaryKeyword": "ethical wildlife photography",
+          "script": "Want wildlife footage that shows natural behaviour without disturbing the animal? Start with distance, not a closer camera position. First, check the local park or reserve rules; safe distances vary by species and place. Second, use binoculars or a zoom lens instead of approaching. Third, watch the animal: if it freezes, changes direction, gives warning signals or moves away, back off and give it space. Fourth, never feed, bait, chase, corner, use flash at close range or alter vegetation to force a shot. Stay on designated paths and let wildlife choose its own behaviour. The Complete YouTube Wildlife Creator's Vault is a resource to review for planning a wildlife channel. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business.",
+          "description": "Ethical wildlife photography: four ways to capture natural behaviour without changing an animal's actions. Safe distances vary by species and location; follow local rules and back away if wildlife reacts.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault\nhttps://selar.com/0u19v8u99l\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nFilm responsibly. Never bait, chase, feed or disturb wildlife for footage.",
+          "productUrl": "https://selar.com/0u19v8u99l",
+          "productId": "wildlife-creators-vault",
+          "visibility": "private",
+          "keywordPhrases": [
+            {
+              "phrase": "ethical wildlife photography"
+            },
+            {
+              "phrase": "ethical wildlife filming"
+            },
+            {
+              "phrase": "how to film wildlife without disturbing animals"
+            },
+            {
+              "phrase": "wildlife filmmaking tips"
+            },
+            {
+              "phrase": "wildlife documentary filming ethics"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T11:13:58+02:00",
+            "note": "Fresh indexed results for ethical wildlife photography and safe wildlife viewing directly address the tutorial's questions about distance, zoom, animal stress signals and avoiding disturbance. This is qualitative search-intent evidence only; no measured global search volume or competition data is available.",
+            "sources": [
+              {
+                "title": "Ethical wildlife photography – how photographers can keep themselves and animals safe",
+                "url": "https://spca.bc.ca/about-us/our-work/wild-animal-programs/ethical-wildlife-photography-how-photographers-can-keep-themselves-and-animals-safe/",
+                "whyRelevant": "Current guidance explains stress signals, backing away, using binoculars or zoom lenses, and avoiding feeding or changing animal behaviour for a shot."
+              },
+              {
+                "title": "Ethical Wildlife Photography — San Juan Island National Historical Park",
+                "url": "https://www.nps.gov/sajh/planyourvisit/ethical-wildlife-photography.htm",
+                "whyRelevant": "The National Park Service recommends keeping distance and using zoom lenses, and makes clear that wildlife viewing distances are location-specific."
+              },
+              {
+                "title": "7 Ways to Safely Watch Wildlife — National Park Service",
+                "url": "https://www.nps.gov/subjects/watchingwildlife/7ways.htm",
+                "whyRelevant": "Official guidance says animal reactions indicate excessive proximity and advises against feeding, frightening or intentionally disturbing wildlife."
+              }
+            ]
+          },
+          "hashtags": [
+            "#EthicalWildlifePhotography",
+            "#WildlifeFilmmaking",
+            "#WildlifeDocumentary",
+            "#WildlifeConservation",
+            "#YouTubeCreator"
+          ],
+          "thumbnailDirection": "Use authentic, rights-cleared wildlife footage showing an animal in its natural habitat from a respectful distance. Add a small telephoto-lens silhouette and large mobile-readable text: “KEEP YOUR DISTANCE”. Do not stage or approach wildlife.",
+          "productionChecklist": [
+            "Follow the actual park, reserve and species-specific viewing rules; do not invent a universal safe distance.",
+            "Use a zoom lens or binoculars instead of approaching wildlife.",
+            "Back away if an animal freezes, changes behaviour, gives warning signals or moves away.",
+            "Never feed, bait, chase, corner, flash at close range or alter vegetation to force a shot.",
+            "Use only genuine rights-cleared footage; do not present synthetic animal behaviour as documentary evidence.",
+            "Verify narration facts and retain the cited ethical-wildlife guidance in the production notes.",
+            "Record natural narration and confirm a final runtime near 55 seconds.",
+            "Time captions to the final voice track and check mobile readability and vertical safe areas.",
+            "Verify the exact Selar product, seller and the approved direct-sales disclosure against the registry.",
+            "Complete human playback, factual and thumbnail review against final asset hashes.",
+            "Do not schedule until SonicVhibez-only destination access, complete publication history and every 72-hour gap are verified."
+          ],
+          "disclosure": {
+            "status": "APPROVED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "approvedAt": "2026-11-10T07:02:41+02:00",
+            "approvalReference": "Owner explicitly approved the exact viewer-facing Selar direct-sales disclosure in the ChatGPT conversation on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Approval applies to the Complete YouTube Wildlife Creator's Vault promotion only."
+          },
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T11:13:58+02:00",
+            "note": "Current search results support an educational query around ethical wildlife photography and filming: how to keep distance, recognize stress and record natural behaviour without disturbance. This is qualitative intent evidence, not measured demand or ranking data.",
+            "sources": [
+              {
+                "title": "Ethical wildlife photography – how photographers can keep themselves and animals safe",
+                "url": "https://spca.bc.ca/about-us/our-work/wild-animal-programs/ethical-wildlife-photography-how-photographers-can-keep-themselves-and-animals-safe/",
+                "whyRelevant": "Current guidance explains stress signals, backing away, using binoculars or zoom lenses, and avoiding feeding or changing animal behaviour for a shot."
+              },
+              {
+                "title": "Ethical Wildlife Photography — San Juan Island National Historical Park",
+                "url": "https://www.nps.gov/sajh/planyourvisit/ethical-wildlife-photography.htm",
+                "whyRelevant": "The National Park Service recommends keeping distance and using zoom lenses, and makes clear that wildlife viewing distances are location-specific."
+              },
+              {
+                "title": "7 Ways to Safely Watch Wildlife — National Park Service",
+                "url": "https://www.nps.gov/subjects/watchingwildlife/7ways.htm",
+                "whyRelevant": "Official guidance says animal reactions indicate excessive proximity and advises against feeding, frightening or intentionally disturbing wildlife."
+              }
+            ]
+          }
+        },
+        {
+          "id": "sonicvhibez-short-008-youtube-video-outline",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "How to Outline a YouTube Video: 4 Steps Before Scripting",
+          "primaryKeyword": "how to outline a YouTube video",
+          "script": "Before writing a full YouTube script, build a simple outline. Step one: name the viewer and the question they need answered. Step two: write a promise the video can actually deliver. Step three: choose three to five main points, put them in a useful order, and add a fact, example or demonstration under each. Step four: note a visual for each point, then write the takeaway and one next step. If a claim has no evidence, mark it for checking or remove it. An outline keeps the video focused without making you read every word. Advertisement. The Full Video Creation Prompt Pack Premium Edition is a planning resource to review. Its direct-sales disclosure is awaiting owner approval; do not release this draft until approved and inserted.",
+          "productId": "video-creation-prompt-pack-premium",
+          "productUrl": "https://selar.com/539497q11t",
+          "description": "How to outline a YouTube video: define the viewer, promise, main points and supporting visuals before writing the full script.\n\nPlanning resource: The Full Video Creation Prompt Pack Premium Edition\nhttps://selar.com/539497q11t\n\nADVERTISEMENT — DISCLOSURE HOLD\nThis is a direct-sales promotion for a product sold through the owner's Selar business. The exact viewer-facing disclosure wording for this specific product is awaiting owner approval. Do not publish until it is approved and inserted in the final description and narration.\n\nAn outline is a planning aid; verify every claim and source before filming.",
+          "keywordPhrases": [
+            {
+              "phrase": "how to outline a YouTube video"
+            },
+            {
+              "phrase": "YouTube video outline template"
+            },
+            {
+              "phrase": "how to plan a YouTube video"
+            },
+            {
+              "phrase": "YouTube script outline"
+            },
+            {
+              "phrase": "YouTube video structure"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T11:13:58+02:00",
+            "note": "Fresh indexed results for YouTube video outline and outline templates describe audience, hook, promise, main sections, supporting evidence or visuals, and a closing next step. This supports the tutorial's exact planning lesson qualitatively; no measured global search volume or competition data is available.",
+            "sources": [
+              {
+                "title": "YouTube video outline generator — AresGen",
+                "url": "https://www.aresgen.com/templates/youtube-video-outline",
+                "whyRelevant": "The template structures a YouTube outline around a target audience, hook, main sections and closing call to action, matching the Short's practical outline steps."
+              },
+              {
+                "title": "What Is a YouTube Video Outline? Complete Creator Guide",
+                "url": "https://www.creatoressentials.com/glossary/video-outline/",
+                "whyRelevant": "The guide identifies the viewer, promise, hook, sections, evidence, visuals, transitions and call to action as useful outline elements."
+              },
+              {
+                "title": "YouTube Video Outline — How to Plan Content",
+                "url": "https://tuberanker.com/blog/youtube-video-outline",
+                "whyRelevant": "The guide describes planning a relevant hook, introduction, main points and conclusion before writing or filming."
+              }
+            ]
+          },
+          "hashtags": [
+            "#YouTubeVideoOutline",
+            "#YouTubeScript",
+            "#VideoPlanning",
+            "#ContentCreation",
+            "#YouTubeCreator"
+          ],
+          "thumbnailDirection": "Show a clean one-page outline with four rows labelled VIEWER, PROMISE, POINTS and VISUALS. Large mobile-readable text: “OUTLINE FIRST”. Use a simple, original graphic rather than a misleading dashboard screenshot.",
+          "disclosure": {
+            "status": "HOLD",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "holdText": "The owner confirms this is a direct sale through their own Selar business, not an affiliate commission. The viewer-facing commercial disclosure is still unapproved; keep this promotion on HOLD until the owner approves the exact wording."
+          },
+          "productionChecklist": [
+            "Keep the lesson to four repeatable outline steps and one clear example.",
+            "Make the audience and viewer question specific before drafting the hook.",
+            "Ensure the video promise is deliverable and matches the actual content.",
+            "Support each main point with a verified fact, example or demonstration.",
+            "Add a useful visual cue to each section without inventing evidence.",
+            "Use original or commercially cleared graphics, music and sound effects.",
+            "Record natural narration and confirm a final runtime near 55 seconds.",
+            "Time captions to the final voice track and check phone-size readability.",
+            "Verify the exact Prompt Pack listing and seller; retain the product-specific disclosure HOLD.",
+            "Obtain owner approval of the exact direct-sales disclosure before final recording or release.",
+            "Complete human playback, factual and thumbnail review against final asset hashes.",
+            "Do not schedule until SonicVhibez-only destination access and full publication-spacing verification pass."
+          ],
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T11:13:58+02:00",
+            "note": "Current search results show informational intent around how to outline a YouTube video and reusable outline templates, with repeated structures for audience, hook, main points, evidence, visuals and closing CTA. This is qualitative intent evidence only.",
+            "sources": [
+              {
+                "title": "YouTube video outline generator — AresGen",
+                "url": "https://www.aresgen.com/templates/youtube-video-outline",
+                "whyRelevant": "The template structures a YouTube outline around a target audience, hook, main sections and closing call to action, matching the Short's practical outline steps."
+              },
+              {
+                "title": "What Is a YouTube Video Outline? Complete Creator Guide",
+                "url": "https://www.creatoressentials.com/glossary/video-outline/",
+                "whyRelevant": "The guide identifies the viewer, promise, hook, sections, evidence, visuals, transitions and call to action as useful outline elements."
+              },
+              {
+                "title": "YouTube Video Outline — How to Plan Content",
+                "url": "https://tuberanker.com/blog/youtube-video-outline",
+                "whyRelevant": "The guide describes planning a relevant hook, introduction, main points and conclusion before writing or filming."
+              }
+            ]
+          },
+          "visibility": "private"
+        }
+      ]
     }
   ]
 }
