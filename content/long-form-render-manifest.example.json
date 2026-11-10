@@ -10,7 +10,7 @@
   "rightsConfirmed": false,
   "complianceReviewed": false,
   "title": "REPLACE_WITH_REVIEWED_VIDEO_TITLE",
-  "containsSyntheticMedia": false,
-  "hasPaidPromotion": false,
-  "notes": "Example only. Copy to content/long-form-render-manifest.json only after real files and evidence exist. Keep rightsConfirmed and complianceReviewed false until human review. This manifest does not publish anything."
+  "containsSyntheticMedia": true,
+  "hasPaidPromotion": true,
+  "notes": "Example only. The current planned long-form narration uses synthetic TTS and the scripts include the owner-approved Selar direct-sales promotion. Keep these disclosure flags true unless the final reviewed content genuinely differs. Copy to content/long-form-render-manifest.json only after real files and evidence exist. Keep rightsConfirmed and complianceReviewed false until human review. This manifest does not publish anything."
 }
