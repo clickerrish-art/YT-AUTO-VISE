@@ -127,6 +127,19 @@ test("the weekly promotional Short cap rejects a third item", () => {
   assert.ok(validatePromotionalShortPlan(plan, products).some(error => /exceeds the 2-Short weekly limit/.test(error)));
 });
 
+test("promotional Short drafts require explicit private visibility", () => {
+  for (const [label, visibility] of [["missing", undefined], ["public", "public"], ["unlisted", "unlisted"]]) {
+    const plan = clone(checkedInPlan);
+    const item = plan.weeks[0].items[0];
+    if (visibility === undefined) delete item.visibility;
+    else item.visibility = visibility;
+    assert.ok(
+      validatePromotionalShortPlan(plan, products).some(error => /visibility must be exactly private/.test(error)),
+      `${label} visibility must fail closed`
+    );
+  }
+});
+
 test("candidate products stay draft-only and keep the disclosure hold", () => {
   const plan = clone(checkedInPlan);
   plan.weeks[0].items[0].status = "READY_FOR_PRIVATE_UPLOAD";
