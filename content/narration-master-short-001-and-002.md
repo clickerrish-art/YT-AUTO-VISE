@@ -28,7 +28,7 @@ Finish with one useful takeaway so viewers leave having learned something.
 
 Build your next wildlife video with a plan. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.
 
-**Performance notes:** Brief pause after the opening question. Emphasize “safe distance” without sounding alarmist. Keep the product mention matter-of-fact. Display the exact approved direct-sales disclosure clearly on screen while it is spoken.
+**Performance notes:** Brief pause after the opening question. Emphasize “safe distance” without sounding alarmist. Keep the product mention matter-of-fact. Show a clear “ADVERTISEMENT” identifier at the start of the promotional segment, then display the exact approved direct-sales disclosure clearly on screen while it is spoken.
 
 ## Short 002 — 3 Steps to Plan a Wildlife Documentary Short
 
