@@ -129,6 +129,46 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
         self.assertNotIn("paid resource", cleaned)
         self.assertNotIn("Creator's Vault", cleaned)
 
+    def test_includes_paid_product_paragraph_only_with_exact_owner_approved_disclosure(self):
+        source = (
+            "Opening narration remains.\\n\\n"
+            "If you want a paid resource, review the product. "
+            "This product is sold through my own Selar business; purchases generate revenue for my business. "
+            "The link is in the description.\\n\\n"
+            "Closing narration remains."
+        )
+
+        cleaned = MODULE.clean_script(source, include_paid_product=True)
+
+        self.assertIn("paid resource", cleaned)
+        self.assertIn("This product is sold through my own Selar business; purchases generate revenue for my business.", cleaned)
+        self.assertNotIn("selar.com", cleaned)
+
+    def test_rejects_paid_product_paragraph_without_exact_approved_disclosure(self):
+        source = "If you want a paid resource, review the product.\\n\\nClosing narration remains."
+        with self.assertRaisesRegex(ValueError, "exact owner-approved Selar disclosure"):
+            MODULE.clean_script(source, include_paid_product=True)
+
+    def test_owner_approved_selar_gate_requires_matching_owner_approval(self):
+        valid = {
+            "products": [{
+                "url": "https://selar.com/0u19v8u99l",
+                "status": "approved",
+                "promotionGate": {
+                    "seller": {"status": "VERIFIED", "sourceUrl": "https://selar.com/0u19v8u99l", "verifiedAt": "2026-11-09T09:49:01+02:00"},
+                    "brandAuthorization": {"status": "OWNER_CONFIRMED", "brand": "SonicVhibez", "confirmedAt": "2026-11-06T20:02:19+02:00"},
+                    "compensation": {"status": "OWNER_CONFIRMED", "type": "DIRECT_SALES_REVENUE"},
+                    "disclosure": {"status": "OWNER_APPROVED", "text": "This product is sold through my own Selar business; purchases generate revenue for my business.", "approvedAt": "2026-11-10T07:02:41+02:00", "approvalReference": "owner approval"}
+                }
+            }]
+        }
+        self.assertTrue(MODULE.has_owner_approved_selar_disclosure(valid))
+        invalid = {**valid, "products": [{**valid["products"][0], "promotionGate": {
+            **valid["products"][0]["promotionGate"],
+            "disclosure": {**valid["products"][0]["promotionGate"]["disclosure"], "status": "UNVERIFIED"}
+        }}]}
+        self.assertFalse(MODULE.has_owner_approved_selar_disclosure(invalid))
+
     def test_removes_promotional_resource_line_and_selar_url(self):
         source = (
             "Useful narration.\n\n"
