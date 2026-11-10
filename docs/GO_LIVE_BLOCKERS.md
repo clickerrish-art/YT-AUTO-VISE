@@ -2086,3 +2086,10 @@ Production-readiness workflow [41137046887](https://github.com/clickerrish-art/Y
 The application/test candidate `1334f9380dafbf5f9e6cf272e1bd14feab0045f3` passed its code/quality checks and the 18-journey dashboard browser run. A subsequent browser-test-only commit `67edf6c84d716a236f457df8b13901eee896d195` added successful hash-bound script-review form evidence. These engineering tests do not resolve the 13 production prerequisites.
 
 **Safety remains unchanged:** public/unattended YouTube publishing is disabled; no upload, schedule or publication was attempted; Nature Frontiers is not a YouTube target; Meta/Metricool external publishing was not performed.
+
+
+## NOAA spiny-lobster source decision — 10 November 2026
+
+The owner has now explicitly authorized the specific NOAA Fisheries **B-Roll: Spiny Lobsters in California's Channel Islands** package for conditional SonicVhibez use, subject to the exact credit **“NOAA’s Office of National Marine Sanctuaries”** and complete removal of the source audio. The source is identified by SHA-256 `1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb` and acquisition artifact run `42594716333` / artifact `13662524700`.
+
+This closes the owner-permission question for this package only; it does **not** close production rights/compliance gates. The one-second timeline review is not frame-by-frame clearance. Selected shots, transitions and any additional embedded credits still require review; final edit must be checked for exact attribution and absence of source audio. Do not set `rightsConfirmed=true` or `complianceReviewed=true`, create a production-ready manifest, or enable/upload/publish on the basis of this authorization alone. Keep the footage as a conditionally authorized source candidate until shot-level and final-edit review are complete. Leatherback footage and all other sources remain separate and unapproved.
