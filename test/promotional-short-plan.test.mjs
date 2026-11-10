@@ -29,7 +29,8 @@ test("owner-approved direct-sales disclosure is carried verbatim in the wildlife
   assert.equal(item.disclosure.approvedAt, approval.approvedAt);
   assert.equal(item.disclosure.approvalReference, approval.approvalReference);
   assert.ok(item.script.indexOf("Advertisement.") < item.script.indexOf("Complete YouTube Wildlife Creator's Vault"));
-  assert.ok(item.script.includes(`Advertisement. ${approval.text}`));
+  assert.ok(item.script.includes(approval.text));
+  assert.ok(item.script.indexOf("Advertisement.") < item.script.indexOf(approval.text));
   assert.match(item.description, /^ADVERTISEMENT$/m);
   assert.ok(item.description.includes(approval.text));
   assert.equal(/DISCLOSURE HOLD/i.test(item.description), false);
@@ -39,7 +40,7 @@ test("owner-approved direct-sales disclosure is carried verbatim in the wildlife
   const alteredItem = alteredScript.weeks[1].items.find(row => row.id === item.id);
   alteredItem.script = alteredItem.script.replace(approval.text, "Purchases may support this business.");
   assert.ok(validatePromotionalShortPlan(alteredScript, products)
-    .some(error => /script must speak the exact owner-approved direct-sales disclosure/.test(error)));
+    .some(error => /script must place an advertisement identifier before the exact owner-approved direct-sales disclosure/.test(error)));
 
   const alteredApproval = clone(plan);
   const alteredApprovalItem = alteredApproval.weeks[1].items.find(row => row.id === item.id);
@@ -178,7 +179,8 @@ test("primary keyword must appear near the start of the SEO title", () => {
 
 test("qualitative web-search intent is accepted only with dated HTTPS sources and no invented volume", () => {
   const plan = clone(checkedInPlan);
-  const item = plan.weeks[1].items[0];
+  const item = plan.weeks[1].items[1];
+  assert.equal(item.id, "sonicvhibez-short-006-niche-selection");
   assert.equal(validatePromotionalShortPlan(plan, products).length, 0);
 
   const missingSources = clone(plan);

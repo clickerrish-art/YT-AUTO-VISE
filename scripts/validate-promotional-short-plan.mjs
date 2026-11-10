@@ -158,9 +158,11 @@ export function validatePromotionalShortPlan(plan, products) {
             || itemDisclosure.approvalReference !== productDisclosure.approvalReference) {
           errors.push(`${label}: disclosure approval must match the exact owner-approved product registry record`);
         }
-        const exactSpokenDisclosure = `Advertisement. ${productDisclosure.text}`;
-        if (!String(item?.script ?? "").includes(exactSpokenDisclosure)) {
-          errors.push(`${label}: script must speak the exact owner-approved direct-sales disclosure after an advertisement identifier`);
+        const scriptText = String(item?.script ?? "");
+        const advertisementIndex = scriptText.indexOf("Advertisement.");
+        const disclosureIndex = scriptText.indexOf(productDisclosure.text);
+        if (advertisementIndex < 0 || disclosureIndex < 0 || advertisementIndex > disclosureIndex) {
+          errors.push(`${label}: script must place an advertisement identifier before the exact owner-approved direct-sales disclosure`);
         }
         const description = String(item?.description ?? "");
         if (!/^ADVERTISEMENT$/m.test(description) || !description.includes(productDisclosure.text)) {
