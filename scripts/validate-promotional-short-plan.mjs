@@ -136,14 +136,48 @@ export function validatePromotionalShortPlan(plan, products) {
       if (typeof item?.description !== "string" || !item.description.includes(item?.productUrl ?? "")) {
         errors.push(`${label}: description must contain the exact product URL`);
       }
-      if (!/DISCLOSURE HOLD/i.test(item?.description ?? "")) errors.push(`${label}: description must retain an explicit disclosure hold`);
       const expectedRelationshipStatus = product?.url && (() => {
         try { const host = new URL(product.url).hostname.toLowerCase(); return host === "selar.com" || host.endsWith(".selar.com"); }
         catch { return false; }
       })() ? "OWNER_CONFIRMED_DIRECT_SALES" : "UNVERIFIED";
-      if (item?.disclosure?.status !== "HOLD" || item.disclosure.relationshipStatus !== expectedRelationshipStatus
-          || item.disclosure.requiredBeforeRelease !== true) {
-        errors.push(`${label}: disclosure must remain on HOLD with the exact relationship status recorded`);
+      const productDisclosure = product?.promotionGate?.disclosure ?? {};
+      const hasOwnerApprovedDisclosure = productDisclosure.status === "OWNER_APPROVED";
+      const validOwnerApprovedDisclosure = hasOwnerApprovedDisclosure
+        && typeof productDisclosure.text === "string" && productDisclosure.text.trim()
+        && isValidZonedIsoTimestamp(productDisclosure.approvedAt)
+        && typeof productDisclosure.approvalReference === "string" && productDisclosure.approvalReference.trim();
+      if (hasOwnerApprovedDisclosure && !validOwnerApprovedDisclosure) {
+        errors.push(`${label}: product registry owner-approved disclosure evidence is incomplete`);
+      }
+      if (validOwnerApprovedDisclosure) {
+        const itemDisclosure = item?.disclosure ?? {};
+        if (itemDisclosure.status !== "APPROVED"
+            || itemDisclosure.relationshipStatus !== expectedRelationshipStatus
+            || itemDisclosure.requiredBeforeRelease !== true
+            || itemDisclosure.approvedAt !== productDisclosure.approvedAt
+            || itemDisclosure.approvalReference !== productDisclosure.approvalReference) {
+          errors.push(`${label}: disclosure approval must match the exact owner-approved product registry record`);
+        }
+        const exactSpokenDisclosure = `Advertisement. ${productDisclosure.text}`;
+        if (!String(item?.script ?? "").includes(exactSpokenDisclosure)) {
+          errors.push(`${label}: script must speak the exact owner-approved direct-sales disclosure after an advertisement identifier`);
+        }
+        const description = String(item?.description ?? "");
+        if (!/^ADVERTISEMENT$/m.test(description) || !description.includes(productDisclosure.text)) {
+          errors.push(`${label}: description must show an ADVERTISEMENT identifier and the exact owner-approved disclosure`);
+        }
+        if (/DISCLOSURE HOLD/i.test(description)) {
+          errors.push(`${label}: an owner-approved disclosure must not be labelled as a disclosure hold`);
+        }
+      } else {
+        if (!/DISCLOSURE HOLD/i.test(item?.description ?? "")) {
+          errors.push(`${label}: description must retain an explicit disclosure hold`);
+        }
+        if (item?.disclosure?.status !== "HOLD"
+            || item.disclosure.relationshipStatus !== expectedRelationshipStatus
+            || item.disclosure.requiredBeforeRelease !== true) {
+          errors.push(`${label}: disclosure must remain on HOLD with the exact relationship status recorded`);
+        }
       }
       if (!Array.isArray(item?.keywordPhrases) || item.keywordPhrases.length < 3
           || !item.keywordPhrases.some(row => typeof row?.phrase === "string" && row.phrase.toLowerCase() === item?.primaryKeyword?.toLowerCase())) {

@@ -237,8 +237,8 @@
           "targetSeconds": 55,
           "title": "How to Make a Wildlife Documentary: 3 Storytelling Shots",
           "primaryKeyword": "how to make a wildlife documentary",
-          "script": "How do you make a wildlife documentary from footage that feels like a story, not a random collection of clips? Plan three shots before editing. First, a wide view that establishes the habitat. Second, a medium shot that shows where the animal sits in that environment. Third, a close detail that captures something you genuinely recorded—movement, feeding, or a natural interaction. Connect the shots with one simple line of context: what are we seeing, and why does it matter? Never bait, chase, stage, or disturb an animal to force a scene. If you're planning a wildlife-focused channel, the Complete YouTube Wildlife Creator's Vault is one resource to review; check the listing before deciding if it fits.",
-          "description": "How to make a wildlife documentary: plan a habitat wide shot, an animal-in-context shot and a truthful detail shot before editing.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault\nReview the exact Selar listing and its contents here:\nhttps://selar.com/0u19v8u99l\n\nDISCLOSURE HOLD: Seller Click 47 was rechecked on 9 November 2026. Owner-confirmed relationship: this is sold through the owner's own Selar business and purchases generate direct sales revenue for that business; it is not an affiliate commission. Separately, the product page body uses Nature Frontiers branding, so its fit for a SonicVhibez promotion still requires owner confirmation. The proposed viewer-facing disclosure remains a draft and requires owner approval before release.\n\nA wildlife video should document what actually happened. Do not stage animal behaviour or disturb wildlife for footage.",
+          "script": "How do you make a wildlife documentary from footage that feels like a story, not a random collection of clips? Plan three shots before editing. First, a wide view that establishes the habitat. Second, a medium shot that shows where the animal sits in that environment. Third, a close detail that captures something you genuinely recorded—movement, feeding, or a natural interaction. Connect the shots with one simple line of context: what are we seeing, and why does it matter? Never bait, chase, stage, or disturb an animal to force a scene. Advertisement. The Complete YouTube Wildlife Creator's Vault is one resource to review; check the listing before deciding if it fits. This product is sold through my own Selar business; purchases generate revenue for my business.",
+          "description": "How to make a wildlife documentary: plan a habitat wide shot, an animal-in-context shot and a truthful detail shot before editing.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault\nReview the exact Selar listing and its contents here:\nhttps://selar.com/0u19v8u99l\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nA wildlife video should document what actually happened. Do not stage animal behaviour or disturb wildlife for footage.",
           "productUrl": "https://selar.com/0u19v8u99l",
           "productId": "wildlife-creators-vault",
           "visibility": "private",
@@ -294,15 +294,16 @@
             "Record narration naturally and confirm a final runtime near 55 seconds.",
             "Time captions to the final voice track; check phone-size readability and vertical safe areas.",
             "Recheck the exact Selar listing, seller and its brand wording before promotion.",
-            "Record the owner-confirmed direct Selar sales relationship; keep viewer-facing disclosure on hold until owner-approved.",
+            "Include the exact owner-approved direct-sales disclosure in narration and description; media rights, final assets and human review remain separate release gates.",
             "Complete human playback, factual and thumbnail review against final asset hashes.",
             "Do not create a publication slot until the SonicVhibez destination and complete YouTube history are verified and every 72-hour gap is calculated."
           ],
           "disclosure": {
-            "status": "HOLD",
+            "status": "APPROVED",
             "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
             "requiredBeforeRelease": true,
-            "holdText": "The owner confirms this is a direct sale through their own Selar business, not an affiliate commission. The viewer-facing commercial disclosure is still unapproved; keep this promotion on HOLD until the owner approves the exact wording."
+            "approvedAt": "2026-11-10T07:02:41+02:00",
+            "approvalReference": "Owner explicitly approved the exact viewer-facing Selar direct-sales disclosure in the ChatGPT conversation on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Approval applies to the Complete YouTube Wildlife Creator's Vault promotion only."
           },
           "currentIntentEvidence": {
             "provider": "web_search",

@@ -19,6 +19,35 @@ test("creator-education Shorts stay within the two-item weekly cap across draft-
   assert.ok(checkedInPlan.weeks.every(week => week.items.every(item => item.targetSeconds === 55)));
 });
 
+test("owner-approved direct-sales disclosure is carried verbatim in the wildlife Short script and description", () => {
+  const plan = clone(checkedInPlan);
+  const item = plan.weeks[1].items.find(row => row.id === "sonicvhibez-short-005-wildlife-story-sequence");
+  const product = products.find(row => row.id === "wildlife-creators-vault");
+  const approval = product.promotionGate.disclosure;
+
+  assert.equal(item.disclosure.status, "APPROVED");
+  assert.equal(item.disclosure.approvedAt, approval.approvedAt);
+  assert.equal(item.disclosure.approvalReference, approval.approvalReference);
+  assert.ok(item.script.indexOf("Advertisement.") < item.script.indexOf("Complete YouTube Wildlife Creator's Vault"));
+  assert.ok(item.script.includes(`Advertisement. ${approval.text}`));
+  assert.match(item.description, /^ADVERTISEMENT$/m);
+  assert.ok(item.description.includes(approval.text));
+  assert.equal(/DISCLOSURE HOLD/i.test(item.description), false);
+  assert.deepEqual(validatePromotionalShortPlan(plan, products), []);
+
+  const alteredScript = clone(plan);
+  const alteredItem = alteredScript.weeks[1].items.find(row => row.id === item.id);
+  alteredItem.script = alteredItem.script.replace(approval.text, "Purchases may support this business.");
+  assert.ok(validatePromotionalShortPlan(alteredScript, products)
+    .some(error => /script must speak the exact owner-approved direct-sales disclosure/.test(error)));
+
+  const alteredApproval = clone(plan);
+  const alteredApprovalItem = alteredApproval.weeks[1].items.find(row => row.id === item.id);
+  alteredApprovalItem.disclosure.approvalReference = "unrelated approval";
+  assert.ok(validatePromotionalShortPlan(alteredApproval, products)
+    .some(error => /disclosure approval must match the exact owner-approved product registry record/.test(error)));
+});
+
 test("candidate seller verification is required while direct Selar sales are owner-confirmed and disclosure remains unresolved", () => {
   const candidates = clone(products);
   const candidate = candidates.find(product => product.status === "candidate");
