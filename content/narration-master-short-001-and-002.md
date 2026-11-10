@@ -26,7 +26,7 @@ Add readable captions and only music you have permission to use.
 
 Finish with one useful takeaway so viewers leave having learned something.
 
-Build your next wildlife video with a plan. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.
+Build your next wildlife video with a plan. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.
 
 **Performance notes:** Brief pause after the opening question. Emphasize “safe distance” without sounding alarmist. Keep the product mention matter-of-fact. Show a clear “ADVERTISEMENT” identifier at the start of the promotional segment, then display the exact approved direct-sales disclosure clearly on screen while it is spoken.
 
@@ -42,9 +42,9 @@ Second, build a simple story. Open with a moment that raises the question, add h
 
 Third, check every asset. Confirm footage and music rights, fact-check each claim, and keep captions readable on a phone.
 
-Record each clip's source, what it shows, and what still needs checking. A focused story beats a rushed list of facts. This product is sold through my own Selar business; purchases generate revenue for my business. The link is below.
+Record each clip's source, what it shows, and what still needs checking. A focused story beats a rushed list of facts. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The link is below.
 
-**Performance notes:** Make each step distinct, but keep the delivery warm and steady. Do not add claims about guaranteed growth or results. Display the exact approved direct-sales disclosure clearly on screen while it is spoken.
+**Performance notes:** Make each step distinct, but keep the delivery warm and steady. Do not add claims about guaranteed growth or results. Show a clear ADVERTISEMENT identifier at the start of the promotional segment, then display the exact approved direct-sales disclosure clearly on screen while it is spoken.
 
 ## Recording and finalization checklist
 
