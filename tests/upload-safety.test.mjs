@@ -99,11 +99,11 @@ test("both manual upload workflows require explicit private confirmation and pre
     assert.match(workflow, /group: sonicvhibez-private-upload/);
     assert.match(workflow, /cancel-in-progress: false/);
     assert.match(workflow, /Validate previous upload ledger against executed private-upload jobs/);
-    assert.match(workflow, /run: node scripts\\/validate-upload-ledger-run\\.mjs/);
+    assert.match(workflow, /run: node scripts\/validate-upload-ledger-run\.mjs/);
     assert.match(workflow, /PREVIOUS_LEDGER_RUN_ID/);
     assert.match(workflow, /previous_ledger_run_id/);
     assert.match(workflow, /sonicvhibez-upload-ledger/);
-    assert.match(workflow, /CHANNEL_HISTORY_RECONCILIATION_PATH: content\\/youtube-history-reconciliation\\.json/);
+    assert.match(workflow, /CHANNEL_HISTORY_RECONCILIATION_PATH: content\/youtube-history-reconciliation\.json/);
     assert.doesNotMatch(workflow, /Refuse ledger bypass after any prior manual upload run/);
     assert.match(workflow, /run: npm ci --ignore-scripts/);
     assert.doesNotMatch(workflow, /run: npm install --ignore-scripts/);
