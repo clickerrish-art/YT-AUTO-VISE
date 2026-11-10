@@ -1,6 +1,6 @@
 # Narration master — SonicVhibez Shorts
 
-These reads target 50–60 seconds. Timing is approximate; the final editor must align captions to the recorded audio. The owner approved this exact Selar direct-sales disclosure on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Use it verbatim in spoken audio and as readable on-screen text immediately alongside the product CTA. Keep YouTube’s paid-promotion declaration enabled. All generated audio remains review-only until human review; no rights or publication approval is implied. Voice direction: friendly, clear, natural American male voice, conversational rather than salesy. Aim for an unhurried documentary pace and leave short pauses between ideas.
+These reads target 50–60 seconds. Timing is approximate; the final editor must align captions to the recorded audio. The owner approved this exact Selar direct-sales disclosure on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Use it verbatim in spoken audio and as readable on-screen text immediately alongside the product CTA. Keep YouTube’s paid-promotion declaration enabled. All generated audio remains review-only until human review; no rights or publication approval is implied. Voice direction: friendly, clear, natural American male voice, conversational rather than salesy. Aim for an unhurried documentary pace and leave short pauses between ideas. Performance note: show the exact approved disclosure as readable, high-contrast on-screen text at the product CTA; captions must match the spoken words.
 
 ## Short 001 — How to Make Better Wildlife Videos for YouTube
 
@@ -28,7 +28,7 @@ Finish with one useful takeaway so viewers leave having learned something.
 
 Build your next wildlife video with a plan. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.
 
-**Performance notes:** Brief pause after the opening question. Emphasize “safe distance” without sounding alarmist. Keep the product mention matter-of-fact.
+**Performance notes:** Brief pause after the opening question. Emphasize “safe distance” without sounding alarmist. Keep the product mention matter-of-fact. Display the exact approved direct-sales disclosure clearly on screen while it is spoken.
 
 ## Short 002 — 3 Steps to Plan a Wildlife Documentary Short
 
@@ -44,7 +44,7 @@ Third, check every asset. Confirm footage and music rights, fact-check each clai
 
 Record each clip's source, what it shows, and what still needs checking. A focused story beats a rushed list of facts. This product is sold through my own Selar business; purchases generate revenue for my business. The link is below.
 
-**Performance notes:** Make each step distinct, but keep the delivery warm and steady. Do not add claims about guaranteed growth or results.
+**Performance notes:** Make each step distinct, but keep the delivery warm and steady. Do not add claims about guaranteed growth or results. Display the exact approved direct-sales disclosure clearly on screen while it is spoken.
 
 ## Recording and finalization checklist
 
