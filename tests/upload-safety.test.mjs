@@ -259,14 +259,18 @@ test("upload log directory creation rejects symlinked ancestors before ledger or
 });
 
 
-test("remote YouTube read-back must match exact video ID, channel, approved title and private visibility", () => {
-  const expected = { videoId: "video-accepted-001", channelId: "UC" + "A".repeat(22), title: "Approved wildlife documentary" };
-  const remote = { id: expected.videoId, snippet: { channelId: expected.channelId, title: expected.title }, status: { privacyStatus: "private" } };
+test("remote YouTube read-back must match exact metadata, paid-promotion and synthetic-media declarations", () => {
+  const expected = { videoId: "video-accepted-001", channelId: "UC" + "A".repeat(22), title: "Approved wildlife documentary", description: "ADVERTISEMENT — approved direct-sales disclosure", hasPaidPromotion: true, containsSyntheticMedia: true };
+  const remote = { id: expected.videoId, snippet: { channelId: expected.channelId, title: expected.title, description: expected.description }, status: { privacyStatus: "private", containsSyntheticMedia: true }, paidProductPlacementDetails: { hasPaidProductPlacement: true } };
   assert.equal(remoteUploadMatchesApprovedMetadata(remote, expected), true);
   assert.equal(remoteUploadMatchesApprovedMetadata({ ...remote, id: "other-video" }, expected), false);
   assert.equal(remoteUploadMatchesApprovedMetadata({ ...remote, snippet: { ...remote.snippet, channelId: "UC" + "B".repeat(22) } }, expected), false);
   assert.equal(remoteUploadMatchesApprovedMetadata({ ...remote, snippet: { ...remote.snippet, title: "Different title" } }, expected), false);
   assert.equal(remoteUploadMatchesApprovedMetadata({ ...remote, status: { privacyStatus: "unlisted" } }, expected), false);
+  assert.equal(remoteUploadMatchesApprovedMetadata({ ...remote, paidProductPlacementDetails: { hasPaidProductPlacement: false } }, expected), false);
+  assert.equal(remoteUploadMatchesApprovedMetadata({ ...remote, status: { ...remote.status, containsSyntheticMedia: false } }, expected), false);
+  assert.equal(remoteUploadMatchesApprovedMetadata({ ...remote, snippet: { ...remote.snippet, description: "missing disclosure" } }, expected), false);
+
   assert.equal(remoteUploadMatchesApprovedMetadata(null, expected), false);
 });
 
