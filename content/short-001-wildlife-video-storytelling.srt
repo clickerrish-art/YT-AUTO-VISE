@@ -43,9 +43,13 @@ Finish with one useful takeaway so viewers leave having learned something.
 Build your next wildlife video with a plan.
 
 12
-00:00:50,000 --> 00:00:57,000
-This product is sold through my own Selar business; purchases generate revenue for my business.
+00:00:50,000 --> 00:00:51,000
+ADVERTISEMENT
 
 13
-00:00:57,000 --> 00:01:00,000
+00:00:51,000 --> 00:00:58,000
+This product is sold through my own Selar business; purchases generate revenue for my business.
+
+14
+00:00:58,000 --> 00:01:00,000
 The link is in the description.
