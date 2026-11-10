@@ -39,5 +39,9 @@ Then edit tightly. Remove pauses that don’t add information.
 Add readable captions and only music you have permission to use.
 
 11
-00:00:50,000 --> 00:00:55,000
-Finish with one useful takeaway so viewers leave having learned something. Build your next wildlife video with a plan. Find the Wildlife Creator’s Vault at the link in the description.
+00:00:50,000 --> 00:00:57,000
+This product is sold through my own Selar business; purchases generate revenue for my business.
+
+12
+00:00:57,000 --> 00:01:00,000
+Find the Wildlife Creator’s Vault at the link in the description.
