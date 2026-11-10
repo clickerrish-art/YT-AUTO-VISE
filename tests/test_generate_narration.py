@@ -14,8 +14,31 @@ spec.loader.exec_module(module)
 class NarrationTests(unittest.TestCase):
     def test_current_scripts_are_in_required_word_range(self):
         master = module.MASTER.read_text(encoding="utf-8")
-        self.assertEqual(len(module.extract_read(master, "short-001").split()), 130)
-        self.assertEqual(len(module.extract_read(master, "short-002").split()), 128)
+        self.assertEqual(len(module.extract_read(master, "short-001").split()), 128)
+        self.assertEqual(len(module.extract_read(master, "short-002").split()), 126)
+
+    def test_current_scripts_use_exact_owner_approved_disclosure(self):
+        master = module.MASTER.read_text(encoding="utf-8")
+        for short_id in ("short-001", "short-002"):
+            narration = module.extract_read(master, short_id)
+            self.assertIn(module.APPROVED_DISCLOSURE_TEXT, narration)
+
+    def test_owner_approved_selar_gate_requires_exact_matching_disclosure(self):
+        valid = {
+            "products": [{
+                "url": "https://selar.com/0u19v8u99l",
+                "status": "approved",
+                "promotionGate": {
+                    "seller": {"status": "VERIFIED", "sourceUrl": "https://selar.com/0u19v8u99l", "verifiedAt": "2026-11-09T09:49:01+02:00"},
+                    "brandAuthorization": {"status": "OWNER_CONFIRMED", "brand": "SonicVhibez", "confirmedAt": "2026-11-06T20:02:19+02:00"},
+                    "compensation": {"status": "OWNER_CONFIRMED", "type": "DIRECT_SALES_REVENUE"},
+                    "disclosure": {"status": "OWNER_APPROVED", "text": module.APPROVED_DISCLOSURE_TEXT, "approvedAt": "2026-11-10T07:02:41+02:00", "approvalReference": "owner approval"}
+                }
+            }]
+        }
+        self.assertTrue(module.has_owner_approved_selar_disclosure(valid))
+        valid["products"][0]["promotionGate"]["disclosure"]["status"] = "UNVERIFIED"
+        self.assertFalse(module.has_owner_approved_selar_disclosure(valid))
 
     def test_rejects_short_narration(self):
         with self.assertRaisesRegex(ValueError, "125–150"):
