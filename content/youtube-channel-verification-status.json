@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "status": "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
-  "mode": "READ_ONLY_OWNER_REVIEW_REQUIRED",
+  "mode": "OWNER_REVIEWED_REMOTE_HISTORY_PENDING_UPLOAD_ATTEMPT_CHECK",
   "workflowRunId": 42609557970,
   "workflowRunAttempt": 4,
   "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42609557970",
@@ -44,14 +44,25 @@
       "visibility": "public",
       "youtubePublishedAt": "2026-10-22T15:05:56Z",
       "duration": "PT20S",
-      "format": "UNCLASSIFIED_REQUIRES_OWNER_REVIEW",
+      "format": "short",
       "ownerConfirmed": true,
-      "publicationCycleReconciled": false
+      "publicationCycleReconciled": false,
+      "ownerReview": {
+        "verifiedBy": "clickerrish-art",
+        "verifiedAt": "2026-11-10T04:35:06Z",
+        "format": "short",
+        "studioPublicationDateConfirmed": true,
+        "studioVideoUrl": "https://studio.youtube.com/video/LjePS02hA1o/edit"
+      }
     }
   ],
   "publicationHistoryReconciliation": {
-    "status": "NOT_TESTED",
-    "reason": "The inventory is complete, but format classification, actual publication-time review and reconciliation against all pending or uncertain local upload attempts remain separate owner/release gates."
+    "status": "OWNER_REVIEWED_REMOTE_HISTORY",
+    "reconciliationPath": "content/youtube-history-reconciliation.json",
+    "reconciliationBlobSha": "627b68c655744a6891c2128d36bb8656fdb71415",
+    "verifiedAt": "2026-11-10T04:35:06Z",
+    "verifiedBy": "clickerrish-art",
+    "reason": "The complete public/private/unlisted uploads inventory contains one public video. The owner confirmed it is a Short and that its YouTube Studio publication date matches the API record. The exact UTC timestamp is retained from the YouTube API. The separate upload-attempt ledger must still be checked by the uploader immediately before any future insertion; no publication-cycle or go-live clearance is claimed."
   },
   "secretValuesLogged": false,
   "publishingEnabled": false,

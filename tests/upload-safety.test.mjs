@@ -103,6 +103,7 @@ test("both manual upload workflows require explicit private confirmation and pre
     assert.match(workflow, /PREVIOUS_LEDGER_RUN_ID/);
     assert.match(workflow, /previous_ledger_run_id/);
     assert.match(workflow, /sonicvhibez-upload-ledger/);
+    assert.match(workflow, /CHANNEL_HISTORY_RECONCILIATION_PATH: content\\/youtube-history-reconciliation\\.json/);
     assert.doesNotMatch(workflow, /Refuse ledger bypass after any prior manual upload run/);
     assert.match(workflow, /run: npm ci --ignore-scripts/);
     assert.doesNotMatch(workflow, /run: npm install --ignore-scripts/);

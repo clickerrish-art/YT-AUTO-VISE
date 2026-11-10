@@ -44,6 +44,7 @@ test("both private-upload entry points validate actual prior upload jobs instead
   for (const candidate of [workflow, artifactWorkflow]) {
     assert.ok(candidate.includes("node scripts/validate-upload-ledger-run.mjs"));
     assert.ok(candidate.includes("Latest prior run that actually executed private-upload"));
+    assert.ok(candidate.includes("CHANNEL_HISTORY_RECONCILIATION_PATH: content/youtube-history-reconciliation.json"));
     assert.ok(!candidate.includes("Refuse ledger bypass after any prior manual upload run"));
   }
 });

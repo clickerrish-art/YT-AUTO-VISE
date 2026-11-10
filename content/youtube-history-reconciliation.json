@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "complete": true,
+  "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+  "verifiedAt": "2026-11-10T04:35:06Z",
+  "verifiedBy": "clickerrish-art",
+  "verificationReference": "YouTube read-only inventory workflow run 42609557970, attempt 4; owner confirmed the only upload is a Short and its YouTube Studio publication date matches the API inventory.",
+  "videos": [
+    {
+      "id": "LjePS02hA1o",
+      "format": "short",
+      "visibility": "public",
+      "actualPublishedAt": "2026-10-22T15:05:56Z",
+      "evidenceReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42609557970; https://www.youtube.com/watch?v=LjePS02hA1o"
+    }
+  ]
+}

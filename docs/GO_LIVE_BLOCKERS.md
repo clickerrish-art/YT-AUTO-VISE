@@ -1,14 +1,31 @@
-# Current checkpoint — 9 November 2026, 16:32 UTC
+# Current checkpoint — 10 November 2026
 
-**Implementation branch HEAD:** `668fba344c9accdf5a678b5ce5240318e7fff256` · **main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged · **PR #1:** OPEN, DRAFT, UNMERGED. This checkpoint supersedes older statements below that still describe YouTube OAuth as `invalid_client`.
+**Implementation branch:** `codex/marketing-machine-audit-fixes` · **main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged · **PR #1:** OPEN, DRAFT, UNMERGED. The changes below are confined to the implementation branch.
 
-## Verified YouTube identity and inventory
+## Verified YouTube identity and owner-reviewed remote history
 
-- Read-only OAuth and complete uploads-playlist inventory **PASS** on workflow run [42609557970, attempt 4](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42609557970), source SHA `20bc3f12039f562bfe5412eacb838ba4f8555434`.
+- Read-only OAuth and complete uploads-playlist inventory **PASS** on [workflow run 42609557970, attempt 4](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42609557970), source SHA `20bc3f12039f562bfe5412eacb838ba4f8555434`.
 - Authenticated channel: `UCSlkuPfHH78oGC1o418HV4w`, handle `@sonicvhibez`, display title `SonicVibes`.
-- Complete inventory: 1 public, 0 private, 0 unlisted uploads. The one public video is `LjePS02hA1o`, 20 seconds, published 22 October 2026; the owner confirmed it is theirs. Its format remains UNCLASSIFIED pending review.
-- The inventory is not yet an owner-approved publication-cycle reconciliation: local pending/uncertain upload attempts and the video format/publication-cycle classification still require reconciliation.
-- `content/youtube-channel-verification-status.json` now records the successful run. `content/next-short.json` now carries the authenticated channel ID. The Short remains held.
+- YouTube returned one public upload, zero private and zero unlisted. Video [LjePS02hA1o](https://www.youtube.com/watch?v=LjePS02hA1o) is 20 seconds. You confirmed it is a Short and that its publication date in YouTube Studio matches the API inventory. The API timestamp is `2026-10-22T15:05:56Z` (22 October 2026, 17:05:56 SAST).
+- Added `content/youtube-history-reconciliation.json`, bound to the authenticated channel, exact remote video ID, format and API timestamp. The status report records your Short/date confirmation. This reconciles the remote inventory and format classification; it does **not** declare the full publication cycle or local upload-attempt ledger cleared.
+- The uploader must independently validate `run-logs/upload-attempts.json` and the complete remote history immediately before any future insert. Unresolved, unknown or unreadable attempts remain a hard block.
+
+## Forensic result for previous private-upload workflow runs
+
+- Upload-private workflow run [#5 / 42569826008](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42569826008), manually triggered 9 November, ran the read-only verification job. It failed before OAuth because the four YouTube secrets were empty in that earlier run. Its `private-upload` job was **SKIPPED** because the confirmation input remained `NO`. It produced no upload-ledger artifact and sent no upload request.
+- Upload-private runs #1–#4 on 24 October were push-triggered workflow-definition failures; GitHub reports no jobs for those runs. They did not execute the private uploader and produced no ledger artifact.
+- The later read-only workflow #9 successfully authenticated YouTube with the configured OAuth credentials and exported the complete inventory. The earlier invalid-client/missing-secret failures are historical, not the current OAuth result.
+- Fixed a ledger-recovery guard defect: the old workflow guard treated any prior manual run—including read-only/skipped runs—as proof that a previous upload ledger existed. New `scripts/validate-upload-ledger-run.mjs` checks the actual `private-upload` job across both upload entry points. A skipped/read-only run does not block first-time ledger initialization; any executed private-upload job still requires its latest unexpired ledger artifact. Missing history, job data or artifact fails closed.
+- Wired `CHANNEL_HISTORY_RECONCILIATION_PATH` into both private upload workflows, pointing to the owner-reviewed reconciliation document. The uploader previously required that path but the workflows did not supply it.
+- Regression tests now cover skipped read-only runs, failed-but-executed upload jobs, latest-ledger selection, expired/missing ledger artifacts, API inspection failures, both workflow entry points and the required history path.
+
+## Safety and production status
+
+- Public publishing and unattended publishing remain disabled. The upload path remains private-only, explicitly opt-in, and subject to a one-shot authorization bound to final media, metadata, approval and channel.
+- Readiness remains **HOLD**. Genuine Short/long-form media, completed render manifests, asset-rights evidence, final MP4, human media/compliance review and exact Selar disclosure approval remain required.
+- No upload, public publication, metadata write, schedule mutation, main-branch edit, PR merge, reset, rebase or force-push occurred.
+
+**Verdict:** YouTube read-only OAuth and full inventory work. The one existing Short and its calendar publication date are owner-reviewed. The ledger recovery guard and history-file wiring are corrected; production readiness remains HOLD until genuine media, rights, review and remaining owner gates are satisfied.
 
 ## Monthly YouTube SEO research
 
