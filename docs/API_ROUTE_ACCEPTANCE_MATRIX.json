@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-09T11:48:00.000Z",
+  "generatedAt": "2026-11-11T08:28:26.000Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "6b8bfe653490b829f6036648ab5bae51e131f4ac",
@@ -15,14 +15,14 @@
       "GET /readyz",
       "GET /operational-readyz"
     ],
-    "branchAheadBy": 3364,
+    "branchAheadBy": 3514,
     "branchBehindBy": 2,
-    "changedFiles": 308,
+    "changedFiles": 323,
     "branchProtectionEnabled": null,
     "branchProtectionStatus": "UNVERIFIED — GitHub returned 403 for the protection endpoint.",
-    "comparisonSourceSha": "6b8bfe653490b829f6036648ab5bae51e131f4ac",
+    "comparisonSourceSha": "a6ec55317f0890601e9206c68c61a933c359b946",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42611627830"
+    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938497"
   },
   "counts": {
     "routes": 45,
@@ -138,13 +138,22 @@
     "latestExactHeadContentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189435",
     "latestExactHeadDashboardE2E": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189415",
     "latestExactHeadAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189417",
-    "latestExactHeadMetadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189397",
+    "latestExactHeadMetadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938566",
     "latestExactHeadBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189409",
     "latestExactHeadInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189369",
-    "latestExactHeadReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189528",
-    "latestExactHeadCloudflareDurableState": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189364"
+    "latestExactHeadReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938908",
+    "latestExactHeadCloudflareDurableState": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938498",
+    "latestExactHeadSha": "a6ec55317f0890601e9206c68c61a933c359b946",
+    "latestExactHeadRouteMatrixConsistency": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938502",
+    "latestExactHeadAutomationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938507",
+    "latestExactHeadDashboardBrowser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938792",
+    "latestExactHeadQueueReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938526",
+    "latestExactHeadDeploymentRecovery": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938618",
+    "latestExactHeadIsolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938504",
+    "latestExactHeadBranchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938497",
+    "latestExactHeadNatureFrontiersDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938863"
   },
-  "disclaimer": "This matrix is synchronized to dashboard-server.mjs, public/dashboard.html and the source-derived API route tests at exact source/test SHA 6b8bfe653490b829f6036648ab5bae51e131f4ac. The exact-head content-quality workflow passed 722 Node tests, including the source-derived authentication matrix; authentication-negative PASS does not imply authorized route success. API-001 remains NOT_TESTED overall; routes marked NOT_TESTED or BLOCKED require route-specific positive, validation, persistence, audit, concurrency and restart evidence before acceptance.",
+  "disclaimer": "This matrix is synchronized to dashboard-server.mjs and public/dashboard.html. The exact-head test/api-route-acceptance-matrix.test.mjs verifies that all 45 source-derived protected API method/path pairs appear exactly once, the inventory and acceptance counts agree, all routes retain an explicit authentication-negative PASS, and unknown branch protection remains null; see exact HEAD a6ec55317f0890601e9206c68c61a933c359b946 and content-quality run 42986938502 (778 tests, zero skipped). The exact-head automation/security run 42986938507 passed 140/140 Node test files and its Python/syntax/security checks. This inventory/consistency verification does not upgrade any route's overall acceptance status: 37 routes remain PASS and 8 remain BLOCKED for the route-specific reasons recorded below. Authentication-negative PASS does not imply authorized route success. External provider credentials, human approvals, genuine media/rights, and deliberately disabled publishing remain separate gates.",
   "routes": [
     {
       "method": "GET",
