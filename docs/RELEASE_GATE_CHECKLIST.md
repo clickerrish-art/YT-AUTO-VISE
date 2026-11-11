@@ -1,3 +1,55 @@
+# Latest release-gate checkpoint — 11 November 2026
+
+**Tested code/test commit:** `a6ec55317f0890601e9206c68c61a933c359b946`  
+**Documentation head before this checkpoint update:** `a2c1cf642b890d49b63e0ac07d4bdffc56271120`  
+**Implementation branch:** `codex/marketing-machine-audit-fixes` · **PR #1:** OPEN · DRAFT · UNMERGED  
+**main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`  
+**Divergence at checkpoint:** 3,516 ahead / 2 behind · PR changed files: 323. This checkpoint update is documentation-only; it does not change source/test code.
+
+## Owner-independent implementation completed
+
+- Added `test/api-route-acceptance-matrix.test.mjs`. It checks all 45 source-derived protected API method/path pairs exactly once, reconciles inventory and acceptance counts, requires authentication-negative PASS on every route, and preserves unknown branch-protection status as `null`.
+- Refreshed `docs/API_ROUTE_ACCEPTANCE_MATRIX.json` with the current branch comparison and exact-head evidence. The matrix still records 37 PASS / 8 BLOCKED; the new consistency test does not upgrade any blocked route.
+- The source/test commit `a6ec55317f0890601e9206c68c61a933c359b946` passed CI, and its documentation-only descendant passed the same checks on the exact current head `4f489e5e822e9a0b485076732567719b075b243f`.
+
+## Exact-head CI evidence
+
+- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42987556610): 778/778 Node tests, zero failures and zero skips.
+- [Automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42987556801): 140/140 Node test files, 44 Python tests, zero skips, npm audit 0 vulnerabilities, JavaScript syntax and Python compilation checks passed.
+- [Dashboard Chromium E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42987556532): 29/29 passed.
+- [Queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42987556675): PASS; 16 queue items, 72-hour elapsed minimum, 216-hour rolling long-form/long-form/Short cycle, publishing disabled.
+- [Cloudflare durable-state checks](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42987556459), [metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42987556436), [isolated main/candidate baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42987556533), [branch inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42987556445), [deployment recovery](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42987556572) and [local Nature Frontiers draft-package validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42987556490) passed. Nature Frontiers validation is local-only; it made no Meta API write.
+- [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42987556794): HOLD — 7 blockers. The workflow intentionally fails closed; this is not a production pass.
+
+## Promotional workflow and SEO
+
+- Six creator-education Shorts remain `DRAFT_ONLY`, each targeting about 55 seconds: two for each week beginning 9, 16 and 23 November. The weekly maximum of two is met; no publication timestamp has been added.
+- Short 005 and Short 007 use the Complete YouTube Wildlife Creator's Vault and its owner-approved direct-sales disclosure. Shorts 003/008 (Prompt Pack) and 004/006 (90-Day Blueprint) remain disclosure HOLD. Approval is product-specific and is not transferred.
+- Seller Click 47 was last verified on 9 November. The Vault's direct-sales disclosure was owner-approved on 10 November. The other two products are owner-confirmed direct-sales candidates but their viewer-facing disclosure remains unverified. The separate campaign-management record still lacks its exact preview approval receipt and remains draft-only.
+- Current qualitative search-intent checks support niche validation, ethical wildlife photography, YouTube outlining and structured script prompts. No current measured search volume or competition is claimed: vidIQ reports 3 credits remaining, below the 5-credit keyword-research call cost. Existing 7–8 November volume estimates remain historical provider estimates.
+- Safari and generic external-affiliate campaigns remain INACTIVE. The exact approved Selar destination remains `https://selar.com/0u19v8u99l`.
+
+## Destination, schedule and 72-hour rule
+
+- The verified promotional YouTube account is SonicVibes `@sonicvhibez`, channel `UCSlkuPfHH78oGC1o418HV4w`. Nature Frontiers is a separate YouTube channel `UC41xXhw22o6Q2I2pTKB2kOg`; it is not a promotional target.
+- Metricool still exposes one brand record labelled Nature Frontiers (`7545638`), but its YouTube network ID matches SonicVibes. The same brand record contains Nature Frontiers Facebook/Instagram connections; no separate SonicVhibez-only brand exists. No Metricool write was attempted.
+- A fresh Metricool read returned 20 scheduled records through 20 January 2027. Nine product-promotion records are Facebook and/or Instagram items with `status=PENDING`, `draft=false`, `autoPublish=false`; they are **not drafts**. Eleven other records are drafts with auto-publishing disabled. No YouTube provider record appeared; no record was changed.
+- The latest complete authenticated YouTube uploads inventory is the read-only verification from 10 November 2026 04:35:06Z: one public Short, zero private and zero unlisted. Its actual publication was `2026-10-22T15:05:56Z` (17:05:56 SAST). At 11 November 2026 10:33:00 SAST, 473h 27m 04s had elapsed.
+- The local queue has 16 items with no publication timestamps and `publishingEnabled=false`; all six promotional Shorts have `publicationAt=null`. The YouTube Studio scheduled queue and upload-attempt ledger were not independently refreshed in this run. The 72-hour gap from the last known upload is exceeded, but full next-slot clearance remains **UNVERIFIED**. Do not schedule or upload.
+
+## Remaining release gates
+
+- Complete current public/private/unlisted history and reconcile all pending/uncertain upload attempts immediately before any authorized private upload.
+- Genuine rights-cleared footage, narration and music; real Short and long-form render manifests; final `media/next-short.mp4`; final hashes.
+- Human metadata, factual, rights, playback and compliance review. No review flag may be set without actual review.
+- Owner-approved exact viewer-facing disclosures for the Prompt Pack and 90-Day Blueprint; no transfer of the Vault disclosure approval.
+- Cloudflare backup/restore routes require the configured endpoint, operator token and Cloudflare Access service-token credentials. Real Meta Page identity/provider acceptance remains external.
+- Public/unattended publishing remains disabled. Safari remains inactive. No upload, publication, live scheduling, account reconnection, paid generation, existing-post mutation or main-branch change occurred.
+
+GitHub scheduled workflows execute from `main`; PR-branch workflow runs are CI evidence, not active production automation.
+
+---
+
 # Latest release-gate checkpoint — 10 November 2026
 
 **Current source/test candidate:** `102e83cae844abfbc6f6cf51f1628e9a8e5011cc`  
