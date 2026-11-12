@@ -1,3 +1,49 @@
+# 12 November 2026 — second November 30 creator-education Short and current provider checkpoint
+
+**Branch before this documentation update:** `codex/marketing-machine-audit-fixes` at `7e8bd9b9bb0fbe6505ffde9afa571c8e6e02c0c0`.  
+**Tested content/test commit:** `8464dbfe901feeadd83a1b919315247c06ee22a7`; the current branch also contains a plan-note-only descendant.  
+**PR #1:** OPEN · DRAFT · UNMERGED. **main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged. **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`.  
+**Branch comparison:** 3,521 ahead / 2 behind · 323 PR files. No main edit, merge, reset, rebase, force-push or destructive reconciliation.
+
+## Draft-only promotional content
+
+- Added `sonicvhibez-short-010-wildlife-shot-list` to the week beginning 30 November 2026: title **“Wildlife Documentary Shot List: 3 Shots to Plan”**, primary phrase **“wildlife documentary shot list”**, 123-word script, approximately 55-second target, exact approved Vault Selar URL, five hashtags, thumbnail direction and production checklist.
+- The item is `DRAFT_ONLY`, private and has no publication/scheduling timestamp. It uses the product-specific owner-approved direct-sales disclosure verbatim. This approval applies only to the Complete YouTube Wildlife Creator's Vault.
+- The plan now has eight creator-education Shorts: two each for weeks beginning 9, 16, 23 and 30 November. Every week remains at or below the two-Short cap. Publication and scheduling remain disabled.
+- Search evidence for Short 010 is qualitative web-search intent, not measured global volume: current indexed guides discuss wildlife shot lists, establishing/medium/detail sequences and ethical filming. Sources: [Concolor Media](https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/), [Africa Media](https://africa-media.org/careers/how-to-get-the-best-shots-for-your-wildlife-documentary/), and [KiliSherpas](https://kilisherpas.com/blogs/how-to-film-a-wildlife-documentary-on-your-safari-in-tanzania). vidIQ had 3 credits remaining; its keyword-research call costs 5 credits, so no new volume/competition estimate was claimed.
+- The Full Video Creation Prompt Pack and YouTube Success Blueprint remain disclosure HOLD. The Vault disclosure is not transferable.
+- Seller Click 47 was last verified against the Vault's exact Selar page on 9 November 2026. A fresh direct page open on 12 November was inaccessible, so seller/listing details were not re-certified today.
+
+## Exact-source CI for the content/test change
+
+At content/test commit `8464dbfe901feeadd83a1b919315247c06ee22a7`:
+
+- [Automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43181711777) — passed; 140/140 Node test files, 0 failures/0 skips; 44 Python tests passed; npm audit found 0 vulnerabilities; promotional-plan validation reported **8 SonicVhibez Short drafts**, weekly cap enforced, publication/scheduling disabled.
+- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43181712777) — 781/781 passed, 0 failures/0 skips.
+- [Dashboard Chromium E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43181711600) — 29/29 passed.
+- [Queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43181711576), [Cloudflare durable-state](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43181711786), [deployment recovery](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43181711880), [isolated main/candidate baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43181711865), [branch inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43181711555), [metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43181711603), and [local Nature Frontiers draft validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43181711674) — passed. Nature Frontiers validation is local-only; it did not write to Meta.
+- [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43181711761) — intentional HOLD/failure because owner-controlled production evidence remains incomplete. The queue workflow also records live YouTube history as BLOCKED for any upload. These CI results do not authorize upload or publication.
+
+## Metricool, destination and spacing
+
+- Metricool returned one brand, `Nature Frontiers` (`7545638`). Its `youtubeData` is SonicVibes channel `UCSlkuPfHH78oGC1o418HV4w`, matching vidIQ's `@sonicvhibez`; Nature Frontiers' own YouTube channel is a different ID, `UC41xXhw22o6Q2I2pTKB2kOg`. There is no separate SonicVhibez-only Metricool brand, so no post was created. The mixed brand's Facebook/Instagram networks remain Nature Frontiers only.
+- The read-only Metricool schedule query returned 21 records and no YouTube provider rows. Eight future product-promotion records are `draft=true` and `autoPublish=false`. One earlier Vault promotion is already published to Facebook (11 November, 17:00 SAST; `autoPublish=false`); it was not changed. No Metricool record was created, edited, approved, cancelled or published in this run.
+- The latest complete YouTube upload inventory remains the owner-reviewed 10 November 2026 snapshot: one public Short, zero private and zero unlisted. Its known actual publication time is 22 October 2026, 17:05:56 SAST. The elapsed gap to 12 November 2026, 10:11:06 SAST is **497 hours, 5 minutes, 10 seconds**. This historical gap exceeds 72 hours, but current complete history and the pending/uncertain upload-attempt ledger were not refreshed today. **Spacing clearance remains UNVERIFIED; no slot is approved and no scheduling is permitted.**
+- No finished promotional MP4 or final thumbnail was verified. No video was rendered, uploaded or published; no paid generation or account reconnection was attempted.
+
+## Remaining gates
+
+1. Refresh complete public/private/unlisted SonicVhibez history and reconcile every pending/uncertain upload attempt immediately before any authorized upload.
+2. Produce genuine rights-cleared footage, narration and music; create real render manifests and final MP4/thumbnail assets.
+3. Complete human factual, rights, compliance, metadata, thumbnail and full-playback review against final asset hashes.
+4. Obtain product-specific disclosure approval for the Prompt Pack and 90-Day Blueprint.
+5. Complete authenticated Node-to-Cloudflare backup/restore route acceptance and operational rollback evidence.
+6. Complete human semantic review of the 3,521-commit divergence and verify branch-protection state; the protection endpoint remains unavailable to this connection.
+
+No public/unattended publishing, upload, schedule, account reconnection, paid generation or live provider mutation occurred. GitHub scheduled workflows execute from `main`; PR-branch CI is verification evidence, not production automation.
+
+---
+
 # Current compliance and production checkpoint — 12 November 2026
 
 **Tested source/content commit:** `312cda20e4c7f2486367d5d4fcc82730ff8c9d30` (this checkpoint is a documentation-only descendant).  
