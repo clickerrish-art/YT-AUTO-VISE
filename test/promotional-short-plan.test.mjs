@@ -210,3 +210,40 @@ test("qualitative web-search intent is accepted only with dated HTTPS sources an
   inventedVolume.weeks[1].items[0].keywordPhrases[0].estimatedMonthlySearches = 10000;
   assert.ok(validatePromotionalShortPlan(inventedVolume, products).some(error => /no invented volume or competition metrics/.test(error)));
 });
+
+
+test("keyword evidence must be current and cannot be materially future-dated", () => {
+  const now = new Date("2026-11-12T09:54:29+02:00");
+  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products, { now }), []);
+
+  const stale = clone(checkedInPlan);
+  stale.weeks[0].items[0].keywordEvidence.researchedAt = "2026-10-28T09:54:28+02:00";
+  assert.ok(validatePromotionalShortPlan(stale, products, { now })
+    .some(error => /keyword evidence must be no more than 14 days old/.test(error)));
+
+  const future = clone(checkedInPlan);
+  future.weeks[0].items[0].keywordEvidence.researchedAt = "2026-11-12T10:00:00+02:00";
+  assert.ok(validatePromotionalShortPlan(future, products, { now })
+    .some(error => /cannot be more than 5 minutes in the future/.test(error)));
+});
+
+test("November 30 wildlife fact-check Short uses current qualitative evidence and the exact approved Vault disclosure", () => {
+  const week = checkedInPlan.weeks.find(row => row.weekOf === "2026-11-30");
+  assert.ok(week);
+  assert.equal(week.items.length, 1);
+  const item = week.items.find(row => row.id === "sonicvhibez-short-009-wildlife-video-fact-check");
+  const product = products.find(row => row.id === "wildlife-creators-vault");
+  assert.ok(item);
+  assert.equal(item.channel, "SonicVhibez");
+  assert.equal(item.status, "DRAFT_ONLY");
+  assert.equal(item.visibility, "private");
+  assert.equal(item.targetSeconds, 55);
+  assert.equal(item.primaryKeyword, "how to fact-check wildlife videos");
+  assert.equal(item.productUrl, product.url);
+  assert.equal(item.keywordEvidence.provider, "web_search");
+  assert.equal(item.keywordEvidence.type, "qualitative_search_intent");
+  assert.match(item.keywordEvidence.note, /no measured global search volume/i);
+  assert.equal(item.disclosure.status, "APPROVED");
+  assert.equal(item.disclosure.approvalReference, product.promotionGate.disclosure.approvalReference);
+  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
+});

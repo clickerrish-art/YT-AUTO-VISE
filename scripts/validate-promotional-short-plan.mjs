@@ -6,6 +6,8 @@ import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 
 const WORD_MIN = 90;
 const WORD_MAX = 135;
+const KEYWORD_EVIDENCE_MAX_AGE_MS = 14 * 24 * 60 * 60 * 1000;
+const KEYWORD_EVIDENCE_FUTURE_SKEW_MS = 5 * 60 * 1000;
 
 function isCalendarDate(value) {
   if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
@@ -39,8 +41,9 @@ function isRealMonday(value) {
     && date.getUTCDay() === 1;
 }
 
-export function validatePromotionalShortPlan(plan, products) {
+export function validatePromotionalShortPlan(plan, products, options = {}) {
   const errors = [];
+  const referenceNow = options.now instanceof Date && Number.isFinite(options.now.getTime()) ? options.now : new Date();
   if (!plan || typeof plan !== "object" || Array.isArray(plan)) return ["plan must be a JSON object"];
   if (plan.channel !== "SonicVhibez") errors.push("channel must be exactly SonicVhibez");
   if (plan.timezone !== "Africa/Johannesburg") errors.push("timezone must be Africa/Johannesburg");
@@ -189,6 +192,11 @@ export function validatePromotionalShortPlan(plan, products) {
       const evidenceTimestampValid = isValidZonedIsoTimestamp(evidence?.researchedAt);
       if (!evidenceTimestampValid) {
         errors.push(`${label}: keyword evidence needs a valid research timestamp`);
+      } else {
+        const evidenceAgeMs = referenceNow.getTime() - Date.parse(evidence.researchedAt);
+        if (evidenceAgeMs > KEYWORD_EVIDENCE_MAX_AGE_MS || evidenceAgeMs < -KEYWORD_EVIDENCE_FUTURE_SKEW_MS) {
+          errors.push(`${label}: keyword evidence must be no more than 14 days old and cannot be more than 5 minutes in the future`);
+        }
       }
       const evidenceNote = typeof evidence?.note === "string" ? evidence.note.trim() : "";
       if (evidence?.provider === "vidIQ") {

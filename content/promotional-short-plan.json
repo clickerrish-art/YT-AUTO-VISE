@@ -10,7 +10,8 @@
     "This is a draft-preparation plan for the week beginning 2026-11-09, not a publication calendar.",
     "No publicationAt, publishedAt or scheduledAt values are permitted in this plan.",
     "A separate verified SonicVhibez destination schedule and complete public/private/unlisted YouTube history are required before any publication-slot calculation or scheduling.",
-    "Selar products are the owner's direct-sales business and must not be classified as affiliate commissions. Products hosted outside Selar (including Serengeti and other external sellers) are affiliate promotions. Every promotion remains blocked until its exact relationship and viewer-facing disclosure are verified and owner-approved."
+    "Selar products are the owner's direct-sales business and must not be classified as affiliate commissions. Products hosted outside Selar (including Serengeti and other external sellers) are affiliate promotions. Every promotion remains blocked until its exact relationship and viewer-facing disclosure are verified and owner-approved.",
+    "A single 55-second wildlife-video fact-check Short is prepared for the week beginning 2026-11-30. It remains DRAFT_ONLY with private visibility, no publication timestamp and the approved Vault direct-sales disclosure."
   ],
   "weeks": [
     {
@@ -628,6 +629,146 @@
               }
             ]
           },
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "weekOf": "2026-11-30",
+      "status": "DRAFT_ONLY",
+      "items": [
+        {
+          "id": "sonicvhibez-short-009-wildlife-video-fact-check",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "How to Fact-Check Wildlife Videos Before You Publish",
+          "primaryKeyword": "how to fact-check wildlife videos",
+          "script": "That viral wildlife clip might be real—but the caption can still be wrong. Before you build a YouTube story around it, run three checks. First, separate what you can actually see from what the caption claims: species, location, behaviour and date. Second, trace the claim to an original source, such as a wildlife agency, museum, university or peer-reviewed study—not just another repost. Third, compare an independent source and keep any uncertainty in your narration. If the footage doesn't prove the claim, change the script, not the evidence. That's how wildlife creators protect accuracy and audience trust. Advertisement. The Complete YouTube Wildlife Creator's Vault is a resource to explore for wildlife-content planning. This product is sold through my own Selar business; purchases generate revenue for my business.",
+          "productId": "wildlife-creators-vault",
+          "productUrl": "https://selar.com/0u19v8u99l",
+          "description": "How to fact-check wildlife videos before you turn a clip into a YouTube story: separate visible evidence from caption claims, trace each claim to a reliable original source, and keep uncertainty in the narration.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF\nReview the exact Selar listing for current contents and price:\nhttps://selar.com/0u19v8u99l\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nFurther reading:\nhttps://www.srf.ch/news/srf-faktenchecks/faktencheck-tiervideos-im-internet-herzig-aber-oft-fake-drei-beispiele\nhttps://www.documentarytube.com/blog/how-to-handle-misinformation-about-wildlife-and-conservation/\n\nA resource does not replace independent fact-checking or footage-rights clearance.",
+          "keywordPhrases": [
+            {
+              "phrase": "how to fact-check wildlife videos"
+            },
+            {
+              "phrase": "how to verify animal videos"
+            },
+            {
+              "phrase": "wildlife misinformation fact check"
+            },
+            {
+              "phrase": "fact-check wildlife documentary claims"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-12T09:54:29+02:00",
+            "note": "Qualitative search-intent evidence only: current indexed results surface dedicated guidance on wildlife-video misinformation, verifying animal clips and fact-checking YouTube scripts. No measured global search volume or competition was available; vidIQ had 3 credits remaining, below its 5-credit keyword-research call cost. These results are not volume estimates.",
+            "sources": [
+              {
+                "title": "How to Fact-Check and Correct Wildlife Misinformation",
+                "url": "https://www.documentarytube.com/blog/how-to-handle-misinformation-about-wildlife-and-conservation/",
+                "whyRelevant": "Recent wildlife-specific guidance recommends writing down the exact claim and tracing it to an underlying study, dataset, agency notice or first-hand source."
+              },
+              {
+                "title": "Fact-check: Animal videos on the internet—cute, but often fake",
+                "url": "https://www.srf.ch/news/srf-faktenchecks/faktencheck-tiervideos-im-internet-herzig-aber-oft-fake-drei-beispiele",
+                "whyRelevant": "The Swiss public broadcaster's January 2026 animal-video fact-check explains checking plausibility, visual continuity and the account or earliest accessible source."
+              },
+              {
+                "title": "How to Research and Fact-Check a YouTube Script",
+                "url": "https://meowplaybook.com/blog/research-fact-check-youtube-script",
+                "whyRelevant": "A creator-facing guide published last week recommends matching every checkable script claim to a source fact sheet and linking sources for viewers."
+              },
+              {
+                "title": "How to Identify Marine Species in Blue Planet III Footage",
+                "url": "https://www.documentarytube.com/blog/how-to-identify-marine-species-featured-in-blue-planet-iii/",
+                "whyRelevant": "A recent documentary-specific guide distinguishes confirmed, supported, probable and unresolved species identification, supporting honest uncertainty in narration."
+              }
+            ]
+          },
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-12T09:54:29+02:00",
+            "note": "Qualitative search-intent evidence only: current indexed results surface dedicated guidance on wildlife-video misinformation, verifying animal clips and fact-checking YouTube scripts. No measured global search volume or competition was available; vidIQ had 3 credits remaining, below its 5-credit keyword-research call cost. These results are not volume estimates.",
+            "sources": [
+              {
+                "title": "How to Fact-Check and Correct Wildlife Misinformation",
+                "url": "https://www.documentarytube.com/blog/how-to-handle-misinformation-about-wildlife-and-conservation/",
+                "whyRelevant": "Recent wildlife-specific guidance recommends writing down the exact claim and tracing it to an underlying study, dataset, agency notice or first-hand source."
+              },
+              {
+                "title": "Fact-check: Animal videos on the internet—cute, but often fake",
+                "url": "https://www.srf.ch/news/srf-faktenchecks/faktencheck-tiervideos-im-internet-herzig-aber-oft-fake-drei-beispiele",
+                "whyRelevant": "The Swiss public broadcaster's January 2026 animal-video fact-check explains checking plausibility, visual continuity and the account or earliest accessible source."
+              },
+              {
+                "title": "How to Research and Fact-Check a YouTube Script",
+                "url": "https://meowplaybook.com/blog/research-fact-check-youtube-script",
+                "whyRelevant": "A creator-facing guide published last week recommends matching every checkable script claim to a source fact sheet and linking sources for viewers."
+              },
+              {
+                "title": "How to Identify Marine Species in Blue Planet III Footage",
+                "url": "https://www.documentarytube.com/blog/how-to-identify-marine-species-featured-in-blue-planet-iii/",
+                "whyRelevant": "A recent documentary-specific guide distinguishes confirmed, supported, probable and unresolved species identification, supporting honest uncertainty in narration."
+              }
+            ]
+          },
+          "scriptEvidence": [
+            {
+              "title": "How to Fact-Check and Correct Wildlife Misinformation",
+              "url": "https://www.documentarytube.com/blog/how-to-handle-misinformation-about-wildlife-and-conservation/",
+              "whyUsed": "Recent wildlife-specific guidance recommends writing down the exact claim and tracing it to an underlying study, dataset, agency notice or first-hand source."
+            },
+            {
+              "title": "Fact-check: Animal videos on the internet—cute, but often fake",
+              "url": "https://www.srf.ch/news/srf-faktenchecks/faktencheck-tiervideos-im-internet-herzig-aber-oft-fake-drei-beispiele",
+              "whyUsed": "The Swiss public broadcaster's January 2026 animal-video fact-check explains checking plausibility, visual continuity and the account or earliest accessible source."
+            },
+            {
+              "title": "How to Research and Fact-Check a YouTube Script",
+              "url": "https://meowplaybook.com/blog/research-fact-check-youtube-script",
+              "whyUsed": "A creator-facing guide published last week recommends matching every checkable script claim to a source fact sheet and linking sources for viewers."
+            },
+            {
+              "title": "How to Identify Marine Species in Blue Planet III Footage",
+              "url": "https://www.documentarytube.com/blog/how-to-identify-marine-species-featured-in-blue-planet-iii/",
+              "whyUsed": "A recent documentary-specific guide distinguishes confirmed, supported, probable and unresolved species identification, supporting honest uncertainty in narration."
+            }
+          ],
+          "hashtags": [
+            "#WildlifeFactCheck",
+            "#WildlifeDocumentary",
+            "#YouTubeCreator",
+            "#WildlifeEducation",
+            "#ContentResearch"
+          ],
+          "thumbnailDirection": "Use one genuine, rights-cleared wildlife frame paused beside a simple magnifying-glass/source icon. Large text: “CHECK THE CLAIM”. Do not use a synthetic animal image or imply that the pictured species or location has been verified unless it has.",
+          "disclosure": {
+            "status": "APPROVED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "approvedAt": "2026-11-10T07:02:41+02:00",
+            "approvalReference": "Owner explicitly approved the exact viewer-facing Selar direct-sales disclosure in the ChatGPT conversation on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Approval applies to the Complete YouTube Wildlife Creator's Vault promotion only."
+          },
+          "productionChecklist": [
+            "Confirm every factual statement in the narration against a source note; do not use captions as proof.",
+            "Prefer original wildlife-agency, museum, university or peer-reviewed sources for animal claims.",
+            "Check species, location, date and behaviour separately; preserve uncertainty when identification is incomplete.",
+            "Use only original or commercially cleared footage, narration, music and sound effects.",
+            "Do not bait, chase, stage, handle or disturb wildlife to obtain supporting shots.",
+            "Record natural narration and confirm the finished runtime is 50–60 seconds, targeting about 55.",
+            "Time captions to the final voice track and check phone-size readability and vertical safe areas.",
+            "Use the exact owner-approved ADVERTISEMENT identifier and direct-sales disclosure in the final video and description.",
+            "Recheck the Selar product page and seller before release; current registry seller evidence was last rechecked 9 November 2026.",
+            "Complete human factual, rights, compliance, playback and thumbnail review against final asset hashes.",
+            "Keep the item private and draft-only; no upload or scheduling is authorized.",
+            "Before any future schedule, inspect complete SonicVhibez history and destination queue and calculate every gap as at least 72 full hours in Africa/Johannesburg."
+          ],
           "visibility": "private"
         }
       ]
