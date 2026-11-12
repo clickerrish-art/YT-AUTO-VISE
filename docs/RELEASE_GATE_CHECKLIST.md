@@ -1,3 +1,44 @@
+# Latest release-gate checkpoint — 12 November 2026
+
+**Tested source/content commit:** `312cda20e4c7f2486367d5d4fcc82730ff8c9d30` · documentation-only checkpoint follows this commit.  
+**Implementation branch:** `codex/marketing-machine-audit-fixes` · **PR #1:** OPEN · DRAFT · UNMERGED.  
+**main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`.  
+**Divergence:** 3,518 ahead / 2 behind · PR changed files: 323.
+
+## Exact-source implementation and CI
+
+- Prepared Short 009 for the week beginning 30 November: 55-second target, 126-word script, title `How to Fact-Check Wildlife Videos Before You Publish`, primary phrase `how to fact-check wildlife videos`, exact approved Selar Vault link, owner-approved direct-sales disclosure, five hashtags, thumbnail direction, research sources and production checklist. It is private, `DRAFT_ONLY`, has no publication timestamp and does not exceed the two-Short weekly cap.
+- The plan now contains seven Shorts: two each for weeks beginning 9, 16 and 23 November, and one for 30 November. No publication or scheduling dates are assigned.
+- Keyword evidence is qualitative web-search intent, not measured volume. vidIQ had three credits remaining; its keyword-research and owned-upload-history calls each cost five credits, so no volume figures or fresh complete upload inventory are claimed. The validator now rejects keyword evidence older than 14 days or more than five minutes in the future.
+- At exact source/content SHA `312cda20e4c7f2486367d5d4fcc82730ff8c9d30`: 140/140 Node test files passed, 44 Python tests passed, npm audit 0 vulnerabilities, content-quality 780/780 passed with zero failures/skips, dashboard Chromium 29/29 passed, queue readiness passed, deployment recovery passed, Cloudflare state passed, metadata passed, isolated baseline passed, branch inventory passed, local Nature Frontiers draft validation passed and lockfile validation passed.
+- Production readiness [run 43179567491](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43179567491) remains HOLD with seven blockers. No readiness claim is made.
+
+## Products and disclosure
+
+- The Complete YouTube Wildlife Creator's Vault is the only product with an owner-approved exact viewer-facing direct-sales disclosure: “This product is sold through my own Selar business; purchases generate revenue for my business.” Seller Click 47 was last verified in the product registry on 9 November 2026; the Selar page could not be freshly reopened through the web reader in this run.
+- The Full Video Creation Prompt Pack Premium Edition and The YouTube Success Blueprint 90-Day Creator System remain candidate records with disclosure HOLD. The Vault approval is not transferable.
+- Safari and generic external-affiliate campaigns remain INACTIVE. The exact approved Selar destination remains `https://selar.com/0u19v8u99l`.
+
+## Destination, Metricool and publication spacing
+
+- vidIQ identifies SonicVibes `@sonicvhibez`, channel `UCSlkuPfHH78oGC1o418HV4w`; the same channel ID is exposed as Metricool's YouTube network under its sole brand record, labelled Nature Frontiers (`7545638`). Nature Frontiers' own YouTube channel is separate: `UC41xXhw22o6Q2I2pTKB2kOg`. No separate SonicVhibez-only Metricool brand exists; no Metricool write was attempted.
+- A fresh Metricool read returned 21 records. Eight future Selar/product-promotion records are Facebook-only pending drafts with `draft=true` and `autoPublish=false`; one earlier Vault promotion was already published to Facebook on 11 November at 17:00 SAST. No YouTube provider record appeared. No existing record was changed.
+- The latest complete YouTube history snapshot remains the read-only inventory from 10 November 2026 04:35:06Z: one public Short, zero private and zero unlisted; its actual publication was 22 October 2026 17:05:56 SAST. At 12 November 2026 09:54:29 SAST, 496h 48m 33s had elapsed. This historical interval exceeds 72 hours, but the current complete history and pending/uncertain upload ledger were not refreshed. Full spacing clearance remains **UNVERIFIED**. Do not schedule or upload.
+- The current Metricool schedule contains no SonicVhibez YouTube provider record. The local promotional plan has no publication timestamps and publication/scheduling flags remain false.
+
+## Remaining production gates
+
+- Independently reconcile current public/private/unlisted YouTube history and every pending/uncertain upload attempt before any authorized private upload.
+- Genuine rights-cleared footage, narration and music; shot-level rights review; real Short/long-form render manifests; final `media/next-short.mp4`; final hashes.
+- Human factual, metadata, rights, compliance and full-playback review.
+- Product-specific disclosure approval for Prompt Pack and Success Blueprint.
+- Complete authenticated Node-to-Cloudflare backup/restore acceptance and deployment/rollback evidence.
+- Full semantic Git review and branch-protection verification remain outstanding.
+
+Public/unattended publishing remains disabled. No video was rendered, uploaded, scheduled or published; no account was reconnected, no paid generation was attempted and no existing Metricool record was changed. GitHub scheduled workflows execute from `main`, not from the PR branch.
+
+---
+
 # Latest release-gate checkpoint — 11 November 2026
 
 **Tested code/test commit:** `a6ec55317f0890601e9206c68c61a933c359b946`  

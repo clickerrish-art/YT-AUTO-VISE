@@ -1,3 +1,32 @@
+# Current compliance and production checkpoint — 12 November 2026
+
+**Tested source/content commit:** `312cda20e4c7f2486367d5d4fcc82730ff8c9d30` (this checkpoint is a documentation-only descendant).  
+**Implementation branch:** `codex/marketing-machine-audit-fixes` · **PR #1:** OPEN · DRAFT · UNMERGED.  
+**main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`.  
+**Branch comparison:** 3,518 ahead / 2 behind · 323 PR files. No main edit, merge, reset, rebase, force-push or destructive reconciliation.
+
+## Owner-independent implementation completed
+
+- Added one 55-second SonicVhibez creator-education Short for the week beginning 30 November 2026: `sonicvhibez-short-009-wildlife-video-fact-check`. It remains `DRAFT_ONLY`, private, unscheduled and uses the exact owner-approved Vault direct-sales disclosure.
+- The SEO validator now requires keyword evidence to be no more than 14 days old and rejects evidence more than five minutes in the future. Regression tests cover stale/future timestamps and the new Short's exact product/disclosure/evidence requirements.
+- Exact source/content SHA `312cda20e4c7f2486367d5d4fcc82730ff8c9d30`: 140/140 Node test files passed; 44 Python tests passed; npm audit reported zero vulnerabilities; content quality passed 780/780 tests with zero failures/skips; dashboard Chromium E2E passed 29/29; queue readiness, deployment recovery, Cloudflare durable-state, metadata, isolated baseline, branch inventory and local Nature Frontiers draft validation passed. The promotional-plan validator ran in the automation workflow without errors.
+- Exact CI: [automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43179560088), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43179567389), [dashboard E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43179567516), [queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43179567495), [Cloudflare state](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43179567422), [deployment recovery](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43179560043), [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43179567761), [baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43179567664), [branch inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43179567532), [local Nature Frontiers draft validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43179567617), and [lockfile validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43179561223).
+- Production readiness [run 43179567491](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43179567491) correctly remains HOLD with seven evidence blockers; the workflow failure is expected fail-closed behaviour, not an engineering test failure.
+
+## Current owner-controlled / external gates
+
+1. Reconcile complete current SonicVhibez public/private/unlisted YouTube history and all pending/uncertain upload attempts immediately before any authorized upload.
+2. Supply genuine rights-cleared Short and long-form assets; create the real render manifests only after shot-level rights review.
+3. Produce the final `media/next-short.mp4` and final asset hashes.
+4. Complete human factual, rights, compliance, metadata and full-playback review; do not set review flags without actual review.
+5. Keep the Prompt Pack and 90-Day Blueprint disclosure holds until their exact viewer-facing direct-sales wording is explicitly approved; the Vault approval is product-specific.
+6. Cloudflare backup/restore route acceptance still requires verified Node-to-Worker credentials and operational recovery/rollback evidence.
+7. Complete the human semantic review of the 3,518-commit branch divergence and verify branch-protection state; GitHub's protection endpoint remains unavailable to this connection.
+
+No public/unattended publishing, upload, schedule, account reconnection, paid generation or live provider mutation occurred. Nature Frontiers remains prohibited as a SonicVhibez YouTube target. GitHub scheduled workflows execute from `main`; PR-branch CI is verification evidence, not production automation.
+
+---
+
 # Current compliance and production checkpoint — 11 November 2026
 
 **Current branch HEAD:** `4f489e5e822e9a0b485076732567719b075b243f` (documentation-only descendant of tested code/test commit `a6ec55317f0890601e9206c68c61a933c359b946`).  
