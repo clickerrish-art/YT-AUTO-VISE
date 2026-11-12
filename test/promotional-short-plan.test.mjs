@@ -213,7 +213,7 @@ test("qualitative web-search intent is accepted only with dated HTTPS sources an
 
 
 test("keyword evidence must be current and cannot be materially future-dated", () => {
-  const now = new Date("2026-11-12T09:54:29+02:00");
+  const now = new Date("2026-11-12T10:11:06+02:00");
   assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products, { now }), []);
 
   const stale = clone(checkedInPlan);
@@ -222,7 +222,7 @@ test("keyword evidence must be current and cannot be materially future-dated", (
     .some(error => /keyword evidence must be no more than 14 days old/.test(error)));
 
   const future = clone(checkedInPlan);
-  future.weeks[0].items[0].keywordEvidence.researchedAt = "2026-11-12T10:00:00+02:00";
+  future.weeks[0].items[0].keywordEvidence.researchedAt = "2026-11-12T10:17:00+02:00";
   assert.ok(validatePromotionalShortPlan(future, products, { now })
     .some(error => /cannot be more than 5 minutes in the future/.test(error)));
 });
@@ -230,7 +230,7 @@ test("keyword evidence must be current and cannot be materially future-dated", (
 test("November 30 wildlife fact-check Short uses current qualitative evidence and the exact approved Vault disclosure", () => {
   const week = checkedInPlan.weeks.find(row => row.weekOf === "2026-11-30");
   assert.ok(week);
-  assert.equal(week.items.length, 1);
+  assert.equal(week.items.length, 2);
   const item = week.items.find(row => row.id === "sonicvhibez-short-009-wildlife-video-fact-check");
   const product = products.find(row => row.id === "wildlife-creators-vault");
   assert.ok(item);
@@ -245,5 +245,30 @@ test("November 30 wildlife fact-check Short uses current qualitative evidence an
   assert.match(item.keywordEvidence.note, /no measured global search volume/i);
   assert.equal(item.disclosure.status, "APPROVED");
   assert.equal(item.disclosure.approvalReference, product.promotionGate.disclosure.approvalReference);
+  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
+});
+
+
+test("November 30 wildlife shot-list Short uses current qualitative intent and the exact approved Vault disclosure", () => {
+  const week = checkedInPlan.weeks.find(row => row.weekOf === "2026-11-30");
+  const item = week?.items.find(row => row.id === "sonicvhibez-short-010-wildlife-shot-list");
+  const product = products.find(row => row.id === "wildlife-creators-vault");
+  assert.ok(week);
+  assert.equal(week.items.length, 2);
+  assert.ok(item);
+  assert.equal(item.channel, "SonicVhibez");
+  assert.equal(item.status, "DRAFT_ONLY");
+  assert.equal(item.visibility, "private");
+  assert.equal(item.targetSeconds, 55);
+  assert.equal(item.primaryKeyword, "wildlife documentary shot list");
+  assert.equal(item.productUrl, product.url);
+  assert.equal(item.keywordEvidence.provider, "web_search");
+  assert.equal(item.keywordEvidence.type, "qualitative_search_intent");
+  assert.match(item.keywordEvidence.note, /no measured global search volume/i);
+  assert.equal(item.disclosure.status, "APPROVED");
+  assert.equal(item.disclosure.approvalReference, product.promotionGate.disclosure.approvalReference);
+  assert.ok(item.script.indexOf("Advertisement.") < item.script.indexOf(product.promotionGate.disclosure.text));
+  assert.match(item.description, /^ADVERTISEMENT$/m);
+  assert.ok(item.description.includes(product.promotionGate.disclosure.text));
   assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
 });

@@ -11,7 +11,8 @@
     "No publicationAt, publishedAt or scheduledAt values are permitted in this plan.",
     "A separate verified SonicVhibez destination schedule and complete public/private/unlisted YouTube history are required before any publication-slot calculation or scheduling.",
     "Selar products are the owner's direct-sales business and must not be classified as affiliate commissions. Products hosted outside Selar (including Serengeti and other external sellers) are affiliate promotions. Every promotion remains blocked until its exact relationship and viewer-facing disclosure are verified and owner-approved.",
-    "A single 55-second wildlife-video fact-check Short is prepared for the week beginning 2026-11-30. It remains DRAFT_ONLY with private visibility, no publication timestamp and the approved Vault direct-sales disclosure."
+    "A single 55-second wildlife-video fact-check Short is prepared for the week beginning 2026-11-30. It remains DRAFT_ONLY with private visibility, no publication timestamp and the approved Vault direct-sales disclosure.",
+    "A second 55-second wildlife shot-list Short is prepared for the week beginning 2026-11-30. It remains DRAFT_ONLY, private, unscheduled and uses the same product-specific approved Vault direct-sales disclosure; the two-Short weekly cap is not exceeded."
   ],
   "weeks": [
     {
@@ -765,6 +766,127 @@
             "Time captions to the final voice track and check phone-size readability and vertical safe areas.",
             "Use the exact owner-approved ADVERTISEMENT identifier and direct-sales disclosure in the final video and description.",
             "Recheck the Selar product page and seller before release; current registry seller evidence was last rechecked 9 November 2026.",
+            "Complete human factual, rights, compliance, playback and thumbnail review against final asset hashes.",
+            "Keep the item private and draft-only; no upload or scheduling is authorized.",
+            "Before any future schedule, inspect complete SonicVhibez history and destination queue and calculate every gap as at least 72 full hours in Africa/Johannesburg."
+          ],
+          "visibility": "private"
+        },
+        {
+          "id": "sonicvhibez-short-010-wildlife-shot-list",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "Wildlife Documentary Shot List: 3 Shots to Plan",
+          "primaryKeyword": "wildlife documentary shot list",
+          "script": "Wildlife documentary shot list: start with three shots, not a forced animal moment. First, capture a wide view that establishes the habitat. Next, record a medium shot that places the animal in its surroundings. Then, if it happens naturally and safely, capture a detail: a paw moving through grass, a bird feeding, or water rippling beside a hippo. Keep your distance, hold a steady frame, and let the animal decide what happens. If the behaviour never occurs, leave it out—never bait, chase or stage it. Build the edit around what you actually observed. Advertisement. The Complete YouTube Wildlife Creator's Vault is a resource to explore for wildlife-content planning. This product is sold through my own Selar business; purchases generate revenue for my business.",
+          "productId": "wildlife-creators-vault",
+          "productUrl": "https://selar.com/0u19v8u99l",
+          "description": "Wildlife documentary shot list: plan a habitat wide shot, an animal-in-context shot and a genuine detail shot before editing. Let the animal's natural behaviour set the pace; never chase, bait or stage a scene.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF\nReview the exact Selar listing for current contents and price:\nhttps://selar.com/0u19v8u99l\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nA resource does not replace animal-welfare guidance, factual review or footage-rights clearance.",
+          "keywordPhrases": [
+            {
+              "phrase": "wildlife documentary shot list"
+            },
+            {
+              "phrase": "how to film a wildlife documentary"
+            },
+            {
+              "phrase": "wildlife filmmaking tips"
+            },
+            {
+              "phrase": "wildlife video shot sequence"
+            },
+            {
+              "phrase": "wide medium close-up wildlife shots"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-12T10:11:06+02:00",
+            "note": "Qualitative search-intent evidence only: current indexed results surface practical wildlife-documentary shot-list guides, shot-size sequencing and wildlife-filming tutorials. No measured global search volume or competition is available; vidIQ has 3 credits remaining and its keyword-research call costs 5 credits. These sources support the topic and phrasing, not volume estimates.",
+            "sources": [
+              {
+                "title": "Types of shots in wildlife video",
+                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
+                "whyRelevant": "Explains why wildlife sequences benefit from varied shot sizes and consistent camera angles, supporting a practical shot-sequence lesson."
+              },
+              {
+                "title": "How to get the best shots for your wildlife documentary",
+                "url": "https://africa-media.org/careers/how-to-get-the-best-shots-for-your-wildlife-documentary/",
+                "whyRelevant": "Covers wide, medium and close shots, B-roll, patience, stable framing and observing wildlife without forcing action."
+              },
+              {
+                "title": "How to film a wildlife documentary on your safari",
+                "url": "https://kilisherpas.com/blogs/how-to-film-a-wildlife-documentary-on-your-safari-in-tanzania",
+                "whyRelevant": "Provides an explicit shot-list sequence of establishing, medium and close-up shots and stresses safe distance and natural behaviour."
+              }
+            ]
+          },
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-12T10:11:06+02:00",
+            "note": "Qualitative search-intent evidence only: current indexed results surface practical wildlife-documentary shot-list guides, shot-size sequencing and wildlife-filming tutorials. No measured global search volume or competition is available; vidIQ has 3 credits remaining and its keyword-research call costs 5 credits. These sources support the topic and phrasing, not volume estimates.",
+            "sources": [
+              {
+                "title": "Types of shots in wildlife video",
+                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
+                "whyRelevant": "Explains why wildlife sequences benefit from varied shot sizes and consistent camera angles, supporting a practical shot-sequence lesson."
+              },
+              {
+                "title": "How to get the best shots for your wildlife documentary",
+                "url": "https://africa-media.org/careers/how-to-get-the-best-shots-for-your-wildlife-documentary/",
+                "whyRelevant": "Covers wide, medium and close shots, B-roll, patience, stable framing and observing wildlife without forcing action."
+              },
+              {
+                "title": "How to film a wildlife documentary on your safari",
+                "url": "https://kilisherpas.com/blogs/how-to-film-a-wildlife-documentary-on-your-safari-in-tanzania",
+                "whyRelevant": "Provides an explicit shot-list sequence of establishing, medium and close-up shots and stresses safe distance and natural behaviour."
+              }
+            ]
+          },
+          "scriptEvidence": [
+            {
+              "title": "Types of shots in wildlife video",
+              "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
+              "whyUsed": "Explains why wildlife sequences benefit from varied shot sizes and consistent camera angles, supporting a practical shot-sequence lesson."
+            },
+            {
+              "title": "How to get the best shots for your wildlife documentary",
+              "url": "https://africa-media.org/careers/how-to-get-the-best-shots-for-your-wildlife-documentary/",
+              "whyUsed": "Covers wide, medium and close shots, B-roll, patience, stable framing and observing wildlife without forcing action."
+            },
+            {
+              "title": "How to film a wildlife documentary on your safari",
+              "url": "https://kilisherpas.com/blogs/how-to-film-a-wildlife-documentary-on-your-safari-in-tanzania",
+              "whyUsed": "Provides an explicit shot-list sequence of establishing, medium and close-up shots and stresses safe distance and natural behaviour."
+            }
+          ],
+          "hashtags": [
+            "#WildlifeFilmmaking",
+            "#WildlifeDocumentary",
+            "#WildlifeVideo",
+            "#YouTubeCreator",
+            "#ResponsibleWildlife"
+          ],
+          "thumbnailDirection": "Use three genuine, rights-cleared frames in a simple sequence: wide habitat, animal in context, and a naturally captured detail. Large text: “3 SHOTS TO PLAN”. Do not stage an animal action or imply that missing footage was recorded.",
+          "disclosure": {
+            "status": "APPROVED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "approvedAt": "2026-11-10T07:02:41+02:00",
+            "approvalReference": "Owner explicitly approved the exact viewer-facing Selar direct-sales disclosure in the ChatGPT conversation on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Approval applies to the Complete YouTube Wildlife Creator's Vault promotion only."
+          },
+          "productionChecklist": [
+            "Confirm every factual statement in the narration against a reliable source; do not use captions as proof.",
+            "Use wide, medium and detail shots only when they were genuinely captured; never fabricate a missing shot.",
+            "Use only original or commercially cleared footage, narration, music and sound effects.",
+            "Keep a safe distance and never bait, chase, stage, handle or disturb wildlife.",
+            "Record natural narration and confirm the finished runtime is 50–60 seconds, targeting about 55.",
+            "Time captions to the final voice track and check phone-size readability and vertical safe areas.",
+            "Use the exact owner-approved ADVERTISEMENT identifier and direct-sales disclosure in the final video and description.",
+            "Recheck the Selar product page and seller before release; registry seller evidence was last verified 9 November 2026.",
             "Complete human factual, rights, compliance, playback and thumbnail review against final asset hashes.",
             "Keep the item private and draft-only; no upload or scheduling is authorized.",
             "Before any future schedule, inspect complete SonicVhibez history and destination queue and calculate every gap as at least 72 full hours in Africa/Johannesburg."
