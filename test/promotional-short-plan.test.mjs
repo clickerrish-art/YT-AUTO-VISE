@@ -213,18 +213,39 @@ test("qualitative web-search intent is accepted only with dated HTTPS sources an
 
 
 test("keyword evidence must be current and cannot be materially future-dated", () => {
-  const now = new Date("2026-11-12T10:11:06+02:00");
+  const evidenceTimes = checkedInPlan.weeks.flatMap(week =>
+    week.items.map(item => Date.parse(item.keywordEvidence.researchedAt))
+  );
+  const now = new Date(Math.max(...evidenceTimes));
   assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products, { now }), []);
 
   const stale = clone(checkedInPlan);
-  stale.weeks[0].items[0].keywordEvidence.researchedAt = "2026-10-28T09:54:28+02:00";
+  stale.weeks[0].items[0].keywordEvidence.researchedAt =
+    new Date(now.getTime() - 15 * 24 * 60 * 60 * 1000).toISOString();
   assert.ok(validatePromotionalShortPlan(stale, products, { now })
     .some(error => /keyword evidence must be no more than 14 days old/.test(error)));
 
   const future = clone(checkedInPlan);
-  future.weeks[0].items[0].keywordEvidence.researchedAt = "2026-11-12T10:17:00+02:00";
+  future.weeks[0].items[0].keywordEvidence.researchedAt =
+    new Date(now.getTime() + 5 * 60 * 1000 + 1).toISOString();
   assert.ok(validatePromotionalShortPlan(future, products, { now })
     .some(error => /cannot be more than 5 minutes in the future/.test(error)));
+});
+
+test("December 7 wildlife B-roll Short has current qualitative evidence and approved Vault disclosure", () => {
+  const week = checkedInPlan.weeks.find(row => row.weekOf === "2026-12-07");
+  assert.ok(week);
+  assert.equal(week.items.length, 1);
+  const item = week.items[0];
+  assert.equal(item.id, "sonicvhibez-short-011-wildlife-broll");
+  assert.equal(item.targetSeconds, 55);
+  assert.equal(item.status, "DRAFT_ONLY");
+  assert.equal(item.visibility, "private");
+  assert.equal(item.productUrl, "https://selar.com/0u19v8u99l");
+  assert.equal(item.disclosure.status, "APPROVED");
+  assert.equal(item.keywordEvidence.type, "qualitative_search_intent");
+  assert.ok(item.keywordEvidence.sources.length >= 3);
+  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
 });
 
 test("November 30 wildlife fact-check Short uses current qualitative evidence and the exact approved Vault disclosure", () => {
