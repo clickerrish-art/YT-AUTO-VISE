@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-13T07:15:04.000Z",
+  "generatedAt": "2026-11-13T07:26:30.000Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "82d7382d1ded258ecdf5a94132fea2c003c6d62d",
+  "testedSourceTestSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
   "liveMainSha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -15,14 +15,14 @@
       "GET /readyz",
       "GET /operational-readyz"
     ],
-    "branchAheadBy": 3523,
+    "branchAheadBy": 3527,
     "branchBehindBy": 2,
     "changedFiles": 323,
     "branchProtectionEnabled": null,
     "branchProtectionStatus": "UNVERIFIED — GitHub returned 403 for the protection endpoint.",
-    "comparisonSourceSha": "82d7382d1ded258ecdf5a94132fea2c003c6d62d",
+    "comparisonSourceSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169973"
+    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387613"
   },
   "counts": {
     "routes": 45,
@@ -135,25 +135,25 @@
       "nodeRuntimeIntegration": "BLOCKED — DASHBOARD_STATE_API_URL, DASHBOARD_STATE_OPERATOR_TOKEN and Cloudflare Access service-token credentials are not verified in the Node dashboard runtime",
       "classification": "Infrastructure provisioning PASS; Node route end-to-end acceptance remains BLOCKED."
     },
-    "latestExactHeadContentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170068",
-    "latestExactHeadDashboardE2E": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169911",
-    "latestExactHeadAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169890",
-    "latestExactHeadMetadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169900",
-    "latestExactHeadBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169927",
-    "latestExactHeadInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169973",
-    "latestExactHeadReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170087",
-    "latestExactHeadCloudflareDurableState": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170172",
-    "latestExactHeadSha": "a6ec55317f0890601e9206c68c61a933c359b946",
-    "latestExactHeadRouteMatrixConsistency": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938502",
-    "latestExactHeadAutomationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938507",
-    "latestExactHeadDashboardBrowser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938792",
-    "latestExactHeadQueueReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170040",
-    "latestExactHeadDeploymentRecovery": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170044",
-    "latestExactHeadIsolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938504",
-    "latestExactHeadBranchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42986938497",
-    "latestExactHeadNatureFrontiersDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169962"
+    "latestExactHeadContentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387665",
+    "latestExactHeadDashboardE2E": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387699",
+    "latestExactHeadAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387638",
+    "latestExactHeadMetadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387880",
+    "latestExactHeadBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387657",
+    "latestExactHeadInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387613",
+    "latestExactHeadReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387595",
+    "latestExactHeadCloudflareDurableState": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387762",
+    "latestExactHeadSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
+    "latestExactHeadRouteMatrixConsistency": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387665",
+    "latestExactHeadAutomationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387638",
+    "latestExactHeadDashboardBrowser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387699",
+    "latestExactHeadQueueReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387624",
+    "latestExactHeadDeploymentRecovery": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387826",
+    "latestExactHeadIsolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387657",
+    "latestExactHeadBranchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387613",
+    "latestExactHeadNatureFrontiersDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387616"
   },
-  "disclaimer": "This matrix is synchronized to dashboard-server.mjs and public/dashboard.html. The exact-head test/api-route-acceptance-matrix.test.mjs verifies that all 45 source-derived protected API method/path pairs appear exactly once, the inventory and acceptance counts agree, all routes retain an explicit authentication-negative PASS, and unknown branch protection remains null; see exact HEAD a6ec55317f0890601e9206c68c61a933c359b946 and content-quality run 42986938502 (778 tests, zero skipped). The exact-head automation/security run 42986938507 passed 140/140 Node test files and its Python/syntax/security checks. This inventory/consistency verification does not upgrade any route's overall acceptance status: 37 routes remain PASS and 8 remain BLOCKED for the route-specific reasons recorded below. Authentication-negative PASS does not imply authorized route success. External provider credentials, human approvals, genuine media/rights, and deliberately disabled publishing remain separate gates.",
+  "disclaimer": "This matrix is synchronized to dashboard-server.mjs and public/dashboard.html. The exact-head route-matrix test on 8daa78c0cdd25a2f08dd73310cae4a65c16b4279 verifies all 45 source-derived protected API method/path pairs appear exactly once, inventory and acceptance counts agree, and every route retains an authentication-negative PASS; see content-quality run 43385387665 (783 tests, zero skipped). Automation/security run 43385387638 passed 140/140 Node test files, 44 Python tests, zero skips and npm audit 0 vulnerabilities. These checks do not upgrade route acceptance: 37 routes remain PASS and 8 remain BLOCKED. Authentication-negative PASS does not imply authorized route success. External credentials, human approvals, genuine media/rights and deliberately disabled publishing remain separate gates.",
   "routes": [
     {
       "method": "GET",
@@ -172,9 +172,9 @@
       "notes": "Read-only Cloudflare account verification on 2026-11-08 confirms the staging Worker is deployed with the D1 binding, six application tables exist, dashboard_state revision 1 contains 16 queue items and publishingEnabled=false, and one backup exists. The Access application is email-only and no Access service tokens are configured; an unauthenticated health request is intercepted with login_required. The Node app runtime still lacks a verified service-token-backed DASHBOARD_STATE_API_URL/DASHBOARD_STATE_OPERATOR_TOKEN configuration, so these three Node routes remain BLOCKED until authenticated end-to-end read/write/backup/restore is proven. No token or state snapshot was exposed.",
       "testEvidence": {
         "test": "test/dashboard-cloudflare-state.integration.test.mjs",
-        "exactTestedSha": "82d7382d1ded258ecdf5a94132fea2c003c6d62d",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170068",
-        "scenario": "Authenticated integration test exercises the three Cloudflare state routes with remote configuration absent and verifies 503 responses plus byte-identical local state/no metadata or pending files. With remote test service configured, invalid and stale restore payloads are rejected before any remote restore request."
+        "exactTestedSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387665",
+        "scenario": "Exact-SHA content-quality suite includes the authenticated integration test: all three state routes return 503 without remote configuration and leave local state byte-identical; invalid and stale restore payloads never reach the remote restore endpoint."
       }
     },
     {
@@ -194,9 +194,9 @@
       "notes": "Read-only Cloudflare account verification on 2026-11-08 confirms the staging Worker is deployed with the D1 binding, six application tables exist, dashboard_state revision 1 contains 16 queue items and publishingEnabled=false, and one backup exists. The Access application is email-only and no Access service tokens are configured; an unauthenticated health request is intercepted with login_required. The Node app runtime still lacks a verified service-token-backed DASHBOARD_STATE_API_URL/DASHBOARD_STATE_OPERATOR_TOKEN configuration, so these three Node routes remain BLOCKED until authenticated end-to-end read/write/backup/restore is proven. No token or state snapshot was exposed.",
       "testEvidence": {
         "test": "test/dashboard-cloudflare-state.integration.test.mjs",
-        "exactTestedSha": "82d7382d1ded258ecdf5a94132fea2c003c6d62d",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170068",
-        "scenario": "Authenticated integration test exercises the three Cloudflare state routes with remote configuration absent and verifies 503 responses plus byte-identical local state/no metadata or pending files. With remote test service configured, invalid and stale restore payloads are rejected before any remote restore request."
+        "exactTestedSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387665",
+        "scenario": "Exact-SHA content-quality suite includes the authenticated integration test: all three state routes return 503 without remote configuration and leave local state byte-identical; invalid and stale restore payloads never reach the remote restore endpoint."
       }
     },
     {
@@ -216,9 +216,9 @@
       "notes": "Read-only Cloudflare account verification on 2026-11-08 confirms the staging Worker is deployed with the D1 binding, six application tables exist, dashboard_state revision 1 contains 16 queue items and publishingEnabled=false, and one backup exists. The Access application is email-only and no Access service tokens are configured; an unauthenticated health request is intercepted with login_required. The Node app runtime still lacks a verified service-token-backed DASHBOARD_STATE_API_URL/DASHBOARD_STATE_OPERATOR_TOKEN configuration, so these three Node routes remain BLOCKED until authenticated end-to-end read/write/backup/restore is proven. No token or state snapshot was exposed.",
       "testEvidence": {
         "test": "test/dashboard-cloudflare-state.integration.test.mjs",
-        "exactTestedSha": "82d7382d1ded258ecdf5a94132fea2c003c6d62d",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170068",
-        "scenario": "Authenticated integration test exercises the three Cloudflare state routes with remote configuration absent and verifies 503 responses plus byte-identical local state/no metadata or pending files. With remote test service configured, invalid and stale restore payloads are rejected before any remote restore request."
+        "exactTestedSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387665",
+        "scenario": "Exact-SHA content-quality suite includes the authenticated integration test: all three state routes return 503 without remote configuration and leave local state byte-identical; invalid and stale restore payloads never reach the remote restore endpoint."
       }
     },
     {
@@ -1258,31 +1258,31 @@
     "note": "Read-only inventory export is implemented; no channel history was authenticated or reconciled because Google rejected the configured OAuth client pair."
   },
   "latestExactCiCheckpoint": {
-    "recordedAt": "2026-11-13T07:15:04Z",
-    "exactSourceTestSha": "82d7382d1ded258ecdf5a94132fea2c003c6d62d",
-    "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170068",
-    "contentQualityResult": "PASS — 782/782 Node tests, zero failures and zero skips; includes Cloudflare backup/restore route fail-closed integration coverage.",
-    "dashboardBrowser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169911",
+    "recordedAt": "2026-11-13T07:26:30Z",
+    "exactSourceTestSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
+    "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387665",
+    "contentQualityResult": "PASS — 783/783 Node tests, zero failures and zero skips; includes Short 011 keyword-freshness/disclosure regression and Cloudflare route fail-closed integration coverage.",
+    "dashboardBrowser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387699",
     "dashboardBrowserResult": "PASS — 29/29 Chromium journeys.",
-    "queueReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170040",
-    "queueReadinessResult": "PASS — existing queue policy checks passed; publishing remains disabled.",
-    "cloudflareState": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170172",
+    "queueReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387624",
+    "queueReadinessResult": "PASS — 16 queue items; Africa/Johannesburg 72-hour minimum; 216-hour rolling cycle; publication disabled.",
+    "cloudflareState": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387762",
     "cloudflareStateResult": "PASS — 9/9 Cloudflare Worker durable-state unit tests.",
-    "deploymentRecovery": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170044",
+    "deploymentRecovery": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387826",
     "deploymentRecoveryResult": "PASS.",
-    "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169973",
-    "branchInventoryResult": "PASS — non-destructive inventory.",
-    "natureFrontiersLocalDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169962",
+    "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387613",
+    "branchInventoryResult": "PASS — non-destructive inventory only.",
+    "natureFrontiersLocalDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387616",
     "natureFrontiersLocalDraftResult": "PASS — local validation only; no Meta API write.",
-    "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169890",
-    "automationSecurityResult": "IN PROGRESS at checkpoint; no final result claimed.",
-    "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169900",
-    "metadataResult": "IN PROGRESS at checkpoint; no final result claimed.",
-    "isolatedMainCandidateBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169927",
-    "isolatedMainCandidateBaselineResult": "IN PROGRESS at checkpoint; no final result claimed.",
-    "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170087",
+    "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387638",
+    "automationSecurityResult": "PASS — 140/140 Node test files, 44 Python tests, zero skips, npm audit reports 0 vulnerabilities.",
+    "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387880",
+    "metadataResult": "PASS — default metadata checker remains fail-closed and unreviewed metadata/asset examples remain blocked.",
+    "isolatedMainCandidateBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387657",
+    "isolatedMainCandidateBaselineResult": "PASS — exact main and candidate baselines completed and the comparison artifact was uploaded.",
+    "productionReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387595",
     "productionReadinessResult": "HOLD — expected fail-closed production-evidence blockers remain.",
-    "routeAcceptanceBoundary": "The new test/dashboard-cloudflare-state.integration.test.mjs coverage proves that GET /api/state/backups, POST /api/state/backup and POST /api/state/restore return 503 without remote configuration and do not mutate the local snapshot. Restore validation rejects missing confirmation, blank backupId, non-positive/fractional/string expectedRevision and stale revisions before any remote restore call. This is route-specific validation/fail-closed evidence only; authorized Node-to-Worker success, audit, concurrency, durable persistence and restart acceptance remain blocked by missing Cloudflare Access service-token configuration."
+    "routeAcceptanceBoundary": "Exact-SHA integration proves GET /api/state/backups, POST /api/state/backup and POST /api/state/restore return 503 without remote configuration and do not mutate local state. Restore validation rejects missing confirmation, blank backupId, invalid expectedRevision and stale revision before any remote restore call. This is validation/fail-closed evidence only; authorized Node-to-Worker success, durable persistence, audit, concurrency and restart acceptance remain blocked by Cloudflare Access service-token configuration."
   },
   "cloudflareStagingInfrastructure": {
     "observedAt": "2026-11-09",

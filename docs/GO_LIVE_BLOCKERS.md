@@ -1,63 +1,65 @@
-# 13 November 2026 — Short 011 prepared; route safety and provider evidence refreshed
+# 13 November 2026 — Short 011 prepared; Cloudflare route tests and CI verified
 
-**Current source/test HEAD:** `8daa78c0cdd25a2f08dd73310cae4a65c16b4279`.  
+**Source/test SHA:** `8daa78c0cdd25a2f08dd73310cae4a65c16b4279`. Current branch head before this documentation commit: `2211a5e5957678b91e8899a9ca0d3ad632297a47`.  
 **PR #1:** OPEN · DRAFT · UNMERGED. **main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged. **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`.  
-**Branch comparison at this source/test HEAD:** 3,527 ahead / 2 behind · 323 PR files. No main edit, merge, reset, rebase, force-push or destructive reconciliation.
+**Branch comparison at source/test SHA:** 3,527 ahead / 2 behind · 323 PR files. No main edit, merge, reset, rebase, force-push or destructive reconciliation.
 
-## Promotional Short prepared
+## Promotional content
 
-Added `sonicvhibez-short-011-wildlife-broll` to `content/promotional-short-plan.json` for the week beginning **7 December 2026**. It is one item in that week, so the maximum of two per week is respected. The plan now contains nine private `DRAFT_ONLY` Shorts: two for each week beginning 9, 16, 23 and 30 November, and one for 7 December. `publicationEnabled=false`, `schedulingEnabled=false`; no publication timestamp or live schedule was added.
+Added `sonicvhibez-short-011-wildlife-broll` for the week beginning **7 December 2026**. The plan now has nine private `DRAFT_ONLY` Shorts: two each for 9, 16, 23 and 30 November, and one for 7 December. Every week remains at or below the two-Short cap. Publication and scheduling are disabled; no publication timestamps were added.
 
-- **Title:** Wildlife Documentary B-Roll: 3 Shots That Save the Edit
+- **SEO title:** Wildlife Documentary B-Roll: 3 Shots That Save the Edit
 - **Primary phrase:** wildlife documentary B-roll
-- **Target:** 55 seconds; 133-word narration draft.
-- **Script:** explains habitat context, natural movement and detail cutaways; explicitly prohibits baiting, chasing or staging wildlife.
-- **Product:** Complete YouTube Wildlife Creator's Vault — exact owner-supplied URL `https://selar.com/0u19v8u99l`.
-- **Disclosure:** the exact owner-approved direct-sales wording is included in narration and description: “This product is sold through my own Selar business; purchases generate revenue for my business.” This approval applies only to the Vault.
-- **Description:** primary phrase appears in the opening line, followed by the exact Selar URL and an ADVERTISEMENT label.
+- **Runtime target:** 55 seconds; 133-word narration draft.
+- **Script:** habitat context, natural movement and detail cutaways; no baiting, chasing or staged animal behaviour.
+- **Product:** Complete YouTube Wildlife Creator's Vault — `https://selar.com/0u19v8u99l`.
+- **Description:** starts with the primary phrase, includes the exact Selar link, an ADVERTISEMENT label and the owner-approved direct-sales disclosure: “This product is sold through my own Selar business; purchases generate revenue for my business.” This approval applies only to the Vault.
 - **Hashtags:** `#WildlifeFilmmaking #WildlifeDocumentary #WildlifeVideo #Broll #YouTubeCreator`.
-- **Thumbnail direction:** three genuine, rights-cleared frames—habitat, naturally recorded movement, genuine detail—with “DON'T MISS B-ROLL”. No thumbnail asset or rendered MP4 is claimed.
+- **Thumbnail direction:** three genuine, rights-cleared frames (habitat, naturally recorded movement, detail); text “DON'T MISS B-ROLL”. No thumbnail asset or rendered MP4 is claimed.
 
-### Search-intent evidence
+### Search intent
 
-Current web research found wildlife-filmmaking guidance about cutaways/B-roll, shot-size variety and ethical filming: [World Nomads wildlife-filmmaking masterclass](https://member.worldnomads.com/explore/guides/wildlife-filmmaking), [Concolor Media shot types](https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/), and [Serengeti African Tours documentary-filming guide](https://serengetiafricantours.com/how-to-film-a-wildlife-documentary-on-your-safari/). A general video-storytelling source also explains how B-roll provides context and atmosphere: [AquaExposure](https://www.aquaexposure.com/nl/blog/onderwatervideo-storytelling-duik-vertellen). This is **qualitative search-intent evidence only**; no measured global search volume or competition is claimed. vidIQ had three credits remaining, below the five-credit keyword-research call cost.
+Current qualitative evidence supports B-roll/cutaways, shot variety and ethical wildlife filming: [World Nomads wildlife-filmmaking masterclass](https://member.worldnomads.com/explore/guides/wildlife-filmmaking), [Concolor Media shot types](https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/), and [Serengeti African Tours filming guide](https://serengetiafricantours.com/how-to-film-a-wildlife-documentary-on-your-safari/). [AquaExposure's storytelling guide](https://www.aquaexposure.com/nl/blog/onderwatervideo-storytelling-duik-vertellen) supports the general use of B-roll for context and atmosphere. No measured global volume or competition is claimed. vidIQ had three credits remaining, below its five-credit keyword call cost.
 
-### Content validation correction
+### Validation fix
 
-The first content-quality run on commit `14c201a8af37183e9ce277a70e22d567be56fc99` failed because the existing keyword-freshness test used a fixed 12 November reference time and treated the new 13 November research timestamp as future-dated. The content itself was not the failure. Commit `8daa78c` updates the test to derive its reference time from the newest checked-in evidence, tests stale/future thresholds relative to that instant, and adds a Short 011-specific disclosure/SEO/weekly-cap regression. Exact-source [content-quality CI](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387665) passed **783/783 tests, zero failures, zero skips**; its log confirms the new Short 011 regression passed.
+The first content-quality run on `14c201a` failed because the existing freshness test used a fixed 12 November reference time and treated Short 011's 13 November research timestamp as future-dated. Commit `8daa78c` made the test reference time derive from the latest checked-in evidence, retained stale/future threshold tests, and added a Short 011-specific regression. The corrected exact-source [content-quality run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387665) passed **783/783, zero failures, zero skips**.
 
-## Cloudflare state-route implementation
+## Cloudflare state routes
 
-- Commit `82d7382d1ded258ecdf5a94132fea2c003c6d62d` added integration tests for `GET /api/state/backups`, `POST /api/state/backup` and `POST /api/state/restore`: with remote Cloudflare state unconfigured, each returns HTTP 503, the local state file remains byte-identical, and no remote revision/pending metadata is created.
-- The configured test-service path rejects missing restore confirmation, blank backup IDs, zero/fractional/string expected revisions and stale revisions before any remote restore request.
-- The API acceptance matrix records the exact route test SHA. The three Cloudflare routes remain **BLOCKED overall** because authenticated Node-to-Worker success, durable persistence, audit, concurrency and restart acceptance still require Cloudflare Access service-token configuration. Matrix: 45 protected routes / 45 authentication-negative PASS / 37 overall PASS / 8 BLOCKED.
-- Exact source/test CI for the Cloudflare route change: [782/782 content tests](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170068), [29/29 Chromium journeys](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169911), [9/9 Cloudflare Worker durable-state tests](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170172). Queue readiness, deployment recovery, branch inventory and local Nature Frontiers draft validation also passed on that source/test commit; production readiness remains HOLD.
+Commit `82d7382` added integration tests for `GET /api/state/backups`, `POST /api/state/backup` and `POST /api/state/restore`: when remote Cloudflare state is not configured, all three return 503, local state remains byte-identical, and no revision/pending metadata is created. Restore validation rejects missing confirmation, blank backup IDs, zero/fractional/string expected revisions and stale revisions before any remote restore call.
 
-## Current destination, schedule and 72-hour check
+The API matrix remains **45 protected routes / 45 authentication-negative PASS / 37 overall PASS / 8 BLOCKED**. The three Cloudflare state routes remain BLOCKED overall because authenticated Node-to-Worker success, durable persistence, audit, concurrency and restart acceptance still need Cloudflare Access service-token configuration. The matrix does not overstate negative-path tests as full route acceptance.
 
-- Metricool exposes one mixed brand labelled Nature Frontiers (`7545638`). Its `youtubeData` channel ID `UCSlkuPfHH78oGC1o418HV4w` matches the read-only vidIQ SonicVibes/`@sonicvhibez` channel. Nature Frontiers' own YouTube channel ID is different: `UC41xXhw22o6Q2I2pTKB2kOg`. The SonicVhibez channel identity is matched, but no separate SonicVhibez-only Metricool brand exists; no Metricool write was attempted.
-- The scheduled-post query returned 20 future Nature Frontiers records, all `draft=true` and `autoPublish=false`; all have Facebook provider entries and one also has an Instagram provider entry with Instagram auto-publishing false. No YouTube provider row appeared. These records were left unchanged. The endpoint does not return already-published posts.
-- Fresh read-only vidIQ channel inventory returned one public Short, zero private and zero unlisted videos, no scheduledPublishAt value and no next page. Last actual publication: **22 October 2026, 17:05:56 SAST**. At **13 November 2026, 09:10:21 SAST**, elapsed time was **21 days, 16 hours, 4 minutes, 25 seconds**. Metricool showed no YouTube scheduled provider row. The inspected interval exceeds 72 hours; no next publication slot was proposed. Pending/uncertain upload-attempt reconciliation remains a pre-upload gate.
-- No finished promotional MP4 or thumbnail is verified. HeyGen's previously exhausted monthly free allowance was not bypassed; no paid generation, upload, publication, live scheduling, account reconnection or auto-publishing change occurred.
-- The Vault seller was last verified on 9 November; its page could not be freshly reopened today. The Prompt Pack and 90-Day Blueprint disclosures remain HOLD.
-
-## Current exact-head CI status
+## Exact-source CI results
 
 At source/test SHA `8daa78c`:
 - [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387665): **783/783 PASS**, zero skips.
-- [Cloudflare durable-state](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387762): PASS.
+- [Automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387638): **140/140 Node test files**, 44 Python tests, zero skips; npm audit **0 vulnerabilities**.
+- [Dashboard Chromium E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387699): **29/29 PASS**.
+- [Queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387624): PASS — 16 queue items, 72-hour minimum, 216-hour rolling cycle, publishing disabled.
+- [Cloudflare Worker durable state](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387762): **9/9 PASS**.
 - [Deployment recovery](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387826): PASS.
-- [Branch inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387613): PASS.
-- [Nature Frontiers local draft validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387616): PASS; local-only, no Meta API write.
+- [Branch inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387613): PASS, non-destructive.
+- [Nature Frontiers local draft validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387616): PASS, local-only; no Meta API write.
+- [Isolated main/candidate baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387657): PASS; exact main and candidate tests completed and the comparison artifact was uploaded.
+- [Metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387880): PASS; the default checker remains fail-closed and unreviewed examples remain blocked.
 - [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387595): HOLD/expected fail-closed result.
-- Automation/security, metadata, queue readiness, dashboard browser E2E and isolated main/candidate baseline were still running at the checkpoint; no final result is claimed for those jobs.
+
+## Destination and spacing
+
+- Metricool exposes one mixed brand labelled Nature Frontiers (`7545638`). Its YouTube channel ID `UCSlkuPfHH78oGC1o418HV4w` matches read-only vidIQ SonicVibes/`@sonicvhibez`. Nature Frontiers' own YouTube channel ID `UC41xXhw22o6Q2I2pTKB2kOg` is different. The SonicVhibez channel identity is matched, but no separate SonicVhibez-only Metricool brand exists; no Metricool write was attempted.
+- The scheduled-post query returned 20 future Nature Frontiers records, all `draft=true` and `autoPublish=false`; all have Facebook provider entries and one also has Instagram with auto-publishing false. No YouTube provider row appeared. All were left unchanged. The scheduled-post endpoint does not return already-published records.
+- Fresh read-only vidIQ inventory returned one public Short, zero private and zero unlisted videos, no scheduledPublishAt value and no next page. Last actual publication: **22 October 2026, 17:05:56 SAST**. At **13 November 2026, 09:10:21 SAST**, elapsed time was **21 days, 16 hours, 4 minutes, 25 seconds**. Metricool showed no YouTube scheduled provider row. The inspected interval exceeds 72 hours; no next slot was proposed. Pending/uncertain upload-attempt reconciliation remains a pre-upload gate.
+- No final promotional MP4 or thumbnail is verified. HeyGen's previously exhausted monthly free allowance was not bypassed; no paid generation, upload, publication, live scheduling, account reconnection or auto-publishing change occurred.
+- Vault seller Click 47 was last verified 9 November; its page could not be freshly reopened today. Prompt Pack and 90-Day Blueprint disclosures remain HOLD.
 
 ## Remaining release blockers
 
 1. Complete pending/uncertain upload-attempt reconciliation before any upload.
 2. Genuine rights-cleared footage, narration and music; final render manifests, MP4 and thumbnail; human factual, rights, compliance, playback and thumbnail review.
 3. Product-specific disclosure approval for the Prompt Pack and 90-Day Blueprint.
-4. Authenticated Node-to-Cloudflare state access using configured Cloudflare Access service-token credentials; no secrets were requested or entered in chat.
+4. Authenticated Node-to-Cloudflare state access using Cloudflare Access service-token credentials; no secrets were requested or entered in chat.
 5. Per-operation private-upload authorization and final secure OAuth/upload-receipt verification.
 6. Full semantic review of the divergent branch history; branch protection remains unverified because the GitHub protection endpoint is unavailable to this connection.
 
