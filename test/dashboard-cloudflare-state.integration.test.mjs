@@ -65,6 +65,7 @@ test("dashboard startup recovers local work through authenticated Cloudflare per
   let remoteState = null;
   let revision = 0;
   let authFailures = 0;
+  let restoreRequests = 0;
   const backups = [];
   const stateServer = http.createServer(async (req, res) => {
     try {
@@ -111,6 +112,7 @@ test("dashboard startup recovers local work through authenticated Cloudflare per
         return;
       }
       if (req.method === "POST" && req.url === "/api/backups/restore") {
+        restoreRequests++;
         const backup = backups.find(item => item.backupId === body?.backupId);
         if (!backup) { send(res, 404, { error: "Backup not found" }); return; }
         if (Number(body.expectedRevision) !== revision) { send(res, 409, { code: "REVISION_CONFLICT", error: "reload" }); return; }
@@ -207,6 +209,27 @@ test("dashboard startup recovers local work through authenticated Cloudflare per
   });
   assert.equal(unconfirmed.status, 400, "restore must require an explicit confirmation flag");
   assert.equal(revision, 2, "unconfirmed restore must not contact or mutate the remote state");
+  const invalidRestoreBodies = [
+    { backupId: " ", expectedRevision: 2, confirmRestore: true },
+    { backupId: backup.backupId, expectedRevision: 0, confirmRestore: true },
+    { backupId: backup.backupId, expectedRevision: 2.5, confirmRestore: true },
+    { backupId: backup.backupId, expectedRevision: "2", confirmRestore: true },
+    { backupId: backup.backupId, expectedRevision: 2, confirmRestore: false }
+  ];
+  for (const body of invalidRestoreBodies) {
+    const response = await fetch(base + "/api/state/restore", {
+      method: "POST", headers: { ...headers, "content-type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    assert.equal(response.status, 400, "invalid restore input must be rejected before remote mutation");
+  }
+  const staleRestore = await fetch(base + "/api/state/restore", {
+    method: "POST", headers: { ...headers, "content-type": "application/json" },
+    body: JSON.stringify({ backupId: backup.backupId, expectedRevision: 1, confirmRestore: true })
+  });
+  assert.equal(staleRestore.status, 409, "stale revision must be rejected before remote mutation");
+  assert.equal(restoreRequests, 0, "invalid and stale restore requests must never reach the remote restore endpoint");
+  assert.equal(revision, 2, "invalid and stale restore requests must leave the remote revision unchanged");
   const restoreResponse = await fetch(base + "/api/state/restore", {
     method: "POST", headers: { ...headers, "content-type": "application/json" },
     body: JSON.stringify({ backupId: backup.backupId, expectedRevision: 2, confirmRestore: true })
@@ -214,10 +237,76 @@ test("dashboard startup recovers local work through authenticated Cloudflare per
   assert.equal(restoreResponse.status, 200);
   const restoreReceipt = await restoreResponse.json();
   assert.equal(restoreReceipt.revision, 3);
+  assert.equal(restoreRequests, 1, "only the explicitly confirmed valid restore may reach the remote endpoint");
   assert.equal(remoteState.audit.at(-1).action, "DASHBOARD_STATE_RESTORED");
   assert.equal(remoteState.audit.at(-1).backupId, backup.backupId);
   const restoredLocal = JSON.parse(fs.readFileSync(stateFile, "utf8"));
   assert.deepEqual(restoredLocal, remoteState);
   const metadata = JSON.parse(fs.readFileSync(stateFile + ".cloudflare-meta.json", "utf8"));
   assert.equal(metadata.revision, 3);
+});
+
+
+test("Cloudflare backup and restore routes fail closed without remote configuration and never mutate local state", async t => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-cloudflare-unconfigured-"));
+  const stateFile = path.join(stateDir, "dashboard-state.json");
+  const initialState = {
+    version: 1, queueItems: [], campaigns: [], audit: [], jobs: [], uploads: [],
+    facebookDrafts: [], facebookPosts: [], facebookAttempts: [], publishingEnabled: false
+  };
+  fs.writeFileSync(stateFile, JSON.stringify(initialState), { mode: 0o600 });
+  const before = fs.readFileSync(stateFile);
+
+  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    cwd: root,
+    env: {
+      ...process.env,
+      DASHBOARD_OPERATOR_TOKEN: dashboardToken,
+      DASHBOARD_OPERATOR_ID: "integration-operator",
+      DASHBOARD_STATE_DIR: stateDir,
+      UPLOAD_LOG_DIR: stateDir,
+      PORT: "0",
+      DASHBOARD_HOST: "127.0.0.1",
+      DASHBOARD_STATE_API_URL: "",
+      DASHBOARD_STATE_OPERATOR_TOKEN: "",
+      DASHBOARD_STATE_ACCESS_CLIENT_ID: "",
+      DASHBOARD_STATE_ACCESS_CLIENT_SECRET: "",
+      META_PAGE_ACCESS_TOKEN: "",
+      META_USER_ACCESS_TOKEN: "",
+      NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "",
+      FACEBOOK_PUBLISH_ENABLED: "",
+      YOUTUBE_CLIENT_ID: "",
+      YOUTUBE_CLIENT_SECRET: "",
+      YOUTUBE_REFRESH_TOKEN: "",
+      SONICVHIBEZ_CHANNEL_ID: ""
+    },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let logs = "";
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  const instance = { child, get logs() { return logs; } };
+
+  t.after(async () => {
+    if (child.exitCode === null) {
+      try { await stopChild(child); } catch { child.kill("SIGKILL"); }
+    }
+    fs.rmSync(stateDir, { recursive: true, force: true });
+  });
+
+  const base = await waitForReady(instance);
+  const headers = { "x-operator-token": dashboardToken };
+  const listing = await fetch(base + "/api/state/backups", { headers });
+  assert.equal(listing.status, 503, "backup listing must fail closed when Cloudflare state is not configured");
+  const creation = await fetch(base + "/api/state/backup", { method: "POST", headers });
+  assert.equal(creation.status, 503, "backup creation must fail closed when Cloudflare state is not configured");
+  const restore = await fetch(base + "/api/state/restore", {
+    method: "POST",
+    headers: { ...headers, "content-type": "application/json" },
+    body: JSON.stringify({ backupId: "backup-1", expectedRevision: 1, confirmRestore: true })
+  });
+  assert.equal(restore.status, 503, "restore must fail closed when Cloudflare state is not configured");
+  assert.deepEqual(fs.readFileSync(stateFile), before, "unconfigured backup/restore requests must not alter local state");
+  assert.equal(fs.existsSync(stateFile + ".cloudflare-meta.json"), false, "unconfigured routes must not create remote revision metadata");
+  assert.equal(fs.existsSync(stateFile + ".cloudflare-pending.json"), false, "unconfigured routes must not create pending remote mutations");
 });
