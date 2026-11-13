@@ -1,3 +1,45 @@
+# 13 November 2026 — Cloudflare state-route fail-closed acceptance and current provider check
+
+**Source/test commit:** `82d7382d1ded258ecdf5a94132fea2c003c6d62d`. The API acceptance-matrix update and this checkpoint are documentation-only descendants.  
+**PR #1:** OPEN · DRAFT · UNMERGED. **main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged. **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`.  
+**Branch comparison at source/test commit:** 3,523 ahead / 2 behind · 323 PR files. No main edit, merge, reset, rebase, force-push or destructive reconciliation.
+
+## Owner-independent implementation and exact-source verification
+
+- Added route-specific integration coverage in `test/dashboard-cloudflare-state.integration.test.mjs`. The test verifies that `GET /api/state/backups`, `POST /api/state/backup` and `POST /api/state/restore` each return HTTP 503 when remote Cloudflare state is not configured, while the local state file remains byte-identical and no remote revision/pending metadata is created.
+- The configured test-service path now rejects missing restore confirmation, blank backup IDs, zero/fractional/string expected revisions and stale revisions before any remote restore request. The test counts remote restore calls and confirms only a valid explicitly confirmed restore reaches that endpoint.
+- Updated `docs/API_ROUTE_ACCEPTANCE_MATRIX.json` with the exact source/test SHA and CI evidence. The three Cloudflare routes remain **BLOCKED overall** because authorized Node-to-Worker success, durable persistence, audit, concurrency and restart acceptance still require Cloudflare Access service-token configuration. The route matrix remains 45 protected routes / 45 authentication-negative PASS / 37 overall PASS / 8 BLOCKED. No overall route status was upgraded by negative-path tests.
+- At exact source/test SHA `82d7382d1ded258ecdf5a94132fea2c003c6d62d`:
+  - [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170068): **782/782 Node tests passed, zero failures and zero skips**; log confirms the new no-configuration Cloudflare route test passed.
+  - [Dashboard Chromium E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169911): **29/29 passed**.
+  - [Cloudflare Worker durable-state](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170172): **9/9 passed**.
+  - [Queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170040), [deployment recovery](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170044), [branch inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169973) and [local Nature Frontiers draft validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384169962) passed. Nature Frontiers validation was local-only; no Meta API write occurred.
+  - [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43384170087) remains HOLD/expected fail-closed result.
+  - Automation/security, metadata validation and isolated main/candidate baseline were still running at this checkpoint; no final result is claimed for those runs.
+- The documentation-only matrix descendant triggered a fresh CI batch; those exact-descendant runs were still in progress at the time of this update. The source/test results above are tied to the exact tested source SHA, not inferred from CI on another commit.
+
+## Promotional content, destination and spacing
+
+- The checked-in plan remains eight creator-education Shorts, two each for weeks beginning 9, 16, 23 and 30 November. The two-per-week cap is full for each listed week, so no additional Short was added. All eight remain `DRAFT_ONLY`, with publication and scheduling disabled and no publication timestamps.
+- Metricool exposes one mixed brand labelled Nature Frontiers (`7545638`). Its `youtubeData` is SonicVibes channel `UCSlkuPfHH78oGC1o418HV4w`, matching the read-only vidIQ channel `@sonicvhibez`; Nature Frontiers' own YouTube channel is a different ID, `UC41xXhw22o6Q2I2pTKB2kOg`. The SonicVhibez YouTube identity is matched by channel ID, but there is still no separate SonicVhibez-only Metricool brand. No Metricool write was attempted and no Nature Frontiers social network was used for a SonicVhibez promotion.
+- The current Metricool scheduled-post query returned 20 future records, all `draft=true` and `autoPublish=false`; all 20 have Facebook provider entries and one also has an Instagram provider entry with Instagram auto-publishing false. No YouTube provider row appeared. These Nature Frontiers Facebook/Instagram product-promotion drafts were left unchanged. The endpoint returns scheduled posts only and cannot re-verify previously published posts.
+- Fresh read-only vidIQ inventory for SonicVhibez returned one public Short, zero private and zero unlisted videos, with no scheduledPublishAt value and no next page. The last actual publication is `2026-10-22T15:05:56Z` = **22 October 2026, 17:05:56 SAST**. At 13 November 2026, 09:10:21 SAST, the elapsed interval was **21 days, 16 hours, 4 minutes, 25 seconds**. Metricool returned no YouTube scheduled provider rows. The inspected timestamp interval exceeds 72 hours; no next slot was created. The separate upload-attempt ledger remains a pre-upload reconciliation gate.
+- No final promotional MP4 or thumbnail was verified. HeyGen's previously exhausted monthly free allowance was not bypassed; no paid generation, rendering, upload, publication, live scheduling or account reconnection occurred.
+- vidIQ keyword research was executed for `wildlife documentary shot list`. Current web evidence is qualitative rather than a quoted measured-volume claim: [Adobe's sequence-shot guide](https://www.adobe.com/nl/creativecloud/video/production/cinematography/camera-shots-and-angles/sequence-shot.html) explains wide/medium/close-up sequence planning; [Concolor Media's wildlife-shot guide](https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/) discusses shot-size variation; [Serengeti African Tours](https://serengetiafricantours.com/how-to-film-a-wildlife-documentary-on-your-safari/) covers wildlife sequence planning and ethical filming. The keyword tool balance showed three credits remaining after the research call, below its five-credit call cost; no further keyword-volume claim is made.
+- The exact Selar URLs remain those supplied by the owner. The Vault direct-sales disclosure is owner-approved; the Prompt Pack and 90-Day Blueprint disclosures remain HOLD. The direct Selar pages could not be freshly opened in this run; seller Click 47 was last verified on 9 November, so no fresh seller/listing verification is claimed.
+
+## Remaining release blockers
+
+1. Complete pending/uncertain upload-attempt reconciliation before any authorized upload.
+2. Genuine rights-cleared footage, narration and music; final Short/long-form render manifests, MP4 and thumbnail; human factual, rights, compliance and playback review.
+3. Product-specific viewer-facing disclosure approval for the Prompt Pack and 90-Day Blueprint.
+4. Authenticated Node-to-Cloudflare state access using configured Cloudflare Access service-token credentials; no secrets were requested or entered in chat.
+5. Per-operation private-upload authorization, final secure OAuth/upload receipt verification, and full semantic review of the divergent branch history; branch protection remains unverified because the GitHub protection endpoint is unavailable to this connection.
+
+Public/unattended publishing remains disabled. GitHub scheduled workflows execute from `main`; PR-branch CI is verification evidence, not production automation.
+
+---
+
 # 12 November 2026 — second November 30 creator-education Short and current provider checkpoint
 
 **Branch before this documentation update:** `codex/marketing-machine-audit-fixes` at `7e8bd9b9bb0fbe6505ffde9afa571c8e6e02c0c0`.  
