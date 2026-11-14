@@ -65,12 +65,11 @@ function headers(accessToken, extra = {}) {
 
 /** Verify the user's granted app scopes, exact managed Page, create-content task and matching Page token. */
 export async function verifyMetaPagePermissions({
-  pageId, userAccessToken, pageAccessToken, apiVersion = "v26.0",
+  pageId, userAccessToken, apiVersion = "v26.0",
   fetchImpl = fetch, timeoutMs = 10000
 }) {
   if (!PAGE_ID_PATTERN.test(String(pageId ?? ""))) throw new MetaPageApiError("A numeric owner-specified Page ID is required");
   if (typeof userAccessToken !== "string" || userAccessToken.length < 20) throw new MetaPageApiError("Meta user access token is not configured securely");
-  if (typeof pageAccessToken !== "string" || pageAccessToken.length < 20) throw new MetaPageApiError("Meta Page access token is not configured securely");
   if (!API_VERSION_PATTERN.test(apiVersion)) throw new MetaPageApiError("META_GRAPH_API_VERSION must look like v26.0");
   // Resolve the numeric user ID first. The v26.0 permissions reference documents
   // the edge as /{user-id}/permissions; /me/permissions is rejected as an unknown field.
@@ -129,13 +128,12 @@ export async function verifyMetaPagePermissions({
   const tasks = Array.isArray(page.tasks) ? page.tasks : [];
   if (!tasks.includes("CREATE_CONTENT") && !tasks.includes("MANAGE")) throw new MetaPageApiError("The authorized account lacks the CREATE_CONTENT or MANAGE task for this Page");
   const returnedPageToken = typeof page.access_token === "string" ? page.access_token : "";
-  const tokensMatch = returnedPageToken.length === pageAccessToken.length &&
-    crypto.timingSafeEqual(Buffer.from(returnedPageToken), Buffer.from(pageAccessToken));
-  if (!tokensMatch) throw new MetaPageApiError("The configured Page access token does not match the token returned for this exact Page ID");
+  if (returnedPageToken.length < 20) throw new MetaPageApiError("Meta did not return a usable Page access token for this exact Page ID");
   return {
     verified: true, pageId: page.id, pageName: typeof page.name === "string" ? page.name : null,
     tasks, grantedPermissions: required.filter(permission => granted.has(permission)),
-    permissionsVerified: true, verifiedAt: new Date().toISOString(), apiVersion
+    permissionsVerified: true, pageAccessToken: returnedPageToken,
+    verifiedAt: new Date().toISOString(), apiVersion
   };
 }
 
