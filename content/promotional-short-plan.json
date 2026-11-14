@@ -1092,7 +1092,47 @@
             "Keep the item private and draft-only; no upload or scheduling is authorized.",
             "Before any future schedule, inspect complete SonicVhibez history and destination queue and calculate every gap as at least 72 full hours in Africa/Johannesburg."
           ],
-          "visibility": "private"
+          "visibility": "private",
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-14T09:43:11+02:00",
+            "note": "Current indexed guidance covers wildlife-documentary editing, shot sequencing, narration-led B-roll and natural sound mixing. This is qualitative support for the lesson; the separate measured keyword estimate is from vidIQ.",
+            "sources": [
+              {
+                "title": "How to Edit Nature and Animal Documentary Videos (2026)",
+                "url": "https://umbrellacreators.com/blog/how-to-edit-nature-and-animal-documentary-videos",
+                "whyRelevant": "A recent wildlife-documentary editing guide discusses sequencing, pacing and preserving natural movement, matching the Short's story-and-rhythm passes."
+              },
+              {
+                "title": "Step-By-Step Guide to Editing Animal Sound Effects for Wildlife Documentaries",
+                "url": "https://audioscene.org/article/step-by-step-guide-to-editing-animal-sound-effects-for-wildlife-documentaries",
+                "whyRelevant": "Explains balancing narration, music, ambience and animal sound effects while avoiding over-processing, supporting the sound pass."
+              },
+              {
+                "title": "Zoo Promo: Working with Voice-Over in Premiere Pro",
+                "url": "https://blog.nobledesktop.com/learn/premiere-pro/zoo-promo-working-with-voice-over",
+                "whyRelevant": "Updated in April 2026; covers narration timing, B-roll layering and audio mixing as practical editing workflow components."
+              }
+            ]
+          },
+          "scriptEvidence": [
+            {
+              "title": "How to Edit Nature and Animal Documentary Videos (2026)",
+              "url": "https://umbrellacreators.com/blog/how-to-edit-nature-and-animal-documentary-videos",
+              "whyUsed": "A recent wildlife-documentary editing guide discusses sequencing, pacing and preserving natural movement, matching the Short's story-and-rhythm passes."
+            },
+            {
+              "title": "Step-By-Step Guide to Editing Animal Sound Effects for Wildlife Documentaries",
+              "url": "https://audioscene.org/article/step-by-step-guide-to-editing-animal-sound-effects-for-wildlife-documentaries",
+              "whyUsed": "Explains balancing narration, music, ambience and animal sound effects while avoiding over-processing, supporting the sound pass."
+            },
+            {
+              "title": "Zoo Promo: Working with Voice-Over in Premiere Pro",
+              "url": "https://blog.nobledesktop.com/learn/premiere-pro/zoo-promo-working-with-voice-over",
+              "whyUsed": "Updated in April 2026; covers narration timing, B-roll layering and audio mixing as practical editing workflow components."
+            }
+          ]
         }
       ]
     }
