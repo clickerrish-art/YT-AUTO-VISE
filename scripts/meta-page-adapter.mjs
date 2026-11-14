@@ -63,7 +63,7 @@ function headers(accessToken, extra = {}) {
   return { authorization: "Bearer " + accessToken, accept: "application/json", ...extra };
 }
 
-/** Verify the user's granted app scopes, exact managed Page, create-content task and matching Page token. */
+/** Verify the user's granted app scopes and derive the exact managed Page's runtime access token. */
 export async function verifyMetaPagePermissions({
   pageId, userAccessToken, apiVersion = "v26.0",
   fetchImpl = fetch, timeoutMs = 10000
