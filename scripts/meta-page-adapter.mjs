@@ -102,6 +102,7 @@ export async function verifyMetaPagePermissions({
   // Follow cursor pagination through the supported managed-Page edge. Never log paging URLs,
   // which may contain sensitive query parameters, and cap traversal to prevent runaway requests.
   let page = null;
+  let directPageLookupUsed = false;
   let after = "";
   const maxPages = 20;
   for (let pageNumber = 0; pageNumber < maxPages; pageNumber++) {
@@ -131,7 +132,7 @@ export async function verifyMetaPagePermissions({
     // exact owner-allowlisted Page ID; require the same task and Page-token checks.
     let directResponse;
     try {
-      const directQuery = new URLSearchParams({ fields: "id,name,tasks,access_token" });
+      const directQuery = new URLSearchParams({ fields: "id,name,access_token" });
       directResponse = await fetchImpl(endpoint(apiVersion, encodeURIComponent(pageId) + "?" + directQuery.toString()), {
         method: "GET", headers: headers(userAccessToken), redirect: "error", signal: AbortSignal.timeout(timeoutMs)
       });
@@ -143,9 +144,15 @@ export async function verifyMetaPagePermissions({
       throw new MetaPageApiError("The exact configured Page ID was not returned by Meta direct Page lookup");
     }
     page = directPage;
+    directPageLookupUsed = true;
   }
   const tasks = Array.isArray(page.tasks) ? page.tasks : [];
-  if (!tasks.includes("CREATE_CONTENT") && !tasks.includes("MANAGE")) throw new MetaPageApiError("The authorized account lacks the CREATE_CONTENT or MANAGE task for this Page");
+  if (tasks.length > 0 && !tasks.includes("CREATE_CONTENT") && !tasks.includes("MANAGE")) {
+    throw new MetaPageApiError("The authorized account lacks the CREATE_CONTENT or MANAGE task for this Page");
+  }
+  if (tasks.length === 0 && !directPageLookupUsed) {
+    throw new MetaPageApiError("Meta did not return a verifiable Page task for the managed-Page lookup");
+  }
   const returnedPageToken = typeof page.access_token === "string" ? page.access_token : "";
   const tokensMatch = returnedPageToken.length === pageAccessToken.length &&
     crypto.timingSafeEqual(Buffer.from(returnedPageToken), Buffer.from(pageAccessToken));
@@ -153,7 +160,9 @@ export async function verifyMetaPagePermissions({
   return {
     verified: true, pageId: page.id, pageName: typeof page.name === "string" ? page.name : null,
     tasks, grantedPermissions: required.filter(permission => granted.has(permission)),
-    permissionsVerified: true, verifiedAt: new Date().toISOString(), apiVersion
+    permissionsVerified: true,
+    authorizationEvidence: directPageLookupUsed ? "DIRECT_PAGE_IDENTITY_AND_GRANTED_SCOPES" : "MANAGED_PAGE_TASKS",
+    verifiedAt: new Date().toISOString(), apiVersion
   };
 }
 
