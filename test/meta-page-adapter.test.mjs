@@ -313,7 +313,7 @@ test("Meta permission verification falls back to exact direct Page lookup when /
         { permission: "pages_manage_posts", status: "granted" }
       ] });
       if (String(url).includes("/me/accounts?")) return response({ data: [] });
-      if (String(url).includes("/" + PAGE_ID + "?fields=id%2Cname%2Ctasks%2Caccess_token")) {
+      if (String(url).includes("/" + PAGE_ID + "?fields=id%2Cname%2Caccess_token")) {
         return response({ id: PAGE_ID, name: "Nature Frontiers", tasks: ["CREATE_CONTENT"], access_token: TOKEN });
       }
       throw new Error("Unexpected Meta endpoint: " + url);
@@ -322,7 +322,8 @@ test("Meta permission verification falls back to exact direct Page lookup when /
   assert.equal(result.verified, true);
   assert.equal(result.pageId, PAGE_ID);
   assert.equal(result.pageName, "Nature Frontiers");
-  assert.deepEqual(result.tasks, ["CREATE_CONTENT"]);
+  assert.deepEqual(result.tasks, []);
+  assert.equal(result.authorizationEvidence, "DIRECT_PAGE_IDENTITY_AND_GRANTED_SCOPES");
   assert.equal(calls.length, 4);
   assert.ok(calls.every(call => call.options.redirect === "error"));
   assert.ok(calls.every(call => !call.url.includes(userToken) && !call.url.includes(TOKEN)));
