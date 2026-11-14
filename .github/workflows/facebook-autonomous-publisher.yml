@@ -20,7 +20,6 @@ jobs:
     runs-on: [self-hosted, linux, facebook-publisher]
     timeout-minutes: 10
     env:
-      FACEBOOK_STATE_DIR: ${{ vars.FACEBOOK_STATE_DIR }}
       FACEBOOK_AUTONOMOUS_QUEUE_PATH: ${{ vars.FACEBOOK_AUTONOMOUS_QUEUE_PATH }}
       NATURE_FRONTIERS_FACEBOOK_PAGE_ID: ${{ vars.NATURE_FRONTIERS_FACEBOOK_PAGE_ID }}
       # Fail-closed at workflow level; live publishing needs a separate reviewed change and authorization.
@@ -32,6 +31,22 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
+      - name: Initialize persistent, private Facebook state directory
+        env:
+          FACEBOOK_STATE_DIR_OVERRIDE: ${{ vars.FACEBOOK_STATE_DIR }}
+        run: |
+          state_dir="${FACEBOOK_STATE_DIR_OVERRIDE:-$HOME/.local/state/nature-frontiers-facebook}"
+          case "$state_dir" in
+            /*) ;;
+            *) echo "FACEBOOK_STATE_DIR must be an absolute path"; exit 1 ;;
+          esac
+          mkdir -p "$state_dir"
+          chmod 700 "$state_dir"
+          if [ -L "$state_dir" ] || [ ! -d "$state_dir" ]; then
+            echo "Facebook state directory must be a real directory, not a symlink."
+            exit 1
+          fi
+          printf 'FACEBOOK_STATE_DIR=%s\n' "$state_dir" >> "$GITHUB_ENV"
       - name: Install locked dependencies without lifecycle scripts
         run: npm ci --ignore-scripts
       - name: Validate and enqueue evidence-complete candidates
