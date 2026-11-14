@@ -1552,6 +1552,105 @@ test("R2 completion returns idempotent READY when a concurrent D1 compare-and-se
   assert.equal(deletes, 0, "a concurrent successful completion must not delete the valid R2 object");
 });
 
+test("retry reconciles a completed R2 object after the first D1 READY write throws", async () => {
+  const fixture = await createRunnerOidcFixture();
+  const artifact = {
+    artifact_id: "55555555-5555-4555-8555-555555555555",
+    upload_id: "upload-ledger-write-failure",
+    object_key: "jobs/job-ledger-failure/" + "e".repeat(64) + "/video.mp4",
+    size_bytes: 5,
+    expected_parts: 1,
+    status: "UPLOADING",
+    sha256: "e".repeat(64),
+    job_id: "job-ledger-failure",
+    source_path: "media/ledger-failure-video.mp4",
+    artifact_kind: "video",
+    etag: null,
+    completed_at: null
+  };
+  const object = {
+    size: 5,
+    httpEtag: "completed-r2-object-etag",
+    customMetadata: {
+      jobId: artifact.job_id,
+      sourcePath: artifact.source_path,
+      artifactKind: artifact.artifact_kind,
+      sha256: artifact.sha256
+    }
+  };
+  let failFirstLedgerWrite = true;
+  let completedObject = null;
+  let completeCalls = 0;
+  const database = {
+    prepare(sql) {
+      return {
+        args: [],
+        bind(...args) { this.args = args; return this; },
+        async first() {
+          if (sql.includes("SELECT status, etag, completed_at FROM runner_artifacts")) {
+            return { status: artifact.status, etag: artifact.etag, completed_at: artifact.completed_at };
+          }
+          if (sql.includes("FROM runner_artifacts WHERE artifact_id")) return { ...artifact };
+          return null;
+        },
+        async all() {
+          if (sql.includes("FROM runner_artifact_parts")) {
+            return { results: [{ part_number: 1, etag: "part-etag" }] };
+          }
+          return { results: [] };
+        },
+        async run() {
+          if (sql.startsWith("UPDATE runner_artifacts SET status = 'READY'")) {
+            if (failFirstLedgerWrite) {
+              failFirstLedgerWrite = false;
+              throw new Error("simulated D1 write interruption after R2 completion");
+            }
+            Object.assign(artifact, {
+              status: "READY",
+              etag: this.args[0],
+              completed_at: this.args[1]
+            });
+            return { meta: { changes: 1 } };
+          }
+          return { meta: { changes: 1 } };
+        }
+      };
+    }
+  };
+  const env = {
+    STATE_DB: database,
+    ARTIFACTS: {
+      resumeMultipartUpload() {
+        return {
+          async complete() {
+            completeCalls += 1;
+            if (completedObject) throw new Error("multipart upload was already completed");
+            completedObject = object;
+            return object;
+          }
+        };
+      },
+      async get() { return completedObject; }
+    }
+  };
+  const request = () => handleRequest(new Request("https://state.example/api/runner/artifacts/complete", {
+    method: "POST",
+    headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
+    body: JSON.stringify({ artifactId: artifact.artifact_id })
+  }), env, fixture);
+
+  await assert.rejects(request(), /simulated D1 write interruption/);
+  assert.equal(artifact.status, "UPLOADING", "a failed D1 write must leave the artifact quarantined");
+  const retry = await request();
+  assert.equal(retry.status, 201);
+  const body = await retry.json();
+  assert.equal(body.status, "READY");
+  assert.equal(body.reconciled, true);
+  assert.equal(artifact.status, "READY");
+  assert.equal(artifact.etag, object.httpEtag);
+  assert.equal(completeCalls, 2, "the retry must reconcile the existing object rather than start another upload");
+});
+
 test("simultaneous R2 artifact completion requests converge on one READY ledger receipt", async () => {
   const fixture = await createRunnerOidcFixture();
   const artifact = {
