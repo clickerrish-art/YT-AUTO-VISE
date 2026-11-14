@@ -125,7 +125,25 @@ export async function verifyMetaPagePermissions({
     }
     after = nextAfter;
   }
-  if (!page) throw new MetaPageApiError("The configured Page ID was not found in the bounded managed-Page lookup");
+  if (!page) {
+    // Some Meta account configurations expose a Page to the authorized user token
+    // through the Page object while omitting it from /me/accounts. Resolve only the
+    // exact owner-allowlisted Page ID; require the same task and Page-token checks.
+    let directResponse;
+    try {
+      const directQuery = new URLSearchParams({ fields: "id,name,tasks,access_token" });
+      directResponse = await fetchImpl(endpoint(apiVersion, encodeURIComponent(pageId) + "?" + directQuery.toString()), {
+        method: "GET", headers: headers(userAccessToken), redirect: "error", signal: AbortSignal.timeout(timeoutMs)
+      });
+    } catch {
+      throw new MetaPageApiError("Meta direct Page lookup failed before a response; publishing remains blocked", { retryable: true });
+    }
+    const directPage = await parseResponse(directResponse, userAccessToken);
+    if (directPage?.id !== pageId) {
+      throw new MetaPageApiError("The exact configured Page ID was not returned by Meta direct Page lookup");
+    }
+    page = directPage;
+  }
   const tasks = Array.isArray(page.tasks) ? page.tasks : [];
   if (!tasks.includes("CREATE_CONTENT") && !tasks.includes("MANAGE")) throw new MetaPageApiError("The authorized account lacks the CREATE_CONTENT or MANAGE task for this Page");
   const returnedPageToken = typeof page.access_token === "string" ? page.access_token : "";
