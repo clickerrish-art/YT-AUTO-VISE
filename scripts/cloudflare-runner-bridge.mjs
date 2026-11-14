@@ -5,6 +5,7 @@ import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { atomicWriteJson } from "./atomic-json-file.mjs";
 import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
+import { buildCloudflareAccessHeaders } from "./cloudflare-access-auth.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const workerId = process.env.DASHBOARD_WORKER_ID ?? "sonicvhibez-render-worker";
@@ -54,10 +55,12 @@ async function getOidcToken() {
 
 async function requestJson(route, options = {}) {
   const origin = configuration();
+  const accessHeaders = buildCloudflareAccessHeaders();
   const oidcToken = await getOidcToken();
   const response = await fetch(origin + route, {
     ...options,
     headers: {
+      ...accessHeaders,
       accept: "application/json",
       "content-type": "application/json",
       authorization: "Bearer " + oidcToken,
