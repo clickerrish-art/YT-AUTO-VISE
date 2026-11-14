@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
-export const FACEBOOK_POLICY_RULE_VERSION = "nf-facebook-autonomous-policy-2026-10-v3";
+export const FACEBOOK_POLICY_RULE_VERSION = "nf-facebook-autonomous-policy-2026-11-v4";
 export const APPROVED_SELLAR_URL = "https://selar.com/0u19v8u99l";
 const sha256 = value => crypto.createHash("sha256").update(value).digest("hex");
 const text = value => typeof value === "string" && value.trim().length > 0;
