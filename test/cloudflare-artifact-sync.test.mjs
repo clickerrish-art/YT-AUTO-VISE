@@ -45,9 +45,16 @@ globalThis.fetch = async (input, init = {}) => {
   fs.appendFileSync(tracePath, method + " " + url.pathname + url.search + "\\n");
 
   if (url.hostname === "token.actions.githubusercontent.com") {
-    return json({ value: "x".repeat(160) });
+    const header = Buffer.from(JSON.stringify({ alg: "RS256", typ: "JWT" })).toString("base64url");
+    const claims = Buffer.from(JSON.stringify({ exp: Math.floor(Date.now() / 1000) + 300 })).toString("base64url");
+    const signature = Buffer.alloc(100, 7).toString("base64url");
+    return json({ value: header + "." + claims + "." + signature });
   }
   if (!url.hostname.endsWith(".workers.dev")) return originalFetch(input, init);
+  if (init.headers?.["cf-access-client-id"] !== process.env.DASHBOARD_STATE_ACCESS_CLIENT_ID ||
+      init.headers?.["cf-access-client-secret"] !== process.env.DASHBOARD_STATE_ACCESS_CLIENT_SECRET) {
+    return json({ error: "Cloudflare Access service-token headers are missing" }, 401);
+  }
 
   if (url.pathname === "/api/runner/artifacts" && method === "GET") {
     return json({ artifacts: [] });
@@ -95,6 +102,8 @@ globalThis.fetch = async (input, init = {}) => {
     ACTIONS_ID_TOKEN_REQUEST_URL: "https://token.actions.githubusercontent.com/_services/token",
     ACTIONS_ID_TOKEN_REQUEST_TOKEN: "test-actions-oidc-request-token",
     DASHBOARD_API_URL: "https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev",
+    DASHBOARD_STATE_ACCESS_CLIENT_ID: "test-service-token-id.access",
+    DASHBOARD_STATE_ACCESS_CLIENT_SECRET: "test-service-token-secret",
     DASHBOARD_WORKER_ID: "sync-test-worker",
     DASHBOARD_STATE_DIR: directory,
     MOCK_TRACE_FILE: tracePath,
