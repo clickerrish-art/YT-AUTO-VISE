@@ -320,7 +320,9 @@ test("December 7 wildlife video-editing Short uses fresh vidIQ estimates and the
   assert.match(item.description, /^Wildlife video editing/);
   assert.match(item.description, /^ADVERTISEMENT$/m);
   assert.ok(item.description.includes(product.promotionGate.disclosure.text));
-  assert.equal(item.script.trim().split(/\s+/).filter(Boolean).length, 126);
+  assert.equal(item.script.trim().split(/\s+/).filter(Boolean).length, 128);
+  assert.ok(item.script.includes('You can explore the Complete YouTube Wildlife Creator’s Vault using the link in the description.'));
+  assert.equal(item.script.includes('is a planning resource'), false);
   assert.equal(item.currentIntentEvidence.provider, "web_search");
   assert.equal(item.currentIntentEvidence.sources.length, 3);
   assert.ok(item.scriptEvidence.every(source => source.url.startsWith("https://")));
