@@ -1,0 +1,113 @@
+name: Generate free SonicVhibez Short narration artifacts
+
+on:
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - "content/narration-master-short-001-and-002.md"
+      - "scripts/generate-narration.py"
+      - "tests/test_generate_narration.py"
+      - ".github/workflows/short-narration-artifact.yml"
+  workflow_dispatch:
+    inputs:
+      short:
+        description: Which narration to generate
+        required: true
+        type: choice
+        options: [both, short-001, short-002]
+        default: both
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sonicvhibez-short-narration-artifact
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install free Edge TTS client
+        run: python -m pip install --disable-pip-version-check --retries 3 --timeout 30 edge-tts
+      - name: Ensure ffprobe is available
+        run: |
+          if ! command -v ffprobe >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
+          ffprobe -version
+      - name: Run narration extraction and caption unit tests
+        run: |
+          python -m unittest discover -s tests -p 'test_generate_narration.py' -v
+          python scripts/generate-narration.py --short both --extract-only
+      - name: Generate audio and word-boundary captions
+        env:
+          SELECTED_SHORT: ${{ github.event.inputs.short || 'both' }}
+        run: python scripts/generate-narration.py --short "$SELECTED_SHORT" --voice en-US-GuyNeural --rate=+0%
+      - name: Validate SRT structure and safety metadata
+        run: |
+          python - <<'PY'
+          import json, re
+          from pathlib import Path
+          root = Path("media/narration")
+          summary = json.loads((root / "generation-summary.json").read_text())
+          items = summary.get("items", [])
+          if not items:
+              raise SystemExit("No narration artifacts were generated")
+          for item in items:
+              stem = f"{item['shortId']}-{item['voice']}"
+              files = [root / f"{stem}.{ext}" for ext in ("mp3", "srt", "txt", "json")]
+              if not all(p.is_file() and p.stat().st_size for p in files):
+                  raise SystemExit(f"Missing or empty narration artifact: {stem}")
+              srt = files[1].read_text(encoding="utf-8")
+              blocks = re.split(r"\n\s*\n", srt.strip())
+              previous_end = 0
+              for index, block in enumerate(blocks, 1):
+                  lines = block.splitlines()
+                  if len(lines) < 3 or lines[0] != str(index):
+                      raise SystemExit(f"Invalid SRT cue sequence: {stem}")
+                  match = re.fullmatch(r"(\d{2}):(\d{2}):(\d{2}),(\d{3}) --> (\d{2}):(\d{2}):(\d{2}),(\d{3})", lines[1])
+                  if not match:
+                      raise SystemExit(f"Invalid SRT timestamp: {stem}")
+                  n = list(map(int, match.groups()))
+                  start = ((n[0]*60+n[1])*60+n[2])*1000+n[3]
+                  end = ((n[4]*60+n[5])*60+n[6])*1000+n[7]
+                  if start < previous_end or end <= start or not " ".join(lines[2:]).strip():
+                      raise SystemExit(f"Invalid/overlapping SRT cue: {stem}")
+                  previous_end = end
+              report = json.loads(files[3].read_text())
+              if report.get("captionTiming") != "TTS_WORD_BOUNDARIES" or report.get("rightsStatus") != "NOT_VERIFIED" or report.get("publishingEnabled") is not False:
+                  raise SystemExit(f"Unsafe narration report: {stem}")
+              print(f"{item['shortId']}: {item['durationSeconds']}s; {item['wordBoundaryCount']} word boundaries; {len(blocks)} cues; 50–60s target={item['withinTargetDuration']}")
+          PY
+      - name: Upload review-only narration artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-short-narration-review
+          path: |
+            media/narration/*.mp3
+            media/narration/*.srt
+            media/narration/*.txt
+            media/narration/*.json
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Enforce 50–60 second target after preserving artifact
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          summary = Path("media/narration/generation-summary.json")
+          if not summary.is_file():
+              raise SystemExit("BLOCKED: narration summary is missing")
+          items = json.loads(summary.read_text()).get("items", [])
+          if not items or any(x.get("withinTargetDuration") is not True for x in items):
+              raise SystemExit("REVIEW REQUIRED: artifact retained; adjust narration wording or natural pauses, not artificial time-stretching.")
+          print("PASS: all Short narration drafts meet 50–60 seconds. Human review and rights checks remain required.")
+          PY

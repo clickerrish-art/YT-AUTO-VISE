@@ -1,6 +1,5 @@
 name: Validate SonicVhibez metadata
 on:
-  push:
   pull_request:
   workflow_dispatch:
 permissions:
@@ -8,19 +7,70 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
         with:
-          node-version: 20
-      - run: npm install --ignore-scripts
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      - name: Install FFmpeg for renderer integration tests
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            timeout 600s sudo apt-get update -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30
+            timeout 900s sudo apt-get install -y --no-install-recommends -o Acquire::Retries=3 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 ffmpeg
+          else
+            echo "FFmpeg and ffprobe are already available; skipping package installation."
+          fi
+          ffmpeg -version
+          ffprobe -version
       - run: node --check scripts/render-long-form.mjs
       - run: node --check test/render-long-form.test.mjs
       - run: node --check scripts/validate-asset-register.mjs
       - run: node --check test/validate-asset-register.test.mjs
-      - run: npm test
+      - run: node --check scripts/validate-schedule.mjs
+      - name: Run tests and require zero skips
+        shell: bash
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee "$RUNNER_TEMP/node-test.log"
+          if ! grep -Fq 'ℹ skipped 0' "$RUNNER_TEMP/node-test.log"; then
+            echo "FAIL: Node test summary did not explicitly report zero skips."
+            exit 1
+          fi
+      - name: Confirm default metadata checker fails closed until all production gates pass
+        run: |
+          set +e
+          output=$(npm run check 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          if [ "$status" -eq 0 ]; then
+            echo "BLOCKED: default metadata checker unexpectedly passed without a reviewed production metadata file."
+            exit 1
+          fi
+          if { [ "$status" -ne 1 ] && [ "$status" -ne 2 ]; } || ! printf '%s' "$output" | grep -Fq 'BLOCKED'; then
+            echo "BLOCKED: npm run check failed for an unexpected reason (exit $status)."
+            exit 1
+          fi
+          echo "PASS: npm run check fails closed because the checked-in metadata does not satisfy all current production gates."
+      - name: Validate authoritative draft schedule
+        run: npm run validate:schedule
       - name: Report production blockers without publishing
-        run: npm run readiness
+        run: |
+          set +e
+          output=$(npm run readiness 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          if [ "$status" -ne 2 ] || ! printf '%s' "$output" | grep -Fq 'HOLD:'; then
+            echo "BLOCKED: readiness must exit 2 and report HOLD while mandatory production gates are unresolved."
+            exit 1
+          fi
+          echo "PASS: readiness reports the current blockers and exits non-zero; production is not accepted."
       - name: Validate timed subtitle drafts
         run: npm run check:captions
       - name: Ensure all unreviewed metadata examples are blocked

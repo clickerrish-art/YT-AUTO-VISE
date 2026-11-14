@@ -1,58 +1,22 @@
 # Narration master — SonicVhibez Shorts
 
-These reads are written to follow the current 55-second subtitle drafts. Timing is approximate; the final editor must align captions to the recorded audio. Voice direction: friendly, clear, natural American male voice, conversational rather than salesy. Aim for an unhurried documentary pace and leave short pauses between ideas.
+These reads target 50–60 seconds. Timing is approximate; the final editor must align captions to the recorded audio. The owner approved this exact Selar direct-sales disclosure on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Use it verbatim in spoken audio and as readable on-screen text immediately alongside the product CTA. Keep YouTube’s paid-promotion declaration enabled. All generated audio remains review-only until human review; no rights or publication approval is implied. Voice direction: friendly, clear, natural American male voice, conversational rather than salesy. Aim for an unhurried documentary pace and leave short pauses between ideas. Performance note: show the exact approved disclosure as readable, high-contrast on-screen text at the product CTA; captions must match the spoken words.
 
 ## Short 001 — How to Make Better Wildlife Videos for YouTube
 
 **Read:**
 
-Want better wildlife videos?
+Want better wildlife videos? Start with one clear story, not a pile of random animal clips. Choose one question your footage can actually answer. Plan three shots: a wide habitat view, a meaningful detail, and the behavior itself. Keep separate moments in their original recorded order; label any reconstruction clearly. Keep a safe distance. Never bait, chase, or disturb wildlife. Use patient observation and steady framing; let natural movement tell the story. Edit out pauses that add no information. Add readable captions and only music you have permission to use. Finish with one useful takeaway. For more wildlife creator planning, review the Complete YouTube Wildlife Creator's Vault. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.
 
-Start with one clear story, not a collection of random animal clips.
-
-First, choose a question: what behavior will viewers discover?
-
-Next, plan three shots: a wide view, a closer detail, and the behavior itself.
-
-Keep a safe distance. Never bait, chase, or disturb wildlife just to get a shot.
-
-Let natural movement tell the story. Use steady framing and patient observation.
-
-Then edit tightly. Remove pauses that don't add information.
-
-Add readable captions and only music you have permission to use.
-
-Finish with one useful takeaway so viewers leave having learned something.
-
-Build your next wildlife video with a plan. Find the Wildlife Creator's Vault at the link in the description.
-
-**Performance notes:** Brief pause after the opening question. Emphasize “safe distance” without sounding alarmist. Keep the product mention matter-of-fact.
+**Performance notes:** Brief pause after the opening question. Emphasize “safe distance” without sounding alarmist. Keep the product mention matter-of-fact. Show a clear “ADVERTISEMENT” identifier at the start of the promotional segment, then display the exact approved direct-sales disclosure clearly on screen while it is spoken.
 
 ## Short 002 — 3 Steps to Plan a Wildlife Documentary Short
 
 **Read:**
 
-Planning a wildlife documentary Short?
+Planning a wildlife documentary Short? Plan three things before editing. First, choose one subject and one question: how does it feed, move, communicate, or care for its young? Describe only what your footage shows. Second, build a simple story: open with the question, add habitat context, then show the behavior. Keep separate clips in their real sequence. Third, check every asset. Confirm footage and music rights, fact-check each claim, and keep captions readable on a phone. Record each clip's source and what it shows. Record each clip's location, date, source, and any detail that still needs checking. Review the Complete YouTube Wildlife Creator's Vault for more wildlife creator planning. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. Link below.
 
-Use three simple steps before you start editing.
-
-Step one: choose one subject and one question your video will answer.
-
-Maybe it's how an animal finds food, communicates, or adapts to its habitat.
-
-Step two: map the story. Open with a hook, show the behavior, then explain why it matters.
-
-Choose footage that supports each beat. Don't imply that separate clips happened at the same moment.
-
-Step three: check every asset. Confirm footage, music, and image rights before publishing.
-
-Keep narration clear, captions readable, and every claim supported.
-
-A focused story is easier to follow than a rushed list of facts.
-
-Plan your next wildlife Short with confidence. The Wildlife Creator's Vault is linked in the description.
-
-**Performance notes:** Make each step distinct, but keep the delivery warm and steady. Do not add claims about guaranteed growth or results.
+**Performance notes:** Make each step distinct, but keep the delivery warm and steady. Do not add claims about guaranteed growth or results. Show a clear ADVERTISEMENT identifier at the start of the promotional segment, then display the exact approved direct-sales disclosure clearly on screen while it is spoken.
 
 ## Recording and finalization checklist
 

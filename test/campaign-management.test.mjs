@@ -1,0 +1,164 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import crypto from "node:crypto";
+import { manageCampaign } from "../scripts/campaign-management.mjs";
+import { validateCampaigns } from "../scripts/validate-campaigns.mjs";
+import fs from "node:fs";
+
+const baseline = JSON.parse(fs.readFileSync(new URL("../config/campaigns.json", import.meta.url), "utf8"));
+const operator = "owner@example.test";
+
+test("Safari requires HTTPS preview but activation remains prohibited by project policy", () => {
+  const id = baseline.campaigns.find(c => c.type === "safari_affiliate").id;
+  assert.throws(() => manageCampaign(baseline, { campaignId: id, action: "activate", confirmOwnerApproval: true }, operator), /Safari affiliate campaigns are disabled.*remain INACTIVE/);
+  assert.throws(() => manageCampaign(baseline, { campaignId: id, action: "preview", destinationUrl: "http://example.com", disclosureText: "Affiliate disclosure applies" }, operator), /HTTPS/);
+  const preview = manageCampaign(baseline, { campaignId: id, action: "preview", destinationUrl: "https://example.com/stay", disclosureText: "I may earn a commission from eligible bookings." }, operator);
+  assert.equal(preview.previewOnly, true);
+  assert.equal(preview.config.campaigns.find(c => c.id === id).status, "INACTIVE");
+  assert.throws(() => manageCampaign(preview.config, { campaignId: id, action: "activate", confirmOwnerApproval: true }, operator, "2026-10-23T12:00:00Z"),
+    /Safari affiliate campaigns are disabled.*remain INACTIVE/);
+  assert.deepEqual(validateCampaigns(preview.config), []);
+});
+
+test("Safari deactivation clears pending destination and approval data", () => {
+  const id = baseline.campaigns.find(c => c.type === "safari_affiliate").id;
+  const preview = manageCampaign(baseline, { campaignId: id, action: "preview", destinationUrl: "https://example.com/stay", disclosureText: "I may earn a commission from eligible bookings." }, operator);
+  const inactive = manageCampaign(preview.config, { campaignId: id, action: "deactivate" }, operator);
+  assert.equal(inactive.campaign.destinationUrl, "");
+  assert.equal(inactive.campaign.ownerApproved, false);
+  assert.equal(inactive.campaign.status, "INACTIVE");
+  assert.equal(Object.hasOwn(inactive.campaign, "pendingDestinationUrl"), false);
+  assert.equal(Object.hasOwn(inactive.campaign, "pendingDisclosureText"), false);
+  assert.deepEqual(validateCampaigns(inactive.config), []);
+});
+
+test("Selar campaign rejects generic wording that hides the owner's direct-sales relationship", () => {
+  const id = baseline.campaigns.find(c => c.type === "selar_digital_product").id;
+  assert.throws(() => manageCampaign(baseline, {
+    campaignId: id,
+    action: "preview",
+    destinationUrl: "https://selar.com/0u19v8u99l",
+    disclosureText: "Promotional link: product details and current terms are available on the seller page."
+  }, operator), /own business and direct sales revenue/);
+  const invalid = structuredClone(baseline);
+  invalid.campaigns.find(c => c.id === id).compensationType = "affiliate";
+  assert.ok(validateCampaigns(invalid).some(error => /direct sales revenue/i.test(error)));
+});
+
+test("Selar URL cannot be edited and campaign activation remains draft-only", () => {
+  const id = baseline.campaigns.find(c => c.type === "selar_digital_product").id;
+  assert.throws(() => manageCampaign(baseline, { campaignId: id, action: "activate", destinationUrl: "https://example.com", disclosureText: "Promotional link" }, operator), /exactly match/);
+  const disclosureText = "This product is sold through my own Selar business; purchases generate revenue for my business.";
+  assert.throws(() => manageCampaign(baseline, {
+    campaignId: id, action: "activate", destinationUrl: "https://selar.com/0u19v8u99l", disclosureText, confirmOwnerApproval: true
+  }, operator), /Preview the exact destination and disclosure before activation/);
+  const preview = manageCampaign(baseline, {
+    campaignId: id, action: "preview", destinationUrl: "https://selar.com/0u19v8u99l", disclosureText
+  }, operator);
+  assert.throws(() => manageCampaign(preview.config, {
+    campaignId: id, action: "activate", destinationUrl: "https://selar.com/0u19v8u99l", disclosureText
+  }, operator), /Explicit owner approval/);
+  assert.throws(() => manageCampaign(preview.config, {
+    campaignId: id, action: "activate", destinationUrl: "https://selar.com/0u19v8u99l", disclosureText: disclosureText + " changed", confirmOwnerApproval: true
+  }, operator), /Preview the exact destination and disclosure before activation/);
+  const result = manageCampaign(preview.config, {
+    campaignId: id, action: "activate", destinationUrl: "https://selar.com/0u19v8u99l", disclosureText, confirmOwnerApproval: true
+  }, operator);
+  assert.equal(result.campaign.destinationUrl, "https://selar.com/0u19v8u99l");
+  assert.equal(result.campaign.status, "ACTIVE_FOR_DRAFTS_ONLY");
+  assert.equal(result.campaign.disclosureApprovalStatus, "OWNER_APPROVED");
+  assert.equal(result.campaign.approval.approvedBy, operator);
+  assert.deepEqual(validateCampaigns(result.config), []);
+});
+
+
+test("Selar preview persists pending destination and disclosure without changing the approved campaign", () => {
+  const id = baseline.campaigns.find(c => c.type === "selar_digital_product").id;
+  const original = structuredClone(baseline.campaigns.find(c => c.id === id));
+  const disclosure = "  This product is sold through my own Selar business; purchases generate revenue for my business.  ";
+  const result = manageCampaign(baseline, {
+    campaignId: id,
+    action: "preview",
+    destinationUrl: "https://selar.com/0u19v8u99l",
+    disclosureText: disclosure
+  }, operator);
+
+  const saved = result.config.campaigns.find(c => c.id === id);
+  assert.equal(result.previewOnly, true);
+  assert.equal(saved.pendingDestinationUrl, "https://selar.com/0u19v8u99l");
+  assert.equal(saved.pendingDisclosureText, disclosure.trim());
+  assert.match(saved.pendingDestinationVersion, /^[a-f0-9]{64}$/);
+  assert.equal(saved.pendingDestinationVersion, crypto.createHash("sha256").update("https://selar.com/0u19v8u99l\n" + disclosure.trim()).digest("hex"));
+  assert.equal(saved.destinationUrl, original.destinationUrl);
+  assert.equal(saved.disclosureText, original.disclosureText);
+  assert.deepEqual(saved.approval, original.approval);
+  assert.deepEqual(baseline.campaigns.find(c => c.id === id), original, "preview must not mutate the caller's source configuration");
+  assert.deepEqual(validateCampaigns(result.config), []);
+});
+
+test("Selar activation applies the submitted disclosure and clears the pending preview", () => {
+  const id = baseline.campaigns.find(c => c.type === "selar_digital_product").id;
+  const disclosure = "This product is sold through my own Selar business; purchases generate revenue for my business.";
+  const preview = manageCampaign(baseline, {
+    campaignId: id,
+    action: "preview",
+    destinationUrl: "https://selar.com/0u19v8u99l",
+    disclosureText: disclosure
+  }, operator);
+  const activated = manageCampaign(preview.config, {
+    campaignId: id,
+    action: "activate",
+    destinationUrl: "https://selar.com/0u19v8u99l",
+    disclosureText: disclosure,
+    confirmOwnerApproval: true
+  }, operator, "2026-10-30T12:00:00Z");
+  assert.equal(activated.campaign.disclosureText, disclosure);
+  assert.equal(Object.hasOwn(activated.campaign, "pendingDestinationUrl"), false);
+  assert.equal(Object.hasOwn(activated.campaign, "pendingDisclosureText"), false);
+  assert.equal(Object.hasOwn(activated.campaign, "pendingDestinationVersion"), false);
+  assert.deepEqual(validateCampaigns(activated.config), []);
+});
+
+
+test("Selar deactivation discards an unapproved pending preview", () => {
+  const id = baseline.campaigns.find(c => c.type === "selar_digital_product").id;
+  const preview = manageCampaign(baseline, {
+    campaignId: id,
+    action: "preview",
+    destinationUrl: "https://selar.com/0u19v8u99l",
+    disclosureText: "This product is sold through my own Selar business; purchases generate revenue for my business."
+  }, operator);
+  assert.ok(preview.campaign.pendingDestinationVersion);
+  const inactive = manageCampaign(preview.config, { campaignId: id, action: "deactivate" }, operator);
+  assert.equal(inactive.campaign.status, "INACTIVE");
+  assert.equal(Object.hasOwn(inactive.campaign, "pendingDestinationUrl"), false);
+  assert.equal(Object.hasOwn(inactive.campaign, "pendingDisclosureText"), false);
+  assert.equal(Object.hasOwn(inactive.campaign, "pendingDestinationVersion"), false);
+  assert.deepEqual(validateCampaigns(inactive.config), []);
+});
+
+
+test("generic external affiliate preview and activation are bound to exact destination and disclosure", () => {
+  const id = baseline.campaigns.find(c => c.type === "affiliate").id;
+  const destinationUrl = "https://affiliate.example/serengeti?ref=sonicvhibez";
+  const disclosureText = "I may earn a commission if you book through this affiliate link.";
+  assert.throws(() => manageCampaign(baseline, { campaignId: id, action: "preview", destinationUrl: "http://affiliate.example/serengeti", disclosureText }, operator), /HTTPS/);
+  const preview = manageCampaign(baseline, { campaignId: id, action: "preview", destinationUrl, disclosureText }, operator);
+  assert.equal(preview.previewOnly, true);
+  assert.equal(preview.campaign.status, "INACTIVE");
+  assert.equal(preview.campaign.pendingDestinationUrl, destinationUrl);
+  assert.throws(() => manageCampaign(preview.config, { campaignId: id, action: "activate", destinationUrl, disclosureText }, operator), /Explicit owner approval/);
+  assert.throws(() => manageCampaign(preview.config, { campaignId: id, action: "activate", destinationUrl, disclosureText: disclosureText + " changed", confirmOwnerApproval: true }, operator), /pending preview must match/);
+  const activated = manageCampaign(preview.config, { campaignId: id, action: "activate", destinationUrl, disclosureText, confirmOwnerApproval: true }, operator, "2026-11-09T10:00:00Z");
+  assert.equal(activated.campaign.status, "ACTIVE_FOR_DRAFTS_ONLY");
+  assert.equal(activated.campaign.compensationType, "affiliate");
+  assert.equal(activated.campaign.destinationValidation, "owner_confirmed_exact_https");
+  assert.equal(activated.campaign.destinationUrl, destinationUrl);
+  assert.equal(activated.campaign.approval.approvedBy, operator);
+  assert.deepEqual(validateCampaigns(activated.config), []);
+  const deactivated = manageCampaign(activated.config, { campaignId: id, action: "deactivate" }, operator);
+  assert.equal(deactivated.campaign.status, "INACTIVE");
+  assert.equal(deactivated.campaign.destinationUrl, "");
+  assert.equal(deactivated.campaign.ownerApproved, false);
+  assert.deepEqual(validateCampaigns(deactivated.config), []);
+});

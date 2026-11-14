@@ -28,6 +28,13 @@ test("queue replenishment is idempotent and never enables publishing", () => {
     assert.equal(first.status, 0, first.stderr);
     const afterFirst = JSON.parse(fs.readFileSync(queuePath, "utf8"));
     assert.equal(afterFirst.publishingEnabled, false);
+    assert.deepEqual(afterFirst.cadence.formats, ["long_form", "long_form", "short"]);
+    assert.equal(afterFirst.cadence.minimumHoursBetweenConsecutivePublications, 72);
+    assert.equal(afterFirst.cadence.minimumCycleHours, 216);
+    assert.deepEqual(afterFirst.cadence.draftPreparationFallback.days, ["Tuesday", "Saturday"]);
+    assert.equal(afterFirst.cadence.draftPreparationFallback.notPublicationCadence, true);
+    assert.equal("postsPerWeek" in afterFirst.cadence, false);
+    assert.equal("days" in afterFirst.cadence, false);
     assert.ok(afterFirst.items.some(item => item.id === "existing-approved-draft"));
     assert.ok(afterFirst.items.length >= 13, "preserve the existing item and seed all 12 reviewed topic briefs");
     const seeded = afterFirst.items.filter(item => item.id !== "existing-approved-draft" && item.status === "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW");
@@ -60,6 +67,45 @@ test("queue replenishment refuses a queue that has publishing enabled", () => {
     assert.notEqual(result.status, 0);
     assert.match(result.stderr, /must not enable publishing/);
     assert.deepEqual(JSON.parse(fs.readFileSync(queuePath, "utf8")), original);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("a missing queue is initialized from the authoritative rolling publication policy", () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-queue-default-"));
+  const queuePath = path.join(tempDir, "new", "queue.json");
+  try {
+    const result = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
+      encoding: "utf8",
+      env: { ...process.env, QUEUE_PATH: queuePath }
+    });
+    assert.equal(result.status, 0, result.stderr);
+    const created = JSON.parse(fs.readFileSync(queuePath, "utf8"));
+    assert.equal(created.publishingEnabled, false);
+    assert.deepEqual(created.cadence.formats, ["long_form", "long_form", "short"]);
+    assert.equal(created.cadence.minimumHoursBetweenConsecutivePublications, 72);
+    assert.equal(created.cadence.minimumCycleHours, 216);
+    assert.deepEqual(created.cadence.draftPreparationFallback.days, ["Tuesday", "Saturday"]);
+    assert.equal(created.cadence.draftPreparationFallback.notPublicationCadence, true);
+    assert.equal("postsPerWeek" in created.cadence, false);
+    assert.equal("days" in created.cadence, false);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("queue replenishment normalizes an omitted publishing flag to explicit false", () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-queue-default-publishing-"));
+  const queuePath = path.join(tempDir, "queue.json");
+  fs.writeFileSync(queuePath, JSON.stringify({ items: [] }));
+  try {
+    const result = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
+      encoding: "utf8",
+      env: { ...process.env, QUEUE_PATH: queuePath }
+    });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(JSON.parse(fs.readFileSync(queuePath, "utf8")).publishingEnabled, false);
   } finally {
     fs.rmSync(tempDir, { recursive: true, force: true });
   }

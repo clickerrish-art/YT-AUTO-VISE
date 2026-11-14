@@ -1,0 +1,50 @@
+{
+  "status": "HOLD_FOR_SOURCE_REVIEW_AND_HUMAN_APPROVAL",
+  "channel": "SonicVhibez",
+  "contentType": "short",
+  "title": "California Spiny Lobster: The Reef's Night-Time Forager",
+  "description": "Meet the California spiny lobster (Panulirus interruptus), filmed in the rocky reef habitat of California's Channel Islands. NOAA footage is credited to NOAA’s Office of National Marine Sanctuaries. California spiny lobsters shelter in reef crevices by day and emerge after dark to forage. Source audio has been removed from the edit. Educational natural-history narration; behaviour described in narration is not necessarily shown in every shot.",
+  "tags": [
+    "California spiny lobster",
+    "Panulirus interruptus",
+    "NOAA",
+    "Channel Islands",
+    "marine wildlife",
+    "rocky reef",
+    "ocean animals",
+    "marine biology",
+    "wildlife documentary",
+    "nature Shorts"
+  ],
+  "hashtags": [
+    "#CaliforniaSpinyLobster",
+    "#MarineWildlife",
+    "#OceanDocumentary",
+    "#WildlifeShorts"
+  ],
+  "targetSeconds": 55,
+  "format": "9:16",
+  "visibility": "private",
+  "hasPaidPromotion": false,
+  "paidProductPlacementDetails": {
+    "hasPaidProductPlacement": false
+  },
+  "rightsConfirmed": false,
+  "rightsEvidenceReviewed": false,
+  "humanApproved": false,
+  "complianceReviewed": false,
+  "sourceAssetId": "NOAA-SPINY-LOBSTERS-CA-2026-11",
+  "sourceAudioPolicy": "REMOVE_COMPLETELY",
+  "requiredAttribution": "NOAA’s Office of National Marine Sanctuaries",
+  "scheduleStatus": "UNSCHEDULED_NEXT_SHORT_CANDIDATE",
+  "uploadAllowed": false,
+  "notes": "Editorial wildlife Short, not a Selar promotion. Source permission is conditional only; source-file reacquisition, shot-level/transition review, final edit review, rights evidence and human compliance approval remain open. Do not alter existing schedule or rolling cycle. A 55.235-second technical review render exists with AI-generated eSpeak narration and exact NOAA credit; it is explicitly not a production master. Replace the synthetic draft voice with approved narration and complete human review before any publication.",
+  "containsSyntheticMedia": false,
+  "renderReview": {
+    "status": "REVIEW_RENDER_ONLY_NOT_FOR_PUBLICATION",
+    "evidencePath": "content/short-004-california-spiny-lobster-review-render.json",
+    "outputSha256": "c0735b95efa5a70fba2eba3a87cbacd2355c400288b320d97dd3190dce1cf280",
+    "narrationDisclosure": "AI-GENERATED NARRATION",
+    "requiresHumanVoiceReview": true
+  }
+}

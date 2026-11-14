@@ -4,7 +4,106 @@
       "id": "wildlife-creators-vault",
       "name": "Complete YouTube Wildlife Creator's Vault – Premium Combo PDF",
       "url": "https://selar.com/0u19v8u99l",
-      "status": "approved"
+      "status": "approved",
+      "promotionGate": {
+        "seller": {
+          "status": "VERIFIED",
+          "name": "Click 47",
+          "sourceUrl": "https://selar.com/0u19v8u99l",
+          "verifiedAt": "2026-11-09T09:49:01+02:00",
+          "evidenceReference": "Read-only live Selar page rechecked 2026-11-09; page title and visible seller line identify Click 47."
+        },
+        "brandAuthorization": {
+          "status": "OWNER_CONFIRMED",
+          "brand": "SonicVhibez",
+          "confirmedAt": "2026-11-06T20:02:19+02:00",
+          "approvalReference": "Owner explicitly authorized SonicVhibez promotion of this Selar product in the ChatGPT conversation on 2026-11-06 (reply: “yes. proceed”).",
+          "note": "Brand-level permission confirmed by owner. This does not verify compensation or approve viewer-facing disclosure; those remain separate release gates."
+        },
+        "compensation": {
+          "status": "OWNER_CONFIRMED",
+          "type": "DIRECT_SALES_REVENUE",
+          "verifiedAt": "2026-11-09",
+          "evidenceReference": "Owner clarified in the ChatGPT conversation on 2026-11-09 that Selar is their own business and customer payments are received directly through Selar.",
+          "note": "This is a direct commercial relationship through the owner's own Selar business. Purchases generate revenue for the owner's business. Do not classify as an affiliate commission or describe the promotion as having no commercial benefit."
+        },
+        "disclosure": {
+          "status": "OWNER_APPROVED",
+          "text": "This product is sold through my own Selar business; purchases generate revenue for my business.",
+          "approvedAt": "2026-11-10T07:02:41+02:00",
+          "approvalReference": "Owner explicitly approved the exact viewer-facing Selar direct-sales disclosure in the ChatGPT conversation on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Approval applies to the Complete YouTube Wildlife Creator's Vault promotion only."
+        }
+      }
+    },
+    {
+      "id": "video-creation-prompt-pack-premium",
+      "name": "The Full Video Creation Prompt Pack Premium Edition",
+      "url": "https://selar.com/539497q11t",
+      "status": "candidate",
+      "promotionGate": {
+        "seller": {
+          "status": "VERIFIED",
+          "name": "Click 47",
+          "sourceUrl": "https://selar.com/539497q11t",
+          "verifiedAt": "2026-11-09T09:49:01+02:00",
+          "evidenceReference": "Read-only live Selar page rechecked 2026-11-09; page title and visible seller line identify Click 47."
+        },
+        "brandAuthorization": {
+          "status": "OWNER_CONFIRMED",
+          "brand": "SonicVhibez",
+          "confirmedAt": "2026-11-07T09:15:59+02:00",
+          "approvalReference": "Owner instruction in the 2026-11-07 SonicVhibez promotional YouTube brief explicitly names this supplied product for creator-education Shorts on SonicVhibez.",
+          "note": "Owner explicitly requested SonicVhibez creator-education YouTube promotions connected to this supplied Selar product. The owner separately confirmed Selar is their own business and purchases generate direct sales revenue; this is not an affiliate commission. This does not approve the viewer-facing disclosure or replace content, rights and brand-fit review."
+        },
+        "compensation": {
+          "status": "OWNER_CONFIRMED",
+          "type": "DIRECT_SALES_REVENUE",
+          "verifiedAt": "2026-11-09",
+          "evidenceReference": "Owner clarified in the ChatGPT conversation on 2026-11-09 that Selar is their own business and customer payments are received directly through Selar.",
+          "note": "Owner-confirmed direct commercial relationship through the owner's own Selar business. Purchases generate revenue for the owner's business. Do not classify as an affiliate commission or describe the promotion as having no commercial benefit."
+        },
+        "disclosure": {
+          "status": "UNVERIFIED",
+          "text": "This product is sold through my own Selar business; purchases generate revenue for my business.",
+          "approvedAt": "",
+          "approvalReference": ""
+        }
+      }
+    },
+    {
+      "id": "youtube-success-blueprint-90-day",
+      "name": "The YouTube Success Blueprint 90-Day Creator System",
+      "url": "https://selar.com/91j893378q",
+      "status": "candidate",
+      "promotionGate": {
+        "seller": {
+          "status": "VERIFIED",
+          "name": "Click 47",
+          "sourceUrl": "https://selar.com/91j893378q",
+          "verifiedAt": "2026-11-09T09:49:01+02:00",
+          "evidenceReference": "Read-only live Selar page rechecked 2026-11-09; page title and visible seller line identify Click 47."
+        },
+        "brandAuthorization": {
+          "status": "OWNER_CONFIRMED",
+          "brand": "SonicVhibez",
+          "confirmedAt": "2026-11-07T09:15:59+02:00",
+          "approvalReference": "Owner instruction in the 2026-11-07 SonicVhibez promotional YouTube brief explicitly names this supplied product for creator-education Shorts on SonicVhibez.",
+          "note": "Owner explicitly requested SonicVhibez creator-education YouTube promotions connected to this supplied Selar product. The owner separately confirmed Selar is their own business and purchases generate direct sales revenue; this is not an affiliate commission. This does not approve the viewer-facing disclosure or replace content, rights and brand-fit review."
+        },
+        "compensation": {
+          "status": "OWNER_CONFIRMED",
+          "type": "DIRECT_SALES_REVENUE",
+          "verifiedAt": "2026-11-09",
+          "evidenceReference": "Owner clarified in the ChatGPT conversation on 2026-11-09 that Selar is their own business and customer payments are received directly through Selar.",
+          "note": "Owner-confirmed direct commercial relationship through the owner's own Selar business. Purchases generate revenue for the owner's business. Do not classify as an affiliate commission or describe the promotion as having no commercial benefit."
+        },
+        "disclosure": {
+          "status": "UNVERIFIED",
+          "text": "This product is sold through my own Selar business; purchases generate revenue for my business.",
+          "approvedAt": "",
+          "approvalReference": ""
+        }
+      }
     }
   ]
 }

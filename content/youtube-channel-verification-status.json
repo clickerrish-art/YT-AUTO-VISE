@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
+  "mode": "OWNER_REVIEWED_REMOTE_HISTORY_PENDING_UPLOAD_ATTEMPT_CHECK",
+  "workflowRunId": 42609557970,
+  "workflowRunAttempt": 4,
+  "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42609557970",
+  "sourceCommit": "20bc3f12039f562bfe5412eacb838ba4f8555434",
+  "checkedAt": "2026-11-09T15:57:20.079Z",
+  "deterministicIdentityAndPaginationTests": {
+    "status": "PASS",
+    "passed": 6,
+    "failed": 0
+  },
+  "oauth": {
+    "status": "PASS",
+    "errorCode": null,
+    "message": "Google OAuth authenticated the configured SonicVhibez channel using the existing matching client credentials and refresh token. Secret values were not logged."
+  },
+  "channel": {
+    "id": "UCSlkuPfHH78oGC1o418HV4w",
+    "title": "SonicVibes",
+    "handle": "@sonicvhibez",
+    "identityVerified": true
+  },
+  "channelIdentityVerified": true,
+  "uploadsInventoryComplete": true,
+  "uploadsPlaylistPages": 1,
+  "totalUploads": 1,
+  "visibilityCounts": {
+    "public": 1,
+    "private": 0,
+    "unlisted": 0
+  },
+  "inventoryArtifact": {
+    "id": 13689103271,
+    "name": "sonicvhibez-youtube-history-inventory",
+    "sha256": "70269df128ca12cefbf1f9e596c507230fb55c4d46142d474e44d959360b9656",
+    "expiresAt": "2026-11-16T15:57:20Z"
+  },
+  "videos": [
+    {
+      "id": "LjePS02hA1o",
+      "visibility": "public",
+      "youtubePublishedAt": "2026-10-22T15:05:56Z",
+      "duration": "PT20S",
+      "format": "short",
+      "ownerConfirmed": true,
+      "publicationCycleReconciled": false,
+      "ownerReview": {
+        "verifiedBy": "clickerrish-art",
+        "verifiedAt": "2026-11-10T04:35:06Z",
+        "format": "short",
+        "studioPublicationDateConfirmed": true,
+        "studioVideoUrl": "https://studio.youtube.com/video/LjePS02hA1o/edit"
+      }
+    }
+  ],
+  "publicationHistoryReconciliation": {
+    "status": "OWNER_REVIEWED_REMOTE_HISTORY",
+    "reconciliationPath": "content/youtube-history-reconciliation.json",
+    "reconciliationBlobSha": "627b68c655744a6891c2128d36bb8656fdb71415",
+    "verifiedAt": "2026-11-10T04:35:06Z",
+    "verifiedBy": "clickerrish-art",
+    "reason": "The complete public/private/unlisted uploads inventory contains one public video. The owner confirmed it is a Short and that its YouTube Studio publication date matches the API record. The exact UTC timestamp is retained from the YouTube API. The separate upload-attempt ledger must still be checked by the uploader immediately before any future insertion; no publication-cycle or go-live clearance is claimed."
+  },
+  "secretValuesLogged": false,
+  "publishingEnabled": false,
+  "uploadAttempted": false,
+  "metadataWriteAttempted": false,
+  "attempts": [
+    {
+      "workflowRunId": 42591153889,
+      "status": "BLOCKED",
+      "errorCode": "invalid_client"
+    },
+    {
+      "workflowRunId": 42591293612,
+      "status": "BLOCKED",
+      "errorCode": "invalid_client"
+    },
+    {
+      "workflowRunId": 42609557970,
+      "attempt": 4,
+      "status": "PASS",
+      "sourceCommit": "20bc3f12039f562bfe5412eacb838ba4f8555434"
+    }
+  ]
+}

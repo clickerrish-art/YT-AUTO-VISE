@@ -1,0 +1,1140 @@
+{
+  "version": 1,
+  "channel": "SonicVhibez",
+  "timezone": "Africa/Johannesburg",
+  "maxShortsPerWeek": 2,
+  "publicationEnabled": false,
+  "schedulingEnabled": false,
+  "calendarStatus": "DRAFT_PREPARATION_ONLY_NO_PUBLICATION_DATES",
+  "notes": "This is a draft-preparation plan for the week beginning 2026-11-09, not a publication calendar.,No publicationAt, publishedAt or scheduledAt values are permitted in this plan.,A separate verified SonicVhibez destination schedule and complete public/private/unlisted YouTube history are required before any publication-slot calculation or scheduling.,Selar products are the owner's direct-sales business and must not be classified as affiliate commissions. Products hosted outside Selar (including Serengeti and other external sellers) are affiliate promotions. Every promotion remains blocked until its exact relationship and viewer-facing disclosure are verified and owner-approved.,Two 55-second creator-education Shorts are prepared for the week beginning 2026-11-30: a wildlife-video fact-check lesson and a wildlife-documentary shot-list lesson. Both remain DRAFT_ONLY, private and unscheduled; the two-Short weekly cap is enforced, and the Vault direct-sales disclosure is product-specifically approved. Added sonicvhibez-short-011-wildlife-broll for the week beginning 2026-12-07; the weekly maximum remains two, publication/scheduling remain disabled, and the item has no publication timestamp. Added sonicvhibez-short-012-wildlife-video-editing for the week beginning 2026-12-07; vidIQ estimated the primary phrase at 8,456 monthly searches with competition 18/100, and the 2-Short weekly cap remains enforced. The item is private, DRAFT_ONLY and has no publication timestamp.",
+  "weeks": [
+    {
+      "weekOf": "2026-11-09",
+      "status": "DRAFT_ONLY",
+      "items": [
+        {
+          "id": "sonicvhibez-short-003-prompt-framework",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "How to Script a YouTube Video: 5 Prompt Details to Include",
+          "primaryKeyword": "how to script a YouTube video",
+          "script": "Need a YouTube video prompt that gives you something usable? Don't start with “make it cinematic.” Give the prompt five anchors. One: the subject. Two: the action or lesson the viewer should see. Three: the setting and time of day. Four: the shot size and camera movement. Five: the format, duration and limits. For wildlife, add a safety rule: observe from a distance, never stage or disturb an animal, and don't invent behaviour the footage cannot support. Then request separate shot-list and narration drafts so you can fact-check every claim. A prompt is a brief, not a rights licence. The Full Video Creation Prompt Pack Premium Edition listing describes 20 prompts across six connected production stages; review the full contents before deciding whether it fits your workflow.",
+          "productId": "video-creation-prompt-pack-premium",
+          "productUrl": "https://selar.com/539497q11t",
+          "description": "How to script a YouTube video with a clear prompt: define the subject, action, setting, shot and output constraints before requesting a shot list or narration draft.\n\nPlanning resource: The Full Video Creation Prompt Pack Premium Edition\nThe Selar listing describes 20 ready-to-use prompts across six connected production stages, from research and scripting through thumbnail, metadata, production support and optimization. Review the full listing for exact contents.\nhttps://selar.com/539497q11t\n\nDISCLOSURE HOLD: Seller Click 47 was rechecked on 9 November 2026. Owner-confirmed relationship: this is sold through the owner's own Selar business and purchases generate direct sales revenue for that business; it is not an affiliate commission. The proposed viewer-facing disclosure remains a draft and requires owner approval before release. Do not publish while unresolved.\n\nA prompt is a planning brief, not a fact-check, footage licence or music licence.",
+          "keywordPhrases": [
+            {
+              "phrase": "how to script a YouTube video",
+              "estimatedMonthlySearches": 44243,
+              "volumeScore": 69,
+              "competition": 46,
+              "growthPct": 70.7
+            },
+            {
+              "phrase": "how to write a video script for youtube",
+              "estimatedMonthlySearches": 17752,
+              "volumeScore": 63,
+              "competition": 56,
+              "growthPct": null
+            },
+            {
+              "phrase": "how to write a script for youtube",
+              "estimatedMonthlySearches": 7377,
+              "volumeScore": 58,
+              "competition": 43,
+              "growthPct": null
+            },
+            {
+              "phrase": "how to script youtube videos",
+              "estimatedMonthlySearches": 33672,
+              "volumeScore": 68,
+              "competition": 43,
+              "growthPct": -39.4
+            },
+            {
+              "phrase": "how to write scripts for youtube videos",
+              "estimatedMonthlySearches": 15707,
+              "volumeScore": 63,
+              "competition": 47,
+              "growthPct": null
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "vidIQ",
+            "researchedAt": "2026-11-08T09:38:00+02:00",
+            "type": "estimated_monthly_searches",
+            "note": "Fresh vidIQ research on 2026-11-08: the primary phrase has 44,243 estimated monthly searches, competition 46/100 and search-demand growth +70.7%. Related phrases include how to write a video script for YouTube (17,752), how to script YouTube videos (33,672) and how to write scripts for YouTube videos (15,707). These are provider estimates, not independently audited; the primary phrase directly matches the scripting lesson."
+          },
+          "hashtags": [
+            "#YouTubeVideoPrompts",
+            "#YouTubeScript",
+            "#VideoCreation",
+            "#ContentPlanning",
+            "#YouTubeCreator"
+          ],
+          "thumbnailDirection": "A clean five-row prompt card beside a creator's editing desk; labels SUBJECT, ACTION, SETTING, SHOT, FORMAT; large text “5 PROMPT DETAILS”. Keep the graphic legible on a phone and do not imply that a generated result is automatically accurate.",
+          "disclosure": {
+            "status": "HOLD",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "holdText": "The owner confirms this is a direct sale through their own Selar business, not an affiliate commission. The viewer-facing commercial disclosure is still unapproved; keep this promotion on HOLD until the owner approves the exact wording."
+          },
+          "productionChecklist": [
+            "Keep the lesson practical and show one original example prompt.",
+            "Check every generated factual claim; a prompt is not a source.",
+            "For wildlife examples, prohibit baiting, chasing, staging or disturbing animals.",
+            "Use only original or commercially cleared visuals, music and sound effects.",
+            "Record narration naturally and confirm a final runtime near 55 seconds.",
+            "Time captions to the actual voice track; check phone-size readability and vertical safe areas.",
+            "Recheck the exact Selar listing and seller before promotion.",
+            "Record owner-confirmed SonicVhibez brand authorization and the correct relationship: Selar = direct sales revenue; non-Selar = affiliate promotion.",
+            "Replace the disclosure hold with the exact approved viewer-facing disclosure.",
+            "Complete human playback, factual and thumbnail review against final asset hashes.",
+            "Do not schedule until the SonicVhibez destination and full YouTube history are verified and every 72-hour gap is calculated."
+          ],
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T09:55:27+02:00",
+            "note": "Fresh indexed search results show creator-facing prompt builders explicitly structure a YouTube prompt around video type, audience, topic, hook, length, title, thumbnail and description. This is qualitative search-intent evidence only; no current global volume or competition measurement was available because vidIQ had 4 credits and a keyword call costs 5.",
+            "sources": [
+              {
+                "title": "YouTube Script Prompt Generator — Free AI Video Script Builder (2026)",
+                "url": "https://promptifyer.online/youtube-script-prompt-generator",
+                "whyRelevant": "Current result describes prompts organized around video type, audience, hook style, length, title, thumbnail and description, matching the Short's prompt-brief lesson."
+              },
+              {
+                "title": "YouTube Growth Strategy ChatGPT Prompt",
+                "url": "https://promptslove.com/prompts/youtube-growth-strategy-chatgpt-prompt/",
+                "whyRelevant": "Search result shows a structured prompt asking for channel niche, audience, goals and actionable steps; supports demand for practical, context-rich creator prompts."
+              }
+            ]
+          },
+          "visibility": "private"
+        },
+        {
+          "id": "sonicvhibez-short-004-90-day-review",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "YouTube Growth Strategy: Build a 90-Day Content Plan",
+          "primaryKeyword": "YouTube growth strategy",
+          "script": "Want a YouTube growth strategy you can actually review? Build a 90-day plan in three blocks. Days 1–30: choose one audience, name the problem your videos solve, and set a production pace you can maintain. Days 31–60: create a repeatable series, publish at that pace, and test one hook or thumbnail change at a time. Days 61–90: review your own analytics—click-through rate, average view duration and returning viewers. Compare similar videos and time windows. Write down what you expected, what the numbers show, and one change to test next. The YouTube Success Blueprint 90-Day Creator System listing describes a 30/60/90-day plan; check the details before deciding if it fits. A plan is a learning cycle, not a growth guarantee.",
+          "productId": "youtube-success-blueprint-90-day",
+          "productUrl": "https://selar.com/91j893378q",
+          "description": "Build a YouTube growth strategy with a 90-day content plan: set realistic production capacity, test a repeatable series, then review patterns in your own analytics.\n\nPlanning resource: The YouTube Success Blueprint 90-Day Creator System\nThe Selar listing outlines a 30/60/90-day creator plan and topics including niche and audience, repeatable video ideas, hooks, titles and thumbnails, analytics and pre-publish checks. Review the listing for full contents.\nhttps://selar.com/91j893378q\n\nDISCLOSURE HOLD: Seller Click 47 was rechecked on 9 November 2026. Owner-confirmed relationship: this is sold through the owner's own Selar business and purchases generate direct sales revenue for that business; it is not an affiliate commission. The proposed viewer-facing disclosure remains a draft and requires owner approval before release. Do not publish while unresolved.\n\nA 90-day plan is a review cycle, not a guarantee of views, subscribers, monetisation or income.",
+          "keywordPhrases": [
+            {
+              "phrase": "YouTube growth strategy",
+              "estimatedMonthlySearches": 22973,
+              "volumeScore": 65,
+              "competition": 46,
+              "growthPct": null
+            },
+            {
+              "phrase": "how to grow YouTube channel",
+              "estimatedMonthlySearches": 214276,
+              "volumeScore": 80,
+              "competition": 40,
+              "growthPct": 43
+            },
+            {
+              "phrase": "YouTube growth tips",
+              "estimatedMonthlySearches": 86457,
+              "volumeScore": 74,
+              "competition": 33,
+              "growthPct": null
+            },
+            {
+              "phrase": "how to grow a small YouTube channel",
+              "estimatedMonthlySearches": 129456,
+              "volumeScore": 76,
+              "competition": 36,
+              "growthPct": 238.3
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "vidIQ",
+            "researchedAt": "2026-11-07T09:15:59+02:00",
+            "type": "estimated_monthly_searches",
+            "note": "vidIQ estimate researched 2026-11-07: YouTube growth strategy had 22,973 estimated monthly searches and competition 46/100; related estimates included how to grow YouTube channel (214,276; +43%) and how to grow a small YouTube channel (129,456; +238.3%). On 2026-11-08, current web search results also surfaced 90-day YouTube content strategy resources covering audience, content pillars, calendars and analytics review. Volume figures are vidIQ provider estimates, not independently audited; today's web results are qualitative, not additional volume measurements.",
+            "qualitativeCheckedAt": "2026-11-08T09:38:00+02:00",
+            "qualitativeSources": [
+              {
+                "title": "YouTube Content Strategy Template (Free Excel, Word & PDF)",
+                "url": "https://alpha.outlierkit.com/resources/youtube-content-strategy-template/",
+                "whyRelevant": "Current search result covers audience positioning, content pillars, a 90-day calendar, production pipeline and monthly KPI review—closely matching the video's planning lesson."
+              },
+              {
+                "title": "The YouTube Content Strategy Framework: Plan Videos That Compound",
+                "url": "https://www.overseeros.com/blog/youtube-content-strategy-framework-how-to-plan-videos-that-compound",
+                "whyRelevant": "Current search result outlines a 90-day strategy with research, planning, publishing and review phases; qualitative evidence of matching informational intent."
+              }
+            ]
+          },
+          "hashtags": [
+            "#YouTubeGrowthStrategy",
+            "#YouTubeContentPlan",
+            "#ContentPlanning",
+            "#YouTubeCreator",
+            "#CreatorEducation"
+          ],
+          "thumbnailDirection": "A simple 90-day timeline split into PLAN, PUBLISH and REVIEW, with three clearly separated blocks and the words “90-DAY PLAN”. Avoid subscriber or income promises and keep all labels readable at phone size.",
+          "disclosure": {
+            "status": "HOLD",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "holdText": "The owner confirms this is a direct sale through their own Selar business, not an affiliate commission. The viewer-facing commercial disclosure is still unapproved; keep this promotion on HOLD until the owner approves the exact wording."
+          },
+          "productionChecklist": [
+            "Keep the plan realistic and avoid implying that one cadence fits every channel.",
+            "Explain the three 30-day phases clearly (days 1–30, 31–60 and 61–90) without promising growth outcomes.",
+            "Use the creator's own analytics; do not invent performance figures.",
+            "Check metric definitions and avoid treating one upload as a trend.",
+            "Use original or commercially cleared graphics, music and sound effects.",
+            "Record narration naturally and confirm a final runtime near 55 seconds.",
+            "Time captions to the actual voice track; check phone-size readability and vertical safe areas.",
+            "Recheck the exact Selar listing and seller before promotion.",
+            "Record owner-confirmed SonicVhibez brand authorization and the correct relationship: Selar = direct sales revenue; non-Selar = affiliate promotion.",
+            "Replace the disclosure hold with the exact approved viewer-facing disclosure.",
+            "Complete human playback, factual and thumbnail review against final asset hashes.",
+            "Do not schedule until the SonicVhibez destination and full YouTube history are verified and every 72-hour gap is calculated."
+          ],
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T09:55:27+02:00",
+            "note": "Fresh indexed results discuss 90-day YouTube growth sprints, day-30/day-60/day-90 reviews, measurable leading indicators and a 90-day content calendar/KPI tracker. This supports the planning and review angle qualitatively; it does not establish search volume or guarantee outcomes.",
+            "sources": [
+              {
+                "title": "YouTube Growth Strategy That Actually Works in 2026",
+                "url": "https://alanspicer.com/youtube-growth-strategy/",
+                "whyRelevant": "The result outlines a 90-day sprint and reviews at days 30, 60 and 90, closely matching the Short's three-phase review structure."
+              },
+              {
+                "title": "YouTube Content Strategy Template",
+                "url": "https://alpha.outlierkit.com/resources/youtube-content-strategy-template/",
+                "whyRelevant": "The template includes a 90-day calendar, production pipeline and monthly KPI tracker, supporting search intent around a practical 90-day creator plan."
+              }
+            ]
+          },
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "weekOf": "2026-11-16",
+      "status": "DRAFT_ONLY",
+      "items": [
+        {
+          "id": "sonicvhibez-short-005-wildlife-story-sequence",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "How to Make a Wildlife Documentary: 3 Storytelling Shots",
+          "primaryKeyword": "how to make a wildlife documentary",
+          "script": "How do you make a wildlife documentary from footage that feels like a story, not a random collection of clips? Plan three shots before editing. First, a wide view that establishes the habitat. Second, a medium shot that shows where the animal sits in that environment. Third, a close detail that captures something you genuinely recorded—movement, feeding, or a natural interaction. Connect the shots with one simple line of context: what are we seeing, and why does it matter? Never bait, chase, stage, or disturb an animal to force a scene. Advertisement. The Complete YouTube Wildlife Creator's Vault is one resource to review; check the listing before deciding if it fits. This product is sold through my own Selar business; purchases generate revenue for my business.",
+          "description": "How to make a wildlife documentary: plan a habitat wide shot, an animal-in-context shot and a truthful detail shot before editing.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault\nReview the exact Selar listing and its contents here:\nhttps://selar.com/0u19v8u99l\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nA wildlife video should document what actually happened. Do not stage animal behaviour or disturb wildlife for footage.",
+          "productUrl": "https://selar.com/0u19v8u99l",
+          "productId": "wildlife-creators-vault",
+          "visibility": "private",
+          "keywordPhrases": [
+            {
+              "phrase": "how to make a wildlife documentary"
+            },
+            {
+              "phrase": "wildlife filmmaking tips"
+            },
+            {
+              "phrase": "wildlife documentary storytelling"
+            },
+            {
+              "phrase": "how to tell a story with wildlife footage"
+            },
+            {
+              "phrase": "wildlife video storytelling"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-09T09:49:01+02:00",
+            "note": "No measured search-volume or competition data is available for this wildlife seed. Fresh qualitative search results surfaced professional wildlife-filmmaking guidance recommending a planned sequence of wide establishing shots, animal-in-context shots and close details, plus documentary-style sequence guidance that explicitly prioritizes observing wildlife without disturbance. This supports the practical lesson only; it does not establish query volume or ranking opportunity.",
+            "sources": [
+              {
+                "title": "Wildlife Filmmaking: The Essential Masterclass",
+                "url": "https://www.worldnomads.com/explore/guides/wildlife-filmmaking",
+                "whyRelevant": "A wildlife documentary filmmaker's guide discusses using wide shots, close-ups and cutaways to tell an animal story, directly supporting the three-shot sequence lesson."
+              },
+              {
+                "title": "Underwater Cinematography: How to Shoot Like a Nature Documentary",
+                "url": "https://www.divevolkdiving.com/en-ca/blogs/diving-knowledge/underwater-cinematography-nature-documentary-shots",
+                "whyRelevant": "Updated guidance explains building a documentary sequence from context, subject and detail shots while letting animals choose distance and direction; the ethical filming principle aligns with this Short."
+              }
+            ]
+          },
+          "hashtags": [
+            "#WildlifeDocumentary",
+            "#WildlifeFilmmaking",
+            "#WildlifeStorytelling",
+            "#YouTubeCreator",
+            "#NatureVideo"
+          ],
+          "thumbnailDirection": "Three-panel storyboard: habitat wide shot → animal-in-context shot → truthful close detail. Large text: “3 SHOTS / 1 STORY”. Use only final rights-cleared footage; never depict staged animal behaviour.",
+          "productionChecklist": [
+            "Keep the lesson practical: habitat, animal-in-context and truthful detail shots.",
+            "Use only footage that genuinely records the described behaviour; verify every factual claim.",
+            "Never bait, chase, stage, approach or disturb wildlife to obtain a shot.",
+            "Use only original or commercially cleared footage, narration, music and sound effects.",
+            "Avoid AI-generated or illustrative footage being presented as documentary evidence.",
+            "Record narration naturally and confirm a final runtime near 55 seconds.",
+            "Time captions to the final voice track; check phone-size readability and vertical safe areas.",
+            "Recheck the exact Selar listing, seller and its brand wording before promotion.",
+            "Include the exact owner-approved direct-sales disclosure in narration and description; media rights, final assets and human review remain separate release gates.",
+            "Complete human playback, factual and thumbnail review against final asset hashes.",
+            "Do not create a publication slot until the SonicVhibez destination and complete YouTube history are verified and every 72-hour gap is calculated."
+          ],
+          "disclosure": {
+            "status": "APPROVED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "approvedAt": "2026-11-10T07:02:41+02:00",
+            "approvalReference": "Owner explicitly approved the exact viewer-facing Selar direct-sales disclosure in the ChatGPT conversation on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Approval applies to the Complete YouTube Wildlife Creator's Vault promotion only."
+          },
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T09:55:27+02:00",
+            "note": "Fresh indexed wildlife-filmmaking guidance explains building sequences from wide, medium and close shots, organizing clips by behavior and using pacing deliberately. This supports the actual three-shot storytelling lesson; no measured search volume or competition is claimed.",
+            "sources": [
+              {
+                "title": "How To Become a Wildlife Filmmaker (7 Proven Steps)",
+                "url": "https://www.docfilmacademy.com/blog/how-to-become-a-wildlife-filmmaker",
+                "whyRelevant": "The result explicitly recommends wide, mid and close-up sequences, organization by behavior and deliberate pacing for wildlife storytelling."
+              }
+            ]
+          }
+        },
+        {
+          "id": "sonicvhibez-short-006-niche-selection",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "How to choose a YouTube niche you can sustain",
+          "primaryKeyword": "how to choose a YouTube niche",
+          "script": "How do you choose a YouTube niche you can keep creating for—not just one that sounds popular? Run four checks. First, name one specific viewer and the problem they want solved. Second, list ten useful video ideas that genuinely fit your knowledge and access. Third, check whether people already ask related questions in search suggestions, comments and your own audience feedback. Fourth, make sure you can produce the videos safely and consistently with the time and budget you have. Compare two or three niche options, then test a small series and review the audience response. The YouTube Success Blueprint 90-Day Creator System is a planning resource to review. A niche is a hypothesis, not a growth guarantee.",
+          "productId": "youtube-success-blueprint-90-day",
+          "productUrl": "https://selar.com/91j893378q",
+          "visibility": "private",
+          "description": "How to choose a YouTube niche: compare a specific audience problem, useful expertise, repeatable ideas and realistic production capacity before committing.\n\nUse this four-check process to shortlist a channel topic, then test a small series and review what your actual audience watches.\n\nPlanning resource: The YouTube Success Blueprint 90-Day Creator System\nThe Selar listing describes a 30/60/90-day creator system. Review the full listing for exact contents:\nhttps://selar.com/91j893378q\n\nDISCLOSURE HOLD: Seller Click 47 was rechecked on 9 November 2026. Owner-confirmed relationship: this is sold through the owner's own Selar business and purchases generate direct sales revenue for that business; it is not an affiliate commission. The proposed viewer-facing disclosure remains a draft and requires owner approval before release. Do not publish while unresolved.\n\nA niche test is a planning exercise, not a promise of views, subscribers or income.",
+          "keywordPhrases": [
+            {
+              "phrase": "how to choose a YouTube niche"
+            },
+            {
+              "phrase": "how to find your YouTube niche"
+            },
+            {
+              "phrase": "how to pick a YouTube channel topic"
+            },
+            {
+              "phrase": "best YouTube niche for beginners"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-09T09:49:01+02:00",
+            "note": "No measured global search-volume or competition data is available in this run: vidIQ has 4 credits remaining, below its 5-credit keyword-research call cost. Fresh qualitative search results surfaced an English-language guide matching the exact query and an official YouTube Help page explaining that Studio Trends reports top searches, audience interest and Shorts content gaps over the last 28 days. The connected channel's private Studio Trends data was not accessed, so these are intent signals only, not measured demand or competition.",
+            "sources": [
+              {
+                "title": "How Do You Choose a YouTube Niche You Can Sustain?",
+                "url": "https://mitaschool.com/choose-youtube-niche/",
+                "whyRelevant": "A recently indexed English-language creator guide frames niche choice around a specific audience problem, demonstrable knowledge and videos the creator can reliably produce—directly matching this Short's four-check lesson."
+              },
+              {
+                "title": "Explore trends on YouTube — YouTube Help",
+                "url": "https://support.google.com/youtube/answer/11962757?co=GENIE.Platform%3DDesktop&hl=en",
+                "whyRelevant": "Official guidance explains that YouTube Studio Trends surfaces audience top searches, audience interest and Shorts content gaps using recent 28-day signals. This is relevant evidence for how creators should validate a niche, but the user's Studio data was not accessed."
+              }
+            ]
+          },
+          "hashtags": [
+            "#YouTubeNiche",
+            "#YouTubeChannelIdeas",
+            "#YouTubeStrategy",
+            "#CreatorEducation",
+            "#YouTubeBeginners"
+          ],
+          "thumbnailDirection": "Show three simple topic cards beside a focused audience icon; highlight one card with a clear check mark. Large mobile-readable text: “4 NICHE CHECKS”. Avoid income, subscriber or growth promises.",
+          "disclosure": {
+            "status": "HOLD",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "holdText": "The owner confirms this is a direct sale through their own Selar business, not an affiliate commission. The viewer-facing commercial disclosure is still unapproved; keep this promotion on HOLD until the owner approves the exact wording."
+          },
+          "productionChecklist": [
+            "Keep the four checks practical and explain each in one short sentence.",
+            "Use a concrete example of a viewer problem and a repeatable video idea.",
+            "Do not imply that a niche guarantees views, subscribers, monetisation or income.",
+            "Use original or commercially cleared graphics, music and sound effects.",
+            "Record natural narration and confirm a final runtime near 55 seconds.",
+            "Time captions to the actual voice track and check phone-size readability.",
+            "Verify the exact Selar listing and retain the recorded seller evidence reference.",
+            "Classify Selar as direct sales revenue and non-Selar sources (including Serengeti) as affiliate promotions; verify each relationship against its exact link.",
+            "Replace the disclosure hold only after the owner-approved truthful disclosure is available.",
+            "Complete human playback, factual and thumbnail review against final asset hashes.",
+            "Do not schedule until SonicVhibez destination identity and complete YouTube history are verified and every 72-hour gap is calculated."
+          ],
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T09:55:27+02:00",
+            "note": "Fresh indexed results frame YouTube niche selection around sustainable audience demand, recurring viewer problems, production capacity and validating a small test series rather than chasing trends. This is qualitative intent evidence, not measured global volume or competition.",
+            "sources": [
+              {
+                "title": "Free YouTube Niche Finder",
+                "url": "https://www.sonuker.com/tools/free-youtube-niche-finder",
+                "whyRelevant": "The result emphasizes sustainable niches, recurring audience demand and production cadence rather than trend chasing."
+              },
+              {
+                "title": "How to Choose a YouTube Niche: A Decision Framework That Holds Up",
+                "url": "https://stitchr.app/guides/how-to-choose-youtube-niche",
+                "whyRelevant": "The guide centers audience demand and consistency, matching the Short's four-check niche-selection method."
+              },
+              {
+                "title": "How to Choose a YouTube Niche: Stop Guessing, Read Demand",
+                "url": "https://onetube.io/blog/how-to-choose-youtube-niche",
+                "whyRelevant": "The result recommends checking recurring audience questions and competitor comments to validate a niche's real viewer problem."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "weekOf": "2026-11-23",
+      "status": "DRAFT_ONLY",
+      "items": [
+        {
+          "id": "sonicvhibez-short-007-ethical-wildlife-filming",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "Ethical Wildlife Photography: 4 Rules for Safer Filming",
+          "primaryKeyword": "ethical wildlife photography",
+          "script": "Want wildlife footage that shows natural behaviour without disturbing the animal? Start with distance, not a closer camera position. First, check the local park or reserve rules; safe distances vary by species and place. Second, use binoculars or a zoom lens instead of approaching. Third, watch the animal: if it freezes, changes direction, gives warning signals or moves away, back off and give it space. Fourth, never feed, bait, chase, corner, use flash at close range or alter vegetation to force a shot. Stay on designated paths and let wildlife choose its own behaviour. The Complete YouTube Wildlife Creator's Vault is a resource to review for planning a wildlife channel. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business.",
+          "description": "Ethical wildlife photography: four ways to capture natural behaviour without changing an animal's actions. Safe distances vary by species and location; follow local rules and back away if wildlife reacts.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault\nhttps://selar.com/0u19v8u99l\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nFilm responsibly. Never bait, chase, feed or disturb wildlife for footage.",
+          "productUrl": "https://selar.com/0u19v8u99l",
+          "productId": "wildlife-creators-vault",
+          "visibility": "private",
+          "keywordPhrases": [
+            {
+              "phrase": "ethical wildlife photography"
+            },
+            {
+              "phrase": "ethical wildlife filming"
+            },
+            {
+              "phrase": "how to film wildlife without disturbing animals"
+            },
+            {
+              "phrase": "wildlife filmmaking tips"
+            },
+            {
+              "phrase": "wildlife documentary filming ethics"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T11:13:58+02:00",
+            "note": "Fresh indexed results for ethical wildlife photography and safe wildlife viewing directly address the tutorial's questions about distance, zoom, animal stress signals and avoiding disturbance. This is qualitative search-intent evidence only; no measured global search volume or competition data is available.",
+            "sources": [
+              {
+                "title": "Ethical wildlife photography – how photographers can keep themselves and animals safe",
+                "url": "https://spca.bc.ca/about-us/our-work/wild-animal-programs/ethical-wildlife-photography-how-photographers-can-keep-themselves-and-animals-safe/",
+                "whyRelevant": "Current guidance explains stress signals, backing away, using binoculars or zoom lenses, and avoiding feeding or changing animal behaviour for a shot."
+              },
+              {
+                "title": "Ethical Wildlife Photography — San Juan Island National Historical Park",
+                "url": "https://www.nps.gov/sajh/planyourvisit/ethical-wildlife-photography.htm",
+                "whyRelevant": "The National Park Service recommends keeping distance and using zoom lenses, and makes clear that wildlife viewing distances are location-specific."
+              },
+              {
+                "title": "7 Ways to Safely Watch Wildlife — National Park Service",
+                "url": "https://www.nps.gov/subjects/watchingwildlife/7ways.htm",
+                "whyRelevant": "Official guidance says animal reactions indicate excessive proximity and advises against feeding, frightening or intentionally disturbing wildlife."
+              }
+            ]
+          },
+          "hashtags": [
+            "#EthicalWildlifePhotography",
+            "#WildlifeFilmmaking",
+            "#WildlifeDocumentary",
+            "#WildlifeConservation",
+            "#YouTubeCreator"
+          ],
+          "thumbnailDirection": "Use authentic, rights-cleared wildlife footage showing an animal in its natural habitat from a respectful distance. Add a small telephoto-lens silhouette and large mobile-readable text: “KEEP YOUR DISTANCE”. Do not stage or approach wildlife.",
+          "productionChecklist": [
+            "Follow the actual park, reserve and species-specific viewing rules; do not invent a universal safe distance.",
+            "Use a zoom lens or binoculars instead of approaching wildlife.",
+            "Back away if an animal freezes, changes behaviour, gives warning signals or moves away.",
+            "Never feed, bait, chase, corner, flash at close range or alter vegetation to force a shot.",
+            "Use only genuine rights-cleared footage; do not present synthetic animal behaviour as documentary evidence.",
+            "Verify narration facts and retain the cited ethical-wildlife guidance in the production notes.",
+            "Record natural narration and confirm a final runtime near 55 seconds.",
+            "Time captions to the final voice track and check mobile readability and vertical safe areas.",
+            "Verify the exact Selar product, seller and the approved direct-sales disclosure against the registry.",
+            "Complete human playback, factual and thumbnail review against final asset hashes.",
+            "Do not schedule until SonicVhibez-only destination access, complete publication history and every 72-hour gap are verified."
+          ],
+          "disclosure": {
+            "status": "APPROVED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "approvedAt": "2026-11-10T07:02:41+02:00",
+            "approvalReference": "Owner explicitly approved the exact viewer-facing Selar direct-sales disclosure in the ChatGPT conversation on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Approval applies to the Complete YouTube Wildlife Creator's Vault promotion only."
+          },
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T11:13:58+02:00",
+            "note": "Current search results support an educational query around ethical wildlife photography and filming: how to keep distance, recognize stress and record natural behaviour without disturbance. This is qualitative intent evidence, not measured demand or ranking data.",
+            "sources": [
+              {
+                "title": "Ethical wildlife photography – how photographers can keep themselves and animals safe",
+                "url": "https://spca.bc.ca/about-us/our-work/wild-animal-programs/ethical-wildlife-photography-how-photographers-can-keep-themselves-and-animals-safe/",
+                "whyRelevant": "Current guidance explains stress signals, backing away, using binoculars or zoom lenses, and avoiding feeding or changing animal behaviour for a shot."
+              },
+              {
+                "title": "Ethical Wildlife Photography — San Juan Island National Historical Park",
+                "url": "https://www.nps.gov/sajh/planyourvisit/ethical-wildlife-photography.htm",
+                "whyRelevant": "The National Park Service recommends keeping distance and using zoom lenses, and makes clear that wildlife viewing distances are location-specific."
+              },
+              {
+                "title": "7 Ways to Safely Watch Wildlife — National Park Service",
+                "url": "https://www.nps.gov/subjects/watchingwildlife/7ways.htm",
+                "whyRelevant": "Official guidance says animal reactions indicate excessive proximity and advises against feeding, frightening or intentionally disturbing wildlife."
+              }
+            ]
+          }
+        },
+        {
+          "id": "sonicvhibez-short-008-youtube-video-outline",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "How to Outline a YouTube Video: 4 Steps Before Scripting",
+          "primaryKeyword": "how to outline a YouTube video",
+          "script": "Before writing a full YouTube script, build a simple outline. Step one: name the viewer and the question they need answered. Step two: write a promise the video can actually deliver. Step three: choose three to five main points, put them in a useful order, and add a fact, example or demonstration under each. Step four: note a visual for each point, then write the takeaway and one next step. If a claim has no evidence, mark it for checking or remove it. An outline keeps the video focused without making you read every word. Advertisement. The Full Video Creation Prompt Pack Premium Edition is a planning resource to review. Its direct-sales disclosure is awaiting owner approval; do not release this draft until approved and inserted.",
+          "productId": "video-creation-prompt-pack-premium",
+          "productUrl": "https://selar.com/539497q11t",
+          "description": "How to outline a YouTube video: define the viewer, promise, main points and supporting visuals before writing the full script.\n\nPlanning resource: The Full Video Creation Prompt Pack Premium Edition\nhttps://selar.com/539497q11t\n\nADVERTISEMENT — DISCLOSURE HOLD\nThis is a direct-sales promotion for a product sold through the owner's Selar business. The exact viewer-facing disclosure wording for this specific product is awaiting owner approval. Do not publish until it is approved and inserted in the final description and narration.\n\nAn outline is a planning aid; verify every claim and source before filming.",
+          "keywordPhrases": [
+            {
+              "phrase": "how to outline a YouTube video"
+            },
+            {
+              "phrase": "YouTube video outline template"
+            },
+            {
+              "phrase": "how to plan a YouTube video"
+            },
+            {
+              "phrase": "YouTube script outline"
+            },
+            {
+              "phrase": "YouTube video structure"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T11:13:58+02:00",
+            "note": "Fresh indexed results for YouTube video outline and outline templates describe audience, hook, promise, main sections, supporting evidence or visuals, and a closing next step. This supports the tutorial's exact planning lesson qualitatively; no measured global search volume or competition data is available.",
+            "sources": [
+              {
+                "title": "YouTube video outline generator — AresGen",
+                "url": "https://www.aresgen.com/templates/youtube-video-outline",
+                "whyRelevant": "The template structures a YouTube outline around a target audience, hook, main sections and closing call to action, matching the Short's practical outline steps."
+              },
+              {
+                "title": "What Is a YouTube Video Outline? Complete Creator Guide",
+                "url": "https://www.creatoressentials.com/glossary/video-outline/",
+                "whyRelevant": "The guide identifies the viewer, promise, hook, sections, evidence, visuals, transitions and call to action as useful outline elements."
+              },
+              {
+                "title": "YouTube Video Outline — How to Plan Content",
+                "url": "https://tuberanker.com/blog/youtube-video-outline",
+                "whyRelevant": "The guide describes planning a relevant hook, introduction, main points and conclusion before writing or filming."
+              }
+            ]
+          },
+          "hashtags": [
+            "#YouTubeVideoOutline",
+            "#YouTubeScript",
+            "#VideoPlanning",
+            "#ContentCreation",
+            "#YouTubeCreator"
+          ],
+          "thumbnailDirection": "Show a clean one-page outline with four rows labelled VIEWER, PROMISE, POINTS and VISUALS. Large mobile-readable text: “OUTLINE FIRST”. Use a simple, original graphic rather than a misleading dashboard screenshot.",
+          "disclosure": {
+            "status": "HOLD",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "holdText": "The owner confirms this is a direct sale through their own Selar business, not an affiliate commission. The viewer-facing commercial disclosure is still unapproved; keep this promotion on HOLD until the owner approves the exact wording."
+          },
+          "productionChecklist": [
+            "Keep the lesson to four repeatable outline steps and one clear example.",
+            "Make the audience and viewer question specific before drafting the hook.",
+            "Ensure the video promise is deliverable and matches the actual content.",
+            "Support each main point with a verified fact, example or demonstration.",
+            "Add a useful visual cue to each section without inventing evidence.",
+            "Use original or commercially cleared graphics, music and sound effects.",
+            "Record natural narration and confirm a final runtime near 55 seconds.",
+            "Time captions to the final voice track and check phone-size readability.",
+            "Verify the exact Prompt Pack listing and seller; retain the product-specific disclosure HOLD.",
+            "Obtain owner approval of the exact direct-sales disclosure before final recording or release.",
+            "Complete human playback, factual and thumbnail review against final asset hashes.",
+            "Do not schedule until SonicVhibez-only destination access and full publication-spacing verification pass."
+          ],
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-10T11:13:58+02:00",
+            "note": "Current search results show informational intent around how to outline a YouTube video and reusable outline templates, with repeated structures for audience, hook, main points, evidence, visuals and closing CTA. This is qualitative intent evidence only.",
+            "sources": [
+              {
+                "title": "YouTube video outline generator — AresGen",
+                "url": "https://www.aresgen.com/templates/youtube-video-outline",
+                "whyRelevant": "The template structures a YouTube outline around a target audience, hook, main sections and closing call to action, matching the Short's practical outline steps."
+              },
+              {
+                "title": "What Is a YouTube Video Outline? Complete Creator Guide",
+                "url": "https://www.creatoressentials.com/glossary/video-outline/",
+                "whyRelevant": "The guide identifies the viewer, promise, hook, sections, evidence, visuals, transitions and call to action as useful outline elements."
+              },
+              {
+                "title": "YouTube Video Outline — How to Plan Content",
+                "url": "https://tuberanker.com/blog/youtube-video-outline",
+                "whyRelevant": "The guide describes planning a relevant hook, introduction, main points and conclusion before writing or filming."
+              }
+            ]
+          },
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "weekOf": "2026-11-30",
+      "status": "DRAFT_ONLY",
+      "items": [
+        {
+          "id": "sonicvhibez-short-009-wildlife-video-fact-check",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "How to Fact-Check Wildlife Videos Before You Publish",
+          "primaryKeyword": "how to fact-check wildlife videos",
+          "script": "That viral wildlife clip might be real—but the caption can still be wrong. Before you build a YouTube story around it, run three checks. First, separate what you can actually see from what the caption claims: species, location, behaviour and date. Second, trace the claim to an original source, such as a wildlife agency, museum, university or peer-reviewed study—not just another repost. Third, compare an independent source and keep any uncertainty in your narration. If the footage doesn't prove the claim, change the script, not the evidence. That's how wildlife creators protect accuracy and audience trust. Advertisement. The Complete YouTube Wildlife Creator's Vault is a resource to explore for wildlife-content planning. This product is sold through my own Selar business; purchases generate revenue for my business.",
+          "productId": "wildlife-creators-vault",
+          "productUrl": "https://selar.com/0u19v8u99l",
+          "description": "How to fact-check wildlife videos before you turn a clip into a YouTube story: separate visible evidence from caption claims, trace each claim to a reliable original source, and keep uncertainty in the narration.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF\nReview the exact Selar listing for current contents and price:\nhttps://selar.com/0u19v8u99l\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nFurther reading:\nhttps://www.srf.ch/news/srf-faktenchecks/faktencheck-tiervideos-im-internet-herzig-aber-oft-fake-drei-beispiele\nhttps://www.documentarytube.com/blog/how-to-handle-misinformation-about-wildlife-and-conservation/\n\nA resource does not replace independent fact-checking or footage-rights clearance.",
+          "keywordPhrases": [
+            {
+              "phrase": "how to fact-check wildlife videos"
+            },
+            {
+              "phrase": "how to verify animal videos"
+            },
+            {
+              "phrase": "wildlife misinformation fact check"
+            },
+            {
+              "phrase": "fact-check wildlife documentary claims"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-12T09:54:29+02:00",
+            "note": "Qualitative search-intent evidence only: current indexed results surface dedicated guidance on wildlife-video misinformation, verifying animal clips and fact-checking YouTube scripts. No measured global search volume or competition was available; vidIQ had 3 credits remaining, below its 5-credit keyword-research call cost. These results are not volume estimates.",
+            "sources": [
+              {
+                "title": "How to Fact-Check and Correct Wildlife Misinformation",
+                "url": "https://www.documentarytube.com/blog/how-to-handle-misinformation-about-wildlife-and-conservation/",
+                "whyRelevant": "Recent wildlife-specific guidance recommends writing down the exact claim and tracing it to an underlying study, dataset, agency notice or first-hand source."
+              },
+              {
+                "title": "Fact-check: Animal videos on the internet—cute, but often fake",
+                "url": "https://www.srf.ch/news/srf-faktenchecks/faktencheck-tiervideos-im-internet-herzig-aber-oft-fake-drei-beispiele",
+                "whyRelevant": "The Swiss public broadcaster's January 2026 animal-video fact-check explains checking plausibility, visual continuity and the account or earliest accessible source."
+              },
+              {
+                "title": "How to Research and Fact-Check a YouTube Script",
+                "url": "https://meowplaybook.com/blog/research-fact-check-youtube-script",
+                "whyRelevant": "A creator-facing guide published last week recommends matching every checkable script claim to a source fact sheet and linking sources for viewers."
+              },
+              {
+                "title": "How to Identify Marine Species in Blue Planet III Footage",
+                "url": "https://www.documentarytube.com/blog/how-to-identify-marine-species-featured-in-blue-planet-iii/",
+                "whyRelevant": "A recent documentary-specific guide distinguishes confirmed, supported, probable and unresolved species identification, supporting honest uncertainty in narration."
+              }
+            ]
+          },
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-12T09:54:29+02:00",
+            "note": "Qualitative search-intent evidence only: current indexed results surface dedicated guidance on wildlife-video misinformation, verifying animal clips and fact-checking YouTube scripts. No measured global search volume or competition was available; vidIQ had 3 credits remaining, below its 5-credit keyword-research call cost. These results are not volume estimates.",
+            "sources": [
+              {
+                "title": "How to Fact-Check and Correct Wildlife Misinformation",
+                "url": "https://www.documentarytube.com/blog/how-to-handle-misinformation-about-wildlife-and-conservation/",
+                "whyRelevant": "Recent wildlife-specific guidance recommends writing down the exact claim and tracing it to an underlying study, dataset, agency notice or first-hand source."
+              },
+              {
+                "title": "Fact-check: Animal videos on the internet—cute, but often fake",
+                "url": "https://www.srf.ch/news/srf-faktenchecks/faktencheck-tiervideos-im-internet-herzig-aber-oft-fake-drei-beispiele",
+                "whyRelevant": "The Swiss public broadcaster's January 2026 animal-video fact-check explains checking plausibility, visual continuity and the account or earliest accessible source."
+              },
+              {
+                "title": "How to Research and Fact-Check a YouTube Script",
+                "url": "https://meowplaybook.com/blog/research-fact-check-youtube-script",
+                "whyRelevant": "A creator-facing guide published last week recommends matching every checkable script claim to a source fact sheet and linking sources for viewers."
+              },
+              {
+                "title": "How to Identify Marine Species in Blue Planet III Footage",
+                "url": "https://www.documentarytube.com/blog/how-to-identify-marine-species-featured-in-blue-planet-iii/",
+                "whyRelevant": "A recent documentary-specific guide distinguishes confirmed, supported, probable and unresolved species identification, supporting honest uncertainty in narration."
+              }
+            ]
+          },
+          "scriptEvidence": [
+            {
+              "title": "How to Fact-Check and Correct Wildlife Misinformation",
+              "url": "https://www.documentarytube.com/blog/how-to-handle-misinformation-about-wildlife-and-conservation/",
+              "whyUsed": "Recent wildlife-specific guidance recommends writing down the exact claim and tracing it to an underlying study, dataset, agency notice or first-hand source."
+            },
+            {
+              "title": "Fact-check: Animal videos on the internet—cute, but often fake",
+              "url": "https://www.srf.ch/news/srf-faktenchecks/faktencheck-tiervideos-im-internet-herzig-aber-oft-fake-drei-beispiele",
+              "whyUsed": "The Swiss public broadcaster's January 2026 animal-video fact-check explains checking plausibility, visual continuity and the account or earliest accessible source."
+            },
+            {
+              "title": "How to Research and Fact-Check a YouTube Script",
+              "url": "https://meowplaybook.com/blog/research-fact-check-youtube-script",
+              "whyUsed": "A creator-facing guide published last week recommends matching every checkable script claim to a source fact sheet and linking sources for viewers."
+            },
+            {
+              "title": "How to Identify Marine Species in Blue Planet III Footage",
+              "url": "https://www.documentarytube.com/blog/how-to-identify-marine-species-featured-in-blue-planet-iii/",
+              "whyUsed": "A recent documentary-specific guide distinguishes confirmed, supported, probable and unresolved species identification, supporting honest uncertainty in narration."
+            }
+          ],
+          "hashtags": [
+            "#WildlifeFactCheck",
+            "#WildlifeDocumentary",
+            "#YouTubeCreator",
+            "#WildlifeEducation",
+            "#ContentResearch"
+          ],
+          "thumbnailDirection": "Use one genuine, rights-cleared wildlife frame paused beside a simple magnifying-glass/source icon. Large text: “CHECK THE CLAIM”. Do not use a synthetic animal image or imply that the pictured species or location has been verified unless it has.",
+          "disclosure": {
+            "status": "APPROVED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "approvedAt": "2026-11-10T07:02:41+02:00",
+            "approvalReference": "Owner explicitly approved the exact viewer-facing Selar direct-sales disclosure in the ChatGPT conversation on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Approval applies to the Complete YouTube Wildlife Creator's Vault promotion only."
+          },
+          "productionChecklist": [
+            "Confirm every factual statement in the narration against a source note; do not use captions as proof.",
+            "Prefer original wildlife-agency, museum, university or peer-reviewed sources for animal claims.",
+            "Check species, location, date and behaviour separately; preserve uncertainty when identification is incomplete.",
+            "Use only original or commercially cleared footage, narration, music and sound effects.",
+            "Do not bait, chase, stage, handle or disturb wildlife to obtain supporting shots.",
+            "Record natural narration and confirm the finished runtime is 50–60 seconds, targeting about 55.",
+            "Time captions to the final voice track and check phone-size readability and vertical safe areas.",
+            "Use the exact owner-approved ADVERTISEMENT identifier and direct-sales disclosure in the final video and description.",
+            "Recheck the Selar product page and seller before release; current registry seller evidence was last rechecked 9 November 2026.",
+            "Complete human factual, rights, compliance, playback and thumbnail review against final asset hashes.",
+            "Keep the item private and draft-only; no upload or scheduling is authorized.",
+            "Before any future schedule, inspect complete SonicVhibez history and destination queue and calculate every gap as at least 72 full hours in Africa/Johannesburg."
+          ],
+          "visibility": "private"
+        },
+        {
+          "id": "sonicvhibez-short-010-wildlife-shot-list",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "Wildlife Documentary Shot List: 3 Shots to Plan",
+          "primaryKeyword": "wildlife documentary shot list",
+          "script": "Wildlife documentary shot list: start with three shots, not a forced animal moment. First, capture a wide view that establishes the habitat. Next, record a medium shot that places the animal in its surroundings. Then, if it happens naturally and safely, capture a detail: a paw moving through grass, a bird feeding, or water rippling beside a hippo. Keep your distance, hold a steady frame, and let the animal decide what happens. If the behaviour never occurs, leave it out—never bait, chase or stage it. Build the edit around what you actually observed. Advertisement. The Complete YouTube Wildlife Creator's Vault is a resource to explore for wildlife-content planning. This product is sold through my own Selar business; purchases generate revenue for my business.",
+          "productId": "wildlife-creators-vault",
+          "productUrl": "https://selar.com/0u19v8u99l",
+          "description": "Wildlife documentary shot list: plan a habitat wide shot, an animal-in-context shot and a genuine detail shot before editing. Let the animal's natural behaviour set the pace; never chase, bait or stage a scene.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF\nReview the exact Selar listing for current contents and price:\nhttps://selar.com/0u19v8u99l\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nA resource does not replace animal-welfare guidance, factual review or footage-rights clearance.",
+          "keywordPhrases": [
+            {
+              "phrase": "wildlife documentary shot list"
+            },
+            {
+              "phrase": "how to film a wildlife documentary"
+            },
+            {
+              "phrase": "wildlife filmmaking tips"
+            },
+            {
+              "phrase": "wildlife video shot sequence"
+            },
+            {
+              "phrase": "wide medium close-up wildlife shots"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-12T10:11:06+02:00",
+            "note": "Qualitative search-intent evidence only: current indexed results surface practical wildlife-documentary shot-list guides, shot-size sequencing and wildlife-filming tutorials. No measured global search volume or competition is available; vidIQ has 3 credits remaining and its keyword-research call costs 5 credits. These sources support the topic and phrasing, not volume estimates.",
+            "sources": [
+              {
+                "title": "Types of shots in wildlife video",
+                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
+                "whyRelevant": "Explains why wildlife sequences benefit from varied shot sizes and consistent camera angles, supporting a practical shot-sequence lesson."
+              },
+              {
+                "title": "How to get the best shots for your wildlife documentary",
+                "url": "https://africa-media.org/careers/how-to-get-the-best-shots-for-your-wildlife-documentary/",
+                "whyRelevant": "Covers wide, medium and close shots, B-roll, patience, stable framing and observing wildlife without forcing action."
+              },
+              {
+                "title": "How to film a wildlife documentary on your safari",
+                "url": "https://kilisherpas.com/blogs/how-to-film-a-wildlife-documentary-on-your-safari-in-tanzania",
+                "whyRelevant": "Provides an explicit shot-list sequence of establishing, medium and close-up shots and stresses safe distance and natural behaviour."
+              }
+            ]
+          },
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-12T10:11:06+02:00",
+            "note": "Qualitative search-intent evidence only: current indexed results surface practical wildlife-documentary shot-list guides, shot-size sequencing and wildlife-filming tutorials. No measured global search volume or competition is available; vidIQ has 3 credits remaining and its keyword-research call costs 5 credits. These sources support the topic and phrasing, not volume estimates.",
+            "sources": [
+              {
+                "title": "Types of shots in wildlife video",
+                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
+                "whyRelevant": "Explains why wildlife sequences benefit from varied shot sizes and consistent camera angles, supporting a practical shot-sequence lesson."
+              },
+              {
+                "title": "How to get the best shots for your wildlife documentary",
+                "url": "https://africa-media.org/careers/how-to-get-the-best-shots-for-your-wildlife-documentary/",
+                "whyRelevant": "Covers wide, medium and close shots, B-roll, patience, stable framing and observing wildlife without forcing action."
+              },
+              {
+                "title": "How to film a wildlife documentary on your safari",
+                "url": "https://kilisherpas.com/blogs/how-to-film-a-wildlife-documentary-on-your-safari-in-tanzania",
+                "whyRelevant": "Provides an explicit shot-list sequence of establishing, medium and close-up shots and stresses safe distance and natural behaviour."
+              }
+            ]
+          },
+          "scriptEvidence": [
+            {
+              "title": "Types of shots in wildlife video",
+              "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
+              "whyUsed": "Explains why wildlife sequences benefit from varied shot sizes and consistent camera angles, supporting a practical shot-sequence lesson."
+            },
+            {
+              "title": "How to get the best shots for your wildlife documentary",
+              "url": "https://africa-media.org/careers/how-to-get-the-best-shots-for-your-wildlife-documentary/",
+              "whyUsed": "Covers wide, medium and close shots, B-roll, patience, stable framing and observing wildlife without forcing action."
+            },
+            {
+              "title": "How to film a wildlife documentary on your safari",
+              "url": "https://kilisherpas.com/blogs/how-to-film-a-wildlife-documentary-on-your-safari-in-tanzania",
+              "whyUsed": "Provides an explicit shot-list sequence of establishing, medium and close-up shots and stresses safe distance and natural behaviour."
+            }
+          ],
+          "hashtags": [
+            "#WildlifeFilmmaking",
+            "#WildlifeDocumentary",
+            "#WildlifeVideo",
+            "#YouTubeCreator",
+            "#ResponsibleWildlife"
+          ],
+          "thumbnailDirection": "Use three genuine, rights-cleared frames in a simple sequence: wide habitat, animal in context, and a naturally captured detail. Large text: “3 SHOTS TO PLAN”. Do not stage an animal action or imply that missing footage was recorded.",
+          "disclosure": {
+            "status": "APPROVED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "approvedAt": "2026-11-10T07:02:41+02:00",
+            "approvalReference": "Owner explicitly approved the exact viewer-facing Selar direct-sales disclosure in the ChatGPT conversation on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Approval applies to the Complete YouTube Wildlife Creator's Vault promotion only."
+          },
+          "productionChecklist": [
+            "Confirm every factual statement in the narration against a reliable source; do not use captions as proof.",
+            "Use wide, medium and detail shots only when they were genuinely captured; never fabricate a missing shot.",
+            "Use only original or commercially cleared footage, narration, music and sound effects.",
+            "Keep a safe distance and never bait, chase, stage, handle or disturb wildlife.",
+            "Record natural narration and confirm the finished runtime is 50–60 seconds, targeting about 55.",
+            "Time captions to the final voice track and check phone-size readability and vertical safe areas.",
+            "Use the exact owner-approved ADVERTISEMENT identifier and direct-sales disclosure in the final video and description.",
+            "Recheck the Selar product page and seller before release; registry seller evidence was last verified 9 November 2026.",
+            "Complete human factual, rights, compliance, playback and thumbnail review against final asset hashes.",
+            "Keep the item private and draft-only; no upload or scheduling is authorized.",
+            "Before any future schedule, inspect complete SonicVhibez history and destination queue and calculate every gap as at least 72 full hours in Africa/Johannesburg."
+          ],
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "weekOf": "2026-12-07",
+      "status": "DRAFT_ONLY",
+      "items": [
+        {
+          "id": "sonicvhibez-short-011-wildlife-broll",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "Wildlife Documentary B-Roll: 3 Shots That Save the Edit",
+          "primaryKeyword": "wildlife documentary B-roll",
+          "script": "Your wildlife clips look beautiful, but the edit feels jumpy? You may be missing B-roll. Before filming, plan three supporting shots—without moving closer to an animal. First, habitat context: wind in grass, water, trees or tracks, recorded from a safe position. Second, natural movement: a herd crossing the frame, leaves shifting or ripples spreading. Third, detail: feathers, paws or a branch moving in the breeze, only when naturally available. Hold each frame steady and note where and when it was captured. In the edit, use these shots to bridge cuts and show viewers where the action belongs. Never bait, chase or stage wildlife. Advertisement. The Complete YouTube Wildlife Creator's Vault is a resource to explore for wildlife-content planning. This product is sold through my own Selar business; purchases generate revenue for my business.",
+          "productId": "wildlife-creators-vault",
+          "productUrl": "https://selar.com/0u19v8u99l",
+          "description": "Wildlife documentary B-roll: capture habitat context, natural movement and genuine detail shots to connect your wildlife edit. Film from a safe distance and never bait, chase or disturb animals.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF\nReview the exact Selar listing for current contents and price:\nhttps://selar.com/0u19v8u99l\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nA resource does not replace animal-welfare guidance, factual review or footage-rights clearance.",
+          "keywordPhrases": [
+            {
+              "phrase": "wildlife documentary B-roll"
+            },
+            {
+              "phrase": "wildlife video B-roll"
+            },
+            {
+              "phrase": "wildlife filmmaking tips"
+            },
+            {
+              "phrase": "how to film a wildlife documentary"
+            },
+            {
+              "phrase": "wildlife video storytelling"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-13T09:19:00+02:00",
+            "note": "Qualitative search-intent evidence only: current indexed wildlife-filmmaking guides discuss B-roll/cutaways, shot variety, shot sequences and ethical filming. No measured global search volume or competition figure was available. vidIQ had three credits remaining, below its five-credit keyword-research call cost; no volume estimate is claimed.",
+            "sources": [
+              {
+                "title": "Wildlife Filmmaking: The Essential Masterclass",
+                "url": "https://member.worldnomads.com/explore/guides/wildlife-filmmaking",
+                "whyRelevant": "Wildlife filmmaker guidance covers shot variety, cutaways, editing and preparing for unpredictable animal behaviour."
+              },
+              {
+                "title": "Types of shots in wildlife video",
+                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
+                "whyRelevant": "Explains shot-size variation and continuity in wildlife sequences, supporting the use of contextual and detail cutaways."
+              },
+              {
+                "title": "How To Film A Wildlife Documentary On Your Safari",
+                "url": "https://serengetiafricantours.com/how-to-film-a-wildlife-documentary-on-your-safari/",
+                "whyRelevant": "Covers wide, medium and close-up wildlife shots and explicitly advises safe distance and allowing natural behaviour."
+              },
+              {
+                "title": "Tell a dive story on video: from a 30-second clip to a mini-documentary",
+                "url": "https://www.aquaexposure.com/nl/blog/onderwatervideo-storytelling-duik-vertellen",
+                "whyRelevant": "A video-storytelling guide explains how B-roll supplies context and atmosphere between main action shots; used as general editing support, not wildlife-specific evidence."
+              }
+            ]
+          },
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-13T09:19:00+02:00",
+            "note": "Qualitative search-intent evidence only: current indexed wildlife-filmmaking guides discuss B-roll/cutaways, shot variety, shot sequences and ethical filming. No measured global search volume or competition figure was available. vidIQ had three credits remaining, below its five-credit keyword-research call cost; no volume estimate is claimed.",
+            "sources": [
+              {
+                "title": "Wildlife Filmmaking: The Essential Masterclass",
+                "url": "https://member.worldnomads.com/explore/guides/wildlife-filmmaking",
+                "whyRelevant": "Wildlife filmmaker guidance covers shot variety, cutaways, editing and preparing for unpredictable animal behaviour."
+              },
+              {
+                "title": "Types of shots in wildlife video",
+                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
+                "whyRelevant": "Explains shot-size variation and continuity in wildlife sequences, supporting the use of contextual and detail cutaways."
+              },
+              {
+                "title": "How To Film A Wildlife Documentary On Your Safari",
+                "url": "https://serengetiafricantours.com/how-to-film-a-wildlife-documentary-on-your-safari/",
+                "whyRelevant": "Covers wide, medium and close-up wildlife shots and explicitly advises safe distance and allowing natural behaviour."
+              },
+              {
+                "title": "Tell a dive story on video: from a 30-second clip to a mini-documentary",
+                "url": "https://www.aquaexposure.com/nl/blog/onderwatervideo-storytelling-duik-vertellen",
+                "whyRelevant": "A video-storytelling guide explains how B-roll supplies context and atmosphere between main action shots; used as general editing support, not wildlife-specific evidence."
+              }
+            ]
+          },
+          "scriptEvidence": [
+            {
+              "title": "Wildlife Filmmaking: The Essential Masterclass",
+              "url": "https://member.worldnomads.com/explore/guides/wildlife-filmmaking",
+              "whyUsed": "Wildlife filmmaker guidance covers shot variety, cutaways, editing and preparing for unpredictable animal behaviour."
+            },
+            {
+              "title": "Types of shots in wildlife video",
+              "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
+              "whyUsed": "Explains shot-size variation and continuity in wildlife sequences, supporting the use of contextual and detail cutaways."
+            },
+            {
+              "title": "How To Film A Wildlife Documentary On Your Safari",
+              "url": "https://serengetiafricantours.com/how-to-film-a-wildlife-documentary-on-your-safari/",
+              "whyUsed": "Covers wide, medium and close-up wildlife shots and explicitly advises safe distance and allowing natural behaviour."
+            },
+            {
+              "title": "Tell a dive story on video: from a 30-second clip to a mini-documentary",
+              "url": "https://www.aquaexposure.com/nl/blog/onderwatervideo-storytelling-duik-vertellen",
+              "whyUsed": "A video-storytelling guide explains how B-roll supplies context and atmosphere between main action shots; used as general editing support, not wildlife-specific evidence."
+            }
+          ],
+          "hashtags": [
+            "#WildlifeFilmmaking",
+            "#WildlifeDocumentary",
+            "#WildlifeVideo",
+            "#Broll",
+            "#YouTubeCreator"
+          ],
+          "thumbnailDirection": "Use three real, rights-cleared frames: habitat context, naturally recorded animal movement, and a genuine detail. Large text: “DON'T MISS B-ROLL”. Keep the animal undisturbed; do not imply that any unrecorded behaviour was captured.",
+          "disclosure": {
+            "status": "APPROVED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "approvedAt": "2026-11-10T07:02:41+02:00",
+            "approvalReference": "Owner explicitly approved the exact viewer-facing Selar direct-sales disclosure in the ChatGPT conversation on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Approval applies to the Complete YouTube Wildlife Creator's Vault promotion only."
+          },
+          "productionChecklist": [
+            "Use only original or commercially cleared wildlife footage, narration, music and sound effects.",
+            "Capture habitat context, natural movement and detail only when genuinely available; never fabricate missing B-roll.",
+            "Keep a safe distance; never bait, chase, stage, handle or disturb wildlife.",
+            "Record source location/date privately for factual verification; do not expose sensitive wildlife locations.",
+            "Record natural narration and confirm a final runtime of 50–60 seconds, targeting about 55.",
+            "Time captions to the final voice track and check phone-size readability and vertical safe areas.",
+            "Use the exact owner-approved ADVERTISEMENT identifier and direct-sales disclosure in the final video and description.",
+            "Recheck the exact Selar product page and seller before release; current seller evidence was last verified 9 November 2026.",
+            "Complete human factual, rights, compliance, playback and thumbnail review against final asset hashes.",
+            "Keep the item private and draft-only; no upload or scheduling is authorized.",
+            "Before any future schedule, inspect complete SonicVhibez history and destination queue and calculate every gap as at least 72 full hours in Africa/Johannesburg."
+          ],
+          "visibility": "private"
+        },
+        {
+          "id": "sonicvhibez-short-012-wildlife-video-editing",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "Wildlife Video Editing: 3 Passes for a Clearer Story",
+          "primaryKeyword": "wildlife video editing",
+          "script": "Wildlife video editing gets easier when you stop trying to perfect every clip at once. Use three passes. First, story: choose one verified moment and arrange the wide, action and detail shots so the sequence makes sense. Don’t cut away context or imply behaviour you didn’t record. Second, rhythm: trim dead time, but keep enough natural pauses for viewers to understand what happened. Third, sound: keep useful field audio, lower music beneath it, and caption only what is actually said. Watch the edit once without music. If the story is unclear, fix the pictures before adding effects. Advertisement. You can explore the Complete YouTube Wildlife Creator’s Vault using the link in the description. This product is sold through my own Selar business; purchases generate revenue for my business.",
+          "productId": "wildlife-creators-vault",
+          "productUrl": "https://selar.com/0u19v8u99l",
+          "description": "Wildlife video editing is easier when you separate story, rhythm and sound into three deliberate passes. Use this checklist to keep the sequence clear without inventing animal behaviour.\n\nProduct: Complete YouTube Wildlife Creator's Vault\nhttps://selar.com/0u19v8u99l\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nUse only original or commercially cleared footage and audio. Keep animal behaviour factual and undisturbed.",
+          "keywordPhrases": [
+            {
+              "phrase": "wildlife video editing",
+              "estimatedMonthlySearches": 8456,
+              "volumeScore": 59,
+              "competition": 18,
+              "growthPct": null
+            },
+            {
+              "phrase": "wildlife video tips"
+            },
+            {
+              "phrase": "wildlife filmmaking"
+            },
+            {
+              "phrase": "wildlife videography"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "vidIQ",
+            "type": "estimated_monthly_searches",
+            "researchedAt": "2026-11-14T09:43:11+02:00",
+            "note": "vidIQ research on 2026-11-14 returned the seed phrase 'wildlife video editing' at an estimated 8,456 monthly searches, volume score 59/100 and competition 18/100. Related terms 'wildlife video tips', 'wildlife filmmaking' and 'wildlife videography' each displayed fewer than 750 estimated monthly searches. No growth percentage or top-market breakdown was returned for the seed. These are provider estimates, not independently audited."
+          },
+          "hashtags": [
+            "#WildlifeVideoEditing",
+            "#WildlifeFilmmaking",
+            "#WildlifeDocumentary",
+            "#VideoEditing",
+            "#YouTubeCreator"
+          ],
+          "thumbnailDirection": "Use a genuine rights-cleared wildlife edit timeline with three clearly labelled passes: STORY, RHYTHM, SOUND. Large text: “EDIT IN 3 PASSES”. No AI or stock footage may be presented as the finished production asset.",
+          "disclosure": {
+            "status": "APPROVED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "approvedAt": "2026-11-10T07:02:41+02:00",
+            "approvalReference": "Owner explicitly approved the exact viewer-facing Selar direct-sales disclosure in the ChatGPT conversation on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Approval applies to the Complete YouTube Wildlife Creator's Vault promotion only."
+          },
+          "productionChecklist": [
+            "Use only original or commercially cleared wildlife footage, narration, music and sound effects.",
+            "Choose a verified sequence and preserve the context needed to understand the recorded behaviour.",
+            "Never imply a cause, action or animal behaviour that the source footage does not show.",
+            "Trim for clarity while retaining natural pauses and sequence continuity.",
+            "Keep useful field audio intelligible and lower music beneath it; verify all music rights.",
+            "Caption only the actual narration and check synchronization, phone-size readability and vertical safe areas.",
+            "Confirm final runtime between 50 and 60 seconds, targeting about 55 seconds.",
+            "Use the exact owner-approved ADVERTISEMENT identifier and direct-sales disclosure in the final video and description.",
+            "Recheck the exact Selar product page and seller before release; current seller evidence was last verified 9 November 2026.",
+            "Complete human factual, rights, compliance, playback and thumbnail review against final asset hashes.",
+            "Keep the item private and draft-only; no upload or scheduling is authorized.",
+            "Before any future schedule, inspect complete SonicVhibez history and destination queue and calculate every gap as at least 72 full hours in Africa/Johannesburg."
+          ],
+          "visibility": "private",
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-14T09:43:11+02:00",
+            "note": "Current indexed guidance covers wildlife-documentary editing, shot sequencing, narration-led B-roll and natural sound mixing. This is qualitative support for the lesson; the separate measured keyword estimate is from vidIQ.",
+            "sources": [
+              {
+                "title": "How to Edit Nature and Animal Documentary Videos (2026)",
+                "url": "https://umbrellacreators.com/blog/how-to-edit-nature-and-animal-documentary-videos",
+                "whyRelevant": "A recent wildlife-documentary editing guide discusses sequencing, pacing and preserving natural movement, matching the Short's story-and-rhythm passes."
+              },
+              {
+                "title": "Step-By-Step Guide to Editing Animal Sound Effects for Wildlife Documentaries",
+                "url": "https://audioscene.org/article/step-by-step-guide-to-editing-animal-sound-effects-for-wildlife-documentaries",
+                "whyRelevant": "Explains balancing narration, music, ambience and animal sound effects while avoiding over-processing, supporting the sound pass."
+              },
+              {
+                "title": "Zoo Promo: Working with Voice-Over in Premiere Pro",
+                "url": "https://blog.nobledesktop.com/learn/premiere-pro/zoo-promo-working-with-voice-over",
+                "whyRelevant": "Updated in April 2026; covers narration timing, B-roll layering and audio mixing as practical editing workflow components."
+              }
+            ]
+          },
+          "scriptEvidence": [
+            {
+              "title": "How to Edit Nature and Animal Documentary Videos (2026)",
+              "url": "https://umbrellacreators.com/blog/how-to-edit-nature-and-animal-documentary-videos",
+              "whyUsed": "A recent wildlife-documentary editing guide discusses sequencing, pacing and preserving natural movement, matching the Short's story-and-rhythm passes."
+            },
+            {
+              "title": "Step-By-Step Guide to Editing Animal Sound Effects for Wildlife Documentaries",
+              "url": "https://audioscene.org/article/step-by-step-guide-to-editing-animal-sound-effects-for-wildlife-documentaries",
+              "whyUsed": "Explains balancing narration, music, ambience and animal sound effects while avoiding over-processing, supporting the sound pass."
+            },
+            {
+              "title": "Zoo Promo: Working with Voice-Over in Premiere Pro",
+              "url": "https://blog.nobledesktop.com/learn/premiere-pro/zoo-promo-working-with-voice-over",
+              "whyUsed": "Updated in April 2026; covers narration timing, B-roll layering and audio mixing as practical editing workflow components."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

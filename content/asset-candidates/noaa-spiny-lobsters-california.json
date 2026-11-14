@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "channel": "SonicVhibez",
+  "assetId": "NOAA-SPINY-LOBSTERS-CA-2026-11",
+  "status": "OWNER_AUTHORIZED_CONDITIONAL_SOURCE_CANDIDATE",
+  "productionApproved": false,
+  "rightsConfirmed": false,
+  "rightsEvidenceReviewed": false,
+  "humanApproved": false,
+  "complianceReviewed": false,
+  "source": {
+    "title": "B-Roll: Spiny Lobsters in California's Channel Islands",
+    "publisher": "NOAA's Office of National Marine Sanctuaries",
+    "sourceUrl": "https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6313425635112/b-roll%3A-spiny-lobsters-in-california",
+    "acquiredFilename": "noaa-spiny-lobsters-california.download",
+    "sha256": "1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb",
+    "container": "GitHub Actions artifact sonicvhibez-noaa-broll-candidates",
+    "workflowRunId": 42594716333,
+    "artifactId": 13662524700,
+    "artifactUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42594716333/artifacts/13662524700",
+    "technical": {
+      "container": "MP4",
+      "videoCodec": "H.264",
+      "audioCodec": "AAC",
+      "width": 1280,
+      "height": 720,
+      "durationSeconds": 380.81,
+      "bytes": 100223664
+    }
+  },
+  "ownerAuthorization": {
+    "status": "APPROVED_WITH_CONDITIONS",
+    "recordedDate": "2026-11-10",
+    "scope": "This specific NOAA Spiny Lobsters in California package only",
+    "requiredAttribution": "NOAA’s Office of National Marine Sanctuaries",
+    "sourceAudio": "REMOVE_COMPLETELY",
+    "noEndorsement": "Do not use NOAA seals/logos as SonicVhibez branding or imply NOAA endorses SonicVhibez or any promoted product.",
+    "authorizationReference": "Owner explicitly approved use of this specific package in the ChatGPT conversation on 2026-11-10, conditioned on exact NOAA credit and complete removal of the source audio."
+  },
+  "termsAndReview": {
+    "publicDomainStatement": "NOAA's official B-roll library states B-roll packages may be downloaded and used with NOAA credit; package-specific opening slate supplies exact attribution.",
+    "observedOpeningSlateCredit": "Please credit “NOAA’s Office of National Marine Sanctuaries”.",
+    "visualReview": "The complete 380.810-second source was sampled at one-second intervals (381 frames). Sampled content shows underwater reef habitat, fish and California spiny lobsters. No people, handling, baiting, staged interaction, graphic animal harm, or additional credit cards were observed in this one-second sample.",
+    "reviewLimitations": [
+      "One-second sampling is not frame-by-frame or sub-second review.",
+      "Individual selected shots, transitions, embedded content and source terms still require human review.",
+      "The source AAC audio is not cleared and must not appear in any derivative.",
+      "This candidate is not entered into the approved production asset register."
+    ],
+    "nextClearanceSteps": [
+      "Verify the source package and exact SHA-256 before editing.",
+      "Select and inspect each intended in/out range and adjacent transitions.",
+      "Remove the entire source audio stream and verify the final file has no source audio.",
+      "Display the exact required NOAA credit legibly in the final edit.",
+      "Check the final edit for factual accuracy, third-party content, endorsement implications and all other applicable disclosures.",
+      "Complete separate human final-video and compliance approval before setting production flags."
+    ]
+  },
+  "publication": {
+    "allowed": false,
+    "note": "Owner approval is conditional source-use authorization only. It is not final-video approval, upload authorization, or permission to enable publishing."
+  },
+  "reviewCut": {
+    "filename": "NOAA-spiny-lobster-review-cut.mp4",
+    "localOutput": "/mnt/data/noaa-review/NOAA-spiny-lobster-review-cut.mp4",
+    "durationSeconds": 64,
+    "dimensions": "1280x720",
+    "videoCodec": "H.264",
+    "audioStreams": 0,
+    "sourceAudioRemoved": true,
+    "sourceRangesSeconds": [
+      [
+        160,
+        175
+      ],
+      [
+        245,
+        260
+      ],
+      [
+        320,
+        335
+      ],
+      [
+        360,
+        375
+      ]
+    ],
+    "sha256": "74fe43b1beae68574d2f75fd7b95737bde87be1ebad48451d4b50b94645b9181",
+    "purpose": "Silent source-review assembly only; contains a persistent review-only warning, exact NOAA attribution, and a not-approved-for-publication end slate.",
+    "productionApproved": false,
+    "notes": "This is not the final Short, has no narration, and has not completed full human/compliance review."
+  }
+}

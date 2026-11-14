@@ -3,6 +3,9 @@
 This script only creates local draft files. It never uploads or publishes.
 """
 from pathlib import Path
+from datetime import datetime
+import json
+import math
 import asyncio
 import re
 import sys
@@ -18,19 +21,90 @@ except ImportError:
     print("ERROR: Install edge-tts first: python -m pip install edge-tts", file=sys.stderr)
     raise SystemExit(2)
 
-SOURCE = Path("content/long-form-scripts.md")
-OUT = Path("media/long-form-drafts")
+SCRIPT_DIR = Path(__file__).resolve().parent
+REPO_ROOT = SCRIPT_DIR.parent
+SOURCE = REPO_ROOT / "content" / "long-form-scripts.md"
+OUT = REPO_ROOT / "media" / "long-form-drafts"
+PRODUCTS = REPO_ROOT / "config" / "products.json"
+APPROVED_SELLAR_URL = "https://selar.com/0u19v8u99l"
+APPROVED_DISCLOSURE_TEXT = "This product is sold through my own Selar business; purchases generate revenue for my business."
 VOICE = "en-US-GuyNeural"
 CAPTION_MAX_WORDS = 7
 CAPTION_MAX_CHARS = 42
 
-def clean_script(text: str) -> str:
+def _has_timezone(value: str) -> bool:
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        return parsed.tzinfo is not None and parsed.utcoffset() is not None
+    except (TypeError, ValueError, AttributeError):
+        return False
+
+
+def _valid_owner_date(value: str) -> bool:
+    try:
+        return datetime.strptime(value, "%Y-%m-%d").strftime("%Y-%m-%d") == value
+    except (TypeError, ValueError):
+        return False
+
+
+def has_owner_approved_selar_disclosure(product_config=None) -> bool:
+    """Fail closed unless the exact Selar product, relationship and disclosure are owner-approved."""
+    try:
+        if product_config is None:
+            product_config = json.loads(PRODUCTS.read_text(encoding="utf-8"))
+        products = product_config.get("products", [])
+        product = next((item for item in products if item.get("url") == APPROVED_SELLAR_URL), None)
+        if not product or product.get("status") != "approved":
+            return False
+        gate = product.get("promotionGate", {})
+        seller = gate.get("seller", {})
+        brand = gate.get("brandAuthorization", {})
+        compensation = gate.get("compensation", {})
+        disclosure = gate.get("disclosure", {})
+        return (
+            seller.get("status") == "VERIFIED"
+            and seller.get("sourceUrl") == APPROVED_SELLAR_URL
+            and bool(str(seller.get("name", "")).strip())
+            and _has_timezone(seller.get("verifiedAt", ""))
+            and bool(str(seller.get("evidenceReference", "")).strip())
+            and brand.get("status") == "OWNER_CONFIRMED"
+            and brand.get("brand") == "SonicVhibez"
+            and _has_timezone(brand.get("confirmedAt", ""))
+            and bool(str(brand.get("approvalReference", "")).strip())
+            and compensation.get("status") == "OWNER_CONFIRMED"
+            and compensation.get("type") == "DIRECT_SALES_REVENUE"
+            and _valid_owner_date(compensation.get("verifiedAt", ""))
+            and bool(str(compensation.get("evidenceReference", "")).strip())
+            and disclosure.get("status") == "OWNER_APPROVED"
+            and disclosure.get("text") == APPROVED_DISCLOSURE_TEXT
+            and _has_timezone(disclosure.get("approvedAt", ""))
+            and bool(str(disclosure.get("approvalReference", "")).strip())
+        )
+    except (OSError, ValueError, TypeError, AttributeError):
+        return False
+
+def clean_script(text: str, include_paid_product: bool = False) -> str:
     text = re.sub(r"(?m)^#{1,6} .*\n", "", text)
     text = re.sub(r"(?m)^\*\*[^\n]*\*\*\s*$", "", text)
     text = re.sub(r"(?m)^\*\*\[.*?\]\*\*.*$", "", text)
     text = re.sub(r"(?m)^### Suggested (description|tags).*$", "", text)
+    paid_paragraphs = re.findall(
+        r"(?:^|\n\n)(If you want a paid resource\b.*?)(?=\n\n|$)",
+        text,
+        flags=re.DOTALL,
+    )
+    if include_paid_product:
+        if any(APPROVED_DISCLOSURE_TEXT not in paragraph for paragraph in paid_paragraphs):
+            raise ValueError("Paid-product narration must contain the exact owner-approved Selar disclosure")
+    else:
+        text = re.sub(
+            r"(?:^|\n\n)If you want a paid resource\b.*?(?=\n\n|$)",
+            "",
+            text,
+            flags=re.DOTALL,
+        )
     text = re.sub(r"(?m)^Promotional resource:.*$", "", text)
-    text = re.sub(r"https://selar\.com/0u19v8u99l", "the approved creator resource linked in the video description", text)
+    text = re.sub(r"https://selar\.com/0u19v8u99l", "", text)
     text = re.sub(r"\[[^\]]*\]", " ", text)
     text = re.sub(r"\*\*(.*?)\*\*", r"\1", text)
     text = re.sub(r"(?m)^[-*]\s+", "", text)
@@ -51,7 +125,7 @@ def extract_episodes(markdown: str):
         description = re.search(r"(?m)^### Suggested description\s*$", body)
         if description:
             body = body[:description.start()]
-        cleaned = clean_script(body)
+        cleaned = clean_script(body, include_paid_product=has_owner_approved_selar_disclosure())
         if len(cleaned.split()) < 500:
             raise ValueError(f"Episode {match.group(1)} script seems unexpectedly short ({len(cleaned.split())} words)")
         episodes.append((match.group(1), match.group(2).strip(), cleaned))
@@ -69,12 +143,22 @@ def srt_time(seconds: float) -> str:
 def captions_from_boundaries(boundaries):
     """Group actual TTS word-boundary events into readable draft caption cues."""
     cues, group = [], []
+    previous_start = -1.0
     for item in boundaries:
         word = str(item.get("text", "")).strip()
         if not word:
             continue
-        start = max(0.0, float(item.get("offset", 0)) / 10_000_000)
-        end = max(start + 0.15, (float(item.get("offset", 0)) + float(item.get("duration", 0))) / 10_000_000)
+        if len(word) > CAPTION_MAX_CHARS:
+            raise ValueError("A TTS word exceeds the maximum caption character count; manual caption editing is required")
+        offset = float(item.get("offset", 0))
+        duration = float(item.get("duration", 0))
+        if not math.isfinite(offset) or not math.isfinite(duration) or offset < 0 or duration < 0:
+            raise ValueError("TTS word-boundary offsets and durations must be finite and non-negative")
+        start = offset / 10_000_000
+        if start < previous_start:
+            raise ValueError("TTS word-boundary events are out of order; refusing to generate misleading captions")
+        previous_start = start
+        end = max(start + 0.15, (offset + duration) / 10_000_000)
         if group and (len(group) >= CAPTION_MAX_WORDS or len(" ".join(x["text"] for x in group)) + len(word) + 1 > CAPTION_MAX_CHARS):
             cues.append(group)
             group = []
@@ -84,24 +168,41 @@ def captions_from_boundaries(boundaries):
             group = []
     if group:
         cues.append(group)
+    # Distinct caption groups can begin less than 50 ms apart. They cannot
+    # both have a positive-duration, non-overlapping SRT interval, so merge
+    # those groups before assigning cue times (readability limits are advisory
+    # in this rare TTS-boundary edge case).
+    normalized_cues = []
+    for cue in cues:
+        if normalized_cues and cue[0]["start"] < normalized_cues[-1][0]["start"] + 0.05:
+            normalized_cues[-1].extend(cue)
+        else:
+            normalized_cues.append(cue)
+
     lines = []
-    for index, cue in enumerate(cues, 1):
+    for index, cue in enumerate(normalized_cues, 1):
         start = cue[0]["start"]
         end = max(start + 0.05, cue[-1]["end"])
-        # TTS word-boundary durations can overlap slightly across adjacent words.
-        # End each cue at the next cue's start so SRT blocks never overlap.
-        if index < len(cues):
-            next_start = cues[index][0]["start"]
-            if end > next_start:
-                end = max(start + 0.05, next_start)
+        # TTS word-boundary durations can overlap across adjacent words.
+        # Clip the earlier cue at the next start; the merge above guarantees
+        # that this still leaves the minimum 50 ms cue duration.
+        if index < len(normalized_cues):
+            next_start = normalized_cues[index][0]["start"]
+            end = min(end, next_start)
         lines.extend([str(index), f"{srt_time(start)} --> {srt_time(end)}", " ".join(x["text"] for x in cue), ""])
     return "\n".join(lines).rstrip() + "\n"
 
 def captions_from_text_estimate(text: str, duration: float) -> str:
     """Build explicitly approximate draft caption timings when TTS word events are absent."""
+    if not math.isfinite(duration) or duration <= 0:
+        raise ValueError("Estimated caption duration must be finite and positive")
     words = text.split()
+    if not words:
+        raise ValueError("Cannot generate estimated captions from empty narration text")
     groups, group = [], []
     for word in words:
+        if len(word) > CAPTION_MAX_CHARS:
+            raise ValueError("A narration word exceeds the maximum caption character count; manual caption editing is required")
         candidate = " ".join(group + [word])
         if group and (len(group) >= CAPTION_MAX_WORDS or len(candidate) > CAPTION_MAX_CHARS):
             groups.append(group)
@@ -112,12 +213,18 @@ def captions_from_text_estimate(text: str, duration: float) -> str:
             group = []
     if group:
         groups.append(group)
+    # Reserve at least 100 ms per cue, then distribute the remaining
+    # duration by text length. This prevents tiny groups rounding to zero.
+    minimum_cue_seconds = 0.1
+    if duration < len(groups) * minimum_cue_seconds:
+        raise ValueError("Narration is too short to assign a positive 100 ms interval to every estimated caption cue")
     total_chars = sum(len(" ".join(g)) for g in groups) or 1
+    distributable_duration = duration - len(groups) * minimum_cue_seconds
     cursor = 0.0
     lines = []
     for index, words_group in enumerate(groups, 1):
         caption = " ".join(words_group)
-        share = duration * len(caption) / total_chars
+        share = minimum_cue_seconds + distributable_duration * len(caption) / total_chars
         start = cursor
         end = duration if index == len(groups) else min(duration, cursor + share)
         if end <= start:

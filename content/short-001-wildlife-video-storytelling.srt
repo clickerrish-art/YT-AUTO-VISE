@@ -1,51 +1,59 @@
 1
-00:00:00,000 --> 00:00:04,000
+00:00:00,000 --> 00:00:02,000
 Want better wildlife videos?
 
 2
-00:00:04,000 --> 00:00:09,000
-Start with one clear story,
-not a collection of random animal clips.
+00:00:02,000 --> 00:00:06,000
+Start with one clear story, not a pile of random animal clips.
 
 3
-00:00:09,000 --> 00:00:14,000
-First, choose a question:
-What behavior will viewers discover?
+00:00:06,000 --> 00:00:09,000
+Choose one question your footage can actually answer.
 
 4
-00:00:14,000 --> 00:00:20,000
-Next, plan three shots:
-a wide view, a closer detail,
-and the behavior itself.
+00:00:09,000 --> 00:00:15,000
+Plan three shots: a wide habitat view, a meaningful detail, and the behavior itself.
 
 5
-00:00:20,000 --> 00:00:26,000
-Keep a safe distance.
-Never bait, chase, or disturb wildlife
-just to get a shot.
+00:00:15,000 --> 00:00:19,000
+Keep separate moments in their original recorded order; label any reconstruction clearly.
 
 6
-00:00:26,000 --> 00:00:32,000
-Let natural movement tell the story.
-Use steady framing and patient observation.
+00:00:19,000 --> 00:00:21,000
+Keep a safe distance.
 
 7
-00:00:32,000 --> 00:00:38,000
-Then edit tightly.
-Remove pauses that don't add information.
+00:00:21,000 --> 00:00:25,000
+Never bait, chase, or disturb wildlife.
 
 8
-00:00:38,000 --> 00:00:44,000
-Add readable captions
-and only music you have permission to use.
+00:00:25,000 --> 00:00:31,000
+Use patient observation and steady framing; let natural movement tell the story.
 
 9
-00:00:44,000 --> 00:00:50,000
-Finish with one useful takeaway
-so viewers leave having learned something.
+00:00:31,000 --> 00:00:34,000
+Edit out pauses that add no information.
 
 10
-00:00:50,000 --> 00:00:55,000
-Build your next wildlife video with a plan.
-Find the Wildlife Creator's Vault
-at the link in the description.
+00:00:34,000 --> 00:00:40,000
+Add readable captions and only music you have permission to use.
+
+11
+00:00:40,000 --> 00:00:42,000
+Finish with one useful takeaway.
+
+12
+00:00:42,000 --> 00:00:47,000
+For more wildlife creator planning, review the Complete YouTube Wildlife Creator's Vault.
+
+13
+00:00:47,000 --> 00:00:48,000
+Advertisement.
+
+14
+00:00:48,000 --> 00:00:54,000
+This product is sold through my own Selar business; purchases generate revenue for my business.
+
+15
+00:00:54,000 --> 00:00:55,000
+The link is in the description.

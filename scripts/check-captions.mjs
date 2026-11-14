@@ -13,14 +13,14 @@ for (const file of files) {
     failed = true;
     continue;
   }
-  const text = fs.readFileSync(file, "utf8").replace(/\r\n/g, "\n").trim();
+  const text = fs.readFileSync(file, "utf8").replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
   const blocks = text.split(/\n\s*\n/);
   let previousEnd = 0;
   let fileErrors = [];
   for (let i = 0; i < blocks.length; i++) {
     const lines = blocks[i].split("\n");
-    if (lines.length < 3 || Number(lines[0]) !== i + 1) {
-      fileErrors.push(`block ${i + 1}: invalid sequence or missing caption text`);
+    if (lines.length < 2 || Number(lines[0]) !== i + 1) {
+      fileErrors.push(`block ${i + 1}: invalid sequence or missing timestamp`);
       continue;
     }
     const match = lines[1].match(/^(\d{2}):(\d{2}):(\d{2}),(\d{3}) --> (\d{2}):(\d{2}):(\d{2}),(\d{3})$/);
@@ -29,6 +29,11 @@ for (const file of files) {
       continue;
     }
     const nums = match.slice(1).map(Number);
+    const [, startMinutes, startSeconds, , endMinutes, endSeconds] = nums;
+    if (startMinutes > 59 || startSeconds > 59 || endMinutes > 59 || endSeconds > 59) {
+      fileErrors.push(`block ${i + 1}: minute and second timestamp fields must be between 00 and 59`);
+      continue;
+    }
     const toMs = (h, m, s, ms) => (((h * 60 + m) * 60 + s) * 1000 + ms);
     const start = toMs(...nums.slice(0, 4));
     const end = toMs(...nums.slice(4, 8));

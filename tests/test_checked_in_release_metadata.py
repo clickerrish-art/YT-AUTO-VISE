@@ -7,7 +7,7 @@ APPROVED_URL = "https://selar.com/0u19v8u99l"
 
 
 class CheckedInReleaseMetadataTests(unittest.TestCase):
-    def test_checked_in_short_is_not_uploadable_by_default(self):
+    def test_checked_in_short_uses_verified_channel_id_but_is_not_uploadable_by_default(self):
         metadata = json.loads((ROOT / "content" / "next-short.json").read_text(encoding="utf-8"))
         self.assertEqual(metadata.get("channel"), "SonicVhibez")
         self.assertEqual(metadata.get("productUrl"), APPROVED_URL)
@@ -15,7 +15,13 @@ class CheckedInReleaseMetadataTests(unittest.TestCase):
         self.assertEqual(metadata.get("status"), "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW")
         self.assertFalse(metadata.get("rightsConfirmed"))
         self.assertFalse(metadata.get("complianceReviewed"))
-        self.assertFalse(metadata.get("channelId"))
+        self.assertEqual(metadata.get("channelId"), "UCSlkuPfHH78oGC1o418HV4w", "use only the ID confirmed by authenticated read-only OAuth")
+
+    def test_long_form_queue_does_not_embed_an_unverified_channel_id(self):
+        queue = json.loads((ROOT / "content" / "long-form-queue.json").read_text(encoding="utf-8"))
+        self.assertEqual(queue.get("channel"), "SonicVhibez")
+        self.assertIs(queue.get("publishingEnabled"), False)
+        self.assertNotIn("channelId", queue, "long-form queue must wait for authenticated OAuth channel identity")
 
     def test_all_queued_items_remain_held_and_use_only_approved_destination(self):
         queue = json.loads((ROOT / "content" / "queue.json").read_text(encoding="utf-8"))

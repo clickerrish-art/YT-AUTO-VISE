@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "channel": "SonicVhibez",
+  "status": "DRAFT_REVIEW_REQUIRED",
+  "generatedAt": "2026-11-09T08:56:03Z",
+  "workflowRunId": 42589534250,
+  "workflowArtifactId": 13660447363,
+  "sourceCommit": "79f750da984629a1c455e0f3f436ded9041cf7bf",
+  "sourceScriptPath": "content/narration-master-short-001-and-002.md",
+  "sourceScriptBlobSha": "f1e78a0c74f5ad5363c63dcaaa355bd6ce4c594e",
+  "generator": "scripts/generate-narration.py",
+  "voice": "en-US-GuyNeural",
+  "rate": "+0%",
+  "items": [
+    {
+      "id": "short-001",
+      "audioPath": "media/narration/short-001-en-US-GuyNeural.mp3",
+      "audioSha256": "41057f63ac53a2b953a246de84340408d01c0aa9dbc1deee4d723b77eb27bafb",
+      "durationSeconds": 59.496,
+      "wordCount": 130,
+      "captionPath": "media/narration/short-001-en-US-GuyNeural.srt",
+      "captionSha256": "e2c9f723545b10e4488122064a2638ee7a20746a68f10e438d336e1ff3b03dcb",
+      "captionCueCount": 20,
+      "captionTiming": "TTS_WORD_BOUNDARIES"
+    },
+    {
+      "id": "short-002",
+      "audioPath": "media/narration/short-002-en-US-GuyNeural.mp3",
+      "audioSha256": "c2b9f462f45af71b3a7eadb7e0e68091b77c3c4a9ecfa088852a63ddc0ae7ff7",
+      "durationSeconds": 53.376,
+      "wordCount": 128,
+      "captionPath": "media/narration/short-002-en-US-GuyNeural.srt",
+      "captionSha256": "d682569dfe1c049cabdac7e532bc19e5ae110b894a9a021c78550a345e84bc19",
+      "captionCueCount": 20,
+      "captionTiming": "TTS_WORD_BOUNDARIES"
+    }
+  ],
+  "rightsStatus": "NOT_VERIFIED",
+  "humanReviewRequired": true,
+  "publishingEnabled": false,
+  "disclosureStatus": "PROPOSED_DRAFT_NOT_OWNER_APPROVED",
+  "limitations": [
+    "These are narration and caption drafts only; no rendered Short MP4 is represented by this report.",
+    "Voice-use and commercial-use permissions are not verified by the generation workflow.",
+    "Captions require human timing, punctuation, pronunciation, readability and playback review.",
+    "The Selar direct-sales disclosure is proposed draft wording and is not owner-approved.",
+    "Rights, factual accuracy, final edit, thumbnail, compliance and channel identity remain separate release gates."
+  ]
+}

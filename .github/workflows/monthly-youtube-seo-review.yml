@@ -1,0 +1,70 @@
+name: Monthly SonicVhibez SEO research and guarded metadata refresh
+
+on:
+  # GitHub schedules execute only from the default branch. This branch push
+  # trigger validates the workflow now; the monthly schedule activates only
+  # after the owner chooses to merge the draft PR.
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - "scripts/research-youtube-seo.mjs"
+      - "scripts/update-youtube-seo-metadata.mjs"
+      - "test/update-youtube-seo-metadata.test.mjs"
+      - "config/seo-metadata-approval.json"
+      - "scripts/verify-youtube-channel.mjs"
+      - "test/research-youtube-seo.test.mjs"
+      - ".github/workflows/monthly-youtube-seo-review.yml"
+  schedule:
+    - cron: "17 6 9 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sonicvhibez-monthly-youtube-seo-research
+  cancel-in-progress: false
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out implementation branch
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          package-manager-cache: false
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+      - name: Test read-only SEO research and approval boundaries
+        run: node --test test/research-youtube-seo.test.mjs
+      - name: Test guarded metadata update and approval boundaries
+        run: node --test test/update-youtube-seo-metadata.test.mjs
+      - name: Research South Africa-relevant wildlife search results
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
+        run: node scripts/research-youtube-seo.mjs
+      - name: Apply exact owner-approved SEO metadata (opt-in; never changes privacy or publishing state)
+        if: ${{ vars.SEO_METADATA_WRITE_ENABLED == 'YES' && vars.SEO_METADATA_DRY_RUN == 'NO' && vars.SEO_METADATA_LIVE_CONFIRM == 'YES' && hashFiles('config/seo-metadata-approval.json') != '' }}
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
+          SEO_METADATA_WRITE_ENABLED: ${{ vars.SEO_METADATA_WRITE_ENABLED }}
+          SEO_METADATA_DRY_RUN: ${{ vars.SEO_METADATA_DRY_RUN }}
+          SEO_METADATA_LIVE_CONFIRM: ${{ vars.SEO_METADATA_LIVE_CONFIRM }}
+        run: node scripts/update-youtube-seo-metadata.mjs
+      - name: Retain monthly SEO research for owner review
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-monthly-seo-${{ github.run_id }}
+          path: artifacts/seo/monthly/
+          if-no-files-found: error
+          retention-days: 30
