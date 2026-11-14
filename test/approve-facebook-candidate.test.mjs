@@ -42,7 +42,7 @@ test("interactive signer writes a valid approval bound to the exact candidate fi
   assert.equal(result.approved, true);
   assert.equal(approval.status, "APPROVED");
   assert.equal(approval.contentFingerprint, facebookPayloadFingerprint(saved));
-  const signed = approval.contentFingerprint + "\\n" + approval.reviewerId + "\\n" + approval.approvedAt;
+  const signed = approval.contentFingerprint + "\n" + approval.reviewerId + "\n" + approval.approvedAt;
   const expected = crypto.createHmac("sha256", secret).update(signed).digest("hex");
   assert.equal(approval.signature, expected);
 });
