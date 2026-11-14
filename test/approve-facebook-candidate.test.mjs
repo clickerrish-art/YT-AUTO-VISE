@@ -63,6 +63,27 @@ test("signer refuses an unconfirmed review and leaves the candidate unchanged", 
   assert.equal(fs.readFileSync(file, "utf8"), original);
 });
 
+test("signer refuses to overwrite a candidate changed while the human review prompt is open", async t => {
+  const dir = fs.mkdtempSync(path.join(root, ".tmp-facebook-approval-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const file = path.join(dir, "candidates.json");
+  const payload = candidate("nf-test-slot-race");
+  const original = JSON.stringify([payload]);
+  fs.writeFileSync(file, original);
+  await assert.rejects(() => approveFacebookCandidate({
+    candidateFile: path.relative(root, file), slotId: payload.slotId,
+    env: { FACEBOOK_APPROVAL_HMAC_SECRET: secret, FACEBOOK_APPROVER_ID: "owner-test-reviewer" },
+    confirm: async () => {
+      fs.writeFileSync(file, JSON.stringify([{ ...payload, caption: "Changed while reviewer was reading" }]));
+      return "APPROVE " + payload.slotId;
+    },
+    now: "2026-11-14T10:00:00.000Z"
+  }), /changed during review/i);
+  const saved = JSON.parse(fs.readFileSync(file, "utf8"))[0];
+  assert.equal(saved.editorialApproval, undefined);
+  assert.equal(saved.caption, "Changed while reviewer was reading");
+});
+
 test("signer rejects missing key, duplicate slot IDs, existing approval and symlinked files", async t => {
   const dir = fs.mkdtempSync(path.join(root, ".tmp-facebook-approval-"));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
