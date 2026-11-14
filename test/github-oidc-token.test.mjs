@@ -13,7 +13,7 @@ test("GitHub OIDC token provider requests the expected audience and caches a sti
   let requests = 0;
   const getToken = createGitHubOidcTokenProvider({
     env: {
-      ACTIONS_ID_TOKEN_REQUEST_URL: "https://token.actions.githubusercontent.com/_services/token",
+      ACTIONS_ID_TOKEN_REQUEST_URL: "https://pipelines.actions.githubusercontent.com/_services/token",
       ACTIONS_ID_TOKEN_REQUEST_TOKEN: "request-token"
     },
     now: () => nowMs,
@@ -36,7 +36,7 @@ test("GitHub OIDC token provider refreshes before the cached token expires", asy
   let requests = 0;
   const getToken = createGitHubOidcTokenProvider({
     env: {
-      ACTIONS_ID_TOKEN_REQUEST_URL: "https://token.actions.githubusercontent.com/_services/token",
+      ACTIONS_ID_TOKEN_REQUEST_URL: "https://pipelines.actions.githubusercontent.com/_services/token",
       ACTIONS_ID_TOKEN_REQUEST_TOKEN: "request-token"
     },
     now: () => nowMs,
@@ -66,7 +66,7 @@ test("GitHub OIDC token provider rejects missing credentials and untrusted reque
 
 test("GitHub OIDC token provider rejects malformed and nearly expired JWTs", async () => {
   const env = {
-    ACTIONS_ID_TOKEN_REQUEST_URL: "https://token.actions.githubusercontent.com/_services/token",
+    ACTIONS_ID_TOKEN_REQUEST_URL: "https://pipelines.actions.githubusercontent.com/_services/token",
     ACTIONS_ID_TOKEN_REQUEST_TOKEN: "request-token"
   };
   const malformed = createGitHubOidcTokenProvider({
