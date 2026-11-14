@@ -22,7 +22,8 @@ export function createGitHubOidcTokenProvider({
     let requestUrl;
     try { requestUrl = new URL(requestUrlValue); }
     catch { throw new Error("GitHub Actions OIDC request URL is invalid"); }
-    if (requestUrl.protocol !== "https:" || !requestUrl.hostname.endsWith(".actions.githubusercontent.com")) {
+    if (requestUrl.protocol !== "https:" || requestUrl.hostname !== "pipelines.actions.githubusercontent.com" ||
+        requestUrl.username || requestUrl.password || requestUrl.hash) {
       throw new Error("GitHub Actions OIDC request URL is not trusted");
     }
     requestUrl.searchParams.set("audience", "sonicvhibez-dashboard-runner");
