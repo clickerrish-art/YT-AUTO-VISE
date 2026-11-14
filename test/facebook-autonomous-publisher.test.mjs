@@ -35,7 +35,7 @@ test("failed durable lock initialization removes only its own incomplete lock", 
       fs.fsyncSync = () => { const error = new Error("simulated lock fsync failure"); error.code = "EIO"; throw error; };
       await assert.rejects(() => runAutonomousFacebookPublisher({
         rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
-        env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) }
+        env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) }
       }), /simulated lock fsync failure/);
     } finally {
       fs.fsyncSync = originalFsync;
@@ -43,7 +43,7 @@ test("failed durable lock initialization removes only its own incomplete lock", 
     assert.equal(fs.existsSync(lockPath), false, "failed initialization must not strand a lock file");
     const result = await runAutonomousFacebookPublisher({
       rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
-      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) }
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) }
     });
     assert.equal(result.status, "COMPLETED", "a subsequent run must acquire the released lock");
   } finally { f.cleanup(); }
@@ -67,7 +67,7 @@ test("lock release never removes a replacement lock owned by another process", a
     const continueGate = new Promise(resolve => { continueResolve = resolve; });
     const env = {
       FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345",
-      META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30)
+      META_USER_ACCESS_TOKEN: "u".repeat(30)
     };
     const publisher = runAutonomousFacebookPublisher({
       rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now, env,
@@ -114,7 +114,7 @@ test("live mode requires explicit disable of emergency stop and durable absolute
     fs.writeFileSync(f.configPath, JSON.stringify(f.config));
     await assert.rejects(() => runAutonomousFacebookPublisher({ rootDir: f.root,
       configPath: f.configPath, queuePath: f.queuePath, stateDir: "relative-state",
-      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) }
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) }
     }), /absolute durable/i);
   } finally { f.cleanup(); }
 });
@@ -128,7 +128,7 @@ test("live mode refuses to run without secure Meta credentials", async () => {
     fs.writeFileSync(f.configPath, JSON.stringify(f.config));
     await assert.rejects(() => runAutonomousFacebookPublisher({ rootDir: f.root,
       configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345" }
-    }), /access tokens are missing/i);
+    }), /Meta user access token is missing/i);
   } finally { f.cleanup(); }
 });
 
@@ -152,8 +152,8 @@ test("uncertain mutation is reconciled and a unique verified receipt is persiste
     let mutationCalls = 0, reconciliationCalls = 0;
     const result = await runAutonomousFacebookPublisher({ rootDir: f.root,
       configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now,
-      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
-      verifyPermissions: async () => ({ permissionsVerified: true }),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
       verifyIdentity: async () => ({ verified: true }),
       policyEvaluator: async () => ({ eligible: true, blockers: [], warnings: [], contentFingerprint: "c".repeat(64), policyRuleVersion: f.config.complianceRuleSet, mediaFingerprints: [], reason: "ELIGIBLE" }),
       publish: async () => { mutationCalls++; const error = new Error("timeout after server mutation"); error.uncertain = true; throw error; },
@@ -192,8 +192,8 @@ test("unresolved mutation remains durably uncertain and is never retried", async
     let mutationCalls = 0;
     const result = await runAutonomousFacebookPublisher({ rootDir: f.root,
       configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now,
-      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
-      verifyPermissions: async () => ({ permissionsVerified: true }),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
       verifyIdentity: async () => ({ verified: true }),
       policyEvaluator: async () => ({ eligible: true, blockers: [], warnings: [], contentFingerprint: "d".repeat(64), policyRuleVersion: f.config.complianceRuleSet, mediaFingerprints: [], reason: "ELIGIBLE" }),
       publish: async () => { mutationCalls++; const error = new Error("timeout"); error.uncertain = true; throw error; },
@@ -231,8 +231,8 @@ test("startup reconciles an interrupted PUBLISHING ledger entry before consideri
     const result = await runAutonomousFacebookPublisher({ rootDir: f.root,
       configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
       now: Date.parse("2026-10-25T05:30:00.000Z"),
-      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
-      verifyPermissions: async () => ({ permissionsVerified: true }),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
       verifyIdentity: async () => ({ verified: true }),
       publish: async () => { mutationCalls++; throw new Error("must not publish this slot twice"); },
       reconcileRemote: async () => {
@@ -258,7 +258,7 @@ test("separate runtime kill switch blocks live config before any Meta request", 
     let called = false;
     const result = await runAutonomousFacebookPublisher({ rootDir: f.root,
       configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
-      env: { FACEBOOK_PUBLISH_ENABLED: "NO", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
+      env: { FACEBOOK_PUBLISH_ENABLED: "NO", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
       fetchImpl: async () => { called = true; throw new Error("must not call"); }
     });
     assert.equal(result.status, "SAFE_NOOP");
@@ -273,7 +273,7 @@ test("live publisher rejects a runtime Page ID that differs from configuration",
     fs.writeFileSync(f.configPath, JSON.stringify(f.config));
     await assert.rejects(() => runAutonomousFacebookPublisher({ rootDir: f.root,
       configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
-      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "999999999999999", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) }
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "999999999999999", META_USER_ACCESS_TOKEN: "u".repeat(30) }
     }), /must exactly match/i);
   } finally { f.cleanup(); }
 });
@@ -290,7 +290,7 @@ test("publisher rejects a queue symlink that resolves outside its repository roo
     fs.symlinkSync(path.join(outside, "queue.json"), f.queuePath);
     await assert.rejects(() => runAutonomousFacebookPublisher({
       rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
-      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) }
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) }
     }), /symlink escapes approved repository\/state roots/i);
   } finally {
     f.cleanup();
@@ -310,8 +310,8 @@ test("publisher defaults to a durable queue in FACEBOOK_STATE_DIR when no queue 
     const result = await runAutonomousFacebookPublisher({
       rootDir: f.root, configPath: f.configPath, stateDir: f.stateDir,
       now: Date.parse("2026-10-25T05:30:00.000Z"),
-      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
-      verifyPermissions: async () => ({ permissionsVerified: true }),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
       verifyIdentity: async () => ({ verified: true }),
       publish: async () => { throw new Error("empty durable queue must not publish"); }
     });
@@ -334,7 +334,7 @@ test("publisher rejects state-ledger symlinks escaping the durable state directo
     fs.symlinkSync(outsideHistory, path.join(f.stateDir, "facebook-history.json"));
     await assert.rejects(() => runAutonomousFacebookPublisher({
       rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
-      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) }
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) }
     }), /state file symlink escapes/i);
   } finally {
     f.cleanup();
@@ -359,7 +359,7 @@ test("failed Meta permissions automatically skip and drain a slot without owner 
     const result = await runAutonomousFacebookPublisher({
       rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
       now: Date.parse("2026-10-25T05:30:00.000Z"),
-      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30), META_PAGE_ACCESS_TOKEN: "p".repeat(30) },
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
       verifyPermissions: async () => ({ permissionsVerified: false }),
       verifyIdentity: async () => { throw new Error("identity should not be called"); },
       policyEvaluator: async () => ({ eligible: true, blockers: [], warnings: [], contentFingerprint: "e".repeat(64), policyRuleVersion: f.config.complianceRuleSet, mediaFingerprints: [], reason: "ELIGIBLE" }),

@@ -21,7 +21,6 @@ jobs:
     env:
       NATURE_FRONTIERS_FACEBOOK_PAGE_ID: ${{ vars.NATURE_FRONTIERS_FACEBOOK_PAGE_ID }}
       META_USER_ACCESS_TOKEN: ${{ secrets.META_USER_ACCESS_TOKEN }}
-      META_PAGE_ACCESS_TOKEN: ${{ secrets.META_PAGE_ACCESS_TOKEN }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -36,12 +35,10 @@ jobs:
           const config = JSON.parse(fs.readFileSync("config/facebook-publishing.json", "utf8"));
           const pageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
           const userToken = process.env.META_USER_ACCESS_TOKEN ?? "";
-          const pageToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
 
           if (!/^\d{5,30}$/.test(pageId)) throw new Error("Missing or invalid Actions variable NATURE_FRONTIERS_FACEBOOK_PAGE_ID");
           if (pageId !== config.destinationPageId) throw new Error("Actions Page ID does not match config/facebook-publishing.json");
           if (userToken.length < 20) throw new Error("Missing Actions secret META_USER_ACCESS_TOKEN");
-          if (pageToken.length < 20) throw new Error("Missing Actions secret META_PAGE_ACCESS_TOKEN");
 
           // Safe request diagnostics: record only the API stage, version, HTTP status and
           // Meta error identifiers. Never log tokens, query strings, response bodies or raw IDs.
@@ -80,12 +77,12 @@ jobs:
           };
 
           const permissions = await verifyMetaPagePermissions({
-            pageId, userAccessToken: userToken, pageAccessToken: pageToken,
+            pageId, userAccessToken: userToken,
             apiVersion: config.apiVersion, fetchImpl: diagnosticFetch
           });
           const identity = await verifyMetaPageIdentity({
             pageId, expectedPageId: config.destinationPageId, expectedPageName: config.destinationPageName,
-            accessToken: pageToken, apiVersion: config.apiVersion, fetchImpl: diagnosticFetch
+            accessToken: permissions.pageAccessToken, apiVersion: config.apiVersion, fetchImpl: diagnosticFetch
           });
           if (permissions.pageName !== identity.pageName) {
             throw new Error("Meta managed-Page lookup and direct Page identity returned different names");

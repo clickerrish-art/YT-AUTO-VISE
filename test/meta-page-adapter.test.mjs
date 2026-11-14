@@ -29,11 +29,11 @@ test("Meta Page identity verification checks exact Page ID without putting token
   }), /does not match/i);
 });
 
-test("Meta permission verification requires granted scopes, Page task and matching Page token", async () => {
+test("Meta permission verification requires granted scopes, exact Page identity, Page task and runtime Page token", async () => {
   const userToken = "user-access-token-" + "u".repeat(30);
   const calls = [];
   const result = await verifyMetaPagePermissions({
-    pageId: PAGE_ID, userAccessToken: userToken, pageAccessToken: TOKEN, apiVersion: API,
+    pageId: PAGE_ID, userAccessToken: userToken, apiVersion: API,
     fetchImpl: async (url, options) => {
       calls.push({ url, options });
       if (url.endsWith("/me?fields=id")) return response({ id: "987654321098765" });
@@ -46,19 +46,32 @@ test("Meta permission verification requires granted scopes, Page task and matchi
     }
   });
   assert.equal(result.permissionsVerified, true);
+  assert.equal(result.pageAccessToken, TOKEN);
   assert.deepEqual(result.grantedPermissions, ["pages_show_list", "pages_read_engagement", "pages_manage_posts"]);
   assert.ok(result.tasks.includes("CREATE_CONTENT"));
   assert.equal(calls.length, 3);
   assert.ok(calls.every(call => call.options.redirect === "error"));
   assert.equal(new URL(calls[0].url).searchParams.has("access_token"), false);
   await assert.rejects(() => verifyMetaPagePermissions({
-    pageId: PAGE_ID, userAccessToken: userToken, pageAccessToken: "different-page-token-" + "y".repeat(25), apiVersion: API,
+    pageId: PAGE_ID, userAccessToken: userToken, apiVersion: API,
     fetchImpl: async url => String(url).endsWith("/me?fields=id")
       ? response({ id: "987654321098765" })
       : String(url).endsWith("/987654321098765/permissions")
         ? response({ data: [{ permission: "pages_show_list", status: "granted" }, { permission: "pages_manage_posts", status: "granted" }] })
         : response({ data: [{ id: PAGE_ID, name: "Nature Frontiers", tasks: ["CREATE_CONTENT"], access_token: TOKEN }] })
   }), /permissions are missing/i);
+  await assert.rejects(() => verifyMetaPagePermissions({
+    pageId: PAGE_ID, userAccessToken: userToken, apiVersion: API,
+    fetchImpl: async url => String(url).endsWith("/me?fields=id")
+      ? response({ id: "987654321098765" })
+      : String(url).endsWith("/987654321098765/permissions")
+        ? response({ data: [
+            { permission: "pages_show_list", status: "granted" },
+            { permission: "pages_read_engagement", status: "granted" },
+            { permission: "pages_manage_posts", status: "granted" }
+          ] })
+        : response({ data: [{ id: PAGE_ID, name: "Nature Frontiers", tasks: ["CREATE_CONTENT"] }] })
+  }), /usable Page access token/i);
 });
 
 test("Meta publish adapter schedules a future post and performs no retries", async () => {
@@ -148,7 +161,7 @@ test("Meta permission verification follows cursor pagination to find the exact m
   const userToken = "user-access-token-" + "p".repeat(30);
   const urls = [], requestOptions = [];
   const result = await verifyMetaPagePermissions({
-    pageId: PAGE_ID, userAccessToken: userToken, pageAccessToken: TOKEN, apiVersion: API,
+    pageId: PAGE_ID, userAccessToken: userToken, apiVersion: API,
     fetchImpl: async (url, options) => {
       urls.push(String(url));
       requestOptions.push(options);

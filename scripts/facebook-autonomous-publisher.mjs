@@ -102,7 +102,7 @@ export async function runAutonomousFacebookPublisher({
   validateConfig(config);
   if (typeof stateDir !== "string" || !path.isAbsolute(stateDir)) throw new Error("FACEBOOK_STATE_DIR must be an absolute durable operator-controlled directory");
   if (!/^\d{5,30}$/.test(String(env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "")) || env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID !== config.destinationPageId) throw new Error("NATURE_FRONTIERS_FACEBOOK_PAGE_ID must exactly match the configured Nature Frontiers Page ID");
-  if (!env.META_USER_ACCESS_TOKEN || !env.META_PAGE_ACCESS_TOKEN) throw new Error("Meta access tokens are missing from the secure runtime environment");
+  if (!env.META_USER_ACCESS_TOKEN) throw new Error("Meta user access token is missing from the secure runtime environment");
   fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
   const resolvedQueuePath = path.resolve(activeRoot, queuePath);
   const canonicalRoot = fs.realpathSync(activeRoot);
@@ -140,6 +140,21 @@ export async function runAutonomousFacebookPublisher({
     const runStartedAt = isoNow(current);
     let published = 0, skipped = 0;
 
+    // Derive a short-lived Page token only when interrupted mutations need reconciliation.
+    // The token is obtained from the exact managed Page response and is never persisted or logged.
+    let recoveryPageToken = "";
+    if (ledger.some(row => row && ["PUBLISHING", "UNCERTAIN"].includes(row.status))) {
+      try {
+        const recoveryPermissions = await verifyPermissions({
+          pageId: config.destinationPageId, userAccessToken: env.META_USER_ACCESS_TOKEN,
+          apiVersion: config.apiVersion, fetchImpl
+        });
+        if (recoveryPermissions?.permissionsVerified === true &&
+            typeof recoveryPermissions.pageAccessToken === "string" && recoveryPermissions.pageAccessToken.length >= 20) {
+          recoveryPageToken = recoveryPermissions.pageAccessToken;
+        }
+      } catch { /* unresolved attempts remain blocked below; never retry a remote mutation */ }
+    }
     // Recover interrupted mutations before selecting new work. A PUBLISHING ledger entry
     // means the previous process may have reached Meta; it must never be retried blindly.
     for (let index = 0; index < ledger.length; index++) {
@@ -159,9 +174,10 @@ export async function runAutonomousFacebookPublisher({
       }
       let reconciliation;
       try {
+        if (recoveryPageToken.length < 20) throw new Error("No runtime-derived Page token available for reconciliation");
         reconciliation = await reconcileRemote({
           pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
-          accessToken: env.META_PAGE_ACCESS_TOKEN, apiVersion: config.apiVersion,
+          accessToken: recoveryPageToken, apiVersion: config.apiVersion,
           caption, scheduledAt, attemptStartedAt: attempt.startedAt,
           remotePostId: attempt.remotePostId ?? null, fetchImpl
         });
@@ -236,15 +252,20 @@ export async function runAutonomousFacebookPublisher({
       // Validate the live destination before mutation. Connection failures become an
       // auditable automatic skip; no owner override or publish request is attempted.
       let permissionVerification;
+      let pageAccessToken = "";
       try {
         permissionVerification = await verifyPermissions({
           pageId: config.destinationPageId, userAccessToken: env.META_USER_ACCESS_TOKEN,
-          pageAccessToken: env.META_PAGE_ACCESS_TOKEN, apiVersion: config.apiVersion, fetchImpl
+          apiVersion: config.apiVersion, fetchImpl
         });
-        if (permissionVerification?.permissionsVerified !== true) throw new Error("Permission check failed");
+        if (permissionVerification?.permissionsVerified !== true ||
+            typeof permissionVerification.pageAccessToken !== "string" || permissionVerification.pageAccessToken.length < 20) {
+          throw new Error("Permission check did not derive a valid Page token for the exact Page");
+        }
+        pageAccessToken = permissionVerification.pageAccessToken;
         await verifyIdentity({
           pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
-          expectedPageName: config.destinationPageName, accessToken: env.META_PAGE_ACCESS_TOKEN,
+          expectedPageName: config.destinationPageName, accessToken: pageAccessToken,
           apiVersion: config.apiVersion, fetchImpl
         });
       } catch {
@@ -275,12 +296,12 @@ export async function runAutonomousFacebookPublisher({
         };
         remote = await publish({
           draft: adapterDraft, pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
-          accessToken: env.META_PAGE_ACCESS_TOKEN, apiVersion: config.apiVersion,
+          accessToken: pageAccessToken, apiVersion: config.apiVersion,
           permissionsVerified: permissionVerification.permissionsVerified, fetchImpl, rootDir: activeRoot, now: current
         });
         const verified = await readRemote({
           remotePostId: remote.remotePostId, expectedPageId: config.destinationPageId,
-          accessToken: env.META_PAGE_ACCESS_TOKEN, apiVersion: config.apiVersion, fetchImpl
+          accessToken: pageAccessToken, apiVersion: config.apiVersion, fetchImpl
         });
         const success = ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(verified.status);
         const receipt = {
@@ -301,7 +322,7 @@ export async function runAutonomousFacebookPublisher({
           try {
             reconciliation = await reconcileRemote({
               pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
-              accessToken: env.META_PAGE_ACCESS_TOKEN, apiVersion: config.apiVersion,
+              accessToken: pageAccessToken, apiVersion: config.apiVersion,
               caption: payload.caption, scheduledAt: payload.scheduledAt, attemptStartedAt: attempt.startedAt,
               remotePostId: remote?.remotePostId ?? null, fetchImpl
             });
