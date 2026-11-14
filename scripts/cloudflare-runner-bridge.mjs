@@ -28,7 +28,11 @@ function configuration() {
   }
   if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(workerId)) throw new Error("DASHBOARD_WORKER_ID is invalid");
   if (!process.env.ACTIONS_ID_TOKEN_REQUEST_URL || !process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN) {
-    throw new Error("GitHub Actions OIDC is unavailable; grant this workflow id-token: write 
+    throw new Error("GitHub Actions OIDC is unavailable; grant this workflow id-token: write permission");
+  }
+  return parsed.origin;
+}
+
 async function requestJson(route, options = {}) {
   const origin = configuration();
   const accessHeaders = buildCloudflareAccessHeaders();
