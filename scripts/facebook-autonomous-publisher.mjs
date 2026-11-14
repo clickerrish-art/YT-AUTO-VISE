@@ -229,7 +229,7 @@ export async function runAutonomousFacebookPublisher({
           reason: "POLICY_RULE_VERSION_MISMATCH"
         };
       }
-      if (!decision?.eligible)
+      if (!decision?.eligible) {
         const record = { slotId: payload.slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_BLOCKED", checkedAt: isoNow(current), contentFingerprint: decision?.contentFingerprint ?? null, policyDecision: decision, reason: decision?.reason ?? "POLICY_UNKNOWN" };
         history.push(record); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++; continue;
       }
