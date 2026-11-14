@@ -1,0 +1,67 @@
+name: Verify Nature Frontiers Meta Page connection
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - "config/facebook-publishing.json"
+      - "scripts/meta-page-adapter.mjs"
+      - ".github/workflows/facebook-meta-connection-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify-read-only-meta-connection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      NATURE_FRONTIERS_FACEBOOK_PAGE_ID: ${{ vars.NATURE_FRONTIERS_FACEBOOK_PAGE_ID }}
+      META_USER_ACCESS_TOKEN: ${{ secrets.META_USER_ACCESS_TOKEN }}
+      META_PAGE_ACCESS_TOKEN: ${{ secrets.META_PAGE_ACCESS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - name: Verify configured secrets and owner-approved Page identity (read-only)
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from "node:fs";
+          import { verifyMetaPageIdentity, verifyMetaPagePermissions } from "./scripts/meta-page-adapter.mjs";
+
+          const config = JSON.parse(fs.readFileSync("config/facebook-publishing.json", "utf8"));
+          const pageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
+          const userToken = process.env.META_USER_ACCESS_TOKEN ?? "";
+          const pageToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
+
+          if (!/^\\d{5,30}$/.test(pageId)) throw new Error("Missing or invalid Actions variable NATURE_FRONTIERS_FACEBOOK_PAGE_ID");
+          if (pageId !== config.destinationPageId) throw new Error("Actions Page ID does not match config/facebook-publishing.json");
+          if (userToken.length < 20) throw new Error("Missing Actions secret META_USER_ACCESS_TOKEN");
+          if (pageToken.length < 20) throw new Error("Missing Actions secret META_PAGE_ACCESS_TOKEN");
+
+          const permissions = await verifyMetaPagePermissions({
+            pageId, userAccessToken: userToken, pageAccessToken: pageToken, apiVersion: config.apiVersion
+          });
+          const identity = await verifyMetaPageIdentity({
+            pageId, expectedPageId: config.destinationPageId, expectedPageName: config.destinationPageName,
+            accessToken: pageToken, apiVersion: config.apiVersion
+          });
+          if (permissions.pageName !== identity.pageName) {
+            throw new Error("Meta managed-Page lookup and direct Page identity returned different names");
+          }
+
+          console.log(JSON.stringify({
+            result: "PASS",
+            mode: "READ_ONLY_NO_PUBLISH",
+            pageId: identity.pageId,
+            pageName: identity.pageName,
+            grantedPermissions: permissions.grantedPermissions,
+            pageTasks: permissions.tasks,
+            apiVersion: config.apiVersion,
+            publishingEnabled: config.publishingEnabled,
+            dryRun: config.dryRun,
+            emergencyStop: config.emergencyStop
+          }, null, 2));
+          NODE
