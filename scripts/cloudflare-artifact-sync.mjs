@@ -4,15 +4,16 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { artifactPartMd5, assertArtifactPartMatches } from "./artifact-integrity.mjs";
+import { buildCloudflareAccessHeaders } from "./cloudflare-access-auth.mjs";
+import { createGitHubOidcTokenProvider } from "./github-oidc-token.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const stateDir = path.resolve(process.env.DASHBOARD_STATE_DIR ?? path.join(root, "state"));
 const stateFile = path.join(stateDir, "dashboard-state.json");
 const workerId = process.env.DASHBOARD_WORKER_ID ?? "sonicvhibez-render-worker";
 const baseUrl = process.env.DASHBOARD_API_URL ?? "https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev";
-const audience = "sonicvhibez-dashboard-runner";
 const PART_BYTES = 8 * 1024 * 1024;
-let oidcToken;
+const getToken = createGitHubOidcTokenProvider();
 
 function origin() {
   const parsed = new URL(baseUrl);
@@ -25,33 +26,17 @@ function origin() {
   return parsed.origin;
 }
 
-async function getToken() {
-  if (oidcToken) return oidcToken;
-  const url = new URL(process.env.ACTIONS_ID_TOKEN_REQUEST_URL);
-  if (url.protocol !== "https:" || !url.hostname.endsWith(".actions.githubusercontent.com")) {
-    throw new Error("GitHub Actions OIDC request URL is not trusted");
-  }
-  url.searchParams.set("audience", audience);
-  const response = await fetch(url, {
-    headers: { authorization: "Bearer " + process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN, accept: "application/json" },
-    redirect: "error", signal: AbortSignal.timeout(15_000)
-  });
-  if (!response.ok) throw new Error("GitHub OIDC token request failed with HTTP " + response.status);
-  const payload = await response.json();
-  if (typeof payload.value !== "string" || payload.value.length < 100) throw new Error("GitHub OIDC token response is invalid");
-  oidcToken = payload.value;
-  return oidcToken;
-}
-
 async function requestJson(route, options = {}) {
-  const token = await getToken();
+  const accessHeaders = buildCloudflareAccessHeaders();
   const { timeoutMs = 60_000, ...fetchOptions } = options;
   let lastError;
   for (let attempt = 0; attempt < 4; attempt++) {
     try {
+      const token = await getToken();
       const response = await fetch(origin() + route, {
         ...fetchOptions,
         headers: {
+          ...accessHeaders,
           accept: "application/json",
           authorization: "Bearer " + token,
           "x-worker-id": workerId,
