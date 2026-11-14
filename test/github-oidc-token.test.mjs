@@ -56,12 +56,19 @@ test("GitHub OIDC token provider refreshes before the cached token expires", asy
 
 test("GitHub OIDC token provider rejects missing credentials and untrusted request URLs", async () => {
   await assert.rejects(createGitHubOidcTokenProvider({ env: {} })(), /OIDC is unavailable/);
-  await assert.rejects(createGitHubOidcTokenProvider({
-    env: {
-      ACTIONS_ID_TOKEN_REQUEST_URL: "http://attacker.example/token",
-      ACTIONS_ID_TOKEN_REQUEST_TOKEN: "request-token"
-    }
-  })(), /request URL is not trusted/);
+  for (const requestUrl of [
+    "http://attacker.example/token",
+    "https://attacker.actions.githubusercontent.com/token",
+    "https://pipelines.actions.githubusercontent.com@attacker.example/token",
+    "https://pipelines.actions.githubusercontent.com/token#fragment"
+  ]) {
+    await assert.rejects(createGitHubOidcTokenProvider({
+      env: {
+        ACTIONS_ID_TOKEN_REQUEST_URL: requestUrl,
+        ACTIONS_ID_TOKEN_REQUEST_TOKEN: "request-token"
+      }
+    })(), /request URL is not trusted/);
+  }
 });
 
 test("GitHub OIDC token provider rejects malformed and nearly expired JWTs", async () => {
