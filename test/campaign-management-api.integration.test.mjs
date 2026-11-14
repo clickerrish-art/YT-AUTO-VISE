@@ -39,7 +39,9 @@ function launchDashboard({ stateDir, token }) {
 }
 
 async function waitForReady(instance) {
-  for (let attempt = 0; attempt < 100; attempt++) {
+  // CI runners can be slow while the dashboard imports its full server module graph.
+  // Keep polling at 100 ms, but allow up to 30 seconds for the real health endpoint.
+  for (let attempt = 0; attempt < 300; attempt++) {
     if (instance.child.exitCode !== null) throw new Error("Dashboard exited before readiness: " + instance.logs);
     let started;
     for (const line of instance.logs.split(/\r?\n/)) {
