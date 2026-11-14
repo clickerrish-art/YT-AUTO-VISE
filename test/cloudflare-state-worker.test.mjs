@@ -2031,6 +2031,85 @@ test("private R2 multipart completion deletes an object whose receipt metadata i
   assert.equal(failedStatus, true);
 });
 
+test("R2 part upload can be retried safely when its first D1 part receipt write fails", async () => {
+  const fixture = await createRunnerOidcFixture();
+  const artifact = {
+    artifact_id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+    upload_id: "upload-part-ledger-retry",
+    object_key: "jobs/job-part-ledger-retry/" + "2".repeat(64) + "/video.mp4",
+    size_bytes: 5,
+    part_size_bytes: 5,
+    expected_parts: 1,
+    status: "UPLOADING"
+  };
+  const partRows = new Map();
+  let failFirstPartReceipt = true;
+  let r2PartUploads = 0;
+  const database = {
+    prepare(sql) {
+      return {
+        args: [],
+        bind(...args) { this.args = args; return this; },
+        async first() {
+          if (sql.includes("FROM runner_artifacts WHERE artifact_id")) return artifact;
+          return null;
+        },
+        async run() {
+          if (sql.startsWith("INSERT INTO runner_artifact_parts")) {
+            if (failFirstPartReceipt) {
+              failFirstPartReceipt = false;
+              throw new Error("simulated D1 part receipt write interruption");
+            }
+            const [artifactId, partNumber, etag] = this.args;
+            partRows.set(partNumber, etag);
+            return { meta: { changes: 1 } };
+          }
+          return { meta: { changes: 1 } };
+        }
+      };
+    }
+  };
+  const env = {
+    STATE_DB: database,
+    ARTIFACTS: {
+      resumeMultipartUpload(key, uploadId) {
+        assert.equal(key, artifact.object_key);
+        assert.equal(uploadId, artifact.upload_id);
+        return {
+          async uploadPart(partNumber, body) {
+            r2PartUploads += 1;
+            assert.equal(partNumber, 1);
+            assert.deepEqual([...new Uint8Array(await new Response(body).arrayBuffer())], [1, 2, 3, 4, 5]);
+            return { partNumber, etag: "7cfdd07889b3295d6a550914ab35e068" };
+          }
+        };
+      }
+    }
+  };
+  const request = () => handleRequest(new Request(
+    "https://state.example/api/runner/artifacts/part?artifactId=" + artifact.artifact_id + "&partNumber=1",
+    {
+      method: "PUT",
+      headers: {
+        authorization: "Bearer " + fixture.token,
+        "content-type": "application/octet-stream",
+        "content-length": "5",
+        "x-part-md5": "7cfdd07889b3295d6a550914ab35e068"
+      },
+      body: new Uint8Array([1, 2, 3, 4, 5])
+    }
+  ), env, fixture);
+  const first = await request();
+  assert.equal(first.status, 503);
+  assert.equal((await first.json()).code, "ARTIFACT_PART_UPLOAD_FAILED");
+  assert.equal(partRows.size, 0, "R2 success without a durable D1 receipt must remain unrecorded");
+  const retry = await request();
+  assert.equal(retry.status, 200);
+  assert.equal((await retry.json()).md5Verified, true);
+  assert.equal(r2PartUploads, 2, "retry must safely replace the same multipart part number");
+  assert.equal(partRows.get(1), "7cfdd07889b3295d6a550914ab35e068");
+});
+
 test("R2 multipart initialization aborts the new upload when the D1 receipt insert fails", async () => {
   const fixture = await createRunnerOidcFixture();
   const digest = "1".repeat(64);
