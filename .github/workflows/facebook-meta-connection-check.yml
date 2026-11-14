@@ -38,17 +38,50 @@ jobs:
           const userToken = process.env.META_USER_ACCESS_TOKEN ?? "";
           const pageToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
 
-          if (!/^\d{5,30}$/.test(pageId)) throw new Error("Missing or invalid Actions variable NATURE_FRONTIERS_FACEBOOK_PAGE_ID");
+          if (!/^\\d{5,30}$/.test(pageId)) throw new Error("Missing or invalid Actions variable NATURE_FRONTIERS_FACEBOOK_PAGE_ID");
           if (pageId !== config.destinationPageId) throw new Error("Actions Page ID does not match config/facebook-publishing.json");
           if (userToken.length < 20) throw new Error("Missing Actions secret META_USER_ACCESS_TOKEN");
           if (pageToken.length < 20) throw new Error("Missing Actions secret META_PAGE_ACCESS_TOKEN");
 
+          // Safe request diagnostics: record only the API stage, version, HTTP status and
+          // Meta error identifiers. Never log tokens, query strings, response bodies or raw IDs.
+          const diagnosticFetch = async (input, options) => {
+            const rawUrl = typeof input === "string" ? input : input.url;
+            const url = new URL(rawUrl);
+            const apiVersion = url.pathname.split("/")[1] ?? "unknown";
+            const path = url.pathname.replace(/\\/\\d{5,30}(?=\\/permissions)/, "/{user-id}")
+              .replace(/\\/\\d{5,30}(?=$)/, "/{page-id}");
+            const stage = path.endsWith("/permissions") ? "user-permissions"
+              : path.endsWith("/me") ? "user-identity"
+              : path.endsWith("/me/accounts") ? "managed-page-list"
+              : "page-identity";
+            try {
+              const response = await fetch(input, options);
+              let metaError = {};
+              if (!response.ok) {
+                const body = await response.clone().json().catch(() => ({}));
+                metaError = {
+                  errorCode: body?.error?.code ?? null,
+                  errorSubcode: body?.error?.error_subcode ?? null,
+                  errorType: body?.error?.type ?? null,
+                  fbtraceId: body?.error?.fbtrace_id ?? null
+                };
+              }
+              console.log(JSON.stringify({ metaDiagnostic: true, stage, apiVersion, path, httpStatus: response.status, ...metaError }));
+              return response;
+            } catch {
+              console.log(JSON.stringify({ metaDiagnostic: true, stage, apiVersion, path, networkFailure: true }));
+              throw new Error("Meta request failed before an HTTP response at stage " + stage);
+            }
+          };
+
           const permissions = await verifyMetaPagePermissions({
-            pageId, userAccessToken: userToken, pageAccessToken: pageToken, apiVersion: config.apiVersion
+            pageId, userAccessToken: userToken, pageAccessToken: pageToken,
+            apiVersion: config.apiVersion, fetchImpl: diagnosticFetch
           });
           const identity = await verifyMetaPageIdentity({
             pageId, expectedPageId: config.destinationPageId, expectedPageName: config.destinationPageName,
-            accessToken: pageToken, apiVersion: config.apiVersion
+            accessToken: pageToken, apiVersion: config.apiVersion, fetchImpl: diagnosticFetch
           });
           if (permissions.pageName !== identity.pageName) {
             throw new Error("Meta managed-Page lookup and direct Page identity returned different names");
