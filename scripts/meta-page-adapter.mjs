@@ -72,9 +72,23 @@ export async function verifyMetaPagePermissions({
   if (typeof userAccessToken !== "string" || userAccessToken.length < 20) throw new MetaPageApiError("Meta user access token is not configured securely");
   if (typeof pageAccessToken !== "string" || pageAccessToken.length < 20) throw new MetaPageApiError("Meta Page access token is not configured securely");
   if (!API_VERSION_PATTERN.test(apiVersion)) throw new MetaPageApiError("META_GRAPH_API_VERSION must look like v26.0");
+  // Resolve the numeric user ID first. The v26.0 permissions reference documents
+  // the edge as /{user-id}/permissions; /me/permissions is rejected as an unknown field.
+  let userResponse;
+  try {
+    userResponse = await fetchImpl(endpoint(apiVersion, "me?fields=id"), {
+      method: "GET", headers: headers(userAccessToken), redirect: "error", signal: AbortSignal.timeout(timeoutMs)
+    });
+  } catch {
+    throw new MetaPageApiError("Meta user identity check failed before a response; publishing remains blocked", { retryable: true });
+  }
+  const user = await parseResponse(userResponse, userAccessToken);
+  if (typeof user.id !== "string" || !PAGE_ID_PATTERN.test(user.id)) {
+    throw new MetaPageApiError("Meta did not return a valid numeric user ID for the supplied user token");
+  }
   let permissionsResponse;
   try {
-    permissionsResponse = await fetchImpl(endpoint(apiVersion, "me/permissions"), {
+    permissionsResponse = await fetchImpl(endpoint(apiVersion, encodeURIComponent(user.id) + "/permissions"), {
       method: "GET", headers: headers(userAccessToken), redirect: "error", signal: AbortSignal.timeout(timeoutMs)
     });
   } catch {
