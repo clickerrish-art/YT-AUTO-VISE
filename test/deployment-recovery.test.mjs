@@ -197,15 +197,19 @@ test("manual repository runner defaults to read-only staging checks and requires
 });
 
 
-test("Cloudflare adapter CI watches Access and OIDC implementation and test files on push and pull request", () => {
+test("Cloudflare adapter CI watches Access and OIDC files in both push and pull-request path filters", () => {
   const workflow = fs.readFileSync(path.join(repositoryRoot, ".github", "workflows", "dashboard-cloudflare-adapter.yml"), "utf8");
+  const pushPaths = workflow.split("  push:")[1]?.split("  pull_request:")[0] ?? "";
+  const pullRequestPaths = workflow.split("  pull_request:")[1]?.split("\npermissions:")[0] ?? "";
+  assert.ok(pushPaths.length > 0, "push path filter must exist");
+  assert.ok(pullRequestPaths.length > 0, "pull-request path filter must exist");
   for (const watchedPath of [
     "scripts/cloudflare-access-auth.mjs",
     "scripts/github-oidc-token.mjs",
     "test/cloudflare-access-auth.test.mjs",
     "test/github-oidc-token.test.mjs"
   ]) {
-    const occurrences = workflow.split(watchedPath).length - 1;
-    assert.ok(occurrences >= 2, watchedPath + " must appear in both push and pull-request path filters");
+    assert.ok(pushPaths.includes(`- "${watchedPath}"`), watchedPath + " must trigger push checks");
+    assert.ok(pullRequestPaths.includes(`- "${watchedPath}"`), watchedPath + " must trigger pull-request checks");
   }
 });
