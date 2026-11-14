@@ -235,7 +235,7 @@ test("keyword evidence must be current and cannot be materially future-dated", (
 test("December 7 wildlife B-roll Short has current qualitative evidence and approved Vault disclosure", () => {
   const week = checkedInPlan.weeks.find(row => row.weekOf === "2026-12-07");
   assert.ok(week);
-  assert.equal(week.items.length, 1);
+  assert.equal(week.items.length, 2);
   const item = week.items[0];
   assert.equal(item.id, "sonicvhibez-short-011-wildlife-broll");
   assert.equal(item.targetSeconds, 55);
