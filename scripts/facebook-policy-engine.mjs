@@ -96,6 +96,34 @@ function fingerprint(payload) {
     syntheticDisclosure: payload?.syntheticDisclosure ?? ""
   }));
 }
+export function facebookPayloadFingerprint(payload) {
+  return fingerprint(payload);
+}
+function verifyEditorialApproval(payload, contentFingerprint, approvalSecret, now) {
+  const approval = payload?.editorialApproval;
+  const fail = reason => ({ passed: false, reason });
+  if (!approval || typeof approval !== "object" || Array.isArray(approval)) return fail("EDITORIAL_APPROVAL_MISSING");
+  if (typeof approvalSecret !== "string" || approvalSecret.length < 32) return fail("EDITORIAL_APPROVAL_SECRET_NOT_CONFIGURED");
+  if (approval.status !== "APPROVED") return fail("EDITORIAL_APPROVAL_NOT_APPROVED");
+  if (approval.contentFingerprint !== contentFingerprint) return fail("EDITORIAL_APPROVAL_CONTENT_MISMATCH");
+  if (!text(approval.reviewerId) || approval.reviewerId.length > 200) return fail("EDITORIAL_APPROVER_ID_MISSING");
+  const approvedAt = Date.parse(approval.approvedAt);
+  const checkedAt = Date.parse(now);
+  if (!Number.isFinite(approvedAt) || !Number.isFinite(checkedAt) ||
+      approvedAt > checkedAt + 5 * 60_000 || checkedAt - approvedAt > 30 * 24 * 60 * 60_000) {
+    return fail("EDITORIAL_APPROVAL_TIMESTAMP_INVALID_OR_STALE");
+  }
+  if (typeof approval.signature !== "string" || !/^[a-f0-9]{64}$/i.test(approval.signature)) {
+    return fail("EDITORIAL_APPROVAL_SIGNATURE_MISSING");
+  }
+  const signed = contentFingerprint + "\\n" + approval.reviewerId + "\\n" + approval.approvedAt;
+  const expected = crypto.createHmac("sha256", approvalSecret).update(signed).digest();
+  const supplied = Buffer.from(approval.signature, "hex");
+  if (supplied.length !== expected.length || !crypto.timingSafeEqual(expected, supplied)) {
+    return fail("EDITORIAL_APPROVAL_SIGNATURE_INVALID");
+  }
+  return { passed: true, reviewerId: approval.reviewerId, approvedAt: approval.approvedAt, contentFingerprint };
+}
 
 /**
  * Fail-closed, deterministic gate for the exact final Facebook payload.
@@ -116,12 +144,13 @@ export async function evaluateFinalFacebookPayload(payload, {
   minimumIntervalMinutes = 60 * 20,
   timezone = "Africa/Johannesburg",
   sourceTimeoutMs = 8000,
-  semanticVerifier = null
+  semanticVerifier = null,
+  approvalSecret = process.env.FACEBOOK_APPROVAL_HMAC_SECRET ?? ""
 } = {}) {
   const blockers = [], warnings = [], sourceChecks = [], rightsChecks = [], disclosureChecks = [], destinationChecks = [];
   const add = (list, reason) => { if (!list.includes(reason)) list.push(reason); };
   const resultBase = { eligible: false, blockers, warnings, sourceChecks, rightsChecks, disclosureChecks, destinationChecks,
-    duplicateCheck: { passed: false, matches: [] }, policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION,
+    duplicateCheck: { passed: false, matches: [] }, editorialApprovalCheck: { passed: false, reason: "NOT_CHECKED" }, policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION,
     contentFingerprint: fingerprint(payload), mediaFingerprints: [], checkedAt: now, reason: "NOT_EVALUATED" };
   if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
     add(blockers, "Final payload is missing or malformed");
@@ -131,7 +160,9 @@ export async function evaluateFinalFacebookPayload(payload, {
   if (!text(payload.slotId)) add(blockers, "A durable intended slot ID is required for idempotency");
   if (!/^\d{5,30}$/.test(String(payload.destinationPageId ?? "")) || payload.destinationPageId !== expectedPageId) add(blockers, "Exact Nature Frontiers Page ID is not verified or does not match the configured destination");
   if (payload.destination !== "nature_frontiers_facebook") add(blockers, "Destination separation check failed");
-  if (payload.requiresHumanApproval === true || payload.approvalRequired === true) add(blockers, "Routine publishing payload must not depend on per-post approval");
+  const editorialApprovalCheck = verifyEditorialApproval(payload, resultBase.contentFingerprint, approvalSecret, now);
+  resultBase.editorialApprovalCheck = editorialApprovalCheck;
+  if (!editorialApprovalCheck.passed) add(blockers, "Exact final content lacks a valid, recent, owner-authorized editorial approval: " + editorialApprovalCheck.reason);
   if (/(like and share|share this to win|comment yes|tag \d+ friends|share to save|react now|comment below to get|share to unlock)/i.test(payload.caption ?? "")) add(blockers, "Engagement bait detected");
   if (/(graphic injury|animal cruelty|staged animal fight|bait(?:ing)? wildlife|chase wildlife|touch wild animals|provoke wildlife|bloodied carcass)/i.test(payload.caption ?? "")) add(blockers, "Wildlife welfare or graphic-content rule triggered");
   if (/(guaranteed earnings|guaranteed returns|miracle cure|100% proven|exclusive rescue footage|I rescued|we rescued)/i.test(payload.caption ?? "")) add(blockers, "Unsupported certainty, fabricated-experience risk, or high-impact claim detected");
