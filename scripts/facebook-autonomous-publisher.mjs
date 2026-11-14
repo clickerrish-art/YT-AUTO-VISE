@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { evaluateFinalFacebookPayload } from "./facebook-policy-engine.mjs";
+import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION } from "./facebook-policy-engine.mjs";
 import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost, fetchMetaPagePost, reconcileMetaPagePost } from "./meta-page-adapter.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -54,6 +54,7 @@ function acquireLock(file) {
 function validateConfig(config) {
   if (!config || config.destination !== "nature_frontiers_facebook" || config.timezone !== "Africa/Johannesburg") throw new Error("Facebook publisher configuration destination/timezone is invalid");
   if (config.autonomousMode !== true || config.autonomousSchedulingEnabled !== true) throw new Error("Autonomous Facebook mode/scheduling is not explicitly enabled");
+  if (config.complianceRuleSet !== FACEBOOK_POLICY_RULE_VERSION) throw new Error("Facebook publisher policy rule version does not match the policy engine");
   if (config.emergencyStop !== false) throw new Error("Facebook emergency stop is active; no publication attempted");
   if (config.publishingEnabled !== true || config.dryRun !== false) throw new Error("Facebook live publishing is not explicitly enabled or dry-run is still active");
   if (!/^\d{5,30}$/.test(String(config.destinationPageId ?? ""))) throw new Error("A verified numeric Facebook Page ID is required");
@@ -219,7 +220,16 @@ export async function runAutonomousFacebookPublisher({
       } catch {
         decision = { eligible: false, blockers: ["POLICY_ENGINE_ERROR"], warnings: [], policyRuleVersion: config.complianceRuleSet, contentFingerprint: null, checkedAt: isoNow(current), reason: "POLICY_ENGINE_ERROR" };
       }
-      if (!decision?.eligible) {
+      if (decision?.policyRuleVersion !== FACEBOOK_POLICY_RULE_VERSION) {
+        decision = {
+          ...(decision && typeof decision === "object" ? decision : {}),
+          eligible: false,
+          blockers: [...new Set([...(Array.isArray(decision?.blockers) ? decision.blockers : []), "POLICY_RULE_VERSION_MISMATCH"])],
+          policyRuleVersion: decision?.policyRuleVersion ?? null,
+          reason: "POLICY_RULE_VERSION_MISMATCH"
+        };
+      }
+      if (!decision?.eligible)
         const record = { slotId: payload.slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_BLOCKED", checkedAt: isoNow(current), contentFingerprint: decision?.contentFingerprint ?? null, policyDecision: decision, reason: decision?.reason ?? "POLICY_UNKNOWN" };
         history.push(record); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++; continue;
       }
