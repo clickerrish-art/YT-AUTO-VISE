@@ -1,6 +1,8 @@
 name: SonicVhibez repository production runner
 
 on:
+  push:
+    branches: [codex/cloudflare-adapter-integration-20261108]
   workflow_dispatch:
     inputs:
       run_staging_smoke:
@@ -23,6 +25,22 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  validate-only:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - name: Validate runner source without dispatching production work
+        run: |
+          node --check scripts/cloudflare-access-auth.mjs
+          node --check scripts/cloudflare-runner-bridge.mjs
+          node --check scripts/worker-runner.mjs
+          ruby -e 'require "yaml"; YAML.load_file(".github/workflows/repository-runner.yml")'
+
   repository-runner:
     if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/codex/cloudflare-adapter-integration-20261108' && inputs.run_repository_runner == true }}
     runs-on: ubuntu-latest
