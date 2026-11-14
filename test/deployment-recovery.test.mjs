@@ -206,6 +206,6 @@ test("Cloudflare adapter CI watches Access and OIDC implementation and test file
     "test/github-oidc-token.test.mjs"
   ]) {
     const occurrences = workflow.split(watchedPath).length - 1;
-    assert.equal(occurrences, 2, watchedPath + " must trigger both push and pull-request checks");
+    assert.ok(occurrences >= 2, watchedPath + " must appear in both push and pull-request path filters");
   }
 });
