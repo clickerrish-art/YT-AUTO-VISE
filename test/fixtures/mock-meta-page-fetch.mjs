@@ -17,6 +17,7 @@ fs.readFileSync = function (file, options) {
     const source = originalReadFileSync.call(this, file, "utf8");
     const config = JSON.parse(source);
     config.destinationPageId = pageId;
+    config.destinationPageName = pageName;
     const serialized = JSON.stringify(config, null, 2) + "\n";
     return options === "utf8" || options === "utf-8" ? serialized : Buffer.from(serialized);
   }
