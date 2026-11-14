@@ -36,6 +36,7 @@ on:
       - "test/cloudflare-artifact-sync.test.mjs"
       - "test/dashboard-ui-contract.test.mjs"
       - ".github/workflows/dashboard-cloudflare-adapter.yml"
+  workflow_dispatch:
   pull_request:
     branches: [codex/marketing-machine-audit-fixes]
     paths:
