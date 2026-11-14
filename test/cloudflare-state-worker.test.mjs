@@ -1746,6 +1746,86 @@ test("simultaneous R2 artifact completion requests converge on one READY ledger 
   assert.equal(deletes, 0, "the losing completion request must not delete the valid shared object");
 });
 
+test("lost R2 completion response keeps the ledger quarantined when the object is missing or has the wrong size", async () => {
+  const scenarios = [
+    { name: "missing", recoveredObject: null, artifactId: "66666666-6666-4666-8666-666666666666" },
+    {
+      name: "wrong-size",
+      artifactId: "77777777-7777-4777-8777-777777777777",
+      recoveredObject: {
+        size: 6,
+        httpEtag: "wrong-size-etag",
+        customMetadata: {
+          jobId: "job-recovery-size",
+          sourcePath: "media/recovery-size.mp4",
+          artifactKind: "video",
+          sha256: "f".repeat(64)
+        }
+      }
+    }
+  ];
+  for (const scenario of scenarios) {
+    const fixture = await createRunnerOidcFixture();
+    const artifact = {
+      artifact_id: scenario.artifactId,
+      upload_id: "upload-recovery-" + scenario.name,
+      object_key: "jobs/job-recovery-" + scenario.name + "/" + "f".repeat(64) + "/video.mp4",
+      size_bytes: 5,
+      expected_parts: 1,
+      status: "UPLOADING",
+      sha256: "f".repeat(64),
+      job_id: "job-recovery-" + (scenario.name === "wrong-size" ? "size" : "missing"),
+      source_path: scenario.name === "wrong-size" ? "media/recovery-size.mp4" : "media/recovery-missing.mp4",
+      artifact_kind: "video"
+    };
+    if (scenario.recoveredObject?.customMetadata) {
+      scenario.recoveredObject.customMetadata.jobId = artifact.job_id;
+      scenario.recoveredObject.customMetadata.sourcePath = artifact.source_path;
+    }
+    let readyUpdates = 0;
+    const database = {
+      prepare(sql) {
+        return {
+          args: [],
+          bind(...args) { this.args = args; return this; },
+          async first() {
+            if (sql.includes("FROM runner_artifacts WHERE artifact_id")) return artifact;
+            return null;
+          },
+          async all() {
+            if (sql.includes("FROM runner_artifact_parts")) {
+              return { results: [{ part_number: 1, etag: "part-etag" }] };
+            }
+            return { results: [] };
+          },
+          async run() {
+            if (sql.startsWith("UPDATE runner_artifacts SET status = 'READY'")) readyUpdates += 1;
+            return { meta: { changes: 1 } };
+          }
+        };
+      }
+    };
+    const env = {
+      STATE_DB: database,
+      ARTIFACTS: {
+        resumeMultipartUpload() {
+          return { async complete() { throw new Error("simulated lost completion response"); } };
+        },
+        async get() { return scenario.recoveredObject; }
+      }
+    };
+    const response = await handleRequest(new Request("https://state.example/api/runner/artifacts/complete", {
+      method: "POST",
+      headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
+      body: JSON.stringify({ artifactId: artifact.artifact_id })
+    }), env, fixture);
+    assert.equal(response.status, 503, scenario.name);
+    assert.equal((await response.json()).code, "ARTIFACT_COMPLETE_FAILED", scenario.name);
+    assert.equal(artifact.status, "UPLOADING", scenario.name);
+    assert.equal(readyUpdates, 0, scenario.name + " must not commit READY without an exact object match");
+  }
+});
+
 test("lost R2 completion response refuses mismatched recovery metadata and keeps the artifact quarantined", async () => {
   const fixture = await createRunnerOidcFixture();
   const artifact = {
