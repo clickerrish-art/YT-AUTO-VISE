@@ -1,0 +1,79 @@
+#!/usr/bin/env node
+/**
+ * Read-only authenticated smoke test for the deployed SonicVhibez staging Worker.
+ * It never writes dashboard state, claims jobs, creates runner sessions, or publishes.
+ */
+const base = process.env.DASHBOARD_STAGING_API_URL;
+const token = process.env.DASHBOARD_OPERATOR_TOKEN;
+
+function assert(condition, message) {
+  if (!condition) throw new Error(message);
+}
+
+assert(typeof base === "string" && base.length > 0, "DASHBOARD_STAGING_API_URL is required");
+assert(typeof token === "string" && token.length >= 24, "DASHBOARD_OPERATOR_TOKEN secret is required");
+
+const parsed = new URL(base);
+assert(parsed.protocol === "https:" && !parsed.username && !parsed.password && !parsed.search && !parsed.hash,
+  "Staging Worker URL must be a clean HTTPS origin");
+assert(parsed.hostname.endsWith(".workers.dev"), "Refusing to test a non-workers.dev host");
+
+async function get(path, headers = {}) {
+  const response = await fetch(new URL(path, parsed.origin), {
+    method: "GET",
+    headers: { accept: "application/json", ...headers },
+    redirect: "error",
+    signal: AbortSignal.timeout(15_000)
+  });
+  let body;
+  try { body = await response.json(); }
+  catch { throw new Error(path + " returned non-JSON HTTP " + response.status); }
+  return { status: response.status, body };
+}
+
+const health = await get("/healthz");
+assert(health.status === 200 && health.body?.status === "ok",
+  "Public Worker health check failed");
+
+const unauthenticated = await get("/api/state");
+assert(unauthenticated.status === 401,
+  "Unauthenticated /api/state must return HTTP 401; received " + unauthenticated.status);
+
+const authenticated = await get("/api/state", { "x-operator-token": token });
+assert(authenticated.status === 200,
+  "Authenticated /api/state must return HTTP 200; received " + authenticated.status);
+const payload = authenticated.body;
+const state = payload?.state && typeof payload.state === "object" ? payload.state : payload;
+assert(Number.isSafeInteger(Number(payload?.revision)) && Number(payload.revision) >= 1,
+  "Authenticated state response is missing a valid durable revision");
+for (const key of ["queueItems", "audit", "jobs", "uploads"]) {
+  assert(Array.isArray(state?.[key]), "Authenticated state response is missing array: " + key);
+}
+assert(state.publishingEnabled !== true && state.publicPublishingEnabled !== true &&
+  state.unattendedPublishingEnabled !== true && payload.publishingEnabled !== true,
+  "Staging state unexpectedly reports publishing enabled");
+
+const runnerStatusUnauthenticated = await get("/api/runner/session/status");
+assert(runnerStatusUnauthenticated.status === 401,
+  "Unauthenticated runner session status must return HTTP 401; received " + runnerStatusUnauthenticated.status);
+const runnerStatusAuthenticated = await get("/api/runner/session/status", { "x-operator-token": token });
+assert(runnerStatusAuthenticated.status === 200 && typeof runnerStatusAuthenticated.body?.active === "boolean",
+  "Authenticated runner session status failed; received HTTP " + runnerStatusAuthenticated.status);
+
+console.log(JSON.stringify({
+  result: "PASS",
+  target: parsed.origin,
+  checks: {
+    publicHealth: "PASS",
+    unauthenticatedStateRejected: "PASS",
+    authenticatedStateRead: "PASS",
+    durableRevision: Number(payload.revision),
+    requiredStateCollections: "PASS",
+    publishingDisabled: "PASS",
+    unauthenticatedRunnerStatusRejected: "PASS",
+    authenticatedRunnerStatusRead: "PASS"
+  },
+  runnerSessionActive: runnerStatusAuthenticated.body.active,
+  publishingEnabled: false,
+  writesPerformed: false
+}, null, 2));
