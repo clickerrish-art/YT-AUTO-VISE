@@ -150,7 +150,7 @@ export async function runFacebookContentIntake({
         reason: "POLICY_RULE_VERSION_MISMATCH"
       };
     }
-    if (!decision?.eligible)
+    if (!decision?.eligible) {
       decisions.push({ slotId: candidate.slotId, eligible: false, contentFingerprint: decision?.contentFingerprint ?? null, policyDecision: decision, reason: decision?.reason ?? "POLICY_UNKNOWN" });
       blocked++;
       continue;
