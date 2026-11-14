@@ -4,6 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { runFacebookContentIntake } from "../scripts/facebook-content-intake.mjs";
+import { FACEBOOK_POLICY_RULE_VERSION } from "../scripts/facebook-policy-engine.mjs";
 
 function fixture() {
   const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-intake-"));
@@ -15,7 +16,7 @@ function fixture() {
   fs.writeFileSync(configPath, JSON.stringify({
     destination: "nature_frontiers_facebook", timezone: "Africa/Johannesburg",
     autonomousMode: true, autonomousSchedulingEnabled: true,
-    complianceRuleSet: "nf-facebook-autonomous-policy-2026-10-v2",
+    complianceRuleSet: FACEBOOK_POLICY_RULE_VERSION,
     destinationPageId: "123456789012345", destinationPageName: "Nature Frontiers",
     allowedDomains: [], allowedCampaignIds: [], approvedDestinations: [],
     dailyCap: 1, minimumIntervalMinutes: 1200
@@ -35,8 +36,8 @@ test("intake queues only candidates that pass the final policy evaluator", async
     const result = await runFacebookContentIntake({
       ...f, now: Date.parse("2026-10-24T10:00:00Z"), rootDir: f.rootDir,
       policyEvaluator: async candidate => candidate.slotId === "eligible-slot"
-        ? { eligible: true, contentFingerprint: "a".repeat(64), policyRuleVersion: "nf-facebook-autonomous-policy-2026-10-v1", reason: "ELIGIBLE" }
-        : { eligible: false, blockers: ["MISSING_RIGHTS"], reason: "MISSING_RIGHTS" }
+        ? { eligible: true, contentFingerprint: "a".repeat(64), policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION, reason: "ELIGIBLE" }
+        : { eligible: false, blockers: ["MISSING_RIGHTS"], policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION, reason: "MISSING_RIGHTS" }
     });
     assert.equal(result.accepted, 1);
     assert.equal(result.blocked, 1);
