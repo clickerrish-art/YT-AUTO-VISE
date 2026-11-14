@@ -252,6 +252,7 @@ export async function runAutonomousFacebookPublisher({
       // Validate the live destination before mutation. Connection failures become an
       // auditable automatic skip; no owner override or publish request is attempted.
       let permissionVerification;
+      let pageAccessToken = "";
       try {
         permissionVerification = await verifyPermissions({
           pageId: config.destinationPageId, userAccessToken: env.META_USER_ACCESS_TOKEN,
@@ -261,7 +262,7 @@ export async function runAutonomousFacebookPublisher({
             typeof permissionVerification.pageAccessToken !== "string" || permissionVerification.pageAccessToken.length < 20) {
           throw new Error("Permission check did not derive a valid Page token for the exact Page");
         }
-        const pageAccessToken = permissionVerification.pageAccessToken;
+        pageAccessToken = permissionVerification.pageAccessToken;
         await verifyIdentity({
           pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
           expectedPageName: config.destinationPageName, accessToken: pageAccessToken,
