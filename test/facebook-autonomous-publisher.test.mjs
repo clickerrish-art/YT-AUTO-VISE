@@ -128,7 +128,7 @@ test("live mode refuses to run without secure Meta credentials", async () => {
     fs.writeFileSync(f.configPath, JSON.stringify(f.config));
     await assert.rejects(() => runAutonomousFacebookPublisher({ rootDir: f.root,
       configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345" }
-    }), /access tokens are missing/i);
+    }), /Meta user access token is missing/i);
   } finally { f.cleanup(); }
 });
 
