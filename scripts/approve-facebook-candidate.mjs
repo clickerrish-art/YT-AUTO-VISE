@@ -31,11 +31,12 @@ export async function approveFacebookCandidate({
   if (!withinRoot(file)) fail("Candidate file must remain inside the repository");
   const initial = fs.lstatSync(file);
   if (!initial.isFile() || initial.isSymbolicLink()) fail("Candidate file must be a regular file, not a symlink");
+  const initialBytes = fs.readFileSync(file);
   const canonical = fs.realpathSync(file);
   if (!withinRoot(canonical) || canonical !== file) fail("Candidate file resolves outside the repository or through a symlink");
 
   const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
-  const candidates = JSON.parse(fs.readFileSync(canonical, "utf8"));
+  const candidates = JSON.parse(initialBytes.toString("utf8"));
   if (!Array.isArray(candidates)) fail("Candidate JSON must contain an array");
   const matches = candidates.map((item, index) => ({ item, index })).filter(row => row.item?.slotId === slotId);
   if (matches.length !== 1) fail("The exact slot ID must match exactly one candidate");
@@ -68,6 +69,14 @@ export async function approveFacebookCandidate({
     ...item,
     editorialApproval: { status: "APPROVED", contentFingerprint, reviewerId, approvedAt, signature }
   };
+
+  const currentStat = fs.lstatSync(canonical);
+  const currentBytes = fs.readFileSync(canonical);
+  if (!currentStat.isFile() || currentStat.isSymbolicLink() ||
+      currentStat.dev !== initial.dev || currentStat.ino !== initial.ino ||
+      !currentBytes.equals(initialBytes)) {
+    fail("Candidate changed during review; approval was not written. Reopen the latest candidate and review it again.");
+  }
 
   const temporary = canonical + "." + process.pid + ".approval.tmp";
   const mode = fs.statSync(canonical).mode & 0o777;
