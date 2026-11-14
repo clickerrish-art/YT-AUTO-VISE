@@ -116,7 +116,7 @@ function verifyEditorialApproval(payload, contentFingerprint, approvalSecret, no
   if (typeof approval.signature !== "string" || !/^[a-f0-9]{64}$/i.test(approval.signature)) {
     return fail("EDITORIAL_APPROVAL_SIGNATURE_MISSING");
   }
-  const signed = contentFingerprint + "\\n" + approval.reviewerId + "\\n" + approval.approvedAt;
+  const signed = contentFingerprint + "\n" + approval.reviewerId + "\n" + approval.approvedAt;
   const expected = crypto.createHmac("sha256", approvalSecret).update(signed).digest();
   const supplied = Buffer.from(approval.signature, "hex");
   if (supplied.length !== expected.length || !crypto.timingSafeEqual(expected, supplied)) {
