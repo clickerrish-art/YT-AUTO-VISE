@@ -1,3 +1,49 @@
+# 14 November 2026 — Short 012 prepared; exact-SHA validation refreshed
+
+**Current implementation/test SHA:** `806b784d36e084f2621f586b52cae4939aea56e3`. **PR #1:** OPEN · DRAFT · UNMERGED. **main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged. **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`. **Branch comparison:** 3,549 ahead / 2 behind · 324 PR files. Branch-protection API inspection still returns 403; do not infer protection status.
+
+## New owner-independent work
+
+- Added `sonicvhibez-short-012-wildlife-video-editing` to the week beginning **7 December 2026**. The promotional plan now contains **10 private DRAFT_ONLY Shorts across five weeks, exactly two per week**. No publication timestamp or live schedule was assigned.
+- Short 012: **Wildlife Video Editing: 3 Passes for a Clearer Story**; 55-second target; 128-word script; exact Vault URL `https://selar.com/0u19v8u99l`; owner-approved direct-sales disclosure and an explicit `ADVERTISEMENT` label. Product copy is neutral because the Selar page could not be freshly opened today.
+- vidIQ measured estimate for `wildlife video editing`: **8,456 estimated monthly searches**, volume score 59/100, competition 18/100. Related terms `wildlife video tips`, `wildlife filmmaking` and `wildlife videography` each displayed fewer than 750 estimated monthly searches. No seed growth percentage or top-market breakdown was returned. These are provider estimates, not audited counts.
+- Qualitative source evidence is stored with the plan: [Umbrella Creators wildlife editing guide](https://umbrellacreators.com/blog/how-to-edit-nature-and-animal-documentary-videos), [Audio Scene wildlife sound-editing guide](https://audioscene.org/article/step-by-step-guide-to-editing-animal-sound-effects-for-wildlife-documentaries), and [Noble Desktop voice-over/B-roll editing guide](https://blog.nobledesktop.com/learn/premiere-pro/zoo-promo-working-with-voice-over).
+- Fixed the Meta Page verification integration mock to follow the current numeric-user-ID then `/{user-id}/permissions` read path, and updated its read-only call-count assertions.
+- Fixed the dashboard campaign action feedback race: the UI now refreshes persisted state before announcing that an action completed. Browser coverage asserts the generic affiliate activation option is enabled only for the correct campaign; Safari remains disabled/inactive.
+- Updated the weekly-plan regression for two Shorts in the 7 December week and kept the Vault mention neutral until product contents can be freshly verified.
+
+Implementation commits: [`7d44a9e`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/7d44a9ea35dd24bca714dc40d0dad5178ce38c9a), [`3c7d8f8`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3c7d8f8a65b89b68d1ef570da4b2a5c536df6c8c), [`6b3896e`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/6b3896e9adae9389a8798198a3cb127fb5d0feda), [`7d45a88`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/7d45a885f1327c8f5a16224775e075b7d19dc154), [`806b784`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/806b784d36e084f2621f586b52cae4939aea56e3).
+
+## Exact-SHA CI at 806b784
+
+- [Automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43573394036): **140/140 Node test files PASS**, **44 Python tests PASS**, zero skips; npm audit **0 vulnerabilities**.
+- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43573394075): **784/784 PASS**, zero skips.
+- [Queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43573394059): **784/784 PASS**, zero skips; 16 queue items; 72-hour minimum and 216-hour rolling cycle; publishing disabled.
+- [Dashboard Chromium E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43573394061): **29/29 PASS**.
+- [Cloudflare durable-state worker](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43573394085): **9/9 PASS**.
+- [Deployment recovery](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43573393987): PASS, two recovery tests.
+- [Metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43573394217): PASS; default metadata remains fail-closed and unreviewed templates remain blocked.
+- [Branch reconciliation inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43573394013): PASS, non-destructive.
+- [Nature Frontiers local draft validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43573393990): PASS, local-only.
+- [Main/candidate exact-SHA baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43573394082): PASS; comparison artifact retained.
+- [npm lockfile verification](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43573390322): PASS.
+- [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43573394142): **HOLD**, 11 blockers remain; this is not a production pass.
+- [Nature Frontiers Meta Page identity](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43573394159): failed because the configured Meta session token had expired; no token value was exposed.
+
+## Active owner-controlled blockers
+
+1. No complete live reconciliation of public/private/unlisted/scheduled YouTube items plus all pending/uncertain upload attempts immediately before any upload. The checked-in reconciliation snapshot is dated 10 November; the runtime upload-attempt ledger is not accessible from this run.
+2. No `media/next-short.mp4`, `content/render-manifest.json`, `content/long-form-render-manifest.json`, or final thumbnail asset exists at this SHA. Rights-cleared footage, narration and music plus human factual/rights/playback review are still required.
+3. Metricool currently exposes only Nature Frontiers SA brand `8094526` with Facebook and Instagram; no YouTube network or separate SonicVhibez/Sonic Fire brand is exposed. Scheduled-post query for 1 November 2026–31 January 2027 returned no records. The prior brand ID `7545638` is no longer accessible (403). No Metricool write was made.
+4. Read-only vidIQ inventory for the SonicVhibez channel returned one public Short, zero private/unlisted, no scheduled publication timestamp and no next page. Last actual publication was **22 October 2026, 17:05:56 SAST**; at **14 November 2026, 10:00:01 SAST**, elapsed time was **22 days, 16 hours, 54 minutes, 5 seconds**. This interval exceeds 72 hours, but the destination schedule and runtime uncertain-upload ledger remain unverified; therefore no next slot is approved.
+5. Selar product-page access failed during this run; Vault seller evidence was last verified 9 November. Prompt Pack and 90-Day Blueprint viewer-facing disclosures remain unapproved. Only the Vault disclosure is owner-approved.
+6. Meta user/page token in GitHub Actions expired. Refresh it directly in the secure GitHub Actions secret store only if Nature Frontiers Meta verification is required; never paste tokens into chat.
+7. Live Cloudflare Node-to-Worker persistence still requires Cloudflare Access service-token configuration and real remote restart/concurrency evidence.
+
+Safari affiliate remains `INACTIVE`, with no destination and no owner approval. Public/unattended YouTube publishing remains disabled. No video was uploaded, published or scheduled. The branch's scheduled GitHub workflows are not active production automation until merged to `main`; PR #1 remains draft and unmerged.
+
+---
+
 # 13 November 2026 — Short 011 prepared; Cloudflare route tests and CI verified
 
 **Source/test SHA:** `8daa78c0cdd25a2f08dd73310cae4a65c16b4279`. Current branch head before this documentation commit: `2211a5e5957678b91e8899a9ca0d3ad632297a47`.  

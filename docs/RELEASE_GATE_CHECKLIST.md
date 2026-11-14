@@ -1,3 +1,51 @@
+# 14 November 2026 — Release gate evidence at source/test SHA 806b784
+
+**Candidate:** `806b784d36e084f2621f586b52cae4939aea56e3` · **PR #1:** OPEN / DRAFT / UNMERGED · **main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged · **comparison:** 3,549 ahead / 2 behind · 324 changed files · merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+
+## Verified engineering checks
+
+- [x] 140/140 Node test files pass, zero skips.
+- [x] 44 Python tests pass.
+- [x] npm audit reports zero vulnerabilities.
+- [x] Promotional plan validation passes; 10 private drafts across five weeks, no more than two per week.
+- [x] Queue policy: 72 elapsed-hour minimum and 216-hour rolling cycle; publishing disabled.
+- [x] Queue readiness: 784/784 tests, zero skips; 16 queue items.
+- [x] Content quality: 784/784 tests, zero skips.
+- [x] Chromium dashboard acceptance: 29/29.
+- [x] Cloudflare durable-state unit tests: 9/9.
+- [x] Deployment recovery smoke: two tests pass.
+- [x] Metadata fail-closed validation passes; unreviewed metadata and asset-register examples remain blocked.
+- [x] Non-destructive branch inventory and isolated main/candidate baseline comparison pass.
+- [x] Nature Frontiers local draft package validates; no provider write was made.
+- [x] npm lockfile verification passes.
+
+## Release gates still HOLD
+
+- [ ] Independently reconcile full YouTube public/private/unlisted/scheduled history and all pending/uncertain upload attempts using current authorized evidence.
+- [ ] Verify SonicVhibez/Sonic Fire as a distinct YouTube destination in Metricool; the current connected brand is Nature Frontiers SA with Facebook/Instagram only.
+- [ ] Create and verify real Short MP4, thumbnail and render manifest; no such assets exist at candidate SHA.
+- [ ] Create long-form render manifest only after real assets and rights are verified.
+- [ ] Obtain genuine rights evidence for footage, narration and music; complete human factual, compliance and playback review.
+- [ ] Recheck the exact Vault Selar page/seller. Keep the other two product disclosures on HOLD.
+- [ ] Refresh the expired Nature Frontiers Meta access token directly in GitHub Actions secrets if that separate integration is required.
+- [ ] Configure Cloudflare Access service tokens and verify authenticated remote persistence, audit, concurrency and restart recovery.
+- [ ] Independently verify branch protection; GitHub API currently returns 403 to this integration.
+
+## Publishing and queue controls
+
+- [x] Public publishing disabled.
+- [x] Unattended publishing disabled.
+- [x] Safari affiliate campaign remains inactive with no approved destination.
+- [x] No Metricool post created, edited or scheduled.
+- [x] No YouTube upload or publication attempted.
+- [x] No main edit, PR merge, reset, rebase, force-push or destructive reconciliation.
+- [x] All proposed promotional content remains private and `DRAFT_ONLY`; no publication timestamp is assigned.
+- [ ] Do not schedule until the destination's complete history and queue can be inspected and every publication gap is calculated at **72 full hours or more** in Africa/Johannesburg.
+
+The passing engineering checks do not override the owner-controlled production gates. Scheduled GitHub workflows execute from `main`; the PR branch's schedule is not active production automation.
+
+---
+
 # 13 November 2026 — Short 011 prepared; Cloudflare route tests and CI verified
 
 **Source/test SHA:** `8daa78c0cdd25a2f08dd73310cae4a65c16b4279`. Current branch head before this documentation commit: `2211a5e5957678b91e8899a9ca0d3ad632297a47`.  
