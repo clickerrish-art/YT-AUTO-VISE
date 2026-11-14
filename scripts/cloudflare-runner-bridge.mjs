@@ -6,12 +6,12 @@ import { fileURLToPath } from "node:url";
 import { atomicWriteJson } from "./atomic-json-file.mjs";
 import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
 import { buildCloudflareAccessHeaders } from "./cloudflare-access-auth.mjs";
+import { createGitHubOidcTokenProvider } from "./github-oidc-token.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const workerId = process.env.DASHBOARD_WORKER_ID ?? "sonicvhibez-render-worker";
 const baseUrl = process.env.DASHBOARD_API_URL ?? "https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev";
-const OIDC_AUDIENCE = "sonicvhibez-dashboard-runner";
-let cachedOidcToken = null;
+const getOidcToken = createGitHubOidcTokenProvider();
 const stateDir = path.resolve(process.env.DASHBOARD_STATE_DIR ?? path.join(root, "state"));
 const stateFile = path.join(stateDir, "dashboard-state.json");
 const snapshotMetaFile = path.join(stateDir, ".cloudflare-runner-snapshot.json");
@@ -28,31 +28,7 @@ function configuration() {
   }
   if (!/^[A-Za-z0-9][A-Za-z0-9._:-]{1,119}$/.test(workerId)) throw new Error("DASHBOARD_WORKER_ID is invalid");
   if (!process.env.ACTIONS_ID_TOKEN_REQUEST_URL || !process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN) {
-    throw new Error("GitHub Actions OIDC is unavailable; grant this workflow id-token: write permission");
-  }
-  return parsed.origin;
-}
-
-async function getOidcToken() {
-  if (cachedOidcToken) return cachedOidcToken;
-  configuration();
-  const requestUrl = new URL(process.env.ACTIONS_ID_TOKEN_REQUEST_URL);
-  if (requestUrl.protocol !== "https:" || !requestUrl.hostname.endsWith(".actions.githubusercontent.com")) {
-    throw new Error("GitHub Actions OIDC request URL is not trusted");
-  }
-  requestUrl.searchParams.set("audience", OIDC_AUDIENCE);
-  const response = await fetch(requestUrl, {
-    headers: { authorization: "Bearer " + process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN, accept: "application/json" },
-    redirect: "error",
-    signal: AbortSignal.timeout(15_000)
-  });
-  if (!response.ok) throw new Error("GitHub Actions OIDC token request failed with HTTP " + response.status);
-  const payload = await response.json();
-  if (typeof payload.value !== "string" || payload.value.length < 100) throw new Error("GitHub Actions did not return a valid OIDC token");
-  cachedOidcToken = payload.value;
-  return cachedOidcToken;
-}
-
+    throw new Error("GitHub Actions OIDC is unavailable; grant this workflow id-token: write 
 async function requestJson(route, options = {}) {
   const origin = configuration();
   const accessHeaders = buildCloudflareAccessHeaders();
