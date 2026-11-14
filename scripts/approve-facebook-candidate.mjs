@@ -61,8 +61,8 @@ export async function approveFacebookCandidate({
     "   Source supports claim: " + String(claim?.sourceSupportsClaim === true),
     "   Previously verified: " + String(claim?.verified === true),
     "   Quote verified: " + String(claim?.quoteVerified === true)
-  ].join("\\n")).join("\\n") + "\\n");
-  stdout.write("Final media and rights evidence:\\n" + item.media.map((asset, i) => {
+  ].join("\n")).join("\n") + "\n");
+  stdout.write("Final media and rights evidence:\n" + item.media.map((asset, i) => {
     const rights = asset?.rightsRecord ?? {};
     return [
       "Media " + (i + 1) + ": " + String(asset?.id ?? "unnamed"),
@@ -79,16 +79,16 @@ export async function approveFacebookCandidate({
       "   Attribution required: " + String(rights.attributionRequired === true),
       "   Attribution text: " + String(rights.attributionText ?? "not supplied"),
       "   Rights expiry: " + String(rights.expiresAt ?? "not supplied")
-    ].join("\\n");
-  }).join("\\n") + "\\n");
-  stdout.write("Links: " + JSON.stringify(item.links ?? []) + "\\n");
-  stdout.write("Content fingerprint: " + contentFingerprint + "\\n");
-  stdout.write("IMPORTANT: Read each source, inspect every actual media file, and open each rights document before approving. Displayed metadata and hashes do not prove that the license is genuine or that a source supports a claim. Missing evidence must remain blocked.\\n");
+    ].join("\n");
+  }).join("\n") + "\n");
+  stdout.write("Links: " + JSON.stringify(item.links ?? []) + "\n");
+  stdout.write("Content fingerprint: " + contentFingerprint + "\n");
+  stdout.write("IMPORTANT: Read each source, inspect every actual media file, and open each rights document before approving. Displayed metadata and hashes do not prove that the license is genuine or that a source supports a claim. Missing evidence must remain blocked.\n");
 
   const answer = await confirm("Type exactly APPROVE " + slotId + " to sign this exact content: ");
   if (answer !== "APPROVE " + slotId) fail("Approval not confirmed; candidate was not changed");
   const approvedAt = new Date(now).toISOString();
-  const signed = contentFingerprint + "\\n" + reviewerId + "\\n" + approvedAt;
+  const signed = contentFingerprint + "\n" + reviewerId + "\n" + approvedAt;
   const signature = crypto.createHmac("sha256", secret).update(signed).digest("hex");
   candidates[index] = {
     ...item,
