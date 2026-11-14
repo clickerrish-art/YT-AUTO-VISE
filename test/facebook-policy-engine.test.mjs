@@ -12,7 +12,7 @@ process.env.FACEBOOK_APPROVAL_HMAC_SECRET = APPROVAL_SECRET;
 function approve(payload, approvedAt = "2026-10-24T11:00:00.000Z") {
   const contentFingerprint = facebookPayloadFingerprint(payload);
   const reviewerId = "owner-reviewer-test";
-  const signed = contentFingerprint + "\\n" + reviewerId + "\\n" + approvedAt;
+  const signed = contentFingerprint + "\n" + reviewerId + "\n" + approvedAt;
   const signature = crypto.createHmac("sha256", APPROVAL_SECRET).update(signed).digest("hex");
   payload.editorialApproval = { status: "APPROVED", contentFingerprint, reviewerId, approvedAt, signature };
 }
