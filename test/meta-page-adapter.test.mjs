@@ -36,7 +36,8 @@ test("Meta permission verification requires granted scopes, Page task and matchi
     pageId: PAGE_ID, userAccessToken: userToken, pageAccessToken: TOKEN, apiVersion: API,
     fetchImpl: async (url, options) => {
       calls.push({ url, options });
-      if (url.endsWith("/me/permissions")) return response({ data: [
+      if (url.endsWith("/me?fields=id")) return response({ id: "987654321098765" });
+      if (url.endsWith("/987654321098765/permissions")) return response({ data: [
         { permission: "pages_show_list", status: "granted" },
         { permission: "pages_read_engagement", status: "granted" },
         { permission: "pages_manage_posts", status: "granted" }
@@ -47,14 +48,16 @@ test("Meta permission verification requires granted scopes, Page task and matchi
   assert.equal(result.permissionsVerified, true);
   assert.deepEqual(result.grantedPermissions, ["pages_show_list", "pages_read_engagement", "pages_manage_posts"]);
   assert.ok(result.tasks.includes("CREATE_CONTENT"));
-  assert.equal(calls.length, 2);
+  assert.equal(calls.length, 3);
   assert.ok(calls.every(call => call.options.redirect === "error"));
   assert.equal(new URL(calls[0].url).searchParams.has("access_token"), false);
   await assert.rejects(() => verifyMetaPagePermissions({
     pageId: PAGE_ID, userAccessToken: userToken, pageAccessToken: "different-page-token-" + "y".repeat(25), apiVersion: API,
-    fetchImpl: async url => url.endsWith("/me/permissions")
-      ? response({ data: [{ permission: "pages_show_list", status: "granted" }, { permission: "pages_manage_posts", status: "granted" }] })
-      : response({ data: [{ id: PAGE_ID, name: "Nature Frontiers", tasks: ["CREATE_CONTENT"], access_token: TOKEN }] })
+    fetchImpl: async url => String(url).endsWith("/me?fields=id")
+      ? response({ id: "987654321098765" })
+      : String(url).endsWith("/987654321098765/permissions")
+        ? response({ data: [{ permission: "pages_show_list", status: "granted" }, { permission: "pages_manage_posts", status: "granted" }] })
+        : response({ data: [{ id: PAGE_ID, name: "Nature Frontiers", tasks: ["CREATE_CONTENT"], access_token: TOKEN }] })
   }), /permissions are missing/i);
 });
 
@@ -149,7 +152,8 @@ test("Meta permission verification follows cursor pagination to find the exact m
     fetchImpl: async (url, options) => {
       urls.push(String(url));
       requestOptions.push(options);
-      if (String(url).endsWith("/me/permissions")) return response({ data: [
+      if (String(url).endsWith("/me?fields=id")) return response({ id: "987654321098765" });
+      if (String(url).endsWith("/987654321098765/permissions")) return response({ data: [
         { permission: "pages_show_list", status: "granted" },
         { permission: "pages_read_engagement", status: "granted" },
         { permission: "pages_manage_posts", status: "granted" }
@@ -164,7 +168,7 @@ test("Meta permission verification follows cursor pagination to find the exact m
   });
   assert.equal(result.verified, true);
   assert.equal(result.pageId, PAGE_ID);
-  assert.equal(urls.length, 3);
+  assert.equal(urls.length, 4);
   assert.ok(requestOptions.every(options => options.redirect === "error"));
   assert.ok(urls.every(url => !url.includes(userToken) && !url.includes(TOKEN)));
 });
