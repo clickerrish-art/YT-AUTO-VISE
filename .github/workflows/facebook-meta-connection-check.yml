@@ -38,7 +38,7 @@ jobs:
           const userToken = process.env.META_USER_ACCESS_TOKEN ?? "";
           const pageToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
 
-          if (!/^\\d{5,30}$/.test(pageId)) throw new Error("Missing or invalid Actions variable NATURE_FRONTIERS_FACEBOOK_PAGE_ID");
+          if (!/^\d{5,30}$/.test(pageId)) throw new Error("Missing or invalid Actions variable NATURE_FRONTIERS_FACEBOOK_PAGE_ID");
           if (pageId !== config.destinationPageId) throw new Error("Actions Page ID does not match config/facebook-publishing.json");
           if (userToken.length < 20) throw new Error("Missing Actions secret META_USER_ACCESS_TOKEN");
           if (pageToken.length < 20) throw new Error("Missing Actions secret META_PAGE_ACCESS_TOKEN");
@@ -49,8 +49,8 @@ jobs:
             const rawUrl = typeof input === "string" ? input : input.url;
             const url = new URL(rawUrl);
             const apiVersion = url.pathname.split("/")[1] ?? "unknown";
-            const path = url.pathname.replace(/\\/\\d{5,30}(?=\\/permissions)/, "/{user-id}")
-              .replace(/\\/\\d{5,30}(?=$)/, "/{page-id}");
+            const path = url.pathname.replace(/\/\d{5,30}(?=\/permissions)/, "/{user-id}")
+              .replace(/\/\d{5,30}(?=$)/, "/{page-id}");
             const stage = path.endsWith("/permissions") ? "user-permissions"
               : path.endsWith("/me") ? "user-identity"
               : path.endsWith("/me/accounts") ? "managed-page-list"
