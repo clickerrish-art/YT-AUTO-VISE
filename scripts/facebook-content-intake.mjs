@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { evaluateFinalFacebookPayload } from "./facebook-policy-engine.mjs";
+import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION } from "./facebook-policy-engine.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = file => JSON.parse(fs.readFileSync(file, "utf8"));
@@ -92,7 +92,7 @@ export async function runFacebookContentIntake({
   };
   if (config.destination !== "nature_frontiers_facebook" || config.timezone !== "Africa/Johannesburg" ||
       config.autonomousMode !== true || config.autonomousSchedulingEnabled !== true ||
-      config.complianceRuleSet !== "nf-facebook-autonomous-policy-2026-10-v2") {
+      config.complianceRuleSet !== FACEBOOK_POLICY_RULE_VERSION) {
     throw new Error("Facebook intake configuration is invalid or policy version does not match");
   }
   const lockPath = stateFile(config.lockFile ?? "facebook-publishing.lock");
@@ -142,7 +142,15 @@ export async function runFacebookContentIntake({
     } catch {
       decision = { eligible: false, blockers: ["POLICY_ENGINE_ERROR"], warnings: [], reason: "POLICY_ENGINE_ERROR", checkedAt: new Date(now).toISOString() };
     }
-    if (!decision?.eligible) {
+    if (decision?.policyRuleVersion !== FACEBOOK_POLICY_RULE_VERSION) {
+      decision = {
+        ...(decision && typeof decision === "object" ? decision : {}),
+        eligible: false,
+        blockers: [...new Set([...(Array.isArray(decision?.blockers) ? decision.blockers : []), "POLICY_RULE_VERSION_MISMATCH"])],
+        reason: "POLICY_RULE_VERSION_MISMATCH"
+      };
+    }
+    if (!decision?.eligible)
       decisions.push({ slotId: candidate.slotId, eligible: false, contentFingerprint: decision?.contentFingerprint ?? null, policyDecision: decision, reason: decision?.reason ?? "POLICY_UNKNOWN" });
       blocked++;
       continue;
