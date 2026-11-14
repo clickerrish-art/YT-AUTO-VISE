@@ -44,7 +44,7 @@ globalThis.fetch = async (input, init = {}) => {
   const method = String(init.method ?? "GET").toUpperCase();
   fs.appendFileSync(tracePath, method + " " + url.pathname + url.search + "\\n");
 
-  if (url.hostname === "token.actions.githubusercontent.com") {
+  if (url.hostname === "pipelines.actions.githubusercontent.com") {
     const header = Buffer.from(JSON.stringify({ alg: "RS256", typ: "JWT" })).toString("base64url");
     const claims = Buffer.from(JSON.stringify({ exp: Math.floor(Date.now() / 1000) + 300 })).toString("base64url");
     const signature = Buffer.alloc(100, 7).toString("base64url");
@@ -99,7 +99,7 @@ globalThis.fetch = async (input, init = {}) => {
 
   const env = {
     ...process.env,
-    ACTIONS_ID_TOKEN_REQUEST_URL: "https://token.actions.githubusercontent.com/_services/token",
+    ACTIONS_ID_TOKEN_REQUEST_URL: "https://pipelines.actions.githubusercontent.com/_services/token",
     ACTIONS_ID_TOKEN_REQUEST_TOKEN: "test-actions-oidc-request-token",
     DASHBOARD_API_URL: "https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev",
     DASHBOARD_STATE_ACCESS_CLIENT_ID: "test-service-token-id.access",
