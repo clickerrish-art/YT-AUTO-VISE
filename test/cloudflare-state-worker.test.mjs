@@ -1897,6 +1897,80 @@ test("lost R2 completion response refuses mismatched recovery metadata and keeps
   assert.equal(deletedKey, null, "the reconciliation path must quarantine rather than delete an unverified object");
 });
 
+test("successful R2 multipart completion deletes an object whose size differs from the durable receipt", async () => {
+  const fixture = await createRunnerOidcFixture();
+  const artifact = {
+    artifact_id: "88888888-8888-4888-8888-888888888888",
+    upload_id: "upload-size-mismatch",
+    object_key: "jobs/job-size-mismatch/" + "9".repeat(64) + "/video.mp4",
+    size_bytes: 5,
+    expected_parts: 1,
+    status: "UPLOADING",
+    sha256: "9".repeat(64),
+    job_id: "job-size-mismatch",
+    source_path: "media/size-mismatch.mp4",
+    artifact_kind: "video"
+  };
+  let deletedKey = null;
+  let failedStatus = false;
+  const env = {
+    STATE_DB: {
+      prepare(sql) {
+        return {
+          args: [],
+          bind(...args) { this.args = args; return this; },
+          async first() {
+            if (sql.includes("FROM runner_artifacts WHERE artifact_id")) return artifact;
+            return null;
+          },
+          async all() {
+            if (sql.includes("FROM runner_artifact_parts")) {
+              return { results: [{ part_number: 1, etag: "part-etag" }] };
+            }
+            return { results: [] };
+          },
+          async run() {
+            if (sql.startsWith("UPDATE runner_artifacts SET status = 'FAILED'")) {
+              artifact.status = "FAILED";
+              failedStatus = true;
+            }
+            return { meta: { changes: 1 } };
+          }
+        };
+      }
+    },
+    ARTIFACTS: {
+      resumeMultipartUpload() {
+        return {
+          async complete() {
+            return {
+              size: 6,
+              httpEtag: "wrong-size-etag",
+              customMetadata: {
+                jobId: artifact.job_id,
+                sourcePath: artifact.source_path,
+                artifactKind: artifact.artifact_kind,
+                sha256: artifact.sha256
+              }
+            };
+          }
+        };
+      },
+      async delete(key) { deletedKey = key; }
+    }
+  };
+  const response = await handleRequest(new Request("https://state.example/api/runner/artifacts/complete", {
+    method: "POST",
+    headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
+    body: JSON.stringify({ artifactId: artifact.artifact_id })
+  }), env, fixture);
+  assert.equal(response.status, 409);
+  assert.equal((await response.json()).code, "ARTIFACT_SIZE_MISMATCH");
+  assert.equal(deletedKey, artifact.object_key);
+  assert.equal(failedStatus, true);
+  assert.equal(artifact.status, "FAILED");
+});
+
 test("private R2 multipart completion deletes an object whose receipt metadata is mismatched", async () => {
   const fixture = await createRunnerOidcFixture();
   const artifact = {
