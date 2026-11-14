@@ -297,3 +297,50 @@ test("Meta scheduled mutations reject timezone-free and impossible timestamps be
   }
   assert.equal(requests, 0, "invalid schedule timestamps must be rejected before a remote mutation");
 });
+
+
+test("Meta permission verification falls back to exact direct Page lookup when /me/accounts omits the Page", async () => {
+  const userToken = "user-access-token-" + "u".repeat(30);
+  const calls = [];
+  const result = await verifyMetaPagePermissions({
+    pageId: PAGE_ID, userAccessToken: userToken, pageAccessToken: TOKEN, apiVersion: API,
+    fetchImpl: async (url, options) => {
+      calls.push({ url: String(url), options });
+      if (String(url).endsWith("/me?fields=id")) return response({ id: "987654321098765" });
+      if (String(url).endsWith("/987654321098765/permissions")) return response({ data: [
+        { permission: "pages_show_list", status: "granted" },
+        { permission: "pages_read_engagement", status: "granted" },
+        { permission: "pages_manage_posts", status: "granted" }
+      ] });
+      if (String(url).includes("/me/accounts?")) return response({ data: [] });
+      if (String(url).includes("/" + PAGE_ID + "?fields=id%2Cname%2Ctasks%2Caccess_token")) {
+        return response({ id: PAGE_ID, name: "Nature Frontiers", tasks: ["CREATE_CONTENT"], access_token: TOKEN });
+      }
+      throw new Error("Unexpected Meta endpoint: " + url);
+    }
+  });
+  assert.equal(result.verified, true);
+  assert.equal(result.pageId, PAGE_ID);
+  assert.equal(result.pageName, "Nature Frontiers");
+  assert.deepEqual(result.tasks, ["CREATE_CONTENT"]);
+  assert.equal(calls.length, 4);
+  assert.ok(calls.every(call => call.options.redirect === "error"));
+  assert.ok(calls.every(call => !call.url.includes(userToken) && !call.url.includes(TOKEN)));
+});
+
+test("Meta direct Page fallback rejects a response for any Page other than the exact allowlisted ID", async () => {
+  const userToken = "user-access-token-" + "u".repeat(30);
+  await assert.rejects(() => verifyMetaPagePermissions({
+    pageId: PAGE_ID, userAccessToken: userToken, pageAccessToken: TOKEN, apiVersion: API,
+    fetchImpl: async url => {
+      if (String(url).endsWith("/me?fields=id")) return response({ id: "987654321098765" });
+      if (String(url).endsWith("/987654321098765/permissions")) return response({ data: [
+        { permission: "pages_show_list", status: "granted" },
+        { permission: "pages_read_engagement", status: "granted" },
+        { permission: "pages_manage_posts", status: "granted" }
+      ] });
+      if (String(url).includes("/me/accounts?")) return response({ data: [] });
+      return response({ id: "999999999999999", name: "Different Page", tasks: ["CREATE_CONTENT"], access_token: TOKEN });
+    }
+  }), /exact configured Page ID/i);
+});
