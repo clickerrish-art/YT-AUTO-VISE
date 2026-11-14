@@ -8,6 +8,12 @@ import { Script } from "node:vm";
 import { DEFAULT_CAMPAIGNS, manageCampaign, validateCampaigns } from "../cloudflare/campaigns-compat.js";
 import { DEFAULT_WEEKLY_PLAN } from "../cloudflare/weekly-plan-compat.js";
 
+const futureTuesdayDate = (weeksAhead = 1) => {
+  const target = new Date(Date.now() + weeksAhead * 7 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000);
+  target.setUTCDate(target.getUTCDate() + ((2 - target.getUTCDay() + 7) % 7));
+  return target.toISOString().slice(0, 10);
+};
+
 const validState = () => ({
   version: 1,
   queueItems: [],
@@ -686,7 +692,7 @@ test("draft editing preserves review flags and enforces Johannesburg publication
   const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
   const payload = {
     id: "draft-queue-01", title: "Updated wildlife behaviour", topic: "Observe animal behaviour responsibly",
-    contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: "2026-11-17",
+    contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: futureTuesdayDate(),
     productUrl: "https://selar.com/0u19v8u99l"
   };
   const send = body => handleRequest(new Request("https://state.example/api/drafts/update", {
@@ -698,7 +704,7 @@ test("draft editing preserves review flags and enforces Johannesburg publication
   const body = await updated.json();
   assert.equal(updated.status, 200);
   assert.equal(body.item.title, payload.title);
-  assert.equal(body.item.scheduledAt, "2026-11-17T15:00:00.000Z");
+  assert.equal(body.item.scheduledAt, payload.scheduledDate + "T15:00:00.000Z");
   assert.equal(body.item.status, "DRAFT_REVIEW_REQUIRED");
   assert.equal(body.item.rightsConfirmed, true);
   assert.equal(body.item.complianceReviewed, false);
@@ -711,9 +717,11 @@ test("draft editing preserves review flags and enforces Johannesburg publication
 
 test("draft editing blocks another reserved slot on the same Johannesburg calendar date", async () => {
   const state = validState();
+  const firstTuesday = futureTuesdayDate(1);
+  const secondTuesday = futureTuesdayDate(2);
   state.queueItems = [
-    { id: "draft-a", reservationType: "SCHEDULED_SLOT", scheduledDate: "2026-11-17", scheduledAt: "2026-11-17T15:00:00.000Z", status: "DRAFT_REVIEW_REQUIRED" },
-    { id: "draft-b", reservationType: "SCHEDULED_SLOT", scheduledDate: "2026-11-24", scheduledAt: "2026-11-24T15:00:00.000Z", status: "DRAFT_REVIEW_REQUIRED" }
+    { id: "draft-a", reservationType: "SCHEDULED_SLOT", scheduledDate: firstTuesday, scheduledAt: firstTuesday + "T15:00:00.000Z", status: "DRAFT_REVIEW_REQUIRED" },
+    { id: "draft-b", reservationType: "SCHEDULED_SLOT", scheduledDate: secondTuesday, scheduledAt: secondTuesday + "T15:00:00.000Z", status: "DRAFT_REVIEW_REQUIRED" }
   ];
   const { database, snapshot } = mutableDatabase(state);
   const env = { DASHBOARD_OPERATOR_TOKEN: "a".repeat(24), DASHBOARD_OPERATOR_ID: "sonicvhibez-owner", STATE_DB: database };
@@ -722,13 +730,13 @@ test("draft editing blocks another reserved slot on the same Johannesburg calend
     headers: { "x-operator-token": "a".repeat(24), "content-type": "application/json" },
     body: JSON.stringify({
       id: "draft-b", title: "Updated wildlife behaviour", topic: "Observe animal behaviour responsibly",
-      contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: "2026-11-17",
+      contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: firstTuesday,
       productUrl: "https://selar.com/0u19v8u99l"
     })
   }), env);
   assert.equal(response.status, 409);
   assert.equal(snapshot().revision, 1);
-  assert.equal(snapshot().state.queueItems[1].scheduledDate, "2026-11-24");
+  assert.equal(snapshot().state.queueItems[1].scheduledDate, secondTuesday);
 });
 
 
@@ -781,7 +789,7 @@ test("draft creation persists a queue item and linked production job with safe d
   const payload = {
     id: "wildlife-draft-01", title: "Wildlife behaviour explained",
     topic: "Observe animal behaviour responsibly in natural habitats",
-    contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: "2026-11-10",
+    contentType: "long_form", scheduledDay: "Tuesday", scheduledDate: futureTuesdayDate(),
     productUrl: "https://selar.com/0u19v8u99l"
   };
   const request = () => handleRequest(new Request("https://state.example/api/drafts", {
