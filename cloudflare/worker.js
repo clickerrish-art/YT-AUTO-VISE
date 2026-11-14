@@ -658,9 +658,23 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
         }, 409);
       }
       const completedAt = new Date().toISOString();
-      await env.STATE_DB.prepare(
+      const saved = await env.STATE_DB.prepare(
         "UPDATE runner_artifacts SET status = 'READY', etag = ?, completed_at = ? WHERE artifact_id = ? AND status = 'UPLOADING'"
       ).bind(object.httpEtag, completedAt, input.artifactId).run();
+      if (Number(saved.meta?.changes ?? 0) !== 1) {
+        const latest = await env.STATE_DB.prepare(
+          "SELECT status, etag, completed_at FROM runner_artifacts WHERE artifact_id = ?"
+        ).bind(input.artifactId).first();
+        if (latest?.status !== "READY") {
+          return json({ error: "Completed R2 object could not be committed to the durable artifact ledger; reconciliation is required", code: "ARTIFACT_LEDGER_CONFLICT" }, 503);
+        }
+        return json({
+          artifactId: artifact.artifact_id, objectKey: artifact.object_key,
+          sha256: artifact.sha256, sizeBytes: object.size, etag: latest.etag,
+          status: "READY", completedAt: latest.completed_at, idempotent: true,
+          publishingEnabled: false
+        });
+      }
       return json({
         artifactId: artifact.artifact_id, objectKey: artifact.object_key,
         sha256: artifact.sha256, sizeBytes: object.size, etag: object.httpEtag,
