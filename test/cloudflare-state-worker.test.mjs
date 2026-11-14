@@ -1301,8 +1301,8 @@ test("private R2 artifact upload requires an exact generated receipt and complet
   const partRows = new Map();
   let uploadedPart = null;
   let r2PartEtag = "bad";
-  let loseCompletionResponse = false;
   let rejectReadyUpdate = false;
+  let completeCalls = 0;
   let completedObjectAvailable = false;
   const database = {
     prepare(sql) {
@@ -1373,11 +1373,9 @@ test("private R2 artifact upload requires an exact generated receipt and complet
           return { partNumber, etag: r2PartEtag };
         },
         async complete(parts) {
+          completeCalls += 1;
           assert.deepEqual(parts, [{ partNumber: 1, etag: "7cfdd07889b3295d6a550914ab35e068" }]);
-          if (completedObjectAvailable || loseCompletionResponse) {
-            completedObjectAvailable = true;
-            throw new Error("simulated already-completed or lost R2 completion response");
-          }
+          if (completedObjectAvailable) throw new Error("simulated already-completed R2 multipart upload");
           completedObjectAvailable = true;
           return {
             size: 5, httpEtag: "object-etag",
@@ -1453,6 +1451,13 @@ test("private R2 artifact upload requires an exact generated receipt and complet
   assert.equal(completedBody.status, "READY");
   assert.equal(completedBody.reconciled, true);
   assert.equal(artifactRows.get(created.artifactId).status, "READY");
+  assert.equal(completeCalls, 2);
+  const alreadyReady = await call("/api/runner/artifacts/complete", "POST", { artifactId: created.artifactId });
+  assert.equal(alreadyReady.status, 200);
+  const alreadyReadyBody = await alreadyReady.json();
+  assert.equal(alreadyReadyBody.status, "READY");
+  assert.equal(alreadyReadyBody.idempotent, true);
+  assert.equal(completeCalls, 2, "READY idempotency must not call R2 multipart completion again");
   const list = await handleRequest(new Request("https://state.example/api/artifacts?jobId=" + job.id, {
     headers: { "x-operator-token": "o".repeat(32) }
   }), env);
