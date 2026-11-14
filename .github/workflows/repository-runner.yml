@@ -1,6 +1,8 @@
 name: SonicVhibez repository production runner
 
 on:
+  push:
+    branches: [codex/cloudflare-adapter-integration-20261108]
   workflow_dispatch:
     inputs:
       run_staging_smoke:
@@ -23,6 +25,18 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  push-safety:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      contents: read
+    steps:
+      - name: Keep repository execution manual-only
+        run: |
+          echo "Push validation only: the repository runner is available only through an explicit workflow_dispatch."
+          echo "No production job, staging smoke, deployment, or publishing action was started."
+
   repository-runner:
     if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/codex/cloudflare-adapter-integration-20261108' && inputs.run_repository_runner == true }}
     runs-on: ubuntu-latest
