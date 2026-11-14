@@ -54,11 +54,36 @@ export async function approveFacebookCandidate({
   stdout.write("Slot: " + item.slotId + "\n");
   stdout.write("Scheduled: " + String(item.scheduledAt ?? "not set") + "\n");
   stdout.write("Caption:\n" + item.caption + "\n");
-  stdout.write("Claims:\n" + item.claims.map((claim, i) => (i + 1) + ". " + String(claim?.text ?? "")).join("\n") + "\n");
-  stdout.write("Media:\n" + item.media.map(asset => "- " + String(asset?.id ?? "unnamed") + " SHA-256 " + String(asset?.sha256 ?? "missing")).join("\n") + "\n");
-  stdout.write("Links: " + JSON.stringify(item.links ?? []) + "\n");
-  stdout.write("Content fingerprint: " + contentFingerprint + "\n");
-  stdout.write("Review the actual media files and source/rights evidence separately before approving.\n");
+  stdout.write("Claims and source evidence:\n" + item.claims.map((claim, i) => [
+    (i + 1) + ". " + String(claim?.text ?? "MISSING CLAIM TEXT"),
+    "   Source URLs: " + JSON.stringify(claim?.sourceUrls ?? []),
+    "   Source excerpt: " + String(claim?.sourceExcerpt ?? "MISSING SOURCE EXCERPT"),
+    "   Source supports claim: " + String(claim?.sourceSupportsClaim === true),
+    "   Previously verified: " + String(claim?.verified === true),
+    "   Quote verified: " + String(claim?.quoteVerified === true)
+  ].join("\\n")).join("\\n") + "\\n");
+  stdout.write("Final media and rights evidence:\\n" + item.media.map((asset, i) => {
+    const rights = asset?.rightsRecord ?? {};
+    return [
+      "Media " + (i + 1) + ": " + String(asset?.id ?? "unnamed"),
+      "   File path: " + String(asset?.path ?? "MISSING"),
+      "   File SHA-256: " + String(asset?.sha256 ?? "MISSING"),
+      "   Rights evidence path: " + String(rights.evidencePath ?? "MISSING"),
+      "   Rights evidence SHA-256: " + String(rights.evidenceSha256 ?? "MISSING"),
+      "   Source: " + String(rights.source ?? "MISSING"),
+      "   License: " + String(rights.license ?? "MISSING"),
+      "   Commercial use allowed: " + String(rights.commercialUse === true),
+      "   Social media use allowed: " + String(rights.socialMediaUse === true),
+      "   Provenance verified: " + String(rights.provenanceVerified === true),
+      "   Synthetic/altered origin known: " + String(rights.syntheticOrAlteredKnown === true),
+      "   Attribution required: " + String(rights.attributionRequired === true),
+      "   Attribution text: " + String(rights.attributionText ?? "not supplied"),
+      "   Rights expiry: " + String(rights.expiresAt ?? "not supplied")
+    ].join("\\n");
+  }).join("\\n") + "\\n");
+  stdout.write("Links: " + JSON.stringify(item.links ?? []) + "\\n");
+  stdout.write("Content fingerprint: " + contentFingerprint + "\\n");
+  stdout.write("IMPORTANT: Read each source, inspect every actual media file, and open each rights document before approving. Displayed metadata and hashes do not prove that the license is genuine or that a source supports a claim. Missing evidence must remain blocked.\\n");
 
   const answer = await confirm("Type exactly APPROVE " + slotId + " to sign this exact content: ");
   if (answer !== "APPROVE " + slotId) fail("Approval not confirmed; candidate was not changed");
