@@ -4,9 +4,18 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION } from "../scripts/facebook-policy-engine.mjs";
+import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION, facebookPayloadFingerprint } from "../scripts/facebook-policy-engine.mjs";
 
 const hash = value => crypto.createHash("sha256").update(value).digest("hex");
+const APPROVAL_SECRET = "test-only-editorial-approval-secret-0123456789";
+process.env.FACEBOOK_APPROVAL_HMAC_SECRET = APPROVAL_SECRET;
+function approve(payload, approvedAt = "2026-10-24T11:00:00.000Z") {
+  const contentFingerprint = facebookPayloadFingerprint(payload);
+  const reviewerId = "owner-reviewer-test";
+  const signed = contentFingerprint + "\\n" + reviewerId + "\\n" + approvedAt;
+  const signature = crypto.createHmac("sha256", APPROVAL_SECRET).update(signed).digest("hex");
+  payload.editorialApproval = { status: "APPROVED", contentFingerprint, reviewerId, approvedAt, signature };
+}
 function fixture() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-policy-"));
   const media = Buffer.from("licensed media fixture");
@@ -34,10 +43,11 @@ function fixture() {
         provenanceVerified: true, syntheticOrAlteredKnown: true, attributionRequired: false }
     }]
   };
+  approve(payload);
   return { root, payload, cleanup: () => fs.rmSync(root, { recursive: true, force: true }) };
 }
 const options = root => ({
-  expectedPageId: "123456789012345", expectedPageName: "Nature Frontiers", evidenceRoot: root,
+  expectedPageId: "123456789012345", expectedPageName: "Nature Frontiers", evidenceRoot: root, approvalSecret: APPROVAL_SECRET,
   history: [], allowedDomains: [], allowedCampaignIds: ["selar-wildlife-vault"],
   approvedDestinations: [], now: "2026-10-24T12:00:00.000Z",
   fetchImpl: async url => ({ ok: true, status: 200, url: String(url), text: async () => "Wildlife viewing guidance: Observe wildlife from a respectful distance and avoid disturbing animals. Further information." }),
@@ -57,6 +67,33 @@ test("policy returns the required structured decision and accepts only a complet
     assert.equal(result.mediaFingerprints[0].passed, true);
     assert.equal(result.duplicateCheck.passed, true);
     for (const key of ["blockers","warnings","sourceChecks","rightsChecks","disclosureChecks","destinationChecks","duplicateCheck","contentFingerprint","mediaFingerprints","checkedAt","reason"]) assert.ok(key in result, key);
+  } finally { f.cleanup(); }
+});
+
+test("editorial approval is mandatory, signed, recent and bound to the exact final content", async () => {
+  const f = fixture();
+  try {
+    delete f.payload.editorialApproval;
+    let result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.equal(result.editorialApprovalCheck.reason, "EDITORIAL_APPROVAL_MISSING");
+    approve(f.payload);
+    f.payload.caption += " Updated after review.";
+    result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.equal(result.editorialApprovalCheck.reason, "EDITORIAL_APPROVAL_CONTENT_MISMATCH");
+    approve(f.payload);
+    f.payload.editorialApproval.signature = "0".repeat(64);
+    result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.equal(result.editorialApprovalCheck.reason, "EDITORIAL_APPROVAL_SIGNATURE_INVALID");
+    approve(f.payload, "2026-09-01T11:00:00.000Z");
+    result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.equal(result.editorialApprovalCheck.reason, "EDITORIAL_APPROVAL_TIMESTAMP_INVALID_OR_STALE");
+    result = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), approvalSecret: "" });
+    assert.equal(result.eligible, false);
+    assert.equal(result.editorialApprovalCheck.reason, "EDITORIAL_APPROVAL_SECRET_NOT_CONFIGURED");
   } finally { f.cleanup(); }
 });
 
@@ -189,11 +226,12 @@ test("duplicate slots, near-duplicates and daily frequency limits block", async 
   } finally { f.cleanup(); }
 });
 
-test("no owner-approval flag is required for ordinary eligible content; unknown synthetic origin blocks", async () => {
+test("valid exact-content editorial approval is accepted; unknown synthetic origin blocks", async () => {
   const f = fixture();
   try {
     const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(result.eligible, true);
+    assert.equal(result.editorialApprovalCheck.passed, true);
     f.payload.media[0].representationKnown = false;
     const unknown = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(unknown.eligible, false);
@@ -235,6 +273,7 @@ test("a factual claim needs a reachable authoritative source containing the reco
     const excerpt = "Wetlands support biodiversity and help regulate water flows.";
     f.payload.caption = "Wetlands support biodiversity and help regulate water flows.";
     f.payload.claims = [{ text: "Wetlands support biodiversity and help regulate water flows", sourceUrls: ["https://sanbi.org/research"], sourceExcerpt: excerpt, sourceSupportsClaim: true, verified: true }];
+    approve(f.payload);
     const result = await evaluateFinalFacebookPayload(f.payload, {
       ...options(f.root),
       fetchImpl: async url => ({ ok: true, status: 200, url: String(url), text: async () => "Report summary. " + excerpt + " Further documented context." })
