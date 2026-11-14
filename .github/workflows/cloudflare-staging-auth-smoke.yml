@@ -1,0 +1,36 @@
+name: Cloudflare staging authenticated smoke
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - "scripts/cloudflare-staging-auth-smoke.mjs"
+      - ".github/workflows/cloudflare-staging-auth-smoke.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  authenticated-staging-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      DASHBOARD_STAGING_API_URL: https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev
+      DASHBOARD_OPERATOR_TOKEN: ${{ secrets.DASHBOARD_OPERATOR_TOKEN }}
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Require protected staging credential
+        run: |
+          if [ -z "$DASHBOARD_OPERATOR_TOKEN" ]; then
+            echo "::error::Add the existing staging Worker operator token as the GitHub Actions secret DASHBOARD_OPERATOR_TOKEN. Do not paste it into logs or chat."
+            exit 1
+          fi
+      - name: Run read-only authenticated staging checks
+        run: node scripts/cloudflare-staging-auth-smoke.mjs
