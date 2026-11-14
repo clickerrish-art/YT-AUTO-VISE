@@ -1466,6 +1466,92 @@ test("private R2 artifact upload requires an exact generated receipt and complet
   assert.equal(download.headers.get("x-artifact-sha256"), digest);
 });
 
+test("R2 completion returns idempotent READY when a concurrent D1 compare-and-set already won", async () => {
+  const fixture = await createRunnerOidcFixture();
+  const artifact = {
+    artifact_id: "33333333-3333-4333-8333-333333333333",
+    upload_id: "upload-concurrent-ready",
+    object_key: "jobs/job-concurrent/" + "c".repeat(64) + "/video.mp4",
+    size_bytes: 5,
+    expected_parts: 1,
+    status: "UPLOADING",
+    sha256: "c".repeat(64),
+    job_id: "job-concurrent",
+    source_path: "media/concurrent-video.mp4",
+    artifact_kind: "video",
+    etag: null,
+    completed_at: null
+  };
+  let deletes = 0;
+  const database = {
+    prepare(sql) {
+      return {
+        args: [],
+        bind(...args) { this.args = args; return this; },
+        async first() {
+          if (sql.includes("SELECT status, etag, completed_at FROM runner_artifacts")) {
+            return { status: artifact.status, etag: artifact.etag, completed_at: artifact.completed_at };
+          }
+          if (sql.includes("FROM runner_artifacts WHERE artifact_id")) return artifact;
+          return null;
+        },
+        async all() {
+          if (sql.includes("FROM runner_artifact_parts")) {
+            return { results: [{ part_number: 1, etag: "part-etag" }] };
+          }
+          return { results: [] };
+        },
+        async run() {
+          if (sql.startsWith("UPDATE runner_artifacts SET status = 'READY'")) {
+            Object.assign(artifact, {
+              status: "READY",
+              etag: "concurrent-winner-etag",
+              completed_at: "2026-11-14T12:00:00.000Z"
+            });
+            return { meta: { changes: 0 } };
+          }
+          return { meta: { changes: 1 } };
+        }
+      };
+    }
+  };
+  const env = {
+    STATE_DB: database,
+    ARTIFACTS: {
+      resumeMultipartUpload() {
+        return {
+          async complete() {
+            return {
+              size: 5,
+              httpEtag: "this-request-etag",
+              customMetadata: {
+                jobId: artifact.job_id,
+                sourcePath: artifact.source_path,
+                artifactKind: artifact.artifact_kind,
+                sha256: artifact.sha256
+              }
+            };
+          }
+        };
+      },
+      async delete() { deletes += 1; }
+    }
+  };
+  const response = await handleRequest(new Request("https://state.example/api/runner/artifacts/complete", {
+    method: "POST",
+    headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
+    body: JSON.stringify({ artifactId: artifact.artifact_id })
+  }), env, fixture);
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.equal(body.status, "READY");
+  assert.equal(body.idempotent, true);
+  assert.equal(body.etag, "concurrent-winner-etag");
+  assert.equal(body.completedAt, "2026-11-14T12:00:00.000Z");
+  assert.equal(artifact.status, "READY");
+  assert.equal(deletes, 0, "a concurrent successful completion must not delete the valid R2 object");
+});
+
 test("lost R2 completion response refuses mismatched recovery metadata and keeps the artifact quarantined", async () => {
   const fixture = await createRunnerOidcFixture();
   const artifact = {
