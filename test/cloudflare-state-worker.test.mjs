@@ -1301,6 +1301,7 @@ test("private R2 artifact upload requires an exact generated receipt and complet
   const partRows = new Map();
   let uploadedPart = null;
   let r2PartEtag = "bad";
+  let loseCompletionResponse = false;
   const database = {
     prepare(sql) {
       return {
@@ -1363,6 +1364,7 @@ test("private R2 artifact upload requires an exact generated receipt and complet
         },
         async complete(parts) {
           assert.deepEqual(parts, [{ partNumber: 1, etag: "7cfdd07889b3295d6a550914ab35e068" }]);
+          if (loseCompletionResponse) throw new Error("simulated lost R2 completion response");
           return {
             size: 5, httpEtag: "object-etag",
             customMetadata: {
@@ -1375,7 +1377,9 @@ test("private R2 artifact upload requires an exact generated receipt and complet
     },
     async get(key) {
       return {
-        size: 5, httpEtag: "object-etag", customMetadata: { sha256: digest },
+        size: 5, httpEtag: "object-etag", customMetadata: {
+          jobId: job.id, sourcePath: "media/generated-video.mp4", artifactKind: "video", sha256: digest
+        },
         body: new Response("video").body,
         writeHttpMetadata(headers) { headers.set("content-type", "video/mp4"); }
       };
@@ -1422,9 +1426,12 @@ test("private R2 artifact upload requires an exact generated receipt and complet
   assert.equal(part.status, 200);
   assert.equal((await part.json()).md5Verified, true);
   assert.equal(uploadedPart.partNumber, 1);
+  loseCompletionResponse = true;
   const complete = await call("/api/runner/artifacts/complete", "POST", { artifactId: created.artifactId });
   assert.equal(complete.status, 201);
-  assert.equal((await complete.json()).status, "READY");
+  const completedBody = await complete.json();
+  assert.equal(completedBody.status, "READY");
+  assert.equal(completedBody.reconciled, true);
   const list = await handleRequest(new Request("https://state.example/api/artifacts?jobId=" + job.id, {
     headers: { "x-operator-token": "o".repeat(32) }
   }), env);
