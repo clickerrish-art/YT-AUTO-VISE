@@ -520,10 +520,17 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
           customMetadata: { jobId, sourcePath, artifactKind, sha256: digest }
         });
         if (existing?.status === "FAILED") {
-          await env.STATE_DB.prepare("DELETE FROM runner_artifact_parts WHERE artifact_id = ?").bind(artifactId).run();
-          await env.STATE_DB.prepare(
-            "UPDATE runner_artifacts SET upload_id = ?, status = 'UPLOADING', etag = NULL, created_at = ?, completed_at = NULL WHERE artifact_id = ? AND status = 'FAILED'"
-          ).bind(multipart.uploadId, createdAt, artifactId).run();
+          const retryResults = await env.STATE_DB.batch([
+            env.STATE_DB.prepare(
+              "UPDATE runner_artifacts SET upload_id = ?, status = 'UPLOADING', etag = NULL, created_at = ?, completed_at = NULL WHERE artifact_id = ? AND status = 'FAILED'"
+            ).bind(multipart.uploadId, createdAt, artifactId),
+            env.STATE_DB.prepare(
+              "DELETE FROM runner_artifact_parts WHERE artifact_id = ? AND EXISTS (SELECT 1 FROM runner_artifacts WHERE artifact_id = ? AND upload_id = ? AND status = 'UPLOADING')"
+            ).bind(artifactId, artifactId, multipart.uploadId)
+          ]);
+          if (Number(retryResults?.[0]?.meta?.changes ?? 0) !== 1) {
+            throw new Error("Failed artifact retry lost its durable compare-and-set");
+          }
         } else {
           await env.STATE_DB.prepare(
             "INSERT INTO runner_artifacts (artifact_id, job_id, source_path, artifact_kind, filename, object_key, upload_id, sha256, size_bytes, part_size_bytes, expected_parts, content_type, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'UPLOADING', ?)"
