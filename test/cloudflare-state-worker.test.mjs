@@ -1466,6 +1466,77 @@ test("private R2 artifact upload requires an exact generated receipt and complet
   assert.equal(download.headers.get("x-artifact-sha256"), digest);
 });
 
+test("lost R2 completion response refuses mismatched recovery metadata and keeps the artifact quarantined", async () => {
+  const fixture = await createRunnerOidcFixture();
+  const artifact = {
+    artifact_id: "22222222-2222-4222-8222-222222222222",
+    upload_id: "upload-recovery-mismatch",
+    object_key: "jobs/job-recovery/" + "a".repeat(64) + "/video.mp4",
+    size_bytes: 5,
+    expected_parts: 1,
+    status: "UPLOADING",
+    sha256: "a".repeat(64),
+    job_id: "job-recovery",
+    source_path: "media/video.mp4",
+    artifact_kind: "video"
+  };
+  let readyUpdates = 0;
+  let deletedKey = null;
+  const database = {
+    prepare(sql) {
+      return {
+        args: [],
+        bind(...args) { this.args = args; return this; },
+        async first() {
+          if (sql.includes("FROM runner_artifacts WHERE artifact_id")) return artifact;
+          return null;
+        },
+        async all() {
+          if (sql.includes("FROM runner_artifact_parts")) {
+            return { results: [{ part_number: 1, etag: "part-etag" }] };
+          }
+          return { results: [] };
+        },
+        async run() {
+          if (sql.startsWith("UPDATE runner_artifacts SET status = 'READY'")) readyUpdates += 1;
+          return { meta: { changes: 1 } };
+        }
+      };
+    }
+  };
+  const env = {
+    STATE_DB: database,
+    ARTIFACTS: {
+      resumeMultipartUpload() {
+        return { async complete() { throw new Error("simulated lost completion response"); } };
+      },
+      async get() {
+        return {
+          size: 5,
+          httpEtag: "unexpected-object-etag",
+          customMetadata: {
+            jobId: artifact.job_id,
+            sourcePath: artifact.source_path,
+            artifactKind: artifact.artifact_kind,
+            sha256: "b".repeat(64)
+          }
+        };
+      },
+      async delete(key) { deletedKey = key; }
+    }
+  };
+  const response = await handleRequest(new Request("https://state.example/api/runner/artifacts/complete", {
+    method: "POST",
+    headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
+    body: JSON.stringify({ artifactId: artifact.artifact_id })
+  }), env, fixture);
+  assert.equal(response.status, 503);
+  assert.equal((await response.json()).code, "ARTIFACT_COMPLETE_FAILED");
+  assert.equal(artifact.status, "UPLOADING");
+  assert.equal(readyUpdates, 0, "mismatched recovered metadata must never be committed as READY");
+  assert.equal(deletedKey, null, "the reconciliation path must quarantine rather than delete an unverified object");
+});
+
 test("private R2 multipart completion deletes an object whose receipt metadata is mismatched", async () => {
   const fixture = await createRunnerOidcFixture();
   const artifact = {
