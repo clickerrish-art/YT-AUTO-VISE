@@ -505,7 +505,7 @@ async function waitForNextCycle(milliseconds, shouldStop) {
   while (!shouldStop()) {
     const remaining = deadline - Date.now();
     if (remaining <= 0) return;
-    await delay(Math.min(250, remaining));
+    await delay(Math.min(50, remaining));
   }
 }
 
