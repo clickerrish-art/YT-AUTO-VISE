@@ -6,7 +6,7 @@
   "publicationEnabled": false,
   "schedulingEnabled": false,
   "calendarStatus": "DRAFT_PREPARATION_ONLY_NO_PUBLICATION_DATES",
-  "notes": "This is a draft-preparation plan for the week beginning 2026-11-09, not a publication calendar.,No publicationAt, publishedAt or scheduledAt values are permitted in this plan.,A separate verified SonicVhibez destination schedule and complete public/private/unlisted YouTube history are required before any publication-slot calculation or scheduling.,Selar products are the owner's direct-sales business and must not be classified as affiliate commissions. Products hosted outside Selar (including Serengeti and other external sellers) are affiliate promotions. Every promotion remains blocked until its exact relationship and viewer-facing disclosure are verified and owner-approved.,Two 55-second creator-education Shorts are prepared for the week beginning 2026-11-30: a wildlife-video fact-check lesson and a wildlife-documentary shot-list lesson. Both remain DRAFT_ONLY, private and unscheduled; the two-Short weekly cap is enforced, and the Vault direct-sales disclosure is product-specifically approved. Added sonicvhibez-short-011-wildlife-broll for the week beginning 2026-12-07; the weekly maximum remains two, publication/scheduling remain disabled, and the item has no publication timestamp.",
+  "notes": "This is a draft-preparation plan for the week beginning 2026-11-09, not a publication calendar.,No publicationAt, publishedAt or scheduledAt values are permitted in this plan.,A separate verified SonicVhibez destination schedule and complete public/private/unlisted YouTube history are required before any publication-slot calculation or scheduling.,Selar products are the owner's direct-sales business and must not be classified as affiliate commissions. Products hosted outside Selar (including Serengeti and other external sellers) are affiliate promotions. Every promotion remains blocked until its exact relationship and viewer-facing disclosure are verified and owner-approved.,Two 55-second creator-education Shorts are prepared for the week beginning 2026-11-30: a wildlife-video fact-check lesson and a wildlife-documentary shot-list lesson. Both remain DRAFT_ONLY, private and unscheduled; the two-Short weekly cap is enforced, and the Vault direct-sales disclosure is product-specifically approved. Added sonicvhibez-short-011-wildlife-broll for the week beginning 2026-12-07; the weekly maximum remains two, publication/scheduling remain disabled, and the item has no publication timestamp. Added sonicvhibez-short-012-wildlife-video-editing for the week beginning 2026-12-07; vidIQ estimated the primary phrase at 8,456 monthly searches with competition 18/100, and the 2-Short weekly cap remains enforced. The item is private, DRAFT_ONLY and has no publication timestamp.",
   "weeks": [
     {
       "weekOf": "2026-11-09",
@@ -1020,6 +1020,72 @@
             "Record source location/date privately for factual verification; do not expose sensitive wildlife locations.",
             "Record natural narration and confirm a final runtime of 50–60 seconds, targeting about 55.",
             "Time captions to the final voice track and check phone-size readability and vertical safe areas.",
+            "Use the exact owner-approved ADVERTISEMENT identifier and direct-sales disclosure in the final video and description.",
+            "Recheck the exact Selar product page and seller before release; current seller evidence was last verified 9 November 2026.",
+            "Complete human factual, rights, compliance, playback and thumbnail review against final asset hashes.",
+            "Keep the item private and draft-only; no upload or scheduling is authorized.",
+            "Before any future schedule, inspect complete SonicVhibez history and destination queue and calculate every gap as at least 72 full hours in Africa/Johannesburg."
+          ],
+          "visibility": "private"
+        },
+        {
+          "id": "sonicvhibez-short-012-wildlife-video-editing",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "Wildlife Video Editing: 3 Passes for a Clearer Story",
+          "primaryKeyword": "wildlife video editing",
+          "script": "Wildlife video editing gets easier when you stop trying to perfect every clip at once. Use three passes. First, story: choose one verified moment and arrange the wide, action and detail shots so the sequence makes sense. Don’t cut away context or imply behaviour you didn’t record. Second, rhythm: trim dead time, but keep enough natural pauses for viewers to understand what happened. Third, sound: keep useful field audio, lower music beneath it, and caption only what is actually said. Watch the edit once without music. If the story is unclear, fix the pictures before adding effects. Advertisement. The Complete YouTube Wildlife Creator’s Vault is a planning resource for wildlife creators. This product is sold through my own Selar business; purchases generate revenue for my business.",
+          "productId": "wildlife-creators-vault",
+          "productUrl": "https://selar.com/0u19v8u99l",
+          "description": "Wildlife video editing is easier when you separate story, rhythm and sound into three deliberate passes. Use this checklist to keep the sequence clear without inventing animal behaviour.\n\nPlanning resource: Complete YouTube Wildlife Creator's Vault\nhttps://selar.com/0u19v8u99l\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nUse only original or commercially cleared footage and audio. Keep animal behaviour factual and undisturbed.",
+          "keywordPhrases": [
+            {
+              "phrase": "wildlife video editing",
+              "estimatedMonthlySearches": 8456,
+              "volumeScore": 59,
+              "competition": 18,
+              "growthPct": null
+            },
+            {
+              "phrase": "wildlife video tips"
+            },
+            {
+              "phrase": "wildlife filmmaking"
+            },
+            {
+              "phrase": "wildlife videography"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "vidIQ",
+            "type": "estimated_monthly_searches",
+            "researchedAt": "2026-11-14T09:43:11+02:00",
+            "note": "vidIQ research on 2026-11-14 returned the seed phrase 'wildlife video editing' at an estimated 8,456 monthly searches, volume score 59/100 and competition 18/100. Related terms 'wildlife video tips', 'wildlife filmmaking' and 'wildlife videography' each displayed fewer than 750 estimated monthly searches. No growth percentage or top-market breakdown was returned for the seed. These are provider estimates, not independently audited."
+          },
+          "hashtags": [
+            "#WildlifeVideoEditing",
+            "#WildlifeFilmmaking",
+            "#WildlifeDocumentary",
+            "#VideoEditing",
+            "#YouTubeCreator"
+          ],
+          "thumbnailDirection": "Use a genuine rights-cleared wildlife edit timeline with three clearly labelled passes: STORY, RHYTHM, SOUND. Large text: “EDIT IN 3 PASSES”. No AI or stock footage may be presented as the finished production asset.",
+          "disclosure": {
+            "status": "APPROVED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "approvedAt": "2026-11-10T07:02:41+02:00",
+            "approvalReference": "Owner explicitly approved the exact viewer-facing Selar direct-sales disclosure in the ChatGPT conversation on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Approval applies to the Complete YouTube Wildlife Creator's Vault promotion only."
+          },
+          "productionChecklist": [
+            "Use only original or commercially cleared wildlife footage, narration, music and sound effects.",
+            "Choose a verified sequence and preserve the context needed to understand the recorded behaviour.",
+            "Never imply a cause, action or animal behaviour that the source footage does not show.",
+            "Trim for clarity while retaining natural pauses and sequence continuity.",
+            "Keep useful field audio intelligible and lower music beneath it; verify all music rights.",
+            "Caption only the actual narration and check synchronization, phone-size readability and vertical safe areas.",
+            "Confirm final runtime between 50 and 60 seconds, targeting about 55 seconds.",
             "Use the exact owner-approved ADVERTISEMENT identifier and direct-sales disclosure in the final video and description.",
             "Recheck the exact Selar product page and seller before release; current seller evidence was last verified 9 November 2026.",
             "Complete human factual, rights, compliance, playback and thumbnail review against final asset hashes.",

@@ -293,3 +293,33 @@ test("November 30 wildlife shot-list Short uses current qualitative intent and t
   assert.ok(item.description.includes(product.promotionGate.disclosure.text));
   assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
 });
+
+
+test("December 7 wildlife video-editing Short uses fresh vidIQ estimates and the exact approved Vault disclosure", () => {
+  const week = checkedInPlan.weeks.find(row => row.weekOf === "2026-12-07");
+  const item = week?.items.find(row => row.id === "sonicvhibez-short-012-wildlife-video-editing");
+  const product = products.find(row => row.id === "wildlife-creators-vault");
+  assert.ok(week);
+  assert.equal(week.items.length, 2);
+  assert.ok(item);
+  assert.equal(item.channel, "SonicVhibez");
+  assert.equal(item.status, "DRAFT_ONLY");
+  assert.equal(item.visibility, "private");
+  assert.equal(item.targetSeconds, 55);
+  assert.equal(item.title, "Wildlife Video Editing: 3 Passes for a Clearer Story");
+  assert.equal(item.primaryKeyword, "wildlife video editing");
+  assert.equal(item.productUrl, product.url);
+  assert.equal(item.keywordEvidence.provider, "vidIQ");
+  assert.equal(item.keywordEvidence.type, "estimated_monthly_searches");
+  assert.equal(item.keywordPhrases[0].estimatedMonthlySearches, 8456);
+  assert.equal(item.keywordPhrases[0].competition, 18);
+  assert.match(item.keywordEvidence.note, /provider estimates, not independently audited/i);
+  assert.equal(item.disclosure.status, "APPROVED");
+  assert.equal(item.disclosure.approvalReference, product.promotionGate.disclosure.approvalReference);
+  assert.ok(item.script.indexOf("Advertisement.") < item.script.indexOf(product.promotionGate.disclosure.text));
+  assert.match(item.description, /^Wildlife video editing/);
+  assert.match(item.description, /^ADVERTISEMENT$/m);
+  assert.ok(item.description.includes(product.promotionGate.disclosure.text));
+  assert.equal(item.script.trim().split(/\\s+/).filter(Boolean).length, 126);
+  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
+});

@@ -30,6 +30,7 @@ async function startDashboard({ stateDir, token, pageId, pageToken, userToken, t
     META_GRAPH_API_VERSION: "v26.0",
     MOCK_META_PAGE_ID: pageId,
     MOCK_META_PAGE_NAME: "Nature Frontiers",
+    MOCK_META_USER_ID: "987654321098765",
     MOCK_META_TRACE_PATH: tracePath,
     MOCK_META_CONFIG_PATH: path.resolve("config/facebook-publishing.json"),
     MOCK_META_FAIL_MODE: failMode,
@@ -87,8 +88,12 @@ test("mocked Meta Page verification persists identity, permission and audit evid
     "each successful explicit identity check must have one reviewer-attributed audit event");
   assert.ok(persisted.audit.filter(event => event.action === "FACEBOOK_PAGE_IDENTITY_VERIFIED").every(event => event.actor === "meta-verification-test-operator"));
   const providerCalls = fs.readFileSync(tracePath, "utf8").trim().split("\n").map(line => JSON.parse(line));
-  assert.equal(providerCalls.length, 6, "two verifications each perform permission, managed-Page and identity reads");
+  assert.equal(providerCalls.length, 8, "two verifications each perform user identity, permission, managed-Page and Page identity reads");
   assert.ok(providerCalls.every(call => call.method === "GET"), "identity verification must not perform a provider mutation");
+  assert.equal(providerCalls.filter(call => call.pathname.endsWith("/me")).length, 2, "each verification resolves the numeric user ID");
+  assert.equal(providerCalls.filter(call => call.pathname.endsWith("/987654321098765/permissions")).length, 2, "each verification reads permissions from the numeric user edge");
+  assert.equal(providerCalls.filter(call => call.pathname.endsWith("/me/accounts")).length, 2);
+  assert.equal(providerCalls.filter(call => call.pathname.endsWith("/" + pageId)).length, 2);
 
   await stopDashboard(server);
   server = await startDashboard({ stateDir, token, pageId, pageToken, userToken, tracePath });
