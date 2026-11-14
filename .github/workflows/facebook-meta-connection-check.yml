@@ -3,7 +3,6 @@ name: Verify Nature Frontiers Meta Page connection
 on:
   workflow_dispatch:
   pull_request:
-    branches: [codex/marketing-machine-audit-fixes]
     types: [opened, reopened, synchronize]
   push:
     branches: [codex/marketing-machine-audit-fixes]
@@ -39,7 +38,7 @@ jobs:
           const userToken = process.env.META_USER_ACCESS_TOKEN ?? "";
           const pageToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
 
-          if (!/^\\d{5,30}$/.test(pageId)) throw new Error("Missing or invalid Actions variable NATURE_FRONTIERS_FACEBOOK_PAGE_ID");
+          if (!/^\d{5,30}$/.test(pageId)) throw new Error("Missing or invalid Actions variable NATURE_FRONTIERS_FACEBOOK_PAGE_ID");
           if (pageId !== config.destinationPageId) throw new Error("Actions Page ID does not match config/facebook-publishing.json");
           if (userToken.length < 20) throw new Error("Missing Actions secret META_USER_ACCESS_TOKEN");
           if (pageToken.length < 20) throw new Error("Missing Actions secret META_PAGE_ACCESS_TOKEN");
