@@ -26,6 +26,7 @@ jobs:
       FACEBOOK_PUBLISH_ENABLED: 'NO'
       META_USER_ACCESS_TOKEN: ${{ secrets.META_USER_ACCESS_TOKEN }}
       META_PAGE_ACCESS_TOKEN: ${{ secrets.META_PAGE_ACCESS_TOKEN }}
+      FACEBOOK_APPROVAL_HMAC_SECRET: ${{ secrets.FACEBOOK_APPROVAL_HMAC_SECRET }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
