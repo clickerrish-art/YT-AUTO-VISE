@@ -602,7 +602,45 @@ async function handleRequest(request, env, { fetchImpl = fetch } = {}) {
       try {
         object = await env.ARTIFACTS.resumeMultipartUpload(artifact.object_key, artifact.upload_id).complete(parts);
       } catch {
-        return json({ error: "R2 multipart completion failed; the upload remains available for reconciliation", code: "ARTIFACT_COMPLETE_FAILED" }, 503);
+        // Completion may have succeeded in R2 while its response was lost. Reconcile
+        // the deterministic object key before reporting failure or retrying completion.
+        try {
+          const recovered = await env.ARTIFACTS.get(artifact.object_key);
+          const recoveredMetadata = recovered?.customMetadata ?? {};
+          const recoveredMatches = recovered &&
+            Number(recovered.size) === Number(artifact.size_bytes) &&
+            recoveredMetadata.sha256 === artifact.sha256 &&
+            recoveredMetadata.jobId === artifact.job_id &&
+            recoveredMetadata.sourcePath === artifact.source_path &&
+            recoveredMetadata.artifactKind === artifact.artifact_kind;
+          if (recoveredMatches) {
+            const completedAt = new Date().toISOString();
+            const saved = await env.STATE_DB.prepare(
+              "UPDATE runner_artifacts SET status = 'READY', etag = ?, completed_at = ? WHERE artifact_id = ? AND status = 'UPLOADING'"
+            ).bind(recovered.httpEtag, completedAt, input.artifactId).run();
+            if (Number(saved.meta?.changes ?? 0) === 1) {
+              return json({
+                artifactId: artifact.artifact_id, objectKey: artifact.object_key,
+                sha256: artifact.sha256, sizeBytes: recovered.size, etag: recovered.httpEtag,
+                status: "READY", completedAt, reconciled: true, publishingEnabled: false
+              }, 201);
+            }
+            const latest = await env.STATE_DB.prepare(
+              "SELECT status, etag, completed_at FROM runner_artifacts WHERE artifact_id = ?"
+            ).bind(input.artifactId).first();
+            if (latest?.status === "READY") {
+              return json({
+                artifactId: artifact.artifact_id, objectKey: artifact.object_key,
+                sha256: artifact.sha256, sizeBytes: recovered.size, etag: latest.etag,
+                status: "READY", completedAt: latest.completed_at, idempotent: true,
+                reconciled: true, publishingEnabled: false
+              });
+            }
+          }
+        } catch {
+          // Keep the durable UPLOADING record for an explicit later reconciliation.
+        }
+        return json({ error: "R2 multipart completion failed and no matching completed object could be reconciled; upload remains quarantined", code: "ARTIFACT_COMPLETE_FAILED" }, 503);
       }
       if (Number(object.size) !== Number(artifact.size_bytes)) {
         await env.ARTIFACTS.delete(artifact.object_key);
