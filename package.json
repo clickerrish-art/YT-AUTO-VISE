@@ -37,7 +37,8 @@
     "worker": "node scripts/worker-runner.mjs",
     "validate:promotional-shorts": "node scripts/validate-promotional-short-plan.mjs",
     "backup:recover": "node scripts/backup-state.mjs --recover",
-    "seo:research": "node scripts/research-youtube-seo.mjs"
+    "seo:research": "node scripts/research-youtube-seo.mjs",
+    "facebook:approve": "node scripts/approve-facebook-candidate.mjs"
   },
   "engines": {
     "node": ">=22"
