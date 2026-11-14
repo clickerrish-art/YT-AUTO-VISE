@@ -98,6 +98,7 @@ jobs:
             pageName: identity.pageName,
             grantedPermissions: permissions.grantedPermissions,
             pageTasks: permissions.tasks,
+            pageAuthorizationEvidence: permissions.authorizationEvidence,
             apiVersion: config.apiVersion,
             publishingEnabled: config.publishingEnabled,
             dryRun: config.dryRun,
