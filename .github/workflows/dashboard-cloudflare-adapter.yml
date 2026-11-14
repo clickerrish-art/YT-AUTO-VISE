@@ -103,6 +103,8 @@ jobs:
           node --check scripts/cloudflare-runner-bridge.mjs
           node --check scripts/cloudflare-access-auth.mjs
           node --check test/cloudflare-access-auth.test.mjs
+          node --check scripts/github-oidc-token.mjs
+          node --check test/github-oidc-token.test.mjs
           node --check scripts/cloudflare-artifact-sync.mjs
           node --check scripts/artifact-integrity.mjs
           node --check test/artifact-integrity.test.mjs
@@ -114,4 +116,4 @@ jobs:
           node --check test/deployment-recovery.test.mjs
           ruby -e 'require "yaml"; YAML.load_file(".github/workflows/repository-runner.yml")'
       - name: Cloudflare state, repository runner and dashboard inventory tests
-        run: node --test test/cloudflare-access-auth.test.mjs test/cloudflare-state-worker.test.mjs test/worker-runner.test.mjs test/dashboard-inventory.test.mjs test/dashboard-ui-contract.test.mjs test/promotional-short-plan.test.mjs test/cloudflare-artifact-sync.test.mjs test/deployment-recovery.test.mjs test/artifact-integrity.test.mjs
+        run: node --test test/cloudflare-access-auth.test.mjs test/github-oidc-token.test.mjs test/cloudflare-state-worker.test.mjs test/worker-runner.test.mjs test/dashboard-inventory.test.mjs test/dashboard-ui-contract.test.mjs test/promotional-short-plan.test.mjs test/cloudflare-artifact-sync.test.mjs test/deployment-recovery.test.mjs test/artifact-integrity.test.mjs
