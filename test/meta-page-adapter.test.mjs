@@ -314,7 +314,7 @@ test("Meta permission verification falls back to exact direct Page lookup when /
       ] });
       if (String(url).includes("/me/accounts?")) return response({ data: [] });
       if (String(url).includes("/" + PAGE_ID + "?fields=id%2Cname%2Caccess_token")) {
-        return response({ id: PAGE_ID, name: "Nature Frontiers", tasks: ["CREATE_CONTENT"], access_token: TOKEN });
+        return response({ id: PAGE_ID, name: "Nature Frontiers", access_token: TOKEN });
       }
       throw new Error("Unexpected Meta endpoint: " + url);
     }
