@@ -58,6 +58,10 @@ jobs:
             try {
               const response = await fetch(input, options);
               let metaError = {};
+              if (stage === "user-identity" && response.ok) {
+                const identityBody = await response.clone().json().catch(() => ({}));
+                metaError.meIdMatchesConfiguredPageId = typeof identityBody?.id === "string" && identityBody.id === pageId;
+              }
               if (!response.ok) {
                 const body = await response.clone().json().catch(() => ({}));
                 metaError = {
