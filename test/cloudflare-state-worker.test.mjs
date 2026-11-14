@@ -2031,6 +2031,111 @@ test("private R2 multipart completion deletes an object whose receipt metadata i
   assert.equal(failedStatus, true);
 });
 
+test("failed R2 artifact restart atomically clears old parts and aborts a losing compare-and-set", async () => {
+  for (const loseRace of [false, true]) {
+    const fixture = await createRunnerOidcFixture();
+    const digest = "f".repeat(64);
+    const job = {
+      kind: "CONTENT_PRODUCTION",
+      id: loseRace ? "job-retry-race" : "job-retry-success",
+      state: "GENERATED",
+      outputArtifacts: [{ path: "media/retry-video.mp4", sha256: digest }]
+    };
+    const state = { ...validState(), jobs: [job] };
+    const artifact = {
+      artifact_id: loseRace ? "99999999-9999-4999-8999-999999999999" : "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      job_id: job.id,
+      source_path: "media/retry-video.mp4",
+      artifact_kind: "video",
+      filename: "retry-video.mp4",
+      object_key: "jobs/" + job.id + "/" + digest + "/retry-video.mp4",
+      upload_id: "old-upload-id",
+      sha256: digest,
+      size_bytes: 5,
+      part_size_bytes: 5,
+      expected_parts: 1,
+      content_type: "video/mp4",
+      status: "FAILED",
+      created_at: "2026-11-13T00:00:00.000Z",
+      completed_at: null
+    };
+    const oldParts = new Map([[1, "old-part-etag"]]);
+    let oldUploadAborts = 0;
+    let newUploadAborts = 0;
+    let batchCalls = 0;
+    const database = {
+      prepare(sql) {
+        return {
+          sql,
+          args: [],
+          bind(...args) { this.args = args; return this; },
+          async first() {
+            if (sql.includes("FROM dashboard_state")) {
+              return { revision: 4, state_json: JSON.stringify(state), updated_at: "2026-11-08T00:00:00.000Z" };
+            }
+            if (sql.includes("FROM runner_artifacts WHERE job_id")) return { ...artifact };
+            if (sql.includes("SUM(size_bytes)")) return { total_bytes: 0 };
+            return null;
+          },
+          async run() { return { meta: { changes: 1 } }; }
+        };
+      },
+      async batch(statements) {
+        batchCalls += 1;
+        assert.equal(statements.length, 2);
+        assert.match(statements[0].sql, /^UPDATE runner_artifacts SET upload_id/);
+        assert.match(statements[1].sql, /^DELETE FROM runner_artifact_parts/);
+        if (loseRace) {
+          artifact.status = "UPLOADING";
+          artifact.upload_id = "concurrent-winning-upload";
+          return [{ meta: { changes: 0 } }, { meta: { changes: 0 } }];
+        }
+        artifact.status = "UPLOADING";
+        artifact.upload_id = "new-upload-id";
+        oldParts.clear();
+        return [{ meta: { changes: 1 } }, { meta: { changes: 1 } }];
+      }
+    };
+    const env = {
+      STATE_DB: database,
+      ARTIFACTS: {
+        async list() { return { objects: [], truncated: false }; },
+        resumeMultipartUpload(key, uploadId) {
+          assert.equal(uploadId, "old-upload-id");
+          return { async abort() { oldUploadAborts += 1; } };
+        },
+        async createMultipartUpload(key, options) {
+          assert.equal(options.customMetadata.sha256, digest);
+          return { key, uploadId: "new-upload-id", async abort() { newUploadAborts += 1; } };
+        }
+      }
+    };
+    const response = await handleRequest(new Request("https://state.example/api/runner/artifacts/create", {
+      method: "POST",
+      headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
+      body: JSON.stringify({
+        jobId: job.id, sourcePath: "media/retry-video.mp4", artifactKind: "video",
+        sha256: digest, sizeBytes: 5, contentType: "video/mp4"
+      })
+    }), env, fixture);
+    assert.equal(oldUploadAborts, 1);
+    assert.equal(batchCalls, 1);
+    if (loseRace) {
+      assert.equal(response.status, 503);
+      assert.equal((await response.json()).code, "ARTIFACT_UPLOAD_INIT_FAILED");
+      assert.equal(newUploadAborts, 1, "a losing restart must abort its newly-created R2 multipart upload");
+      assert.equal(artifact.upload_id, "concurrent-winning-upload");
+      assert.equal(oldParts.size, 1, "a losing restart must not delete the winning upload's part ledger");
+    } else {
+      assert.equal(response.status, 201);
+      assert.equal(newUploadAborts, 0);
+      assert.equal(artifact.status, "UPLOADING");
+      assert.equal(artifact.upload_id, "new-upload-id");
+      assert.equal(oldParts.size, 0, "a successful restart must clear stale part receipts atomically");
+    }
+  }
+});
+
 test("private R2 artifact creation rejects unbound SHA, unsafe paths and storage over-budget", async () => {
   const fixture = await createRunnerOidcFixture();
   const digest = "a".repeat(64);
