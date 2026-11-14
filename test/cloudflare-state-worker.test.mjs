@@ -1302,6 +1302,8 @@ test("private R2 artifact upload requires an exact generated receipt and complet
   let uploadedPart = null;
   let r2PartEtag = "bad";
   let loseCompletionResponse = false;
+  let rejectReadyUpdate = false;
+  let completedObjectAvailable = false;
   const database = {
     prepare(sql) {
       return {
@@ -1313,6 +1315,10 @@ test("private R2 artifact upload requires an exact generated receipt and complet
             return [...artifactRows.values()].find(row => row.job_id === this.args[0] && row.source_path === this.args[1] && row.sha256 === this.args[2]) ?? null;
           }
           if (sql.includes("SUM(size_bytes)")) return { total_bytes: 0 };
+          if (sql.includes("SELECT status, etag, completed_at FROM runner_artifacts WHERE artifact_id")) {
+            const row = artifactRows.get(this.args[0]);
+            return row ? { status: row.status, etag: row.etag ?? null, completed_at: row.completed_at ?? null } : null;
+          }
           if (sql.includes("FROM runner_artifacts WHERE artifact_id")) return artifactRows.get(this.args[0]) ?? null;
           return null;
         },
@@ -1340,6 +1346,10 @@ test("private R2 artifact upload requires an exact generated receipt and complet
           if (sql.startsWith("UPDATE runner_artifacts SET status = 'READY'")) {
             const [etag, completedAt, artifactId] = this.args;
             const row = artifactRows.get(artifactId);
+            if (rejectReadyUpdate) {
+              rejectReadyUpdate = false;
+              return { meta: { changes: 0 } };
+            }
             if (row) Object.assign(row, { status: "READY", etag, completed_at: completedAt });
             return { meta: { changes: row ? 1 : 0 } };
           }
@@ -1364,7 +1374,11 @@ test("private R2 artifact upload requires an exact generated receipt and complet
         },
         async complete(parts) {
           assert.deepEqual(parts, [{ partNumber: 1, etag: "7cfdd07889b3295d6a550914ab35e068" }]);
-          if (loseCompletionResponse) throw new Error("simulated lost R2 completion response");
+          if (completedObjectAvailable || loseCompletionResponse) {
+            completedObjectAvailable = true;
+            throw new Error("simulated already-completed or lost R2 completion response");
+          }
+          completedObjectAvailable = true;
           return {
             size: 5, httpEtag: "object-etag",
             customMetadata: {
@@ -1376,6 +1390,7 @@ test("private R2 artifact upload requires an exact generated receipt and complet
       };
     },
     async get(key) {
+      if (!completedObjectAvailable) return null;
       return {
         size: 5, httpEtag: "object-etag", customMetadata: {
           jobId: job.id, sourcePath: "media/generated-video.mp4", artifactKind: "video", sha256: digest
@@ -1426,12 +1441,18 @@ test("private R2 artifact upload requires an exact generated receipt and complet
   assert.equal(part.status, 200);
   assert.equal((await part.json()).md5Verified, true);
   assert.equal(uploadedPart.partNumber, 1);
-  loseCompletionResponse = true;
+  rejectReadyUpdate = true;
+  const conflicted = await call("/api/runner/artifacts/complete", "POST", { artifactId: created.artifactId });
+  assert.equal(conflicted.status, 503);
+  assert.equal((await conflicted.json()).code, "ARTIFACT_LEDGER_CONFLICT");
+  assert.equal(artifactRows.get(created.artifactId).status, "UPLOADING", "a failed D1 compare-and-set must not claim READY");
+
   const complete = await call("/api/runner/artifacts/complete", "POST", { artifactId: created.artifactId });
   assert.equal(complete.status, 201);
   const completedBody = await complete.json();
   assert.equal(completedBody.status, "READY");
   assert.equal(completedBody.reconciled, true);
+  assert.equal(artifactRows.get(created.artifactId).status, "READY");
   const list = await handleRequest(new Request("https://state.example/api/artifacts?jobId=" + job.id, {
     headers: { "x-operator-token": "o".repeat(32) }
   }), env);
