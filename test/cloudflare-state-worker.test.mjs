@@ -2031,6 +2031,65 @@ test("private R2 multipart completion deletes an object whose receipt metadata i
   assert.equal(failedStatus, true);
 });
 
+test("R2 multipart initialization aborts the new upload when the D1 receipt insert fails", async () => {
+  const fixture = await createRunnerOidcFixture();
+  const digest = "1".repeat(64);
+  const job = {
+    kind: "CONTENT_PRODUCTION",
+    id: "job-r2-ledger-init-failure",
+    state: "GENERATED",
+    outputArtifacts: [{ path: "media/init-failure.mp4", sha256: digest }]
+  };
+  const state = { ...validState(), jobs: [job] };
+  let multipartCreated = 0;
+  let multipartAborted = 0;
+  const database = {
+    prepare(sql) {
+      return {
+        args: [],
+        bind(...args) { this.args = args; return this; },
+        async first() {
+          if (sql.includes("FROM dashboard_state")) {
+            return { revision: 4, state_json: JSON.stringify(state), updated_at: "2026-11-08T00:00:00.000Z" };
+          }
+          if (sql.includes("FROM runner_artifacts WHERE job_id")) return null;
+          if (sql.includes("SUM(size_bytes)")) return { total_bytes: 0 };
+          return null;
+        },
+        async run() {
+          if (sql.startsWith("INSERT INTO runner_artifacts")) {
+            throw new Error("simulated D1 artifact receipt insert failure");
+          }
+          return { meta: { changes: 1 } };
+        }
+      };
+    }
+  };
+  const env = {
+    STATE_DB: database,
+    ARTIFACTS: {
+      async list() { return { objects: [], truncated: false }; },
+      async createMultipartUpload(key, options) {
+        multipartCreated += 1;
+        assert.equal(options.customMetadata.sha256, digest);
+        return { key, uploadId: "untracked-upload", async abort() { multipartAborted += 1; } };
+      }
+    }
+  };
+  const response = await handleRequest(new Request("https://state.example/api/runner/artifacts/create", {
+    method: "POST",
+    headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
+    body: JSON.stringify({
+      jobId: job.id, sourcePath: "media/init-failure.mp4", artifactKind: "video",
+      sha256: digest, sizeBytes: 5, contentType: "video/mp4"
+    })
+  }), env, fixture);
+  assert.equal(response.status, 503);
+  assert.equal((await response.json()).code, "ARTIFACT_UPLOAD_INIT_FAILED");
+  assert.equal(multipartCreated, 1);
+  assert.equal(multipartAborted, 1, "an R2 multipart upload without a durable D1 receipt must be aborted");
+});
+
 test("failed R2 artifact restart atomically clears old parts and aborts a losing compare-and-set", async () => {
   for (const loseRace of [false, true]) {
     const fixture = await createRunnerOidcFixture();
