@@ -33,6 +33,8 @@ jobs:
       DASHBOARD_STATE_DIR: ${{ github.workspace }}/state
       WORKER_STATE_DIR: ${{ github.workspace }}/run-logs
       WORKER_DISPATCH_LIMIT: "1"
+      DASHBOARD_STATE_ACCESS_CLIENT_ID: ${{ secrets.DASHBOARD_STATE_ACCESS_CLIENT_ID }}
+      DASHBOARD_STATE_ACCESS_CLIENT_SECRET: ${{ secrets.DASHBOARD_STATE_ACCESS_CLIENT_SECRET }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -157,6 +159,8 @@ jobs:
     env:
       DASHBOARD_API_URL: https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev
       DASHBOARD_WORKER_ID: sonicvhibez-render-worker
+      DASHBOARD_STATE_ACCESS_CLIENT_ID: ${{ secrets.DASHBOARD_STATE_ACCESS_CLIENT_ID }}
+      DASHBOARD_STATE_ACCESS_CLIENT_SECRET: ${{ secrets.DASHBOARD_STATE_ACCESS_CLIENT_SECRET }}
       DASHBOARD_STATE_DIR: ${{ runner.temp }}/sonicvhibez-state
       WORKER_STATE_DIR: ${{ runner.temp }}/sonicvhibez-worker
     steps:
