@@ -1552,6 +1552,101 @@ test("R2 completion returns idempotent READY when a concurrent D1 compare-and-se
   assert.equal(deletes, 0, "a concurrent successful completion must not delete the valid R2 object");
 });
 
+test("simultaneous R2 artifact completion requests converge on one READY ledger receipt", async () => {
+  const fixture = await createRunnerOidcFixture();
+  const artifact = {
+    artifact_id: "44444444-4444-4444-8444-444444444444",
+    upload_id: "upload-simultaneous-complete",
+    object_key: "jobs/job-simultaneous/" + "d".repeat(64) + "/video.mp4",
+    size_bytes: 5,
+    expected_parts: 1,
+    status: "UPLOADING",
+    sha256: "d".repeat(64),
+    job_id: "job-simultaneous",
+    source_path: "media/simultaneous-video.mp4",
+    artifact_kind: "video",
+    etag: null,
+    completed_at: null
+  };
+  let completionCalls = 0;
+  let releaseBoth;
+  const bothCompleting = new Promise(resolve => { releaseBoth = resolve; });
+  let deletes = 0;
+  const database = {
+    prepare(sql) {
+      return {
+        args: [],
+        bind(...args) { this.args = args; return this; },
+        async first() {
+          if (sql.includes("SELECT status, etag, completed_at FROM runner_artifacts")) {
+            return { status: artifact.status, etag: artifact.etag, completed_at: artifact.completed_at };
+          }
+          if (sql.includes("FROM runner_artifacts WHERE artifact_id")) return { ...artifact };
+          return null;
+        },
+        async all() {
+          if (sql.includes("FROM runner_artifact_parts")) {
+            return { results: [{ part_number: 1, etag: "part-etag" }] };
+          }
+          return { results: [] };
+        },
+        async run() {
+          if (sql.startsWith("UPDATE runner_artifacts SET status = 'READY'")) {
+            if (artifact.status !== "UPLOADING") return { meta: { changes: 0 } };
+            Object.assign(artifact, {
+              status: "READY",
+              etag: "single-winning-etag",
+              completed_at: "2026-11-14T12:30:00.000Z"
+            });
+            return { meta: { changes: 1 } };
+          }
+          return { meta: { changes: 1 } };
+        }
+      };
+    }
+  };
+  const env = {
+    STATE_DB: database,
+    ARTIFACTS: {
+      resumeMultipartUpload() {
+        return {
+          async complete() {
+            completionCalls += 1;
+            if (completionCalls === 2) releaseBoth();
+            await bothCompleting;
+            return {
+              size: 5,
+              httpEtag: "r2-object-etag",
+              customMetadata: {
+                jobId: artifact.job_id,
+                sourcePath: artifact.source_path,
+                artifactKind: artifact.artifact_kind,
+                sha256: artifact.sha256
+              }
+            };
+          }
+        };
+      },
+      async delete() { deletes += 1; }
+    }
+  };
+  const request = () => handleRequest(new Request("https://state.example/api/runner/artifacts/complete", {
+    method: "POST",
+    headers: { authorization: "Bearer " + fixture.token, "content-type": "application/json" },
+    body: JSON.stringify({ artifactId: artifact.artifact_id })
+  }), env, fixture);
+  const responses = await Promise.all([request(), request()]);
+  const statuses = responses.map(response => response.status).sort((a, b) => a - b);
+  assert.deepEqual(statuses, [200, 201]);
+  const bodies = await Promise.all(responses.map(response => response.json()));
+  assert.ok(bodies.every(body => body.status === "READY"));
+  assert.equal(bodies.filter(body => body.idempotent === true).length, 1);
+  assert.equal(artifact.status, "READY");
+  assert.equal(artifact.etag, "single-winning-etag");
+  assert.equal(completionCalls, 2, "both requests must reach the simulated R2 completion race");
+  assert.equal(deletes, 0, "the losing completion request must not delete the valid shared object");
+});
+
 test("lost R2 completion response refuses mismatched recovery metadata and keeps the artifact quarantined", async () => {
   const fixture = await createRunnerOidcFixture();
   const artifact = {
