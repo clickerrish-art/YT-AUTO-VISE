@@ -2,6 +2,9 @@ name: Verify Nature Frontiers Meta Page connection
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [codex/marketing-machine-audit-fixes]
+    types: [opened, reopened, synchronize]
   push:
     branches: [codex/marketing-machine-audit-fixes]
     paths:
