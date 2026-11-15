@@ -396,7 +396,7 @@ export function evaluateNextPublication({
   for (let index = 0; index < cycleHistory.length; index++) {
     const expectedHistoricalFormat = ROLLING_PUBLICATION_FORMATS[index % ROLLING_PUBLICATION_FORMATS.length];
     if (cycleHistory[index].format !== expectedHistoricalFormat) {
-      errors.push(`remote history position ${index + 1} in the approved cycle must be ${expectedHistoricalFormat} in the rolling long_form, long_form, short cycle; got ${cycleHistory[index].format}`);
+      errors.push(`remote history position ${index + 1} must be ${expectedHistoricalFormat} in the approved cycle in the rolling long_form, long_form, short cycle; got ${cycleHistory[index].format}`);
     }
   }
   const latestActual = actualSorted.at(-1);
