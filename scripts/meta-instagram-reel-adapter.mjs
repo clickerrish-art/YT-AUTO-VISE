@@ -81,12 +81,12 @@ function validInstagramReelPermalink(value) {
     return url.protocol === "https:" &&
       (url.hostname === "www.instagram.com" || url.hostname === "instagram.com") &&
       !url.username && !url.password && !url.port && !url.search && !url.hash &&
-      /^\\/reel\\/[A-Za-z0-9_-]+\\/?$/.test(url.pathname);
+      /^\/reel\/[A-Za-z0-9_-]+\/?$/.test(url.pathname);
   } catch { return false; }
 }
 function validPublishedTimestamp(value) {
   return typeof value === "string" &&
-    /(?:Z|[+-]\\d{2}:?\\d{2})$/.test(value) &&
+    /(?:Z|[+-]\d{2}:?\d{2})$/.test(value) &&
     Number.isFinite(Date.parse(value));
 }
 
