@@ -141,10 +141,11 @@ try {
 
     $originalDirectoryAcl = Get-Acl -LiteralPath $secretDirectory
     $looseDirectoryAcl = Get-Acl -LiteralPath $secretDirectory
-    $directoryReadRule = New-Object System.Security.AccessControl.FileSystemAccessRule(
+    $directoryInheritanceFlags = [System.Security.AccessControl.InheritanceFlags]::ContainerInherit -bor [System.Security.AccessControl.InheritanceFlags]::ObjectInherit
+    $directoryReadRule = [System.Security.AccessControl.FileSystemAccessRule]::new(
         $usersSid,
         [System.Security.AccessControl.FileSystemRights]::ReadAndExecute,
-        [System.Security.AccessControl.InheritanceFlags]::ContainerInherit -bor [System.Security.AccessControl.InheritanceFlags]::ObjectInherit,
+        $directoryInheritanceFlags,
         [System.Security.AccessControl.PropagationFlags]::None,
         [System.Security.AccessControl.AccessControlType]::Allow
     )
