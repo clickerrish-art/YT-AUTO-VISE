@@ -60,7 +60,7 @@ assert(state.publishingEnabled !== true && state.publicPublishingEnabled !== tru
   state.unattendedPublishingEnabled !== true && payload.publishingEnabled !== true,
   "Staging state unexpectedly reports publishing enabled");
 
-const backupList = await get("/api/state/backups", { "x-operator-token": token });
+const backupList = await get("/api/backups", { "x-operator-token": token });
 if (backupList.status !== 200 || !Array.isArray(backupList.body?.backups)) {
   const errorCode = typeof backupList.body?.code === "string" ? backupList.body.code : "none";
   const errorMessage = typeof backupList.body?.error === "string" ? backupList.body.error.slice(0, 240) : "none";
