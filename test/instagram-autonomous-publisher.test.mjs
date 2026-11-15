@@ -129,12 +129,19 @@ test("approved Instagram feed image dispatch persists IDs and verifies the feed 
 
 test("Instagram feed posts have an independent one-per-day cap",async()=>{
  const f=setup();try{
-  fs.writeFileSync(f.queuePath,"[]");
+  const config=JSON.parse(fs.readFileSync(f.configPath,"utf8"));config.allowedImageDomains=["example.test"];fs.writeFileSync(f.configPath,JSON.stringify(config));
+  const queue=JSON.parse(fs.readFileSync(f.queuePath,"utf8"));const payload=queue[0];
+  payload.mediaType="feed_post";payload.scheduledAt="2026-11-15T14:00:00.000Z";payload.media.url="https://cdn.example.test/wildlife.jpg";
+  payload.approval=createInstagramApprovalReceipt(payload,{reviewer:"Editor",reason:"Exact feed image reviewed",secret,now:"2026-11-15T09:00:00.000Z"});
+  fs.writeFileSync(f.queuePath,JSON.stringify(queue));
   fs.writeFileSync(path.join(f.state,"instagram-history.json"),JSON.stringify([{slotId:"earlier-feed",status:"PUBLISHED_VERIFIED",
    mediaType:"feed_post",publishedAt:"2026-11-15T09:00:00.000Z"}]));
+  let publishCalls=0;
   const result=await runAutonomousInstagramPublisher({configPath:f.configPath,queuePath:f.queuePath,stateDir:f.state,rootDir:f.root,
-   now:Date.parse("2026-11-15T14:00:00.000Z"),env:env(),verifyAccount:verified,policyEvaluator:eligible});
-  assert.equal(result.skipped,0); // No candidate is queued; prior feed remains in history.
-  const history=JSON.parse(fs.readFileSync(path.join(f.state,"instagram-history.json"),"utf8"));assert.equal(history.length,1);
+   now:Date.parse("2026-11-15T14:00:00.000Z"),env:env(),verifyAccount:verified,policyEvaluator:eligible,
+   publishImage:async()=>{publishCalls++;}});
+  assert.equal(publishCalls,0);assert.equal(result.skipped,1);
+  const history=JSON.parse(fs.readFileSync(path.join(f.state,"instagram-history.json"),"utf8"));
+  assert.equal(history.at(-1).status,"BLOCKED_DAILY_FEED_CAP");
  }finally{f.cleanup();}
 });

@@ -5,10 +5,12 @@ on:
     branches: [main, codex/marketing-machine-audit-fixes]
     paths:
       - "scripts/meta-instagram-reel-adapter.mjs"
+      - "scripts/meta-instagram-image-adapter.mjs"
       - "scripts/instagram-autonomous-publisher.mjs"
       - "scripts/instagram-content-intake.mjs"
       - "config/instagram-publishing.json"
       - "test/meta-instagram-reel-adapter.test.mjs"
+      - "test/meta-instagram-image-adapter.test.mjs"
       - "test/instagram-autonomous-publisher.test.mjs"
       - "test/instagram-content-intake.test.mjs"
       - "content/instagram-intake-candidates.json"
@@ -47,7 +49,7 @@ jobs:
       - name: Install locked dependencies without lifecycle scripts
         run: npm ci --ignore-scripts
       - name: Test Instagram adapter and autonomous dispatch recovery
-        run: node --test test/meta-instagram-reel-adapter.test.mjs test/instagram-autonomous-publisher.test.mjs test/instagram-content-intake.test.mjs
+        run: node --test test/meta-instagram-reel-adapter.test.mjs test/meta-instagram-image-adapter.test.mjs test/instagram-autonomous-publisher.test.mjs test/instagram-content-intake.test.mjs
       - name: Verify intake refuses unconfigured Instagram identity without writing a queue
         run: |
           output="$(node scripts/instagram-content-intake.mjs)"
