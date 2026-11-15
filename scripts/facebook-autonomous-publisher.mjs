@@ -229,7 +229,12 @@ export async function runAutonomousFacebookPublisher({
           recoveryReason: "INTERRUPTED_ATTEMPT_RECONCILED_BEFORE_NEW_WORK"
         };
         ledger[index] = recovered;
-        history.push({ ...recovered, payload: undefined });
+        const existingReceipts = history.filter(item => item?.slotId === recovered.slotId &&
+          ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status));
+        if (existingReceipts.some(item => item.remotePostId !== recovered.remotePostId)) {
+          throw new Error("Facebook history conflicts with a reconciled ledger receipt; publishing blocked for manual reconciliation");
+        }
+        if (!existingReceipts.length) history.push({ ...recovered, payload: undefined });
       } else {
         ledger[index] = { ...attempt, status: "UNCERTAIN", reconciliation, retryAllowed: false,
           reason: reconciliation?.reason ?? "REMOTE_OUTCOME_UNRESOLVED_NO_RETRY" };
