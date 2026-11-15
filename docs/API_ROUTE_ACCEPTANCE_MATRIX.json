@@ -27,8 +27,8 @@
   "counts": {
     "routes": 48,
     "authNegativePass": 48,
-    "overallPass": 40,
-    "overallNotTested": 2,
+    "overallPass": 42,
+    "overallNotTested": 0,
     "overallBlocked": 6,
     "authNegativePassHistorical": 45,
     "authNegativePassCurrentHead": 48
@@ -158,9 +158,15 @@
       "exactSha": "1de17e81bf751c98147aab2a1657d8e5b6c00e64",
       "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43774533849",
       "result": "PASS — 48/48 protected API routes reject missing and invalid operator credentials; full Node suite 894/894, zero skipped."
+    },
+    "latestExactHeadReadOnlyRoutes": {
+      "exactSha": "1de17e81bf751c98147aab2a1657d8e5b6c00e64",
+      "instagramStatusCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43774533777",
+      "mediaRegisterAndFullSuiteCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43774533849",
+      "result": "PASS — both authenticated read-only GET contracts; 894/894 Node tests, zero skipped; 48/48 protected routes pass missing/invalid authentication rejection."
     }
   },
-  "disclaimer": "The route matrix is synchronized to the source-derived dashboard API inventory. On exact source/test SHA 31ceeaf61275af745e4e93c777698ad2362b2a17, the full Node regression suite passed 894/894 with zero skips, and all 48 protected API routes passed missing/invalid-credential rejection before route processing or mutation (Queue readiness run 43774065231). Route-level business acceptance remains distinct: 40 PASS, 2 NOT_TESTED and 6 BLOCKED. Authentication-negative PASS does not imply authorized business success. External credentials, human approvals, genuine media/rights and deliberately disabled publishing remain separate gates.",
+  "disclaimer": "The route matrix is synchronized to the source-derived dashboard API inventory. On exact source/test SHA 1de17e81bf751c98147aab2a1657d8e5b6c00e64, the full Node regression suite passed 894/894 with zero skips (Content quality run 43774533849); the missing/invalid-credential matrix covered all 48 protected routes (Queue readiness run 43774533742); the Instagram read-only status integration passed in the 62/62 safety suite (run 43774533777); and the Nature Frontiers media-register authenticated read-only integration passed in the full suite. Current route-level acceptance: 42 PASS, 0 NOT_TESTED, 6 BLOCKED. The two read-only endpoints pass their local API contracts; this does not establish a live Meta connection or authorize publishing. Six routes remain blocked by external identity, account or production prerequisites.",
   "routes": [
     {
       "method": "GET",
@@ -253,10 +259,10 @@
       "inputValidation": "NOT_APPLICABLE — read-only GET accepts no caller-supplied body or query parameters.",
       "durablePersistence": "NOT_APPLICABLE — read-only status endpoint does not mutate persistent state.",
       "auditEvidence": "NOT_APPLICABLE — read-only GET does not mutate state or append an audit event.",
-      "concurrency": "NOT_TESTED — exact-head concurrent-read coverage has not yet been recorded for this endpoint.",
+      "concurrency": "NOT_APPLICABLE — authenticated read-only status GET performs no state transition or mutation.",
       "restartRecovery": "NOT_APPLICABLE — read-only GET has no state transition to recover.",
       "externalOperation": "NOT_APPLICABLE — endpoint reports local configuration and verified receipts; it does not call Meta or publish.",
-      "overallAcceptance": "NOT_TESTED",
+      "overallAcceptance": "PASS",
       "notes": "Exact-head local integration test verifies authenticated status response, Nature Frontiers destination, read-only/no-provider-mutation boundary, fail-closed publishing switches, unconfigured Instagram account ID, numeric linked Page ID and operator-token redaction. It deliberately does not claim live Meta connectivity or authorize publishing.",
       "testEvidence": {
         "test": "test/dashboard-server.test.mjs and test/dashboard-ui-contract.test.mjs",
@@ -264,8 +270,8 @@
         "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43774533777",
         "scenario": "Authenticated GET /api/instagram/status returns HTTP 200 and safe read-only status; publishing remains disabled, dry-run and emergency stop remain active, Instagram business account remains unset, configured Page ID is numeric, and operator token is absent from response."
       },
-      "lastVerifiedOverallAcceptance": "NOT_TESTED",
-      "currentHeadStatus": "NOT_TESTED"
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS"
     },
     {
       "method": "GET",
@@ -442,7 +448,7 @@
       "concurrency": "NOT_APPLICABLE — read-only GET performs no state transition.",
       "restartRecovery": "NOT_APPLICABLE — read-only GET has no state transition to recover.",
       "externalOperation": "NOT_APPLICABLE — no provider API or external publishing call is used.",
-      "overallAcceptance": "NOT_TESTED",
+      "overallAcceptance": "PASS",
       "notes": "Exact-head integration test verifies authenticated read-only access to the checked-in provider-independent register, source/license/inspection/approval fields, and validation response. Rights review and publication remain separate gates; the endpoint does not approve or publish media.",
       "testEvidence": {
         "test": "test/nature-frontiers-media-register-api.test.mjs",
@@ -450,8 +456,8 @@
         "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43774533849",
         "scenario": "Real local dashboard server: unauthenticated request rejected; authenticated GET returns HTTP 200 with Nature Frontiers register, registered asset and rights/inspection/approval statuses; no stateFile path is exposed."
       },
-      "lastVerifiedOverallAcceptance": "NOT_TESTED",
-      "currentHeadStatus": "NOT_TESTED"
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS"
     },
     {
       "method": "GET",
