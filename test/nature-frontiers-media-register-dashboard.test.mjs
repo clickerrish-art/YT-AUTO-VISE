@@ -18,6 +18,8 @@ test("Nature Frontiers media register is exposed through an authenticated provid
   assert.match(server, /usage\.platformPostIds/);
   assert.match(server, /source\?\.listingEvidence/);
   assert.match(server, /licenseEvidence/);
+  assert.match(server, /listingLicenseClaim/);
+  assert.match(server, /approvedFileSha256/);
   assert.match(server, /additionalPermissionsEvidence/);
   assert.match(server, /inspectedFileSha256/);
   assert.match(server, /approvedUsage/);
@@ -41,6 +43,8 @@ test("Nature Frontiers dashboard renders source, claims, file integrity, rights,
   assert.match(html, /evidenceUrls/);
   assert.match(html, /SHA-256/);
   assert.match(html, /Licence evidence/);
+  assert.match(html, /Listing licence claim/);
+  assert.match(html, /Approved file SHA-256/);
   assert.match(html, /Additional permissions evidence/);
   assert.match(html, /inspectedFileSha256/);
   assert.match(html, /proposedSeries/);
