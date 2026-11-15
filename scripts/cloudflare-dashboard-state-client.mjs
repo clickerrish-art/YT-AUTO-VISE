@@ -119,7 +119,7 @@ export class CloudflareDashboardStateClient {
     }
     const match = String(etag ?? "").match(/^"?([1-9][0-9]*)"?$/);
     if (!match || Number(match[1]) !== revision) {
-      throw new DashboardStateServiceError("State revision and ETag do not match", { code: "INVALID_RESPONSE" });
+      throw new DashboardStateServiceError("State revision and ETag do not match (revision=" + revision + ", etag=" + String(etag ?? "missing").slice(0, 80) + ")", { code: "INVALID_RESPONSE" });
     }
     let state;
     try { state = validateRemoteDashboardState(payload.state); }
