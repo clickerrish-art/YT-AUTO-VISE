@@ -17,12 +17,20 @@ export function registerLocalMedia({ register, assetId, filePath, root = process
   if (asset.approval?.status !== "pending") throw new Error("local media replacement is blocked unless approval is pending");
   if (asset.usage?.scheduled === true || asset.usage?.published === true) throw new Error("cannot replace media for a scheduled or published asset");
 
-  const absoluteRoot = path.resolve(root);
+  const absoluteRoot = fs.realpathSync(path.resolve(root));
   const mediaRoot = path.resolve(absoluteRoot, MEDIA_ROOT);
   const absoluteFile = path.resolve(absoluteRoot, filePath);
   const relativeToMedia = path.relative(mediaRoot, absoluteFile);
   if (!relativeToMedia || relativeToMedia.startsWith("..") || path.isAbsolute(relativeToMedia)) {
     throw new Error(`media file must be stored under ${MEDIA_ROOT}/`);
+  }
+  const realMediaRoot = fs.realpathSync(mediaRoot);
+  const realFile = fs.realpathSync(absoluteFile);
+  const realRootRelative = path.relative(absoluteRoot, realMediaRoot);
+  const realFileRelative = path.relative(realMediaRoot, realFile);
+  if (realRootRelative.startsWith("..") || path.isAbsolute(realRootRelative) ||
+      !realFileRelative || realFileRelative.startsWith("..") || path.isAbsolute(realFileRelative)) {
+    throw new Error("media path resolves outside the dedicated local media directory");
   }
   const stat = fs.lstatSync(absoluteFile);
   if (!stat.isFile() || stat.isSymbolicLink()) throw new Error("media path must be a regular, non-symlink file");
