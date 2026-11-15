@@ -154,4 +154,7 @@ finally {
     Remove-Variable SignerNpmExitCode -Scope Global -ErrorAction SilentlyContinue
     Remove-Variable SignerNpmCapture -Scope Global -ErrorAction SilentlyContinue
     if (Test-Path -LiteralPath $tempRoot) { Remove-Item -LiteralPath $tempRoot -Recurse -Force }
+    # GitHub's PowerShell runner propagates a non-zero LASTEXITCODE left by the
+    # deliberately failing child-process test, even though that failure was expected.
+    $global:LASTEXITCODE = 0
 }
