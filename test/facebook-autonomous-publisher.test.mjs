@@ -11,6 +11,7 @@ function setup() {
   const configPath = path.join(root, "config.json");
   const queuePath = path.join(root, "queue.json");
   const stateDir = path.join(root, "durable-state");
+  fs.mkdirSync(stateDir, { mode: 0o700 });
   const config = {
     destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
     destinationPageName: "Nature Frontiers", apiVersion: "v26.0", timezone: "Africa/Johannesburg",
@@ -23,6 +24,24 @@ function setup() {
   fs.writeFileSync(queuePath, "[]");
   return { root, configPath, queuePath, stateDir, config, cleanup: () => fs.rmSync(root, { recursive: true, force: true }) };
 }
+
+test("publisher rejects an existing state directory with broad permissions before acquiring a lock", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.chmodSync(f.stateDir, 0o755);
+    let mutationCalls = 0;
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      publish: async () => { mutationCalls++; throw new Error("must not publish with insecure state permissions"); }
+    }), /permissions must be private/i);
+    assert.equal(mutationCalls, 0);
+    assert.equal(fs.existsSync(path.join(f.stateDir, "facebook-publishing.lock")), false,
+      "an insecure state directory must be rejected before lock acquisition");
+  } finally { f.cleanup(); }
+});
 
 test("failed durable lock initialization removes only its own incomplete lock", async () => {
   const f = setup();
