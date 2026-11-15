@@ -2056,7 +2056,7 @@ test("all dashboard controls have stable identities and accessible names", async
     return { controlCount: controls.length, formCount: forms.length, failures };
   });
 
-  expect(audit.controlCount).toBe(118);
+  expect(audit.controlCount).toBe(119);
   expect(audit.formCount).toBe(17);
   expect(audit.failures).toEqual([]);
 });
