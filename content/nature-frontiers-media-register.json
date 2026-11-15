@@ -3911,6 +3911,1106 @@
         "published": false,
         "platformPostIds": []
       }
+    },
+    {
+      "id": "nf-pex-crocodile-basking-20443910",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "20443910",
+        "url": "https://www.pexels.com/video/basking-crocodile-20443910/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-crocodile-river-40627960",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "40627960",
+        "url": "https://www.pexels.com/video/serene-river-scene-with-crocodile-swim-40627960/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-crocodile-riverbank-35232256",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "35232256",
+        "url": "https://www.pexels.com/video/wild-crocodile-resting-on-jungle-riverbank-35232256/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-hippo-swimming-38742717",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "38742717",
+        "url": "https://www.pexels.com/video/relaxing-hippo-swimming-in-tranquil-water-38742717/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-crocodiles-zoo-2885406",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "2885406",
+        "url": "https://www.pexels.com/video/crocodiles-stay-motionless-in-a-water-pond-of-the-zoo-2885406/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-hippo-zambezi-32861840",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "32861840",
+        "url": "https://www.pexels.com/video/hippo-wading-in-lower-zambezi-national-park-32861840/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-hippo-mud-37954197",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37954197",
+        "url": "https://www.pexels.com/video/hippopotamus-enjoying-muddy-water-outdoors-37954197/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-hippo-porpoising-27385907",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "27385907",
+        "url": "https://www.pexels.com/video/porpoising-hippo-27385907/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-elephant-thailand-17842225",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "17842225",
+        "url": "https://www.pexels.com/video/elephant-of-thailand-17842225/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-hippo-underwater-7723445",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "7723445",
+        "url": "https://www.pexels.com/video/a-hippopotamus-underwater-7723445/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-elephant-closeup-3842815",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "3842815",
+        "url": "https://www.pexels.com/video/close-up-shot-of-elephants-3842815/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-elephant-aerial-africa-33660365",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "33660365",
+        "url": "https://www.pexels.com/video/aerial-view-of-elephant-in-the-african-savannah-33660365/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-elephant-family-2835528",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "2835528",
+        "url": "https://www.pexels.com/video/a-family-of-elephant-roaming-at-a-grassland-2835528/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-elephant-jungle-36167571",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "36167571",
+        "url": "https://www.pexels.com/video/wild-elephant-in-lush-green-jungle-habitat-36167571/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-elephant-grassland-7499056",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "7499056",
+        "url": "https://www.pexels.com/video/a-grassland-with-elephants-7499056/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-wildlife-water-11760750",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "11760750",
+        "url": "https://www.pexels.com/video/wild-animals-gathering-by-a-body-of-water-in-the-african-savannah-11760750/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-african-elephants-37402113",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37402113",
+        "url": "https://www.pexels.com/video/african-elephants-in-natural-habitat-37402113/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-elephant-hill-16320007",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "16320007",
+        "url": "https://www.pexels.com/video/an-elephant-is-walking-through-the-grass-on-a-hill-16320007/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-elephants-savannah-12419429",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "12419429",
+        "url": "https://www.pexels.com/video/elephants-on-savannah-12419429/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-elephants-grass-4430140",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "4430140",
+        "url": "https://www.pexels.com/video/elephants-on-grass-field-4430140/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
     }
   ]
 }
