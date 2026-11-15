@@ -305,13 +305,28 @@
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-10T09:55:27+02:00",
-            "note": "Fresh indexed wildlife-filmmaking guidance explains building sequences from wide, medium and close shots, organizing clips by behavior and using pacing deliberately. This supports the actual three-shot storytelling lesson; no measured search volume or competition is claimed.",
+            "researchedAt": "2026-11-15T09:44:45+02:00",
+            "note": "Fresh search results for wildlife-documentary filming and shot-list guidance support the exact three-shot lesson: establish habitat with a wide shot, show the animal in context, then use a truthful close detail. Search results also reinforce ethical observation and sequence-based storytelling. No measured global search volume, competition score or trend percentage was available; treat this as qualitative intent evidence only.",
             "sources": [
               {
-                "title": "How To Become a Wildlife Filmmaker (7 Proven Steps)",
-                "url": "https://www.docfilmacademy.com/blog/how-to-become-a-wildlife-filmmaker",
-                "whyRelevant": "The result explicitly recommends wide, mid and close-up sequences, organization by behavior and deliberate pacing for wildlife storytelling."
+                "title": "Wildlife Filmmaking: The Essential Masterclass",
+                "url": "https://member.worldnomads.com/explore/guides/wildlife-filmmaking",
+                "whyRelevant": "Professional wildlife-filmmaking guidance covers wide shots, close-ups, cutaways, subject knowledge and editing, directly supporting the sequence lesson."
+              },
+              {
+                "title": "How To Film A Wildlife Documentary On Your Safari",
+                "url": "https://serengetiafricantours.com/how-to-film-a-wildlife-documentary-on-your-safari/",
+                "whyRelevant": "The guide explicitly recommends a wide-to-medium-to-close sequence and ethical filming that does not chase or provoke animals."
+              },
+              {
+                "title": "Types of shots in wildlife video",
+                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
+                "whyRelevant": "The article discusses shot-size variation and continuity when cutting between wildlife shots."
+              },
+              {
+                "title": "How to make a shot list",
+                "url": "https://www.adobe.com/creativecloud/video/discover/shot-list",
+                "whyRelevant": "Adobe's current shot-list guide supports planning wide, medium and close coverage before editing."
               }
             ]
           }
@@ -390,23 +405,18 @@
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-10T09:55:27+02:00",
-            "note": "Fresh indexed results frame YouTube niche selection around sustainable audience demand, recurring viewer problems, production capacity and validating a small test series rather than chasing trends. This is qualitative intent evidence, not measured global volume or competition.",
+            "researchedAt": "2026-11-15T09:44:45+02:00",
+            "note": "Fresh search results for the exact YouTube-niche question emphasize audience definition, a repeatable viewer promise, a distinct angle, sustainable production capacity and testing a small series. This matches the four-check script. No measured global search volume, competition score or trend percentage was available; treat this as qualitative intent evidence only.",
             "sources": [
               {
-                "title": "Free YouTube Niche Finder",
-                "url": "https://www.sonuker.com/tools/free-youtube-niche-finder",
-                "whyRelevant": "The result emphasizes sustainable niches, recurring audience demand and production cadence rather than trend chasing."
+                "title": "How to Choose a YouTube Niche (Step-by-Step)",
+                "url": "https://www.bazuddi.com/guides/how-to-choose-a-youtube-niche",
+                "whyRelevant": "Recently updated step-by-step guidance matches the query and covers audience, specific viewer promise, distinct angle and production feasibility."
               },
               {
-                "title": "How to Choose a YouTube Niche: A Decision Framework That Holds Up",
-                "url": "https://stitchr.app/guides/how-to-choose-youtube-niche",
-                "whyRelevant": "The guide centers audience demand and consistency, matching the Short's four-check niche-selection method."
-              },
-              {
-                "title": "How to Choose a YouTube Niche: Stop Guessing, Read Demand",
-                "url": "https://onetube.io/blog/how-to-choose-youtube-niche",
-                "whyRelevant": "The result recommends checking recurring audience questions and competitor comments to validate a niche's real viewer problem."
+                "title": "How to Choose a YouTube Niche",
+                "url": "https://monitoryt.com/blog/choosing-a-youtube-niche",
+                "whyRelevant": "The guide recommends validating exact audience wording with YouTube search autocomplete and Google Trends rather than guessing demand."
               }
             ]
           }
