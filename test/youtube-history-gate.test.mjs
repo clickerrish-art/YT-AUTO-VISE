@@ -64,14 +64,14 @@ test("history reconciliation separates future scheduled videos from actual publi
   const scheduledVideo = {
     id: "vid-scheduled",
     snippet: { channelId, publishedAt: "2026-10-05T00:00:00.000Z" },
-    status: { privacyStatus: "private", publishAt: "2026-10-10T15:00:00.000Z" }
+    status: { privacyStatus: "private", publishAt: "2026-11-08T15:00:00.000Z" }
   };
   const scheduledReconciliation = {
     ...reconciliation,
     verifiedAt: "2026-10-04T23:59:59.000Z",
     videos: [
       ...reconciliation.videos,
-      { id: "vid-scheduled", format: "short", visibility: "private", scheduledAt: "2026-10-10T15:00:00.000Z" }
+      { id: "vid-scheduled", format: "short", visibility: "private", scheduledAt: "2026-11-08T15:00:00.000Z" }
     ]
   };
   const snapshot = validateHistoryReconciliationSnapshot({
@@ -85,14 +85,14 @@ test("history reconciliation separates future scheduled videos from actual publi
   assert.deepEqual(snapshot.scheduledItems, [{
     id: "vid-scheduled",
     status: "scheduled",
-    scheduledAt: "2026-10-10T15:00:00.000Z",
+    scheduledAt: "2026-11-08T15:00:00.000Z",
     format: "short"
   }]);
   assert.throws(() => assertNextPublicationAllowed({
     history: snapshot.history,
     scheduledItems: snapshot.scheduledItems,
     pendingAttempts: [],
-    proposedAt: "2026-10-12T15:00:00.000Z",
+    proposedAt: "2026-11-10T15:00:00.000Z",
     jobId: "job-4",
     format: "long_form"
   }), /blocked upload/);
@@ -100,7 +100,7 @@ test("history reconciliation separates future scheduled videos from actual publi
     history: snapshot.history,
     scheduledItems: snapshot.scheduledItems,
     pendingAttempts: [],
-    proposedAt: "2026-10-13T15:00:00.000Z",
+    proposedAt: "2026-11-11T15:00:00.000Z",
     jobId: "job-4",
     format: "long_form"
   }), "the recorded owner approval clears the cadence-decision blocker while history and slot checks remain enforced");
@@ -182,13 +182,13 @@ test("unresolved or uncertain upload attempts block new uploads", () => {
 });
 
 test("cycle gate uses verified history and requires the next expected format and 72-hour gap", () => {
-  const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
+  const history = [{ id: "vid-b", status: "unlisted", actualPublishedAt: "2026-11-07T15:00:00.000Z", format: "long_form" }];
   assert.doesNotThrow(
-    () => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-10-07T15:00:00.000Z", jobId: "job-3", format: "long_form" }),
+    () => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-11-10T15:00:00.000Z", jobId: "job-3", format: "long_form" }),
     "an approved cadence permits a valid next-format slot exactly 72 elapsed hours after the prior publication"
   );
-  assert.throws(() => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-10-07T14:59:59.999Z", jobId: "job-3", format: "long_form" }), /blocked upload/);
-  assert.throws(() => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-10-07T15:00:00.000Z", jobId: "job-3", format: "short" }), /next format must be long_form/);
+  assert.throws(() => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-11-10T14:59:59.999Z", jobId: "job-3", format: "long_form" }), /blocked upload/);
+  assert.throws(() => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-11-10T15:00:00.000Z", jobId: "job-3", format: "short" }), /next format must be long_form/);
 });
 
 
@@ -227,7 +227,7 @@ test("private upload gate accepts the approved cadence but still enforces all ot
   assert.doesNotThrow(() => assertNextPublicationAllowed({
     history,
     pendingAttempts: [],
-    proposedAt: "2026-10-07T15:00:00.000Z",
+    proposedAt: "2026-11-10T15:00:00.000Z",
     jobId: "job-owner-cadence",
     format: "long_form"
   }));
