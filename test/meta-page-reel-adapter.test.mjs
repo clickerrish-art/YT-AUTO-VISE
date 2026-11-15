@@ -225,3 +225,37 @@ test("Page Reel scheduling fails closed without approval or outside Meta's sched
   await assert.rejects(()=>run({scheduledPublishAt:"2027-06-16T12:00:00.000Z",approvalVerified:true}),/between 10 minutes and 6 months/i);
   assert.equal(calls,0);
 });
+
+test("Page Reel remote ID is durably recorded before binary upload begins",async t=>{
+  const {root,draft}=await fixture(t);
+  const events=[];
+  const result=await createMetaPageReel({
+    draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,
+    permissionsVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,
+    rootDir:root,inspect:()=>inspected,now:()=>Date.parse("2026-11-15T12:00:00Z"),
+    onRemoteVideoId:async record=>{events.push({kind:"persist",record});},
+    fetchImpl:async(url,options)=>{
+      events.push({kind:"request",url:String(url)});
+      if(events.filter(x=>x.kind==="request").length===1)return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO});
+      if(String(url).includes("rupload.facebook.com"))return response({success:true});
+      return response({success:true});
+    }
+  });
+  assert.equal(result.remoteVideoId,VIDEO);
+  assert.equal(events[0].kind,"request");
+  assert.equal(events[1].kind,"persist");
+  assert.equal(events[1].record.remoteVideoId,VIDEO);
+  assert.equal(events[2].url,"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO);
+});
+
+test("Page Reel upload stops when durable remote-ID recording fails",async t=>{
+  const {root,draft}=await fixture(t);
+  let calls=0;
+  await assert.rejects(()=>createMetaPageReel({
+    draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,
+    permissionsVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,
+    rootDir:root,inspect:()=>inspected,onRemoteVideoId:async()=>{throw new Error("state disk unavailable");},
+    fetchImpl:async()=>{calls++;return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO});}
+  }),error=>error instanceof MetaPageReelError && error.uncertain===true && error.remoteVideoId===VIDEO);
+  assert.equal(calls,1,"no binary upload may proceed before the remote ID is durably persisted");
+});
