@@ -23,7 +23,7 @@ test("Instagram Reel uses resumable container upload, bounded processing, publis
     if(String(url).includes("rupload.facebook.com")) return ok({success:true});
     if(String(url).includes("status_code")) return ok({id:"123456789012346",status_code:"FINISHED"});
     if(String(url).endsWith("/media_publish")) return ok({id:"123456789012347"});
-    if(String(url).includes("fields=id,media_type,permalink,timestamp")) return ok({id:"123456789012347",media_type:"VIDEO",media_product_type:"REELS",permalink:"https://www.instagram.com/reel/abc/",timestamp:"2026-11-15T10:00:00+0000"});
+    if(String(url).includes("fields=id,media_type,media_product_type,permalink,timestamp")) return ok({id:"123456789012347",media_type:"VIDEO",media_product_type:"REELS",permalink:"https://www.instagram.com/reel/abc/",timestamp:"2026-11-15T10:00:00+0000"});
     throw new Error("unexpected endpoint "+url);
   },{onContainerId:async x=>persisted.push(x.containerId),onMediaId:async x=>persisted.push(x.mediaId)});
   assert.equal(result.status,"PUBLISHED_VERIFIED");
@@ -94,4 +94,30 @@ test("account verification requires exact professional identity and publishing s
   assert.equal(result.verified,true);
   assert.equal(result.accountType,"BUSINESS");
   assert.equal(result.facebookPageId,"1431329126735709");
+});
+
+test("container processing is polled no faster than once per minute and only up to five checks",async()=>{
+  const waits=[];let statusReads=0;
+  const result=await run(async(url,options={})=>{
+    if(String(url).endsWith("/media")) return ok({id:"123456789012346"});
+    if(String(url).includes("rupload")) return ok({success:true});
+    if(String(url).includes("status_code")) {
+      statusReads++;
+      return ok({id:"123456789012346",status_code:statusReads===1?"IN_PROGRESS":"FINISHED"});
+    }
+    if(String(url).endsWith("/media_publish")) return ok({id:"123456789012347"});
+    if(String(url).includes("media_product_type")) return ok({id:"123456789012347",media_type:"VIDEO",media_product_type:"REELS",permalink:"https://www.instagram.com/reel/abc/"});
+    throw new Error("unexpected endpoint "+url);
+  },{wait:async ms=>waits.push(ms)});
+  assert.equal(result.status,"PUBLISHED_VERIFIED");
+  assert.deepEqual(waits,[60_000]);
+  assert.equal(statusReads,2);
+});
+
+test("resumable uploads are blocked unless Facebook Login for Business support is explicitly verified",async()=>{
+  let calls=0;
+  await assert.rejects(()=>publishInstagramReel({draft,instagramAccountId:account,expectedInstagramAccountId:account,accessToken:token,
+    accountVerified:true,approvalVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,
+    rootDir:root,inspect:()=>media,fetchImpl:async()=>{calls++;return ok({});}}),/Facebook Login for Business/i);
+  assert.equal(calls,0);
 });
