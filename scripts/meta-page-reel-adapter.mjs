@@ -42,8 +42,10 @@ function inspectVideo(filePath) {
   try { parsed = JSON.parse(result.stdout); } catch { throw new MetaPageReelError("ffprobe returned invalid video inspection data"); }
   const stream = (parsed.streams ?? []).find(item => item.codec_type === "video" && Number(item.width) > 0 && Number(item.height) > 0);
   const duration = Number(parsed.format?.duration);
-  if (!stream || !Number.isFinite(duration) || duration <= 0) throw new MetaPageReelError("Reel video must contain a decodable video stream and positive duration");
-  return { width:Number(stream.width), height:Number(stream.height), durationSeconds:duration };
+  const [rateNumerator, rateDenominator] = String(stream?.avg_frame_rate ?? "").split("/").map(Number);
+  const frameRate = rateDenominator > 0 ? rateNumerator / rateDenominator : NaN;
+  if (!stream || !Number.isFinite(duration) || duration <= 0 || !Number.isFinite(frameRate)) throw new MetaPageReelError("Reel video must contain a decodable video stream, duration and frame rate");
+  return { width:Number(stream.width), height:Number(stream.height), durationSeconds:duration, frameRate };
 }
 function validateUploadUrl(value, expectedVideoId) {
   let url;
@@ -90,8 +92,10 @@ export async function createMetaPageReel({
   catch { throw new MetaPageReelError("Reel video is missing, unsafe or unreadable"); }
   if (!bytes.length || crypto.createHash("sha256").update(bytes).digest("hex") !== draft.media.sha256) throw new MetaPageReelError("Reel video checksum does not match the reviewed draft");
   const media = inspect(absolute);
-  if (!media || !Number.isFinite(media.durationSeconds) || media.durationSeconds <= 0) throw new MetaPageReelError("Reel video inspection did not establish a valid duration");
-  if (!Number.isFinite(media.width) || !Number.isFinite(media.height) || media.height <= media.width) throw new MetaPageReelError("Facebook Reel media must be a verified portrait video");
+  if (!media || !Number.isFinite(media.durationSeconds) || media.durationSeconds < 4 || media.durationSeconds > 60) throw new MetaPageReelError("Facebook Reel duration must be between 4 and 60 seconds");
+  if (!Number.isFinite(media.width) || !Number.isFinite(media.height) || media.width < 540 || media.height < 960 ||
+      Math.abs(media.width / media.height - 9 / 16) > 0.005) throw new MetaPageReelError("Facebook Reel media must meet the minimum 540x960 portrait 9:16 dimensions");
+  if (!Number.isFinite(media.frameRate) || media.frameRate < 23) throw new MetaPageReelError("Facebook Reel frame rate must be at least 23 fps");
   const startForm = new URLSearchParams({ upload_phase:"START" });
   let start;
   try {
