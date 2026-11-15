@@ -173,6 +173,14 @@ export async function runAutonomousFacebookPublisher({
   const historyPath = stateFile(config.historyFile ?? "facebook-history.json");
   const ledgerPath = stateFile(config.attemptLedgerFile ?? "facebook-attempt-ledger.json");
   const lockPath = stateFile(config.lockFile ?? "facebook-publishing.lock");
+  const summaryPath = path.resolve(stateDir, "facebook-run-summary.json");
+  const durablePaths = [historyPath, ledgerPath, lockPath, summaryPath];
+  if (new Set(durablePaths).size !== durablePaths.length) {
+    throw new Error("Facebook history, attempt ledger, lock and run-summary files must use distinct paths");
+  }
+  if (durablePaths.includes(queuePath)) {
+    throw new Error("Autonomous Facebook queue must not overlap a history, ledger, lock or run-summary file");
+  }
   const release = acquireLock(lockPath);
   try {
     let history = safeHistory(historyPath);
@@ -636,7 +644,7 @@ export async function runAutonomousFacebookPublisher({
         remotePostId: item.remotePostId ?? null, reconciliation: item.reconciliation ?? null
       }))
     };
-    atomicJson(path.join(stateDir, "facebook-run-summary.json"), summary);
+    atomicJson(summaryPath, summary);
     return summary;
   } finally { release(); }
 }
