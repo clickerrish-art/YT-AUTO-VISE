@@ -20,7 +20,7 @@ function fixture() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-policy-"));
   const media = Buffer.from("licensed media fixture");
   const license = Buffer.from("commercial and social media license evidence fixture");
-  fs.writeFileSync(path.join(root, "asset.bin"), media);
+  fs.writeFileSync(path.join(root, "asset.jpg"), media);
   fs.writeFileSync(path.join(root, "license.txt"), license);
   const payload = {
     destination: "nature_frontiers_facebook",
@@ -36,7 +36,7 @@ function fixture() {
     links: [],
     commercial: false,
     media: [{
-      id: "asset-1", path: "asset.bin", sha256: hash(media), syntheticOrAltered: false,
+      id: "asset-1", path: "asset.jpg", sha256: hash(media), syntheticOrAltered: false,
       representationKnown: true,
       rightsRecord: { evidencePath: "license.txt", evidenceSha256: hash(license), source: "Documented original asset",
         license: "Commercial social media use", commercialUse: true, socialMediaUse: true,
@@ -258,7 +258,7 @@ test("approval fingerprint changes when rights provenance knowledge changes", ()
     claims: [],
     media: [{
       id: "asset-1",
-      path: "asset.bin",
+      path: "asset.jpg",
       sha256: "a".repeat(64),
       syntheticOrAltered: false,
       representationKnown: true,
