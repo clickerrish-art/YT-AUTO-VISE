@@ -5,6 +5,12 @@ on:
     branches: [codex/marketing-machine-audit-fixes]
     paths:
       - "scripts/cloudflare-staging-auth-smoke.mjs"
+      - "scripts/cloudflare-dashboard-state-client.mjs"
+      - "scripts/cloudflare-dashboard-state-store.mjs"
+      - "scripts/dashboard-server.mjs"
+      - "cloudflare/worker.js"
+      - "cloudflare/staging-snapshot/worker.js"
+      - "cloudflare/migrations/**"
       - ".github/workflows/cloudflare-staging-auth-smoke.yml"
 
 permissions:
