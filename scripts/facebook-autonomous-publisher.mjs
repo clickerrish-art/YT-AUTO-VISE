@@ -101,6 +101,8 @@ function safeHistory(file) {
   }
   return value;
 }
+const isVerifiedHistoryStatus = status => ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(status);
+const isRecoverableUncertainHistory = item => item?.status === "UNCERTAIN";
 
 /**
  * Runs at the configured local preparation time. It never asks for per-post approval.
@@ -218,14 +220,20 @@ export async function runAutonomousFacebookPublisher({
       const existingSlotRecords = history.filter(item => item?.slotId === attempt.slotId);
       const existingReceipts = existingSlotRecords.filter(item =>
         ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status));
-      if (existingSlotRecords.some(item => !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)) ||
+      const uncertainOutcomes = existingSlotRecords.filter(isRecoverableUncertainHistory);
+      if (existingSlotRecords.some(item => !isVerifiedHistoryStatus(item.status) && !isRecoverableUncertainHistory(item)) ||
+          uncertainOutcomes.length > 1 ||
           existingReceipts.some(item => item.remotePostId !== attempt.remotePostId)) {
-        throw new Error("Facebook history conflicts with a verified ledger receipt or prior slot outcome; publishing blocked for manual reconciliation");
+        throw new Error("Facebook history conflicts with a verified ledger receipt or prior terminal slot outcome; publishing blocked for manual reconciliation");
       }
       if (existingReceipts.length) continue;
-      history.push({ ...attempt, payload: undefined,
+      const recoveredHistory = { ...attempt, payload: undefined,
         historyRebuiltAt: isoNow(Number(now)),
-        historyRebuildReason: "VERIFIED_LEDGER_RECEIPT_RECOVERED_AFTER_HISTORY_WRITE_GAP" });
+        historyRebuildReason: "VERIFIED_LEDGER_RECEIPT_RECOVERED_AFTER_HISTORY_WRITE_GAP" };
+      if (uncertainOutcomes.length === 1) {
+        const uncertainIndex = history.findIndex(item => item === uncertainOutcomes[0]);
+        history[uncertainIndex] = recoveredHistory;
+      } else history.push(recoveredHistory);
       historyRebuilt = true;
     }
     if (historyRebuilt) {
@@ -242,13 +250,21 @@ export async function runAutonomousFacebookPublisher({
         const slotOutcomes = latestHistory.filter(item => item?.slotId === attempt.slotId);
         const receipts = slotOutcomes.filter(item =>
           ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status));
-        if (slotOutcomes.some(item => !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)) ||
+        const uncertainOutcomes = slotOutcomes.filter(isRecoverableUncertainHistory);
+        if (slotOutcomes.some(item => !isVerifiedHistoryStatus(item.status) && !isRecoverableUncertainHistory(item)) ||
+            uncertainOutcomes.length > 1 ||
             receipts.some(item => item.remotePostId !== attempt.remotePostId)) {
-          throw new Error("Facebook history changed during ledger recovery and contains a conflicting slot outcome; manual reconciliation required");
+          throw new Error("Facebook history changed during ledger recovery and contains a conflicting terminal slot outcome; manual reconciliation required");
         }
-        if (!receipts.length) latestHistory.push({ ...attempt, payload: undefined,
-          historyRebuiltAt: isoNow(Number(now)),
-          historyRebuildReason: "VERIFIED_LEDGER_RECEIPT_RECOVERED_AFTER_HISTORY_WRITE_GAP" });
+        if (!receipts.length) {
+          const recoveredHistory = { ...attempt, payload: undefined,
+            historyRebuiltAt: isoNow(Number(now)),
+            historyRebuildReason: "VERIFIED_LEDGER_RECEIPT_RECOVERED_AFTER_HISTORY_WRITE_GAP" };
+          if (uncertainOutcomes.length === 1) {
+            const uncertainIndex = latestHistory.findIndex(item => item === uncertainOutcomes[0]);
+            latestHistory[uncertainIndex] = recoveredHistory;
+          } else latestHistory.push(recoveredHistory);
+        }
       }
       history = latestHistory;
       atomicJson(historyPath, history);
@@ -331,12 +347,20 @@ export async function runAutonomousFacebookPublisher({
         const existingSlotOutcomes = latestHistory.filter(item => item?.slotId === recovered.slotId);
         const existingReceipts = existingSlotOutcomes.filter(item =>
           ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status));
-        if (existingSlotOutcomes.some(item => !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)) ||
+        const uncertainOutcomes = existingSlotOutcomes.filter(isRecoverableUncertainHistory);
+        if (existingSlotOutcomes.some(item => !isVerifiedHistoryStatus(item.status) && !isRecoverableUncertainHistory(item)) ||
+            uncertainOutcomes.length > 1 ||
             existingReceipts.some(item => item.remotePostId !== recovered.remotePostId)) {
-          throw new Error("Facebook history contains a prior outcome conflicting with a reconciled ledger receipt; publishing blocked for manual reconciliation");
+          throw new Error("Facebook history contains a prior terminal outcome conflicting with a reconciled ledger receipt; publishing blocked for manual reconciliation");
         }
         history = latestHistory;
-        if (!existingReceipts.length) history.push({ ...recovered, payload: undefined });
+        if (!existingReceipts.length) {
+          const recoveredHistory = { ...recovered, payload: undefined };
+          if (uncertainOutcomes.length === 1) {
+            const uncertainIndex = history.findIndex(item => item === uncertainOutcomes[0]);
+            history[uncertainIndex] = recoveredHistory;
+          } else history.push(recoveredHistory);
+        }
         atomicJson(historyPath, history);
       } else {
         ledger[index] = { ...attempt, status: "UNCERTAIN", reconciliation, retryAllowed: false,
@@ -365,9 +389,9 @@ export async function runAutonomousFacebookPublisher({
       if (index >= 0) { queue.splice(index, 1); atomicJson(queuePath, queue); }
     };
     for (const payload of candidates) {
-      if (history.some(item => item.slotId === payload.slotId)) {
-        // A durable history outcome is terminal for this slot. It is safe to
-        // remove the queue copy because the outcome is already recorded.
+      if (history.some(item => item.slotId === payload.slotId && !isRecoverableUncertainHistory(item))) {
+        // A terminal durable history outcome is safe to drain from the queue.
+        // UNCERTAIN is deliberately nonterminal and retains the original payload.
         removeQueuedSlot(payload.slotId);
         skipped++;
         continue;
@@ -539,12 +563,20 @@ export async function runAutonomousFacebookPublisher({
           const existingSlotOutcomes = latestHistory.filter(item => item?.slotId === recovered.slotId);
           const existingReceipts = existingSlotOutcomes.filter(item =>
             ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status));
-          if (existingSlotOutcomes.some(item => !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)) ||
+          const uncertainOutcomes = existingSlotOutcomes.filter(isRecoverableUncertainHistory);
+          if (existingSlotOutcomes.some(item => !isVerifiedHistoryStatus(item.status) && !isRecoverableUncertainHistory(item)) ||
+              uncertainOutcomes.length > 1 ||
               existingReceipts.some(item => item.remotePostId !== recovered.remotePostId)) {
-            throw new Error("Facebook history contains a prior outcome conflicting with a reconciled ledger receipt; publishing blocked for manual reconciliation");
+            throw new Error("Facebook history contains a prior terminal outcome conflicting with a reconciled ledger receipt; publishing blocked for manual reconciliation");
           }
           history = latestHistory;
-          if (!existingReceipts.length) history.push({ ...recovered, payload: undefined });
+          if (!existingReceipts.length) {
+            const recoveredHistory = { ...recovered, payload: undefined };
+            if (uncertainOutcomes.length === 1) {
+              const uncertainIndex = history.findIndex(item => item === uncertainOutcomes[0]);
+              history[uncertainIndex] = recoveredHistory;
+            } else history.push(recoveredHistory);
+          }
           atomicJson(ledgerPath, ledger); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); published++;
           continue;
         }
