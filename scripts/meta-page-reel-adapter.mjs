@@ -96,7 +96,7 @@ export async function createMetaPageReel({
       typeof draft.media?.path !== "string" || !/^[a-f0-9]{64}$/.test(draft.media?.sha256 ?? "")) {
     throw new MetaPageReelError("A captioned, checksum-bound Facebook Page Reel draft is required");
   }
-  if (!["DRAFT","PUBLISHED"].includes(videoState)) throw new MetaPageReelError("Reel state must be DRAFT or PUBLISHED");
+  if (!["DRAFT","PUBLISHED","SCHEDULED"].includes(videoState)) throw new MetaPageReelError("Reel state must be DRAFT, PUBLISHED or SCHEDULED");
   if (publishingEnabled !== true || dryRun !== false || emergencyStop !== false) {
     throw new MetaPageReelError("Remote Reel upload requires live publishing enabled, dry-run disabled and emergency stop cleared");
   }
