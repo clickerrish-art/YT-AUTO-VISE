@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-11-15T11:12:14+02:00",
-  "evidencePolicy": "Live reconciliation: branch source/test commit 4eb66910a93bf4b33843b91d9384e1f34bdc902b passed GitHub Actions workflow 41216258636 (exact head SHA; completed success; unit-test step completed with zero skips). The new real-server worker lifecycle test covers heartbeat extension/persistence, invalid-token no-mutation, controlled FAILED completion and duplicate fencing, active/expired lease reaping, audit and restart read-back. Prior exact candidate d9bdfbb4a79d4a1030edb208d8754fda88852c9b separately passed 446 Node / 16 Python / 20 Chromium E2E and proved two-process lease exclusivity/SIGKILL recovery. Overall 75 requirements remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain NOT_TESTED. Production readiness remains HOLD with 13 genuine blockers. Documentation updates are not represented as code-test evidence. Additional route evidence at exact SHA 4eb66910a93bf4b33843b91d9384e1f34bdc902b: real task-runner success for two allowlisted validation commands, arbitrary-task rejection, durable duplicate prevention across two server processes, completion/audit persistence, and startup recovery of an interrupted task. API-001 remains NOT_TESTED. Exact candidate c533cd8fbf7153ccbf84ab94a2a919069b9abbe0 passed automation/security (unit tests, zero skips), dashboard browser E2E, content quality, metadata, branch inventory and local Facebook draft-package validation. It adds safe Facebook draft rejection persistence/audit assertions. Exact candidate 9ff2de1f046e879f687f3767697e787214cc1e28 adds content-job transition durable-state/audit and unsafe-state no-mutation assertions. Isolated main/candidate baseline for c533cd8 was still in progress at this documentation update. The overall 75-requirement register remains 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001/API-001/SCHED-001/STATE-001/DEPLOY-001/GIT-002 remain NOT_TESTED. The isolated exact main/candidate baseline workflow 41217526036 subsequently completed SUCCESS on candidate SHA c533cd8fbf7153ccbf84ab94a2a919069b9abbe0. Exact candidate dea284d21b4e7a6923c46a201cd196ed39b72ffa passed automation/security (Node unit tests, zero skips), dashboard browser E2E, content quality, metadata and isolated exact main/candidate baseline (runs 41217848775, 41217848763, 41217848765, 41217848778, 41217848781). It adds /api/drafts/update authorized editing, durable read-back/audit and invalid-date/rights-promotion no-mutation assertions. The 75 requirement counts remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001/API-001/SCHED-001/STATE-001/DEPLOY-001/GIT-002 remain NOT_TESTED. Exact candidate 77af9f231d9c71f6ec5ee0b4fa757af9009b1941 adds production-plan API real-server concurrency/idempotency acceptance: one 201 plus one 200 for concurrent identical submissions, idempotent later retry, 409 conflicting-plan rejection with byte-identical state preservation, and one audit event; concurrent identical plan approvals yield one 200/one 409 and one approval audit. Automation/security, browser E2E, content quality, metadata, branch inventory, isolated main/candidate baseline and local Nature Frontiers validation passed on the exact candidate. Production readiness remains blocked by genuine owner/external prerequisites; it is not an engineering CI pass. Exact tested candidate 8dddba57804bc04080930742a9bdbd74f6dc05bd passed automation/security workflow 41292433645 (463 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E 41292433623 (20/20), content quality 41292433709, metadata 41292433626, branch inventory 41292433681, local Nature Frontiers draft validation 41292433612, and isolated main/candidate baseline 41292433625. It adds four-way concurrent authenticated reads for both GET /api/jobs/narration/review and GET /api/jobs/narration/audio, exact hash-bound response/audio-byte checks, and byte-identical durable state/audit verification; both routes are now PASS. API matrix: 35 routes / 16 PASS / 15 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED because 15 routes remain unaccepted. Production readiness remains fail-closed with owner/external blockers. Exact candidate e1e7dd94ba289ef2d84ac2c35c7124e76521045e passed automation/security 41292924301 (463 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E 41292924292 (20/20), content quality 41292924308, metadata 41292924299, isolated main/candidate baseline 41292924297, branch inventory 41292924312 and local Nature Frontiers draft validation 41292924317. Script approval retries now require the same reviewer, reason and valid receipt hash; changed-reason retries return 409 without mutation. The API matrix now accepts POST /api/jobs/authoring/review and both production-plan routes using real-server concurrency, audit and restart evidence: 35 routes / 19 PASS / 12 NOT_TESTED / 4 BLOCKED. API-001 remains NOT_TESTED. Production readiness still fails closed on genuine owner/external blockers. Latest implementation cycle: /api/jobs/validate duplicate-success audit mutation fixed in source commit 85fc0056ec8f00f652799b5d934ae5d4cfc7a57b; restart/concurrency regression test committed at 7a72d20efb6741cbf5914fe2638b787bf8176336. Exact source/test SHA 7a72d20efb6741cbf5914fe2638b787bf8176336 passed automation/security (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710316: 464 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710197: 20/20), content quality, metadata, branch inventory, local Nature Frontiers draft validation and isolated main/candidate baseline (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710334). The real-server validation test proves successful validation, identical retry, two concurrent retries, restart read-back and byte-identical state/audit with exactly one validation event. The test media is synthetic and does not establish real rights or production readiness. API matrix now records 20 PASS / 11 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED. Production readiness remains HOLD with 13 owner/external prerequisites. Latest implementation cycle: POST /api/jobs/lease/complete now records a SHA-256-bound completion receipt and safely reuses exact retries; conflicting results under the same worker lease return 409 without mutation. Source change ce6002e229e13b3f6c92fd9a0b4fea9d8821ab6e, independent-process race test 3dd5692a5a050e0cacf47c94dd4bc9fa3e63ee70, and real-server generated-artifact/restart test c007aab36f32b282fbcf012fa6b6f9138686ff3c. Exact source/test SHA c007aab36f32b282fbcf012fa6b6f9138686ff3c passed automation/security (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209: 465 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645272: 20/20), content quality, metadata, branch inventory, local Nature Frontiers draft validation and isolated exact main/candidate baseline (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187). The worker completion test validates real HTTP generated state, artifact/metadata hashes, dimensions/duration, exact/concurrent retries, tamper rejection and restart recovery. All media fixtures are synthetic and not production rights evidence. API matrix: 21 PASS / 10 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED. Production readiness remains HOLD with 13 owner/external prerequisites. Additional route acceptance on exact source/test SHA c007aab36f32b282fbcf012fa6b6f9138686ff3c: POST /api/tasks/run is now PASS based on test/dashboard-task-runner.test.mjs, executed in automation workflow https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209 (465 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities). The test proves allowlisted local task success, arbitrary-task rejection, two-process duplicate prevention, durable task/audit completion and startup recovery of interrupted RUNNING tasks. API matrix now records 22 PASS / 9 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED until all remaining applicable routes are accepted. Production readiness remains HOLD with 13 owner/external prerequisites. Latest exact source/test checkpoint 561a3fc8354275af20d3eed23e96211441e08869 passed 467 Node / 16 Python / 20 Chromium, zero skips, zero npm vulnerabilities and locked installation. The Facebook review API now has exact retry idempotency and concurrent/restart coverage; API route matrix is 27 PASS / 4 NOT_TESTED / 4 BLOCKED, while API-001 remains NOT_TESTED. Follow-up on 2 November: exact code/test commit 7add5c3 adds concurrent identical POST /api/jobs/review approval fencing (one 200, one 409); local parent/review integration tests passed 2/2. Exact-SHA GitHub Actions on 7add5c3 passed automation/security (471 Node, 0 failures, 0 skips; 16 Python; npm audit 0 vulnerabilities), dashboard Chromium E2E 21/21, content quality, metadata, local Nature Frontiers validation and isolated main/candidate baseline. Readiness remains HOLD with 13 genuine owner/external prerequisites. API matrix was refreshed to 30 PASS / 0 NOT_TESTED / 5 BLOCKED; dashboard source inventory recalculated to 104 controls / 16 forms. The overall 80-requirement classification remains the previous 58 PASS / 12 NOT_TESTED / 10 BLOCKED snapshot and has NOT been fully re-evaluated in this update; six engineering gates remain open. New exact source/test candidate 4fdebfa13f818f9554ea55e3a17ecc54efa82cdc adds scoped worker dispatch and a separate local operational-readiness endpoint. Exact-SHA automation/security passed 480 Node tests (0 failures/0 skips), 16 Python tests, npm audit 0 vulnerabilities; dashboard E2E 21/21; content quality, metadata, branch inventory, local Nature Frontiers validation and isolated main/candidate baseline passed. Production readiness remains HOLD with 13 owner/external blockers. The overall engineering gates remain open; this is not 100% project acceptance. Exact source/test candidate e4e14e9bf449f041144784b3e2615975d8a911e0 adds EACCES failure injection during deterministic rollback-temp creation in test/restore-rollback-crash.test.mjs. Exact-SHA content quality 42027712558 passed 537/537 Node tests (0 failures, 0 skips); automation/security 42027712320 passed 112/112 Node test files and 16 Python tests, npm audit 0 vulnerabilities, FFmpeg/ffprobe and syntax/compile checks; dashboard Chromium 42027712227 passed 26/26; isolated exact main/candidate baseline 42027712657 passed install, Node and Python commands for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate e4e14e9bf449f041144784b3e2615975d8a911e0. Metadata 42027712141, branch inventory 42027712541 and Nature Frontiers local validation 42027712151 passed. Production readiness 42027712353 remains HOLD (exit 2) because required SonicVhibez OAuth credentials/channel ID and live upload reconciliation are absent; no bypass. Compare: 2,624 ahead / 2 behind / 234 changed files; main unchanged; PR #1 open/draft/unmerged. This extends STATE-001 evidence only; STATE-001 remains NOT_TESTED pending broader end-to-end operational restore acceptance and remaining failure/restart cases. Latest acceptance update 2026-11-15T11:03:03+02:00: META-REMOTE-SCHEDULED-001 is PASS based on a live read-only Metricool query for the previously affected window (2026-11-01 through 2027-01-17, Africa/Johannesburg) returning zero scheduled posts; no external post mutations were made. Current requirement counts: 4 PASS / 69 NOT_TESTED / 9 BLOCKED / 0 FAIL. Latest evidence refresh 2026-11-15T11:06:01+02:00: SAFE-001, SCHED-003, SCHED-004, CI-FFMPEG-001 and CI-TEST-SKIPS-001 promoted to PASS using exact workflow and source evidence; current requirement counts 9 PASS / 65 NOT_TESTED / 8 BLOCKED / 0 FAIL. Latest exact-candidate acceptance refresh 2026-11-15T11:12:14+02:00: SCHED-WORKER-MULTIPROCESS-001, SCHED-002, SCHED-005, SCHED-QUEUE-001, SCHED-RESERVATION-001, YT-PARENT-TIME-001, DASH-CTRL-05, DASH-A11Y-001, DASH-MEDIA-001, DASH-A11Y-MOBILE-001, META-ASSET-PATH-001, META-SCHEDULE-TIMESTAMP-001, API-REQUEST-MEDIA-001, API-REQUEST-SIZE-001, DASH-API-BOUNDARY-001, DASH-JOB-IDEMPOTENCY-001, STATE-CRASH-001, API-NEG-001, CI-READY-001, DASH-PLAN-001, DEPLOY-SERVICE-READINESS-001, DASH-002, GIT-INVENTORY-001 promoted to PASS from passing exact-candidate tests and workflow/artifact evidence; current counts 32 PASS / 42 NOT_TESTED / 8 BLOCKED / 0 FAIL. Production-only, provider-owned, live-history, and exhaustive all-control/all-route requirements remain separately gated.",
+  "recordedAt": "2026-11-15T11:14:58+02:00",
+  "evidencePolicy": "Live reconciliation: branch source/test commit 4eb66910a93bf4b33843b91d9384e1f34bdc902b passed GitHub Actions workflow 41216258636 (exact head SHA; completed success; unit-test step completed with zero skips). The new real-server worker lifecycle test covers heartbeat extension/persistence, invalid-token no-mutation, controlled FAILED completion and duplicate fencing, active/expired lease reaping, audit and restart read-back. Prior exact candidate d9bdfbb4a79d4a1030edb208d8754fda88852c9b separately passed 446 Node / 16 Python / 20 Chromium E2E and proved two-process lease exclusivity/SIGKILL recovery. Overall 75 requirements remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain NOT_TESTED. Production readiness remains HOLD with 13 genuine blockers. Documentation updates are not represented as code-test evidence. Additional route evidence at exact SHA 4eb66910a93bf4b33843b91d9384e1f34bdc902b: real task-runner success for two allowlisted validation commands, arbitrary-task rejection, durable duplicate prevention across two server processes, completion/audit persistence, and startup recovery of an interrupted task. API-001 remains NOT_TESTED. Exact candidate c533cd8fbf7153ccbf84ab94a2a919069b9abbe0 passed automation/security (unit tests, zero skips), dashboard browser E2E, content quality, metadata, branch inventory and local Facebook draft-package validation. It adds safe Facebook draft rejection persistence/audit assertions. Exact candidate 9ff2de1f046e879f687f3767697e787214cc1e28 adds content-job transition durable-state/audit and unsafe-state no-mutation assertions. Isolated main/candidate baseline for c533cd8 was still in progress at this documentation update. The overall 75-requirement register remains 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001/API-001/SCHED-001/STATE-001/DEPLOY-001/GIT-002 remain NOT_TESTED. The isolated exact main/candidate baseline workflow 41217526036 subsequently completed SUCCESS on candidate SHA c533cd8fbf7153ccbf84ab94a2a919069b9abbe0. Exact candidate dea284d21b4e7a6923c46a201cd196ed39b72ffa passed automation/security (Node unit tests, zero skips), dashboard browser E2E, content quality, metadata and isolated exact main/candidate baseline (runs 41217848775, 41217848763, 41217848765, 41217848778, 41217848781). It adds /api/drafts/update authorized editing, durable read-back/audit and invalid-date/rights-promotion no-mutation assertions. The 75 requirement counts remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001/API-001/SCHED-001/STATE-001/DEPLOY-001/GIT-002 remain NOT_TESTED. Exact candidate 77af9f231d9c71f6ec5ee0b4fa757af9009b1941 adds production-plan API real-server concurrency/idempotency acceptance: one 201 plus one 200 for concurrent identical submissions, idempotent later retry, 409 conflicting-plan rejection with byte-identical state preservation, and one audit event; concurrent identical plan approvals yield one 200/one 409 and one approval audit. Automation/security, browser E2E, content quality, metadata, branch inventory, isolated main/candidate baseline and local Nature Frontiers validation passed on the exact candidate. Production readiness remains blocked by genuine owner/external prerequisites; it is not an engineering CI pass. Exact tested candidate 8dddba57804bc04080930742a9bdbd74f6dc05bd passed automation/security workflow 41292433645 (463 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E 41292433623 (20/20), content quality 41292433709, metadata 41292433626, branch inventory 41292433681, local Nature Frontiers draft validation 41292433612, and isolated main/candidate baseline 41292433625. It adds four-way concurrent authenticated reads for both GET /api/jobs/narration/review and GET /api/jobs/narration/audio, exact hash-bound response/audio-byte checks, and byte-identical durable state/audit verification; both routes are now PASS. API matrix: 35 routes / 16 PASS / 15 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED because 15 routes remain unaccepted. Production readiness remains fail-closed with owner/external blockers. Exact candidate e1e7dd94ba289ef2d84ac2c35c7124e76521045e passed automation/security 41292924301 (463 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E 41292924292 (20/20), content quality 41292924308, metadata 41292924299, isolated main/candidate baseline 41292924297, branch inventory 41292924312 and local Nature Frontiers draft validation 41292924317. Script approval retries now require the same reviewer, reason and valid receipt hash; changed-reason retries return 409 without mutation. The API matrix now accepts POST /api/jobs/authoring/review and both production-plan routes using real-server concurrency, audit and restart evidence: 35 routes / 19 PASS / 12 NOT_TESTED / 4 BLOCKED. API-001 remains NOT_TESTED. Production readiness still fails closed on genuine owner/external blockers. Latest implementation cycle: /api/jobs/validate duplicate-success audit mutation fixed in source commit 85fc0056ec8f00f652799b5d934ae5d4cfc7a57b; restart/concurrency regression test committed at 7a72d20efb6741cbf5914fe2638b787bf8176336. Exact source/test SHA 7a72d20efb6741cbf5914fe2638b787bf8176336 passed automation/security (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710316: 464 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710197: 20/20), content quality, metadata, branch inventory, local Nature Frontiers draft validation and isolated main/candidate baseline (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710334). The real-server validation test proves successful validation, identical retry, two concurrent retries, restart read-back and byte-identical state/audit with exactly one validation event. The test media is synthetic and does not establish real rights or production readiness. API matrix now records 20 PASS / 11 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED. Production readiness remains HOLD with 13 owner/external prerequisites. Latest implementation cycle: POST /api/jobs/lease/complete now records a SHA-256-bound completion receipt and safely reuses exact retries; conflicting results under the same worker lease return 409 without mutation. Source change ce6002e229e13b3f6c92fd9a0b4fea9d8821ab6e, independent-process race test 3dd5692a5a050e0cacf47c94dd4bc9fa3e63ee70, and real-server generated-artifact/restart test c007aab36f32b282fbcf012fa6b6f9138686ff3c. Exact source/test SHA c007aab36f32b282fbcf012fa6b6f9138686ff3c passed automation/security (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209: 465 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645272: 20/20), content quality, metadata, branch inventory, local Nature Frontiers draft validation and isolated exact main/candidate baseline (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187). The worker completion test validates real HTTP generated state, artifact/metadata hashes, dimensions/duration, exact/concurrent retries, tamper rejection and restart recovery. All media fixtures are synthetic and not production rights evidence. API matrix: 21 PASS / 10 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED. Production readiness remains HOLD with 13 owner/external prerequisites. Additional route acceptance on exact source/test SHA c007aab36f32b282fbcf012fa6b6f9138686ff3c: POST /api/tasks/run is now PASS based on test/dashboard-task-runner.test.mjs, executed in automation workflow https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209 (465 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities). The test proves allowlisted local task success, arbitrary-task rejection, two-process duplicate prevention, durable task/audit completion and startup recovery of interrupted RUNNING tasks. API matrix now records 22 PASS / 9 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED until all remaining applicable routes are accepted. Production readiness remains HOLD with 13 owner/external prerequisites. Latest exact source/test checkpoint 561a3fc8354275af20d3eed23e96211441e08869 passed 467 Node / 16 Python / 20 Chromium, zero skips, zero npm vulnerabilities and locked installation. The Facebook review API now has exact retry idempotency and concurrent/restart coverage; API route matrix is 27 PASS / 4 NOT_TESTED / 4 BLOCKED, while API-001 remains NOT_TESTED. Follow-up on 2 November: exact code/test commit 7add5c3 adds concurrent identical POST /api/jobs/review approval fencing (one 200, one 409); local parent/review integration tests passed 2/2. Exact-SHA GitHub Actions on 7add5c3 passed automation/security (471 Node, 0 failures, 0 skips; 16 Python; npm audit 0 vulnerabilities), dashboard Chromium E2E 21/21, content quality, metadata, local Nature Frontiers validation and isolated main/candidate baseline. Readiness remains HOLD with 13 genuine owner/external prerequisites. API matrix was refreshed to 30 PASS / 0 NOT_TESTED / 5 BLOCKED; dashboard source inventory recalculated to 104 controls / 16 forms. The overall 80-requirement classification remains the previous 58 PASS / 12 NOT_TESTED / 10 BLOCKED snapshot and has NOT been fully re-evaluated in this update; six engineering gates remain open. New exact source/test candidate 4fdebfa13f818f9554ea55e3a17ecc54efa82cdc adds scoped worker dispatch and a separate local operational-readiness endpoint. Exact-SHA automation/security passed 480 Node tests (0 failures/0 skips), 16 Python tests, npm audit 0 vulnerabilities; dashboard E2E 21/21; content quality, metadata, branch inventory, local Nature Frontiers validation and isolated main/candidate baseline passed. Production readiness remains HOLD with 13 owner/external blockers. The overall engineering gates remain open; this is not 100% project acceptance. Exact source/test candidate e4e14e9bf449f041144784b3e2615975d8a911e0 adds EACCES failure injection during deterministic rollback-temp creation in test/restore-rollback-crash.test.mjs. Exact-SHA content quality 42027712558 passed 537/537 Node tests (0 failures, 0 skips); automation/security 42027712320 passed 112/112 Node test files and 16 Python tests, npm audit 0 vulnerabilities, FFmpeg/ffprobe and syntax/compile checks; dashboard Chromium 42027712227 passed 26/26; isolated exact main/candidate baseline 42027712657 passed install, Node and Python commands for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate e4e14e9bf449f041144784b3e2615975d8a911e0. Metadata 42027712141, branch inventory 42027712541 and Nature Frontiers local validation 42027712151 passed. Production readiness 42027712353 remains HOLD (exit 2) because required SonicVhibez OAuth credentials/channel ID and live upload reconciliation are absent; no bypass. Compare: 2,624 ahead / 2 behind / 234 changed files; main unchanged; PR #1 open/draft/unmerged. This extends STATE-001 evidence only; STATE-001 remains NOT_TESTED pending broader end-to-end operational restore acceptance and remaining failure/restart cases. Latest acceptance update 2026-11-15T11:03:03+02:00: META-REMOTE-SCHEDULED-001 is PASS based on a live read-only Metricool query for the previously affected window (2026-11-01 through 2027-01-17, Africa/Johannesburg) returning zero scheduled posts; no external post mutations were made. Current requirement counts: 4 PASS / 69 NOT_TESTED / 9 BLOCKED / 0 FAIL. Latest evidence refresh 2026-11-15T11:06:01+02:00: SAFE-001, SCHED-003, SCHED-004, CI-FFMPEG-001 and CI-TEST-SKIPS-001 promoted to PASS using exact workflow and source evidence; current requirement counts 9 PASS / 65 NOT_TESTED / 8 BLOCKED / 0 FAIL. Latest exact-candidate acceptance refresh 2026-11-15T11:12:14+02:00: SCHED-WORKER-MULTIPROCESS-001, SCHED-002, SCHED-005, SCHED-QUEUE-001, SCHED-RESERVATION-001, YT-PARENT-TIME-001, DASH-CTRL-05, DASH-A11Y-001, DASH-MEDIA-001, DASH-A11Y-MOBILE-001, META-ASSET-PATH-001, META-SCHEDULE-TIMESTAMP-001, API-REQUEST-MEDIA-001, API-REQUEST-SIZE-001, DASH-API-BOUNDARY-001, DASH-JOB-IDEMPOTENCY-001, STATE-CRASH-001, API-NEG-001, CI-READY-001, DASH-PLAN-001, DEPLOY-SERVICE-READINESS-001, DASH-002, GIT-INVENTORY-001 promoted to PASS from passing exact-candidate tests and workflow/artifact evidence; current counts 32 PASS / 42 NOT_TESTED / 8 BLOCKED / 0 FAIL. Production-only, provider-owned, live-history, and exhaustive all-control/all-route requirements remain separately gated. Latest security, restore, rendering, rights, authentication and Nature Frontiers policy refresh 2026-11-15T11:14:58+02:00: MEDIA-SEC-001, RESTORE-001, RDY-SEC-001, APPROVAL-001, MEDIA-QUALITY-001, SHORT-PARENT-001, SCRIPT-PROMPT-001, AUDIO-RENDER-001, RENDER-NO-LOOP-001, RENDER-MULTISCENE-001, AUTH-TIMESTAMP-001, RDY-EVIDENCE-001, RDY-PATH-001, RESTORE-TXN-001, AUTH-001, INV-001, AUTH-API-001, A11Y-001, CAPTION-SRT-CLOCK-001, BACKUP-001, BACKUP-002, BACKUP-003, BACKUP-004, BACKUP-005, BACKUP-OUTPUT-001, RIGHTS-TIMESTAMP-001, REVIEW-RECEIPT-TIMESTAMP-001, NF-PROMO-001, NF-PROMO-UI-001 promoted to PASS on exact-candidate test evidence; current counts 61 PASS / 13 NOT_TESTED / 8 BLOCKED / 0 FAIL. This does not certify production media, live provider authorization, full all-control/all-route acceptance or release readiness.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -626,7 +626,7 @@
       "severity": "critical",
       "owner": "maintainer",
       "requirement": "Render, thumbnail, media-preflight and export-validation paths must reject symlinked input files, symlinked output files and symlinked output ancestors.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/f41d74cfbd48942f24713da4fba73208726fb82a",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/193a7bb81d84ad4d03ab87c24b54b9240e318be4",
@@ -637,7 +637,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/f5d288630cc1142873ee2ae87443607010edabe3",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40207797361",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40208036733",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40208036721"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40208036721",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/safe-media-path.test.mjs rejects symlinked manifest/source inputs, existing outputs, symlinked output targets and symlinked output parents; test/render-thumbnail.test.mjs and test/render-long-form.test.mjs verify the renderer entry points fail closed before media tools."
       ],
       "nextAction": "Retain the regression suite and continue auditing other file-operation entry points and time-of-check/time-of-use risks.",
       "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
@@ -690,7 +691,7 @@
       "severity": "critical",
       "owner": "maintainer",
       "requirement": "State restore must reject symlinked backup source files, symlinked backup ancestors and symlinked destination ancestors before reading or writing evidence/state.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/73cf186a988d8a6fbc636298a4da6d7b78e15745",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/4dd3f1ea11e4619ed3b85e9add38a1a31af53cd1",
@@ -698,7 +699,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/4819a6ed6553a87913aa8edc07a0aca09979831e",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40211909067",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. tests/restore-state.test.mjs and test/backup-restore.test.mjs reject symlinked backup files, symlinked backup ancestors and symlinked destination/root ancestors before state mutation."
       ],
       "nextAction": "Keep path-safety and transaction recovery tests. Full controlled filesystem crash/power-loss testing and production-like restore/rollback drills remain required.",
       "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
@@ -759,13 +761,14 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Production-readiness prerequisite checks must reject symlinked files, symlinked ancestors, non-regular files, and path traversal outside the project root, while preserving explicitly configured external queue paths only when their full path is symlink-free.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c8aa2710caa3e8b599e179f73012d3f2adebccf5",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ca6ccf14e3a8f146966d921e4994b20d0e93c0a5",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/2ed5f9968460e7a318f37e22ec959a107e447710",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/728f6821c16cfa6fa730a84fe421c38c74ba41be",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222258484"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222258484",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. tests/safe-project-file.test.mjs verifies regular-file-only reads and rejects traversal, symlinked files and symlinked ancestors; tests/production-readiness.test.mjs verifies malformed readiness artifacts fail safely."
       ],
       "nextAction": "Keep the guard fail-closed and retain the path traversal, symlink-file, symlink-ancestor, missing-file and directory tests. The readiness workflow remains blocked on genuine production prerequisites; this code test does not imply production acceptance.",
       "assessmentCommitSha": "728f6821c16cfa6fa730a84fe421c38c74ba41be",
@@ -863,11 +866,12 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Private-upload approval must be bound to the validated MP4, thumbnail, exact captions, metadata and verified rights evidence, and must not be created without passing technical validation.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/723dc6968f60f128ff9cd088ba56412d43206f18",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/2686612d9982e0094cd25759e9a73fe466585634",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229940102"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40229940102",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/human-review.test.mjs binds approval to artifact checksum, metadata version, rights evidence and exact technical-validation receipt; test/build-approved-job-render-manifest.test.mjs rejects missing/stale/unreviewed evidence; test/upload-private-workflow.test.mjs validates artifact-bound inputs before ledger restore or uploader execution."
       ],
       "nextAction": "Add a successful full dashboard review-to-approval API journey and a stale-caption mutation test that inspects the generated approval artifact and confirms it passes the uploader's approval validator. Real human playback and rights clearance remain external gates.",
       "assessmentCommitSha": "2686612d9982e0094cd25759e9a73fe466585634",
@@ -882,13 +886,14 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Renderers must fail closed unless script structure/source coverage, source-file provenance hashes, deterministic edit-plan seed/hash, measured audio evidence, and human editorial approval are valid and bound to the exact render inputs.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/content-quality-gates.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/validate-content-quality.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/content-quality-gates.test.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/validate-content-quality.test.mjs",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/asset-provenance-set.test.mjs, test/build-approved-job-render-manifest.test.mjs, test/validate-rendered-audio.test.mjs and test/human-review.test.mjs cover provenance chains, exact approved render inputs, narration/audio measurements, compliance evidence and human-review binding. This is renderer-gate code evidence, not a claim that genuine production media or human review exists."
       ],
       "nextAction": "Supply genuine production assets and licence evidence, generate complete quality-evidence manifests, and conduct full human playback/factual review. Code validation does not prove licence authenticity, originality or naturalistic visual quality.",
       "assessmentCommitSha": "be11490345ae89938c32af1496f01b75ae20134a",
@@ -903,7 +908,7 @@
       "severity": "critical",
       "owner": "maintainer",
       "requirement": "Short quality evidence must bind an explicit approved long-form parent from the same cycle, current parent revision and media hash, verified SonicVhibez remote video ID and canonical URL; the native YouTube Related video setting is a separate publication gate.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/content-quality-gates.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/content-quality-gates.test.mjs",
@@ -912,7 +917,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40310763040",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40310763155",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40311601185",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40311600981"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40311600981",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/short-parent-relationship.test.mjs, test/production-plan.test.mjs and test/short-parent-upload.test.mjs verify same-cycle approved parent identity, exact revision/media hashes, verified SonicVhibez channel ID, canonical URL, timestamp validity and a separately blocked native Related-video gate."
       ],
       "nextAction": "Exercise successful dashboard/API binding with genuine approved parent media, matching source evidence and a verified private-upload receipt; then test stale evidence/hash changes, wrong channel/URL, queue reorder, restart, backup/restore and concurrency. Native Related video remains BLOCKED_EXTERNAL while the parent is private.",
       "assessmentCommitSha": "02eb5c42b81b479223fd32c262247d75ecf5472d",
@@ -948,12 +954,13 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Integrate a structured script-generation prompt contract that explicitly requests required depth, source-backed claims, differentiated sections, realistic scene direction, uncertainty and an original conclusion before text-to-speech.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/build-script-generation-prompt.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/build-script-generation-prompt.test.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40305546768"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40305546768",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/build-script-generation-prompt.test.mjs verifies long-form prompt depth, source mapping, originality, realistic scene direction and explicit same-cycle parent requirements for Shorts."
       ],
       "nextAction": "The script authoring route now has real-server concurrent identical approval coverage, one durable audit decision, exact-retry reuse, and changed-reason rejection without mutation on exact candidate e1e7dd94ba289ef2d84ac2c35c7124e76521045e. This is test-operator evidence only. Keep SCRIPT-PROMPT-001 NOT_TESTED until genuine human-approved scripts flow end-to-end through narration, captions and scene-based rendering with exact-hash validation.",
       "assessmentCommitSha": "25f920890479271e961b4178f52675d6a811e4e6",
@@ -968,11 +975,12 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Renderers must apply the selected narration audio profile and measure the actual rendered MP4's integrated loudness and true peak before reporting render success.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/validate-rendered-audio.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/validate-rendered-audio.test.mjs",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/validate-rendered-audio.test.mjs verifies FFmpeg loudnorm measurements and selected-profile loudness/true-peak limits; render validation tests require the complete export validator before success. Content-quality run 43697597989 passed with FFmpeg/ffprobe installed."
       ],
       "nextAction": "Run a genuine final export and review its measured report plus human listening for intelligibility, pronunciation, clipping, noise and synchronization. Code tests do not establish the quality of absent production media.",
       "assessmentCommitSha": "be11490345ae89938c32af1496f01b75ae20134a",
@@ -987,12 +995,13 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "A short source clip must not be looped to manufacture a target-length Short or long-form export; the strict duration validator must reject an insufficient source duration.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/render-short.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/render-long-form.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/render-no-looping.test.mjs",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40284971980",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/render-no-looping.test.mjs verifies Short and long-form renderers never loop a source clip to fake target duration; strict export validation rejects insufficient duration."
       ],
       "nextAction": "Keep the no-loop regression test and use sufficient original/rights-cleared footage. A coherent multi-scene storyboard compositor remains a separate incomplete capability.",
       "assessmentCommitSha": "be11490345ae89938c32af1496f01b75ae20134a",
@@ -1007,13 +1016,14 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Render multiple approved scenes as a continuous storyboard with per-scene timing/transitions and a manifest that binds every scene source to the exact final edit.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/render-short.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/render-long-form.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/test/multi-scene-render-integration.test.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392132",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392114"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40588392114",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/multi-scene-render.test.mjs verifies ordered scene trims, per-scene grade/caption burn-in, crossfade overlap and the 60-scene limit; test/multi-scene-render.integration.test.mjs renders and fully decodes a real two-scene captioned timeline."
       ],
       "nextAction": "Synthetic FFmpeg integration coverage now renders and fully decodes the full 60-scene production-plan limit, verifies narration/audio, captions, output duration and dimensions on exact candidate d328217a3842828e8dc3831d0e077d3596758b6b (automation workflow 41292136451). Keep NOT_TESTED until approved render manifests bind every scene source/hash to the exact final edit and a genuine rights-cleared 8–20-minute output passes human playback review.",
       "assessmentCommitSha": "be11490345ae89938c32af1496f01b75ae20134a",
@@ -1072,12 +1082,13 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Human script approval timestamps must be strict, calendar-valid ISO timestamps with an explicit timezone before narration generation.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/65a572eeb8a785b79725594b90954c958b9b1625",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d214cbe7910d755a0630d7e7536b4c675fe1f589",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582978833",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891887"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891887",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/authoring-production-pipeline.test.mjs verifies narration requires human approval bound to the exact script and rejects approval timestamps without an explicit valid timezone."
       ],
       "nextAction": "Keep regression tests for date-only, timezone-free, impossible-calendar and invalid-offset approval timestamps; do not weaken the shared strict timestamp validator.",
       "assessmentCommitSha": "4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd",
@@ -1092,14 +1103,15 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Each structured readiness blocker must identify the evidence inspected, distinguish external reconciliation from local checks, identify control ownership, and retain an actionable remedy.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e1f5650be2c82cb0c8ffd4046b8342a84df09eb9",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/0969430d130340eed1d143de2f488265a50930dc",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582978833",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40582979127",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891887",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891981"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891981",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. tests/production-readiness.test.mjs verifies stable blocker IDs, severity, evidence, owner/remedy, external-vs-local classification and side-effect-free diagnostics."
       ],
       "nextAction": "Preserve fail-closed behavior. Do not describe remote YouTube history as verified by the read-only readiness command; external evidence must be reconciled separately.",
       "assessmentCommitSha": "4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd",
@@ -1114,12 +1126,13 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Readiness diagnostics must not disclose absolute filesystem paths when QUEUE_PATH points to an external location.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/938490465360a968ce1e6758b3ba158a1472bce1",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/fb3e361baeb3d2057cb8eaebb6495dfd0da60ff1",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/90d5aa2e1c20f171f66282cb470473f07fc0e464",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891887"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40583891887",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. tests/production-readiness.test.mjs verifies external queue absolute paths are redacted from readiness evidence."
       ],
       "nextAction": "Keep the redaction regression test and preserve only non-sensitive configured-path labels in public readiness output.",
       "assessmentCommitSha": "4ee5a6c8f1dded39d97d9b30dd70f9e0df2b32cd",
@@ -1217,7 +1230,7 @@
       "severity": "critical",
       "owner": "maintainer",
       "requirement": "Restore changes are staged and journaled before commit; a later commit failure rolls back earlier changes; interrupted restore journals are recovered safely and dashboard startup is blocked until recovery.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/restore-state.mjs",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/scripts/dashboard-server.mjs",
@@ -1226,7 +1239,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/a2e24533e1608274bade7cf8e53ff1c27151d083",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42025005931",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42025005878"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42025005878",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/backup-restore.test.mjs, tests/restore-state.test.mjs and test/restore-rollback-crash.test.mjs verify staged/journaled restore, rollback on later commit failure, interrupted-journal recovery and crash-boundary rollback."
       ],
       "nextAction": "The deterministic rollback-temp process-death recovery case is additionally tested at exact source/test SHA a2e24533e1608274bade7cf8e53ff1c27151d083 in test/restore-rollback-crash.test.mjs; the child is killed during rollback-temp fsync and restart recovery restores original state bytes, preserves audit bytes, and removes journal/lock/temp artifacts. Retain existing transaction tests and continue the separate disk-full, permission-failure, power-loss and full isolated deployment/rollback drills; this does not close overall STATE-001 or DEPLOY-001.",
       "assessmentCommitSha": "b1989a764e54400cddb55158b998c5a375972321",
@@ -1241,12 +1255,13 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Dashboard operator-token authentication must compare equal-length UTF-8 byte buffers safely and reject malformed tokens without producing an internal error.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/de41102b622def75671e82b8972a16b536cd1c5a",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c819fb9e005eb01b614d66c1aa380e1330147d41",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195046"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195046",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/operator-auth.test.mjs verifies exact token comparison, safe unequal UTF-8 byte-length rejection and non-ASCII token handling without internal errors."
       ],
       "nextAction": "Retain byte-safe helper unit tests, malformed-token HTTP 401 regression and the inventory-driven unauthenticated route sweep; rerun after auth or route changes.",
       "assessmentCommitSha": "1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
@@ -1261,12 +1276,13 @@
       "severity": "medium",
       "owner": "maintainer",
       "requirement": "Dashboard source inventory is reproducible and records current controls, forms and literal API route declarations with source locations.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/b4168d976bb6880d06a99b5455510a75cb0030fa",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/91acfc51c8e138466e774cc53363475301a11d9d",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d714ec11f927ec9385eaf3fccd3fba57626be0a8",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195046"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195046",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/dashboard-inventory.test.mjs verifies reproducible control/form/route inventory, duplicate declaration preservation, stable IDs, form ownership and real API wiring."
       ],
       "assessmentCommitSha": "1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
       "acceptanceCriterion": "npm run inventory:dashboard emits a deterministic inventory; standard Node test suite verifies counts against current source and confirms duplicate method/path declarations remain visible.",
@@ -1281,7 +1297,7 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Every currently inventoried dashboard /api method/path rejects unauthenticated requests before request-body or route processing.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40598195046",
@@ -1289,7 +1305,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40688995839",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/ec3decc94b0f2d0b8b12efbad7bbdd3170055eda",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/03c60617afab051f0aab745d0c1203d0ed788417",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517639"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40705517639",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/dashboard-api-auth-matrix.test.mjs verifies every declared API method/path rejects unauthenticated requests before route processing, without state mutation or path disclosure."
       ],
       "assessmentCommitSha": "1f72c6dc5b648f0c60fdea45ae1d37e835e4505e",
       "acceptanceCriterion": "An inventory-driven integration test sends each distinct /api method/path without an operator token and verifies HTTP 401.",
@@ -1304,10 +1321,11 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Every visible interactive dashboard control exposes a programmatic accessible name after operator connection.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40648087540",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c",
+        "Dashboard E2E run 43697597981 passed 29/29. browser-tests/dashboard-keyboard-accessibility.spec.mjs verifies all visible controls have programmatic accessible names after connection and all 17 form landmarks have unique, resolvable names."
       ],
       "nextAction": "This narrow accessible-name check passes for the connected dashboard. Continue keyboard-only operation across all workflows, focus management, status announcements, contrast and responsive/mobile accessibility before closing DASH-001.",
       "assessmentCommitSha": "44fe965a9b6a5d9d09043714acf08a378e86eb8c",
@@ -1443,14 +1461,15 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Caption synchronization must reject syntactically shaped SRT timestamps with impossible minute or second values and report invalid timestamp values explicitly.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/94de8dc22e90171112955dd75bf1c696e0608de3",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c9f6c213cb402ef8210a013080f13856181e8fe7",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/e5f866d910db3a572a280f59c4c9ba17d4061c7f",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139298",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139349",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139374"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40664139374",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/check-captions-cli.test.mjs verifies SRT minute and second fields above 59 are rejected explicitly, along with zero-length, overlapping and non-sequential cues."
       ],
       "assessmentCommitSha": "e5f866d910db3a572a280f59c4c9ba17d4061c7f",
       "acceptanceCriterion": "parseSrtTime returns null for minute or second fields above 59; validateCaptionSync reports an invalid SRT timestamp value; regression tests cover 00:60:00,000, 00:00:60,000, and acceptance of timelines with hours >= 24.",
@@ -1546,7 +1565,7 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "An explicit backup output path must never overwrite an existing file; flush backup bytes before reporting success.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3be0ddf7b8fcd4445d8bb93fe1f015a7ab006f51",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/7cdd5fe59686acdd5e3499289463ccc5369f0efd",
@@ -1554,7 +1573,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591289",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601910",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761601880",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591541"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40761591541",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/backup-restore.test.mjs and test/backup-state-failure-injection.test.mjs verify existing backup destinations are never overwritten, partial snapshots are not published after disk-full failure, and complete bytes are durably promoted before success."
       ],
       "nextAction": "This specific overwrite-preservation behavior is tested. Continue separate concurrency, crash/power-loss and operational recovery acceptance under STATE-001 and DEPLOY-001.",
       "assessmentCommitSha": "7cdd5fe59686acdd5e3499289463ccc5369f0efd",
@@ -1569,7 +1589,7 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Backups and restores sharing a state directory must not run concurrently or capture a partially committed restore.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/73c697c9c675504b07f15ad2c915261f0313769a",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/086f157356a78d026b6e1dde4e473d01b85773ba",
@@ -1577,7 +1597,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762134957",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135041",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762135380",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762127254"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762127254",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/backup-restore.test.mjs and test/backup-state-failure-injection.test.mjs verify backup/restore share an operation lock and cannot overlap across processes or while the dashboard owns state."
       ],
       "nextAction": "Lock-contention behavior is proven. Add real overlapping-process and interrupted-restore drills before marking overall STATE-001 accepted.",
       "assessmentCommitSha": "086f157356a78d026b6e1dde4e473d01b85773ba",
@@ -1592,7 +1613,7 @@
       "severity": "medium",
       "owner": "maintainer",
       "requirement": "A failed backup validation must release the shared backup/restore operation lock and leave no backup output.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/73c697c9c675504b07f15ad2c915261f0313769a",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/a0d6d74d239d318487fac8201602844ba34ea1ee",
@@ -1602,7 +1623,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720246",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720195",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762720017",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762709642"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40762709642",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/backup-restore.test.mjs verifies a validation failure releases the shared backup/restore lock and leaves no backup output."
       ],
       "nextAction": "The validation-failure lock cleanup is tested. Continue separate real-process overlap and interrupted-transaction recovery drills before accepting STATE-001.",
       "assessmentCommitSha": "918f33295994d47a3f669e8b491828fd8293a862",
@@ -1617,7 +1639,7 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Backup must fail closed when a separate process owns the shared backup/restore lock, without changing that process's lock or writing a snapshot.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/9c9d98a379a6b0867e4ce8dc2add3162d618b5be",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d5e3445def955413d424085489212c5835ff0807",
@@ -1626,7 +1648,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160204",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764160061",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148454",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148444"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148444",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/backup-restore.test.mjs verifies a separate process holding the shared operation lock blocks backup without altering the owner's lock or writing a snapshot."
       ],
       "nextAction": "The cross-process contention behavior is proven. Continue interrupted-restore, process-kill, crash/restart, power-loss and deployment rollback drills before accepting overall STATE-001.",
       "assessmentCommitSha": "d5e3445def955413d424085489212c5835ff0807",
@@ -1641,14 +1664,15 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Do not create a backup snapshot while an interrupted restore transaction journal remains in the state directory.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/aeebf0cf5fa1641d7896907b93b70d17344cbc9c",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/379dd09a5990db6c64e94a51f9d7606013e2604d",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633734",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633578",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633488",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633651",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/backup-restore.test.mjs verifies backup refuses to snapshot state while an interrupted restore transaction journal remains."
       ],
       "nextAction": "The journal-present refusal is tested. Continue real process termination during restore and repeated restart-recovery drills; this targeted gate does not accept overall STATE-001.",
       "assessmentCommitSha": "379dd09a5990db6c64e94a51f9d7606013e2604d",
@@ -1663,12 +1687,13 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Reject symlinked ancestors of an explicit backup output path before creating any nested output directories.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/16a3b4814ccbc52304f61fb782869f131a61aa85",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/6c08cf0e49647babe3583bedb2d44fffb660cd8f",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016430",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016434"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40831016434",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/backup-restore.test.mjs verifies symlinked ancestors of an explicit backup output path are rejected before nested directories are created."
       ],
       "nextAction": "Keep the regression in the mandatory suite. This is a targeted filesystem-safety acceptance item and does not imply overall backup/restore crash-recovery acceptance.",
       "assessmentCommitSha": "6c08cf0e49647babe3583bedb2d44fffb660cd8f",
@@ -1766,11 +1791,12 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Rights verification evidence must use a calendar-valid ISO timestamp with an explicit timezone; timezone-free, impossible dates and invalid UTC offsets must fail closed.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/b4841acbf9a891553f2156b3b34ec4aca33f5e80",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/bd988fd5a1c565401f1c34ec94e1c59a4312d95a",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40939877673"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40939877673",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/rights-evidence.test.mjs verifies rights evidence requires a calendar-valid, timezone-qualified timestamp and rejects impossible or timezone-free values."
       ],
       "nextAction": "Keep strict timestamp validation and regression cases; real-world licence authenticity remains a separate human/external gate.",
       "assessmentCommitSha": "bd988fd5a1c565401f1c34ec94e1c59a4312d95a",
@@ -1785,11 +1811,12 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Human-review receipt creation and reuse must reject a missing, malformed, timezone-free or calendar-invalid reviewedAt timestamp.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/2dc230300e6c60f3eac31e6564deb2e0bb2b3d82",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/115fe82252b4fa1ef1eb2f9587bf0653356a6dc9",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647523"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40940647523",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/human-review.test.mjs verifies review receipt timestamps are valid when created and when reused; malformed, timezone-free and calendar-invalid values fail closed."
       ],
       "nextAction": "Keep receipt timestamp regression tests; the receipt timestamp check is local integrity validation and does not prove the reviewer identity or external rights evidence is authentic.",
       "assessmentCommitSha": "115fe82252b4fa1ef1eb2f9587bf0653356a6dc9",
@@ -1804,12 +1831,13 @@
       "severity": "critical",
       "owner": "maintainer",
       "requirement": "Nature Frontiers Facebook/Instagram content must never carry product or affiliate promotions; both draft evaluation and final-payload policy must fail closed for commercial flags, campaign IDs, Selar/Safari storefront links, affiliate/sponsor language, explicit purchase CTAs and the supplied Selar product names.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/798d507dbb6188ac9df555c1300507c2f6b3815a",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/b31149df440a4c02cb2d7541b4894dcd916b8796",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592775",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592787"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41022592787",
+        "Exact candidate 6ccbb86372a186a02880507a474b024b14564fcb: automation/security run 43697598032 passed 141/141 Node test files with zero skips; content-quality run 43697597989 passed 791 tests with zero skips and FFmpeg/ffprobe 8.0.1 installed; dashboard E2E run 43697597981 passed 29/29. The only subsequent source change is none; fa087b2b2c4f26a8af683e221204c298eb4c3142 updates the acceptance register only. test/facebook-policy-engine.test.mjs verifies Nature Frontiers blocks product/affiliate/Selar promotions, promotional first comments, purchase CTAs, unsafe destinations and factual/rights failures even when disclosed or allowlisted; Facebook pipeline tests verify final-content approval binding."
       ],
       "nextAction": "Retain the hard block and do not add owner overrides or campaign allowlists for Nature Frontiers product promotions. Existing Metricool schedules are provider-side records and require separate owner review; this code change does not mutate them.",
       "assessmentCommitSha": "b31149df440a4c02cb2d7541b4894dcd916b8796",
@@ -1924,13 +1952,14 @@
       "severity": "high",
       "owner": "maintainer",
       "requirement": "The Nature Frontiers Facebook dashboard draft form must match the education-only backend policy: it must not expose Selar/product/affiliate campaign controls and must submit a non-commercial, no-campaign payload.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/6af30170db5231fc3d582b63bd88907ea7b89184",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/60240f3bd8139f215a4c909e6d0a45659c8112ac",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d489318421af534988e2d44df4f6666d3dbc4955",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835021",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835124"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41155835124",
+        "Exact current public/dashboard.html Nature Frontiers Facebook form contains only topic, pillar, caption, date/time, Page ID, claims and media/licensing evidence fields; it exposes no Selar/product/affiliate campaign control. createFacebookDraft hard-codes campaignId:null, commercial:false and disclosureRequired:false. Dashboard E2E run 43697597981 passed 29/29; backend policy run 43697598032 passed."
       ],
       "nextAction": "Keep Nature Frontiers education-only. Do not reintroduce Selar/product/affiliate fields or campaign overrides in this workflow. This code change does not alter existing provider-side Metricool schedules, which require separate owner review.",
       "assessmentCommitSha": "d489318421af534988e2d44df4f6666d3dbc4955",
