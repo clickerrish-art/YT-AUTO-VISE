@@ -49,6 +49,38 @@ test("failed durable lock initialization removes only its own incomplete lock", 
   } finally { f.cleanup(); }
 });
 
+test("publisher does not begin work when lock directory durability cannot be confirmed", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    let mutationCalls = 0, directoryFsyncAttempted = false;
+    const originalFsync = fs.fsyncSync;
+    try {
+      fs.fsyncSync = fd => {
+        if (fs.fstatSync(fd).isDirectory()) {
+          directoryFsyncAttempted = true;
+          const error = new Error("simulated lock directory fsync failure");
+          error.code = "EIO";
+          throw error;
+        }
+        return originalFsync(fd);
+      };
+      await assert.rejects(() => runAutonomousFacebookPublisher({
+        rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+        env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+        publish: async () => { mutationCalls++; throw new Error("publisher must not begin after an unflushed lock"); }
+      }), /simulated lock directory fsync failure/);
+    } finally {
+      fs.fsyncSync = originalFsync;
+    }
+    assert.equal(directoryFsyncAttempted, true);
+    assert.equal(mutationCalls, 0);
+    assert.equal(fs.existsSync(path.join(f.stateDir, "facebook-publishing.lock")), false,
+      "a lock whose directory durability could not be confirmed must be cleaned up");
+  } finally { f.cleanup(); }
+});
+
 test("lock release never removes a replacement lock owned by another process", async () => {
   const f = setup();
   try {
