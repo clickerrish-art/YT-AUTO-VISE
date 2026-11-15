@@ -587,7 +587,7 @@ test("normal verified publish path preserves a concurrent conflicting history re
         };
       },
       reconcileRemote: async () => ({ outcome: "UNRESOLVED", reason: "NO_MATCH_IS_NOT_PROOF_OF_NON_PUBLICATION", matches: [] })
-    }), /verified receipt for this slot|history conflicts/i);
+    }), /verified receipt for this slot|history conflicts|history already contains an outcome/i);
     const history = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-history.json"), "utf8"));
     assert.deepEqual(history, [concurrentReceipt], "the concurrent verified receipt must remain unchanged");
     const ledger = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), "utf8"));
@@ -635,7 +635,7 @@ test("live uncertain reconciliation rechecks durable history and blocks a concur
           scheduledPublishTime: Date.parse(payload.scheduledAt) / 1000
         } };
       }
-    }), /history conflicts with a reconciled ledger receipt/i);
+    }), /history (?:conflicts with|contains a prior terminal outcome conflicting with) a reconciled ledger receipt/i);
     assert.equal(mutationCalls, 1);
     assert.equal(reconciliationCalls, 1);
     const history = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-history.json"), "utf8"));
@@ -1010,7 +1010,7 @@ test("startup blocks a verified ledger receipt that conflicts with a prior non-v
       env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
       policyEvaluator: async () => { policyCalls++; return { eligible: true }; },
       publish: async () => { mutationCalls++; throw new Error("conflicting history must never publish"); }
-    }), /history conflicts with a verified ledger receipt or prior slot outcome/i);
+    }), /history conflicts with a verified ledger receipt or prior terminal slot outcome/i);
     assert.equal(policyCalls, 0);
     assert.equal(mutationCalls, 0);
     assert.deepEqual(JSON.parse(fs.readFileSync(historyPath, "utf8")), prior);
@@ -1041,11 +1041,16 @@ test("startup does not promote an incomplete or unverified ledger row into remot
       env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
       publish: async () => { throw new Error("ledger presence must continue to block duplicate processing"); }
     });
-    const history = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-history.json"), "utf8"));
+    const historyPath = path.join(f.stateDir, "facebook-history.json");
+    const history = fs.existsSync(historyPath) ? JSON.parse(fs.readFileSync(historyPath, "utf8")) : [];
     assert.equal(history.length, 0, "incomplete ledger data must not be represented as a verified remote receipt");
     assert.equal(result.lastRemoteReceipt, null);
     assert.equal(result.skipped, 1);
-    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), []);
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), [{
+      slotId, destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Do not publish from incomplete ledger evidence.", links: [], media: [], claims: []
+    }], "the original candidate remains queued for manual reconciliation");
   } finally { f.cleanup(); }
 });
 
@@ -1120,7 +1125,7 @@ test("startup blocks interrupted reconciliation when existing verified history n
           scheduledPublishTime: Date.parse(payload.scheduledAt) / 1000 }
       }),
       publish: async () => { mutationCalls++; throw new Error("must remain blocked"); }
-    }), /history conflicts with a reconciled ledger receipt/i);
+    }), /history (?:conflicts with|contains a prior terminal outcome conflicting with) a reconciled ledger receipt/i);
     assert.equal(mutationCalls, 0);
     assert.equal(JSON.parse(fs.readFileSync(f.queuePath, "utf8")).length, 1);
   } finally { f.cleanup(); }
@@ -1158,7 +1163,8 @@ test("startup keeps a confirmed reconciliation without a remote post ID uncertai
       publish: async () => { mutationCalls++; throw new Error("must not publish an uncertain slot"); }
     });
     const ledger = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), "utf8"));
-    const history = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-history.json"), "utf8"));
+    const historyPath = path.join(f.stateDir, "facebook-history.json");
+    const history = fs.existsSync(historyPath) ? JSON.parse(fs.readFileSync(historyPath, "utf8")) : [];
     assert.equal(mutationCalls, 0);
     assert.equal(ledger[0].status, "UNCERTAIN");
     assert.notEqual(history.some(item => ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)), true);
@@ -1195,13 +1201,17 @@ test("atomic state write does not acknowledge a rename until its directory entry
     };
     const originalFsync = fs.fsyncSync;
     let directoryFsyncAttempted = false;
+    let directoryFsyncCount = 0;
     try {
       fs.fsyncSync = fd => {
         if (fs.fstatSync(fd).isDirectory()) {
-          directoryFsyncAttempted = true;
+          directoryFsyncCount++;
+          if (directoryFsyncCount === 2) {
+            directoryFsyncAttempted = true;
           const error = new Error("simulated directory fsync failure");
           error.code = "EIO";
-          throw error;
+            throw error;
+          }
         }
         return originalFsync(fd);
       };
@@ -1264,7 +1274,7 @@ test("startup reconciliation re-reads history after Meta lookup before writing a
         };
       },
       publish: async () => { mutationCalls++; throw new Error("startup recovery conflict must block publishing"); }
-    }), /history conflicts with a reconciled ledger receipt/i);
+    }), /history (?:conflicts with|contains a prior terminal outcome conflicting with) a reconciled ledger receipt/i);
     assert.equal(mutationCalls, 0);
     assert.deepEqual(JSON.parse(fs.readFileSync(historyPath, "utf8")), [concurrentReceipt],
       "the concurrent verified receipt must remain byte-for-byte authoritative");
@@ -1455,12 +1465,15 @@ test("startup reconciliation preserves a concurrent non-verified slot outcome", 
       stateDir: f.stateDir, now: Date.parse("2026-10-25T05:30:00.000Z"),
       env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
       verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
-      reconcileRemote: async () => ({
-        outcome: "CONFIRMED",
+      reconcileRemote: async () => {
+        fs.writeFileSync(historyPath, JSON.stringify([concurrentOutcome]));
+        return {
+          outcome: "CONFIRMED",
         receipt: { status: "SCHEDULED_VERIFIED", remotePostId: "123456789012345_recovered" }
-      }),
+        };
+      },
       publish: async () => { mutationCalls++; throw new Error("conflicting outcome must block new work"); }
-    }), /prior outcome conflicting with a reconciled ledger receipt/i);
+    }), /prior terminal outcome conflicting with a reconciled ledger receipt/i);
     assert.equal(mutationCalls, 0);
     assert.deepEqual(JSON.parse(fs.readFileSync(historyPath, "utf8")), [concurrentOutcome]);
     assert.equal(JSON.parse(fs.readFileSync(f.queuePath, "utf8")).length, 1);
@@ -1504,7 +1517,7 @@ test("in-run reconciliation preserves a concurrent non-verified slot outcome", a
           receipt: { status: "SCHEDULED_VERIFIED", remotePostId: "123456789012345_recovered" }
         };
       }
-    }), /prior outcome conflicting with a reconciled ledger receipt/i);
+    }), /prior terminal outcome conflicting with a reconciled ledger receipt/i);
     assert.equal(mutationCalls, 1);
     assert.deepEqual(JSON.parse(fs.readFileSync(historyPath, "utf8")), [concurrentOutcome]);
     assert.equal(JSON.parse(fs.readFileSync(f.queuePath, "utf8")).length, 1);
@@ -1554,7 +1567,7 @@ test("ledger history rebuild preserves a concurrent non-verified slot outcome", 
         stateDir: f.stateDir, now: Date.parse("2026-10-25T05:30:00.000Z"),
         env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
         publish: async () => { throw new Error("history rebuild conflict must block before new work"); }
-      }), /history changed during ledger recovery and contains a conflicting slot outcome/i);
+      }), /history changed during ledger recovery and contains a conflicting terminal slot outcome/i);
     } finally {
       fs.readFileSync = originalRead;
       fs.writeFileSync = originalWrite;
