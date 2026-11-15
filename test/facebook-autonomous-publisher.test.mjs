@@ -1010,6 +1010,57 @@ test("startup reconciliation re-reads history after Meta lookup before writing a
 });
 
 
+test("startup blocks duplicate attempt-ledger slot IDs before recovery or Meta access", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    const slotId = "nature-frontiers-duplicate-ledger-slot";
+    fs.writeFileSync(f.queuePath, JSON.stringify([{
+      slotId, destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Duplicate ledger rows must stop processing.", links: [], media: [], claims: []
+    }]));
+    fs.writeFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), JSON.stringify([
+      { kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId, destination: "nature_frontiers_facebook", status: "FAILED_PREMUTATION_OR_REJECTED" },
+      { kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId, destination: "nature_frontiers_facebook", status: "UNCERTAIN" }
+    ]));
+    let permissionCalls = 0, mutationCalls = 0;
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath,
+      stateDir: f.stateDir, now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      verifyPermissions: async () => { permissionCalls++; throw new Error("must not contact Meta"); },
+      publish: async () => { mutationCalls++; throw new Error("must not mutate Meta"); }
+    }), /duplicate slot IDs/i);
+    assert.equal(permissionCalls, 0);
+    assert.equal(mutationCalls, 0);
+    assert.equal(JSON.parse(fs.readFileSync(f.queuePath, "utf8")).length, 1);
+    assert.equal(fs.existsSync(path.join(f.stateDir, "facebook-publishing.lock")), false);
+  } finally { f.cleanup(); }
+});
+
+test("startup blocks malformed queue rows and unexpected destinations before policy or Meta access", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.writeFileSync(f.queuePath, JSON.stringify([{}]));
+    let policyCalls = 0, mutationCalls = 0;
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath,
+      stateDir: f.stateDir, now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      policyEvaluator: async () => { policyCalls++; return { eligible: true }; },
+      publish: async () => { mutationCalls++; throw new Error("malformed queue must never publish"); }
+    }), /malformed record or missing slot ID/i);
+    assert.equal(policyCalls, 0);
+    assert.equal(mutationCalls, 0);
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), [{}]);
+  } finally { f.cleanup(); }
+});
+
 test("startup blocks conflicting verified receipts already present in durable history", async () => {
   const f = setup();
   try {
