@@ -365,8 +365,18 @@ export async function runAutonomousFacebookPublisher({
       if (index >= 0) { queue.splice(index, 1); atomicJson(queuePath, queue); }
     };
     for (const payload of candidates) {
-      if (history.some(item => item.slotId === payload.slotId) || ledger.some(item => item.slotId === payload.slotId)) {
+      if (history.some(item => item.slotId === payload.slotId)) {
+        // A durable history outcome is terminal for this slot. It is safe to
+        // remove the queue copy because the outcome is already recorded.
         removeQueuedSlot(payload.slotId);
+        skipped++;
+        continue;
+      }
+      if (ledger.some(item => item.slotId === payload.slotId)) {
+        // An attempt ledger entry without a terminal history outcome is a
+        // reconciliation/manual-review case. Keep the original queue payload:
+        // the ledger intentionally stores only a reduced evidence snapshot.
+        // The idempotency record prevents this retained item from being retried.
         skipped++;
         continue;
       }
@@ -492,8 +502,10 @@ export async function runAutonomousFacebookPublisher({
         history = latestHistory;
         if (!existingReceipts.length) history.push({ ...receipt, payload: undefined });
         atomicJson(ledgerPath, ledger); atomicJson(historyPath, history);
-        removeQueuedSlot(payload.slotId);
-        if (success) published++; else skipped++;
+        // Only a fully verified remote receipt may consume the original queue
+        // payload. UNCERTAIN outcomes need that payload for manual reconciliation.
+        if (success) { removeQueuedSlot(payload.slotId); published++; }
+        else skipped++;
       } catch (error) {
         const uncertain = error?.uncertain === true || error?.retryable === true || error?.name === "AbortError" || Boolean(remote?.remotePostId);
         let reconciliation = null;
@@ -552,7 +564,10 @@ export async function runAutonomousFacebookPublisher({
         }
         history = latestHistory;
         history.push({ ...failed, payload: undefined });
-        atomicJson(ledgerPath, ledger); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++;
+        atomicJson(ledgerPath, ledger); atomicJson(historyPath, history);
+        // Retain the original queue item for operator review after any
+        // non-verified attempt; the ledger prevents automatic re-publication.
+        skipped++;
       }
     }
     const summary = {
