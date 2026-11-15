@@ -148,6 +148,54 @@ test("rolling cycle advances long-form, long-form, Short and treats private/unli
   assert.equal(result.expectedFormat, "short");
 });
 
+test("approved cycle start does not retroactively classify earlier remote videos", () => {
+  const legacyShort = {
+    id: "legacy-short-before-cycle",
+    status: "public",
+    actualPublishedAt: "2026-10-22T15:05:56.000Z",
+    format: "short"
+  };
+  const cycleStartAt = "2026-11-07T00:57:33+02:00";
+  const firstLong = evaluateNextPublication({
+    history: [legacyShort], historyVerified: true, cycleStartAt,
+    proposedAt: "2026-11-10T15:05:56.000Z", jobId: "cycle-long-1", format: "long_form"
+  });
+  assert.equal(firstLong.valid, true, firstLong.errors.join("; "));
+  assert.equal(firstLong.expectedFormat, "long_form");
+  assert.equal(firstLong.cycleHistoryCount, 0);
+
+  const wrongFirstFormat = evaluateNextPublication({
+    history: [legacyShort], historyVerified: true, cycleStartAt,
+    proposedAt: "2026-11-10T15:05:56.000Z", jobId: "cycle-short-wrong", format: "short"
+  });
+  assert.equal(wrongFirstFormat.valid, false);
+  assert.equal(wrongFirstFormat.expectedFormat, "long_form");
+
+  const secondLong = evaluateNextPublication({
+    history: [legacyShort, {
+      id: "cycle-long-1", status: "private",
+      actualPublishedAt: "2026-11-10T15:05:56.000Z", format: "long_form"
+    }],
+    historyVerified: true, cycleStartAt,
+    proposedAt: "2026-11-13T15:05:56.000Z", jobId: "cycle-long-2", format: "long_form"
+  });
+  assert.equal(secondLong.valid, true, secondLong.errors.join("; "));
+  assert.equal(secondLong.expectedFormat, "long_form");
+  assert.equal(secondLong.cycleHistoryCount, 1);
+
+  const short = evaluateNextPublication({
+    history: [legacyShort,
+      { id: "cycle-long-1", status: "private", actualPublishedAt: "2026-11-10T15:05:56.000Z", format: "long_form" },
+      { id: "cycle-long-2", status: "private", actualPublishedAt: "2026-11-13T15:05:56.000Z", format: "long_form" }
+    ],
+    historyVerified: true, cycleStartAt,
+    proposedAt: "2026-11-16T15:05:56.000Z", jobId: "cycle-short-1", format: "short"
+  });
+  assert.equal(short.valid, true, short.errors.join("; "));
+  assert.equal(short.expectedFormat, "short");
+  assert.equal(short.cycleHistoryCount, 2);
+});
+
 test("rolling publication gate rejects channel history without a supported format classification", () => {
   const result = evaluateNextPublication({
     history: [{
