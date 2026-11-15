@@ -9,7 +9,8 @@ import { FACEBOOK_POLICY_RULE_VERSION } from "../scripts/facebook-policy-engine.
 function fixture() {
   const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-intake-"));
   const stateDir = path.join(rootDir, "durable-state");
-  fs.mkdirSync(stateDir);
+  fs.mkdirSync(stateDir, { mode: 0o700 });
+  if (process.platform !== "win32") fs.chmodSync(stateDir, 0o700);
   const configPath = path.join(rootDir, "config.json");
   const queuePath = "queue.json";
   const candidatePath = "candidates.json";
@@ -95,6 +96,22 @@ test("intake fails closed when the durable posting lock is already held", async 
     fs.writeFileSync(path.join(f.rootDir, f.candidatePath), "[]");
     fs.writeFileSync(path.join(f.stateDir, "facebook-publishing.lock"), JSON.stringify({ pid: 1, startedAt: "2026-10-24T10:00:00Z" }));
     await assert.rejects(() => runFacebookContentIntake({ ...f, rootDir: f.rootDir }), /EEXIST|file already exists/i);
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(f.rootDir, f.queuePath), "utf8")), []);
+  } finally { f.cleanup(); }
+});
+
+
+test("intake rejects a group/world-accessible durable state directory before acquiring a lock", async () => {
+  if (process.platform === "win32") return;
+  const f = fixture();
+  try {
+    fs.writeFileSync(path.join(f.rootDir, f.candidatePath), "[]");
+    fs.chmodSync(f.stateDir, 0o755);
+    await assert.rejects(
+      () => runFacebookContentIntake({ ...f, rootDir: f.rootDir }),
+      /permissions must be private/i
+    );
+    assert.equal(fs.existsSync(path.join(f.stateDir, "facebook-publishing.lock")), false);
     assert.deepEqual(JSON.parse(fs.readFileSync(path.join(f.rootDir, f.queuePath), "utf8")), []);
   } finally { f.cleanup(); }
 });
