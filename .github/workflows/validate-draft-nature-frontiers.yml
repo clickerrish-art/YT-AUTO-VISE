@@ -1,0 +1,32 @@
+name: Validate draft Nature Frontiers approval branch
+
+on:
+  push:
+    branches:
+      - codex/nature-frontiers-editorial-approval-gate-20261114
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  detect-draft-pr:
+    runs-on: ubuntu-latest
+    outputs:
+      is_draft: ${{ steps.lookup.outputs.is_draft }}
+    steps:
+      - name: Run validation only while the associated PR is a draft
+        id: lookup
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          is_draft="$(gh pr list --head "${GITHUB_REPOSITORY_OWNER}:${GITHUB_REF_NAME}" --state open --json isDraft --jq '.[0].isDraft // false')"
+          echo "is_draft=${is_draft}" >> "$GITHUB_OUTPUT"
+          echo "Associated PR draft state: ${is_draft}"
+
+  validate:
+    needs: detect-draft-pr
+    if: needs.detect-draft-pr.outputs.is_draft == 'true'
+    uses: ./.github/workflows/validate.yml
+    permissions:
+      contents: read
