@@ -133,7 +133,7 @@ export async function verifyMetaPagePermissions({
     // is never logged or placed in a URL.
     let directResponse;
     try {
-      const directQuery = new URLSearchParams({ fields: "id,name,access_token" });
+      const directQuery = new URLSearchParams({ fields: "id,name,tasks,access_token" });
       directResponse = await fetchImpl(endpoint(apiVersion, encodeURIComponent(pageId) + "?" + directQuery.toString()), {
         method: "GET", headers: headers(userAccessToken), redirect: "error", signal: AbortSignal.timeout(timeoutMs)
       });
@@ -148,11 +148,11 @@ export async function verifyMetaPagePermissions({
     if (directToken.length < 20) {
       throw new MetaPageApiError("Meta direct Page lookup did not return a usable Page access token for the configured Page");
     }
-    page = { id: directPage.id, name: directPage.name, access_token: directToken, tasks: [] };
+    page = { id: directPage.id, name: directPage.name, access_token: directToken, tasks: Array.isArray(directPage.tasks) ? directPage.tasks : [] };
     pageAccessMethod = "DIRECT_PAGE_NODE";
   }
   const tasks = Array.isArray(page.tasks) ? page.tasks : [];
-  if (pageAccessMethod === "MANAGED_PAGE_LIST" && !tasks.includes("CREATE_CONTENT") && !tasks.includes("MANAGE")) {
+  if (!tasks.includes("CREATE_CONTENT") && !tasks.includes("MANAGE")) {
     throw new MetaPageApiError("The authorized account lacks the CREATE_CONTENT or MANAGE task for this Page");
   }
   const returnedPageToken = typeof page.access_token === "string" ? page.access_token : "";
