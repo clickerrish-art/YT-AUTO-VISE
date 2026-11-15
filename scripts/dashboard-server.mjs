@@ -759,10 +759,10 @@ const server = http.createServer(async (req, res) => {
         return json(res, 200, {
           destination: "nature_frontiers_instagram",
           timezone: config.timezone,
-          accountConfigured: /^\\d{5,30}$/.test(String(config.instagramBusinessAccountId ?? "")),
+          accountConfigured: /^[0-9]{5,30}$/.test(String(config.instagramBusinessAccountId ?? "")),
           accountMatchesRuntime: Boolean(config.instagramBusinessAccountId) &&
             process.env.NATURE_FRONTIERS_INSTAGRAM_ACCOUNT_ID === config.instagramBusinessAccountId,
-          linkedPageConfigured: /^\\d{5,30}$/.test(String(config.facebookPageId ?? "")),
+          linkedPageConfigured: /^[0-9]{5,30}$/.test(String(config.facebookPageId ?? "")),
           linkedPageMatchesRuntime: Boolean(config.facebookPageId) &&
             process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID === config.facebookPageId,
           metaTokenConfigured: typeof process.env.META_USER_ACCESS_TOKEN === "string" && process.env.META_USER_ACCESS_TOKEN.length >= 20,
