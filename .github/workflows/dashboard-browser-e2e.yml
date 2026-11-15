@@ -5,6 +5,9 @@ on:
     branches: [codex/marketing-machine-audit-fixes]
     paths:
       - "browser-tests/**"
+      - "test/api-route-acceptance-matrix.test.mjs"
+      - "test/dashboard-api-auth-matrix.test.mjs"
+      - "docs/API_ROUTE_ACCEPTANCE_MATRIX.json"
       - "public/dashboard.html"
       - "scripts/dashboard-server.mjs"
       - "scripts/campaign-management.mjs"
