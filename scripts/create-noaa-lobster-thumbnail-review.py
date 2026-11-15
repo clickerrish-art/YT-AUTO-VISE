@@ -36,9 +36,25 @@ def run(args: list[str]) -> str:
         raise SystemExit(f"Command failed ({result.returncode}): {' '.join(args)}\n{result.stderr}")
     return result.stdout
 
+def assert_no_symlink_ancestors(path: Path) -> None:
+    current = path
+    while current == ROOT or ROOT in current.parents:
+        if current.exists() and current.is_symlink():
+            raise SystemExit(f"Refusing symlinked review path: {current}")
+        if current == ROOT:
+            break
+        current = current.parent
+
 def main() -> None:
+    assert_no_symlink_ancestors(SOURCE)
+    assert_no_symlink_ancestors(OUT_DIR)
     if not SOURCE.is_file():
         raise SystemExit(f"NOAA source artifact missing: {SOURCE}")
+    if SOURCE.is_symlink():
+        raise SystemExit("NOAA source artifact must be a regular file, not a symlink")
+    existing_outputs = [FRAME, OUTPUT, EVIDENCE]
+    if any(path.exists() or path.is_symlink() for path in existing_outputs):
+        raise SystemExit("Refusing to overwrite an existing review-only thumbnail artifact")
     source_hash = sha256(SOURCE)
     if source_hash != EXPECTED_SOURCE_SHA256:
         raise SystemExit(f"Source SHA-256 mismatch: {source_hash}")
@@ -101,6 +117,9 @@ def main() -> None:
         "schemaVersion": 1,
         "contentId": "SHORT-004-CALIFORNIA-SPINY-LOBSTER",
         "status": "REVIEW_ONLY_NOT_FOR_PUBLICATION",
+        "reviewStatus": "PENDING_HUMAN_REVIEW",
+        "humanReviewRequired": True,
+        "productionAsset": False,
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "source": {
             "title": "B-Roll: Spiny Lobsters in California's Channel Islands",
