@@ -90,7 +90,7 @@ test("Page Reel adapter rejects mismatched Page IDs, missing permission checks, 
 test("Page Reel adapter rejects upload URLs outside Meta's rupload host and path",async t=>{
   const {root,draft}=await fixture(t);
   await assert.rejects(()=>createMetaPageReel({
-    draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,permissionsVerified:true,
+    draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,permissionsVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,
     rootDir:root,inspect:()=>inspected,
     fetchImpl:async()=>response({video_id:VIDEO,upload_url:"https://attacker.example/video-upload/"+VIDEO})
   }),/outside the approved rupload host\/path/i);
@@ -100,7 +100,7 @@ test("Page Reel upload timeout retains remote video ID and is explicitly uncerta
   const {root,draft}=await fixture(t);
   let calls=0;
   await assert.rejects(()=>createMetaPageReel({
-    draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,permissionsVerified:true,
+    draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,permissionsVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,
     rootDir:root,inspect:()=>inspected,
     fetchImpl:async()=>{calls++;if(calls===1)return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO});throw new Error("network timeout");}
   }),error=>error instanceof MetaPageReelError && error.uncertain===true && error.remoteVideoId===VIDEO);
