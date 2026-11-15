@@ -60,6 +60,21 @@ The command checks the actual local bytes against both the register SHA-256 and 
 
 **Important:** this records visual inspection and claim assessment only. It does not assess or clear rights, grant final human approval, or permit scheduling/publication. Rights remain as-is and approval remains pending. A verified claim must have credible, relevant evidence; a URL alone is not proof that the evidence is authoritative. Never mark a claim verified based solely on a stock listing or filename.
 
+
+## API-independent rights review
+
+Rights review is recorded separately from visual inspection and owner approval. Prepare a review JSON file after checking the actual licence and all relevant third-party rights. The file must include the exact registered media SHA-256, a reviewer, timezone-qualified timestamp, HTTPS licence evidence, a complete five-part checklist, review notes and explicit permitted platform usage scopes.
+
+Checklist keys: `sourceLicenceReviewed`, `commercialUsePermitted`, `attributionRequirementsChecked`, `thirdPartyRightsChecked`, and `platformUseAndEditingRestrictionsChecked`. All must be true before rights can be marked cleared. If additional permissions are marked `obtained`, attach HTTPS evidence URLs. Never mark `not_required` unless the review establishes that no additional permission is needed.
+
+Run:
+
+```sh
+npm run nature-frontiers:review-rights -- nf-pex-giraffe-5220275 path/to/rights-review.json
+```
+
+Rights clearance is bound to the exact local file SHA-256 and permitted usage scopes. It does not approve the asset, mark it visually inspected, schedule it or publish it. Human approval must separately use a usage scope contained within the rights-cleared permittedUsage list.
+
 ## Safety invariants
 
 - New media defaults to held and pending.

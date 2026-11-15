@@ -79,6 +79,10 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
       if (typeof rights.reviewedBy !== "string" || !rights.reviewedBy.trim()) errors.push(at + " cleared rights require reviewedBy");
       if (!validTimestamp(rights.reviewedAt) || Date.parse(rights.reviewedAt) > now) errors.push(at + " cleared rights require a valid non-future timezone-qualified reviewedAt");
       if (!["not_required", "obtained"].includes(rights.additionalPermissionsStatus)) errors.push(at + " cleared rights require explicit resolution of additional permissions");
+      if (!Array.isArray(rights.permittedUsage) || rights.permittedUsage.length === 0 ||
+          rights.permittedUsage.some(scope => typeof scope !== "string" || !scope.trim())) {
+        errors.push(at + " cleared rights require explicit permittedUsage scopes");
+      }
     }
 
     const inspection = asset.inspection ?? {};
@@ -118,6 +122,11 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
       if (typeof approval.approvedBy !== "string" || !approval.approvedBy.trim()) errors.push(at + " approved status requires approvedBy");
       if (!validTimestamp(approval.approvedAt) || Date.parse(approval.approvedAt) > now) errors.push(at + " approved status requires a valid non-future timezone-qualified approvedAt");
       if (!Array.isArray(approval.approvedUsage) || approval.approvedUsage.length === 0) errors.push(at + " approval must state its permitted usage scope");
+      if (Array.isArray(rights.permittedUsage) &&
+          Array.isArray(approval.approvedUsage) &&
+          approval.approvedUsage.some(scope => !rights.permittedUsage.includes(scope))) {
+        errors.push(at + " approval usage exceeds the rights-cleared permittedUsage scope");
+      }
     }
     if (typeof asset.usage?.scheduled !== "boolean" || typeof asset.usage?.published !== "boolean" || !Array.isArray(asset.usage?.platformPostIds)) errors.push(at + " requires explicit usage booleans and platformPostIds");
     if (asset.usage?.scheduled === true || asset.usage?.published === true) {
