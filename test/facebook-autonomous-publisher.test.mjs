@@ -1319,3 +1319,57 @@ test("in-run reconciliation preserves a concurrent non-verified slot outcome", a
     assert.equal(JSON.parse(fs.readFileSync(f.queuePath, "utf8")).length, 1);
   } finally { f.cleanup(); }
 });
+
+
+test("ledger history rebuild preserves a concurrent non-verified slot outcome", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    const slotId = "nature-frontiers-ledger-rebuild-nonverified-race";
+    const payload = {
+      slotId, destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Verified ledger receipt with concurrent terminal history.", links: [], media: [], claims: []
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    const ledger = [{
+      kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId, destination: "nature_frontiers_facebook",
+      status: "SCHEDULED_VERIFIED", verifiedRemotely: true, retryAllowed: false,
+      remotePostId: "123456789012345_verified", startedAt: "2026-10-25T05:30:00.000Z",
+      scheduledAt: payload.scheduledAt
+    }];
+    const ledgerPath = path.join(f.stateDir, "facebook-attempt-ledger.json");
+    const historyPath = path.join(f.stateDir, "facebook-history.json");
+    fs.writeFileSync(ledgerPath, JSON.stringify(ledger));
+    const concurrentOutcome = {
+      slotId, destination: "nature_frontiers_facebook",
+      status: "SKIPPED_BLOCKED", reason: "operator terminal outcome"
+    };
+    const originalRead = fs.readFileSync;
+    const originalWrite = fs.writeFileSync;
+    let historyReads = 0;
+    try {
+      fs.readFileSync = function(file, ...args) {
+        if (file === historyPath && ++historyReads === 2) {
+          originalWrite(historyPath, JSON.stringify([concurrentOutcome]));
+        }
+        return originalRead.call(this, file, ...args);
+      };
+      await assert.rejects(() => runAutonomousFacebookPublisher({
+        rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath,
+        stateDir: f.stateDir, now: Date.parse("2026-10-25T05:30:00.000Z"),
+        env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+        publish: async () => { throw new Error("history rebuild conflict must block before new work"); }
+      }), /history changed during ledger recovery and contains a conflicting slot outcome/i);
+    } finally {
+      fs.readFileSync = originalRead;
+      fs.writeFileSync = originalWrite;
+    }
+    assert.equal(historyReads, 2);
+    assert.deepEqual(JSON.parse(originalRead(historyPath, "utf8")), [concurrentOutcome]);
+    assert.deepEqual(JSON.parse(originalRead(ledgerPath, "utf8")), ledger);
+    assert.deepEqual(JSON.parse(originalRead(f.queuePath, "utf8")), [payload]);
+  } finally { f.cleanup(); }
+});
