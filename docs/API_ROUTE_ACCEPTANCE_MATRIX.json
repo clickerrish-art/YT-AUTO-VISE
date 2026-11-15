@@ -3,7 +3,7 @@
   "generatedAt": "2026-11-16T18:00:00+02:00",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "34a153f6a3f12fdddabc0330c1814fcf9632d2b1",
+  "testedSourceTestSha": "31ceeaf61275af745e4e93c777698ad2362b2a17",
   "liveMainSha": "69fdf35c90f980c142be3aaffa863304bc7eaa25",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -26,12 +26,12 @@
   },
   "counts": {
     "routes": 48,
-    "authNegativePass": 46,
+    "authNegativePass": 48,
     "overallPass": 40,
     "overallNotTested": 2,
     "overallBlocked": 6,
     "authNegativePassHistorical": 45,
-    "authNegativePassCurrentHead": 46
+    "authNegativePassCurrentHead": 48
   },
   "evidence": {
     "authMatrix": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034162",
@@ -153,9 +153,14 @@
     "latestExactHeadDeploymentRecovery": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387826",
     "latestExactHeadIsolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387657",
     "latestExactHeadBranchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387613",
-    "latestExactHeadNatureFrontiersDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387616"
+    "latestExactHeadNatureFrontiersDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387616",
+    "latestExactHeadRouteAuthMatrix": {
+      "exactSha": "31ceeaf61275af745e4e93c777698ad2362b2a17",
+      "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43774065231",
+      "result": "PASS — 48/48 protected API routes reject missing and invalid operator credentials; full Node suite 894/894, zero skipped."
+    }
   },
-  "disclaimer": "This matrix is synchronized to dashboard-server.mjs and public/dashboard.html. The exact-head route-matrix test on 8daa78c0cdd25a2f08dd73310cae4a65c16b4279 verifies all 45 source-derived protected API method/path pairs appear exactly once, inventory and acceptance counts agree, and every route retains an authentication-negative PASS; see content-quality run 43385387665 (783 tests, zero skipped). Automation/security run 43385387638 passed 140/140 Node test files, 44 Python tests, zero skips and npm audit 0 vulnerabilities. These checks do not upgrade route acceptance: 37 routes remain PASS and 8 remain BLOCKED. Authentication-negative PASS does not imply authorized route success. External credentials, human approvals, genuine media/rights and deliberately disabled publishing remain separate gates.",
+  "disclaimer": "The route matrix is synchronized to the source-derived dashboard API inventory. On exact source/test SHA 31ceeaf61275af745e4e93c777698ad2362b2a17, the full Node regression suite passed 894/894 with zero skips, and all 48 protected API routes passed missing/invalid-credential rejection before route processing or mutation (Queue readiness run 43774065231). Route-level business acceptance remains distinct: 40 PASS, 2 NOT_TESTED and 6 BLOCKED. Authentication-negative PASS does not imply authorized business success. External credentials, human approvals, genuine media/rights and deliberately disabled publishing remain separate gates.",
   "routes": [
     {
       "method": "GET",
@@ -243,7 +248,7 @@
       "path": "/api/instagram/status",
       "classification": "Nature Frontiers Instagram operations status (authenticated, read-only)",
       "authRequired": "operator token",
-      "authenticationNegative": "NOT_TESTED — newly added status endpoint is included in the source-derived missing/invalid-credential matrix; exact-head CI result pending.",
+      "authenticationNegative": "PASS — exact source/test SHA 31ceeaf61275af745e4e93c777698ad2362b2a17: the full 894-test Node regression suite passed with zero failures and zero skips in Queue readiness run 43774065231. The source-derived negative-auth matrix verified missing and invalid operator credentials for all 48 protected API routes before route processing or mutation.",
       "authorizedSuccess": "NOT_TESTED — dashboard status integration test is included in the updated Instagram safety workflow; exact-head CI result pending.",
       "inputValidation": "NOT_TESTED — safe configuration and persisted-state parsing are covered by the route integration test; exact-head CI result pending.",
       "durablePersistence": "NOT_APPLICABLE — read-only status endpoint does not mutate persistent state.",
@@ -429,7 +434,7 @@
       "path": "/api/nature-frontiers/media-register",
       "classification": "Nature Frontiers provider-independent media register (read-only)",
       "authRequired": "operator token",
-      "authenticationNegative": "NOT_TESTED — added to the source-derived route inventory; exact-head missing/invalid-credential execution is pending.",
+      "authenticationNegative": "PASS — exact source/test SHA 31ceeaf61275af745e4e93c777698ad2362b2a17: the full 894-test Node regression suite passed with zero failures and zero skips in Queue readiness run 43774065231. The source-derived negative-auth matrix verified missing and invalid operator credentials for all 48 protected API routes before route processing or mutation.",
       "authorizedSuccess": "NOT_TESTED — authenticated integration coverage exists in test/nature-frontiers-media-register-api.test.mjs; exact-head CI result pending.",
       "inputValidation": "PASS — register is parsed and validated with validateMediaRegister; malformed/unavailable register returns a safe server error.",
       "durablePersistence": "NOT_APPLICABLE — read-only register is sourced from the checked-in provider-independent JSON register.",
