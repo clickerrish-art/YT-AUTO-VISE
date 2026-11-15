@@ -50,7 +50,7 @@ test("uncertain image publish preserves the container ID and never retries",asyn
 
 test("image reconciliation confirms only exact IMAGE FEED media",async()=>{
  const result=await reconcileInstagramImagePost({mediaId:"123456789012347",instagramAccountId:account,expectedInstagramAccountId:account,accessToken:token,
-  fetchImpl:async()=>ok({id:"123456789012347",media_type:"IMAGE",media_product_type:"FEED",permalink:"https://www.instagram.com/p/abc/"})});
+  fetchImpl:async()=>ok({id:"123456789012347",media_type:"IMAGE",media_product_type:"FEED",permalink:"https://www.instagram.com/p/abc/",timestamp:"2026-11-15T10:00:00+0000"})});
  assert.equal(result.outcome,"CONFIRMED");
 });
 
