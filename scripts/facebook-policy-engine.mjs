@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 
 export const FACEBOOK_POLICY_RULE_VERSION = "nf-facebook-autonomous-policy-2026-10-v3";
 export const APPROVED_SELLAR_URL = "https://selar.com/0u19v8u99l";
@@ -97,6 +98,65 @@ function fingerprint(payload) {
   }));
 }
 
+function approvalBody(approval) {
+  return {
+    decision: approval.decision,
+    reviewer: approval.reviewer,
+    reason: approval.reason,
+    reviewedAt: approval.reviewedAt,
+    contentFingerprint: approval.contentFingerprint,
+    policyRuleVersion: approval.policyRuleVersion
+  };
+}
+
+export function createFacebookAutonomousApprovalReceipt(payload, {
+  reviewer, reason, secret, now = new Date().toISOString()
+} = {}) {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) throw new Error("Exact final Facebook payload is required for approval");
+  if (typeof secret !== "string" || Buffer.byteLength(secret, "utf8") < 32) throw new Error("FACEBOOK_APPROVAL_HMAC_SECRET must contain at least 32 bytes");
+  if (!text(reviewer) || reviewer.trim().length < 2 || reviewer.length > 120) throw new Error("Authenticated human reviewer identity is required");
+  if (!text(reason) || reason.trim().length < 3 || reason.length > 1000) throw new Error("Human approval reason is required");
+  if (!isValidZonedIsoTimestamp(now)) throw new Error("Approval timestamp must be a valid ISO timestamp with explicit timezone");
+  const body = {
+    decision: "APPROVE",
+    reviewer: reviewer.trim(),
+    reason: reason.trim(),
+    reviewedAt: now,
+    contentFingerprint: fingerprint(payload),
+    policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION
+  };
+  const signature = crypto.createHmac("sha256", secret).update(JSON.stringify(body)).digest("hex");
+  return Object.freeze({ ...body, signature });
+}
+
+export function verifyFacebookAutonomousApprovalReceipt(payload, {
+  secret, now = new Date().toISOString()
+} = {}) {
+  const errors = [];
+  const approval = payload?.approval;
+  if (!approval || typeof approval !== "object" || Array.isArray(approval)) {
+    return { valid: false, errors: ["A signed human approval receipt is required for autonomous publishing"], contentFingerprint: fingerprint(payload) };
+  }
+  if (approval.decision !== "APPROVE") errors.push("Human approval receipt decision must be APPROVE");
+  if (!text(approval.reviewer) || approval.reviewer.trim().length < 2 || approval.reviewer.length > 120) errors.push("Human approval receipt reviewer is missing or invalid");
+  if (!text(approval.reason) || approval.reason.trim().length < 3 || approval.reason.length > 1000) errors.push("Human approval receipt reason is missing or invalid");
+  if (!isValidZonedIsoTimestamp(approval.reviewedAt)) errors.push("Human approval receipt timestamp is invalid");
+  else if (isValidZonedIsoTimestamp(now) && Date.parse(approval.reviewedAt) > Date.parse(now) + 5 * 60_000) errors.push("Human approval receipt cannot be future-dated");
+  const currentFingerprint = fingerprint(payload);
+  if (approval.contentFingerprint !== currentFingerprint) errors.push("Human approval receipt does not bind the exact current final payload");
+  if (approval.policyRuleVersion !== FACEBOOK_POLICY_RULE_VERSION) errors.push("Human approval receipt was created for a different policy version");
+  if (typeof secret !== "string" || Buffer.byteLength(secret, "utf8") < 32) {
+    errors.push("FACEBOOK_APPROVAL_HMAC_SECRET is missing or too short");
+  } else if (typeof approval.signature !== "string" || !/^[a-f0-9]{64}$/.test(approval.signature)) {
+    errors.push("Human approval receipt signature is missing or malformed");
+  } else {
+    const expected = crypto.createHmac("sha256", secret).update(JSON.stringify(approvalBody(approval))).digest();
+    const supplied = Buffer.from(approval.signature, "hex");
+    if (supplied.length !== expected.length || !crypto.timingSafeEqual(supplied, expected)) errors.push("Human approval receipt signature is invalid");
+  }
+  return { valid: errors.length === 0, errors, contentFingerprint: currentFingerprint };
+}
+
 /**
  * Fail-closed, deterministic gate for the exact final Facebook payload.
  * Source verification is deliberately injectable; a URL alone is never treated as evidence.
@@ -116,7 +176,8 @@ export async function evaluateFinalFacebookPayload(payload, {
   minimumIntervalMinutes = 60 * 20,
   timezone = "Africa/Johannesburg",
   sourceTimeoutMs = 8000,
-  semanticVerifier = null
+  semanticVerifier = null,
+  approvalSecret = process.env.FACEBOOK_APPROVAL_HMAC_SECRET
 } = {}) {
   const blockers = [], warnings = [], sourceChecks = [], rightsChecks = [], disclosureChecks = [], destinationChecks = [];
   const add = (list, reason) => { if (!list.includes(reason)) list.push(reason); };
@@ -131,7 +192,9 @@ export async function evaluateFinalFacebookPayload(payload, {
   if (!text(payload.slotId)) add(blockers, "A durable intended slot ID is required for idempotency");
   if (!/^\d{5,30}$/.test(String(payload.destinationPageId ?? "")) || payload.destinationPageId !== expectedPageId) add(blockers, "Exact Nature Frontiers Page ID is not verified or does not match the configured destination");
   if (payload.destination !== "nature_frontiers_facebook") add(blockers, "Destination separation check failed");
-  if (payload.requiresHumanApproval === true || payload.approvalRequired === true) add(blockers, "Routine publishing payload must not depend on per-post approval");
+  if (payload.requiresHumanApproval === true || payload.approvalRequired === true) add(blockers, "Payload is still marked as requiring human approval; complete review before it enters the autonomous queue");
+  const approvalCheck = verifyFacebookAutonomousApprovalReceipt(payload, { secret: approvalSecret, now });
+  for (const error of approvalCheck.errors) add(blockers, error);
   if (/(like and share|share this to win|comment yes|tag \d+ friends|share to save|react now|comment below to get|share to unlock)/i.test(payload.caption ?? "")) add(blockers, "Engagement bait detected");
   if (/(graphic injury|animal cruelty|staged animal fight|bait(?:ing)? wildlife|chase wildlife|touch wild animals|provoke wildlife|bloodied carcass)/i.test(payload.caption ?? "")) add(blockers, "Wildlife welfare or graphic-content rule triggered");
   if (/(guaranteed earnings|guaranteed returns|miracle cure|100% proven|exclusive rescue footage|I rescued|we rescued)/i.test(payload.caption ?? "")) add(blockers, "Unsupported certainty, fabricated-experience risk, or high-impact claim detected");
