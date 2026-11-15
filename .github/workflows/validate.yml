@@ -98,3 +98,19 @@ jobs:
             exit 1
           fi
           echo "PASS: unreviewed asset register example remains blocked."
+
+  windows-signer:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      - name: Exercise DPAPI signer and ACL handling on Windows
+        shell: powershell
+        run: .\test\approve-facebook-candidate.ps1
