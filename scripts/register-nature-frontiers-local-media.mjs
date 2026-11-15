@@ -2,13 +2,36 @@
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
 import { validateMediaRegister } from "./validate-nature-frontiers-media-register.mjs";
 
 const DEFAULT_REGISTER = "content/nature-frontiers-media-register.json";
 const MEDIA_ROOT = "media/nature-frontiers";
 
-export function registerLocalMedia({ register, assetId, filePath, root = process.cwd() }) {
+export function extractVideoTechnicalMetadata(filePath, { probeExecutable = process.env.FFPROBE_PATH || "ffprobe", run = execFileSync } = {}) {
+  let output;
+  try {
+    output = run(probeExecutable, ["-v", "error", "-show_entries", "format=duration:stream=codec_type,codec_name,width,height,avg_frame_rate", "-of", "json", filePath], { encoding: "utf8", timeout: 15000, maxBuffer: 1024 * 1024, windowsHide: true });
+  } catch (error) { throw new Error("ffprobe failed: " + error.message); }
+  let parsed;
+  try { parsed = JSON.parse(output); } catch { throw new Error("ffprobe returned invalid JSON"); }
+  const streams = Array.isArray(parsed.streams) ? parsed.streams : [];
+  const video = streams.find(stream => stream?.codec_type === "video");
+  if (!video) throw new Error("ffprobe found no video stream");
+  const durationSeconds = Number(parsed.format?.duration);
+  const width = Number(video.width);
+  const height = Number(video.height);
+  const [numerator, denominator] = String(video.avg_frame_rate ?? "").split("/").map(Number);
+  const frameRate = denominator > 0 ? numerator / denominator : NaN;
+  if (!Number.isFinite(durationSeconds) || durationSeconds <= 0 || !Number.isInteger(width) || width <= 0 || !Number.isInteger(height) || height <= 0 || !Number.isFinite(frameRate) || frameRate <= 0 || typeof video.codec_name !== "string" || !video.codec_name) {
+    throw new Error("ffprobe metadata is incomplete or invalid");
+  }
+  const audio = streams.find(stream => stream?.codec_type === "audio");
+  return { extractor: "ffprobe", durationSeconds, width, height, frameRate, videoCodec: video.codec_name, audioCodec: typeof audio?.codec_name === "string" ? audio.codec_name : null };
+}
+
+export function registerLocalMedia({ register, assetId, filePath, root = process.cwd(), technicalMetadata = null }) {
   if (!register || !Array.isArray(register.assets)) throw new Error("register.assets must be an array");
   if (typeof assetId !== "string" || !assetId.trim()) throw new Error("assetId is required");
   if (typeof filePath !== "string" || !filePath.trim()) throw new Error("filePath is required");
@@ -42,6 +65,10 @@ export function registerLocalMedia({ register, assetId, filePath, root = process
   const relativePath = path.relative(absoluteRoot, absoluteFile).split(path.sep).join("/");
   asset.localFile = { path: relativePath, sha256, byteSize: stat.size };
   asset.media = { ...(asset.media ?? {}), sha256, byteSize: stat.size };
+  if (technicalMetadata !== null) {
+    if (!technicalMetadata || technicalMetadata.extractor !== "ffprobe") throw new Error("technicalMetadata must be extracted by ffprobe");
+    asset.media.technical = structuredClone(technicalMetadata);
+  }
   // A new file is evidence of possession and integrity only, never visual inspection or rights clearance.
   asset.inspection = { ...(asset.inspection ?? {}), status: "not_inspected", inspectedBy: null, inspectedAt: null, visualNotes: "" };
   asset.rights = { ...(asset.rights ?? {}), reviewStatus: "not_assessed", additionalPermissionsStatus: "not_assessed", reviewedBy: null, reviewedAt: null };
@@ -58,18 +85,23 @@ export function persistRegister(registerPath, register) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
-  const [assetId, filePath, registerPath = DEFAULT_REGISTER] = process.argv.slice(2);
+  const args = process.argv.slice(2);
+  const probeRequested = args.includes("--probe");
+  const positional = args.filter(arg => arg !== "--probe");
+  const [assetId, filePath, registerPath = DEFAULT_REGISTER] = positional;
   if (!assetId || !filePath) {
-    console.error("Usage: node scripts/register-nature-frontiers-local-media.mjs <asset-id> <media/nature-frontiers/file> [register.json]");
+    console.error("Usage: node scripts/register-nature-frontiers-local-media.mjs <asset-id> <media/nature-frontiers/file> [register.json] [--probe]");
     process.exit(2);
   }
   try {
     const register = JSON.parse(fs.readFileSync(registerPath, "utf8"));
-    const result = registerLocalMedia({ register, assetId, filePath });
+  const technicalMetadata = probeRequested ? extractVideoTechnicalMetadata(path.resolve(filePath)) : null;
+    const result = registerLocalMedia({ register, assetId, filePath, technicalMetadata });
     const validationErrors = validateMediaRegister(register);
     if (validationErrors.length) throw new Error("register validation failed: " + validationErrors.join("; "));
     persistRegister(registerPath, register);
-    console.log(`PASS: recorded local file integrity for ${result.assetId}: ${result.path} (${result.byteSize} bytes, SHA-256 ${result.sha256}). Inspection, rights and approval remain pending.`);
+    const technical = technicalMetadata ? " ffprobe: " + technicalMetadata.width + "x" + technicalMetadata.height + ", " + technicalMetadata.durationSeconds + "s, " + technicalMetadata.frameRate + "fps." : "";
+    console.log("PASS: recorded local file integrity for " + result.assetId + ": " + result.path + " (" + result.byteSize + " bytes, SHA-256 " + result.sha256 + ")." + technical + " Inspection, rights and approval remain pending.");
   } catch (error) {
     console.error("FAIL: " + error.message);
     process.exitCode = 1;
