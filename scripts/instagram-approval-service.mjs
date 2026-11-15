@@ -1,5 +1,5 @@
 import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
-import { evaluateFinalFacebookPayload } from "./facebook-policy-engine.mjs";
+import { evaluateFinalFacebookPayload, verifyFacebookAutonomousApprovalReceipt } from "./facebook-policy-engine.mjs";
 import { createInstagramApprovalReceipt } from "./instagram-autonomous-publisher.mjs";
 
 const ID=/^\d{5,30}$/;
@@ -36,6 +36,8 @@ export async function approveInstagramCandidate({
    blockers.push("PUBLIC_FEED_IMAGE_MUST_USE_AN_ALLOWLISTED_HTTPS_HOST");
  }
  if(blockers.length) return {approved:false,blockers};
+ const sourceApproval=verifyFacebookAutonomousApprovalReceipt(payload.sourcePayload,{secret:env.FACEBOOK_APPROVAL_HMAC_SECRET,now});
+ if(!sourceApproval.valid) return {approved:false,blockers:["FACEBOOK_SOURCE_HUMAN_APPROVAL_SIGNATURE_INVALID"],approvalErrors:sourceApproval.errors};
  const policy=await policyEvaluator(payload.sourcePayload,{
   expectedPageId:config.facebookPageId,expectedPageName:config.facebookPageName??"Nature Frontiers SA",
   history:[],evidenceRoot,now,timezone:config.timezone,
