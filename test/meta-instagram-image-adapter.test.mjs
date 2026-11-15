@@ -53,3 +53,31 @@ test("image reconciliation confirms only exact IMAGE FEED media",async()=>{
   fetchImpl:async()=>ok({id:"123456789012347",media_type:"IMAGE",media_product_type:"FEED",permalink:"https://www.instagram.com/p/abc/"})});
  assert.equal(result.outcome,"CONFIRMED");
 });
+
+test("publication read-back rejects foreign hosts, non-feed paths and missing or malformed timestamps",async()=>{
+ const invalid=[
+  {id:"123456789012347",media_type:"IMAGE",media_product_type:"FEED",permalink:"https://evil.example/p/abc/",timestamp:"2026-11-15T10:00:00+0000"},
+  {id:"123456789012347",media_type:"IMAGE",media_product_type:"FEED",permalink:"https://www.instagram.com/reel/abc/",timestamp:"2026-11-15T10:00:00+0000"},
+  {id:"123456789012347",media_type:"IMAGE",media_product_type:"FEED",permalink:"https://www.instagram.com/p/abc/",timestamp:null},
+  {id:"123456789012347",media_type:"IMAGE",media_product_type:"FEED",permalink:"https://www.instagram.com/p/abc/",timestamp:"not-a-time"}
+ ];
+ for(const data of invalid) {
+  await assert.rejects(()=>run(async(url,options={})=>{
+   if(String(url)===draft.media.url)return ok({});
+   if(String(url).endsWith("/media")&&options.method==="POST")return ok({id:"123456789012346"});
+   if(String(url).includes("status_code"))return ok({id:"123456789012346",status_code:"FINISHED"});
+   if(String(url).endsWith("/media_publish"))return ok({id:"123456789012347"});
+   if(String(url).includes("media_product_type"))return ok(data);
+   throw new Error("unexpected endpoint "+url);
+  }),error=>error instanceof InstagramImageError&&error.uncertain&&error.mediaId==="123456789012347");
+ }
+});
+test("reconciliation rejects foreign permalinks and invalid publication timestamps",async()=>{
+ for(const data of [
+  {id:"123456789012347",media_type:"IMAGE",media_product_type:"FEED",permalink:"https://evil.example/p/abc/",timestamp:"2026-11-15T10:00:00+0000"},
+  {id:"123456789012347",media_type:"IMAGE",media_product_type:"FEED",permalink:"https://www.instagram.com/p/abc/",timestamp:null}
+ ]) {
+  const result=await reconcileInstagramImagePost({mediaId:"123456789012347",instagramAccountId:account,expectedInstagramAccountId:account,accessToken:token,fetchImpl:async()=>ok(data)});
+  assert.equal(result.outcome,"UNRESOLVED");
+ }
+});
