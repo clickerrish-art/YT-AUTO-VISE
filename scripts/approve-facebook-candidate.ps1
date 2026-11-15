@@ -57,6 +57,14 @@ if ($PSVersionTable.PSVersion.Major -lt 5) {
 
 if ($InitializeSecret) {
     New-Item -ItemType Directory -Path $secretDirectory -Force | Out-Null
+    if ((Get-Item -LiteralPath $secretDirectory -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+        throw "The local secret directory must not be a symbolic link or reparse point."
+    }
+    if (Test-Path -LiteralPath $secretFile) {
+        if ((Get-Item -LiteralPath $secretFile -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+            throw "The local secret file must not be a symbolic link or reparse point."
+        }
+    }
     Set-CurrentUserOnlyAcl -Path $secretDirectory -Directory
     $secureSecret = Read-Host "Enter the existing FACEBOOK_APPROVAL_HMAC_SECRET (input is hidden)" -AsSecureString
     $bstr = [IntPtr]::Zero
@@ -84,6 +92,12 @@ if ($InitializeSecret) {
 
 if (-not (Test-Path -LiteralPath $secretFile -PathType Leaf)) {
     throw "No local signer secret is configured. Run this script once with -InitializeSecret first."
+}
+if ((Get-Item -LiteralPath $secretDirectory -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+    throw "The local secret directory must not be a symbolic link or reparse point."
+}
+if ((Get-Item -LiteralPath $secretFile -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+    throw "The local secret file must not be a symbolic link or reparse point."
 }
 if ([string]::IsNullOrWhiteSpace($SlotId)) {
     throw "Supply the exact candidate slot ID with -SlotId."
