@@ -27,9 +27,9 @@
   "counts": {
     "routes": 45,
     "authNegativePass": 45,
-    "overallPass": 38,
+    "overallPass": 40,
     "overallNotTested": 0,
-    "overallBlocked": 7,
+    "overallBlocked": 5,
     "authNegativePassHistorical": 45,
     "authNegativePassCurrentHead": 45
   },
@@ -187,48 +187,49 @@
       "path": "/api/state/backup",
       "classification": "Cloudflare durable-state backup creation",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
-      "authorizedSuccess": "BLOCKED — staging infrastructure is provisioned, but the Node dashboard cannot complete an authenticated end-to-end call in CI without DASHBOARD_STATE_API_URL, DASHBOARD_STATE_OPERATOR_TOKEN and Cloudflare Access service-token credentials.",
-      "inputValidation": "NOT_APPLICABLE — route has no caller-supplied body; the no-configuration 503/no-local-mutation guard is covered by the exact-SHA integration test.",
-      "durablePersistence": "BLOCKED — staging D1 has an initialized revision-1 snapshot and backup; route-level live read/write/backup/restore through the Node dashboard remains unverified.",
-      "auditEvidence": "NOT_TESTED.",
-      "concurrency": "NOT_TESTED.",
-      "restartRecovery": "NOT_TESTED.",
-      "externalOperation": "Cloudflare Access and authenticated Node-to-Worker read paths are now verified. POST backup/restore remain blocked until a separately authorized, one-time staging backup/restore cycle is executed and verified.",
-      "overallAcceptance": "BLOCKED",
-      "notes": "The current exact-candidate staging smoke proves Node dashboard authentication and read-only Cloudflare-backed state/backup listing, but deliberately performs no writes. The POST operation is not claimed PASS; it requires an isolated one-time staging backup/restore cycle with verified pre/post state and restart durability.",
+      "authenticationNegative": "PASS — full authenticated-route negative matrix 45/45 on exact source candidate cabd871847f14b6667adb43af1dbacaaa81f35b2; missing and invalid operator credentials are rejected before route processing or mutation.",
+      "authorizedSuccess": "PASS — one-time staging drill 43701290286 created a backup through the real Node dashboard POST /api/state/backup and received HTTP 201 with backupId, sourceRevision 2, SHA-256 and timestamp.",
+      "inputValidation": "NOT_APPLICABLE — backup creation accepts no caller-supplied body; authentication and remote configuration guards are covered by exact-candidate integration tests.",
+      "durablePersistence": "PASS — the explicit backup remained in the Cloudflare D1 backup inventory after restore and Node dashboard restart; the automatic pre-restore backup was also retained.",
+      "auditEvidence": "PASS — durable backup metadata records backup ID, source revision, SHA-256, created_at and OPERATOR_REQUESTED actor reason.",
+      "concurrency": "NOT_APPLICABLE — backup creation is append-only and does not advance or overwrite the dashboard state revision.",
+      "restartRecovery": "PASS — after restore, the Node dashboard was stopped and restarted with the same state directory; the explicit backup and automatic pre-restore backup remained visible.",
+      "externalOperation": "PASS — live Cloudflare Access-authenticated Node dashboard successfully wrote and read the staging D1 backup inventory.",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-candidate one-time staging drill 43701290286 (commit 41bd4de95d876c9778a4993a0e67ac207d1379ff) passed. The Node dashboard created an explicit backup at source revision 2; the backup's ID, SHA-256, timestamp and actor reason were verified; the backup remained visible after restore and restart. The Worker also retained its automatic pre-restore backup. No content jobs were present and publishing remained disabled.",
       "testEvidence": {
-        "test": "test/dashboard-cloudflare-state.integration.test.mjs",
-        "exactTestedSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387665",
-        "scenario": "Exact-SHA content-quality suite includes the authenticated integration test: all three state routes return 503 without remote configuration and leave local state byte-identical; invalid and stale restore payloads never reach the remote restore endpoint."
+        "test": "scripts/cloudflare-staging-backup-restore-smoke.mjs",
+        "exactTestedSha": "41bd4de95d876c9778a4993a0e67ac207d1379ff",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43701290286",
+        "scenario": "Real Node dashboard POST /api/state/backup returned HTTP 201; explicit backup was retained in D1 after restore and restart; automatic pre-restore backup was also retained; final backup inventory contained five records."
       },
-      "lastVerifiedOverallAcceptance": "BLOCKED",
-      "currentHeadStatus": "BLOCKED"
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS"
     },
     {
       "method": "POST",
       "path": "/api/state/restore",
       "classification": "Cloudflare durable-state backup restore",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
-      "authorizedSuccess": "BLOCKED — staging infrastructure is provisioned, but the Node dashboard cannot complete an authenticated end-to-end call in CI without DASHBOARD_STATE_API_URL, DASHBOARD_STATE_OPERATOR_TOKEN and Cloudflare Access service-token credentials.",
-      "inputValidation": "PASS — exact-SHA integration rejects missing confirmation, blank backupId, non-positive/fractional/string expectedRevision and stale revision before any remote restore request; unconfigured service returns 503.",
-      "durablePersistence": "BLOCKED — staging D1 has an initialized revision-1 snapshot and backup; route-level live read/write/backup/restore through the Node dashboard remains unverified.",
-      "auditEvidence": "NOT_TESTED.",
-      "concurrency": "NOT_TESTED.",
-      "restartRecovery": "NOT_TESTED.",
-      "externalOperation": "Cloudflare Access and authenticated Node-to-Worker read paths are now verified. POST backup/restore remain blocked until a separately authorized, one-time staging backup/restore cycle is executed and verified.",
-      "overallAcceptance": "BLOCKED",
-      "notes": "The current exact-candidate staging smoke proves Node dashboard authentication and read-only Cloudflare-backed state/backup listing, but deliberately performs no writes. The POST operation is not claimed PASS; it requires an isolated one-time staging backup/restore cycle with verified pre/post state and restart durability.",
+      "authenticationNegative": "PASS — full authenticated-route negative matrix 45/45 on exact source candidate cabd871847f14b6667adb43af1dbacaaa81f35b2; missing and invalid operator credentials are rejected before route processing or mutation.",
+      "authorizedSuccess": "PASS — one-time staging drill 43701290286 restored the exact pre-test snapshot through the real Node dashboard POST /api/state/restore with explicit confirmRestore=true; D1 revision advanced monotonically from 2 to 3.",
+      "inputValidation": "PASS — test/dashboard-cloudflare-state.integration.test.mjs rejects missing confirmation, blank backup ID, non-positive/fractional/string expectedRevision and stale revision before any remote restore request; the live drill exercised the valid confirmed path.",
+      "durablePersistence": "PASS — Cloudflare D1 persisted revision 3 and the restored state; explicit and automatic pre-restore backups remained retained.",
+      "auditEvidence": "PASS — D1 state contains a DASHBOARD_STATE_RESTORED audit receipt naming the exact backup ID; the drill verified the receipt and exact state restoration.",
+      "concurrency": "PASS — restore is compare-and-swap protected by expectedRevision; exact-candidate tests reject stale revisions before remote mutation, and the live restore advanced revision exactly once.",
+      "restartRecovery": "PASS — after restore, the Node dashboard was stopped and restarted; it recovered revision 3 and the five-record backup inventory, and the remote state remained byte-identical after restart.",
+      "externalOperation": "PASS — live Cloudflare Access-authenticated Node dashboard successfully executed the D1 restore operation; no production content or publishing was touched.",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-candidate one-time staging drill 43701290286 passed. Starting revision 2; the Node dashboard created an explicit backup, then restored that exact backup with confirmRestore=true. Cloudflare D1 advanced to revision 3, retained the explicit and automatic pre-restore backups (five total), and appended DASHBOARD_STATE_RESTORED with the exact backup ID. The restored state matched the pre-test snapshot except for the single restore audit receipt. A fresh Node dashboard process recovered revision 3 and the backup inventory; remote state remained stable. Publishing stayed disabled and jobs remained zero.",
       "testEvidence": {
-        "test": "test/dashboard-cloudflare-state.integration.test.mjs",
-        "exactTestedSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387665",
-        "scenario": "Exact-SHA content-quality suite includes the authenticated integration test: all three state routes return 503 without remote configuration and leave local state byte-identical; invalid and stale restore payloads never reach the remote restore endpoint."
+        "test": "scripts/cloudflare-staging-backup-restore-smoke.mjs and test/dashboard-cloudflare-state.integration.test.mjs",
+        "exactTestedSha": "41bd4de95d876c9778a4993a0e67ac207d1379ff",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43701290286",
+        "unitCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43700604234",
+        "scenario": "Live Node dashboard backup/restore; explicit confirmation, revision-checked restore, exact state preservation plus one audit receipt, automatic pre-restore backup, Node restart recovery and stable remote D1 state."
       },
-      "lastVerifiedOverallAcceptance": "BLOCKED",
-      "currentHeadStatus": "BLOCKED"
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS"
     },
     {
       "method": "GET",
@@ -1432,17 +1433,14 @@
     "note": "Read-only inventory export is implemented; no channel history was authenticated or reconciled because Google rejected the configured OAuth client pair."
   },
   "latestExactCiCheckpoint": {
-    "recordedAt": "2026-11-15T11:48:00+02:00",
+    "recordedAt": "2026-11-15T11:52:30+02:00",
     "exactSourceTestSha": "cabd871847f14b6667adb43af1dbacaaa81f35b2",
-    "branchHeadSha": "dba1b095300ab05833b485aa607385f6231955e8",
+    "stagingWriteTestSha": "41bd4de95d876c9778a4993a0e67ac207d1379ff",
     "automationSecurity": "PASS — 141/141 Node test files, 44 Python tests, zero skips, npm audit 0 vulnerabilities; workflow 43700604234.",
-    "cloudflareStagingSmoke": "PASS — workflow 43700604171; Access service token, state read, backup list, Node dashboard integration and remote-state-unchanged checks.",
-    "contentQuality": "Earlier exact-source workflow 43698639433 passed; current 43700604234 also reran all Node/Python tests.",
-    "dashboardBrowser": "Earlier exact-source workflow 43698639466 passed 29/29 Chromium journeys; current dashboard source unchanged.",
-    "queueReadiness": "Earlier exact-source workflow 43698639332 passed 16 held items and rolling 72-hour policy.",
-    "cloudflareDurableState": "Earlier exact-source workflow 43698639522 passed 9/9 Worker unit tests; current staging smoke adds live read-only Node integration.",
-    "deploymentRecovery": "Earlier exact-source workflow 43698639458 passed 2/2 rollback/recovery tests.",
-    "productionReadiness": "HOLD — valid YouTube OAuth, complete remote history and production media/rights/review remain absent.",
+    "cloudflareStagingReadOnly": "PASS — workflow 43700604171; Access, Node state read, backup listing, remote state unchanged.",
+    "cloudflareStagingBackupRestore": "PASS — workflow 43701290286; revision 2→3, explicit and automatic backups retained, restore audit receipt, exact pre-test state preserved, Node restart recovery, remote state stable.",
+    "cloudflareDurableState": "PASS — live Node-to-Worker state/backup/restore and restart verified; local failure-injection and multiprocess tests passed in the exact-candidate Node suite.",
+    "productionReadiness": "HOLD — valid YouTube OAuth, complete remote history and genuine production media/rights/review remain absent.",
     "metaPageIdentity": "BLOCKED — configured Page is absent from authenticated /me/accounts managed-Page list."
   },
   "cloudflareStagingInfrastructure": {
@@ -1454,7 +1452,7 @@
     "recoveredSourceSnapshotCommit": "a93b649d4a5f8f4e516b93d1fd3192173eef8949",
     "d1ApplicationTables": 6,
     "state": {
-      "revision": 2,
+      "revision": 3,
       "updatedAt": "2026-11-08T00:00:00.000Z",
       "queueItems": 16,
       "jobs": 0,
@@ -1463,15 +1461,15 @@
       "campaigns": 2,
       "publishingEnabled": false
     },
-    "backups": 3,
+    "backups": 5,
     "backupIntegrity": "PASS — stored SHA-256 matches backup bytes and backup bytes match current state",
     "runnerStates": 0,
     "artifactRecords": 0,
     "accessApplication": "SonicVhibez Dashboard Staging",
     "accessPolicy": "email operator allow policy plus GitHub Actions staging service-token non_identity allow policy",
     "accessServiceTokens": 1,
-    "nodeRuntimeIntegration": "PARTIAL PASS — authenticated read-only Node dashboard integration succeeds for GET /api/state and GET /api/state/backups; remote state remains unchanged. POST backup and POST restore through Node remain untested.",
-    "classification": "Staging Worker, D1/R2 bindings, Access service token and read-only Node-to-Worker integration PASS. Backup/restore writes, Node restart durability after restore and full state acceptance remain NOT_TESTED.",
+    "nodeRuntimeIntegration": "PASS — authenticated Node dashboard state read, backup list, explicit backup creation, confirmed restore, and restart recovery all passed against the staging Worker/D1.",
+    "classification": "Cloudflare staging state acceptance PASS: authenticated Node dashboard reads, explicit D1 backup, confirmed D1 restore, audit receipt, automatic pre-restore backup and restart durability all verified. No production content was published or modified.",
     "accessApplicationId": "3fe39768-37e9-4471-8eaf-a00d1c62d54a",
     "accessServiceTokenName": "SonicVhibez-GitHub-Staging",
     "accessServiceTokenEnabled": true,
@@ -1501,7 +1499,21 @@
       }
     ],
     "sourceSnapshotComparison": "PASS — all eight deployed modules (worker.js and seven compatibility modules) are byte-identical to cloudflare/staging-snapshot/* at exact candidate dba1b095300ab05833b485aa607385f6231955e8.",
-    "rootWorkerDeploymentSafety": "Do not deploy the separate 12KB cloudflare/worker.js over this 108KB deployed main module; it is not a drop-in replacement and would remove runner/artifact routes. The deployed source snapshot is exact and preserved."
+    "rootWorkerDeploymentSafety": "Do not deploy the separate 12KB cloudflare/worker.js over this 108KB deployed main module; it is not a drop-in replacement and would remove runner/artifact routes. The deployed source snapshot is exact and preserved.",
+    "backupRestoreDrill": {
+      "status": "PASS",
+      "runId": 43701290286,
+      "initialRevision": 2,
+      "restoredRevision": 3,
+      "explicitBackupRetained": true,
+      "automaticPreRestoreBackupRetained": true,
+      "restoreAuditReceipt": "DASHBOARD_STATE_RESTORED",
+      "exactStateRestored": true,
+      "nodeRestartRecovery": true,
+      "remoteStateStableAfterRestart": true,
+      "publishingEnabled": false,
+      "contentJobs": 0
+    }
   },
   "historicalCounts": {
     "generatedAt": "2026-11-13T07:26:30.000Z",
@@ -1541,9 +1553,9 @@
     "note": "All 45 authentication-negative route checks pass on the exact current source/test SHA. The 37 previously passing route-level business acceptances are NOT_TESTED on this SHA because current positive, validation, persistence, audit, concurrency and restart evidence is not complete for every route; 8 routes remain BLOCKED."
   },
   "currentHeadEvidence": {
-    "exactSha": "dba1b095300ab05833b485aa607385f6231955e8",
+    "exactSha": "41bd4de95d876c9778a4993a0e67ac207d1379ff",
     "sourceTestSha": "cabd871847f14b6667adb43af1dbacaaa81f35b2",
-    "sourceDifferenceFromTestSha": "Only .github/workflows/validate-automation.yml concurrency/cancel-in-progress configuration; runtime source and tests are unchanged.",
+    "sourceDifferenceFromTestSha": "Only staging-smoke scripts, workflow gates, and acceptance documentation; dashboard/runtime source and test files are unchanged.",
     "authenticationNegative": {
       "pass": 45,
       "notTested": 0,
@@ -1551,11 +1563,12 @@
       "ciRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445"
     },
     "routeOverall": {
-      "pass": 38,
+      "pass": 40,
       "notTested": 0,
-      "blocked": 7
+      "blocked": 5
     },
-    "cloudflareNodeReadOnlyIntegration": "PASS — workflow 43700604171; Node dashboard authenticated state and backup-list reads; remote state unchanged.",
-    "reason": "38 routes are accepted on exact-candidate evidence. Seven routes remain BLOCKED by live Meta owner/provider authorization, YouTube reconciliation, staging backup/restore write verification, or genuine production media."
+    "cloudflareNodeReadOnlyIntegration": "PASS — workflow 43700604171; authenticated Node dashboard state and backup-list reads; remote state unchanged.",
+    "cloudflareNodeBackupRestore": "PASS — workflow 43701290286; explicit backup and confirmed restore through Node dashboard; revision 2→3; automatic pre-restore backup, audit receipt, restart recovery; five backups retained.",
+    "reason": "40 routes now PASS on exact-candidate evidence. Five routes remain BLOCKED by live Meta Page authorization, YouTube reconciliation or production-media prerequisites."
   }
 }
