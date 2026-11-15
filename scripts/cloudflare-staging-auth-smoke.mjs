@@ -57,7 +57,7 @@ const payload = authenticated.body;
 const state = payload?.state && typeof payload.state === "object" ? payload.state : payload;
 assert(Number.isSafeInteger(Number(payload?.revision)) && Number(payload.revision) >= 1,
   "Authenticated state response is missing a valid durable revision");
-const etagRevisionMatch = String(authenticated.etag ?? "").match(/^(?:W\\/)?"?([1-9][0-9]*)"?$/);
+const etagRevisionMatch = String(authenticated.etag ?? "").match(/^(?:W\/)?"?([1-9][0-9]*)"?$/);
 assert(etagRevisionMatch && Number(etagRevisionMatch[1]) === Number(payload.revision),
   "Authenticated Worker state ETag does not match its revision: etag=" + String(authenticated.etag ?? "missing") + ", revision=" + Number(payload.revision));
 for (const key of ["queueItems", "audit", "jobs", "uploads"]) {
