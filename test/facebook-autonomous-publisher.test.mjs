@@ -754,6 +754,39 @@ test("startup rebuilds missing history from a verified ledger receipt before dra
 });
 
 
+test("startup blocks a verified ledger receipt that conflicts with a prior non-verified slot outcome", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    const slotId = "nature-frontiers-2026-10-25-history-outcome-conflict";
+    const prior = [{ slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_BLOCKED", reason: "previous terminal outcome" }];
+    const ledger = [{
+      kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId, destination: "nature_frontiers_facebook",
+      status: "SCHEDULED_VERIFIED", startedAt: "2026-10-25T05:30:00.000Z",
+      scheduledAt: "2026-10-25T06:00:00.000Z", remotePostId: "123456789012345_777",
+      verifiedRemotely: true, retryAllowed: false
+    }];
+    const historyPath = path.join(f.stateDir, "facebook-history.json");
+    const ledgerPath = path.join(f.stateDir, "facebook-attempt-ledger.json");
+    fs.writeFileSync(historyPath, JSON.stringify(prior));
+    fs.writeFileSync(ledgerPath, JSON.stringify(ledger));
+    let policyCalls = 0, mutationCalls = 0;
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath,
+      stateDir: f.stateDir, now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      policyEvaluator: async () => { policyCalls++; return { eligible: true }; },
+      publish: async () => { mutationCalls++; throw new Error("conflicting history must never publish"); }
+    }), /history conflicts with a verified ledger receipt or prior slot outcome/i);
+    assert.equal(policyCalls, 0);
+    assert.equal(mutationCalls, 0);
+    assert.deepEqual(JSON.parse(fs.readFileSync(historyPath, "utf8")), prior);
+    assert.deepEqual(JSON.parse(fs.readFileSync(ledgerPath, "utf8")), ledger);
+  } finally { f.cleanup(); }
+});
+
 test("startup does not promote an incomplete or unverified ledger row into remote history", async () => {
   const f = setup();
   try {
