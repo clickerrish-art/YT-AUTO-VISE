@@ -14,7 +14,7 @@ function setup(){
    instagramBusinessAccountId:account,publishingEnabled:true,dryRun:false,emergencyStop:false,timezone:"Africa/Johannesburg",
    apiVersion:"v26.0",facebookLoginForBusinessEnabled:true};
  fs.writeFileSync(configPath,JSON.stringify(config));
- const sourcePayload={destination:"nature_frontiers_facebook",destinationPageId:page,slotId:"slot-1",caption:"Educational wildlife note.",
+ const sourcePayload={destination:"nature_frontiers_facebook",mediaType:"reel",destinationPageId:page,slotId:"slot-1",caption:"Educational wildlife note.",
    media:[{path:"media/reel.mp4",sha256:"a".repeat(64)}],claims:[]};
  const payload={destination:"nature_frontiers_instagram",slotId:"slot-1",scheduledAt:"2026-11-15T10:00:00.000Z",
    timezone:"Africa/Johannesburg",mediaType:"reel",caption:sourcePayload.caption,media:{path:"media/reel.mp4",sha256:"a".repeat(64)},

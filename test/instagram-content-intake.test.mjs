@@ -12,7 +12,7 @@ function setup(){
  fs.mkdirSync(content);const configPath=path.join(root,"instagram.json"),candidatePath=path.join(content,"candidates.json"),queuePath=path.join(content,"queue.json");
  const config={destination:"nature_frontiers_instagram",timezone:"Africa/Johannesburg",instagramBusinessAccountId:account,facebookPageId:page,facebookPageName:"Nature Frontiers SA"};
  fs.writeFileSync(configPath,JSON.stringify(config));fs.writeFileSync(queuePath,"[]");
- const sourcePayload={destination:"nature_frontiers_facebook",destinationPageId:page,slotId:"slot-1",caption:"A verified wildlife fact.",
+ const sourcePayload={destination:"nature_frontiers_facebook",mediaType:"reel",destinationPageId:page,slotId:"slot-1",caption:"A verified wildlife fact.",
    media:[{path:"media/reel.mp4",sha256:"a".repeat(64)}],claims:[]};
  const payload={destination:"nature_frontiers_instagram",slotId:"slot-1",scheduledAt:"2026-11-15T12:00:00.000+02:00",timezone:"Africa/Johannesburg",
    mediaType:"reel",caption:sourcePayload.caption,media:{path:"media/reel.mp4",sha256:"a".repeat(64)},claims:[],shareToFeed:true,
