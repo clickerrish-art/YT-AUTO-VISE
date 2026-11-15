@@ -750,7 +750,8 @@ const server = http.createServer(async (req, res) => {
             url: asset.source?.url ?? null,
             contributor: asset.source?.contributor ?? null,
             listingStatus: asset.source?.listingStatus ?? "unverified",
-            listingDescription: asset.source?.listingDescription ?? null
+            listingDescription: asset.source?.listingDescription ?? null,
+            listingEvidence: Array.isArray(asset.source?.listingEvidence) ? asset.source.listingEvidence : []
           },
           localFile: asset.localFile ? { path: asset.localFile.path, sha256: asset.localFile.sha256 } : null,
           media: asset.media ?? null,
@@ -759,13 +760,18 @@ const server = http.createServer(async (req, res) => {
             reviewStatus: asset.rights?.reviewStatus ?? "not_assessed",
             additionalPermissionsStatus: asset.rights?.additionalPermissionsStatus ?? "not_assessed",
             permittedUsage: Array.isArray(asset.rights?.permittedUsage) ? asset.rights.permittedUsage : [],
+            licenseEvidence: Array.isArray(asset.rights?.licenseEvidence) ? asset.rights.licenseEvidence : [],
+            additionalPermissionsEvidence: Array.isArray(asset.rights?.additionalPermissionsEvidence) ? asset.rights.additionalPermissionsEvidence : [],
+            notes: asset.rights?.notes ?? null,
             reviewedBy: asset.rights?.reviewedBy ?? null,
             reviewedAt: asset.rights?.reviewedAt ?? null
           },
           inspection: {
             status: asset.inspection?.status ?? "not_inspected",
             inspectedBy: asset.inspection?.inspectedBy ?? null,
-            inspectedAt: asset.inspection?.inspectedAt ?? null
+            inspectedAt: asset.inspection?.inspectedAt ?? null,
+            inspectedFileSha256: asset.inspection?.inspectedFileSha256 ?? null,
+            visualNotes: asset.inspection?.visualNotes ?? null
           },
           editorial: asset.editorial ?? {},
           approval: {
