@@ -339,6 +339,11 @@ export async function runAutonomousFacebookPublisher({
           accessToken: pageAccessToken, apiVersion: config.apiVersion,
           permissionsVerified: permissionVerification.permissionsVerified, fetchImpl, rootDir: activeRoot, now: current
         });
+        if (typeof remote?.remotePostId !== "string" || !remote.remotePostId.trim()) {
+          const error = new Error("Meta publish response omitted its remote post ID; reconciliation required");
+          error.uncertain = true;
+          throw error;
+        }
         const verified = await readRemote({
           remotePostId: remote.remotePostId, expectedPageId: config.destinationPageId,
           accessToken: pageAccessToken, apiVersion: config.apiVersion, fetchImpl
