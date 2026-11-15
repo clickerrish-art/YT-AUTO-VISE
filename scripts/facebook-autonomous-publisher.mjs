@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,13 +10,24 @@ const isoNow = now => new Date(now).toISOString();
 const readJson = file => JSON.parse(fs.readFileSync(file, "utf8"));
 function atomicJson(file, value) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
-  const temporary = file + "." + process.pid + ".tmp";
-  const handle = fs.openSync(temporary, "wx", 0o600);
+  // A unique exclusive temp file prevents a stale crash remnant (or a reused PID)
+  // from blocking recovery writes on the next process start.
+  const temporary = file + "." + process.pid + "." + crypto.randomUUID() + ".tmp";
+  let handle;
   try {
+    handle = fs.openSync(temporary, "wx", 0o600);
     fs.writeFileSync(handle, JSON.stringify(value, null, 2) + "\n", "utf8");
     fs.fsyncSync(handle);
-  } finally { fs.closeSync(handle); }
-  fs.renameSync(temporary, file);
+    fs.closeSync(handle);
+    handle = undefined;
+    fs.renameSync(temporary, file);
+  } catch (error) {
+    if (handle !== undefined) {
+      try { fs.closeSync(handle); } catch {}
+    }
+    try { fs.unlinkSync(temporary); } catch {}
+    throw error;
+  }
 }
 function acquireLock(file) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
