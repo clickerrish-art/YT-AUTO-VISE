@@ -196,6 +196,36 @@ test("approved cycle start does not retroactively classify earlier remote videos
   assert.equal(short.cycleHistoryCount, 2);
 });
 
+test("pre-cycle publications still enforce elapsed-hour spacing and invalid cycle anchors fail closed", () => {
+  const recentLegacyShort = {
+    id: "legacy-short-near-cycle-start",
+    status: "public",
+    actualPublishedAt: "2026-11-06T12:00:00.000Z",
+    format: "short"
+  };
+  const tooSoon = evaluateNextPublication({
+    history: [recentLegacyShort],
+    historyVerified: true,
+    cycleStartAt: "2026-11-07T00:57:33+02:00",
+    proposedAt: "2026-11-08T12:00:00.000Z",
+    jobId: "too-soon-after-legacy",
+    format: "long_form"
+  });
+  assert.equal(tooSoon.valid, false);
+  assert.ok(tooSoon.errors.some(error => error.includes("72 elapsed hours")));
+
+  const futureAnchor = evaluateNextPublication({
+    history: [recentLegacyShort],
+    historyVerified: true,
+    cycleStartAt: "2026-11-20T00:00:00.000Z",
+    proposedAt: "2026-11-10T12:00:00.000Z",
+    jobId: "future-cycle-anchor",
+    format: "long_form"
+  });
+  assert.equal(futureAnchor.valid, false);
+  assert.ok(futureAnchor.errors.some(error => error.includes("cycleStartAt must not be later")));
+});
+
 test("rolling publication gate rejects channel history without a supported format classification", () => {
   const result = evaluateNextPublication({
     history: [{
