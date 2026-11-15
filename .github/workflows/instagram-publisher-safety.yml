@@ -6,9 +6,13 @@ on:
     paths:
       - "scripts/meta-instagram-reel-adapter.mjs"
       - "scripts/instagram-autonomous-publisher.mjs"
+      - "scripts/instagram-content-intake.mjs"
       - "config/instagram-publishing.json"
       - "test/meta-instagram-reel-adapter.test.mjs"
       - "test/instagram-autonomous-publisher.test.mjs"
+      - "test/instagram-content-intake.test.mjs"
+      - "content/instagram-intake-candidates.json"
+      - "content/instagram-autonomous-queue.json"
       - "package.json"
       - "package-lock.json"
       - ".github/workflows/instagram-publisher-safety.yml"
@@ -42,7 +46,18 @@ jobs:
       - name: Install locked dependencies without lifecycle scripts
         run: npm ci --ignore-scripts
       - name: Test Instagram adapter and autonomous dispatch recovery
-        run: node --test test/meta-instagram-reel-adapter.test.mjs test/instagram-autonomous-publisher.test.mjs
+        run: node --test test/meta-instagram-reel-adapter.test.mjs test/instagram-autonomous-publisher.test.mjs test/instagram-content-intake.test.mjs
+      - name: Verify intake refuses unconfigured Instagram identity without writing a queue
+        run: |
+          output="$(node scripts/instagram-content-intake.mjs)"
+          printf '%s\\n' "$output"
+          node --input-type=module - "$output" <<'NODE'
+          const result = JSON.parse(process.argv[2]);
+          if (result.status !== 'BLOCKED_CONFIGURATION' || result.accepted !== 0) {
+            throw new Error('Instagram intake did not fail closed for the unconfigured account');
+          }
+          console.log('PASS Instagram intake blocks when no owner-verified account ID exists');
+          NODE
       - name: Prove repository Instagram defaults are fail-closed
         run: |
           node --input-type=module <<'NODE'

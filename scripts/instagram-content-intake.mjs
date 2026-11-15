@@ -18,7 +18,7 @@ function atomicJson(file,value) {
 function localPath(base,candidate,label) {
   if(typeof candidate!=="string"||!candidate||path.isAbsolute(candidate)||candidate.includes("\\")||
      candidate.split("/").some(x=>!x||x==="."||x==="..")) throw new Error(label+" path must be a safe repository-relative path");
-  const canonical=fs.realpathSync(base),target=path.resolve(canonical,candidate);
+  const canonical=fs.realpathSync(base),target=path.isAbsolute(candidate)?path.resolve(candidate):path.resolve(canonical,candidate);
   if(!target.startsWith(canonical+path.sep)) throw new Error(label+" path escapes repository root");
   const checked=fs.existsSync(target)?fs.realpathSync(target):fs.realpathSync(path.dirname(target));
   if(checked!==canonical&&!checked.startsWith(canonical+path.sep)) throw new Error(label+" symlink escapes repository root");
@@ -57,6 +57,7 @@ export async function runInstagramContentIntake({
       if(payload.instagramAccountId!==config.instagramBusinessAccountId||payload.facebookPageId!==config.facebookPageId) reasons.push("ACCOUNT_OR_LINKED_PAGE_MISMATCH");
       if(payload.timezone!==config.timezone||!isValidZonedIsoTimestamp(payload.scheduledAt)||Date.parse(payload.scheduledAt)<=Number(now)) reasons.push("INVALID_OR_NON_FUTURE_JOHANNESBURG_SCHEDULE");
       if(payload.mediaType!=="reel"||!payload.media||typeof payload.media.path!=="string"||!/^[a-f0-9]{64}$/.test(payload.media.sha256??"")) reasons.push("UNSUPPORTED_OR_UNPINNED_INSTAGRAM_MEDIA");
+      if(payload.shareToFeed!=null&&typeof payload.shareToFeed!=="boolean") reasons.push("INVALID_SHARE_TO_FEED_SETTING");
       if(typeof payload.caption!=="string"||!payload.caption.trim()||payload.sourcePayload?.caption!==payload.caption||
          payload.sourcePayload?.destination!=="nature_frontiers_facebook"||payload.sourcePayload?.destinationPageId!==config.facebookPageId||
          !Array.isArray(payload.sourcePayload?.media)||!payload.sourcePayload.media.some(x=>x?.path===payload.media?.path&&x?.sha256===payload.media?.sha256)) {
