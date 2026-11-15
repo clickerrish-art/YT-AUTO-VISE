@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { pathToFileURL } from "node:url";
+import { validateMediaRegister } from "./validate-nature-frontiers-media-register.mjs";
 
 const DEFAULT_REGISTER = "content/nature-frontiers-media-register.json";
 const MEDIA_ROOT = "media/nature-frontiers";
@@ -65,6 +66,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   try {
     const register = JSON.parse(fs.readFileSync(registerPath, "utf8"));
     const result = registerLocalMedia({ register, assetId, filePath });
+    const validationErrors = validateMediaRegister(register);
+    if (validationErrors.length) throw new Error("register validation failed: " + validationErrors.join("; "));
     persistRegister(registerPath, register);
     console.log(`PASS: recorded local file integrity for ${result.assetId}: ${result.path} (${result.byteSize} bytes, SHA-256 ${result.sha256}). Inspection, rights and approval remain pending.`);
   } catch (error) {
