@@ -2,6 +2,7 @@
 [CmdletBinding()]
 param(
     [switch]$InitializeSecret,
+    [switch]$ReplaceExistingSecret,
     [string]$CandidateFile = "content/facebook-intake-candidates.json",
     [string]$SlotId
 )
@@ -64,6 +65,9 @@ if ($InitializeSecret) {
         if ((Get-Item -LiteralPath $secretFile -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
             throw "The local secret file must not be a symbolic link or reparse point."
         }
+        if (-not $ReplaceExistingSecret) {
+            throw "A local signer secret already exists. Refusing to overwrite it. Use -ReplaceExistingSecret only when intentionally rotating the local key."
+        }
     }
     Set-CurrentUserOnlyAcl -Path $secretDirectory -Directory
     $secureSecret = Read-Host "Enter the existing FACEBOOK_APPROVAL_HMAC_SECRET (input is hidden)" -AsSecureString
@@ -113,6 +117,8 @@ if (-not (Test-Path -LiteralPath (Join-Path $repoRoot "node_modules") -PathType 
 
 $encryptedSecret = [System.IO.File]::ReadAllText($secretFile, [System.Text.Encoding]::UTF8).Trim()
 $secureSecret = ConvertTo-SecureString -String $encryptedSecret
+$previousHmacSecret = [Environment]::GetEnvironmentVariable("FACEBOOK_APPROVAL_HMAC_SECRET", "Process")
+$previousApproverId = [Environment]::GetEnvironmentVariable("FACEBOOK_APPROVER_ID", "Process")
 $bstr = [IntPtr]::Zero
 try {
     $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureSecret)
@@ -135,8 +141,8 @@ try {
     }
 }
 finally {
-    Remove-Item Env:FACEBOOK_APPROVAL_HMAC_SECRET -ErrorAction SilentlyContinue
-    Remove-Item Env:FACEBOOK_APPROVER_ID -ErrorAction SilentlyContinue
+    [Environment]::SetEnvironmentVariable("FACEBOOK_APPROVAL_HMAC_SECRET", $previousHmacSecret, "Process")
+    [Environment]::SetEnvironmentVariable("FACEBOOK_APPROVER_ID", $previousApproverId, "Process")
     if ($bstr -ne [IntPtr]::Zero) {
         [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
     }
