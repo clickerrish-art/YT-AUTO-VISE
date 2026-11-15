@@ -38,7 +38,7 @@
   "requiredAttribution": "NOAA’s Office of National Marine Sanctuaries",
   "scheduleStatus": "UNSCHEDULED_NEXT_SHORT_CANDIDATE",
   "uploadAllowed": false,
-  "notes": "Editorial wildlife Short, not a Selar promotion. Source permission is conditional only; source-file reacquisition, shot-level/transition review, final edit review, rights evidence and human compliance approval remain open. Do not alter existing schedule or rolling cycle. A 55.235-second technical review render exists with AI-generated eSpeak narration and exact NOAA credit; it is explicitly not a production master. Replace the synthetic draft voice with approved narration and complete human review before any publication.",
+  "notes": "Editorial wildlife Short, not a Selar promotion. Source permission is conditional only; source-file reacquisition and selected-range review are now evidenced, and a silent 55-second 9:16 visual-review cut exists. Full human playback, final edit review, rights evidence and human compliance approval remain open. Do not alter existing schedule or rolling cycle. The separate eSpeak narration render remains synthetic review-only and must be replaced with approved narration before publication.",
   "containsSyntheticMedia": false,
   "renderReview": {
     "status": "REVIEW_RENDER_ONLY_NOT_FOR_PUBLICATION",
@@ -46,5 +46,48 @@
     "outputSha256": "c0735b95efa5a70fba2eba3a87cbacd2355c400288b320d97dd3190dce1cf280",
     "narrationDisclosure": "AI-GENERATED NARRATION",
     "requiresHumanVoiceReview": true
+  },
+  "visualReview": {
+    "status": "VISUAL_REVIEW_CUT_GENERATED_NOT_FOR_PUBLICATION",
+    "filename": "NOAA-california-spiny-lobster-visual-review-1080x1920.mp4",
+    "sha256": "4fc0b7f4a3f5d79ecf8d6a2bb148f06ba01f56c1c8d3b4db846d614f65f07261",
+    "durationSeconds": 55,
+    "format": "9:16",
+    "width": 1080,
+    "height": 1920,
+    "frameRate": 30,
+    "videoCodec": "H.264",
+    "audioStreams": 0,
+    "sourceAudioRemoved": true,
+    "sourceRangesSeconds": [
+      [
+        160,
+        175
+      ],
+      [
+        245,
+        257
+      ],
+      [
+        320,
+        335
+      ],
+      [
+        360,
+        373
+      ]
+    ],
+    "persistentWarning": "REVIEW ONLY - NOT APPROVED FOR PUBLICATION",
+    "requiredAttribution": "Footage courtesy of NOAA’s Office of National Marine Sanctuaries",
+    "fullFileDecode": "PASS",
+    "humanFullPlaybackReview": "NOT_COMPLETED",
+    "rightsConfirmed": false,
+    "rightsEvidenceReviewed": false,
+    "humanApproved": false,
+    "complianceReviewed": false,
+    "uploadAllowed": false,
+    "scheduleAllowed": false,
+    "delivery": "Conversation review attachment; not committed as production media",
+    "notes": "Silent visual-review cut only. It is distinct from the earlier eSpeak narration review render. It is not a production master, has no approved narration/captions, and must not be substituted for media/next-short.mp4."
   }
 }
