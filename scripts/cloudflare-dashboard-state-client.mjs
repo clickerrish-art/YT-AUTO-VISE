@@ -3,7 +3,7 @@ const OPTIONAL_ARRAYS = ["campaigns", "facebookDrafts", "facebookPosts", "facebo
 const MAX_STATE_BYTES = 2 * 1024 * 1024;
 
 function revisionFromEtag(value) {
-  const match = String(value ?? "").match(/^(?:W\\/)?"?([1-9][0-9]*)"?$/);
+  const match = String(value ?? "").match(/^(?:W\/)?"?([1-9][0-9]*)"?$/);
   return match ? Number(match[1]) : null;
 }
 
