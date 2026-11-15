@@ -310,3 +310,57 @@ test("Meta scheduled mutations reject timezone-free and impossible timestamps be
   }
   assert.equal(requests, 0, "invalid schedule timestamps must be rejected before a remote mutation");
 });
+
+
+test("Meta permission verification falls back to the exact configured Page node when managed Page list is empty", async () => {
+  const userToken = "user-access-token-" + "d".repeat(30);
+  const urls = [];
+  const result = await verifyMetaPagePermissions({
+    pageId: PAGE_ID, userAccessToken: userToken, apiVersion: API,
+    fetchImpl: async (url, options) => {
+      urls.push(String(url));
+      assert.equal(options.headers.authorization, "Bearer " + userToken);
+      assert.equal(options.redirect, "error");
+      if (String(url).endsWith("/me?fields=id")) return response({ id: "987654321098765" });
+      if (String(url).endsWith("/987654321098765/permissions")) return response({ data: [
+        { permission: "pages_show_list", status: "granted" },
+        { permission: "pages_read_engagement", status: "granted" },
+        { permission: "pages_manage_posts", status: "granted" }
+      ] });
+      if (String(url).includes("/me/accounts?")) return response({ data: [] });
+      assert.equal(String(url), "https://graph.facebook.com/v26.0/" + PAGE_ID + "?fields=id%2Cname%2Caccess_token");
+      return response({ id: PAGE_ID, name: "Nature Frontiers", access_token: TOKEN });
+    }
+  });
+  assert.equal(result.verified, true);
+  assert.equal(result.pageId, PAGE_ID);
+  assert.equal(result.pageName, "Nature Frontiers");
+  assert.equal(result.pageAccessToken, TOKEN);
+  assert.equal(result.pageAccessMethod, "DIRECT_PAGE_NODE");
+  assert.deepEqual(result.tasks, []);
+  assert.deepEqual(result.grantedPermissions, ["pages_show_list", "pages_read_engagement", "pages_manage_posts"]);
+  assert.equal(urls.length, 4);
+  assert.ok(urls.every(url => !url.includes(userToken) && !url.includes(TOKEN)));
+});
+
+test("Meta direct Page-node fallback rejects a mismatched Page ID and never accepts a missing token", async () => {
+  const userToken = "user-access-token-" + "m".repeat(30);
+  const fetchFor = pageBody => async url => {
+    if (String(url).endsWith("/me?fields=id")) return response({ id: "987654321098765" });
+    if (String(url).endsWith("/987654321098765/permissions")) return response({ data: [
+      { permission: "pages_show_list", status: "granted" },
+      { permission: "pages_read_engagement", status: "granted" },
+      { permission: "pages_manage_posts", status: "granted" }
+    ] });
+    if (String(url).includes("/me/accounts?")) return response({ data: [] });
+    return response(pageBody);
+  };
+  await assert.rejects(() => verifyMetaPagePermissions({
+    pageId: PAGE_ID, userAccessToken: userToken, apiVersion: API,
+    fetchImpl: fetchFor({ id: "999999999999999", name: "Wrong Page", access_token: TOKEN })
+  }), /exact configured Page identity/i);
+  await assert.rejects(() => verifyMetaPagePermissions({
+    pageId: PAGE_ID, userAccessToken: userToken, apiVersion: API,
+    fetchImpl: fetchFor({ id: PAGE_ID, name: "Nature Frontiers" })
+  }), /did not return a usable Page access token/i);
+});
