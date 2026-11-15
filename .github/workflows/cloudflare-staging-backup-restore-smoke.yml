@@ -1,0 +1,57 @@
+name: One-time Cloudflare staging backup and restore drill
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_backup_restore:
+        description: "Authorize a staging-only backup and restore of the exact current state. This adds two backup records and advances the revision by one."
+        required: true
+        type: choice
+        options:
+          - NO
+          - YES
+        default: NO
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-staging-backup-restore
+  cancel-in-progress: false
+
+jobs:
+  backup-restore:
+    if: inputs.confirm_backup_restore == 'YES'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DASHBOARD_STAGING_BACKUP_RESTORE_CONFIRMATION: ${{ inputs.confirm_backup_restore }}
+      DASHBOARD_STAGING_API_URL: ${{ secrets.DASHBOARD_STAGING_API_URL }}
+      DASHBOARD_OPERATOR_TOKEN: ${{ secrets.DASHBOARD_OPERATOR_TOKEN }}
+      CLOUDFLARE_ACCESS_CLIENT_ID: ${{ secrets.CLOUDFLARE_ACCESS_CLIENT_ID }}
+      CLOUDFLARE_ACCESS_CLIENT_SECRET: ${{ secrets.CLOUDFLARE_ACCESS_CLIENT_SECRET }}
+    steps:
+      - name: Check out implementation branch
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Verify required staging credentials are present
+        shell: bash
+        run: |
+          for name in DASHBOARD_STAGING_API_URL DASHBOARD_OPERATOR_TOKEN CLOUDFLARE_ACCESS_CLIENT_ID CLOUDFLARE_ACCESS_CLIENT_SECRET; do
+            if [ -z "${!name}" ]; then
+              echo "::error::$name is not configured"
+              exit 1
+            fi
+          done
+
+      - name: Run one-time exact-state backup and restore drill
+        run: node scripts/cloudflare-staging-backup-restore-smoke.mjs
