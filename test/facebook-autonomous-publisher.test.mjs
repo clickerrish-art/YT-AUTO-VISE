@@ -141,7 +141,8 @@ test("duplicate queue slot IDs block before any candidate can be published", asy
     };
     const queue = [
       { ...base, caption: "First candidate caption." },
-      { ...base, caption: "Different candidate with the same idempotency key." }
+      { ...base, scheduledDate: "2026-10-26", scheduledAt: "2026-10-26T06:00:00.000Z",
+        caption: "Different future-dated candidate with the same idempotency key." }
     ];
     fs.writeFileSync(f.queuePath, JSON.stringify(queue));
     let policyCalls = 0, mutationCalls = 0;
