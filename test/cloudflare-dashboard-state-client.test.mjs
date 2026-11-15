@@ -89,6 +89,12 @@ test("GET rejects a mismatched ETag rather than accepting an ambiguous snapshot"
   await assert.rejects(client.getState(), error => error instanceof DashboardStateServiceError && error.code === "INVALID_RESPONSE");
 });
 
+test("GET accepts a weak Cloudflare edge ETag only when its revision matches the state body", async t => {
+  const client = await fixture(t, (_req, res) =>
+    respond(res, 200, { revision: 7, updatedAt: "2026-11-08T00:00:00.000Z", state: state(["draft"]) }, { etag: 'W/"7"' }));
+  assert.equal((await client.getState()).revision, 7);
+});
+
 test("PUT sends If-Match and validates the incremented revision", async t => {
   const client = await fixture(t, (req, res, body) => {
     assert.equal(req.method, "PUT");
@@ -107,6 +113,14 @@ test("PUT rejects a successful response with a mismatched ETag", async t => {
     respond(res, 200, { revision: 8, state: body }, { etag: '"7"' }));
   await assert.rejects(client.updateState(state(), 7), error =>
     error instanceof DashboardStateServiceError && error.code === "INVALID_RESPONSE");
+});
+
+test("PUT accepts a weak Cloudflare edge ETag when the compare-and-swap revision increments exactly once", async t => {
+  const client = await fixture(t, (req, res, body) => {
+    assert.equal(req.headers["if-match"], "7");
+    respond(res, 200, { revision: 8, state: body }, { etag: 'W/"8"' });
+  });
+  assert.equal((await client.updateState(state(["updated"]), 7)).revision, 8);
 });
 
 test("PUT exposes revision conflicts and never retries a stale write", async t => {
