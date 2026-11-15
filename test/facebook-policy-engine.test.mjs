@@ -267,7 +267,7 @@ test("signed human fact-check attestation is accepted without an external semant
     const claimHash = hash(claim.text);
     const sourceUrlsHash = hash(JSON.stringify(claim.sourceUrls));
     const reviewerId = "owner-fact-checker-test";
-    const signed = claimHash + "\\n" + sourceUrlsHash + "\\n" + reviewerId + "\\n" + checkedAt;
+    const signed = claimHash + "\n" + sourceUrlsHash + "\n" + reviewerId + "\n" + checkedAt;
     claim.semanticVerification = { claimHash, sourceUrlsHash, reviewerId, checkedAt, signature: crypto.createHmac("sha256", APPROVAL_SECRET).update(signed).digest("hex") };
     approve(f.payload);
     const result = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), semanticVerifier: null });
