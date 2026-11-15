@@ -161,6 +161,17 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(instagramStatus.queueCount, 0);
   assert.equal(JSON.stringify(instagramStatus).includes(token), false, "status must never disclose operator credentials");
 
+  const malformedInstagramLedger = path.join(stateDir, "instagram-attempt-ledger.json");
+  fs.writeFileSync(malformedInstagramLedger, "{malformed-json");
+  const malformedInstagramStatusResponse = await fetchDashboard(base + "/api/instagram/status", { headers: { "x-operator-token": token } });
+  assert.equal(malformedInstagramStatusResponse.status, 503,
+    "malformed Instagram operational state must fail closed instead of presenting a misleading healthy status");
+  const malformedInstagramStatus = await malformedInstagramStatusResponse.json();
+  assert.equal(malformedInstagramStatus.readOnly, true);
+  assert.equal(malformedInstagramStatus.providerMutationAttempted, false);
+  assert.equal(JSON.stringify(malformedInstagramStatus).includes(token), false);
+  fs.rmSync(malformedInstagramLedger, { force: true });
+
 
   // Route-level boundary acceptance for lifecycle operations whose complete
   // success path is separately gated by real media, remote receipts and human review.
