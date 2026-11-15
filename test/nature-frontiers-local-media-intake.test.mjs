@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { registerLocalMedia, persistRegister, extractVideoTechnicalMetadata } from "../scripts/register-nature-frontiers-local-media.mjs";
+import { registerLocalMedia, persistRegister, extractVideoTechnicalMetadata, parseIntakeArguments, runLocalMediaIntake } from "../scripts/register-nature-frontiers-local-media.mjs";
 import { validateMediaRegister } from "../scripts/validate-nature-frontiers-media-register.mjs";
 
 const ASSET_ID = "nf-pex-giraffe-5220275";
@@ -92,4 +92,43 @@ test("rejects failed, malformed, incomplete and non-video ffprobe results", () =
   assert.throws(() => extractVideoTechnicalMetadata("/tmp/clip.mp4", { run: () => "not json" }), /invalid JSON/);
   assert.throws(() => extractVideoTechnicalMetadata("/tmp/clip.mp4", { run: () => JSON.stringify({ format: { duration: "2" }, streams: [] }) }), /no video stream/);
   assert.throws(() => extractVideoTechnicalMetadata("/tmp/clip.mp4", { run: () => JSON.stringify({ format: { duration: "2" }, streams: [{ codec_type: "video", codec_name: "h264", width: 0, height: 1080, avg_frame_rate: "0/0" }] }) }), /incomplete or invalid/);
+});
+
+test("parses intake CLI arguments and rejects ambiguous or unknown options", () => {
+  assert.deepEqual(parseIntakeArguments(["asset-1", "media/nature-frontiers/a.mp4", "--probe"]), {
+    assetId: "asset-1", filePath: "media/nature-frontiers/a.mp4", registerPath: "content/nature-frontiers-media-register.json", probeRequested: true
+  });
+  assert.throws(() => parseIntakeArguments(["asset-1", "clip.mp4", "--probe", "--probe"]), /only be supplied once/);
+  assert.throws(() => parseIntakeArguments(["asset-1", "clip.mp4", "--surprise"]), /unknown option/);
+  assert.throws(() => parseIntakeArguments(["asset-1"]), /expected asset ID/);
+});
+
+test("CLI runner persists only after successful probe and register validation", () => {
+  const { root, register } = fixture();
+  fs.mkdirSync(path.join(root, "content"), { recursive: true });
+  const registerPath = path.join(root, "content/nature-frontiers-media-register.json");
+  fs.writeFileSync(registerPath, JSON.stringify(register));
+  const before = fs.readFileSync(registerPath, "utf8");
+  assert.throws(() => runLocalMediaIntake({
+    args: [ASSET_ID, "media/nature-frontiers/clip.mp4", registerPath, "--probe"],
+    root,
+    runProbe: () => "not-json"
+  }), /invalid JSON/);
+  assert.equal(fs.readFileSync(registerPath, "utf8"), before);
+  const payload = JSON.stringify({
+    format: { duration: "12.5" },
+    streams: [{ codec_type: "video", codec_name: "h264", width: 1920, height: 1080, avg_frame_rate: "30/1" }]
+  });
+  const result = runLocalMediaIntake({
+    args: [ASSET_ID, "media/nature-frontiers/clip.mp4", registerPath, "--probe"],
+    root,
+    runProbe: () => payload
+  });
+  assert.equal(result.technicalMetadata.durationSeconds, 12.5);
+  const saved = JSON.parse(fs.readFileSync(registerPath, "utf8"));
+  assert.equal(saved.assets[0].media.technical.videoCodec, "h264");
+  assert.equal(saved.assets[0].inspection.status, "not_inspected");
+  assert.equal(saved.assets[0].rights.reviewStatus, "not_assessed");
+  assert.equal(saved.assets[0].approval.status, "pending");
+  assert.deepEqual(validateMediaRegister(saved), []);
 });
