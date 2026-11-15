@@ -70,6 +70,7 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
       if (typeof inspection.inspectedBy !== "string" || !inspection.inspectedBy.trim()) errors.push(at + " complete inspection requires inspectedBy");
       if (!validTimestamp(inspection.inspectedAt) || Date.parse(inspection.inspectedAt) > now) errors.push(at + " complete inspection requires a valid non-future timezone-qualified inspectedAt");
       if (typeof inspection.visualNotes !== "string" || inspection.visualNotes.trim().length < 20) errors.push(at + " complete inspection requires meaningful visualNotes");
+      if (!asset.localFile || inspection.inspectedFileSha256 !== asset.localFile.sha256) errors.push(at + " complete inspection file SHA-256 must match the currently registered local file");
     }
 
     const claims = asset.claims ?? [];
