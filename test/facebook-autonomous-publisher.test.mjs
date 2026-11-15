@@ -206,6 +206,60 @@ test("unresolved attempt keeps the original queue payload for manual reconciliat
   } finally { f.cleanup(); }
 });
 
+test("confirmed startup reconciliation replaces its prior uncertain history outcome", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    const payload = {
+      slotId: "nature-frontiers-recover-uncertain-history",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "A previously uncertain candidate now has a verified receipt.",
+      links: [], media: [], claims: [], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    fs.writeFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), JSON.stringify([{
+      kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId: payload.slotId,
+      destination: "nature_frontiers_facebook", status: "UNCERTAIN",
+      startedAt: "2026-10-25T05:30:00.000Z", scheduledAt: payload.scheduledAt,
+      payload: { caption: payload.caption, scheduledAt: payload.scheduledAt },
+      retryAllowed: false
+    }]));
+    const uncertainHistory = {
+      slotId: payload.slotId, destination: "nature_frontiers_facebook",
+      status: "UNCERTAIN", reason: "REMOTE_OUTCOME_UNCERTAIN_RECONCILIATION_REQUIRED"
+    };
+    const historyPath = path.join(f.stateDir, "facebook-history.json");
+    fs.writeFileSync(historyPath, JSON.stringify([uncertainHistory]));
+    let reconciliationCalls = 0, mutationCalls = 0;
+    const result = await runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath,
+      stateDir: f.stateDir, now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
+      reconcileRemote: async () => {
+        reconciliationCalls++;
+        return { outcome: "CONFIRMED", receipt: {
+          status: "SCHEDULED_VERIFIED", remotePostId: "123456789012345_recovered",
+          scheduledPublishTime: Date.parse(payload.scheduledAt) / 1000
+        } };
+      },
+      publish: async () => { mutationCalls++; throw new Error("a recovered attempt must not be republished"); }
+    });
+    assert.equal(result.status, "COMPLETED");
+    assert.equal(reconciliationCalls, 1);
+    assert.equal(mutationCalls, 0);
+    const history = JSON.parse(fs.readFileSync(historyPath, "utf8"));
+    assert.equal(history.length, 1, "the uncertain history row must be replaced, not duplicated");
+    assert.equal(history[0].status, "SCHEDULED_VERIFIED");
+    assert.equal(history[0].remotePostId, "123456789012345_recovered");
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), [],
+      "a verified receipt may safely drain its original queue item");
+  } finally { f.cleanup(); }
+});
+
 test("safe defaults are a no-op and never attempt a Meta request", async () => {
   const f = setup();
   try {
