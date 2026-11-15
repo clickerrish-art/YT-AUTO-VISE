@@ -32,18 +32,50 @@
     "type": "synthetic_text_to_speech",
     "engine": "eSpeak",
     "voice": "en-us",
-    "speedWpm": 125,
+    "speedWpm": 135,
     "exactScriptPath": "content/short-004-california-spiny-lobster-script.md",
-    "disclosureOverlay": "AI-GENERATED NARRATION",
+    "disclosureOverlay": "AI-GENERATED NARRATION - REVIEW ONLY",
     "humanVoiceApproval": false,
     "replaceBeforePublication": true
   },
   "captions": {
     "path": "content/short-004-california-spiny-lobster.srt",
     "intendedToMatchNarrationWordForWord": true,
-    "timingStatus": "PROVISIONAL_TIMING_REQUIRES_HUMAN_REVIEW"
+    "timingStatus": "PROVISIONAL_TIMINGS_FROM_EXACT_ESPEAK_SEGMENT_DURATIONS_NOT_HUMAN_VERIFIED",
+    "cueCount": 12,
+    "wordCount": 108,
+    "maxLineCharacters": 38,
+    "maxLinesPerCue": 3,
+    "overlappingCues": 0,
+    "gapBetweenCuesMs": 80
   },
   "output": {
+    "filename": "NOAA-california-spiny-lobster-narration-review-1080x1920.mp4",
+    "sha256": "aa84154b6938750f646377e9493dae81552249d9a07ba7d521d9b29addf8f1ba",
+    "durationSeconds": 55,
+    "width": 1080,
+    "height": 1920,
+    "frameRate": 30,
+    "videoCodec": "H.264",
+    "audioCodec": "AAC",
+    "audioMeanVolumeDb": -21.5,
+    "audioMaxVolumeDb": -2,
+    "fullFileDecode": "PASS",
+    "sourceAudioStream": "ABSENT",
+    "syntheticNarrationAudio": "PRESENT — eSpeak en-us, 135 WPM",
+    "localPath": "/mnt/data/noaa-review/NOAA-california-spiny-lobster-narration-review-1080x1920.mp4",
+    "delivery": "Conversation review attachment; not committed as production media"
+  },
+  "remainingReview": [
+    "Human full-playback review of the complete video, synthetic narration, captions, attribution, framing and factual claims",
+    "Human editorial decision on synthetic eSpeak voice quality; replace with owner-approved natural narration before publication",
+    "Caption timing is generated from exact eSpeak segment durations but remains provisional until human review against the final approved voice",
+    "Verify exact credit and all captions are legible on mobile across the complete video",
+    "Complete rights and compliance approval; keep all production approval flags false until then"
+  ],
+  "uploadAllowed": false,
+  "scheduleAllowed": false,
+  "supersededOutput": {
     "filename": "NOAA-california-spiny-lobster-short-review.mp4",
     "sha256": "c0735b95efa5a70fba2eba3a87cbacd2355c400288b320d97dd3190dce1cf280",
     "durationSeconds": 55.235,
@@ -56,14 +88,5 @@
     "fullFileDecode": "PASS",
     "sourceAudioStream": "ABSENT",
     "localPath": "/mnt/data/noaa-source/NOAA-california-spiny-lobster-short-review.mp4"
-  },
-  "remainingReview": [
-    "Human full-playback review of the complete video, narration, captions, attribution, framing and factual claims",
-    "Human editorial decision on synthetic eSpeak voice quality; replace with approved natural narration before publication",
-    "Shot-level review remains sampled at two-second intervals for the selected ranges, not frame-by-frame",
-    "Verify exact credit is legible on mobile across the complete video",
-    "Complete rights and compliance approval; keep all production approval flags false until then"
-  ],
-  "uploadAllowed": false,
-  "scheduleAllowed": false
+  }
 }
