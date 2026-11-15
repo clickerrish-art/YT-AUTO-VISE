@@ -239,10 +239,12 @@ export async function runAutonomousFacebookPublisher({
             !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(attempt.status) ||
             attempt.verifiedRemotely !== true || typeof attempt.remotePostId !== "string" ||
             !attempt.remotePostId.trim() || typeof attempt.slotId !== "string" || !attempt.slotId.trim()) continue;
-        const receipts = latestHistory.filter(item => item?.slotId === attempt.slotId &&
+        const slotOutcomes = latestHistory.filter(item => item?.slotId === attempt.slotId);
+        const receipts = slotOutcomes.filter(item =>
           ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status));
-        if (receipts.some(item => item.remotePostId !== attempt.remotePostId)) {
-          throw new Error("Facebook history changed during ledger recovery; manual reconciliation required");
+        if (slotOutcomes.some(item => !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)) ||
+            receipts.some(item => item.remotePostId !== attempt.remotePostId)) {
+          throw new Error("Facebook history changed during ledger recovery and contains a conflicting slot outcome; manual reconciliation required");
         }
         if (!receipts.length) latestHistory.push({ ...attempt, payload: undefined,
           historyRebuiltAt: isoNow(Number(now)),
