@@ -70,7 +70,7 @@ function fingerprint(payload) {
       sourceSupportsClaim: claim?.sourceSupportsClaim === true,
       verified: claim?.verified === true,
       quoteVerified: claim?.quoteVerified === true,
-      semanticVerification: claim?.semanticVerification ? { claimHash: String(claim.semanticVerification.claimHash ?? ""), sourceUrlsHash: String(claim.semanticVerification.sourceUrlsHash ?? ""), reviewerId: String(claim.semanticVerification.reviewerId ?? ""), checkedAt: String(claim.semanticVerification.checkedAt ?? ""), signature: String(claim.semanticVerification.signature ?? "") } : null
+      semanticVerification: claim?.semanticVerification ? { claimHash: String(claim.semanticVerification.claimHash ?? ""), sourceUrlsHash: String(claim.semanticVerification.sourceUrlsHash ?? ""), sourceExcerptHash: String(claim.semanticVerification.sourceExcerptHash ?? ""), reviewerId: String(claim.semanticVerification.reviewerId ?? ""), checkedAt: String(claim.semanticVerification.checkedAt ?? ""), signature: String(claim.semanticVerification.signature ?? "") } : null
     })).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))),
     media: Array.isArray(payload?.media) ? payload.media.map(m => ({
       id: m?.id ?? "", path: m?.path ?? "", sha256: m?.sha256 ?? "",
@@ -215,15 +215,16 @@ export async function evaluateFinalFacebookPayload(payload, {
       const attestation = claim.semanticVerification;
       const claimHash = sha256(String(claim.text));
       const sourceUrlsHash = sha256(JSON.stringify(claim.sourceUrls));
+      const sourceExcerptHash = sha256(String(claim.sourceExcerpt ?? ""));
       const checkedAt = Date.parse(attestation?.checkedAt);
       const checkedNow = Date.parse(now);
       const reviewerId = text(attestation?.reviewerId) ? attestation.reviewerId : "";
-      const signed = claimHash + "\n" + sourceUrlsHash + "\n" + reviewerId + "\n" + String(attestation?.checkedAt ?? "");
+      const signed = claimHash + "\n" + sourceUrlsHash + "\n" + sourceExcerptHash + "\n" + reviewerId + "\n" + String(attestation?.checkedAt ?? "");
       const expected = crypto.createHmac("sha256", approvalSecret).update(signed).digest();
       const supplied = Buffer.from(String(attestation?.signature ?? ""), "hex");
       const signatureValid = supplied.length === expected.length && crypto.timingSafeEqual(expected, supplied);
-      const verified = typeof approvalSecret === "string" && approvalSecret.length >= 32 && attestation?.claimHash === claimHash && attestation?.sourceUrlsHash === sourceUrlsHash && reviewerId.length > 0 && reviewerId.length <= 200 && Number.isFinite(checkedAt) && Number.isFinite(checkedNow) && checkedAt <= checkedNow + 5 * 60_000 && checkedNow - checkedAt <= 30 * 24 * 60 * 60_000 && signatureValid;
-      semanticResult = { verified, verifierId: verified ? reviewerId : null, checkedAt: verified ? attestation.checkedAt : null, reason: verified ? "SIGNED_HUMAN_FACT_CHECK_BOUND_TO_CLAIM_AND_SOURCE_SET" : "SIGNED_HUMAN_FACT_CHECK_MISSING_OR_INVALID" };
+      const verified = typeof approvalSecret === "string" && approvalSecret.length >= 32 && attestation?.claimHash === claimHash && attestation?.sourceUrlsHash === sourceUrlsHash && attestation?.sourceExcerptHash === sourceExcerptHash && reviewerId.length > 0 && reviewerId.length <= 200 && Number.isFinite(checkedAt) && Number.isFinite(checkedNow) && checkedAt <= checkedNow + 5 * 60_000 && checkedNow - checkedAt <= 30 * 24 * 60 * 60_000 && signatureValid;
+      semanticResult = { verified, verifierId: verified ? reviewerId : null, checkedAt: verified ? attestation.checkedAt : null, reason: verified ? "SIGNED_HUMAN_FACT_CHECK_BOUND_TO_CLAIM_SOURCE_SET_AND_EXCERPT" : "SIGNED_HUMAN_FACT_CHECK_MISSING_OR_INVALID" };
     }
     if (typeof semanticVerifier === "function" && checks.some(check => check.passed && check.excerptFound === true)) {
       try {
