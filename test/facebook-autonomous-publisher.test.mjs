@@ -581,3 +581,39 @@ test("startup does not promote an incomplete or unverified ledger row into remot
     assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), []);
   } finally { f.cleanup(); }
 });
+
+
+test("startup blocks when verified ledger and history receipts disagree on remote post identity", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    const slotId = "nature-frontiers-2026-10-25-conflicting-receipts";
+    fs.writeFileSync(f.queuePath, JSON.stringify([{
+      slotId, destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Conflicting receipt test.", links: [], media: [], claims: []
+    }]));
+    const base = {
+      kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId, destination: "nature_frontiers_facebook",
+      status: "SCHEDULED_VERIFIED", verifiedRemotely: true, retryAllowed: false
+    };
+    fs.writeFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), JSON.stringify([{
+      ...base, remotePostId: "123456789012345_ledger"
+    }]));
+    fs.writeFileSync(path.join(f.stateDir, "facebook-history.json"), JSON.stringify([{
+      ...base, remotePostId: "123456789012345_history"
+    }]));
+    let mutationCalls = 0;
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath,
+      stateDir: f.stateDir, now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      publish: async () => { mutationCalls++; throw new Error("conflicting receipts must stop before mutation"); }
+    }), /history conflicts with a verified ledger receipt/i);
+    assert.equal(mutationCalls, 0);
+    assert.equal(JSON.parse(fs.readFileSync(f.queuePath, "utf8")).length, 1,
+      "the queue must remain untouched for operator reconciliation");
+  } finally { f.cleanup(); }
+});
