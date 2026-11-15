@@ -43,6 +43,9 @@
 - The current Metricool brand `8094526` returned no scheduled posts for 2026-11-16 through 2026-12-16. The previous brand `7545638` returns HTTP 403 (access denied). Therefore the eight historical `draft:false`, `autoPublish:true` records from the 2026-10-28 snapshot remain **UNKNOWN**; an empty schedule on the new brand does not prove they were canceled or resolved.
 - Keep publishing disabled, dry-run enabled and emergency stop active. No Metricool or Meta record was modified.
 
+- A read-only Metricool snapshot for the current brand `8094526` returned 3 Facebook feed posts on 2026-11-13 and 2 Facebook Reels on 2026-11-13/14; Instagram feed/Reels queries for 2026-11-12 through 2026-11-16 returned no rows, and no future schedule was returned through 2026-12-16. The Facebook post-level metrics are sparse/null/zero and do not establish a reliable performance baseline. These external posts are not thereby approved under the repository's rights/editorial workflow.
+- The repository still has no accepted end-to-end engagement analytics ingestion and learning loop. Metricool remains a read-only external snapshot; do not infer performance from null/zero values or fabricate analytics.
+
 ### SonicVhibez — YouTube
 
 The exact production-readiness run remains HOLD with eight blockers: complete remote upload/history reconciliation; `content/render-manifest.json`; `content/long-form-render-manifest.json`; human-reviewed metadata; verified rights; completed compliance review; genuine `media/next-short.mp4`; and valid YouTube OAuth (currently `invalid_grant`). The readiness workflow never uploads, schedules or publishes: [diagnostic run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231751).
