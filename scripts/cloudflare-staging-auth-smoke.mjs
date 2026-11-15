@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { createCloudflareAccessHeaders } from "./cloudflare-access-headers.mjs";
 /**
  * Read-only authenticated smoke test for the deployed SonicVhibez staging Worker.
  * It never writes dashboard state, claims jobs, creates runner sessions, or publishes.
@@ -27,12 +28,7 @@ assert(parsed.hostname.endsWith(".workers.dev"), "Refusing to test a non-workers
 async function get(path, headers = {}) {
   const response = await fetch(new URL(path, parsed.origin), {
     method: "GET",
-    headers: {
-      accept: "application/json",
-      "CF-Access-Client-Id": accessClientId,
-      "CF-Access-Client-Secret": accessClientSecret,
-      ...headers
-    },
+    headers: createCloudflareAccessHeaders(accessClientId, accessClientSecret, headers),
     redirect: "error",
     signal: AbortSignal.timeout(15_000)
   });
