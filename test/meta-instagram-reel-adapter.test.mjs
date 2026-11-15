@@ -75,7 +75,7 @@ test("unknown container status fails closed before media_publish",async()=>{
 test("reconciliation confirms only a persisted exact Reel media ID",async()=>{
   const result=await reconcileInstagramReel({mediaId:"123456789012347",containerId:"123456789012346",
     instagramAccountId:account,expectedInstagramAccountId:account,accessToken:token,
-    fetchImpl:async()=>ok({id:"123456789012347",media_type:"REELS",permalink:"https://www.instagram.com/reel/abc/",timestamp:"2026-11-15T10:00:00+0000"})});
+    fetchImpl:async()=>ok({id:"123456789012347",media_type:"VIDEO",media_product_type:"REELS",permalink:"https://www.instagram.com/reel/abc/",timestamp:"2026-11-15T10:00:00+0000"})});
   assert.equal(result.outcome,"CONFIRMED");
   const unresolved=await reconcileInstagramReel({containerId:"123456789012346",instagramAccountId:account,
     expectedInstagramAccountId:account,accessToken:token,fetchImpl:async()=>{throw new Error("must not call");}});
@@ -85,12 +85,13 @@ test("reconciliation confirms only a persisted exact Reel media ID",async()=>{
 test("account verification requires exact professional identity and publishing scopes",async()=>{
   const responses=[
     ok({id:"987654321"}),
-    ok({data:[{permission:"instagram_basic",status:"granted"},{permission:"instagram_content_publish",status:"granted"}]}),
-    ok({id:account,username:"naturefrontiers",account_type:"BUSINESS"})
+    ok({data:[{permission:"instagram_basic",status:"granted"},{permission:"instagram_content_publish",status:"granted"},{permission:"pages_show_list",status:"granted"},{permission:"pages_read_engagement",status:"granted"}]}),
+    ok({id:account,username:"naturefrontiers",account_type:"BUSINESS"}),
+    ok({id:"1431329126735709",instagram_business_account:{id:account,username:"naturefrontiers"}})
   ];
   const result=await verifyInstagramBusinessAccount({instagramAccountId:account,expectedInstagramAccountId:account,accessToken:token,
     facebookPageId:"1431329126735709",expectedFacebookPageId:"1431329126735709",fetchImpl:async()=>responses.shift()});
   assert.equal(result.verified,true);
   assert.equal(result.accountType,"BUSINESS");
-  assert.equal(result.facebookPageId,"1431329126735709");\n  assert.equal(result.facebookPageId,"1431329126735709");
+  assert.equal(result.facebookPageId,"1431329126735709");
 });
