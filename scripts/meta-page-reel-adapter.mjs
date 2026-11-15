@@ -80,8 +80,14 @@ export async function createMetaPageReel({
     throw new MetaPageReelError("Publishing a Reel requires verified editorial approval");
   }
   let absolute, bytes;
-  try { absolute = resolveRegularFileNoSymlinks(draft.media.path, rootDir, "Facebook Reel video"); bytes = fs.readFileSync(absolute); }
+  try { absolute = resolveRegularFileNoSymlinks(draft.media.path, rootDir, "Facebook Reel video"); }
   catch { throw new MetaPageReelError("Reel video is missing, unsafe, unreadable or not a regular file"); }
+  const canonicalRoot = path.resolve(rootDir);
+  if (absolute !== canonicalRoot && !absolute.startsWith(canonicalRoot + path.sep)) {
+    throw new MetaPageReelError("Reel video path escapes the configured repository root");
+  }
+  try { bytes = fs.readFileSync(absolute); }
+  catch { throw new MetaPageReelError("Reel video is missing, unsafe or unreadable"); }
   if (!bytes.length || crypto.createHash("sha256").update(bytes).digest("hex") !== draft.media.sha256) throw new MetaPageReelError("Reel video checksum does not match the reviewed draft");
   const media = inspect(absolute);
   if (!media || !Number.isFinite(media.durationSeconds) || media.durationSeconds <= 0) throw new MetaPageReelError("Reel video inspection did not establish a valid duration");
