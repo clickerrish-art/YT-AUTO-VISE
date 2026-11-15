@@ -258,7 +258,11 @@ export async function runAutonomousFacebookPublisher({
           reason: "POLICY_RULE_VERSION_MISMATCH"
         };
       }
-      if (payload.mediaType != null && !["feed_post","reel"].includes(payload.mediaType)) {\n        const record = { slotId: payload.slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_BLOCKED", checkedAt: isoNow(current), reason: "UNSUPPORTED_MEDIA_TYPE" };\n        history.push(record); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++; continue;\n      }\n      if (!decision?.eligible) {
+      if (payload.mediaType != null && !["feed_post","reel"].includes(payload.mediaType)) {
+        const record = { slotId: payload.slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_BLOCKED", checkedAt: isoNow(current), reason: "UNSUPPORTED_MEDIA_TYPE" };
+        history.push(record); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++; continue;
+      }
+      if (!decision?.eligible) {
         const record = { slotId: payload.slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_BLOCKED", checkedAt: isoNow(current), contentFingerprint: decision?.contentFingerprint ?? null, policyDecision: decision, reason: decision?.reason ?? "POLICY_UNKNOWN" };
         history.push(record); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++; continue;
       }
@@ -294,8 +298,9 @@ export async function runAutonomousFacebookPublisher({
         skipped++;
         continue;
       }
+      const isReel = payload.mediaType === "reel";
       const attempt = {
-        kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId: payload.slotId, destination: "nature_frontiers_facebook",
+        kind: isReel ? "FACEBOOK_PAGE_REEL_PUBLISH_ATTEMPT" : "FACEBOOK_PUBLISH_ATTEMPT", slotId: payload.slotId, destination: "nature_frontiers_facebook",
         status: "PUBLISHING", startedAt: isoNow(current), scheduledAt: payload.scheduledAt, contentFingerprint: decision.contentFingerprint,
         policyRuleVersion: decision.policyRuleVersion, policyDecision: decision,
         payload: { caption: payload.caption, scheduledAt: payload.scheduledAt, mediaType: payload.mediaType ?? "feed_post", links: payload.links ?? [], mediaFingerprints: decision.mediaFingerprints }
