@@ -41,11 +41,13 @@ jobs:
             *) echo "FACEBOOK_STATE_DIR must be an absolute path"; exit 1 ;;
           esac
           mkdir -p "$state_dir"
-          chmod 700 "$state_dir"
+          # Reject a symlink before chmod: chmod follows the link and would
+          # otherwise mutate the target directory even though the next check fails.
           if [ -L "$state_dir" ] || [ ! -d "$state_dir" ]; then
             echo "Facebook state directory must be a real directory, not a symlink."
             exit 1
           fi
+          chmod 700 "$state_dir"
           printf 'FACEBOOK_STATE_DIR=%s\n' "$state_dir" >> "$GITHUB_ENV"
       - name: Install locked dependencies without lifecycle scripts
         run: npm ci --ignore-scripts
