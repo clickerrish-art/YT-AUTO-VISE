@@ -7,8 +7,10 @@ The canonical register is `content/nature-frontiers-media-register.json`. It is 
 Run:
 
 ```sh
-node scripts/validate-nature-frontiers-media-register.mjs
+npm run validate:nature-frontiers-media
 ```
+
+Or invoke the Node.js script directly: `node scripts/validate-nature-frontiers-media-register.mjs`.
 
 Or validate another JSON file:
 
