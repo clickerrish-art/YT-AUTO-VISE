@@ -2,6 +2,11 @@ const REQUIRED_ARRAYS = ["queueItems", "audit", "jobs", "uploads"];
 const OPTIONAL_ARRAYS = ["campaigns", "facebookDrafts", "facebookPosts", "facebookAttempts"];
 const MAX_STATE_BYTES = 2 * 1024 * 1024;
 
+function revisionFromEtag(value) {
+  const match = String(value ?? "").match(/^(?:W\\/)?"?([1-9][0-9]*)"?$/);
+  return match ? Number(match[1]) : null;
+}
+
 export class DashboardStateServiceError extends Error {
   constructor(message, { status = 0, code = "STATE_SERVICE_ERROR" } = {}) {
     super(message);
@@ -102,7 +107,7 @@ export class CloudflareDashboardStateClient {
   async bootstrapState(state) {
     const validated = validateRemoteDashboardState(state);
     const { payload, etag } = await this.request("/api/state/bootstrap", { method: "POST", body: validated });
-    if (Number(payload?.revision) !== 1 || !payload?.state || String(etag ?? "") !== '"1"') {
+    if (Number(payload?.revision) !== 1 || !payload?.state || revisionFromEtag(etag) !== 1) {
       throw new DashboardStateServiceError("State service returned an invalid bootstrap receipt", { code: "INVALID_RESPONSE" });
     }
     let savedState;
@@ -118,7 +123,7 @@ export class CloudflareDashboardStateClient {
       throw new DashboardStateServiceError("State service returned an incomplete state snapshot", { code: "INVALID_RESPONSE" });
     }
     const match = String(etag ?? "").match(/^"?([1-9][0-9]*)"?$/);
-    if (!match || Number(match[1]) !== revision) {
+    if (!match || Number(match[1]) !== revision || revisionFromEtag(etag) !== revision) {
       throw new DashboardStateServiceError("State revision and ETag do not match (revision=" + revision + ", etag=" + String(etag ?? "missing").slice(0, 80) + ")", { code: "INVALID_RESPONSE" });
     }
     let state;
@@ -133,7 +138,7 @@ export class CloudflareDashboardStateClient {
     const { payload, etag } = await this.request("/api/state", { method: "PUT", body: validated, revision: expectedRevision });
     const revision = Number(payload?.revision);
     if (!Number.isSafeInteger(revision) || revision !== expectedRevision + 1 || !payload?.state ||
-        String(etag ?? "") !== '"' + revision + '"') {
+        revisionFromEtag(etag) !== revision) {
       throw new DashboardStateServiceError("State service returned an unexpected update revision", { code: "INVALID_RESPONSE" });
     }
     let savedState;
@@ -176,7 +181,7 @@ export class CloudflareDashboardStateClient {
     });
     const revision = Number(payload?.revision);
     if (!Number.isSafeInteger(revision) || revision !== expectedRevision + 1 || !payload?.state ||
-        String(etag ?? "") !== '"' + revision + '"') {
+        revisionFromEtag(etag) !== revision) {
       throw new DashboardStateServiceError("State service returned an unexpected restore revision", { code: "INVALID_RESPONSE" });
     }
     let state;
