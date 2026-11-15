@@ -183,3 +183,45 @@ test("Page Reel adapter enforces minimum resolution, duration and frame rate bef
   await assert.rejects(()=>run(()=>({width:1080,height:1920,durationSeconds:35,frameRate:22})),/at least 23 fps/i);
   assert.equal(calls,0);
 });
+
+test("Page Reel scheduling requires approval and binds the exact requested timestamp",async t=>{
+  const {root,draft}=await fixture(t);
+  const now=Date.parse("2026-11-15T12:00:00.000Z");
+  const scheduledAt="2026-11-16T06:00:00.000Z";
+  const calls=[];
+  const result=await createMetaPageReel({
+    draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,
+    permissionsVerified:true,approvalVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,
+    videoState:"SCHEDULED",scheduledPublishAt:scheduledAt,now:()=>now,
+    rootDir:root,inspect:()=>inspected,
+    fetchImpl:async(url,options)=>{
+      calls.push({url:String(url),options});
+      if(calls.length===1)return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO});
+      if(calls.length===2)return response({success:true});
+      return response({success:true});
+    }
+  });
+  assert.equal(result.status,"REMOTE_SCHEDULED_UNVERIFIED");
+  assert.equal(result.videoState,"SCHEDULED");
+  assert.equal(result.scheduledPublishTime,Math.floor(Date.parse(scheduledAt)/1000));
+  const finish=new URLSearchParams(calls[2].options.body);
+  assert.equal(finish.get("video_state"),"SCHEDULED");
+  assert.equal(finish.get("scheduled_publish_time"),String(Math.floor(Date.parse(scheduledAt)/1000)));
+  assert.equal(calls.length,3);
+});
+
+test("Page Reel scheduling fails closed without approval or outside Meta's scheduling window",async t=>{
+  const {root,draft}=await fixture(t);
+  const now=Date.parse("2026-11-15T12:00:00.000Z");
+  let calls=0;
+  const run=options=>createMetaPageReel({
+    draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,
+    permissionsVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,
+    videoState:"SCHEDULED",now:()=>now,rootDir:root,inspect:()=>inspected,
+    fetchImpl:async()=>{calls++;return response({});},...options
+  });
+  await assert.rejects(()=>run({scheduledPublishAt:"2026-11-15T12:05:00.000Z",approvalVerified:true}),/between 10 minutes and 6 months/i);
+  await assert.rejects(()=>run({scheduledPublishAt:"2026-11-16T12:00:00.000Z",approvalVerified:false}),/requires verified editorial approval/i);
+  await assert.rejects(()=>run({scheduledPublishAt:"2027-06-16T12:00:00.000Z",approvalVerified:true}),/between 10 minutes and 6 months/i);
+  assert.equal(calls,0);
+});
