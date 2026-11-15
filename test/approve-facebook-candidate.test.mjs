@@ -43,6 +43,12 @@ test("interactive signer writes a valid approval bound to the exact candidate fi
   assert.equal(approval.status, "APPROVED");
   assert.equal(saved.claims[0].semanticVerification.reviewerId, "owner-test-reviewer");
   assert.match(saved.claims[0].semanticVerification.signature, /^[a-f0-9]{64}$/);
+  const attestation = saved.claims[0].semanticVerification;
+  const claimHash = crypto.createHash("sha256").update(saved.claims[0].text).digest("hex");
+  const sourceUrlsHash = crypto.createHash("sha256").update(JSON.stringify(saved.claims[0].sourceUrls)).digest("hex");
+  const sourceExcerptHash = crypto.createHash("sha256").update(saved.claims[0].sourceExcerpt).digest("hex");
+  const factCheckSigned = claimHash + "\n" + sourceUrlsHash + "\n" + sourceExcerptHash + "\n" + attestation.reviewerId + "\n" + attestation.checkedAt;
+  assert.equal(attestation.signature, crypto.createHmac("sha256", secret).update(factCheckSigned).digest("hex"));
   assert.equal(approval.contentFingerprint, facebookPayloadFingerprint(saved));
   const signed = approval.contentFingerprint + "\n" + approval.reviewerId + "\n" + approval.approvedAt;
   const expected = crypto.createHmac("sha256", secret).update(signed).digest("hex");
