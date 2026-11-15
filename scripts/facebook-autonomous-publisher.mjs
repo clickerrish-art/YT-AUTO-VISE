@@ -219,7 +219,8 @@ export async function runAutonomousFacebookPublisher({
         reconciliation = { outcome: "UNRESOLVED", reason: "STARTUP_RECONCILIATION_FAILED", matches: [] };
       }
       if (reconciliation?.outcome === "CONFIRMED" &&
-          ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(reconciliation.receipt?.status)) {
+          ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(reconciliation.receipt?.status) &&
+          typeof reconciliation.receipt?.remotePostId === "string" && reconciliation.receipt.remotePostId.trim()) {
         const recovered = {
           ...attempt, status: reconciliation.receipt.status, completedAt: new Date().toISOString(),
           remotePostId: reconciliation.receipt.remotePostId, remoteUrl: reconciliation.receipt.remoteUrl ?? null,
