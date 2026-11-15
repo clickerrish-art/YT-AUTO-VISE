@@ -39,7 +39,7 @@ async function get(path, headers = {}) {
   let body;
   try { body = await response.json(); }
   catch { throw new Error(path + " returned non-JSON HTTP " + response.status); }
-  return { status: response.status, body };
+  return { status: response.status, body, etag: response.headers.get("etag") };
 }
 
 const health = await get("/healthz");
@@ -57,6 +57,8 @@ const payload = authenticated.body;
 const state = payload?.state && typeof payload.state === "object" ? payload.state : payload;
 assert(Number.isSafeInteger(Number(payload?.revision)) && Number(payload.revision) >= 1,
   "Authenticated state response is missing a valid durable revision");
+assert(authenticated.etag === '"' + Number(payload.revision) + '"',
+  "Authenticated Worker state ETag does not match its revision: etag=" + String(authenticated.etag ?? "missing") + ", revision=" + Number(payload.revision));
 for (const key of ["queueItems", "audit", "jobs", "uploads"]) {
   assert(Array.isArray(state?.[key]), "Authenticated state response is missing array: " + key);
 }
