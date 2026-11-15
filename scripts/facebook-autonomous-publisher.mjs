@@ -341,10 +341,15 @@ export async function runAutonomousFacebookPublisher({
             });
         const success = isReel ? verified?.outcome === "CONFIRMED" && ["SCHEDULED_VERIFIED","PUBLISHED_VERIFIED"].includes(verified.receipt?.status) : ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(verified.status);
         const receipt = {
-          ...attempt, status: success ? verified.status : "UNCERTAIN", completedAt: new Date().toISOString(),
-          remotePostId: remote.remotePostId, remoteUrl: verified.remoteUrl ?? null,
-          remoteCreatedAt: verified.createdTime ?? null, scheduledPublishTime: verified.scheduledPublishTime ?? null,
-          verifiedRemotely: success, reconciliation: verified.status, retryAllowed: false
+          ...attempt,
+          status: success ? (isReel ? verified.receipt.status : verified.status) : "UNCERTAIN",
+          completedAt: new Date().toISOString(),
+          remotePostId: isReel ? (verified?.receipt?.remotePostId ?? remote.remoteVideoId) : remote.remotePostId,
+          remoteVideoId: isReel ? remote.remoteVideoId : undefined,
+          remoteUrl: isReel ? (verified?.receipt?.remoteUrl ?? null) : (verified.remoteUrl ?? null),
+          remoteCreatedAt: isReel ? (verified?.receipt?.createdTime ?? null) : (verified.createdTime ?? null),
+          scheduledPublishTime: isReel ? (verified?.receipt?.scheduledPublishTime ?? null) : (verified.scheduledPublishTime ?? null),
+          verifiedRemotely: success, reconciliation: verified, retryAllowed: false
         };
         ledger[ledger.length - 1] = receipt;
         history.push({ ...receipt, payload: undefined });
@@ -352,7 +357,7 @@ export async function runAutonomousFacebookPublisher({
         removeQueuedSlot(payload.slotId);
         if (success) published++; else skipped++;
       } catch (error) {
-        const uncertain = error?.uncertain === true || error?.retryable === true || error?.name === "AbortError" || Boolean(remote?.remotePostId || remote?.remoteVideoId);
+        const uncertain = error?.uncertain === true || error?.retryable === true || error?.name === "AbortError" || Boolean(remote?.remotePostId || remote?.remoteVideoId || ledger[ledger.length - 1]?.remoteVideoId);
         let reconciliation = null;
         if (uncertain) {
           try {
