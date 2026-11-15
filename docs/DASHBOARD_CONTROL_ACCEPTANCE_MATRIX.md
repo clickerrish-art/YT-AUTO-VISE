@@ -1,14 +1,18 @@
-# Latest exact-SHA evidence — 15 November 2026
+# Latest exact-SHA evidence — 16 November 2026
 
-**Current branch HEAD:** `3a8cb2b991324e2386df0a246bd6a58da97dcdd2`. **Dashboard UI source SHA:** `9e0f9dddb359f5ded0906d8ae156174dd4c390f9`. **Browser test source SHA:** `07b2014d48d43963f2fd67091253a3505d5633d5`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25`. The only source change after the tested browser SHA is the review-only NOAA thumbnail generator; dashboard HTML, dashboard server and browser tests are otherwise unchanged.
+**Latest tested source/test SHA:** `7a23289f7a6cd9a34027b84691333da0b7051fc2`. The dashboard UI source blob is `a3ffb14f2922c75d8e6ec190e10ad7f5658ebf98`; dashboard backend source blob is `028433ef23a6c7cc02d4e086eae92e197ade1bab`; browser test source blob is `dc13e490123e0c06a3e3a4be03420ea2029476ac`. `main` remains `69fdf35c90f980c142be3aaffa863304bc7eaa25`. Subsequent commits through `11018f44f2eac25dba0d2d20c27c5bb502a5f794` update evidence and content metadata only.
 
-- Dashboard Chromium E2E: [run 43702012574](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43702012574), **29/29 passed** on exact browser-test SHA `07b2014d48d43963f2fd67091253a3505d5633d5`. It covers the retry form, campaign preview/activation, real Edge TTS narration, production-plan review, backup controls, accessible names and fail-closed states. The campaign preview test now waits for `aria-busy` to clear before the second submit, preserving the single-flight guard.
-- Content quality: [run 43698639433](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639433), **791 tests passed, zero failures/skips**, with FFmpeg/ffprobe 8.0.1 installed.
-- Automation/security: [run 43700604234](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43700604234), **141/141 Node test files passed; 44 Python tests passed; zero skips; npm audit 0 vulnerabilities**.
-- Metadata validation: [run 43698639432](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639432), **141/141 Node test files passed**.
-- The static inventory remains **118 controls, 17 forms, 49 route handlers and 45 protected API routes**; dashboard source files were unchanged in this implementation increment.
-- The 29 passing browser journeys are not exhaustive per-control acceptance. Current exact-SHA form outcomes are **11 PASS / 6 BLOCKED / 0 NOT_TESTED**. The six owner-dependent production forms remain blocked; the 11 PASS forms have current real-dashboard/browser evidence listed below.
-- **DASH-001 remains NOT_TESTED overall.** Every visible control still needs explicit success, validation, error, authorization, persistence, refresh/restart and accessibility evidence.
+- Dashboard Chromium E2E: [run 43775231777](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231777), **29/29 passed** on exact source/test SHA `7a23289f7a6cd9a34027b84691333da0b7051fc2`.
+- Queue readiness: [run 43775231714](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231714), **894/894 Node tests passed, zero failures, zero skips**.
+- Automation/security: [run 43775226743](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775226743), **155/155 Node test files passed; 45 Python tests passed; zero skips; npm audit 0 vulnerabilities**.
+- Instagram publishing safety: [run 43775231716](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231716), **62/62 passed**. Metadata validation [run 43775231904](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231904), content quality [run 43775231746](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231746), Cloudflare durable-state unit checks [run 43775231719](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231719), deployment recovery smoke [run 43775231875](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231875), isolated baseline [run 43775231713](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231713), branch inventory [run 43775231721](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231721), and local Nature Frontiers draft-package validation [run 43775231820](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231820) all passed.
+- The static inventory is **119 controls** (27 buttons, 49 inputs, 27 selects, 16 textareas), **17 forms**, **52 route handlers** and **48 protected API routes**.
+- Form-level outcomes are **11 PASS / 6 BLOCKED / 0 NOT_TESTED**. The six owner-dependent production forms remain blocked; fixtures do not substitute for genuine media, rights, identities or human review.
+- API route acceptance is **42 PASS / 0 NOT_TESTED / 6 BLOCKED**; all **48/48** protected routes reject missing and invalid operator credentials. The six blocked routes still require external account, history or genuine production prerequisites.
+- Two new read-only dashboard panels now have local route/UI contract acceptance: the Nature Frontiers media register and Instagram operations status. Neither mutates a provider or claims live Meta connectivity.
+- **DASH-001 remains NOT_TESTED overall.** The 29 passing browser journeys and 119-control inventory are not exhaustive control-by-control evidence for success, validation, error, authorization, persistence, refresh/restart and accessibility behavior.
+- Production readiness remains **BLOCKED** [run 43775231751](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231751). Meta Page identity verification remains **FAILED** [run 43775231860](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231860) because the configured access token is expired (HTTP 401, OAuth error 190, subcode 463).
+
 
 # Latest exact-SHA evidence — 9 November 2026
 
@@ -936,9 +940,9 @@ No genuine rights-cleared final exports or human playback approval; YouTube OAut
 
 # Dashboard control/API acceptance matrix
 
-**Assessment basis:** candidate `e6bdf05bbda396d462de53f3c5a10dce6108f8f8`; this matrix remains partial where individual journeys are marked PARTIAL or NOT_TESTED. The dashboard markup is `public/dashboard.html`; backend routes are in `scripts/dashboard-server.mjs`; browser acceptance uses `browser-tests/dashboard.spec.mjs`.
+**Assessment basis:** exact source/test SHA `7a23289f7a6cd9a34027b84691333da0b7051fc2`; current UI is `public/dashboard.html`, backend is `scripts/dashboard-server.mjs`, and browser acceptance uses `browser-tests/dashboard.spec.mjs`. This matrix remains partial where individual journeys are marked PARTIAL or NOT_TESTED.
 
-**Scope note:** this matrix maps visible control groups to backend operations. It is not a claim that every control has exhaustive browser, authorization, failure-injection, or persistence coverage. The exact-SHA browser suite has eight tests; the remaining items stay NOT_TESTED until dedicated evidence exists.
+**Scope note:** this matrix maps visible control groups to backend operations. It is not a claim that every control has exhaustive browser, authorization, failure-injection, or persistence coverage. The exact-SHA Chromium suite passed 29 journeys; the remaining items stay PARTIAL or NOT_TESTED until dedicated evidence exists.
 
 | ID | Visible control / journey | Backend route or action | Authorization / safety boundary | Current status | Evidence / next acceptance action |
 |---|---|---|---|---|---|
@@ -962,16 +966,19 @@ No genuine rights-cleared final exports or human playback approval; YouTube OAut
 | DASH-CTRL-18 | Job state transitions | `POST /api/jobs/transition` | Authenticated; legal state transitions only; reject replay and malformed transition | PARTIAL | Lifecycle unit tests exist; exhaustive route-level authorization/state matrix remains outstanding. |
 | DASH-CTRL-19 | Health/status and autonomous Facebook status | `GET /api/facebook/autonomous-status` and state routes | Authenticated except documented health endpoints; no secrets in response | NOT_TESTED | Add response schema and secret-redaction tests plus real runner/volume health verification. |
 | DASH-CTRL-20 | Keyboard, mobile, status announcements, layout | Dashboard HTML/CSS and accessible status regions | Keyboard operability, labels, focus, narrow viewport, no horizontal overflow | PARTIAL | Exact-candidate browser run [40227616798](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616798) passed 10 Chromium journeys. New keyboard-only test verifies the operator token label, password input, Tab/Enter connection and token redaction. Full control-by-control keyboard/focus and mobile accessibility review remains incomplete. |
+| DASH-CTRL-21 | Nature Frontiers media register panel and refresh | `GET /api/nature-frontiers/media-register` | Authenticated, read-only; displays source, license, inspection, rights and approval state; never approves or publishes | PASS | Exact-SHA full Node suite [43775231714](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231714) covers `test/nature-frontiers-media-register-api.test.mjs` and dashboard contract tests. Authenticated GET returns the register and validation; no state path is disclosed and no provider mutation occurs. Media rights and human approval remain separate gates. |
+| DASH-CTRL-22 | Nature Frontiers Instagram operations status panel and refresh | `GET /api/instagram/status` | Authenticated, read-only; secrets redacted; no Meta call or publish; safe switches reported accurately | PASS | Exact-SHA Instagram safety [run 43775231716](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231716) covers the authenticated status route and UI contract. Tests verify HTTP 200, fail-closed switches, account ID remains unset, Page ID format, token redaction, and malformed persisted ledger returns safe HTTP 503. This does not prove live Meta connectivity. |
 
 ## Current automated evidence
 
-- Exact assessed candidate: `e6bdf05bbda396d462de53f3c5a10dce6108f8f8`.
-- [Automation/security run 40227616776](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616776): **PASS** — 276 Node tests, 0 failures; 8 Python safety tests; clean normal/locked install; npm audit 0 vulnerabilities.
-- [Browser E2E run 40227616798](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616798): **PASS** — 10 Chromium journeys against the real local dashboard/backend, including keyboard-only operator login and token redaction.
-- [Isolated baseline run 40227617108](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227617108): **PASS** — exact main `fa00d28e7f58911482686e4ad69fac9f4701a2e6` and candidate `e6bdf05bbda396d462de53f3c5a10dce6108f8f8`; both installs, Node tests and Python tests exited 0.
-- [Metadata run 40227616809](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616809): **PASS**; [content quality run 40227616866](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616866): **PASS**.
-- [Production readiness run 40227616914](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616914): **BLOCKED**, as required until genuine owner-controlled prerequisites pass.
-- [Nature Frontiers Facebook draft run 40227616772](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40227616772): **SKIPPED**, not live integration evidence.
+- Exact assessed source/test candidate: `7a23289f7a6cd9a34027b84691333da0b7051fc2`.
+- [Automation/security run 43775226743](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775226743): **PASS** — 155 Node test files, 45 Python tests, zero skips, npm audit 0 vulnerabilities.
+- [Queue readiness run 43775231714](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231714): **PASS** — 894/894 Node tests, zero failures/skips.
+- [Browser E2E run 43775231777](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231777): **PASS** — 29 Chromium journeys.
+- [Instagram safety run 43775231716](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231716): **PASS** — 62/62 tests, including authenticated status and corrupt-ledger fail-closed behavior.
+- [Metadata run 43775231904](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231904), [content quality run 43775231746](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231746), [Cloudflare durable-state run 43775231719](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231719), [deployment recovery run 43775231875](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231875), [baseline run 43775231713](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231713) and [branch inventory run 43775231721](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231721): **PASS**.
+- [Production readiness run 43775231751](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231751): **BLOCKED**, fail-closed. [Meta Page verification run 43775231860](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231860): **FAILED** on expired Meta OAuth token. These are external production blockers, not dashboard control successes.
+
 
 ## Acceptance rule
 
