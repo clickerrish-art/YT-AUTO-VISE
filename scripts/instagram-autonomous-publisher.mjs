@@ -174,7 +174,12 @@ export async function runAutonomousInstagramPublisher({
         accessToken:env.META_USER_ACCESS_TOKEN,apiVersion:config.apiVersion,fetchImpl
       });
       if(result?.outcome==="CONFIRMED"&&result.receipt?.status==="PUBLISHED_VERIFIED") {
-        ledger[i]={...current,status:"PUBLISHED_VERIFIED",completedAt:nowIso,reconciliation:result,retryAllowed:false};
+        ledger[i]={...current,status:"PUBLISHED_VERIFIED",completedAt:nowIso,
+          remoteMediaId:result.receipt.mediaId??current.remoteMediaId??null,
+          remoteContainerId:result.receipt.containerId??current.remoteContainerId??null,
+          permalink:result.receipt.permalink??current.permalink??null,
+          publishedAt:result.receipt.publishedAt??current.publishedAt??null,
+          verifiedRemotely:true,reconciliation:result,retryAllowed:false};
         history.push({...ledger[i],payload:undefined});
       } else {
         ledger[i]={...current,status:"UNCERTAIN",reconciliation:result,retryAllowed:false,reason:result?.reason??"INSTAGRAM_OUTCOME_UNRESOLVED_NO_RETRY"};
