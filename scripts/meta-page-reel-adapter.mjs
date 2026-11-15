@@ -93,7 +93,9 @@ export async function createMetaPageReel({
   const started = await readJson(start, { mutation:true });
   const videoId = typeof started.video_id === "string" ? started.video_id : "";
   if (!/^\d{5,30}$/.test(videoId)) throw new MetaPageReelError("Meta did not return a valid Reel video ID; reconcile the initialization before retry");
-  let uploadUrl;\n  try { uploadUrl = validateUploadUrl(started.upload_url); }\n  catch (error) { throw new MetaPageReelError(error.message, { uncertain:true, remoteVideoId:videoId }); }
+  let uploadUrl;
+  try { uploadUrl = validateUploadUrl(started.upload_url); }
+  catch (error) { throw new MetaPageReelError(error.message, { uncertain:true, remoteVideoId:videoId }); }
   let uploaded;
   try {
     uploaded = await fetchImpl(uploadUrl, {
