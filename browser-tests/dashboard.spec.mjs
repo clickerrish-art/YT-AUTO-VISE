@@ -406,6 +406,7 @@ test("campaign controls fail closed on unapproved destinations and retain Safari
   await page.locator("#campaigndisclosure").fill("Affiliate link; I may earn a commission.");
   await page.getByRole("button", { name: "Apply campaign action" }).click();
   await expect(page.locator("#campaignresult")).toContainText("Preview saved; campaign remains unactivated");
+  await expect(page.locator("#campaignform")).not.toHaveAttribute("aria-busy", "true");
   let stateResponse = await request.get("/api/state", { headers });
   expect(stateResponse.status()).toBe(200);
   let state = await stateResponse.json();
@@ -437,6 +438,7 @@ test("campaign controls fail closed on unapproved destinations and retain Safari
   await page.locator("#campaigndisclosure").fill("I may earn a commission if you book through this affiliate link.");
   await page.getByRole("button", { name: "Apply campaign action" }).click();
   await expect(page.locator("#campaignresult")).toContainText("Preview saved; campaign remains unactivated");
+  await expect(page.locator("#campaignform")).not.toHaveAttribute("aria-busy", "true");
   await expect(page.locator('#campaignaction option[value="activate"]')).toBeEnabled();
   await page.locator("#campaignaction").selectOption("activate");
   await expect(page.locator("#campaignaction")).toHaveValue("activate");
