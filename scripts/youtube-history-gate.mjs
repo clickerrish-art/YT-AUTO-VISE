@@ -365,15 +365,16 @@ export function assertNextPublicationAllowed({ history, pendingAttempts, schedul
       || JSON.stringify(configuredFormats) !== JSON.stringify(["long_form", "long_form", "short"])) {
     throw new Error("authoritative publication schedule has inconsistent spacing/cycle values; refusing upload");
   }
-  const result = evaluateNextPublication({
-    history, historyVerified: true, pendingAttempts, scheduledItems, proposedAt, jobId, format,
-    timeZone: timeZone ?? policy.timezone ?? DEFAULT_SCHEDULE_TIMEZONE,
-    minSpacingHours: minSpacingHours ?? configuredSpacing ?? DEFAULT_MIN_SPACING_HOURS
-  });
-  if (!result.valid) throw new Error("rolling publication cycle gate blocked upload: " + result.errors.join("; "));
   const cadenceDecision = validateCadenceDecision(policy.cadenceDecision, configuredSpacing);
   if (!cadenceDecision.valid) {
     throw new Error("owner-approved cadence decision blocks private upload: " + cadenceDecision.errors.join("; "));
   }
+  const result = evaluateNextPublication({
+    history, historyVerified: true, pendingAttempts, scheduledItems, proposedAt, jobId, format,
+    timeZone: timeZone ?? policy.timezone ?? DEFAULT_SCHEDULE_TIMEZONE,
+    minSpacingHours: minSpacingHours ?? configuredSpacing ?? DEFAULT_MIN_SPACING_HOURS,
+    cycleStartAt: policy.cadenceDecision.approvedAt
+  });
+  if (!result.valid) throw new Error("rolling publication cycle gate blocked upload: " + result.errors.join("; "));
   return result;
 }
