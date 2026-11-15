@@ -41,7 +41,8 @@
     "validate:nature-frontiers-media": "node scripts/validate-nature-frontiers-media-register.mjs",
     "nature-frontiers:register-local-media": "node scripts/register-nature-frontiers-local-media.mjs",
     "nature-frontiers:review-visual": "node scripts/record-nature-frontiers-visual-review.mjs",
-    "facebook:plan:daily": "node scripts/generate-facebook-daily-plan.mjs"
+    "facebook:plan:daily": "node scripts/generate-facebook-daily-plan.mjs",
+    "test:instagram-reel": "node --test test/meta-instagram-reel-adapter.test.mjs"
   },
   "engines": {
     "node": ">=22"
