@@ -5,6 +5,7 @@ on:
     branches: [codex/marketing-machine-audit-fixes]
     paths:
       - "scripts/cloudflare-staging-auth-smoke.mjs"
+      - "scripts/cloudflare-staging-backup-restore-smoke.mjs"
       - "scripts/cloudflare-dashboard-state-client.mjs"
       - "scripts/cloudflare-dashboard-state-store.mjs"
       - "scripts/dashboard-server.mjs"
@@ -46,3 +47,10 @@ jobs:
           fi
       - name: Run read-only authenticated staging checks
         run: node scripts/cloudflare-staging-auth-smoke.mjs
+      - name: Syntax-check one-time backup and restore acceptance
+        run: node --check scripts/cloudflare-staging-backup-restore-smoke.mjs
+      - name: Run one-time staging backup and restore acceptance
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[staging-backup-restore]')
+        env:
+          DASHBOARD_STAGING_BACKUP_RESTORE_CONFIRMATION: "YES"
+        run: node scripts/cloudflare-staging-backup-restore-smoke.mjs
