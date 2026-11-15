@@ -959,3 +959,52 @@ test("atomic state write does not acknowledge a rename until its directory entry
     assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), []);
   } finally { f.cleanup(); }
 });
+
+
+test("startup reconciliation re-reads history after Meta lookup before writing a recovered receipt", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    const payload = {
+      slotId: "nature-frontiers-2026-10-25-startup-history-race",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Startup reconciliation history race.", links: [], media: [], claims: []
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    fs.writeFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), JSON.stringify([{
+      kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId: payload.slotId,
+      destination: "nature_frontiers_facebook", status: "PUBLISHING",
+      startedAt: "2026-10-25T05:30:00.000Z", scheduledAt: payload.scheduledAt,
+      payload: { caption: payload.caption, scheduledAt: payload.scheduledAt }
+    }]));
+    const historyPath = path.join(f.stateDir, "facebook-history.json");
+    const concurrentReceipt = {
+      kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId: payload.slotId,
+      destination: "nature_frontiers_facebook", status: "SCHEDULED_VERIFIED",
+      verifiedRemotely: true, remotePostId: "123456789012345_concurrent"
+    };
+    let mutationCalls = 0;
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath,
+      stateDir: f.stateDir, now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
+      reconcileRemote: async () => {
+        fs.writeFileSync(historyPath, JSON.stringify([concurrentReceipt]));
+        return {
+          outcome: "CONFIRMED",
+          receipt: { status: "SCHEDULED_VERIFIED", remotePostId: "123456789012345_reconciled" }
+        };
+      },
+      publish: async () => { mutationCalls++; throw new Error("startup recovery conflict must block publishing"); }
+    }), /history conflicts with a reconciled ledger receipt/i);
+    assert.equal(mutationCalls, 0);
+    assert.deepEqual(JSON.parse(fs.readFileSync(historyPath, "utf8")), [concurrentReceipt],
+      "the concurrent verified receipt must remain byte-for-byte authoritative");
+    assert.equal(JSON.parse(fs.readFileSync(f.queuePath, "utf8")).length, 1,
+      "the queued slot must remain for manual reconciliation");
+  } finally { f.cleanup(); }
+});
