@@ -17,7 +17,7 @@
       "severity": "critical",
       "owner": "maintainer",
       "requirement": "Keep implementation isolated from main and preserve PR #1 as draft/unmerged.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/44fe965a9b6a5d9d09043714acf08a378e86eb8c",
@@ -34,16 +34,16 @@
       "assessmentCommitSha": "a16b94e60960aba90fa20adc8fcdaf3057e15d68",
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch.",
       "lastVerifiedStatus": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadStatus": "PASS",
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "PASS: PR #1 issue is open and titled Draft; main SHA is unchanged by this run; branch divergence and changed-file count were independently retrieved; no merge or destructive history operation occurred. Draft boolean is inferred from the PR title/body because the issue endpoint does not expose the draft field."
     },
     {
       "id": "CI-001",
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Run existing automated Node/Python, locked-install, metadata, content and browser checks on the current PR checkpoint.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295493",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40659295386",
@@ -162,16 +162,16 @@
       "assessmentCommitSha": "a16b94e60960aba90fa20adc8fcdaf3057e15d68",
       "acceptanceCriterion": "Automation/security, browser E2E, metadata and content-quality workflows complete successfully on the exact candidate SHA, with no required local test skipped.",
       "lastVerifiedStatus": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadStatus": "PASS",
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "PASS: exact SHA 12c287 passed automation/security 141/141 Node test files and 44 Python tests, content quality 786/786, metadata 141/141 and dashboard Chromium E2E 29/29; zero skips."
     },
     {
       "id": "CI-002",
       "severity": "high",
       "owner": "maintainer",
       "requirement": "Run baseline suites against exact current main and implementation branch SHAs in isolated environments.",
-      "status": "NOT_TESTED",
+      "status": "PASS",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40651430324",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40706792076",
@@ -212,9 +212,9 @@
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence.",
       "lastVerifiedStatus": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadStatus": "PASS",
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "PASS: isolated main/candidate baseline workflow completed successfully on exact main SHA 69fdf35 and candidate SHA 12c287."
     },
     {
       "id": "DASH-001",
@@ -355,8 +355,8 @@
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "SCHED-001",
@@ -386,8 +386,8 @@
       "acceptanceCriterion": "The same 72-hour minimum, rolling long_form → long_form → short cycle, actual-history ordering and DST/timezone policy are enforced by config, queue, dashboard, workflows and tests.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "SCHED-WORKER-MULTIPROCESS-001",
@@ -404,8 +404,8 @@
       "acceptanceCriterion": "Two independent local dashboard processes sharing one isolated persistent state race to claim one queued job; exactly one obtains a lease and one claim audit event is persisted. After both processes are SIGKILLed, a fresh process must recover the job to RECOVERY_REQUIRED, clear the lease, and append exactly one recovery audit event.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "STATE-001",
@@ -459,8 +459,8 @@
       "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "YT-001",
@@ -476,8 +476,8 @@
       "acceptanceCriterion": "Authenticated YouTube API identity matches the independently verified SonicVhibez channel ID and never resolves to Nature Frontiers.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "YT-002",
@@ -493,8 +493,8 @@
       "acceptanceCriterion": "Playable 50–60s 9:16 Short and 6–10 minute long-form outputs decode fully, match manifests/checksums, carry verified rights evidence, and have recorded human review bound to exact hashes.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "YT-003",
@@ -510,8 +510,8 @@
       "acceptanceCriterion": "Complete public/private/unlisted history and every uncertain attempt are reconciled; a separate one-shot authorization is consumed exactly once; any authorized test upload is verified private on the correct channel and has a durable receipt.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "FB-001",
@@ -529,8 +529,8 @@
       "acceptanceCriterion": "The verified Nature Frontiers Page identity and permissions pass live checks; the intended draft-only workflow completes (not skipped) and retains a validated draft artifact without publishing.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "SAFE-001",
@@ -547,8 +547,8 @@
       "acceptanceCriterion": "All applicable public/unattended YouTube and Facebook live mutations remain blocked, Safari stays inactive, and only the exact approved Selar URL is accepted.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "SEC-001",
@@ -564,8 +564,8 @@
       "acceptanceCriterion": "Repository owner enables branch protection and required status checks and verifies the settings before integration.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "GIT-002",
@@ -597,8 +597,8 @@
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "DEPLOY-001",
@@ -615,8 +615,8 @@
       "acceptanceCriterion": "An isolated deployment run records startup, health/readiness, monitoring, backup, restore, rollback and interrupted-deployment outcomes for the exact candidate SHA.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "MEDIA-SEC-001",
@@ -641,8 +641,8 @@
       "acceptanceCriterion": "Regression tests prove relevant media paths reject symlinks and unsafe ancestors; remaining TOCTOU risk is documented and separately assessed.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "SCHED-002",
@@ -660,8 +660,8 @@
       "acceptanceCriterion": "evaluateNextPublication rejects missing, draft, scheduled, deleted or unknown statuses in claimed remote publication history, while accepting only published/public/private/unlisted and retaining 72-hour/cycle safeguards.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "DASH-002",
@@ -677,8 +677,8 @@
       "acceptanceCriterion": "The dashboard matrix lists every currently identified visible control group, its backend route, authorization/safety boundary, status, evidence and next acceptance action.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "RESTORE-001",
@@ -700,8 +700,8 @@
       "acceptanceCriterion": "Tests reject a symlinked backup file, a symlinked parent of the backup, and a symlinked rootDir ancestor without creating files through the link; regular backup input and explicit restore confirmation remain functional.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "SCHED-003",
@@ -723,8 +723,8 @@
       "acceptanceCriterion": "Configuration records the requested weekly target and mathematical conflict; validator emits a visible blocked decision status; production readiness refuses to pass unless a valid owner-approved cadence decision is present.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "SCHED-004",
@@ -742,8 +742,8 @@
       "acceptanceCriterion": "Readiness accepts only an explicitly approved, timezone-stamped, referenced, mathematically feasible cadence with at least 72 elapsed hours between actual publications; shorter spacing is rejected in every mode.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "RDY-SEC-001",
@@ -763,8 +763,8 @@
       "acceptanceCriterion": "Automated tests prove safe in-root regular files pass; path traversal, outside-root paths, symlinked files, symlinked ancestors, directories and missing files fail; readiness continues to support an explicitly configured external queue path only when the full path contains no symlinks.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "CI-READY-001",
@@ -784,8 +784,8 @@
       "acceptanceCriterion": "The workflow records both exit codes in a retained artifact, validates the values, confirms they agree, and emits the explicit BLOCKED message when both checks return 2; a missing or malformed record fails closed.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "DASH-CTRL-05",
@@ -803,8 +803,8 @@
       "acceptanceCriterion": "Unauthenticated requests return 401; malformed dates and impossible calendar dates return HTTP 400 with safe JSON errors; draft IDs and publishing state remain unchanged.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "DASH-A11Y-001",
@@ -822,8 +822,8 @@
       "acceptanceCriterion": "A programmatic label identifies the password token input; keyboard typing, Tab focus and Enter activate Connect; successful connection reveals the app and does not echo the token in status feedback.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "DASH-MEDIA-001",
@@ -842,8 +842,8 @@
       "acceptanceCriterion": "POST /api/jobs/validate invokes validate-short-export.mjs for Short artifacts or validate-long-form-export.mjs for long-form artifacts; any validator error/non-zero exit blocks validationResults.passed=true. Short exports with missing, malformed, or fps outside 23.9–60 are rejected.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "APPROVAL-001",
@@ -861,8 +861,8 @@
       "acceptanceCriterion": "Approval re-hashes the exact validated captions and rejects missing/changed captions; approval relatedArtifacts include current video(s), thumbnail, SRT captions and metadata JSON hashes; lifecycle approval requires validationResults.passed === true and exact equality of the reviewed artifact set.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "MEDIA-QUALITY-001",
@@ -882,8 +882,8 @@
       "acceptanceCriterion": "The Short and long-form renderers invoke the quality validator before FFmpeg; missing/placeholder evidence, source hash mismatch, invalid script depth/source references, stale edit plan, failed audio metrics or absent human editorial review block rendering.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "SHORT-PARENT-001",
@@ -906,8 +906,8 @@
       "acceptanceCriterion": "Tests reject missing/wrong parent, wrong weekly cycle, stale revision/hash, unapproved/failed/foreign-channel parent, missing remote ID, wrong canonical URL and unverified native Related video at publication stage.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "YOUTUBE-RELATED-001",
@@ -927,8 +927,8 @@
       "acceptanceCriterion": "The native association is verified in Studio for the actual Short and exact parent ID, with parent public/unlisted and advanced feature access confirmed; otherwise the gate remains blocked.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "SCRIPT-PROMPT-001",
@@ -947,8 +947,8 @@
       "acceptanceCriterion": "The script-authoring workflow emits a structured prompt with the 6–10 minute/50–60 second target, required sections and sourcing rules, then validates the returned text with measured counts and source coverage before narration generation.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "AUDIO-RENDER-001",
@@ -966,8 +966,8 @@
       "acceptanceCriterion": "A valid selected profile is applied with safe filter parameters; the final rendered MP4 is measured with FFmpeg loudnorm; missing/unparseable measurements, out-of-tolerance integrated loudness or excessive true peak block success.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "RENDER-NO-LOOP-001",
@@ -986,8 +986,8 @@
       "acceptanceCriterion": "Both renderers omit stream looping and still require the output duration and full-file decode validators before reporting success.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "RENDER-MULTISCENE-001",
@@ -1007,8 +1007,8 @@
       "acceptanceCriterion": "A multi-scene test fixture renders a deterministic, timed sequence of distinct approved inputs; missing/reordered/stale assets fail closed and the final manifest records each source hash and edit decision.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "SCHED-QUEUE-001",
@@ -1029,8 +1029,8 @@
       "acceptanceCriterion": "QUEUED entries are treated as active schedule reservations; collision and malformed/missing timestamp cases fail closed, while a valid exact 72-hour gap passes.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "ART-RENDER-001",
@@ -1050,8 +1050,8 @@
       "acceptanceCriterion": "An existing regular file, symlink or retained per-job manifest is not overwritten; the request fails closed before a job lease is claimed and retained bytes remain unchanged.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "AUTH-TIMESTAMP-001",
@@ -1070,8 +1070,8 @@
       "acceptanceCriterion": "Narration refuses script approval timestamps unless they are calendar-valid ISO timestamps with explicit timezone; regression cases fail before any TTS subprocess is invoked.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "RDY-EVIDENCE-001",
@@ -1092,8 +1092,8 @@
       "acceptanceCriterion": "Readiness JSON exposes stable blocker IDs, severity, evidence kind and observed limitation, controlOwner, and actionable resolution; tests verify absent credentials are reported without printing secret values and remote history is explicitly unverified by the read-only check.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "RDY-PATH-001",
@@ -1112,8 +1112,8 @@
       "acceptanceCriterion": "With an absolute external QUEUE_PATH and malformed queue JSON, readiness returns exit code 2, reports a redacted path label, and never includes the external directory in the serialized evidence.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "YT-PARENT-TIME-001",
@@ -1135,8 +1135,8 @@
       "acceptanceCriterion": "Reject timezone-free, impossible calendar dates and out-of-range UTC offsets for relationshipApprovedAt and reject invalid timestamps for native Related-video verification; accept valid timezone-qualified timestamps.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "CI-FFMPEG-001",
@@ -1159,8 +1159,8 @@
       "acceptanceCriterion": "Both workflows install and report FFmpeg/ffprobe before the Node suite; exact candidate ac97c8860700dcbfedfb367d4dfbc0c654164479 reports 374 tests, 374 pass, 0 failures, 0 skips, including a synthetic multi-scene FFmpeg integration test.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "CI-TEST-SKIPS-001",
@@ -1192,8 +1192,8 @@
       "acceptanceCriterion": "Automation, content-quality and metadata jobs explicitly report 378 tests, 378 pass, 0 fail, 0 skipped on exact candidate b1989a764e54400cddb55158b998c5a375972321.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "RESTORE-TXN-001",
@@ -1216,8 +1216,8 @@
       "acceptanceCriterion": "On the exact tested candidate, injected failure after the first destination commit rolls back all partial changes; the original dashboard state is restored byte-for-byte; simulated interrupted journal recovery rolls back and requires explicit retry; dashboard startup refuses to serve while a journal exists.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "AUTH-001",
@@ -1236,8 +1236,8 @@
       "acceptanceCriterion": "Exact tokens are accepted; wrong or non-string values are rejected; unequal UTF-8 byte lengths never reach timingSafeEqual and the dashboard API returns 401 rather than 500 for a malformed token.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "INV-001",
@@ -1256,8 +1256,8 @@
       "nextAction": "Keep the inventory test synchronized when dashboard controls, forms or literal route declarations change. Inventory does not establish behavior acceptance.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "AUTH-API-001",
@@ -1279,8 +1279,8 @@
       "nextAction": "Retain byte-safe helper and malformed-token tests; exact-SHA route sweep covers missing credentials across all distinct API method/path routes. Exact-SHA boundary test verifies 400 malformed JSON, 415 unsupported media type, and 413 for >16 KiB request bodies without persisted-state mutation or state-path disclosure. These focused tests do not close DASH-001.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "A11Y-001",
@@ -1297,8 +1297,8 @@
       "acceptanceCriterion": "Playwright connects to the real local dashboard and asserts that every visible button, input, select and textarea has a programmatic name from ARIA, associated labels or native button text/value.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "SCHED-005",
@@ -1317,8 +1317,8 @@
       "acceptanceCriterion": "evaluateNextPublication rejects each supported remote publication status when actualPublishedAt and publishedAt are absent, even if createdAt or scheduledAt is present; exact candidate CI passes with zero skipped tests.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "DASH-A11Y-MOBILE-001",
@@ -1334,8 +1334,8 @@
       "acceptanceCriterion": "The real local dashboard/backend is connected at 320px viewport width; documentElement.scrollWidth and body.scrollWidth do not exceed window.innerWidth; exact candidate browser suite passes.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "META-REMOTE-SCHEDULED-001",
@@ -1351,8 +1351,8 @@
       "acceptanceCriterion": "The owner has decided which records are intended; any authorized changes are verified by a fresh Metricool read-back; no unintended scheduled publication remains active; evidence does not expose credentials.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "SCHED-RESERVATION-001",
@@ -1369,8 +1369,8 @@
       "nextAction": "Retain regression coverage and include this rule in broader queue/restart/concurrency acceptance.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "META-ASSET-PATH-001",
@@ -1391,8 +1391,8 @@
       "nextAction": "Retain both regression tests. Reuse resolveRegularFileNoSymlinks for any future external-media upload adapter and add coverage before adding such paths.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "META-SCHEDULE-TIMESTAMP-001",
@@ -1412,8 +1412,8 @@
       "nextAction": "Retain the adapter regression test and apply strict timezone-qualified timestamp validation at every external scheduling boundary.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "CAPTION-SRT-CLOCK-001",
@@ -1434,8 +1434,8 @@
       "nextAction": "Keep strict timestamp validation at all caption parsing and rendering boundaries.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "API-REQUEST-MEDIA-001",
@@ -1456,8 +1456,8 @@
       "nextAction": "Keep the regression and ensure any future body-bearing API routes use the shared readBody parser. This focused case does not close DASH-001.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "API-REQUEST-SIZE-001",
@@ -1475,8 +1475,8 @@
       "acceptanceCriterion": "Oversized request returns 413; no state mutation occurs; error response does not reveal local filesystem paths.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "DASH-API-BOUNDARY-001",
@@ -1493,8 +1493,8 @@
       "acceptanceCriterion": "Against the real local server, malformed JSON returns 400, unsupported content type returns 415, and JSON >16 KiB returns 413; error responses do not disclose the state path and state bytes are unchanged.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "DASH-JOB-IDEMPOTENCY-001",
@@ -1511,8 +1511,8 @@
       "acceptanceCriterion": "Real HTTP POST /api/jobs creates one queued job and audit event; exact retry returns same job as reused; different inputs with the same key return 409; persisted job/audit counts remain one.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "BACKUP-001",
@@ -1534,8 +1534,8 @@
       "acceptanceCriterion": "When outputPath already exists, backupState rejects, preserves the original bytes, and cleans up its temporary file. A new backup is finalized without replacement-capable rename; file bytes are fsynced and the parent directory is fsynced on supported POSIX systems.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "BACKUP-002",
@@ -1557,8 +1557,8 @@
       "acceptanceCriterion": "Backup acquires the same exclusive state-operation lock as restore, rejects a pre-existing lock without changing it, and writes no backup output while the lock is held.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "BACKUP-003",
@@ -1582,8 +1582,8 @@
       "acceptanceCriterion": "When backupState fails because there are no eligible entries, it rejects, removes only its own shared lock, and does not create the requested backup file.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "BACKUP-004",
@@ -1606,8 +1606,8 @@
       "acceptanceCriterion": "A child Node process acquires and fsyncs the shared operation lock. backupState rejects, leaves the lock bytes unchanged, writes no backup file, and the child releases only its own lock during fixture cleanup.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "BACKUP-005",
@@ -1628,8 +1628,8 @@
       "acceptanceCriterion": "When .restore-transaction.json exists, backupState rejects before reading snapshot inputs, preserves the journal, creates no backup output, and removes only its own operation lock.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "BACKUP-OUTPUT-001",
@@ -1648,8 +1648,8 @@
       "acceptanceCriterion": "A backup output path with a symlinked ancestor is rejected before nested directories are created outside the intended path; no backup output is written and the shared operation lock is released.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "STATE-CRASH-001",
@@ -1668,8 +1668,8 @@
       "acceptanceCriterion": "A separate process exits immediately after a destination commit, leaving the journal and lock. After operator-confirmed lock cleanup, recovery restores the exact original bytes, clears the journal, and releases its own lock.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "UPLOAD-LOG-PATH-001",
@@ -1687,8 +1687,8 @@
       "acceptanceCriterion": "Upload log directory creation must reject any symlinked ancestor before creating descendant directories, ledger files or operation locks.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "YT-READBACK-001",
@@ -1707,8 +1707,8 @@
       "acceptanceCriterion": "Shared read-back validation must reject missing/incorrect remote ID, wrong channel, title mismatch, or any visibility other than private for both new uploads and prior-attempt reconciliation.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "GIT-INVENTORY-001",
@@ -1729,8 +1729,8 @@
       "acceptanceCriterion": "A full-history run must produce retained machine-readable JSON and human-readable Markdown containing every branch-only/base-only commit and per-commit file status/path summaries without mutating repository history.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "RIGHTS-TIMESTAMP-001",
@@ -1748,8 +1748,8 @@
       "acceptanceCriterion": "createReviewDecision rejects timezone-free timestamps, impossible calendar dates, offsets outside the ISO-8601 limit and malformed values, while accepting valid timezone-qualified timestamps.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "REVIEW-RECEIPT-TIMESTAMP-001",
@@ -1767,8 +1767,8 @@
       "acceptanceCriterion": "createReviewDecision refuses invalid reviewedAt values, and isReviewCurrent returns false for a persisted review whose reviewedAt timestamp is invalid.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "NF-PROMO-001",
@@ -1787,8 +1787,8 @@
       "acceptanceCriterion": "Tests demonstrate that evaluateFacebookDraft and evaluateFinalFacebookPayload reject all three supplied Selar URLs, the named Complete YouTube Wildlife Creator's Vault, commercial=true, campaign IDs, affiliate language and purchase/download CTAs, while an ordinary non-commercial wildlife education fixture remains eligible.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "DASH-PLAN-001",
@@ -1807,8 +1807,8 @@
       "acceptanceCriterion": "A real local dashboard/server browser journey persists a valid test production plan, rejects tampered narration approval and changed scene evidence, records a hash-bound review and audit event, survives restart, and leaves rendering and publication disabled.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "API-001",
@@ -1867,8 +1867,8 @@
       "acceptanceCriterion": "A route-by-route acceptance matrix records exact method/path and independently passing authorized success, unauthorized, invalid input, persistence, failure, concurrency/idempotency, audit and restart evidence as applicable.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "API-NEG-001",
@@ -1885,8 +1885,8 @@
       "acceptanceCriterion": "The real dashboard server accepts the test operator token, every discovered /api method/path returns a safe JSON response to an empty request without a 5xx, leaks no internal path and leaves persisted state byte-identical.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "NF-PROMO-UI-001",
@@ -1906,8 +1906,8 @@
       "acceptanceCriterion": "The dashboard form exposes no prohibited campaign/commercial/disclosure controls; its submitted payload fixes campaignId=null, commercial=false and disclosureRequired=false; static contract and full CI pass on the exact source/test SHA.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "MEDIA-001",
@@ -1921,8 +1921,8 @@
       "nextAction": "Existing renderers and fixture tests do not yet demonstrate a reproducible genuine 6–10 minute 16:9 long-form and 50–60 second 9:16 Short from an approved script and rights-cleared assets. RENDER-MULTISCENE-001 remains NOT_TESTED. Complete the full pipeline with real authorized assets; do not treat silent MP3 or synthetic FFmpeg fixtures as production media.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "SEO-001",
@@ -1936,8 +1936,8 @@
       "nextAction": "Metadata validation and qualitative keyword guidance exist, but measured search-volume/competition evidence and a fully reviewed production metadata package are not established. Do not claim a 99/100 ranking score or guaranteed discoverability.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "PUB-001",
@@ -1951,8 +1951,8 @@
       "nextAction": "Blocked by the 13 production-readiness prerequisites: verified SonicVhibez channel identity and OAuth credentials, complete public/private/unlisted history, genuine media and rights evidence, human review, approved metadata and owner-approved feasible cadence. No upload was attempted.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "META-001",
@@ -1966,8 +1966,8 @@
       "nextAction": "Local Nature Frontiers draft validation passes, but provider-side Page identity/permissions and draft creation/read-back are not accepted. The last documented Metricool read-only check on 31 October found eight promotional records, one published and seven future with draft=false and autoPublish=true; no remote records were changed. Owner must review those records and verify the correct Page/Instagram identity before any external mutation.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "E2E-001",
@@ -1982,8 +1982,8 @@
       "nextAction": "The successful narration reconciliation route is a focused workflow slice, not the complete business scenario. No end-to-end run has yet produced and accepted genuine production media through every stage and persisted the full result across restart.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "SCHED-WORKER-DISPATCH-001",
@@ -2001,8 +2001,8 @@
       "acceptanceCriterion": "The worker uses a separate scoped token, can only list dispatchable jobs and invoke the renderer, filters unapproved render plans, applies bounded conflict backoff, preserves state for read-only listings and stops its poll wait promptly.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     },
     {
       "id": "DEPLOY-SERVICE-READINESS-001",
@@ -2020,71 +2020,74 @@
       "acceptanceCriterion": "A real-server test demonstrates GET /operational-readyz returns local service readiness when state/config/UI are readable while GET /readyz continues to return blocked publication prerequisites; publishing remains disabled.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "3e302319d35ca738df421148b357afc7038f8e93",
-      "currentHeadEvidenceNote": "No full exact-current-head CI or end-to-end acceptance was available; retain prior evidence only as historical."
+      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
     }
   ],
   "currentCheckpoint": {
-    "applicationCodeSha": "3e302319d35ca738df421148b357afc7038f8e93",
-    "testedSha": "44a909db7c9ab60e9c62e7b92f3e028a88675619",
-    "checkpointPrHead": "1c20fd77207d918f554d5c035d172f4309051446",
+    "applicationCodeSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+    "testedSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+    "checkpointPrHead": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
     "currentMainSha": "69fdf35c90f980c142be3aaffa863304bc7eaa25",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 3568,
+    "aheadBy": 3573,
     "behindBy": 4,
     "changedFiles": 328,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "15 November live refresh: the current code/test change is 3e302319d35ca738df421148b357afc7038f8e93 and its focused local regression passed 2/2. No GitHub Actions or combined-status result was returned for that SHA, so no current-head acceptance item is marked PASS. Last full CI on parent SHA 44a909db7c9ab60e9c62e7b92f3e028a88675619 passed automation/security (140 Node test files, 44 Python tests, zero skips, npm audit 0), content quality (784/784), and dashboard E2E (29/29). Production readiness remains HOLD with seven owner/evidence blockers; Meta Page verification is blocked by an expired token. PR #1 remains open and its title/body identify it as draft; main was not edited by this run. PR #7 remains open; its draft flag is not exposed.",
+    "verdict": "15 November exact-SHA verification: source/test SHA 12c28787923384d5ba767614c89c09b4b328cd9a passed automation/security (141 Node test files, 44 Python tests, zero skips, npm audit 0), content quality (786/786), metadata (141/141), dashboard Chromium E2E (29/29 after retry), isolated main/candidate baseline, queue readiness, Cloudflare durable-state (9/9), deployment recovery (2/2), branch inventory and local Nature Frontiers draft validation. CI-001, CI-002 and GIT-001 are PASS with exact current evidence. Other requirements remain NOT_TESTED or BLOCKED; no production readiness or publication claim.",
     "ci": {
-      "automationSecurity": "PASS on exact SHA 44a909: 140/140 Node test files, 44 Python tests, zero skips, npm audit 0 vulnerabilities.",
-      "contentQuality": "PASS on exact SHA 44a909: 784/784, zero skipped.",
-      "dashboardE2e": "PASS on exact SHA 44a909: 29/29 Chromium journeys.",
-      "queueReadiness": "PASS on exact SHA 44a909: 16 held queue items, publishing disabled.",
-      "cloudflareDurableState": "PASS on exact SHA 44a909: 9/9.",
-      "deploymentRecovery": "PASS on exact SHA 44a909: 2 tests.",
-      "isolatedBaseline": "PASS on exact SHA 44a909.",
-      "branchReconciliationInventory": "PASS on exact SHA 44a909: 3,560 ahead / 4 behind / 326 final-tree file changes.",
-      "productionReadiness": "HOLD — 7 blockers; expected fail-closed result.",
-      "metaPageIdentity": "BLOCKED — HTTP 401, Meta error 190/subcode 463, session expired.",
-      "currentHeadFullCi": "NOT_TESTED"
+      "automationSecurity": "PASS — 141/141 Node test files; 44 Python tests; zero skips; npm audit 0 vulnerabilities.",
+      "contentQuality": "PASS — 786/786; zero failures/skips.",
+      "metadata": "PASS — 141/141 Node test files.",
+      "dashboardE2e": "PASS — 29/29 Chromium journeys after a transient TTS ECONNRESET retry.",
+      "isolatedBaseline": "PASS — exact main/candidate baseline.",
+      "branchReconciliationInventory": "PASS — 3,569 ahead / 4 behind / 328 final-tree changes.",
+      "queueReadiness": "PASS — 16 held queue items; publishing disabled.",
+      "cloudflareDurableState": "PASS — 9/9.",
+      "deploymentRecovery": "PASS — 2/2.",
+      "natureFrontiersLocalDraft": "PASS — local validation only; provider creation skipped.",
+      "productionReadiness": "HOLD — 7 owner/evidence blockers.",
+      "metaPageIdentity": "BLOCKED — HTTP 401, error 190/subcode 463, expired session.",
+      "currentHeadFullCi": "PASS"
     },
     "runs": {
-      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430117",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430168",
-      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430119",
-      "queueReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430134",
-      "cloudflareDurableState": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430188",
-      "deploymentRecovery": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430097",
-      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430158",
-      "metaPageIdentity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430169",
-      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430124",
-      "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430144"
+      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156887",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156782",
+      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156787",
+      "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156795",
+      "queueReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156819",
+      "cloudflareDurableState": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156892",
+      "deploymentRecovery": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156937",
+      "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156932",
+      "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156810",
+      "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156841",
+      "metaPageIdentity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692157035"
     },
     "requirementStatusSnapshot": {
       "total": 82,
-      "PASS": 0,
-      "NOT_TESTED": 72,
+      "PASS": 3,
+      "NOT_TESTED": 69,
       "BLOCKED": 10,
       "asOf": "2026-11-15T09:44:45+02:00",
       "freshlyReconciled": true,
-      "rule": "Prior PASS labels are retained only in lastVerifiedStatus; current status is NOT_TESTED until exact-current-head evidence exists."
+      "rule": "Only CI-001, CI-002 and GIT-001 have exact current-SHA PASS evidence. Historical PASS statuses for other requirements remain preserved in lastVerifiedStatus but are not current PASS."
     },
     "engineeringGates": {
       "DASH_001": "NOT_TESTED",
       "API_001": "NOT_TESTED",
       "SCHED_001": "NOT_TESTED",
-      "STATE_001": "NOT_TESTED",
+      "STATE_001": "BLOCKED",
       "DEPLOY_001": "NOT_TESTED",
       "GIT_002": "NOT_TESTED"
     },
     "dashboardBrowserJourneys": {
       "passed": 29,
       "total": 29,
-      "run": 43690430119,
-      "applicationSourceTestSha": "44a909db7c9ab60e9c62e7b92f3e028a88675619",
-      "currentHeadStatus": "NOT_TESTED"
+      "run": 43692156787,
+      "applicationSourceTestSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "currentHeadStatus": "PASS for 29 browser journeys; DASH-001 overall NOT_TESTED"
     },
     "pr7": {
       "state": "open",
@@ -2092,14 +2095,14 @@
       "draftFlag": "NOT_EXPOSED"
     }
   },
-  "candidateSourceTestSha": "3e302319d35ca738df421148b357afc7038f8e93",
-  "latestSourceTestSha": "44a909db7c9ab60e9c62e7b92f3e028a88675619",
-  "latestChangeTestStatus": "LOCAL_FOCUSED_PASS_CI_PENDING",
-  "latestChangeTestReason": "Cloudflare Access header precedence/fail-closed regression passed 2/2 focused local Node tests on exact code/test commit 3e302319d35ca738df421148b357afc7038f8e93. No GitHub Actions run or combined status was returned for that SHA; full CI remains NOT_TESTED.",
+  "candidateSourceTestSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+  "latestSourceTestSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+  "latestChangeTestStatus": "PASS_ON_EXACT_SHA_CI",
+  "latestChangeTestReason": "Cloudflare Access header precedence/fail-closed regression passed in the 141/141 Node test-file suite on exact SHA 12c28787923384d5ba767614c89c09b4b328cd9a; focused local test passed 2/2. Full content, metadata, dashboard and baseline workflows also passed on that SHA.",
   "requirementCounts": {
     "total": 82,
-    "PASS": 0,
-    "NOT_TESTED": 72,
+    "PASS": 3,
+    "NOT_TESTED": 69,
     "BLOCKED": 10
   },
   "apiRouteCounts": {
@@ -2107,7 +2110,7 @@
     "PASS": 0,
     "NOT_TESTED": 37,
     "BLOCKED": 8,
-    "authenticationNegativePass": 0
+    "authenticationNegativePass": 45
   },
   "implementationCommits": [
     "33d6f4c4e6010578ae961f7cf97a7e0e9d70bac7",
@@ -2160,22 +2163,22 @@
     "4efa72a3a5faab9815e382d332260fb23e3cbe46",
     "a665908e1d4aa217d00a1ca1034ded9f838846a7"
   ],
-  "latestDocumentedPrHeadBeforeRegisterRefresh": "1c20fd77207d918f554d5c035d172f4309051446",
-  "observedBranchHeadBeforeRegisterRefresh": "1c20fd77207d918f554d5c035d172f4309051446",
-  "latestLiveBranchHeadBeforeRegisterRefresh": "1c20fd77207d918f554d5c035d172f4309051446",
-  "latestLiveAheadBy": 3568,
+  "latestDocumentedPrHeadBeforeRegisterRefresh": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
+  "observedBranchHeadBeforeRegisterRefresh": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
+  "latestLiveBranchHeadBeforeRegisterRefresh": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
+  "latestLiveAheadBy": 3573,
   "latestLiveBehindBy": 4,
   "latestLiveChangedFiles": 328,
-  "currentLiveHeadBeforeRegisterRefresh": "1c20fd77207d918f554d5c035d172f4309051446",
-  "currentLiveAheadBy": 3568,
+  "currentLiveHeadBeforeRegisterRefresh": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
+  "currentLiveAheadBy": 3573,
   "currentLiveBehindBy": 4,
   "currentLiveChangedFiles": 328,
-  "latestInventoryHead": "05daf438c889079853c6521df1cb54a1223424ff",
-  "latestInventoryAheadBy": 2589,
-  "latestInventoryBehindBy": 2,
-  "latestInventoryChangedFiles": 231,
+  "latestInventoryHead": "12c28787923384d5ba767614c89c09b4b328cd9a",
+  "latestInventoryAheadBy": 3569,
+  "latestInventoryBehindBy": 4,
+  "latestInventoryChangedFiles": 328,
   "changedFilesExact": true,
-  "changedFilesNote": "Current PR #1 file-list API returns all 328 changed paths. The compare endpoint caps its returned file array at 300. The latest completed non-destructive inventory workflow on SHA 44a909 reported 3,560 ahead / 4 behind / 326 final-tree file changes; current branch comparison is 3,568 ahead / 4 behind.",
+  "changedFilesNote": "Current PR #1 file-list API returns all 328 changed paths. The compare endpoint caps its returned file array at 300. Exact-SHA branch inventory run 43692156810 reports 3,569 ahead / 4 behind / 328 final-tree file changes.",
   "latestLiveChangedFilesExact": true,
   "currentLiveChangedFilesExact": true,
   "apiRouteMatrixCounts": {
@@ -2204,12 +2207,12 @@
     "npmLockfile": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940197663",
     "latestFullHistoryBundle": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41358222112"
   },
-  "implementationBranchHeadBeforeRegisterRefresh": "1c20fd77207d918f554d5c035d172f4309051446",
+  "implementationBranchHeadBeforeRegisterRefresh": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
   "documentationOnlyCommitsAfterTest": [
-    "cd57e25fa30ad13fbfd9b84a08a22fa264ba8ef1",
-    "e4d46dcfe1141019f868259caeb2758ef784a525",
-    "9d10ac25daaea83021f91dce3d42f51879d4ed1b",
-    "1c20fd77207d918f554d5c035d172f4309051446"
+    "313fc88f79c221d96f5bf23743ed70d66eeb45c7",
+    "b674edaf809a8e82ffc828c4f322c9ee36ed2b94",
+    "f196d3ae901b58f31949bebb3fefa633db967b5b",
+    "351d8b69cb7fb66c8c0acc8c0211cce10266f765"
   ],
   "latestInventoryArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41941480110",
   "ciCheckoutWorkingTreeClean": true,
@@ -2309,60 +2312,57 @@
   },
   "liveEvidenceRefresh": {
     "recordedDate": "2026-11-15",
-    "observedBranchHeadBeforeRegisterRefresh": "1c20fd77207d918f554d5c035d172f4309051446",
-    "codeTestSha": "3e302319d35ca738df421148b357afc7038f8e93",
-    "lastFullCiSha": "44a909db7c9ab60e9c62e7b92f3e028a88675619",
+    "observedBranchHeadBeforeRegisterRefresh": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
+    "exactHeadSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
     "mainSha": "69fdf35c90f980c142be3aaffa863304bc7eaa25",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
     "branchComparison": {
-      "aheadBy": 3568,
+      "aheadBy": 3573,
       "behindBy": 4,
       "pr1ChangedFiles": 328,
       "pr7ChangedFiles": 13
     },
     "ciRuns": {
-      "automation": 43690430117,
-      "dashboard": 43690430119,
-      "content": 43690430168,
-      "queue": 43690430134,
-      "cloudflare": 43690430188,
-      "deploymentRecovery": 43690430097,
-      "baseline": 43690430124,
-      "branchInventory": 43690430144,
-      "readiness": 43690430158,
-      "metaPageIdentity": 43690430169
+      "automation": 43692156887,
+      "dashboard": 43692156787,
+      "content": 43692156782,
+      "metadata": 43692156795,
+      "queue": 43692156819,
+      "cloudflare": 43692156892,
+      "deploymentRecovery": 43692156937,
+      "baseline": 43692156932,
+      "branchInventory": 43692156810,
+      "readiness": 43692156841,
+      "metaPageIdentity": 43692157035,
+      "natureFrontiersLocalDraft": 43692156803
     },
-    "latestFullCiResults": {
-      "nodeTestFilesPassed": 140,
+    "latestExactCiResults": {
+      "nodeTestFilesPassed": 141,
       "pythonTestsPassed": 44,
       "nodeSkipped": 0,
       "pythonSkipped": 0,
       "npmAuditVulnerabilities": 0,
-      "contentQualityPassed": 784,
+      "contentQualityPassed": 786,
       "dashboardChromiumPassed": 29,
+      "metadataNodeTestFilesPassed": 141,
+      "queueItems": 16,
       "cloudflareStatePassed": 9,
-      "deploymentRecoveryPassed": 2
-    },
-    "currentHeadTest": {
-      "status": "LOCAL_FOCUSED_PASS_CI_PENDING",
-      "passed": 2,
-      "failed": 0,
-      "skipped": 0,
-      "test": "test/cloudflare-access-headers.test.mjs",
-      "nodeVersion": "v22.16.0"
+      "deploymentRecoveryPassed": 2,
+      "authenticationNegativeRoutesPassed": 45
     },
     "currentHeadAcceptanceCounts": {
       "requirements": {
         "total": 82,
-        "PASS": 0,
-        "NOT_TESTED": 72,
+        "PASS": 3,
+        "NOT_TESTED": 69,
         "BLOCKED": 10
       },
       "apiRoutes": {
         "routes": 45,
         "PASS": 0,
         "NOT_TESTED": 37,
-        "BLOCKED": 8
+        "BLOCKED": 8,
+        "authenticationNegativePass": 45
       },
       "dashboardForms": {
         "total": 17,
@@ -2372,17 +2372,17 @@
       }
     },
     "inventory": {
-      "latestExactCiSha": "44a909db7c9ab60e9c62e7b92f3e028a88675619",
-      "aheadBy": 3560,
+      "exactSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+      "aheadBy": 3569,
       "behindBy": 4,
-      "changedFiles": 326,
-      "artifactRun": 43690430144
+      "changedFiles": 328,
+      "artifactRun": 43692156810
     },
     "productionReadiness": {
       "status": "HOLD",
       "blockers": 7
     },
-    "caveat": "No full exact-current-head GitHub Actions run was returned for code/test SHA 3e302. Historical exact-SHA PASS evidence remains in lastVerifiedStatus and source-specific evidence, but current-head statuses are not promoted to PASS."
+    "caveat": "Full automated suites pass on exact source/test SHA 12c287. Subsequent branch commits update only the API/dashboard/GO_LIVE/release/acceptance documentation; no application source or tests changed after the tested SHA."
   },
   "cloudflareStagingInfrastructure": {
     "observedAt": "2026-11-08",
@@ -2431,8 +2431,8 @@
   "currentHeadCounts": {
     "requirements": {
       "total": 82,
-      "PASS": 0,
-      "NOT_TESTED": 72,
+      "PASS": 3,
+      "NOT_TESTED": 69,
       "BLOCKED": 10
     },
     "apiRoutes": {
@@ -2440,13 +2440,18 @@
       "PASS": 0,
       "NOT_TESTED": 37,
       "BLOCKED": 8,
-      "authenticationNegativePass": 0
+      "authenticationNegativePass": 45
     },
     "dashboardForms": {
       "total": 17,
       "PASS": 0,
       "NOT_TESTED": 11,
       "BLOCKED": 6
+    },
+    "dashboardBrowserE2E": {
+      "status": "PASS",
+      "passed": 29,
+      "total": 29
     }
   }
 }
