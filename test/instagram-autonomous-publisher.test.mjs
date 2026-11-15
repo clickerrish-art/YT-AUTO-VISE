@@ -105,3 +105,36 @@ test("uncertain Instagram container without a media ID remains unresolved and is
   const ledger=JSON.parse(fs.readFileSync(path.join(f.state,"instagram-attempt-ledger.json"),"utf8"));assert.equal(ledger[0].status,"UNCERTAIN");
  }finally{f.cleanup();}
 });
+
+test("approved Instagram feed image dispatch persists IDs and verifies the feed receipt",async()=>{
+ const f=setup();try{
+  const config=JSON.parse(fs.readFileSync(f.configPath,"utf8"));config.allowedImageDomains=["example.test"];fs.writeFileSync(f.configPath,JSON.stringify(config));
+  const queue=JSON.parse(fs.readFileSync(f.queuePath,"utf8"));const payload=queue[0];
+  payload.mediaType="feed_post";payload.media.url="https://cdn.example.test/wildlife.jpg";payload.media.altText="Wildlife in a natural habitat";
+  payload.approval=createInstagramApprovalReceipt(payload,{reviewer:"Editor",reason:"Exact feed image reviewed",secret,now:"2026-11-15T09:00:00.000Z"});
+  fs.writeFileSync(f.queuePath,JSON.stringify(queue));
+  const result=await runAutonomousInstagramPublisher({configPath:f.configPath,queuePath:f.queuePath,stateDir:f.state,rootDir:f.root,
+   now:Date.parse("2026-11-15T10:00:00.000Z"),env:env(),verifyAccount:verified,policyEvaluator:eligible,
+   publishImage:async args=>{
+    await args.onContainerId({containerId:"123456789012346",createdAt:"2026-11-15T10:00:01.000Z"});
+    await args.onMediaId({containerId:"123456789012346",mediaId:"123456789012347",publishedAt:"2026-11-15T10:00:02.000Z"});
+    return {status:"PUBLISHED_VERIFIED",verifiedRemotely:true,containerId:"123456789012346",mediaId:"123456789012347",
+      permalink:"https://www.instagram.com/p/abc/",publishedAt:"2026-11-15T10:00:02.000Z"};
+   }});
+  assert.equal(result.published,1);
+  const ledger=JSON.parse(fs.readFileSync(path.join(f.state,"instagram-attempt-ledger.json"),"utf8"));
+  assert.equal(ledger[0].kind,"INSTAGRAM_IMAGE_PUBLISH_ATTEMPT");assert.equal(ledger[0].status,"PUBLISHED_VERIFIED");
+ }finally{f.cleanup();}
+});
+
+test("Instagram feed posts have an independent one-per-day cap",async()=>{
+ const f=setup();try{
+  fs.writeFileSync(f.queuePath,"[]");
+  fs.writeFileSync(path.join(f.state,"instagram-history.json"),JSON.stringify([{slotId:"earlier-feed",status:"PUBLISHED_VERIFIED",
+   mediaType:"feed_post",publishedAt:"2026-11-15T09:00:00.000Z"}]));
+  const result=await runAutonomousInstagramPublisher({configPath:f.configPath,queuePath:f.queuePath,stateDir:f.state,rootDir:f.root,
+   now:Date.parse("2026-11-15T14:00:00.000Z"),env:env(),verifyAccount:verified,policyEvaluator:eligible});
+  assert.equal(result.skipped,0); // No candidate is queued; prior feed remains in history.
+  const history=JSON.parse(fs.readFileSync(path.join(f.state,"instagram-history.json"),"utf8"));assert.equal(history.length,1);
+ }finally{f.cleanup();}
+});

@@ -56,7 +56,15 @@ export async function runInstagramContentIntake({
       if(payload.destination!=="nature_frontiers_instagram") reasons.push("WRONG_INSTAGRAM_DESTINATION");
       if(payload.instagramAccountId!==config.instagramBusinessAccountId||payload.facebookPageId!==config.facebookPageId) reasons.push("ACCOUNT_OR_LINKED_PAGE_MISMATCH");
       if(payload.timezone!==config.timezone||!isValidZonedIsoTimestamp(payload.scheduledAt)||Date.parse(payload.scheduledAt)<=Number(now)) reasons.push("INVALID_OR_NON_FUTURE_JOHANNESBURG_SCHEDULE");
-      if(payload.mediaType!=="reel"||!payload.media||typeof payload.media.path!=="string"||!/^[a-f0-9]{64}$/.test(payload.media.sha256??"")) reasons.push("UNSUPPORTED_OR_UNPINNED_INSTAGRAM_MEDIA");
+      const isReel=payload.mediaType==="reel",isFeed=payload.mediaType==="feed_post";
+      if((!isReel&&!isFeed)||!payload.media||typeof payload.media.path!=="string"||!/^[a-f0-9]{64}$/.test(payload.media.sha256??"")) reasons.push("UNSUPPORTED_OR_UNPINNED_INSTAGRAM_MEDIA");
+      if(isFeed) {
+        let imageUrl;try{imageUrl=new URL(payload.media.url);}catch{}
+        const host=imageUrl?.hostname?.toLowerCase()??"";
+        const allowed=Array.isArray(config.allowedImageDomains)&&config.allowedImageDomains.some(domain=>host===String(domain).toLowerCase()||host.endsWith("."+String(domain).toLowerCase()));
+        if(!imageUrl||imageUrl.protocol!=="https:"||imageUrl.username||imageUrl.password||imageUrl.port||imageUrl.search||imageUrl.hash||!allowed)
+          reasons.push("INSTAGRAM_FEED_IMAGE_URL_NOT_ON_APPROVED_PUBLIC_HOST");
+      }
       if(payload.shareToFeed!=null&&typeof payload.shareToFeed!=="boolean") reasons.push("INVALID_SHARE_TO_FEED_SETTING");
       if(typeof payload.caption!=="string"||!payload.caption.trim()||payload.sourcePayload?.caption!==payload.caption||
          payload.sourcePayload?.destination!=="nature_frontiers_facebook"||payload.sourcePayload?.destinationPageId!==config.facebookPageId||

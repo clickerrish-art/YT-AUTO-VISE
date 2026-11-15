@@ -18,5 +18,6 @@
     "Instagram Graph API publishing is immediate, not future-scheduled. Dispatch only inside an approved publication window.",
     "Publishing is disabled, dry-run is enabled and the emergency stop is active. Do not change these defaults until credentials, account linkage, permissions, rights, exact media and human approval are verified.",
     "An uncertain media_publish outcome must be reconciled by persisted container/media IDs. Never blindly repeat a publish mutation."
-  ]
+  ],
+  "allowedImageDomains": []
 }

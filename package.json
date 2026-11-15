@@ -46,7 +46,8 @@
     "instagram:publish:autonomous": "node scripts/instagram-autonomous-publisher.mjs",
     "test:instagram-publisher": "node --test test/instagram-autonomous-publisher.test.mjs",
     "instagram:intake:autonomous": "node scripts/instagram-content-intake.mjs",
-    "test:instagram-intake": "node --test test/instagram-content-intake.test.mjs"
+    "test:instagram-intake": "node --test test/instagram-content-intake.test.mjs",
+    "test:instagram-image": "node --test test/meta-instagram-image-adapter.test.mjs"
   },
   "engines": {
     "node": ">=22"
