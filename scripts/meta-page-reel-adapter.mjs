@@ -35,6 +35,28 @@ async function readJson(response, { mutation = false, remoteVideoId = null, toke
   );
   return data;
 }
+function readPinnedRegularFile(filePath) {
+  let descriptor;
+  try {
+    const before = fs.lstatSync(filePath);
+    if (!before.isFile() || before.isSymbolicLink()) throw new Error("not a regular file");
+    descriptor = fs.openSync(filePath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+    const opened = fs.fstatSync(descriptor);
+    const current = fs.lstatSync(filePath);
+    if (!opened.isFile() || current.isSymbolicLink() || !current.isFile() ||
+        opened.dev !== current.dev || opened.ino !== current.ino ||
+        opened.dev !== before.dev || opened.ino !== before.ino) throw new Error("file identity changed during open");
+    const bytes = fs.readFileSync(descriptor);
+    const after = fs.fstatSync(descriptor);
+    if (after.size !== opened.size || bytes.length !== after.size) throw new Error("file changed while being read");
+    return bytes;
+  } catch {
+    throw new MetaPageReelError("Reel video could not be safely pinned as an unchanged regular file");
+  } finally {
+    if (descriptor !== undefined) try { fs.closeSync(descriptor); } catch {}
+  }
+}
+
 function inspectVideo(filePath) {
   const result = spawnSync("ffprobe", ["-v","error","-show_entries","format=duration:stream=codec_type,width,height,avg_frame_rate","-of","json",filePath], { encoding:"utf8", timeout:20000 });
   if (result.error || result.status !== 0) throw new MetaPageReelError("ffprobe is unavailable or could not inspect the Reel video");
@@ -88,8 +110,7 @@ export async function createMetaPageReel({
   if (absolute !== canonicalRoot && !absolute.startsWith(canonicalRoot + path.sep)) {
     throw new MetaPageReelError("Reel video path escapes the configured repository root");
   }
-  try { bytes = fs.readFileSync(absolute); }
-  catch { throw new MetaPageReelError("Reel video is missing, unsafe or unreadable"); }
+  bytes = readPinnedRegularFile(absolute);
   if (!bytes.length || crypto.createHash("sha256").update(bytes).digest("hex") !== draft.media.sha256) throw new MetaPageReelError("Reel video checksum does not match the reviewed draft");
   const media = inspect(absolute);
   if (!media || !Number.isFinite(media.durationSeconds) || media.durationSeconds < 4 || media.durationSeconds > 60) throw new MetaPageReelError("Facebook Reel duration must be between 4 and 60 seconds");
