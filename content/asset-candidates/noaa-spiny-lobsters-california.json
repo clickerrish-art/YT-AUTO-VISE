@@ -40,12 +40,13 @@
   "termsAndReview": {
     "publicDomainStatement": "NOAA's official B-roll library states B-roll packages may be downloaded and used with NOAA credit; package-specific opening slate supplies exact attribution.",
     "observedOpeningSlateCredit": "Please credit “NOAA’s Office of National Marine Sanctuaries”.",
-    "visualReview": "The complete 380.810-second source was sampled at one-second intervals (381 frames). Sampled content shows underwater reef habitat, fish and California spiny lobsters. No people, handling, baiting, staged interaction, graphic animal harm, or additional credit cards were observed in this one-second sample.",
+    "visualReview": "Selected source ranges 160–175s, 245–257s, 320–335s and 360–373s were inspected with 2 fps contact sheets. The selected frames show California spiny lobster and reef habitat; no people, handling, baiting, staged interaction, graphic animal harm, watermark or additional credit card was observed in the selected ranges. This is selected-range sampling only, not full source playback.",
     "reviewLimitations": [
       "One-second sampling is not frame-by-frame or sub-second review.",
       "Individual selected shots, transitions, embedded content and source terms still require human review.",
       "The source AAC audio is not cleared and must not appear in any derivative.",
-      "This candidate is not entered into the approved production asset register."
+      "This candidate is not entered into the approved production asset register.",
+      "The 55-second silent vertical visual-review cut has been generated and full-file decoded; it remains a review-only derivative with persistent warning and exact NOAA attribution."
     ],
     "nextClearanceSteps": [
       "Verify the source package and exact SHA-256 before editing.",
@@ -90,5 +91,48 @@
     "purpose": "Silent source-review assembly only; contains a persistent review-only warning, exact NOAA attribution, and a not-approved-for-publication end slate.",
     "productionApproved": false,
     "notes": "This is not the final Short, has no narration, and has not completed full human/compliance review."
+  },
+  "visualReviewCut": {
+    "filename": "NOAA-california-spiny-lobster-visual-review-1080x1920.mp4",
+    "delivery": "Conversation review attachment; not committed as a production media file",
+    "sha256": "4fc0b7f4a3f5d79ecf8d6a2bb148f06ba01f56c1c8d3b4db846d614f65f07261",
+    "durationSeconds": 55,
+    "width": 1080,
+    "height": 1920,
+    "frameRate": 30,
+    "videoCodec": "H.264",
+    "audioStreams": 0,
+    "sourceAudioRemoved": true,
+    "sourceRangesSeconds": [
+      [
+        160,
+        175
+      ],
+      [
+        245,
+        257
+      ],
+      [
+        320,
+        335
+      ],
+      [
+        360,
+        373
+      ]
+    ],
+    "persistentReviewWarning": "REVIEW ONLY - NOT APPROVED FOR PUBLICATION",
+    "requiredAttribution": "Footage courtesy of NOAA’s Office of National Marine Sanctuaries",
+    "fullFileDecode": "PASS",
+    "purpose": "Silent vertical visual-review cut only. Preserves selected genuine NOAA footage, displays persistent review-only warning and exact required credit; no narration or captions.",
+    "productionApproved": false,
+    "uploadAllowed": false,
+    "scheduleAllowed": false,
+    "reviewLimitations": [
+      "Selected ranges were visually sampled at 2 frames per second and the final cut was checked via a six-frame contact sheet; this is not full continuous human playback.",
+      "The source package contains AAC audio, which was completely excluded from this cut; source audio rights remain uncleared.",
+      "The final edit, shot-to-narration alignment, captions, factual claims, attribution legibility on device, rights and compliance still require human review.",
+      "This review cut is not the production master and must not be renamed or substituted for media/next-short.mp4."
+    ]
   }
 }
