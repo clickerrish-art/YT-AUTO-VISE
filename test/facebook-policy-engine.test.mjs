@@ -55,6 +55,37 @@ const options = root => ({
   })
 });
 
+test("Nature Frontiers cadence caps two Reels and one feed post per Johannesburg day", async () => {
+  const f = fixture();
+  try {
+    const common = {
+      destination: "nature_frontiers_facebook",
+      status: "PUBLISHED_VERIFIED",
+      scheduledAt: "2026-10-24T07:00:00.000Z"
+    };
+    const twoReels = [
+      { ...common, slotId: "reel-a", kind: "FACEBOOK_PAGE_REEL_PUBLISH_ATTEMPT", mediaType: "reel", scheduledAt: "2026-10-24T03:00:00.000Z" },
+      { ...common, slotId: "reel-b", kind: "FACEBOOK_PAGE_REEL_PUBLISH_ATTEMPT", mediaType: "reel" }
+    ];
+    f.payload.mediaType = "reel";
+    const reelDecision = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), history: twoReels, maxPostsPerLocalDay: 3,
+      maxReelsPerLocalDay: 2, maxFeedPostsPerLocalDay: 1, minimumIntervalMinutes: 240
+    });
+    assert.equal(reelDecision.eligible, false);
+    assert.match(reelDecision.blockers.join(" "), /Daily Reel cap/i);
+
+    f.payload.mediaType = "feed_post";
+    const feedDecision = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), history: [{ ...common, slotId: "feed-a", kind: "FACEBOOK_PUBLISH_ATTEMPT", mediaType: "feed_post" }],
+      maxPostsPerLocalDay: 3, maxReelsPerLocalDay: 2, maxFeedPostsPerLocalDay: 1,
+      minimumIntervalMinutes: 240
+    });
+    assert.equal(feedDecision.eligible, false);
+    assert.match(feedDecision.blockers.join(" "), /Daily feed-post cap/i);
+  } finally { f.cleanup(); }
+});
+
 test("policy returns the required structured decision and accepts only a complete safe fixture", async () => {
   const f = fixture();
   try {
