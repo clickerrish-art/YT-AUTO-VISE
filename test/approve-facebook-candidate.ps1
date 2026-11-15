@@ -120,6 +120,44 @@ try {
     Assert-True ((Get-PlainTextForTest -Value $rotated) -ceq $secretTwo) "Explicit rotation did not persist the replacement key"
     $rotated.Dispose()
 
+    # Loosened ACLs must fail closed before the approval command is invoked.
+    $originalFileAcl = Get-Acl -LiteralPath $secretFile
+    $looseFileAcl = Get-Acl -LiteralPath $secretFile
+    $usersSid = New-Object System.Security.Principal.SecurityIdentifier("S-1-5-32-545")
+    $usersReadRule = New-Object System.Security.AccessControl.FileSystemAccessRule(
+        $usersSid,
+        [System.Security.AccessControl.FileSystemRights]::Read,
+        [System.Security.AccessControl.AccessControlType]::Allow
+    )
+    $looseFileAcl.AddAccessRule($usersReadRule)
+    Set-Acl -LiteralPath $secretFile -AclObject $looseFileAcl
+    $global:SignerNpmCapture = $null
+    $looseFileRejected = $false
+    try { & $signerScript -CandidateFile "test/approve-facebook-candidate.test.mjs" -SlotId "windows-ci-loose-file-acl" | Out-Null } catch { $looseFileRejected = $true }
+    Assert-True $looseFileRejected "Signer must reject a secret file with a permissive ACL"
+    Assert-True ($null -eq $global:SignerNpmCapture) "Signer must reject permissive ACLs before invoking npm"
+    Set-Acl -LiteralPath $secretFile -AclObject $originalFileAcl
+    Assert-PrivateAcl -Path $secretFile
+
+    $originalDirectoryAcl = Get-Acl -LiteralPath $secretDirectory
+    $looseDirectoryAcl = Get-Acl -LiteralPath $secretDirectory
+    $directoryReadRule = New-Object System.Security.AccessControl.FileSystemAccessRule(
+        $usersSid,
+        [System.Security.AccessControl.FileSystemRights]::ReadAndExecute,
+        [System.Security.AccessControl.InheritanceFlags]::ContainerInherit -bor [System.Security.AccessControl.InheritanceFlags]::ObjectInherit,
+        [System.Security.AccessControl.PropagationFlags]::None,
+        [System.Security.AccessControl.AccessControlType]::Allow
+    )
+    $looseDirectoryAcl.AddAccessRule($directoryReadRule)
+    Set-Acl -LiteralPath $secretDirectory -AclObject $looseDirectoryAcl
+    $global:SignerNpmCapture = $null
+    $looseDirectoryRejected = $false
+    try { & $signerScript -CandidateFile "test/approve-facebook-candidate.test.mjs" -SlotId "windows-ci-loose-directory-acl" | Out-Null } catch { $looseDirectoryRejected = $true }
+    Assert-True $looseDirectoryRejected "Signer must reject a secret directory with a permissive ACL"
+    Assert-True ($null -eq $global:SignerNpmCapture) "Signer must reject permissive directory ACLs before invoking npm"
+    Set-Acl -LiteralPath $secretDirectory -AclObject $originalDirectoryAcl
+    Assert-PrivateAcl -Path $secretDirectory
+
     # The normal path must decrypt only for the child process and restore prior environment values.
     [Environment]::SetEnvironmentVariable("FACEBOOK_APPROVAL_HMAC_SECRET", "prior-process-secret-value", "Process")
     [Environment]::SetEnvironmentVariable("FACEBOOK_APPROVER_ID", "prior-reviewer-value", "Process")
