@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { publishInstagramReel, verifyInstagramBusinessAccount, reconcileInstagramReel } from "./meta-instagram-reel-adapter.mjs";
+import { publishInstagramImagePost, reconcileInstagramImagePost } from "./meta-instagram-image-adapter.mjs";
 import { evaluateFinalFacebookPayload } from "./facebook-policy-engine.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -109,12 +110,12 @@ export async function runAutonomousInstagramPublisher({
   queuePath=path.join(root,"content/instagram-autonomous-queue.json"),
   stateDir=process.env.FACEBOOK_STATE_DIR, env=process.env, rootDir=root,
   fetchImpl=fetch, now=Date.now(), verifyAccount=verifyInstagramBusinessAccount,
-  publish=publishInstagramReel, reconcile=reconcileInstagramReel,
+  publish=publishInstagramReel, publishImage=publishInstagramImagePost, reconcile=reconcileInstagramReel, reconcileImage=reconcileInstagramImagePost,
   policyEvaluator=evaluateFinalFacebookPayload
 }={}) {
   const config=readJson(configPath);
   if(config?.emergencyStop!==false||config?.publishingEnabled!==true||config?.dryRun!==false||
-     env.INSTAGRAM_PUBLISH_ENABLED!=="YES"||config?.facebookLoginForBusinessEnabled!==true) {
+     env.INSTAGRAM_PUBLISH_ENABLED!=="YES") {
     return {status:"SAFE_NOOP",reason:"INSTAGRAM_PUBLISHING_DISABLED_DRY_RUN_OR_EMERGENCY_STOP_ACTIVE",published:0,skipped:0};
   }
   if(typeof stateDir!=="string"||!path.isAbsolute(stateDir)) throw new Error("FACEBOOK_STATE_DIR must be an absolute durable operator-controlled directory");
@@ -166,7 +167,8 @@ export async function runAutonomousInstagramPublisher({
       if(!prior||!["PUBLISHING","UPLOADING","UNCERTAIN"].includes(prior.status)) continue;
       if(prior.status!=="UNCERTAIN") { ledger[i]={...prior,status:"UNCERTAIN",retryAllowed:false,reason:"PROCESS_RESTARTED_DURING_INSTAGRAM_MUTATION"}; atomicJson(ledgerFile,ledger); }
       const current=ledger[i];
-      const result=await reconcile({
+      const reconcileAttempt=current.kind==="INSTAGRAM_IMAGE_PUBLISH_ATTEMPT"?reconcileImage:reconcile;
+      const result=await reconcileAttempt({
         mediaId:current.remoteMediaId??null,containerId:current.remoteContainerId??null,
         instagramAccountId:config.instagramBusinessAccountId,expectedInstagramAccountId:config.instagramBusinessAccountId,
         accessToken:env.META_USER_ACCESS_TOKEN,apiVersion:config.apiVersion,fetchImpl
@@ -196,11 +198,21 @@ export async function runAutonomousInstagramPublisher({
       const today=localDate(nowMs,config.timezone);
       const todays=history.filter(x=>x.status==="PUBLISHED_VERIFIED"&&localDate(Date.parse(x.publishedAt??x.completedAt??""),config.timezone)===today);
       const reelsToday=todays.filter(x=>x.mediaType==="reel").length;
-      if(reelsToday>=2) { history.push({slotId:payload.slotId,status:"BLOCKED_DAILY_REEL_CAP",checkedAt:nowIso}); skipped++; continue; }
+      const feedToday=todays.filter(x=>x.mediaType==="feed_post").length;
+      if(payload.mediaType==="reel"&&reelsToday>=2) { history.push({slotId:payload.slotId,status:"BLOCKED_DAILY_REEL_CAP",checkedAt:nowIso}); skipped++; continue; }
+      if(payload.mediaType==="feed_post"&&feedToday>=1) { history.push({slotId:payload.slotId,status:"BLOCKED_DAILY_FEED_CAP",checkedAt:nowIso}); skipped++; continue; }
       const previousTimes=todays.map(x=>Date.parse(x.publishedAt??x.completedAt??"")).filter(Number.isFinite);
       if(previousTimes.some(x=>nowMs-x<4*60*60_000)) { history.push({slotId:payload.slotId,status:"BLOCKED_MINIMUM_INTERVAL",checkedAt:nowIso}); skipped++; continue; }
-      if(payload.mediaType!=="reel"||!payload.media||typeof payload.media.path!=="string"||!/^[a-f0-9]{64}$/.test(payload.media.sha256??"")) {
+      const isReel=payload.mediaType==="reel",isFeed=payload.mediaType==="feed_post";
+      if((!isReel&&!isFeed)||!payload.media||typeof payload.media.path!=="string"||!/^[a-f0-9]{64}$/.test(payload.media.sha256??"")||
+         (isFeed&&(typeof payload.media.url!=="string"||!payload.media.url.startsWith("https://")))) {
         history.push({slotId:payload.slotId,status:"BLOCKED_UNSUPPORTED_OR_UNPINNED_MEDIA",checkedAt:nowIso}); skipped++; continue;
+      }
+      if(isReel&&config.facebookLoginForBusinessEnabled!==true) {
+        history.push({slotId:payload.slotId,status:"BLOCKED_RESUMABLE_UPLOAD_CAPABILITY_UNVERIFIED",checkedAt:nowIso}); skipped++; continue;
+      }
+      if(isFeed&&(!Array.isArray(config.allowedImageDomains)||!config.allowedImageDomains.length)) {
+        history.push({slotId:payload.slotId,status:"BLOCKED_PUBLIC_IMAGE_HOST_NOT_ALLOWLISTED",checkedAt:nowIso}); skipped++; continue;
       }
       if(typeof payload.caption!=="string"||!payload.caption.trim()||payload.sourcePayload?.caption!==payload.caption||
          !Array.isArray(payload.sourcePayload?.media)||!payload.sourcePayload.media.some(x=>x?.sha256===payload.media.sha256&&x?.path===payload.media.path)) {
@@ -215,21 +227,24 @@ export async function runAutonomousInstagramPublisher({
       });
       if(decision?.eligible!==true) { history.push({slotId:payload.slotId,status:"BLOCKED_SOURCE_POLICY",checkedAt:nowIso,policyDecision:decision}); skipped++; continue; }
 
-      const attempt={kind:"INSTAGRAM_REEL_PUBLISH_ATTEMPT",slotId:payload.slotId,destination:"nature_frontiers_instagram",
-        status:"PUBLISHING",startedAt:nowIso,scheduledAt:payload.scheduledAt,mediaType:"reel",
+      const attempt={kind:isReel?"INSTAGRAM_REEL_PUBLISH_ATTEMPT":"INSTAGRAM_IMAGE_PUBLISH_ATTEMPT",slotId:payload.slotId,destination:"nature_frontiers_instagram",
+        status:"PUBLISHING",startedAt:nowIso,scheduledAt:payload.scheduledAt,mediaType:payload.mediaType,
         contentFingerprint:approval.payloadFingerprint??instagramApprovalFingerprint(payload),
         sourcePolicyDecision:decision,remoteContainerId:null,remoteMediaId:null,retryAllowed:false};
       ledger.push(attempt); atomicJson(ledgerFile,ledger);
       try {
-        const receipt=await publish({
-          draft:{kind:"INSTAGRAM_REEL_DRAFT",caption:payload.caption,media:payload.media},
+        const common={
           instagramAccountId:config.instagramBusinessAccountId,expectedInstagramAccountId:config.instagramBusinessAccountId,
           accessToken:env.META_USER_ACCESS_TOKEN,apiVersion:config.apiVersion,accountVerified:true,
-          approvalVerified:true,resumableUploadSupported:true,publishingEnabled:true,dryRun:false,emergencyStop:false,
-          shareToFeed:payload.shareToFeed!==false,fetchImpl,rootDir,
+          approvalVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,fetchImpl,
           onContainerId:async info=>updateAttempt(payload.slotId,{status:"UPLOADING",remoteContainerId:info.containerId,containerCreatedAt:info.createdAt}),
           onMediaId:async info=>updateAttempt(payload.slotId,{status:"PUBLISHING",remoteMediaId:info.mediaId,remotePublishedAt:info.publishedAt})
-        });
+        };
+        const receipt=isReel
+          ? await publish({draft:{kind:"INSTAGRAM_REEL_DRAFT",caption:payload.caption,media:payload.media},
+              ...common,resumableUploadSupported:true,shareToFeed:payload.shareToFeed!==false,rootDir})
+          : await publishImage({draft:{kind:"INSTAGRAM_IMAGE_DRAFT",caption:payload.caption,media:{url:payload.media.url,sha256:payload.media.sha256,altText:payload.media.altText}},
+              ...common,allowedImageDomains:config.allowedImageDomains??[]});
         if(receipt?.status!=="PUBLISHED_VERIFIED"||receipt.verifiedRemotely!==true||!receipt.mediaId) throw new Error("Instagram adapter did not return a remotely verified publication receipt");
         const final={...ledger.find(x=>x.slotId===payload.slotId),status:"PUBLISHED_VERIFIED",completedAt:nowIso,
           remoteMediaId:receipt.mediaId,remoteContainerId:receipt.containerId,permalink:receipt.permalink,
