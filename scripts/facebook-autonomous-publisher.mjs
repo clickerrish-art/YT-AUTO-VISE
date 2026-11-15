@@ -135,6 +135,19 @@ export async function runAutonomousFacebookPublisher({
   if (!/^\d{5,30}$/.test(String(env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "")) || env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID !== config.destinationPageId) throw new Error("NATURE_FRONTIERS_FACEBOOK_PAGE_ID must exactly match the configured Nature Frontiers Page ID");
   if (!env.META_USER_ACCESS_TOKEN) throw new Error("Meta user access token is missing from the secure runtime environment");
   fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+  // The state directory contains idempotency history and recovery evidence.
+  // Do not silently trust an existing directory whose permissions are broader
+  // than the private mode requested above (mkdir does not tighten existing dirs).
+  const stateDirStat = fs.lstatSync(stateDir);
+  if (!stateDirStat.isDirectory() || stateDirStat.isSymbolicLink()) {
+    throw new Error("FACEBOOK_STATE_DIR must be a real directory, not a symlink");
+  }
+  if (process.platform !== "win32" && (stateDirStat.mode & 0o077) !== 0) {
+    throw new Error("FACEBOOK_STATE_DIR permissions must be private (0700); tighten the directory before running");
+  }
+  if (typeof process.getuid === "function" && stateDirStat.uid !== process.getuid()) {
+    throw new Error("FACEBOOK_STATE_DIR must be owned by the publisher runtime user");
+  }
   const resolvedQueuePath = path.resolve(activeRoot, queuePath);
   const canonicalRoot = fs.realpathSync(activeRoot);
   const canonicalStateDir = fs.realpathSync(stateDir);
