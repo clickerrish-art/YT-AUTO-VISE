@@ -242,3 +242,13 @@ test("approval usage must be contained in the rights-cleared scope", () => {
   };
   assert.ok(validateMediaRegister(value).some(error => error.includes("approval usage exceeds the rights-cleared permittedUsage scope")));
 });
+
+
+test("obtained additional permissions require HTTPS evidence in the canonical register", () => {
+  const value = structuredClone(base);
+  value.assets[0].rights.additionalPermissionsStatus = "obtained";
+  value.assets[0].rights.additionalPermissionsEvidence = [];
+  assert.ok(validateMediaRegister(value).some(error => error.includes("obtained additional permissions require evidence URLs")));
+  value.assets[0].rights.additionalPermissionsEvidence = ["http://example.com/permission"];
+  assert.ok(validateMediaRegister(value).some(error => error.includes("additional permissions evidence URLs must be HTTPS")));
+});

@@ -74,13 +74,24 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
     for (const evidence of Array.isArray(rights.licenseEvidence) ? rights.licenseEvidence : []) {
       if (!validHttpsUrl(evidence)) errors.push(at + " rights licence evidence URLs must be HTTPS");
     }
+    if (rights.additionalPermissionsEvidence !== undefined && !Array.isArray(rights.additionalPermissionsEvidence)) {
+      errors.push(at + " rights.additionalPermissionsEvidence must be an array");
+    }
+    for (const evidence of Array.isArray(rights.additionalPermissionsEvidence) ? rights.additionalPermissionsEvidence : []) {
+      if (!validHttpsUrl(evidence)) errors.push(at + " additional permissions evidence URLs must be HTTPS");
+    }
+    if (rights.additionalPermissionsStatus === "obtained" &&
+        (!Array.isArray(rights.additionalPermissionsEvidence) || rights.additionalPermissionsEvidence.length === 0)) {
+      errors.push(at + " obtained additional permissions require evidence URLs");
+    }
     if (rights.reviewStatus === "cleared") {
       if (!Array.isArray(rights.licenseEvidence) || rights.licenseEvidence.length === 0) errors.push(at + " cleared rights require licence evidence");
       if (typeof rights.reviewedBy !== "string" || !rights.reviewedBy.trim()) errors.push(at + " cleared rights require reviewedBy");
       if (!validTimestamp(rights.reviewedAt) || Date.parse(rights.reviewedAt) > now) errors.push(at + " cleared rights require a valid non-future timezone-qualified reviewedAt");
       if (!["not_required", "obtained"].includes(rights.additionalPermissionsStatus)) errors.push(at + " cleared rights require explicit resolution of additional permissions");
       if (!Array.isArray(rights.permittedUsage) || rights.permittedUsage.length === 0 ||
-          rights.permittedUsage.some(scope => typeof scope !== "string" || !scope.trim())) {
+          rights.permittedUsage.some(scope => typeof scope !== "string" || !scope.trim()) ||
+          new Set(rights.permittedUsage).size !== rights.permittedUsage.length) {
         errors.push(at + " cleared rights require explicit permittedUsage scopes");
       }
     }
