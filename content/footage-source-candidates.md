@@ -132,3 +132,46 @@ A 64-second, 16:9 silent review assembly was created from the exact owner-author
 - Verification: ffprobe reports one H.264 video stream and no audio streams; extracted footage frame and end slate were visually checked.
 
 This assembly is only a source/credit/audio-removal proof. It has no narration, script, captions, product promotion, final metadata, or final-video compliance review. It is not the planned Short or a publishable video. Keep the asset outside the approved production register and keep all rights/final-review flags false until selected-shot review and full final-video approval are complete.
+
+---
+
+## Pexels wildlife clips — conditional owner-approved candidates, HOLD — 16 November 2026
+
+The owner previously authorized stock footage only **if each clip is individually verified safe**. This is conditional source-review permission, not blanket production approval.
+
+### Candidate 1 — King cobra feeding on another snake
+
+- Source page: https://www.pexels.com/video/king-cobra-eating-another-snake-in-the-wild-30175165/
+- Page title: **King Cobra Eating Another Snake in the Wild**
+- Contributor shown on page: **Regan Dsouza**
+- Pexels listing: Free
+- Page metadata: 1920×1080, 16:9, 10 seconds, 25 fps; page date 10 January 2025.
+- Page description: “King cobra feeding on another snake in natural habitat.”
+- Current license references checked: https://www.pexels.com/license/ and https://help.pexels.com/hc/en-us/articles/360042295214-Can-I-use-the-photos-and-videos-for-a-commercial-project
+- License summary: Pexels states that its photos/videos may be used and modified for commercial projects without required attribution. Prohibitions include standalone redistribution/sale, implied endorsement, and trademark use. The terms also warn that depicted third-party rights may require separate permission.
+
+### Candidate 2 — Slow worm moving through grass
+
+- Source page: https://www.pexels.com/video/nature-animal-lizard-reptile-4106826/
+- Page title shown: **A Snake Crawling In The Ground**
+- Contributor shown on page: **Muhammadrizwan Saeed**
+- Pexels listing: Free
+- Page metadata: 1920×1080, 16:9, 17 seconds, 29.97 fps; page date 8 April 2020.
+- Important factual correction: the page description identifies the animal as a **slow worm (*Anguis fragilis*)**, not a snake. Any script, title, caption or narration must identify it accurately as a legless lizard/slow worm, not a snake.
+- Current license references checked: https://www.pexels.com/license/ and https://help.pexels.com/hc/en-us/articles/360042295214-Can-I-use-the-photos-and-videos-for-a-commercial-project
+- License summary: same Pexels commercial-use and restriction summary as Candidate 1.
+
+### Verification result and stop conditions
+
+<badge>HOLD — NOT CLEARED</badge>
+
+The source listing pages and current Pexels license/help pages were inspected on 2026-11-16. The browser download attempt could not start because the optional TinyFish browser wallet is below zero; the local runtime also cannot resolve `videos.pexels.com`. **Neither full-resolution MP4 was downloaded or visually inspected.**
+
+Therefore the following remain unknown for both clips:
+- Actual frame-by-frame content, exact animal identity/behaviour throughout, distress or unsafe handling, misleading cuts, overlays/watermarks, and any third-party material.
+- Embedded audio/music rights and whether the final edit must remove the source audio.
+- Whether any additional rights, restrictions or context beyond the Pexels listing apply to the downloaded file.
+
+Do not enter either clip in `content/asset-register.json`, create a production render manifest, edit, schedule, approve or publish either clip yet. After a lawful local download, inspect the entire clip at full resolution, verify the exact file hash, check all frames/audio/overlays and retain the page/license evidence. Only then can each candidate be considered separately for rights review and human editorial approval.
+
+**Editorial constraint:** never present the slow worm as a snake, never imply the cobra clip depicts a different species or event, and never label either stock clip as footage filmed by SonicVhibez.
