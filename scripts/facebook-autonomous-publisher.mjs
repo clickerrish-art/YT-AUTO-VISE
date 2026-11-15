@@ -394,7 +394,16 @@ export async function runAutonomousFacebookPublisher({
             recoveryReason: "REMOTE_RECEIPT_RECOVERED_AFTER_UNCERTAIN_MUTATION"
           };
           ledger[ledger.length - 1] = recovered;
-          history.push({ ...recovered, payload: undefined });
+          // Re-read the durable projection after remote reconciliation. This also
+          // detects a receipt written while the network operation was in flight.
+          const latestHistory = safeHistory(historyPath);
+          const existingReceipts = latestHistory.filter(item => item?.slotId === recovered.slotId &&
+            ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status));
+          if (existingReceipts.some(item => item.remotePostId !== recovered.remotePostId)) {
+            throw new Error("Facebook history conflicts with a reconciled ledger receipt; publishing blocked for manual reconciliation");
+          }
+          history = latestHistory;
+          if (!existingReceipts.length) history.push({ ...recovered, payload: undefined });
           atomicJson(ledgerPath, ledger); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); published++;
           continue;
         }
