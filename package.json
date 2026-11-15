@@ -38,7 +38,8 @@
     "validate:promotional-shorts": "node scripts/validate-promotional-short-plan.mjs",
     "backup:recover": "node scripts/backup-state.mjs --recover",
     "seo:research": "node scripts/research-youtube-seo.mjs",
-    "validate:nature-frontiers-media": "node scripts/validate-nature-frontiers-media-register.mjs"
+    "validate:nature-frontiers-media": "node scripts/validate-nature-frontiers-media-register.mjs",
+    "nature-frontiers:register-local-media": "node scripts/register-nature-frontiers-local-media.mjs"
   },
   "engines": {
     "node": ">=22"
