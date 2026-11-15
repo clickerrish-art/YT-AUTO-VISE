@@ -78,6 +78,16 @@ export async function runFacebookContentIntake({
     throw new Error("FACEBOOK_STATE_DIR must be an absolute durable operator-controlled directory");
   }
   fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
+  const stateDirStat = fs.lstatSync(stateDir);
+  if (!stateDirStat.isDirectory() || stateDirStat.isSymbolicLink()) {
+    throw new Error("FACEBOOK_STATE_DIR must be a real directory, not a symlink");
+  }
+  if (process.platform !== "win32" && (stateDirStat.mode & 0o077) !== 0) {
+    throw new Error("FACEBOOK_STATE_DIR permissions must be private (0700); tighten the directory before intake");
+  }
+  if (typeof process.getuid === "function" && stateDirStat.uid !== process.getuid()) {
+    throw new Error("FACEBOOK_STATE_DIR must be owned by the intake runtime user");
+  }
   const config = readJson(configPath);
   const stateFile = name => {
     if (typeof name !== "string" || !name.trim() || path.isAbsolute(name) || name.includes("\\") ||
