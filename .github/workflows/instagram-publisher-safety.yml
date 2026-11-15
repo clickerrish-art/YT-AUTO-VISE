@@ -21,6 +21,7 @@ on:
     paths:
       - "scripts/meta-instagram-reel-adapter.mjs"
       - "scripts/instagram-autonomous-publisher.mjs"
+      - "scripts/instagram-content-intake.mjs"
       - "config/instagram-publishing.json"
       - "test/meta-instagram-reel-adapter.test.mjs"
       - "test/instagram-autonomous-publisher.test.mjs"
@@ -50,7 +51,7 @@ jobs:
       - name: Verify intake refuses unconfigured Instagram identity without writing a queue
         run: |
           output="$(node scripts/instagram-content-intake.mjs)"
-          printf '%s\\n' "$output"
+          printf '%s\n' "$output"
           node --input-type=module - "$output" <<'NODE'
           const result = JSON.parse(process.argv[2]);
           if (result.status !== 'BLOCKED_CONFIGURATION' || result.accepted !== 0) {
