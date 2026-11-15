@@ -211,3 +211,34 @@ test("rejects empty or non-string remote publication receipts", () => {
   value.assets[0].usage.platformPostIds = [123];
   assert.ok(validateMediaRegister(value).some(error => error.includes("platformPostIds entries must be non-empty strings")));
 });
+
+
+test("approval usage must be contained in the rights-cleared scope", () => {
+  const value = structuredClone(base);
+  const hash = "e".repeat(64);
+  value.assets[0].localFile = { path: "media/nf-test.mp4", sha256: hash };
+  value.assets[0].media.sha256 = hash;
+  value.assets[0].rights = {
+    reviewStatus: "cleared",
+    additionalPermissionsStatus: "not_required",
+    licenseEvidence: ["https://example.com/license-evidence"],
+    permittedUsage: ["Instagram Reel"],
+    reviewedBy: "rights reviewer",
+    reviewedAt: "2026-11-15T10:00:00+02:00"
+  };
+  value.assets[0].inspection = {
+    status: "complete",
+    inspectedBy: "editor",
+    inspectedAt: "2026-11-15T10:05:00+02:00",
+    inspectedFileSha256: hash,
+    visualNotes: "Full clip inspected; species and visible behaviour documented."
+  };
+  value.assets[0].approval = {
+    status: "approved",
+    approvedBy: "owner",
+    approvedAt: "2026-11-15T10:10:00+02:00",
+    approvedFileSha256: hash,
+    approvedUsage: ["Facebook Feed"]
+  };
+  assert.ok(validateMediaRegister(value).some(error => error.includes("approval usage exceeds the rights-cleared permittedUsage scope")));
+});

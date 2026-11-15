@@ -36,7 +36,7 @@ function fixture() {
     editorial: { status: "candidate" },
     localFile: { path: "media/nature-frontiers/clip.mp4", sha256: hash },
     approval: { status: "pending" },
-    usage: { scheduled: false, published: false },
+    usage: { scheduled: false, published: false, platformPostIds: [] },
     rights: { reviewStatus: "not_assessed", additionalPermissionsStatus: "not_assessed", licenseEvidence: [] }
   }] };
   return { root, register, hash };
