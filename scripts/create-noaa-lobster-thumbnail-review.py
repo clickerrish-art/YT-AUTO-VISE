@@ -21,6 +21,7 @@ FRAME = OUT_DIR / "source-frame-370s.jpg"
 OUTPUT = OUT_DIR / "noaa-california-spiny-lobster-thumbnail-review.jpg"
 EVIDENCE = OUT_DIR / "noaa-california-spiny-lobster-thumbnail-review.json"
 EXPECTED_SOURCE_SHA256 = "1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb"
+REQUIRED_ATTRIBUTION = "NOAA’s Office of National Marine Sanctuaries"
 SOURCE_SECONDS = 370
 
 def sha256(path: Path) -> str:
@@ -106,7 +107,7 @@ def main() -> None:
         draw.text((62, y + 5), text, font=bold, fill=(0, 0, 0, 210), stroke_width=6, stroke_fill=(0, 0, 0, 180))
         draw.text((58, y), text, font=bold, fill=fill, stroke_width=2, stroke_fill=(0, 0, 0, 220))
     draw.rounded_rectangle((770, 661, 1225, 702), radius=9, fill=(3, 14, 20, 210))
-    draw.text((786, 673), "NOAA • NATIONAL MARINE SANCTUARIES", font=footer, fill=(255, 255, 255, 245))
+    draw.text((786, 673), REQUIRED_ATTRIBUTION, font=footer, fill=(255, 255, 255, 245))
 
     image.convert("RGB").save(OUTPUT, quality=94, optimize=True)
     final_image = Image.open(OUTPUT)
@@ -128,7 +129,7 @@ def main() -> None:
             "sourceSeconds": SOURCE_SECONDS,
             "sourceDurationSeconds": round(duration, 3),
             "sourceAudioUsed": False,
-            "attribution": "NOAA's Office of National Marine Sanctuaries"
+            "attribution": REQUIRED_ATTRIBUTION
         },
         "thumbnail": {
             "path": str(OUTPUT.relative_to(ROOT)),
