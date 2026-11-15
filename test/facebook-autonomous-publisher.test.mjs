@@ -658,3 +658,43 @@ test("startup blocks interrupted reconciliation when existing verified history n
     assert.equal(JSON.parse(fs.readFileSync(f.queuePath, "utf8")).length, 1);
   } finally { f.cleanup(); }
 });
+
+
+test("startup keeps a confirmed reconciliation without a remote post ID uncertain", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    const payload = {
+      slotId: "nature-frontiers-2026-10-25-missing-remote-id",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Receipt without remote identity.", links: [], media: [], claims: []
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    fs.writeFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), JSON.stringify([{
+      kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId: payload.slotId, destination: "nature_frontiers_facebook",
+      status: "PUBLISHING", startedAt: "2026-10-25T05:30:00.000Z", scheduledAt: payload.scheduledAt,
+      payload: { caption: payload.caption, scheduledAt: payload.scheduledAt }
+    }]));
+    let mutationCalls = 0;
+    const result = await runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+      now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
+      reconcileRemote: async () => ({
+        outcome: "CONFIRMED",
+        receipt: { status: "SCHEDULED_VERIFIED", scheduledPublishTime: Date.parse(payload.scheduledAt) / 1000 }
+      }),
+      publish: async () => { mutationCalls++; throw new Error("must not publish an uncertain slot"); }
+    });
+    const ledger = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), "utf8"));
+    const history = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-history.json"), "utf8"));
+    assert.equal(mutationCalls, 0);
+    assert.equal(ledger[0].status, "UNCERTAIN");
+    assert.notEqual(history.some(item => ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)), true);
+    assert.equal(result.published, 0);
+  } finally { f.cleanup(); }
+});
