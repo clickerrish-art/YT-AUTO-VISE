@@ -146,6 +146,20 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const malformedTokenResponse = await fetchDashboard(base + "/api/state", { headers: { "x-operator-token": malformedUnicodeToken } });
   assert.equal(malformedTokenResponse.status, 401, "equal JavaScript string lengths with unequal UTF-8 byte lengths must reject cleanly");
   const headers = { "content-type": "application/json", "x-operator-token": token };
+  const instagramStatusResponse = await fetchDashboard(base + "/api/instagram/status", { headers: { "x-operator-token": token } });
+  assert.equal(instagramStatusResponse.status, 200, "Instagram operations status must be available to an authenticated operator");
+  const instagramStatus = await instagramStatusResponse.json();
+  assert.equal(instagramStatus.destination, "nature_frontiers_instagram");
+  assert.equal(instagramStatus.readOnly, true);
+  assert.equal(instagramStatus.providerMutationAttempted, false);
+  assert.equal(instagramStatus.publishingSwitches.publishingEnabled, false);
+  assert.equal(instagramStatus.publishingSwitches.dryRun, true);
+  assert.equal(instagramStatus.publishingSwitches.emergencyStop, true);
+  assert.equal(instagramStatus.accountConfigured, false, "the owner-unverified Instagram account ID must remain unset");
+  assert.equal(instagramStatus.candidateCount, 0);
+  assert.equal(instagramStatus.queueCount, 0);
+  assert.equal(JSON.stringify(instagramStatus).includes(token), false, "status must never disclose operator credentials");
+
 
   // Route-level boundary acceptance for lifecycle operations whose complete
   // success path is separately gated by real media, remote receipts and human review.
