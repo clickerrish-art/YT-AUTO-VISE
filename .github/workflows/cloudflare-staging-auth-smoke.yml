@@ -49,3 +49,9 @@ jobs:
         run: node scripts/cloudflare-staging-auth-smoke.mjs
       - name: Syntax-check one-time backup and restore acceptance
         run: node --check scripts/cloudflare-staging-backup-restore-smoke.mjs
+      # Explicit push-commit marker is required for any future staging write drill.
+      - name: Run one-time staging backup and restore acceptance
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[staging-backup-restore]')
+        env:
+          DASHBOARD_STAGING_BACKUP_RESTORE_CONFIRMATION: "YES"
+        run: node scripts/cloudflare-staging-backup-restore-smoke.mjs
