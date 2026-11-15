@@ -15,7 +15,7 @@ function setup() {
     destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
     destinationPageName: "Nature Frontiers", apiVersion: "v26.0", timezone: "Africa/Johannesburg",
     autonomousMode: true, autonomousSchedulingEnabled: true, emergencyStop: true,
-    publishingEnabled: false, dryRun: true, dailyCap: 1, minimumIntervalMinutes: 1200,
+    publishingEnabled: false, dryRun: true, dailyCap: 3, dailyReelCap: 2, dailyFeedPostCap: 1, minimumIntervalMinutes: 240,
     allowedDomains: [], allowedCampaignIds: [], approvedDestinations: [],
     complianceRuleSet: FACEBOOK_POLICY_RULE_VERSION
   };
