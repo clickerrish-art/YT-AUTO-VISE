@@ -20,7 +20,7 @@ OUT_DIR = ROOT / "media" / "review-only" / "thumbnails"
 FRAME = OUT_DIR / "source-frame-370s.jpg"
 OUTPUT = OUT_DIR / "noaa-california-spiny-lobster-thumbnail-review.jpg"
 EVIDENCE = OUT_DIR / "noaa-california-spiny-lobster-thumbnail-review.json"
-EXPECTED_SOURCE_SHA256 = "68af5b6a4c4b4b0a4a5d8c3d2f2a5b9f4f0d3a7c0a8f7c4b9b7e0f3a2c1d6e5f"
+EXPECTED_SOURCE_SHA256 = "1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb"
 SOURCE_SECONDS = 370
 
 def sha256(path: Path) -> str:
