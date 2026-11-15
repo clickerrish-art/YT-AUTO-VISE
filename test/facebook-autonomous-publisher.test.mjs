@@ -127,6 +127,39 @@ test("lock release never removes a replacement lock owned by another process", a
   } finally { f.cleanup(); }
 });
 
+test("duplicate queue slot IDs block before any candidate can be published", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const now = Date.parse("2026-10-25T05:30:00.000Z");
+    const base = {
+      slotId: "nature-frontiers-duplicate-slot",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      links: [], media: [], claims: [], campaignId: null
+    };
+    const queue = [
+      { ...base, caption: "First candidate caption." },
+      { ...base, caption: "Different candidate with the same idempotency key." }
+    ];
+    fs.writeFileSync(f.queuePath, JSON.stringify(queue));
+    let policyCalls = 0, mutationCalls = 0;
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      policyEvaluator: async () => { policyCalls++; return { eligible: true }; },
+      publish: async () => { mutationCalls++; throw new Error("must not publish an ambiguous slot"); }
+    }), /duplicate slot IDs/i);
+    assert.equal(policyCalls, 0, "ambiguous queue entries must be rejected before policy selection");
+    assert.equal(mutationCalls, 0, "ambiguous queue entries must never reach Meta mutation");
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), queue,
+      "the ambiguous queue must remain intact for manual reconciliation");
+    assert.equal(fs.existsSync(path.join(f.stateDir, "facebook-publishing.lock")), false,
+      "the publisher lock must be released after rejecting the queue");
+  } finally { f.cleanup(); }
+});
+
 test("safe defaults are a no-op and never attempt a Meta request", async () => {
   const f = setup();
   try {
