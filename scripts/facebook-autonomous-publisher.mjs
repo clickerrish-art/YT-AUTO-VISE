@@ -261,21 +261,21 @@ export async function runAutonomousFacebookPublisher({
       atomicJson(historyPath, history);
     }
 
-    const candidates = queue.filter(item => item && item.destination === "nature_frontiers_facebook" &&
-      item.destinationPageId === config.destinationPageId && item.scheduledDate === today &&
-      typeof item.slotId === "string" && typeof item.scheduledAt === "string");
-    // A slot ID is the idempotency key across queue, ledger and history. Never
-    // choose an arbitrary payload when a malformed or duplicated queue contains
-    // multiple candidates for the same key; doing so could publish unreviewed
-    // content while silently discarding the other candidate.
-    const candidateSlotCounts = new Map();
-    for (const candidate of candidates) {
-      candidateSlotCounts.set(candidate.slotId, (candidateSlotCounts.get(candidate.slotId) ?? 0) + 1);
+    // Slot IDs are global idempotency keys, not date-scoped. Validate the
+    // complete queue before filtering today's work so duplicates on future
+    // dates or alternate destination metadata cannot be silently shadowed.
+    const queuedSlotCounts = new Map();
+    for (const item of queue) {
+      if (typeof item?.slotId !== "string" || !item.slotId.trim()) continue;
+      queuedSlotCounts.set(item.slotId, (queuedSlotCounts.get(item.slotId) ?? 0) + 1);
     }
-    const duplicateSlotIds = [...candidateSlotCounts].filter(([, count]) => count > 1).map(([slotId]) => slotId);
+    const duplicateSlotIds = [...queuedSlotCounts].filter(([, count]) => count > 1).map(([slotId]) => slotId);
     if (duplicateSlotIds.length) {
       throw new Error("Autonomous Facebook queue contains duplicate slot IDs; publishing blocked for manual queue reconciliation");
     }
+    const candidates = queue.filter(item => item && item.destination === "nature_frontiers_facebook" &&
+      item.destinationPageId === config.destinationPageId && item.scheduledDate === today &&
+      typeof item.slotId === "string" && typeof item.scheduledAt === "string");
     const removeQueuedSlot = slotId => {
       const index = queue.findIndex(item => item?.slotId === slotId);
       if (index >= 0) { queue.splice(index, 1); atomicJson(queuePath, queue); }
