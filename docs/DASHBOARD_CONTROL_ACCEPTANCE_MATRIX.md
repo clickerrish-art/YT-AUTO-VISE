@@ -1,3 +1,19 @@
+# Live evidence refresh — 15 November 2026
+
+**Current code/test change:** `3e302319d35ca738df421148b357afc7038f8e93` (Cloudflare Access header hardening; focused local test 2/2 passed).  
+**Last full CI-tested source SHA:** `44a909db7c9ab60e9c62e7b92f3e028a88675619`. The current code/test SHA has no GitHub Actions run surfaced yet; do not transfer PASS labels to it.
+
+- Dashboard Chromium E2E on the last full CI SHA: [run 43690430119](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430119), **29/29 passed**.
+- Content quality on that SHA: [run 43690430168](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430168), **784/784 passed, zero skipped**.
+- Automation/security on that SHA: [run 43690430117](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430117), **140/140 Node test files passed, 44 Python tests passed, zero skipped; npm audit 0 vulnerabilities**.
+- Dashboard source files were not changed by the subsequent Cloudflare smoke helper or promotional-plan evidence commits. The last recorded static inventory remains **118 controls, 17 forms, 49 route handlers and 45 protected API routes**; it is not a fresh inventory execution on the current code/test SHA.
+- Last evidenced form outcomes remain **11 PASS / 6 BLOCKED** on the prior tested source. For the current branch head, strict exact-SHA status is **0 PASS / 11 NOT_TESTED / 6 BLOCKED** until the full browser suite is rerun on that head.
+- **DASH-001 remains NOT_TESTED overall.** The 29 browser journeys and static inventory do not establish exhaustive per-control business success, validation, authorization, persistence, refresh, concurrency, restart and accessibility acceptance.
+
+The current exact-head full CI state is NOT_TESTED; no current-head dashboard PASS is claimed.
+
+---
+
 # Latest exact-SHA evidence — 9 November 2026
 
 - Exact application source/test SHA: `ac02833e38f70e4806b12d8583b07e968e5a19fa`.
