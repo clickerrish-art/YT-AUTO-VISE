@@ -60,7 +60,6 @@ assert(Number.isSafeInteger(Number(payload?.revision)) && Number(payload.revisio
 const etagRevisionMatch = String(authenticated.etag ?? "").match(/^(?:W\\/)?"?([1-9][0-9]*)"?$/);
 assert(etagRevisionMatch && Number(etagRevisionMatch[1]) === Number(payload.revision),
   "Authenticated Worker state ETag does not match its revision: etag=" + String(authenticated.etag ?? "missing") + ", revision=" + Number(payload.revision));
-  "Authenticated Worker state ETag does not match its revision: etag=" + String(authenticated.etag ?? "missing") + ", revision=" + Number(payload.revision));
 for (const key of ["queueItems", "audit", "jobs", "uploads"]) {
   assert(Array.isArray(state?.[key]), "Authenticated state response is missing array: " + key);
 }
