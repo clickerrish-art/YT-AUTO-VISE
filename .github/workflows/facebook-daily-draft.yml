@@ -9,9 +9,11 @@ on:
     branches: [main, codex/marketing-machine-audit-fixes]
     paths:
       - "scripts/generate-facebook-daily-draft.mjs"
+      - "scripts/generate-facebook-daily-plan.mjs"
       - "scripts/facebook-pipeline.mjs"
       - "scripts/restore-facebook-draft-history.mjs"
       - "test/facebook-daily-draft.test.mjs"
+      - "test/facebook-daily-plan.test.mjs"
       - "test/restore-facebook-draft-history.test.mjs"
       - "package.json"
       - "package-lock.json"
@@ -20,9 +22,11 @@ on:
     branches: [main]
     paths:
       - "scripts/generate-facebook-daily-draft.mjs"
+      - "scripts/generate-facebook-daily-plan.mjs"
       - "scripts/facebook-pipeline.mjs"
       - "scripts/restore-facebook-draft-history.mjs"
       - "test/facebook-daily-draft.test.mjs"
+      - "test/facebook-daily-plan.test.mjs"
       - "test/restore-facebook-draft-history.test.mjs"
       - "package.json"
       - "package-lock.json"
@@ -50,7 +54,7 @@ jobs:
       - name: Install locked dependencies without lifecycle scripts
         run: npm ci --ignore-scripts
       - name: Test daily draft and cross-run history recovery
-        run: node --test test/facebook-daily-draft.test.mjs test/restore-facebook-draft-history.test.mjs
+        run: node --test test/facebook-daily-draft.test.mjs test/facebook-daily-plan.test.mjs test/restore-facebook-draft-history.test.mjs
       - name: Generate a deterministic local draft-only package
         env:
           FACEBOOK_DAILY_DRAFT_DIR: ${{ runner.temp }}/facebook-candidate-drafts
@@ -80,6 +84,21 @@ jobs:
           const failed = checks.filter(([ok]) => !ok);
           for (const [ok, label] of checks) console.log((ok ? 'PASS ' : 'FAIL ') + label);
           if (failed.length) process.exit(1);
+          NODE
+      - name: Generate and validate the three-slot research-only plan
+        env:
+          FACEBOOK_DAILY_PLAN_DIR: ${{ runner.temp }}/facebook-candidate-plans
+          FACEBOOK_DAILY_PLAN_DATE: "2030-10-25"
+          FACEBOOK_DAILY_PLAN_NOW: "2030-10-24T05:30:00.000Z"
+        run: |
+          node scripts/generate-facebook-daily-plan.mjs
+          test -s "$FACEBOOK_DAILY_PLAN_DIR/2030-10-25.plan.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const plan = JSON.parse(fs.readFileSync(process.env.FACEBOOK_DAILY_PLAN_DIR + '/2030-10-25.plan.json', 'utf8'));
+          if (plan.slots.length !== 3 || plan.slots.filter(x => x.mediaType === 'reel').length !== 2 || plan.slots.filter(x => x.mediaType === 'feed_post').length !== 1) process.exit(1);
+          if (plan.publishReady !== false || plan.publishingEnabled !== false || plan.slots.some(x => x.media !== null || x.rightsEvidence !== null || x.factualClaims.length)) process.exit(1);
+          console.log('PASS: 2 Reel + 1 feed research-only plan; no fabricated claims, media or rights.');
           NODE
       - name: Report external integration boundary
         run: |
@@ -121,6 +140,17 @@ jobs:
         with:
           name: nature-frontiers-facebook-draft-${{ github.run_id }}
           path: ${{ runner.temp }}/facebook-drafts/*.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Generate three-slot research-only content plan
+        env:
+          FACEBOOK_DAILY_PLAN_DIR: ${{ runner.temp }}/facebook-plans
+        run: node scripts/generate-facebook-daily-plan.mjs
+      - name: Retain three-slot plan for operator review
+        uses: actions/upload-artifact@v4
+        with:
+          name: nature-frontiers-facebook-plan-${{ github.run_id }}
+          path: ${{ runner.temp }}/facebook-plans/*.plan.json
           if-no-files-found: error
           retention-days: 14
       - name: Report external integration boundary
