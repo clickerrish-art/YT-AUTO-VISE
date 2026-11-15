@@ -680,12 +680,10 @@ const server = http.createServer(async (req, res) => {
         } else {
           const report = String(readinessCheck.stdout ?? "");
           const reportHasHold = /^HOLD:/m.test(report);
-          blockers.push(...report.split(/\r?
-/).filter(line => line.startsWith("- ")).map(line => line.slice(2)));
+          blockers.push(...report.split(/\r?\n/).filter(line => line.startsWith("- ")).map(line => line.slice(2)));
           if (readinessCheck.status === 2 && !reportHasHold) blockers.push("Production readiness validator exited blocked without a HOLD report; inspect the readiness task output");
           if (readinessCheck.status === 0 && reportHasHold) blockers.push("Production readiness validator returned success while reporting HOLD");
-          if (reportHasHold && !report.split(/\r?
-/).some(line => line.startsWith("- "))) blockers.push("Production readiness validator reported HOLD without actionable blocker details");
+          if (reportHasHold && !report.split(/\r?\n/).some(line => line.startsWith("- "))) blockers.push("Production readiness validator reported HOLD without actionable blocker details");
         }
         if (!schedule.channelId || !/^UC[a-zA-Z0-9_-]{22}$/.test(schedule.channelId)) blockers.push("SONICVHIBEZ_CHANNEL_ID has not been independently verified in the authoritative schedule");
         if (process.env.SONICVHIBEZ_CHANNEL_ID && schedule.channelId && process.env.SONICVHIBEZ_CHANNEL_ID !== schedule.channelId) blockers.push("Configured channel ID does not match the authoritative schedule channel ID");
