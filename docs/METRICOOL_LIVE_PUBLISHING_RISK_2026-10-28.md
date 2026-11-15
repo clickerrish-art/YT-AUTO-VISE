@@ -94,3 +94,16 @@ The exact-candidate Meta verification workflow still receives HTTP 401, OAuth er
 - Do not guess an Instagram Business Account ID from the returned username.
 - Do not use the Nature Frontiers YouTube connection as SonicVhibez.
 - Do not update, pause, cancel, reschedule or publish any Metricool record without explicit owner authorization for the exact record and action.
+
+### Current brand publication and analytics snapshot — 2026-11-16
+
+Read-only Metricool post-level queries for current brand `8094526` returned:
+
+- **Facebook feed:** 3 feed posts dated 2026-11-13. Two are photo posts with empty caption text; one is a welcome post for Nature Frontiers SA.
+- **Facebook Reels:** 2 Reels dated 2026-11-13 and 2026-11-14, both about “Mongoose vs King Cobra fight.” The returned post-level metrics are sparse and some values are null/zero; they are not treated as a reliable performance baseline.
+- **Instagram feed and Reels:** no post rows returned for 2026-11-12 through 2026-11-16.
+- **Future schedule:** no scheduled posts returned for the current brand through 2026-12-16.
+
+This shows some recent Facebook activity but no confirmed Instagram publishing activity or upcoming schedule in the current Metricool brand. It does not prove the status of records on inaccessible old brand `7545638`, and it does not establish that the Facebook content passed this repository's rights/editorial approval process.
+
+No analytics ingestion or optimization loop is currently accepted in the repository. Metricool data remains a read-only external snapshot; sparse/null/zero metrics must not be interpreted as verified account-wide performance or used to fabricate a content-performance baseline.
