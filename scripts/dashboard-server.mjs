@@ -264,7 +264,8 @@ function appendFacebookRecoveryReceipt(record) {
     const noFollow = fs.constants.O_NOFOLLOW ?? 0;
     const fd = fs.openSync(ledger, fs.constants.O_WRONLY | fs.constants.O_APPEND | fs.constants.O_CREAT | noFollow, 0o600);
     try {
-      fs.writeSync(fd, JSON.stringify(safeRecord) + "\n", undefined, "utf8");
+      fs.writeSync(fd, JSON.stringify(safeRecord) + "
+", undefined, "utf8");
       fs.fsyncSync(fd);
     } finally { fs.closeSync(fd); }
     try { fs.chmodSync(ledger, 0o600); } catch {}
@@ -292,10 +293,12 @@ function readFacebookRecoveryLedger() {
   if (!raw) return [];
   // A crash during append can leave a partial final JSON record. Never skip it:
   // doing so could hide the only receipt for a remote operation with uncertain outcome.
-  if (!raw.endsWith("\n")) {
+  if (!raw.endsWith("
+")) {
     throw new Error("Facebook recovery ledger has an incomplete final record; preserve it and reconcile remote state before retrying");
   }
-  const lines = raw.slice(0, -1).split("\n");
+  const lines = raw.slice(0, -1).split("
+");
   const records = [];
   for (const line of lines) {
     if (!line.trim()) {
@@ -538,14 +541,16 @@ function runTask(taskId, commandOverride = null, { signal } = {}) {
     };
     const timer = setTimeout(() => {
       timedOut = true;
-      output += "\\nTask exceeded its time limit; termination requested.";
+      output += "\
+Task exceeded its time limit; termination requested.";
       abortChild();
     }, taskTimeoutMs.get(taskId) ?? 60_000);
     if (signal?.aborted) abortChild();
     else signal?.addEventListener("abort", abortChild, { once: true });
     child.stdout.on("data", collect);
     child.stderr.on("data", collect);
-    child.on("error", error => finish({ exitCode: null, status: "FAILED", output: redactOperationalText((output + "\\n" + error.message).slice(-12000), { roots: [root, stateDir] }) }));
+    child.on("error", error => finish({ exitCode: null, status: "FAILED", output: redactOperationalText((output + "\
+" + error.message).slice(-12000), { roots: [root, stateDir] }) }));
     child.on("close", code => finish({ exitCode: code, status: timedOut ? "TIMED_OUT" : code === 0 ? "SUCCEEDED" : "FAILED" }));
   });
 }
@@ -678,10 +683,12 @@ const server = http.createServer(async (req, res) => {
         } else {
           const report = String(readinessCheck.stdout ?? "");
           const reportHasHold = /^HOLD:/m.test(report);
-          blockers.push(...report.split(/\r?\n/).filter(line => line.startsWith("- ")).map(line => line.slice(2)));
+          blockers.push(...report.split(/\r?
+/).filter(line => line.startsWith("- ")).map(line => line.slice(2)));
           if (readinessCheck.status === 2 && !reportHasHold) blockers.push("Production readiness validator exited blocked without a HOLD report; inspect the readiness task output");
           if (readinessCheck.status === 0 && reportHasHold) blockers.push("Production readiness validator returned success while reporting HOLD");
-          if (reportHasHold && !report.split(/\r?\n/).some(line => line.startsWith("- "))) blockers.push("Production readiness validator reported HOLD without actionable blocker details");
+          if (reportHasHold && !report.split(/\r?
+/).some(line => line.startsWith("- "))) blockers.push("Production readiness validator reported HOLD without actionable blocker details");
         }
         if (!schedule.channelId || !/^UC[a-zA-Z0-9_-]{22}$/.test(schedule.channelId)) blockers.push("SONICVHIBEZ_CHANNEL_ID has not been independently verified in the authoritative schedule");
         if (process.env.SONICVHIBEZ_CHANNEL_ID && schedule.channelId && process.env.SONICVHIBEZ_CHANNEL_ID !== schedule.channelId) blockers.push("Configured channel ID does not match the authoritative schedule channel ID");
@@ -757,6 +764,7 @@ const server = http.createServer(async (req, res) => {
           media: asset.media ?? null,
           claims: Array.isArray(asset.claims) ? asset.claims : [],
           rights: {
+            listingLicenseClaim: asset.rights?.listingLicenseClaim ?? null,
             reviewStatus: asset.rights?.reviewStatus ?? "not_assessed",
             additionalPermissionsStatus: asset.rights?.additionalPermissionsStatus ?? "not_assessed",
             permittedUsage: Array.isArray(asset.rights?.permittedUsage) ? asset.rights.permittedUsage : [],
@@ -778,6 +786,7 @@ const server = http.createServer(async (req, res) => {
             status: asset.approval?.status ?? "pending",
             approvedBy: asset.approval?.approvedBy ?? null,
             approvedAt: asset.approval?.approvedAt ?? null,
+            approvedFileSha256: asset.approval?.approvedFileSha256 ?? null,
             approvedUsage: Array.isArray(asset.approval?.approvedUsage) ? asset.approval.approvedUsage : []
           },
           usage: {
@@ -1966,7 +1975,8 @@ const server = http.createServer(async (req, res) => {
           verified[name] = { path: artifact.path, sha256: artifact.sha256, file };
         }
         const transcript = fs.readFileSync(verified["narration.txt"].file, "utf8");
-        const expectedTranscript = String(script.narration ?? "").replace(/\s+/gu, " ").trim() + "\n";
+        const expectedTranscript = String(script.narration ?? "").replace(/\s+/gu, " ").trim() + "
+";
         if (transcript !== expectedTranscript) throw new Error("Narration transcript differs from the exact approved script");
         const captions = fs.readFileSync(verified["captions.srt"].file, "utf8");
         const report = JSON.parse(fs.readFileSync(verified["narration-report.json"].file, "utf8"));
@@ -2919,7 +2929,8 @@ const server = http.createServer(async (req, res) => {
         const timer = setTimeout(() => { timedOut = true; child.kill("SIGTERM"); }, 60_000);
         child.stdout.on("data", collect);
         child.stderr.on("data", collect);
-        child.on("error", error => { clearTimeout(timer); resolve({ status: "FAILED", exitCode: null, output: (textOutput + "\n" + error.message).slice(-12000), truncated }); });
+        child.on("error", error => { clearTimeout(timer); resolve({ status: "FAILED", exitCode: null, output: (textOutput + "
+" + error.message).slice(-12000), truncated }); });
         child.on("close", code => { clearTimeout(timer); resolve({ status: timedOut ? "TIMED_OUT" : code === 0 ? "SUCCEEDED" : "FAILED", exitCode: code, output: textOutput, truncated }); });
       });
       const updatedLedger = readUploadLedger();
