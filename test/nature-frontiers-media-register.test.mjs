@@ -42,6 +42,15 @@ test("accepts provider-neutral local records without API credentials or network 
   assert.deepEqual(validateMediaRegister(base), []);
 });
 
+
+test("does not require a provider asset ID, API key, or remote metadata", () => {
+  const value = structuredClone(base);
+  delete value.assets[0].source.assetId;
+  value.assets[0].source.provider = "Local archive";
+  value.assets[0].source.url = "https://archive.example.org/wildlife/clip-01";
+  assert.deepEqual(validateMediaRegister(value), []);
+});
+
 test("rejects duplicate stable asset IDs", () => {
   const value = structuredClone(base);
   value.assets.push(structuredClone(value.assets[0]));
