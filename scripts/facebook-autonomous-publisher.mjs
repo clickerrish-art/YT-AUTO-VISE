@@ -162,6 +162,11 @@ export async function runAutonomousFacebookPublisher({
   try {
     let history = safeHistory(historyPath);
     let ledger = safeHistory(ledgerPath);
+    for (const record of history) {
+      if (typeof record.slotId !== "string" || !record.slotId.trim()) {
+        throw new Error("Facebook history contains a record without a valid slot ID; manual history reconciliation required");
+      }
+    }
     const ledgerSlotIds = new Set();
     for (const attempt of ledger) {
       if (typeof attempt.slotId !== "string" || !attempt.slotId.trim()) {
