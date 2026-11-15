@@ -15,7 +15,7 @@ test("Nature Frontiers media register is exposed through an authenticated provid
   assert.match(server, /rights\.permittedUsage/);
   assert.match(server, /inspection\.status/);
   assert.match(server, /approval\.status/);
-  assert.match(server, /usage\.platformPostIds/);
+  assert.match(server, /usage\.platformPostIds/);\n  assert.match(server, /source\?\.listingEvidence/);\n  assert.match(server, /licenseEvidence/);\n  assert.match(server, /additionalPermissionsEvidence/);\n  assert.match(server, /inspectedFileSha256/);\n  assert.match(server, /approvedUsage/);
   assert.match(server, /Operator authentication required/);
 });
 
@@ -29,7 +29,7 @@ test("Nature Frontiers dashboard renders source, claims, file integrity, rights,
   assert.match(html, /cells\[0\]\.textContent=/);
   assert.match(html, /cells\[3\]\.textContent=.*Permitted use/);
   assert.match(html, /cells\[4\]\.textContent=/);
-  assert.match(html, /cells\[5\]\.textContent=.*Approval/);
+  assert.match(html, /cells\[5\]\.textContent=.*Approval/);\n  assert.match(html, /cells\[6\]\.textContent=.*Remote receipts/);\n  assert.match(html, /listingStatus/);\n  assert.match(html, /listingEvidence/);\n  assert.match(html, /evidenceUrls/);\n  assert.match(html, /SHA-256/);\n  assert.match(html, /Licence evidence/);\n  assert.match(html, /Additional permissions evidence/);\n  assert.match(html, /inspectedFileSha256/);\n  assert.match(html, /proposedSeries/);\n  assert.match(html, /approvedBy/);\n  assert.match(html, /platformPostIds/);
   assert.match(html, /publishing state unknown/);
   assert.match(html, /cannot inspect, clear rights, approve, schedule or publish assets/);
   assert.doesNotMatch(html, /nfRegisterAssets[\s\S]{0,2000}\.innerHTML\s*=/);
