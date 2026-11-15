@@ -192,6 +192,36 @@ test("cycle gate uses verified history and requires the next expected format and
 });
 
 
+test("owner-approved cycle starts after a legacy Short while retaining it for 72-hour spacing", () => {
+  const legacyHistory = [{
+    id: "legacy-public-short",
+    status: "public",
+    actualPublishedAt: "2026-10-22T15:05:56.000Z",
+    format: "short"
+  }];
+  assert.doesNotThrow(() => assertNextPublicationAllowed({
+    history: legacyHistory,
+    pendingAttempts: [],
+    proposedAt: "2026-11-10T15:05:56.000Z",
+    jobId: "first-approved-cycle-long-form",
+    format: "long_form"
+  }));
+  assert.throws(() => assertNextPublicationAllowed({
+    history: legacyHistory,
+    pendingAttempts: [],
+    proposedAt: "2026-11-10T15:05:56.000Z",
+    jobId: "wrong-first-cycle-short",
+    format: "short"
+  }), /next format must be long_form/);
+  assert.throws(() => assertNextPublicationAllowed({
+    history: legacyHistory,
+    pendingAttempts: [],
+    proposedAt: "2026-10-24T15:05:55.999Z",
+    jobId: "too-soon",
+    format: "long_form"
+  }), /blocked upload/);
+});
+
 test("private upload gate accepts the approved cadence but still enforces all other gates", () => {
   const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
   assert.doesNotThrow(() => assertNextPublicationAllowed({
