@@ -161,6 +161,51 @@ test("duplicate queue slot IDs block before any candidate can be published", asy
   } finally { f.cleanup(); }
 });
 
+test("unresolved attempt keeps the original queue payload for manual reconciliation", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    const payload = {
+      slotId: "nature-frontiers-unresolved-retain-queue",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Keep the complete original candidate for manual review.",
+      links: ["https://example.org/source"], media: [{ path: "content/evidence.jpg", sha256: "a".repeat(64) }],
+      claims: [{ text: "A source-backed claim" }], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    fs.writeFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), JSON.stringify([{
+      kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId: payload.slotId,
+      destination: "nature_frontiers_facebook", status: "UNCERTAIN",
+      startedAt: "2026-10-25T05:30:00.000Z", scheduledAt: payload.scheduledAt,
+      payload: { caption: payload.caption, scheduledAt: payload.scheduledAt },
+      retryAllowed: false
+    }]));
+    let mutationCalls = 0, reconciliationCalls = 0;
+    const result = await runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath,
+      stateDir: f.stateDir, now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
+      reconcileRemote: async () => {
+        reconciliationCalls++;
+        return { outcome: "UNRESOLVED", reason: "NO_MATCH_IS_NOT_PROOF_OF_NON_PUBLICATION", matches: [] };
+      },
+      publish: async () => { mutationCalls++; throw new Error("an uncertain slot must never be retried"); }
+    });
+    assert.equal(result.status, "COMPLETED");
+    assert.equal(reconciliationCalls, 1);
+    assert.equal(mutationCalls, 0);
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), [payload],
+      "the complete original queue payload must remain available for operator reconciliation");
+    const ledger = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), "utf8"));
+    assert.equal(ledger[0].status, "UNCERTAIN");
+    assert.equal(ledger[0].retryAllowed, false);
+  } finally { f.cleanup(); }
+});
+
 test("safe defaults are a no-op and never attempt a Meta request", async () => {
   const f = setup();
   try {
