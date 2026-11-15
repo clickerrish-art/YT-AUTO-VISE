@@ -26,7 +26,7 @@ jobs:
     timeout-minutes: 10
     env:
       DASHBOARD_STAGING_BACKUP_RESTORE_CONFIRMATION: ${{ inputs.confirm_backup_restore }}
-      DASHBOARD_STAGING_API_URL: ${{ secrets.DASHBOARD_STAGING_API_URL }}
+      DASHBOARD_STAGING_API_URL: https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev
       DASHBOARD_OPERATOR_TOKEN: ${{ secrets.DASHBOARD_OPERATOR_TOKEN }}
       CLOUDFLARE_ACCESS_CLIENT_ID: ${{ secrets.CLOUDFLARE_ACCESS_CLIENT_ID }}
       CLOUDFLARE_ACCESS_CLIENT_SECRET: ${{ secrets.CLOUDFLARE_ACCESS_CLIENT_SECRET }}
