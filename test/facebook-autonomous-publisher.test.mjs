@@ -792,3 +792,52 @@ test("startup keeps a confirmed reconciliation without a remote post ID uncertai
     assert.equal(result.published, 0);
   } finally { f.cleanup(); }
 });
+
+
+test("atomic state write does not acknowledge a rename until its directory entry is fsynced", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const now = Date.parse("2026-11-15T07:30:00.000Z");
+    const payload = {
+      slotId: "nature-frontiers-2026-11-15-directory-fsync",
+      destination: "nature_frontiers_facebook",
+      destinationPageId: "123456789012345",
+      scheduledDate: "2026-11-15",
+      scheduledAt: "2026-11-15T08:00:00.000Z",
+      caption: "Test-only candidate must remain blocked.",
+      links: [], media: [], claims: [], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    const options = {
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      policyEvaluator: async () => ({
+        eligible: false, blockers: ["TEST_BLOCK"], warnings: [], contentFingerprint: "b".repeat(64),
+        policyRuleVersion: f.config.complianceRuleSet, reason: "TEST_BLOCK"
+      })
+    };
+    const originalFsync = fs.fsyncSync;
+    let fsyncCalls = 0;
+    try {
+      fs.fsyncSync = fd => {
+        fsyncCalls++;
+        // Lock file, state temp file, then containing directory after rename.
+        if (fsyncCalls === 3) { const error = new Error("simulated directory fsync failure"); error.code = "EIO"; throw error; }
+        return originalFsync(fd);
+      };
+      await assert.rejects(() => runAutonomousFacebookPublisher(options), /simulated directory fsync failure/);
+    } finally {
+      fs.fsyncSync = originalFsync;
+    }
+    const historyPath = path.join(f.stateDir, "facebook-history.json");
+    assert.equal(JSON.parse(fs.readFileSync(historyPath, "utf8"))[0].status, "SKIPPED_BLOCKED",
+      "rename may have produced a complete file, but the failed directory fsync must not be acknowledged");
+    assert.equal(fs.existsSync(path.join(f.stateDir, "facebook-publishing.lock")), false);
+    const result = await runAutonomousFacebookPublisher(options);
+    assert.equal(result.status, "COMPLETED");
+    assert.equal(result.skipped, 1);
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), []);
+  } finally { f.cleanup(); }
+});
