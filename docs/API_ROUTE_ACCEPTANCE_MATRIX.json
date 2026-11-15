@@ -7,31 +7,31 @@
   "liveMainSha": "69fdf35c90f980c142be3aaffa863304bc7eaa25",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
-    "totalHandlers": 49,
-    "protectedApiRoutes": 45,
+    "totalHandlers": 50,
+    "protectedApiRoutes": 46,
     "nonApiHandlers": [
       "GET /",
       "GET /healthz",
       "GET /readyz",
       "GET /operational-readyz"
     ],
-    "branchAheadBy": 3527,
-    "branchBehindBy": 2,
+    "branchAheadBy": 3782,
+    "branchBehindBy": 4,
     "changedFiles": 323,
     "branchProtectionEnabled": null,
     "branchProtectionStatus": "UNVERIFIED — GitHub returned 403 for the protection endpoint.",
-    "comparisonSourceSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
+    "comparisonSourceSha": "a56ea9c1006d5f405ad139d6af2f2ef9f6efe6e9",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
     "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387613"
   },
   "counts": {
-    "routes": 45,
-    "authNegativePass": 45,
+    "routes": 46,
+    "authNegativePass": 46,
     "overallPass": 40,
     "overallNotTested": 0,
-    "overallBlocked": 5,
+    "overallBlocked": 6,
     "authNegativePassHistorical": 45,
-    "authNegativePassCurrentHead": 45
+    "authNegativePassCurrentHead": 46
   },
   "evidence": {
     "authMatrix": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034162",
@@ -619,6 +619,30 @@
       },
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS"
+    },
+    {
+      "method": "POST",
+      "path": "/api/instagram/approve",
+      "classification": "Instagram-specific signed human approval and candidate intake",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact candidate SHA 8b397d32d39a3874174d6e824451bb31f7c1c264: the authenticated-route negative matrix includes every source-derived API route and rejects missing/invalid operator credentials before route validation or mutation; Instagram safety workflow 43766594262 passed the route-negative suite.",
+      "authorizedSuccess": "BLOCKED — approval requires a recently verified Nature Frontiers Facebook Page, a matching owner-verified Instagram professional account ID, and an exact approved source payload. The repository configuration intentionally leaves the Instagram account ID unset.",
+      "inputValidation": "PASS — route requires confirmInstagramApproval=true, an exact payload, and a specific review reason; source policy and target mismatch fail closed.",
+      "durablePersistence": "NOT_TESTED — production approval is blocked until the owner-verified Instagram account and Page connection are configured.",
+      "auditEvidence": "NOT_TESTED — no production approval receipt or audit event is fabricated.",
+      "concurrency": "NOT_TESTED — no production Instagram approval has been authorized.",
+      "restartRecovery": "NOT_TESTED — no production Instagram approval receipt exists to recover.",
+      "externalOperation": "Meta Page/Instagram identity verification is an owner prerequisite; this route itself makes no provider mutation.",
+      "overallAcceptance": "BLOCKED",
+      "notes": "This endpoint records a separately signed Instagram-specific human approval and appends the exact candidate to the local intake register only after rechecking source policy and the verified linked Page/account. It does not publish, schedule or call Meta. Current configuration keeps instagramBusinessAccountId null, publishingEnabled false, dryRun true and emergencyStop true. Do not infer a positive approval from mocked tests or the authentication-negative result.",
+      "testEvidence": {
+        "test": "test/instagram-approval-service.test.mjs; test/dashboard-api-authenticated-route-negative-matrix.test.mjs; .github/workflows/instagram-publisher-safety.yml",
+        "exactTestedSha": "8b397d32d39a3874174d6e824451bb31f7c1c264",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43766594262",
+        "scenario": "Instagram adapter, approval service, publisher recovery and source-derived API authentication-negative tests passed; no live Instagram identity or approval was asserted."
+      },
+      "lastVerifiedOverallAcceptance": "BLOCKED",
+      "currentHeadStatus": "BLOCKED"
     },
     {
       "method": "POST",
