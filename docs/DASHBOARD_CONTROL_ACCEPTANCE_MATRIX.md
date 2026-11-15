@@ -1,6 +1,6 @@
 # Latest exact-SHA evidence — 16 November 2026
 
-**Latest tested source/test SHA:** `7a23289f7a6cd9a34027b84691333da0b7051fc2`. The dashboard UI source blob is `a3ffb14f2922c75d8e6ec190e10ad7f5658ebf98`; dashboard backend source blob is `028433ef23a6c7cc02d4e086eae92e197ade1bab`; browser test source blob is `dc13e490123e0c06a3e3a4be03420ea2029476ac`. `main` remains `69fdf35c90f980c142be3aaffa863304bc7eaa25`. Subsequent commits through `dcb6916af0c0c700d9c010c1cab140572cddcacf` (nine commits) update existing content/documentation paths only; no application source or test files changed after the tested SHA.
+**Latest tested source/test SHA:** `7a23289f7a6cd9a34027b84691333da0b7051fc2`. The dashboard UI source blob is `a3ffb14f2922c75d8e6ec190e10ad7f5658ebf98`; dashboard backend source blob is `028433ef23a6c7cc02d4e086eae92e197ade1bab`; browser test source blob is `dc13e490123e0c06a3e3a4be03420ea2029476ac`. `main` remains `69fdf35c90f980c142be3aaffa863304bc7eaa25`. Subsequent branch commits update existing content/documentation paths only; no application source or test files changed after the tested SHA.
 
 - Dashboard Chromium E2E: [run 43775231777](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231777), **29/29 passed** on exact source/test SHA `7a23289f7a6cd9a34027b84691333da0b7051fc2`.
 - Queue readiness: [run 43775231714](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231714), **894/894 Node tests passed, zero failures, zero skips**.
