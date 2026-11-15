@@ -226,6 +226,22 @@ test("Page Reel scheduling fails closed without approval or outside Meta's sched
   assert.equal(calls,0);
 });
 
+test("Page Reel six-calendar-month scheduling window clamps month-end dates without overflow",async t=>{
+  const {root,draft}=await fixture(t);
+  const now=Date.parse("2026-08-31T12:00:00.000Z");
+  let calls=0;
+  const run=scheduledPublishAt=>createMetaPageReel({
+    draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,
+    permissionsVerified:true,approvalVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,
+    videoState:"SCHEDULED",scheduledPublishAt,now:()=>now,rootDir:root,inspect:()=>inspected,
+    fetchImpl:async()=>{calls++;return response(calls===1?{video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO}:{success:true});}
+  });
+  const accepted=await run("2027-02-28T12:00:00.000Z");
+  assert.equal(accepted.status,"REMOTE_SCHEDULED_UNVERIFIED");
+  await assert.rejects(()=>run("2027-03-01T12:00:00.000Z"),/between 10 minutes and 6 months/i);
+  assert.equal(calls,3,"the out-of-window date must be rejected before a second remote upload");
+});
+
 test("Page Reel remote ID is durably recorded before binary upload begins",async t=>{
   const {root,draft}=await fixture(t);
   const events=[];
