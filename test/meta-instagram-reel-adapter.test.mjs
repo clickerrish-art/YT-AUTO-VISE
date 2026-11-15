@@ -106,7 +106,7 @@ test("container processing is polled no faster than once per minute and only up 
       return ok({id:"123456789012346",status_code:statusReads===1?"IN_PROGRESS":"FINISHED"});
     }
     if(String(url).endsWith("/media_publish")) return ok({id:"123456789012347"});
-    if(String(url).includes("media_product_type")) return ok({id:"123456789012347",media_type:"VIDEO",media_product_type:"REELS",permalink:"https://www.instagram.com/reel/abc/"});
+    if(String(url).includes("media_product_type")) return ok({id:"123456789012347",media_type:"VIDEO",media_product_type:"REELS",permalink:"https://www.instagram.com/reel/abc/",timestamp:"2026-11-15T10:00:00+0000"});
     throw new Error("unexpected endpoint "+url);
   },{wait:async ms=>waits.push(ms)});
   assert.equal(result.status,"PUBLISHED_VERIFIED");
@@ -120,4 +120,35 @@ test("resumable uploads are blocked unless Facebook Login for Business support i
     accountVerified:true,approvalVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,
     rootDir:root,inspect:()=>media,fetchImpl:async()=>{calls++;return ok({});}}),/Facebook Login for Business/i);
   assert.equal(calls,0);
+});
+
+
+test("publication read-back rejects non-Instagram permalinks and missing or malformed timestamps",async()=>{
+  const invalid=[
+    {id:"123456789012347",media_type:"VIDEO",media_product_type:"REELS",permalink:"https://evil.example/reel/abc/",timestamp:"2026-11-15T10:00:00+0000"},
+    {id:"123456789012347",media_type:"VIDEO",media_product_type:"REELS",permalink:"https://www.instagram.com/p/abc/",timestamp:"2026-11-15T10:00:00+0000"},
+    {id:"123456789012347",media_type:"VIDEO",media_product_type:"REELS",permalink:"https://www.instagram.com/reel/abc/",timestamp:null},
+    {id:"123456789012347",media_type:"VIDEO",media_product_type:"REELS",permalink:"https://www.instagram.com/reel/abc/",timestamp:"not-a-time"}
+  ];
+  for(const data of invalid) {
+    await assert.rejects(()=>run(async(url,options={})=>{
+      if(String(url).endsWith("/media")) return ok({id:"123456789012346"});
+      if(String(url).includes("rupload")) return ok({success:true});
+      if(String(url).includes("status_code")) return ok({id:"123456789012346",status_code:"FINISHED"});
+      if(String(url).endsWith("/media_publish")) return ok({id:"123456789012347"});
+      if(String(url).includes("media_product_type")) return ok(data);
+      throw new Error("unexpected endpoint "+url);
+    }),error=>error instanceof InstagramReelError&&error.uncertain&&error.mediaId==="123456789012347");
+  }
+});
+
+test("reconciliation rejects a foreign permalink and missing publication timestamp",async()=>{
+  for(const data of [
+    {id:"123456789012347",media_type:"VIDEO",media_product_type:"REELS",permalink:"https://evil.example/reel/abc/",timestamp:"2026-11-15T10:00:00+0000"},
+    {id:"123456789012347",media_type:"VIDEO",media_product_type:"REELS",permalink:"https://www.instagram.com/reel/abc/",timestamp:null}
+  ]) {
+    const result=await reconcileInstagramReel({mediaId:"123456789012347",containerId:"123456789012346",
+      instagramAccountId:account,expectedInstagramAccountId:account,accessToken:token,fetchImpl:async()=>ok(data)});
+    assert.equal(result.outcome,"UNRESOLVED");
+  }
 });

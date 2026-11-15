@@ -74,6 +74,22 @@ function uploadUrl(value, version, containerId) {
   }
   return url.toString();
 }
+function validInstagramReelPermalink(value) {
+  if (typeof value !== "string") return false;
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" &&
+      (url.hostname === "www.instagram.com" || url.hostname === "instagram.com") &&
+      !url.username && !url.password && !url.port && !url.search && !url.hash &&
+      /^\\/reel\\/[A-Za-z0-9_-]+\\/?$/.test(url.pathname);
+  } catch { return false; }
+}
+function validPublishedTimestamp(value) {
+  return typeof value === "string" &&
+    /(?:Z|[+-]\\d{2}:?\\d{2})$/.test(value) &&
+    Number.isFinite(Date.parse(value));
+}
+
 function validateDraft(draft) {
   if (!draft || draft.kind !== "INSTAGRAM_REEL_DRAFT" || typeof draft.caption !== "string" || !draft.caption.trim() ||
       typeof draft.media?.path !== "string" || !/^[a-f0-9]{64}$/.test(draft.media?.sha256 ?? "")) {
@@ -239,7 +255,7 @@ export async function publishInstagramReel({
     });
     verified = await responseJson(response, { token:accessToken, containerId, mediaId });
   } catch { throw new InstagramReelError("Instagram publication read-back failed; outcome remains unresolved", { uncertain:true, containerId, mediaId }); }
-  if (verified.id !== mediaId || verified.media_type !== "VIDEO" || verified.media_product_type !== "REELS" || typeof verified.permalink !== "string" || !verified.permalink.startsWith("https://")) {
+  if (verified.id !== mediaId || verified.media_type !== "VIDEO" || verified.media_product_type !== "REELS" || !validInstagramReelPermalink(verified.permalink) || !validPublishedTimestamp(verified.timestamp)) {
     throw new InstagramReelError("Instagram published media read-back did not confirm the expected Reel identity and permalink", { uncertain:true, containerId, mediaId });
   }
   return { status:"PUBLISHED_VERIFIED", instagramAccountId, containerId, mediaId, permalink:verified.permalink,
@@ -255,7 +271,7 @@ export async function reconcileInstagramReel({ mediaId, containerId = null, inst
       method:"GET", headers:headers(accessToken), redirect:"error", signal:AbortSignal.timeout(timeoutMs)
     });
     const data = await responseJson(response, { token:accessToken, containerId, mediaId });
-    if (data.id !== mediaId || data.media_type !== "VIDEO" || data.media_product_type !== "REELS" || typeof data.permalink !== "string" || !data.permalink.startsWith("https://")) {
+    if (data.id !== mediaId || data.media_type !== "VIDEO" || data.media_product_type !== "REELS" || !validInstagramReelPermalink(data.permalink) || !validPublishedTimestamp(data.timestamp)) {
       return { outcome:"UNRESOLVED", reason:"INSTAGRAM_MEDIA_READBACK_MISMATCH", mediaId, containerId };
     }
     return { outcome:"CONFIRMED", receipt:{ status:"PUBLISHED_VERIFIED", mediaId, containerId, permalink:data.permalink, publishedAt:data.timestamp ?? null } };
