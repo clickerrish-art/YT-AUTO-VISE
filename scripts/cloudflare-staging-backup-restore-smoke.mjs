@@ -9,7 +9,7 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 function revisionFromEtag(value) {
-  const match = String(value ?? "").match(/^(?:W\\/)?"?([1-9][0-9]*)"?$/);
+  const match = String(value ?? "").match(/^(?:W\/)?"?([1-9][0-9]*)"?$/);
   return match ? Number(match[1]) : null;
 }
 const base = process.env.DASHBOARD_STAGING_API_URL;
@@ -82,7 +82,7 @@ function startDashboard(stateDir) {
     child.stderr.setEncoding("utf8");
     child.stdout.on("data", chunk => {
       pending += chunk;
-      const lines = pending.split(/\\r?\\n/);
+      const lines = pending.split(/\r?\n/);
       pending = lines.pop() ?? "";
       for (const line of lines) {
         if (!line.includes('"event":"dashboard_started"')) continue;
@@ -110,7 +110,7 @@ function startDashboard(stateDir) {
       settled = true;
       clearTimeout(timeout);
       reject(new Error("Node dashboard exited before readiness (code=" + code + ", signal=" + signal +
-        "); diagnostic=" + stderr.replace(/\\s+/g, " ").slice(-500)));
+        "); diagnostic=" + stderr.replace(/\s+/g, " ").slice(-500)));
     });
     child.once("error", error => {
       if (settled) return;
