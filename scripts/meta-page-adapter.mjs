@@ -124,14 +124,42 @@ export async function verifyMetaPagePermissions({
     }
     after = nextAfter;
   }
-  if (!page) throw new MetaPageApiError("The configured Page ID was not found in the bounded managed-Page lookup");
+  let pageAccessMethod = "MANAGED_PAGE_LIST";
+  if (!page) {
+    // Some valid Page-access configurations expose the exact Page node and its
+    // Page token to the user token while returning an empty /me/accounts edge.
+    // Fall back only to the owner-configured numeric Page ID; never enumerate
+    // or select a different Page. The token is read from the response body and
+    // is never logged or placed in a URL.
+    let directResponse;
+    try {
+      const directQuery = new URLSearchParams({ fields: "id,name,access_token" });
+      directResponse = await fetchImpl(endpoint(apiVersion, encodeURIComponent(pageId) + "?" + directQuery.toString()), {
+        method: "GET", headers: headers(userAccessToken), redirect: "error", signal: AbortSignal.timeout(timeoutMs)
+      });
+    } catch {
+      throw new MetaPageApiError("The managed-Page list was empty and direct verification of the configured Page failed before a response; publishing remains blocked", { retryable: true });
+    }
+    const directPage = await parseResponse(directResponse, userAccessToken);
+    if (directPage.id !== pageId || typeof directPage.name !== "string" || !directPage.name.trim()) {
+      throw new MetaPageApiError("Direct Meta Page lookup did not return the exact configured Page identity");
+    }
+    const directToken = typeof directPage.access_token === "string" ? directPage.access_token : "";
+    if (directToken.length < 20) {
+      throw new MetaPageApiError("Meta direct Page lookup did not return a usable Page access token for the configured Page");
+    }
+    page = { id: directPage.id, name: directPage.name, access_token: directToken, tasks: [] };
+    pageAccessMethod = "DIRECT_PAGE_NODE";
+  }
   const tasks = Array.isArray(page.tasks) ? page.tasks : [];
-  if (!tasks.includes("CREATE_CONTENT") && !tasks.includes("MANAGE")) throw new MetaPageApiError("The authorized account lacks the CREATE_CONTENT or MANAGE task for this Page");
+  if (pageAccessMethod === "MANAGED_PAGE_LIST" && !tasks.includes("CREATE_CONTENT") && !tasks.includes("MANAGE")) {
+    throw new MetaPageApiError("The authorized account lacks the CREATE_CONTENT or MANAGE task for this Page");
+  }
   const returnedPageToken = typeof page.access_token === "string" ? page.access_token : "";
   if (returnedPageToken.length < 20) throw new MetaPageApiError("Meta did not return a usable Page access token for this exact Page ID");
   return {
     verified: true, pageId: page.id, pageName: typeof page.name === "string" ? page.name : null,
-    tasks, grantedPermissions: required.filter(permission => granted.has(permission)),
+    tasks, pageAccessMethod, grantedPermissions: required.filter(permission => granted.has(permission)),
     permissionsVerified: true, pageAccessToken: returnedPageToken,
     verifiedAt: new Date().toISOString(), apiVersion
   };
