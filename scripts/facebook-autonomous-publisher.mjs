@@ -458,6 +458,15 @@ export async function runAutonomousFacebookPublisher({
           reconciliation, retryAllowed: false
         };
         ledger[ledger.length - 1] = failed;
+        // Even a failed/unresolved catch path must not write a stale in-memory
+        // history snapshot over a receipt created while the remote call ran.
+        const latestHistory = safeHistory(historyPath);
+        const concurrentReceipts = latestHistory.filter(item => item?.slotId === failed.slotId &&
+          ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status));
+        if (concurrentReceipts.length) {
+          throw new Error("Facebook history already contains a verified receipt for this slot; manual reconciliation required before recording a failed attempt");
+        }
+        history = latestHistory;
         history.push({ ...failed, payload: undefined });
         atomicJson(ledgerPath, ledger); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++;
       }
