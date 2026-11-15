@@ -10,6 +10,15 @@ on:
       - "scripts/instagram-content-intake.mjs"
       - "scripts/instagram-approval-service.mjs"
       - "scripts/dashboard-server.mjs"
+      - "public/dashboard.html"
+      - "test/dashboard-server.test.mjs"
+      - "test/dashboard-ui-contract.test.mjs"
+      - "test/dashboard-inventory.test.mjs"
+      - "scripts/dashboard-server.mjs"
+      - "public/dashboard.html"
+      - "test/dashboard-server.test.mjs"
+      - "test/dashboard-ui-contract.test.mjs"
+      - "test/dashboard-inventory.test.mjs"
       - "config/instagram-publishing.json"
       - "test/meta-instagram-reel-adapter.test.mjs"
       - "test/meta-instagram-image-adapter.test.mjs"
@@ -55,7 +64,7 @@ jobs:
       - name: Install locked dependencies without lifecycle scripts
         run: npm ci --ignore-scripts
       - name: Test Instagram adapter and autonomous dispatch recovery
-        run: node --test test/meta-instagram-reel-adapter.test.mjs test/meta-instagram-image-adapter.test.mjs test/instagram-autonomous-publisher.test.mjs test/instagram-content-intake.test.mjs test/instagram-approval-service.test.mjs test/dashboard-api-authenticated-route-negative-matrix.test.mjs
+        run: node --test test/meta-instagram-reel-adapter.test.mjs test/meta-instagram-image-adapter.test.mjs test/instagram-autonomous-publisher.test.mjs test/instagram-content-intake.test.mjs test/instagram-approval-service.test.mjs test/dashboard-api-authenticated-route-negative-matrix.test.mjs test/dashboard-server.test.mjs test/dashboard-ui-contract.test.mjs test/dashboard-inventory.test.mjs
       - name: Verify intake refuses unconfigured Instagram identity without writing a queue
         run: |
           output="$(node scripts/instagram-content-intake.mjs)"
