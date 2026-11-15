@@ -4,8 +4,8 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
 
-const PAGE_ID = /^\\d{5,30}$/;
-const API_VERSION = /^v\\d+\\.\\d+$/;
+const PAGE_ID = /^\d{5,30}$/;
+const API_VERSION = /^v\d+\.\d+$/;
 const TOKEN_MIN = 20;
 const graph = (version, edge) => `https://graph.facebook.com/${version}/${edge}`;
 const auth = token => ({ authorization: "Bearer " + token, accept: "application/json" });
@@ -92,7 +92,7 @@ export async function createMetaPageReel({
   } catch { throw new MetaPageReelError("Reel upload initialization ended without a definitive response; reconcile before retry", { uncertain:true }); }
   const started = await readJson(start, { mutation:true });
   const videoId = typeof started.video_id === "string" ? started.video_id : "";
-  if (!/^\\d{5,30}$/.test(videoId)) throw new MetaPageReelError("Meta did not return a valid Reel video ID; reconcile the initialization before retry");
+  if (!/^\d{5,30}$/.test(videoId)) throw new MetaPageReelError("Meta did not return a valid Reel video ID; reconcile the initialization before retry");
   const uploadUrl = validateUploadUrl(started.upload_url);
   let uploaded;
   try {
@@ -127,7 +127,7 @@ export async function createMetaPageReel({
 /** Read the remote processing/publication phases; a missing response is never treated as failure-to-publish. */
 export async function fetchMetaPageReelStatus({ remoteVideoId, expectedPageId, accessToken, apiVersion = "v26.0", fetchImpl = fetch, timeoutMs = 10000 }) {
   validate({ pageId:expectedPageId, expectedPageId, accessToken, apiVersion });
-  if (!/^\\d{5,30}$/.test(String(remoteVideoId ?? ""))) throw new MetaPageReelError("A numeric remote Reel video ID is required");
+  if (!/^\d{5,30}$/.test(String(remoteVideoId ?? ""))) throw new MetaPageReelError("A numeric remote Reel video ID is required");
   let response;
   try {
     response = await fetchImpl(graph(apiVersion, encodeURIComponent(remoteVideoId) + "?fields=id,status"), {
