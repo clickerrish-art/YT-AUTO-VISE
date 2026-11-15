@@ -51,6 +51,9 @@ function acquireLock(file) {
   try {
     fs.writeFileSync(handle, JSON.stringify({ pid: process.pid, acquiredAt: new Date().toISOString() }));
     fs.fsyncSync(handle);
+    // The lock's file contents are not enough: persist the directory entry
+    // before any publisher work can begin on a shared durable state volume.
+    syncDirectory(path.dirname(file));
   } catch (error) {
     // Remove only the exact inode created by this acquisition. If another
     // actor replaced the path, leave it untouched for operator inspection.
