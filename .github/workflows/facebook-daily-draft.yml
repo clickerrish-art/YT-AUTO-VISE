@@ -40,7 +40,7 @@ jobs:
   validate-candidate-draft:
     # Candidate pushes and PRs exercise the actual local draft generator and recovery tests.
     # This creates no competing retained artifact and performs no external Meta operation.
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes')
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes') || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes')
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
@@ -100,6 +100,13 @@ jobs:
           if (plan.publishReady !== false || plan.publishingEnabled !== false || plan.slots.some(x => x.media !== null || x.rightsEvidence !== null || x.factualClaims.length)) process.exit(1);
           console.log('PASS: 2 Reel + 1 feed research-only plan; no fabricated claims, media or rights.');
           NODE
+      - name: Retain candidate three-slot plan for operator review
+        uses: actions/upload-artifact@v4
+        with:
+          name: nature-frontiers-facebook-plan-candidate-${{ github.run_id }}
+          path: ${{ runner.temp }}/facebook-candidate-plans/*.plan.json
+          if-no-files-found: error
+          retention-days: 14
       - name: Report external integration boundary
         run: |
           {
