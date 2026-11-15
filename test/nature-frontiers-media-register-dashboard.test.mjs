@@ -11,7 +11,7 @@ test("Nature Frontiers media register is exposed through an authenticated provid
   assert.match(server, /validateMediaRegister\(register\)/);
   assert.match(server, /readOnly:\s*true/);
   assert.match(server, /publishingEnabled:\s*false/);
-  assert.match(server, /rights\.reviewStatus/);
+  assert.match(server, /reviewStatus:/);
   assert.match(server, /rights\.permittedUsage/);
   assert.match(server, /inspection\.status/);
   assert.match(server, /approval\.status/);
