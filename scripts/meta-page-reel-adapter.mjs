@@ -91,6 +91,7 @@ export async function createMetaPageReel({
   if (!bytes.length || crypto.createHash("sha256").update(bytes).digest("hex") !== draft.media.sha256) throw new MetaPageReelError("Reel video checksum does not match the reviewed draft");
   const media = inspect(absolute);
   if (!media || !Number.isFinite(media.durationSeconds) || media.durationSeconds <= 0) throw new MetaPageReelError("Reel video inspection did not establish a valid duration");
+  if (!Number.isFinite(media.width) || !Number.isFinite(media.height) || media.height <= media.width) throw new MetaPageReelError("Facebook Reel media must be a verified portrait video");
   const startForm = new URLSearchParams({ upload_phase:"START" });
   let start;
   try {
