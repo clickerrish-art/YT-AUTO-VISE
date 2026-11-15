@@ -213,6 +213,9 @@ async function getLocal(localBase, pathname, authenticated = true) {
 
 const stateBeforeNode = JSON.stringify({ revision: payload.revision, updatedAt: payload.updatedAt, state });
 const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-staging-node-smoke-"));
+// Seed the temporary local copy with the exact remote snapshot. This makes store initialization
+// a hash-match read path and prevents its first-run baseline merge from writing to staging.
+fs.writeFileSync(path.join(stateDir, "dashboard-state.json"), JSON.stringify(state), { encoding: "utf8", mode: 0o600, flag: "wx" });
 let localDashboard;
 let nodeDashboardChecks = null;
 try {
