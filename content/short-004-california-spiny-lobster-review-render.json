@@ -64,7 +64,10 @@
     "sourceAudioStream": "ABSENT",
     "syntheticNarrationAudio": "PRESENT — eSpeak en-us, 135 WPM",
     "localPath": "/mnt/data/noaa-review/NOAA-california-spiny-lobster-narration-review-1080x1920.mp4",
-    "delivery": "Conversation review attachment; not committed as production media"
+    "delivery": "Conversation review attachment; not committed as production media",
+    "sizeBytes": 24286438,
+    "audioSampleRateHz": 22050,
+    "audioChannels": 1
   },
   "remainingReview": [
     "Human full-playback review of the complete video, synthetic narration, captions, attribution, framing and factual claims",
