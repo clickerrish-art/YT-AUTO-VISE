@@ -356,7 +356,7 @@ export async function runAutonomousFacebookPublisher({
           remoteUrl: isReel ? (verified?.receipt?.remoteUrl ?? null) : (verified.remoteUrl ?? null),
           remoteCreatedAt: isReel ? (verified?.receipt?.createdTime ?? null) : (verified.createdTime ?? null),
           scheduledPublishTime: isReel ? (verified?.receipt?.scheduledPublishTime ?? null) : (verified.scheduledPublishTime ?? null),
-          verifiedRemotely: success, reconciliation: verified, retryAllowed: false
+          verifiedRemotely: success, reconciliation: isReel ? verified : verified.status, retryAllowed: false
         };
         ledger[ledger.length - 1] = receipt;
         history.push({ ...receipt, payload: undefined });
