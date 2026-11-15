@@ -492,6 +492,46 @@ test("unresolved mutation remains durably uncertain and is never retried", async
 });
 
 
+test("unresolved publish preserves a concurrent non-verified history outcome and stops reconciliation", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const now = Date.parse("2026-10-25T05:30:00.000Z");
+    const payload = {
+      slotId: "nature-frontiers-2026-10-25-history-nonverified-race",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Educational wildlife habitat note.", links: [], media: [], claims: []
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    const concurrent = { slotId: payload.slotId, destination: "nature_frontiers_facebook",
+      status: "SKIPPED_BLOCKED", reason: "operator reconciliation record" };
+    const historyPath = path.join(f.stateDir, "facebook-history.json");
+    let mutationCalls = 0;
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath,
+      stateDir: f.stateDir, now,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
+      verifyIdentity: async () => ({ verified: true }),
+      policyEvaluator: async () => ({ eligible: true, blockers: [], warnings: [],
+        contentFingerprint: "d".repeat(64), policyRuleVersion: f.config.complianceRuleSet,
+        mediaFingerprints: [], reason: "ELIGIBLE" }),
+      publish: async () => { mutationCalls++; const error = new Error("timeout"); error.uncertain = true; throw error; },
+      reconcileRemote: async () => {
+        fs.writeFileSync(historyPath, JSON.stringify([concurrent]));
+        return { outcome: "UNRESOLVED", reason: "NO_MATCH_IS_NOT_PROOF_OF_NON_PUBLICATION", matches: [] };
+      }
+    }), /history already contains an outcome for this slot/i);
+    assert.equal(mutationCalls, 1);
+    assert.deepEqual(JSON.parse(fs.readFileSync(historyPath, "utf8")), [concurrent]);
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), [payload]);
+    const ledger = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), "utf8"));
+    assert.equal(ledger[0].status, "PUBLISHING", "retain the pre-mutation durable attempt for manual reconciliation");
+  } finally { f.cleanup(); }
+});
+
 test("startup reconciles an interrupted PUBLISHING ledger entry before considering its slot", async () => {
   const f = setup();
   try {
