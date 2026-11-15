@@ -21,7 +21,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          is_draft="$(gh pr list --head "${GITHUB_REPOSITORY_OWNER}:${GITHUB_REF_NAME}" --state open --json isDraft --jq '.[0].isDraft // false')"
+          is_draft="$(gh api "repos/${GITHUB_REPOSITORY}/pulls" -f state=open -f head="${GITHUB_REPOSITORY_OWNER}:${GITHUB_REF_NAME}" --jq '.[0].draft // false')"
           echo "is_draft=${is_draft}" >> "$GITHUB_OUTPUT"
           echo "Associated PR draft state: ${is_draft}"
 
