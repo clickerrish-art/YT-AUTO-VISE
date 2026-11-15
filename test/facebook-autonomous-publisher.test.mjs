@@ -173,6 +173,46 @@ test("remote post with mismatched caption or scheduled time is never recorded as
   } finally { f.cleanup(); }
 });
 
+test("remote post with mismatched scheduled time is never recorded as verified", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const now = Date.parse("2026-10-25T05:30:00.000Z");
+    const payload = {
+      slotId: "nature-frontiers-2026-10-25-0800-schedule-mismatch",
+      destination: "nature_frontiers_facebook",
+      destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25",
+      scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Approved wildlife education caption.",
+      links: [], media: [], claims: [], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    const result = await runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
+      verifyIdentity: async () => ({ verified: true }),
+      policyEvaluator: async () => ({ eligible: true, blockers: [], warnings: [], contentFingerprint: "e".repeat(64), policyRuleVersion: f.config.complianceRuleSet, mediaFingerprints: [], reason: "ELIGIBLE" }),
+      publish: async () => ({ remotePostId: "123456789012345_1000" }),
+      readRemote: async () => ({
+        status: "SCHEDULED_VERIFIED",
+        remotePostId: "123456789012345_1000",
+        remoteMessage: payload.caption,
+        scheduledPublishTime: Date.parse(payload.scheduledAt) / 1000 + 600
+      })
+    });
+    assert.equal(result.published, 0);
+    assert.equal(result.skipped, 1);
+    const ledger = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), "utf8"));
+    assert.equal(ledger[0].status, "UNCERTAIN");
+    assert.equal(ledger[0].verifiedRemotely, false);
+    assert.equal(ledger[0].verificationReason, "REMOTE_SCHEDULE_MISSING_OR_MISMATCHED");
+    assert.equal(ledger[0].retryAllowed, false);
+  } finally { f.cleanup(); }
+});
+
 test("uncertain mutation is reconciled and a unique verified receipt is persisted without retry", async () => {
   const f = setup();
   try {
