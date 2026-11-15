@@ -20,8 +20,20 @@ function fixture() {
   const bytes = Buffer.from("fixture media bytes");
   fs.writeFileSync(path.join(root, "media/nature-frontiers/clip.mp4"), bytes);
   const hash = crypto.createHash("sha256").update(bytes).digest("hex");
-  const register = { assets: [{
+  const register = {
+    schemaVersion: "1.0.0",
+    registerId: "nature-frontiers-media",
+    brand: "Nature Frontiers",
+    timezone: "Africa/Johannesburg",
+    policy: { defaultPublicationState: "held", requireHumanApproval: true, allowAutomaticPublication: false, sourceOfTruth: "versioned-local-json" },
+    assets: [{
     id: "nf-test-asset-001",
+    mediaType: "video",
+    source: { provider: "Local archive", url: "https://archive.example.org/clip", listingStatus: "verified", listingEvidence: [] },
+    media: { sha256: hash },
+    claims: [],
+    inspection: { status: "not_inspected", inspectedBy: null, inspectedAt: null, visualNotes: "" },
+    editorial: { status: "candidate" },
     localFile: { path: "media/nature-frontiers/clip.mp4", sha256: hash },
     approval: { status: "pending" },
     usage: { scheduled: false, published: false },

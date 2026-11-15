@@ -87,6 +87,7 @@ test("requires a matching file hash, reviewer, evidence and usage scope for appr
     reviewStatus: "cleared",
     additionalPermissionsStatus: "not_required",
     licenseEvidence: ["https://example.com/license-evidence"],
+    permittedUsage: ["Instagram Reel"],
     reviewedBy: "rights reviewer",
     reviewedAt: "2026-11-15T10:00:00+02:00"
   };
@@ -117,6 +118,7 @@ test("does not approve listing-only species or unverified location claims", () =
     reviewStatus: "cleared",
     additionalPermissionsStatus: "not_required",
     licenseEvidence: ["https://example.com/license-evidence"],
+    permittedUsage: ["Instagram Reel"],
     reviewedBy: "rights reviewer",
     reviewedAt: "2026-11-15T10:00:00+02:00"
   };
@@ -176,6 +178,7 @@ test("rejects impossible calendar dates even when Date.parse normalizes them", (
     reviewStatus: "cleared",
     additionalPermissionsStatus: "not_required",
     licenseEvidence: ["https://example.com/license-evidence"],
+    permittedUsage: ["Instagram Reel"],
     reviewedBy: "rights reviewer",
     reviewedAt: "2026-02-30T10:00:00+02:00"
   };
