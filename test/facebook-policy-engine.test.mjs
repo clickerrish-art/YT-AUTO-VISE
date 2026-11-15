@@ -212,6 +212,11 @@ test("autonomous publishing requires a signed human approval bound to the exact 
     assert.equal(forged.eligible, false);
     assert.ok(forged.blockers.some(x => /signature is invalid/i.test(x)));
 
+    f.payload.approval = { ...approval, policyRuleVersion: "nf-facebook-autonomous-policy-2026-10-v3" };
+    const oldPolicy = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(oldPolicy.eligible, false);
+    assert.ok(oldPolicy.blockers.some(x => /different policy version/i.test(x)));
+
     f.payload.approval = approval;
     f.payload.caption += " Updated after review.";
     const stale = await evaluateFinalFacebookPayload(f.payload, options(f.root));
