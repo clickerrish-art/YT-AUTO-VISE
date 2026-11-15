@@ -84,6 +84,7 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
       if (!validTimestamp(approval.approvedAt) || Date.parse(approval.approvedAt) > now) errors.push(at + " approved status requires a valid non-future timezone-qualified approvedAt");
       if (!Array.isArray(approval.approvedUsage) || approval.approvedUsage.length === 0) errors.push(at + " approval must state its permitted usage scope");
     }
+    if (typeof asset.usage?.scheduled !== "boolean" || typeof asset.usage?.published !== "boolean" || !Array.isArray(asset.usage?.platformPostIds)) errors.push(at + " requires explicit usage booleans and platformPostIds");
     if (asset.usage?.scheduled === true || asset.usage?.published === true) {
       if (approval.status !== "approved") errors.push(at + " cannot be scheduled or published without exact-asset human approval");
     }
@@ -103,11 +104,6 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
       for (const error of errors) console.error("FAIL: " + error);
       process.exitCode = 1;
     } else {
-      const counts = register.assets.reduce((result, asset) => {
-        result[asset.approval.status] = (result[asset.approval.status] ?? 0) + 1;
-        result[asset.inspection.status] = (result[asset.inspection.status] ?? 0) + 1;
-        return result;
-      }, {});
       console.log(`PASS: API-independent Nature Frontiers media register is structurally valid (${register.assets.length} assets). No asset is cleared by structural validation alone.`);
     }
   } catch (error) {
