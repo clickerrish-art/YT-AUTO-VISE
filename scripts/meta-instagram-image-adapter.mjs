@@ -48,7 +48,7 @@ function inspectJpeg(bytes) {
 export async function publishInstagramImagePost({
  draft,instagramAccountId,expectedInstagramAccountId,accessToken,apiVersion="v26.0",
  accountVerified=false,approvalVerified=false,publishingEnabled=false,dryRun=true,emergencyStop=true,
- allowedImageDomains=[],onContainerId=null,onMediaId=null,fetchImpl=fetch,wait=ms=>new Promise(resolve=>setTimeout(resolve,ms)),timeoutMs=60000
+ allowedImageDomains=[],onContainerId=null,onMediaId=null,fetchImpl=fetch,inspect=inspectJpeg,wait=ms=>new Promise(resolve=>setTimeout(resolve,ms)),timeoutMs=60000
 }) {
  validate({instagramAccountId,expectedInstagramAccountId,accessToken,apiVersion});
  if(!draft||draft.kind!=="INSTAGRAM_IMAGE_DRAFT"||typeof draft.caption!=="string"||!draft.caption.trim()||
@@ -67,7 +67,7 @@ export async function publishInstagramImagePost({
  if(!bytes.length||bytes.length>8*1024*1024||bytes[0]!==0xff||bytes[1]!==0xd8||bytes[2]!==0xff) throw new InstagramImageError("Instagram feed image must be a valid JPEG no larger than 8 MiB");
  const sha256=crypto.createHash("sha256").update(bytes).digest("hex");
  if(sha256!==draft.media.sha256) throw new InstagramImageError("Public Instagram JPEG bytes do not match the reviewed SHA-256");
- const media=inspectJpeg(bytes);
+ const media=inspect(bytes);
  const form=new URLSearchParams({image_url:url.toString(),caption:draft.caption,...(draft.media.altText?{alt_text:draft.media.altText}:{})});
  let created;
  try {
