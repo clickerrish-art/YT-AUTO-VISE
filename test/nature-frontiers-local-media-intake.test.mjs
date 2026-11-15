@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { registerLocalMedia, persistRegister } from "../scripts/register-nature-frontiers-local-media.mjs";
+import { registerLocalMedia, persistRegister, extractVideoTechnicalMetadata } from "../scripts/register-nature-frontiers-local-media.mjs";
 import { validateMediaRegister } from "../scripts/validate-nature-frontiers-media-register.mjs";
 
 const ASSET_ID = "nf-pex-giraffe-5220275";
@@ -64,4 +64,32 @@ test("persists register atomically as ordinary JSON", () => {
   persistRegister(target, register);
   assert.deepEqual(JSON.parse(fs.readFileSync(target, "utf8")), register);
   assert.equal(fs.readdirSync(root).filter(name => name.endsWith(".tmp")).length, 0);
+});
+
+test("extracts technical video metadata from ffprobe without changing review or rights gates", () => {
+  const payload = JSON.stringify({
+    format: { duration: "12.5" },
+    streams: [
+      { codec_type: "video", codec_name: "h264", width: 1920, height: 1080, avg_frame_rate: "30000/1001" },
+      { codec_type: "audio", codec_name: "aac" }
+    ]
+  });
+  const metadata = extractVideoTechnicalMetadata("/tmp/clip.mp4", { run: () => payload });
+  assert.equal(metadata.extractor, "ffprobe");
+  assert.equal(metadata.width, 1920);
+  assert.equal(metadata.height, 1080);
+  assert.ok(Math.abs(metadata.frameRate - 29.97002997) < 0.000001);
+  const { root, register } = fixture();
+  registerLocalMedia({ register, assetId: ASSET_ID, filePath: "media/nature-frontiers/clip.mp4", root, technicalMetadata: metadata });
+  assert.deepEqual(register.assets[0].media.technical, metadata);
+  assert.equal(register.assets[0].inspection.status, "not_inspected");
+  assert.equal(register.assets[0].rights.reviewStatus, "not_assessed");
+  assert.equal(register.assets[0].approval.status, "pending");
+});
+
+test("rejects failed, malformed, incomplete and non-video ffprobe results", () => {
+  assert.throws(() => extractVideoTechnicalMetadata("/tmp/clip.mp4", { run: () => { throw new Error("not installed"); } }), /ffprobe failed/);
+  assert.throws(() => extractVideoTechnicalMetadata("/tmp/clip.mp4", { run: () => "not json" }), /invalid JSON/);
+  assert.throws(() => extractVideoTechnicalMetadata("/tmp/clip.mp4", { run: () => JSON.stringify({ format: { duration: "2" }, streams: [] }) }), /no video stream/);
+  assert.throws(() => extractVideoTechnicalMetadata("/tmp/clip.mp4", { run: () => JSON.stringify({ format: { duration: "2" }, streams: [{ codec_type: "video", codec_name: "h264", width: 0, height: 1080, avg_frame_rate: "0/0" }] }) }), /incomplete or invalid/);
 });
