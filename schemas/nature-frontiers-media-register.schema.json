@@ -172,7 +172,26 @@
                 "type",
                 "value",
                 "status"
-              ]
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "value": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "status": {
+                  "enum": [
+                    "listing_only",
+                    "unverified",
+                    "verified",
+                    "not_used"
+                  ]
+                }
+              },
+              "additionalProperties": true
             }
           },
           "rights": {
