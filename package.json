@@ -44,7 +44,9 @@
     "facebook:plan:daily": "node scripts/generate-facebook-daily-plan.mjs",
     "test:instagram-reel": "node --test test/meta-instagram-reel-adapter.test.mjs",
     "instagram:publish:autonomous": "node scripts/instagram-autonomous-publisher.mjs",
-    "test:instagram-publisher": "node --test test/instagram-autonomous-publisher.test.mjs"
+    "test:instagram-publisher": "node --test test/instagram-autonomous-publisher.test.mjs",
+    "instagram:intake:autonomous": "node scripts/instagram-content-intake.mjs",
+    "test:instagram-intake": "node --test test/instagram-content-intake.test.mjs"
   },
   "engines": {
     "node": ">=22"
