@@ -181,13 +181,18 @@ test("API acceptance matrix exactly matches every live server API route", () => 
     "every API route declared by dashboard-server.mjs must have exactly one acceptance-matrix row");
   const instagramStatus = matrix.routes.find(route => route.method === "GET" && route.path === "/api/instagram/status");
   assert.ok(instagramStatus, "the read-only Instagram operations endpoint must be inventoried");
-  assert.equal(instagramStatus.overallAcceptance, "NOT_TESTED",
-    "the new status endpoint must remain NOT_TESTED until exact-head acceptance evidence is recorded");
+  assert.equal(instagramStatus.overallAcceptance, "PASS",
+    "the authenticated read-only Instagram status contract is accepted independently of live Meta connectivity");
   assert.match(instagramStatus.authenticationNegative, /^PASS\b/,
     "the Instagram status route's missing/invalid-credential checks passed on the exact recorded source/test SHA");
   const natureRegister = matrix.routes.find(route => route.method === "GET" && route.path === "/api/nature-frontiers/media-register");
   assert.match(natureRegister?.authenticationNegative ?? "", /^PASS\b/,
     "the Nature Frontiers media-register route's missing/invalid-credential checks must be recorded after exact-head execution");
+  assert.equal(natureRegister?.overallAcceptance, "PASS",
+    "the authenticated read-only Nature Frontiers media-register contract is accepted independently of media rights approval");
+  assert.equal(matrix.counts.overallPass, 42);
+  assert.equal(matrix.counts.overallNotTested, 0);
+  assert.equal(matrix.counts.overallBlocked, 6);
   assert.equal(matrix.counts.authNegativePass, 48,
     "the matrix must record exact-head authentication-negative PASS for all 48 protected routes");
   assert.equal(matrix.counts.routes, actual.length,
