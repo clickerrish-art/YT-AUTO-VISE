@@ -41,6 +41,8 @@ test("interactive signer writes a valid approval bound to the exact candidate fi
   const approval = saved.editorialApproval;
   assert.equal(result.approved, true);
   assert.equal(approval.status, "APPROVED");
+  assert.equal(saved.claims[0].semanticVerification.reviewerId, "owner-test-reviewer");
+  assert.match(saved.claims[0].semanticVerification.signature, /^[a-f0-9]{64}$/);
   assert.equal(approval.contentFingerprint, facebookPayloadFingerprint(saved));
   const signed = approval.contentFingerprint + "\n" + approval.reviewerId + "\n" + approval.approvedAt;
   const expected = crypto.createHmac("sha256", secret).update(signed).digest("hex");
