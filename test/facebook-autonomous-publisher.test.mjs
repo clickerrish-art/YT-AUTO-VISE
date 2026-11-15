@@ -810,13 +810,15 @@ test("atomic state write does not acknowledge a rename until its directory entry
       links: [], media: [], claims: [], campaignId: null
     };
     fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    let mutationCalls = 0;
     const options = {
       rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now,
       env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
       policyEvaluator: async () => ({
         eligible: false, blockers: ["TEST_BLOCK"], warnings: [], contentFingerprint: "b".repeat(64),
         policyRuleVersion: f.config.complianceRuleSet, reason: "TEST_BLOCK"
-      })
+      }),
+      publish: async () => { mutationCalls++; throw new Error("blocked candidate must never reach Meta"); }
     };
     const originalFsync = fs.fsyncSync;
     let directoryFsyncAttempted = false;
@@ -838,10 +840,13 @@ test("atomic state write does not acknowledge a rename until its directory entry
     const historyPath = path.join(f.stateDir, "facebook-history.json");
     assert.equal(JSON.parse(fs.readFileSync(historyPath, "utf8"))[0].status, "SKIPPED_BLOCKED",
       "rename may have produced a complete file, but the failed directory fsync must not be acknowledged");
+    assert.equal(JSON.parse(fs.readFileSync(f.queuePath, "utf8")).length, 1,
+      "the queued slot must remain available for idempotent recovery when the history write is not acknowledged");
     assert.equal(fs.existsSync(path.join(f.stateDir, "facebook-publishing.lock")), false);
     const result = await runAutonomousFacebookPublisher(options);
     assert.equal(result.status, "COMPLETED");
     assert.equal(result.skipped, 1);
+    assert.equal(mutationCalls, 0);
     assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), []);
   } finally { f.cleanup(); }
 });
