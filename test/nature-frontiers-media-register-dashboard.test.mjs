@@ -45,6 +45,11 @@ test("Nature Frontiers dashboard renders source, claims, file integrity, rights,
   assert.match(html, /inspectedFileSha256/);
   assert.match(html, /proposedSeries/);
   assert.match(html, /approvedBy/);
+  assert.match(html, /approvedAt/);
+  assert.match(html, /approvedUsage/);
+  assert.match(html, /editorial\?\.status/);
+  assert.match(html, /listingDescription/);
+  assert.match(html, /contributor/);
   assert.match(html, /platformPostIds/);
   assert.match(html, /publishing state unknown/);
   assert.match(html, /cannot inspect, clear rights, approve, schedule or publish assets/);
