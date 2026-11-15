@@ -45,10 +45,10 @@ function inspectVideo(filePath) {
   if (!stream || !Number.isFinite(duration) || duration <= 0) throw new MetaPageReelError("Reel video must contain a decodable video stream and positive duration");
   return { width:Number(stream.width), height:Number(stream.height), durationSeconds:duration };
 }
-function validateUploadUrl(value) {
+function validateUploadUrl(value, expectedVideoId) {
   let url;
   try { url = new URL(value); } catch { throw new MetaPageReelError("Meta did not return a valid Reel upload URL"); }
-  if (url.protocol !== "https:" || url.hostname !== "rupload.facebook.com" || url.username || url.password || !url.pathname.startsWith("/video-upload/") || url.search) {
+  if (url.protocol !== "https:" || url.hostname !== "rupload.facebook.com" || url.username || url.password || !url.pathname.startsWith("/video-upload/") || !url.pathname.endsWith("/" + expectedVideoId) || url.search) {
     throw new MetaPageReelError("Meta returned an upload URL outside the approved rupload host/path");
   }
   return url.toString();
@@ -94,7 +94,7 @@ export async function createMetaPageReel({
   const videoId = typeof started.video_id === "string" ? started.video_id : "";
   if (!/^\d{5,30}$/.test(videoId)) throw new MetaPageReelError("Meta did not return a valid Reel video ID; reconcile the initialization before retry");
   let uploadUrl;
-  try { uploadUrl = validateUploadUrl(started.upload_url); }
+  try { uploadUrl = validateUploadUrl(started.upload_url, videoId); }
   catch (error) { throw new MetaPageReelError(error.message, { uncertain:true, remoteVideoId:videoId }); }
   let uploaded;
   try {
