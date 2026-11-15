@@ -122,8 +122,7 @@ export class CloudflareDashboardStateClient {
     if (!Number.isSafeInteger(revision) || revision < 1 || !payload?.state) {
       throw new DashboardStateServiceError("State service returned an incomplete state snapshot", { code: "INVALID_RESPONSE" });
     }
-    const match = String(etag ?? "").match(/^"?([1-9][0-9]*)"?$/);
-    if (!match || Number(match[1]) !== revision || revisionFromEtag(etag) !== revision) {
+    if (revisionFromEtag(etag) !== revision) {
       throw new DashboardStateServiceError("State revision and ETag do not match (revision=" + revision + ", etag=" + String(etag ?? "missing").slice(0, 80) + ")", { code: "INVALID_RESPONSE" });
     }
     let state;
