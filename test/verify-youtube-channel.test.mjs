@@ -127,3 +127,22 @@ test("read-only verification writes a complete owner-review inventory artifact w
     assert.match(inventory.verifiedAt, /^\d{4}-\d{2}-\d{2}T/);
   } finally { fs.rmSync(directory, { recursive: true, force: true }); }
 });
+
+test("read-only inventory rejects unsupported remote visibility instead of silently omitting a video", async () => {
+  const youtube = {
+    channels: { list: async () => ({ data: { items: [channel] } }) },
+    playlistItems: { list: async () => ({ data: {
+      pageInfo: { totalResults: 1 },
+      items: [{ contentDetails: { videoId: "scheduled-video" } }]
+    } }) },
+    videos: { list: async () => ({ data: { items: [{
+      id: "scheduled-video",
+      snippet: { channelId: CHANNEL_ID, publishedAt: "2026-11-01T10:00:00Z" },
+      status: { privacyStatus: "scheduled" }
+    }] } }) }
+  };
+  await assert.rejects(
+    verifySonicVhibezChannel({ env, youtubeFactory: () => youtube }),
+    /missing or unsupported visibility/
+  );
+});
