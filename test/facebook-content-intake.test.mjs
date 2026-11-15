@@ -19,7 +19,7 @@ function fixture() {
     complianceRuleSet: FACEBOOK_POLICY_RULE_VERSION,
     destinationPageId: "123456789012345", destinationPageName: "Nature Frontiers",
     allowedDomains: [], allowedCampaignIds: [], approvedDestinations: [],
-    dailyCap: 1, minimumIntervalMinutes: 1200
+    dailyCap: 3, dailyReelCap: 2, dailyFeedPostCap: 1, minimumIntervalMinutes: 240
   }));
   fs.writeFileSync(path.join(rootDir, queuePath), "[]");
   return { rootDir, stateDir, configPath, queuePath, candidatePath, cleanup: () => fs.rmSync(rootDir, { recursive: true, force: true }) };
@@ -33,12 +33,20 @@ test("intake queues only candidates that pass the final policy evaluator", async
       { slotId: "blocked-slot", destination: "nature_frontiers_facebook", caption: "Blocked final caption" }
     ];
     fs.writeFileSync(path.join(f.rootDir, f.candidatePath), JSON.stringify(candidates));
+    let observedPolicyOptions;
     const result = await runFacebookContentIntake({
       ...f, now: Date.parse("2026-10-24T10:00:00Z"), rootDir: f.rootDir,
-      policyEvaluator: async candidate => candidate.slotId === "eligible-slot"
-        ? { eligible: true, contentFingerprint: "a".repeat(64), policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION, reason: "ELIGIBLE" }
-        : { eligible: false, blockers: ["MISSING_RIGHTS"], policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION, reason: "MISSING_RIGHTS" }
+      policyEvaluator: async (candidate, options) => {
+        observedPolicyOptions = options;
+        return candidate.slotId === "eligible-slot"
+          ? { eligible: true, contentFingerprint: "a".repeat(64), policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION, reason: "ELIGIBLE" }
+          : { eligible: false, blockers: ["MISSING_RIGHTS"], policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION, reason: "MISSING_RIGHTS" };
+      }
     });
+    assert.equal(observedPolicyOptions.maxPostsPerLocalDay, 3);
+    assert.equal(observedPolicyOptions.maxReelsPerLocalDay, 2);
+    assert.equal(observedPolicyOptions.maxFeedPostsPerLocalDay, 1);
+    assert.equal(observedPolicyOptions.minimumIntervalMinutes, 240);
     assert.equal(result.accepted, 1);
     assert.equal(result.blocked, 1);
     const queue = JSON.parse(fs.readFileSync(path.join(f.rootDir, f.queuePath), "utf8"));
