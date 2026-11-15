@@ -70,11 +70,14 @@ test("requires every inspection check and explicit disposition for every registe
   assert.throws(() => recordNatureFrontiersReview({ register: a.register, assetId: "nf-test-asset", review: { ...a.review, claims: a.review.claims.slice(0, 1) }, root: a.root }), /every registered claim/);
 });
 
-test("verified claims require HTTPS evidence and inspection cannot be changed after scheduling", () => {
+test("verified claims require HTTPS evidence and inspection cannot be changed after approval or scheduling", () => {
   const a = fixture();
   const badClaims = a.review.claims.map(item => ({ ...item }));
   badClaims[0].evidenceUrls = ["http://example.org/source"];
   assert.throws(() => recordNatureFrontiersReview({ register: a.register, assetId: "nf-test-asset", review: { ...a.review, claims: badClaims }, root: a.root }), /HTTPS evidence/);
+  a.register.assets[0].approval.status = "approved";
+  assert.throws(() => recordNatureFrontiersReview({ register: a.register, assetId: "nf-test-asset", review: a.review, root: a.root }), /after an approval decision/);
+  a.register.assets[0].approval.status = "pending";
   a.register.assets[0].usage.scheduled = true;
   assert.throws(() => recordNatureFrontiersReview({ register: a.register, assetId: "nf-test-asset", review: a.review, root: a.root }), /after scheduling/);
 });
