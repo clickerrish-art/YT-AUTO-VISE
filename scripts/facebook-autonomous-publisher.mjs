@@ -326,10 +326,12 @@ export async function runAutonomousFacebookPublisher({
         // Re-read after the remote request, not from the startup snapshot: a
         // concurrent verified receipt must never be overwritten by recovery.
         const latestHistory = safeHistory(historyPath);
-        const existingReceipts = latestHistory.filter(item => item?.slotId === recovered.slotId &&
+        const existingSlotOutcomes = latestHistory.filter(item => item?.slotId === recovered.slotId);
+        const existingReceipts = existingSlotOutcomes.filter(item =>
           ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status));
-        if (existingReceipts.some(item => item.remotePostId !== recovered.remotePostId)) {
-          throw new Error("Facebook history conflicts with a reconciled ledger receipt; publishing blocked for manual reconciliation");
+        if (existingSlotOutcomes.some(item => !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)) ||
+            existingReceipts.some(item => item.remotePostId !== recovered.remotePostId)) {
+          throw new Error("Facebook history contains a prior outcome conflicting with a reconciled ledger receipt; publishing blocked for manual reconciliation");
         }
         history = latestHistory;
         if (!existingReceipts.length) history.push({ ...recovered, payload: undefined });
@@ -520,10 +522,12 @@ export async function runAutonomousFacebookPublisher({
           // Re-read the durable projection after remote reconciliation. This also
           // detects a receipt written while the network operation was in flight.
           const latestHistory = safeHistory(historyPath);
-          const existingReceipts = latestHistory.filter(item => item?.slotId === recovered.slotId &&
+          const existingSlotOutcomes = latestHistory.filter(item => item?.slotId === recovered.slotId);
+          const existingReceipts = existingSlotOutcomes.filter(item =>
             ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status));
-          if (existingReceipts.some(item => item.remotePostId !== recovered.remotePostId)) {
-            throw new Error("Facebook history conflicts with a reconciled ledger receipt; publishing blocked for manual reconciliation");
+          if (existingSlotOutcomes.some(item => !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)) ||
+              existingReceipts.some(item => item.remotePostId !== recovered.remotePostId)) {
+            throw new Error("Facebook history contains a prior outcome conflicting with a reconciled ledger receipt; publishing blocked for manual reconciliation");
           }
           history = latestHistory;
           if (!existingReceipts.length) history.push({ ...recovered, payload: undefined });
