@@ -22,10 +22,12 @@ on:
     branches: [main]
     paths:
       - "scripts/meta-instagram-reel-adapter.mjs"
+      - "scripts/meta-instagram-image-adapter.mjs"
       - "scripts/instagram-autonomous-publisher.mjs"
       - "scripts/instagram-content-intake.mjs"
       - "config/instagram-publishing.json"
       - "test/meta-instagram-reel-adapter.test.mjs"
+      - "test/meta-instagram-image-adapter.test.mjs"
       - "test/instagram-autonomous-publisher.test.mjs"
       - "package.json"
       - "package-lock.json"
@@ -72,7 +74,8 @@ jobs:
             [config.publishingEnabled === false, 'publishing disabled'],
             [config.dryRun === true, 'dry-run enabled'],
             [config.emergencyStop === true, 'emergency stop active'],
-            [config.facebookLoginForBusinessEnabled === false, 'resumable upload capability unverified']
+            [config.facebookLoginForBusinessEnabled === false, 'resumable upload capability unverified'],
+            [Array.isArray(config.allowedImageDomains) && config.allowedImageDomains.length === 0, 'public image host allowlist starts empty']
           ];
           for (const [ok, label] of checks) console.log((ok ? 'PASS ' : 'FAIL ') + label);
           if (checks.some(([ok]) => !ok)) process.exit(1);
