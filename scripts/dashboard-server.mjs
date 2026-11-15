@@ -1972,8 +1972,7 @@ const server = http.createServer(async (req, res) => {
           verified[name] = { path: artifact.path, sha256: artifact.sha256, file };
         }
         const transcript = fs.readFileSync(verified["narration.txt"].file, "utf8");
-        const expectedTranscript = String(script.narration ?? "").replace(/\s+/gu, " ").trim() + "
-";
+        const expectedTranscript = String(script.narration ?? "").replace(/\s+/gu, " ").trim() + "\n";
         if (transcript !== expectedTranscript) throw new Error("Narration transcript differs from the exact approved script");
         const captions = fs.readFileSync(verified["captions.srt"].file, "utf8");
         const report = JSON.parse(fs.readFileSync(verified["narration-report.json"].file, "utf8"));
@@ -2926,8 +2925,7 @@ const server = http.createServer(async (req, res) => {
         const timer = setTimeout(() => { timedOut = true; child.kill("SIGTERM"); }, 60_000);
         child.stdout.on("data", collect);
         child.stderr.on("data", collect);
-        child.on("error", error => { clearTimeout(timer); resolve({ status: "FAILED", exitCode: null, output: (textOutput + "
-" + error.message).slice(-12000), truncated }); });
+        child.on("error", error => { clearTimeout(timer); resolve({ status: "FAILED", exitCode: null, output: (textOutput + "\n" + error.message).slice(-12000), truncated }); });
         child.on("close", code => { clearTimeout(timer); resolve({ status: timedOut ? "TIMED_OUT" : code === 0 ? "SUCCEEDED" : "FAILED", exitCode: code, output: textOutput, truncated }); });
       });
       const updatedLedger = readUploadLedger();
