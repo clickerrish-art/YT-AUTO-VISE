@@ -39,7 +39,7 @@ def run(args: list[str]) -> str:
 def assert_no_symlink_ancestors(path: Path) -> None:
     current = path
     while current == ROOT or ROOT in current.parents:
-        if current.exists() and current.is_symlink():
+        if current.is_symlink():
             raise SystemExit(f"Refusing symlinked review path: {current}")
         if current == ROOT:
             break
