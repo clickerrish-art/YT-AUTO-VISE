@@ -1010,6 +1010,29 @@ test("startup reconciliation re-reads history after Meta lookup before writing a
 });
 
 
+test("startup blocks malformed history records without slot identity", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    const historyPath = path.join(f.stateDir, "facebook-history.json");
+    const malformed = [{ destination: "nature_frontiers_facebook", status: "SKIPPED_BLOCKED", reason: "legacy row without id" }];
+    fs.writeFileSync(historyPath, JSON.stringify(malformed));
+    let policyCalls = 0, mutationCalls = 0;
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath,
+      stateDir: f.stateDir, now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      policyEvaluator: async () => { policyCalls++; return { eligible: true }; },
+      publish: async () => { mutationCalls++; throw new Error("malformed history must never publish"); }
+    }), /history contains a record without a valid slot ID/i);
+    assert.equal(policyCalls, 0);
+    assert.equal(mutationCalls, 0);
+    assert.deepEqual(JSON.parse(fs.readFileSync(historyPath, "utf8")), malformed);
+  } finally { f.cleanup(); }
+});
+
 test("startup blocks duplicate attempt-ledger slot IDs before recovery or Meta access", async () => {
   const f = setup();
   try {
