@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 import { createCloudflareAccessHeaders } from "./cloudflare-access-headers.mjs";
+import { spawn } from "node:child_process";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 /**
  * Read-only authenticated smoke test for the deployed SonicVhibez staging Worker.
  * It never writes dashboard state, claims jobs, creates runner sessions, or publishes.
@@ -90,6 +94,158 @@ const runnerStatusAuthenticated = await get("/api/runner/session/status", { "x-o
 assert(runnerStatusAuthenticated.status === 200 && typeof runnerStatusAuthenticated.body?.active === "boolean",
   "Authenticated runner session status failed; received HTTP " + runnerStatusAuthenticated.status);
 
+// Start the real Node dashboard against the staging Worker with a fresh temporary
+// local directory. Refuse to start if startup recovery could mutate remote state.
+assert(state.jobs.length === 0, "Staging contains content jobs; refusing to run startup recovery smoke");
+assert(!(state.facebookAttempts ?? []).some(item => ["SUBMITTING", "REMOTE_SCHEDULED_UNVERIFIED"].includes(item.status)),
+  "Staging contains an uncertain Meta attempt; refusing to run startup recovery smoke");
+assert(!(state.campaigns ?? []).some(item => item.type === "safari_affiliate" &&
+  (item.status !== "INACTIVE" || item.destinationUrl !== "" || item.ownerApproved !== false ||
+   item.destinationValidation !== "not_verified" || item.disclosureText !== "" ||
+   ["pendingDestinationUrl", "pendingDisclosureText", "pendingDestinationVersion", "approval"].some(key => Object.hasOwn(item, key)))),
+  "Staging contains a non-compliant Safari campaign; refusing to run startup recovery smoke");
+
+function startLocalDashboard(stateDir) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+      cwd: process.cwd(),
+      env: {
+        ...process.env,
+        DASHBOARD_HOST: "127.0.0.1",
+        PORT: "0",
+        DASHBOARD_STATE_DIR: stateDir,
+        DASHBOARD_OPERATOR_TOKEN: token,
+        DASHBOARD_OPERATOR_ID: "staging-smoke-operator",
+        DASHBOARD_STATE_API_URL: parsed.origin,
+        DASHBOARD_STATE_OPERATOR_TOKEN: token,
+        DASHBOARD_STATE_ACCESS_CLIENT_ID: accessClientId,
+        DASHBOARD_STATE_ACCESS_CLIENT_SECRET: accessClientSecret
+      },
+      stdio: ["ignore", "pipe", "pipe"]
+    });
+    let pending = "";
+    let stderr = "";
+    let settled = false;
+    const timeout = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      child.kill("SIGTERM");
+      reject(new Error("Node dashboard did not become ready within 15 seconds"));
+    }, 15_000);
+    child.stdout.setEncoding("utf8");
+    child.stderr.setEncoding("utf8");
+    child.stdout.on("data", chunk => {
+      pending += chunk;
+      const lines = pending.split(/\\r?\\n/);
+      pending = lines.pop() ?? "";
+      for (const line of lines) {
+        if (!line.includes('"event":"dashboard_started"')) continue;
+        try {
+          const started = JSON.parse(line);
+          if (!Number.isInteger(started.port) || started.port < 1 || started.port > 65535) {
+            throw new Error("Node dashboard returned an invalid loopback port");
+          }
+          if (settled) return;
+          settled = true;
+          clearTimeout(timeout);
+          resolve({ child, port: started.port });
+        } catch (error) {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timeout);
+          child.kill("SIGTERM");
+          reject(error);
+        }
+      }
+    });
+    child.stderr.on("data", chunk => { stderr = (stderr + chunk).slice(-2000); });
+    child.once("exit", (code, signal) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      reject(new Error("Node dashboard exited before readiness (code=" + code + ", signal=" + signal +
+        "); diagnostic=" + stderr.replace(/\\s+/g, " ").slice(-500)));
+    });
+    child.once("error", error => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      reject(new Error("Node dashboard could not start: " + error.message));
+    });
+  });
+}
+
+async function stopLocalDashboard(child) {
+  if (!child || child.exitCode !== null) return;
+  await new Promise(resolve => {
+    let done = false;
+    let timer;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      resolve();
+    };
+    child.once("exit", finish);
+    child.kill("SIGTERM");
+    timer = setTimeout(() => {
+      child.kill("SIGKILL");
+      finish();
+    }, 8_000);
+  });
+}
+
+async function getLocal(localBase, pathname, authenticated = true) {
+  const response = await fetch(new URL(pathname, localBase), {
+    method: "GET",
+    headers: authenticated ? { "x-operator-token": token } : {},
+    redirect: "error",
+    signal: AbortSignal.timeout(15_000)
+  });
+  let body;
+  try { body = await response.json(); }
+  catch { throw new Error("Local dashboard " + pathname + " returned non-JSON HTTP " + response.status); }
+  return { status: response.status, body };
+}
+
+const stateBeforeNode = JSON.stringify({ revision: payload.revision, updatedAt: payload.updatedAt, state });
+const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-staging-node-smoke-"));
+let localDashboard;
+let nodeDashboardChecks = null;
+try {
+  localDashboard = await startLocalDashboard(stateDir);
+  const localBase = "http://127.0.0.1:" + localDashboard.port;
+  const localUnauthenticated = await getLocal(localBase, "/api/state", false);
+  assert(localUnauthenticated.status === 401,
+    "Local Node dashboard must reject unauthenticated state reads; received HTTP " + localUnauthenticated.status);
+  const localState = await getLocal(localBase, "/api/state");
+  assert(localState.status === 200 && Array.isArray(localState.body?.queueItems) &&
+    Array.isArray(localState.body?.jobs) && Array.isArray(localState.body?.audit) &&
+    localState.body?.publishingEnabled === false,
+    "Local Node dashboard could not read authenticated Cloudflare-backed state");
+  const localBackups = await getLocal(localBase, "/api/state/backups");
+  assert(localBackups.status === 200 && Array.isArray(localBackups.body?.backups) &&
+    Number(localBackups.body?.revision) === Number(payload.revision),
+    "Local Node dashboard could not read the Cloudflare-backed backup inventory");
+  assert(localBackups.body.backups.length >= 1,
+    "Local Node dashboard did not receive the retained staging backup");
+  nodeDashboardChecks = {
+    unauthenticatedStateRejected: "PASS",
+    authenticatedCloudflareStateRead: "PASS",
+    authenticatedCloudflareBackupList: "PASS",
+    durableRevision: Number(localBackups.body.revision),
+    retainedBackupCount: localBackups.body.backups.length,
+    publishingDisabled: "PASS"
+  };
+} finally {
+  if (localDashboard) await stopLocalDashboard(localDashboard.child);
+  fs.rmSync(stateDir, { recursive: true, force: true });
+}
+const stateAfterNode = await get("/api/state", { "x-operator-token": token });
+assert(stateAfterNode.status === 200 &&
+  JSON.stringify({ revision: stateAfterNode.body.revision, updatedAt: stateAfterNode.body.updatedAt, state: stateAfterNode.body.state }) === stateBeforeNode,
+  "Read-only Node dashboard smoke unexpectedly changed remote Cloudflare state");
+
 console.log(JSON.stringify({
   result: "PASS",
   target: parsed.origin,
@@ -104,7 +260,9 @@ console.log(JSON.stringify({
     retainedBackupCount: backupList.body.backups.length,
     publishingDisabled: "PASS",
     unauthenticatedRunnerStatusRejected: "PASS",
-    authenticatedRunnerStatusRead: "PASS"
+    authenticatedRunnerStatusRead: "PASS",
+    nodeDashboardCloudflareIntegration: nodeDashboardChecks,
+    remoteStateUnchanged: "PASS"
   },
   runnerSessionActive: runnerStatusAuthenticated.body.active,
   publishingEnabled: false,
