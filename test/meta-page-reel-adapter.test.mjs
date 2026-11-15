@@ -122,3 +122,10 @@ test("Page Reel status read-back binds the response to the exact remote video ID
     fetchImpl:async()=>response({id:"111111111111111",status:{video_status:"ready"}})
   }),/did not match/i);
 });
+
+test("Page Reel API errors redact the Page access token",async()=>{
+  await assert.rejects(()=>fetchMetaPageReelStatus({
+    remoteVideoId:VIDEO,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,
+    fetchImpl:async()=>response({error:{message:"invalid token "+TOKEN,code:190}},400)
+  }),error=>error instanceof MetaPageReelError && !error.message.includes(TOKEN) && error.code===190);
+});
