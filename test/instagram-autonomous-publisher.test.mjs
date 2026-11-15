@@ -86,9 +86,9 @@ test("interrupted Instagram publish with a persisted media ID reconciles without
   let publishes=0,reconciles=0;
   const result=await runAutonomousInstagramPublisher({configPath:f.configPath,queuePath:f.queuePath,stateDir:f.state,rootDir:f.root,
    now:Date.parse("2026-11-15T10:00:00.000Z"),env:env(),verifyAccount:verified,policyEvaluator:eligible,
-   publish:async()=>{publishes++;},reconcile:async()=>{reconciles++;return {outcome:"CONFIRMED",receipt:{status:"PUBLISHED_VERIFIED",mediaId:"123456789012347"}};}});
+   publish:async()=>{publishes++;},reconcile:async()=>{reconciles++;return {outcome:"CONFIRMED",receipt:{status:"PUBLISHED_VERIFIED",mediaId:"123456789012347",publishedAt:"2026-11-15T10:00:02.000Z",permalink:"https://www.instagram.com/reel/abc/"}};}});
   assert.equal(publishes,0);assert.equal(reconciles,1);assert.equal(result.published,0);
-  const ledger=JSON.parse(fs.readFileSync(path.join(f.state,"instagram-attempt-ledger.json"),"utf8"));assert.equal(ledger[0].status,"PUBLISHED_VERIFIED");
+  const ledger=JSON.parse(fs.readFileSync(path.join(f.state,"instagram-attempt-ledger.json"),"utf8"));assert.equal(ledger[0].status,"PUBLISHED_VERIFIED");assert.equal(ledger[0].verifiedRemotely,true);assert.equal(ledger[0].publishedAt,"2026-11-15T10:00:02.000Z");
  }finally{f.cleanup();}
 });
 
