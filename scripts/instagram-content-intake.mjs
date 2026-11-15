@@ -16,10 +16,10 @@ function atomicJson(file,value) {
   fs.renameSync(temp,file);
 }
 function localPath(base,candidate,label) {
-  if(typeof candidate!=="string"||!candidate||path.isAbsolute(candidate)||candidate.includes("\\")||
-     candidate.split("/").some(x=>!x||x==="."||x==="..")) throw new Error(label+" path must be a safe repository-relative path");
+  if(typeof candidate!=="string"||!candidate||candidate.includes("\\")||
+     candidate.split(/[\\/]/).some(x=>x==="..")) throw new Error(label+" path must be a safe path within the repository root");
   const canonical=fs.realpathSync(base),target=path.isAbsolute(candidate)?path.resolve(candidate):path.resolve(canonical,candidate);
-  if(!target.startsWith(canonical+path.sep)) throw new Error(label+" path escapes repository root");
+  if(target===canonical||!target.startsWith(canonical+path.sep)) throw new Error(label+" path escapes repository root");
   const checked=fs.existsSync(target)?fs.realpathSync(target):fs.realpathSync(path.dirname(target));
   if(checked!==canonical&&!checked.startsWith(canonical+path.sep)) throw new Error(label+" symlink escapes repository root");
   return target;
