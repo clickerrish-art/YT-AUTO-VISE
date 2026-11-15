@@ -396,6 +396,13 @@ export async function runAutonomousFacebookPublisher({
         skipped++;
         continue;
       }
+      if (history.some(item => item.slotId === payload.slotId)) {
+        // An orphaned UNCERTAIN history row (for example, after ledger loss)
+        // is not proof that publication did not occur. Retain it for manual
+        // reconciliation rather than allowing a fresh mutation.
+        skipped++;
+        continue;
+      }
       if (ledger.some(item => item.slotId === payload.slotId)) {
         // An attempt ledger entry without a terminal history outcome is a
         // reconciliation/manual-review case. Keep the original queue payload:
