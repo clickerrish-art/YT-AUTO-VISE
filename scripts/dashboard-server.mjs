@@ -292,12 +292,10 @@ function readFacebookRecoveryLedger() {
   if (!raw) return [];
   // A crash during append can leave a partial final JSON record. Never skip it:
   // doing so could hide the only receipt for a remote operation with uncertain outcome.
-  if (!raw.endsWith("
-")) {
+  if (!raw.endsWith("\n")) {
     throw new Error("Facebook recovery ledger has an incomplete final record; preserve it and reconcile remote state before retrying");
   }
-  const lines = raw.slice(0, -1).split("
-");
+  const lines = raw.slice(0, -1).split("\n");
   const records = [];
   for (const line of lines) {
     if (!line.trim()) {
