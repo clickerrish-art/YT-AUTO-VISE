@@ -38,11 +38,16 @@ test("rejects files outside the dedicated local media directory", () => {
   assert.throws(() => registerLocalMedia({ register, assetId: "nf-test-asset-001", filePath: "outside.mp4", root }), /must be stored under/);
 });
 
-test("rejects missing and empty media files", () => {
+test("rejects missing, empty and symlink-escaped media files", () => {
   const { root, register } = fixture();
   assert.throws(() => registerLocalMedia({ register, assetId: "nf-test-asset-001", filePath: "media/nature-frontiers/missing.mp4", root }));
   fs.writeFileSync(path.join(root, "media/nature-frontiers/empty.mp4"), "");
   assert.throws(() => registerLocalMedia({ register, assetId: "nf-test-asset-001", filePath: "media/nature-frontiers/empty.mp4", root }), /must not be empty/);
+  const outside = path.join(root, "outside");
+  fs.mkdirSync(outside);
+  fs.writeFileSync(path.join(outside, "escape.mp4"), "outside bytes");
+  fs.symlinkSync(outside, path.join(root, "media/nature-frontiers/linked"));
+  assert.throws(() => registerLocalMedia({ register, assetId: "nf-test-asset-001", filePath: "media/nature-frontiers/linked/escape.mp4", root }), /resolves outside/);
 });
 
 test("rejects unknown IDs and approved or already-used assets", () => {
