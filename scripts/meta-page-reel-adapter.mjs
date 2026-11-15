@@ -36,7 +36,7 @@ async function readJson(response, { mutation = false, remoteVideoId = null, toke
   return data;
 }
 function inspectVideo(filePath) {
-  const result = spawnSync("ffprobe", ["-v","error","-show_entries","format=duration:stream=codec_type,width,height","-of","json",filePath], { encoding:"utf8", timeout:20000 });
+  const result = spawnSync("ffprobe", ["-v","error","-show_entries","format=duration:stream=codec_type,width,height,avg_frame_rate","-of","json",filePath], { encoding:"utf8", timeout:20000 });
   if (result.error || result.status !== 0) throw new MetaPageReelError("ffprobe is unavailable or could not inspect the Reel video");
   let parsed;
   try { parsed = JSON.parse(result.stdout); } catch { throw new MetaPageReelError("ffprobe returned invalid video inspection data"); }
