@@ -106,6 +106,39 @@ test("requires a matching file hash, reviewer, evidence and usage scope for appr
   assert.deepEqual(validateMediaRegister(value), []);
 });
 
+
+test("does not approve listing-only species or unverified location claims", () => {
+  const value = structuredClone(base);
+  const hash = "c".repeat(64);
+  value.assets[0].localFile = { path: "media/nf-test.mp4", sha256: hash };
+  value.assets[0].media.sha256 = hash;
+  value.assets[0].rights = {
+    reviewStatus: "cleared",
+    additionalPermissionsStatus: "not_required",
+    licenseEvidence: ["https://example.com/license-evidence"],
+    reviewedBy: "rights reviewer",
+    reviewedAt: "2026-11-15T10:00:00+02:00"
+  };
+  value.assets[0].inspection = {
+    status: "complete",
+    inspectedBy: "editor",
+    inspectedAt: "2026-11-15T10:05:00+02:00",
+    visualNotes: "Full clip inspected; species and visible behaviour documented."
+  };
+  value.assets[0].claims = [{ type: "location", value: "South Africa", status: "unverified" }];
+  value.assets[0].approval = {
+    status: "approved",
+    approvedBy: "owner",
+    approvedAt: "2026-11-15T10:10:00+02:00",
+    approvedFileSha256: hash,
+    approvedUsage: ["Instagram Reel"]
+  };
+  assert.ok(validateMediaRegister(value).some(error => error.includes("factual claims remain listing-only or unverified")));
+  value.assets[0].claims[0].status = "verified";
+  value.assets[0].rights.additionalPermissionsStatus = "not_assessed";
+  assert.ok(validateMediaRegister(value).some(error => error.includes("explicit resolution of additional permissions")));
+});
+
 test("rejects scheduled or published records without approval and publication receipts", () => {
   const value = structuredClone(base);
   value.assets[0].usage.scheduled = true;
