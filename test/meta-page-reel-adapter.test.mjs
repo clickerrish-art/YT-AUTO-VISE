@@ -129,3 +129,19 @@ test("Page Reel API errors redact the Page access token",async()=>{
     fetchImpl:async()=>response({error:{message:"invalid token "+TOKEN,code:190}},400)
   }),error=>error instanceof MetaPageReelError && !error.message.includes(TOKEN) && error.code===190);
 });
+
+test("Page Reel adapter rejects media paths outside the configured repository root",async t=>{
+  const {root,draft}=await fixture(t);
+  const outside=path.join(path.dirname(root),"outside-reel.mp4");
+  const bytes=Buffer.from("outside-root video bytes");
+  fs.writeFileSync(outside,bytes);
+  t.after(()=>fs.rmSync(outside,{force:true}));
+  let calls=0;
+  await assert.rejects(()=>createMetaPageReel({
+    draft:{...draft,media:{path:"../outside-reel.mp4",sha256:crypto.createHash("sha256").update(bytes).digest("hex")}},
+    pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,permissionsVerified:true,
+    publishingEnabled:true,dryRun:false,emergencyStop:false,rootDir:root,inspect:()=>inspected,
+    fetchImpl:async()=>{calls++;return response({});}
+  }),/escapes the configured repository root/i);
+  assert.equal(calls,0);
+});
