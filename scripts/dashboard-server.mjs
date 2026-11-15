@@ -33,6 +33,8 @@ import {
   approveFacebookDraft, facebookApprovalFingerprint, chooseFacebookExperimentSlot, summarizeFacebookExperiment, generateFacebookIdea, assertFacebookPublishAllowed
 } from "./facebook-pipeline.mjs";
 import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost, fetchMetaPagePost, MetaPageApiError } from "./meta-page-adapter.mjs";
+import { approveInstagramCandidate } from "./instagram-approval-service.mjs";
+import { instagramApprovalFingerprint } from "./instagram-autonomous-publisher.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = process.env.DASHBOARD_HOST ?? "127.0.0.1";
@@ -1067,6 +1069,57 @@ const server = http.createServer(async (req, res) => {
         state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_DRAFT_RECHECKED", itemId: draft.id, ok: evaluation.ok, blockers: evaluation.blockers, flags: evaluation.flags, complianceVersion: evaluation.complianceVersion, at: new Date().toISOString(), actor: operatorId });
         await saveState(state);
         return json(res, 200, { draft: state.facebookDrafts[index], evaluation, publishingEnabled: false });
+      } finally { release(); }
+    }
+    if (req.method === "POST" && url.pathname === "/api/instagram/approve") {
+      const body = await readBody(req);
+      if (body.confirmInstagramApproval !== true || !body.payload || typeof body.reason !== "string") {
+        return json(res, 400, { error: "Exact Instagram payload, reason and confirmInstagramApproval=true are required" });
+      }
+      const reason = body.reason.trim().slice(0, 1000);
+      if (reason.length < 3) return json(res, 400, { error: "A specific human review reason is required" });
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const instagramConfig = JSON.parse(fs.readFileSync(path.join(root, "config/instagram-publishing.json"), "utf8"));
+        const facebookConfig = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+        const verifiedPageId = verifiedFacebookPageId(state, facebookConfig);
+        if (!verifiedPageId || verifiedPageId !== instagramConfig.facebookPageId ||
+            process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID !== verifiedPageId) {
+          return json(res, 409, { error: "A recently verified Nature Frontiers Facebook Page matching the Instagram linked-Page configuration is required" });
+        }
+        if (process.env.NATURE_FRONTIERS_INSTAGRAM_ACCOUNT_ID !== instagramConfig.instagramBusinessAccountId) {
+          return json(res, 409, { error: "Owner-verified Instagram professional account ID must match the secure runtime configuration" });
+        }
+        const candidateFile = path.join(root, "content", "instagram-intake-candidates.json");
+        const candidates = JSON.parse(fs.readFileSync(candidateFile, "utf8"));
+        if (!Array.isArray(candidates)) return json(res, 409, { error: "Instagram candidate register is malformed; no approval was recorded" });
+        const approved = await approveInstagramCandidate({
+          payload: body.payload, reviewer: operatorId, reason, config: instagramConfig,
+          env: process.env, now: new Date().toISOString(), evidenceRoot: root
+        });
+        if (!approved.approved) return json(res, 409, { error: "Instagram approval is blocked by source-policy or target validation", blockers: approved.blockers, policy: approved.policy ?? null, publishingEnabled: false });
+        const fingerprint = instagramApprovalFingerprint(approved.payload);
+        const prior = candidates.find(item => item?.slotId === approved.payload.slotId);
+        if (prior) {
+          if (instagramApprovalFingerprint(prior) === fingerprint) {
+            return json(res, 200, { status: "APPROVED_FOR_INSTAGRAM_INTAKE", slotId: prior.slotId, idempotent: true, publishingEnabled: false });
+          }
+          return json(res, 409, { error: "An Instagram candidate already occupies this slot with different content; reconcile it before changing approval" });
+        }
+        atomicWriteJson(candidateFile, [...candidates, approved.payload]);
+        state.audit.push({
+          id: crypto.randomUUID(), action: "INSTAGRAM_DRAFT_APPROVED_FOR_INTAKE",
+          itemId: approved.payload.slotId, reviewer: operatorId, fingerprint,
+          at: approved.approvedAt, policyVersion: approved.payload.approval.policyVersion,
+          publishingEnabled: false, providerMutationAttempted: false
+        });
+        await saveState(state);
+        return json(res, 201, {
+          status: "APPROVED_FOR_INSTAGRAM_INTAKE", slotId: approved.payload.slotId,
+          reviewer: operatorId, fingerprint, sourcePolicy: approved.policy,
+          publishingEnabled: false, providerMutationAttempted: false
+        });
       } finally { release(); }
     }
     if (req.method === "POST" && url.pathname === "/api/facebook/drafts/approve") {
