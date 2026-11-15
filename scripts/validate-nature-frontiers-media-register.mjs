@@ -4,16 +4,28 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 const SHA256 = /^[a-f0-9]{64}$/;
-const ZONED_ISO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
+const ZONED_ISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(Z|([+-])(\d{2}):(\d{2}))$/;
 
 function validTimestamp(value) {
-  return typeof value === "string" && ZONED_ISO.test(value) && Number.isFinite(Date.parse(value));
+  if (typeof value !== "string") return false;
+  const match = ZONED_ISO.exec(value);
+  if (!match) return false;
+  const [, yearText, monthText, dayText, hourText, minuteText, secondText, zone, , offsetHourText, offsetMinuteText] = match;
+  const year = Number(yearText), month = Number(monthText), day = Number(dayText);
+  const hour = Number(hourText), minute = Number(minuteText), second = Number(secondText);
+  const offsetHour = Number(offsetHourText ?? 0), offsetMinute = Number(offsetMinuteText ?? 0);
+  const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  if (month < 1 || month > 12 || day < 1 || day > daysInMonth ||
+      hour > 23 || minute > 59 || second > 59 ||
+      offsetHour > 23 || offsetMinute > 59) return false;
+  return Number.isFinite(Date.parse(value));
 }
 
 function validHttpsUrl(value) {
+  if (typeof value !== "string" || !value.trim()) return false;
   try {
     const url = new URL(value);
-    return url.protocol === "https:" && !url.username && !url.password;
+    return url.protocol === "https:" && Boolean(url.hostname) && !url.username && !url.password;
   } catch {
     return false;
   }
@@ -44,7 +56,9 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
     if (!validHttpsUrl(asset.source?.url)) errors.push(at + " source URL must be HTTPS without embedded credentials");
     if (!["unverified", "verified", "unavailable", "rejected"].includes(asset.source?.listingStatus)) errors.push(at + " has an invalid listingStatus");
     if (!Array.isArray(asset.source?.listingEvidence)) errors.push(at + " listingEvidence must be an array");
-    for (const url of asset.source?.listingEvidence ?? []) if (!validHttpsUrl(url)) errors.push(at + " listing evidence URLs must be HTTPS");
+    for (const url of Array.isArray(asset.source?.listingEvidence) ? asset.source.listingEvidence : []) {
+      if (!validHttpsUrl(url)) errors.push(at + " listing evidence URLs must be HTTPS");
+    }
 
     if (asset.localFile !== null && asset.localFile !== undefined) {
       if (typeof asset.localFile.path !== "string" || !asset.localFile.path.trim()) errors.push(at + " localFile.path must be a non-empty relative path");
@@ -57,6 +71,9 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
     if (!["not_assessed", "in_progress", "cleared", "rejected"].includes(rights.reviewStatus)) errors.push(at + " has an invalid rights.reviewStatus");
     if (!["not_assessed", "not_required", "required", "obtained", "rejected"].includes(rights.additionalPermissionsStatus)) errors.push(at + " has an invalid additionalPermissionsStatus");
     if (!Array.isArray(rights.licenseEvidence)) errors.push(at + " rights.licenseEvidence must be an array");
+    for (const evidence of Array.isArray(rights.licenseEvidence) ? rights.licenseEvidence : []) {
+      if (!validHttpsUrl(evidence)) errors.push(at + " rights licence evidence URLs must be HTTPS");
+    }
     if (rights.reviewStatus === "cleared") {
       if (!Array.isArray(rights.licenseEvidence) || rights.licenseEvidence.length === 0) errors.push(at + " cleared rights require licence evidence");
       if (typeof rights.reviewedBy !== "string" || !rights.reviewedBy.trim()) errors.push(at + " cleared rights require reviewedBy");
@@ -75,8 +92,18 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
 
     const claims = asset.claims ?? [];
     if (!Array.isArray(claims)) errors.push(at + " claims must be an array");
-    for (const claim of claims) {
-      if (!claim || typeof claim !== "object" || typeof claim.type !== "string" || typeof claim.value !== "string" || !["listing_only", "unverified", "verified", "not_used"].includes(claim.status)) errors.push(at + " contains an invalid factual claim record");
+    for (const claim of Array.isArray(claims) ? claims : []) {
+      if (!claim || typeof claim !== "object" || Array.isArray(claim) ||
+          typeof claim.type !== "string" || typeof claim.value !== "string" ||
+          !["listing_only", "unverified", "verified", "not_used"].includes(claim.status)) {
+        errors.push(at + " contains an invalid factual claim record");
+        continue;
+      }
+      if (claim.status === "verified" &&
+          (!Array.isArray(claim.evidenceUrls) || claim.evidenceUrls.length === 0 ||
+           claim.evidenceUrls.some(url => !validHttpsUrl(url)))) {
+        errors.push(at + " verified factual claims require one or more HTTPS evidenceUrls");
+      }
     }
 
     const approval = asset.approval ?? {};

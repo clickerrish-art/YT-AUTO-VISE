@@ -154,3 +154,39 @@ test("keeps automatic publishing disabled as an invariant", () => {
   value.policy.allowAutomaticPublication = true;
   assert.ok(validateMediaRegister(value).some(error => error.includes("automatic publication must remain disabled")));
 });
+
+
+test("malformed nested arrays produce validation errors instead of crashing", () => {
+  const value = structuredClone(base);
+  value.assets[0].source.listingEvidence = { url: "https://example.com/evidence" };
+  value.assets[0].rights.licenseEvidence = { url: "https://example.com/license" };
+  value.assets[0].claims = { type: "species", value: "lion", status: "verified" };
+  const errors = validateMediaRegister(value);
+  assert.ok(errors.some(error => error.includes("listingEvidence must be an array")));
+  assert.ok(errors.some(error => error.includes("rights.licenseEvidence must be an array")));
+  assert.ok(errors.some(error => error.includes("claims must be an array")));
+});
+
+test("rejects impossible calendar dates even when Date.parse normalizes them", () => {
+  const value = structuredClone(base);
+  const hash = "d".repeat(64);
+  value.assets[0].localFile = { path: "media/nf-test.mp4", sha256: hash };
+  value.assets[0].media.sha256 = hash;
+  value.assets[0].rights = {
+    reviewStatus: "cleared",
+    additionalPermissionsStatus: "not_required",
+    licenseEvidence: ["https://example.com/license-evidence"],
+    reviewedBy: "rights reviewer",
+    reviewedAt: "2026-02-30T10:00:00+02:00"
+  };
+  const errors = validateMediaRegister(value);
+  assert.ok(errors.some(error => error.includes("valid non-future timezone-qualified reviewedAt")));
+});
+
+test("verified factual claims require evidence URLs rather than an unsupported status flag", () => {
+  const value = structuredClone(base);
+  value.assets[0].claims = [{ type: "species", value: "lion", status: "verified" }];
+  assert.ok(validateMediaRegister(value).some(error => error.includes("verified factual claims require one or more HTTPS evidenceUrls")));
+  value.assets[0].claims[0].evidenceUrls = ["https://trusted.example.org/species"];
+  assert.ok(!validateMediaRegister(value).some(error => error.includes("verified factual claims require one or more HTTPS evidenceUrls")));
+});
