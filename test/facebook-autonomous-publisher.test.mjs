@@ -1008,3 +1008,43 @@ test("startup reconciliation re-reads history after Meta lookup before writing a
       "the queued slot must remain for manual reconciliation");
   } finally { f.cleanup(); }
 });
+
+
+test("policy-block history append preserves a concurrent durable history update", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const now = Date.parse("2026-10-25T05:30:00.000Z");
+    const payload = {
+      slotId: "nature-frontiers-policy-history-race",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Policy check history race.", links: [], media: [], claims: []
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    const historyPath = path.join(f.stateDir, "facebook-history.json");
+    const concurrent = {
+      slotId: payload.slotId, destination: "nature_frontiers_facebook",
+      status: "SCHEDULED_VERIFIED", verifiedRemotely: true,
+      remotePostId: "123456789012345_concurrent"
+    };
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath,
+      stateDir: f.stateDir, now,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      policyEvaluator: async () => {
+        fs.mkdirSync(f.stateDir, { recursive: true });
+        fs.writeFileSync(historyPath, JSON.stringify([concurrent]));
+        return { eligible: false, blockers: ["TEST_BLOCK"], warnings: [],
+          contentFingerprint: "c".repeat(64), policyRuleVersion: f.config.complianceRuleSet,
+          reason: "TEST_BLOCK" };
+      },
+      publish: async () => { throw new Error("policy-blocked candidate must not publish"); }
+    }), /history already contains this slot/i);
+    assert.deepEqual(JSON.parse(fs.readFileSync(historyPath, "utf8")), [concurrent],
+      "the concurrent durable history entry must not be overwritten");
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), [payload],
+      "the slot remains queued for manual reconciliation");
+  } finally { f.cleanup(); }
+});
