@@ -48,6 +48,7 @@ const options = root => ({
   history: [], allowedDomains: [], allowedCampaignIds: ["selar-wildlife-vault"],
   approvedDestinations: [], now: "2026-10-24T12:00:00.000Z",
   fetchImpl: async url => ({ ok: true, status: 200, url: String(url), text: async () => "Wildlife viewing guidance: Observe wildlife from a respectful distance and avoid disturbing animals. Further information." }),
+  approvalSecret: TEST_APPROVAL_SECRET,
   semanticVerifier: async ({ claimText, sourceUrls, checkedAt }) => ({
     verified: true, claimHash: hash(claimText), sourceUrlsHash: hash(JSON.stringify(sourceUrls)),
     verifierId: "unit-test-semantic-verifier", checkedAt
