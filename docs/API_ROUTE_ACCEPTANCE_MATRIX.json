@@ -27,9 +27,9 @@
   "counts": {
     "routes": 45,
     "authNegativePass": 45,
-    "overallPass": 37,
+    "overallPass": 38,
     "overallNotTested": 0,
-    "overallBlocked": 8,
+    "overallBlocked": 7,
     "authNegativePassHistorical": 45,
     "authNegativePassCurrentHead": 45
   },
@@ -162,24 +162,25 @@
       "path": "/api/state/backups",
       "classification": "Cloudflare durable-state backup listing",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
-      "authorizedSuccess": "BLOCKED — staging infrastructure is provisioned, but the Node dashboard cannot complete an authenticated end-to-end call in CI without DASHBOARD_STATE_API_URL, DASHBOARD_STATE_OPERATOR_TOKEN and Cloudflare Access service-token credentials.",
-      "inputValidation": "NOT_APPLICABLE — read-only route has no caller-supplied body or query parameters; the no-configuration 503/no-local-mutation guard is covered by the exact-SHA integration test.",
-      "durablePersistence": "BLOCKED — staging D1 has an initialized revision-1 snapshot and backup; route-level live read/write/backup/restore through the Node dashboard remains unverified.",
-      "auditEvidence": "NOT_TESTED.",
-      "concurrency": "NOT_TESTED.",
-      "restartRecovery": "NOT_TESTED.",
-      "externalOperation": "Cloudflare Access service token and policy now exist; authenticated Node-to-Worker runtime and state API credentials remain unverified. Authenticated smoke workflow exists but has no current observed run; route-level read/write/backup/restore acceptance remains blocked.",
-      "overallAcceptance": "BLOCKED",
-      "notes": "Read-only Cloudflare account verification on 2026-11-15 supersedes the 8-Nov Access inventory: the SonicVhibez Dashboard Staging Access application now has one enabled service token named SonicVhibez-GitHub-Staging and an attached non_identity allow policy; token last_seen_at is 2026-11-15T07:48:19Z. The repository contains .github/workflows/cloudflare-staging-auth-smoke.yml, which expects GitHub Actions secrets DASHBOARD_OPERATOR_TOKEN, CLOUDFLARE_ACCESS_CLIENT_ID and CLOUDFLARE_ACCESS_CLIENT_SECRET. No current run of that authenticated smoke workflow appears in the latest Actions run inventory, so token/policy existence is not treated as proof of authenticated Node-to-Worker access or durable backup/restore. These three routes remain BLOCKED pending a successful read-only authenticated smoke and authorized end-to-end backup/restore.",
+      "authenticationNegative": "PASS — exact-candidate authenticated staging smoke 43700604171 verifies unauthenticated Node GET /api/state returns HTTP 401 before state access.",
+      "authorizedSuccess": "PASS — exact-candidate staging smoke 43700604171 starts the real Node dashboard with Cloudflare Access credentials and verifies authenticated GET /api/state/backups returns HTTP 200, revision 2 and three retained backup records.",
+      "inputValidation": "NOT_APPLICABLE — read-only route has no request body or query parameters.",
+      "durablePersistence": "PASS — Node dashboard reads the D1-backed backup inventory through CloudflareDashboardStateClient; every returned backup has a non-empty ID, positive source revision, 64-character SHA-256 and valid timestamp, and no state_json is exposed.",
+      "auditEvidence": "NOT_APPLICABLE — read-only GET does not mutate state or append an audit event.",
+      "concurrency": "NOT_APPLICABLE — read-only backup listing does not perform a compare-and-swap write.",
+      "restartRecovery": "NOT_APPLICABLE — read-only backup listing has no state transition to recover.",
+      "externalOperation": "PASS — Cloudflare Access service token and policy authenticate the Node dashboard to the deployed staging Worker; direct Worker and Node-mediated state/backup reads succeed.",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-candidate staging smoke 43700604171 passed on source SHA cabd871847f14b6667adb43af1dbacaaa81f35b2; the current branch HEAD dba1b095300ab05833b485aa607385f6231955e8 differs only by the validate-automation workflow concurrency setting. The smoke verifies Cloudflare Access authentication, unauthenticated rejection, Node dashboard startup against an exact pre-seeded local snapshot, authenticated Node GET /api/state and GET /api/state/backups, revision 2, three retained backups, publishing disabled and byte-identical remote state before/after. No remote write was performed.",
       "testEvidence": {
-        "test": "test/dashboard-cloudflare-state.integration.test.mjs",
-        "exactTestedSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387665",
-        "scenario": "Exact-SHA content-quality suite includes the authenticated integration test: all three state routes return 503 without remote configuration and leave local state byte-identical; invalid and stale restore payloads never reach the remote restore endpoint."
+        "test": "scripts/cloudflare-staging-auth-smoke.mjs",
+        "exactTestedSha": "cabd871847f14b6667adb43af1dbacaaa81f35b2",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43700604171",
+        "automationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43700604234",
+        "scenario": "Read-only authenticated Node-to-Cloudflare integration through the real dashboard server; state and backup list retrieved; remote state hash/revision unchanged; weak W/\"2\" ETag revision matched by the client."
       },
-      "lastVerifiedOverallAcceptance": "BLOCKED",
-      "currentHeadStatus": "BLOCKED"
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS"
     },
     {
       "method": "POST",
@@ -193,9 +194,9 @@
       "auditEvidence": "NOT_TESTED.",
       "concurrency": "NOT_TESTED.",
       "restartRecovery": "NOT_TESTED.",
-      "externalOperation": "Cloudflare Access service token and policy now exist; authenticated Node-to-Worker runtime and state API credentials remain unverified. Authenticated smoke workflow exists but has no current observed run; route-level read/write/backup/restore acceptance remains blocked.",
+      "externalOperation": "Cloudflare Access and authenticated Node-to-Worker read paths are now verified. POST backup/restore remain blocked until a separately authorized, one-time staging backup/restore cycle is executed and verified.",
       "overallAcceptance": "BLOCKED",
-      "notes": "Read-only Cloudflare account verification on 2026-11-15 supersedes the 8-Nov Access inventory: the SonicVhibez Dashboard Staging Access application now has one enabled service token named SonicVhibez-GitHub-Staging and an attached non_identity allow policy; token last_seen_at is 2026-11-15T07:48:19Z. The repository contains .github/workflows/cloudflare-staging-auth-smoke.yml, which expects GitHub Actions secrets DASHBOARD_OPERATOR_TOKEN, CLOUDFLARE_ACCESS_CLIENT_ID and CLOUDFLARE_ACCESS_CLIENT_SECRET. No current run of that authenticated smoke workflow appears in the latest Actions run inventory, so token/policy existence is not treated as proof of authenticated Node-to-Worker access or durable backup/restore. These three routes remain BLOCKED pending a successful read-only authenticated smoke and authorized end-to-end backup/restore.",
+      "notes": "The current exact-candidate staging smoke proves Node dashboard authentication and read-only Cloudflare-backed state/backup listing, but deliberately performs no writes. The POST operation is not claimed PASS; it requires an isolated one-time staging backup/restore cycle with verified pre/post state and restart durability.",
       "testEvidence": {
         "test": "test/dashboard-cloudflare-state.integration.test.mjs",
         "exactTestedSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
@@ -217,9 +218,9 @@
       "auditEvidence": "NOT_TESTED.",
       "concurrency": "NOT_TESTED.",
       "restartRecovery": "NOT_TESTED.",
-      "externalOperation": "Cloudflare Access service token and policy now exist; authenticated Node-to-Worker runtime and state API credentials remain unverified. Authenticated smoke workflow exists but has no current observed run; route-level read/write/backup/restore acceptance remains blocked.",
+      "externalOperation": "Cloudflare Access and authenticated Node-to-Worker read paths are now verified. POST backup/restore remain blocked until a separately authorized, one-time staging backup/restore cycle is executed and verified.",
       "overallAcceptance": "BLOCKED",
-      "notes": "Read-only Cloudflare account verification on 2026-11-15 supersedes the 8-Nov Access inventory: the SonicVhibez Dashboard Staging Access application now has one enabled service token named SonicVhibez-GitHub-Staging and an attached non_identity allow policy; token last_seen_at is 2026-11-15T07:48:19Z. The repository contains .github/workflows/cloudflare-staging-auth-smoke.yml, which expects GitHub Actions secrets DASHBOARD_OPERATOR_TOKEN, CLOUDFLARE_ACCESS_CLIENT_ID and CLOUDFLARE_ACCESS_CLIENT_SECRET. No current run of that authenticated smoke workflow appears in the latest Actions run inventory, so token/policy existence is not treated as proof of authenticated Node-to-Worker access or durable backup/restore. These three routes remain BLOCKED pending a successful read-only authenticated smoke and authorized end-to-end backup/restore.",
+      "notes": "The current exact-candidate staging smoke proves Node dashboard authentication and read-only Cloudflare-backed state/backup listing, but deliberately performs no writes. The POST operation is not claimed PASS; it requires an isolated one-time staging backup/restore cycle with verified pre/post state and restart durability.",
       "testEvidence": {
         "test": "test/dashboard-cloudflare-state.integration.test.mjs",
         "exactTestedSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
@@ -1431,31 +1432,29 @@
     "note": "Read-only inventory export is implemented; no channel history was authenticated or reconciled because Google rejected the configured OAuth client pair."
   },
   "latestExactCiCheckpoint": {
-    "recordedAt": "2026-11-15T11:20:00+02:00",
-    "exactSourceTestSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
-    "automationSecurity": "PASS — 141/141 Node test files, 44 Python tests, zero skips; npm audit 0 vulnerabilities.",
-    "contentQuality": "PASS — 791 tests, zero failures and zero skips.",
-    "dashboardBrowser": "PASS — 29/29 Chromium journeys.",
-    "metadata": "PASS — 141/141 Node test files.",
-    "queueReadiness": "PASS — 16 held items; rolling 72-hour policy; public publishing disabled.",
-    "cloudflareDurableState": "PASS — 9/9 Worker durable-state unit tests.",
-    "deploymentRecovery": "PASS — 2 tests, zero skips.",
-    "isolatedMainCandidateBaseline": "PASS — exact main and candidate checkouts.",
-    "branchInventory": "PASS — non-destructive inventory only.",
-    "productionReadiness": "HOLD — expected live YouTube identity/history and production-media evidence blockers remain.",
-    "metaPageIdentity": "BLOCKED — configured Page is absent from authenticated /me/accounts managed-Page list.",
-    "api001Overall": "NOT_TESTED — 37/45 routes PASS; 8/45 remain BLOCKED."
+    "recordedAt": "2026-11-15T11:48:00+02:00",
+    "exactSourceTestSha": "cabd871847f14b6667adb43af1dbacaaa81f35b2",
+    "branchHeadSha": "dba1b095300ab05833b485aa607385f6231955e8",
+    "automationSecurity": "PASS — 141/141 Node test files, 44 Python tests, zero skips, npm audit 0 vulnerabilities; workflow 43700604234.",
+    "cloudflareStagingSmoke": "PASS — workflow 43700604171; Access service token, state read, backup list, Node dashboard integration and remote-state-unchanged checks.",
+    "contentQuality": "Earlier exact-source workflow 43698639433 passed; current 43700604234 also reran all Node/Python tests.",
+    "dashboardBrowser": "Earlier exact-source workflow 43698639466 passed 29/29 Chromium journeys; current dashboard source unchanged.",
+    "queueReadiness": "Earlier exact-source workflow 43698639332 passed 16 held items and rolling 72-hour policy.",
+    "cloudflareDurableState": "Earlier exact-source workflow 43698639522 passed 9/9 Worker unit tests; current staging smoke adds live read-only Node integration.",
+    "deploymentRecovery": "Earlier exact-source workflow 43698639458 passed 2/2 rollback/recovery tests.",
+    "productionReadiness": "HOLD — valid YouTube OAuth, complete remote history and production media/rights/review remain absent.",
+    "metaPageIdentity": "BLOCKED — configured Page is absent from authenticated /me/accounts managed-Page list."
   },
   "cloudflareStagingInfrastructure": {
     "observedAt": "2026-11-15",
     "worker": "sonicvhibez-durable-state-staging",
-    "workerDeployment": "deployed; D1 STATE_DB binding and R2 ARTIFACTS binding present",
-    "workerDeploymentId": "4f26b391-0009-4948-ad3e-c4081ed7a1d5",
+    "workerDeployment": "deployed; latest deployment active at 100% traffic; D1 STATE_DB and R2 ARTIFACTS bindings present",
+    "workerDeploymentId": "49a60647-7b13-42f3-a0b6-a4be892635dc",
     "workerSourceAnnotation": "0ecea4caa817364d2f38b31b15a0f0c8033f68ca",
     "recoveredSourceSnapshotCommit": "a93b649d4a5f8f4e516b93d1fd3192173eef8949",
     "d1ApplicationTables": 6,
     "state": {
-      "revision": 1,
+      "revision": 2,
       "updatedAt": "2026-11-08T00:00:00.000Z",
       "queueItems": 16,
       "jobs": 0,
@@ -1464,20 +1463,45 @@
       "campaigns": 2,
       "publishingEnabled": false
     },
-    "backups": 1,
+    "backups": 3,
     "backupIntegrity": "PASS — stored SHA-256 matches backup bytes and backup bytes match current state",
     "runnerStates": 0,
     "artifactRecords": 0,
     "accessApplication": "SonicVhibez Dashboard Staging",
     "accessPolicy": "email operator allow policy plus GitHub Actions staging service-token non_identity allow policy",
     "accessServiceTokens": 1,
-    "nodeRuntimeIntegration": "NOT_VERIFIED — a Cloudflare Access service token and matching Access policy now exist, and cloudflare-staging-auth-smoke.yml is configured to use GitHub Actions secrets DASHBOARD_OPERATOR_TOKEN, CLOUDFLARE_ACCESS_CLIENT_ID and CLOUDFLARE_ACCESS_CLIENT_SECRET. No current run of that authenticated smoke workflow is present in the latest Actions run inventory; authenticated Node-to-Worker state/backup/restore acceptance is therefore still blocked.",
-    "classification": "Cloudflare staging Worker/D1 provisioning and Access service-token/policy configuration are present. Authenticated Node-to-Worker runtime success and route-level durable read/write/backup/restore have not been demonstrated. Deployed Worker source is older than the current repository branch.",
+    "nodeRuntimeIntegration": "PARTIAL PASS — authenticated read-only Node dashboard integration succeeds for GET /api/state and GET /api/state/backups; remote state remains unchanged. POST backup and POST restore through Node remain untested.",
+    "classification": "Staging Worker, D1/R2 bindings, Access service token and read-only Node-to-Worker integration PASS. Backup/restore writes, Node restart durability after restore and full state acceptance remain NOT_TESTED.",
     "accessApplicationId": "3fe39768-37e9-4471-8eaf-a00d1c62d54a",
     "accessServiceTokenName": "SonicVhibez-GitHub-Staging",
     "accessServiceTokenEnabled": true,
     "accessServiceTokenExpiresAt": "2027-11-15T07:13:36Z",
-    "accessServiceTokenLastSeenAt": "2026-11-15T07:48:19Z"
+    "accessServiceTokenLastSeenAt": "2026-11-15T09:46:48Z",
+    "workerVersionId": "9a9bfd4c-208c-4dd8-93b0-5f84cdf3356c",
+    "workerDeploymentCreatedAt": "2026-11-14T19:06:42.659275Z",
+    "workerDeploymentAnnotation": "Deployed version 9a9bfd4c",
+    "compatibilityDate": "2026-11-07",
+    "usageModel": "standard",
+    "bindings": [
+      {
+        "name": "STATE_DB",
+        "type": "d1"
+      },
+      {
+        "name": "ARTIFACTS",
+        "type": "r2_bucket"
+      },
+      {
+        "name": "DASHBOARD_OPERATOR_ID",
+        "type": "secret_text"
+      },
+      {
+        "name": "DASHBOARD_OPERATOR_TOKEN",
+        "type": "secret_text"
+      }
+    ],
+    "sourceSnapshotComparison": "PASS — all eight deployed modules (worker.js and seven compatibility modules) are byte-identical to cloudflare/staging-snapshot/* at exact candidate dba1b095300ab05833b485aa607385f6231955e8.",
+    "rootWorkerDeploymentSafety": "Do not deploy the separate 12KB cloudflare/worker.js over this 108KB deployed main module; it is not a drop-in replacement and would remove runner/artifact routes. The deployed source snapshot is exact and preserved."
   },
   "historicalCounts": {
     "generatedAt": "2026-11-13T07:26:30.000Z",
@@ -1517,7 +1541,9 @@
     "note": "All 45 authentication-negative route checks pass on the exact current source/test SHA. The 37 previously passing route-level business acceptances are NOT_TESTED on this SHA because current positive, validation, persistence, audit, concurrency and restart evidence is not complete for every route; 8 routes remain BLOCKED."
   },
   "currentHeadEvidence": {
-    "exactSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
+    "exactSha": "dba1b095300ab05833b485aa607385f6231955e8",
+    "sourceTestSha": "cabd871847f14b6667adb43af1dbacaaa81f35b2",
+    "sourceDifferenceFromTestSha": "Only .github/workflows/validate-automation.yml concurrency/cancel-in-progress configuration; runtime source and tests are unchanged.",
     "authenticationNegative": {
       "pass": 45,
       "notTested": 0,
@@ -1525,10 +1551,11 @@
       "ciRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445"
     },
     "routeOverall": {
-      "pass": 37,
+      "pass": 38,
       "notTested": 0,
-      "blocked": 8
+      "blocked": 7
     },
-    "reason": "37 routes have current exact-candidate positive integration evidence across all applicable acceptance dimensions. Eight routes remain BLOCKED by external provider or infrastructure prerequisites; API-001 remains NOT_TESTED until those eight are fully accepted."
+    "cloudflareNodeReadOnlyIntegration": "PASS — workflow 43700604171; Node dashboard authenticated state and backup-list reads; remote state unchanged.",
+    "reason": "38 routes are accepted on exact-candidate evidence. Seven routes remain BLOCKED by live Meta owner/provider authorization, YouTube reconciliation, staging backup/restore write verification, or genuine production media."
   }
 }
