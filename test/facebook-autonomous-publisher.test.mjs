@@ -363,6 +363,49 @@ test("uncertain mutation is reconciled and a unique verified receipt is persiste
   } finally { f.cleanup(); }
 });
 
+test("normal verified publish path preserves a concurrent conflicting history receipt", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const now = Date.parse("2026-10-25T05:30:00.000Z");
+    const payload = {
+      slotId: "nature-frontiers-normal-success-history-race",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Approved educational wildlife caption.", links: [], media: [], claims: []
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    const concurrentReceipt = {
+      slotId: payload.slotId, destination: "nature_frontiers_facebook",
+      status: "SCHEDULED_VERIFIED", verifiedRemotely: true,
+      remotePostId: "123456789012345_concurrent"
+    };
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
+      verifyIdentity: async () => ({ verified: true }),
+      policyEvaluator: async () => ({ eligible: true, blockers: [], warnings: [], contentFingerprint: "c".repeat(64), policyRuleVersion: f.config.complianceRuleSet, mediaFingerprints: [], reason: "ELIGIBLE" }),
+      publish: async () => ({ remotePostId: "123456789012345_returned" }),
+      readRemote: async () => {
+        fs.writeFileSync(path.join(f.stateDir, "facebook-history.json"), JSON.stringify([concurrentReceipt]));
+        return {
+          status: "SCHEDULED_VERIFIED", remotePostId: "123456789012345_returned",
+          remoteMessage: payload.caption, scheduledPublishTime: Date.parse(payload.scheduledAt) / 1000
+        };
+      },
+      reconcileRemote: async () => ({ outcome: "UNRESOLVED", reason: "NO_MATCH_IS_NOT_PROOF_OF_NON_PUBLICATION", matches: [] })
+    }), /verified receipt for this slot|history conflicts/i);
+    const history = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-history.json"), "utf8"));
+    assert.deepEqual(history, [concurrentReceipt], "the concurrent verified receipt must remain unchanged");
+    const ledger = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), "utf8"));
+    assert.equal(ledger[0].status, "PUBLISHING", "the unresolved attempt must remain available for safe startup reconciliation");
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), [payload],
+      "the slot remains queued for manual reconciliation");
+  } finally { f.cleanup(); }
+});
+
 test("live uncertain reconciliation rechecks durable history and blocks a concurrent conflicting receipt", async () => {
   const f = setup();
   try {
