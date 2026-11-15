@@ -75,7 +75,7 @@ test("signer refuses to overwrite a candidate changed while the human review pro
     env: { FACEBOOK_APPROVAL_HMAC_SECRET: secret, FACEBOOK_APPROVER_ID: "owner-test-reviewer" },
     confirm: async () => {
       fs.writeFileSync(file, JSON.stringify([{ ...payload, caption: "Changed while reviewer was reading" }]));
-      return "APPROVE " + payload.slotId;
+      return "VERIFY CLAIM " + payload.slotId + " 1";
     },
     now: "2026-11-14T10:00:00.000Z"
   }), /changed during review/i);
