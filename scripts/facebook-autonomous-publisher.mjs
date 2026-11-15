@@ -183,7 +183,29 @@ export async function runAutonomousFacebookPublisher({
         historyRebuildReason: "VERIFIED_LEDGER_RECEIPT_RECOVERED_AFTER_HISTORY_WRITE_GAP" });
       historyRebuilt = true;
     }
-    if (historyRebuilt) atomicJson(historyPath, history);
+    if (historyRebuilt) {
+      // Re-read immediately before committing the rebuilt projection. A durable
+      // history receipt may have been added by an operator or recovery process
+      // after the initial snapshot was loaded.
+      const latestHistory = safeHistory(historyPath);
+      for (const attempt of ledger) {
+        if (!attempt || attempt.kind !== "FACEBOOK_PUBLISH_ATTEMPT" ||
+            attempt.destination !== "nature_frontiers_facebook" ||
+            !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(attempt.status) ||
+            attempt.verifiedRemotely !== true || typeof attempt.remotePostId !== "string" ||
+            !attempt.remotePostId.trim() || typeof attempt.slotId !== "string" || !attempt.slotId.trim()) continue;
+        const receipts = latestHistory.filter(item => item?.slotId === attempt.slotId &&
+          ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status));
+        if (receipts.some(item => item.remotePostId !== attempt.remotePostId)) {
+          throw new Error("Facebook history changed during ledger recovery; manual reconciliation required");
+        }
+        if (!receipts.length) latestHistory.push({ ...attempt, payload: undefined,
+          historyRebuiltAt: isoNow(Number(now)),
+          historyRebuildReason: "VERIFIED_LEDGER_RECEIPT_RECOVERED_AFTER_HISTORY_WRITE_GAP" });
+      }
+      history = latestHistory;
+      atomicJson(historyPath, history);
+    }
     const queue = readJson(queuePath);
     if (!Array.isArray(queue)) throw new Error("Autonomous Facebook queue must be a JSON array");
     const current = Number(now);
@@ -247,18 +269,22 @@ export async function runAutonomousFacebookPublisher({
           recoveryReason: "INTERRUPTED_ATTEMPT_RECONCILED_BEFORE_NEW_WORK"
         };
         ledger[index] = recovered;
-        const existingReceipts = history.filter(item => item?.slotId === recovered.slotId &&
+        // Re-read after the remote request, not from the startup snapshot: a
+        // concurrent verified receipt must never be overwritten by recovery.
+        const latestHistory = safeHistory(historyPath);
+        const existingReceipts = latestHistory.filter(item => item?.slotId === recovered.slotId &&
           ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status));
         if (existingReceipts.some(item => item.remotePostId !== recovered.remotePostId)) {
           throw new Error("Facebook history conflicts with a reconciled ledger receipt; publishing blocked for manual reconciliation");
         }
+        history = latestHistory;
         if (!existingReceipts.length) history.push({ ...recovered, payload: undefined });
+        atomicJson(historyPath, history);
       } else {
         ledger[index] = { ...attempt, status: "UNCERTAIN", reconciliation, retryAllowed: false,
           reason: reconciliation?.reason ?? "REMOTE_OUTCOME_UNRESOLVED_NO_RETRY" };
       }
       atomicJson(ledgerPath, ledger);
-      atomicJson(historyPath, history);
     }
 
     // Slot IDs are global idempotency keys, not date-scoped. Validate the
