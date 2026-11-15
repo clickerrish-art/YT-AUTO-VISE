@@ -5,9 +5,9 @@
 ## Exact source/test evidence
 
 - Tested source/test SHA: `7a23289f7a6cd9a34027b84691333da0b7051fc2`.
-- Branch head observed before this report refresh: `58d3c8dbbdc675899a8168adaf1e0904dc167657`. Five content/documentation-only commits follow the tested SHA; no application source or test files changed after it.
+- Branch head observed before this report refresh: `526cffa2b0b0df36ee36c1336da1ef9472f38faa`. Eleven content/documentation-only commits follow the tested SHA; no application source or test files changed after it.
 - `main`: `69fdf35c90f980c142be3aaffa863304bc7eaa25`, unchanged. PR #1 remains OPEN, DRAFT and UNMERGED.
-- Branch comparison: 3,853 commits ahead, 4 behind; branch inventory at tested SHA found 3,848 branch-only commits, 4 base-only commits, 0 patch-equivalent commits, 366 final-tree changed files, 0 deletions and a clean working tree. Integration decision remains `REQUIRES_REVIEW`; no merge, rebase, reset, force-push or destructive reconciliation was performed.
+- Branch comparison: 3,859 commits ahead, 4 behind; branch inventory at tested SHA found 3,848 branch-only commits, 4 base-only commits, 0 patch-equivalent commits, 366 final-tree changed files, 0 deletions and a clean working tree. Integration decision remains `REQUIRES_REVIEW`; no merge, rebase, reset, force-push or destructive reconciliation was performed.
 
 | Acceptance area | Exact result |
 |---|---|
