@@ -31,7 +31,7 @@ async function readJson(response, { mutation = false, remoteVideoId = null } = {
   catch { throw new MetaPageReelError("Meta returned an unreadable Reel response", { status: response.status, uncertain: mutation, remoteVideoId }); }
   if (!response.ok || data?.error) throw new MetaPageReelError(
     typeof data?.error?.message === "string" ? data.error.message.slice(0, 400) : "Meta Reel request failed",
-    { status: response.status, code: data?.error?.code ?? null, uncertain: mutation && (response.status >= 500 || response.status === 429), remoteVideoId }
+    { status: response.status, code: data?.error?.code ?? null, uncertain: mutation, remoteVideoId }
   );
   return data;
 }
@@ -93,7 +93,7 @@ export async function createMetaPageReel({
   const started = await readJson(start, { mutation:true });
   const videoId = typeof started.video_id === "string" ? started.video_id : "";
   if (!/^\d{5,30}$/.test(videoId)) throw new MetaPageReelError("Meta did not return a valid Reel video ID; reconcile the initialization before retry");
-  const uploadUrl = validateUploadUrl(started.upload_url);
+  let uploadUrl;\n  try { uploadUrl = validateUploadUrl(started.upload_url); }\n  catch (error) { throw new MetaPageReelError(error.message, { uncertain:true, remoteVideoId:videoId }); }
   let uploaded;
   try {
     uploaded = await fetchImpl(uploadUrl, {
