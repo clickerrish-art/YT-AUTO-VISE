@@ -91,7 +91,9 @@ export async function runAutonomousFacebookPublisher({
   verifyIdentity = verifyMetaPageIdentity,
   publish = publishMetaPagePost,
   readRemote = fetchMetaPagePost,
-  reconcileRemote = reconcileMetaPagePost
+  reconcileRemote = reconcileMetaPagePost,
+  publishReel = createMetaPageReel,
+  reconcileReel = reconcileMetaPageReel
 } = {}) {
   const activeRoot = path.resolve(rootDir);
   queuePath = String(env.FACEBOOK_AUTONOMOUS_QUEUE_PATH ?? "").trim() || queuePath || (path.isAbsolute(String(stateDir ?? "")) ? path.join(stateDir, "facebook-autonomous-queue.json") : path.join(activeRoot, "content/facebook-autonomous-queue.json"));
