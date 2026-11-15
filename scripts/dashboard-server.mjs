@@ -738,6 +738,57 @@ const server = http.createServer(async (req, res) => {
         publishingEnabled: false
       });
     }
+    if (req.method === "GET" && url.pathname === "/api/instagram/status") {
+      try {
+        const readArray = file => {
+          if (!fs.existsSync(file)) return [];
+          const value = JSON.parse(fs.readFileSync(file, "utf8"));
+          if (!Array.isArray(value)) throw new Error("Instagram operational register must be a JSON array: " + path.basename(file));
+          return value;
+        };
+        const config = JSON.parse(fs.readFileSync(path.join(root, "config/instagram-publishing.json"), "utf8"));
+        const candidates = readArray(path.join(root, "content/instagram-intake-candidates.json"));
+        const queue = readArray(path.join(root, "content/instagram-autonomous-queue.json"));
+        const ledger = readArray(path.join(stateDir, "instagram-attempt-ledger.json"));
+        const history = readArray(path.join(stateDir, "instagram-history.json"));
+        const attemptsByStatus = ledger.reduce((counts, item) => {
+          const status = typeof item?.status === "string" ? item.status : "MALFORMED";
+          counts[status] = (counts[status] ?? 0) + 1;
+          return counts;
+        }, {});
+        return json(res, 200, {
+          destination: "nature_frontiers_instagram",
+          timezone: config.timezone,
+          accountConfigured: /^\\d{5,30}$/.test(String(config.instagramBusinessAccountId ?? "")),
+          accountMatchesRuntime: Boolean(config.instagramBusinessAccountId) &&
+            process.env.NATURE_FRONTIERS_INSTAGRAM_ACCOUNT_ID === config.instagramBusinessAccountId,
+          linkedPageConfigured: /^\\d{5,30}$/.test(String(config.facebookPageId ?? "")),
+          linkedPageMatchesRuntime: Boolean(config.facebookPageId) &&
+            process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID === config.facebookPageId,
+          metaTokenConfigured: typeof process.env.META_USER_ACCESS_TOKEN === "string" && process.env.META_USER_ACCESS_TOKEN.length >= 20,
+          instagramApprovalSecretConfigured: typeof process.env.INSTAGRAM_APPROVAL_HMAC_SECRET === "string" &&
+            Buffer.byteLength(process.env.INSTAGRAM_APPROVAL_HMAC_SECRET, "utf8") >= 32,
+          facebookApprovalSecretConfigured: typeof process.env.FACEBOOK_APPROVAL_HMAC_SECRET === "string" &&
+            Buffer.byteLength(process.env.FACEBOOK_APPROVAL_HMAC_SECRET, "utf8") >= 32,
+          publishingSwitches: {
+            publishingEnabled: config.publishingEnabled === true,
+            dryRun: config.dryRun === true,
+            emergencyStop: config.emergencyStop === true
+          },
+          candidateCount: candidates.length,
+          queueCount: queue.length,
+          attemptsByStatus,
+          verifiedPublicationCount: history.filter(item => item?.status === "PUBLISHED_VERIFIED" && item?.verifiedRemotely === true).length,
+          lastVerifiedPublicationAt: history.filter(item => item?.status === "PUBLISHED_VERIFIED" && item?.verifiedRemotely === true)
+            .map(item => item.publishedAt ?? item.completedAt ?? null).filter(Boolean).sort().at(-1) ?? null,
+          readOnly: true,
+          providerMutationAttempted: false,
+          checkedAt: new Date().toISOString()
+        });
+      } catch (error) {
+        return json(res, 503, { error: "Instagram operational status is unavailable or malformed", detail: error.message, readOnly: true, providerMutationAttempted: false });
+      }
+    }
     if (req.method === "GET" && url.pathname === "/api/nature-frontiers/media-register") {
       try {
         const registerPath = path.join(root, "content/nature-frontiers-media-register.json");
