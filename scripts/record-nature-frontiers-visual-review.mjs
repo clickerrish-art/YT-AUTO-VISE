@@ -23,6 +23,7 @@ export function recordNatureFrontiersReview({ register, assetId, review, root = 
   const asset = register.assets.find(item => item.id === assetId);
   if (!asset) throw new Error("unknown asset ID: " + assetId);
   if (!asset.localFile?.path || !/^[a-f0-9]{64}$/.test(asset.localFile.sha256 ?? "")) throw new Error("asset must have a registered local file and SHA-256 before review");
+  if (asset.approval?.status !== "pending") throw new Error("visual review changes are blocked after an approval decision; use the formal revocation/re-review workflow");
   if (asset.usage?.scheduled || asset.usage?.published) throw new Error("cannot revise inspection after scheduling or publication; use a separate incident/revocation workflow");
   if (review.fileSha256 !== asset.localFile.sha256) throw new Error("review fileSha256 does not match the currently registered asset; review is stale");
   if (typeof review.reviewer !== "string" || !review.reviewer.trim()) throw new Error("reviewer is required");
