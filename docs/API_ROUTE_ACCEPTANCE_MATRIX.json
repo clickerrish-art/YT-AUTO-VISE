@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-15T09:44:45+02:00",
+  "generatedAt": "2026-11-16T18:00:00+02:00",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
+  "testedSourceTestSha": "34a153f6a3f12fdddabc0330c1814fcf9632d2b1",
   "liveMainSha": "69fdf35c90f980c142be3aaffa863304bc7eaa25",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
-    "totalHandlers": 50,
-    "protectedApiRoutes": 46,
+    "totalHandlers": 51,
+    "protectedApiRoutes": 47,
     "nonApiHandlers": [
       "GET /",
       "GET /healthz",
@@ -25,10 +25,10 @@
     "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387613"
   },
   "counts": {
-    "routes": 46,
+    "routes": 47,
     "authNegativePass": 46,
     "overallPass": 40,
-    "overallNotTested": 0,
+    "overallNotTested": 1,
     "overallBlocked": 6,
     "authNegativePassHistorical": 45,
     "authNegativePassCurrentHead": 46
@@ -1394,6 +1394,30 @@
       },
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS"
+    },
+    {
+      "method": "GET",
+      "path": "/api/nature-frontiers/media-register",
+      "classification": "Nature Frontiers provider-independent media register (read-only)",
+      "authRequired": "operator token",
+      "authenticationNegative": "NOT_TESTED — added to the source-derived route inventory; exact-head missing/invalid-credential execution is pending.",
+      "authorizedSuccess": "NOT_TESTED — authenticated integration coverage exists in test/nature-frontiers-media-register-api.test.mjs; exact-head CI result pending.",
+      "inputValidation": "PASS — register is parsed and validated with validateMediaRegister; malformed/unavailable register returns a safe server error.",
+      "durablePersistence": "NOT_APPLICABLE — read-only register is sourced from the checked-in provider-independent JSON register.",
+      "auditEvidence": "NOT_APPLICABLE — read-only GET does not mutate state or append an audit event.",
+      "concurrency": "NOT_APPLICABLE — read-only GET performs no state transition.",
+      "restartRecovery": "NOT_APPLICABLE — read-only GET has no state transition to recover.",
+      "externalOperation": "NOT_APPLICABLE — no provider API or external publishing call is used.",
+      "overallAcceptance": "NOT_TESTED",
+      "notes": "New authenticated, provider-independent, read-only register endpoint. It validates and sanitizes source, factual claims, local file/hash, licence and permission evidence, inspection, approval and usage receipts. Exact-head route and integration tests are pending.",
+      "testEvidence": {
+        "test": "test/nature-frontiers-media-register-api.test.mjs and test/dashboard-api-auth-matrix.test.mjs",
+        "exactTestedSha": null,
+        "ci": null,
+        "scenario": "Authenticated read-only register response and unauthenticated/invalid-credential rejection; pending exact-head CI."
+      },
+      "lastVerifiedOverallAcceptance": "NOT_TESTED",
+      "currentHeadStatus": "NOT_TESTED"
     }
   ],
   "liveEvidenceRefresh": {
