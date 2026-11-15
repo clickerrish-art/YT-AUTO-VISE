@@ -256,6 +256,12 @@ export async function evaluateFinalFacebookPayload(payload, {
 
   const media = Array.isArray(payload.media) ? payload.media : [];
   if (media.length === 0) add(blockers, "At least one final media asset with a rights record is required");
+  // The current Meta adapter creates one Page photo per post. Never approve a
+  // multi-asset or video payload that the publisher would silently truncate or reject.
+  if (media.length > 1) add(blockers, "This publisher supports exactly one image asset per post; multi-asset payloads require an explicit supported format");
+  if (media.length === 1 && ![".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tif", ".tiff"].includes(path.extname(String(media[0]?.path ?? "")).toLowerCase())) {
+    add(blockers, "The current Meta publisher supports image assets only; video and unsupported media formats remain blocked");
+  }
   for (let i = 0; i < media.length; i++) {
     const asset = media[i] ?? {};
     const record = asset.rightsRecord ?? {};
