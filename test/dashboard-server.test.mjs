@@ -156,6 +156,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(instagramStatus.publishingSwitches.dryRun, true);
   assert.equal(instagramStatus.publishingSwitches.emergencyStop, true);
   assert.equal(instagramStatus.accountConfigured, false, "the owner-unverified Instagram account ID must remain unset");
+  assert.equal(instagramStatus.linkedPageConfigured, true, "the configured Nature Frontiers Page ID must be recognized as numeric");
   assert.equal(instagramStatus.candidateCount, 0);
   assert.equal(instagramStatus.queueCount, 0);
   assert.equal(JSON.stringify(instagramStatus).includes(token), false, "status must never disclose operator credentials");
