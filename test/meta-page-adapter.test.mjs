@@ -257,6 +257,23 @@ test("no reconciliation match is unresolved, never proof that a publish is safe 
   assert.equal(result.reason, "NO_MATCH_IS_NOT_PROOF_OF_NON_PUBLICATION");
 });
 
+test("search reconciliation rejects even whitespace-different captions", async () => {
+  const result = await reconcileMetaPagePost({
+    pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
+    caption: "Exact scheduled caption", scheduledAt: "2026-10-25T06:00:00.000Z",
+    attemptStartedAt: "2026-10-24T10:00:00.000Z",
+    fetchImpl: async url => String(url).includes("/scheduled_posts")
+      ? response({ data: [{
+          id: PAGE_ID + "_whitespace", message: "Exact scheduled caption ",
+          created_time: "2026-10-24T10:01:00Z",
+          scheduled_publish_time: String(Date.parse("2026-10-25T06:00:00.000Z") / 1000)
+        }] })
+      : response({ data: [] })
+  });
+  assert.equal(result.outcome, "UNRESOLVED");
+  assert.equal(result.reason, "NO_MATCH_IS_NOT_PROOF_OF_NON_PUBLICATION");
+});
+
 test("multiple matching remote posts remain ambiguous and block retry", async () => {
   const item = id => ({
     id: PAGE_ID + "_" + id, message: "Exact scheduled caption",
