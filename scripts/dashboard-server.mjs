@@ -264,8 +264,7 @@ function appendFacebookRecoveryReceipt(record) {
     const noFollow = fs.constants.O_NOFOLLOW ?? 0;
     const fd = fs.openSync(ledger, fs.constants.O_WRONLY | fs.constants.O_APPEND | fs.constants.O_CREAT | noFollow, 0o600);
     try {
-      fs.writeSync(fd, JSON.stringify(safeRecord) + "
-", undefined, "utf8");
+      fs.writeSync(fd, JSON.stringify(safeRecord) + "\\n", undefined, "utf8");
       fs.fsyncSync(fd);
     } finally { fs.closeSync(fd); }
     try { fs.chmodSync(ledger, 0o600); } catch {}
