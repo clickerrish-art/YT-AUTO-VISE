@@ -1,0 +1,72 @@
+name: Validate Nature Frontiers Instagram publishing safety
+
+on:
+  push:
+    branches: [main, codex/marketing-machine-audit-fixes]
+    paths:
+      - "scripts/meta-instagram-reel-adapter.mjs"
+      - "scripts/instagram-autonomous-publisher.mjs"
+      - "config/instagram-publishing.json"
+      - "test/meta-instagram-reel-adapter.test.mjs"
+      - "test/instagram-autonomous-publisher.test.mjs"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/instagram-publisher-safety.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/meta-instagram-reel-adapter.mjs"
+      - "scripts/instagram-autonomous-publisher.mjs"
+      - "config/instagram-publishing.json"
+      - "test/meta-instagram-reel-adapter.test.mjs"
+      - "test/instagram-autonomous-publisher.test.mjs"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/instagram-publisher-safety.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-instagram:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Test Instagram adapter and autonomous dispatch recovery
+        run: node --test test/meta-instagram-reel-adapter.test.mjs test/instagram-autonomous-publisher.test.mjs
+      - name: Prove repository Instagram defaults are fail-closed
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const config = JSON.parse(fs.readFileSync('config/instagram-publishing.json', 'utf8'));
+          const checks = [
+            [config.destination === 'nature_frontiers_instagram', 'Instagram destination'],
+            [config.instagramBusinessAccountId === null, 'no guessed Instagram account ID'],
+            [config.publishingEnabled === false, 'publishing disabled'],
+            [config.dryRun === true, 'dry-run enabled'],
+            [config.emergencyStop === true, 'emergency stop active'],
+            [config.facebookLoginForBusinessEnabled === false, 'resumable upload capability unverified']
+          ];
+          for (const [ok, label] of checks) console.log((ok ? 'PASS ' : 'FAIL ') + label);
+          if (checks.some(([ok]) => !ok)) process.exit(1);
+          NODE
+      - name: Run the default Instagram worker and require a safe no-op
+        run: |
+          output="$(node scripts/instagram-autonomous-publisher.mjs)"
+          printf '%s\n' "$output"
+          node --input-type=module - "$output" <<'NODE'
+          const result = JSON.parse(process.argv[2]);
+          if (result.status !== 'SAFE_NOOP' || result.published !== 0) {
+            throw new Error('Instagram default worker did not remain a safe no-op');
+          }
+          console.log('PASS Instagram worker performs no provider action under repository defaults');
+          NODE
