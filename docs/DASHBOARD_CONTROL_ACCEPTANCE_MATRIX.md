@@ -1,18 +1,14 @@
-# Live evidence refresh — 15 November 2026
+# Latest exact-SHA evidence — 15 November 2026
 
-**Current code/test change:** `3e302319d35ca738df421148b357afc7038f8e93` (Cloudflare Access header hardening; focused local test 2/2 passed).  
-**Last full CI-tested source SHA:** `44a909db7c9ab60e9c62e7b92f3e028a88675619`. The current code/test SHA has no GitHub Actions run surfaced yet; do not transfer PASS labels to it.
+**Exact source/test SHA:** `12c28787923384d5ba767614c89c09b4b328cd9a`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25`. The later changes after this tested SHA are documentation refreshes only.
 
-- Dashboard Chromium E2E on the last full CI SHA: [run 43690430119](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430119), **29/29 passed**.
-- Content quality on that SHA: [run 43690430168](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430168), **784/784 passed, zero skipped**.
-- Automation/security on that SHA: [run 43690430117](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430117), **140/140 Node test files passed, 44 Python tests passed, zero skipped; npm audit 0 vulnerabilities**.
-- Dashboard source files were not changed by the subsequent Cloudflare smoke helper or promotional-plan evidence commits. The last recorded static inventory remains **118 controls, 17 forms, 49 route handlers and 45 protected API routes**; it is not a fresh inventory execution on the current code/test SHA.
-- Last evidenced form outcomes remain **11 PASS / 6 BLOCKED** on the prior tested source. For the current branch head, strict exact-SHA status is **0 PASS / 11 NOT_TESTED / 6 BLOCKED** until the full browser suite is rerun on that head.
-- **DASH-001 remains NOT_TESTED overall.** The 29 browser journeys and static inventory do not establish exhaustive per-control business success, validation, authorization, persistence, refresh, concurrency, restart and accessibility acceptance.
-
-The current exact-head full CI state is NOT_TESTED; no current-head dashboard PASS is claimed.
-
----
+- Dashboard Chromium E2E: [run 43692156787](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156787), **29/29 passed** on the exact SHA after retrying one transient `ECONNRESET` during the external TTS test.
+- Content quality: [run 43692156782](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156782), **786/786 passed, zero failures/skips**.
+- Automation/security: [run 43692156887](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156887), **141/141 Node test files passed; 44 Python tests passed; zero skips; npm audit 0 vulnerabilities**.
+- Metadata validation: [run 43692156795](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156795), **141/141 Node test files passed**.
+- The static inventory remains **118 controls, 17 forms, 49 route handlers and 45 protected API routes**; dashboard source files were unchanged in this implementation increment.
+- The 29 passing browser journeys are not exhaustive per-control acceptance. Current exact-SHA form outcomes remain **0 PASS / 11 NOT_TESTED / 6 BLOCKED**; the six owner-dependent production forms remain blocked. The previous 11 PASS / 6 BLOCKED summary is retained only as historical evidence.
+- **DASH-001 remains NOT_TESTED overall.** Every visible control still needs explicit success, validation, error, authorization, persistence, refresh/restart and accessibility evidence.
 
 # Latest exact-SHA evidence — 9 November 2026
 
