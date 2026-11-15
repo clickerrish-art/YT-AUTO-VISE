@@ -114,7 +114,7 @@ test("history reconciliation separates future scheduled videos from actual publi
     channelId,
     remoteVideos: [...remoteVideos, scheduledVideo],
     reconciliation: scheduledReconciliation,
-    now: new Date("2026-10-11T00:00:00.000Z")
+    now: new Date("2026-11-09T00:00:00.000Z")
   }), /past publishAt/);
 });
 
