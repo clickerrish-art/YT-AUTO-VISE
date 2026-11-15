@@ -40,11 +40,11 @@ function validInstagramFeedPermalink(value) {
   return url.protocol==="https:"&&
    (url.hostname==="www.instagram.com"||url.hostname==="instagram.com")&&
    !url.username&&!url.password&&!url.port&&!url.search&&!url.hash&&
-   /^\\/p\\/[A-Za-z0-9_-]+\\/?$/.test(url.pathname);
+   /^\/p\/[A-Za-z0-9_-]+\/?$/.test(url.pathname);
  } catch { return false; }
 }
 function validPublishedTimestamp(value) {
- return typeof value==="string"&&/(?:Z|[+-]\\d{2}:?\\d{2})$/.test(value)&&Number.isFinite(Date.parse(value));
+ return typeof value==="string"&&/(?:Z|[+-]\d{2}:?\d{2})$/.test(value)&&Number.isFinite(Date.parse(value));
 }
 function inspectJpeg(bytes) {
  const result=spawnSync("ffprobe",["-v","error","-select_streams","v:0","-show_entries","stream=codec_name,width,height","-of","json","-"],{input:bytes,encoding:"utf8",timeout:15000});
