@@ -303,12 +303,24 @@ export async function runAutonomousFacebookPublisher({
           remotePostId: remote.remotePostId, expectedPageId: config.destinationPageId,
           accessToken: pageAccessToken, apiVersion: config.apiVersion, fetchImpl
         });
-        const success = ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(verified.status);
+        const expectedScheduledSeconds = Math.floor(Date.parse(payload.scheduledAt) / 1000);
+        const observedScheduledSeconds = Number(verified.scheduledPublishTime);
+        const remoteContentMatches = typeof verified.remoteMessage === "string" && verified.remoteMessage === payload.caption;
+        const remoteScheduleMatches = Number.isFinite(observedScheduledSeconds) &&
+          Math.abs(observedScheduledSeconds - expectedScheduledSeconds) <= 120;
+        const statusVerified = ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(verified.status);
+        // A remote ID and a scheduled-status flag alone are not proof that Meta
+        // stored the exact approved caption and intended publication time.
+        const success = statusVerified && remoteContentMatches && remoteScheduleMatches;
+        const verificationReason = success ? "REMOTE_CONTENT_AND_SCHEDULE_MATCH_EXACT_APPROVED_PAYLOAD" :
+          !statusVerified ? "REMOTE_STATUS_NOT_CONFIRMED" :
+          !remoteContentMatches ? "REMOTE_CAPTION_MISSING_OR_MISMATCHED" :
+          "REMOTE_SCHEDULE_MISSING_OR_MISMATCHED";
         const receipt = {
           ...attempt, status: success ? verified.status : "UNCERTAIN", completedAt: new Date().toISOString(),
           remotePostId: remote.remotePostId, remoteUrl: verified.remoteUrl ?? null,
           remoteCreatedAt: verified.createdTime ?? null, scheduledPublishTime: verified.scheduledPublishTime ?? null,
-          verifiedRemotely: success, reconciliation: verified.status, retryAllowed: false
+          verifiedRemotely: success, verificationReason, reconciliation: verified.status, retryAllowed: false
         };
         ledger[ledger.length - 1] = receipt;
         history.push({ ...receipt, payload: undefined });
