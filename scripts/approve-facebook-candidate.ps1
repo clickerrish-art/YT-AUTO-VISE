@@ -48,7 +48,7 @@ function Set-CurrentUserOnlyAcl {
     Set-Acl -LiteralPath $Path -AclObject $acl
 }
 
-if (-not $IsWindows -and $PSVersionTable.PSVersion.Major -ge 6) {
+if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) {
     throw "This helper requires Windows DPAPI. Run it in Windows PowerShell 5.1 or PowerShell 7 on Windows."
 }
 if ($PSVersionTable.PSVersion.Major -lt 5) {
