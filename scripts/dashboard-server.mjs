@@ -749,8 +749,10 @@ const server = http.createServer(async (req, res) => {
         const config = JSON.parse(fs.readFileSync(path.join(root, "config/instagram-publishing.json"), "utf8"));
         const candidates = readArray(path.join(root, "content/instagram-intake-candidates.json"));
         const queue = readArray(path.join(root, "content/instagram-autonomous-queue.json"));
-        const ledger = readArray(path.join(stateDir, "instagram-attempt-ledger.json"));
-        const history = readArray(path.join(stateDir, "instagram-history.json"));
+        const instagramStateDir = process.env.FACEBOOK_STATE_DIR ?? stateDir;
+        if (!path.isAbsolute(instagramStateDir)) throw new Error("FACEBOOK_STATE_DIR must be absolute for Instagram durable-state inspection");
+        const ledger = readArray(path.join(instagramStateDir, "instagram-attempt-ledger.json"));
+        const history = readArray(path.join(instagramStateDir, "instagram-history.json"));
         const attemptsByStatus = ledger.reduce((counts, item) => {
           const status = typeof item?.status === "string" ? item.status : "MALFORMED";
           counts[status] = (counts[status] ?? 0) + 1;
