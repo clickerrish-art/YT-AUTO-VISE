@@ -549,3 +549,35 @@ test("startup rebuilds missing history from a verified ledger receipt before dra
     assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), []);
   } finally { f.cleanup(); }
 });
+
+
+test("startup does not promote an incomplete or unverified ledger row into remote history", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    const slotId = "nature-frontiers-2026-10-25-unverified-ledger-row";
+    fs.writeFileSync(f.queuePath, JSON.stringify([{
+      slotId, destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Do not publish from incomplete ledger evidence.", links: [], media: [], claims: []
+    }]));
+    fs.writeFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), JSON.stringify([{
+      slotId, destination: "nature_frontiers_facebook", status: "SCHEDULED_VERIFIED",
+      // Deliberately missing attempt kind, remotePostId and verifiedRemotely attestation.
+      retryAllowed: false
+    }]));
+    const result = await runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath,
+      stateDir: f.stateDir, now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      publish: async () => { throw new Error("ledger presence must continue to block duplicate processing"); }
+    });
+    const history = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-history.json"), "utf8"));
+    assert.equal(history.length, 0, "incomplete ledger data must not be represented as a verified remote receipt");
+    assert.equal(result.lastRemoteReceipt, null);
+    assert.equal(result.skipped, 1);
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), []);
+  } finally { f.cleanup(); }
+});
