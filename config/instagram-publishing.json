@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "destination": "nature_frontiers_instagram",
+  "facebookPageId": "1431329126735709",
+  "instagramBusinessAccountId": null,
+  "publishingEnabled": false,
+  "dryRun": true,
+  "emergencyStop": true,
+  "timezone": "Africa/Johannesburg",
+  "apiVersion": "v26.0",
+  "facebookLoginForBusinessEnabled": false,
+  "requireSignedHumanApproval": true,
+  "requireRemoteReadback": true,
+  "notes": [
+    "Instagram professional account ID is intentionally unset until the owner verifies the exact Nature Frontiers Business or Creator account.",
+    "The linked Instagram account must be read back from the configured Facebook Page; an unlinked or mismatched account blocks publication.",
+    "Resumable uploads require a verified Facebook Login for Business integration. Do not enable this flag from configuration alone.",
+    "Instagram Graph API publishing is immediate, not future-scheduled. Dispatch only inside an approved publication window.",
+    "Publishing is disabled, dry-run is enabled and the emergency stop is active. Do not change these defaults until credentials, account linkage, permissions, rights, exact media and human approval are verified.",
+    "An uncertain media_publish outcome must be reconciled by persisted container/media IDs. Never blindly repeat a publish mutation."
+  ]
+}

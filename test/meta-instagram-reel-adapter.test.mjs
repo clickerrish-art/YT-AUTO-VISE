@@ -13,7 +13,7 @@ const draft = { kind:"INSTAGRAM_REEL_DRAFT", caption:"Educational wildlife Reel.
 const media = { width:1080,height:1920,durationSeconds:55,frameRate:30 };
 const ok = (data,status=200) => ({ ok:status>=200&&status<300,status,json:async()=>data });
 const run = (fetchImpl, extra={}) => publishInstagramReel({ draft,instagramAccountId:account,expectedInstagramAccountId:account,accessToken:token,
-  accountVerified:true,approvalVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,rootDir:root,inspect:()=>media,fetchImpl,...extra });
+  accountVerified:true,approvalVerified:true,resumableUploadSupported:true,publishingEnabled:true,dryRun:false,emergencyStop:false,rootDir:root,inspect:()=>media,fetchImpl,...extra });
 
 test("Instagram Reel uses resumable container upload, bounded processing, publish and remote read-back",async()=>{
   const calls=[],persisted=[];
@@ -23,7 +23,7 @@ test("Instagram Reel uses resumable container upload, bounded processing, publis
     if(String(url).includes("rupload.facebook.com")) return ok({success:true});
     if(String(url).includes("status_code")) return ok({id:"123456789012346",status_code:"FINISHED"});
     if(String(url).endsWith("/media_publish")) return ok({id:"123456789012347"});
-    if(String(url).includes("fields=id,media_type,permalink,timestamp")) return ok({id:"123456789012347",media_type:"REELS",permalink:"https://www.instagram.com/reel/abc/",timestamp:"2026-11-15T10:00:00+0000"});
+    if(String(url).includes("fields=id,media_type,permalink,timestamp")) return ok({id:"123456789012347",media_type:"VIDEO",media_product_type:"REELS",permalink:"https://www.instagram.com/reel/abc/",timestamp:"2026-11-15T10:00:00+0000"});
     throw new Error("unexpected endpoint "+url);
   },{onContainerId:async x=>persisted.push(x.containerId),onMediaId:async x=>persisted.push(x.mediaId)});
   assert.equal(result.status,"PUBLISHED_VERIFIED");
@@ -89,7 +89,7 @@ test("account verification requires exact professional identity and publishing s
     ok({id:account,username:"naturefrontiers",account_type:"BUSINESS"})
   ];
   const result=await verifyInstagramBusinessAccount({instagramAccountId:account,expectedInstagramAccountId:account,accessToken:token,
-    fetchImpl:async()=>responses.shift()});
+    facebookPageId:"1431329126735709",expectedFacebookPageId:"1431329126735709",fetchImpl:async()=>responses.shift()});
   assert.equal(result.verified,true);
-  assert.equal(result.accountType,"BUSINESS");
+  assert.equal(result.accountType,"BUSINESS");\n  assert.equal(result.facebookPageId,"1431329126735709");
 });

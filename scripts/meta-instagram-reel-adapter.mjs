@@ -83,7 +83,7 @@ function validateDraft(draft) {
 
 /** Verify granted publishing scopes and the exact Instagram professional account identity. */
 export async function verifyInstagramBusinessAccount({
-  instagramAccountId, expectedInstagramAccountId, accessToken, apiVersion = "v26.0", fetchImpl = fetch, timeoutMs = 10000
+  instagramAccountId, expectedInstagramAccountId, facebookPageId, expectedFacebookPageId, accessToken, apiVersion = "v26.0", fetchImpl = fetch, timeoutMs = 10000
 }) {
   validate({ instagramAccountId, expectedInstagramAccountId, accessToken, apiVersion });
   let response;
@@ -101,7 +101,7 @@ export async function verifyInstagramBusinessAccount({
   } catch { throw new InstagramReelError("Meta permission check failed before a response; Instagram publishing remains blocked"); }
   const permissions = await responseJson(response, { token:accessToken });
   const granted = new Set((permissions.data ?? []).filter(x => x?.status === "granted").map(x => x.permission));
-  const required = ["instagram_basic", "instagram_content_publish"];
+  const required = ["instagram_basic", "instagram_content_publish", "pages_show_list", "pages_read_engagement"];
   const missing = required.filter(x => !granted.has(x));
   if (missing.length) throw new InstagramReelError("Required Instagram permissions are missing or not granted: " + missing.join(", "));
   try {
@@ -131,7 +131,7 @@ export async function publishInstagramReel({
   validate({ instagramAccountId, expectedInstagramAccountId, accessToken, apiVersion });
   validateDraft(draft);
   if (accountVerified !== true) throw new InstagramReelError("Exact Instagram professional account and permissions were not verified");
-  if (approvalVerified !== true) throw new InstagramReelError("Instagram Reel publication requires verified editorial approval");
+  if (approvalVerified !== true) throw new InstagramReelError("Instagram Reel publication requires verified editorial approval");\n  if (resumableUploadSupported !== true) throw new InstagramReelError("Resumable upload requires a verified Facebook Login for Business integration");
   if (publishingEnabled !== true || dryRun !== false || emergencyStop !== false) {
     throw new InstagramReelError("Instagram publication requires live publishing enabled, dry-run disabled and emergency stop cleared");
   }
@@ -220,12 +220,12 @@ export async function publishInstagramReel({
   }
   let verified;
   try {
-    const response = await fetchImpl(graph(apiVersion, encodeURIComponent(mediaId) + "?fields=id,media_type,permalink,timestamp"), {
+    const response = await fetchImpl(graph(apiVersion, encodeURIComponent(mediaId) + "?fields=id,media_type,media_product_type,permalink,timestamp"), {
       method:"GET", headers:headers(accessToken), redirect:"error", signal:AbortSignal.timeout(timeoutMs)
     });
     verified = await responseJson(response, { token:accessToken, containerId, mediaId });
   } catch { throw new InstagramReelError("Instagram publication read-back failed; outcome remains unresolved", { uncertain:true, containerId, mediaId }); }
-  if (verified.id !== mediaId || verified.media_type !== "REELS" || typeof verified.permalink !== "string" || !verified.permalink.startsWith("https://")) {
+  if (verified.id !== mediaId || verified.media_type !== "VIDEO" || verified.media_product_type !== "REELS" || typeof verified.permalink !== "string" || !verified.permalink.startsWith("https://")) {
     throw new InstagramReelError("Instagram published media read-back did not confirm the expected Reel identity and permalink", { uncertain:true, containerId, mediaId });
   }
   return { status:"PUBLISHED_VERIFIED", instagramAccountId, containerId, mediaId, permalink:verified.permalink,
@@ -241,7 +241,7 @@ export async function reconcileInstagramReel({ mediaId, containerId = null, inst
       method:"GET", headers:headers(accessToken), redirect:"error", signal:AbortSignal.timeout(timeoutMs)
     });
     const data = await responseJson(response, { token:accessToken, containerId, mediaId });
-    if (data.id !== mediaId || data.media_type !== "REELS" || typeof data.permalink !== "string" || !data.permalink.startsWith("https://")) {
+    if (data.id !== mediaId || data.media_type !== "VIDEO" || data.media_product_type !== "REELS" || typeof data.permalink !== "string" || !data.permalink.startsWith("https://")) {
       return { outcome:"UNRESOLVED", reason:"INSTAGRAM_MEDIA_READBACK_MISMATCH", mediaId, containerId };
     }
     return { outcome:"CONFIRMED", receipt:{ status:"PUBLISHED_VERIFIED", mediaId, containerId, permalink:data.permalink, publishedAt:data.timestamp ?? null } };
