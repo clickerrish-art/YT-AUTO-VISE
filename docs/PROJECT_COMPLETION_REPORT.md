@@ -1,3 +1,64 @@
+# Current completion checkpoint — 16 November 2026
+
+**Project state: engineering checks green; production operation still blocked by external prerequisites. Do not declare production-ready or enable publishing.**
+
+## Exact source/test evidence
+
+- Tested source/test SHA: `7a23289f7a6cd9a34027b84691333da0b7051fc2`.
+- Branch head observed before this report refresh: `58d3c8dbbdc675899a8168adaf1e0904dc167657`. Five content/documentation-only commits follow the tested SHA; no application source or test files changed after it.
+- `main`: `69fdf35c90f980c142be3aaffa863304bc7eaa25`, unchanged. PR #1 remains OPEN, DRAFT and UNMERGED.
+- Branch comparison: 3,853 commits ahead, 4 behind; branch inventory at tested SHA found 3,848 branch-only commits, 4 base-only commits, 0 patch-equivalent commits, 366 final-tree changed files, 0 deletions and a clean working tree. Integration decision remains `REQUIRES_REVIEW`; no merge, rebase, reset, force-push or destructive reconciliation was performed.
+
+| Acceptance area | Exact result |
+|---|---|
+| Full Node regression | 894/894 passed, zero failures, zero skips — [Queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231714) |
+| Automation/security | 155 Node test files and 45 Python tests passed; zero skips; npm audit 0 vulnerabilities — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775226743) |
+| Dashboard browser E2E | 29/29 Chromium journeys passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231777) |
+| Instagram safety | 62/62 passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231716) |
+| Metadata and content quality | Passed — [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231904), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231746) |
+| Cloudflare durable-state unit tests | 9/9 passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231719) |
+| Deployment recovery smoke | 2/2 passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231875) |
+| Isolated baseline and branch inventory | Passed — [baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231713), [inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231721) |
+| Nature Frontiers daily draft package | Local validation passed only; this is not provider publication — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231820) |
+
+## Current acceptance position
+
+- Dashboard inventory: 119 controls, 17 forms, 52 route handlers and 48 protected API routes.
+- Dashboard form outcomes: 11 PASS, 6 BLOCKED.
+- Dashboard browser journeys: 29/29 pass. **DASH-001 remains NOT_TESTED overall** because these journeys do not yet provide exhaustive success, validation, error, authorization, persistence, refresh/restart and accessibility evidence for every visible control.
+- API route matrix: 42 PASS, 0 NOT_TESTED, 6 BLOCKED. Missing/invalid operator credentials are rejected on 48/48 protected routes. **API-001 remains NOT_TESTED overall** because six provider/production routes remain blocked.
+- Current exact-head requirement snapshot: 6 PASS, 67 NOT_TESTED, 9 BLOCKED. SCHED-003 is now PASS: the owner-approved rolling cycle without a weekly target is recorded in `config/weekly-content-plan.json` (2026-11-07) and passes the current schedule validation.
+- **SCHED-001 remains NOT_TESTED:** complete live SonicVhibez public/private/unlisted history and actual remote publication timestamps cannot be verified while YouTube OAuth returns `invalid_grant`.
+- **STATE-001 is NOT_TESTED on the current candidate:** Cloudflare durable-state unit tests and deployment recovery smoke pass, but the live Node-to-Worker staging backup/restore smoke was not rerun on this exact candidate. The last live staging PASS is historical at SHA `41bd4de95d876c9778a4993a0e67ac207d1379ff`.
+- **DEPLOY-001 remains NOT_TESTED:** recovery smoke passing is not proof of a complete production deployment.
+- **GIT-002 remains NOT_TESTED:** 3,848 branch-only commits still require human semantic integration review. Preserve divergence and PR #1 draft status.
+
+## External production blockers
+
+### Nature Frontiers — Meta / Instagram
+
+- Meta Page verification fails with HTTP 401, OAuth error 190, subcode 463 (expired access-token session): [exact verification run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231860).
+- The current Metricool brand metadata reports Page ID `1431329126735709`, which matches repository configuration, but that does not replace Meta Graph identity and permission verification.
+- The numeric Instagram Business Account ID remains unset. The Metricool username is not a substitute.
+- The current Metricool brand `8094526` returned no scheduled posts for 2026-11-16 through 2026-12-16. The previous brand `7545638` returns HTTP 403 (access denied). Therefore the eight historical `draft:false`, `autoPublish:true` records from the 2026-10-28 snapshot remain **UNKNOWN**; an empty schedule on the new brand does not prove they were canceled or resolved.
+- Keep publishing disabled, dry-run enabled and emergency stop active. No Metricool or Meta record was modified.
+
+### SonicVhibez — YouTube
+
+The exact production-readiness run remains HOLD with eight blockers: complete remote upload/history reconciliation; `content/render-manifest.json`; `content/long-form-render-manifest.json`; human-reviewed metadata; verified rights; completed compliance review; genuine `media/next-short.mp4`; and valid YouTube OAuth (currently `invalid_grant`). The readiness workflow never uploads, schedules or publishes: [diagnostic run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231751).
+
+### Media and rights
+
+- The NOAA spiny-lobster source artifact was reacquired and its SHA-256 verified. A silent 55-second 9:16 visual-review cut was generated with the persistent warning **REVIEW ONLY — NOT APPROVED FOR PUBLICATION** and exact credit **“Footage courtesy of NOAA’s Office of National Marine Sanctuaries”**. It has no audio stream and decodes fully. Its SHA-256 is `4fc0b7f4a3f5d79ecf8d6a2bb148f06ba01f56c1c8d3b4db846d614f65f07261`. This is a review attachment, not a production master; full continuous human playback, final narration/caption review, rights and compliance approval remain open. It must not be substituted for `media/next-short.mp4`.
+- Two Pexels listing pages and their license references were inspected as conditional candidates. The full-resolution files could not be downloaded in this environment, so neither clip has been visually reviewed or cleared. Both remain HOLD; the slow-worm page description identifies *Anguis fragilis*, a legless lizard, not a snake.
+- No synthetic or unverified asset is being represented as production evidence.
+
+## No-publication safety state
+
+No provider mutation, upload, schedule, approval or publication was performed in this work. Existing fail-closed defaults remain in place. The project is not complete until the external identity, genuine media, rights, human-review, remote-history and deployment gates are actually satisfied.
+
+---
+
 ## Current verified position — 30 October 2026
 
 The live PR #1 HEAD is `a1152a2ce936af2e4dd4ccb88cc63d7bafb483cb` (documentation-only evidence/register updates). The exact tested source/test candidate is `115fe82252b4fa1ef1eb2f9587bf0653356a6dc9`: 426 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities; FFmpeg/ffprobe, JavaScript syntax and Python compilation passed. Content quality, metadata, 15 Chromium browser journeys, isolated baseline and non-destructive branch inventory passed. Production readiness remains fail-closed. Acceptance register: 53 PASS / 8 NOT_TESTED / 8 BLOCKED_EXTERNAL. **The application is incomplete and not production-ready.** Current evidence: `docs/CURRENT_RELEASE_EVIDENCE_2026-10-30.md`.
