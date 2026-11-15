@@ -1,3 +1,55 @@
+# 15 November 2026 — live build and release checkpoint
+
+**Code/test change:** `3e302319d35ca738df421148b357afc7038f8e93`.  
+**Observed branch head before this documentation refresh:** `e4d46dcfe1141019f868259caeb2758ef784a525`.  
+**main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627` · branch divergence at the observed checkpoint: **3,566 ahead / 4 behind** · PR #1 changed-file inventory: **328 files**. PR #1 is OPEN and its title identifies it as a Draft; it remains unmerged. PR #7 is OPEN with 13 changed files; its draft flag is not exposed by the current read-only issue endpoint. No main edit, merge, reset, rebase, force-push or history rewrite was performed. Branch-protection status remains unknown because the permission endpoint returns 403.
+
+## Owner-independent implementation completed in this run
+
+- Added `scripts/cloudflare-access-headers.mjs` to build normalized Cloudflare Access headers.
+- Updated `scripts/cloudflare-staging-auth-smoke.mjs` so caller-supplied headers cannot override the Access client ID or secret.
+- Added `test/cloudflare-access-headers.test.mjs` covering case-insensitive override attempts, preservation of the operator token, and fail-closed handling of missing credentials.
+- Exact commits: [`eff70ce`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/eff70cecc5fa754d796df86eac6461f0895f2c7b), [`c865e47`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c865e471ff7a21a419a32d9ac48a80f999eb0b2a), [`3e30231`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3e302319d35ca738df421148b357afc7038f8e93).
+- Focused local test on Node v22.16.0: **2/2 passed, 0 failed, 0 skipped**.
+- No GitHub Actions run or combined-status check was returned for code/test SHA `3e302319d35ca738df421148b357afc7038f8e93`; full exact-head CI is **NOT_TESTED**. Do not transfer the preceding CI PASS results to this newer SHA.
+
+## Last full CI checkpoint — exact SHA `44a909db7c9ab60e9c62e7b92f3e028a88675619`
+
+- [Automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430117): **140/140 Node test files passed; 44 Python tests passed; zero skipped; npm audit 0 vulnerabilities**.
+- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430168): **784/784 passed; zero skipped**.
+- [Dashboard Chromium E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430119): **29/29 passed**.
+- [Queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430134): 16 queue items; approved destination policy; publishing disabled.
+- [Cloudflare durable-state unit checks](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430188): **9/9 passed**.
+- [Deployment recovery](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430097): **2 recovery tests passed**.
+- Metadata validation, isolated main/candidate baseline, non-destructive branch inventory and local Nature Frontiers draft-package validation passed.
+- [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430158): expected **HOLD — 7 blockers**. The workflow failed closed after reporting the blockers; this is not a production pass.
+- [Nature Frontiers Meta Page identity](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430169): failed read-only verification with HTTP 401, Meta error 190/subcode 463 because the configured session token expired. No token value was exposed.
+
+## Current release blockers — do not bypass
+
+1. Independently reconcile the complete current SonicVhibez public/private/unlisted/scheduled YouTube history and every pending or uncertain upload attempt immediately before any upload.
+2. Create `content/render-manifest.json` only after genuine final media rights are verified.
+3. Create `content/long-form-render-manifest.json` only after genuine long-form assets and rights are verified.
+4. Human-review the exact metadata and mark it `READY_FOR_PRIVATE_UPLOAD` only after review.
+5. Set `rightsConfirmed=true` only after footage, narration, music and sound rights are genuinely evidenced.
+6. Set `complianceReviewed=true` only after actual content and compliance review.
+7. Produce the genuine final `media/next-short.mp4`; it is absent at the observed branch head. The matching final thumbnail is also absent.
+
+The queue contains 16 held or review-pending items and no publication timestamps. The promotional plan contains 10 private `DRAFT_ONLY` creator-education Shorts across five weeks, exactly two per week, with no publication/scheduling dates. No production MP4, render manifest, long-form manifest or final thumbnail was found at the observed branch head.
+
+## Destination, history and disclosure checks
+
+- Metricool currently returns one brand: **Nature Frontiers SA**, brand ID `8094526`, timezone `Africa/Johannesburg`. Its returned YouTube network ID is `UCSlkuPfHH78oGC1o418HV4w`, which the read-only vidIQ account list identifies as SonicVibes `@sonicvhibez`; however, the YouTube identity is attached to a brand labelled Nature Frontiers and no distinct SonicVhibez/Sonic Fire Metricool brand is exposed. Do not use this mixed-brand association as a safe promotional destination.
+- The current Metricool scheduled-post query for 15 November 2026–15 May 2027 returned **zero records**. This does not expose published history or prove the status of older/past posts. No Metricool record was changed.
+- Read-only vidIQ account inventory shows SonicVibes `@sonicvhibez` and Nature Frontiers as separate active YouTube accounts. This verifies the channel identity in vidIQ, not a separate Metricool brand.
+- The latest repository YouTube inventory remains dated 10 November 2026: one owner-confirmed public Short, last published **22 October 2026 at 17:05:56 SAST**. The known elapsed interval to 15 November 2026 at 09:44:45 SAST is **23 days, 16 hours, 38 minutes, 49 seconds**. This is not a spacing clearance: the history and upload-attempt ledger have not been refreshed for this run, and the destination schedule is not verifiable.
+- Selar seller evidence for all three supplied links last identified seller **Click 47** on 9 November 2026. The Vault's direct-sales relationship and exact disclosure are owner-approved. The Prompt Pack and 90-Day Blueprint are owner-confirmed direct-sales products, but their viewer-facing disclosure wording remains unapproved. Direct Selar pages could not be freshly opened in this run; do not claim a new seller-page check.
+- Safari affiliate remains INACTIVE. Public and unattended publishing remain disabled. No upload, publication, scheduling, Metricool mutation, Meta publication, paid service, GPU or trial was used.
+
+**Release decision: HOLD.** Keep PR #1 draft/unmerged and keep all publishing controls disabled. The passing tests on SHA `44a909` and the focused local test on `3e30231` do not satisfy current-head full CI, media, rights, human review, upload-history or destination gates.
+
+---
+
 # 14 November 2026 — Short 012 prepared; exact-SHA validation refreshed
 
 **Current implementation/test SHA:** `806b784d36e084f2621f586b52cae4939aea56e3`. **PR #1:** OPEN · DRAFT · UNMERGED. **main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged. **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`. **Branch comparison:** 3,549 ahead / 2 behind · 324 PR files. Branch-protection API inspection still returns 403; do not infer protection status.
