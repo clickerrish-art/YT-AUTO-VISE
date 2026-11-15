@@ -504,3 +504,48 @@ test("failed atomic state write removes its unique temporary file and a later ru
     assert.equal(history[0].status, "SKIPPED_BLOCKED");
   } finally { f.cleanup(); }
 });
+
+
+test("startup rebuilds missing history from a verified ledger receipt before draining duplicate queue work", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    const now = Date.parse("2026-10-25T05:30:00.000Z");
+    const payload = {
+      slotId: "nature-frontiers-2026-10-25-0800-history-gap",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Previously verified educational wildlife caption.",
+      links: [], media: [], claims: [], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    fs.writeFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), JSON.stringify([{
+      kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId: payload.slotId,
+      destination: "nature_frontiers_facebook", status: "SCHEDULED_VERIFIED",
+      startedAt: "2026-10-25T05:30:00.000Z", completedAt: "2026-10-25T05:31:00.000Z",
+      scheduledAt: payload.scheduledAt, remotePostId: "123456789012345_777",
+      remoteUrl: "https://www.facebook.com/123456789012345_777",
+      verifiedRemotely: true, retryAllowed: false,
+      payload: { caption: payload.caption, scheduledAt: payload.scheduledAt }
+    }]));
+    let mutationCalls = 0, permissionCalls = 0;
+    const result = await runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath,
+      stateDir: f.stateDir, now,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      verifyPermissions: async () => { permissionCalls++; throw new Error("duplicate slot must not reach Meta"); },
+      publish: async () => { mutationCalls++; throw new Error("duplicate slot must never be republished"); }
+    });
+    assert.equal(result.status, "COMPLETED");
+    assert.equal(mutationCalls, 0);
+    assert.equal(permissionCalls, 0);
+    const history = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-history.json"), "utf8"));
+    assert.equal(history.length, 1);
+    assert.equal(history[0].slotId, payload.slotId);
+    assert.equal(history[0].status, "SCHEDULED_VERIFIED");
+    assert.equal(history[0].historyRebuildReason, "VERIFIED_LEDGER_RECEIPT_RECOVERED_AFTER_HISTORY_WRITE_GAP");
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), []);
+  } finally { f.cleanup(); }
+});
