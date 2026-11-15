@@ -391,6 +391,611 @@
         "published": false,
         "platformPostIds": []
       }
+    },
+    {
+      "id": "nf-pex-braunbar-15387783",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "15387783",
+        "url": "https://www.pexels.com/video/braunbar-15387783/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-asian-nature-18368171",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "18368171",
+        "url": "https://www.pexels.com/video/asian-nature-10-19-18368171/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-buffalo-herd-34650034",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "34650034",
+        "url": "https://www.pexels.com/video/aerial-view-of-buffalo-herd-grazing-in-open-field-34650034/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-giraffes-zoo-35750705",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "35750705",
+        "url": "https://www.pexels.com/video/giraffes-in-natural-habitat-at-a-zoo-35750705/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-giraffe-grassland-37711934",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37711934",
+        "url": "https://www.pexels.com/video/giraffe-strolling-in-scenic-open-grassland-37711934/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-giraffe-wild-5220276",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "5220276",
+        "url": "https://www.pexels.com/video/giraffe-walking-on-the-wild-5220276/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-giraffe-standing-5220275",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "5220275",
+        "url": "https://www.pexels.com/video/giraffe-standing-on-the-grass-field-5220275/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-giraffe-eating-5220297",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "5220297",
+        "url": "https://www.pexels.com/video/a-giraffe-eating-5220297/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-giraffes-savannah-37175433",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37175433",
+        "url": "https://www.pexels.com/video/giraffes-grazing-on-a-sunny-savannah-37175433/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-giraffes-tree-14908997",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "14908997",
+        "url": "https://www.pexels.com/video/a-group-of-giraffes-eating-leaves-from-the-trees-14908997/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-giraffe-savannah-39746519",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "39746519",
+        "url": "https://www.pexels.com/video/giraffe-strolling-in-african-savannah-landscape-39746519/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
     }
   ]
 }
