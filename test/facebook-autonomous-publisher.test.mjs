@@ -1343,6 +1343,7 @@ test("ledger history rebuild preserves a concurrent non-verified slot outcome", 
     const ledgerPath = path.join(f.stateDir, "facebook-attempt-ledger.json");
     const historyPath = path.join(f.stateDir, "facebook-history.json");
     fs.writeFileSync(ledgerPath, JSON.stringify(ledger));
+    fs.writeFileSync(historyPath, "[]");
     const concurrentOutcome = {
       slotId, destination: "nature_frontiers_facebook",
       status: "SKIPPED_BLOCKED", reason: "operator terminal outcome"
