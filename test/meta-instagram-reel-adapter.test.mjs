@@ -91,5 +91,6 @@ test("account verification requires exact professional identity and publishing s
   const result=await verifyInstagramBusinessAccount({instagramAccountId:account,expectedInstagramAccountId:account,accessToken:token,
     facebookPageId:"1431329126735709",expectedFacebookPageId:"1431329126735709",fetchImpl:async()=>responses.shift()});
   assert.equal(result.verified,true);
-  assert.equal(result.accountType,"BUSINESS");\n  assert.equal(result.facebookPageId,"1431329126735709");
+  assert.equal(result.accountType,"BUSINESS");
+  assert.equal(result.facebookPageId,"1431329126735709");\n  assert.equal(result.facebookPageId,"1431329126735709");
 });

@@ -110,10 +110,22 @@ export async function verifyInstagramBusinessAccount({
     });
   } catch { throw new InstagramReelError("Instagram professional account identity could not be verified"); }
   const account = await responseJson(response, { token:accessToken });
-  if (account.id !== expectedInstagramAccountId || !["BUSINESS","CREATOR"].includes(String(account.account_type ?? "").toUpperCase())) {
+  if (account.id !== expectedInstagramAccountId || !["BUSINESS","CREATOR","MEDIA_CREATOR"].includes(String(account.account_type ?? "").toUpperCase())) {
     throw new InstagramReelError("The configured Instagram account is not the exact verified professional account");
   }
-  return { verified:true, instagramAccountId:account.id, username:account.username ?? null, accountType:account.account_type, grantedPermissions:required, verifiedAt:new Date().toISOString(), apiVersion };
+  if (!ID.test(String(facebookPageId ?? "")) || facebookPageId !== expectedFacebookPageId) {
+    throw new InstagramReelError("The linked Facebook Page ID does not match the owner-verified Nature Frontiers Page");
+  }
+  try {
+    response = await fetchImpl(graph(apiVersion, encodeURIComponent(facebookPageId) + "?fields=id,instagram_business_account{id,username}"), {
+      method:"GET", headers:headers(accessToken), redirect:"error", signal:AbortSignal.timeout(timeoutMs)
+    });
+  } catch { throw new InstagramReelError("The Nature Frontiers Page-to-Instagram account link could not be verified"); }
+  const page = await responseJson(response, { token:accessToken });
+  if (page.id !== expectedFacebookPageId || page.instagram_business_account?.id !== expectedInstagramAccountId) {
+    throw new InstagramReelError("The configured Instagram professional account is not linked to the exact Nature Frontiers Facebook Page");
+  }
+  return { verified:true, instagramAccountId:account.id, facebookPageId:page.id, username:account.username ?? null, accountType:account.account_type, grantedPermissions:required, verifiedAt:new Date().toISOString(), apiVersion };
 }
 
 /**
@@ -125,13 +137,14 @@ export async function verifyInstagramBusinessAccount({
 export async function publishInstagramReel({
   draft, instagramAccountId, expectedInstagramAccountId, accessToken, apiVersion = "v26.0",
   accountVerified = false, approvalVerified = false, publishingEnabled = false, dryRun = true, emergencyStop = true,
-  shareToFeed = true, onContainerId = null, onMediaId = null, fetchImpl = fetch,
-  rootDir = process.cwd(), inspect = inspectVideo, timeoutMs = 60000
+  shareToFeed = true, resumableUploadSupported = false, onContainerId = null, onMediaId = null, fetchImpl = fetch,
+  rootDir = process.cwd(), inspect = inspectVideo, wait = ms => new Promise(resolve => setTimeout(resolve, ms)), timeoutMs = 60000
 }) {
   validate({ instagramAccountId, expectedInstagramAccountId, accessToken, apiVersion });
   validateDraft(draft);
   if (accountVerified !== true) throw new InstagramReelError("Exact Instagram professional account and permissions were not verified");
-  if (approvalVerified !== true) throw new InstagramReelError("Instagram Reel publication requires verified editorial approval");\n  if (resumableUploadSupported !== true) throw new InstagramReelError("Resumable upload requires a verified Facebook Login for Business integration");
+  if (approvalVerified !== true) throw new InstagramReelError("Instagram Reel publication requires verified editorial approval");
+  if (resumableUploadSupported !== true) throw new InstagramReelError("Resumable upload requires a verified Facebook Login for Business integration");
   if (publishingEnabled !== true || dryRun !== false || emergencyStop !== false) {
     throw new InstagramReelError("Instagram publication requires live publishing enabled, dry-run disabled and emergency stop cleared");
   }
@@ -185,6 +198,7 @@ export async function publishInstagramReel({
 
   let statusCode = "";
   for (let attempt = 0; attempt < 5; attempt++) {
+    if (attempt > 0) await wait(60_000);
     let response;
     try {
       response = await fetchImpl(graph(apiVersion, encodeURIComponent(containerId) + "?fields=id,status_code"), {
@@ -237,7 +251,7 @@ export async function reconcileInstagramReel({ mediaId, containerId = null, inst
   validate({ instagramAccountId, expectedInstagramAccountId, accessToken, apiVersion });
   if (!ID.test(String(mediaId ?? ""))) return { outcome:"UNRESOLVED", reason:"INSTAGRAM_MEDIA_ID_MISSING_NO_RETRY", containerId };
   try {
-    const response = await fetchImpl(graph(apiVersion, encodeURIComponent(mediaId) + "?fields=id,media_type,permalink,timestamp"), {
+    const response = await fetchImpl(graph(apiVersion, encodeURIComponent(mediaId) + "?fields=id,media_type,media_product_type,permalink,timestamp"), {
       method:"GET", headers:headers(accessToken), redirect:"error", signal:AbortSignal.timeout(timeoutMs)
     });
     const data = await responseJson(response, { token:accessToken, containerId, mediaId });
