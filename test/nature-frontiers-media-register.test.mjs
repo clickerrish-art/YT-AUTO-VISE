@@ -94,6 +94,7 @@ test("requires a matching file hash, reviewer, evidence and usage scope for appr
     status: "complete",
     inspectedBy: "editor",
     inspectedAt: "2026-11-15T10:05:00+02:00",
+    inspectedFileSha256: hash,
     visualNotes: "Full clip inspected; species and visible behaviour documented."
   };
   value.assets[0].approval = {
