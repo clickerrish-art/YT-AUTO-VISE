@@ -213,6 +213,47 @@ test("remote post with mismatched scheduled time is never recorded as verified",
   } finally { f.cleanup(); }
 });
 
+test("publish response without remote ID triggers reconciliation instead of direct verification", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const now = Date.parse("2026-10-25T05:30:00.000Z");
+    const payload = {
+      slotId: "nature-frontiers-2026-10-25-missing-publish-id",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Approved wildlife education caption.", links: [], media: [], claims: []
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    let readCalls = 0, reconcileCalls = 0, mutationCalls = 0;
+    const result = await runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
+      verifyIdentity: async () => ({ verified: true }),
+      policyEvaluator: async () => ({ eligible: true, blockers: [], warnings: [], contentFingerprint: "c".repeat(64), policyRuleVersion: f.config.complianceRuleSet, mediaFingerprints: [], reason: "ELIGIBLE" }),
+      publish: async () => { mutationCalls++; return {}; },
+      readRemote: async () => { readCalls++; throw new Error("cannot fetch a post without its remote ID"); },
+      reconcileRemote: async () => {
+        reconcileCalls++;
+        return { outcome: "CONFIRMED", receipt: {
+          status: "SCHEDULED_VERIFIED", remotePostId: "123456789012345_recovered",
+          scheduledPublishTime: Date.parse(payload.scheduledAt) / 1000
+        } };
+      }
+    });
+    assert.equal(mutationCalls, 1);
+    assert.equal(readCalls, 0, "direct lookup must not run with a missing remote ID");
+    assert.equal(reconcileCalls, 1, "missing mutation identity must enter reconciliation");
+    assert.equal(result.published, 1);
+    const ledger = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), "utf8"));
+    assert.equal(ledger[0].status, "SCHEDULED_VERIFIED");
+    assert.equal(ledger[0].remotePostId, "123456789012345_recovered");
+    assert.equal(ledger[0].verifiedRemotely, true);
+  } finally { f.cleanup(); }
+});
+
 test("uncertain mutation is reconciled and a unique verified receipt is persisted without retry", async () => {
   const f = setup();
   try {
