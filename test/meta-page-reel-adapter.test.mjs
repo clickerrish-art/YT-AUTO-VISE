@@ -145,3 +145,14 @@ test("Page Reel adapter rejects media paths outside the configured repository ro
   }),/escapes the configured repository root/i);
   assert.equal(calls,0);
 });
+
+test("Page Reel initialization without a remote ID is uncertain and never retried",async t=>{
+  const {root,draft}=await fixture(t);
+  let calls=0;
+  await assert.rejects(()=>createMetaPageReel({
+    draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,permissionsVerified:true,
+    publishingEnabled:true,dryRun:false,emergencyStop:false,rootDir:root,inspect:()=>inspected,
+    fetchImpl:async()=>{calls++;return response({success:true});}
+  }),error=>error instanceof MetaPageReelError && error.uncertain===true);
+  assert.equal(calls,1);
+});
