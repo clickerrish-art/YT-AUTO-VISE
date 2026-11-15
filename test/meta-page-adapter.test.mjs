@@ -328,8 +328,8 @@ test("Meta permission verification falls back to the exact configured Page node 
         { permission: "pages_manage_posts", status: "granted" }
       ] });
       if (String(url).includes("/me/accounts?")) return response({ data: [] });
-      assert.equal(String(url), "https://graph.facebook.com/v26.0/" + PAGE_ID + "?fields=id%2Cname%2Caccess_token");
-      return response({ id: PAGE_ID, name: "Nature Frontiers", access_token: TOKEN });
+      assert.equal(String(url), "https://graph.facebook.com/v26.0/" + PAGE_ID + "?fields=id%2Cname%2Ctasks%2Caccess_token");
+      return response({ id: PAGE_ID, name: "Nature Frontiers", tasks: ["CREATE_CONTENT"], access_token: TOKEN });
     }
   });
   assert.equal(result.verified, true);
@@ -337,7 +337,7 @@ test("Meta permission verification falls back to the exact configured Page node 
   assert.equal(result.pageName, "Nature Frontiers");
   assert.equal(result.pageAccessToken, TOKEN);
   assert.equal(result.pageAccessMethod, "DIRECT_PAGE_NODE");
-  assert.deepEqual(result.tasks, []);
+  assert.deepEqual(result.tasks, ["CREATE_CONTENT"]);
   assert.deepEqual(result.grantedPermissions, ["pages_show_list", "pages_read_engagement", "pages_manage_posts"]);
   assert.equal(urls.length, 4);
   assert.ok(urls.every(url => !url.includes(userToken) && !url.includes(TOKEN)));
@@ -361,6 +361,10 @@ test("Meta direct Page-node fallback rejects a mismatched Page ID and never acce
   }), /exact configured Page identity/i);
   await assert.rejects(() => verifyMetaPagePermissions({
     pageId: PAGE_ID, userAccessToken: userToken, apiVersion: API,
-    fetchImpl: fetchFor({ id: PAGE_ID, name: "Nature Frontiers" })
+    fetchImpl: fetchFor({ id: PAGE_ID, name: "Nature Frontiers", tasks: ["CREATE_CONTENT"] })
   }), /did not return a usable Page access token/i);
+  await assert.rejects(() => verifyMetaPagePermissions({
+    pageId: PAGE_ID, userAccessToken: userToken, apiVersion: API,
+    fetchImpl: fetchFor({ id: PAGE_ID, name: "Nature Frontiers", access_token: TOKEN, tasks: [] })
+  }), /lacks the CREATE_CONTENT or MANAGE task/i);
 });
