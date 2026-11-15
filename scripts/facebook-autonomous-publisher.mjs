@@ -362,16 +362,19 @@ export async function runAutonomousFacebookPublisher({
         if (uncertain) {
           try {
             reconciliation = isReel
-            ? (remote?.remoteVideoId ? await reconcileReel({
-                remoteVideoId:remote.remoteVideoId, expectedPageId:config.destinationPageId,
-                accessToken:pageAccessToken, apiVersion:config.apiVersion, scheduledAt:payload.scheduledAt, fetchImpl
-              }) : { outcome:"UNRESOLVED", reason:"REEL_REMOTE_VIDEO_ID_NOT_DURABLY_RECORDED_NO_RETRY" })
-            : await reconcileRemote({
-                pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
-                accessToken: pageAccessToken, apiVersion: config.apiVersion,
-                caption: payload.caption, scheduledAt: payload.scheduledAt, attemptStartedAt: attempt.startedAt,
-                remotePostId: remote?.remotePostId ?? null, fetchImpl
-              });
+              ? ((remote?.remoteVideoId ?? ledger[ledger.length - 1]?.remoteVideoId)
+                  ? await reconcileReel({
+                      remoteVideoId:remote?.remoteVideoId ?? ledger[ledger.length - 1]?.remoteVideoId,
+                      expectedPageId:config.destinationPageId, accessToken:pageAccessToken,
+                      apiVersion:config.apiVersion, scheduledAt:payload.scheduledAt, fetchImpl
+                    })
+                  : { outcome:"UNRESOLVED", reason:"REEL_REMOTE_VIDEO_ID_NOT_DURABLY_RECORDED_NO_RETRY" })
+              : await reconcileRemote({
+                  pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
+                  accessToken: pageAccessToken, apiVersion: config.apiVersion,
+                  caption: payload.caption, scheduledAt: payload.scheduledAt, attemptStartedAt: attempt.startedAt,
+                  remotePostId: remote?.remotePostId ?? null, fetchImpl
+                });
           } catch {
             reconciliation = { outcome: "UNRESOLVED", reason: "RECONCILIATION_FAILED", matches: [] };
           }
@@ -380,7 +383,7 @@ export async function runAutonomousFacebookPublisher({
             ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(reconciliation.receipt?.status)) {
           const recovered = {
             ...attempt, status: reconciliation.receipt.status, completedAt: new Date().toISOString(),
-            remotePostId: reconciliation.receipt.remotePostId, remoteUrl: reconciliation.receipt.remoteUrl ?? null,
+            remotePostId: reconciliation.receipt.remotePostId, remoteVideoId: remote?.remoteVideoId ?? ledger[ledger.length - 1]?.remoteVideoId ?? attempt.remoteVideoId ?? null, remoteUrl: reconciliation.receipt.remoteUrl ?? null,
             remoteCreatedAt: reconciliation.receipt.createdTime ?? null,
             scheduledPublishTime: reconciliation.receipt.scheduledPublishTime ?? null,
             verifiedRemotely: true, reconciliation, retryAllowed: false,
