@@ -1,3 +1,46 @@
+# 15 November 2026 — exact source/test SHA release-gate refresh
+
+**Exact tested source/test SHA:** `12c28787923384d5ba767614c89c09b4b328cd9a`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627` · **divergence at tested SHA:** 3,569 ahead / 4 behind · **PR #1 files:** 328. PR #1 is open, draft and unmerged. PR #7 is open with 13 changed files; draft metadata is not exposed. Documentation-only commits follow the tested SHA; application source/test changes are covered by the exact-SHA run below.
+
+## Current exact-SHA verification
+
+- [Automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156887): 141/141 Node test files, 44 Python tests, zero skips, npm audit 0 vulnerabilities.
+- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156782): 786/786, zero skips.
+- [Dashboard Chromium E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156787): 29/29 after rerunning one transient TTS `ECONNRESET`.
+- [Metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156795): 141/141 Node test files.
+- [Queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156819): 16 held items, publishing disabled.
+- [Cloudflare durable-state unit checks](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156892): 9/9.
+- [Deployment recovery](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156937): 2/2.
+- [Isolated baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156932): PASS on exact main and candidate SHAs.
+- [Branch inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156810): 3,569 ahead / 4 behind / 328 final-tree changes; no destructive reconciliation.
+- [Nature Frontiers local draft validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156803): PASS; provider draft creation skipped.
+- [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156841): HOLD — 7 required evidence/owner blockers.
+- [Meta Page identity](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692157035): blocked by expired Meta session token, HTTP 401 / error 190 / subcode 463.
+
+The current API matrix has **45/45 authentication-negative checks passing** on this exact SHA, while API-001 remains NOT_TESTED overall: 37 route-level business acceptances are not current-head PASS and 8 routes remain blocked. Dashboard E2E is 29/29, but DASH-001 remains NOT_TESTED because not every control/form has exhaustive success, validation, authorization, persistence and restart evidence.
+
+## Remaining mandatory release gates
+
+- [ ] Refresh complete SonicVhibez public/private/unlisted/scheduled YouTube history and the pending/uncertain upload-attempt ledger.
+- [ ] Verify a distinct SonicVhibez/Sonic Fire YouTube destination in Metricool; only Nature Frontiers SA brand `8094526` is returned, with a mixed-brand YouTube identity.
+- [ ] Obtain genuine rights-cleared footage, narration, music and sound assets; create final MP4, thumbnail and render manifests.
+- [ ] Complete factual, legal, rights, caption, metadata and thumbnail human review against exact final hashes.
+- [ ] Approve viewer-facing direct-sales disclosures for the Prompt Pack and 90-Day Blueprint. The Vault disclosure alone is approved.
+- [ ] Complete authenticated Cloudflare Node-to-Worker persistence, audit, concurrency and restart verification.
+- [ ] Refresh the expired Meta session only through secure GitHub Actions secrets if the separate Nature Frontiers verification is required.
+- [ ] Verify branch protection independently; the permission endpoint remains 403.
+
+## Publication safety and spacing
+
+- [x] No publishing, scheduling, upload, Meta post, Metricool write or account reconnection was performed.
+- [x] Public/unattended publishing remains disabled; Safari affiliate remains inactive.
+- [x] Ten planned Shorts remain private and DRAFT_ONLY, exactly two per week, with no publication timestamps. The 16-item production queue remains held/review-pending with no schedule timestamps.
+- [ ] **72-hour spacing remains UNVERIFIED.** The only current repository history snapshot is dated 10 November 2026 and records one public Short at 22 October 2026, 17:05:56 SAST. The known interval to 15 November 2026, 09:44:45 SAST is 23 days, 16 hours, 38 minutes, 49 seconds, but the complete current history, pending upload attempts and safe destination schedule were not inspected. Do not assign a slot or schedule a next video.
+
+GitHub scheduled workflows execute from `main`; PR-branch schedules are not production automation. Keep PR #1 open/draft/unmerged and do not reset, rebase, force-push or destructively reconcile the 4-commit divergence.
+
+---
+
 # 15 November 2026 — release gate refresh
 
 **Code/test change:** `3e302319d35ca738df421148b357afc7038f8e93`. **Last full CI-tested SHA:** `44a909db7c9ab60e9c62e7b92f3e028a88675619`. **Observed implementation branch before this documentation refresh:** `e4d46dcfe1141019f868259caeb2758ef784a525`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627` · **divergence:** 3,566 ahead / 4 behind · **PR #1 changed files:** 328.
