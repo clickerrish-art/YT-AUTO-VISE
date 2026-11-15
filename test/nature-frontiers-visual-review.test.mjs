@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { recordNatureFrontiersReview } from "../scripts/record-nature-frontiers-visual-review.mjs";
+import { recordNatureFrontiersReview, runNatureFrontiersReview } from "../scripts/record-nature-frontiers-visual-review.mjs";
 import { validateMediaRegister } from "../scripts/validate-nature-frontiers-media-register.mjs";
 
 const checks = { watchedEntireClip: true, checkedBeginningMiddleEnd: true, checkedAudio: true, checkedEditsAndContext: true, checkedForMisleadingRepresentation: true };
@@ -80,4 +80,26 @@ test("verified claims require HTTPS evidence and inspection cannot be changed af
   a.register.assets[0].approval.status = "pending";
   a.register.assets[0].usage.scheduled = true;
   assert.throws(() => recordNatureFrontiersReview({ register: a.register, assetId: "nf-test-asset", review: a.review, root: a.root }), /after scheduling/);
+});
+
+test("CLI runner persists only a valid hash-bound review and preserves pending rights/approval", () => {
+  const a = fixture();
+  const registerPath = path.join(a.root, "register.json");
+  const reviewPath = path.join(a.root, "review.json");
+  fs.writeFileSync(registerPath, JSON.stringify(a.register, null, 2));
+  fs.writeFileSync(reviewPath, JSON.stringify(a.review, null, 2));
+  const before = fs.readFileSync(registerPath, "utf8");
+  const invalid = { ...a.review, fileSha256: "0".repeat(64) };
+  fs.writeFileSync(reviewPath, JSON.stringify(invalid, null, 2));
+  assert.throws(() => runNatureFrontiersReview({ args: ["nf-test-asset", reviewPath, registerPath], root: a.root }), /does not match/);
+  assert.equal(fs.readFileSync(registerPath, "utf8"), before);
+
+  fs.writeFileSync(reviewPath, JSON.stringify(a.review, null, 2));
+  const result = runNatureFrontiersReview({ args: ["nf-test-asset", reviewPath, registerPath], root: a.root, now: Date.parse("2026-11-15T19:00:00+02:00") });
+  const persisted = JSON.parse(fs.readFileSync(registerPath, "utf8"));
+  assert.match(result.message, /^PASS:/);
+  assert.equal(persisted.assets[0].inspection.status, "complete");
+  assert.equal(persisted.assets[0].reviewHistory.length, 1);
+  assert.equal(persisted.assets[0].rights.reviewStatus, "not_assessed");
+  assert.equal(persisted.assets[0].approval.status, "pending");
 });
