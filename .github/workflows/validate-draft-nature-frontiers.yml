@@ -15,6 +15,7 @@ jobs:
     outputs:
       is_draft: ${{ steps.lookup.outputs.is_draft }}
     steps:
+      - uses: actions/checkout@v7
       - name: Run validation only while the associated PR is a draft
         id: lookup
         env:
