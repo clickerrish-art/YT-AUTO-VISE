@@ -207,6 +207,11 @@ test("autonomous publishing requires a signed human approval bound to the exact 
     assert.equal(missing.eligible, false);
     assert.ok(missing.blockers.some(x => /signed human approval receipt is required/i.test(x)));
 
+    f.payload.approval = { ...approval, signature: "0".repeat(64) };
+    const forged = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(forged.eligible, false);
+    assert.ok(forged.blockers.some(x => /signature is invalid/i.test(x)));
+
     f.payload.approval = approval;
     f.payload.caption += " Updated after review.";
     const stale = await evaluateFinalFacebookPayload(f.payload, options(f.root));
