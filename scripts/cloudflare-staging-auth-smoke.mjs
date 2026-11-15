@@ -136,7 +136,7 @@ function startLocalDashboard(stateDir) {
     child.stderr.setEncoding("utf8");
     child.stdout.on("data", chunk => {
       pending += chunk;
-      const lines = pending.split(/\\r?\\n/);
+      const lines = pending.split(/\r?\n/);
       pending = lines.pop() ?? "";
       for (const line of lines) {
         if (!line.includes('"event":"dashboard_started"')) continue;
@@ -164,7 +164,7 @@ function startLocalDashboard(stateDir) {
       settled = true;
       clearTimeout(timeout);
       reject(new Error("Node dashboard exited before readiness (code=" + code + ", signal=" + signal +
-        "); diagnostic=" + stderr.replace(/\\s+/g, " ").slice(-500)));
+        "); diagnostic=" + stderr.replace(/\s+/g, " ").slice(-500)));
     });
     child.once("error", error => {
       if (settled) return;
