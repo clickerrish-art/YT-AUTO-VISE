@@ -11,7 +11,7 @@ const VIDEO = "987654321098765";
 const TOKEN = "test-page-token-" + "x".repeat(30);
 const API = "v26.0";
 const response = (data,status=200) => new Response(JSON.stringify(data),{status,headers:{"content-type":"application/json"}});
-const inspected = {width:1080,height:1920,durationSeconds:35};
+const inspected = {width:1080,height:1920,durationSeconds:35,frameRate:30};
 
 async function fixture(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(),"nf-reel-test-"));
@@ -163,8 +163,23 @@ test("Page Reel adapter rejects landscape video before contacting Meta",async t=
   await assert.rejects(()=>createMetaPageReel({
     draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,permissionsVerified:true,
     publishingEnabled:true,dryRun:false,emergencyStop:false,rootDir:root,
-    inspect:()=>({width:1920,height:1080,durationSeconds:35}),
+    inspect:()=>({width:1920,height:1080,durationSeconds:35,frameRate:30}),
     fetchImpl:async()=>{calls++;return response({});}
-  }),/portrait video/i);
+  }),/minimum 540x960 portrait 9:16/i);
+  assert.equal(calls,0);
+});
+
+test("Page Reel adapter enforces minimum resolution, duration and frame rate before upload",async t=>{
+  const {root,draft}=await fixture(t);
+  let calls=0;
+  const run=inspect=>createMetaPageReel({
+    draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,permissionsVerified:true,
+    publishingEnabled:true,dryRun:false,emergencyStop:false,rootDir:root,inspect,
+    fetchImpl:async()=>{calls++;return response({});}
+  });
+  await assert.rejects(()=>run(()=>({width:480,height:854,durationSeconds:35,frameRate:30})),/minimum 540x960/i);
+  await assert.rejects(()=>run(()=>({width:1080,height:1920,durationSeconds:61,frameRate:30})),/between 4 and 60/i);
+  await assert.rejects(()=>run(()=>({width:1080,height:1920,durationSeconds:3,frameRate:30})),/between 4 and 60/i);
+  await assert.rejects(()=>run(()=>({width:1080,height:1920,durationSeconds:35,frameRate:22})),/at least 23 fps/i);
   assert.equal(calls,0);
 });
