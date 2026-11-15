@@ -10,7 +10,7 @@ const DEFAULT_REGISTER = "content/nature-frontiers-media-register.json";
 const REQUIRED_CHECKS = ["watchedEntireClip", "checkedBeginningMiddleEnd", "checkedAudio", "checkedEditsAndContext", "checkedForMisleadingRepresentation"];
 
 function validTimestamp(value, now = Date.now()) {
-  return typeof value === "string" && /^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$/.test(value) && Number.isFinite(Date.parse(value)) && Date.parse(value) <= now;
+  return typeof value === "string" && /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:[.][0-9]+)?(?:Z|[+-][0-9]{2}:[0-9]{2})$/.test(value) && Number.isFinite(Date.parse(value)) && Date.parse(value) <= now;
 }
 
 function isHttps(value) {
