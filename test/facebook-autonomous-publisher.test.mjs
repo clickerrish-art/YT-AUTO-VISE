@@ -453,3 +453,54 @@ test("failed Meta permissions automatically skip and drain a slot without owner 
     assert.equal(history[0].reason, "META_PAGE_IDENTITY_OR_PERMISSION_CHECK_FAILED_NO_MUTATION");
   } finally { f.cleanup(); }
 });
+
+
+test("failed atomic state write removes its unique temporary file and a later run recovers", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const now = Date.parse("2026-11-15T07:30:00.000Z");
+    const payload = {
+      slotId: "nature-frontiers-2026-11-15-1000",
+      destination: "nature_frontiers_facebook",
+      destinationPageId: "123456789012345",
+      scheduledDate: "2026-11-15",
+      scheduledAt: "2026-11-15T08:00:00.000Z",
+      caption: "Test-only candidate must remain blocked.",
+      links: [], media: [], claims: [], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    const options = {
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      policyEvaluator: async () => ({
+        eligible: false, blockers: ["TEST_BLOCK"], warnings: [], contentFingerprint: "a".repeat(64),
+        policyRuleVersion: f.config.complianceRuleSet, reason: "TEST_BLOCK"
+      })
+    };
+    const originalFsync = fs.fsyncSync;
+    let fsyncCalls = 0;
+    try {
+      fs.fsyncSync = fd => {
+        fsyncCalls++;
+        if (fsyncCalls === 2) { const error = new Error("simulated atomic state fsync failure"); error.code = "EIO"; throw error; }
+        return originalFsync(fd);
+      };
+      await assert.rejects(() => runAutonomousFacebookPublisher(options), /simulated atomic state fsync failure/);
+    } finally {
+      fs.fsyncSync = originalFsync;
+    }
+    assert.equal(fs.existsSync(path.join(f.stateDir, "facebook-publishing.lock")), false,
+      "publisher must release its own lock after a failed state write");
+    assert.deepEqual(fs.readdirSync(f.stateDir), [],
+      "failed state write must remove its unique temporary file");
+    const result = await runAutonomousFacebookPublisher(options);
+    assert.equal(result.status, "COMPLETED");
+    assert.equal(result.skipped, 1, "the policy-blocked candidate must remain blocked on recovery");
+    assert.deepEqual(fs.readdirSync(f.stateDir).filter(name => name.endsWith(".tmp")), [],
+      "successful recovery must leave no temporary state files");
+    const history = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-history.json"), "utf8"));
+    assert.equal(history[0].status, "SKIPPED_BLOCKED");
+  } finally { f.cleanup(); }
+});
