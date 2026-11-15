@@ -41,14 +41,6 @@ jobs:
       - name: Install dependencies
         run: |
           if [ -f package-lock.json ]; then npm ci --ignore-scripts; else npm install --ignore-scripts; fi
-      - name: Run read-only authenticated Cloudflare staging smoke
-        if: github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes'
-        env:
-          DASHBOARD_STAGING_API_URL: https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev
-          DASHBOARD_OPERATOR_TOKEN: ${{ secrets.DASHBOARD_OPERATOR_TOKEN }}
-          CLOUDFLARE_ACCESS_CLIENT_ID: ${{ secrets.CLOUDFLARE_ACCESS_CLIENT_ID }}
-          CLOUDFLARE_ACCESS_CLIENT_SECRET: ${{ secrets.CLOUDFLARE_ACCESS_CLIENT_SECRET }}
-        run: node scripts/cloudflare-staging-auth-smoke.mjs
       - name: Verify normal lifecycle-script install in isolated temporary checkout
         run: |
           set -eu
@@ -151,3 +143,12 @@ jobs:
           for f in scripts/*.mjs; do node --check "$f"; done
       - name: Compile Python automation scripts
         run: python -m py_compile scripts/generate-narration.py scripts/generate-authoring-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py scripts/render-reviewed-wildlife-footage.py scripts/prepare-review-metadata.py tests/test_prepare_review_metadata.py tests/test_checked_in_release_metadata.py tests/test_reviewed_footage_renderer.py
+
+      - name: Run read-only authenticated Cloudflare staging smoke
+        if: github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes'
+        env:
+          DASHBOARD_STAGING_API_URL: https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev
+          DASHBOARD_OPERATOR_TOKEN: ${{ secrets.DASHBOARD_OPERATOR_TOKEN }}
+          CLOUDFLARE_ACCESS_CLIENT_ID: ${{ secrets.CLOUDFLARE_ACCESS_CLIENT_ID }}
+          CLOUDFLARE_ACCESS_CLIENT_SECRET: ${{ secrets.CLOUDFLARE_ACCESS_CLIENT_SECRET }}
+        run: node scripts/cloudflare-staging-auth-smoke.mjs
