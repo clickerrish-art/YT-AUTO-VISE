@@ -92,7 +92,8 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
 
     const claims = asset.claims ?? [];
     if (!Array.isArray(claims)) errors.push(at + " claims must be an array");
-    for (const claim of Array.isArray(claims) ? claims : []) {
+    const claimRecords = Array.isArray(claims) ? claims : [];
+    for (const claim of claimRecords) {
       if (!claim || typeof claim !== "object" || Array.isArray(claim) ||
           typeof claim.type !== "string" || typeof claim.value !== "string" ||
           !["listing_only", "unverified", "verified", "not_used"].includes(claim.status)) {
@@ -109,7 +110,7 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
     const approval = asset.approval ?? {};
     if (!["pending", "approved", "rejected", "revoked"].includes(approval.status)) errors.push(at + " has an invalid approval.status");
     if (approval.status === "approved") {
-      if (claims.some(claim => !["verified", "not_used"].includes(claim?.status))) errors.push(at + " cannot be approved while factual claims remain listing-only or unverified");
+      if (claimRecords.some(claim => !["verified", "not_used"].includes(claim?.status))) errors.push(at + " cannot be approved while factual claims remain listing-only or unverified");
       if (rights.reviewStatus !== "cleared") errors.push(at + " cannot be approved until rights are cleared");
       if (inspection.status !== "complete") errors.push(at + " cannot be approved until full visual inspection is complete");
       if (!asset.localFile || !SHA256.test(asset.localFile.sha256 ?? "")) errors.push(at + " approval must bind to an exact local file SHA-256");
@@ -121,6 +122,10 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
     if (typeof asset.usage?.scheduled !== "boolean" || typeof asset.usage?.published !== "boolean" || !Array.isArray(asset.usage?.platformPostIds)) errors.push(at + " requires explicit usage booleans and platformPostIds");
     if (asset.usage?.scheduled === true || asset.usage?.published === true) {
       if (approval.status !== "approved") errors.push(at + " cannot be scheduled or published without exact-asset human approval");
+    }
+    if (Array.isArray(asset.usage?.platformPostIds) &&
+        asset.usage.platformPostIds.some(id => typeof id !== "string" || !id.trim())) {
+      errors.push(at + " platformPostIds entries must be non-empty strings");
     }
     if (asset.usage?.published === true && (!Array.isArray(asset.usage.platformPostIds) || asset.usage.platformPostIds.length === 0)) {
       errors.push(at + " published usage requires a remote platform post ID receipt");

@@ -190,3 +190,21 @@ test("verified factual claims require evidence URLs rather than an unsupported s
   value.assets[0].claims[0].evidenceUrls = ["https://trusted.example.org/species"];
   assert.ok(!validateMediaRegister(value).some(error => error.includes("verified factual claims require one or more HTTPS evidenceUrls")));
 });
+
+
+test("malformed claims remain a validation error even when approval is asserted", () => {
+  const value = structuredClone(base);
+  value.assets[0].claims = { type: "species", value: "lion", status: "verified" };
+  value.assets[0].approval.status = "approved";
+  assert.ok(validateMediaRegister(value).some(error => error.includes("claims must be an array")));
+});
+
+test("rejects empty or non-string remote publication receipts", () => {
+  const value = structuredClone(base);
+  value.assets[0].usage.published = true;
+  value.assets[0].approval.status = "approved";
+  value.assets[0].usage.platformPostIds = ["post-123", ""];
+  assert.ok(validateMediaRegister(value).some(error => error.includes("platformPostIds entries must be non-empty strings")));
+  value.assets[0].usage.platformPostIds = [123];
+  assert.ok(validateMediaRegister(value).some(error => error.includes("platformPostIds entries must be non-empty strings")));
+});
