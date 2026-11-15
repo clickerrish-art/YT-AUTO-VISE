@@ -201,6 +201,9 @@ test("autonomous publishing requires a signed human approval bound to the exact 
   try {
     const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(result.eligible, true, JSON.stringify(result.blockers));
+    const noSecret = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), approvalSecret: "" });
+    assert.equal(noSecret.eligible, false);
+    assert.ok(noSecret.blockers.some(x => /HMAC_SECRET is missing or too short/i.test(x)));
     const approval = f.payload.approval;
     delete f.payload.approval;
     const missing = await evaluateFinalFacebookPayload(f.payload, options(f.root));
