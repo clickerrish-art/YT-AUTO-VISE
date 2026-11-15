@@ -256,6 +256,59 @@ test("uncertain mutation is reconciled and a unique verified receipt is persiste
   } finally { f.cleanup(); }
 });
 
+test("live uncertain reconciliation rechecks durable history and blocks a concurrent conflicting receipt", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const now = Date.parse("2026-10-25T05:30:00.000Z");
+    const payload = {
+      slotId: "nature-frontiers-2026-10-25-live-reconciliation-conflict",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Approved educational wildlife caption.", links: [], media: [], claims: []
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    let mutationCalls = 0, reconciliationCalls = 0;
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
+      verifyIdentity: async () => ({ verified: true }),
+      policyEvaluator: async () => ({ eligible: true, blockers: [], warnings: [], contentFingerprint: "b".repeat(64), policyRuleVersion: f.config.complianceRuleSet, mediaFingerprints: [], reason: "ELIGIBLE" }),
+      publish: async () => {
+        mutationCalls++;
+        fs.writeFileSync(path.join(f.stateDir, "facebook-history.json"), JSON.stringify([{
+          slotId: payload.slotId, destination: "nature_frontiers_facebook",
+          status: "SCHEDULED_VERIFIED", verifiedRemotely: true,
+          remotePostId: "123456789012345_concurrent"
+        }]));
+        const error = new Error("timeout after remote mutation");
+        error.uncertain = true;
+        throw error;
+      },
+      reconcileRemote: async () => {
+        reconciliationCalls++;
+        return { outcome: "CONFIRMED", receipt: {
+          status: "SCHEDULED_VERIFIED", remotePostId: "123456789012345_reconciled",
+          scheduledPublishTime: Date.parse(payload.scheduledAt) / 1000
+        } };
+      }
+    }), /history conflicts with a reconciled ledger receipt/i);
+    assert.equal(mutationCalls, 1);
+    assert.equal(reconciliationCalls, 1);
+    const history = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-history.json"), "utf8"));
+    assert.equal(history.length, 1);
+    assert.equal(history[0].remotePostId, "123456789012345_concurrent",
+      "conflicting durable history must not be overwritten");
+    const ledger = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-attempt-ledger.json"), "utf8"));
+    assert.equal(ledger[0].status, "PUBLISHING",
+      "the unresolved ledger attempt remains available for safe startup reconciliation");
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), [payload],
+      "the candidate remains queued for manual reconciliation");
+  } finally { f.cleanup(); }
+});
+
 test("unresolved mutation remains durably uncertain and is never retried", async () => {
   const f = setup();
   try {
