@@ -4,9 +4,10 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION } from "../scripts/facebook-policy-engine.mjs";
+import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION, createFacebookAutonomousApprovalReceipt } from "../scripts/facebook-policy-engine.mjs";
 
 const hash = value => crypto.createHash("sha256").update(value).digest("hex");
+const TEST_APPROVAL_SECRET = "unit-test-facebook-approval-secret-32-bytes-minimum";
 function fixture() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-policy-"));
   const media = Buffer.from("licensed media fixture");
@@ -34,6 +35,12 @@ function fixture() {
         provenanceVerified: true, syntheticOrAlteredKnown: true, attributionRequired: false }
     }]
   };
+  payload.approval = createFacebookAutonomousApprovalReceipt(payload, {
+    reviewer: "Unit Test Reviewer",
+    reason: "Reviewed exact final caption, media, rights evidence and destination.",
+    secret: TEST_APPROVAL_SECRET,
+    now: "2026-10-24T12:00:00.000Z"
+  });
   return { root, payload, cleanup: () => fs.rmSync(root, { recursive: true, force: true }) };
 }
 const options = root => ({
@@ -189,11 +196,29 @@ test("duplicate slots, near-duplicates and daily frequency limits block", async 
   } finally { f.cleanup(); }
 });
 
-test("no owner-approval flag is required for ordinary eligible content; unknown synthetic origin blocks", async () => {
+test("autonomous publishing requires a signed human approval bound to the exact final payload", async () => {
   const f = fixture();
   try {
     const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
-    assert.equal(result.eligible, true);
+    assert.equal(result.eligible, true, JSON.stringify(result.blockers));
+    const approval = f.payload.approval;
+    delete f.payload.approval;
+    const missing = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(missing.eligible, false);
+    assert.ok(missing.blockers.some(x => /signed human approval receipt is required/i.test(x)));
+
+    f.payload.approval = approval;
+    f.payload.caption += " Updated after review.";
+    const stale = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(stale.eligible, false);
+    assert.ok(stale.blockers.some(x => /does not bind the exact current final payload/i.test(x)));
+
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer",
+      reason: "Reviewed the updated exact final caption and evidence.",
+      secret: TEST_APPROVAL_SECRET,
+      now: "2026-10-24T12:00:00.000Z"
+    });
     f.payload.media[0].representationKnown = false;
     const unknown = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(unknown.eligible, false);
@@ -235,6 +260,12 @@ test("a factual claim needs a reachable authoritative source containing the reco
     const excerpt = "Wetlands support biodiversity and help regulate water flows.";
     f.payload.caption = "Wetlands support biodiversity and help regulate water flows.";
     f.payload.claims = [{ text: "Wetlands support biodiversity and help regulate water flows", sourceUrls: ["https://sanbi.org/research"], sourceExcerpt: excerpt, sourceSupportsClaim: true, verified: true }];
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer",
+      reason: "Reviewed the exact final wetland caption, claim, source and media.",
+      secret: TEST_APPROVAL_SECRET,
+      now: "2026-10-24T12:00:00.000Z"
+    });
     const result = await evaluateFinalFacebookPayload(f.payload, {
       ...options(f.root),
       fetchImpl: async url => ({ ok: true, status: 200, url: String(url), text: async () => "Report summary. " + excerpt + " Further documented context." })
