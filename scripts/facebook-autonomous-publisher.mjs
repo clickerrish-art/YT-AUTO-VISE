@@ -397,7 +397,17 @@ export async function runAutonomousFacebookPublisher({
           verifiedRemotely: success, verificationReason, reconciliation: verified.status, retryAllowed: false
         };
         ledger[ledger.length - 1] = receipt;
-        history.push({ ...receipt, payload: undefined });
+        // The normal verification path needs the same concurrent-writer
+        // protection as uncertain-mutation recovery: never replace a durable
+        // receipt for this slot with a different remote post ID.
+        const latestHistory = safeHistory(historyPath);
+        const existingReceipts = latestHistory.filter(item => item?.slotId === receipt.slotId &&
+          ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status));
+        if (existingReceipts.some(item => item.remotePostId !== receipt.remotePostId)) {
+          throw new Error("Facebook history conflicts with a remotely verified publish receipt; publishing blocked for manual reconciliation");
+        }
+        history = latestHistory;
+        if (!existingReceipts.length) history.push({ ...receipt, payload: undefined });
         atomicJson(ledgerPath, ledger); atomicJson(historyPath, history);
         removeQueuedSlot(payload.slotId);
         if (success) published++; else skipped++;
