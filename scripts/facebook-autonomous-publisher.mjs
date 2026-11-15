@@ -162,6 +162,16 @@ export async function runAutonomousFacebookPublisher({
   try {
     let history = safeHistory(historyPath);
     let ledger = safeHistory(ledgerPath);
+    const ledgerSlotIds = new Set();
+    for (const attempt of ledger) {
+      if (typeof attempt.slotId !== "string" || !attempt.slotId.trim()) {
+        throw new Error("Facebook attempt ledger contains a record without a valid slot ID; manual reconciliation required");
+      }
+      if (ledgerSlotIds.has(attempt.slotId)) {
+        throw new Error("Facebook attempt ledger contains duplicate slot IDs; manual reconciliation required");
+      }
+      ledgerSlotIds.add(attempt.slotId);
+    }
     // A slot may have only one authoritative verified remote identity. Detect
     // conflicting receipts already present in the durable projection before
     // recovery, queue cleanup, policy evaluation, or any Meta operation.
@@ -236,6 +246,15 @@ export async function runAutonomousFacebookPublisher({
     }
     const queue = readJson(queuePath);
     if (!Array.isArray(queue)) throw new Error("Autonomous Facebook queue must be a JSON array");
+    for (const item of queue) {
+      if (!item || typeof item !== "object" || Array.isArray(item) ||
+          typeof item.slotId !== "string" || !item.slotId.trim()) {
+        throw new Error("Autonomous Facebook queue contains a malformed record or missing slot ID; manual queue reconciliation required");
+      }
+      if (item.destination !== "nature_frontiers_facebook" || item.destinationPageId !== config.destinationPageId) {
+        throw new Error("Autonomous Facebook queue contains a record for an unexpected destination or Page; manual queue reconciliation required");
+      }
+    }
     const current = Number(now);
     const today = localDate(current, config.timezone);
     const runStartedAt = isoNow(current);
