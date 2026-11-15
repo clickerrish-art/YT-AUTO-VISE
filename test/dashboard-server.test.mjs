@@ -1316,7 +1316,8 @@ test("every protected dashboard API route rejects missing and invalid operator a
     const mutatingRoutes = inventory.routes.filter(route =>
       route.path.startsWith("/api/") && route.method !== "GET"
     );
-    assert.equal(mutatingRoutes.length, 33, "all declared mutating API routes must be included in the auth matrix");
+    assert.equal(mutatingRoutes.length, 34, "all declared mutating API routes must be included in the auth matrix");
+    assert.ok(mutatingRoutes.some(route => route.method === "POST" && route.path === "/api/instagram/approve"), "Instagram approval must be covered by the operator-authentication matrix");
 
     for (const route of mutatingRoutes) {
       for (const authCase of [
