@@ -49,3 +49,19 @@ The validator uses only Node.js built-ins. It performs no network requests and n
 - No provider API is required to create, edit, validate, back up or restore the register.
 
 Pexels' licence and terms can change. The register stores evidence links and review records rather than assuming that a provider API response is a legal clearance. Pexels' own terms note that third-party rights may still apply and that standalone redistribution is prohibited. See [Pexels License](https://www.pexels.com/license/) and [Pexels Terms of Service](https://www.pexels.com/terms-of-service/).
+
+## Register an obtained local media file
+
+Keep lawfully obtained source media under `media/nature-frontiers/` (this directory is git-ignored and should not be committed). Then record its integrity against an existing asset ID:
+
+```sh
+npm run nature-frontiers:register-local-media -- nf-pex-giraffe-5220275 media/nature-frontiers/giraffe-clip.mp4
+```
+
+The command:
+- verifies that the target is a non-empty regular file inside the dedicated local media directory;
+- computes SHA-256 from the actual file bytes and records the relative path and byte size;
+- writes the register as local JSON using an atomic rename;
+- refuses unknown IDs, approved assets, and assets already marked scheduled or published.
+
+This is an integrity/ingestion step only. It does not download footage, verify a provider licence, inspect the clip, identify species or location, assess third-party rights, or approve content. After ingestion, inspection and rights statuses remain `not_inspected` and `not_assessed`, and approval remains `pending`. Run the register validator after each intake. Do not place private licence documents in the repository; retain them in the approved private evidence store and record appropriate evidence references.
