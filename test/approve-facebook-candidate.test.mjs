@@ -16,7 +16,7 @@ const candidate = slotId => ({
   slotId,
   scheduledAt: "2026-11-15T06:00:00.000Z",
   caption: "Observe wildlife from a respectful distance.",
-  claims: [{ text: "Observe wildlife from a respectful distance." }],
+  claims: [{ text: "Observe wildlife from a respectful distance.", sourceUrls: ["https://sanbi.org/wildlife-viewing"], sourceExcerpt: "Observe wildlife from a respectful distance and avoid disturbing animals." }],
   media: [{ id: "asset-1", sha256: "a".repeat(64) }],
   links: []
 });
@@ -33,7 +33,7 @@ test("interactive signer writes a valid approval bound to the exact candidate fi
     env: { FACEBOOK_APPROVAL_HMAC_SECRET: secret, FACEBOOK_APPROVER_ID: "owner-test-reviewer" },
     confirm: async prompt => {
       assert.ok(prompt.includes(payload.slotId));
-      return "APPROVE " + payload.slotId;
+      return prompt.includes("VERIFY CLAIM") ? "VERIFY CLAIM " + payload.slotId + " 1" : "APPROVE " + payload.slotId;
     },
     now: "2026-11-14T10:00:00.000Z"
   });
