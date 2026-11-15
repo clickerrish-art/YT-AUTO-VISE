@@ -274,10 +274,12 @@ test("signed human fact-check attestation is accepted without an external semant
     const result = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), semanticVerifier: null });
     assert.equal(result.eligible, true, JSON.stringify(result.blockers));
     assert.equal(result.sourceChecks[0].semanticVerification.reason, "SIGNED_HUMAN_FACT_CHECK_BOUND_TO_CLAIM_SOURCE_SET_AND_EXCERPT");
-    claim.sourceExcerpt += " Changed after fact-check.";
+    claim.sourceExcerpt += " ";
     approve(f.payload);
     const excerptTampered = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), semanticVerifier: null });
     assert.equal(excerptTampered.eligible, false);
+    assert.equal(excerptTampered.sourceChecks[0].checks[0].passed, true);
+    assert.equal(excerptTampered.sourceChecks[0].semanticVerification.reason, "SIGNED_HUMAN_FACT_CHECK_MISSING_OR_INVALID");
     claim.text = "A different factual claim";
     approve(f.payload);
     const tampered = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), semanticVerifier: null });
