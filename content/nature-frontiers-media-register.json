@@ -1711,6 +1711,1106 @@
         "published": false,
         "platformPostIds": []
       }
+    },
+    {
+      "id": "nf-pex-antelope-36589216",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "36589216",
+        "url": "https://www.pexels.com/video/intimate-moment-between-two-wild-antelopes-36589216/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-blackbuck-34375829",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "34375829",
+        "url": "https://www.pexels.com/video/blackbucks-grazing-in-open-grassland-habitat-34375829/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-nyala-34360735",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "34360735",
+        "url": "https://www.pexels.com/video/nyala-antelopes-at-waterhole-in-twilight-34360735/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-impala-12939735",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "12939735",
+        "url": "https://www.pexels.com/video/impalas-on-grassland-12939735/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-hyenas-wildebeest-30024912",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "30024912",
+        "url": "https://www.pexels.com/video/hyenas-feeding-on-wildebeest-in-kruger-park-30024912/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-wild-dogs-39157074",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "39157074",
+        "url": "https://www.pexels.com/video/african-wild-dogs-in-natural-habitat-39157074/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-wild-dogs-feeding-39157076",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "39157076",
+        "url": "https://www.pexels.com/video/african-wild-dogs-feeding-in-natural-habitat-39157076/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-lions-feeding-30025149",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "30025149",
+        "url": "https://www.pexels.com/video/lions-feeding-on-prey-in-african-savannah-30025149/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-ostriches-39159270",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "39159270",
+        "url": "https://www.pexels.com/video/group-of-ostriches-grazing-in-dry-grassland-39159270/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-warthogs-32418597",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "32418597",
+        "url": "https://www.pexels.com/video/group-of-warthogs-foraging-in-african-wilderness-32418597/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-cheetah-34743200",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "34743200",
+        "url": "https://www.pexels.com/video/relaxing-cheetah-in-natural-habitat-34743200/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-elephant-aerial-33660354",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "33660354",
+        "url": "https://www.pexels.com/video/aerial-view-of-elephant-in-safari-landscape-33660354/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-leopard-cub-18955955",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "18955955",
+        "url": "https://www.pexels.com/video/leopard_jungtier-18955955/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-leopard-fence-27683634",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "27683634",
+        "url": "https://www.pexels.com/video/a-leopard-sitting-in-the-grass-behind-a-fence-27683634/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-leopard-resting-37156659",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37156659",
+        "url": "https://www.pexels.com/video/majestic-leopard-resting-in-natural-habitat-37156659/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-cheetah-grassland-32414261",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "32414261",
+        "url": "https://www.pexels.com/video/resting-cheetah-in-the-wild-grassland-32414261/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-cheetah-19078996",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "19078996",
+        "url": "https://www.pexels.com/video/gepard-19078996/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-lions-resting-37251748",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37251748",
+        "url": "https://www.pexels.com/video/serene-lions-resting-in-natural-habitat-37251748/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-lioness-cub-37732383",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37732383",
+        "url": "https://www.pexels.com/video/majestic-lioness-with-cub-in-natural-habitat-37732383/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-lions-savanna-37687552",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37687552",
+        "url": "https://www.pexels.com/video/lions-resting-in-the-african-savanna-37687552/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
     }
   ]
 }
