@@ -59,8 +59,8 @@ function validateConfig(config) {
   if (config.emergencyStop !== false) throw new Error("Facebook emergency stop is active; no publication attempted");
   if (config.publishingEnabled !== true || config.dryRun !== false) throw new Error("Facebook live publishing is not explicitly enabled or dry-run is still active");
   if (!/^\d{5,30}$/.test(String(config.destinationPageId ?? ""))) throw new Error("A verified numeric Facebook Page ID is required");
-  if (!Number.isInteger(config.dailyCap) || config.dailyCap < 1 || config.dailyCap > 1) throw new Error("Facebook daily cap must remain exactly one post per local day");
-  if (!Number.isFinite(config.minimumIntervalMinutes) || config.minimumIntervalMinutes < 1200) throw new Error("Facebook minimum interval must be at least 20 hours");
+  if (config.dailyCap !== 3 || config.dailyReelCap !== 2 || config.dailyFeedPostCap !== 1) throw new Error("Nature Frontiers cadence must remain capped at two Reels and one feed post per Johannesburg day");
+  if (!Number.isFinite(config.minimumIntervalMinutes) || config.minimumIntervalMinutes < 240) throw new Error("Facebook minimum interval must be at least four hours");
 }
 function localDate(now, timezone) {
   return new Intl.DateTimeFormat("en-CA", { timeZone: timezone, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(now));
@@ -243,7 +243,8 @@ export async function runAutonomousFacebookPublisher({
           allowedDomains: config.allowedDomains ?? [], allowedCampaignIds: config.allowedCampaignIds ?? [],
           approvedDestinations: config.approvedDestinations ?? [], history,
           evidenceRoot: activeRoot, now: isoNow(current), timezone: config.timezone,
-          maxPostsPerLocalDay: config.dailyCap, minimumIntervalMinutes: config.minimumIntervalMinutes,
+          maxPostsPerLocalDay: config.dailyCap, maxReelsPerLocalDay: config.dailyReelCap,
+          maxFeedPostsPerLocalDay: config.dailyFeedPostCap, minimumIntervalMinutes: config.minimumIntervalMinutes,
           fetchImpl
         });
       } catch {
@@ -301,7 +302,7 @@ export async function runAutonomousFacebookPublisher({
       const isReel = payload.mediaType === "reel";
       const attempt = {
         kind: isReel ? "FACEBOOK_PAGE_REEL_PUBLISH_ATTEMPT" : "FACEBOOK_PUBLISH_ATTEMPT", slotId: payload.slotId, destination: "nature_frontiers_facebook",
-        status: "PUBLISHING", startedAt: isoNow(current), scheduledAt: payload.scheduledAt, contentFingerprint: decision.contentFingerprint,
+        status: "PUBLISHING", startedAt: isoNow(current), scheduledAt: payload.scheduledAt, mediaType: payload.mediaType ?? "feed_post", contentFingerprint: decision.contentFingerprint,
         policyRuleVersion: decision.policyRuleVersion, policyDecision: decision,
         payload: { caption: payload.caption, scheduledAt: payload.scheduledAt, mediaType: payload.mediaType ?? "feed_post", links: payload.links ?? [], mediaFingerprints: decision.mediaFingerprints }
       };
