@@ -260,6 +260,40 @@ test("confirmed startup reconciliation replaces its prior uncertain history outc
   } finally { f.cleanup(); }
 });
 
+test("orphaned uncertain history never permits a fresh publish mutation", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const payload = {
+      slotId: "nature-frontiers-orphaned-uncertain-history",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "An uncertain history row without a ledger must remain held.",
+      links: [], media: [], claims: [], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    const historyPath = path.join(f.stateDir, "facebook-history.json");
+    const uncertain = { slotId: payload.slotId, destination: "nature_frontiers_facebook",
+      status: "UNCERTAIN", reason: "REMOTE_OUTCOME_UNCERTAIN_RECONCILIATION_REQUIRED" };
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    fs.writeFileSync(historyPath, JSON.stringify([uncertain]));
+    let policyCalls = 0, mutationCalls = 0;
+    const result = await runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath,
+      stateDir: f.stateDir, now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      policyEvaluator: async () => { policyCalls++; return { eligible: true }; },
+      publish: async () => { mutationCalls++; throw new Error("orphaned uncertainty must never be republished"); }
+    });
+    assert.equal(result.status, "COMPLETED");
+    assert.equal(policyCalls, 0);
+    assert.equal(mutationCalls, 0);
+    assert.deepEqual(JSON.parse(fs.readFileSync(historyPath, "utf8")), [uncertain]);
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), [payload]);
+  } finally { f.cleanup(); }
+});
+
 test("safe defaults are a no-op and never attempt a Meta request", async () => {
   const f = setup();
   try {
