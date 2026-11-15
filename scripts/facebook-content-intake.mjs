@@ -136,6 +136,8 @@ export async function runFacebookContentIntake({
         now: new Date(now).toISOString(),
         timezone: config.timezone,
         maxPostsPerLocalDay: config.dailyCap,
+        maxReelsPerLocalDay: config.dailyReelCap,
+        maxFeedPostsPerLocalDay: config.dailyFeedPostCap,
         minimumIntervalMinutes: config.minimumIntervalMinutes,
         fetchImpl
       });
