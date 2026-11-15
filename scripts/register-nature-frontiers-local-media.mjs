@@ -95,8 +95,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   }
   try {
     const register = JSON.parse(fs.readFileSync(registerPath, "utf8"));
-  const technicalMetadata = probeRequested ? extractVideoTechnicalMetadata(path.resolve(filePath)) : null;
-    const result = registerLocalMedia({ register, assetId, filePath, technicalMetadata });
+    const result = registerLocalMedia({ register, assetId, filePath });
+    const technicalMetadata = probeRequested ? extractVideoTechnicalMetadata(path.resolve(filePath)) : null;
+    if (technicalMetadata) register.assets.find(asset => asset.id === assetId).media.technical = technicalMetadata;
     const validationErrors = validateMediaRegister(register);
     if (validationErrors.length) throw new Error("register validation failed: " + validationErrors.join("; "));
     persistRegister(registerPath, register);
