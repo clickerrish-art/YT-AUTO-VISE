@@ -61,7 +61,7 @@ npm run nature-frontiers:register-local-media -- nf-pex-giraffe-5220275 media/na
 The command:
 - verifies that the target is a non-empty regular file inside the dedicated local media directory;
 - computes SHA-256 from the actual file bytes and records the relative path and byte size;
-- writes the register as local JSON using an atomic rename;
+- runs the existing structural register validator before saving, then writes the register as local JSON using an atomic rename;
 - refuses unknown IDs, approved assets, and assets already marked scheduled or published.
 
 This is an integrity/ingestion step only. It does not download footage, verify a provider licence, inspect the clip, identify species or location, assess third-party rights, or approve content. After ingestion, inspection and rights statuses remain `not_inspected` and `not_assessed`, and approval remains `pending`. Run the register validator after each intake. Do not place private licence documents in the repository; retain them in the approved private evidence store and record appropriate evidence references.
