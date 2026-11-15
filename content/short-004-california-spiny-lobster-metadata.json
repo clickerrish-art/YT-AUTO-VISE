@@ -123,6 +123,9 @@
     "uploadAllowed": false,
     "scheduleAllowed": false,
     "delivery": "Conversation review attachment; not committed as production media",
-    "notes": "Synthetic eSpeak narration is for editorial timing review only and must be replaced by owner-approved natural narration before publication. This render does not change any production approval flags."
+    "notes": "Synthetic eSpeak narration is for editorial timing review only and must be replaced by owner-approved natural narration before publication. This render does not change any production approval flags.",
+    "sizeBytes": 24286438,
+    "audioSampleRateHz": 22050,
+    "audioChannels": 1
   }
 }
