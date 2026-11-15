@@ -156,3 +156,15 @@ test("Page Reel initialization without a remote ID is uncertain and never retrie
   }),error=>error instanceof MetaPageReelError && error.uncertain===true);
   assert.equal(calls,1);
 });
+
+test("Page Reel adapter rejects landscape video before contacting Meta",async t=>{
+  const {root,draft}=await fixture(t);
+  let calls=0;
+  await assert.rejects(()=>createMetaPageReel({
+    draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,permissionsVerified:true,
+    publishingEnabled:true,dryRun:false,emergencyStop:false,rootDir:root,
+    inspect:()=>({width:1920,height:1080,durationSeconds:35}),
+    fetchImpl:async()=>{calls++;return response({});}
+  }),/portrait video/i);
+  assert.equal(calls,0);
+});
