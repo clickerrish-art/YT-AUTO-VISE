@@ -4,8 +4,8 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
 
-const ID = /^\\d{5,30}$/;
-const VERSION = /^v\\d+\\.\\d+$/;
+const ID = /^\d{5,30}$/;
+const VERSION = /^v\d+\.\d+$/;
 const graph = (version, edge) => `https://graph.facebook.com/${version}/${edge}`;
 const headers = token => ({ authorization: "Bearer " + token, accept: "application/json" });
 
