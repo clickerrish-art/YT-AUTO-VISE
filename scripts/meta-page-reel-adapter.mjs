@@ -179,3 +179,52 @@ export async function fetchMetaPageReelStatus({ remoteVideoId, expectedPageId, a
   if (data.id !== remoteVideoId || !data.status || typeof data.status !== "object") throw new MetaPageReelError("Meta Reel status response did not match the requested video ID");
   return { remoteVideoId, status:data.status, checkedAt:new Date().toISOString(), verifiedRemotely:true };
 }
+
+
+/**
+ * Reconcile a known Reel ID without searching by caption or issuing another mutation.
+ * Only an explicit completed publishing phase with a matching scheduled/published
+ * state and timestamp is accepted as a confirmed receipt.
+ */
+export async function reconcileMetaPageReel({
+  remoteVideoId, expectedPageId, accessToken, apiVersion = "v26.0",
+  scheduledAt = null, fetchImpl = fetch, timeoutMs = 10000
+}) {
+  try {
+    const remote = await fetchMetaPageReelStatus({
+      remoteVideoId, expectedPageId, accessToken, apiVersion, fetchImpl, timeoutMs
+    });
+    const status = remote.status ?? {};
+    const phase = status.publishing_phase ?? {};
+    const phaseStatus = String(phase.status ?? "").toLowerCase();
+    const publishStatus = String(phase.publish_status ?? "").toLowerCase();
+    const rawTime = phase.publish_time ?? status.scheduled_publish_time ?? null;
+    const epoch = typeof rawTime === "number" ? rawTime :
+      (typeof rawTime === "string" && /^\d+(?:\.\d+)?$/.test(rawTime) ? Number(rawTime) :
+        (rawTime == null ? NaN : Date.parse(rawTime) / 1000));
+    if (phaseStatus !== "complete" || !Number.isFinite(epoch)) {
+      return { outcome:"UNRESOLVED", reason:"REEL_PUBLISHING_PHASE_OR_TIMESTAMP_NOT_CONFIRMED", remoteVideoId, status };
+    }
+    if (publishStatus === "scheduled") {
+      const expected = scheduledAt == null ? NaN : Date.parse(scheduledAt) / 1000;
+      if (!Number.isFinite(expected) || Math.abs(epoch - expected) > 60) {
+        return { outcome:"UNRESOLVED", reason:"REEL_SCHEDULED_TIME_MISMATCH_OR_MISSING", remoteVideoId, status };
+      }
+      return {
+        outcome:"CONFIRMED",
+        receipt:{ status:"SCHEDULED_VERIFIED", remotePostId:remoteVideoId, remoteVideoId,
+          scheduledPublishTime:epoch, createdTime:null, remoteUrl:null }
+      };
+    }
+    if (publishStatus === "published") {
+      return {
+        outcome:"CONFIRMED",
+        receipt:{ status:"PUBLISHED_VERIFIED", remotePostId:remoteVideoId, remoteVideoId,
+          scheduledPublishTime:null, createdTime:new Date(epoch * 1000).toISOString(), remoteUrl:null }
+      };
+    }
+    return { outcome:"UNRESOLVED", reason:"REEL_PUBLISH_STATUS_NOT_CONFIRMED", remoteVideoId, status };
+  } catch {
+    return { outcome:"UNRESOLVED", reason:"REEL_STATUS_READ_FAILED", remoteVideoId };
+  }
+}
