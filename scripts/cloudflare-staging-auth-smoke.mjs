@@ -89,6 +89,7 @@ for (const backup of backupList.body.backups) {
   assert(!Object.hasOwn(backup, "state_json"),
     "Backup listing must not expose the persisted state snapshot");
 }
+const backupIdsBeforeNode = backupList.body.backups.map(item => item.backup_id).sort();
 
 const runnerStatusUnauthenticated = await get("/api/runner/session/status");
 assert(runnerStatusUnauthenticated.status === 401,
@@ -235,10 +236,14 @@ try {
     "Local Node dashboard could not read the Cloudflare-backed backup inventory");
   assert(localBackups.body.backups.length >= 1,
     "Local Node dashboard did not receive the retained staging backup");
+  const backupIdsDuringNode = localBackups.body.backups.map(item => item.backup_id).sort();
+  assert(JSON.stringify(backupIdsDuringNode) === JSON.stringify(backupIdsBeforeNode),
+    "Local Node dashboard startup changed the Cloudflare backup inventory; expected read-only behavior");
   nodeDashboardChecks = {
     unauthenticatedStateRejected: "PASS",
     authenticatedCloudflareStateRead: "PASS",
     authenticatedCloudflareBackupList: "PASS",
+    backupInventoryUnchanged: "PASS",
     durableRevision: Number(localBackups.body.revision),
     retainedBackupCount: localBackups.body.backups.length,
     publishingDisabled: "PASS"
@@ -251,6 +256,12 @@ const stateAfterNode = await get("/api/state", { "x-operator-token": token });
 assert(stateAfterNode.status === 200 &&
   JSON.stringify({ revision: stateAfterNode.body.revision, updatedAt: stateAfterNode.body.updatedAt, state: stateAfterNode.body.state }) === stateBeforeNode,
   "Read-only Node dashboard smoke unexpectedly changed remote Cloudflare state");
+const backupListAfterNode = await get("/api/backups", { "x-operator-token": token });
+assert(backupListAfterNode.status === 200 && Array.isArray(backupListAfterNode.body?.backups),
+  "Could not re-read Cloudflare backup inventory after local Node dashboard shutdown");
+const backupIdsAfterNode = backupListAfterNode.body.backups.map(item => item.backup_id).sort();
+assert(JSON.stringify(backupIdsAfterNode) === JSON.stringify(backupIdsBeforeNode),
+  "Read-only Node dashboard smoke unexpectedly changed remote Cloudflare backup inventory");
 
 console.log(JSON.stringify({
   result: "PASS",
@@ -263,6 +274,7 @@ console.log(JSON.stringify({
     durableRevision: Number(payload.revision),
     requiredStateCollections: "PASS",
     backupListing: "PASS",
+    backupInventoryUnchanged: "PASS",
     retainedBackupCount: backupList.body.backups.length,
     publishingDisabled: "PASS",
     unauthenticatedRunnerStatusRejected: "PASS",
