@@ -155,8 +155,12 @@ export async function runAutonomousFacebookPublisher({
           !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(attempt.status) ||
           attempt.verifiedRemotely !== true || typeof attempt.remotePostId !== "string" ||
           !attempt.remotePostId.trim() || typeof attempt.slotId !== "string" || !attempt.slotId.trim()) continue;
-      if (history.some(item => item?.slotId === attempt.slotId &&
-          ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status))) continue;
+      const existingReceipts = history.filter(item => item?.slotId === attempt.slotId &&
+        ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status));
+      if (existingReceipts.some(item => item.remotePostId !== attempt.remotePostId)) {
+        throw new Error("Facebook history conflicts with a verified ledger receipt; publishing blocked for manual reconciliation");
+      }
+      if (existingReceipts.length) continue;
       history.push({ ...attempt, payload: undefined,
         historyRebuiltAt: isoNow(Number(now)),
         historyRebuildReason: "VERIFIED_LEDGER_RECEIPT_RECOVERED_AFTER_HISTORY_WRITE_GAP" });
