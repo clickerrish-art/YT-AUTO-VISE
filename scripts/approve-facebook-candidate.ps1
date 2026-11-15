@@ -1,0 +1,131 @@
+#requires -Version 5.1
+[CmdletBinding()]
+param(
+    [switch]$InitializeSecret,
+    [string]$CandidateFile = "content/facebook-intake-candidates.json",
+    [string]$SlotId
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+
+$repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+$secretDirectory = Join-Path $env:LOCALAPPDATA "NatureFrontiers"
+$secretFile = Join-Path $secretDirectory "facebook-approval-hmac.dpapi"
+
+function Set-CurrentUserOnlyAcl {
+    param([Parameter(Mandatory)][string]$Path, [switch]$Directory)
+    $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent().User
+    $acl = if ($Directory) {
+        New-Object System.Security.AccessControl.DirectorySecurity
+    } else {
+        New-Object System.Security.AccessControl.FileSecurity
+    }
+    $acl.SetAccessRuleProtection($true, $false)
+    $inheritance = if ($Directory) {
+        [System.Security.AccessControl.InheritanceFlags]::ContainerInherit -bor [System.Security.AccessControl.InheritanceFlags]::ObjectInherit
+    } else {
+        [System.Security.AccessControl.InheritanceFlags]::None
+    }
+    $propagation = [System.Security.AccessControl.PropagationFlags]::None
+    $rule = New-Object System.Security.AccessControl.FileSystemAccessRule(
+        $identity,
+        [System.Security.AccessControl.FileSystemRights]::FullControl,
+        $inheritance,
+        $propagation,
+        [System.Security.AccessControl.AccessControlType]::Allow
+    )
+    $acl.AddAccessRule($rule)
+    $systemSid = New-Object System.Security.Principal.SecurityIdentifier("S-1-5-18")
+    $systemRule = New-Object System.Security.AccessControl.FileSystemAccessRule(
+        $systemSid,
+        [System.Security.AccessControl.FileSystemRights]::FullControl,
+        $inheritance,
+        $propagation,
+        [System.Security.AccessControl.AccessControlType]::Allow
+    )
+    $acl.AddAccessRule($systemRule)
+    Set-Acl -LiteralPath $Path -AclObject $acl
+}
+
+if (-not $IsWindows -and $PSVersionTable.PSVersion.Major -ge 6) {
+    throw "This helper requires Windows DPAPI. Run it in Windows PowerShell 5.1 or PowerShell 7 on Windows."
+}
+if ($PSVersionTable.PSVersion.Major -lt 5) {
+    throw "PowerShell 5.1 or later is required."
+}
+
+if ($InitializeSecret) {
+    New-Item -ItemType Directory -Path $secretDirectory -Force | Out-Null
+    Set-CurrentUserOnlyAcl -Path $secretDirectory -Directory
+    $secureSecret = Read-Host "Enter the existing FACEBOOK_APPROVAL_HMAC_SECRET (input is hidden)" -AsSecureString
+    $bstr = [IntPtr]::Zero
+    try {
+        $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureSecret)
+        $plainSecret = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr)
+        if ($plainSecret.Length -lt 32) {
+            throw "The secret must contain at least 32 characters. Nothing was saved."
+        }
+        $encrypted = ConvertFrom-SecureString -SecureString $secureSecret
+        [System.IO.File]::WriteAllText($secretFile, $encrypted, [System.Text.Encoding]::UTF8)
+        Set-CurrentUserOnlyAcl -Path $secretFile
+        Write-Output "Encrypted signer secret saved for this Windows user only: $secretFile"
+        Write-Output "The secret was not written to the repository or displayed."
+    }
+    finally {
+        if ($bstr -ne [IntPtr]::Zero) {
+            [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
+        }
+        $plainSecret = $null
+        if ($secureSecret) { $secureSecret.Dispose() }
+    }
+    return
+}
+
+if (-not (Test-Path -LiteralPath $secretFile -PathType Leaf)) {
+    throw "No local signer secret is configured. Run this script once with -InitializeSecret first."
+}
+if ([string]::IsNullOrWhiteSpace($SlotId)) {
+    throw "Supply the exact candidate slot ID with -SlotId."
+}
+$candidatePath = Join-Path $repoRoot $CandidateFile
+$resolvedCandidate = (Resolve-Path -LiteralPath $candidatePath).Path
+if (-not $resolvedCandidate.StartsWith($repoRoot + [System.IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) {
+    throw "Candidate file must be inside the repository."
+}
+if (-not (Test-Path -LiteralPath (Join-Path $repoRoot "node_modules") -PathType Container)) {
+    throw "Node dependencies are missing. Run npm ci in the repository first."
+}
+
+$encryptedSecret = [System.IO.File]::ReadAllText($secretFile, [System.Text.Encoding]::UTF8).Trim()
+$secureSecret = ConvertTo-SecureString -String $encryptedSecret
+$bstr = [IntPtr]::Zero
+try {
+    $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureSecret)
+    $env:FACEBOOK_APPROVAL_HMAC_SECRET = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr)
+    $reviewer = Read-Host "Reviewer ID (your real, attributable reviewer label)"
+    if ([string]::IsNullOrWhiteSpace($reviewer) -or $reviewer.Length -gt 200) {
+        throw "A reviewer ID between 1 and 200 characters is required."
+    }
+    $env:FACEBOOK_APPROVER_ID = $reviewer
+    Push-Location $repoRoot
+    try {
+        & npm run facebook:approve -- $CandidateFile $SlotId
+        $exitCode = $LASTEXITCODE
+    }
+    finally {
+        Pop-Location
+    }
+    if ($exitCode -ne 0) {
+        throw "The approval command failed with exit code $exitCode. No approval should be assumed."
+    }
+}
+finally {
+    Remove-Item Env:FACEBOOK_APPROVAL_HMAC_SECRET -ErrorAction SilentlyContinue
+    Remove-Item Env:FACEBOOK_APPROVER_ID -ErrorAction SilentlyContinue
+    if ($bstr -ne [IntPtr]::Zero) {
+        [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
+    }
+    $secureSecret.Dispose()
+    $encryptedSecret = $null
+}
