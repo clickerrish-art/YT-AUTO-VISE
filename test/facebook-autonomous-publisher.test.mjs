@@ -373,3 +373,83 @@ test("failed Meta permissions automatically skip and drain a slot without owner 
     assert.equal(history[0].reason, "META_PAGE_IDENTITY_OR_PERMISSION_CHECK_FAILED_NO_MUTATION");
   } finally { f.cleanup(); }
 });
+
+test("scheduled Reel publisher persists remote video ID before upload and verifies scheduled receipt",async()=>{
+  const f=setup();
+  try {
+    Object.assign(f.config,{emergencyStop:false,publishingEnabled:true,dryRun:false});
+    fs.writeFileSync(f.configPath,JSON.stringify(f.config));
+    const now=Date.parse("2026-10-25T05:30:00.000Z");
+    const payload={
+      slotId:"nature-frontiers-reel-2026-10-25-0600",destination:"nature_frontiers_facebook",
+      destinationPageId:"123456789012345",scheduledDate:"2026-10-25",scheduledAt:"2026-10-25T06:00:00.000Z",
+      mediaType:"reel",caption:"Verified wildlife education Reel.",media:[{path:"media/reel.mp4",sha256:"a".repeat(64)}],
+      links:[],claims:[],campaignId:null
+    };
+    fs.writeFileSync(f.queuePath,JSON.stringify([payload]));
+    let uploadCalls=0,reconcileCalls=0;
+    const result=await runAutonomousFacebookPublisher({
+      rootDir:f.root,configPath:f.configPath,queuePath:f.queuePath,stateDir:f.stateDir,now,
+      env:{FACEBOOK_PUBLISH_ENABLED:"YES",NATURE_FRONTIERS_FACEBOOK_PAGE_ID:"123456789012345",META_USER_ACCESS_TOKEN:"u".repeat(30)},
+      policyEvaluator:async()=>({eligible:true,blockers:[],warnings:[],contentFingerprint:"e".repeat(64),policyRuleVersion:f.config.complianceRuleSet,mediaFingerprints:[{sha256:"a".repeat(64)}],reason:"ELIGIBLE"}),
+      verifyPermissions:async()=>({permissionsVerified:true,pageAccessToken:"p".repeat(30)}),
+      verifyIdentity:async()=>({verified:true}),
+      publish:async()=>{throw new Error("feed-post adapter must not receive a Reel");},
+      publishReel:async options=>{
+        uploadCalls++;
+        assert.equal(options.videoState,"SCHEDULED");
+        assert.equal(options.scheduledPublishAt,payload.scheduledAt);
+        await options.onRemoteVideoId({remoteVideoId:"987654321098765"});
+        const ledger=JSON.parse(fs.readFileSync(path.join(f.stateDir,"facebook-attempt-ledger.json"),"utf8"));
+        assert.equal(ledger[0].remoteVideoId,"987654321098765","remote ID must be durable before binary upload");
+        return {remoteVideoId:"987654321098765",status:"REMOTE_SCHEDULED_UNVERIFIED"};
+      },
+      reconcileReel:async options=>{
+        reconcileCalls++;
+        assert.equal(options.remoteVideoId,"987654321098765");
+        return {outcome:"CONFIRMED",receipt:{status:"SCHEDULED_VERIFIED",remotePostId:"987654321098765",remoteVideoId:"987654321098765",scheduledPublishTime:Date.parse(payload.scheduledAt)/1000}};
+      }
+    });
+    assert.equal(result.published,1);
+    assert.equal(uploadCalls,1);
+    assert.equal(reconcileCalls,1);
+    const ledger=JSON.parse(fs.readFileSync(path.join(f.stateDir,"facebook-attempt-ledger.json"),"utf8"));
+    assert.equal(ledger[0].kind,"FACEBOOK_PAGE_REEL_PUBLISH_ATTEMPT");
+    assert.equal(ledger[0].status,"SCHEDULED_VERIFIED");
+    assert.equal(ledger[0].remoteVideoId,"987654321098765");
+    assert.equal(ledger[0].verifiedRemotely,true);
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath,"utf8")),[]);
+  } finally { f.cleanup(); }
+});
+
+test("startup recovers an interrupted Reel upload by its persisted remote video ID without reuploading",async()=>{
+  const f=setup();
+  try {
+    Object.assign(f.config,{emergencyStop:false,publishingEnabled:true,dryRun:false});
+    fs.writeFileSync(f.configPath,JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir,{recursive:true});
+    const scheduledAt="2026-10-25T06:00:00.000Z";
+    const payload={slotId:"nature-frontiers-reel-recovery",destination:"nature_frontiers_facebook",destinationPageId:"123456789012345",
+      scheduledDate:"2026-10-25",scheduledAt,mediaType:"reel",caption:"Previously submitted Reel.",media:[],links:[],claims:[],campaignId:null};
+    fs.writeFileSync(f.queuePath,JSON.stringify([payload]));
+    fs.writeFileSync(path.join(f.stateDir,"facebook-attempt-ledger.json"),JSON.stringify([{
+      kind:"FACEBOOK_PAGE_REEL_PUBLISH_ATTEMPT",slotId:payload.slotId,destination:"nature_frontiers_facebook",
+      status:"PUBLISHING",startedAt:"2026-10-25T05:30:00.000Z",scheduledAt,remoteVideoId:"987654321098765",
+      payload:{caption:payload.caption,scheduledAt,mediaType:"reel"}
+    }]));
+    let uploadCalls=0,reconcileCalls=0;
+    const result=await runAutonomousFacebookPublisher({
+      rootDir:f.root,configPath:f.configPath,queuePath:f.queuePath,stateDir:f.stateDir,now:Date.parse("2026-10-25T05:30:00.000Z"),
+      env:{FACEBOOK_PUBLISH_ENABLED:"YES",NATURE_FRONTIERS_FACEBOOK_PAGE_ID:"123456789012345",META_USER_ACCESS_TOKEN:"u".repeat(30)},
+      verifyPermissions:async()=>({permissionsVerified:true,pageAccessToken:"p".repeat(30)}),
+      publishReel:async()=>{uploadCalls++;throw new Error("recovered Reel must never upload again");},
+      reconcileReel:async options=>{reconcileCalls++;assert.equal(options.remoteVideoId,"987654321098765");return {outcome:"CONFIRMED",receipt:{status:"SCHEDULED_VERIFIED",remotePostId:"987654321098765",remoteVideoId:"987654321098765",scheduledPublishTime:Date.parse(scheduledAt)/1000}};}
+    });
+    assert.equal(uploadCalls,0);
+    assert.equal(reconcileCalls,1);
+    const ledger=JSON.parse(fs.readFileSync(path.join(f.stateDir,"facebook-attempt-ledger.json"),"utf8"));
+    assert.equal(ledger[0].status,"SCHEDULED_VERIFIED");
+    assert.equal(ledger[0].remoteVideoId,"987654321098765");
+    assert.equal(result.skipped,1);
+  } finally { f.cleanup(); }
+});
