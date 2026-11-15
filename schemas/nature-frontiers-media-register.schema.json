@@ -1,0 +1,340 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nature-frontiers.local/schemas/media-register.schema.json",
+  "title": "Nature Frontiers Media Register",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "registerId",
+    "brand",
+    "timezone",
+    "policy",
+    "assets"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "registerId": {
+      "type": "string",
+      "const": "nature-frontiers-media"
+    },
+    "brand": {
+      "type": "string",
+      "const": "Nature Frontiers"
+    },
+    "timezone": {
+      "type": "string",
+      "const": "Africa/Johannesburg"
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "defaultPublicationState",
+        "requireHumanApproval",
+        "allowAutomaticPublication",
+        "sourceOfTruth"
+      ],
+      "properties": {
+        "defaultPublicationState": {
+          "const": "held"
+        },
+        "requireHumanApproval": {
+          "const": true
+        },
+        "allowAutomaticPublication": {
+          "const": false
+        },
+        "sourceOfTruth": {
+          "const": "versioned-local-json"
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "mediaType",
+          "source",
+          "claims",
+          "rights",
+          "inspection",
+          "editorial",
+          "approval",
+          "usage"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{2,79}$"
+          },
+          "mediaType": {
+            "enum": [
+              "video",
+              "image",
+              "audio"
+            ]
+          },
+          "source": {
+            "type": "object",
+            "required": [
+              "provider",
+              "url",
+              "listingStatus",
+              "listingEvidence"
+            ],
+            "properties": {
+              "provider": {
+                "type": "string",
+                "minLength": 1
+              },
+              "assetId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "contributor": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "listingStatus": {
+                "enum": [
+                  "unverified",
+                  "verified",
+                  "unavailable",
+                  "rejected"
+                ]
+              },
+              "listingDescription": {
+                "type": "string"
+              },
+              "listingTags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "listingEvidence": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            },
+            "additionalProperties": true
+          },
+          "localFile": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "media": {
+            "type": "object"
+          },
+          "claims": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "type",
+                "value",
+                "status"
+              ]
+            }
+          },
+          "rights": {
+            "type": "object",
+            "required": [
+              "reviewStatus",
+              "additionalPermissionsStatus",
+              "licenseEvidence"
+            ],
+            "properties": {
+              "reviewStatus": {
+                "enum": [
+                  "not_assessed",
+                  "in_progress",
+                  "cleared",
+                  "rejected"
+                ]
+              },
+              "additionalPermissionsStatus": {
+                "enum": [
+                  "not_assessed",
+                  "not_required",
+                  "required",
+                  "obtained",
+                  "rejected"
+                ]
+              },
+              "licenseEvidence": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "reviewedBy": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "reviewedAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              }
+            },
+            "additionalProperties": true
+          },
+          "inspection": {
+            "type": "object",
+            "required": [
+              "status",
+              "inspectedBy",
+              "inspectedAt",
+              "visualNotes"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "not_inspected",
+                  "partial",
+                  "complete"
+                ]
+              },
+              "inspectedBy": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "inspectedAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "visualNotes": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          "editorial": {
+            "type": "object"
+          },
+          "approval": {
+            "type": "object",
+            "required": [
+              "status",
+              "approvedBy",
+              "approvedAt",
+              "approvedFileSha256",
+              "approvedUsage"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "pending",
+                  "approved",
+                  "rejected",
+                  "revoked"
+                ]
+              },
+              "approvedBy": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "approvedAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "approvedFileSha256": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "approvedUsage": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": true
+          },
+          "usage": {
+            "type": "object",
+            "required": [
+              "scheduled",
+              "published",
+              "platformPostIds"
+            ],
+            "properties": {
+              "scheduled": {
+                "type": "boolean"
+              },
+              "published": {
+                "type": "boolean"
+              },
+              "platformPostIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}
