@@ -112,8 +112,7 @@ function asTimestamp(value, label) {
  */
 export function validatePublicationSlot(proposed, existingItems = [], {
   timeZone = DEFAULT_SCHEDULE_TIMEZONE,
-  minSpacingHours = DEFAULT_MIN_SPACING_HOURS,
-  cycleStartAt = null
+  minSpacingHours = DEFAULT_MIN_SPACING_HOURS
 } = {}) {
   if (!proposed || typeof proposed !== "object") throw new Error("proposed slot is required");
   if (!Number.isFinite(minSpacingHours) || minSpacingHours < DEFAULT_MIN_SPACING_HOURS) throw new Error(`minSpacingHours must be at least ${DEFAULT_MIN_SPACING_HOURS} elapsed hours`);
@@ -292,7 +291,8 @@ export function evaluateNextPublication({
   jobId,
   format,
   timeZone = DEFAULT_SCHEDULE_TIMEZONE,
-  minSpacingHours = DEFAULT_MIN_SPACING_HOURS
+  minSpacingHours = DEFAULT_MIN_SPACING_HOURS,
+  cycleStartAt = null
 } = {}) {
   const errors = [];
   if (historyVerified !== true) errors.push("complete channel history has not been independently verified");
