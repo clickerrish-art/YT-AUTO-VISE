@@ -179,6 +179,10 @@ test("API acceptance matrix exactly matches every live server API route", () => 
 
   assert.deepEqual(documented, actual,
     "every API route declared by dashboard-server.mjs must have exactly one acceptance-matrix row");
+  const instagramStatus = matrix.routes.find(route => route.method === "GET" && route.path === "/api/instagram/status");
+  assert.ok(instagramStatus, "the read-only Instagram operations endpoint must be inventoried");
+  assert.equal(instagramStatus.overallAcceptance, "NOT_TESTED",
+    "the new status endpoint must remain NOT_TESTED until exact-head acceptance evidence is recorded");
   assert.equal(matrix.counts.routes, actual.length,
     "the acceptance matrix route count must match the live source inventory");
   assert.equal(matrix.counts.authNegativePass, matrix.routes.filter(route => /PASS/.test(route.authenticationNegative)).length,
