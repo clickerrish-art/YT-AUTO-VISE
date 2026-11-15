@@ -71,11 +71,8 @@ if ($InitializeSecret) {
     }
     Set-CurrentUserOnlyAcl -Path $secretDirectory -Directory
     $secureSecret = Read-Host "Enter the existing FACEBOOK_APPROVAL_HMAC_SECRET (input is hidden)" -AsSecureString
-    $bstr = [IntPtr]::Zero
     try {
-        $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureSecret)
-        $plainSecret = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr)
-        if ($plainSecret.Length -lt 32) {
+        if ($secureSecret.Length -lt 32) {
             throw "The secret must contain at least 32 characters. Nothing was saved."
         }
         $encrypted = ConvertFrom-SecureString -SecureString $secureSecret
@@ -85,10 +82,6 @@ if ($InitializeSecret) {
         Write-Output "The secret was not written to the repository or displayed."
     }
     finally {
-        if ($bstr -ne [IntPtr]::Zero) {
-            [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
-        }
-        $plainSecret = $null
         if ($secureSecret) { $secureSecret.Dispose() }
     }
     return
