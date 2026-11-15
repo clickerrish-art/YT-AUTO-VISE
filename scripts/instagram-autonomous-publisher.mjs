@@ -6,6 +6,7 @@ import { publishInstagramReel, verifyInstagramBusinessAccount, reconcileInstagra
 import { evaluateFinalFacebookPayload } from "./facebook-policy-engine.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const ID = /^\d{5,30}$/;
 export const INSTAGRAM_POLICY_VERSION = "nature-frontiers-instagram-policy-2026-11-v1";
 const sha256 = value => crypto.createHash("sha256").update(value).digest("hex");
 const iso = value => new Date(value).toISOString();
