@@ -85,6 +85,7 @@ function fingerprint(payload) {
         commercialUse: m?.rightsRecord?.commercialUse === true,
         socialMediaUse: m?.rightsRecord?.socialMediaUse === true,
         provenanceVerified: m?.rightsRecord?.provenanceVerified === true,
+        syntheticOrAlteredKnown: m?.rightsRecord?.syntheticOrAlteredKnown === true,
         attributionRequired: m?.rightsRecord?.attributionRequired === true,
         attributionText: m?.rightsRecord?.attributionText ?? "",
         expiresAt: m?.rightsRecord?.expiresAt ?? null
