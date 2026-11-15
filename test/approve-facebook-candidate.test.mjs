@@ -81,9 +81,12 @@ test("signer refuses to overwrite a candidate changed while the human review pro
   await assert.rejects(() => approveFacebookCandidate({
     candidateFile: path.relative(root, file), slotId: payload.slotId,
     env: { FACEBOOK_APPROVAL_HMAC_SECRET: secret, FACEBOOK_APPROVER_ID: "owner-test-reviewer" },
-    confirm: async () => {
-      fs.writeFileSync(file, JSON.stringify([{ ...payload, caption: "Changed while reviewer was reading" }]));
-      return "VERIFY CLAIM " + payload.slotId + " 1";
+    confirm: async prompt => {
+      if (prompt.startsWith("Type exactly VERIFY CLAIM ")) {
+        fs.writeFileSync(file, JSON.stringify([{ ...payload, caption: "Changed while reviewer was reading" }]));
+        return "VERIFY CLAIM " + payload.slotId + " 1";
+      }
+      return "APPROVE " + payload.slotId;
     },
     now: "2026-11-14T10:00:00.000Z"
   }), /changed during review/i);
