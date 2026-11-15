@@ -215,10 +215,12 @@ export async function runAutonomousFacebookPublisher({
           !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(attempt.status) ||
           attempt.verifiedRemotely !== true || typeof attempt.remotePostId !== "string" ||
           !attempt.remotePostId.trim() || typeof attempt.slotId !== "string" || !attempt.slotId.trim()) continue;
-      const existingReceipts = history.filter(item => item?.slotId === attempt.slotId &&
+      const existingSlotRecords = history.filter(item => item?.slotId === attempt.slotId);
+      const existingReceipts = existingSlotRecords.filter(item =>
         ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status));
-      if (existingReceipts.some(item => item.remotePostId !== attempt.remotePostId)) {
-        throw new Error("Facebook history conflicts with a verified ledger receipt; publishing blocked for manual reconciliation");
+      if (existingSlotRecords.some(item => !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)) ||
+          existingReceipts.some(item => item.remotePostId !== attempt.remotePostId)) {
+        throw new Error("Facebook history conflicts with a verified ledger receipt or prior slot outcome; publishing blocked for manual reconciliation");
       }
       if (existingReceipts.length) continue;
       history.push({ ...attempt, payload: undefined,
