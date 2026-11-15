@@ -132,3 +132,19 @@ test("CLI runner persists only after successful probe and register validation", 
   assert.equal(saved.assets[0].approval.status, "pending");
   assert.deepEqual(validateMediaRegister(saved), []);
 });
+
+test("complete visual inspection must be bound to the current local media hash", () => {
+  const { root, register } = fixture();
+  registerLocalMedia({ register, assetId: ASSET_ID, filePath: "media/nature-frontiers/clip.mp4", root });
+  const asset = register.assets[0];
+  asset.inspection = {
+    status: "complete",
+    inspectedBy: "Editorial reviewer",
+    inspectedAt: new Date(Date.now() - 1000).toISOString(),
+    visualNotes: "Full clip reviewed; no unsupported claims or misleading edits observed.",
+    inspectedFileSha256: asset.localFile.sha256
+  };
+  assert.deepEqual(validateMediaRegister(register), []);
+  asset.inspection.inspectedFileSha256 = "0".repeat(64);
+  assert.ok(validateMediaRegister(register).some(error => error.includes("complete inspection file SHA-256 must match")));
+});
