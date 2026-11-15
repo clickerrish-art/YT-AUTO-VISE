@@ -2110,10 +2110,10 @@
   "currentCheckpoint": {
     "applicationCodeSha": "6a84e24c959639843dbb1f3d6449cfc464fc1dde",
     "testedSha": "7a23289f7a6cd9a34027b84691333da0b7051fc2",
-    "checkpointPrHead": "5b61de00c926357086ef63cbf178c8e2c60df9c7",
+    "checkpointPrHead": "894300efeaee1bc45426e2bc8826451f19d78832",
     "currentMainSha": "69fdf35c90f980c142be3aaffa863304bc7eaa25",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 3853,
+    "aheadBy": 3858,
     "behindBy": 4,
     "changedFiles": 366,
     "prState": "open",
@@ -2196,7 +2196,19 @@
       "draft": true,
       "merged": false,
       "base": "main"
-    }
+    },
+    "documentationOnlyCommitsAfterTest": [
+      "19de6aed3b46499e4a6a913c03a12a122f04a6f5",
+      "e0249b6b9522239360d3bfe762714fe0a34420eb",
+      "7206ea276b47382d7f0d182c0cd00b40d67a107c",
+      "11018f44f2eac25dba0d2d20c27c5bb502a5f794",
+      "5b61de00c926357086ef63cbf178c8e2c60df9c7",
+      "58d3c8dbbdc675899a8168adaf1e0904dc167657",
+      "1d351f36cdd26f6ded0422135b9edd0672048faa",
+      "6efa0d2c3f6a5ecff3085d5bec74f3d219bcd8a4",
+      "dcb6916af0c0c700d9c010c1cab140572cddcacf",
+      "894300efeaee1bc45426e2bc8826451f19d78832"
+    ]
   },
   "candidateSourceTestSha": "7a23289f7a6cd9a34027b84691333da0b7051fc2",
   "latestSourceTestSha": "7a23289f7a6cd9a34027b84691333da0b7051fc2",
@@ -2269,7 +2281,7 @@
   "latestDocumentedPrHeadBeforeRegisterRefresh": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
   "observedBranchHeadBeforeRegisterRefresh": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
   "latestLiveBranchHeadBeforeRegisterRefresh": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
-  "latestLiveAheadBy": 3853,
+  "latestLiveAheadBy": 3858,
   "latestLiveBehindBy": 4,
   "latestLiveChangedFiles": 366,
   "currentLiveHeadBeforeRegisterRefresh": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
@@ -2320,7 +2332,12 @@
     "e0249b6b9522239360d3bfe762714fe0a34420eb",
     "7206ea276b47382d7f0d182c0cd00b40d67a107c",
     "11018f44f2eac25dba0d2d20c27c5bb502a5f794",
-    "5b61de00c926357086ef63cbf178c8e2c60df9c7"
+    "5b61de00c926357086ef63cbf178c8e2c60df9c7",
+    "58d3c8dbbdc675899a8168adaf1e0904dc167657",
+    "1d351f36cdd26f6ded0422135b9edd0672048faa",
+    "6efa0d2c3f6a5ecff3085d5bec74f3d219bcd8a4",
+    "dcb6916af0c0c700d9c010c1cab140572cddcacf",
+    "894300efeaee1bc45426e2bc8826451f19d78832"
   ],
   "latestInventoryArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231721",
   "ciCheckoutWorkingTreeClean": true,
@@ -2420,12 +2437,12 @@
   },
   "liveEvidenceRefresh": {
     "recordedDate": "2026-11-16",
-    "observedBranchHeadBeforeRegisterRefresh": "5b61de00c926357086ef63cbf178c8e2c60df9c7",
+    "observedBranchHeadBeforeRegisterRefresh": "894300efeaee1bc45426e2bc8826451f19d78832",
     "exactSourceTestSha": "7a23289f7a6cd9a34027b84691333da0b7051fc2",
     "mainSha": "69fdf35c90f980c142be3aaffa863304bc7eaa25",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
     "branchComparison": {
-      "aheadBy": 3853,
+      "aheadBy": 3858,
       "behindBy": 4,
       "finalTreeChangedFiles": 366,
       "branchOnlyCommitsAtInventory": 3848,
@@ -2540,7 +2557,7 @@
       ],
       "sha256": "4fc0b7f4a3f5d79ecf8d6a2bb148f06ba01f56c1c8d3b4db846d614f65f07261"
     },
-    "caveat": "Five content/documentation-only commits follow the exact tested source/test SHA; no application source or test files changed after that SHA. The current PR branch remains draft and unmerged."
+    "caveat": "Ten content/documentation-only commits follow the exact tested source/test SHA; no application source or test files changed after that SHA."
   },
   "cloudflareStagingInfrastructure": {
     "observedAt": "2026-11-08",
@@ -2614,5 +2631,5 @@
       "skipped": 0
     }
   },
-  "latestLiveBranchHead": "5b61de00c926357086ef63cbf178c8e2c60df9c7"
+  "latestLiveBranchHead": "894300efeaee1bc45426e2bc8826451f19d78832"
 }
