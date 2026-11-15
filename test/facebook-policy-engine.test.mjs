@@ -226,6 +226,39 @@ test("duplicate slots, near-duplicates and daily frequency limits block", async 
   } finally { f.cleanup(); }
 });
 
+test("approval fingerprint changes when rights provenance knowledge changes", () => {
+  const payload = {
+    destination: "nature_frontiers_facebook",
+    destinationPageId: "123456789012345",
+    slotId: "nf-provenance-fingerprint-test",
+    scheduledAt: "2026-10-25T08:00:00.000Z",
+    caption: "Wildlife education.",
+    claims: [],
+    media: [{
+      id: "asset-1",
+      path: "asset.bin",
+      sha256: "a".repeat(64),
+      syntheticOrAltered: false,
+      representationKnown: true,
+      rightsRecord: {
+        evidencePath: "license.txt",
+        evidenceSha256: "b".repeat(64),
+        source: "Original",
+        license: "Social media",
+        commercialUse: true,
+        socialMediaUse: true,
+        provenanceVerified: true,
+        syntheticOrAlteredKnown: true,
+        attributionRequired: false
+      }
+    }]
+  };
+  const before = facebookPayloadFingerprint(payload);
+  payload.media[0].rightsRecord.syntheticOrAlteredKnown = false;
+  const after = facebookPayloadFingerprint(payload);
+  assert.notEqual(after, before);
+});
+
 test("valid exact-content editorial approval is accepted; unknown synthetic origin blocks", async () => {
   const f = fixture();
   try {
