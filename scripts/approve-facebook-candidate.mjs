@@ -60,9 +60,10 @@ export async function approveFacebookCandidate({
     const checkedAt = new Date(now).toISOString();
     const claimHash = crypto.createHash("sha256").update(String(claim.text)).digest("hex");
     const sourceUrlsHash = crypto.createHash("sha256").update(JSON.stringify(claim.sourceUrls)).digest("hex");
-    const signed = claimHash + "\n" + sourceUrlsHash + "\n" + reviewerId + "\n" + checkedAt;
+    const sourceExcerptHash = crypto.createHash("sha256").update(String(claim.sourceExcerpt ?? "")).digest("hex");
+    const signed = claimHash + "\n" + sourceUrlsHash + "\n" + sourceExcerptHash + "\n" + reviewerId + "\n" + checkedAt;
     const signature = crypto.createHmac("sha256", secret).update(signed).digest("hex");
-    item.claims[i] = { ...claim, sourceSupportsClaim: true, verified: true, semanticVerification: { claimHash, sourceUrlsHash, reviewerId, checkedAt, signature } };
+    item.claims[i] = { ...claim, sourceSupportsClaim: true, verified: true, semanticVerification: { claimHash, sourceUrlsHash, sourceExcerptHash, reviewerId, checkedAt, signature } };
   }
   const contentFingerprint = facebookPayloadFingerprint(item);
   stdout.write("\nNATURE FRONTIERS — FINAL CONTENT REVIEW\n");
