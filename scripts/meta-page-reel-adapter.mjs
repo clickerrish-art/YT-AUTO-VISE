@@ -73,8 +73,11 @@ export async function createMetaPageReel({
     throw new MetaPageReelError("A captioned, checksum-bound Facebook Page Reel draft is required");
   }
   if (!["DRAFT","PUBLISHED"].includes(videoState)) throw new MetaPageReelError("Reel state must be DRAFT or PUBLISHED");
-  if (videoState === "PUBLISHED" && (approvalVerified !== true || publishingEnabled !== true || dryRun !== false || emergencyStop !== false)) {
-    throw new MetaPageReelError("Publishing a Reel requires verified editorial approval, live publishing enabled, dry-run disabled and emergency stop cleared");
+  if (publishingEnabled !== true || dryRun !== false || emergencyStop !== false) {
+    throw new MetaPageReelError("Remote Reel upload requires live publishing enabled, dry-run disabled and emergency stop cleared");
+  }
+  if (videoState === "PUBLISHED" && approvalVerified !== true) {
+    throw new MetaPageReelError("Publishing a Reel requires verified editorial approval");
   }
   let absolute, bytes;
   try { absolute = resolveRegularFileNoSymlinks(draft.media.path, rootDir, "Facebook Reel video"); bytes = fs.readFileSync(absolute); }
