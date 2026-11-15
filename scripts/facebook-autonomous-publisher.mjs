@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION } from "./facebook-policy-engine.mjs";
 import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost, fetchMetaPagePost, reconcileMetaPagePost } from "./meta-page-adapter.mjs";
+import { createMetaPageReel, reconcileMetaPageReel } from "./meta-page-reel-adapter.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const isoNow = now => new Date(now).toISOString();
@@ -175,12 +176,22 @@ export async function runAutonomousFacebookPublisher({
       let reconciliation;
       try {
         if (recoveryPageToken.length < 20) throw new Error("No runtime-derived Page token available for reconciliation");
-        reconciliation = await reconcileRemote({
-          pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
-          accessToken: recoveryPageToken, apiVersion: config.apiVersion,
-          caption, scheduledAt, attemptStartedAt: attempt.startedAt,
-          remotePostId: attempt.remotePostId ?? null, fetchImpl
-        });
+        if (attempt.kind === "FACEBOOK_PAGE_REEL_PUBLISH_ATTEMPT") {
+          reconciliation = attempt.remoteVideoId
+            ? await reconcileReel({
+                remoteVideoId:attempt.remoteVideoId, expectedPageId:config.destinationPageId,
+                accessToken:recoveryPageToken, apiVersion:config.apiVersion,
+                scheduledAt, fetchImpl
+              })
+            : { outcome:"UNRESOLVED", reason:"REEL_REMOTE_VIDEO_ID_NOT_DURABLY_RECORDED_NO_RETRY" };
+        } else {
+          reconciliation = await reconcileRemote({
+            pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
+            accessToken: recoveryPageToken, apiVersion: config.apiVersion,
+            caption, scheduledAt, attemptStartedAt: attempt.startedAt,
+            remotePostId: attempt.remotePostId ?? null, fetchImpl
+          });
+        }
       } catch {
         reconciliation = { outcome: "UNRESOLVED", reason: "STARTUP_RECONCILIATION_FAILED", matches: [] };
       }
@@ -245,7 +256,7 @@ export async function runAutonomousFacebookPublisher({
           reason: "POLICY_RULE_VERSION_MISMATCH"
         };
       }
-      if (!decision?.eligible) {
+      if (payload.mediaType != null && !["feed_post","reel"].includes(payload.mediaType)) {\n        const record = { slotId: payload.slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_BLOCKED", checkedAt: isoNow(current), reason: "UNSUPPORTED_MEDIA_TYPE" };\n        history.push(record); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++; continue;\n      }\n      if (!decision?.eligible) {
         const record = { slotId: payload.slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_BLOCKED", checkedAt: isoNow(current), contentFingerprint: decision?.contentFingerprint ?? null, policyDecision: decision, reason: decision?.reason ?? "POLICY_UNKNOWN" };
         history.push(record); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++; continue;
       }
@@ -285,25 +296,50 @@ export async function runAutonomousFacebookPublisher({
         kind: "FACEBOOK_PUBLISH_ATTEMPT", slotId: payload.slotId, destination: "nature_frontiers_facebook",
         status: "PUBLISHING", startedAt: isoNow(current), scheduledAt: payload.scheduledAt, contentFingerprint: decision.contentFingerprint,
         policyRuleVersion: decision.policyRuleVersion, policyDecision: decision,
-        payload: { caption: payload.caption, scheduledAt: payload.scheduledAt, links: payload.links ?? [], mediaFingerprints: decision.mediaFingerprints }
+        payload: { caption: payload.caption, scheduledAt: payload.scheduledAt, mediaType: payload.mediaType ?? "feed_post", links: payload.links ?? [], mediaFingerprints: decision.mediaFingerprints }
       };
       ledger.push(attempt); atomicJson(ledgerPath, ledger);
       let remote = null;
       try {
-        const adapterDraft = {
-          kind: "FACEBOOK_PAGE_DRAFT", caption: payload.caption, scheduledAt: payload.scheduledAt,
-          media: Array.isArray(payload.media) && payload.media.length ? payload.media[0] : null
-        };
-        remote = await publish({
-          draft: adapterDraft, pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
-          accessToken: pageAccessToken, apiVersion: config.apiVersion,
-          permissionsVerified: permissionVerification.permissionsVerified, fetchImpl, rootDir: activeRoot, now: current
-        });
-        const verified = await readRemote({
-          remotePostId: remote.remotePostId, expectedPageId: config.destinationPageId,
-          accessToken: pageAccessToken, apiVersion: config.apiVersion, fetchImpl
-        });
-        const success = ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(verified.status);
+        if (isReel) {
+          const adapterDraft = {
+            kind:"FACEBOOK_PAGE_REEL_DRAFT", caption:payload.caption,
+            media:Array.isArray(payload.media) && payload.media.length ? payload.media[0] : null
+          };
+          remote = await publishReel({
+            draft:adapterDraft, pageId:config.destinationPageId, expectedPageId:config.destinationPageId,
+            accessToken:pageAccessToken, apiVersion:config.apiVersion,
+            permissionsVerified:permissionVerification.permissionsVerified, approvalVerified:true,
+            publishingEnabled:true, dryRun:false, emergencyStop:false,
+            videoState:"SCHEDULED", scheduledPublishAt:payload.scheduledAt,
+            fetchImpl, rootDir:activeRoot, now:()=>current,
+            onRemoteVideoId:async ({remoteVideoId})=>{
+              const index=ledger.length-1;
+              ledger[index]={...ledger[index],remoteVideoId};
+              atomicJson(ledgerPath,ledger);
+            }
+          });
+        } else {
+          const adapterDraft = {
+            kind: "FACEBOOK_PAGE_DRAFT", caption: payload.caption, scheduledAt: payload.scheduledAt,
+            media: Array.isArray(payload.media) && payload.media.length ? payload.media[0] : null
+          };
+          remote = await publish({
+            draft: adapterDraft, pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
+            accessToken: pageAccessToken, apiVersion: config.apiVersion,
+            permissionsVerified: permissionVerification.permissionsVerified, fetchImpl, rootDir: activeRoot, now: current
+          });
+        }
+        const verified = isReel
+          ? await reconcileReel({
+              remoteVideoId:remote.remoteVideoId, expectedPageId:config.destinationPageId,
+              accessToken:pageAccessToken, apiVersion:config.apiVersion, scheduledAt:payload.scheduledAt, fetchImpl
+            })
+          : await readRemote({
+              remotePostId: remote.remotePostId, expectedPageId: config.destinationPageId,
+              accessToken: pageAccessToken, apiVersion: config.apiVersion, fetchImpl
+            });
+        const success = isReel ? verified?.outcome === "CONFIRMED" && ["SCHEDULED_VERIFIED","PUBLISHED_VERIFIED"].includes(verified.receipt?.status) : ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(verified.status);
         const receipt = {
           ...attempt, status: success ? verified.status : "UNCERTAIN", completedAt: new Date().toISOString(),
           remotePostId: remote.remotePostId, remoteUrl: verified.remoteUrl ?? null,
@@ -316,16 +352,21 @@ export async function runAutonomousFacebookPublisher({
         removeQueuedSlot(payload.slotId);
         if (success) published++; else skipped++;
       } catch (error) {
-        const uncertain = error?.uncertain === true || error?.retryable === true || error?.name === "AbortError" || Boolean(remote?.remotePostId);
+        const uncertain = error?.uncertain === true || error?.retryable === true || error?.name === "AbortError" || Boolean(remote?.remotePostId || remote?.remoteVideoId);
         let reconciliation = null;
         if (uncertain) {
           try {
-            reconciliation = await reconcileRemote({
-              pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
-              accessToken: pageAccessToken, apiVersion: config.apiVersion,
-              caption: payload.caption, scheduledAt: payload.scheduledAt, attemptStartedAt: attempt.startedAt,
-              remotePostId: remote?.remotePostId ?? null, fetchImpl
-            });
+            reconciliation = isReel
+            ? (remote?.remoteVideoId ? await reconcileReel({
+                remoteVideoId:remote.remoteVideoId, expectedPageId:config.destinationPageId,
+                accessToken:pageAccessToken, apiVersion:config.apiVersion, scheduledAt:payload.scheduledAt, fetchImpl
+              }) : { outcome:"UNRESOLVED", reason:"REEL_REMOTE_VIDEO_ID_NOT_DURABLY_RECORDED_NO_RETRY" })
+            : await reconcileRemote({
+                pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
+                accessToken: pageAccessToken, apiVersion: config.apiVersion,
+                caption: payload.caption, scheduledAt: payload.scheduledAt, attemptStartedAt: attempt.startedAt,
+                remotePostId: remote?.remotePostId ?? null, fetchImpl
+              });
           } catch {
             reconciliation = { outcome: "UNRESOLVED", reason: "RECONCILIATION_FAILED", matches: [] };
           }
