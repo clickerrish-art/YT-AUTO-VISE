@@ -175,3 +175,18 @@ Therefore the following remain unknown for both clips:
 Do not enter either clip in `content/asset-register.json`, create a production render manifest, edit, schedule, approve or publish either clip yet. After a lawful local download, inspect the entire clip at full resolution, verify the exact file hash, check all frames/audio/overlays and retain the page/license evidence. Only then can each candidate be considered separately for rights review and human editorial approval.
 
 **Editorial constraint:** never present the slow worm as a snake, never imply the cobra clip depicts a different species or event, and never label either stock clip as footage filmed by SonicVhibez.
+
+## NOAA Spiny Lobster visual-review cut — 16 November 2026
+
+The retained GitHub Actions source artifact `sonicvhibez-noaa-broll-candidates` (run `42594716333`, artifact `13662524700`) was downloaded again for the conditional source-review task.
+
+- The source MP4 SHA-256 recomputed locally matches the recorded value exactly: `1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb`.
+- `ffprobe` confirms H.264, 1280×720, 59.94 fps, 380.810 seconds, AAC 48 kHz stereo.
+- Selected ranges were sampled at 2 fps: 160–175 s (reef habitat establishing shot), 245–257 s (close lobster/crevice), 320–335 s (lobster from above), and 360–373 s (side view of lobster).
+- The selected samples show California spiny lobster and rocky reef habitat. No people, handling, baiting, staged interaction, graphic animal harm, watermark or additional credit card was observed in these selected ranges. This is not a full continuous playback review.
+- A silent 55-second 9:16 visual-review cut was created from those exact ranges: `NOAA-california-spiny-lobster-visual-review-1080x1920.mp4`.
+- Output SHA-256: `4fc0b7f4a3f5d79ecf8d6a2bb148f06ba01f56c1c8d3b4db846d614f65f07261`; H.264, 1080×1920, 30 fps, 55.000 seconds, 20,090,415 bytes, no audio stream, full-file decode PASS.
+- The cut carries a persistent **REVIEW ONLY - NOT APPROVED FOR PUBLICATION** warning and the exact credit **“Footage courtesy of NOAA’s Office of National Marine Sanctuaries”** throughout.
+- The review cut is shared as a conversation attachment and is not committed as a production media file.
+
+**Disposition remains HOLD.** This review cut is not a production master, has no narration or captions, and has not completed full human playback, final voice/caption review, final compliance review or final human approval. The source audio remains excluded. Keep all rights/production flags false and do not upload, schedule or publish it. Do not substitute it for `media/next-short.mp4`.
