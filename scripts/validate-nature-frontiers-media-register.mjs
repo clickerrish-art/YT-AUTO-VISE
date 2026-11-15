@@ -61,8 +61,7 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
       if (!Array.isArray(rights.licenseEvidence) || rights.licenseEvidence.length === 0) errors.push(at + " cleared rights require licence evidence");
       if (typeof rights.reviewedBy !== "string" || !rights.reviewedBy.trim()) errors.push(at + " cleared rights require reviewedBy");
       if (!validTimestamp(rights.reviewedAt) || Date.parse(rights.reviewedAt) > now) errors.push(at + " cleared rights require a valid non-future timezone-qualified reviewedAt");
-      if (rights.additionalPermissionsStatus === "required") errors.push(at + " cannot clear rights while required additional permissions are outstanding");
-      if (rights.additionalPermissionsStatus === "rejected" || rights.reviewStatus === "rejected") errors.push(at + " rejected permissions cannot be cleared");
+      if (!["not_required", "obtained"].includes(rights.additionalPermissionsStatus)) errors.push(at + " cleared rights require explicit resolution of additional permissions");
     }
 
     const inspection = asset.inspection ?? {};
@@ -73,9 +72,16 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
       if (typeof inspection.visualNotes !== "string" || inspection.visualNotes.trim().length < 20) errors.push(at + " complete inspection requires meaningful visualNotes");
     }
 
+    const claims = asset.claims ?? [];
+    if (!Array.isArray(claims)) errors.push(at + " claims must be an array");
+    for (const claim of claims) {
+      if (!claim || typeof claim !== "object" || typeof claim.type !== "string" || typeof claim.value !== "string" || !["listing_only", "unverified", "verified", "not_used"].includes(claim.status)) errors.push(at + " contains an invalid factual claim record");
+    }
+
     const approval = asset.approval ?? {};
     if (!["pending", "approved", "rejected", "revoked"].includes(approval.status)) errors.push(at + " has an invalid approval.status");
     if (approval.status === "approved") {
+      if (claims.some(claim => !["verified", "not_used"].includes(claim?.status))) errors.push(at + " cannot be approved while factual claims remain listing-only or unverified");
       if (rights.reviewStatus !== "cleared") errors.push(at + " cannot be approved until rights are cleared");
       if (inspection.status !== "complete") errors.push(at + " cannot be approved until full visual inspection is complete");
       if (!asset.localFile || !SHA256.test(asset.localFile.sha256 ?? "")) errors.push(at + " approval must bind to an exact local file SHA-256");
