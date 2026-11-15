@@ -145,6 +145,21 @@ export async function runAutonomousFacebookPublisher({
   try {
     let history = safeHistory(historyPath);
     let ledger = safeHistory(ledgerPath);
+    // The ledger is the authoritative attempt record. If a crash occurred after
+    // its verified receipt was committed but before history was written, rebuild
+    // the missing history projection before selecting any queued work.
+    let historyRebuilt = false;
+    for (const attempt of ledger) {
+      if (!attempt || !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(attempt.status) ||
+          typeof attempt.slotId !== "string") continue;
+      if (history.some(item => item?.slotId === attempt.slotId &&
+          ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status))) continue;
+      history.push({ ...attempt, payload: undefined,
+        historyRebuiltAt: isoNow(Number(now)),
+        historyRebuildReason: "VERIFIED_LEDGER_RECEIPT_RECOVERED_AFTER_HISTORY_WRITE_GAP" });
+      historyRebuilt = true;
+    }
+    if (historyRebuilt) atomicJson(historyPath, history);
     const queue = readJson(queuePath);
     if (!Array.isArray(queue)) throw new Error("Autonomous Facebook queue must be a JSON array");
     const current = Number(now);
