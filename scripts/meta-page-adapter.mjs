@@ -268,7 +268,8 @@ export async function reconcileMetaPagePost({
   if (remotePostId) {
     const receipt = await fetchMetaPagePost({ remotePostId, expectedPageId, accessToken, apiVersion, fetchImpl, timeoutMs });
     const expectedSchedule = Math.floor(Date.parse(scheduledAt) / 1000);
-    const observedSchedule = Number(receipt.scheduledPublishTime);
+    const observedSchedule = receipt.scheduledPublishTime == null || receipt.scheduledPublishTime === ""
+      ? Number.NaN : Number(receipt.scheduledPublishTime);
     const captionMatches = receipt.remoteMessage === caption;
     const scheduleMatches = Number.isFinite(observedSchedule) &&
       Math.abs(observedSchedule - expectedSchedule) <= 120;
@@ -278,8 +279,8 @@ export async function reconcileMetaPagePost({
     }
     return {
       outcome: "UNRESOLVED",
-      reason: !statusVerified ? "REMOTE_ID_STATUS_NOT_CONFIRMED" :
-        !captionMatches ? "REMOTE_ID_CAPTION_MISMATCH" : "REMOTE_ID_SCHEDULE_MISMATCH",
+      reason: !captionMatches ? "REMOTE_ID_CAPTION_MISMATCH" :
+        !scheduleMatches ? "REMOTE_ID_SCHEDULE_MISMATCH" : "REMOTE_ID_STATUS_NOT_CONFIRMED",
       receipt, matches: [receipt], checkedAt: new Date().toISOString()
     };
   }
