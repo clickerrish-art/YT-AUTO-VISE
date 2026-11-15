@@ -25,7 +25,8 @@ export function instagramApprovalFingerprint(payload) {
   const source = payload?.sourcePayload;
   return sha256(JSON.stringify({
     destination:payload?.destination, slotId:payload?.slotId, scheduledAt:payload?.scheduledAt,
-    caption:payload?.caption, media:payload?.media, claims:payload?.claims ?? [],
+    timezone:payload?.timezone, mediaType:payload?.mediaType, caption:payload?.caption,
+    media:payload?.media, claims:payload?.claims ?? [],
     shareToFeed:payload?.shareToFeed !== false, instagramAccountId:payload?.instagramAccountId,
     facebookPageId:payload?.facebookPageId, sourcePayloadFingerprint:source ? sha256(JSON.stringify(source)) : null
   }));
