@@ -3,7 +3,7 @@
   "generatedAt": "2026-11-16T18:00:00+02:00",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "31ceeaf61275af745e4e93c777698ad2362b2a17",
+  "testedSourceTestSha": "1de17e81bf751c98147aab2a1657d8e5b6c00e64",
   "liveMainSha": "69fdf35c90f980c142be3aaffa863304bc7eaa25",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -155,8 +155,8 @@
     "latestExactHeadBranchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387613",
     "latestExactHeadNatureFrontiersDraft": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387616",
     "latestExactHeadRouteAuthMatrix": {
-      "exactSha": "31ceeaf61275af745e4e93c777698ad2362b2a17",
-      "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43774065231",
+      "exactSha": "1de17e81bf751c98147aab2a1657d8e5b6c00e64",
+      "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43774533849",
       "result": "PASS — 48/48 protected API routes reject missing and invalid operator credentials; full Node suite 894/894, zero skipped."
     }
   },
@@ -249,20 +249,20 @@
       "classification": "Nature Frontiers Instagram operations status (authenticated, read-only)",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — exact source/test SHA 31ceeaf61275af745e4e93c777698ad2362b2a17: the full 894-test Node regression suite passed with zero failures and zero skips in Queue readiness run 43774065231. The source-derived negative-auth matrix verified missing and invalid operator credentials for all 48 protected API routes before route processing or mutation.",
-      "authorizedSuccess": "NOT_TESTED — dashboard status integration test is included in the updated Instagram safety workflow; exact-head CI result pending.",
-      "inputValidation": "NOT_TESTED — safe configuration and persisted-state parsing are covered by the route integration test; exact-head CI result pending.",
+      "authorizedSuccess": "PASS — exact source/test SHA 1de17e81bf751c98147aab2a1657d8e5b6c00e64; test/dashboard-server.test.mjs passed in the 62/62 Instagram safety suite on run 43774533777. Authenticated GET returns HTTP 200, identifies the Nature Frontiers destination, confirms read-only/no-provider-mutation behavior, reports fail-closed switches and does not expose the operator token.",
+      "inputValidation": "NOT_APPLICABLE — read-only GET accepts no caller-supplied body or query parameters.",
       "durablePersistence": "NOT_APPLICABLE — read-only status endpoint does not mutate persistent state.",
       "auditEvidence": "NOT_APPLICABLE — read-only GET does not mutate state or append an audit event.",
       "concurrency": "NOT_TESTED — exact-head concurrent-read coverage has not yet been recorded for this endpoint.",
       "restartRecovery": "NOT_APPLICABLE — read-only GET has no state transition to recover.",
       "externalOperation": "NOT_APPLICABLE — endpoint reports local configuration and verified receipts; it does not call Meta or publish.",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "Authenticated read-only operations summary for Nature Frontiers Instagram. Reports configuration presence/match, fail-closed switches, queue/attempt counts and retained verified remote receipts without exposing secrets or contacting Meta. It does not establish live account connectivity or authorize publishing.",
+      "notes": "Exact-head local integration test verifies authenticated status response, Nature Frontiers destination, read-only/no-provider-mutation boundary, fail-closed publishing switches, unconfigured Instagram account ID, numeric linked Page ID and operator-token redaction. It deliberately does not claim live Meta connectivity or authorize publishing.",
       "testEvidence": {
         "test": "test/dashboard-server.test.mjs and test/dashboard-ui-contract.test.mjs",
-        "exactTestedSha": null,
-        "ci": null,
-        "scenario": "Authenticated read-only status response, safe defaults, configured account ID reporting, secret redaction and explicit no-provider-mutation behavior; exact-head CI pending."
+        "exactTestedSha": "1de17e81bf751c98147aab2a1657d8e5b6c00e64",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43774533777",
+        "scenario": "Authenticated GET /api/instagram/status returns HTTP 200 and safe read-only status; publishing remains disabled, dry-run and emergency stop remain active, Instagram business account remains unset, configured Page ID is numeric, and operator token is absent from response."
       },
       "lastVerifiedOverallAcceptance": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED"
@@ -435,7 +435,7 @@
       "classification": "Nature Frontiers provider-independent media register (read-only)",
       "authRequired": "operator token",
       "authenticationNegative": "PASS — exact source/test SHA 31ceeaf61275af745e4e93c777698ad2362b2a17: the full 894-test Node regression suite passed with zero failures and zero skips in Queue readiness run 43774065231. The source-derived negative-auth matrix verified missing and invalid operator credentials for all 48 protected API routes before route processing or mutation.",
-      "authorizedSuccess": "NOT_TESTED — authenticated integration coverage exists in test/nature-frontiers-media-register-api.test.mjs; exact-head CI result pending.",
+      "authorizedSuccess": "PASS — exact source/test SHA 1de17e81bf751c98147aab2a1657d8e5b6c00e64; the full 894-test Node suite passed with zero failures and zero skips in run 43774533849. test/nature-frontiers-media-register-api.test.mjs verifies authenticated HTTP 200, live read-only register payload, real registered asset, validation result, no state-file path disclosure and publishing disabled.",
       "inputValidation": "PASS — register is parsed and validated with validateMediaRegister; malformed/unavailable register returns a safe server error.",
       "durablePersistence": "NOT_APPLICABLE — read-only register is sourced from the checked-in provider-independent JSON register.",
       "auditEvidence": "NOT_APPLICABLE — read-only GET does not mutate state or append an audit event.",
@@ -443,12 +443,12 @@
       "restartRecovery": "NOT_APPLICABLE — read-only GET has no state transition to recover.",
       "externalOperation": "NOT_APPLICABLE — no provider API or external publishing call is used.",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "New authenticated, provider-independent, read-only register endpoint. It validates and sanitizes source, factual claims, local file/hash, licence and permission evidence, inspection, approval and usage receipts. Exact-head route and integration tests are pending.",
+      "notes": "Exact-head integration test verifies authenticated read-only access to the checked-in provider-independent register, source/license/inspection/approval fields, and validation response. Rights review and publication remain separate gates; the endpoint does not approve or publish media.",
       "testEvidence": {
-        "test": "test/nature-frontiers-media-register-api.test.mjs and test/dashboard-api-auth-matrix.test.mjs",
-        "exactTestedSha": null,
-        "ci": null,
-        "scenario": "Authenticated read-only register response and unauthenticated/invalid-credential rejection; pending exact-head CI."
+        "test": "test/nature-frontiers-media-register-api.test.mjs",
+        "exactTestedSha": "1de17e81bf751c98147aab2a1657d8e5b6c00e64",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43774533849",
+        "scenario": "Real local dashboard server: unauthenticated request rejected; authenticated GET returns HTTP 200 with Nature Frontiers register, registered asset and rights/inspection/approval statuses; no stateFile path is exposed."
       },
       "lastVerifiedOverallAcceptance": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED"
