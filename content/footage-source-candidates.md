@@ -190,3 +190,17 @@ The retained GitHub Actions source artifact `sonicvhibez-noaa-broll-candidates` 
 - The review cut is shared as a conversation attachment and is not committed as a production media file.
 
 **Disposition remains HOLD.** This review cut is not a production master, has no narration or captions, and has not completed full human playback, final voice/caption review, final compliance review or final human approval. The source audio remains excluded. Keep all rights/production flags false and do not upload, schedule or publish it. Do not substitute it for `media/next-short.mp4`.
+
+### NOAA lobster narrated review render — 16 November 2026
+
+A second, explicitly synthetic **review-only** render was generated to inspect the narration/caption pacing against the same silent visual cut.
+
+- File: `NOAA-california-spiny-lobster-narration-review-1080x1920.mp4`
+- SHA-256: `aa84154b6938750f646377e9493dae81552249d9a07ba7d521d9b29addf8f1ba`
+- Duration: 55.000 seconds; H.264 1080×1920 at 30 fps; AAC mono 22.05 kHz.
+- Narration: eSpeak `en-us`, synthetic, 135 WPM. The render explicitly displays **AI-GENERATED NARRATION - REVIEW ONLY** as well as the persistent publication hold.
+- Source audio remains absent; only the synthetic review narration is present.
+- Captions were reflowed into 12 timed cues, 108 words, maximum 38 characters per line, maximum 3 lines in the one long location cue, zero overlaps and 80 ms inter-cue gaps. Caption text matches the script word-for-word. Timings are derived from the exact eSpeak segment durations, not yet human-verified against a final natural voice.
+- Full-file decode: PASS. Sampled frames confirm the review warning, AI narration disclosure, captions and NOAA credit remain visible and do not overlap.
+
+**Disposition remains HOLD.** The synthetic voice is not approved for publication and must be replaced with owner-approved natural narration. Human full-playback review, final voice/caption timing, factual/editorial review, rights confirmation and compliance approval remain outstanding. Neither the silent nor narrated review render is a production master or a substitute for `media/next-short.mp4`.
