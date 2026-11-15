@@ -70,6 +70,28 @@ test("policy returns the required structured decision and accepts only a complet
   } finally { f.cleanup(); }
 });
 
+test("policy blocks multiple media assets instead of approving a payload the publisher truncates", async () => {
+  const f = fixture();
+  try {
+    f.payload.media.push({ ...f.payload.media[0], id: "asset-2" });
+    approve(f.payload);
+    const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(reason => /exactly one image asset/i.test(reason)));
+  } finally { f.cleanup(); }
+});
+
+test("policy blocks video assets while the current Page adapter is image-only", async () => {
+  const f = fixture();
+  try {
+    f.payload.media[0].path = "asset.mp4";
+    approve(f.payload);
+    const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(reason => /image assets only/i.test(reason)));
+  } finally { f.cleanup(); }
+});
+
 test("editorial approval is mandatory, signed, recent and bound to the exact final content", async () => {
   const f = fixture();
   try {
