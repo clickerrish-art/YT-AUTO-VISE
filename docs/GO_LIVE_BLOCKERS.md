@@ -1,3 +1,40 @@
+# 15 November 2026 — exact current source/test SHA CI refresh
+
+**Exact tested source/test SHA:** `12c28787923384d5ba767614c89c09b4b328cd9a`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627` · tested-SHA divergence: **3,569 ahead / 4 behind** · PR #1 changed-file count: **328**. The subsequent acceptance-matrix/documentation commits do not alter application code or tests. PR #1 remains OPEN, Draft and unmerged; PR #7 remains OPEN with 13 changed files (its draft boolean is not exposed by the issue endpoint). No main edit or history mutation occurred.
+
+## Exact-SHA CI results
+
+- [Automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156887): **141/141 Node test files passed; 44 Python tests passed; zero skips; npm audit 0 vulnerabilities**. This includes the new Cloudflare Access header override/fail-closed regression.
+- [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156782): **786/786 passed, zero failures/skips**.
+- [Dashboard Chromium E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156787): **29/29 passed** after a rerun; the first attempt had one transient external TTS `ECONNRESET`, and the retry passed.
+- [Metadata validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156795): **141/141 Node test files passed**.
+- [Queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156819): **786/786 passed**; 16 queue items, publishing disabled.
+- [Cloudflare durable-state unit checks](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156892): **9/9 passed**.
+- [Deployment recovery](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156937): **2/2 passed**.
+- [Isolated main/candidate baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156932): **PASS** on the exact main and candidate checkouts.
+- [Non-destructive branch inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156810): **3,569 ahead / 4 behind / 328 final-tree file changes**; decision `REQUIRES_REVIEW`; no history mutation.
+- [Nature Frontiers local draft validation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156803): **PASS**; provider-side draft creation was skipped.
+- [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156841): expected **HOLD — 7 blockers**; no private upload or publication.
+- [Nature Frontiers Meta identity](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692157035): **BLOCKED** by HTTP 401, Meta error 190/subcode 463, expired session token.
+
+The initial Dashboard E2E network reset was rerun successfully on the same exact source/test SHA. The production-readiness and Meta failures are external/owner gates, not test-suite regressions.
+
+## Current owner/evidence gates remain unchanged
+
+1. Independently reconcile complete current SonicVhibez public/private/unlisted/scheduled history and every pending/uncertain upload attempt immediately before any upload.
+2. Produce genuine final rights-cleared media and complete both short and long-form render manifests.
+3. Human-review exact media, facts, captions, metadata, thumbnail, rights and compliance before marking any asset READY.
+4. Obtain a distinct safe SonicVhibez/Sonic Fire Metricool destination; the only returned brand is labelled Nature Frontiers SA and its YouTube network ID is a mixed-brand association.
+5. Complete authenticated Cloudflare Node-to-Worker persistence, audit, concurrency and restart verification.
+6. Refresh the expired Meta token only in the secure GitHub Actions secret store if that separate Nature Frontiers verification is required.
+7. Independently verify branch protection; the permission endpoint still returns 403.
+
+The repository queue has 16 held/review-pending items and no publication timestamps. The promotional plan has 10 private `DRAFT_ONLY` Shorts across five weeks, exactly two per week, with no schedule dates. The final MP4, thumbnail and render manifests remain absent. The known YouTube history snapshot is dated 10 November, so the 72-hour spacing check remains **UNVERIFIED** despite the known last-upload-to-now interval exceeding 72 hours. No upload, publication, live scheduling, Metricool mutation, Meta publication, paid service, GPU or trial was used.
+
+**Release remains HOLD.** Full automated suites pass on exact source/test SHA `12c287`, but the seven readiness gates above remain mandatory. Public/unattended publishing remains disabled.
+
+---
+
 # 15 November 2026 — live build and release checkpoint
 
 **Code/test change:** `3e302319d35ca738df421148b357afc7038f8e93`.  
