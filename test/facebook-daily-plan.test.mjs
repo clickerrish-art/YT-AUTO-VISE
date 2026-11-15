@@ -48,7 +48,7 @@ test("daily plan is idempotent and preserves the original plan", t => {
 test("missed slots are held individually and never silently backdated", t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-plan-missed-"));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  const result = generateDailyFacebookPlan({ date: "2030-10-25", outputDir: root, now: "2030-10-25T16:30:00.000Z" });
+  const result = generateDailyFacebookPlan({ date: "2030-10-25", outputDir: root, now: "2030-10-25T12:30:00.000Z" });
   assert.equal(result.plan.slots[0].scheduleStatus, "MISSED_SLOT_REVIEW_REQUIRED");
   assert.equal(result.plan.slots[1].scheduleStatus, "MISSED_SLOT_REVIEW_REQUIRED");
   assert.equal(result.plan.slots[2].scheduleStatus, "FUTURE_SLOT_PROPOSED");
