@@ -214,7 +214,7 @@ export async function runAutonomousInstagramPublisher({
       if(isFeed&&(!Array.isArray(config.allowedImageDomains)||!config.allowedImageDomains.length)) {
         history.push({slotId:payload.slotId,status:"BLOCKED_PUBLIC_IMAGE_HOST_NOT_ALLOWLISTED",checkedAt:nowIso}); skipped++; continue;
       }
-      if(typeof payload.caption!=="string"||!payload.caption.trim()||payload.sourcePayload?.caption!==payload.caption||
+      if(typeof payload.caption!=="string"||!payload.caption.trim()||payload.sourcePayload?.caption!==payload.caption||payload.sourcePayload?.mediaType!==payload.mediaType||
          !Array.isArray(payload.sourcePayload?.media)||!payload.sourcePayload.media.some(x=>x?.sha256===payload.media.sha256&&x?.path===payload.media.path)) {
         history.push({slotId:payload.slotId,status:"BLOCKED_SOURCE_PAYLOAD_MISMATCH",checkedAt:nowIso}); skipped++; continue;
       }

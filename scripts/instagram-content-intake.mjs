@@ -67,7 +67,7 @@ export async function runInstagramContentIntake({
       }
       if(payload.shareToFeed!=null&&typeof payload.shareToFeed!=="boolean") reasons.push("INVALID_SHARE_TO_FEED_SETTING");
       if(typeof payload.caption!=="string"||!payload.caption.trim()||payload.sourcePayload?.caption!==payload.caption||
-         payload.sourcePayload?.destination!=="nature_frontiers_facebook"||payload.sourcePayload?.destinationPageId!==config.facebookPageId||
+         payload.sourcePayload?.destination!=="nature_frontiers_facebook"||payload.sourcePayload?.destinationPageId!==config.facebookPageId||payload.sourcePayload?.mediaType!==payload.mediaType||
          !Array.isArray(payload.sourcePayload?.media)||!payload.sourcePayload.media.some(x=>x?.path===payload.media?.path&&x?.sha256===payload.media?.sha256)) {
         reasons.push("FACEBOOK_SOURCE_PAYLOAD_OR_MEDIA_BINDING_MISMATCH");
       }

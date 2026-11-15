@@ -110,7 +110,7 @@ test("approved Instagram feed image dispatch persists IDs and verifies the feed 
  const f=setup();try{
   const config=JSON.parse(fs.readFileSync(f.configPath,"utf8"));config.allowedImageDomains=["example.test"];fs.writeFileSync(f.configPath,JSON.stringify(config));
   const queue=JSON.parse(fs.readFileSync(f.queuePath,"utf8"));const payload=queue[0];
-  payload.mediaType="feed_post";payload.media.url="https://cdn.example.test/wildlife.jpg";payload.media.altText="Wildlife in a natural habitat";
+  payload.mediaType="feed_post";payload.sourcePayload.mediaType="feed_post";payload.media.url="https://cdn.example.test/wildlife.jpg";payload.media.altText="Wildlife in a natural habitat";
   payload.approval=createInstagramApprovalReceipt(payload,{reviewer:"Editor",reason:"Exact feed image reviewed",secret,now:"2026-11-15T09:00:00.000Z"});
   fs.writeFileSync(f.queuePath,JSON.stringify(queue));
   const result=await runAutonomousInstagramPublisher({configPath:f.configPath,queuePath:f.queuePath,stateDir:f.state,rootDir:f.root,

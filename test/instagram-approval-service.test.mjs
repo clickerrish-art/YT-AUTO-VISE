@@ -37,7 +37,9 @@ test("Instagram approval requires the Facebook source payload to pass the existi
  assert.equal(result.approved,false);assert.ok(result.blockers.includes("FACEBOOK_SOURCE_EDITORIAL_AND_RIGHTS_POLICY_NOT_ELIGIBLE"));
 });
 test("Instagram feed approval requires an allowlisted public image host",async()=>{
- const candidate=payload();candidate.mediaType="feed_post";candidate.media.url="https://evil.example.net/image.jpg";
+ const candidate=payload();candidate.mediaType="feed_post";candidate.sourcePayload.mediaType="feed_post";
+ candidate.sourcePayload.approval=createFacebookAutonomousApprovalReceipt(candidate.sourcePayload,{reviewer:"Facebook editor",reason:"Source approved",secret:fbSecret,now:"2026-11-15T09:00:00.000Z"});
+ candidate.media.url="https://evil.example.net/image.jpg";
  const result=await approveInstagramCandidate({payload:candidate,reviewer:"Operator",reason:"Reviewed",config:{...config,allowedImageDomains:["example.test"]},env,
   now:"2026-11-15T09:00:00.000Z",policyEvaluator:eligible});
  assert.equal(result.approved,false);assert.ok(result.blockers.includes("PUBLIC_FEED_IMAGE_MUST_USE_AN_ALLOWLISTED_HTTPS_HOST"));

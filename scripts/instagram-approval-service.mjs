@@ -22,7 +22,7 @@ export async function approveInstagramCandidate({
   blockers.push("FUTURE_JOHANNESBURG_PUBLICATION_TIME_REQUIRED");
  if(!["reel","feed_post"].includes(payload.mediaType)) blockers.push("UNSUPPORTED_INSTAGRAM_FORMAT");
  if(typeof payload.caption!=="string"||!payload.caption.trim()||payload.sourcePayload?.caption!==payload.caption||
-    payload.sourcePayload?.destination!=="nature_frontiers_facebook"||payload.sourcePayload?.destinationPageId!==config.facebookPageId||
+    payload.sourcePayload?.destination!=="nature_frontiers_facebook"||payload.sourcePayload?.destinationPageId!==config.facebookPageId||payload.sourcePayload?.mediaType!==payload.mediaType||
     !Array.isArray(payload.sourcePayload?.media)||!payload.media||typeof payload.media.path!=="string"||
     !/^[a-f0-9]{64}$/.test(payload.media.sha256??"")||
     !payload.sourcePayload.media.some(x=>x?.path===payload.media.path&&x?.sha256===payload.media.sha256))

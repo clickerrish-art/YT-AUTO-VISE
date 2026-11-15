@@ -59,7 +59,7 @@ test("Instagram intake accepts a signed feed image only from an allowlisted publ
  const f=setup();try{
   const config=JSON.parse(fs.readFileSync(f.configPath,"utf8"));config.allowedImageDomains=["example.test"];fs.writeFileSync(f.configPath,JSON.stringify(config));
   const candidates=JSON.parse(fs.readFileSync(f.candidatePath,"utf8"));const payload=candidates[0];
-  payload.mediaType="feed_post";payload.media.url="https://cdn.example.test/wildlife.jpg";payload.media.altText="Wildlife in a natural habitat";
+  payload.mediaType="feed_post";payload.sourcePayload.mediaType="feed_post";payload.media.url="https://cdn.example.test/wildlife.jpg";payload.media.altText="Wildlife in a natural habitat";
   payload.approval=createInstagramApprovalReceipt(payload,{reviewer:"Editor",reason:"Exact Instagram feed image reviewed",secret,now:"2026-11-15T09:00:00.000Z"});
   fs.writeFileSync(f.candidatePath,JSON.stringify(candidates));
   const result=await runInstagramContentIntake({configPath:f.configPath,candidatePath:f.candidatePath,queuePath:f.queuePath,rootDir:f.root,env,
