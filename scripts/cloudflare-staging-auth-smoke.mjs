@@ -5,6 +5,8 @@
  */
 const base = process.env.DASHBOARD_STAGING_API_URL;
 const token = process.env.DASHBOARD_OPERATOR_TOKEN;
+const accessClientId = process.env.CLOUDFLARE_ACCESS_CLIENT_ID;
+const accessClientSecret = process.env.CLOUDFLARE_ACCESS_CLIENT_SECRET;
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -12,6 +14,10 @@ function assert(condition, message) {
 
 assert(typeof base === "string" && base.length > 0, "DASHBOARD_STAGING_API_URL is required");
 assert(typeof token === "string" && token.length >= 24, "DASHBOARD_OPERATOR_TOKEN secret is required");
+assert(typeof accessClientId === "string" && accessClientId.length > 0,
+  "CLOUDFLARE_ACCESS_CLIENT_ID secret is required");
+assert(typeof accessClientSecret === "string" && accessClientSecret.length > 0,
+  "CLOUDFLARE_ACCESS_CLIENT_SECRET secret is required");
 
 const parsed = new URL(base);
 assert(parsed.protocol === "https:" && !parsed.username && !parsed.password && !parsed.search && !parsed.hash,
@@ -21,7 +27,12 @@ assert(parsed.hostname.endsWith(".workers.dev"), "Refusing to test a non-workers
 async function get(path, headers = {}) {
   const response = await fetch(new URL(path, parsed.origin), {
     method: "GET",
-    headers: { accept: "application/json", ...headers },
+    headers: {
+      accept: "application/json",
+      "CF-Access-Client-Id": accessClientId,
+      "CF-Access-Client-Secret": accessClientSecret,
+      ...headers
+    },
     redirect: "error",
     signal: AbortSignal.timeout(15_000)
   });
@@ -64,6 +75,7 @@ console.log(JSON.stringify({
   result: "PASS",
   target: parsed.origin,
   checks: {
+    cloudflareAccessServiceToken: "PASS",
     publicHealth: "PASS",
     unauthenticatedStateRejected: "PASS",
     authenticatedStateRead: "PASS",
