@@ -21,7 +21,7 @@ test("Instagram feed image uses public hash-pinned JPEG, container processing, p
   if(String(url).endsWith("/media")&&options.method==="POST")return ok({id:"123456789012346"});
   if(String(url).includes("status_code"))return ok({id:"123456789012346",status_code:"FINISHED"});
   if(String(url).endsWith("/media_publish"))return ok({id:"123456789012347"});
-  if(String(url).includes("media_product_type"))return ok({id:"123456789012347",media_type:"IMAGE",media_product_type:"FEED",permalink:"https://www.instagram.com/p/abc/"});
+  if(String(url).includes("media_product_type"))return ok({id:"123456789012347",media_type:"IMAGE",media_product_type:"FEED",permalink:"https://www.instagram.com/p/abc/",timestamp:"2026-11-15T10:00:00+0000"});
   throw new Error("unexpected endpoint "+url);
  },{onContainerId:async x=>persisted.push(x.containerId),onMediaId:async x=>persisted.push(x.mediaId)});
  assert.equal(result.status,"PUBLISHED_VERIFIED");assert.deepEqual(persisted,["123456789012346","123456789012347"]);
