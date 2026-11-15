@@ -15,6 +15,16 @@ test("dashboard derives production slots and rolling cycle from authoritative ba
   assert.doesNotMatch(html, /<option>Thursday<\/option>/);
 });
 
+test("dashboard exposes read-only Nature Frontiers Instagram operations health", () => {
+  assert.match(html, /Nature Frontiers Instagram — operations health/);
+  assert.match(html, /id="instagramRefresh"/);
+  assert.match(html, /id="instagramStatus"/);
+  assert.match(html, /api\("\/api\/instagram\/status"\)/);
+  assert.match(html, /Meta token present: .*not live-verified/);
+  assert.match(html, /No provider mutation was attempted/);
+  assert.match(html, /\$\("instagramRefresh"\)\.onclick=loadInstagramStatus/);
+});
+
 test("dashboard describes the real read-only Meta adapter without implying live Facebook publishing", () => {
   assert.match(html, /read-only Meta adapter can verify Page identity and permissions/);
   assert.match(html, /this draft workflow does not publish a Page post/);
