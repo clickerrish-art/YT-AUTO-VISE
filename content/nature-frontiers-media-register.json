@@ -1,0 +1,396 @@
+{
+  "schemaVersion": "1.0.0",
+  "registerId": "nature-frontiers-media",
+  "brand": "Nature Frontiers",
+  "timezone": "Africa/Johannesburg",
+  "policy": {
+    "defaultPublicationState": "held",
+    "requireHumanApproval": true,
+    "allowAutomaticPublication": false,
+    "sourceOfTruth": "versioned-local-json",
+    "notes": [
+      "This register is provider-neutral and must remain usable without a stock-provider API.",
+      "A source listing or platform licence claim is not proof of species, filming location, additional permissions, or final publication clearance.",
+      "Stock footage must not be described as footage captured or owned by Nature Frontiers.",
+      "Do not publish until the exact media file, rights evidence, complete visual inspection, and human approval are recorded."
+    ]
+  },
+  "assets": [
+    {
+      "id": "nf-pex-giraffe-5220275",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "5220275",
+        "url": "https://www.pexels.com/video/giraffe-standing-on-the-grass-field-5220275/",
+        "contributor": "Taryn Elliott",
+        "listingStatus": "verified",
+        "listingDescription": "Giraffe standing in a grass field; listing describes an African savanna setting.",
+        "listingTags": [
+          "South Africa"
+        ],
+        "listingEvidence": [
+          "https://www.pexels.com/video/giraffe-standing-on-the-grass-field-5220275/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "giraffe",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "South Africa",
+          "status": "unverified"
+        },
+        {
+          "type": "behaviour",
+          "value": "standing",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "A listing-level free-use claim is not final rights clearance; assess third-party rights and intended use."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wild Encounters",
+        "proposedStory": "Giraffe browsing behaviour"
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-giraffe-5220276",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "5220276",
+        "url": "https://www.pexels.com/video/giraffe-walking-on-the-wild-5220276/",
+        "contributor": "Taryn Elliott",
+        "listingStatus": "verified",
+        "listingDescription": "Giraffe walking across grassland; listing describes an African setting.",
+        "listingTags": [],
+        "listingEvidence": [
+          "https://www.pexels.com/video/giraffe-walking-on-the-wild-5220276/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "giraffe",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "Africa",
+          "status": "unverified"
+        },
+        {
+          "type": "behaviour",
+          "value": "walking",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "A listing-level free-use claim is not final rights clearance."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wild Encounters",
+        "proposedStory": "Giraffe browsing behaviour"
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-giraffe-5220297",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "5220297",
+        "url": "https://www.pexels.com/video/a-giraffe-eating-5220297/",
+        "contributor": "Taryn Elliott",
+        "listingStatus": "verified",
+        "listingDescription": "Giraffe feeding; listing describes an African savanna setting.",
+        "listingTags": [],
+        "listingEvidence": [
+          "https://www.pexels.com/video/a-giraffe-eating-5220297/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "giraffe",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "Africa",
+          "status": "unverified"
+        },
+        {
+          "type": "behaviour",
+          "value": "feeding",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "A listing-level free-use claim is not final rights clearance."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wild Encounters",
+        "proposedStory": "Giraffe browsing behaviour"
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-zebra-28858838",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "28858838",
+        "url": "https://www.pexels.com/video/zebra-herd-grazing-in-african-savanna-28858838/",
+        "contributor": "Magda Ehlers",
+        "listingStatus": "verified",
+        "listingDescription": "Zebra herd grazing in an African savanna.",
+        "listingTags": [
+          "Kruger National Park"
+        ],
+        "listingEvidence": [
+          "https://www.pexels.com/video/zebra-herd-grazing-in-african-savanna-28858838/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": 29,
+        "width": 3840,
+        "height": 2160,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "zebra",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "Kruger National Park",
+          "status": "unverified"
+        },
+        {
+          "type": "behaviour",
+          "value": "grazing",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "Listing tags are not proof of exact filming location; verify the actual clip and provenance."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wild Science",
+        "proposedStory": "Mixed-herd vigilance and feeding ecology"
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-zebra-wildebeest-30025799",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "30025799",
+        "url": "https://www.pexels.com/video/wildlife-harmony-zebras-and-wildebeests-in-kruger-30025799/",
+        "contributor": "Johnny Tilly",
+        "listingStatus": "verified",
+        "listingDescription": "Zebras and wildebeest on savanna; title references Kruger.",
+        "listingTags": [
+          "Kruger National Park"
+        ],
+        "listingEvidence": [
+          "https://www.pexels.com/video/wildlife-harmony-zebras-and-wildebeests-in-kruger-30025799/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": 25,
+        "width": 1920,
+        "height": 1080,
+        "frameRate": 25
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "zebra and wildebeest",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "Kruger National Park",
+          "status": "unverified"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "Title and tags are leads, not independent filming-location evidence."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wild Science",
+        "proposedStory": "Zebra and wildebeest mixed-herd ecology"
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    }
+  ]
+}
