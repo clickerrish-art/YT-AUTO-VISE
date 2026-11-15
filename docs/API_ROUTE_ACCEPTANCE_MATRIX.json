@@ -169,9 +169,9 @@
       "auditEvidence": "NOT_TESTED.",
       "concurrency": "NOT_TESTED.",
       "restartRecovery": "NOT_TESTED.",
-      "externalOperation": "Cloudflare staging Worker is deployed and D1 is initialized; authenticated Node-to-Worker access still requires a Cloudflare Access service token and app-runtime state API credentials.",
+      "externalOperation": "Cloudflare Access service token and policy now exist; authenticated Node-to-Worker runtime and state API credentials remain unverified. Authenticated smoke workflow exists but has no current observed run; route-level read/write/backup/restore acceptance remains blocked.",
       "overallAcceptance": "BLOCKED",
-      "notes": "Read-only Cloudflare account verification on 2026-11-08 confirms the staging Worker is deployed with the D1 binding, six application tables exist, dashboard_state revision 1 contains 16 queue items and publishingEnabled=false, and one backup exists. The Access application is email-only and no Access service tokens are configured; an unauthenticated health request is intercepted with login_required. The Node app runtime still lacks a verified service-token-backed DASHBOARD_STATE_API_URL/DASHBOARD_STATE_OPERATOR_TOKEN configuration, so these three Node routes remain BLOCKED until authenticated end-to-end read/write/backup/restore is proven. No token or state snapshot was exposed.",
+      "notes": "Read-only Cloudflare account verification on 2026-11-15 supersedes the 8-Nov Access inventory: the SonicVhibez Dashboard Staging Access application now has one enabled service token named SonicVhibez-GitHub-Staging and an attached non_identity allow policy; token last_seen_at is 2026-11-15T07:48:19Z. The repository contains .github/workflows/cloudflare-staging-auth-smoke.yml, which expects GitHub Actions secrets DASHBOARD_OPERATOR_TOKEN, CLOUDFLARE_ACCESS_CLIENT_ID and CLOUDFLARE_ACCESS_CLIENT_SECRET. No current run of that authenticated smoke workflow appears in the latest Actions run inventory, so token/policy existence is not treated as proof of authenticated Node-to-Worker access or durable backup/restore. These three routes remain BLOCKED pending a successful read-only authenticated smoke and authorized end-to-end backup/restore.",
       "testEvidence": {
         "test": "test/dashboard-cloudflare-state.integration.test.mjs",
         "exactTestedSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
@@ -193,9 +193,9 @@
       "auditEvidence": "NOT_TESTED.",
       "concurrency": "NOT_TESTED.",
       "restartRecovery": "NOT_TESTED.",
-      "externalOperation": "Cloudflare staging Worker is deployed and D1 is initialized; authenticated Node-to-Worker access still requires a Cloudflare Access service token and app-runtime state API credentials.",
+      "externalOperation": "Cloudflare Access service token and policy now exist; authenticated Node-to-Worker runtime and state API credentials remain unverified. Authenticated smoke workflow exists but has no current observed run; route-level read/write/backup/restore acceptance remains blocked.",
       "overallAcceptance": "BLOCKED",
-      "notes": "Read-only Cloudflare account verification on 2026-11-08 confirms the staging Worker is deployed with the D1 binding, six application tables exist, dashboard_state revision 1 contains 16 queue items and publishingEnabled=false, and one backup exists. The Access application is email-only and no Access service tokens are configured; an unauthenticated health request is intercepted with login_required. The Node app runtime still lacks a verified service-token-backed DASHBOARD_STATE_API_URL/DASHBOARD_STATE_OPERATOR_TOKEN configuration, so these three Node routes remain BLOCKED until authenticated end-to-end read/write/backup/restore is proven. No token or state snapshot was exposed.",
+      "notes": "Read-only Cloudflare account verification on 2026-11-15 supersedes the 8-Nov Access inventory: the SonicVhibez Dashboard Staging Access application now has one enabled service token named SonicVhibez-GitHub-Staging and an attached non_identity allow policy; token last_seen_at is 2026-11-15T07:48:19Z. The repository contains .github/workflows/cloudflare-staging-auth-smoke.yml, which expects GitHub Actions secrets DASHBOARD_OPERATOR_TOKEN, CLOUDFLARE_ACCESS_CLIENT_ID and CLOUDFLARE_ACCESS_CLIENT_SECRET. No current run of that authenticated smoke workflow appears in the latest Actions run inventory, so token/policy existence is not treated as proof of authenticated Node-to-Worker access or durable backup/restore. These three routes remain BLOCKED pending a successful read-only authenticated smoke and authorized end-to-end backup/restore.",
       "testEvidence": {
         "test": "test/dashboard-cloudflare-state.integration.test.mjs",
         "exactTestedSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
@@ -217,9 +217,9 @@
       "auditEvidence": "NOT_TESTED.",
       "concurrency": "NOT_TESTED.",
       "restartRecovery": "NOT_TESTED.",
-      "externalOperation": "Cloudflare staging Worker is deployed and D1 is initialized; authenticated Node-to-Worker access still requires a Cloudflare Access service token and app-runtime state API credentials.",
+      "externalOperation": "Cloudflare Access service token and policy now exist; authenticated Node-to-Worker runtime and state API credentials remain unverified. Authenticated smoke workflow exists but has no current observed run; route-level read/write/backup/restore acceptance remains blocked.",
       "overallAcceptance": "BLOCKED",
-      "notes": "Read-only Cloudflare account verification on 2026-11-08 confirms the staging Worker is deployed with the D1 binding, six application tables exist, dashboard_state revision 1 contains 16 queue items and publishingEnabled=false, and one backup exists. The Access application is email-only and no Access service tokens are configured; an unauthenticated health request is intercepted with login_required. The Node app runtime still lacks a verified service-token-backed DASHBOARD_STATE_API_URL/DASHBOARD_STATE_OPERATOR_TOKEN configuration, so these three Node routes remain BLOCKED until authenticated end-to-end read/write/backup/restore is proven. No token or state snapshot was exposed.",
+      "notes": "Read-only Cloudflare account verification on 2026-11-15 supersedes the 8-Nov Access inventory: the SonicVhibez Dashboard Staging Access application now has one enabled service token named SonicVhibez-GitHub-Staging and an attached non_identity allow policy; token last_seen_at is 2026-11-15T07:48:19Z. The repository contains .github/workflows/cloudflare-staging-auth-smoke.yml, which expects GitHub Actions secrets DASHBOARD_OPERATOR_TOKEN, CLOUDFLARE_ACCESS_CLIENT_ID and CLOUDFLARE_ACCESS_CLIENT_SECRET. No current run of that authenticated smoke workflow appears in the latest Actions run inventory, so token/policy existence is not treated as proof of authenticated Node-to-Worker access or durable backup/restore. These three routes remain BLOCKED pending a successful read-only authenticated smoke and authorized end-to-end backup/restore.",
       "testEvidence": {
         "test": "test/dashboard-cloudflare-state.integration.test.mjs",
         "exactTestedSha": "8daa78c0cdd25a2f08dd73310cae4a65c16b4279",
@@ -1447,7 +1447,7 @@
     "api001Overall": "NOT_TESTED — 37/45 routes PASS; 8/45 remain BLOCKED."
   },
   "cloudflareStagingInfrastructure": {
-    "observedAt": "2026-11-09",
+    "observedAt": "2026-11-15",
     "worker": "sonicvhibez-durable-state-staging",
     "workerDeployment": "deployed; D1 STATE_DB binding and R2 ARTIFACTS binding present",
     "workerDeploymentId": "4f26b391-0009-4948-ad3e-c4081ed7a1d5",
@@ -1469,10 +1469,15 @@
     "runnerStates": 0,
     "artifactRecords": 0,
     "accessApplication": "SonicVhibez Dashboard Staging",
-    "accessPolicy": "email-only allow policy",
-    "accessServiceTokens": 0,
-    "nodeRuntimeIntegration": "BLOCKED — no Cloudflare Access service token is configured for unattended Node/GitHub Actions integration",
-    "classification": "Infrastructure provisioning PASS; deployed Worker source is older than the current repository branch and staging campaign-state migration is not applied. Node route end-to-end acceptance remains BLOCKED."
+    "accessPolicy": "email operator allow policy plus GitHub Actions staging service-token non_identity allow policy",
+    "accessServiceTokens": 1,
+    "nodeRuntimeIntegration": "NOT_VERIFIED — a Cloudflare Access service token and matching Access policy now exist, and cloudflare-staging-auth-smoke.yml is configured to use GitHub Actions secrets DASHBOARD_OPERATOR_TOKEN, CLOUDFLARE_ACCESS_CLIENT_ID and CLOUDFLARE_ACCESS_CLIENT_SECRET. No current run of that authenticated smoke workflow is present in the latest Actions run inventory; authenticated Node-to-Worker state/backup/restore acceptance is therefore still blocked.",
+    "classification": "Cloudflare staging Worker/D1 provisioning and Access service-token/policy configuration are present. Authenticated Node-to-Worker runtime success and route-level durable read/write/backup/restore have not been demonstrated. Deployed Worker source is older than the current repository branch.",
+    "accessApplicationId": "3fe39768-37e9-4471-8eaf-a00d1c62d54a",
+    "accessServiceTokenName": "SonicVhibez-GitHub-Staging",
+    "accessServiceTokenEnabled": true,
+    "accessServiceTokenExpiresAt": "2027-11-15T07:13:36Z",
+    "accessServiceTokenLastSeenAt": "2026-11-15T07:48:19Z"
   },
   "historicalCounts": {
     "generatedAt": "2026-11-13T07:26:30.000Z",
