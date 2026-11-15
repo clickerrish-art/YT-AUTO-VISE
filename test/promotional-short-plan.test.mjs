@@ -151,10 +151,19 @@ test("candidate products stay draft-only and keep the disclosure hold", () => {
   assert.ok(validatePromotionalShortPlan(plan, products).some(error => /disclosure must remain on HOLD/i.test(error)));
 });
 
-test("publication timestamps and live scheduling are forbidden in the draft plan", () => {
-  const plan = clone(checkedInPlan);
-  plan.weeks[0].items[0].scheduledAt = "2026-11-12T10:00:00+02:00";
-  assert.ok(validatePromotionalShortPlan(plan, products).some(error => /publication timestamps are forbidden/.test(error)));
+test("publication timestamps at any depth and live scheduling are forbidden in the draft plan", () => {
+  const itemTimestamp = clone(checkedInPlan);
+  itemTimestamp.weeks[0].items[0].scheduledAt = "2026-11-12T10:00:00+02:00";
+  assert.ok(validatePromotionalShortPlan(itemTimestamp, products).some(error => /publication timestamps are forbidden/.test(error)));
+
+  const rootTimestamp = clone(checkedInPlan);
+  rootTimestamp.publishedAt = "2026-11-12T10:00:00+02:00";
+  assert.ok(validatePromotionalShortPlan(rootTimestamp, products).some(error => /publication timestamps are forbidden/.test(error)));
+
+  const nestedTimestamp = clone(checkedInPlan);
+  nestedTimestamp.weeks[0].review = { metadata: { publicationAt: "2026-11-12T10:00:00+02:00" } };
+  assert.ok(validatePromotionalShortPlan(nestedTimestamp, products).some(error => /publication timestamps are forbidden/.test(error)));
+
   const unsafe = clone(checkedInPlan);
   unsafe.schedulingEnabled = true;
   assert.ok(validatePromotionalShortPlan(unsafe, products).some(error => /schedulingEnabled must remain false/.test(error)));
