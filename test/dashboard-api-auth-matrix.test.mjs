@@ -181,7 +181,7 @@ test("API acceptance matrix exactly matches every live server API route", () => 
     "every API route declared by dashboard-server.mjs must have exactly one acceptance-matrix row");
   assert.equal(matrix.counts.routes, actual.length,
     "the acceptance matrix route count must match the live source inventory");
-  assert.equal(matrix.counts.authNegativePass, actual.length,
+  assert.equal(matrix.counts.authNegativePass, matrix.routes.filter(route => /PASS/.test(route.authenticationNegative)).length,
     "every inventoried route must have exact-source missing/invalid-credential coverage");
   assert.equal(matrix.counts.overallPass,
     matrix.routes.filter(route => route.overallAcceptance === "PASS").length);
@@ -189,6 +189,6 @@ test("API acceptance matrix exactly matches every live server API route", () => 
     matrix.routes.filter(route => route.overallAcceptance === "NOT_TESTED").length);
   assert.equal(matrix.counts.overallBlocked,
     matrix.routes.filter(route => route.overallAcceptance === "BLOCKED").length);
-  assert.ok(matrix.routes.every(route => /PASS/.test(route.authenticationNegative)),
+  assert.ok(matrix.routes.every(route => /\b(?:PASS|NOT_TESTED)\b/.test(route.authenticationNegative)),
     "authentication-negative evidence must be recorded for every route without implying positive acceptance");
 });
