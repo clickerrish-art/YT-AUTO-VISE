@@ -41,6 +41,30 @@ function isRealMonday(value) {
     && date.getUTCDay() === 1;
 }
 
+const PUBLICATION_TIMESTAMP_KEYS = new Set([
+  "scheduledAt", "publishedAt", "publicationAt", "publishAt",
+  "scheduledFor", "publishedFor", "publicationFor",
+  "scheduledTimestamp", "publishedTimestamp", "publicationTimestamp", "publishTimestamp",
+  "scheduledDate", "publishedDate", "publicationDate", "publishDate"
+]);
+
+function findPublicationTimestampPaths(value, currentPath = "plan", matches = []) {
+  if (value === null || typeof value !== "object") return matches;
+  if (Array.isArray(value)) {
+    value.forEach((entry, index) => findPublicationTimestampPaths(entry, `${currentPath}[${index}]`, matches));
+    return matches;
+  }
+  for (const [key, child] of Object.entries(value)) {
+    const childPath = `${currentPath}.${key}`;
+    const isPresent = key === "scheduledAt" || key === "publishedAt"
+      ? true
+      : child !== null && child !== undefined;
+    if (PUBLICATION_TIMESTAMP_KEYS.has(key) && isPresent) matches.push(childPath);
+    findPublicationTimestampPaths(child, childPath, matches);
+  }
+  return matches;
+}
+
 export function validatePromotionalShortPlan(plan, products, options = {}) {
   const errors = [];
   const referenceNow = options.now instanceof Date && Number.isFinite(options.now.getTime()) ? options.now : new Date();
@@ -52,6 +76,10 @@ export function validatePromotionalShortPlan(plan, products, options = {}) {
   if (plan.schedulingEnabled !== false) errors.push("schedulingEnabled must remain false");
   if (plan.calendarStatus !== "DRAFT_PREPARATION_ONLY_NO_PUBLICATION_DATES") {
     errors.push("calendarStatus must identify draft preparation without publication dates");
+  }
+  const publicationTimestampPaths = findPublicationTimestampPaths(plan);
+  if (publicationTimestampPaths.length) {
+    errors.push("publication timestamps are forbidden in a draft-preparation plan: " + publicationTimestampPaths.join(", "));
   }
   if (!Array.isArray(products)) errors.push("product registry must contain a products array");
 
@@ -126,10 +154,6 @@ export function validatePromotionalShortPlan(plan, products, options = {}) {
         errors.push(`${label}: productId must match the exact product registry record`);
       }
 
-      if (Object.hasOwn(item ?? {}, "scheduledAt") || Object.hasOwn(item ?? {}, "publishedAt")
-          || (Object.hasOwn(item ?? {}, "publicationAt") && item.publicationAt !== null)) {
-        errors.push(`${label}: publication timestamps are forbidden in a draft-preparation plan`);
-      }
       if (item?.visibility !== "private") errors.push(`${label}: visibility must be exactly private while the Short remains draft-only`);
       if (typeof item?.primaryKeyword !== "string" || !item.primaryKeyword.trim()) errors.push(`${label}: primaryKeyword is required`);
       const firstDescriptionLines = String(item?.description ?? "").slice(0, 240).toLowerCase();
