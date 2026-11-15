@@ -315,7 +315,7 @@ export async function reconcileMetaPagePost({
       }
       if (!Array.isArray(data.data)) return { outcome: "UNRESOLVED", reason: "RECONCILIATION_RESPONSE_MALFORMED", matches: [], checkedAt: new Date().toISOString() };
       for (const item of data.data) {
-        if (typeof item?.id !== "string" || typeof item?.message !== "string" || item.message.trim() !== caption.trim()) continue;
+        if (typeof item?.id !== "string" || typeof item?.message !== "string" || item.message !== caption) continue;
         const scheduled = Number(item.scheduled_publish_time);
         const created = Date.parse(item.created_time ?? "");
         const scheduleMatches = Number.isFinite(scheduled) && Math.abs(scheduled * 1000 - expectedSchedule * 1000) <= 120_000;
