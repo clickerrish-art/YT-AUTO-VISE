@@ -60,6 +60,24 @@ assert(state.publishingEnabled !== true && state.publicPublishingEnabled !== tru
   state.unattendedPublishingEnabled !== true && payload.publishingEnabled !== true,
   "Staging state unexpectedly reports publishing enabled");
 
+const backupList = await get("/api/state/backups", { "x-operator-token": token });
+assert(backupList.status === 200 && Array.isArray(backupList.body?.backups),
+  "Authenticated backup listing must return HTTP 200 with a backups array");
+assert(backupList.body.backups.length >= 1,
+  "Staging must retain at least one verified backup before state-route acceptance");
+for (const backup of backupList.body.backups) {
+  assert(typeof backup.backup_id === "string" && backup.backup_id.length > 0,
+    "Backup listing contains an invalid backup ID");
+  assert(Number.isSafeInteger(Number(backup.source_revision)) && Number(backup.source_revision) >= 1,
+    "Backup listing contains an invalid source revision");
+  assert(/^[a-f0-9]{64}$/.test(backup.sha256 ?? ""),
+    "Backup listing contains an invalid SHA-256 digest");
+  assert(typeof backup.created_at === "string" && Number.isFinite(Date.parse(backup.created_at)),
+    "Backup listing contains an invalid creation timestamp");
+  assert(!Object.hasOwn(backup, "state_json"),
+    "Backup listing must not expose the persisted state snapshot");
+}
+
 const runnerStatusUnauthenticated = await get("/api/runner/session/status");
 assert(runnerStatusUnauthenticated.status === 401,
   "Unauthenticated runner session status must return HTTP 401; received " + runnerStatusUnauthenticated.status);
@@ -77,6 +95,8 @@ console.log(JSON.stringify({
     authenticatedStateRead: "PASS",
     durableRevision: Number(payload.revision),
     requiredStateCollections: "PASS",
+    backupListing: "PASS",
+    retainedBackupCount: backupList.body.backups.length,
     publishingDisabled: "PASS",
     unauthenticatedRunnerStatusRejected: "PASS",
     authenticatedRunnerStatusRead: "PASS"
