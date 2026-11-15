@@ -70,6 +70,10 @@ if ($InitializeSecret) {
         }
     }
     Set-CurrentUserOnlyAcl -Path $secretDirectory -Directory
+    if (Test-Path -LiteralPath $secretFile) {
+        # Tighten permissions before replacing an existing file, not only after writing it.
+        Set-CurrentUserOnlyAcl -Path $secretFile
+    }
     $secureSecret = Read-Host "Enter the existing FACEBOOK_APPROVAL_HMAC_SECRET (input is hidden)" -AsSecureString
     try {
         if ($secureSecret.Length -lt 32) {
