@@ -26,7 +26,7 @@ test("Page Reel adapter initializes, uploads the exact local bytes, and finalize
   const calls=[];
   const result=await createMetaPageReel({
     draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,
-    permissionsVerified:true,rootDir:root,inspect:()=>inspected,
+    permissionsVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,rootDir:root,inspect:()=>inspected,
     fetchImpl:async(url,options)=>{
       calls.push({url:String(url),options});
       if(calls.length===1) return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO});
@@ -70,7 +70,7 @@ test("Page Reel publication requires all explicit live approval and safety switc
     draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,
     permissionsVerified:true,videoState:"PUBLISHED",rootDir:root,inspect:()=>inspected,
     fetchImpl:async()=>{calls++;return response({});}
-  }),/requires verified editorial approval/i);
+  }),/live publishing enabled/i);
   assert.equal(calls,0);
   const result=await publish();
   assert.equal(result.status,"REMOTE_PUBLISHED_UNVERIFIED");
@@ -80,7 +80,7 @@ test("Page Reel publication requires all explicit live approval and safety switc
 test("Page Reel adapter rejects mismatched Page IDs, missing permission checks, and checksum drift before network calls",async t=>{
   const {root,draft}=await fixture(t);
   let calls=0;
-  const options={draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,rootDir:root,inspect:()=>inspected,fetchImpl:async()=>{calls++;return response({});}};
+  const options={draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,publishingEnabled:true,dryRun:false,emergencyStop:false,rootDir:root,inspect:()=>inspected,fetchImpl:async()=>{calls++;return response({});}};
   await assert.rejects(()=>createMetaPageReel({...options,expectedPageId:"999999999999999",permissionsVerified:true}),/allowlist/i);
   await assert.rejects(()=>createMetaPageReel({...options,permissionsVerified:false}),/permissions/i);
   await assert.rejects(()=>createMetaPageReel({...options,permissionsVerified:true,draft:{...draft,media:{...draft.media,sha256:"a".repeat(64)}}}),/checksum/i);
