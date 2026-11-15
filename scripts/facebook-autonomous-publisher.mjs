@@ -162,6 +162,17 @@ export async function runAutonomousFacebookPublisher({
   try {
     let history = safeHistory(historyPath);
     let ledger = safeHistory(ledgerPath);
+    const appendHistoryRecord = record => {
+      // Policy and Meta checks are asynchronous. Re-read at the write boundary
+      // so concurrent receipts or operator updates are never overwritten.
+      const latestHistory = safeHistory(historyPath);
+      if (record?.slotId && latestHistory.some(item => item?.slotId === record.slotId)) {
+        throw new Error("Facebook history already contains this slot; manual reconciliation required before appending another outcome");
+      }
+      latestHistory.push(record);
+      atomicJson(historyPath, latestHistory);
+      history = latestHistory;
+    };
     // The ledger is the authoritative attempt record. If a crash occurred after
     // its verified receipt was committed but before history was written, rebuild
     // the missing history projection before selecting any queued work.
@@ -316,7 +327,7 @@ export async function runAutonomousFacebookPublisher({
       // Run early enough to use Meta's scheduled-post API. A missed slot is skipped, never caught up.
       if (!Number.isFinite(scheduled) || current < scheduled - 45 * 60_000 || current > scheduled - 10 * 60_000) {
         const record = { slotId: payload.slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_MISSED_SLOT", checkedAt: isoNow(current), reason: "SLOT_OUTSIDE_AUTOMATED_PREPARATION_WINDOW" };
-        history.push(record); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++; continue;
+        appendHistoryRecord(record); removeQueuedSlot(payload.slotId); skipped++; continue;
       }
       let decision;
       try {
@@ -342,7 +353,7 @@ export async function runAutonomousFacebookPublisher({
       }
       if (!decision?.eligible) {
         const record = { slotId: payload.slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_BLOCKED", checkedAt: isoNow(current), contentFingerprint: decision?.contentFingerprint ?? null, policyDecision: decision, reason: decision?.reason ?? "POLICY_UNKNOWN" };
-        history.push(record); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++; continue;
+        appendHistoryRecord(record); removeQueuedSlot(payload.slotId); skipped++; continue;
       }
       // Validate the live destination before mutation. Connection failures become an
       // auditable automatic skip; no owner override or publish request is attempted.
@@ -370,8 +381,7 @@ export async function runAutonomousFacebookPublisher({
           contentFingerprint: decision.contentFingerprint, policyDecision: decision,
           reason: "META_PAGE_IDENTITY_OR_PERMISSION_CHECK_FAILED_NO_MUTATION"
         };
-        history.push(record);
-        atomicJson(historyPath, history);
+        appendHistoryRecord(record);
         removeQueuedSlot(payload.slotId);
         skipped++;
         continue;
