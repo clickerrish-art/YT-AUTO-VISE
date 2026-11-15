@@ -1,5 +1,8 @@
 name: Validate SonicVhibez metadata
 on:
+  push:
+    branches:
+      - codex/nature-frontiers-editorial-approval-gate-20261114
   pull_request:
   workflow_dispatch:
 permissions:
