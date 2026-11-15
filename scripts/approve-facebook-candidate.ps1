@@ -49,6 +49,40 @@ function Set-CurrentUserOnlyAcl {
     Set-Acl -LiteralPath $Path -AclObject $acl
 }
 
+function Assert-CurrentUserOnlyAcl {
+    param([Parameter(Mandatory)][string]$Path)
+    $currentSid = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value
+    $systemSid = "S-1-5-18"
+    $acl = Get-Acl -LiteralPath $Path
+    if (-not $acl.AreAccessRulesProtected) {
+        throw "The local signer path must have inheritance disabled: $Path"
+    }
+    $ownerSid = $acl.GetOwner([System.Security.Principal.SecurityIdentifier]).Value
+    if ($ownerSid -ne $currentSid) {
+        throw "The local signer path must be owned by the current Windows user: $Path"
+    }
+    $rules = $acl.GetAccessRules($true, $true, [System.Security.Principal.SecurityIdentifier])
+    $seenCurrent = $false
+    $seenSystem = $false
+    foreach ($rule in $rules) {
+        $sid = $rule.IdentityReference.Value
+        if (($sid -ne $currentSid) -and ($sid -ne $systemSid)) {
+            throw "The local signer path grants access to an unexpected principal: $Path"
+        }
+        if ($rule.AccessControlType -ne [System.Security.AccessControl.AccessControlType]::Allow -or $rule.IsInherited) {
+            throw "The local signer path contains an unexpected access rule: $Path"
+        }
+        if (($rule.FileSystemRights -band [System.Security.AccessControl.FileSystemRights]::FullControl) -ne [System.Security.AccessControl.FileSystemRights]::FullControl) {
+            throw "The local signer path must grant full control only to its owner and SYSTEM: $Path"
+        }
+        if ($sid -eq $currentSid) { $seenCurrent = $true }
+        if ($sid -eq $systemSid) { $seenSystem = $true }
+    }
+    if (-not $seenCurrent -or -not $seenSystem) {
+        throw "The local signer path must grant access only to the current user and SYSTEM: $Path"
+    }
+}
+
 if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) {
     throw "This helper requires Windows DPAPI. Run it in Windows PowerShell 5.1 or PowerShell 7 on Windows."
 }
@@ -100,6 +134,8 @@ if ((Get-Item -LiteralPath $secretDirectory -Force).Attributes -band [IO.FileAtt
 if ((Get-Item -LiteralPath $secretFile -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
     throw "The local secret file must not be a symbolic link or reparse point."
 }
+Assert-CurrentUserOnlyAcl -Path $secretDirectory
+Assert-CurrentUserOnlyAcl -Path $secretFile
 if ([string]::IsNullOrWhiteSpace($SlotId)) {
     throw "Supply the exact candidate slot ID with -SlotId."
 }
