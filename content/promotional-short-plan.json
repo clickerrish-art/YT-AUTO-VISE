@@ -259,18 +259,23 @@
           "keywordEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-09T09:49:01+02:00",
-            "note": "No measured search-volume or competition data is available for this wildlife seed. Fresh qualitative search results surfaced professional wildlife-filmmaking guidance recommending a planned sequence of wide establishing shots, animal-in-context shots and close details, plus documentary-style sequence guidance that explicitly prioritizes observing wildlife without disturbance. This supports the practical lesson only; it does not establish query volume or ranking opportunity.",
+            "researchedAt": "2026-11-15T10:12:21+02:00",
+            "note": "Fresh indexed search results for wildlife documentary filmmaking and shot sequencing support the exact three-shot lesson: Concolor Media explains varied shot sizes and sequence continuity; Conservation Film Foundation teaches planning scenes, sequences and transitions; BBC Natural World editorial guidance stresses truthfulness and warns against misleading viewers with mismatched cutaways or reconstructions. No measured global search volume or competition data was accessed; this is qualitative search-intent evidence only.",
             "sources": [
               {
-                "title": "Wildlife Filmmaking: The Essential Masterclass",
-                "url": "https://www.worldnomads.com/explore/guides/wildlife-filmmaking",
-                "whyRelevant": "A wildlife documentary filmmaker's guide discusses using wide shots, close-ups and cutaways to tell an animal story, directly supporting the three-shot sequence lesson."
+                "title": "Types of shots in wildlife video",
+                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
+                "whyRelevant": "Explains wide, medium and close shot variety plus sequence continuity, directly supporting the three-shot planning lesson."
               },
               {
-                "title": "Underwater Cinematography: How to Shoot Like a Nature Documentary",
-                "url": "https://www.divevolkdiving.com/en-ca/blogs/diving-knowledge/underwater-cinematography-nature-documentary-shots",
-                "whyRelevant": "Updated guidance explains building a documentary sequence from context, subject and detail shots while letting animals choose distance and direction; the ethical filming principle aligns with this Short."
+                "title": "Wildlife Documentary Filmmaking 101",
+                "url": "https://conservationfilmfoundation.org/outreach-action/courses/meft/lessons/lesson-1/",
+                "whyRelevant": "Recommends outlining scenes and sequences and planning transitions before filming, supporting the practical shot-list lesson."
+              },
+              {
+                "title": "Editorial Policy Guidance Note: Recording the Natural World",
+                "url": "https://downloads.bbc.co.uk/guidelines/editorialguidelines/pdfs/natural-world.pdf",
+                "whyRelevant": "BBC guidance requires truthful natural-history storytelling and cautions against misleading viewers with mismatched cutaways or reconstructions."
               }
             ]
           },
@@ -360,18 +365,28 @@
           "keywordEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-09T09:49:01+02:00",
-            "note": "No measured global search-volume or competition data is available in this run: vidIQ has 4 credits remaining, below its 5-credit keyword-research call cost. Fresh qualitative search results surfaced an English-language guide matching the exact query and an official YouTube Help page explaining that Studio Trends reports top searches, audience interest and Shorts content gaps over the last 28 days. The connected channel's private Studio Trends data was not accessed, so these are intent signals only, not measured demand or competition.",
+            "researchedAt": "2026-11-15T10:12:21+02:00",
+            "note": "Fresh qualitative search evidence for the exact question 'how to choose a YouTube niche' is supported by official YouTube guidance: Studio Trends exposes recent top searches and Shorts content gaps; YouTube recommends grouping content by audience, format, longevity and production cost and building sustainable, repeatable formats. Recent indexed creator guides also frame niche choice around a specific audience problem and realistic production capacity. No measured global search volume or competition data was accessed; SonicVhibez private Studio Trends was not inspected, so this is intent evidence only.",
             "sources": [
               {
-                "title": "How Do You Choose a YouTube Niche You Can Sustain?",
-                "url": "https://mitaschool.com/choose-youtube-niche/",
-                "whyRelevant": "A recently indexed English-language creator guide frames niche choice around a specific audience problem, demonstrable knowledge and videos the creator can reliably produce—directly matching this Short's four-check lesson."
+                "title": "Explore trends on YouTube",
+                "url": "https://support.google.com/youtube/answer/11962757?hl=en-do-i-get-paid",
+                "whyRelevant": "Official guidance describes top searches, audience-interest signals and Shorts content gaps from recent 28-day activity, which are relevant checks before choosing a niche."
               },
               {
-                "title": "Explore trends on YouTube — YouTube Help",
-                "url": "https://support.google.com/youtube/answer/11962757?co=GENIE.Platform%3DDesktop&hl=en",
-                "whyRelevant": "Official guidance explains that YouTube Studio Trends surfaces audience top searches, audience interest and Shorts content gaps using recent 28-day signals. This is relevant evidence for how creators should validate a niche, but the user's Studio data was not accessed."
+                "title": "Tips to learn what content to create",
+                "url": "https://support.google.com/youtube/answer/13616340?co=YOUTUBE._YTVideoType%3Dshorts&hl=en",
+                "whyRelevant": "Official YouTube guidance recommends grouping videos by intended audience, format, longevity and production cost, reviewing patterns and choosing sustainable content."
+              },
+              {
+                "title": "New, casual, & regular viewers tips",
+                "url": "https://support.google.com/youtube/answer/13615784?hl=en",
+                "whyRelevant": "Official guidance explains how consistent topics and formats can help viewers return, supporting the lesson's repeatability and sustainability checks."
+              },
+              {
+                "title": "How to Choose a YouTube Niche: A Decision Framework That Holds Up",
+                "url": "https://stitchr.app/guides/how-to-choose-youtube-niche",
+                "whyRelevant": "A current indexed guide addresses the exact niche-selection question and discusses audience demand and production fit; it is qualitative third-party evidence, not a measured volume source."
               }
             ]
           },
