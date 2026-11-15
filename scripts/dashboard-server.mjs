@@ -20,6 +20,7 @@ import { assertShortParentRelationship, shortParentRelationshipSha256, validateS
 import { createContentJob, transitionContentJob, authorizeContentJobRetry, approveContentJobForPrivateUpload, claimWorkerLease, heartbeatWorkerLease, completeWorkerLease, expireWorkerLease, deadLetterExhaustedJob } from "./content-job-lifecycle.mjs";
 import { createReviewDecision, sha256File, validateTechnicalReviewBinding } from "./human-review.mjs";
 import { buildVerifiedRightsAssets } from "./rights-evidence.mjs";
+import { validateMediaRegister } from "./validate-nature-frontiers-media-register.mjs";
 import { canonicalAuthoringScriptSha256, runAuthoringNarrationStage } from "./authoring-production-pipeline.mjs";
 import { productionPlanSha256, validateProductionPlan, validateNarrationApprovalReceipt, validateShortProductionPlanParent } from "./production-plan.mjs";
 import { buildApprovedJobRenderManifest } from "./build-approved-job-render-manifest.mjs";
@@ -734,6 +735,72 @@ const server = http.createServer(async (req, res) => {
         queueItemCount: restored.queueItems.length, jobCount: restored.jobs.length,
         publishingEnabled: false
       });
+    }
+    if (req.method === "GET" && url.pathname === "/api/nature-frontiers/media-register") {
+      try {
+        const registerPath = path.join(root, "content/nature-frontiers-media-register.json");
+        const register = JSON.parse(fs.readFileSync(registerPath, "utf8"));
+        const validationErrors = validateMediaRegister(register);
+        const assets = register.assets.map(asset => ({
+          id: asset.id,
+          mediaType: asset.mediaType,
+          source: {
+            provider: asset.source?.provider ?? null,
+            assetId: asset.source?.assetId ?? null,
+            url: asset.source?.url ?? null,
+            contributor: asset.source?.contributor ?? null,
+            listingStatus: asset.source?.listingStatus ?? "unverified",
+            listingDescription: asset.source?.listingDescription ?? null
+          },
+          localFile: asset.localFile ? { path: asset.localFile.path, sha256: asset.localFile.sha256 } : null,
+          media: asset.media ?? null,
+          claims: Array.isArray(asset.claims) ? asset.claims : [],
+          rights: {
+            reviewStatus: asset.rights?.reviewStatus ?? "not_assessed",
+            additionalPermissionsStatus: asset.rights?.additionalPermissionsStatus ?? "not_assessed",
+            permittedUsage: Array.isArray(asset.rights?.permittedUsage) ? asset.rights.permittedUsage : [],
+            reviewedBy: asset.rights?.reviewedBy ?? null,
+            reviewedAt: asset.rights?.reviewedAt ?? null
+          },
+          inspection: {
+            status: asset.inspection?.status ?? "not_inspected",
+            inspectedBy: asset.inspection?.inspectedBy ?? null,
+            inspectedAt: asset.inspection?.inspectedAt ?? null
+          },
+          editorial: asset.editorial ?? {},
+          approval: {
+            status: asset.approval?.status ?? "pending",
+            approvedBy: asset.approval?.approvedBy ?? null,
+            approvedAt: asset.approval?.approvedAt ?? null,
+            approvedUsage: Array.isArray(asset.approval?.approvedUsage) ? asset.approval.approvedUsage : []
+          },
+          usage: {
+            scheduled: asset.usage?.scheduled === true,
+            published: asset.usage?.published === true,
+            platformPostIds: Array.isArray(asset.usage?.platformPostIds) ? asset.usage.platformPostIds : []
+          }
+        }));
+        return json(res, 200, {
+          brand: "Nature Frontiers",
+          registerId: register.registerId,
+          schemaVersion: register.schemaVersion,
+          timezone: register.timezone,
+          sourceOfTruth: register.policy?.sourceOfTruth ?? "unknown",
+          policy: {
+            defaultPublicationState: register.policy?.defaultPublicationState ?? "unknown",
+            requireHumanApproval: register.policy?.requireHumanApproval === true,
+            allowAutomaticPublication: register.policy?.allowAutomaticPublication === true
+          },
+          validation: { ok: validationErrors.length === 0, errors: validationErrors },
+          assetCount: assets.length,
+          assets,
+          readOnly: true,
+          publishingEnabled: false,
+          checkedAt: new Date().toISOString()
+        });
+      } catch (error) {
+        return json(res, 503, { error: "Nature Frontiers media register is unavailable or invalid", detail: error.message, readOnly: true, publishingEnabled: false });
+      }
     }
     if (req.method === "GET" && url.pathname === "/api/state") {
       const state = loadState();
