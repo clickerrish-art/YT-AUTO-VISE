@@ -25,12 +25,12 @@ function validate({ pageId, expectedPageId, accessToken, apiVersion }) {
   if (typeof accessToken !== "string" || accessToken.length < TOKEN_MIN) throw new MetaPageReelError("Meta Page access token is not configured securely");
   if (!API_VERSION.test(apiVersion)) throw new MetaPageReelError("Meta Graph API version is invalid");
 }
-async function readJson(response, { mutation = false, remoteVideoId = null } = {}) {
+async function readJson(response, { mutation = false, remoteVideoId = null, token = "" } = {}) {
   let data;
   try { data = await response.json(); }
   catch { throw new MetaPageReelError("Meta returned an unreadable Reel response", { status: response.status, uncertain: mutation, remoteVideoId }); }
   if (!response.ok || data?.error) throw new MetaPageReelError(
-    typeof data?.error?.message === "string" ? data.error.message.slice(0, 400) : "Meta Reel request failed",
+    typeof data?.error?.message === "string" ? data.error.message.split(token).join("[REDACTED]").slice(0, 400) : "Meta Reel request failed",
     { status: response.status, code: data?.error?.code ?? null, uncertain: mutation, remoteVideoId }
   );
   return data;
@@ -93,7 +93,7 @@ export async function createMetaPageReel({
       redirect:"error", signal:AbortSignal.timeout(timeoutMs)
     });
   } catch { throw new MetaPageReelError("Reel upload initialization ended without a definitive response; reconcile before retry", { uncertain:true }); }
-  const started = await readJson(start, { mutation:true });
+  const started = await readJson(start, { mutation:true, token:accessToken });
   const videoId = typeof started.video_id === "string" ? started.video_id : "";
   if (!/^\d{5,30}$/.test(videoId)) throw new MetaPageReelError("Meta did not return a valid Reel video ID; reconcile the initialization before retry");
   let uploadUrl;
@@ -107,7 +107,7 @@ export async function createMetaPageReel({
       body:bytes, redirect:"error", signal:AbortSignal.timeout(timeoutMs)
     });
   } catch { throw new MetaPageReelError("Reel binary upload ended without a definitive response; do not retry; reconcile this video ID", { uncertain:true, remoteVideoId:videoId }); }
-  const uploadResult = await readJson(uploaded, { mutation:true, remoteVideoId:videoId });
+  const uploadResult = await readJson(uploaded, { mutation:true, remoteVideoId:videoId, token:accessToken });
   if (uploadResult.success !== true) throw new MetaPageReelError("Meta did not confirm receipt of the Reel binary; reconcile before any retry", { uncertain:true, remoteVideoId:videoId });
   const finishForm = new URLSearchParams({
     upload_phase:"FINISH", video_id:videoId, video_state:videoState, description:draft.caption
@@ -119,7 +119,7 @@ export async function createMetaPageReel({
       redirect:"error", signal:AbortSignal.timeout(timeoutMs)
     });
   } catch { throw new MetaPageReelError("Reel finalization ended without a definitive response; reconcile this video ID before retry", { uncertain:true, remoteVideoId:videoId }); }
-  const finishResult = await readJson(finished, { mutation:true, remoteVideoId:videoId });
+  const finishResult = await readJson(finished, { mutation:true, remoteVideoId:videoId, token:accessToken });
   if (finishResult.success !== true) throw new MetaPageReelError("Meta did not confirm Reel finalization; reconcile before any retry", { uncertain:true, remoteVideoId:videoId });
   return {
     status: videoState === "DRAFT" ? "REMOTE_DRAFT_UNVERIFIED" : "REMOTE_PUBLISHED_UNVERIFIED",
@@ -139,7 +139,7 @@ export async function fetchMetaPageReelStatus({ remoteVideoId, expectedPageId, a
       method:"GET", headers:auth(accessToken), redirect:"error", signal:AbortSignal.timeout(timeoutMs)
     });
   } catch { throw new MetaPageReelError("Remote Reel status could not be read; outcome remains unresolved", { uncertain:true, remoteVideoId }); }
-  const data = await readJson(response);
+  const data = await readJson(response, { token:accessToken });
   if (data.id !== remoteVideoId || !data.status || typeof data.status !== "object") throw new MetaPageReelError("Meta Reel status response did not match the requested video ID");
   return { remoteVideoId, status:data.status, checkedAt:new Date().toISOString(), verifiedRemotely:true };
 }
