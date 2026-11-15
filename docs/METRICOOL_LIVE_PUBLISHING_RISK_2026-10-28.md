@@ -54,3 +54,43 @@ No records were paused, cancelled, edited, deleted, rescheduled or republished d
 - Risk of automatic publication: **CONFIRMED** for the eight returned future records.
 - External intervention and post-change verification: **BLOCKED_EXTERNAL** pending explicit owner authorization.
 - Repository draft-only behavior: separate acceptance item; this snapshot does not prove or disprove every repository execution path.
+
+---
+
+## Follow-up verification — 2026-11-16 (read-only)
+
+A fresh read-only inspection was performed through the connected Metricool account. No Metricool records were changed.
+
+### Current connected brand
+
+The current brand list returns one Nature Frontiers brand:
+
+- Brand label: **Nature Frontiers SA**
+- Current Metricool brand ID: `8094526`
+- Timezone: `Africa/Johannesburg`
+- Facebook Page ID returned by Metricool: `1431329126735709`
+- Instagram username returned by Metricool: `naturefrontieers2026`
+
+The returned Facebook Page ID matches `config/facebook-publishing.json` and `config/instagram-publishing.json`. This is a Metricool metadata match, **not** a fresh Meta Graph API identity/permission verification. The Instagram username is not the required numeric Instagram Business Account ID; that ID remains intentionally unset.
+
+The brand metadata also includes a YouTube connection. It is a Nature Frontiers destination and must never be used as the SonicVhibez YouTube target.
+
+### Scheduled-post reconciliation result
+
+- Current brand `8094526`: scheduled-post query for 2026-10-28 through 2026-11-28 (expanded range) returned an empty data set.
+- Current brand `8094526`: upcoming query for 2026-11-16 through 2026-12-16 returned an empty data set.
+- Previous snapshot brand `7545638`: it is no longer present in the current connected brand list. Both scheduled-post queries against that old brand ID returned **HTTP 403 — Access denied to blog: 7545638**.
+
+**Important unresolved risk:** the eight historical future records in the 2026-10-28 snapshot were `draft: false` and `autoPublish: true`. The current connection cannot access their former brand, so the empty schedule on brand `8094526` does not prove that the old records were canceled, transferred, or otherwise resolved. Their final state remains **UNKNOWN / BLOCKED_EXTERNAL** until the owner restores access to the old Metricool brand or independently verifies those exact records in the Metricool UI.
+
+### Meta identity check
+
+The exact-candidate Meta verification workflow still receives HTTP 401, OAuth error 190, subcode 463 (expired access-token session) when requesting `/me`. The Page ID metadata match above does not bypass this failure. Renew Meta authorization, then rerun the read-only identity and permissions check before enabling any publishing path.
+
+### Required safe posture
+
+- Keep Meta/Instagram publishing disabled, dry-run enabled and emergency stop active.
+- Do not infer the status of the eight historical records from the new brand's empty schedule.
+- Do not guess an Instagram Business Account ID from the returned username.
+- Do not use the Nature Frontiers YouTube connection as SonicVhibez.
+- Do not update, pause, cancel, reschedule or publish any Metricool record without explicit owner authorization for the exact record and action.
