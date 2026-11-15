@@ -220,6 +220,32 @@ test("uncertain Facebook mutation is reconciled against the scheduled-post edge 
   assert.ok(calls.every(url => !url.includes(TOKEN)));
 });
 
+test("known-ID reconciliation confirms only an exact caption and scheduled-time match", async () => {
+  const scheduledAt = "2026-10-25T06:00:00.000Z";
+  const expectedSeconds = Date.parse(scheduledAt) / 1000;
+  const run = async ({ message = "Exact scheduled caption", scheduled = expectedSeconds } = {}) =>
+    reconcileMetaPagePost({
+      pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
+      caption: "Exact scheduled caption", scheduledAt,
+      attemptStartedAt: "2026-10-24T10:00:00.000Z", remotePostId: PAGE_ID + "_known",
+      fetchImpl: async () => response({
+        id: PAGE_ID + "_known", message, created_time: "2026-10-24T10:01:00Z",
+        scheduled_publish_time: String(scheduled), is_published: false
+      })
+    });
+  const exact = await run();
+  assert.equal(exact.outcome, "CONFIRMED");
+  const wrongCaption = await run({ message: "Different approved caption" });
+  assert.equal(wrongCaption.outcome, "UNRESOLVED");
+  assert.equal(wrongCaption.reason, "REMOTE_ID_CAPTION_MISMATCH");
+  const wrongSchedule = await run({ scheduled: expectedSeconds + 600 });
+  assert.equal(wrongSchedule.outcome, "UNRESOLVED");
+  assert.equal(wrongSchedule.reason, "REMOTE_ID_SCHEDULE_MISMATCH");
+  const missingSchedule = await run({ scheduled: null });
+  assert.equal(missingSchedule.outcome, "UNRESOLVED");
+  assert.equal(missingSchedule.reason, "REMOTE_ID_SCHEDULE_MISMATCH");
+});
+
 test("no reconciliation match is unresolved, never proof that a publish is safe to retry", async () => {
   const result = await reconcileMetaPagePost({
     pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
