@@ -819,18 +819,22 @@ test("atomic state write does not acknowledge a rename until its directory entry
       })
     };
     const originalFsync = fs.fsyncSync;
-    let fsyncCalls = 0;
+    let directoryFsyncAttempted = false;
     try {
       fs.fsyncSync = fd => {
-        fsyncCalls++;
-        // Lock file, state temp file, then containing directory after rename.
-        if (fsyncCalls === 3) { const error = new Error("simulated directory fsync failure"); error.code = "EIO"; throw error; }
+        if (fs.fstatSync(fd).isDirectory()) {
+          directoryFsyncAttempted = true;
+          const error = new Error("simulated directory fsync failure");
+          error.code = "EIO";
+          throw error;
+        }
         return originalFsync(fd);
       };
       await assert.rejects(() => runAutonomousFacebookPublisher(options), /simulated directory fsync failure/);
     } finally {
       fs.fsyncSync = originalFsync;
     }
+    assert.equal(directoryFsyncAttempted, true, "test must fail the directory descriptor, not an earlier file flush");
     const historyPath = path.join(f.stateDir, "facebook-history.json");
     assert.equal(JSON.parse(fs.readFileSync(historyPath, "utf8"))[0].status, "SKIPPED_BLOCKED",
       "rename may have produced a complete file, but the failed directory fsync must not be acknowledged");
