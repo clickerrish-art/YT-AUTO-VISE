@@ -49,6 +49,21 @@ export async function approveFacebookCandidate({
   if (!Array.isArray(item.claims) || item.claims.length === 0) fail("Candidate must include its factual claim evidence before review");
   if (!Array.isArray(item.media) || item.media.length === 0) fail("Candidate must include its final media assets before review");
 
+  if (item.claims.some(claim => !Array.isArray(claim?.sourceUrls) || claim.sourceUrls.length === 0 || typeof claim.sourceExcerpt !== "string" || claim.sourceExcerpt.trim().length < 25)) fail("Every factual claim needs source URLs and a source excerpt before fact-check attestation");
+  stdout.write("\nNATURE FRONTIERS — FACTUAL CLAIM REVIEW\n");
+  for (let i = 0; i < item.claims.length; i++) {
+    const claim = item.claims[i];
+    stdout.write("\nClaim " + (i + 1) + ": " + claim.text + "\nSources: " + JSON.stringify(claim.sourceUrls) + "\nExcerpt: " + claim.sourceExcerpt + "\n");
+    stdout.write("Open and read every listed source. Confirm the excerpt supports the complete claim, including context and qualifications. Do not confirm if the evidence is ambiguous, outdated, contradicted or incomplete.\n");
+    const factCheckAnswer = await confirm("Type exactly VERIFY CLAIM " + slotId + " " + (i + 1) + " after checking the source: ");
+    if (factCheckAnswer !== "VERIFY CLAIM " + slotId + " " + (i + 1)) fail("Claim fact-check not confirmed; no approval was written");
+    const checkedAt = new Date(now).toISOString();
+    const claimHash = crypto.createHash("sha256").update(String(claim.text)).digest("hex");
+    const sourceUrlsHash = crypto.createHash("sha256").update(JSON.stringify(claim.sourceUrls)).digest("hex");
+    const signed = claimHash + "\\n" + sourceUrlsHash + "\\n" + reviewerId + "\\n" + checkedAt;
+    const signature = crypto.createHmac("sha256", secret).update(signed).digest("hex");
+    item.claims[i] = { ...claim, sourceSupportsClaim: true, verified: true, semanticVerification: { claimHash, sourceUrlsHash, reviewerId, checkedAt, signature } };
+  }
   const contentFingerprint = facebookPayloadFingerprint(item);
   stdout.write("\nNATURE FRONTIERS — FINAL CONTENT REVIEW\n");
   stdout.write("Slot: " + item.slotId + "\n");
