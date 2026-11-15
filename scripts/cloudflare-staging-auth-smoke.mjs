@@ -61,8 +61,13 @@ assert(state.publishingEnabled !== true && state.publicPublishingEnabled !== tru
   "Staging state unexpectedly reports publishing enabled");
 
 const backupList = await get("/api/state/backups", { "x-operator-token": token });
-assert(backupList.status === 200 && Array.isArray(backupList.body?.backups),
-  "Authenticated backup listing must return HTTP 200 with a backups array");
+if (backupList.status !== 200 || !Array.isArray(backupList.body?.backups)) {
+  const errorCode = typeof backupList.body?.code === "string" ? backupList.body.code : "none";
+  const errorMessage = typeof backupList.body?.error === "string" ? backupList.body.error.slice(0, 240) : "none";
+  throw new Error("Authenticated backup listing failed: HTTP " + backupList.status +
+    "; code=" + errorCode + "; error=" + errorMessage +
+    "; responseKeys=" + Object.keys(backupList.body ?? {}).sort().join(","));
+}
 assert(backupList.body.backups.length >= 1,
   "Staging must retain at least one verified backup before state-route acceptance");
 for (const backup of backupList.body.backups) {
