@@ -112,7 +112,8 @@ function asTimestamp(value, label) {
  */
 export function validatePublicationSlot(proposed, existingItems = [], {
   timeZone = DEFAULT_SCHEDULE_TIMEZONE,
-  minSpacingHours = DEFAULT_MIN_SPACING_HOURS
+  minSpacingHours = DEFAULT_MIN_SPACING_HOURS,
+  cycleStartAt = null
 } = {}) {
   if (!proposed || typeof proposed !== "object") throw new Error("proposed slot is required");
   if (!Number.isFinite(minSpacingHours) || minSpacingHours < DEFAULT_MIN_SPACING_HOURS) throw new Error(`minSpacingHours must be at least ${DEFAULT_MIN_SPACING_HOURS} elapsed hours`);
@@ -379,14 +380,27 @@ export function evaluateNextPublication({
   const proposedTimestamp = parseStrictTimestamp(proposedAt);
   if (!Number.isFinite(proposedTimestamp)) errors.push("proposedAt must be a valid ISO timestamp with explicit timezone");
   const actualSorted = normalizedHistory.sort((a, b) => a.timestamp - b.timestamp);
-  for (let index = 0; index < actualSorted.length; index++) {
+  let cycleStartTimestamp = Number.NEGATIVE_INFINITY;
+  if (cycleStartAt !== null && cycleStartAt !== undefined) {
+    cycleStartTimestamp = parseStrictTimestamp(cycleStartAt);
+    if (!Number.isFinite(cycleStartTimestamp)) {
+      errors.push("cycleStartAt must be a valid ISO timestamp with explicit timezone");
+    } else if (Number.isFinite(proposedTimestamp) && cycleStartTimestamp > proposedTimestamp) {
+      errors.push("cycleStartAt must not be later than the proposed publication");
+    }
+  }
+  // The owner-approved policy starts a new format cycle at its approval time.
+  // Earlier remote publications remain authoritative spacing/duplicate history,
+  // but are not retroactively forced into a sequence that did not yet apply.
+  const cycleHistory = actualSorted.filter(item => item.timestamp >= cycleStartTimestamp);
+  for (let index = 0; index < cycleHistory.length; index++) {
     const expectedHistoricalFormat = ROLLING_PUBLICATION_FORMATS[index % ROLLING_PUBLICATION_FORMATS.length];
-    if (actualSorted[index].format !== expectedHistoricalFormat) {
-      errors.push(`remote history position ${index + 1} must be ${expectedHistoricalFormat} in the rolling long_form, long_form, short cycle; got ${actualSorted[index].format}`);
+    if (cycleHistory[index].format !== expectedHistoricalFormat) {
+      errors.push(`remote history position ${index + 1} in the approved cycle must be ${expectedHistoricalFormat} in the rolling long_form, long_form, short cycle; got ${cycleHistory[index].format}`);
     }
   }
   const latestActual = actualSorted.at(-1);
-  const expectedFormat = ROLLING_PUBLICATION_FORMATS[actualSorted.length % ROLLING_PUBLICATION_FORMATS.length];
+  const expectedFormat = ROLLING_PUBLICATION_FORMATS[cycleHistory.length % ROLLING_PUBLICATION_FORMATS.length];
   if (format !== expectedFormat) errors.push(`next format must be ${expectedFormat} in the rolling long_form, long_form, short cycle`);
   const candidate = { id: jobId, status: "scheduled", scheduledAt: proposedAt };
   // Historical records determine cycle progression and duplicate detection, but spacing
@@ -415,7 +429,7 @@ export function evaluateNextPublication({
       errors.push(`proposed publication is less than ${minSpacingHours} elapsed hours after the latest actual channel publication`);
     }
   }
-  return { valid: errors.length === 0, errors: [...new Set(errors)], expectedFormat, latestActualAt: latestActual ? new Date(latestActual.timestamp).toISOString() : null };
+  return { valid: errors.length === 0, errors: [...new Set(errors)], expectedFormat, cycleStartAt: cycleStartAt ?? null, cycleHistoryCount: cycleHistory.length, latestActualAt: latestActual ? new Date(latestActual.timestamp).toISOString() : null };
 }
 
 
