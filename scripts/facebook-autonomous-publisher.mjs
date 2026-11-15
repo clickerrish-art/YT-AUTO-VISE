@@ -150,8 +150,11 @@ export async function runAutonomousFacebookPublisher({
     // the missing history projection before selecting any queued work.
     let historyRebuilt = false;
     for (const attempt of ledger) {
-      if (!attempt || !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(attempt.status) ||
-          typeof attempt.slotId !== "string") continue;
+      if (!attempt || attempt.kind !== "FACEBOOK_PUBLISH_ATTEMPT" ||
+          attempt.destination !== "nature_frontiers_facebook" ||
+          !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(attempt.status) ||
+          attempt.verifiedRemotely !== true || typeof attempt.remotePostId !== "string" ||
+          !attempt.remotePostId.trim() || typeof attempt.slotId !== "string" || !attempt.slotId.trim()) continue;
       if (history.some(item => item?.slotId === attempt.slotId &&
           ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status))) continue;
       history.push({ ...attempt, payload: undefined,
