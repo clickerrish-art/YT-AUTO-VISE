@@ -264,6 +264,18 @@ export async function runAutonomousFacebookPublisher({
     const candidates = queue.filter(item => item && item.destination === "nature_frontiers_facebook" &&
       item.destinationPageId === config.destinationPageId && item.scheduledDate === today &&
       typeof item.slotId === "string" && typeof item.scheduledAt === "string");
+    // A slot ID is the idempotency key across queue, ledger and history. Never
+    // choose an arbitrary payload when a malformed or duplicated queue contains
+    // multiple candidates for the same key; doing so could publish unreviewed
+    // content while silently discarding the other candidate.
+    const candidateSlotCounts = new Map();
+    for (const candidate of candidates) {
+      candidateSlotCounts.set(candidate.slotId, (candidateSlotCounts.get(candidate.slotId) ?? 0) + 1);
+    }
+    const duplicateSlotIds = [...candidateSlotCounts].filter(([, count]) => count > 1).map(([slotId]) => slotId);
+    if (duplicateSlotIds.length) {
+      throw new Error("Autonomous Facebook queue contains duplicate slot IDs; publishing blocked for manual queue reconciliation");
+    }
     const removeQueuedSlot = slotId => {
       const index = queue.findIndex(item => item?.slotId === slotId);
       if (index >= 0) { queue.splice(index, 1); atomicJson(queuePath, queue); }
