@@ -1,3 +1,40 @@
+# 15 November 2026 — release gate refresh
+
+**Code/test change:** `3e302319d35ca738df421148b357afc7038f8e93`. **Last full CI-tested SHA:** `44a909db7c9ab60e9c62e7b92f3e028a88675619`. **Observed implementation branch before this documentation refresh:** `e4d46dcfe1141019f868259caeb2758ef784a525`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627` · **divergence:** 3,566 ahead / 4 behind · **PR #1 changed files:** 328.
+
+## Engineering evidence
+
+- The last full CI-tested SHA `44a909` passed 140/140 Node test files, 44 Python tests, zero skips and npm audit with 0 vulnerabilities ([automation/security](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430117)).
+- Content quality passed 784/784 with zero skips ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430168)).
+- Dashboard Chromium E2E passed 29/29 ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430119)).
+- Queue readiness, metadata validation, Cloudflare durable-state unit checks (9/9), deployment recovery (2/2), isolated main/candidate baseline, non-destructive branch inventory and local Nature Frontiers draft validation passed.
+- The newer code/test SHA `3e302319d35ca738df421148b357afc7038f8e93` adds Cloudflare Access header precedence protection. Its focused local Node test passed **2/2**. GitHub Actions and combined status returned no exact-SHA run for `3e302`; current-head full CI remains **NOT_TESTED**.
+- Production readiness on `44a909` remains **HOLD — 7 blockers**; [run 43690430158](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430158) correctly failed closed. The Nature Frontiers Meta identity workflow failed because its session token expired ([run 43690430169](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43690430169)); no token was exposed.
+
+## Required owner-controlled gates
+
+- [ ] Refresh complete SonicVhibez public/private/unlisted/scheduled YouTube history and the pending/uncertain upload-attempt ledger immediately before any upload.
+- [ ] Verify the separate SonicVhibez/Sonic Fire YouTube destination in Metricool; the only returned brand is Nature Frontiers SA, with a mixed-brand YouTube network ID.
+- [ ] Obtain and inspect genuine final rights-cleared footage, narration, music and sound assets.
+- [ ] Create and verify the final Short MP4, matching thumbnail and render manifest; none exists at the observed branch head.
+- [ ] Human-review the full video, narration, facts, captions, rights and thumbnail; do not set approval flags from placeholders.
+- [ ] Recheck the exact Selar listing and seller. The Vault direct-sales disclosure is approved; Prompt Pack and 90-Day Blueprint disclosures remain unapproved.
+- [ ] Configure/verify Cloudflare Access service-token-backed Node-to-Worker integration and complete real persistence, audit, concurrency and restart evidence.
+- [ ] Refresh the expired Nature Frontiers Meta token only through the secure GitHub Actions secret store if that separate Meta verification is required.
+- [ ] Independently verify branch protection; current permission inspection returns 403.
+
+## Publication and queue safety
+
+- [x] The plan remains draft-only, private, capped at two Shorts per week, and contains no publication timestamps.
+- [x] The repository queue has 16 held/review-pending items and no publication timestamps.
+- [x] Public/unattended publishing remains disabled; Safari affiliate remains inactive.
+- [x] No YouTube upload, public publication, live schedule, Metricool mutation or Meta publication was performed.
+- [ ] **Spacing check remains UNVERIFIED.** The only owner-confirmed history snapshot is dated 10 November and records one public Short at 22 October 2026, 17:05:56 SAST. The known elapsed interval to 15 November 2026, 09:44:45 SAST is 23 days, 16 hours, 38 minutes, 49 seconds, but complete current history, uncertain upload attempts and the correct destination schedule are not available. Do not schedule or calculate a next slot from this stale snapshot.
+
+The current branch's schedule workflows execute from `main`; a PR-branch schedule is not active production automation. Keep PR #1 open/draft/unmerged and do not reconcile its 3,566/4 divergence destructively.
+
+---
+
 # 14 November 2026 — Release gate evidence at source/test SHA 806b784
 
 **Candidate:** `806b784d36e084f2621f586b52cae4939aea56e3` · **PR #1:** OPEN / DRAFT / UNMERGED · **main:** `fa00d28e7f58911482686e4ad69fac9f4701a2e6` unchanged · **comparison:** 3,549 ahead / 2 behind · 324 changed files · merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
