@@ -8,8 +8,21 @@ import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost,
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const isoNow = now => new Date(now).toISOString();
 const readJson = file => JSON.parse(fs.readFileSync(file, "utf8"));
+function syncDirectory(directory) {
+  // A file fsync does not make the rename durable by itself: the containing
+  // directory entry must also be flushed before the write is acknowledged.
+  // Node cannot portably open directories for fsync on Windows, so fail closed
+  // there rather than claim crash durability that the runtime cannot provide.
+  if (process.platform === "win32") {
+    throw new Error("Durable publisher state writes require directory fsync; this runtime does not support it");
+  }
+  const directoryHandle = fs.openSync(directory, "r");
+  try { fs.fsyncSync(directoryHandle); }
+  finally { fs.closeSync(directoryHandle); }
+}
 function atomicJson(file, value) {
-  fs.mkdirSync(path.dirname(file), { recursive: true });
+  const directory = path.dirname(file);
+  fs.mkdirSync(directory, { recursive: true });
   // A unique exclusive temp file prevents a stale crash remnant (or a reused PID)
   // from blocking recovery writes on the next process start.
   const temporary = file + "." + process.pid + "." + crypto.randomUUID() + ".tmp";
@@ -21,6 +34,7 @@ function atomicJson(file, value) {
     fs.closeSync(handle);
     handle = undefined;
     fs.renameSync(temporary, file);
+    syncDirectory(directory);
   } catch (error) {
     if (handle !== undefined) {
       try { fs.closeSync(handle); } catch {}
