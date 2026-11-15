@@ -162,6 +162,23 @@ export async function runAutonomousFacebookPublisher({
   try {
     let history = safeHistory(historyPath);
     let ledger = safeHistory(ledgerPath);
+    // A slot may have only one authoritative verified remote identity. Detect
+    // conflicting receipts already present in the durable projection before
+    // recovery, queue cleanup, policy evaluation, or any Meta operation.
+    const verifiedHistoryIds = new Map();
+    for (const item of history) {
+      if (!item || !["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status) ||
+          typeof item.slotId !== "string" || !item.slotId.trim()) continue;
+      const remotePostId = typeof item.remotePostId === "string" ? item.remotePostId.trim() : "";
+      if (!remotePostId) {
+        throw new Error("Verified Facebook history receipt is missing its remote post ID; manual reconciliation required");
+      }
+      const priorId = verifiedHistoryIds.get(item.slotId);
+      if (priorId && priorId !== remotePostId) {
+        throw new Error("Facebook history contains conflicting verified remote post IDs for one slot; manual reconciliation required");
+      }
+      verifiedHistoryIds.set(item.slotId, remotePostId);
+    }
     const appendHistoryRecord = record => {
       // Policy and Meta checks are asynchronous. Re-read at the write boundary
       // so concurrent receipts or operator updates are never overwritten.
