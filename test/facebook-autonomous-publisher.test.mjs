@@ -1010,6 +1010,43 @@ test("startup reconciliation re-reads history after Meta lookup before writing a
 });
 
 
+test("startup blocks conflicting verified receipts already present in durable history", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    const slotId = "nature-frontiers-conflicting-history-rows";
+    const queue = [{
+      slotId, destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Conflicting durable history must stop all processing.", links: [], media: [], claims: []
+    }];
+    const receipts = [
+      { slotId, destination: "nature_frontiers_facebook", status: "SCHEDULED_VERIFIED",
+        verifiedRemotely: true, remotePostId: "123456789012345_first" },
+      { slotId, destination: "nature_frontiers_facebook", status: "PUBLISHED_VERIFIED",
+        verifiedRemotely: true, remotePostId: "123456789012345_second" }
+    ];
+    fs.writeFileSync(f.queuePath, JSON.stringify(queue));
+    const historyPath = path.join(f.stateDir, "facebook-history.json");
+    fs.writeFileSync(historyPath, JSON.stringify(receipts));
+    let policyCalls = 0, mutationCalls = 0;
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath,
+      stateDir: f.stateDir, now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      policyEvaluator: async () => { policyCalls++; return { eligible: true }; },
+      publish: async () => { mutationCalls++; throw new Error("conflicting receipts must never reach Meta"); }
+    }), /conflicting verified remote post IDs/i);
+    assert.equal(policyCalls, 0);
+    assert.equal(mutationCalls, 0);
+    assert.deepEqual(JSON.parse(fs.readFileSync(historyPath, "utf8")), receipts);
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), queue);
+    assert.equal(fs.existsSync(path.join(f.stateDir, "facebook-publishing.lock")), false);
+  } finally { f.cleanup(); }
+});
+
 test("policy-block history append preserves a concurrent durable history update", async () => {
   const f = setup();
   try {
