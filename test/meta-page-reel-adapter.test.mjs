@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { createMetaPageReel, fetchMetaPageReelStatus, MetaPageReelError } from "../scripts/meta-page-reel-adapter.mjs";
+import { createMetaPageReel, fetchMetaPageReelStatus, reconcileMetaPageReel, MetaPageReelError } from "../scripts/meta-page-reel-adapter.mjs";
 
 const PAGE = "1431329126735709";
 const VIDEO = "987654321098765";
@@ -258,4 +258,37 @@ test("Page Reel upload stops when durable remote-ID recording fails",async t=>{
     fetchImpl:async()=>{calls++;return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO});}
   }),error=>error instanceof MetaPageReelError && error.uncertain===true && error.remoteVideoId===VIDEO);
   assert.equal(calls,1,"no binary upload may proceed before the remote ID is durably persisted");
+});
+
+test("Page Reel reconciliation confirms only a completed scheduled phase at the requested time",async()=>{
+  const scheduledAt="2026-11-16T06:00:00.000Z";
+  const publishTime=Date.parse(scheduledAt)/1000;
+  const confirmed=await reconcileMetaPageReel({
+    remoteVideoId:VIDEO,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,scheduledAt,
+    fetchImpl:async()=>response({id:VIDEO,status:{video_status:"ready",publishing_phase:{status:"complete",publish_status:"scheduled",publish_time:publishTime}}})
+  });
+  assert.equal(confirmed.outcome,"CONFIRMED");
+  assert.equal(confirmed.receipt.status,"SCHEDULED_VERIFIED");
+  assert.equal(confirmed.receipt.remoteVideoId,VIDEO);
+  const mismatch=await reconcileMetaPageReel({
+    remoteVideoId:VIDEO,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,scheduledAt,
+    fetchImpl:async()=>response({id:VIDEO,status:{video_status:"ready",publishing_phase:{status:"complete",publish_status:"scheduled",publish_time:publishTime+120}}})
+  });
+  assert.equal(mismatch.outcome,"UNRESOLVED");
+  const processing=await reconcileMetaPageReel({
+    remoteVideoId:VIDEO,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,scheduledAt,
+    fetchImpl:async()=>response({id:VIDEO,status:{video_status:"processing",publishing_phase:{status:"in_progress",publish_status:"scheduled",publish_time:publishTime}}})
+  });
+  assert.equal(processing.outcome,"UNRESOLVED");
+});
+
+test("Page Reel reconciliation confirms publication only after explicit completed published status",async()=>{
+  const publishedAt="2026-11-15T12:30:00.000Z";
+  const result=await reconcileMetaPageReel({
+    remoteVideoId:VIDEO,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,
+    fetchImpl:async()=>response({id:VIDEO,status:{video_status:"ready",publishing_phase:{status:"complete",publish_status:"published",publish_time:Date.parse(publishedAt)/1000}}})
+  });
+  assert.equal(result.outcome,"CONFIRMED");
+  assert.equal(result.receipt.status,"PUBLISHED_VERIFIED");
+  assert.equal(result.receipt.createdTime,publishedAt);
 });
