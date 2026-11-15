@@ -33,6 +33,19 @@ function safeImageUrl(value,allowedDomains) {
  }
  return url;
 }
+function validInstagramFeedPermalink(value) {
+ if(typeof value!=="string") return false;
+ try {
+  const url=new URL(value);
+  return url.protocol==="https:"&&
+   (url.hostname==="www.instagram.com"||url.hostname==="instagram.com")&&
+   !url.username&&!url.password&&!url.port&&!url.search&&!url.hash&&
+   /^\\/p\\/[A-Za-z0-9_-]+\\/?$/.test(url.pathname);
+ } catch { return false; }
+}
+function validPublishedTimestamp(value) {
+ return typeof value==="string"&&/(?:Z|[+-]\\d{2}:?\\d{2})$/.test(value)&&Number.isFinite(Date.parse(value));
+}
 function inspectJpeg(bytes) {
  const result=spawnSync("ffprobe",["-v","error","-select_streams","v:0","-show_entries","stream=codec_name,width,height","-of","json","-"],{input:bytes,encoding:"utf8",timeout:15000});
  if(result.error||result.status!==0) throw new InstagramImageError("ffprobe is unavailable or could not inspect the Instagram image");
@@ -115,7 +128,7 @@ export async function publishInstagramImagePost({
  catch{throw new InstagramImageError("Instagram image publication read-back failed; outcome remains unresolved",{uncertain:true,containerId,mediaId});}
  const verified=await json(response,{token:accessToken,containerId,mediaId});
  if(verified.id!==mediaId||verified.media_type!=="IMAGE"||verified.media_product_type!=="FEED"||
-    typeof verified.permalink!=="string"||!verified.permalink.startsWith("https://")) {
+    !validInstagramFeedPermalink(verified.permalink)||!validPublishedTimestamp(verified.timestamp)) {
   throw new InstagramImageError("Instagram read-back did not confirm the expected feed image and permalink",{uncertain:true,containerId,mediaId});
  }
  return {status:"PUBLISHED_VERIFIED",instagramAccountId,containerId,mediaId,permalink:verified.permalink,
@@ -129,7 +142,7 @@ export async function reconcileInstagramImagePost({mediaId,containerId=null,inst
  try{
   const response=await fetchImpl(graph(apiVersion,encodeURIComponent(mediaId)+"?fields=id,media_type,media_product_type,permalink,timestamp"),{method:"GET",headers:headers(accessToken),redirect:"error",signal:AbortSignal.timeout(timeoutMs)});
   const data=await json(response,{token:accessToken,containerId,mediaId});
-  if(data.id!==mediaId||data.media_type!=="IMAGE"||data.media_product_type!=="FEED"||typeof data.permalink!=="string"||!data.permalink.startsWith("https://"))
+  if(data.id!==mediaId||data.media_type!=="IMAGE"||data.media_product_type!=="FEED"||!validInstagramFeedPermalink(data.permalink)||!validPublishedTimestamp(data.timestamp))
    return {outcome:"UNRESOLVED",reason:"INSTAGRAM_IMAGE_READBACK_MISMATCH",mediaId,containerId};
   return {outcome:"CONFIRMED",receipt:{status:"PUBLISHED_VERIFIED",mediaId,containerId,permalink:data.permalink,publishedAt:data.timestamp??null}};
  }catch{return {outcome:"UNRESOLVED",reason:"INSTAGRAM_IMAGE_READBACK_FAILED_NO_RETRY",mediaId,containerId};}
