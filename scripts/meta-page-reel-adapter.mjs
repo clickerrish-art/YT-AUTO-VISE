@@ -87,7 +87,7 @@ export async function createMetaPageReel({
   draft, pageId, expectedPageId, accessToken, apiVersion = "v26.0",
   permissionsVerified = false, approvalVerified = false,
   publishingEnabled = false, dryRun = true, emergencyStop = true,
-  videoState = "DRAFT", fetchImpl = fetch, rootDir = process.cwd(),
+  videoState = "DRAFT", scheduledPublishAt = null, now = () => Date.now(), onRemoteVideoId = null, fetchImpl = fetch, rootDir = process.cwd(),
   inspect = inspectVideo, timeoutMs = 60000
 }) {
   validate({ pageId, expectedPageId, accessToken, apiVersion });
@@ -100,8 +100,23 @@ export async function createMetaPageReel({
   if (publishingEnabled !== true || dryRun !== false || emergencyStop !== false) {
     throw new MetaPageReelError("Remote Reel upload requires live publishing enabled, dry-run disabled and emergency stop cleared");
   }
-  if (videoState === "PUBLISHED" && approvalVerified !== true) {
-    throw new MetaPageReelError("Publishing a Reel requires verified editorial approval");
+  if (videoState !== "DRAFT" && approvalVerified !== true) {
+    throw new MetaPageReelError("Publishing or scheduling a Reel requires verified editorial approval");
+  }
+  let scheduledPublishEpoch = null;
+  if (videoState === "SCHEDULED") {
+    const scheduledMs = typeof scheduledPublishAt === "number" ? scheduledPublishAt :
+      (typeof scheduledPublishAt === "string" ? Date.parse(scheduledPublishAt) : NaN);
+    const currentMs = Number(now());
+    const latest = new Date(currentMs);
+    latest.setMonth(latest.getMonth() + 6);
+    if (!Number.isFinite(scheduledMs) || !Number.isFinite(currentMs) ||
+        scheduledMs < currentMs + 10 * 60 * 1000 || scheduledMs > latest.getTime()) {
+      throw new MetaPageReelError("Scheduled Reel publication must be between 10 minutes and 6 months from now");
+    }
+    scheduledPublishEpoch = Math.floor(scheduledMs / 1000);
+  } else if (scheduledPublishAt != null) {
+    throw new MetaPageReelError("A scheduled publication time is only valid with videoState SCHEDULED");
   }
   let absolute, bytes;
   try { absolute = resolveRegularFileNoSymlinks(draft.media.path, rootDir, "Facebook Reel video"); }
@@ -146,7 +161,8 @@ export async function createMetaPageReel({
   const uploadResult = await readJson(uploaded, { mutation:true, remoteVideoId:videoId, token:accessToken });
   if (uploadResult.success !== true) throw new MetaPageReelError("Meta did not confirm receipt of the Reel binary; reconcile before any retry", { uncertain:true, remoteVideoId:videoId });
   const finishForm = new URLSearchParams({
-    upload_phase:"FINISH", video_id:videoId, video_state:videoState, description:draft.caption
+    upload_phase:"FINISH", video_id:videoId, video_state:videoState, description:draft.caption,
+    ...(scheduledPublishEpoch == null ? {} : { scheduled_publish_time:String(scheduledPublishEpoch) })
   });
   let finished;
   try {
@@ -158,8 +174,10 @@ export async function createMetaPageReel({
   const finishResult = await readJson(finished, { mutation:true, remoteVideoId:videoId, token:accessToken });
   if (finishResult.success !== true) throw new MetaPageReelError("Meta did not confirm Reel finalization; reconcile before any retry", { uncertain:true, remoteVideoId:videoId });
   return {
-    status: videoState === "DRAFT" ? "REMOTE_DRAFT_UNVERIFIED" : "REMOTE_PUBLISHED_UNVERIFIED",
+    status: videoState === "DRAFT" ? "REMOTE_DRAFT_UNVERIFIED" :
+      videoState === "SCHEDULED" ? "REMOTE_SCHEDULED_UNVERIFIED" : "REMOTE_PUBLISHED_UNVERIFIED",
     remoteVideoId:videoId, pageId, apiVersion, videoState, media,
+    scheduledPublishTime:scheduledPublishEpoch,
     sha256:draft.media.sha256, uploadedBytes:bytes.length,
     createdAt:new Date().toISOString(), verifiedRemotely:false
   };
