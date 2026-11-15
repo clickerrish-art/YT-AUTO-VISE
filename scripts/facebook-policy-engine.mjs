@@ -173,6 +173,8 @@ export async function evaluateFinalFacebookPayload(payload, {
   fetchImpl = fetch,
   now = new Date().toISOString(),
   maxPostsPerLocalDay = 1,
+  maxReelsPerLocalDay = 2,
+  maxFeedPostsPerLocalDay = 1,
   minimumIntervalMinutes = 60 * 20,
   timezone = "Africa/Johannesburg",
   sourceTimeoutMs = 8000,
@@ -365,6 +367,11 @@ export async function evaluateFinalFacebookPayload(payload, {
     return new Intl.DateTimeFormat("en-CA", { timeZone: timezone, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(timestamp)) === day;
   });
   if (sameDay.length >= maxPostsPerLocalDay) add(blockers, "Daily publication cap already reached; missed slots are not caught up");
+  const isReel = payload?.mediaType === "reel";
+  const reelsToday = sameDay.filter(item => item.mediaType === "reel" || item.kind === "FACEBOOK_PAGE_REEL_PUBLISH_ATTEMPT").length;
+  const feedToday = sameDay.length - reelsToday;
+  if (isReel && reelsToday >= maxReelsPerLocalDay) add(blockers, "Daily Reel cap already reached; missed slots are not caught up");
+  if (!isReel && feedToday >= maxFeedPostsPerLocalDay) add(blockers, "Daily feed-post cap already reached; missed slots are not caught up");
   const last = prior.map(item => Date.parse(item.publishedAt ?? item.createdAt ?? item.scheduledAt ?? "")).filter(Number.isFinite).sort((a,b)=>b-a)[0];
   if (last != null && current - last < minimumIntervalMinutes * 60000) add(blockers, "Minimum interval between Facebook posts has not elapsed");
 
