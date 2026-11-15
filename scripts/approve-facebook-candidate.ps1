@@ -23,6 +23,9 @@ function Set-CurrentUserOnlyAcl {
         New-Object System.Security.AccessControl.FileSecurity
     }
     $acl.SetAccessRuleProtection($true, $false)
+    # Explicitly set ownership as well as the DACL; newly created directories can
+    # inherit an unexpected owner from a runner-provided parent directory.
+    $acl.SetOwner($identity)
     $inheritance = if ($Directory) {
         [System.Security.AccessControl.InheritanceFlags]::ContainerInherit -bor [System.Security.AccessControl.InheritanceFlags]::ObjectInherit
     } else {
