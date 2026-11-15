@@ -57,8 +57,10 @@ function readPinnedRegularFile(filePath) {
   }
 }
 
-function inspectVideo(filePath) {
-  const result = spawnSync("ffprobe", ["-v","error","-show_entries","format=duration:stream=codec_type,width,height,avg_frame_rate","-of","json",filePath], { encoding:"utf8", timeout:20000 });
+function inspectVideo(bytes) {
+  // Inspect the exact byte buffer already SHA-256 pinned for upload, not a path
+  // that could be replaced between hashing and ffprobe opening it.
+  const result = spawnSync("ffprobe", ["-v","error","-show_entries","format=duration:stream=codec_type,width,height,avg_frame_rate","-of","json","-"], { input:bytes, encoding:"utf8", timeout:20000 });
   if (result.error || result.status !== 0) throw new MetaPageReelError("ffprobe is unavailable or could not inspect the Reel video");
   let parsed;
   try { parsed = JSON.parse(result.stdout); } catch { throw new MetaPageReelError("ffprobe returned invalid video inspection data"); }
@@ -109,7 +111,18 @@ export async function createMetaPageReel({
       (typeof scheduledPublishAt === "string" ? Date.parse(scheduledPublishAt) : NaN);
     const currentMs = Number(now());
     const latest = new Date(currentMs);
-    latest.setMonth(latest.getMonth() + 6);
+    if (Number.isFinite(currentMs)) {
+      // Add six calendar months without Date#setMonth overflow (e.g. Aug 31
+      // becoming an invalid/overlong March date). Clamp to the target month's
+      // final day while preserving UTC clock fields.
+      const originalDay = latest.getUTCDate();
+      const targetMonth = latest.getUTCMonth() + 6;
+      const targetYear = latest.getUTCFullYear() + Math.floor(targetMonth / 12);
+      const normalizedMonth = targetMonth % 12;
+      const lastDay = new Date(Date.UTC(targetYear, normalizedMonth + 1, 0)).getUTCDate();
+      latest.setUTCDate(1);
+      latest.setUTCFullYear(targetYear, normalizedMonth, Math.min(originalDay, lastDay));
+    }
     if (!Number.isFinite(scheduledMs) || !Number.isFinite(currentMs) ||
         scheduledMs < currentMs + 10 * 60 * 1000 || scheduledMs > latest.getTime()) {
       throw new MetaPageReelError("Scheduled Reel publication must be between 10 minutes and 6 months from now");
@@ -127,7 +140,7 @@ export async function createMetaPageReel({
   }
   bytes = readPinnedRegularFile(absolute);
   if (!bytes.length || crypto.createHash("sha256").update(bytes).digest("hex") !== draft.media.sha256) throw new MetaPageReelError("Reel video checksum does not match the reviewed draft");
-  const media = inspect(absolute);
+  const media = inspect(bytes);
   if (!media || !Number.isFinite(media.durationSeconds) || media.durationSeconds < 4 || media.durationSeconds > 60) throw new MetaPageReelError("Facebook Reel duration must be between 4 and 60 seconds");
   if (!Number.isFinite(media.width) || !Number.isFinite(media.height) || media.width < 540 || media.height < 960 ||
       Math.abs(media.width / media.height - 9 / 16) > 0.005) throw new MetaPageReelError("Facebook Reel media must meet the minimum 540x960 portrait 9:16 dimensions");
