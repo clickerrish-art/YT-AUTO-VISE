@@ -780,7 +780,7 @@ const server = http.createServer(async (req, res) => {
           attemptsByStatus,
           verifiedPublicationCount: history.filter(item => item?.status === "PUBLISHED_VERIFIED" && item?.verifiedRemotely === true).length,
           lastVerifiedPublicationAt: history.filter(item => item?.status === "PUBLISHED_VERIFIED" && item?.verifiedRemotely === true)
-            .map(item => item.publishedAt ?? item.completedAt ?? null).filter(Boolean).sort().at(-1) ?? null,
+            .map(item => item.publishedAt ?? null).filter(Boolean).sort().at(-1) ?? null,
           readOnly: true,
           providerMutationAttempted: false,
           checkedAt: new Date().toISOString()
