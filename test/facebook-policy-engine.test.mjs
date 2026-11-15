@@ -259,6 +259,27 @@ test("approval fingerprint changes when rights provenance knowledge changes", ()
   assert.notEqual(after, before);
 });
 
+test("signed human fact-check attestation is accepted without an external semantic service and is bound to claim and source set", async () => {
+  const f = fixture();
+  try {
+    const claim = f.payload.claims[0];
+    const checkedAt = "2026-10-24T11:30:00.000Z";
+    const claimHash = hash(claim.text);
+    const sourceUrlsHash = hash(JSON.stringify(claim.sourceUrls));
+    const reviewerId = "owner-fact-checker-test";
+    const signed = claimHash + "\\n" + sourceUrlsHash + "\\n" + reviewerId + "\\n" + checkedAt;
+    claim.semanticVerification = { claimHash, sourceUrlsHash, reviewerId, checkedAt, signature: crypto.createHmac("sha256", APPROVAL_SECRET).update(signed).digest("hex") };
+    approve(f.payload);
+    const result = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), semanticVerifier: null });
+    assert.equal(result.eligible, true, JSON.stringify(result.blockers));
+    assert.equal(result.sourceChecks[0].semanticVerification.reason, "SIGNED_HUMAN_FACT_CHECK_BOUND_TO_CLAIM_AND_SOURCE_SET");
+    claim.text = "A different factual claim";
+    approve(f.payload);
+    const tampered = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), semanticVerifier: null });
+    assert.equal(tampered.eligible, false);
+    assert.match(tampered.blockers.join(" "), /trusted semantic verification/i);
+  } finally { f.cleanup(); }
+});
 test("valid exact-content editorial approval is accepted; unknown synthetic origin blocks", async () => {
   const f = fixture();
   try {
