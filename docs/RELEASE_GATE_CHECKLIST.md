@@ -1,3 +1,37 @@
+# 16 November 2026 — exact candidate release checklist
+
+**Application/test candidate:** `57769fa219fe98b52f8b182f3849206ac3c8110c`; subsequent commits in this documentation refresh do not change source or tests. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25`, unchanged. PR #1 remains open, draft and unmerged.
+
+## Verified candidate gates
+
+- [x] Automation/security: 917 Node tests, 45 Python tests, zero skips; npm audit 0 vulnerabilities — [43942293152](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942293152).
+- [x] Content quality: 917/917 — [43942302023](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942302023).
+- [x] Dashboard browser: 33/33 — [43942301932](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301932).
+- [x] Metadata validation: fail-closed templates verified — [43942302103](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942302103).
+- [x] Queue validation: 16 held items; no queue mutation or publishing — [43942301833](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301833).
+- [x] Cloudflare read-only staging smoke and durable-state checks — [43942293152](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942293152), [43942301818](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301818).
+- [x] Deployment recovery: 2/2 — [43942302049](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942302049).
+- [x] Isolated exact main/candidate baseline — [43942301927](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301927).
+- [x] Non-destructive inventory: 3,943 ahead / 4 behind / 372 changed files; no history mutation — [43942302072](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942302072).
+- [x] Nature Frontiers local draft and Instagram safety validation only; no provider publication — [43942301897](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301897), [43942302234](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942302234).
+
+## Mandatory release gates still OPEN
+
+- [ ] Owner-approved feasible publication cadence. The requested 2 long-form + 1 Short weekly conflicts with 72-hour minimum spacing; no approval exists for the proposed 216-hour rolling cycle.
+- [ ] Valid owner-authorized YouTube OAuth; current refresh returns `invalid_grant`.
+- [ ] Independently verified SonicVhibez channel identity and complete public/private/unlisted/scheduled history plus all uncertain attempts.
+- [ ] Genuine final Short and long-form MP4s; complete rights-backed render manifests and exact hashes.
+- [ ] Verified footage, narration, music and sound-effect rights and permitted-use evidence.
+- [ ] Human approval of factual accuracy, metadata, captions, thumbnail, compliance and final media hashes.
+- [ ] Authorized private-only upload, provider-side read-back and any native Short-parent association. No upload has been attempted.
+- [ ] Nature Frontiers Meta identity renewal in secure secret storage if that separate integration is required; current token expired (HTTP 401 / error 190 / subcode 463). Keep all publishing disabled.
+- [ ] Owner verification of branch protection and required checks; integration cannot read the protection endpoint (403).
+- [ ] Complete field-level DASH-001, all-route API-001 and branch semantic GIT-002 acceptance. Current sub-gates are not full acceptance.
+
+**Production readiness [43942301842](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301842) correctly reports HOLD — 9 blockers.** Keep public/unattended publishing disabled, keep the queue held, and do not merge PR #1. No paid service, GPU, trial, provider mutation, upload, Meta post, Metricool write or destructive Git operation was used.
+
+---
+
 # 15 November 2026 — exact source/test SHA release-gate refresh
 
 **Exact tested source/test SHA:** `12c28787923384d5ba767614c89c09b4b328cd9a`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627` · **divergence at tested SHA:** 3,569 ahead / 4 behind · **PR #1 files:** 328. PR #1 is open, draft and unmerged. PR #7 is open with 13 changed files; draft metadata is not exposed. Documentation-only commits follow the tested SHA; application source/test changes are covered by the exact-SHA run below.
