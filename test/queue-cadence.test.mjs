@@ -29,8 +29,8 @@ test("draft preparation fallback has actual cyclic UTC gaps of 96 and 72 hours b
   assert.equal(queue.cadence.draftPreparationFallback.notPublicationCadence, true);
 });
 test("the requested three-publication weekly cadence conflicts with the 72-hour minimum", () => {
-  assert.equal(plan.requestedWeeklyCadence.totalPerWeek, 3);
-  assert.equal(plan.requestedWeeklyCadence.totalPerWeek * plan.minimumPublicationSpacingHours, 216);
+  assert.equal(plan.requestedWeeklyCadence.totalPublicationsPerWeek, 3);
+  assert.equal(plan.requestedWeeklyCadence.totalPublicationsPerWeek * plan.minimumPublicationSpacingHours, 216);
   assert.equal(plan.requestedWeeklyCadence.status, "CONFLICTS_WITH_72_HOUR_MINIMUM");
   assert.equal(plan.publicationCycle.minimumCycleHours, 216);
   assert.equal(queue.cadence.minimumCycleHours, 216);
@@ -134,7 +134,7 @@ test("the requested two-long-form weekly queue remains planning-only and cannot 
   assert.equal(longFormQueue.publishingEnabled, false);
   assert.equal(plan.requestedWeeklyCadence.longFormPerWeek, 2);
   assert.equal(plan.requestedWeeklyCadence.shortsPerWeek, 1);
-  assert.equal(plan.requestedWeeklyCadence.totalPerWeek, 3);
+  assert.equal(plan.requestedWeeklyCadence.totalPublicationsPerWeek, 3);
   assert.equal(plan.requestedWeeklyCadence.status, "CONFLICTS_WITH_72_HOUR_MINIMUM");
   assert.equal(plan.cadenceDecision.status, "OWNER_APPROVAL_REQUIRED");
   assert.equal(plan.cadenceDecision.ownerApproved, false);
