@@ -160,6 +160,9 @@ test("Instagram approval route fails closed without a verified linked Page and s
     assert.deepEqual(fs.readFileSync(candidateFile), candidateBefore);
   }
   const state = JSON.parse(fs.readFileSync(stateFile, "utf8"));
-  assert.equal(state.publishingEnabled, false);
+  assert.equal(instagramConfig.publishingEnabled, false);
+  assert.equal(instagramConfig.dryRun, true);
+  assert.equal(instagramConfig.emergencyStop, true);
+  assert.ok(Array.isArray(state.audit));
   assert.equal(state.audit.length, 0);
 });
