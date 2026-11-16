@@ -9,7 +9,7 @@ import { createMetaPageReel, fetchMetaPageReelStatus, reconcileMetaPageReel, Met
 const PAGE = "1431329126735709";
 const VIDEO = "987654321098765";
 const TOKEN = "test-page-token-" + "x".repeat(30);
-const API = "v26.0";
+const API = "v27.0";
 const response = (data,status=200) => new Response(JSON.stringify(data),{status,headers:{"content-type":"application/json"}});
 const inspected = {width:1080,height:1920,durationSeconds:35,frameRate:30};
 
@@ -29,9 +29,9 @@ test("Page Reel adapter initializes, uploads the exact local bytes, and finalize
     permissionsVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,rootDir:root,inspect:()=>inspected,
     fetchImpl:async(url,options)=>{
       calls.push({url:String(url),options});
-      if(calls.length===1) return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO});
+      if(calls.length===1) return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v27.0/"+VIDEO});
       if(calls.length===2) {
-        assert.equal(String(url),"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO);
+        assert.equal(String(url),"https://rupload.facebook.com/video-upload/v27.0/"+VIDEO);
         assert.equal(options.headers.authorization,"OAuth "+TOKEN);
         assert.equal(options.headers.offset,"0");
         assert.equal(options.headers.file_size,String(bytes.length));
@@ -64,7 +64,7 @@ test("Page Reel publication requires all explicit live approval and safety switc
     draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,
     permissionsVerified:true,approvalVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,
     videoState:"PUBLISHED",rootDir:root,inspect:()=>inspected,
-    fetchImpl:async()=>{calls++;return response(calls===1?{video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO}:{success:true});}
+    fetchImpl:async()=>{calls++;return response(calls===1?{video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v27.0/"+VIDEO}:{success:true});}
   });
   await assert.rejects(()=>createMetaPageReel({
     draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,
@@ -102,7 +102,7 @@ test("Page Reel upload timeout retains remote video ID and is explicitly uncerta
   await assert.rejects(()=>createMetaPageReel({
     draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,permissionsVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,
     rootDir:root,inspect:()=>inspected,
-    fetchImpl:async()=>{calls++;if(calls===1)return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO});throw new Error("network timeout");}
+    fetchImpl:async()=>{calls++;if(calls===1)return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v27.0/"+VIDEO});throw new Error("network timeout");}
   }),error=>error instanceof MetaPageReelError && error.uncertain===true && error.remoteVideoId===VIDEO);
   assert.equal(calls,2,"the adapter must not retry an uncertain upload");
 });
@@ -196,7 +196,7 @@ test("Page Reel scheduling requires approval and binds the exact requested times
     rootDir:root,inspect:()=>inspected,
     fetchImpl:async(url,options)=>{
       calls.push({url:String(url),options});
-      if(calls.length===1)return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO});
+      if(calls.length===1)return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v27.0/"+VIDEO});
       if(calls.length===2)return response({success:true});
       return response({success:true});
     }
@@ -234,7 +234,7 @@ test("Page Reel six-calendar-month scheduling window clamps month-end dates with
     draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,
     permissionsVerified:true,approvalVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,
     videoState:"SCHEDULED",scheduledPublishAt,now:()=>now,rootDir:root,inspect:()=>inspected,
-    fetchImpl:async()=>{calls++;return response(calls===1?{video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO}:{success:true});}
+    fetchImpl:async()=>{calls++;return response(calls===1?{video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v27.0/"+VIDEO}:{success:true});}
   });
   const accepted=await run("2027-02-28T12:00:00.000Z");
   assert.equal(accepted.status,"REMOTE_SCHEDULED_UNVERIFIED");
@@ -252,7 +252,7 @@ test("Page Reel remote ID is durably recorded before binary upload begins",async
     onRemoteVideoId:async record=>{events.push({kind:"persist",record});},
     fetchImpl:async(url,options)=>{
       events.push({kind:"request",url:String(url)});
-      if(events.filter(x=>x.kind==="request").length===1)return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO});
+      if(events.filter(x=>x.kind==="request").length===1)return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v27.0/"+VIDEO});
       if(String(url).includes("rupload.facebook.com"))return response({success:true});
       return response({success:true});
     }
@@ -261,7 +261,7 @@ test("Page Reel remote ID is durably recorded before binary upload begins",async
   assert.equal(events[0].kind,"request");
   assert.equal(events[1].kind,"persist");
   assert.equal(events[1].record.remoteVideoId,VIDEO);
-  assert.equal(events[2].url,"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO);
+  assert.equal(events[2].url,"https://rupload.facebook.com/video-upload/v27.0/"+VIDEO);
 });
 
 test("Page Reel upload stops when durable remote-ID recording fails",async t=>{
@@ -271,7 +271,7 @@ test("Page Reel upload stops when durable remote-ID recording fails",async t=>{
     draft,pageId:PAGE,expectedPageId:PAGE,accessToken:TOKEN,apiVersion:API,
     permissionsVerified:true,publishingEnabled:true,dryRun:false,emergencyStop:false,
     rootDir:root,inspect:()=>inspected,onRemoteVideoId:async()=>{throw new Error("state disk unavailable");},
-    fetchImpl:async()=>{calls++;return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v26.0/"+VIDEO});}
+    fetchImpl:async()=>{calls++;return response({video_id:VIDEO,upload_url:"https://rupload.facebook.com/video-upload/v27.0/"+VIDEO});}
   }),error=>error instanceof MetaPageReelError && error.uncertain===true && error.remoteVideoId===VIDEO);
   assert.equal(calls,1,"no binary upload may proceed before the remote ID is durably persisted");
 });

@@ -12,7 +12,7 @@ function setup(){
  const configPath=path.join(root,"instagram.json"),queuePath=path.join(root,"queue.json");
  const config={version:1,destination:"nature_frontiers_instagram",facebookPageId:page,facebookPageName:"Nature Frontiers SA",
    instagramBusinessAccountId:account,publishingEnabled:true,dryRun:false,emergencyStop:false,timezone:"Africa/Johannesburg",
-   apiVersion:"v26.0",facebookLoginForBusinessEnabled:true};
+   apiVersion:"v27.0",facebookLoginForBusinessEnabled:true};
  fs.writeFileSync(configPath,JSON.stringify(config));
  const sourcePayload={destination:"nature_frontiers_facebook",mediaType:"reel",destinationPageId:page,slotId:"slot-1",caption:"Educational wildlife note.",
    media:[{path:"media/reel.mp4",sha256:"a".repeat(64)}],claims:[]};

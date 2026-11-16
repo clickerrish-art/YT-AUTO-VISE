@@ -25,6 +25,7 @@ test("Instagram feed image uses public hash-pinned JPEG, container processing, p
   throw new Error("unexpected endpoint "+url);
  },{onContainerId:async x=>persisted.push(x.containerId),onMediaId:async x=>persisted.push(x.mediaId)});
  assert.equal(result.status,"PUBLISHED_VERIFIED");assert.deepEqual(persisted,["123456789012346","123456789012347"]);
+ assert.ok(calls.filter(call=>call.url.includes("graph.facebook.com")).every(call=>call.url.includes("/v27.0/")),"Instagram Graph requests use v27.0");
  assert.equal(calls.filter(x=>x.method==="POST").length,2);
 });
 

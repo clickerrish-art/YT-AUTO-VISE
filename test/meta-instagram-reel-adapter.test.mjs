@@ -27,6 +27,7 @@ test("Instagram Reel uses resumable container upload, bounded processing, publis
     throw new Error("unexpected endpoint "+url);
   },{onContainerId:async x=>persisted.push(x.containerId),onMediaId:async x=>persisted.push(x.mediaId)});
   assert.equal(result.status,"PUBLISHED_VERIFIED");
+  assert.ok(calls.every(call => call.url.includes("/v27.0/")), "all Instagram Graph and resumable-upload requests use v27.0");
   assert.deepEqual(persisted,["123456789012346","123456789012347"]);
   assert.equal(calls.filter(x=>x.method==="POST").length,3);
 });

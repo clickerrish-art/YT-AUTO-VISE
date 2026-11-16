@@ -13,7 +13,7 @@ function setup() {
   const stateDir = path.join(root, "durable-state");
   const config = {
     destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
-    destinationPageName: "Nature Frontiers", apiVersion: "v26.0", timezone: "Africa/Johannesburg",
+    destinationPageName: "Nature Frontiers", apiVersion: "v27.0", timezone: "Africa/Johannesburg",
     autonomousMode: true, autonomousSchedulingEnabled: true, emergencyStop: true,
     publishingEnabled: false, dryRun: true, dailyCap: 3, dailyReelCap: 2, dailyFeedPostCap: 1, minimumIntervalMinutes: 240,
     allowedDomains: [], allowedCampaignIds: [], approvedDestinations: [],

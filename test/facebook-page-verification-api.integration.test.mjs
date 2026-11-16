@@ -27,7 +27,6 @@ async function startDashboard({ stateDir, token, pageId, pageToken, userToken, t
     NATURE_FRONTIERS_FACEBOOK_PAGE_ID: pageId,
     META_PAGE_ACCESS_TOKEN: pageToken,
     META_USER_ACCESS_TOKEN: userToken,
-    META_GRAPH_API_VERSION: "v26.0",
     MOCK_META_PAGE_ID: pageId,
     MOCK_META_PAGE_NAME: "Nature Frontiers",
     MOCK_META_USER_ID: "987654321098765",
@@ -89,6 +88,7 @@ test("mocked Meta Page verification persists identity, permission and audit evid
   assert.ok(persisted.audit.filter(event => event.action === "FACEBOOK_PAGE_IDENTITY_VERIFIED").every(event => event.actor === "meta-verification-test-operator"));
   const providerCalls = fs.readFileSync(tracePath, "utf8").trim().split("\n").map(line => JSON.parse(line));
   assert.equal(providerCalls.length, 8, "two verifications each perform user identity, permission, managed-Page and Page identity reads");
+  assert.ok(providerCalls.every(call => call.pathname.startsWith("/v27.0/")), "dashboard Meta verification uses the configured current Graph API version");
   assert.ok(providerCalls.every(call => call.method === "GET"), "identity verification must not perform a provider mutation");
   assert.equal(providerCalls.filter(call => call.pathname.endsWith("/me")).length, 2, "each verification resolves the numeric user ID");
   assert.equal(providerCalls.filter(call => call.pathname.endsWith("/987654321098765/permissions")).length, 2, "each verification reads permissions from the numeric user edge");

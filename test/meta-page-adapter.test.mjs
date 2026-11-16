@@ -8,7 +8,7 @@ import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost,
 
 const PAGE_ID = "123456789012345";
 const TOKEN = "test-token-never-log-" + "x".repeat(30);
-const API = "v26.0";
+const API = "v27.0";
 const NOW = Date.parse("2026-10-24T10:00:00.000Z");
 const response = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });
 
@@ -82,7 +82,7 @@ test("Meta publish adapter schedules a future post and performs no retries", asy
     permissionsVerified: true, now: NOW,
     fetchImpl: async (url, options) => {
       calls++; request = { url, options };
-      assert.equal(url, "https://graph.facebook.com/v26.0/123456789012345/feed");
+      assert.equal(url, "https://graph.facebook.com/v27.0/123456789012345/feed");
       return response({ id: PAGE_ID + "_999" });
     }
   });
@@ -125,7 +125,7 @@ test("Meta adapter validates local image checksums and remote verification statu
   });
   assert.equal(published.remotePostId, PAGE_ID + "_888");
   await assert.rejects(() => publishMetaPagePost({ draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API, permissionsVerified: true, rootDir: root, now: NOW, probeImage: () => { throw new MetaPageApiError("simulated decode failure"); }, fetchImpl: async () => response({ id: "should-not-publish" }) }), /simulated decode failure/i);
-  assert.equal(request.url, "https://graph.facebook.com/v26.0/123456789012345/photos");
+  assert.equal(request.url, "https://graph.facebook.com/v27.0/123456789012345/photos");
   assert.ok(request.options.body.get("source") instanceof Blob);
   await assert.rejects(() => publishMetaPagePost({
     draft: { ...draft, media: { ...draft.media, sha256: "a".repeat(64) } }, pageId: PAGE_ID, expectedPageId: PAGE_ID,
