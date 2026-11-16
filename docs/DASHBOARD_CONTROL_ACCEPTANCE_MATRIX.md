@@ -1,3 +1,15 @@
+## Latest exact-SHA evidence refresh — 2026-11-16
+
+- Candidate source and test SHA: `6a527bd16f0e1323843c552f635d4ae48b47b9da`.
+- Dashboard browser workflow: run [43936987948](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43936987948), **33/33 passed** against the real local dashboard and backend.
+- Additional field-mapping journey: the five production-blocked forms (render, validation, rights, review and upload reconciliation) serialize their fields to the expected API payloads, display the expected fail-closed blocker, keep submit actions disabled, and leave persisted jobs/audit/uploads unchanged. All inputs used by this journey are explicitly test fixtures, not production evidence or approval.
+- Candidate baseline comparison: run [43936987586](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43936987586), candidate Node suite **159/159 files passed**, Python **45/45 passed**, zero skipped; candidate `npm audit` reported **0 vulnerabilities**. Main was tested separately and remains unchanged.
+- Content-quality workflow: run [43936987482](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43936987482), **909/909 Node tests passed**, zero skipped; long-form draft word-count floor passed. This does not certify final runtime or production-media readiness.
+
+**DASH-001 remains NOT_TESTED / NOT COMPLETE.** This refresh adds evidence for the five blocked-form field mappings and current browser suite, but it does not claim exhaustive per-control success, validation, authorization, persistence, refresh/restart, concurrency and accessibility acceptance across every dashboard control. Production-dependent forms remain fail-closed until genuine prerequisites exist.
+
+---
+
 # Latest exact-SHA evidence — 16 November 2026
 
 **Application source SHA:** `00142ffca51d63fb4ad2fff571c12c021456a88a`  
