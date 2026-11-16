@@ -66,7 +66,7 @@
     "approvalReference": null,
     "explanation": "The proposed rolling long_form → long_form → short cycle with a 72-hour minimum requires 216 hours per complete cycle. The user previously requested two long-form videos plus one Short per week, which cannot fit in a 168-hour week while preserving the 72-hour minimum and no-same-Johannesburg-day rule. The rolling no-weekly-target alternative is a proposal only; publication must remain blocked until the owner explicitly approves a feasible cadence. Tuesday/Saturday remain draft-preparation triggers only.",
     "proposedMode": "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
-    "provenanceNote": "The former OWNER_APPROVED timestamp and reference were assistant-authored, not a user-authored approval. They are withdrawn and must not authorize scheduling."
+    "provenanceNote": "The former OWNER_APPROVED timestamp and reference were assistant-authored, not user-authored approval. They are withdrawn. No schedule may be dispatched until the owner explicitly approves a feasible cadence in a new user message."
   },
   "spacingPolicy": {
     "minimumHoursBetweenPosts": 72,
