@@ -1297,8 +1297,16 @@ test("authoring form generates and persists a source-bound script through the re
     await expect(page.locator("#authoringscript")).toContainText(providerSource.title);
 
     await page.locator("#narrationreviewjob").selectOption(created.job.id);
+    await expect(page.locator("#narrationreviewsha")).toHaveAttribute("readonly", "");
+    await expect(page.locator("#narrationreviewaudioSha")).toHaveAttribute("readonly", "");
+    await expect(page.locator("#narrationreviewtranscriptSha")).toHaveAttribute("readonly", "");
+    await expect(page.locator("#narrationreviewcaptionsSha")).toHaveAttribute("readonly", "");
+    await expect(page.locator("#narrationreviewreportSha")).toHaveAttribute("readonly", "");
     await expect(page.locator("#narrationreviewsha")).toHaveValue(reviewedScriptSha);
     await expect(page.locator("#narrationreviewaudioSha")).toHaveValue(audioArtifact.sha256);
+    await expect(page.locator("#narrationreviewtranscriptSha")).toHaveValue(transcriptArtifact.sha256);
+    await expect(page.locator("#narrationreviewcaptionsSha")).toHaveValue(captionsArtifact.sha256);
+    await expect(page.locator("#narrationreviewreportSha")).toHaveValue(reportArtifact.sha256);
     await expect(page.locator("#narrationtranscript")).toContainText("A wildlife encounter");
     await expect(page.locator("#narrationcaptions")).toContainText("Narration caption fixture");
     await page.locator("#narrationreviewdecision").selectOption("APPROVE");

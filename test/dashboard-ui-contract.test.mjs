@@ -2,9 +2,13 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
+import { inventoryDashboardSources } from "../scripts/dashboard-inventory.mjs";
 
 const dashboardPath = path.join(process.cwd(), "public", "dashboard.html");
 const html = fs.readFileSync(dashboardPath, "utf8");
+const serverPath = path.join(process.cwd(), "scripts", "dashboard-server.mjs");
+const server = fs.readFileSync(serverPath, "utf8");
+const inventory = inventoryDashboardSources(html, server);
 
 test("dashboard derives production slots and rolling cycle from authoritative backend schedule", () => {
   assert.match(html, /const scheduleSlots=Array\.isArray\(state\.schedule\?\.schedule\)/);
@@ -107,4 +111,51 @@ test("final media review exposes verified video, thumbnail, captions and evidenc
   assert.match(html, /bundle\.previewUrls\.(?:video|thumbnail|captions)/);
   assert.match(html, /Integrity verified/);
   assert.match(html, /actual media, thumbnail and captions loaded/);
+});
+
+
+test("all 119 static dashboard controls map to a submitted form or an explicit standalone binding", () => {
+  assert.equal(inventory.counts.controls, 119);
+  assert.equal(inventory.counts.forms, 17);
+  assert.deepEqual(inventory.counts.controlsByTag, { button: 27, input: 49, select: 27, textarea: 16 });
+  assert.equal(new Set(inventory.controls.map(control => control.acceptanceId)).size, 119,
+    "every control must have a unique stable acceptance identity");
+
+  const submitHandlers = new Set(
+    [...html.matchAll(/\\$\\(["']([^"']+)["']\\)\\.onsubmit\\s*=/g)].map(match => match[1])
+  );
+  const formIds = inventory.forms.map(form => form.id);
+  assert.equal(formIds.length, 17);
+  assert.deepEqual(formIds.filter(id => !submitHandlers.has(id)), [],
+    "every form must have a submit handler");
+  assert.deepEqual(inventory.controls.filter(control => control.form && !submitHandlers.has(control.form)), [],
+    "every control inside a form must inherit a real form submission path");
+
+  const standaloneIds = inventory.controls.filter(control => !control.form).map(control => control.id).sort();
+  const expectedStandaloneIds = [
+    "refresh", "token", "connect", "createStateBackup", "refreshStateBackups",
+    "fbverifyPage", "instagramRefresh", "search", "filter", "narrationreviewjob",
+    "narrationreviewsha", "narrationreviewaudioSha", "narrationreviewtranscriptSha",
+    "narrationreviewcaptionsSha", "narrationreviewreportSha", "task", "runTask"
+  ].sort();
+  assert.deepEqual(standaloneIds, expectedStandaloneIds,
+    "new standalone controls must be explicitly added to this acceptance map");
+
+  for (const id of [
+    "refresh", "connect", "createStateBackup", "refreshStateBackups",
+    "fbverifyPage", "instagramRefresh", "runTask"
+  ]) assert.ok(html.includes('$("' + id + '").onclick'), id + " must have a click handler");
+  assert.ok(html.includes('$("token").value'), "operator token must be consumed by the connect action");
+  assert.ok(html.includes('$("search").oninput'), "search input must have a live filter handler");
+  assert.ok(html.includes('$("filter").onchange'), "format filter must have a change handler");
+  assert.ok(html.includes('$("narrationreviewjob").onchange'), "narration selection must load its review bundle");
+  assert.ok(html.includes('$("task").value'), "task selector must be consumed by the run-task action");
+
+  for (const id of [
+    "narrationreviewsha", "narrationreviewaudioSha", "narrationreviewtranscriptSha",
+    "narrationreviewcaptionsSha", "narrationreviewreportSha"
+  ]) {
+    assert.ok(html.includes('id="' + id + '" readonly'), id + " is a system-populated integrity digest and must be read-only");
+    assert.ok(html.includes('$("' + id + '").value'), id + " must be populated from the verified review bundle");
+  }
 });
