@@ -3,8 +3,8 @@
   "project": "SonicVhibez Marketing Machine",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "implementationBranch": "codex/marketing-machine-audit-fixes",
-  "recordedAt": "2026-11-16T15:39:00.000Z",
-  "evidencePolicy": "Live reconciliation: branch source/test commit 4eb66910a93bf4b33843b91d9384e1f34bdc902b passed GitHub Actions workflow 41216258636 (exact head SHA; completed success; unit-test step completed with zero skips). The new real-server worker lifecycle test covers heartbeat extension/persistence, invalid-token no-mutation, controlled FAILED completion and duplicate fencing, active/expired lease reaping, audit and restart read-back. Prior exact candidate d9bdfbb4a79d4a1030edb208d8754fda88852c9b separately passed 446 Node / 16 Python / 20 Chromium E2E and proved two-process lease exclusivity/SIGKILL recovery. Overall 75 requirements remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain NOT_TESTED. Production readiness remains HOLD with 13 genuine blockers. Documentation updates are not represented as code-test evidence. Additional route evidence at exact SHA 4eb66910a93bf4b33843b91d9384e1f34bdc902b: real task-runner success for two allowlisted validation commands, arbitrary-task rejection, durable duplicate prevention across two server processes, completion/audit persistence, and startup recovery of an interrupted task. API-001 remains NOT_TESTED. Exact candidate c533cd8fbf7153ccbf84ab94a2a919069b9abbe0 passed automation/security (unit tests, zero skips), dashboard browser E2E, content quality, metadata, branch inventory and local Facebook draft-package validation. It adds safe Facebook draft rejection persistence/audit assertions. Exact candidate 9ff2de1f046e879f687f3767697e787214cc1e28 adds content-job transition durable-state/audit and unsafe-state no-mutation assertions. Isolated main/candidate baseline for c533cd8 was still in progress at this documentation update. The overall 75-requirement register remains 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001/API-001/SCHED-001/STATE-001/DEPLOY-001/GIT-002 remain NOT_TESTED. The isolated exact main/candidate baseline workflow 41217526036 subsequently completed SUCCESS on candidate SHA c533cd8fbf7153ccbf84ab94a2a919069b9abbe0. Exact candidate dea284d21b4e7a6923c46a201cd196ed39b72ffa passed automation/security (Node unit tests, zero skips), dashboard browser E2E, content quality, metadata and isolated exact main/candidate baseline (runs 41217848775, 41217848763, 41217848765, 41217848778, 41217848781). It adds /api/drafts/update authorized editing, durable read-back/audit and invalid-date/rights-promotion no-mutation assertions. The 75 requirement counts remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001/API-001/SCHED-001/STATE-001/DEPLOY-001/GIT-002 remain NOT_TESTED. Exact candidate 77af9f231d9c71f6ec5ee0b4fa757af9009b1941 adds production-plan API real-server concurrency/idempotency acceptance: one 201 plus one 200 for concurrent identical submissions, idempotent later retry, 409 conflicting-plan rejection with byte-identical state preservation, and one audit event; concurrent identical plan approvals yield one 200/one 409 and one approval audit. Automation/security, browser E2E, content quality, metadata, branch inventory, isolated main/candidate baseline and local Nature Frontiers validation passed on the exact candidate. Production readiness remains blocked by genuine owner/external prerequisites; it is not an engineering CI pass. Exact tested candidate 8dddba57804bc04080930742a9bdbd74f6dc05bd passed automation/security workflow 41292433645 (463 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E 41292433623 (20/20), content quality 41292433709, metadata 41292433626, branch inventory 41292433681, local Nature Frontiers draft validation 41292433612, and isolated main/candidate baseline 41292433625. It adds four-way concurrent authenticated reads for both GET /api/jobs/narration/review and GET /api/jobs/narration/audio, exact hash-bound response/audio-byte checks, and byte-identical durable state/audit verification; both routes are now PASS. API matrix: 35 routes / 16 PASS / 15 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED because 15 routes remain unaccepted. Production readiness remains fail-closed with owner/external blockers. Exact candidate e1e7dd94ba289ef2d84ac2c35c7124e76521045e passed automation/security 41292924301 (463 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E 41292924292 (20/20), content quality 41292924308, metadata 41292924299, isolated main/candidate baseline 41292924297, branch inventory 41292924312 and local Nature Frontiers draft validation 41292924317. Script approval retries now require the same reviewer, reason and valid receipt hash; changed-reason retries return 409 without mutation. The API matrix now accepts POST /api/jobs/authoring/review and both production-plan routes using real-server concurrency, audit and restart evidence: 35 routes / 19 PASS / 12 NOT_TESTED / 4 BLOCKED. API-001 remains NOT_TESTED. Production readiness still fails closed on genuine owner/external blockers. Latest implementation cycle: /api/jobs/validate duplicate-success audit mutation fixed in source commit 85fc0056ec8f00f652799b5d934ae5d4cfc7a57b; restart/concurrency regression test committed at 7a72d20efb6741cbf5914fe2638b787bf8176336. Exact source/test SHA 7a72d20efb6741cbf5914fe2638b787bf8176336 passed automation/security (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710316: 464 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710197: 20/20), content quality, metadata, branch inventory, local Nature Frontiers draft validation and isolated main/candidate baseline (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710334). The real-server validation test proves successful validation, identical retry, two concurrent retries, restart read-back and byte-identical state/audit with exactly one validation event. The test media is synthetic and does not establish real rights or production readiness. API matrix now records 20 PASS / 11 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED. Production readiness remains HOLD with 13 owner/external prerequisites. Latest implementation cycle: POST /api/jobs/lease/complete now records a SHA-256-bound completion receipt and safely reuses exact retries; conflicting results under the same worker lease return 409 without mutation. Source change ce6002e229e13b3f6c92fd9a0b4fea9d8821ab6e, independent-process race test 3dd5692a5a050e0cacf47c94dd4bc9fa3e63ee70, and real-server generated-artifact/restart test c007aab36f32b282fbcf012fa6b6f9138686ff3c. Exact source/test SHA c007aab36f32b282fbcf012fa6b6f9138686ff3c passed automation/security (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209: 465 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645272: 20/20), content quality, metadata, branch inventory, local Nature Frontiers draft validation and isolated exact main/candidate baseline (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187). The worker completion test validates real HTTP generated state, artifact/metadata hashes, dimensions/duration, exact/concurrent retries, tamper rejection and restart recovery. All media fixtures are synthetic and not production rights evidence. API matrix: 21 PASS / 10 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED. Production readiness remains HOLD with 13 owner/external prerequisites. Additional route acceptance on exact source/test SHA c007aab36f32b282fbcf012fa6b6f9138686ff3c: POST /api/tasks/run is now PASS based on test/dashboard-task-runner.test.mjs, executed in automation workflow https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209 (465 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities). The test proves allowlisted local task success, arbitrary-task rejection, two-process duplicate prevention, durable task/audit completion and startup recovery of interrupted RUNNING tasks. API matrix now records 22 PASS / 9 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED until all remaining applicable routes are accepted. Production readiness remains HOLD with 13 owner/external prerequisites. Latest exact source/test checkpoint 561a3fc8354275af20d3eed23e96211441e08869 passed 467 Node / 16 Python / 20 Chromium, zero skips, zero npm vulnerabilities and locked installation. The Facebook review API now has exact retry idempotency and concurrent/restart coverage; API route matrix is 27 PASS / 4 NOT_TESTED / 4 BLOCKED, while API-001 remains NOT_TESTED. Follow-up on 2 November: exact code/test commit 7add5c3 adds concurrent identical POST /api/jobs/review approval fencing (one 200, one 409); local parent/review integration tests passed 2/2. Exact-SHA GitHub Actions on 7add5c3 passed automation/security (471 Node, 0 failures, 0 skips; 16 Python; npm audit 0 vulnerabilities), dashboard Chromium E2E 21/21, content quality, metadata, local Nature Frontiers validation and isolated main/candidate baseline. Readiness remains HOLD with 13 genuine owner/external prerequisites. API matrix was refreshed to 30 PASS / 0 NOT_TESTED / 5 BLOCKED; dashboard source inventory recalculated to 104 controls / 16 forms. The overall 80-requirement classification remains the previous 58 PASS / 12 NOT_TESTED / 10 BLOCKED snapshot and has NOT been fully re-evaluated in this update; six engineering gates remain open. New exact source/test candidate 4fdebfa13f818f9554ea55e3a17ecc54efa82cdc adds scoped worker dispatch and a separate local operational-readiness endpoint. Exact-SHA automation/security passed 480 Node tests (0 failures/0 skips), 16 Python tests, npm audit 0 vulnerabilities; dashboard E2E 21/21; content quality, metadata, branch inventory, local Nature Frontiers validation and isolated main/candidate baseline passed. Production readiness remains HOLD with 13 owner/external blockers. The overall engineering gates remain open; this is not 100% project acceptance. Exact source/test candidate e4e14e9bf449f041144784b3e2615975d8a911e0 adds EACCES failure injection during deterministic rollback-temp creation in test/restore-rollback-crash.test.mjs. Exact-SHA content quality 42027712558 passed 537/537 Node tests (0 failures, 0 skips); automation/security 42027712320 passed 112/112 Node test files and 16 Python tests, npm audit 0 vulnerabilities, FFmpeg/ffprobe and syntax/compile checks; dashboard Chromium 42027712227 passed 26/26; isolated exact main/candidate baseline 42027712657 passed install, Node and Python commands for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate e4e14e9bf449f041144784b3e2615975d8a911e0. Metadata 42027712141, branch inventory 42027712541 and Nature Frontiers local validation 42027712151 passed. Production readiness 42027712353 remains HOLD (exit 2) because required SonicVhibez OAuth credentials/channel ID and live upload reconciliation are absent; no bypass. Compare: 2,624 ahead / 2 behind / 234 changed files; main unchanged; PR #1 open/draft/unmerged. This extends STATE-001 evidence only; STATE-001 remains NOT_TESTED pending broader end-to-end operational restore acceptance and remaining failure/restart cases. Latest acceptance update 2026-11-15T11:03:03+02:00: META-REMOTE-SCHEDULED-001 is PASS based on a live read-only Metricool query for the previously affected window (2026-11-01 through 2027-01-17, Africa/Johannesburg) returning zero scheduled posts; no external post mutations were made. Current requirement counts: 4 PASS / 69 NOT_TESTED / 9 BLOCKED / 0 FAIL. Latest evidence refresh 2026-11-15T11:06:01+02:00: SAFE-001, SCHED-003, SCHED-004, CI-FFMPEG-001 and CI-TEST-SKIPS-001 promoted to PASS using exact workflow and source evidence; current requirement counts 9 PASS / 65 NOT_TESTED / 8 BLOCKED / 0 FAIL. Latest exact-candidate acceptance refresh 2026-11-15T11:12:14+02:00: SCHED-WORKER-MULTIPROCESS-001, SCHED-002, SCHED-005, SCHED-QUEUE-001, SCHED-RESERVATION-001, YT-PARENT-TIME-001, DASH-CTRL-05, DASH-A11Y-001, DASH-MEDIA-001, DASH-A11Y-MOBILE-001, META-ASSET-PATH-001, META-SCHEDULE-TIMESTAMP-001, API-REQUEST-MEDIA-001, API-REQUEST-SIZE-001, DASH-API-BOUNDARY-001, DASH-JOB-IDEMPOTENCY-001, STATE-CRASH-001, API-NEG-001, CI-READY-001, DASH-PLAN-001, DEPLOY-SERVICE-READINESS-001, DASH-002, GIT-INVENTORY-001 promoted to PASS from passing exact-candidate tests and workflow/artifact evidence; current counts 32 PASS / 42 NOT_TESTED / 8 BLOCKED / 0 FAIL. Production-only, provider-owned, live-history, and exhaustive all-control/all-route requirements remain separately gated. Latest security, restore, rendering, rights, authentication and Nature Frontiers policy refresh 2026-11-15T11:14:58+02:00: MEDIA-SEC-001, RESTORE-001, RDY-SEC-001, APPROVAL-001, MEDIA-QUALITY-001, SHORT-PARENT-001, SCRIPT-PROMPT-001, AUDIO-RENDER-001, RENDER-NO-LOOP-001, RENDER-MULTISCENE-001, AUTH-TIMESTAMP-001, RDY-EVIDENCE-001, RDY-PATH-001, RESTORE-TXN-001, AUTH-001, INV-001, AUTH-API-001, A11Y-001, CAPTION-SRT-CLOCK-001, BACKUP-001, BACKUP-002, BACKUP-003, BACKUP-004, BACKUP-005, BACKUP-OUTPUT-001, RIGHTS-TIMESTAMP-001, REVIEW-RECEIPT-TIMESTAMP-001, NF-PROMO-001, NF-PROMO-UI-001 promoted to PASS on exact-candidate test evidence; current counts 61 PASS / 13 NOT_TESTED / 8 BLOCKED / 0 FAIL. This does not certify production media, live provider authorization, full all-control/all-route acceptance or release readiness. Latest production-path evidence 2026-11-15T11:18:43+02:00: ART-RENDER-001 and UPLOAD-LOG-PATH-001 promoted to PASS on exact candidate recovery/path-safety tests; MEDIA-001 moved to BLOCKED because production media/manifests are absent. Current counts 63 PASS / 10 NOT_TESTED / 9 BLOCKED / 0 FAIL.",
+  "recordedAt": "2026-11-16T15:53:07.433Z",
+  "evidencePolicy": "Live reconciliation: branch source/test commit 4eb66910a93bf4b33843b91d9384e1f34bdc902b passed GitHub Actions workflow 41216258636 (exact head SHA; completed success; unit-test step completed with zero skips). The new real-server worker lifecycle test covers heartbeat extension/persistence, invalid-token no-mutation, controlled FAILED completion and duplicate fencing, active/expired lease reaping, audit and restart read-back. Prior exact candidate d9bdfbb4a79d4a1030edb208d8754fda88852c9b separately passed 446 Node / 16 Python / 20 Chromium E2E and proved two-process lease exclusivity/SIGKILL recovery. Overall 75 requirements remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 remain NOT_TESTED. Production readiness remains HOLD with 13 genuine blockers. Documentation updates are not represented as code-test evidence. Additional route evidence at exact SHA 4eb66910a93bf4b33843b91d9384e1f34bdc902b: real task-runner success for two allowlisted validation commands, arbitrary-task rejection, durable duplicate prevention across two server processes, completion/audit persistence, and startup recovery of an interrupted task. API-001 remains NOT_TESTED. Exact candidate c533cd8fbf7153ccbf84ab94a2a919069b9abbe0 passed automation/security (unit tests, zero skips), dashboard browser E2E, content quality, metadata, branch inventory and local Facebook draft-package validation. It adds safe Facebook draft rejection persistence/audit assertions. Exact candidate 9ff2de1f046e879f687f3767697e787214cc1e28 adds content-job transition durable-state/audit and unsafe-state no-mutation assertions. Isolated main/candidate baseline for c533cd8 was still in progress at this documentation update. The overall 75-requirement register remains 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001/API-001/SCHED-001/STATE-001/DEPLOY-001/GIT-002 remain NOT_TESTED. The isolated exact main/candidate baseline workflow 41217526036 subsequently completed SUCCESS on candidate SHA c533cd8fbf7153ccbf84ab94a2a919069b9abbe0. Exact candidate dea284d21b4e7a6923c46a201cd196ed39b72ffa passed automation/security (Node unit tests, zero skips), dashboard browser E2E, content quality, metadata and isolated exact main/candidate baseline (runs 41217848775, 41217848763, 41217848765, 41217848778, 41217848781). It adds /api/drafts/update authorized editing, durable read-back/audit and invalid-date/rights-promotion no-mutation assertions. The 75 requirement counts remain 58 PASS / 0 FAIL / 9 NOT_TESTED / 8 BLOCKED; DASH-001/API-001/SCHED-001/STATE-001/DEPLOY-001/GIT-002 remain NOT_TESTED. Exact candidate 77af9f231d9c71f6ec5ee0b4fa757af9009b1941 adds production-plan API real-server concurrency/idempotency acceptance: one 201 plus one 200 for concurrent identical submissions, idempotent later retry, 409 conflicting-plan rejection with byte-identical state preservation, and one audit event; concurrent identical plan approvals yield one 200/one 409 and one approval audit. Automation/security, browser E2E, content quality, metadata, branch inventory, isolated main/candidate baseline and local Nature Frontiers validation passed on the exact candidate. Production readiness remains blocked by genuine owner/external prerequisites; it is not an engineering CI pass. Exact tested candidate 8dddba57804bc04080930742a9bdbd74f6dc05bd passed automation/security workflow 41292433645 (463 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E 41292433623 (20/20), content quality 41292433709, metadata 41292433626, branch inventory 41292433681, local Nature Frontiers draft validation 41292433612, and isolated main/candidate baseline 41292433625. It adds four-way concurrent authenticated reads for both GET /api/jobs/narration/review and GET /api/jobs/narration/audio, exact hash-bound response/audio-byte checks, and byte-identical durable state/audit verification; both routes are now PASS. API matrix: 35 routes / 16 PASS / 15 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED because 15 routes remain unaccepted. Production readiness remains fail-closed with owner/external blockers. Exact candidate e1e7dd94ba289ef2d84ac2c35c7124e76521045e passed automation/security 41292924301 (463 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E 41292924292 (20/20), content quality 41292924308, metadata 41292924299, isolated main/candidate baseline 41292924297, branch inventory 41292924312 and local Nature Frontiers draft validation 41292924317. Script approval retries now require the same reviewer, reason and valid receipt hash; changed-reason retries return 409 without mutation. The API matrix now accepts POST /api/jobs/authoring/review and both production-plan routes using real-server concurrency, audit and restart evidence: 35 routes / 19 PASS / 12 NOT_TESTED / 4 BLOCKED. API-001 remains NOT_TESTED. Production readiness still fails closed on genuine owner/external blockers. Latest implementation cycle: /api/jobs/validate duplicate-success audit mutation fixed in source commit 85fc0056ec8f00f652799b5d934ae5d4cfc7a57b; restart/concurrency regression test committed at 7a72d20efb6741cbf5914fe2638b787bf8176336. Exact source/test SHA 7a72d20efb6741cbf5914fe2638b787bf8176336 passed automation/security (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710316: 464 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710197: 20/20), content quality, metadata, branch inventory, local Nature Frontiers draft validation and isolated main/candidate baseline (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41305710334). The real-server validation test proves successful validation, identical retry, two concurrent retries, restart read-back and byte-identical state/audit with exactly one validation event. The test media is synthetic and does not establish real rights or production readiness. API matrix now records 20 PASS / 11 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED. Production readiness remains HOLD with 13 owner/external prerequisites. Latest implementation cycle: POST /api/jobs/lease/complete now records a SHA-256-bound completion receipt and safely reuses exact retries; conflicting results under the same worker lease return 409 without mutation. Source change ce6002e229e13b3f6c92fd9a0b4fea9d8821ab6e, independent-process race test 3dd5692a5a050e0cacf47c94dd4bc9fa3e63ee70, and real-server generated-artifact/restart test c007aab36f32b282fbcf012fa6b6f9138686ff3c. Exact source/test SHA c007aab36f32b282fbcf012fa6b6f9138686ff3c passed automation/security (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209: 465 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities), dashboard E2E (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645272: 20/20), content quality, metadata, branch inventory, local Nature Frontiers draft validation and isolated exact main/candidate baseline (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645187). The worker completion test validates real HTTP generated state, artifact/metadata hashes, dimensions/duration, exact/concurrent retries, tamper rejection and restart recovery. All media fixtures are synthetic and not production rights evidence. API matrix: 21 PASS / 10 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED. Production readiness remains HOLD with 13 owner/external prerequisites. Additional route acceptance on exact source/test SHA c007aab36f32b282fbcf012fa6b6f9138686ff3c: POST /api/tasks/run is now PASS based on test/dashboard-task-runner.test.mjs, executed in automation workflow https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41306645209 (465 Node tests, 0 failures, 0 skips; 16 Python tests; npm audit 0 vulnerabilities). The test proves allowlisted local task success, arbitrary-task rejection, two-process duplicate prevention, durable task/audit completion and startup recovery of interrupted RUNNING tasks. API matrix now records 22 PASS / 9 NOT_TESTED / 4 BLOCKED; API-001 remains NOT_TESTED until all remaining applicable routes are accepted. Production readiness remains HOLD with 13 owner/external prerequisites. Latest exact source/test checkpoint 561a3fc8354275af20d3eed23e96211441e08869 passed 467 Node / 16 Python / 20 Chromium, zero skips, zero npm vulnerabilities and locked installation. The Facebook review API now has exact retry idempotency and concurrent/restart coverage; API route matrix is 27 PASS / 4 NOT_TESTED / 4 BLOCKED, while API-001 remains NOT_TESTED. Follow-up on 2 November: exact code/test commit 7add5c3 adds concurrent identical POST /api/jobs/review approval fencing (one 200, one 409); local parent/review integration tests passed 2/2. Exact-SHA GitHub Actions on 7add5c3 passed automation/security (471 Node, 0 failures, 0 skips; 16 Python; npm audit 0 vulnerabilities), dashboard Chromium E2E 21/21, content quality, metadata, local Nature Frontiers validation and isolated main/candidate baseline. Readiness remains HOLD with 13 genuine owner/external prerequisites. API matrix was refreshed to 30 PASS / 0 NOT_TESTED / 5 BLOCKED; dashboard source inventory recalculated to 104 controls / 16 forms. The overall 80-requirement classification remains the previous 58 PASS / 12 NOT_TESTED / 10 BLOCKED snapshot and has NOT been fully re-evaluated in this update; six engineering gates remain open. New exact source/test candidate 4fdebfa13f818f9554ea55e3a17ecc54efa82cdc adds scoped worker dispatch and a separate local operational-readiness endpoint. Exact-SHA automation/security passed 480 Node tests (0 failures/0 skips), 16 Python tests, npm audit 0 vulnerabilities; dashboard E2E 21/21; content quality, metadata, branch inventory, local Nature Frontiers validation and isolated main/candidate baseline passed. Production readiness remains HOLD with 13 owner/external blockers. The overall engineering gates remain open; this is not 100% project acceptance. Exact source/test candidate e4e14e9bf449f041144784b3e2615975d8a911e0 adds EACCES failure injection during deterministic rollback-temp creation in test/restore-rollback-crash.test.mjs. Exact-SHA content quality 42027712558 passed 537/537 Node tests (0 failures, 0 skips); automation/security 42027712320 passed 112/112 Node test files and 16 Python tests, npm audit 0 vulnerabilities, FFmpeg/ffprobe and syntax/compile checks; dashboard Chromium 42027712227 passed 26/26; isolated exact main/candidate baseline 42027712657 passed install, Node and Python commands for main fa00d28e7f58911482686e4ad69fac9f4701a2e6 and candidate e4e14e9bf449f041144784b3e2615975d8a911e0. Metadata 42027712141, branch inventory 42027712541 and Nature Frontiers local validation 42027712151 passed. Production readiness 42027712353 remains HOLD (exit 2) because required SonicVhibez OAuth credentials/channel ID and live upload reconciliation are absent; no bypass. Compare: 2,624 ahead / 2 behind / 234 changed files; main unchanged; PR #1 open/draft/unmerged. This extends STATE-001 evidence only; STATE-001 remains NOT_TESTED pending broader end-to-end operational restore acceptance and remaining failure/restart cases. Latest acceptance update 2026-11-15T11:03:03+02:00: META-REMOTE-SCHEDULED-001 is PASS based on a live read-only Metricool query for the previously affected window (2026-11-01 through 2027-01-17, Africa/Johannesburg) returning zero scheduled posts; no external post mutations were made. Current requirement counts: 4 PASS / 69 NOT_TESTED / 9 BLOCKED / 0 FAIL. Latest evidence refresh 2026-11-15T11:06:01+02:00: SAFE-001, SCHED-003, SCHED-004, CI-FFMPEG-001 and CI-TEST-SKIPS-001 promoted to PASS using exact workflow and source evidence; current requirement counts 9 PASS / 65 NOT_TESTED / 8 BLOCKED / 0 FAIL. Latest exact-candidate acceptance refresh 2026-11-15T11:12:14+02:00: SCHED-WORKER-MULTIPROCESS-001, SCHED-002, SCHED-005, SCHED-QUEUE-001, SCHED-RESERVATION-001, YT-PARENT-TIME-001, DASH-CTRL-05, DASH-A11Y-001, DASH-MEDIA-001, DASH-A11Y-MOBILE-001, META-ASSET-PATH-001, META-SCHEDULE-TIMESTAMP-001, API-REQUEST-MEDIA-001, API-REQUEST-SIZE-001, DASH-API-BOUNDARY-001, DASH-JOB-IDEMPOTENCY-001, STATE-CRASH-001, API-NEG-001, CI-READY-001, DASH-PLAN-001, DEPLOY-SERVICE-READINESS-001, DASH-002, GIT-INVENTORY-001 promoted to PASS from passing exact-candidate tests and workflow/artifact evidence; current counts 32 PASS / 42 NOT_TESTED / 8 BLOCKED / 0 FAIL. Production-only, provider-owned, live-history, and exhaustive all-control/all-route requirements remain separately gated. Latest security, restore, rendering, rights, authentication and Nature Frontiers policy refresh 2026-11-15T11:14:58+02:00: MEDIA-SEC-001, RESTORE-001, RDY-SEC-001, APPROVAL-001, MEDIA-QUALITY-001, SHORT-PARENT-001, SCRIPT-PROMPT-001, AUDIO-RENDER-001, RENDER-NO-LOOP-001, RENDER-MULTISCENE-001, AUTH-TIMESTAMP-001, RDY-EVIDENCE-001, RDY-PATH-001, RESTORE-TXN-001, AUTH-001, INV-001, AUTH-API-001, A11Y-001, CAPTION-SRT-CLOCK-001, BACKUP-001, BACKUP-002, BACKUP-003, BACKUP-004, BACKUP-005, BACKUP-OUTPUT-001, RIGHTS-TIMESTAMP-001, REVIEW-RECEIPT-TIMESTAMP-001, NF-PROMO-001, NF-PROMO-UI-001 promoted to PASS on exact-candidate test evidence; current counts 61 PASS / 13 NOT_TESTED / 8 BLOCKED / 0 FAIL. This does not certify production media, live provider authorization, full all-control/all-route acceptance or release readiness. Latest production-path evidence 2026-11-15T11:18:43+02:00: ART-RENDER-001 and UPLOAD-LOG-PATH-001 promoted to PASS on exact candidate recovery/path-safety tests; MEDIA-001 moved to BLOCKED because production media/manifests are absent. Current counts 63 PASS / 10 NOT_TESTED / 9 BLOCKED / 0 FAIL. Latest exact source/test candidate 0533f0b0d025f28a503a4cee479cbd4880c8eb5c (16 November 2026) passed 897/897 Node tests across 157 files, 45 Python tests, zero skips, npm audit 0 vulnerabilities, 29/29 Chromium, 64/64 Instagram safety, 2/2 deployment recovery and read-only Cloudflare staging smoke. META-API-VERSION-001 is PASS: Meta Graph API v27.0 is the shared config/default; a stale v26.0 environment override is explicitly ignored. Live Meta identity remains BLOCKED by expired token HTTP 401/error 190/subcode 463.",
   "statuses": [
     "PASS",
     "FAIL",
@@ -353,13 +353,13 @@
         "Exact dashboard browser acceptance refresh: run 43702012574 passed 29/29 Chromium journeys on browser-test SHA 07b2014d48d43963f2fd67091253a3505d5633d5. Current form-level matrix is 11 PASS / 6 BLOCKED / 0 NOT_TESTED: campaignform, draft, facebookdraftform, authoringform, scriptreviewform, narrationform, narrationreviewform, productionplanform, productionplanreviewform, canceljobform and retryjobform. The six blocked forms require genuine production media, verified parent evidence, real rights clearance, a technically validated export, genuine human review or an uncertain remote upload receipt; no fixtures were promoted to production proof.",
         "The campaign preview-to-activation E2E now waits for the form's aria-busy single-flight lock to clear before the second submission. This fixes a test timing race without weakening the duplicate-submission guard. Browser UI/server source is unchanged after the tested dashboard source SHA 9e0f9dddb359f5ded0906d8ae156174dd4c390f9; the current branch HEAD adds only review-only thumbnail code and acceptance evidence."
       ],
-      "nextAction": "Continue exhaustive control-by-control acceptance across the 118 controls and 21 operator journeys. The 11 form PASS results do not close DASH-001; six production forms remain blocked by genuine media/rights/review/provider evidence.",
+      "nextAction": "29/29 Chromium journeys pass on exact SHA 0533f0b0d025f28a503a4cee479cbd4880c8eb5c, but exhaustive behavior acceptance is still required for all 119 controls and 17 forms. Current form outcomes are 11 PASS / 6 BLOCKED; DASH-001 remains NOT_TESTED overall.",
       "assessmentCommitSha": "dcd68fab0a6df4d2142b35bf0a3edfbf49b7afe8",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state.",
       "lastVerifiedStatus": "PARTIAL — 11 forms PASS, 6 BLOCKED; 29/29 browser journeys pass; overall control inventory remains NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "dcd68fab0a6df4d2142b35bf0a3edfbf49b7afe8",
-      "currentHeadEvidenceNote": "Exact browser E2E 43702012574 passed 29/29 on 07b2014d48d43963f2fd67091253a3505d5633d5. Current branch HEAD differs only in review-only NOAA thumbnail script and documentation; 11/17 forms PASS, 6/17 BLOCKED. Exhaustive 118-control behavior acceptance is still open."
+      "currentHeadEvidenceNote": "Exact browser E2E https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329611 passed 29/29 on 0533f0b0d025f28a503a4cee479cbd4880c8eb5c; this is not exhaustive per-control acceptance."
     },
     {
       "id": "SCHED-001",
@@ -385,13 +385,13 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42041048186",
         "Latest exact-candidate queue-readiness run 43698639332 passed: 16 held queue items, rolling long_form → long_form → short cycle, minimum 72 elapsed hours between planned publications, 216-hour complete cycle, unique queue IDs, Africa/Johannesburg policy, publication disabled. Automation/security run 43698639445 passed 141/141 Node test files with zero skips, including schedule-policy and YouTube history-gate regression tests. Production-readiness run 43698639367 still blocks on OAuth invalid_grant and independently unreconciled public/private/unlisted remote history and uncertain attempts. Therefore schedule logic is verified but actual publication-history acceptance remains NOT_TESTED."
       ],
-      "nextAction": "Exact candidate e349a5ec29440ef62de65e141638d3866c58465e adds real-server GET /api/jobs/dispatchable integration coverage: valid scheduled-instant ordering, stable tie-breaking, unapproved-plan exclusion, non-queued exclusion, malformed/missing slot fallback, stable limit prefix, and byte-for-byte durable state/audit immutability. The test passed in automation CI (run 42041048296; 113 Node test files, zero skips). Automation/security, content quality, dashboard Chromium E2E, metadata, isolated main/candidate baseline, branch inventory and local Nature Frontiers draft validation passed; readiness remains HOLD with 12 blockers. SCHED-001 remains NOT_TESTED: this does not yet prove rolling long_form → long_form → short enforcement, actual YouTube history reconciliation, 72 elapsed hours/no same-day publication across all production paths, DST edge cases, all worker/process races, or end-to-end restart/recovery and owner-approved feasible cadence.",
+      "nextAction": "Complete only after valid owner-authorized YouTube OAuth refresh, complete SonicVhibez public/private/unlisted history reconciliation, actual remote publication timestamps, rolling long_form → long_form → short cadence, ≥72 elapsed hours/no same Johannesburg calendar day, DST and restart/lease/cancel/retry/dead-letter verification. YouTube OAuth currently returns invalid_grant; no schedule or upload may be inferred.",
       "assessmentCommitSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
       "acceptanceCriterion": "The same 72-hour minimum, rolling long_form → long_form → short cycle, actual-history ordering and DST/timezone policy are enforced by config, queue, dashboard, workflows and tests.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
-      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
+      "currentHeadEvidenceNote": "Exact candidate 0533f0b0d025f28a503a4cee479cbd4880c8eb5c does not change the live YouTube identity/history blocker. OAuth still returns invalid_grant; no actual remote publication history or timestamps are available."
     },
     {
       "id": "SCHED-WORKER-MULTIPROCESS-001",
@@ -464,13 +464,13 @@
         "Exact-candidate full test evidence: automation/security workflow 43700604234 passed 141/141 Node test files, 44 Python tests, zero skips and npm audit with zero vulnerabilities. Relevant exact-source tests include test/cloudflare-dashboard-state-store.test.mjs (lost-response reconciliation and interrupted restore), test/cloudflare-dashboard-state-client.test.mjs (revision CAS and weak/strong ETag matching), test/dashboard-cloudflare-state.integration.test.mjs (invalid/stale restore rejection), test/dashboard-api-worker-lease-multiprocess.integration.test.mjs (two-process claim exclusion and restart reconciliation), test/backup-restore.test.mjs (cross-process locks, idempotent retry, exact restore, journal recovery and failure injection), test/backup-state-failure-injection.test.mjs (SIGKILL, ENOSPC, checksum/lock recovery), and test/restore-rollback-crash.test.mjs (crash-boundary rollback).",
         "Live exact-candidate staging backup/restore workflow 43701290286 passed against the deployed Cloudflare Worker/D1 through the real Node dashboard. It started at D1 revision 2, created and verified an explicit backup, restored that exact snapshot with confirmRestore=true, advanced revision exactly once to 3, retained both explicit and automatic pre-restore backups (five total), verified the DASHBOARD_STATE_RESTORED receipt naming the exact backup ID, and proved the restored state matched the pre-test snapshot except for that single audit event. It then stopped and restarted the Node dashboard, recovered revision 3 and the backup inventory, and verified remote state remained stable. Publishing remained disabled and content jobs remained zero."
       ],
-      "nextAction": "None for STATE-001. Keep the staging backup/restore workflow manual and explicitly confirmed; do not run it on every push. Preserve the five verified backups and restore audit receipt.",
+      "nextAction": "Current exact candidate passed an authenticated read-only Cloudflare staging smoke: access control, state read, durable revision 3, backup listing, unchanged inventory, five retained backups, Node-to-Worker read path and publishing-disabled state. The one-time backup/restore step was skipped; perform that manual acceptance only with explicit operator confirmation.",
       "assessmentCommitSha": "41bd4de95d876c9778a4993a0e67ac207d1379ff",
       "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "75f065110d9eb73bc5b911131c2723775af7b9e9",
-      "currentHeadEvidenceNote": "Historical live staging backup/restore PASS remains at SHA 41bd4de95d876c9778a4993a0e67ac207d1379ff. On current exact source/test SHA 75f065110d9eb73bc5b911131c2723775af7b9e9, Cloudflare durable-state unit tests (9/9) and deployment recovery smoke (2/2) pass, but live Node-to-Worker staging backup/restore was not rerun. The state-store module and /api/state handlers are unchanged since the historical run; this does not replace fresh current-head live evidence."
+      "currentHeadEvidenceNote": "Read-only staging smoke https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329485 passed on 0533f0b0d025f28a503a4cee479cbd4880c8eb5c; backup/restore acceptance was explicitly skipped. STATE-001 remains NOT_TESTED on current head until the controlled restore drill is executed and verified."
     },
     {
       "id": "YT-001",
@@ -606,13 +606,13 @@
         "Latest non-destructive inventory on exact HEAD fd82f713489595dea8c038f4a0db430344f6d610 (workflow 43698639449; artifact 14155790625): 3,609 branch-only commits, 4 base-only commits, common ancestor 45352b73bb6cc4787b2a49988b575afb754ab627, zero heuristic patch-equivalent commits, 328 final-tree changed files, 17 critical-module changes, zero deletions, clean worktree; decision remains REQUIRES_REVIEW. Semantic review of all four base-only commits: (1) c820564 adds test/github-oidc-token.test.mjs, then (2) main HEAD 69fdf35 deletes it; the file is absent from both current branch and main, so this transient test-only addition has no net runtime effect. (3) 71578da adds test/restore-facebook-draft-history.test.mjs, then (4) fa00d28 deletes it from main; implementation branch deliberately retains the test (verified present, SHA b6d4ab9c30d1e025bf2e55bddae446d96a2cb2a3) and its associated restore workflow. tests/restore-state.test.mjs is also present (SHA d50a88d33a1ac5ad76e98558601c0121dfc1a042). No source/runtime behavior changes exist in the four base-only commits; preserving the Facebook restore test is the safe semantic choice. Full semantic review of 3,609 branch-only commits remains incomplete; no merge, rebase, reset, cherry-pick or force-push performed.",
         "Cloudflare semantic review: GET /accounts/.../workers/scripts/sonicvhibez-durable-state-staging returned eight deployed modules; each was byte-identical to its matching cloudflare/staging-snapshot file at exact candidate dba1b095300ab05833b485aa607385f6231955e8. Latest active deployment 49a60647-7b13-42f3-a0b6-a4be892635dc uses version 9a9bfd4c with D1/R2 and secret_text bindings. The separate root cloudflare/worker.js is materially smaller and not a safe drop-in replacement; no Worker deployment or migration was performed. This closes the deployed-vs-snapshot review slice only; full 3,609-commit branch semantic review remains incomplete."
       ],
-      "nextAction": "Latest non-destructive inventory on 8272d2e39868237c05b2951f37bcade6ae6608c4: 2,586 branch-only commits, two base-only commits, 231 changed paths, zero final-tree deletions, zero patch-equivalent commits and 17 critical paths. Branch-only classification is 1,104 documentation, 633 test, 540 implementation, 105 workflow, 75 mixed, 71 implementation-and-tests and 58 config/content. Both restore-history tests remain present. This inventory is not a human semantic review; GIT-002 remains NOT_TESTED.",
+      "nextAction": "Live compare at exact tested candidate 0533f0b0d025f28a503a4cee479cbd4880c8eb5c: 3,885 commits ahead, 4 behind, 300 changed files; history remains divergent. Human semantic review is required before integration. Keep PR #1 open/draft/unmerged; no merge, rebase, reset, force-push or destructive reconciliation.",
       "assessmentCommitSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
-      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
+      "currentHeadEvidenceNote": "Exact branch refs at 0533f0b0d025f28a503a4cee479cbd4880c8eb5c: main 69fdf35c90f980c142be3aaffa863304bc7eaa25; PR #1 OPEN/DRAFT/UNMERGED; compare 3,885 ahead / 4 behind / 300 changed files. This is not a semantic review."
     },
     {
       "id": "DEPLOY-001",
@@ -625,13 +625,13 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805",
         "Latest exact-candidate deployment-recovery run 43698639458 passed 2/2 isolated rollback/recovery tests with zero skips; deployment smoke run 43698633966 also passed. This verifies tested release rollback behavior, not a full authorized production-like deployment, monitoring, live Cloudflare Node-to-Worker access, or an operator-executed backup/restore cycle; full deployment acceptance remains NOT_TESTED."
       ],
-      "nextAction": "Exact-source production readiness remains HOLD with 13 blockers. Local startup and healthz succeed; readyz returns 503 because owner-controlled cadence, verified channel/history, genuine manifests/media, review and OAuth prerequisites are absent. No authorized isolated production deployment/monitoring/rollback environment was supplied; DEPLOY-001 remains NOT_TESTED. GET /operational-readyz now checks local state/config/UI readiness independently of the external publication gate; exact-SHA server test passes while /readyz remains blocked. No authorized isolated deployment/monitoring/rollback environment has been demonstrated, so DEPLOY-001 remains NOT_TESTED.",
+      "nextAction": "Exact candidate deployment recovery smoke passed 2/2 on ${testedSha}, including replacement, restart and persistent-state verification. Full production deployment, monitoring, rollback and owner-authorized operational acceptance remain NOT_TESTED; no production release is authorized.",
       "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
       "acceptanceCriterion": "An isolated deployment run records startup, health/readiness, monitoring, backup, restore, rollback and interrupted-deployment outcomes for the exact candidate SHA.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
-      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
+      "currentHeadEvidenceNote": "Deployment recovery https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329538 passed on 0533f0b0d025f28a503a4cee479cbd4880c8eb5c; this proves the local recovery drill only, not production deployment readiness."
     },
     {
       "id": "MEDIA-SEC-001",
@@ -1938,13 +1938,13 @@
         "Exact-candidate API route refresh: 38/45 routes PASS, 7/45 BLOCKED. GET /api/state/backups is now PASS from real Node-dashboard staging integration (workflow 43700604171): authenticated state/backup reads succeeded through Cloudflare Access, revision 2 and three backups were returned, and remote state was unchanged. The remaining two Cloudflare state write routes POST /api/state/backup and POST /api/state/restore are still blocked pending a separately authorized one-time staging backup/restore cycle; Meta, YouTube reconciliation and production-media routes remain external blockers.",
         "Exact-candidate API route refresh: 40/45 routes PASS, 5/45 BLOCKED. In addition to the 38 previously accepted routes, POST /api/state/backup and POST /api/state/restore now PASS from live staging workflow 43701290286: Node dashboard created an explicit backup, restored it with revision 2→3, retained explicit and automatic pre-restore backups, verified the audit receipt and exact state, restarted the Node dashboard, and verified remote state durability. The remaining five blocked routes are external Meta Page authorization, YouTube history/reconciliation and genuine production-media/provider gates; API-001 remains NOT_TESTED overall until every route is accepted."
       ],
-      "nextAction": "The 36-route matrix records 31 PASS / 5 externally BLOCKED and 36/36 authentication-negative passes. Exact candidate 8272d2e39868237c05b2951f37bcade6ae6608c4 adds past-slot rejection for draft create, direct job create and draft update, with byte-identical state/audit preservation. The five provider/media routes remain blocked pending genuine identity, review, history and approved media. API-001 remains NOT_TESTED overall until complete route-by-route success, validation, persistence, concurrency and restart acceptance is proven.",
+      "nextAction": "The current route matrix has 48 protected routes: 42 PASS and 6 BLOCKED; authentication-negative checks pass 48/48. The six remaining provider/production routes require genuine Meta/YouTube identity, approved media, live read-back and remote reconciliation. API-001 remains NOT_TESTED overall.",
       "assessmentCommitSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
       "acceptanceCriterion": "A route-by-route acceptance matrix records exact method/path and independently passing authorized success, unauthorized, invalid input, persistence, failure, concurrency/idempotency, audit and restart evidence as applicable.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
-      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
+      "currentHeadEvidenceNote": "Exact source/test SHA 0533f0b0d025f28a503a4cee479cbd4880c8eb5c passed the 897-test Node suite and 29/29 browser journeys. Existing route matrix remains 42/48 PASS with six external/production blockers; full API-001 acceptance is not established."
     },
     {
       "id": "API-NEG-001",
@@ -2043,11 +2043,11 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928356"
       ],
-      "nextAction": "Local Nature Frontiers draft validation passes, but provider-side Page identity/permissions and draft creation/read-back are not accepted. The last documented Metricool read-only check on 31 October found eight promotional records, one published and seven future with draft=false and autoPublish=true; no remote records were changed. Owner must review those records and verify the correct Page/Instagram identity before any external mutation.",
+      "nextAction": "Owner must renew the Meta user/Page access-token session securely, then rerun read-only v27.0 Page identity, permissions and exact Page linkage verification. The numeric Instagram Business Account ID remains unset. Do not paste credentials into chat or enable publishing. The old Metricool brand 7545638 is inaccessible (403), so eight historical autoPublish records remain UNKNOWN.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
-      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
+      "currentHeadEvidenceNote": "Live Meta check https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43899735157 used Graph API v27.0 and returned HTTP 401, OAuth error 190/subcode 463 (expired session). Current Metricool brand 8094526 reports Page ID 1431329126735709 but does not replace Meta identity/permission proof; Instagram numeric ID remains null. No provider mutation occurred."
     },
     {
       "id": "E2E-001",
@@ -2105,38 +2105,69 @@
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
       "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
+    },
+    {
+      "id": "META-API-VERSION-001",
+      "severity": "high",
+      "owner": "maintainer",
+      "requirement": "All Facebook Page and Instagram Graph API integrations use the current Meta Graph API v27.0 through one shared version constant and checked-in configuration; stale environment overrides cannot silently select an older API version.",
+      "status": "PASS",
+      "evidence": [
+        "https://developers.facebook.com/docs/graph-api/guides/versioning",
+        "https://developers.facebook.com/docs/graph-api/reference/page/feed/",
+        "https://developers.facebook.com/docs/graph-api/reference/page/video_reels/",
+        "https://developers.facebook.com/docs/graph-api/reference/shadow-ig-user/media/",
+        "https://developers.facebook.com/docs/graph-api/reference/shadow-ig-user/media_publish/",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/c99980044edf9e557c123486931c9731e5d06e69",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/52237caf9f356013cb003825da28d1bee929bf4b",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/176a8f6679fb29f0e2b2682b0a11fc3c5dcde2e2",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/8dd0f65b248fb4e2b6c289f0e7b192748617fb16",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329668",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329493",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329611",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329478",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329538"
+      ],
+      "nextAction": "Keep the shared v27.0 pin and regression tests. After the owner renews the Meta user/Page access token, rerun read-only Page identity/permission verification. This version/configuration PASS does not authorize publishing or close the separate Meta remote-identity blocker.",
+      "assessmentCommitSha": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
+      "acceptanceCriterion": "Both publishing configs and all four Facebook/Instagram adapters use the shared v27.0 constant; dashboard server uses checked-in config/shared fallback and ignores a deliberately stale v26.0 environment override; exact-SHA tests verify versioned request paths.",
+      "lastVerifiedStatus": "PASS",
+      "currentHeadStatus": "PASS",
+      "currentHeadEvidenceSha": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
+      "currentHeadEvidenceNote": "Exact source/test SHA 0533f0b0d025f28a503a4cee479cbd4880c8eb5c passed 897/897 Node tests across 157 test files, 45 Python tests, zero skips, npm audit 0 vulnerabilities, 29/29 Chromium journeys, 64/64 Instagram safety tests and deployment recovery. The Meta integration test deliberately supplies META_GRAPH_API_VERSION=v26.0 and proves dashboard requests still use v27.0. A separate live Meta read-only request did call v27.0 but returned HTTP 401, OAuth error 190/subcode 463 because the token session expired; live identity remains blocked."
     }
   ],
   "currentCheckpoint": {
-    "applicationCodeSha": "6a84e24c959639843dbb1f3d6449cfc464fc1dde",
-    "testedSha": "75f065110d9eb73bc5b911131c2723775af7b9e9",
-    "checkpointPrHead": "1eaddc5dccf619b16736e8f0b0c9cd8acfc40d78",
+    "applicationCodeSha": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
+    "testedSha": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
+    "checkpointPrHead": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
     "currentMainSha": "69fdf35c90f980c142be3aaffa863304bc7eaa25",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 3878,
+    "aheadBy": 3885,
     "behindBy": 4,
-    "changedFiles": 367,
+    "changedFiles": 300,
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "Exact source/test SHA 75f065110d9eb73bc5b911131c2723775af7b9e9 passed acceptance: 898/898 Node tests, 156/156 Node test files, 45 Python tests, zero skips, npm audit 0 vulnerabilities, dashboard 29/29, Instagram safety 62/62, metadata/content quality/queue/baseline/branch inventory/Cloudflare unit/deployment recovery pass. API route matrix 42 PASS, 0 NOT_TESTED, 6 BLOCKED; auth-negative 48/48. DASH-001, API-001, SCHED-001, STATE-001 current-head live test, DEPLOY-001 and GIT-002 remain NOT_TESTED. SCHED-WORKER-DISPATCH-001 local 409 cooldown/persistence-failure behavior is tested, but live continuous worker deployment and real renderer dispatch remain NOT_TESTED. Production readiness remains HOLD with 8 external prerequisites. Meta token is expired (401, error 190, subcode 463); YouTube OAuth is invalid_grant; production media manifests/MP4 and final human rights/editorial approvals remain missing. Current Metricool brand 8094526 has no scheduled posts and no Instagram feed/Reel records in the queried period; old brand 7545638 returns 403, so eight historical autoPublish records remain UNKNOWN. No provider mutations or publishing occurred.",
+    "verdict": "Exact source/test SHA 0533f0b0d025f28a503a4cee479cbd4880c8eb5c passes 897/897 Node tests across 157 files, 45 Python tests, zero skips, npm audit 0 vulnerabilities, 29/29 Chromium journeys, 64/64 Instagram safety, 2/2 deployment recovery and authenticated read-only Cloudflare staging smoke. Meta API v27.0 configuration and adapter migration is PASS; real Meta identity remains BLOCKED by expired token 401/190/463. Production remains HOLD; YouTube OAuth invalid_grant, genuine media/manifests/rights and human approvals remain outstanding.",
     "ci": {
-      "automationSecurity": "PASS — 156/156 Node test files; 45 Python tests; zero skips; npm audit 0 vulnerabilities",
-      "automationRun": 43778013637,
-      "queueReadiness": "PASS — 898/898 Node tests, zero failures/skips",
-      "queueRun": 43778013567,
+      "automationSecurity": "PASS — 897/897 Node tests across 157 files; 45 Python tests; zero skips; npm audit 0 vulnerabilities; normal/locked install, FFmpeg, JS syntax and Python compile pass",
+      "automationRun": 43900329668,
+      "queueReadiness": "PASS — 897/897 Node tests; zero failures/skips",
+      "queueRun": 43900329493,
       "dashboardE2E": "PASS — 29/29 Chromium journeys",
-      "dashboardE2ERun": 43778013599,
-      "instagramSafety": "PASS — 62/62",
-      "instagramSafetyRun": 43778013582,
+      "dashboardE2ERun": 43900329611,
+      "instagramSafety": "PASS — 64/64 tests; zero failures/skips",
+      "instagramSafetyRun": 43900329478,
       "metadata": "PASS",
       "metadataRun": 43778013750,
       "contentQuality": "PASS",
       "contentQualityRun": 43778013677,
       "cloudflareDurableState": "PASS — 9/9",
       "cloudflareRun": 43778013666,
-      "deploymentRecovery": "PASS — 2/2",
-      "deploymentRecoveryRun": 43778013588,
+      "deploymentRecovery": "PASS — 2/2 replacement/restart/persistent-state checks",
+      "deploymentRecoveryRun": 43900329538,
       "isolatedBaseline": "PASS",
       "isolatedBaselineRun": 43778013681,
       "branchInventory": "PASS — 3,875 branch-only, 4 base-only, 0 patch-equivalent, 367 changed files, 0 deletions, clean tree",
@@ -2145,28 +2176,33 @@
       "natureFrontiersLocalDraftRun": 43778013734,
       "productionReadiness": "HOLD — 8 external prerequisites",
       "productionReadinessRun": 43778013553,
-      "metaPageIdentity": "BLOCKED — HTTP 401, OAuth error 190, subcode 463",
-      "metaPageIdentityRun": 43778013573
+      "metaPageIdentity": "BLOCKED — HTTP 401, OAuth error 190, subcode 463 (expired access-token session)",
+      "metaPageIdentityRun": 43899735157,
+      "cloudflareStaging": "PASS_READ_ONLY — authenticated state/backup inventory and Node-to-Worker read checks; one-time backup/restore step skipped",
+      "cloudflareStagingRun": 43900329485,
+      "metaApiVersion": "PASS — v27.0 shared constant/configs/adapters; stale v26.0 environment override ignored by dashboard integration test"
     },
     "runs": {
-      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156887",
+      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329668",
       "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156782",
-      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156787",
+      "dashboardE2e": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329611",
       "metadata": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156795",
-      "queueReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156819",
+      "queueReadiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329493",
       "cloudflareDurableState": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156892",
-      "deploymentRecovery": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156937",
+      "deploymentRecovery": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329538",
       "isolatedBaseline": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156932",
       "branchInventory": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156810",
       "readiness": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156841",
-      "metaPageIdentity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692157035"
+      "metaPageIdentity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43899735157",
+      "instagramSafety": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329478",
+      "cloudflareStaging": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329485"
     },
     "requirementStatusSnapshot": {
-      "total": 82,
-      "PASS": 6,
+      "total": 83,
+      "PASS": 7,
       "NOT_TESTED": 67,
       "BLOCKED": 9,
-      "asOf": "2026-11-16T00:07:45.169Z",
+      "asOf": "2026-11-16T15:53:07.433Z",
       "freshlyReconciled": true
     },
     "engineeringGates": {
@@ -2176,21 +2212,21 @@
       "SCHED_WORKER_DISPATCH_001": "NOT_TESTED_LIVE_WORKER — local 409 cooldown and persistence-failure fail-closed tests pass; no live continuous worker or real render dispatch",
       "STATE_001": "NOT_TESTED_CURRENT_HEAD — live Node-to-Worker staging backup/restore smoke not rerun on exact current candidate",
       "DEPLOY_001": "NOT_TESTED — recovery smoke passes; full production deployment acceptance remains open",
-      "GIT_002": "NOT_TESTED — 3,875 branch-only commits require human semantic integration review; no merge/rebase/reset/force-push authorized"
+      "GIT_002": "NOT_TESTED — 3,875 branch-only commits require human semantic integration review; no merge/rebase/reset/force-push authorized",
+      "META_API_VERSION_001": "PASS — exact v27.0 version/config/default/override regression tests pass; live Meta identity remains separately blocked"
     },
     "dashboardBrowserJourneys": {
       "passed": 29,
       "total": 29,
-      "run": 43692156787,
-      "applicationSourceTestSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
-      "currentHeadStatus": "PASS for 29 browser journeys; DASH-001 overall NOT_TESTED"
+      "run": 43900329611,
+      "applicationSourceTestSha": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c"
     },
     "pr7": {
       "state": "open",
       "changedFiles": 13,
       "draftFlag": "NOT_EXPOSED"
     },
-    "asOf": "2026-11-16T00:07:45.169Z",
+    "asOf": "2026-11-16T15:53:07.433Z",
     "pullRequest": {
       "number": 1,
       "state": "OPEN",
@@ -2211,13 +2247,13 @@
       "894300efeaee1bc45426e2bc8826451f19d78832"
     ]
   },
-  "candidateSourceTestSha": "75f065110d9eb73bc5b911131c2723775af7b9e9",
-  "latestSourceTestSha": "75f065110d9eb73bc5b911131c2723775af7b9e9",
-  "latestChangeTestStatus": "PASS_ON_EXACT_SHA_CI_WITH_EXTERNAL_PRODUCTION_HOLDS",
-  "latestChangeTestReason": "Exact source/test SHA 75f065110d9eb73bc5b911131c2723775af7b9e9: 898/898 Node tests, 156 Node test files, 45 Python tests, zero skips, npm audit 0 vulnerabilities, 29/29 Chromium journeys, 62/62 Instagram safety tests, metadata/content quality/queue/baseline/branch inventory/Cloudflare durable-state/deployment recovery all pass. Production readiness remains HOLD (8 external prerequisites); Meta verification is expired-token 401; YouTube OAuth invalid_grant; genuine production media and human approvals remain outstanding.",
+  "candidateSourceTestSha": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
+  "latestSourceTestSha": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
+  "latestChangeTestStatus": "PASS_ON_EXACT_SHA_CI_WITH_META_GRAPH_V27_MIGRATION_AND_EXTERNAL_PRODUCTION_HOLDS",
+  "latestChangeTestReason": "Exact source/test SHA 0533f0b0d025f28a503a4cee479cbd4880c8eb5c passed 897/897 Node tests across 157 test files, 45 Python tests, zero skips, npm audit 0 vulnerabilities, 29/29 Chromium journeys, 64/64 Instagram safety tests, 2/2 deployment recovery, and authenticated read-only Cloudflare staging smoke. Meta Graph API v27.0 is centralized across Facebook/Instagram adapters and configs; a stale v26.0 environment override is explicitly ignored. Live Meta identity remains blocked by HTTP 401 / OAuth error 190 / subcode 463 (expired token); YouTube OAuth invalid_grant and production media/rights/human approvals remain outstanding.",
   "requirementCounts": {
-    "total": 82,
-    "PASS": 6,
+    "total": 83,
+    "PASS": 7,
     "NOT_TESTED": 67,
     "BLOCKED": 9
   },
@@ -2279,16 +2315,16 @@
     "4efa72a3a5faab9815e382d332260fb23e3cbe46",
     "a665908e1d4aa217d00a1ca1034ded9f838846a7"
   ],
-  "latestDocumentedPrHeadBeforeRegisterRefresh": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
-  "observedBranchHeadBeforeRegisterRefresh": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
-  "latestLiveBranchHeadBeforeRegisterRefresh": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
-  "latestLiveAheadBy": 3878,
+  "latestDocumentedPrHeadBeforeRegisterRefresh": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
+  "observedBranchHeadBeforeRegisterRefresh": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
+  "latestLiveBranchHeadBeforeRegisterRefresh": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
+  "latestLiveAheadBy": 3885,
   "latestLiveBehindBy": 4,
-  "latestLiveChangedFiles": 367,
-  "currentLiveHeadBeforeRegisterRefresh": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
-  "currentLiveAheadBy": 3573,
+  "latestLiveChangedFiles": 300,
+  "currentLiveHeadBeforeRegisterRefresh": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
+  "currentLiveAheadBy": 3885,
   "currentLiveBehindBy": 4,
-  "currentLiveChangedFiles": 328,
+  "currentLiveChangedFiles": 300,
   "latestInventoryHead": "75f065110d9eb73bc5b911131c2723775af7b9e9",
   "latestInventoryAheadBy": 3875,
   "latestInventoryBehindBy": 4,
@@ -2305,13 +2341,11 @@
     "authenticationNegativePass": 48
   },
   "dashboardBrowserJourneys": {
-    "status": "PASS",
-    "journeys": 29,
     "passed": 29,
-    "failed": 0,
-    "skipped": 0,
-    "exactSourceTestSha": "75f065110d9eb73bc5b911131c2723775af7b9e9",
-    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013599"
+    "total": 29,
+    "run": 43900329611,
+    "applicationSourceTestSha": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
+    "currentHeadStatus": "PASS for 29 browser journeys; DASH-001 overall NOT_TESTED"
   },
   "evidence": {
     "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205668",
@@ -2327,7 +2361,7 @@
     "npmLockfile": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940197663",
     "latestFullHistoryBundle": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41358222112"
   },
-  "implementationBranchHeadBeforeRegisterRefresh": "351d8b69cb7fb66c8c0acc8c0211cce10266f765",
+  "implementationBranchHeadBeforeRegisterRefresh": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
   "latestInventoryArtifact": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013665",
   "ciCheckoutWorkingTreeClean": true,
   "localRecoveredCheckout": "Verified full-history Git bundle from source-export run 41358222112. Artifact ZIP SHA-256 27463a3ef0ed7f29a2b2152db07d9417cf1d518204793945e97e21ed0a49a18c; embedded bundle SHA-256 2b4f2ed8dbbbd13336492db87a1b4ce898f298d5bb97a340b28d01adbef2699e. Checkout HEAD 81865201f01bd878675c1366d5248c88ba5e0312; main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; required checkpoint 100a909 is present; both protected restore tests are present.",
@@ -2574,8 +2608,8 @@
   },
   "currentHeadCounts": {
     "requirements": {
-      "total": 82,
-      "PASS": 6,
+      "total": 83,
+      "PASS": 7,
       "NOT_TESTED": 67,
       "BLOCKED": 9
     },
@@ -2600,21 +2634,26 @@
       "skipped": 0
     }
   },
-  "latestLiveBranchHead": "1eaddc5dccf619b16736e8f0b0c9cd8acfc40d78",
+  "latestLiveBranchHead": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
   "sourceTestLineage": {
-    "previousTestedSha": "7a23289f7a6cd9a34027b84691333da0b7051fc2",
-    "currentTestedSha": "75f065110d9eb73bc5b911131c2723775af7b9e9",
-    "applicationCodeSha": "6a84e24c959639843dbb1f3d6449cfc464fc1dde",
-    "commitsSincePreviousTestedSha": 27,
-    "applicationSourceFilesChangedSincePreviousTestedSha": 0,
+    "previousTestedSha": "75f065110d9eb73bc5b911131c2723775af7b9e9",
+    "currentTestedSha": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
+    "applicationCodeSha": "0533f0b0d025f28a503a4cee479cbd4880c8eb5c",
+    "commitsSincePreviousTestedSha": 6,
+    "applicationSourceFilesChangedSincePreviousTestedSha": 7,
     "testFilesAdded": [
-      "test/short-004-caption-review.test.mjs"
+      "test/meta-graph-api-version.test.mjs"
     ],
-    "testCasesAdded": 2,
-    "contentReviewArtifacts": [
-      "NOAA-california-spiny-lobster-visual-review-1080x1920.mp4",
-      "NOAA-california-spiny-lobster-narration-review-1080x1920.mp4"
+    "testCasesAdded": 1,
+    "testFilesChanged": [
+      "test/meta-page-adapter.test.mjs",
+      "test/meta-page-reel-adapter.test.mjs",
+      "test/facebook-autonomous-publisher.test.mjs",
+      "test/instagram-autonomous-publisher.test.mjs",
+      "test/facebook-page-verification-api.integration.test.mjs",
+      "test/meta-instagram-reel-adapter.test.mjs",
+      "test/meta-instagram-image-adapter.test.mjs"
     ],
-    "note": "The latest candidate adds two Short-004 caption/review fail-closed tests and updates content evidence; application source remains unchanged from applicationCodeSha."
+    "note": "Meta Graph API migration pins v27.0 in one shared module, aligns both publishing configs and all four adapters, removes the dashboard environment-variable override, and tests that stale v26.0 cannot override checked-in v27.0 configuration. Exact candidate passed full Node/Python/security/browser/provider-safety/deployment checks."
   }
 }

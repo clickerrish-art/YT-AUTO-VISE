@@ -1,62 +1,59 @@
 # Current completion checkpoint — 16 November 2026
 
-**Project state: engineering checks green; production operation still blocked by external prerequisites. Do not declare production-ready or enable publishing.**
+**Project state: exact-candidate engineering checks pass; production operation remains blocked by external prerequisites. Do not declare production-ready or enable publishing.**
 
 ## Exact source/test evidence
 
-- Tested source/test SHA: `75f065110d9eb73bc5b911131c2723775af7b9e9`.
-- Branch head observed before this report refresh: `831b71b4f781ba5d7e45941aad6498e17a9fdcbd`. Two documentation-only commits follow the tested SHA; no application source or test files changed after it.
+- Tested application/source/test SHA: `0533f0b0d025f28a503a4cee479cbd4880c8eb5c`.
+- Current branch head at this evidence refresh: `0533f0b0d025f28a503a4cee479cbd4880c8eb5c`; this report/register refresh is documentation-only.
 - `main`: `69fdf35c90f980c142be3aaffa863304bc7eaa25`, unchanged. PR #1 remains OPEN, DRAFT and UNMERGED.
-- Branch comparison at tested SHA: 3,875 commits ahead, 4 behind; branch inventory found 3,875 branch-only commits, 4 base-only commits, 0 patch-equivalent commits, 367 final-tree changed files, 0 deletions and a clean working tree. Integration decision remains `REQUIRES_REVIEW`; no merge, rebase, reset, force-push or destructive reconciliation was performed.
+- Live comparison: **3,885 ahead / 4 behind / 300 changed files**. The branch remains divergent and requires human semantic review. No merge, rebase, reset, force-push or destructive reconciliation was performed.
 
 | Acceptance area | Exact result |
 |---|---|
-| Full Node regression | 898/898 passed, zero failures, zero skips — [Queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013567) |
-| Automation/security | 156 Node test files and 45 Python tests passed; zero skips; npm audit 0 vulnerabilities — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013637) |
-| Dashboard browser E2E | 29/29 Chromium journeys passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013599) |
-| Instagram safety | 62/62 passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013582) |
-| Metadata and content quality | Passed — [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013750), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013677) |
-| Cloudflare durable-state unit tests | 9/9 passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013666) |
-| Deployment recovery smoke | 2/2 passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013588) |
-| Isolated baseline and branch inventory | Passed — [baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013681), [inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013665) |
-| Nature Frontiers daily draft package | Local validation passed only; this is not provider publication — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013734) |
+| Full Node regression | **897/897 passed**, 0 failures, 0 skips — [run 43900329493](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329493) |
+| Automation/security | **157 Node test files; 45 Python tests; 0 skips; npm audit 0 vulnerabilities**; clean/locked install, FFmpeg, JS syntax and Python compile passed — [run 43900329668](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329668) |
+| Dashboard browser E2E | **29/29 Chromium journeys passed** — [run 43900329611](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329611) |
+| Instagram safety | **64/64 passed**, zero failures/skips — [run 43900329478](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329478) |
+| Deployment recovery | **2/2 passed** — replacement, restart and persistent-state verification — [run 43900329538](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329538) |
+| Cloudflare staging | Authenticated read-only state/backup inventory and Node-to-Worker read smoke passed; five retained backups, publishing disabled, remote inventory unchanged. The one-time backup/restore step was skipped — [run 43900329485](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329485) |
+| Meta API version | **PASS** — v27.0 is centralized across Facebook/Instagram adapters and configs; stale v26.0 environment override is ignored and regression-tested. |
+
+## Meta Graph API v27.0 correction
+
+Meta's official versioning documentation identifies **v27.0** as the latest Graph API version. The Page Feed, Page Video Reels, Instagram media and Instagram media_publish references all document v27.0 endpoints.
+
+The repository now uses `scripts/meta-graph-api-version.mjs` as the shared default; both publishing configurations are pinned to v27.0; all four Facebook/Instagram adapters use that shared default. The dashboard server now uses checked-in config/shared fallback rather than allowing an unverified `META_GRAPH_API_VERSION` environment value to override it. An integration test deliberately supplies stale `v26.0` and verifies the actual request paths remain `/v27.0/`.
+
+The version/configuration work is accepted. **Live Meta identity is not accepted:** the latest real read-only Meta connection attempt used v27.0 and returned HTTP 401, OAuth error 190/subcode 463 because the access-token session expired — [run 43899735157](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43899735157). The owner must renew the token before read-only Page identity/permissions can pass. No publication was attempted.
 
 ## Current acceptance position
 
-- Dashboard inventory: 119 controls, 17 forms, 52 route handlers and 48 protected API routes.
-- Dashboard form outcomes: 11 PASS, 6 BLOCKED.
-- Dashboard browser journeys: 29/29 pass. **DASH-001 remains NOT_TESTED overall** because these journeys do not yet provide exhaustive success, validation, error, authorization, persistence, refresh/restart and accessibility evidence for every visible control.
-- API route matrix: 42 PASS, 0 NOT_TESTED, 6 BLOCKED. Missing/invalid operator credentials are rejected on 48/48 protected routes. **API-001 remains NOT_TESTED overall** because six provider/production routes remain blocked.
-- Current exact-head requirement snapshot: 6 PASS, 67 NOT_TESTED, 9 BLOCKED. SCHED-003 is now PASS: the owner-approved rolling cycle without a weekly target is recorded in `config/weekly-content-plan.json` (2026-11-07) and passes the current schedule validation.
-- **SCHED-001 remains NOT_TESTED:** complete live SonicVhibez public/private/unlisted history and actual remote publication timestamps cannot be verified while YouTube OAuth returns `invalid_grant`.
-- **Worker retry/backoff safety is fixed and regression-tested:** a 409 preflight conflict persists its cooldown; if cooldown persistence fails, the worker stops before another poll and retains the process lock to prevent duplicate dispatch. Tests cover restart persistence and fail-closed behavior. **SCHED-WORKER-DISPATCH-001 remains NOT_TESTED for a live continuous worker deployment and real renderer dispatch.**
-- **STATE-001 is NOT_TESTED on the current candidate:** Cloudflare durable-state unit tests and deployment recovery smoke pass, but the live Node-to-Worker staging backup/restore smoke was not rerun on this exact candidate. The last live staging PASS is historical at SHA `41bd4de95d876c9778a4993a0e67ac207d1379ff`.
-- **DEPLOY-001 remains NOT_TESTED:** recovery smoke passing is not proof of a complete production deployment.
-- **GIT-002 remains NOT_TESTED:** 3,875 branch-only commits still require human semantic integration review. Preserve divergence and PR #1 draft status.
+- Requirements register: **7 PASS / 67 NOT_TESTED / 9 BLOCKED** (83 total).
+- Dashboard inventory: 119 controls, 17 forms; current form outcomes 11 PASS / 6 BLOCKED. The 29/29 browser journeys do not provide exhaustive behavior evidence for every control. **DASH-001 remains NOT_TESTED overall.**
+- API route matrix: 48 protected routes, 42 PASS / 6 BLOCKED; authentication-negative checks pass 48/48. **API-001 remains NOT_TESTED overall.**
+- **SCHED-001 remains NOT_TESTED:** complete SonicVhibez remote YouTube history and actual publication timestamps are unavailable; YouTube OAuth returns `invalid_grant`.
+- **STATE-001 remains NOT_TESTED on this exact candidate:** authenticated read-only staging smoke passed, but the manual backup/restore acceptance was skipped.
+- **DEPLOY-001 remains NOT_TESTED:** local replacement/restart recovery passed 2/2; this is not full production deployment/monitoring/rollback acceptance.
+- **GIT-002 remains NOT_TESTED:** 3,885 ahead / 4 behind / 300 changed files still require human semantic integration review. Preserve PR #1 draft/unmerged.
 
 ## External production blockers
 
 ### Nature Frontiers — Meta / Instagram
 
-- Meta Page verification fails with HTTP 401, OAuth error 190, subcode 463 (expired access-token session): [exact verification run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013573).
-- The current Metricool brand metadata reports Page ID `1431329126735709`, which matches repository configuration, but that does not replace Meta Graph identity and permission verification.
-- The numeric Instagram Business Account ID remains unset. The Metricool username is not a substitute.
-- The current Metricool brand `8094526` returned no scheduled posts for 2026-11-16 through 2026-12-16. The previous brand `7545638` returns HTTP 403 (access denied). Therefore the eight historical `draft:false`, `autoPublish:true` records from the 2026-10-28 snapshot remain **UNKNOWN**; an empty schedule on the new brand does not prove they were canceled or resolved.
-- Keep publishing disabled, dry-run enabled and emergency stop active. No Metricool or Meta record was modified.
-
-- A read-only Metricool snapshot for the current brand `8094526` returned 3 Facebook feed posts on 2026-11-13 and 2 Facebook Reels on 2026-11-13/14; Instagram feed/Reels queries for 2026-11-12 through 2026-11-16 returned no rows, and no future schedule was returned through 2026-12-16. The Facebook post-level metrics are sparse/null/zero and do not establish a reliable performance baseline. These external posts are not thereby approved under the repository's rights/editorial workflow.
-- The repository still has no accepted end-to-end engagement analytics ingestion and learning loop. Metricool remains a read-only external snapshot; do not infer performance from null/zero values or fabricate analytics.
+- Meta Page identity/permission verification is blocked by expired credentials: HTTP 401, OAuth error 190, subcode 463. Renew the token securely, then rerun read-only v27.0 identity and permission verification.
+- Current Metricool brand `8094526` reports Page ID `1431329126735709`, matching repository configuration, but this is not independent Meta Graph identity/permission verification.
+- Numeric Instagram Business Account ID remains unset; the returned username is not a substitute.
+- Historical Metricool brand `7545638` returns HTTP 403. The eight historical `draft:false`, `autoPublish:true` records therefore remain UNKNOWN. The current brand's empty future schedule does not prove the historical records were cancelled.
+- Keep `publishingEnabled=false`, `dryRun=true` and `emergencyStop=true`. No Meta or Metricool record was changed.
 
 ### SonicVhibez — YouTube
 
-The exact production-readiness run remains HOLD with eight blockers: complete remote upload/history reconciliation; `content/render-manifest.json`; `content/long-form-render-manifest.json`; human-reviewed metadata; verified rights; completed compliance review; genuine `media/next-short.mp4`; and valid YouTube OAuth (currently `invalid_grant`). The readiness workflow never uploads, schedules or publishes: [diagnostic run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013553).
+YouTube OAuth currently returns `invalid_grant`. Complete remote upload/history reconciliation, genuine render manifests and production MP4, approved metadata, rights evidence, human review and channel identity verification remain outstanding. Public/unattended publishing stays disabled.
 
-### Media and rights
+### Media, rights and approvals
 
-- The NOAA spiny-lobster source artifact was reacquired and its SHA-256 verified. A silent 55-second 9:16 visual-review cut was generated with the persistent warning **REVIEW ONLY — NOT APPROVED FOR PUBLICATION** and exact credit **“Footage courtesy of NOAA’s Office of National Marine Sanctuaries”**. It has no audio stream and decodes fully. Its SHA-256 is `4fc0b7f4a3f5d79ecf8d6a2bb148f06ba01f56c1c8d3b4db846d614f65f07261`. This is a review attachment, not a production master; full continuous human playback, final narration/caption review, rights and compliance approval remain open. It must not be substituted for `media/next-short.mp4`.
-- A separate 55-second narrated review render was also generated: `NOAA-california-spiny-lobster-narration-review-1080x1920.mp4`, SHA-256 `aa84154b6938750f646377e9493dae81552249d9a07ba7d521d9b29addf8f1ba`, H.264 1080×1920/30 fps with AAC audio. It uses synthetic eSpeak `en-us` narration at 135 WPM, contains 108 script-matched words across 12 timed cues (maximum 38 characters per line), and visibly discloses **AI-GENERATED NARRATION — REVIEW ONLY**. The new `test/short-004-caption-review.test.mjs` verifies caption readability, word-for-word script alignment and fail-closed rights/approval flags. The synthetic voice must be replaced with owner-approved narration before publication; cue timing still requires human review.
-- Two Pexels listing pages and their license references were inspected as conditional candidates. The full-resolution files could not be downloaded in this environment, so neither clip has been visually reviewed or cleared. Both remain HOLD; the slow-worm page description identifies *Anguis fragilis*, a legless lizard, not a snake.
-- No synthetic or unverified asset is being represented as production evidence.
+No synthetic or unverified asset is accepted as production proof. Genuine media provenance, rights clearance, human editorial review and final approval are still required. No upload, post, schedule, campaign activation or provider mutation occurred.
 
 ## No-publication safety state
 
