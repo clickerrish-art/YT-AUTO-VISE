@@ -6,18 +6,19 @@
 
 - Full Node suite: [run 43901917853](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901917853), **898/898 passed, zero failures/skips**.
 - Automation/security: [run 43901917864](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901917864), **157 Node test files, 45 Python tests, zero skips, npm audit 0 vulnerabilities**.
-- Dashboard Chromium E2E: [run 43901838658](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901838658), **29/29 passed** on the application/browser source SHA above.
+- Dashboard Chromium E2E: [run 43901838658](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901838658), **29/29 passed**.
 - Deployment recovery: [run 43901918059](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901918059), **2/2 passed**.
 - Static dashboard inventory: **119 controls** (27 buttons, 49 inputs, 27 selects, 16 textareas), **17 forms**, 52 route handlers and 48 protected API routes.
-- Form-level outcomes remain **11 PASS / 6 BLOCKED / 0 NOT_TESTED**. The six owner-dependent production forms remain blocked; fixtures do not substitute for genuine media, rights, identities or human review.
-- **DASH-CTRL-WIRING-001: PASS.** All 119 controls have unique stable acceptance IDs; 102 controls map to the 17 form submit handlers; all 17 standalone controls have explicit action/value bindings. The Node test explicitly reports: “all 119 static dashboard controls map to a submitted form or an explicit standalone binding.”
-- Five system-populated narration-review SHA-256 fields are now read-only. The browser journey verifies the script, audio, transcript, captions and report hashes against the selected bundle's actual artifact hashes.
-- **DASH-001 remains NOT_TESTED overall.** Wiring and readonly integrity are proven, but exhaustive per-control business success, validation, error feedback, authorization, persistence, refresh/restart, concurrency and accessibility acceptance remains outstanding.
+- **DASH-CTRL-WIRING-001: PASS.** All 119 controls have unique stable acceptance IDs; 102 controls map to 17 form submit handlers; all 17 standalone controls have explicit action/value bindings.
+- **DASH-CTRL-A11Y-001: PASS.** Four browser journeys cover keyboard-only connection, accessible names for visible controls, 320px no-overflow and unique accessible names for all 17 form landmarks.
+- **DASH-CTRL-FORM-PATHS-001: PASS.** All 17 forms have a journey: 11 successful local/operator workflows and six production-dependent forms that fail closed with actionable feedback and no unintended mutation.
+- Five system-populated narration-review SHA-256 fields are readonly; the browser verifies script, audio, transcript, captions and report hashes against the selected bundle.
+- **DASH-001 remains NOT_TESTED overall.** The sub-gates above do not prove exhaustive field-level success, validation, error feedback, authorization, persistence, refresh/restart, concurrency and accessibility behavior for every control.
 - API route acceptance remains **42 PASS / 0 NOT_TESTED / 6 BLOCKED**; all 48 protected routes reject missing and invalid operator credentials.
 - Meta Graph API v27.0 configuration and adapter migration is PASS; live Meta identity remains BLOCKED by expired-token HTTP 401 / OAuth error 190 / subcode 463.
 - YouTube OAuth still returns `invalid_grant`; SCHED-001 remains NOT_TESTED.
 - Cloudflare staging read-only smoke passed on the previous exact candidate; backup/restore acceptance was skipped.
-- Branch comparison: **3,888 ahead / 4 behind / 300 changed files**; semantic integration decision remains `REQUIRES_REVIEW`.
+- Branch comparison before this documentation refresh: **3,888 ahead / 4 behind / 300 changed files**; semantic integration decision remains `REQUIRES_REVIEW`.
 
 ## Explicit standalone control bindings
 
@@ -41,7 +42,7 @@
 | `task` | select | Value consumed by the run-task action |
 | `runTask` | button | Explicit task-execution click handler |
 
-The remaining **102 controls** are owned by one of the 17 forms. The static test asserts that every form has a submit handler and every form-owned control resolves to that handler. Browser tests separately verify accessible names and representative success/failure journeys. This wiring subgate does not claim every field has exhaustive behavioral acceptance.
+The remaining **102 controls** are owned by one of the 17 forms. The static test asserts that every form has a submit handler and every form-owned control resolves to that handler. Browser tests separately verify accessible names and representative success/failure journeys. This wiring sub-gate does not claim every field has exhaustive behavioral acceptance.
 
 ## Current 17-form status
 

@@ -1,33 +1,42 @@
 # Current completion checkpoint — 16 November 2026
 
-**Project state: engineering sub-gates are passing; production remains on HOLD. No publishing, campaign activation or provider mutation is authorized.**
+**Project state: dashboard engineering sub-gates pass; production remains on HOLD. No publishing, campaign activation or provider mutation is authorized.**
 
 ## Exact source/test evidence
 
 - Application/browser source SHA: `1e8421383957521f511459ac5b40c4e3c61da442`.
-- Node/test SHA: `71eb284cfb7a06e434064b94df7f6e8be487b1a9`.
+- Node/control-wiring test SHA: `71eb284cfb7a06e434064b94df7f6e8be487b1a9`.
 - `main`: `69fdf35c90f980c142be3aaffa863304bc7eaa25`, unchanged. PR #1 remains OPEN, DRAFT and UNMERGED.
-- Live comparison: **3,888 ahead / 4 behind / 300 changed files**. The branch remains divergent and requires human semantic review. No merge, rebase, reset, force-push or destructive reconciliation was performed.
+- Live comparison before this documentation refresh: **3,888 ahead / 4 behind / 300 changed files**. Human semantic review is still required.
 
 | Acceptance area | Exact result |
 |---|---|
 | Full Node regression | **898/898 passed**, 0 failures, 0 skips across 157 test files — [run 43901917853](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901917853) |
 | Automation/security | **898/898 Node; 45/45 Python; 0 skips; npm audit 0 vulnerabilities**; clean/locked install, FFmpeg, JS syntax and Python compile passed — [run 43901917864](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901917864) |
-| Dashboard browser E2E | **29/29 Chromium journeys passed**, including all five readonly narration-review digest values — [run 43901838658](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901838658) |
+| Dashboard browser E2E | **29/29 Chromium journeys passed** — [run 43901838658](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901838658) |
 | Dashboard control wiring | **119/119 controls mapped**, 17/17 form handlers, 17/17 standalone bindings, 119 unique acceptance IDs — [run 43901917864](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901917864) |
+| Dashboard accessibility | **4/4 journeys passed** — keyboard-only connection, accessible names, 320px mobile layout and 17 unique form landmarks — [run 43901838658](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901838658) |
+| Dashboard form paths | **17/17 forms exercised**: 11 successful workflows and six production-dependent forms that fail closed — [run 43901838658](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901838658) |
 | Deployment recovery | **2/2 passed** — replacement, restart and persistent-state verification — [run 43901918059](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901918059) |
-| Cloudflare staging | Previous exact candidate authenticated read-only state/backup inventory and Node-to-Worker read smoke passed; five retained backups, publishing disabled, remote inventory unchanged. The one-time backup/restore step was skipped — [run 43900329485](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43900329485) |
 | Meta API version | **PASS** — v27.0 is centralized across Facebook/Instagram adapters and configs; stale v26.0 environment override is ignored and regression-tested. |
 
 ## Dashboard control wiring and integrity
 
-The static inventory is **119 controls**: 27 buttons, 49 inputs, 27 selects and 16 textareas, across 17 forms. The new exact-SHA Node test maps all 119 controls to either a submit-handled form or an explicit standalone binding. It confirms 17 forms have submit handlers, 102 controls are form-owned, 17 standalone controls have explicit handlers/value consumers, and every control has a unique stable acceptance identity.
+The static inventory is **119 controls**: 27 buttons, 49 inputs, 27 selects and 16 textareas, across 17 forms. The exact Node test maps all 119 controls to a submit-handled form or explicit standalone binding. It confirms 17 forms have submit handlers, 102 controls are form-owned, 17 standalone controls have explicit handlers/value consumers, and every control has a unique stable acceptance identity.
 
-The five system-populated narration-review integrity fields — script, audio, transcript, captions and review-report SHA-256 — are now **read-only**. The browser journey verifies all five displayed values against the selected review bundle's artifact hashes. This prevents operators from editing a displayed digest to misrepresent the source artifact.
+The five system-populated narration-review integrity fields — script, audio, transcript, captions and review-report SHA-256 — are **read-only**. The browser journey verifies all five displayed values against the selected review bundle's artifact hashes.
 
-**This is a wiring/integrity PASS, not full DASH-001 acceptance.** The current form outcomes remain 11 PASS / 6 BLOCKED. The six production forms still need genuine media, rights, verified parent, validated export, human review or uncertain remote-upload evidence. The full control-by-control success, validation, error, authorization, persistence, refresh/restart and concurrency matrix is still outstanding; DASH-001 remains NOT_TESTED overall.
+## Dashboard accessibility and form behavior
 
-The dedicated Instagram workflow on intermediate source SHA `1e842` initially failed because the newly added dashboard matcher was over-escaped. The matcher was corrected in test-only commit `71eb`; the full 898-test suite then passed on `71eb`, including Instagram adapter/safety tests. No Instagram publisher code failure was reported.
+All four accessibility journeys passed: keyboard-only operator connection, programmatic names for all visible controls, no page-level horizontal overflow at 320px, and unique/resolvable accessible names for all 17 form landmarks.
+
+All 17 forms have an exercised path. Eleven demonstrate successful local/operator workflows: `campaignform`, `draft`, `facebookdraftform`, `authoringform`, `scriptreviewform`, `narrationform`, `narrationreviewform`, `productionplanform`, `productionplanreviewform`, `canceljobform` and `retryjobform`.
+
+Six production-dependent forms remain blocked and fail closed: `produceform`, `parentrelationshipform`, `validationform`, `rightsform`, `reviewform` and `reconcileform`. Tests verify disabled/actionable feedback, incomplete parent binding rejection, malformed/insufficient rights evidence rejection, and no unintended jobs, audit records, uploads or publications.
+
+**DASH-CTRL-WIRING-001, DASH-CTRL-A11Y-001 and DASH-CTRL-FORM-PATHS-001 are PASS. DASH-001 remains NOT_TESTED overall.** These sub-gates do not establish exhaustive field-level success, validation, error feedback, authorization, persistence, refresh/restart and concurrency behavior for every control. Six forms also remain blocked on genuine production prerequisites.
+
+The dedicated Instagram workflow on intermediate source SHA `1e842` initially failed because the new dashboard matcher was over-escaped. The matcher was corrected in test-only commit `71eb`; the full 898-test suite then passed on `71eb`, including Instagram adapter/safety tests. No Instagram publisher code failure was reported.
 
 ## Meta Graph API v27.0 correction
 
@@ -39,8 +48,8 @@ The version/configuration work is accepted. **Live Meta identity is not accepted
 
 ## Current acceptance position
 
-- Requirements register: **8 PASS / 67 NOT_TESTED / 9 BLOCKED** (84 total).
-- Dashboard: 119 controls, 17 forms; wiring PASS, but **DASH-001 remains NOT_TESTED overall**.
+- Requirements register: **10 PASS / 67 NOT_TESTED / 9 BLOCKED** (86 total).
+- Dashboard: 119 controls, 17 forms; wiring, accessibility and form-path sub-gates PASS, but **DASH-001 remains NOT_TESTED overall**.
 - API route matrix: 48 protected routes, 42 PASS / 6 BLOCKED; authentication-negative checks pass 48/48. **API-001 remains NOT_TESTED overall.**
 - **SCHED-001 remains NOT_TESTED:** complete SonicVhibez remote YouTube history and actual publication timestamps are unavailable; YouTube OAuth returns `invalid_grant`.
 - **STATE-001 remains NOT_TESTED on this exact candidate:** authenticated read-only staging smoke passed, but the manual backup/restore acceptance was skipped.
