@@ -102,3 +102,4 @@ jobs:
             source-identity.json
           retention-days: 7
 # Recovery refresh: export the full-history source bundle after the 2 November API, dashboard inventory and acceptance-register refresh.
+# Recovery refresh: deterministic full-history export requested 2026-11-17.
