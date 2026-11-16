@@ -38,7 +38,7 @@ function normalizeWords(value) {
 }
 
 test("Short-004 timed captions match the narration script and remain readable", () => {
-  const narration = script.match(/^## Narration draft\s*\n+([\s\S]*?)\n+## Edit and disclosure instructions/m);
+  const narration = script.match(/^## Narration draft[^\n]*\n+([\s\S]*?)\n+## Edit and disclosure instructions/m);
   assert.ok(narration, "narration section exists");
   const scriptText = narration[1].replace(/\s+/g, " ").trim();
   const cues = parseCues(srt);
