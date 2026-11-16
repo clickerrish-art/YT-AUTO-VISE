@@ -423,3 +423,15 @@ test("one-shot upload authorization binds one job and all final hashes to the ve
   assert.throws(() => validateOneShotUploadAuthorization({ ...input, visibility: "public" }, { ...input, now: new Date("2026-10-24T12:30:00.000Z") }), /restrict the operation to private/);
   assert.throws(() => validateOneShotUploadAuthorization(input, { ...input, now: new Date("2026-10-26T13:00:00.000Z") }), /no older than 24 hours/);
 });
+
+test("private uploader requires the verified @sonicvhibez handle for every accepted display title", async () => {
+  const { matchesApprovedSonicVhibezChannel } = await import("../scripts/upload-private.mjs");
+  const valid = { id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez", customUrl: "@sonicvhibez" } };
+  const validLegacyTitle = { id: TEST_CHANNEL_ID, snippet: { title: "SonicVibes", customUrl: "sonicvhibez" } };
+  assert.equal(matchesApprovedSonicVhibezChannel(valid, TEST_CHANNEL_ID), true);
+  assert.equal(matchesApprovedSonicVhibezChannel(validLegacyTitle, TEST_CHANNEL_ID), true);
+  assert.equal(matchesApprovedSonicVhibezChannel({ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez", customUrl: "@different-channel" } }, TEST_CHANNEL_ID), false);
+  assert.equal(matchesApprovedSonicVhibezChannel({ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez" } }, TEST_CHANNEL_ID), false);
+  assert.equal(matchesApprovedSonicVhibezChannel({ id: TEST_CHANNEL_ID, snippet: { title: "Other Channel", customUrl: "@sonicvhibez" } }, TEST_CHANNEL_ID), false);
+  assert.equal(matchesApprovedSonicVhibezChannel({ id: "UC" + "B".repeat(22), snippet: { title: "SonicVhibez", customUrl: "@sonicvhibez" } }, TEST_CHANNEL_ID), false);
+});
