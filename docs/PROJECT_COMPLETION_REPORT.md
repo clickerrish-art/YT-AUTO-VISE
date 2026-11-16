@@ -1,6 +1,6 @@
 # 16 November 2026 — exact source/test completion checkpoint
 
-**Verified application/test candidate:** `57769fa219fe98b52f8b182f3849206ac3c8110c`. The current branch has two subsequent documentation-only commits; no application or test files changed after this candidate. **Current documentation HEAD:** `8c9fbbb1612b45c41ba1ff398712327bdf02dd07`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` (unchanged). PR #1 remains OPEN, DRAFT and UNMERGED.
+**Verified application/test candidate:** `57769fa219fe98b52f8b182f3849206ac3c8110c`. Subsequent commits in this refresh are documentation-only; no application or test files changed after this candidate. The live PR head is verified separately; this checkpoint reports the exact source/test SHA. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` (unchanged). PR #1 remains OPEN, DRAFT and UNMERGED.
 
 ## Exact-candidate engineering verification
 
