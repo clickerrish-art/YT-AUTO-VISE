@@ -534,15 +534,17 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508297",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/75ef3a5ee5c3eb41f1edec106d65145b219d737c",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40896235130"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40896235130",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43918610269",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43918609969"
       ],
-      "nextAction": "The workflow is explicitly local draft-package validation; its successful result does not prove remote Page draft creation. The actual provider-side create/read-back remains BLOCKED_EXTERNAL and must be performed in an authorized environment with verified Page identity, permissions, token scopes and remote read-back evidence. The scheduled autonomous publisher workflow is fail-closed with FACEBOOK_PUBLISH_ENABLED=NO and config publishingEnabled=false/dryRun=true/emergencyStop=true.",
+      "nextAction": "Renew the Meta user/Page token in the secure runtime, verify the exact Page identity and permissions, and implement the intended draft-only provider create/read-back path in version-controlled code. The current production Worker is health-only and must not be represented as a functioning publisher. Keep all publishing disabled until identity, rights, signed approval and remote read-back are verified.",
       "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
       "acceptanceCriterion": "The verified Nature Frontiers Page identity and permissions pass live checks; the intended draft-only workflow completes (not skipped) and retains a validated draft artifact without publishing.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
-      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
+      "currentHeadEvidenceSha": "142daf6d363c22d3980297077f37de34976a6c03",
+      "currentHeadEvidenceNote": "Exact current branch candidate local draft validation run 43918610269 passed, but it is local-only and does not create/read back a provider-side Facebook draft. The exact-source Meta identity workflow 43918609969 remains blocked by HTTP 401 / OAuth error 190 / subcode 463. Direct Cloudflare read-only inspection on 2026-11-16 found the deployed nature-frontiers-publisher Worker exposes only GET /health, has only a D1 binding and no Meta credential bindings; its seven application tables are empty (0 content items, targets, approvals, rights records, publication attempts, audit events and webhook events). Publishing remains disabled, dryRun=true and emergencyStop=true; no provider mutation occurred."
     },
     {
       "id": "SAFE-001",
@@ -2045,13 +2047,14 @@
       "requirement": "Verify Nature Frontiers Page/Instagram ownership and permissions, reconcile existing Metricool scheduled records safely, and prove the intended draft-only Meta integration without cross-brand publishing.",
       "status": "BLOCKED",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928356"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928356",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43918609969"
       ],
-      "nextAction": "Owner must renew the Meta user/Page access-token session securely, then rerun read-only v27.0 Page identity, permissions and exact Page linkage verification. The numeric Instagram Business Account ID remains unset. Do not paste credentials into chat or enable publishing. The old Metricool brand 7545638 is inaccessible (403), so eight historical autoPublish records remain UNKNOWN.",
+      "nextAction": "Owner must renew the Meta user/Page token securely and verify the exact Page/Instagram account linkage and permissions. Independently, implement and test the intended draft-only Meta integration in version-controlled code: the deployed Cloudflare Worker is currently health-only, not a publisher. Reconcile the inaccessible historical Metricool brand 7545638 and its eight UNKNOWN autoPublish records before any publishing enablement. Do not paste credentials into chat or enable publishing.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
-      "currentHeadEvidenceNote": "Live Meta check https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43899735157 used Graph API v27.0 and returned HTTP 401, OAuth error 190/subcode 463 (expired session). Current Metricool brand 8094526 reports Page ID 1431329126735709 but does not replace Meta identity/permission proof; Instagram numeric ID remains null. No provider mutation occurred."
+      "currentHeadEvidenceSha": "142daf6d363c22d3980297077f37de34976a6c03",
+      "currentHeadEvidenceNote": "Exact-source Graph API v27.0 Page identity check 43918609969 returned HTTP 401, OAuth error 190/subcode 463 (expired Meta session). Direct Cloudflare read-only inventory on 2026-11-16 confirms the deployed nature-frontiers-publisher Worker version 8205c16d exposes only GET /health; its settings contain a D1 binding but no Meta secret bindings and its source has no Graph API publishing route. Production D1 has the seven application tables but zero rows in content_items, content_targets, approvals, media_rights, publication_attempts, audit_events and meta_webhook_events. Current Metricool brand 8094526 reports Page ID 1431329126735709 but does not prove Meta ownership or permissions; historical brand 7545638 remains inaccessible (403), and eight prior autoPublish records remain UNKNOWN. No provider mutation occurred."
     },
     {
       "id": "E2E-001",
