@@ -2384,3 +2384,128 @@ test("dashboard visibly surfaces durable held Facebook candidates for operator r
   await expect(page.locator("#facebookautonomousstatus")).toContainText("HELD_CONNECTION_BLOCKED");
   await expect(page.locator("#facebookautonomousdetails")).toContainText("Held: 1");
 });
+
+
+test("blocked production forms serialize every field and surface blockers without state mutation", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  const beforeResponse = await request.get("/api/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  const calls = [];
+  const blockedRoutes = [
+    ["/api/jobs/produce", "produceresult", "Render blocked or failed:"],
+    ["/api/jobs/validate", "validationresult", "Validation blocked:"],
+    ["/api/jobs/rights/verify", "rightsresult", "Rights verification blocked:"],
+    ["/api/jobs/review", "reviewresult", "Review blocked:"],
+    ["/api/uploads/reconcile", "reconcileresult", "Reconciliation blocked:"]
+  ];
+  for (const [routePath] of blockedRoutes) {
+    await page.route("**" + routePath, async route => {
+      calls.push({ path: routePath, method: route.request().method(), body: route.request().postDataJSON() });
+      await route.fulfill({
+        status: 409,
+        contentType: "application/json",
+        body: JSON.stringify({ error: "mocked production prerequisite blocker" })
+      });
+    });
+  }
+
+  const addOption = async (id, value) => {
+    await page.locator("#" + id).evaluate((element, optionValue) => {
+      element.add(new Option("browser fixture — not production evidence", optionValue));
+    }, value);
+    await page.locator("#" + id).selectOption(value);
+  };
+  const submit = async id => page.locator("#" + id).evaluate(form =>
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }))
+  );
+
+  await addOption("producejob", "fixture-produce-job");
+  await submit("produceform");
+  await expect(page.locator("#produceresult")).toContainText("Render blocked or failed: mocked production prerequisite blocker");
+
+  await addOption("validationjob", "fixture-validation-job");
+  await page.locator("#captionsPath").fill("content/fixture-captions.srt");
+  await submit("validationform");
+  await expect(page.locator("#validationresult")).toContainText("Validation blocked: mocked production prerequisite blocker");
+
+  await addOption("rightsjob", "fixture-rights-job");
+  const rightsAssets = [{
+    assetId: "fixture-asset",
+    source: "fixture source — not rights evidence",
+    rightsHolder: "fixture holder",
+    assetPath: "media/fixture.mp4",
+    licenseEvidenceLocation: "evidence/fixture-license.txt",
+    permittedUses: ["YouTube"],
+    restrictions: "fixture restrictions",
+    attributionRequirements: "fixture attribution"
+  }];
+  await page.locator("#assetsJson").fill(JSON.stringify(rightsAssets));
+  await page.locator("#confirmRightsVerified").check();
+  await submit("rightsform");
+  await expect(page.locator("#rightsresult")).toContainText("Rights verification blocked: mocked production prerequisite blocker");
+
+  await addOption("reviewjob", "fixture-review-job");
+  await page.locator("#reviewdecision").selectOption("APPROVE");
+  await page.locator("#artifactPath").fill("artifacts/fixture.mp4");
+  await page.locator("#artifactSha").fill("a".repeat(64));
+  await page.locator("#metadataPath").fill("content/fixture-metadata.json");
+  await page.locator("#metadataSha").fill("b".repeat(64));
+  await page.locator("#rightsJson").fill(JSON.stringify({ fixture: true }));
+  await page.locator("#reviewReason").fill("Fixture review reason — not human approval.");
+  await submit("reviewform");
+  await expect(page.locator("#reviewresult")).toContainText("Review blocked: mocked production prerequisite blocker");
+
+  await page.locator("#reconcileJobId").fill("fixture-reconcile-job");
+  await page.locator("#reconcileVideoPath").fill("media/fixture.mp4");
+  await page.locator("#reconcileMetadataPath").fill("content/fixture-metadata.json");
+  await page.locator("#reconcileApprovalPath").fill("content/fixture-approval.json");
+  await submit("reconcileform");
+  await expect(page.locator("#reconcileresult")).toContainText("Reconciliation blocked: mocked production prerequisite blocker");
+
+  expect(calls).toEqual([
+    { path: "/api/jobs/produce", method: "POST", body: { jobId: "fixture-produce-job" } },
+    { path: "/api/jobs/validate", method: "POST", body: { jobId: "fixture-validation-job", captionsPath: "content/fixture-captions.srt" } },
+    { path: "/api/jobs/rights/verify", method: "POST", body: { jobId: "fixture-rights-job", assets: rightsAssets, confirmRightsVerified: true } },
+    { path: "/api/jobs/review", method: "POST", body: {
+      jobId: "fixture-review-job",
+      decision: "APPROVE",
+      artifactPath: "artifacts/fixture.mp4",
+      artifactSha256: "a".repeat(64),
+      metadataPath: "content/fixture-metadata.json",
+      metadataVersion: "b".repeat(64),
+      rightsEvidence: { fixture: true },
+      reason: "Fixture review reason — not human approval."
+    } },
+    { path: "/api/uploads/reconcile", method: "POST", body: {
+      jobId: "fixture-reconcile-job",
+      videoPath: "media/fixture.mp4",
+      metadataPath: "content/fixture-metadata.json",
+      approvalPath: "content/fixture-approval.json"
+    } }
+  ]);
+
+  for (const [routePath, resultId] of blockedRoutes) {
+    await expect(page.locator("#" + resultId)).not.toContainText(/successfully|verified by|review recorded|reconciliation result:/i);
+  }
+  for (const [formId] of [
+    ["produceform"], ["validationform"], ["rightsform"], ["reviewform"], ["reconcileform"]
+  ]) {
+    await expect(page.locator("#" + formId + " button[type=submit]")).toBeDisabled();
+  }
+
+  const afterResponse = await request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  const after = await afterResponse.json();
+  expect(after.jobs).toEqual(before.jobs);
+  expect(after.audit).toEqual(before.audit);
+  expect(after.auditLog ?? []).toEqual(before.auditLog ?? []);
+  expect(after.uploads).toEqual(before.uploads);
+  expect(after.publishingEnabled).toBe(false);
+});
