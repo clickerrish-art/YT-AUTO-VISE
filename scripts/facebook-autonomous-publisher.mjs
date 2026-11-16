@@ -8,6 +8,20 @@ import { createMetaPageReel, reconcileMetaPageReel } from "./meta-page-reel-adap
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const isoNow = now => new Date(now).toISOString();
 const readJson = file => JSON.parse(fs.readFileSync(file, "utf8"));
+function fsyncDirectory(directory) {
+  // A flushed temporary file plus rename is not crash-durable until the parent
+  // directory entry is flushed. Preserve the ledger transition before any
+  // subsequent remote mutation or queue removal is treated as complete.
+  if (process.platform === "win32") return;
+  let directoryFd;
+  try {
+    directoryFd = fs.openSync(directory, fs.constants.O_RDONLY);
+    fs.fsyncSync(directoryFd);
+  } finally {
+    if (directoryFd !== undefined) fs.closeSync(directoryFd);
+  }
+}
+
 function atomicJson(file, value) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   const temporary = file + "." + process.pid + ".tmp";
@@ -17,6 +31,7 @@ function atomicJson(file, value) {
     fs.fsyncSync(handle);
   } finally { fs.closeSync(handle); }
   fs.renameSync(temporary, file);
+  fsyncDirectory(path.dirname(file));
 }
 function acquireLock(file) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
