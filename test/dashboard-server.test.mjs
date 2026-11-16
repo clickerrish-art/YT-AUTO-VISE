@@ -250,6 +250,10 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(logs.includes(stateDir), false, "startup logs must not disclose the local state directory");
   assert.ok(body.blockers.some(item => /complete SonicVhibez public\/private\/unlisted history is reconciled/i.test(item)), "dashboard state must expose the live history reconciliation blocker");
   assert.ok(!body.blockers.some(item => /CADENCE DECISION REQUIRED/.test(item)), "the recorded owner approval must clear only the cadence-decision blocker");
+  fs.writeFileSync(path.join(stateDir, "facebook-held-items.json"), JSON.stringify([{
+    slotId: "nature-frontiers-held-test-slot", status: "HELD_CONNECTION_BLOCKED",
+    reason: "META_PAGE_IDENTITY_OR_PERMISSION_CHECK_FAILED_NO_MUTATION", heldAt: "2026-11-16T10:00:00.000Z"
+  }]));
   const autonomousUnauth = await fetchDashboard(base + "/api/facebook/autonomous-status");
   assert.equal(autonomousUnauth.status, 401, "autonomous publisher status must use the same operator authentication");
   const autonomousResponse = await fetchDashboard(base + "/api/facebook/autonomous-status", { headers });
@@ -261,6 +265,9 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(Object.hasOwn(autonomous, "META_PAGE_ACCESS_TOKEN"), false);
   assert.ok(Array.isArray(autonomous.blockers));
   assert.equal(typeof autonomous.queueCount, "number");
+  assert.equal(autonomous.heldItemsCount, 1, "the dashboard must expose durable held candidates");
+  assert.equal(autonomous.heldItems[0].status, "HELD_CONNECTION_BLOCKED");
+  assert.ok(autonomous.blockedPosts.some(item => item.status === "HELD_CONNECTION_BLOCKED"));
 
   const emergencyStoppedPublish = await fetchDashboard(base + "/api/facebook/publish", {
     method: "POST", headers, body: JSON.stringify({ draftId: "must-not-publish", confirmOperation: true })

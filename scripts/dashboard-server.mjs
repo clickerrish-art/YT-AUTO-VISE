@@ -1108,6 +1108,11 @@ const server = http.createServer(async (req, res) => {
         const queue = readArray(queuePath);
         const history = durableStateConfigured ? readArray(stateFile(config.historyFile ?? "facebook-history.json")) : [];
         const ledger = durableStateConfigured ? readArray(stateFile(config.attemptLedgerFile ?? "facebook-attempt-ledger.json")) : [];
+        const heldItems = durableStateConfigured ? readArray(stateFile(config.heldItemsFile ?? "facebook-held-items.json")) : [];
+        const heldItemsSummary = heldItems.filter(item => item.status !== "RELEASED").slice(-20).map(item => ({
+          slotId: item.slotId ?? null, status: item.status, reason: item.reason ?? null,
+          heldAt: item.heldAt ?? null, updatedAt: item.updatedAt ?? null
+        }));
         const runSummaryPath = durableStateConfigured ? stateFile("facebook-run-summary.json") : "";
         const intakeSummaryPath = durableStateConfigured ? stateFile("facebook-intake-summary.json") : "";
         const lastRun = runSummaryPath && fs.existsSync(runSummaryPath) ? JSON.parse(fs.readFileSync(runSummaryPath, "utf8")) : null;
@@ -1122,10 +1127,16 @@ const server = http.createServer(async (req, res) => {
           nextScheduledRunAt = localDateTimeToIso(nextLocalDate, "07:30", "Africa/Johannesburg");
         }
         const lastRemoteReceipt = [...history].reverse().find(item => ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)) ?? null;
-        const blockedPosts = history.filter(item => item.status === "SKIPPED_BLOCKED").slice(-20).map(item => ({
-          slotId: item.slotId ?? null, status: item.status, reason: item.reason ?? null,
-          blockers: item.policyDecision?.blockers ?? [], checkedAt: item.checkedAt ?? null
-        }));
+        const blockedPosts = [
+          ...history.filter(item => String(item.status ?? "").startsWith("HELD_") || item.status === "SKIPPED_BLOCKED").map(item => ({
+            slotId: item.slotId ?? null, status: item.status, reason: item.reason ?? null,
+            blockers: item.policyDecision?.blockers ?? [], checkedAt: item.checkedAt ?? null
+          })),
+          ...heldItemsSummary.map(item => ({
+            slotId: item.slotId, status: item.status, reason: item.reason,
+            blockers: [], checkedAt: item.updatedAt ?? item.heldAt
+          }))
+        ].filter((item, index, items) => items.findIndex(other => other.slotId === item.slotId && other.status === item.status) === index).slice(-20);
         const uncertainAttempts = ledger.filter(item => item.status === "UNCERTAIN").slice(-20).map(item => ({
           slotId: item.slotId ?? null, status: item.status, reason: item.reason ?? null,
           remotePostId: item.remotePostId ?? null, reconciliation: item.reconciliation ?? null
@@ -1148,6 +1159,7 @@ const server = http.createServer(async (req, res) => {
           durableStateConfigured, queueCount: queue.length, lastRun, lastIntake,
           publishedCount: history.filter(item => ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)).length,
           skippedCount: history.filter(item => String(item.status ?? "").startsWith("SKIPPED")).length,
+          heldItemsCount: heldItemsSummary.length, heldItems: heldItemsSummary,
           lastRemoteReceipt, blockedPosts, uncertainAttempts, blockers
         });
       } catch {
