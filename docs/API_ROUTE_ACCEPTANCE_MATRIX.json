@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-16T18:00:00+02:00",
+  "generatedAt": "2026-11-16T19:46:54.000Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "1de17e81bf751c98147aab2a1657d8e5b6c00e64",
+  "testedSourceTestSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
   "liveMainSha": "69fdf35c90f980c142be3aaffa863304bc7eaa25",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -1516,15 +1516,48 @@
     "note": "Read-only inventory export is implemented; no channel history was authenticated or reconciled because Google rejected the configured OAuth client pair."
   },
   "latestExactCiCheckpoint": {
-    "recordedAt": "2026-11-15T11:52:30+02:00",
-    "exactSourceTestSha": "cabd871847f14b6667adb43af1dbacaaa81f35b2",
-    "stagingWriteTestSha": "41bd4de95d876c9778a4993a0e67ac207d1379ff",
-    "automationSecurity": "PASS — 141/141 Node test files, 44 Python tests, zero skips, npm audit 0 vulnerabilities; workflow 43700604234.",
-    "cloudflareStagingReadOnly": "PASS — workflow 43700604171; Access, Node state read, backup listing, remote state unchanged.",
-    "cloudflareStagingBackupRestore": "PASS — workflow 43701290286; revision 2→3, explicit and automatic backups retained, restore audit receipt, exact pre-test state preserved, Node restart recovery, remote state stable.",
-    "cloudflareDurableState": "PASS — live Node-to-Worker state/backup/restore and restart verified; local failure-injection and multiprocess tests passed in the exact-candidate Node suite.",
-    "productionReadiness": "HOLD — valid YouTube OAuth, complete remote history and genuine production media/rights/review remain absent.",
-    "metaPageIdentity": "BLOCKED — configured Page is absent from authenticated /me/accounts managed-Page list."
+    "exactSourceTestSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
+    "automationRun": "43942293152",
+    "nodeTests": {
+      "passed": 917,
+      "failed": 0,
+      "skipped": 0
+    },
+    "pythonTests": {
+      "passed": 45,
+      "failed": 0,
+      "skipped": 0
+    },
+    "npmAuditVulnerabilities": 0,
+    "dashboardE2ERun": "43942301932",
+    "dashboardJourneys": {
+      "passed": 33,
+      "total": 33
+    },
+    "routeMatrix": {
+      "routes": 48,
+      "overallPass": 42,
+      "overallBlocked": 6,
+      "authenticationNegativePass": 48
+    },
+    "metadataRun": "43942302103",
+    "queueReadinessRun": "43942301833",
+    "cloudflareReadOnlyStagingRun": "43942293152",
+    "deploymentRecoveryRun": "43942302049",
+    "isolatedBaselineRun": "43942301927",
+    "productionReadiness": {
+      "status": "HOLD",
+      "blockers": 9,
+      "run": "43942301842"
+    },
+    "metaIdentity": {
+      "status": "BLOCKED",
+      "httpStatus": 401,
+      "errorCode": 190,
+      "errorSubcode": 463,
+      "run": "43942301878"
+    },
+    "note": "This full exact-candidate regression confirms current tests pass but does not promote any previously blocked route. The six blocked routes still require genuine external/provider or production-media prerequisites; API-001 remains NOT_TESTED."
   },
   "cloudflareStagingInfrastructure": {
     "observedAt": "2026-11-15",
@@ -1636,22 +1669,27 @@
     "note": "All 45 authentication-negative route checks pass on the exact current source/test SHA. The 37 previously passing route-level business acceptances are NOT_TESTED on this SHA because current positive, validation, persistence, audit, concurrency and restart evidence is not complete for every route; 8 routes remain BLOCKED."
   },
   "currentHeadEvidence": {
-    "exactSha": "41bd4de95d876c9778a4993a0e67ac207d1379ff",
-    "sourceTestSha": "cabd871847f14b6667adb43af1dbacaaa81f35b2",
-    "sourceDifferenceFromTestSha": "Only staging-smoke scripts, workflow gates, and acceptance documentation; dashboard/runtime source and test files are unchanged.",
+    "exactSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
+    "sourceTestSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
+    "sourceDifferenceFromTestSha": "Full Node/Python/browser regression ran against the exact candidate. Route-level PASS/BLOCKED classifications are retained from the existing route-specific acceptance evidence; this refresh does not promote any blocked route.",
     "authenticationNegative": {
-      "pass": 45,
+      "pass": 48,
       "notTested": 0,
       "failed": 0,
-      "ciRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445"
+      "ciRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942293152"
     },
     "routeOverall": {
-      "pass": 40,
+      "pass": 42,
       "notTested": 0,
-      "blocked": 5
+      "blocked": 6
     },
-    "cloudflareNodeReadOnlyIntegration": "PASS — workflow 43700604171; authenticated Node dashboard state and backup-list reads; remote state unchanged.",
-    "cloudflareNodeBackupRestore": "PASS — workflow 43701290286; explicit backup and confirmed restore through Node dashboard; revision 2→3; automatic pre-restore backup, audit receipt, restart recovery; five backups retained.",
-    "reason": "40 routes now PASS on exact-candidate evidence. Five routes remain BLOCKED by live Meta Page authorization, YouTube reconciliation or production-media prerequisites."
+    "cloudflareNodeReadOnlyIntegration": "PASS — authenticated Node dashboard state and backup-list reads; remote state unchanged; publishing disabled.",
+    "fullRegression": {
+      "node": 917,
+      "python": 45,
+      "chromium": 33,
+      "npmAuditVulnerabilities": 0
+    },
+    "reason": "42 routes retain PASS from route-specific tests; six remain BLOCKED by live Meta authorization, YouTube reconciliation or genuine production-media prerequisites. Full API-001 acceptance remains NOT_TESTED."
   }
 }
