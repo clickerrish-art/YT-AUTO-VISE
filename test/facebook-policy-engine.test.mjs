@@ -99,6 +99,22 @@ test("policy returns the required structured decision and accepts only a complet
   } finally { f.cleanup(); }
 });
 
+
+test("operator-released hold records do not count as remote publications or duplicate receipts", async () => {
+  const f = fixture();
+  try {
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root),
+      history: [{
+        destination: "nature_frontiers_facebook", slotId: f.payload.slotId,
+        status: "HELD_CONNECTION_BLOCKED", checkedAt: "2026-10-24T12:00:00.000Z"
+      }]
+    });
+    assert.equal(result.duplicateCheck.passed, true);
+    assert.equal(result.eligible, true, JSON.stringify(result.blockers));
+  } finally { f.cleanup(); }
+});
+
 test("missing rights evidence and changed media checksum fail closed", async () => {
   const f = fixture();
   try {

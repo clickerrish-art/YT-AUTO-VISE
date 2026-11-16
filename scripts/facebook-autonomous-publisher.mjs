@@ -131,11 +131,16 @@ export async function runAutonomousFacebookPublisher({
   };
   const historyPath = stateFile(config.historyFile ?? "facebook-history.json");
   const ledgerPath = stateFile(config.attemptLedgerFile ?? "facebook-attempt-ledger.json");
+  const heldItemsPath = stateFile(config.heldItemsFile ?? "facebook-held-items.json");
   const lockPath = stateFile(config.lockFile ?? "facebook-publishing.lock");
+  if (new Set([historyPath, ledgerPath, heldItemsPath, lockPath]).size !== 4) {
+    throw new Error("Facebook history, attempt ledger, held-items ledger and lock must use distinct paths");
+  }
   const release = acquireLock(lockPath);
   try {
     let history = safeHistory(historyPath);
     let ledger = safeHistory(ledgerPath);
+    let heldItems = safeHistory(heldItemsPath);
     const queue = readJson(queuePath);
     if (!Array.isArray(queue)) throw new Error("Autonomous Facebook queue must be a JSON array");
     const current = Number(now);
@@ -224,17 +229,66 @@ export async function runAutonomousFacebookPublisher({
       const index = queue.findIndex(item => item?.slotId === slotId);
       if (index >= 0) { queue.splice(index, 1); atomicJson(queuePath, queue); }
     };
+    const holdQueuedSlot = (payload, status, reason, decision = null, attempt = null) => {
+      const existingIndex = heldItems.findIndex(item => item?.slotId === payload.slotId && item.status !== "RELEASED");
+      const existing = existingIndex >= 0 ? heldItems[existingIndex] : null;
+      const contentFingerprint = decision?.contentFingerprint ?? attempt?.contentFingerprint ?? existing?.contentFingerprint ?? null;
+      if (existing && JSON.stringify(existing.payload) !== JSON.stringify(payload)) {
+        throw new Error("Held Facebook slot payload changed; manual reconciliation required");
+      }
+      if (existing?.contentFingerprint && contentFingerprint && existing.contentFingerprint !== contentFingerprint) {
+        throw new Error("Held Facebook slot has a conflicting content fingerprint; manual reconciliation required");
+      }
+      const heldRecord = {
+        ...(existing ?? {}), slotId: payload.slotId, destination: payload.destination,
+        status, heldAt: existing?.heldAt ?? isoNow(current), updatedAt: isoNow(current), reason,
+        contentFingerprint, policyDecision: decision ?? existing?.policyDecision ?? null,
+        attempt: attempt ?? existing?.attempt ?? null, payload
+      };
+      if (existingIndex >= 0) heldItems[existingIndex] = heldRecord;
+      else heldItems.push(heldRecord);
+      // Persist the complete original candidate before writing history or draining
+      // the active queue. A failed hold write must leave the queue item untouched.
+      atomicJson(heldItemsPath, heldItems);
+      history.push({
+        slotId: payload.slotId, destination: payload.destination, status,
+        checkedAt: isoNow(current), contentFingerprint, policyDecision: decision ?? null,
+        reason, heldItemPath: path.basename(heldItemsPath)
+      });
+      atomicJson(historyPath, history);
+      removeQueuedSlot(payload.slotId);
+    };
     for (const payload of candidates) {
-      if (history.some(item => item.slotId === payload.slotId) || ledger.some(item => item.slotId === payload.slotId)) {
+      const existingHold = heldItems.find(item => item?.slotId === payload.slotId && item.status !== "RELEASED");
+      if (existingHold) {
+        // The full payload is already durably held. A changed duplicate is an
+        // ambiguity, not permission to discard either version.
+        if (JSON.stringify(existingHold.payload) !== JSON.stringify(payload)) {
+          throw new Error("Active held Facebook slot conflicts with a different queued payload; manual reconciliation required");
+        }
+        // Drain only an exact stale duplicate; never call Meta again until release.
         removeQueuedSlot(payload.slotId);
+        skipped++;
+        continue;
+      }
+      const releasedHold = heldItems.some(item => item?.slotId === payload.slotId && item.status === "RELEASED");
+      const priorHistory = history.filter(item => item.slotId === payload.slotId &&
+        !(releasedHold && String(item.status ?? "").startsWith("HELD_"))).at(-1) ?? null;
+      const priorLedger = ledger.filter(item => item.slotId === payload.slotId).at(-1) ?? null;
+      if (priorHistory || priorLedger) {
+        const verified = ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(priorHistory?.status) ||
+          ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(priorLedger?.status);
+        if (verified) removeQueuedSlot(payload.slotId);
+        else holdQueuedSlot(payload, "HELD_PRIOR_OUTCOME_REQUIRES_RECONCILIATION",
+          "PRIOR_UNVERIFIED_HISTORY_OR_LEDGER_REQUIRES_MANUAL_REVIEW", priorHistory?.policyDecision ?? null, priorLedger ?? null);
         skipped++;
         continue;
       }
       const scheduled = Date.parse(payload.scheduledAt);
       // Run early enough to use Meta's scheduled-post API. A missed slot is skipped, never caught up.
       if (!Number.isFinite(scheduled) || current < scheduled - 45 * 60_000 || current > scheduled - 10 * 60_000) {
-        const record = { slotId: payload.slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_MISSED_SLOT", checkedAt: isoNow(current), reason: "SLOT_OUTSIDE_AUTOMATED_PREPARATION_WINDOW" };
-        history.push(record); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++; continue;
+        holdQueuedSlot(payload, "HELD_MISSED_SLOT", "SLOT_OUTSIDE_AUTOMATED_PREPARATION_WINDOW");
+        skipped++; continue;
       }
       let decision;
       try {
@@ -260,12 +314,12 @@ export async function runAutonomousFacebookPublisher({
         };
       }
       if (payload.mediaType != null && !["feed_post","reel"].includes(payload.mediaType)) {
-        const record = { slotId: payload.slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_BLOCKED", checkedAt: isoNow(current), reason: "UNSUPPORTED_MEDIA_TYPE" };
-        history.push(record); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++; continue;
+        holdQueuedSlot(payload, "HELD_UNSUPPORTED_MEDIA_TYPE", "UNSUPPORTED_MEDIA_TYPE", decision);
+        skipped++; continue;
       }
       if (!decision?.eligible) {
-        const record = { slotId: payload.slotId, destination: "nature_frontiers_facebook", status: "SKIPPED_BLOCKED", checkedAt: isoNow(current), contentFingerprint: decision?.contentFingerprint ?? null, policyDecision: decision, reason: decision?.reason ?? "POLICY_UNKNOWN" };
-        history.push(record); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++; continue;
+        holdQueuedSlot(payload, "HELD_POLICY_BLOCKED", decision?.reason ?? "POLICY_UNKNOWN", decision);
+        skipped++; continue;
       }
       // Validate the live destination before mutation. Connection failures become an
       // auditable automatic skip; no owner override or publish request is attempted.
@@ -287,15 +341,8 @@ export async function runAutonomousFacebookPublisher({
           apiVersion: config.apiVersion, fetchImpl
         });
       } catch {
-        const record = {
-          slotId: payload.slotId, destination: "nature_frontiers_facebook",
-          status: "SKIPPED_CONNECTION_BLOCKED", checkedAt: isoNow(current),
-          contentFingerprint: decision.contentFingerprint, policyDecision: decision,
-          reason: "META_PAGE_IDENTITY_OR_PERMISSION_CHECK_FAILED_NO_MUTATION"
-        };
-        history.push(record);
-        atomicJson(historyPath, history);
-        removeQueuedSlot(payload.slotId);
+        holdQueuedSlot(payload, "HELD_CONNECTION_BLOCKED",
+          "META_PAGE_IDENTITY_OR_PERMISSION_CHECK_FAILED_NO_MUTATION", decision);
         skipped++;
         continue;
       }
@@ -362,8 +409,14 @@ export async function runAutonomousFacebookPublisher({
         ledger[ledger.length - 1] = receipt;
         history.push({ ...receipt, payload: undefined });
         atomicJson(ledgerPath, ledger); atomicJson(historyPath, history);
-        removeQueuedSlot(payload.slotId);
-        if (success) published++; else skipped++;
+        if (success) {
+          removeQueuedSlot(payload.slotId);
+          published++;
+        } else {
+          holdQueuedSlot(payload, "HELD_UNCERTAIN_REMOTE_OUTCOME",
+            "REMOTE_OUTCOME_UNCERTAIN_RECONCILIATION_REQUIRED", decision, receipt);
+          skipped++;
+        }
       } catch (error) {
         const uncertain = error?.uncertain === true || error?.retryable === true || error?.name === "AbortError" || Boolean(remote?.remotePostId || remote?.remoteVideoId || ledger[ledger.length - 1]?.remoteVideoId);
         let reconciliation = null;
@@ -410,15 +463,21 @@ export async function runAutonomousFacebookPublisher({
         };
         ledger[ledger.length - 1] = failed;
         history.push({ ...failed, payload: undefined });
-        atomicJson(ledgerPath, ledger); atomicJson(historyPath, history); removeQueuedSlot(payload.slotId); skipped++;
+        atomicJson(ledgerPath, ledger); atomicJson(historyPath, history);
+        holdQueuedSlot(payload, uncertain ? "HELD_UNCERTAIN_REMOTE_OUTCOME" : "HELD_OPERATION_FAILED", failed.reason, decision, failed);
+        skipped++;
       }
     }
     const summary = {
       status: "COMPLETED", destination: "nature_frontiers_facebook", timezone: config.timezone,
       startedAt: runStartedAt, completedAt: new Date().toISOString(), date: today,
       published, skipped, queueCount: queue.length,
+      heldItemsCount: heldItems.filter(item => item.status !== "RELEASED").length,
+      heldItems: heldItems.filter(item => item.status !== "RELEASED").slice(-20).map(item => ({
+        slotId: item.slotId, status: item.status, reason: item.reason, heldAt: item.heldAt
+      })),
       lastRemoteReceipt: [...history].reverse().find(item => ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(item.status)) ?? null,
-      blockedPosts: history.filter(item => item.status === "SKIPPED_BLOCKED").slice(-20).map(item => ({
+      blockedPosts: history.filter(item => String(item.status ?? "").startsWith("HELD_") || item.status === "SKIPPED_BLOCKED").slice(-20).map(item => ({
         slotId: item.slotId ?? null, status: item.status, reason: item.reason ?? null,
         blockers: item.policyDecision?.blockers ?? [], checkedAt: item.checkedAt ?? null
       })),

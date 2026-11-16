@@ -205,6 +205,9 @@ test("unresolved mutation remains durably uncertain and is never retried", async
     assert.equal(ledger[0].status, "UNCERTAIN");
     assert.equal(ledger[0].retryAllowed, false);
     assert.equal(ledger[0].reconciliation.outcome, "UNRESOLVED");
+    const held = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-held-items.json"), "utf8"));
+    assert.equal(held[0].status, "HELD_UNCERTAIN_REMOTE_OUTCOME");
+    assert.deepEqual(held[0].payload, payload, "an unresolved remote outcome must retain the full original candidate");
   } finally { f.cleanup(); }
 });
 
@@ -343,7 +346,7 @@ test("publisher rejects state-ledger symlinks escaping the durable state directo
 });
 
 
-test("failed Meta permissions automatically skip and drain a slot without owner confirmation", async () => {
+test("failed Meta permissions hold the complete candidate before draining the active queue", async () => {
   const f = setup();
   try {
     Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
@@ -369,8 +372,132 @@ test("failed Meta permissions automatically skip and drain a slot without owner 
     assert.equal(publishCalls, 0);
     assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), []);
     const history = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-history.json"), "utf8"));
-    assert.equal(history[0].status, "SKIPPED_CONNECTION_BLOCKED");
+    assert.equal(history[0].status, "HELD_CONNECTION_BLOCKED");
     assert.equal(history[0].reason, "META_PAGE_IDENTITY_OR_PERMISSION_CHECK_FAILED_NO_MUTATION");
+    const held = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-held-items.json"), "utf8"));
+    assert.equal(held.length, 1);
+    assert.equal(held[0].status, "HELD_CONNECTION_BLOCKED");
+    assert.deepEqual(held[0].payload, payload, "the complete candidate must survive the automatic hold");
+    assert.equal(result.heldItemsCount, 1);
+  } finally { f.cleanup(); }
+});
+
+
+test("policy-blocked candidate is retained in the durable held-items ledger", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const payload = {
+      slotId: "nature-frontiers-policy-hold-2026-10-25-0800",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Candidate held pending rights review.", links: [],
+      media: [{ path: "media/candidate.mp4", sha256: "a".repeat(64) }],
+      claims: [{ text: "A source-backed claim" }], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    let permissionCalls = 0, publishCalls = 0;
+    const result = await runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+      now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      policyEvaluator: async () => ({ eligible: false, blockers: ["RIGHTS_NOT_VERIFIED"], warnings: [], contentFingerprint: "f".repeat(64), policyRuleVersion: f.config.complianceRuleSet, reason: "RIGHTS_NOT_VERIFIED" }),
+      verifyPermissions: async () => { permissionCalls++; throw new Error("policy-blocked content must not reach Meta"); },
+      publish: async () => { publishCalls++; throw new Error("policy-blocked content must never publish"); }
+    });
+    assert.equal(result.skipped, 1);
+    assert.equal(permissionCalls, 0);
+    assert.equal(publishCalls, 0);
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), []);
+    const held = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-held-items.json"), "utf8"));
+    assert.equal(held[0].status, "HELD_POLICY_BLOCKED");
+    assert.deepEqual(held[0].payload, payload);
+    assert.deepEqual(held[0].policyDecision.blockers, ["RIGHTS_NOT_VERIFIED"]);
+  } finally { f.cleanup(); }
+});
+
+test("operator-released held candidate can be retried after the connection is restored", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const payload = {
+      slotId: "nature-frontiers-release-held-2026-10-25-0800",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Retry only after the operator releases this exact held candidate.",
+      links: [], media: [], claims: [], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    const base = {
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+      now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      policyEvaluator: async () => ({ eligible: true, blockers: [], warnings: [], contentFingerprint: "9".repeat(64), policyRuleVersion: f.config.complianceRuleSet, reason: "ELIGIBLE" })
+    };
+    await runAutonomousFacebookPublisher({ ...base, verifyPermissions: async () => ({ permissionsVerified: false }) });
+    const heldPath = path.join(f.stateDir, "facebook-held-items.json");
+    const held = JSON.parse(fs.readFileSync(heldPath, "utf8"));
+    assert.equal(held[0].status, "HELD_CONNECTION_BLOCKED");
+    held[0].status = "RELEASED";
+    fs.writeFileSync(heldPath, JSON.stringify(held));
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    let publishCalls = 0;
+    const result = await runAutonomousFacebookPublisher({
+      ...base,
+      verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
+      verifyIdentity: async () => ({ verified: true }),
+      publish: async () => { publishCalls++; return { remotePostId: "123456789012345_released" }; },
+      readRemote: async () => ({ status: "SCHEDULED_VERIFIED", remoteUrl: "https://www.facebook.com/123456789012345_released", createdTime: "2026-10-25T05:30:00Z", scheduledPublishTime: Date.parse(payload.scheduledAt) / 1000 })
+    });
+    assert.equal(result.published, 1);
+    assert.equal(publishCalls, 1);
+    assert.equal(result.heldItemsCount, 0);
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), []);
+    assert.equal(JSON.parse(fs.readFileSync(heldPath, "utf8"))[0].status, "RELEASED");
+  } finally { f.cleanup(); }
+});
+
+test("failed held-ledger persistence leaves the original candidate in the active queue", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const payload = {
+      slotId: "nature-frontiers-hold-write-failure-2026-10-25-0800",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Preserve this exact candidate if hold persistence fails.",
+      links: [], media: [], claims: [], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    const originalOpen = fs.openSync;
+    try {
+      fs.openSync = function(file, ...args) {
+        if (typeof file === "string" && file.includes("facebook-held-items.json.")) {
+          const error = new Error("simulated held-ledger persistence failure");
+          error.code = "EIO";
+          throw error;
+        }
+        return originalOpen.call(this, file, ...args);
+      };
+      await assert.rejects(() => runAutonomousFacebookPublisher({
+        rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+        now: Date.parse("2026-10-25T05:30:00.000Z"),
+        env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+        policyEvaluator: async () => ({ eligible: true, blockers: [], warnings: [], contentFingerprint: "e".repeat(64), policyRuleVersion: f.config.complianceRuleSet, reason: "ELIGIBLE" }),
+        verifyPermissions: async () => ({ permissionsVerified: false }),
+        publish: async () => { throw new Error("must not publish"); }
+      }), /simulated held-ledger persistence failure/);
+    } finally {
+      fs.openSync = originalOpen;
+    }
+    assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), [payload],
+      "queue removal must happen only after the full payload is durably held");
+    assert.equal(fs.existsSync(path.join(f.stateDir, "facebook-history.json")), false);
+    assert.equal(fs.existsSync(path.join(f.stateDir, "facebook-held-items.json")), false);
+    assert.equal(fs.existsSync(path.join(f.stateDir, "facebook-publishing.lock")), false);
   } finally { f.cleanup(); }
 });
 
