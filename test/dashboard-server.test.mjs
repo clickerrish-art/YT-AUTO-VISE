@@ -1614,3 +1614,41 @@ test("dashboard readiness and state diagnostics enforce the non-waivable 72-hour
   assert.ok(source.includes("validateCadenceDecision(schedule.cadenceDecision, schedule.minimumPublicationSpacingHours)"));
   assert.equal(source.includes("schedule.ownerApprovedPolicy"), false);
 });
+
+test("dashboard refuses startup when the restore journal is a dangling symlink", async t => {
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dashboard-dangling-restore-"));
+  const journal = path.join(stateDir, ".restore-transaction.json");
+  fs.symlinkSync(path.join(stateDir, "missing-restore-transaction.json"), journal);
+  const port = await reservePort();
+  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+    env: {
+      ...process.env,
+      DASHBOARD_OPERATOR_TOKEN: "test-token-" + "d".repeat(40),
+      DASHBOARD_OPERATOR_ID: "test-owner",
+      DASHBOARD_STATE_DIR: stateDir,
+      PORT: String(port),
+      DASHBOARD_HOST: "127.0.0.1"
+    },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let logs = "";
+  child.stdout.on("data", chunk => { logs += chunk.toString(); });
+  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  t.after(() => {
+    if (child.exitCode === null) child.kill("SIGTERM");
+    fs.rmSync(stateDir, { recursive: true, force: true });
+  });
+
+  const result = await new Promise(resolve => {
+    const timer = setTimeout(() => resolve({ timedOut: true, code: null }), 3000);
+    child.once("exit", code => {
+      clearTimeout(timer);
+      resolve({ timedOut: false, code });
+    });
+  });
+  assert.equal(result.timedOut, false, "dashboard must not start when a dangling restore journal exists");
+  assert.equal(result.code, 2);
+  assert.match(logs, /interrupted state restore journal exists/i);
+  assert.equal(fs.existsSync(path.join(stateDir, "dashboard-state.json")), false,
+    "startup refusal must not initialize state while a restore journal path is unsafe");
+});
