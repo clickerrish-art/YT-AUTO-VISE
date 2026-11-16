@@ -2358,3 +2358,29 @@ test("dashboard fails closed when Cloudflare backup state is unavailable", async
   expect(await afterResponse.json()).toEqual(before);
 });
 
+test("dashboard visibly surfaces durable held Facebook candidates for operator review", async ({ page }) => {
+  await page.goto("/");
+  await page.evaluate(() => {
+    facebookAutonomousState = {
+      blockers: [],
+      heldItemsCount: 1,
+      heldItems: [{
+        slotId: "nature-frontiers-held-ui-test",
+        status: "HELD_CONNECTION_BLOCKED",
+        reason: "META_PAGE_IDENTITY_OR_PERMISSION_CHECK_FAILED_NO_MUTATION"
+      }],
+      autonomousMode: true,
+      publishingEnabled: false,
+      dryRun: true,
+      emergencyStop: true,
+      queueCount: 1,
+      publishedCount: 0,
+      skippedCount: 0,
+      uncertainAttempts: []
+    };
+    renderFacebookAutonomous();
+  });
+  await expect(page.locator("#facebookautonomousstatus")).toContainText("nature-frontiers-held-ui-test");
+  await expect(page.locator("#facebookautonomousstatus")).toContainText("HELD_CONNECTION_BLOCKED");
+  await expect(page.locator("#facebookautonomousdetails")).toContainText("Held: 1");
+});
