@@ -126,3 +126,21 @@ Metricool's Facebook best-time endpoint for 2026-11-16 through 2026-11-22 return
 The Metricool metrics catalogue was also checked. Useful currently listed fields include Facebook impressions/reach/comments/reactions/shares and Instagram Reel reach/interactions/saves/shares/views/average watch time/retention/skip rate. The catalogue marks Instagram Reel videoViews and videoViewsTotal as deprecated; any future analytics integration must use the non-deprecated fields (for example, views and interactions) instead.
 
 **Acceptance update:** Metricool brand and scheduled-post read checks remain PASS for the accessible brand; current analytics retrieval is PASS for the returned Facebook/Instagram data; the Instagram activity baseline remains NOT_ESTABLISHED; historical old-brand scheduled-record reconciliation remains BLOCKED_EXTERNAL. No Metricool records, account settings, publication dates, or delivery modes were changed.
+
+
+### Owner-confirmed Nature Frontiers Page identity — 2026-11-16 (read-only)
+
+The owner explicitly confirmed that the official Nature Frontiers Facebook Page ID is **1431329126735709**, and authorized identity verification only. No publishing or account changes are authorized by that confirmation.
+
+Read-only cross-checks:
+
+- Metricool brand `8094526` identifies itself as **Nature Frontiers SA** and returns Facebook Page ID `1431329126735709`.
+- Repository `config/facebook-publishing.json` at implementation commit `31cf7e81dcc4efa36515ba2965a02c44cc13d281` has `destinationPageId` set to `1431329126735709`, `publishingEnabled=false`, `dryRun=true`, and `emergencyStop=true`.
+- The connected vidIQ account inventory does **not** contain that Page ID. It instead exposes a different Page named **Nature Frontiers**, ID `1090224080838313`, with an active OAuth connection and publishing capability. Treat that as a different/unverified destination; do not use it for Nature Frontiers publishing or change it automatically.
+- The connected vidIQ account inventory contains no Instagram account.
+- The Meta read-only GitHub Actions identity check for the implementation branch failed before Page enumeration: `GET /me` returned HTTP 401, OAuth error 190, subcode 463 (expired user access-token session). Therefore the current Meta user identity, managed-Page list, Page task permissions, and direct Page-name match remain **NOT VERIFIED**.
+- Metricool brand `8094526` also reports YouTube channel ID `UCSlkuPfHH78oGC1o418HV4w`, which is the SonicVhibez channel. This is a cross-brand association risk: do not use the Nature Frontiers Metricool brand for YouTube publishing or change its connection without a separately authorized, verified migration.
+
+**Identity conclusion:** owner-designated ID, Metricool ID, and repository destination ID agree. This is a consistent configuration/owner-confirmation match, **not** a successful live Meta OAuth identity verification. Final Meta identity verification remains **BLOCKED_EXTERNAL** until a valid Meta user access token is restored and the read-only `/me`, `/me/accounts`, and `/{page-id}?fields=id,name` checks succeed. Meta's Page API documents these read requirements and token/permission constraints; see the official [Page Graph API reference](https://developers.facebook.com/docs/graph-api/reference/page/) and [User Accounts edge](https://developers.facebook.com/docs/graph-api/reference/user/accounts/).
+
+**Safety:** no posts were read or changed through a write endpoint; no post was created, scheduled, edited, paused, canceled, or published; no account connection, credential, permission, destination, or publishing flag was modified. The Facebook/Instagram publishing posture remains disabled, dry-run, and emergency-stopped.
