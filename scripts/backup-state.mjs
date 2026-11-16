@@ -102,10 +102,41 @@ export function readRegularFileNoFollow(filePath) {
   }
 }
 
+/**
+ * Resolve optional inputs without following dangling symlinks. existsSync()
+ * follows links and reports false for a broken symlink, which could silently
+ * omit a state or rights-evidence path from an otherwise successful backup.
+ * Walk with lstat so a missing component is optional but any symlink component
+ * remains a hard failure.
+ */
+function optionalPathStatNoSymlinks(filePath, label) {
+  const absolute = path.resolve(filePath);
+  const parsed = path.parse(absolute);
+  const parts = path.relative(parsed.root, absolute).split(path.sep).filter(Boolean);
+  let current = parsed.root;
+  for (let index = 0; index < parts.length; index++) {
+    current = path.join(current, parts[index]);
+    let stat;
+    try {
+      stat = fs.lstatSync(current);
+    } catch (error) {
+      if (error?.code === "ENOENT") return null;
+      throw error;
+    }
+    if (stat.isSymbolicLink()) {
+      throw new Error("Backup refuses symbolic links in " + label + " path");
+    }
+    if (index < parts.length - 1 && !stat.isDirectory()) {
+      throw new Error("Backup " + label + " path contains a non-directory component");
+    }
+    if (index === parts.length - 1) return stat;
+  }
+  return null;
+}
+
 function collectFiles(dir, relativePrefix, output, { maxBytes = 10 * 1024 * 1024 } = {}) {
-  if (!fs.existsSync(dir)) return;
-  assertNoSymlinkComponents(dir, "rights-evidence input");
-  const stat = fs.lstatSync(dir);
+  const stat = optionalPathStatNoSymlinks(dir, "rights-evidence input");
+  if (!stat) return;
   if (stat.isSymbolicLink()) throw new Error("Backup refuses symbolic-link directories: " + relativePrefix);
   if (!stat.isDirectory()) throw new Error("Backup path must be a directory: " + relativePrefix);
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -131,10 +162,9 @@ async function backupStateUnlocked({ rootDir = root, stateDir = process.env.DASH
   const logDir = path.resolve(base, uploadLogDir);
   const entries = [];
   const add = (absolute, target, maxBytes = 10 * 1024 * 1024) => {
-    if (!fs.existsSync(absolute)) return;
-    assertNoSymlinkComponents(absolute, "state/evidence input");
-    const stat = fs.lstatSync(absolute);
-    if (stat.isSymbolicLink() || !stat.isFile()) throw new Error("Backup accepts only regular files: " + absolute);
+    const stat = optionalPathStatNoSymlinks(absolute, "state/evidence input");
+    if (!stat) return;
+    if (!stat.isFile()) throw new Error("Backup accepts only regular files: " + absolute);
     if (stat.size > maxBytes) throw new Error("Backup file exceeds 10 MiB limit: " + path.basename(absolute));
     const bytes = readRegularFileNoFollow(absolute);
     entries.push({ target, sha256: sha256(bytes), bytes: bytes.length, contentBase64: bytes.toString("base64") });
