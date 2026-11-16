@@ -5,6 +5,7 @@ import { spawnSync } from "node:child_process";
 import { ROLLING_PUBLICATION_FORMATS, weeklyUtcCronGaps, validateCadenceDecision } from "../scripts/schedule-policy.mjs";
 const queue = JSON.parse(fs.readFileSync("content/queue.json", "utf8"));
 const plan = JSON.parse(fs.readFileSync("config/weekly-content-plan.json", "utf8"));
+const longFormQueue = JSON.parse(fs.readFileSync("content/long-form-queue.json", "utf8"));
 test("authoritative plan defines the rolling long-form, long-form, Short publication cycle", () => {
   assert.equal(plan.channel, "SonicVhibez");
   assert.equal(plan.timezone, "Africa/Johannesburg");
@@ -120,4 +121,15 @@ test("owner-defined cadence rejects three publications compressed into a 168-hou
   const result = validateCadenceDecision(decision, 72);
   assert.equal(result.valid, false);
   assert.ok(result.errors.some(error => error.includes("mathematically infeasible")));
+});
+
+test("long-form queue is a draft backlog and does not impose a weekly publication target", () => {
+  assert.equal(longFormQueue.status, "PLANNING_ONLY");
+  assert.equal(longFormQueue.publishingEnabled, false);
+  assert.equal("targetPerWeek" in longFormQueue, false);
+  assert.deepEqual(longFormQueue.draftPreparation.days, ["Tuesday"]);
+  assert.equal(longFormQueue.draftPreparation.status, "DRAFT_ONLY");
+  assert.equal(longFormQueue.draftPreparation.weeklyPublicationTarget, null);
+  assert.equal(longFormQueue.draftPreparation.timezone, plan.timezone);
+  assert.match(longFormQueue.draftPreparation.note, /Saturday is reserved for Short draft preparation/);
 });

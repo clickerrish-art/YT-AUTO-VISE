@@ -51,6 +51,15 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and actionab
   }
   assert.ok(report.blockers.some(blocker => /SonicVhibez public, private and unlisted history/.test(blocker.message)));
   assert.equal(report.blockers.some(blocker => /OAuth error invalid_client/.test(blocker.message) && blocker.evidence.path === "content/youtube-channel-verification-status.json"), false, "the verified read-only OAuth inventory must not remain incorrectly marked as invalid_client");
+  const invalidGrantBlocker = report.blockers.find(blocker => /invalid_grant/i.test(blocker.message));
+  if (invalidGrantBlocker) {
+    assert.equal(invalidGrantBlocker.controlOwner, "external_owner_or_human_reviewer");
+    assert.match(invalidGrantBlocker.resolution, /YOUTUBE_REFRESH_TOKEN/);
+    assert.match(invalidGrantBlocker.resolution, /youtube\.readonly/);
+    assert.match(invalidGrantBlocker.resolution, /youtube\.upload/);
+    assert.match(invalidGrantBlocker.resolution, /offline access/i);
+    assert.match(invalidGrantBlocker.resolution, /Never paste token values/i);
+  }
   assert.ok(report.limitations.some(item => /never uploads/.test(item)));
 });
 
