@@ -80,7 +80,22 @@ function validateConfig(config) {
 function localDate(now, timezone) {
   return new Intl.DateTimeFormat("en-CA", { timeZone: timezone, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(now));
 }
-function safeHistory(file) {
+const FACEBOOK_HISTORY_STATUSES = new Set([
+  "SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED", "UNCERTAIN", "FAILED_PREMUTATION_OR_REJECTED",
+  "HELD_PRIOR_OUTCOME_REQUIRES_RECONCILIATION", "HELD_MISSED_SLOT", "HELD_UNSUPPORTED_MEDIA_TYPE",
+  "HELD_POLICY_BLOCKED", "HELD_CONNECTION_BLOCKED", "HELD_UNCERTAIN_REMOTE_OUTCOME",
+  "HELD_OPERATION_FAILED", "SKIPPED_BLOCKED"
+]);
+const FACEBOOK_LEDGER_STATUSES = new Set([
+  "PUBLISHING", "UNCERTAIN", "SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED", "FAILED_PREMUTATION_OR_REJECTED"
+]);
+const FACEBOOK_HELD_STATUSES = new Set([
+  "HELD_PRIOR_OUTCOME_REQUIRES_RECONCILIATION", "HELD_MISSED_SLOT", "HELD_UNSUPPORTED_MEDIA_TYPE",
+  "HELD_POLICY_BLOCKED", "HELD_CONNECTION_BLOCKED", "HELD_UNCERTAIN_REMOTE_OUTCOME",
+  "HELD_OPERATION_FAILED", "RELEASED"
+]);
+
+function safeHistory(file, label, allowedStatuses) {
   let stat;
   try {
     stat = fs.lstatSync(file);
@@ -89,11 +104,13 @@ function safeHistory(file) {
     throw error;
   }
   if (stat.isSymbolicLink() || !stat.isFile()) {
-    throw new Error("Persistent Facebook history path must be a regular non-symlink file; publishing blocked");
+    throw new Error("Persistent Facebook " + label + " path must be a regular non-symlink file; publishing blocked");
   }
   const value = readJson(file);
-  if (!Array.isArray(value) || value.some(row => !row || typeof row !== "object" || typeof row.status !== "string")) {
-    throw new Error("Persistent Facebook history is malformed; publishing blocked");
+  if (!Array.isArray(value) || value.some(row =>
+    !row || typeof row !== "object" || Array.isArray(row) || !allowedStatuses.has(row.status)
+  )) {
+    throw new Error("Persistent Facebook " + label + " contains malformed or unknown status data; publishing blocked");
   }
   return value;
 }
@@ -177,9 +194,9 @@ export async function runAutonomousFacebookPublisher({
   }
   const release = acquireLock(lockPath);
   try {
-    let history = safeHistory(historyPath);
-    let ledger = safeHistory(ledgerPath);
-    let heldItems = safeHistory(heldItemsPath);
+    let history = safeHistory(historyPath, "history", FACEBOOK_HISTORY_STATUSES);
+    let ledger = safeHistory(ledgerPath, "attempt ledger", FACEBOOK_LEDGER_STATUSES);
+    let heldItems = safeHistory(heldItemsPath, "held-items ledger", FACEBOOK_HELD_STATUSES);
     const queue = readJson(queuePath);
     if (!Array.isArray(queue)) throw new Error("Autonomous Facebook queue must be a JSON array");
     const current = Number(now);
