@@ -3,7 +3,7 @@
   "channel": "SonicVhibez",
   "contentType": "short",
   "title": "California Spiny Lobster: The Reef's Night-Time Forager",
-  "description": "Meet the California spiny lobster (Panulirus interruptus), filmed in the rocky reef habitat of California's Channel Islands. NOAA footage is credited to NOAA’s Office of National Marine Sanctuaries. California spiny lobsters shelter in reef crevices by day and emerge after dark to forage. Source audio has been removed from the edit. Educational natural-history narration; behaviour described in narration is not necessarily shown in every shot.",
+  "description": "Meet the California spiny lobster (Panulirus interruptus), filmed in the rocky reef habitat of California's Channel Islands. NOAA footage is credited to NOAA Fisheries and NOAA’s Office of National Marine Sanctuaries. California spiny lobsters shelter in reef crevices by day and emerge after dark to forage. Source audio has been removed from the edit. Educational natural-history narration; behaviour described in narration is not necessarily shown in every shot.",
   "tags": [
     "California spiny lobster",
     "Panulirus interruptus",
@@ -29,16 +29,16 @@
   "paidProductPlacementDetails": {
     "hasPaidProductPlacement": false
   },
-  "rightsConfirmed": false,
-  "rightsEvidenceReviewed": false,
+  "rightsConfirmed": true,
+  "rightsEvidenceReviewed": true,
   "humanApproved": false,
   "complianceReviewed": false,
   "sourceAssetId": "NOAA-SPINY-LOBSTERS-CA-2026-11",
   "sourceAudioPolicy": "REMOVE_COMPLETELY",
-  "requiredAttribution": "NOAA’s Office of National Marine Sanctuaries",
+  "requiredAttribution": "NOAA Fisheries / NOAA's Office of National Marine Sanctuaries",
   "scheduleStatus": "UNSCHEDULED_NEXT_SHORT_CANDIDATE",
   "uploadAllowed": false,
-  "notes": "Editorial wildlife Short, not a Selar promotion. Source permission is conditional only; source-file hash is verified, selected footage ranges reviewed, and both silent and synthetic-narration review cuts exist. Full human playback, natural voice approval, rights evidence and human compliance approval remain open. Do not alter the existing schedule or rolling cycle. Neither review cut is the production master or media/next-short.mp4.",
+  "notes": "Editorial wildlife Short, not a Selar promotion. The exact NOAA B-roll source hash, public-domain reuse statement and package opening-slate credit have now been verified for this source only. Current review cuts remain non-production artifacts. Add NOAA Fisheries and NOAA's Office of National Marine Sanctuaries attribution to the final master. Full human playback, natural voice approval, caption timing, factual/editorial review and human compliance approval remain open. Do not alter the existing schedule or rolling cycle. Neither review cut is the production master or media/next-short.mp4.",
   "containsSyntheticMedia": false,
   "renderReview": {
     "status": "REVIEW_RENDER_ONLY_NOT_FOR_PUBLICATION",
@@ -78,18 +78,19 @@
       ]
     ],
     "persistentWarning": "REVIEW ONLY - NOT APPROVED FOR PUBLICATION",
-    "requiredAttribution": "Footage courtesy of NOAA’s Office of National Marine Sanctuaries",
+    "requiredAttribution": "NOAA Fisheries / NOAA's Office of National Marine Sanctuaries",
     "fullFileDecode": "PASS",
     "humanFullPlaybackReview": "NOT_COMPLETED",
-    "rightsConfirmed": false,
-    "rightsEvidenceReviewed": false,
+    "rightsConfirmed": true,
+    "rightsEvidenceReviewed": true,
     "humanApproved": false,
     "complianceReviewed": false,
     "uploadAllowed": false,
     "scheduleAllowed": false,
     "delivery": "Conversation review attachment; not committed as production media",
     "notes": "Silent visual-review cut only. It is distinct from the earlier eSpeak narration review render. It is not a production master, has no approved narration/captions, and must not be substituted for media/next-short.mp4.",
-    "productionApproved": false
+    "productionApproved": false,
+    "attributionStatus": "ADD_NOAA_FISHERIES_CREDIT_TO_FINAL_MASTER"
   },
   "narrationReview": {
     "status": "SYNTHETIC_REVIEW_RENDER_ONLY_NOT_FOR_PUBLICATION",
@@ -113,12 +114,12 @@
     "captionTimings": "Generated from exact eSpeak segment durations; provisional until human review",
     "persistentWarning": "REVIEW ONLY - NOT APPROVED FOR PUBLICATION",
     "aiNarrationDisclosure": "AI-GENERATED NARRATION - REVIEW ONLY",
-    "requiredAttribution": "Footage courtesy of NOAA’s Office of National Marine Sanctuaries",
+    "requiredAttribution": "NOAA Fisheries / NOAA's Office of National Marine Sanctuaries",
     "fullFileDecode": "PASS",
     "humanFullPlaybackReview": "NOT_COMPLETED",
     "humanVoiceApproval": false,
-    "rightsConfirmed": false,
-    "rightsEvidenceReviewed": false,
+    "rightsConfirmed": true,
+    "rightsEvidenceReviewed": true,
     "humanApproved": false,
     "complianceReviewed": false,
     "uploadAllowed": false,
@@ -127,6 +128,61 @@
     "notes": "Synthetic eSpeak narration is for editorial timing review only and must be replaced by owner-approved natural narration before publication. This render does not change any production approval flags.",
     "sizeBytes": 24286438,
     "audioSampleRateHz": 22050,
-    "audioChannels": 1
-  }
+    "audioChannels": 1,
+    "attributionStatus": "ADD_NOAA_FISHERIES_CREDIT_TO_FINAL_MASTER"
+  },
+  "rightsEvidence": {
+    "status": "PUBLIC_DOMAIN_SOURCE_VERIFIED",
+    "licenseType": "PUBLIC_DOMAIN_NOAA_BROLL",
+    "sourcePageUrl": "https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6313425635112/b-roll%3A-spiny-lobsters-in-california?autoStart=true",
+    "sourcePageTitle": "B-Roll: Spiny Lobsters in California",
+    "publisher": "NOAA Fisheries",
+    "licenseStatement": "NOAA Fisheries states that B-roll packages are in the public domain and may be reused with NOAA Fisheries credit.",
+    "sourceSha256": "1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb",
+    "sourceDurationSeconds": 380.81,
+    "sourceVideo": "H.264 1280x720 at 60000/1001 fps; AAC source audio 48 kHz stereo",
+    "sourceWorkflowRunId": 42594716333,
+    "sourceArtifactId": 13662524700,
+    "sourceArtifactZipSha256": "4e2f68ae62032f618d20cb5cebfdcec180ba6b2617a7559cd51f238029ae8985",
+    "sourceFileHashRecomputed": true,
+    "openingSlateInspected": true,
+    "openingSlateStatement": "All footage courtesy of the National Oceanic and Atmospheric Administration, a federal agency of the U.S. Department of Commerce.",
+    "openingSlateCredit": "NOAA's Office of National Marine Sanctuaries",
+    "siteWideCredit": "NOAA Fisheries",
+    "thirdPartyCreditCardObservedInOpeningSlate": false,
+    "endingFramesInspected": true,
+    "sourceAudioIncludedInOutput": false,
+    "sourceAudioRemoved": true,
+    "requiredAttributionForFinalMaster": "NOAA Fisheries / NOAA's Office of National Marine Sanctuaries",
+    "currentReviewOverlayAttribution": "NOAA's Office of National Marine Sanctuaries",
+    "attributionStatus": "ADD_NOAA_FISHERIES_CREDIT_TO_FINAL_MASTER",
+    "selectedSourceRangesSeconds": [
+      [
+        160,
+        175
+      ],
+      [
+        245,
+        257
+      ],
+      [
+        320,
+        335
+      ],
+      [
+        360,
+        373
+      ]
+    ],
+    "reviewedAt": "2026-11-16",
+    "reviewTimezone": "Africa/Johannesburg",
+    "scope": "This evidence applies only to the exact NOAA B-roll source hash listed above and the selected SHORT-004 ranges.",
+    "limitations": [
+      "The source licence is verified from the official NOAA Fisheries page and the exact source opening slate; this is not legal advice.",
+      "The current review renders show the package-specific Office credit. Add the site-wide NOAA Fisheries credit to the final production master.",
+      "Human full-playback, factual/editorial review, final attribution review and hash-bound owner approval remain separate release gates."
+    ]
+  },
+  "productionApproved": false,
+  "scheduleAllowed": false
 }
