@@ -107,3 +107,22 @@ Read-only Metricool post-level queries for current brand `8094526` returned:
 This shows some recent Facebook activity but no confirmed Instagram publishing activity or upcoming schedule in the current Metricool brand. It does not prove the status of records on inaccessible old brand `7545638`, and it does not establish that the Facebook content passed this repository's rights/editorial approval process.
 
 No analytics ingestion or optimization loop is currently accepted in the repository. Metricool data remains a read-only external snapshot; sparse/null/zero metrics must not be interpreted as verified account-wide performance or used to fabricate a content-performance baseline.
+
+
+### Fresh Metricool analytics cross-check — 2026-11-16 (read-only)
+
+A second read-only analytics query was run for 2026-10-01 through 2026-11-16 (Africa/Johannesburg). The provider returned three Facebook feed rows and zero Instagram Reel rows.
+
+| Facebook post ID | Returned type | Post date | Impressions | Reach | Comments | Reactions | Shares |
+|---|---|---|---:|---:|---:|---:|---:|
+| 1431329126735709_927095510487741 | photo | 2026-11-13 | 6 | 1 | 0 | 0 | 0 |
+| 1431329126735709_122095771209554605 | post | 2026-11-13 | 0 | 0 | 0 | 0 | 0 |
+| 1431329126735709_122095749285554605 | photo | 2026-11-13 | 4 | 1 | 0 | 0 | 0 |
+
+The welcome post's engagement field was null; the other two returned 0.0. These small/sparse values are recorded as returned and must not be extrapolated into an account-wide performance claim. The zero Instagram Reel rows are consistent with the separate zero-activity best-time response below, but neither is proof that the Instagram account has no activity outside the connected brand or queried window.
+
+Metricool's Facebook best-time endpoint for 2026-11-16 through 2026-11-22 returned its highest hourly values on Wednesday at 12:00 (15,834), Monday at 10:00 (15,247), and Tuesday at 10:00 (14,999). These are provider-relative values, not guaranteed reach or a sufficient basis to override editorial review, rights checks, or the owner's approved publishing cadence. The corresponding Instagram best-time response returned zero for every hour on every day; do not infer a useful Instagram posting time from it.
+
+The Metricool metrics catalogue was also checked. Useful currently listed fields include Facebook impressions/reach/comments/reactions/shares and Instagram Reel reach/interactions/saves/shares/views/average watch time/retention/skip rate. The catalogue marks Instagram Reel videoViews and videoViewsTotal as deprecated; any future analytics integration must use the non-deprecated fields (for example, views and interactions) instead.
+
+**Acceptance update:** Metricool brand and scheduled-post read checks remain PASS for the accessible brand; current analytics retrieval is PASS for the returned Facebook/Instagram data; the Instagram activity baseline remains NOT_ESTABLISHED; historical old-brand scheduled-record reconciliation remains BLOCKED_EXTERNAL. No Metricool records, account settings, publication dates, or delivery modes were changed.
