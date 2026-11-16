@@ -233,3 +233,20 @@ test("YouTube channel monetization is not evidence of Selar compensation", () =>
   const mismatchErrors = validateProductPromotionGate(fixture.product, fixture.metadata);
   assert.ok(mismatchErrors.some(error => /hasPaidPromotion must match/i.test(error)));
 });
+
+test("Long-form 001 uses the exact owner-approved direct-sales disclosure in its description, spoken CTA and on-screen direction", () => {
+  const config = JSON.parse(fs.readFileSync("config/products.json", "utf8"));
+  const product = config.products.find(item => item.id === "wildlife-creators-vault");
+  const disclosure = product.promotionGate.disclosure.text;
+  const script = fs.readFileSync("content/long-form-001-wildlife-story-script.md", "utf8");
+  const description = script.split("**Description draft**")[1]?.split("#Wildlife")[0] ?? "";
+  const cta = script.split("### 6:50–7:25 — Recap and call to action")[1]?.split("## Editorial and compliance checklist")[0] ?? "";
+  assert.equal(product.promotionGate.compensation.type, "DIRECT_SALES_REVENUE");
+  assert.ok(description.includes(disclosure));
+  assert.match(description, /ADVERTISEMENT/);
+  assert.ok(cta.includes(disclosure));
+  assert.match(cta, /Advertisement\./);
+  assert.match(cta, /display a clear ADVERTISEMENT identifier/i);
+  assert.match(cta, /readable, high-contrast on-screen text/i);
+  assert.doesNotMatch(script, /affiliate-style|affiliate link/i);
+});

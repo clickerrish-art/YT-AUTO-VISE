@@ -19,8 +19,12 @@ A strong wildlife video is more than a sequence of beautiful animal clips. In th
 
 This is a creator-education video. Always verify animal-behaviour claims with reliable sources and respect wildlife, local rules and the rights attached to every clip.
 
-If you want a structured wildlife-video planning resource, see the Complete YouTube Wildlife Creator's Vault: https://selar.com/0u19v8u99l  
-(Disclosure: this is a promotional/affiliate-style link; confirm the exact commercial relationship before publishing and enable YouTube's paid-promotion disclosure if applicable.)
+ADVERTISEMENT — Promotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF.
+
+This product is sold through my own Selar business; purchases generate revenue for my business.
+https://selar.com/0u19v8u99l
+
+Narration uses AI-generated text-to-speech. Any realistic AI-generated wildlife scenes or meaningful alterations of real events or places will be disclosed using YouTube's altered-content setting where required. Review the current sales page and terms before purchasing.
 
 #WildlifeFilmmaking #DocumentaryStorytelling #VideoEditing
 
@@ -111,22 +115,22 @@ Show a pre-publication checklist and a folder containing licence records, source
 **Voice-over:**  
 Here is the method: choose a question the footage can answer, arrange the best shots into a beginning, middle and end, edit for meaning, preserve useful natural sound, verify the narration, and make the packaging match the actual story. You do not need to make every video louder or more dramatic. You need to make each shot earn its place.
 
-If this helped, subscribe to SonicVhibez for practical creator workflows. And if you want a planning resource for wildlife video creation, the Wildlife Creator’s Vault link is in the description. Check the product details before purchasing. Thanks for watching.
+If this helped, subscribe to SonicVhibez for practical creator workflows. Advertisement. If you want a structured resource for planning wildlife videos, you can review the Complete YouTube Wildlife Creator's Vault – Premium Combo PDF using the link in the description. This product is sold through my own Selar business; purchases generate revenue for my business. Check the current sales page and terms before deciding whether it suits you. No product can guarantee views, growth or monetization. Thanks for watching SonicVhibez.
 
 **Visuals:**  
-Return to the three-part timeline, then a restrained end screen with subscribe prompt and one relevant video placeholder. Only display the product link if its details and promotional disclosures have been verified.
+Return to the three-part timeline. Display a clear ADVERTISEMENT identifier before the product CTA and show the exact approved direct-sales disclosure in readable, high-contrast on-screen text while it is spoken; hold long enough to read. Then show a restrained end screen with a subscribe prompt and one relevant video placeholder. Keep the product link beside the disclosure.
 
 ## Editorial and compliance checklist
 
 - [ ] Confirm all footage is licensed for the intended YouTube/commercial use; save licence evidence and source URLs.
 - [ ] Confirm that clips are not edited to imply an event or reaction that did not happen.
 - [ ] Research and cite any factual animal-behaviour claims in the production notes; remove unsupported claims.
-- [ ] Confirm the product link opens the intended product and verify whether a paid/affiliate relationship applies.
+- [ ] Confirm the approved Selar product URL is correct; include the exact owner-approved direct-sales disclosure in the description, spoken narration and readable on-screen text beside the CTA, with a clear ADVERTISEMENT identifier before the promotion.
 - [ ] Confirm the video is original, adds educational value, and is not repetitive or mass-produced.
 - [ ] Generate final narration; target 7–8 minutes, but do not stretch with filler to hit duration.
 - [ ] Create captions from the final narration and check timing.
 - [ ] Render and inspect the actual 16:9 MP4; verify audio, picture, title, thumbnail and end screen.
-- [ ] Apply relevant YouTube altered/synthetic-content and paid-promotion settings.
+- [ ] Enable YouTube's paid-promotion declaration and applicable altered/synthetic-media settings; retain evidence of the final settings.
 - [ ] Human review and approval required before upload or scheduling.
 
 ## Production status
