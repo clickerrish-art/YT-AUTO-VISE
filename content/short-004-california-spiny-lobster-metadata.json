@@ -88,7 +88,8 @@
     "uploadAllowed": false,
     "scheduleAllowed": false,
     "delivery": "Conversation review attachment; not committed as production media",
-    "notes": "Silent visual-review cut only. It is distinct from the earlier eSpeak narration review render. It is not a production master, has no approved narration/captions, and must not be substituted for media/next-short.mp4."
+    "notes": "Silent visual-review cut only. It is distinct from the earlier eSpeak narration review render. It is not a production master, has no approved narration/captions, and must not be substituted for media/next-short.mp4.",
+    "productionApproved": false
   },
   "narrationReview": {
     "status": "SYNTHETIC_REVIEW_RENDER_ONLY_NOT_FOR_PUBLICATION",
