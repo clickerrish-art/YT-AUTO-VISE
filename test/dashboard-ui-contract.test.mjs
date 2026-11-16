@@ -159,3 +159,53 @@ test("all 119 static dashboard controls map to a submitted form or an explicit s
     assert.ok(html.includes('$("' + id + '").value'), id + " must be populated from the verified review bundle");
   }
 });
+
+
+test("all six production-blocked dashboard forms bind their fields to guarded API routes with integration coverage", () => {
+  const contracts = [
+    {
+      form: "produceform", route: "/api/jobs/produce",
+      fields: ["producejob"],
+      integration: "test/dashboard-api-produce-fail-closed-recovery.integration.test.mjs"
+    },
+    {
+      form: "validationform", route: "/api/jobs/validate",
+      fields: ["validationjob", "captionsPath"],
+      integration: "test/dashboard-api-validation-idempotency.integration.test.mjs"
+    },
+    {
+      form: "rightsform", route: "/api/jobs/rights/verify",
+      fields: ["rightsjob", "assetsJson", "confirmRightsVerified", "rightsAssetId", "rightsAssetSource", "rightsAssetHolder", "rightsAssetPath", "rightsLicensePath", "rightsRestrictions", "rightsAttribution"],
+      integration: "test/dashboard-api-rights-verification.integration.test.mjs"
+    },
+    {
+      form: "reviewform", route: "/api/jobs/review",
+      fields: ["reviewjob", "reviewdecision", "artifactPath", "artifactSha", "metadataPath", "metadataSha", "rightsJson", "reviewReason"],
+      integration: "test/dashboard-api-review-approval.integration.test.mjs"
+    },
+    {
+      form: "reconcileform", route: "/api/uploads/reconcile",
+      fields: ["reconcileJobId", "reconcileVideoPath", "reconcileMetadataPath", "reconcileApprovalPath"],
+      integration: "test/upload-reconcile-fail-closed.integration.test.mjs"
+    },
+    {
+      form: "parentrelationshipform", route: "/api/jobs/parent-relationship",
+      fields: ["relationshipChildJob", "relationshipParentJob", "relationshipChildMediaPath", "relationshipParentMediaPath", "parentQualityEvidencePath", "relationshipSourceSegments", "confirmRelationshipReviewed", "relationshipReviewNotes"],
+      integration: "test/dashboard-api-parent-relationship.integration.test.mjs"
+    }
+  ];
+
+  for (const contract of contracts) {
+    assert.ok(inventory.forms.some(form => form.id === contract.form), contract.form + " must exist in the static form inventory");
+    assert.ok(html.includes('$("' + contract.form + '").onsubmit'), contract.form + " must have a submit handler");
+    assert.ok(html.includes(contract.route), contract.form + " must target its intended guarded API route");
+    for (const field of contract.fields) {
+      assert.ok(html.includes('id="' + field + '"'), contract.form + " must expose " + field);
+      assert.ok(html.includes('$("' + field + '")'), contract.form + " handler/helper must consume " + field);
+    }
+    const integrationPath = path.join(process.cwd(), contract.integration);
+    const integrationSource = fs.readFileSync(integrationPath, "utf8");
+    assert.ok(integrationSource.includes(contract.route),
+      contract.form + " must have an integration test for " + contract.route);
+  }
+});
