@@ -145,7 +145,7 @@ test("private uploader records uncertain remote outcomes and refuses blind retri
     fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-timeout-001", contentType: "long_form", artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), technicalValidationSha256: crypto.createHash("sha256").update(JSON.stringify({ passed: true, fixtureOnly: true })).digest("hex"), technicalValidationReceipt: { passed: true, fixtureOnly: true }, reviewer: "Test Operator", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }, { path: captionsPath, sha256: captionsSha }, { path: metadataPath, sha256: sha256File(metadataPath) }] }));
     const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES", YOUTUBE_EMERGENCY_STOP: "false", UPLOAD_LOG_DIR: path.join(dir, "logs") };
     const youtubeFactory = () => ({
-      channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez" } }] } }) },
+      channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez", customUrl: "@sonicvhibez" } }] } }) },
       videos: {
         insert: async request => { for await (const _chunk of request.media.body) {} const e = new Error("network timed out"); e.code = "ETIMEDOUT"; throw e; },
         list: async ({ id }) => {
@@ -195,7 +195,7 @@ test("private uploader streams the exact approved video bytes even if its path i
     let uploadedBytes = null;
     let uploadRequest = null;
     const youtubeFactory = () => ({
-      channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez" } }] } }) },
+      channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez", customUrl: "@sonicvhibez" } }] } }) },
       videos: {
         insert: async request => {
           uploadRequest = request;
@@ -253,7 +253,7 @@ test("private uploader records the remote ID and requires reconciliation if pinn
     const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES", YOUTUBE_EMERGENCY_STOP: "false", UPLOAD_LOG_DIR: path.join(dir, "logs") };
     let uploadedBytes = null, remoteVideoListCalls = 0;
     const youtubeFactory = () => ({
-      channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez" } }] } }) },
+      channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez", customUrl: "@sonicvhibez" } }] } }) },
       videos: {
         insert: async request => {
           fs.writeFileSync(videoPath, changedVideo);
@@ -307,7 +307,7 @@ test("private uploader preserves remote video ID and marks recovery if receipt p
     fs.writeFileSync(approvalPath, JSON.stringify({ decision: "APPROVE", jobId: "job-receipt-001", contentType: "long_form", artifactSha256: videoSha, metadataVersion: sha256File(metadataPath), technicalValidationSha256: crypto.createHash("sha256").update(JSON.stringify({ passed: true, fixtureOnly: true })).digest("hex"), technicalValidationReceipt: { passed: true, fixtureOnly: true }, reviewer: "Test Operator", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: videoPath, sha256: videoSha }, { path: thumbnailPath, sha256: thumbnailSha }, { path: captionsPath, sha256: captionsSha }, { path: metadataPath, sha256: sha256File(metadataPath) }] }));
     const env = { YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test", SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES", YOUTUBE_EMERGENCY_STOP: "false", UPLOAD_LOG_DIR: path.join(dir, "logs") };
     const youtubeFactory = () => ({
-      channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez" } }] } }) },
+      channels: { list: async () => ({ data: { items: [{ id: TEST_CHANNEL_ID, snippet: { title: "SonicVhibez", customUrl: "@sonicvhibez" } }] } }) },
       videos: {
         insert: async request => { for await (const _chunk of request.media.body) {} return { data: { id: "VIDEO_PRIVATE_TEST" } }; },
         list: async ({ id }) => {
