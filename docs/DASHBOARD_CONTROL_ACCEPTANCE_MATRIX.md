@@ -1,10 +1,10 @@
 ## Latest exact-SHA evidence refresh — 2026-11-16
 
 - Candidate source and test SHA: `6a527bd16f0e1323843c552f635d4ae48b47b9da`.
-- Dashboard browser workflow: run [43936987948](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43936987948), **33/33 passed** against the real local dashboard and backend.
+- Dashboard browser workflow: run [43939877654](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43939877654), **33/33 passed** against the real local dashboard and backend (candidate 0253e).
 - Additional field-mapping journey: the five production-blocked forms (render, validation, rights, review and upload reconciliation) serialize their fields to the expected API payloads, display the expected fail-closed blocker, keep submit actions disabled, and leave persisted jobs/audit/uploads unchanged. All inputs used by this journey are explicitly test fixtures, not production evidence or approval.
 - Candidate baseline comparison: run [43936987586](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43936987586), candidate Node suite **159/159 files passed**, Python **45/45 passed**, zero skipped; candidate `npm audit` reported **0 vulnerabilities**. Main was tested separately and remains unchanged.
-- Content-quality workflow: run [43936987482](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43936987482), **909/909 Node tests passed**, zero skipped; long-form draft word-count floor passed. This does not certify final runtime or production-media readiness.
+- Content-quality workflow: run [43938987786](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43938987786), **912/912 Node tests passed**, zero skipped (candidate 012eea, before the later cadence-approval correction). This does not certify final runtime or production-media readiness.
 
 **DASH-001 remains NOT_TESTED / NOT COMPLETE.** This refresh adds evidence for the five blocked-form field mappings and current browser suite, but it does not claim exhaustive per-control success, validation, authorization, persistence, refresh/restart, concurrency and accessibility acceptance across every dashboard control. Production-dependent forms remain fail-closed until genuine prerequisites exist.
 
@@ -17,11 +17,11 @@
 **Browser test SHA:** `4e4bcadaded2e65d0b78216fa79450790902b762`  
 **Current main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` (unchanged); PR #1 remains open, draft and unmerged.
 
-- Node suite: [run 43904736766](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904736766), **901/901 passed, zero failures/skips**.
+- Node suite: [run 43938987786](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43938987786), **912/912 passed, zero failures/skips** (candidate 012eea; later cadence changes have targeted 97/97 local coverage only).
 - Dedicated Instagram safety: [run 43904726184](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904726184), **66/66 passed, zero skips**.
 - Python regression: **45/45 passed** on 71eb; no Python source changed afterward — [run 43901917864](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901917864).
 - Lockfile/security: [run 43904859928](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904859928), lockfile verified and npm audit **0 vulnerabilities**.
-- Dashboard Chromium E2E: [run 43904859951](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904859951), **31/31 passed**.
+- Dashboard Chromium E2E: [run 43939877654](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43939877654), **33/33 passed**.
 - Deployment recovery: [run 43904859797](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904859797), **2/2 passed**.
 - Static dashboard inventory: **120 controls** (27 buttons, 50 inputs, 27 selects, 16 textareas), **17 forms**, 103 form-owned controls and 17 standalone controls; 52 literal routes and 48 protected API routes.
 - **DASH-CTRL-WIRING-001: PASS.** All 120 controls have unique stable acceptance IDs; all 103 form-owned controls map to the 17 form handlers; all 17 standalone controls have explicit action/value bindings.
@@ -36,7 +36,7 @@
 - Meta Graph API v27.0 configuration and adapter migration is PASS; live Meta identity remains BLOCKED by expired-token HTTP 401 / OAuth error 190 / subcode 463.
 - YouTube OAuth still returns `invalid_grant`; SCHED-001 remains NOT_TESTED.
 - Cloudflare staging read-only smoke passed on the previous exact candidate; backup/restore acceptance was skipped.
-- Branch comparison before this documentation refresh: **3,895 ahead / 4 behind / 300 changed files**; semantic integration decision remains `REQUIRES_REVIEW`.
+- Branch comparison at current head: **3,940 ahead / 4 behind**; GitHub's 300-file compare listing is capped. Semantic integration decision remains `REQUIRES_REVIEW`.
 
 ## Explicit standalone control bindings
 
@@ -66,7 +66,7 @@ The Facebook draft form also directly tests `fbpillar`, `fbtime` and `fbexternal
 
 The `rightsAssetYouTubeAllowed` checkbox is inside the rights asset builder and is **unchecked by default**. The JSON placeholder starts with `permittedUses: []`. The builder refuses missing fields, unchecked YouTube permission and duplicate asset IDs; only an explicit per-asset check adds `"YouTube"` to `permittedUses`. It resets after adding the asset, while the separate global `confirmRightsVerified` remains unchecked. The rights-verification submit action remains disabled until genuine prerequisites are available.
 
-The 31/31 browser run verifies the builder changes only local JSON, does not call the rights API and does not mutate job/audit state. The checkbox is an operator attestation, **not automated proof of rights**.
+The 33/33 browser run verifies the builder changes only local JSON, does not call the rights API and does not mutate job/audit state. The checkbox is an operator attestation, **not automated proof of rights**.
 
 ## Six production-blocked form/API contracts
 
@@ -1007,7 +1007,7 @@ No genuine rights-cleared final exports or human playback approval; YouTube OAut
 
 > **Latest verified code checkpoint — 25 October 2026:** Source/test candidate `dfad17c87c6473a81ac65baa67ac7f694e2c7b29` adds symlink- and traversal-safe readiness file checks and corrects the readiness workflow to compare retained line-delimited exit codes. Exact-candidate evidence: [automation/security — 276 Node tests, 0 failures, 8 Python tests, 0 reported dependency vulnerabilities](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702143), [browser E2E — 8 passed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702124), [content quality PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702109), [metadata PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702097), and [locked install PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222697980). [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702175) correctly records exit codes 2/2 and remains **BLOCKED** on genuine prerequisites; the [Facebook draft workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702166) was **SKIPPED**, not passed. These results apply only to this exact candidate until the final PR HEAD's checks complete.
 
-> **Cadence decision blocker — 25 October 2026:** The requested target of two long-form videos plus one Short per week is mathematically incompatible with a 72-hour minimum between consecutive publications: three cyclic gaps require at least 216 hours (9 days), versus 168 hours in a week. `config/weekly-content-plan.json` now records the requested target and `cadenceDecision.status=OWNER_DECISION_REQUIRED`; `npm run validate:schedule` reports the conflict, and production readiness blocks publication until a feasible mode is explicitly owner-approved. Draft-generation triggers are not publication times. Public/unattended publishing remains disabled.
+> **Cadence decision blocker — 25 October 2026:** The requested target of two long-form videos plus one Short per week is mathematically incompatible with a 72-hour minimum between consecutive publications: three cyclic gaps require at least 216 hours (9 days), versus 168 hours in a week. `config/weekly-content-plan.json` now records the requested target and `cadenceDecision.status=OWNER_APPROVAL_REQUIRED` (the former assistant-authored approval record was withdrawn); `npm run validate:schedule` reports the conflict, and production readiness blocks publication until a feasible mode is explicitly owner-approved. Draft-generation triggers are not publication times. Public/unattended publishing remains disabled.
 
 # Dashboard control/API acceptance matrix
 
@@ -1076,7 +1076,7 @@ Tested application/test SHA: `a912d3c724195fb1f3ca823d186cddf8b9b4f984`. Exact-S
 
 Change: [`3dbccd1`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/3dbccd19584cb9da81e646cb9c34a65184fcd47b) hardens script research input validation; [`a912d3c`](https://github.com/clickerrish-art/YT-AUTO-VISE/commit/a912d3c724195fb1f3ca823d186cddf8b9b4f984) adds regression tests proving malformed, insecure, placeholder and duplicate research records are rejected before provider access. Current PR HEAD after evidence-document updates is later than the tested SHA; those updates are documentation-only.
 
-Current Git snapshot before these documentation updates: PR HEAD `a912d3c724195fb1f3ca823d186cddf8b9b4f984`, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, 1,322 ahead / 2 behind, 141 changed files. PR remains open/draft/unmerged. Full branch-only history review remains incomplete. Verdict remains **CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED**: authoring is not lifecycle/dashboard integrated; renderer still does not compose a genuine multi-scene storyboard; no production media/rights/human playback evidence; YouTube/Meta identity and history are unverified; cadence decision and exhaustive recovery/deployment gates remain open. No external upload, post, campaign activation, merge, or destructive Git operation occurred.
+Current Git snapshot before these documentation updates: PR HEAD `57769fa219fe98b52f8b182f3849206ac3c8110c`, `main=69fdf35c90f980c142be3aaffa863304bc7eaa25`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, 3,940 ahead / 4 behind; GitHub's compare listing is capped at 300 files. PR remains open/draft/unmerged. Full branch-only history review remains incomplete. Verdict remains **CODE ACCEPTANCE BLOCKED / PRODUCTION BLOCKED**: authoring is not lifecycle/dashboard integrated; renderer still does not compose a genuine multi-scene storyboard; no production media/rights/human playback evidence; YouTube/Meta identity and history are unverified; cadence decision and exhaustive recovery/deployment gates remain open. No external upload, post, campaign activation, merge, or destructive Git operation occurred.
 
 ## Checkpoint supplement — 27 October 2026
 

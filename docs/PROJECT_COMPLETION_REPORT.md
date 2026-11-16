@@ -4,19 +4,21 @@
 
 ## Exact source/test evidence
 
-- Application source SHA: `00142ffca51d63fb4ad2fff571c12c021456a88a`.
-- Node test/inventory SHA: `016843734b74984481828393c0c61fd6e022d416`.
-- Browser test SHA: `4e4bcadaded2e65d0b78216fa79450790902b762`.
+- Current implementation branch HEAD: `57769fa219fe98b52f8b182f3849206ac3c8110c`.
+- Last full Node regression: **912/912 passed, zero failures/skips** on candidate `012eea3f7d2d24ff3cc70947071e74e48efed9bd` — [run 43938987786](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43938987786). This predates the cadence-approval withdrawal.
+- Latest dashboard browser E2E: **33/33 passed** on candidate `0253e68fc301a5337f9e6a126fcf62fd55fdca88` — [run 43939877654](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43939877654); dashboard runtime has not changed since.
+- Cadence/readiness corrections passed **97/97 targeted local tests** on recovered source bundle snapshot `8c6d9c9fb8bfacf3d63f4b75357cc5e0b41164d5` with the current configuration and test changes applied. This is targeted evidence, not a full suite on the current HEAD.
+- Python regression **45/45** and `npm audit` **0 vulnerabilities** passed on prior candidates; no Python, dependency or lockfile changes have been made since those checks.
 - `main`: `69fdf35c90f980c142be3aaffa863304bc7eaa25`, unchanged. PR #1 remains OPEN, DRAFT and UNMERGED.
-- Live comparison before this documentation refresh: **3,895 ahead / 4 behind / 300 changed files**. Human semantic review is still required.
+- Live comparison at the current head: **3,940 ahead / 4 behind**. GitHub's compare API returned 300 file entries (its cap), not a complete inventory. Human semantic review is still required.
 
 | Acceptance area | Exact result |
 |---|---|
-| Full Node regression | **901/901 passed**, 0 failures, 0 skips — [run 43904736766](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904736766) |
+| Full Node regression | **912/912 passed**, 0 failures, 0 skips — [run 43938987786](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43938987786) on candidate 012eea (before cadence correction) |
 | Dedicated Instagram safety | **66/66 passed**, zero skips — [run 43904726184](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904726184) |
 | Python regression | **45/45 passed** on 71eb; no Python source changed afterward — [run 43901917864](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901917864) |
 | Dependency/security | Lockfile verification succeeded; **npm audit 0 vulnerabilities** — [run 43904859928](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904859928) |
-| Dashboard browser E2E | **31/31 Chromium journeys passed** — [run 43904859951](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904859951) |
+| Dashboard browser E2E | **33/33 Chromium journeys passed** — [run 43939877654](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43939877654) on candidate 0253e |
 | Deployment recovery | **2/2 passed** — replacement, restart and persistent-state verification — [run 43904859797](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904859797) |
 
 ## Dashboard inventory and control wiring
@@ -64,13 +66,13 @@ The version/configuration work is accepted. **Live Meta identity is not accepted
 
 ## Current acceptance position
 
-- Requirements register: **13 PASS / 67 NOT_TESTED / 9 BLOCKED** (89 total).
+- Requirements register snapshot: **70 PASS / 9 NOT_TESTED / 10 BLOCKED** (89 total; not freshly reconciled across every requirement).
 - Dashboard: 120 controls, 17 forms; six dashboard sub-gates PASS, but **DASH-001 remains NOT_TESTED overall**.
 - API route matrix: 48 protected routes, 42 PASS / 6 BLOCKED; authentication-negative checks pass 48/48. **API-001 remains NOT_TESTED overall.**
 - **SCHED-001 remains NOT_TESTED:** complete SonicVhibez remote YouTube history and actual publication timestamps are unavailable; YouTube OAuth returns `invalid_grant`.
 - **STATE-001 remains NOT_TESTED:** authenticated read-only staging smoke passed, but the manual backup/restore acceptance was skipped.
 - **DEPLOY-001 remains NOT_TESTED:** local replacement/restart recovery passed 2/2; this is not full production deployment/monitoring/rollback acceptance.
-- **GIT-002 remains NOT_TESTED:** 3,895 ahead / 4 behind / 300 changed files still require human semantic integration review. Preserve PR #1 draft/unmerged.
+- **GIT-002 remains NOT_TESTED:** 3,940 ahead / 4 behind; GitHub's 300-file compare listing is capped. Full semantic integration review remains required. Preserve PR #1 draft/unmerged.
 
 ## External production blockers
 
@@ -262,7 +264,7 @@ No genuine rights-cleared final exports or human playback approval; YouTube OAut
 
 > **Latest verified code checkpoint — 25 October 2026:** Source/test candidate `dfad17c87c6473a81ac65baa67ac7f694e2c7b29` adds symlink- and traversal-safe readiness file checks and corrects the readiness workflow to compare retained line-delimited exit codes. Exact-candidate evidence: [automation/security — 276 Node tests, 0 failures, 8 Python tests, 0 reported dependency vulnerabilities](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702143), [browser E2E — 8 passed](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702124), [content quality PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702109), [metadata PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702097), and [locked install PASS](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222697980). [Production readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702175) correctly records exit codes 2/2 and remains **BLOCKED** on genuine prerequisites; the [Facebook draft workflow](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40222702166) was **SKIPPED**, not passed. These results apply only to this exact candidate until the final PR HEAD's checks complete.
 
-> **Cadence decision blocker — 25 October 2026:** The requested target of two long-form videos plus one Short per week is mathematically incompatible with a 72-hour minimum between consecutive publications: three cyclic gaps require at least 216 hours (9 days), versus 168 hours in a week. `config/weekly-content-plan.json` now records the requested target and `cadenceDecision.status=OWNER_DECISION_REQUIRED`; `npm run validate:schedule` reports the conflict, and production readiness blocks publication until a feasible mode is explicitly owner-approved. Draft-generation triggers are not publication times. Public/unattended publishing remains disabled.
+> **Cadence decision blocker — 25 October 2026:** The requested target of two long-form videos plus one Short per week is mathematically incompatible with a 72-hour minimum between consecutive publications: three cyclic gaps require at least 216 hours (9 days), versus 168 hours in a week. `config/weekly-content-plan.json` now records the requested target and `cadenceDecision.status=OWNER_APPROVAL_REQUIRED` (the former assistant-authored approval record was withdrawn); `npm run validate:schedule` reports the conflict, and production readiness blocks publication until a feasible mode is explicitly owner-approved. Draft-generation triggers are not publication times. Public/unattended publishing remains disabled.
 
 ## Authoritative current checkpoint — 25 October 2026
 
