@@ -417,7 +417,7 @@
       "severity": "critical",
       "owner": "maintainer",
       "requirement": "Prove cross-process idempotency, crash recovery, ambiguous-operation reconciliation, backup and restore.",
-      "status": "PASS",
+      "status": "NOT_TESTED",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40590357469",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40591305237",
@@ -2338,11 +2338,12 @@
     },
     "requirementStatusSnapshot": {
       "total": 89,
-      "PASS": 13,
-      "NOT_TESTED": 67,
+      "PASS": 70,
+      "NOT_TESTED": 10,
       "BLOCKED": 9,
-      "asOf": "2026-11-16T16:18:13.341Z",
-      "freshlyReconciled": true
+      "asOf": "2026-11-16",
+      "freshlyReconciled": false,
+      "countBasis": "Derived from requirements[] status fields; this is a register consistency correction, not proof that every item was reverified on the current branch head."
     },
     "engineeringGates": {
       "DASH_001": "NOT_TESTED — 29 browser journeys are not exhaustive control-by-control acceptance for 119 controls",
@@ -2457,8 +2458,8 @@
   "latestChangeTestReason": "Application code SHA 00142ffca51d63fb4ad2fff571c12c021456a88a; Node test SHA 016843734b74984481828393c0c61fd6e022d416; browser test SHA 4e4bcadaded2e65d0b78216fa79450790902b762. Node suite 901/901 passed, zero skips; dedicated Instagram safety 66/66 passed; browser E2E 31/31 passed; npm lockfile verification succeeded with npm audit 0 vulnerabilities; deployment recovery 2/2 passed. Dashboard inventory is 120 controls, 17 forms, 103 form-owned and 17 standalone. Rights asset builder now requires explicit per-asset YouTube licence attestation and never grants permission by default. Python 45/45 passed on 71eb; no Python sources changed afterward. DASH-001 remains NOT_TESTED overall; Meta and YouTube live credentials remain owner blockers.",
   "requirementCounts": {
     "total": 89,
-    "PASS": 13,
-    "NOT_TESTED": 67,
+    "PASS": 70,
+    "NOT_TESTED": 10,
     "BLOCKED": 9
   },
   "apiRouteCounts": {
@@ -2815,8 +2816,8 @@
   "currentHeadCounts": {
     "requirements": {
       "total": 89,
-      "PASS": 13,
-      "NOT_TESTED": 67,
+      "PASS": 70,
+      "NOT_TESTED": 10,
       "BLOCKED": 9
     },
     "apiRoutes": {
