@@ -338,7 +338,7 @@ test("publisher rejects state-ledger symlinks escaping the durable state directo
     await assert.rejects(() => runAutonomousFacebookPublisher({
       rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
       env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) }
-    }), /state file symlink escapes/i);
+    }), /state file path contains a symbolic link; publishing blocked/i);
   } finally {
     f.cleanup();
     fs.rmSync(outside, { recursive: true, force: true });
