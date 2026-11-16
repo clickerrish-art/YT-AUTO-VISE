@@ -707,6 +707,81 @@ test("Instagram status refresh is read-only and makes no provider request", asyn
   await expect(page.locator("#instagramRefresh")).toBeEnabled();
 });
 
+test("rights asset builder requires explicit per-asset YouTube permission and only edits local JSON", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  const beforeResponse = await request.get("/api/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+  let rightsVerifyRequests = 0;
+  page.on("request", outgoing => {
+    if (outgoing.method() === "POST" && new URL(outgoing.url()).pathname === "/api/jobs/rights/verify") {
+      rightsVerifyRequests++;
+    }
+  });
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+  await expect(page.locator("#rightsAssetYouTubeAllowed")).not.toBeChecked();
+  await expect(page.getByRole("button", { name: "Verify source rights and advance to human review" })).toBeDisabled();
+  await expect(page.locator("#confirmRightsVerified")).not.toBeChecked();
+
+  await page.locator("#rightsAssetId").fill("fixture-rights-asset");
+  await page.locator("#rightsAssetSource").fill("fixture source; not production evidence");
+  await page.locator("#rightsAssetHolder").fill("");
+  await page.locator("#rightsAssetPath").fill("media/fixture-rights-asset.mp4");
+  await page.locator("#rightsLicensePath").fill("rights/fixture-license.txt");
+  await page.locator("#rightsRestrictions").fill("Fixture only; no production permission asserted");
+  await page.locator("#rightsAttribution").fill("Fixture attribution only");
+  await page.locator("#addRightsAsset").click();
+  await expect(page.locator("#rightsAssetBuilderResult")).toContainText("Complete every asset field");
+  await expect(page.locator("#assetsJson")).toHaveValue("");
+
+  await page.locator("#rightsAssetHolder").fill("Fixture rights holder; not a real clearance");
+  await page.locator("#addRightsAsset").click();
+  await expect(page.locator("#rightsAssetBuilderResult")).toContainText("Explicitly confirm the retained licence permits YouTube use");
+  await expect(page.locator("#assetsJson")).toHaveValue("");
+
+  await page.locator("#rightsAssetYouTubeAllowed").check();
+  await page.locator("#addRightsAsset").click();
+  await expect(page.locator("#rightsAssetBuilderResult")).toContainText("Added fixture-rights-asset to the JSON array");
+  const assets = JSON.parse(await page.locator("#assetsJson").inputValue());
+  expect(assets).toHaveLength(1);
+  expect(assets[0]).toMatchObject({
+    assetId: "fixture-rights-asset",
+    source: "fixture source; not production evidence",
+    rightsHolder: "Fixture rights holder; not a real clearance",
+    assetPath: "media/fixture-rights-asset.mp4",
+    licenseEvidenceLocation: "rights/fixture-license.txt",
+    restrictions: "Fixture only; no production permission asserted",
+    attributionRequirements: "Fixture attribution only",
+    permittedUses: ["YouTube"]
+  });
+  await expect(page.locator("#rightsAssetYouTubeAllowed")).not.toBeChecked();
+  await expect(page.locator("#confirmRightsVerified")).not.toBeChecked();
+
+  await page.locator("#rightsAssetId").fill("fixture-rights-asset");
+  await page.locator("#rightsAssetSource").fill("fixture source; not production evidence");
+  await page.locator("#rightsAssetHolder").fill("Fixture rights holder; not a real clearance");
+  await page.locator("#rightsAssetPath").fill("media/fixture-rights-asset.mp4");
+  await page.locator("#rightsLicensePath").fill("rights/fixture-license.txt");
+  await page.locator("#rightsRestrictions").fill("Fixture only; no production permission asserted");
+  await page.locator("#rightsAttribution").fill("Fixture attribution only");
+  await page.locator("#rightsAssetYouTubeAllowed").check();
+  await page.locator("#addRightsAsset").click();
+  await expect(page.locator("#rightsAssetBuilderResult")).toContainText("already in the JSON array");
+  expect(JSON.parse(await page.locator("#assetsJson").inputValue())).toHaveLength(1);
+
+  expect(rightsVerifyRequests).toBe(0);
+  const afterResponse = await request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  const after = await afterResponse.json();
+  expect(after.jobs).toHaveLength(before.jobs.length);
+  expect(after.audit).toHaveLength(before.audit.length);
+  expect(after.publishingEnabled).toBe(false);
+});
+
 test("production controls disable safely when real media prerequisites are missing", async ({ page, request }) => {
   const headers = { "x-operator-token": operatorToken };
   await page.goto("/");
@@ -2122,7 +2197,7 @@ test("all dashboard controls have stable identities and accessible names", async
     return { controlCount: controls.length, formCount: forms.length, failures };
   });
 
-  expect(audit.controlCount).toBe(119);
+  expect(audit.controlCount).toBe(120);
   expect(audit.formCount).toBe(17);
   expect(audit.failures).toEqual([]);
 });

@@ -115,10 +115,10 @@ test("final media review exposes verified video, thumbnail, captions and evidenc
 
 
 test("all 119 static dashboard controls map to a submitted form or an explicit standalone binding", () => {
-  assert.equal(inventory.counts.controls, 119);
+  assert.equal(inventory.counts.controls, 120);
   assert.equal(inventory.counts.forms, 17);
-  assert.deepEqual(inventory.counts.controlsByTag, { button: 27, input: 49, select: 27, textarea: 16 });
-  assert.equal(new Set(inventory.controls.map(control => control.acceptanceId)).size, 119,
+  assert.deepEqual(inventory.counts.controlsByTag, { button: 27, input: 50, select: 27, textarea: 16 });
+  assert.equal(new Set(inventory.controls.map(control => control.acceptanceId)).size, 120,
     "every control must have a unique stable acceptance identity");
 
   const submitHandlers = new Set(
@@ -175,7 +175,7 @@ test("all six production-blocked dashboard forms bind their fields to guarded AP
     },
     {
       form: "rightsform", route: "/api/jobs/rights/verify",
-      fields: ["rightsjob", "assetsJson", "confirmRightsVerified", "rightsAssetId", "rightsAssetSource", "rightsAssetHolder", "rightsAssetPath", "rightsLicensePath", "rightsRestrictions", "rightsAttribution"],
+      fields: ["rightsjob", "assetsJson", "confirmRightsVerified", "rightsAssetId", "rightsAssetSource", "rightsAssetHolder", "rightsAssetPath", "rightsLicensePath", "rightsRestrictions", "rightsAttribution", "rightsAssetYouTubeAllowed"],
       integration: "test/dashboard-api-rights-verification.integration.test.mjs"
     },
     {
