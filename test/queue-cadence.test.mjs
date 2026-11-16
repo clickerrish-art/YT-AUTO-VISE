@@ -152,4 +152,5 @@ test("the rolling no-weekly-target alternative is a proposal, not owner approval
   const validation = validateCadenceDecision(plan.cadenceDecision, 72);
   assert.equal(validation.valid, false);
   assert.ok(validation.errors.includes("status must be OWNER_APPROVED"));
+  assert.ok(validation.errors.includes("explicit owner approval of a feasible cadence is required before publication"));
 });

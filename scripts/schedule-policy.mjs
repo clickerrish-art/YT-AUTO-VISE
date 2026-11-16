@@ -50,6 +50,9 @@ export function validateCadenceDecision(decision, minimumSpacingHours, now = Dat
   }
   if (decision.status !== "OWNER_APPROVED") errors.push("status must be OWNER_APPROVED");
   if (decision.ownerApproved !== true) errors.push("ownerApproved must be true");
+  if (decision.status !== "OWNER_APPROVED" || decision.ownerApproved !== true) {
+    errors.push("explicit owner approval of a feasible cadence is required before publication");
+  }
   if (!["ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET", "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"].includes(decision.approvedMode)) {
     errors.push("approvedMode must be a supported cadence mode");
   }

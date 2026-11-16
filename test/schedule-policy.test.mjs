@@ -586,6 +586,7 @@ test("owner cadence approval requires explicit, timezone-qualified, feasible evi
   }, 72);
   assert.equal(missingApproval.valid, false);
   assert.ok(missingApproval.errors.some(error => error.includes("ownerApproved must be true")));
+  assert.ok(missingApproval.errors.some(error => error.includes("explicit owner approval of a feasible cadence is required")));
   assert.ok(missingApproval.errors.some(error => error.includes("calendar-valid ISO timestamp")));
   assert.ok(missingApproval.errors.some(error => error.includes("approvalReference must be a non-empty")));
 
