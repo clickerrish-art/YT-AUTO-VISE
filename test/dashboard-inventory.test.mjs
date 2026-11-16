@@ -17,12 +17,12 @@ test("dashboard static inventory reports all declared controls, forms and litera
   assert.equal(inventory.counts.controls, inventory.controls.length);
   assert.equal(inventory.counts.forms, inventory.forms.length);
   assert.equal(inventory.counts.routes, inventory.routes.length);
-  assert.equal(inventory.counts.controls, 119);
+  assert.equal(inventory.counts.controls, 120);
   assert.equal(inventory.counts.forms, 17);
   assert.equal(inventory.counts.routes, 52);
   assert.deepEqual(inventory.counts.controlsByTag, {
     button: 27,
-    input: 49,
+    input: 50,
     select: 27,
     textarea: 16,
   });
@@ -163,7 +163,7 @@ test("dashboard forms and non-submit controls are wired to real API routes", () 
     wiredControls++;
   }
 
-  assert.equal(wiredControls, 99, "the number of static non-submit dashboard controls changed; review the acceptance fixture");
+  assert.equal(wiredControls, 100, "the number of static non-submit dashboard controls changed; review the acceptance fixture");
 });
 
 test("dashboard inventory associates controls with their owning form, including explicit external form references", () => {
