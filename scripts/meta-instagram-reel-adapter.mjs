@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { META_GRAPH_API_VERSION } from "./meta-graph-api-version.mjs";
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
@@ -99,7 +100,7 @@ function validateDraft(draft) {
 
 /** Verify granted publishing scopes and the exact Instagram professional account identity. */
 export async function verifyInstagramBusinessAccount({
-  instagramAccountId, expectedInstagramAccountId, facebookPageId, expectedFacebookPageId, accessToken, apiVersion = "v26.0", fetchImpl = fetch, timeoutMs = 10000
+  instagramAccountId, expectedInstagramAccountId, facebookPageId, expectedFacebookPageId, accessToken, apiVersion = META_GRAPH_API_VERSION, fetchImpl = fetch, timeoutMs = 10000
 }) {
   validate({ instagramAccountId, expectedInstagramAccountId, accessToken, apiVersion });
   let response;
@@ -151,7 +152,7 @@ export async function verifyInstagramBusinessAccount({
  * All mutations are single-attempt; uncertain outcomes must be reconciled, never retried blindly.
  */
 export async function publishInstagramReel({
-  draft, instagramAccountId, expectedInstagramAccountId, accessToken, apiVersion = "v26.0",
+  draft, instagramAccountId, expectedInstagramAccountId, accessToken, apiVersion = META_GRAPH_API_VERSION,
   accountVerified = false, approvalVerified = false, publishingEnabled = false, dryRun = true, emergencyStop = true,
   shareToFeed = true, resumableUploadSupported = false, onContainerId = null, onMediaId = null, fetchImpl = fetch,
   rootDir = process.cwd(), inspect = inspectVideo, wait = ms => new Promise(resolve => setTimeout(resolve, ms)), timeoutMs = 60000
@@ -263,7 +264,7 @@ export async function publishInstagramReel({
 }
 
 /** Reconcile a persisted Instagram media ID; never creates a container or republishes. */
-export async function reconcileInstagramReel({ mediaId, containerId = null, instagramAccountId, expectedInstagramAccountId, accessToken, apiVersion = "v26.0", fetchImpl = fetch, timeoutMs = 10000 }) {
+export async function reconcileInstagramReel({ mediaId, containerId = null, instagramAccountId, expectedInstagramAccountId, accessToken, apiVersion = META_GRAPH_API_VERSION, fetchImpl = fetch, timeoutMs = 10000 }) {
   validate({ instagramAccountId, expectedInstagramAccountId, accessToken, apiVersion });
   if (!ID.test(String(mediaId ?? ""))) return { outcome:"UNRESOLVED", reason:"INSTAGRAM_MEDIA_ID_MISSING_NO_RETRY", containerId };
   try {

@@ -4,6 +4,7 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
 import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
+import { META_GRAPH_API_VERSION } from "./meta-graph-api-version.mjs";
 
 const PAGE_ID_PATTERN = /^\d{5,30}$/;
 const API_VERSION_PATTERN = /^v\d+\.\d+$/;
@@ -42,10 +43,10 @@ async function parseResponse(response, token, { mutation = false } = {}) {
   }
   return data;
 }
-function validateConfig({ pageId, expectedPageId, accessToken, apiVersion = "v26.0" }) {
+function validateConfig({ pageId, expectedPageId, accessToken, apiVersion = META_GRAPH_API_VERSION }) {
   if (!PAGE_ID_PATTERN.test(String(pageId ?? "")) || pageId !== expectedPageId) throw new MetaPageApiError("Facebook Page ID is missing or does not match the owner-verified allowlist");
   if (typeof accessToken !== "string" || accessToken.length < 20) throw new MetaPageApiError("Meta Page access token is not configured securely");
-  if (!API_VERSION_PATTERN.test(apiVersion)) throw new MetaPageApiError("META_GRAPH_API_VERSION must look like v26.0");
+  if (!API_VERSION_PATTERN.test(apiVersion)) throw new MetaPageApiError("META_GRAPH_API_VERSION must be a valid version such as v27.0");
 }
 function probeImageFile(filePath) {
   const result = spawnSync("ffprobe", ["-v", "error", "-select_streams", "v:0", "-show_entries", "stream=codec_type,width,height", "-of", "json", filePath], { encoding: "utf8", timeout: 15000 });
@@ -65,14 +66,14 @@ function headers(accessToken, extra = {}) {
 
 /** Verify the user's granted app scopes and derive the exact managed Page's runtime access token. */
 export async function verifyMetaPagePermissions({
-  pageId, userAccessToken, apiVersion = "v26.0",
+  pageId, userAccessToken, apiVersion = META_GRAPH_API_VERSION,
   fetchImpl = fetch, timeoutMs = 10000
 }) {
   if (!PAGE_ID_PATTERN.test(String(pageId ?? ""))) throw new MetaPageApiError("A numeric owner-specified Page ID is required");
   if (typeof userAccessToken !== "string" || userAccessToken.length < 20) throw new MetaPageApiError("Meta user access token is not configured securely");
-  if (!API_VERSION_PATTERN.test(apiVersion)) throw new MetaPageApiError("META_GRAPH_API_VERSION must look like v26.0");
-  // Resolve the numeric user ID first. The v26.0 permissions reference documents
-  // the edge as /{user-id}/permissions; /me/permissions is rejected as an unknown field.
+  if (!API_VERSION_PATTERN.test(apiVersion)) throw new MetaPageApiError("META_GRAPH_API_VERSION must be a valid version such as v27.0");
+  // Resolve the numeric user ID first; the permissions edge is /{user-id}/permissions.
+  // /me/permissions is rejected as an unknown field.
   let userResponse;
   try {
     userResponse = await fetchImpl(endpoint(apiVersion, "me?fields=id"), {
@@ -143,7 +144,7 @@ export async function verifyMetaPagePermissions({
 }
 
 export async function verifyMetaPageIdentity({
-  pageId, expectedPageId, accessToken, apiVersion = "v26.0", expectedPageName = "",
+  pageId, expectedPageId, accessToken, apiVersion = META_GRAPH_API_VERSION, expectedPageName = "",
   fetchImpl = fetch, timeoutMs = 10000
 }) {
   validateConfig({ pageId, expectedPageId, accessToken, apiVersion });
@@ -163,7 +164,7 @@ export async function verifyMetaPageIdentity({
 
 /** Single-request Page post adapter. It deliberately performs no retries. */
 export async function publishMetaPagePost({
-  draft, pageId, expectedPageId, accessToken, apiVersion = "v26.0",
+  draft, pageId, expectedPageId, accessToken, apiVersion = META_GRAPH_API_VERSION,
   permissionsVerified = false, fetchImpl = fetch, rootDir = process.cwd(), now = Date.now(),
   timeoutMs = 30000, probeImage = probeImageFile
 }) {
@@ -226,7 +227,7 @@ export async function publishMetaPagePost({
 }
 
 export async function fetchMetaPagePost({
-  remotePostId, expectedPageId, accessToken, apiVersion = "v26.0",
+  remotePostId, expectedPageId, accessToken, apiVersion = META_GRAPH_API_VERSION,
   fetchImpl = fetch, timeoutMs = 10000
 }) {
   validateConfig({ pageId: expectedPageId, expectedPageId, accessToken, apiVersion });
@@ -261,7 +262,7 @@ export async function fetchMetaPagePost({
  * A zero-match result is deliberately not treated as proof of non-publication.
  */
 export async function reconcileMetaPagePost({
-  pageId, expectedPageId, accessToken, apiVersion = "v26.0",
+  pageId, expectedPageId, accessToken, apiVersion = META_GRAPH_API_VERSION,
   caption, scheduledAt, attemptStartedAt, remotePostId = null,
   fetchImpl = fetch, timeoutMs = 10000, maxPages = 5
 }) {

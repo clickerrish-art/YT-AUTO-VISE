@@ -5,7 +5,7 @@
   "destinationPageName": "Nature Frontiers SA",
   "publishingEnabled": false,
   "dryRun": true,
-  "apiVersion": "v26.0",
+  "apiVersion": "v27.0",
   "timezone": "Africa/Johannesburg",
   "dailyTarget": 3,
   "defaultLocalTime": "08:00",

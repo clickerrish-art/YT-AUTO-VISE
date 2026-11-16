@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
+import { META_GRAPH_API_VERSION } from "./meta-graph-api-version.mjs";
 
 const PAGE_ID = /^\d{5,30}$/;
 const API_VERSION = /^v\d+\.\d+$/;
@@ -86,7 +87,7 @@ function validateUploadUrl(value, expectedVideoId) {
  * Never retries a mutation: uncertain outcomes retain the remote video ID for reconciliation.
  */
 export async function createMetaPageReel({
-  draft, pageId, expectedPageId, accessToken, apiVersion = "v26.0",
+  draft, pageId, expectedPageId, accessToken, apiVersion = META_GRAPH_API_VERSION,
   permissionsVerified = false, approvalVerified = false,
   publishingEnabled = false, dryRun = true, emergencyStop = true,
   videoState = "DRAFT", scheduledPublishAt = null, now = () => Date.now(), onRemoteVideoId = null, fetchImpl = fetch, rootDir = process.cwd(),
@@ -197,7 +198,7 @@ export async function createMetaPageReel({
 }
 
 /** Read the remote processing/publication phases; a missing response is never treated as failure-to-publish. */
-export async function fetchMetaPageReelStatus({ remoteVideoId, expectedPageId, accessToken, apiVersion = "v26.0", fetchImpl = fetch, timeoutMs = 10000 }) {
+export async function fetchMetaPageReelStatus({ remoteVideoId, expectedPageId, accessToken, apiVersion = META_GRAPH_API_VERSION, fetchImpl = fetch, timeoutMs = 10000 }) {
   validate({ pageId:expectedPageId, expectedPageId, accessToken, apiVersion });
   if (!/^\d{5,30}$/.test(String(remoteVideoId ?? ""))) throw new MetaPageReelError("A numeric remote Reel video ID is required");
   let response;
@@ -218,7 +219,7 @@ export async function fetchMetaPageReelStatus({ remoteVideoId, expectedPageId, a
  * state and timestamp is accepted as a confirmed receipt.
  */
 export async function reconcileMetaPageReel({
-  remoteVideoId, expectedPageId, accessToken, apiVersion = "v26.0",
+  remoteVideoId, expectedPageId, accessToken, apiVersion = META_GRAPH_API_VERSION,
   scheduledAt = null, fetchImpl = fetch, timeoutMs = 10000
 }) {
   try {

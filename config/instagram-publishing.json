@@ -7,7 +7,7 @@
   "dryRun": true,
   "emergencyStop": true,
   "timezone": "Africa/Johannesburg",
-  "apiVersion": "v26.0",
+  "apiVersion": "v27.0",
   "facebookLoginForBusinessEnabled": false,
   "requireSignedHumanApproval": true,
   "requireRemoteReadback": true,

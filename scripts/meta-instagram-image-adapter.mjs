@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { META_GRAPH_API_VERSION } from "./meta-graph-api-version.mjs";
 import { spawnSync } from "node:child_process";
 
 const ID=/^\d{5,30}$/;
@@ -59,7 +60,7 @@ function inspectJpeg(bytes) {
 
 /** Publish one approved Instagram feed image using a public, hash-pinned JPEG URL. */
 export async function publishInstagramImagePost({
- draft,instagramAccountId,expectedInstagramAccountId,accessToken,apiVersion="v26.0",
+ draft,instagramAccountId,expectedInstagramAccountId,accessToken,apiVersion=META_GRAPH_API_VERSION,
  accountVerified=false,approvalVerified=false,publishingEnabled=false,dryRun=true,emergencyStop=true,
  allowedImageDomains=[],onContainerId=null,onMediaId=null,fetchImpl=fetch,inspect=inspectJpeg,wait=ms=>new Promise(resolve=>setTimeout(resolve,ms)),timeoutMs=60000
 }) {
@@ -136,7 +137,7 @@ export async function publishInstagramImagePost({
 }
 
 /** Reconcile a persisted Instagram feed media ID without creating or publishing a container. */
-export async function reconcileInstagramImagePost({mediaId,containerId=null,instagramAccountId,expectedInstagramAccountId,accessToken,apiVersion="v26.0",fetchImpl=fetch,timeoutMs=10000}) {
+export async function reconcileInstagramImagePost({mediaId,containerId=null,instagramAccountId,expectedInstagramAccountId,accessToken,apiVersion=META_GRAPH_API_VERSION,fetchImpl=fetch,timeoutMs=10000}) {
  validate({instagramAccountId,expectedInstagramAccountId,accessToken,apiVersion});
  if(!ID.test(String(mediaId??""))) return {outcome:"UNRESOLVED",reason:"INSTAGRAM_MEDIA_ID_MISSING_NO_RETRY",containerId};
  try{
