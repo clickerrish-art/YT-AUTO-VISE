@@ -612,3 +612,32 @@ test("publisher fsyncs the state directory after each atomic ledger rename", asy
     f.cleanup();
   }
 });
+
+test("publisher rejects dangling state-ledger symlinks instead of treating them as empty history", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    fs.symlinkSync(path.join(f.stateDir, "missing-history.json"), path.join(f.stateDir, "facebook-history.json"));
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) }
+    }), /state file path contains a symbolic link/i);
+  } finally { f.cleanup(); }
+});
+
+test("publisher rejects internal state-ledger symlink aliases that could merge history and attempts", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(f.stateDir, { recursive: true });
+    fs.writeFileSync(path.join(f.stateDir, "facebook-history.json"), "[]\n");
+    fs.symlinkSync(path.join(f.stateDir, "facebook-history.json"), path.join(f.stateDir, "facebook-attempt-ledger.json"));
+    await assert.rejects(() => runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) }
+    }), /state file path contains a symbolic link/i);
+  } finally { f.cleanup(); }
+});
