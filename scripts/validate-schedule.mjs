@@ -24,7 +24,8 @@ const requestedCadence = plan.requestedWeeklyCadence;
 if (requestedCadence?.longFormPerWeek !== 2 || requestedCadence?.shortsPerWeek !== 1 || requestedCadence?.totalPublicationsPerWeek !== 3 || requestedCadence?.status !== "CONFLICTS_WITH_72_HOUR_MINIMUM") errors.push("requestedWeeklyCadence must explicitly record the requested 2 long-form + 1 Short weekly target and its 72-hour conflict");
 const cadenceDecision = plan.cadenceDecision;
 const supportedCadenceModes = ["ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET", "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"];
-if (!cadenceDecision || !["OWNER_DECISION_REQUIRED", "OWNER_APPROVED"].includes(cadenceDecision.status) || typeof cadenceDecision.ownerApproved !== "boolean") errors.push("cadenceDecision must explicitly record owner decision status");
+if (!cadenceDecision || !["OWNER_APPROVAL_REQUIRED", "OWNER_APPROVED"].includes(cadenceDecision.status) || typeof cadenceDecision.ownerApproved !== "boolean") errors.push("cadenceDecision must explicitly record owner decision status");
+if (cadenceDecision?.status === "OWNER_APPROVAL_REQUIRED" && (cadenceDecision.ownerApproved !== false || cadenceDecision.approvedMode !== null || cadenceDecision.approvedAt !== null || cadenceDecision.approvalReference !== null)) errors.push("unapproved cadence decision must not contain owner approval fields");
 if (cadenceDecision?.status === "OWNER_APPROVED" && cadenceDecision.ownerApproved !== true) errors.push("cadenceDecision OWNER_APPROVED status requires ownerApproved=true");
 if (cadenceDecision?.ownerApproved === true || cadenceDecision?.status === "OWNER_APPROVED") {
  if (cadenceDecision.status !== "OWNER_APPROVED" || cadenceDecision.ownerApproved !== true) errors.push("approved cadence decision must have matching OWNER_APPROVED status and ownerApproved=true");
