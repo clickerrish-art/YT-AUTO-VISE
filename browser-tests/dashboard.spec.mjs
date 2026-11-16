@@ -1065,6 +1065,7 @@ test("authoring and approval forms reject malformed evidence without false succe
   await page.locator("#rightsLicensePath").fill("evidence/license.txt");
   await page.locator("#rightsRestrictions").fill("Documented restrictions");
   await page.locator("#rightsAttribution").fill("Required attribution");
+  await page.locator("#rightsAssetYouTubeAllowed").check();
   await page.locator("#addRightsAsset").click();
   const builtAsset = JSON.parse(await page.locator("#assetsJson").inputValue());
   expect(builtAsset).toHaveLength(1);
