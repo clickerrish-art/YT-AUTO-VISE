@@ -86,7 +86,9 @@ test("readiness JSON distinguishes external reconciliation from code-controlled 
     /secret values are never included/.test(blocker.evidence.observed)
   ));
   const cadence = report.blockers.find(blocker => /CADENCE DECISION REQUIRED/.test(blocker.message));
-  assert.equal(cadence, undefined, "the persisted owner-approved rolling cadence must not remain a readiness blocker");
+  assert.ok(cadence, "cadence must remain blocked until explicit owner approval");
+  assert.equal(cadence.controlOwner, "external_owner_or_human_reviewer");
+  assert.match(cadence.resolution, /Choose a feasible owner-approved cadence/);
   assert.equal(report.blockers.some(blocker => /Metadata needs the verified SonicVhibez YouTube channel ID/.test(blocker.message)), false, "metadata already contains the authenticated SonicVhibez channel ID");
   const metadata = JSON.parse(fs.readFileSync("content/next-short.json", "utf8"));
   assert.equal(metadata.channelId, "UCSlkuPfHH78oGC1o418HV4w");
@@ -140,10 +142,13 @@ test("readiness never accepts an owner-approved cadence that weakens the 72-hour
   assert.equal(schedule.minimumPublicationSpacingHours, 72);
   assert.equal(schedule.publicationCycle.minimumHoursBetweenConsecutivePublications, 72);
   assert.equal(schedule.publicationCycle.minimumCycleHours, 216);
-  assert.equal(schedule.cadenceDecision.status, "OWNER_APPROVED");
-  assert.equal(schedule.cadenceDecision.ownerApproved, true);
-  assert.equal(schedule.cadenceDecision.approvedMode, "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET");
-  assert.doesNotMatch(schedule.cadenceDecision.approvedMode, /WEEKLY_TARGET_WITH_SHORTER_SPACING/);
+  assert.equal(schedule.cadenceDecision.status, "OWNER_APPROVAL_REQUIRED");
+  assert.equal(schedule.cadenceDecision.ownerApproved, false);
+  assert.equal(schedule.cadenceDecision.approvedMode, null);
+  assert.equal(schedule.cadenceDecision.proposedMode, "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET");
+  assert.equal(schedule.cadenceDecision.approvedAt, null);
+  assert.equal(schedule.cadenceDecision.approvalReference, null);
+  assert.doesNotMatch(schedule.cadenceDecision.proposedMode, /WEEKLY_TARGET_WITH_SHORTER_SPACING/);
 });
 
 
