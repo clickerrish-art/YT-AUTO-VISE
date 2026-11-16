@@ -2417,10 +2417,17 @@ test("blocked production forms serialize every field and surface blockers withou
   }
 
   const addOption = async (id, value) => {
-    await page.locator("#" + id).evaluate((element, optionValue) => {
+    const control = page.locator("#" + id);
+    await control.evaluate((element, optionValue) => {
+      // These selectors are intentionally unavailable when no genuine eligible
+      // production job exists. Enable and seed them only inside this isolated
+      // browser fixture so the UI serialization contract can still be tested.
+      element.disabled = false;
       element.add(new Option("browser fixture — not production evidence", optionValue));
+      element.value = optionValue;
+      element.dispatchEvent(new Event("change", { bubbles: true }));
     }, value);
-    await page.locator("#" + id).selectOption(value);
+    await expect(control).toHaveValue(value);
   };
   const submit = async id => page.locator("#" + id).evaluate(form =>
     form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }))
