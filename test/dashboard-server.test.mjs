@@ -249,7 +249,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(Object.hasOwn(body, "stateFile"), false, "authenticated API responses must not disclose the local state-file path");
   assert.equal(logs.includes(stateDir), false, "startup logs must not disclose the local state directory");
   assert.ok(body.blockers.some(item => /complete SonicVhibez public\/private\/unlisted history is reconciled/i.test(item)), "dashboard state must expose the live history reconciliation blocker");
-  assert.ok(!body.blockers.some(item => /CADENCE DECISION REQUIRED/.test(item)), "the recorded owner approval must clear only the cadence-decision blocker");
+  assert.ok(body.blockers.some(item => /CADENCE DECISION REQUIRED/.test(item)), "dashboard state must retain the cadence blocker until the owner explicitly approves a feasible cadence");
   fs.writeFileSync(path.join(stateDir, "facebook-held-items.json"), JSON.stringify([{
     slotId: "nature-frontiers-held-test-slot", status: "HELD_CONNECTION_BLOCKED",
     reason: "META_PAGE_IDENTITY_OR_PERMISSION_CHECK_FAILED_NO_MUTATION", heldAt: "2026-11-16T10:00:00.000Z"
@@ -287,7 +287,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.ok(Array.isArray(readiness.blockers));
   assert.ok(readiness.blockers.some(item => /long-form(?: render manifest|-render-manifest)/i.test(item)));
   assert.ok(readiness.blockers.some(item => /SONICVHIBEZ_CHANNEL_ID|channel ID/i.test(item)));
-  assert.ok(!readiness.blockers.some(item => /CADENCE DECISION REQUIRED/.test(item)), "owner-approved cadence must no longer be a production blocker");
+  assert.ok(readiness.blockers.some(item => /CADENCE DECISION REQUIRED/.test(item)), "production readiness must retain the cadence blocker until explicit owner approval");
   assert.ok(readiness.blockers.some(item => /complete SonicVhibez public, private and unlisted history/i.test(item)), "unreconciled live history must remain a blocker");
   const operationalReadinessResponse = await fetchDashboard(base + "/operational-readyz");
   const operationalReadiness = await operationalReadinessResponse.json();
