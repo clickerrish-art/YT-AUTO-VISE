@@ -81,7 +81,16 @@ function localDate(now, timezone) {
   return new Intl.DateTimeFormat("en-CA", { timeZone: timezone, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(now));
 }
 function safeHistory(file) {
-  if (!fs.existsSync(file)) return [];
+  let stat;
+  try {
+    stat = fs.lstatSync(file);
+  } catch (error) {
+    if (error?.code === "ENOENT") return [];
+    throw error;
+  }
+  if (stat.isSymbolicLink() || !stat.isFile()) {
+    throw new Error("Persistent Facebook history path must be a regular non-symlink file; publishing blocked");
+  }
   const value = readJson(file);
   if (!Array.isArray(value) || value.some(row => !row || typeof row !== "object" || typeof row.status !== "string")) {
     throw new Error("Persistent Facebook history is malformed; publishing blocked");
@@ -136,12 +145,27 @@ export async function runAutonomousFacebookPublisher({
         name.includes("\\") || name.split("/").some(part => !part || part === "." || part === "..")) {
       throw new Error("Facebook state filenames must be safe relative paths within FACEBOOK_STATE_DIR");
     }
-    const base = path.resolve(stateDir);
+    const base = fs.realpathSync(path.resolve(stateDir));
     const resolved = path.resolve(base, name);
     if (resolved !== base && !resolved.startsWith(base + path.sep)) throw new Error("Facebook state file escapes FACEBOOK_STATE_DIR");
-    const canonicalBase = fs.realpathSync(base);
-    const checked = fs.existsSync(resolved) ? fs.realpathSync(resolved) : fs.realpathSync(path.dirname(resolved));
-    if (checked !== canonicalBase && !checked.startsWith(canonicalBase + path.sep)) throw new Error("Facebook state file symlink escapes FACEBOOK_STATE_DIR");
+    const parts = path.relative(base, resolved).split(path.sep).filter(Boolean);
+    let current = base;
+    for (let index = 0; index < parts.length; index++) {
+      current = path.join(current, parts[index]);
+      let stat;
+      try {
+        stat = fs.lstatSync(current);
+      } catch (error) {
+        if (error?.code === "ENOENT") break;
+        throw error;
+      }
+      if (stat.isSymbolicLink()) {
+        throw new Error("Facebook state file path contains a symbolic link; publishing blocked");
+      }
+      if (index < parts.length - 1 && !stat.isDirectory()) {
+        throw new Error("Facebook state file path contains a non-directory component");
+      }
+    }
     return resolved;
   };
   const historyPath = stateFile(config.historyFile ?? "facebook-history.json");
