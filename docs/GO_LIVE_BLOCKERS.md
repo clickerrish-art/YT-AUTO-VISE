@@ -1,3 +1,40 @@
+# 16 November 2026 — exact candidate release hold
+
+**Application/test SHA:** `57769fa219fe98b52f8b182f3849206ac3c8110c` (later commits are documentation-only). **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25`, unchanged. PR #1 remains OPEN/DRAFT/UNMERGED.
+
+## Exact-SHA verification
+
+- Automation/security [43942293152](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942293152): 917 Node tests, 45 Python tests, zero skips, npm audit 0 vulnerabilities; authenticated read-only Cloudflare staging smoke PASS.
+- Content quality [43942302023](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942302023): 917/917 Node tests, zero failures/skips.
+- Dashboard Chromium [43942301932](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301932): 33/33 passed.
+- Metadata [43942302103](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942302103): PASS; unreviewed metadata remains blocked.
+- Queue [43942301833](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301833): PASS; 16 held items, no additions, publishing disabled.
+- Cloudflare durable state [43942301818](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301818): PASS, read-only.
+- Deployment recovery [43942302049](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942302049): 2/2 passed.
+- Isolated main/candidate baseline [43942301927](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301927): PASS.
+- Branch inventory [43942302072](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942302072): 3,943 ahead / 4 behind / 372 changed files; REQUIRES_REVIEW; no history mutation.
+- Nature Frontiers local draft [43942301897](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301897) and Instagram safety [43942302234](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942302234): PASS, no provider publication.
+- Production readiness [43942301842](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301842): HOLD — 9 blockers.
+- Meta identity [43942301878](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301878): expired Meta session, HTTP 401 / OAuth 190 / subcode 463.
+
+## Mandatory blockers — keep all publishing disabled
+
+1. Owner approval of a feasible cadence. Requested 2 long-form + 1 Short per week conflicts with 72-hour spacing; the 216-hour rolling alternative remains unapproved.
+2. YouTube OAuth refresh currently returns `invalid_grant`; reauthorize the existing client securely and independently verify SonicVhibez channel identity.
+3. Reconcile complete public/private/unlisted/scheduled YouTube history and every pending/uncertain upload attempt.
+4. Genuine final Short MP4, long-form MP4 and both render manifests are missing.
+5. Genuine footage, narration, music and sound-effect rights/licence evidence and per-asset permitted-use proof are missing.
+6. Exact-hash human review of final media, factual accuracy, captions, metadata, thumbnail and compliance is missing.
+7. Provider-side upload/read-back and any native Short-parent relationship remain unverified; no upload is authorized.
+8. Nature Frontiers Meta Page/Instagram identity is blocked by an expired token. Renew only in the secure secret store; retain draft-only and publishing-disabled defaults.
+9. Branch protection and required checks cannot be independently inspected through the current integration (403); owner verification is required.
+
+**Verified engineering sub-gates:** 917 Node tests, 45 Python tests, 33 browser journeys, npm audit 0 vulnerabilities, queue validation, metadata fail-closed validation, staging read-only checks, local deployment recovery and exact main/candidate baseline all passed on the candidate. The schedule validator now correctly distinguishes a structurally valid draft policy from unapproved publication authorization.
+
+**Do not infer release readiness from CI.** No YouTube upload, public/unattended publishing, Meta publication, Metricool write, production deployment, paid service, GPU or trial was used. Keep PR #1 open/draft/unmerged; no merge, rebase, reset or force-push.
+
+---
+
 # 15 November 2026 — exact current source/test SHA CI refresh
 
 **Exact tested source/test SHA:** `12c28787923384d5ba767614c89c09b4b328cd9a`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` · **merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627` · tested-SHA divergence: **3,569 ahead / 4 behind** · PR #1 changed-file count: **328**. The subsequent acceptance-matrix/documentation commits do not alter application code or tests. PR #1 remains OPEN, Draft and unmerged; PR #7 remains OPEN with 13 changed files (its draft boolean is not exposed by the issue endpoint). No main edit or history mutation occurred.
