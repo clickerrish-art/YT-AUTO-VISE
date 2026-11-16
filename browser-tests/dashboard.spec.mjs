@@ -2432,15 +2432,18 @@ test("blocked production forms serialize every field and surface blockers withou
   const submit = async id => page.locator("#" + id).evaluate(form =>
     form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }))
   );
-  const waitForStateRefresh = () => page.waitForResponse(response =>
-    response.url().endsWith("/api/state") && response.request().method() === "GET" && response.status() === 200
+  const markRefreshPending = async () => page.locator("#message").evaluate(element => {
+    element.textContent = "Waiting for the authenticated dashboard refresh.";
+  });
+  const waitForRefreshComplete = () => expect(page.locator("#message")).toHaveText(
+    "Connected. Queue diagnostics and dashboard data are read from the authenticated local API."
   );
 
   await addOption("producejob", "fixture-produce-job");
-  const afterProduceRefresh = waitForStateRefresh();
+  await markRefreshPending();
   await submit("produceform");
   await expect(page.locator("#produceresult")).toContainText("Render blocked or failed: mocked production prerequisite blocker");
-  await afterProduceRefresh;
+  await waitForRefreshComplete();
 
   await addOption("validationjob", "fixture-validation-job");
   await page.locator("#captionsPath").fill("content/fixture-captions.srt");
@@ -2478,10 +2481,10 @@ test("blocked production forms serialize every field and surface blockers withou
   await page.locator("#reconcileVideoPath").fill("media/fixture.mp4");
   await page.locator("#reconcileMetadataPath").fill("content/fixture-metadata.json");
   await page.locator("#reconcileApprovalPath").fill("content/fixture-approval.json");
-  const afterReconcileRefresh = waitForStateRefresh();
+  await markRefreshPending();
   await submit("reconcileform");
   await expect(page.locator("#reconcileresult")).toContainText("Reconciliation blocked: mocked production prerequisite blocker");
-  await afterReconcileRefresh;
+  await waitForRefreshComplete();
 
   expect(calls).toEqual([
     { path: "/api/jobs/produce", method: "POST", body: { jobId: "fixture-produce-job" } },
