@@ -16,6 +16,7 @@ on:
       - "test/api-route-acceptance-matrix.test.mjs"
       - "test/dashboard-api-auth-matrix.test.mjs"
       - "test/dashboard-ui-contract.test.mjs"
+      - "test/instagram-approval-route-fail-closed.integration.test.mjs"
       - "test/dashboard-inventory.test.mjs"
       - "config/instagram-publishing.json"
       - "test/meta-instagram-reel-adapter.test.mjs"
@@ -23,6 +24,7 @@ on:
       - "test/instagram-autonomous-publisher.test.mjs"
       - "test/instagram-content-intake.test.mjs"
       - "test/instagram-approval-service.test.mjs"
+      - "test/instagram-approval-route-fail-closed.integration.test.mjs"
       - "test/dashboard-api-authenticated-route-negative-matrix.test.mjs"
       - "content/instagram-intake-candidates.json"
       - "content/instagram-autonomous-queue.json"
@@ -78,7 +80,7 @@ jobs:
           ffmpeg -version
           ffprobe -version
       - name: Test Instagram adapter and autonomous dispatch recovery
-        run: node --test test/meta-instagram-reel-adapter.test.mjs test/meta-instagram-image-adapter.test.mjs test/instagram-autonomous-publisher.test.mjs test/instagram-content-intake.test.mjs test/instagram-approval-service.test.mjs test/dashboard-api-authenticated-route-negative-matrix.test.mjs test/dashboard-server.test.mjs test/dashboard-ui-contract.test.mjs test/dashboard-inventory.test.mjs
+        run: node --test test/meta-instagram-reel-adapter.test.mjs test/meta-instagram-image-adapter.test.mjs test/instagram-autonomous-publisher.test.mjs test/instagram-content-intake.test.mjs test/instagram-approval-service.test.mjs test/instagram-approval-route-fail-closed.integration.test.mjs test/dashboard-api-authenticated-route-negative-matrix.test.mjs test/dashboard-server.test.mjs test/dashboard-ui-contract.test.mjs test/dashboard-inventory.test.mjs
       - name: Verify intake refuses unconfigured Instagram identity without writing a queue
         run: |
           output="$(node scripts/instagram-content-intake.mjs)"
