@@ -942,7 +942,7 @@ No genuine rights-cleared final exports or human playback approval; YouTube OAut
 
 # Dashboard control/API acceptance matrix
 
-**Assessment basis:** exact source/test SHA `7a23289f7a6cd9a34027b84691333da0b7051fc2`; current UI is `public/dashboard.html`, backend is `scripts/dashboard-server.mjs`, and browser acceptance uses `browser-tests/dashboard.spec.mjs`. This matrix remains partial where individual journeys are marked PARTIAL or NOT_TESTED.
+**Assessment basis:** exact source/test SHA `75f065110d9eb73bc5b911131c2723775af7b9e9`; current UI is `public/dashboard.html`, backend is `scripts/dashboard-server.mjs`, and browser acceptance uses `browser-tests/dashboard.spec.mjs`. This matrix remains partial where individual journeys are marked PARTIAL or NOT_TESTED.
 
 **Scope note:** this matrix maps visible control groups to backend operations. It is not a claim that every control has exhaustive browser, authorization, failure-injection, or persistence coverage. The exact-SHA Chromium suite passed 29 journeys; the remaining items stay PARTIAL or NOT_TESTED until dedicated evidence exists.
 
