@@ -2493,7 +2493,7 @@
       "total": 33,
       "run": 43939877654,
       "testedCommitSha": "0253e68fc301a5337f9e6a126fcf62fd55fdca88",
-      "note": "Dashboard runtime unchanged by later scheduling/config changes."
+      "note": "Dashboard runtime unchanged by later cadence/config changes."
     }
   },
   "candidateSourceTestSha": "4e4bcadaded2e65d0b78216fa79450790902b762",
@@ -2590,13 +2590,15 @@
     "authenticationNegativePass": 48
   },
   "dashboardBrowserJourneys": {
-    "passed": 31,
-    "total": 31,
-    "run": 43904859951,
+    "passed": 33,
+    "total": 33,
+    "run": 43939877654,
     "applicationSourceSha": "00142ffca51d63fb4ad2fff571c12c021456a88a",
     "nodeTestSha": "016843734b74984481828393c0c61fd6e022d416",
     "browserTestSha": "4e4bcadaded2e65d0b78216fa79450790902b762",
-    "currentHeadStatus": "PASS; DASH-001 overall remains NOT_TESTED"
+    "currentHeadStatus": "PASS; DASH-001 overall remains NOT_TESTED",
+    "testedCommitSha": "0253e68fc301a5337f9e6a126fcf62fd55fdca88",
+    "status": "PASS"
   },
   "evidence": {
     "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205668",

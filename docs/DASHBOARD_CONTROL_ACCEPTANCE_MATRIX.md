@@ -35,7 +35,7 @@
 - API route acceptance remains **42 PASS / 0 NOT_TESTED / 6 BLOCKED**; all 48 protected routes reject missing and invalid operator credentials.
 - Meta Graph API v27.0 configuration and adapter migration is PASS; live Meta identity remains BLOCKED by expired-token HTTP 401 / OAuth error 190 / subcode 463.
 - YouTube OAuth still returns `invalid_grant`; SCHED-001 remains NOT_TESTED.
-- Cloudflare staging read-only smoke passed on the previous exact candidate; backup/restore acceptance was skipped.
+- Cloudflare staging backup/restore acceptance passed: explicit backup and restore, exact audit receipt, matching checksum, state equality, revision 2→3, restart recovery and five retained backups; publishing remained disabled. This closes STATE-001 for staging only; DEPLOY-001 remains NOT_TESTED.
 - Branch comparison at current head: **3,940 ahead / 4 behind**; GitHub's 300-file compare listing is capped. Semantic integration decision remains `REQUIRES_REVIEW`.
 
 ## Explicit standalone control bindings

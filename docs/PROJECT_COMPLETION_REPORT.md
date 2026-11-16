@@ -4,7 +4,7 @@
 
 ## Exact source/test evidence
 
-- Current implementation branch HEAD: `57769fa219fe98b52f8b182f3849206ac3c8110c`.
+- Implementation branch code HEAD at the start of this documentation refresh: `57769fa219fe98b52f8b182f3849206ac3c8110c` (subsequent commits in this refresh are documentation-only).
 - Last full Node regression: **912/912 passed, zero failures/skips** on candidate `012eea3f7d2d24ff3cc70947071e74e48efed9bd` — [run 43938987786](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43938987786). This predates the cadence-approval withdrawal.
 - Latest dashboard browser E2E: **33/33 passed** on candidate `0253e68fc301a5337f9e6a126fcf62fd55fdca88` — [run 43939877654](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43939877654); dashboard runtime has not changed since.
 - Cadence/readiness corrections passed **97/97 targeted local tests** on recovered source bundle snapshot `8c6d9c9fb8bfacf3d63f4b75357cc5e0b41164d5` with the current configuration and test changes applied. This is targeted evidence, not a full suite on the current HEAD.
@@ -70,7 +70,7 @@ The version/configuration work is accepted. **Live Meta identity is not accepted
 - Dashboard: 120 controls, 17 forms; six dashboard sub-gates PASS, but **DASH-001 remains NOT_TESTED overall**.
 - API route matrix: 48 protected routes, 42 PASS / 6 BLOCKED; authentication-negative checks pass 48/48. **API-001 remains NOT_TESTED overall.**
 - **SCHED-001 remains NOT_TESTED:** complete SonicVhibez remote YouTube history and actual publication timestamps are unavailable; YouTube OAuth returns `invalid_grant`.
-- **STATE-001 remains NOT_TESTED:** authenticated read-only staging smoke passed, but the manual backup/restore acceptance was skipped.
+- **STATE-001: PASS for staging recovery.** Authenticated staging D1 backup/restore and restart recovery were verified, including the exact restore receipt, matching checksum, revision 2→3, restored state and five retained backups. Production deployment/monitoring acceptance remains separate under DEPLOY-001.
 - **DEPLOY-001 remains NOT_TESTED:** local replacement/restart recovery passed 2/2; this is not full production deployment/monitoring/rollback acceptance.
 - **GIT-002 remains NOT_TESTED:** 3,940 ahead / 4 behind; GitHub's 300-file compare listing is capped. Full semantic integration review remains required. Preserve PR #1 draft/unmerged.
 
@@ -452,7 +452,7 @@ This section records evidence from the preceding branch checkpoint; the commit c
 - The automation log at checkpoint `586e5404ceabf399375e59fc0adad95389367408` reports 112 Node tests passed, 0 failed, 0 skipped; Python safety tests: 8 passed. Campaign validation passed, 16 queued topics were held for review, public publishing was disabled, and JavaScript/Python syntax checks passed.
 - The automation install at that checkpoint used `npm ci --ignore-scripts` (46 packages added, 47 audited). Plain `npm ci` without `--ignore-scripts` has not been verified.
 - Current npm audit: 4 moderate, 0 high, 0 critical. Affected packages/ranges reported by the audit: `gaxios` 6.4.0–6.7.1 (via `uuid`); `googleapis` 33.0.0–149.0.0 (via `googleapis-common`); `googleapis-common` <=7.2.0 (via `uuid`); `uuid` <11.1.1 (v3/v5/v6 buffer bounds-check advisory). npm reports the available `googleapis` fix as 178.0.0, a major upgrade. Do not upgrade blindly; evaluate runtime compatibility and rerun the full suite. Dependency tree is not vulnerability-free.
-- Production acceptance remains **BLOCKED**: the rolling cycle and fail-closed history gate are implemented but live channel history/OAuth have not been accepted; genuine assets, retained rights evidence and final-hash human review are absent; one explicitly authorized private upload/remote receipt is unverified; owner-run restart/backup/restore acceptance is outstanding. Safari remains inactive pending exact HTTPS destination, truthful disclosure and explicit owner approval.
+- Production acceptance remains **BLOCKED**: the rolling cycle and fail-closed history gate are implemented but live channel history/OAuth have not been accepted; genuine assets, retained rights evidence and final-hash human review are absent; one explicitly authorized private upload/remote receipt is unverified; production deployment, monitoring and production backup/restore acceptance remain outstanding. Safari remains inactive pending exact HTTPS destination, truthful disclosure and explicit owner approval.
 - Public publishing remains disabled. GitHub Actions success does not prove that scheduled workflows are active on `main`, and does not prove production media, real rights, live OAuth, upload acceptance or restore acceptance.
 - The malformed content-quality URL formerly in PR #1 was corrected to run [40084868796](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40084868796).
 
