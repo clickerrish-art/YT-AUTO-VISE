@@ -58,8 +58,8 @@ function normalizeChannelHandle(value) {
 /** Match the verified SonicVhibez handle, not an assumed display-name spelling. */
 export function matchesApprovedSonicVhibezChannel(channel, expectedChannelId) {
   if (!channel || channel.id !== expectedChannelId) return false;
-  if (channel.snippet?.title === "SonicVhibez") return true;
-  return channel.snippet?.title === "SonicVibes" &&
+  const title = typeof channel.snippet?.title === "string" ? channel.snippet.title.trim() : "";
+  return ["SonicVhibez", "SonicVibes"].includes(title) &&
     normalizeChannelHandle(channel.snippet?.customUrl) === APPROVED_SONICVHIBEZ_HANDLE;
 }
 
