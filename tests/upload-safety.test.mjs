@@ -66,8 +66,11 @@ test("verified @sonicvhibez handle is accepted when the channel display title is
     id: channelId, snippet: { title: "Nature Frontiers", customUrl: "@naturefrontiers" }
   }, channelId), false);
   assert.equal(matchesApprovedSonicVhibezChannel({
-    id: channelId, snippet: { title: "SonicVhibez" }
+    id: channelId, snippet: { title: "SonicVhibez", customUrl: "@sonicvhibez" }
   }, channelId), true);
+  assert.equal(matchesApprovedSonicVhibezChannel({
+    id: channelId, snippet: { title: "SonicVhibez" }
+  }, channelId), false);
 });
 
 test("promotion disclosure artifacts are validated before any YouTube insert", () => {
