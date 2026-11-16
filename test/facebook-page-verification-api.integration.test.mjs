@@ -27,6 +27,8 @@ async function startDashboard({ stateDir, token, pageId, pageToken, userToken, t
     NATURE_FRONTIERS_FACEBOOK_PAGE_ID: pageId,
     META_PAGE_ACCESS_TOKEN: pageToken,
     META_USER_ACCESS_TOKEN: userToken,
+    // Simulate a stale repository variable; checked-in config must remain authoritative.
+    META_GRAPH_API_VERSION: "v26.0",
     MOCK_META_PAGE_ID: pageId,
     MOCK_META_PAGE_NAME: "Nature Frontiers",
     MOCK_META_USER_ID: "987654321098765",
