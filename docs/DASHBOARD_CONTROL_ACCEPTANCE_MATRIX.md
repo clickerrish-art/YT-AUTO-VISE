@@ -1,20 +1,51 @@
 # Latest exact-SHA evidence — 16 November 2026
 
-**Latest tested source/test SHA:** `75f065110d9eb73bc5b911131c2723775af7b9e9`. Dashboard UI source blob: `a3ffb14f2922c75d8e6ec190e10ad7f5658ebf98`; dashboard backend source blob: `028433ef23a6c7cc02d4e086eae92e197ade1bab`; browser test source blob: `dc13e490123e0c06a3e3a4be03420ea2029476ac`; new Short-004 caption/review regression test blob: `0eae8250a2335f0f084e986fb3afd2d1739cbccd`. Application code remains at the already tested dashboard implementation; the new test adds content-caption and review-only fail-closed acceptance. `main` remains `69fdf35c90f980c142be3aaffa863304bc7eaa25`.
+**Application/browser source SHA:** `1e8421383957521f511459ac5b40c4e3c61da442`  
+**Node/control-wiring test SHA:** `71eb284cfb7a06e434064b94df7f6e8be487b1a9`  
+**Current main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` (unchanged); PR #1 remains open, draft and unmerged.
 
-- Dashboard Chromium E2E: [run 43778013599](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013599), **29/29 passed**.
-- Queue readiness: [run 43778013567](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013567), **898/898 Node tests passed, zero failures, zero skips**.
-- Automation/security: [run 43778013637](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013637), **156/156 Node test files passed; 45 Python tests passed; zero skips; npm audit 0 vulnerabilities**.
-- Instagram publishing safety: [run 43778013582](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013582), **62/62 passed**. Metadata validation [run 43778013750](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013750), content quality [run 43778013677](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013677), Cloudflare durable-state unit checks [run 43778013666](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013666), deployment recovery smoke [run 43778013588](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013588), isolated baseline [run 43778013681](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013681), branch inventory [run 43778013665](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013665), and local Nature Frontiers draft-package validation [run 43778013734](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013734) all passed.
-- Branch inventory at the tested SHA: **3,875 branch-only commits, 4 base-only commits, 0 patch-equivalent commits, 367 final-tree changed files, 0 deletions, clean working tree**. Semantic integration decision remains `REQUIRES_REVIEW`.
-- Static dashboard inventory: **119 controls** (27 buttons, 49 inputs, 27 selects, 16 textareas), **17 forms**, **52 route handlers** and **48 protected API routes**.
-- Form-level outcomes: **11 PASS / 6 BLOCKED / 0 NOT_TESTED**. The six owner-dependent production forms remain blocked; fixtures do not substitute for genuine media, rights, identities or human review.
-- API route acceptance: **42 PASS / 0 NOT_TESTED / 6 BLOCKED**; all **48/48** protected routes reject missing and invalid operator credentials.
-- Two read-only dashboard panels have local route/UI contract acceptance: Nature Frontiers media register and Instagram operations status. Neither mutates a provider or claims live Meta connectivity.
-- The Short-004 regression test now verifies word-for-word script/caption match, cue timing, mobile line length and fail-closed review/rights/approval flags. It does not make the review render production-approved.
-- **DASH-001 remains NOT_TESTED overall.** The 29 passing browser journeys and 119-control inventory are not exhaustive control-by-control evidence for success, validation, error, authorization, persistence, refresh/restart and accessibility behavior.
-- Production readiness remains **HOLD** [run 43778013553](https://github.com/clickerrish-art/YT-AUTO-VISE). Meta Page identity verification remains **FAILED** [run 43778013573](https://github.com/clickerrish-art/YT-AUTO-VISE) because the configured access token is expired (HTTP 401, OAuth error 190, subcode 463).
+- Full Node suite: [run 43901917853](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901917853), **898/898 passed, zero failures/skips**.
+- Automation/security: [run 43901917864](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901917864), **157 Node test files, 45 Python tests, zero skips, npm audit 0 vulnerabilities**.
+- Dashboard Chromium E2E: [run 43901838658](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901838658), **29/29 passed** on the application/browser source SHA above.
+- Deployment recovery: [run 43901918059](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901918059), **2/2 passed**.
+- Static dashboard inventory: **119 controls** (27 buttons, 49 inputs, 27 selects, 16 textareas), **17 forms**, 52 route handlers and 48 protected API routes.
+- Form-level outcomes remain **11 PASS / 6 BLOCKED / 0 NOT_TESTED**. The six owner-dependent production forms remain blocked; fixtures do not substitute for genuine media, rights, identities or human review.
+- **DASH-CTRL-WIRING-001: PASS.** All 119 controls have unique stable acceptance IDs; 102 controls map to the 17 form submit handlers; all 17 standalone controls have explicit action/value bindings. The Node test explicitly reports: “all 119 static dashboard controls map to a submitted form or an explicit standalone binding.”
+- Five system-populated narration-review SHA-256 fields are now read-only. The browser journey verifies the script, audio, transcript, captions and report hashes against the selected bundle's actual artifact hashes.
+- **DASH-001 remains NOT_TESTED overall.** Wiring and readonly integrity are proven, but exhaustive per-control business success, validation, error feedback, authorization, persistence, refresh/restart, concurrency and accessibility acceptance remains outstanding.
+- API route acceptance remains **42 PASS / 0 NOT_TESTED / 6 BLOCKED**; all 48 protected routes reject missing and invalid operator credentials.
+- Meta Graph API v27.0 configuration and adapter migration is PASS; live Meta identity remains BLOCKED by expired-token HTTP 401 / OAuth error 190 / subcode 463.
+- YouTube OAuth still returns `invalid_grant`; SCHED-001 remains NOT_TESTED.
+- Cloudflare staging read-only smoke passed on the previous exact candidate; backup/restore acceptance was skipped.
+- Branch comparison: **3,888 ahead / 4 behind / 300 changed files**; semantic integration decision remains `REQUIRES_REVIEW`.
 
+## Explicit standalone control bindings
+
+| Control | Type | Binding / safety role |
+|---|---|---|
+| `refresh` | button | Explicit click handler refreshes dashboard data |
+| `token` | password input | Consumed by the operator connect action; value is redacted |
+| `connect` | button | Explicit operator-authentication action |
+| `createStateBackup` | button | Explicit click handler; authorization-gated |
+| `refreshStateBackups` | button | Explicit click handler refreshes backup inventory |
+| `fbverifyPage` | button | Read-only Meta Page verification action |
+| `instagramRefresh` | button | Read-only Instagram operations refresh |
+| `search` | input | Live input filter |
+| `filter` | select | Change handler filters dashboard records |
+| `narrationreviewjob` | select | Change handler loads the selected narration review bundle |
+| `narrationreviewsha` | readonly input | Script SHA-256 populated from verified bundle |
+| `narrationreviewaudioSha` | readonly input | Audio SHA-256 populated from verified bundle |
+| `narrationreviewtranscriptSha` | readonly input | Transcript SHA-256 populated from verified bundle |
+| `narrationreviewcaptionsSha` | readonly input | Captions SHA-256 populated from verified bundle |
+| `narrationreviewreportSha` | readonly input | Review-report SHA-256 populated from verified bundle |
+| `task` | select | Value consumed by the run-task action |
+| `runTask` | button | Explicit task-execution click handler |
+
+The remaining **102 controls** are owned by one of the 17 forms. The static test asserts that every form has a submit handler and every form-owned control resolves to that handler. Browser tests separately verify accessible names and representative success/failure journeys. This wiring subgate does not claim every field has exhaustive behavioral acceptance.
+
+## Current 17-form status
+
+**11 PASS / 6 BLOCKED.** The six blocked forms remain held for genuine media, rights, verified parent, technical validation, human review or uncertain remote-upload evidence. No fixture can substitute for those owner/provider prerequisites.
 
 # Latest exact-SHA evidence — 9 November 2026
 
