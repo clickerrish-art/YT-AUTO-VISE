@@ -289,3 +289,39 @@ test("backup keeps a complete promoted snapshot when directory fsync fails after
   assert.equal(fs.existsSync(path.join(source.stateDir, ".restore-operation.lock")), false,
     "the operation lock must be released even when directory durability confirmation fails");
 });
+
+test("backup rejects dangling symlinks instead of silently omitting optional state or rights evidence", async t => {
+  const stateFixture = fixture();
+  const rightsFixture = fixture();
+  t.after(() => {
+    fs.rmSync(stateFixture.root, { recursive: true, force: true });
+    fs.rmSync(rightsFixture.root, { recursive: true, force: true });
+  });
+
+  const statePath = path.join(stateFixture.stateDir, "dashboard-state.json");
+  fs.unlinkSync(statePath);
+  fs.symlinkSync(path.join(stateFixture.root, "missing-dashboard-state.json"), statePath);
+  await assert.rejects(
+    backupState({
+      rootDir: stateFixture.root,
+      stateDir: stateFixture.stateDir,
+      uploadLogDir: stateFixture.uploadLogDir,
+      rightsDir: stateFixture.rightsDir,
+      outputPath: path.join(stateFixture.root, "backup.json")
+    }),
+    /symbolic links in state\/evidence input path/
+  );
+
+  fs.rmSync(rightsFixture.rightsDir, { recursive: true, force: true });
+  fs.symlinkSync(path.join(rightsFixture.root, "missing-rights-evidence"), rightsFixture.rightsDir, "dir");
+  await assert.rejects(
+    backupState({
+      rootDir: rightsFixture.root,
+      stateDir: rightsFixture.stateDir,
+      uploadLogDir: rightsFixture.uploadLogDir,
+      rightsDir: rightsFixture.rightsDir,
+      outputPath: path.join(rightsFixture.root, "backup.json")
+    }),
+    /symbolic links in rights-evidence input path/
+  );
+});
