@@ -28,8 +28,11 @@ test("draft preparation fallback has actual cyclic UTC gaps of 96 and 72 hours b
   assert.ok(plan.schedule.every(slot => slot.status === "DRAFT_ONLY"));
   assert.equal(queue.cadence.draftPreparationFallback.notPublicationCadence, true);
 });
-test("the 3-publication rolling cycle requires at least 216 hours, not a weekly count", () => {
-  assert.equal(plan.publicationCycle.minimumCycleHours, 3 * 72);
+test("the requested three-publication weekly cadence conflicts with the 72-hour minimum", () => {
+  assert.equal(plan.requestedWeeklyCadence.totalPerWeek, 3);
+  assert.equal(plan.requestedWeeklyCadence.totalPerWeek * plan.minimumPublicationSpacingHours, 216);
+  assert.equal(plan.requestedWeeklyCadence.status, "CONFLICTS_WITH_72_HOUR_MINIMUM");
+  assert.equal(plan.publicationCycle.minimumCycleHours, 216);
   assert.equal(queue.cadence.minimumCycleHours, 216);
   assert.equal(queue.cadence.minimumHoursBetweenConsecutivePublications, 72);
   assert.deepEqual(queue.cadence.formats, ["long_form", "long_form", "short"]);
@@ -123,13 +126,30 @@ test("owner-defined cadence rejects three publications compressed into a 168-hou
   assert.ok(result.errors.some(error => error.includes("mathematically infeasible")));
 });
 
-test("long-form queue is a draft backlog and does not impose a weekly publication target", () => {
+test("the requested two-long-form weekly queue remains planning-only and cannot publish under an unapproved cadence", () => {
+  assert.equal(longFormQueue.targetPerWeek, 2);
+  assert.equal(longFormQueue.cadence.targetPerWeek, 2);
+  assert.deepEqual(longFormQueue.cadence.days, ["Tuesday", "Saturday"]);
   assert.equal(longFormQueue.status, "PLANNING_ONLY");
   assert.equal(longFormQueue.publishingEnabled, false);
-  assert.equal("targetPerWeek" in longFormQueue, false);
-  assert.deepEqual(longFormQueue.draftPreparation.days, ["Tuesday"]);
-  assert.equal(longFormQueue.draftPreparation.status, "DRAFT_ONLY");
-  assert.equal(longFormQueue.draftPreparation.weeklyPublicationTarget, null);
-  assert.equal(longFormQueue.draftPreparation.timezone, plan.timezone);
-  assert.match(longFormQueue.draftPreparation.note, /Saturday is reserved for Short draft preparation/);
+  assert.equal(plan.requestedWeeklyCadence.longFormPerWeek, 2);
+  assert.equal(plan.requestedWeeklyCadence.shortsPerWeek, 1);
+  assert.equal(plan.requestedWeeklyCadence.totalPerWeek, 3);
+  assert.equal(plan.requestedWeeklyCadence.status, "CONFLICTS_WITH_72_HOUR_MINIMUM");
+  assert.equal(plan.cadenceDecision.status, "OWNER_APPROVAL_REQUIRED");
+  assert.equal(plan.cadenceDecision.ownerApproved, false);
+  assert.equal(plan.cadenceDecision.proposedMode, "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET");
+  assert.equal(validateCadenceDecision(plan.cadenceDecision, 72).valid, false);
+});
+
+test("the rolling no-weekly-target alternative is a proposal, not owner approval", () => {
+  assert.equal(plan.cadenceDecision.status, "OWNER_APPROVAL_REQUIRED");
+  assert.equal(plan.cadenceDecision.ownerApproved, false);
+  assert.equal(plan.cadenceDecision.approvedMode, null);
+  assert.equal(plan.cadenceDecision.approvedAt, null);
+  assert.equal(plan.cadenceDecision.approvalReference, null);
+  assert.equal(plan.cadenceDecision.proposedMode, "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET");
+  const validation = validateCadenceDecision(plan.cadenceDecision, 72);
+  assert.equal(validation.valid, false);
+  assert.ok(validation.errors.includes("status must be OWNER_APPROVED"));
 });

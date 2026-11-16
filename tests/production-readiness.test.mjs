@@ -60,6 +60,10 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and actionab
     assert.match(invalidGrantBlocker.resolution, /offline access/i);
     assert.match(invalidGrantBlocker.resolution, /Never paste token values/i);
   }
+  const cadenceBlocker = report.blockers.find(blocker => /CADENCE DECISION REQUIRED/i.test(blocker.message));
+  assert.ok(cadenceBlocker, "publication readiness must fail closed until the cadence has explicit owner approval");
+  assert.equal(cadenceBlocker.controlOwner, "external_owner_or_human_reviewer");
+  assert.match(cadenceBlocker.resolution, /Choose a feasible owner-approved cadence/);
   assert.ok(report.limitations.some(item => /never uploads/.test(item)));
 });
 

@@ -59,12 +59,14 @@
     "status": "CONFLICTS_WITH_72_HOUR_MINIMUM"
   },
   "cadenceDecision": {
-    "status": "OWNER_APPROVED",
-    "ownerApproved": true,
-    "approvedMode": "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
-    "approvedAt": "2026-11-07T00:57:33+02:00",
-    "approvalReference": "User approval in ChatGPT conversation on 2026-11-07 (Africa/Johannesburg)",
-    "explanation": "Owner approved the rolling long_form → long_form → short sequence with at least 72 elapsed hours between consecutive actual publications and no weekly publication target. Tuesday/Saturday remain draft-preparation triggers only. Public/unattended publishing remains disabled."
+    "status": "OWNER_APPROVAL_REQUIRED",
+    "ownerApproved": false,
+    "approvedMode": null,
+    "approvedAt": null,
+    "approvalReference": null,
+    "explanation": "The proposed rolling long_form → long_form → short cycle with a 72-hour minimum requires 216 hours per complete cycle. The user previously requested two long-form videos plus one Short per week, which cannot fit in a 168-hour week while preserving the 72-hour minimum and no-same-Johannesburg-day rule. The rolling no-weekly-target alternative is a proposal only; publication must remain blocked until the owner explicitly approves a feasible cadence. Tuesday/Saturday remain draft-preparation triggers only.",
+    "proposedMode": "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
+    "provenanceNote": "The former OWNER_APPROVED timestamp and reference were assistant-authored, not a user-authored approval. They are withdrawn and must not authorize scheduling."
   },
   "spacingPolicy": {
     "minimumHoursBetweenPosts": 72,

@@ -89,13 +89,5 @@
     "timezone": "Africa/Johannesburg",
     "targetPerWeek": 2
   },
-  "draftPreparation": {
-    "days": [
-      "Tuesday"
-    ],
-    "timezone": "Africa/Johannesburg",
-    "status": "DRAFT_ONLY",
-    "weeklyPublicationTarget": null,
-    "note": "This is a planning backlog, not a publication schedule. Long-form draft preparation uses the Tuesday slot in config/weekly-content-plan.json; Saturday is reserved for Short draft preparation. The rolling publication cycle has no weekly publication target."
-  }
+  "targetPerWeek": 2
 }
