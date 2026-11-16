@@ -4,57 +4,73 @@
 
 ## Exact source/test evidence
 
-- Application/browser source SHA: `1e8421383957521f511459ac5b40c4e3c61da442`.
-- Node/control-wiring test SHA: `71eb284cfb7a06e434064b94df7f6e8be487b1a9`.
+- Application source SHA: `00142ffca51d63fb4ad2fff571c12c021456a88a`.
+- Node test/inventory SHA: `016843734b74984481828393c0c61fd6e022d416`.
+- Browser test SHA: `4e4bcadaded2e65d0b78216fa79450790902b762`.
 - `main`: `69fdf35c90f980c142be3aaffa863304bc7eaa25`, unchanged. PR #1 remains OPEN, DRAFT and UNMERGED.
-- Live comparison before this documentation refresh: **3,888 ahead / 4 behind / 300 changed files**. Human semantic review is still required.
+- Live comparison before this documentation refresh: **3,895 ahead / 4 behind / 300 changed files**. Human semantic review is still required.
 
 | Acceptance area | Exact result |
 |---|---|
-| Full Node regression | **898/898 passed**, 0 failures, 0 skips across 157 test files — [run 43901917853](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901917853) |
-| Automation/security | **898/898 Node; 45/45 Python; 0 skips; npm audit 0 vulnerabilities**; clean/locked install, FFmpeg, JS syntax and Python compile passed — [run 43901917864](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901917864) |
-| Dashboard browser E2E | **29/29 Chromium journeys passed** — [run 43901838658](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901838658) |
-| Dashboard control wiring | **119/119 controls mapped**, 17/17 form handlers, 17/17 standalone bindings, 119 unique acceptance IDs — [run 43901917864](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901917864) |
-| Dashboard accessibility | **4/4 journeys passed** — keyboard-only connection, accessible names, 320px mobile layout and 17 unique form landmarks — [run 43901838658](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901838658) |
-| Dashboard form paths | **17/17 forms exercised**: 11 successful workflows and six production-dependent forms that fail closed — [run 43901838658](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901838658) |
-| Deployment recovery | **2/2 passed** — replacement, restart and persistent-state verification — [run 43901918059](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901918059) |
-| Meta API version | **PASS** — v27.0 is centralized across Facebook/Instagram adapters and configs; stale v26.0 environment override is ignored and regression-tested. |
+| Full Node regression | **901/901 passed**, 0 failures, 0 skips — [run 43904736766](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904736766) |
+| Dedicated Instagram safety | **66/66 passed**, zero skips — [run 43904726184](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904726184) |
+| Python regression | **45/45 passed** on 71eb; no Python source changed afterward — [run 43901917864](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43901917864) |
+| Dependency/security | Lockfile verification succeeded; **npm audit 0 vulnerabilities** — [run 43904859928](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904859928) |
+| Dashboard browser E2E | **31/31 Chromium journeys passed** — [run 43904859951](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904859951) |
+| Deployment recovery | **2/2 passed** — replacement, restart and persistent-state verification — [run 43904859797](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904859797) |
 
-## Dashboard control wiring and integrity
+## Dashboard inventory and control wiring
 
-The static inventory is **119 controls**: 27 buttons, 49 inputs, 27 selects and 16 textareas, across 17 forms. The exact Node test maps all 119 controls to a submit-handled form or explicit standalone binding. It confirms 17 forms have submit handlers, 102 controls are form-owned, 17 standalone controls have explicit handlers/value consumers, and every control has a unique stable acceptance identity.
+The static inventory is **120 controls**: 27 buttons, 50 inputs, 27 selects and 16 textareas, across 17 forms. There are 103 form-owned controls and 17 standalone controls. All 120 have unique stable acceptance IDs. All 17 forms have submit handlers; all 17 standalone controls have explicit action/value bindings. Five system-populated narration-review SHA-256 fields are read-only and browser-verified against the selected bundle's artifact hashes.
 
-The five system-populated narration-review integrity fields — script, audio, transcript, captions and review-report SHA-256 — are **read-only**. The browser journey verifies all five displayed values against the selected review bundle's artifact hashes.
+## Standalone behavior and Facebook draft fields
 
-## Dashboard accessibility and form behavior
+All 17 standalone controls now have direct behavior coverage. In particular:
+- `refreshStateBackups` performs a GET-only backup inventory refresh.
+- `instagramRefresh` performs a GET-only local status refresh, reports the safe switches and makes no external provider request.
+- Facebook pillar, 18:00 experiment time and external-link review values are persisted and read back.
+- Operator authentication, dashboard refresh/search/filter, narration-review bundle selection/digests and the allowlisted task controls retain their existing coverage.
 
-All four accessibility journeys passed: keyboard-only operator connection, programmatic names for all visible controls, no page-level horizontal overflow at 320px, and unique/resolvable accessible names for all 17 form landmarks.
+## Rights asset permission correction
 
-All 17 forms have an exercised path. Eleven demonstrate successful local/operator workflows: `campaignform`, `draft`, `facebookdraftform`, `authoringform`, `scriptreviewform`, `narrationform`, `narrationreviewform`, `productionplanform`, `productionplanreviewform`, `canceljobform` and `retryjobform`.
+A material rights-safety defect was fixed. The rights-asset builder previously inserted `permittedUses: ["YouTube"]` automatically. It now starts with an empty permitted-uses list and requires a separate, initially unchecked `rightsAssetYouTubeAllowed` checkbox for each asset. Missing fields, unchecked permission and duplicate asset IDs are rejected. The checkbox resets after adding the asset; the separate global `confirmRightsVerified` checkbox remains unchecked; the rights-verification submit button remains disabled until genuine prerequisites are available.
 
-Six production-dependent forms remain blocked and fail closed: `produceform`, `parentrelationshipform`, `validationform`, `rightsform`, `reviewform` and `reconcileform`. Tests verify disabled/actionable feedback, incomplete parent binding rejection, malformed/insufficient rights evidence rejection, and no unintended jobs, audit records, uploads or publications.
+The browser test verifies this behavior, including that adding a local fixture record does not call the rights API or mutate project state. The checkbox is an operator attestation, **not automated proof of rights**. Actual licence evidence, hashes and human review remain mandatory.
 
-**DASH-CTRL-WIRING-001, DASH-CTRL-A11Y-001 and DASH-CTRL-FORM-PATHS-001 are PASS. DASH-001 remains NOT_TESTED overall.** These sub-gates do not establish exhaustive field-level success, validation, error feedback, authorization, persistence, refresh/restart and concurrency behavior for every control. Six forms also remain blocked on genuine production prerequisites.
+## Production-blocked form/API mapping
 
-The dedicated Instagram workflow on intermediate source SHA `1e842` initially failed because the new dashboard matcher was over-escaped. The matcher was corrected in test-only commit `71eb`; the full 898-test suite then passed on `71eb`, including Instagram adapter/safety tests. No Instagram publisher code failure was reported.
+All six blocked forms now have a static field-to-route contract and a corresponding integration test:
+
+| Form | Guarded API route | Integration test |
+|---|---|---|
+| `produceform` | `/api/jobs/produce` | `dashboard-api-produce-fail-closed-recovery.integration.test.mjs` |
+| `validationform` | `/api/jobs/validate` | `dashboard-api-validation-idempotency.integration.test.mjs` |
+| `rightsform` | `/api/jobs/rights/verify` | `dashboard-api-rights-verification.integration.test.mjs` |
+| `reviewform` | `/api/jobs/review` | `dashboard-api-review-approval.integration.test.mjs` |
+| `reconcileform` | `/api/uploads/reconcile` | `upload-reconcile-fail-closed.integration.test.mjs` |
+| `parentrelationshipform` | `/api/jobs/parent-relationship` | `dashboard-api-parent-relationship.integration.test.mjs` |
+
+All 17 forms have exercised paths: 11 successful local/operator workflows and six production-dependent forms that fail closed. The six blocked forms still require genuine media, rights, verified parent, technical validation, human review or uncertain remote-upload evidence. The 17 fields in those forms are mapped to guarded routes and backend integration tests, but their live UI success paths remain intentionally unavailable until prerequisites exist.
+
+**DASH-CTRL-WIRING-001, DASH-CTRL-A11Y-001, DASH-CTRL-FORM-PATHS-001, DASH-CTRL-STANDALONE-001, DASH-CTRL-BLOCKED-API-001 and DASH-CTRL-RIGHTS-USE-001 are PASS. DASH-001 remains NOT_TESTED overall.** These sub-gates do not prove exhaustive field-level success, validation, error feedback, authorization, persistence, refresh/restart and concurrency behavior for every control.
 
 ## Meta Graph API v27.0 correction
 
 Meta's official versioning documentation identifies **v27.0** as the latest Graph API version. The Page Feed, Page Video Reels, Instagram media and Instagram media_publish references document v27.0 endpoints.
 
-The repository now uses `scripts/meta-graph-api-version.mjs` as the shared default; both publishing configurations are pinned to v27.0; all four Facebook/Instagram adapters use that shared default. The dashboard server uses checked-in config/shared fallback rather than allowing an unverified `META_GRAPH_API_VERSION` environment value to override it. An integration test deliberately supplies stale `v26.0` and verifies the actual request paths remain `/v27.0/`.
+The repository uses `scripts/meta-graph-api-version.mjs` as the shared default; both publishing configurations are pinned to v27.0; all four Facebook/Instagram adapters use that shared default. The dashboard server uses checked-in config/shared fallback rather than allowing an unverified `META_GRAPH_API_VERSION` environment value to override it. An integration test deliberately supplies stale `v26.0` and verifies the actual request paths remain `/v27.0/`.
 
-The version/configuration work is accepted. **Live Meta identity is not accepted:** the latest real read-only Meta connection attempt used v27.0 and returned HTTP 401, OAuth error 190/subcode 463 because the access-token session expired — [run 43899735157](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43899735157). The owner must renew the token before read-only Page identity/permissions can pass. No publication was attempted.
+The version/configuration work is accepted. **Live Meta identity is not accepted:** the latest real read-only Meta connection attempt used v27.0 and returned HTTP 401, OAuth error 190/subcode 463 because the access-token session expired — [run 43904512991](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43904512991). The owner must renew the token before read-only Page identity/permissions can pass. No publication was attempted.
 
 ## Current acceptance position
 
-- Requirements register: **10 PASS / 67 NOT_TESTED / 9 BLOCKED** (86 total).
-- Dashboard: 119 controls, 17 forms; wiring, accessibility and form-path sub-gates PASS, but **DASH-001 remains NOT_TESTED overall**.
+- Requirements register: **13 PASS / 67 NOT_TESTED / 9 BLOCKED** (89 total).
+- Dashboard: 120 controls, 17 forms; six dashboard sub-gates PASS, but **DASH-001 remains NOT_TESTED overall**.
 - API route matrix: 48 protected routes, 42 PASS / 6 BLOCKED; authentication-negative checks pass 48/48. **API-001 remains NOT_TESTED overall.**
 - **SCHED-001 remains NOT_TESTED:** complete SonicVhibez remote YouTube history and actual publication timestamps are unavailable; YouTube OAuth returns `invalid_grant`.
-- **STATE-001 remains NOT_TESTED on this exact candidate:** authenticated read-only staging smoke passed, but the manual backup/restore acceptance was skipped.
+- **STATE-001 remains NOT_TESTED:** authenticated read-only staging smoke passed, but the manual backup/restore acceptance was skipped.
 - **DEPLOY-001 remains NOT_TESTED:** local replacement/restart recovery passed 2/2; this is not full production deployment/monitoring/rollback acceptance.
-- **GIT-002 remains NOT_TESTED:** 3,888 ahead / 4 behind / 300 changed files still require human semantic integration review. Preserve PR #1 draft/unmerged.
+- **GIT-002 remains NOT_TESTED:** 3,895 ahead / 4 behind / 300 changed files still require human semantic integration review. Preserve PR #1 draft/unmerged.
 
 ## External production blockers
 
