@@ -122,7 +122,7 @@ test("all 119 static dashboard controls map to a submitted form or an explicit s
     "every control must have a unique stable acceptance identity");
 
   const submitHandlers = new Set(
-    [...html.matchAll(/\\$\\(["']([^"']+)["']\\)\\.onsubmit\\s*=/g)].map(match => match[1])
+    [...html.matchAll(/\$\(["']([^"']+)["']\)\.onsubmit\s*=/g)].map(match => match[1])
   );
   const formIds = inventory.forms.map(form => form.id);
   assert.equal(formIds.length, 17);
