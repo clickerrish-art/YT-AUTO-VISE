@@ -421,7 +421,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
   const expectedChannelId = env.SONICVHIBEZ_CHANNEL_ID;
   const matchedChannel = authenticatedChannels.find(item => item.id === expectedChannelId);
   if (!matchedChannel || metadata.channelId !== expectedChannelId) throw new Error("authenticated YouTube channel ID does not match configured SonicVhibez channel ID");
-  if (!matchesApprovedSonicVhibezChannel(matchedChannel, expectedChannelId)) throw new Error("authenticated channel must match the verified @sonicvhibez handle or the legacy SonicVhibez channel title");
+  if (!matchesApprovedSonicVhibezChannel(matchedChannel, expectedChannelId)) throw new Error("authenticated channel must match the verified @sonicvhibez handle and an approved SonicVhibez display title");
   if ((metadata.contentType ?? metadata.format) === "short") {
     const relationship = approval.shortParentRelationship;
     if (metadata.parentContentId !== relationship.parentContentId || metadata.parentVideoId !== relationship.parentRemoteVideoId || metadata.parentVideoUrl !== relationship.parentCanonicalUrl) {
