@@ -4,22 +4,22 @@
 
 ## Exact source/test evidence
 
-- Tested source/test SHA: `7a23289f7a6cd9a34027b84691333da0b7051fc2`.
-- Branch head observed before this report refresh: `526cffa2b0b0df36ee36c1336da1ef9472f38faa`. Eleven content/documentation-only commits follow the tested SHA; no application source or test files changed after it.
+- Tested source/test SHA: `75f065110d9eb73bc5b911131c2723775af7b9e9`.
+- Branch head observed before this report refresh: `831b71b4f781ba5d7e45941aad6498e17a9fdcbd`. Two documentation-only commits follow the tested SHA; no application source or test files changed after it.
 - `main`: `69fdf35c90f980c142be3aaffa863304bc7eaa25`, unchanged. PR #1 remains OPEN, DRAFT and UNMERGED.
-- Branch comparison: 3,859 commits ahead, 4 behind; branch inventory at tested SHA found 3,848 branch-only commits, 4 base-only commits, 0 patch-equivalent commits, 366 final-tree changed files, 0 deletions and a clean working tree. Integration decision remains `REQUIRES_REVIEW`; no merge, rebase, reset, force-push or destructive reconciliation was performed.
+- Branch comparison at tested SHA: 3,875 commits ahead, 4 behind; branch inventory found 3,875 branch-only commits, 4 base-only commits, 0 patch-equivalent commits, 367 final-tree changed files, 0 deletions and a clean working tree. Integration decision remains `REQUIRES_REVIEW`; no merge, rebase, reset, force-push or destructive reconciliation was performed.
 
 | Acceptance area | Exact result |
 |---|---|
-| Full Node regression | 894/894 passed, zero failures, zero skips — [Queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231714) |
-| Automation/security | 155 Node test files and 45 Python tests passed; zero skips; npm audit 0 vulnerabilities — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775226743) |
-| Dashboard browser E2E | 29/29 Chromium journeys passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231777) |
-| Instagram safety | 62/62 passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231716) |
-| Metadata and content quality | Passed — [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231904), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231746) |
-| Cloudflare durable-state unit tests | 9/9 passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231719) |
-| Deployment recovery smoke | 2/2 passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231875) |
-| Isolated baseline and branch inventory | Passed — [baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231713), [inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231721) |
-| Nature Frontiers daily draft package | Local validation passed only; this is not provider publication — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231820) |
+| Full Node regression | 898/898 passed, zero failures, zero skips — [Queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013567) |
+| Automation/security | 156 Node test files and 45 Python tests passed; zero skips; npm audit 0 vulnerabilities — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013637) |
+| Dashboard browser E2E | 29/29 Chromium journeys passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013599) |
+| Instagram safety | 62/62 passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013582) |
+| Metadata and content quality | Passed — [metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013750), [content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013677) |
+| Cloudflare durable-state unit tests | 9/9 passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013666) |
+| Deployment recovery smoke | 2/2 passed — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013588) |
+| Isolated baseline and branch inventory | Passed — [baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013681), [inventory](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013665) |
+| Nature Frontiers daily draft package | Local validation passed only; this is not provider publication — [run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013734) |
 
 ## Current acceptance position
 
@@ -29,15 +29,16 @@
 - API route matrix: 42 PASS, 0 NOT_TESTED, 6 BLOCKED. Missing/invalid operator credentials are rejected on 48/48 protected routes. **API-001 remains NOT_TESTED overall** because six provider/production routes remain blocked.
 - Current exact-head requirement snapshot: 6 PASS, 67 NOT_TESTED, 9 BLOCKED. SCHED-003 is now PASS: the owner-approved rolling cycle without a weekly target is recorded in `config/weekly-content-plan.json` (2026-11-07) and passes the current schedule validation.
 - **SCHED-001 remains NOT_TESTED:** complete live SonicVhibez public/private/unlisted history and actual remote publication timestamps cannot be verified while YouTube OAuth returns `invalid_grant`.
+- **Worker retry/backoff safety is fixed and regression-tested:** a 409 preflight conflict persists its cooldown; if cooldown persistence fails, the worker stops before another poll and retains the process lock to prevent duplicate dispatch. Tests cover restart persistence and fail-closed behavior. **SCHED-WORKER-DISPATCH-001 remains NOT_TESTED for a live continuous worker deployment and real renderer dispatch.**
 - **STATE-001 is NOT_TESTED on the current candidate:** Cloudflare durable-state unit tests and deployment recovery smoke pass, but the live Node-to-Worker staging backup/restore smoke was not rerun on this exact candidate. The last live staging PASS is historical at SHA `41bd4de95d876c9778a4993a0e67ac207d1379ff`.
 - **DEPLOY-001 remains NOT_TESTED:** recovery smoke passing is not proof of a complete production deployment.
-- **GIT-002 remains NOT_TESTED:** 3,848 branch-only commits still require human semantic integration review. Preserve divergence and PR #1 draft status.
+- **GIT-002 remains NOT_TESTED:** 3,875 branch-only commits still require human semantic integration review. Preserve divergence and PR #1 draft status.
 
 ## External production blockers
 
 ### Nature Frontiers — Meta / Instagram
 
-- Meta Page verification fails with HTTP 401, OAuth error 190, subcode 463 (expired access-token session): [exact verification run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231860).
+- Meta Page verification fails with HTTP 401, OAuth error 190, subcode 463 (expired access-token session): [exact verification run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013573).
 - The current Metricool brand metadata reports Page ID `1431329126735709`, which matches repository configuration, but that does not replace Meta Graph identity and permission verification.
 - The numeric Instagram Business Account ID remains unset. The Metricool username is not a substitute.
 - The current Metricool brand `8094526` returned no scheduled posts for 2026-11-16 through 2026-12-16. The previous brand `7545638` returns HTTP 403 (access denied). Therefore the eight historical `draft:false`, `autoPublish:true` records from the 2026-10-28 snapshot remain **UNKNOWN**; an empty schedule on the new brand does not prove they were canceled or resolved.
@@ -48,11 +49,12 @@
 
 ### SonicVhibez — YouTube
 
-The exact production-readiness run remains HOLD with eight blockers: complete remote upload/history reconciliation; `content/render-manifest.json`; `content/long-form-render-manifest.json`; human-reviewed metadata; verified rights; completed compliance review; genuine `media/next-short.mp4`; and valid YouTube OAuth (currently `invalid_grant`). The readiness workflow never uploads, schedules or publishes: [diagnostic run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43775231751).
+The exact production-readiness run remains HOLD with eight blockers: complete remote upload/history reconciliation; `content/render-manifest.json`; `content/long-form-render-manifest.json`; human-reviewed metadata; verified rights; completed compliance review; genuine `media/next-short.mp4`; and valid YouTube OAuth (currently `invalid_grant`). The readiness workflow never uploads, schedules or publishes: [diagnostic run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43778013553).
 
 ### Media and rights
 
 - The NOAA spiny-lobster source artifact was reacquired and its SHA-256 verified. A silent 55-second 9:16 visual-review cut was generated with the persistent warning **REVIEW ONLY — NOT APPROVED FOR PUBLICATION** and exact credit **“Footage courtesy of NOAA’s Office of National Marine Sanctuaries”**. It has no audio stream and decodes fully. Its SHA-256 is `4fc0b7f4a3f5d79ecf8d6a2bb148f06ba01f56c1c8d3b4db846d614f65f07261`. This is a review attachment, not a production master; full continuous human playback, final narration/caption review, rights and compliance approval remain open. It must not be substituted for `media/next-short.mp4`.
+- A separate 55-second narrated review render was also generated: `NOAA-california-spiny-lobster-narration-review-1080x1920.mp4`, SHA-256 `aa84154b6938750f646377e9493dae81552249d9a07ba7d521d9b29addf8f1ba`, H.264 1080×1920/30 fps with AAC audio. It uses synthetic eSpeak `en-us` narration at 135 WPM, contains 108 script-matched words across 12 timed cues (maximum 38 characters per line), and visibly discloses **AI-GENERATED NARRATION — REVIEW ONLY**. The new `test/short-004-caption-review.test.mjs` verifies caption readability, word-for-word script alignment and fail-closed rights/approval flags. The synthetic voice must be replaced with owner-approved narration before publication; cue timing still requires human review.
 - Two Pexels listing pages and their license references were inspected as conditional candidates. The full-resolution files could not be downloaded in this environment, so neither clip has been visually reviewed or cleared. Both remain HOLD; the slow-worm page description identifies *Anguis fragilis*, a legless lizard, not a snake.
 - No synthetic or unverified asset is being represented as production evidence.
 
