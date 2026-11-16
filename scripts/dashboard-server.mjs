@@ -30,6 +30,7 @@ import { createWorkerQuarantineReleaseReceipt, verifyWorkerQuarantineReleaseRece
 import { manageCampaign } from "./campaign-management.mjs";
 import { validatePublicationSlot, validateCadenceDecision, localDateTimeToIso } from "./schedule-policy.mjs";
 import {
+import { META_GRAPH_API_VERSION } from "./meta-graph-api-version.mjs";
   FACEBOOK_PUBLISHING_DEFAULTS, createFacebookDraft, evaluateFacebookDraft,
   approveFacebookDraft, facebookApprovalFingerprint, chooseFacebookExperimentSlot, summarizeFacebookExperiment, generateFacebookIdea, assertFacebookPublishAllowed
 } from "./facebook-pipeline.mjs";
@@ -1025,7 +1026,7 @@ const server = http.createServer(async (req, res) => {
       const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
       const pageAccessToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
       const userAccessToken = process.env.META_USER_ACCESS_TOKEN ?? "";
-      const apiVersion = process.env.META_GRAPH_API_VERSION ?? config.apiVersion ?? "v26.0";
+      const apiVersion = config.apiVersion ?? META_GRAPH_API_VERSION;
       if (!/^\d{5,30}$/.test(envPageId) || config.destinationPageId !== envPageId) return json(res, 409, { error: "Configure the exact owner-verified numeric Page ID in both config/facebook-publishing.json and NATURE_FRONTIERS_FACEBOOK_PAGE_ID first" });
       if (pageAccessToken.length < 20 || userAccessToken.length < 20) return json(res, 409, { error: "META_USER_ACCESS_TOKEN and META_PAGE_ACCESS_TOKEN are both required in the secure environment" });
       let identity;
@@ -1289,7 +1290,7 @@ const server = http.createServer(async (req, res) => {
       const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
       const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
       const accessToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
-      const apiVersion = process.env.META_GRAPH_API_VERSION ?? config.apiVersion ?? "v26.0";
+      const apiVersion = config.apiVersion ?? META_GRAPH_API_VERSION;
       const envPublishingEnabled = process.env.FACEBOOK_PUBLISH_ENABLED === "YES";
       const initialState = loadState();
       const expectedPageId = verifiedFacebookPageId(initialState, config);
