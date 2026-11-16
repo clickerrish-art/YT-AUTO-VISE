@@ -1,3 +1,14 @@
+## Exact-candidate dashboard evidence refresh — 16 November 2026
+
+- Exact source/test candidate: `57769fa219fe98b52f8b182f3849206ac3c8110c`.
+- Dashboard browser workflow [43942301932](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301932): **33/33 Chromium journeys passed** against the real local dashboard/backend.
+- Full Node regression [43942293152](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942293152): **917/917 passed**, zero failures/skips; Python **45/45**, zero skips; npm audit **0 vulnerabilities**.
+- Current inventory remains 120 controls, 17 forms, 103 form-owned controls and 17 standalone controls. The 17 standalone controls, 11 successful local/operator forms and six fail-closed production forms retain their existing targeted evidence.
+- The dashboard test suite now asserts that an unapproved cadence remains visible as a production blocker; it no longer assumes an assistant-authored cadence approval.
+- **DASH-001 remains NOT_TESTED overall.** Thirty-three browser journeys and targeted control/form sub-gates do not establish exhaustive success, validation, error feedback, authorization, persistence, refresh/restart, concurrency and accessibility behavior for every field/control. The six production-dependent forms must remain fail-closed until genuine prerequisites exist.
+
+---
+
 ## Latest exact-SHA evidence refresh — 2026-11-16
 
 - Candidate source and test SHA: `6a527bd16f0e1323843c552f635d4ae48b47b9da`.
