@@ -580,3 +580,35 @@ test("startup recovers an interrupted Reel upload by its persisted remote video 
     assert.equal(result.skipped,1);
   } finally { f.cleanup(); }
 });
+
+test("publisher fsyncs the state directory after each atomic ledger rename", async () => {
+  const f = setup();
+  const originalFsync = fs.fsyncSync;
+  let directoryFsyncs = 0;
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.fsyncSync = function (fd) {
+      if (fs.fstatSync(fd).isDirectory()) directoryFsyncs += 1;
+      return originalFsync.call(this, fd);
+    };
+    const result = await runAutonomousFacebookPublisher({
+      rootDir: f.root,
+      configPath: f.configPath,
+      queuePath: f.queuePath,
+      stateDir: f.stateDir,
+      env: {
+        FACEBOOK_PUBLISH_ENABLED: "YES",
+        NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345",
+        META_USER_ACCESS_TOKEN: "u".repeat(30)
+      }
+    });
+    assert.equal(result.status, "COMPLETED");
+    assert.ok(fs.existsSync(path.join(f.stateDir, "facebook-run-summary.json")));
+    assert.ok(directoryFsyncs >= 1,
+      "the state directory must be fsynced after the summary/ledger atomic rename");
+  } finally {
+    fs.fsyncSync = originalFsync;
+    f.cleanup();
+  }
+});
