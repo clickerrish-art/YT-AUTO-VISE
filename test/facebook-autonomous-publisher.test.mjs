@@ -641,3 +641,24 @@ test("publisher rejects internal state-ledger symlink aliases that could merge h
     }), /state file path contains a symbolic link/i);
   } finally { f.cleanup(); }
 });
+
+test("publisher blocks unknown persisted statuses in history, attempt ledger and held-items ledger", async () => {
+  const cases = [
+    ["facebook-history.json", [{ status: "PUBLISHED" }]],
+    ["facebook-attempt-ledger.json", [{ status: "PENDING" }]],
+    ["facebook-held-items.json", [{ status: "HELD_UNKNOWN_NEW_STATE" }]]
+  ];
+  for (const [filename, rows] of cases) {
+    const f = setup();
+    try {
+      Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+      fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+      fs.mkdirSync(f.stateDir, { recursive: true });
+      fs.writeFileSync(path.join(f.stateDir, filename), JSON.stringify(rows));
+      await assert.rejects(() => runAutonomousFacebookPublisher({
+        rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+        env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) }
+      }), /malformed or unknown status data; publishing blocked/i, filename);
+    } finally { f.cleanup(); }
+  }
+});
