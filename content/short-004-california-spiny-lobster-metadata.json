@@ -3,7 +3,7 @@
   "channel": "SonicVhibez",
   "contentType": "short",
   "title": "California Spiny Lobster: The Reef's Night-Time Forager",
-  "description": "Meet the California spiny lobster (Panulirus interruptus), filmed in the rocky reef habitat of California's Channel Islands. NOAA footage is credited to NOAA’s Office of National Marine Sanctuaries. California spiny lobsters shelter in reef crevices by day and emerge after dark to forage. Source audio has been removed from the edit. Educational natural-history narration; behaviour described in narration is not necessarily shown in every shot.",
+  "description": "Meet the California spiny lobster (Panulirus interruptus), filmed in the rocky reef habitat of California's Channel Islands. Footage courtesy of NOAA Fisheries and NOAA’s Office of National Marine Sanctuaries. California spiny lobsters shelter in reef crevices by day and emerge after dark to forage. Source audio has been removed from the edit. Educational natural-history narration; behaviour described in narration is not necessarily shown in every shot.",
   "tags": [
     "California spiny lobster",
     "Panulirus interruptus",
@@ -35,10 +35,10 @@
   "complianceReviewed": false,
   "sourceAssetId": "NOAA-SPINY-LOBSTERS-CA-2026-11",
   "sourceAudioPolicy": "REMOVE_COMPLETELY",
-  "requiredAttribution": "NOAA’s Office of National Marine Sanctuaries",
+  "requiredAttribution": "NOAA Fisheries / NOAA’s Office of National Marine Sanctuaries",
   "scheduleStatus": "UNSCHEDULED_NEXT_SHORT_CANDIDATE",
   "uploadAllowed": false,
-  "notes": "Editorial wildlife Short, not a Selar promotion. The exact NOAA B-roll source hash and public-domain source terms have been independently verified for this source only. Final-output rights confirmation remains false until the final master includes NOAA Fisheries and NOAA's Office of National Marine Sanctuaries attribution and the complete output is reviewed. Current review cuts remain non-production artifacts. Full human playback, natural voice approval, caption timing, factual/editorial review and human compliance approval remain open. Do not alter the existing schedule or rolling cycle. Neither review cut is the production master or media/next-short.mp4.",
+  "notes": "Editorial wildlife Short, not a Selar promotion. The exact NOAA B-roll source hash and public-domain source terms have been independently verified for this source only. Final-output rights confirmation remains false until the final master and its description include NOAA Fisheries and NOAA's Office of National Marine Sanctuaries attribution and the complete output is reviewed. Current review cuts remain non-production artifacts. Full human playback, natural voice approval, caption timing, factual/editorial review and human compliance approval remain open. Do not alter the existing schedule or rolling cycle. Neither review cut is the production master or media/next-short.mp4.",
   "containsSyntheticMedia": false,
   "renderReview": {
     "status": "REVIEW_RENDER_ONLY_NOT_FOR_PUBLICATION",
