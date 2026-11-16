@@ -576,6 +576,9 @@ test("Facebook draft idea and save controls persist a blocked draft without atte
   await expect(page.locator("#fbcaption")).not.toHaveValue("");
 
   await page.locator("#fbid").fill(draftId);
+  await page.locator("#fbpillar").selectOption("conservation_education");
+  await page.locator("#fbtime").selectOption("18:00");
+  await page.locator("#fbexternalReviewed").check();
   await page.locator("#fbpageid").fill("123456789");
   await page.locator("#fbcaption").fill("Research-first wildlife education draft: explain how habitat structure affects animal behaviour. Add verified sources and licensed media before any publication.");
   await page.getByRole("button", { name: "Save Facebook draft and run checks" }).click();
@@ -590,6 +593,11 @@ test("Facebook draft idea and save controls persist a blocked draft without atte
   expect(saved.destination).toBe("nature_frontiers_facebook");
   expect(saved.publishingEnabled).toBe(false);
   expect(saved.status).toBe("DRAFT");
+  expect(saved.pillar).toBe("conservation_education");
+  expect(saved.scheduledTime).toBe("18:00");
+  expect(saved.timezone).toBe("Africa/Johannesburg");
+  expect(saved.experiment.slot).toBe("18:00");
+  expect(saved.externalLinksReviewed).toBe(true);
   expect(state.publishingEnabled).toBe(false);
 });
 
@@ -655,6 +663,49 @@ test("Facebook Page verification control retains actionable blocked feedback aft
   await expect(page.locator("#facebookstatus")).toBeVisible();
 });
 
+
+test("Instagram status refresh is read-only and makes no provider request", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  const statusRequests = [];
+  const providerRequests = [];
+  page.on("request", outgoing => {
+    const url = new URL(outgoing.url());
+    if (url.pathname === "/api/instagram/status") {
+      statusRequests.push({ method: outgoing.method(), token: outgoing.headers()["x-operator-token"] });
+    }
+    if (url.hostname === "graph.facebook.com" || url.hostname.endsWith(".instagram.com") || url.hostname === "instagram.com") {
+      providerRequests.push({ method: outgoing.method(), url: outgoing.url() });
+    }
+  });
+
+  const statusResponse = await request.get("/api/instagram/status", { headers });
+  expect(statusResponse.status()).toBe(200);
+  const status = await statusResponse.json();
+  expect(status.readOnly).toBe(true);
+  expect(status.providerMutationAttempted).toBe(false);
+  expect(status.publishingSwitches).toEqual({
+    publishingEnabled: false,
+    dryRun: true,
+    emergencyStop: true
+  });
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+  const beforeRefresh = statusRequests.length;
+  await page.locator("#instagramRefresh").click();
+  await expect(page.locator("#instagramStatus")).toContainText("Account ID configured: no", { timeout: 10_000 });
+  await expect(page.locator("#instagramStatus")).toContainText("publishingEnabled=false");
+  await expect(page.locator("#instagramStatus")).toContainText("dryRun=true");
+  await expect(page.locator("#instagramStatus")).toContainText("emergencyStop=true");
+  await expect(page.locator("#instagramStatus")).toContainText("No provider mutation was attempted.");
+  await expect.poll(() => statusRequests.length).toBeGreaterThan(beforeRefresh);
+  expect(statusRequests.at(-1).method).toBe("GET");
+  expect(statusRequests.at(-1).token).toBe(operatorToken);
+  expect(providerRequests).toEqual([]);
+  await expect(page.locator("#instagramRefresh")).toBeEnabled();
+});
 
 test("production controls disable safely when real media prerequisites are missing", async ({ page, request }) => {
   const headers = { "x-operator-token": operatorToken };
@@ -1935,9 +1986,11 @@ test("Cloudflare backup controls create a checkpoint and require revision-bound 
     reason: "OPERATOR_REQUESTED:browser-e2e"
   }];
   const backupRequests = [];
+  const backupListRequests = [];
   const restoreRequests = [];
 
   await page.route("**/api/state/backups", async route => {
+    backupListRequests.push({ method: route.request().method(), path: new URL(route.request().url()).pathname });
     await route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -1984,6 +2037,11 @@ test("Cloudflare backup controls create a checkpoint and require revision-bound 
   await expect(page.locator("#createStateBackup")).toBeEnabled();
   await expect(page.locator("#stateBackupList")).toContainText("Revision 4");
   await expect(page.locator("#restoreStateBackup-backup-1")).toHaveAttribute("data-restore-backup", "backup-1");
+  const listRequestsBeforeRefresh = backupListRequests.length;
+  await page.locator("#refreshStateBackups").click();
+  await expect.poll(() => backupListRequests.length).toBe(listRequestsBeforeRefresh + 1);
+  expect(backupListRequests.at(-1)).toEqual({ method: "GET", path: "/api/state/backups" });
+  await expect(page.locator("#stateBackupList")).toContainText("Revision 4");
 
   await page.locator("#createStateBackup").click();
   await expect(page.locator("#stateBackupList")).toContainText("Revision 5");
