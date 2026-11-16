@@ -115,5 +115,30 @@
       "verifiedBy": "clickerrish-art",
       "reason": "The complete public/private/unlisted uploads inventory contains one public video. The owner confirmed it is a Short and that its YouTube Studio publication date matches the API record. The exact UTC timestamp is retained from the YouTube API. The separate upload-attempt ledger must still be checked by the uploader immediately before any future insertion; no publication-cycle or go-live clearance is claimed."
     }
+  },
+  "latestVidIQReadOnlyInventory": {
+    "checkedAt": "2026-11-16T20:43:23.653Z",
+    "source": "connected vidIQ YouTube uploads inventory",
+    "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+    "privacyStatusesQueried": [
+      "public",
+      "private",
+      "unlisted"
+    ],
+    "pagesRetrieved": 1,
+    "totalVideosReturned": 1,
+    "paginationComplete": true,
+    "videos": [
+      {
+        "videoId": "LjePS02hA1o",
+        "title": "How to make wildlife videos people actually watch #wildlife #filmmaking #shorts",
+        "privacyStatus": "public",
+        "uploadStatus": "processed",
+        "publishedAt": "2026-10-22T15:05:56Z",
+        "videoType": "short",
+        "duration": "PT20S"
+      }
+    ],
+    "interpretation": "Supplemental connected-vidIQ inventory cross-check only. This does not replace the production YouTube OAuth workflow, independently verify the Google token, or reconcile pending/uncertain upload attempts. The production status remains BLOCKED_OAUTH_INVALID_GRANT and publication remains disabled."
   }
 }
