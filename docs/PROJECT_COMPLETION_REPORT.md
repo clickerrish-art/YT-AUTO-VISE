@@ -1,3 +1,53 @@
+# 16 November 2026 — exact source/test completion checkpoint
+
+**Verified application/test candidate:** `57769fa219fe98b52f8b182f3849206ac3c8110c`. The current branch has two subsequent documentation-only commits; no application or test files changed after this candidate. **Current documentation HEAD:** `8c9fbbb1612b45c41ba1ff398712327bdf02dd07`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` (unchanged). PR #1 remains OPEN, DRAFT and UNMERGED.
+
+## Exact-candidate engineering verification
+
+| Gate | Exact result |
+|---|---|
+| Automation/security | [run 43942293152](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942293152): 917/917 Node tests, 45/45 Python tests, zero skips, npm audit 0 vulnerabilities; authenticated read-only Cloudflare staging smoke passed |
+| Content quality | [run 43942302023](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942302023): 917/917 Node tests, zero failures/skips |
+| Dashboard Chromium E2E | [run 43942301932](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301932): 33/33 journeys passed |
+| Metadata validation | [run 43942302103](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942302103): PASS; unreviewed metadata and asset examples remain blocked |
+| Queue readiness | [run 43942301833](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301833): PASS; 16 queue items, zero added to the isolated proposal, publishing disabled |
+| Cloudflare durable-state checks | [run 43942301818](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301818): PASS; authenticated read-only state/backup checks and no remote mutation |
+| Deployment recovery | [run 43942302049](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942302049): 2/2 passed |
+| Isolated main/candidate baseline | [run 43942301927](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301927): PASS on exact main and candidate checkouts |
+| Branch inventory | [run 43942302072](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942302072): PASS; 3,943 ahead / 4 behind / 372 final-tree file changes; no history mutation |
+| Nature Frontiers local draft | [run 43942301897](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301897): PASS; local-only, no provider write |
+| Nature Frontiers Instagram safety | [run 43942302234](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942302234): PASS; safety validation only, no publishing |
+| Production readiness | [run 43942301842](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301842): expected HOLD — 9 genuine owner/evidence blockers |
+| Nature Frontiers Meta identity | [run 43942301878](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942301878): BLOCKED by expired Meta session, HTTP 401 / OAuth error 190 / subcode 463 |
+
+The schedule-validator correction now accepts the explicit `OWNER_APPROVAL_REQUIRED` configuration as a valid, fail-closed planning state. It validates the 72-hour rolling policy and draft-only preparation slots while separately reporting that publication is blocked. The YouTube upload gate still rejects private upload without real owner cadence approval. Tests now separate pure cycle arithmetic from production authorization; no approval was fabricated.
+
+## Current acceptance position
+
+- Requirements register: **70 PASS / 9 NOT_TESTED / 10 BLOCKED** (89 total; these counts do not mean all owner gates are satisfied).
+- API matrix: **48 protected routes; 42 PASS / 6 BLOCKED; authentication-negative checks 48/48**. API-001 remains NOT_TESTED overall.
+- Dashboard: 120 controls, 17 forms, 103 form-owned controls and 17 standalone controls. The six dashboard behavior sub-gates pass; DASH-001 remains NOT_TESTED because exhaustive per-field business behavior is not proven.
+- SCHED-001 remains NOT_TESTED: complete remote YouTube history and actual publication timestamps cannot be verified while YouTube OAuth returns `invalid_grant`.
+- STATE-001 is PASS for the staging recovery evidence. DEPLOY-001 remains NOT_TESTED for full production deployment, monitoring and rollback.
+- GIT-002 remains NOT_TESTED: branch history is highly divergent and requires human semantic review. The four base-only commits are two test-file add/revert pairs with no net base-tree change; branch-only integration review remains incomplete.
+- The 16-item queue is held; no upload, schedule mutation or publication occurred.
+
+## Mandatory external/owner blockers — do not bypass
+
+1. **Cadence:** the requested 2 long-form + 1 Short weekly cadence conflicts with a minimum 72-hour interval. The 216-hour rolling alternative is not owner-approved. A feasible mode, timezone-aware approval timestamp and reference are required.
+2. **YouTube identity/OAuth:** reauthorize the existing OAuth client securely; current refresh returns `invalid_grant`. Verify the exact SonicVhibez channel ID independently.
+3. **Complete YouTube history:** reconcile every public/private/unlisted/scheduled video and uncertain upload attempt immediately before any upload.
+4. **Genuine media:** final `media/next-short.mp4`, long-form export, render manifests and exact hashes are absent.
+5. **Rights:** provide genuine footage, narration, music and sound-effect licences and per-asset permitted-use evidence.
+6. **Human review:** approve factual accuracy, metadata, captions, thumbnail, rights and compliance against exact final hashes.
+7. **Remote read-back/related video:** verify any provider-side upload/read-back and native Short-parent relationship only when a permitted operation is separately authorized.
+8. **Meta (separate Nature Frontiers brand):** renew the expired token in the secure secret store before read-only Page/Instagram identity verification. Keep draft-only and publishing-disabled defaults.
+9. **Repository protection:** branch protection cannot be independently inspected through the current integration (403); repository owner must verify required checks/settings.
+
+**Zero-cost rule preserved:** no paid service, GPU, trial, provider mutation, YouTube upload, Meta publication, Metricool write, merge, rebase, reset or force-push was used. Public/unattended publishing remains disabled. These blockers are not waived by passing CI.
+
+---
+
 # Current completion checkpoint — 16 November 2026
 
 **Project state: dashboard engineering sub-gates pass; production remains on HOLD. No publishing, campaign activation or provider mutation is authorized.**
