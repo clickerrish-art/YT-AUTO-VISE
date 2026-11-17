@@ -1265,6 +1265,128 @@
             "Do not assign a publication slot until complete current YouTube history and the SonicVhibez destination schedule are inspected and every 72-hour gap is calculated."
           ],
           "visibility": "private"
+        },
+        {
+          "id": "sonicvhibez-short-014-wildlife-audio-recording",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "Wildlife Audio Recording: 3 Field Tips for Clear Sound",
+          "primaryKeyword": "wildlife audio recording",
+          "script": "Wildlife audio recording can make a scene feel real, but wind and handling noise can bury the sound. Try three checks before you record. First, fit a windscreen that suits your microphone and use a shock mount if you’re handling it. Second, aim a directional mic toward the sound, monitor the meter, and leave headroom so a sudden call doesn’t clip. Make a short test recording. Third, stay still and quiet, capture a little natural ambience, and keep a respectful distance. Never use playback, bait, chase, or approach wildlife for a recording. If the sound is poor, change position only when safe and permitted. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. Explore the Complete YouTube Wildlife Creator's Vault at the link below.",
+          "productId": "wildlife-creators-vault",
+          "productUrl": "https://selar.com/0u19v8u99l",
+          "description": "Wildlife audio recording: reduce wind and handling noise, aim the microphone, leave headroom and capture natural ambience without disturbing animals.\n\nResource: Complete YouTube Wildlife Creator's Vault\nhttps://selar.com/0u19v8u99l\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nUse original or commercially cleared audio. Do not use playback, bait or pursuit to attract wildlife.",
+          "keywordPhrases": [
+            {
+              "phrase": "wildlife audio recording"
+            },
+            {
+              "phrase": "how to record wildlife sounds"
+            },
+            {
+              "phrase": "wildlife sound recording tips"
+            },
+            {
+              "phrase": "field recording for wildlife videos"
+            },
+            {
+              "phrase": "reduce wind noise in outdoor audio"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-17T10:31:49+02:00",
+            "note": "Qualitative search-intent evidence only: current results include direct how-to pages about recording clear wildlife audio and official Cornell Lab guidance on wildlife sound recording. No live global keyword-volume or competition data was accessed; no numerical volume is claimed.",
+            "sources": [
+              {
+                "title": "Sound recording tips — Cornell Lab of Ornithology / Macaulay Library",
+                "url": "https://support.ebird.org/en/support/solutions/articles/48001064298-sound-recording-tips",
+                "whyRelevant": "Official field guidance covers directional microphone aim, safe record levels, staying quiet, handling noise, shock mounts and windscreens."
+              },
+              {
+                "title": "How to Record Clear Wildlife Audio in the Field — Sekin",
+                "url": "https://sekin.in/how-to-record-clear-wildlife-audio-in-the-field/",
+                "whyRelevant": "A guide dated 14 October 2026 uses the same clear-wildlife-audio how-to intent and discusses mic placement, wind, headroom and ethical distance."
+              },
+              {
+                "title": "Creating Authentic Nature Sounds for Wildlife Documentaries and Films — Audio Scene",
+                "url": "https://audioscene.org/article/creating-authentic-nature-sounds-for-wildlife-documentaries-and-films",
+                "whyRelevant": "Updated 14 July 2026; supports quiet field technique, respectful distance, wind protection and authentic ambience."
+              }
+            ]
+          },
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-17T10:31:49+02:00",
+            "note": "Search results retrieved 17 November 2026 show informational intent around how to record wildlife sounds, microphone aim, wind protection and avoiding disturbance. This is qualitative evidence only; no measured search volume is available or claimed.",
+            "sources": [
+              {
+                "title": "Sound recording tips — Cornell Lab of Ornithology / Macaulay Library",
+                "url": "https://support.ebird.org/en/support/solutions/articles/48001064298-sound-recording-tips",
+                "whyRelevant": "Official field guidance covers directional microphone aim, safe record levels, staying quiet, handling noise, shock mounts and windscreens."
+              },
+              {
+                "title": "How to Record Clear Wildlife Audio in the Field — Sekin",
+                "url": "https://sekin.in/how-to-record-clear-wildlife-audio-in-the-field/",
+                "whyRelevant": "A guide dated 14 October 2026 uses the same clear-wildlife-audio how-to intent and discusses mic placement, wind, headroom and ethical distance."
+              },
+              {
+                "title": "Creating Authentic Nature Sounds for Wildlife Documentaries and Films — Audio Scene",
+                "url": "https://audioscene.org/article/creating-authentic-nature-sounds-for-wildlife-documentaries-and-films",
+                "whyRelevant": "Updated 14 July 2026; supports quiet field technique, respectful distance, wind protection and authentic ambience."
+              }
+            ]
+          },
+          "scriptEvidence": [
+            {
+              "title": "Sound recording tips — Cornell Lab of Ornithology / Macaulay Library",
+              "url": "https://support.ebird.org/en/support/solutions/articles/48001064298-sound-recording-tips",
+              "whyUsed": "Official field guidance covers directional microphone aim, safe record levels, staying quiet, handling noise, shock mounts and windscreens."
+            },
+            {
+              "title": "How to Record Clear Wildlife Audio in the Field — Sekin",
+              "url": "https://sekin.in/how-to-record-clear-wildlife-audio-in-the-field/",
+              "whyUsed": "A guide dated 14 October 2026 uses the same clear-wildlife-audio how-to intent and discusses mic placement, wind, headroom and ethical distance."
+            },
+            {
+              "title": "Creating Authentic Nature Sounds for Wildlife Documentaries and Films — Audio Scene",
+              "url": "https://audioscene.org/article/creating-authentic-nature-sounds-for-wildlife-documentaries-and-films",
+              "whyUsed": "Updated 14 July 2026; supports quiet field technique, respectful distance, wind protection and authentic ambience."
+            }
+          ],
+          "hashtags": [
+            "#WildlifeAudio",
+            "#FieldRecording",
+            "#WildlifeFilmmaking",
+            "#NatureDocumentary",
+            "#YouTubeCreator"
+          ],
+          "thumbnailDirection": "Vertical close-up of a real, rights-cleared field microphone with a compatible windscreen in a natural habitat. Add three simple labels: WIND / AIM / LEVELS and the headline “CLEANER WILDLIFE AUDIO”. Do not use a fabricated audio meter, baited animal scene or unlicensed wildlife image.",
+          "disclosure": {
+            "status": "APPROVED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "approvedAt": "2026-11-10T07:00:36+02:00",
+            "approvalReference": "Owner supplied this exact viewer-facing disclosure in a user-authored ChatGPT message on 2026-11-10 at 07:00:36+02:00: “This product is sold through my own Selar business; purchases generate revenue for my business.” The owner followed on 2026-11-10 at 07:23:41+02:00 with an instruction to proceed to completion while guarding against policy violations. This wording applies only to the Complete YouTube Wildlife Creator's Vault promotion."
+          },
+          "productionChecklist": [
+            "Use original or commercially cleared footage, field audio, narration, music and sound effects; retain licence evidence.",
+            "Demonstrate wind protection with a compatible windscreen and explain that fit matters.",
+            "Show microphone aim and a safe recording-level check; avoid claiming one fixed gain setting suits every recorder.",
+            "Keep a respectful distance; never bait, chase, use playback or change animal behaviour for a recording.",
+            "Capture genuine ambience only where recording is permitted and without disturbing wildlife.",
+            "Record a natural voice track and verify a final runtime of 50–60 seconds, targeting about 55.",
+            "Synchronize captions to the final voice track and check phone-size readability and vertical safe areas.",
+            "Use the exact owner-approved ADVERTISEMENT identifier and direct-sales disclosure in the final video and description.",
+            "Recheck the exact Selar listing and seller Click 47 before release; the repository's seller evidence was last verified 9 November 2026 and the page could not be re-opened in this run.",
+            "Complete factual, rights, compliance, playback and thumbnail review against the final asset hashes.",
+            "Keep this item private and DRAFT_ONLY; do not upload, schedule or publish.",
+            "Do not assign a publication slot until complete current YouTube history and the correct SonicVhibez destination schedule are inspected and every 72-hour gap is calculated."
+          ],
+          "visibility": "private"
         }
       ]
     }

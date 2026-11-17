@@ -272,9 +272,8 @@ test("December 7 wildlife B-roll Short has current qualitative evidence and appr
 test("December 14 YouTube Shorts analytics draft stays private and held for product-specific disclosure", () => {
   const week = checkedInPlan.weeks.find(row => row.weekOf === "2026-12-14");
   assert.ok(week);
-  assert.equal(week.items.length, 1);
-  const item = week.items[0];
-  assert.equal(item.id, "sonicvhibez-short-013-youtube-shorts-analytics");
+  assert.equal(week.items.length, 2);
+  const item = week.items.find(row => row.id === "sonicvhibez-short-013-youtube-shorts-analytics");
   assert.equal(item.targetSeconds, 55);
   assert.equal(item.status, "DRAFT_ONLY");
   assert.equal(item.visibility, "private");
@@ -364,5 +363,35 @@ test("December 7 wildlife video-editing Short uses fresh vidIQ estimates and the
   assert.equal(item.currentIntentEvidence.provider, "web_search");
   assert.equal(item.currentIntentEvidence.sources.length, 3);
   assert.ok(item.scriptEvidence.every(source => source.url.startsWith("https://")));
+  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
+});
+
+
+test("December 14 wildlife audio recording Short uses current qualitative intent and the approved Vault disclosure", () => {
+  const week = checkedInPlan.weeks.find(row => row.weekOf === "2026-12-14");
+  const item = week?.items.find(row => row.id === "sonicvhibez-short-014-wildlife-audio-recording");
+  const product = products.find(row => row.id === "wildlife-creators-vault");
+  assert.ok(week);
+  assert.equal(week.items.length, 2);
+  assert.ok(item);
+  assert.equal(item.channel, "SonicVhibez");
+  assert.equal(item.status, "DRAFT_ONLY");
+  assert.equal(item.visibility, "private");
+  assert.equal(item.targetSeconds, 55);
+  assert.equal(item.title, "Wildlife Audio Recording: 3 Field Tips for Clear Sound");
+  assert.equal(item.primaryKeyword, "wildlife audio recording");
+  assert.equal(item.productUrl, product.url);
+  assert.equal(item.keywordEvidence.provider, "web_search");
+  assert.equal(item.keywordEvidence.type, "qualitative_search_intent");
+  assert.match(item.keywordEvidence.note, /no live global keyword-volume|no numerical volume/i);
+  assert.equal(item.currentIntentEvidence.provider, "web_search");
+  assert.equal(item.currentIntentEvidence.sources.length, 3);
+  assert.equal(item.disclosure.status, "APPROVED");
+  assert.equal(item.disclosure.approvalReference, product.promotionGate.disclosure.approvalReference);
+  assert.ok(item.script.indexOf("Advertisement.") < item.script.indexOf(product.promotionGate.disclosure.text));
+  assert.match(item.description, /^Wildlife audio recording/);
+  assert.match(item.description, /^ADVERTISEMENT$/m);
+  assert.ok(item.description.includes(product.promotionGate.disclosure.text));
+  assert.equal(item.script.trim().split(/\s+/).filter(Boolean).length, 131);
   assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
 });

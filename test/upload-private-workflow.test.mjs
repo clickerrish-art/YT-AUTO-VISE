@@ -48,3 +48,13 @@ test("both private-upload entry points validate actual prior upload jobs instead
     assert.ok(!candidate.includes("Refuse ledger bypass after any prior manual upload run"));
   }
 });
+
+
+const uploaderSource = fs.readFileSync("scripts/upload-private.mjs", "utf8");
+
+test("private uploader imports the complete YouTube history snapshot reader it invokes", () => {
+  const importLine = uploaderSource.split("\n").find(line => line.startsWith("import {") && line.includes('"./youtube-history-gate.mjs"')) ?? "";
+  assert.ok(importLine.includes("fetchCompleteYoutubeHistorySnapshot"));
+  assert.equal(importLine.includes("fetchCompleteYoutubeHistory,"), false);
+  assert.ok((uploaderSource.match(/fetchCompleteYoutubeHistorySnapshot\(/g) ?? []).length >= 3);
+});

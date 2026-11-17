@@ -20,6 +20,20 @@ const reconciliation = {
   ]
 };
 
+function verifiedHistorySnapshot(history, scheduledItems = []) {
+  return {
+    complete: true,
+    channelId,
+    history,
+    scheduledItems,
+    privateUploads: [],
+    verifiedAt: "2026-10-24T10:00:00.000Z",
+    verifiedBy: "Owner Reviewer",
+    reconciliationSha256: "a".repeat(64)
+  };
+}
+
+
 test("history reconciliation records private uploads without advancing the actual-publication cycle", () => {
   const snapshot = validateHistoryReconciliationSnapshot({ channelId, remoteVideos, reconciliation });
   assert.equal(snapshot.history.length, 1);
@@ -101,7 +115,7 @@ test("history reconciliation separates future scheduled videos from actual publi
   });
   assert.equal(validSlot.valid, true, "a 72-hour gap from the scheduled item passes the slot policy");
   assert.throws(() => assertNextPublicationAllowed({
-    history: snapshot.history, scheduledItems: snapshot.scheduledItems, pendingAttempts: [],
+    historySnapshot: snapshot, expectedChannelId: channelId, pendingAttempts: [],
     proposedAt: "2026-11-11T15:00:00.000Z", jobId: "job-4", format: "long_form"
   }), /owner-approved cadence decision blocks private upload/, "the production gate still requires actual owner approval");
   assert.throws(() => validateHistoryReconciliationSnapshot({
@@ -191,7 +205,10 @@ test("cycle slot policy enforces verified history, next format and the 72-hour g
   const wrongFormat = evaluateNextPublication({ history, historyVerified: true, pendingAttempts: [], proposedAt: "2026-11-10T15:00:00.000Z", jobId: "job-3", format: "short" });
   assert.equal(wrongFormat.valid, false);
   assert.ok(wrongFormat.errors.some(error => /next format must be long_form/.test(error)));
-  assert.throws(() => assertNextPublicationAllowed({ history, pendingAttempts: [], proposedAt: "2026-11-10T15:00:00.000Z", jobId: "job-3", format: "long_form" }), /owner-approved cadence decision blocks private upload/);
+  assert.throws(() => assertNextPublicationAllowed({
+    historySnapshot: verifiedHistorySnapshot(history), expectedChannelId: channelId, pendingAttempts: [],
+    proposedAt: "2026-11-10T15:00:00.000Z", jobId: "job-3", format: "long_form"
+  }), /owner-approved cadence decision blocks private upload/);
 });
 
 
@@ -223,7 +240,8 @@ test("owner-approved cycle starts after a legacy Short while retaining it for 72
   assert.equal(tooSoon.valid, false);
   assert.ok(tooSoon.errors.some(error => /spacing conflict/.test(error)));
   assert.throws(() => assertNextPublicationAllowed({
-    history: legacyHistory, pendingAttempts: [], proposedAt: "2026-11-10T15:05:56.000Z",
+    historySnapshot: verifiedHistorySnapshot(legacyHistory), expectedChannelId: channelId, pendingAttempts: [],
+    proposedAt: "2026-11-10T15:05:56.000Z",
     jobId: "first-approved-cycle-long-form", format: "long_form"
   }), /owner-approved cadence decision blocks private upload/);
 });
@@ -231,7 +249,8 @@ test("owner-approved cycle starts after a legacy Short while retaining it for 72
 test("private upload gate remains blocked without owner cadence approval and still enforces unresolved-attempt checks", () => {
   const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
   assert.throws(() => assertNextPublicationAllowed({
-    history, pendingAttempts: [], proposedAt: "2026-11-10T15:00:00.000Z",
+    historySnapshot: verifiedHistorySnapshot(history), expectedChannelId: channelId, pendingAttempts: [],
+    proposedAt: "2026-11-10T15:00:00.000Z",
     jobId: "job-owner-cadence", format: "long_form"
   }), /owner-approved cadence decision blocks private upload/);
   const unresolved = evaluateNextPublication({
@@ -425,4 +444,43 @@ test("complete history fetch rejects repeated page tokens and duplicate playlist
   } finally {
     fs.rmSync(directory, { recursive: true, force: true });
   }
+});
+
+
+test("production publication gate requires complete channel, scheduled, private-upload and attempt inventories", () => {
+  const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
+  const snapshot = verifiedHistorySnapshot(history);
+  const base = {
+    historySnapshot: snapshot,
+    expectedChannelId: channelId,
+    pendingAttempts: [],
+    proposedAt: "2026-11-10T15:00:00.000Z",
+    jobId: "job-explicit-inventories",
+    format: "long_form"
+  };
+
+  assert.throws(
+    () => assertNextPublicationAllowed({ ...base, historySnapshot: undefined }),
+    /complete owner-verified YouTube history snapshot/
+  );
+  assert.throws(
+    () => assertNextPublicationAllowed({ ...base, historySnapshot: { ...snapshot, scheduledItems: undefined } }),
+    /complete owner-verified YouTube history snapshot/
+  );
+  assert.throws(
+    () => assertNextPublicationAllowed({ ...base, pendingAttempts: undefined }),
+    /upload attempt ledger must be explicitly inspected/
+  );
+  assert.throws(
+    () => assertNextPublicationAllowed({ ...base, expectedChannelId: "UC" + "Z".repeat(22) }),
+    /must match the authenticated SonicVhibez channel ID/
+  );
+  assert.throws(
+    () => assertNextPublicationAllowed({ ...base, timeZone: "UTC" }),
+    /timeZone override must match authoritative timezone Africa\/Johannesburg/
+  );
+  assert.throws(
+    () => assertNextPublicationAllowed({ ...base, minSpacingHours: 71 }),
+    /minSpacingHours override must match authoritative spacing policy of 72 hours/
+  );
 });

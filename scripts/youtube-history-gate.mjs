@@ -350,7 +350,28 @@ export async function fetchCompleteYoutubeHistory(youtube, channel, reconciliati
   return (await fetchCompleteYoutubeHistorySnapshot(youtube, channel, reconciliationPath, channelId)).history;
 }
 
-export function assertNextPublicationAllowed({ history, pendingAttempts, scheduledItems = [], proposedAt, jobId, format, timeZone, minSpacingHours } = {}) {
+export function assertNextPublicationAllowed({
+  historySnapshot, expectedChannelId, pendingAttempts, proposedAt, jobId, format, timeZone, minSpacingHours
+} = {}) {
+  const verifiedAt = strictIsoTimestamp(historySnapshot?.verifiedAt);
+  if (!historySnapshot || typeof historySnapshot !== "object" || Array.isArray(historySnapshot)
+      || historySnapshot.complete !== true
+      || typeof historySnapshot.channelId !== "string" || !historySnapshot.channelId.trim()
+      || !Array.isArray(historySnapshot.history)
+      || !Array.isArray(historySnapshot.scheduledItems)
+      || !Array.isArray(historySnapshot.privateUploads)
+      || typeof historySnapshot.verifiedBy !== "string" || historySnapshot.verifiedBy.trim().length < 2
+      || !Number.isFinite(verifiedAt) || verifiedAt > Date.now()
+      || !/^[a-f0-9]{64}$/.test(historySnapshot.reconciliationSha256 ?? "")) {
+    throw new Error("complete owner-verified YouTube history snapshot with public/private/unlisted and scheduled inventory is required before upload");
+  }
+  if (typeof expectedChannelId !== "string" || !expectedChannelId.trim() || historySnapshot.channelId !== expectedChannelId) {
+    throw new Error("complete YouTube history snapshot must match the authenticated SonicVhibez channel ID");
+  }
+  if (!Array.isArray(pendingAttempts)) {
+    throw new Error("upload attempt ledger must be explicitly inspected and supplied as an array");
+  }
+
   let policy = {};
   try {
     policy = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), "config/weekly-content-plan.json"), "utf8"));
@@ -359,20 +380,36 @@ export function assertNextPublicationAllowed({ history, pendingAttempts, schedul
   }
   const configuredSpacing = policy.minimumPublicationSpacingHours;
   const configuredFormats = policy.publicationCycle?.formats;
-  if (!Number.isFinite(configuredSpacing) || configuredSpacing <= 0 || configuredSpacing > 8760
+  if (!Number.isFinite(configuredSpacing) || configuredSpacing < DEFAULT_MIN_SPACING_HOURS || configuredSpacing > 8760
       || policy.publicationCycle?.minimumHoursBetweenConsecutivePublications !== configuredSpacing
       || policy.publicationCycle?.minimumCycleHours !== configuredSpacing * (Array.isArray(configuredFormats) ? configuredFormats.length : 0)
       || JSON.stringify(configuredFormats) !== JSON.stringify(["long_form", "long_form", "short"])) {
     throw new Error("authoritative publication schedule has inconsistent spacing/cycle values; refusing upload");
   }
+  if (policy.timezone !== DEFAULT_SCHEDULE_TIMEZONE) {
+    throw new Error("authoritative publication timezone must be " + DEFAULT_SCHEDULE_TIMEZONE);
+  }
+  if (timeZone !== undefined && timeZone !== policy.timezone) {
+    throw new Error("timeZone override must match authoritative timezone " + policy.timezone);
+  }
+  if (minSpacingHours !== undefined && minSpacingHours !== configuredSpacing) {
+    throw new Error("minSpacingHours override must match authoritative spacing policy of " + configuredSpacing + " hours");
+  }
+
   const cadenceDecision = validateCadenceDecision(policy.cadenceDecision, configuredSpacing);
   if (!cadenceDecision.valid) {
     throw new Error("owner-approved cadence decision blocks private upload: " + cadenceDecision.errors.join("; "));
   }
   const result = evaluateNextPublication({
-    history, historyVerified: true, pendingAttempts, scheduledItems, proposedAt, jobId, format,
-    timeZone: timeZone ?? policy.timezone ?? DEFAULT_SCHEDULE_TIMEZONE,
-    minSpacingHours: minSpacingHours ?? configuredSpacing ?? DEFAULT_MIN_SPACING_HOURS,
+    history: historySnapshot.history,
+    historyVerified: true,
+    pendingAttempts,
+    scheduledItems: historySnapshot.scheduledItems,
+    proposedAt,
+    jobId,
+    format,
+    timeZone: policy.timezone,
+    minSpacingHours: configuredSpacing,
     cycleStartAt: policy.cadenceDecision.approvedAt
   });
   if (!result.valid) throw new Error("rolling publication cycle gate blocked upload: " + result.errors.join("; "));

@@ -9,7 +9,7 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
-import { assertNoUnresolvedUploadAttempts, fetchCompleteYoutubeHistory, assertNextPublicationAllowed } from "./youtube-history-gate.mjs";
+import { assertNoUnresolvedUploadAttempts, fetchCompleteYoutubeHistorySnapshot, assertNextPublicationAllowed } from "./youtube-history-gate.mjs";
 import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence } from "./short-parent-relationship.mjs";
 import { atomicWriteJson } from "./atomic-json-file.mjs";
 import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
@@ -554,11 +554,17 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     assertNoUnresolvedUploadAttempts(ledger);
     const safeHistoryPath = resolveRepositoryFileNoSymlinks(env.CHANNEL_HISTORY_RECONCILIATION_PATH, "Channel history reconciliation");
     const historySnapshot = await fetchCompleteYoutubeHistorySnapshot(youtube, matchedChannel, safeHistoryPath, expectedChannelId, { now: now() });
-    const history = historySnapshot.history;
     const format = metadata.contentType ?? metadata.format;
     if (!["long_form", "short"].includes(format)) throw new Error("metadata must explicitly identify contentType as long_form or short for rolling cycle enforcement");
-    cycleHistoryLength = history.length;
-    cycleGate = assertNextPublicationAllowed({ history, scheduledItems: historySnapshot.scheduledItems, pendingAttempts: ledger.attempts, proposedAt: now().toISOString(), jobId, format });
+    cycleHistoryLength = historySnapshot.history.length;
+    cycleGate = assertNextPublicationAllowed({
+      historySnapshot,
+      expectedChannelId,
+      pendingAttempts: ledger.attempts,
+      proposedAt: now().toISOString(),
+      jobId,
+      format
+    });
   }
   const attempt = {
     attemptId: crypto.randomUUID(), jobId, artifactSha256: videoSha256, metadataVersion: metadataSha256,
