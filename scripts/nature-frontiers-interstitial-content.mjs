@@ -30,7 +30,8 @@ export function validateInterstitialCandidate(item) {
   if (item.campaignId !== null) errors.push("non-commercial interstitial content must explicitly set campaignId=null");
   if (item.commercial !== false) errors.push("non-commercial interstitial content must explicitly set commercial=false");
   if (item.disclosureRequired !== false) errors.push("non-commercial interstitial content must explicitly set disclosureRequired=false");
-  if (item.links != null && (!Array.isArray(item.links) || item.links.length > 0)) errors.push("non-commercial interstitial content must not carry campaign links");
+  if (!Array.isArray(item.links) || item.links.length > 0) errors.push("non-commercial interstitial content must explicitly carry an empty links array");
+  if (item.disclosure != null && item.disclosure !== "") errors.push("non-commercial interstitial content must not carry campaign disclosure metadata");
   if (typeof item.caption === "string" && /https?:\/\/[^\s)]+/i.test(item.caption)) errors.push("non-commercial interstitial captions must not contain outbound campaign links");
   if (typeof item.caption === "string" && /\b(?:safari\.com|selar\.com|selar|direct sales|purchases generate revenue|sold through my own|affiliate link|affiliate disclosure|may earn a commission|paid partnership|sponsored|advertisement)\b/i.test(item.caption)) errors.push("non-commercial interstitial content must not include commercial destinations or campaign disclosures");
   if (item.brand !== "Nature Frontiers") errors.push("candidate must target Nature Frontiers only");
