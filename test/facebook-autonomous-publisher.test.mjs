@@ -666,3 +666,35 @@ test("publisher blocks unknown persisted statuses in history, attempt ledger and
     } finally { f.cleanup(); }
   }
 });
+
+test("publisher supplies the authoritative campaign registry to the final payload policy", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    fs.mkdirSync(path.join(f.root, "config"), { recursive: true });
+    const campaigns = [{ id: "selar-wildlife-vault", type: "selar_digital_product", status: "ACTIVE_FOR_DRAFTS_ONLY", ownerApproved: true, disclosureApprovalStatus: "PENDING_OWNER_APPROVAL", disclosureRequired: true, disclosureText: "This product is sold through my own Selar business; purchases generate revenue for my business.", destinationUrl: "https://selar.com/0u19v8u99l" }];
+    fs.writeFileSync(path.join(f.root, "config", "campaigns.json"), JSON.stringify({ campaigns }));
+    fs.writeFileSync(f.queuePath, JSON.stringify([{
+      slotId: "nature-frontiers-2026-10-25-0800",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Educational wildlife habitat note.", links: [], media: [], claims: [],
+      campaignId: null, commercial: false, disclosureRequired: false, disclosure: null
+    }]));
+    let observedRegistry = null;
+    const result = await runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir,
+      now: Date.parse("2026-10-25T05:30:00.000Z"),
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      policyEvaluator: async (_payload, policyOptions) => {
+        observedRegistry = policyOptions.campaignRegistry;
+        return { eligible: false, blockers: ["TEST_HOLD"], warnings: [], contentFingerprint: "a".repeat(64), policyRuleVersion: f.config.complianceRuleSet, mediaFingerprints: [], reason: "TEST_HOLD" };
+      },
+      verifyPermissions: async () => { throw new Error("blocked content must not reach Meta permission or publish calls"); },
+      publish: async () => { throw new Error("blocked content must never be published"); }
+    });
+    assert.deepEqual(observedRegistry, campaigns);
+    assert.equal(result.skipped, 1);
+  } finally { f.cleanup(); }
+});
