@@ -2,7 +2,7 @@ name: Validate Cloudflare durable-state pull requests
 
 on:
   pull_request:
-    branches: [codex/marketing-machine-audit-fixes]
+    branches: [codex/cloudflare-durable-state]
     paths:
       - "cloudflare/**"
       - "cloudflare.config.ts"
