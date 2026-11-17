@@ -20,7 +20,8 @@ on:
       - "test/meta-rate-limit.test.mjs"
       - "test/facebook-policy-engine.test.mjs"
       - "test/facebook-autonomous-publisher.test.mjs"
-      - "test/facebook-autonomous-publisher-workflow.test.mjs test/verify-meta-credentials.test.mjs"
+      - "test/facebook-autonomous-publisher-workflow.test.mjs"
+      - "test/verify-meta-credentials.test.mjs"
       - ".github/workflows/facebook-meta-connection-check.yml"
 
 permissions:
@@ -44,7 +45,7 @@ jobs:
           node --check scripts/verify-meta-credentials.mjs
           node --check scripts/meta-rate-limit.mjs
           node --check scripts/facebook-autonomous-publisher.mjs
-          node --test test/meta-page-adapter.test.mjs test/meta-page-reel-adapter.test.mjs test/meta-rate-limit.test.mjs test/facebook-policy-engine.test.mjs test/facebook-autonomous-publisher.test.mjs test/facebook-autonomous-publisher-workflow.test.mjs
+          node --test test/meta-page-adapter.test.mjs test/meta-page-reel-adapter.test.mjs test/meta-rate-limit.test.mjs test/facebook-policy-engine.test.mjs test/facebook-autonomous-publisher.test.mjs test/facebook-autonomous-publisher-workflow.test.mjs test/verify-meta-credentials.test.mjs
       - name: Verify user and Page tokens independently (read-only; no refresh)
         if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes')
         run: node scripts/verify-meta-credentials.mjs
