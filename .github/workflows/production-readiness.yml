@@ -18,10 +18,21 @@ on:
     # Weekly diagnostic only; does not upload or publish.
     - cron: "0 16 * * 1"
   push:
-    branches: [main]
+    branches: [main, codex/marketing-machine-audit-fixes]
     paths:
+      - "scripts/production-readiness.mjs"
+      - "scripts/schedule-policy.mjs"
+      - "scripts/youtube-history-gate.mjs"
+      - "scripts/check-content.mjs"
+      - "tests/production-readiness.test.mjs"
+      - "test/production-readiness-workflow.test.mjs"
+      - "config/weekly-content-plan.json"
+      - "config/products.json"
       - "content/queue.json"
       - "content/next-short.json"
+      - "content/render-manifest.json"
+      - "content/long-form-render-manifest.json"
+      - "media/next-short.mp4"
       - "content/render-manifest.example.json"
       - "scripts/production-readiness.mjs"
       - ".github/workflows/production-readiness.yml"
