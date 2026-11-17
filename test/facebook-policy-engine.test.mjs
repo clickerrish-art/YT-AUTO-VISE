@@ -186,6 +186,7 @@ test("Nature Frontiers allows only the exact disclosed affiliate campaign and re
     assert.equal(unapproved.eligible, false);
     assert.ok(unapproved.blockers.some(item => /campaign ID is not allowlisted/i.test(item)));
     f.payload.links = f.payload.links.slice(1);
+    f.payload.caption = f.payload.caption.replace(NATURE_FRONTIERS_REQUIRED_POST_LINKS[0], "");
     const missingLink = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(missingLink.eligible, false);
     assert.ok(missingLink.blockers.some(item => /every Nature Frontiers post/i.test(item)));
