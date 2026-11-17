@@ -19,7 +19,7 @@ test("candidate Pexels pages never become verified source or rights evidence wit
     assert.equal(asset.rightsConfirmed, false);
     assert.equal(asset.localMediaPath, null);
     assert.equal(asset.status, "HOLD");
-    if (asset.candidateSourceUrl) assert.match(asset.candidateSourceUrl, /^https:\/\/www\\.pexels\\.com\/video\//);
+    if (asset.candidateSourceUrl) assert.match(asset.candidateSourceUrl, /^https:\/\/www\.pexels\.com\/video\//);
   }
   assert.equal(inventory.releaseAuthorized, false);
   assert.equal(inventory.status, "HOLD_SOURCE_PROVENANCE_AND_LOCAL_MEDIA_MISSING");
