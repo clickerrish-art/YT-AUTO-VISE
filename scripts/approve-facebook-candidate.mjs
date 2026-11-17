@@ -70,7 +70,7 @@ export async function approveFacebookCandidate({
   if (!Array.isArray(item.claims) || item.claims.length === 0) fail("Candidate must include sourced factual claims before review");
   if (!Array.isArray(item.media) || item.media.length === 0) fail("Candidate must include final media and rights evidence before review");
 
-  stdout.write("\\nNATURE FRONTIERS — FACTUAL CLAIM REVIEW\\n");
+  stdout.write("\nNATURE FRONTIERS — FACTUAL CLAIM REVIEW\n");
   for (let index = 0; index < item.claims.length; index++) {
     const claim = item.claims[index];
     if (typeof claim?.text !== "string" || !claim.text.trim() ||
@@ -78,14 +78,14 @@ export async function approveFacebookCandidate({
         typeof claim.sourceExcerpt !== "string" || claim.sourceExcerpt.trim().length < 25) {
       fail("Every claim needs text, source URLs and a substantive source excerpt");
     }
-    stdout.write("\\nClaim " + (index + 1) + ": " + claim.text + "\\n");
-    stdout.write("Sources: " + JSON.stringify(claim.sourceUrls) + "\\nExcerpt: " + claim.sourceExcerpt + "\\n");
-    stdout.write("Open each source and verify that it supports the complete claim with its qualifications.\\n");
+    stdout.write("\nClaim " + (index + 1) + ": " + claim.text + "\n");
+    stdout.write("Sources: " + JSON.stringify(claim.sourceUrls) + "\nExcerpt: " + claim.sourceExcerpt + "\n");
+    stdout.write("Open each source and verify that it supports the complete claim with its qualifications.\n");
     if (await confirm("Type exactly VERIFY CLAIM " + slotId + " " + (index + 1) + ": ") !==
         "VERIFY CLAIM " + slotId + " " + (index + 1)) fail("Claim review was not confirmed; no approval was written");
   }
 
-  stdout.write("\\nNATURE FRONTIERS — FINAL MEDIA AND RIGHTS REVIEW\\n");
+  stdout.write("\nNATURE FRONTIERS — FINAL MEDIA AND RIGHTS REVIEW\n");
   for (let index = 0; index < item.media.length; index++) {
     const asset = item.media[index] ?? {};
     const rights = asset.rightsRecord ?? {};
@@ -116,16 +116,16 @@ export async function approveFacebookCandidate({
       "Social media use: " + rights.socialMediaUse,
       "Provenance verified: " + rights.provenanceVerified,
       "Synthetic/altered origin known: " + rights.syntheticOrAlteredKnown
-    ].join("\\n") + "\\n");
+    ].join("\n") + "\n");
     if (await confirm("Type exactly VERIFY MEDIA " + slotId + " " + (index + 1) + " after inspecting the actual file and licence: ") !==
         "VERIFY MEDIA " + slotId + " " + (index + 1)) fail("Media/rights review was not confirmed; no approval was written");
   }
 
-  stdout.write("\\nFINAL CAPTION\\n" + item.caption + "\\n");
-  stdout.write("Links: " + JSON.stringify(item.links ?? []) + "\\n");
+  stdout.write("\nFINAL CAPTION\n" + item.caption + "\n");
+  stdout.write("Links: " + JSON.stringify(item.links ?? []) + "\n");
   const fingerprint = facebookPayloadFingerprint(item);
-  stdout.write("Exact content fingerprint: " + fingerprint + "\\n");
-  stdout.write("The publisher will independently rerun all policy, rights, source, duplicate, cadence and destination checks. This signature does not enable publishing.\\n");
+  stdout.write("Exact content fingerprint: " + fingerprint + "\n");
+  stdout.write("The publisher will independently rerun all policy, rights, source, duplicate, cadence and destination checks. This signature does not enable publishing.\n");
   const reason = await confirm("Enter the reason for approving this exact candidate: ");
   if (typeof reason !== "string" || reason.trim().length < 3 || reason.length > 1000) fail("A meaningful approval reason is required");
   if (await confirm("Type exactly APPROVE " + slotId + " to sign: ") !== "APPROVE " + slotId) {
@@ -144,7 +144,7 @@ export async function approveFacebookCandidate({
   const temporary = source.path + "." + process.pid + ".approval.tmp";
   const fd = fs.openSync(temporary, "wx", 0o600);
   try {
-    fs.writeFileSync(fd, JSON.stringify(updated, null, 2) + "\\n", "utf8");
+    fs.writeFileSync(fd, JSON.stringify(updated, null, 2) + "\n", "utf8");
     fs.fsyncSync(fd);
   } finally { fs.closeSync(fd); }
   try {
