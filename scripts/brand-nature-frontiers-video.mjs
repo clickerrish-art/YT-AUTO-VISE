@@ -30,7 +30,7 @@ try {
   process.exit(2);
 }
 fs.mkdirSync(path.dirname(output), { recursive: true });
-const graph = "[1:v][0:v]scale2ref=w=rw*0.09:h=-1[brand][base];[brand]colorchannelmixer=aa=0.58[mark];[base][mark]overlay=x=W-w-24:y=H-h-24:format=auto:shortest=1[out]";
+const graph = "[1:v][0:v]scale2ref=w=rw*0.09:h=ow*ih/iw[brand][base];[brand]colorchannelmixer=aa=0.58[mark];[base][mark]overlay=x=W-w-24:y=H-h-24:format=auto:shortest=1[out]";
 const args = [
   "-hide_banner", "-v", "error", "-xerror", "-i", input, "-loop", "1", "-framerate", "30", "-i", logo,
   "-filter_complex", graph, "-map", "[out]", "-map", "0:a?",
