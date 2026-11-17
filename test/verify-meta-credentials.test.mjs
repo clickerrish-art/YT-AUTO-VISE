@@ -79,7 +79,7 @@ test("a missing stored Page token remains a separate blocker even when user perm
     throw new Error("Unexpected endpoint: " + value);
   };
   const report = await verifyMetaCredentials({ env: { ...env, META_PAGE_ACCESS_TOKEN: "" }, config, fetchImpl });
-  assert.equal(report.userToken.status, "PASS");
+  assert.equal(report.userToken.status, "PASS", JSON.stringify(report));
   assert.equal(report.pageToken.status, "NOT_CONFIGURED");
   assert.equal(report.result, "BLOCKED");
 });
@@ -98,7 +98,7 @@ test("a Page token for a different Page fails even when the user token is valid"
     throw new Error("Unexpected endpoint: " + value);
   };
   const report = await verifyMetaCredentials({ env, config, fetchImpl });
-  assert.equal(report.userToken.status, "PASS");
+  assert.equal(report.userToken.status, "PASS", JSON.stringify(report));
   assert.equal(report.pageToken.status, "FAIL");
   assert.equal(report.result, "BLOCKED");
 });
