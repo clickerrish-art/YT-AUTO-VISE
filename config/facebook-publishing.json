@@ -32,13 +32,13 @@
     "authorized_behind_scenes"
   ],
   "notes": [
-    "Autonomous mode means eligible posts do not require routine per-post approval; it does not override publishingEnabled=false, dryRun=true, emergencyStop=true, identity/permission checks, policy blockers, or an uncertain remote outcome.",
     "Publishing is deliberately disabled and dry-run enabled until the exact Nature Frontiers Page connection is securely configured and independently verified.",
     "The Page ID must be supplied through secure configuration and verified against Meta. No ID, token, permission, or live acceptance is assumed.",
     "All policy uncertainty, missing source checks, missing rights evidence, unknown media provenance, unapproved destinations, duplicates, and uncertain publish results block the affected slot automatically.",
     "History and attempt ledger paths must point to durable operator-controlled storage in production; GitHub Actions artifacts are diagnostic exports only.",
     "The Nature Frontiers Facebook destination is separate from the SonicVhibez YouTube destination.",
-    "Nature Frontiers Facebook and Instagram are education-only: product promotions, affiliate links, paid placements, Selar/Safari storefront links, and promotional campaign IDs are rejected by policy."
+    "Nature Frontiers Facebook and Instagram are education-only: product promotions, affiliate links, paid placements, Selar/Safari storefront links, and promotional campaign IDs are rejected by policy.",
+    "Every Nature Frontiers Facebook candidate requires a human review and an HMAC-signed approval receipt bound to its exact final content fingerprint. Use npm run facebook:approve -- content/facebook-intake-candidates.json <exact-slot-id> on the operator workstation. Configure FACEBOOK_APPROVAL_HMAC_SECRET (at least 32 bytes) and FACEBOOK_APPROVER_ID through the workstation's secure secret manager or protected process environment; never store or paste the secret in the repository, candidate file, terminal transcript, or chat. Missing, stale, altered or invalid approvals block intake and publication."
   ],
   "autonomousMode": true,
   "autonomousSchedulingEnabled": true,
