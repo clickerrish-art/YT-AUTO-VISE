@@ -310,14 +310,14 @@ test("Nature Frontiers does not accept links or disclosures moved from the capti
     f.payload.firstCommentText = "Product details: https://selar.com/0u19v8u99l";
     const linkedComment = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(linkedComment.eligible, false);
-    assert.ok(linkedComment.blockers.some(item => /explicitly allowlisted monetization campaign and visible affiliate disclosure/i.test(item)));
+    assert.ok(linkedComment.blockers.some(item => /Commercial Nature Frontiers content requires an explicit campaignId/i.test(item)));
     assert.ok(linkedComment.destinationChecks.some(check => check.url === "https://selar.com/0u19v8u99l" && check.passed === true));
 
     const linkedFingerprint = linkedComment.contentFingerprint;
     f.payload.firstCommentText = "Affiliate link: I may earn a commission if you purchase.";
     const affiliateComment = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(affiliateComment.eligible, false);
-    assert.ok(affiliateComment.blockers.some(item => /explicitly allowlisted monetization campaign and visible affiliate disclosure/i.test(item)));
+    assert.ok(affiliateComment.blockers.some(item => /Organic Nature Frontiers content must not include an affiliate/i.test(item)));
     assert.notEqual(affiliateComment.contentFingerprint, linkedFingerprint,
       "the public first comment must be included in the approval fingerprint");
   } finally { f.cleanup(); }
@@ -327,7 +327,7 @@ test("Safari remains inactive and arbitrary or unsafe destinations are blocked",
   const f = fixture();
   try {
     f.payload.commercial = true;
-    f.payload.campaignId = "safari-affiliate";
+    f.payload.campaignId = "safari-affiliate-inactive";
     f.payload.links = ["https://example.com/affiliate"];
     f.payload.caption = "Affiliate link: I may earn a commission. Consider this travel option.";
     let result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
@@ -438,7 +438,7 @@ test("a factual claim needs a reachable authoritative source containing the reco
   const f = fixture();
   try {
     const excerpt = "Wetlands support biodiversity and help regulate water flows.";
-    f.payload.caption = "Wetlands support biodiversity and help regulate water flows. Affiliate disclosure: Nature Frontiers may earn a commission if you book through these links. " + NATURE_FRONTIERS_KNOWN_DESTINATIONS.join(" ");
+    f.payload.caption = "Wetlands support biodiversity and help regulate water flows.";
     f.payload.claims = [{ text: "Wetlands support biodiversity and help regulate water flows", sourceUrls: ["https://sanbi.org/research"], sourceExcerpt: excerpt, sourceSupportsClaim: true, verified: true }];
     f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
       reviewer: "Unit Test Reviewer",
