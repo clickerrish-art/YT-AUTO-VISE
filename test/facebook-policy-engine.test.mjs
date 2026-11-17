@@ -176,24 +176,127 @@ test("engagement bait, graphic wildlife and sensitive location content block", a
   } finally { f.cleanup(); }
 });
 
-test("Nature Frontiers allows only the exact disclosed affiliate campaign and required link set", async () => {
+test("ordinary Nature Frontiers wildlife posts are non-commercial and need no link dump or affiliate disclosure", async () => {
   const f = fixture();
   try {
-    const allowed = await evaluateFinalFacebookPayload(f.payload, options(f.root));
-    assert.equal(allowed.eligible, true, JSON.stringify(allowed.blockers));
-    f.payload.caption = f.payload.caption.replace("Affiliate disclosure: Nature Frontiers may earn a commission if you book through these links.", "Nature Frontiers shares wildlife education and travel information.");
-    const undisclosed = await evaluateFinalFacebookPayload(f.payload, options(f.root));
-    assert.equal(undisclosed.eligible, false);
-    assert.ok(undisclosed.blockers.some(item => /visible affiliate disclosure/i.test(item)));
-    f.payload.campaignId = "unapproved-campaign";
-    const unapproved = await evaluateFinalFacebookPayload(f.payload, options(f.root));
-    assert.equal(unapproved.eligible, false);
-    assert.ok(unapproved.blockers.some(item => /campaign ID is not allowlisted/i.test(item)));
-    f.payload.links = f.payload.links.slice(1);
-    f.payload.caption = f.payload.caption.replace(NATURE_FRONTIERS_KNOWN_DESTINATIONS[0], "");
-    const missingLink = await evaluateFinalFacebookPayload(f.payload, options(f.root));
-    assert.equal(missingLink.eligible, false);
-    assert.ok(missingLink.blockers.some(item => /every Nature Frontiers post/i.test(item)));
+    const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, true, JSON.stringify(result.blockers));
+    assert.equal(f.payload.campaignId, null);
+    assert.equal(f.payload.commercial, false);
+    assert.equal(f.payload.disclosureRequired, false);
+    assert.deepEqual(f.payload.links, []);
+    assert.equal(result.disclosureChecks[0].required, false);
+    assert.equal(result.destinationChecks.length, 0);
+  } finally { f.cleanup(); }
+});
+
+test("Selar direct-sales content cannot borrow affiliate disclosure or draft-only approval", async () => {
+  const f = fixture();
+  try {
+    const campaign = JSON.parse(fs.readFileSync(path.join(process.cwd(), "config/campaigns.json"), "utf8")).campaigns
+      .find(item => item.id === "selar-wildlife-vault");
+    f.payload.links = [APPROVED_SELLAR_URL];
+    f.payload.caption += " Affiliate disclosure: Nature Frontiers may earn a commission if you book through these links.";
+    f.payload.commercial = true;
+    f.payload.campaignId = "selar-wildlife-vault";
+    f.payload.disclosureRequired = true;
+    f.payload.disclosure = campaign.disclosureText;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer", reason: "Reviewed the exact final direct-sales test payload.",
+      secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z"
+    });
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), allowedCampaignIds: ["selar-wildlife-vault"],
+      approvedDestinations: [APPROVED_SELLAR_URL], campaignRegistry: [campaign]
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /not approved for autonomous publishing/i.test(item)));
+    assert.ok(result.blockers.some(item => /exact owner-approved disclosure/i.test(item)));
+  } finally { f.cleanup(); }
+});
+
+test("Safari affiliate content remains inactive and cannot borrow Selar direct-sales approval", async () => {
+  const f = fixture();
+  try {
+    const campaign = JSON.parse(fs.readFileSync(path.join(process.cwd(), "config/campaigns.json"), "utf8")).campaigns
+      .find(item => item.id === "safari-affiliate-inactive");
+    const safariUrl = "https://www.safari.com/sabi-sand?a=GM26";
+    f.payload.links = [safariUrl];
+    f.payload.caption += " " + (campaign.disclosureText || "This is an affiliate link; we may earn a commission.");
+    f.payload.commercial = true;
+    f.payload.campaignId = campaign.id;
+    f.payload.disclosureRequired = true;
+    f.payload.disclosure = campaign.disclosureText;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer", reason: "Reviewed the exact inactive Safari campaign test payload.",
+      secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z"
+    });
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), allowedCampaignIds: [campaign.id],
+      approvedDestinations: [safariUrl], campaignRegistry: [campaign]
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /not approved for autonomous publishing/i.test(item)));
+    assert.ok(result.blockers.some(item => /not registered to this exact campaign/i.test(item)));
+  } finally { f.cleanup(); }
+});
+
+test("a single Nature Frontiers post cannot mix Safari affiliate and Selar direct-sales destinations", async () => {
+  const f = fixture();
+  try {
+    const campaign = JSON.parse(fs.readFileSync(path.join(process.cwd(), "config/campaigns.json"), "utf8")).campaigns
+      .find(item => item.id === "selar-wildlife-vault");
+    const safariUrl = "https://www.safari.com/sabi-sand?a=GM26";
+    f.payload.links = [APPROVED_SELLAR_URL, safariUrl];
+    f.payload.caption += " " + campaign.disclosureText;
+    f.payload.commercial = true;
+    f.payload.campaignId = campaign.id;
+    f.payload.disclosureRequired = true;
+    f.payload.disclosure = campaign.disclosureText;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer", reason: "Reviewed the exact mixed-campaign test payload.",
+      secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z"
+    });
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), allowedCampaignIds: [campaign.id],
+      approvedDestinations: [APPROVED_SELLAR_URL, safariUrl], campaignRegistry: [campaign]
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /cannot mix Safari affiliate and Selar direct-sales/i.test(item)));
+  } finally { f.cleanup(); }
+});
+
+test("an explicitly active test-only Selar campaign requires its own exact URL and direct-sales disclosure", async () => {
+  const f = fixture();
+  try {
+    const disclosure = "This product is sold through my own Selar business; purchases generate revenue for my business.";
+    const campaign = {
+      id: "test-selar-direct-sales",
+      type: "selar_digital_product",
+      status: "ACTIVE_FOR_AUTONOMOUS_PUBLISHING",
+      ownerApproved: true,
+      disclosureApprovalStatus: "APPROVED",
+      disclosureRequired: true,
+      disclosureText: disclosure,
+      compensationType: "direct_sales_revenue",
+      destinationUrl: APPROVED_SELLAR_URL
+    };
+    f.payload.links = [APPROVED_SELLAR_URL];
+    f.payload.caption += " " + disclosure;
+    f.payload.commercial = true;
+    f.payload.campaignId = campaign.id;
+    f.payload.disclosureRequired = true;
+    f.payload.disclosure = disclosure;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer", reason: "Test-only approved campaign fixture validates exact direct-sales disclosure.",
+      secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z"
+    });
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), allowedCampaignIds: [campaign.id],
+      approvedDestinations: [APPROVED_SELLAR_URL], campaignRegistry: [campaign]
+    });
+    assert.equal(result.eligible, true, JSON.stringify(result.blockers));
+    assert.equal(result.disclosureChecks[0].compensationType, "direct_sales_revenue");
   } finally { f.cleanup(); }
 });
 
