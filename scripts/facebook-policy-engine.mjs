@@ -45,25 +45,6 @@ export function nearDuplicateRatio(a, b) {
 function hostMatches(host, domains) {
   return domains.some(domain => host === domain || host.endsWith("." + domain));
 }
-function containsAffiliateLanguage(caption) {
-  return /\b(affiliate|affiliate link|earn commission|may earn|paid partnership|sponsored|advertisement|ad)\b/i.test(caption);
-}
-
-function isNatureFrontiersProductPromotion(payload, links = []) {
-  // Metricool supports a public first comment. Treat it as promotional copy too:
-  // a neutral caption must not be able to move a prohibited product link into the comment.
-  const visibleCopy = [payload?.caption, payload?.firstCommentText]
-    .filter(value => typeof value === "string").join("\n");
-  const hasStorefrontLink = links.some(link => {
-    try {
-      const host = new URL(String(link)).hostname.toLowerCase();
-      return host === "selar.com" || host.endsWith(".selar.com") || host === "safari.com" || host.endsWith(".safari.com");
-    } catch { return false; }
-  });
-  const explicitPromotion = /\b(?:buy now|shop now|order now|purchase now|download now|get your copy|product link|promotional link|product promotion|limited offer|complete youtube wildlife creator|full video creation prompt pack premium edition|youtube success blueprint(?: 90-day creator system)?|selar)\b/i.test(visibleCopy);
-  return payload?.commercial === true || Boolean(String(payload?.campaignId ?? "").trim()) ||
-    hasStorefrontLink || containsAffiliateLanguage(visibleCopy) || explicitPromotion;
-}
 function fingerprint(payload) {
   return sha256(JSON.stringify({
     destination: payload?.destination ?? "",
