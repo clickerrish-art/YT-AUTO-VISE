@@ -135,6 +135,7 @@ export async function runFacebookContentIntake({
         evidenceRoot: activeRoot,
         now: new Date(now).toISOString(),
         timezone: config.timezone,
+        mediaHistoryReconciled: config.mediaHistoryReconciled === true,
         maxPostsPerLocalDay: config.dailyCap,
         maxReelsPerLocalDay: config.dailyReelCap,
         maxFeedPostsPerLocalDay: config.dailyFeedPostCap,
