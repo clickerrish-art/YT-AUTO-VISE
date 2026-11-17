@@ -43,9 +43,15 @@ function isRealMonday(value) {
 
 const PUBLICATION_TIMESTAMP_KEYS = new Set([
   "scheduledAt", "publishedAt", "publicationAt", "publishAt",
+  "actualPublishedAt", "actualPublicationAt", "actualPublishAt",
+  "scheduledPublishAt", "scheduledPublicationAt", "scheduledStartTime",
+  "plannedPublishAt", "plannedPublicationAt",
   "scheduledFor", "publishedFor", "publicationFor",
   "scheduledTimestamp", "publishedTimestamp", "publicationTimestamp", "publishTimestamp",
-  "scheduledDate", "publishedDate", "publicationDate", "publishDate"
+  "scheduledDate", "publishedDate", "publicationDate", "publishDate",
+  "actualPublishedDate", "actualPublicationDate",
+  "scheduledPublishDate", "plannedPublishDate", "plannedPublicationDate",
+  "scheduledPublishTime", "plannedPublishTime", "actualPublishTime"
 ]);
 
 function findPublicationTimestampPaths(value, currentPath = "plan", matches = []) {

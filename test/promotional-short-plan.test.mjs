@@ -169,6 +169,19 @@ test("publication timestamps at any depth and live scheduling are forbidden in t
   assert.ok(validatePromotionalShortPlan(unsafe, products).some(error => /schedulingEnabled must remain false/.test(error)));
 });
 
+test("draft plans reject alternate actual and scheduled publication timestamp field names at any depth", () => {
+  for (const key of ["actualPublishedAt", "scheduledPublishAt", "plannedPublicationAt", "scheduledStartTime"]) {
+    const unsafe = clone(checkedInPlan);
+    unsafe.weeks[0].items[0].provider = { youtube: { [key]: "2026-12-17T10:00:00+02:00" } };
+    const errors = validatePromotionalShortPlan(unsafe, products);
+    assert.ok(
+      errors.some(error => error.includes(`plan.weeks[0].items[0].provider.youtube.${key}`)),
+      `${key} must be treated as a publication timestamp anywhere in the draft plan`
+    );
+  }
+});
+
+
 test("the plan rejects another channel and non-Monday week boundaries", () => {
   const plan = clone(checkedInPlan);
   plan.weeks[0].items[0].channel = "Nature Frontiers";
