@@ -87,7 +87,7 @@ export async function approveFacebookCandidate({
     const sourceUrlsHash = sha256(Buffer.from(JSON.stringify(claim.sourceUrls), "utf8"));
     const sourceExcerptHash = sha256(Buffer.from(String(claim.sourceExcerpt), "utf8"));
     const checkedAt = new Date(now).toISOString();
-    const signed = claimHash + "\\n" + sourceUrlsHash + "\\n" + sourceExcerptHash + "\\n" + reviewer.trim() + "\\n" + checkedAt;
+    const signed = claimHash + "\n" + sourceUrlsHash + "\n" + sourceExcerptHash + "\n" + reviewer.trim() + "\n" + checkedAt;
     const signature = crypto.createHmac("sha256", secret).update(signed).digest("hex");
     item.claims[index] = {
       ...claim,
