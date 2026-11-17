@@ -58,7 +58,7 @@ test("valid user and stored Page tokens are independently verified against the e
   };
   const report = await verifyMetaCredentials({ env, config, fetchImpl });
   assert.equal(report.result, "PASS");
-  assert.equal(report.userToken.status, "PASS");
+  assert.equal(report.userToken.status, "PASS", JSON.stringify(report));
   assert.deepEqual(report.userToken.grantedPermissions, ["pages_show_list", "pages_read_engagement", "pages_manage_posts"]);
   assert.equal(report.pageToken.status, "PASS");
   assert.equal(report.identityNamesMatch, true);
