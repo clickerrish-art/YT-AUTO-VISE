@@ -9,17 +9,10 @@
       "destinationUrl": "https://selar.com/0u19v8u99l",
       "destinationValidation": "exact_approved_allowlist",
       "ownerApproved": true,
-      "disclosureApprovalStatus": "OWNER_APPROVED",
+      "disclosureApprovalStatus": "PENDING_OWNER_APPROVAL",
       "disclosureRequired": true,
       "disclosureText": "This product is sold through my own Selar business; purchases generate revenue for my business.",
-      "compensationType": "direct_sales_revenue",
-      "disclosureApprovedAt": "2026-11-10T07:00:36+02:00",
-      "disclosureApprovalReference": "Owner supplied this exact viewer-facing disclosure in a user-authored ChatGPT message on 2026-11-10 at 07:00:36+02:00: “This product is sold through my own Selar business; purchases generate revenue for my business.” The owner followed on 2026-11-10 at 07:23:41+02:00 with an instruction to proceed to completion while guarding against policy violations. This wording applies only to the Complete YouTube Wildlife Creator's Vault promotion.",
-      "approval": {
-        "approvedBy": "clickerrish-art",
-        "approvedAt": "2026-11-10T07:00:36+02:00",
-        "destinationVersion": "14add7769c05d044b08af39812ae88de7aa4d9f1484cd080b6f1d136712fcdd3"
-      }
+      "compensationType": "direct_sales_revenue"
     },
     {
       "id": "safari-affiliate-inactive",
@@ -50,6 +43,7 @@
     "Safari remains inactive until the owner supplies exact destination URLs and confirms approval and disclosure text.",
     "Never copy a destination, disclosure, price, offer, or tracking parameter from one campaign type into the other.",
     "Every non-Selar commercial destination is classified as an affiliate campaign; the generic affiliate record remains inactive until an exact HTTPS destination and viewer-facing disclosure are owner-approved.",
-    "The Selar Wildlife Creator's Vault campaign disclosure state is synchronized to the exact owner-approved wording and approval evidence in config/products.json. Campaign remains ACTIVE_FOR_DRAFTS_ONLY; publishing allowlists remain empty and this synchronization does not authorize public posting."
+    "The Selar Wildlife Creator's Vault campaign disclosure state is synchronized to the exact owner-approved wording and approval evidence in config/products.json. Campaign remains ACTIVE_FOR_DRAFTS_ONLY; publishing allowlists remain empty and this synchronization does not authorize public posting.",
+    "Nature Frontiers commercial disclosure approval is brand-specific and remains pending. Do not inherit the separate SonicVhibez product disclosure approval; Nature Frontiers commercial publishing remains blocked."
   ]
 }
