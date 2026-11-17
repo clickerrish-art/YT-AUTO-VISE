@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "1.0.0",
+  "brand": "Nature Frontiers",
+  "timezone": "Africa/Johannesburg",
+  "campaignId": "nature-frontiers-affiliate-monetization",
+  "disclosure": "Affiliate disclosure: Nature Frontiers may earn a commission if you book through the Safari.com links. Selar links lead to Africa's Wild Secrets and the Wildlife Creator's Vault. This supports our wildlife education content.",
+  "requiredForEveryPost": [
+    "https://www.safari.com/sabi-sand?a=GM26",
+    "https://www.safari.com/kruger-national-park?a=GM26",
+    "https://www.safari.com/destinations/serengeti?a=GM26",
+    "https://www.safari.com/singita-boulders?a=GM26",
+    "https://www.safari.com/safaris/4-day-londolozi-varty-camp-fly-in-safari?a=GM26",
+    "https://selar.com/m/kehinde-ajiboye3108854",
+    "https://selar.com/0u19v8u99l",
+    "https://www.youtube.com/@NatureFrontiers-life?sub_confirmation=1"
+  ],
+  "destinations": [
+    {
+      "url": "https://www.safari.com/sabi-sand?a=GM26",
+      "kind": "safari_affiliate",
+      "required": true
+    },
+    {
+      "url": "https://www.safari.com/kruger-national-park?a=GM26",
+      "kind": "safari_affiliate",
+      "required": true
+    },
+    {
+      "url": "https://www.safari.com/destinations/serengeti?a=GM26",
+      "kind": "safari_affiliate",
+      "required": true
+    },
+    {
+      "url": "https://www.safari.com/singita-boulders?a=GM26",
+      "kind": "safari_affiliate",
+      "required": true
+    },
+    {
+      "url": "https://www.safari.com/safaris/4-day-londolozi-varty-camp-fly-in-safari?a=GM26",
+      "kind": "safari_affiliate",
+      "required": true
+    },
+    {
+      "url": "https://selar.com/m/kehinde-ajiboye3108854",
+      "kind": "selar_store",
+      "required": true
+    },
+    {
+      "url": "https://selar.com/0u19v8u99l",
+      "kind": "selar_store",
+      "required": true
+    },
+    {
+      "url": "https://www.youtube.com/@NatureFrontiers-life?sub_confirmation=1",
+      "kind": "youtube_subscription",
+      "required": true
+    }
+  ],
+  "platformNotes": {
+    "facebook": "Include all required URLs in the visible post caption. Do not move disclosures or links into an undisclosed comment.",
+    "instagram": "Include the URL set in the caption, and provide an approved profile-link or Story-link-sticker route because caption URLs are not reliably clickable.",
+    "youtube": "Nature Frontiers channel only; do not use SonicVhibez as the destination."
+  },
+  "safety": {
+    "publishingEnabled": false,
+    "dryRun": true,
+    "emergencyStop": true,
+    "requireHumanApproval": true,
+    "requireAffiliateDisclosure": true,
+    "requireExactDestinationAllowlist": true,
+    "neverRecycleMedia": true,
+    "requireUniqueStory": true
+  }
+}
