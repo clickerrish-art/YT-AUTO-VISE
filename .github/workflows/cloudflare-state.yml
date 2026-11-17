@@ -41,3 +41,5 @@ jobs:
           node --check test/cloudflare-state-worker.test.mjs
       - name: Run durable-state unit tests
         run: node --test test/cloudflare-state-worker.test.mjs
+      - name: Run scoped dashboard Worker API integration test
+        run: node --test test/dashboard-worker-api.integration.test.mjs
