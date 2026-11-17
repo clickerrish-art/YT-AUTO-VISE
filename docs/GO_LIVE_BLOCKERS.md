@@ -1,3 +1,14 @@
+
+
+## 17 November 2026 — owner-approved cadence and anti-spam rules
+
+- Owner approval received in this conversation: repeat **long-form → long-form → Short** with no weekly publication target.
+- The approval is recorded in `config/weekly-content-plan.json` as `OWNER_APPROVED`, with a timezone-qualified timestamp and this conversation as its approval reference.
+- Hard spacing remains at least **72 elapsed hours** between every pair of consecutive actual publications, with no two publications on the same `Africa/Johannesburg` calendar day. A complete three-format cycle therefore takes at least 216 hours (9 days).
+- Draft-preparation triggers are not publication authorization. All existing YouTube history, uncertain attempts, media, rights, metadata, compliance, private-upload authorization and OAuth gates remain mandatory. Public/unattended publishing remains disabled.
+- A global anti-spam policy is now recorded in the YouTube, Facebook and Instagram publishing configurations. It prohibits automated likes, comments, replies, follows/unfollows, DMs, unsolicited/bulk outreach, engagement exchanges/pods, artificial views/clicks, duplicate/mass reposting, engagement bait and metadata/hashtag stuffing. Automated engagement mutations and unsolicited outbound messages are explicitly disabled.
+- Permitted automation is limited to research/drafting, human-review workflows, scheduling of approved content, publishing after all release gates pass, and read-only analytics. Platform rate limits and terms must be respected; policy uncertainty fails closed; uncertain remote mutations are never blindly retried.
+- **Implementation verification caveat:** these configuration rules are committed as policy declarations. They are not evidence that every provider-side action surface has been technically instrumented or that any engagement API is active. No automated engagement feature is authorized; verify code-level enforcement before any publishing enablement.
 # 17 November 2026 — latest exact source and verification checkpoint
 
 **Exact code/test SHA:** `4ff54d69085ba0bd6ba8fe73edd3d4c7d11d0b37`; the later branch commits update the release record only. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` (unchanged). **PR #1:** OPEN / DRAFT / UNMERGED, head at the latest branch SHA. No merge, main edit, PR readiness change, reset, rebase, force-push or history rewrite occurred.
