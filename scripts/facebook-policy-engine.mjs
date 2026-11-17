@@ -3,7 +3,17 @@ import fs from "node:fs";
 import path from "node:path";
 import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 
-export const FACEBOOK_POLICY_RULE_VERSION = "nf-facebook-autonomous-policy-2026-11-v4";
+export const FACEBOOK_POLICY_RULE_VERSION = "nf-facebook-autonomous-policy-2026-11-v5";
+export const NATURE_FRONTIERS_REQUIRED_POST_LINKS = Object.freeze([
+  "https://www.safari.com/sabi-sand?a=GM26",
+  "https://www.safari.com/kruger-national-park?a=GM26",
+  "https://www.safari.com/destinations/serengeti?a=GM26",
+  "https://www.safari.com/singita-boulders?a=GM26",
+  "https://www.safari.com/safaris/4-day-londolozi-varty-camp-fly-in-safari?a=GM26",
+  "https://selar.com/m/kehinde-ajiboye3108854",
+  "https://selar.com/0u19v8u99l",
+  "https://www.youtube.com/@NatureFrontiers-life?sub_confirmation=1"
+]);
 export const APPROVED_SELLAR_URL = "https://selar.com/0u19v8u99l";
 const sha256 = value => crypto.createHash("sha256").update(value).digest("hex");
 const text = value => typeof value === "string" && value.trim().length > 0;
@@ -351,8 +361,17 @@ export async function evaluateFinalFacebookPayload(payload, {
     .filter(value => typeof value === "string").join("\n");
   const visibleLinks = visibleCopy.match(/https?:\/\/[^\s)]+/gi) ?? [];
   const links = [...new Set([...structuredLinks, ...visibleLinks])];
-  if (payload.destination === "nature_frontiers_facebook" && isNatureFrontiersProductPromotion(payload, links)) {
-    add(blockers, "Nature Frontiers Facebook and Instagram are education-only destinations; product and affiliate promotions are prohibited");
+  const monetizationCampaignApproved = payload.campaignId === "nature-frontiers-affiliate-monetization" && allowedCampaignIds.includes(payload.campaignId);
+  const visibleAffiliateDisclosure = /\\b(affiliate link|affiliate disclosure|i may earn|may earn a commission|commission if you buy|paid partnership|sponsored|advertisement)\\b/i.test(String(payload.caption ?? ""));
+  if (payload.destination === "nature_frontiers_facebook" && isNatureFrontiersProductPromotion(payload, links) &&
+      !(payload.commercial === true && monetizationCampaignApproved && visibleAffiliateDisclosure)) {
+    add(blockers, "Nature Frontiers commercial content requires the explicitly allowlisted monetization campaign and visible affiliate disclosure");
+  }
+  for (const requiredLink of NATURE_FRONTIERS_REQUIRED_POST_LINKS) {
+    if (!links.includes(requiredLink) || !String(payload.caption ?? "").includes(requiredLink)) {
+      add(blockers, "Every Nature Frontiers post must visibly include every required Safari, Selar and YouTube destination");
+      break;
+    }
   }
   const affiliate = payload.commercial === true || links.some(link => /selar\.com|safari\.com/i.test(String(link)));
   const disclosureText = String(payload.caption ?? "");
@@ -376,9 +395,8 @@ export async function evaluateFinalFacebookPayload(payload, {
     const parsed = new URL(link);
     const isSelar = parsed.hostname === "selar.com" || parsed.hostname.endsWith(".selar.com");
     const isSafari = parsed.hostname === "safari.com" || parsed.hostname.endsWith(".safari.com");
-    const allowed = isSelar || isSafari
-      ? false
-      : approvedDestinations.includes(link) || hostMatches(parsed.hostname, allowedDomains);
+    const allowed = approvedDestinations.includes(link) ||
+      ((!isSelar && !isSafari) && hostMatches(parsed.hostname, allowedDomains));
     let reachable = false;
     let finalUrl = link;
     if (allowed) {
