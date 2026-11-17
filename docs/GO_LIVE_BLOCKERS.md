@@ -1,48 +1,61 @@
-# 17 November 2026 — latest exact source/test checkpoint
+# 17 November 2026 — latest exact source and verification checkpoint
 
-## 17 November 2026 — latest verified implementation checkpoint
+**Latest implementation branch HEAD:** `4ff54d69085ba0bd6ba8fe73edd3d4c7d11d0b37`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` (unchanged). **PR #1:** OPEN / DRAFT / UNMERGED, head at the latest branch SHA. No merge, main edit, PR readiness change, reset, rebase, force-push or history rewrite occurred.
 
-**Exact code/test SHA:** `4ff54d69085ba0bd6ba8fe73edd3d4c7d11d0b37`. **Implementation branch:** `codex/marketing-machine-audit-fixes`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` (unchanged). PR #1 remains OPEN / DRAFT / UNMERGED. The subsequent documentation-only checkpoint is recorded below this section.
+## Latest exact-HEAD checks
 
-### Exact-SHA CI
+- Content quality [44073050923](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050923): **941/941 passed; zero failed; zero skipped**.
+- Nature Frontiers signed editorial approval [44073050917](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050917): **24/24 passed; zero skipped**. This verifies the approval-signing and policy regression suite, not an actual human approval receipt or live publication.
+- Cloudflare runner bridge [44073050920](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050920): **84/84 passed; zero skipped**.
+- Dashboard browser E2E [44073050905]: PASS.
+- Queue readiness [44073050871]: PASS.
+- Metadata validation [44073050902]: PASS.
+- Cloudflare durable-state [44073050911]: PASS.
+- Deployment recovery [44073050925]: PASS.
+- Nature Frontiers Instagram safety [44073050879]: PASS.
+- Non-destructive branch inventory [44073050898]: PASS.
+- Isolated main/candidate baseline [44073050951]: PASS.
+- Nature Frontiers Meta connection workflow [44073050894]: the job ran its **84-test regression suite only**. It did not perform live user-token or Page-token verification. Do not interpret the green workflow as a live Meta connection pass.
+- Production readiness [44073050903]: **HOLD — 9 blockers**. This is expected; its final gate correctly fails on readiness exit code 2 rather than bypassing release controls.
 
-- Content quality [44073050923](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050923): **941/941 tests passed; 0 failed; 0 skipped**.
-- SonicVhibez automation [44073050921](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050921): **164/164 Node test files passed; 45/45 Python tests passed; 0 skips**. Queue validator reports 16 held queue items, approved destination, and public publishing disabled.
-- Isolated main/candidate baseline [44073050951](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050951): PASS. Candidate `4ff54d6`: 164/164 Node test files, 45 Python tests, npm audit **0 vulnerabilities**. Exact main `69fdf35`: 54 Node tests and 4 moderate npm audit findings.
-- Dashboard Chromium [44073050905](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050905): **33/33 passed**.
-- Nature Frontiers signed editorial approval [44073050917](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050917): **24/24 passed; 0 skipped**. Covers claim-source HMACs, exact payload approval, media/licence checksums, declines and review-race protection.
-- Nature Frontiers Instagram safety [44073050879](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050879): PASS.
-- Daily Nature Frontiers local draft package [44073051000](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073051000): PASS; draft validation only, no Meta API write.
-- Deployment recovery [44073050925](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050925): PASS.
-- Cloudflare durable-state unit checks [44073050911](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050911): PASS.
-- Cloudflare runner bridge [44073050920](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050920): PASS.
-- Non-destructive branch inventory [44073050898](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050898): PASS.
-- Meta Page connection workflow [44073050894](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050894): regression tests **84/84 passed**, but its live secret/Page verification step was **SKIPPED**. This is not a live token or Page-identity pass.
-- Production readiness [44073050903](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050903): expected **HOLD** on the outstanding external release blockers; no gate was bypassed.
+## Current release blockers — 9
 
-### Additional exact operational checks
+The exact readiness artifact is run [44073050903](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050903), artifact ID `14323547389`.
 
-- Cloudflare staging D1: revision 3, valid JSON, publishing disabled, 16 queue items, 4 audit events, 5 logical D1 backup records; zero worker jobs, Facebook drafts/posts or upload receipts.
-- Cloudflare staging queue statuses remain mixed-case (12 held, 1 script/captions ready for review, 2 script ready/narration pending, 1 lowercase legacy variant). Do not rely on this mixed-status set for automated transitions until a reviewed normalization is applied.
-- Cloudflare Nature Frontiers production D1 has the required schema, but inspected business tables have zero rows.
-- Cloudflare R2 API returns HTTP 403 / code 10042 because R2 is not enabled in the account. The staging Worker has an R2 binding configured, but the bucket/object path is not proven usable. No independent R2 backup or restore claim is allowed.
-- No Cloudflare D1 or Worker data/configuration was modified during these read-only checks.
+1. Owner must explicitly approve a feasible cadence mode with a timezone-aware timestamp and non-empty approval reference. The proposed rolling `long_form → long_form → short` cycle at 72-hour minimum requires 216 hours for three gaps and is not a weekly three-post schedule. No approval may be inferred.
+2. Current complete SonicVhibez public/private/unlisted/scheduled inventory and every pending/uncertain upload attempt must be reconciled immediately before an upload.
+3. Genuine Short render manifest and source/rights evidence are missing.
+4. Genuine long-form render manifest and source/rights evidence are missing.
+5. Final metadata has not been human-reviewed and marked `READY_FOR_PRIVATE_UPLOAD`.
+6. Rights are not verified; do not set `rightsConfirmed=true`.
+7. Compliance review is incomplete; do not set `complianceReviewed=true`.
+8. `media/next-short.mp4` is missing from the repository.
+9. The current read-only YouTube verification status remains `BLOCKED_OAUTH_INVALID_GRANT`. The four YouTube secret names are present, but the configured refresh token was rejected. Reauthorize the existing OAuth client securely, update only `YOUTUBE_REFRESH_TOKEN`, then rerun read-only verification.
 
+## Nature Frontiers / Meta
 
-## 17 November 2026 — live Cloudflare persistence inspection
+- The exact-head signed approval implementation is now CI-verified (24/24 tests). It supports per-claim source attestation, reviewer identity, HMAC signing, exact payload/media/rights hashes, final confirmation and atomic approval receipt writing. It does not manufacture a receipt or approve content automatically.
+- Live Meta user/Page token verification remains unproven. Prior live user-token check returned 401 / code 190 / subcode 463; the Page token was not independently tested. Replace `META_USER_ACCESS_TOKEN` securely, then use the dedicated manual read-only verification workflow. Never paste tokens into chat.
+- Nature Frontiers publisher remains fail-closed. No Meta publish, schedule, draft mutation or existing Metricool record change was performed.
 
-Read-only Cloudflare API and D1 queries were run against the connected account. No rows were inserted, updated or deleted.
+## Cloudflare persistence
 
-- `sonicvhibez-durable-state-staging` is deployed with a D1 binding and an `ARTIFACTS` R2 binding in its settings. The staging D1 schema is present. The dashboard state has **revision 3**, valid JSON, `publishingEnabled=false`, **16 queue items**, 4 audit events, and zero worker jobs, Facebook drafts/posts or upload receipts.
-- The staging database has **5 logical backup rows** with 64-character SHA fields. The latest state is 11,009 bytes; the most recent backup records are tied to revisions 1 and 2. These are same-account D1 logical backups, not independent disaster-recovery copies. Hash format and row metadata were inspected; backup payload hashes were not recomputed from exported bytes in this check.
-- Queue statuses are not normalized: 12 `HOLD_FOR_MEDIA_AND_HUMAN_REVIEW`, 1 `SCRIPT_AND_CAPTIONS_READY_NEEDS_MEDIA_AND_HUMAN_REVIEW`, 2 `SCRIPT_READY_NARRATION_DRAFT_PENDING_GENERATION_MEDIA_AND_HUMAN_REVIEW_REQUIRED`, and 1 lowercase `script_and_captions_ready_needs_media_and_review`. No publishing state is enabled. The lowercase variant should be normalized in a reviewed migration or queue adapter before operational status transitions are relied upon.
-- The `nature-frontiers-prod-state` D1 database has the production content/approval/audit/rights/attempt schema, but all inspected business tables currently contain **zero rows**. This is not evidence of live Meta publishing or production content acceptance.
-- The Cloudflare R2 API returned HTTP 403 / code 10042: **R2 must first be enabled through the Cloudflare Dashboard**. The staging Worker has an R2 binding name, but an R2 bucket/object inventory could not be confirmed. Do not claim the independent R2 export/restore path is working.
-- No Cloudflare state, secrets, Worker settings, D1 schemas, queue contents, or publishing switches were changed during this inspection.
+The latest recorded read-only inspection found staging D1 at revision 3 with 16 queue items, publishing disabled, and five logical backup rows. Those rows are same-account logical backups, not an independent disaster-recovery copy. The R2 API returned 403 / code 10042; R2 must be enabled in the Cloudflare Dashboard before bucket/object inventory, hash read-back and independent restore can be verified. No Cloudflare state or secrets were changed.
 
-**Owner action to unblock R2:** enable R2 Object Storage in the Cloudflare Dashboard for this account, then re-check that `sonicvhibez-artifacts-staging` exists, upload a non-sensitive test object, read it back and verify its SHA-256, and complete an independent export/restore drill. Keep this separate from the D1 Time Travel drill.
+## Nature Frontiers crocodile Reel
+
+- The 55.1-second v2 master was recovered and visually sampled throughout. No graphic feeding, injury or actual attack was observed; the footage is visibly illustrative rather than photorealistic wildlife footage.
+- The opening 10-second animation source is present, but independent creator/source-project/licence evidence is still missing.
+- Full spoken transcript, human audio playback/pronunciation review, final silence/end-hold approval, factual/editorial approval and exact-hash release approval remain outstanding. The local transcription toolchain is not installed in this environment; no transcript has been fabricated.
+- Recommended factual caption correction: crocodiles' eyes, ears and nostrils can remain above water; avoid the narrower claim that only eyes are visible.
+- No Metricool upload, schedule or publication was performed.
+
+## Safeguards
+
+Public/unattended publishing remains disabled. YouTube target remains SonicVhibez only; Nature Frontiers is a separate brand. No credential, approval, licence, media file, provider response or external publication was fabricated. All nine readiness blockers remain release blockers until independently evidenced.
 
 ---
+
 
 
 ## 17 November 2026 — current Meta approval implementation (verification pending)
