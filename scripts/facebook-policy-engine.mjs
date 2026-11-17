@@ -367,15 +367,15 @@ export async function evaluateFinalFacebookPayload(payload, {
   const hostOf = link => {
     try { return new URL(link).hostname.toLowerCase(); } catch { return ""; }
   };
-  const isSafariLink = link => /(^|\\.)safari\\.com$/.test(hostOf(link));
-  const isSelarLink = link => /(^|\\.)selar\\.com$/.test(hostOf(link));
+  const isSafariLink = link => /(^|\.)safari\.com$/.test(hostOf(link));
+  const isSelarLink = link => /(^|\.)selar\.com$/.test(hostOf(link));
   const safariLinks = links.filter(isSafariLink);
   const selarLinks = links.filter(isSelarLink);
   const commercialLinks = [...safariLinks, ...selarLinks];
   const visibleDisclosureCopy = [payload.caption, payload.firstCommentText]
-    .filter(value => typeof value === "string").join("\\n");
+    .filter(value => typeof value === "string").join("\n");
   const hasCommercialIntent = payload.commercial === true || payload.campaignId != null || commercialLinks.length > 0;
-  const genericCommercialDisclosure = /\\b(affiliate link|affiliate disclosure|i may earn|may earn a commission|commission if you buy|paid partnership|sponsored|advertisement|direct sales|purchases generate revenue)\\b/i.test(visibleDisclosureCopy);
+  const genericCommercialDisclosure = /\b(affiliate link|affiliate disclosure|i may earn|may earn a commission|commission if you buy|paid partnership|sponsored|advertisement|direct sales|purchases generate revenue)\b/i.test(visibleDisclosureCopy);
   if (!hasCommercialIntent) {
     if (payload.commercial !== false || payload.campaignId !== null || payload.disclosureRequired !== false) {
       add(blockers, "Organic Nature Frontiers content must explicitly set campaignId=null, commercial=false and disclosureRequired=false");
