@@ -362,7 +362,7 @@ export async function evaluateFinalFacebookPayload(payload, {
   const visibleLinks = visibleCopy.match(/https?:\/\/[^\s)]+/gi) ?? [];
   const links = [...new Set([...structuredLinks, ...visibleLinks])];
   const monetizationCampaignApproved = payload.campaignId === "nature-frontiers-affiliate-monetization" && allowedCampaignIds.includes(payload.campaignId);
-  const visibleAffiliateDisclosure = /\\b(affiliate link|affiliate disclosure|i may earn|may earn a commission|commission if you buy|paid partnership|sponsored|advertisement)\\b/i.test(String(payload.caption ?? ""));
+  const visibleAffiliateDisclosure = /\b(affiliate link|affiliate disclosure|i may earn|may earn a commission|commission if you buy|paid partnership|sponsored|advertisement)\b/i.test(String(payload.caption ?? ""));
   if (payload.destination === "nature_frontiers_facebook" && isNatureFrontiersProductPromotion(payload, links) &&
       !(payload.commercial === true && monetizationCampaignApproved && visibleAffiliateDisclosure)) {
     add(blockers, "Nature Frontiers commercial content requires the explicitly allowlisted monetization campaign and visible affiliate disclosure");
