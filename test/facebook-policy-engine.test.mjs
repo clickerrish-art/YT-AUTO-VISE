@@ -617,3 +617,46 @@ test("synthetic or AI-generated media is blocked until the disclosure is actuall
     assert.ok(result.blockers.some(item => /requires a visible synthetic\/altered-media disclosure/i.test(item)));
   } finally { f.cleanup(); }
 });
+
+
+test("unreconciled Metricool history imported as UNCERTAIN blocks duplicate wildlife stories", async () => {
+  const f = fixture();
+  try {
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root),
+      history: [{
+        destination: "nature_frontiers_facebook",
+        status: "UNCERTAIN",
+        remotePostId: "metricool-import-unknown-remote-id",
+        caption: f.payload.caption,
+        publishedAt: "2026-11-13T20:01:16+02:00",
+        mediaType: "reel",
+        verifiedRemotely: false,
+        reconciliationStatus: "UNRECONCILED"
+      }]
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /Duplicate story, recycled media fingerprint, prior attempt or previously used slot detected/i.test(item)));
+    assert.equal(result.duplicateCheck.matches[0].status, "UNCERTAIN");
+  } finally { f.cleanup(); }
+});
+
+test("unreconciled Metricool UNCERTAIN posts still count against daily and format caps", async () => {
+  const f = fixture();
+  try {
+    const history = [
+      { destination: "nature_frontiers_facebook", status: "UNCERTAIN", slotId: "metricool-reel-1", publishedAt: "2026-10-24T06:00:00Z", mediaType: "reel" },
+      { destination: "nature_frontiers_facebook", status: "UNCERTAIN", slotId: "metricool-reel-2", publishedAt: "2026-10-24T10:00:00Z", mediaType: "reel" },
+      { destination: "nature_frontiers_facebook", status: "UNCERTAIN", slotId: "metricool-feed-1", publishedAt: "2026-10-24T14:00:00Z", mediaType: "feed_post" }
+    ];
+    f.payload.mediaType = "reel";
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), history,
+      maxPostsPerLocalDay: 3, maxReelsPerLocalDay: 2, maxFeedPostsPerLocalDay: 1,
+      minimumIntervalMinutes: 240
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /Daily publication cap already reached/i.test(item)));
+    assert.ok(result.blockers.some(item => /Daily Reel cap already reached/i.test(item)));
+  } finally { f.cleanup(); }
+});
