@@ -412,6 +412,6 @@ test("December 14 Shorts analytics lesson uses current official metric definitio
   assert.equal(item.disclosure.status, "HOLD");
   assert.ok(item.description.includes("DISCLOSURE HOLD"));
   assert.ok(item.script.indexOf("Advertisement.") < item.script.indexOf("YouTube Success Blueprint"));
-  assert.ok(item.script.trim().split(/\\s+/).filter(Boolean).length >= 90);
-  assert.ok(item.script.trim().split(/\\s+/).filter(Boolean).length <= 135);
+  assert.ok(item.script.trim().split(/\s+/).filter(Boolean).length >= 90);
+  assert.ok(item.script.trim().split(/\s+/).filter(Boolean).length <= 135);
 });
