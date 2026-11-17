@@ -1,12 +1,21 @@
 name: Cloudflare durable-state unit checks
 
 on:
+  push:
+    branches: [codex/cloudflare-durable-state]
+    paths:
+      - "cloudflare/**"
+      - "cloudflare.config.ts"
+      - "test/cloudflare-state-worker.test.mjs"
+      - "test/dashboard-worker-api.integration.test.mjs"
+      - ".github/workflows/cloudflare-state.yml"
   pull_request:
     branches: [codex/marketing-machine-audit-fixes]
     paths:
       - "cloudflare/**"
       - "cloudflare.config.ts"
       - "test/cloudflare-state-worker.test.mjs"
+      - "test/dashboard-worker-api.integration.test.mjs"
       - ".github/workflows/cloudflare-state.yml"
   workflow_dispatch:
 
