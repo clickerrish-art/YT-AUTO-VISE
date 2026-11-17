@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { authenticate, constantTimeEqual, handleRequest, operatorIdentity, validateDashboardState } from "../cloudflare/worker.js";
 
 const validState = () => ({
@@ -142,7 +143,7 @@ function createRestoreDatabase({ current, backup }) {
 }
 
 function sha256Text(value) {
-  return require("node:crypto").createHash("sha256").update(value).digest("hex");
+  return createHash("sha256").update(value).digest("hex");
 }
 
 test("backup restore verifies the backup hash, checks revision, and preserves a pre-restore backup", async () => {
