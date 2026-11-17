@@ -14,7 +14,12 @@
       "disclosureText": "This product is sold through my own Selar business; purchases generate revenue for my business.",
       "compensationType": "direct_sales_revenue",
       "disclosureApprovedAt": "2026-11-10T07:00:36+02:00",
-      "disclosureApprovalReference": "Owner supplied this exact viewer-facing disclosure in a user-authored ChatGPT message on 2026-11-10 at 07:00:36+02:00: “This product is sold through my own Selar business; purchases generate revenue for my business.” The owner followed on 2026-11-10 at 07:23:41+02:00 with an instruction to proceed to completion while guarding against policy violations. This wording applies only to the Complete YouTube Wildlife Creator's Vault promotion."
+      "disclosureApprovalReference": "Owner supplied this exact viewer-facing disclosure in a user-authored ChatGPT message on 2026-11-10 at 07:00:36+02:00: “This product is sold through my own Selar business; purchases generate revenue for my business.” The owner followed on 2026-11-10 at 07:23:41+02:00 with an instruction to proceed to completion while guarding against policy violations. This wording applies only to the Complete YouTube Wildlife Creator's Vault promotion.",
+      "approval": {
+        "approvedBy": "clickerrish-art",
+        "approvedAt": "2026-11-10T07:00:36+02:00",
+        "destinationVersion": "14add7769c05d044b08af39812ae88de7aa4d9f1484cd080b6f1d136712fcdd3"
+      }
     },
     {
       "id": "safari-affiliate-inactive",
