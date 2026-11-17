@@ -249,7 +249,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(Object.hasOwn(body, "stateFile"), false, "authenticated API responses must not disclose the local state-file path");
   assert.equal(logs.includes(stateDir), false, "startup logs must not disclose the local state directory");
   assert.ok(body.blockers.some(item => /complete SonicVhibez public\/private\/unlisted history is reconciled/i.test(item)), "dashboard state must expose the live history reconciliation blocker");
-  assert.ok(body.blockers.some(item => /CADENCE DECISION REQUIRED/.test(item)), "dashboard state must retain the cadence blocker until the owner explicitly approves a feasible cadence");
+  assert.equal(body.blockers.some(item => /CADENCE DECISION REQUIRED/.test(item)), false, "the recorded owner-approved rolling cadence must not remain an outstanding blocker");
   fs.writeFileSync(path.join(stateDir, "facebook-held-items.json"), JSON.stringify([{
     slotId: "nature-frontiers-held-test-slot", status: "HELD_CONNECTION_BLOCKED",
     reason: "META_PAGE_IDENTITY_OR_PERMISSION_CHECK_FAILED_NO_MUTATION", heldAt: "2026-11-16T10:00:00.000Z"
