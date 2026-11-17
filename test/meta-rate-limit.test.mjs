@@ -61,3 +61,32 @@ test("malformed or symlinked rate-limit state fails closed", async t => {
   fs.symlinkSync(target, stateFile);
   await assert.rejects(() => guarded("https://graph.facebook.com/v27.0/me", {}), /non-symlink/i);
 });
+
+test("provider Retry-After longer than one hour is never shortened", async t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "meta-rate-limit-long-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const stateFile = path.join(dir, "state.json");
+  const now = Date.parse("2026-11-17T10:00:00.000Z");
+  const guarded = createMetaRateLimitGuard({ stateFile, now: () => now, fetchImpl: async () => response(429, { "retry-after": "7200" }) });
+  await guarded("https://graph.facebook.com/v27.0/me", {});
+  assert.equal(JSON.parse(fs.readFileSync(stateFile, "utf8")).blockedUntil, now + 7200000);
+});
+
+test("expired cooldown is atomically overwritten and cleared after a successful response", async t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "meta-rate-limit-overwrite-"));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const stateFile = path.join(dir, "state.json");
+  let now = Date.parse("2026-11-17T10:00:00.000Z");
+  let calls = 0;
+  const guarded = createMetaRateLimitGuard({ stateFile, now: () => now, fetchImpl: async () => {
+    calls++;
+    return calls === 1 ? response(429, { "retry-after": "1" }) : response(200);
+  } });
+  await guarded("https://graph.facebook.com/v27.0/me", {});
+  now += 2000;
+  await guarded("https://graph.facebook.com/v27.0/me", {});
+  const state = JSON.parse(fs.readFileSync(stateFile, "utf8"));
+  assert.equal(state.blockedUntil, 0);
+  assert.equal(state.reason, "COOLDOWN_EXPIRED");
+  assert.deepEqual(fs.readdirSync(dir), ["state.json"], "atomic replacement must not leave temporary files behind");
+});
