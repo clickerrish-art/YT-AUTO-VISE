@@ -110,7 +110,7 @@ if (!exists(mediaInventoryPath)) {
       blockers.push("Imported SonicVhibez Canva wildlife media provenance inventory must contain a non-empty assets array.");
     } else {
       const unresolvedAssets = inventory.assets.filter(asset => {
-        const sourceVerified = typeof asset?.originalSourceUrl === "string" && /^https:\/\/www\\.pexels\\.com\/video\//.test(asset.originalSourceUrl);
+        const sourceVerified = typeof asset?.originalSourceUrl === "string" && /^https:\/\/www\.pexels\.com\/video\//.test(asset.originalSourceUrl);
         const localPath = typeof asset?.localMediaPath === "string" && asset.localMediaPath.trim() && !path.isAbsolute(asset.localMediaPath) && exists(asset.localMediaPath);
         const hashVerified = typeof asset?.sha256 === "string" && /^[a-f0-9]{64}$/i.test(asset.sha256);
         return asset?.status !== "CLEARED" || !sourceVerified || asset?.creatorConfirmed !== true || asset?.rightsConfirmed !== true || !localPath || !hashVerified || asset?.humanVisualReview !== "PASS";
