@@ -22,7 +22,10 @@ function fixture() {
     dailyCap: 3, dailyReelCap: 2, dailyFeedPostCap: 1, minimumIntervalMinutes: 240
   }));
   fs.writeFileSync(path.join(rootDir, queuePath), "[]");
-  return { rootDir, stateDir, configPath, queuePath, candidatePath, cleanup: () => fs.rmSync(rootDir, { recursive: true, force: true }) };
+  fs.mkdirSync(path.join(rootDir, "config"), { recursive: true });
+  const campaigns = [{ id: "selar-wildlife-vault", type: "selar_digital_product", status: "ACTIVE_FOR_DRAFTS_ONLY", ownerApproved: true, disclosureApprovalStatus: "PENDING_OWNER_APPROVAL", disclosureRequired: true, disclosureText: "This product is sold through my own Selar business; purchases generate revenue for my business.", destinationUrl: "https://selar.com/0u19v8u99l" }];
+  fs.writeFileSync(path.join(rootDir, "config", "campaigns.json"), JSON.stringify({ campaigns }));
+  return { rootDir, stateDir, configPath, queuePath, candidatePath, campaigns, cleanup: () => fs.rmSync(rootDir, { recursive: true, force: true }) };
 }
 
 test("intake queues only candidates that pass the final policy evaluator", async () => {
@@ -43,6 +46,7 @@ test("intake queues only candidates that pass the final policy evaluator", async
           : { eligible: false, blockers: ["MISSING_RIGHTS"], policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION, reason: "MISSING_RIGHTS" };
       }
     });
+    assert.deepEqual(observedPolicyOptions.campaignRegistry, f.campaigns);
     assert.equal(observedPolicyOptions.maxPostsPerLocalDay, 3);
     assert.equal(observedPolicyOptions.maxReelsPerLocalDay, 2);
     assert.equal(observedPolicyOptions.maxFeedPostsPerLocalDay, 1);
