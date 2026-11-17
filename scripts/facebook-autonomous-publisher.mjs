@@ -355,7 +355,7 @@ export async function runAutonomousFacebookPublisher({
         decision = await policyEvaluator(payload, {
           expectedPageId: config.destinationPageId, expectedPageName: config.destinationPageName,
           allowedDomains: config.allowedDomains ?? [], allowedCampaignIds: config.allowedCampaignIds ?? [],
-          approvedDestinations: config.approvedDestinations ?? [], history,
+          approvedDestinations: config.approvedDestinations ?? [], history: [...history, ...ledger],
           evidenceRoot: activeRoot, now: isoNow(current), timezone: config.timezone,
           maxPostsPerLocalDay: config.dailyCap, maxReelsPerLocalDay: config.dailyReelCap,
           maxFeedPostsPerLocalDay: config.dailyFeedPostCap, minimumIntervalMinutes: config.minimumIntervalMinutes,
