@@ -1,3 +1,12 @@
+## Exact candidate dashboard evidence — 17 November 2026
+
+- Exact candidate source/test SHA: `621d11d76242e5f5964291371d119ad09e44b94e`.
+- Dashboard browser workflow [44044525925](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44044525925): **33/33 Chromium journeys passed** on this exact SHA.
+- Current control inventory snapshot remains 120 controls, 17 forms, 103 form-owned controls and 17 standalone controls; the latest stored field-level matrix counts are 11 successful forms and 6 production-blocked forms.
+- **DASH-001 remains NOT_TESTED overall.** The 33 browser journeys do not establish exhaustive success, validation, authorization, persistence, refresh/restart, concurrency and accessibility behavior for every control/form. Do not promote historical PASS rows to current exact-SHA acceptance without field-level evidence.
+
+---
+
 ## Exact-candidate dashboard evidence refresh — 16 November 2026
 
 - Exact source/test candidate: `57769fa219fe98b52f8b182f3849206ac3c8110c`.

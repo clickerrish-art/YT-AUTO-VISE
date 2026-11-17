@@ -1,3 +1,46 @@
+# 17 November 2026 — exact current candidate hold
+
+**Implementation branch:** `621d11d76242e5f5964291371d119ad09e44b94e` (the application-code safety change is `43b17b877a5cb7f1c5770a91a2a54f1f565755d4`; the latest commit adds the December 14 draft/test). **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25`. **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`. **Divergence:** 3,989 ahead / 4 behind / 383 changed files. PR #1 remains OPEN/DRAFT/UNMERGED (mergeable, 383 changed files). PR #7 remains OPEN/DRAFT/UNMERGED (not mergeable, 19 changed files; no exact-head Actions runs were returned for its head). GitHub reports branch protection disabled on both the implementation branch and main. No main edit, merge, close, ready-state change, reset, rebase, force-push or history rewrite occurred.
+
+## Exact-SHA CI — `621d11d76242e5f5964291371d119ad09e44b94e`
+
+- Automation/security: **163/163 Node test files passed; 45/45 Python tests passed; zero skips** — [44044525874](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44044525874).
+- Content quality: PASS — [44044525726](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44044525726).
+- npm audit: **0 vulnerabilities** — [44044525861](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44044525861).
+- Metadata validation: PASS; unreviewed metadata remains fail-closed — [44044525861](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44044525861).
+- Dashboard Chromium: **33/33 passed** — [44044525925](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44044525925).
+- Queue readiness: PASS; 16 items remain held and public publishing is disabled — [44044525741](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44044525741).
+- Cloudflare durable-state unit checks: PASS — [44044525786](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44044525786).
+- Cloudflare runner-bridge safety tests: PASS — [44044525859](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44044525859).
+- Deployment recovery smoke: PASS — [44044526064](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44044526064).
+- Isolated main/candidate baseline: PASS — [44044525821](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44044525821).
+- Non-destructive branch inventory: PASS — [44044525978](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44044525978).
+- Production readiness: **HOLD — 9 blockers**, intentionally not bypassed — [44044525901](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44044525901).
+
+## Acceptance snapshot — do not overstate
+
+The stored requirements register is still the 16 November snapshot on tested SHA `57769fa219fe98b52f8b182f3849206ac3c8110c`: **89 requirements = 70 PASS / 0 FAIL / 9 NOT_TESTED / 10 BLOCKED**; it has not been freshly reconciled item-by-item on this SHA. The stored API route snapshot is also from that SHA: **48 routes = 42 PASS / 0 NOT_TESTED / 6 BLOCKED; 48/48 authentication-negative checks passed**. API-001 remains NOT_TESTED overall. The current dashboard run is 33/33, but DASH-001 remains NOT_TESTED across 120 controls and 17 forms. SCHED-001, DEPLOY-001 and GIT-002 remain NOT_TESTED; SCHED-003 remains BLOCKED.
+
+## Current private-upload blockers — keep publishing disabled
+
+1. Owner-approved feasible cadence mode and timezone-qualified approval reference are missing.
+2. Complete current public/private/unlisted/scheduled YouTube history and all pending/uncertain upload attempts are not reconciled; read-only OAuth returns `invalid_grant`.
+3. Genuine `content/render-manifest.json` and per-asset rights evidence are missing.
+4. Genuine `content/long-form-render-manifest.json` and long-form asset/rights evidence are missing.
+5. Final metadata has not received human review or `READY_FOR_PRIVATE_UPLOAD` approval.
+6. Media rights are not verified; do not set `rightsConfirmed=true`.
+7. Content/compliance review is incomplete; do not set `complianceReviewed=true`.
+8. Final `media/next-short.mp4` is missing.
+9. Read-only YouTube identity/uploads inventory is blocked by OAuth `invalid_grant`.
+
+The 11 promotional Shorts in the draft plan remain private/DRAFT_ONLY, at most two per preparation week, with publication and scheduling disabled and no publication timestamps. The newly added December 14 analytics Short is held because the 90-Day Blueprint disclosure remains UNVERIFIED. The Vault's disclosure is owner-approved; the Prompt Pack and 90-Day Blueprint disclosures are not.
+
+Metricool currently exposes only Nature Frontiers SA brand `8094526` with Facebook and Instagram, not SonicVhibez YouTube. Its scheduled-post query returned no posts for the inspected range; the integration exposes no draft inventory, so existing Nature Frontiers draft flags cannot be independently confirmed this run. The connected YouTube handle `@sonicvhibez` maps to channel ID `UCSlkuPfHH78oGC1o418HV4w`, matching the stale repository history snapshot, but that does not provide a SonicVhibez Metricool schedule.
+
+**No video was rendered, uploaded, scheduled or published.** Scheduled GitHub workflows execute from main; this PR branch is not production automation. Safari affiliate promotion remains inactive. No paid service or quota was used.
+
+---
+
 # 16 November 2026 — exact candidate release hold
 
 **Application/test SHA:** `57769fa219fe98b52f8b182f3849206ac3c8110c` (later commits are documentation-only). **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25`, unchanged. PR #1 remains OPEN/DRAFT/UNMERGED.

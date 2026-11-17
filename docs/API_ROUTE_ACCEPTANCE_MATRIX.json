@@ -1691,5 +1691,15 @@
       "npmAuditVulnerabilities": 0
     },
     "reason": "42 routes retain PASS from route-specific tests; six remain BLOCKED by live Meta authorization, YouTube reconciliation or genuine production-media prerequisites. Full API-001 acceptance remains NOT_TESTED."
+  },
+  "latestRegressionEvidence": {
+    "recordedAt": "2026-11-17T08:17:56.185Z",
+    "testedSourceTestSha": "621d11d76242e5f5964291371d119ad09e44b94e",
+    "automationRun": 44044525874,
+    "nodeTestFilesPassed": 163,
+    "pythonTestsPassed": 45,
+    "skipped": 0,
+    "npmAuditVulnerabilities": 0,
+    "note": "Exact-SHA regression evidence only. This does not refresh per-route business acceptance. The route-level acceptance snapshot remains 48 routes: 42 PASS, 0 NOT_TESTED, 6 BLOCKED, with 48 authentication-negative checks passing as of 2026-11-16 on source/test SHA 57769fa219fe98b52f8b182f3849206ac3c8110c."
   }
 }
