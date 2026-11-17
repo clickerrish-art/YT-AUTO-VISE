@@ -15,6 +15,7 @@ test("Nature Frontiers publishing configuration retains fail-closed defaults", (
   assert.equal(config.publishingEnabled, false);
   assert.equal(config.dryRun, true);
   assert.equal(config.emergencyStop, true);
+  assert.equal(config.mediaHistoryReconciled, false);
 });
 
 test("Nature Frontiers remains a Facebook destination, not a YouTube target", () => {
