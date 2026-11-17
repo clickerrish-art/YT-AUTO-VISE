@@ -259,7 +259,7 @@ export async function evaluateFinalFacebookPayload(payload, {
       const checkedAt = Date.parse(attestation?.checkedAt);
       const checkedNow = Date.parse(now);
       const reviewerId = text(attestation?.reviewerId) ? attestation.reviewerId : "";
-      const signed = claimHash + "\\n" + sourceUrlsHash + "\\n" + sourceExcerptHash + "\\n" + reviewerId + "\\n" + String(attestation?.checkedAt ?? "");
+      const signed = claimHash + "\n" + sourceUrlsHash + "\n" + sourceExcerptHash + "\n" + reviewerId + "\n" + String(attestation?.checkedAt ?? "");
       let signatureValid = false;
       if (typeof approvalSecret === "string" && Buffer.byteLength(approvalSecret, "utf8") >= 32 &&
           typeof attestation?.signature === "string" && /^[a-f0-9]{64}$/.test(attestation.signature)) {
