@@ -5,8 +5,9 @@
   "policyReference": {
     "url": "https://www.pexels.com/license/",
     "reviewStatus": "POLICY_REVIEWED_AS_GENERAL_POLICY_ONLY",
-    "notes": "Pexels License permits free commercial use and modification without attribution. Pexels Terms prohibit standalone redistribution or resale and warn that additional third-party rights may still apply. This general policy does not prove that a candidate source page is the exact source of a Canva import or that any additional permissions are unnecessary.",
-    "termsUrl": "https://www.pexels.com/terms-of-service/"
+    "notes": "Official Pexels License and Terms were rechecked on 2026-11-17. Pexels content is generally free for commercial use and modification, but standalone redistribution/resale, implied endorsement, trademark use, and additional third-party rights remain restricted. This general policy does not prove that a candidate page is the exact source of a Canva import or that all depicted-content permissions are unnecessary.",
+    "termsUrl": "https://www.pexels.com/terms-of-service/",
+    "lastVerified": "2026-11-17"
   },
   "status": "HOLD_SOURCE_PROVENANCE_AND_LOCAL_MEDIA_MISSING",
   "releaseAuthorized": false,
@@ -26,14 +27,27 @@
         "height": 2160,
         "durationSeconds": 14
       },
-      "sourceMatchStatus": "CANDIDATE_MATCH_PENDING_VISUAL_CONFIRMATION",
+      "sourceMatchStatus": "METADATA_MATCH_PENDING_VISUAL_CONFIRMATION",
       "originalSourceUrl": null,
       "creatorConfirmed": false,
       "downloadDate": null,
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "HOLD"
+      "status": "HOLD",
+      "sourcePageEvidence": {
+        "checkedAt": "2026-11-17",
+        "pageTitle": "Majestic African Elephant in Natural Habitat",
+        "url": "https://www.pexels.com/video/majestic-african-elephant-in-natural-habitat-37394148/",
+        "creator": "Magda Ehlers",
+        "width": 3840,
+        "height": 2160,
+        "durationSeconds": 14,
+        "publishedDate": "2026-05-03",
+        "licenseLabel": "Pexels License — Free",
+        "metadataMatch": "EXACT",
+        "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
+      }
     },
     {
       "canvaAssetId": "VAHZ9hEjS0U",
@@ -50,14 +64,27 @@
         "height": 1080,
         "durationSeconds": 14
       },
-      "sourceMatchStatus": "CANDIDATE_DURATION_MISMATCH_PENDING_VISUAL_CONFIRMATION",
+      "sourceMatchStatus": "METADATA_DURATION_MISMATCH_PENDING_VISUAL_CONFIRMATION",
       "originalSourceUrl": null,
       "creatorConfirmed": false,
       "downloadDate": null,
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "HOLD"
+      "status": "HOLD",
+      "sourcePageEvidence": {
+        "checkedAt": "2026-11-17",
+        "pageTitle": "An Aerial Footage of Zebras and Wildebeests",
+        "url": "https://www.pexels.com/video/an-aerial-footage-of-zebras-and-wildebeests-5146558/",
+        "creator": "Taryn Elliott",
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 14,
+        "publishedDate": "2020-08-20",
+        "licenseLabel": "Pexels License — Free",
+        "metadataMatch": "DURATION_MISMATCH_CANVA_13S_PEXELS_14S",
+        "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
+      }
     },
     {
       "canvaAssetId": "VAHZ9niQJoo",
@@ -74,14 +101,27 @@
         "height": 1080,
         "durationSeconds": 25
       },
-      "sourceMatchStatus": "CANDIDATE_MATCH_PENDING_VISUAL_CONFIRMATION",
+      "sourceMatchStatus": "METADATA_MATCH_PENDING_VISUAL_CONFIRMATION",
       "originalSourceUrl": null,
       "creatorConfirmed": false,
       "downloadDate": null,
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "HOLD"
+      "status": "HOLD",
+      "sourcePageEvidence": {
+        "checkedAt": "2026-11-17",
+        "pageTitle": "Zebras and Wildebeests Grazing in the Meadows",
+        "url": "https://www.pexels.com/video/zebras-and-wildebeests-grazing-in-the-meadows-5146578/",
+        "creator": "Taryn Elliott",
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 25,
+        "publishedDate": "2020-08-20",
+        "licenseLabel": "Pexels License — Free",
+        "metadataMatch": "EXACT",
+        "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
+      }
     },
     {
       "canvaAssetId": "VAHZ9i3Hx6U",
@@ -98,14 +138,27 @@
         "height": 1080,
         "durationSeconds": 21
       },
-      "sourceMatchStatus": "CANDIDATE_MATCH_PENDING_VISUAL_CONFIRMATION",
+      "sourceMatchStatus": "METADATA_MATCH_PENDING_VISUAL_CONFIRMATION",
       "originalSourceUrl": null,
       "creatorConfirmed": false,
       "downloadDate": null,
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "HOLD"
+      "status": "HOLD",
+      "sourcePageEvidence": {
+        "checkedAt": "2026-11-17",
+        "pageTitle": "Giraffe in the Open Fields",
+        "url": "https://www.pexels.com/video/giraffe-in-the-open-fields-5214258/",
+        "creator": "Taryn Elliott",
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 21,
+        "publishedDate": "2020-08-28",
+        "licenseLabel": "Pexels License — Free",
+        "metadataMatch": "EXACT",
+        "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
+      }
     },
     {
       "canvaAssetId": "VAHZ9oFCiak",
@@ -125,14 +178,35 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "HOLD"
+      "status": "HOLD",
+      "sourcePageEvidence": {
+        "checkedAt": "2026-11-17",
+        "searchNote": "No exact Pexels source page matching the Canva metadata (3840x2160, 9 seconds) was verified. Similar lion pages surfaced with different metadata and were rejected as source matches.",
+        "unmatchedCandidates": [
+          {
+            "url": "https://www.pexels.com/video/video-of-a-lion-8476160/",
+            "creator": "Nicky Pe",
+            "width": 3840,
+            "height": 2160,
+            "durationSeconds": 21
+          },
+          {
+            "url": "https://www.pexels.com/video/majestic-lion-in-natural-habitat-40581226/",
+            "creator": "Richard Lathrop",
+            "width": 2160,
+            "height": 3840,
+            "durationSeconds": 34
+          }
+        ]
+      }
     }
   ],
   "blockingEvidence": [
     "The five Canva asset IDs and media metadata are recorded, but original MP4 files are not present in the repository.",
-    "Exact Pexels source URLs, creator names, download records and source-to-Canva visual matches were not retained for the five imports.",
-    "Candidate Pexels pages are not treated as confirmed sources until their frames are matched to the imported Canva assets.",
+    "Four candidate Pexels pages were checked against creator, dimensions and duration. Three match the recorded metadata; one zebra clip has a 1-second duration mismatch. Canva-to-Pexels visual matching remains pending because the source preview could not be independently retrieved in this verification pass.",
+    "The fifth Canva lion clip has no verified exact Pexels source page/creator; similar Pexels pages with mismatching durations or dimensions were rejected.",
+    "Candidate Pexels pages and general Pexels commercial-use terms are not sufficient to clear an imported clip without exact visual matching, original MP4, download/source evidence, hash and human review.",
     "No footage rights or human visual review is marked complete."
   ],
-  "notes": "This inventory records existing imported Canva assets only. Candidate URLs are research leads, not verified provenance. Do not use any asset in a render, mark rightsConfirmed true, or claim commercial clearance until the original source page and creator are confirmed, the exact clip is visually matched, the original MP4 is available, and the intended use is reviewed."
+  "notes": "Metadata-only source-page verification completed 2026-11-17. No asset is cleared: all five remain HOLD, originalSourceUrl remains null, creatorConfirmed=false, rightsConfirmed=false and humanVisualReview=NOT_DONE until the Canva import is visually matched to the exact Pexels source and the original MP4/hash are retained."
 }
