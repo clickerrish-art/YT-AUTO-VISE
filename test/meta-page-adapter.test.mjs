@@ -333,3 +333,27 @@ test("Meta permission verification fails closed when the configured Page is abse
   }), /not returned by the authenticated account's managed-Page list/i);
   assert.equal(directPageRequested, false, "direct Page identity must not substitute for managed Page task authorization");
 });
+
+test("expired or revoked user and Page tokens fail closed without any automatic OAuth exchange", async () => {
+  const userToken = "expired-user-token-" + "u".repeat(30);
+  const pageToken = "expired-page-token-" + "p".repeat(30);
+  const paths = [];
+  await assert.rejects(() => verifyMetaPagePermissions({
+    pageId: PAGE_ID, userAccessToken: userToken, apiVersion: API,
+    fetchImpl: async url => {
+      const parsed = new URL(url); paths.push(parsed.pathname);
+      return response({ error: { code: 190, message: "Invalid OAuth access token" } }, 400);
+    }
+  }), error => error instanceof MetaPageApiError && error.code === 190 && !error.message.includes(userToken));
+  assert.deepEqual(paths, ["/v27.0/me"]);
+  paths.length = 0;
+  await assert.rejects(() => verifyMetaPageIdentity({
+    pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: pageToken, apiVersion: API,
+    fetchImpl: async url => {
+      const parsed = new URL(url); paths.push(parsed.pathname);
+      return response({ error: { code: 190, message: "Invalid OAuth access token" } }, 400);
+    }
+  }), error => error instanceof MetaPageApiError && error.code === 190 && !error.message.includes(pageToken));
+  assert.deepEqual(paths, ["/v27.0/" + PAGE_ID]);
+  assert.ok(paths.every(item => !item.includes("/oauth/access_token")));
+});
