@@ -141,6 +141,14 @@ export async function runAutonomousFacebookPublisher({
   const activeRoot = path.resolve(rootDir);
   queuePath = String(env.FACEBOOK_AUTONOMOUS_QUEUE_PATH ?? "").trim() || queuePath || (path.isAbsolute(String(stateDir ?? "")) ? path.join(stateDir, "facebook-autonomous-queue.json") : path.join(activeRoot, "content/facebook-autonomous-queue.json"));
   const config = readJson(configPath);
+  let campaignRegistry = [];
+  try {
+    const campaignConfig = readJson(path.join(activeRoot, "config/campaigns.json"));
+    if (Array.isArray(campaignConfig.campaigns)) campaignRegistry = campaignConfig.campaigns;
+  } catch {
+    // Missing or malformed campaign registry must fail closed for commercial payloads.
+    campaignRegistry = [];
+  }
   // Safe defaults are intentionally a no-op rather than an error or implicit opt-in.
   if (config?.emergencyStop !== false || config?.publishingEnabled !== true || config?.dryRun !== false || env.FACEBOOK_PUBLISH_ENABLED !== "YES") {
     return { status: "SAFE_NOOP", reason: "PUBLISHING_DISABLED_ENV_SWITCH_OR_EMERGENCY_STOP_ACTIVE", published: 0, skipped: 0 };
@@ -355,7 +363,7 @@ export async function runAutonomousFacebookPublisher({
         decision = await policyEvaluator(payload, {
           expectedPageId: config.destinationPageId, expectedPageName: config.destinationPageName,
           allowedDomains: config.allowedDomains ?? [], allowedCampaignIds: config.allowedCampaignIds ?? [],
-          approvedDestinations: config.approvedDestinations ?? [], history: [...history, ...ledger],
+          approvedDestinations: config.approvedDestinations ?? [], campaignRegistry, history: [...history, ...ledger],
           evidenceRoot: activeRoot, now: isoNow(current), timezone: config.timezone,
           mediaHistoryReconciled: config.mediaHistoryReconciled === true,
           maxPostsPerLocalDay: config.dailyCap, maxReelsPerLocalDay: config.dailyReelCap,
