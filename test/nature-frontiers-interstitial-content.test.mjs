@@ -1,10 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { buildInterstitialCalendar, validateInterstitialCandidate } from "../scripts/nature-frontiers-interstitial-content.mjs";
+import { NATURE_FRONTIERS_REQUIRED_POST_LINKS } from "../scripts/facebook-policy-engine.mjs";
 
 const candidate=(overrides={})=>({
  id:"nf-photo-lion-001",brand:"Nature Frontiers",type:"wildlife_photo",title:"A lion's quiet signal",
- caption:"A closer look at how lions communicate. What detail would you notice first?",
+ caption:"A closer look at how lions communicate. What detail would you notice first? Affiliate disclosure: we may earn a commission. " + NATURE_FRONTIERS_REQUIRED_POST_LINKS.join(" "),
  original:true,status:"approved",createdAt:"2026-11-01T00:00:00Z",
  media:{path:"media/nature-frontiers/lion.jpg",sha256:"a".repeat(64),altText:"Adult lion resting in golden grass"},
  claims:[{text:"Lions use scent marking to communicate territorial information.",sources:["https://www.nationalgeographic.com/animals/mammals/facts/lion"]}],
