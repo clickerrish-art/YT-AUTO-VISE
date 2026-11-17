@@ -15,7 +15,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const logo = path.join(root, "brand", "nature-frontiers-logo-transparent.png");
 const [inputArg, outputArg] = process.argv.slice(2);
 if (!inputArg || !outputArg) {
-  console.error("Usage: node scripts/brand-nature-frontiers-video.mjs <input.mp4> <output.mp4>");
+  console.error("Usage: NATURE_FRONTIERS_LOGO_POSITION=top-right|bottom-right|top-left|bottom-left node scripts/brand-nature-frontiers-video.mjs <input.mp4> <output.mp4>");
   process.exit(2);
 }
 let input, output;
@@ -30,7 +30,15 @@ try {
   process.exit(2);
 }
 fs.mkdirSync(path.dirname(output), { recursive: true });
-const graph = "[1:v][0:v]scale2ref=w=rw*0.09:h=ow*ih/iw[brand][base];[brand]colorchannelmixer=aa=0.58[mark];[base][mark]overlay=x=W-w-24:y=H-h-24:format=auto:shortest=1[out]";
+const allowedPositions = new Set(["top-right", "bottom-right", "top-left", "bottom-left"]);
+const position = process.env.NATURE_FRONTIERS_LOGO_POSITION || "bottom-right";
+if (!allowedPositions.has(position)) {
+  console.error("BLOCKED: NATURE_FRONTIERS_LOGO_POSITION must be one of: " + [...allowedPositions].join(", "));
+  process.exit(2);
+}
+const x = position.endsWith("right") ? "W-w-24" : "24";
+const y = position.startsWith("top") ? "24" : "H-h-24";
+const graph = `[1:v][0:v]scale2ref=w=rw*0.09:h=ow*ih/iw[brand][base];[brand]colorchannelmixer=aa=0.58[mark];[base][mark]overlay=x=${x}:y=${y}:format=auto:shortest=1[out]`;
 const args = [
   "-hide_banner", "-v", "error", "-xerror", "-i", input, "-loop", "1", "-framerate", "30", "-i", logo,
   "-filter_complex", graph, "-map", "[out]", "-map", "0:a?",
@@ -53,7 +61,7 @@ const manifest = {
   outputSha256: sha256(output),
   logoPath: "brand/nature-frontiers-logo-transparent.png",
   logoSha256: sha256(logo),
-  overlay: { position: "bottom-right", marginPixels: 24, widthRatio: 0.09, opacity: 0.58, aspectRatioPreserved: true },
+  overlay: { position, marginPixels: 24, widthRatio: 0.09, opacity: 0.58, aspectRatioPreserved: true },
   watermarkReview: { status: "PENDING_FULL_VIDEO_HUMAN_REVIEW", reviewer: null, reviewedAt: null, reviewedOutputSha256: null },
   publicationStatus: "HOLD"
 };
