@@ -38,7 +38,9 @@ test("holds text claims with missing sources and duplicate IDs",()=>{
 test("does not exceed weekly cap or schedule more than one item per local day",()=>{
  const items=[candidate(),candidate({id:"nf-fact-002",type:"animal_fact",media:null}),candidate({id:"nf-text-003",type:"wildlife_text",media:null})];
  const plan=buildInterstitialCalendar({videos:[...videos,{brand:"Nature Frontiers",status:"scheduled",scheduledAt:"2026-11-24T06:00:00Z"}],candidates:items,now:"2026-11-17T00:00:00Z",maxPerWeek:1});
- assert.ok(plan.placements.length<=1);
+ const weeklyCounts=new Map();
+ for(const placement of plan.placements) weeklyCounts.set(placement.week,(weeklyCounts.get(placement.week)??0)+1);
+ assert.ok([...weeklyCounts.values()].every(count=>count<=1),"the configured cap applies per Johannesburg-local week, not across the entire multi-week calendar");
  assert.equal(new Set(plan.placements.map(x=>x.localDate)).size,plan.placements.length);
 });
 test("rejects unknown brand and malformed video schedule",()=>{
