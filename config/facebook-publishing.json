@@ -38,7 +38,7 @@
     "All policy uncertainty, missing source checks, missing rights evidence, unknown media provenance, unapproved destinations, duplicates, and uncertain publish results block the affected slot automatically.",
     "History and attempt ledger paths must point to durable operator-controlled storage in production; GitHub Actions artifacts are diagnostic exports only.",
     "The Nature Frontiers Facebook destination is separate from the SonicVhibez YouTube destination.",
-    "Nature Frontiers may publish clearly disclosed commercial/affiliate content only under the exact allowlisted nature-frontiers-affiliate-monetization campaign. Every post must include all destinations in config/nature-frontiers-post-links.json. Do not infer endorsement or guarantee availability, prices, sightings, accommodation, or travel outcomes.",
+    "Nature Frontiers commercial/affiliate publishing remains blocked: no combined campaign is currently registered and approved for the Safari affiliate and Selar direct-sales destinations. Keep allowedCampaignIds empty until each destination, compensation type, viewer-facing disclosure, and owner approval are separately verified.",
     "Every Nature Frontiers Facebook candidate requires a human review and an HMAC-signed approval receipt bound to its exact final content fingerprint. Use npm run facebook:approve -- content/facebook-intake-candidates.json <exact-slot-id> on the operator workstation. Configure FACEBOOK_APPROVAL_HMAC_SECRET (at least 32 bytes) and FACEBOOK_APPROVER_ID through the workstation's secure secret manager or protected process environment; never store or paste the secret in the repository, candidate file, terminal transcript, or chat. Missing, stale, altered or invalid approvals block intake and publication.",
     "Global anti-spam policy prohibits automated likes, comments, replies, follows, DMs, unsolicited outreach, engagement exchanges and artificial engagement. Content publishing does not authorize automated audience interaction."
   ],
@@ -52,7 +52,7 @@
   "historyFile": "facebook-history.json",
   "attemptLedgerFile": "facebook-attempt-ledger.json",
   "lockFile": "facebook-publishing.lock",
-  "allowedCampaignIds": ["nature-frontiers-affiliate-monetization"],
+  "allowedCampaignIds": [],
   "allowedDomains": [],
   "approvedDestinations": [
     "https://www.safari.com/sabi-sand?a=GM26",
