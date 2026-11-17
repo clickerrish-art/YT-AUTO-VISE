@@ -4,7 +4,7 @@ import path from "node:path";
 import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 
 export const FACEBOOK_POLICY_RULE_VERSION = "nf-facebook-autonomous-policy-2026-11-v5";
-export const NATURE_FRONTIERS_REQUIRED_POST_LINKS = Object.freeze([
+export const NATURE_FRONTIERS_KNOWN_DESTINATIONS = Object.freeze([
   "https://www.safari.com/sabi-sand?a=GM26",
   "https://www.safari.com/kruger-national-park?a=GM26",
   "https://www.safari.com/destinations/serengeti?a=GM26",
@@ -190,6 +190,7 @@ export async function evaluateFinalFacebookPayload(payload, {
   allowedDomains = [],
   allowedCampaignIds = [],
   approvedDestinations = [],
+  campaignRegistry = [],
   history = [],
   evidenceRoot = process.cwd(),
   fetchImpl = fetch,
@@ -363,30 +364,66 @@ export async function evaluateFinalFacebookPayload(payload, {
     .filter(value => typeof value === "string").join("\n");
   const visibleLinks = visibleCopy.match(/https?:\/\/[^\s)]+/gi) ?? [];
   const links = [...new Set([...structuredLinks, ...visibleLinks])];
-  const monetizationCampaignApproved = payload.campaignId === "nature-frontiers-affiliate-monetization" && allowedCampaignIds.includes(payload.campaignId);
-  const visibleAffiliateDisclosure = /\b(affiliate link|affiliate disclosure|i may earn|may earn a commission|commission if you buy|paid partnership|sponsored|advertisement)\b/i.test(String(payload.caption ?? ""));
-  if (payload.destination === "nature_frontiers_facebook" && isNatureFrontiersProductPromotion(payload, links) &&
-      !(payload.commercial === true && monetizationCampaignApproved && visibleAffiliateDisclosure)) {
-    add(blockers, "Nature Frontiers commercial content requires the explicitly allowlisted monetization campaign and visible affiliate disclosure");
-  }
-  for (const requiredLink of NATURE_FRONTIERS_REQUIRED_POST_LINKS) {
-    if (!links.includes(requiredLink) || !String(payload.caption ?? "").includes(requiredLink)) {
-      add(blockers, "Every Nature Frontiers post must visibly include every required Safari, Selar and YouTube destination");
-      break;
+  const hostOf = link => {
+    try { return new URL(link).hostname.toLowerCase(); } catch { return ""; }
+  };
+  const isSafariLink = link => /(^|\\.)safari\\.com$/.test(hostOf(link));
+  const isSelarLink = link => /(^|\\.)selar\\.com$/.test(hostOf(link));
+  const safariLinks = links.filter(isSafariLink);
+  const selarLinks = links.filter(isSelarLink);
+  const commercialLinks = [...safariLinks, ...selarLinks];
+  const visibleDisclosureCopy = [payload.caption, payload.firstCommentText]
+    .filter(value => typeof value === "string").join("\\n");
+  const hasCommercialIntent = payload.commercial === true || payload.campaignId != null || commercialLinks.length > 0;
+  const genericCommercialDisclosure = /\\b(affiliate link|affiliate disclosure|i may earn|may earn a commission|commission if you buy|paid partnership|sponsored|advertisement|direct sales|purchases generate revenue)\\b/i.test(visibleDisclosureCopy);
+  if (!hasCommercialIntent) {
+    if (payload.commercial !== false || payload.campaignId !== null || payload.disclosureRequired !== false) {
+      add(blockers, "Organic Nature Frontiers content must explicitly set campaignId=null, commercial=false and disclosureRequired=false");
     }
-  }
-  const affiliate = payload.commercial === true || links.some(link => /selar\.com|safari\.com/i.test(String(link)));
-  const disclosureText = String(payload.caption ?? "");
-  if (affiliate) {
-    const disclosureVisible = /\b(affiliate link|affiliate disclosure|i may earn|may earn a commission|commission if you buy|paid partnership|sponsored|advertisement)\b/i.test(disclosureText);
-    disclosureChecks.push({ required: true, visibleInCaption: disclosureVisible, passed: disclosureVisible });
-    if (!disclosureVisible) add(blockers, "Commercial or affiliate promotion requires a clear disclosure visible in the final caption");
-    if (payload.campaignId === "selar-wildlife-vault" && !links.includes(APPROVED_SELLAR_URL)) add(blockers, "Selar campaign must use the exact approved product destination");
-    if (links.includes(APPROVED_SELLAR_URL) && payload.campaignId !== "selar-wildlife-vault" && payload.campaignId !== "nature-frontiers-affiliate-monetization") add(blockers, "Approved Selar URL is restricted to an explicitly configured Selar or Nature Frontiers campaign");
-    if (payload.campaignId === "safari-affiliate" && payload.safariCampaignEnabled !== true) add(blockers, "Safari affiliate campaign is inactive until explicitly configured");
-    if (!allowedCampaignIds.includes(payload.campaignId)) add(blockers, "Campaign ID is not allowlisted for autonomous publishing");
-  } else {
+    if (payload.disclosure != null && payload.disclosure !== "") add(blockers, "Organic Nature Frontiers content must not carry an unrelated campaign disclosure");
+    if (genericCommercialDisclosure) add(blockers, "Organic Nature Frontiers content must not include an affiliate, sponsored or direct-sales disclosure");
     disclosureChecks.push({ required: false, visibleInCaption: false, passed: true });
+  } else {
+    if (payload.commercial !== true || payload.disclosureRequired !== true || typeof payload.campaignId !== "string" || !payload.campaignId.trim()) {
+      add(blockers, "Commercial Nature Frontiers content requires an explicit campaignId, commercial=true and disclosureRequired=true");
+    }
+    if (safariLinks.length > 0 && selarLinks.length > 0) {
+      add(blockers, "A single Nature Frontiers post cannot mix Safari affiliate and Selar direct-sales campaigns");
+    }
+    const campaign = Array.isArray(campaignRegistry) ? campaignRegistry.find(item => item?.id === payload.campaignId) : null;
+    if (!campaign) {
+      add(blockers, "Commercial campaign ID is not registered in config/campaigns.json");
+      disclosureChecks.push({ required: true, visibleInCaption: false, passed: false });
+    } else {
+      const campaignActive = campaign.status === "ACTIVE_FOR_AUTONOMOUS_PUBLISHING" &&
+        campaign.ownerApproved === true && campaign.disclosureApprovalStatus === "APPROVED";
+      if (!campaignActive) add(blockers, `Campaign ${campaign.id} is not approved for autonomous publishing`);
+      if (!allowedCampaignIds.includes(campaign.id)) add(blockers, "Campaign ID is not allowlisted for autonomous publishing");
+      if (campaign.disclosureRequired !== true || payload.disclosureRequired !== true) {
+        add(blockers, "Campaign-specific viewer disclosure must be explicitly required");
+      }
+      const campaignUrls = [campaign.destinationUrl, ...(Array.isArray(campaign.destinations) ? campaign.destinations : [])].filter(Boolean);
+      if (campaign.type === "safari_affiliate" || campaign.type === "affiliate") {
+        if (safariLinks.length === 0 || selarLinks.length > 0) add(blockers, "Affiliate campaign posts must use only their own approved Safari destinations");
+        if (safariLinks.some(link => !campaignUrls.includes(link))) add(blockers, "Safari affiliate destination is not registered to this exact campaign");
+      } else if (campaign.type === "selar_digital_product") {
+        if (selarLinks.length === 0 || safariLinks.length > 0) add(blockers, "Selar direct-sales campaign posts must use only their own approved Selar destinations");
+        if (selarLinks.some(link => !campaignUrls.includes(link))) add(blockers, "Selar destination is not registered to this exact direct-sales campaign");
+        if (campaign.destinationUrl !== APPROVED_SELLAR_URL) add(blockers, "Selar campaign destination does not match the sole approved product URL");
+      } else {
+        add(blockers, "Commercial campaign type is not supported by the Nature Frontiers policy engine");
+      }
+      const disclosureText = typeof campaign.disclosureText === "string" ? campaign.disclosureText : "";
+      const disclosureVisible = disclosureText.length >= 20 && String(payload.caption ?? "").includes(disclosureText);
+      disclosureChecks.push({
+        required: true,
+        visibleInCaption: disclosureVisible,
+        passed: disclosureVisible && payload.disclosure === disclosureText,
+        compensationType: campaign.compensationType ?? campaign.type
+      });
+      if (!disclosureVisible) add(blockers, "Commercial campaign requires its exact owner-approved disclosure visibly included in the final caption");
+      if (payload.disclosure !== disclosureText) add(blockers, "Campaign disclosure metadata must exactly match the registered campaign disclosure");
+    }
   }
   for (const link of links) {
     if (!urlIsSafe(link)) {
