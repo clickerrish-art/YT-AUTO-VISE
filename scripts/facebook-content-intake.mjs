@@ -79,6 +79,14 @@ export async function runFacebookContentIntake({
   }
   fs.mkdirSync(stateDir, { recursive: true, mode: 0o700 });
   const config = readJson(configPath);
+  let campaignRegistry = [];
+  try {
+    const campaignConfig = readJson(path.join(activeRoot, "config/campaigns.json"));
+    if (Array.isArray(campaignConfig.campaigns)) campaignRegistry = campaignConfig.campaigns;
+  } catch {
+    // Missing or malformed campaign registry must fail closed for commercial candidates.
+    campaignRegistry = [];
+  }
   const stateFile = name => {
     if (typeof name !== "string" || !name.trim() || path.isAbsolute(name) || name.includes("\\") ||
         name.split("/").some(part => !part || part === "." || part === "..")) throw new Error("Unsafe Facebook state filename");
@@ -131,6 +139,7 @@ export async function runFacebookContentIntake({
         allowedDomains: config.allowedDomains ?? [],
         allowedCampaignIds: config.allowedCampaignIds ?? [],
         approvedDestinations: config.approvedDestinations ?? [],
+        campaignRegistry,
         history: [...history, ...queue],
         evidenceRoot: activeRoot,
         now: new Date(now).toISOString(),
