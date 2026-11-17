@@ -2,17 +2,17 @@ import fs from "node:fs";
 import path from "node:path";
 
 const RATE_LIMIT_CODES = new Set([4, 17, 32, 613]);
-const MAX_BACKOFF_MS = 60 * 60 * 1000;
+const MAX_FALLBACK_BACKOFF_MS = 60 * 60 * 1000;
 const DEFAULT_BACKOFF_MS = 60 * 1000;
 const USAGE_THRESHOLD = 90;
 
 function parseRetryAfter(value, now) {
   if (typeof value !== "string" || !value.trim()) return null;
   const seconds = Number(value.trim());
-  if (Number.isFinite(seconds) && seconds >= 0) return Math.min(MAX_BACKOFF_MS, seconds * 1000);
+  if (Number.isFinite(seconds) && seconds >= 0) return Math.min(Number.MAX_SAFE_INTEGER - now, seconds * 1000);
   const date = Date.parse(value);
   if (!Number.isFinite(date)) return null;
-  return Math.min(MAX_BACKOFF_MS, Math.max(0, date - now));
+  return Math.min(Number.MAX_SAFE_INTEGER - now, Math.max(0, date - now));
 }
 
 function usagePercentages(headers) {
@@ -97,7 +97,7 @@ export function createMetaRateLimitGuard({ fetchImpl = fetch, stateFile, now = D
     if (rateLimited || nearLimit) {
       const attempts = rateLimited ? state.attempts + 1 : Math.max(1, state.attempts);
       const retryAfter = parseRetryAfter(response.headers?.get?.("retry-after"), current);
-      const fallback = Math.min(MAX_BACKOFF_MS, DEFAULT_BACKOFF_MS * (2 ** Math.min(attempts - 1, 6)));
+      const fallback = Math.min(MAX_FALLBACK_BACKOFF_MS, DEFAULT_BACKOFF_MS * (2 ** Math.min(attempts - 1, 6)));
       const delay = rateLimited ? (retryAfter ?? fallback) : 5 * 60 * 1000;
       writeState(stateFile, {
         attempts,
