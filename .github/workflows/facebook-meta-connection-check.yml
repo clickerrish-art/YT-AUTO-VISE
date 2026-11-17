@@ -13,6 +13,7 @@ on:
       - "scripts/meta-page-adapter.mjs"
       - "scripts/facebook-autonomous-publisher.mjs"
       - "scripts/meta-rate-limit.mjs"
+      - ".github/workflows/facebook-autonomous-publisher.yml"
       - "test/meta-page-adapter.test.mjs"
       - "test/meta-rate-limit.test.mjs"
       - "test/facebook-policy-engine.test.mjs"
@@ -41,6 +42,7 @@ jobs:
           node --check scripts/facebook-autonomous-publisher.mjs
           node --test test/meta-page-adapter.test.mjs test/meta-page-reel-adapter.test.mjs test/meta-rate-limit.test.mjs test/facebook-policy-engine.test.mjs test/facebook-autonomous-publisher.test.mjs test/facebook-autonomous-publisher-workflow.test.mjs
       - name: Verify configured secrets and owner-approved Page identity (read-only)
+        if: github.event_name == 'workflow_dispatch'
         run: |
           node --input-type=module <<'NODE'
           import fs from "node:fs";
