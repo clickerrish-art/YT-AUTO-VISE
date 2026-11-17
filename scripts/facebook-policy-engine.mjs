@@ -337,7 +337,10 @@ export async function evaluateFinalFacebookPayload(payload, {
     if (!check.passed) add(blockers, `Media asset ${i + 1} failed rights, provenance, expiry or checksum verification`);
     resultBase.mediaFingerprints.push({ id: String(asset.id ?? ""), sha256: String(asset.sha256 ?? ""), passed: check.passed });
     if (typeof asset.syntheticOrAltered !== "boolean" || asset.representationKnown !== true) add(blockers, `Media asset ${i + 1} synthetic/altered origin or representation is unknown`);
-    if (asset.syntheticOrAltered === true && asset.disclosureRequired === true && asset.disclosureApplied !== true) add(blockers, `Media asset ${i + 1} requires a visible synthetic/altered-media disclosure`);
+    if (asset.syntheticOrAltered === true) {
+      if (asset.disclosureRequired !== true) add(blockers, `Media asset ${i + 1} is synthetic/altered but does not require an AI disclosure`);
+      if (asset.disclosureApplied !== true) add(blockers, `Media asset ${i + 1} requires a visible synthetic/altered-media disclosure`);
+    }
   }
 
   const structuredLinks = Array.isArray(payload.links) ? payload.links.map(String) : [];
