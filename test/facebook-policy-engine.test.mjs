@@ -424,3 +424,39 @@ test("semantic verifier must bind its result to the exact claim and source set",
     assert.equal(mismatchedSources.sourceChecks[0].semanticVerification.verified, false);
   } finally { f.cleanup(); }
 });
+
+test("signed human source-review attestations replace an unavailable semantic verifier and bind exact claim evidence", async () => {
+  const f = fixture();
+  try {
+    const claim = f.payload.claims[0];
+    const claimHash = hash(claim.text);
+    const sourceUrlsHash = hash(JSON.stringify(claim.sourceUrls));
+    const sourceExcerptHash = hash(claim.sourceExcerpt);
+    const reviewerId = "owner-reviewed-editor";
+    const checkedAt = "2026-10-24T12:00:00.000Z";
+    const signed = claimHash + "\\n" + sourceUrlsHash + "\\n" + sourceExcerptHash + "\\n" + reviewerId + "\\n" + checkedAt;
+    claim.semanticVerification = {
+      claimHash, sourceUrlsHash, sourceExcerptHash, reviewerId, checkedAt,
+      signature: crypto.createHmac("sha256", TEST_APPROVAL_SECRET).update(signed).digest("hex")
+    };
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: reviewerId, reason: "Reviewed the exact claim and source excerpt.",
+      secret: TEST_APPROVAL_SECRET, now: checkedAt
+    });
+    const noSemanticService = options(f.root);
+    delete noSemanticService.semanticVerifier;
+    const valid = await evaluateFinalFacebookPayload(f.payload, noSemanticService);
+    assert.equal(valid.eligible, true, JSON.stringify(valid.blockers));
+    assert.equal(valid.sourceChecks[0].semanticVerification.reason,
+      "SIGNED_HUMAN_FACT_CHECK_BOUND_TO_CLAIM_SOURCE_SET_AND_EXCERPT");
+
+    claim.semanticVerification.sourceExcerptHash = "0".repeat(64);
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: reviewerId, reason: "Re-signed altered fixture to isolate claim attestation validation.",
+      secret: TEST_APPROVAL_SECRET, now: checkedAt
+    });
+    const tampered = await evaluateFinalFacebookPayload(f.payload, noSemanticService);
+    assert.equal(tampered.eligible, false);
+    assert.match(tampered.blockers.join(" "), /trusted semantic verification/i);
+  } finally { f.cleanup(); }
+});
