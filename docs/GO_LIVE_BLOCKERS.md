@@ -1,4 +1,45 @@
-# 17 November 2026 — exact current candidate hold
+# 17 November 2026 — latest exact source/test checkpoint
+
+**Exact source/test SHA:** `38cb904c463e4e5f5e24d09fc0d88882c93bb45b`. **Implementation branch:** `codex/marketing-machine-audit-fixes`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` (unchanged). **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`. **Divergence:** 3,994 ahead / 4 behind / 300 changed files. PR #1 remains OPEN / DRAFT / UNMERGED. No main edit, merge, close, ready-state change, reset, rebase, force-push or history rewrite occurred.
+
+## Exact-SHA verification on `38cb904c463e4e5f5e24d09fc0d88882c93bb45b`
+
+- Content quality [44068430046](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44068430046): **936/936 Node tests passed; 0 failed; 0 skipped**.
+- Automation/security [44068430180](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44068430180): PASS. Isolated candidate baseline: **163/163 Node test files and 45/45 Python tests passed; zero skips**.
+- Dashboard Chromium [44068430112](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44068430112): **33/33 passed**.
+- Queue readiness [44068430488](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44068430488): PASS; 16 queue items retained in an isolated proposal; all destinations validated; public publishing disabled.
+- Metadata validation [44068430417](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44068430417): PASS; unsafe/unreviewed metadata remains fail-closed; caption structure checks pass.
+- Isolated main/candidate baseline [44068430210](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44068430210): PASS on exact checkouts. Main baseline: 54 Node tests passed, npm audit 4 moderate vulnerabilities. Candidate: 163/163 Node test files, 45 Python tests, npm audit **0 vulnerabilities**.
+- Deployment recovery [44068430145](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44068430145): **2/2 passed**.
+- Cloudflare durable-state checks [44068430415](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44068430415): PASS.
+- Cloudflare runner-bridge safety [44068430347](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44068430347): **83/83 passed; zero skips**.
+- Non-destructive branch inventory [44068430353](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44068430353): PASS; no history mutation.
+- Nature Frontiers Instagram safety [44068430260](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44068430260): regression checks PASS. Meta live secret/Page verification was skipped; this is not a live token pass.
+- Production readiness [44068430196](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44068430196): **HOLD — 9 blockers**, expected and not bypassed.
+
+## Production blockers — keep publishing disabled
+
+1. Owner-approved feasible cadence mode, timezone-aware approval timestamp and non-empty approval reference are missing. The requested 2 long-form + 1 Short weekly cadence conflicts with 72-hour spacing; the rolling `long_form → long_form → short` cycle requires owner approval.
+2. Complete current public/private/unlisted/scheduled YouTube history and all pending/uncertain upload attempts are not independently reconciled.
+3. Genuine `content/render-manifest.json` and real Short media with per-asset rights evidence are missing.
+4. Genuine `content/long-form-render-manifest.json` and real long-form media/rights evidence are missing.
+5. Final metadata has not received human review or `READY_FOR_PRIVATE_UPLOAD` approval.
+6. Media rights are not verified; do not set `rightsConfirmed=true`.
+7. Content/compliance review is incomplete; do not set `complianceReviewed=true`.
+8. Final `media/next-short.mp4` is missing.
+9. Read-only YouTube identity/uploads inventory is blocked by OAuth `invalid_grant`; the configured refresh token must be reauthorized securely before live history verification.
+
+## Additional verified implementation
+
+- The private uploader now requires a complete owner-reviewed YouTube history snapshot bound to the authenticated SonicVhibez channel ID, including complete uploads-playlist pagination, remote video status/timestamps, scheduled/private inventory, a checksummed reconciliation document and an explicitly supplied upload-attempt ledger. The gate enforces the authoritative Africa/Johannesburg timezone and 72-hour minimum. This code does not replace the live OAuth/history evidence.
+- The December 14 analytics Short remains private / `DRAFT_ONLY` / disclosure `HOLD`; its regression test pins the official YouTube analytics source and the hold state.
+- The isolated queue proposal contains 16 held/review-pending items. No upload, schedule or publication was performed.
+- The Meta workflow's latest success was regression-only; its live secret/Page verification step was skipped. Previous live Meta token check remains expired/401 until the secure secret is renewed.
+- No media, rights evidence, owner approval, credential or provider success was fabricated. PR #1 remains draft and unmerged.
+
+---
+
+# 17 November 2026 — previous candidate checkpoint (621d)
 
 **Implementation branch:** `621d11d76242e5f5964291371d119ad09e44b94e` (the application-code safety change is `43b17b877a5cb7f1c5770a91a2a54f1f565755d4`; the latest commit adds the December 14 draft/test). **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25`. **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`. **Divergence:** 3,989 ahead / 4 behind / 383 changed files. PR #1 remains OPEN/DRAFT/UNMERGED (mergeable, 383 changed files). PR #7 remains OPEN/DRAFT/UNMERGED (not mergeable, 19 changed files; no exact-head Actions runs were returned for its head). GitHub reports branch protection disabled on both the implementation branch and main. No main edit, merge, close, ready-state change, reset, rebase, force-push or history rewrite occurred.
 
