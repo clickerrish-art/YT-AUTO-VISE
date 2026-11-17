@@ -79,14 +79,14 @@ test("history reconciliation separates future scheduled videos from actual publi
   const scheduledVideo = {
     id: "vid-scheduled",
     snippet: { channelId, publishedAt: "2026-10-05T00:00:00.000Z" },
-    status: { privacyStatus: "private", publishAt: "2026-11-08T15:00:00.000Z" }
+    status: { privacyStatus: "private", publishAt: "2026-11-18T15:00:00.000Z" }
   };
   const scheduledReconciliation = {
     ...reconciliation,
     verifiedAt: "2026-10-04T23:59:59.000Z",
     videos: [
       ...reconciliation.videos,
-      { id: "vid-scheduled", format: "short", visibility: "private", scheduledAt: "2026-11-08T15:00:00.000Z" }
+      { id: "vid-scheduled", format: "short", visibility: "private", scheduledAt: "2026-11-18T15:00:00.000Z" }
     ]
   };
   const snapshot = validateHistoryReconciliationSnapshot({
@@ -100,24 +100,25 @@ test("history reconciliation separates future scheduled videos from actual publi
   assert.deepEqual(snapshot.scheduledItems, [{
     id: "vid-scheduled",
     status: "scheduled",
-    scheduledAt: "2026-11-08T15:00:00.000Z",
+    scheduledAt: "2026-11-18T15:00:00.000Z",
     format: "short"
   }]);
   const tooSoon = evaluateNextPublication({
     history: snapshot.history, historyVerified: true, scheduledItems: snapshot.scheduledItems,
-    pendingAttempts: [], proposedAt: "2026-11-10T15:00:00.000Z", jobId: "job-4", format: "long_form"
+    pendingAttempts: [], proposedAt: "2026-11-20T15:00:00.000Z", jobId: "job-4", format: "long_form"
   });
   assert.equal(tooSoon.valid, false);
   assert.ok(tooSoon.errors.some(error => /spacing conflict/.test(error)));
   const validSlot = evaluateNextPublication({
     history: snapshot.history, historyVerified: true, scheduledItems: snapshot.scheduledItems,
-    pendingAttempts: [], proposedAt: "2026-11-11T15:00:00.000Z", jobId: "job-4", format: "long_form"
+    pendingAttempts: [], proposedAt: "2026-11-21T15:00:00.000Z", jobId: "job-4", format: "long_form"
   });
   assert.equal(validSlot.valid, true, "a 72-hour gap from the scheduled item passes the slot policy");
-  assert.throws(() => assertNextPublicationAllowed({
+  const approvedSlot = assertNextPublicationAllowed({
     historySnapshot: snapshot, expectedChannelId: channelId, pendingAttempts: [],
-    proposedAt: "2026-11-11T15:00:00.000Z", jobId: "job-4", format: "long_form"
-  }), /owner-approved cadence decision blocks private upload/, "the production gate still requires actual owner approval");
+    proposedAt: "2026-11-21T15:00:00.000Z", jobId: "job-4", format: "long_form"
+  });
+  assert.equal(approvedSlot.valid, true, "a future slot after the recorded approval and 72-hour scheduled-item gap is permitted");
   assert.throws(() => validateHistoryReconciliationSnapshot({
     channelId,
     remoteVideos: [...remoteVideos, scheduledVideo],
@@ -128,7 +129,7 @@ test("history reconciliation separates future scheduled videos from actual publi
     channelId,
     remoteVideos: [...remoteVideos, scheduledVideo],
     reconciliation: scheduledReconciliation,
-    now: new Date("2026-11-09T00:00:00.000Z")
+    now: new Date("2026-11-19T00:00:00.000Z")
   }), /past publishAt/);
 });
 
@@ -195,7 +196,7 @@ test("unresolved or uncertain upload attempts block new uploads", () => {
   assert.throws(() => assertNoUnresolvedUploadAttempts({}), /missing or invalid/);
 });
 
-test("cycle slot policy enforces verified history, next format and the 72-hour gap independently of owner authorization", () => {
+test("owner-approved cycle gate enforces verified history, next format and the 72-hour gap", () => {
   const history = [{ id: "vid-b", status: "unlisted", actualPublishedAt: "2026-11-07T15:00:00.000Z", format: "long_form" }];
   const valid = evaluateNextPublication({ history, historyVerified: true, pendingAttempts: [], proposedAt: "2026-11-10T15:00:00.000Z", jobId: "job-3", format: "long_form" });
   assert.equal(valid.valid, true, "the policy accepts the next-format slot exactly 72 elapsed hours after the prior publication");
@@ -205,10 +206,11 @@ test("cycle slot policy enforces verified history, next format and the 72-hour g
   const wrongFormat = evaluateNextPublication({ history, historyVerified: true, pendingAttempts: [], proposedAt: "2026-11-10T15:00:00.000Z", jobId: "job-3", format: "short" });
   assert.equal(wrongFormat.valid, false);
   assert.ok(wrongFormat.errors.some(error => /next format must be long_form/.test(error)));
-  assert.throws(() => assertNextPublicationAllowed({
+  const approved = assertNextPublicationAllowed({
     historySnapshot: verifiedHistorySnapshot(history), expectedChannelId: channelId, pendingAttempts: [],
-    proposedAt: "2026-11-10T15:00:00.000Z", jobId: "job-3", format: "long_form"
-  }), /owner-approved cadence decision blocks private upload/);
+    proposedAt: "2026-11-21T15:00:00.000Z", jobId: "job-3", format: "long_form"
+  });
+  assert.equal(approved.valid, true, "the configured owner approval permits a future slot without waiving the 72-hour minimum");
 });
 
 
@@ -239,20 +241,22 @@ test("owner-approved cycle starts after a legacy Short while retaining it for 72
   });
   assert.equal(tooSoon.valid, false);
   assert.ok(tooSoon.errors.some(error => /spacing conflict/.test(error)));
-  assert.throws(() => assertNextPublicationAllowed({
+  const approved = assertNextPublicationAllowed({
     historySnapshot: verifiedHistorySnapshot(legacyHistory), expectedChannelId: channelId, pendingAttempts: [],
-    proposedAt: "2026-11-10T15:05:56.000Z",
+    proposedAt: "2026-11-20T15:05:56.000Z",
     jobId: "first-approved-cycle-long-form", format: "long_form"
-  }), /owner-approved cadence decision blocks private upload/);
+  });
+  assert.equal(approved.valid, true, "the approved cycle starts on its recorded date and retains the legacy Short for spacing");
 });
 
-test("private upload gate remains blocked without owner cadence approval and still enforces unresolved-attempt checks", () => {
+test("private upload gate accepts approved cadence but unresolved attempts still block", () => {
   const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
-  assert.throws(() => assertNextPublicationAllowed({
+  const approved = assertNextPublicationAllowed({
     historySnapshot: verifiedHistorySnapshot(history), expectedChannelId: channelId, pendingAttempts: [],
-    proposedAt: "2026-11-10T15:00:00.000Z",
+    proposedAt: "2026-11-20T15:00:00.000Z",
     jobId: "job-owner-cadence", format: "long_form"
-  }), /owner-approved cadence decision blocks private upload/);
+  });
+  assert.equal(approved.valid, true);
   const unresolved = evaluateNextPublication({
     history, historyVerified: true,
     pendingAttempts: [{ jobId: "uncertain-job", status: "RECOVERY_REQUIRED" }],
