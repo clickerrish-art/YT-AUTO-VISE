@@ -172,6 +172,10 @@ test("uncertain mutation is reconciled and a unique verified receipt is persiste
     assert.equal(ledger[0].remotePostId, "123456789012345_999");
     assert.equal(ledger[0].verifiedRemotely, true);
     assert.equal(history[0].remotePostId, "123456789012345_999");
+    const persistedState = fs.readdirSync(f.stateDir).filter(name => name.endsWith(".json"))
+      .map(name => fs.readFileSync(path.join(f.stateDir, name), "utf8")).join("\\n");
+    assert.equal(persistedState.includes("u".repeat(30)), false, "Meta user access token must never be persisted");
+    assert.equal(persistedState.includes("p".repeat(30)), false, "derived Meta Page token must never be persisted");
     assert.deepEqual(JSON.parse(fs.readFileSync(f.queuePath, "utf8")), []);
   } finally { f.cleanup(); }
 });
