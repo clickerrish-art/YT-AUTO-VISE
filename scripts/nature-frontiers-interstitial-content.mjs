@@ -2,7 +2,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { NATURE_FRONTIERS_REQUIRED_POST_LINKS } from "./facebook-policy-engine.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SHA256 = /^[a-f0-9]{64}$/;
@@ -28,8 +27,12 @@ export function validateInterstitialCandidate(item) {
   if (!ALLOWED_TYPES.has(item.type)) errors.push("unsupported interstitial content type");
   if (typeof item.title !== "string" || !item.title.trim() || item.title.length > 120) errors.push("title is required and must be at most 120 characters");
   if (typeof item.caption !== "string" || !item.caption.trim() || item.caption.length > 2200) errors.push("caption is required and must be at most 2200 characters");
-  if (typeof item.caption === "string" && NATURE_FRONTIERS_REQUIRED_POST_LINKS.some(url => !item.caption.includes(url))) errors.push("caption must visibly include all approved Safari, Selar and Nature Frontiers YouTube links");
-  if (typeof item.caption === "string" && !/affiliate disclosure|affiliate link|may earn a commission/i.test(item.caption)) errors.push("visible affiliate disclosure is required");
+  if (item.campaignId !== null) errors.push("non-commercial interstitial content must explicitly set campaignId=null");
+  if (item.commercial !== false) errors.push("non-commercial interstitial content must explicitly set commercial=false");
+  if (item.disclosureRequired !== false) errors.push("non-commercial interstitial content must explicitly set disclosureRequired=false");
+  if (item.links != null && (!Array.isArray(item.links) || item.links.length > 0)) errors.push("non-commercial interstitial content must not carry campaign links");
+  if (typeof item.caption === "string" && /https?:\\/\\/[^\\s)]+/i.test(item.caption)) errors.push("non-commercial interstitial captions must not contain outbound campaign links");
+  if (typeof item.caption === "string" && /\\b(?:safari\\.com|selar\\.com|affiliate link|affiliate disclosure|may earn a commission|paid partnership|sponsored|advertisement)\\b/i.test(item.caption)) errors.push("non-commercial interstitial content must not include commercial destinations or campaign disclosures");
   if (item.brand !== "Nature Frontiers") errors.push("candidate must target Nature Frontiers only");
   if (item.original !== true) errors.push("originality must be explicitly verified");
   if (item.rights?.status !== "cleared" || !Array.isArray(item.rights?.evidence) || !item.rights.evidence.length || item.rights.evidence.some(x => !https(x))) errors.push("documented rights clearance is required");
@@ -79,13 +82,13 @@ export function buildInterstitialCalendar({ videos, candidates, now = new Date()
       scheduledAt:instant, timezone, localDate:date, week, status:"PROPOSED_NOT_SCHEDULED",
       publishReady:false, media:candidate.media??null, caption:candidate.caption, claims:candidate.claims,
       rights:candidate.rights, approval:candidate.approval,
-      blockers:["This is a proposal only; it has not been sent to Meta or Metricool.","Revalidate media hash, rights, claim sources, final approval receipt and duplicate history immediately before scheduling."] });
+      campaignId:null,commercial:false,disclosureRequired:false,links:[],blockers:["This is a non-commercial proposal only; it has not been sent to Meta or Metricool.","No Safari affiliate or Selar direct-sales campaign is attached to this organic post.","Revalidate media hash, rights, claim sources, final approval receipt and duplicate history immediately before scheduling."] });
     usedIds.add(candidate.id); dayCounts.set(date,1); weekCounts.set(week,(weekCounts.get(week)??0)+1);
     decisions.push({id:candidate.id,status:"PROPOSED",scheduledAt:instant});
   }
   for (const candidate of ordered) if (!usedIds.has(candidate.id) && !decisions.some(d=>d.id===candidate.id)) decisions.push({id:candidate.id,status:"HELD",reasons:["No safe gap between scheduled videos within configured frequency limits."]});
   return { schemaVersion:"1.0.0", brand:"Nature Frontiers", timezone, generatedAt:now,
-    policy:{ publishEnabled:false, maxPerWeek, minGapHours, noAutomatedEngagement:true, requireHumanApproval:true },
+    policy:{ publishEnabled:false, maxPerWeek, minGapHours, noAutomatedEngagement:true, requireHumanApproval:true, campaignId:null, commercial:false, disclosureRequired:false, requireNoCommercialLinks:true },
     videoCount:videos.length, placements, decisions };
 }
 
