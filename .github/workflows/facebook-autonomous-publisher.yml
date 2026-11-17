@@ -53,3 +53,46 @@ jobs:
         run: npm run facebook:intake:autonomous
       - name: Run autonomous Facebook publisher
         run: npm run facebook:publish:autonomous
+      - name: Snapshot recovery state (30-day recovery window)
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          snapshot_dir="$RUNNER_TEMP/nature-frontiers-facebook-recovery"
+          mkdir -p "$snapshot_dir"
+          manifest="$snapshot_dir/recovery-manifest.json"
+          node --input-type=module -e 'const fs=require("node:fs"); fs.writeFileSync(process.argv[1], JSON.stringify({createdAt:new Date().toISOString(),repository:process.env.GITHUB_REPOSITORY,runId:process.env.GITHUB_RUN_ID,commit:process.env.GITHUB_SHA,retentionDays:30,stateAvailable:Boolean(process.env.FACEBOOK_STATE_DIR && fs.existsSync(process.env.FACEBOOK_STATE_DIR))},null,2)+"\\n",{mode:0o600});' "$manifest"
+          if [ -n "${FACEBOOK_STATE_DIR:-}" ] && [ -d "$FACEBOOK_STATE_DIR" ] && [ ! -L "$FACEBOOK_STATE_DIR" ]; then
+            tar -czf "$snapshot_dir/facebook-state.tar.gz" --ignore-failed-read -C "$FACEBOOK_STATE_DIR" --wildcards 'facebook-*.json' 'facebook-publishing.lock' 'meta-rate-limit-state.json'
+            chmod 600 "$snapshot_dir/facebook-state.tar.gz"
+          else
+            echo "Durable state directory was unavailable; no state archive was created." > "$snapshot_dir/RECOVERY_BLOCKED.txt"
+          fi
+          echo "### Nature Frontiers recovery snapshot" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Retention: 30 days" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Contains publisher JSON ledgers, queue and Meta rate-limit cooldown state only; no access tokens." >> "$GITHUB_STEP_SUMMARY"
+      - name: Retain recovery snapshot for 30 days
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nature-frontiers-facebook-recovery-${{ github.run_id }}
+          path: ${{ runner.temp }}/nature-frontiers-facebook-recovery/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Send failure alert
+        if: failure()
+        shell: bash
+        env:
+          FAILURE_WEBHOOK_URL: ${{ secrets.FACEBOOK_FAILURE_WEBHOOK_URL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          RUN_NAME: ${{ github.workflow }}
+        run: |
+          set -euo pipefail
+          if [ -z "${FAILURE_WEBHOOK_URL:-}" ]; then
+            echo "::warning::FACEBOOK_FAILURE_WEBHOOK_URL is not configured; GitHub Actions failure notifications remain the fallback."
+            echo "- Failure alert webhook: not configured (GitHub Actions notifications are the fallback)." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          payload="$(node -e 'const text=process.env.RUN_NAME+" failed. Inspect the sanitized run logs: "+process.env.RUN_URL; process.stdout.write(JSON.stringify({text,content:text}));')"
+          curl --fail --silent --show-error --max-time 10 -H "Content-Type: application/json" --data "$payload" "$FAILURE_WEBHOOK_URL"
+          echo "- Failure alert: webhook delivery accepted." >> "$GITHUB_STEP_SUMMARY"
