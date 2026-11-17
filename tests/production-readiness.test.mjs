@@ -224,3 +224,21 @@ test("readiness reports malformed render-manifest asset paths without crashing J
     fs.rmSync(directory, { recursive: true, force: true });
   }
 });
+
+test("readiness blocks imported Canva wildlife assets until exact source, local MP4 and human review are verified", () => {
+  const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
+    cwd: process.cwd(), encoding: "utf8"
+  });
+  assert.equal(result.status, 2);
+  const report = JSON.parse(result.stdout);
+  const blocker = report.blockers.find(item => /imported Canva wildlife asset\(s\) remain unverified/.test(item.message));
+  assert.ok(blocker, "unverified imported Canva assets must be an explicit production blocker");
+  assert.equal(blocker.severity, "critical");
+  assert.equal(blocker.controlOwner, "external_owner_or_human_reviewer");
+  assert.equal(blocker.evidence.path, "content/sonicvhibez-imported-media-inventory.json");
+  assert.match(blocker.message, /VAHZ9kg2rvg/);
+  assert.match(blocker.message, /VAHZ9oFCiak/);
+  assert.match(blocker.resolution, /original MP4/);
+  assert.match(blocker.resolution, /SHA-256/);
+  assert.match(blocker.resolution, /Candidate URLs are not proof/);
+});
