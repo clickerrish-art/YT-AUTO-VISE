@@ -374,7 +374,7 @@ test("source excerpt and self-declared verification cannot replace a trusted sem
     });
     assert.equal(result.eligible, false);
     assert.ok(result.blockers.some(item => /trusted semantic verification/i.test(item)));
-    assert.equal(result.sourceChecks[0].semanticVerification.reason, "NO_TRUSTED_SEMANTIC_VERIFIER_CONFIGURED");
+    assert.equal(result.sourceChecks[0].semanticVerification.reason, "SIGNED_HUMAN_FACT_CHECK_MISSING_OR_INVALID");
   } finally { f.cleanup(); }
 });
 
