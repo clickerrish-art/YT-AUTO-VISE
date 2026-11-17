@@ -27,7 +27,7 @@ export async function verifyMetaCredentials({
   const report = {
     result: "BLOCKED",
     mode: "READ_ONLY_NO_PUBLISH",
-    pageId: /^\\d{5,30}$/.test(pageId) && pageId === config.destinationPageId ? pageId : null,
+    pageId: /^\d{5,30}$/.test(pageId) && pageId === config.destinationPageId ? pageId : null,
     userToken: { status: "NOT_CHECKED" },
     pageToken: { status: "NOT_CHECKED" },
     safety: {
@@ -37,7 +37,7 @@ export async function verifyMetaCredentials({
     }
   };
 
-  if (!/^\\d{5,30}$/.test(pageId) || pageId !== config.destinationPageId) {
+  if (!/^\d{5,30}$/.test(pageId) || pageId !== config.destinationPageId) {
     report.userToken = { status: "BLOCKED_CONFIG", reason: "Configured Page ID is missing or does not match the owner-verified allowlist" };
     report.pageToken = { status: "BLOCKED_CONFIG", reason: "Configured Page ID is missing or does not match the owner-verified allowlist" };
     return report;
