@@ -62,19 +62,22 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
     review: { decision: "APPROVE", approvalSha256: "a".repeat(64) }
   };
   const now = new Date();
-  const today = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
-  }).format(now);
-  const localNowParts = new Intl.DateTimeFormat("en-GB", {
-    timeZone: "Africa/Johannesburg", hour: "2-digit", minute: "2-digit", hourCycle: "h23"
-  }).formatToParts(now);
-  const localNowMinutes = Number(localNowParts.find(part => part.type === "hour").value) * 60 +
-    Number(localNowParts.find(part => part.type === "minute").value);
-  const localTime = minutesAgo => {
-    const minuteOfDay = localNowMinutes - minutesAgo;
-    assert.ok(minuteOfDay >= 0, "test must run after the first three minutes of the Johannesburg day");
-    return String(Math.floor(minuteOfDay / 60)).padStart(2, "0") + ":" +
-      String(minuteOfDay % 60).padStart(2, "0");
+  const localSlot = minutesAgo => {
+    const slotDate = new Date(now.getTime() - minutesAgo * 60_000);
+    const dateParts = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
+    }).formatToParts(slotDate);
+    const timeParts = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Africa/Johannesburg", hour: "2-digit", minute: "2-digit", hourCycle: "h23"
+    }).formatToParts(slotDate);
+    const value = parts => Object.fromEntries(parts.map(part => [part.type, part.value]));
+    const date = value(dateParts);
+    const time = value(timeParts);
+    return {
+      date: date.year + "-" + date.month + "-" + date.day,
+      time: time.hour + ":" + time.minute,
+      timezone: "Africa/Johannesburg"
+    };
   };
   initialState.jobs.push(
     {
@@ -91,7 +94,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       state: "QUEUED",
       contentType: "short",
       createdAt: "2026-11-02T18:01:00.000Z",
-      scheduledSlot: { date: today, time: localTime(3), timezone: "Africa/Johannesburg" },
+      scheduledSlot: localSlot(3),
       authoring: { productionPlan: approvedPlan }
     },
     {
@@ -100,7 +103,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       state: "QUEUED",
       contentType: "long_form",
       createdAt: "2026-11-02T17:59:00.000Z",
-      scheduledSlot: { date: today, time: localTime(1), timezone: "Africa/Johannesburg" },
+      scheduledSlot: localSlot(1),
       authoring: { productionPlan: structuredClone(approvedPlan) }
     },
     {
@@ -109,7 +112,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       state: "QUEUED",
       contentType: "long_form",
       createdAt: "2026-11-02T18:02:00.000Z",
-      scheduledSlot: { date: today, time: localTime(2), timezone: "Africa/Johannesburg" },
+      scheduledSlot: localSlot(2),
       authoring: { productionPlan: structuredClone(approvedPlan) }
     },
     {
@@ -118,7 +121,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       state: "QUEUED",
       contentType: "short",
       createdAt: "2026-11-02T18:03:00.000Z",
-      scheduledSlot: { date: today, time: localTime(1), timezone: "Africa/Johannesburg" }
+      scheduledSlot: localSlot(1)
     }
   );
   fs.writeFileSync(statePath, JSON.stringify(initialState, null, 2) + "\n");
@@ -242,7 +245,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
     {
       kind: "CONTENT_PRODUCTION", id: "recovery-output-job", state: "QUEUED",
       contentType: "short", createdAt: "2026-11-07T10:00:00.000Z",
-      scheduledSlot: { date: today, time: localTime(3), timezone: "Africa/Johannesburg" },
+      scheduledSlot: localSlot(3),
       authoring: { productionPlan: structuredClone(approvedPlan) },
       transitionHistory: [{ from: null, to: "QUEUED", at: new Date().toISOString(), actor: "test", reason: "fixture" }],
       attemptCount: 0, retryPolicy: { maxAttempts: 2, requiresOperatorRetry: true }
@@ -250,7 +253,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
     {
       kind: "CONTENT_PRODUCTION", id: "recovery-manifest-job", state: "QUEUED",
       contentType: "short", createdAt: "2026-11-07T10:01:00.000Z",
-      scheduledSlot: { date: today, time: localTime(3), timezone: "Africa/Johannesburg" },
+      scheduledSlot: localSlot(3),
       authoring: { productionPlan: structuredClone(approvedPlan) },
       transitionHistory: [{ from: null, to: "QUEUED", at: new Date().toISOString(), actor: "test", reason: "fixture" }],
       attemptCount: 0, retryPolicy: { maxAttempts: 2, requiresOperatorRetry: true }
