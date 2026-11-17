@@ -1,3 +1,108 @@
+# 18 November 2026 — current master completion checkpoint
+
+This section supersedes the historical checkpoints below. It records the latest live repository and provider checks completed on 18 November 2026. It does not authorize publication or weaken any release gate.
+
+## Exact repository baseline
+
+- Implementation branch: `codex/marketing-machine-audit-fixes`
+- Code/test baseline evaluated: `19aeb07b1be3feb93ae0bbedbf000f2976cfb2e8`
+- `main` at comparison time: `2e4153c8252349d1a7c5655f5cdc00da557c597e`
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
+- Divergence: implementation branch 4,143 commits ahead and 6 behind `main`
+- Preserve the divergence. Do not merge, rebase, reset, force-push, rewrite history, or modify `main`. Keep PR #1 draft and unmerged.
+
+The code/test baseline above is the source SHA for the live checks below. This status-document update changes no application code.
+
+## Current YouTube production readiness — HOLD, nine blockers
+
+Current readiness run: [44191403056](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44191403056). The run correctly returns HOLD and performs no upload, schedule or publication operation.
+
+1. **Current channel history is not reconciled.** The production OAuth read-only check is blocked by `invalid_grant`; public, private, unlisted and scheduled uploads plus every pending/uncertain upload attempt must be retrieved and reconciled before any upload.
+2. **Five imported Canva clips remain on HOLD.** Their original MP4s are absent; visual matching, source provenance, creator confirmation, exact hashes, rights review and human review are incomplete. The live Canva asset IDs and metadata were retrieved, but metadata alone does not prove the Pexels source.
+3. **The genuine Short render manifest is missing.** Review renders are not production manifests.
+4. **The genuine long-form render manifest is missing.**
+5. **Final metadata has not been human-reviewed and marked `READY_FOR_PRIVATE_UPLOAD`.**
+6. **Final-output rights are not confirmed.** Do not set `rightsConfirmed=true` without exact source and final-output evidence.
+7. **Compliance review is incomplete.** Do not set `complianceReviewed=true` without human review of the exact final media, narration, captions, metadata and disclosures.
+8. **`media/next-short.mp4` is absent.** A review attachment or source file is not a production master.
+9. **YouTube OAuth is invalid.** Reauthorize the existing OAuth client and update the GitHub Actions `YOUTUBE_REFRESH_TOKEN` secret through the approved secret-management flow. Never paste token values into chat or logs.
+
+### Imported Canva asset evidence
+
+The current inventory contains five IDs:
+
+- `VAHZ9kg2rvg` — African elephant, 3840×2160, 14 seconds; candidate Pexels listing metadata matches, but visual match and original MP4 are still missing.
+- `VAHZ9hEjS0U` — aerial zebras/wildebeest, 1920×1080, 13 seconds; candidate Pexels listing is 14 seconds, so the duration mismatch remains unresolved.
+- `VAHZ9niQJoo` — grazing zebras/wildebeest, 1920×1080, 25 seconds; candidate listing metadata matches, but visual match and original MP4 are still missing.
+- `VAHZ9i3Hx6U` — giraffes, 1920×1080, 21 seconds; candidate listing metadata matches, but visual match and original MP4 are still missing.
+- `VAHZ9oFCiak` — African lion, 3840×2160, 9 seconds; no exact source page/creator has been verified.
+
+All five remain `HOLD`; none has rights clearance or human visual approval.
+
+### Owner-approved cadence — resolved, not a blocker
+
+The owner-approved cadence is recorded in `config/weekly-content-plan.json`: rolling `long_form → long_form → short`, repeating without a weekly publication target. Enforce at least 72 elapsed hours between actual publications and no two publications on the same Africa/Johannesburg calendar day. A complete three-gap cycle takes at least 216 hours. Tuesday/Saturday entries are draft-preparation triggers only. Public and unattended publishing remain disabled.
+
+## Current engineering verification
+
+On the code/test baseline above:
+
+- Node automation: 169/169 test files passed, zero skipped.
+- Dashboard browser E2E: passed.
+- Queue readiness: passed.
+- Metadata validation: passed.
+- Cloudflare durable-state regression: passed.
+- Cloudflare runner-bridge regression: passed.
+- Deployment recovery regression: passed.
+- Meta connection regression: passed as a test suite only; it did **not** verify a live Meta user token or Page token.
+- Instagram safety regression: passed as a test suite only.
+- Signed editorial-approval regression: passed as a test suite only; no real human approval receipt was created.
+- Production readiness: HOLD, as required by the outstanding release gates.
+
+### Worker retry/backoff correction
+
+The current `scripts/worker-runner.mjs` and its tests now cover HTTP 409 cooldown persistence across restart, bounded `Retry-After`, uncertain 408/5xx/transport outcomes, durable uncertain-dispatch quarantine, and retaining the process lock if backoff/quarantine persistence fails. The corresponding tests include an actual separate-process restart check. This resolves the earlier worker 409/backoff defect at code/test level. It does **not** prove a production worker process is deployed or running.
+
+## Cross-platform and deployment blockers
+
+### Nature Frontiers / Meta
+
+- The latest Meta workflow ran its regression suite only; it did not make a live Page-token or Instagram professional-account verification.
+- The repository's configured Facebook Page ID matches the Metricool Nature Frontiers brand Page ID. A separate connected vidIQ Page with the same display name has a different Page ID; do not switch targets based on display name. Confirm the exact intended Page ID through Meta before any publishing.
+- Metricool reports the Instagram handle `naturefrontieers2026`, but the repository still lacks an independently verified Instagram professional-account ID and live publishing authorization.
+- The Metricool Nature Frontiers brand had zero scheduled posts in the checked 18 November–18 December 2026 window. This is not evidence of a failed post; it means no future campaign schedule was present in that window.
+- Existing content must remain held until exact media, signed human approval, rights and provider-side status are verified. No live publishing is authorized by these regression results.
+
+### Cloudflare / persistence / deployment
+
+- The SonicVhibez durable-state Worker inspected in Cloudflare is explicitly a staging Worker bound to the staging D1 database. The staging D1 contains a dashboard-state row and five backup rows, but no runner-control, runner-state or runner-artifact rows were present in the live query.
+- The staging Worker has no configured scheduled triggers.
+- Cloudflare R2 API access returned HTTP 403 because R2 is not enabled/available for this account. Independent object-storage backup and restore therefore remain blocked.
+- No production SonicVhibez Worker or production SonicVhibez D1 database was present in the inspected Cloudflare account. Do not treat staging regression tests as production deployment evidence.
+- The separate Nature Frontiers production D1 schema exists but its inspected application tables contained zero rows. Its publisher Worker configuration showed a D1 binding only; live Meta credentials and provider-side publishing were not verified.
+
+## Production media work completed on 18 November
+
+The exact NOAA Fisheries spiny-lobster B-roll source artifact was downloaded and verified against the recorded source SHA-256 `1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb`. A new 55-second visual review cut was created from more clearly visible lobster shots. It is 1080×1920, 30 fps, H.264, contains no audio stream, passes a full-file decode, and includes NOAA Fisheries / NOAA Office of National Marine Sanctuaries attribution plus a persistent review-only warning. Its SHA-256 is `d32a6985818c85c40945930fb371e1887c36c9774f6b25b6bc1821f638304e4a`.
+
+This is a **visual review cut only**, not `media/next-short.mp4` and not a production master. It has no approved narration, no approved SonicVhibez logo overlay, no completed full human playback, no final rights confirmation, no compliance approval and no upload authorization. The NOAA source page states that B-roll packages are public domain when credited to NOAA Fisheries and warns that any separately credited third-party material may have its own restrictions: [NOAA B-roll reuse and attribution terms](https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6313425635112/b-roll%3A-spiny-lobsters-in-california?autoStart=true).
+
+## Required owner inputs
+
+1. Reauthorize the existing YouTube OAuth client and update the GitHub Actions refresh-token secret through GitHub's secret settings.
+2. Provide the five original Canva-exported MP4s or exact source/download links, especially the unresolved lion clip, so each can be visually matched and hashed.
+3. Provide the approved SonicVhibez logo file for the requested small, subtle, low-opacity overlay.
+4. Provide a natural narration recording or explicitly approve AI narration with the required disclosure.
+5. Confirm the exact official Nature Frontiers Facebook Page ID and Instagram professional-account identity in Meta Business Suite; authorize the live Meta credentials through secret management.
+6. Enable Cloudflare R2 for the account or approve an equivalent independent backup target, then verify a real restore.
+7. Provide the required production deployment access and secrets through their respective secret managers, not chat.
+8. Complete human review and approval against the exact final media, narration, captions, metadata, thumbnail and hashes.
+
+Until these items are resolved and their outcomes independently verified, keep publishing disabled and all affected media/jobs held.
+
+
+---
+
 
 
 ## 17 November 2026 — owner-approved cadence and anti-spam rules
@@ -9,7 +114,7 @@
 - A global anti-spam policy is now recorded in the YouTube, Facebook and Instagram publishing configurations. It prohibits automated likes, comments, replies, follows/unfollows, DMs, unsolicited/bulk outreach, engagement exchanges/pods, artificial views/clicks, duplicate/mass reposting, engagement bait and metadata/hashtag stuffing. Automated engagement mutations and unsolicited outbound messages are explicitly disabled.
 - Permitted automation is limited to research/drafting, human-review workflows, scheduling of approved content, publishing after all release gates pass, and read-only analytics. Platform rate limits and terms must be respected; policy uncertainty fails closed; uncertain remote mutations are never blindly retried.
 - **Implementation verification caveat:** these configuration rules are committed as policy declarations. They are not evidence that every provider-side action surface has been technically instrumented or that any engagement API is active. No automated engagement feature is authorized; verify code-level enforcement before any publishing enablement.
-# 17 November 2026 — latest exact source and verification checkpoint
+# Historical checkpoint — 17 November 2026 (superseded by the 18 November 2026 status above)
 
 **Exact code/test SHA:** `4ff54d69085ba0bd6ba8fe73edd3d4c7d11d0b37`; the later branch commits update the release record only. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` (unchanged). **PR #1:** OPEN / DRAFT / UNMERGED, head at the latest branch SHA. No merge, main edit, PR readiness change, reset, rebase, force-push or history rewrite occurred.
 
@@ -29,7 +134,7 @@
 - Nature Frontiers Meta connection workflow [44073050894]: the job ran its **84-test regression suite only**. It did not perform live user-token or Page-token verification. Do not interpret the green workflow as a live Meta connection pass.
 - Production readiness [44073050903]: **HOLD — 9 blockers**. This is expected; its final gate correctly fails on readiness exit code 2 rather than bypassing release controls.
 
-## Current release blockers — 9
+## Historical release blockers as of 17 November 2026 — superseded
 
 The exact readiness artifact is run [44073050903](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050903), artifact ID `14323547389`.
 
