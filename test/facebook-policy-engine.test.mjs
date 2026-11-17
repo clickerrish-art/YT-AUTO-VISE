@@ -183,7 +183,7 @@ test("Nature Frontiers allows only the exact disclosed affiliate campaign and re
   } finally { f.cleanup(); }
 });
 
-test("Nature Frontiers blocks Selar links and affiliate copy placed in the public first comment", async () => {
+test("Nature Frontiers does not accept links or disclosures moved from the caption into the public first comment", async () => {
   const f = fixture();
   try {
     f.payload.caption = "Observe wildlife from a respectful distance and avoid disturbing animals.";
@@ -194,7 +194,7 @@ test("Nature Frontiers blocks Selar links and affiliate copy placed in the publi
     const linkedComment = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(linkedComment.eligible, false);
     assert.ok(linkedComment.blockers.some(item => /approved monetization campaign and visible affiliate disclosure/i.test(item)));
-    assert.ok(linkedComment.destinationChecks.some(check => check.url === "https://selar.com/0u19v8u99l" && check.passed === false));
+    assert.ok(linkedComment.destinationChecks.some(check => check.url === "https://selar.com/0u19v8u99l" && check.passed === true));
 
     const linkedFingerprint = linkedComment.contentFingerprint;
     f.payload.firstCommentText = "Affiliate link: I may earn a commission if you purchase.";
