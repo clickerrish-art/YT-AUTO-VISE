@@ -33,6 +33,7 @@ on:
       - "content/render-manifest.json"
       - "content/long-form-render-manifest.json"
       - "media/next-short.mp4"
+      - ".github/workflows/production-readiness.yml"
       - "content/render-manifest.example.json"
       - "scripts/production-readiness.mjs"
       - ".github/workflows/production-readiness.yml"
