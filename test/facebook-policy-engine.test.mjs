@@ -434,7 +434,7 @@ test("signed human source-review attestations replace an unavailable semantic ve
     const sourceExcerptHash = hash(claim.sourceExcerpt);
     const reviewerId = "owner-reviewed-editor";
     const checkedAt = "2026-10-24T12:00:00.000Z";
-    const signed = claimHash + "\\n" + sourceUrlsHash + "\\n" + sourceExcerptHash + "\\n" + reviewerId + "\\n" + checkedAt;
+    const signed = claimHash + "\n" + sourceUrlsHash + "\n" + sourceExcerptHash + "\n" + reviewerId + "\n" + checkedAt;
     claim.semanticVerification = {
       claimHash, sourceUrlsHash, sourceExcerptHash, reviewerId, checkedAt,
       signature: crypto.createHmac("sha256", TEST_APPROVAL_SECRET).update(signed).digest("hex")
