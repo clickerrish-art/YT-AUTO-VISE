@@ -106,7 +106,7 @@ function fingerprint(payload) {
   }));
 }
 
-function approvalBody(approval) {
+export function facebookPayloadFingerprint(payload) {\n  return fingerprint(payload);\n}\n\nfunction approvalBody(approval) {
   return {
     decision: approval.decision,
     reviewer: approval.reviewer,
