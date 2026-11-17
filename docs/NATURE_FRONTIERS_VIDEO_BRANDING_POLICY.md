@@ -3,9 +3,9 @@
 Status: mandatory production policy. Applies to every Nature Frontiers video, Reel, Story video, feed video, derivative, re-export and republished edit.
 
 ## Brand source of truth
-- Use `brand/nature-frontiers-logo.png` as the authoritative supplied Nature Frontiers logo.
+- Use `brand/nature-frontiers-logo-transparent.png` as the authoritative transparent Nature Frontiers logo derived from the owner-supplied artwork. The asset must be present and its SHA-256 recorded before rendering.
 - Do not redraw, retype, recolour, stretch, crop, or substitute the logo.
-- Preserve its aspect ratio. Keep it fully visible, with safe margins, sufficient contrast and consistent placement/scale across the brand's video outputs.
+- Preserve its aspect ratio. Keep it fully visible, with safe margins, sufficient contrast and consistent placement/scale across the brand's video outputs. Default overlay: bottom-right, 9% of frame width, 24 px inset, 58% overlay opacity; never obscure the subject, captions, disclosures or essential action. If that placement obstructs content, move it to a consistent clear corner and record the exception.
 - The logo is an intentional Nature Frontiers brand mark; it is not permission to retain any other watermark.
 
 ## Zero-watermark requirement
@@ -13,7 +13,7 @@ The final encoded file must contain no visible watermark or third-party brand ma
 
 ## Mandatory render and release sequence
 1. Use only source media and tools whose licence/terms permit the intended Nature Frontiers use and watermark-free export. Zero-cost resources are preferred; never buy credits or services without explicit owner approval.
-2. Render the final edit, then apply the supplied logo as a native overlay during a lossless/quality-controlled final encode. Do not rely on a platform profile image or caption as branding.
+2. Render the final edit, then apply the supplied transparent logo as a native overlay during a quality-controlled final encode. The still-image input must loop for the entire video duration, and scaling must preserve the logo's original aspect ratio. Do not rely on a platform profile image or caption as branding.
 3. Inspect the complete final encoded video at normal playback speed, including every scene transition, all corners/edges, first and last frames, and any inserted/AI-generated segment. A spot-check or automated technical check is not a complete watermark review.
 4. Confirm the Nature Frontiers logo is present, correct, undistorted, legible and consistently placed. Record reviewer, timestamp, final-file SHA-256 and review result.
 5. Run technical decode and existing rights, factual, editorial, caption, audio, disclosure and approval checks independently. Branding does not establish rights or content approval.
