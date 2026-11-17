@@ -50,7 +50,8 @@
     "test:instagram-image": "node --test test/meta-instagram-image-adapter.test.mjs",
     "test:instagram-approval": "node --test test/instagram-approval-service.test.mjs",
     "nature-frontiers:review-rights": "node scripts/record-nature-frontiers-rights-review.mjs",
-    "facebook:approve": "node scripts/approve-facebook-candidate.mjs"
+    "facebook:approve": "node scripts/approve-facebook-candidate.mjs",
+    "nature-frontiers:plan-interstitial": "node scripts/nature-frontiers-interstitial-content.mjs"
   },
   "engines": {
     "node": ">=22"
