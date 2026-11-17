@@ -45,4 +45,6 @@ test("known Nature Frontiers destinations remain allowlisted but are never requi
   assert.ok(links.destinations.every(item => item.required === false));
   assert.equal(links.destinations.find(item => item.campaignId === "safari-affiliate-inactive")?.status, "INACTIVE");
   assert.equal(links.destinations.find(item => item.campaignId === "selar-wildlife-vault")?.status, "ACTIVE_FOR_DRAFTS_ONLY");
+  assert.equal(links.destinations.find(item => item.url === "https://selar.com/m/kehinde-ajiboye3108854")?.status, "NOT_APPROVED_DESTINATION");
+  assert.equal(links.destinations.find(item => item.url === "https://selar.com/m/kehinde-ajiboye3108854")?.campaignId, null);
 });
