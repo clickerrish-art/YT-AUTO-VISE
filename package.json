@@ -49,7 +49,8 @@
     "test:instagram-intake": "node --test test/instagram-content-intake.test.mjs",
     "test:instagram-image": "node --test test/meta-instagram-image-adapter.test.mjs",
     "test:instagram-approval": "node --test test/instagram-approval-service.test.mjs",
-    "nature-frontiers:review-rights": "node scripts/record-nature-frontiers-rights-review.mjs"
+    "nature-frontiers:review-rights": "node scripts/record-nature-frontiers-rights-review.mjs",
+    "facebook:approve": "node scripts/approve-facebook-candidate.mjs"
   },
   "engines": {
     "node": ">=22"
