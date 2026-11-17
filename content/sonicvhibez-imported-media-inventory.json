@@ -5,7 +5,8 @@
   "policyReference": {
     "url": "https://www.pexels.com/license/",
     "reviewStatus": "POLICY_REVIEWED_AS_GENERAL_POLICY_ONLY",
-    "notes": "Pexels states its free license permits commercial use and does not require attribution. This does not prove that any candidate source page below is the exact source of a Canva import."
+    "notes": "Pexels License permits free commercial use and modification without attribution. Pexels Terms prohibit standalone redistribution or resale and warn that additional third-party rights may still apply. This general policy does not prove that a candidate source page is the exact source of a Canva import or that any additional permissions are unnecessary.",
+    "termsUrl": "https://www.pexels.com/terms-of-service/"
   },
   "status": "HOLD_SOURCE_PROVENANCE_AND_LOCAL_MEDIA_MISSING",
   "releaseAuthorized": false,
