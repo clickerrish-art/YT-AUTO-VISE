@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION } from "./facebook-policy-engine.mjs";
 import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost, fetchMetaPagePost, reconcileMetaPagePost } from "./meta-page-adapter.mjs";
 import { createMetaPageReel, reconcileMetaPageReel } from "./meta-page-reel-adapter.mjs";
+import { createMetaRateLimitGuard } from "./meta-rate-limit.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const isoNow = now => new Date(now).toISOString();
@@ -189,10 +190,12 @@ export async function runAutonomousFacebookPublisher({
   const ledgerPath = stateFile(config.attemptLedgerFile ?? "facebook-attempt-ledger.json");
   const heldItemsPath = stateFile(config.heldItemsFile ?? "facebook-held-items.json");
   const lockPath = stateFile(config.lockFile ?? "facebook-publishing.lock");
-  if (new Set([historyPath, ledgerPath, heldItemsPath, lockPath]).size !== 4) {
+  const rateLimitStatePath = stateFile("meta-rate-limit-state.json");
+  if (new Set([historyPath, ledgerPath, heldItemsPath, lockPath, rateLimitStatePath]).size !== 5) {
     throw new Error("Facebook history, attempt ledger, held-items ledger and lock must use distinct paths");
   }
   const release = acquireLock(lockPath);
+  const guardedFetch = createMetaRateLimitGuard({ fetchImpl, stateFile: rateLimitStatePath, now: () => Number(now) });
   try {
     let history = safeHistory(historyPath, "history", FACEBOOK_HISTORY_STATUSES);
     let ledger = safeHistory(ledgerPath, "attempt ledger", FACEBOOK_LEDGER_STATUSES);
@@ -211,7 +214,7 @@ export async function runAutonomousFacebookPublisher({
       try {
         const recoveryPermissions = await verifyPermissions({
           pageId: config.destinationPageId, userAccessToken: env.META_USER_ACCESS_TOKEN,
-          apiVersion: config.apiVersion, fetchImpl
+          apiVersion: config.apiVersion, fetchImpl: guardedFetch
         });
         if (recoveryPermissions?.permissionsVerified === true &&
             typeof recoveryPermissions.pageAccessToken === "string" && recoveryPermissions.pageAccessToken.length >= 20) {
@@ -244,7 +247,7 @@ export async function runAutonomousFacebookPublisher({
             ? await reconcileReel({
                 remoteVideoId:attempt.remoteVideoId, expectedPageId:config.destinationPageId,
                 accessToken:recoveryPageToken, apiVersion:config.apiVersion,
-                scheduledAt, fetchImpl
+                scheduledAt, fetchImpl: guardedFetch
               })
             : { outcome:"UNRESOLVED", reason:"REEL_REMOTE_VIDEO_ID_NOT_DURABLY_RECORDED_NO_RETRY" };
         } else {
@@ -252,7 +255,7 @@ export async function runAutonomousFacebookPublisher({
             pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
             accessToken: recoveryPageToken, apiVersion: config.apiVersion,
             caption, scheduledAt, attemptStartedAt: attempt.startedAt,
-            remotePostId: attempt.remotePostId ?? null, fetchImpl
+            remotePostId: attempt.remotePostId ?? null, fetchImpl: guardedFetch
           });
         }
       } catch {
@@ -355,7 +358,7 @@ export async function runAutonomousFacebookPublisher({
           evidenceRoot: activeRoot, now: isoNow(current), timezone: config.timezone,
           maxPostsPerLocalDay: config.dailyCap, maxReelsPerLocalDay: config.dailyReelCap,
           maxFeedPostsPerLocalDay: config.dailyFeedPostCap, minimumIntervalMinutes: config.minimumIntervalMinutes,
-          fetchImpl
+          fetchImpl: guardedFetch
         });
       } catch {
         decision = { eligible: false, blockers: ["POLICY_ENGINE_ERROR"], warnings: [], policyRuleVersion: config.complianceRuleSet, contentFingerprint: null, checkedAt: isoNow(current), reason: "POLICY_ENGINE_ERROR" };
@@ -384,7 +387,7 @@ export async function runAutonomousFacebookPublisher({
       try {
         permissionVerification = await verifyPermissions({
           pageId: config.destinationPageId, userAccessToken: env.META_USER_ACCESS_TOKEN,
-          apiVersion: config.apiVersion, fetchImpl
+          apiVersion: config.apiVersion, fetchImpl: guardedFetch
         });
         if (permissionVerification?.permissionsVerified !== true ||
             typeof permissionVerification.pageAccessToken !== "string" || permissionVerification.pageAccessToken.length < 20) {
@@ -394,7 +397,7 @@ export async function runAutonomousFacebookPublisher({
         await verifyIdentity({
           pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
           expectedPageName: config.destinationPageName, accessToken: pageAccessToken,
-          apiVersion: config.apiVersion, fetchImpl
+          apiVersion: config.apiVersion, fetchImpl: guardedFetch
         });
       } catch {
         holdQueuedSlot(payload, "HELD_CONNECTION_BLOCKED",
@@ -423,7 +426,7 @@ export async function runAutonomousFacebookPublisher({
             permissionsVerified:permissionVerification.permissionsVerified, approvalVerified:true,
             publishingEnabled:true, dryRun:false, emergencyStop:false,
             videoState:"SCHEDULED", scheduledPublishAt:payload.scheduledAt,
-            fetchImpl, rootDir:activeRoot, now:()=>current,
+            fetchImpl: guardedFetch, rootDir:activeRoot, now:()=>current,
             onRemoteVideoId:async ({remoteVideoId})=>{
               const index=ledger.length-1;
               ledger[index]={...ledger[index],remoteVideoId};
@@ -438,17 +441,17 @@ export async function runAutonomousFacebookPublisher({
           remote = await publish({
             draft: adapterDraft, pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
             accessToken: pageAccessToken, apiVersion: config.apiVersion,
-            permissionsVerified: permissionVerification.permissionsVerified, fetchImpl, rootDir: activeRoot, now: current
+            permissionsVerified: permissionVerification.permissionsVerified, fetchImpl: guardedFetch, rootDir: activeRoot, now: current
           });
         }
         const verified = isReel
           ? await reconcileReel({
               remoteVideoId:remote.remoteVideoId, expectedPageId:config.destinationPageId,
-              accessToken:pageAccessToken, apiVersion:config.apiVersion, scheduledAt:payload.scheduledAt, fetchImpl
+              accessToken:pageAccessToken, apiVersion:config.apiVersion, scheduledAt:payload.scheduledAt, fetchImpl: guardedFetch
             })
           : await readRemote({
               remotePostId: remote.remotePostId, expectedPageId: config.destinationPageId,
-              accessToken: pageAccessToken, apiVersion: config.apiVersion, fetchImpl
+              accessToken: pageAccessToken, apiVersion: config.apiVersion, fetchImpl: guardedFetch
             });
         const success = isReel ? verified?.outcome === "CONFIRMED" && ["SCHEDULED_VERIFIED","PUBLISHED_VERIFIED"].includes(verified.receipt?.status) : ["SCHEDULED_VERIFIED", "PUBLISHED_VERIFIED"].includes(verified.status);
         const receipt = {
@@ -483,14 +486,14 @@ export async function runAutonomousFacebookPublisher({
                   ? await reconcileReel({
                       remoteVideoId:remote?.remoteVideoId ?? ledger[ledger.length - 1]?.remoteVideoId,
                       expectedPageId:config.destinationPageId, accessToken:pageAccessToken,
-                      apiVersion:config.apiVersion, scheduledAt:payload.scheduledAt, fetchImpl
+                      apiVersion:config.apiVersion, scheduledAt:payload.scheduledAt, fetchImpl: guardedFetch
                     })
                   : { outcome:"UNRESOLVED", reason:"REEL_REMOTE_VIDEO_ID_NOT_DURABLY_RECORDED_NO_RETRY" })
               : await reconcileRemote({
                   pageId: config.destinationPageId, expectedPageId: config.destinationPageId,
                   accessToken: pageAccessToken, apiVersion: config.apiVersion,
                   caption: payload.caption, scheduledAt: payload.scheduledAt, attemptStartedAt: attempt.startedAt,
-                  remotePostId: remote?.remotePostId ?? null, fetchImpl
+                  remotePostId: remote?.remotePostId ?? null, fetchImpl: guardedFetch
                 });
           } catch {
             reconciliation = { outcome: "UNRESOLVED", reason: "RECONCILIATION_FAILED", matches: [] };
