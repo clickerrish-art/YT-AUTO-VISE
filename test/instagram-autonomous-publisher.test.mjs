@@ -26,7 +26,7 @@ function setup(){
 const env=()=>({INSTAGRAM_PUBLISH_ENABLED:"YES",NATURE_FRONTIERS_INSTAGRAM_ACCOUNT_ID:account,NATURE_FRONTIERS_FACEBOOK_PAGE_ID:page,
  META_USER_ACCESS_TOKEN:"m".repeat(40),INSTAGRAM_APPROVAL_HMAC_SECRET:secret});
 const verified=async()=>({verified:true,instagramAccountId:account,facebookPageId:page});
-const eligible=async()=>({eligible:true,policyRuleVersion:"nf-facebook-autonomous-policy-2026-11-v4"});
+const eligible=async()=>({eligible:true,policyRuleVersion:"nf-facebook-autonomous-policy-2026-11-v5"});
 
 test("Instagram worker defaults are safe no-op before touching provider or queue",async()=>{
  const f=setup();try{
