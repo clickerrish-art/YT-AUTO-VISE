@@ -60,7 +60,8 @@ test("organic interstitial candidates reject Safari and Selar campaigns and affi
   candidate({caption:base.caption+" https://www.safari.com/sabi-sand?a=GM26"}),
   candidate({caption:base.caption+" https://selar.com/0u19v8u99l"}),
   candidate({campaignId:"safari-affiliate",commercial:true,disclosureRequired:true,links:["https://www.safari.com/sabi-sand?a=GM26"]}),
-  candidate({caption:base.caption+" Affiliate disclosure: we may earn a commission."})
+  candidate({caption:base.caption+" Affiliate disclosure: we may earn a commission."}),
+  candidate({caption:base.caption+" This product is sold through my own Selar business; purchases generate revenue for my business."})
  ];
  for(const item of unsafe){
   const errors=validateInterstitialCandidate(item);
