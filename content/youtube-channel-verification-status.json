@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "status": "BLOCKED_OAUTH_INVALID_GRANT",
   "mode": "READ_ONLY_IDENTITY_AND_INVENTORY_FAILED",
-  "workflowRunId": 44150665070,
+  "workflowRunId": 44152608827,
   "workflowRunAttempt": 1,
-  "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44150665070",
-  "sourceCommit": "4de7154a2b2d6d62bf050202de6b4b1103277237",
-  "checkedAt": "2026-11-17T18:42:16.737Z",
+  "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44152608827",
+  "sourceCommit": "476463fe06ffb404e939abba9fee76594ab66ebc",
+  "checkedAt": "2026-11-17T18:53:17.277Z",
   "deterministicIdentityAndPaginationTests": {
     "status": "PASS",
     "passed": 6,
@@ -15,7 +15,7 @@
   "oauth": {
     "status": "BLOCKED",
     "errorCode": "invalid_grant",
-    "message": "The 17 November read-only verification was rejected with invalid_grant. No current channel identity or uploads inventory was fetched. Reauthorize the existing OAuth client and update the GitHub Actions refresh-token secret. No token value was logged."
+    "message": "The latest 17 November read-only verification was rejected with invalid_grant. No current channel identity or uploads inventory was fetched. Reauthorize the existing OAuth client and update the GitHub Actions refresh-token secret. No token value was logged."
   },
   "channel": {
     "id": "UCSlkuPfHH78oGC1o418HV4w",
@@ -68,6 +68,13 @@
       "status": "BLOCKED",
       "errorCode": "invalid_grant",
       "sourceCommit": "4de7154a2b2d6d62bf050202de6b4b1103277237"
+    },
+    {
+      "workflowRunId": 44152608827,
+      "attempt": 1,
+      "status": "BLOCKED",
+      "errorCode": "invalid_grant",
+      "sourceCommit": "476463fe06ffb404e939abba9fee76594ab66ebc"
     }
   ],
   "previousSuccessfulVerification": {
