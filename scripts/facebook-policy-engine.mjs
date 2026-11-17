@@ -356,7 +356,7 @@ export async function evaluateFinalFacebookPayload(payload, {
   const visibleDisclosureCopy = [payload.caption, payload.firstCommentText]
     .filter(value => typeof value === "string").join("\n");
   const hasCommercialIntent = payload.commercial === true || payload.campaignId != null || commercialLinks.length > 0;
-  const genericCommercialDisclosure = /\b(affiliate link|affiliate disclosure|i may earn|may earn a commission|commission if you buy|paid partnership|sponsored|advertisement|direct sales|purchases generate revenue)\b/i.test(visibleDisclosureCopy);
+  const genericCommercialDisclosure = /\b(affiliate link|affiliate disclosure|i may earn|may earn a commission|commission if you buy|paid partnership|sponsored|advertisement|direct sales|purchases generate revenue|selar)\b/i.test(visibleDisclosureCopy);
   if (!hasCommercialIntent) {
     if (payload.commercial !== false || payload.campaignId !== null || payload.disclosureRequired !== false) {
       add(blockers, "Organic Nature Frontiers content must explicitly set campaignId=null, commercial=false and disclosureRequired=false");
