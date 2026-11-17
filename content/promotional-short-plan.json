@@ -6,7 +6,7 @@
   "publicationEnabled": false,
   "schedulingEnabled": false,
   "calendarStatus": "DRAFT_PREPARATION_ONLY_NO_PUBLICATION_DATES",
-  "notes": "This is a draft-preparation plan for the week beginning 2026-11-09, not a publication calendar.,No publicationAt, publishedAt or scheduledAt values are permitted in this plan.,A separate verified SonicVhibez destination schedule and complete public/private/unlisted YouTube history are required before any publication-slot calculation or scheduling.,Selar products are the owner's direct-sales business and must not be classified as affiliate commissions. Products hosted outside Selar (including Serengeti and other external sellers) are affiliate promotions. Every promotion remains blocked until its exact relationship and viewer-facing disclosure are verified and owner-approved.,Two 55-second creator-education Shorts are prepared for the week beginning 2026-11-30: a wildlife-video fact-check lesson and a wildlife-documentary shot-list lesson. Both remain DRAFT_ONLY, private and unscheduled; the two-Short weekly cap is enforced, and the Vault direct-sales disclosure is product-specifically approved. Added sonicvhibez-short-011-wildlife-broll for the week beginning 2026-12-07; the weekly maximum remains two, publication/scheduling remain disabled, and the item has no publication timestamp. Added sonicvhibez-short-012-wildlife-video-editing for the week beginning 2026-12-07; vidIQ estimated the primary phrase at 8,456 monthly searches with competition 18/100, and the 2-Short weekly cap remains enforced. The item is private, DRAFT_ONLY and has no publication timestamp.",
+  "notes": "This is a draft-preparation plan for the week beginning 2026-11-09, not a publication calendar.,No publicationAt, publishedAt or scheduledAt values are permitted in this plan.,A separate verified SonicVhibez destination schedule and complete public/private/unlisted YouTube history are required before any publication-slot calculation or scheduling.,Selar products are the owner's direct-sales business and must not be classified as affiliate commissions. Products hosted outside Selar (including Serengeti and other external sellers) are affiliate promotions. Every promotion remains blocked until its exact relationship and viewer-facing disclosure are verified and owner-approved.,Two 55-second creator-education Shorts are prepared for the week beginning 2026-11-30: a wildlife-video fact-check lesson and a wildlife-documentary shot-list lesson. Both remain DRAFT_ONLY, private and unscheduled; the two-Short weekly cap is enforced, and the Vault direct-sales disclosure is product-specifically approved. Added sonicvhibez-short-011-wildlife-broll for the week beginning 2026-12-07; the weekly maximum remains two, publication/scheduling remain disabled, and the item has no publication timestamp. Added sonicvhibez-short-012-wildlife-video-editing for the week beginning 2026-12-07; vidIQ estimated the primary phrase at 8,456 monthly searches with competition 18/100, and the 2-Short weekly cap remains enforced. The item is private, DRAFT_ONLY and has no publication timestamp. Added sonicvhibez-short-013-youtube-shorts-analytics for the week beginning 2026-12-14; 55-second private DRAFT_ONLY, qualitative search-intent evidence only, 90-Day Blueprint direct-sales disclosure HOLD, and no publication timestamp.",
   "weeks": [
     {
       "weekOf": "2026-11-09",
@@ -1158,6 +1158,113 @@
               "whyUsed": "Updated in April 2026; covers narration timing, B-roll layering and audio mixing as practical editing workflow components."
             }
           ]
+        }
+      ]
+    },
+    {
+      "weekOf": "2026-12-14",
+      "status": "DRAFT_ONLY",
+      "items": [
+        {
+          "id": "sonicvhibez-short-013-youtube-shorts-analytics",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "YouTube Shorts Analytics: 3 Metrics to Review Weekly",
+          "primaryKeyword": "YouTube Shorts analytics",
+          "script": "Your Shorts view count alone cannot tell you whether the opening worked. In YouTube Studio, check three things. First, “stayed to watch”: the share of times viewers kept watching instead of swiping away. Second, engaged views and average view duration: together, they show how many viewers stayed and how long they watched. Third, subscribers gained: did this Short bring people who want more of this topic? Compare the results with your own recent Shorts, not a random creator’s benchmark. Then change one thing in the next video—your first line, pacing or topic—and review again. Advertisement. The YouTube Success Blueprint 90-Day Creator System is linked below.",
+          "productId": "youtube-success-blueprint-90-day",
+          "productUrl": "https://selar.com/91j893378q",
+          "description": "YouTube Shorts analytics: review stayed to watch, engaged views, average view duration and subscribers gained. Compare the results with your own recent Shorts before changing one thing.\n\nResource: The YouTube Success Blueprint 90-Day Creator System\nhttps://selar.com/91j893378q\n\nDISCLOSURE HOLD — the owner-confirmed relationship is direct sales through the owner's own Selar business, not an affiliate commission. Proposed viewer-facing wording (not yet approved for this specific product): “This product is sold through my own Selar business; purchases generate revenue for my business.” Keep this draft private until the exact disclosure is approved.\n\nSeller: Click 47 — last verified 2026-11-09; recheck the exact listing before release.",
+          "keywordPhrases": [
+            {
+              "phrase": "YouTube Shorts analytics"
+            },
+            {
+              "phrase": "how to read YouTube Shorts analytics"
+            },
+            {
+              "phrase": "YouTube Shorts metrics"
+            },
+            {
+              "phrase": "stayed to watch metric"
+            },
+            {
+              "phrase": "YouTube Studio Shorts analytics"
+            },
+            {
+              "phrase": "engaged views and average view duration"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-17T08:10:35.317Z",
+            "note": "Qualitative search-intent evidence only: current official YouTube Help results describe Shorts metrics, discovery and engagement, while a recent beginner guide uses the same beginner-analytics query language. No live keyword-volume or competition data was accessed; no numerical volume is claimed.",
+            "sources": [
+              {
+                "title": "Understand your YouTube content performance — YouTube Help",
+                "url": "https://support.google.com/youtube/answer/12220281",
+                "whyRelevant": "Official YouTube Help directly lists Shorts metrics, how viewers find Shorts and how viewers engaged, including stayed to watch and average view duration."
+              },
+              {
+                "title": "Get started with YouTube Insights — YouTube Help",
+                "url": "https://support.google.com/youtube/answer/9002587",
+                "whyRelevant": "Official guidance explains the Analytics overview, reach, engagement, audience-retention and audience reports."
+              },
+              {
+                "title": "YouTube Analytics for beginners: the 5 numbers to read first",
+                "url": "https://videxa.in/blog/youtube-analytics-for-beginners",
+                "whyRelevant": "Updated 29 October 2026; the title and article structure show recent beginner-oriented search language around reading YouTube metrics. This is qualitative evidence, not measured volume."
+              }
+            ]
+          },
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-17T08:10:35.317Z",
+            "note": "Current search results show direct informational intent around understanding YouTube Shorts analytics and the meaning of engagement metrics. No search-volume estimate was available or claimed.",
+            "sources": [
+              {
+                "title": "Understand your YouTube content performance — YouTube Help",
+                "url": "https://support.google.com/youtube/answer/12220281",
+                "whyRelevant": "Official Shorts analytics definitions match the lesson's three metrics."
+              },
+              {
+                "title": "YouTube Analytics for beginners: the 5 numbers to read first",
+                "url": "https://videxa.in/blog/youtube-analytics-for-beginners",
+                "whyRelevant": "Recent beginner-focused guide corroborates the query wording and beginner audience need."
+              }
+            ]
+          },
+          "hashtags": [
+            "#YouTubeShortsAnalytics",
+            "#YouTubeStudio",
+            "#YouTubeCreator",
+            "#ContentStrategy",
+            "#CreatorEducation"
+          ],
+          "thumbnailDirection": "Vertical dashboard-style illustration with three clean metric labels: STAYED TO WATCH, AVERAGE VIEW DURATION, SUBSCRIBERS. Headline: “3 SHORTS METRICS”. Use no fabricated channel numbers or fake performance screenshots.",
+          "disclosure": {
+            "status": "HOLD",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "holdText": "The owner-confirmed relationship is direct sales through the owner's own Selar business. The exact viewer-facing disclosure is not approved for this specific product; keep the promotion on HOLD until the owner approves the wording."
+          },
+          "productionChecklist": [
+            "Verify the current YouTube Studio definitions of stayed to watch, engaged views, average view duration and subscribers gained before final editing.",
+            "Use only authorized SonicVhibez analytics; if showing sample UI, label it clearly as illustrative and use no invented performance figures.",
+            "Keep the lesson specific to Shorts; do not substitute long-form thumbnail CTR for Shorts engagement metrics.",
+            "Record a natural voice track and confirm the final runtime is 50–60 seconds.",
+            "Synchronize captions to the final voice track and keep key metric labels readable in vertical safe areas.",
+            "Use original or commercially cleared visuals, music and sound effects; no unverified media.",
+            "Recheck the exact Selar listing and seller Click 47 before release; repository evidence was last verified on 2026-11-09.",
+            "Keep the direct-sales disclosure on HOLD until its exact viewer-facing wording is approved for this product.",
+            "Complete factual, human playback, thumbnail and final-asset-hash review before any upload consideration.",
+            "Keep this item private and DRAFT_ONLY; do not upload, schedule or publish.",
+            "Do not assign a publication slot until complete current YouTube history and the SonicVhibez destination schedule are inspected and every 72-hour gap is calculated."
+          ],
+          "visibility": "private"
         }
       ]
     }
