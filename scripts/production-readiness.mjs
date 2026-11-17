@@ -99,6 +99,33 @@ if (!queueExists) {
       notes.push(`Queue: ${items.length} items; public publishing ${queue.publishingEnabled === false ? "disabled" : "not safely disabled"}.`);
   }
 }
+
+const mediaInventoryPath = "content/sonicvhibez-imported-media-inventory.json";
+if (!exists(mediaInventoryPath)) {
+  blockers.push("Imported SonicVhibez Canva wildlife media provenance inventory is missing.");
+} else {
+  try {
+    const inventory = JSON.parse(fs.readFileSync(path.resolve(root, mediaInventoryPath), "utf8"));
+    if (!inventory || typeof inventory !== "object" || Array.isArray(inventory) || !Array.isArray(inventory.assets) || inventory.assets.length === 0) {
+      blockers.push("Imported SonicVhibez Canva wildlife media provenance inventory must contain a non-empty assets array.");
+    } else {
+      const unresolvedAssets = inventory.assets.filter(asset => {
+        const sourceVerified = typeof asset?.originalSourceUrl === "string" && /^https:\/\/www\\.pexels\\.com\/video\//.test(asset.originalSourceUrl);
+        const localPath = typeof asset?.localMediaPath === "string" && asset.localMediaPath.trim() && !path.isAbsolute(asset.localMediaPath) && exists(asset.localMediaPath);
+        const hashVerified = typeof asset?.sha256 === "string" && /^[a-f0-9]{64}$/i.test(asset.sha256);
+        return asset?.status !== "CLEARED" || !sourceVerified || asset?.creatorConfirmed !== true || asset?.rightsConfirmed !== true || !localPath || !hashVerified || asset?.humanVisualReview !== "PASS";
+      });
+      if (inventory.releaseAuthorized !== true || inventory.status !== "CLEARED" || unresolvedAssets.length > 0) {
+        const ids = unresolvedAssets.map(asset => asset?.canvaAssetId).filter(Boolean);
+        blockers.push(`LIVE BLOCKER: ${unresolvedAssets.length} imported Canva wildlife asset(s) remain unverified (${ids.join(", ") || "inventory not cleared"}); exact source page and creator, original MP4, SHA-256 and human visual review are required before use.`);
+      }
+      notes.push(`Imported Canva wildlife media inventory: ${inventory.assets.length} assets; ${unresolvedAssets.length} unresolved; release ${inventory.releaseAuthorized === true ? "authorized" : "not authorized"}.`);
+    }
+  } catch {
+    blockers.push("Imported SonicVhibez Canva wildlife media provenance inventory is not valid JSON.");
+  }
+}
+
 if (!exists(manifestPath)) {
   blockers.push("Create content/render-manifest.json from the example and fill it only after verifying asset rights.");
 } else {
@@ -217,6 +244,7 @@ if (!exists(youtubeVerificationPath)) {
   }
 }
 function resolutionFor(blocker) {
+  if (/imported Canva wildlife asset/i.test(blocker)) return "For every listed Canva asset, confirm the exact original Pexels source page and creator, visually match the imported frames, export the original MP4, retain download/source evidence and a SHA-256 hash, and complete human visual review. Only then mark the individual asset CLEARED and authorize the inventory. Candidate URLs are not proof.";
   if (/read-only YouTube identity and uploads inventory verification.*invalid_grant/i.test(blocker)) return "Google rejected the YouTube OAuth refresh token (invalid_grant). Reauthorize the existing OAuth client for the same Google account with the YouTube read-only and upload scopes (https://www.googleapis.com/auth/youtube.readonly and https://www.googleapis.com/auth/youtube.upload), request offline access with explicit consent, confirm the new refresh token belongs to the configured YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET pair, update only YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets, then rerun the read-only verification workflow. Never paste token values into chat or create a second OAuth client.";
   if (/read-only YouTube identity and uploads inventory verification.*invalid_client/i.test(blocker)) return "Google rejected the existing OAuth client ID/secret pair. Verify the matching values for the existing single client in GitHub Actions secrets; do not create another client or share secret values. Rerun the read-only verification workflow after correcting the pair.";
   if (/read-only YouTube identity and uploads inventory verification evidence is missing/i.test(blocker)) return "Run the read-only YouTube identity and uploads inventory workflow and retain its status report. Do not upload or publish while the check is missing or blocked.";
@@ -244,6 +272,11 @@ function controlOwnerFor(message) {
 }
 
 function evidenceInspectedFor(message) {
+  if (/imported Canva wildlife asset/i.test(message)) return {
+    kind: "repository-path-check",
+    path: mediaInventoryPath,
+    observed: message
+  };
   if (/read-only YouTube identity|OAuth error/i.test(message)) return {
     kind: "repository-path-check",
     path: youtubeVerificationPath,
