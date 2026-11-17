@@ -201,6 +201,7 @@ export async function evaluateFinalFacebookPayload(payload, {
   timezone = "Africa/Johannesburg",
   sourceTimeoutMs = 8000,
   semanticVerifier = null,
+  mediaHistoryReconciled = false,
   approvalSecret = process.env.FACEBOOK_APPROVAL_HMAC_SECRET
 } = {}) {
   const blockers = [], warnings = [], sourceChecks = [], rightsChecks = [], disclosureChecks = [], destinationChecks = [];
@@ -216,6 +217,7 @@ export async function evaluateFinalFacebookPayload(payload, {
   if (!text(payload.slotId)) add(blockers, "A durable intended slot ID is required for idempotency");
   if (!/^\d{5,30}$/.test(String(payload.destinationPageId ?? "")) || payload.destinationPageId !== expectedPageId) add(blockers, "Exact Nature Frontiers Page ID is not verified or does not match the configured destination");
   if (payload.destination !== "nature_frontiers_facebook") add(blockers, "Destination separation check failed");
+  if (mediaHistoryReconciled !== true) add(blockers, "Complete cross-platform media history reconciliation is not evidenced; recycled footage cannot be ruled out");
   if (payload.requiresHumanApproval === true || payload.approvalRequired === true) add(blockers, "Payload is still marked as requiring human approval; complete review before it enters the autonomous queue");
   const approvalCheck = verifyFacebookAutonomousApprovalReceipt(payload, { secret: approvalSecret, now });
   for (const error of approvalCheck.errors) add(blockers, error);
