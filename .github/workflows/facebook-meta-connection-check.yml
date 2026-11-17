@@ -5,7 +5,9 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
   push:
-    branches: [codex/marketing-machine-audit-fixes]
+    branches:
+      - codex/marketing-machine-audit-fixes
+      - codex/meta-trust-safety-hardening
     paths:
       - "config/facebook-publishing.json"
       - "scripts/meta-page-adapter.mjs"
