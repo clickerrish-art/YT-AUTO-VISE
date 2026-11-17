@@ -63,8 +63,25 @@ jobs:
           manifest="$snapshot_dir/recovery-manifest.json"
           node --input-type=module -e 'import fs from "node:fs"; fs.writeFileSync(process.argv[1], JSON.stringify({createdAt:new Date().toISOString(),repository:process.env.GITHUB_REPOSITORY,runId:process.env.GITHUB_RUN_ID,commit:process.env.GITHUB_SHA,retentionDays:30,stateAvailable:Boolean(process.env.FACEBOOK_STATE_DIR && fs.existsSync(process.env.FACEBOOK_STATE_DIR))},null,2)+"\\n",{mode:0o600});' "$manifest"
           if [ -n "${FACEBOOK_STATE_DIR:-}" ] && [ -d "$FACEBOOK_STATE_DIR" ] && [ ! -L "$FACEBOOK_STATE_DIR" ]; then
-            tar -czf "$snapshot_dir/facebook-state.tar.gz" --ignore-failed-read -C "$FACEBOOK_STATE_DIR" --wildcards 'facebook-*.json' 'facebook-publishing.lock' 'meta-rate-limit-state.json'
-            chmod 600 "$snapshot_dir/facebook-state.tar.gz"
+            shopt -s nullglob
+            state_files=( "$FACEBOOK_STATE_DIR"/facebook-*.json )
+            for name in facebook-publishing.lock meta-rate-limit-state.json; do
+              candidate="$FACEBOOK_STATE_DIR/$name"
+              if [ -f "$candidate" ] && [ ! -L "$candidate" ]; then state_files+=( "$candidate" ); fi
+            done
+            if (("${#state_files[@]}")); then
+              basenames=()
+              for candidate in "${state_files[@]}"; do
+                if [ -f "$candidate" ] && [ ! -L "$candidate" ]; then basenames+=( "${candidate##*/}" ); fi
+              done
+              if (("${#basenames[@]}")); then
+                tar -czf "$snapshot_dir/facebook-state.tar.gz" -C "$FACEBOOK_STATE_DIR" "${basenames[@]}"
+                chmod 600 "$snapshot_dir/facebook-state.tar.gz"
+              fi
+            fi
+            if [ ! -f "$snapshot_dir/facebook-state.tar.gz" ]; then
+              echo "No allowlisted publisher state files were available to snapshot." > "$snapshot_dir/RECOVERY_BLOCKED.txt"
+            fi
           else
             echo "Durable state directory was unavailable; no state archive was created." > "$snapshot_dir/RECOVERY_BLOCKED.txt"
           fi
