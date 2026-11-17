@@ -83,6 +83,18 @@ export async function approveFacebookCandidate({
     stdout.write("Open each source and verify that it supports the complete claim with its qualifications.\n");
     if (await confirm("Type exactly VERIFY CLAIM " + slotId + " " + (index + 1) + ": ") !==
         "VERIFY CLAIM " + slotId + " " + (index + 1)) fail("Claim review was not confirmed; no approval was written");
+    const claimHash = sha256(Buffer.from(String(claim.text), "utf8"));
+    const sourceUrlsHash = sha256(Buffer.from(JSON.stringify(claim.sourceUrls), "utf8"));
+    const sourceExcerptHash = sha256(Buffer.from(String(claim.sourceExcerpt), "utf8"));
+    const checkedAt = new Date(now).toISOString();
+    const signed = claimHash + "\\n" + sourceUrlsHash + "\\n" + sourceExcerptHash + "\\n" + reviewer.trim() + "\\n" + checkedAt;
+    const signature = crypto.createHmac("sha256", secret).update(signed).digest("hex");
+    item.claims[index] = {
+      ...claim,
+      sourceSupportsClaim: true,
+      verified: true,
+      semanticVerification: { claimHash, sourceUrlsHash, sourceExcerptHash, reviewerId: reviewer.trim(), checkedAt, signature }
+    };
   }
 
   stdout.write("\nNATURE FRONTIERS — FINAL MEDIA AND RIGHTS REVIEW\n");
