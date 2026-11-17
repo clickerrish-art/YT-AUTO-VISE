@@ -96,8 +96,8 @@ function main() {
   const plan=buildInterstitialCalendar({videos:JSON.parse(fs.readFileSync(videosPath,"utf8")),candidates:JSON.parse(fs.readFileSync(candidatesPath,"utf8"))});
   fs.mkdirSync(path.dirname(outputPath),{recursive:true});
   const temp=outputPath+"."+process.pid+".tmp",fd=fs.openSync(temp,"wx",0o600);
-  try{fs.writeFileSync(fd,JSON.stringify(plan,null,2)+"\\n","utf8");fs.fsyncSync(fd);}finally{fs.closeSync(fd);}
+  try{fs.writeFileSync(fd,JSON.stringify(plan,null,2)+"\n","utf8");fs.fsyncSync(fd);}finally{fs.closeSync(fd);}
   fs.renameSync(temp,outputPath);
-  process.stdout.write(JSON.stringify({status:"OK",placements:plan.placements.length,held:plan.decisions.filter(x=>x.status==="HELD").length,outputPath: path.relative(root,outputPath)})+"\\n");
+  process.stdout.write(JSON.stringify({status:"OK",placements:plan.placements.length,held:plan.decisions.filter(x=>x.status==="HELD").length,outputPath: path.relative(root,outputPath)})+"\n");
 }
-if(import.meta.url===new URL(process.argv[1]??"", "file://").href) main();
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
