@@ -1,5 +1,21 @@
 # 17 November 2026 — latest exact source/test checkpoint
 
+## 17 November 2026 — live Cloudflare persistence inspection
+
+Read-only Cloudflare API and D1 queries were run against the connected account. No rows were inserted, updated or deleted.
+
+- `sonicvhibez-durable-state-staging` is deployed with a D1 binding and an `ARTIFACTS` R2 binding in its settings. The staging D1 schema is present. The dashboard state has **revision 3**, valid JSON, `publishingEnabled=false`, **16 queue items**, 4 audit events, and zero worker jobs, Facebook drafts/posts or upload receipts.
+- The staging database has **5 logical backup rows** with 64-character SHA fields. The latest state is 11,009 bytes; the most recent backup records are tied to revisions 1 and 2. These are same-account D1 logical backups, not independent disaster-recovery copies. Hash format and row metadata were inspected; backup payload hashes were not recomputed from exported bytes in this check.
+- Queue statuses are not normalized: 12 `HOLD_FOR_MEDIA_AND_HUMAN_REVIEW`, 1 `SCRIPT_AND_CAPTIONS_READY_NEEDS_MEDIA_AND_HUMAN_REVIEW`, 2 `SCRIPT_READY_NARRATION_DRAFT_PENDING_GENERATION_MEDIA_AND_HUMAN_REVIEW_REQUIRED`, and 1 lowercase `script_and_captions_ready_needs_media_and_review`. No publishing state is enabled. The lowercase variant should be normalized in a reviewed migration or queue adapter before operational status transitions are relied upon.
+- The `nature-frontiers-prod-state` D1 database has the production content/approval/audit/rights/attempt schema, but all inspected business tables currently contain **zero rows**. This is not evidence of live Meta publishing or production content acceptance.
+- The Cloudflare R2 API returned HTTP 403 / code 10042: **R2 must first be enabled through the Cloudflare Dashboard**. The staging Worker has an R2 binding name, but an R2 bucket/object inventory could not be confirmed. Do not claim the independent R2 export/restore path is working.
+- No Cloudflare state, secrets, Worker settings, D1 schemas, queue contents, or publishing switches were changed during this inspection.
+
+**Owner action to unblock R2:** enable R2 Object Storage in the Cloudflare Dashboard for this account, then re-check that `sonicvhibez-artifacts-staging` exists, upload a non-sensitive test object, read it back and verify its SHA-256, and complete an independent export/restore drill. Keep this separate from the D1 Time Travel drill.
+
+---
+
+
 ## 17 November 2026 — current Meta approval implementation (verification pending)
 
 **Latest implementation SHA:** `fec53f39e46dc7f55807218a1cfcd301c958a2f7`. This is 15 commits ahead of the previously verified source/test SHA `38cb904c463e4e5f5e24d09fc0d88882c93bb45b`; the eight changed paths are the approval signer, policy engine, their tests, publisher comment, config, package command, and focused workflow. `main` remains `69fdf35c90f980c142be3aaffa863304bc7eaa25`; PR #1 remains draft/unmerged.
