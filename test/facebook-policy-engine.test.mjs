@@ -47,7 +47,7 @@ function fixture() {
 const options = root => ({
   expectedPageId: "123456789012345", expectedPageName: "Nature Frontiers", evidenceRoot: root,
   history: [], allowedDomains: [], allowedCampaignIds: ["nature-frontiers-affiliate-monetization"],
-  approvedDestinations: [...NATURE_FRONTIERS_REQUIRED_POST_LINKS], now: "2026-10-24T12:00:00.000Z",
+  approvedDestinations: [...NATURE_FRONTIERS_REQUIRED_POST_LINKS], mediaHistoryReconciled: true, now: "2026-10-24T12:00:00.000Z",
   fetchImpl: async url => ({ ok: true, status: 200, url: String(url), text: async () => "Wildlife viewing guidance: Observe wildlife from a respectful distance and avoid disturbing animals. Further information." }),
   approvalSecret: TEST_APPROVAL_SECRET,
   semanticVerifier: async ({ claimText, sourceUrls, checkedAt }) => ({
@@ -84,6 +84,15 @@ test("Nature Frontiers cadence caps two Reels and one feed post per Johannesburg
     });
     assert.equal(feedDecision.eligible, false);
     assert.match(feedDecision.blockers.join(" "), /Daily feed-post cap/i);
+  } finally { f.cleanup(); }
+});
+
+test("publishing remains blocked until complete cross-platform media history is reconciled", async () => {
+  const f = fixture();
+  try {
+    const result = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), mediaHistoryReconciled: false });
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /complete cross-platform media history reconciliation/i.test(item)));
   } finally { f.cleanup(); }
 });
 
