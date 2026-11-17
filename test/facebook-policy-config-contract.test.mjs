@@ -16,6 +16,10 @@ test("Nature Frontiers publishing configuration retains fail-closed defaults", (
   assert.equal(config.dryRun, true);
   assert.equal(config.emergencyStop, true);
   assert.equal(config.mediaHistoryReconciled, false);
+  assert.deepEqual(config.allowedCampaignIds, [], "unregistered Safari affiliate and Selar direct-sales campaigns must not authorize commercial publishing");
+  const campaignConfig = JSON.parse(fs.readFileSync(path.join(process.cwd(), "config/campaigns.json"), "utf8"));
+  assert.equal(campaignConfig.campaigns.find(item => item.type === "safari_affiliate")?.status, "INACTIVE");
+  assert.equal(campaignConfig.campaigns.find(item => item.type === "selar_digital_product")?.status, "ACTIVE_FOR_DRAFTS_ONLY");
 });
 
 test("Nature Frontiers remains a Facebook destination, not a YouTube target", () => {
