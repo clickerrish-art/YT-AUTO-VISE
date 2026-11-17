@@ -228,15 +228,15 @@ export async function runAutonomousInstagramPublisher({
       const decision=await policyEvaluator(payload.sourcePayload,{
         expectedPageId:config.facebookPageId,expectedPageName:config.facebookPageName??"Nature Frontiers SA",
         allowedCampaignIds:config.allowedCampaignIds??[],approvedDestinations:config.approvedDestinations??[],
-        allowedDomains:config.allowedDomains??[],history:[],evidenceRoot:rootDir,now:nowIso,timezone:config.timezone,maxPostsPerLocalDay:999,
+        allowedDomains:config.allowedDomains??[],history:[...history,...ledger],evidenceRoot:rootDir,now:nowIso,timezone:config.timezone,maxPostsPerLocalDay:999,
         maxReelsPerLocalDay:999,maxFeedPostsPerLocalDay:999,minimumIntervalMinutes:0,fetchImpl
       });
       if(decision?.eligible!==true) { history.push({slotId:payload.slotId,status:"BLOCKED_SOURCE_POLICY",checkedAt:nowIso,policyDecision:decision}); skipped++; continue; }
 
       const attempt={kind:isReel?"INSTAGRAM_REEL_PUBLISH_ATTEMPT":"INSTAGRAM_IMAGE_PUBLISH_ATTEMPT",slotId:payload.slotId,destination:"nature_frontiers_instagram",
         status:"PUBLISHING",startedAt:nowIso,scheduledAt:payload.scheduledAt,mediaType:payload.mediaType,
-        contentFingerprint:approval.payloadFingerprint??instagramApprovalFingerprint(payload),
-        sourcePolicyDecision:decision,remoteContainerId:null,remoteMediaId:null,retryAllowed:false};
+        contentFingerprint:approval.payloadFingerprint??instagramApprovalFingerprint(payload),caption:payload.caption,
+        mediaFingerprints:decision.mediaFingerprints??[],sourcePolicyDecision:decision,remoteContainerId:null,remoteMediaId:null,retryAllowed:false};
       ledger.push(attempt); atomicJson(ledgerFile,ledger);
       try {
         const common={
