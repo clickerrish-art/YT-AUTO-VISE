@@ -208,5 +208,5 @@
     "Candidate Pexels pages and general Pexels commercial-use terms are not sufficient to clear an imported clip without exact visual matching, original MP4, download/source evidence, hash and human review.",
     "No footage rights or human visual review is marked complete."
   ],
-  "notes": "Metadata-only source-page verification completed 2026-11-17. No asset is cleared: all five remain HOLD, originalSourceUrl remains null, creatorConfirmed=false, rightsConfirmed=false and humanVisualReview=NOT_DONE until the Canva import is visually matched to the exact Pexels source and the original MP4/hash are retained."
+  "notes": "Metadata-only source-page verification completed 2026-11-17. Candidate URLs are research leads, not verified provenance. No asset is cleared: all five remain HOLD, originalSourceUrl remains null, creatorConfirmed=false, rightsConfirmed=false and humanVisualReview=NOT_DONE until the Canva import is visually matched to the exact Pexels source and the original MP4/hash are retained."
 }
