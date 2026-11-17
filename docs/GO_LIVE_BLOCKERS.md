@@ -44,11 +44,13 @@ The latest recorded read-only inspection found staging D1 at revision 3 with 16 
 
 ## Nature Frontiers crocodile Reel
 
-- The 55.1-second v2 master was recovered and visually sampled throughout. No graphic feeding, injury or actual attack was observed; the footage is visibly illustrative rather than photorealistic wildlife footage.
-- The opening 10-second animation source is present, but independent creator/source-project/licence evidence is still missing.
-- Full spoken transcript, human audio playback/pronunciation review, final silence/end-hold approval, factual/editorial approval and exact-hash release approval remain outstanding. The local transcription toolchain is not installed in this environment; no transcript has been fabricated.
-- Recommended factual caption correction: crocodiles' eyes, ears and nostrils can remain above water; avoid the narrower claim that only eyes are visible.
-- No Metricool upload, schedule or publication was performed.
+- The previous 55.1-second v2 master was recovered and visually sampled. No graphic feeding, injury or actual attack was observed, but its opening 10-second animation has no independently verified creator/source-project/licence record, and its full narration transcript/audio review was incomplete. **Do not release v2.**
+- A new self-contained v3 review draft was created locally, without reusing the v2 master or its unverified opening animation. It uses five original vector-style scenes rendered locally, no third-party footage, no stock images and no music.
+- v3 master SHA-256: `d877aa661c49fd57bc710dc76ab360b88b9d6131fa1cd35a250f86f29be2df59`; 53.98 seconds, 720×1280, 24 fps, 115-word narration and 10 sentence-synchronized caption blocks. Audio peak -1.8 dBFS; full decode passed; no black-frame intervals or long silence intervals were detected.
+- Corrected factual language: eyes, ears and nostrils are positioned high on the head; tail provides the main forward thrust. Sources: IUCN Crocodile Specialist Group, SANBI and the San Diego Zoo factsheet.
+- The v3 review package is available as a local deliverable; package SHA-256 `11e7382082f66999e4c54b32c7a2c85c491e3fc4e761840d290a6e18c42461e6`.
+- eSpeak 1.48.15 was used for the draft voiceover. Its software is GPL-3.0; the review package includes the GPL-3.0 text. This does not make a legal determination about the generated audio output.
+- **Release remains on hold:** human full-video/audio listening, pronunciation/factual sign-off, voice/output licensing suitability, rights/provenance sign-off, cover approval and final platform metadata/owner authorization are outstanding. No Metricool upload, scheduling or publication occurred.
 
 ## Safeguards
 
@@ -58,19 +60,21 @@ Public/unattended publishing remains disabled. YouTube target remains SonicVhibe
 
 
 
-## 17 November 2026 — current Meta approval implementation (verification pending)
+## 17 November 2026 — current Meta approval implementation (exact-SHA verified)
 
-**Latest implementation SHA:** `fec53f39e46dc7f55807218a1cfcd301c958a2f7`. This is 15 commits ahead of the previously verified source/test SHA `38cb904c463e4e5f5e24d09fc0d88882c93bb45b`; the eight changed paths are the approval signer, policy engine, their tests, publisher comment, config, package command, and focused workflow. `main` remains `69fdf35c90f980c142be3aaffa863304bc7eaa25`; PR #1 remains draft/unmerged.
+**Verified code/test SHA:** `4ff54d69085ba0bd6ba8fe73edd3d4c7d11d0b37`. **Latest documentation commit:** `99f74a6903177bd59aeb0dac0d015a88e2307f4b`. `main` remains `69fdf35c90f980c142be3aaffa863304bc7eaa25`; PR #1 remains draft/unmerged.
 
 - Added `npm run facebook:approve -- content/facebook-intake-candidates.json <exact-slot-id>` for an interactive, human-confirmed approval of one exact candidate.
-- The signer requires reviewer ID and a 32-byte minimum HMAC secret from protected environment/secret manager; it does not read or write secret values to the repository.
-- It requires claim-by-claim confirmation, signs claim text/source URL/source excerpt hashes, checks actual media and rights-evidence file hashes and required licence fields, prints the exact content fingerprint, requires a final confirmation, detects changes during review, and atomically writes the approval receipt.
-- The policy engine now verifies those per-claim HMAC attestations when no external semantic verifier is configured, and includes the attestation fields in the payload fingerprint. It still re-fetches each authoritative source and verifies the recorded excerpt before the candidate can pass.
-- The publisher independently rechecks the receipt and all policy, media, rights, source, duplicate, cadence and destination gates. This implementation does not enable publishing.
-- A first full CI attempt on intermediate SHA `1d7d89a39e1349f4d215059fa94bc51e91c254e7` exposed a missing export for the canonical payload fingerprint: **936 passed, 1 failed, 0 skipped**. The missing export was added in `fec53f3`. The semantic-attestation fallback and final signer tests were added after that run. **No CI result yet verifies the final SHA `fec53f3`; status is IMPLEMENTED — UNVERIFIED.**
-- The focused workflow file was added, but because it is new on the draft branch and is not yet on the base branch, it is not independent evidence that the workflow has executed.
+- The signer requires reviewer ID and a 32-byte minimum HMAC secret from a protected environment/secret manager; no secret is written to the repository.
+- It requires claim-by-claim confirmation, signs claim text/source URL/source excerpt hashes, checks actual media and rights-evidence file hashes and required licence fields, prints the exact content fingerprint, requires final confirmation, detects changes during review, and atomically writes the approval receipt.
+- The policy engine verifies per-claim HMAC attestations when no external semantic verifier is configured, binds those attestations into the payload fingerprint, and independently re-fetches each authoritative source to verify the recorded excerpt.
+- The publisher independently rechecks the receipt and all policy, media, rights, source, duplicate, cadence and destination gates. This does not enable publishing.
+- Focused approval CI [44073050917](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050917): **24/24 passed; 0 failed; 0 skipped**.
+- Full candidate content quality [44073050923](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050923): **941/941 passed; 0 failed; 0 skipped**.
+- Full candidate automation [44073050921](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050921): **164/164 Node test files and 45/45 Python tests passed; zero skips**.
+- No candidate was approved and no Meta publishing action was performed. Live Meta user/Page token verification was skipped in the PR workflow; it is not a live credential pass.
 
-This is a usability and verification-path improvement only. There is still no populated approved candidate queue, no valid live Meta token, no independent Page verification, and no authorization to publish. The Nature Frontiers publisher remains fail-closed.
+This is a usable approval path, but the actual Nature Frontiers candidate queue is empty and all real content still needs rights, factual, editorial and owner review. The publisher remains fail-closed.
 
 ---
 
