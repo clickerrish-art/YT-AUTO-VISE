@@ -1,0 +1,44 @@
+name: Cloudflare runner bridge safety tests
+
+on:
+  push:
+    branches:
+      - codex/marketing-machine-audit-fixes
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "scripts/cloudflare-*.mjs"
+      - "scripts/github-oidc-token.mjs"
+      - "scripts/artifact-integrity.mjs"
+      - "test/cloudflare-runner-bridge.test.mjs"
+      - "test/cloudflare-artifact-sync.test.mjs"
+      - ".github/workflows/cloudflare-runner-bridge-tests.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-runner-bridge-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  bridge-safety:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+      - name: Syntax-check runner bridge modules
+        run: |
+          node --check scripts/cloudflare-access-auth.mjs
+          node --check scripts/github-oidc-token.mjs
+          node --check scripts/artifact-integrity.mjs
+          node --check scripts/cloudflare-runner-bridge.mjs
+          node --check scripts/cloudflare-artifact-sync.mjs
+      - name: Run mocked Cloudflare runner and artifact integrity tests
+        run: |
+          node --test test/cloudflare-runner-bridge.test.mjs
+          node --test test/cloudflare-artifact-sync.test.mjs
