@@ -1,0 +1,137 @@
+{
+  "channel": "SonicVhibez",
+  "importedIntoCanvaAt": "2026-11-04",
+  "sourcePlatformReportedByProject": "Pexels",
+  "policyReference": {
+    "url": "https://www.pexels.com/license/",
+    "reviewStatus": "POLICY_REVIEWED_AS_GENERAL_POLICY_ONLY",
+    "notes": "Pexels states its free license permits commercial use and does not require attribution. This does not prove that any candidate source page below is the exact source of a Canva import."
+  },
+  "status": "HOLD_SOURCE_PROVENANCE_AND_LOCAL_MEDIA_MISSING",
+  "releaseAuthorized": false,
+  "assets": [
+    {
+      "canvaAssetId": "VAHZ9kg2rvg",
+      "subject": "African elephant close-up",
+      "canvaMetadata": {
+        "width": 3840,
+        "height": 2160,
+        "durationSeconds": 14
+      },
+      "candidateSourceUrl": "https://www.pexels.com/video/majestic-african-elephant-in-natural-habitat-37394148/",
+      "candidateCreator": "Magda Ehlers",
+      "candidateMetadata": {
+        "width": 3840,
+        "height": 2160,
+        "durationSeconds": 14
+      },
+      "sourceMatchStatus": "CANDIDATE_MATCH_PENDING_VISUAL_CONFIRMATION",
+      "originalSourceUrl": null,
+      "creatorConfirmed": false,
+      "downloadDate": null,
+      "localMediaPath": null,
+      "rightsConfirmed": false,
+      "humanVisualReview": "NOT_DONE",
+      "status": "HOLD"
+    },
+    {
+      "canvaAssetId": "VAHZ9hEjS0U",
+      "subject": "Aerial zebras and wildebeest",
+      "canvaMetadata": {
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 13
+      },
+      "candidateSourceUrl": "https://www.pexels.com/video/an-aerial-footage-of-zebras-and-wildebeests-5146558/",
+      "candidateCreator": "Taryn Elliott",
+      "candidateMetadata": {
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 14
+      },
+      "sourceMatchStatus": "CANDIDATE_DURATION_MISMATCH_PENDING_VISUAL_CONFIRMATION",
+      "originalSourceUrl": null,
+      "creatorConfirmed": false,
+      "downloadDate": null,
+      "localMediaPath": null,
+      "rightsConfirmed": false,
+      "humanVisualReview": "NOT_DONE",
+      "status": "HOLD"
+    },
+    {
+      "canvaAssetId": "VAHZ9niQJoo",
+      "subject": "Zebras and wildebeest grazing",
+      "canvaMetadata": {
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 25
+      },
+      "candidateSourceUrl": "https://www.pexels.com/video/zebras-and-wildebeests-grazing-in-the-meadows-5146578/",
+      "candidateCreator": "Taryn Elliott",
+      "candidateMetadata": {
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 25
+      },
+      "sourceMatchStatus": "CANDIDATE_MATCH_PENDING_VISUAL_CONFIRMATION",
+      "originalSourceUrl": null,
+      "creatorConfirmed": false,
+      "downloadDate": null,
+      "localMediaPath": null,
+      "rightsConfirmed": false,
+      "humanVisualReview": "NOT_DONE",
+      "status": "HOLD"
+    },
+    {
+      "canvaAssetId": "VAHZ9i3Hx6U",
+      "subject": "Giraffes in the wild",
+      "canvaMetadata": {
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 21
+      },
+      "candidateSourceUrl": "https://www.pexels.com/video/giraffe-in-the-open-fields-5214258/",
+      "candidateCreator": "Taryn Elliott",
+      "candidateMetadata": {
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 21
+      },
+      "sourceMatchStatus": "CANDIDATE_MATCH_PENDING_VISUAL_CONFIRMATION",
+      "originalSourceUrl": null,
+      "creatorConfirmed": false,
+      "downloadDate": null,
+      "localMediaPath": null,
+      "rightsConfirmed": false,
+      "humanVisualReview": "NOT_DONE",
+      "status": "HOLD"
+    },
+    {
+      "canvaAssetId": "VAHZ9oFCiak",
+      "subject": "African lion close-up",
+      "canvaMetadata": {
+        "width": 3840,
+        "height": 2160,
+        "durationSeconds": 9
+      },
+      "candidateSourceUrl": null,
+      "candidateCreator": null,
+      "candidateMetadata": null,
+      "sourceMatchStatus": "UNRESOLVED_SOURCE_URL_AND_CREATOR_NOT_RECORDED",
+      "originalSourceUrl": null,
+      "creatorConfirmed": false,
+      "downloadDate": null,
+      "localMediaPath": null,
+      "rightsConfirmed": false,
+      "humanVisualReview": "NOT_DONE",
+      "status": "HOLD"
+    }
+  ],
+  "blockingEvidence": [
+    "The five Canva asset IDs and media metadata are recorded, but original MP4 files are not present in the repository.",
+    "Exact Pexels source URLs, creator names, download records and source-to-Canva visual matches were not retained for the five imports.",
+    "Candidate Pexels pages are not treated as confirmed sources until their frames are matched to the imported Canva assets.",
+    "No footage rights or human visual review is marked complete."
+  ],
+  "notes": "This inventory records existing imported Canva assets only. Candidate URLs are research leads, not verified provenance. Do not use any asset in a render, mark rightsConfirmed true, or claim commercial clearance until the original source page and creator are confirmed, the exact clip is visually matched, the original MP4 is available, and the intended use is reviewed."
+}
