@@ -61,7 +61,7 @@ jobs:
           snapshot_dir="$RUNNER_TEMP/nature-frontiers-facebook-recovery"
           mkdir -p "$snapshot_dir"
           manifest="$snapshot_dir/recovery-manifest.json"
-          node --input-type=module -e 'const fs=require("node:fs"); fs.writeFileSync(process.argv[1], JSON.stringify({createdAt:new Date().toISOString(),repository:process.env.GITHUB_REPOSITORY,runId:process.env.GITHUB_RUN_ID,commit:process.env.GITHUB_SHA,retentionDays:30,stateAvailable:Boolean(process.env.FACEBOOK_STATE_DIR && fs.existsSync(process.env.FACEBOOK_STATE_DIR))},null,2)+"\\n",{mode:0o600});' "$manifest"
+          node --input-type=module -e 'import fs from "node:fs"; fs.writeFileSync(process.argv[1], JSON.stringify({createdAt:new Date().toISOString(),repository:process.env.GITHUB_REPOSITORY,runId:process.env.GITHUB_RUN_ID,commit:process.env.GITHUB_SHA,retentionDays:30,stateAvailable:Boolean(process.env.FACEBOOK_STATE_DIR && fs.existsSync(process.env.FACEBOOK_STATE_DIR))},null,2)+"\\n",{mode:0o600});' "$manifest"
           if [ -n "${FACEBOOK_STATE_DIR:-}" ] && [ -d "$FACEBOOK_STATE_DIR" ] && [ ! -L "$FACEBOOK_STATE_DIR" ]; then
             tar -czf "$snapshot_dir/facebook-state.tar.gz" --ignore-failed-read -C "$FACEBOOK_STATE_DIR" --wildcards 'facebook-*.json' 'facebook-publishing.lock' 'meta-rate-limit-state.json'
             chmod 600 "$snapshot_dir/facebook-state.tar.gz"
