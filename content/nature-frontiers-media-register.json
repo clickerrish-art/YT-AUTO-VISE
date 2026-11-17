@@ -1004,11 +1004,19 @@
         "provider": "Pexels",
         "assetId": "4106826",
         "url": "https://www.pexels.com/video/nature-animal-lizard-reptile-4106826/",
-        "contributor": null,
-        "listingStatus": "unverified",
-        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
-        "listingTags": [],
-        "listingEvidence": []
+        "contributor": "Muhammadrizwan Saeed",
+        "listingStatus": "verified",
+        "listingDescription": "Pexels listing describes a close-up of a slow worm (Anguis fragilis) moving through grass and leaves outdoors. Listing metadata: 1920×1080, 17 seconds, 29.97 fps. The page slug says lizard, but the description identifies a slow worm.",
+        "listingTags": [
+          "Snake",
+          "Reptiles",
+          "Lizard",
+          "Snakes",
+          "Slow Motion Nature"
+        ],
+        "listingEvidence": [
+          "https://www.pexels.com/video/nature-animal-lizard-reptile-4106826/"
+        ]
       },
       "localFile": null,
       "media": {
@@ -1018,15 +1026,28 @@
         "height": null,
         "frameRate": null
       },
-      "claims": [],
+      "claims": [
+        {
+          "type": "species",
+          "value": "slow worm (Anguis fragilis)",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "moving through grass and leaves",
+          "status": "listing_only"
+        }
+      ],
       "rights": {
-        "listingLicenseClaim": null,
-        "licenseEvidence": [],
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/video/nature-animal-lizard-reptile-4106826/"
+        ],
         "reviewStatus": "not_assessed",
         "additionalPermissionsStatus": "not_assessed",
         "reviewedBy": null,
         "reviewedAt": null,
-        "notes": "No rights assessment has been performed."
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
       },
       "inspection": {
         "status": "not_inspected",
@@ -1059,11 +1080,20 @@
         "provider": "Pixabay",
         "assetId": "111414",
         "url": "https://pixabay.com/videos/lion-predator-masculine-mane-zoo-111414/",
-        "contributor": null,
-        "listingStatus": "unverified",
-        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
-        "listingTags": [],
-        "listingEvidence": []
+        "contributor": "NickyPe",
+        "listingStatus": "verified",
+        "listingDescription": "Pixabay listing title identifies a lion; listing metadata: 3840×2160, 25 fps, published 22 March 2022. No specific filming location or behaviour is established by the listing.",
+        "listingTags": [
+          "Lion",
+          "Predator",
+          "Masculine",
+          "Mane",
+          "Zoo",
+          "Wildlife"
+        ],
+        "listingEvidence": [
+          "https://pixabay.com/videos/lion-predator-masculine-mane-zoo-111414/"
+        ]
       },
       "localFile": null,
       "media": {
@@ -1073,15 +1103,23 @@
         "height": null,
         "frameRate": null
       },
-      "claims": [],
+      "claims": [
+        {
+          "type": "species",
+          "value": "lion",
+          "status": "listing_only"
+        }
+      ],
       "rights": {
-        "listingLicenseClaim": null,
-        "licenseEvidence": [],
+        "listingLicenseClaim": "Pixabay Content License",
+        "licenseEvidence": [
+          "https://pixabay.com/videos/lion-predator-masculine-mane-zoo-111414/"
+        ],
         "reviewStatus": "not_assessed",
         "additionalPermissionsStatus": "not_assessed",
         "reviewedBy": null,
         "reviewedAt": null,
-        "notes": "No rights assessment has been performed."
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
       },
       "inspection": {
         "status": "not_inspected",
@@ -1114,11 +1152,13 @@
         "provider": "Pexels",
         "assetId": "10041504",
         "url": "https://www.pexels.com/video/a-badger-eating-an-egg-10041504/",
-        "contributor": null,
-        "listingStatus": "unverified",
-        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "contributor": "Los Muertos Crew",
+        "listingStatus": "verified",
+        "listingDescription": "Pexels page slug says badger, but the actual listing description identifies a coati eating an egg on a rustic brick floor outdoors in Mexico. Listing metadata: 1920×1080, 21 seconds, 23.98 fps. Do not use or caption this as a badger.",
         "listingTags": [],
-        "listingEvidence": []
+        "listingEvidence": [
+          "https://www.pexels.com/video/a-badger-eating-an-egg-10041504/"
+        ]
       },
       "localFile": null,
       "media": {
@@ -1128,15 +1168,33 @@
         "height": null,
         "frameRate": null
       },
-      "claims": [],
+      "claims": [
+        {
+          "type": "species",
+          "value": "coati",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "eating an egg",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "Mexico",
+          "status": "listing_only"
+        }
+      ],
       "rights": {
-        "listingLicenseClaim": null,
-        "licenseEvidence": [],
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/video/a-badger-eating-an-egg-10041504/"
+        ],
         "reviewStatus": "not_assessed",
         "additionalPermissionsStatus": "not_assessed",
         "reviewedBy": null,
         "reviewedAt": null,
-        "notes": "No rights assessment has been performed."
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour. The page title slug says badger but its description says coati; exclude from badger narratives."
       },
       "inspection": {
         "status": "not_inspected",
@@ -1224,11 +1282,18 @@
         "provider": "Pexels",
         "assetId": "40320170",
         "url": "https://www.pexels.com/video/playful-meerkat-in-natural-habitat-40320170/",
-        "contributor": null,
-        "listingStatus": "unverified",
-        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
-        "listingTags": [],
-        "listingEvidence": []
+        "contributor": "Bil Hinton",
+        "listingStatus": "verified",
+        "listingDescription": "Pexels listing describes a meerkat playfully exploring its natural habitat. Listing metadata: 3840×2160, 22 seconds, 25 fps. No filming location is established by the listing.",
+        "listingTags": [
+          "Meerkat",
+          "Animal Videos",
+          "Animals Video",
+          "Animals Videos"
+        ],
+        "listingEvidence": [
+          "https://www.pexels.com/video/playful-meerkat-in-natural-habitat-40320170/"
+        ]
       },
       "localFile": null,
       "media": {
@@ -1238,15 +1303,28 @@
         "height": null,
         "frameRate": null
       },
-      "claims": [],
+      "claims": [
+        {
+          "type": "species",
+          "value": "meerkat",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "exploring",
+          "status": "listing_only"
+        }
+      ],
       "rights": {
-        "listingLicenseClaim": null,
-        "licenseEvidence": [],
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/video/playful-meerkat-in-natural-habitat-40320170/"
+        ],
         "reviewStatus": "not_assessed",
         "additionalPermissionsStatus": "not_assessed",
         "reviewedBy": null,
         "reviewedAt": null,
-        "notes": "No rights assessment has been performed."
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
       },
       "inspection": {
         "status": "not_inspected",
@@ -1279,11 +1357,20 @@
         "provider": "Pixabay",
         "assetId": "173139",
         "url": "https://pixabay.com/videos/snake-cobra-serpent-snake-tongue-173139/",
-        "contributor": null,
-        "listingStatus": "unverified",
-        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
-        "listingTags": [],
-        "listingEvidence": []
+        "contributor": "FestiMania",
+        "listingStatus": "verified",
+        "listingDescription": "Pixabay listing title and tags identify a snake/cobra. Listing metadata: 3840×2160, 30 fps, published 26 July 2023. Species and behaviour still require full clip inspection.",
+        "listingTags": [
+          "Snake",
+          "Cobra",
+          "Serpent",
+          "Snake Tongue",
+          "Reptile",
+          "Animal"
+        ],
+        "listingEvidence": [
+          "https://pixabay.com/videos/snake-cobra-serpent-snake-tongue-173139/"
+        ]
       },
       "localFile": null,
       "media": {
@@ -1293,15 +1380,23 @@
         "height": null,
         "frameRate": null
       },
-      "claims": [],
+      "claims": [
+        {
+          "type": "species",
+          "value": "cobra (listing claim only)",
+          "status": "listing_only"
+        }
+      ],
       "rights": {
-        "listingLicenseClaim": null,
-        "licenseEvidence": [],
+        "listingLicenseClaim": "Pixabay Content License",
+        "licenseEvidence": [
+          "https://pixabay.com/videos/snake-cobra-serpent-snake-tongue-173139/"
+        ],
         "reviewStatus": "not_assessed",
         "additionalPermissionsStatus": "not_assessed",
         "reviewedBy": null,
         "reviewedAt": null,
-        "notes": "No rights assessment has been performed."
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
       },
       "inspection": {
         "status": "not_inspected",
@@ -1334,11 +1429,18 @@
         "provider": "Pexels",
         "assetId": "14564347",
         "url": "https://www.pexels.com/video/a-curious-warthog-in-a-field-14564347/",
-        "contributor": null,
-        "listingStatus": "unverified",
-        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
-        "listingTags": [],
-        "listingEvidence": []
+        "contributor": "Magda Ehlers",
+        "listingStatus": "verified",
+        "listingDescription": "Pexels listing describes a warthog wandering freely in its natural habitat. Listing metadata: 3840×2160, 28 seconds, 25 fps. Kruger National Park appears among related tags only and is not proof of filming location.",
+        "listingTags": [
+          "Kruger National Park",
+          "Animals Videos",
+          "Wild Boar",
+          "African Wildlife"
+        ],
+        "listingEvidence": [
+          "https://www.pexels.com/video/a-curious-warthog-in-a-field-14564347/"
+        ]
       },
       "localFile": null,
       "media": {
@@ -1348,15 +1450,28 @@
         "height": null,
         "frameRate": null
       },
-      "claims": [],
+      "claims": [
+        {
+          "type": "species",
+          "value": "warthog",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "wandering",
+          "status": "listing_only"
+        }
+      ],
       "rights": {
-        "listingLicenseClaim": null,
-        "licenseEvidence": [],
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/video/a-curious-warthog-in-a-field-14564347/"
+        ],
         "reviewStatus": "not_assessed",
         "additionalPermissionsStatus": "not_assessed",
         "reviewedBy": null,
         "reviewedAt": null,
-        "notes": "No rights assessment has been performed."
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
       },
       "inspection": {
         "status": "not_inspected",
@@ -1444,11 +1559,21 @@
         "provider": "Pixabay",
         "assetId": "263732",
         "url": "https://pixabay.com/videos/lion-big-cat-wildlife-predator-263732/",
-        "contributor": null,
-        "listingStatus": "unverified",
-        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
-        "listingTags": [],
-        "listingEvidence": []
+        "contributor": "MikoEP",
+        "listingStatus": "verified",
+        "listingDescription": "Pixabay listing describes a lion walking toward the camera. Listing metadata: 1080×1920, 30 fps, published 10 March 2025. No specific filming location is established.",
+        "listingTags": [
+          "Lion",
+          "Big Cat",
+          "Wildlife",
+          "Predator",
+          "Walking",
+          "Savannah",
+          "Nature"
+        ],
+        "listingEvidence": [
+          "https://pixabay.com/videos/lion-big-cat-wildlife-predator-263732/"
+        ]
       },
       "localFile": null,
       "media": {
@@ -1458,15 +1583,28 @@
         "height": null,
         "frameRate": null
       },
-      "claims": [],
+      "claims": [
+        {
+          "type": "species",
+          "value": "lion",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "walking toward the camera",
+          "status": "listing_only"
+        }
+      ],
       "rights": {
-        "listingLicenseClaim": null,
-        "licenseEvidence": [],
+        "listingLicenseClaim": "Pixabay Content License",
+        "licenseEvidence": [
+          "https://pixabay.com/videos/lion-big-cat-wildlife-predator-263732/"
+        ],
         "reviewStatus": "not_assessed",
         "additionalPermissionsStatus": "not_assessed",
         "reviewedBy": null,
         "reviewedAt": null,
-        "notes": "No rights assessment has been performed."
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
       },
       "inspection": {
         "status": "not_inspected",
@@ -1499,11 +1637,27 @@
         "provider": "Pixabay",
         "assetId": "323312",
         "url": "https://pixabay.com/videos/lion-male-lion-king-mane-face-323312/",
-        "contributor": null,
-        "listingStatus": "unverified",
-        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
-        "listingTags": [],
-        "listingEvidence": []
+        "contributor": "Solarselle77",
+        "listingStatus": "verified",
+        "listingDescription": "Pixabay listing title identifies a male lion in a close-up/profile portrait. Listing metadata: 3328×1856, 24 fps, published 20 December 2025. No specific filming location is established.",
+        "listingTags": [
+          "Lion",
+          "Male Lion",
+          "King",
+          "Mane",
+          "Face",
+          "Head",
+          "Profile",
+          "Close Up",
+          "Portrait",
+          "Wildlife",
+          "Africa",
+          "Safari",
+          "Savanna"
+        ],
+        "listingEvidence": [
+          "https://pixabay.com/videos/lion-male-lion-king-mane-face-323312/"
+        ]
       },
       "localFile": null,
       "media": {
@@ -1513,15 +1667,23 @@
         "height": null,
         "frameRate": null
       },
-      "claims": [],
+      "claims": [
+        {
+          "type": "species",
+          "value": "lion",
+          "status": "listing_only"
+        }
+      ],
       "rights": {
-        "listingLicenseClaim": null,
-        "licenseEvidence": [],
+        "listingLicenseClaim": "Pixabay Content License",
+        "licenseEvidence": [
+          "https://pixabay.com/videos/lion-male-lion-king-mane-face-323312/"
+        ],
         "reviewStatus": "not_assessed",
         "additionalPermissionsStatus": "not_assessed",
         "reviewedBy": null,
         "reviewedAt": null,
-        "notes": "No rights assessment has been performed."
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
       },
       "inspection": {
         "status": "not_inspected",
@@ -1554,11 +1716,19 @@
         "provider": "Pixabay",
         "assetId": "127476",
         "url": "https://pixabay.com/videos/monkey-baboon-ape-primate-animals-127476/",
-        "contributor": null,
-        "listingStatus": "unverified",
-        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
-        "listingTags": [],
-        "listingEvidence": []
+        "contributor": "Eaktas06",
+        "listingStatus": "verified",
+        "listingDescription": "Pixabay listing title identifies a monkey/baboon/primate. Listing metadata: 1920×1080, 29 fps, published 26 August 2022. Species must be confirmed by inspecting the complete video.",
+        "listingTags": [
+          "Monkey",
+          "Baboon",
+          "Ape",
+          "Primate",
+          "Animals"
+        ],
+        "listingEvidence": [
+          "https://pixabay.com/videos/monkey-baboon-ape-primate-animals-127476/"
+        ]
       },
       "localFile": null,
       "media": {
@@ -1568,15 +1738,23 @@
         "height": null,
         "frameRate": null
       },
-      "claims": [],
+      "claims": [
+        {
+          "type": "species",
+          "value": "baboon (listing claim only)",
+          "status": "listing_only"
+        }
+      ],
       "rights": {
-        "listingLicenseClaim": null,
-        "licenseEvidence": [],
+        "listingLicenseClaim": "Pixabay Content License",
+        "licenseEvidence": [
+          "https://pixabay.com/videos/monkey-baboon-ape-primate-animals-127476/"
+        ],
         "reviewStatus": "not_assessed",
         "additionalPermissionsStatus": "not_assessed",
         "reviewedBy": null,
         "reviewedAt": null,
-        "notes": "No rights assessment has been performed."
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
       },
       "inspection": {
         "status": "not_inspected",
@@ -1664,11 +1842,17 @@
         "provider": "Pexels",
         "assetId": "39120738",
         "url": "https://www.pexels.com/video/zebras-at-watering-hole-in-african-safari-39120738/",
-        "contributor": null,
-        "listingStatus": "unverified",
-        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
-        "listingTags": [],
-        "listingEvidence": []
+        "contributor": "Magda Ehlers",
+        "listingStatus": "verified",
+        "listingDescription": "Pexels listing describes zebras grazing beside a watering hole in an African savannah. Listing metadata: 3840×2160, 26 seconds, 25 fps. No named reserve or filming location is established.",
+        "listingTags": [
+          "Animals Video",
+          "Animal Videos",
+          "Animals Videos"
+        ],
+        "listingEvidence": [
+          "https://www.pexels.com/video/zebras-at-watering-hole-in-african-safari-39120738/"
+        ]
       },
       "localFile": null,
       "media": {
@@ -1678,15 +1862,28 @@
         "height": null,
         "frameRate": null
       },
-      "claims": [],
+      "claims": [
+        {
+          "type": "species",
+          "value": "zebra",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "grazing beside a watering hole",
+          "status": "listing_only"
+        }
+      ],
       "rights": {
-        "listingLicenseClaim": null,
-        "licenseEvidence": [],
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/video/zebras-at-watering-hole-in-african-safari-39120738/"
+        ],
         "reviewStatus": "not_assessed",
         "additionalPermissionsStatus": "not_assessed",
         "reviewedBy": null,
         "reviewedAt": null,
-        "notes": "No rights assessment has been performed."
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
       },
       "inspection": {
         "status": "not_inspected",
