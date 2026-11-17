@@ -40,7 +40,8 @@
     "The Nature Frontiers Facebook destination is separate from the SonicVhibez YouTube destination.",
     "Nature Frontiers commercial/affiliate publishing remains blocked: no combined campaign is currently registered and approved for the Safari affiliate and Selar direct-sales destinations. Keep allowedCampaignIds empty until each destination, compensation type, viewer-facing disclosure, and owner approval are separately verified.",
     "Every Nature Frontiers Facebook candidate requires a human review and an HMAC-signed approval receipt bound to its exact final content fingerprint. Use npm run facebook:approve -- content/facebook-intake-candidates.json <exact-slot-id> on the operator workstation. Configure FACEBOOK_APPROVAL_HMAC_SECRET (at least 32 bytes) and FACEBOOK_APPROVER_ID through the workstation's secure secret manager or protected process environment; never store or paste the secret in the repository, candidate file, terminal transcript, or chat. Missing, stale, altered or invalid approvals block intake and publication.",
-    "Global anti-spam policy prohibits automated likes, comments, replies, follows, DMs, unsolicited outreach, engagement exchanges and artificial engagement. Content publishing does not authorize automated audience interaction."
+    "Global anti-spam policy prohibits automated likes, comments, replies, follows, DMs, unsolicited outreach, engagement exchanges and artificial engagement. Content publishing does not authorize automated audience interaction.",
+    "Operational verification: pull_request events run the Meta credential regression tests but skip live token verification. Live read-only identity/permission verification runs only on workflow_dispatch or a qualifying push to this implementation branch. Keep publishing disabled until that live report passes for the exact configured Page ID."
   ],
   "autonomousMode": true,
   "autonomousSchedulingEnabled": true,
