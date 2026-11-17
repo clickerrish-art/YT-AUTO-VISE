@@ -415,10 +415,20 @@ export async function evaluateFinalFacebookPayload(payload, {
   const current = Date.parse(now);
   const day = new Intl.DateTimeFormat("en-CA", { timeZone: timezone, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(current));
   const prior = history.filter(item => item && item.destination === "nature_frontiers_facebook" && ["PUBLISHED_VERIFIED", "SCHEDULED_VERIFIED", "PUBLISHING", "UNCERTAIN"].includes(item.status));
+  const candidateMediaHashes = new Set(resultBase.mediaFingerprints.map(item => item.sha256).filter(value => /^[a-f0-9]{64}$/.test(value)));
+  const priorReusesMedia = item => {
+    const records = [
+      ...(Array.isArray(item?.mediaFingerprints) ? item.mediaFingerprints : []),
+      ...(Array.isArray(item?.payload?.mediaFingerprints) ? item.payload.mediaFingerprints : []),
+      ...(Array.isArray(item?.policyDecision?.mediaFingerprints) ? item.policyDecision.mediaFingerprints : []),
+      ...(Array.isArray(item?.payload?.media) ? item.payload.media : [])
+    ];
+    return records.some(record => candidateMediaHashes.has(String(record?.sha256 ?? "")));
+  };
   const matches = prior.filter(item => item.slotId === payload.slotId || item.contentFingerprint === resultBase.contentFingerprint ||
-    (text(item.caption) && nearDuplicateRatio(payload.caption, item.caption) >= 0.82));
+    priorReusesMedia(item) || (text(item.caption) && nearDuplicateRatio(payload.caption, item.caption) >= 0.82));
   resultBase.duplicateCheck = { passed: matches.length === 0, matches: matches.map(item => ({ slotId: item.slotId ?? null, status: item.status, remotePostId: item.remotePostId ?? null })) };
-  if (matches.length) add(blockers, "Duplicate, near-duplicate, prior attempt or previously used slot detected");
+  if (matches.length) add(blockers, "Duplicate story, recycled media fingerprint, prior attempt or previously used slot detected");
   const sameDay = prior.filter(item => {
     const timestamp = Date.parse(item.publishedAt ?? item.createdAt ?? item.scheduledAt ?? "");
     if (!Number.isFinite(timestamp)) return true;
