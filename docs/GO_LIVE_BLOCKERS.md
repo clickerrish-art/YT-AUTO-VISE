@@ -1,5 +1,22 @@
 # 17 November 2026 — latest exact source/test checkpoint
 
+## 17 November 2026 — current Meta approval implementation (verification pending)
+
+**Latest implementation SHA:** `fec53f39e46dc7f55807218a1cfcd301c958a2f7`. This is 15 commits ahead of the previously verified source/test SHA `38cb904c463e4e5f5e24d09fc0d88882c93bb45b`; the eight changed paths are the approval signer, policy engine, their tests, publisher comment, config, package command, and focused workflow. `main` remains `69fdf35c90f980c142be3aaffa863304bc7eaa25`; PR #1 remains draft/unmerged.
+
+- Added `npm run facebook:approve -- content/facebook-intake-candidates.json <exact-slot-id>` for an interactive, human-confirmed approval of one exact candidate.
+- The signer requires reviewer ID and a 32-byte minimum HMAC secret from protected environment/secret manager; it does not read or write secret values to the repository.
+- It requires claim-by-claim confirmation, signs claim text/source URL/source excerpt hashes, checks actual media and rights-evidence file hashes and required licence fields, prints the exact content fingerprint, requires a final confirmation, detects changes during review, and atomically writes the approval receipt.
+- The policy engine now verifies those per-claim HMAC attestations when no external semantic verifier is configured, and includes the attestation fields in the payload fingerprint. It still re-fetches each authoritative source and verifies the recorded excerpt before the candidate can pass.
+- The publisher independently rechecks the receipt and all policy, media, rights, source, duplicate, cadence and destination gates. This implementation does not enable publishing.
+- A first full CI attempt on intermediate SHA `1d7d89a39e1349f4d215059fa94bc51e91c254e7` exposed a missing export for the canonical payload fingerprint: **936 passed, 1 failed, 0 skipped**. The missing export was added in `fec53f3`. The semantic-attestation fallback and final signer tests were added after that run. **No CI result yet verifies the final SHA `fec53f3`; status is IMPLEMENTED — UNVERIFIED.**
+- The focused workflow file was added, but because it is new on the draft branch and is not yet on the base branch, it is not independent evidence that the workflow has executed.
+
+This is a usability and verification-path improvement only. There is still no populated approved candidate queue, no valid live Meta token, no independent Page verification, and no authorization to publish. The Nature Frontiers publisher remains fail-closed.
+
+---
+
+
 **Exact source/test SHA:** `38cb904c463e4e5f5e24d09fc0d88882c93bb45b`. **Implementation branch:** `codex/marketing-machine-audit-fixes`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` (unchanged). **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`. **Divergence:** 3,994 ahead / 4 behind / 300 changed files. PR #1 remains OPEN / DRAFT / UNMERGED. No main edit, merge, close, ready-state change, reset, rebase, force-push or history rewrite occurred.
 
 ## Exact-SHA verification on `38cb904c463e4e5f5e24d09fc0d88882c93bb45b`
