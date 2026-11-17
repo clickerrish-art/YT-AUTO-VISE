@@ -75,11 +75,11 @@ The current `scripts/worker-runner.mjs` and its tests now cover HTTP 409 cooldow
 
 ### Cloudflare / persistence / deployment
 
-- The SonicVhibez durable-state Worker inspected in Cloudflare is explicitly a staging Worker bound to the staging D1 database. The staging D1 contains a dashboard-state row and five backup rows, but no runner-control, runner-state or runner-artifact rows were present in the live query.
+- The SonicVhibez durable-state Worker inspected in Cloudflare is explicitly a staging Worker bound to the staging D1 database. Live staging D1 counts: `dashboard_backups=5`, `dashboard_state=1` (revision 3), `runner_artifacts=0`, `runner_artifact_parts=0`, `runner_control=0` and `runner_state=0`.
 - The staging Worker has no configured scheduled triggers.
-- Cloudflare R2 API access returned HTTP 403 because R2 is not enabled/available for this account. Independent object-storage backup and restore therefore remain blocked.
+- Cloudflare R2 bucket-list API access returned HTTP 403. Whether this is disabled R2 or insufficient API-token permission was not independently resolved. Independent object-storage backup and restore therefore remain unverified.
 - No production SonicVhibez Worker or production SonicVhibez D1 database was present in the inspected Cloudflare account. Do not treat staging regression tests as production deployment evidence.
-- The separate Nature Frontiers production D1 schema exists but its inspected application tables contained zero rows. Its publisher Worker configuration showed a D1 binding only; live Meta credentials and provider-side publishing were not verified.
+- The separate Nature Frontiers production D1 schema exists; all seven inspected application tables (`approvals`, `audit_events`, `content_items`, `content_targets`, `media_rights`, `meta_webhook_events`, `publication_attempts`) contained zero rows at inspection time. Its publisher Worker configuration showed only a D1 binding, with no plain variables or secret bindings. Live Meta credentials and provider-side publishing were not verified.
 
 ## Production media work completed on 18 November
 
