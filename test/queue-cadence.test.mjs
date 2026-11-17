@@ -126,7 +126,7 @@ test("owner-defined cadence rejects three publications compressed into a 168-hou
   assert.ok(result.errors.some(error => error.includes("mathematically infeasible")));
 });
 
-test("the requested two-long-form weekly queue remains planning-only and cannot publish under an unapproved cadence", () => {
+test("the requested weekly target remains planning metadata while the owner-approved rolling cycle controls publication", () => {
   assert.equal(longFormQueue.targetPerWeek, 2);
   assert.equal(longFormQueue.cadence.targetPerWeek, 2);
   assert.deepEqual(longFormQueue.cadence.days, ["Tuesday", "Saturday"]);
@@ -136,21 +136,19 @@ test("the requested two-long-form weekly queue remains planning-only and cannot 
   assert.equal(plan.requestedWeeklyCadence.shortsPerWeek, 1);
   assert.equal(plan.requestedWeeklyCadence.totalPublicationsPerWeek, 3);
   assert.equal(plan.requestedWeeklyCadence.status, "CONFLICTS_WITH_72_HOUR_MINIMUM");
-  assert.equal(plan.cadenceDecision.status, "OWNER_APPROVAL_REQUIRED");
-  assert.equal(plan.cadenceDecision.ownerApproved, false);
-  assert.equal(plan.cadenceDecision.proposedMode, "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET");
-  assert.equal(validateCadenceDecision(plan.cadenceDecision, 72).valid, false);
+  assert.equal(plan.cadenceDecision.status, "OWNER_APPROVED");
+  assert.equal(plan.cadenceDecision.ownerApproved, true);
+  assert.equal(plan.cadenceDecision.approvedMode, "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET");
+  assert.equal(validateCadenceDecision(plan.cadenceDecision, 72).valid, true);
 });
 
-test("the rolling no-weekly-target alternative is a proposal, not owner approval", () => {
-  assert.equal(plan.cadenceDecision.status, "OWNER_APPROVAL_REQUIRED");
-  assert.equal(plan.cadenceDecision.ownerApproved, false);
-  assert.equal(plan.cadenceDecision.approvedMode, null);
-  assert.equal(plan.cadenceDecision.approvedAt, null);
-  assert.equal(plan.cadenceDecision.approvalReference, null);
-  assert.equal(plan.cadenceDecision.proposedMode, "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET");
+test("the recorded rolling cadence approval is explicit and does not waive 72-hour spacing", () => {
+  assert.equal(plan.cadenceDecision.status, "OWNER_APPROVED");
+  assert.equal(plan.cadenceDecision.ownerApproved, true);
+  assert.equal(plan.cadenceDecision.approvedMode, "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET");
+  assert.ok(plan.cadenceDecision.approvedAt);
+  assert.ok(plan.cadenceDecision.approvalReference.trim());
   const validation = validateCadenceDecision(plan.cadenceDecision, 72);
-  assert.equal(validation.valid, false);
-  assert.ok(validation.errors.includes("status must be OWNER_APPROVED"));
-  assert.ok(validation.errors.includes("explicit owner approval of a feasible cadence is required before publication"));
+  assert.equal(validation.valid, true);
+  assert.equal(validateCadenceDecision(plan.cadenceDecision, 71.99).valid, false);
 });
