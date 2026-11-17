@@ -6,6 +6,9 @@ on:
     paths:
       - "scripts/verify-youtube-channel.mjs"
       - "test/verify-youtube-channel.test.mjs"
+      - "scripts/production-readiness.mjs"
+      - "content/youtube-history-reconciliation.json"
+      - ".github/workflows/production-readiness.yml"
       - ".github/workflows/verify-youtube-channel-readonly.yml"
   workflow_dispatch:
 
