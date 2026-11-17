@@ -4,7 +4,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION, createFacebookAutonomousApprovalReceipt, NATURE_FRONTIERS_REQUIRED_POST_LINKS } from "../scripts/facebook-policy-engine.mjs";
+import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION, createFacebookAutonomousApprovalReceipt, NATURE_FRONTIERS_KNOWN_DESTINATIONS, APPROVED_SELLAR_URL } from "../scripts/facebook-policy-engine.mjs";
 
 const hash = value => crypto.createHash("sha256").update(value).digest("hex");
 const TEST_APPROVAL_SECRET = "unit-test-facebook-approval-secret-32-bytes-minimum";
@@ -18,16 +18,18 @@ function fixture() {
     destination: "nature_frontiers_facebook",
     destinationPageId: "123456789012345",
     slotId: "nf-2026-10-25-0800",
-    caption: "Observe wildlife from a respectful distance and avoid disturbing animals. Affiliate disclosure: Nature Frontiers may earn a commission if you book through these links. " + NATURE_FRONTIERS_REQUIRED_POST_LINKS.join(" "),
+    caption: "Observe wildlife from a respectful distance and avoid disturbing animals.",
     claims: [{
       text: "Observe wildlife from a respectful distance and avoid disturbing animals.",
       sourceUrls: ["https://sanbi.org/wildlife-viewing"],
       sourceExcerpt: "Observe wildlife from a respectful distance and avoid disturbing animals.",
       sourceSupportsClaim: true, verified: true
     }],
-    links: [...NATURE_FRONTIERS_REQUIRED_POST_LINKS],
-    commercial: true,
-    campaignId: "nature-frontiers-affiliate-monetization",
+    links: [],
+    commercial: false,
+    campaignId: null,
+    disclosureRequired: false,
+    disclosure: null,
     media: [{
       id: "asset-1", path: "asset.bin", sha256: hash(media), syntheticOrAltered: false,
       representationKnown: true,
@@ -46,8 +48,10 @@ function fixture() {
 }
 const options = root => ({
   expectedPageId: "123456789012345", expectedPageName: "Nature Frontiers", evidenceRoot: root,
-  history: [], allowedDomains: [], allowedCampaignIds: ["nature-frontiers-affiliate-monetization"],
-  approvedDestinations: [...NATURE_FRONTIERS_REQUIRED_POST_LINKS], mediaHistoryReconciled: true, now: "2026-10-24T12:00:00.000Z",
+  history: [], allowedDomains: [], allowedCampaignIds: [],
+  approvedDestinations: [...NATURE_FRONTIERS_KNOWN_DESTINATIONS],
+  campaignRegistry: JSON.parse(fs.readFileSync(path.join(process.cwd(), "config/campaigns.json"), "utf8")).campaigns,
+  mediaHistoryReconciled: true, now: "2026-10-24T12:00:00.000Z",
   fetchImpl: async url => ({ ok: true, status: 200, url: String(url), text: async () => "Wildlife viewing guidance: Observe wildlife from a respectful distance and avoid disturbing animals. Further information." }),
   approvalSecret: TEST_APPROVAL_SECRET,
   semanticVerifier: async ({ claimText, sourceUrls, checkedAt }) => ({
@@ -186,7 +190,7 @@ test("Nature Frontiers allows only the exact disclosed affiliate campaign and re
     assert.equal(unapproved.eligible, false);
     assert.ok(unapproved.blockers.some(item => /campaign ID is not allowlisted/i.test(item)));
     f.payload.links = f.payload.links.slice(1);
-    f.payload.caption = f.payload.caption.replace(NATURE_FRONTIERS_REQUIRED_POST_LINKS[0], "");
+    f.payload.caption = f.payload.caption.replace(NATURE_FRONTIERS_KNOWN_DESTINATIONS[0], "");
     const missingLink = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(missingLink.eligible, false);
     assert.ok(missingLink.blockers.some(item => /every Nature Frontiers post/i.test(item)));
@@ -331,7 +335,7 @@ test("a factual claim needs a reachable authoritative source containing the reco
   const f = fixture();
   try {
     const excerpt = "Wetlands support biodiversity and help regulate water flows.";
-    f.payload.caption = "Wetlands support biodiversity and help regulate water flows. Affiliate disclosure: Nature Frontiers may earn a commission if you book through these links. " + NATURE_FRONTIERS_REQUIRED_POST_LINKS.join(" ");
+    f.payload.caption = "Wetlands support biodiversity and help regulate water flows. Affiliate disclosure: Nature Frontiers may earn a commission if you book through these links. " + NATURE_FRONTIERS_KNOWN_DESTINATIONS.join(" ");
     f.payload.claims = [{ text: "Wetlands support biodiversity and help regulate water flows", sourceUrls: ["https://sanbi.org/research"], sourceExcerpt: excerpt, sourceSupportsClaim: true, verified: true }];
     f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
       reviewer: "Unit Test Reviewer",
