@@ -1,6 +1,6 @@
 # 17 November 2026 — latest exact source and verification checkpoint
 
-**Latest implementation branch HEAD:** `4ff54d69085ba0bd6ba8fe73edd3d4c7d11d0b37`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` (unchanged). **PR #1:** OPEN / DRAFT / UNMERGED, head at the latest branch SHA. No merge, main edit, PR readiness change, reset, rebase, force-push or history rewrite occurred.
+**Exact code/test SHA:** `4ff54d69085ba0bd6ba8fe73edd3d4c7d11d0b37`; the later branch commits update the release record only. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` (unchanged). **PR #1:** OPEN / DRAFT / UNMERGED, head at the latest branch SHA. No merge, main edit, PR readiness change, reset, rebase, force-push or history rewrite occurred.
 
 ## Latest exact-HEAD checks
 
@@ -62,7 +62,7 @@ Public/unattended publishing remains disabled. YouTube target remains SonicVhibe
 
 ## 17 November 2026 — current Meta approval implementation (exact-SHA verified)
 
-**Verified code/test SHA:** `4ff54d69085ba0bd6ba8fe73edd3d4c7d11d0b37`. **Latest documentation commit:** `99f74a6903177bd59aeb0dac0d015a88e2307f4b`. `main` remains `69fdf35c90f980c142be3aaffa863304bc7eaa25`; PR #1 remains draft/unmerged.
+**Verified code/test SHA:** `4ff54d69085ba0bd6ba8fe73edd3d4c7d11d0b37`. `main` remains `69fdf35c90f980c142be3aaffa863304bc7eaa25`; PR #1 remains draft/unmerged.
 
 - Added `npm run facebook:approve -- content/facebook-intake-candidates.json <exact-slot-id>` for an interactive, human-confirmed approval of one exact candidate.
 - The signer requires reviewer ID and a 32-byte minimum HMAC secret from a protected environment/secret manager; no secret is written to the repository.
