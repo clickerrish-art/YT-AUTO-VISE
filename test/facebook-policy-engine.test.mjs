@@ -4,7 +4,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION, createFacebookAutonomousApprovalReceipt } from "../scripts/facebook-policy-engine.mjs";
+import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION, createFacebookAutonomousApprovalReceipt, NATURE_FRONTIERS_REQUIRED_POST_LINKS } from "../scripts/facebook-policy-engine.mjs";
 
 const hash = value => crypto.createHash("sha256").update(value).digest("hex");
 const TEST_APPROVAL_SECRET = "unit-test-facebook-approval-secret-32-bytes-minimum";
@@ -18,15 +18,16 @@ function fixture() {
     destination: "nature_frontiers_facebook",
     destinationPageId: "123456789012345",
     slotId: "nf-2026-10-25-0800",
-    caption: "Observe wildlife from a respectful distance and avoid disturbing animals.",
+    caption: "Observe wildlife from a respectful distance and avoid disturbing animals. Affiliate disclosure: Nature Frontiers may earn a commission if you book through these links. " + NATURE_FRONTIERS_REQUIRED_POST_LINKS.join(" "),
     claims: [{
       text: "Observe wildlife from a respectful distance and avoid disturbing animals.",
       sourceUrls: ["https://sanbi.org/wildlife-viewing"],
       sourceExcerpt: "Observe wildlife from a respectful distance and avoid disturbing animals.",
       sourceSupportsClaim: true, verified: true
     }],
-    links: [],
-    commercial: false,
+    links: [...NATURE_FRONTIERS_REQUIRED_POST_LINKS],
+    commercial: true,
+    campaignId: "nature-frontiers-affiliate-monetization",
     media: [{
       id: "asset-1", path: "asset.bin", sha256: hash(media), syntheticOrAltered: false,
       representationKnown: true,
@@ -45,8 +46,8 @@ function fixture() {
 }
 const options = root => ({
   expectedPageId: "123456789012345", expectedPageName: "Nature Frontiers", evidenceRoot: root,
-  history: [], allowedDomains: [], allowedCampaignIds: ["selar-wildlife-vault"],
-  approvedDestinations: [], now: "2026-10-24T12:00:00.000Z",
+  history: [], allowedDomains: [], allowedCampaignIds: ["nature-frontiers-affiliate-monetization"],
+  approvedDestinations: [...NATURE_FRONTIERS_REQUIRED_POST_LINKS], now: "2026-10-24T12:00:00.000Z",
   fetchImpl: async url => ({ ok: true, status: 200, url: String(url), text: async () => "Wildlife viewing guidance: Observe wildlife from a respectful distance and avoid disturbing animals. Further information." }),
   approvalSecret: TEST_APPROVAL_SECRET,
   semanticVerifier: async ({ claimText, sourceUrls, checkedAt }) => ({
@@ -162,38 +163,25 @@ test("engagement bait, graphic wildlife and sensitive location content block", a
   } finally { f.cleanup(); }
 });
 
-test("Nature Frontiers rejects product and affiliate promotions even when disclosed or allowlisted", async () => {
+test("Nature Frontiers allows only the exact disclosed affiliate campaign and required link set", async () => {
   const f = fixture();
   try {
-    const productLinks = ["https://selar.com/0u19v8u99l", "https://selar.com/539497q11t", "https://selar.com/91j893378q"];
-    for (const link of productLinks) {
-      f.payload.commercial = true;
-      f.payload.campaignId = "selar-wildlife-vault";
-      f.payload.links = [link];
-      f.payload.caption = "Affiliate link: I may earn a commission if you buy. Review this product: " + link;
-      const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
-      assert.equal(result.eligible, false, link);
-      assert.ok(result.blockers.some(item => /Nature Frontiers Facebook and Instagram are education-only/i.test(item)));
-      assert.ok(result.destinationChecks.some(check => check.url === link && check.passed === false));
-    }
-    f.payload.commercial = false;
-    f.payload.campaignId = null;
-    f.payload.links = [];
-    f.payload.caption = "Affiliate link: I may earn a commission if you buy.";
-    const affiliateCopy = await evaluateFinalFacebookPayload(f.payload, options(f.root));
-    assert.equal(affiliateCopy.eligible, false);
-    assert.ok(affiliateCopy.blockers.some(item => /product and affiliate promotions are prohibited/i.test(item)));
-    f.payload.caption = "The Complete YouTube Wildlife Creator's Vault is available now.";
-    const namedProduct = await evaluateFinalFacebookPayload(f.payload, options(f.root));
-    assert.equal(namedProduct.eligible, false);
-    assert.ok(namedProduct.blockers.some(item => /product and affiliate promotions are prohibited/i.test(item)));
-    f.payload.caption = "Buy now and download your copy today.";
-    const promotionalCallToAction = await evaluateFinalFacebookPayload(f.payload, options(f.root));
-    assert.equal(promotionalCallToAction.eligible, false);
-    assert.ok(promotionalCallToAction.blockers.some(item => /product and affiliate promotions are prohibited/i.test(item)));
+    const allowed = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(allowed.eligible, true, JSON.stringify(allowed.blockers));
+    f.payload.caption = f.payload.caption.replace("Affiliate disclosure:", "Disclosure omitted:");
+    const undisclosed = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(undisclosed.eligible, false);
+    assert.ok(undisclosed.blockers.some(item => /visible affiliate disclosure/i.test(item)));
+    f.payload.campaignId = "unapproved-campaign";
+    const unapproved = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(unapproved.eligible, false);
+    assert.ok(unapproved.blockers.some(item => /campaign ID is not allowlisted/i.test(item)));
+    f.payload.links = f.payload.links.slice(1);
+    const missingLink = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(missingLink.eligible, false);
+    assert.ok(missingLink.blockers.some(item => /every Nature Frontiers post/i.test(item)));
   } finally { f.cleanup(); }
 });
-
 
 test("Nature Frontiers blocks Selar links and affiliate copy placed in the public first comment", async () => {
   const f = fixture();
@@ -205,14 +193,14 @@ test("Nature Frontiers blocks Selar links and affiliate copy placed in the publi
     f.payload.firstCommentText = "Product details: https://selar.com/0u19v8u99l";
     const linkedComment = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(linkedComment.eligible, false);
-    assert.ok(linkedComment.blockers.some(item => /product and affiliate promotions are prohibited/i.test(item)));
+    assert.ok(linkedComment.blockers.some(item => /approved monetization campaign and visible affiliate disclosure/i.test(item)));
     assert.ok(linkedComment.destinationChecks.some(check => check.url === "https://selar.com/0u19v8u99l" && check.passed === false));
 
     const linkedFingerprint = linkedComment.contentFingerprint;
     f.payload.firstCommentText = "Affiliate link: I may earn a commission if you purchase.";
     const affiliateComment = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(affiliateComment.eligible, false);
-    assert.ok(affiliateComment.blockers.some(item => /product and affiliate promotions are prohibited/i.test(item)));
+    assert.ok(affiliateComment.blockers.some(item => /approved monetization campaign and visible affiliate disclosure/i.test(item)));
     assert.notEqual(affiliateComment.contentFingerprint, linkedFingerprint,
       "the public first comment must be included in the approval fingerprint");
   } finally { f.cleanup(); }
