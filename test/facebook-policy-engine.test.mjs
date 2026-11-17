@@ -647,7 +647,7 @@ test("unreconciled Metricool UNCERTAIN posts still count against daily and forma
     const history = [
       { destination: "nature_frontiers_facebook", status: "UNCERTAIN", slotId: "metricool-reel-1", publishedAt: "2026-10-24T06:00:00Z", mediaType: "reel" },
       { destination: "nature_frontiers_facebook", status: "UNCERTAIN", slotId: "metricool-reel-2", publishedAt: "2026-10-24T10:00:00Z", mediaType: "reel" },
-      { destination: "nature_frontiers_facebook", status: "UNCERTAIN", slotId: "metricool-feed-1", publishedAt: "2026-10-24T14:00:00Z", mediaType: "feed_post" }
+      { destination: "nature_frontiers_facebook", status: "UNCERTAIN", slotId: "metricool-feed-1", publishedAt: "2026-10-24T11:00:00Z", mediaType: "feed_post" }
     ];
     f.payload.mediaType = "reel";
     const result = await evaluateFinalFacebookPayload(f.payload, {
