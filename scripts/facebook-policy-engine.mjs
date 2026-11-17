@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 
-export const FACEBOOK_POLICY_RULE_VERSION = "nf-facebook-autonomous-policy-2026-11-v5";
+export const FACEBOOK_POLICY_RULE_VERSION = "nf-facebook-autonomous-policy-2026-11-v6";
 export const NATURE_FRONTIERS_KNOWN_DESTINATIONS = Object.freeze([
   "https://www.safari.com/sabi-sand?a=GM26",
   "https://www.safari.com/kruger-national-park?a=GM26",
