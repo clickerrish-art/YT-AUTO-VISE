@@ -55,11 +55,10 @@
       "url": "https://selar.com/m/kehinde-ajiboye3108854",
       "kind": "selar_store",
       "required": false,
-      "campaignId": "selar-wildlife-vault",
-      "status": "ACTIVE_FOR_DRAFTS_ONLY",
+      "campaignId": null,
+      "status": "NOT_APPROVED_DESTINATION",
       "commercial": true,
-      "disclosureRequired": true,
-      "disclosureApprovalStatus": "PENDING_OWNER_APPROVAL"
+      "disclosureRequired": true
     },
     {
       "url": "https://selar.com/0u19v8u99l",
