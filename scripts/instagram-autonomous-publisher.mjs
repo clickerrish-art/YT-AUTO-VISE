@@ -228,7 +228,8 @@ export async function runAutonomousInstagramPublisher({
       const decision=await policyEvaluator(payload.sourcePayload,{
         expectedPageId:config.facebookPageId,expectedPageName:config.facebookPageName??"Nature Frontiers SA",
         allowedCampaignIds:config.allowedCampaignIds??[],approvedDestinations:config.approvedDestinations??[],
-        allowedDomains:config.allowedDomains??[],history:[...history,...ledger],evidenceRoot:rootDir,now:nowIso,timezone:config.timezone,maxPostsPerLocalDay:999,
+        allowedDomains:config.allowedDomains??[],history:[...history,...ledger],evidenceRoot:rootDir,now:nowIso,timezone:config.timezone,
+        mediaHistoryReconciled:config.mediaHistoryReconciled===true,maxPostsPerLocalDay:999,
         maxReelsPerLocalDay:999,maxFeedPostsPerLocalDay:999,minimumIntervalMinutes:0,fetchImpl
       });
       if(decision?.eligible!==true) { history.push({slotId:payload.slotId,status:"BLOCKED_SOURCE_POLICY",checkedAt:nowIso,policyDecision:decision}); skipped++; continue; }
