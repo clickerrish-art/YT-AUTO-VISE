@@ -228,3 +228,28 @@ test("backup restore refuses a stale expected revision without mutating state", 
   assert.equal(snapshot.batchCalls, 0);
   assert.equal(snapshot.state.revision, 4);
 });
+
+
+test("backup restore returns not-found for an unknown backup without mutating state", async () => {
+  const currentJson = JSON.stringify(validState());
+  const db = createRestoreDatabase({
+    current: { revision: 2, state_json: currentJson, updated_at: "2026-11-17T00:00:00.000Z" },
+    backup: { backupId: "some-other-backup", state_json: currentJson, sha256: sha256Text(currentJson) }
+  });
+  const response = await handleRequest(new Request("https://state.example/api/backups/restore", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-operator-token": "operator-token-".padEnd(40, "x")
+    },
+    body: JSON.stringify({ backupId: "missing-backup", expectedRevision: 2 })
+  }), {
+    DASHBOARD_OPERATOR_TOKEN: "operator-token-".padEnd(40, "x"),
+    DASHBOARD_OPERATOR_ID: "test-owner",
+    STATE_DB: db
+  });
+  assert.equal(response.status, 404);
+  assert.match((await response.json()).error, /Backup not found/);
+  assert.equal(db.snapshot().batchCalls, 0);
+  assert.equal(db.snapshot().state.revision, 2);
+});
