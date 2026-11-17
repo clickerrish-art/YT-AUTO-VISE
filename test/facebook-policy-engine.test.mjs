@@ -579,3 +579,41 @@ test("signed human source-review attestations replace an unavailable semantic ve
     assert.match(tampered.blockers.join(" "), /trusted semantic verification/i);
   } finally { f.cleanup(); }
 });
+
+
+test("synthetic or AI-generated media cannot bypass disclosure by declaring disclosure unnecessary", async () => {
+  const f = fixture();
+  try {
+    f.payload.media[0].syntheticOrAltered = true;
+    f.payload.media[0].disclosureRequired = false;
+    f.payload.media[0].disclosureApplied = false;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer",
+      reason: "Test fixture binds the exact synthetic asset and disclosure metadata.",
+      secret: TEST_APPROVAL_SECRET,
+      now: "2026-10-24T12:00:00.000Z"
+    });
+    const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /synthetic\/altered but does not require an AI disclosure/i.test(item)));
+    assert.ok(result.blockers.some(item => /requires a visible synthetic\/altered-media disclosure/i.test(item)));
+  } finally { f.cleanup(); }
+});
+
+test("synthetic or AI-generated media is blocked until the disclosure is actually applied", async () => {
+  const f = fixture();
+  try {
+    f.payload.media[0].syntheticOrAltered = true;
+    f.payload.media[0].disclosureRequired = true;
+    f.payload.media[0].disclosureApplied = false;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer",
+      reason: "Test fixture binds the exact synthetic asset and required disclosure state.",
+      secret: TEST_APPROVAL_SECRET,
+      now: "2026-10-24T12:00:00.000Z"
+    });
+    const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /requires a visible synthetic\/altered-media disclosure/i.test(item)));
+  } finally { f.cleanup(); }
+});
