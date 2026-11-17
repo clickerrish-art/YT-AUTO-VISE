@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "status": "BLOCKED_OAUTH_INVALID_GRANT",
   "mode": "READ_ONLY_IDENTITY_AND_INVENTORY_FAILED",
-  "workflowRunId": 43697039950,
+  "workflowRunId": 44150665070,
   "workflowRunAttempt": 1,
-  "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43697039950",
-  "sourceCommit": "9b4f01c92d56da55a862c2b0cdd48f6c6a061ad5",
-  "checkedAt": "2026-11-15T08:59:47.103Z",
+  "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44150665070",
+  "sourceCommit": "4de7154a2b2d6d62bf050202de6b4b1103277237",
+  "checkedAt": "2026-11-17T18:42:16.737Z",
   "deterministicIdentityAndPaginationTests": {
     "status": "PASS",
     "passed": 6,
@@ -15,7 +15,7 @@
   "oauth": {
     "status": "BLOCKED",
     "errorCode": "invalid_grant",
-    "message": "Google rejected the configured refresh token during the latest read-only verification. Reauthorize the existing OAuth client and update the GitHub Actions refresh-token secret. No token value was logged."
+    "message": "The 17 November read-only verification was rejected with invalid_grant. No current channel identity or uploads inventory was fetched. Reauthorize the existing OAuth client and update the GitHub Actions refresh-token secret. No token value was logged."
   },
   "channel": {
     "id": "UCSlkuPfHH78oGC1o418HV4w",
@@ -28,16 +28,11 @@
   "uploadsPlaylistPages": null,
   "totalUploads": null,
   "visibilityCounts": null,
-  "inventoryArtifact": {
-    "id": 13689103271,
-    "name": "sonicvhibez-youtube-history-inventory",
-    "sha256": "70269df128ca12cefbf1f9e596c507230fb55c4d46142d474e44d959360b9656",
-    "expiresAt": "2026-11-16T15:57:20Z"
-  },
+  "inventoryArtifact": null,
   "videos": [],
   "publicationHistoryReconciliation": {
     "status": "STALE_PREVIOUS_VERIFICATION",
-    "reason": "The 9 November owner-reviewed inventory remains historical evidence only. The 15 November OAuth refresh was rejected, so no current remote history was retrieved and no upload-attempt reconciliation or publication clearance is claimed."
+    "reason": "The 9 November owner-reviewed inventory remains historical evidence only. The latest 17 November OAuth refresh was rejected with invalid_grant, so no current remote history was retrieved and no upload-attempt reconciliation or publication clearance is claimed."
   },
   "secretValuesLogged": false,
   "publishingEnabled": false,
@@ -66,6 +61,13 @@
       "status": "BLOCKED",
       "errorCode": "invalid_grant",
       "sourceCommit": "9b4f01c92d56da55a862c2b0cdd48f6c6a061ad5"
+    },
+    {
+      "workflowRunId": 44150665070,
+      "attempt": 1,
+      "status": "BLOCKED",
+      "errorCode": "invalid_grant",
+      "sourceCommit": "4de7154a2b2d6d62bf050202de6b4b1103277237"
     }
   ],
   "previousSuccessfulVerification": {
@@ -140,5 +142,12 @@
       }
     ],
     "interpretation": "Supplemental connected-vidIQ inventory cross-check only. This does not replace the production YouTube OAuth workflow, independently verify the Google token, or reconcile pending/uncertain upload attempts. The production status remains BLOCKED_OAUTH_INVALID_GRANT and publication remains disabled."
+  },
+  "previousInventoryArtifact": {
+    "id": 13689103271,
+    "name": "sonicvhibez-youtube-history-inventory",
+    "sha256": "70269df128ca12cefbf1f9e596c507230fb55c4d46142d474e44d959360b9656",
+    "expiresAt": "2026-11-16T15:57:20Z",
+    "status": "EXPIRED_HISTORICAL_ARTIFACT"
   }
 }
