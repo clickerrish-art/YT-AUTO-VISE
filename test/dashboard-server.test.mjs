@@ -287,7 +287,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.ok(Array.isArray(readiness.blockers));
   assert.ok(readiness.blockers.some(item => /long-form(?: render manifest|-render-manifest)/i.test(item)));
   assert.ok(readiness.blockers.some(item => /SONICVHIBEZ_CHANNEL_ID|channel ID/i.test(item)));
-  assert.ok(readiness.blockers.some(item => /CADENCE DECISION REQUIRED/.test(item)), "production readiness must retain the cadence blocker until explicit owner approval");
+  assert.equal(readiness.blockers.some(item => /CADENCE DECISION REQUIRED/.test(item)), false, "production readiness must recognize the recorded owner-approved rolling cadence");
   assert.ok(readiness.blockers.some(item => /complete SonicVhibez public, private and unlisted history/i.test(item)), "unreconciled live history must remain a blocker");
   const operationalReadinessResponse = await fetchDashboard(base + "/operational-readyz");
   const operationalReadiness = await operationalReadinessResponse.json();
