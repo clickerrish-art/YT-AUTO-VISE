@@ -70,7 +70,15 @@ function fingerprint(payload) {
       sourceExcerpt: String(claim?.sourceExcerpt ?? ""),
       sourceSupportsClaim: claim?.sourceSupportsClaim === true,
       verified: claim?.verified === true,
-      quoteVerified: claim?.quoteVerified === true
+      quoteVerified: claim?.quoteVerified === true,
+      semanticVerification: claim?.semanticVerification ? {
+        claimHash: String(claim.semanticVerification.claimHash ?? ""),
+        sourceUrlsHash: String(claim.semanticVerification.sourceUrlsHash ?? ""),
+        sourceExcerptHash: String(claim.semanticVerification.sourceExcerptHash ?? ""),
+        reviewerId: String(claim.semanticVerification.reviewerId ?? ""),
+        checkedAt: String(claim.semanticVerification.checkedAt ?? ""),
+        signature: String(claim.semanticVerification.signature ?? "")
+      } : null
     })).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))),
     media: Array.isArray(payload?.media) ? payload.media.map(m => ({
       id: m?.id ?? "", path: m?.path ?? "", sha256: m?.sha256 ?? "",
@@ -243,6 +251,34 @@ export async function evaluateFinalFacebookPayload(payload, {
       }
     }
     let semanticResult = { verified: false, reason: "NO_TRUSTED_SEMANTIC_VERIFIER_CONFIGURED" };
+    if (typeof semanticVerifier !== "function" && checks.some(check => check.passed && check.excerptFound === true)) {
+      const attestation = claim.semanticVerification;
+      const claimHash = sha256(String(claim.text));
+      const sourceUrlsHash = sha256(JSON.stringify(claim.sourceUrls));
+      const sourceExcerptHash = sha256(String(claim.sourceExcerpt ?? ""));
+      const checkedAt = Date.parse(attestation?.checkedAt);
+      const checkedNow = Date.parse(now);
+      const reviewerId = text(attestation?.reviewerId) ? attestation.reviewerId : "";
+      const signed = claimHash + "\\n" + sourceUrlsHash + "\\n" + sourceExcerptHash + "\\n" + reviewerId + "\\n" + String(attestation?.checkedAt ?? "");
+      let signatureValid = false;
+      if (typeof approvalSecret === "string" && Buffer.byteLength(approvalSecret, "utf8") >= 32 &&
+          typeof attestation?.signature === "string" && /^[a-f0-9]{64}$/.test(attestation.signature)) {
+        const expected = crypto.createHmac("sha256", approvalSecret).update(signed).digest();
+        const supplied = Buffer.from(attestation.signature, "hex");
+        signatureValid = supplied.length === expected.length && crypto.timingSafeEqual(expected, supplied);
+      }
+      const verified = typeof approvalSecret === "string" && Buffer.byteLength(approvalSecret, "utf8") >= 32 &&
+        attestation?.claimHash === claimHash && attestation?.sourceUrlsHash === sourceUrlsHash &&
+        attestation?.sourceExcerptHash === sourceExcerptHash && reviewerId.length >= 2 && reviewerId.length <= 200 &&
+        Number.isFinite(checkedAt) && Number.isFinite(checkedNow) &&
+        checkedAt <= checkedNow + 5 * 60_000 && checkedNow - checkedAt <= 30 * 24 * 60 * 60_000 && signatureValid;
+      semanticResult = {
+        verified,
+        verifierId: verified ? reviewerId : null,
+        checkedAt: verified ? attestation.checkedAt : null,
+        reason: verified ? "SIGNED_HUMAN_FACT_CHECK_BOUND_TO_CLAIM_SOURCE_SET_AND_EXCERPT" : "SIGNED_HUMAN_FACT_CHECK_MISSING_OR_INVALID"
+      };
+    }
     if (typeof semanticVerifier === "function" && checks.some(check => check.passed && check.excerptFound === true)) {
       try {
         const verification = await semanticVerifier({
