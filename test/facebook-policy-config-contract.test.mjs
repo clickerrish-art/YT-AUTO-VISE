@@ -29,7 +29,7 @@ test("Nature Frontiers remains a Facebook destination, not a YouTube target", ()
 
 
 test("every Nature Frontiers post destination is exact-allowlisted for the disclosed campaign", () => {
-  assert.ok(config.allowedCampaignIds.includes("nature-frontiers-affiliate-monetization"));
+  assert.deepEqual(config.allowedCampaignIds, [], "no Nature Frontiers commercial campaign is authorized for autonomous publishing yet");
   for (const url of NATURE_FRONTIERS_REQUIRED_POST_LINKS) {
     assert.ok(config.approvedDestinations.includes(url), url);
   }
