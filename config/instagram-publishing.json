@@ -17,7 +17,46 @@
     "Resumable uploads require a verified Facebook Login for Business integration. Do not enable this flag from configuration alone.",
     "Instagram Graph API publishing is immediate, not future-scheduled. Dispatch only inside an approved publication window.",
     "Publishing is disabled, dry-run is enabled and the emergency stop is active. Do not change these defaults until credentials, account linkage, permissions, rights, exact media and human approval are verified.",
-    "An uncertain media_publish outcome must be reconciled by persisted container/media IDs. Never blindly repeat a publish mutation."
+    "An uncertain media_publish outcome must be reconciled by persisted container/media IDs. Never blindly repeat a publish mutation.",
+    "Global anti-spam policy prohibits automated likes, comments, replies, follows, DMs, unsolicited outreach, engagement exchanges and artificial engagement. Content publishing does not authorize automated audience interaction."
   ],
-  "allowedImageDomains": []
+  "allowedImageDomains": [],
+  "antiSpamPolicy": {
+    "enabled": true,
+    "scope": "all_managed_social_destinations",
+    "mode": "PROHIBIT_AUTOMATED_ENGAGEMENT",
+    "prohibitedActions": [
+      "automated_likes",
+      "automated_comments",
+      "automated_replies",
+      "automated_follows",
+      "automated_unfollows",
+      "automated_direct_messages",
+      "bulk_or_unsolicited_outreach",
+      "engagement_pods_or_exchange",
+      "engagement_bait_or_coordinated_fake_engagement",
+      "automated_view_or_click_manipulation",
+      "mass_reposting_or_duplicate_distribution",
+      "keyword_or_hashtag_stuffing",
+      "misleading_metadata"
+    ],
+    "allowedAutomation": [
+      "content_research_and_drafting",
+      "human_review_workflows",
+      "approved_content_scheduling",
+      "publishing_only_after_all_release_gates_pass",
+      "read_only_analytics_and_reporting"
+    ],
+    "enforcement": {
+      "engagementApiMutationsAllowed": false,
+      "automatedAudienceInteractionAllowed": false,
+      "unsolicitedOutboundMessagesAllowed": false,
+      "duplicateContentMustBeHeld": true,
+      "platformRateLimitsMustBeRespected": true,
+      "platformTermsAndPoliciesMustBeRespected": true,
+      "failClosedOnPolicyUncertainty": true,
+      "noRetryOfUncertainRemoteMutations": true
+    },
+    "note": "No bot-driven likes, comments, replies, follows, DMs, engagement exchanges, artificial views/clicks, or unsolicited outreach. Human-initiated genuine interaction is outside automation and must comply with platform rules."
+  }
 }
