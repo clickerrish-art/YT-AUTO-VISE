@@ -9,6 +9,13 @@ on:
     paths:
       - "config/facebook-publishing.json"
       - "scripts/meta-page-adapter.mjs"
+      - "scripts/facebook-autonomous-publisher.mjs"
+      - "scripts/meta-rate-limit.mjs"
+      - "test/meta-page-adapter.test.mjs"
+      - "test/meta-rate-limit.test.mjs"
+      - "test/facebook-policy-engine.test.mjs"
+      - "test/facebook-autonomous-publisher.test.mjs"
+      - "test/facebook-autonomous-publisher-workflow.test.mjs"
       - ".github/workflows/facebook-meta-connection-check.yml"
 
 permissions:
@@ -26,6 +33,11 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: "24"
+      - name: Run Meta token, rate-limit, publisher and policy regression tests
+        run: |
+          node --check scripts/meta-rate-limit.mjs
+          node --check scripts/facebook-autonomous-publisher.mjs
+          node --test test/meta-page-adapter.test.mjs test/meta-page-reel-adapter.test.mjs test/meta-rate-limit.test.mjs test/facebook-policy-engine.test.mjs test/facebook-autonomous-publisher.test.mjs test/facebook-autonomous-publisher-workflow.test.mjs
       - name: Verify configured secrets and owner-approved Page identity (read-only)
         run: |
           node --input-type=module <<'NODE'
