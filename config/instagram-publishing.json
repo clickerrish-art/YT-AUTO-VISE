@@ -11,6 +11,7 @@
   "facebookLoginForBusinessEnabled": false,
   "requireSignedHumanApproval": true,
   "requireRemoteReadback": true,
+  "mediaHistoryReconciled": false,
   "notes": [
     "Instagram professional account ID is intentionally unset until the owner verifies the exact Nature Frontiers Business or Creator account.",
     "The linked Instagram account must be read back from the configured Facebook Page; an unlinked or mismatched account blocks publication.",
