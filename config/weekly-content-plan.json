@@ -37,7 +37,8 @@
     "Human-review factual accuracy, captions, thumbnail, disclosures and YouTube altered/synthetic-media settings",
     "Render and pass format-specific media preflight",
     "Validate metadata and channel ID against the connected SonicVhibez account",
-    "Upload privately first and verify the result in YouTube Studio"
+    "Upload privately first and verify the result in YouTube Studio",
+    "Enforce the global anti-spam policy: no automated likes/comments/replies/follows/DMs, engagement exchanges, artificial views/clicks, unsolicited outreach, or duplicate/mass reposting; fail closed on uncertainty."
   ],
   "notes": [
     "Africa/Johannesburg is UTC+2 without daylight-saving changes; 15:00 UTC corresponds to 17:00 SAST.",
@@ -50,7 +51,9 @@
     "Tuesday/Saturday workflow cron slots are draft-preparation triggers only and are not the authoritative publication schedule.",
     "Before upload, reconcile public/private/unlisted channel history, scheduled items and every pending or uncertain upload attempt; missing or incomplete history blocks publication.",
     "Public and unattended publishing remain disabled; private upload requires a separate explicit authorization and all release gates.",
-    "Authoritative publication policy is publicationCycle; schedule entries are draft-preparation triggers only."
+    "Authoritative publication policy is publicationCycle; schedule entries are draft-preparation triggers only.",
+    "Owner-approved cadence recorded 2026-11-17: rolling long_form → long_form → short → repeat, without a weekly target; minimum 72 elapsed hours and no same Johannesburg calendar day.",
+    "Global anti-spam policy prohibits automated audience engagement and manipulation; automation is limited to approved content operations, scheduling, publishing after release gates, and read-only analytics."
   ],
   "requestedWeeklyCadence": {
     "longFormPerWeek": 2,
@@ -59,14 +62,12 @@
     "status": "CONFLICTS_WITH_72_HOUR_MINIMUM"
   },
   "cadenceDecision": {
-    "status": "OWNER_APPROVAL_REQUIRED",
-    "ownerApproved": false,
-    "approvedMode": null,
-    "approvedAt": null,
-    "approvalReference": null,
-    "explanation": "The proposed rolling long_form → long_form → short cycle with a 72-hour minimum requires 216 hours per complete cycle. The user previously requested two long-form videos plus one Short per week, which cannot fit in a 168-hour week while preserving the 72-hour minimum and no-same-Johannesburg-day rule. The rolling no-weekly-target alternative is a proposal only; publication must remain blocked until the owner explicitly approves a feasible cadence. Tuesday/Saturday remain draft-preparation triggers only.",
-    "proposedMode": "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
-    "provenanceNote": "The former OWNER_APPROVED timestamp and reference were assistant-authored, not user-authored approval. They are withdrawn. No schedule may be dispatched until the owner explicitly approves a feasible cadence in a new user message."
+    "status": "OWNER_APPROVED",
+    "ownerApproved": true,
+    "approvedMode": "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
+    "approvedAt": "2026-11-17T13:49:00+02:00",
+    "approvalReference": "Owner approval in ChatGPT conversation, 2026-11-17: long-form → long-form → Short → repeat; no weekly target.",
+    "explanation": "Owner explicitly approved the repeating long_form → long_form → short cycle without a weekly publication target. Each consecutive actual publication must be at least 72 elapsed hours apart and must not share an Africa/Johannesburg calendar day. Three cycle gaps require at least 216 hours."
   },
   "spacingPolicy": {
     "minimumHoursBetweenPosts": 72,
@@ -89,5 +90,43 @@
     "publicationRequiresVerifiedHistory": true,
     "publicationEnabled": false,
     "description": "Rolling three-publication sequence: long-form, long-form, Short. Each next actual publication waits at least 72 elapsed hours from the prior actual publication; the earliest full cycle is 216 hours (9 days), not a weekly target."
+  },
+  "antiSpamPolicy": {
+    "enabled": true,
+    "scope": "all_managed_social_destinations",
+    "mode": "PROHIBIT_AUTOMATED_ENGAGEMENT",
+    "prohibitedActions": [
+      "automated_likes",
+      "automated_comments",
+      "automated_replies",
+      "automated_follows",
+      "automated_unfollows",
+      "automated_direct_messages",
+      "bulk_or_unsolicited_outreach",
+      "engagement_pods_or_exchange",
+      "engagement_bait_or_coordinated_fake_engagement",
+      "automated_view_or_click_manipulation",
+      "mass_reposting_or_duplicate_distribution",
+      "keyword_or_hashtag_stuffing",
+      "misleading_metadata"
+    ],
+    "allowedAutomation": [
+      "content_research_and_drafting",
+      "human_review_workflows",
+      "approved_content_scheduling",
+      "publishing_only_after_all_release_gates_pass",
+      "read_only_analytics_and_reporting"
+    ],
+    "enforcement": {
+      "engagementApiMutationsAllowed": false,
+      "automatedAudienceInteractionAllowed": false,
+      "unsolicitedOutboundMessagesAllowed": false,
+      "duplicateContentMustBeHeld": true,
+      "platformRateLimitsMustBeRespected": true,
+      "platformTermsAndPoliciesMustBeRespected": true,
+      "failClosedOnPolicyUncertainty": true,
+      "noRetryOfUncertainRemoteMutations": true
+    },
+    "note": "No bot-driven likes, comments, replies, follows, DMs, engagement exchanges, artificial views/clicks, or unsolicited outreach. Human-initiated genuine interaction is outside automation and must comply with platform rules."
   }
 }
