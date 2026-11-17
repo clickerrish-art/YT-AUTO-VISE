@@ -116,7 +116,7 @@ jobs:
           QUEUE_PATH: ${{ runner.temp }}/queue-proposal/queue.json
         run: node scripts/replenish-queue.mjs
       - name: Retain queue proposal for operator review
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: sonicvhibez-queue-proposal-${{ github.run_id }}
           path: ${{ runner.temp }}/queue-proposal/

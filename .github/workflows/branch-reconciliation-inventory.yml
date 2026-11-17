@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out exact candidate with full history
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
@@ -26,7 +26,7 @@ jobs:
           mkdir -p artifacts
           npm run report:branch -- --base origin/main --head HEAD --json artifacts/branch-reconciliation-report.json --markdown artifacts/branch-reconciliation-report.md
       - name: Retain full reconciliation inventory
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: branch-reconciliation-${{ github.sha }}
           path: |

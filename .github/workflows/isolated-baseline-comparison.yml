@@ -19,21 +19,21 @@ jobs:
     timeout-minutes: 45
     steps:
       - name: Check out live main branch HEAD
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: main
           path: baseline-main
           fetch-depth: 1
 
       - name: Check out exact candidate SHA
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           path: baseline-candidate
           fetch-depth: 1
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "24"
 
@@ -140,7 +140,7 @@ jobs:
 
       - name: Upload baseline evidence even when a test fails
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: baseline-comparison
           path: baseline-comparison.txt

@@ -5,16 +5,24 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const workflow = fs.readFileSync(path.join(root, ".github/workflows/production-readiness.yml"), "utf8");
+const expected = new Map([
+  [".github/workflows/production-readiness.yml", { checkout: 7, setupNode: 6, uploadArtifact: 6 }],
+  [".github/workflows/queue-readiness.yml", { checkout: 7, setupNode: 7, uploadArtifact: 6 }],
+  [".github/workflows/branch-reconciliation-inventory.yml", { checkout: 7, uploadArtifact: 6 }],
+  [".github/workflows/isolated-baseline-comparison.yml", { checkout: 7, setupNode: 6, uploadArtifact: 6 }]
+]);
 
-test("production readiness workflow uses Node 24-compatible maintained actions", () => {
-  assert.match(workflow, /uses:\s*actions\/checkout@v7\b/);
-  assert.match(workflow, /uses:\s*actions\/setup-node@v6\b/);
-  assert.match(workflow, /uses:\s*actions\/upload-artifact@v6\b/);
-  assert.match(workflow, /node-version:\s*24\b/);
-  assert.doesNotMatch(
-    workflow,
-    /uses:\s*actions\/(?:checkout|setup-node|upload-artifact)@v(?:1|2|3|4|5)\b/,
-    "the production-readiness job must not regress to a Node 20 action runtime"
-  );
+test("critical CI workflows use Node 24-compatible maintained action runtimes", () => {
+  for (const [relativePath, versions] of expected) {
+    const workflow = fs.readFileSync(path.join(root, relativePath), "utf8");
+    if (versions.checkout) assert.match(workflow, new RegExp("uses:\\s*actions/checkout@v" + versions.checkout + "\\b"), relativePath);
+    if (versions.setupNode) assert.match(workflow, new RegExp("uses:\\s*actions/setup-node@v" + versions.setupNode + "\\b"), relativePath);
+    if (versions.uploadArtifact) assert.match(workflow, new RegExp("uses:\\s*actions/upload-artifact@v" + versions.uploadArtifact + "\\b"), relativePath);
+    assert.match(workflow, /node-version:\s*["']?24\b/);
+    assert.doesNotMatch(
+      workflow,
+      /uses:\s*actions\/(?:checkout|setup-node|upload-artifact)@v(?:1|2|3|4|5)\b/,
+      relativePath + " must not regress to a Node 20 action runtime"
+    );
+  }
 });
