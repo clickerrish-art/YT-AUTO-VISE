@@ -5011,6 +5011,240 @@
         "published": false,
         "platformPostIds": []
       }
+    },
+    {
+      "id": "nf-pex-elephant-37394148",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37394148",
+        "url": "https://www.pexels.com/video/majestic-african-elephant-in-natural-habitat-37394148/",
+        "contributor": "Magda Ehlers",
+        "listingStatus": "verified",
+        "listingDescription": "Close-up of an African elephant grazing in a lush, green habitat.",
+        "listingTags": [],
+        "listingEvidence": [
+          "https://www.pexels.com/video/majestic-african-elephant-in-natural-habitat-37394148/"
+        ],
+        "canvaAssetId": "VAHbNVGS8LM",
+        "canvaImportVerified": true
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": 14,
+        "width": 3840,
+        "height": 2160,
+        "frameRate": 25
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "African elephant",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "grazing",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "filming location unspecified",
+          "status": "unverified"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License (listing-level claim only)",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "Imported into Canva and source listing metadata checked. Exact original MP4 bytes, SHA-256, full visual inspection and intended-use rights review are not yet available; remain held."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wildlife Science",
+        "proposedStory": "Elephant feeding ecology and seasonal diet; footage is illustrative stock, not a Nature Frontiers field recording.",
+        "notes": "Licensed third-party stock. Never represent as Nature Frontiers original-camera footage."
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-zebra-wildebeest-5146578",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "5146578",
+        "url": "https://www.pexels.com/video/zebras-and-wildebeests-grazing-in-the-meadows-5146578/",
+        "contributor": "Taryn Elliott",
+        "listingStatus": "verified",
+        "listingDescription": "Zebras and wildebeests grazing together on a sunny African savanna day.",
+        "listingTags": [],
+        "listingEvidence": [
+          "https://www.pexels.com/video/zebras-and-wildebeests-grazing-in-the-meadows-5146578/"
+        ],
+        "canvaAssetId": "VAHbNQdZTYc",
+        "canvaImportVerified": true
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": 25,
+        "width": 1920,
+        "height": 1080,
+        "frameRate": 25
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "zebras and wildebeests",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "grazing together",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "filming location unspecified",
+          "status": "unverified"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License (listing-level claim only)",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "Imported into Canva and source listing metadata checked. Exact original MP4 bytes, SHA-256, full visual inspection and intended-use rights review are not yet available; remain held."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wildlife Science",
+        "proposedStory": "Comparative grazing ecology; do not imply footage was filmed at Maputo Special Reserve.",
+        "notes": "Licensed third-party stock. Never represent as Nature Frontiers original-camera footage."
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
+    },
+    {
+      "id": "nf-pex-giraffe-5214258",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "5214258",
+        "url": "https://www.pexels.com/video/giraffe-in-the-open-fields-5214258/",
+        "contributor": "Taryn Elliott",
+        "listingStatus": "verified",
+        "listingDescription": "A serene scene of a giraffe strolling through the African savanna under a clear sky.",
+        "listingTags": [],
+        "listingEvidence": [
+          "https://www.pexels.com/video/giraffe-in-the-open-fields-5214258/"
+        ],
+        "canvaAssetId": "VAHbNT-7Jx4",
+        "canvaImportVerified": true
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": 21,
+        "width": 1920,
+        "height": 1080,
+        "frameRate": 25
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "giraffe",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "walking",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "filming location unspecified",
+          "status": "unverified"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License (listing-level claim only)",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "Imported into Canva and source listing metadata checked. Exact original MP4 bytes, SHA-256, full visual inspection and intended-use rights review are not yet available; remain held."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wildlife Science",
+        "proposedStory": "Giraffe browsing ecology; source clip shows walking, not a verified feeding action.",
+        "notes": "Licensed third-party stock. Never represent as Nature Frontiers original-camera footage."
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      }
     }
   ]
 }
