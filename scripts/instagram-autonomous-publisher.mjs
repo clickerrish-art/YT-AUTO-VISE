@@ -227,7 +227,8 @@ export async function runAutonomousInstagramPublisher({
       if(!approval.valid) { history.push({slotId:payload.slotId,status:"BLOCKED_INSTAGRAM_APPROVAL",checkedAt:nowIso,blockers:approval.errors}); skipped++; continue; }
       const decision=await policyEvaluator(payload.sourcePayload,{
         expectedPageId:config.facebookPageId,expectedPageName:config.facebookPageName??"Nature Frontiers SA",
-        history:[],evidenceRoot:rootDir,now:nowIso,timezone:config.timezone,maxPostsPerLocalDay:999,
+        allowedCampaignIds:config.allowedCampaignIds??[],approvedDestinations:config.approvedDestinations??[],
+        allowedDomains:config.allowedDomains??[],history:[],evidenceRoot:rootDir,now:nowIso,timezone:config.timezone,maxPostsPerLocalDay:999,
         maxReelsPerLocalDay:999,maxFeedPostsPerLocalDay:999,minimumIntervalMinutes:0,fetchImpl
       });
       if(decision?.eligible!==true) { history.push({slotId:payload.slotId,status:"BLOCKED_SOURCE_POLICY",checkedAt:nowIso,policyDecision:decision}); skipped++; continue; }
