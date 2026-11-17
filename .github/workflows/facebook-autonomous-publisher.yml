@@ -111,5 +111,8 @@ jobs:
             exit 0
           fi
           payload="$(node -e 'const text=process.env.RUN_NAME+" failed. Inspect the sanitized run logs: "+process.env.RUN_URL; process.stdout.write(JSON.stringify({text,content:text}));')"
-          curl --fail --silent --show-error --max-time 10 -H "Content-Type: application/json" --data "$payload" "$FAILURE_WEBHOOK_URL"
+          if ! curl --fail --silent --max-time 10 -H "Content-Type: application/json" --data "$payload" "$FAILURE_WEBHOOK_URL"; then
+            echo "::error::Failure alert delivery failed; webhook URL withheld from logs."
+            exit 1
+          fi
           echo "- Failure alert: webhook delivery accepted." >> "$GITHUB_STEP_SUMMARY"
