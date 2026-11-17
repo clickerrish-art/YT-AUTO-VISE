@@ -16,9 +16,11 @@ test("critical CI workflows use Node 24-compatible maintained action runtimes", 
   for (const [relativePath, versions] of expected) {
     const workflow = fs.readFileSync(path.join(root, relativePath), "utf8");
     if (versions.checkout) assert.match(workflow, new RegExp("uses:\\s*actions/checkout@v" + versions.checkout + "\\b"), relativePath);
-    if (versions.setupNode) assert.match(workflow, new RegExp("uses:\\s*actions/setup-node@v" + versions.setupNode + "\\b"), relativePath);
+    if (versions.setupNode) {
+      assert.match(workflow, new RegExp("uses:\\s*actions/setup-node@v" + versions.setupNode + "\\b"), relativePath);
+      assert.match(workflow, /node-version:\s*["']?24\b/, relativePath + " must explicitly select Node 24");
+    }
     if (versions.uploadArtifact) assert.match(workflow, new RegExp("uses:\\s*actions/upload-artifact@v" + versions.uploadArtifact + "\\b"), relativePath);
-    assert.match(workflow, /node-version:\s*["']?24\b/);
     assert.doesNotMatch(
       workflow,
       /uses:\s*actions\/(?:checkout|setup-node|upload-artifact)@v(?:1|2|3|4|5)\b/,
