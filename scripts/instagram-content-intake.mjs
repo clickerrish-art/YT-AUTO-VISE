@@ -78,7 +78,8 @@ export async function runInstagramContentIntake({
       if(reasons.length===0) {
         const policy=await policyEvaluator(payload.sourcePayload,{
           expectedPageId:config.facebookPageId,expectedPageName:config.facebookPageName??"Nature Frontiers SA",
-          history:[],evidenceRoot:rootDir,now:new Date(Number(now)).toISOString(),timezone:config.timezone,
+          allowedCampaignIds:config.allowedCampaignIds??[],approvedDestinations:config.approvedDestinations??[],
+          allowedDomains:config.allowedDomains??[],history:[],evidenceRoot:rootDir,now:new Date(Number(now)).toISOString(),timezone:config.timezone,
           maxPostsPerLocalDay:999,maxReelsPerLocalDay:999,maxFeedPostsPerLocalDay:999,minimumIntervalMinutes:0
         });
         if(policy?.eligible!==true) reasons.push("SOURCE_PAYLOAD_POLICY_BLOCKED");
