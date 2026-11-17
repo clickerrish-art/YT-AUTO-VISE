@@ -382,7 +382,7 @@ export async function evaluateFinalFacebookPayload(payload, {
     disclosureChecks.push({ required: true, visibleInCaption: disclosureVisible, passed: disclosureVisible });
     if (!disclosureVisible) add(blockers, "Commercial or affiliate promotion requires a clear disclosure visible in the final caption");
     if (payload.campaignId === "selar-wildlife-vault" && !links.includes(APPROVED_SELLAR_URL)) add(blockers, "Selar campaign must use the exact approved product destination");
-    if (payload.campaignId !== "selar-wildlife-vault" && links.includes(APPROVED_SELLAR_URL)) add(blockers, "Approved Selar URL is restricted to the configured Selar campaign");
+    if (links.includes(APPROVED_SELLAR_URL) && payload.campaignId !== "selar-wildlife-vault" && payload.campaignId !== "nature-frontiers-affiliate-monetization") add(blockers, "Approved Selar URL is restricted to an explicitly configured Selar or Nature Frontiers campaign");
     if (payload.campaignId === "safari-affiliate" && payload.safariCampaignEnabled !== true) add(blockers, "Safari affiliate campaign is inactive until explicitly configured");
     if (!allowedCampaignIds.includes(payload.campaignId)) add(blockers, "Campaign ID is not allowlisted for autonomous publishing");
   } else {
