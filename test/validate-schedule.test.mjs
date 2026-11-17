@@ -7,11 +7,11 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 const repoRoot=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const copiedFiles=["config/weekly-content-plan.json","content/queue.json",".github/workflows/generate-long-form-narration.yml",".github/workflows/free-narration-artifact.yml","scripts/schedule-policy.mjs"];
-test("authoritative validator accepts safe draft policy while retaining unapproved cadence and live-history holds",()=>{
+test("authoritative validator accepts the approved rolling cadence while retaining the live-history hold",()=>{
  const result=spawnSync(process.execPath,["scripts/validate-schedule.mjs"],{cwd:repoRoot,encoding:"utf8"});
  assert.equal(result.status,0,result.stdout+result.stderr);
  assert.match(result.stdout,/PASS: rolling long_form, long_form, short cycle/);
- assert.match(result.stdout,/BLOCKED — CADENCE DECISION/);
+ assert.doesNotMatch(result.stdout,/BLOCKED — CADENCE DECISION/);
  assert.match(result.stdout,/BLOCKED — LIVE HISTORY/);
 });
 function runWithPlanMutation(mutate){
@@ -22,16 +22,16 @@ function runWithPlanMutation(mutate){
   return spawnSync(process.execPath,[path.join(repoRoot,"scripts/validate-schedule.mjs")],{cwd:temp,encoding:"utf8"});
  }finally{fs.rmSync(temp,{recursive:true,force:true});}
 }
-test("validator keeps the proposed rolling cadence unapproved until the owner records a decision",()=>{
+test("validator recognizes the recorded owner-approved rolling cadence but retains live-history hold",()=>{
  const plan=JSON.parse(fs.readFileSync(path.join(repoRoot,"config/weekly-content-plan.json"),"utf8"));
- assert.equal(plan.cadenceDecision.status,"OWNER_APPROVAL_REQUIRED");
- assert.equal(plan.cadenceDecision.ownerApproved,false);
- assert.equal(plan.cadenceDecision.approvedMode,null);
- assert.equal(plan.cadenceDecision.approvedAt,null);
- assert.equal(plan.cadenceDecision.approvalReference,null);
+ assert.equal(plan.cadenceDecision.status,"OWNER_APPROVED");
+ assert.equal(plan.cadenceDecision.ownerApproved,true);
+ assert.equal(plan.cadenceDecision.approvedMode,"ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET");
+ assert.ok(plan.cadenceDecision.approvedAt);
+ assert.ok(plan.cadenceDecision.approvalReference);
  const result=spawnSync(process.execPath,["scripts/validate-schedule.mjs"],{cwd:repoRoot,encoding:"utf8"});
  assert.equal(result.status,0,result.stdout+result.stderr);
- assert.match(result.stdout,/BLOCKED — CADENCE DECISION/);
+ assert.doesNotMatch(result.stdout,/BLOCKED — CADENCE DECISION/);
  assert.match(result.stdout,/BLOCKED — LIVE HISTORY/);
 });
 test("validator rejects missing or falsely approved cadence decisions",()=>{
