@@ -38,7 +38,8 @@
     "History and attempt ledger paths must point to durable operator-controlled storage in production; GitHub Actions artifacts are diagnostic exports only.",
     "The Nature Frontiers Facebook destination is separate from the SonicVhibez YouTube destination.",
     "Nature Frontiers Facebook and Instagram are education-only: product promotions, affiliate links, paid placements, Selar/Safari storefront links, and promotional campaign IDs are rejected by policy.",
-    "Every Nature Frontiers Facebook candidate requires a human review and an HMAC-signed approval receipt bound to its exact final content fingerprint. Use npm run facebook:approve -- content/facebook-intake-candidates.json <exact-slot-id> on the operator workstation. Configure FACEBOOK_APPROVAL_HMAC_SECRET (at least 32 bytes) and FACEBOOK_APPROVER_ID through the workstation's secure secret manager or protected process environment; never store or paste the secret in the repository, candidate file, terminal transcript, or chat. Missing, stale, altered or invalid approvals block intake and publication."
+    "Every Nature Frontiers Facebook candidate requires a human review and an HMAC-signed approval receipt bound to its exact final content fingerprint. Use npm run facebook:approve -- content/facebook-intake-candidates.json <exact-slot-id> on the operator workstation. Configure FACEBOOK_APPROVAL_HMAC_SECRET (at least 32 bytes) and FACEBOOK_APPROVER_ID through the workstation's secure secret manager or protected process environment; never store or paste the secret in the repository, candidate file, terminal transcript, or chat. Missing, stale, altered or invalid approvals block intake and publication.",
+    "Global anti-spam policy prohibits automated likes, comments, replies, follows, DMs, unsolicited outreach, engagement exchanges and artificial engagement. Content publishing does not authorize automated audience interaction."
   ],
   "autonomousMode": true,
   "autonomousSchedulingEnabled": true,
@@ -55,5 +56,43 @@
   "approvedDestinations": [],
   "sourceCheckTimeoutMs": 8000,
   "maxSourceRedirects": 0,
-  "maxManagedPageLookupPages": 20
+  "maxManagedPageLookupPages": 20,
+  "antiSpamPolicy": {
+    "enabled": true,
+    "scope": "all_managed_social_destinations",
+    "mode": "PROHIBIT_AUTOMATED_ENGAGEMENT",
+    "prohibitedActions": [
+      "automated_likes",
+      "automated_comments",
+      "automated_replies",
+      "automated_follows",
+      "automated_unfollows",
+      "automated_direct_messages",
+      "bulk_or_unsolicited_outreach",
+      "engagement_pods_or_exchange",
+      "engagement_bait_or_coordinated_fake_engagement",
+      "automated_view_or_click_manipulation",
+      "mass_reposting_or_duplicate_distribution",
+      "keyword_or_hashtag_stuffing",
+      "misleading_metadata"
+    ],
+    "allowedAutomation": [
+      "content_research_and_drafting",
+      "human_review_workflows",
+      "approved_content_scheduling",
+      "publishing_only_after_all_release_gates_pass",
+      "read_only_analytics_and_reporting"
+    ],
+    "enforcement": {
+      "engagementApiMutationsAllowed": false,
+      "automatedAudienceInteractionAllowed": false,
+      "unsolicitedOutboundMessagesAllowed": false,
+      "duplicateContentMustBeHeld": true,
+      "platformRateLimitsMustBeRespected": true,
+      "platformTermsAndPoliciesMustBeRespected": true,
+      "failClosedOnPolicyUncertainty": true,
+      "noRetryOfUncertainRemoteMutations": true
+    },
+    "note": "No bot-driven likes, comments, replies, follows, DMs, engagement exchanges, artificial views/clicks, or unsolicited outreach. Human-initiated genuine interaction is outside automation and must comply with platform rules."
+  }
 }
