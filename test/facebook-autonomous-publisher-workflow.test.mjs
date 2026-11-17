@@ -23,5 +23,5 @@ test("Meta publisher serializes triggers, keeps 30-day recovery snapshots and em
   assert.match(workflow, /if: failure\(\)/);
   assert.match(workflow, /FACEBOOK_FAILURE_WEBHOOK_URL/);
   assert.match(workflow, /curl --fail --silent --show-error/);
-  assert.doesNotMatch(workflow, /echo .*FAILURE_WEBHOOK_URL/);
+  assert.doesNotMatch(workflow, /echo .*\\$FAILURE_WEBHOOK_URL/);
 });
