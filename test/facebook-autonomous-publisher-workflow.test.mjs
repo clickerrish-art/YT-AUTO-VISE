@@ -22,7 +22,7 @@ test("Meta publisher serializes triggers, keeps 30-day recovery snapshots and em
   assert.match(workflow, /nature-frontiers-facebook-recovery-/);
   assert.match(workflow, /if: failure\(\)/);
   assert.match(workflow, /FACEBOOK_FAILURE_WEBHOOK_URL/);
-  assert.match(workflow, /curl --fail --silent --show-error/);
+  assert.match(workflow, /curl --fail --silent --max-time 10/);
   assert.doesNotMatch(workflow, /echo .*\\$FAILURE_WEBHOOK_URL/);
   assert.match(workflow, /state_files=\( .*facebook-\*\.json/);
 });
