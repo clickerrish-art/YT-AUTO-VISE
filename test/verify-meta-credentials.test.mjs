@@ -40,7 +40,7 @@ test("invalid user token does not prevent an independent stored Page-token ident
   assert.equal(requested.length, 2);
   const serialized = JSON.stringify(report);
   for (const secret of [env.META_USER_ACCESS_TOKEN, env.META_PAGE_ACCESS_TOKEN]) assert.equal(serialized.includes(secret), false);
-  assert.equal(serialized.includes("derived-page-token"), false);
+  assert.equal(serialized.includes("derived-page-token-value-long-enough"), false);
 });
 
 test("valid user and stored Page tokens are independently verified against the exact configured Page", async () => {
@@ -74,7 +74,7 @@ test("a missing stored Page token remains a separate blocker even when user perm
       return json({ data: ["pages_show_list", "pages_read_engagement", "pages_manage_posts"].map(permission => ({ permission, status: "granted" })) });
     }
     if (value.includes("/me/accounts?")) {
-      return json({ data: [{ id: pageId, name: "Nature Frontiers", tasks: ["CREATE_CONTENT"], access_token: "derived-page-token" }] });
+      return json({ data: [{ id: pageId, name: "Nature Frontiers", tasks: ["CREATE_CONTENT"], access_token: "derived-page-token-value-long-enough" }] });
     }
     throw new Error("Unexpected endpoint: " + value);
   };
@@ -92,7 +92,7 @@ test("a Page token for a different Page fails even when the user token is valid"
       return json({ data: ["pages_show_list", "pages_read_engagement", "pages_manage_posts"].map(permission => ({ permission, status: "granted" })) });
     }
     if (value.includes("/me/accounts?")) {
-      return json({ data: [{ id: pageId, name: "Nature Frontiers", tasks: ["CREATE_CONTENT"], access_token: "derived-page-token" }] });
+      return json({ data: [{ id: pageId, name: "Nature Frontiers", tasks: ["CREATE_CONTENT"], access_token: "derived-page-token-value-long-enough" }] });
     }
     if (value.endsWith("/" + pageId + "?fields=id,name")) return json({ id: "987654321", name: "Other Page" });
     throw new Error("Unexpected endpoint: " + value);
