@@ -9,6 +9,7 @@ on:
       - ".github/workflows/twice-weekly-check.yml"
       - "scripts/production-readiness.mjs"
       - "tests/production-readiness.test.mjs"
+      - "test/production-readiness-workflow.test.mjs"
       - ".github/workflows/production-readiness.yml"
       - "content/**"
       - "config/weekly-content-plan.json"
@@ -33,10 +34,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 24
       - name: Report blockers without exposing credentials
@@ -66,7 +67,7 @@ jobs:
           NODE
       - name: Upload diagnostic report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: sonicvhibez-readiness-report
           path: readiness-report/
