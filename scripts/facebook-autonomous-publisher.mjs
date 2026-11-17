@@ -117,7 +117,8 @@ function safeHistory(file, label, allowedStatuses) {
 }
 
 /**
- * Runs at the configured local preparation time. It never asks for per-post approval.
+ * Runs at the configured local preparation time. Every candidate must carry a valid HMAC-signed
+ * human approval bound to the exact final payload; the publisher independently rechecks it.
  * Durable storage must be supplied by the operator-controlled runtime, not a short-lived CI artifact.
  */
 export async function runAutonomousFacebookPublisher({
