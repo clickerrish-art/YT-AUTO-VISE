@@ -1,5 +1,34 @@
 # 17 November 2026 — latest exact source/test checkpoint
 
+## 17 November 2026 — latest verified implementation checkpoint
+
+**Exact code/test SHA:** `4ff54d69085ba0bd6ba8fe73edd3d4c7d11d0b37`. **Implementation branch:** `codex/marketing-machine-audit-fixes`. **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25` (unchanged). PR #1 remains OPEN / DRAFT / UNMERGED. The subsequent documentation-only checkpoint is recorded below this section.
+
+### Exact-SHA CI
+
+- Content quality [44073050923](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050923): **941/941 tests passed; 0 failed; 0 skipped**.
+- SonicVhibez automation [44073050921](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050921): **164/164 Node test files passed; 45/45 Python tests passed; 0 skips**. Queue validator reports 16 held queue items, approved destination, and public publishing disabled.
+- Isolated main/candidate baseline [44073050951](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050951): PASS. Candidate `4ff54d6`: 164/164 Node test files, 45 Python tests, npm audit **0 vulnerabilities**. Exact main `69fdf35`: 54 Node tests and 4 moderate npm audit findings.
+- Dashboard Chromium [44073050905](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050905): **33/33 passed**.
+- Nature Frontiers signed editorial approval [44073050917](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050917): **24/24 passed; 0 skipped**. Covers claim-source HMACs, exact payload approval, media/licence checksums, declines and review-race protection.
+- Nature Frontiers Instagram safety [44073050879](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050879): PASS.
+- Daily Nature Frontiers local draft package [44073051000](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073051000): PASS; draft validation only, no Meta API write.
+- Deployment recovery [44073050925](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050925): PASS.
+- Cloudflare durable-state unit checks [44073050911](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050911): PASS.
+- Cloudflare runner bridge [44073050920](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050920): PASS.
+- Non-destructive branch inventory [44073050898](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050898): PASS.
+- Meta Page connection workflow [44073050894](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050894): regression tests **84/84 passed**, but its live secret/Page verification step was **SKIPPED**. This is not a live token or Page-identity pass.
+- Production readiness [44073050903](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44073050903): expected **HOLD** on the outstanding external release blockers; no gate was bypassed.
+
+### Additional exact operational checks
+
+- Cloudflare staging D1: revision 3, valid JSON, publishing disabled, 16 queue items, 4 audit events, 5 logical D1 backup records; zero worker jobs, Facebook drafts/posts or upload receipts.
+- Cloudflare staging queue statuses remain mixed-case (12 held, 1 script/captions ready for review, 2 script ready/narration pending, 1 lowercase legacy variant). Do not rely on this mixed-status set for automated transitions until a reviewed normalization is applied.
+- Cloudflare Nature Frontiers production D1 has the required schema, but inspected business tables have zero rows.
+- Cloudflare R2 API returns HTTP 403 / code 10042 because R2 is not enabled in the account. The staging Worker has an R2 binding configured, but the bucket/object path is not proven usable. No independent R2 backup or restore claim is allowed.
+- No Cloudflare D1 or Worker data/configuration was modified during these read-only checks.
+
+
 ## 17 November 2026 — live Cloudflare persistence inspection
 
 Read-only Cloudflare API and D1 queries were run against the connected account. No rows were inserted, updated or deleted.
