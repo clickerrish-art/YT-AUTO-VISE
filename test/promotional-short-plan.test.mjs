@@ -395,3 +395,23 @@ test("December 14 wildlife audio recording Short uses current qualitative intent
   assert.equal(item.script.trim().split(/\s+/).filter(Boolean).length, 131);
   assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
 });
+
+test("December 14 Shorts analytics lesson uses current official metric definitions and stays disclosure-held", () => {
+  const item = checkedInPlan.weeks.find(row => row.weekOf === "2026-12-14")
+    ?.items.find(row => row.id === "sonicvhibez-short-013-youtube-shorts-analytics");
+  assert.ok(item, "the December 14 analytics draft must exist");
+  assert.match(item.script, /stayed to watch/i);
+  assert.match(item.script, /engaged views/i);
+  assert.match(item.script, /average view duration/i);
+  assert.match(item.script, /subscribers gained/i);
+  assert.ok(item.keywordEvidence.sources.some(source =>
+    source.url === "https://support.google.com/youtube/answer/12220281"
+  ), "the draft must retain the official YouTube Shorts analytics definitions");
+  assert.equal(item.visibility, "private");
+  assert.equal(item.status, "DRAFT_ONLY");
+  assert.equal(item.disclosure.status, "HOLD");
+  assert.ok(item.description.includes("DISCLOSURE HOLD"));
+  assert.ok(item.script.indexOf("Advertisement.") < item.script.indexOf("YouTube Success Blueprint"));
+  assert.ok(item.script.trim().split(/\\s+/).filter(Boolean).length >= 90);
+  assert.ok(item.script.trim().split(/\\s+/).filter(Boolean).length <= 135);
+});
