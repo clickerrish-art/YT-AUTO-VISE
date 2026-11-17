@@ -202,14 +202,14 @@ test("Nature Frontiers does not accept links or disclosures moved from the capti
     f.payload.firstCommentText = "Product details: https://selar.com/0u19v8u99l";
     const linkedComment = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(linkedComment.eligible, false);
-    assert.ok(linkedComment.blockers.some(item => /approved monetization campaign and visible affiliate disclosure/i.test(item)));
+    assert.ok(linkedComment.blockers.some(item => /explicitly allowlisted monetization campaign and visible affiliate disclosure/i.test(item)));
     assert.ok(linkedComment.destinationChecks.some(check => check.url === "https://selar.com/0u19v8u99l" && check.passed === true));
 
     const linkedFingerprint = linkedComment.contentFingerprint;
     f.payload.firstCommentText = "Affiliate link: I may earn a commission if you purchase.";
     const affiliateComment = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(affiliateComment.eligible, false);
-    assert.ok(affiliateComment.blockers.some(item => /approved monetization campaign and visible affiliate disclosure/i.test(item)));
+    assert.ok(affiliateComment.blockers.some(item => /explicitly allowlisted monetization campaign and visible affiliate disclosure/i.test(item)));
     assert.notEqual(affiliateComment.contentFingerprint, linkedFingerprint,
       "the public first comment must be included in the approval fingerprint");
   } finally { f.cleanup(); }
