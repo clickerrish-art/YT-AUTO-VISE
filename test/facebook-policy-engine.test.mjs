@@ -232,6 +232,20 @@ test("duplicate slots, near-duplicates and daily frequency limits block", async 
   } finally { f.cleanup(); }
 });
 
+test("previously published media hashes are rejected even when the new story and slot differ", async () => {
+  const f = fixture();
+  try {
+    const history = [{
+      destination: "nature_frontiers_facebook", slotId: "different-story-slot", status: "PUBLISHED_VERIFIED",
+      policyDecision: { mediaFingerprints: [{ id: "old-asset", sha256: f.payload.media[0].sha256, passed: true }] }
+    }];
+    const result = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), history });
+    assert.equal(result.eligible, false);
+    assert.equal(result.duplicateCheck.passed, false);
+    assert.ok(result.blockers.some(item => /recycled media fingerprint/i.test(item)));
+  } finally { f.cleanup(); }
+});
+
 test("autonomous publishing requires a signed human approval bound to the exact final payload", async () => {
   const f = fixture();
   try {
