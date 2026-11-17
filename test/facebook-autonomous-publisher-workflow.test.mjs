@@ -15,3 +15,13 @@ test("scheduled Facebook publisher workflow cannot enable live publishing throug
   assert.equal(config.dryRun, true);
   assert.equal(config.emergencyStop, true);
 });
+
+test("Meta publisher serializes triggers, keeps 30-day recovery snapshots and emits failure alerts", () => {
+  assert.match(workflow, /concurrency:\s*\n\s+group: nature-frontiers-facebook-autonomous-publisher\s+cancel-in-progress: false/);
+  assert.match(workflow, /retention-days: 30/);
+  assert.match(workflow, /nature-frontiers-facebook-recovery-/);
+  assert.match(workflow, /if: failure\(\)/);
+  assert.match(workflow, /FACEBOOK_FAILURE_WEBHOOK_URL/);
+  assert.match(workflow, /curl --fail --silent --show-error/);
+  assert.doesNotMatch(workflow, /echo .*FAILURE_WEBHOOK_URL/);
+});
