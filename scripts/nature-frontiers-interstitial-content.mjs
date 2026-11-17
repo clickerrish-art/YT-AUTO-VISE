@@ -2,6 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { NATURE_FRONTIERS_REQUIRED_POST_LINKS } from "./facebook-policy-engine.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SHA256 = /^[a-f0-9]{64}$/;
@@ -27,6 +28,8 @@ export function validateInterstitialCandidate(item) {
   if (!ALLOWED_TYPES.has(item.type)) errors.push("unsupported interstitial content type");
   if (typeof item.title !== "string" || !item.title.trim() || item.title.length > 120) errors.push("title is required and must be at most 120 characters");
   if (typeof item.caption !== "string" || !item.caption.trim() || item.caption.length > 2200) errors.push("caption is required and must be at most 2200 characters");
+  if (typeof item.caption === "string" && NATURE_FRONTIERS_REQUIRED_POST_LINKS.some(url => !item.caption.includes(url))) errors.push("caption must visibly include all approved Safari, Selar and Nature Frontiers YouTube links");
+  if (typeof item.caption === "string" && !/affiliate disclosure|affiliate link|may earn a commission/i.test(item.caption)) errors.push("visible affiliate disclosure is required");
   if (item.brand !== "Nature Frontiers") errors.push("candidate must target Nature Frontiers only");
   if (item.original !== true) errors.push("originality must be explicitly verified");
   if (item.rights?.status !== "cleared" || !Array.isArray(item.rights?.evidence) || !item.rights.evidence.length || item.rights.evidence.some(x => !https(x))) errors.push("documented rights clearance is required");
