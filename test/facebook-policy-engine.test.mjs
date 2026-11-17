@@ -177,7 +177,7 @@ test("Nature Frontiers allows only the exact disclosed affiliate campaign and re
   try {
     const allowed = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(allowed.eligible, true, JSON.stringify(allowed.blockers));
-    f.payload.caption = f.payload.caption.replace("Affiliate disclosure:", "Disclosure omitted:");
+    f.payload.caption = f.payload.caption.replace("Affiliate disclosure: Nature Frontiers may earn a commission if you book through these links.", "Nature Frontiers shares wildlife education and travel information.");
     const undisclosed = await evaluateFinalFacebookPayload(f.payload, options(f.root));
     assert.equal(undisclosed.eligible, false);
     assert.ok(undisclosed.blockers.some(item => /visible affiliate disclosure/i.test(item)));
@@ -330,7 +330,7 @@ test("a factual claim needs a reachable authoritative source containing the reco
   const f = fixture();
   try {
     const excerpt = "Wetlands support biodiversity and help regulate water flows.";
-    f.payload.caption = "Wetlands support biodiversity and help regulate water flows.";
+    f.payload.caption = "Wetlands support biodiversity and help regulate water flows. Affiliate disclosure: Nature Frontiers may earn a commission if you book through these links. " + NATURE_FRONTIERS_REQUIRED_POST_LINKS.join(" ");
     f.payload.claims = [{ text: "Wetlands support biodiversity and help regulate water flows", sourceUrls: ["https://sanbi.org/research"], sourceExcerpt: excerpt, sourceSupportsClaim: true, verified: true }];
     f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
       reviewer: "Unit Test Reviewer",
