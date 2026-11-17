@@ -35,13 +35,14 @@ function launchDashboard({ stateDir, token }) {
   let logs = "";
   child.stdout.on("data", chunk => { logs += chunk.toString(); });
   child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  child.on("error", error => { logs += `Dashboard child process error: ${error.message}\n`; });
   return { child, get logs() { return logs; } };
 }
 
 async function waitForReady(instance) {
-  // CI runners can be slow while the dashboard imports its full server module graph.
-  // Keep polling at 100 ms, but allow up to 30 seconds for the real health endpoint.
-  for (let attempt = 0; attempt < 300; attempt++) {
+  // CI runners can be heavily contended while the dashboard imports its full server module graph.
+  // Keep polling at 100 ms, allow up to 60 seconds, and retain child-process errors in diagnostics.
+  for (let attempt = 0; attempt < 600; attempt++) {
     if (instance.child.exitCode !== null) throw new Error("Dashboard exited before readiness: " + instance.logs);
     let started;
     for (const line of instance.logs.split(/\r?\n/)) {
