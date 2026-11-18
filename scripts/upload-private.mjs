@@ -13,6 +13,7 @@ import { assertNoUnresolvedUploadAttempts, fetchCompleteYoutubeHistorySnapshot, 
 import { assertShortParentRelationship, shortParentRelationshipSha256, validateSourceSegmentsAgainstEvidence } from "./short-parent-relationship.mjs";
 import { atomicWriteJson } from "./atomic-json-file.mjs";
 import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
+import { assertYoutubeVideoInsertScope } from "./youtube-oauth-scope.mjs";
 
 export const APPROVED_SELAR_URL = "https://selar.com/0u19v8u99l";
 export const APPROVED_SELAR_DISCLOSURE = "This product is sold through my own Selar business; purchases generate revenue for my business.";
@@ -414,6 +415,10 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     const { google } = await import("googleapis");
     const oauth = new google.auth.OAuth2(env.YOUTUBE_CLIENT_ID, env.YOUTUBE_CLIENT_SECRET);
     oauth.setCredentials({ refresh_token: env.YOUTUBE_REFRESH_TOKEN });
+    const accessToken = await oauth.getAccessToken();
+    if (!accessToken?.token) throw new Error("Google OAuth did not return an access token for the configured YouTube refresh token");
+    const tokenInfo = await oauth.getTokenInfo(accessToken.token);
+    assertYoutubeVideoInsertScope(tokenInfo);
     youtube = google.youtube({ version: "v3", auth: oauth });
   }
   const channel = await youtube.channels.list({ part: ["id", "snippet", "contentDetails"], mine: true });
