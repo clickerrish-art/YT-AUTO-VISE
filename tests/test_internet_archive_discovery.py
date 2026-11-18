@@ -54,6 +54,17 @@ class InternetArchiveDiscoveryTests(unittest.TestCase):
         self.assertEqual(classify_license(""), "HOLD_LICENSE_UNVERIFIED")
         self.assertEqual(classify_license("https://example.org/terms"), "HOLD_LICENSE_UNVERIFIED")
 
+    def test_broad_search_false_positives_are_filtered(self):
+        payload = {"response": {"docs": [
+            {"identifier": "wildlife-doc", "title": "African wildlife documentary", "mediatype": "movies"},
+            {"identifier": "unrelated", "title": "Evening talk show", "mediatype": "movies"},
+            {"identifier": "animal-game", "title": "H1Z1 Deer on the Roof", "mediatype": "movies"}
+        ]}}
+        def opener(request, timeout):
+            return FakeResponse(payload)
+        results = search_archive("mediatype:movies AND wildlife", opener=opener)
+        self.assertEqual([item["identifier"] for item in results], ["wildlife-doc", "animal-game"])
+
     def test_invalid_identifier_is_rejected(self):
         self.assertIsNone(candidate_from_doc({"identifier": "../private"}))
 
