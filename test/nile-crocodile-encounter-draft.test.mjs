@@ -7,7 +7,7 @@ const narration = draft.match(/^## Narration draft[^\n]*\n\n([\s\S]*?)(?=\n\n## 
 
 test("Nile crocodile encounter remains an unqueued review-only draft", () => {
   assert.match(draft, /UNQUEUED EDITORIAL DRAFT/);
-  assert.match(draft, /Queue state: NOT QUEUED/);
+  assert.match(draft, /\*\*Queue state:\*\* NOT QUEUED/);
   assert.match(draft, /not rendered, approved, scheduled or published/i);
   assert.doesNotMatch(draft, /publishReady\s*[:=]\s*true|publishingEnabled\s*[:=]\s*true/i);
 });
