@@ -7,6 +7,7 @@ on:
       - "scripts/production-quality-scorecard.mjs"
       - "scripts/upload-private.mjs"
       - "scripts/dashboard-server.mjs"
+      - "scripts/run-node-tests.mjs"
       - "public/dashboard.html"
       - "test/**"
       - "tests/**"
