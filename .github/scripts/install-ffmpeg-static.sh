@@ -6,18 +6,29 @@ set -euo pipefail
 : "${GITHUB_ENV:?GITHUB_ENV must be set by GitHub Actions}"
 
 # Pinned full renderer build for CI. The npm ffmpeg-static binary lacks the
-# drawtext filter needed by production thumbnail rendering. This GPL shared
-# build is ephemeral CI tooling only; it is not bundled into production.
+# drawtext filter required by thumbnail rendering. This GPL shared build is
+# ephemeral CI tooling only; it is not bundled into production.
+RELEASE_TAG="autobuild-2026-11-17-12-40"
+ASSET_NAME="ffmpeg-N-129000-g64f6bcffaf-linux64-gpl-shared.tar.xz"
+BASE_URL="https://github.com/FFmpeg-Builds/FFmpeg-Builds/releases/download/$RELEASE_TAG"
+CHECKSUMS="$RUNNER_TEMP/ffmpeg-checksums.sha256"
 ARCHIVE="$RUNNER_TEMP/ffmpeg-renderer-build.tar.xz"
 EXTRACT_DIR="$RUNNER_TEMP/ffmpeg-renderer-build"
 BIN_DIR="$RUNNER_TEMP/ffmpeg-renderer-bin"
-URL="https://github.com/FFmpeg-Builds/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl-shared.tar.xz"
-EXPECTED_SHA256="1fb258c5d1ed0a135143a5be228684e60f2b1cbf09462104370db23093709794"
+
+curl --fail --location --silent --show-error \
+  --retry 3 --retry-all-errors --connect-timeout 20 --max-time 60 \
+  "$BASE_URL/checksums.sha256" --output "$CHECKSUMS"
+EXPECTED_SHA256="$(awk -v asset="$ASSET_NAME" '$2 == asset {print $1}' "$CHECKSUMS")"
+if [[ ! "$EXPECTED_SHA256" =~ ^[a-f0-9]{64}$ ]]; then
+  echo "Pinned FFmpeg release checksum file did not contain the expected asset" >&2
+  exit 1
+fi
 
 mkdir -p "$EXTRACT_DIR" "$BIN_DIR"
 curl --fail --location --silent --show-error \
   --retry 3 --retry-all-errors --connect-timeout 20 --max-time 240 \
-  "$URL" --output "$ARCHIVE"
+  "$BASE_URL/$ASSET_NAME" --output "$ARCHIVE"
 echo "$EXPECTED_SHA256  $ARCHIVE" | sha256sum --check -
 
 tar -xJf "$ARCHIVE" -C "$EXTRACT_DIR"

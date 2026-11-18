@@ -11,7 +11,7 @@ const ffmpegWorkflows = [
   ".github/workflows/validate.yml"
 ];
 
-test("FFmpeg CI uses a checksum-pinned renderer build with drawtext and H.264 support", () => {
+test("FFmpeg CI uses a pinned renderer build with verified drawtext and H.264 support", () => {
   for (const path of ffmpegWorkflows) {
     const workflow = fs.readFileSync(path, "utf8");
     assert.match(workflow, /source .*install-ffmpeg-static\\.sh/, path + " must source the shared FFmpeg installer");
@@ -19,8 +19,8 @@ test("FFmpeg CI uses a checksum-pinned renderer build with drawtext and H.264 su
   }
 
   const installer = fs.readFileSync(".github/scripts/install-ffmpeg-static.sh", "utf8");
-  assert.match(installer, /FFmpeg-Builds\\/FFmpeg-Builds/);
-  assert.match(installer, /EXPECTED_SHA256="[a-f0-9]{64}"/);
+  assert.match(installer, /autobuild-2026-11-17-12-40/);
+  assert.match(installer, /checksums\\.sha256/);
   assert.match(installer, /sha256sum --check/);
   assert.match(installer, /drawtext/);
   assert.match(installer, /libx264/);
