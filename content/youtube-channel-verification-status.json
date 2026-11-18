@@ -126,6 +126,14 @@
       "sourceCommit": "9aaffeee6b3ad75b19e92774fb1091d4209389ac",
       "jobId": 134489957947,
       "artifactId": 14385812917
+    },
+    {
+      "workflowRunId": 44239470352,
+      "attempt": 1,
+      "status": "BLOCKED",
+      "errorCode": "invalid_grant",
+      "sourceCommit": "9b9d7da8ce4b8e7c7a2a7f916c4b3bd5ac5a572f",
+      "checkedAt": "2026-11-18T04:52:19Z"
     }
   ],
   "previousSuccessfulVerification": {
@@ -224,5 +232,18 @@
     "result": "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
     "artifactId": 14385812917,
     "artifactSha256": "ef87dc8a4137c4f5a39fd92572e850ee4a6f61fa24474ebdc80d5952d7224206"
+  },
+  "latestAttempt": {
+    "workflowRunId": 44239470352,
+    "workflowRunAttempt": 1,
+    "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44239470352",
+    "sourceCommit": "9b9d7da8ce4b8e7c7a2a7f916c4b3bd5ac5a572f",
+    "attemptedAt": "2026-11-18T04:52:19Z",
+    "status": "BLOCKED",
+    "errorCode": "invalid_grant",
+    "message": "Google OAuth rejected the refresh-token grant during read-only verification. Channel inventory and upload-scope verification did not run; no upload or metadata write was attempted.",
+    "publishingEnabled": false,
+    "uploadAttempted": false,
+    "metadataWriteAttempted": false
   }
 }
