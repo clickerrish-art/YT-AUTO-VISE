@@ -51,7 +51,21 @@
     "note": "Owner-confirmed historical Short remains in publication history but does not satisfy the current 50–60 second Short production specification."
   },
   "uploadAttemptReconciliation": {
-    "status": "NOT_RECONCILED",
-    "note": "Fresh remote inventory is complete and matches the owner-reviewed publication record. No complete current ledger of pending/uncertain local or remote upload attempts has yet been independently verified. This remains a pre-upload blocker; no cadence clearance is claimed."
+    "status": "NO_EXECUTED_GITHUB_PRIVATE_UPLOADS_MANUAL_ATTEMPTS_UNVERIFIED",
+    "inspectedAt": "2026-11-18T00:56:00Z",
+    "evidence": {
+      "workflowDispatchRunsInspected": 5,
+      "privateUploadWorkflowRunId": 42569826008,
+      "privateUploadJobConclusion": "skipped",
+      "readOnlyVerificationJobConclusion": "failure",
+      "uploadArtifactPrivatelyWorkflowRunsFound": 0,
+      "executedPrivateUploadJobs": 0,
+      "nextPrivateUploadPreviousLedgerRunId": "NONE",
+      "evidenceReferences": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42569826008",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs?event=workflow_dispatch"
+      ]
+    },
+    "note": "The complete available GitHub Actions workflow_dispatch history contains one upload-private.yml run; its private-upload job was skipped and only the read-only verification job executed and failed. No upload-artifact-privately.yml run or other executed private-upload job was found. The upload workflow's ledger validator can therefore use previous_ledger_run_id=NONE for the next authorized attempt. This does not rule out manual, out-of-band, or local upload attempts; the owner must confirm those are absent before a future upload. This is partial workflow-history reconciliation, not full upload-attempt clearance."
   }
 }
