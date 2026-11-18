@@ -50,20 +50,21 @@ This is an evidence register, not a declaration that the project is complete. A 
 **Status: BLOCKED**
 
 Existing configuration:
-- WanGP source pinned to `f4cfc1259215577be9a2ee280c41efbedfb4459a`.
-- Wan 2.2 TI2V 5B mirrored checkpoint and VAE pinned by revision and SHA-256.
-- Exact mirror checkpoint/VAE derivative provenance is unverified; configuration correctly says `HOLD_UNVERIFIED_MIRROR_DERIVATIVE_PROVENANCE`.
+- WanGP source pinned to `f4cfc1259215577be9a2ee280c41efbedfb4459a`. Its exact `LICENSE.txt` (WanGP Community License 2.0) has been reviewed: internal business use, private batch/queue/headless use and use of outputs are permitted, subject to third-party model terms. Credit is required for a Direct Output Sale; third-party weights retain their own licences. The WanGP software licence itself is therefore not the blocker.
+
+Wan 2.2 TI2V 5B mirrored checkpoint and VAE are pinned by immutable revisions and SHA-256. The official `Wan-AI/Wan2.2-TI2V-5B` model card states Apache-2.0, but the `DeepBeepMeep/Wan2.2` mirror's model-tree metadata identifies `Wan-AI/Wan2.2-T2V-A14B` as the base while the pinned checkpoint filename says 5B. The mirror provides hashes but no file-specific conversion/provenance statement or explicit licence. The VAE mirror likewise has a hash but no file-specific provenance/licence. Exact mirror checkpoint/VAE derivative provenance remains `HOLD_UNVERIFIED_MIRROR_DERIVATIVE_PROVENANCE`; do not infer rights from the upstream model alone.
 - Kaggle execution is owner-started, temporary and not unattended.
 
 Required tasks:
-1. Obtain verifiable provenance and commercial-use terms for the exact checkpoint and VAE, or replace them with a WanGP-compatible source whose exact files and licence are independently verified.
-2. Inspect pinned WanGP source, dependency installation and notebook execution for supply-chain risks; do not run unreviewed mutable code.
-3. Owner starts the project notebook in Kaggle, enables Internet and a free GPU, and runs the pinned setup/test cells.
-4. Generate a real 5-second photorealistic wildlife test shot; no cartoon, still montage or fabricated file.
-5. Verify output MP4, exact model/source metadata, seed, prompt, negative prompt, file SHA-256, ffprobe report and full FFmpeg decode.
-6. Import output with `scripts/import_wangp_kaggle_output.py`.
-7. Human watches the complete clip and records anatomy, species, movement, continuity, artefact and realism review.
-8. Retain outputs outside temporary Kaggle session storage without requiring a large local PC model cache.
+1. WanGP Community License 2.0 is verified for internal business use and output creation; preserve its terms and any required direct-output credit.
+2. Obtain maintainer evidence that the exact pinned mirror checkpoint and VAE derive from the official Apache-2.0 TI2V-5B model and are redistributed under those terms, or replace them with a WanGP-compatible source whose exact files and licence are independently verified. The mirror's model-tree base-model metadata conflicts with the expected 5B checkpoint, so keep the weight/VAE rights gate on HOLD.
+3. Inspect pinned WanGP source, dependency installation and notebook execution for supply-chain risks; do not run unreviewed mutable code.
+4. Owner starts the project notebook in Kaggle, enables Internet and a free GPU, and runs the pinned setup/test cells.
+5. Generate a real 5-second photorealistic wildlife test shot; no cartoon, still montage or fabricated file.
+6. Verify output MP4, exact model/source metadata, seed, prompt, negative prompt, file SHA-256, ffprobe report and full FFmpeg decode.
+7. Import output with `scripts/import_wangp_kaggle_output.py`.
+8. Human watches the complete clip and records anatomy, species, movement, continuity, artefact and realism review.
+9. Retain outputs outside temporary Kaggle session storage without requiring a large local PC model cache.
 
 **Owner input needed:** start the Kaggle notebook session and provide the resulting test package or an accessible artifact reference. The assistant cannot operate the user's Kaggle UI or claim GPU output without it.
 
