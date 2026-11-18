@@ -39,6 +39,6 @@ test("YouTube verification mirrors the owner-attested upload-attempt ledger", ()
   assert.equal(mirrored.evidence.automatedLedgerValidation.runId, ledger.evidence.automatedLedgerValidation.runId);
   assert.equal(mirrored.ownerAttestation.status, ledger.ownerAttestation.status);
   const readiness = fs.readFileSync(path.join(root, "scripts/production-readiness.mjs"), "utf8");
-  assert.match(readiness, /const verificationAttempts = verification\\.uploadAttemptReconciliation/);
-  assert.match(readiness, /verificationAttempts\\?\\.status === attempts\\.status/);
+  assert.match(readiness, /const verificationAttempts = verification\.uploadAttemptReconciliation/);
+  assert.match(readiness, /verificationAttempts\?\.status === attempts\.status/);
 });
