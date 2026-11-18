@@ -23,6 +23,7 @@ const manifestPath = "content/render-manifest.json";
 const metadataPath = "content/next-short.json";
 const videoPath = "media/next-short.mp4";
 const youtubeVerificationPath = "content/youtube-channel-verification-status.json";
+const historyReconciliationPath = "content/youtube-history-reconciliation.json";
 const schedulePath = "config/weekly-content-plan.json";
 const productsPath = "config/products.json";
 const approvedProductUrl = "https://selar.com/0u19v8u99l";
@@ -62,7 +63,7 @@ if (!exists(schedulePath)) {
       blockers.push("CADENCE DECISION REQUIRED: a feasible owner-approved cadence mode, explicit timezone-aware approval timestamp and non-empty approval reference are required before publication.");
     }
     if (["targetCadence", "requestedTargetCadence", "cadenceDecisionRequired", "interimDraftCadence"].some(key => key in schedule)) blockers.push("Stale weekly cadence fields must be removed.");
-    blockers.push("LIVE BLOCKER: complete SonicVhibez public, private and unlisted history plus all pending/uncertain upload attempts must be independently reconciled immediately before upload.");
+
   } catch {
     blockers.push("Authoritative weekly schedule is not valid JSON; cadence and spacing cannot be verified.");
   }
@@ -230,6 +231,12 @@ for (const key of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRES
 if (process.env.SONICVHIBEZ_CHANNEL_ID && !/^UC[a-zA-Z0-9_-]{22}$/.test(process.env.SONICVHIBEZ_CHANNEL_ID)) {
   blockers.push("SONICVHIBEZ_CHANNEL_ID does not match the expected YouTube channel-ID format; verify it manually.");
 }
+const MAX_HISTORY_EVIDENCE_AGE_MS = 24 * 60 * 60 * 1000;
+const isFreshHistoryEvidence = value => {
+  const timestamp = Date.parse(value);
+  const now = Date.now();
+  return Number.isFinite(timestamp) && timestamp <= now && now - timestamp <= MAX_HISTORY_EVIDENCE_AGE_MS;
+};
 if (!exists(youtubeVerificationPath)) {
   blockers.push("LIVE BLOCKER: read-only YouTube identity and uploads inventory verification evidence is missing.");
 } else {
@@ -238,9 +245,60 @@ if (!exists(youtubeVerificationPath)) {
     if (verification.status !== "PASS_READ_ONLY_IDENTITY_AND_INVENTORY") {
       const code = typeof verification.oauth?.errorCode === "string" ? verification.oauth.errorCode : "not-passing";
       blockers.push(`LIVE BLOCKER: read-only YouTube identity and uploads inventory verification is ${verification.status ?? "unknown"}; OAuth error ${code}.`);
+    } else if (!exists(historyReconciliationPath)) {
+      blockers.push("LIVE BLOCKER: owner-reviewed YouTube history reconciliation evidence is missing.");
+    } else {
+      const reconciliation = JSON.parse(fs.readFileSync(path.join(root, historyReconciliationPath), "utf8"));
+      const publication = verification.publicationHistoryReconciliation;
+      const attempts = verification.uploadAttemptReconciliation;
+      const ledgerValidation = attempts?.evidence?.automatedLedgerValidation;
+      const channel = verification.channel;
+      const inventoryArtifact = verification.inventoryArtifact;
+      const expectedChannelId = process.env.SONICVHIBEZ_CHANNEL_ID;
+      const historyMatches = verification.channelIdentityVerified === true &&
+        verification.uploadsInventoryComplete === true &&
+        typeof channel?.id === "string" &&
+        (!expectedChannelId || channel.id === expectedChannelId) &&
+        ["SonicVhibez", "SonicVibes"].includes(channel.title) &&
+        channel.handle === "@sonicvhibez" &&
+        publication?.status === "OWNER_REVIEWED_REMOTE_HISTORY_MATCHES_FRESH_INVENTORY" &&
+        publication.freshInventoryRunId === verification.workflowRunId &&
+        publication.freshInventoryArtifactSha256 === inventoryArtifact?.sha256 &&
+        reconciliation.complete === true &&
+        reconciliation.channelId === channel.id &&
+        reconciliation.verifiedAt === publication.verifiedAt &&
+        reconciliation.latestInventoryEvidence?.complete === true &&
+        reconciliation.latestInventoryEvidence?.workflowRunId === verification.workflowRunId &&
+        reconciliation.latestInventoryEvidence?.artifactSha256 === inventoryArtifact?.sha256 &&
+        reconciliation.latestInventoryEvidence?.totalUploads === verification.totalUploads;
+      const historyFresh = isFreshHistoryEvidence(verification.checkedAt) &&
+        isFreshHistoryEvidence(publication?.verifiedAt) &&
+        isFreshHistoryEvidence(reconciliation.verifiedAt) &&
+        Date.parse(inventoryArtifact?.expiresAt ?? "") > Date.now();
+      if (!historyMatches || !historyFresh) {
+        blockers.push("LIVE BLOCKER: complete owner-reviewed public/private/unlisted SonicVhibez history evidence is missing, stale, or inconsistent with the authenticated channel and fresh inventory.");
+      }
+      const attemptsReconciled = attempts?.status === "VERIFIED_NO_PRIOR_PRIVATE_UPLOAD_JOBS" &&
+        reconciliation.uploadAttemptReconciliation?.status === attempts.status &&
+        reconciliation.uploadAttemptReconciliation?.inspectedAt === attempts.inspectedAt &&
+        attempts.ownerAttestation?.status === "CONFIRMED" &&
+        attempts.ownerAttestation.confirmedAt === attempts.inspectedAt?.slice(0, 10) &&
+        attempts.evidence?.executedPrivateUploadJobs === 0 &&
+        attempts.evidence?.uploadArtifactPrivatelyWorkflowRunsFound === 0 &&
+        ledgerValidation?.conclusion === "success" &&
+        ledgerValidation.executedPrivateUploadRuns === 0 &&
+        ledgerValidation.previousLedgerRunId === "NONE" &&
+        attempts.evidence?.nextPrivateUploadPreviousLedgerRunId === "NONE";
+      const attemptsFresh = isFreshHistoryEvidence(attempts?.inspectedAt);
+      if (!attemptsReconciled || !attemptsFresh) {
+        blockers.push("LIVE BLOCKER: local, workflow and owner-attested upload-attempt reconciliation is missing, stale, or incomplete; do not retry an uncertain upload.");
+      }
+      if (historyMatches && historyFresh && attemptsReconciled && attemptsFresh) {
+        notes.push(`YouTube history: verified ${verification.totalUploads} upload(s) for ${channel.handle}; public=${verification.visibilityCounts?.public ?? 0}, private=${verification.visibilityCounts?.private ?? 0}, unlisted=${verification.visibilityCounts?.unlisted ?? 0}; prior upload-attempt reconciliation passed.`);
+      }
     }
   } catch {
-    blockers.push("YouTube channel verification status file is not valid JSON.");
+    blockers.push("YouTube channel verification or owner-reviewed history reconciliation evidence is not valid JSON.");
   }
 }
 function resolutionFor(blocker) {
