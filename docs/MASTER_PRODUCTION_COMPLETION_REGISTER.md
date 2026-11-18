@@ -98,7 +98,7 @@ A promising free local candidate has been identified: `DataCraftsmanAustralia/pi
 
 Three male speakers are registered for audition: Banjo (Timothy Ferguson, speaker 5, 7.97 hours), Angus (Algy Pug, speaker 4, 1.80 hours) and Flynn (Howard Skyman, speaker 6, 0.58 hours). Banjo is the first candidate because the model author records that Timothy Ferguson's spoken outro identifies him as recording from the Gold Coast, Australia. The model author warns that the voices can sound formal/literary rather than conversational and have variable recording quality.
 
-**Verified:** GitHub Actions run [44228884555](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44228884555) completed successfully on source SHA `4678e10369d2093d7928fc1bda06ad768542ef2f`. It installed Piper 1.8.0, passed the candidate/speaker-map tests, generated all three WAV auditions, verified the pinned model SHA-256 `f34849bce64d803d0fe90087766d5d6f2a8215a12edad43e486d77072df7dd41`, and uploaded artifact `14394291428` (`sonicvhibez-piper-australian-male-voice-auditions`). The artifact expires 2026-12-18. This is an audition only, not final narration. The owner has not yet auditioned or selected a voice.
+**Verified:** GitHub Actions run [44228884555](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44228884555) completed successfully on source SHA `4678e10369d2093d7928fc1bda06ad768542ef2f`. It installed Piper 1.8.0, passed the candidate/speaker-map tests, generated all three WAV auditions, verified the pinned model SHA-256 `f34849bce64d803d0fe90087766d5d6f2a8215a12edad43e486d77072df7dd41`, and uploaded artifact `14394291428` (`sonicvhibez-piper-australian-male-voice-auditions`). The artifact expires 2026-12-18. This is an audition only, not final narration. The owner has not yet auditioned or selected a voice. An enhanced workflow that synthesizes the actual current Short script in all three voices is queued as run `44229692794` on SHA `d766f642d4c5102da4db1a504527518370588b7a`; it has not yet completed.
 
 Tasks:
 1. Verify the Piper audition workflow and owner-listen to Banjo, Angus and Flynn; choose one or reject all three.
@@ -215,11 +215,13 @@ The Short upload metadata title has been aligned to the exact title in the produ
 
 ## Required owner inputs (only when the corresponding gate is ready)
 
-1. Start the free Kaggle session and run the pinned test notebook; provide the resulting package/artifact.
-2. If no commercially cleared free Australian-English male voice is verified, provide a voice recording or explicitly approve a documented option.
-3. Watch and approve the exact final video, captions, thumbnail, metadata, disclosures and factual claims.
-4. Explicitly authorize any exact private upload job after all prior gates pass.
-5. Separately authorize any public publication or unattended scheduling; existing approval does not imply it.
+1. Start the free Kaggle session and run the pinned test notebook; provide the resulting package/artifact. No Kaggle GPU generation has yet been performed.
+2. Listen to the Australian male Piper auditions and select one voice or reject all three; if none meets the realistic/conversational quality bar, provide an owner-recorded voice track or approve another fully documented option.
+3. Confirm whether the first content package should remain the current creator-education tutorial or be replaced with a realistic animal-encounter story. The current drafts are tutorials, not animal-encounter documentaries.
+4. Create/restore a separate SonicVhibez Metricool brand connected only to the verified SonicVhibez YouTube channel, disconnect that channel from Nature Frontiers, and restore access to the old brand or independently verify the eight historical auto-publishing records.
+5. Watch and approve the exact final video, captions, thumbnail, metadata, disclosures and factual claims.
+6. Explicitly authorize any exact private upload job after all prior gates pass.
+7. Separately authorize any public publication or unattended scheduling; existing approval does not imply it.
 
 ## Current acceptance decision
 
