@@ -1,3 +1,21 @@
+## Latest exact candidate dashboard evidence — 18 November 2026
+
+- Exact code/test SHA: `8d3f24b46af34af3238ca7714e96606af0c3940f`.
+- Browser E2E [44272072070](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44272072070): **33/33 Chromium journeys passed**.
+- Automation/security [44272071799](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44272071799): 983/983 Node, 84/84 Python, zero skips, npm audit zero vulnerabilities. Content-quality [44272072115](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44272072115): 985/985.
+- Inventory remains **120 controls, 17 forms, 103 form-owned controls and 17 standalone controls**; stored form-level snapshot remains 11 successful local/operator forms and 6 production-blocked forms.
+- The 33 journeys include keyboard-only connection, accessible names, 320px mobile no-overflow, form landmarks, malformed/impossible date rejection, safe API behavior and disabled publishing controls.
+- **DASH-001 remains NOT_TESTED overall**: 33 journeys do not prove exhaustive field-level success, validation, authorization, persistence, restart, concurrency and feedback behavior for all 120 controls/forms.
+
+## Latest exact candidate dashboard evidence — 18 November 2026
+
+- Exact code/test SHA: `8d3f24b46af34af3238ca7714e96606af0c3940f`.
+- Browser E2E [44272072070](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44272072070): **33/33 Chromium journeys passed**.
+- Automation/security [44272071799](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44272071799): 983/983 Node, 84/84 Python, zero skips, npm audit zero vulnerabilities. Content-quality [44272072115](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44272072115): 985/985.
+- Inventory remains **120 controls, 17 forms, 103 form-owned controls and 17 standalone controls**; stored form-level snapshot remains 11 successful local/operator forms and 6 production-blocked forms.
+- The 33 journeys include keyboard-only connection, accessible names, 320px mobile no-overflow, form landmarks, malformed/impossible date rejection, safe API behavior and disabled publishing controls.
+- **DASH-001 remains NOT_TESTED overall**: 33 journeys do not prove exhaustive field-level success, validation, authorization, persistence, restart, concurrency and feedback behavior for all 120 controls/forms.
+
 ## Exact candidate dashboard evidence — 18 November 2026
 
 - Exact source/test SHA: `3c67fbef9a48ba77774240a30bdb7aecde43320c`.

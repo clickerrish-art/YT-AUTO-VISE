@@ -1,3 +1,45 @@
+# Latest non-destructive inventory — 18 November 2026
+
+- Candidate code/test SHA: `8d3f24b46af34af3238ca7714e96606af0c3940f`; main: `2cd6f223b6b673c030974c7f27c5ddf6f41e8b38`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Divergence: **4,331 branch-only commits / 9 base-only commits**.
+- Final tree: **433 changed paths**, **17 critical modules**, zero final-tree deletions, zero patch-equivalent commits.
+- Branch-only categories: 1,349 documentation-only; 1,271 test-only; 1,001 implementation; 234 config/content; 220 workflow-only; 137 implementation-and-tests; 119 mixed.
+- Nine base-only commits requiring semantic review:
+  - `2cd6f223` Revert accidental implementation-only files from main.
+  - `a10eca5d` Avoid slow apt index refresh in narration review runner.
+  - `5af11d8d` Correct Metricool cross-brand evidence field.
+  - `2e4153c8` Revert accidental default-branch file creation.
+  - `71ed56fe` Test non-commercial Nature Frontiers interstitial safeguards.
+  - `69fdf35c` Remove accidental test-file addition from main.
+  - `c8205649` Test GitHub OIDC token expiry and refresh.
+  - `fa00d28e` Revert unintended test-file write to default branch.
+  - `71578daf` Exercise cross-run history restoration with mocked GitHub artifact API.
+- PR #1 remains OPEN / DRAFT / UNMERGED. Mergeability is not authorization to merge.
+- Branch-protection API returned HTTP 403; owner/admin must verify protection and required checks.
+- Exact baseline: main 54 Node / 8 Python, 4 moderate npm vulnerabilities; candidate 983 Node / 84 Python, zero skips and zero npm vulnerabilities.
+- No reset, rebase, force-push, cherry-pick, merge or destructive reconciliation was performed. GIT-002 remains NOT_TESTED pending human semantic review of the 17 critical modules.
+
+# Latest non-destructive inventory — 18 November 2026
+
+- Candidate code/test SHA: `8d3f24b46af34af3238ca7714e96606af0c3940f`; main: `2cd6f223b6b673c030974c7f27c5ddf6f41e8b38`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Divergence: **4,331 branch-only commits / 9 base-only commits**.
+- Final tree: **433 changed paths**, **17 critical modules**, zero final-tree deletions, zero patch-equivalent commits.
+- Branch-only categories: 1,349 documentation-only; 1,271 test-only; 1,001 implementation; 234 config/content; 220 workflow-only; 137 implementation-and-tests; 119 mixed.
+- Nine base-only commits requiring semantic review:
+  - `2cd6f223` Revert accidental implementation-only files from main.
+  - `a10eca5d` Avoid slow apt index refresh in narration review runner.
+  - `5af11d8d` Correct Metricool cross-brand evidence field.
+  - `2e4153c8` Revert accidental default-branch file creation.
+  - `71ed56fe` Test non-commercial Nature Frontiers interstitial safeguards.
+  - `69fdf35c` Remove accidental test-file addition from main.
+  - `c8205649` Test GitHub OIDC token expiry and refresh.
+  - `fa00d28e` Revert unintended test-file write to default branch.
+  - `71578daf` Exercise cross-run history restoration with mocked GitHub artifact API.
+- PR #1 remains OPEN / DRAFT / UNMERGED. Mergeability is not authorization to merge.
+- Branch-protection API returned HTTP 403; owner/admin must verify protection and required checks.
+- Exact baseline: main 54 Node / 8 Python, 4 moderate npm vulnerabilities; candidate 983 Node / 84 Python, zero skips and zero npm vulnerabilities.
+- No reset, rebase, force-push, cherry-pick, merge or destructive reconciliation was performed. GIT-002 remains NOT_TESTED pending human semantic review of the 17 critical modules.
+
 # Current inventory refresh — 5 November 2026
 
 The latest non-destructive inventory was generated from exact source/test candidate `51ad2bbcd502c9e44717cd4a529794993cfc50fe` in [workflow run 41951888807](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41951888807).

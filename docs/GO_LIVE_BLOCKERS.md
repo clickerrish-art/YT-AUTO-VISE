@@ -1,3 +1,59 @@
+# Latest exact production-readiness result — 18 November 2026
+
+Candidate code/test SHA: `8d3f24b46af34af3238ca7714e96606af0c3940f`; readiness run [44272072084](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44272072084). Result: **HOLD, exit 2, 19 blockers**, with human-readable and JSON diagnostics agreeing. No upload was attempted.
+
+RDY-93F84DBDCB44 — Short footage missing: `media/next-short-footage.mp4`.
+RDY-7EC64DE8E92E — Short narration missing: `media/next-short-narration.mp3`.
+RDY-D90DC5FF4ECE — Short footage rights evidence missing.
+RDY-463DB1D16F39 — Short narration rights evidence missing.
+RDY-33CDEB9448E4 — Short `rightsConfirmed` not owner-confirmed.
+RDY-E76C6F6896E0 — Short `complianceReviewed` not human-confirmed.
+RDY-F0C5955F99EB — Long-form footage missing: `media/long-form-001-footage.mp4`.
+RDY-C2B8E199C3D9 — Long-form narration missing: `media/long-form-drafts/long-001-narration-final.mp3`.
+RDY-46866CA44098 — Long-form captions missing: `long-form-001-captions-final.srt`.
+RDY-E9140B0CF9A9 — Long-form footage rights evidence missing.
+RDY-0682CC58ECF0 — Long-form narration rights evidence missing.
+RDY-EF19160F89FB — Long-form `rightsConfirmed` not owner-confirmed.
+RDY-9F64A4A468D6 — Long-form `complianceReviewed` not human-confirmed.
+RDY-59F6FCE1F9B0 — Metadata not human-reviewed / not `READY_FOR_PRIVATE_UPLOAD`.
+RDY-4E9BD4C5E14F — Metadata rights confirmation missing.
+RDY-36AA230A31D7 — Metadata compliance review missing.
+RDY-3DA0707998B8 — Final Short MP4 missing: `media/next-short.mp4`.
+RDY-B5E6F37EADD2 — Latest YouTube OAuth refresh returns `invalid_grant`.
+RDY-8D340A6DA7D7 — Current upload-capable `youtube.upload` scope not independently verified.
+
+Separate upload-attempt reconciliation is PASS: no prior private-upload job executed, no prior private-upload artifact, and owner attestation found no additional manual/local/external attempts. The mirrored verification record now matches the reconciliation file.
+
+The queue remains 16 draft-only items with publishing disabled and zero scheduled timestamps. The Nature Frontiers three-slot artifact is a deterministic 2030-10-25 research-only PR fixture, not today's posts and not a remote Facebook draft. No external publishing or scheduling operation was performed.
+
+# Latest exact production-readiness result — 18 November 2026
+
+Candidate code/test SHA: `8d3f24b46af34af3238ca7714e96606af0c3940f`; readiness run [44272072084](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44272072084). Result: **HOLD, exit 2, 19 blockers**, with human-readable and JSON diagnostics agreeing. No upload was attempted.
+
+RDY-93F84DBDCB44 — Short footage missing: `media/next-short-footage.mp4`.
+RDY-7EC64DE8E92E — Short narration missing: `media/next-short-narration.mp3`.
+RDY-D90DC5FF4ECE — Short footage rights evidence missing.
+RDY-463DB1D16F39 — Short narration rights evidence missing.
+RDY-33CDEB9448E4 — Short `rightsConfirmed` not owner-confirmed.
+RDY-E76C6F6896E0 — Short `complianceReviewed` not human-confirmed.
+RDY-F0C5955F99EB — Long-form footage missing: `media/long-form-001-footage.mp4`.
+RDY-C2B8E199C3D9 — Long-form narration missing: `media/long-form-drafts/long-001-narration-final.mp3`.
+RDY-46866CA44098 — Long-form captions missing: `long-form-001-captions-final.srt`.
+RDY-E9140B0CF9A9 — Long-form footage rights evidence missing.
+RDY-0682CC58ECF0 — Long-form narration rights evidence missing.
+RDY-EF19160F89FB — Long-form `rightsConfirmed` not owner-confirmed.
+RDY-9F64A4A468D6 — Long-form `complianceReviewed` not human-confirmed.
+RDY-59F6FCE1F9B0 — Metadata not human-reviewed / not `READY_FOR_PRIVATE_UPLOAD`.
+RDY-4E9BD4C5E14F — Metadata rights confirmation missing.
+RDY-36AA230A31D7 — Metadata compliance review missing.
+RDY-3DA0707998B8 — Final Short MP4 missing: `media/next-short.mp4`.
+RDY-B5E6F37EADD2 — Latest YouTube OAuth refresh returns `invalid_grant`.
+RDY-8D340A6DA7D7 — Current upload-capable `youtube.upload` scope not independently verified.
+
+Separate upload-attempt reconciliation is PASS: no prior private-upload job executed, no prior private-upload artifact, and owner attestation found no additional manual/local/external attempts. The mirrored verification record now matches the reconciliation file.
+
+The queue remains 16 draft-only items with publishing disabled and zero scheduled timestamps. The Nature Frontiers three-slot artifact is a deterministic 2030-10-25 research-only PR fixture, not today's posts and not a remote Facebook draft. No external publishing or scheduling operation was performed.
+
 # 18 November 2026 — live current-head blocker register
 
 This section supersedes the earlier 18 November snapshot below. It is based on live implementation-branch metadata and exact source/test SHA `3c67fbef9a48ba77774240a30bdb7aecde43320c`, plus readiness artifact from run [44263192630](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192630).
