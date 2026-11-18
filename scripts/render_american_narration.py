@@ -4,6 +4,9 @@ from __future__ import annotations
 import argparse, hashlib, json, math, struct, sys, urllib.request, wave
 from pathlib import Path
 
+# Ensure direct CLI execution can import sibling repository modules.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from scripts.generate_piper_voice_audition import extract_short_narration, sha256_file, sha256_text
 
 REPO = "rhasspy/piper-voices"
