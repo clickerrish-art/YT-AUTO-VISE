@@ -21,6 +21,7 @@ MODEL_BYTES = 63531379
 CONFIG_BYTES = 4968
 VOICE_ID = "en_US-norman-medium"
 OUTPUT = "american-wildlife-encounter-narration-review.wav"
+SPEECH_LENGTH_SCALE = 1.1
 DIRECTION = ("American English male voice; mature approximately-45-year-old vocal character; "
              "clean, clear, warm, confident, passionate wildlife storyteller; natural conversational pacing; "
              "controlled emphasis; no robotic cadence or exaggerated theatricality.")
@@ -88,7 +89,7 @@ def inspect_wav(path: Path) -> dict:
     peak=max(map(abs,samples)); rms=math.sqrt(sum(v*v for v in samples)/len(samples))
     clipped=sum(abs(v)>=32760 for v in samples)
     duration=frames/rate
-    if duration<20 or duration>180 or peak==0 or rms<8 or clipped:
+    if duration<50 or duration>60 or peak==0 or rms<8 or clipped:
         raise ValueError(f"Output duration/level/clipping validation failed: duration={duration:.3f}s peak={peak} rms={rms:.2f} clipped={clipped}")
     return {"channels":channels,"sampleRateHz":rate,"sampleWidthBits":16,
             "durationSeconds":round(duration,3),"peakDbfs":round(20*math.log10(peak/32768),2),
@@ -113,7 +114,7 @@ def render(output: Path, source: Path) -> dict:
     voice=PiperVoice.load(str(model))
     wav_path=output/OUTPUT
     with wave.open(str(wav_path),"wb") as wav:
-        voice.synthesize_wav(narration,wav,SynthesisConfig())
+        voice.synthesize_wav(narration,wav,SynthesisConfig(length_scale=SPEECH_LENGTH_SCALE))
     headroom=apply_headroom(wav_path)
     metrics=inspect_wav(wav_path)
     report={
@@ -129,7 +130,7 @@ def render(output: Path, source: Path) -> dict:
       "sourceScriptPath":str(source),"sourceScriptSha256":sha256_text(source_text),
       "sourceNarrationSha256":sha256_text(narration),"sourceNarrationWordCount":len(narration.split()),
       "audioFile":wav_path.name,"audioSha256":sha256_file(wav_path),"audioBytes":wav_path.stat().st_size,
-      "audioMetrics":metrics,"headroomProcessing":headroom,"humanVoiceQualityReview":"PENDING",
+      "audioMetrics":metrics,"headroomProcessing":headroom,"speechLengthScale":SPEECH_LENGTH_SCALE,"targetDurationSeconds":{"minimum":50,"maximum":60},"humanVoiceQualityReview":"PENDING",
       "commercialAttributionReview":"PENDING","productionApproved":False,"finalNarration":False,
       "publishingEnabled":False,"releaseStatus":"HOLD",
       "limitations":["Perceived age is a direction, not a verified human age.","Piper has limited expressive controls; passionate delivery requires human listening."]

@@ -14,7 +14,7 @@ test("Nile crocodile encounter remains an unqueued review-only draft", () => {
 
 test("narration is a short wildlife encounter and discloses AI reconstruction", () => {
   const words = narration.trim().split(/\s+/);
-  assert.ok(words.length >= 80 && words.length <= 140, `unexpected narration word count: ${words.length}`);
+  assert.ok(words.length >= 140 && words.length <= 165, `unexpected narration word count: ${words.length}`);
   assert.match(narration, /Nile crocodile/i);
   assert.match(narration, /AI-generated illustration of documented behaviour/i);
   assert.match(narration, /not real footage of an attack/i);

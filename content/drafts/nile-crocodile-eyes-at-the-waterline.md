@@ -7,9 +7,9 @@
 **Disclosure:** Every generated shot must be visibly identified as an AI-generated illustrative reconstruction. Do not imply that the scene is authentic footage or a recorded real-world attack.  
 **Thumbnail concept:** Nile crocodile eye at dusk, tight waterline close-up, eye on the right, clean negative space on the left, exact headline “TOO BIG?”; no blood, human victim, gore, fake logos or watermark.
 
-## Narration draft (116 words; retime to approved final audio)
+## Narration draft (154 words; 50–60-second target)
 
-At first, the river looks empty. Then two eyes break the surface. A Nile crocodile can keep almost all its body underwater, with only its eyes, ears and nostrils exposed. From there, it can watch the shoreline while staying mostly concealed. It is an ambush hunter: it waits near the water's edge, then strikes when prey comes within reach. Specialised sensors in its skin can detect tiny disturbances in the water. To a viewer, the warning may be almost invisible: a ripple, a change in the surface, a pair of eyes. A quiet river does not mean an empty river. This is an AI-generated illustration of documented behaviour, not real footage of an attack. Never approach a crocodile shoreline.
+At first, the river looks empty. Then two eyes break the surface. A Nile crocodile can keep almost all its body underwater, with only its eyes, ears and nostrils exposed. From there, it can watch the shoreline while staying mostly concealed. Its low profile hides the body, while the waterline gives it a view of the bank. It does not need a long chase. It waits near the water's edge for prey to come within striking distance. Specialised sensory organs in its skin can detect tiny disturbances in the water. To a viewer, the warning may be almost invisible: a ripple, a change in the surface, a pair of eyes. When prey comes close enough, the crocodile can launch from the water in a sudden ambush. A quiet river does not mean an empty river. This is an AI-generated illustration of documented behaviour, not real footage of an attack. Never approach a crocodile shoreline.
 
 ## Factual claim map
 
