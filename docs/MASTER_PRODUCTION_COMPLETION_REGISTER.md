@@ -27,7 +27,7 @@ This is an evidence register, not a declaration that the project is complete. A 
 | Product promotion | Only `https://selar.com/0u19v8u99l` is approved; exact direct-sales disclosure is owner-approved; paid-promotion flag must remain enabled | PASS for this product/disclosure only |
 | WanGP source setup | Project-owned Kaggle notebook pins WanGP source commit and records model/VAE revisions and hashes; importer and tests exist | PASS for repository setup only; no GPU generation has been evidenced |
 | Internet Archive intake v1 | Workflow run `44227968869` completed successfully and uploaded artifact `14392619879`; 30 records were returned, but inspection showed broad-search false positives | PASS for workflow mechanics; FAIL for useful discovery relevance |
-| Internet Archive intake v2 | Relevance filter and regression test committed; workflow rerun on current branch SHA `e7a017267cbef4efb7408f3abb595334767e1651` | PENDING workflow result |
+| Internet Archive intake v2 | Run `44228944629` succeeded on SHA `c36f19a57e90b049607afacfbbcebda0c0bb358c`; 21 candidates returned, but manual artifact inspection still found broad-title false positives and only one potentially wildlife-relevant item, with no licence. No media downloaded. | PASS for workflow mechanics; FAIL for useful/licensed discovery |
 
 ## Outstanding work — ordered execution gates
 
@@ -35,12 +35,13 @@ This is an evidence register, not a declaration that the project is complete. A 
 
 **Status: IN PROGRESS**
 
-1. Confirm v2 GitHub Actions run on the current SHA succeeds.
-2. Inspect the resulting report for wildlife relevance; report zero useful results honestly if no suitable items are found.
-3. Review individual item pages and licence terms; metadata triage is not legal clearance.
-4. Exclude NonCommercial, NoDerivatives, unknown, uploader-unverified and third-party-restricted material.
-5. Only then consider an item for manual download and asset registration.
-6. Keep download, registration, render, scheduling and publishing disabled until separate approvals.
+1. The v2 workflow and tests passed, but the 21-result report still contained false positives; only one title looked potentially wildlife-related and it had no licence metadata.
+2. A stricter v3 search is now pinned to the Prelinger collection and per-item Public Domain Mark/CC0 metadata, with title-only relevance and game/sports/photography/broadcast exclusions. Workflow run `44229512157` is queued on current SHA `cfdbca182898a075a02192bd58db8b313aaf6623`.
+3. Inspect the v3 report; if no suitable item appears, report zero suitable assets rather than widening the query into unlicensed content.
+4. Review each candidate item page and licence terms; metadata triage is not legal clearance.
+5. Exclude NonCommercial, NoDerivatives, unknown, uploader-unverified and third-party-restricted material.
+6. Only then consider an item for manual download and asset registration.
+7. Keep download, registration, render, scheduling and publishing disabled until separate approvals.
 
 **Acceptance:** v2 tests pass, search results are relevant, and every selected asset has exact source page, uploader/creator, licence evidence, commercial-use and modification rights, third-party clearance, file hash and human approval. No item is approved merely by appearing in the report.
 
