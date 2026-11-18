@@ -16,6 +16,7 @@ test("readiness report identifies blockers, preserves safety defaults, and exits
   assert.match(result.stdout, /SonicVhibez production readiness/);
   assert.match(result.stdout, /YouTube history: verified 1 upload\(s\)/);
   assert.match(result.stdout, /LIVE BLOCKER: YouTube OAuth upload scope is not independently verified/);
+  assert.match(result.stdout, /latest read-only YouTube OAuth attempt is BLOCKED \(OAuth error invalid_grant\)/);
   assert.doesNotMatch(result.stdout, /LIVE BLOCKER: complete SonicVhibez public, private and unlisted history/);
   assert.match(result.stdout, /HOLD:/);
   assert.match(result.stdout, /public publishing disabled/);
