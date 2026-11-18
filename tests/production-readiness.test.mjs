@@ -236,16 +236,17 @@ test("readiness reports malformed render-manifest asset paths without crashing J
 });
 
 test("readiness blocks selected imported Canva wildlife assets until exact source, local MP4 and human review are verified", () => {
-  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-media-inventory-"));
+  const directory = fs.mkdtempSync(path.join(process.cwd(), "content", ".sonicvhibez-media-inventory-"));
   try {
     const inventory = JSON.parse(fs.readFileSync("content/sonicvhibez-imported-media-inventory.json", "utf8"));
     inventory.assets[0].status = "HOLD";
     inventory.assets[0].excludedFromProduction = false;
     const inventoryPath = path.join(directory, "sonicvhibez-imported-media-inventory.json");
     fs.writeFileSync(inventoryPath, JSON.stringify(inventory, null, 2));
+    const relativeInventoryPath = path.relative(process.cwd(), inventoryPath);
     const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
       cwd: process.cwd(),
-      env: { ...process.env, SONICVHIBEZ_IMPORTED_MEDIA_INVENTORY_PATH: inventoryPath },
+      env: { ...process.env, SONICVHIBEZ_IMPORTED_MEDIA_INVENTORY_PATH: relativeInventoryPath },
       encoding: "utf8"
     });
     assert.equal(result.status, 2);
