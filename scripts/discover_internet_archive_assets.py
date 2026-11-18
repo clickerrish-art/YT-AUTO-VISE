@@ -22,7 +22,16 @@ DEFAULT_QUERY = (
     "OR shark OR whale OR bird OR reptile OR ocean OR nature)"
 )
 FIELDS = ("identifier", "title", "creator", "date", "year", "mediatype",
-          "licenseurl", "rights", "description", "collection")
+          "licenseurl", "rights", "description", "collection", "subject")
+RELEVANCE_TERMS = (
+    "wildlife", "animal", "crocodile", "alligator", "elephant", "lion", "tiger",
+    "leopard", "cheetah", "hyena", "wolf", "fox", "bear", "deer", "antelope",
+    "giraffe", "zebra", "rhino", "rhinoceros", "hippo", "hippopotamus",
+    "shark", "whale", "dolphin", "seal", "penguin", "turtle", "tortoise",
+    "snake", "lizard", "reptile", "bird", "eagle", "hawk", "owl", "parrot",
+    "butterfly", "insect", "spider", "frog", "amphibian", "fish", "marine",
+    "underwater", "coral reef", "ocean life", "safari", "ecosystem"
+)
 USER_AGENT = "SonicVhibez-ArchiveDiscovery/1.0 (metadata-only rights-review intake)"
 
 
@@ -49,6 +58,13 @@ def clean_text(value: Any, limit: int = 4000) -> str:
     if value is None:
         return ""
     return str(value).strip()[:limit]
+
+
+def is_wildlife_relevant(doc: dict[str, Any]) -> bool:
+    """Reject broad-search false positives unless descriptive metadata names wildlife."""
+    searchable = " ".join(clean_text(doc.get(key), 4000) for key in
+                          ("title", "description", "subject", "collection")).lower()
+    return any(term in searchable for term in RELEVANCE_TERMS)
 
 
 def candidate_from_doc(doc: dict[str, Any]) -> dict[str, Any] | None:
@@ -94,14 +110,14 @@ def search_archive(query: str, rows: int = 30, timeout: int = 30,
     docs = payload.get("response", {}).get("docs", [])
     if not isinstance(docs, list):
         raise ValueError("Unexpected Internet Archive response format")
-    return [candidate for doc in docs if isinstance(doc, dict)
+    return [candidate for doc in docs if isinstance(doc, dict) and is_wildlife_relevant(doc)
             for candidate in [candidate_from_doc(doc)] if candidate is not None]
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--query", default=DEFAULT_QUERY)
-    parser.add_argument("--rows", type=int, default=30)
+    parser.add_argument("--rows", type=int, default=100)
     parser.add_argument("--output", default="internet-archive-discovery.json")
     args = parser.parse_args()
     try:
