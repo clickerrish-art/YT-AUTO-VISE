@@ -100,7 +100,7 @@ test("human-review bundle and previews require operator auth and reject changed 
     assert.equal(response.status, 200, kind + " preview should be available to the authenticated operator");
     assert.deepEqual(Buffer.from(await response.arrayBuffer()), artifacts[kind]);
   }
-  for (const kind of ["video", "thumbnail", "captions"]) {
+  for (const kind of ["video", "thumbnail", "captions", "narration"]) {
     fs.writeFileSync(path.join(process.cwd(), paths[kind]), Buffer.from("tampered " + kind));
     const tamperedPreview = await fetch(base + bundle.previewUrls[kind], { headers });
     assert.equal(tamperedPreview.status, 409, "changed " + kind + " must never be served as the approved preview");
