@@ -59,7 +59,7 @@
     }
   ],
   "audition": {
-    "status": "GENERATED_OWNER_AUDITION_PENDING",
+    "status": "GENERATED_FULL_SCRIPT_OWNER_AUDITION_PENDING",
     "generatedByWorkflow": true,
     "chosenVoice": null,
     "exactTestText": "At first, the river looks still. Then a ripple moves across the water. A saltwater crocodile rises near the bank, pauses, and slips beneath the surface. Keep your distance and let the animal behave naturally.",
@@ -69,10 +69,38 @@
       "Confirm the accent and naturalness meet the realistic male Australian-English requirement",
       "Review commercial attribution and terms before production use"
     ],
-    "workflowRunId": 44228884555,
-    "artifactId": 14394291428,
-    "generatedAt": "2026-11-18",
-    "artifactContainsFullScript": false,
-    "productionApproved": false
+    "workflowRunId": 44240205149,
+    "artifactId": 14399291832,
+    "generatedAt": "2026-11-18T04:52:13Z",
+    "artifactContainsFullScript": true,
+    "productionApproved": false,
+    "artifactDigest": "sha256:4ec6e49d4f1bc1d0896802c9c1f43dd9c11f2d1aa82a3d6068f534b4c281151f",
+    "implementationHeadSha": "02da9bc9e9ac4d14377f2c0d1bf4b5c099144099",
+    "sourceScriptSha256": "2a4bc78951d2bb07e4e7ac6f85f8ba94e9f6ff253f8ba0c3c0bf26514309f94e",
+    "sourceNarrationSha256": "4d823613cbf10f1e3927ae6611527de215da73ff47e4c65185348ba4997157a9",
+    "artifactExpiresAt": "2026-12-18T04:52:10Z",
+    "fullScriptAuditions": [
+      {
+        "voice": "banjo",
+        "file": "banjo-short-001-script-audition.wav",
+        "sha256": "b20631c0fd8cafabc8ad1c6beb212ba7b6d765dbd5de5ca50a442e182a8d2b42",
+        "durationSeconds": 47.229,
+        "wordCount": 129
+      },
+      {
+        "voice": "angus",
+        "file": "angus-short-001-script-audition.wav",
+        "sha256": "11ed86addf21cef8adc6f4e411724fce797086e5a572ba2f6352d4f4a34f0d8e",
+        "durationSeconds": 54.253,
+        "wordCount": 129
+      },
+      {
+        "voice": "flynn",
+        "file": "flynn-short-001-script-audition.wav",
+        "sha256": "6a464ec0ada8802970562324bcc186b16c938a8228b4b3d5524964c5d1cd87d7",
+        "durationSeconds": 45.79,
+        "wordCount": 129
+      }
+    ]
   }
 }
