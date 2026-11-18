@@ -14,7 +14,7 @@ test("readiness report identifies blockers, preserves safety defaults, and exits
   });
   assert.equal(result.status, 2);
   assert.match(result.stdout, /SonicVhibez production readiness/);
-  assert.match(result.stdout, /YouTube history: verified 1 upload\\(s\\)/);
+  assert.match(result.stdout, /YouTube history: verified 1 upload\(s\)/);
   assert.doesNotMatch(result.stdout, /LIVE BLOCKER: complete SonicVhibez public, private and unlisted history/);
   assert.match(result.stdout, /HOLD:/);
   assert.match(result.stdout, /public publishing disabled/);
@@ -50,7 +50,7 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and actionab
     assert.ok(["external_owner_or_human_reviewer", "shared_code_and_owner", "maintainer_code_or_configuration"].includes(blocker.controlOwner));
     assert.ok(blocker.resolution.length > 20);
   }
-  assert.equal(report.blockers.some(blocker => /complete owner-reviewed public\\/private\\/unlisted SonicVhibez history/.test(blocker.message)), false, "fresh owner-reviewed history evidence must clear the unconditional blocker");
+  assert.equal(report.blockers.some(blocker => /complete owner-reviewed public\/private\/unlisted SonicVhibez history/.test(blocker.message)), false, "fresh owner-reviewed history evidence must clear the unconditional blocker");
   assert.ok(report.notes.some(note => /YouTube history: verified 1 upload/.test(note)));
   assert.equal(report.blockers.some(blocker => /OAuth error invalid_client/.test(blocker.message) && blocker.evidence.path === "content/youtube-channel-verification-status.json"), false, "the verified read-only OAuth inventory must not remain incorrectly marked as invalid_client");
   const invalidGrantBlocker = report.blockers.find(blocker => /invalid_grant/i.test(blocker.message));
