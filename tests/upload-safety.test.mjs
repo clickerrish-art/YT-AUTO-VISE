@@ -104,7 +104,7 @@ test("upload approval rejects mismatched job, artifact, metadata, and visibility
     factualEditorialEvidenceRef: "fixture/factual-review",
     scores: Object.fromEntries(dimensions.map(key => [key, 90])),
     criticalGates: Object.fromEntries(gates.map(key => [key, true])),
-    artifactHashes: { video: "a".repeat(64), metadata: "b".repeat(64), thumbnail: "d".repeat(64), captions: "e".repeat(64), narration: "6".repeat(64) }
+    artifactHashes: { video: "a".repeat(64), metadata: "b".repeat(64), thumbnail: "d".repeat(64), images: ["d".repeat(64)], captions: "e".repeat(64), narration: "6".repeat(64) }
   };
   const rightsEvidence = { assetPath: "media/source.mp4", assetSha256: "e".repeat(64), licenseEvidenceLocation: "rights/source-license.txt", licenseEvidenceSha256: "f".repeat(64), permittedUses: ["YouTube"], verificationStatus: "VERIFIED", verifiedBy: "owner@example.test", verifiedAt: "2026-10-24T00:00:00.000Z" };
   const rightsEvidenceSha256 = crypto.createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex");
