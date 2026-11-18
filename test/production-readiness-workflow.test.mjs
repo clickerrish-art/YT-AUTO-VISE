@@ -28,3 +28,17 @@ test("critical CI workflows use Node 24-compatible maintained action runtimes", 
     );
   }
 });
+
+test("YouTube verification mirrors the owner-attested upload-attempt ledger", () => {
+  const verification = JSON.parse(fs.readFileSync(path.join(root, "content/youtube-channel-verification-status.json"), "utf8"));
+  const reconciliation = JSON.parse(fs.readFileSync(path.join(root, "content/youtube-history-reconciliation.json"), "utf8"));
+  const ledger = reconciliation.uploadAttemptReconciliation;
+  const mirrored = verification.uploadAttemptReconciliation;
+  assert.equal(mirrored.status, ledger.status);
+  assert.equal(mirrored.inspectedAt, ledger.inspectedAt);
+  assert.equal(mirrored.evidence.automatedLedgerValidation.runId, ledger.evidence.automatedLedgerValidation.runId);
+  assert.equal(mirrored.ownerAttestation.status, ledger.ownerAttestation.status);
+  const readiness = fs.readFileSync(path.join(root, "scripts/production-readiness.mjs"), "utf8");
+  assert.match(readiness, /const verificationAttempts = verification\\.uploadAttemptReconciliation/);
+  assert.match(readiness, /verificationAttempts\\?\\.status === attempts\\.status/);
+});

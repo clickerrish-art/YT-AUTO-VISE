@@ -274,6 +274,7 @@ if (!exists(youtubeVerificationPath)) {
       const reconciliation = JSON.parse(fs.readFileSync(path.join(root, historyReconciliationPath), "utf8"));
       const publication = verification.publicationHistoryReconciliation;
       const attempts = reconciliation.uploadAttemptReconciliation;
+      const verificationAttempts = verification.uploadAttemptReconciliation;
       const ledgerValidation = attempts?.evidence?.automatedLedgerValidation;
       const channel = verification.channel;
       const inventoryArtifact = verification.inventoryArtifact;
@@ -304,6 +305,10 @@ if (!exists(youtubeVerificationPath)) {
       const attemptsReconciled = attempts?.status === "VERIFIED_NO_PRIOR_PRIVATE_UPLOAD_JOBS" &&
         reconciliation.uploadAttemptReconciliation?.status === attempts.status &&
         reconciliation.uploadAttemptReconciliation?.inspectedAt === attempts.inspectedAt &&
+        verificationAttempts?.status === attempts.status &&
+        verificationAttempts?.inspectedAt === attempts.inspectedAt &&
+        verificationAttempts?.evidence?.automatedLedgerValidation?.runId === ledgerValidation?.runId &&
+        verificationAttempts?.ownerAttestation?.status === "CONFIRMED" &&
         attempts.ownerAttestation?.status === "CONFIRMED" &&
         attempts.ownerAttestation.confirmedAt === attempts.inspectedAt?.slice(0, 10) &&
         attempts.evidence?.executedPrivateUploadJobs === 0 &&
