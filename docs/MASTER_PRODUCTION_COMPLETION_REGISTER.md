@@ -1,3 +1,102 @@
+# LIVE MASTER STATUS — 18 November 2026
+
+**This live refresh supersedes older checkpoint details below wherever they conflict.** It is an evidence snapshot, not a release approval.
+
+- Current code/test branch immediately before this register refresh: `cad909be9b70eaa897b919aebc93439dceaf15b6`.
+- `main`: `2e4153c8252349d1a7c5655f5cdc00da557c597e` (not modified).
+- PR #1: OPEN / DRAFT / UNMERGED. No merge, close, ready-for-review change, reset, rebase, force-push or history rewrite.
+- Branch comparison before this documentation commit: 4,287 ahead / 6 behind; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. GIT-002 semantic review remains NOT TESTED.
+- Full exact-SHA CI checkpoint `62a7e6305c18f1d25c9e9ffd3088e4f990044af4`: 977/977 Node tests passed; 170/170 Node test files passed; 83/83 Python tests passed; 33/33 Chromium journeys passed; isolated main/candidate baseline passed; metadata, queue, Cloudflare durable-state, runner-bridge, deployment-recovery, Nature Frontiers editorial and Instagram safety suites passed. npm audit reported zero vulnerabilities. The readiness workflow correctly returned HOLD, not PASS. Later narration CLI/headroom changes are being re-tested on newer SHAs; do not transfer the earlier result to those later commits.
+- The latest readiness artifact on `62a7e630` reports **19 release blockers**. It confirms the previously reconciled single legacy YouTube upload and prior-attempt ledger, but it does not authorize a new upload.
+
+## Current 19 release blockers
+
+**Short manifest (6):**
+1. Missing `media/next-short-footage.mp4`.
+2. Missing `media/next-short-narration.mp3`.
+3. Missing genuine, human-verified footage-rights evidence.
+4. Missing genuine, human-verified narration-rights evidence.
+5. `rightsConfirmed` must remain false until every asset's actual permissions are checked.
+6. `complianceReviewed` must remain false until a human reviews the exact final package.
+
+**Long-form manifest (7):**
+7. Missing `media/long-form-001-footage.mp4`.
+8. Missing `media/long-form-drafts/long-001-narration-final.mp3`.
+9. Missing `long-form-001-captions-final.srt`.
+10. Missing human-verified footage-rights evidence.
+11. Missing human-verified narration-rights evidence.
+12. Long-form `rightsConfirmed` remains false.
+13. Long-form `complianceReviewed` remains false.
+
+**Metadata and release (3):**
+14. Final metadata has not been human-reviewed and marked `READY_FOR_PRIVATE_UPLOAD`.
+15. Metadata rights confirmation remains false.
+16. Metadata compliance review remains false.
+
+**Remote access and final master (3):**
+17. `media/next-short.mp4` does not exist.
+18. Latest read-only YouTube OAuth attempt returns `invalid_grant`.
+19. A current upload-capable YouTube OAuth scope (`youtube.upload` or another documented `videos.insert`-capable scope) is not independently verified.
+
+The five imported Canva clips are explicitly excluded from production and remain uncleared. The strict Internet Archive discovery workflow completed but found zero eligible wildlife assets; no media was downloaded. The WanGP model/VAE mirror provenance conflict remains unresolved, and no owner-started Kaggle GPU generation has occurred. The current Short draft is a creator-education tutorial, which does not meet the user's current requested direction of realistic wildlife-encounter storytelling. Any AI-generated encounter must be clearly labelled as an illustrative reconstruction, not a real documented event.
+
+## Engineering and operational acceptance — current decision
+
+| Gate | Evidence / status | Remaining acceptance |
+|---|---|---|
+| DASH-001 | NOT TESTED overall. Inventory: 120 controls, 17 forms, 103 form-owned, 17 standalone; 33/33 browser journeys pass; 11 forms locally pass and 6 production-dependent forms fail closed. | Exhaustive per-control/field success, validation, error, authorization, persistence, refresh/restart, concurrency and accessibility acceptance. |
+| API-001 | NOT TESTED overall. 48 protected routes; 42 overall PASS, 6 BLOCKED; 48/48 missing/invalid-auth negative checks pass. | Six positive paths remain provider/production gated; complete route-by-route persistence, audit, concurrency and restart acceptance. |
+| SCHED-001 | NOT TESTED. Rolling `long_form → long_form → short`, 72 elapsed hours and no same Johannesburg calendar day are policy-tested. One legacy public 20-second Short is inventoried; prior upload-attempt reconciliation passed. | Fresh OAuth, current history immediately before release, real dispatch, remote timestamps, worker restart, lease/cancel/retry/dead-letter and real publication proof. |
+| SCHED-WORKER-DISPATCH-001 | Local retry/backoff, 409 and uncertain-dispatch quarantine tests pass. | No continuous production worker or real render dispatch is proven. |
+| STATE-001 | PASS for staging D1 backup/restore and restart tests only. Direct read-only query shows 5 backups and one dashboard-state row at revision 3. | Independent off-account backup and production state acceptance. Staging has zero runner artifact, runner control and runner-state rows. |
+| DEPLOY-001 | NOT TESTED. Deployment recovery smoke passes 2/2. | No SonicVhibez production Worker exists; production monitoring, alerting, rollback and disaster recovery remain open. |
+| GIT-002 | NOT TESTED. Branch is 4,287 ahead / 6 behind at this refresh. | Human semantic review of the divergent history; preserve all divergence and do not merge. Branch protection is reported disabled and needs owner/admin action. |
+| E2E-001 | NOT TESTED. | No real rights-cleared item has completed plan → script → footage → narration → captions → render → QC → approval → private-upload preparation → remote read-back → restart recovery. |
+| SEO-001 | NOT TESTED. | No final metadata, captions and thumbnail have been approved against a genuine final export with measured search evidence. |
+
+Stored acceptance-register snapshot (16 November, explicitly not freshly reconciled): 89 requirements = 70 PASS / 9 NOT_TESTED / 10 BLOCKED. API matrix snapshot: 48 routes = 42 PASS / 6 BLOCKED, authentication-negative 48/48. Do not present these stored counts as a current full release pass.
+
+## Nature Frontiers — separate Meta lane
+
+- Live Meta verification was executed on push (run `44251034601`), not merely inferred from the green PR regression suite. The regression suite passed 100 tests, but the live read-only check failed: user token HTTP 401 / OAuth error 190 (session invalid because user logged out); Page token HTTP 401 / OAuth error 190 (session invalidated by password/security change).
+- Configured Page ID is `1431329126735709`; required user-token permissions are `pages_show_list`, `pages_read_engagement`, and `pages_manage_posts`, plus Page task `CREATE_CONTENT` or `MANAGE`. Both user and Page tokens must be renewed through Meta and stored only in GitHub Actions secrets. Never paste tokens into chat.
+- Metricool currently exposes one brand only: Nature Frontiers SA, brand ID `8094526`, timezone `Africa/Johannesburg`. Its record contains Facebook Page `1431329126735709`, Instagram username `naturefrontieers2026`, and a `youtubeData` field containing the SonicVhibez channel ID `UCSlkuPfHH78oGC1o418HV4w`. The brand's connected-network summary lists Facebook/Instagram; treat the YouTube field as an unresolved cross-brand mapping and do not use Nature Frontiers as a YouTube destination.
+- Current Metricool query returned zero scheduled posts for 18 November–18 December 2026. Old brand ID `7545638` returns HTTP 403 (access denied), so eight previously observed future auto-publish records remain UNKNOWN until the owner restores access or independently verifies them in the Metricool UI. Do not edit/cancel/publish unknown records.
+- The green daily-draft CI run is a deterministic PR test fixture dated 2030-10-25, not a real scheduled content package. It contains three research-only slots with no factual claims, media, rights evidence, Page ID or approval. It is not a provider-side Meta draft.
+- The Cloudflare `nature-frontiers-publisher` Worker is deployed but has no scheduled triggers and no secret bindings; its production D1 schema exists but all content, approval, rights, target, publication-attempt and audit tables contain zero rows. Instagram professional-account numeric ID is not configured/verified. Keep `publishingEnabled=false`, `dryRun=true`, `FACEBOOK_PUBLISH_ENABLED=NO`, emergency stop enabled, and unreviewed items held.
+
+## Cloudflare / continuous operations
+
+- Account read-only inventory shows no SonicVhibez production Worker. `sonicvhibez-durable-state-staging` is the only SonicVhibez Worker; it has no schedules and binds staging D1 plus an R2 bucket.
+- Staging D1 has 5 backup rows and 1 state row (revision 3), but 0 runner artifacts, 0 artifact parts, 0 runner-control rows and 0 runner-state rows.
+- R2 is not enabled: Cloudflare API returns error 10042 (“Please enable R2 through the Cloudflare Dashboard”). Do not enable or incur storage charges without explicit cost approval.
+- `nature-frontiers-publisher` has no schedules and no secret bindings. Its D1 production database is schema-provisioned but has zero content, targets, approvals, rights, publication attempts, audit events or webhook rows.
+- No continuous production worker, persistent media artifact path or independent off-account backup is proven.
+
+## Voice and production direction
+
+- User's current creative requirement is American English, mature male wildlife storyteller, energetic and passionate, natural and trustworthy; realistic animal-encounter stories rather than creator-education tutorials. AI-generated scenes must be disclosed as illustrative reconstructions.
+- HeyGen Sterling audition exists from the prior conversation, but no persistent repository voice setting or private user voice clone has been saved. No user recording or room-tone recording has been uploaded. Sterling is a public voice and is not a zero-cost/permanent guarantee.
+- Free local Piper Norman (American English male) review workflow is under repair. Its first real render produced 50.143 seconds but failed strict clipping QC with 15 full-scale samples; a minimal headroom pass and regression test have now been added. The current run must pass and produce the audio artifact before this voice can even be auditioned. It remains review-only and requires human listening, licence review and explicit approval.
+- Do not use the older Australian Piper auditions as the current voice choice. No final narration or human approval exists.
+
+## Required owner inputs to unblock work
+
+1. Reauthorize the existing Google OAuth client for YouTube with `youtube.readonly` and `youtube.upload` plus offline access; update only `YOUTUBE_REFRESH_TOKEN` in GitHub Actions secrets. Do not send tokens in chat.
+2. Reauthorize Meta user and Page tokens with the required Page scopes/tasks; update `META_USER_ACCESS_TOKEN` and `META_PAGE_ACCESS_TOKEN` in GitHub Actions secrets. Confirm the exact Facebook Page and Instagram professional-account numeric ID in Meta Business Suite.
+3. Restore access to Metricool brand `7545638` or verify its eight historical auto-publish records; create a separate SonicVhibez Metricool brand and remove the SonicVhibez YouTube mapping from Nature Frontiers.
+4. Start the pinned free Kaggle notebook session and provide its real test output only after the WanGP checkpoint/VAE provenance conflict is resolved; no GPU generation has been performed.
+5. Choose the final narration route: approve a tested zero-cost American voice, supply a clean recording of your own voice with explicit clone consent, or reject the candidates. Supply original room tone only if it must be used.
+6. Provide genuine source/rights-cleared media or approve the specific AI-generation model after its exact weights/VAE provenance and commercial terms are verified.
+7. Human-review the final video, captions, thumbnail, facts, disclosures, metadata and hashes; explicitly authorize the exact private-upload job only after all prior gates pass.
+8. Confirm a zero-cost independent backup destination and production deployment access. Do not enable R2 or any paid service without an explicit cost ceiling.
+
+## Release decision
+
+**HOLD — NOT MASTER COMPLETE.** No public upload, private upload, scheduling or publication is authorized. No finished Short or long-form production master exists. The current 19 blockers, invalid YouTube OAuth, invalid Meta tokens, missing separate brand configuration, absent production worker, disabled R2 and pending owner approvals prevent a 100% release. “Risk-free” cannot be guaranteed; the release target is zero unresolved critical/high blockers, documented residual risk, verified fail-closed behavior and human-approved exact artifacts.
+
+---
+
 # SonicVhibez master production completion register
 
 **Scope:** first fully reviewed SonicVhibez production package and safe, verified publishing path.  
