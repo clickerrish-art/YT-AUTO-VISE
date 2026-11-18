@@ -14,7 +14,7 @@ Audition the original samples:
 - [Angus — Algy Pug](https://huggingface.co/DataCraftsmanAustralia/piper-en_AU-librivox-medium/resolve/3faad046064c56f7316ffd745d5a8b14035f35df/samples/angus.wav)
 - [Flynn — Howard Skyman](https://huggingface.co/DataCraftsmanAustralia/piper-en_AU-librivox-medium/resolve/3faad046064c56f7316ffd745d5a8b14035f35df/samples/flynn.wav)
 
-The project workflow also generates all three on the same wildlife test sentence, with exact model hash verification, and retains them as a downloadable Actions artifact. They are auditions only, not approved final narration.
+The project workflow generates all three on the same wildlife test sentence and also synthesizes the complete current Short narration draft in each voice. It verifies the exact model hash and records the source-script hash, audio hashes, file sizes and durations in a downloadable Actions artifact. These full-script files remain auditions only, not final narration. They are auditions only, not approved final narration.
 
 ## Licence and attribution
 
