@@ -36,6 +36,10 @@ jobs:
         run: PYTHONPATH=. python -m unittest discover -s tests -p "test_render_american_narration.py" -v
       - name: Render American male storyteller review audio
         run: python scripts/render_american_narration.py --source-script content/short-001-wildlife-video-storytelling.md --output artifacts/american-narration-review
+      - name: Install FFmpeg for listening export
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
       - name: Create listening MP3
         run: ffmpeg -nostdin -hide_banner -loglevel error -y -i artifacts/american-narration-review/american-short-001-narration-review.wav -codec:a libmp3lame -b:a 192k artifacts/american-narration-review/american-short-001-narration-review.mp3
       - name: Retain review audio and provenance
