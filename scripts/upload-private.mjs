@@ -297,6 +297,9 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
     if (!Array.isArray(evidence.permittedUses) || !evidence.permittedUses.includes("YouTube")) throw new Error("rights evidence must explicitly permit YouTube use");
     if (evidence.verificationStatus !== "VERIFIED" || typeof evidence.verifiedBy !== "string" || !evidence.verifiedBy.trim() || !Number.isFinite(strictIsoTimestamp(evidence.verifiedAt))) throw new Error("rights evidence must retain reviewer identity, VERIFIED status, and a valid verification timestamp");
   }
+  if (approval.artifactSha256 !== artifactSha256) throw new Error("approval artifact checksum does not match the actual MP4");
+  if (approval.metadataVersion !== metadataVersion) throw new Error("approval metadata version does not match the actual metadata file");
+  if (typeof approval.reviewer !== "string" || approval.reviewer.trim().length < 2) throw new Error("authenticated human reviewer identity is missing");
   if (!approval.qualityScorecard || approval.qualityScorecardSha256 !== qualityScorecardSha256(approval.qualityScorecard)) {
     throw new Error("production quality scorecard checksum does not match the approval record");
   }
@@ -304,9 +307,6 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
     artifactSha256, metadataSha256: metadataVersion, relatedArtifacts: approval.relatedArtifacts, reviewer: approval.reviewer
   });
   if (qualityErrors.length) throw new Error("production quality scorecard blocked: " + qualityErrors.join("; "));
-  if (approval.artifactSha256 !== artifactSha256) throw new Error("approval artifact checksum does not match the actual MP4");
-  if (approval.metadataVersion !== metadataVersion) throw new Error("approval metadata version does not match the actual metadata file");
-  if (typeof approval.reviewer !== "string" || approval.reviewer.trim().length < 2) throw new Error("authenticated human reviewer identity is missing");
   if (!/^[a-f0-9]{64}$/.test(approval.rightsEvidenceSha256 ?? "")) throw new Error("rights-evidence checksum is missing");
   if (!approval.technicalValidationReceipt || typeof approval.technicalValidationReceipt !== "object" || Array.isArray(approval.technicalValidationReceipt)) throw new Error("exact technical-validation receipt is missing");
   const actualTechnicalValidationSha256 = crypto.createHash("sha256").update(JSON.stringify(approval.technicalValidationReceipt)).digest("hex");
