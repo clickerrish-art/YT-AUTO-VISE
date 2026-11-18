@@ -90,18 +90,23 @@ Required tasks:
 
 ### Gate 4 — Clear narration and audio
 
-**Status: BLOCKED**
+**Status: IN PROGRESS — AUDITION WORKFLOW ADDED; OWNER LISTENING AND ATTRIBUTION REVIEW PENDING**
 
-Required voice profile is a natural, realistic male Australian-English voice. No final voice file or verified commercial-use permission is currently present.
+A promising free local candidate has been identified: `DataCraftsmanAustralia/piper-en_AU-librivox-medium`, pinned at `3faad046064c56f7316ffd745d5a8b14035f35df`. Its model card states CC BY 4.0 and permits commercial use with attribution. The model's base lineage also requires attribution to Jenny (Dioco); the model author explicitly describes their lineage interpretation as good-faith and not a legal conclusion. The candidate is not yet approved for production.
+
+Three male speakers are registered for audition: Banjo (Timothy Ferguson, speaker 5, 7.97 hours), Angus (Algy Pug, speaker 4, 1.80 hours) and Flynn (Howard Skyman, speaker 6, 0.58 hours). Banjo is the first candidate because the model author records that Timothy Ferguson's spoken outro identifies him as recording from the Gold Coast, Australia. The model author warns that the voices can sound formal/literary rather than conversational and have variable recording quality.
+
+A pinned Piper 1.8.0 audition workflow now generates all three samples using the same test text and verifies the model SHA-256. This is an audition only, not final narration.
 
 Tasks:
-1. Select a genuinely free voice option with documented commercial-use rights for the voice model, software and generated output, or use an owner-recorded voice track.
-2. Record exact voice/model version, licence URL, licence copy, settings and source-script hash.
-3. Regenerate narration from the current script; old narration evidence is stale against current script hashes and the Short narration lacks the approved exact disclosure.
-4. Include the exact spoken direct-sales disclosure and clear spoken advertisement identification where required.
-5. Check pronunciation, intelligibility, pacing, naturalness and Australian-English accent.
-6. Run audio loudness, clipping, silence and full-playback checks.
-7. Time captions against the final narration; no draft SRT is accepted as final.
+1. Verify the Piper audition workflow and owner-listen to Banjo, Angus and Flynn; choose one or reject all three.
+2. Review CC BY 4.0 terms and the Jenny (Dioco) base-checkpoint attribution condition; retain the full upstream attribution evidence. If unresolved, keep the voice on HOLD or use an owner-recorded voice track.
+3. Record exact voice/model version, licence URL, licence copy, settings and source-script hash.
+4. Regenerate narration from the current script; old narration evidence is stale against current script hashes and the Short narration lacks the approved exact disclosure.
+5. Include the exact spoken direct-sales disclosure and clear spoken advertisement identification where required.
+6. Check pronunciation, intelligibility, pacing, naturalness and Australian-English accent.
+7. Run audio loudness, clipping, silence and full-playback checks.
+8. Time captions against the final narration; no draft SRT is accepted as final.
 
 **Owner input needed only if no suitable zero-cost voice with documented commercial rights is established:** supply a recorded voice track or approve a specific cleared voice option.
 
