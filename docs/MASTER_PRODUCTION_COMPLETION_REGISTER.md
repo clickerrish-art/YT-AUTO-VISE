@@ -54,7 +54,7 @@ The five imported Canva clips are explicitly excluded from production and remain
 | E2E-001 | NOT TESTED. | No real rights-cleared item has completed plan → script → footage → narration → captions → render → QC → approval → private-upload preparation → remote read-back → restart recovery. |
 | SEO-001 | NOT TESTED. | No final metadata, captions and thumbnail have been approved against a genuine final export with measured search evidence. |
 
-Stored acceptance-register snapshot (16 November, explicitly not freshly reconciled): 89 requirements = 70 PASS / 9 NOT_TESTED / 10 BLOCKED. API matrix snapshot: 48 routes = 42 PASS / 6 BLOCKED, authentication-negative 48/48. Do not present these stored counts as a current full release pass.
+Stored acceptance-register snapshot (16 November, refreshed on 18 November for the owner-approved cadence decision only; remaining rows are not freshly reconciled): 89 requirements = 71 PASS / 9 NOT_TESTED / 9 BLOCKED. SCHED-003 is now PASS from the owner-authored 17 November approval recorded in config; SCHED-001 remains NOT_TESTED. API matrix snapshot: 48 routes = 42 PASS / 6 BLOCKED, authentication-negative 48/48. Do not present these stored counts as a current full release pass.
 
 ## Nature Frontiers — separate Meta lane
 
