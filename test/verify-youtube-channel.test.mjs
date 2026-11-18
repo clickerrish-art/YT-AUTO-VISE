@@ -79,7 +79,7 @@ test("read-only verification independently reports the OAuth scope required for 
     oauthFactory: () => makeOAuth(["https://www.googleapis.com/auth/youtube.upload"])
   });
   assert.equal(uploadResult.uploadScopeVerified, true);
-  assert.match(uploadResult.uploadScopeCheckedAt, /^\\d{4}-\\d{2}-\\d{2}T/);
+  assert.match(uploadResult.uploadScopeCheckedAt, /^\d{4}-\d{2}-\d{2}T/);
   assert.equal(uploadResult.acceptedUploadScope, "https://www.googleapis.com/auth/youtube.upload");
   assert.deepEqual(uploadResult.grantedYouTubeScopes, ["https://www.googleapis.com/auth/youtube.upload"]);
 
