@@ -2950,7 +2950,7 @@ const server = http.createServer(async (req, res) => {
         if (body.decision === "APPROVE") {
           qualityScorecard = body.qualityScorecard;
           const qualityErrors = validateProductionQualityScorecard(qualityScorecard, {
-            artifactSha256, metadataSha256: metadataVersion, relatedArtifacts
+            artifactSha256, metadataSha256: metadataVersion, relatedArtifacts, reviewer
           });
           if (qualityErrors.length) return json(res, 422, {
             error: "Production quality scorecard blocked",
