@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 
 const SHA256 = /^[a-f0-9]{64}$/;
+const TIMEZONE_ISO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/;
 const DIMENSIONS = [
   "photorealismVisualCredibility",
   "sharpnessImageClarity",
@@ -46,7 +47,7 @@ export function validateProductionQualityScorecard(review, {
     errors.push("quality scorecard must approve policy SV-PQS-001");
   }
   if (!nonempty(review.reviewer) || review.reviewer.trim().length < 2) errors.push("quality scorecard reviewer identity is required");
-  const reviewedAt = Date.parse(review.reviewedAt);
+  const reviewedAt = TIMEZONE_ISO.test(review.reviewedAt ?? "") ? Date.parse(review.reviewedAt) : NaN;
   const nowMs = now instanceof Date ? now.getTime() : Date.parse(now);
   if (!Number.isFinite(reviewedAt) || !Number.isFinite(nowMs) || reviewedAt > nowMs + 5 * 60_000 || nowMs - reviewedAt > maxAgeMs) {
     errors.push("quality scorecard timestamp must be valid, not future-dated and no older than the permitted review window");
