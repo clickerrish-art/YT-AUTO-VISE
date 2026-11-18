@@ -107,18 +107,21 @@ test("final media review exposes verified video, thumbnail, captions and evidenc
   assert.match(html, /id="reviewCaptions"/);
   assert.match(html, /id="reviewMetadata"/);
   assert.match(html, /id="reviewRights"/);
+  assert.match(html, /id="reviewNarration"/);
+  assert.match(html, /id="reviewImageGallery"/);
+  assert.match(html, /id="qualityScorecardJson"/);
   assert.match(html, /\/api\/jobs\/review\/bundle/);
-  assert.match(html, /bundle\.previewUrls\.(?:video|thumbnail|captions)/);
+  assert.match(html, /bundle\.previewUrls\.(?:video|thumbnail|captions|narration|images)/);
   assert.match(html, /Integrity verified/);
-  assert.match(html, /actual media, thumbnail and captions loaded/);
+  assert.match(html, /authenticated video, narration, thumbnail and captions loaded/);
 });
 
 
-test("all 119 static dashboard controls map to a submitted form or an explicit standalone binding", () => {
-  assert.equal(inventory.counts.controls, 120);
+test("all 121 static dashboard controls map to a submitted form or an explicit standalone binding", () => {
+  assert.equal(inventory.counts.controls, 121);
   assert.equal(inventory.counts.forms, 17);
-  assert.deepEqual(inventory.counts.controlsByTag, { button: 27, input: 50, select: 27, textarea: 16 });
-  assert.equal(new Set(inventory.controls.map(control => control.acceptanceId)).size, 120,
+  assert.deepEqual(inventory.counts.controlsByTag, { button: 27, input: 50, select: 27, textarea: 17 });
+  assert.equal(new Set(inventory.controls.map(control => control.acceptanceId)).size, 121,
     "every control must have a unique stable acceptance identity");
 
   const submitHandlers = new Set(
