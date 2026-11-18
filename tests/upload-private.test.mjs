@@ -117,9 +117,9 @@ test("uploader verifies authenticated channel ID and exact channel name before u
 
 test("private uploader validates an upload-capable OAuth scope before any YouTube insert", () => {
   const source = fs.readFileSync("scripts/upload-private.mjs", "utf8");
-  assert.match(source, /oauth\\.getAccessToken\\(\\)/);
-  assert.match(source, /oauth\\.getTokenInfo\\(accessToken\\.token\\)/);
-  assert.match(source, /assertYoutubeVideoInsertScope\\(tokenInfo\\)/);
+  assert.match(source, /oauth\.getAccessToken\(\)/);
+  assert.match(source, /oauth\.getTokenInfo\(accessToken\.token\)/);
+  assert.match(source, /assertYoutubeVideoInsertScope\(tokenInfo\)/);
   assert.ok(source.indexOf("assertYoutubeVideoInsertScope(tokenInfo)") < source.indexOf("youtube.videos.insert("));
 });
 
