@@ -1,0 +1,45 @@
+name: Render Banjo Australian narration review
+
+on:
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - "config/narration-voice-candidates.json"
+      - "scripts/render_banjo_narration.py"
+      - "scripts/generate_piper_voice_audition.py"
+      - "tests/test_render_banjo_narration.py"
+      - "content/short-001-wildlife-video-storytelling.md"
+      - ".github/workflows/banjo-narration-review.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sonicvhibez-banjo-narration-review
+  cancel-in-progress: false
+
+jobs:
+  render-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: \${{ github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned Piper engine
+        run: python -m pip install --disable-pip-version-check "piper-tts==1.8.0"
+      - name: Test Banjo narration renderer
+        run: python -m unittest discover -s tests -p "test_render_banjo_narration.py" -v
+      - name: Render Banjo narration for human review
+        run: python scripts/render_banjo_narration.py --source-script content/short-001-wildlife-video-storytelling.md --output artifacts/banjo-narration-review
+      - name: Retain review-only audio and attribution evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-banjo-narration-review
+          path: artifacts/banjo-narration-review/
+          if-no-files-found: error
+          retention-days: 30

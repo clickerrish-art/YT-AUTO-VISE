@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "CANDIDATES_ONLY_OWNER_AUDITION_REQUIRED",
+  "status": "BANJO_SELECTED_CANDIDATE_OWNER_HUMAN_REVIEW_PENDING",
   "provider": "piper_local",
   "model": {
     "repository": "DataCraftsmanAustralia/piper-en_AU-librivox-medium",
@@ -11,19 +11,20 @@
     "license": "CC-BY-4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
     "attribution": "en_AU-librivox-medium, CC BY 4.0. Fine-tuned from en_GB-jenny_dioco-medium, derived from the Jenny TTS dataset by Jenny (Dioco). Training audio is public domain, recorded by LibriVox volunteers.",
-    "attributionAdditional": "Jenny (Dioco) attribution is required by the base-checkpoint terms; the model author explains their lineage interpretation as good-faith compliance, not a legal conclusion. Retain the full ATTRIBUTION.md.",
+    "attributionAdditional": "Jenny (Dioco) attribution is requested by the base-checkpoint terms; the model author describes the lineage interpretation as good-faith compliance, not a legal conclusion. Retain full ATTRIBUTION.md and obtain owner review before commercial use.",
     "engine": "OHF-Voice/piper1-gpl",
     "engineVersion": "1.8.0",
     "engineLicense": "GPL-3.0-or-later",
-    "sourceAttributionUrl": "https://github.com/DataCraftsmanAustralia/piper-en_AU/blob/main/ATTRIBUTION.md",
+    "sourceAttributionUrl": "https://huggingface.co/DataCraftsmanAustralia/piper-en_AU-librivox-medium/blob/3faad046064c56f7316ffd745d5a8b14035f35df/ATTRIBUTION.md",
     "modelCardUrl": "https://huggingface.co/DataCraftsmanAustralia/piper-en_AU-librivox-medium",
     "limitations": [
       "Model author describes the delivery as period-inflected and formal-literary rather than conversational.",
       "Source recordings are home recordings with variable microphone quality, level drift and band-limiting.",
       "Modern technical terms, numerals, abbreviations and URLs may be weak.",
-      "Voice samples must be auditioned by the owner; no voice has been approved for final narration."
+      "Australian accent selection was by ear; model attribution identifies Timothy Ferguson as recording from the Gold Coast, Australia.",
+      "Voice quality must be checked against the realistic, natural Australian male documentary requirement."
     ],
-    "commercialUseStatus": "MODEL_CARD_STATES_COMMERCIAL_USE_PERMITTED_ATTRIBUTION_REQUIRED_OWNER_REVIEW_PENDING",
+    "commercialUseStatus": "MODEL_CARD_PERMITS_COMMERCIAL_USE_WITH_ATTRIBUTION; OWNER_REVIEW_REQUIRED",
     "productionApproved": false
   },
   "candidates": [
@@ -33,7 +34,7 @@
       "narrator": "Timothy Ferguson",
       "gender": "male",
       "trainingHours": 7.97,
-      "accentEvidence": "Model author selected as Australian by ear; ATTRIBUTION.md records that Timothy Ferguson's spoken outro identifies him as recording from the Gold Coast, Australia.",
+      "accentEvidence": "Model author selected as Australian by ear; ATTRIBUTION.md records Timothy Ferguson's spoken outro identifies him as recording from the Gold Coast, Australia.",
       "sampleUrl": "https://huggingface.co/DataCraftsmanAustralia/piper-en_AU-librivox-medium/resolve/3faad046064c56f7316ffd745d5a8b14035f35df/samples/banjo.wav",
       "priority": 1
     },
@@ -59,48 +60,32 @@
     }
   ],
   "audition": {
-    "status": "GENERATED_FULL_SCRIPT_OWNER_AUDITION_PENDING",
+    "status": "OWNER_SELECTED_BANJO_FOR_FURTHER_HUMAN_REVIEW",
     "generatedByWorkflow": true,
-    "chosenVoice": null,
-    "exactTestText": "At first, the river looks still. Then a ripple moves across the water. A saltwater crocodile rises near the bank, pauses, and slips beneath the surface. Keep your distance and let the animal behave naturally.",
+    "chosenVoice": "banjo",
+    "chosenSpeakerId": 5,
+    "narrator": "Timothy Ferguson",
+    "selectedAt": "2026-11-18",
     "requirements": [
-      "Owner listens to all three samples",
-      "Choose one voice or reject all three",
-      "Confirm the accent and naturalness meet the realistic male Australian-English requirement",
-      "Review commercial attribution and terms before production use"
+      "Listen to the full current-script Banjo narration, not just the short sample.",
+      "Confirm natural Australian-English accent and conversational realism.",
+      "Review pronunciation, pacing, warmth, consistency and suitability for wildlife documentary narration.",
+      "Review full model and upstream attribution terms for intended commercial use.",
+      "Record approval against the exact final narration WAV SHA-256 before any production use."
     ],
     "workflowRunId": 44240205149,
     "artifactId": 14399291832,
-    "generatedAt": "2026-11-18T04:52:13Z",
     "artifactContainsFullScript": true,
     "productionApproved": false,
-    "artifactDigest": "sha256:4ec6e49d4f1bc1d0896802c9c1f43dd9c11f2d1aa82a3d6068f534b4c281151f",
-    "implementationHeadSha": "02da9bc9e9ac4d14377f2c0d1bf4b5c099144099",
-    "sourceScriptSha256": "2a4bc78951d2bb07e4e7ac6f85f8ba94e9f6ff253f8ba0c3c0bf26514309f94e",
-    "sourceNarrationSha256": "4d823613cbf10f1e3927ae6611527de215da73ff47e4c65185348ba4997157a9",
-    "artifactExpiresAt": "2026-12-18T04:52:10Z",
-    "fullScriptAuditions": [
-      {
-        "voice": "banjo",
-        "file": "banjo-short-001-script-audition.wav",
-        "sha256": "b20631c0fd8cafabc8ad1c6beb212ba7b6d765dbd5de5ca50a442e182a8d2b42",
-        "durationSeconds": 47.229,
-        "wordCount": 129
-      },
-      {
-        "voice": "angus",
-        "file": "angus-short-001-script-audition.wav",
-        "sha256": "11ed86addf21cef8adc6f4e411724fce797086e5a572ba2f6352d4f4a34f0d8e",
-        "durationSeconds": 54.253,
-        "wordCount": 129
-      },
-      {
-        "voice": "flynn",
-        "file": "flynn-short-001-script-audition.wav",
-        "sha256": "6a464ec0ada8802970562324bcc186b16c938a8228b4b3d5524964c5d1cd87d7",
-        "durationSeconds": 45.79,
-        "wordCount": 129
-      }
-    ]
+    "finalNarration": false
+  },
+  "rendering": {
+    "script": "scripts/render_banjo_narration.py",
+    "workflow": ".github/workflows/banjo-narration-review.yml",
+    "output": "banjo-short-001-narration-review.wav",
+    "status": "IMPLEMENTATION_PENDING_WORKFLOW_EXECUTION",
+    "humanVoiceQualityReview": "PENDING",
+    "commercialAttributionReview": "PENDING",
+    "productionApproved": false
   }
 }
