@@ -51,7 +51,7 @@
     "note": "Owner-confirmed historical Short remains in publication history but does not satisfy the current 50–60 second Short production specification."
   },
   "uploadAttemptReconciliation": {
-    "status": "NO_EXECUTED_GITHUB_PRIVATE_UPLOADS_MANUAL_ATTEMPTS_UNVERIFIED",
+    "status": "OWNER_ATTESTED_NO_OTHER_ATTEMPTS_PENDING_AUTOMATED_LEDGER_VALIDATION",
     "inspectedAt": "2026-11-18T00:56:00Z",
     "evidence": {
       "workflowDispatchRunsInspected": 5,
@@ -66,6 +66,14 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs?event=workflow_dispatch"
       ]
     },
-    "note": "The complete available GitHub Actions workflow_dispatch history contains one upload-private.yml run; its private-upload job was skipped and only the read-only verification job executed and failed. No upload-artifact-privately.yml run or other executed private-upload job was found. The upload workflow's ledger validator can therefore use previous_ledger_run_id=NONE for the next authorized attempt. This does not rule out manual, out-of-band, or local upload attempts; the owner must confirm those are absent before a future upload. This is partial workflow-history reconciliation, not full upload-attempt clearance."
+    "note": "The owner has confirmed there were no manual, local, or external YouTube upload attempts beyond LjePS02hA1o. The GitHub Actions workflow history previously inspected contained one upload-private.yml run; its private-upload job was skipped and its read-only verification job failed. No upload-artifact-privately.yml run or executed private-upload job was found in that inspection. Owner attestation closes the out-of-band attempt question. Automated all-pages workflow/job ledger validation remains to be run before any future private upload. This does not authorize a new upload.",
+    "ownerAttestation": {
+      "status": "CONFIRMED",
+      "confirmedAt": "2026-11-18",
+      "statement": "The owner confirmed there were no manual, local, or external YouTube upload attempts other than the inventoried video LjePS02hA1o.",
+      "scope": "Manual, local, and third-party/out-of-band upload attempts",
+      "appliesToVideoId": "LjePS02hA1o",
+      "note": "This is an owner attestation, not an automated GitHub Actions ledger validation. The read-only ledger validator must still inspect all prior workflow_dispatch runs and their private-upload job conclusions before any future upload."
+    }
   }
 }
