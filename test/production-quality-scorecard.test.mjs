@@ -88,6 +88,10 @@ test("rejects absent or incorrectly typed thumbnail, caption and narration bindi
   assert.match(validateProductionQualityScorecard(review, options()).join(" "), /captions hash is not present/);
 });
 
+test("rejects a scorecard signed by a different reviewer than the approval identity", () => {
+  assert.match(validateProductionQualityScorecard(validReview(), { ...options(), reviewer: "Different Operator" }).join(" "), /must match the authenticated approval reviewer/);
+});
+
 test("rejects any final image missing from the image-review hash set", () => {
   const review = validReview();
   const additionalImage = { path: "media/scene-still.png", sha256: hash("scene-still") };
