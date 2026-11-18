@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "status": "BLOCKED_NOT_RENDERABLE",
+  "channel": "SonicVhibez",
+  "contentType": "short",
+  "targetSeconds": 55,
+  "targetAspectRatio": "9:16",
+  "footagePath": "../media/next-short-footage.mp4",
+  "narrationPath": "../media/next-short-narration.mp3",
+  "captionsPath": "short-001-wildlife-video-storytelling.srt",
+  "qualityEvidencePath": "short-quality-evidence.json",
+  "footageLicenseEvidence": "",
+  "narrationLicenseEvidence": "",
+  "rightsConfirmed": false,
+  "complianceReviewed": false,
+  "containsSyntheticMedia": true,
+  "hasPaidPromotion": true,
+  "sourceScriptPath": "short-001-wildlife-video-storytelling.md",
+  "sourceScriptBlobSha256": "81f9c038fc40bbdca860fc97f2998f526ff5aa13",
+  "captionSourceBlobSha256": "8f4bce80ecbccd2800b2e809db0244bee235d43c",
+  "notes": "This is a fail-closed production manifest, not evidence of a completed render. The referenced final footage, narration and quality evidence files do not exist in the repository. The SRT is a draft and has not been synchronized against current final audio. The old recovered narration is stale against the current source script and does not contain the exact approved spoken disclosure. Do not set rightsConfirmed or complianceReviewed true until genuine source/voice rights evidence and a human review against exact final hashes exist. Private-only, unscheduled; no upload authorization."
+}
