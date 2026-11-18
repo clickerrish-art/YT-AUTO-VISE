@@ -59,8 +59,8 @@
     }
   ],
   "audition": {
-    "status": "NOT_YET_AUDITIONED_BY_OWNER",
-    "generatedByWorkflow": false,
+    "status": "GENERATED_OWNER_AUDITION_PENDING",
+    "generatedByWorkflow": true,
     "chosenVoice": null,
     "exactTestText": "At first, the river looks still. Then a ripple moves across the water. A saltwater crocodile rises near the bank, pauses, and slips beneath the surface. Keep your distance and let the animal behave naturally.",
     "requirements": [
@@ -68,6 +68,11 @@
       "Choose one voice or reject all three",
       "Confirm the accent and naturalness meet the realistic male Australian-English requirement",
       "Review commercial attribution and terms before production use"
-    ]
+    ],
+    "workflowRunId": 44228884555,
+    "artifactId": 14394291428,
+    "generatedAt": "2026-11-18",
+    "artifactContainsFullScript": false,
+    "productionApproved": false
   }
 }
