@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "channel": "SonicVhibez",
-  "status": "DRAFT_REVIEW_REQUIRED",
+  "status": "SUPERSEDED_SOURCE_SCRIPT_CHANGED",
   "generatedAt": "2026-11-09T08:59:34Z",
   "workflowRunId": 42589947310,
   "workflowArtifactId": 13660413544,
@@ -43,6 +43,11 @@
     "These are narration and caption drafts only; no rendered long-form MP4 is represented by this report.",
     "Voice-use and commercial-use permissions are not verified by the generation workflow.",
     "Captions are generated from TTS word boundaries and still require human timing, punctuation and readability review.",
-    "All factual claims, final edit, thumbnail, rights, compliance and any promotional disclosure require human review."
-  ]
+    "All factual claims, final edit, thumbnail, rights, compliance and any promotional disclosure require human review.",
+    "The recorded sourceScriptBlobSha does not match the current source script blob. This artifact is historical draft evidence only and must not be used as production narration approval.",
+    "Regenerate narration from the exact current script, verify commercial-use voice rights, synchronize captions to final audio, and complete human playback/compliance review before release."
+  ],
+  "currentSourceScriptBlobSha": "63b4d3473c510e49052a8b7beac406f727491fba",
+  "recordedSourceScriptBlobSha": "390dfdcf15f896b135238237f9753f5cfddf710e",
+  "disclosureStatus": "NOT_VERIFIED_IN_FINAL_AUDIO"
 }
