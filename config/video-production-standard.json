@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "applies_to": [
+    "SonicVhibez YouTube Shorts",
+    "SonicVhibez YouTube long-form",
+    "Nature Frontiers Facebook Reels",
+    "Nature Frontiers Facebook feed video"
+  ],
+  "status": "mandatory-production-specification",
+  "visual_standard": {
+    "style": "photorealistic observational natural-history documentary",
+    "animal_anatomy": "species-accurate anatomy, proportions, skin/fur/feather detail and natural movement",
+    "environment": "physically plausible habitat, scale, weather, lighting and perspective",
+    "physics": "credible water, reflections, refraction, shadows, contact, momentum and environmental interaction",
+    "camera": "credible wildlife-documentary lensing, stable observational framing, restrained natural camera movement, realistic focus and exposure",
+    "motion": "subtle, continuous, biologically plausible behavior; no morphing, jitter, teleporting or exaggerated action",
+    "color": "restrained natural color grading; no fantasy lighting or oversaturation",
+    "audio": "natural location ambience; narration and music only when separately approved and rights-cleared"
+  },
+  "mandatory_negative_checks": [
+    "No malformed or duplicated anatomy",
+    "No plastic, rubbery, synthetic-looking textures",
+    "No impossible water or environmental physics",
+    "No implausible animal scale or behavior",
+    "No excessive sharpening, oversaturation or artificial cinematic effects",
+    "No text, logos or watermarks baked into raw footage",
+    "No AI-generated footage represented as genuine documentary footage"
+  ],
+  "platform_delivery": {
+    "facebook_reels": "9:16 vertical; platform-specific safe areas and captions checked",
+    "youtube_shorts": "9:16 vertical; Shorts duration and safe areas checked",
+    "youtube_long_form": "16:9 horizontal; 6-10 minutes unless an approved brief specifies otherwise"
+  },
+  "provenance": {
+    "synthetic_media_label_required": true,
+    "genuine_wildlife_claims_require_verifiable_source": true,
+    "rights_and_commercial_use_must_be_verified": true,
+    "human_review_required_before_scheduling_or_publishing": true
+  },
+  "release_gate": "Reject and regenerate or replace any shot that fails anatomy, physics, motion, camera, provenance, rights, or human-review checks. A generation-complete status is not a quality approval."
+}
