@@ -66,7 +66,7 @@ function reviewImageArtifacts(job) {
   const isImage = value => typeof value === "string" && /\.(jpg|jpeg|png|webp|gif|avif)$/i.test(value);
   const rights = job.rightsChecks?.evidence;
   const rightsAssets = Array.isArray(rights?.assets) ? rights.assets : rights ? [rights] : [];
-  const scenes = job.authoring?.productionPlan?.scenes ?? [];
+  const scenes = job.authoring?.productionPlan?.plan?.scenes ?? [];
   const candidates = [
     ...(job.outputArtifacts ?? []).filter(item => isImage(item.path)),
     job.thumbnailArtifact,
