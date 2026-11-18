@@ -1,5 +1,7 @@
 import hashlib
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 import wave
@@ -47,6 +49,15 @@ class FakeVoice:
 
 
 class BanjoNarrationTests(unittest.TestCase):
+    def test_direct_cli_import_works_from_repository_root(self):
+        root = Path(__file__).resolve().parents[1]
+        result = subprocess.run(
+            [sys.executable, str(root / "scripts" / "render_banjo_narration.py"), "--help"],
+            cwd=root, capture_output=True, text=True, check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Render the selected Banjo voice", result.stdout)
+
     def test_selection_is_fixed_to_banjo_speaker_five(self):
         self.assertEqual(module.VOICE_ID, "banjo")
         self.assertEqual(module.SPEAKER_ID, 5)

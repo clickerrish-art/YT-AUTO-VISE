@@ -14,16 +14,9 @@ from pathlib import Path
 
 try:
     from .generate_piper_voice_audition import (
-    CONFIG_NAME,
-    MODEL_NAME,
-    MODEL_SHA256,
-    REPO,
-    REVISION,
-    download_pinned,
-    extract_short_narration,
-    sha256_file,
-    sha256_text,
-        validate_config,
+        CONFIG_NAME, MODEL_NAME, MODEL_SHA256, REPO, REVISION,
+        download_pinned, extract_short_narration, sha256_file,
+        sha256_text, validate_config,
     )
 except ImportError:
     from generate_piper_voice_audition import (
