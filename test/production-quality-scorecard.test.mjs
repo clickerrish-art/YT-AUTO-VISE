@@ -70,7 +70,10 @@ test("rejects missing full playback and image inspection evidence", () => {
   assert.match(validateProductionQualityScorecard(review, options()).join(" "), /mobile and desktop/);
 });
 
-test("rejects stale, future-dated and hash-mismatched reviews", () => {
+test("rejects stale, future-dated, timezone-naive and hash-mismatched reviews", () => {
+  const timezoneNaive = validReview();
+  timezoneNaive.reviewedAt = "2026-11-18T10:00:00";
+  assert.match(validateProductionQualityScorecard(timezoneNaive, options()).join(" "), /timestamp must be valid/);
   const review = validReview();
   review.reviewedAt = "2020-01-01T00:00:00.000Z";
   review.artifactHashes.video = hash("different-video");
