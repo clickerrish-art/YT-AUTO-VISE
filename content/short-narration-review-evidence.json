@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "channel": "SonicVhibez",
-  "status": "DRAFT_REVIEW_REQUIRED",
+  "status": "SUPERSEDED_SOURCE_SCRIPT_CHANGED",
   "generatedAt": "2026-11-09T08:56:03Z",
   "workflowRunId": 42589534250,
   "workflowArtifactId": 13660447363,
@@ -38,12 +38,16 @@
   "rightsStatus": "NOT_VERIFIED",
   "humanReviewRequired": true,
   "publishingEnabled": false,
-  "disclosureStatus": "PROPOSED_DRAFT_NOT_OWNER_APPROVED",
+  "disclosureStatus": "APPROVED_WORDING_NOT_PRESENT_IN_RECOVERED_AUDIO",
   "limitations": [
     "These are narration and caption drafts only; no rendered Short MP4 is represented by this report.",
     "Voice-use and commercial-use permissions are not verified by the generation workflow.",
     "Captions require human timing, punctuation, pronunciation, readability and playback review.",
     "The Selar direct-sales disclosure is proposed draft wording and is not owner-approved.",
-    "Rights, factual accuracy, final edit, thumbnail, compliance and channel identity remain separate release gates."
-  ]
+    "Rights, factual accuracy, final edit, thumbnail, compliance and channel identity remain separate release gates.",
+    "The recorded sourceScriptBlobSha does not match the current source script blob. This artifact is historical draft evidence only and must not be used as production narration approval.",
+    "Regenerate narration from the exact current script, verify commercial-use voice rights, synchronize captions to final audio, and complete human playback/compliance review before release."
+  ],
+  "currentSourceScriptBlobSha": "5df19a36e72e9e11cfa151038ee73ac90ca67e55",
+  "recordedSourceScriptBlobSha": "f1e78a0c74f5ad5363c63dcaaa355bd6ce4c594e"
 }
