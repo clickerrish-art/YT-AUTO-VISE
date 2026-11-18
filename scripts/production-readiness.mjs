@@ -245,18 +245,20 @@ if (!exists(youtubeVerificationPath)) {
     if (verification.status !== "PASS_READ_ONLY_IDENTITY_AND_INVENTORY") {
       const code = typeof verification.oauth?.errorCode === "string" ? verification.oauth.errorCode : "not-passing";
       blockers.push(`LIVE BLOCKER: read-only YouTube identity and uploads inventory verification is ${verification.status ?? "unknown"}; OAuth error ${code}.`);
-    } else if (verification.uploadScopeVerified !== true ||
-        !isFreshHistoryEvidence(verification.uploadScopeCheckedAt) ||
-        ![
-          "https://www.googleapis.com/auth/youtube.upload",
-          "https://www.googleapis.com/auth/youtube",
-          "https://www.googleapis.com/auth/youtube.force-ssl",
-          "https://www.googleapis.com/auth/youtubepartner"
-        ].includes(verification.acceptedUploadScope)) {
-      blockers.push("LIVE BLOCKER: YouTube OAuth upload scope is not independently verified with a current scope accepted by videos.insert; require youtube.upload (preferred) or another documented upload-capable scope before private upload.");
-    } else if (!exists(historyReconciliationPath)) {
-      blockers.push("LIVE BLOCKER: owner-reviewed YouTube history reconciliation evidence is missing.");
     } else {
+      if (verification.uploadScopeVerified !== true ||
+          !isFreshHistoryEvidence(verification.uploadScopeCheckedAt) ||
+          ![
+            "https://www.googleapis.com/auth/youtube.upload",
+            "https://www.googleapis.com/auth/youtube",
+            "https://www.googleapis.com/auth/youtube.force-ssl",
+            "https://www.googleapis.com/auth/youtubepartner"
+          ].includes(verification.acceptedUploadScope)) {
+        blockers.push("LIVE BLOCKER: YouTube OAuth upload scope is not independently verified with a current scope accepted by videos.insert; require youtube.upload (preferred) or another documented upload-capable scope before private upload.");
+      }
+      if (!exists(historyReconciliationPath)) {
+        blockers.push("LIVE BLOCKER: owner-reviewed YouTube history reconciliation evidence is missing.");
+      } else {
       const reconciliation = JSON.parse(fs.readFileSync(path.join(root, historyReconciliationPath), "utf8"));
       const publication = verification.publicationHistoryReconciliation;
       const attempts = reconciliation.uploadAttemptReconciliation;
@@ -305,6 +307,7 @@ if (!exists(youtubeVerificationPath)) {
       if (historyMatches && historyFresh && attemptsReconciled && attemptsFresh) {
         notes.push(`YouTube history: verified ${verification.totalUploads} upload(s) for ${channel.handle}; public=${verification.visibilityCounts?.public ?? 0}, private=${verification.visibilityCounts?.private ?? 0}, unlisted=${verification.visibilityCounts?.unlisted ?? 0}; prior upload-attempt reconciliation passed.`);
       }
+    }
     }
   } catch {
     blockers.push("YouTube channel verification or owner-reviewed history reconciliation evidence is not valid JSON.");
