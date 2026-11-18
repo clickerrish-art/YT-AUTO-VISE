@@ -41,6 +41,7 @@ const baseApproval = {
     { path: "metadata/child.json", sha256: sha("b") }
   ],
   qualityScorecard,
+  qualityScorecardSha256: crypto.createHash("sha256").update(JSON.stringify(qualityScorecard)).digest("hex"),
   shortParentRelationship: relationship,
   shortParentRelationshipSha256: shortParentRelationshipSha256(relationship)
 };
