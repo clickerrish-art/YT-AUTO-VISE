@@ -3002,13 +3002,13 @@
     },
     "requirementStatusSnapshot": {
       "total": 89,
-      "PASS": 70,
+      "PASS": 71,
       "FAIL": 0,
       "NOT_TESTED": 9,
-      "BLOCKED": 10,
-      "asOf": "2026-11-16",
+      "BLOCKED": 9,
+      "asOf": "2026-11-18",
       "freshlyReconciled": false,
-      "testedSourceTestSha": "57769fa219fe98b52f8b182f3849206ac3c8110c"
+      "countBasis": "Stored requirements[] statuses; SCHED-003 was reconciled to PASS from the owner-approved 2026-11-17 cadence record. All other requirement rows retain their prior evidence dates and are not freshly re-certified."
     },
     "apiRouteStatusSnapshot": {
       "routes": 48,
@@ -3063,10 +3063,16 @@
       ],
       "sonicVhibezYouTubeExposed": false,
       "scheduledPostsReturned": 0,
-      "draftInventoryExposed": false
+      "draftInventoryExposed": false,
+      "sonicvhibezYouTubeExposed": true,
+      "youtubeDataFieldChannelId": "UCSlkuPfHH78oGC1o418HV4w",
+      "oldBrandId": 7545638,
+      "oldBrandAccessStatus": "HTTP 403 — access denied",
+      "oldBrandUnknownFutureAutoPublishRecords": 8,
+      "liveReadAt": "2026-11-18",
+      "liveReadNote": "Only Nature Frontiers SA (8094526) is returned. networksData.youtubeData contains the SonicVhibez channel ID although the connected-network summary lists Facebook and Instagram. Treat as unresolved cross-brand mapping; do not use for YouTube publishing. Current brand has zero scheduled posts in 2026-11-18 to 2026-12-18. Old brand 7545638 remains inaccessible (403); eight previously observed future autoPublish records remain unknown."
     },
     "ownerBlockers": [
-      "Owner-approved feasible cadence mode and timezone-qualified approval reference",
       "Complete current public/private/unlisted/scheduled YouTube history and all pending/uncertain upload attempts; read-only OAuth currently returns invalid_grant",
       "Genuine content/render-manifest.json with verified asset rights",
       "Genuine long-form-render-manifest.json with verified long-form assets and rights",
@@ -3083,6 +3089,14 @@
       "prsMergedOrClosedOrMarkedReady": false,
       "historyRewritten": false,
       "paidServicesUsed": false
-    }
+    },
+    "metaPageIdentity": {
+      "status": "BLOCKED",
+      "httpStatus": 401,
+      "errorCode": 190,
+      "run": 44251034601,
+      "reason": "Live read-only verification on 2026-11-18: user token session invalid because user logged out; Page token session invalidated by password/security change. Reauthorize both tokens; do not paste tokens into chat."
+    },
+    "latestLiveBranchHeadBeforeRegisterRefresh": "fa9233ffbb4c7bda87a259019621b9769d4c5463"
   }
 }
